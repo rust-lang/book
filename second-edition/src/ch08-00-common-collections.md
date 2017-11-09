@@ -1,25 +1,22 @@
-# Common Collections
+# Коллекции стандартной библиотеки
 
-Rust’s standard library includes a number of really useful data structures
-called *collections*. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data these collections point to is stored on the heap, which means
-the amount of data does not need to be known at compile time and can grow or
-shrink as the program runs. Each kind of collection has different capabilities
-and costs, and choosing an appropriate one for the situation you’re in is a
-skill you’ll develop over time. In this chapter, we’ll go over three
-collections which are used very often in Rust programs:
+Стандартная библиотека содержит полезные структуры данных, которые называются
+*коллекциями*. Другие типы данных представляют собой хранение какого-то одного типа
+данных. Особенностью коллекций является хранение множества однотипных данных.
+В отличии от массива и кортежа, данных хранятся в куче, а это значит, что размер
+коллекций может быть неизвестен в момент компиляции программы. Она может изменяться
+(увеличиваться, уменьшаться) во время работы программы. Каждый вид коллекции имеет
+свои особенности и ограничения производительности. Выбор конкретной коллекции зависит
+от целей, которые необходимо решить. В этой главе будет рассмотрено несколько
+коллекций:
 
-* A *vector* allows us to store a variable number of values next to each other.
-* A *string* is a collection of characters. We’ve seen the `String` type
-  before, but we’ll talk about it in depth now.
-* A *hash map* allows us to associate a value with a particular key. It’s a
-  particular implementation of the more general data structure called a *map*.
+* *Вектор* позволяет нам сохранять данные последовательно.
+* *Строка* - последовательность символов. В этой главе мы поговорим о этом типе данных подробнее.
+* *Хеш таблица* позволяет сопоставлять значение ключу. Это реализация структуры *map*.
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+Для того, чтобы узнать о других видах коллекций, пожалуйста, перейдите на страницу
+документации [the documentation][collections].
 
 [collections]: ../../std/collections/index.html
 
-We’re going to discuss how to create and update vectors, strings, and hash
-maps, as well as what makes each special.
+Мы начинаем свой рассказ с того, как создать и обновить вектора, строки и хэш таблицы.

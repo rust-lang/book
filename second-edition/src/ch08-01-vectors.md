@@ -1,64 +1,78 @@
-## Vectors
+## Векторы
 
-The first type we’ll look at is `Vec<T>`, also known as a *vector*. Vectors
-allow us to store more than one value in a single data structure that puts all
-the values next to each other in memory. Vectors can only store values of the
-same type. They are useful in situations where you have a list of items, such
-as the lines of text in a file or the prices of items in a shopping cart.
+Первым видом коллекции, который мы разберем будет *вектор* `Vec<T>`. Вектора могут
+сохранять множество данных в одной структуре, сохраняя данные один за одним. Данные
+могут быть только одного типа. Данным тип данных удобен, когда нужно иметь список
+данных.
 
-### Creating a New Vector
+### Создание нового вектора
 
-To create a new, empty vector, we can call the `Vec::new` function:
-
-```rust
-let v: Vec<i32> = Vec::new();
-```
-
-Note that we added a type annotation here. Since we aren’t inserting any values
-into this vector, Rust doesn’t know what kind of elements we intend to store.
-This is an important point. Vectors are homogeneous: they may store many
-values, but those values must all be the same type. Vectors are implemented
-using generics, which Chapter 10 will cover how to use in your own types. For
-now, all you need to know is that the `Vec` type provided by the standard
-library can hold any type, and when a specific `Vec` holds a specific type, the
-type goes within angle brackets. We’ve told Rust that the `Vec` in `v` will
-hold elements of the `i32` type.
-
-In real code, Rust can infer the type of value we want to store once we insert
-values, so you rarely need to do this type annotation. It’s more common to
-create a `Vec` that has initial values, and Rust provides the `vec!` macro for
-convenience. The macro will create a new `Vec` that holds the values we give
-it. This will create a new `Vec<i32>` that holds the values `1`, `2`, and `3`:
+Для создания нового вектора используется функция `Vec::new`:
 
 ```rust
-let v = vec![1, 2, 3];
+fn main() {
+    let v: Vec<i32> = Vec::new();
+    print!("{:?} ", v);
+
+
+}
 ```
 
-Because we’ve given initial `i32` values, Rust can infer that the type of `v`
-is `Vec<i32>`, and the type annotation isn’t necessary. Let’s look at how to
-modify a vector next.
+Обратите внимание, что мы добавили описание (аннотацию) типа данных. Очень важным
+момент: пока мы не добавим хотя бы один элемент в вектор, компилятор (Rust) не будет
+знать, что за тип данных будет содержать в этой коллекции. Как мы уже говорили,
+вектор может содержать только один тип данных. Это его особенность.
 
-### Updating a Vector
-
-To create a vector then add elements to it, we can use the `push` method:
+Более удобный способ инициализации вектора - с помощью макроса `vec!` (по умолчанию
+тип числовых данных i32):
 
 ```rust
-let mut v = Vec::new();
+fn main() {
+   let v = vec![1, 2, 3];
+   println!("{:?}",v);
+}
 
-v.push(5);
-v.push(6);
-v.push(7);
-v.push(8);
 ```
 
-As with any variable as we discussed in Chapter 3, if we want to be able to
-change its value, we need to make it mutable with the `mut` keyword. The
-numbers we place inside are all of type `i32`, and Rust infers this from the
-data, so we don’t need the `Vec<i32>` annotation.
+Так как мы создали коллекцию скалярных значений, то компилятор на основе типов
+данных самостоятельно установит тип данных вектора.
+Интересно, кой тип данных будет у вектора, если сделать такие изменения в коде
+инициализации:
 
-### Dropping a Vector Drops its Elements
+```rust
+fn main() {
+   let v = vec![1, 2, (3 as u64)];
+   println!("{:?}",v);
+}
 
-Like any other `struct`, a vector will be freed when it goes out of scope:
+```
+
+В следующей секции вы узнаете, как изменить содержания коллекции вектор.
+
+### Изменение вектора
+
+Для заполнения вектора данными, используется метод `push`:
+
+```rust
+fn main() {
+   //let mut v = Vec::new();
+   let mut v = vec![];
+    v.push(5);
+    v.push(6);
+    v.push(7);
+    v.push(8);
+    println!("{:?}",v);
+}
+```
+
+Обратите внимание, что мы использовали `mut` для того, чтобы была возможность
+изменять значения переменной. Компилятор определяет тип данных после добавления
+первого элемента в коллекцию.
+
+### Удаление элементов из вектора
+
+По работе памяти с объектами вектор ведёт себя также как и структура. Память, занимаемая
+вектором очищается после выхода кода за пределы области видимости:
 
 ```rust
 {
@@ -69,39 +83,32 @@ Like any other `struct`, a vector will be freed when it goes out of scope:
 } // <- v goes out of scope and is freed here
 ```
 
-When the vector gets dropped, all of its contents will also be dropped, meaning
-those integers it holds will be cleaned up. This may seem like a
-straightforward point, but can get a little more complicated once we start to
-introduce references to the elements of the vector. Let’s tackle that next!
+При удалении коллекции, удаляется всё её содержимое. Есть кое-какие особенности в
+этом процессе, которые мы обсудим далее.
 
-### Reading Elements of Vectors
+### Чтение данных вектора
 
-Now that you know how to create, update, and destroy vectors, knowing how to
-read their contents is a good next step. There are two ways to reference a
-value stored in a vector. In the examples, we’ve annotated the types of the
-values that are returned from these functions for extra clarity.
-
-This example shows both methods of accessing a value in a vector either with
-indexing syntax or the `get` method:
+Следующим навыком, который вам пригодится при работе с векторами - это чтение
+содержания. Существует два способа получения ссылке на данные: по индексу и с помощью
+метода `get`:
 
 ```rust
-let v = vec![1, 2, 3, 4, 5];
+fn main() {
+   let v = vec![1, 2, 3, 4, 5];
 
-let third: &i32 = &v[2];
-let third: Option<&i32> = v.get(2);
+    let third: &i32 = &v[2];
+    println!("{}", third);
+    let third: Option<&i32> = v.get(2);
+    println!("{:?}", third);
+}
+
 ```
 
-There are a few things to note here. First, that we use the index value of `2`
-to get the third element: vectors are indexed by number, starting at zero.
-Second, the two different ways to get the third element are: using `&` and
-`[]`, which gives us a reference, or using the `get` method with the index
-passed as an argument, which gives us an `Option<&T>`.
-
-The reason Rust has two ways to reference an element is so that you can choose
-how the program behaves when you try to use an index value that the vector
-doesn’t have an element for. As an example, what should a program do if it has
-a vector that holds five elements then tries to access an element at index 100
-like this:
+Содержимое вектора индексируется по номер начиная с 0. Второй способ - использовать
+метод `get`,  который возвращает `Option<&T>`. Каждый из этих способов имеет свои
+плюсы и минусы. Плюсы. Первый быстрый, второй надёжный (при ошибке выбора индекса
+программа, аварийно, прекращает работу, а при втором просто возвращает `None`).
+Какой способ доступа к данным выбрать зависит он контекста и целей программы.
 
 ```rust,should_panic
 let v = vec![1, 2, 3, 4, 5];
@@ -109,32 +116,38 @@ let v = vec![1, 2, 3, 4, 5];
 let does_not_exist = &v[100];
 let does_not_exist = v.get(100);
 ```
+```
+```
 
-When you run this, you will find that with the first `[]` method, Rust will
-cause a `panic!` when a non-existent element is referenced. This method would
-be preferable if you want your program to consider an attempt to access an
-element past the end of the vector to be a fatal error that should crash the
-program.
+```rust,should_panic
+fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+    println!("{}", v[100]);
+    //println!("{}", &v[100]);
+}
+```
 
-When the `get` method is passed an index that is outside the array, it will
-return `None` without panicking. You would use this if accessing an element
-beyond the range of the vector will happen occasionally under normal
-circumstances. Your code can then have logic to handle having either
-`Some(&element)` or `None`, as we discussed in Chapter 6. For example, the
-index could be coming from a person entering a number. If they accidentally
-enter a number that’s too large and your program gets a `None` value, you could
-tell the user how many items are in the current `Vec` and give them another
-chance to enter a valid value. That would be more user-friendly than crashing
-the program for a typo!
+```
+thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 100', /checkout/src/liballoc/vec.rs:1555:10
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```
 
-#### Invalid References
+```rust,should_panic
+fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+    println!("{}", v[100]);
+}
+```
 
-Once the program has a valid reference, the borrow checker will enforce the
-ownership and borrowing rules covered in Chapter 4 to ensure this reference and
-any other references to the contents of the vector stay valid. Recall the rule
-that says we can’t have mutable and immutable references in the same scope.
-That rule applies in this example, where we hold an immutable reference to the
-first element in a vector and try to add an element to the end:
+```
+None
+```
+
+#### Неправильные ссылки
+
+Освежите в памяти правила заимствования, ссылочной целостности, с которыми мы
+познакомились в главе 4! Здесь мы ещё раз  посмотрим на их работу в действии в контексте
+работы с векторами:
 
 ```rust,ignore
 let mut v = vec![1, 2, 3, 4, 5];
@@ -144,7 +157,7 @@ let first = &v[0];
 v.push(6);
 ```
 
-Compiling this will give us this error:
+Получим ошибку компиляции:
 
 ```text
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as
@@ -159,67 +172,56 @@ immutable
   | - immutable borrow ends here
 ```
 
-This code might look like it should work: why should a reference to the first
-element care about what changes about the end of the vector? The reason why
-this code isn’t allowed is due to the way vectors work. Adding a new element
-onto the end of the vector might require allocating new memory and copying the
-old elements over to the new space, in the circumstance that there isn’t enough
-room to put all the elements next to each other where the vector was. In that
-case, the reference to the first element would be pointing to deallocated
-memory. The borrowing rules prevent programs from ending up in that situation.
+Правильный код будет иметь вид:
+```rust,ignore
+fn main() {
+    let mut v = vec![1, 2, 3, 4, 5];
+    v.push(6);
+    let first = &v[0];
 
-> Note: For more on this, see The Nomicon at
-*https://doc.rust-lang.org/stable/nomicon/vec.html*.
+    //v.push(6);
 
-### Using an Enum to Store Multiple Types
-
-At the beginning of this chapter, we said that vectors can only store values
-that are all the same type. This can be inconvenient; there are definitely use
-cases for needing to store a list of things of different types. Luckily, the
-variants of an enum are all defined under the same enum type, so when we need
-to store elements of a different type in a vector, we can define and use an
-enum!
-
-For example, let’s say we want to get values from a row in a spreadsheet, where
-some of the columns in the row contain integers, some floating point numbers,
-and some strings. We can define an enum whose variants will hold the different
-value types, and then all of the enum variants will be considered the same
-type, that of the enum. Then we can create a vector that holds that enum and
-so, ultimately, holds different types:
-
-```rust
-enum SpreadsheetCell {
-    Int(i32),
-    Float(f64),
-    Text(String),
+    println!("{:?}", v);
+    println!("{}", first);
 }
-
-let row = vec![
-    SpreadsheetCell::Int(3),
-    SpreadsheetCell::Text(String::from("blue")),
-    SpreadsheetCell::Float(10.12),
-];
 ```
 
-<span class="caption">Listing 8-1: Defining an enum to be able to hold
-different types of data in a vector</span>
+Такие строгие ограничения существуют для того, чтобы исключить ошибку
 
-The reason Rust needs to know exactly what types will be in the vector at
-compile time is so that it knows exactly how much memory on the heap will be
-needed to store each element. A secondary advantage to this is that we can be
-explicit about what types are allowed in this vector. If Rust allowed a vector
-to hold any type, there would be a chance that one or more of the types would
-cause errors with the operations performed on the elements of the vector. Using
-an enum plus a `match` means that Rust will ensure at compile time that we
-always handle every possible case, as we discussed in Chapter 6.
+> Более подробно об этом читайте на странице
+*https://doc.rust-lang.org/stable/nomicon/vec.html*.
 
-If you don’t know at the time that you’re writing a program the exhaustive set
-of types the program will get at runtime to store in a vector, the enum
-technique won’t work. Instead, you can use a trait object, which we’ll cover in
-Chapter 17.
+### Использование перечисления для хранения множества разных типов
 
-Now that we’ve gone over some of the most common ways to use vectors, be sure
-to take a look at the API documentation for all of the many useful methods
-defined on `Vec` by the standard library. For example, in addition to `push`
-there’s a `pop` method that will remove and return the last element. Let’s move
-on to the next collection type: `String`!
+В начале этой главы мы выяснили, что вектор может хранить только однотипные данные.
+Бывают ситуации, когда нужно хранить разные типы данных. В этом нм помогу перечисления.
+
+Приведем пример. К примеру, нам надо получить данные из строки ячеек данных, где
+разные колонки хранят разные типы данных (целые числа, дробны числа, строки).
+Создадим вектор, который будет содержать элементы перечисления:
+
+```rust
+fn main() {
+    #[derive(Debug)]
+    enum SpreadsheetCell {
+        Int(i32),
+        Float(f64),
+        Text(String),
+    }
+
+    let row = vec![
+        SpreadsheetCell::Int(3),
+        SpreadsheetCell::Text(String::from("blue")),
+        SpreadsheetCell::Float(10.12),
+    ];
+    println!("{:?}", row);
+}
+```
+
+<span class="caption">Пример 8-1: Определение перечисления, которое будет иметь возможность
+содержать различные типы данных в векторе</span>
+
+Компилятору, обязательно, надо знать, какой тип данных будет у вектора во время
+компиляции, для того, чтобы рассчитать сколько памяти нужно будет выделить в куче
+для хранения одного элемента. Также используя перечисление и  `match` можно будут
+обработаны все возможные варианты.
