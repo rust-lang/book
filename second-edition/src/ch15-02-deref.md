@@ -53,7 +53,7 @@ we addressed whatever was confusing here before? /Carol -->
 `Mp3` example seemed to be confusing with the metadata that was involved.
 Interested to see if this breakdown works better or not. /Carol -->
 
-<span class="filename">Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -100,7 +100,7 @@ We can rewrite the code in Listing 15-8 to use a `Box<T>` instead of a
 reference, and the de-reference operator will work the same way as shown in
 Listing 15-9:
 
-<span class="filename">Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
