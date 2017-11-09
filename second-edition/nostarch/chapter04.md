@@ -457,6 +457,7 @@ fn main() {
 
     takes_ownership(s);             // s's value moves into the function...
                                     // ... and so is no longer valid here.
+
     let x = 5;                      // x comes into scope.
 
     makes_copy(x);                  // x would move into the function,
@@ -721,7 +722,7 @@ something that new Rustaceans struggle with, because most languages let you
 mutate whenever you’d like. The benefit of having this restriction is that Rust
 can prevent data races at compile time.
 
-A *data race* is a particular type of race condition in which these three
+A *data race* is similar to a race condition and happens when these three
 behaviors occur:
 
 1. Two or more pointers access the same data at the same time.
