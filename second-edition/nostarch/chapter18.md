@@ -346,7 +346,7 @@ circumstances, they may be refutable. Let’s discuss that next.
 
 Patterns come in two forms: refutable and irrefutable. Patterns that will match
 for any possible value passed are said to be *irrefutable*. An example would be
-`x` in the statement `let x = 5;` beause `x` matches anything and so cannot
+`x` in the statement `let x = 5;` because `x` matches anything and so cannot
 fail to match. Patterns that may fail to match for some possible value are said
 to be *refutable*. An example of this would be `Some(x)` in the expression `if
 let Some(x) = a_value`; if the value in the `a_value` variable is `None` rather
@@ -1199,8 +1199,8 @@ has ownership.
 <!-- Above -- why will that make it fail, because the bind is then invalid? -->
 <!-- Yes, I've clarified a bit /Carol -->
 
-<!--Below -- Is this then the solution, introducing &? I assume so, becuase we
-dont have & in the example above, but the connection isn't clear -->
+<!--Below -- Is this then the solution, introducing &? I assume so, because we
+don’t have & in the example above, but the connection isn't clear -->
 <!-- No, the solution is introducing `ref`. I've clarified /Carol -->
 
 In order to fix this code, we want to have the `Some(name)` pattern borrow that

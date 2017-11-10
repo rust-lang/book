@@ -780,8 +780,8 @@ has ownership.
 <!-- Above -- why will that make it fail, because the bind is then invalid? -->
 <!-- Yes, I've clarified a bit /Carol -->
 
-<!--Below -- Is this then the solution, introducing &? I assume so, becuase we
-dont have & in the example above, but the connection isn't clear -->
+<!--Below -- Is this then the solution, introducing &? I assume so, because we
+don’t have & in the example above, but the connection isn't clear -->
 <!-- No, the solution is introducing `ref`. I've clarified /Carol -->
 
 In order to fix this code, we want to have the `Some(name)` pattern borrow that

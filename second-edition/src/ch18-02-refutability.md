@@ -2,7 +2,7 @@
 
 Patterns come in two forms: refutable and irrefutable. Patterns that will match
 for any possible value passed are said to be *irrefutable*. An example would be
-`x` in the statement `let x = 5;` beause `x` matches anything and so cannot
+`x` in the statement `let x = 5;` because `x` matches anything and so cannot
 fail to match. Patterns that may fail to match for some possible value are said
 to be *refutable*. An example of this would be `Some(x)` in the expression `if
 let Some(x) = a_value`; if the value in the `a_value` variable is `None` rather
