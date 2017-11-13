@@ -52,7 +52,7 @@ fn main() {
     /* I'm feeling
        exceptionally
        lucky
-    *  today
+       today
     */
     let lucky_number = 7;
 }
