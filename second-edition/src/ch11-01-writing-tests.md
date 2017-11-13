@@ -61,9 +61,9 @@ function as a test. We could also have non-test functions in the `tests` module
 to help set up common scenarios or perform common operations, so we need to
 indicate which functions are tests with the `#[test]` attribute.
 
-The function boddy use the `assert_eq!` macro to assert that 2 + 2 equals 4.
-This assersion serves as an example of the form for a typical test.
-Let’s run it and see that this test passes.
+The function body uses the `assert_eq!` macro to assert that 2 + 2 equals 4.
+This assertion serves as an example of the format for a typical test. Let’s run
+it and see that this test passes.
 
 The `cargo test` command runs all tests we have in our project, as shown in
 Listing 11-2:
