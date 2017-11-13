@@ -43,5 +43,20 @@ fn main() {
 }
 ```
 
+As with some other languages, comments can be made into multi-line blocks using the following two delimiters: ```/*``` and ```*/```:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    /* I'm feeling
+       exceptionally
+       lucky
+    *  today
+    */
+    let lucky_number = 7;
+}
+```
+
 Rust also has another kind of comment, documentation comments, which we’ll
 discuss in Chapter 14.
