@@ -46,6 +46,7 @@ follows:
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
@@ -60,9 +61,9 @@ function as a test. We could also have non-test functions in the `tests` module
 to help set up common scenarios or perform common operations, so we need to
 indicate which functions are tests with the `#[test]` attribute.
 
-The function currently has no body, which means there is no code to fail the
-test; an empty test is a passing test! Let’s run it and see that this test
-passes.
+The function boddy use the `assert_eq!` macro to assert that 2 + 2 equals 4.
+This assersion serves as an example of the form for a typical test.
+Let’s run it and see that this test passes.
 
 The `cargo test` command runs all tests we have in our project, as shown in
 Listing 11-2:
