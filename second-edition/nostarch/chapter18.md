@@ -39,8 +39,8 @@ clear code.
 ## All the Places Patterns May be Used
 
 Patterns pop up in a number of places in Rust, and you’ve been using them a lot
-without realizing it! This section is a reference to everywhere you can validly
-use patterns.
+without realizing it! This section is a reference to all the places where
+patterns are valid.
 
 ### `match` Arms
 
