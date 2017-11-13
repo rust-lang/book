@@ -43,7 +43,7 @@ fn main() {
 }
 ```
 
-As with some other languages, comments can be made into multi-line blocks using the following two delimiters: ```/*``` and ```*/```:
+As with some other languages, comments can be made into multiple lined blocks using the following two delimiters: ```/*``` and ```*/```:
 
 <span class="filename">Filename: src/main.rs</span>
 
