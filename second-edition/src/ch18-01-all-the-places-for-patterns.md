@@ -30,7 +30,7 @@ variable, and so is often used in the last match arm. This can be useful when
 you want to ignore any value not specified, for example. We’ll cover this in
 more detail later in this chapter.
 
-### Conditional`if let` Expressions
+### Conditional `if let` Expressions
 
 In Chapter 6 we discussed how `if let` expressions are used mainly as a shorter
 way to write the equivalent of a `match` that only cares about matching one
