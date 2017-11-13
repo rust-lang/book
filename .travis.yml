@@ -13,6 +13,6 @@ addons:
       - aspell
       - aspell-en
 before_script:
-  - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
+  - (cargo install mdbook --vers 0.0.26 --force || true)
 script:
   - bash ci/build.sh

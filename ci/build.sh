@@ -22,14 +22,20 @@ cd ../..
 
 # tests for the first edition
 cd first-edition
+echo 'Testing first edition...'
 mdbook test
+echo 'Building first edition...'
 mdbook build
 
 cd ..
 
 # tests for the second edition
 cd second-edition
+echo 'Spellchecking second edition...'
 bash spellcheck.sh list
+echo 'Testing second edition...'
 mdbook test
+echo 'Building second edition...'
 mdbook build
+echo 'Linting second edition for local file paths...'
 cargo run --bin lfp src
