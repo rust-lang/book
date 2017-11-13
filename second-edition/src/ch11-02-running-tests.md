@@ -253,7 +253,7 @@ time consuming tests with the `ignore` attribute to exclude them:
 ```rust
 #[test]
 fn it_works() {
-    assert!(true);
+    assert_eq!(2 + 2, 4);
 }
 
 #[test]

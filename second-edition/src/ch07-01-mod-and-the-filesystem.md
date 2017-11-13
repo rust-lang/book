@@ -29,15 +29,16 @@ Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
 
-Cargo creates an empty test to help us get our library started, rather than the
-“Hello, world!” binary that we get when we use the `--bin` option. We’ll look
-at the `#[]` and `mod tests` syntax in the “Using `super` to Access a Parent
-Module” section later in this chapter, but for now, leave this code at the
-bottom of *src/lib.rs*.
+Cargo creates an example test to help us get our library started, rather than
+the “Hello, world!” binary that we get when we use the `--bin` option. We’ll
+look at the `#[]` and `mod tests` syntax in the “Using `super` to Access a
+Parent Module” section later in this chapter, but for now, leave this code at
+the bottom of *src/lib.rs*.
 
 Because we don’t have a *src/main.rs* file, there’s nothing for Cargo to
 execute with the `cargo run` command. Therefore, we’ll use the `cargo build`

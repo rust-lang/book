@@ -120,6 +120,7 @@ Give the `it_works` function a different name, such as `exploration`, like so:
 mod tests {
     #[test]
     fn exploration() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
@@ -148,6 +149,7 @@ like Listing 11-3:
 mod tests {
     #[test]
     fn exploration() {
+        assert_eq!(2 + 2, 4);
     }
 
     #[test]
