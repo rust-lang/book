@@ -83,6 +83,7 @@ Filename: src/lib.rs
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
@@ -97,9 +98,9 @@ function as a test. We could also have non-test functions in the `tests` module
 to help set up common scenarios or perform common operations, so we need to
 indicate which functions are tests with the `#[test]` attribute.
 
-The function currently has no body, which means there is no code to fail the
-test; an empty test is a passing test! Let’s run it and see that this test
-passes.
+The function body uses the `assert_eq!` macro to assert that 2 + 2 equals 4.
+This assertion serves as an example of the format for a typical test. Let’s run
+it and see that this test passes.
 
 The `cargo test` command runs all tests we have in our project, as shown in
 Listing 11-2:
@@ -135,7 +136,7 @@ We don’t have any tests we’ve marked as ignored, so the summary says `0
 ignored`. We’re going to talk about ignoring tests in the next section on
 different ways to run tests. The `0 measured` statistic is for benchmark tests
 that measure performance. Benchmark tests are, as of this writing, only
-available in nightly Rust. See Appendix D for more information about nightly
+available in nightly Rust. See Chapter 1 for more information about nightly
 Rust.
 
 The next part of the test output that starts with `Doc-tests adder` is for the
@@ -155,6 +156,7 @@ Filename: src/lib.rs
 mod tests {
     #[test]
     fn exploration() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
@@ -183,6 +185,7 @@ Filename: src/lib.rs
 mod tests {
     #[test]
     fn exploration() {
+        assert_eq!(2 + 2, 4);
     }
 
     #[test]
@@ -246,8 +249,7 @@ helps us check that our code is functioning in the way we intend.
 
 Remember all the way back in Chapter 5, Listing 5-9, where we had a `Rectangle`
 struct and a `can_hold` method, repeated here in Listing 11-5. Let’s put this
-code in *src/lib.rs* instead of *src/main.rs* and write some tests for it using
-the `assert!` macro.
+code in *src/lib.rs* and write some tests for it using the `assert!` macro.
 
 Filename: src/lib.rs
 
@@ -625,7 +627,7 @@ Listing 11-8 shows how we’d write a test that checks the error conditions of
 Filename: src/lib.rs
 
 ```
-struct Guess {
+pub struct Guess {
     value: u32,
 }
 
@@ -714,7 +716,7 @@ different messages depending on whether the value was too small or too large:
 Filename: src/lib.rs
 
 ```
-struct Guess {
+pub struct Guess {
     value: u32,
 }
 
@@ -792,7 +794,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
-but the panic message `did not include expected string 'Guess value must be
+but the panic message did not include expected string `'Guess value must be
 less than or equal to 100'`. We can see the panic message that we did get,
 which in this case was `Guess value must be greater than or equal to 1, got
 200.` We could then start figuring out where our bug was!
@@ -949,7 +951,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 Note that the output for the tests and the test results is interleaved; this is
 because the tests are running in parallel as we talked about in the previous
 section. Try using both the `--test-threads=1` option and the `--nocapture`
-function and see what the output looks like then!
+flag and see what the output looks like then!
 
 ### Running a Subset of Tests by Name
 
@@ -1055,7 +1057,7 @@ Filename: src/lib.rs
 ```
 #[test]
 fn it_works() {
-    assert!(true);
+    assert_eq!(2 + 2, 4);
 }
 
 #[test]
@@ -1151,6 +1153,7 @@ Filename: src/lib.rs
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
