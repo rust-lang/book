@@ -1,65 +1,63 @@
-## Controlling How Tests are Run
+## Controlling How Tests Are Run
 
 Just as `cargo run` compiles your code and then runs the resulting binary,
 `cargo test` compiles your code in test mode and runs the resulting test
-binary. There are options you can use to change the default behavior of `cargo
-test`. For example, the default behavior of the binary produced by `cargo test`
-is to run all the tests in parallel and capture output generated during test
-runs, preventing it from being displayed to make it easier to read the output
-related to the test results. You can change this default behavior by specifying
-command line options.
+binary. You can specify command line options to change the default behavior of
+`cargo test`. For example, the default behavior of the binary produced by
+`cargo test` is to run all the tests in parallel and capture output generated
+during test runs, preventing the output from being displayed and making it
+easier to read the output related to the test results.
 
-Some command line options can be passed to `cargo test`, and some need to be
-passed instead to the resulting test binary. To separate these two types of
-arguments, you list the arguments that go to `cargo test`, then the separator
-`--`, and then the arguments that go to the test binary. Running `cargo test
---help` will tell you about the options that go with `cargo test`, and running
-`cargo test -- --help` will tell you about the options that go after the
-separator `--`.
+Some command line options go to `cargo test` and some go to the resulting test
+binary. To separate these two types of arguments, you list the arguments that
+go to `cargo test` followed by the separator `--` and then the arguments that
+go to the test binary. Running `cargo test --help` displays the options you can
+use with `cargo test`, and running `cargo test -- --help` displays the options
+you can use after the separator `--`.
 
 ### Running Tests in Parallel or Consecutively
 
-When multiple tests are run, by default they run in parallel using threads.
-This means the tests will finish running faster, so that we can get faster
-feedback on whether or not our code is working. Since the tests are running at
-the same time, you should take care that your tests do not depend on each other
-or on any shared state, including a shared environment such as the current
-working directory or environment variables.
+When you run multiple tests, by default they run in parallel using threads.
+This means the tests will finish running faster so you can get feedback quicker
+on whether or not your code is working. Because the tests are running at the
+same time, make sure your tests don’t depend on each other or on any shared
+state, including a shared environment, such as the current working directory or
+environment variables.
 
 For example, say each of your tests runs some code that creates a file on disk
-named `test-output.txt` and writes some data to that file. Then each test reads
+named *test-output.txt* and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
-which is different in each test. Because the tests are all run at the same
-time, one test might overwrite the file between when another test writes and
-reads the file. The second test will then fail, not because the code is
-incorrect, but because the tests have interfered with each other while running
-in parallel. One solution would be to make sure each test writes to a different
-file; another solution is to run the tests one at a time.
+which is different in each test. Because the tests run at the same time, one
+test might overwrite the file between when another test writes and reads the
+file. The second test will then fail, not because the code is incorrect, but
+because the tests have interfered with each other while running in parallel.
+One solution is to make sure each test writes to a different file; another
+solution is to run the tests one at a time.
 
-If you don’t want to run the tests in parallel, or if you want more
-fine-grained control over the number of threads used, you can send the
-`--test-threads` flag and the number of threads you want to use to the test
-binary. For example:
+If you don’t want to run the tests in parallel or if you want more fine-grained
+control over the number of threads used, you can send the `--test-threads` flag
+and the number of threads you want to use to the test binary. Take a look at
+the following example:
 
 ```text
 $ cargo test -- --test-threads=1
 ```
 
-We set the number of test threads to 1, telling the program not to use any
-parallelism. This will take longer than running them in parallel, but the tests
-won’t be potentially interfering with each other if they share state.
+We set the number of test threads to `1`, telling the program not to use any
+parallelism. Running the tests using one thread will take longer than running
+them in parallel, but the tests won’t interfere with each other if they share
+state.
 
 ### Showing Function Output
 
 By default, if a test passes, Rust’s test library captures anything printed to
 standard output. For example, if we call `println!` in a test and the test
 passes, we won’t see the `println!` output in the terminal: we’ll only see the
-line that says the test passed. If a test fails, we’ll see whatever was printed
-to standard output with the rest of the failure message.
+line that indicates the test passed. If a test fails, we’ll see whatever was
+printed to standard output with the rest of the failure message.
 
-For example, Listing 11-10 has a silly function that prints out the value of
-its parameter and then returns 10. We then have a test that passes and a test
-that fails:
+As an example, Listing 11-10 has a silly function that prints the value of its
+parameter and returns 10, as well as a test that passes and a test that fails.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -90,7 +88,7 @@ mod tests {
 <span class="caption">Listing 11-10: Tests for a function that calls
 `println!`</span>
 
-The output we’ll see when we run these tests with `cargo test` is:
+When we run these tests with `cargo test`, we’ll see the following output:
 
 ```text
 running 2 tests
@@ -100,7 +98,7 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-	I got the value 8
+    I got the value 8
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
 right)` (left: `5`, right: `10`)', src/lib.rs:19
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -112,19 +110,19 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 ```
 
 Note that nowhere in this output do we see `I got the value 4`, which is what
-gets printed when the test that passes runs. That output has been captured. The
+is printed when the test that passes runs. That output has been captured. The
 output from the test that failed, `I got the value 8`, appears in the section
-of the test summary output that also shows the cause of the test failure.
+of the test summary output, which also shows the cause of the test failure.
 
-If we want to be able to see printed values for passing tests as well, the
-output capture behavior can be disabled by using the `--nocapture` flag:
+If we want to see printed values for passing tests as well, we can disable the
+output capture behavior by using the `--nocapture` flag:
 
 ```text
 $ cargo test -- --nocapture
 ```
 
-Running the tests from Listing 11-10 again with the `--nocapture` flag now
-shows:
+When we run the tests in Listing 11-10 again with the `--nocapture` flag, we
+see the following output:
 
 ```text
 running 2 tests
@@ -144,10 +142,10 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-Note that the output for the tests and the test results is interleaved; this is
-because the tests are running in parallel as we talked about in the previous
-section. Try using both the `--test-threads=1` option and the `--nocapture`
-flag and see what the output looks like then!
+Note that the output for the tests and the test results are interleaved; the
+reason is that the tests are running in parallel, as we talked about in the
+previous section. Try using the `--test-threads=1` option and the `--nocapture`
+flag, and see what the output looks like then!
 
 ### Running a Subset of Tests by Name
 
@@ -157,7 +155,7 @@ that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll create three tests for our
-`add_two` function as shown in Listing 11-11 and choose which ones to run:
+`add_two` function, as shown in Listing 11-11, and choose which ones to run:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -187,10 +185,11 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-11: Three tests with a variety of names</span>
+<span class="caption">Listing 11-11: Three tests with three different
+names</span>
 
-If we run the tests without passing any arguments, as we’ve already seen, all
-the tests will run in parallel:
+If we run the tests without passing any arguments, as we saw earlier, all the
+tests will run in parallel:
 
 ```text
 running 3 tests
@@ -216,14 +215,14 @@ test tests::one_hundred ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-We can’t specify the names of multiple tests in this way, only the first value
-given to `cargo test` will be used.
+We can’t specify the names of multiple tests in this way; only the first value
+given to `cargo test` will be used. But there is a way to run multiple tests.
 
 #### Filtering to Run Multiple Tests
 
-However, we can specify part of a test name, and any test whose name matches
-that value will get run. For example, since two of our tests’ names contain
-`add`, we can run those two by running `cargo test add`:
+We can specify part of a test name, and any test whose name matches that value
+will be run. For example, because two of our tests’ names contain `add`, we can
+run those two by running `cargo test add`:
 
 ```text
 $ cargo test add
@@ -237,16 +236,17 @@ test tests::add_three_and_two ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-This ran all tests with `add` in the name. Also note that the module in which
-tests appear becomes part of the test’s name, so we can run all the tests in a
-module by filtering on the module’s name.
+This command ran all tests with `add` in the name. Also note that the module in
+which tests appear becomes part of the test’s name, so we can run all the tests
+in a module by filtering on the module’s name.
 
-### Ignore Some Tests Unless Specifically Requested
+### Ignoring Some Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
 might want to exclude them during most runs of `cargo test`. Rather than
-listing as arguments all tests you do want to run, we can instead annotate the
-time consuming tests with the `ignore` attribute to exclude them:
+listing as arguments all tests you do want to run, you can instead annotate the
+time-consuming tests using the `ignore` attribute to exclude them, as shown
+here:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -263,9 +263,8 @@ fn expensive_test() {
 }
 ```
 
-We add the `#[ignore]` line to the test we want to exclude, after `#[test]`.
-Now if we run our tests, we’ll see `it_works` runs, but `expensive_test` does
-not:
+After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now
+when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
 ```text
 $ cargo test
@@ -286,8 +285,8 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-`expensive_test` is listed as `ignored`. If we want to run only the ignored
-tests, we can ask for them to be run with `cargo test -- --ignored`:
+The `expensive_test` function is listed as `ignored`. If we want to run only
+the ignored tests, we can use `cargo test -- --ignored`:
 
 ```text
 $ cargo test -- --ignored
@@ -301,6 +300,6 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results
-will be fast. When you’re at a point that it makes sense to check the results
-of the `ignored` tests and you have time to wait for the results, you can
-choose to run `cargo test -- --ignored` instead.
+will be fast. When you’re at a point where it makes sense to check the results
+of the `ignored` tests and you have time to wait for the results, you can run
+`cargo test -- --ignored` instead.
