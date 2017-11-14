@@ -98,15 +98,16 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-    I got the value 8
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
-right)` (left: `5`, right: `10`)', src/lib.rs:19
+        I got the value 8
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
+  left: `5`,
+ right: `10`', src/lib.rs:19:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::this_test_will_fail
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Note that nowhere in this output do we see `I got the value 4`, which is what
@@ -129,8 +130,9 @@ running 2 tests
 I got the value 4
 I got the value 8
 test tests::this_test_will_pass ... ok
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
-right)` (left: `5`, right: `10`)', src/lib.rs:19
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
+  left: `5`,
+ right: `10`', src/lib.rs:19:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 test tests::this_test_will_fail ... FAILED
 
@@ -139,7 +141,7 @@ failures:
 failures:
     tests::this_test_will_fail
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Note that the output for the tests and the test results are interleaved; the
@@ -197,7 +199,7 @@ test tests::add_two_and_two ... ok
 test tests::add_three_and_two ... ok
 test tests::one_hundred ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 #### Running Single Tests
@@ -212,8 +214,12 @@ $ cargo test one_hundred
 running 1 test
 test tests::one_hundred ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out
 ```
+
+Only the test with the name `one_hundred` ran; the other two tests didn't match
+that name. The test output lets us know we had more tests than what this
+command ran by displaying `2 filtered out` at the end of the summary line.
 
 We can’t specify the names of multiple tests in this way; only the first value
 given to `cargo test` will be used. But there is a way to run multiple tests.
@@ -233,12 +239,13 @@ running 2 tests
 test tests::add_two_and_two ... ok
 test tests::add_three_and_two ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
-This command ran all tests with `add` in the name. Also note that the module in
-which tests appear becomes part of the test’s name, so we can run all the tests
-in a module by filtering on the module’s name.
+This command ran all tests with `add` in the name name and filtered out the
+test named `one_hundred`. Also note that the module in which tests appear
+becomes part of the test’s name, so we can run all the tests in a module by
+filtering on the module’s name.
 
 ### Ignoring Some Tests Unless Specifically Requested
 
@@ -276,13 +283,7 @@ running 2 tests
 test expensive_test ... ignored
 test it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
 ```
 
 The `expensive_test` function is listed as `ignored`. If we want to run only
@@ -296,7 +297,7 @@ $ cargo test -- --ignored
 running 1 test
 test expensive_test ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results

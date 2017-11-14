@@ -119,13 +119,13 @@ $ cargo test
 running 1 test
 test tests::it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Listing 11-2: The output from running the automatically generated test
@@ -138,8 +138,9 @@ text `test result: ok.` means that all the tests passed, and the portion that
 reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 
 Because we don’t have any tests we’ve marked as ignored, the summary shows `0
-ignored`. We’ll talk about ignoring tests in the next section, “Controlling How
-Tests Are Run”.
+ignored`. We also haven’t filtered the tests being run, so the end of the
+summary shows `0 filtered out`. We’ll talk about ignoring and filtering out
+tests in the next section, “Controlling How Tests Are Run”.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
@@ -175,7 +176,7 @@ Then run `cargo test` again. The output now shows `exploration` instead of
 running 1 test
 test tests::exploration ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Let’s add another test, but this time we’ll make a test that fails! Tests fail
@@ -216,13 +217,13 @@ test tests::another ... FAILED
 failures:
 
 ---- tests::another stdout ----
-    thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:9
+    thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:10:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::another
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
 error: test failed
 ```
@@ -233,7 +234,7 @@ Instead of `ok`, the line `test tests::another` shows `FAILED`. Two new
 sections appear between the individual results and the summary: the first
 section displays the detailed reason for each test failure. In this case,
 `another` failed because it `panicked at 'Make this test fail'`, which happened
-on line 9 in the *src/lib.rs* file. The next section lists just the names of
+on line 10 in the *src/lib.rs* file. The next section lists just the names of
 all the failing tests, which is useful when there are lots of tests and lots of
 detailed failing test output. We can use the name of a failing test to run just
 that test to more easily debug it; we’ll talk more about ways to run tests in
@@ -320,7 +321,7 @@ is supposed to return `true`, so our test should pass. Let’s find out!
 running 1 test
 test tests::larger_can_hold_smaller ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 It does pass! Let’s add another test, this time asserting that a smaller
@@ -357,7 +358,7 @@ running 2 tests
 test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Two tests that pass! Now let’s see what happens to our test results when we
@@ -386,13 +387,13 @@ failures:
 
 ---- tests::larger_can_hold_smaller stdout ----
     thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed:
-    larger.can_hold(&smaller)', src/lib.rs:22
+    larger.can_hold(&smaller)', src/lib.rs:22:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::larger_can_hold_smaller
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Our tests caught the bug! Because `larger.length` is 8 and `smaller.length` is
@@ -442,7 +443,7 @@ Let’s check that it passes!
 running 1 test
 test tests::it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 The first argument we gave to the `assert_eq!` macro, `4`, is equal to the
@@ -468,21 +469,21 @@ test tests::it_adds_two ... FAILED
 failures:
 
 ---- tests::it_adds_two stdout ----
-    thread 'tests::it_adds_two' panicked at 'assertion failed: `(left ==
-    right)` (left: `4`, right: `5`)', src/lib.rs:11
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+        thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
+  left: `4`,
+ right: `5`', src/lib.rs:11:8
 
 failures:
     tests::it_adds_two
 
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Our test caught the bug! The `it_adds_two` test failed, displaying the message
-`` assertion failed: `(left == right)` (left: `4`, right: `5`) ``. This message
-is useful and helps us start debugging: it means the `left` argument to
-`assert_eq!` was `4`, but the `right` argument, where we had `add_two(2)`, was
-`5`.
+`` assertion failed: `(left == right)` `` and showing that `left` was `4` and
+`right` was `5`. This message is useful and helps us start debugging: it means
+the `left` argument to `assert_eq!` was `4`, but the `right` argument, where we
+had `add_two(2)`, was `5`.
 
 Note that in some languages and test frameworks, the parameters to the
 functions that assert two values are equal are called `expected` and `actual`,
@@ -491,7 +492,7 @@ they’re called `left` and `right`, and the order in which we specify the value
 we expect and the value that the code under test produces doesn’t matter. We
 could write the assertion in this test as `assert_eq!(add_two(2), 4)`, which
 would result in a failure message that displays `` assertion failed: `(left ==
-right)` (left: `5`, right: `4`) ``.
+right)` `` and that `left` was `5` and `right` was `4`.
 
 The `assert_ne!` macro will pass if the two values we give it are not equal and
 fail if they’re equal. This macro is most useful for cases when we’re not sure
@@ -574,7 +575,7 @@ failures:
 
 ---- tests::greeting_contains_name stdout ----
     thread 'tests::greeting_contains_name' panicked at 'assertion failed:
-    result.contains("Carol")', src/lib.rs:12
+    result.contains("Carol")', src/lib.rs:12:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -603,7 +604,7 @@ Now when we run the test, we’ll get a more informative error message:
 ```
 ---- tests::greeting_contains_name stdout ----
     thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
-    name, value was `Hello`', src/lib.rs:12
+    name, value was `Hello!`', src/lib.rs:12:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -668,13 +669,15 @@ passes:
 running 1 test
 test tests::greater_than_100 ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Looks good! Now let’s introduce a bug in our code by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
 ```
+// ...snip...
+
 impl Guess {
     pub fn new(value: u32) -> Guess {
         if value < 1  {
@@ -699,7 +702,7 @@ failures:
 failures:
     tests::greater_than_100
 
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 We don’t get a very helpful message in this case, but when we look at the test
@@ -718,9 +721,7 @@ different messages depending on whether the value was too small or too large:
 Filename: src/lib.rs
 
 ```
-pub struct Guess {
-    value: u32,
-}
+// ...snip...
 
 impl Guess {
     pub fn new(value: u32) -> Guess {
@@ -784,8 +785,8 @@ test tests::greater_than_100 ... FAILED
 failures:
 
 ---- tests::greater_than_100 stdout ----
-    thread 'tests::greater_than_100' panicked at 'Guess value must be greater
-    than or equal to 1, got 200.', src/lib.rs:10
+        thread 'tests::greater_than_100' panicked at 'Guess value must be
+greater than or equal to 1, got 200.', src/lib.rs:11:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 note: Panic did not include expected string 'Guess value must be less than or
 equal to 100'
@@ -793,7 +794,7 @@ equal to 100'
 failures:
     tests::greater_than_100
 
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
@@ -905,15 +906,16 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-    I got the value 8
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
-right)` (left: `5`, right: `10`)', src/lib.rs:19
+        I got the value 8
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
+  left: `5`,
+ right: `10`', src/lib.rs:19:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::this_test_will_fail
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Note that nowhere in this output do we see `I got the value 4`, which is what
@@ -936,8 +938,9 @@ running 2 tests
 I got the value 4
 I got the value 8
 test tests::this_test_will_pass ... ok
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
-right)` (left: `5`, right: `10`)', src/lib.rs:19
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
+  left: `5`,
+ right: `10`', src/lib.rs:19:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 test tests::this_test_will_fail ... FAILED
 
@@ -946,7 +949,7 @@ failures:
 failures:
     tests::this_test_will_fail
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Note that the output for the tests and the test results are interleaved; the
@@ -1003,7 +1006,7 @@ test tests::add_two_and_two ... ok
 test tests::add_three_and_two ... ok
 test tests::one_hundred ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 #### Running Single Tests
@@ -1018,8 +1021,12 @@ $ cargo test one_hundred
 running 1 test
 test tests::one_hundred ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out
 ```
+
+Only the test with the name `one_hundred` ran; the other two tests didn't match
+that name. The test output lets us know we had more tests than what this
+command ran by displaying `2 filtered out` at the end of the summary line.
 
 We can’t specify the names of multiple tests in this way; only the first value
 given to `cargo test` will be used. But there is a way to run multiple tests.
@@ -1039,12 +1046,13 @@ running 2 tests
 test tests::add_two_and_two ... ok
 test tests::add_three_and_two ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
-This command ran all tests with `add` in the name. Also note that the module in
-which tests appear becomes part of the test’s name, so we can run all the tests
-in a module by filtering on the module’s name.
+This command ran all tests with `add` in the name name and filtered out the
+test named `one_hundred`. Also note that the module in which tests appear
+becomes part of the test’s name, so we can run all the tests in a module by
+filtering on the module’s name.
 
 ### Ignoring Some Tests Unless Specifically Requested
 
@@ -1082,13 +1090,7 @@ running 2 tests
 test expensive_test ... ignored
 test it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
 ```
 
 The `expensive_test` function is listed as `ignored`. If we want to run only
@@ -1102,7 +1104,7 @@ $ cargo test -- --ignored
 running 1 test
 test expensive_test ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results
@@ -1257,20 +1259,20 @@ $ cargo test
 running 1 test
 test tests::internal ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/integration_test-ce99bcc2479f4607
 
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 The three sections of output include the unit tests, the integration test, and
@@ -1303,7 +1305,7 @@ $ cargo test --test integration_test
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 This command runs only the tests in the *tests/integration_test.rs* file.
@@ -1345,26 +1347,26 @@ did we call the `setup` function from anywhere:
 running 1 test
 test tests::internal ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/common-b8b07b6f1be2db70
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/integration_test-d993c68b431d39df
 
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Having `common` appear in the test results with `running 0 tests` displayed for

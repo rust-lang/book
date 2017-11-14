@@ -146,26 +146,26 @@ $ cargo test
 running 1 test
 test tests::internal ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/integration_test-ce99bcc2479f4607
 
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 The three sections of output include the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we’ve been
 seeing: one line for each unit test (one named `internal` that we added in
-Listing11-12) and then a summary line for the unit tests.
+Listing 11-12) and then a summary line for the unit tests.
 
 The integration tests section starts with the line `Running
 target/debug/deps/integration-test-ce99bcc2479f4607` (the hash at the end of
@@ -192,7 +192,7 @@ $ cargo test --test integration_test
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 This command runs only the tests in the *tests/integration_test.rs* file.
@@ -234,26 +234,26 @@ did we call the `setup` function from anywhere:
 running 1 test
 test tests::internal ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/common-b8b07b6f1be2db70
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/integration_test-d993c68b431d39df
 
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 Having `common` appear in the test results with `running 0 tests` displayed for
