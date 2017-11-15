@@ -111,8 +111,8 @@ the value `IpAddrKind::V4` as its `kind` with associated address data of
 it. We’ve used a struct to bundle the `kind` and `address` values together, so
 now the variant is associated with the value.
 
-We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
+We can represent the same concept in a more concise way using just an enum,
+rather than an enum inside a struct, by putting data directly into each enum
 variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
 variants will have associated `String` values:
 
@@ -180,7 +180,7 @@ what you might come up with.
 Note that even though the standard library contains a definition for `IpAddr`,
 we can still create and use our own definition without conflict because we
 haven’t brought the standard library’s definition into our scope. We’ll talk
-more about importing types in Chapter 7.
+more about bringing types into scope in Chapter 7.
 
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:
@@ -202,7 +202,7 @@ This enum has four variants with different types:
 * `Quit` has no data associated with it at all.
 * `Move` includes an anonymous struct inside it.
 * `Write` includes a single `String`.
-* `ChangeColor` includes three `i32`s.
+* `ChangeColor` includes three `i32` values.
 
 Defining an enum with variants like the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions except the enum doesn’t use the
@@ -242,8 +242,8 @@ m.call();
 
 The body of the method would use `self` to get the value that we called the
 method on. In this example, we’ve created a variable `m` that has the value
-`Message::Write("hello")`, and that is what `self` will be in the body of the
-`call` method when `m.call()` runs.
+`Message::Write(String::from("hello"))`, and that is what `self` will be in the
+body of the `call` method when `m.call()` runs.
 
 Let’s look at another enum in the standard library that is very common and
 useful: `Option`.
@@ -298,8 +298,8 @@ enum Option<T> {
 ```
 
 The `Option<T>` enum is so useful that it’s even included in the prelude; you
-don’t need to import it explicitly.  In addition, so are its variants: you can
-use `Some` and `None` directly without prefixing them with `Option::`.
+don’t need to bring it into scope explicitly. In addition, so are its variants:
+you can use `Some` and `None` directly without prefixing them with `Option::`.
 `Option<T>` is still just a regular enum, and `Some(T)` and `None` are still
 variants of type `Option<T>`.
 
@@ -328,7 +328,7 @@ the same thing as null: we don’t have a valid value. So why is having
 In short, because `Option<T>` and `T` (where `T` can be any type) are different
 types, the compiler won’t let us use an `Option<T>` value as if it was
 definitely a valid value. For example, this code won’t compile because it’s
-trying to compare an `Option<i8>` to an `i8`:
+trying to add an `i8` to an `Option<i8>`:
 
 ```
 let x: i8 = 5;
@@ -344,13 +344,13 @@ error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is
 not satisfied
  -->
   |
-7 | let sum = x + y;
-  |           ^^^^^
+5 |     let sum = x + y;
+  |                 ^ no implementation for `i8 + std::option::Option<i8>`
   |
 ```
 
 Intense! In effect, this error message means that Rust doesn’t understand how
-to add an `Option<i8>` and an `i8`, because they’re different types. When we
+to add an `i8` and an `Option<i8>`, because they’re different types. When we
 have a value of a type like `i8` in Rust, the compiler will ensure that we
 always have a valid value. We can proceed confidently without having to check
 for null before using that value. Only when we have an `Option<i8>` (or
@@ -392,9 +392,9 @@ value.
 Rust has an extremely powerful control-flow operator called `match` that allows
 us to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
-names, wildcards, and many other things; Chapter 18 will be about all the
-different kinds of patterns and what they do. The power of `match` comes from
-the expressiveness of the patterns and the compiler checks that make sure all
+names, wildcards, and many other things; Chapter 18 covers all the different
+kinds of patterns and what they do. The power of `match` comes from the
+expressiveness of the patterns and the compiler checks that make sure all
 possible cases are handled.
 
 Think of a `match` expression kind of like a coin sorting machine: coins slide
@@ -416,7 +416,7 @@ enum Coin {
     Quarter,
 }
 
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -451,14 +451,14 @@ The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
-Curly braces typically aren’t used if the match arm code is short, as it is in
-Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you can use curly braces. For example, the
+Curly brackets typically aren’t used if the match arm code is short, as it is
+in Listing 6-3 where each arm just returns a value. If you want to run multiple
+lines of code in a match arm, you can use curly brackets. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a `Coin::Penny` but would still return the last value of the block, `1`:
 
 ```
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -478,10 +478,10 @@ values that match the pattern. This is how we can extract values out of enum
 variants.
 
 As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States printed quarters with different
+From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `State` value stored
+our `enum` by changing the `Quarter` variant to include a `UsState` value stored
 inside it, which we’ve done here in Listing 6-4:
 
 ```
@@ -514,7 +514,7 @@ pattern that matches values of the variant `Coin::Quarter`. When a
 quarter’s state. Then we can use `state` in the code for that arm, like so:
 
 ```
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -568,21 +568,21 @@ Listing 6-5: A function that uses a `match` expression on an `Option<i32>`
 #### Matching `Some(T)`
 
 Let’s examine the first execution of `plus_one` in more detail. When we call
-`plus_one(five)` w,  the variable `x` in the body of `plus_one` will have the
+`plus_one(five)`, the variable `x` in the body of `plus_one` will have the
 value `Some(5)`. We then compare that against each match arm.
 
 ```
 None => None,
 ```
 
-The `Some(5)` value doesn’t match the pattern `None` u, so we continue to the
+The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
 next arm.
 
 ```
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)` v? Why yes it does! We have the same variant.
+Does `Some(5)` match `Some(i)`? Well yes it does! We have the same variant.
 The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
 code in the match arm is then executed, so we add one to the value of `i` and
 create a new `Some` value with our total `6` inside.
@@ -590,7 +590,7 @@ create a new `Some` value with our total `6` inside.
 #### Matching `None`
 
 Now let’s consider the second call of `plus_one` in Listing 6-5 where `x` is
-`None` x. We enter the `match` and compare to the first arm u.
+`None`. We enter the `match` and compare to the first arm.
 
 ```
 None => None,
@@ -757,4 +757,3 @@ function expects.
 In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
-
