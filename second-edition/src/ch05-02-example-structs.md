@@ -53,7 +53,7 @@ The `area` function is supposed to calculate the area of one rectangle, but the
 function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
-we might do that in the "Grouping Values into Tuples" section of Chapter 3: by
+we might do that in the “Grouping Values into Tuples” section of Chapter 3: by
 using tuples. Listing 5-9 shows another version of our program that uses tuples:
 
 <span class="filename">Filename: src/main.rs</span>

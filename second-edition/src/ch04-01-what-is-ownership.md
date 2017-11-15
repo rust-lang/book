@@ -322,7 +322,7 @@ To ensure memory safety, there’s one more detail to what happens in this
 situation in Rust. Instead of trying to copy the allocated memory, Rust
 considers `s1` to no longer be valid and therefore, Rust doesn’t need to free
 anything when `s1` goes out of scope. Check out what happens when you try to
-use `s1` after `s2` is created, it won't work:
+use `s1` after `s2` is created, it won’t work:
 
 ```rust,ignore
 let s1 = String::from("hello");
