@@ -23,7 +23,7 @@ the data to specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly braces, we define the names and types of
+grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
 struct to store information about a user account:
 
@@ -40,7 +40,7 @@ Listing 5-1: A `User` struct definition
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct, and then add curly braces containing `key:
+stating the name of the struct, and then add curly brackets containing `key:
 value` pairs where the keys are the names of the fields and the values are the
 data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
@@ -79,7 +79,7 @@ user1.email = String::from("anotheremail@example.com");
 Listing 5-3: Changing the value in the `email` field of a `User` instance
 
 Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable. Also note that with any expression, we can
+only certain fields as mutable. Also note that as with any expression, we can
 construct a new instance of the struct as the last expression in the function
 body to implicitly return that new instance.
 
@@ -104,7 +104,7 @@ returns a `User` instance
 It makes sense to name the function arguments with the same name as the struct
 fields, but having to repeat the `email` and `username` field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there's a convenient shorthand!
+would get even more annoying. Luckily, there’s a convenient shorthand!
 
 ### Using the Field Init Shorthand when Variables and Fields Have the Same Name
 
@@ -154,7 +154,7 @@ let user2 = User {
 Listing 5-6: Creating a new `User` instance using some of the values from
 `user1`
 
-Using struct update syntax, we can achieve the same effect with less code,
+Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
 
@@ -166,7 +166,7 @@ let user2 = User {
 };
 ```
 
-Listing 5-7: Using struct update syntax to set a new `email` and `username`
+Listing 5-7: Using struct update syntax to set new `email` and `username`
 values for a `User` instance but use the rest of the values from the fields of
 the instance in the `user1` variable
 
@@ -176,12 +176,13 @@ different value for `email` and `username` but has the same values for the
 
 ### Tuple Structs without Named Fields to Create Different Types
 
-We can also define structs that look similar to tuples, called *tuple structs*,
-that have the added meaning the struct name provides, but don’t have names
-associated with their fields, just the types of the fields. Tuple structs are
-useful when you want to give the whole tuple a name and make the tuple be a
-different type than other tuples, but naming each field as in a regular struct
-would be verbose or redundant.
+We can also define structs that look similar to tuples (which were discussed in
+Chapter 3), called *tuple structs*, that have the added meaning the struct name
+provides, but don’t have names associated with their fields; rather, they just
+have the types of the fields. Tuple structs are useful when you want to give
+the whole tuple a name and make the tuple be a different type than other
+tuples, but naming each field as in a regular struct would be verbose or
+redundant.
 
 To define a tuple struct you start with the `struct` keyword and the struct
 name followed by the types in the tuple. For example, here are definitions and
@@ -200,9 +201,9 @@ instances of different tuple structs. Each struct we define is its own type,
 even though the fields within the struct have the same types. For example, a
 function that takes a parameter of type `Color` cannot take a `Point` as an
 argument, even though both types are made up of three `i32` values. Otherwise,
-tuple struct instances behave like tuples, which we covered in Chapter 3: you
-can destructure them into their individual pieces, you can use a `.` followed
-by the index to access an individual value, and so on.
+tuple struct instances behave like tuples: you can destructure them into their
+individual pieces and you can use a `.` followed by the index to access an
+individual value, and so on.
 
 ### Unit-Like Structs without Any Fields
 
@@ -210,7 +211,7 @@ We can also define structs that don’t have any fields! These are called
 *unit-like structs* since they behave similarly to `()`, the unit type.
 Unit-like structs can be useful in situations such as when you need to
 implement a trait on some type, but you don’t have any data that you want to
-store in the type itself. We’ll be discussing traits in Chapter 10.
+store in the type itself. We’ll discuss traits in Chapter 10.
 
 PROD: START BOX
 
@@ -222,7 +223,7 @@ we want instances of this struct to own all of its data and for that data to be
 valid for as long as the entire struct is valid.
 
 It’s possible for structs to store references to data owned by something else,
-but to do so requires the use of *lifetimes*, a Rust feature that is discussed
+but to do so requires the use of *lifetimes*, a Rust feature that we’ll discuss
 in Chapter 10. Lifetimes ensure that the data referenced by a struct is valid
 for as long as the struct is. Let’s say you try to store a reference in a
 struct without specifying lifetimes, like this:
@@ -263,9 +264,9 @@ error[E0106]: missing lifetime specifier
   |            ^ expected lifetime parameter
 ```
 
-We’ll discuss how to fix these errors so you can store references in structs in
-Chapter 10, but for now, we’ll fix errors like these using owned types like
-`String` instead of references like `&str`.
+In Chapter 10, we’ll discuss how to fix these errors so you can store
+references in structs, but for now, we’ll fix errors like these using owned
+types like `String` instead of references like `&str`.
 
 PROD: END BOX
 
@@ -314,7 +315,7 @@ calling the `area` function with each dimension, we can do better. The width
 and the height are related to each other because together they describe one
 rectangle.
 
-The issue with this method is evident in the signature of `area`:
+The issue with this code is evident in the signature of `area`:
 
 ```
 fn area(width: u32, height: u32) -> u32 {
@@ -324,9 +325,8 @@ The `area` function is supposed to calculate the area of one rectangle, but the
 function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
-we might do that in the Grouping Values into Tuples section of Chapter 3 on
-page XX: by using tuples. Listing 5-9 shows another version of our program that
-uses tuples:
+we might do that in the “Grouping Values into Tuples” section of Chapter 3: by
+using tuples. Listing 5-9 shows another version of our program that uses tuples:
 
 Filename: src/main.rs
 
@@ -403,18 +403,17 @@ using `rect1`, which is the reason we use the `&` in the function signature and
 where we call the function.
 
 The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance. Our function signature for `area` now indicates exactly what we mean:
-calculate the area of a `Rectangle` using its `width` and `height` fields. This
-conveys that the width and height are related to each other, and gives
+instance. Our function signature for `area` now says exactly what we mean:
+calculate the area of a `Rectangle`, using its `width` and `height` fields.
+This conveys that the width and height are related to each other, and gives
 descriptive names to the values rather than using the tuple index values of `0`
-and `1`—a win for clarity.
+and `1`. This is a win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
-It would be helpful to be able to print out an instance of the `Rectangle`
-while we’re debugging our program in order to see the values for all its
-fields. Listing 5-11 uses the `println!` macro as we have been in earlier
-chapters:
+It’d be nice to be able to print out an instance of our `Rectangle` while we’re
+debugging our program and see the values for all its fields. Listing 5-11 tries
+the `println!` macro as we have used it in Chapters 2, 3, and 4:
 
 Filename: src/main.rs
 
@@ -445,14 +444,14 @@ direct end user consumption. The primitive types we’ve seen so far implement
 `Display` by default, because there’s only one way you’d want to show a `1` or
 any other primitive type to a user. But with structs, the way `println!` should
 format the output is less clear because there are more display possibilities:
-do you want commas or not? Do you want to print the curly braces? Should all
+do you want commas or not? Do you want to print the curly brackets? Should all
 the fields be shown? Due to this ambiguity, Rust doesn’t try to guess what we
 want and structs don’t have a provided implementation of `Display`.
 
 If we continue reading the errors, we’ll find this helpful note:
 
 ```
-note: `Rectangle` cannot be formatted with the default formatter; try using
+`Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 ```
 
@@ -465,13 +464,13 @@ its value while we’re debugging our code.
 Run the code with this change. Drat! We still get an error:
 
 ```
-error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+error[E0277]: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
 But again, the compiler gives us a helpful note:
 
 ```
-note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+`Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
 
@@ -575,7 +574,7 @@ Listing 5-13: Defining an `area` method on the `Rectangle` struct
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (*implementation*) block. Then we move the `area` function within the `impl`
-curly braces and change the first (and in this case, only) parameter to be
+curly brackets and change the first (and in this case, only) parameter to be
 `self` in the signature and everywhere within the body. In `main` where we
 called the `area` function and passed `rect1` as an argument, we can instead
 use *method syntax* to call the `area` method on our `Rectangle` instance.
@@ -631,9 +630,9 @@ p1.distance(&p2);
 The first one looks much cleaner. This automatic referencing behavior works
 because methods have a clear receiver—the type of `self`. Given the receiver
 and name of a method, Rust can figure out definitively whether the method is
-reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
-that Rust makes borrowing implicit for method receivers is a big part of
-making ownership ergonomic in practice.
+reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact that
+Rust makes borrowing implicit for method receivers is a big part of making
+ownership ergonomic in practice.
 
 PROD: END BOX
 
