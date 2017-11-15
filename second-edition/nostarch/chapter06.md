@@ -37,7 +37,7 @@ We can express this concept in code by defining an `IpAddrKind` enumeration and
 listing the possible kinds an IP address can be, `V4` and `V6`. These are known
 as the *variants* of the enum:
 
-```rust
+```
 enum IpAddrKind {
     V4,
     V6,
@@ -50,7 +50,7 @@ enum IpAddrKind {
 
 We can create instances of each of the two variants of `IpAddrKind` like this:
 
-```rust
+```
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
@@ -61,13 +61,13 @@ both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 `IpAddrKind`. We can then, for instance, define a function that takes any
 `IpAddrKind`:
 
-```rust
+```
 fn route(ip_type: IpAddrKind) { }
 ```
 
 And we can call this function with either variant:
 
-```rust
+```
 route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
@@ -77,7 +77,7 @@ at the moment we don’t have a way to store the actual IP address *data*; we
 only know what *kind* it is. Given that you just learned about structs in
 Chapter 5, you might tackle this problem as shown in Listing 6-1:
 
-```rust
+```
 enum IpAddrKind {
     V4,
     V6,
@@ -118,7 +118,7 @@ rather than an enum as part of a struct by putting data directly into each enum
 variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
 variants will have associated `String` values:
 
-```rust
+```
 enum IpAddr {
     V4(String),
     V6(String),
@@ -139,7 +139,7 @@ between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
 still express `V6` addresses as one `String` value, we wouldn’t be able to with
 a struct. Enums handle this case with ease:
 
-```rust
+```
 enum IpAddr {
     V4(u8, u8, u8, u8),
     V6(String),
@@ -159,7 +159,7 @@ variants that we’ve defined and used, but it embeds the address data inside th
 variants in the form of two different structs, which are defined differently
 for each variant:
 
-```rust
+```
 struct Ipv4Addr {
     // details elided
 }
@@ -187,7 +187,7 @@ more about importing types in Chapter 7.
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:
 
-```rust
+```
 enum Message {
     Quit,
     Move { x: i32, y: i32 },
@@ -214,7 +214,7 @@ defining different kinds of struct definitions except the enum doesn’t use the
 type. The following structs could hold the same data that the preceding enum
 variants hold:
 
-```rust
+```
 struct QuitMessage; // unit struct
 struct MoveMessage {
     x: i32,
@@ -233,7 +233,7 @@ There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
 enums. Here’s a method named `call` that we could define on our `Message` enum:
 
-```rust
+```
 impl Message {
     fn call(&self) {
         // method body would be defined here
@@ -294,7 +294,7 @@ implementation. As such, Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is defined by the standard library as follows:
 
-```rust
+```
 enum Option<T> {
     Some(T),
     None,
@@ -313,7 +313,7 @@ For now, all you need to know is that `<T>` means the `Some` variant of the
 `Option` enum can hold one piece of data of any type. Here are some examples of
 using `Option` values to hold number types and string types:
 
-```rust
+```
 let some_number = Some(5);
 let some_string = Some("a string");
 
@@ -334,7 +334,7 @@ types, the compiler won’t let us use an `Option<T>` value as if it was
 definitely a valid value. For example, this code won’t compile because it’s
 trying to compare an `Option<i8>` to an `i8`:
 
-```rust,ignore
+```
 let x: i8 = 5;
 let y: Option<i8> = Some(5);
 
@@ -343,7 +343,7 @@ let sum = x + y;
 
 If we run this code, we get an error message like this:
 
-```text
+```
 error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is
 not satisfied
  -->
@@ -412,7 +412,7 @@ can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:
 
-```rust
+```
 enum Coin {
     Penny,
     Nickel,
@@ -463,7 +463,7 @@ lines of code in a match arm, you can use curly braces. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a `Coin::Penny` but would still return the last value of the block, `1`:
 
-```rust
+```
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
         Coin::Penny => {
@@ -490,7 +490,7 @@ designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `State` value stored
 inside it, which we’ve done here in Listing 6-4:
 
-```rust
+```
 #[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -521,7 +521,7 @@ pattern that matches values of the variant `Coin::Quarter`. When a
 `Coin::Quarter` matches, the `state` variable will bind to the value of that
 quarter’s state. Then we can use `state` in the code for that arm, like so:
 
-```rust
+```
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
         Coin::Penny => 1,
@@ -558,7 +558,7 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5:
 
-```rust
+```
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         None => None,
@@ -581,14 +581,14 @@ Let’s examine the first execution of `plus_one` in more detail. When we call
 `plus_one(five)` w,  the variable `x` in the body of `plus_one` will have the
 value `Some(5)`. We then compare that against each match arm.
 
-```rust,ignore
+```
 None => None,
 ```
 
 The `Some(5)` value doesn’t match the pattern `None` u, so we continue to the
 next arm.
 
-```rust,ignore
+```
 Some(i) => Some(i + 1),
 ```
 
@@ -602,7 +602,7 @@ create a new `Some` value with our total `6` inside.
 Now let’s consider the second call of `plus_one` in Listing 6-5 where `x` is
 `None` x. We enter the `match` and compare to the first arm u.
 
-```rust,ignore
+```
 None => None,
 ```
 
@@ -621,7 +621,7 @@ consistently a user favorite.
 There’s one other aspect of `match` we need to discuss. Consider this version
 of our `plus_one` function:
 
-```rust,ignore
+```
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),
@@ -633,7 +633,7 @@ We didn’t handle the `None` case, so this code will cause a bug. Luckily, it�
 a bug Rust knows how to catch. If we try to compile this code, we’ll get this
 error:
 
-```text
+```
 error[E0004]: non-exhaustive patterns: `None` not covered
  -->
   |
@@ -656,7 +656,7 @@ we only care about the values 1, 3, 5, and 7, we don’t want to have to list ou
 0, 2, 4, 6, 8, 9 all the way up to 255. Fortunately, we don’t have to: we can
 use the special pattern `_` instead:
 
-```rust
+```
 let some_u8_value = 0u8;
 match some_u8_value {
     1 => println!("one"),
@@ -683,7 +683,7 @@ handle values that match one pattern and ignore the rest. Consider the program
 in Listing 6-6 that matches on an `Option<u8>` value but only wants to execute
 code if the value is three:
 
-```rust
+```
 let some_u8_value = Some(0u8);
 match some_u8_value {
     Some(3) => println!("three"),
@@ -704,7 +704,7 @@ boilerplate code to add.
 Instead, we could write this in a shorter way using `if let`. The following
 code behaves the same as the `match` in Listing 6-6:
 
-```rust
+```
 if let Some(3) = some_u8_value {
     println!("three");
 }
@@ -731,7 +731,7 @@ We can include an `else` with an `if let`. The block of code that goes with the
 announcing the state of the quarters, we could do that with a `match`
 expression like this:
 
-```rust
+```
 let mut count = 0;
 match coin {
     Coin::Quarter(state) => println!("State quarter from {:?}!", state),
@@ -741,7 +741,7 @@ match coin {
 
 Or we could use an `if let` and `else` expression like this:
 
-```rust
+```
 let mut count = 0;
 if let Coin::Quarter(state) = coin {
     println!("State quarter from {:?}!", state);
