@@ -43,7 +43,7 @@ calling the `area` function with each dimension, we can do better. The width
 and the height are related to each other because together they describe one
 rectangle.
 
-The issue with this method is evident in the signature of `area`:
+The issue with this code is evident in the signature of `area`:
 
 ```rust,ignore
 fn area(width: u32, height: u32) -> u32 {
@@ -53,9 +53,8 @@ The `area` function is supposed to calculate the area of one rectangle, but the
 function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
-we might do that in the Grouping Values into Tuples section of Chapter 3 on
-page XX: by using tuples. Listing 5-9 shows another version of our program that
-uses tuples:
+we might do that in the "Grouping Values into Tuples" section of Chapter 3: by
+using tuples. Listing 5-9 shows another version of our program that uses tuples:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,7 +73,7 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-8: Specifying the width and height of the
+<span class="caption">Listing 5-9: Specifying the width and height of the
 rectangle with a tuple</span>
 
 In one way, this program is better. Tuples let us add a bit of structure, and
@@ -133,18 +132,17 @@ using `rect1`, which is the reason we use the `&` in the function signature and
 where we call the function.
 
 The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance. Our function signature for `area` now indicates exactly what we mean:
-calculate the area of a `Rectangle` using its `width` and `height` fields. This
-conveys that the width and height are related to each other, and gives
+instance. Our function signature for `area` now says exactly what we mean:
+calculate the area of a `Rectangle`, using its `width` and `height` fields.
+This conveys that the width and height are related to each other, and gives
 descriptive names to the values rather than using the tuple index values of `0`
-and `1`—a win for clarity.
+and `1`. This is a win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
-It would be helpful to be able to print out an instance of the `Rectangle`
-while we’re debugging our program in order to see the values for all its
-fields. Listing 5-11 uses the `println!` macro as we have been in earlier
-chapters:
+It’d be nice to be able to print out an instance of our `Rectangle` while we’re
+debugging our program and see the values for all its fields. Listing 5-11 tries
+the `println!` macro as we have used it in Chapters 2, 3, and 4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -183,7 +181,7 @@ want and structs don’t have a provided implementation of `Display`.
 If we continue reading the errors, we’ll find this helpful note:
 
 ```text
-note: `Rectangle` cannot be formatted with the default formatter; try using
+`Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 ```
 
@@ -196,13 +194,13 @@ its value while we’re debugging our code.
 Run the code with this change. Drat! We still get an error:
 
 ```text
-error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+error[E0277]: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
 But again, the compiler gives us a helpful note:
 
 ```text
-note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+`Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
 
