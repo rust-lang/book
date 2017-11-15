@@ -99,10 +99,8 @@ let loopback = IpAddr {
 };
 ```
 
-<caption>
 Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a
 `struct`
-</caption>
 
 Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously) and an `address` field
@@ -196,10 +194,8 @@ enum Message {
 }
 ```
 
-<caption>
 Listing 6-2: A `Message` enum whose variants each store different amounts and
 types of values
-</caption>
 
 This enum has four variants with different types:
 
@@ -430,10 +426,8 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-<caption>
 Listing 6-3: An enum and a `match` expression that has the variants of the enum
 as its patterns.
-</caption>
 
 Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -506,10 +500,8 @@ enum Coin {
 }
 ```
 
-<caption>
 Listing 6-4: A `Coin` enum where the `Quarter` variant also holds a `UsState`
 value
-</caption>
 
 Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we’ll also call out the name of
@@ -571,9 +563,7 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<caption>
 Listing 6-5: A function that uses a `match` expression on an `Option<i32>`
-</caption>
 
 #### Matching `Some(T)`
 
@@ -691,10 +681,8 @@ match some_u8_value {
 }
 ```
 
-<caption>
 Listing 6-6: A `match` that only cares about executing code when the value is
 `Some(3)`
-</caption>
 
 We want to do something with the `Some(3)` match but do nothing with any other
 `Some<u8>` value or the `None` value. To satisfy the `match` expression, we
