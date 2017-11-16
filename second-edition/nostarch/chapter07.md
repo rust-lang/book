@@ -17,7 +17,7 @@ you can choose whether those definitions are visible outside their module
 (public) or not (private). Here’s an overview of how modules work:
 
 * The `mod` keyword declares a new module. Code within the module appears
-  either immediately following this declaration within curly braces or in
+  either immediately following this declaration within curly brackets or in
   another file.
 * By default, functions, types, constants, and modules are private. The `pub`
   keyword makes an item public and therefore visible outside its namespace.
@@ -31,8 +31,8 @@ We’ll look at each of these parts to see how they fit into the whole.
 We’ll start our module example by making a new project with Cargo, but instead
 of creating a binary crate, we’ll make a library crate: a project that other
 people can pull into their projects as a dependency. For example, the `rand`
-crate in Chapter 2 is a library crate that we used as a dependency in the
-guessing game project.
+crate discussed in Chapter 2 is a library crate that we used as a dependency in
+the guessing game project.
 
 We’ll create a skeleton of a library that provides some general networking
 functionality; we’ll concentrate on the organization of the modules and
@@ -57,15 +57,16 @@ Filename: src/lib.rs
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
 
-Cargo creates an empty test to help us get our library started, rather than the
-“Hello, world!” binary that we get when we use the `--bin` option. We’ll look
-at the `#[]` and `mod tests` syntax in the “Using `super` to Access a Parent
-Module” section later in this chapter, but for now, leave this code at the
-bottom of *src/lib.rs*.
+Cargo creates an example test to help us get our library started, rather than
+the “Hello, world!” binary that we get when we use the `--bin` option. We’ll
+look at the `#[]` and `mod tests` syntax in the “Using `super` to Access a
+Parent Module” section later in this chapter, but for now, leave this code at
+the bottom of *src/lib.rs*.
 
 Because we don’t have a *src/main.rs* file, there’s nothing for Cargo to
 execute with the `cargo run` command. Therefore, we’ll use the `cargo build`
@@ -91,9 +92,9 @@ mod network {
 ```
 
 After the `mod` keyword, we put the name of the module, `network`, and then a
-block of code in curly braces. Everything inside this block is inside the
+block of code in curly brackets. Everything inside this block is inside the
 namespace `network`. In this case, we have a single function, `connect`. If we
-wanted to call this function from a script outside the `network` module, we
+wanted to call this function from code outside the `network` module, we
 would need to specify the module and use the namespace syntax `::`, like so:
 `network::connect()` rather than just `connect()`.
 
@@ -224,13 +225,13 @@ communicator
 
 If these modules had many functions, and those functions were becoming lengthy,
 it would be difficult to scroll through this file to find the code we wanted to
-work with. Because the functions are nested inside one or more mod blocks, the
-lines of code inside the functions will start getting lengthy as well. These
-would be good reasons to separate the `client`, `network`, and `server` modules
-from *src/lib.rs* and place them into their own files.
+work with. Because the functions are nested inside one or more `mod` blocks,
+the lines of code inside the functions will start getting lengthy as well.
+These would be good reasons to separate the `client`, `network`, and `server`
+modules from *src/lib.rs* and place them into their own files.
 
-First, replace the `client` module code with only the declaration of the `client`
-module, so that your *src/lib.rs* looks like the following:
+First, replace the `client` module code with only the declaration of the
+`client` module, so that your *src/lib.rs* looks like the following:
 
 Filename: src/lib.rs
 
@@ -288,29 +289,33 @@ a library crate rather than a binary crate:
 ```
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/client.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:4:5
   |
-4 |     fn connect() {
-  |     ^
+4 | /     fn connect() {
+5 | |     }
+  | |_____^
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:8:9
   |
-8 |         fn connect() {
-  |         ^
+8 | /         fn connect() {
+9 | |         }
+  | |_________^
 ```
 
 These warnings tell us that we have functions that are never used. Don’t worry
-about these warnings for now; we’ll address them in the “Controlling Visibility
-with `pub`” section later in this chapter. The good news is that they’re just
+about these warnings for now; we’ll address them later in this chapter in the
+“Controlling Visibility with `pub`” section. The good news is that they’re just
 warnings; our project built successfully!
 
 Next, let’s extract the `network` module into its own file using the same
@@ -378,7 +383,7 @@ error: cannot declare a new module at this location
 4 | mod server;
   |     ^^^^^^
   |
-note: maybe move this module `network` to its own directory via `network/mod.rs`
+note: maybe move this module `src/network.rs` to its own directory via `src/network/mod.rs`
  --> src/network.rs:4:5
   |
 4 | mod server;
@@ -410,7 +415,7 @@ previously, we can do what the note suggests:
 
 1. Make a new *directory* named *network*, the parent module’s name.
 2. Move the *src/network.rs* file into the new *network* directory, and
-   rename *src/network/mod.rs*.
+   rename it to *src/network/mod.rs*.
 3. Move the submodule file *src/server.rs* into the *network* directory.
 
 Here are commands to carry out these steps:
@@ -512,23 +517,28 @@ able to build our project, but we still get warning messages about the
 not being used:
 
 ```
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
-src/client.rs:1:1
+warning: function is never used: `connect`
+ --> src/client.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/mod.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 ```
 
 So why are we receiving these warnings? After all, we’re building a library
@@ -575,7 +585,7 @@ the `client` module. However, invoking `cargo build` will now give us an error
 after the warnings:
 
 ```
-error: module `client` is private
+error[E0603]: module `client` is private
  --> src/main.rs:4:5
   |
 4 |     communicator::client::connect();
@@ -595,17 +605,17 @@ will our call to that function from our binary crate be allowed, but the
 warning that the function is unused will go away. Marking a function as public
 lets Rust know that the function will be used by code outside of our program.
 Rust considers the theoretical external usage that’s now possible as the
-function “being used.” Thus, when something is marked public, Rust will not
-require that it be used in our program and will stop warning that the item is
-unused.
+function “being used.” Thus, when a function is marked public, Rust will not
+require that it be used in our program and will stop warning that the function
+is unused.
 
 ### Making a Function Public
 
-To tell Rust to make something public, we add the `pub` keyword to the start of
-the declaration of the item we want to make public. We’ll focus on fixing the
-warning that indicates `client::connect` has gone unused for now, as well as
-the `` module `client` is private `` error from our binary crate. Modify
-*src/lib.rs* to make the `client` module public, like so:
+To tell Rust to make a function public, we add the `pub` keyword to the start
+of the declaration. We’ll focus on fixing the warning that indicates
+`client::connect` has gone unused for now, as well as the `` module `client` is
+private `` error from our binary crate. Modify *src/lib.rs* to make the
+`client` module public, like so:
 
 Filename: src/lib.rs
 
@@ -618,7 +628,7 @@ mod network;
 The `pub` keyword is placed right before `mod`. Let’s try building again:
 
 ```
-error: function `connect` is private
+error[E0603]: function `connect` is private
  --> src/main.rs:4:5
   |
 4 |     communicator::client::connect();
@@ -639,17 +649,21 @@ pub fn connect() {
 Now run `cargo build` again:
 
 ```
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/mod.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 ```
 
 The code compiled, and the warning about `client::connect` not being used is
@@ -678,17 +692,21 @@ mod server;
 Then compile the code:
 
 ```
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/mod.rs:1:1
   |
-1 | pub fn connect() {
-  | ^
+1 | / pub fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 ```
 
 Hmmm, we’re still getting an unused function warning, even though
@@ -709,11 +727,14 @@ pub mod network;
 Now when we compile, that warning is gone:
 
 ```
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 ```
 
 Only one warning is left! Try to fix this one on your own!
@@ -801,7 +822,7 @@ Feel free to design more experiments and try them out!
 
 Next, let’s talk about bringing items into scope with the `use` keyword.
 
-## Importing Names
+## Referring to Names in Different Modules
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
@@ -828,7 +849,7 @@ Listing 7-6: Calling a function by fully specifying its enclosing module’s pat
 As you can see, referring to the fully qualified name can get quite lengthy.
 Fortunately, Rust has a keyword to make these calls more concise.
 
-### Concise Imports with `use`
+### Bringing Names into Scope with the `use` Keyword
 
 Rust’s `use` keyword shortens lengthy function calls by bringing the modules of
 the function you want to call into scope. Here’s an example of bringing the
@@ -882,10 +903,10 @@ fn main() {
 Doing so allows us to exclude all the modules and reference the function
 directly.
 
-Because enums also form a sort of namespace like modules, we can import an
-enum’s variants with `use` as well. For any kind of `use` statement, if you’re
-importing multiple items from one namespace, you can list them using curly
-braces and commas in the last position, like so:
+Because enums also form a sort of namespace like modules, we can bring an
+enum’s variants into scope with `use` as well. For any kind of `use` statement,
+if you’re bringing multiple items from one namespace into scope, you can list
+them using curly brackets and commas in the last position, like so:
 
 ```
 enum TrafficLight {
@@ -906,10 +927,11 @@ fn main() {
 We’re still specifying the `TrafficLight` namespace for the `Green` variant
 because we didn’t include `Green` in the `use` statement.
 
-### Glob Imports with `*`
+### Bringing All Names into Scope with a Glob
 
-To import all the items in a namespace at once, we can use the `*` syntax. For
-example:
+To bring all the items in a namespace into scope at once, we can use the `*`
+syntax, which is called the *glob operator*. This example brings all the
+variants of an enum into scope without having to list each specifically:
 
 ```
 enum TrafficLight {
@@ -927,7 +949,7 @@ fn main() {
 }
 ```
 
-The `*` is called a *glob*, and it will import all items visible inside the
+The `*` will bring into scope all the visible items in the `TrafficLight`
 namespace. You should use globs sparingly: they are convenient, but this might
 also pull in more items than you expected and cause naming conflicts.
 
@@ -948,6 +970,7 @@ pub mod network;
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
@@ -968,7 +991,7 @@ communicator
 
 Tests are for exercising the code within our library, so let’s try to call our
 `client::connect` function from this `it_works` function, even though we won’t
-be checking any functionality right now:
+be checking any functionality right now. This won't work yet:
 
 Filename: src/lib.rs
 
@@ -991,7 +1014,7 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
  --> src/lib.rs:9:9
   |
 9 |         client::connect();
-  |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
+  |         ^^^^^^ Use of undeclared type or module `client`
 ```
 
 The compilation failed, but why? We don’t need to place `communicator::` in
