@@ -39,7 +39,7 @@ cart.
 To create a new, empty vector, we can call the `Vec::new` function as shown in
 Listing 8-1:
 
-```rust
+```
 let v: Vec<i32> = Vec::new();
 ```
 
@@ -61,7 +61,7 @@ common to create a `Vec<T>` that has initial values, and Rust provides the
 values we give it. Listing 8-2 creates a new `Vec<i32>` that holds the values
 `1`, `2`, and `3`:
 
-```rust
+```
 let v = vec![1, 2, 3];
 ```
 
@@ -76,7 +76,7 @@ to modify a vector.
 To create a vector and then add elements to it, we can use the `push` method as
 shown in Listing 8-3:
 
-```rust
+```
 let mut v = Vec::new();
 
 v.push(5);
@@ -97,7 +97,7 @@ data, so we don’t need the `Vec<i32>` annotation.
 Like any other `struct`, a vector will be freed when it goes out of scope, as
 annotated in Listing 8-4:
 
-```rust
+```
 {
     let v = vec![1, 2, 3, 4];
 
@@ -123,7 +123,7 @@ values that are returned from these functions for extra clarity.
 Listing 8-5 shows both methods of accessing a value in a vector either with
 indexing syntax or the `get` method:
 
-```rust
+```
 let v = vec![1, 2, 3, 4, 5];
 
 let third: &i32 = &v[2];
@@ -145,7 +145,7 @@ have an element for. As an example, what should a program do if it has a vector
 that holds five elements and then tries to access an element at index 100, as
 shown in Listing 8-6:
 
-```rust,should_panic
+```
 let v = vec![1, 2, 3, 4, 5];
 
 let does_not_exist = &v[100];
@@ -179,7 +179,7 @@ rule that states we can’t have mutable and immutable references in the same
 scope. That rule applies in Listing 8-7 where we hold an immutable reference to
 the first element in a vector and try to add an element to the end:
 
-```rust,ignore
+```
 let mut v = vec![1, 2, 3, 4, 5];
 
 let first = &v[0];
@@ -192,7 +192,7 @@ to an item
 
 Compiling this code will result in this error:
 
-```text
+```
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as
 immutable
   |
@@ -224,7 +224,7 @@ indexing to access one element, we can iterate through all of the elements.
 Listing 8-8 shows how to use a `for` loop to get immutable references to each
 element in a vector of `i32` values and print them out:
 
-```rust
+```
 let v = vec![100, 32, 57];
 for i in &v {
     println!("{}", i);
@@ -238,7 +238,7 @@ We can also iterate over mutable references to each element in a mutable vector
 if we want to make changes to all the elements. The `for` loop in Listing 8-9
 will add `50` to each element:
 
-```rust
+```
 let mut v = vec![100, 32, 57];
 for i in &mut v {
     *i += 50;
@@ -266,7 +266,7 @@ value types, and then all the enum variants will be considered the same type,
 that of the enum. Then we can create a vector that holds that enum and so,
 ultimately, holds different types. We’ve demonstrated this in Listing 8-8:
 
-```rust
+```
 enum SpreadsheetCell {
     Int(i32),
     Float(f64),
@@ -349,7 +349,7 @@ them and when each is appropriate.
 Many of the same operations available with `Vec` are available with `String` as
 well, starting with the `new` function to create a string, shown in Listing 8-9:
 
-```rust
+```
 let mut s = String::new();
 ```
 
@@ -361,7 +361,7 @@ with. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, which string literals do. Listing 8-10
 shows two examples:
 
-```rust
+```
 let data = "initial contents";
 
 let s = data.to_string();
@@ -379,7 +379,7 @@ We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-11 is equivalent to the code from Listing 8-10
 that uses `to_string`:
 
-```rust
+```
 let s = String::from("initial contents");
 ```
 
@@ -394,7 +394,7 @@ redundant, but they all have their place! In this case, `String::from` and
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-12:
 
-```rust
+```
 let hello = String::from("السلام عليكم");
 let hello = String::from("Dobrý den");
 let hello = String::from("Hello");
@@ -423,7 +423,7 @@ the `+` operator or the `format!` macro to concatenate `String` values together.
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-13:
 
-```rust
+```
 let mut s = String::from("foo");
 s.push_str("bar");
 ```
@@ -435,7 +435,7 @@ string slice because we don’t necessarily want to take ownership of the
 parameter. For example, the code in Listing 8-14 shows that it would be
 unfortunate if we weren’t able to use `s2` after appending its contents to `s1`:
 
-```rust
+```
 let mut s1 = String::from("foo");
 let s2 = "bar";
 s1.push_str(&s2);
@@ -451,7 +451,7 @@ The `push` method takes a single character as a parameter and adds it to the
 `String`. Listing 8-15 shows code that adds an l to a `String` using the `push`
 method:
 
-```rust
+```
 let mut s = String::from("lo");
 s.push('l');
 ```
@@ -465,7 +465,7 @@ As a result of this code, `s` will contain `lol`.
 Often, we’ll want to combine two existing strings. One way is to use the `+`
 operator, as shown in Listing 8-16:
 
-```rust
+```
 let s1 = String::from("Hello, ");
 let s2 = String::from("world!");
 let s3 = s1 + &s2; // Note that s1 has been moved here and can no longer be used
@@ -480,7 +480,7 @@ reference to `s2` has to do with the signature of the method that gets called
 when we use the `+` operator. The `+` operator uses the `add` method, whose
 signature looks something like this:
 
-```rust,ignore
+```
 fn add(self, s: &str) -> String {
 ```
 
@@ -514,7 +514,7 @@ than copying.
 
 If we need to concatenate multiple strings, the behavior of `+` gets unwieldy:
 
-```rust
+```
 let s1 = String::from("tic");
 let s2 = String::from("tac");
 let s3 = String::from("toe");
@@ -526,7 +526,7 @@ At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"`
 characters, it’s difficult to see what’s going on. For more complicated string
 combining, we can use the `format!` macro:
 
-```rust
+```
 let s1 = String::from("tic");
 let s2 = String::from("tac");
 let s3 = String::from("toe");
@@ -546,7 +546,7 @@ string by referencing them by index is a valid and common operation. However,
 if we try to access parts of a `String` using indexing syntax in Rust, we’ll
 get an error. Consider the code in Listing 8-17:
 
-```rust,ignore
+```
 let s1 = String::from("hello");
 let h = s1[0];
 ```
@@ -555,7 +555,7 @@ Listing 8-17: Attempting to use indexing syntax with a String
 
 This code will result in the following error:
 
-```text
+```
 error: the trait bound `std::string::String: std::ops::Index<_>` is not
 satisfied [--explain E0277]
   |>
@@ -573,7 +573,7 @@ memory.
 A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly
 encoded UTF-8 example strings from Listing 8-12. First, this one:
 
-```rust
+```
 let len = String::from("Hola").len();
 ```
 
@@ -581,7 +581,7 @@ In this case, `len` will be four, which means the `Vec` storing the string
 “Hola” is four bytes long. Each of these letters takes one byte when encoded in
 UTF-8. But what about the following line?
 
-```rust
+```
 let len = String::from("Здравствуйте").len();
 ```
 
@@ -591,7 +591,7 @@ each Unicode scalar value takes two bytes of storage. Therefore, an index into
 the string’s bytes will not always correlate to a valid Unicode scalar value.
 To demonstrate, consider this invalid Rust code:
 
-```rust,ignore
+```
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```
@@ -617,7 +617,7 @@ clusters (the closest thing to what we would call *letters*).
 If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
 ultimately stored as a `Vec` of `u8` values that looks like this:
 
-```text
+```
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
 224, 165, 135]
 ```
@@ -626,7 +626,7 @@ That’s 18 bytes and is how computers ultimately store this data. If we look at
 them as Unicode scalar values, which are what Rust’s `char` type is, those
 bytes look like this:
 
-```text
+```
 ['न', 'म', 'स', '्', 'त', 'े']
 ```
 
@@ -635,7 +635,7 @@ they’re diacritics that don’t make sense on their own. Finally, if we look a
 them as grapheme clusters, we’d get what a person would call the four letters
 that make up the Hindi word:
 
-```text
+```
 ["न", "म", "स्", "ते"]
 ```
 
@@ -659,7 +659,7 @@ be more specific in your indexing and indicate that you want a string slice,
 rather than indexing using `[]` with a single number, you can use `[]` with a
 range to create a string slice containing particular bytes:
 
-```rust
+```
 let hello = "Здравствуйте";
 
 let s = &hello[0..4];
@@ -672,7 +672,7 @@ Earlier, we mentioned that each of these characters was two bytes, which means
 What would happen if we used `&hello[0..1]`? The answer: Rust will panic at
 runtime in the same way that accessing an invalid index in a vector does:
 
-```text
+```
 thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
 character boundary', ../src/libcore/str/mod.rs:1694
 ```
@@ -689,7 +689,7 @@ way to do so is to use the `chars` method. Calling `chars` on “नमस्त
 out and returns six values of type `char`, and you can iterate over the result
 in order to access each element:
 
-```rust
+```
 for c in "नमस्ते".chars() {
     println!("{}", c);
 }
@@ -697,7 +697,7 @@ for c in "नमस्ते".chars() {
 
 This code will print the following:
 
-```text
+```
 न
 म
 स
@@ -709,7 +709,7 @@ This code will print the following:
 The `bytes` method returns each raw byte, which might be appropriate for your
 domain:
 
-```rust
+```
 for b in "नमस्ते".bytes() {
     println!("{}", b);
 }
@@ -717,7 +717,7 @@ for b in "नमस्ते".bytes() {
 
 This code will print the 18 bytes that make up this `String`, starting with:
 
-```text
+```
 224
 164
 168
@@ -771,7 +771,7 @@ Listing 8-18, we’re keeping track of the scores of two teams whose names are
 Blue and Yellow. The Blue team will start with 10 points, and the Yellow team
 starts with 50:
 
-```rust
+```
 use std::collections::HashMap;
 
 let mut scores = HashMap::new();
@@ -801,7 +801,7 @@ separate vectors, we can use the `zip` method to create a vector of tuples
 where “Blue” is paired with 10, and so forth. Then we can use the `collect`
 method to turn that vector of tuples into a `HashMap` as shown in Listing 8-19:
 
-```rust
+```
 use std::collections::HashMap;
 
 let teams  = vec![String::from("Blue"), String::from("Yellow")];
@@ -824,7 +824,7 @@ For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
 the hash map will be the owner of those values as demonstrated in Listing 8-20:
 
-```rust
+```
 use std::collections::HashMap;
 
 let field_name = String::from("Favorite color");
@@ -852,7 +852,7 @@ the “Validating References with Lifetimes” section in Chapter 10.
 We can get a value out of the hash map by providing its key to the `get` method
 as shown in Listing 8-21:
 
-```rust
+```
 use std::collections::HashMap;
 
 let mut scores = HashMap::new();
@@ -875,7 +875,7 @@ of the ways that we covered in Chapter 6.
 We can iterate over each key/value pair in a hash map in a similar manner as we
 do with vectors, using a `for` loop:
 
-```rust
+```
 use std::collections::HashMap;
 
 let mut scores = HashMap::new();
@@ -890,7 +890,7 @@ for (key, value) in &scores {
 
 This code will print each pair in an arbitrary order:
 
-```text
+```
 Yellow: 50
 Blue: 10
 ```
@@ -914,7 +914,7 @@ Even though the code in Listing 8-22 calls `insert` twice, the hash map will
 only contain one key/value pair because we’re inserting the value for the Blue
 team’s key both times:
 
-```rust
+```
 use std::collections::HashMap;
 
 let mut scores = HashMap::new();
@@ -941,7 +941,7 @@ team has a value associated with it. If it doesn’t, we want to insert the valu
 50, and the same for the Blue team. Using the `entry` API, the code looks like
 Listing 8-23:
 
-```rust
+```
 use std::collections::HashMap;
 
 let mut scores = HashMap::new();
@@ -977,7 +977,7 @@ the words as keys and increment the value to keep track of how many times we’v
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value `0`:
 
-```rust
+```
 use std::collections::HashMap;
 
 let text = "hello world wonderful world";
