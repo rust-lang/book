@@ -17,7 +17,7 @@ mkdir -p tmp
 rm -rf tmp/*.md
 
 # Get all the markdown files in the src dir,
-ls src/*.md | \
+ls src/${1:-""}*.md | \
 # except for SUMMARY.md.
 grep -v SUMMARY.md | \
 # Extract just the filename so we can reuse it easily.
