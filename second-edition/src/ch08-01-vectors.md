@@ -242,7 +242,7 @@ some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and then all the enum variants will be considered the same type,
 that of the enum. Then we can create a vector that holds that enum and so,
-ultimately, holds different types. We’ve demonstrated this in Listing 8-8:
+ultimately, holds different types. We’ve demonstrated this in Listing 8-10:
 
 ```rust
 enum SpreadsheetCell {
@@ -258,7 +258,7 @@ let row = vec![
 ];
 ```
 
-<span class="caption">Listing 8-8: Defining an `enum` to store values of
+<span class="caption">Listing 8-10: Defining an `enum` to store values of
 different types in one vector</span>
 
 The reason Rust needs to know what types will be in the vector at compile time
