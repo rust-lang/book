@@ -1,4 +1,4 @@
-## Vectors
+## Vectors Store Lists of Values
 
 The first collection type we’ll look at is `Vec<T>`, also known as a *vector*.
 Vectors allow us to store more than one value in a single data structure that
@@ -118,9 +118,9 @@ argument, which gives us an `Option<&T>`.
 
 The reason Rust has two ways to reference an element is so you can choose how
 the program behaves when you try to use an index value that the vector doesn’t
-have an element for. As an example, what should a program do if it has a vector
-that holds five elements and then tries to access an element at index 100, as
-shown in Listing 8-6:
+have an element for. As an example, let's see what a program will do if it has
+a vector that holds five elements and then tries to access an element at index
+100, as shown in Listing 8-6:
 
 ```rust,should_panic
 let v = vec![1, 2, 3, 4, 5];
@@ -144,7 +144,7 @@ Your code will then have logic to handle having either `Some(&element)` or
 `None`, as discussed in Chapter 6. For example, the index could be coming from
 a person entering a number. If they accidentally enter a number that’s too
 large and the program gets a `None` value, you could tell the user how many
-items are in the current `Vec` and give them another chance to enter a valid
+items are in the current vector and give them another chance to enter a valid
 value. That would be more user-friendly than crashing the program due to a typo!
 
 #### Invalid References
@@ -154,7 +154,8 @@ ownership and borrowing rules (covered in Chapter 4) to ensure this reference
 and any other references to the contents of the vector remain valid. Recall the
 rule that states we can’t have mutable and immutable references in the same
 scope. That rule applies in Listing 8-7 where we hold an immutable reference to
-the first element in a vector and try to add an element to the end:
+the first element in a vector and try to add an element to the end, which won't
+work:
 
 ```rust,ignore
 let mut v = vec![1, 2, 3, 4, 5];
@@ -170,15 +171,16 @@ while holding a reference to an item</span>
 Compiling this code will result in this error:
 
 ```text
-error[E0502]: cannot borrow `v` as mutable because it is also borrowed as
-immutable
+error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
+ -->
   |
-4 | let first = &v[0];
-  |              - immutable borrow occurs here
+4 |     let first = &v[0];
+  |                  - immutable borrow occurs here
 5 |
-6 | v.push(6);
-  | ^ mutable borrow occurs here
-7 | }
+6 |     v.push(6);
+  |     ^ mutable borrow occurs here
+7 |
+8 | }
   | - immutable borrow ends here
 ```
 
@@ -196,10 +198,10 @@ rules prevent programs from ending up in that situation.
 
 ### Iterating Over the Values in a Vector
 
-If we want to access each element in a vector in turn, rather than using
-indexing to access one element, we can iterate through all of the elements.
-Listing 8-8 shows how to use a `for` loop to get immutable references to each
-element in a vector of `i32` values and print them out:
+If we want to access each element in a vector in turn, we can iterate through
+all of the elements rather than use indexes to access one at a time. Listing
+8-8 shows how to use a `for` loop to get immutable references to each element
+in a vector of `i32` values and print them out:
 
 ```rust
 let v = vec![100, 32, 57];
@@ -212,7 +214,7 @@ for i in &v {
 iterating over the elements using a `for` loop</span>
 
 We can also iterate over mutable references to each element in a mutable vector
-if we want to make changes to all the elements. The `for` loop in Listing 8-9
+in order to make changes to all the elements. The `for` loop in Listing 8-9
 will add `50` to each element:
 
 ```rust
@@ -225,9 +227,9 @@ for i in &mut v {
 <span class="caption">Listing 8-9: Iterating over mutable references to
 elements in a vector</span>
 
-In order to change the value that the mutable reference refers to, before we
-can use the `+=` operator with `i`, we have to use the dereference operator
-(`*`) to get to the value.
+To change the value that the mutable reference refers to, we have to use the
+dereference operator (`*`) to get to the value in `i` before we can use the
+`+=` operator .
 
 ### Using an Enum to Store Multiple Types
 
@@ -240,7 +242,7 @@ store elements of a different type in a vector, we can define and use an enum!
 For example, let’s say we want to get values from a row in a spreadsheet where
 some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
-value types, and then all the enum variants will be considered the same type,
+value types, and then all the enum variants will be considered the same type:
 that of the enum. Then we can create a vector that holds that enum and so,
 ultimately, holds different types. We’ve demonstrated this in Listing 8-10:
 
@@ -270,12 +272,12 @@ operations performed on the elements of the vector. Using an enum plus a
 `match` expression means that Rust will ensure at compile time that we always
 handle every possible case, as discussed in Chapter 6.
 
-If you don’t know when you’re writing a program the exhaustive set of types the
-program will get at runtime to store in a vector, the enum technique won’t
+If you don’t know the exhaustive set of types the program will get at runtime
+to store in a vector when you’re writing a program, the enum technique won’t
 work. Instead, you can use a trait object, which we’ll cover in Chapter 17.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
 to review the API documentation for all the many useful methods defined on
-`Vec` by the standard library. For example, in addition to `push`, a `pop`
+`Vec<T>` by the standard library. For example, in addition to `push`, a `pop`
 method removes and returns the last element. Let’s move on to the next
 collection type: `String`!

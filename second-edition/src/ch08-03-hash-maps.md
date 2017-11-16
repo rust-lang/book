@@ -1,4 +1,4 @@
-## Hash Maps
+## Hash Maps Store Keys Associated with Values
 
 The last of our common collections is the *hash map*. The type `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V`. It does this via a
@@ -38,9 +38,9 @@ keys and values</span>
 
 Note that we need to first `use` the `HashMap` from the collections portion of
 the standard library. Of our three common collections, this one is the least
-often used, so it’s not included in the features imported automatically in the
-prelude. Hash maps also have less support from the standard library; there’s no
-built-in macro to construct them, for example.
+often used, so it’s not included in the features brought into scope
+automatically in the prelude. Hash maps also have less support from the
+standard library; there’s no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are

@@ -1,4 +1,4 @@
-## Strings
+## Strings Store UTF-8 Encoded Text
 
 We talked about strings in Chapter 4, but we’ll look at them in more depth now.
 New Rustaceans commonly get stuck on strings due to a combination of three
@@ -114,8 +114,9 @@ All of these are valid `String` values.
 ### Updating a String
 
 A `String` can grow in size and its contents can change, just like the contents
-of a `Vec`, by pushing more data into it. In addition, we can conveniently use
-the `+` operator or the `format!` macro to concatenate `String` values together.
+of a `Vec<T>`, by pushing more data into it. In addition, we can conveniently
+use the `+` operator or the `format!` macro to concatenate `String` values
+together.
 
 #### Appending to a String with `push_str` and `push`
 
@@ -176,7 +177,7 @@ let s3 = s1 + &s2; // Note that s1 has been moved here and can no longer be used
 <span class="caption">Listing 8-18: Using the `+` operator to combine two
 `String` values into a new `String` value</span>
 
-As a result of this code, the string `s3` will contain `Hello, world!`. The
+The string `s3` will contain `Hello, world!` as a result of this code. The
 reason `s1` is no longer valid after the addition and the reason we used a
 reference to `s2` has to do with the signature of the method that gets called
 when we use the `+` operator. The `+` operator uses the `add` method, whose
@@ -197,13 +198,14 @@ First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
 string to the first string because of the `s` parameter in the `add` function:
 we can only add a `&str` to a `String`; we can’t add two `String` values
 together. But wait - the type of `&s2` is `&String`, not `&str`, as specified
-in the second parameter to `add`. Why does Listing 8-16 compile? We are able to
-use `&s2` in the call to `add` because the compiler can *coerce* the `&String`
-argument into a `&str`. When we call the `add` method, Rust uses something
-called a *deref coercion*, which you could think of here as turning `&s2` into
-`&s2[..]`. We’ll discuss deref coercion in more depth in Chapter 15. Because
-`add` does not take ownership of the `s` parameter, `s2` will still be a valid
-`String` after this operation.
+in the second parameter to `add`. So why does Listing 8-18 compile?
+
+The reason we’re able to use `&s2` in the call to `add` is that the compiler
+can *coerce* the `&String` argument into a `&str`. When we call the `add`
+method, Rust uses a *deref coercion*, which here turns `&s2` into `&s2[..]`.
+We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
+not take ownership of the `s` parameter, `s2` will still be a valid `String`
+after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
@@ -259,12 +261,13 @@ String</span>
 This code will result in the following error:
 
 ```text
-error: the trait bound `std::string::String: std::ops::Index<_>` is not
-satisfied [--explain E0277]
-  |>
-  |>     let h = s1[0];
-  |>             ^^^^^
-note: the type `std::string::String` cannot be indexed by `_`
+error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` is not satisfied
+ -->
+  |
+3 |     let h = s1[0];
+  |             ^^^^^ the type `std::string::String` cannot be indexed by `{integer}`
+  |
+  = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
 ```
 
 The error and the note tell the story: Rust strings don’t support indexing. But
@@ -378,8 +381,7 @@ What would happen if we used `&hello[0..1]`? The answer: Rust will panic at
 runtime in the same way that accessing an invalid index in a vector does:
 
 ```text
-thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
-character boundary', ../src/libcore/str/mod.rs:1694
+thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/libcore/str/mod.rs:2188:4
 ```
 
 You should use ranges to create string slices with caution, because it can
@@ -391,7 +393,7 @@ Fortunately, we can access elements in a string in other ways.
 
 If we need to perform operations on individual Unicode scalar values, the best
 way to do so is to use the `chars` method. Calling `chars` on “नमस्ते” separates
-out and returns six values of type `char`, and you can iterate over the result
+out and returns six values of type `char`, and we can iterate over the result
 in order to access each element:
 
 ```rust
