@@ -3,8 +3,8 @@
 We’ll start our module example by making a new project with Cargo, but instead
 of creating a binary crate, we’ll make a library crate: a project that other
 people can pull into their projects as a dependency. For example, the `rand`
-crate in Chapter 2 is a library crate that we used as a dependency in the
-guessing game project.
+crate discussed in Chapter 2 is a library crate that we used as a dependency in
+the guessing game project.
 
 We’ll create a skeleton of a library that provides some general networking
 functionality; we’ll concentrate on the organization of the modules and
@@ -66,7 +66,7 @@ mod network {
 After the `mod` keyword, we put the name of the module, `network`, and then a
 block of code in curly brackets. Everything inside this block is inside the
 namespace `network`. In this case, we have a single function, `connect`. If we
-wanted to call this function from a script outside the `network` module, we
+wanted to call this function from code outside the `network` module, we
 would need to specify the module and use the namespace syntax `::`, like so:
 `network::connect()` rather than just `connect()`.
 
@@ -198,13 +198,13 @@ communicator
 
 If these modules had many functions, and those functions were becoming lengthy,
 it would be difficult to scroll through this file to find the code we wanted to
-work with. Because the functions are nested inside one or more mod blocks, the
-lines of code inside the functions will start getting lengthy as well. These
-would be good reasons to separate the `client`, `network`, and `server` modules
-from *src/lib.rs* and place them into their own files.
+work with. Because the functions are nested inside one or more `mod` blocks,
+the lines of code inside the functions will start getting lengthy as well.
+These would be good reasons to separate the `client`, `network`, and `server`
+modules from *src/lib.rs* and place them into their own files.
 
-First, replace the `client` module code with only the declaration of the `client`
-module, so that your *src/lib.rs* looks like the following:
+First, replace the `client` module code with only the declaration of the
+`client` module, so that your *src/lib.rs* looks like the following:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -262,29 +262,33 @@ a library crate rather than a binary crate:
 ```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/client.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:4:5
   |
-4 |     fn connect() {
-  |     ^
+4 | /     fn connect() {
+5 | |     }
+  | |_____^
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:8:9
   |
-8 |         fn connect() {
-  |         ^
+8 | /         fn connect() {
+9 | |         }
+  | |_________^
 ```
 
 These warnings tell us that we have functions that are never used. Don’t worry
-about these warnings for now; we’ll address them in the “Controlling Visibility
-with `pub`” section later in this chapter. The good news is that they’re just
+about these warnings for now; we’ll address them later in this chapter in the
+“Controlling Visibility with `pub`” section. The good news is that they’re just
 warnings; our project built successfully!
 
 Next, let’s extract the `network` module into its own file using the same
@@ -352,7 +356,7 @@ error: cannot declare a new module at this location
 4 | mod server;
   |     ^^^^^^
   |
-note: maybe move this module `network` to its own directory via `network/mod.rs`
+note: maybe move this module `src/network.rs` to its own directory via `src/network/mod.rs`
  --> src/network.rs:4:5
   |
 4 | mod server;

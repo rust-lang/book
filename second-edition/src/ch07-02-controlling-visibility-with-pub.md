@@ -8,23 +8,28 @@ able to build our project, but we still get warning messages about the
 not being used:
 
 ```text
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
-src/client.rs:1:1
+warning: function is never used: `connect`
+ --> src/client.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/mod.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 ```
 
 So why are we receiving these warnings? After all, we’re building a library
@@ -71,7 +76,7 @@ the `client` module. However, invoking `cargo build` will now give us an error
 after the warnings:
 
 ```text
-error: module `client` is private
+error[E0603]: module `client` is private
  --> src/main.rs:4:5
   |
 4 |     communicator::client::connect();
@@ -91,17 +96,17 @@ will our call to that function from our binary crate be allowed, but the
 warning that the function is unused will go away. Marking a function as public
 lets Rust know that the function will be used by code outside of our program.
 Rust considers the theoretical external usage that’s now possible as the
-function “being used.” Thus, when something is marked public, Rust will not
-require that it be used in our program and will stop warning that the item is
-unused.
+function “being used.” Thus, when a function is marked public, Rust will not
+require that it be used in our program and will stop warning that the function
+is unused.
 
 ### Making a Function Public
 
-To tell Rust to make something public, we add the `pub` keyword to the start of
-the declaration of the item we want to make public. We’ll focus on fixing the
-warning that indicates `client::connect` has gone unused for now, as well as
-the `` module `client` is private `` error from our binary crate. Modify
-*src/lib.rs* to make the `client` module public, like so:
+To tell Rust to make a function public, we add the `pub` keyword to the start
+of the declaration. We’ll focus on fixing the warning that indicates
+`client::connect` has gone unused for now, as well as the `` module `client` is
+private `` error from our binary crate. Modify *src/lib.rs* to make the
+`client` module public, like so:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -114,7 +119,7 @@ mod network;
 The `pub` keyword is placed right before `mod`. Let’s try building again:
 
 ```text
-error: function `connect` is private
+error[E0603]: function `connect` is private
  --> src/main.rs:4:5
   |
 4 |     communicator::client::connect();
@@ -135,17 +140,21 @@ pub fn connect() {
 Now run `cargo build` again:
 
 ```text
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/mod.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 ```
 
 The code compiled, and the warning about `client::connect` not being used is
@@ -174,17 +183,21 @@ mod server;
 Then compile the code:
 
 ```text
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/mod.rs:1:1
   |
-1 | pub fn connect() {
-  | ^
+1 | / pub fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
 ```
 
 Hmmm, we’re still getting an unused function warning, even though
@@ -205,11 +218,14 @@ pub mod network;
 Now when we compile, that warning is gone:
 
 ```text
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/network/server.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 ```
 
 Only one warning is left! Try to fix this one on your own!
