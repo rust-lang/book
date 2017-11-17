@@ -1,4 +1,6 @@
+cd ..
 rev=$(git rev-parse --short HEAD)
+cd second-edition
 rm -rf book
 mdbook build
 cd book
