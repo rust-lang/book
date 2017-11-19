@@ -74,14 +74,14 @@ element by index in a vector:
 fn main() {
     let v = vec![1, 2, 3];
 
-    v[100];
+    v[99];
 }
 ```
 
 <span class="caption">Listing 9-1: Attempting to access an element beyond the
 end of a vector, which will cause a `panic!`</span>
 
-Here, we’re attempting to access the hundredth element of our vector, but it
+Here, we’re attempting to access the hundredth element (hundredth since indexing starts at zero) of our vector, but it
 has only three elements. In this situation, Rust will panic. Using `[]` is
 supposed to return an element, but if you pass an invalid index, there’s no
 element that Rust could return here that would be correct.
