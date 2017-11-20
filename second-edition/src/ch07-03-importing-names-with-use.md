@@ -2,7 +2,7 @@
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
-here in Listing 7-6:
+here in Listing 7-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -20,7 +20,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-6: Calling a function by fully specifying its
+<span class="caption">Listing 7-7: Calling a function by fully specifying its
 enclosing module’s path</span>
 
 As you can see, referring to the fully qualified name can get quite lengthy.
@@ -256,7 +256,7 @@ $ cargo test
 running 1 test
 test tests::it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 ## Summary

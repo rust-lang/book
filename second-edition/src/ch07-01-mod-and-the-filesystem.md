@@ -204,7 +204,7 @@ These would be good reasons to separate the `client`, `network`, and `server`
 modules from *src/lib.rs* and place them into their own files.
 
 First, replace the `client` module code with only the declaration of the
-`client` module, so that your *src/lib.rs* looks like the following:
+`client` module, so that your *src/lib.rs* looks like code shown in Listing 7-4:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -221,6 +221,8 @@ mod network {
     }
 }
 ```
+
+<span class="caption">Listing 7-4: Extracting the contents of the `client` module but leaving the declaration in *src/lib.rs*</span>
 
 We’re still *declaring* the `client` module here, but by replacing the block
 with a semicolon, we’re telling Rust to look in another location for the code
@@ -345,7 +347,7 @@ fn connect() {
 }
 ```
 
-When we try to `cargo build`, we’ll get the error shown in Listing 7-4:
+When we try to `cargo build`, we’ll get the error shown in Listing 7-5:
 
 ```text
 $ cargo build
@@ -368,14 +370,14 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<span class="caption">Listing 7-4: Error when trying to extract the `server`
+<span class="caption">Listing 7-5: Error when trying to extract the `server`
 submodule into *src/server.rs*</span>
 
 The error says we `cannot declare a new module at this location` and is
 pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is
 different than *src/lib.rs* somehow: keep reading to understand why.
 
-The note in the middle of Listing 7-4 is actually very helpful because it
+The note in the middle of Listing 7-5 is actually very helpful because it
 points out something we haven’t yet talked about doing:
 
 ```text
