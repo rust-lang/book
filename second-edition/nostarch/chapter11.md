@@ -3,7 +3,7 @@
 
 # Writing Automated Tests
 
-In his 1972 essay “The Humble Programmer”, Edsger W. Dijkstra said that
+In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that
 “Program testing can be a very effective way to show the presence of bugs, but
 it is hopelessly inadequate for showing their absence.” That doesn’t mean we
 shouldn’t try to test as much as we can! Correctness in our programs is the
@@ -52,7 +52,7 @@ take these actions, which include the `test` attribute, a few macros, and the
 ### The Anatomy of a Test Function
 
 At its simplest, a test in Rust is a function that’s annotated with the `test`
-attribute. Attributes are metadata about pieces of Rust code: one example is
+attribute. Attributes are metadata about pieces of Rust code; one example is
 the `derive` attribute we used with structs in Chapter 5. To change a function
 into a test function, we add `#[test]` on the line before `fn`. When we run our
 tests with the `cargo test` command, Rust builds a test runner binary that runs
@@ -140,7 +140,7 @@ reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 Because we don’t have any tests we’ve marked as ignored, the summary shows `0
 ignored`. We also haven’t filtered the tests being run, so the end of the
 summary shows `0 filtered out`. We’ll talk about ignoring and filtering out
-tests in the next section, “Controlling How Tests Are Run”.
+tests in the next section, “Controlling How Tests Are Run.”
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
