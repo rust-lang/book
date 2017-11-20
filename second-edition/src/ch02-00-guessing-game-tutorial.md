@@ -285,7 +285,7 @@ If we don’t call `expect`, the program will compile, but we’ll get a warning
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-warning: unused `std::result::Result` which must be used
+warning: unused result which must be used
   --> src/main.rs:10:5
    |
 10 |     io::stdin().read_line(&mut guess);
