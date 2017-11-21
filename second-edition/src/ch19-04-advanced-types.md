@@ -76,11 +76,11 @@ like that in Listing 19-35:
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Box<Fn() + Send + 'static>) {
-    // ...snip...
+    // --snip--
 }
 
 fn returns_long_type() -> Box<Fn() + Send + 'static> {
-    // ...snip...
+    // --snip--
 #     Box::new(|| ())
 }
 ```
@@ -98,11 +98,11 @@ type Thunk = Box<Fn() + Send + 'static>;
 let f: Thunk = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Thunk) {
-    // ...snip...
+    // --snip--
 }
 
 fn returns_long_type() -> Thunk {
-    // ...snip...
+    // --snip--
 #     Box::new(|| ())
 }
 ```
@@ -170,7 +170,7 @@ function will never return. For example:
 
 ```rust,ignore
 fn bar() -> ! {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -318,7 +318,7 @@ That is, a generic function definition like this:
 
 ```rust,ignore
 fn generic<T>(t: T) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -326,7 +326,7 @@ is actually treated as if we had written this:
 
 ```rust,ignore
 fn generic<T: Sized>(t: T) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -336,7 +336,7 @@ restriction:
 
 ```rust,ignore
 fn generic<T: ?Sized>(t: &T) {
-    // ...snip...
+    // --snip--
 }
 ```
 

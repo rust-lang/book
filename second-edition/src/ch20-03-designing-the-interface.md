@@ -234,7 +234,7 @@ generic parameter `F` with these bounds:
 ```rust
 # pub struct ThreadPool;
 impl ThreadPool {
-    // ...snip...
+    // --snip--
 
     pub fn execute<F>(&self, f: F)
         where

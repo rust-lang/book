@@ -104,7 +104,7 @@ to wrap the `thread` value in `Some` when we create a new `Worker`:
 ```rust,ignore
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        // ...snip...
+        // --snip--
 
         Worker {
             id,
@@ -177,16 +177,16 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Message>,
 }
 
-// ...snip...
+// --snip--
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
         let (sender, receiver) = mpsc::channel();
 
-        // ...snip...
+        // --snip--
     }
 
     pub fn execute<F>(&self, f: F)
@@ -199,7 +199,7 @@ impl ThreadPool {
     }
 }
 
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->

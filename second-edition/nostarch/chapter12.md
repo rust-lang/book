@@ -132,7 +132,7 @@ $ cargo run
 ["target/debug/minigrep"]
 
 $ cargo run needle haystack
-...snip...
+--snip--
 ["target/debug/minigrep", "needle", "haystack"]
 ```
 
@@ -233,7 +233,7 @@ use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
-    // ...snip...
+    // --snip--
     println!("In file {}", filename);
 
     let mut f = File::open(filename).expect("file not found");
@@ -380,7 +380,7 @@ fn main() {
 
     let (query, filename) = parse_config(&args);
 
-    // ...snip...
+    // --snip--
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
@@ -445,7 +445,7 @@ fn main() {
 
     let mut f = File::open(config.filename).expect("file not found");
 
-    // ...snip...
+    // --snip--
 }
 
 struct Config {
@@ -529,10 +529,10 @@ fn main() {
 
     let config = Config::new(&args);
 
-    // ...snip...
+    // --snip--
 }
 
-// ...snip...
+// --snip--
 
 impl Config {
     fn new(args: &[String]) -> Config {
@@ -581,12 +581,12 @@ isn’t long enough, the program panics, with a better error message than the
 Filename: src/main.rs
 
 ```
-// ...snip...
+// --snip--
 fn new(args: &[String]) -> Config {
     if args.len() < 3 {
         panic!("not enough arguments");
     }
-    // ...snip...
+    // --snip--
 ```
 
 Listing 12-8: Adding a check for the number of arguments
@@ -686,7 +686,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 ```
 
 Listing 12-10: Exiting with an error code if creating a new `Config` fails
@@ -740,7 +740,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-    // ...snip...
+    // --snip--
 
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
@@ -758,7 +758,7 @@ fn run(config: Config) {
     println!("With text:\n{}", contents);
 }
 
-// ...snip...
+// --snip--
 ```
 
 Listing 12-11: Extracting a `run` function containing the rest of the program
@@ -783,7 +783,7 @@ Filename: src/main.rs
 ```
 use std::error::Error;
 
-// ...snip...
+// --snip--
 
 fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
@@ -848,7 +848,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-    // ...snip...
+    // --snip--
 
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
@@ -902,12 +902,12 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        // ...snip...
+        // --snip--
     }
 }
 
 pub fn run(config: Config) -> Result<(), Box<Error>> {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -933,9 +933,9 @@ use std::process;
 use minigrep::Config;
 
 fn main() {
-    // ...snip...
+    // --snip--
     if let Err(e) = minigrep::run(config) {
-        // ...snip...
+        // --snip--
     }
 }
 ```
@@ -1468,7 +1468,7 @@ Filename: src/lib.rs
 ```
 use std::env;
 
-// ...snip...
+// --snip--
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {

@@ -26,12 +26,12 @@ use std::time::Duration;
 # use std::io::prelude::*;
 # use std::net::TcpStream;
 # use std::fs::File;
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
 #     let mut buffer = [0; 512];
 #     stream.read(&mut buffer).unwrap();
-    // ...snip...
+    // --snip--
 
     let get = b"GET / HTTP/1.1\r\n";
     let sleep = b"GET /sleep HTTP/1.1\r\n";
@@ -45,7 +45,7 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
 
-    // ...snip...
+    // --snip--
 }
 ```
 

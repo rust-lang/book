@@ -503,7 +503,7 @@ similar to this code:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
-    // ...snip...
+    // --snip--
 }
 ```
 

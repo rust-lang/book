@@ -23,7 +23,7 @@ the `grep` tool for searching files called `ripgrep`. If we want to install
 $ cargo install ripgrep
 Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading ripgrep v0.3.2
- ...snip...
+ --snip--
    Compiling ripgrep v0.3.2
     Finished release [optimized + debuginfo] target(s) in 97.91 secs
   Installing ~/.cargo/bin/rg

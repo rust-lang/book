@@ -155,7 +155,7 @@ Post` block:
 # }
 #
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn add_text(&mut self, text: &str) {
         self.content.push_str(text);
     }
@@ -192,7 +192,7 @@ implementation:
 # }
 #
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn content(&self) -> &str {
         ""
     }
@@ -229,7 +229,7 @@ upon /Carol -->
 # }
 #
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn request_review(&mut self) {
         if let Some(s) = self.state.take() {
             self.state = Some(s.request_review())
@@ -317,7 +317,7 @@ state is approved, shown in Listing 17-16.
 # }
 #
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn approve(&mut self) {
         if let Some(s) = self.state.take() {
             self.state = Some(s.approve())
@@ -337,7 +337,7 @@ impl State for Draft {
 #         Box::new(PendingReview {})
 #     }
 #
-    // ...snip...
+    // --snip--
     fn approve(self: Box<Self>) -> Box<State> {
         self
     }
@@ -350,7 +350,7 @@ impl State for PendingReview {
 #         self
 #     }
 #
-    // ...snip...
+    // --snip--
     fn approve(self: Box<Self>) -> Box<State> {
         Box::new(Published {})
     }
@@ -398,11 +398,11 @@ return an empty string slice, as shown in Listing 17-17:
 # }
 #
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn content(&self) -> &str {
         self.state.as_ref().unwrap().content(&self)
     }
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -441,17 +441,17 @@ we have, as shown in Listing 17-18:
 #     content: String
 # }
 trait State {
-    // ...snip...
+    // --snip--
     fn content<'a>(&self, post: &'a Post) -> &'a str {
         ""
     }
 }
 
-// ...snip...
+// --snip--
 struct Published {}
 
 impl State for Published {
-    // ...snip...
+    // --snip--
     fn content<'a>(&self, post: &'a Post) -> &'a str {
         &post.content
     }
@@ -640,7 +640,7 @@ return a `Post` as shown in Listing 17-20:
 # }
 #
 impl DraftPost {
-    // ...snip...
+    // --snip--
 
     pub fn request_review(self) -> PendingReviewPost {
         PendingReviewPost {

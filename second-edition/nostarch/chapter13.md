@@ -1277,7 +1277,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1292,7 +1292,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1312,7 +1312,7 @@ Filename: src/lib.rs
 ```
 impl Config {
     pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        // ...snip...
+        // --snip--
 ```
 
 Listing 13-26: Updating the signature of `Config::new` to expect an iterator

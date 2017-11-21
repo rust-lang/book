@@ -795,7 +795,7 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn add_text(&mut self, text: &str) {
         self.content.push_str(text);
     }
@@ -828,7 +828,7 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn content(&self) -> &str {
         ""
     }
@@ -860,7 +860,7 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn request_review(&mut self) {
         if let Some(s) = self.state.take() {
             self.state = Some(s.request_review())
@@ -943,7 +943,7 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn approve(&mut self) {
         if let Some(s) = self.state.take() {
             self.state = Some(s.approve())
@@ -959,7 +959,7 @@ trait State {
 struct Draft {}
 
 impl State for Draft {
-    // ...snip...
+    // --snip--
     fn approve(self: Box<Self>) -> Box<State> {
         self
     }
@@ -968,7 +968,7 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-    // ...snip...
+    // --snip--
     fn approve(self: Box<Self>) -> Box<State> {
         Box::new(Published {})
     }
@@ -1007,11 +1007,11 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-    // ...snip...
+    // --snip--
     pub fn content(&self) -> &str {
         self.state.as_ref().unwrap().content(&self)
     }
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1047,17 +1047,17 @@ Filename: src/lib.rs
 
 ```
 trait State {
-    // ...snip...
+    // --snip--
     fn content<'a>(&self, post: &'a Post) -> &'a str {
         ""
     }
 }
 
-// ...snip...
+// --snip--
 struct Published {}
 
 impl State for Published {
-    // ...snip...
+    // --snip--
     fn content<'a>(&self, post: &'a Post) -> &'a str {
         &post.content
     }
@@ -1237,7 +1237,7 @@ Filename: src/lib.rs
 
 ```
 impl DraftPost {
-    // ...snip...
+    // --snip--
 
     pub fn request_review(self) -> PendingReviewPost {
         PendingReviewPost {

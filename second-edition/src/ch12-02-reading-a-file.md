@@ -42,7 +42,7 @@ fn main() {
 #     let filename = &args[2];
 #
 #     println!("Searching for {}", query);
-    // ...snip...
+    // --snip--
     println!("In file {}", filename);
 
     let mut f = File::open(filename).expect("file not found");

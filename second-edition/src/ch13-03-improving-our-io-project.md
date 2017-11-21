@@ -71,7 +71,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -86,7 +86,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -107,7 +107,7 @@ Next, we need to update the definition of `Config::new`. In your I/O project’s
 ```rust,ignore
 impl Config {
     pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        // ...snip...
+        // --snip--
 ```
 
 <span class="caption">Listing 13-26: Updating the signature of `Config::new` to

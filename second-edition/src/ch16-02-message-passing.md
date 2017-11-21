@@ -338,7 +338,7 @@ shown in Listing 16-11:
 # use std::time::Duration;
 #
 # fn main() {
-// ...snip...
+// --snip--
 let (tx, rx) = mpsc::channel();
 
 let tx1 = mpsc::Sender::clone(&tx);
@@ -369,7 +369,7 @@ thread::spawn(move || {
         thread::sleep(Duration::from_secs(1));
     }
 });
-// ...snip...
+// --snip--
 #
 #     for received in rx {
 #         println!("Got: {}", received);

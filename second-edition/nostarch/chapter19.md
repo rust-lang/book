@@ -1032,7 +1032,7 @@ like Listing 19-23:
 
 ```
 fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1051,7 +1051,7 @@ Contrast with the definition of `distance` in Listing 19-24 that uses the
 
 ```
 fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1072,7 +1072,7 @@ trait object:
 
 ```
 fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1094,7 +1094,7 @@ for their `Edge` type:
 
 ```
 fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1561,11 +1561,11 @@ like that in Listing 19-31:
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Box<Fn() + Send + 'static>) {
-    // ...snip...
+    // --snip--
 }
 
 fn returns_long_type() -> Box<Fn() + Send + 'static> {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1582,11 +1582,11 @@ type Thunk = Box<Fn() + Send + 'static>;
 let f: Thunk = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Thunk) {
-    // ...snip...
+    // --snip--
 }
 
 fn returns_long_type() -> Thunk {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1652,7 +1652,7 @@ function will never return. For example:
 
 ```
 fn bar() -> ! {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1795,7 +1795,7 @@ That is, a generic function definition like this:
 
 ```
 fn generic<T>(t: T) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1803,7 +1803,7 @@ is actually treated as if we had written this:
 
 ```
 fn generic<T: Sized>(t: T) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1813,7 +1813,7 @@ restriction:
 
 ```
 fn generic<T: ?Sized>(t: &T) {
-    // ...snip...
+    // --snip--
 }
 ```
 

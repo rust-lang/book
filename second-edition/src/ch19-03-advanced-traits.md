@@ -104,7 +104,7 @@ like Listing 19-23:
 # trait GGraph<Node, Edge> {}
 #
 fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
-    // ...snip...
+    // --snip--
 #     0
 }
 ```
@@ -130,7 +130,7 @@ Contrast with the definition of `distance` in Listing 19-24 that uses the
 # }
 #
 fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
-    // ...snip...
+    // --snip--
 #     0
 }
 ```
@@ -154,7 +154,7 @@ trait object:
 # trait GGraph<Node, Edge> {}
 #
 fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
-    // ...snip...
+    // --snip--
 #     0
 }
 ```
@@ -182,7 +182,7 @@ for their `Edge` type:
 # }
 #
 fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {
-    // ...snip...
+    // --snip--
 }
 ```
 

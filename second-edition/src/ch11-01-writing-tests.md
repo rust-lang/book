@@ -300,7 +300,7 @@ mod tests {
 
     #[test]
     fn larger_can_hold_smaller() {
-        // ...snip...
+        // --snip--
     }
 
     #[test]
@@ -336,7 +336,7 @@ compares the lengths:
 #     length: u32,
 #     width: u32,
 # }
-// ...snip...
+// --snip--
 
 impl Rectangle {
     pub fn can_hold(&self, other: &Rectangle) -> bool {
@@ -698,7 +698,7 @@ different messages depending on whether the value was too small or too large:
 #     value: u32,
 # }
 #
-// ...snip...
+// --snip--
 
 impl Guess {
     pub fn new(value: u32) -> Guess {

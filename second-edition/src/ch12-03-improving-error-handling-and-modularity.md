@@ -80,7 +80,7 @@ fn main() {
 
     let (query, filename) = parse_config(&args);
 
-    // ...snip...
+    // --snip--
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
@@ -149,7 +149,7 @@ fn main() {
 
     let mut f = File::open(config.filename).expect("file not found");
 
-    // ...snip...
+    // --snip--
 }
 
 struct Config {
@@ -235,7 +235,7 @@ fn main() {
 
     let config = Config::new(&args);
 
-    // ...snip...
+    // --snip--
 }
 
 # struct Config {
@@ -243,7 +243,7 @@ fn main() {
 #     filename: String,
 # }
 #
-// ...snip...
+// --snip--
 
 impl Config {
     fn new(args: &[String]) -> Config {
@@ -293,12 +293,12 @@ isn’t long enough, the program panics, with a better error message than the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// ...snip...
+// --snip--
 fn new(args: &[String]) -> Config {
     if args.len() < 3 {
         panic!("not enough arguments");
     }
-    // ...snip...
+    // --snip--
 ```
 
 <span class="caption">Listing 12-8: Adding a check for the number of
@@ -399,7 +399,7 @@ fn main() {
         process::exit(1);
     });
 
-    // ...snip...
+    // --snip--
 ```
 
 <span class="caption">Listing 12-10: Exiting with an error code if creating a
@@ -454,7 +454,7 @@ defining the function in *src/main.rs*:
 
 ```rust,ignore
 fn main() {
-    // ...snip...
+    // --snip--
 
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
@@ -472,7 +472,7 @@ fn run(config: Config) {
     println!("With text:\n{}", contents);
 }
 
-// ...snip...
+// --snip--
 ```
 
 <span class="caption">Listing 12-11: Extracting a `run` function containing the
@@ -497,7 +497,7 @@ signature and body of `run`:
 ```rust,ignore
 use std::error::Error;
 
-// ...snip...
+// --snip--
 
 fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
@@ -563,7 +563,7 @@ difference:
 
 ```rust,ignore
 fn main() {
-    // ...snip...
+    // --snip--
 
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
@@ -617,12 +617,12 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        // ...snip...
+        // --snip--
     }
 }
 
 pub fn run(config: Config) -> Result<(), Box<Error>> {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -649,9 +649,9 @@ use std::process;
 use minigrep::Config;
 
 fn main() {
-    // ...snip...
+    // --snip--
     if let Err(e) = minigrep::run(config) {
-        // ...snip...
+        // --snip--
     }
 }
 ```

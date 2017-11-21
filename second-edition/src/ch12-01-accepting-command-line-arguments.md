@@ -88,7 +88,7 @@ $ cargo run
 ["target/debug/minigrep"]
 
 $ cargo run needle haystack
-...snip...
+--snip--
 ["target/debug/minigrep", "needle", "haystack"]
 ```
 

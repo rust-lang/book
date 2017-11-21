@@ -336,7 +336,7 @@ mod tests {
 
     #[test]
     fn larger_can_hold_smaller() {
-        // ...snip...
+        // --snip--
     }
 
     #[test]
@@ -367,7 +367,7 @@ method by replacing the greater-than sign with a less-than sign when it
 compares the lengths:
 
 ```
-// ...snip...
+// --snip--
 
 impl Rectangle {
     pub fn can_hold(&self, other: &Rectangle) -> bool {
@@ -676,7 +676,7 @@ Looks good! Now let’s introduce a bug in our code by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
 ```
-// ...snip...
+// --snip--
 
 impl Guess {
     pub fn new(value: u32) -> Guess {
@@ -721,7 +721,7 @@ different messages depending on whether the value was too small or too large:
 Filename: src/lib.rs
 
 ```
-// ...snip...
+// --snip--
 
 impl Guess {
     pub fn new(value: u32) -> Guess {

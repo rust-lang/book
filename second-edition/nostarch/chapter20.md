@@ -391,7 +391,7 @@ Filename: src/main.rs
 ```
 use std::fs::File;
 
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
@@ -442,7 +442,7 @@ add code to treat requests differently:
 Filename: src/main.rs
 
 ```
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
@@ -495,7 +495,7 @@ browser indicating as such to the end user:
 Filename: src/main.rs
 
 ```
-// ...snip...
+// --snip--
 
 } else {
     let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
@@ -554,10 +554,10 @@ shown in Listing 20-9:
 Filename: src/main.rs
 
 ```
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
-    // ...snip...
+    // --snip--
 
    let (status_line, filename) = if buffer.starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
@@ -625,10 +625,10 @@ Filename: src/main.rs
 ```
 use std::thread;
 use std::time::Duration;
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
-    // ...snip...
+    // --snip--
 
     let get = b"GET / HTTP/1.1\r\n";
     let sleep = b"GET /sleep HTTP/1.1\r\n";
@@ -642,7 +642,7 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -922,7 +922,7 @@ Filename: src/lib.rs
 
 ```
 impl ThreadPool {
-    // ...snip...
+    // --snip--
 
     pub fn execute<F>(&self, f: F)
         where
@@ -1003,7 +1003,7 @@ impl ThreadPool {
         ThreadPool
     }
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1063,7 +1063,7 @@ pub struct ThreadPool {
 }
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: u32) -> ThreadPool {
         assert!(size > 0);
 
@@ -1078,7 +1078,7 @@ impl ThreadPool {
         }
     }
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1164,7 +1164,7 @@ pub struct ThreadPool {
 }
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -1178,7 +1178,7 @@ impl ThreadPool {
             workers
         }
     }
-    // ...snip...
+    // --snip--
 }
 
 struct Worker {
@@ -1250,7 +1250,7 @@ hold anything for now:
 Filename: src/lib.rs
 
 ```
-// ...snip...
+// --snip--
 use std::sync::mpsc;
 
 pub struct ThreadPool {
@@ -1261,7 +1261,7 @@ pub struct ThreadPool {
 struct Job;
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -1278,7 +1278,7 @@ impl ThreadPool {
             sender,
         }
     }
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -1298,7 +1298,7 @@ Filename: src/lib.rs
 
 ```
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -1315,10 +1315,10 @@ impl ThreadPool {
             sender,
         }
     }
-    // ...snip...
+    // --snip--
 }
 
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
@@ -1382,10 +1382,10 @@ Filename: src/lib.rs
 use std::sync::Arc;
 use std::sync::Mutex;
 
-// ...snip...
+// --snip--
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -1405,12 +1405,12 @@ impl ThreadPool {
         }
     }
 
-    // ...snip...
+    // --snip--
 }
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        // ...snip...
+        // --snip--
     }
 }
 ```
@@ -1433,12 +1433,12 @@ this is such a case! Take a look at Listing 20-19:
 Filename: src/lib.rs
 
 ```
-// ...snip...
+// --snip--
 
 type Job = Box<FnOnce() + Send + 'static>;
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
 
     pub fn execute<F>(&self, f: F)
         where
@@ -1450,7 +1450,7 @@ impl ThreadPool {
     }
 }
 
-// ...snip...
+// --snip--
 ```
 
 Listing 20-19: Creating a `Job` type alias for a `Box` that holds each closure,
@@ -1474,7 +1474,7 @@ change shown in Listing 20-20 to `Worker::new`:
 Filename: src/lib.rs
 
 ```
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
@@ -1575,7 +1575,7 @@ impl<F: FnOnce()> FnBox for F {
 
 type Job = Box<FnBox + Send + 'static>;
 
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
@@ -1793,7 +1793,7 @@ Filename: src/lib.rs
 ```
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        // ...snip...
+        // --snip--
 
         Worker {
             id,
@@ -1865,16 +1865,16 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Message>,
 }
 
-// ...snip...
+// --snip--
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
         let (sender, receiver) = mpsc::channel();
 
-        // ...snip...
+        // --snip--
     }
 
     pub fn execute<F>(&self, f: F)
@@ -1887,7 +1887,7 @@ impl ThreadPool {
     }
 }
 
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
