@@ -155,7 +155,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
 
     <!-- Character styles -->
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold' or @w:val = 'EmphasisBold' or @w:val = 'LiteralCaption']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold' or @w:val = 'LiteralCaption' or @w:val = 'LiteralBox']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
@@ -174,7 +174,26 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisBold']]">
+        <xsl:choose>
+            <xsl:when test="normalize-space(w:t) != ''">
+                <xsl:if test="starts-with(w:t, ' ')">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <xsl:text>**</xsl:text>
+                <xsl:value-of select="normalize-space(w:t)" />
+                <xsl:text>**</xsl:text>
+                <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+            </xsl:when>
+            <xsl:when test="normalize-space(w:t) != w:t and w:t != ''">
+                <xsl:text> </xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption' or @w:val = 'EmphasisRevItal']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
