@@ -279,6 +279,14 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
+If you’re using PowerShell, you will need to set the environment variable and
+run the program in two commands rather than one:
+
+```text
+$ $env.CASE_INSENSITIVE=1
+$ cargo run to poem.txt
+```
+
 Excellent, we also got lines containing “To”! Our `minigrep` program can now do
 case-insensitive searching controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
