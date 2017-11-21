@@ -8,7 +8,7 @@
 все слова пишутся в нижнем регистре и слова в многословных обозначениях разделяются
 нижним подчёркиванием. Пример объявления функции:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -76,7 +76,7 @@ The value of x is: 5
 
 При объявлении нескольких входных параметров, они разделяются запятыми:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Файл: src/main.rs</span>
 
 ```rust
 fn main() {

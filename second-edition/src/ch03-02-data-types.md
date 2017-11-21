@@ -360,14 +360,14 @@ fn main() {
 ```rust
 fn main() {
   let value32_min = std::f32::MIN;
-  println!("value f32 min = {}",value32_min);
+  println!("value f32 min = {}", value32_min);
   let value32_max = std::f32::MAX;
-  println!("value f32 max = {}",value32_max);
+  println!("value f32 max = {}", value32_max);
 
   let value64_min = std::f64::MIN;
-  println!("value f64 min = {}",value64_min);
+  println!("value f64 min = {}", value64_min);
   let value64_max = std::f64::MAX;
-  println!("value f64 max = {}",value64_max);
+  println!("value f64 max = {}", value64_max);
 }
 ```
 
@@ -430,7 +430,6 @@ println!("RADIX = {}",std::f32::RADIX);
 
 ```rust
 
-f
 fn main() {
 
 println!("std::f64");
@@ -653,7 +652,7 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
  println!("a is: {:?}", months);
 ```
 
-##### Accessing Array Elements Организация доступа к элементам массива
+##### Организация доступа к элементам массива
 
 Массив - это непрерывная область памяти, содержащаяся в стеке. Вы можете получить
 доступ к какому-либо элементу по его индексу:

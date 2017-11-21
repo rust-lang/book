@@ -162,12 +162,7 @@ fn main() {
 Когда вы пишите функцию, в результате работы которой может произойти непредвиденная
 ошибка, вместо того, чтобы обрабатывать эту ошибоку вы можите создать подробноое
 описание этой и передать ошибку по цепочке на верхний уровень обработки кода.
-When writing a function whose implementation calls something that might fail,
-instead of handling the error within this function, you can choose to let your
-caller know about the error so they can decide what to do. This is known as
-*propagating* the error, and gives more control to the calling code where there
-might be more information or logic that dictates how the error should be
-handled than what you have available in the context of your code.
+
 
 For example, Listing 9-5 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
@@ -195,22 +190,14 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">Listing 9-5: A function that returns errors to the
-calling code using `match`</span>
+<span class="caption">Listing 9-5: Эта функция, которая возвращает ошибки вызова
+выражения `match`</span>
 
-Let’s look at the return type of the function first: `Result<String,
-io::Error>`. This means that the function is returning a value of the type
-`Result<T, E>` where the generic parameter `T` has been filled in with the
-concrete type `String`, and the generic type `E` has been filled in with the
-concrete type `io::Error`. If this function succeeds without any problems, the
-caller of this function will receive an `Ok` value that holds a `String` — the
-username that this function read from the file. If this function encounters any
-problems, the caller of this function will receive an `Err` value that holds an
-instance of `io::Error` that contains more information about what the problems
-were. We chose `io::Error` as the return type of this function because that
-happens to be the type of the error value returned from both of the operations
-we’re calling in this function’s body that might fail: the `File::open`
-function and the `read_to_string` method.
+Давайте, рассмотрим тип возвращаемого значения `Result<String, io::Error>`.Если
+эта функция будет выполнена успешно, будет возвращено `Ok`, содержащее значение
+типа `String`. Если же при чтении файла будут какие-либо проблемы - `io::Error`.
+
+
 
 The body of the function starts by calling the `File::open` function. Then we
 handle the `Result` value returned with a `match` similar to the `match` in

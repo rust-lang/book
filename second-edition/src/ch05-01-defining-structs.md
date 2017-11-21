@@ -64,9 +64,9 @@ struct User {
 fn main() {
   let mut user1 = User {
     email: String::from("someone@example.com"),
-   username: String::from("someusername123"),
-   active: true,
-   sign_in_count: 1,
+    username: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
 };
 user1.email = String::from("anotheremail@example.com");
 println!("[{};{};{};{}]", user1.username,user1.email,user1.active,user1.sign_in_count);
@@ -229,7 +229,7 @@ let origin = Point(0, 0, 0);
 Создателю новых типов доступно создание структур без полей. Такой объект бывает
 полезен при более сложной работе, которая будет обсуждать в главе 10.
 
-> ### Ownership of Struct Data
+> ### Владение данными структуры
 > При определении структуры `User` в примере 5-1 мы предпочли использовать тип `String`
 > вместо `&str`. Это было осознанное решение, т.к. мы хотели чтобы экземпляры структур
 > владели действительными данными во время своего существования в памяти.

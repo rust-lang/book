@@ -72,73 +72,36 @@ fn main() {
 >
 > Как это работает: когда вы вызываете метод `object.something()`, Rust автоматически
 > добавляет `&`, `&mut`, or `*` так  чтообы `object` имет соответсующеие опции
-> Другими словами, the method. In other words, the following are the same:
+> Другими словами, строки *p1.distance(&p2);* *(&p1).distance(&p2);* эквивалентны:
 >
-```rust
-#[derive(Debug,Copy,Clone)]
-struct Point {
-   x: f64,
-     y: f64,
- }
-
- impl Point {
-    fn distance(&self, other: &Point) -> f64 {
-        let x_squared = f64::powi(other.x - self.x, 2);
-        let y_squared = f64::powi(other.y - self.y, 2);
-
-        f64::sqrt(x_squared + y_squared)
-    }
- }
- fn main(){
- let p1 = Point { x: 0.0, y: 0.0 };
- let p2 = Point { x: 5.0, y: 6.5 };
-p1.distance(&p2);
-(&p1).distance(&p2);
-}
-```
-> ### Where’s the `->` Operator?
+>```rust
+>#[derive(Debug,Copy,Clone)]
+>struct Point {
+>   x: f64,
+>     y: f64,
+> }
 >
-> In languages like C++, two different operators are used for calling methods:
-> you use `.` if you’re calling a method on the object directly and `->` if
-> you’re calling the method on a pointer to the object and need to dereference
-> the pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
+> impl Point {
+>    fn distance(&self, other: &Point) -> f64 {
+>        let x_squared = f64::powi(other.x - self.x, 2);
+>        let y_squared = f64::powi(other.y - self.y, 2);
 >
-> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
-> feature called *automatic referencing and dereferencing*. Calling methods is
-> one of the few places in Rust that has this behavior.
->
-> Here’s how it works: when you call a method with `object.something()`, Rust
-> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
-> the method. In other words, the following are the same:
->
-> ```rust
-> # #[derive(Debug,Copy,Clone)]
-> # struct Point {
-> #     x: f64,
-> #     y: f64,
-> # }
-> #
-> # impl Point {
-> #    fn distance(&self, other: &Point) -> f64 {
-> #        let x_squared = f64::powi(other.x - self.x, 2);
-> #        let y_squared = f64::powi(other.y - self.y, 2);
-> #
-> #        f64::sqrt(x_squared + y_squared)
-> #    }
-> # }
-> # let p1 = Point { x: 0.0, y: 0.0 };
-> # let p2 = Point { x: 5.0, y: 6.5 };
+>        f64::sqrt(x_squared + y_squared)
+>    }
+> }
+> fn main(){
+> let p1 = Point { x: 0.0, y: 0.0 };
+> let p2 = Point { x: 5.0, y: 6.5 };
 > p1.distance(&p2);
 > (&p1).distance(&p2);
-> ```
->
-> The first one looks much cleaner. This automatic referencing behavior works
-> because methods have a clear receiver—the type of `self`. Given the receiver
-> and name of a method, Rust can figure out definitively whether the method is
-> reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
-> that Rust makes borrowing implicit for method receivers is a big part of
-> making ownership ergonomic in practice.
+> }
+>```
+
+Первый вариант *p1.distance(&p2);* выглядит давольно-таки понятно.
+Компилятор Rust может по определить, что можно делать с переменной переменной
+(читать значение (`&self`), изменять содержание (`&mut self`) или сохранять значение (`self`) ).
+Тот факт, что опсание владения происходит неявно, делать код программы более компактным.
+
 
 ### Методы с несколькими параметрами
 
@@ -278,11 +241,11 @@ let rect1 = Rectangle { length: 50, width: 30 };
 Каждая структура может использовать множество блоков `impl`. Пример 5-15:
 
 ```rust
- #[derive(Debug)]
- struct Rectangle {
-     length: u32,
-     width: u32,
- }
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
 
 impl Rectangle {
     fn area(&self) -> u32 {
@@ -295,6 +258,34 @@ impl Rectangle {
         self.length > other.length && self.width > other.width
     }
 }
+impl Rectangle {
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            length: size,
+            width: size,
+        }
+    }
+}
+fn main() {
+    let rect1 = Rectangle {
+        length: 50,
+        width: 30,
+    };
+    let rect2 = Rectangle {
+        length: 40,
+        width: 10,
+    };
+    let rect3 = Rectangle {
+        length: 45,
+        width: 60,
+    };
+    println!("area of rect1 = {}", rect1.area());
+    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+    println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+    let rect4 = Rectangle::square(50);
+    println!("area of rect4 = {}", rect4.area());
+}
+
 ```
 
 <span class="caption">Пример 5-16: неоднократное использование `impl`</span>
