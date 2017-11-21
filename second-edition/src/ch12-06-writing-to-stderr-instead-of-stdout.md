@@ -118,6 +118,6 @@ using the concepts in previous chapters, your code will be well organized,
 store data effectively in the appropriate data structures, handle errors
 nicely, and be well tested.
 
-Next, we’ll explore some Rust features that were influencedby functional
+Next, we’ll explore some Rust features that were influenced by functional
 languages: closures and iterators.
 
