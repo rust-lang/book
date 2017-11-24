@@ -51,8 +51,8 @@ fn main() {
 }
 ```
 
-Listing 12-1: Collect the command line arguments into a vector and print them
-out
+<span class="caption">Listing 12-1: Collect the command line arguments into
+a vector and print them out</span>
 
 First, we bring the `std::env` module into scope with a `use` statement so that
 we can use its `args` function. Notice the `std::env::args` function is nested
@@ -124,7 +124,8 @@ fn main() {
 }
 ```
 
-Listing 12-2: Create variables to hold the query argument and filename argument
+<span class="caption">Listing 12-2: Create variables to hold the query argument
+and filename argument</span>
 
 As we saw when we printed out the vector, the program’s name takes up the first
 value in the vector at `args[0]`, so that we’re starting at index `1`. The
