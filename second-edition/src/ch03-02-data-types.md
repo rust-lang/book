@@ -83,7 +83,9 @@ if you’re on a 32-bit architecture.
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that all number literals except the byte literal allow a type suffix, such as
-`57u8`, and `_` as a visual separator, such as `1_000`.
+`57u8`, and `_` as a visual separator, such as `1_000`. The visual separator
+makes it easier to read bigger numbers; for instance, `16777216` can be
+written `16_777_216`.
 
 <span class="caption">Table 3-2: Integer Literals in Rust</span>
 
