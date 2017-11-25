@@ -80,7 +80,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 о ошибке.
 
 ```text
-$ RUST_BACKTRACE=1 cargo run
+$ set RUST_BACKTRACE=1 &&cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 100', /stable-dist-rustc/build/src/libcollections/vec.rs:1392

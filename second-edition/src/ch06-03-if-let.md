@@ -51,9 +51,10 @@ match coin {
 }
 ```
 
-Or we could use an `if let` and `else` expression like this:
+Этот же код можно переписать с использованием `if let` и `else`:
 
 ```rust
+
 #[derive(Debug)]
 enum UsState {
    Alabama,
@@ -66,37 +67,42 @@ enum Coin {
    Dime,
    Quarter(UsState),
 }
+
 fn doit(coin:Coin){
 
-let mut count = 0;
-if let Coin::Quarter(state) = coin {
-   println!("State quarter from {:?}!", state);
-} else {
-   count += 1;
-}
-println!("{:?}", count);
-}
-fn main(){
-doit(Coin::Penny);
-doit(Coin::Nickel);
-doit(Coin::Dime);
-doit(Coin::Quarter(UsState::Alabama));
-doit(Coin::Quarter(UsState::Alaska));
+  let mut count = 0;
 
+  if let Coin::Quarter(state) = coin {
+    println!("State quarter from {:?}!", state);
+  } else {
+    count += 1;
+  }
+
+  println!("{:?}", count);
 }
+
+fn main(){
+  doit(Coin::Penny);
+  doit(Coin::Nickel);
+  doit(Coin::Dime);
+  doit(Coin::Quarter(UsState::Alabama));
+  doit(Coin::Quarter(UsState::Alaska));
+}
+
 ```
 
 Вам выбирать какая конструкция подходит для вашего кода лучше сего.
 
 ## Итоги
 
-В этой главе мы рассмотрели как использовать перечисление (создание, примеры использования).
-Также на пример типа из стандартной библиотеки `Option<T>` мы рассмотрели как
-предотвратить ошибки в коде.  Также мы рассмотрели использование конструкций
-`match` и `if let` для анализа и выборки данных из значений перечислений, а также
-некоторые возможные улучшения и упрощения кода.
+В этой главе мы рассмотрели, как использовать перечисление (создание, примеры использования).
+Также на пример типа из стандартной библиотеки `Option<T>` выяснили, как
+предотвратить ошибки в коде.  Изучили использование конструкций `match` и `if let`
+для анализа и выборки данных из значений перечислений, а также некоторые возможные
+улучшения и упрощения кода.
 
 Теперь вы можете создавать программы и использовать возможности группировочных структур
 Rust.
 
-Для логической организации большого количества кода весьма удобно использовать модули.
+Для логической организации большого количества файлов кода весьма удобно использовать модули,
+о которых мы поговорим далее.
