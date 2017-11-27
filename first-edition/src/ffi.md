@@ -737,11 +737,11 @@ void foo(struct Foo *arg);
 void bar(struct Bar *arg);
 ```
 
-To do this in Rust, let’s create our own opaque types with `enum`:
+To do this in Rust, let’s create our own opaque types:
 
 ```rust
-pub enum Foo {}
-pub enum Bar {}
+#[repr(C)] pub struct Foo { private: [u8; 0] }
+#[repr(C)] pub struct Bar { private: [u8; 0] }
 
 extern "C" {
     pub fn foo(arg: *mut Foo);
@@ -750,7 +750,9 @@ extern "C" {
 # fn main() {}
 ```
 
-By using an `enum` with no variants, we create an opaque type that we can’t
-instantiate, as it has no variants. But because our `Foo` and `Bar` types are
+By including a private field and no constructor, 
+we create an opaque type that we can’t instantiate outside of this module.
+An empty array is both zero-size and compatible with `#[repr(C)]`.
+But because our `Foo` and `Bar` types are
 different, we’ll get type safety between the two of them, so we cannot
 accidentally pass a pointer to `Foo` to `bar()`.
