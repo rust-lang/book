@@ -7,15 +7,26 @@ This repo contains two editions of “The Rust Programming Language”.
 The second edition is a rewrite that will be printed by NoStarch Press,
 available around October 2017.
 
-[You can read it online][html]; the last few chapters aren't completed yet, but
+[You can read the very latest online][html]; the last few chapters aren't completed yet, but
 the first half of the book is much improved from the first edition. We recommend
 starting with the second edition.
 
 [html]: http://rust-lang.github.io/book/
 
+Note that links to the standard library won't work in this version; this is intentional
+so that links work with the book and API docs shipped with Rust installations for offline
+reading. For a version of the book where these links do work, please see the book as shipped
+with the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues in those
+versions may have been fixed in this repository already.
+
+[stable]: https://doc.rust-lang.org/stable/book/second-edition/
+[beta]: https://doc.rust-lang.org/beta/book/second-edition/
+[nightly]: https://doc.rust-lang.org/nightly/book/second-edition/
+
 [The first edition is still available to read online][first].
 
 [first]: https://doc.rust-lang.org/book/
+
 
 ## Requirements
 
