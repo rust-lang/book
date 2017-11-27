@@ -2,12 +2,12 @@
 
 Welcome to “The Rust Programming Language,” an introductory book about Rust.
 Rust is a fast, friendly, and fearless programming language. As a
-general-purpose programming language, Rust is used in production by over 100
-companies for a variety of tasks, such as command line tools, web services,
-devops tooling, embedded devices, audio and video analysis and transcoding,
-cryptocurrencies, bioinformatics, search enginges, internet of things
-applications, machine learning, and even major parts of the Firefox web
-browser.
+general-purpose programming language, Rust is used in production by hundreds of
+companies, large and small, for a variety of tasks, such as command line
+tools, web services, devops tooling, embedded devices, audio and video
+analysis and transcoding, cryptocurrencies, bioinformatics, search enginges,
+internet of things applications, machine learning, and even major parts of
+the Firefox web browser.
 
 MORE STUFF GOES HERE LATER
 
@@ -23,7 +23,7 @@ to programming.
 
 ## How to use this book
 
-This book generally assumes that you're reading it back-to-front, that is, later
+This book generally assumes that you're reading it front-to-back, that is, later
 chapters build on top of concepts in earlier chapters, and earlier chapters may
 not dig into details on a topic, revisiting the topic in a later chapter.
 
@@ -33,7 +33,7 @@ In the project chapters, we'll build small programs together, applying what we'v
 learned so far. Chapters 2, 12, and 20 are project chapters, the rest are concept
 chapters.
 
-Additionally, Chapter 2 is a sort of hands-on introduction to Rust as a
+Additionally, Chapter 2 is a hands-on introduction to Rust as a
 language. We'll cover concepts at a high level, and later chapters will go
 into them in detail. If you're the kind of person who likes to get their
 hands dirty right away, Chapter 2 is great for that. If you're *really* that
@@ -46,6 +46,13 @@ to chapter 3.
 In the end, there's no wrong way to read a book: if you want to skip ahead,
 go for it! You may have to jump back if you find things confusing. Do
 whatever works for you.
+
+An important part of the process of learning Rust is learning how to read
+the error messages that the compiler gives you. As such, we'll be showing
+a lot of code that doesn't compile, and the error message the compiler
+will show you in that situation. As such, if you pick a random example,
+it may not compile! Please read the surrounding text to make sure that
+you didn't happen to pick one of the in-progress examples.
 
 Finally, there are some appendices. These contain useful information about
 the language in a more reference-like format.

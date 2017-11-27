@@ -34,7 +34,7 @@ Windows CMD:
 
 ```cmd
 > mkdir %USERPROFILE%\projects
-> cd %USERPROFILE%\projects
+> cd /d %USERPROFILE%\projects
 > mkdir hello_world
 > cd hello_world
 ```
@@ -78,7 +78,7 @@ On Windows, use `.\main.exe` instead of `./main`.
 
 ```powershell
 > rustc main.rs
-> \.main.exe
+> .\main.exe
 Hello, world!
 ```
 
@@ -131,6 +131,20 @@ instead, it would look like this: `println` (without the `!`). We’ll discuss
 Rust macros in more detail in Appendix E, but for now you just need to know
 that when you see a `!` that means that you’re calling a macro instead of a
 normal function.
+
+> Why is println! a macro? There's multiple reasons, and we haven't really
+> explained Rust yet, so it's not exactly obvious. Here's the reasons:
+>
+> * The string passed to `println!` can have formatting specifiers in it,
+>   and those are checked at compile-time.
+> * Rust functions can only have a static number of arguments, but `println!`
+>   (and macros generally) can take a variable number of them.
+> * The formatters can take named arguments, which Rust functions cannot.
+> * It implicitly takes its arguments by reference even when they're passed
+>   by value.
+>
+> If none of this makes sense, don't worry about it. We'll cover this stuff
+> in more detail later.
 
 Next is `"Hello, world!"` which is a *string*. We pass this string as an
 argument to `println!`, which prints the string to the screen. Easy enough!
@@ -387,10 +401,26 @@ $ cargo run
 Hello, world!
 ```
 
+Finally, there's `cargo check`. This will check out your code to make sure
+that it compiles, but not bother producing an executable:
+
+```text
+$ cargo check
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
+```
+
+Why would you not want an executable? `cargo check` is often much faster
+than `cargo build`, since we can skip that entire step. If we're checking
+our work, rather than producing a build to run, this will speed things
+up! As such, many Rustaceans run `cargo check` as they write their program
+to make sure that it compiles, and then run `cargo build` once they're
+ready to give it a spin themselves.
+
 So a few more differences we’ve now seen:
 
-- Instead of using `rustc`, build a project using `cargo build` (or build and
-  run it in one step with `cargo run`)
+- Instead of using `rustc`, build a project using `cargo build` or
+  `cargo check` (or build and run it in one step with `cargo run`).
 - Instead of the result of the build being put in the same directory as our
   code, Cargo will put it in the *target/debug* directory.
 
