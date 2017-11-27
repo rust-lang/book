@@ -1,3 +1,13 @@
+# NOTICE ABOUT STATUS
+
+The second edition of The Rust Programming Language is getting ever closer to being printed!
+This means we're not able to make large changes to chapters that are in any column to the 
+right of, and including, the "Frozen" column [on our Project board][proj]. Issues or pull
+requests submitted for frozen chapters are welcome but will be closed until we start work
+on a third edition. Thank you!
+
+[proj]: https://github.com/rust-lang/book/projects/1
+
 # The Rust Programming Language
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
