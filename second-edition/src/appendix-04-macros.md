@@ -9,8 +9,7 @@ Way back in Chapter 1, when talking about "Hello World", we said this:
 > when you see a ! that means that you’re calling a macro instead of a normal
 > function.
 
-Finally, at the very end of the book, in this appendix, we'll actually explain
-what's going on here.
+Finally, in this appendix, we'll actually explain what's going on here.
 
 Fundamentally, macros are a way of writing code that writes other code. In
 the previous appendix, we discussed the `derive` attribute, which generates
@@ -21,40 +20,15 @@ what you've written in your source code.
 Before we dive into more detail on macros, we're going to go over some
 history, to give you context for macros in Rust.
 
-## Macro history
-
-Why is this section an appendix rather than a chapter in the book? We're at
-sort of a transitional period in Rust's history with regards to macros, and so
-we want to explain *some* of what's going on here, but also, it will be different
-in the future, and so we don't want to explain too much, either.
-
-As Rust developed, two major forms of macros evolved. One was called “macros”
-and the other was called “compiler plugins.” Both of these systems were
-pretty good, but both of them also had a lot of problems. We’ll get into the
-details of each of these kinds of macros below, but there’s one thing we
-should talk about first. In the final period before Rust 1.0, we had to make
-a tough decision: what do we do about macros? We know that the system has
-these flaws, but fixing them was going to take a long time. Were we willing
-to delay the release of Rust for what was possibly going to be years, to wait
-on a redesign of the macro system? Could we simply remove macros, even though
-"Hello world" uses macros?
-
-In the end, we decided that we would stablize macros, but not compiler plugins.
-Additionally, we'd change the keyword to declare them from `macro` to `macro_rules`, a slightly more awkward name, with the intent of using the
-`macro` keyword for an improved macro system later. Even though macros have
-flaws, they're too useful to leave out of Rust.
-
-Designing a language is hard.
-
-So, as far as Rust's macros goes today, there are two kinds of macros:
-declarative macros and procedural macros. Declarative macros are macros
-like `vec!`, and procedural macros are like `derive`. In this appendex,
-we'll cover the state of both of these macro systems today, and then
-discuss where we're planning on taking Rust's macros in the future.
+Macros are covered in an appendix because they're still evolving. They have
+changed and will change more than the rest of the language and standard
+library since Rust 1.0, so this section will likely get out of date more than
+the rest of this book. This appendix covers the basics of the current state
+of macros at the time of publication.
 
 ## Declarative Macros with `macro_rules`
 
-The first form of Macros in Rust, and the one that's most widely used, are
+The first form of macros in Rust, and the one that's most widely used, are
 called "declarative macros," sometimes "macros by example," sometimes
 "macro_rules macros," or sometimes just plain "macros." At their core,
 declarative macros allow you to write something similar to a Rust `match`
@@ -68,17 +42,21 @@ match x {
 }
 ```
 
-With `match`, `x`'s structure and value will be evaluated, and the right arm will execute based on what matches. So if `x` is five, the second arm happens. Etc.
-We discussed `match` in Chapter 6, section 2.
+With `match`, `x`'s structure and value will be evaluated, and the right arm
+will execute based on what matches. So if `x` is five, the second arm
+happens. Etc. We discussed `match` in Chapter 6, section 2.
 
-These kinds of macros work in the same way: you set up some sort of pattern, and then, if that pattern matches, some code is generated. One important difference here is that in `match`, `x` gets evaluated. With macros, `x` does not get evaluated.
+These kinds of macros work in the same way: you set up some sort of pattern,
+and then, if that pattern matches, some code is generated. One important
+difference here is that in `match`, `x` gets evaluated. With macros, `x` does
+not get evaluated, as macros match the structure of the source code itself,
+not the values it'd produce when evaluated.
 
-To define a macro, you use something similar to `match`, called `macro_rules`.
-Earlier in the book, we used the `vec!` macro to create vectors. It looks like
-this:
+To define a macro, you use the `macro_rules!` construct. Earlier in the book,
+we used the `vec!` macro to create vectors. It looks like this:
 
 ```rust
-let x: Vec<u32> = vec![1, 2, 3];
+let v: Vec<u32> = vec![1, 2, 3];
 ```
 
 This macro creates a new vector with three elements inside. Here's what the
@@ -98,17 +76,31 @@ macro_rules! vec {
 }
 ```
 
+> This isn't the exact `vec!` macro: it also does some tricks to pre-allocate
+> the correct amount of memory up-front. That stuff detracts from this example,
+> though, so we've only shown the simplified version here.
+
 Whew! That's a bunch of stuff. The most important line is here:
 
 ```rust
     ( $( $x:expr ),* ) => {
 ```
 
-This `pattern => block` looks similar to the `match` statement above. If this pattern matches, then the block of code will be emitted. Given that this is the only pattern in this macro, there's only one valid way to match; any other will be an error. More complex macros will have more than one rule.
+This `pattern => block` looks similar to the `match` statement above. If this
+pattern matches, then the block of code will be emitted. Given that this is
+the only pattern in this macro, there's only one valid way to match; any
+other will be an error. More complex macros will have more than one rule.
 
-The `$x:expr` part matches an expression, and gives it the name `$x`. The `$(),*` part matches zero or more of these expressions. Then, in the body of the macro, the `$()*` part is generated for each part that matches, and the `$x` within is replaced with each expression that was matched.
+The `$x:expr` part matches an expression, and gives it the name `$x`. The
+`$(),*` part matches zero or more of these expressions, delimited by a comma.
+Then, in the body of the macro, the `$()*` part is generated for each part
+that matches, and the `$x` within is replaced with each expression that was
+matched.
 
-These macros are fine, but there's a number of bugs and rough edges. For example, there's no namespacing: if a macro exists, it's everywhere. In order to prevent name clashes, this means that you have to explicitly import the macros when using a crate:
+These macros are fine, but there's a number of bugs and rough edges. For
+example, there's no namespacing: if a macro exists, it's everywhere. In order
+to prevent name clashes, this means that you have to explicitly import the
+macros when using a crate:
 
 ```rust
 #[macro_use]
@@ -117,8 +109,9 @@ extern crate serde;
 
 Otherwise, you couldn't import two crates that had the same macro name. In
 practice this conflict doesn't come up much, but the more crates you use, the
-more likely it is. The hygiene of `macro_rules` is there, but not perfect.
-(Only local variables and labels are hygienic...) Et cetera.
+more likely it is. Macros have a concept called 'hygene', which controls the
+rules of what names are valid in what scopes, and `macro_rules!` has holes
+in its implementation of hygene.
 
 Given that most Rust programmers will *use* macros more than *write* macros,
 that's all we'll discuss about `macro_rules` in this book. To learn more
@@ -131,18 +124,20 @@ Macros](https://danielkeep.github.io/tlborm/book/index.html).
 In opposition to the pattern-based declarative macros, the second form are
 called "procedural macros" because they're functions: they accept some Rust
 code as an input, and produce some Rust code as an output. We say "code" but
-we don't mean that literally. Today, the only thing you can use procedural
+we don't mean that literally. Today, the only thing you can define procedural
 macros for is to allow your traits to be `derive`d. Let's build an example
 together.
 
-The first thing we need to do is start a new crate for our project:
+Since we're starting a new project, let's make a new package:
 
 ```bash
 $ cargo new --bin hello-world
 ```
 
-All we want is to be able to call `hello_world()` on a derived type. Something
-like this:
+We want to be able to call a `hello_world` function from a trait, without having
+to implement the trait in the usual way. Instead, we want to be able to add a
+derive annotation and get that method added to our type. Why would we want to
+do this? Well, let's look at an example of what we'd want to write:
 
 ```rust,ignore
 #[derive(HelloWorld)]
@@ -153,7 +148,33 @@ fn main() {
 }
 ```
 
-With some kind of nice output, like `Hello, World! My name is Pancakes.`.
+This should produce some kind of nice output, like `Hello, World! My name is
+Pancakes`. Remember that Rust doesn't have relfection capabilities, so we
+can't look up the struct's name at runtime. Thus, we need a macro to generate
+code at compile time. If we were to not use `derive`, the users of the `HelloWorld` trait
+would have to write this code instead:
+
+```rust,ignore
+use hello_world::HelloWorld;
+
+struct Pancakes;
+
+impl HelloWorld for Pancakes {
+    fn hello_world() {
+        println!("Hello, World! My name is Pancakes");
+    }
+}
+
+fn main() {
+    Pancakes::hello_world();
+}
+```
+
+This isn't much for only one implementation of one associated function. However,
+if we wanted to have two different structs implement `HelloWorld`, we'd need
+to repeat the `impl HelloWorld for` lines for each struct, and it's 99% identical,
+except for the name of the struct. `derive` can give us much more concise code
+by removing this boilerplate.
 
 Let's go ahead and write up what we think our macro will look like from a
 user perspective. In `src/main.rs` we write:
@@ -190,11 +211,24 @@ $ cargo new hello-world-derive
 ```
 
 To make sure that our `hello-world` crate is able to find this new crate
-we've created, we'll add it to our toml:
+we've created, we'll add it to our `Cargo.toml`.
 
 ```toml
 [dependencies]
 hello-world-derive = { path = "hello-world-derive" }
+```
+
+We also need to add dependencies for `syn` and `quote` in the `Cargo.toml`
+for `hello-world-derive`, as well as declare that it has a crate type of
+'`proc-macro`' Here's what that looks like:
+
+```toml
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "0.11.11"
+quote = "0.3.15"
 ```
 
 As for the source of our `hello-world-derive` crate, here's an example:
@@ -223,7 +257,7 @@ pub fn hello_world(input: TokenStream) -> TokenStream {
 }
 ```
 
-So there is a lot going on here. We have introduced two new crates: [`syn`]
+There is a lot going on here. We have introduced two new crates: [`syn`]
 and [`quote`]. As you may have noticed, `input: TokenSteam` is immediately
 converted to a `String`. This `String` is a string representation of the Rust
 code for which we are deriving `HelloWorld`. At the moment, the only thing
@@ -247,8 +281,8 @@ parse it using `syn`, construct the implementation of `hello_world` (using
 
 One last note: you'll see some `unwrap()`s there. If you want to provide an
 error for a procedural macro, then you should `panic!` with the error
-message. We'll talk more about this later, but in this case, we're keeping it
-as simple as possible.
+message, unlike in most Rust code. We'll talk more about this later, but in
+this case, we're keeping it as simple as possible.
 
 Great, so let's write `impl_hello_world(&ast)`.
 
@@ -276,33 +310,6 @@ templating mechanics; we simply write `#name` and `quote!` will replace it
 with the variable named `name`. You can even do some repetition similar to
 regular macros work. You should check out the [docs](https://docs.rs/quote)
 for a good introduction.
-
-So I think that's it. Oh, well, we do need to add dependencies for `syn` and
-`quote` in the `cargo.toml` for `hello-world-derive`.
-
-```toml
-[dependencies]
-syn = "0.11.11"
-quote = "0.3.15"
-```
-
-That should be it. Let's try to compile `hello-world`.
-
-```bash
-error: the `#[proc_macro_derive]` attribute is only usable with crates of the `proc-macro` crate type
- --> hello-world-derive/src/lib.rs:8:3
-  |
-8 | #[proc_macro_derive(HelloWorld)]
-  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-```
-
-Oh, so it appears that we need to declare that our `hello-world-derive` crate is
-a `proc-macro` crate type. How do we do this? Like this:
-
-```toml
-[lib]
-proc-macro = true
-```
 
 Ok so now, let's compile `hello-world`. Executing `cargo run` now yields:
 
@@ -370,7 +377,7 @@ fn impl_hello_world(ast: &syn::DeriveInput) -> quote::Tokens {
             }
         }
     } else {
-        //Nope. This is an Enum. We cannot handle these!
+        // Nope. This is an Enum. We cannot handle these!
        panic!("#[derive(HelloWorld)] is only defined for structs, not for enums!");
     }
 }

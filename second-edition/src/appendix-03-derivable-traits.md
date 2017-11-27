@@ -42,16 +42,21 @@ this code.
 
 This works with the following traits provided by the standard library:
 
-* `Eq`, `PartialEq`, `Ord`, `PartialOrd`
-* `Copy` and `Clone`
-* `Hash`
-* `Default` and `Zero`
-* `Debug` and notably, *not* `Display`
+* `Eq`, `PartialEq`, the traits for the `==` operator.
+* `Ord`, `PartialOrd`, the traits for the `<` and `>` operators.
+* `Copy` and `Clone`, which control how to make copies of your structs and enums.
+* `Hash`, which is used by `HashMap` for its keys.
+* `Default` and `Zero`, which provide default or zero values.
+* `Debug` and notably, *not* `Display`, the formatting traits.
+
+> If you remember from Chapter 5, `Display` is for end-users, and so is specific
+> to your application. As such, we don't provide a way to derive `Display`, as
+> there's no way to understand what the correct output should be.
 
 Of course, the code that's generated is specific to each trait; the example above
 is only for `Debug`, the code for `Clone` would look quite different! If you'd
-like to see the exact code generated, the [`cargo-expand`] package on Crates.io,
-once installed, will show your code after the generation occurs. This requires
+like to see the exact code generated, the [`cargo-expand`] package on Crates.io
+will show your code after the generation occurs. This requires
 a nightly version of Rust.
 
 [`cargo-expand`]: https://crates.io/crates/cargo-expand
