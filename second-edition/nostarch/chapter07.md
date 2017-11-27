@@ -231,7 +231,7 @@ These would be good reasons to separate the `client`, `network`, and `server`
 modules from *src/lib.rs* and place them into their own files.
 
 First, replace the `client` module code with only the declaration of the
-`client` module, so that your *src/lib.rs* looks like the following:
+`client` module, so that your *src/lib.rs* looks like code shown in Listing 7-4:
 
 Filename: src/lib.rs
 
@@ -248,6 +248,9 @@ mod network {
     }
 }
 ```
+
+Listing 7-4: Extracting the contents of the `client` module but leaving the
+declaration in *src/lib.rs*
 
 We’re still *declaring* the `client` module here, but by replacing the block
 with a semicolon, we’re telling Rust to look in another location for the code
@@ -372,7 +375,7 @@ fn connect() {
 }
 ```
 
-When we try to `cargo build`, we’ll get the error shown in Listing 7-4:
+When we try to `cargo build`, we’ll get the error shown in Listing 7-5:
 
 ```
 $ cargo build
@@ -395,14 +398,14 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-Listing 7-4: Error when trying to extract the `server` submodule into
+Listing 7-5: Error when trying to extract the `server` submodule into
 *src/server.rs*
 
 The error says we `cannot declare a new module at this location` and is
 pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is
 different than *src/lib.rs* somehow: keep reading to understand why.
 
-The note in the middle of Listing 7-4 is actually very helpful because it
+The note in the middle of Listing 7-5 is actually very helpful because it
 points out something we haven’t yet talked about doing:
 
 ```
@@ -509,7 +512,7 @@ Next, we’ll talk about the `pub` keyword and get rid of those warnings!
 
 ## Controlling Visibility with `pub`
 
-We resolved the error messages shown in Listing 7-4 by moving the `network` and
+We resolved the error messages shown in Listing 7-5 by moving the `network` and
 `network::server` code into the *src/network/mod.rs* and
 *src/network/server.rs* files, respectively. At that point, `cargo build` was
 able to build our project, but we still get warning messages about the
@@ -750,7 +753,7 @@ Overall, these are the rules for item visibility:
 ### Privacy Examples
 
 Let’s look at a few more privacy examples to get some practice. Create a new
-library project and enter the code in Listing 7-5 into your new project’s
+library project and enter the code in Listing 7-6 into your new project’s
 *src/lib.rs*:
 
 Filename: src/lib.rs
@@ -776,7 +779,7 @@ fn try_me() {
 }
 ```
 
-Listing 7-5: Examples of private and public functions, some of which are
+Listing 7-6: Examples of private and public functions, some of which are
 incorrect
 
 Before you try to compile this code, make a guess about which lines in the
@@ -826,7 +829,7 @@ Next, let’s talk about bringing items into scope with the `use` keyword.
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
-here in Listing 7-6:
+here in Listing 7-7:
 
 Filename: src/main.rs
 
@@ -844,7 +847,7 @@ fn main() {
 }
 ```
 
-Listing 7-6: Calling a function by fully specifying its enclosing module’s path
+Listing 7-7: Calling a function by fully specifying its enclosing module’s path
 
 As you can see, referring to the fully qualified name can get quite lengthy.
 Fortunately, Rust has a keyword to make these calls more concise.
@@ -1081,7 +1084,7 @@ $ cargo test
 running 1 test
 test tests::it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 ## Summary

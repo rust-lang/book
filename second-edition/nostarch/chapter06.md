@@ -432,7 +432,7 @@ as its patterns.
 Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
 `coin`. This seems very similar to an expression used with `if`, but there’s a
-big difference: with `if`, the expression needs to return a boolean value.
+big difference: with `if`, the expression needs to return a Boolean value.
 Here, it can be any type. The type of `coin` in this example is the `Coin` enum
 that we defined in Listing 6-3.
 

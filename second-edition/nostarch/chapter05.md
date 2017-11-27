@@ -678,7 +678,7 @@ parameter will be by looking at the code that calls the method:
 read `rect2` (rather than write, which would mean we’d need a mutable borrow),
 and we want `main` to retain ownership of `rect2` so we can use it again after
 calling the `can_hold` method. The return value of `can_hold` will be a
-boolean, and the implementation will check whether the width and height of
+Boolean, and the implementation will check whether the width and height of
 `self` are both greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
 Listing 5-13, shown in Listing 5-15:

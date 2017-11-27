@@ -194,15 +194,16 @@ to an item
 Compiling this code will result in this error:
 
 ```
-error[E0502]: cannot borrow `v` as mutable because it is also borrowed as
-immutable
+error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
+ -->
   |
-4 | let first = &v[0];
-  |              - immutable borrow occurs here
+4 |     let first = &v[0];
+  |                  - immutable borrow occurs here
 5 |
-6 | v.push(6);
-  | ^ mutable borrow occurs here
-7 | }
+6 |     v.push(6);
+  |     ^ mutable borrow occurs here
+7 |
+8 | }
   | - immutable borrow ends here
 ```
 
