@@ -36,7 +36,7 @@ You’ll see different type annotations as we discuss the various data types.
 ### Scalar Types
 
 A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
+integers, floating-point numbers, Booleans, and characters. You’ll likely
 recognize these from other programming languages, but let’s jump into how they
 work in Rust.
 
@@ -156,8 +156,8 @@ list of all operators that Rust provides.
 
 #### The Boolean Type
 
-As in most other programming languages, a boolean type in Rust has two possible
-values: `true` and `false`. The boolean type in Rust is specified using `bool`.
+As in most other programming languages, a Boolean type in Rust has two possible
+values: `true` and `false`. The Boolean type in Rust is specified using `bool`.
 For example:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -170,7 +170,7 @@ fn main() {
 }
 ```
 
-The main way to consume boolean values is through conditionals, such as an `if`
+The main way to consume Boolean values is through conditionals, such as an `if`
 expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
 section.
 

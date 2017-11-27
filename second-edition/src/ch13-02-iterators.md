@@ -229,7 +229,7 @@ provides.
 Now that we’ve introduced iterators, we can demonstrate a common use of
 closures that capture their environment by using the `filter` iterator adapter.
 The `filter` method on an iterator takes a closure that takes each item from
-the iterator and returns a boolean. If the closure returns `true`, the value
+the iterator and returns a Boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
 `false`, the value won’t be included in the resulting iterator.
 

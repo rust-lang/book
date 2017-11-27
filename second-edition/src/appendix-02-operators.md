@@ -18,7 +18,7 @@ operators, before the expression they apply to.
     could mutate the dereference), and produces the result of dereferencing the
     `&` or `&mut` borrowed pointer returned from the overload method.
 * `!`
-  : Logical negation. On the boolean type, this flips between `true` and
+  : Logical negation. On the Boolean type, this flips between `true` and
     `false`. On integer types, this inverts the individual bits in the
     two’s complement representation of the value.
 * `&` and `&mut`
@@ -64,7 +64,7 @@ calculation; see the `pow` method on the numeric types.
 Like the arithmetic operators, bitwise operators are syntactic sugar for calls
 to methods of built-in traits. This means bitwise operators can be overridden
 for user-defined types. The default meaning of the operators on standard types
-is given here. Bitwise `&`, `|` and `^` applied to boolean arguments are
+is given here. Bitwise `&`, `|` and `^` applied to Boolean arguments are
 equivalent to logical `&&`, `||` and `!=` evaluated in non-lazy fashion.
 
 * `&`
@@ -83,9 +83,9 @@ equivalent to logical `&&`, `||` and `!=` evaluated in non-lazy fashion.
   : Right shift (arithmetic).
     Calls the `shr` method of the `std::ops::Shr` trait.
 
-#### Lazy boolean operators
+#### Lazy Boolean Operators
 
-The operators `||` and `&&` may be applied to operands of boolean type. The
+The operators `||` and `&&` may be applied to operands of Boolean type. The
 `||` operator denotes logical ‘or’, and the `&&` operator denotes logical
 ‘and’. They differ from `|` and `&` in that the right-hand operand is only
 evaluated when the left-hand operand does not already determine the result of

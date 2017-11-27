@@ -214,7 +214,7 @@ let’s look at some macros other than `panic!` that are useful in tests.
 
 The `assert!` macro, provided by the standard library, is useful when you want
 to ensure that some condition in a test evaluates to `true`. We give the
-`assert!` macro an argument that evaluates to a boolean. If the value is
+`assert!` macro an argument that evaluates to a Boolean. If the value is
 `true`, `assert!` does nothing and the test passes. If the value is `false`,
 the `assert!` macro calls the `panic!` macro, which causes the test to fail.
 Using the `assert!` macro helps us check that our code is functioning in the
@@ -243,7 +243,7 @@ impl Rectangle {
 <span class="caption">Listing 11-5: Using the `Rectangle` struct and its
 `can_hold` method from Chapter 5</span>
 
-The `can_hold` method returns a boolean, which means it’s a perfect use case
+The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a length of 8 and
 a width of 7, and asserting that it can hold another `Rectangle` instance that

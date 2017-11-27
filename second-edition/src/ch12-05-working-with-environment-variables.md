@@ -147,7 +147,7 @@ pub struct Config {
 }
 ```
 
-We add the `case_sensitive` field that holds a boolean. Then we need our `run`
+We add the `case_sensitive` field that holds a Boolean. Then we need our `run`
 function to check the `case_sensitive` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive` function
 as shown in Listing 12-22:

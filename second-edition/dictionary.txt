@@ -38,8 +38,8 @@ BitXor
 Bjarne
 Boehm
 bool
-boolean
-booleans
+Boolean
+Booleans
 Bors
 BorrowMutError
 BuildHasher

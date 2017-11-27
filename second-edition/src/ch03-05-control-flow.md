@@ -102,9 +102,9 @@ error[E0308]: mismatched types
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-boolean types to a boolean, unlike
+not automatically try to convert non-Boolean types to a Boolean, unlike
 languages such as Ruby and JavaScript. You must be explicit and always provide
-`if` with a `boolean` as its condition. If we want the `if` code block to run
+`if` with a Boolean as its condition. If we want the `if` code block to run
 only when a number is not equal to `0`, for example, we can change the `if`
 expression to the following:
 
