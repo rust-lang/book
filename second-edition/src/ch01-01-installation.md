@@ -4,19 +4,19 @@ The first step to using Rust is to install it. You’ll need an internet
 connection to run the commands in this chapter, as we’ll be downloading Rust
 from the internet.
 
-We’ll be showing off a number of commands using a terminal, and those lines
-all start with `$`. You don’t need to type in the `$` character; they are
-there to indicate the start of each command. You’ll see many tutorials and
-examples around the web that follow this convention: `$` for commands run as
-a regular user, and `#` for commands you should be running as an
-administrator. Lines that don’t start with `$` are typically showing the
-output of the previous command. Additionally, PowerShell specific examples
-will use `>` rather than `$`.
+> We’ll be showing off a number of commands using a terminal, and those lines
+> all start with `$`. You don’t need to type in the `$` character; they are
+> there to indicate the start of each command. You’ll see many tutorials and
+> examples around the web that follow this convention: `$` for commands run as
+> a regular user, and `#` for commands you should be running as an
+> administrator. Lines that don’t start with `$` are typically showing the
+> output of the previous command. Additionally, PowerShell specific examples
+> will use `>` rather than `$`.
 
 ## Installing on Linux or Mac
 
-If you’re on Linux or a Mac, all you need to do is open a terminal and type
-this:
+If you’re on Linux or a Mac, 99% of what you need to do is open a terminal
+and type this:
 
 ```text
 $ curl https://sh.rustup.rs -sSf | sh
@@ -32,8 +32,9 @@ Rust is installed now. Great!
 Of course, if you distrust using `curl URL | sh` to install software, you can download, 
 inspect, and run the script however you like.
 
-The installation script automatically adds Rust to your system PATH after your next login. 
-If you want to start using Rust right away, run the following command in your shell:
+The installation script automatically adds Rust to your system PATH after
+your next login. If you want to start using Rust right away, run the
+following command in your shell:
 
 ```text
 $ source $HOME/.cargo/env
@@ -45,11 +46,24 @@ Alternatively, add the following line to your `~/.bash_profile`:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
+Finally, you'll need a linker of some kind. You may have one installed. If
+not, check your platform's documentation for how to install a C compiler;
+they usually come with the correct linker as well, given that C needs one
+as well. You may want to do this regardless, as some packages depend on C
+code as well.
+
 ## Installing on Windows
 
-On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
-follow the instructions to download rustup-init.exe. Run that and follow the
-rest of the instructions it gives you.
+On Windows, go to
+[https://www.rust-lang.org/en-US/install.html](https://www.rust-lang.org/en-US/install.html)
+and follow the instructions. You'll also need the C++ build tools for Visual
+Studio 2013 or later. The easiest way to acquire the build tools is by
+installing [Microsoft Visual C++ Build Tools
+2017](https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017)
+which provides only the Visual C++ build tools. Alternately, you can
+[install](https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017)
+Visual Studio 2017, Visual Studio 2015, or Visual Studio 2013 and during
+install select the "C++ tools".
 
 The rest of this book will use commands that work in both `cmd.exe` and
 PowerShell. If there are specific differences, we'll explain which to use.
