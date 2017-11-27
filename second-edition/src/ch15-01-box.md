@@ -202,7 +202,7 @@ error[E0072]: recursive type `List` has infinite size
 1 | enum List {
   | ^^^^^^^^^ recursive type has infinite size
 2 |     Cons(i32, List),
-  |     --------------- recursive without indirection
+  |               ----- recursive without indirection
   |
   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
   make `List` representable
