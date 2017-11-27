@@ -186,7 +186,7 @@ of their own, and eventually, there's consensus to accept or reject the
 feature.
 
 If the feature is accepted, an issue is opened on the Rust repository, and
-someone can implement it. The person who implements it very may well not be
+someone can implement it. The person who implements it very well may not be
 the person who proposed the feature in the first place! When the
 implementation is ready, it lands on the `master` branch behind a feature
 gate, as we discussed above.
