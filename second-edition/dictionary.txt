@@ -164,6 +164,7 @@ Haskell
 hasn
 helloworld
 HelloWorld
+HelloWorldName
 Hmmm
 Hoare
 Hola
