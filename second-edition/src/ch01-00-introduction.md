@@ -1,35 +1,38 @@
 # Introduction
 
-Welcome to “The Rust Programming Language,” an introductory book about Rust.
-Rust is a programming language that’s focused on safety, speed, and
-concurrency. Its design lets you create programs that have the performance and
-control of a low-level language, but with the powerful abstractions of a
-high-level language. These properties make Rust suitable for programmers who
-have experience in languages like C and are looking for a safer alternative, as
-well as those from languages like Python who are looking for ways to write code
-that performs better without sacrificing expressiveness.
+Bienvenido al "Lenguaje de Programación Rust" un libro introductorio a Rust.
+Rust es un lenguaje de programación focalizado en la seguridad, velocidad, y
+la concurrencia. Su diseño permite crear programas que tienen el desempeño y
+control de un lenguage de bajo nivel, pero con las poderosas abstraciones de
+unlenguaje de alto nivel. Estas propiedades hacen de Rust una alternativa
+viable para desarrolladores que tienen experiencia en lenguajes como C y que
+buscan una alternativa mas segura, al igual que aquellos que usan lenguajes
+como python que buscan alternativas para excribir código que se desempeña mejor
+sin sacrificar la expresividad.
 
-Rust performs the majority of its safety checks and memory management decisions
-at compile time, so that your program's runtime performance isn't impacted. This
-makes it useful in a number of use cases that other languages aren’t good at:
-programs with predictable space and time requirements, embedding in other
-languages, and writing low-level code, like device drivers and operating
-systems. It's also great for web applications: it powers the Rust package
-registry site, [crates.io]!  We're excited to see what *you* create with Rust.
+Rust ejecuta la mayor parte de sus verificaciones de seguridad y decisiones de
+manejo de memoria durante la compilación para que el desempeño del programa en
+ejecución no se vea afectado. Esto lo hace útil en algunos casos en los cuales
+otros lenguajes no son buenos: programas con requerimientos precisos de espacio
+y tiempo, incluidos en otros lenguajes, y con escritura de código de bajo nivel,
+ por ejemplo *drivers* y sistemas operativos. Es igualmente grandioso para
+ aplicaciones web: soporta el sitio web de paquetes de Rust, [crates.io]!.
+Nos gustaría ver todo lo que *tu* puedes crear con Rust.
 
 [crates.io]: https://crates.io/
 
-This book is written for a reader who already knows how to program in at least
-one programming language. After reading this book, you should be comfortable
-writing Rust programs. We’ll be learning Rust through small, focused examples
-that build on each other to demonstrate how to use various features of Rust as
-well as how they work behind the scenes.
+Este libro está escrito para el lector que ya sabe programar en por lo menos un
+lenguaje de programación. Al finalizar este libro, no deberías tener ningún
+problema escribiendo programas Rust. Vamos a aprender Rust a través de pequeños
+ejemplos focalizados que se contruyen los unos basados en los otros y que
+demuestran cómo utilizar las características de Rust al igual de mostrar como
+funcionan tras bambalinas.
 
-## Contributing to the book
+## Contribuir a este libro
 
-This book is open source. If you find an error, please don’t hesitate to file an
-issue or send a pull request [on GitHub]. Please see [CONTRIBUTING.md] for
-more details.
+Este es un libro de código abierto. Si encuentras un error por favor no dudes en
+crear un _issue_ o enviar una _pull request_ [a Github]. Mira el [CONTRIBUTING.md]
+para mas detalles.
 
-[on GitHub]: https://github.com/rust-lang/book
+[a GitHub]: https://github.com/rust-lang/book
 [CONTRIBUTING.md]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
