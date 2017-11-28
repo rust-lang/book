@@ -160,6 +160,7 @@ Hoare
 Hola
 homogenous
 html
+hyperoptimize
 Iceburgh
 IEEE
 impl
