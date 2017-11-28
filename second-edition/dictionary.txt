@@ -92,6 +92,7 @@ dereferenced
 dereferences
 dereferencing
 DerefMut
+DeriveInput
 destructor
 destructure
 destructured
@@ -141,6 +142,7 @@ FnBox
 FnMut
 FnOnce
 formatter
+FrenchToast
 FromIterator
 frontend
 getter
@@ -161,6 +163,7 @@ HashSet
 Haskell
 hasn
 helloworld
+HelloWorld
 Hmmm
 Hoare
 Hola
@@ -344,6 +347,7 @@ SecondaryColor
 SelectBox
 semver
 SemVer
+serde
 ShlAssign
 ShrAssign
 shouldn
@@ -366,6 +370,7 @@ Stdin
 stdlib
 stdout
 steveklabnik's
+stringify
 Stroustrup
 Stroustrup's
 struct
@@ -391,6 +396,7 @@ supertrait
 supertraits
 TcpListener
 TcpStream
+templating
 test's
 TextField
 That'd
@@ -401,6 +407,7 @@ timestamp
 Tiếng
 timeline
 TODO
+TokenStream
 toml
 TOML
 ToString

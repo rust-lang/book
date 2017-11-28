@@ -109,9 +109,9 @@ extern crate serde;
 
 Otherwise, you couldn't import two crates that had the same macro name. In
 practice this conflict doesn't come up much, but the more crates you use, the
-more likely it is. Macros have a concept called 'hygene', which controls the
+more likely it is. Macros have a concept called 'hygiene', which controls the
 rules of what names are valid in what scopes, and `macro_rules!` has holes
-in its implementation of hygene.
+in its implementation of hygiene.
 
 Given that most Rust programmers will *use* macros more than *write* macros,
 that's all we'll discuss about `macro_rules` in this book. To learn more
@@ -149,7 +149,7 @@ fn main() {
 ```
 
 This should produce some kind of nice output, like `Hello, World! My name is
-Pancakes`. Remember that Rust doesn't have relfection capabilities, so we
+Pancakes`. Remember that Rust doesn't have reflection capabilities, so we
 can't look up the struct's name at runtime. Thus, we need a macro to generate
 code at compile time. If we were to not use `derive`, the users of the `HelloWorld` trait
 would have to write this code instead:
@@ -349,7 +349,7 @@ adding `attributes` to the `proc_macro_derive` attribute:
 
 ```rust,ignore
 #[proc_macro_derive(HelloWorld, attributes(HelloWorldName))]
-pub fn hello_world(input: TokenStream) -> TokenStream 
+pub fn hello_world(input: TokenStream) -> TokenStream
 ```
 
 Multiple attributes can be specified that way.
