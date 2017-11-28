@@ -102,7 +102,7 @@ example, there's no namespacing: if a macro exists, it's everywhere. In order
 to prevent name clashes, this means that you have to explicitly import the
 macros when using a crate:
 
-```rust
+```rust,ignore
 #[macro_use]
 extern crate serde;
 ```
