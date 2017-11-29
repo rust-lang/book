@@ -1,8 +1,9 @@
-# Writing Automated Tests
+# Написание автоматических тестов
 
-> Program testing can be a very effective way to show the presence of bugs, but
-> it is hopelessly inadequate for showing their absence.
-> Edsger W. Dijkstra, “The Humble Programmer” (1972)
+> Тестирование программы может быть весьма эффективных средством проверки на наличие
+> ошибок, но оно, к сожалению, положительно пройденные тесты не могут говорить об
+> отсутствии ошибок.
+> Эдсгер Вибе Дейкстра, “Скромный программист” (1972)
 
 Correctness in our programs means that our code does what we intend for it to
 do. Rust is a programming language that cares a lot about correctness, but

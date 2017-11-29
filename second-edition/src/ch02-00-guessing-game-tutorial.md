@@ -24,6 +24,10 @@
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
+or
+```shell
+$ cargo new guessing_game --bin && cd guessing_game
+```
 
 Данная команда `cargo new` принимает аргумент - имя нового проекта
 `guessing_game`, а далее флаг `--bin`, который уточняет какой тип приложения мы
@@ -411,9 +415,8 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
 
 ```rust
 fn main() {
-
-    let mut guess1 = "text string1";
-    let mut guess2 = "text string2";
+    let guess1 = "text string1";
+    let guess2 = "text string2";
     println!("You guessed1: {}", guess1);
     println!("You guessed2: {}", guess2);
 
@@ -421,6 +424,7 @@ fn main() {
     let y = 10;
     println!("x = {} and y = {}", x, y);
 }
+
 ```
 Вы также можете передавать множество параметров в макрос:
 

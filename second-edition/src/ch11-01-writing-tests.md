@@ -1,4 +1,4 @@
-## How to Write Tests
+## Как писать тесты
 
 Tests are Rust functions that verify that the non-test code is functioning in
 the expected manner. The bodies of test functions typically perform some setup,

@@ -1,35 +1,27 @@
-## Validating References with Lifetimes
+## Проверка ссылок с помощью Lifetimes
 
-When we talked about references in Chapter 4, we left out an important detail:
-every reference in Rust has a *lifetime*, which is the scope for which that
-reference is valid. Most of the time lifetimes are implicit and inferred, just
-like most of the time types are inferred. Similarly to when we have to annotate
-types because multiple types are possible, there are cases where the lifetimes
-of references could be related in a few different ways, so Rust needs us to
-annotate the relationships using generic lifetime parameters so that it can
-make sure the actual references used at runtime will definitely be valid.
+Когда мы говорили о ссылках в Главе 4, мы опустили весьма важную деталь:
+каждая ссылка в Rust имеет *время жизни*. Это область действия, в которой она является
+действительной.
 
-Yes, it’s a bit unusual, and will be different to tools you’ve used in other
-programming languages. Lifetimes are, in some ways, Rust’s most distinctive
-feature.
+Lifetimes являются уникальной парадигмой языка Rust. Эта тема несколько обширна, что
+в этой главе мы сможем изложить только синтаксис. В Главе 19 вы узнаете больше и
+подробнее о возможностях этой парадигмы программирования на Rust.
 
-Lifetimes are a big topic that can’t be covered in entirety in this chapter, so
-we’ll cover common ways you might encounter lifetime syntax in this chapter to
-get you familiar with the concepts. Chapter 19 will contain more advanced
-information about everything lifetimes can do.
+### Lifetimes защищают программу от недействительных ссылок
 
-### Lifetimes Prevent Dangling References
-
-The main aim of lifetimes is to prevent dangling references, which will cause a
-program to reference data other than the data we’re intending to reference.
-Consider the program in Listing 10-18, with an outer scope and an inner scope.
-The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of 5. Inside
-the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print out the value in `r`:
+Самое важное свойство lifetimes - это предотвращение недействительных ссылок. Такую
+ошибку весьма трудно заметить. Это весьма коварная ошибка. Для примера, давайте
+рассмотрим код (10-18). Здесь демонстрируется поведение переменных в различных
+областях видимости. Во внешней области видимости мы декларируем переменную `r` без
+её инициализации. Во внутренней области видимости мы декларируем переменную `x` и
+инициализируем её значением `5`. Внутри области видимости переменой `x` мы присваиваем,
+точнее, пытаемся присвоить значение переменной `r`. Присваиваем её ссылочное значение
+переменной `x`. Затем, мы хотим напечатать содержимое переменной `r` во внешней
+области видимости:
 
 ```rust,ignore
-{
+fn main(){
     let r;
 
     {
@@ -41,17 +33,16 @@ the inner scope ends, and we attempt to print out the value in `r`:
 }
 ```
 
-<span class="caption">Listing 10-18: An attempt to use a reference whose value
-has gone out of scope</span>
+<span class="caption">Listing 10-18: Попытка использования ссылки, которая стала
+недействительной после выхода переменной из внутренней области видимости</span>
 
-> #### Uninitialized Variables Cannot Be Used
+> #### Неинициализированные переменные не использоваться (в выражениях, параметрах
+  вызова функций или методов и пр.)
 >
-> The next few examples declare variables without giving them an initial value,
-> so that the variable name exists in the outer scope. This might appear to be
-> in conflict with Rust not having null. However, if we try to use a variable
-> before giving it a value, we’ll get a compile-time error. Try it out!
+> Следующие примеры демонстрируют объявление переменных без их инициализации.
+> Имя переменной существует во внешней области видимости.
 
-When we compile this code, we’ll get an error:
+Сообщение об ошибке:
 
 ```text
 error: `x` does not live long enough
@@ -65,19 +56,16 @@ error: `x` does not live long enough
    | - borrowed value needs to live until here
 ```
 
-The variable `x` doesn’t “live long enough.” Why not? Well, `x` is going to go
-out of scope when we hit the closing curly brace on line 7, ending the inner
-scope. But `r` is valid for the outer scope; its scope is larger and we say
-that it “lives longer.” If Rust allowed this code to work, `r` would be
-referencing memory that was deallocated when `x` went out of scope, and
-anything we tried to do with `r` wouldn’t work correctly. So how does Rust
-determine that this code should not be allowed?
+Переменная `x` больше не существует, т.к. её области видимости закончилась сразу же
+после выхода за пределы области её объявления. В тоже время переменная `r` продолжает
+находится в зоне свого объявления. Как же в таком случае компилятор Rust понимает,
+что содержание переменной уже недействительно?
 
-#### The Borrow Checker
+#### Проверка заимствования
 
-The part of the compiler called the *borrow checker* compares scopes to
-determine that all borrows are valid. Listing 10-19 shows the same example from
-Listing 10-18 with annotations showing the lifetimes of the variables:
+У в состав компилятора Rust входит функционал называющий ся *провека заимствования*.
+Демонстрационный код (10-19) иллюстрирует всё тот же пример (10-18), графически
+изображая область действия имеющихся переменных:
 
 ```rust,ignore
 {
@@ -94,8 +82,8 @@ Listing 10-18 with annotations showing the lifetimes of the variables:
 }
 ```
 
-<span class="caption">Listing 10-19: Annotations of the lifetimes of `r` and
-`x`, named `'a` and `'b` respectively</span>
+<span class="caption">Пример кода 10-19: Описание времени жизни переменных `r` и
+`x`, с помощью идентификаторов `'a` и `'b`</span>
 
 <!-- Just checking I'm reading this right: the inside block is the b lifetime,
 correct? I want to leave a note for production, make sure we can make that
@@ -105,46 +93,49 @@ line and ends with the first closing curly brace on the 7th line. Do you think
 the text art comments work or should we make an SVG diagram that has nicer
 looking arrows and labels? /Carol -->
 
-We’ve annotated the lifetime of `r` with `'a` and the lifetime of `x` with
-`'b`. As you can see, the inner `'b` block is much smaller than the outer `'a`
-lifetime block. At compile time, Rust compares the size of the two lifetimes
-and sees that `r` has a lifetime of `'a`, but that it refers to an object with
-a lifetime of `'b`. The program is rejected because the lifetime `'b` is
-shorter than the lifetime of `'a`: the subject of the reference does not live
-as long as the reference.
+Мы описываем время жизни переменной `r` с помощью `'a` и время жизни переменной `x`
+с помощью описательной переменной `'b`. Обратите внимание, что блок `'b` находится
+внутри блока `'a` и значительно меньше. Во время компиляции, компилятор Rust сравнивает
+два идентификатора времени жизни и получается так, что описание времени жизни переменной
+`r` находится в идентификаторе времени жизни `'a`, но в тоже время хранит в себе
+ссылку на объект с идентификатором времени жизни `'b`. Такая программа не компилируется,
+т.к. время жизни `'b` короче, чем время жизни `'a`, время жизни переменой больше,
+чем её содержание. Это неприемлемо.
 
-Let’s look at an example in Listing 10-20 that doesn’t try to make a dangling
-reference and compiles without any errors:
+Рассмотрим другой пример (10-20), в котором нет проблем с недействительными ссылками.
+В нём просто закомментировали наличие вложенного блока кода. Данный код пройдет тест
+на ссылочную целостность и будет  принят компиляторов, как действительный и готовый
+к исполнению:
 
 ```rust
 {
     let x = 5;            // -----+-- 'b
-                          //      |
+    //{                   //      |
     let r = &x;           // --+--+-- 'a
-                          //   |  |
+    //}                   //   |  |
     println!("r: {}", r); //   |  |
                           // --+  |
 }                         // -----+
 ```
 
-<span class="caption">Listing 10-20: A valid reference because the data has a
-longer lifetime than the reference</span>
+<span class="caption">Блок кода 10-20: Все ссылки действительные, т.к. и данные и
+ссылка имеют одинаковое время жизни</span>
 
-Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
-means `r` can reference `x`: Rust knows that the reference in `r` will always
-be valid while `x` is valid.
+В данном примере переменная `x` имеет время жизни `'b`, что большое чем время жизни
+`'a`. Это означает, что переменная `r` может ссылаться на переменную `x` и её значение
+будет действительно при введении значения на консоль и до конца блока, в котором
+переменная `x`  была объявлена.
 
-Now that we’ve shown where the lifetimes of references are in a concrete
-example and discussed how Rust analyzes lifetimes to ensure references will
-always be valid, let’s talk about generic lifetimes of parameters and return
-values in the context of functions.
+В этом пример мы рассмотрели и проанализировали работу анализатора времени жизни
+переменных. Далее, рассмотрим время жизни обобщенных переменных, а также возвращаемых
+функциями значений.
 
-### Generic Lifetimes in Functions
+### Идентификаторы времени жизни обобщенных типов данных в функциях
 
-Let’s write a function that will return the longest of two string slices. We
-want to be able to call this function by passing it two string slices, and we
-want to get back a string slice. The code in Listing 10-21 should print `The
-longest string is abcd` once we’ve implemented the `longest` function:
+Напишем функцию, которая возвращает наибольшую по длине строку. Эта функция
+должна получать две переменные в качестве параметров функции и возвращать результат.
+В строке вывода должно быть напечатано `The longest string is abcd`.
+Пример кода (10-21):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -158,14 +149,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-21: A `main` function that calls the `longest`
-function to find the longest of two string slices</span>
+<span class="caption">Пример кода 10-21: Функция `main` вызывает функцию `longest`
+для поиска наибольшей строки</span>
 
-Note that we want the function to take string slices (which are references, as
-we talked about in Chapter 4) since we don’t want the `longest` function to
-take ownership of its arguments. We want the function to be able to accept
-slices of a `String` (which is the type of the variable `string1`) as well as
-string literals (which is what variable `string2` contains).
+Обратите внимание, что мы хотим иметь в качестве параметров срезы строк (которые
+являются ссылками (об этом мы говорили в Главе 4)). Это делается для того, чтобы
+не передавать владение в функцию передаваемых аргументов. Мы хотим, чтобы функция
+принимала в качестве аргументов строковые срезы.
+
 
 <!-- why is `a` a slice and `b` a literal? You mean "a" from the string "abcd"? -->
 <!-- I've changed the variable names to remove ambiguity between the variable
@@ -184,11 +175,12 @@ and below). If these topics are confusing you in this context, I'd be
 interested to know if rereading Chapter 4 clears up that confusion.
 /Carol -->
 
-Refer back to the “String Slices as Arguments” section of Chapter 4 for more
-discussion about why these are the arguments we want.
+Освежим в памяти материал Главы 4 (секцию "Срезы строк в качестве аргументов")
+для того, чтобы хорошо представлять особенности а тонкости рассматриваемого вопроса
+в данном примере.
 
-If we try to implement the `longest` function as shown in Listing 10-22, it
-won’t compile:
+Если просто реализовать функции так, как это показано в примере кода (10-22), то
+то программа не будет скомпилирована:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -202,11 +194,11 @@ fn longest(x: &str, y: &str) -> &str {
 }
 ```
 
-<span class="caption">Listing 10-22: An implementation of the `longest`
-function that returns the longest of two string slices, but does not yet
-compile</span>
+<span class="caption">Код программы 10-22: Пример реализации функции `longest`,
+которая возвращает наибольший срез строки, но пока ещё не компилируется (содержит
+в себе ошибку)</span>
 
-Instead we get the following error that talks about lifetimes:
+В описании ошибки компилятор сообщает о проблемах в определении времени жизни:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -218,66 +210,59 @@ error[E0106]: missing lifetime specifier
    signature does not say whether it is borrowed from `x` or `y`
 ```
 
-The help text is telling us that the return type needs a generic lifetime
-parameter on it because Rust can’t tell if the reference being returned refers
-to `x` or `y`. Actually, we don’t know either, since the `if` block in the body
-of this function returns a reference to `x` and the `else` block returns a
-reference to `y`!
+Описание ошибки довольно-таки информативно, но всё-таки не очень понятно.
+Ясно одно - анализатору времени жизни переменных не хватает данных для анализа
+корректности ссылочной целостности. Необходимо видоизменить код функции так, чтобы
+было устранить неопределенность и дать возможность компилятору провести все необходимые
+проверки.
 
-As we’re defining this function, we don’t know the concrete values that will be
-passed into this function, so we don’t know whether the `if` case or the `else`
-case will execute. We also don’t know the concrete lifetimes of the references
-that will be passed in, so we can’t look at the scopes like we did in Listings
-10-19 and 10-20 in order to determine that the reference we return will always
-be valid. The borrow checker can’t determine this either, because it doesn’t
-know how the lifetimes of `x` and `y` relate to the lifetime of the return
-value. We’re going to add generic lifetime parameters that will define the
-relationship between the references so that the borrow checker can perform its
-analysis.
+### Синтаксис описания времени жизни переменных
 
-### Lifetime Annotation Syntax
+Описания времени жизни не может изменить время жизни ссылок в программе.
+Также как функции могут принимать любые входные данные удовлетворяющие условиям,
+также функции потенциально могут принимать любые ссылки с любым временем жизни.
+Описание времени жизни связывает между собой ссылки.
 
-Lifetime annotations don’t change how long any of the references involved live.
-In the same way that functions can accept any type when the signature specifies
-a generic type parameter, functions can accept references with any lifetime
-when the signature specifies a generic lifetime parameter. What lifetime
-annotations do is relate the lifetimes of multiple references to each other.
+Описание времени жизни имеет необычный синтаксис: имена параметров времени жизни
+обязаны начинаться с символа `'`. Имена их обычно пишутся в нижнем регистре и также,
+как обобщенные типы данных, их имена очень короткие. Обычно, по умолчанию используется
+`'a`. Параметры описания времени жизни следуют после символа `&` ссылочного типа данных
+и разделяются пробелом от названия тип данных.
 
-Lifetime annotations have a slightly unusual syntax: the names of lifetime
-parameters must start with an apostrophe `'`. The names of lifetime parameters
-are usually all lowercase, and like generic types, their names are usually very
-short. `'a` is the name most people use as a default. Lifetime parameter
-annotations go after the `&` of a reference, and a space separates the lifetime
-annotation from the reference’s type.
-
-Here’s some examples: we’ve got a reference to an `i32` without a lifetime
-parameter, a reference to an `i32` that has a lifetime parameter named `'a`,
-and a mutable reference to an `i32` that also has the lifetime `'a`:
+Пример ссылки на переменную типа данных `i32`:
 
 ```rust,ignore
 &i32        // a reference
+```
+Пример ссылки на переменную типа данных `i32` с описанием времени жизни `'a`:
+
+```rust,ignore
 &'a i32     // a reference with an explicit lifetime
+```
+
+Пример изменяемой переменной типа данных `i32` с описанием времени жизни `'a`:
+
+```rust,ignore
 &'a mut i32 // a mutable reference with an explicit lifetime
 ```
 
-One lifetime annotation by itself doesn’t have much meaning: lifetime
-annotations tell Rust how the generic lifetime parameters of multiple
-references relate to each other. If we have a function with the parameter
-`first` that is a reference to an `i32` that has the lifetime `'a`, and the
-function has another parameter named `second` that is another reference to an
-`i32` that also has the lifetime `'a`, these two lifetime annotations that have
-the same name indicate that the references `first` and `second` must both live
-as long as the same generic lifetime.
+Само по себе описание времени жизни не имеет значения: оно сообщает компилятору Rust,
+как обобщенные параметры времени жизни изменяемой переменных связаны между собой.
+Если у нас есть функция с параметром `first`, которая имеет ссылочный тип данных `i32` и
+имеет описание времени жизни `'a` и эта функция имеет другой параметр с именем
+`second`, который в свою очередь является ссылкой на переменную типа `i32` и имеет
+описание времени жизни `'a`, то, следовательно у них одно и тоже описание времени
+жизни. Следовательно эти ссылки существовать столько же, сколько существует обобщенное
+описание времени жизни.
 
-### Lifetime Annotations in Function Signatures
+### Описания времени жизни в синтаксисе функций
 
-Let’s look at lifetime annotations in the context of the `longest` function
-we’re working on. Just like generic type parameters, generic lifetime
-parameters need to be declared within angle brackets between the function name
-and the parameter list. The constraint we want to tell Rust about for the
-references in the parameters and the return value is that they all must have
-the same lifetime, which we’ll name `'a` and add to each reference as shown in
-Listing 10-23:
+Теперь когда мы познакомились с аннотациями времени жизни переменных, применим
+эти знания. В функцию `longest` внесём описания времени жизни переменных. Обратите
+внимание, что аннотации в функциях располагаются в том же мести и квадратных скобках,
+также как и обобщенные типы данных. Ограничение которое мы хотим внести в данную
+функцию следующее: время жизни параметров и возвращаемого значения одно и тоже.
+Пример (10-23):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -291,49 +276,24 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 ```
 
-<span class="caption">Listing 10-23: The `longest` function definition that
-specifies all the references in the signature must have the same lifetime,
-`'a`</span>
+<span class="caption">Listing 10-23: В функции `longest` определено время жизни
+ссылочных переменных `'a`, благодаря чему компилятор может провести соответствующие проверки
+корректности кода </span>
 
-This will compile and will produce the result we want when used with the `main`
-function in Listing 10-21.
+Теперь код (10-21) использующий эту функцию может быть скомпилирован.
 
-The function signature now says that for some lifetime `'a`, the function will
-get two parameters, both of which are string slices that live at least as long
-as the lifetime `'a`. The function will return a string slice that also will
-last at least as long as the lifetime `'a`. This is the contract we are telling
-Rust we want it to enforce.
+Компилятор теперь знает достаточно, о функции `longest`, чтобы убедиться в ссылочной
+целостности.
 
-By specifying the lifetime parameters in this function signature, we are not
-changing the lifetimes of any values passed in or returned, but we are saying
-that any values that do not adhere to this contract should be rejected by the
-borrow checker. This function does not know (or need to know) exactly how long
-`x` and `y` will live, but only needs to know that there is some scope that
-can be substituted for `'a` that will satisfy this signature.
+Когда необходимо описание времени жизни функций, это описание может располагаться
+только в заголовке функции. Это описание необходимо, как тонкая настройка целостности
+данных.
 
-When annotating lifetimes in functions, the annotations go on the function
-signature, and not in any of the code in the function body. This is because
-Rust is able to analyze the code within the function without any help, but when
-a function has references to or from code outside that function, the lifetimes
-of the arguments or return values will potentially be different each time the
-function is called. This would be incredibly costly and often impossible for
-Rust to figure out. In this case, we need to annotate the lifetimes ourselves.
+Т.к. время жизни переменных может отличаться друг от друга при использовании данной
+функции берется наименьшее значение. Только в этом случае мы можем гарантировать,
+что возвращаемое значение будет иметь действительное время жизни.
 
-When concrete references are passed to `longest`, the concrete lifetime that
-gets substituted for `'a` is the part of the scope of `x` that overlaps with
-the scope of `y`. Since scopes always nest, another way to say this is that the
-generic lifetime `'a` will get the concrete lifetime equal to the smaller of
-the lifetimes of `x` and `y`. Because we’ve annotated the returned reference
-with the same lifetime parameter `'a`, the returned reference will therefore be
-guaranteed to be valid as long as the shorter of the lifetimes of `x` and `y`.
-
-Let’s see how this restricts the usage of the `longest` function by passing in
-references that have different concrete lifetimes. Listing 10-24 is a
-straightforward example that should match your intuition from any language:
-`string1` is valid until the end of the outer scope, `string2` is valid until
-the end of the inner scope, and `result` references something that is valid
-until the end of the inner scope. The borrow checker approves of this code; it
-will compile and print `The longest string is long string is long` when run:
+Рассмотрим пример ограничений времени жизни работает на следующем примере (10-24):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -357,15 +317,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-24: Using the `longest` function with
-references to `String` values that have different concrete lifetimes</span>
+<span class="caption">Код программы 10-24: Использование функции `longest` и ссылок
+на строковые данные `String`, которые имеют разное время жизни</span>
 
-Next, let’s try an example that will show that the lifetime of the reference in
-`result` must be the smaller lifetime of the two arguments. We’ll move the
-declaration of the `result` variable outside the inner scope, but leave the
-assignment of the value to the `result` variable inside the scope with
-`string2`. Next, we’ll move the `println!` that uses `result` outside of the
-inner scope, after it has ended. The code in Listing 10-25 will not compile:
+Далее, рассмотрим пример, которые покажет, что время жизни результата работы
+функции минимальное из имеющихся. Мы переместим определение переменной `result`
+из внутренней области видимости, но присвоим значение внутри внутренней области
+видимости. При таких условиях, пример кода 10-25 не будет скомпилирован:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -381,10 +339,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-25: Attempting to use `result` after `string2`
-has gone out of scope won’t compile</span>
+<span class="caption">Listing 10-25: Попытка использование переменной `result`
+после выхода переменной `string2` за пределы области видимости</span>
 
-If we try to compile this, we’ll get this error:
+Описание ошибки:
 
 ```text
 error: `string2` does not live long enough
@@ -398,31 +356,18 @@ error: `string2` does not live long enough
    | - borrowed value needs to live until here
 ```
 
-The error is saying that in order for `result` to be valid for the `println!`,
-`string2` would need to be valid until the end of the outer scope. Rust knows
-this because we annotated the lifetimes of the function parameters and return
-values with the same lifetime parameter, `'a`.
+Эта ошибка возникает из-за минимального значения времени жизни одного из значений
+входных данных функции.
 
-We can look at this code as humans and see that `string1` is longer, and
-therefore `result` will contain a reference to `string1`. Because `string1` has
-not gone out of scope yet, a reference to `string1` will still be valid for the
-`println!`. However, what we’ve told Rust with the lifetime parameters is that
-the lifetime of the reference returned by the `longest` function is the same as
-the smaller of the lifetimes of the references passed in. Therefore, the borrow
-checker disallows the code in Listing 10-25 as possibly having an invalid
-reference.
+Пожалуйста, поэкспериментируйте со значениями времени жизни ссылок! Посмотрите,
+какая из ссылок используется для определения времени жизни результата.
 
-Try designing some more experiments that vary the values and lifetimes of the
-references passed in to the `longest` function and how the returned reference
-is used. Make hypotheses about whether your experiments will pass the borrow
-checker or not before you compile, then check to see if you’re right!
+### Думай категориями времени жизни
 
-### Thinking in Terms of Lifetimes
-
-The exact way to specify lifetime parameters depends on what your function is
-doing. For example, if we changed the implementation of the `longest` function
-to always return the first argument rather than the longest string slice, we
-wouldn’t need to specify a lifetime on the `y` parameter. This code compiles:
+Для того, чтобы точно определить время жизни параметров необходимо точно знать,
+что будет делать функция. Например, если мы изменили реализацию функции `longest`
+ в новой редакции функция будет всегда возвращать первый аргумент, то в этом случае
+ нет необходимости устанавливать время жизни параметра `y`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -432,17 +377,22 @@ fn longest<'a>(x: &'a str, y: &str) -> &'a str {
 }
 ```
 
-In this example, we’ve specified a lifetime parameter `'a` for the parameter
-`x` and the return type, but not for the parameter `y`, since the lifetime of
-`y` does not have any relationship with the lifetime of `x` or the return value.
+Для того, чтобы не было сообщений компилятора о неиспользуемом параметре, сделайте,
+как рекомендуется:
 
-When returning a reference from a function, the lifetime parameter for the
-return type needs to match the lifetime parameter of one of the arguments. If
-the reference returned does *not* refer to one of the arguments, the only other
-possibility is that it refers to a value created within this function, which
-would be a dangling reference since the value will go out of scope at the end
-of the function. Consider this attempted implementation of the `longest`
-function that won’t compile:
+<span class="filename">Filename: src/main.rs</span>
+```rust
+fn longest<'a>(x: &'a str, _y: &str) -> &'a str {
+    x
+}
+```
+
+В этом примере мы сообщили параметр времени жизни `'a` для параметра `x` и возвращаемого
+значения, но не для параметра `y`.
+
+Если же в коде метода возвращаемая ссылка не будет ссылаться на какой-либо из аргументов,
+тогда эта ссылка при выходе из области видимости станет недействительной, что приведёт
+к ошибке компиляции и другим тревожным сообщениям:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -452,11 +402,11 @@ fn longest<'a>(x: &str, y: &str) -> &'a str {
     result.as_str()
 }
 ```
+Даже если будет установлен параметр время жизни у возвращаемого значения, этот код
+также не будет скомпилирован, т.к. возвращаемое значение не будет связано с временем
+жизни какого-либо из параметров.
 
-Even though we’ve specified a lifetime parameter `'a` for the return type, this
-implementation fails to compile because the return value lifetime is not
-related to the lifetime of the parameters at all. Here’s the error message we
-get:
+Сообщение об ошибке:
 
 ```text
 error: `result` does not live long enough
@@ -472,26 +422,19 @@ at 1:44...
 1 | fn longest<'a>(x: &str, y: &str) -> &'a str {
   |                                             ^
 ```
+Т.к. время жизни переменной истекает после выхода её из области видимости функции,
+такой код не будет скомпилирован.
 
-The problem is that `result` will go out of scope and get cleaned up at the end
-of the `longest` function, and we’re trying to return a reference to `result`
-from the function. There’s no way we can specify lifetime parameters that would
-change the dangling reference, and Rust won’t let us create a dangling
-reference. In this case, the best fix would be to return an owned data type
-rather than a reference so that the calling function is then responsible for
-cleaning up the value.
+Как только будет установлена связь времени жизни входящих переменных и возвращаемого
+значения - для компилятора будет достаточно информации, чтобы сделать проверки и
+скомпилировать код, исключив возможность появления недействительных ссылок.
 
-Ultimately, lifetime syntax is about connecting the lifetimes of various
-arguments and return values of functions. Once they’re connected, Rust has
-enough information to allow memory-safe operations and disallow operations that
-would create dangling pointers or otherwise violate memory safety.
+### Определение времени жизни при объявлении структур
 
-### Lifetime Annotations in Struct Definitions
-
-Up until now, we’ve only defined structs to hold owned types. It is possible
-for structs to hold references, but we need to add a lifetime annotation on
-every reference in the struct’s definition. Listing 10-26 has a struct named
-`ImportantExcerpt` that holds a string slice:
+До сих пор мы объявляли структуры, которые содержали нессылочные типы данных.
+Также возможно в структурах использовать ссылочные типы данных, но при этом необходимо
+добавить описание времени жизни каждой ссылки в определение структуры. Пример кода
+10-26 описывает структуру `ImportantExcerpt` содержащую срезы строковых данных:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -506,28 +449,30 @@ fn main() {
         .next()
         .expect("Could not find a '.'");
     let i = ImportantExcerpt { part: first_sentence };
+
+    println!("{}",i.part);
 }
 ```
 
-<span class="caption">Listing 10-26: A struct that holds a reference, so its
-definition needs a lifetime annotation</span>
+<span class="caption">Пример кода 10-26: Структура, которая содержит ссылку и определение
+времени жизни</span>
 
-This struct has one field, `part`, that holds a string slice, which is a
-reference. Just like with generic data types, we have to declare the name of
-the generic lifetime parameter inside angle brackets after the name of the
-struct so that we can use the lifetime parameter in the body of the struct
-definition.
+Обратите внимание, что поле структуры `ImportantExcerpt` содержит ссылку
 
-The `main` function here creates an instance of the `ImportantExcerpt` struct
-that holds a reference to the first sentence of the `String` owned by the
-variable `novel`.
+Синтаксис такой же, как и при работе с обобщенными типами данных.
 
-### Lifetime Elision
+Функция `main` создаёт экземпляр структуры `ImportantExcerpt`, который содержит
+ссылку на перовое предложение из переменной `novel`.
 
-In this section, we’ve learned that every reference has a lifetime, and we need
-to specify lifetime parameters for functions or structs that use references.
-However, in Chapter 4 we had a function in the “String Slices” section, shown
-again in Listing 10-27, that compiled without lifetime annotations:
+### Правила неявного определения времени жизни
+
+Подведём промежуточные итоги изучения описания времени жизни. Из этой части главы
+мы узнали, что каждая ссылка имеет время жизни и нам нужно устанавливать параметры
+времени жизни для функций или структур, которые используют ссылки.
+
+Также, изучая материал Главы 4, мы создали функции (в секции “String Slices”), которая
+также использует ссылки, но при этом компилятор для её работы не требует информации
+о времени жизни (Пример кода 10-27):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -545,120 +490,103 @@ fn first_word(s: &str) -> &str {
 }
 ```
 
-<span class="caption">Listing 10-27: A function we defined in Chapter 4 that
-compiled without lifetime annotations, even though the parameter and return
-type are references</span>
+<span class="caption">Код программы 10-27: Обратите внимание, что функция, которою
+мы определили в Главе 4 компилируется без описания времени жизни ссылок, несмотря на
+то, что и входной параметр и выходной - ссылки</span>
 
-The reason this function compiles without lifetime annotations is historical:
-in early versions of pre-1.0 Rust, this indeed wouldn’t have compiled. Every
-reference needed an explicit lifetime. At that time, the function signature
-would have been written like this:
+Причина по которой это код может быть скомпилирован - историческая, первые версии
+Rust предполагали явное указание подобной функциональности.
+Сейчас мы рекомендуем написать данный код следующим образом, чтобы иметь возможность
+использовать возможности компилятора по анализ возможных ошибок:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-After writing a lot of Rust code, the Rust team found that Rust programmers
-were typing the same lifetime annotations over and over in particular
-situations. These situations were predictable and followed a few deterministic
-patterns. The Rust team then programmed these patterns into the Rust compiler’s
-code so that the borrow checker can infer the lifetimes in these situations
-without forcing the programmer to explicitly add the annotations.
+После продолжительной работы и накопления большого опыта, разработчики языка Rust
+обнаружили, что описания времени жизни программисты пишут в определённых шаблонных
+решениях, практиках. Программисты Rust решили сделать так, что в таких случаях
+сам компилятор может расставлять переменные времени жизни без явного объявления его
+в коде программы.
 
-We mention this piece of Rust history because it’s entirely possible that more
-deterministic patterns will emerge and be added to the compiler. In the future,
-even fewer lifetime annotations might be required.
+Т.к. язык Rust постоянно развивается, возможно, в будущем роль переменных времени
+жизни будут уменьшиться и больше будет случает в описаниях функций и перечислений.
 
-The patterns programmed into Rust’s analysis of references are called the
-*lifetime elision rules*. These aren’t rules for programmers to follow; the
-rules are a set of particular cases that the compiler will consider, and if
-your code fits these cases, you don’t need to write the lifetimes explicitly.
+Шаблоны, по которым компилятор Rust анализирует ссылки называется *правилами неявного
+поредения времени жизни*. Эти правила существую для компилятора, а не для пишущего
+программы на Rust программиста. Знание этих правил позволит не описывать время
+жизни ссылок там, где это делать необязательно.
 
-The elision rules don’t provide full inference: if Rust deterministically
-applies the rules but there’s still ambiguity as to what lifetimes the
-references have, it won’t guess what the lifetime of the remaining references
-should be. In this case, the compiler will give you an error that can be
-resolved by adding the lifetime annotations that correspond to your intentions
-for how the references relate to each other.
+Неявные правила не имеет четких ограничений. Эти правила выводятся на основе имеющихся
+данных в коде программы. Если этих данных не будет достаточно - компилятор выведет
+соответствующие сообщения и не скомпилирует код.
 
-First, some definitions: Lifetimes on function or method parameters are called
-*input lifetimes*, and lifetimes on return values are called *output lifetimes*.
+Сейчас мы рассмотрим правила анализа переменных времени жизни.
+Первое правило применяется к входным переменным. Последующие два правила применяются
+к выходным переменным. Если компилятор применил эти правила и в результате этого
+он не смог определить связывание данных переменных компилятор остановит свою работу и
+сообщит об ошибке. Вот эти правила:
 
-Now, on to the rules that the compiler uses to figure out what lifetimes
-references have when there aren’t explicit annotations. The first rule applies
-to input lifetimes, and the second two rules apply to output lifetimes. If the
-compiler gets to the end of the three rules and there are still references that
-it can’t figure out lifetimes for, the compiler will stop with an error.
+1. Каждый параметр является ссылкой получающей свой собственный параметр времени жизни.
+   Другими словами, функция с одним параметром получает один параметр времени жизни:
+   `fn foo<'a>(x: &'a i32)`. Функция с двумя аргументами получает два различных
+  параметров времени жизни: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)` и так далее.
 
-1. Each parameter that is a reference gets its own lifetime parameter. In other
-   words, a function with one parameter gets one lifetime parameter: `fn
-   foo<'a>(x: &'a i32)`, a function with two arguments gets two separate
-   lifetime parameters: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and so on.
+2. Если существует одни параметр времени жизни он связывается со всеми выходными
+   параметрами: `fn foo<'a>(x: &'a i32) -> &'a i32`.
 
-2. If there is exactly one input lifetime parameter, that lifetime is assigned
-   to all output lifetime parameters: `fn foo<'a>(x: &'a i32) -> &'a i32`.
+3. Если есть множество входных параметров времени жизни и один из них является
+   ссылкой `&self` или `&mut self` (т.к. это ссылка на метод структуры или перечисления
+   то в этом случае, параметр времени жизни `self` будет связан со всеми выходными
+   параметрами времени жизни.
 
-3. If there are multiple input lifetime parameters, but one of them is `&self`
-   or `&mut self` because this is a method, then the lifetime of `self` is
-   assigned to all output lifetime parameters. This makes writing methods much
-   nicer.
-
-Let’s pretend we’re the compiler and apply these rules to figure out what the
-lifetimes of the references in the signature of the `first_word` function in
-Listing 10-27 are. The signature starts without any lifetimes associated with
-the references:
+Вооружившись этими знаниями вернёмся к функции `first_word` и рассмотрим подробнее
+анализ компилятора её заголовка. В нём нет описания времени жизни:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-Then we (as the compiler) apply the first rule, which says each parameter gets
-its own lifetime. We’re going to call it `'a` as usual, so now the signature is:
+Далее, применим первое правило, которое говорит, что каждый параметр получает свой
+собственный параметр времени жизни. Пропишем это условие явным образом:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
 ```
 
-On to the second rule, which applies because there is exactly one input
-lifetime. The second rule says the lifetime of the one input parameter gets
-assigned to the output lifetime, so now the signature is:
+Второе правило таки применяется, т.к. здесь только один входной параметр времени
+жизни. Следовательно, данная переменная времени жизни свяжется с выходной переменной
+времени жизни. Перепишем заголовок функции с учётом этого правила:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-Now all the references in this function signature have lifetimes, and the
-compiler can continue its analysis without needing the programmer to annotate
-the lifetimes in this function signature.
+Теперь все ссылки в этой функции имеют параметры времени жизни и компилятор может
+продолжить свой анализ без необходимости получить дополнительную информацию от
+программиста.
 
-Let’s do another example, this time with the `longest` function that had no
-lifetime parameters when we started working with in Listing 10-22:
+Давайте рассмотрим ещё один пример - заголовок функции `longest`, в котором нет
+параметров времени жизни из примера 10-22:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
 ```
 
-Pretending we’re the compiler again, let’s apply the first rule: each parameter
-gets its own lifetime. This time we have two parameters, so we have two
-lifetimes:
+Применим правила времени жизни:
 
 ```rust,ignore
 fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 ```
 
-Looking at the second rule, it doesn’t apply since there is more than one input
-lifetime. Looking at the third rule, this also does not apply because this is a
-function rather than a method, so none of the parameters are `self`. So we’re
-out of rules, but we haven’t figured out what the return type’s lifetime is.
-This is why we got an error trying to compile the code from Listing 10-22: the
-compiler worked through the lifetime elision rules it knows, but still can’t
-figure out all the lifetimes of the references in the signature.
+Второе правило нельзя применить, т.к. входных параметров несколько. Смотрим
+третье правило. Оно также не применимо, т.к. это функция, а не метод. Поэтому
+компилятор в данном случае сообщит об ошибке (Пример кода 10-22)
 
-Because the third rule only really applies in method signatures, let’s look at
-lifetimes in that context now, and see why the third rule means we don’t have
-to annotate lifetimes in method signatures very often.
+Т.к. третье правило применяется только к методам, давайте рассмотрим работу этого
+правила подробнее.
 
-### Lifetime Annotations in Method Definitions
+### Описание времени жизни в определении методов
 
 <!-- Is this different to the reference lifetime annotations, or just a
 finalized explanation? -->
@@ -668,24 +596,23 @@ parameters need to be declared and used since the lifetime parameters could go
 with the struct's fields or with references passed into or returned from
 methods. /Carol -->
 
-When we implement methods on a struct with lifetimes, the syntax is again the
-same as that of generic type parameters that we showed in Listing 10-11: the
-place that lifetime parameters are declared and used depends on whether the
-lifetime parameter is related to the struct fields or the method arguments and
-return values.
+Когда мы реализуем методы в структурах с описанием времени жизни, синтаксис
+описаний схож с аннотациями обобщенного программирования (Пример кода 10-11).
+Место где описания времени жизни определяется и используется зависит от того
+с чем он связывается - с полем структуры либо с аргументами методов и возвращаемыми
+значениями.
 
-Lifetime names for struct fields always need to be declared after the `impl`
-keyword and then used after the struct’s name, since those lifetimes are part
-of the struct’s type.
+Имена переменных времени жизни для полей структур всегда должны описывается после
+ключевого слова `impl` и затем помещаться после имени структуры, т.к. это имя -
+неотъемлемая часть типа данных структуры.
 
-In method signatures inside the `impl` block, references might be tied to the
-lifetime of references in the struct’s fields, or they might be independent. In
-addition, the lifetime elision rules often make it so that lifetime annotations
-aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in Listing 10-26.
+В описании методов внутри блока `impl`, ссылки могут быть связаны с ссылками полей
+или могут быть независимыми. Дополнительно, правила неявного использования
+времени жизни делают использование переменных времени жизни необязательными.
+Рассмотрим пример кода. Используем структуру `ImportantExcerpt` из примера 10-26.
 
-First, here’s a method named `level`. The only parameter is a reference to
-`self`, and the return value is just an `i32`, not a reference to anything:
+Здесь метод в методе `level` входной параметр - ссылка на `self` и возвращаемое
+значение типа `i32` (не ссылка):
 
 ```rust
 # struct ImportantExcerpt<'a> {
@@ -699,11 +626,10 @@ impl<'a> ImportantExcerpt<'a> {
 }
 ```
 
-The lifetime parameter declaration after `impl` and use after the type name is
-required, but we’re not required to annotate the lifetime of the reference to
-`self` because of the first elision rule.
+Описание параметра времени жизни находится после `impl` и используется после имени.
+Нам не надо добавлять информацию к входному параметру (правило 1).
 
-Here’s an example where the third lifetime elision rule applies:
+Пример применения третьего правила:
 
 ```rust
 # struct ImportantExcerpt<'a> {
@@ -718,40 +644,35 @@ impl<'a> ImportantExcerpt<'a> {
 }
 ```
 
-There are two input lifetimes, so Rust applies the first lifetime elision rule
-and gives both `&self` and `announcement` their own lifetimes. Then, because
-one of the parameters is `&self`, the return type gets the lifetime of `&self`,
-and all lifetimes have been accounted for.
+Тут два входных параметра. Применяем первое правило. Т.к. один из параметров `&self`
+возвращаемое значения будет иметь время жизни переменой `&self`
 
-### The Static Lifetime
+### Статическая переменная времени жизни
 
-There is *one* special lifetime we need to discuss: `'static`. The `'static`
-lifetime is the entire duration of the program. All string literals have the
-`'static` lifetime, which we can choose to annotate as follows:
+Существует ещё одно особенное врем жизни - 'static`. Оно описывает всё врем жизни
+программы. Все строковые литералы имеют этот тип времени жизни, которое мы можем
+указать явным образом:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the binary of your program and
-the binary of your program is always available. Therefore, the lifetime of all
-string literals is `'static`.
+Содержание этой строки сохраняется внутри бинарного кода вашей программы и всегда
+доступно для использования. Поэтому время жизни всех строковых литералов `'static`.
 
 <!-- How would you add a static lifetime (below)? -->
 <!-- Just like you'd specify any lifetime, see above where it shows `&'static str`. /Carol -->
 
-You may see suggestions to use the `'static` lifetime in error message help
-text, but before specifying `'static` as the lifetime for a reference, think
-about whether the reference you have is one that actually lives the entire
-lifetime of your program or not (or even if you want it to live that long, if
-it could). Most of the time, the problem in the code is an attempt to create a
-dangling reference or a mismatch of the available lifetimes, and the solution
-is fixing those problems, not specifying the `'static` lifetime.
+В сообщениях компилятора могут быть сообщении использовать `'static`. Прежде чем
+использовать данный тип переменной времени жизни, пожалуйста, подумайте, должна ли
+данная переменна быть доступна во время работы программы. Очень часто такие ссылки
+являются источником скрытых ошибок.
 
-### Generic Type Parameters, Trait Bounds, and Lifetimes Together
+### Обобщенные типы, связывание с типажом и переменные времени жизни
 
-Let’s briefly look at the syntax of specifying generic type parameters, trait
-bounds, and lifetimes all in one function!
+Теперь когда мы узнали о синтаксисе переменных времени жизни настала пора
+объединить эти знания с другими концепциями языка Rust. Рассмотрим пример определения
+обобщенных параметров, типажа и переменных времени жизни вместе:
 
 ```rust
 use std::fmt::Display;
@@ -768,31 +689,22 @@ fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a st
 }
 ```
 
-This is the `longest` function from Listing 10-23 that returns the longest of
-two string slices, but with an extra argument named `ann`. The type of `ann` is
-the generic type `T`, which may be filled in by any type that implements the
-`Display` trait as specified by the `where` clause. This extra argument will be
-printed out before the function compares the lengths of the string slices,
-which is why the `Display` trait bound is necessary. Because lifetimes are a
-type of generic, the declarations of both the lifetime parameter `'a` and the
-generic type parameter `T` go in the same list within the angle brackets after
-the function name.
+Это видоизмененный пример функции `longest` (код прогрммы 10-23). Программа
+возвращает наибольшую строку. Обратите внимание на дополнительный аргумент обобщенного
+типа `ann: T`! Он может быть любым, реализующим типаж `Display`. Содержание данной
+переменной будет напечатано прежде, чем будет произведено сравнение строк. Т.к. переменные
+времени жизни - это разновидность обобщенного типа параметров, они располагаются
+вместе.
 
-## Summary
+## Итоги
 
-We covered a lot in this chapter! Now that you know about generic type
-parameters, traits and trait bounds, and generic lifetime parameters, you’re
-ready to write code that isn’t duplicated but can be used in many different
-situations. Generic type parameters mean the code can be applied to different
-types. Traits and trait bounds ensure that even though the types are generic,
-those types will have the behavior the code needs. Relationships between the
-lifetimes of references specified by lifetime annotations ensure that this
-flexible code won’t have any dangling references. And all of this happens at
-compile time so that run-time performance isn’t affected!
-
-Believe it or not, there’s even more to learn in these areas: Chapter 17 will
-discuss trait objects, which are another way to use traits. Chapter 19 will be
-covering more complex scenarios involving lifetime annotations. Chapter 20 will
-get to some advanced type system features. Up next, though, let’s talk about
-how to write tests in Rust so that we can make sure our code using all these
-features is working the way we want it to!
+В этой главе мы рассмотрели много важного материала для понимания работы переменных
+времени жизни. Вы уже знаете достаточно, чтобы писать код программы и не дублировать
+создаваемый вами код. Обобщенные параметры помогаю использовать код для различных
+типов данных. Типажи и связывании с типажами помогает соблюсти конвенции и контракты
+чтобы иметь предсказуемое поведение. Также у нас есть эффективных способ борьбы с
+недействительными ссылками. Вся эта подготовительная работа проводиться в момент
+компиляции. Есть ещё тему которые дополнят эту картину. В Главе 17 вы изучите
+типажные объекты (это ещё один способ использовать типажи). В Главе 19 будет говориться
+о сложных сценариях использования переменных времени жизни. В Главе 20 будет рассмотрена
+система опций. В следующей главе будут рассказано, как написать тесты в Rust.

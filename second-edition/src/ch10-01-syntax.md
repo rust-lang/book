@@ -1,22 +1,20 @@
-## Generic Data Types
+## Шаблонные типы данных (родовые типы, дженерики) (Generic Data Types)
 
-Using generics where we usually place types, like in function signatures or
-structs, lets us create definitions that we can use for many different concrete
-data types. Let’s take a look at how to define functions, structs, enums, and
-methods using generics, and at the end of this section we’ll discuss the
-performance of code using generics.
+Использование шаблонных типов данных в описании входных параметров функций, полях
+и методах структур позволяет нам создавать структуры, языковые конструкции, которые
+можно использовать с различными типами данных. Далее, будут рассмотрены определения
+функций, структур, перечислений, методов, с помощью использования шаблонных типов
+данных. Также мы рассмотрим производительность кода, который использует этот подход.
 
-### Using Generic Data Types in Function Definitions
+### Использование шаблонных типов данных в определении функций
 
-We can define functions that use generics in the signature of the function
-where the data types of the parameters and return value go. In this way, the
-code we write can be more flexible and provide more functionality to callers of
-our function, while not introducing code duplication.
+Мы можем создавать определения функций с помощью шаблонов. При этом код становится
+более удобным и универсальным.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions
-providing the same functionality to find the largest value in a slice. The
-first function is the one we extracted in Listing 10-3 that finds the largest
-`i32` in a slice. The second function finds the largest `char` in a slice:
+Продолжим исследование функции, которую мы создали в предыдущем разделе - `largest`.
+Создадим коды искомых функций для срезов. Первая функция будет искать наибольшее значение в
+данных в типа `i32`. Вторая функция будет искать наибольшее значение в типах данных
+`char`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -60,44 +58,38 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-4: Two functions that differ only in their
-names and the types in their signatures</span>
+<span class="caption">Listing 10-4: Две функции, отличия которых (кроме названий) только
+в типе обрабатываемых данных</span>
 
-Here, the functions `largest_i32` and `largest_char` have the exact same body,
-so it would be nice if we could turn these two functions into one and get rid
-of the duplication. Luckily, we can do that by introducing a generic type
-parameter!
 
-To parameterize the types in the signature of the one function we’re going to
-define, we need to create a name for the type parameter, just like how we give
-names for the value parameters to a function. We’re going to choose the name
-`T`. Any identifier can be used as a type parameter name, but we’re choosing
-`T` because Rust’s type naming convention is CamelCase. Generic type parameter
-names also tend to be short by convention, often just one letter. Short for
-“type”, `T` is the default choice of most Rust programmers.
+Функции `largest_i32` и `largest_char` имеют абсолютно одинаковое содержание. Было бы,
+конечно, замечательно если бы была возможность объединить содержание в одну функцию.
+Это возможно с дженериков.
 
-When we use a parameter in the body of the function, we have to declare the
-parameter in the signature so that the compiler knows what that name in the
-body means. Similarly, when we use a type parameter name in a function
-signature, we have to declare the type parameter name before we use it. Type
-name declarations go in angle brackets between the name of the function and the
-parameter list.
+Для параметризирования параметров функции, необходимо дать имя типу параметра. Также,
+как мы даём имя параметру функции. Назовём этот тип `T`. В качестве этого имени могут
+быть любой идентификатор, но учитывая конвенции языка программирования Rust - имя будет
+таковым. `T` - это сокращения от "тип". Для упрощения это имя в языке Rust выбирается
+по умолчанию.
 
-The function signature of the generic `largest` function we’re going to define
-will look like this:
+Для того, чтобы использовать данный параметр, мы должны определить его специальным образом.
+Переменная типа записывается в квадратных скобках между именем функции и списком параметров.
+
+В результате описание функции `largest` будет иметь следующий вид:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> T {
+...
 ```
 
-We would read this as: the function `largest` is generic over some type `T`. It
-has one parameter named `list`, and the type of `list` is a slice of values of
-type `T`. The `largest` function will return a value of the same type `T`.
+Читает это определение следующим образом: обобщенная функция `largest` имеет тип параметров
+`T`. Эта финкция имеет один параметр `list`. Тип данных данного параметра `T`. Функция
+возвращает значение типа данных `T`.
 
-Listing 10-5 shows the unified `largest` function definition using the generic
-data type in its signature, and shows how we’ll be able to call `largest` with
-either a slice of `i32` values or `char` values. Note that this code won’t
-compile yet!
+В следующим тексте программы (10-5) будет продемонстрирован полный текст данной
+функции, а также её использование. Обратите внимание, что данный код ещё имеет недостатки!
+Пожалуйста, попробуйте скомпилировать код данного примера и ознакомьтесь с сообщениями
+компилятора!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -127,10 +119,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-5: A definition of the `largest` function that
-uses generic type parameters but doesn’t compile yet</span>
+<span class="caption">Listing 10-5: Объявление функции `largest`, которая использует
+концепцию обобщенного программирования (дженерики) для параметризации используемых типов
+данных</span>
 
-If we try to compile this code right now, we’ll get this error:
+Описание ошибки:
 
 ```text
 error[E0369]: binary operation `>` cannot be applied to type `T`
@@ -141,33 +134,22 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 ```
 
-The note mentions `std::cmp::PartialOrd`, which is a *trait*. We’re going to
-talk about traits in the next section, but briefly, what this error is saying
-is that the body of `largest` won’t work for all possible types that `T` could
-be; since we want to compare values of type `T` in the body, we can only use
-types that know how to be ordered. The standard library has defined the trait
-`std::cmp::PartialOrd` that types can implement to enable comparisons. We’ll
-come back to traits and how to specify that a generic type has a particular
-trait in the next section, but let’s set this example aside for a moment and
-explore other places we can use generic type parameters first.
+Мы подробнее поговорим о *типажах* (таких как `std::cmp::PartialOrd`) в последующих
+главах книги. Эта ошибка сообщает нам о том, что содержание функции не будет работать
+для всех типов данных, т.к. внутри функции используется оператор сравнения `>`, а для
+его использования типы параметризированных переменных должны реализовать типаж `std::cmp::PartialOrd`.
 
-<!-- Liz: this is the reason we had the topics in the order we did in the first
-draft of this chapter; it's hard to do anything interesting with generic types
-in functions unless you also know about traits and trait bounds. I think this
-ordering could work out okay, though, and keep a stronger thread with the
-`longest` function going through the whole chapter, but we do pause with a
-not-yet-compiling example here, which I know isn't ideal either. Let us know
-what you think. /Carol -->
+### Использование обобщенных типов данных при определении структур
 
-### Using Generic Data Types in Struct Definitions
-
-We can define structs to use a generic type parameter in one or more of the
-struct’s fields with the `<>` syntax too. Listing 10-6 shows the definition and
-use of a `Point` struct that can hold `x` and `y` coordinate values of any type:
+Мы можем определять структуры для использования внутри. Для этого также, как и в функции
+ между названием структуры и списком параметров пишем в квадратных скобах имена используемых
+ типов данных. Код программы (10-6) наглядно демонстрирует это. Структура `Point`
+ содержит параметризированные поля `x` и `y`:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
+#[derive(Debug)]
 struct Point<T> {
     x: T,
     y: T,
@@ -176,40 +158,49 @@ struct Point<T> {
 fn main() {
     let integer = Point { x: 5, y: 10 };
     let float = Point { x: 1.0, y: 4.0 };
+    println!("{:?}", integer);
+    println!("{:?}", float);
 }
+
 ```
 
-<span class="caption">Listing 10-6: A `Point` struct that holds `x` and `y`
-values of type `T`</span>
+<span class="caption">Listing 10-6: Использование структуры `Point` содержащей поля
+`x` и `y` типа `T`</span>
 
-The syntax is similar to using generics in function definitions. First, we have
-to declare the name of the type parameter within angle brackets just after the
-name of the struct. Then we can use the generic type in the struct definition
-where we would specify concrete data types.
+Обратите внимание, на схожие черты синтаксиса при определении обобщенной функции и структуры.
+Мы называем тип параметра, располагаем его в определённом синтаксисом языка месте.
+Вызов и использование синтаксических структуру аналогичны.
 
-Note that because we’ve only used one generic type in the definition of
-`Point`, what we’re saying is that the `Point` struct is generic over some type
-`T`, and the fields `x` and `y` are *both* that same type, whatever it ends up
-being. If we try to create an instance of a `Point` that has values of
-different types, as in Listing 10-7, our code won’t compile:
+Также обратите внимание, что типы данных полей структуры имеют один и тот же тип дынных.
+Если структура будет инициирована различными числовыми типами данных - код не скомпилируется:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+#[derive(Debug)]
 struct Point<T> {
     x: T,
     y: T,
 }
 
 fn main() {
+/*
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+    println!("{:?}", integer);
+    println!("{:?}", float);
+
+    */
+
     let wont_work = Point { x: 5, y: 4.0 };
+    println!("{:?}", wont_work);
 }
 ```
 
-<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
-type because both have the same generic data type `T`</span>
+<span class="caption">Listing 10-7:Пример ошибки. Поля `x` и `y` должны быть инициированы
+одинаковыми типами данных `T`</span>
 
-If we try to compile this, we’ll get the following error:
+Описание ошибки:
 
 ```text
 error[E0308]: mismatched types
@@ -223,20 +214,19 @@ error[E0308]: mismatched types
   = note:    found type `{float}`
 ```
 
-When we assigned the integer value 5 to `x`, the compiler then knows for this
-instance of `Point` that the generic type `T` will be an integer. Then when we
-specified 4.0 for `y`, which is defined to have the same type as `x`, we get a
-type mismatch error.
+Когда мы присваиваем значение первой переменной (в данном случае `x`), компилятор определяет
+тип данных обобщенного типа. Следовательно, все последующие входные параметры должны иметь
+тотже тип данных. Поэтому введение иного типа данных приводит к ошибке.
 
-If we wanted to define a `Point` struct where `x` and `y` could have different
-types but still have those types be generic, we can use multiple generic type
-parameters. In listing 10-8, we’ve changed the definition of `Point` to be
-generic over types `T` and `U`. The field `x` is of type `T`, and the field `y`
-is of type `U`:
+Если же необходимо использовать различные типы данных для входящих значений и переменных,
+для этого надо описать все типы при определении и корректно их использовать.
+
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
+#[derive(Debug)]
 struct Point<T, U> {
     x: T,
     y: U,
@@ -246,24 +236,26 @@ fn main() {
     let both_integer = Point { x: 5, y: 10 };
     let both_float = Point { x: 1.0, y: 4.0 };
     let integer_and_float = Point { x: 5, y: 4.0 };
+
+    println!("{:?}", both_integer);
+    println!("{:?}", both_float);
+    println!("{:?}", integer_and_float);
 }
+
 ```
 
-<span class="caption">Listing 10-8: A `Point` generic over two types so that
-`x` and `y` may be values of different types</span>
+<span class="caption">Listing 10-8: Структура `Point` имеет два поля разного типа</span>
 
-Now all of these instances of `Point` are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few gets
-hard to read and understand. If you get to a point of needing lots of generic
-types, it’s probably a sign that your code could use some restructuring to be
-separated into smaller pieces.
+Теперь все эти экземпляры структуры `Point` можно использовать, код компилируется.
+Нет ограничений на количество используемых параметров типов данных. Но большое их количество
+может негативно повлиять на читабельность кода. Если всё же такая необходимость появляется,
+то это обстоятельство может служить сигналом для реструктуризации имеющегося кода программы.
 
-### Using Generic Data Types in Enum Definitions
+### Использование обобщенного программирования в перечислениях
 
-Similarly to structs, enums can be defined to hold generic data types in their
-variants. We used the `Option<T>` enum provided by the standard library in
-Chapter 6, and now its definition should make more sense. Let’s take another
-look:
+Также как и в структурах, перечисления могут иметь обобщенные типа данные. Мы уже использовали
+такой тип данных в наших предыдущих примерах - `Option<T>` (в Главе 6). Рассмотрим определение
+данного перечисления подробнее:
 
 ```rust
 enum Option<T> {
@@ -272,16 +264,13 @@ enum Option<T> {
 }
 ```
 
-In other words, `Option<T>` is an enum generic in type `T`. It has two
-variants: `Some`, which holds one value of type `T`, and a `None` variant that
-doesn’t hold any value. The standard library only has to have this one
-definition to support the creation of values of this enum that have any
-concrete type. The idea of “an optional value” is a more abstract concept than
-one specific type, and Rust lets us express this abstract concept without lots
-of duplication.
+Это определение перечисления с обобщенным типом данных `T`. Перечисление имеет два
+значения: `Some`, которое содержит значение типа `T` и `None`, которое не содержит каких-либо
+данных. Стандартная библиотека предоставляет такой функционал - опциональное значение,
+идея которого более абстрактная. Она позволяет обойтись без дублирования.
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+Как и структура и функция, перечисления также могут использовать список обобщенных параметров.
+Примером этого - определение перечисления `Result` из Главы 9:
 
 ```rust
 enum Result<T, E> {
@@ -290,26 +279,22 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`. `Result` has two
-variants: `Ok`, which holds a value of type `T`, and `Err`, which holds a value
-of type `E`. This definition makes it convenient to use the `Result` enum
-anywhere we have an operation that might succeed (and return a value of some
-type `T`) or fail (and return an error of some type `E`). Recall Listing 9-2
-when we opened a file: in that case, `T` was filled in with the type
-`std::fs::File` when the file was opened successfully and `E` was filled in
-with the type `std::io::Error` when there were problems opening the file.
+Перечисление `Result` имеет два обобщенных типа `T` и `E`. `Result` имеет два значения:
+`Ok`, которое содержит тип `T` и `Err`, которое содержит тип `E`. Такое определение
+позволяет использовать перечисление `Result` везде, где операции могут быть выполнены
+успешно (возвращение значение типа данных `T`) или неуспешно (возвращение значения типа данных
+`E`). Обратимся к коду программы 9-2, где мы открывали файл. При открытии файла предоставлялись
+данные типа `T`, т.е. в том примере `std::fs::File` или, при ошибке, `E` (`std::io::Error` -
+т.е. при каких-либо проблемах с открытием файла).
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-remove the duplication by using the same process we used with the function
-definitions to introduce generic types instead.
+Мы надеемся, что Вам стало понятно, как избежать дублирование кода, используя возможности
+обобщенного программирования при работы с функциями, структурам и перечислениями.
 
-### Using Generic Data Types in Method Definitions
+### Использование обобщенных типов данных в определении методов
 
-Like we did in Chapter 5, we can implement methods on structs and enums that
-have generic types in their definitions. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6. We’ve then defined a method named `x` on
-`Point<T>` that returns a reference to the data in the field `x`:
+Также как и в Главе 5, мы может реализовать методы структур и перечислений с помощью
+обобщенного программирования. Код программы 10-9 демонстрирует пример добавления метода
+`x` в структуру `Point<T>`. Метод возвращает ссылку на значение данных поля `x`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -326,23 +311,23 @@ impl<T> Point<T> {
 }
 
 fn main() {
-    let p = Point { x: 5, y: 10 };
+    let p1 = Point { x: 5, y: 10 };
+    let p2 = Point { x: p1.x, y: p1.y };
 
-    println!("p.x = {}", p.x());
+    println!("p1.x() = {}", p1.x());
+    println!("p2.x = {}", p2.x());
 }
+
 ```
 
-<span class="caption">Listing 10-9: Implementing a method named `x` on the
-`Point<T>` struct that will return a reference to the `x` field, which is of
-type `T`.</span>
+<span class="caption">Код программы 10-9: Реализация метода `x` в структуре `Point<T>`.
+Метод `x()` возвращает ссылку на данные поля `x` (имеет тип `T`).</span>
 
-Note that we have to declare `T` just after `impl` in order to use `T` in the
-type `Point<T>`. Declaring `T` as a generic type after the `impl` is how Rust
-knows the type in the angle brackets in `Point` is a generic type rather than a
-concrete type. For example, we could choose to implement methods on
-`Point<f32>` instances rather than `Point` instances with any generic type.
-Listing 10-10 shows that we don’t declare anything after the `impl` in this
-case, since we’re using a concrete type, `f32`:
+Конечно же, Вы обратили внимание на особенную структуры при описании обобщенного типа данных.
+После `impl` находится имя обобщенного типа `impl<T>`. Таким образом в синтаксисе языка
+компилятору передаётся информация о типах данных внутри структуры.
+Например, мы можем выбрать реализацию методов `Point<f32>`.
+Пример::
 
 ```rust
 # struct Point<T> {
@@ -357,24 +342,55 @@ impl Point<f32> {
 }
 ```
 
-<span class="caption">Listing 10-10: Building an `impl` block which only
-applies to a struct with a specific type is used for the generic type parameter
-`T`</span>
+<span class="caption">Код программы 10-10: Реализация `impl` блока структуры `Point`.
+При данной реализации метод структуры Point можно использовать только с определенным
+типом данных. В данном случае это `f32`.</span>
 
-This code means the type `Point<f32>` will have a method named
-`distance_from_origin`, and other instances of `Point<T>` where `T` is not of
-type `f32` will not have this method defined. This method measures how far our
-point is from the point of coordinates (0.0, 0.0) and uses mathematical
-operations which are only available for floating-point types.
+Пожалуйста, попробуйте откомпилировать код примера программы и познакомьтесь с описанием
+ошибки:
 
-Generic type parameters in a struct definition aren’t always the same generic
-type parameters you want to use in that struct’s method signatures. Listing
-10-11 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
-The method takes another `Point` as a parameter, which might have different
-types than the `self` `Point` that we’re calling `mixup` on. The method creates
-a new `Point` instance that has the `x` value from the `self` `Point` (which is
-of type `T`) and the `y` value from the passed-in `Point` (which is of type
-`W`):
+```rust
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+}
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+fn main() {
+    let p2 = Point { x: 3., y: 1. };
+    println!("p2.x() = {}", p2.x());
+    println!("distance from origin =  {}", p2.distance_from_origin());
+
+    ///////////////////
+
+    let p1 = Point { x: 5, y: 10 };
+
+    println!("p1.x() = {}", p1.x());
+
+    println!("distance from origin =  {}", p1.distance_from_origin());
+}
+
+```
+
+Описание ошибки помогает понять, что экземпляры типа `Point<f32>` имеют метод `distance_from_origin`,
+а экземпляры типа `Point<T>`, где `T` не является типом данных `f32` такого метода не
+имеют.
+
+Обобщенные типы параметров в определении структур не всегда такие же, которые вы бы хотели
+использовать в методах. Код программы 10-11 описывает метод `mixup` структуры `Point<T, U>`.
+Метод получает другую структуру `Point` в качестве параметра, которая может содержать
+другие типы данных в качестве обобщенных типов данных. Метод создаёт новый экземпляр
+структуры `Point`, который получает значение `x` из `self` `Point` (типа `T`) и `y` из
+`Point` (типа `W`):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -403,52 +419,38 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-11: Methods that use different generic types
-than their struct’s definition</span>
+<span class="caption">Код программы 10-11: Методы могут иметь различные обобщенные типы,
+нежели те, которые есть в определении структур</span>
 
-In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). `p2` is a `Point` that has a string
-slice for `x` (with value `"Hello"`) and a `char` for `y` (with value `c`).
-Calling `mixup` on `p1` with the argument `p2` gives us `p3`, which will have
-an `i32` for `x`, since `x` came from `p1`. `p3` will have a `char` for `y`,
-since `y` came from `p2`. The `println!` will print `p3.x = 5, p3.y = c`.
+В методе `main` мы создали экземпляр `Point`, который имеет тип данных `i32` для `x` и
+`f64` для `y`. Далее мы создали экземпляр `Point`, который имеет тип данных срез строкового
+типа для `x` и `char` для `y`. Вызов метода `mixup` из переменной `p1` с аргументом `p2`
+создаёт новый экземпляр типа `Point`, копирую данные из уже имеющихся экземпляров.
 
-Note that the generic parameters `T` and `U` are declared after `impl`, since
-they go with the struct definition. The generic parameters `V` and `W` are
-declared after `fn mixup`, since they are only relevant to the method.
+Обратите внимание, что параметры типов `T` и `U` объявляется в блоке реализации после
+ключевого слова `impl`. Параметры `V` и `W` объявляются после имени метода, и, следовательно,
+могут быть использованы только в этом методе.
 
-### Performance of Code Using Generics
+### Производительность программ, использующие обобщенное программирование
 
-You may have been reading this section and wondering if there’s a run-time cost
-to using generic type parameters. Good news: the way that Rust has implemented
-generics means that your code will not run any slower than if you had specified
-concrete types instead of generic type parameters!
+Наверное, это немного удивительно какие же накладные расходы могут быть у программ с
+прадватирельной компиляцией, даже есль используюется обобщенное программирование.
+Так и есть. Программ созданные на Rust не имеет такой проблемы, но только лишь тогда,
+когда будут использованы конкретные типы данных, т.е. они будут определены в процессе
+компиляции программы.
+Технология *мономорфизации* кода позволяет это реализовать. Этот процесс конвертирует
+обобщенный код в конкретный.
 
-Rust accomplishes this by performing *monomorphization* of code using generics
-at compile time. Monomorphization is the process of turning generic code into
-specific code with the concrete types that are actually used filled in.
-
-What the compiler does is the opposite of the steps that we performed to create
-the generic function in Listing 10-5. The compiler looks at all the places that
-generic code is called and generates code for the concrete types that the
-generic code is called with.
-
-Let’s work through an example that uses the standard library’s `Option` enum:
+Рассмотрим пример компиляции кода. Создадим два экземпляра перечисления `Option`:
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it will perform monomorphization. The compiler
-will read the values that have been passed to `Option` and see that we have two
-kinds of `Option<T>`: one is `i32`, and one is `f64`. As such, it will expand
-the generic definition of `Option<T>` into `Option_i32` and `Option_f64`,
-thereby replacing the generic definition with the specific ones.
-
-The monomorphized version of our code that the compiler generates looks like
-this, with the uses of the generic `Option` replaced with the specific
-definitions created by the compiler:
+При компиляции произойдет оптимизация (*мономорфизации*). Компилятор прочитает значения
+внутри значений перечисления `Option` и создаст необходимы типы `Option<i32>` и `Option<f64>`.
+Оптимизированная версия кода будет выглядеть следующим образом:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -469,8 +471,6 @@ fn main() {
 }
 ```
 
-We can write the non-duplicated code using generics, and Rust will compile that
-into code that specifies the type in each instance. That means we pay no
-runtime cost for using generics; when the code runs, it performs just like it
-would if we had duplicated each particular definition by hand. The process of
-monomorphization is what makes Rust’s generics extremely efficient at runtime.
+Подведём итоги.
+Мы познакомились с обобщенным программированием в Rust. Благодаря внутренней оптимизации
+обобщенного кода, нет накладных расходов при работе программ.
