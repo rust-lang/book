@@ -407,6 +407,7 @@ threadsafe
 timestamp
 Tiếng
 timeline
+tlborm
 TODO
 TokenStream
 toml
@@ -421,6 +422,7 @@ tuple
 tuples
 turbofish
 typeof
+TypeName
 UFCS
 unary
 Unary

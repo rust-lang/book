@@ -137,7 +137,7 @@ pattern used here mean; for the full macro pattern syntax, see [the reference].
 
 The `$x:expr` part of the pattern matches any Rust expression and gives the
 expression the name `$x`. The `*` specifies that the pattern matches zero or
-more of whatever preceeds the `*`. In this case, `*` is preceeded by `$(),` so
+more of whatever precedes the `*`. In this case, `*` is preceded by `$(),` so
 this pattern matches zero or more of whatever is inside the parentheses,
 delimited by a comma. When we call this macro with `vec![1, 2, 3];`, the
 pattern matches the three expressions `1`, `2`, and `3`.
