@@ -201,7 +201,7 @@ Running this code will print the following:
 
 ```text
 CustomSmartPointer created.
-Dropping CustomSmartPointer!
+Dropping CustomSmartPointer with data `some data`!
 CustomSmartPointer dropped before the end of main.
 ```
 
@@ -210,7 +210,7 @@ this chapter in any case -->
 <!-- I added a definition for destructor a few paragraphs above, the first time
 we see it in an error message. /Carol -->
 
-The `Dropping CustomSmartPointer!` is printed between `CustomSmartPointer
+The ```Dropping CustomSmartPointer with data `some data`!``` is printed between `CustomSmartPointer
 created.` and `CustomSmartPointer dropped before the end of main.`, showing
 that the `drop` method code is called to drop `c` at that point.
 
