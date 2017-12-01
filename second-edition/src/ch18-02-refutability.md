@@ -9,7 +9,7 @@ let Some(x) = a_value`; if the value in the `a_value` variable is `None` rather
 than `Some`, then the `Some(x)` pattern would not match.
 
 `let` statements, function parameters, and `for` loops can only accept
-irrefutable patterns, because the program cannot continue do anything
+irrefutable patterns, because the program cannot do anything
 meaningful with values that don’t match. The `if let` and `while let`
 expressions are restricted to only accept refutable patterns, because by
 definition they’re intended to handle possible failure---the functionality of a
