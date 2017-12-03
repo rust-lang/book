@@ -43,6 +43,12 @@ Alternatively, add the following line to your `~/.bash_profile`:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
+If you're on a Mac, all the things above can be done with one-line Homebrew:
+
+```text
+$ brew install rust
+```
+
 ### Installing on Windows
 
 On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
