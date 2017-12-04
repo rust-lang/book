@@ -431,7 +431,7 @@ coercion will take effect on the `&` and the `Box` so that the `content` method
 will ultimately be called on the type that implements the `State` trait.
 
 That means we need to add `content` to the `State` trait definition, and that’s
-where We’ll put the logic for what content to return depending on which state
+where we’ll put the logic for what content to return depending on which state
 we have, as shown in Listing 17-18:
 
 <span class="filename">Filename: src/lib.rs</span>
