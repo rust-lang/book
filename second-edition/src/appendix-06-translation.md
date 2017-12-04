@@ -16,3 +16,4 @@ For resources in languages other than English. Most are still in progress; see
 - [日本語](https://github.com/hazama-yuinyan/book)
 - [Français](https://github.com/quadrifoglio/rust-book-fr)
 - [Polski](https://github.com/paytchoo/book-pl)
+- [עברית](https://github.com/idanmel/rust-book-heb)
