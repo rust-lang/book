@@ -4,6 +4,7 @@ abcd
 abcdefghijklmnopqrstuvwxyz
 adaptor
 adaptors
+AddAssign
 Addr
 aggregator
 AGraph
@@ -29,12 +30,15 @@ Baz’s
 benchmarking
 bitand
 BitAnd
+BitAndAssign
 bitor
 BitOr
+BitOrAssign
 bitwise
 Bitwise
 bitxor
 BitXor
+BitXorAssign
 Bjarne
 Boehm
 bool
@@ -102,6 +106,7 @@ doccratesio
 DOCTYPE
 doesn
 disambiguating
+DivAssign
 DraftPost
 DSTs
 ebooks
@@ -119,6 +124,7 @@ eprintln
 Erlang
 ErrorKind
 Executables
+expr
 extern
 favicon
 FFFD
@@ -162,14 +168,17 @@ homogenous
 html
 hyperoptimize
 Iceburgh
+ident
 IEEE
 impl
 implementor
 implementors
 ImportantExcerpt
 incrementing
+IndexMut
 indices
 init
+initializer
 inline
 instantiation
 internet
@@ -226,6 +235,7 @@ monomorphized
 MoveMessage
 Mozilla
 mpsc
+MulAssign
 multibyte
 multithreaded
 mutex
@@ -249,6 +259,7 @@ nitty
 nocapture
 nomicon
 Nomicon
+nonequality
 NotFound
 null's
 OCaml
@@ -262,6 +273,7 @@ OsStr
 OsString
 other's
 OutlinePrint
+overloadable
 overread
 param
 parameterize
@@ -289,6 +301,9 @@ pushups
 QuitMessage
 RAII
 randcrate
+RangeFrom
+RangeTo
+RangeFull
 README
 READMEs
 rect
@@ -303,6 +318,7 @@ RefCell
 RefMut
 refutability
 reimplement
+RemAssign
 repr
 representable
 request's
@@ -327,6 +343,8 @@ SecondaryColor
 SelectBox
 semver
 SemVer
+ShlAssign
+ShrAssign
 shouldn
 Simula
 situps
@@ -353,6 +371,7 @@ Struct
 structs
 struct's
 Structs
+SubAssign
 subclasses
 subcommand
 subcommands
@@ -390,6 +409,7 @@ trpl
 tuesday
 tuple
 tuples
+turbofish
 typeof
 UFCS
 unary

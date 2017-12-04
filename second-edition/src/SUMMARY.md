@@ -123,7 +123,7 @@
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
-    - [B - Operators](appendix-02-operators.md)
+    - [B - Operators and Symbols](appendix-02-operators.md)
     - [C - Derivable Traits]()
     - [D - Macros]()
     - [E - Translations]()
