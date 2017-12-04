@@ -24,14 +24,14 @@ you. We've also used the `println!` and `vec!` macros. All of these macros
 
 Metaprogramming is useful to reduce the amount of code you have to write and
 maintain, which is also one of the roles of functions. However, macros have
-some additional powers that functions don't have. A function signature has to
-declare the number and type of parameters the function has. Macros can take a
-variable number of parameters: we can call `println!("hello")` with one
-argument, or `println!("hello {}", name)` with two arguments. Also, macros are
-expanded before the compiler interprets the meaning of the code, so a macro
-can, for example, implement a trait on a given type, whereas a function can't
-because a function gets called at runtime and a trait needs to be implemented
-at compile time.
+some additional powers that functions don't have, as we discussed in Chapter 1.
+A function signature has to declare the number and type of parameters the
+function has. Macros can take a variable number of parameters: we can call
+`println!("hello")` with one argument, or `println!("hello {}", name)` with two
+arguments. Also, macros are expanded before the compiler interprets the meaning
+of the code, so a macro can, for example, implement a trait on a given type,
+whereas a function can't because a function gets called at runtime and a trait
+needs to be implemented at compile time.
 
 The downside to implementing a macro rather than a function is that macro
 definitions are more complex than function definitions. You're writing Rust
@@ -61,11 +61,11 @@ defined or brought into scope before they're called in a file. Unlike
 functions, where we can define a function at the bottom of a file yet call it
 at the top, we always have to define macros before we're able to call them.
 
-## Declarative Macros with `macro_rules` for General Metaprogramming
+## Declarative Macros with `macro_rules!` for General Metaprogramming
 
 The first form of macros in Rust, and the one that's most widely used, is
 called *declarative macros*. These are also sometimes referred to as *macros by
-example*, *`macro_rules` macros*, or just plain *macros*. At their core,
+example*, *`macro_rules!` macros*, or just plain *macros*. At their core,
 declarative macros allow you to write something similar to a Rust `match`
 expression. As discussed in Chapter 6, `match` expressions are control
 structures that take an expression, compare the resulting value of the
@@ -160,7 +160,7 @@ We've defined a macro that can take any number of arguments of any type and can
 generate code to create a vector containing the specified elements.
 
 Given that most Rust programmers will *use* macros more than *write* macros,
-that's all we'll discuss about `macro_rules` in this book. To learn more about
+that's all we'll discuss about `macro_rules!` in this book. To learn more about
 how to write macros, consult the online documentation or other resources such
 as [The Little Book of Rust Macros][tlborm].
 
@@ -447,7 +447,12 @@ we can get by using `#name`. The trait implementation has one function,
 `hello_world`, and the function body contains the functionality we want to
 provide: printing `Hello, World! My name is` and then the name of the type the
 user of our crate has annotated. The `stringify!` macro used here is built into
-Rust and is used because........
+Rust. It takes a Rust expression, such as `1 + 2`, and at compile time turns
+the expression into a string literal, such as `"1 + 2"`. This is different than
+`format!` or `println!`, which evaluate the expression and then turn the result
+into a `String`. There's a possibility that `#name` would be an expression that
+we would want to print out literally, and `stringify!` also saves an allocation
+by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello-world`
 and `hello-world-derive`. Let's hook these crates up to the code in Listing

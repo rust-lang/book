@@ -54,9 +54,6 @@ provided by the standard library. If you want different behavior than what the
 `derive` attribute provides, consult the standard library documentation for
 each trait for the details needed for manual implementation of the traits.
 
-## What might make you derive/what do errors look like
-
-
 ## Standard Library Traits that Can Be Derived
 
 The following sections list all of the traits in the standard library that can
@@ -116,8 +113,8 @@ Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that may be `None` if comparing the given values does not
 produce an ordering. When derived on structs, two instances of the struct are
 compared by comparing the value in each field in the order in which the fields
-appear in the struct defintion. When derived on enums, variants of the enum
-declared earlier in the enum defintion are greater than the variants listed
+appear in the struct definition. When derived on enums, variants of the enum
+declared earlier in the enum definition are greater than the variants listed
 later.
 
 An example of when `PartialOrd` is required is the `gen_range` method in the

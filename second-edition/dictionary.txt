@@ -46,6 +46,7 @@ Boolean
 Booleans
 Bors
 BorrowMutError
+BTreeSet
 BuildHasher
 Cacher
 Cagain
