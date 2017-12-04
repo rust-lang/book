@@ -179,6 +179,11 @@ implementation of `Default` for the whole type calls the `default` method on
 each of the parts of the type, so all of the fields or values in the type must
 also implement `Default` to derive `Default.`
 
+A common use of `Default::default` is in combination with the struct update
+syntax discussed in the "Creating Instances From Other Instances With Struct
+Update Syntax" section in Chapter 5. You can customize a few fields of a struct
+and then use the default values for the rest by using `..Default::default()`.
+
 An example of when `Default` is required is the `unwrap_or_default` method on
 `Option<T>` instances. If the `Option<T>` is `None`, the `unwrap_or_default`
 method will return the result of `Default::default` for the type `T` stored in
