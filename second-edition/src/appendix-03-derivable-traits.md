@@ -152,7 +152,8 @@ no other code is necessary. The `Copy` trait does not define any methods to
 prevent programmers from overloading those methods violating the assumption
 that no arbitrary code is being run. You can derive `Copy` on any type whose
 parts all implement `Copy`. The `Copy` trait can only be applied to types that
-also implement `Clone`.
+also implement `Clone`, as a type that implements `Copy` has a trivial
+implementation of `Clone`, doing the same thing as `Copy`.
 
 An example of when `Copy` is required is when storing values of that type in a
 `Cell<T>`, a data structure that provides interior mutability by moving values
