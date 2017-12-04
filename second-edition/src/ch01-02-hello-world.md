@@ -316,6 +316,7 @@ program through Cargo! To do so, enter the following commands:
 ```text
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
 This should have created an executable file in *target/debug/hello_cargo* (or
@@ -350,6 +351,7 @@ and then run:
 
 ```text
 $ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
@@ -363,6 +365,7 @@ this:
 ```text
 $ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.33 secs
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
