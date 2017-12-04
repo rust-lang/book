@@ -382,7 +382,7 @@ parameter.
 
 This closure isn’t very useful except for the purposes of this example. Note
 that we haven’t added any type annotations to the definition: if we then try to
-call the closure twice, using a `String` as an argument the first time and an
+call the closure twice, using a `String` as an argument the first time and a
 `u32` the second time, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -447,7 +447,7 @@ example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have in order to match this trait bound. In
-this case, our closure has a parameter of type `u32` and returns an `u32`, so
+this case, our closure has a parameter of type `u32` and returns a `u32`, so
 the trait bound we specify is `Fn(u32) -> u32`.
 
 Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
@@ -470,7 +470,7 @@ closure in `calculation` and an optional result in `value`</span>
 The `Cacher` struct has a `calculation` field of the generic type `T`. The
 trait bounds on `T` specify that it’s a closure by using the `Fn` trait. Any
 closure we want to store in the `calculation` field must have one `u32`
-parameter (specified within the parentheses after `Fn`) and must return an
+parameter (specified within the parentheses after `Fn`) and must return a
 `u32` (specified after the `->`).
 
 > Note: Functions implement all three of the `Fn` traits too. If what we want to
@@ -675,7 +675,7 @@ if it’s present. If it’s not present, the `Cacher` will call the closure and
 save the resulting value in the hash map associated with its `arg` value.
 
 Another problem with the current `Cacher` implementation is that it only
-accepts closures that take one parameter of type `u32` and return an `u32`. We
+accepts closures that take one parameter of type `u32` and return a `u32`. We
 might want to cache the results of closures that take a string slice and return
 `usize` values, for example. To fix this issue, try introducing more generic
 parameters to increase the flexibility of the `Cacher` functionality.
