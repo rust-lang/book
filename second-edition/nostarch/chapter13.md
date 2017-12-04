@@ -60,7 +60,7 @@ Filename: src/main.rs
 use std::thread;
 use std::time::Duration;
 
-fn simulated_expensive_calculation(intensity: i32) -> i32 {
+fn simulated_expensive_calculation(intensity: u32) -> u32 {
     println!("calculating slowly...");
     thread::sleep(Duration::from_secs(2));
     intensity
@@ -119,7 +119,7 @@ will be made to this function:
 Filename: src/main.rs
 
 ```
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
@@ -179,7 +179,7 @@ variable, as shown in Listing 13-4:
 Filename: src/main.rs
 
 ```
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     let expensive_result =
         simulated_expensive_calculation(intensity);
 
@@ -245,12 +245,12 @@ was chosen because of its similarity to closure definitions in Smalltalk and
 Ruby. This closure has one parameter named `num`; if we had more than one
 parameter, we would separate them with commas, like `|param1, param2|`.
 
-After the parameters, we place curly braces that hold the body of the
+After the parameters, we place curly brackets that hold the body of the
 closure—these are optional if the closure body is a single expression. The end
-of the closure, after the curly braces, needs a semicolon to complete the `let`
-statement. The value returned from the last line in the closure body (`num`)
-will be the value returned from the closure when it’s called, since that line
-doesn’t end in a semicolon; just like in function bodies.
+of the closure, after the curly brackets, needs a semicolon to complete the
+`let` statement. The value returned from the last line in the closure body
+(`num`) will be the value returned from the closure when it’s called, since
+that line doesn’t end in a semicolon; just like in function bodies.
 
 Note that this `let` statement means `expensive_closure` contains the
 *definition* of an anonymous function, not the *resulting value* of calling the
@@ -267,7 +267,7 @@ argument values we want to use, as shown in Listing 13-6:
 Filename: src/main.rs
 
 ```
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     let expensive_closure = |num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
@@ -340,7 +340,7 @@ would look like the definition shown in Listing 13-7:
 Filename: src/main.rs
 
 ```
-let expensive_closure = |num: i32| -> i32 {
+let expensive_closure = |num: u32| -> u32 {
     println!("calculating slowly...");
     thread::sleep(Duration::from_secs(2));
     num
@@ -358,15 +358,15 @@ closure syntax is similar to function syntax, except for the use of pipes and
 the amount of syntax that is optional:
 
 ```
-fn  add_one_v1   (x: i32) -> i32 { x + 1 }
-let add_one_v2 = |x: i32| -> i32 { x + 1 };
+fn  add_one_v1   (x: u32) -> u32 { x + 1 }
+let add_one_v2 = |x: u32| -> u32 { x + 1 };
 let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
 The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the braces that are
+the closure definition, and the fourth line removes the brackets that are
 optional, since the closure body only has one expression. These are all valid
 definitions that will produce the same behavior when they’re called.
 
@@ -377,8 +377,8 @@ parameter.
 
 This closure isn’t very useful except for the purposes of this example. Note
 that we haven’t added any type annotations to the definition: if we then try to
-call the closure twice, using a `String` as an argument the first time and an
-`i32` the second time, we’ll get an error:
+call the closure twice, using a `String` as an argument the first time and a
+`u32` the second time, we’ll get an error:
 
 Filename: src/main.rs
 
@@ -442,8 +442,8 @@ example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have in order to match this trait bound. In
-this case, our closure has a parameter of type `i32` and returns an `i32`, so
-the trait bound we specify is `Fn(i32) -> i32`.
+this case, our closure has a parameter of type `u32` and returns a `u32`, so
+the trait bound we specify is `Fn(u32) -> u32`.
 
 Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
 and an optional result value:
@@ -452,10 +452,10 @@ Filename: src/main.rs
 
 ```
 struct Cacher<T>
-    where T: Fn(i32) -> i32
+    where T: Fn(u32) -> u32
 {
     calculation: T,
-    value: Option<i32>,
+    value: Option<u32>,
 }
 ```
 
@@ -464,16 +464,16 @@ and an optional result in `value`
 
 The `Cacher` struct has a `calculation` field of the generic type `T`. The
 trait bounds on `T` specify that it’s a closure by using the `Fn` trait. Any
-closure we want to store in the `calculation` field must have one `i32`
-parameter (specified within the parentheses after `Fn`) and must return an
-`i32` (specified after the `->`).
+closure we want to store in the `calculation` field must have one `u32`
+parameter (specified within the parentheses after `Fn`) and must return a
+`u32` (specified after the `->`).
 
 > Note: Functions implement all three of the `Fn` traits too. If what we want to
 > do doesn’t require capturing a value from the environment, we can use a
 > function rather than a closure where we need something that implements an `Fn`
 > trait.
 
-The `value` field is of type `Option<i32>`. Before we execute the closure,
+The `value` field is of type `Option<u32>`. Before we execute the closure,
 `value` will be `None`. When code using a `Cacher` asks for the *result* of the
 closure, the `Cacher` will execute the closure at that time and store the
 result within a `Some` variant in the `value` field. Then if the code asks for
@@ -487,7 +487,7 @@ Filename: src/main.rs
 
 ```
 impl<T> Cacher<T>
-    where T: Fn(i32) -> i32
+    where T: Fn(u32) -> u32
 {
     fn new(calculation: T) -> Cacher<T> {
         Cacher {
@@ -496,7 +496,7 @@ impl<T> Cacher<T>
         }
     }
 
-    fn value(&mut self, arg: i32) -> i32 {
+    fn value(&mut self, arg: u32) -> u32 {
         match self.value {
             Some(v) => v,
             None => {
@@ -536,7 +536,7 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 Filename: src/main.rs
 
 ```
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     let mut expensive_result = Cacher::new(|num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
@@ -631,7 +631,7 @@ if it’s present. If it’s not present, the `Cacher` will call the closure and
 save the resulting value in the hash map associated with its `arg` value.
 
 Another problem with the current `Cacher` implementation is that it only
-accepts closures that take one parameter of type `i32` and return an `i32`. We
+accepts closures that take one parameter of type `u32` and return a `u32`. We
 might want to cache the results of closures that take a string slice and return
 `usize` values, for example. To fix this issue, try introducing more generic
 parameters to increase the flexibility of the `Cacher` functionality.
@@ -797,7 +797,7 @@ let v1_iter = v1.iter();
 Listing 13-13: Creating an iterator
 
 Once we’ve created an iterator, we can choose to use it in a variety of ways.
-In Listing 3-6 from Chapter 3, we actually used iterators with `for` loops to
+In Listing 3-4 from Chapter 3, we actually used iterators with `for` loops to
 execute some code on each item, though we glossed over what the call to `iter`
 did until now.
 
@@ -1002,7 +1002,7 @@ provides.
 Now that we’ve introduced iterators, we can demonstrate a common use of
 closures that capture their environment by using the `filter` iterator adapter.
 The `filter` method on an iterator takes a closure that takes each item from
-the iterator and returns a boolean. If the closure returns `true`, the value
+the iterator and returns a Boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
 `false`, the value won’t be included in the resulting iterator.
 
@@ -1015,11 +1015,11 @@ Filename: src/lib.rs
 ```
 #[derive(PartialEq, Debug)]
 struct Shoe {
-    size: i32,
+    size: u32,
     style: String,
 }
 
-fn shoes_in_my_size(shoes: Vec<Shoe>, shoe_size: i32) -> Vec<Shoe> {
+fn shoes_in_my_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
     shoes.into_iter()
         .filter(|s| s.size == shoe_size)
         .collect()
