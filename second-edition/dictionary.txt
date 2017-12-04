@@ -119,6 +119,7 @@ eprintln
 Erlang
 ErrorKind
 Executables
+expr
 extern
 favicon
 FFFD
@@ -162,6 +163,7 @@ homogenous
 html
 hyperoptimize
 Iceburgh
+ident
 IEEE
 impl
 implementor
@@ -262,6 +264,7 @@ OsStr
 OsString
 other's
 OutlinePrint
+overloadable
 overread
 param
 parameterize
@@ -289,6 +292,9 @@ pushups
 QuitMessage
 RAII
 randcrate
+RangeFrom
+RangeTo
+RangeFull
 README
 READMEs
 rect
