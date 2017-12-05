@@ -81,10 +81,10 @@ error:
 ```text
 error[E0277]: the trait bound `{integer}: std::cmp::PartialEq<&{integer}>` is
 not satisfied
- --> <assert_eq macros>:5:19
+ --> src/main.rs:6:5
   |
-5 | if ! ( * left_val == * right_val ) {
-  |                   ^^ can't compare `{integer}` with `&{integer}`
+6 |     assert_eq!(5, y);
+  |     ^^^^^^^^^^^^^^^^^ can't compare `{integer}` with `&{integer}`
   |
   = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
   `{integer}`
