@@ -85,16 +85,19 @@ thread and other text from a new thread:
 
 ```rust
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     thread::spawn(|| {
         for i in 1..10 {
             println!("hi number {} from the spawned thread!", i);
+            thread::sleep(Duration::from_millis(1));
         }
     });
 
     for i in 1..5 {
         println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
     }
 }
 ```
@@ -123,11 +126,13 @@ hi number 5 from the spawned thread!
 always? -->
 <!-- I've added a bit of clarification /Carol -->
 
-The threads will probably take turns, but that’s not guaranteed: it depends on
-how your operating system schedules the threads. In this run, the main thread
-printed first, even though the print statement from the spawned thread appears
-first in the code. And even though we told the spawned thread to print until
-`i` is 9, it only got to 5 before the main thread shut down.
+The `thread::sleep` function will force a thread to stop its execution for a 
+short duration, allowing a different thread to run, so that they will probably
+take turns, but that’s not guaranteed: it depends on how your operating system 
+schedules the threads. In this run, the main thread printed first, even though 
+the print statement from the spawned thread appears first in the code. And even
+though we told the spawned thread to print until `i` is 9, it only got to 5 
+before the main thread shut down.
 
 If you run this code and only see one thread, or don’t see any overlap, try
 increasing the numbers in the ranges to create more opportunities for a thread
@@ -160,16 +165,19 @@ seems missing, so I'm not sure if this is sufficient /Carol -->
 
 ```rust
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     let handle = thread::spawn(|| {
         for i in 1..10 {
             println!("hi number {} from the spawned thread!", i);
+            thread::sleep(Duration::from_millis(1));
         }
     });
 
     for i in 1..5 {
         println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
     }
 
     handle.join();
@@ -214,11 +222,13 @@ If we instead move `handle.join()` before the `for` loop in main, like this:
 
 ```rust
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     let handle = thread::spawn(|| {
         for i in 1..10 {
             println!("hi number {} from the spawned thread!", i);
+            thread::sleep(Duration::from_millis(1));
         }
     });
 
@@ -226,6 +236,7 @@ fn main() {
 
     for i in 1..5 {
         println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
     }
 }
 ```
