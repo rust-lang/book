@@ -367,6 +367,7 @@ stdlib
 stdout
 steveklabnik's
 Stroustrup
+Stroustrup's
 struct
 Struct
 structs
