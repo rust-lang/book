@@ -180,7 +180,7 @@ create a new iterator</span>
 
 The warning we get is:
 
-```
+```text
 warning: unused `std::iter::Map` which must be used: iterator adaptors are lazy
 and do nothing unless consumed
  --> src/main.rs:4:5

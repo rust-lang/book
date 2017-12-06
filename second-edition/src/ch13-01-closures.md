@@ -650,7 +650,7 @@ passed into it. We call the `value` method on this `Cacher` instance with an
 Run this test with the `Cacher` implementation in Listing 13-9 and Listing
 13-10, and the test will fail on the `assert_eq!` with this message:
 
-```
+```text
 thread 'call_with_different_values' panicked at 'assertion failed: `(left == right)`
   left: `1`,
  right: `2`', src/main.rs
@@ -724,7 +724,7 @@ fn main() {
 
 We get an error:
 
-```
+```text
 error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
 } closure form instead
  --> src/main.rs
