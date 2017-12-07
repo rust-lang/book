@@ -5,30 +5,25 @@
 > отсутствии ошибок.
 > Эдсгер Вибе Дейкстра, “Скромный программист” (1972)
 
-Correctness in our programs means that our code does what we intend for it to
-do. Rust is a programming language that cares a lot about correctness, but
-correctness is a complex topic and isn’t easy to prove. Rust’s type system
-shoulders a huge part of this burden, but the type system cannot catch every
-kind of incorrectness. As such, Rust includes support for writing software
-tests within the language itself.
+"Программа работает корректно" означает, что её код выполняет именно то, что мы
+от него ожидаем. В языке программирования Rust этому аспекту работы программ уделяется
+весьма много внимания. К сожалению, не всегда этого возможно достичь на все 100%.
+Система типов Rust способствует упрощению достижения этой цели, но, к сожалению,
+не может обеспечить исключения возможных ошибок. Именно поэтому в язык программирования
+была включена поддержка тестирования.
 
-As an example, say we write a function called `add_two` that adds two to
-whatever number is passed to it. This function’s signature accepts an integer
-as a parameter and returns an integer as a result. When we implement and
-compile that function, Rust will do all the type checking and borrow checking
-that we’ve seen so far to make sure that, for instance, we aren’t passing a
-`String` value or an invalid reference to this function. What Rust *can’t*
-check is that this function will do precisely what we intend: return the
-parameter plus two, rather than, say, the parameter plus 10 or the parameter
-minus 50! That’s where tests come in.
+Например, мы написали функцию `add_two`, которая добавляет два к любому введённому в
+данную функцию числи и возвращает результат. После реализации и в момент компиляции
+данной функции, Rust проверит типы и владение, для того чтобы исключить возможные
+ошибки. К сожалению, компилятор *не сможет* проверить, что функция выполняет именно
+то, что от неё требуется (т.е. не будет возвращаться иное значение, нежели то, что
+было задумано программистом). Решить эту задачу поможет тестирование.
 
-We can write tests that assert, for example, that when we pass `3` to the
-`add_two` function, we get `5` back. We can run these tests whenever we make
-changes to our code to make sure any existing correct behavior has not changed.
+Мы можем написать тесты, которые проверять, например, что когда мы введём в функцию
+число `3`, то будет возвращено число `5`. Мы можем выполнять эти тесты после внесения
+изменений в код, чтобы убедиться, что всё работает корректно.
 
-Testing is a complex skill, and we cannot hope to cover everything about how to
-write good tests in one chapter of a book, so here we’ll just discuss the
-mechanics of Rust’s testing facilities. We’ll talk about the annotations and
-macros available to you when writing your tests, the default behavior and
-options provided for running your tests, and how to organize tests into unit
-tests and integration tests.
+Тестирования - весьма сложная и многоаспектная тема для обсуждения. Поэтому в этой
+главе будет разъеснена только механизмы тестирования в Rust. Мы расскажем об описаниях
+и макросах доступных вам для написания тестов, о поведениях по умолчанию и возможностях
+запуска тестов, об способах организации тестов в группы и об интеграционном тестировании.

@@ -1,11 +1,11 @@
 ## Обрабатываемы ошибки и `Result`
 
-Множестов ошибок не являются настолько критичными, чтобы останавливать выполнение
+Множество ошибок не являются настолько критичными, чтобы останавливать выполнение
 программы. Весьма часто необходим просто правильная их обработка. К примеру, при
 открытии файла может произойти ошибка из-за отсутствия файла. Решения могут быть
 разные: от игнорирования до создания нового файла.
 
-Надеюсь, что вы ещё помните содержание главы 2, где мы рассмотривали перечисление
+Надеюсь, что вы ещё помните содержание главы 2, где мы рассматривали перечисление
 `Result`. Оно имеет два значения `Ok` и `Err`.
 
 ```rust
@@ -81,8 +81,8 @@ fn main() {
 Обратите внимание, что перечисление `Result`, также как `Option` входит в состав
 экспорта по умолчанию.
 
-Здесь мы сообщаем значение `Ok` содерживт знечение типа `File` `file`.
-Другое значение может хранить значение типа `Err`. В этом примере мы исполуем
+Здесь мы сообщаем значение `Ok` содержит значение типа `File` `file`.
+Другое значение может хранить значение типа `Err`. В этом примере мы используем
 вызов макроса `panic!`. Если нет файла с именем *hello.txt*, будет выполнен этот код.
 Следовательно, будет выведено следующее сообщение:
 
@@ -93,7 +93,7 @@ Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 
 ### Обработка различных ошибок
 
-Пример создание нового файла при отсутсвии запрашиваемого файла:
+Пример создание нового файла при отсутствии запрашиваемого файла:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -112,7 +112,7 @@ fn main() {
         },
         Err(error) => panic!("There was a problem opening the file: {:?}", error),
     };
-    print!("{:?}",f);
+    print!("{:#?}",f);
 }
 
 ```
@@ -122,14 +122,14 @@ fn main() {
 
 ### Сокращенные макросы обработки ошибок `unwrap` и `expect`
 
-Метод `unwrap` - это оболочнка выражения `match`, которая возвращает `Ok` или `Err`.
+Метод `unwrap` - это оболочка выражения `match`, которая возвращает `Ok` или `Err`.
 
 ```rust,should_panic
 use std::fs::File;
 
 fn main() {
     let f = File::open("hello.txt").unwrap();
-    print!("{:?}", f);
+    print!("{:#?}", f);
 }
 
 ```
@@ -154,19 +154,19 @@ fn main() {
 }
 ```
 
-Мы используем `expect` таким же образом, каки и `unwrap`: возвращаем ссылку на файл или
+Мы используем `expect` таким же образом, каким и `unwrap`: возвращаем ссылку на файл или
 вызов макроса `panic!`.
 
-### Генерировани ошибок
+### Генерировании ошибок
 
 Когда вы пишите функцию, в результате работы которой может произойти непредвиденная
-ошибка, вместо того, чтобы обрабатывать эту ошибоку вы можите создать подробноое
+ошибка, вместо того, чтобы обрабатывать эту ошибку вы можете создать подробное
 описание этой и передать ошибку по цепочке на верхний уровень обработки кода.
 
 
-For example, Listing 9-5 shows a function that reads a username from a file. If
-the file doesn’t exist or can’t be read, this function will return those errors
-to the code that called this function:
+Например, код программы 9-5 читает имя пользователя из файла. Если файл не существует
+или не может быть прочтён, то функция возвращает эти ошибку в код, которые вызвал
+эту функцию:
 
 ```rust
 use std::io;
@@ -197,37 +197,17 @@ fn read_username_from_file() -> Result<String, io::Error> {
 эта функция будет выполнена успешно, будет возвращено `Ok`, содержащее значение
 типа `String`. Если же при чтении файла будут какие-либо проблемы - `io::Error`.
 
+Тело этой функции начинает с вызову функции `File::open`. Далее мы получаем результат
+анализа результата чтения файла функцией `match`. Если функция `File::open` сработала
+успешно, мы сохраняет ссылку на файл в переменную `f` и программа продолжает свою
+работу.
 
+Далее, мы создаём строковую переменную `s` и вызываем метод файла `read_to_string`,
+которая читает содержание файла, как строковые данные в переменную `s`. Результатом
+работы этой фунции будет знанчение перечисления `Result`: `Ok` или `io::Error`.
 
-The body of the function starts by calling the `File::open` function. Then we
-handle the `Result` value returned with a `match` similar to the `match` in
-Listing 9-3, only instead of calling `panic!` in the `Err` case, we return
-early from this function and pass the error value from `File::open` back to the
-caller as this function’s error value. If `File::open` succeeds, we store the
-file handle in the variable `f` and continue.
-
-Then we create a new `String` in variable `s` and call the `read_to_string`
-method on the file handle in `f` in order to read the contents of the file into
-`s`. The `read_to_string` method also returns a `Result` because it might fail,
-even though `File::open` succeeded. So we need another `match` to handle that
-`Result`: if `read_to_string` succeeds, then our function has succeeded, and we
-return the username from the file that’s now in `s` wrapped in an `Ok`. If
-`read_to_string` fails, we return the error value in the same way that we
-returned the error value in the `match` that handled the return value of
-`File::open`. We don’t need to explicitly say `return`, however, since this is
-the last expression in the function.
-
-The code that calls this code will then handle getting either an `Ok` value
-that contains a username or an `Err` value that contains an `io::Error`. We
-don’t know what the caller will do with those values. If they get an `Err`
-value, they could choose to call `panic!` and crash their program, use a
-default username, or look up the username from somewhere other than a file, for
-example. We don’t have enough information on what the caller is actually trying
-to do, so we propagate all the success or error information upwards for them to
-handle as they see fit.
-
-This pattern of propagating errors is so common in Rust that there is dedicated
-syntax to make this easier: `?`.
+Этого же результата можно достичь с помощью сокращенного написания (с помощью использования
+символа `?`).
 
 ### A Shortcut for Propagating Errors: `?`
 
@@ -248,26 +228,21 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">Listing 9-6: A function that returns errors to the
-calling code using `?`</span>
+<span class="caption">Код программы 9-6: Пример функции, которая возвращает ошибку,
+используя символ `?`</span>
 
-The `?` placed after a `Result` value is defined to work the exact same way as
-the `match` expressions we defined to handle the `Result` values in Listing
-9-5. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
-get returned from this expression and the program will continue. If the value
-is an `Err`, the value inside the `Err` will be returned from the whole
-function as if we had used the `return` keyword so that the error value gets
-propagated to the caller.
+Благодаря и использованию символа `?` сокращается запись кода (код, написанный в
+предыдущем примере создаётся компилятором самостоятельно).
 
-In the context of Listing 9-6, the `?` at the end of the `File::open` call will
-return the value inside an `Ok` to the variable `f`. If an error occurs, `?`
-will return early out of the whole function and give any `Err` value to our
-caller. The same thing applies to the `?` at the end of the `read_to_string`
-call.
+В коде примера 9-6 в первой строке функция `File::open` возвращает содержимое значения
+перечисления `Ok` в переменную `f`. Если же в при работе этой функции происходит
+ошибка, будет возвращен экземпляр структуры `Err`. Те же самые действия произойдут
+при чтении текстовых данных из файла с помощью функции `read_to_string`.
 
-The `?` eliminates a lot of boilerplate and makes this function’s
-implementation simpler. We could even shorten this code further by chaining
-method calls immediately after the `?`:
+Использование сокращенных конструкций позволят уменьшить количество строк кода и
+ место потенциальных ошибок. Написанный в предыдущем примере сокращенный код можно
+ сделать ещё меньше с помощью сокращения промежуточных переменных и конвейерного вызова
+ методов:
 
 ```rust
 use std::io;
@@ -283,25 +258,16 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-We’ve moved the creation of the new `String` in `s` to the beginning of the
-function; that part hasn’t changed. Instead of creating a variable `f`, we’ve
-chained the call to `read_to_string` directly onto the result of
-`File::open("hello.txt")?`. We still have a `?` at the end of the
-`read_to_string` call, and we still return an `Ok` value containing the
-username in `s` when both `File::open` and `read_to_string` succeed rather than
-returning errors. The functionality is again the same as in Listing 9-5 and
-Listing 9-6, this is just a different, more ergonomic way to write it.
+Мы перенесли создание экземпляра структуры `String` в начало функции. Вместо того,
+чтобы создавать переменную `f` мы последовательно вызываем методы экземпляров
+выходные данных.
 
-### `?` Can Only Be Used in Functions That Return `Result`
+### Ограничения использования `?`
 
-The `?` can only be used in functions that have a return type of `Result`,
-since it is defined to work in exactly the same way as the `match` expression
-we defined in Listing 9-5. The part of the `match` that requires a return type
-of `Result` is `return Err(e)`, so the return type of the function must be a
-`Result` to be compatible with this `return`.
-
-Let’s look at what happens if we use `?` in the `main` function, which you’ll
-recall has a return type of `()`:
+Сокращенную запись с помощью символа `?` можно использовать в функциях, которые
+возвращают значение перечисления `Result`. Соответственно, если функция не возвращает
+значение перечисления `Result`, а в коде написано обратное - компилятор сгенерирует
+ошибку. Пример:
 
 ```rust,ignore
 use std::fs::File;
@@ -320,7 +286,7 @@ https://github.com/rust-lang/rust/issues/35946 fixed soon, hopefully before this
 chapter gets through copy editing-- at that point I'll make sure to update this
 error message. /Carol -->
 
-When we compile this, we get the following error message:
+Описание ошибки:
 
 ```text
 error[E0308]: mismatched types
@@ -334,12 +300,8 @@ error[E0308]: mismatched types
   = note:    found type `std::result::Result<_, _>`
 ```
 
-This error is pointing out that we have mismatched types: the `main` function
-has a return type of `()`, but the `?` might return a `Result`. In functions
-that don’t return `Result`, when you call other functions that return `Result`,
-you’ll need to use a `match` or one of the `Result` methods to handle it,
-instead of using `?` to potentially propagate the error to the caller.
+В описании ошибки сообщается, что функция `main` должна возвращать кортеж, а вместо
+этого - функция возвращает `Result`.
 
-Now that we’ve discussed the details of calling `panic!` or returning `Result`,
-let’s return to the topic of how to decide which is appropriate to use in which
-cases.
+В следующем разделе будет рассказано об особенностях вызова макроса `panic!`, приведены
+рекомендации при выборе конструкции для отслеживания ошибок.

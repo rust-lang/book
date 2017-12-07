@@ -116,7 +116,7 @@ use std::io;
 полезных функциональных возможностей, в том числе для обработки вводимых данных
 пользователя.
 
-[prelude]: ../../std/prelude/index.html
+[prelude]: https://doc.rust-lang.org/std/prelude/index.html
 
 Функция `main` - точка начала выполнения программы:
 
@@ -184,7 +184,7 @@ let mut guess = String::new();
 который может хранить строковые данные в кодировке UTF-8. Размер хранящихся данных
 может изменяться динамически.
 
-[string]: ../../std/string/struct.String.html
+[string]: https://doc.rust-lang.org/std/string/struct.String.html
 
 Также обратите внимание на синтаксическую конструкцию `::`. Выражение `::new`
 сообщает нам следующую информацию: функуция `new` - это функция, которая связана с
@@ -256,14 +256,14 @@ fn main() {
 Функция `stdin` возвращает экземпляр типа [`std::io::Stdin`][iostdin]<!-- ignore -->,
 который является обработчиком данных, вводимых с клавиатуры терминала.
 
-[iostdin]: ../../std/io/struct.Stdin.html
+[iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
 
 Следующая часть кода `.read_line(&mut guess)` вызывает метод экземпляра этого
 обработчика [`read_line`][read_line]<!-- ignore -->. Данный метод производит чтение
 введеных данных. Обратите внимание на синтаксис описания входных данных этого метода:
 `&mut guess`!
 
-[read_line]: ../../std/io/struct.Stdin.html#method.read_line
+[read_line]: https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line
 
 Метод `read_line` добавляет к содержанию переменной `guess` всё, что введено с
 клавиатуры. Поэтому очень важно, чтобы переменная, к которой добавляются значения
@@ -335,8 +335,8 @@ io::stdin().read_line(&mut guess)
 В стандартной библиотеке существует множество типов имеющих название [`Result`][result]<!-- ignore -->,
 а также такими именами называются вложенные модули (например, `io::Result`).
 
-[ioresult]: ../../std/io/type.Result.html
-[result]: ../../std/result/enum.Result.html
+[ioresult]: https://doc.rust-lang.org/std/io/type.Result.html
+[result]: https://doc.rust-lang.org/std/result/enum.Result.html
 
 Типа данных `Result` чаще всего являются *перечисления*[enums]<!-- ignore -->
 (*[enums]*). Это такой тип данных, который имеет фиксированный набор значений.
@@ -356,7 +356,7 @@ io::stdin().read_line(&mut guess)
 метод `expect` завершит работы программы и отобразит информацию об ошибке (с дополнительной
 информацией, которую вы передали функции):
 
-[expect]: ../../std/result/enum.Result.html#method.expect
+[expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
 ```rust,ignore
 .expect("Failed to read line");
@@ -912,7 +912,7 @@ let guess: u32 = guess.trim().parse()
 со всеми числовыми типами в главе 3. Переменную `secret_number` Rust приведёт к
 типу данных `u32` за нас.
 
-[parse]: ../../std/primitive.str.html#method.parse
+[parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
 
 Обратите внимания, что следующее звено в цепочке вызовов функций уже нам знакомо!
 Это функция `expect`. Это результат `Result` работы предыдущей функции. Если пользователь

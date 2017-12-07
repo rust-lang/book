@@ -17,6 +17,6 @@
 Для того, чтобы узнать о других видах коллекций, пожалуйста, перейдите на страницу
 документации [the documentation][collections].
 
-[collections]: ../../std/collections/index.html
+[collections]: https://doc.rust-lang.org/std/collections/index.html
 
 Мы начинаем свой рассказ с того, как создать и обновить вектора, строки и хэш таблицы.

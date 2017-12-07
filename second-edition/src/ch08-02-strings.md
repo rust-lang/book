@@ -100,7 +100,7 @@ fn main() {
 отрезок символьных данных в качестве параметра. Переменная `s` будет содержать
 строку “foobar”.
 
-Метод `push_str` получает отрезок (срез) в качестве параметра, т.к. для использования
+Метод `push_str` получает срез в качестве параметра, т.к. для использования
 данного типа данных вдадение не нужно. К примеру, было бы очень жаль, если бы
 вы не имели бы возможности использовать данные переменной `s2` после добавления её
 содержания в переменную `s1`:
@@ -203,12 +203,13 @@ fn main() {
 Описание ошибки:
 
 ```text
-error: the trait bound `std::string::String: std::ops::Index<_>` is not
-satisfied [--explain E0277]
-  |>
-  |>     let h = s1[0];
-  |>             ^^^^^
-note: the type `std::string::String` cannot be indexed by `_`
+error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` is not satisfied
+ -->
+  |
+3 |     let h = s1[0];
+  |             ^^^^^ the type `std::string::String` cannot be indexed by `{integer}`
+  |
+  = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
 ```
 
 Глубинная причина не реализованности этой опции в системе хранения строк в памяти.

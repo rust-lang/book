@@ -33,10 +33,11 @@ fn first_word(s: &String) -> usize {
     s.len()
 }
 
-fn main(){
-let index = first_word(&String::from("hello, Nik!"));
-println!("{}",index);
+fn main() {
+    let index = first_word(&String::from("hello, Nik!"));
+    println!("{}", index);
 }
+
 ```
 
 <span class="caption">Listing 4-10: Пример функции `first_word`, которая возвращает
@@ -158,33 +159,47 @@ let world = &s[6..11];
 с 0-го индекса:
 
 ```rust
-let s = String::from("hello");
+fn main(){
+    let s = String::from("hello");
 
-let slice = &s[0..2];
-let slice = &s[..2];
+    let slice = &s[0..2];
+    println!("{}",slice);
+    let slice = &s[..2];
+    println!("{}",slice);
+}
 ```
 
 Таким же образом можно поступить с последним элементом, если это последний байт в
 `String`:
 
 ```rust
-let s = String::from("hello");
+fn main() {
+    let s = String::from("hello");
 
-let len = s.len();
+    let len = s.len();
+    println!("sting length = {}", len);
+    let slice = &s[3..len];
+    println!("{}", slice);
+    let slice = &s[3..];
+    println!("{}", slice);
+}
 
-let slice = &s[3..len];
-let slice = &s[3..];
 ```
 
 Таким образом динамический массив целого массива можно описать так:
 
 ```rust
-let s = String::from("hello");
+fn main() {
+    let s = String::from("hello");
+    println!("{}", s);
+    let len = s.len();
+    println!("a length of the string = {}", s);
+    let slice = &s[0..len];
+    println!("{}", slice);
+    let slice = &s[..];
+    println!("{}", slice);
+}
 
-let len = s.len();
-
-let slice = &s[0..len];
-let slice = &s[..];
 ```
 
 Применим полученные знания и перепишем метод `first_word`. Для представления

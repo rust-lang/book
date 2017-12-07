@@ -109,7 +109,7 @@ pub fn connect() {
 }
 ```
 
-Снова компилируем `cargo clean`, `cargo build` снова:
+Снова компилируем `cargo clean && cargo build` снова:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default

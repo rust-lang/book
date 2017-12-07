@@ -163,7 +163,7 @@ fn main() {
 проделанной работе вы поймёте как изменяется содержание переменной `x`.
 
 Такое поведение неизменяемых переменных отличается от использования изменяемых.
-Такое шаблон эмуляции изменяемой переменной позволяет более точно выразить идею
+Этот шаблон эмуляции изменяемой переменной позволяет более точно выразить идею
 автора кода, что повысит как его надёжность так и читабельность:
 
 ```rust
@@ -181,18 +181,18 @@ let spaces = spaces.len();
 
 ```rust
 fn main() {
-  let spaces = "_";
-  println!("The value of x is: {}", x);
-  let spaces = spaces.len();
-  println!("The value of x is: {}", x);
-  let spaces = "Привет!";
-  println!("The value of x is: {}", x);
-  let spaces: u32 = spaces.len();
-  println!("The value of x is: {}", x);
-  let spaces = "Привет!";
-  println!("The value of x is: {}", x);
-  let spaces: u32 = 3.45;
-  println!("The value of x is: {}", x);
+    let x = "_";
+    println!("The value of x is: {}", x);
+    let x = x.len();
+    println!("The value of x is: {}", x);
+    let x = "Привет!";
+    println!("The value of x is: {}", x);
+    let x: u32 = x.len() as u32;
+    println!("The value of x is: {}", x);
+    let x = "Привет!";
+    println!("The value of x is: {}", x);
+    let x: f32 = 3.45;
+    println!("The value of x is: {}", x);
 }
 ```
 
@@ -202,9 +202,9 @@ fn main() {
 
 ```rust
 fn main() {
-  let mut spaces = "_";
+  let mut x = "_";
   println!("The value of x is: {}", x);
-  spaces = spaces.len();
+  spaces = x.len();
   println!("The value of x is: {}", x);
 
 }
@@ -215,7 +215,7 @@ fn main() {
 fn main() {
   let mut spaces = "   ";
   spaces = spaces.len();
-  println!("The value of x is: {}", x);
+  println!("The value of x is: {}", spaces);
 
 }
 
@@ -234,7 +234,7 @@ error[E0308]: mismatched types
 
 
 Пожалуйста, проверьте как работает этот код! Поэкспериментируйте над использованием
-уже ваз  знакомых типов данных (строками, целыми и дробными числами)!
+уже вам знакомых типов данных (строками, целыми и дробными числами)!
 Обратите внимание, что компилятор сам подставляет типы данных при инициализации
 переменных.
 

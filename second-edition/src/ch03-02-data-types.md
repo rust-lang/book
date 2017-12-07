@@ -71,7 +71,7 @@ error[E0282]: unable to infer enough type information about `_`
 Он указывает на то, что данный тип не может быть отрицательной величиной.
 Число, стоящее после буквы указывает на битовую разрядность этого числа.
 Если заменить символ `u` на `i` `u32`, то в переменной данного типа можно будет
-присваивать отрицательные целый числа. Давай те это проверим на нашем примере:
+присваивать отрицательные целый числа. Проверим на нашем примере:
 
 
 ```rust
@@ -102,11 +102,11 @@ fn main() {
 ```rust
 fn main() {
   let guess:
-  u8
+  //u8
   //u16
   //u32
   //u64
-  //i8
+  i8
   //i16
   //i32
   //i64
@@ -121,7 +121,7 @@ fn main() {
 Давайте пристальнее посмотрим на эту сводную таблицу: по горизонтали длины, по
 вертикали два варианта числового типа - знакового и беззнакового. Надеюсь, что
 теперь ясно какие Rust имеет типы данных. А теперь очень интересный вопрос. Какие
-ограничения у этих типов данных. Давайте напишем программу, которая будет вводить
+ограничения у этих типов данных. Давайте напишем программу, которая будет выводить
 доступные для использования числа в определённом типе данных. Для этого исследования
 подойдут уже усвоенные нами знания об особенностях переменных, а также бесконечный цикл.
 
@@ -139,8 +139,8 @@ fn main() {
   //isize
   //usize
 
-  = ;
-  println!("guess = {}",guess);
+  = 0;
+  println!("value = {}", value);
 }
 ```
 Запустите программу, измените код так, чтобы программа вывела бы вам все доступные
@@ -165,13 +165,24 @@ fn main() {
 | usize| 0            | 18446744073709551615|
 
 
-Один из возможных (изящных) вариантов решения:
+Один из возможных вариантов решения. Остановить длинный или бесконечный цикл, зависшее
+консольное приложение можно комбинацией клавиш Cntr^C:
 
 ```rust
 fn main() {
-  let value = <i32>::min_value();
-  println!("value = {}",value);
+    let max = <i8>::max_value();
+    let mut value = <i8>::min_value();
+    loop {
+        value = value + 1;
+
+        println!("value = {}", value);
+
+        if value == max {
+            break;
+        }
+    }
 }
+
 ```
 
 Каждый знаковый числовой тип хранит данные от -(2<sup>n - 1</sup>) до 2<sup>n -
@@ -184,7 +195,7 @@ fn main() {
 архитектуры операционной системы. Если система 32-битная - переменные могут хранить
 32-битные величины, если 64-битные соответственно.
 
-Кроме ёмкости целочисленные переменные могут иметь различение обозначение.
+Кроме ёмкости целочисленные переменные могут иметь различные обозначения.
 Так одно и тоже число может быть записана в разных системах счисления. Её выбор
 зависит от замысла программиста. Есть также возможность указать тип литерала непосредственно
 при его написании (в виде суффикса числа). Правда есть ограничения (битовая система
@@ -229,83 +240,55 @@ fn main() {
 
 ```rust
 fn main() {
+    let value = 98_222_000;
+    println!("value = {}", value);
 
-  let value = 98_222_000;
-  println!("value = {}",value);
+    let mut value = 0xff;
+    println!("value = {}", value);
+    value = 0x_ff;
+    println!("value = {}", value);
 
- let mut value = 0xff;
- println!("value = {}",value);
- value = 0x_ff;
- println!("value = {}",value);
+    let mut value = 0o77;
+    println!("value = {}", value);
+    value = 0o_77;
+	  println!("value = {}", value);
 
- let mut value = 0o77;
- println!("value = {}",value);
- value = 0o_77;
+    let mut value = 0b1111_0000;
+    println!("value = {}", value);
+    value = 0b1_111_0000;
+    println!("value = {}", value);
 
- let mut value = 0b1111_0000;
- println!("value = {}",value);
- value = 0b1_111_0000;
- println!("value = {}",value);
-
-  let value = b'A';
- println!("value = {}",value);
-
+    let value = b'A';
+    println!("value = {}", value);
 }
+
 ```
 Примеры использование разделителя `_`:
 
 ```rust
 fn main() {
+    let value = 98_222_000;
+    println!("value = {}", value);
 
-  let value = 98_222_000;
-  println!("value = {}",value);
+    let mut value = 0xff;
+    println!("value = {}", value);
+    value = 0x_ff;
+    println!("value = {}", value);
 
- let mut value = 0xff;
- println!("value = {}",value);
- value = 0x_ff;
- println!("value = {}",value);
+    let mut value = 0o77;
+    println!("value = {}", value);
+    value = 0o_77;
+    println!("value = {}", value);
 
- let mut value = 0o77;
- println!("value = {}",value);
- value = 0o_77;
+    let mut value = 0b1111_0000;
+    println!("value = {}", value);
+    value = 0b1_111_0000;
+    println!("value = {}", value);
 
- let mut value = 0b1111_0000;
- println!("value = {}",value);
- value = 0b1_111_0000;
- println!("value = {}",value);
-
-  let value = b'A';
- println!("value = {}",value);
-
+    let value = b'A';
+    println!("value = {}", value);
 }
-```
 
-Примеры использование разделителя `_`:
-
-```rust
-fn main() {
-
-  let value = 98_222_000;
-  println!("value = {}",value);
-
- let mut value = 0xff;
- println!("value = {}",value);
- value = 0x_ff;
- println!("value = {}",value);
-
- let mut value = 0o77;
- println!("value = {}",value);
- value = 0o_77;
-
- let mut value = 0b1111_0000;
- println!("value = {}",value);
- value = 0b1_111_0000;
- println!("value = {}",value);
-
-  let value = b'A';
- println!("value = {}",value);
-
-}
 ```
 
 Обратите внимание на результаты работы программы, при использовании инициализации
@@ -313,20 +296,22 @@ fn main() {
 
 ```rust
 fn main() {
+    //let value = 9223372036854775807;
+    let value:i64 = 9223372036854775807;
+    println!("value = {}", value);
 
-  let value = 9223372036854775807;
-  println!("value = {}",value);
+    //let value = -9223372036854775808;
+    let value:i64 = -9223372036854775808;
+    println!("value = {}", value);
 
- let value = -9223372036854775808;
- println!("value = {}",value);
-
- let value = 18446744073709551615;
- println!("value = {}",value);
-
+    //let value = 18446744073709551615;
+    let value:u64 = 18446744073709551615;
+    println!("value = {}", value);
 }
+
 ```
 
-Пожалуйста, проверьте вышеописанную информацию, используя вышеописанную теоретическую
+Пожалуйста, проверьте вышеописанную информацию, используя теоретическую
 информацию в ваших программных кодах.
 Уверен, что в столкнётесь с различными сюрпризами, которые помогут усвоению
 пройденного материала и ускорят ваше становления в качестве знатока Rust. Пишите
@@ -359,15 +344,15 @@ fn main() {
 
 ```rust
 fn main() {
-  let value32_min = std::f32::MIN;
-  println!("value f32 min = {}", value32_min);
-  let value32_max = std::f32::MAX;
-  println!("value f32 max = {}", value32_max);
+    let value32_min = std::f32::MIN;
+    println!("value f32 min = {}", value32_min);
+    let value32_max = std::f32::MAX;
+    println!("value f32 max = {}", value32_max);
 
-  let value64_min = std::f64::MIN;
-  println!("value f64 min = {}", value64_min);
-  let value64_max = std::f64::MAX;
-  println!("value f64 max = {}", value64_max);
+    let value64_min = std::f64::MIN;
+    println!("value f64 min = {}", value64_min);
+    let value64_max = std::f64::MAX;
+    println!("value f64 max = {}", value64_max);
 }
 ```
 
@@ -379,51 +364,50 @@ fn main() {
 ```rust
 
 fn main() {
+    println!("std::f32");
+    // Approximate number of significant digits in base 10.
+    println!("DIGITS = {}", std::f32::DIGITS);
 
-println!("std::f32");
-// Approximate number of significant digits in base 10.
-println!("DIGITS = {}",std::f32::DIGITS);
+    // Difference between 1.0 and the next largest representable number.
+    println!("EPSILON = {}", std::f32::EPSILON);
 
-// Difference between 1.0 and the next largest representable number.
-println!("EPSILON = {}",std::f32::EPSILON);
+    // Infinity (∞).
+    println!("INFINITY = {}", std::f32::INFINITY);
 
-// Infinity (∞).
-println!("INFINITY = {}",std::f32::INFINITY);
+    // Number of significant digits in base 2.
+    println!("MANTISSA_DIGITS = {}", std::f32::MANTISSA_DIGITS);
 
-// Number of significant digits in base 2.
-println!("MANTISSA_DIGITS = {}",std::f32::MANTISSA_DIGITS);
+    // Largest finite f32 value.
+    println!("MAX = {}", std::f32::MAX);
 
-// Largest finite f32 value.
-println!("MAX = {}",std::f32::MAX);
+    // Maximum possible power of 10 exponent.
+    println!("MAX_10_EXP = {}", std::f32::MAX_10_EXP);
 
-// Maximum possible power of 10 exponent.
-println!("MAX_10_EXP = {}",std::f32::MAX_10_EXP);
+    // Maximum possible power of 2 exponent.
+    println!("MAX_EXP = {}", std::f32::MAX_EXP);
 
-// Maximum possible power of 2 exponent.
-println!("MAX_EXP = {}",std::f32::MAX_EXP);
+    // Smallest finite f32 value.
+    println!("MIN = {}", std::f32::MIN);
 
-// Smallest finite f32 value.
-println!("MIN = {}",std::f32::MIN);
+    // Minimum possible normal power of 10 exponent.
+    println!("MIN_10_EXP = {}", std::f32::MIN_10_EXP);
 
-// Minimum possible normal power of 10 exponent.
-println!("MIN_10_EXP = {}",std::f32::MIN_10_EXP);
+    // One greater than the minimum possible normal power of 2 exponent.
+    println!("MIN_EXP = {}", std::f32::MIN_EXP);
 
-// One greater than the minimum possible normal power of 2 exponent.
-println!("MIN_EXP = {}",std::f32::MIN_EXP);
+    // Smallest positive normal f32 value.
+    println!("MIN_POSITIVE = {}", std::f32::MIN_POSITIVE);
 
-// Smallest positive normal f32 value.
-println!("MIN_POSITIVE = {}",std::f32::MIN_POSITIVE);
+    // Not a Number (NaN).
+    println!("NAN = {}", std::f32::NAN);
 
-// Not a Number (NaN).
-println!("NAN = {}",std::f32::NAN);
+    // Negative infinity (-∞).
+    println!("NEG_INFINITY = {}", std::f32::NEG_INFINITY);
 
-// Negative infinity (-∞).
-println!("NEG_INFINITY = {}",std::f32::NEG_INFINITY);
-
-// The radix or base of the internal representation of f32.
-println!("RADIX = {}",std::f32::RADIX);
-
+    // The radix or base of the internal representation of f32.
+    println!("RADIX = {}", std::f32::RADIX);
 }
+
 ```
 
 Пожалуйста, самостоятельно изучите состав констант модуля `std::f64`:
@@ -431,51 +415,50 @@ println!("RADIX = {}",std::f32::RADIX);
 ```rust
 
 fn main() {
+    println!("std::f64");
+    // Approximate number of significant digits in base 10.
+    println!("DIGITS = {}", std::f64::DIGITS);
 
-println!("std::f64");
-// Approximate number of significant digits in base 10.
-println!("DIGITS = {}",std::f64::DIGITS);
+    // Difference between 1.0 and the next largest representable number.
+    println!("EPSILON = {}", std::f64::EPSILON);
 
-// Difference between 1.0 and the next largest representable number.
-println!("EPSILON = {}",std::f64::EPSILON);
+    // Infinity (∞).
+    println!("INFINITY = {}", std::f64::INFINITY);
 
-// Infinity (∞).
-println!("INFINITY = {}",std::f64::INFINITY);
+    // Number of significant digits in base 2.
+    println!("MANTISSA_DIGITS = {}", std::f64::MANTISSA_DIGITS);
 
-// Number of significant digits in base 2.
-println!("MANTISSA_DIGITS = {}",std::f64::MANTISSA_DIGITS);
+    // Largest finite f64 value.
+    println!("MAX = {}", std::f64::MAX);
 
-// Largest finite f64 value.
-println!("MAX = {}",std::f64::MAX);
+    // Maximum possible power of 10 exponent.
+    println!("MAX_10_EXP = {}", std::f64::MAX_10_EXP);
 
-// Maximum possible power of 10 exponent.
-println!("MAX_10_EXP = {}",std::f64::MAX_10_EXP);
+    // Maximum possible power of 2 exponent.
+    println!("MAX_EXP = {}", std::f64::MAX_EXP);
 
-// Maximum possible power of 2 exponent.
-println!("MAX_EXP = {}",std::f64::MAX_EXP);
+    // Smallest finite f64 value.
+    println!("MIN = {}", std::f64::MIN);
 
-// Smallest finite f64 value.
-println!("MIN = {}",std::f64::MIN);
+    // Minimum possible normal power of 10 exponent.
+    println!("MIN_10_EXP = {}", std::f64::MIN_10_EXP);
 
-// Minimum possible normal power of 10 exponent.
-println!("MIN_10_EXP = {}",std::f64::MIN_10_EXP);
+    // One greater than the minimum possible normal power of 2 exponent.
+    println!("MIN_EXP = {}", std::f64::MIN_EXP);
 
-// One greater than the minimum possible normal power of 2 exponent.
-println!("MIN_EXP = {}",std::f64::MIN_EXP);
+    // Smallest positive normal f64 value.
+    println!("MIN_POSITIVE = {}", std::f64::MIN_POSITIVE);
 
-// Smallest positive normal f64 value.
-println!("MIN_POSITIVE = {}",std::f64::MIN_POSITIVE);
+    // Not a Number (NaN).
+    println!("NAN = {}", std::f64::NAN);
 
-// Not a Number (NaN).
-println!("NAN = {}",std::f64::NAN);
+    // Negative infinity (-∞).
+    println!("NEG_INFINITY = {}", std::f64::NEG_INFINITY);
 
-// Negative infinity (-∞).
-println!("NEG_INFINITY = {}",std::f64::NEG_INFINITY);
-
-// The radix or base of the internal representation of f64.
-println!("RADIX = {}",std::f64::RADIX);
-
+    // The radix or base of the internal representation of f64.
+    println!("RADIX = {}", std::f64::RADIX);
 }
+
 ```
 
 #### Чиловые операции
@@ -487,7 +470,7 @@ Rust предоставляет основные математические о
 - деление,
 - остаток от деления.
 
-Пример их спользования:
+Пример их использования:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -508,15 +491,16 @@ fn main() {
     // remainder
     let remainder = 43 % 5;
 
-    println!("sum = {}",sum);
-    println!("difference = {}",difference);
-    println!("product = {}",product);
-    println!("quotient = {}",quotient);
-    println!("remainder = {}",remainder);
+    println!("sum = {}", sum);
+    println!("difference = {}", difference);
+    println!("product = {}", product);
+    println!("quotient = {}", quotient);
+    println!("remainder = {}", remainder);
 }
+
 ```
 Каждое из этих выражений использует математические операции и вычисляет значение,
-которые присваевается переменной. Приложение Б содержит список всех материматических
+которые присваевается переменной. Приложение 2 содержит список всех материматических
 операции языка Rust.
 
 #### Логический тип данных
@@ -531,15 +515,22 @@ fn main() {
 
 ```rust
 fn main() {
-  let t = true;
-  println!("t = {}", t);
-  println!("!t = {}", !t);
-  println!("t && t= {}", t && t);
-  println!("t || t= {}", t || t);
-  let mut f: bool = false; // with explicit type annotation
-  println!("f = {}", f);
-  //f = TRUE;// error is here
+
+    let t = true;
+
+    println!("t = {}", t);
+    println!("!t = {}", !t);
+    println!("t && t= {}", t && t);
+    println!("t || t= {}", t || t);
+
+    let f: bool = false; // with explicit type annotation
+
+    println!("f = {}", f);
+    println!("!t = {}", !t);
+    println!("t && t= {}", t && t);
+    println!("t || t= {}", t || t);
 }
+
 ```
 
 Логические значение применяются в операторах сравнения `if`, `for`.
@@ -595,12 +586,13 @@ fn main() {
 
 ```rust
 fn main() {
-  let tup = (500, 6.4, 1);
+    let tup = (500, 6.4, 1);
 
-  let (x, y, z) = tup;
+    let (x, y, z) = tup;
 
-  println!("The value of (x,y,z) is: ({},{},{})", x,y,z);
+    println!("The value of (x,y,z) is: ({},{},{})", x, y, z);
 }
+
 ```
 
 Есть ещё один способ доступа к содержанию кортежа - по индексу - с помощью `.`:
@@ -632,10 +624,10 @@ fn main() {
 
 ```rust
 fn main() {
-  let a = [1, 2, 3, 4, 5];
-  let b:[u8;5] = [1, 2, 3, 4, 5];
-  println!("a is: {:?}", a);
-  println!("b is: {:?}", b);
+    let a = [1, 2, 3, 4, 5];
+    let b: [u8; 5] = [1, 2, 3, 4, 5];
+    println!("a is: {:?}", a);
+    println!("b is: {:?}", b);
 }
 ```
 
@@ -661,12 +653,13 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
 
 ```rust
 fn main() {
-  let a = [1, 2, 3, 4, 5];
-  let first = a[0];
-  let second = a[1];
+    let a = [1, 2, 3, 4, 5];
+    let first = a[0];
+    let second = a[1];
 
-  println!("first = {}, second = {}", first, second);
+    println!("first = {}, second = {}", first, second);
 }
+
 ```
 
 ##### Ошибка доступа к элементу массива

@@ -122,11 +122,14 @@ let s = String::from("hello");
 Такие строки *могут* быть изменены:
 
 ```rust
-let mut s = String::from("hello");
+fn main() {
+    let mut s = String::from("hello");
 
-s.push_str(", world!"); // push_str() appends a literal to a String
+    s.push_str(", world!"); // push_str() appends a literal to a String
 
-println!("{}", s); // This will print `hello, world!`
+    println!("{}", s); // This will print `hello, world!`
+}
+
 ```
 
 В чём же отличия типов данных изменяемых строковых `String` и неизменяемых литеральных?
@@ -260,10 +263,14 @@ let s2 = s1;
 `s2`:
 
 ```rust,ignore
-let s1 = String::from("hello");
-let s2 = s1;
+fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1;
 
-println!("{}, world!", s1);
+    println!("{}, world!", s1);
+    println!("{}, world!", s2);
+}
+
 ```
 
 В терминальной строке вы увидите подобное сообщение, информирующее о том, что переменную
@@ -364,7 +371,7 @@ fn main() {
     let s = String::from("hello");  // s comes into scope.
 
     takes_ownership(s);             // s's value moves into the function...
-    //println!("{}", some_string);    // ... and so is no longer valid here.
+    //println!("{}", s);    // ... and so is no longer valid here.
     let x = 5;                      // x comes into scope.
 
     makes_copy(x);                  // x would move into the function,
@@ -385,7 +392,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 ```
 
 <span class="caption">Listing 4-7: Демонстрация измения владения по средством передачи
-функции переменной. Демотрация выхода переменной за приделы области видимости и
+функции переменной. Демонстрация выхода переменной за приделы области видимости и
 освобождения ресуросов</span>
 
 Если вы попытаетесь использовать переменую после вызова метода `takes_ownership`,
@@ -435,7 +442,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
 Изменение владения ведётся по описанным ранее законам. Оно перемещается при изменении
 владельца данных.
 
-На практите очень неудобно всгда отслеживать владение данными.
+На практите очень неудобно всегда отслеживать владение данными.
 
 Для упрощения работы при передачи данных в функцию и из функции удобно использовать
 кортежи:

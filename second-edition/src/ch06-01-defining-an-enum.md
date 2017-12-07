@@ -16,14 +16,15 @@ enum IpAddrKind {
 Экземпляр перечисления можно создать следующим образом:
 
 ```rust
- enum IpAddrKind {
-     V4,
-     V6,
- }
-fn main(){
-let four = IpAddrKind::V4;
-let six = IpAddrKind::V6;
+enum IpAddrKind {
+    V4,
+    V6,
 }
+fn main() {
+    let four = IpAddrKind::V4;
+    let six = IpAddrKind::V6;
+}
+
 ```
 
 Обратите внимание, что перед значением стоит идентификатор. `::` разделяет эти данные.
@@ -31,24 +32,24 @@ let six = IpAddrKind::V6;
 тип при указании типа данных функции:
 
 ```rust
-# enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
+ enum IpAddrKind {
+     V4,
+     V6,
+ }
+
 fn route(ip_type: IpAddrKind) { }
 ```
 
 Значениями данной функции будут значения перечисления данного типа:
 
 ```rust
-# enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-# fn route(ip_type: IpAddrKind) { }
-#
+ enum IpAddrKind {
+     V4,
+     V6,
+ }
+
+ fn route(ip_type: IpAddrKind) { }
+
 route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
@@ -113,7 +114,7 @@ IP-адреса.
 
 Рассмотрим какое решение реализовано в стандартной библиотеке:
 
-[IpAddr]: ../../std/net/enum.IpAddr.html
+[IpAddr]: https://doc.rust-lang.org/std/net/enum.IpAddr.html
 
 ```rust
 struct Ipv4Addr {
@@ -180,21 +181,21 @@ struct ChangeColorMessage(i32, i32, i32); // tuple struct
 добавления функций в них идентична. Мы используем структуру `impl`:
 
 ```rust
- enum Message {
-     Quit,
-     Move { x: i32, y: i32 },
-     Write(String),
-     ChangeColor(i32, i32, i32),
- }
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
 
 impl Message {
     fn call(&self) {
         // method body would be defined here
     }
 }
-fn main(){
-let m = Message::Write(String::from("hello"));
-m.call();
+fn main() {
+    let m = Message::Write(String::from("hello"));
+    m.call();
 }
 ```
 
@@ -216,7 +217,7 @@ m.call();
 Перечисление `Option<T>` даёт возможность показать, что значение нулевое с помощью
 одного из своих элементов [defined by the standard library][option]<!-- ignore -->:
 
-[option]: ../../std/option/enum.Option.html
+[option]: https://doc.rust-lang.org/std/option/enum.Option.html
 
 ```rust
 enum Option<T> {
@@ -280,7 +281,7 @@ not satisfied
 Вам надо хорошо разобраться с методами перечисления `Option<T>`. Это поможет вам
 лучше понимать исходный код Rust стандартной библиотеки.
 
-[docs]: ../../std/option/enum.Option.html
+[docs]: https://doc.rust-lang.org/std/option/enum.Option.html
 
 В следующей секции будет рассмотрена конструкция `match`. Это управляющая конструкция,
 которая используется совместно с перечислениями. Результат выполнения той или иной

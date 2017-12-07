@@ -108,11 +108,13 @@ fn main() {
     let mut s = String::from("hello");
 
     change(&mut s);
+    println!("{}", s);
 }
 
 fn change(some_string: &mut String) {
     some_string.push_str(", world");
 }
+
 ```
 
 Для того, чтобы данные ссылочной переменной можно было изменить, также как и обычную
@@ -127,14 +129,15 @@ fn change(some_string: &mut String) {
 
 ```rust
 fn main() {
-let mut s = String::from("hello");
+    let mut s = String::from("hello");
 
-let r1 = &mut s;
-let r2 = &mut s;
+    let r1 = &mut s;
+    let r2 = &mut s;
 
-println!("{}",r1);
-println!("{}",r2);
+    println!("{}", r1);
+    println!("{}", r2);
 }
+
 
 ```
 
@@ -162,33 +165,32 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 
 ```rust
 fn main() {
-  let mut s = String::from("hello");
+    let mut s = String::from("hello");
 
-{
-let r1 = &mut s;
-println!("{}",r1);
-}
-{
-let r2 = &mut s;
-println!("{}",r2);
-}
+    {
+        let r1 = &mut s;
+        println!("{}", r1);
+    }
+    {
+        let r2 = &mut s;
+        println!("{}", r2);
+    }
 }
 ```
 Подобное правило действительно и для комбинации изменяемых и неизменяемых
 ссылочных переменных. Пример кода с ошибкой:
 
 ```rust
+
 fn main() {
-  let mut s = String::from("hello");
-let r1 = &s;
-let r2 = &s;
-let r3 = &mut s;
-println!("{}",r1);
-println!("{}",r2);
-println!("{}",r3);
+    let s = String::from("hello");
+    let r1 = &s;
+    let r2 = &s;
+    let r3 = &mut s;
+    println!("{}", r1);
+    println!("{}", r2);
+    println!("{}", r3);
 }
-
-
 ```
 
 Here’s the error:

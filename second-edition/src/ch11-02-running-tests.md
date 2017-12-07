@@ -1,65 +1,56 @@
-## Controlling How Tests are Run
+## Контролирование хода выполнение тестов
 
-Just as `cargo run` compiles your code and then runs the resulting binary,
-`cargo test` compiles your code in test mode and runs the resulting test
-binary. There are options you can use to change the default behavior of `cargo
-test`. For example, the default behavior of the binary produced by `cargo test`
-is to run all the tests in parallel and capture output generated during test
-runs, preventing it from being displayed to make it easier to read the output
-related to the test results. You can change this default behavior by specifying
-command line options.
+Также как команда `cargo run` компилирует и затем выполняет созданный бинарный файл,
+команда `cargo test` компилирует его в тестовом режиме а затем выполнят его.
+Для изменения поведения команды по умолчанию существуют параметры, на которые можно
+влиять при запуске тестирования. Например, по умолчанию, система управлением запуска
+тестов (СУЗТ) выполняет тесты параллельно (т.е. создаётся поток для каждого теста, чтобы
+обеспечить изолированное выполнение каждого теста). Кроме того СУЗТ собирает консольные
+сообщения каждого теста и форматирует их и выводит по своим правилам. Есть возможность
+менять это поведение с помощь опций командной строки при запуске команды `cargo test`.
 
-Some command line options can be passed to `cargo test`, and some need to be
-passed instead to the resulting test binary. To separate these two types of
-arguments, you list the arguments that go to `cargo test`, then the separator
-`--`, and then the arguments that go to the test binary. Running `cargo test
---help` will tell you about the options that go with `cargo test`, and running
-`cargo test -- --help` will tell you about the options that go after the
-separator `--`.
+Опции команды `cargo test`  могут быть добавлены после,
+опции для тестов должны устанавливаться дополнительно (следовать далее). Для разделения
+этих двух типов аргументов используется разделитель `--`. Чтобы узнать подробнее об
+доступных опциях команды `cargo test` - используйте опцию `--help`. Для того, чтобы узнать
+об опциях доступных для непосредственно для тестов используйте команду `cargo test -- --help`.
+Обратите внимание, что данную команду необходимо запускать внутри cargo-проекта
+(пакета).
 
-### Running Tests in Parallel or Consecutively
+### Выполнение тестов параллельно или последовательно
 
-When multiple tests are run, by default they run in parallel using threads.
-This means the tests will finish running faster, so that we can get faster
-feedback on whether or not our code is working. Since the tests are running at
-the same time, you should take care that your tests do not depend on each other
-or on any shared state, including a shared environment such as the current
-working directory or environment variables.
+Когда выполняется несколько тестов они выполняются параллельно (по умолчанию).
+Это значит, что тесты завершат свою работу быстрее, т.е. мы быстрее узнаем успешно
+работают тесты или нет. Важно соблюдать независимость работы тестов.
 
-For example, say each of your tests runs some code that creates a file on disk
-named `test-output.txt` and writes some data to that file. Then each test reads
-the data in that file and asserts that the file contains a particular value,
-which is different in each test. Because the tests are all run at the same
-time, one test might overwrite the file between when another test writes and
-reads the file. The second test will then fail, not because the code is
-incorrect, but because the tests have interfered with each other while running
-in parallel. One solution would be to make sure each test writes to a different
-file; another solution is to run the tests one at a time.
+Например, когда тесты создают в одном и том же месте  на диске файл с одним и тем же
+названием, читают из него данные, записывают их - вероятность ошибки в работе таких
+тестов (из-за конкурирования доступа к ресурсу, некорректных данных в файле) весьма
+высока. Решением будет использование уникальных имён создаваемых и используемых каждым
+тестом в отдельности, либо выполнение таких тестов последовательно.
 
-If you don’t want to run the tests in parallel, or if you want more
-fine-grained control over the number of threads used, you can send the
-`--test-threads` flag and the number of threads you want to use to the test
-binary. For example:
+Для выполнения тестов последовательно, пожалуйста запустите следующую команду в
+папке проекта с тестами:
 
 ```text
 $ cargo test -- --test-threads=1
 ```
 
-We set the number of test threads to 1, telling the program not to use any
-parallelism. This will take longer than running them in parallel, but the tests
-won’t be potentially interfering with each other if they share state.
+В данной команде мы сообщили количество потоков, которое будет использовано системой
+тестирования для запуска всех тестов (т.к. количество 1, то все тесты будут работать
+последовательно).
 
-### Showing Function Output
+### Демонстрация результатов работы функции
 
-By default, if a test passes, Rust’s test library captures anything printed to
-standard output. For example, if we call `println!` in a test and the test
-passes, we won’t see the `println!` output in the terminal: we’ll only see the
-line that says the test passed. If a test fails, we’ll see whatever was printed
-to standard output with the rest of the failure message.
+По умолчанию, если тест пройден, СУЗТ блокирует вывод на печать, т.е. если вы вызовете
+макрос `println!` внутри кода теста и тест будет пройден, вы не увидите вывода
+на консоль результатов вызова `println!`. Если же тест не был пройден, все информационные
+сообщение, а также описание ошибки будет выведено на консоль.
 
-For example, Listing 11-10 has a silly function that prints out the value of
-its parameter and then returns 10. We then have a test that passes and a test
-that fails:
+Например, в коде (11-10) функция выводить значение параметра с поясняющим текстовым
+сообщением, а также возвращает целочисленное константное значение `10`. Далее,
+следуют тест, который имеет правильный входной параметр и тест, который имеет ошибочный
+входной параметр:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -87,10 +78,10 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-10: Tests for a function that calls
+<span class="caption">Listing 11-10: Тест функции, которая использует макрос `println!`
 `println!`</span>
 
-The output we’ll see when we run these tests with `cargo test` is:
+Результат вывода на консоль команды `cargo test`:
 
 ```text
 running 2 tests
@@ -111,20 +102,18 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-Note that nowhere in this output do we see `I got the value 4`, which is what
-gets printed when the test that passes runs. That output has been captured. The
-output from the test that failed, `I got the value 8`, appears in the section
-of the test summary output that also shows the cause of the test failure.
+Обратите внимание, что мы не увидели вывода на консоль работы корректно сработавшего
+теста `I got the value 4`. Этот вывод был проигнорирован. А вот результат работы
+программы, при неработающем тесте был показан (для лучшего понимания ошибки).
 
-If we want to be able to see printed values for passing tests as well, the
-output capture behavior can be disabled by using the `--nocapture` flag:
+Для того, чтобы всегда видеть вывод на консоль и корректно работающих программ,
+используйте флаг `--nocapture`:
 
 ```text
 $ cargo test -- --nocapture
 ```
 
-Running the tests from Listing 11-10 again with the `--nocapture` flag now
-shows:
+Выполним тесты ещё раз с этим флагом:
 
 ```text
 running 2 tests
@@ -144,20 +133,21 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-Note that the output for the tests and the test results is interleaved; this is
-because the tests are running in parallel as we talked about in the previous
-section. Try using both the `--test-threads=1` option and the `--nocapture`
-function and see what the output looks like then!
+Обратите внимание, что есть какая-то неразбериха в косольном выводе. Всё это из-за
+того, что тесты выполняются параллельно. Этого можно избежать с помощью опции
+`--test-threads=1`. Пожалуйста, проверьте работу команды с флагом `--nocapture` ещё
+раз с последовательном выводом данных на экран.
 
-### Running a Subset of Tests by Name
+### Запуск теста по имени Running a Subset of Tests by Name
 
-Sometimes, running a full test suite can take a long time. If you’re working on
-code in a particular area, you might want to run only the tests pertaining to
-that code. You can choose which tests to run by passing `cargo test` the name
-or names of the test(s) you want to run as an argument.
+Бывают случаи, когда в запуске всех тестов нет необходимости и нужно запустить
+только несколько тестов. Если вы работаете на над функцией и хотите запустить
+тесты, которые исследуют её работу - это было бы удобно. Вы можете это сделать,
+используя команду `cargo test`.
 
-To demonstrate how to run a subset of tests, we’ll create three tests for our
-`add_two` function as shown in Listing 11-11 and choose which ones to run:
+Для демонстрации как запустить группу тестов мы создадим группу тестов для функции
+`add_two` (код программы 11-11) и постараемся выбрать интересующие нас тесты при
+их запуске:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -187,10 +177,10 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-11: Three tests with a variety of names</span>
+<span class="caption">Код программы 11-11: Три теста с различными именами</span>
 
-If we run the tests without passing any arguments, as we’ve already seen, all
-the tests will run in parallel:
+Если вы выполните команду `cargo test` без уточняющих аргументов, все тесты выполнятся
+параллельно:
 
 ```text
 running 3 tests
@@ -201,9 +191,9 @@ test tests::one_hundred ... ok
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-#### Running Single Tests
+#### Запуск одного теста
 
-We can pass the name of any test function to `cargo test` to run only that test:
+Мы можем запустить один тест с помощью указания его имени в команде `cargo test`:
 
 ```text
 $ cargo test one_hundred
@@ -216,14 +206,15 @@ test tests::one_hundred ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-We can’t specify the names of multiple tests in this way, only the first value
-given to `cargo test` will be used.
+К сожалению, таким простым образом (списком тестов) мы не можем запустить несколько тестов.
+Только первый тест из списка будет запущен. Пожалуйста, проверьте как это работает
+(точнее, убедитесь, что это не работает).
 
-#### Filtering to Run Multiple Tests
+#### Использование фильтров для запуска нескольких тестов
 
-However, we can specify part of a test name, and any test whose name matches
-that value will get run. For example, since two of our tests’ names contain
-`add`, we can run those two by running `cargo test add`:
+Существует возможность по имени (с использованием фильтров) запустить несколько тестов.
+Например, мы знаем, что несколько тестов содержат `add`. Для того, чтобы запустить
+вполне достаточно этих знаний:
 
 ```text
 $ cargo test add
@@ -237,16 +228,15 @@ test tests::add_three_and_two ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-This ran all tests with `add` in the name. Also note that the module in which
-tests appear becomes part of the test’s name, so we can run all the tests in a
-module by filtering on the module’s name.
+Обратите внимание, что у нас получилось выполнили тесты с именем `add`. Также
+обратите внимание, что имя модуля включено в имя теста. Таким образом мы можем
+запустить тесты используя имя модуля, в котором он находятся.
 
-### Ignore Some Tests Unless Specifically Requested
+### Игнорирование тестов
 
-Sometimes a few specific tests can be very time-consuming to execute, so you
-might want to exclude them during most runs of `cargo test`. Rather than
-listing as arguments all tests you do want to run, we can instead annotate the
-time consuming tests with the `ignore` attribute to exclude them:
+Бывают случаи, когда выполнение тестов может занимать продолжительное время и
+нет необходимости в их постоянном запуске. Для этих случаев существует
+атрибут `ignore`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -263,9 +253,9 @@ fn expensive_test() {
 }
 ```
 
-We add the `#[ignore]` line to the test we want to exclude, after `#[test]`.
-Now if we run our tests, we’ll see `it_works` runs, but `expensive_test` does
-not:
+Мы добавили атрибут `#[ignore]` для того, чтобы описать исключаемую функцию из списка тестов.
+Теперь, когда мы запустим команду `cargo test`, данный тест будет проигнорировал,
+о чём будет сообщено в описании результатов тестирования:
 
 ```text
 $ cargo test
@@ -286,8 +276,9 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-`expensive_test` is listed as `ignored`. If we want to run only the ignored
-tests, we can ask for them to be run with `cargo test -- --ignored`:
+Выполнение теста `expensive_test` было проигнорировано. Если же вы хотите выполнить
+только проигнорированные тесты, вы можете сообщить это с помощью команды
+`cargo test -- --ignored`:
 
 ```text
 $ cargo test -- --ignored
@@ -300,7 +291,6 @@ test expensive_test ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-By controlling which tests run, you can make sure your `cargo test` results
-will be fast. When you’re at a point that it makes sense to check the results
-of the `ignored` tests and you have time to wait for the results, you can
-choose to run `cargo test -- --ignored` instead.
+Подведём итоги. Вы можете фильтровать тесты по имени при запуске. Вы также можете указать
+какие тесты должны быть проигнорированы, а также отдельно запускать проигнорированные
+тесты.
