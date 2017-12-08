@@ -155,9 +155,10 @@ parts all implement `Copy`. The `Copy` trait can only be applied to types that
 also implement `Clone`, as a type that implements `Copy` has a trivial
 implementation of `Clone`, doing the same thing as `Copy`.
 
-An example of when `Copy` is required is when storing values of that type in a
-`Cell<T>`, a data structure that provides interior mutability by moving values
-into and out of the cell.
+`Copy` is rarely required; when types implement `Copy`, there are optimizations
+that can be applied and the code becomes nicer because you don't have to call
+`clone`. Everything possible with `Copy` can also be accomplished with `Clone`,
+but the code might be slower or have to use `clone` in places.
 
 ### `Hash` for Mapping a Value to a Value of Fixed Size
 
