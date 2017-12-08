@@ -371,7 +371,7 @@ structure that we can then interpret and perform operations on. This is where
 Here's the relevant parts of the `DeriveInput` struct we get from parsing the
 string `struct Pancakes;`:
 
-```text
+```rust,ignore
 DeriveInput {
     // --snip--
 
@@ -389,7 +389,7 @@ with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
 fields on this struct for describing all sorts of Rust code; check the [`syn`
 API docs for `DeriveInput`][syn-docs] for more information.
 
-[syn-docs](https://docs.rs/syn/0.11.11/syn/struct.DeriveInput.html)
+[syn-docs]: https://docs.rs/syn/0.11.11/syn/struct.DeriveInput.html
 
 We haven't defined the `impl_hello_world` function; that's where we'll build
 the new Rust code we want to include. Before we get to that, the last part of
