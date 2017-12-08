@@ -118,7 +118,7 @@ argument, which gives us an `Option<&T>`.
 
 The reason Rust has two ways to reference an element is so you can choose how
 the program behaves when you try to use an index value that the vector doesn’t
-have an element for. As an example, let's see what a program will do if it has
+have an element for. As an example, let’s see what a program will do if it has
 a vector that holds five elements and then tries to access an element at index
 100, as shown in Listing 8-6:
 
@@ -154,7 +154,7 @@ ownership and borrowing rules (covered in Chapter 4) to ensure this reference
 and any other references to the contents of the vector remain valid. Recall the
 rule that states we can’t have mutable and immutable references in the same
 scope. That rule applies in Listing 8-7 where we hold an immutable reference to
-the first element in a vector and try to add an element to the end, which won't
+the first element in a vector and try to add an element to the end, which won’t
 work:
 
 ```rust,ignore

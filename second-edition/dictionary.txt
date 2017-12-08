@@ -46,6 +46,7 @@ Boolean
 Booleans
 Bors
 BorrowMutError
+BTreeSet
 BuildHasher
 Cacher
 Cagain
@@ -92,6 +93,7 @@ dereferenced
 dereferences
 dereferencing
 DerefMut
+DeriveInput
 destructor
 destructure
 destructured
@@ -141,6 +143,7 @@ FnBox
 FnMut
 FnOnce
 formatter
+FrenchToast
 FromIterator
 frontend
 getter
@@ -161,6 +164,8 @@ HashSet
 Haskell
 hasn
 helloworld
+HelloWorld
+HelloWorldName
 Hmmm
 Hoare
 Hola
@@ -344,6 +349,7 @@ SecondaryColor
 SelectBox
 semver
 SemVer
+serde
 ShlAssign
 ShrAssign
 shouldn
@@ -366,6 +372,7 @@ Stdin
 stdlib
 stdout
 steveklabnik's
+stringify
 Stroustrup
 Stroustrup's
 struct
@@ -391,6 +398,7 @@ supertrait
 supertraits
 TcpListener
 TcpStream
+templating
 test's
 TextField
 That'd
@@ -400,7 +408,9 @@ threadsafe
 timestamp
 Tiếng
 timeline
+tlborm
 TODO
+TokenStream
 toml
 TOML
 ToString
@@ -413,6 +423,7 @@ tuple
 tuples
 turbofish
 typeof
+TypeName
 UFCS
 unary
 Unary

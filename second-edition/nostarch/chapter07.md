@@ -994,7 +994,7 @@ communicator
 
 Tests are for exercising the code within our library, so let’s try to call our
 `client::connect` function from this `it_works` function, even though we won’t
-be checking any functionality right now. This won't work yet:
+be checking any functionality right now. This won’t work yet:
 
 Filename: src/lib.rs
 
