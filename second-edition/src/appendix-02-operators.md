@@ -32,7 +32,7 @@ overload that operator is listed.
 * `.` (`expr.ident`): member access.
 * `..` (`..`, `expr..`, `..expr`, `expr..expr`): right-exclusive range literal.
 * `..` (`..expr`): struct literal update syntax.
-* `..` (`variant(x, ..)`, `struct_type { x, .. }`): "and the rest" pattern binding.
+* `..` (`variant(x, ..)`, `struct_type { x, .. }`): “and the rest” pattern binding.
 * `...` (`...expr`, `expr...expr`) *in an expression*: inclusive range expression.
 * `...` (`expr...expr`) *in a pattern*: inclusive range pattern.
 * `/` (`expr / expr`): arithmetic division. Overloadable (`Div`).
@@ -61,7 +61,7 @@ overload that operator is listed.
 * `|` (`expr | expr`): bitwise OR. Overloadable (`BitOr`).
 * `|=` (`var |= expr`): bitwise OR and assignment. Overloadable (`BitOrAssign`).
 * `||` (`expr || expr`): logical OR.
-* `_`: "ignored" pattern binding. Also used to make integer-literals readable.
+* `_`: “ignored” pattern binding. Also used to make integer-literals readable.
 * `?` (`expr?`): Error propagation.
 
 ### Non-operator Symbols
@@ -88,7 +88,7 @@ overload that operator is listed.
 * `type::ident`, `<type as trait>::ident`: associated constants, functions, and types.
 * `<type>::…`: associated item for a type which cannot be directly named (*e.g.* `<&T>::…`, `<[T]>::…`, *etc.*).
 * `trait::method(…)`: disambiguating a method call by naming the trait which defines it.
-* `type::method(…)`: disambiguating a method call by naming the type for which it's defined.
+* `type::method(…)`: disambiguating a method call by naming the type for which it’s defined.
 * `<type as trait>::method(…)`: disambiguating a method call by naming the trait *and* type.
 
 #### Generics
@@ -105,7 +105,7 @@ overload that operator is listed.
 #### Trait Bound Constraints
 
 * `T: U`: generic parameter `T` constrained to types that implement `U`.
-* `T: 'a`: generic type `T` must outlive lifetime `'a`. When we say that a type 'outlives' the lifetime, we mean that it cannot transitively contain any references with lifetimes shorter than `'a`.
+* `T: 'a`: generic type `T` must outlive lifetime `'a`. When we say that a type ‘outlives’ the lifetime, we mean that it cannot transitively contain any references with lifetimes shorter than `'a`.
 * `T : 'static`: The generic type `T` contains no borrowed references other than `'static` ones.
 * `'b: 'a`: generic lifetime `'b` must outlive lifetime `'a`.
 * `T: ?Sized`: allow generic type parameter to be a dynamically-sized type.
@@ -151,4 +151,4 @@ overload that operator is listed.
 * `[expr; len]`: array literal containing `len` copies of `expr`.
 * `[type; len]`: array type containing `len` instances of `type`.
 * `expr[expr]`: collection indexing. Overloadable (`Index`, `IndexMut`).
-* `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]`: collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, `RangeFull` as the "index".
+* `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]`: collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, `RangeFull` as the “index”.

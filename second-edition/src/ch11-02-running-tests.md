@@ -217,7 +217,7 @@ test tests::one_hundred ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out
 ```
 
-Only the test with the name `one_hundred` ran; the other two tests didn't match
+Only the test with the name `one_hundred` ran; the other two tests didn’t match
 that name. The test output lets us know we had more tests than what this
 command ran by displaying `2 filtered out` at the end of the summary line.
 

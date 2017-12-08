@@ -37,13 +37,13 @@ impl ::std::fmt::Debug for Point {
 }
 ```
 
-The generated code implements sensible default behavior for the `Debug` trait's
+The generated code implements sensible default behavior for the `Debug` trait’s
 `fmt` function: a `match` expression destructures a `Point` instance into its
-field values. Then it builds up a string containing the struct's name and each
-field's name and value. This means we're able to use debug formatting on a
+field values. Then it builds up a string containing the struct’s name and each
+field’s name and value. This means we’re able to use debug formatting on a
 `Point` instance to see what value each field has.
 
-The generated code isn't particularly easy to read because it's only for the
+The generated code isn’t particularly easy to read because it’s only for the
 compiler to consume, rather than for programmers to read! The `derive`
 attribute and the default implementation of `Debug` has saved us all of the
 work of writing this code for every struct or enum that we want to be able to
@@ -62,7 +62,7 @@ be used with `derive`. Each section covers:
 - What operators and methods deriving this trait will enable
 - What the implementation of the trait provided by `derive` does
 - What implementing the trait signifies about the type
-- The conditions in which you're allowed or not allowed to implement the trait
+- The conditions in which you’re allowed or not allowed to implement the trait
 - Examples of operations that require the trait
 
 ### `Debug` for Programmer Output
@@ -72,11 +72,11 @@ adding `:?` within `{}` placeholders.
 
 The `Debug` trait signifies that instances of a type may be printed by
 programmers in order to debug their programs by inspecting an instance of a
-type at a particular point in a program's execution.
+type at a particular point in a program’s execution.
 
 An example of when `Debug` is required is the `assert_eq!` macro, which prints
 the values of the instances given as arguments if the equality assertion fails
-so that programmers can see why the two instances weren't equal.
+so that programmers can see why the two instances weren’t equal.
 
 ### `PartialEq` and `Eq` for Equality Comparisons
 
@@ -91,7 +91,7 @@ to the other variants.
 An example of when `PartialEq` is required is the `assert_eq!` macro, which
 needs to be able to compare two instances of a type for equality.
 
-The `Eq` trait doesn't have any methods. It only signals that for every value
+The `Eq` trait doesn’t have any methods. It only signals that for every value
 of the annotated type, the value is equal to itself. The `Eq` trait can only be
 applied to types that also implement `PartialEq`. An example of types that
 implements `PartialEq` but that cannot implement `Eq` are floating point number
@@ -142,7 +142,7 @@ of the type, so all of the fields or values in the type must also implement
 `Clone` to derive `Clone`.
 
 An example of when `Clone` is required is when calling the `to_vec` method on a
-slice containing instances of some type. The slice doesn't own the instances
+slice containing instances of some type. The slice doesn’t own the instances
 but the vector returned from `to_vec` will need to own its instances, so the
 implementation of `to_vec` calls `clone` on each item. Thus, the type stored in
 the slice must implement `Clone`.
@@ -156,7 +156,7 @@ also implement `Clone`, as a type that implements `Copy` has a trivial
 implementation of `Clone`, doing the same thing as `Copy`.
 
 `Copy` is rarely required; when types implement `Copy`, there are optimizations
-that can be applied and the code becomes nicer because you don't have to call
+that can be applied and the code becomes nicer because you don’t have to call
 `clone`. Everything possible with `Copy` can also be accomplished with `Clone`,
 but the code might be slower or have to use `clone` in places.
 
@@ -181,8 +181,8 @@ each of the parts of the type, so all of the fields or values in the type must
 also implement `Default` to derive `Default.`
 
 A common use of `Default::default` is in combination with the struct update
-syntax discussed in the "Creating Instances From Other Instances With Struct
-Update Syntax" section in Chapter 5. You can customize a few fields of a struct
+syntax discussed in the “Creating Instances From Other Instances With Struct
+Update Syntax” section in Chapter 5. You can customize a few fields of a struct
 and then use the default values for the rest by using `..Default::default()`.
 
 An example of when `Default` is required is the `unwrap_or_default` method on
@@ -190,23 +190,23 @@ An example of when `Default` is required is the `unwrap_or_default` method on
 method will return the result of `Default::default` for the type `T` stored in
 the `Option<T>`.
 
-## Standard Library Traits that Can't Be Derived
+## Standard Library Traits that Can’t Be Derived
 
-The rest of the traits defined in the standard library can't be implemented on
-your types using `derive`. These traits don't have a sensible default behavior
+The rest of the traits defined in the standard library can’t be implemented on
+your types using `derive`. These traits don’t have a sensible default behavior
 they could have, so you are required to implement them in the way that makes
 sense for what you are trying to accomplish with your code.
 
-An example of a trait that can't be derived is `Display`, which handles
+An example of a trait that can’t be derived is `Display`, which handles
 formatting of a type for end users of your programs. You should put thought
 into the appropriate way to display a type to an end user: what parts of the
 type should an end user be allowed to see? What parts would they find relevant?
 What format of the data would be most relevant to them? The Rust compiler
-doesn't have this insight into your application, so you must provide it.
+doesn’t have this insight into your application, so you must provide it.
 
 ## Making Custom Traits Derivable
 
 The above list is not comprehensive, however: libraries can implement `derive`
 for their own types! In this way, the list of traits you can use `derive` with
 is truly open-ended. Implementing `derive` involves using a procedural macro,
-which is covered in the next appendix, "Macros."
+which is covered in the next appendix, “Macros.”

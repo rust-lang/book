@@ -110,9 +110,9 @@ Raw pointers:
 
 - Are allowed to ignore the borrowing rules and have both immutable and a
   mutable pointer or multiple mutable pointers to the same location
-- Aren't guaranteed to point to valid memory
+- Aren’t guaranteed to point to valid memory
 - Are allowed to be null
-- Don't implement any automatic clean-up
+- Don’t implement any automatic clean-up
 
 Listing 19-1 shows how to create raw pointers from references:
 
@@ -129,7 +129,7 @@ The `*const T` type is an immutable raw pointer, and `*mut T` is a mutable raw
 pointer. We’ve created raw pointers by using `as` to cast an immutable and a
 mutable reference into their corresponding raw pointer types. These particular
 raw pointers will be valid since we created them directly from references that
-are guaranteed to be valid, but we can't make that assumption about any raw
+are guaranteed to be valid, but we can’t make that assumption about any raw
 pointer.
 
 Listing 19-2 shows how to create a raw pointer to an arbitrary location in
