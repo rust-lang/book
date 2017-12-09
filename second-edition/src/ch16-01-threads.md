@@ -78,7 +78,7 @@ thread-related API provided by the standard library.
 
 To create a new thread, we call the `thread::spawn` function, and pass it a
 closure (we talked about closures in Chapter 13) containing the code we want to
-run in the new thread. The example in Listing 16-1 prints some text from a main
+run in the new thread. The example in [Listing 16-1][Listing-16-1] prints some text from a main
 thread and other text from a new thread:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -143,7 +143,7 @@ to take a break and give the other thread a turn.
 
 #### Waiting for All Threads to Finish Using `join` Handles
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
+The code in [Listing 16-1][Listing-16-1] not only stops the spawned thread prematurely most of
 the time, because the main thread ends before the spawned thread is done,
 there’s actually no guarantee that the spawned thread will get to run at all,
 because there’s no guarantee on the order in which threads run!
@@ -155,8 +155,8 @@ order the threads run in? -->
 We can fix this by saving the return value of `thread::spawn` in a variable.
 The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
 value that, when we call the `join` method on it, will wait for its thread to
-finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
-in Listing 16-1 and call `join` in order to make sure the spawned thread
+finish. [Listing 16-2][Listing-16-2] shows how to use the `JoinHandle` of the thread we created
+in [Listing 16-1][Listing-16-1] and call `join` in order to make sure the spawned thread
 finishes before the `main` exits:
 
 <!-- Saving the return value where? I think this explanation of join handle
@@ -283,10 +283,10 @@ environment is mostly used in the context of starting new threads.”
 Now we’re creating new threads, so let’s talk about capturing values in
 closures!
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
+Notice in [Listing 16-1][Listing-16-1] that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
 thread’s code. In order to do so, the spawned thread’s closure must capture the
-values it needs. Listing 16-3 shows an attempt to create a vector in the main
+values it needs. [Listing 16-3][Listing-16-3] shows an attempt to create a vector in the main
 thread and use it in the spawned thread. However, this won’t yet work, as
 you’ll see in a moment:
 
@@ -339,7 +339,7 @@ tell how long the spawned thread will run, so doesn’t know if the reference to
 `v` will always be valid.
 
 Let’s look at a scenario that’s more likely to have a reference to `v` that
-won’t be valid, shown Listing 16-4:
+won’t be valid, shown [Listing 16-4][Listing-16-4]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -372,7 +372,7 @@ drops `v`, using the `drop` function we discussed in Chapter 15. Then, when the
 spawned thread starts to execute, `v` is no longer valid, so a reference to it
 is also invalid. Oh no!
 
-To fix the problem in Listing 16-3, we can listen to the advice of the error
+To fix the problem in [Listing 16-3][Listing-16-3], we can listen to the advice of the error
 message:
 
 ```text
@@ -383,7 +383,7 @@ variables), use the `move` keyword, as shown:
 
 By adding the `move` keyword before the closure, we force the closure to take
 ownership of the values it’s using, rather than allowing Rust to infer that it
-should borrow. The modification to Listing 16-3 shown in Listing 16-5 will
+should borrow. The modification to [Listing 16-3][Listing-16-3] shown in Listing 16-5 will
 compile and run as we intend:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -411,9 +411,9 @@ to take ownership of the values it uses</span>
 <!-- Can you be more specific about the question we're asking about 16-4?-->
 <!-- Done /Carol -->
 
-What would happen to the code in Listing 16-4 where the main thread called
+What would happen to the code in [Listing 16-4][Listing-16-4] where the main thread called
 `drop` if we use a `move` closure? Would `move` fix that case? Nope, we get a
-different error, because what Listing 16-4 is trying to do isn’t allowed for a
+different error, because what [Listing 16-4][Listing-16-4] is trying to do isn’t allowed for a
 different reason! If we add `move` to the closure, we’d move `v` into the
 closure’s environment, and we could no longer call `drop` on it in the main
 thread. We would get this compiler error instead:
@@ -433,11 +433,11 @@ error[E0382]: use of moved value: `v`
 ```
 
 Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
+[Listing 16-3][Listing-16-3] because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
 thread’s reference. By telling Rust to move ownership of `v` to the spawned
 thread, we’re guaranteeing to Rust that the main thread won’t use `v` anymore.
-If we change Listing 16-4 in the same way, we’re then violating the ownership
+If we change [Listing 16-4][Listing-16-4] in the same way, we’re then violating the ownership
 rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
@@ -449,3 +449,11 @@ after the error /Carol -->
 
 Now that we have a basic understanding of threads and the thread API, let’s
 talk about what we can actually *do* with threads.
+
+[Listing-16-1]: ch16-02-message-passing.html#Listing-16-1
+[Listing-16-1]: ch16-03-shared-state.html#Listing-16-1
+[Listing-16-1]: ch16-01-threads.html#Listing-16-1
+[Listing-16-2]: ch16-01-threads.html#Listing-16-2
+[Listing-16-3]: ch16-01-threads.html#Listing-16-3
+[Listing-16-4]: ch16-01-threads.html#Listing-16-4
+[Listing-16-5]: ch16-01-threads.html#Listing-16-5

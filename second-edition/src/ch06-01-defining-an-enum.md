@@ -73,7 +73,7 @@ route(IpAddrKind::V6);
 Using enums has even more advantages. Thinking more about our IP address type,
 at the moment we don’t have a way to store the actual IP address *data*; we
 only know what *kind* it is. Given that you just learned about structs in
-Chapter 5, you might tackle this problem as shown in Listing 6-1:
+Chapter 5, you might tackle this problem as shown in [Listing 6-1][Listing-6-1]:
 
 [Listing-6-1]: #Listing-6-1
 <a name="Listing-6-1"></a>
@@ -185,7 +185,7 @@ we can still create and use our own definition without conflict because we
 haven’t brought the standard library’s definition into our scope. We’ll talk
 more about bringing types into scope in Chapter 7.
 
-Let’s look at another example of an enum in Listing 6-2: this one has a wide
+Let’s look at another example of an enum in [Listing 6-2][Listing-6-2]: this one has a wide
 variety of types embedded in its variants:
 
 [Listing-6-2]: #Listing-6-2
@@ -210,7 +210,7 @@ This enum has four variants with different types:
 * `Write` includes a single `String`.
 * `ChangeColor` includes three `i32` values.
 
-Defining an enum with variants like the ones in Listing 6-2 is similar to
+Defining an enum with variants like the ones in [Listing 6-2][Listing-6-2] is similar to
 defining different kinds of struct definitions except the enum doesn’t use the
 `struct` keyword and all the variants are grouped together under the `Message`
 type. The following structs could hold the same data that the preceding enum
@@ -228,7 +228,7 @@ struct ChangeColorMessage(i32, i32, i32); // tuple struct
 
 But if we used the different structs, which each have their own type, we
 wouldn’t be able to as easily define a function that could take any of these
-kinds of messages as we could with the `Message` enum defined in Listing 6-2,
+kinds of messages as we could with the `Message` enum defined in [Listing 6-2][Listing-6-2],
 which is a single type.
 
 There is one more similarity between enums and structs: just as we’re able to
@@ -404,3 +404,6 @@ value available. The `match` expression is a control flow construct that does
 just this when used with enums: it will run different code depending on which
 variant of the enum it has, and that code can use the data inside the matching
 value.
+
+[Listing-6-1]: ch06-01-defining-an-enum.html#Listing-6-1
+[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2

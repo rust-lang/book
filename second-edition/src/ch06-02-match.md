@@ -17,7 +17,7 @@ the value will fall into the associated code block to be used during execution.
 Because we just mentioned coins, let’s use them as an example using `match`! We
 can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
-value in cents, as shown here in Listing 6-3:
+value in cents, as shown here in [Listing 6-3][Listing-6-3]:
 
 [Listing-6-3]: #Listing-6-3
 <a name="Listing-6-3"></a>
@@ -48,7 +48,7 @@ the `match` keyword followed by an expression, which in this case is the value
 `coin`. This seems very similar to an expression used with `if`, but there’s a
 big difference: with `if`, the expression needs to return a Boolean value.
 Here, it can be any type. The type of `coin` in this example is the `Coin` enum
-that we defined in Listing 6-3.
+that we defined in [Listing 6-3][Listing-6-3].
 
 Next are the `match` arms. An arm has two parts: a pattern and some code. The
 first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
@@ -59,14 +59,14 @@ When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
 associated with that pattern is executed. If that pattern doesn’t match the
 value, execution continues to the next arm, much like a coin sorting machine.
-We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
+We can have as many arms as we need: in [Listing 6-3][Listing-6-3], our `match` has four arms.
 
 The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
 Curly brackets typically aren’t used if the match arm code is short, as it is
-in Listing 6-3 where each arm just returns a value. If you want to run multiple
+in [Listing 6-3][Listing-6-3] where each arm just returns a value. If you want to run multiple
 lines of code in a match arm, you can use curly brackets. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a `Coin::Penny` but would still return the last value of the block, `1`:
@@ -103,7 +103,7 @@ From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `UsState` value stored
-inside it, which we’ve done here in Listing 6-4:
+inside it, which we’ve done here in [Listing 6-4][Listing-6-4]:
 
 [Listing-6-4]: #Listing-6-4
 <a name="Listing-6-4"></a>
@@ -185,7 +185,7 @@ the function should return the `None` value and not attempt to perform any
 operations.
 
 This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5:
+[Listing 6-5][Listing-6-5]:
 
 [Listing-6-5]: #Listing-6-5
 <a name="Listing-6-5"></a>
@@ -230,7 +230,7 @@ create a new `Some` value with our total `6` inside.
 
 #### Matching `None`
 
-Now let’s consider the second call of `plus_one` in Listing 6-5 where `x` is
+Now let’s consider the second call of `plus_one` in [Listing 6-5][Listing-6-5] where `x` is
 `None`. We enter the `match` and compare to the first arm.
 
 ```rust,ignore
@@ -306,3 +306,7 @@ list before the `_` placeholder.
 
 However, the `match` expression can be a bit wordy in a situation in which we
 only care about *one* of the cases. For this situation, Rust provides `if let`.
+
+[Listing-6-3]: ch06-02-match.html#Listing-6-3
+[Listing-6-4]: ch06-02-match.html#Listing-6-4
+[Listing-6-5]: ch06-02-match.html#Listing-6-5

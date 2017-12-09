@@ -36,7 +36,7 @@ details about iterators: iterators produce a series of values, and we can call
 the `collect` function on an iterator to turn it into a collection, such as a
 vector, containing all the elements the iterator produces.
 
-Use the code in Listing 12-1 to allow your `minigrep` program to read any
+Use the code in [Listing 12-1][Listing-12-1] to allow your `minigrep` program to read any
 command line arguments passed to it and then collect the values into a vector:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -109,7 +109,7 @@ chapter, we’ll ignore it and save only the two arguments we need.
 Printing the value of the vector of arguments illustrated that the program is
 able to access the values specified as command line arguments. Now we need to
 save the values of the two arguments in variables so we can use the values
-throughout the rest of the program. We do that in Listing 12-2:
+throughout the rest of the program. We do that in [Listing 12-2][Listing-12-2]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -158,3 +158,10 @@ saved into the right variables. Later we’ll add some error handling to deal
 with certain potential erroneous situations, such as when the user provides no
 arguments; for now, we’ll ignore that situation and work on adding file reading
 capabilities instead.
+
+[Listing-12-1]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-1
+[Listing-12-1]: ch12-04-testing-the-librarys-functionality.html#Listing-12-1
+[Listing-12-1]: ch12-01-accepting-command-line-arguments.html#Listing-12-1
+[Listing-12-2]: ch12-06-writing-to-stderr-instead-of-stdout.html#Listing-12-2
+[Listing-12-2]: ch12-05-working-with-environment-variables.html#Listing-12-2
+[Listing-12-2]: ch12-01-accepting-command-line-arguments.html#Listing-12-2

@@ -11,7 +11,7 @@ unsigned type for the `size` parameter since a pool with a negative number of
 threads makes no sense. However, a pool with zero threads also makes no sense,
 yet zero is a perfectly valid `u32`. Let’s check that `size` is greater than
 zero before we return a `ThreadPool` instance and panic if we get zero by using
-the `assert!` macro as shown in Listing 20-13:
+the `assert!` macro as shown in [Listing 20-13][Listing-20-13]:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -49,7 +49,7 @@ discussed in Chapter 14. Try running `cargo doc --open` and clicking on the
 
 Instead of adding the use of the `assert!` macro as we’ve done here, we could
 make `new` return a `Result` instead like we did with `Config::new` in the I/O
-project in Listing 12-9, but we’ve decided in this case that trying to create a
+project in [Listing 12-9][Listing-12-9], but we’ve decided in this case that trying to create a
 thread pool without any threads should be an unrecoverable error. If you’re
 feeling ambitious, try to write a version of `new` with this signature to see
 how you feel about both versions:
@@ -79,7 +79,7 @@ the closure. Let’s try using `JoinHandle` too and see what happens. In our
 case, the closures we’re passing to the thread pool will handle the connection
 and not return anything, so `T` will be the unit type `()`.
 
-This won’t compile yet, but let’s consider the code shown in Listing 20-14.
+This won’t compile yet, but let’s consider the code shown in [Listing 20-14][Listing-20-14].
 We’ve changed the definition of `ThreadPool` to hold a vector of
 `thread::JoinHandle<()>` instances, initialized the vector with a capacity of
 `size`, set up a `for` loop that will run some code to create the threads, and
@@ -153,7 +153,7 @@ as a `usize`. If you remember when we defined `new`, we didn’t think too hard
 about what number type made sense, we just chose one. Let’s give it some more
 thought now. Given that `size` is the length of a vector, `usize` makes a lot
 of sense. They even almost share a name! Let’s change the signature of `new`,
-which will get the code in Listing 20-14 to compile:
+which will get the code in [Listing 20-14][Listing-20-14] to compile:
 
 ```rust,ignore
 fn new(size: usize) -> ThreadPool {
@@ -162,7 +162,7 @@ fn new(size: usize) -> ThreadPool {
 If run `cargo check` again, you’ll get a few more warnings, but it should
 succeed.
 
-We left a comment in the `for` loop in Listing 20-14 regarding the creation of
+We left a comment in the `for` loop in [Listing 20-14][Listing-20-14] regarding the creation of
 threads. How do we actually create threads? This is a tough question. What
 should go in these threads? We don’t know what work they need to do at this
 point, since the `execute` method takes the closure and gives it to the pool.
@@ -186,9 +186,9 @@ Let’s make these changes:
    a new `Worker` with that `id`, and store the worker in the vector
 
 If you’re up for a challenge, try implementing these changes on your own before
-taking a look at the code in Listing 20-15.
+taking a look at the code in [Listing 20-15][Listing-20-15].
 
-Ready? Here’s Listing 20-15 with one way to make these modifications:
+Ready? Here’s [Listing 20-15][Listing-20-15] with one way to make these modifications:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -255,3 +255,8 @@ created by spawning a new thread using an empty closure.
 This code compiles and is storing the number of `Worker` instances that we
 specified as an argument to `ThreadPool::new`, but we’re *still* not processing
 the closure that we get in `execute`. Let’s talk about how to do that next.
+
+[Listing-20-13]: ch20-04-storing-threads.html#Listing-20-13
+[Listing-12-9]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-9
+[Listing-20-14]: ch20-04-storing-threads.html#Listing-20-14
+[Listing-20-15]: ch20-04-storing-threads.html#Listing-20-15

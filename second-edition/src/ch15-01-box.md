@@ -36,7 +36,7 @@ know that what you learn here will be applied again in Chapter 17!
 Before we get into a use case for `Box<T>`, let’s get familiar with the syntax
 and how to interact with values stored within a `Box<T>`.
 
-Listing 15-1 shows how to use a box to store an `i32` on the heap:
+[Listing 15-1][Listing-15-1] shows how to use a box to store an `i32` on the heap:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -62,7 +62,7 @@ deallocated. The deallocation happens for both the box (stored on the stack)
 and the data it points to (stored on the heap).
 
 Putting a single value on the heap isn’t very useful, so you won’t use boxes by
-themselves in the way that Listing 15-1 does very often. Having values like a
+themselves in the way that [Listing 15-1][Listing-15-1] does very often. Having values like a
 single `i32` on the stack, where they’re stored by default is more appropriate
 in the majority of cases. Let’s get into a case where boxes allow us to define
 types that we wouldn’t be allowed to if we didn’t have boxes.
@@ -144,7 +144,7 @@ that the reader can use these concepts in more complicated situations. A more
 realistic example would be quite a bit more complicated and obscure why a box
 is useful even more. /Carol -->
 
-Listing 15-2 contains an enum definition for a cons list. Note that this
+[Listing 15-2][Listing-15-2] contains an enum definition for a cons list. Note that this
 won’t compile quite yet because this is type doesn’t have a known size, which
 we’ll demonstrate:
 
@@ -179,7 +179,7 @@ the example; i32 is the default integer type so we chose that. I'm not sure
 what you mean by stable? /Carol-->
 
 Using our cons list type to store the list `1, 2, 3` would look like the code
-in Listing 15-3:
+in [Listing 15-3][Listing-15-3]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -202,7 +202,7 @@ value is another `Cons` value that holds `2` and another `List` value. This
 is one more `Cons` value that holds `3` and a `List` value, which is finally
 `Nil`, the non-recursive variant that signals the end of the list.
 
-If we try to compile the above code, we get the error shown in Listing 15-4:
+If we try to compile the above code, we get the error shown in [Listing 15-4][Listing-15-4]:
 
 [Listing-15-4]: #Listing-15-4
 <a name="Listing-15-4"></a>
@@ -240,7 +240,7 @@ type.
 
 ### Computing the Size of a Non-Recursive Type
 
-Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
+Recall the `Message` enum we defined in [Listing 6-2][Listing-6-2] when we discussed enum
 definitions in Chapter 6:
 
 ```rust
@@ -260,13 +260,13 @@ up being used, the most space a `Message` value will need is the space it would
 take to store the largest of its variants.
 
 Contrast this to what happens when Rust tries to determine how much space a
-recursive type like the `List` enum in Listing 15-2 needs. The compiler starts
+recursive type like the `List` enum in [Listing 15-2][Listing-15-2] needs. The compiler starts
 by looking at the `Cons` variant, which holds a value of type `i32` and a value
 of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
 an `i32` plus the size of a `List`. To figure out how much memory the `List`
 type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
-`List`, and this continues infinitely, as shown in Figure 15-5.
+`List`, and this continues infinitely, as shown in [Figure 15-5][Figure-15-5].
 
 [Figure-15-5]: #Figure-15-5
 <a name="Figure-15-5"></a>
@@ -282,7 +282,7 @@ variant. The `Cons` variant holds a value of type `i32` and a value of type
 ### Using `Box<T>` to Get a Recursive Type with a Known Size
 
 Rust can’t figure out how much space to allocate for recursively defined types,
-so the compiler gives the error in Listing 15-4. The error does include this
+so the compiler gives the error in [Listing 15-4][Listing-15-4]. The error does include this
 helpful suggestion:
 
 ```text
@@ -305,8 +305,8 @@ created by lists “holding” other lists, but the way this concept is implemen
 is now more like the items being next to one another rather than inside one
 another.
 
-We can change the definition of the `List` enum from Listing 15-2 and the usage
-of the `List` from Listing 15-3 to the code in Listing 15-6, which will compile:
+We can change the definition of the `List` enum from [Listing 15-2][Listing-15-2] and the usage
+of the `List` from [Listing 15-3][Listing-15-3] to the code in Listing 15-6, which will compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -337,7 +337,7 @@ box’s pointer data. The `Nil` variant stores no values, so it needs less space
 than the `Cons` variant. We now know that any `List` value will take up the
 size of an `i32` plus the size of a box’s pointer data. By using a box, we’ve
 broken the infinite, recursive chain so the compiler is able to figure out the
-size it needs to store a `List` value. Figure 15-7 shows what the `Cons`
+size it needs to store a `List` value. [Figure 15-7][Figure-15-7] shows what the `Cons`
 variant looks like now:
 
 [Figure-15-7]: #Figure-15-7
@@ -374,3 +374,21 @@ both? I'm not sure it's clear -->
 getting into these traits since they don't make much sense out of context, but
 they're more important to understand before explaining the more complicated
 smart pointers /Carol -->
+
+[Listing-15-1]: ch15-02-deref.html#Listing-15-1
+[Listing-15-1]: ch15-01-box.html#Listing-15-1
+[Listing-15-1]: ch15-03-drop.html#Listing-15-1
+[Listing-15-2]: ch15-06-reference-cycles.html#Listing-15-2
+[Listing-15-2]: ch15-04-rc.html#Listing-15-2
+[Listing-15-2]: ch15-05-interior-mutability.html#Listing-15-2
+[Listing-15-2]: ch15-01-box.html#Listing-15-2
+[Listing-15-3]: ch15-06-reference-cycles.html#Listing-15-3
+[Listing-15-3]: ch15-01-box.html#Listing-15-3
+[Listing-15-4]: ch15-01-box.html#Listing-15-4
+[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2
+[Listing-15-6]: ch15-01-box.html#Listing-15-6
+[Figure-15-5]: ch15-01-box.html#Figure-15-5
+[Figure-15-5]: ch15-01-box.html#Figure-15-5
+[Figure-15-5]: ch15-01-box.html#Figure-15-5
+[Figure-15-7]: ch15-01-box.html#Figure-15-7
+[Figure-15-7]: ch15-01-box.html#Figure-15-7
