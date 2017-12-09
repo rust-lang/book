@@ -155,7 +155,7 @@ Applications that use our library will be expected to provide the actual
 mechanism for sending the messages: the application could choose to put a
 message in the application, send an email, send a text message, or something
 else. Our library doesn’t need to know about that detail; all it needs is
-something that implements a trait we’ll provide called `Messenger`. [Listing 15-23][Listing-15-23]
+something that implements a trait we’ll provide called `Messenger`. Listing 15-23
 shows our library code:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -219,7 +219,7 @@ text message when we call `send`, will only keep track of the messages it’s
 told to send. We can create a new instance of the mock object, create a
 `LimitTracker` that uses the mock object, call the `set_value` method on
 `LimitTracker`, then check that the mock object has the messages we expect.
-[Listing 15-24][Listing-15-24] shows an attempt of implementing a mock object to do just that,
+Listing 15-24 shows an attempt of implementing a mock object to do just that,
 but that the borrow checker won’t allow:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -301,7 +301,7 @@ definition (feel free to try and see what error message you get).
 
 This is where interior mutability can help! We’re going to store the
 `sent_messages` within a `RefCell`, and then the `send` message will be able to
-modify `sent_messages` to store the messages we’ve seen. [Listing 15-25][Listing-15-25] shows
+modify `sent_messages` to store the messages we’ve seen. Listing 15-25 shows
 what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -385,8 +385,8 @@ mutable borrow at any point in time.
 
 If we try to violate these rules, rather than getting a compiler error like we
 would with references, the implementation of `RefCell<T>` will `panic!` at
-runtime. [Listing 15-26][Listing-15-26] shows a modification to the implementation of `send`
-from [Listing 15-25][Listing-15-25] where we’re deliberately trying to create two mutable
+runtime. Listing 15-26 shows a modification to the implementation of `send`
+from Listing 15-25 where we’re deliberately trying to create two mutable
 borrows active for the same scope in order to illustrate that `RefCell<T>`
 prevents us from doing this at runtime:
 
@@ -447,11 +447,11 @@ then we can get a value that can have multiple owners *and* that we can mutate!
 <!-- maybe just recap on why we'd want that? -->
 <!-- done, below /Carol -->
 
-For example, recall the cons list example from [Listing 15-13][Listing-15-13] where we used
+For example, recall the cons list example from Listing 15-13 where we used
 `Rc<T>` to let us have multiple lists share ownership of another list. Because
 `Rc<T>` only holds immutable values, we aren’t able to change any of the values
 in the list once we’ve created them. Let’s add in `RefCell<T>` to get the
-ability to change the values in the lists. [Listing 15-27][Listing-15-27] shows that by using a
+ability to change the values in the lists. Listing 15-27 shows that by using a
 `RefCell<T>` in the `Cons` definition, we’re allowed to modify the value stored
 in all the lists:
 
@@ -502,7 +502,7 @@ follow the final sentence above -->
 <!-- Of the inner value, I've tried to clarify /Carol -->
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and
-`c`, they can both refer to `a`, the same as we did in [Listing 15-13][Listing-15-13].
+`c`, they can both refer to `a`, the same as we did in Listing 15-13.
 
 Once we have the lists in `a`, `b`, and `c` created, we add 10 to the value in
 `value`. We do this by calling `borrow_mut` on `value`, which uses the
@@ -533,10 +533,3 @@ the inner value, the value is copied in and out of the `Cell<T>`. There’s also
 and we’ll be discussing its use in the next chapter on concurrency. Check out
 the standard library docs for more details on the differences between these
 types.
-
-[Listing-15-23]: ch15-05-interior-mutability.html#Listing-15-23
-[Listing-15-24]: ch15-05-interior-mutability.html#Listing-15-24
-[Listing-15-25]: ch15-05-interior-mutability.html#Listing-15-25
-[Listing-15-26]: ch15-05-interior-mutability.html#Listing-15-26
-[Listing-15-13]: ch15-02-deref.html#Listing-15-13
-[Listing-15-27]: ch15-05-interior-mutability.html#Listing-15-27

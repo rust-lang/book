@@ -31,7 +31,7 @@ function return value is gone. Second, note that we pass `&s1` into
 `String`.
 
 These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. [Figure 4-5][Figure-4-5] shows a diagram.
+without taking ownership of it. Figure 4-5 shows a diagram.
 
 [Figure-4-5]: #Figure-4-5
 <a name="Figure-4-5"></a>
@@ -84,7 +84,7 @@ if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.
 
 So what happens if we try to modify something we’re borrowing? Try the code in
-[Listing 4-4][Listing-4-4]. Spoiler alert: it doesn’t work!
+Listing 4-4. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -122,7 +122,7 @@ allowed to modify something we have a reference to.
 
 ### Mutable References
 
-We can fix the error in the code from [Listing 4-4][Listing-4-4] with just a small tweak:
+We can fix the error in the code from Listing 4-4 with just a small tweak:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -329,8 +329,3 @@ Let’s recap what we’ve discussed about references:
 2. References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.
-
-[Listing-4-4]: ch04-02-references-and-borrowing.html#Listing-4-4
-[Figure-4-5]: ch04-02-references-and-borrowing.html#Figure-4-5
-[Figure-4-5]: ch04-02-references-and-borrowing.html#Figure-4-5
-[Figure-4-5]: ch04-02-references-and-borrowing.html#Figure-4-5

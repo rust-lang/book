@@ -2,7 +2,7 @@
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
-here in [Listing 7-7][Listing-7-7]:
+here in Listing 7-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -271,5 +271,3 @@ present a tidy public API to your library users.
 Next, we’ll look at some collection data structures in the standard library
 that you can use in your nice, neat code!
 
-
-[Listing-7-7]: ch07-03-importing-names-with-use.html#Listing-7-7

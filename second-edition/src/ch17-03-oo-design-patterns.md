@@ -31,7 +31,7 @@ Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
 should stay an unpublished draft.
 
-[Listing 17-11][Listing-17-11] shows this workflow in code form. This is an example usage of the
+Listing 17-11 shows this workflow in code form. This is an example usage of the
 API we’re going to implement in a library crate named `blog`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -94,7 +94,7 @@ reviewed.
 Let’s get started on the implementation of the library! We know we need a
 public `Post` struct that holds some content, so let’s start with the
 definition of the struct and an associated public `new` function to create an
-instance of `Post`, as shown in [Listing 17-12][Listing-17-12]. We’ll also make a private
+instance of `Post`, as shown in Listing 17-12. We’ll also make a private
 `State` trait. Then `Post` will hold a trait object of `Box<State>` inside an
 `Option` in a private field named `state`. We’ll see why the `Option` is
 necessary in a bit.
@@ -145,12 +145,12 @@ a `Post` in any other state!
 ### Storing the Text of the Post Content
 
 In the `Post::new` function, we set the `content` field to a new, empty
-`String`. [Listing 17-11][Listing-17-11] showed that we want to be able to call a method named
+`String`. Listing 17-11 showed that we want to be able to call a method named
 `add_text` and pass it a `&str` that’s then added to the text content of the
 blog post. We implement this as a method rather than exposing the `content`
 field as `pub`. This means we can implement a method later that will control
 how the `content` field’s data is read. The `add_text` method is pretty
-straightforward, so let’s add the implementation in [Listing 17-13][Listing-17-13] to the `impl
+straightforward, so let’s add the implementation in Listing 17-13 to the `impl
 Post` block:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -185,12 +185,12 @@ part of the state pattern. The `add_text` method doesn’t interact with the
 
 Even after we’ve called `add_text` and added some content to our post, we still
 want the `content` method to return an empty string slice since the post is
-still in the draft state, as shown on line 8 of [Listing 17-11][Listing-17-11]. For now, let’s
+still in the draft state, as shown on line 8 of Listing 17-11. For now, let’s
 implement the `content` method with the simplest thing that will fulfill this
 requirement: always returning an empty string slice. We’re going to change this
 later once we implement the ability to change a post’s state so it can be
 published. So far, though, posts can only be in the draft state, so the post
-content should always be empty. [Listing 17-14][Listing-17-14] shows this placeholder
+content should always be empty. Listing 17-14 shows this placeholder
 implementation:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -214,7 +214,7 @@ impl Post {
 <span class="caption">Listing 17-14: Adding a placeholder implementation for
 the `content` method on `Post` that always returns an empty string slice</span>
 
-With this added `content` method, everything in [Listing 17-11][Listing-17-11] up to line 8
+With this added `content` method, everything in Listing 17-11 up to line 8
 works as we intend.
 
 ### Requesting a Review of the Post Changes its State
@@ -224,7 +224,7 @@ should change its state from `Draft` to `PendingReview`. We want to give `Post`
 a public method named `request_review` that will take a mutable reference to
 `self`. Then we’re going to call an internal `request_review` method on the
 current state of `Post`, and this second `request_review` method will consume
-the current state and return a new state. [Listing 17-15][Listing-17-15] shows this code:
+the current state and return a new state. Listing 17-15 shows this code:
 
 <!-- NOTE TO DE/AU: We might want to move this explanation to after the code if
 you want to add wingdings, we can see once we transfer it to Word -->
@@ -315,13 +315,13 @@ state is responsible for its own rules.
 We’re going to leave the `content` method on `Post` as it is, returning an
 empty string slice. We can now have a `Post` in the `PendingReview` state as
 well as the `Draft` state, but we want the same behavior in the `PendingReview`
-state. [Listing 17-11][Listing-17-11] now works up until line 11!
+state. Listing 17-11 now works up until line 11!
 
 ### Adding the `approve` Method that Changes the Behavior of `content`
 
 The `approve` method will be similar to the `request_review` method: it will
 set `state` to the value that the current state says it should have when that
-state is approved, shown in [Listing 17-16][Listing-17-16].
+state is approved, shown in Listing 17-16.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -402,7 +402,7 @@ post should stay in the `Published` state in those cases.
 
 Now to update the `content` method on `Post`: if the state is `Published` we
 want to return the value in the post’s `content` field; otherwise we want to
-return an empty string slice, as shown in [Listing 17-17][Listing-17-17]:
+return an empty string slice, as shown in Listing 17-17:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -453,7 +453,7 @@ will ultimately be called on the type that implements the `State` trait.
 
 That means we need to add `content` to the `State` trait definition, and that’s
 where we’ll put the logic for what content to return depending on which state
-we have, as shown in [Listing 17-18][Listing-17-18]:
+we have, as shown in Listing 17-18:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -500,7 +500,7 @@ string? That's pretty awesome coding, maybe give it some ceremony here. Does
 all of 17-11 now work? -->
 <!-- Yep! Good point, so added! /Carol -->
 
-And we’re done-- all of [Listing 17-11][Listing-17-11] now works! We’ve implemented the state
+And we’re done-- all of Listing 17-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic around the rules
 lives in the state objects rather than scattered throughout `Post`.
 
@@ -569,7 +569,7 @@ that outside code has no knowledge of them, we’re going to encode the states
 into different types. Like this, Rust’s type checking system will make attempts
 to use draft posts where only published posts are allowed into a compiler error.
 
-Let’s consider the first part of `main` from [Listing 17-11][Listing-17-11]:
+Let’s consider the first part of `main` from Listing 17-11:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -588,7 +588,7 @@ and the ability to add text to the post’s content. But instead of having a
 that draft posts don’t have the `content` method at all. That way, if we try to
 get a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. This will make it impossible for us to accidentally display
-draft post content in production, since that code won’t even compile. [Listing 17-19][Listing-17-19]
+draft post content in production, since that code won’t even compile. Listing 17-19
 shows the definition of a `Post` struct, a `DraftPost` struct, and
 methods on each:
 
@@ -653,7 +653,7 @@ in the pending review state should still not display any content. Let’s
 implement these constraints by adding another struct, `PendingReviewPost`,
 defining the `request_review` method on `DraftPost` to return a
 `PendingReviewPost`, and defining an `approve` method on `PendingReviewPost` to
-return a `Post` as shown in [Listing 17-20][Listing-17-20]:
+return a `Post` as shown in Listing 17-20:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -715,7 +715,7 @@ shadowing assignments to save the returned instances. We also can’t have the
 assertions about the draft and pending review post’s contents being empty
 strings, nor do we need them: we can’t compile code that tries to use the
 content of posts in those states any longer. The updated code in `main` is
-shown in [Listing 17-21][Listing-17-21]:
+shown in Listing 17-21:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -779,15 +779,3 @@ is an available option.
 Next, let’s look at another feature of Rust that enables lots of flexibility:
 patterns. We’ve looked at them briefly throughout the book, but haven’t seen
 everything they’re capable of yet. Let’s go!
-
-[Listing-17-11]: ch17-03-oo-design-patterns.html#Listing-17-11
-[Listing-17-12]: ch17-03-oo-design-patterns.html#Listing-17-12
-[Listing-17-13]: ch17-03-oo-design-patterns.html#Listing-17-13
-[Listing-17-14]: ch17-03-oo-design-patterns.html#Listing-17-14
-[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
-[Listing-17-16]: ch17-03-oo-design-patterns.html#Listing-17-16
-[Listing-17-17]: ch17-03-oo-design-patterns.html#Listing-17-17
-[Listing-17-18]: ch17-03-oo-design-patterns.html#Listing-17-18
-[Listing-17-19]: ch17-03-oo-design-patterns.html#Listing-17-19
-[Listing-17-20]: ch17-03-oo-design-patterns.html#Listing-17-20
-[Listing-17-21]: ch17-03-oo-design-patterns.html#Listing-17-21

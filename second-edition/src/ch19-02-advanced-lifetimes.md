@@ -13,7 +13,7 @@ Imagine that we want to write a parser. To do this, we’ll have a structure tha
 holds a reference to the string that we’re parsing, and we’ll call that struct
 `Context`. We’ll write a parser that will parse this string and return success
 or failure. The parser will need to borrow the context to do the parsing.
-Implementing this would look like the code in [Listing 19-12][Listing-19-12], which won’t
+Implementing this would look like the code in Listing 19-12, which won’t
 compile because we’ve left off the lifetime annotations for now:
 
 [Listing-19-12]: #Listing-19-12
@@ -50,7 +50,7 @@ simplifying the example in order to concentrate on the lifetimes involved.
 
 So how do we fill in the lifetime parameters for the string slice in `Context`
 and the reference to the `Context` in `Parser`? The most straightforward thing
-to do is to use the same lifetime everywhere, as shown in [Listing 19-13][Listing-19-13]:
+to do is to use the same lifetime everywhere, as shown in Listing 19-13:
 
 [Listing-19-13]: #Listing-19-13
 <a name="Listing-19-13"></a>
@@ -72,7 +72,7 @@ impl<'a> Parser<'a> {
 <span class="caption">Listing 19-13: Annotating all references in `Context` and
 `Parser` with the same lifetime parameter</span>
 
-This compiles fine. Next, in [Listing 19-14][Listing-19-14], let’s write a function that takes
+This compiles fine. Next, in Listing 19-14, let’s write a function that takes
 an instance of `Context`, uses a `Parser` to parse that context, and returns
 what `parse` returns. This won’t quite work:
 
@@ -140,7 +140,7 @@ all the references in this code to always be valid. Both the `Parser` we’re
 creating and the `context` parameter go out of scope at the end of the
 function, though (since `parse_context` takes ownership of `context`).
 
-Let’s look at the definitions in [Listing 19-13][Listing-19-13] again, especially the signature
+Let’s look at the definitions in Listing 19-13 again, especially the signature
 of the `parse` method:
 
 ```rust,ignore
@@ -190,7 +190,7 @@ return value of `parse_context` is tied to the lifetime of the string slice in
 `Context`.
 
 We could try only giving `Parser` and `Context` different lifetime parameters
-as shown in [Listing 19-15][Listing-19-15]. We’ve chosen the lifetime parameter names `'s` and
+as shown in Listing 19-15. We’ve chosen the lifetime parameter names `'s` and
 `'c` here to be clearer about which lifetime goes with the string slice in
 `Context` and which goes with the reference to `Context` in `Parser`. Note that
 this won’t completely fix the problem, but it’s a start and we’ll look at why
@@ -221,7 +221,7 @@ fn parse_context(context: Context) -> Result<(), &str> {
 for the references to the string slice and to `Context`</span>
 
 We’ve annotated the lifetimes of the references in all the same places that we
-annotated them in [Listing 19-13][Listing-19-13], but used different parameters depending on
+annotated them in Listing 19-13, but used different parameters depending on
 whether the reference goes with the string slice or with `Context`. We’ve also
 added an annotation to the string slice part of the return value of `parse` to
 indicate that it goes with the lifetime of the string slice in `Context`.
@@ -294,7 +294,7 @@ also add lifetime parameters as constraints on generic types, which are called
 references. Recall the `RefCell<T>` type from Chapter 15: its `borrow` and
 `borrow_mut` methods return the types `Ref` and `RefMut`, respectively. These
 types are wrappers over references that keep track of the borrowing rules at
-runtime. The definition of the `Ref` struct is shown in [Listing 19-16][Listing-19-16], without
+runtime. The definition of the `Ref` struct is shown in Listing 19-16, without
 lifetime bounds for now:
 
 [Listing-19-16]: #Listing-19-16
@@ -338,7 +338,7 @@ consider adding an explicit lifetime bound `T: 'a` so that the reference type
 `&'a T` does not outlive the data it points at.
 ```
 
-[Listing 19-17][Listing-19-17] shows how to apply this advice by specifying the lifetime bound
+Listing 19-17 shows how to apply this advice by specifying the lifetime bound
 when we declare the generic type `T`. This code now compiles because the `T:
 'a` syntax specifies that `T` can be any type, but if it contains any
 references, the references must live at least as long as `'a`:
@@ -354,7 +354,7 @@ struct Ref<'a, T: 'a>(&'a T);
 that any references in `T` live at least as long as `'a`</span>
 
 We could choose to solve this in a different way, shown in the definition of a
-`StaticRef` struct in [Listing 19-18][Listing-19-18], by adding the `'static` lifetime bound on
+`StaticRef` struct in Listing 19-18, by adding the `'static` lifetime bound on
 `T`. This means if `T` contains any references, they must have the `'static`
 lifetime:
 
@@ -384,7 +384,7 @@ refers to.
 In Chapter 17, we learned about trait objects that consist of putting a trait
 behind a reference in order to use dynamic dispatch. However, we didn’t discuss
 what happens if the type implementing the trait used in the trait object has a
-lifetime. Consider [Listing 19-19][Listing-19-19], where we have a trait `Foo` and a struct
+lifetime. Consider Listing 19-19, where we have a trait `Foo` and a struct
 `Bar` that holds a reference (and thus has a lifetime parameter) that
 implements trait `Foo`, and we want to use an instance of `Bar` as the trait
 object `Box<Foo>`:
@@ -426,12 +426,3 @@ implementor of the `Foo` trait that has any references inside must have the
 lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
-
-[Listing-19-12]: ch19-02-advanced-lifetimes.html#Listing-19-12
-[Listing-19-13]: ch19-02-advanced-lifetimes.html#Listing-19-13
-[Listing-19-14]: ch19-02-advanced-lifetimes.html#Listing-19-14
-[Listing-19-15]: ch19-02-advanced-lifetimes.html#Listing-19-15
-[Listing-19-16]: ch19-02-advanced-lifetimes.html#Listing-19-16
-[Listing-19-17]: ch19-02-advanced-lifetimes.html#Listing-19-17
-[Listing-19-18]: ch19-02-advanced-lifetimes.html#Listing-19-18
-[Listing-19-19]: ch19-02-advanced-lifetimes.html#Listing-19-19

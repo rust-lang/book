@@ -13,9 +13,9 @@ where the data types of the parameters and return value go. In this way, the
 code we write can be more flexible and provide more functionality to callers of
 our function, while not introducing code duplication.
 
-Continuing with our `largest` function, [Listing 10-4][Listing-10-4] shows two functions
+Continuing with our `largest` function, Listing 10-4 shows two functions
 providing the same functionality to find the largest value in a slice. The
-first function is the one we extracted in [Listing 10-3][Listing-10-3] that finds the largest
+first function is the one we extracted in Listing 10-3 that finds the largest
 `i32` in a slice. The second function finds the largest `char` in a slice:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -97,7 +97,7 @@ We would read this as: the function `largest` is generic over some type `T`. It
 has one parameter named `list`, and the type of `list` is a slice of values of
 type `T`. The `largest` function will return a value of the same type `T`.
 
-[Listing 10-5][Listing-10-5] shows the unified `largest` function definition using the generic
+Listing 10-5 shows the unified `largest` function definition using the generic
 data type in its signature, and shows how we’ll be able to call `largest` with
 either a slice of `i32` values or `char` values. Note that this code won’t
 compile yet!
@@ -168,7 +168,7 @@ what you think. /Carol -->
 ### Using Generic Data Types in Struct Definitions
 
 We can define structs to use a generic type parameter in one or more of the
-struct’s fields with the `<>` syntax too. [Listing 10-6][Listing-10-6] shows the definition and
+struct’s fields with the `<>` syntax too. Listing 10-6 shows the definition and
 use of a `Point` struct that can hold `x` and `y` coordinate values of any type:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -200,7 +200,7 @@ Note that because we’ve only used one generic type in the definition of
 `Point`, what we’re saying is that the `Point` struct is generic over some type
 `T`, and the fields `x` and `y` are *both* that same type, whatever it ends up
 being. If we try to create an instance of a `Point` that has values of
-different types, as in [Listing 10-7][Listing-10-7], our code won’t compile:
+different types, as in Listing 10-7, our code won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -309,7 +309,7 @@ The `Result` enum is generic over two types, `T` and `E`. `Result` has two
 variants: `Ok`, which holds a value of type `T`, and `Err`, which holds a value
 of type `E`. This definition makes it convenient to use the `Result` enum
 anywhere we have an operation that might succeed (and return a value of some
-type `T`) or fail (and return an error of some type `E`). Recall [Listing 9-2][Listing-9-2]
+type `T`) or fail (and return an error of some type `E`). Recall Listing 9-2
 when we opened a file: in that case, `T` was filled in with the type
 `std::fs::File` when the file was opened successfully and `E` was filled in
 with the type `std::io::Error` when there were problems opening the file.
@@ -322,8 +322,8 @@ definitions to introduce generic types instead.
 ### Using Generic Data Types in Method Definitions
 
 Like we did in Chapter 5, we can implement methods on structs and enums that
-have generic types in their definitions. [Listing 10-9][Listing-10-9] shows the `Point<T>`
-struct we defined in [Listing 10-6][Listing-10-6]. We’ve then defined a method named `x` on
+have generic types in their definitions. Listing 10-9 shows the `Point<T>`
+struct we defined in Listing 10-6. We’ve then defined a method named `x` on
 `Point<T>` that returns a reference to the data in the field `x`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -359,7 +359,7 @@ type `Point<T>`. Declaring `T` as a generic type after the `impl` is how Rust
 knows the type in the angle brackets in `Point` is a generic type rather than a
 concrete type. For example, we could choose to implement methods on
 `Point<f32>` instances rather than `Point` instances with any generic type.
-[Listing 10-10][Listing-10-10] shows that we don’t declare anything after the `impl` in this
+Listing 10-10 shows that we don’t declare anything after the `impl` in this
 case, since we’re using a concrete type, `f32`:
 
 [Listing-10-10]: #Listing-10-10
@@ -389,8 +389,8 @@ point is from the point of coordinates (0.0, 0.0) and uses mathematical
 operations which are only available for floating-point types.
 
 Generic type parameters in a struct definition aren’t always the same generic
-type parameters you want to use in that struct’s method signatures. [Listing 10-11][Listing-10-11]
-defines a method `mixup` on the `Point<T, U>` struct from [Listing 10-8][Listing-10-8].
+type parameters you want to use in that struct’s method signatures. Listing 10-11
+defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
 The method takes another `Point` as a parameter, which might have different
 types than the `self` `Point` that we’re calling `mixup` on. The method creates
 a new `Point` instance that has the `x` value from the `self` `Point` (which is
@@ -453,7 +453,7 @@ at compile time. Monomorphization is the process of turning generic code into
 specific code with the concrete types that are actually used filled in.
 
 What the compiler does is the opposite of the steps that we performed to create
-the generic function in [Listing 10-5][Listing-10-5]. The compiler looks at all the places that
+the generic function in Listing 10-5. The compiler looks at all the places that
 generic code is called and generates code for the concrete types that the
 generic code is called with.
 
@@ -498,14 +498,3 @@ into code that specifies the type in each instance. That means we pay no
 runtime cost for using generics; when the code runs, it performs just like it
 would if we had duplicated each particular definition by hand. The process of
 monomorphization is what makes Rust’s generics extremely efficient at runtime.
-
-[Listing-10-4]: ch10-01-syntax.html#Listing-10-4
-[Listing-10-3]: ch10-00-generics.html#Listing-10-3
-[Listing-10-5]: ch10-01-syntax.html#Listing-10-5
-[Listing-10-6]: ch10-01-syntax.html#Listing-10-6
-[Listing-10-7]: ch10-01-syntax.html#Listing-10-7
-[Listing-10-8]: ch10-01-syntax.html#Listing-10-8
-[Listing-9-2]: ch09-01-unrecoverable-errors-with-panic.html#Listing-9-2
-[Listing-10-9]: ch10-01-syntax.html#Listing-10-9
-[Listing-10-10]: ch10-01-syntax.html#Listing-10-10
-[Listing-10-11]: ch10-01-syntax.html#Listing-10-11

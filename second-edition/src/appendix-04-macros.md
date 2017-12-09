@@ -186,7 +186,7 @@ function associated with their type. The default implementation will print
 which this trait has been defined.
 
 In other words, we’re going to write a crate that enables another programmer to
-write code that looks like [Listing A4-1][Listing-A4-1] using our crate:
+write code that looks like Listing A4-1 using our crate:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -301,10 +301,10 @@ syn = "0.11.11"
 quote = "0.3.15"
 ```
 
-To start defining the procedural macro, place the code from [Listing A4-2][Listing-A4-2] in
+To start defining the procedural macro, place the code from Listing A4-2 in
 *src/lib.rs* for the `hello-world-derive` crate. Note that this won’t compile
 until we add a definition for the `impl_hello_world` function. We’ve split the
-code into functions in this way because the code in [Listing A4-2][Listing-A4-2] will be the
+code into functions in this way because the code in Listing A4-2 will be the
 same for almost every procedural macro crate; it’s code that makes writing a
 procedural macro more convenient. What you choose to do in the place where the
 `impl_hello_world` function is called will be different and depend on the
@@ -364,7 +364,7 @@ macros follow.
 The first thing this function does is convert the `input` from a `TokenStream`
 to a `String` by calling `to_string`. This `String` is a string representation
 of the Rust code for which we are deriving `HelloWorld`. In the example in
-[Listing A4-1][Listing-A4-1], `s` will have the `String` value `struct Pancakes;` because
+Listing A4-1, `s` will have the `String` value `struct Pancakes;` because
 that’s the Rust code we added the `#[derive(HelloWorld)]` annotation to.
 
 At the moment, the only thing you can do with a `TokenStream` is convert it to
@@ -435,7 +435,7 @@ fn impl_hello_world(ast: &syn::DeriveInput) -> quote::Tokens {
 ```
 
 We are able to get an `Ident` struct instance containing the name (identifier)
-of the annotated type using `ast.ident`. With the code from [Listing A4-1][Listing-A4-1],
+of the annotated type using `ast.ident`. With the code from Listing A4-1,
 `name` will be `Ident("Pancakes")`.
 
 The `quote!` macro from the `quote` crate lets us write up the Rust code that
@@ -461,7 +461,7 @@ we would want to print out literally, and `stringify!` also saves an allocation
 by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello-world`
-and `hello-world-derive`. Let’s hook these crates up to the code in [Listing A4-1][Listing-A4-1]
+and `hello-world-derive`. Let’s hook these crates up to the code in Listing A4-1
 to see it in action! Create a new binary project in your `projects`
 directory with `cargo new --bin pancakes`. We need to add both `hello-world`
 and `hello-world-derive` as dependencies in the `pancakes` crate’s
@@ -475,7 +475,7 @@ hello_world = { path = "../hello-world" }
 hello_world_derive = { path = "../hello-world/hello-world-derive" }
 ```
 
-Put the code from [Listing A4-1][Listing-A4-1] into *src/main.rs*, and executing `cargo run`
+Put the code from Listing A4-1 into *src/main.rs*, and executing `cargo run`
 should print `Hello, World! My name is Pancakes`! The implementation of the
 `HelloWorld` trait from the procedural macro was included without the
 `pancakes` crate needing to implement it; the `#[derive(HelloWorld)]` took care
@@ -488,6 +488,3 @@ better declarative macro system will be used with the `macro` keyword, and
 we’ll add more types of procedural macros, for more powerful tasks than only
 `derive`. These systems are still under development at the time of publication;
 please consult the online Rust documentation for the latest information.
-
-[Listing-A4-1]: appendix-04-macros.html#Listing-A4-1
-[Listing-A4-2]: appendix-04-macros.html#Listing-A4-2

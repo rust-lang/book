@@ -92,7 +92,7 @@ pub fn add_one(x: i32) -> i32 {
 
 Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
 the file to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in [Listing 14-11][Listing-14-11]:
+`main` function to call the `add_one` function, as in Listing 14-11:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -309,5 +309,3 @@ As your project grows, consider using a workspace: smaller components are
 easier to understand individually than one big blob of code. Keeping the crates
 in a workspace can make coordination among them easier if they work together
 and are often changed at the same time.
-
-[Listing-14-11]: ch14-03-cargo-workspaces.html#Listing-14-11
