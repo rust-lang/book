@@ -39,7 +39,7 @@ Named variables are irrefutable patterns that match any value, which we have
 used many times before. There is a complication, however, when used in `match`
 expressions. Because `match` starts a new scope, variables declared as part of
 a pattern inside the `match` expression will shadow those with the same name
-outside the `match` construct---as is the case with all variables. In Listing 18-11,
+outside the `match` construct---as is the case with all variables. In [Listing 18-11][Listing-18-11],
 we declare a variable named `x` with the value `Some(5)` and a variable
 `y` with the value `10`. We then create a `match` expression on the value `x`.
 Take a look at the patterns in the match arms and `println!` at the end, and
@@ -196,7 +196,7 @@ so we've added an enums section. /Carol -->
 
 #### Destructuring Structs
 
-Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can
+[Listing 18-12][Listing-18-12] shows a `Point` struct with two fields, `x` and `y`, that we can
 break apart using a pattern with a `let` statement:
 
 <span class="filename">Filename: src/main.rs
@@ -240,8 +240,8 @@ variables came from which fields. Because having variable names match the
 fields is common, and because writing `let Point { x: x, y: y } = p;` contains
 a lot of duplication, there’s a shorthand for patterns that match struct
 fields: you only need to list the name of the struct field, and the variables
-created from the pattern will have the same names. Listing 18-13 shows code
-that behaves in the same way as the code in Listing 18-12, but the variables
+created from the pattern will have the same names. [Listing 18-13][Listing-18-13] shows code
+that behaves in the same way as the code in [Listing 18-12][Listing-18-12], but the variables
 created in the `let` pattern are `x` and `y` instead of `a` and `b`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -276,7 +276,7 @@ rather than creating variables for all of the fields. This allows us to test
 some of the fields for particular values while creating variables to
 destructure the other fields.
 
-Listing 18-14 shows a `match` statement that separates `Point` values into
+[Listing 18-14][Listing-18-14] shows a `match` statement that separates `Point` values into
 three cases: points that lie directly on the `x` axis (which is true when `y =
 0`), on the `y` axis (`x = 0`), or neither:
 
@@ -322,12 +322,12 @@ containing a 0, so this will print `On the y axis at 7`.
 
 #### Destructuring Enums
 
-We’ve destructured enums before in this book, like in Listing 6-5 in Chapter 6
+We’ve destructured enums before in this book, like in [Listing 6-5][Listing-6-5] in Chapter 6
 when we destructured an `Option<i32>`. One detail we haven’t mentioned
 explicitly is that the pattern to destructure an enum should correspond to the
 way the data stored within the enum is defined. For example, let’s take the
-`Message` enum from Listing 6-2 and write a `match` with patterns that will
-destructure each inner value in Listing 18-15:
+`Message` enum from [Listing 6-2][Listing-6-2] and write a `match` with patterns that will
+destructure each inner value in [Listing 18-15][Listing-18-15]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -407,7 +407,7 @@ This is especially useful in closures where we have iterators that iterate over
 references, but we want to use the values in the closure rather than the
 references.
 
-The example in Listing 18-16 iterates over references to `Point` instances in a
+The example in [Listing 18-16][Listing-18-16] iterates over references to `Point` instances in a
 vector, and destructures both the reference and the struct so we can perform
 calculations on the `x` and `y` values easily:
 
@@ -501,7 +501,7 @@ of a value. Let’s explore how and why to do each of these.
 We’ve used the underscore as a wildcard pattern that will match any value but
 not bind to the value. While the underscore pattern is especially useful as the
 last arm in a `match` expression, we can use it in any pattern, including
-function parameters, as shown in Listing 18-17:
+function parameters, as shown in [Listing 18-17][Listing-18-17]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -544,7 +544,7 @@ motivation /Carol -->
 
 We can also use `_` inside of another pattern to ignore just part of a value,
 when we only want to test for part of a value but have no use for the other
-parts in the corresponding code we want to run. Listing 18-18 shows code
+parts in the corresponding code we want to run. [Listing 18-18][Listing-18-18] shows code
 responsible for giving a setting a value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting, but can unset the setting and can give the setting a value if it is
@@ -589,7 +589,7 @@ we're saying? -->
 <!-- Yes /Carol -->
 
 We can also use underscores in multiple places within one pattern to ignore
-particular values, as shown in Listing 18-19 where we’re ignoring the second
+particular values, as shown in [Listing 18-19][Listing-18-19] where we’re ignoring the second
 and fourth values in a tuple of five items:
 
 [Listing-18-19]: #Listing-18-19
@@ -617,7 +617,7 @@ warning, since that could be a bug. Sometimes, though, it’s useful to create a
 variable you won’t use yet, like if you’re prototyping or just starting a
 project. In this situation you’ll want to tell Rust not to warn you about the
 unused variable, which you can do by starting the name of the variable with an
-underscore. In Listing 18-20 we create two unused variables, but when we run
+underscore. In [Listing 18-20][Listing-18-20] we create two unused variables, but when we run
 this code we should only get a warning about one of them.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -641,7 +641,7 @@ the variable preceded by the underscore.
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore. Something like `_x` still binds the value to
 the variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 18-21 will provide us with an error.
+distinction matters, [Listing 18-21][Listing-18-21] will provide us with an error.
 
 [Listing-18-21]: #Listing-18-21
 <a name="Listing-18-21"></a>
@@ -661,7 +661,7 @@ underscore still binds the value, which may take ownership of the value</span>
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. Using the underscore by itself,
-however, doesn’t ever bind to the value. Listing 18-22 will compile without any
+however, doesn’t ever bind to the value. [Listing 18-22][Listing-18-22] will compile without any
 errors since `s` does not get moved into `_`:
 
 [Listing-18-22]: #Listing-18-22
@@ -687,7 +687,7 @@ This works just fine; because we never bind `s` to anything, it isn’t moved.
 With values that have many parts, we can use the `..` syntax to use only a few
 parts and ignore the rest, while avoiding having to list underscores for each
 ignored value. The `..` pattern will ignore any parts of a value that we
-haven’t explicitly matched in the rest of the pattern. In Listing 18-23, we
+haven’t explicitly matched in the rest of the pattern. In [Listing 18-23][Listing-18-23], we
 have a `Point` struct that holds a coordinate in three dimensional space. In
 the `match` expression, we want to operate only on the `x` coordinate and
 ignore the values in the `y` and `z` fields:
@@ -717,7 +717,7 @@ than having to list out `y: _` and `z: _`, particularly when working with
 structs that have lots of fields, in situations where only one or two fields
 are relevant.
 
-`..` will expand to as many values as it needs to be. Listing 18-24 shows a use
+`..` will expand to as many values as it needs to be. [Listing 18-24][Listing-18-24] shows a use
 of `..` with a tuple:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -744,7 +744,7 @@ Here, we have the first and last value matched with `first` and `last`. The
 `..` will match and ignore everything in the middle.
 
 Using `..` must be unambiguous, however. If it is not clear which values are
-intended for matching, and which to be ignored, Rust will error. Listing 18-25
+intended for matching, and which to be ignored, Rust will error. [Listing 18-25][Listing-18-25]
 shows an example of using `..` ambiguously that will not compile due to this
 ambiguity:
 
@@ -792,7 +792,7 @@ Here we’ll look at using `ref` to make references so ownership of the values
 isn’t moved to variables in the pattern. Usually, when you match against a
 pattern, the variables introduced by the pattern are bound to a value. Rust’s
 ownership rules mean the value will be moved into the `match`, or wherever
-you’re using the pattern. Listing 18-26 shows an example of a `match` that has
+you’re using the pattern. [Listing 18-26][Listing-18-26] shows an example of a `match` that has
 a pattern with a variable, and then another usage of the entire value after the
 `match`. This will fail to compile because ownership of part of the
 `robot_name` value is transferred to the `name` variable in the pattern of the
@@ -843,7 +843,7 @@ in the value. Because `&` already has that meaning in patterns, we can’t use
 `&` to create a reference in a pattern.
 
 Instead, to create a reference in a pattern, we do this by using the `ref`
-keyword before the new variable, as shown in Listing 18-27:
+keyword before the new variable, as shown in [Listing 18-27][Listing-18-27]:
 
 [Listing-18-27]: #Listing-18-27
 <a name="Listing-18-27"></a>
@@ -869,7 +869,7 @@ to the data in `robot_name` rather than moving it.
 To create a mutable reference in order to be able to mutate a value matched in
 a pattern, use `ref mut` instead of `&mut` for the same reason that we use
 `ref` instead of `&`: `&mut` in patterns is for matching existing mutable
-references, not creating new ones. Listing 18-28 shows an example of a pattern
+references, not creating new ones. [Listing 18-28][Listing-18-28] shows an example of a pattern
 creating a mutable reference:
 
 [Listing-18-28]: #Listing-18-28
@@ -903,7 +903,7 @@ a `match` arm that also must match if the pattern matches in order for that arm
 to be chosen. Match guards are useful for expressing more complex ideas than a
 pattern alone allows.
 
-The condition can use variables created in the pattern. Listing 18-29 shows a
+The condition can use variables created in the pattern. [Listing 18-29][Listing-18-29] shows a
 `match` where the first arm has the pattern `Some(x)` and then also has a match
 guard of `if x < 5`:
 
@@ -939,11 +939,11 @@ match guard has given us the ability to express this logic.
 is doing here? I've had a guess above, but I think it needs your review! -->
 <!-- Reviewed and tweaked a bit! /Carol -->
 
-In Listing 18-11, we mentioned that we could use match guards to solve our
+In [Listing 18-11][Listing-18-11], we mentioned that we could use match guards to solve our
 pattern shadowing problem, where a new variable was created inside the pattern
 in the `match` expression instead of using the variable outside the `match`.
 That new variable meant we couldn’t test against the value that the outer
-variable had. Listing 18-30 shows how we can use a match guard to fix this:
+variable had. [Listing 18-30][Listing-18-30] shows how we can use a match guard to fix this:
 
 <!-- Can you check this above -- I've tried to paraphrase the final paragraph
 from that section. -->
@@ -992,7 +992,7 @@ lay this out?-->
 
 You can also use the or operator `|` in a match guard to specify multiple
 patterns, and the match guard condition will apply to all of the patterns.
-Listing 18-31 shows the precedence of combining a match guard with a pattern
+[Listing 18-31][Listing-18-31] shows the precedence of combining a match guard with a pattern
 that uses `|`. The important part of this example is that the `if y` match
 guard applies to 4, 5, *and* 6, even though it might look like `if y` only
 applies to 6:
@@ -1062,7 +1062,7 @@ it, I've tried rewording a bit but I'm not sure why that wasn't explicit
 enough, can you clarify if this still doesn't make sense? /Carol -->
 
 The at operator, `@`, lets us create a variable that holds a value at the same
-time we’re testing that value to see if it matches a pattern. Listing 18-32
+time we’re testing that value to see if it matches a pattern. [Listing 18-32][Listing-18-32]
 shows an example where we want to test that a `Message::Hello` `id` field is
 within the range `3...7` but also be able to bind the value to the variable
 `id_variable` so that we can use it in the code associated with the arm. We
@@ -1126,3 +1126,28 @@ needs.
 
 Now, for the penultimate chapter of the book, let’s take a look at some
 advanced parts of a variety of Rust’s features.
+
+[Listing-18-11]: ch18-03-pattern-syntax.html#Listing-18-11
+[Listing-18-12]: ch18-03-pattern-syntax.html#Listing-18-12
+[Listing-18-13]: ch18-03-pattern-syntax.html#Listing-18-13
+[Listing-18-14]: ch18-03-pattern-syntax.html#Listing-18-14
+[Listing-6-5]: ch06-02-match.html#Listing-6-5
+[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2
+[Listing-18-15]: ch18-03-pattern-syntax.html#Listing-18-15
+[Listing-18-16]: ch18-03-pattern-syntax.html#Listing-18-16
+[Listing-18-17]: ch18-03-pattern-syntax.html#Listing-18-17
+[Listing-18-18]: ch18-03-pattern-syntax.html#Listing-18-18
+[Listing-18-19]: ch18-03-pattern-syntax.html#Listing-18-19
+[Listing-18-20]: ch18-03-pattern-syntax.html#Listing-18-20
+[Listing-18-21]: ch18-03-pattern-syntax.html#Listing-18-21
+[Listing-18-22]: ch18-03-pattern-syntax.html#Listing-18-22
+[Listing-18-23]: ch18-03-pattern-syntax.html#Listing-18-23
+[Listing-18-24]: ch18-03-pattern-syntax.html#Listing-18-24
+[Listing-18-25]: ch18-03-pattern-syntax.html#Listing-18-25
+[Listing-18-26]: ch18-03-pattern-syntax.html#Listing-18-26
+[Listing-18-27]: ch18-03-pattern-syntax.html#Listing-18-27
+[Listing-18-28]: ch18-03-pattern-syntax.html#Listing-18-28
+[Listing-18-29]: ch18-03-pattern-syntax.html#Listing-18-29
+[Listing-18-30]: ch18-03-pattern-syntax.html#Listing-18-30
+[Listing-18-31]: ch18-03-pattern-syntax.html#Listing-18-31
+[Listing-18-32]: ch18-03-pattern-syntax.html#Listing-18-32

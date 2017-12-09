@@ -26,7 +26,7 @@ tweet.
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
 need each struct to have is that it’s able to be summarized, and that we can
-ask for that summary by calling a `summary` method on an instance. Listing 10-12
+ask for that summary by calling a `summary` method on an instance. [Listing 10-12][Listing-10-12]
 shows the definition of a `Summarizable` trait that expresses this
 concept:
 
@@ -60,7 +60,7 @@ listed one per line and each line ending in a semicolon.
 ### Implementing a Trait on a Type
 
 Now that we’ve defined the `Summarizable` trait, we can implement it on the
-types in our media aggregator that we want to have this behavior. Listing 10-13
+types in our media aggregator that we want to have this behavior. [Listing 10-13][Listing-10-13]
 shows an implementation of the `Summarizable` trait on the `NewsArticle` struct
 that uses the headline, the author, and the location to create the return value
 of `summary`. For the `Tweet` struct, we’ve chosen to define `summary` as the
@@ -135,12 +135,12 @@ This will print `1 new tweet: horse_ebooks: of course, as you probably already
 know, people`.
 
 Note that because we’ve defined the `Summarizable` trait and the `NewsArticle`
-and `Tweet` types all in the same `lib.rs` in Listing 10-13, they’re all in the
+and `Tweet` types all in the same `lib.rs` in [Listing 10-13][Listing-10-13], they’re all in the
 same scope. If this `lib.rs` is for a crate we’ve called `aggregator`, and
 someone else wants to use our crate’s functionality plus implement the
 `Summarizable` trait on their `WeatherForecast` struct, their code would need
 to import the `Summarizable` trait into their scope first before they could
-implement it, like in Listing 10-14:
+implement it, like in [Listing 10-14][Listing-10-14]:
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -171,7 +171,7 @@ impl Summarizable for WeatherForecast {
 `aggregator` crate into scope in another crate</span>
 
 This code also assumes `Summarizable` is a public trait, which it is because we
-put the `pub` keyword before `trait` in Listing 10-12.
+put the `pub` keyword before `trait` in [Listing 10-12][Listing-10-12].
 
 One restriction to note with trait implementations: we may implement a trait on
 a type as long as either the trait or the type are local to our crate. In other
@@ -195,9 +195,9 @@ in a trait, instead of making every implementation on every type define custom
 behavior. When we implement the trait on a particular type, we can choose to
 keep or override each method’s default behavior.
 
-Listing 10-15 shows how we could have chosen to specify a default string for
+[Listing 10-15][Listing-10-15] shows how we could have chosen to specify a default string for
 the `summary` method of the `Summarize` trait instead of choosing to only
-define the method signature like we did in Listing 10-12:
+define the method signature like we did in [Listing 10-12][Listing-10-12]:
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -217,7 +217,7 @@ a default implementation of the `summary` method</span>
 
 If we wanted to use this default implementation to summarize instances of
 `NewsArticle` instead of defining a custom implementation like we did in
-Listing 10-13, we would specify an empty `impl` block:
+[Listing 10-13][Listing-10-13], we would specify an empty `impl` block:
 
 ```rust,ignore
 impl Summarizable for NewsArticle {}
@@ -244,7 +244,7 @@ This code prints `New article available! (Read more...)`.
 
 Changing the `Summarizable` trait to have a default implementation for
 `summary` does not require us to change anything about the implementations of
-`Summarizable` on `Tweet` in Listing 10-13 or `WeatherForecast` in Listing 10-14:
+`Summarizable` on `Tweet` in [Listing 10-13][Listing-10-13] or `WeatherForecast` in Listing 10-14:
 the syntax for overriding a default implementation is exactly the same
 as the syntax for implementing a trait method that doesn’t have a default
 implementation.
@@ -307,7 +307,7 @@ limited to those types that implement a particular trait and thus have the
 behavior that we need the types to have. This is called specifying *trait
 bounds* on a generic type.
 
-For example, in Listing 10-13, we implemented the `Summarizable` trait on the
+For example, in [Listing 10-13][Listing-10-13], we implemented the `Summarizable` trait on the
 types `NewsArticle` and `Tweet`. We can define a function `notify` that calls
 the `summary` method on its parameter `item`, which is of the generic type `T`.
 To be able to call `summary` on `item` without getting an error, we can use
@@ -323,7 +323,7 @@ pub fn notify<T: Summarizable>(item: T) {
 Trait bounds go with the declaration of the generic type parameter, after a
 colon and within the angle brackets. Because of the trait bound on `T`, we can
 call `notify` and pass in any instance of `NewsArticle` or `Tweet`. The
-external code from Listing 10-14 that’s using our `aggregator` crate can call
+external code from [Listing 10-14][Listing-10-14] that’s using our `aggregator` crate can call
 our `notify` function and pass in an instance of `WeatherForecast`, since
 `Summarizable` is implemented for `WeatherForecast` as well. Code that calls
 `notify` with any other type, like a `String` or an `i32`, won’t compile, since
@@ -363,7 +363,7 @@ list, and return type are close together.
 So any time you want to use behavior defined by a trait on a generic, you need
 to specify that trait in the generic type parameter’s type bounds. We can now
 fix the definition of the `largest` function that uses a generic type parameter
-from Listing 10-5! When we set that code aside, we were getting this error:
+from [Listing 10-5][Listing-10-5]! When we set that code aside, we were getting this error:
 
 ```text
 error[E0369]: binary operation `>` cannot be applied to type `T`
@@ -417,7 +417,7 @@ that don’t implement the `Copy` trait, which means we wouldn’t be able to mo
 the value out of `list[0]` and into the `largest` variable.
 
 If we only want to be able to call this code with types that are `Copy`, we can
-add `Copy` to the trait bounds of `T`! Listing 10-16 shows the complete code of
+add `Copy` to the trait bounds of `T`! [Listing 10-16][Listing-10-16] shows the complete code of
 a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into `largest` implement both the `PartialOrd`
 and `Copy` traits, like `i32` and `char`:
@@ -553,3 +553,11 @@ There’s another kind of generics that we’ve been using without even realizin
 it called *lifetimes*. Rather than helping us ensure that a type has the
 behavior we need it to have, lifetimes help us ensure that references are valid
 as long as we need them to be. Let’s learn how lifetimes do that.
+
+[Listing-10-12]: ch10-02-traits.html#Listing-10-12
+[Listing-10-13]: ch10-02-traits.html#Listing-10-13
+[Listing-10-14]: ch10-02-traits.html#Listing-10-14
+[Listing-10-15]: ch10-02-traits.html#Listing-10-15
+[Listing-10-5]: ch10-01-syntax.html#Listing-10-5
+[Listing-10-16]: ch10-02-traits.html#Listing-10-16
+[Listing-10-17]: ch10-02-traits.html#Listing-10-17

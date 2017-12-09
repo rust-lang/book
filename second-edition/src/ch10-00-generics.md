@@ -41,7 +41,7 @@ to extract into a function, you’ll start to recognize duplicated code that can
 use generics.
 
 Consider a small program that finds the largest number in a list, shown in
-Listing 10-1:
+[Listing 10-1][Listing-10-1]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -77,8 +77,8 @@ changed. When all the items in the list have been considered, `largest` will
 hold the largest value, which in this case is 100.
 
 If we needed to find the largest number in two different lists of numbers, we
-could duplicate the code in Listing 10-1 and have the same logic exist in two
-places in the program, as in Listing 10-2:
+could duplicate the code in [Listing 10-1][Listing-10-1] and have the same logic exist in two
+places in the program, as in [Listing 10-2][Listing-10-2]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -129,9 +129,9 @@ to the function in a parameter. This will increase the clarity of our code and
 let us communicate and reason about the concept of finding the largest number
 in a list independently of the specific places this concept is used.
 
-In the program in Listing 10-3, we’ve extracted the code that finds the largest
+In the program in [Listing 10-3][Listing-10-3], we’ve extracted the code that finds the largest
 number into a function named `largest`. This program can find the largest
-number in two different lists of numbers, but the code from Listing 10-1 only
+number in two different lists of numbers, but the code from [Listing 10-1][Listing-10-1] only
 exists in one spot:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -176,7 +176,7 @@ definition operates on the `list` representation of any `&[i32]`. When we call
 the `largest` function, the code actually runs on the specific values that we
 pass in.
 
-The mechanics we went through to get from Listing 10-2 to Listing 10-3 were
+The mechanics we went through to get from [Listing 10-2][Listing-10-2] to Listing 10-3 were
 these steps:
 
 1. We noticed there was duplicate code.
@@ -195,3 +195,7 @@ ways.
 What if we had two functions, one that found the largest item in a slice of
 `i32` values and one that found the largest item in a slice of `char` values?
 How would we get rid of that duplication? Let’s find out!
+
+[Listing-10-1]: ch10-00-generics.html#Listing-10-1
+[Listing-10-2]: ch10-00-generics.html#Listing-10-2
+[Listing-10-3]: ch10-00-generics.html#Listing-10-3

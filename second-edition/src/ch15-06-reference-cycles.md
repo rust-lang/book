@@ -12,7 +12,7 @@ never reach 0, and the values will never be dropped.
 ### Creating a Reference Cycle
 
 Let’s take a look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing 15-28:
+starting with the definition of the `List` enum and a `tail` method in [Listing 15-28][Listing-15-28]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -43,9 +43,9 @@ impl List {
 <span class="caption">Listing 15-28: A cons list definition that holds a
 `RefCell` so that we can modify what a `Cons` variant is referring to</span>
 
-We’re using another variation of the `List` definition from Listing 15-6. The
+We’re using another variation of the `List` definition from [Listing 15-6][Listing-15-6]. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value like we did in Listing 15-19,
+instead of having the ability to modify the `i32` value like we did in [Listing 15-19][Listing-15-19],
 we want to be able to modify which `List` a `Cons` variant is pointing
 to. We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant.
@@ -61,7 +61,7 @@ and then a lot of explanation, I'd be fine having this be one big listing if
 you think that would be better /Carol -->
 
 In listing 15-29, we’re adding a `main` function that uses the definitions from
-Listing 15-28. This code creates a list in `a`, a list in `b` that points to
+[Listing 15-28][Listing-15-28]. This code creates a list in `a`, a list in `b` that points to
 the list in `a`, and then modifies the list in `a` to point to `b`, which
 creates a reference cycle. There are `println!` statements along the way to
 show what the reference counts are at various points in this process.
@@ -165,7 +165,7 @@ However, because `a` is still referencing the `Rc` that was in `b`, that `Rc`
 has a count of 1 rather than 0, so the memory the `Rc` has on the heap won’t be
 dropped. The memory will just sit there with a count of one, forever.
 
-To visualize this, we’ve created a reference cycle that looks like Figure 15-30:
+To visualize this, we’ve created a reference cycle that looks like [Figure 15-30][Figure-15-30]:
 
 [Figure-15-30]: #Figure-15-30
 <a name="Figure-15-30"></a>
@@ -219,7 +219,7 @@ Another solution is reorganizing your data structures so that some references
 express ownership and some references don’t. In this way, we can have cycles
 made up of some ownership relationships and some non-ownership relationships,
 and only the ownership relationships affect whether a value may be dropped or
-not. In Listing 15-28, we always want `Cons` variants to own their list, so
+not. In [Listing 15-28][Listing-15-28], we always want `Cons` variants to own their list, so
 reorganizing the data structure isn’t possible. Let’s look at an example using
 graphs made up of parent nodes and child nodes to see when non-ownership
 relationships are an appropriate way to prevent reference cycles.
@@ -295,7 +295,7 @@ a `RefCell` in `children` around the `Vec`.
 
 Next, let’s use our struct definition and create one `Node` instance named
 `leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-31:
+with the value 5 and `leaf` as one of its children, as shown in [Listing 15-31][Listing-15-31]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -379,7 +379,7 @@ you think? It seems repetitive to explain this every time. /Carol
 -->
 
 This way, a node will be able to refer to its parent node, but does not own its
-parent. In Listing 15-32, let’s update `main` to use this new definition so
+parent. In [Listing 15-32][Listing-15-32], let’s update `main` to use this new definition so
 that the `leaf` node will have a way to refer to its parent, `branch`:
 
 <!-- Why are we updating it, what are we doing here? Can you make that clear?
@@ -430,7 +430,7 @@ its parent node, `branch`</span>
 talk it through -->
 
 Creating the `leaf` node looks similar to how creating the `leaf` node looked
-in Listing 15-31, with the exception of the `parent` field: `leaf` starts out
+in [Listing 15-31][Listing-15-31], with the exception of the `parent` field: `leaf` starts out
 without a parent, so we create a new, empty `Weak` reference instance.
 
 At this point, when we try to get a reference to the parent of `leaf` by using
@@ -461,7 +461,7 @@ parent? -->
 When we print out the parent of `leaf` again, this time we’ll get a `Some`
 variant holding `branch`: `leaf` can now access its parent! When we print out
 `leaf`, we also avoid the cycle that eventually ended in a stack overflow like
-we had in Listing 15-29: the `Weak` references are printed as `(Weak)`:
+we had in [Listing 15-29][Listing-15-29]: the `Weak` references are printed as `(Weak)`:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -479,7 +479,7 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. This will let us see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-33:
+in [Listing 15-33][Listing-15-33]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -588,3 +588,11 @@ smart pointers, check out [“The Nomicon”] for even more useful information.
 
 Next, let’s talk about concurrency in Rust. We’ll even learn about a few new
 smart pointers.
+
+[Listing-15-28]: ch15-06-reference-cycles.html#Listing-15-28
+[Listing-15-6]: ch15-01-box.html#Listing-15-6
+[Listing-15-29]: ch15-06-reference-cycles.html#Listing-15-29
+[Listing-15-31]: ch15-06-reference-cycles.html#Listing-15-31
+[Listing-15-32]: ch15-06-reference-cycles.html#Listing-15-32
+[Listing-15-33]: ch15-06-reference-cycles.html#Listing-15-33
+[Figure-15-30]: ch15-06-reference-cycles.html#Figure-15-30

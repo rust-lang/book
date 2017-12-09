@@ -10,7 +10,7 @@ cart.
 ### Creating a New Vector
 
 To create a new, empty vector, we can call the `Vec::new` function as shown in
-Listing 8-1:
+[Listing 8-1][Listing-8-1]:
 
 [Listing-8-1]: #Listing-8-1
 <a name="Listing-8-1"></a>
@@ -28,14 +28,14 @@ store. This is an important point. Vectors are implemented using generics;
 we’ll cover how to use generics with your own types in Chapter 10. For now,
 know that the `Vec<T>` type provided by the standard library can hold any type,
 and when a specific vector holds a specific type, the type is specified within
-angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
+angle brackets. In [Listing 8-1][Listing-8-1], we’ve told Rust that the `Vec<T>` in `v` will
 hold elements of the `i32` type.
 
 In more realistic code, Rust can often infer the type of value we want to store
 once we insert values, so you rarely need to do this type annotation. It’s more
 common to create a `Vec<T>` that has initial values, and Rust provides the
 `vec!` macro for convenience. The macro will create a new vector that holds the
-values we give it. Listing 8-2 creates a new `Vec<i32>` that holds the values
+values we give it. [Listing 8-2][Listing-8-2] creates a new `Vec<i32>` that holds the values
 `1`, `2`, and `3`:
 
 [Listing-8-2]: #Listing-8-2
@@ -55,7 +55,7 @@ to modify a vector.
 ### Updating a Vector
 
 To create a vector and then add elements to it, we can use the `push` method as
-shown in Listing 8-3:
+shown in [Listing 8-3][Listing-8-3]:
 
 [Listing-8-3]: #Listing-8-3
 <a name="Listing-8-3"></a>
@@ -80,7 +80,7 @@ data, so we don’t need the `Vec<i32>` annotation.
 ### Dropping a Vector Drops Its Elements
 
 Like any other `struct`, a vector will be freed when it goes out of scope, as
-annotated in Listing 8-4:
+annotated in [Listing 8-4][Listing-8-4]:
 
 [Listing-8-4]: #Listing-8-4
 <a name="Listing-8-4"></a>
@@ -109,7 +109,7 @@ read their contents is a good next step. There are two ways to reference a
 value stored in a vector. In the examples, we’ve annotated the types of the
 values that are returned from these functions for extra clarity.
 
-Listing 8-5 shows both methods of accessing a value in a vector either with
+[Listing 8-5][Listing-8-5] shows both methods of accessing a value in a vector either with
 indexing syntax or the `get` method:
 
 [Listing-8-5]: #Listing-8-5
@@ -135,7 +135,7 @@ The reason Rust has two ways to reference an element is so you can choose how
 the program behaves when you try to use an index value that the vector doesn’t
 have an element for. As an example, let’s see what a program will do if it has
 a vector that holds five elements and then tries to access an element at index
-100, as shown in Listing 8-6:
+100, as shown in [Listing 8-6][Listing-8-6]:
 
 [Listing-8-6]: #Listing-8-6
 <a name="Listing-8-6"></a>
@@ -171,7 +171,7 @@ When the program has a valid reference, the borrow checker enforces the
 ownership and borrowing rules (covered in Chapter 4) to ensure this reference
 and any other references to the contents of the vector remain valid. Recall the
 rule that states we can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-7 where we hold an immutable reference to
+scope. That rule applies in [Listing 8-7][Listing-8-7] where we hold an immutable reference to
 the first element in a vector and try to add an element to the end, which won’t
 work:
 
@@ -205,7 +205,7 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
   | - immutable borrow ends here
 ```
 
-The code in Listing 8-7 might look like it should work: why should a reference
+The code in [Listing 8-7][Listing-8-7] might look like it should work: why should a reference
 to the first element care about what changes at the end of the vector? The
 reason behind this error is due to the way vectors work: adding a new element
 onto the end of the vector might require allocating new memory and copying the
@@ -220,7 +220,7 @@ rules prevent programs from ending up in that situation.
 ### Iterating Over the Values in a Vector
 
 If we want to access each element in a vector in turn, we can iterate through
-all of the elements rather than use indexes to access one at a time. Listing 8-8
+all of the elements rather than use indexes to access one at a time. [Listing 8-8][Listing-8-8]
 shows how to use a `for` loop to get immutable references to each element
 in a vector of `i32` values and print them out:
 
@@ -238,7 +238,7 @@ for i in &v {
 iterating over the elements using a `for` loop</span>
 
 We can also iterate over mutable references to each element in a mutable vector
-in order to make changes to all the elements. The `for` loop in Listing 8-9
+in order to make changes to all the elements. The `for` loop in [Listing 8-9][Listing-8-9]
 will add `50` to each element:
 
 [Listing-8-9]: #Listing-8-9
@@ -271,7 +271,7 @@ some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and then all the enum variants will be considered the same type:
 that of the enum. Then we can create a vector that holds that enum and so,
-ultimately, holds different types. We’ve demonstrated this in Listing 8-10:
+ultimately, holds different types. We’ve demonstrated this in [Listing 8-10][Listing-8-10]:
 
 [Listing-8-10]: #Listing-8-10
 <a name="Listing-8-10"></a>
@@ -311,3 +311,14 @@ to review the API documentation for all the many useful methods defined on
 `Vec<T>` by the standard library. For example, in addition to `push`, a `pop`
 method removes and returns the last element. Let’s move on to the next
 collection type: `String`!
+
+[Listing-8-1]: ch08-01-vectors.html#Listing-8-1
+[Listing-8-2]: ch08-01-vectors.html#Listing-8-2
+[Listing-8-3]: ch08-01-vectors.html#Listing-8-3
+[Listing-8-4]: ch08-01-vectors.html#Listing-8-4
+[Listing-8-5]: ch08-01-vectors.html#Listing-8-5
+[Listing-8-6]: ch08-01-vectors.html#Listing-8-6
+[Listing-8-7]: ch08-01-vectors.html#Listing-8-7
+[Listing-8-8]: ch08-01-vectors.html#Listing-8-8
+[Listing-8-9]: ch08-01-vectors.html#Listing-8-9
+[Listing-8-10]: ch08-01-vectors.html#Listing-8-10

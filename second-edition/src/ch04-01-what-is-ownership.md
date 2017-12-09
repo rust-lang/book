@@ -114,7 +114,7 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 has
+which it’s declared until the end of the current *scope*. [Listing 4-1][Listing-4-1] has
 comments annotating where the variable `s` is valid:
 
 [Listing-4-1]: #Listing-4-1
@@ -219,7 +219,7 @@ exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+from [Listing 4-1][Listing-4-1] using a `String` instead of a string literal:
 
 ```rust
 {
@@ -249,7 +249,7 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 #### Ways Variables and Data Interact: Move
 
 Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2:
+Let’s look at an example using an integer in [Listing 4-2][Listing-4-2]:
 
 [Listing-4-2]: #Listing-4-2
 <a name="Listing-4-2"></a>
@@ -280,7 +280,7 @@ it works would be the same: that is, the second line would make a copy of the
 value in `s1` and bind it to `s2`. But this isn’t quite what happens.
 
 To explain this more thoroughly, let’s look at what `String` looks like under
-the covers in Figure 4-1. A `String` is made up of three parts, shown on the
+the covers in [Figure 4-1][Figure-4-1]. A `String` is made up of three parts, shown on the
 left: a pointer to the memory that holds the contents of the string, a length,
 and a capacity. This group of data is stored on the stack. On the right is the
 memory on the heap that holds the contents.
@@ -305,7 +305,7 @@ the capacity.
 When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
 pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
-representation in memory looks like Figure 4-2.
+representation in memory looks like [Figure 4-2][Figure-4-2].
 
 [Figure-4-2]: #Figure-4-2
 <a name="Figure-4-2"></a>
@@ -318,7 +318,7 @@ representation in memory looks like Figure 4-2.
 <span class="caption">Figure 4-2: Representation in memory of the variable `s2`
 that has a copy of the pointer, length, and capacity of `s1`</span>
 
-The representation does *not* look like Figure 4-3, which is what memory would
+The representation does *not* look like [Figure 4-3][Figure-4-3], which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could potentially be very expensive in terms of runtime
 performance if the data on the heap was large.
@@ -336,7 +336,7 @@ do if Rust copied the heap data as well</span>
 
 Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the `drop` function and cleans up the heap memory for that variable. But
-Figure 4-2 shows both data pointers pointing to the same location. This is a
+[Figure 4-2][Figure-4-2] shows both data pointers pointing to the same location. This is a
 problem: when `s2` and `s1` go out of scope, they will both try to free the
 same memory. This is known as a *double free* error and is one of the memory
 safety bugs we mentioned previously. Freeing memory twice can lead to memory
@@ -377,7 +377,7 @@ other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a *move*. Here we would read this by saying that `s1` was *moved*
-into `s2`. So what actually happens is shown in Figure 4-4.
+into `s2`. So what actually happens is shown in [Figure 4-4][Figure-4-4].
 
 [Figure-4-4]: #Figure-4-4
 <a name="Figure-4-4"></a>
@@ -414,7 +414,7 @@ println!("s1 = {}, s2 = {}", s1, s2);
 ```
 
 This works just fine and is how you can explicitly produce the behavior shown
-in Figure 4-3, where the heap data *does* get copied.
+in [Figure 4-3][Figure-4-3], where the heap data *does* get copied.
 
 When you see a call to `clone`, you know that some arbitrary code is being
 executed and that code may be expensive. It’s a visual indicator that something
@@ -423,7 +423,7 @@ different is going on.
 #### Stack-Only Data: Copy
 
 There’s another wrinkle we haven’t talked about yet. This code using integers,
-part of which was shown earlier in Listing 4-2, works and is valid:
+part of which was shown earlier in [Listing 4-2][Listing-4-2], works and is valid:
 
 ```rust
 let x = 5;
@@ -468,7 +468,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 
 The semantics for passing a value to a function are similar to assigning a
 value to a variable. Passing a variable to a function will move or copy, just
-like assignment. Listing 4-3 has an example with some annotations showing where
+like assignment. [Listing 4-3][Listing-4-3] has an example with some annotations showing where
 variables go into and out of scope:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -513,7 +513,7 @@ the ownership rules prevent you from doing so.
 ### Return Values and Scope
 
 Returning values can also transfer ownership. Here’s an example with similar
-annotations to those in Listing 4-3:
+annotations to those in [Listing 4-3][Listing-4-3]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -583,3 +583,11 @@ fn calculate_length(s: String) -> (String, usize) {
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for this concept, and it’s called
 *references*.
+
+[Listing-4-1]: ch04-01-what-is-ownership.html#Listing-4-1
+[Listing-4-2]: ch04-01-what-is-ownership.html#Listing-4-2
+[Listing-4-3]: ch04-01-what-is-ownership.html#Listing-4-3
+[Figure-4-1]: ch04-01-what-is-ownership.html#Figure-4-1
+[Figure-4-2]: ch04-01-what-is-ownership.html#Figure-4-2
+[Figure-4-3]: ch04-01-what-is-ownership.html#Figure-4-3
+[Figure-4-4]: ch04-01-what-is-ownership.html#Figure-4-4
