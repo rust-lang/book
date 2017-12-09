@@ -195,3 +195,11 @@ ways.
 What if we had two functions, one that found the largest item in a slice of
 `i32` values and one that found the largest item in a slice of `char` values?
 How would we get rid of that duplication? Let’s find out!
+
+[Listing-10-1]: ch10-03-lifetime-syntax.html#Listing-10-1
+[Listing-10-1]: ch10-00-generics.html#Listing-10-1
+[Listing-10-1]: ch10-02-traits.html#Listing-10-1
+[Listing-10-1]: ch10-01-syntax.html#Listing-10-1
+[Listing-10-2]: ch10-03-lifetime-syntax.html#Listing-10-2
+[Listing-10-2]: ch10-00-generics.html#Listing-10-2
+[Listing-10-3]: ch10-00-generics.html#Listing-10-3

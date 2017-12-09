@@ -499,3 +499,10 @@ potentially propagate the error to the calling code.
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
+
+[Listing-9-3]: ch09-02-recoverable-errors-with-result.html#Listing-9-3
+[Listing-9-4]: ch09-02-recoverable-errors-with-result.html#Listing-9-4
+[Listing-9-5]: ch09-02-recoverable-errors-with-result.html#Listing-9-5
+[Listing-9-6]: ch09-02-recoverable-errors-with-result.html#Listing-9-6
+[Listing-9-7]: ch09-02-recoverable-errors-with-result.html#Listing-9-7
+[Listing-9-8]: ch09-02-recoverable-errors-with-result.html#Listing-9-8

@@ -311,3 +311,16 @@ to review the API documentation for all the many useful methods defined on
 `Vec<T>` by the standard library. For example, in addition to `push`, a `pop`
 method removes and returns the last element. Let’s move on to the next
 collection type: `String`!
+
+[Listing-8-1]: ch08-01-vectors.html#Listing-8-1
+[Listing-8-1]: ch08-02-strings.html#Listing-8-1
+[Listing-8-2]: ch08-03-hash-maps.html#Listing-8-2
+[Listing-8-2]: ch08-01-vectors.html#Listing-8-2
+[Listing-8-3]: ch08-01-vectors.html#Listing-8-3
+[Listing-8-4]: ch08-01-vectors.html#Listing-8-4
+[Listing-8-5]: ch08-01-vectors.html#Listing-8-5
+[Listing-8-6]: ch08-01-vectors.html#Listing-8-6
+[Listing-8-7]: ch08-01-vectors.html#Listing-8-7
+[Listing-8-8]: ch08-01-vectors.html#Listing-8-8
+[Listing-8-9]: ch08-01-vectors.html#Listing-8-9
+[Listing-8-10]: ch08-01-vectors.html#Listing-8-10

@@ -533,3 +533,10 @@ the inner value, the value is copied in and out of the `Cell<T>`. There’s also
 and we’ll be discussing its use in the next chapter on concurrency. Check out
 the standard library docs for more details on the differences between these
 types.
+
+[Listing-15-23]: ch15-05-interior-mutability.html#Listing-15-23
+[Listing-15-24]: ch15-05-interior-mutability.html#Listing-15-24
+[Listing-15-25]: ch15-05-interior-mutability.html#Listing-15-25
+[Listing-15-26]: ch15-05-interior-mutability.html#Listing-15-26
+[Listing-15-13]: ch15-02-deref.html#Listing-15-13
+[Listing-15-27]: ch15-05-interior-mutability.html#Listing-15-27

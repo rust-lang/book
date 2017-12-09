@@ -851,3 +851,19 @@ on what happens in the closure body.
 
 To illustrate situations where closures that can capture their environment are
 useful as function parameters, let’s move on to our next topic: iterators.
+
+[Listing-13-1]: ch13-02-iterators.html#Listing-13-1
+[Listing-13-1]: ch13-01-closures.html#Listing-13-1
+[Listing-13-2]: ch13-02-iterators.html#Listing-13-2
+[Listing-13-2]: ch13-01-closures.html#Listing-13-2
+[Listing-13-2]: ch13-03-improving-our-io-project.html#Listing-13-2
+[Listing-13-3]: ch13-01-closures.html#Listing-13-3
+[Listing-13-4]: ch13-01-closures.html#Listing-13-4
+[Listing-13-5]: ch13-01-closures.html#Listing-13-5
+[Listing-13-6]: ch13-01-closures.html#Listing-13-6
+[Listing-13-7]: ch13-01-closures.html#Listing-13-7
+[Listing-13-8]: ch13-01-closures.html#Listing-13-8
+[Listing-13-9]: ch13-01-closures.html#Listing-13-9
+[Listing-13-10]: ch13-01-closures.html#Listing-13-10
+[Listing-13-11]: ch13-01-closures.html#Listing-13-11
+[Listing-13-12]: ch13-01-closures.html#Listing-13-12

@@ -577,3 +577,15 @@ fn calculate_length(s: String) -> (String, usize) {
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for this concept, and it’s called
 *references*.
+
+[Listing-4-1]: ch04-01-what-is-ownership.html#Listing-4-1
+[Listing-4-2]: ch04-01-what-is-ownership.html#Listing-4-2
+[Listing-4-3]: ch04-01-what-is-ownership.html#Listing-4-3
+[Figure-4-1]: ch04-01-what-is-ownership.html#Figure-4-1
+[Figure-4-1]: ch04-01-what-is-ownership.html#Figure-4-1
+[Figure-4-2]: ch04-01-what-is-ownership.html#Figure-4-2
+[Figure-4-2]: ch04-01-what-is-ownership.html#Figure-4-2
+[Figure-4-3]: ch04-01-what-is-ownership.html#Figure-4-3
+[Figure-4-3]: ch04-01-what-is-ownership.html#Figure-4-3
+[Figure-4-4]: ch04-01-what-is-ownership.html#Figure-4-4
+[Figure-4-4]: ch04-01-what-is-ownership.html#Figure-4-4

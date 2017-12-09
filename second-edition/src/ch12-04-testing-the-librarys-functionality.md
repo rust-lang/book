@@ -345,3 +345,10 @@ and output, lifetimes, testing, and command line parsing.
 To round out this project, we’ll briefly demonstrate how to work with
 environment variables and how to print to standard error, both of which are
 useful when you’re writing command line programs.
+
+[Listing-12-15]: ch12-04-testing-the-librarys-functionality.html#Listing-12-15
+[Listing-12-16]: ch12-04-testing-the-librarys-functionality.html#Listing-12-16
+[Listing-12-17]: ch12-04-testing-the-librarys-functionality.html#Listing-12-17
+[Listing-3-4]: ch03-05-control-flow.html#Listing-3-4
+[Listing-12-18]: ch12-04-testing-the-librarys-functionality.html#Listing-12-18
+[Listing-12-19]: ch12-04-testing-the-librarys-functionality.html#Listing-12-19

@@ -404,3 +404,6 @@ value available. The `match` expression is a control flow construct that does
 just this when used with enums: it will run different code depending on which
 variant of the enum it has, and that code can use the data inside the matching
 value.
+
+[Listing-6-1]: ch06-01-defining-an-enum.html#Listing-6-1
+[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2

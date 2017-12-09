@@ -808,3 +808,18 @@ figuring out where our bug is!
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
 test`.
+
+[Listing-11-1]: ch11-03-test-organization.html#Listing-11-1
+[Listing-11-1]: ch11-01-writing-tests.html#Listing-11-1
+[Listing-11-1]: ch11-02-running-tests.html#Listing-11-1
+[Listing-11-2]: ch11-01-writing-tests.html#Listing-11-2
+[Listing-11-3]: ch11-01-writing-tests.html#Listing-11-3
+[Listing-11-4]: ch11-01-writing-tests.html#Listing-11-4
+[Listing-5-9]: ch05-02-example-structs.html#Listing-5-9
+[Listing-11-5]: ch11-01-writing-tests.html#Listing-11-5
+[Listing-11-6]: ch11-01-writing-tests.html#Listing-11-6
+[Listing-11-7]: ch11-01-writing-tests.html#Listing-11-7
+[Listing-5-12]: ch05-02-example-structs.html#Listing-5-12
+[Listing-9-9]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-9
+[Listing-11-8]: ch11-01-writing-tests.html#Listing-11-8
+[Listing-11-9]: ch11-01-writing-tests.html#Listing-11-9

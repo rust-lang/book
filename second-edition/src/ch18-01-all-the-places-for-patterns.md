@@ -328,3 +328,15 @@ We’ve seen several ways of using patterns now, but patterns do not work the
 same in every place we can use them; in some places, the patterns must be
 *irrefutable*, meaning they must match any value provided. In other
 circumstances, they may be refutable. Let’s discuss that next.
+
+[Listing-18-1]: ch18-03-pattern-syntax.html#Listing-18-1
+[Listing-18-1]: ch18-02-refutability.html#Listing-18-1
+[Listing-18-1]: ch18-01-all-the-places-for-patterns.html#Listing-18-1
+[Listing-18-2]: ch18-03-pattern-syntax.html#Listing-18-2
+[Listing-18-2]: ch18-01-all-the-places-for-patterns.html#Listing-18-2
+[Listing-18-3]: ch18-03-pattern-syntax.html#Listing-18-3
+[Listing-18-3]: ch18-01-all-the-places-for-patterns.html#Listing-18-3
+[Listing-18-4]: ch18-01-all-the-places-for-patterns.html#Listing-18-4
+[Listing-18-5]: ch18-01-all-the-places-for-patterns.html#Listing-18-5
+[Listing-18-6]: ch18-01-all-the-places-for-patterns.html#Listing-18-6
+[Listing-18-7]: ch18-01-all-the-places-for-patterns.html#Listing-18-7

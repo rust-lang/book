@@ -288,3 +288,6 @@ closure passed to `execute` yet!
 > nothing! If we were building a real, complete project, this would be a great
 > time to start writing unit tests to check that the code compiles *and* has
 > the behavior we want.
+
+[Listing-20-11]: ch20-03-designing-the-interface.html#Listing-20-11
+[Listing-20-12]: ch20-03-designing-the-interface.html#Listing-20-12

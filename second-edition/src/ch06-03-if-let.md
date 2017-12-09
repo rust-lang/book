@@ -119,3 +119,6 @@ function expects.
 In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
+
+[Listing-6-6]: ch06-03-if-let.html#Listing-6-6
+[Listing-6-4]: ch06-02-match.html#Listing-6-4

@@ -273,3 +273,9 @@ It would be helpful to tie this behavior more closely to our `Rectangle`
 struct, because it won’t work with any other type. Let’s look at how we can
 continue to refactor this code by turning the `area` function into an `area`
 *method* defined on our `Rectangle` type.
+
+[Listing-5-8]: ch05-02-example-structs.html#Listing-5-8
+[Listing-5-9]: ch05-02-example-structs.html#Listing-5-9
+[Listing-5-10]: ch05-02-example-structs.html#Listing-5-10
+[Listing-5-11]: ch05-02-example-structs.html#Listing-5-11
+[Listing-5-12]: ch05-02-example-structs.html#Listing-5-12

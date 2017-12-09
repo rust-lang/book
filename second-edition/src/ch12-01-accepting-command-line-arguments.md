@@ -158,3 +158,10 @@ saved into the right variables. Later we’ll add some error handling to deal
 with certain potential erroneous situations, such as when the user provides no
 arguments; for now, we’ll ignore that situation and work on adding file reading
 capabilities instead.
+
+[Listing-12-1]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-1
+[Listing-12-1]: ch12-04-testing-the-librarys-functionality.html#Listing-12-1
+[Listing-12-1]: ch12-01-accepting-command-line-arguments.html#Listing-12-1
+[Listing-12-2]: ch12-06-writing-to-stderr-instead-of-stdout.html#Listing-12-2
+[Listing-12-2]: ch12-05-working-with-environment-variables.html#Listing-12-2
+[Listing-12-2]: ch12-01-accepting-command-line-arguments.html#Listing-12-2

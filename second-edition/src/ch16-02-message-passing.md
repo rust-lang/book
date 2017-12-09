@@ -424,3 +424,10 @@ run will be more non-deterministic and create different output each time.
 
 Now that we’ve seen how channels work, let’s look at a different method of
 concurrency.
+
+[Listing-16-6]: ch16-02-message-passing.html#Listing-16-6
+[Listing-16-7]: ch16-02-message-passing.html#Listing-16-7
+[Listing-16-8]: ch16-02-message-passing.html#Listing-16-8
+[Listing-16-9]: ch16-02-message-passing.html#Listing-16-9
+[Listing-16-10]: ch16-02-message-passing.html#Listing-16-10
+[Listing-16-11]: ch16-02-message-passing.html#Listing-16-11

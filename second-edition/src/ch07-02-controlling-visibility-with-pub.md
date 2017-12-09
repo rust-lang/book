@@ -315,3 +315,6 @@ privacy rules to understand why.
 Feel free to design more experiments and try them out!
 
 Next, let’s talk about bringing items into scope with the `use` keyword.
+
+[Listing-7-5]: ch07-01-mod-and-the-filesystem.html#Listing-7-5
+[Listing-7-6]: ch07-02-controlling-visibility-with-pub.html#Listing-7-6

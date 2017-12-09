@@ -482,3 +482,13 @@ This means you can’t use this trait as a trait object in this way. If you’re
 interested in more details on object safety, see [Rust RFC 255].
 
 [Rust RFC 255]: https://github.com/rust-lang/rfcs/blob/master/text/0255-object-safety.md
+
+[Listing-8-10]: ch08-01-vectors.html#Listing-8-10
+[Listing-17-3]: ch17-02-trait-objects.html#Listing-17-3
+[Listing-17-4]: ch17-02-trait-objects.html#Listing-17-4
+[Listing-17-5]: ch17-02-trait-objects.html#Listing-17-5
+[Listing-17-6]: ch17-02-trait-objects.html#Listing-17-6
+[Listing-17-7]: ch17-02-trait-objects.html#Listing-17-7
+[Listing-17-8]: ch17-02-trait-objects.html#Listing-17-8
+[Listing-17-9]: ch17-02-trait-objects.html#Listing-17-9
+[Listing-17-10]: ch17-02-trait-objects.html#Listing-17-10

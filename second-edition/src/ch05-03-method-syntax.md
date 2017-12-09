@@ -286,3 +286,8 @@ available.
 
 But structs aren’t the only way we can create custom types: let’s turn to
 Rust’s enum feature to add another tool to our toolbox.
+
+[Listing-5-13]: ch05-03-method-syntax.html#Listing-5-13
+[Listing-5-14]: ch05-03-method-syntax.html#Listing-5-14
+[Listing-5-15]: ch05-03-method-syntax.html#Listing-5-15
+[Listing-5-16]: ch05-03-method-syntax.html#Listing-5-16

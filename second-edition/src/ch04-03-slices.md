@@ -392,3 +392,7 @@ you don’t have to write and debug extra code to get this control.
 Ownership affects how lots of other parts of Rust work, so we’ll talk about
 these concepts further throughout the rest of the book. Let’s move on to the
 next chapter and look at grouping pieces of data together in a `struct`.
+
+[Listing-4-5]: ch04-03-slices.html#Listing-4-5
+[Listing-4-6]: ch04-03-slices.html#Listing-4-6
+[Figure-4-6]: ch04-03-slices.html#Figure-4-6

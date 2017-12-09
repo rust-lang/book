@@ -616,3 +616,20 @@ requests with a `404` response.
 Since this server runs in a single thread, though, it can only serve one
 request at a time. Let’s see how that can be a problem by simulating some
 slow requests.
+
+[Listing-20-1]: ch20-01-single-threaded.html#Listing-20-1
+[Listing-20-1]: ch20-03-designing-the-interface.html#Listing-20-1
+[Listing-20-1]: ch20-04-storing-threads.html#Listing-20-1
+[Listing-20-1]: ch20-05-sending-requests-via-channels.html#Listing-20-1
+[Listing-20-1]: ch20-02-slow-requests.html#Listing-20-1
+[Listing-20-2]: ch20-01-single-threaded.html#Listing-20-2
+[Listing-20-2]: ch20-05-sending-requests-via-channels.html#Listing-20-2
+[Listing-20-2]: ch20-06-graceful-shutdown-and-cleanup.html#Listing-20-2
+[Listing-20-3]: ch20-01-single-threaded.html#Listing-20-3
+[Listing-20-4]: ch20-01-single-threaded.html#Listing-20-4
+[Listing-20-5]: ch20-01-single-threaded.html#Listing-20-5
+[Listing-12-4]: ch12-02-reading-a-file.html#Listing-12-4
+[Listing-20-6]: ch20-01-single-threaded.html#Listing-20-6
+[Listing-20-7]: ch20-01-single-threaded.html#Listing-20-7
+[Listing-20-8]: ch20-01-single-threaded.html#Listing-20-8
+[Listing-20-9]: ch20-01-single-threaded.html#Listing-20-9

@@ -111,3 +111,5 @@ cover. Other options are the fork/join model and the single threaded async I/O
 model. If you’re interested in this topic, you may want to read more about
 other solutions and try to implement them in Rust; with a low-level language
 like Rust, all of these options are possible.
+
+[Listing-20-10]: ch20-02-slow-requests.html#Listing-20-10

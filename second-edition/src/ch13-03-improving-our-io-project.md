@@ -257,3 +257,14 @@ the iterator must pass.
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the more low-level loop will be faster. Let’s talk about
 performance.
+
+[Listing-12-6]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-6
+[Listing-13-24]: ch13-03-improving-our-io-project.html#Listing-13-24
+[Listing-12-23]: ch12-05-working-with-environment-variables.html#Listing-12-23
+[Listing-12-24]: ch12-06-writing-to-stderr-instead-of-stdout.html#Listing-12-24
+[Listing-13-25]: ch13-03-improving-our-io-project.html#Listing-13-25
+[Listing-13-26]: ch13-03-improving-our-io-project.html#Listing-13-26
+[Listing-13-27]: ch13-03-improving-our-io-project.html#Listing-13-27
+[Listing-13-28]: ch13-03-improving-our-io-project.html#Listing-13-28
+[Listing-13-29]: ch13-03-improving-our-io-project.html#Listing-13-29
+[Listing-13-19]: ch13-02-iterators.html#Listing-13-19

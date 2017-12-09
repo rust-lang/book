@@ -498,3 +498,14 @@ into code that specifies the type in each instance. That means we pay no
 runtime cost for using generics; when the code runs, it performs just like it
 would if we had duplicated each particular definition by hand. The process of
 monomorphization is what makes Rust’s generics extremely efficient at runtime.
+
+[Listing-10-4]: ch10-01-syntax.html#Listing-10-4
+[Listing-10-3]: ch10-00-generics.html#Listing-10-3
+[Listing-10-5]: ch10-01-syntax.html#Listing-10-5
+[Listing-10-6]: ch10-01-syntax.html#Listing-10-6
+[Listing-10-7]: ch10-01-syntax.html#Listing-10-7
+[Listing-10-8]: ch10-01-syntax.html#Listing-10-8
+[Listing-9-2]: ch09-01-unrecoverable-errors-with-panic.html#Listing-9-2
+[Listing-10-9]: ch10-01-syntax.html#Listing-10-9
+[Listing-10-10]: ch10-01-syntax.html#Listing-10-10
+[Listing-10-11]: ch10-01-syntax.html#Listing-10-11

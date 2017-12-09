@@ -1089,3 +1089,9 @@ variables, data types, and functions, and shows how to use them in Rust.
 Chapter 4 explores ownership, which is a Rust feature that is most different
 from other languages. Chapter 5 discusses structs and method syntax, and
 Chapter 6 endeavors to explain enums.
+
+[Listing-2-1]: ch02-00-guessing-game-tutorial.html#Listing-2-1
+[Listing-2-2]: ch02-00-guessing-game-tutorial.html#Listing-2-2
+[Listing-2-3]: ch02-00-guessing-game-tutorial.html#Listing-2-3
+[Listing-2-4]: ch02-00-guessing-game-tutorial.html#Listing-2-4
+[Listing-2-5]: ch02-00-guessing-game-tutorial.html#Listing-2-5

@@ -136,3 +136,5 @@ code, you’ll at least have seen these concepts and syntax once before.
 
 Now, let’s put everything we’ve learned throughout the book into practice with
 one more project!
+
+[Listing-19-38]: ch19-05-advanced-functions-and-closures.html#Listing-19-38

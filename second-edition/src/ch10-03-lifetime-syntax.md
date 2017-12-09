@@ -826,3 +826,15 @@ covering more complex scenarios involving lifetime annotations. Chapter 20 will
 get to some advanced type system features. Up next, though, let’s talk about
 how to write tests in Rust so that we can make sure our code using all these
 features is working the way we want it to!
+
+[Listing-10-18]: ch10-03-lifetime-syntax.html#Listing-10-18
+[Listing-10-19]: ch10-03-lifetime-syntax.html#Listing-10-19
+[Listing-10-20]: ch10-03-lifetime-syntax.html#Listing-10-20
+[Listing-10-21]: ch10-03-lifetime-syntax.html#Listing-10-21
+[Listing-10-22]: ch10-03-lifetime-syntax.html#Listing-10-22
+[Listing-10-23]: ch10-03-lifetime-syntax.html#Listing-10-23
+[Listing-10-24]: ch10-03-lifetime-syntax.html#Listing-10-24
+[Listing-10-25]: ch10-03-lifetime-syntax.html#Listing-10-25
+[Listing-10-26]: ch10-03-lifetime-syntax.html#Listing-10-26
+[Listing-10-27]: ch10-03-lifetime-syntax.html#Listing-10-27
+[Listing-10-11]: ch10-01-syntax.html#Listing-10-11

@@ -513,3 +513,16 @@ iterators return `None`.
 All of these method calls are possible because we specified how the `next`
 method works, and the standard library provides default implementations for
 other methods that call `next`.
+
+[Listing-13-13]: ch13-02-iterators.html#Listing-13-13
+[Listing-3-4]: ch03-05-control-flow.html#Listing-3-4
+[Listing-13-14]: ch13-02-iterators.html#Listing-13-14
+[Listing-13-15]: ch13-02-iterators.html#Listing-13-15
+[Listing-13-16]: ch13-02-iterators.html#Listing-13-16
+[Listing-13-17]: ch13-02-iterators.html#Listing-13-17
+[Listing-13-18]: ch13-02-iterators.html#Listing-13-18
+[Listing-13-19]: ch13-02-iterators.html#Listing-13-19
+[Listing-13-20]: ch13-02-iterators.html#Listing-13-20
+[Listing-13-21]: ch13-02-iterators.html#Listing-13-21
+[Listing-13-22]: ch13-02-iterators.html#Listing-13-22
+[Listing-13-23]: ch13-02-iterators.html#Listing-13-23

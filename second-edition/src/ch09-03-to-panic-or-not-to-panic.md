@@ -247,3 +247,5 @@ Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code in the next chapter.
 
+
+[Listing-9-9]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-9
