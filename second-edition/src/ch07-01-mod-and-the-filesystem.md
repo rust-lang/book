@@ -496,9 +496,3 @@ The modules should be declared in their parent module’s file using the `mod`
 keyword.
 
 Next, we’ll talk about the `pub` keyword and get rid of those warnings!
-
-[Listing-7-1]: ch07-01-mod-and-the-filesystem.html#Listing-7-1
-[Listing-7-2]: ch07-01-mod-and-the-filesystem.html#Listing-7-2
-[Listing-7-3]: ch07-01-mod-and-the-filesystem.html#Listing-7-3
-[Listing-7-4]: ch07-01-mod-and-the-filesystem.html#Listing-7-4
-[Listing-7-5]: ch07-01-mod-and-the-filesystem.html#Listing-7-5

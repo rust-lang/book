@@ -541,20 +541,3 @@ but it is trickier to get `unsafe` code correct since the compiler isn’t able
 to help uphold memory safety. When you have a reason to use `unsafe` code,
 however, it’s possible to do so, and having the explicit `unsafe` annotation
 makes it easier to track down the source of problems if they occur.
-
-[Listing-19-1]: ch19-01-unsafe-rust.html#Listing-19-1
-[Listing-19-1]: ch19-02-advanced-lifetimes.html#Listing-19-1
-[Listing-19-2]: ch19-03-advanced-traits.html#Listing-19-2
-[Listing-19-2]: ch19-01-unsafe-rust.html#Listing-19-2
-[Listing-19-3]: ch19-05-advanced-functions-and-closures.html#Listing-19-3
-[Listing-19-3]: ch19-04-advanced-types.html#Listing-19-3
-[Listing-19-3]: ch19-03-advanced-traits.html#Listing-19-3
-[Listing-19-3]: ch19-01-unsafe-rust.html#Listing-19-3
-[Listing-19-4]: ch19-01-unsafe-rust.html#Listing-19-4
-[Listing-19-5]: ch19-01-unsafe-rust.html#Listing-19-5
-[Listing-19-6]: ch19-01-unsafe-rust.html#Listing-19-6
-[Listing-19-7]: ch19-01-unsafe-rust.html#Listing-19-7
-[Listing-19-8]: ch19-01-unsafe-rust.html#Listing-19-8
-[Listing-19-9]: ch19-01-unsafe-rust.html#Listing-19-9
-[Listing-19-10]: ch19-01-unsafe-rust.html#Listing-19-10
-[Listing-19-11]: ch19-01-unsafe-rust.html#Listing-19-11

@@ -195,6 +195,3 @@ values that causes the panic and what the code should do instead.
 We’ll come back to `panic!` and when we should and should not use `panic!` to
 handle error conditions later in the chapter. Next, we’ll look at how to
 recover from an error using `Result`.
-
-[Listing-9-1]: ch09-01-unrecoverable-errors-with-panic.html#Listing-9-1
-[Listing-9-2]: ch09-01-unrecoverable-errors-with-panic.html#Listing-9-2

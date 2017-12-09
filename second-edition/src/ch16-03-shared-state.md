@@ -463,9 +463,3 @@ people who are skeptical that dealing with ownership is worth it /Carol -->
 
 Let’s round out this chapter by talking about the `Send` and `Sync` traits and
 how we could use them with custom types.
-
-[Listing-16-12]: ch16-03-shared-state.html#Listing-16-12
-[Listing-16-13]: ch16-03-shared-state.html#Listing-16-13
-[Listing-16-2]: ch16-01-threads.html#Listing-16-2
-[Listing-16-14]: ch16-03-shared-state.html#Listing-16-14
-[Listing-16-15]: ch16-03-shared-state.html#Listing-16-15

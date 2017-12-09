@@ -330,13 +330,3 @@ store in the type itself. We’ll discuss traits in Chapter 10.
 > In Chapter 10, we’ll discuss how to fix these errors so you can store
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
-
-[Listing-5-1]: ch05-02-example-structs.html#Listing-5-1
-[Listing-5-1]: ch05-01-defining-structs.html#Listing-5-1
-[Listing-5-1]: ch05-03-method-syntax.html#Listing-5-1
-[Listing-5-2]: ch05-01-defining-structs.html#Listing-5-2
-[Listing-5-3]: ch05-01-defining-structs.html#Listing-5-3
-[Listing-5-4]: ch05-01-defining-structs.html#Listing-5-4
-[Listing-5-5]: ch05-01-defining-structs.html#Listing-5-5
-[Listing-5-6]: ch05-01-defining-structs.html#Listing-5-6
-[Listing-5-7]: ch05-01-defining-structs.html#Listing-5-7

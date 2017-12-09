@@ -318,11 +318,3 @@ and hash maps have that will be helpful for these exercises!
 
 We’re getting into more complex programs in which operations can fail; so, it’s
 a perfect time to discuss error handling next!
-
-[Listing-8-20]: ch08-03-hash-maps.html#Listing-8-20
-[Listing-8-21]: ch08-03-hash-maps.html#Listing-8-21
-[Listing-8-22]: ch08-03-hash-maps.html#Listing-8-22
-[Listing-8-23]: ch08-03-hash-maps.html#Listing-8-23
-[Listing-8-24]: ch08-03-hash-maps.html#Listing-8-24
-[Listing-8-25]: ch08-03-hash-maps.html#Listing-8-25
-[Listing-8-26]: ch08-03-hash-maps.html#Listing-8-26

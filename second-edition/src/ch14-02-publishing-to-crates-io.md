@@ -545,19 +545,3 @@ $ cargo yank --vers 1.0.1 --undo
 A yank *does not* delete any code. The yank feature is not intended for
 deleting accidentally uploaded secrets, for example. If that happens, you must
 reset those secrets immediately.
-
-[Listing-14-1]: ch14-03-cargo-workspaces.html#Listing-14-1
-[Listing-14-1]: ch14-02-publishing-to-crates-io.html#Listing-14-1
-[Listing-14-3]: ch14-02-publishing-to-crates-io.html#Listing-14-3
-[Listing-14-5]: ch14-02-publishing-to-crates-io.html#Listing-14-5
-[Listing-14-7]: ch14-02-publishing-to-crates-io.html#Listing-14-7
-[Listing-14-8]: ch14-02-publishing-to-crates-io.html#Listing-14-8
-[Listing-14-10]: ch14-02-publishing-to-crates-io.html#Listing-14-10
-[Figure-14-2]: ch14-02-publishing-to-crates-io.html#Figure-14-2
-[Figure-14-2]: ch14-02-publishing-to-crates-io.html#Figure-14-2
-[Figure-14-4]: ch14-02-publishing-to-crates-io.html#Figure-14-4
-[Figure-14-4]: ch14-02-publishing-to-crates-io.html#Figure-14-4
-[Figure-14-6]: ch14-02-publishing-to-crates-io.html#Figure-14-6
-[Figure-14-6]: ch14-02-publishing-to-crates-io.html#Figure-14-6
-[Figure-14-9]: ch14-02-publishing-to-crates-io.html#Figure-14-9
-[Figure-14-9]: ch14-02-publishing-to-crates-io.html#Figure-14-9

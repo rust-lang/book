@@ -346,5 +346,3 @@ the empty tuple. Therefore, nothing is returned, which contradicts the function
 definition and results in an error. In this output, Rust provides a message to
 possibly help rectify this issue: it suggests removing the semicolon, which
 would fix the error.
-
-[Listing-3-1]: ch03-03-how-functions-work.html#Listing-3-1

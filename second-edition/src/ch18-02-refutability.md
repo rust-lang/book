@@ -114,7 +114,3 @@ particularly useful and could be replaced with a simpler `let` statement.
 Now that we’ve discussed where patterns can be used and the difference between
 refutable and irrefutable patterns, let’s go over all the syntax we can use to
 create patterns.
-
-[Listing-18-8]: ch18-02-refutability.html#Listing-18-8
-[Listing-18-9]: ch18-02-refutability.html#Listing-18-9
-[Listing-18-10]: ch18-02-refutability.html#Listing-18-10

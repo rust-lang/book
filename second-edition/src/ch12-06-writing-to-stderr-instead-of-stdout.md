@@ -124,5 +124,3 @@ nicely, and be well tested.
 Next, we’ll explore some Rust features that were influenced by functional
 languages: closures and iterators.
 
-
-[Listing-12-24]: ch12-06-writing-to-stderr-instead-of-stdout.html#Listing-12-24

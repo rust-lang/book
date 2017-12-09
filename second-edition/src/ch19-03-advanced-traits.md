@@ -814,20 +814,3 @@ example, we’d have to implement just the methods we do want ourselves.
 That’s how the newtype pattern is used in relation to traits; it’s also a
 useful pattern without having traits involved. Let’s switch focus now to talk
 about some advanced ways to interact with Rust’s type system.
-
-[Listing-19-20]: ch19-03-advanced-traits.html#Listing-19-20
-[Listing-13-6]: ch13-01-closures.html#Listing-13-6
-[Listing-19-21]: ch19-03-advanced-traits.html#Listing-19-21
-[Listing-19-22]: ch19-03-advanced-traits.html#Listing-19-22
-[Listing-19-23]: ch19-03-advanced-traits.html#Listing-19-23
-[Listing-19-24]: ch19-03-advanced-traits.html#Listing-19-24
-[Listing-19-25]: ch19-03-advanced-traits.html#Listing-19-25
-[Listing-19-26]: ch19-03-advanced-traits.html#Listing-19-26
-[Listing-19-27]: ch19-03-advanced-traits.html#Listing-19-27
-[Listing-19-28]: ch19-03-advanced-traits.html#Listing-19-28
-[Listing-19-29]: ch19-03-advanced-traits.html#Listing-19-29
-[Listing-19-30]: ch19-03-advanced-traits.html#Listing-19-30
-[Listing-19-31]: ch19-03-advanced-traits.html#Listing-19-31
-[Listing-19-32]: ch19-03-advanced-traits.html#Listing-19-32
-[Listing-19-33]: ch19-03-advanced-traits.html#Listing-19-33
-[Listing-19-34]: ch19-03-advanced-traits.html#Listing-19-34

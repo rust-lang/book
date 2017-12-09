@@ -310,6 +310,3 @@ By controlling which tests run, you can make sure your `cargo test` results
 will be fast. When you’re at a point where it makes sense to check the results
 of the `ignored` tests and you have time to wait for the results, you can run
 `cargo test -- --ignored` instead.
-
-[Listing-11-10]: ch11-02-running-tests.html#Listing-11-10
-[Listing-11-11]: ch11-02-running-tests.html#Listing-11-11

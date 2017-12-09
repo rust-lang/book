@@ -587,12 +587,3 @@ smart pointers, check out [“The Nomicon”] for even more useful information.
 
 Next, let’s talk about concurrency in Rust. We’ll even learn about a few new
 smart pointers.
-
-[Listing-15-28]: ch15-06-reference-cycles.html#Listing-15-28
-[Listing-15-6]: ch15-01-box.html#Listing-15-6
-[Listing-15-29]: ch15-06-reference-cycles.html#Listing-15-29
-[Listing-15-31]: ch15-06-reference-cycles.html#Listing-15-31
-[Listing-15-32]: ch15-06-reference-cycles.html#Listing-15-32
-[Listing-15-33]: ch15-06-reference-cycles.html#Listing-15-33
-[Figure-15-30]: ch15-06-reference-cycles.html#Figure-15-30
-[Figure-15-30]: ch15-06-reference-cycles.html#Figure-15-30

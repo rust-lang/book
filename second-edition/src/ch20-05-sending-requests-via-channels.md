@@ -532,11 +532,3 @@ do something: we never do anything to clean up our thread pool once it’s done
 being used, we just use <span class="keystroke">ctrl-C</span> to stop the
 program and let the operating system clean up after us. Let’s implement a
 graceful shutdown that cleans up everything we’ve created instead.
-
-[Listing-20-16]: ch20-05-sending-requests-via-channels.html#Listing-20-16
-[Listing-20-17]: ch20-05-sending-requests-via-channels.html#Listing-20-17
-[Listing-20-18]: ch20-05-sending-requests-via-channels.html#Listing-20-18
-[Listing-20-19]: ch20-05-sending-requests-via-channels.html#Listing-20-19
-[Listing-20-20]: ch20-05-sending-requests-via-channels.html#Listing-20-20
-[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
-[Listing-20-21]: ch20-05-sending-requests-via-channels.html#Listing-20-21

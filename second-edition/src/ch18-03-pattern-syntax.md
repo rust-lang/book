@@ -1126,28 +1126,3 @@ needs.
 
 Now, for the penultimate chapter of the book, let’s take a look at some
 advanced parts of a variety of Rust’s features.
-
-[Listing-18-11]: ch18-03-pattern-syntax.html#Listing-18-11
-[Listing-18-12]: ch18-03-pattern-syntax.html#Listing-18-12
-[Listing-18-13]: ch18-03-pattern-syntax.html#Listing-18-13
-[Listing-18-14]: ch18-03-pattern-syntax.html#Listing-18-14
-[Listing-6-5]: ch06-02-match.html#Listing-6-5
-[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2
-[Listing-18-15]: ch18-03-pattern-syntax.html#Listing-18-15
-[Listing-18-16]: ch18-03-pattern-syntax.html#Listing-18-16
-[Listing-18-17]: ch18-03-pattern-syntax.html#Listing-18-17
-[Listing-18-18]: ch18-03-pattern-syntax.html#Listing-18-18
-[Listing-18-19]: ch18-03-pattern-syntax.html#Listing-18-19
-[Listing-18-20]: ch18-03-pattern-syntax.html#Listing-18-20
-[Listing-18-21]: ch18-03-pattern-syntax.html#Listing-18-21
-[Listing-18-22]: ch18-03-pattern-syntax.html#Listing-18-22
-[Listing-18-23]: ch18-03-pattern-syntax.html#Listing-18-23
-[Listing-18-24]: ch18-03-pattern-syntax.html#Listing-18-24
-[Listing-18-25]: ch18-03-pattern-syntax.html#Listing-18-25
-[Listing-18-26]: ch18-03-pattern-syntax.html#Listing-18-26
-[Listing-18-27]: ch18-03-pattern-syntax.html#Listing-18-27
-[Listing-18-28]: ch18-03-pattern-syntax.html#Listing-18-28
-[Listing-18-29]: ch18-03-pattern-syntax.html#Listing-18-29
-[Listing-18-30]: ch18-03-pattern-syntax.html#Listing-18-30
-[Listing-18-31]: ch18-03-pattern-syntax.html#Listing-18-31
-[Listing-18-32]: ch18-03-pattern-syntax.html#Listing-18-32

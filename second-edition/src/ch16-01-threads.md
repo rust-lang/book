@@ -449,11 +449,3 @@ after the error /Carol -->
 
 Now that we have a basic understanding of threads and the thread API, let’s
 talk about what we can actually *do* with threads.
-
-[Listing-16-1]: ch16-02-message-passing.html#Listing-16-1
-[Listing-16-1]: ch16-03-shared-state.html#Listing-16-1
-[Listing-16-1]: ch16-01-threads.html#Listing-16-1
-[Listing-16-2]: ch16-01-threads.html#Listing-16-2
-[Listing-16-3]: ch16-01-threads.html#Listing-16-3
-[Listing-16-4]: ch16-01-threads.html#Listing-16-4
-[Listing-16-5]: ch16-01-threads.html#Listing-16-5

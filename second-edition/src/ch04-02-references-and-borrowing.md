@@ -328,7 +328,3 @@ Let’s recap what we’ve discussed about references:
 2. References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.
-
-[Listing-4-4]: ch04-02-references-and-borrowing.html#Listing-4-4
-[Figure-4-5]: ch04-02-references-and-borrowing.html#Figure-4-5
-[Figure-4-5]: ch04-02-references-and-borrowing.html#Figure-4-5

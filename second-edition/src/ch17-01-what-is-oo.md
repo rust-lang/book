@@ -200,10 +200,3 @@ design.
 For these reasons, Rust chose to take a different approach, using trait objects
 instead of inheritance. Let’s take a look at how trait objects enable
 polymorphism in Rust.
-
-[Listing-17-1]: ch17-02-trait-objects.html#Listing-17-1
-[Listing-17-1]: ch17-01-what-is-oo.html#Listing-17-1
-[Listing-17-1]: ch17-03-oo-design-patterns.html#Listing-17-1
-[Listing-17-2]: ch17-01-what-is-oo.html#Listing-17-2
-[Listing-17-2]: ch17-03-oo-design-patterns.html#Listing-17-2
-[Listing-10-15]: ch10-02-traits.html#Listing-10-15

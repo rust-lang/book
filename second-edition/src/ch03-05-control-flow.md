@@ -464,7 +464,3 @@ taking advantage of the repetition in the song.
 
 When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
 commonly exist in other programming languages: ownership.
-
-[Listing-3-2]: ch03-05-control-flow.html#Listing-3-2
-[Listing-3-3]: ch03-05-control-flow.html#Listing-3-3
-[Listing-3-4]: ch03-05-control-flow.html#Listing-3-4

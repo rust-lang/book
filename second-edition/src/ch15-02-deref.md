@@ -466,12 +466,3 @@ an immutable reference to a mutable reference is possible.
 <!-- Why does it coerce to an immutable reference, and why cant it go the other
 way?-->
 <!-- Elaborated above /Carol-->
-
-[Listing-15-8]: ch15-02-deref.html#Listing-15-8
-[Listing-15-9]: ch15-02-deref.html#Listing-15-9
-[Listing-15-10]: ch15-02-deref.html#Listing-15-10
-[Listing-15-11]: ch15-02-deref.html#Listing-15-11
-[Listing-15-12]: ch15-02-deref.html#Listing-15-12
-[Listing-15-13]: ch15-02-deref.html#Listing-15-13
-[Listing-15-14]: ch15-02-deref.html#Listing-15-14
-[Listing-15-15]: ch15-02-deref.html#Listing-15-15

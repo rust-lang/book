@@ -704,15 +704,3 @@ modular. Almost all of our work will be done in *src/lib.rs* from here on out.
 Let’s take advantage of this newfound modularity by doing something that would
 have been difficult with the old code but is easy with the new code: we’ll
 write some tests!
-
-[Listing-12-5]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-5
-[Listing-12-6]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-6
-[Listing-12-7]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-7
-[Listing-12-8]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-8
-[Listing-9-9]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-9
-[Listing-12-9]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-9
-[Listing-12-10]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-10
-[Listing-12-11]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-11
-[Listing-12-12]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-12
-[Listing-12-13]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-13
-[Listing-12-14]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-14

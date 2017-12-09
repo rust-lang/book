@@ -309,5 +309,3 @@ As your project grows, consider using a workspace: smaller components are
 easier to understand individually than one big blob of code. Keeping the crates
 in a workspace can make coordination among them easier if they work together
 and are often changed at the same time.
-
-[Listing-14-11]: ch14-03-cargo-workspaces.html#Listing-14-11

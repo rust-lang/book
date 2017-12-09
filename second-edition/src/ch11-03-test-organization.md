@@ -329,7 +329,3 @@ help reduce logic bugs having to do with how your code is expected to behave.
 Let’s combine the knowledge you learned in this chapter and in previous
 chapters and work on a project in the next chapter!
 
-
-[Listing-11-12]: ch11-03-test-organization.html#Listing-11-12
-[Listing-11-13]: ch11-03-test-organization.html#Listing-11-13
-[Listing-7-4]: ch07-01-mod-and-the-filesystem.html#Listing-7-4

@@ -779,15 +779,3 @@ is an available option.
 Next, let’s look at another feature of Rust that enables lots of flexibility:
 patterns. We’ve looked at them briefly throughout the book, but haven’t seen
 everything they’re capable of yet. Let’s go!
-
-[Listing-17-11]: ch17-03-oo-design-patterns.html#Listing-17-11
-[Listing-17-12]: ch17-03-oo-design-patterns.html#Listing-17-12
-[Listing-17-13]: ch17-03-oo-design-patterns.html#Listing-17-13
-[Listing-17-14]: ch17-03-oo-design-patterns.html#Listing-17-14
-[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
-[Listing-17-16]: ch17-03-oo-design-patterns.html#Listing-17-16
-[Listing-17-17]: ch17-03-oo-design-patterns.html#Listing-17-17
-[Listing-17-18]: ch17-03-oo-design-patterns.html#Listing-17-18
-[Listing-17-19]: ch17-03-oo-design-patterns.html#Listing-17-19
-[Listing-17-20]: ch17-03-oo-design-patterns.html#Listing-17-20
-[Listing-17-21]: ch17-03-oo-design-patterns.html#Listing-17-21

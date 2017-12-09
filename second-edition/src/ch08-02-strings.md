@@ -477,13 +477,3 @@ handle errors involving non-ASCII characters later in your development life
 cycle.
 
 Let’s switch to something a bit less complex: hash maps!
-
-[Listing-8-11]: ch08-02-strings.html#Listing-8-11
-[Listing-8-12]: ch08-02-strings.html#Listing-8-12
-[Listing-8-13]: ch08-02-strings.html#Listing-8-13
-[Listing-8-14]: ch08-02-strings.html#Listing-8-14
-[Listing-8-15]: ch08-02-strings.html#Listing-8-15
-[Listing-8-16]: ch08-02-strings.html#Listing-8-16
-[Listing-8-17]: ch08-02-strings.html#Listing-8-17
-[Listing-8-18]: ch08-02-strings.html#Listing-8-18
-[Listing-8-19]: ch08-02-strings.html#Listing-8-19

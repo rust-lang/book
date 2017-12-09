@@ -585,10 +585,3 @@ joining us on this tour of Rust. You’re now ready to go out and implement your
 own Rust projects or help with other people’s. Remember there’s a community of
 other Rustaceans who would love to help you with any challenges you encounter
 on your Rust journey.
-
-[Listing-20-21]: ch20-05-sending-requests-via-channels.html#Listing-20-21
-[Listing-20-22]: ch20-06-graceful-shutdown-and-cleanup.html#Listing-20-22
-[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
-[Listing-20-23]: ch20-06-graceful-shutdown-and-cleanup.html#Listing-20-23
-[Listing-20-24]: ch20-06-graceful-shutdown-and-cleanup.html#Listing-20-24
-[Listing-20-25]: ch20-06-graceful-shutdown-and-cleanup.html#Listing-20-25

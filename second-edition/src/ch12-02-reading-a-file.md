@@ -115,6 +115,3 @@ as we could be. The program is still small so these flaws aren’t a big problem
 but as the program grows, it will be harder to fix them cleanly. It’s good
 practice to begin refactoring early on when developing a program, because it’s
 much easier to refactor smaller amounts of code. We’ll do that next.
-
-[Listing-12-3]: ch12-02-reading-a-file.html#Listing-12-3
-[Listing-12-4]: ch12-02-reading-a-file.html#Listing-12-4

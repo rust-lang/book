@@ -255,8 +255,3 @@ created by spawning a new thread using an empty closure.
 This code compiles and is storing the number of `Worker` instances that we
 specified as an argument to `ThreadPool::new`, but we’re *still* not processing
 the closure that we get in `execute`. Let’s talk about how to do that next.
-
-[Listing-20-13]: ch20-04-storing-threads.html#Listing-20-13
-[Listing-12-9]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-9
-[Listing-20-14]: ch20-04-storing-threads.html#Listing-20-14
-[Listing-20-15]: ch20-04-storing-threads.html#Listing-20-15

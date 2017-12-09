@@ -314,9 +314,3 @@ one set to case insensitive.
 
 The `std::env` module contains many more useful features for dealing with
 environment variables: check out its documentation to see what is available.
-
-[Listing-12-20]: ch12-05-working-with-environment-variables.html#Listing-12-20
-[Listing-12-16]: ch12-04-testing-the-librarys-functionality.html#Listing-12-16
-[Listing-12-21]: ch12-05-working-with-environment-variables.html#Listing-12-21
-[Listing-12-22]: ch12-05-working-with-environment-variables.html#Listing-12-22
-[Listing-12-23]: ch12-05-working-with-environment-variables.html#Listing-12-23

@@ -242,7 +242,3 @@ once when the value is no longer being used.
 Now that we’ve gone over `Box<T>` and some of the characteristics of smart
 pointers, let’s talk about a few other smart pointers defined in the standard
 library.
-
-[Listing-15-16]: ch15-03-drop.html#Listing-15-16
-[Listing-15-17]: ch15-03-drop.html#Listing-15-17
-[Listing-15-18]: ch15-03-drop.html#Listing-15-18

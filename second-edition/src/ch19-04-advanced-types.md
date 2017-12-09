@@ -358,9 +358,3 @@ type might not be `Sized`, we need to use it behind some kind of pointer. In
 this case, we’ve chosen a reference.
 
 Next let’s talk about functions and closures!
-
-[Listing-19-26]: ch19-03-advanced-traits.html#Listing-19-26
-[Listing-19-35]: ch19-04-advanced-types.html#Listing-19-35
-[Listing-19-36]: ch19-04-advanced-types.html#Listing-19-36
-[Listing-19-37]: ch19-04-advanced-types.html#Listing-19-37
-[Listing-19-33]: ch19-03-advanced-traits.html#Listing-19-33

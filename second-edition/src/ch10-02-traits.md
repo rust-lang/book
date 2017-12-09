@@ -553,11 +553,3 @@ There’s another kind of generics that we’ve been using without even realizin
 it called *lifetimes*. Rather than helping us ensure that a type has the
 behavior we need it to have, lifetimes help us ensure that references are valid
 as long as we need them to be. Let’s learn how lifetimes do that.
-
-[Listing-10-12]: ch10-02-traits.html#Listing-10-12
-[Listing-10-13]: ch10-02-traits.html#Listing-10-13
-[Listing-10-14]: ch10-02-traits.html#Listing-10-14
-[Listing-10-15]: ch10-02-traits.html#Listing-10-15
-[Listing-10-5]: ch10-01-syntax.html#Listing-10-5
-[Listing-10-16]: ch10-02-traits.html#Listing-10-16
-[Listing-10-17]: ch10-02-traits.html#Listing-10-17

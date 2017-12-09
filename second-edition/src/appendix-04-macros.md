@@ -488,6 +488,3 @@ better declarative macro system will be used with the `macro` keyword, and
 we’ll add more types of procedural macros, for more powerful tasks than only
 `derive`. These systems are still under development at the time of publication;
 please consult the online Rust documentation for the latest information.
-
-[Listing-A4-1]: appendix-04-macros.html#Listing-A4-1
-[Listing-A4-2]: appendix-04-macros.html#Listing-A4-2

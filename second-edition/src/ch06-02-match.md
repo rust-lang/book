@@ -306,7 +306,3 @@ list before the `_` placeholder.
 
 However, the `match` expression can be a bit wordy in a situation in which we
 only care about *one* of the cases. For this situation, Rust provides `if let`.
-
-[Listing-6-3]: ch06-02-match.html#Listing-6-3
-[Listing-6-4]: ch06-02-match.html#Listing-6-4
-[Listing-6-5]: ch06-02-match.html#Listing-6-5

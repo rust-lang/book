@@ -426,12 +426,3 @@ implementor of the `Foo` trait that has any references inside must have the
 lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
-
-[Listing-19-12]: ch19-02-advanced-lifetimes.html#Listing-19-12
-[Listing-19-13]: ch19-02-advanced-lifetimes.html#Listing-19-13
-[Listing-19-14]: ch19-02-advanced-lifetimes.html#Listing-19-14
-[Listing-19-15]: ch19-02-advanced-lifetimes.html#Listing-19-15
-[Listing-19-16]: ch19-02-advanced-lifetimes.html#Listing-19-16
-[Listing-19-17]: ch19-02-advanced-lifetimes.html#Listing-19-17
-[Listing-19-18]: ch19-02-advanced-lifetimes.html#Listing-19-18
-[Listing-19-19]: ch19-02-advanced-lifetimes.html#Listing-19-19

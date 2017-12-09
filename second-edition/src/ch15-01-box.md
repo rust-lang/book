@@ -372,19 +372,3 @@ both? I'm not sure it's clear -->
 getting into these traits since they don't make much sense out of context, but
 they're more important to understand before explaining the more complicated
 smart pointers /Carol -->
-
-[Listing-15-1]: ch15-02-deref.html#Listing-15-1
-[Listing-15-1]: ch15-01-box.html#Listing-15-1
-[Listing-15-1]: ch15-03-drop.html#Listing-15-1
-[Listing-15-2]: ch15-06-reference-cycles.html#Listing-15-2
-[Listing-15-2]: ch15-04-rc.html#Listing-15-2
-[Listing-15-2]: ch15-05-interior-mutability.html#Listing-15-2
-[Listing-15-2]: ch15-01-box.html#Listing-15-2
-[Listing-15-3]: ch15-06-reference-cycles.html#Listing-15-3
-[Listing-15-3]: ch15-01-box.html#Listing-15-3
-[Listing-15-4]: ch15-01-box.html#Listing-15-4
-[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2
-[Listing-15-6]: ch15-01-box.html#Listing-15-6
-[Figure-15-5]: ch15-01-box.html#Figure-15-5
-[Figure-15-5]: ch15-01-box.html#Figure-15-5
-[Figure-15-7]: ch15-01-box.html#Figure-15-7
