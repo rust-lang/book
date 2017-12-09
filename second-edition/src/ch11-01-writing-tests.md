@@ -73,8 +73,7 @@ The function body uses the `assert_eq!` macro to assert that 2 + 2 equals 4.
 This assertion serves as an example of the format for a typical test. Let’s run
 it to see that this test passes.
 
-The `cargo test` command runs all tests in our project, as shown in Listing
-11-2:
+The `cargo test` command runs all tests in our project, as shown in Listing 11-2:
 
 [Listing-11-2]: #Listing-11-2
 <a name="Listing-11-2"></a>
@@ -178,8 +177,8 @@ mod tests {
 <span class="caption">Listing 11-3: Adding a second test that will fail because
 we call the `panic!` macro</span>
 
-Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed:
+Run the tests again using `cargo test`. The output should look like Listing 11-4,
+which shows that our `exploration` test passed and `another` failed:
 
 [Listing-11-4]: #Listing-11-4
 <a name="Listing-11-4"></a>

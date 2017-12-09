@@ -130,7 +130,7 @@ what their purpose is.
 > Note: Some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
 
-Listing12-6 shows the addition of a struct named `Config` defined to have
+Listing 12-6 shows the addition of a struct named `Config` defined to have
 fields named `query` and `filename`. We’ve also changed the `parse_config`
 function to return an instance of the `Config` struct and updated `main` to use
 the struct fields rather than having separate variables:

@@ -202,8 +202,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 </span>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-Chapter 13, but recall that you saw this way of using an iterator in Listing
-3-4, where we used a `for` loop with an iterator to run some code on each item
+Chapter 13, but recall that you saw this way of using an iterator in Listing3-4,
+where we used a `for` loop with an iterator to run some code on each item
 in a collection.
 
 #### Searching Each Line for the Query

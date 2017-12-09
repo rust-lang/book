@@ -343,8 +343,8 @@ these types easier to find.
 that lists the re-exports</span>
 
 Users of the `art` crate can still see and choose to use the internal structure
-as in Listing 14-7, or they can use the more convenient structure from Listing
-14-8, as shown in Listing 14-10:
+as in Listing 14-7, or they can use the more convenient structure from Listing 14-8,
+as shown in Listing 14-10:
 
 <span class="filename">Filename: src/main.rs</span>
 

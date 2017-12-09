@@ -215,8 +215,8 @@ let guess = match guess.trim().parse()  {
 
 What would the type of `guess` be here? It’d have to be both an integer and a
 string, and Rust requires that `guess` can only have one type. So what does
-`continue` return? Why are we allowed to return a `u32` from one arm in Listing
-19-37 and have another arm that ends with `continue`?
+`continue` return? Why are we allowed to return a `u32` from one arm in Listing 19-37
+and have another arm that ends with `continue`?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms. The former

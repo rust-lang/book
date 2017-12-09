@@ -469,8 +469,8 @@ in the variable `get`. Because we’re reading raw bytes into the buffer, we use
 a byte string, created with `b""`, to make `get` a byte string too. Then, we
 check to see if `buffer` starts with the bytes in `get`. If it does, we’ve
 gotten a well-formed request to `/`, which is the success case that we want to
-handle in the `if` block. The `if` block contains the code we added in Listing
-20-5 that returns the contents of our HTML file.
+handle in the `if` block. The `if` block contains the code we added in Listing 20-5
+that returns the contents of our HTML file.
 
 If `buffer` does not start with the bytes in `get`, we’ve gotten some other
 request. We’ll respond to all other requests using the code we’re about to add

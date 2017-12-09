@@ -588,8 +588,8 @@ and the ability to add text to the post’s content. But instead of having a
 that draft posts don’t have the `content` method at all. That way, if we try to
 get a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. This will make it impossible for us to accidentally display
-draft post content in production, since that code won’t even compile. Listing
-17-19 shows the definition of a `Post` struct, a `DraftPost` struct, and
+draft post content in production, since that code won’t even compile. Listing 17-19
+shows the definition of a `Post` struct, a `DraftPost` struct, and
 methods on each:
 
 <span class="filename">Filename: src/lib.rs</span>

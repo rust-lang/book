@@ -135,8 +135,8 @@ library has provided for us, in order to experience that smart pointers don’t
 behave like references by default. Then we’ll learn about how to add the
 ability to use the dereference operator.
 
-`Box<T>` is ultimately defined as a tuple struct with one element, so Listing
-15-10 defines a `MyBox<T>` type in the same way. We’ll also define a `new`
+`Box<T>` is ultimately defined as a tuple struct with one element, so Listing 15-10
+defines a `MyBox<T>` type in the same way. We’ll also define a `new`
 function to match the `new` function defined on `Box<T>`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -203,8 +203,8 @@ implement the `Deref` trait.
 As we discussed in Chapter 10, in order to implement a trait, we need to
 provide implementations for the trait’s required methods. The `Deref` trait,
 provided by the standard library, requires implementing one method named
-`deref` that borrows `self` and returns a reference to the inner data. Listing
-15-12 contains an implementation of `Deref` to add to the definition of `MyBox`:
+`deref` that borrows `self` and returns a reference to the inner data. Listing 15-12
+contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 <span class="filename">Filename: src/main.rs</span>
 

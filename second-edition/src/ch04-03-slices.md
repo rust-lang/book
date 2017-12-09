@@ -236,8 +236,8 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-5, by looking for the first occurrence of a space. When we find a space, we
+We get the index for the end of the word in the same way as we did in Listing 4-5,
+by looking for the first occurrence of a space. When we find a space, we
 return a string slice using the start of the string and the index of the space
 as the starting and ending indices.
 

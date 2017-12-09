@@ -241,8 +241,8 @@ and namespaces created by modules, which we’ll discuss in Chapter 7.
 
 ### Multiple `impl` Blocks
 
-Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method
+Each struct is allowed to have multiple `impl` blocks. For example, Listing 5-15
+is equivalent to the code shown in Listing 5-16, which has each method
 in its own `impl` block:
 
 [Listing-5-16]: #Listing-5-16

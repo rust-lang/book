@@ -461,8 +461,8 @@ we would want to print out literally, and `stringify!` also saves an allocation
 by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello-world`
-and `hello-world-derive`. Let’s hook these crates up to the code in Listing
-A4-1 to see it in action! Create a new binary project in your `projects`
+and `hello-world-derive`. Let’s hook these crates up to the code in Listing A4-1
+to see it in action! Create a new binary project in your `projects`
 directory with `cargo new --bin pancakes`. We need to add both `hello-world`
 and `hello-world-derive` as dependencies in the `pancakes` crate’s
 *Cargo.toml*. If you’ve chosen to publish your versions of `hello-world` and

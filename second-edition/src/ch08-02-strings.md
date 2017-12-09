@@ -44,8 +44,7 @@ them and when each is appropriate.
 ### Creating a New String
 
 Many of the same operations available with `Vec<T>` are available with `String`
-as well, starting with the `new` function to create a string, shown in Listing
-8-11:
+as well, starting with the `new` function to create a string, shown in Listing 8-11:
 
 [Listing-8-11]: #Listing-8-11
 <a name="Listing-8-11"></a>

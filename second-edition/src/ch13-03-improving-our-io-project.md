@@ -216,8 +216,8 @@ Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might make it easier for us to
 make a future enhancement to make searching happen in parallel, because we
-wouldn’t have to manage concurrent access to the `results` vector. Listing
-13-29 shows this change:
+wouldn’t have to manage concurrent access to the `results` vector. Listing 13-29
+shows this change:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -236,8 +236,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 implementation of the `search` function</span>
 
 Recall that the purpose of the `search` function is to return all lines in
-`contents` that contain the `query`. Similar to the `filter` example in Listing
-13-19, we can use the `filter` adaptor to keep only the lines that
+`contents` that contain the `query`. Similar to the `filter` example in Listing 13-19,
+we can use the `filter` adaptor to keep only the lines that
 `line.contains(query)` returns true for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as

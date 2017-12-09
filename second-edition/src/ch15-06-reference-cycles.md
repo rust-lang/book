@@ -12,8 +12,7 @@ never reach 0, and the values will never be dropped.
 ### Creating a Reference Cycle
 
 Let’s take a look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing
-15-28:
+starting with the definition of the `List` enum and a `tail` method in Listing 15-28:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -46,8 +45,8 @@ impl List {
 
 We’re using another variation of the `List` definition from Listing 15-6. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value like we did in Listing
-15-19, we want to be able to modify which `List` a `Cons` variant is pointing
+instead of having the ability to modify the `i32` value like we did in Listing 15-19,
+we want to be able to modify which `List` a `Cons` variant is pointing
 to. We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant.
 

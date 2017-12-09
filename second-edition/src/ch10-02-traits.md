@@ -26,8 +26,8 @@ tweet.
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
 need each struct to have is that it’s able to be summarized, and that we can
-ask for that summary by calling a `summary` method on an instance. Listing
-10-12 shows the definition of a `Summarizable` trait that expresses this
+ask for that summary by calling a `summary` method on an instance. Listing 10-12
+shows the definition of a `Summarizable` trait that expresses this
 concept:
 
 <span class="filename">Filename: lib.rs</span>
@@ -244,8 +244,8 @@ This code prints `New article available! (Read more...)`.
 
 Changing the `Summarizable` trait to have a default implementation for
 `summary` does not require us to change anything about the implementations of
-`Summarizable` on `Tweet` in Listing 10-13 or `WeatherForecast` in Listing
-10-14: the syntax for overriding a default implementation is exactly the same
+`Summarizable` on `Tweet` in Listing 10-13 or `WeatherForecast` in Listing 10-14:
+the syntax for overriding a default implementation is exactly the same
 as the syntax for implementing a trait method that doesn’t have a default
 implementation.
 

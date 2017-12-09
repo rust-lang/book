@@ -389,8 +389,8 @@ point is from the point of coordinates (0.0, 0.0) and uses mathematical
 operations which are only available for floating-point types.
 
 Generic type parameters in a struct definition aren’t always the same generic
-type parameters you want to use in that struct’s method signatures. Listing
-10-11 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
+type parameters you want to use in that struct’s method signatures. Listing 10-11
+defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
 The method takes another `Point` as a parameter, which might have different
 types than the `self` `Point` that we’re calling `mixup` on. The method creates
 a new `Point` instance that has the `x` value from the `self` `Point` (which is

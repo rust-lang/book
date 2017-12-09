@@ -39,8 +39,8 @@ Named variables are irrefutable patterns that match any value, which we have
 used many times before. There is a complication, however, when used in `match`
 expressions. Because `match` starts a new scope, variables declared as part of
 a pattern inside the `match` expression will shadow those with the same name
-outside the `match` construct---as is the case with all variables. In Listing
-18-11, we declare a variable named `x` with the value `Some(5)` and a variable
+outside the `match` construct---as is the case with all variables. In Listing 18-11,
+we declare a variable named `x` with the value `Some(5)` and a variable
 `y` with the value `10`. We then create a `match` expression on the value `x`.
 Take a look at the patterns in the match arms and `println!` at the end, and
 try to figure out what will be printed before running this code or reading

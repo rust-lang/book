@@ -173,8 +173,8 @@ closure, one that moves the counter into the thread, acquires a lock on the
 mutex. When a thread finishes running its closure, `num` will go out of scope
 and release the lock so another thread can acquire it.
 
-In the main thread, we collect all the join handles like we did in Listing
-16-2, and then call `join` on each to make sure all the threads finish. At that
+In the main thread, we collect all the join handles like we did in Listing 16-2,
+and then call `join` on each to make sure all the threads finish. At that
 point, the main thread will acquire the lock and print out the result of this
 program.
 
@@ -281,8 +281,8 @@ we saw in Chapter 15.
 
 In Chapter 15, we were able to give a value multiple owners by using the smart
 pointer `Rc<T>` to create a reference-counted value. Let’s try to do the same
-here and see what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing
-16-14, and clone the `Rc<T>` before moving ownership to the thread. Now we’ve
+here and see what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing 16-14,
+and clone the `Rc<T>` before moving ownership to the thread. Now we’ve
 seen the errors, we’ll also switch back to using the `for` loop, and we’ll keep
 the `move` keyword with the closure:
 
@@ -380,8 +380,8 @@ thread, your code can run faster if it doesn’t have to enforce the guarantees
 atomics provide.
 
 Back to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix our
-program by changing the `use` line and the call to `new`. The code in Listing
-16-15 will finally compile and run:
+program by changing the `use` line and the call to `new`. The code in Listing 16-15
+will finally compile and run:
 
 <span class="filename">Filename: src/main.rs</span>
 

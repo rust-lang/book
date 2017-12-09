@@ -507,8 +507,7 @@ result within a `Some` variant in the `value` field. Then if the code asks for
 the result of the closure again, instead of executing the closure again, the
 `Cacher` will return the result held in the `Some` variant.
 
-The logic around the `value` field we’ve just described is defined in Listing
-13-10:
+The logic around the `value` field we’ve just described is defined in Listing 13-10:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -682,8 +681,8 @@ passed into it. We call the `value` method on this `Cacher` instance with an
 `arg` value of 1 and then an `arg` value of 2, and we expect that the call to
 `value` with the `arg` value of 2 should return 2.
 
-Run this test with the `Cacher` implementation in Listing 13-9 and Listing
-13-10, and the test will fail on the `assert_eq!` with this message:
+Run this test with the `Cacher` implementation in Listing 13-9 and Listing 13-10,
+and the test will fail on the `assert_eq!` with this message:
 
 ```text
 thread 'call_with_different_values' panicked at 'assertion failed: `(left == right)`

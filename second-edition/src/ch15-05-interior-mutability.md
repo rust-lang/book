@@ -155,8 +155,8 @@ Applications that use our library will be expected to provide the actual
 mechanism for sending the messages: the application could choose to put a
 message in the application, send an email, send a text message, or something
 else. Our library doesn’t need to know about that detail; all it needs is
-something that implements a trait we’ll provide called `Messenger`. Listing
-15-23 shows our library code:
+something that implements a trait we’ll provide called `Messenger`. Listing 15-23
+shows our library code:
 
 <span class="filename">Filename: src/lib.rs</span>
 

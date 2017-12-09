@@ -40,8 +40,8 @@ containing a value of whatever type the implementor has specified.
 
 #### Associated Types Versus Generics
 
-When we implemented the `Iterator` trait on the `Counter` struct in Listing
-13-6, we specified that the `Item` type was `u32`:
+When we implemented the `Iterator` trait on the `Counter` struct in Listing 13-6,
+we specified that the `Item` type was `u32`:
 
 ```rust,ignore
 impl Iterator for Counter {
@@ -279,8 +279,7 @@ that we’re implementing `Add` on).
 
 Let’s look at another example of implementing the `Add` trait. Imagine we have
 two structs holding values in different units, `Millimeters` and `Meters`. We
-can implement `Add` for `Millimeters` in different ways as shown in Listing
-19-26:
+can implement `Add` for `Millimeters` in different ways as shown in Listing 19-26:
 
 [Listing-19-26]: #Listing-19-26
 <a name="Listing-19-26"></a>
@@ -557,8 +556,7 @@ A baby dog is called a Spot
 This isn’t really what we wanted, in this case we want to call the `baby_name`
 function that’s part of the `Animal` trait that we implemented on `Dog`, so
 that we can print `A baby dog is called a puppy`. The technique we used in
-Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing
-19-31:
+Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing 19-31:
 
 <span class="filename">Filename: src/main.rs</span>
 
