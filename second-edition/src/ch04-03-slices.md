@@ -18,7 +18,7 @@ fn first_word(s: &String) -> ?
 This function, `first_word`, has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that as shown in [Listing 4-5][Listing-4-5]:
+end of the word. Let’s try that as shown in Listing 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -85,8 +85,8 @@ We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a `usize` on its own, but it’s
 only a meaningful number in the context of the `&String`. In other words,
 because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in [Listing 4-6][Listing-4-6] that
-uses the `first_word` function from [Listing 4-5][Listing-4-5]:
+will still be valid in the future. Consider the program in Listing 4-6 that
+uses the `first_word` function from Listing 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -166,6 +166,7 @@ position and the length of the slice, which corresponds to `ending_index` minus
 `starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
 a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
 
+Figure 4-6 shows this in a diagram.
 
 [Figure-4-6]: #Figure-4-6
 <a name="Figure-4-6"></a>
@@ -235,8 +236,8 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-We get the index for the end of the word in the same way as we did in [Listing 4-5][Listing-4-5],
-by looking for the first occurrence of a space. When we find a space, we
+We get the index for the end of the word in the same way as we did in Listing
+4-5, by looking for the first occurrence of a space. When we find a space, we
 return a string slice using the start of the string and the index of the space
 as the starting and ending indices.
 
@@ -252,7 +253,7 @@ fn second_word(s: &String) -> &str {
 
 We now have a straightforward API that’s much harder to mess up, since the
 compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in [Listing 4-6][Listing-4-6], when we got the index to the end of the
+the bug in the program in Listing 4-6, when we got the index to the end of the
 first word but then cleared the string so our index was invalid? That code was
 logically incorrect but didn’t show any immediate errors. The problems would
 show up later if we kept trying to use the first word index with an emptied

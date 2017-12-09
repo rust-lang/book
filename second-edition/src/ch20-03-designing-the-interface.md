@@ -18,7 +18,7 @@ our implementation.
 First, let’s explore what the code to create a new thread for every connection
 could look like. This isn’t our final plan due to the problems with potentially
 spawning an unlimited number of threads that we talked about earlier, but it’s
-a start. [Listing 20-11][Listing-20-11] shows the changes to `main` to spawn a new thread to
+a start. Listing 20-11 shows the changes to `main` to spawn a new thread to
 handle each stream within the `for` loop:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -59,7 +59,7 @@ overwhelm the system since we’re making new threads without any limit.
 
 We want our thread pool to work in a similar, familiar way so that switching
 from threads to a thread pool doesn’t require large changes to the code we want
-to run in the pool. [Listing 20-12][Listing-20-12] shows the hypothetical interface for a
+to run in the pool. Listing 20-12 shows the hypothetical interface for a
 `ThreadPool` struct we’d like to use instead of `thread::spawn`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -103,7 +103,7 @@ work in a similar way to `thread::spawn`.
 
 ### Compiler Driven Development to Get the API Compiling
 
-Go ahead and make the changes in [Listing 20-12][Listing-20-12] to *src/main.rs*, and let’s use
+Go ahead and make the changes in Listing 20-12 to *src/main.rs*, and let’s use
 the compiler errors to drive our development. Here’s the first error we get:
 
 ```text

@@ -9,7 +9,7 @@ We’ve talked about how to pass closures to functions, but you can pass regular
 functions to functions too! Functions coerce to the type `fn`, with a lower
 case ‘f’ not to be confused with the `Fn` closure trait. `fn` is called a
 *function pointer*. The syntax for specifying that a parameter is a function
-pointer is similar to that of closures, as shown in [Listing 19-38][Listing-19-38]:
+pointer is similar to that of closures, as shown in Listing 19-38:
 
 <span class="filename">Filename: src/main.rs</span>
 

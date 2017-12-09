@@ -22,7 +22,7 @@ information about everything lifetimes can do.
 
 The main aim of lifetimes is to prevent dangling references, which will cause a
 program to reference data other than the data we’re intending to reference.
-Consider the program in [Listing 10-18][Listing-10-18], with an outer scope and an inner scope.
+Consider the program in Listing 10-18, with an outer scope and an inner scope.
 The outer scope declares a variable named `r` with no initial value, and the
 inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
@@ -79,8 +79,8 @@ determine that this code should not be allowed?
 #### The Borrow Checker
 
 The part of the compiler called the *borrow checker* compares scopes to
-determine that all borrows are valid. [Listing 10-19][Listing-10-19] shows the same example from
-[Listing 10-18][Listing-10-18] with annotations showing the lifetimes of the variables:
+determine that all borrows are valid. Listing 10-19 shows the same example from
+Listing 10-18 with annotations showing the lifetimes of the variables:
 
 [Listing-10-19]: #Listing-10-19
 <a name="Listing-10-19"></a>
@@ -119,7 +119,7 @@ a lifetime of `'b`. The program is rejected because the lifetime `'b` is
 shorter than the lifetime of `'a`: the subject of the reference does not live
 as long as the reference.
 
-Let’s look at an example in [Listing 10-20][Listing-10-20] that doesn’t try to make a dangling
+Let’s look at an example in Listing 10-20 that doesn’t try to make a dangling
 reference and compiles without any errors:
 
 [Listing-10-20]: #Listing-10-20
@@ -152,7 +152,7 @@ values in the context of functions.
 
 Let’s write a function that will return the longest of two string slices. We
 want to be able to call this function by passing it two string slices, and we
-want to get back a string slice. The code in [Listing 10-21][Listing-10-21] should print `The
+want to get back a string slice. The code in Listing 10-21 should print `The
 longest string is abcd` once we’ve implemented the `longest` function:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -199,7 +199,7 @@ interested to know if rereading Chapter 4 clears up that confusion.
 Refer back to the “String Slices as Parameters” section of Chapter 4 for more
 discussion about why these are the arguments we want.
 
-If we try to implement the `longest` function as shown in [Listing 10-22][Listing-10-22], it
+If we try to implement the `longest` function as shown in Listing 10-22, it
 won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -292,7 +292,7 @@ parameters need to be declared within angle brackets between the function name
 and the parameter list. The constraint we want to tell Rust about for the
 references in the parameters and the return value is that they all must have
 the same lifetime, which we’ll name `'a` and add to each reference as shown in
-[Listing 10-23][Listing-10-23]:
+Listing 10-23:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -314,7 +314,7 @@ specifies all the references in the signature must have the same lifetime,
 `'a`</span>
 
 This will compile and will produce the result we want when used with the `main`
-function in [Listing 10-21][Listing-10-21].
+function in Listing 10-21.
 
 The function signature now says that for some lifetime `'a`, the function will
 get two parameters, both of which are string slices that live at least as long
@@ -346,7 +346,7 @@ with the same lifetime parameter `'a`, the returned reference will therefore be
 guaranteed to be valid as long as the shorter of the lifetimes of `x` and `y`.
 
 Let’s see how this restricts the usage of the `longest` function by passing in
-references that have different concrete lifetimes. [Listing 10-24][Listing-10-24] is a
+references that have different concrete lifetimes. Listing 10-24 is a
 straightforward example that should match your intuition from any language:
 `string1` is valid until the end of the outer scope, `string2` is valid until
 the end of the inner scope, and `result` references something that is valid
@@ -386,7 +386,7 @@ Next, let’s try an example that will show that the lifetime of the reference i
 declaration of the `result` variable outside the inner scope, but leave the
 assignment of the value to the `result` variable inside the scope with
 `string2`. Next, we’ll move the `println!` that uses `result` outside of the
-inner scope, after it has ended. The code in [Listing 10-25][Listing-10-25] will not compile:
+inner scope, after it has ended. The code in Listing 10-25 will not compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -433,7 +433,7 @@ not gone out of scope yet, a reference to `string1` will still be valid for the
 `println!`. However, what we’ve told Rust with the lifetime parameters is that
 the lifetime of the reference returned by the `longest` function is the same as
 the smaller of the lifetimes of the references passed in. Therefore, the borrow
-checker disallows the code in [Listing 10-25][Listing-10-25] as possibly having an invalid
+checker disallows the code in Listing 10-25 as possibly having an invalid
 reference.
 
 Try designing some more experiments that vary the values and lifetimes of the
@@ -514,7 +514,7 @@ would create dangling pointers or otherwise violate memory safety.
 
 Up until now, we’ve only defined structs to hold owned types. It is possible
 for structs to hold references, but we need to add a lifetime annotation on
-every reference in the struct’s definition. [Listing 10-26][Listing-10-26] has a struct named
+every reference in the struct’s definition. Listing 10-26 has a struct named
 `ImportantExcerpt` that holds a string slice:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -554,7 +554,7 @@ variable `novel`.
 In this section, we’ve learned that every reference has a lifetime, and we need
 to specify lifetime parameters for functions or structs that use references.
 However, in Chapter 4 we had a function in the “String Slices” section, shown
-again in [Listing 10-27][Listing-10-27], that compiled without lifetime annotations:
+again in Listing 10-27, that compiled without lifetime annotations:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -635,7 +635,7 @@ it can’t figure out lifetimes for, the compiler will stop with an error.
 
 Let’s pretend we’re the compiler and apply these rules to figure out what the
 lifetimes of the references in the signature of the `first_word` function in
-[Listing 10-27][Listing-10-27] are. The signature starts without any lifetimes associated with
+Listing 10-27 are. The signature starts without any lifetimes associated with
 the references:
 
 ```rust,ignore
@@ -662,7 +662,7 @@ compiler can continue its analysis without needing the programmer to annotate
 the lifetimes in this function signature.
 
 Let’s do another example, this time with the `longest` function that had no
-lifetime parameters when we started working with in [Listing 10-22][Listing-10-22]:
+lifetime parameters when we started working with in Listing 10-22:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
@@ -680,7 +680,7 @@ Looking at the second rule, it doesn’t apply since there is more than one inpu
 lifetime. Looking at the third rule, this also does not apply because this is a
 function rather than a method, so none of the parameters are `self`. So we’re
 out of rules, but we haven’t figured out what the return type’s lifetime is.
-This is why we got an error trying to compile the code from [Listing 10-22][Listing-10-22]: the
+This is why we got an error trying to compile the code from Listing 10-22: the
 compiler worked through the lifetime elision rules it knows, but still can’t
 figure out all the lifetimes of the references in the signature.
 
@@ -699,7 +699,7 @@ with the struct's fields or with references passed into or returned from
 methods. /Carol -->
 
 When we implement methods on a struct with lifetimes, the syntax is again the
-same as that of generic type parameters that we showed in [Listing 10-11][Listing-10-11]: the
+same as that of generic type parameters that we showed in Listing 10-11: the
 place that lifetime parameters are declared and used depends on whether the
 lifetime parameter is related to the struct fields or the method arguments and
 return values.
@@ -712,7 +712,7 @@ In method signatures inside the `impl` block, references might be tied to the
 lifetime of references in the struct’s fields, or they might be independent. In
 addition, the lifetime elision rules often make it so that lifetime annotations
 aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in [Listing 10-26][Listing-10-26].
+struct named `ImportantExcerpt` that we defined in Listing 10-26.
 
 First, here’s a method named `level`. The only parameter is a reference to
 `self`, and the return value is just an `i32`, not a reference to anything:
@@ -798,7 +798,7 @@ fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a st
 }
 ```
 
-This is the `longest` function from [Listing 10-23][Listing-10-23] that returns the longest of
+This is the `longest` function from Listing 10-23 that returns the longest of
 two string slices, but with an extra argument named `ann`. The type of `ann` is
 the generic type `T`, which may be filled in by any type that implements the
 `Display` trait as specified by the `where` clause. This extra argument will be

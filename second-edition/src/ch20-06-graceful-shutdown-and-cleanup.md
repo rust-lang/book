@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in [Listing 20-21][Listing-20-21] is responding to requests asynchronously through the
+The code in Listing 20-21 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about fields that
 we’re not using in a direct way, which are a reminder that we’re not cleaning
 anything up. When we use <span class="keystroke">ctrl-C</span> to halt the main
@@ -16,7 +16,7 @@ gracefully shutting down its thread pool.
 
 Let’s start with implementing `Drop` for our thread pool. When the pool is
 dropped, we should join on all of our threads to make sure they finish their
-work. [Listing 20-22][Listing-20-22] shows a first attempt at a `Drop` implementation; this code
+work. Listing 20-22 shows a first attempt at a `Drop` implementation; this code
 won’t quite work yet:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -58,7 +58,7 @@ error[E0507]: cannot move out of borrowed content
 Because we only have a mutable borrow of each `worker`, we can’t call `join`:
 `join` takes ownership of its argument. In order to solve this, we need a way
 to move the `thread` out of the `Worker` instance that owns `thread` so that
-`join` can consume the thread. We saw a way to do this in [Listing 17-15][Listing-17-15]: if the
+`join` can consume the thread. We saw a way to do this in Listing 17-15: if the
 `Worker` holds an `Option<thread::JoinHandle<()>` instead, we can call the
 `take` method on the `Option` to move the value out of the `Some` variant and
 leave a `None` variant in its place. In other words, a `Worker` that is running
@@ -170,7 +170,7 @@ thread should run, or it will be a `Terminate` variant that will cause the
 thread to exit its loop and stop.
 
 We need to adjust the channel to use values of type `Message` rather than type
-`Job`, as shown in [Listing 20-23][Listing-20-23]:
+`Job`, as shown in Listing 20-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -251,7 +251,7 @@ variant and break out of the loop if we get the `Terminate` variant.
 With these changes, the code will compile again and continue to function in the
 same way as it has been. We’ll get a warning, though, because we aren’t using
 the `Terminate` variant in any messages. Let’s change our `Drop` implementation
-to look like [Listing 20-24][Listing-20-24]:
+to look like Listing 20-24:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -307,7 +307,7 @@ if we send the same number of terminate messages as there are workers, each
 worker will receive a terminate message before we call `join` on its thread.
 
 In order to see this code in action, let’s modify `main` to only accept two
-requests before gracefully shutting the server down as shown in [Listing 20-25][Listing-20-25]:
+requests before gracefully shutting the server down as shown in Listing 20-25:
 
 <span class="filename">Filename: src/bin/main.rs</span>
 

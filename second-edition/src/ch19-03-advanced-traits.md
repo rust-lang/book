@@ -17,7 +17,7 @@ of the book, but more common than many of the things in this chapter.
 An example of a trait with an associated type is the `Iterator` trait provided
 by the standard library. It has an associated type named `Item` that stands in
 for the type of the values that we’re iterating over. We mentioned in Chapter
-13 that the definition of the `Iterator` trait is as shown in [Listing 19-20][Listing-19-20]:
+13 that the definition of the `Iterator` trait is as shown in Listing 19-20:
 
 [Listing-19-20]: #Listing-19-20
 <a name="Listing-19-20"></a>
@@ -40,8 +40,8 @@ containing a value of whatever type the implementor has specified.
 
 #### Associated Types Versus Generics
 
-When we implemented the `Iterator` trait on the `Counter` struct in [Listing 13-6][Listing-13-6],
-we specified that the `Item` type was `u32`:
+When we implemented the `Iterator` trait on the `Counter` struct in Listing
+13-6, we specified that the `Item` type was `u32`:
 
 ```rust,ignore
 impl Iterator for Counter {
@@ -51,7 +51,7 @@ impl Iterator for Counter {
 ```
 
 This feels similar to generics. So why isn’t the `Iterator` trait defined as
-shown in [Listing 19-21][Listing-19-21]?
+shown in Listing 19-21?
 
 [Listing-19-21]: #Listing-19-21
 <a name="Listing-19-21"></a>
@@ -65,7 +65,7 @@ pub trait Iterator<T> {
 <span class="caption">Listing 19-21: A hypothetical definition of the
 `Iterator` trait using generics</span>
 
-The difference is that with the definition in [Listing 19-21][Listing-19-21], we could also
+The difference is that with the definition in Listing 19-21, we could also
 implement `Iterator<String> for Counter`, or any other type as well, so that
 we’d have multiple implementations of `Iterator` for `Counter`. In other words,
 when a trait has a generic parameter, we can implement that trait for a type
@@ -74,14 +74,14 @@ Then when we use the `next` method on `Counter`, we’d have to provide type
 annotations to indicate which implementation of `Iterator` we wanted to use.
 
 With associated types, we can’t implement a trait on a type multiple times.
-Using the actual definition of `Iterator` from [Listing 19-20][Listing-19-20], we can only
+Using the actual definition of `Iterator` from Listing 19-20, we can only
 choose once what the type of `Item` will be, since there can only be one `impl
 Iterator for Counter`. We don’t have to specify that we want an iterator of
 `u32` values everywhere that we call `next` on `Counter`.
 
 The benefit of not having to specify generic type parameters when a trait uses
 associated types shows up in another way as well. Consider the two traits
-defined in [Listing 19-22][Listing-19-22]. Both are defining a trait having to do with a graph
+defined in Listing 19-22. Both are defining a trait having to do with a graph
 structure that contains nodes of some type and edges of some type. `GGraph` is
 defined using generics, and `AGraph` is defined using associated types:
 
@@ -107,7 +107,7 @@ using generics and `AGraph` using associated types for `Node` and `Edge`</span>
 Let’s say we wanted to implement a function that computes the distance between
 two nodes in any types that implement the graph trait. With the `GGraph` trait
 defined using generics, our `distance` function signature would have to look
-like [Listing 19-23][Listing-19-23]:
+like Listing 19-23:
 
 [Listing-19-23]: #Listing-19-23
 <a name="Listing-19-23"></a>
@@ -132,8 +132,8 @@ know the types of the edges, we’re forced to declare an `E` parameter, because
 we need to to use the `GGraph` trait and that requires specifying the type for
 `Edge`.
 
-Contrast with the definition of `distance` in [Listing 19-24][Listing-19-24] that uses the
-`AGraph` trait from [Listing 19-22][Listing-19-22] with associated types:
+Contrast with the definition of `distance` in Listing 19-24 that uses the
+`AGraph` trait from Listing 19-22 with associated types:
 
 [Listing-19-24]: #Listing-19-24
 <a name="Listing-19-24"></a>
@@ -161,7 +161,7 @@ associated with `AGraph`, we can specify `G::Node`.
 #### Trait Objects with Associated Types
 
 You may have been wondering why we didn’t use a trait object in the `distance`
-functions in [Listing 19-23][Listing-19-23] and Listing 19-24. The signature for the `distance`
+functions in Listing 19-23 and Listing 19-24. The signature for the `distance`
 function using the generic `GGraph` trait does get a bit more concise using a
 trait object:
 
@@ -174,16 +174,16 @@ fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
 }
 ```
 
-This might be a more fair comparison to [Listing 19-24][Listing-19-24]. Specifying the `Edge`
-type is still required, though, which means [Listing 19-24][Listing-19-24] is still preferable
+This might be a more fair comparison to Listing 19-24. Specifying the `Edge`
+type is still required, though, which means Listing 19-24 is still preferable
 since we don’t have to specify something we don’t use.
 
-It’s not possible to change [Listing 19-24][Listing-19-24] to use a trait object for the graph,
+It’s not possible to change Listing 19-24 to use a trait object for the graph,
 since then there would be no way to refer to the `AGraph` trait’s associated
 type.
 
 It is possible in general to use trait objects of traits that have associated
-types, though; [Listing 19-25][Listing-19-25] shows a function named `traverse` that doesn’t
+types, though; Listing 19-25 shows a function named `traverse` that doesn’t
 need to use the trait’s associated types in other arguments. We do, however,
 have to specify the concrete types for the associated types in this case. Here,
 we’ve chosen to accept types that implement the `AGraph` trait with the
@@ -216,7 +216,7 @@ where this is useful is operator overloading.
 Rust does not allow you to create your own operators or overload arbitrary
 operators, but the operations and corresponding traits listed in `std::ops` can
 be overloaded by implementing the traits associated with the operator. For
-example, [Listing 19-25][Listing-19-25] shows how to overload the `+` operator by implementing
+example, Listing 19-25 shows how to overload the `+` operator by implementing
 the `Add` trait on a `Point` struct so that we can add two `Point` instances
 together:
 
@@ -279,7 +279,8 @@ that we’re implementing `Add` on).
 
 Let’s look at another example of implementing the `Add` trait. Imagine we have
 two structs holding values in different units, `Millimeters` and `Meters`. We
-can implement `Add` for `Millimeters` in different ways as shown in [Listing 19-26][Listing-19-26]:
+can implement `Add` for `Millimeters` in different ways as shown in Listing
+19-26:
 
 [Listing-19-26]: #Listing-19-26
 <a name="Listing-19-26"></a>
@@ -340,7 +341,7 @@ one type. We can also have a method implemented directly on the type with the
 same name as well! In order to be able to call each of the methods with the
 same name, then, we need to tell Rust which one we want to use.
 
-Consider the code in [Listing 19-27][Listing-19-27] where we’ve defined two traits, `Pilot` and
+Consider the code in Listing 19-27 where we’ve defined two traits, `Pilot` and
 `Wizard`, that both have a method called `fly`. We then implement both traits
 on a type `Human` that itself already has a method named `fly` implemented on
 it. Each `fly` method does something different:
@@ -385,7 +386,7 @@ and implementations of those traits on the `Human` type in addition to a `fly`
 method on `Human` directly</span>
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in [Listing 19-28][Listing-19-28]:
+the method that is directly implemented on the type, as shown in Listing 19-28:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -435,7 +436,7 @@ called the `fly` method implemented on `Human` directly.
 
 In order to call the `fly` methods from either the `Pilot` trait or the
 `Wizard` trait, we need to use more explicit syntax in order to specify which
-`fly` method we mean. This syntax is demonstrated in [Listing 19-29][Listing-19-29]:
+`fly` method we mean. This syntax is demonstrated in Listing 19-29:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -485,7 +486,7 @@ want to call</span>
 Specifying the trait name before the method name clarifies to Rust which
 implementation of `fly` we want to call. We could also choose to write
 `Human::fly(&person)`, which is equivalent to `person.fly()` that we had in
-[Listing 19-28][Listing-19-28], but is a bit longer to write if we don’t need to disambiguate.
+Listing 19-28, but is a bit longer to write if we don’t need to disambiguate.
 
 Running this code will print:
 
@@ -502,7 +503,7 @@ to use based on the type of `self`.
 However, associated functions that are part of traits don’t have a `self`
 parameter. When two types in the same scope implement that trait, Rust can’t
 figure out which type we mean unless we use *fully qualified syntax*. For
-example, take the `Animal` trait in [Listing 19-30][Listing-19-30] that has the associated
+example, take the `Animal` trait in Listing 19-30 that has the associated
 function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
 the associated function `baby_name` defined on `Dog` directly:
 
@@ -556,7 +557,8 @@ A baby dog is called a Spot
 This isn’t really what we wanted, in this case we want to call the `baby_name`
 function that’s part of the `Animal` trait that we implemented on `Dog`, so
 that we can print `A baby dog is called a puppy`. The technique we used in
-[Listing 19-29][Listing-19-29] doesn’t help here; if we change `main` to be the code in Listing 19-31:
+Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing
+19-31:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -589,7 +591,7 @@ error[E0283]: type annotations required: cannot resolve `_: Animal`
 
 In order to tell Rust that we want to use the implementation of `Animal` for
 `Dog`, we need to use *fully qualified syntax*, which is the most specific we
-can be when calling a function. [Listing 19-32][Listing-19-32] demonstrates how to use fully
+can be when calling a function. Listing 19-32 demonstrates how to use fully
 qualified syntax in this case:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -674,7 +676,7 @@ In the implementation of `outline_print`, since we want to be able to use the
 `OutlinePrint` trait will only work for types that also implement `Display` and
 provide the functionality that `OutlinePrint` needs. We can do that in the
 trait definition by specifying `OutlinePrint: Display`. It’s like adding a
-trait bound to the trait. [Listing 19-33][Listing-19-33] shows an implementation of the
+trait bound to the trait. Listing 19-33 shows an implementation of the
 `OutlinePrint` trait:
 
 [Listing-19-33]: #Listing-19-33
@@ -771,7 +773,7 @@ is elided at compile time.
 
 For example, if we wanted to implement `Display` on `Vec`, we can make a
 `Wrapper` struct that holds an instance of `Vec`. Then we can implement
-`Display` on `Wrapper` and use the `Vec` value as shown in [Listing 19-34][Listing-19-34]:
+`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-34:
 
 <span class="filename">Filename: src/main.rs</span>
 

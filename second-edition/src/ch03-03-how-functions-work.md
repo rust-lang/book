@@ -150,7 +150,7 @@ instructions that perform some action and do not return a value. *Expressions*
 evaluate to a resulting value. Let’s look at some examples.
 
 Creating a variable and assigning a value to it with the `let` keyword is a
-statement. In [Listing 3-1][Listing-3-1], `let y = 6;` is a statement:
+statement. In Listing 3-1, `let y = 6;` is a statement:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -202,7 +202,7 @@ not the case in Rust.
 Expressions evaluate to something and make up most of the rest of the code that
 you’ll write in Rust. Consider a simple math operation, such as `5 + 6`, which
 is an expression that evaluates to the value `11`. Expressions can be part of
-statements: in [Listing 3-1][Listing-3-1] that had the statement `let y = 6;`, `6` is an
+statements: in Listing 3-1 that had the statement `let y = 6;`, `6` is an
 expression that evaluates to the value `6`. Calling a function is an
 expression. Calling a macro is an expression. The block that we use to create
 new scopes, `{}`, is an expression, for example:

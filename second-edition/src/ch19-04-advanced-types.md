@@ -13,7 +13,7 @@ The newtype pattern that we started discussing at the end of the “Advanced
 Traits” section, where we create a new type as a tuple struct with one field
 that wraps a type can also be useful for statically enforcing that values are
 never confused, and is often used to indicate the units of a value. We actually
-had an example of this in [Listing 19-26][Listing-19-26]: the `Millimeters` and `Meters` structs
+had an example of this in Listing 19-26: the `Millimeters` and `Meters` structs
 both wrap `u32` values in a new type. If we write a function with a parameter
 of type `Millimeters`, we won’t be able to compile a program that accidentally
 tries to call that function with a value of type `Meters` or a plain `u32`.
@@ -42,7 +42,7 @@ type Kilometers = i32;
 ```
 
 This means `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters` and
-`Meters` types we created in [Listing 19-26][Listing-19-26], `Kilometers` is not a separate, new
+`Meters` types we created in Listing 19-26, `Kilometers` is not a separate, new
 type. Values that have the type `Kilometers` will be treated exactly the same
 as values of type `i32`:
 
@@ -70,7 +70,7 @@ Box<Fn() + Send + 'static>
 
 Writing this out in function signatures and as type annotations all over the
 place can be tiresome and error-prone. Imagine having a project full of code
-like that in [Listing 19-35][Listing-19-35]:
+like that in Listing 19-35:
 
 [Listing-19-35]: #Listing-19-35
 <a name="Listing-19-35"></a>
@@ -93,7 +93,7 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 A type alias makes this code more manageable by reducing the amount of
 repetition this project has. Here, we’ve introduced an alias named `Thunk` for
 the verbose type, and we can replace all uses of the type with the shorter
-`Thunk` as shown in [Listing 19-36][Listing-19-36]:
+`Thunk` as shown in Listing 19-36:
 
 [Listing-19-36]: #Listing-19-36
 <a name="Listing-19-36"></a>
@@ -184,7 +184,7 @@ This is read as “the function `bar` returns never,” and functions that retur
 never are called *diverging functions*. We can’t create values of the type `!`,
 so `bar` can never possibly return. What use is a type you can never create
 values for? If you think all the way back to Chapter 2, we had some code that
-looked like this, reproduced here in [Listing 19-37][Listing-19-37]:
+looked like this, reproduced here in Listing 19-37:
 
 [Listing-19-37]: #Listing-19-37
 <a name="Listing-19-37"></a>
@@ -215,8 +215,8 @@ let guess = match guess.trim().parse()  {
 
 What would the type of `guess` be here? It’d have to be both an integer and a
 string, and Rust requires that `guess` can only have one type. So what does
-`continue` return? Why are we allowed to return a `u32` from one arm in [Listing 19-37][Listing-19-37]
-and have another arm that ends with `continue`?
+`continue` return? Why are we allowed to return a `u32` from one arm in Listing
+19-37 and have another arm that ends with `continue`?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms. The former
@@ -243,7 +243,7 @@ impl<T> Option<T> {
 }
 ```
 
-Here, the same thing happens as in the `match` in [Listing 19-33][Listing-19-33]: we know that
+Here, the same thing happens as in the `match` in Listing 19-33: we know that
 `val` has the type `T`, and `panic!` has the type `!`, so the result of the
 overall `match` expression is `T`. This works because `panic!` doesn’t produce
 a value; it ends the program. In the `None` case, we won’t be returning a value

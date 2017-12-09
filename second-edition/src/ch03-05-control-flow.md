@@ -170,7 +170,7 @@ Rust branching construct called `match` for these cases.
 #### Using `if` in a `let` statement
 
 Because `if` is an expression, we can use it on the right side of a `let`
-statement, for instance in [Listing 3-2][Listing-3-2]:
+statement, for instance in Listing 3-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -208,7 +208,7 @@ Remember that blocks of code evaluate to the last expression in them, and
 numbers by themselves are also expressions. In this case, the value of the
 whole `if` expression depends on which block of code executes. This means the
 values that have the potential to be results from each arm of the `if` must be
-the same type; in [Listing 3-2][Listing-3-2], the results of both the `if` arm and the `else`
+the same type; in Listing 3-2, the results of both the `if` arm and the `else`
 arm were `i32` integers. If the types are mismatched, as in the following
 example, we’ll get an error:
 
@@ -347,7 +347,7 @@ true, the code runs; otherwise, it exits the loop.
 #### Looping Through a Collection with `for`
 
 You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example, let’s look at [Listing 3-3][Listing-3-3]:
+such as an array. For example, let’s look at Listing 3-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -397,7 +397,7 @@ code to perform the conditional check on every element on every iteration
 through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this code in [Listing 3-4][Listing-3-4]:
+for each item in a collection. A `for` loop looks like this code in Listing 3-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -417,12 +417,12 @@ fn main() {
 <span class="caption">Listing 3-4: Looping through each element of a collection
 using a `for` loop</span>
 
-When we run this code, we’ll see the same output as in [Listing 3-3][Listing-3-3]. More
+When we run this code, we’ll see the same output as in Listing 3-3. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
-For example, in the code in [Listing 3-3][Listing-3-3], if you removed an item from the `a`
+For example, in the code in Listing 3-3, if you removed an item from the `a`
 array but forgot to update the condition to `while index < 4`, the code would
 panic. Using the `for` loop, you don’t need to remember to change any other
 code if you changed the number of values in the array.
@@ -430,7 +430,7 @@ code if you changed the number of values in the array.
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
 certain number of times, as in the countdown example that used a `while` loop
-in [Listing 3-3][Listing-3-3], most Rustaceans would use a `for` loop. The way to do that
+in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
 would be to use a `Range`, which is a type provided by the standard library
 that generates all numbers in sequence starting from one number and ending
 before another number.

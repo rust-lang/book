@@ -7,7 +7,7 @@ have to reimplement that logic ourselves.
 
 In Rust, iterators are *lazy*, meaning they have no effect until we call
 methods that consume the iterator to use it up. For example, the code in
-[Listing 13-13][Listing-13-13] creates an iterator over the items in the vector `v1` by calling
+Listing 13-13 creates an iterator over the items in the vector `v1` by calling
 the `iter` method defined on `Vec`. This code by itself doesn’t do anything
 useful:
 
@@ -22,11 +22,11 @@ let v1_iter = v1.iter();
 
 <span class="caption">Listing 13-13: Creating an iterator</span>
 
-Once we’ve created an iterator, we can use it in a variety of ways. In [Listing 3-4][Listing-3-4]
-in Chapter 3, we used iterators with `for` loops to execute some code on
+Once we’ve created an iterator, we can use it in a variety of ways. In Listing
+3-4 in Chapter 3, we used iterators with `for` loops to execute some code on
 each item, although we glossed over what the call to `iter` did until now.
 
-The example in [Listing 13-14][Listing-13-14] separates the creation of the iterator from the
+The example in Listing 13-14 separates the creation of the iterator from the
 use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
 variable, and no iteration takes place at that time. When the `for` loop is
 called using the iterator in `v1_iter`, each element in the iterator is used in
@@ -86,7 +86,7 @@ The `Iterator` trait only requires implementors to define one method: the
 `next` method, which returns one item of the iterator at a time wrapped in
 `Some` and, when iteration is over, it returns `None`.
 
-We can call the `next` method on iterators directly; [Listing 13-15][Listing-13-15] demonstrates
+We can call the `next` method on iterators directly; Listing 13-15 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
 from the vector:
 
@@ -139,7 +139,7 @@ Methods that call `next` are called *consuming adaptors*, because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. [Listing 13-16][Listing-13-16] has a
+total and returns the total when iteration is complete. Listing 13-16 has a
 test illustrating a use of the `sum` method:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -174,7 +174,7 @@ multiple calls to iterator adaptors to perform complex actions in a readable
 way. But because all iterators are lazy, we have to call one of the consuming
 adaptor methods to get results from calls to iterator adaptors.
 
-[Listing 13-17][Listing-13-17] shows an example of calling the iterator adaptor method `map`,
+Listing 13-17 shows an example of calling the iterator adaptor method `map`,
 which takes a closure to call on each item to produce a new iterator. The
 closure here creates a new iterator in which each item from the vector has been
 incremented by 1. However, this code produces a warning:
@@ -206,7 +206,7 @@ and do nothing unless consumed
   = note: #[warn(unused_must_use)] on by default
 ```
 
-The code in [Listing 13-17][Listing-13-17] doesn’t do anything; the closure we’ve specified
+The code in Listing 13-17 doesn’t do anything; the closure we’ve specified
 never gets called. The warning reminds us why: iterator adaptors are lazy, and
 we need to consume the iterator here.
 
@@ -214,7 +214,7 @@ To fix this and consume the iterator, we’ll use the `collect` method, which yo
 saw briefly in Chapter 12. This method consumes the iterator and collects the
 resulting values into a collection data type.
 
-In [Listing 13-18][Listing-13-18], we collect the results of iterating over the iterator that’s
+In Listing 13-18, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
 containing each item from the original vector incremented by 1:
 
@@ -249,7 +249,7 @@ the iterator and returns a Boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
 `false`, the value won’t be included in the resulting iterator.
 
-In [Listing 13-19][Listing-13-19] we use `filter` with a closure that captures the `shoe_size`
+In Listing 13-19 we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
 instances. It will return only shoes that are the specified size:
 
@@ -326,7 +326,7 @@ First, we’ll create a struct to hold some values, and then we’ll make this
 struct into an iterator by implementing the `Iterator` trait and use the values
 in that implementation.
 
-[Listing 13-20][Listing-13-20] has the definition of the `Counter` struct and an associated
+Listing 13-20 has the definition of the `Counter` struct and an associated
 `new` function to create instances of `Counter`:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -358,7 +358,7 @@ always starting new instances with a value of 0 in the `count` field.
 
 Next, we’ll implement the `Iterator` trait for our `Counter` type by defining
 the body of the `next` method to specify what we want to happen when this
-iterator is used, as shown in [Listing 13-21][Listing-13-21]:
+iterator is used, as shown in Listing 13-21:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -399,10 +399,10 @@ our iterator will return `None`.
 
 #### Using Our `Counter` Iterator’s `next` Method
 
-Once we’ve implemented the `Iterator` trait, we have an iterator! [Listing 13-22][Listing-13-22]
+Once we’ve implemented the `Iterator` trait, we have an iterator! Listing 13-22
 shows a test demonstrating that we can use the iterator functionality of our
 `Counter` struct by calling the `next` method on it directly, just like we did
-with the iterator created from a vector in [Listing 13-15][Listing-13-15]:
+with the iterator created from a vector in Listing 13-15:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -458,7 +458,7 @@ For example, if for some reason we wanted to take the values produced by an
 instance of `Counter`, pair them with values produced by another `Counter`
 instance after skipping the first value, multiply each pair together, keep only
 those results that are divisible by three, and add all the resulting values
-together, we could do so, as shown in the test in [Listing 13-23][Listing-13-23]:
+together, we could do so, as shown in the test in Listing 13-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 

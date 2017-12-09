@@ -56,7 +56,7 @@ passes, we won’t see the `println!` output in the terminal: we’ll only see t
 line that indicates the test passed. If a test fails, we’ll see whatever was
 printed to standard output with the rest of the failure message.
 
-As an example, [Listing 11-10][Listing-11-10] has a silly function that prints the value of its
+As an example, Listing 11-10 has a silly function that prints the value of its
 parameter and returns 10, as well as a test that passes and a test that fails.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -125,7 +125,7 @@ output capture behavior by using the `--nocapture` flag:
 $ cargo test -- --nocapture
 ```
 
-When we run the tests in [Listing 11-10][Listing-11-10] again with the `--nocapture` flag, we
+When we run the tests in Listing 11-10 again with the `--nocapture` flag, we
 see the following output:
 
 ```text
@@ -160,7 +160,7 @@ that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll create three tests for our
-`add_two` function, as shown in [Listing 11-11][Listing-11-11], and choose which ones to run:
+`add_two` function, as shown in Listing 11-11, and choose which ones to run:
 
 <span class="filename">Filename: src/lib.rs</span>
 

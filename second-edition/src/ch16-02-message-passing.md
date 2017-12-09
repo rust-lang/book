@@ -33,7 +33,7 @@ technique, you could use channels to implement a chat system, or a system where
 many threads perform parts of a calculation and send the parts to one thread
 that aggregates the results.
 
-First, we’ll create a channel but not do anything with it in [Listing 16-6][Listing-16-6]:
+First, we’ll create a channel but not do anything with it in Listing 16-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -80,7 +80,7 @@ what you meant /Carol -->
 
 Let’s move the transmitting end into a spawned thread and have it send one
 string so that the spawned thread is communicating with the main thread, shown
-in [Listing 16-7][Listing-16-7]. This is like putting a rubber duck in the river upstream or
+in Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another:
 
 <!-- Can you tell us why we want to do this, what does this do for us and our
@@ -121,7 +121,7 @@ operation will error. In this example, we’re simply calling `unwrap` to panic
 in case of error, but for a real application, we’d handle it properly--return
 to Chapter 9 to review strategies for proper error handling.
 
-In [Listing 16-8][Listing-16-8], we’ll get the value from the receiving end of the channel in
+In Listing 16-8, we’ll get the value from the receiving end of the channel in
 the main thread. This is like retrieving the rubber duck from the water at the
 end of the river, or like getting a chat message:
 
@@ -178,7 +178,7 @@ the main thread is appropriate.
 would want to return the value immediately? -->
 <!-- Elaborated above /Carol -->
 
-If we run the code in [Listing 16-8][Listing-16-8], we’ll see the value printed out from the
+If we run the code in Listing 16-8, we’ll see the value printed out from the
 main thread:
 
 ```text
@@ -207,7 +207,7 @@ advantage we get by making the tradeoff of having to think about ownership
 throughout our Rust programs. Let’s do an experiment to show how channels and
 ownership work together to prevent problems: we’ll try to use a `val` value in
 the spawned thread *after* we’ve sent it down the channel. Try compiling the
-code in [Listing 16-9][Listing-16-9]:
+code in Listing 16-9:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -263,9 +263,9 @@ after sending it; the ownership system checks that everything is okay.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
 
-The code in [Listing 16-8][Listing-16-8] compiled and ran, but doesn’t show us very clearly
+The code in Listing 16-8 compiled and ran, but doesn’t show us very clearly
 that two separate threads are talking to each other over the channel. In
-[Listing 16-10][Listing-16-10] we’ve made some modifications that will prove this code is
+Listing 16-10 we’ve made some modifications that will prove this code is
 running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.
 
@@ -314,7 +314,7 @@ In the main thread, we’re not calling the `recv` function explicitly anymore:
 instead we’re treating `rx` as an iterator. For each value received, we’re
 printing it out. When the channel is closed, iteration will end.
 
-When running the code in [Listing 16-10][Listing-16-10], you should see the following output,
+When running the code in Listing 16-10, you should see the following output,
 with a one second pause in between each line:
 
 ```text
@@ -341,9 +341,9 @@ fix it /Carol -->
 
 Near the start of this section, we mentioned that `mpsc` stood for *multiple
 producer, single consumer*. Let’s put that ability to use and expand the code
-from [Listing 16-10][Listing-16-10] to create multiple threads that all send values to the same
+from Listing 16-10 to create multiple threads that all send values to the same
 receiver. We can do that by cloning the transmitting half of the channel, as
-shown in [Listing 16-11][Listing-16-11]:
+shown in Listing 16-11:
 
 <span class="filename">Filename: src/main.rs</span>
 

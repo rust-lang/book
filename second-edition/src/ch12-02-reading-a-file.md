@@ -3,7 +3,7 @@
 Now we’ll add functionality to read the file that is specified in the
 `filename` command line argument. First, we need a sample file to test it with:
 the best kind of file to use to make sure `minigrep` is working is one with a
-small amount of text over multiple lines with some repeated words. [Listing 12-3][Listing-12-3]
+small amount of text over multiple lines with some repeated words. Listing 12-3
 has an Emily Dickinson poem that will work well! Create a file called
 *poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
@@ -29,7 +29,7 @@ To an admiring bog!
 test case.</span>
 
 With the text in place, edit *src/main.rs* and add code to open the file, as
-shown in [Listing 12-4][Listing-12-4]:
+shown in Listing 12-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
