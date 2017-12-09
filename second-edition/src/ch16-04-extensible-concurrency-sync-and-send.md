@@ -21,7 +21,7 @@ where you don’t want to pay the threadsafe performance penalty.
 
 In this way Rust’s type system and trait bounds ensure we can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
-this in Listing 16-14, we got an error that said `the trait Send is not
+this in [Listing 16-14][Listing-16-14], we got an error that said `the trait Send is not
 implemented for Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`,
 the code compiled.
 

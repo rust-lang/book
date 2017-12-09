@@ -1,7 +1,7 @@
 ## Using Trait Objects that Allow for Values of Different Types
 
 In Chapter 8, we mentioned that one limitation of vectors is that they can only
-store elements of one type. We created a workaround in Listing 8-10 where we
+store elements of one type. We created a workaround in [Listing 8-10][Listing-8-10] where we
 defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
 and text. This meant we could store different types of data in each cell and
 still have a vector that represented a row of cells. This is a perfectly good
@@ -65,7 +65,7 @@ can’t add data to a trait object. Trait objects aren’t as generally useful a
 objects in other languages: their specific purpose is to allow abstraction
 across common behavior.
 
-Listing 17-3 shows how to define a trait named `Draw` with one method named
+[Listing 17-3][Listing-17-3] shows how to define a trait named `Draw` with one method named
 `draw`:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -82,7 +82,7 @@ pub trait Draw {
 <span class="caption">Listing 17-3: Definition of the `Draw` trait</span>
 
 This should look familiar from our discussions on how to define traits in
-Chapter 10. Next comes something new: Listing 17-4 defines a struct named
+Chapter 10. Next comes something new: [Listing 17-4][Listing-17-4] defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
 `Box<Draw>`, which is a trait object: it’s a stand-in for any type inside a
 `Box` that implements the `Draw` trait.
@@ -113,7 +113,7 @@ pub struct Screen {
 trait</span>
 
 On the `Screen` struct, we’ll define a method named `run` that will call the
-`draw` method on each of its `components`, as shown in Listing 17-5:
+`draw` method on each of its `components`, as shown in [Listing 17-5][Listing-17-5]:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -145,7 +145,7 @@ This works differently to defining a struct that uses a generic type parameter
 with trait bounds. A generic type parameter can only be substituted with one
 concrete type at a time, while trait objects allow for multiple concrete types
 to fill in for the trait object at runtime. For example, we could have defined
-the `Screen` struct using a generic type and a trait bound as in Listing 17-6:
+the `Screen` struct using a generic type and a trait bound as in [Listing 17-6][Listing-17-6]:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -191,7 +191,7 @@ provide the `Button` type. Again, actually implementing a GUI library is out of
 scope of this book, so the `draw` method won’t have any useful implementation
 in its body. To imagine what the implementation might look like, a `Button`
 struct might have fields for `width`, `height`, and `label`, as shown in
-Listing 17-7:
+[Listing 17-7][Listing-17-7]:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -231,7 +231,7 @@ types like `TextField`.
 
 Someone using our library has decided to implement a `SelectBox` struct that
 has `width`, `height`, and `options` fields. They implement the `Draw` trait on
-the `SelectBox` type as well, as shown in Listing 17-8:
+the `SelectBox` type as well, as shown in [Listing 17-8][Listing-17-8]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -262,7 +262,7 @@ The user of our library can now write their `main` function to create a
 `Screen` instance. To this they can add a `SelectBox` and a `Button` by putting
 each in a `Box<T>` to become a trait object. They can then call the `run`
 method on the `Screen` instance, which will call `draw` on each of the
-components. Listing 17-9 shows this implementation:
+components. [Listing 17-9][Listing-17-9] shows this implementation:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -308,7 +308,7 @@ This concept---of being concerned only with the messages a value responds to,
 rather than the value’s concrete type---is similar to a concept in dynamically
 typed languages called *duck typing*: if it walks like a duck, and quacks like
 a duck, then it must be a duck! In the implementation of `run` on `Screen` in
-Listing 17-5, `run` doesn’t need to know what the concrete type of each
+[Listing 17-5][Listing-17-5], `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check to see if a component is an instance of a
 `Button` or a `SelectBox`, it just calls the `draw` method on the component. By
 specifying `Box<Draw>` as the type of the values in the `components` vector,
@@ -331,7 +331,7 @@ particular method at runtime or worry about getting errors if a value doesn’t
 implement a method but we call it anyway. Rust won’t compile our code if the
 values don’t implement the traits that the trait objects need.
 
-For example, Listing 17-10 shows what happens if we try to create a `Screen`
+For example, [Listing 17-10][Listing-17-10] shows what happens if we try to create a `Screen`
 with a `String` as a component:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -456,7 +456,7 @@ that’s the return type.
 
 The compiler will tell you if you’re trying to do something that violates the
 rules of object safety in regards to trait objects. For example, if we had
-tried to implement the `Screen` struct in Listing 17-4 to hold types that
+tried to implement the `Screen` struct in [Listing 17-4][Listing-17-4] to hold types that
 implement the `Clone` trait instead of the `Draw` trait, like this:
 
 ```rust,ignore

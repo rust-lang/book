@@ -87,7 +87,7 @@ Raw pointers:
 - Are allowed to be null
 - Don’t implement any automatic clean-up
 
-Listing 19-1 shows how to create raw pointers from references:
+[Listing 19-1][Listing-19-1] shows how to create raw pointers from references:
 
 [Listing-19-1]: #Listing-19-1
 <a name="Listing-19-1"></a>
@@ -108,7 +108,7 @@ raw pointers will be valid since we created them directly from references that
 are guaranteed to be valid, but we can’t make that assumption about any raw
 pointer.
 
-Listing 19-2 shows how to create a raw pointer to an arbitrary location in
+[Listing 19-2][Listing-19-2] shows how to create a raw pointer to an arbitrary location in
 memory. Trying to use arbitrary memory is undefined: there may be data at that
 address, there may not be any data at that address, the compiler might optimize
 the code so that there is no memory access, or your program might segfault.
@@ -126,10 +126,10 @@ let r = address as *const i32;
 <span class="caption">Listing 19-2: Creating a raw pointer to an arbitrary
 memory address</span>
 
-Note there’s no `unsafe` block in either Listing 19-1 or 19-2. You can *create*
+Note there’s no `unsafe` block in either [Listing 19-1][Listing-19-1] or 19-2. You can *create*
 raw pointers in safe code, but you can’t *dereference* raw pointers and read
 the data being pointed to. Using the dereference operator, `*`, on a raw
-pointer requires an `unsafe` block, as shown in Listing 19-3:
+pointer requires an `unsafe` block, as shown in [Listing 19-3][Listing-19-3]:
 
 [Listing-19-3]: #Listing-19-3
 <a name="Listing-19-3"></a>
@@ -152,7 +152,7 @@ unsafe {
 Creating a pointer can’t do any harm; it’s only when accessing the value that
 it points at that you might end up dealing with an invalid value.
 
-Note also that in Listing 19-1 and 19-3 we created a `*const i32` and a `*mut
+Note also that in [Listing 19-1][Listing-19-1] and 19-3 we created a `*const i32` and a `*mut
 i32` that both pointed to the same memory location, that of `num`. If we had
 tried to create an immutable and a mutable reference to `num` instead of raw
 pointers, this would not have compiled due to the rule that says we can’t have
@@ -202,7 +202,7 @@ As an example, let’s check out some functionality from the standard library,
 `split_at_mut`, and explore how we might implement it ourselves. This safe
 method is defined on mutable slices, and it takes one slice and makes it into
 two by splitting the slice at the index given as an argument, as demonstrated
-in Listing 19-4:
+in [Listing 19-4][Listing-19-4]:
 
 [Listing-19-4]: #Listing-19-4
 <a name="Listing-19-4"></a>
@@ -222,7 +222,7 @@ assert_eq!(b, &mut [4, 5, 6]);
 function</span>
 
 This function can’t be implemented using only safe Rust. An attempt might look
-like Listing 19-5. For simplicity, we’re implementing `split_at_mut` as a
+like [Listing 19-5][Listing-19-5]. For simplicity, we’re implementing `split_at_mut` as a
 function rather than a method, and only for slices of `i32` values rather than
 for a generic type `T`:
 
@@ -273,7 +273,7 @@ Borrowing different parts of a slice is fundamentally okay; our two `&mut
 this. When we know something is okay, but Rust doesn’t, it’s time to reach for
 unsafe code.
 
-Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
+[Listing 19-6][Listing-19-6] shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work:
 
 [Listing-19-6]: #Listing-19-6
@@ -330,7 +330,7 @@ Rust. We’ve created a safe abstraction to the unsafe code by writing an
 implementation of the function that uses `unsafe` code in a safe way by only
 creating valid pointers from the data this function has access to.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
+In contrast, the use of `slice::from_raw_parts_mut` in [Listing 19-7][Listing-19-7] would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice ten thousand items long:
 
@@ -359,7 +359,7 @@ that the slice this code creates contains valid `i32` values. Attempting to use
 
 Sometimes, your Rust code may need to interact with code written in another
 language. To do this, Rust has a keyword, `extern`, that facilitates creating
-and using a *Foreign Function Interface* (FFI). Listing 19-8 demonstrates how
+and using a *Foreign Function Interface* (FFI). [Listing 19-8][Listing-19-8] demonstrates how
 to set up an integration with the `abs` function defined in the C standard
 library. Functions declared within `extern` blocks are always unsafe to call
 from Rust code:
@@ -426,7 +426,7 @@ programming languages support them, and so does Rust. However, global variables
 can be problematic: for example, if you have two threads accessing the same
 mutable global variable, a data race can happen.
 
-Global variables are called *static* in Rust. Listing 19-9 shows an example
+Global variables are called *static* in Rust. [Listing 19-9][Listing-19-9] shows an example
 declaration and use of a static variable with a string slice as a value:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -459,7 +459,7 @@ are used.
 
 Another way in which static variables are different from constants is that
 static variables can be mutable. Both accessing and modifying mutable static
-variables is unsafe. Listing 19-10 shows how to declare, access, and modify a
+variables is unsafe. [Listing 19-10][Listing-19-10] shows how to declare, access, and modify a
 mutable static variable named `COUNTER`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -505,7 +505,7 @@ that data accessed from different threads is done safely.
 Finally, the last action we’re only allowed to take when we use the `unsafe`
 keyword is implementing an unsafe trait. We can declare that a trait is
 `unsafe` by adding the `unsafe` keyword before `trait`, and then implementing
-the trait must be marked as `unsafe` too, as shown in Listing 19-11:
+the trait must be marked as `unsafe` too, as shown in [Listing 19-11][Listing-19-11]:
 
 [Listing-19-11]: #Listing-19-11
 <a name="Listing-19-11"></a>

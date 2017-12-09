@@ -13,7 +13,7 @@ requests can be processed quickly. Let’s see this in action.
 ### Simulating a Slow Request in the Current Server Implementation
 
 Let’s see the effect of a request that takes a long time to process on requests
-made to our current server implementation. Listing 20-10 shows the code to
+made to our current server implementation. [Listing 20-10][Listing-20-10] shows the code to
 respond to another request, `/sleep`, that will cause the server to sleep for
 five seconds before responding. This will simulate a slow request so that we
 can see that our server processes requests serially.

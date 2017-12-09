@@ -2,7 +2,7 @@
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
-here in Listing 7-7:
+here in [Listing 7-7][Listing-7-7]:
 
 <span class="filename">Filename: src/main.rs</span>
 

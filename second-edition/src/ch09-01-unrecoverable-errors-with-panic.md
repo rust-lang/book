@@ -65,7 +65,7 @@ in more detail next.
 
 Let’s look at another example to see what it’s like when a `panic!` call comes
 from a library because of a bug in our code instead of from our code calling
-the macro directly. Listing 9-1 has some code that attempts to access an
+the macro directly. [Listing 9-1][Listing-9-1] has some code that attempts to access an
 element by index in a vector:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -127,7 +127,7 @@ wrote. That’s the spot where the problem originated. The lines above the lines
 mentioning your files are code that your code called; the lines below are code
 that called your code. These lines might include core Rust code, standard
 library code, or crates that you’re using. Let’s try getting a backtrace:
-Listing 9-2 shows output similar to what you’ll see:
+[Listing 9-2][Listing-9-2] shows output similar to what you’ll see:
 
 [Listing-9-2]: #Listing-9-2
 <a name="Listing-9-2"></a>
@@ -181,11 +181,11 @@ information, debug symbols must be enabled. Debug symbols are enabled by
 default when using cargo build or cargo run without the --release flag, as we
 have here.
 
-In the output in Listing 9-2, line 11 of the backtrace points to the line in
+In the output in [Listing 9-2][Listing-9-2], line 11 of the backtrace points to the line in
 our project that’s causing the problem: *src/main.rs* in line 4. If we don’t
 want our program to panic, the location pointed to by the first line mentioning
 a file we wrote is where we should start investigating to figure out how we got
-to this location with values that caused the panic. In Listing 9-1 where we
+to this location with values that caused the panic. In [Listing 9-1][Listing-9-1] where we
 deliberately wrote code that would panic in order to demonstrate how to use
 backtraces, the way to fix the panic is to not request an element at index 100
 from a vector that only contains three items. When your code panics in the

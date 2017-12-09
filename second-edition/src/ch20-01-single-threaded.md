@@ -31,7 +31,7 @@ $ cargo new hello --bin
 $ cd hello
 ```
 
-And put the code in Listing 20-1 in `src/main.rs` to start. This code will
+And put the code in [Listing 20-1][Listing-20-1] in `src/main.rs` to start. This code will
 listen at the address `127.0.0.1:8080` for incoming TCP streams. When it gets
 an incoming stream, it will print `Connection established!`:
 
@@ -133,7 +133,7 @@ new function to have a nice separation of the concerns around setting up the
 server and connections versus processing each connection. In this new
 `handle_connection` function, we’ll read data from the `stream` and print it
 out in order to see the data that the browser is sending us. Change the code to
-look like Listing 20-2:
+look like [Listing 20-2][Listing-20-2]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -293,7 +293,7 @@ HTTP/1.1 200 OK\r\n\r\n
 
 This text is a tiny successful HTTP response. Let’s write this to the stream!
 Remove the `println!` that was printing the request data, and add the code in
-Listing 20-3 in its place:
+[Listing 20-3][Listing-20-3] in its place:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -339,7 +339,7 @@ an HTTP request and response.
 
 Let’s return more than a blank page. Create a new file, *hello.html*, in the
 root of your project directory, that is, not in the `src` directory. You can
-put any HTML you want in it; Listing 20-4 shows what the authors used for
+put any HTML you want in it; [Listing 20-4][Listing-20-4] shows what the authors used for
 theirs:
 
 <span class="filename">Filename: hello.html</span>
@@ -365,7 +365,7 @@ theirs:
 response</span>
 
 This is a minimal HTML 5 document with a heading and a little paragraph. Let’s
-modify `handle_connection` as shown in Listing 20-5 to read the HTML file, add
+modify `handle_connection` as shown in [Listing 20-5][Listing-20-5] to read the HTML file, add
 it to the response as a body, and send it:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -402,7 +402,7 @@ body of the response</span>
 We’ve added a line at the top to bring the standard library’s `File` into
 scope, and the file opening and reading code should look familiar since we had
 similar code in Chapter 12 when we read the contents of a file for our I/O
-project in Listing 12-4.
+project in [Listing 12-4][Listing-12-4].
 
 Next, we’re using `format!` to add the file’s contents as the body of the
 success response that we write to the stream.
@@ -422,7 +422,7 @@ send back the HTML file for a well-formed request to `/`.
 Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s check that the browser is requesting `/`, and instead
 return an error if the browser requests anything else. Let’s modify
-`handle_connection` as shown in Listing 20-6, which adds part of the code we’ll
+`handle_connection` as shown in [Listing 20-6][Listing-20-6], which adds part of the code we’ll
 need. This part checks the content of the request we received against what we
 know a request for `/` looks like and adds `if` and `else` blocks where we’ll
 add code to treat requests differently:
@@ -469,8 +469,8 @@ in the variable `get`. Because we’re reading raw bytes into the buffer, we use
 a byte string, created with `b""`, to make `get` a byte string too. Then, we
 check to see if `buffer` starts with the bytes in `get`. If it does, we’ve
 gotten a well-formed request to `/`, which is the success case that we want to
-handle in the `if` block. The `if` block contains the code we added in Listing
-20-5 that returns the contents of our HTML file.
+handle in the `if` block. The `if` block contains the code we added in [Listing 20-5][Listing-20-5]
+that returns the contents of our HTML file.
 
 If `buffer` does not start with the bytes in `get`, we’ve gotten some other
 request. We’ll respond to all other requests using the code we’re about to add
@@ -479,9 +479,9 @@ in the `else` block.
 If you run this code and request `127.0.0.1:8080`, you’ll get the HTML that’s
 in *hello.html*. If you make any other request, such as
 `127.0.0.1:8080/something-else`, you’ll get a connection error like we saw when
-running the code in Listing 20-1 and Listing 20-2.
+running the code in [Listing 20-1][Listing-20-1] and Listing 20-2.
 
-Let’s add code to the `else` block as shown in Listing 20-7 to return a
+Let’s add code to the `else` block as shown in [Listing 20-7][Listing-20-7] to return a
 response with the status code `404`, which signals that the content for the
 request was not found. We’ll also return HTML for a page to render in the
 browser indicating as such to the end user:
@@ -521,7 +521,7 @@ Here, our response has a status line with status code `404` and the reason phras
 `NOT FOUND`. We still aren’t returning any headers, and the body of the
 response will be the HTML in the file *404.html*. Also create a *404.html* file
 next to *hello.html* for the error page; again feel free to use any HTML you’d
-like or use the example HTML in Listing 20-8:
+like or use the example HTML in [Listing 20-8][Listing-20-8]:
 
 <span class="filename">Filename: 404.html</span>
 
@@ -556,7 +556,7 @@ filename. Let’s pull those differences out into an `if` and `else` of one line
 each that will assign the values of the status line and the filename to
 variables; we can then use those variables unconditionally in the code to read
 the file and write the response. The resulting code after this refactoring is
-shown in Listing 20-9:
+shown in [Listing 20-9][Listing-20-9]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -607,7 +607,7 @@ The duplicated code to read the file and write the response is now outside the
 This makes it easier to see exactly what’s different between the two cases, and
 makes it so that we only have one place to update the code if we want to change
 how the file reading and response writing works. The behavior of the code in
-Listing 20-9 will be exactly the same as that in Listing 20-8.
+[Listing 20-9][Listing-20-9] will be exactly the same as that in Listing 20-8.
 
 Awesome! We have a simple little web server in about 40 lines of Rust code that
 responds to one request with a page of content and responds to all other

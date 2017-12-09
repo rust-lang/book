@@ -62,7 +62,7 @@ There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
 impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
-Consider the code in Listing 11-12 with the private function `internal_adder`:
+Consider the code in [Listing 11-12][Listing-11-12] with the private function `internal_adder`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -114,9 +114,9 @@ to *src*. Cargo knows to look for integration test files in this directory. We
 can then make as many test files as we want to in this directory, and Cargo
 will compile each of the files as an individual crate.
 
-Let’s create an integration test. With the code in Listing 11-12 still in the
+Let’s create an integration test. With the code in [Listing 11-12][Listing-11-12] still in the
 *src/lib.rs* file, make a *tests* directory, create a new file named
-*tests/integration_test.rs*, and enter the code in Listing 11-13:
+*tests/integration_test.rs*, and enter the code in [Listing 11-13][Listing-11-13]:
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 
@@ -171,7 +171,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 The three sections of output include the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we’ve been
 seeing: one line for each unit test (one named `internal` that we added in
-Listing 11-12) and then a summary line for the unit tests.
+[Listing 11-12][Listing-11-12]) and then a summary line for the unit tests.
 
 The integration tests section starts with the line `Running
 target/debug/deps/integration-test-ce99bcc2479f4607` (the hash at the end of
@@ -296,7 +296,7 @@ fn it_adds_two() {
 ```
 
 Note that the `mod common;` declaration is the same as the module declarations
-we demonstrated in Listing 7-4. Then in the test function, we can call the
+we demonstrated in [Listing 7-4][Listing-7-4]. Then in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates

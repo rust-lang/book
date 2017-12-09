@@ -64,7 +64,7 @@ system and ownership rules, we can’t get locking and unlocking wrong.
 #### The API of `Mutex<T>`
 
 Let’s start simply with an example of using a mutex in a single-threaded
-context, shown in Listing 16-12:
+context, shown in [Listing 16-12][Listing-16-12]:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -116,7 +116,7 @@ As you may suspect, `Mutex<T>` is a smart pointer. More accurately, the call to
 `lock` *returns* a smart pointer called `MutexGuard`. This smart pointer
 implements `Deref` to point at our inner data, and also has a `Drop`
 implementation that releases the lock automatically when `MutexGuard` goes out
-of scope, which happens at the end of the inner scope in Listing 16-12. This
+of scope, which happens at the end of the inner scope in [Listing 16-12][Listing-16-12]. This
 way, we don’t risk forgetting to release the lock and blocking it from use by
 other threads, because it happens automatically.
 
@@ -129,7 +129,7 @@ Let’s now try to share a value between multiple threads using `Mutex<T>`. We�
 spin up ten threads, and have them each increment a counter value by 1 so that
 the counter goes from 0 to 10. Note that the next few examples will have
 compiler errors, and we’re going to use those errors to learn more about using
-`Mutex<T>` and how Rust helps us use it correctly. Listing 16-13 has our
+`Mutex<T>` and how Rust helps us use it correctly. [Listing 16-13][Listing-16-13] has our
 starting example:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -166,15 +166,15 @@ fn main() {
 guarded by a `Mutex<T>`</span>
 
 We’re creating a `counter` variable to hold an `i32` inside a `Mutex<T>`, like
-we did in Listing 16-12. Next, we’re creating 10 threads by mapping over a
+we did in [Listing 16-12][Listing-16-12]. Next, we’re creating 10 threads by mapping over a
 range of numbers. We use `thread::spawn` and give all the threads the same
 closure, one that moves the counter into the thread, acquires a lock on the
 `Mutex<T>` by calling the `lock` method, and then adds 1 to the value in the
 mutex. When a thread finishes running its closure, `num` will go out of scope
 and release the lock so another thread can acquire it.
 
-In the main thread, we collect all the join handles like we did in Listing
-16-2, and then call `join` on each to make sure all the threads finish. At that
+In the main thread, we collect all the join handles like we did in [Listing 16-2][Listing-16-2],
+and then call `join` on each to make sure all the threads finish. At that
 point, the main thread will acquire the lock and print out the result of this
 program.
 
@@ -218,7 +218,7 @@ not allowed!
 
 Let’s reason this out by simplifying the program. Instead of making 10 threads
 in a `for` loop, let’s just make two threads without a loop and see what
-happens then. Replace the first `for` loop in Listing 16-13 with this code
+happens then. Replace the first `for` loop in [Listing 16-13][Listing-16-13] with this code
 instead:
 
 ```rust,ignore
@@ -281,8 +281,8 @@ we saw in Chapter 15.
 
 In Chapter 15, we were able to give a value multiple owners by using the smart
 pointer `Rc<T>` to create a reference-counted value. Let’s try to do the same
-here and see what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in Listing
-16-14, and clone the `Rc<T>` before moving ownership to the thread. Now we’ve
+here and see what happens. We’ll wrap the `Mutex<T>` in `Rc<T>` in [Listing 16-14][Listing-16-14],
+and clone the `Rc<T>` before moving ownership to the thread. Now we’ve
 seen the errors, we’ll also switch back to using the `for` loop, and we’ll keep
 the `move` keyword with the closure:
 
@@ -380,8 +380,8 @@ thread, your code can run faster if it doesn’t have to enforce the guarantees
 atomics provide.
 
 Back to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix our
-program by changing the `use` line and the call to `new`. The code in Listing
-16-15 will finally compile and run:
+program by changing the `use` line and the call to `new`. The code in [Listing 16-15][Listing-16-15]
+will finally compile and run:
 
 <span class="filename">Filename: src/main.rs</span>
 

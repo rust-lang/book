@@ -43,13 +43,13 @@ added something here, not sure if it's right -->
 there's only one case we care about. Can you elaborate on why that's not clear
 or up front? /Carol -->
 
-Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
+[Listing 18-1][Listing-18-1] shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. This gives us more flexibility than a
 `match` expression where we can only express one value to compare with the
 patterns; the conditions in a series of `if let`/`else if`/`else if let` arms
 aren’t required to have any relation to each other.
 
-The code in Listing 18-1 shows a series of checks for a bunch of different
+The code in [Listing 18-1][Listing-18-1] shows a series of checks for a bunch of different
 conditions that decide what the background color should be. For the purposes of
 the example, we’ve created variables with hardcoded values that a real program
 might get by asking the user.
@@ -115,7 +115,7 @@ in the Rust sense? -->
 
 Similar in construction to `if let`, the `while let` conditional loop allows
 your `while` loop to run for as long as a pattern continues to match. The
-example in Listing 18-2 shows a `while let` loop that uses a vector as a stack
+example in [Listing 18-2][Listing-18-2] shows a `while let` loop that uses a vector as a stack
 and prints out the values in the vector in the opposite order they were pushed
 in:
 
@@ -156,7 +156,7 @@ keyword `for`, so the `x` in `for x in y`.
 pattern section of a for loop straight away -->
 <!-- Yep, looks good! /Carol -->
 
-Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
+[Listing 18-3][Listing-18-3] demonstrates how to use a pattern in a `for` loop to destructure,
 or break apart, a tuple as part of the `for` loop:
 
 <!-- Liz: We've been using the word "destructure" throughout the book in
@@ -221,7 +221,7 @@ variable `x`.” And since the name `x` is the whole pattern, this pattern
 effectively means “bind everything to the variable `x`, whatever the value is.”
 
 To see the pattern matching aspect of `let` a bit more clearly, consider
-Listing 18-4 where we’re using a pattern with `let` to destructure a tuple:
+[Listing 18-4][Listing-18-4] where we’re using a pattern with `let` to destructure a tuple:
 
 [Listing-18-4]: #Listing-18-4
 <a name="Listing-18-4"></a>
@@ -245,7 +245,7 @@ added a small example below to illustrate. /Carol -->
 
 If the number of elements in the pattern don’t match the number of elements in
 the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 18-5 shows an attempt to destructure into two variables a
+example, [Listing 18-5][Listing-18-5] shows an attempt to destructure into two variables a
 tuple with three elements that won’t work:
 
 [Listing-18-5]: #Listing-18-5
@@ -279,7 +279,7 @@ variables is equal to the number of elements in the tuple.
 
 ### Function Parameters
 
-Function parameters can also be patterns. The code in Listing 18-6, declaring a
+Function parameters can also be patterns. The code in [Listing 18-6][Listing-18-6], declaring a
 function named `foo` that takes one parameter named `x` of type `i32`, should
 by now look familiar:
 
@@ -296,7 +296,7 @@ fn foo(x: i32) {
 parameters</span>
 
 The `x` part is a pattern! Like we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 18-7 splits apart the values in a
+function’s arguments to the pattern. [Listing 18-7][Listing-18-7] splits apart the values in a
 tuple as we pass it to a function:
 
 <span class="filename">Filename: src/main.rs</span>

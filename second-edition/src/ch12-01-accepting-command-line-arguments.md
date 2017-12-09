@@ -36,7 +36,7 @@ details about iterators: iterators produce a series of values, and we can call
 the `collect` function on an iterator to turn it into a collection, such as a
 vector, containing all the elements the iterator produces.
 
-Use the code in Listing 12-1 to allow your `minigrep` program to read any
+Use the code in [Listing 12-1][Listing-12-1] to allow your `minigrep` program to read any
 command line arguments passed to it and then collect the values into a vector:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -109,7 +109,7 @@ chapter, we’ll ignore it and save only the two arguments we need.
 Printing the value of the vector of arguments illustrated that the program is
 able to access the values specified as command line arguments. Now we need to
 save the values of the two arguments in variables so we can use the values
-throughout the rest of the program. We do that in Listing 12-2:
+throughout the rest of the program. We do that in [Listing 12-2][Listing-12-2]:
 
 <span class="filename">Filename: src/main.rs</span>
 

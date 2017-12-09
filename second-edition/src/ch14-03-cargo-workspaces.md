@@ -92,7 +92,7 @@ pub fn add_one(x: i32) -> i32 {
 
 Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
 the file to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in Listing 14-11:
+`main` function to call the `add_one` function, as in [Listing 14-11][Listing-14-11]:
 
 <span class="filename">Filename: src/main.rs</span>
 

@@ -1,6 +1,6 @@
 ## Controlling Visibility with `pub`
 
-We resolved the error messages shown in Listing 7-5 by moving the `network` and
+We resolved the error messages shown in [Listing 7-5][Listing-7-5] by moving the `network` and
 `network::server` code into the *src/network/mod.rs* and
 *src/network/server.rs* files, respectively. At that point, `cargo build` was
 able to build our project, but we still get warning messages about the
@@ -241,7 +241,7 @@ Overall, these are the rules for item visibility:
 ### Privacy Examples
 
 Let’s look at a few more privacy examples to get some practice. Create a new
-library project and enter the code in Listing 7-6 into your new project’s
+library project and enter the code in [Listing 7-6][Listing-7-6] into your new project’s
 *src/lib.rs*:
 
 <span class="filename">Filename: src/lib.rs</span>

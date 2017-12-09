@@ -35,7 +35,7 @@ Then, in *src/lib.rs*, we’ll add a `test` module with a test function, as we
 did in Chapter 11. The test function specifies the behavior we want the
 `search` function to have: it will take a query and the text to search for the
 query in, and will return only the lines from the text that contain the query.
-Listing 12-15 shows this test:
+[Listing 12-15][Listing-12-15] shows this test:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -77,7 +77,7 @@ from the `search` function contains only the line we expect.
 We aren’t able to run this test and watch it fail because the test doesn’t even
 compile: the `search` function doesn’t exist yet! So now we’ll add just enough
 code to get the test to compile and run by adding a definition of the `search`
-function that always returns an empty vector, as shown in Listing 12-16. Then
+function that always returns an empty vector, as shown in [Listing 12-16][Listing-12-16]. Then
 the test should compile and fail because an empty vector doesn’t match a vector
 containing the line `"safe, fast, productive."`.
 
@@ -182,7 +182,7 @@ Let’s work through each step, starting with iterating through lines.
 #### Iterating Through Lines with the `lines` Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note this
+conveniently named `lines`, that works as shown in [Listing 12-17][Listing-12-17]. Note this
 won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -202,8 +202,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 </span>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-Chapter 13, but recall that you saw this way of using an iterator in Listing
-3-4, where we used a `for` loop with an iterator to run some code on each item
+Chapter 13, but recall that you saw this way of using an iterator in [Listing 3-4][Listing-3-4],
+where we used a `for` loop with an iterator to run some code on each item
 in a collection.
 
 #### Searching Each Line for the Query
@@ -211,7 +211,7 @@ in a collection.
 Next, we’ll check whether the current line contains our query string.
 Fortunately, strings have a helpful method named `contains` that does this for
 us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note this still won’t compile yet:
+[Listing 12-18][Listing-12-18]. Note this still won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -236,7 +236,7 @@ line contains the string in `query`</span>
 We also need a way to store the lines that contain our query string. For that,
 we can make a mutable vector before the `for` loop and call the `push` method
 to store a `line` in the vector. After the `for` loop, we return the vector, as
-shown in Listing 12-19:
+shown in [Listing 12-19][Listing-12-19]:
 
 <span class="filename">Filename: src/lib.rs</span>
 
