@@ -75,6 +75,9 @@ at the moment we don’t have a way to store the actual IP address *data*; we
 only know what *kind* it is. Given that you just learned about structs in
 Chapter 5, you might tackle this problem as shown in Listing 6-1:
 
+[Listing-6-1]: #Listing-6-1
+<a name="Listing-6-1"></a>
+
 ```rust
 enum IpAddrKind {
     V4,
@@ -184,6 +187,9 @@ more about bringing types into scope in Chapter 7.
 
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:
+
+[Listing-6-2]: #Listing-6-2
+<a name="Listing-6-2"></a>
 
 ```rust
 enum Message {

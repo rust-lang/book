@@ -47,6 +47,9 @@ Many of the same operations available with `Vec<T>` are available with `String`
 as well, starting with the `new` function to create a string, shown in Listing
 8-11:
 
+[Listing-8-11]: #Listing-8-11
+<a name="Listing-8-11"></a>
+
 ```rust
 let mut s = String::new();
 ```
@@ -58,6 +61,9 @@ into. Often, we’ll have some initial data that we want to start the string
 with. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, which string literals do. Listing 8-12
 shows two examples:
+
+[Listing-8-12]: #Listing-8-12
+<a name="Listing-8-12"></a>
 
 ```rust
 let data = "initial contents";
@@ -77,6 +83,9 @@ We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-13 is equivalent to the code from Listing 8-12
 that uses `to_string`:
 
+[Listing-8-13]: #Listing-8-13
+<a name="Listing-8-13"></a>
+
 ```rust
 let s = String::from("initial contents");
 ```
@@ -91,6 +100,9 @@ redundant, but they all have their place! In this case, `String::from` and
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-14:
+
+[Listing-8-14]: #Listing-8-14
+<a name="Listing-8-14"></a>
 
 ```rust
 let hello = String::from("السلام عليكم");
@@ -123,6 +135,9 @@ together.
 We can grow a `String` by using the `push_str` method to append a string slice,
 as shown in Listing 8-15:
 
+[Listing-8-15]: #Listing-8-15
+<a name="Listing-8-15"></a>
+
 ```rust
 let mut s = String::from("foo");
 s.push_str("bar");
@@ -135,6 +150,9 @@ After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, the code in Listing 8-16 shows that it would be
 unfortunate if we weren’t able to use `s2` after appending its contents to `s1`:
+
+[Listing-8-16]: #Listing-8-16
+<a name="Listing-8-16"></a>
 
 ```rust
 let mut s1 = String::from("foo");
@@ -153,6 +171,9 @@ The `push` method takes a single character as a parameter and adds it to the
 `String`. Listing 8-17 shows code that adds the letter l character to a
 `String` using the `push` method:
 
+[Listing-8-17]: #Listing-8-17
+<a name="Listing-8-17"></a>
+
 ```rust
 let mut s = String::from("lo");
 s.push('l');
@@ -167,6 +188,9 @@ As a result of this code, `s` will contain `lol`.
 
 Often, we’ll want to combine two existing strings. One way is to use the `+`
 operator, as shown in Listing 8-18:
+
+[Listing-8-18]: #Listing-8-18
+<a name="Listing-8-18"></a>
 
 ```rust
 let s1 = String::from("Hello, ");
@@ -249,6 +273,9 @@ In many other programming languages, accessing individual characters in a
 string by referencing them by index is a valid and common operation. However,
 if we try to access parts of a `String` using indexing syntax in Rust, we’ll
 get an error. Consider the invalid code in Listing 8-19:
+
+[Listing-8-19]: #Listing-8-19
+<a name="Listing-8-19"></a>
 
 ```rust,ignore
 let s1 = String::from("hello");

@@ -6,6 +6,9 @@ here in Listing 7-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-7-7]: #Listing-7-7
+<a name="Listing-7-7"></a>
+
 ```rust
 pub mod a {
     pub mod series {

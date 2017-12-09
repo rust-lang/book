@@ -76,6 +76,9 @@ as well, we can add it as shown in Listing 7-1:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-7-1]: #Listing-7-1
+<a name="Listing-7-1"></a>
+
 ```rust
 mod network {
     fn connect() {
@@ -108,6 +111,9 @@ and its `connect` function might make more sense to users of our library if
 they were inside the `network` namespace instead, as in Listing 7-2:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-7-2]: #Listing-7-2
+<a name="Listing-7-2"></a>
 
 ```rust
 mod network {
@@ -167,6 +173,9 @@ Listing 7-3:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-7-3]: #Listing-7-3
+<a name="Listing-7-3"></a>
+
 ```rust
 mod client {
     fn connect() {
@@ -207,6 +216,9 @@ First, replace the `client` module code with only the declaration of the
 `client` module, so that your *src/lib.rs* looks like code shown in Listing 7-4:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-7-4]: #Listing-7-4
+<a name="Listing-7-4"></a>
 
 ```rust,ignore
 mod client;
@@ -348,6 +360,9 @@ fn connect() {
 ```
 
 When we try to `cargo build`, we’ll get the error shown in Listing 7-5:
+
+[Listing-7-5]: #Listing-7-5
+<a name="Listing-7-5"></a>
 
 ```text
 $ cargo build

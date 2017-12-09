@@ -29,6 +29,9 @@ number we passed in:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-1]: #Listing-13-1
+<a name="Listing-13-1"></a>
+
 ```rust
 use std::thread;
 use std::time::Duration;
@@ -61,6 +64,9 @@ function we’ll use:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-2]: #Listing-13-2
+<a name="Listing-13-2"></a>
+
 ```rust
 fn main() {
     let simulated_user_specified_value = 10;
@@ -90,6 +96,9 @@ app that we’re most concerned with in this example. The rest of the code
 changes in this example will be made to this function:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-3]: #Listing-13-3
+<a name="Listing-13-3"></a>
 
 ```rust
 # use std::thread;
@@ -163,6 +172,9 @@ a variable, as shown in Listing 13-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-4]: #Listing-13-4
+<a name="Listing-13-4"></a>
+
 ```rust
 # use std::thread;
 # use std::time::Duration;
@@ -222,6 +234,9 @@ introducing here:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-5]: #Listing-13-5
+<a name="Listing-13-5"></a>
+
 ```rust
 # use std::thread;
 # use std::time::Duration;
@@ -264,6 +279,9 @@ definition and follow it with parentheses containing the argument values we
 want to use, as shown in Listing 13-6:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-6]: #Listing-13-6
+<a name="Listing-13-6"></a>
 
 ```rust
 # use std::thread;
@@ -339,6 +357,9 @@ the definition shown in Listing 13-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-7]: #Listing-13-7
+<a name="Listing-13-7"></a>
+
 ```rust
 # use std::thread;
 # use std::time::Duration;
@@ -382,6 +403,9 @@ we then try to call the closure twice, using a `String` as an argument the
 first time and a `u32` the second time, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-8]: #Listing-13-8
+<a name="Listing-13-8"></a>
 
 ```rust,ignore
 let example_closure = |x| x;
@@ -450,6 +474,9 @@ and an optional result value:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-9]: #Listing-13-9
+<a name="Listing-13-9"></a>
+
 ```rust
 struct Cacher<T>
     where T: Fn(u32) -> u32
@@ -484,6 +511,9 @@ The logic around the `value` field we’ve just described is defined in Listing
 13-10:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-10]: #Listing-13-10
+<a name="Listing-13-10"></a>
 
 ```rust
 # struct Cacher<T>
@@ -541,6 +571,9 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 `generate_workout` function from Listing 13-6:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-11]: #Listing-13-11
+<a name="Listing-13-11"></a>
 
 ```rust
 # use std::thread;
@@ -687,6 +720,9 @@ Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
 that uses the variable `x` from the closure’s surrounding environment:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-12]: #Listing-13-12
+<a name="Listing-13-12"></a>
 
 ```rust
 fn main() {

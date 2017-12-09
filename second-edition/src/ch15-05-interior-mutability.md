@@ -160,6 +160,9 @@ something that implements a trait we’ll provide called `Messenger`. Listing
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-15-23]: #Listing-15-23
+<a name="Listing-15-23"></a>
+
 ```rust
 pub trait Messenger {
     fn send(&self, msg: &str);
@@ -220,6 +223,9 @@ Listing 15-24 shows an attempt of implementing a mock object to do just that,
 but that the borrow checker won’t allow:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-15-24]: #Listing-15-24
+<a name="Listing-15-24"></a>
 
 ```rust
 #[cfg(test)]
@@ -299,6 +305,9 @@ modify `sent_messages` to store the messages we’ve seen. Listing 15-25 shows
 what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-15-25]: #Listing-15-25
+<a name="Listing-15-25"></a>
 
 ```rust
 #[cfg(test)]
@@ -383,6 +392,9 @@ prevents us from doing this at runtime:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-15-26]: #Listing-15-26
+<a name="Listing-15-26"></a>
+
 ```rust,ignore
 impl Messenger for MockMessenger {
     fn send(&self, message: &str) {
@@ -444,6 +456,9 @@ ability to change the values in the lists. Listing 15-27 shows that by using a
 in all the lists:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-27]: #Listing-15-27
+<a name="Listing-15-27"></a>
 
 ```rust
 #[derive(Debug)]

@@ -37,6 +37,9 @@ First, we’ll create a channel but not do anything with it in Listing 16-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-6]: #Listing-16-6
+<a name="Listing-16-6"></a>
+
 ```rust
 use std::sync::mpsc;
 
@@ -86,6 +89,9 @@ program? -->
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-7]: #Listing-16-7
+<a name="Listing-16-7"></a>
+
 ```rust
 use std::thread;
 use std::sync::mpsc;
@@ -120,6 +126,9 @@ the main thread. This is like retrieving the rubber duck from the water at the
 end of the river, or like getting a chat message:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-8]: #Listing-16-8
+<a name="Listing-16-8"></a>
 
 ```rust
 use std::thread;
@@ -202,6 +211,9 @@ code in Listing 16-9:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-9]: #Listing-16-9
+<a name="Listing-16-9"></a>
+
 ```rust,ignore
 use std::thread;
 use std::sync::mpsc;
@@ -258,6 +270,9 @@ running concurrently: the spawned thread will now send multiple messages and
 pause for a second between each message.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-10]: #Listing-16-10
+<a name="Listing-16-10"></a>
 
 ```rust
 use std::thread;
@@ -331,6 +346,9 @@ receiver. We can do that by cloning the transmitting half of the channel, as
 shown in Listing 16-11:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-11]: #Listing-16-11
+<a name="Listing-16-11"></a>
 
 ```rust
 # use std::thread;

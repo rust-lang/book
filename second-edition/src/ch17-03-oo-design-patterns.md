@@ -36,6 +36,9 @@ API we’re going to implement in a library crate named `blog`:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-17-11]: #Listing-17-11
+<a name="Listing-17-11"></a>
+
 ```rust,ignore
 extern crate blog;
 use blog::Post;
@@ -104,6 +107,9 @@ start in:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-12]: #Listing-17-12
+<a name="Listing-17-12"></a>
+
 ```rust
 pub struct Post {
     state: Option<Box<State>>,
@@ -149,6 +155,9 @@ Post` block:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-13]: #Listing-17-13
+<a name="Listing-17-13"></a>
+
 ```rust
 # pub struct Post {
 #     content: String,
@@ -186,6 +195,9 @@ implementation:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-14]: #Listing-17-14
+<a name="Listing-17-14"></a>
+
 ```rust
 # pub struct Post {
 #     content: String,
@@ -221,6 +233,9 @@ and because we got some questions about this example that I wanted to expand
 upon /Carol -->
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-15]: #Listing-17-15
+<a name="Listing-17-15"></a>
 
 ```rust
 # pub struct Post {
@@ -310,6 +325,9 @@ state is approved, shown in Listing 17-16.
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-16]: #Listing-17-16
+<a name="Listing-17-16"></a>
+
 ```rust
 # pub struct Post {
 #     state: Option<Box<State>>,
@@ -388,6 +406,9 @@ return an empty string slice, as shown in Listing 17-17:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-17]: #Listing-17-17
+<a name="Listing-17-17"></a>
+
 ```rust
 # trait State {
 #     fn content<'a>(&self, post: &'a Post) -> &'a str;
@@ -435,6 +456,9 @@ where we’ll put the logic for what content to return depending on which state
 we have, as shown in Listing 17-18:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-18]: #Listing-17-18
+<a name="Listing-17-18"></a>
 
 ```rust
 # pub struct Post {
@@ -570,6 +594,9 @@ methods on each:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-19]: #Listing-17-19
+<a name="Listing-17-19"></a>
+
 ```rust
 pub struct Post {
     content: String,
@@ -630,6 +657,9 @@ return a `Post` as shown in Listing 17-20:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-20]: #Listing-17-20
+<a name="Listing-17-20"></a>
+
 ```rust
 # pub struct Post {
 #     content: String,
@@ -688,6 +718,9 @@ content of posts in those states any longer. The updated code in `main` is
 shown in Listing 17-21:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-17-21]: #Listing-17-21
+<a name="Listing-17-21"></a>
 
 ```rust,ignore
 extern crate blog;

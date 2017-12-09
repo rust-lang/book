@@ -33,8 +33,14 @@ function return value is gone. Second, note that we pass `&s1` into
 These ampersands are *references*, and they allow you to refer to some value
 without taking ownership of it. Figure 4-5 shows a diagram.
 
+[Figure-4-5]: #Figure-4-5
+<a name="Figure-4-5"></a>
+
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
+
+[Figure-4-5]: #Figure-4-5
+<a name="Figure-4-5"></a>
 <span class="caption">Figure 4-5: `&String s` pointing at `String s1`</span>
 
 > Note: The opposite of referencing by using `&` is *dereferencing*, which is
@@ -81,6 +87,9 @@ So what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-4. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-4-4]: #Listing-4-4
+<a name="Listing-4-4"></a>
 
 ```rust,ignore
 fn main() {

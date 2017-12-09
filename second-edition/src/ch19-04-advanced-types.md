@@ -72,6 +72,9 @@ Writing this out in function signatures and as type annotations all over the
 place can be tiresome and error-prone. Imagine having a project full of code
 like that in Listing 19-35:
 
+[Listing-19-35]: #Listing-19-35
+<a name="Listing-19-35"></a>
+
 ```rust
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
@@ -91,6 +94,9 @@ A type alias makes this code more manageable by reducing the amount of
 repetition this project has. Here, we’ve introduced an alias named `Thunk` for
 the verbose type, and we can replace all uses of the type with the shorter
 `Thunk` as shown in Listing 19-36:
+
+[Listing-19-36]: #Listing-19-36
+<a name="Listing-19-36"></a>
 
 ```rust
 type Thunk = Box<Fn() + Send + 'static>;
@@ -179,6 +185,9 @@ never are called *diverging functions*. We can’t create values of the type `!`
 so `bar` can never possibly return. What use is a type you can never create
 values for? If you think all the way back to Chapter 2, we had some code that
 looked like this, reproduced here in Listing 19-37:
+
+[Listing-19-37]: #Listing-19-37
+<a name="Listing-19-37"></a>
 
 ```rust
 # let guess = "3";

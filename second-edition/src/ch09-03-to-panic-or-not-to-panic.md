@@ -173,6 +173,9 @@ confidently use the values they receive. Listing 9-9 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100:
 
+[Listing-9-9]: #Listing-9-9
+<a name="Listing-9-9"></a>
+
 ```rust
 pub struct Guess {
     value: u32,

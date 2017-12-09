@@ -46,6 +46,9 @@ Listing 11-1:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-11-1]: #Listing-11-1
+<a name="Listing-11-1"></a>
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -72,6 +75,9 @@ it to see that this test passes.
 
 The `cargo test` command runs all tests in our project, as shown in Listing
 11-2:
+
+[Listing-11-2]: #Listing-11-2
+<a name="Listing-11-2"></a>
 
 ```text
 $ cargo test
@@ -151,6 +157,9 @@ which is to call the `panic!` macro. Enter the new test, `another`, so your
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-11-3]: #Listing-11-3
+<a name="Listing-11-3"></a>
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -171,6 +180,9 @@ we call the `panic!` macro</span>
 
 Run the tests again using `cargo test`. The output should look like Listing
 11-4, which shows that our `exploration` test passed and `another` failed:
+
+[Listing-11-4]: #Listing-11-4
+<a name="Listing-11-4"></a>
 
 ```text
 running 2 tests
@@ -226,6 +238,9 @@ method, which are repeated here in Listing 11-5. Let’s put this code in the
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-11-5]: #Listing-11-5
+<a name="Listing-11-5"></a>
+
 ```rust
 #[derive(Debug)]
 pub struct Rectangle {
@@ -250,6 +265,9 @@ a width of 7, and asserting that it can hold another `Rectangle` instance that
 has a length of 5 and a width of 1:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-6]: #Listing-11-6
+<a name="Listing-11-6"></a>
 
 ```rust
 #[cfg(test)]
@@ -387,6 +405,9 @@ parameter and returns the result. Then we test this function using the
 `assert_eq!` macro.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-7]: #Listing-11-7
+<a name="Listing-11-7"></a>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -600,6 +621,9 @@ happen when we expect:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-11-8]: #Listing-11-8
+<a name="Listing-11-8"></a>
+
 ```rust
 pub struct Guess {
     value: u32,
@@ -692,6 +716,9 @@ modified code for `Guess` in Listing 11-9 where the `new` function panics with
 different messages depending on whether the value was too small or too large:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-9]: #Listing-11-9
+<a name="Listing-11-9"></a>
 
 ```rust
 # pub struct Guess {

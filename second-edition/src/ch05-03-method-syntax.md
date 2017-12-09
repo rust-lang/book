@@ -16,6 +16,9 @@ in Listing 5-13:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-5-13]: #Listing-5-13
+<a name="Listing-5-13"></a>
+
 ```rust
 #[derive(Debug)]
 struct Rectangle {
@@ -129,6 +132,9 @@ method:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-5-14]: #Listing-5-14
+<a name="Listing-5-14"></a>
+
 ```rust,ignore
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
@@ -167,6 +173,9 @@ respectively. Let’s add the new `can_hold` method to the `impl` block from
 Listing 5-13, shown in Listing 5-15:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-15]: #Listing-5-15
+<a name="Listing-5-15"></a>
 
 ```rust
 # #[derive(Debug)]
@@ -235,6 +244,9 @@ and namespaces created by modules, which we’ll discuss in Chapter 7.
 Each struct is allowed to have multiple `impl` blocks. For example, Listing
 5-15 is equivalent to the code shown in Listing 5-16, which has each method
 in its own `impl` block:
+
+[Listing-5-16]: #Listing-5-16
+<a name="Listing-5-16"></a>
 
 ```rust
 # #[derive(Debug)]

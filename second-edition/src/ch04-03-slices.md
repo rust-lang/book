@@ -22,6 +22,9 @@ end of the word. Let’s try that as shown in Listing 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-4-5]: #Listing-4-5
+<a name="Listing-4-5"></a>
+
 ```rust
 fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
@@ -86,6 +89,9 @@ will still be valid in the future. Consider the program in Listing 4-6 that
 uses the `first_word` function from Listing 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-4-6]: #Listing-4-6
+<a name="Listing-4-6"></a>
 
 ```rust
 # fn first_word(s: &String) -> usize {
@@ -161,6 +167,9 @@ position and the length of the slice, which corresponds to `ending_index` minus
 a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
 
 Figure 4-6 shows this in a diagram.
+
+[Figure-4-6]: #Figure-4-6
+<a name="Figure-4-6"></a>
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 

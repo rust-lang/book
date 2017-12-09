@@ -13,6 +13,9 @@ pointer is similar to that of closures, as shown in Listing 19-38:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-19-38]: #Listing-19-38
+<a name="Listing-19-38"></a>
+
 ```rust
 fn add_one(x: i32) -> i32 {
     x + 1

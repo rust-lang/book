@@ -19,6 +19,9 @@ by the standard library. It has an associated type named `Item` that stands in
 for the type of the values that we’re iterating over. We mentioned in Chapter
 13 that the definition of the `Iterator` trait is as shown in Listing 19-20:
 
+[Listing-19-20]: #Listing-19-20
+<a name="Listing-19-20"></a>
+
 ```rust
 pub trait Iterator {
     type Item;
@@ -50,6 +53,9 @@ impl Iterator for Counter {
 This feels similar to generics. So why isn’t the `Iterator` trait defined as
 shown in Listing 19-21?
 
+[Listing-19-21]: #Listing-19-21
+<a name="Listing-19-21"></a>
+
 ```rust
 pub trait Iterator<T> {
     fn next(&mut self) -> Option<T>;
@@ -79,6 +85,9 @@ defined in Listing 19-22. Both are defining a trait having to do with a graph
 structure that contains nodes of some type and edges of some type. `GGraph` is
 defined using generics, and `AGraph` is defined using associated types:
 
+[Listing-19-22]: #Listing-19-22
+<a name="Listing-19-22"></a>
+
 ```rust
 trait GGraph<Node, Edge> {
     // methods would go here
@@ -99,6 +108,9 @@ Let’s say we wanted to implement a function that computes the distance between
 two nodes in any types that implement the graph trait. With the `GGraph` trait
 defined using generics, our `distance` function signature would have to look
 like Listing 19-23:
+
+[Listing-19-23]: #Listing-19-23
+<a name="Listing-19-23"></a>
 
 ```rust
 # trait GGraph<Node, Edge> {}
@@ -122,6 +134,9 @@ we need to to use the `GGraph` trait and that requires specifying the type for
 
 Contrast with the definition of `distance` in Listing 19-24 that uses the
 `AGraph` trait from Listing 19-22 with associated types:
+
+[Listing-19-24]: #Listing-19-24
+<a name="Listing-19-24"></a>
 
 ```rust
 # trait AGraph {
@@ -207,6 +222,9 @@ together:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-19-25]: #Listing-19-25
+<a name="Listing-19-25"></a>
+
 ```rust
 use std::ops::Add;
 
@@ -263,6 +281,9 @@ Let’s look at another example of implementing the `Add` trait. Imagine we have
 two structs holding values in different units, `Millimeters` and `Meters`. We
 can implement `Add` for `Millimeters` in different ways as shown in Listing
 19-26:
+
+[Listing-19-26]: #Listing-19-26
+<a name="Listing-19-26"></a>
 
 ```rust
 use std::ops::Add;
@@ -327,6 +348,9 @@ it. Each `fly` method does something different:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-19-27]: #Listing-19-27
+<a name="Listing-19-27"></a>
+
 ```rust
 trait Pilot {
     fn fly(&self);
@@ -365,6 +389,9 @@ When we call `fly` on an instance of `Human`, the compiler defaults to calling
 the method that is directly implemented on the type, as shown in Listing 19-28:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-28]: #Listing-19-28
+<a name="Listing-19-28"></a>
 
 ```rust
 # trait Pilot {
@@ -412,6 +439,9 @@ In order to call the `fly` methods from either the `Pilot` trait or the
 `fly` method we mean. This syntax is demonstrated in Listing 19-29:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-29]: #Listing-19-29
+<a name="Listing-19-29"></a>
 
 ```rust
 # trait Pilot {
@@ -479,6 +509,9 @@ the associated function `baby_name` defined on `Dog` directly:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-19-30]: #Listing-19-30
+<a name="Listing-19-30"></a>
+
 ```rust
 trait Animal {
     fn baby_name() -> String;
@@ -529,6 +562,9 @@ Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-19-31]: #Listing-19-31
+<a name="Listing-19-31"></a>
+
 ```rust,ignore
 fn main() {
     println!("A baby dog is called a {}", Animal::baby_name());
@@ -559,6 +595,9 @@ can be when calling a function. Listing 19-32 demonstrates how to use fully
 qualified syntax in this case:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-32]: #Listing-19-32
+<a name="Listing-19-32"></a>
 
 ```rust
 # trait Animal {
@@ -639,6 +678,9 @@ provide the functionality that `OutlinePrint` needs. We can do that in the
 trait definition by specifying `OutlinePrint: Display`. It’s like adding a
 trait bound to the trait. Listing 19-33 shows an implementation of the
 `OutlinePrint` trait:
+
+[Listing-19-33]: #Listing-19-33
+<a name="Listing-19-33"></a>
 
 ```rust
 use std::fmt;
@@ -734,6 +776,9 @@ For example, if we wanted to implement `Display` on `Vec`, we can make a
 `Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-34:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-34]: #Listing-19-34
+<a name="Listing-19-34"></a>
 
 ```rust
 use std::fmt;

@@ -66,6 +66,9 @@ Consider the code in Listing 11-12 with the private function `internal_adder`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-11-12]: #Listing-11-12
+<a name="Listing-11-12"></a>
+
 ```rust
 pub fn add_two(a: i32) -> i32 {
     internal_adder(a, 2)
@@ -116,6 +119,9 @@ Let’s create an integration test. With the code in Listing 11-12 still in the
 *tests/integration_test.rs*, and enter the code in Listing 11-13:
 
 <span class="filename">Filename: tests/integration_test.rs</span>
+
+[Listing-11-13]: #Listing-11-13
+<a name="Listing-11-13"></a>
 
 ```rust,ignore
 extern crate adder;

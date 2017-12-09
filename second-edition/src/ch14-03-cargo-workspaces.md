@@ -96,6 +96,9 @@ the file to bring the new `add-one` library crate into scope. Then change the
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-14-11]: #Listing-14-11
+<a name="Listing-14-11"></a>
+
 ```rust,ignore
 extern crate add_one;
 

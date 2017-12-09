@@ -45,6 +45,9 @@ Listing 10-1:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-1]: #Listing-10-1
+<a name="Listing-10-1"></a>
+
 ```rust
 fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
@@ -78,6 +81,9 @@ could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program, as in Listing 10-2:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-2]: #Listing-10-2
+<a name="Listing-10-2"></a>
 
 ```rust
 fn main() {
@@ -129,6 +135,9 @@ number in two different lists of numbers, but the code from Listing 10-1 only
 exists in one spot:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-3]: #Listing-10-3
+<a name="Listing-10-3"></a>
 
 ```rust
 fn largest(list: &[i32]) -> i32 {

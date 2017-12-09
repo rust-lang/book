@@ -55,6 +55,9 @@ Interested to see if this breakdown works better or not. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-8]: #Listing-15-8
+<a name="Listing-15-8"></a>
+
 ```rust
 fn main() {
     let x = 5;
@@ -102,6 +105,9 @@ Listing 15-9:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-9]: #Listing-15-9
+<a name="Listing-15-9"></a>
+
 ```rust
 fn main() {
     let x = 5;
@@ -135,6 +141,9 @@ function to match the `new` function defined on `Box<T>`:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-10]: #Listing-15-10
+<a name="Listing-15-10"></a>
+
 ```rust
 struct MyBox<T>(T);
 
@@ -158,6 +167,9 @@ The code in Listing 15-11 won’t compile because Rust doesn’t know how to
 dereference `MyBox`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-11]: #Listing-15-11
+<a name="Listing-15-11"></a>
 
 ```rust,ignore
 fn main() {
@@ -195,6 +207,9 @@ provided by the standard library, requires implementing one method named
 15-12 contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-12]: #Listing-15-12
+<a name="Listing-15-12"></a>
 
 ```rust
 use std::ops::Deref;
@@ -289,6 +304,9 @@ string slice parameter:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-13]: #Listing-15-13
+<a name="Listing-15-13"></a>
+
 ```rust
 fn hello(name: &str) {
     println!("Hello, {}!", name);
@@ -304,6 +322,9 @@ We can call the `hello` function with a string slice as an argument, like
 Listing 15-14:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-14]: #Listing-15-14
+<a name="Listing-15-14"></a>
 
 ```rust
 # use std::ops::Deref;
@@ -350,6 +371,9 @@ of type `&MyBox<String>`, we’d have to write the code in Listing 15-15 instead
 of the code in Listing 15-14:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-15]: #Listing-15-15
+<a name="Listing-15-15"></a>
 
 ```rust
 # use std::ops::Deref;

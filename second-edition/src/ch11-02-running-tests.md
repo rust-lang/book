@@ -61,6 +61,9 @@ parameter and returns 10, as well as a test that passes and a test that fails.
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-11-10]: #Listing-11-10
+<a name="Listing-11-10"></a>
+
 ```rust
 fn prints_and_returns_10(a: i32) -> i32 {
     println!("I got the value {}", a);
@@ -160,6 +163,9 @@ To demonstrate how to run a subset of tests, we’ll create three tests for our
 `add_two` function, as shown in Listing 11-11, and choose which ones to run:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-11]: #Listing-11-11
+<a name="Listing-11-11"></a>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {

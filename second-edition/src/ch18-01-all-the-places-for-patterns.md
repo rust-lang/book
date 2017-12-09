@@ -62,6 +62,9 @@ Finally, if none of these conditions apply, the background color will be blue:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-18-1]: #Listing-18-1
+<a name="Listing-18-1"></a>
+
 ```rust
 fn main() {
     let favorite_color: Option<&str> = None;
@@ -116,6 +119,9 @@ example in Listing 18-2 shows a `while let` loop that uses a vector as a stack
 and prints out the values in the vector in the opposite order they were pushed
 in:
 
+[Listing-18-2]: #Listing-18-2
+<a name="Listing-18-2"></a>
+
 ```rust
 let mut stack = Vec::new();
 
@@ -159,6 +165,9 @@ section, we said "This is called *destructuring*, because it breaks the single
 tuple into three parts.". So I don't think we need to define destructure again
 in this chapter, but I've added a small parenthetical here in case the reader
 forgets. /Carol -->
+
+[Listing-18-3]: #Listing-18-3
+<a name="Listing-18-3"></a>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -214,6 +223,9 @@ effectively means “bind everything to the variable `x`, whatever the value is.
 To see the pattern matching aspect of `let` a bit more clearly, consider
 Listing 18-4 where we’re using a pattern with `let` to destructure a tuple:
 
+[Listing-18-4]: #Listing-18-4
+<a name="Listing-18-4"></a>
+
 ```rust
 let (x, y, z) = (1, 2, 3);
 ```
@@ -235,6 +247,9 @@ If the number of elements in the pattern don’t match the number of elements in
 the tuple, the overall type won’t match and we’ll get a compiler error. For
 example, Listing 18-5 shows an attempt to destructure into two variables a
 tuple with three elements that won’t work:
+
+[Listing-18-5]: #Listing-18-5
+<a name="Listing-18-5"></a>
 
 ```rust,ignore
 let (x, y) = (1, 2, 3);
@@ -268,6 +283,9 @@ Function parameters can also be patterns. The code in Listing 18-6, declaring a
 function named `foo` that takes one parameter named `x` of type `i32`, should
 by now look familiar:
 
+[Listing-18-6]: #Listing-18-6
+<a name="Listing-18-6"></a>
+
 ```rust
 fn foo(x: i32) {
     // code goes here
@@ -282,6 +300,9 @@ function’s arguments to the pattern. Listing 18-7 splits apart the values in a
 tuple as we pass it to a function:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-7]: #Listing-18-7
+<a name="Listing-18-7"></a>
 
 ```rust
 fn print_coordinates(&(x, y): &(i32, i32)) {

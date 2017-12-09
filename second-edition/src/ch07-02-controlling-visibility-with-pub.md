@@ -246,6 +246,9 @@ library project and enter the code in Listing 7-6 into your new project’s
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-7-6]: #Listing-7-6
+<a name="Listing-7-6"></a>
+
 ```rust,ignore
 mod outermost {
     pub fn middle_function() {}

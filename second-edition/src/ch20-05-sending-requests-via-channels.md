@@ -30,6 +30,9 @@ hold anything for now:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-16]: #Listing-20-16
+<a name="Listing-20-16"></a>
+
 ```rust
 # use std::thread;
 // --snip--
@@ -93,6 +96,9 @@ channel in the thread that the workers spawn, so we’re going to reference the
 won’t quite compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-17]: #Listing-20-17
+<a name="Listing-20-17"></a>
 
 ```rust,ignore
 impl ThreadPool {
@@ -177,6 +183,9 @@ need to make:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-18]: #Listing-20-18
+<a name="Listing-20-18"></a>
+
 ```rust
 # use std::thread;
 # use std::sync::mpsc;
@@ -251,6 +260,9 @@ this is such a case! Take a look at Listing 20-19:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-19]: #Listing-20-19
+<a name="Listing-20-19"></a>
+
 ```rust
 // --snip--
 # pub struct ThreadPool {
@@ -297,6 +309,9 @@ of the channel for a job, and running the job when it gets one. Let’s make the
 change shown in Listing 20-20 to `Worker::new`:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-20]: #Listing-20-20
+<a name="Listing-20-20"></a>
 
 ```rust,ignore
 // --snip--
@@ -387,6 +402,9 @@ changing our type alias to use the new trait, and changing `Worker` to use the
 `call_box` method. These changes are shown in Listing 20-21:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-21]: #Listing-20-21
+<a name="Listing-20-21"></a>
 
 ```rust,ignore
 trait FnBox {

@@ -51,6 +51,9 @@ automatically. We're building up to cleaning up. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-16]: #Listing-15-16
+<a name="Listing-15-16"></a>
+
 ```rust
 struct CustomSmartPointer {
     data: String,
@@ -131,6 +134,9 @@ this here? -->
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-17]: #Listing-15-17
+<a name="Listing-15-17"></a>
+
 ```rust,ignore
 fn main() {
     let c = CustomSmartPointer { data: String::from("some data") };
@@ -174,6 +180,9 @@ an argument. `std::mem::drop` is in the prelude, so we can modify `main` from
 Listing 15-16 to call the `drop` function as shown in Listing 15-18:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-18]: #Listing-15-18
+<a name="Listing-15-18"></a>
 
 ```rust
 # struct CustomSmartPointer {

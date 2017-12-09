@@ -20,6 +20,9 @@ first function is the one we extracted in Listing 10-3 that finds the largest
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-4]: #Listing-10-4
+<a name="Listing-10-4"></a>
+
 ```rust
 fn largest_i32(list: &[i32]) -> i32 {
     let mut largest = list[0];
@@ -101,6 +104,9 @@ compile yet!
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-5]: #Listing-10-5
+<a name="Listing-10-5"></a>
+
 ```rust,ignore
 fn largest<T>(list: &[T]) -> T {
     let mut largest = list[0];
@@ -167,6 +173,9 @@ use of a `Point` struct that can hold `x` and `y` coordinate values of any type:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-6]: #Listing-10-6
+<a name="Listing-10-6"></a>
+
 ```rust
 struct Point<T> {
     x: T,
@@ -194,6 +203,9 @@ being. If we try to create an instance of a `Point` that has values of
 different types, as in Listing 10-7, our code won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-7]: #Listing-10-7
+<a name="Listing-10-7"></a>
 
 ```rust,ignore
 struct Point<T> {
@@ -235,6 +247,9 @@ generic over types `T` and `U`. The field `x` is of type `T`, and the field `y`
 is of type `U`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-8]: #Listing-10-8
+<a name="Listing-10-8"></a>
 
 ```rust
 struct Point<T, U> {
@@ -313,6 +328,9 @@ struct we defined in Listing 10-6. We’ve then defined a method named `x` on
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-9]: #Listing-10-9
+<a name="Listing-10-9"></a>
+
 ```rust
 struct Point<T> {
     x: T,
@@ -343,6 +361,9 @@ concrete type. For example, we could choose to implement methods on
 `Point<f32>` instances rather than `Point` instances with any generic type.
 Listing 10-10 shows that we don’t declare anything after the `impl` in this
 case, since we’re using a concrete type, `f32`:
+
+[Listing-10-10]: #Listing-10-10
+<a name="Listing-10-10"></a>
 
 ```rust
 # struct Point<T> {
@@ -377,6 +398,9 @@ of type `T`) and the `y` value from the passed-in `Point` (which is of type
 `W`):
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-11]: #Listing-10-11
+<a name="Listing-10-11"></a>
 
 ```rust
 struct Point<T, U> {

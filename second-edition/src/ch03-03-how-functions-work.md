@@ -154,6 +154,9 @@ statement. In Listing 3-1, `let y = 6;` is a statement:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-3-1]: #Listing-3-1
+<a name="Listing-3-1"></a>
+
 ```rust
 fn main() {
     let y = 6;

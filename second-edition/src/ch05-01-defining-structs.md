@@ -12,6 +12,9 @@ grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
 struct to store information about a user account:
 
+[Listing-5-1]: #Listing-5-1
+<a name="Listing-5-1"></a>
+
 ```rust
 struct User {
     username: String,
@@ -32,6 +35,9 @@ the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2:
+
+[Listing-5-2]: #Listing-5-2
+<a name="Listing-5-2"></a>
 
 ```rust
 # struct User {
@@ -57,6 +63,9 @@ just this user’s email address, we can use `user1.email` wherever we want to
 use this value. If the instance is mutable, we can change a value by using the
 dot notation and assigning into a particular field. Listing 5-3 shows how to
 change the value in the `email` field of a mutable `User` instance:
+
+[Listing-5-3]: #Listing-5-3
+<a name="Listing-5-3"></a>
 
 ```rust
 # struct User {
@@ -87,6 +96,9 @@ body to implicitly return that new instance.
 Listing 5-4 shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
 the `sign_in_count` gets a value of `1`.
+
+[Listing-5-4]: #Listing-5-4
+<a name="Listing-5-4"></a>
 
 ```rust
 # struct User {
@@ -120,6 +132,9 @@ Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the *field init shorthand* syntax to rewrite
 `build_user` so that it behaves exactly the same but doesn’t have the
 repetition of `email` and `username` in the way shown in Listing 5-5.
+
+[Listing-5-5]: #Listing-5-5
+<a name="Listing-5-5"></a>
 
 ```rust
 # struct User {
@@ -158,6 +173,9 @@ First, Listing 5-6 shows how we create a new `User` instance in `user2` without
 the update syntax. We set new values for `email` and `username`, but otherwise
 use the same values from `user1` that we created in Listing 5-2:
 
+[Listing-5-6]: #Listing-5-6
+<a name="Listing-5-6"></a>
+
 ```rust
 # struct User {
 #     username: String,
@@ -187,6 +205,9 @@ the values from `user1`</span>
 Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
+
+[Listing-5-7]: #Listing-5-7
+<a name="Listing-5-7"></a>
 
 ```rust
 # struct User {

@@ -26,6 +26,9 @@ where Rust requires an irrefutable pattern and vice versa. In Listing 18-8, we
 have a `let` statement, but for the pattern we’ve specified `Some(x)`, a
 refutable pattern. As you might expect, this will error:
 
+[Listing-18-8]: #Listing-18-8
+<a name="Listing-18-8"></a>
+
 ```rust,ignore
 let Some(x) = some_option_value;
 ```
@@ -56,6 +59,9 @@ instead of using `let`, we can use `if let`. That way, if the pattern doesn’t
 match, the code will just skip the code in the curly brackets, giving it a way
 to continue validly. Listing 18-9 shows how to fix the code in Listing 18-8.
 
+[Listing-18-9]: #Listing-18-9
+<a name="Listing-18-9"></a>
+
 ```rust
 # let some_option_value: Option<i32> = None;
 if let Some(x) = some_option_value {
@@ -76,6 +82,9 @@ We’ve given the code an out! This code is perfectly valid, though does now of
 course mean we cannot use an irrefutable pattern without receiving an error. If
 we give `if let` a pattern that will always match, such as `x` as shown in
 Listing 18-10, it will error:
+
+[Listing-18-10]: #Listing-18-10
+<a name="Listing-18-10"></a>
 
 ```rust,ignore
 if let x = 5 {

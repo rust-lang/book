@@ -70,6 +70,9 @@ Listing 17-3 shows how to define a trait named `Draw` with one method named
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-3]: #Listing-17-3
+<a name="Listing-17-3"></a>
+
 ```rust
 pub trait Draw {
     fn draw(&self);
@@ -92,6 +95,9 @@ this section where we talk about needing a `&` or a `Box` to be a trait object.
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-4]: #Listing-17-4
+<a name="Listing-17-4"></a>
+
 ```rust
 # pub trait Draw {
 #     fn draw(&self);
@@ -110,6 +116,9 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 `draw` method on each of its `components`, as shown in Listing 17-5:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-5]: #Listing-17-5
+<a name="Listing-17-5"></a>
 
 ```rust
 # pub trait Draw {
@@ -139,6 +148,9 @@ to fill in for the trait object at runtime. For example, we could have defined
 the `Screen` struct using a generic type and a trait bound as in Listing 17-6:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-6]: #Listing-17-6
+<a name="Listing-17-6"></a>
 
 ```rust
 # pub trait Draw {
@@ -183,6 +195,9 @@ Listing 17-7:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-7]: #Listing-17-7
+<a name="Listing-17-7"></a>
+
 ```rust
 # pub trait Draw {
 #     fn draw(&self);
@@ -220,6 +235,9 @@ the `SelectBox` type as well, as shown in Listing 17-8:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-17-8]: #Listing-17-8
+<a name="Listing-17-8"></a>
+
 ```rust,ignore
 extern crate rust_gui;
 use rust_gui::Draw;
@@ -247,6 +265,9 @@ method on the `Screen` instance, which will call `draw` on each of the
 components. Listing 17-9 shows this implementation:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-17-9]: #Listing-17-9
+<a name="Listing-17-9"></a>
 
 ```rust,ignore
 use rust_gui::{Screen, Button};
@@ -314,6 +335,9 @@ For example, Listing 17-10 shows what happens if we try to create a `Screen`
 with a `String` as a component:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-17-10]: #Listing-17-10
+<a name="Listing-17-10"></a>
 
 ```rust,ignore
 extern crate rust_gui;

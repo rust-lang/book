@@ -32,6 +32,9 @@ concept:
 
 <span class="filename">Filename: lib.rs</span>
 
+[Listing-10-12]: #Listing-10-12
+<a name="Listing-10-12"></a>
+
 ```rust
 pub trait Summarizable {
     fn summary(&self) -> String;
@@ -65,6 +68,9 @@ username followed by the whole text of the tweet, assuming that tweet content
 is already limited to 140 characters.
 
 <span class="filename">Filename: lib.rs</span>
+
+[Listing-10-13]: #Listing-10-13
+<a name="Listing-10-13"></a>
 
 ```rust
 # pub trait Summarizable {
@@ -138,6 +144,9 @@ implement it, like in Listing 10-14:
 
 <span class="filename">Filename: lib.rs</span>
 
+[Listing-10-14]: #Listing-10-14
+<a name="Listing-10-14"></a>
+
 ```rust,ignore
 extern crate aggregator;
 
@@ -191,6 +200,9 @@ the `summary` method of the `Summarize` trait instead of choosing to only
 define the method signature like we did in Listing 10-12:
 
 <span class="filename">Filename: lib.rs</span>
+
+[Listing-10-15]: #Listing-10-15
+<a name="Listing-10-15"></a>
 
 ```rust
 pub trait Summarizable {
@@ -412,6 +424,9 @@ and `Copy` traits, like `i32` and `char`:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-16]: #Listing-10-16
+<a name="Listing-10-16"></a>
+
 ```rust
 fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
     let mut largest = list[0];
@@ -462,6 +477,9 @@ specified traits. For example, the type `Pair<T>` in listing 10-17 always
 implements the `new` method, but `Pair<T>` only implements the `cmp_display` if
 its inner type `T` implements the `PartialOrd` trait that enables comparison
 and the `Display` trait that enables printing:
+
+[Listing-10-17]: #Listing-10-17
+<a name="Listing-10-17"></a>
 
 ```rust
 use std::fmt::Display;

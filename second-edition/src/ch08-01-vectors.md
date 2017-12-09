@@ -12,6 +12,9 @@ cart.
 To create a new, empty vector, we can call the `Vec::new` function as shown in
 Listing 8-1:
 
+[Listing-8-1]: #Listing-8-1
+<a name="Listing-8-1"></a>
+
 ```rust
 let v: Vec<i32> = Vec::new();
 ```
@@ -35,6 +38,9 @@ common to create a `Vec<T>` that has initial values, and Rust provides the
 values we give it. Listing 8-2 creates a new `Vec<i32>` that holds the values
 `1`, `2`, and `3`:
 
+[Listing-8-2]: #Listing-8-2
+<a name="Listing-8-2"></a>
+
 ```rust
 let v = vec![1, 2, 3];
 ```
@@ -50,6 +56,9 @@ to modify a vector.
 
 To create a vector and then add elements to it, we can use the `push` method as
 shown in Listing 8-3:
+
+[Listing-8-3]: #Listing-8-3
+<a name="Listing-8-3"></a>
 
 ```rust
 let mut v = Vec::new();
@@ -72,6 +81,9 @@ data, so we don’t need the `Vec<i32>` annotation.
 
 Like any other `struct`, a vector will be freed when it goes out of scope, as
 annotated in Listing 8-4:
+
+[Listing-8-4]: #Listing-8-4
+<a name="Listing-8-4"></a>
 
 ```rust
 {
@@ -100,6 +112,9 @@ values that are returned from these functions for extra clarity.
 Listing 8-5 shows both methods of accessing a value in a vector either with
 indexing syntax or the `get` method:
 
+[Listing-8-5]: #Listing-8-5
+<a name="Listing-8-5"></a>
+
 ```rust
 let v = vec![1, 2, 3, 4, 5];
 
@@ -121,6 +136,9 @@ the program behaves when you try to use an index value that the vector doesn’t
 have an element for. As an example, let’s see what a program will do if it has
 a vector that holds five elements and then tries to access an element at index
 100, as shown in Listing 8-6:
+
+[Listing-8-6]: #Listing-8-6
+<a name="Listing-8-6"></a>
 
 ```rust,should_panic
 let v = vec![1, 2, 3, 4, 5];
@@ -156,6 +174,9 @@ rule that states we can’t have mutable and immutable references in the same
 scope. That rule applies in Listing 8-7 where we hold an immutable reference to
 the first element in a vector and try to add an element to the end, which won’t
 work:
+
+[Listing-8-7]: #Listing-8-7
+<a name="Listing-8-7"></a>
 
 ```rust,ignore
 let mut v = vec![1, 2, 3, 4, 5];
@@ -199,9 +220,12 @@ rules prevent programs from ending up in that situation.
 ### Iterating Over the Values in a Vector
 
 If we want to access each element in a vector in turn, we can iterate through
-all of the elements rather than use indexes to access one at a time. Listing
-8-8 shows how to use a `for` loop to get immutable references to each element
+all of the elements rather than use indexes to access one at a time. Listing 8-8
+shows how to use a `for` loop to get immutable references to each element
 in a vector of `i32` values and print them out:
+
+[Listing-8-8]: #Listing-8-8
+<a name="Listing-8-8"></a>
 
 ```rust
 let v = vec![100, 32, 57];
@@ -216,6 +240,9 @@ iterating over the elements using a `for` loop</span>
 We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-9
 will add `50` to each element:
+
+[Listing-8-9]: #Listing-8-9
+<a name="Listing-8-9"></a>
 
 ```rust
 let mut v = vec![100, 32, 57];
@@ -245,6 +272,9 @@ and some strings. We can define an enum whose variants will hold the different
 value types, and then all the enum variants will be considered the same type:
 that of the enum. Then we can create a vector that holds that enum and so,
 ultimately, holds different types. We’ve demonstrated this in Listing 8-10:
+
+[Listing-8-10]: #Listing-8-10
+<a name="Listing-8-10"></a>
 
 ```rust
 enum SpreadsheetCell {

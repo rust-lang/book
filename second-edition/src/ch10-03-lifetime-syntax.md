@@ -28,6 +28,9 @@ inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
 the inner scope ends, and we attempt to print out the value in `r`:
 
+[Listing-10-18]: #Listing-10-18
+<a name="Listing-10-18"></a>
+
 ```rust,ignore
 {
     let r;
@@ -79,6 +82,9 @@ The part of the compiler called the *borrow checker* compares scopes to
 determine that all borrows are valid. Listing 10-19 shows the same example from
 Listing 10-18 with annotations showing the lifetimes of the variables:
 
+[Listing-10-19]: #Listing-10-19
+<a name="Listing-10-19"></a>
+
 ```rust,ignore
 {
     let r;         // -------+-- 'a
@@ -116,6 +122,9 @@ as long as the reference.
 Let’s look at an example in Listing 10-20 that doesn’t try to make a dangling
 reference and compiles without any errors:
 
+[Listing-10-20]: #Listing-10-20
+<a name="Listing-10-20"></a>
+
 ```rust
 {
     let x = 5;            // -----+-- 'b
@@ -147,6 +156,9 @@ want to get back a string slice. The code in Listing 10-21 should print `The
 longest string is abcd` once we’ve implemented the `longest` function:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-21]: #Listing-10-21
+<a name="Listing-10-21"></a>
 
 ```rust,ignore
 fn main() {
@@ -191,6 +203,9 @@ If we try to implement the `longest` function as shown in Listing 10-22, it
 won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-22]: #Listing-10-22
+<a name="Listing-10-22"></a>
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
@@ -281,6 +296,9 @@ Listing 10-23:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-23]: #Listing-10-23
+<a name="Listing-10-23"></a>
+
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
@@ -337,6 +355,9 @@ will compile and print `The longest string is long string is long` when run:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-24]: #Listing-10-24
+<a name="Listing-10-24"></a>
+
 ```rust
 # fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 #     if x.len() > y.len() {
@@ -368,6 +389,9 @@ assignment of the value to the `result` variable inside the scope with
 inner scope, after it has ended. The code in Listing 10-25 will not compile:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-25]: #Listing-10-25
+<a name="Listing-10-25"></a>
 
 ```rust,ignore
 fn main() {
@@ -495,6 +519,9 @@ every reference in the struct’s definition. Listing 10-26 has a struct named
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-10-26]: #Listing-10-26
+<a name="Listing-10-26"></a>
+
 ```rust
 struct ImportantExcerpt<'a> {
     part: &'a str,
@@ -530,6 +557,9 @@ However, in Chapter 4 we had a function in the “String Slices” section, show
 again in Listing 10-27, that compiled without lifetime annotations:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-10-27]: #Listing-10-27
+<a name="Listing-10-27"></a>
 
 ```rust
 fn first_word(s: &str) -> &str {

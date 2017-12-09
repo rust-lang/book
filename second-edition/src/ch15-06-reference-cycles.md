@@ -17,6 +17,9 @@ starting with the definition of the `List` enum and a `tail` method in Listing
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-28]: #Listing-15-28
+<a name="Listing-15-28"></a>
+
 ```rust,ignore
 use std::rc::Rc;
 use std::cell::RefCell;
@@ -69,6 +72,9 @@ file -->
 <!-- yes /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-29]: #Listing-15-29
+<a name="Listing-15-29"></a>
 
 ```rust
 # use List::{Cons, Nil};
@@ -162,6 +168,9 @@ dropped. The memory will just sit there with a count of one, forever.
 
 To visualize this, we’ve created a reference cycle that looks like Figure 15-30:
 
+[Figure-15-30]: #Figure-15-30
+<a name="Figure-15-30"></a>
+
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
 <span class="caption">Figure 15-30: A reference cycle of lists `a` and `b`
@@ -170,6 +179,9 @@ pointing to each other</span>
 If you uncomment the last `println!` and run the program, Rust will try and
 print this cycle out with `a` pointing to `b` pointing to `a` and so forth
 until it overflows the stack.
+
+[Figure-15-30]: #Figure-15-30
+<a name="Figure-15-30"></a>
 
 <!-- Can you show us the output? Also, why are we commenting out the print
 statement in the first place?-->
@@ -288,6 +300,9 @@ with the value 5 and `leaf` as one of its children, as shown in Listing 15-31:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-31]: #Listing-15-31
+<a name="Listing-15-31"></a>
+
 ```rust
 # use std::rc::Rc;
 # use std::cell::RefCell;
@@ -373,6 +388,9 @@ that the `leaf` node will have a way to refer to its parent, `branch`:
 <!-- Done /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-32]: #Listing-15-32
+<a name="Listing-15-32"></a>
 
 ```rust
 # use std::rc::{Rc, Weak};
@@ -465,6 +483,9 @@ created and then dropped when it goes out of scope. The modifications are shown
 in Listing 15-33:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-33]: #Listing-15-33
+<a name="Listing-15-33"></a>
 
 ```rust,ignore
 fn main() {

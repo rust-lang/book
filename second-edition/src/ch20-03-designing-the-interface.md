@@ -23,6 +23,9 @@ handle each stream within the `for` loop:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-20-11]: #Listing-20-11
+<a name="Listing-20-11"></a>
+
 ```rust,no_run
 # use std::thread;
 # use std::io::prelude::*;
@@ -60,6 +63,9 @@ to run in the pool. Listing 20-12 shows the hypothetical interface for a
 `ThreadPool` struct we’d like to use instead of `thread::spawn`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-12]: #Listing-20-12
+<a name="Listing-20-12"></a>
 
 ```rust,no_run
 # use std::thread;

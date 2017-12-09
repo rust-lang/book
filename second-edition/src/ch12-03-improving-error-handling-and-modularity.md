@@ -72,6 +72,9 @@ function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-5]: #Listing-12-5
+<a name="Listing-12-5"></a>
+
 ```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -133,6 +136,9 @@ function to return an instance of the `Config` struct and updated `main` to use
 the struct fields rather than having separate variables:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-6]: #Listing-12-6
+<a name="Listing-12-6"></a>
 
 ```rust,should_panic
 # use std::env;
@@ -226,6 +232,9 @@ shows the changes we need to make:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-7]: #Listing-12-7
+<a name="Listing-12-7"></a>
+
 ```rust,should_panic
 # use std::env;
 #
@@ -292,6 +301,9 @@ long enough, the program panics and displays a better error message than the
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-8]: #Listing-12-8
+<a name="Listing-12-8"></a>
+
 ```rust,ignore
 // --snip--
 fn new(args: &[String]) -> Config {
@@ -348,6 +360,9 @@ next listing:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-9]: #Listing-12-9
+<a name="Listing-12-9"></a>
+
 ```rust,ignore
 impl Config {
     fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -390,6 +405,9 @@ nonzero exit status is a convention to signal to the process that called our
 program that the program exited with an error state.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-10]: #Listing-12-10
+<a name="Listing-12-10"></a>
 
 ```rust,ignore
 use std::process;
@@ -455,6 +473,9 @@ defining the function in *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-11]: #Listing-12-11
+<a name="Listing-12-11"></a>
+
 ```rust,ignore
 fn main() {
     // --snip--
@@ -496,6 +517,9 @@ user-friendly way. Listing 12-12 shows the changes we need to make to the
 signature and body of `run`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-12]: #Listing-12-12
+<a name="Listing-12-12"></a>
 
 ```rust,ignore
 use std::error::Error;
@@ -609,6 +633,9 @@ The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-12-13]: #Listing-12-13
+<a name="Listing-12-13"></a>
+
 ```rust,ignore
 use std::error::Error;
 use std::fs::File;
@@ -641,6 +668,9 @@ Now we need to bring the code we moved to *src/lib.rs* into the scope of the
 binary crate in *src/main.rs*, as shown in Listing 12-14:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-14]: #Listing-12-14
+<a name="Listing-12-14"></a>
 
 ```rust,ignore
 extern crate minigrep;

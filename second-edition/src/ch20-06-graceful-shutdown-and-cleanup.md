@@ -21,6 +21,9 @@ won’t quite work yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-22]: #Listing-20-22
+<a name="Listing-20-22"></a>
+
 ```rust,ignore
 impl Drop for ThreadPool {
     fn drop(&mut self) {
@@ -171,6 +174,9 @@ We need to adjust the channel to use values of type `Message` rather than type
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-23]: #Listing-20-23
+<a name="Listing-20-23"></a>
+
 ```rust,ignore
 pub struct ThreadPool {
     workers: Vec<Worker>,
@@ -249,6 +255,9 @@ to look like Listing 20-24:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-24]: #Listing-20-24
+<a name="Listing-20-24"></a>
+
 ```rust,ignore
 impl Drop for ThreadPool {
     fn drop(&mut self) {
@@ -301,6 +310,9 @@ In order to see this code in action, let’s modify `main` to only accept two
 requests before gracefully shutting the server down as shown in Listing 20-25:
 
 <span class="filename">Filename: src/bin/main.rs</span>
+
+[Listing-20-25]: #Listing-20-25
+<a name="Listing-20-25"></a>
 
 ```rust,ignore
 fn main() {

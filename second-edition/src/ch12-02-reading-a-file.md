@@ -10,6 +10,9 @@ Who are you?”
 
 <span class="filename">Filename: poem.txt</span>
 
+[Listing-12-3]: #Listing-12-3
+<a name="Listing-12-3"></a>
+
 ```text
 I’m nobody! Who are you?
 Are you nobody, too?
@@ -29,6 +32,9 @@ With the text in place, edit *src/main.rs* and add code to open the file, as
 shown in Listing 12-4:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-4]: #Listing-12-4
+<a name="Listing-12-4"></a>
 
 ```rust,should_panic
 use std::env;

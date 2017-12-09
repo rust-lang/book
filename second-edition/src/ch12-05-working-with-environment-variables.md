@@ -18,6 +18,9 @@ tests, as shown in Listing 12-20:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-12-20]: #Listing-12-20
+<a name="Listing-12-20"></a>
+
 ```rust
 #[cfg(test)]
 mod test {
@@ -82,6 +85,9 @@ the `query` and each `line` so whatever the case of the input arguments,
 they’ll be the same case when we check whether the line contains the query:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-12-21]: #Listing-12-21
+<a name="Listing-12-21"></a>
 
 ```rust
 fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -153,6 +159,9 @@ won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-12-22]: #Listing-12-22
+<a name="Listing-12-22"></a>
+
 ```rust
 # use std::error::Error;
 # use std::fs::File;
@@ -203,6 +212,9 @@ module to check for an environment variable named `CASE_INSENSITIVE`, as shown
 in Listing 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-12-23]: #Listing-12-23
+<a name="Listing-12-23"></a>
 
 ```rust
 use std::env;

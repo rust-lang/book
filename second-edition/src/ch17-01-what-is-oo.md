@@ -54,6 +54,9 @@ calculated average for us. Listing 17-1 has the definition of the
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-17-1]: #Listing-17-1
+<a name="Listing-17-1"></a>
+
 ```rust
 pub struct AveragedCollection {
     list: Vec<i32>,
@@ -72,6 +75,9 @@ average is also updated. We do this by implementing `add`, `remove`, and
 `average` methods on the struct as shown in Listing 17-2:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-2]: #Listing-17-2
+<a name="Listing-17-2"></a>
 
 ```rust
 # pub struct AveragedCollection {

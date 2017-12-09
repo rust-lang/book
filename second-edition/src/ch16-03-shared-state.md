@@ -68,6 +68,9 @@ context, shown in Listing 16-12:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-12]: #Listing-16-12
+<a name="Listing-16-12"></a>
+
 ```rust
 use std::sync::Mutex;
 
@@ -130,6 +133,9 @@ compiler errors, and we’re going to use those errors to learn more about using
 starting example:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-13]: #Listing-16-13
+<a name="Listing-16-13"></a>
 
 ```rust,ignore
 use std::sync::Mutex;
@@ -282,6 +288,9 @@ the `move` keyword with the closure:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-14]: #Listing-16-14
+<a name="Listing-16-14"></a>
+
 ```rust,ignore
 use std::rc::Rc;
 use std::sync::Mutex;
@@ -375,6 +384,9 @@ program by changing the `use` line and the call to `new`. The code in Listing
 16-15 will finally compile and run:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-15]: #Listing-16-15
+<a name="Listing-16-15"></a>
 
 ```rust
 use std::sync::{Mutex, Arc};

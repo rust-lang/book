@@ -33,6 +33,9 @@ fail: in Listing 9-3 we try to open a file:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-9-3]: #Listing-9-3
+<a name="Listing-9-3"></a>
+
 ```rust
 use std::fs::File;
 
@@ -94,6 +97,9 @@ Chapter 6.
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-9-4]: #Listing-9-4
+<a name="Listing-9-4"></a>
+
 ```rust,should_panic
 use std::fs::File;
 
@@ -147,6 +153,9 @@ Listing 9-4. Look at Listing 9-5, which adds another arm to the `match`:
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
+
+[Listing-9-5]: #Listing-9-5
+<a name="Listing-9-5"></a>
 
 ```rust,ignore
 use std::fs::File;
@@ -283,6 +292,9 @@ to the code that called this function:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-9-6]: #Listing-9-6
+<a name="Listing-9-6"></a>
+
 ```rust
 use std::io;
 use std::io::Read;
@@ -360,6 +372,9 @@ question mark operator:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-9-7]: #Listing-9-7
+<a name="Listing-9-7"></a>
+
 ```rust
 use std::io;
 use std::io::Read;
@@ -409,6 +424,9 @@ implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?` as shown in Listing 9-8:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-9-8]: #Listing-9-8
+<a name="Listing-9-8"></a>
 
 ```rust
 use std::io;

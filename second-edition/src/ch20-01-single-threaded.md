@@ -37,6 +37,9 @@ an incoming stream, it will print `Connection established!`:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-20-1]: #Listing-20-1
+<a name="Listing-20-1"></a>
+
 ```rust,no_run
 use std::net::TcpListener;
 
@@ -133,6 +136,9 @@ out in order to see the data that the browser is sending us. Change the code to
 look like Listing 20-2:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-2]: #Listing-20-2
+<a name="Listing-20-2"></a>
 
 ```rust,no_run
 use std::io::prelude::*;
@@ -291,6 +297,9 @@ Listing 20-3 in its place:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-20-3]: #Listing-20-3
+<a name="Listing-20-3"></a>
+
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
@@ -335,6 +344,9 @@ theirs:
 
 <span class="filename">Filename: hello.html</span>
 
+[Listing-20-4]: #Listing-20-4
+<a name="Listing-20-4"></a>
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -357,6 +369,9 @@ modify `handle_connection` as shown in Listing 20-5 to read the HTML file, add
 it to the response as a body, and send it:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-5]: #Listing-20-5
+<a name="Listing-20-5"></a>
 
 ```rust
 # use std::io::prelude::*;
@@ -414,6 +429,9 @@ add code to treat requests differently:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-20-6]: #Listing-20-6
+<a name="Listing-20-6"></a>
+
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
@@ -470,6 +488,9 @@ browser indicating as such to the end user:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-20-7]: #Listing-20-7
+<a name="Listing-20-7"></a>
+
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
@@ -504,6 +525,9 @@ like or use the example HTML in Listing 20-8:
 
 <span class="filename">Filename: 404.html</span>
 
+[Listing-20-8]: #Listing-20-8
+<a name="Listing-20-8"></a>
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -535,6 +559,9 @@ the file and write the response. The resulting code after this refactoring is
 shown in Listing 20-9:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-9]: #Listing-20-9
+<a name="Listing-20-9"></a>
 
 ```rust
 # use std::io::prelude::*;

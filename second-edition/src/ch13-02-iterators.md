@@ -11,6 +11,9 @@ Listing 13-13 creates an iterator over the items in the vector `v1` by calling
 the `iter` method defined on `Vec`. This code by itself doesn’t do anything
 useful:
 
+[Listing-13-13]: #Listing-13-13
+<a name="Listing-13-13"></a>
+
 ```rust
 let v1 = vec![1, 2, 3];
 
@@ -28,6 +31,9 @@ use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
 variable, and no iteration takes place at that time. When the `for` loop is
 called using the iterator in `v1_iter`, each element in the iterator is used in
 one iteration of the loop, which prints out each value:
+
+[Listing-13-14]: #Listing-13-14
+<a name="Listing-13-14"></a>
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -86,6 +92,9 @@ from the vector:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-13-15]: #Listing-13-15
+<a name="Listing-13-15"></a>
+
 ```rust,test_harness
 #[test]
 fn iterator_demonstration() {
@@ -135,6 +144,9 @@ test illustrating a use of the `sum` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-13-16]: #Listing-13-16
+<a name="Listing-13-16"></a>
+
 ```rust
 #[test]
 fn iterator_sum() {
@@ -168,6 +180,9 @@ closure here creates a new iterator in which each item from the vector has been
 incremented by 1. However, this code produces a warning:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-13-17]: #Listing-13-17
+<a name="Listing-13-17"></a>
 
 ```rust
 let v1: Vec<i32> = vec![1, 2, 3];
@@ -205,6 +220,9 @@ containing each item from the original vector incremented by 1:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-18]: #Listing-13-18
+<a name="Listing-13-18"></a>
+
 ```rust
 let v1: Vec<i32> = vec![1, 2, 3];
 
@@ -236,6 +254,9 @@ variable from its environment to iterate over a collection of `Shoe` struct
 instances. It will return only shoes that are the specified size:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-13-19]: #Listing-13-19
+<a name="Listing-13-19"></a>
 
 ```rust,test_harness
 #[derive(PartialEq, Debug)]
@@ -310,6 +331,9 @@ Listing 13-20 has the definition of the `Counter` struct and an associated
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-13-20]: #Listing-13-20
+<a name="Listing-13-20"></a>
+
 ```rust
 struct Counter {
     count: u32,
@@ -337,6 +361,9 @@ the body of the `next` method to specify what we want to happen when this
 iterator is used, as shown in Listing 13-21:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-13-21]: #Listing-13-21
+<a name="Listing-13-21"></a>
 
 ```rust
 # struct Counter {
@@ -378,6 +405,9 @@ shows a test demonstrating that we can use the iterator functionality of our
 with the iterator created from a vector in Listing 13-15:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-13-22]: #Listing-13-22
+<a name="Listing-13-22"></a>
 
 ```rust
 # struct Counter {
@@ -431,6 +461,9 @@ those results that are divisible by three, and add all the resulting values
 together, we could do so, as shown in the test in Listing 13-23:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-13-23]: #Listing-13-23
+<a name="Listing-13-23"></a>
 
 ```rust
 # struct Counter {

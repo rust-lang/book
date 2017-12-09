@@ -16,6 +16,9 @@ or failure. The parser will need to borrow the context to do the parsing.
 Implementing this would look like the code in Listing 19-12, which won’t
 compile because we’ve left off the lifetime annotations for now:
 
+[Listing-19-12]: #Listing-19-12
+<a name="Listing-19-12"></a>
+
 ```rust,ignore
 struct Context(&str);
 
@@ -49,6 +52,9 @@ So how do we fill in the lifetime parameters for the string slice in `Context`
 and the reference to the `Context` in `Parser`? The most straightforward thing
 to do is to use the same lifetime everywhere, as shown in Listing 19-13:
 
+[Listing-19-13]: #Listing-19-13
+<a name="Listing-19-13"></a>
+
 ```rust
 struct Context<'a>(&'a str);
 
@@ -69,6 +75,9 @@ impl<'a> Parser<'a> {
 This compiles fine. Next, in Listing 19-14, let’s write a function that takes
 an instance of `Context`, uses a `Parser` to parse that context, and returns
 what `parse` returns. This won’t quite work:
+
+[Listing-19-14]: #Listing-19-14
+<a name="Listing-19-14"></a>
 
 ```rust,ignore
 fn parse_context(context: Context) -> Result<(), &str> {
@@ -187,6 +196,9 @@ as shown in Listing 19-15. We’ve chosen the lifetime parameter names `'s` and
 this won’t completely fix the problem, but it’s a start and we’ll look at why
 this isn’t sufficient when we try to compile.
 
+[Listing-19-15]: #Listing-19-15
+<a name="Listing-19-15"></a>
+
 ```rust,ignore
 struct Context<'s>(&'s str);
 
@@ -285,6 +297,9 @@ types are wrappers over references that keep track of the borrowing rules at
 runtime. The definition of the `Ref` struct is shown in Listing 19-16, without
 lifetime bounds for now:
 
+[Listing-19-16]: #Listing-19-16
+<a name="Listing-19-16"></a>
+
 ```rust,ignore
 struct Ref<'a, T>(&'a T);
 ```
@@ -328,6 +343,9 @@ when we declare the generic type `T`. This code now compiles because the `T:
 'a` syntax specifies that `T` can be any type, but if it contains any
 references, the references must live at least as long as `'a`:
 
+[Listing-19-17]: #Listing-19-17
+<a name="Listing-19-17"></a>
+
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
 ```
@@ -339,6 +357,9 @@ We could choose to solve this in a different way, shown in the definition of a
 `StaticRef` struct in Listing 19-18, by adding the `'static` lifetime bound on
 `T`. This means if `T` contains any references, they must have the `'static`
 lifetime:
+
+[Listing-19-18]: #Listing-19-18
+<a name="Listing-19-18"></a>
 
 ```rust
 struct StaticRef<T: 'static>(&'static T);
@@ -367,6 +388,9 @@ lifetime. Consider Listing 19-19, where we have a trait `Foo` and a struct
 `Bar` that holds a reference (and thus has a lifetime parameter) that
 implements trait `Foo`, and we want to use an instance of `Bar` as the trait
 object `Box<Foo>`:
+
+[Listing-19-19]: #Listing-19-19
+<a name="Listing-19-19"></a>
 
 ```rust
 trait Foo { }

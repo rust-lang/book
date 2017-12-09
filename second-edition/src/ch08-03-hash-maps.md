@@ -24,6 +24,9 @@ Listing 8-20, we’re keeping track of the scores of two teams whose names are
 Blue and Yellow. The Blue team will start with 10 points, and the Yellow team
 starts with 50:
 
+[Listing-8-20]: #Listing-8-20
+<a name="Listing-8-20"></a>
+
 ```rust
 use std::collections::HashMap;
 
@@ -55,6 +58,9 @@ separate vectors, we can use the `zip` method to create a vector of tuples
 where “Blue” is paired with 10, and so forth. Then we can use the `collect`
 method to turn that vector of tuples into a `HashMap` as shown in Listing 8-21:
 
+[Listing-8-21]: #Listing-8-21
+<a name="Listing-8-21"></a>
+
 ```rust
 use std::collections::HashMap;
 
@@ -78,6 +84,9 @@ contains based on the types of the data in the vectors.
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
 the hash map will be the owner of those values as demonstrated in Listing 8-22:
+
+[Listing-8-22]: #Listing-8-22
+<a name="Listing-8-22"></a>
 
 ```rust
 use std::collections::HashMap;
@@ -106,6 +115,9 @@ the “Validating References with Lifetimes” section in Chapter 10.
 
 We can get a value out of the hash map by providing its key to the `get` method
 as shown in Listing 8-23:
+
+[Listing-8-23]: #Listing-8-23
+<a name="Listing-8-23"></a>
 
 ```rust
 use std::collections::HashMap;
@@ -170,6 +182,9 @@ Even though the code in Listing 8-24 calls `insert` twice, the hash map will
 only contain one key/value pair because we’re inserting the value for the Blue
 team’s key both times:
 
+[Listing-8-24]: #Listing-8-24
+<a name="Listing-8-24"></a>
+
 ```rust
 use std::collections::HashMap;
 
@@ -197,6 +212,9 @@ or might not exist. Let’s say we want to check whether the key for the Yellow
 team has a value associated with it. If it doesn’t, we want to insert the value
 50, and the same for the Blue team. Using the `entry` API, the code looks like
 Listing 8-25:
+
+[Listing-8-25]: #Listing-8-25
+<a name="Listing-8-25"></a>
 
 ```rust
 use std::collections::HashMap;
@@ -233,6 +251,9 @@ counts how many times each word appears in some text. We use a hash map with
 the words as keys and increment the value to keep track of how many times we’ve
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value `0`:
+
+[Listing-8-26]: #Listing-8-26
+<a name="Listing-8-26"></a>
 
 ```rust
 use std::collections::HashMap;

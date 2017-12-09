@@ -57,6 +57,9 @@ instead:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-24]: #Listing-12-24
+<a name="Listing-12-24"></a>
+
 ```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();

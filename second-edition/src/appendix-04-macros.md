@@ -190,6 +190,9 @@ write code that looks like Listing A4-1 using our crate:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-A4-1]: #Listing-A4-1
+<a name="Listing-A4-1"></a>
+
 ```rust,ignore
 extern crate hello_world;
 #[macro_use]
@@ -308,6 +311,9 @@ procedural macro more convenient. What you choose to do in the place where the
 purpose of your procedural macro.
 
 <span class="filename">Filename: hello-world-derive/src/lib.rs</span>
+
+[Listing-A4-2]: #Listing-A4-2
+<a name="Listing-A4-2"></a>
 
 ```rust,ignore
 extern crate proc_macro;

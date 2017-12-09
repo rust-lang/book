@@ -41,6 +41,9 @@ command line arguments passed to it and then collect the values into a vector:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-12-1]: #Listing-12-1
+<a name="Listing-12-1"></a>
+
 ```rust
 use std::env;
 
@@ -109,6 +112,9 @@ save the values of the two arguments in variables so we can use the values
 throughout the rest of the program. We do that in Listing 12-2:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-2]: #Listing-12-2
+<a name="Listing-12-2"></a>
 
 ```rust,should_panic
 use std::env;

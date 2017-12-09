@@ -117,6 +117,9 @@ hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current *scope*. Listing 4-1 has
 comments annotating where the variable `s` is valid:
 
+[Listing-4-1]: #Listing-4-1
+<a name="Listing-4-1"></a>
+
 ```rust
 {                      // s is not valid here, it’s not yet declared
     let s = "hello";   // s is valid from this point forward
@@ -248,6 +251,9 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2:
 
+[Listing-4-2]: #Listing-4-2
+<a name="Listing-4-2"></a>
+
 ```rust
 let x = 5;
 let y = x;
@@ -279,8 +285,14 @@ left: a pointer to the memory that holds the contents of the string, a length,
 and a capacity. This group of data is stored on the stack. On the right is the
 memory on the heap that holds the contents.
 
+[Figure-4-1]: #Figure-4-1
+<a name="Figure-4-1"></a>
+
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
+
+[Figure-4-1]: #Figure-4-1
+<a name="Figure-4-1"></a>
 <span class="caption">Figure 4-1: Representation in memory of a `String`
 holding the value `"hello"` bound to `s1`</span>
 
@@ -295,8 +307,14 @@ pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-2.
 
+[Figure-4-2]: #Figure-4-2
+<a name="Figure-4-2"></a>
+
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
+
+[Figure-4-2]: #Figure-4-2
+<a name="Figure-4-2"></a>
 <span class="caption">Figure 4-2: Representation in memory of the variable `s2`
 that has a copy of the pointer, length, and capacity of `s1`</span>
 
@@ -305,8 +323,14 @@ look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could potentially be very expensive in terms of runtime
 performance if the data on the heap was large.
 
+[Figure-4-3]: #Figure-4-3
+<a name="Figure-4-3"></a>
+
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
+
+[Figure-4-3]: #Figure-4-3
+<a name="Figure-4-3"></a>
 <span class="caption">Figure 4-3: Another possibility of what `s2 = s1` might
 do if Rust copied the heap data as well</span>
 
@@ -355,8 +379,14 @@ also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a *move*. Here we would read this by saying that `s1` was *moved*
 into `s2`. So what actually happens is shown in Figure 4-4.
 
+[Figure-4-4]: #Figure-4-4
+<a name="Figure-4-4"></a>
+
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
+
+[Figure-4-4]: #Figure-4-4
+<a name="Figure-4-4"></a>
 <span class="caption">Figure 4-4: Representation in memory after `s1` has been
 invalidated</span>
 
@@ -442,6 +472,9 @@ like assignment. Listing 4-3 has an example with some annotations showing where
 variables go into and out of scope:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-4-3]: #Listing-4-3
+<a name="Listing-4-3"></a>
 
 ```rust
 fn main() {

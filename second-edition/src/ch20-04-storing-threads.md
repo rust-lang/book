@@ -15,6 +15,9 @@ the `assert!` macro as shown in Listing 20-13:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-20-13]: #Listing-20-13
+<a name="Listing-20-13"></a>
+
 ```rust
 # pub struct ThreadPool;
 impl ThreadPool {
@@ -83,6 +86,9 @@ We’ve changed the definition of `ThreadPool` to hold a vector of
 returned a `ThreadPool` instance containing them:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-14]: #Listing-20-14
+<a name="Listing-20-14"></a>
 
 ```rust,ignore
 use std::thread;
@@ -185,6 +191,9 @@ taking a look at the code in Listing 20-15.
 Ready? Here’s Listing 20-15 with one way to make these modifications:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-15]: #Listing-20-15
+<a name="Listing-20-15"></a>
 
 ```rust
 use std::thread;

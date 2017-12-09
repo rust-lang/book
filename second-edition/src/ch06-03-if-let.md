@@ -5,6 +5,9 @@ handle values that match one pattern and ignore the rest. Consider the program
 in Listing 6-6 that matches on an `Option<u8>` value but only wants to execute
 code if the value is three:
 
+[Listing-6-6]: #Listing-6-6
+<a name="Listing-6-6"></a>
+
 ```rust
 let some_u8_value = Some(0u8);
 match some_u8_value {

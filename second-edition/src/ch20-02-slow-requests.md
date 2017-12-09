@@ -20,6 +20,9 @@ can see that our server processes requests serially.
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-20-10]: #Listing-20-10
+<a name="Listing-20-10"></a>
+
 ```rust
 use std::thread;
 use std::time::Duration;

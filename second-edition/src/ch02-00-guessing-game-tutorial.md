@@ -79,6 +79,9 @@ to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-2-1]: #Listing-2-1
+<a name="Listing-2-1"></a>
+
 ```rust,ignore
 use std::io;
 
@@ -388,6 +391,9 @@ version 0.3.14.”
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:
 
+[Listing-2-2]: #Listing-2-2
+<a name="Listing-2-2"></a>
+
 ```text
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
@@ -508,6 +514,9 @@ in Listing 2-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-2-3]: #Listing-2-3
+<a name="Listing-2-3"></a>
+
 ```rust,ignore
 extern crate rand;
 
@@ -597,6 +606,9 @@ Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-2-4]: #Listing-2-4
+<a name="Listing-2-4"></a>
 
 ```rust,ignore
 extern crate rand;
@@ -1020,6 +1032,9 @@ testing, but it ruins the game. Let’s delete the `println!` that outputs the
 secret number. Listing 2-5 shows the final code:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-2-5]: #Listing-2-5
+<a name="Listing-2-5"></a>
 
 ```rust,ignore
 extern crate rand;

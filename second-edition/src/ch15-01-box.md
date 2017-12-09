@@ -40,6 +40,9 @@ Listing 15-1 shows how to use a box to store an `i32` on the heap:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-1]: #Listing-15-1
+<a name="Listing-15-1"></a>
+
 ```rust
 fn main() {
     let b = Box::new(5);
@@ -151,6 +154,9 @@ Can you make it clear to the reader why they are doing this?-->
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-2]: #Listing-15-2
+<a name="Listing-15-2"></a>
+
 ```rust,ignore
 enum List {
     Cons(i32, List),
@@ -177,6 +183,9 @@ in Listing 15-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-3]: #Listing-15-3
+<a name="Listing-15-3"></a>
+
 ```rust,ignore
 use List::{Cons, Nil};
 
@@ -194,6 +203,9 @@ is one more `Cons` value that holds `3` and a `List` value, which is finally
 `Nil`, the non-recursive variant that signals the end of the list.
 
 If we try to compile the above code, we get the error shown in Listing 15-4:
+
+[Listing-15-4]: #Listing-15-4
+<a name="Listing-15-4"></a>
 
 ```text
 error[E0072]: recursive type `List` has infinite size
@@ -256,8 +268,14 @@ type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, and this continues infinitely, as shown in Figure 15-5.
 
+[Figure-15-5]: #Figure-15-5
+<a name="Figure-15-5"></a>
+
 <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
+
+[Figure-15-5]: #Figure-15-5
+<a name="Figure-15-5"></a>
 <span class="caption">Figure 15-5: An infinite `List` consisting of infinite
 `Cons` variants</span>
 
@@ -292,6 +310,9 @@ of the `List` from Listing 15-3 to the code in Listing 15-6, which will compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-15-6]: #Listing-15-6
+<a name="Listing-15-6"></a>
+
 ```rust
 enum List {
     Cons(i32, Box<List>),
@@ -318,6 +339,9 @@ size of an `i32` plus the size of a box’s pointer data. By using a box, we’v
 broken the infinite, recursive chain so the compiler is able to figure out the
 size it needs to store a `List` value. Figure 15-7 shows what the `Cons`
 variant looks like now:
+
+[Figure-15-7]: #Figure-15-7
+<a name="Figure-15-7"></a>
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 

@@ -70,6 +70,9 @@ element by index in a vector:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-9-1]: #Listing-9-1
+<a name="Listing-9-1"></a>
+
 ```rust,should_panic
 fn main() {
     let v = vec![1, 2, 3];
@@ -125,6 +128,9 @@ mentioning your files are code that your code called; the lines below are code
 that called your code. These lines might include core Rust code, standard
 library code, or crates that you’re using. Let’s try getting a backtrace:
 Listing 9-2 shows output similar to what you’ll see:
+
+[Listing-9-2]: #Listing-9-2
+<a name="Listing-9-2"></a>
 
 ```text
 $ RUST_BACKTRACE=1 cargo run

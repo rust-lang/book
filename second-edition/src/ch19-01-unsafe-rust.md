@@ -89,6 +89,9 @@ Raw pointers:
 
 Listing 19-1 shows how to create raw pointers from references:
 
+[Listing-19-1]: #Listing-19-1
+<a name="Listing-19-1"></a>
+
 ```rust
 let mut num = 5;
 
@@ -112,6 +115,9 @@ the code so that there is no memory access, or your program might segfault.
 There’s not usually a good reason to be writing code like this, but it is
 possible:
 
+[Listing-19-2]: #Listing-19-2
+<a name="Listing-19-2"></a>
+
 ```rust
 let address = 0x012345usize;
 let r = address as *const i32;
@@ -124,6 +130,9 @@ Note there’s no `unsafe` block in either Listing 19-1 or 19-2. You can *create
 raw pointers in safe code, but you can’t *dereference* raw pointers and read
 the data being pointed to. Using the dereference operator, `*`, on a raw
 pointer requires an `unsafe` block, as shown in Listing 19-3:
+
+[Listing-19-3]: #Listing-19-3
+<a name="Listing-19-3"></a>
 
 ```rust
 let mut num = 5;
@@ -195,6 +204,9 @@ method is defined on mutable slices, and it takes one slice and makes it into
 two by splitting the slice at the index given as an argument, as demonstrated
 in Listing 19-4:
 
+[Listing-19-4]: #Listing-19-4
+<a name="Listing-19-4"></a>
+
 ```rust
 let mut v = vec![1, 2, 3, 4, 5, 6];
 
@@ -213,6 +225,9 @@ This function can’t be implemented using only safe Rust. An attempt might look
 like Listing 19-5. For simplicity, we’re implementing `split_at_mut` as a
 function rather than a method, and only for slices of `i32` values rather than
 for a generic type `T`:
+
+[Listing-19-5]: #Listing-19-5
+<a name="Listing-19-5"></a>
 
 ```rust,ignore
 fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
@@ -260,6 +275,9 @@ unsafe code.
 
 Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work:
+
+[Listing-19-6]: #Listing-19-6
+<a name="Listing-19-6"></a>
 
 ```rust
 use std::slice;
@@ -316,6 +334,9 @@ In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice ten thousand items long:
 
+[Listing-19-7]: #Listing-19-7
+<a name="Listing-19-7"></a>
+
 ```rust
 use std::slice;
 
@@ -344,6 +365,9 @@ library. Functions declared within `extern` blocks are always unsafe to call
 from Rust code:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-8]: #Listing-19-8
+<a name="Listing-19-8"></a>
 
 ```rust
 extern "C" {
@@ -407,6 +431,9 @@ declaration and use of a static variable with a string slice as a value:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-19-9]: #Listing-19-9
+<a name="Listing-19-9"></a>
+
 ```rust
 static HELLO_WORLD: &str = "Hello, world!";
 
@@ -436,6 +463,9 @@ variables is unsafe. Listing 19-10 shows how to declare, access, and modify a
 mutable static variable named `COUNTER`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-10]: #Listing-19-10
+<a name="Listing-19-10"></a>
 
 ```rust
 static mut COUNTER: u32 = 0;
@@ -476,6 +506,9 @@ Finally, the last action we’re only allowed to take when we use the `unsafe`
 keyword is implementing an unsafe trait. We can declare that a trait is
 `unsafe` by adding the `unsafe` keyword before `trait`, and then implementing
 the trait must be marked as `unsafe` too, as shown in Listing 19-11:
+
+[Listing-19-11]: #Listing-19-11
+<a name="Listing-19-11"></a>
 
 ```rust
 unsafe trait Foo {

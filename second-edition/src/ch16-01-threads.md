@@ -83,6 +83,9 @@ thread and other text from a new thread:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-1]: #Listing-16-1
+<a name="Listing-16-1"></a>
+
 ```rust
 use std::thread;
 use std::time::Duration;
@@ -162,6 +165,9 @@ needs expanding, this feels cut short -->
 seems missing, so I'm not sure if this is sufficient /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-2]: #Listing-16-2
+<a name="Listing-16-2"></a>
 
 ```rust
 use std::thread;
@@ -286,6 +292,9 @@ you’ll see in a moment:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-3]: #Listing-16-3
+<a name="Listing-16-3"></a>
+
 ```rust,ignore
 use std::thread;
 
@@ -334,6 +343,9 @@ won’t be valid, shown Listing 16-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-16-4]: #Listing-16-4
+<a name="Listing-16-4"></a>
+
 ```rust,ignore
 use std::thread;
 
@@ -375,6 +387,9 @@ should borrow. The modification to Listing 16-3 shown in Listing 16-5 will
 compile and run as we intend:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-16-5]: #Listing-16-5
+<a name="Listing-16-5"></a>
 
 ```rust
 use std::thread;

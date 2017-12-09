@@ -11,6 +11,9 @@ just that in our project’s *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-5-8]: #Listing-5-8
+<a name="Listing-5-8"></a>
+
 ```rust
 fn main() {
     let width1 = 30;
@@ -58,6 +61,9 @@ using tuples. Listing 5-9 shows another version of our program that uses tuples:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-5-9]: #Listing-5-9
+<a name="Listing-5-9"></a>
+
 ```rust
 fn main() {
     let rect1 = (30, 50);
@@ -96,6 +102,9 @@ we’re using into a data type with a name for the whole as well as names for th
 parts, as shown in Listing 5-10:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-10]: #Listing-5-10
+<a name="Listing-5-10"></a>
 
 ```rust
 struct Rectangle {
@@ -145,6 +154,9 @@ debugging our program and see the values for all its fields. Listing 5-11 tries
 the `println!` macro as we have used it in Chapters 2, 3, and 4:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-11]: #Listing-5-11
+<a name="Listing-5-11"></a>
 
 ```rust,ignore
 struct Rectangle {
@@ -210,6 +222,9 @@ To do that, we add the annotation `#[derive(Debug)]` just before the struct
 definition, as shown in Listing 5-12:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-12]: #Listing-5-12
+<a name="Listing-5-12"></a>
 
 ```rust
 #[derive(Debug)]

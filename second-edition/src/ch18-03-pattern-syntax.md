@@ -48,6 +48,9 @@ further:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-18-11]: #Listing-18-11
+<a name="Listing-18-11"></a>
+
 ```rust
 fn main() {
     let x = Some(5);
@@ -198,6 +201,9 @@ break apart using a pattern with a `let` statement:
 
 <span class="filename">Filename: src/main.rs
 
+[Listing-18-12]: #Listing-18-12
+<a name="Listing-18-12"></a>
+
 ```rust
 struct Point {
     x: i32,
@@ -240,6 +246,9 @@ created in the `let` pattern are `x` and `y` instead of `a` and `b`:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-18-13]: #Listing-18-13
+<a name="Listing-18-13"></a>
+
 ```rust
 struct Point {
     x: i32,
@@ -276,6 +285,9 @@ matching a whole value but part of it? -->
 <!-- I've reworded, is this version clearer? /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-14]: #Listing-18-14
+<a name="Listing-18-14"></a>
 
 ```rust
 # struct Point {
@@ -318,6 +330,9 @@ way the data stored within the enum is defined. For example, let’s take the
 destructure each inner value in Listing 18-15:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-15]: #Listing-18-15
+<a name="Listing-18-15"></a>
 
 ```rust
 enum Message {
@@ -395,6 +410,9 @@ references.
 The example in Listing 18-16 iterates over references to `Point` instances in a
 vector, and destructures both the reference and the struct so we can perform
 calculations on the `x` and `y` values easily:
+
+[Listing-18-16]: #Listing-18-16
+<a name="Listing-18-16"></a>
 
 ```rust
 # struct Point {
@@ -487,6 +505,9 @@ function parameters, as shown in Listing 18-17:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-18-17]: #Listing-18-17
+<a name="Listing-18-17"></a>
+
 ```rust
 fn foo(_: i32, y: i32) {
     println!("This code only uses the y parameter: {}", y);
@@ -529,6 +550,9 @@ the user should not be allowed to overwrite an existing customization of a
 setting, but can unset the setting and can give the setting a value if it is
 currently unset.
 
+[Listing-18-18]: #Listing-18-18
+<a name="Listing-18-18"></a>
+
 ```rust
 let mut setting_value = Some(5);
 let new_setting_value = Some(10);
@@ -568,6 +592,9 @@ We can also use underscores in multiple places within one pattern to ignore
 particular values, as shown in Listing 18-19 where we’re ignoring the second
 and fourth values in a tuple of five items:
 
+[Listing-18-19]: #Listing-18-19
+<a name="Listing-18-19"></a>
+
 ```rust
 let numbers = (2, 4, 8, 16, 32);
 
@@ -595,6 +622,9 @@ this code we should only get a warning about one of them.
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-18-20]: #Listing-18-20
+<a name="Listing-18-20"></a>
+
 ```rust
 fn main() {
     let _x = 5;
@@ -613,6 +643,9 @@ that starts with an underscore. Something like `_x` still binds the value to
 the variable, whereas `_` doesn’t bind at all. To show a case where this
 distinction matters, Listing 18-21 will provide us with an error.
 
+[Listing-18-21]: #Listing-18-21
+<a name="Listing-18-21"></a>
+
 ```rust,ignore
 let s = Some(String::from("Hello!"));
 
@@ -630,6 +663,9 @@ We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. Using the underscore by itself,
 however, doesn’t ever bind to the value. Listing 18-22 will compile without any
 errors since `s` does not get moved into `_`:
+
+[Listing-18-22]: #Listing-18-22
+<a name="Listing-18-22"></a>
 
 ```rust
 let s = Some(String::from("Hello!"));
@@ -655,6 +691,9 @@ haven’t explicitly matched in the rest of the pattern. In Listing 18-23, we
 have a `Point` struct that holds a coordinate in three dimensional space. In
 the `match` expression, we want to operate only on the `x` coordinate and
 ignore the values in the `y` and `z` fields:
+
+[Listing-18-23]: #Listing-18-23
+<a name="Listing-18-23"></a>
 
 ```rust
 struct Point {
@@ -683,6 +722,9 @@ of `..` with a tuple:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-18-24]: #Listing-18-24
+<a name="Listing-18-24"></a>
+
 ```rust
 fn main() {
     let numbers = (2, 4, 8, 16, 32);
@@ -707,6 +749,9 @@ shows an example of using `..` ambiguously that will not compile due to this
 ambiguity:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-25]: #Listing-18-25
+<a name="Listing-18-25"></a>
 
 ```rust,ignore
 fn main() {
@@ -757,6 +802,9 @@ first `match` arm:
 work? -->
 <!-- Done /Carol -->
 
+[Listing-18-26]: #Listing-18-26
+<a name="Listing-18-26"></a>
+
 ```rust,ignore
 let robot_name = Some(String::from("Bors"));
 
@@ -797,6 +845,9 @@ in the value. Because `&` already has that meaning in patterns, we can’t use
 Instead, to create a reference in a pattern, we do this by using the `ref`
 keyword before the new variable, as shown in Listing 18-27:
 
+[Listing-18-27]: #Listing-18-27
+<a name="Listing-18-27"></a>
+
 ```rust
 let robot_name = Some(String::from("Bors"));
 
@@ -820,6 +871,9 @@ a pattern, use `ref mut` instead of `&mut` for the same reason that we use
 `ref` instead of `&`: `&mut` in patterns is for matching existing mutable
 references, not creating new ones. Listing 18-28 shows an example of a pattern
 creating a mutable reference:
+
+[Listing-18-28]: #Listing-18-28
+<a name="Listing-18-28"></a>
 
 ```rust
 let mut robot_name = Some(String::from("Bors"));
@@ -852,6 +906,9 @@ pattern alone allows.
 The condition can use variables created in the pattern. Listing 18-29 shows a
 `match` where the first arm has the pattern `Some(x)` and then also has a match
 guard of `if x < 5`:
+
+[Listing-18-29]: #Listing-18-29
+<a name="Listing-18-29"></a>
 
 ```rust
 let num = Some(4);
@@ -893,6 +950,9 @@ from that section. -->
 <!-- Checked and reworded a bit /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-30]: #Listing-18-30
+<a name="Listing-18-30"></a>
 
 ```rust
 fn main() {
@@ -944,6 +1004,9 @@ match arm? -->
 this code might look like it's saying `4 | 5 | (6 if y)` but it's actually
 saying `(4 | 5 | 6) if y`. I've tried to elaborate above and below, does that
 make sense now? /Carol -->
+
+[Listing-18-31]: #Listing-18-31
+<a name="Listing-18-31"></a>
 
 ```rust
 let x = 4;
@@ -1005,6 +1068,9 @@ within the range `3...7` but also be able to bind the value to the variable
 `id_variable` so that we can use it in the code associated with the arm. We
 could have named `id_variable` `id`, the same as the field, but for the
 purposes of this example we’ve chosen to give it a different name:
+
+[Listing-18-32]: #Listing-18-32
+<a name="Listing-18-32"></a>
 
 ```rust
 enum Message {

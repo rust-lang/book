@@ -19,6 +19,9 @@ can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:
 
+[Listing-6-3]: #Listing-6-3
+<a name="Listing-6-3"></a>
+
 ```rust
 enum Coin {
     Penny,
@@ -102,6 +105,9 @@ designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `UsState` value stored
 inside it, which we’ve done here in Listing 6-4:
 
+[Listing-6-4]: #Listing-6-4
+<a name="Listing-6-4"></a>
+
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
@@ -180,6 +186,9 @@ operations.
 
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5:
+
+[Listing-6-5]: #Listing-6-5
+<a name="Listing-6-5"></a>
 
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {

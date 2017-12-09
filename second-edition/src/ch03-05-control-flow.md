@@ -174,6 +174,9 @@ statement, for instance in Listing 3-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-3-2]: #Listing-3-2
+<a name="Listing-3-2"></a>
+
 ```rust
 fn main() {
     let condition = true;
@@ -348,6 +351,9 @@ such as an array. For example, let’s look at Listing 3-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-3-3]: #Listing-3-3
+<a name="Listing-3-3"></a>
+
 ```rust
 fn main() {
     let a = [10, 20, 30, 40, 50];
@@ -394,6 +400,9 @@ As a more concise alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this code in Listing 3-4:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-3-4]: #Listing-3-4
+<a name="Listing-3-4"></a>
 
 ```rust
 fn main() {

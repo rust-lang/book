@@ -39,6 +39,9 @@ Listing 12-15 shows this test:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-12-15]: #Listing-12-15
+<a name="Listing-12-15"></a>
+
 ```rust
 # fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 #      vec![]
@@ -79,6 +82,9 @@ the test should compile and fail because an empty vector doesn’t match a vecto
 containing the line `"safe, fast, productive."`.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-12-16]: #Listing-12-16
+<a name="Listing-12-16"></a>
 
 ```rust
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -181,6 +187,9 @@ won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-12-17]: #Listing-12-17
+<a name="Listing-12-17"></a>
+
 ```rust,ignore
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
@@ -206,6 +215,9 @@ Listing 12-18. Note this still won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-12-18]: #Listing-12-18
+<a name="Listing-12-18"></a>
+
 ```rust,ignore
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
@@ -227,6 +239,9 @@ to store a `line` in the vector. After the `for` loop, we return the vector, as
 shown in Listing 12-19:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-12-19]: #Listing-12-19
+<a name="Listing-12-19"></a>
 
 ```rust,ignore
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {

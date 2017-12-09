@@ -16,6 +16,9 @@ Listing 12-23 at the end of Chapter 12:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-13-24]: #Listing-13-24
+<a name="Listing-13-24"></a>
+
 ```rust,ignore
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -79,6 +82,9 @@ until we update `Config::new` as well:
 
 <span class="filename">Filename: src/main.rs</span>
 
+[Listing-13-25]: #Listing-13-25
+<a name="Listing-13-25"></a>
+
 ```rust,ignore
 fn main() {
     let config = Config::new(env::args()).unwrap_or_else(|err| {
@@ -105,6 +111,9 @@ function body:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-13-26]: #Listing-13-26
+<a name="Listing-13-26"></a>
+
 ```rust,ignore
 impl Config {
     pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
@@ -129,6 +138,9 @@ we can call the `next` method on it! Listing 13-27 updates the code from
 Listing 12-23 to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-13-27]: #Listing-13-27
+<a name="Listing-13-27"></a>
 
 ```rust
 # use std::env;
@@ -179,6 +191,9 @@ at the end of Chapter 12:
 
 <span class="filename">Filename: src/lib.rs</span>
 
+[Listing-13-28]: #Listing-13-28
+<a name="Listing-13-28"></a>
+
 ```rust,ignore
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
@@ -205,6 +220,9 @@ wouldn’t have to manage concurrent access to the `results` vector. Listing
 13-29 shows this change:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-13-29]: #Listing-13-29
+<a name="Listing-13-29"></a>
 
 ```rust,ignore
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
