@@ -24,28 +24,22 @@ particular project:
 Linux and Mac:
 
 ```text
-$ mkdir ~/projects
-$ cd ~/projects
-$ mkdir hello_world
-$ cd hello_world
+$ mkdir -p ~/projects/hello_world
+$ cd ~/projects/hello_world
 ```
 
 Windows CMD:
 
 ```cmd
-> mkdir %USERPROFILE%\projects
-> cd /d %USERPROFILE%\projects
-> mkdir hello_world
-> cd hello_world
+> mkdir %USERPROFILE%\projects\hello_world
+> cd /d %USERPROFILE%\projects\hello_world
 ```
 
 Windows PowerShell:
 
 ```powershell
-> mkdir $env:USERPROFILE\projects
-> cd $env:USERPROFILE\projects
-> mkdir hello_world
-> cd hello_world
+> mkdir -p $env:USERPROFILE\projects\hello_world
+> cd $env:USERPROFILE\projects\hello_world
 ```
 
 ### Writing and Running a Rust Program
