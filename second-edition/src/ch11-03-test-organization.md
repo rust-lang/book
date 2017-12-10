@@ -1,15 +1,15 @@
-## Test Organization 테스트 조직화
+## 테스트 조직화
 
-이 장의 시작부분에서 언급했듯이, 테스팅은 넓은 분야이고, 여러 사람들이 서로 다른 용어와 조직화 방식을
-이용합니다. 러스트 커뮤니티에서는 테스트에 대해서 두 개의 주요한 카테고리로 나눠 생각하는 경향이 있습니다:
-*단위 테스트(unit test)* 그리고 *통합 테스트(integration test)*입니다. 단위 테스트는 좀 더
-작고 더 집중적이며, 한 번에 하나의 모듈만 분리하여 테스트하고, 비공개 인터페이스 (private
+이 장의 시작부분에서 언급했듯이, 테스팅은 복잡한 분야이고, 여러 사람들이 서로 다른 용어와 조직화 방식을
+이용합니다. 러스트 커뮤니티에서는 테스트에 대해서 두 개의 주요한 카테고리로 나눠 생각합니다:
+*단위 테스트(unit test)* 그리고 *통합 테스트(integration test)*입니다. 단위 테스트는 작고
+하나에 더 집중하며, 한 번에 하나의 모듈만 분리하여 테스트하고, 비공개 인터페이스 (private
 interface)를 테스트 합니다. 통합 테스트는 완전히 여러분의 라이브러리 외부에 있으며, 공개 인터페이스
-(public interface)를 이용하고 테스트마다 여러 개의 모듈을 실험함으로써, 다른 외부의 코드가 하는
-방식과 동일한 형태로 여러분의 코드를 이용합니다.
+(public interface)를 이용하고 테스트마다 여러 개의 모듈을 잠재적으로 실험함으로써, 다른 외부의 코드가
+하는 방식과 동일한 형태로 여러분의 코드를 이용합니다.
 
-두 종류의 테스트 모두 여러분의 라이브러리 코드 조각들이 따로따로 혹은 함께 사용되었을 때 여러분이
-기대하는 바대로 작동하는 지를 확신시키는데 중요합니다.
+두 종류의 테스트 작성 모두가 여러분의 라이브러리 코드 조각들이 따로따로 혹은 함께 사용되었을 때 여러분이
+기대하는 바와 같이 작동하는 지를 확신시키는데 중요합니다.
 
 ### 단위 테스트
 
@@ -29,7 +29,7 @@ interface)를 테스트 합니다. 통합 테스트는 완전히 여러분의 �
 `#[cfg(test)]`를 사용하여 컴파일 결과물에 이들이 포함되지 않아야 함을 특정합니다.
 
 이 장의 첫번째 절에서 새로운 `adder` 프로젝트를 생성했을 때, 카고가 우리를 위하여 아래와 같은 코드를
-생성했던 것을 기억해 보세요:
+생성했던 것을 상기하세요:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -38,11 +38,12 @@ interface)를 테스트 합니다. 통합 테스트는 완전히 여러분의 �
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
 
-이는 자동으로 생성되는 테스트 모듈입니다. `cfg` 속성은 *환경 설정(configuration)* 을 의미하며,
+이 코드는 자동으로 생성되는 테스트 모듈입니다. `cfg` 속성은 *환경 설정(configuration)* 을 의미하며,
 러스트에게 뒤따르는 아이템이 특정한 환경값에 대해서만 포함되어야 함을 말해줍니다. 위의 경우, 환경값이
 `test`인데, 테스트를 컴파일하고 실행하기 위해 러스트로부터 제공되는 것입니다. 이 속성을 이용함으로써,
 카고는 우리가 능동적으로 `cargo test`를 이용해서 테스트를 실행시킬 경우에만 우리의 테스트 코드를
@@ -81,14 +82,6 @@ mod tests {
 
 <span class="caption">Listing 11-12: 비공개 함수 테스트하기</span>
 
-<!-- I'm not clear on why we would assume this might not be fine, why are we
-highlighting this specifically? -->
-<!-- We're addressing experience that the reader might bring with them from
-other languages where this is not allowed; I added a sentence mentioning "other
-languages" at the beginning of this section. Also testing private functions
-from integration tests is not allowed, so if you did want to do this, you'd
-have to do it in unit tests. /Carol -->
-
 `internal_adder` 함수는 `pub`으로 표시되어 있지 않지만, 테스트가 그저 러스트 코드일 뿐이고
 `tests` 모듈도 그냥 또다른 모듈이기 때문에, `internal_adder`를 불러들여 호출하는 것이 그냥 되는
 것을 주목하세요. 만약 여러분이 비공개 함수를 테스트해야 한다고 생각하지 않는다면, 러스트에서는 여러분이
@@ -105,14 +98,13 @@ API 부분에 속하는 함수들만 호출할 수 있다는 의미입니다. �
 
 #### *tests* 디렉토리
 
-우리의 코드를 위한 통합 테스트를 작성하기 위해서, 우리 프로젝트 디렉토리의 최상위, 그러니까 *src* 옆에
-*tests* 디렉토리를 만들어줄 필요가 있습니다. 카고는 이 디렉토리 내의 통합 테스트 파일들을 찾을줄 
-압니다. 그리고난 후에는 이 디렉토리에 원하는 만큼 많은 테스트 파일을 만들 수 있으며, 카고는 각각의
-파일들을 개별적인 크레이트처럼 컴파일할 것입니다.
+프로젝트 디렉토리의 최상위, 그러니까 *src* 옆에 *tests* 디렉토리를 만듭니다.
+카고는 이 디렉토리 내의 통합 테스트 파일들을 찾을줄 압니다. 그리고난 후에는 이 디렉토리에 원하는
+만큼 많은 테스트 파일을 만들 수 있으며, 카고는 각각의 파일들을 개별적인 크레이트처럼 컴파일할 것입니다.
 
-한번 시도해 봅시다! Listing 11-12의 *src/lib.rs* 코드를 그대로 유지하세요. *tests* 디렉토리를
-만들고, *tests/integration_test.rs*라는 이름의 새 파일을 만든 다음, Listing 11-13의 코드를
-집어넣으세요.
+한번 통합 테스트를 만들어봅시다. Listing 11-12의 *src/lib.rs* 코드를 그대로 유지한 채로, *tests*
+디렉토리를 만들고, *tests/integration_test.rs*라는 이름의 새 파일을 만든 다음, Listing 11-13의
+코드를 집어넣으세요.
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 
@@ -128,17 +120,16 @@ fn it_adds_two() {
 <span class="caption">Listing 11-13: `adder` 크레이트 내의 함수에 대한 통합 테스트
 </span>
 
-상단에 `extern crate adder`를 추가했는데, 이는 단위 테스트에서는 필요없었지요. 이는 `tests`
+코드의 상단에 `extern crate adder`를 추가했는데, 이는 단위 테스트에서는 필요없었지요. 이는 `tests`
 디렉토리 내의 각 테스트가 모두 개별적인 크레이트이라서, 우리의 라이브러리를 각각에 가져올 필요가 있기
-때문입니다. 통합 테스트는 이 크레이트를 가져오고 오직 공개 API만 사용함으로써, 이 라이브러리를 다른
-어떤 사용자들과 마찬가지로 이용합니다.
+때문입니다.
 
 *tests/integration_test.rs*에는 `#[cfg(test)]`를 이용한 어노테이션을 해줄 필요가
 없습니다. 카고는 `test` 디렉토리를 특별취급하여 `cargo test`를 실행시켰을 때에만 이 디렉토리
 내의 파일들을 컴파일합니다. 이제 `cargo test` 실행을 시도해봅시다:
 
 ```text
-cargo test
+$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
@@ -146,28 +137,23 @@ cargo test
 running 1 test
 test tests::internal ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/integration_test-ce99bcc2479f4607
 
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-<!-- what are the doc tests? How do we tell the difference between unit and
-integration tests here? -->
-<!-- We mentioned documentation tests in the beginning of this chapter /Carol
--->
-
-이제 출력에 세 개의 섹션이 생겼습니다: 단위 테스트, 통합 테스트, 그리고 문서 테스트입니다. 단위 테스트를
+출력에 세 개의 섹션이 생겼습니다: 단위 테스트, 통합 테스트, 그리고 문서 테스트입니다. 단위 테스트를
 위한 첫번째 섹션은 우리가 봐오던 것과 동일합니다: 각각의 단위 테스트마다 한 라인 (Listing 11-12에서
 우리가 추가한 `intenal`이라는 이름의 것이 있었죠), 그 다음 단위 테스트들의 정리 라인이 있습니다.
 
@@ -176,8 +162,8 @@ integration tests here? -->
 테스트 안의 각 테스트 함수를 위한 라인이 있고, `Doc-tests adder` 섹션이 시작되기 직전에
 통합 테스트의 결과를 위한 정리 라인이 있습니다.
 
-어떠한 *src* 파일에 단위 테스트 함수를 더 추가하는 것이 단위 테스트 섹션의 테스트 결과 라인을 더 늘릴
-것아는 점을 주목하세요. 통합 테스트 파일에 테스트 함수를 더 추가하는 것은 통합 테스트 섹션의 라인을
+어떠한 *src* 파일에 단위 테스트 함수를 더 추가하는 것이 단위 테스트 섹션의 테스트 결과 라인을 더
+늘린다는 점을 상기하세요. 통합 테스트 파일에 테스트 함수를 더 추가하는 것은 그 파일의 섹션의 라인을
 더 늘릴 것입니다. 각 통합 테스트 파일은 고유의 섹션을 가지고 있으므로, 만일 우리가 *tests* 디렉토리에
 파일을 더 추가하면, 통합 테스트 생선이 더 생길 것입니다.
 
@@ -193,35 +179,29 @@ $ cargo test --test integration_test
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-이는 *tests* 디렉토리로부터 우리가 명시한 파일만 테스트합니다.
+이 커맨드는 *tests/integration_test.rs* 내의 테스트만 실행합니다.
 
 #### 통합 테스트 내의 서브모듈
 
 더 많은 통합 테스트를 추가하게 되면, 이들을 조직화하기 쉽도록 *tests* 디렉토리 내에 하나 이상의
-파일을 만들고 싶어할지도 모릅니다; 예를 들면, 이들이 테스트하는 기능별로 테스트 함수들을 묶는다던가
-하는 식으로요. 언급했듯이, *tests* 디렉토리 내의 각 파일은 고유의 개별적인 크레이트인 것처럼
+파일을 만들고 싶어할지도 모릅니다; 예를 들면, 여러분은 이들이 테스트하는 기능별로 테스트 함수들을
+묶을 수 있습니다. 앞서 언급했듯이, *tests* 디렉토리 내의 각 파일은 고유의 개별적인 크레이트인 것처럼
 컴파일됩니다.
 
 각 통합 테스트 파일을 고유한 크레이트인것 처럼 다루는 것은 여러분의 크레이트를 이용하게 될
-사용자들의 방식과 더 유사하게 분리된 스코프를 만들어 내기에 유용합니다. 하지만, 이는 우리가 7장에서
-코드를 모듈과 파일로 나누는 법에 대해 배웠던 바대로 *src* 내의 파일들이 동일한 동작을 공유하는 것을
-*tests* 디렉토리 내의 파일들에서는 할수 없음을 의미합니다.
+사용자들의 방식과 더 유사하게 분리된 스코프를 만들어 내기에 유용합니다. 하지만, 이는 *src* 내의
+파일들이 동일한 동작을 공유하는 것을 *tests* 디렉토리 내의 파일들에서는 할 수 없음을 의미하는데,
+이는 여러분이 7장에서 코드를 모듈과 파일로 나누는 법에 대해 배웠던 것입니다.
 
-The different behavior of files in the *tests* directory is usually most
-noticeable if you have a set of helper functions that would be useful in
-multiple integration test files, and you try to follow the steps from Chapter 7
-to extract them into a common module. For example, if we create
-*tests/common.rs* and place this function named `setup` in it, where we could
-put some code that we want to be able to call from multiple test functions in
-multiple test files:
 만일 여러분이 여러 개의 통합 테스트 파일들 내에서 유용하게 사용될 헬퍼 함수들 묶음을 가지고 있으며,
-이들을 공통 모듈로 추출하기 위해 7장으로부터의 단계를 따르는 시도를 한다면, 이러한 *tests* 디렉토리
-내의 파일에 대한 이색적인 동작 방식은 가장 주목할만 점입니다. 이를테면, 만일 우리가 *tests/common.rs*
-이라는 파일을 만들어서 그 안에 아래와 같이 `setup`이라는 이름의 함수를 위치시키고, 여기에 여러
-테스트 파일들 내의 여러 테스트 함수로부터 호출될 수 있기를 원하는 어떤 코드를 집어넣는다면:
+이들을 공통 모듈로 추출하기 위해 7장의 "모듈을 다른 파일로 옮기기"절에 있는 단계를 따르는 시도를 한다면,
+이러한 *tests* 디렉토리 내의 파일에 대한 이색적인 동작 방식은 가장 주목할만 점입니다. 이를테면, 만일
+우리가 *tests/common.rs* 이라는 파일을 만들어서 그 안에 아래와 같이 `setup`이라는 이름의 함수를
+위치시키고, 여기에 여러 테스트 파일들 내의 여러 테스트 함수로부터 호출될 수 있기를 원하는 어떤 코드를
+집어넣는다면:
 
 <span class="filename">Filename: tests/common.rs</span>
 
@@ -239,41 +219,41 @@ pub fn setup() {
 running 1 test
 test tests::internal ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/common-b8b07b6f1be2db70
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
      Running target/debug/deps/integration_test-d993c68b431d39df
 
 running 1 test
 test it_adds_two ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
    Doc-tests adder
 
 running 0 tests
 
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-<!-- The new section is lines 6-10, will ghost everything else in libreoffice
-/Carol -->
-
 `running 0 tests`이 표시되는 테스트 출력이 보여지는 `common`을 만드는 건 우리가 원하던 것이
-아닙니다; 우리는 그저 다른 통합 테스트 파일들에서 어떤 코드를 공유할 수 있기를 원했지요.
+아닙니다. 우리는 그저 다른 통합 테스트 파일들에서 어떤 코드를 공유할 수 있기를 원했지요.
 
-`common`이 테스트 출력에 나타나지 않도록 하기 위해서는, 우리가 7장에서 배웠던 코드를 파일로 추출하는
-다른 방법을 이용할 필요가 있습니다: *tests/common.rs*을 만드는 대신, *tests/common/mod.rs*를
-만듭니다. `setup` 함수 코드를 *tests/common/mod.rs*로 옮기고 *tests/common.rs* 파일을
-제거하면, 테스트 출력에서 해당 섹션이 더이상 나타나지 않을 것입니다. *tests* 디렉토리의 서브디렉토리 내의
-파일들은 개별적인 크레이트처럼 컴파일되지도, 테스트 출력의 섹션을 갖지도 않습니다.
+`common`이 테스트 출력에 나타나는 것을 막기 위해서는, *tests/common.rs*을 만드는 대신,
+*tests/common/mod.rs*를 만듭니다. 7장의 "모듈 파일시스템의 규칙"절에서 서브모듈을 가지고 있는
+모듈의 파일들을 위해 *module_name/mod.rs*라는 이름 규칙을 이용했었고, 여기서 `common`에 대한
+서브모듈을 가조기 있지는 않지만, 이러한 방식으로 파일명을 정하는 것이 러스트에게 `common` 모듈을
+통합 테스트 파일로 취급하지 않게끔 전달해줍니다. `setup` 함수 코드를 *tests/common/mod.rs*로
+옮기고 *tests/common.rs* 파일을 제거하면, 테스트 출력에서 해당 섹션이 더이상 나타나지 않을 것입니다.
+*tests* 디렉토리의 서브디렉토리 내의 파일들은 개별적인 크레이트처럼 컴파일되지도, 테스트 출력의
+섹션을 갖지도 않습니다.
 
-일단 *tests/common/mod.rs*를 갖게 되면, 어떤 통합 테스트 파일에서라도 모듈처럼 쓸 수 있습니다.
+*tests/common/mod.rs*를 만든 뒤에는, 어떤 통합 테스트 파일에서라도 이를 모듈처럼 쓸 수 있습니다.
 아래에 *tests/integration_test.rs* 내에 `it_adds_two` 테스트로부터 `setup` 함수를 호출하는
 예제가 있습니다:
 
@@ -291,12 +271,12 @@ fn it_adds_two() {
 }
 ```
 
-`mod common;` 선언은 7장에서 했던 모듈 선언과 동일한 점을 주목하세요. 그런 다음 테스트 함수 내에서
-`common::setup()` 함수를 호출 할 수 있습니다.
+`mod common;` 선언은 Listing 7-4에서 보여주었던 모듈 선언과 동일한 점을 주목하세요. 그런 다음
+테스트 함수 내에서 `common::setup()` 함수를 호출 할 수 있습니다.
 
 #### 바이너리 크레이트를 위한 통합 테스트
 
-만약 우리의 프로젝트가 *src/lib.rs*가 없고 *src/main.rs*만 갖고 있는 바이너리 프로젝트라면,
+만약 우리의 프로젝트가 *src/lib.rs* 파일이 없고 *src/main.rs* 파일만 갖고 있는 바이너리 프로젝트라면,
 *tests* 디렉토리 내에 통합 테스트를 만들어서 *src/main.rs*에 정의된 함수를 가져오기 위하여
 `extern crate`를 이용할 수 없습니다. 오직 라이브러리 크레이트만 다른 크레이트에가 호출하고 사용할
 수 있는 함수들을 노출시킵니다; 바이너리 크레이트는 그 스스로 실행될 것으로 여겨집니다.
