@@ -176,7 +176,7 @@ any other primitive type to a user. But with structs, the way `println!` should
 format the output is less clear because there are more display possibilities:
 do you want commas or not? Do you want to print the curly brackets? Should all
 the fields be shown? Due to this ambiguity, Rust doesn’t try to guess what we
-want and structs don’t have a provided implementation of `Display`.
+want when structs don’t have a provided implementation of `Display`.
 
 If we continue reading the errors, we’ll find this helpful note:
 
