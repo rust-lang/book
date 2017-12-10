@@ -5,7 +5,7 @@ us to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
 names, wildcards, and many other things; Chapter 18 covers all the different
 kinds of patterns and what they do. The power of `match` comes from the
-expressiveness of the patterns and the compiler checks that make sure all
+expressiveness of the patterns and the compiler checks that all
 possible cases are handled.
 
 Think of a `match` expression kind of like a coin sorting machine: coins slide
