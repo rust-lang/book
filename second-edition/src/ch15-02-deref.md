@@ -53,7 +53,7 @@ we addressed whatever was confusing here before? /Carol -->
 `Mp3` example seemed to be confusing with the metadata that was involved.
 Interested to see if this breakdown works better or not. /Carol -->
 
-<span class="filename">Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -81,10 +81,10 @@ error:
 ```text
 error[E0277]: the trait bound `{integer}: std::cmp::PartialEq<&{integer}>` is
 not satisfied
- --> <assert_eq macros>:5:19
+ --> src/main.rs:6:5
   |
-5 | if ! ( * left_val == * right_val ) {
-  |                   ^^ can't compare `{integer}` with `&{integer}`
+6 |     assert_eq!(5, y);
+  |     ^^^^^^^^^^^^^^^^^ can't compare `{integer}` with `&{integer}`
   |
   = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
   `{integer}`
@@ -100,7 +100,7 @@ We can rewrite the code in Listing 15-8 to use a `Box<T>` instead of a
 reference, and the de-reference operator will work the same way as shown in
 Listing 15-9:
 
-<span class="filename">Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {

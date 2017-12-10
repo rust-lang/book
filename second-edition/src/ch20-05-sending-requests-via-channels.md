@@ -32,7 +32,7 @@ hold anything for now:
 
 ```rust
 # use std::thread;
-// ...snip...
+// --snip--
 use std::sync::mpsc;
 
 pub struct ThreadPool {
@@ -43,7 +43,7 @@ pub struct ThreadPool {
 struct Job;
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -60,7 +60,7 @@ impl ThreadPool {
             sender,
         }
     }
-    // ...snip...
+    // --snip--
 }
 #
 # struct Worker {
@@ -96,7 +96,7 @@ won’t quite compile yet:
 
 ```rust,ignore
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -113,10 +113,10 @@ impl ThreadPool {
             sender,
         }
     }
-    // ...snip...
+    // --snip--
 }
 
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
@@ -183,7 +183,7 @@ need to make:
 use std::sync::Arc;
 use std::sync::Mutex;
 
-// ...snip...
+// --snip--
 
 # pub struct ThreadPool {
 #     workers: Vec<Worker>,
@@ -192,7 +192,7 @@ use std::sync::Mutex;
 # struct Job;
 #
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -212,7 +212,7 @@ impl ThreadPool {
         }
     }
 
-    // ...snip...
+    // --snip--
 }
 # struct Worker {
 #     id: usize,
@@ -221,7 +221,7 @@ impl ThreadPool {
 #
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        // ...snip...
+        // --snip--
 #         let thread = thread::spawn(|| {
 #            receiver;
 #         });
@@ -252,7 +252,7 @@ this is such a case! Take a look at Listing 20-19:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-// ...snip...
+// --snip--
 # pub struct ThreadPool {
 #     workers: Vec<Worker>,
 #     sender: mpsc::Sender<Job>,
@@ -263,7 +263,7 @@ this is such a case! Take a look at Listing 20-19:
 type Job = Box<FnOnce() + Send + 'static>;
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
 
     pub fn execute<F>(&self, f: F)
         where
@@ -275,7 +275,7 @@ impl ThreadPool {
     }
 }
 
-// ...snip...
+// --snip--
 ```
 
 <span class="caption">Listing 20-19: Creating a `Job` type alias for a `Box`
@@ -299,7 +299,7 @@ change shown in Listing 20-20 to `Worker::new`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
@@ -401,7 +401,7 @@ impl<F: FnOnce()> FnBox for F {
 
 type Job = Box<FnBox + Send + 'static>;
 
-// ...snip...
+// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {

@@ -110,7 +110,7 @@ style is to indent with four spaces, not a tab.
 The second important part is `println!`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
 instead, it would look like this: `println` (without the `!`). We’ll discuss
-Rust macros in more detail in Appendix E, but for now you just need to know
+Rust macros in more detail in Appendix D, but for now you just need to know
 that when you see a `!` that means that you’re calling a macro instead of a
 normal function.
 
@@ -316,6 +316,7 @@ program through Cargo! To do so, enter the following commands:
 ```text
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
 This should have created an executable file in *target/debug/hello_cargo* (or
@@ -350,6 +351,7 @@ and then run:
 
 ```text
 $ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
@@ -363,6 +365,7 @@ this:
 ```text
 $ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.33 secs
      Running `target/debug/hello_cargo`
 Hello, world!
 ```

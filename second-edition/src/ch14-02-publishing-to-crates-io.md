@@ -130,7 +130,7 @@ as shown in Listing 14-3:
 //! calculations more convenient.
 
 /// Adds one to the number given.
-// ...snip...
+// --snip--
 ```
 
 <span class="caption">Listing 14-3: Documentation for the `my_crate` crate as a
@@ -214,7 +214,7 @@ pub mod utils {
     /// Combines two primary colors in equal amounts to create
     /// a secondary color.
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
-        // ...snip...
+        // --snip--
     }
 }
 ```
@@ -283,11 +283,11 @@ pub use kinds::SecondaryColor;
 pub use utils::mix;
 
 pub mod kinds {
-    // ...snip...
+    // --snip--
 }
 
 pub mod utils {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -316,7 +316,7 @@ use art::PrimaryColor;
 use art::mix;
 
 fn main() {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -382,7 +382,7 @@ $ cargo publish
     Updating registry `https://github.com/rust-lang/crates.io-index`
 warning: manifest has no description, license, license-file, documentation,
 homepage or repository.
-...snip...
+--snip--
 error: api errors: missing or empty metadata fields: description, license.
 ```
 

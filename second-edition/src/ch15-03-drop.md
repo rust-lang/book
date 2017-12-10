@@ -35,7 +35,7 @@ for clean up? -->
 this code gets run. It's hard to experience the cleaning up unless we print
 something. /Carol -->
 
-Listing 15-8 shows a `CustomSmartPointer` struct whose only custom
+Listing 15-16 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print out `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This will demonstrate when Rust runs the `drop`
 function:
@@ -69,7 +69,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-8: A `CustomSmartPointer` struct that
+<span class="caption">Listing 15-16: A `CustomSmartPointer` struct that
 implements the `Drop` trait, where we would put our clean up code.</span>
 
 The `Drop` trait is included in the prelude, so we don’t need to import it. We
@@ -122,7 +122,7 @@ up a value early. One example is when using smart pointers that manage locks;
 you may want to force the `drop` method that releases the lock to run so that
 other code in the same scope can acquire the lock. First, let’s see what
 happens if we try to call the `Drop` trait’s `drop` method ourselves by
-modifying the `main` function from Listing 15-8 as shown in Listing 15-9:
+modifying the `main` function from Listing 15-16 as shown in Listing 15-17:
 
 <!-- Above: I'm not following why we are doing this, if it's not necessary and
 we aren't going to cover it now anyway -- can you lay out why we're discussing
@@ -140,7 +140,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-9: Attempting to call the `drop` method from
+<span class="caption">Listing 15-17: Attempting to call the `drop` method from
 the `Drop` trait manually to clean up early</span>
 
 If we try to compile this, we’ll get this error:
@@ -171,7 +171,7 @@ force a value to be cleaned up early, we can use the `std::mem::drop` function.
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
 an argument. `std::mem::drop` is in the prelude, so we can modify `main` from
-Listing 15-8 to call the `drop` function as shown in Listing 15-10:
+Listing 15-16 to call the `drop` function as shown in Listing 15-18:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -194,14 +194,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-10: Calling `std::mem::drop` to explicitly
+<span class="caption">Listing 15-18: Calling `std::mem::drop` to explicitly
 drop a value before it goes out of scope</span>
 
 Running this code will print the following:
 
 ```text
 CustomSmartPointer created.
-Dropping CustomSmartPointer!
+Dropping CustomSmartPointer with data `some data`!
 CustomSmartPointer dropped before the end of main.
 ```
 
@@ -210,7 +210,7 @@ this chapter in any case -->
 <!-- I added a definition for destructor a few paragraphs above, the first time
 we see it in an error message. /Carol -->
 
-The `Dropping CustomSmartPointer!` is printed between `CustomSmartPointer
+The ```Dropping CustomSmartPointer with data `some data`!``` is printed between `CustomSmartPointer
 created.` and `CustomSmartPointer dropped before the end of main.`, showing
 that the `drop` method code is called to drop `c` at that point.
 

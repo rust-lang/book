@@ -172,7 +172,7 @@ and compile the `rand` crate:
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
-   ...snip...
+   --snip--
    Compiling rand v0.3.14
    Compiling add-one v0.1.0 (file:///projects/adder/add-one)
    Compiling adder v0.1.0 (file:///projects/adder)
