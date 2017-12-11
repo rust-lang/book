@@ -317,7 +317,7 @@ with a `String` as a component:
 
 ```rust,ignore
 extern crate rust_gui;
-use rust_gui::Draw;
+use rust_gui::Screen;
 
 fn main() {
     let screen = Screen {
