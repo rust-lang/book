@@ -193,7 +193,7 @@ fn main() {
 }
 ```
 
-Here’s the error:
+Ошибка:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as

@@ -1,12 +1,8 @@
-## Reading a File
+## Чтение файла
 
-Next, we’re going to add functionality to read the file that specified in the
-`filename` command line argument. First, we need a sample file to test it
-with—the best kind of file to use to make sure that `minigrep` is working is
-one with a small amount of text over multiple lines with some repeated words.
-Listing 12-3 has an Emily Dickinson poem that will work well! Create a file
-called `poem.txt` at the root level of your project, and enter the poem “I’m
-nobody! Who are you?”:
+Далее, мы дополним функционал нашей программы, чтобы иметь возможность читать
+содержимое файла. Для начала создадим файл в корне нашего проекта с текстовыми данными `poem.txt` и добавим
+в него следующее содержание стихотворение “I’m nobody! Who are you?”:
 
 <span class="filename">Filename: poem.txt</span>
 
@@ -22,11 +18,9 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-<span class="caption">Listing 12-3: The poem “I’m nobody! Who are you?” by
-Emily Dickinson that will make a good test case</span>
+<span class="caption">Тест 12-3: Стихотворение Эмили Дикинсон “I’m nobody! Who are you?”</span>
 
-With that in place, edit *src/main.rs* and add code to open the file as shown
-in Listing 12-4:
+Далее, рассмотрим код решающий поставленную задачу  *src/main.rs*  12-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -55,31 +49,23 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 12-4: Reading the contents of the file specified
-by the second argument</span>
+<span class="caption">Код 12-4: Чтение содержания файла</span>
 
-First, we add some more `use` statements to bring in relevant parts of the
-standard library: we need `std::fs::File` for dealing with files, and
-`std::io::prelude::*` contains various traits that are useful when doing I/O,
-including file I/O. In the same way that Rust has a general prelude that brings
-certain things into scope automatically, the `std::io` module has its own
-prelude of common things you’ll need when working with I/O. Unlike the default
-prelude, we must explicitly `use` the prelude from `std::io`.
+Изучим содержание исходного кода. Прежде всего, мы добавили импорт необходимых
+модулей и структуры. Для чтения файла нам необходимо:
+1. Модуль `std::env`.
+2. Структура `std::fs::File`.
+3. Всё содержимое модуля `std::io::prelude::*`. В этом модуле есть множество типажей для работы с файлами.
 
-In `main`, we’ve added three things: first, we get a mutable handle to the file
-by calling the `File::open` function and passing it the value of the `filename`
-variable. Second, we create a variable called `contents` and set it to a
-mutable, empty `String`. This will hold the content of the file after we read
-it in. Third, we call `read_to_string` on our file handle and pass a mutable
-reference to `contents` as an argument.
+Коде функции `main` мы добавили вызов функции `File::open`, входным параметром, которой
+является содержание переменной `filename`. Далее мы создали переменную `contents`,
+установив атрибут изменяемости  и присвоив экземпляр структуры данных `String`.
+Данная переменная будет содержащийся текст в открытом файле. Далее, используя метод
+экземпляра структуры `File` `read_to_string` производим считывание текста в переменную
+и выводим её содержание на консоль.
 
-After those lines, we’ve again added a temporary `println!` statement that
-prints out the value of `contents` after the file is read, so that we can check
-that our program is working so far.
-
-Let’s try running this code with any string as the first command line argument
-(since we haven’t implemented the searching part yet) and our *poem.txt* file
-as the second argument:
+Пожалуйста, проверьте работу нашей программы. Введите какой-либо текст в качестве
+первого аргумента и название файла вторым аргументом:
 
 ```text
 $ cargo run the poem.txt
@@ -99,11 +85,11 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Great! Our code read in and printed out the content of the file. We’ve got a
-few flaws though. The `main` function has multiple responsibilities; generally
-functions are clearer and easier to maintain if each function is responsible
-for only one idea. The other problem is that we’re not handling errors as well
-as we could be. While our program is still small, these flaws aren’t a big
-problem, but as our program grows, it will be harder to fix them cleanly. It’s
-good practice to begin refactoring early on when developing a program, as it’s
-much easier to refactor smaller amounts of code, so we’ll do that now.
+Отлично! Наша программа может читать текстовые данные файла. Хотя наша программа
+решает поставленную задачу, она не лишена недостатков. Прежде всего функция `main`
+решает множество задач. Такую функцию неудобно тестировать. Далее, не отслеживаются
+возможные ошибки ввода данных. Пока наша программа небольшая - данными недочётами
+можно пренебречь. При увеличении размеров программы такую программу будет всё сложнее
+и сложнее поддерживать. Хорошей практикой программирования является трансформация,
+перестройка кода (refactoring) по мере её усложнения. Поэтому далее мы улучшим наш
+код с помощью улучшения его структуры.

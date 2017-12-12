@@ -1,58 +1,44 @@
-## Writing Error Messages to Standard Error Instead of Standard Output
+## Вывод сообщений о ошибках в стандартный поток для ошибок вместо стандартного потока
+консольного приложения
 
-At the moment we’re writing all of our output to the terminal with the
-`println!` function. Most terminals provide two kinds of output: *standard
-output* for general information (sometimes abbreviated as `stdout` in code),
-and *standard error* for error messages (`stderr`). This distinction enables
-users to choose whether to direct a the successful output of a program to a
-file but still print error messages to the screen.
+Во всех предыдущих примерах книги вы выводили все сообщения в стандартный поток
+терминала с помощью макроса `println!`. Обычно терминалы предоставляют два вида
+вывода данных: *стандартный* для общений информации и *для ошибок*. Такая особенность
+позволяет, например, писать настройки текущего состояния программы в файл, а сообщения
+об ошибках на экран.
 
-The `println!` function is only capable of printing to standard output, though,
-so we have to use something else in order to print to standard error.
+Для вывода сообщений в поток ошибок нам понадобиться специальный подход, которым
+мы опишем далее.
 
-### Checking Where Errors are Written to
+### Проверка где записываются сообщения об ошибках
 
-First, let’s observe how all content printed by `minigrep` is currently being
-written to standard output, including error messages that we want to write to
-standard error instead. We’ll do that by redirecting the standard output stream
-to a file while we also intentionally cause an error. We won’t redirect the
-standard error stream, so any content sent to standard error will continue to
-display on the screen. Command line programs are expected to send error
-messages to the standard error stream so that we can still see error messages
-on the screen even if we choose to redirect the standard output stream to a
-file. Our program is not currently well-behaved; we’re about to see that it
-saves the error message output to the file instead!
-
-The way to demonstrate this behavior is by running the program with `>` and the
-filename, *output.txt*, that we want to redirect the standard output stream to.
-We’re not going to pass any arguments, which should cause an error:
+Для начала рассмотрим как сообщения об ошибках выводятся в текущей версии программы.
+Далее перенаправил поток вывода сообщений в файл. Удобным способом перенаправления
+потока данных в консольном приложение является символ  `>`. Перенаправим поток
+вывода в файл *output.txt*. Проверим как это работает:
 
 ```text
 $ cargo run > output.txt
 ```
 
-The `>` syntax tells the shell to write the contents of standard output to
-*output.txt* instead of the screen. We didn’t see the error message we were
-expecting printed on the screen, so that means it must have ended up in the
-file. Let’s see what *output.txt* contains:
+Теперь посмотрим на содержание файла *output.txt*:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
 
-Yup, our error message is being printed to standard output. It’s much more
-useful for error messages like this to be printed to standard error, and have
-only data from a successful run end up in the file when we redirect standard
-output in this way. We’ll change that.
+Мы видим, что сообщение об ошибке было напечатано в стандартный поток вывода.
+Было бы более удобно, если бы сообщения об ошибках печатались бы в стандартный
+поток ошибок. Чтобы только сообщения о успешном выполнении программы печатались в
+стандартный поток.
 
-### Printing Errors to Standard Error
+### Печать ошибок в поток ошибок
 
-Let’s change how error messages are printed using the code in Listing 12-24.
-Because of the refactoring we did earlier in this chapter, all the code that
-prints error messages is in one function, in `main`. The standard library
-provides the `eprintln!` macro that prints to the standard error stream, so
-let’s change the two places we were calling `println!` to print errors so that
-these spots use `eprintln!` instead:
+Рассмотрим способ перенаправления поток с помощью кода программы (12-24).
+Так как после проведённого рефакторинга все сообщения сосредоточены в одной функции
+`main` нам будет удобно сделать необходимые изменения. В стандартную библиотеку
+входит макрос `eprintln!`, который печатает сообщения в поток ошибок. Пожалуйста,
+познакомьтесь с обновлённым кодом функции `main`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -73,29 +59,27 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 12-24: Writing error messages to standard error
-instead of standard output using `eprintln!`</span>
+<span class="caption">Код 12-24: Вывод сообщений об ошибках в поток ошибок с помощью
+макроса `eprintln!`</span>
 
-After changing `println!` to `eprintln!`, let’s try running the program again
-in the same way, without any arguments and redirecting standard output with `>`:
+Пожалуйста, проверьте работу обновлённой версии программы:
 
 ```text
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see our error on the screen and `output.txt` contains nothing, which is
-the behavior expected of command line programs.
+Вы также видите сообщения об ошибке на экране, но в файл `output.txt` информация
+об ошибке не была записана.
 
-If we run the program again with arguments that don’t cause an error, but still
-redirect standard output to a file:
+Если же вы напишите всё правильно и программа выполниться без ошибок, файл будет
+содержать найденный строки:
 
 ```text
 $ cargo run to poem.txt > output.txt
 ```
 
-We won’t see any output to our terminal, and `output.txt` will contain our
-results:
+Содержание файла `output.txt` после работы программы:
 
 <span class="filename">Filename: output.txt</span>
 
@@ -104,18 +88,14 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using standard output for successful output and
-standard error for error output as appropriate.
+## Итоги
 
-## Summary
+В этой главе вы использовали наши накопленный опыт и научились работать с файлами.
+Мы создали работающее (правильность работы подтверждена модульными тестами)
+консольное приложение, которое успешно работает с параметрами командной стоки,
+системными переменными, файлами, использует макрос `eprintln!` для вывода ошибок.
 
-In this chapter, we’ve recapped on some of the major concepts so far and
-covered how to do common I/O operations in a Rust context. By using command
-line arguments, files, environment variables, and the `eprintln!` macro for
-printing errors, you’re now prepared to write command line applications. By
-using the concepts from previous chapters, your code will be well-organized, be
-able to store data effectively in the appropriate data structures, handle
-errors nicely, and be well tested.
-
-Next, let’s explore some functional-language influenced Rust features: closures
-and iterators.
+Далее мы рассмотрим уже знакомые вам концепции языка Rust, о которых мы ранее уже
+упоминали и использовали в некоторых демонстрационных примерах. Думаю, что у вас
+уже есть о них общее представление. Пора углубить ваши знания. Итак, замыкания и
+итераторы к вашим услугам!

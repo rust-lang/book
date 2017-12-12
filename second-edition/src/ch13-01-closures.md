@@ -1,4 +1,4 @@
-## Closures: Anonymous Functions that can Capture their Environment
+## Замыкания: анонимные функции, которые могут имеют доступ к своему окружению
 
 <!-- Bill's suggested we flesh out some of these subtitles, which I think we
 did more with earlier chapters but we (I, included!) have got a bit lax with. I
@@ -6,12 +6,12 @@ don't think this is quite right, is there a shorter heading we could use to
 capture what a closure is/is for? -->
 <!-- I've attempted a more descriptive subtitle, what do you think? /Carol -->
 
-Rust’s *closures* are anonymous functions that you can save in a variable or
-pass as arguments to other functions. You can create the closure in one place,
-and then call the closure to evaluate it in a different context. Unlike
-functions, closures are allowed to capture values from the scope in which they
-are called. We’re going to demonstrate how these features of closures allow for
-code reuse and customization of behavior.
+Замыкания в Rust - это анонимные функции, ссылки на которые вы можете сохранять в
+переменные или сделать их аргументами других функций. Вы можете создавать в одном
+месте, а вызывать и их работы в другом контексте. В отличии от функций, замыканиям
+дозволено иметь доступ к переменным той области видимости, в которой они используются.
+Далее будут продемонстрировано, как эти опции помогают сократить количество используемого
+кода в программе и улучшить её поведение.
 
 <!-- Can you say what sets closures apart from functions, explicitly, above? I
 can't see it clearly enough to be confident, after one read through this
@@ -25,24 +25,19 @@ be more motivating. I've also tried to make it clear throughout that storing a
 closure is storing the *unevaluated* code, and then you call the closure in
 order to get the result. /Carol -->
 
-### Creating an Abstraction of Behavior Using a Closure
+### Создание обобщенного поведения используя замыкания
 
-Let’s work on an example that will show a situation where storing a closure to
-be executed at a later time is useful. We’ll talk about the syntax of closures,
-type inference, and traits along the way.
+Рассмотрим пример, демонстрирующий сохранение замыкания для дальнейшего использования.
+Мы также рассмотрим синтаксис замыканий, типизированный интерфейс и типажи.
 
-The hypothetical situation is this: we’re working at a startup that’s making an
-app to generate custom exercise workout plans. The backend is written in Rust,
-and the algorithm that generates the workout plan takes into account many
-different factors like the app user’s age, their Body Mass Index, their
-preferences, their recent workouts, and an intensity number they specify. The
-actual algorithm used isn’t important in this example; what’s important is that
-this calculation takes a few seconds. We only want to call this algorithm if we
-need to, and we only want to call it once, so that we aren’t making the user
-wait more than they need to. We’re going to simulate calling this hypothetical
-algorithm by calling the `simulated_expensive_calculation` function shown in
-Listing 13-1 instead, which will print `calculating slowly...`, wait for two
-seconds, and then return whatever number we passed in:
+Представим, что мы работаем на в стартапе, где создаём приложение для генерации
+планов тренировок. Серверная часть приложения создаётся на Rust. На сервере храниться
+множество данных: возраст, индекс тела, предпочтения, последние результаты тренировок
+и индекс интенсивности тренировок. При проектировании приложения конкретные алгоритмы
+реализаций не важны. Важно, чтобы различные расчёты не занимали много времени.
+Мы буде симулировать работу алгоритма расчета параметров с помощью функции
+`simulated_expensive_calculation` (13-1), которая печатает `calculating slowly...`,
+ждёт две секунды и выводит результат расчёта:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -57,31 +52,24 @@ fn simulated_expensive_calculation(intensity: i32) -> i32 {
 }
 ```
 
-<span class="caption">Listing 13-1: A function we’ll use to stand in for a
-hypothetical calculation that takes about two seconds to run</span>
+<span class="caption">Код программы 13-1: Описания функции, которая моделирует
+расчёт различных параметров</span>
 
-Next, we have a `main` function that contains the parts of the workout app that
-are important for this example. This represents the code that the app would
-call when a user asks for a workout plan. Because the interaction with the
-app’s frontend isn’t relevant to the use of closures, we’re going to hardcode
-values representing inputs to our program and print the outputs.
+Далее рассмотрим содержание функции `main`, которое содержит части нашего приложения.
+В примере моделируется вызов кода, который генерирует план занятий. Т.к. взаимодействие
+с клиентской частью программы не связано с использованием замыканий, мы также
+смоделируем это взаимодействие. Программно будут вводиться данные и печататься результаты.
 
-The inputs to the program are:
+Описание входных данных:
 
-- An `intensity` number from the user, specified when they request a workout,
-  so they can indicate whether they’d like a low intensity workout or a high
-  intensity workout
-- A random number that will generate some variety in the workout plans
+- Индекс интенсивности (`intensity`) - определяет когда запрашивается тренировка.
+  Этот индекс говорит о предпочтениях (низкая или высокая интенсивность)
+- Случайный номер, который будет сгенерирован для выбора плана тренировки
 
-The output the program prints will be the recommended workout plan.
+В результате программа напечатает рекомендованный план занятий.
 
-Listing 13-2 shows the `main` function we’re going to use. We’ve hardcoded the
-variable `simulated_user_specified_value` to 10 and the variable
-`simulated_random_number` to 7 for simplicity’s sake; in an actual program we’d
-get the intensity number from the app frontend and we’d use the `rand` crate to
-generate a random number like we did in the Guessing Game example in Chapter 2.
-The `main` function calls a `generate_workout` function with the simulated
-input values:
+Код 13-2 показывает содержание функции `main`. Мы программно ввели вводимые пользователем
+показатели для простоты демонстрации работы:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -95,14 +83,15 @@ fn main() {
 # fn generate_workout(intensity: i32, random_number: i32) {}
 ```
 
-<span class="caption">Listing 13-2: A `main` function containing hardcoded
-values to simulate user input and random number generation inputs to the
-`generate_workout` function</span>
+<span class="caption">Код программы 13-2: Функция `main` содержащая симуляцию
+пользовательского ввода данных и вызов функции `generate_workout`</span>
 
-That’s the context of what we’re working on. The `generate_workout` function in
-Listing 13-3 contains the business logic of the app that we’re most concerned
-with in this example. The rest of the code changes in this example will be made
-to this function:
+Это и есть контекст в котором мы будем работать. Функция `generate_workout` в
+примере кода 13-3 содержит логику работу программы, которую мы будем изучать в
+этом примере.
+
+contains the business logic of the app that we’re most concerned
+with in this example. Остальные изменения в коде будут сделаны в этой функции:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -139,42 +128,23 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">Listing 13-3: The business logic of the program that
-prints the workout plans based on the inputs and calls to the
-`simulated_expensive_calculation` function</span>
+<span class="caption">Код программы 13-3: Печать плана тренировки зависит от введенных
+данных и вызова функции `simulated_expensive_calculation` </span>
 
-The code in Listing 13-3 has multiple calls to the slow calculation function.
-The first `if` block calls `simulated_expensive_calculation` twice, the `if`
-inside the outer `else` doesn’t call it at all, and the code inside the `else`
-case inside the outer `else` calls it once.
+Код 13-3 несколько раз вызывает функцию расчета.
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-The desired behavior of the `generate_workout` function is to first check if
-the user wants a low intensity workout (indicated by a number less than 25) or
-a high intensity workout (25 or more). Low intensity workout plans will
-recommend a number of pushups and situps based on the complex algorithm we’re
-simulating with the `simulated_expensive_calculation` function, which needs the
-intensity number as an input.
+Желаемое поведение функции `generate_workout` следующее: проверка хочет ли
+пользователь низкой интенсивности тренировки (индекс меньше 25) или высокой (25 и более).
+Невысокая интенсивность будет рекомендовать количество повторений и подходов на
+основании сложного алгоритма, который мы моделируем функцией `simulated_expensive_calculation`.
 
-If the user wants a high intensity workout, there’s some additional logic: if
-the value of the random number generated by the app happens to be 3, the app
-will recommend a break and hydration instead. If not, the user will get a high
-intensity workout of a number of minutes of running that comes from the complex
-algorithm.
+Если же пользователь хочет высокую интенсивность тренировок - добавляется опция -
+случайный образом выбираемое число. Если оно равно 3, то предлагается сделать перерыв.
 
-The data science team has let us know that there are going to be some changes
-to the way we have to call the algorithm. To simplify the update when those
-changes happen, we would like to refactor this code to have only a single call
-to the `simulated_expensive_calculation` function. We also want to get rid of
-the spot where we’re currently calling the function twice unnecessarily, and
-we don’t want to add any other calls to that function in the process. That is,
-we don’t want to call it if we’re in the case where the result isn’t needed at
-all, and we still want to call it only once in the last case.
-
-There are many ways we could restructure this program. The way we’re going to
-try first is extracting the duplicated call to the expensive calculation
-function into a variable, as shown in Listing 13-4:
+Общая логика представлена. Теперь можно заняться рефакторингом кода. Для начала
+устраним дублирование кода. Пример первого приближения 13-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -214,29 +184,21 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">Listing 13-4: Extracting the calls to
-`simulated_expensive_calculation` to one place before the `if` blocks and
-storing the result in the `expensive_result` variable</span>
+<span class="caption">Код программы 13-4: Перенос вызова функции
+`simulated_expensive_calculation` в одно место перед блоком `if` и сохранение
+результата в переменную `expensive_result`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-This change unifies all the calls to `simulated_expensive_calculation` and
-solves the problem of the first `if` block calling the function twice
-unnecessarily. Unfortunately, we’re now calling this function and waiting for
-the result in all cases, which includes the inner `if` block that doesn’t use
-the result value at all.
+Теперь  в любом случае данная функция вызывается. Это не хорошо, т.к. не весь код
+метода использует результаты её работы. Для решения этой задачи замыкания подходят
+лучше всего.
 
-We want to be able to specify some code in one place in our program, but then
-only execute that code if we actually need the result in some other place in
-our program. This is a use case for closures!
+### Замыкания сохраняю код, который может быть запущен позднее
 
-### Closures Store Code to be Executed Later
-
-Instead of always calling the `simulated_expensive_calculation` function before
-the `if` blocks, we can define a closure and store the closure in a variable
-instead of the result as shown in Listing 13-5. We can actually choose to move
-the whole body of `simulated_expensive_calculation` within the closure we’re
-introducing here:
+Вместо того, чтобы всегда запускать функцию `simulated_expensive_calculation`
+перед блоком `if`, мы может определить замыкание и сохранить его в переменную.
+Пример 13-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -252,9 +214,7 @@ let expensive_closure = |num| {
 # expensive_closure(5);
 ```
 
-<span class="caption">Listing 13-5: Defining a closure with the body that was
-in the expensive function and store the closure in the `expensive_closure`
-variable</span>
+<span class="caption">Код программы 13-5: Инициализация замыкания</span>
 
 <!-- Can you elaborate on *how* to define the closure first? I've had a go here
 based on what I can see but not sure it's correct. Are we saying that a closure
@@ -262,33 +222,26 @@ is function that assigned its result to a variable you can then use? -->
 <!-- I've attempted to elaborate on defining a closure in the next few
 paragraphs starting here, is this better? /Carol -->
 
-The closure definition is the part after the `=` that we’re assigning to the
-variable `expensive_closure`. To define a closure, we start with a pair of
-vertical pipes (`|`). Inside the pipes is where we specify the parameters to
-the closure; this syntax was chosen because of its similarity to closure
-definitions in Smalltalk and Ruby. This closure has one parameter named `num`;
-if we had more than one parameter, we would separate them with commas, like
-`|param1, param2|`.
+Определения замыкания мы начинаем с пары палочек (vertical pipes (`|`)). Внутри
+этой конструкции мы определяем параметры замыкания. Такой синтаксис был выбран
+под влиянием языков Ruby и Smalltalk. Замыкание имеет параметр `num`. Несколько
+параметров разделяются запятыми `|param1, param2|`.
 
-After the parameters, we put curly braces that hold the body of the closure.
-The curly braces are optional if the closure body only has one line. After the
-curly braces, we need a semicolon to go with the `let` statement. The value
-returned from the last line in the closure body (`num`), since that line
-doesn’t end in a semicolon, will be the value returned from the closure when
-it’s called, just like in function bodies.
+Далее идёт тело функции-замыкания. Фигурные скобки могут не использоваться, если
+код функции состоит только из одной строчки кода. После закрытия фигурных скобок
+необходим символ `;`. Обратите внимание, что после `num` нет `;`. Это означает, что
+переменная будет возращена функцией.
 
-Note that this `let` statement means `expensive_closure` contains the
-*definition* of an anonymous function, not the *resulting value* of calling the
-anonymous function. Recall the reason we’re using a closure is because we want
-to define the code to call at one point, store that code, and actually call it
-at a later point; the code we want to call is now stored in `expensive_closure`.
+Также обратите внимание, что `let`-переменная `expensive_closure`содержит
+определение функции-замыкания, а не результат её работы.
 
-Now that we have the closure defined, we can change the code in the `if` blocks
-to call the closure in order to execute the code and get the resulting value.
-Calling a closure looks very similar to calling a function; we specify the
-variable name that holds the closure definition and follow it with parentheses
-containing the argument values we want to use for that call as shown in Listing
-13-6:
+Теперь, после определения замыкания мы можем изменить код в блоках `if`, вызывая
+код замыкания по необходимости. Вызов функции-замыкания очень напоминает вызов
+функции.
+
+Вызов замыкания очень похож на вызов функции. Мы определяем имя переменной, которая
+содержит определение замыкания и в скобках указываем аргументы, которые мы хотим
+использовать для вызова. Пример 13-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -325,43 +278,34 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">Listing 13-6: Calling the `expensive_closure` we’ve
-defined</span>
+<span class="caption">Пример 13-6: Вызов замыкания `expensive_closure`</span>
 
-Now we’ve achieved the goal of unifying where the expensive calculation is
-called to one place, and we’re only executing that code where we need the
-results. However, we’ve reintroduced one of the problems from Listing 13-3:
-we’re still calling the closure twice in the first `if` block, which will call
-the expensive code twice and make the user wait twice as long as they need to.
-We could fix this problem by creating a variable local to that `if` block to
-hold the result of calling the closure, but there’s another solution we can use
-since we have a closure. We’ll get back to that solution in a bit; let’s first
-talk about why there aren’t type annotations in the closure definition and the
-traits involved with closures.
+Мы решили задачу многократного использования (вызова) одного кода (т.е. кода
+объявленного в одном месте). Но мы всё-таки не решили вопрос минимизации количества
+вызываемого код (кэширования результата). Код по-прежнему может вызываться дважды.
+Этот вопрос может решить локальная переменная, объявленная в блоке `if`.  Есть ещё
+более лучшее решение, к которому мы вернемся чуть позже. А сейчас обсудим почему
+у замыканий не может быть аннотаций типов и ещё кое-что о связях типажей и замыканий.
 
-### Closure Type Inference and Annotation
+### Интерфейс типа замыкания и аннотация (Closure Type Inference and Annotation)
 
-Closures differ from functions defined with the `fn` keyword in a few
-ways. The first is that closures don’t require you to annotate the types of the
-parameters or the return value like `fn` functions do.
+Замыкания отличаются от функций определяемых с помощью ключевого слова `fn` в некоторых
+аспектах. Замыкания не требуют аннотирования типов параметров или возвращаемого
+значения как это могут делать функции `fn`.
 
 <!-- I've suggested moving this next paragraph up from below, I found this
 section difficult to follow with this next paragraph -->
 
-Type annotations are required on functions because they are part of an
-explicit interface exposed to your users. Defining this interface rigidly is
-important for ensuring that everyone agrees on what types of values a function
-uses and returns. Closures aren’t used in an exposed interface like this,
-though: they’re stored in variables and used without naming them and exposing
-them to be invoked by users of our library.
+Типизированные аннотации необходимы функциям т.к. они являются частью проявленного
+интерфейса с пользователем. Определение этого интерфейса важно для уверенности в
+том, что все использующие данную функцию принимают её входные и выходные данные
+корректно. Замыкания же не используют явного интерфейса, хотя они сохраняются в
+переменных и используются без имени и давая возможность запускать их на выполнение.
 
-Additionally, closures are usually short and only relevant within a narrow
-context rather than in any arbitrary scenario. Within these limited contexts,
-the compiler is reliably able to infer the types of the parameters and return
-type similarly to how it’s able to infer the types of most variables. Being
-forced to annotate the types in these small, anonymous functions would be
-annoying and largely redundant with the information the compiler already has
-available.
+Кроме того, описание замыкания может быть более коротким и может быть использовано
+только в узком контексте, а не в любом месте программы. Из-за ограничения контекстов,
+Благодаря этого ограничению компилятор может правильно подбирать типы данных
+параметров и возвращаемого типа.
 
 <!--Can you expand above on what you mean by "stored in bindings and called
 directly"? Do you mean stored in a variable? I'm struggling to visualize how
@@ -374,10 +318,9 @@ this up -->
 and more like what people are used to by referring to the concept as "variable"
 throughout, but we missed this spot. /Carol -->
 
-Like variables, we can choose to add type annotations if we want to increase
-explicitness and clarity in exchange for being more verbose than is strictly
-necessary; annotating the types for the closure we defined in Listing 13-4
-would look like the definition shown here in Listing 13-7:
+Также как и при определении переменных, мы можем добавить описание типа данных
+переменных замыкания и типа возвращаемого значения (для большей информативности).
+Пример 13-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -392,8 +335,7 @@ let expensive_closure = |num: i32| -> i32 {
 };
 ```
 
-<span class="caption">Listing 13-7: Adding optional type annotations of the
-parameter and return value types in the closure</span>
+<span class="caption">Код 13-7: добавления описания типов данных замыкания</span>
 
 <!-- Why might you want to, if you don't need to? In a particular situation? -->
 <!-- I've added an explanation /Carol -->
@@ -402,12 +344,7 @@ parameter and return value types in the closure</span>
 thing as the functions? -->
 <!-- Yes /Carol -->
 
-The syntax of closures and functions looks more similar with type annotations.
-Here’s a vertical comparison of the syntax for the definition of a function
-that adds one to its parameter, and a closure that has the same behavior. We’ve
-added some spaces here to line up the relevant parts). This illustrates how
-closure syntax is similar to function syntax except for the use of pipes rather
-than parentheses and the amount of syntax that is optional:
+Синтаксическое сравнения описания замыкания и функции:
 
 <!-- Prod: can you align this as shown in the text? -->
 <!-- I'm confused, does this note mean that production *won't* be aligning all
@@ -429,11 +366,7 @@ clarify /Carol -->
 
 <!-- Will add wingdings and ghosting in libreoffice /Carol -->
 
-The first line shows a function definition, and the second line shows a fully
-annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the braces that are
-optional since the closure body only has one line. These are all valid
-definitions that will produce the same behavior when they’re called.
+Проиллюстрированные описания замыканий развноценны.
 
 <!--Below--I'm not sure I'm following, is the i8 type being inferred? It seems
 like we're annotating it. -->
@@ -443,13 +376,9 @@ here we're forcing the type of the *variable* to be `i8` by annotating it in
 the *variable* declaration. I've changed the example to hopefully be less
 confusing and convey our point better. /Carol -->
 
-Closure definitions will have one concrete type inferred for each of their
-parameters and for their return value. For instance, Listing 13-8 shows the
-definition of a short closure that just returns the value it gets as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition: if
-we then try to call the closure twice, using a `String` as an argument the
-first time and an `i32` the second time, we’ll get an error:
+Определения замыканий будут иметь один конкретный тип данных для каждого из параметров
+и выходных данных. Например (код 13-8) показывает определение замыкания и его
+использование:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -460,8 +389,8 @@ let s = example_closure(String::from("hello"));
 let n = example_closure(5);
 ```
 
-<span class="caption">Listing 13-8: Attempting to call a closure whose types
-are inferred with two different types</span>
+<span class="caption">Код 13-8: Попытка использовать замыкание с различными типами
+данных</span>
 
 The compiler gives us this error:
 
@@ -479,51 +408,43 @@ error[E0308]: mismatched types
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked in to the closure in `example_closure`, and we get a type
-error if we try to use a different type with the same closure.
+После того, как вы в первый раз вызвали замыкание и использовали переменные типа
+данных `String`, компилятор неявным образом подставит этот тип в замыкание. Этот
+тип данных будет неизменным у замыкания на протяжении всего времени жизни.
 
-### Using Closures with Generic Parameters and the `Fn` Traits
+### Использование замыканий совместно с обобщёнными типами (дженериками) и типажом `Fn`
 
-Returning to our workout generation app, in Listing 13-6 we left our code still
-calling the expensive calculation closure more times than it needs to. In each
-place throughout our code, if we need the results of the expensive closure more
-than once, we could save the result in a variable for reuse and use the
-variable instead of calling the closure again. This could be a lot of repeated
-code saving the results in a variety of places.
+Возвратимся к нашему приложению для генерации тренировочных программ. В коде 13-6
+мы ещё используем неоднократно замыкание. Больше чем это на надо. Решение с кэшированием
+данных вычислений в переменной увеличит и усложнит наш код.
 
-However, because we have a closure for the expensive calculation, we have
-another solution available to us. We can create a struct that will hold the
-closure and the resulting value of calling the closure. The struct will only
-execute the closure if we need the resulting value, and it will cache the
-resulting value so that the rest of our code doesn’t have to be responsible for
-saving and reusing the result. You may know this pattern as *memoization* or
-*lazy evaluation*.
+Есть ещё одно решение. Мы можем создать структуру, которая будет хранить замыкание
+и результат её работы. Структура выполнить код замыкания если только в этом будет
+необходимость. Данная структура будет кэшировать результат работы замыкания,
+благодаря чему в коде программы не будет необходимости в усложнении кода. Такое
+шаблонное решение называется *запоминанием* (*memoization*) или *ленивой инициализацией*
+(*lazy evaluation*).
 
-In order to make a struct that holds a closure, we need to be able to specify
-the type of the closure. Each closure instance has its own unique anonymous
-type: that is, even if two closures have the same signature, their types are
-still considered to be different. In order to define structs, enums, or
-function parameters that use closures, we use generics and trait bounds like we
-discussed in Chapter 10.
+Для того чтобы структура могла в качестве поля иметь замыкание, мы должны явным
+образом указать его тип. Каждое замыкание имеет свой уникальный тип (даже если два
+замыкания имеют одни и туже сигнатуру, их типы будут считаться различными). Для
+установки типа данных замыкания в структуре, перечислении или функции мы должны
+использовать обобщающие типы и определенные типажи.
 
 <!-- So Fn is a trait built into the language, is that right? I wasn't sure if
 it was just a placeholder here -->
 <!-- Fn is provided by the standard library; I've clarified here. /Carol -->
 
-The `Fn` traits are provided by the standard library. All closures implement
-one of the traits `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
-between these traits in the next section on capturing the environment; in this
-example, we can use the `Fn` trait.
+Типаж `Fn` входит в состав стандартной библиотеки. Все замыкания реализуют один из
+типажей: `Fn`, `FnMut` или `FnOnce`. Мы поговорим о различиях между ним в следующей
+секции. В данном примере мы можем использовать типаж `Fn`.
 
-We add types to the `Fn` trait bound to represent the types of the parameters
-and return values that the closures must have in order to match this trait
-bound. In this case, our closure has a parameter of type `i32` and returns an
-`i32`, so the trait bound we specify is `Fn(i32) -> i32`.
+Мы добавим типы в типаж `Fn` для описания типов параметров и возвращаемого значения,
+которое замыкания должны иметь для того, чтобы соответствовать данному типажу. В данном
+случае, наше замыкание имеет тип параметр `i32` и возвращает `i32`. Сигнатура типажа
+имеет вид: `Fn(i32) -> i32`.
 
-Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
-and an optional result value:
+Код 13-9 показывает определение структуры `Cacher` содержащей замыкание:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -536,24 +457,20 @@ struct Cacher<T>
 }
 ```
 
-<span class="caption">Listing 13-9: Defining a `Cacher` struct that holds a
-closure in `calculation` and an optional result in `value`</span>
+<span class="caption">Код 13-9: определение структуры `Cacher` содержащей замыкание
+ `calculation` и результат в `value`</span>
 
-The `Cacher` struct has a `calculation` field of the generic type `T`. The
-trait bounds on `T` specify that `T` is a closure by using the `Fn` trait. Any
-closure we want to store in the `calculation` field of a `Cacher` instance must
-have one `i32` parameter (specified within the parentheses after `Fn`) and must
-return an `i32` (specified after the `->`).
+Структура `Cacher` имеет поле `calculation` типа `T`. Тип данных замыкания `T`
+описывается сигнатурой типажа `Fn`. Любые замыкания, которые может содержать поле
+`calculation` в экземпляре `Cacher` должно иметь один параметр типа `i32` и возвращать
+ `i32` (определено после `->`).
 
-The `value` field is of type `Option<i32>`. Before we execute the closure,
-`value` will be `None`. If the code using a `Cacher` asks for the result of the
-closure, we’ll execute the closure at that time and store the result within a
-`Some` variant in the `value` field. Then if the code asks for the result of
-the closure again, instead of executing the closure again, we’ll return the
-result that we’re holding in the `Some` variant.
+Поле `value` имеет тип `Option<i32>`. Перед выполнением замыкания `value` будет `None`.
+Если код использует структуру `Cacher` хочет получить результат замыкания, мы
+выполним замыкания и сохраним результат в значении перечисления `Some`. Если же код
+программы запросит значение замыкания ещё раз будет возвращено значение из `Some`.
 
-The logic around the `value` field that we’ve just described is defined in
-Listing 13-10:
+Описанная логика реализована в примере кода 13-10:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -595,29 +512,26 @@ added an introduction of it in Chapter 5. Just adding an explanation here for
 you in case you read this chapter before the changes we've made to Chapter 5!
 /Carol -->
 
-<span class="caption">Listing 13-10: Implementations on `Cacher` of an
-associated function named `new` and a method named `value` that manage the
-caching logic</span>
+<span class="caption">Код 13-10: Реализация структуры `Cacher`, метода `new` и
+метода `value`, который управляет логикой кэширования</span>
 
-The fields on the `Cacher` struct are private since we want `Cacher` to manage
-their values rather than letting the calling code potentially change the values
-in these fields directly. The `Cacher::new` function takes a generic parameter
-`T`, which we’ve defined in the context of the `impl` block to have the same
-trait bound as the `Cacher` struct. `Cacher::new` returns a `Cacher` instance
-that holds the closure specified in the `calculation` field and a `None` value
-in the `value` field, since we haven’t executed the closure yet.
+Поля структуры `Cacher` закрытые, т.к. мы хотим, чтобы экземпляр структуры управлял
+содержание полей и не было возможности извне каким-либо образом на это влиять. Функция
+`Cacher::new` получает обобщенный параметр `T`. Данная функция возвращает экземпляр
+структуры `Cacher` содержащая замыкание в поле `calculation` и `None` в поле `value`.
 
-When the calling code wants the result of evaluating the closure, instead of
-calling the closure directly, it will call the `value` method. This method
-checks to see if we already have a resulting value in `self.value` in a `Some`;
-if we do, it returns the value within the `Some` without executing the closure
-again.
+Когда вызывающий код хочет получить результат работы замыкания, вместо того чтобы
+вызывать замыкание непосредственно, он вызывает метод `value`. Этот метод проверяет
+есть ли уже результат работы замыкания в поле `self.value` внутри значения перечисления
+`Option::Some`. Если там есть значение, это значение возвращается вызывающему коду.
+При этом замыкание больше не используется для получения результата.
 
-If `self.value` is `None`, we call the closure stored in `self.calculation`,
-save the result in `self.value` for future use, and return the value as well.
+Если же поле `self.value` имеет значение `None`, то вызывается замыкание из поля
+`self.calculation` и результат работы записывается в поле `self.value` для будущего
+использования и, далее, полученное значение также возвращается вызывающему коду.
 
-Listing 13-11 shows how we can use this `Cacher` struct in the
-`generate_workout` function from Listing 13-6:
+Пример кода 13-11 демонстрирует использование структуры `Cacher` в функции
+`generate_workout` из примера 13-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -683,32 +597,25 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">Listing 13-11: Using `Cacher` in the `generate_workout`
-function to abstract away the caching logic</span>
+<span class="caption">Код 13-11: Использование экземпляра структуры `Cacher` в
+функции `generate_workout` для реализации кэширования</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Instead of saving the closure in a variable directly, we save a new instance of
-`Cacher` that holds the closure. Then, in each place we want the result, we
-call the `value` method on the `Cacher` instance. We can call the `value`
-method as many times as we want, or not call it at all, and the expensive
-calculation will be run a maximum of once. Try running this program with the
-`main` function from Listing 13-2, and change the values in the
-`simulated_user_specified_value` and `simulated_random_number` variables to
-verify that in all of the cases in the various `if` and `else` blocks,
-`calculating slowly...` printed by the closure only shows up once and only when
-needed.
+Вместо сохранения замыкания в переменную, мы создаём новый экземпляр структуры
+`Cacher` для хранения замыкания. Далее, в каждом месте, где необходим результат
+работы замыкания мы вызываем метод `value`. Мы может вызывать этот метод сколько
+угодно или вообще не вызывать. При любом количестве вызовов функции `value` (один
+раз или более) замыкание будет использовано только один раз. Пожалуйста, проверьте
+работу кода с использованием функции `main`.
 
-The `Cacher` takes care of the logic necessary to ensure we aren’t calling the
-expensive calculation more than we need to, so that `generate_workout` can
-focus on the business logic. Caching values is a more generally useful behavior
-that we might want to use in other parts of our code with other closures as
-well. However, there are a few problems with the current implementation of
-`Cacher` that would make reusing it in different contexts difficult.
+Хотя экземпляр структуры `Cacher` прекрасно справляется со своими обязанностями
+и в функции `generate_workout` можно без каких-либо дополнительных затрат описать
+логику работы, у текущей реализации `Cacher` есть всё же ограничения с контекстом
+использования замыкания.
 
-The first problem is a `Cacher` instance assumes it will always get the same
-value for the parameter `arg` to the `value` method. That is, this test of
-`Cacher` will fail:
+Первое ограничение - предполагается, что параметр `arg` всегда будет одинаковым.
+Изменение этого условия приводит к ошибке:
 
 ```rust,ignore
 #[test]
@@ -722,52 +629,57 @@ fn call_with_different_values() {
 }
 ```
 
-This test creates a new `Cacher` instance with a closure that returns the value
-passed into it. We call the `value` method on this `Cacher` instance with
-an `arg` value of 1 and then an `arg` value of 2, and we expect that the call
-to `value` with the `arg` value of 2 returns 2.
+Этот тест создаёт новый экземпляр `Cacher` с замыканием и возвращает значение.
+Мы вызываем метод `value` с параметром `arg` со значением `1`, а потом с `2`.
+Предполагаем, что когда мы введём значение `2`, то и должны получить это значение.
 
-Run this with the `Cacher` implementation from Listing 13-9 and Listing 13-10
-and the test will fail on the `assert_eq!` with this message:
+Тест не будет пройден:
 
 ```text
 thread 'call_with_different_arg_values' panicked at 'assertion failed:
 `(left == right)` (left: `1`, right: `2`)', src/main.rs
 ```
 
-The problem is that the first time we called `c.value` with 1, the `Cacher`
-instance saved `Some(1)` in `self.value`. After that, no matter what we pass
-in to the `value` method, it will always return 1.
+Проблема в том, что при первом вызове `c.value` с аргументом 1 экземпляр `Cacher`
+сохранит значение `Some(1)` в `self.value`. После этого, неважно какие будут входные
+параметры. Функция всегда будет возвращать 1.
 
-Try modifying `Cacher` to hold a hash map rather than a single value. The keys
-of the hash map will be the `arg` values that are passed in, and the values of
-the hash map will be the result of calling the closure on that key. Instead of
-looking at whether `self.value` directly has a `Some` or a `None` value, the
-`value` function will look up the `arg` in the hash map and return the value if
-it’s present. If it’s not present, the `Cacher` will call the closure and save
-the resulting value in the hash map associated with its `arg` value.
+Решением будет использования хэш-таблицы вместо одного значения. Ключи будут значениями
+входных данных `arg`, а значениями будут результаты работы замыкания. Вместо того,
+чтобы изучения значений перечислений функция `value` должна произвести поиск в
+хэш-таблице и возвратить значение, если оно там находится. При необходимости будет
+вызван код замыкания и будут произведены соответствующие вычисления.
 
-Another problem with the current `Cacher` implementation that restricts its use
-is that it only accepts closures that take one parameter of type `i32` and
-return an `i32`. We might want to be able to cache the results of closures that
-take a string slice as an argument and return `usize` values, for example. Try
-introducing more generic parameters to increase the flexibility of the `Cacher`
-functionality.
+```rust,ignore
+fn value(&mut self, arg: i32) -> i32 {
+        match self.value.get(&arg) {
+            Some(&v) => v,
+            None => {
+                let v = (self.calculation)(arg);
+                self.value.insert(arg,v);
+                v
+            },
+        }
+}
+```
 
-### Closures Can Capture Their Environment
+Ещё одним ограничением является тип данных. На данным момент ими могут быть
+только целочисленные значения типа `i32`. Мы бы хотели иметь возможность использовать
+различные типы данных (срезы строки, `usize` и другие). Попытаемся решить этот
+вопросы с использованием обобщенных параметров.
 
-In the workout generator example, we only used closures as inline anonymous
-functions. Closures have an additional ability we can use that functions don’t
-have, however: they can capture their environment and access variables from the
-scope in which they’re defined.
+### Замыкания могут получать доступ переменным области видимости
+
+В рассматриваемом нами примере генератора учебных планов мы использовали замыкания
+только как встроенные анонимные функции. Возможности же замыкание шире.
 
 <!-- To clarify, by enclosing scope, do you mean the scope that the closure is
 inside? Can you expand on that?-->
 <!-- Yes, I've tried here to clarify that it's the scope in which the closure
 is defined /Carol -->
 
-Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
-that uses the variable `x` from the closure’s surrounding environment:
+Код 13-12 демонстрирует пример переменной замыкания `equal_to_x`, содержание которой
+использует переменные в облсти видимости (переменная `x`):
 
 <!-- To clarify how we talk about a closure, does the closure include the
 variable name, or are we referring to the closure as the functionality that is
@@ -791,15 +703,15 @@ fn main() {
     let y = 4;
 
     assert!(equal_to_x(y));
+    println!("{}",equal_to_x(y));
 }
 ```
 
-<span class="caption">Listing 13-12: Example of a closure that refers to a
-variable in its enclosing scope</span>
+<span class="caption">Код 13-12: пример замыкания, которое использует внешнюю
+переменную</span>
 
-Here, even though `x` is not one of the parameters of `equal_to_x`, the
-`equal_to_x` closure is allowed to use the `x` variable that’s defined in the
-same scope that `equal_to_x` is defined in.
+В этом примере показано, что замыканию позволена использовать переменную `x`,
+которая определена в той же области видимости, что и переменная `equal_to_x`.
 
 <!-- So *why* is this allowed with closures and not functions, what about
 closures makes this safe? -->
@@ -810,7 +722,7 @@ that aspect. Can you elaborate on what led to the conclusion that allowing
 captures with functions wouldn't be safe and what you mean by "safe" here?
 /Carol -->
 
-We can’t do the same with functions; let’s see what happens if we try:
+Такой функциональной возможности функции не имеют:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -826,7 +738,7 @@ fn main() {
 }
 ```
 
-We get an error:
+Описание ошибки:
 
 ```text
 error[E0434]: can't capture dynamic environment in a fn item; use the || { ... }
@@ -837,45 +749,37 @@ closure form instead
   |                                          ^
 ```
 
-The compiler even reminds us that this only works with closures!
-
-When a closure captures a value from its environment, the closure uses memory
-to store the values for use in the closure body. This use of memory is overhead
-that we don’t want to pay for in the more common case where we want to execute
-code that doesn’t capture its environment. Because functions are never allowed
-to capture their environment, defining and using functions will never incur
-this overhead.
+Рассмотрим внутреннюю организацию работы с внешними переменными у замыканий. Для
+хранения данных о внешних переменных у замыканий предусмотрена хранилище (кэш).
+Использование данной возможности накладывает дополнительную нагрузку на ресурсы
+системы (память). Для большей безопасности и устойчивой работы системы было принято
+решение отключить у функций такою возможность.
 
 <!-- Why didn't this work, is there a reason ingrained in the language? Or is
 that not really relevant? -->
 <!-- I've added an explanation /Carol -->
 
-Closures can capture values from their environment in three ways, which
-directly map to the three ways a function can take a parameter: taking
-ownership, borrowing immutably, and borrowing mutably. These ways of capturing
-values are encoded in the three `Fn` traits as follows:
+Замыкания могут получить доступ к переменным среды выполнения несколькими (тремя)
+способами (которые соответствуют возможностям функций при работе с своими аргументами):
+владение, заимствование, изменяемое (нефиксированное) заимствование. Все эти возможности
+описаны в типажах, которые замыкания могут следовать:
 
-* `FnOnce` consumes the variables it captures from its enclosing scope (the
-  enclosing scope is called the closure’s *environment*). In order to consume
-  the captured variables, the closure must therefore take ownership of these
-  variables and moves them into the closure when the closure is defined. The
-  `Once` part of the name is because the closure can’t take ownership of the
-  same variables more than once, so it can only be called one time.
-* `Fn` borrows values from the environment immutably.
-* `FnMut` can change the environment since it mutably borrows values.
+* `FnOnce` получает значения из области видимости (*environment*). Для получения
+  доступа к переменным замыкание должно получить во владения используемые переменные.
+  Замыкание не может получить во владение одну и туже переменную несколько раз.
+* `Fn` заимствует значения из среды (не изменяя при этом их значений).
+* `FnMut` может изменять значения переменных.
 
-When we create a closure, Rust infers how we want to reference the environment
-based on how the closure uses the values from the environment. In Listing
-13-12, the `equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the
-`Fn` trait) since the body of the closure only needs to read the value in `x`.
+Когда мы создаём замыкание, компилятор делает выводы о целях использования переменных
+среды на основании используемых значений. В примере 13-12 `equal_to_x` получает
+доступ к  `x` (readonly), т.е. замыкания реализует `Fn`.
 
-If we want to force the closure to take ownership of the values it uses in the
-environment, we can use the `move` keyword before the parameter list. This is
-mostly useful when passing a closure to a new thread in order to move the data
-to be owned by the new thread. We’ll have more examples of `move` closures in
-Chapter 16 when we talk about concurrency, but for now here’s the code from
-Listing 13-12 with the `move` keyword added to the closure definition and using
-vectors instead of integers, since integers can be copied rather than moved:
+Для получения владения переменными используется ключевое слово `move` перед списком
+параметров. Это удобно, когда замакание перемещается в другой поток. Мы рассмотрим
+примеры использования `move` в Главе 16, когда будем рассматривать возможности Rust
+для разработки многопоточных приложений. В примере 13-12 ключевое слово `move` добавлено
+в определении замыкания и используется вектор вместо целочисленного значения.
+Примитивные типы (как мы знаем) могут быть скопированы (а нам надо перемещать):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -893,7 +797,7 @@ fn main() {
 }
 ```
 
-This example doesn’t compile:
+Описание ошибки:
 
 ```text
 error[E0382]: use of moved value: `x`
@@ -909,13 +813,13 @@ error[E0382]: use of moved value: `x`
     implement the `Copy` trait
 ```
 
-The `x` value is moved into the closure when the closure is defined because of
-the `move` keyword. The closure then has ownership of `x`, and `main` isn’t
-allowed to use `x` anymore. Removing the `println!` will fix this example.
+Здесь переменная `x` перемещена в замыкание её определении. Поэтому в функции
+`main` переменная `x` большое не может быть использована. Для устранения ошибки
+компиляции, устраните эту ошибку (например, удалите строку 6).
 
-Most of the time when specifying one of the `Fn` trait bounds, you can start
-with `Fn` and the compiler will tell you if you need `FnMut` or `FnOnce` based
-on what happens in the closure body.
+В большинстве случаев типаж `Fn` будет использован. Компилятор сам вам сообщит,
+когда лучшем решение было бы использовать `FnMut` или `FnOnce` (на основании использования
+внешних переменных замыканием).
 
-To illustrate situations where closures that can capture their environment are
-useful as function parameters, let’s move on to our next topic: iterators.
+Иллюстрации использования замыканий в качестве параметров функции мы рассмотрим в
+следующей секции, "Итераторы".

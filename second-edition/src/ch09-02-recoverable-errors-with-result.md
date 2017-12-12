@@ -209,11 +209,10 @@ fn read_username_from_file() -> Result<String, io::Error> {
 Этого же результата можно достичь с помощью сокращенного написания (с помощью использования
 символа `?`).
 
-### A Shortcut for Propagating Errors: `?`
+### Сокращение описание `match`  `?`
 
-Listing 9-6 shows an implementation of `read_username_from_file` that has the
-same functionality as it had in Listing 9-5, but this implementation uses the
-question mark operator:
+Код программы 9-6 показывает реализацию функции `read_username_from_file`, функционал
+которой аналогичен коду программы 9-5, но имеет сокрощённое описание:
 
 ```rust
 use std::io;

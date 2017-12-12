@@ -1,22 +1,19 @@
-## Working with Environment Variables
+## Работа с системными переменными
 
-We’re going to improve our tool with an extra feature: an option for case
-insensitive searching that the user can turn on via an environment variable. We
-could make this a command line option and require that users enter it each time
-they want it to apply, but instead we’re going to use an environment variable.
-This allows our users to set the environment variable once and have all their
-searches be case insensitive in that terminal session.
+Мы хотим улучшить наше приложение - добавить дополнительную функцию - установить
+опцию для поиска текста без учёта регистра символов. Это опцию пользователь программы
+может установить в своё системе с помощью переменных среды. Мы можем установить
+опцию такую при запуске программы, что потребует от пользователя при каждом запуске
+программы использовать данную опцию. Мы хотим упростить решение такой задачи.
+Переменные среды позволяют установить какую-либо опцию один раз.
 
-### Writing a Failing Test for the Case-Insensitive `search` Function
 
-We want to add a new `search_case_insensitive` function that we will call when
-the environment variable is on.
+### Написание теста с ошибкой для решения задачи поиск без учёта регистра
 
-We’re going to continue following the TDD process, so the first step is again
-to write a failing test. We’ll add a new test for the new case-insensitive
-search function, and rename our old test from `one_result` to `case_sensitive`
-to be clearer about the differences between the two tests, as shown in Listing
-12-20:
+Добавим новую функцию `search_case_insensitive`, которую мы будем вызывать для того,
+чтобы установить переменную среды.
+
+Напишем тест с ошибкой. Добавим новый тест `case_insensitive` (12-20):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -57,32 +54,27 @@ Trust me.";
 }
 ```
 
-<span class="caption">Listing 12-20: Adding a new failing test for the case
-insensitive function we’re about to add</span>
+<span class="caption">Код 12-20: добавление нового тест с ошибок для проверки поиск
+без учёта регистра</span>
 
-Note that we’ve edited the old test’s `contents` too. We’ve added a new line
-with the text “Duct tape”, with a capital D, that shouldn’t match the query
-“duct” when we’re searching in a case sensitive manner. Changing the old test
-in this way helps ensure that we don’t accidentally break the case sensitive
-search functionality that we’ve already implemented; this test should pass now
-and should continue to pass as we work on the case insensitive search.
+Обратите внимание, что мы также поменяли входные параметры теста `case_sensitive`.
+Мы добавили новую строку “Duct tape”, чтобы была возможность поиска строки “duct”
+при установленной опции игнорирования регистра символов. Благодаря этому изменению
+мы не нарушим ненароком работу предыдущего теста (он сработает при любом установленном
+режиме поиска).
 
-The new test for the case *insensitive* search uses “rUsT” as its query. In the
-`search_case_insensitive` function we’re going to add, the query “rUsT” should
-match both the line containing “Rust:” with a capital R and also the line
-“Trust me.” even though both of those have different casing than the query.
-This is our failing test, and it will fail to compile because we haven’t yet
-defined the `search_case_insensitive` function. Feel free to add a skeleton
-implementation that always returns an empty vector in the same way that we did
-for the `search` function in Listing 12-16 in order to see the test compile and
-fail.
+Новый тест будет использовать следующий шаблон для поиска - “rUsT”. В функции
+`search_case_insensitive` функция поиска должна найти текст и в строке содержащей
+“Rust:” и в “Trust me.”. Пока наш тест ещё не будет срабатывать, т.к. мы ещё не
+реализовали функцию `search_case_insensitive`. Добавим описание функции так, как
+мы это уже делали в функции `search` (без рабочей реализации, но с соблюдением
+всех синтаксических формальностей.).
 
-### Implementing the `search_case_insensitive` Function
+### Реализация функции `search_case_insensitive`
 
-The `search_case_insensitive` function, shown in Listing 12-21, will be almost
-the same as the `search` function. The only difference is that we’ll lowercase
-the `query` and each `line` so that whatever the case of the input arguments,
-they will be the same case when we check whether the line contains the query.
+Функция `search_case_insensitive` показанная в примере кода 12-21 почти нечем не
+отличается от функции `search`. Отличие в том, что производится принудительное
+приведение значения переменной `line` и  в нижний регистр и аргумента `query`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -101,30 +93,22 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">Listing 12-21: Defining the `search_case_insensitive`
-function to lowercase both the query and the line before comparing them</span>
+<span class="caption">Код программы 12-21: Определение функции `search_case_insensitive`
+и реализация тела этой функции</span>
 
-First, we lowercase the `query` string, and store it in a shadowed variable
-with the same name. Calling `to_lowercase` on the query is necessary so that no
-matter if the user’s query is “rust”, “RUST”, “Rust”, or “rUsT”, we’ll treat
-the query as if it was “rust” and be insensitive to the case.
+Описание решения. Сначала получили значение аргумента `query` в нижнем регистре.
+Для этого скроим аргумент с помощью одноимённой локальной переменный и используем
+метод `to_lowercase`. Каждый раз при её использовании создаётся новый экземпляр
+`String`. Метод `contains` требует предоставить срез в качестве входных данных.
 
-Note that `query` is now a `String` rather than a string slice, because calling
-`to_lowercase` creates new data rather than referencing existing data. Say the
-query is “rUsT”, as an example: that string slice does not contain a lowercase
-“u” or “t” for us to use, so we have to allocate a new `String` containing
-“rust”. When we pass `query` as an argument to the `contains` method now, we
-need to add an ampersand because the signature of `contains` is defined to take
-a string slice.
+Т.к. мы приводим сравниваемые значение в один регистр неважно в каком регистре они
+были изначально.
 
-Next, we add a call to `to_lowercase` on each `line` before we check if it
-contains `query` to lowercase all characters. Now that we’ve converted both
-`line` and `query` to lowercase, we’ll find matches no matter what the case of
-the query.
-
-Let’s see if this implementation passes the tests:
+Проверим работу тестов:
 
 ```text
+$ cargo test --lib
+
 running 2 tests
 test test::case_insensitive ... ok
 test test::case_sensitive ... ok
@@ -132,10 +116,8 @@ test test::case_sensitive ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Great! Now, let’s actually call the new `search_case_insensitive` function from
-the `run` function. First, we’re going to add a configuration option for
-switching between case sensitive and case insensitive search to the `Config`
-struct:
+Отлично! Тесты срабатывают. Теперь мы можем использовать нашу новую функцию в `run`.
+Сделаем рефакторинг кода. Добавим поле `case_sensitive: bool` в структуру `Config`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -147,10 +129,10 @@ pub struct Config {
 }
 ```
 
-We add the `case_sensitive` field that holds a boolean. Then we need our `run`
-function to check the `case_sensitive` field’s value and use that to decide
-whether to call the `search` function or the `search_case_insensitive` function
-as shown in Listing 12-22:
+Дополнительное поле нужно для проверки в функции `run` для выбора какой функцией
+воспользоваться для поиска: `case_sensitive` или `search_case_insensitive`. Пример
+кода 12-22:
+
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -193,15 +175,16 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 }
 ```
 
-<span class="caption">Listing 12-22: Calling either `search` or
-`search_case_insensitive` based on the value in `config.case_sensitive`</span>
+<span class="caption">Код программы 12-22: вызов функции в зависимости от значения
+поля `config.case_sensitive`</span>
 
-Finally, we need to actually check for the environment variable. The functions
-for working with environment variables are in the `env` module in the standard
-library, so we want to bring that module into scope with a `use std::env;` line
-at the top of *src/lib.rs*. Then we’re going to use the `var` method from the
-`env` module to check for an environment variable named `CASE_INSENSITIVE`, as
-shown in Listing 12-23:
+Следующим этапом нашего рефакторинга будет реализации проверки переменной среды в
+функции `Config::new`.
+
+Функции для работы с системными переменными находятся в модуле `env` стандартной
+библиотеки. Добавим импорт данного модуля `use std::env;` в файле *src/lib.rs*.
+Далее, мы можем использовать функцию `var` данного модуля для проверки значения
+системной переменной `CASE_INSENSITIVE`. Пример кода 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -231,31 +214,21 @@ impl Config {
 }
 ```
 
-<span class="caption">Listing 12-23: Checking for an environment variable named
-`CASE_INSENSITIVE`</span>
+<span class="caption">Код программы 12-23: проверка системной переменной `CASE_INSENSITIVE`</span>
 
-Here, we create a new variable `case_sensitive`. In order to set its value, we
-call the `env::var` function and pass it the name of the `CASE_INSENSITIVE`
-environment variable. The `env::var` method returns a `Result` that will be the
-successful `Ok` variant that contains the value of the environment variable if
-the environment variable is set. It will return the `Err` variant if the
-environment variable is not set.
+Мы создаём новую переменную `case_sensitive`. Для установки значения этой переменной
+мы получаем значение системной переменной `CASE_INSENSITIVE`. Функция `var` возвращает
+перечисление `Result`.
 
-We’re using the `is_err` method on the `Result` to check to see if it’s an
-error, and therefore unset, which means it *should* do a case sensitive search.
-If the `CASE_INSENSITIVE` environment variable is set to anything, `is_err`
-will return false and it will perform a case insensitive search. We don’t care
-about the *value* of the environment variable, just whether it’s set or unset,
-so we’re checking `is_err` rather than `unwrap`, `expect`, or any of the other
-methods we’ve seen on `Result`.
+Метод `is_err` используется для проверки наличия ошибочного значения. Если ошибки
+нет, код продолжает свою работу. Нас пока интересует только наличие данной переменой
+с списке системных переменных.
 
-We pass the value in the `case_sensitive` variable to the `Config` instance so
-that the `run` function can read that value and decide whether to call `search`
-or `search_case_insensitive` as we implemented in Listing 12-22.
+Далее значение переменной `case_sensitive` используется для инициализации экземпляра
+структуры  `Config`.
 
-Let’s give it a try! First, we’ll run our program without the environment
-variable set and with the query “to”, which should match any line that contains
-the word “to” in all lowercase:
+Сначала проверим работу программы без системной переменной и шаблоном поиска "to",
+который должны подойти только точном совпадении символов:
 
 ```text
 $ cargo run to poem.txt
@@ -265,12 +238,14 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
+Код работает. Далее установим системную переменную и попытаемся запустить программу
+снова.
 Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
 set to 1 but with the same query “to”, and we should get lines that contain
 “to” that might have uppercase letters:
 
 ```text
-$ CASE_INSENSITIVE=1 cargo run to poem.txt
+$ set CASE_INSENSITIVE=1 && cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
@@ -279,18 +254,19 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing “To”! Our `minigrep` program can now do
-case insensitive searching, controlled by an environment variable. Now you know
-how to manage options set using either command line arguments or environment
-variables!
+Отлично! Теперь мы наши и больше "to". Теперь вы знаете, как устанавливать системные
+переменные с помощью командной строки и как и получать к ним доступ.
 
-Some programs allow both arguments *and* environment variables for the same
-configuration. In those cases, the programs decide that one or the other takes
-precedence. For another exercise on your own, try controlling case
-insensitivity through either a command line argument or an environment
-variable. Decide whether the command line argument or the environment variable
-should take precedence if the program is run with one set to case sensitive and
-one set to case insensitive.
+Некоторые программы допускают использование обоих решений для установки конфигурации
+(установки параметров командной строки и отслеживание значений системных переменных).
+В качестве самостоятельной работы, пожалуйста, проверьте работу программы с помощью
+аргументов командной строки и системных переменных. Для удаления системной переменной
+используйте команду:
 
-The `std::env` module contains many more useful features for dealing with
-environment variables; check out its documentation to see what’s available.
+```text
+$ set CASE_INSENSITIVE=
+
+```
+
+Модуль `std::env` содержит множество полезных функций для работы с системными
+переменными. Подробнее о них вы можете узнать из документации.
