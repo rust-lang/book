@@ -102,17 +102,18 @@ Filename: src/main.rs
 fn main() {
     let v = vec![1, 2, 3];
 
-    v[100];
+    v[99];
 }
 ```
 
 Listing 9-1: Attempting to access an element beyond the end of a vector, which
 will cause a `panic!`
 
-Here, we’re attempting to access the hundredth element of our vector, but it
-has only three elements. In this situation, Rust will panic. Using `[]` is
-supposed to return an element, but if you pass an invalid index, there’s no
-element that Rust could return here that would be correct.
+Here, we’re attempting to access the hundredth element of our vector (which is
+at index 99 because indexing starts at zero), but it has only three elements.
+In this situation, Rust will panic. Using `[]` is supposed to return an
+element, but if you pass an invalid index, there’s no element that Rust could
+return here that would be correct.
 
 Other languages, like C, will attempt to give you exactly what you asked for in
 this situation, even though it isn’t what you want: you’ll get whatever is at
@@ -634,6 +635,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
     let mut s = String::new();
 
     File::open("hello.txt")?.read_to_string(&mut s)?;
+
     Ok(s)
 }
 ```

@@ -6,9 +6,9 @@ interpret and respond to. For example, if we try to open a file and that
 operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.
 
-Recall in Chapter 2 in the on “[Handling Potential Failure with the `Result`
-Type][handle_failure]<!-- ignore -->” section that the `Result` enum is defined
-as having two variants, `Ok` and `Err`, as follows:
+Recall from “[Handling Potential Failure with the `Result`
+Type][handle_failure]<!-- ignore -->” in Chapter 2 that the `Result` enum is
+defined as having two variants, `Ok` and `Err`, as follows:
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
 
@@ -66,7 +66,7 @@ error[E0308]: mismatched types
 `std::result::Result`
   |
   = note: expected type `u32`
-  = note:    found type `std::result::Result<std::fs::File, std::io::Error>`
+             found type `std::result::Result<std::fs::File, std::io::Error>`
 ```
 
 This tells us the return type of the `File::open` function is a `Result<T, E>`.
@@ -233,7 +233,7 @@ the `panic!` call that the `unwrap` method makes:
 ```text
 thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
 repr: Os { code: 2, message: "No such file or directory" } }',
-/stable-dist-rustc/build/src/libcore/result.rs:868
+src/libcore/result.rs:906:4
 ```
 
 Another method, `expect`, which is similar to `unwrap`, lets us also choose the
@@ -258,8 +258,7 @@ will be the parameter that we pass to `expect`, rather than the default
 
 ```text
 thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
-2, message: "No such file or directory" } }',
-/stable-dist-rustc/build/src/libcore/result.rs:868
+2, message: "No such file or directory" } }', src/libcore/result.rs:906:4
 ```
 
 Because this error message starts with the text we specified, `Failed to open
@@ -384,18 +383,16 @@ is an `Err`, the value inside the `Err` will be returned from the whole
 function as if we had used the `return` keyword so the error value gets
 propagated to the calling code.
 
-The one difference between the `match` expression from Listing 9-6 and what the
-question mark operator does is that when using the question mark operator,
-error values go through the `from` function defined in the `From` trait in the
-standard library. Many error types implement the `from` function to convert an
-error of one type into an error of another type. When used by the question mark
-operator, the call to the `from` function converts the error type that the
-question mark operator gets into the error type defined in the return type of
-the current function that we’re using `?` in. This is useful when parts of a
-function might fail for many different reasons, but the function returns one
-error type that represents all the ways the function might fail. As long as
-each error type implements the `from` function to define how to convert itself
-to the returned error type, the question mark operator takes care of the
+There is a difference between what the `match` expression from Listing 9-6 and
+the question mark operator do: error values used with `?` go through the `from`
+function, defined in the `From` trait in the standard library, which is used to
+convert errors from one type into another. When the question mark calls the
+`from` function, the error type received is converted into the error type
+defined in the return type of the current function. This is useful when a
+function returns one error type to represent all the ways a function might
+fail, even if parts might fail for many different reasons. As long as each
+error type implements the `from` function to define how to convert itself to
+the returned error type, the question mark operator takes care of the
 conversion automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
@@ -458,14 +455,14 @@ fn main() {
 When we compile this code, we get the following error message:
 
 ```text
-error[E0277]: the `?` operator can only be used in a function that returns
-`Result` (or another type that implements `std::ops::Try`)
+error[E0277]: the trait bound `(): std::ops::Try` is not satisfied
  --> src/main.rs:4:13
   |
 4 |     let f = File::open("hello.txt")?;
   |             ------------------------
   |             |
-  |             cannot use the `?` operator in a function that returns `()`
+  |             the `?` operator can only be used in a function that returns
+  `Result` (or another type that implements `std::ops::Try`)
   |             in this macro invocation
   |
   = help: the trait `std::ops::Try` is not implemented for `()`
