@@ -265,14 +265,14 @@ your threads are actually running at the same time or not.
 
 ### Using `move` Closures with Threads
 
-The `move` closure, which we didn’t cover in Chapter 13, is often used
+The `move` closure, which we mentioned briefly in Chapter 13, is often used
 alongside `thread::spawn`, as it allows us to use data from one thread in
 another thread.
 
-In Chapter 13, we said that “Creating closures that capture values from their
-environment is mostly used in the context of starting new threads.”
-
-<!-- PROD: DE to check this quote, see if it has changed -->
+In Chapter 13, we said that “If we want to force the closure to take ownership
+of the values it uses in the environment, we can use the `move` keyword before
+the parameter list. This technique is mostly useful when passing a closure to a
+new thread to move the data so it’s owned by the new thread.”
 
 Now we’re creating new threads, so let’s talk about capturing values in
 closures!
