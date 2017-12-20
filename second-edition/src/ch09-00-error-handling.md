@@ -16,7 +16,7 @@ location beyond the end of an array.
 
 Most languages don’t distinguish between these two kinds of errors and handle
 both in the same way using mechanisms like exceptions. Rust doesn’t have
-exceptions. Instead, it has the value `Result<T, E>` for recoverable errors and
+exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
 the `panic!` macro that stops execution when it encounters unrecoverable
 errors. This chapter covers calling `panic!` first and then talks about
 returning `Result<T, E>` values. Additionally, we’ll explore considerations to

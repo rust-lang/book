@@ -107,8 +107,9 @@ text `test result: ok.` means that all the tests passed, and the portion that
 reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 
 Because we don’t have any tests we’ve marked as ignored, the summary shows `0
-ignored`. We’ll talk about ignoring tests in the next section, “Controlling How
-Tests Are Run.”
+ignored`. We also haven’t filtered the tests being run, so the end of the
+summary shows `0 filtered out`. We’ll talk about ignoring and filtering out
+tests in the next section, “Controlling How Tests Are Run.”
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
@@ -231,7 +232,7 @@ the `assert!` macro calls the `panic!` macro, which causes the test to fail.
 Using the `assert!` macro helps us check that our code is functioning in the
 way we intend.
 
-In Chapter 5, [Listing 5-9][Listing-5-9], we used a `Rectangle` struct and a `can_hold`
+In Chapter 5, [Listing 5-15][Listing-5-15], we used a `Rectangle` struct and a `can_hold`
 method, which are repeated here in [Listing 11-5][Listing-11-5]. Let’s put this code in the
 *src/lib.rs* file and write some tests for it using the `assert!` macro.
 
@@ -462,6 +463,7 @@ failures:
         thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
   left: `4`,
  right: `5`', src/lib.rs:11:8
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::it_adds_two
@@ -564,8 +566,8 @@ test tests::greeting_contains_name ... FAILED
 failures:
 
 ---- tests::greeting_contains_name stdout ----
-    thread 'tests::greeting_contains_name' panicked at 'assertion failed:
-    result.contains("Carol")', src/lib.rs:12:8
+        thread 'tests::greeting_contains_name' panicked at 'assertion failed:
+result.contains("Carol")', src/lib.rs:12:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -593,8 +595,8 @@ Now when we run the test, we’ll get a more informative error message:
 
 ```text
 ---- tests::greeting_contains_name stdout ----
-    thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
-    name, value was `Hello!`', src/lib.rs:12:8
+        thread 'tests::greeting_contains_name' panicked at 'Greeting did not
+contain name, value was `Hello!`', src/lib.rs:12:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -674,6 +676,8 @@ that the `new` function will panic if the value is greater than 100:
 #     value: u32,
 # }
 #
+// --snip--
+
 impl Guess {
     pub fn new(value: u32) -> Guess {
         if value < 1  {
@@ -788,7 +792,8 @@ test tests::greater_than_100 ... FAILED
 failures:
 
 ---- tests::greater_than_100 stdout ----
-        thread 'tests::greater_than_100' panicked at 'Guess value must be greater than or equal to 1, got 200.', src/lib.rs:11:12
+        thread 'tests::greater_than_100' panicked at 'Guess value must be
+greater than or equal to 1, got 200.', src/lib.rs:11:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 note: Panic did not include expected string 'Guess value must be less than or
 equal to 100'
@@ -813,7 +818,7 @@ test`.
 [Listing-11-2]: ch11-01-writing-tests.html#Listing-11-2
 [Listing-11-3]: ch11-01-writing-tests.html#Listing-11-3
 [Listing-11-4]: ch11-01-writing-tests.html#Listing-11-4
-[Listing-5-9]: ch05-02-example-structs.html#Listing-5-9
+[Listing-5-15]: ch05-03-method-syntax.html#Listing-5-15
 [Listing-11-5]: ch11-01-writing-tests.html#Listing-11-5
 [Listing-11-6]: ch11-01-writing-tests.html#Listing-11-6
 [Listing-11-7]: ch11-01-writing-tests.html#Listing-11-7

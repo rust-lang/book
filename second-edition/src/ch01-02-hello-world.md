@@ -149,6 +149,7 @@ On Windows, you’d enter:
 ```cmd
 > dir /B %= the /B option says to only show the file names =%
 main.exe
+main.pdb
 main.rs
 ```
 

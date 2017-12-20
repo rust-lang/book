@@ -395,8 +395,8 @@ thread::spawn(move || {
 # }
 ```
 
-<span class="caption">Listing 16-11: Sending multiple messages and pausing
-between each one</span>
+<span class="caption">Listing 16-11: Sending multiple messages from multiple
+producers</span>
 
 This time, before we create the first spawned thread, we call `clone` on the
 sending end of the channel. This will give us a new sending handle we can pass

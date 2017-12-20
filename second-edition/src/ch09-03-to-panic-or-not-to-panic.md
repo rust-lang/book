@@ -138,7 +138,7 @@ number being in range, like so:
 
 ```rust,ignore
 loop {
-    // snip
+    // --snip--
 
     let guess: i32 = match guess.trim().parse() {
         Ok(num) => num,
@@ -151,7 +151,7 @@ loop {
     }
 
     match guess.cmp(&secret_number) {
-    // snip
+    // --snip--
 }
 ```
 
