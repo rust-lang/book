@@ -10,6 +10,7 @@ aggregator
 AGraph
 aliasability
 alignof
+alloc
 allocator
 Amir
 anotherusername
@@ -205,6 +206,7 @@ JoinHandle
 kinded
 lang
 latin
+liballoc
 libc
 libcollections
 libcore
