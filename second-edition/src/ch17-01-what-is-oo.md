@@ -1,14 +1,10 @@
-## What Does Object-Oriented Mean?
+## Что означает объектно-ориентированное?
 
-There isn’t consensus in the programming community about the features a
-language needs to have in order to be called object-oriented. Rust is
-influenced by many different programming paradigms; we explored the features it
-has that come from functional programming in Chapter 13. Some of the
-characteristics that object-oriented programming languages tend to share are
-objects, encapsulation, and inheritance. Let’s take a look at what each of
-those mean and whether Rust supports them.
+В сообществе разработчиков отсутствует консенсус относительно особенностей
+языка, который он должен иметь, чтобы быть названным объектно-ориентированным.
+Rust реализован под влиянием различных парадигм программирования.
 
-### Objects Contain Data and Behavior
+### Объекты содержат данные и поведение
 
 The book “Design Patterns: Elements of Reusable Object-Oriented Software,”
 colloquially referred to as “The Gang of Four book,” is a catalog of
@@ -24,7 +20,7 @@ data and `impl` blocks provide methods on structs and enums. Even though
 structs and enums with methods aren’t *called* objects, they provide the same
 functionality that objects do, using the Gang of Four’s definition of objects.
 
-### Encapsulation that Hides Implementation Details
+### Скрытие деталей реализации
 
 Another aspect commonly associated with object-oriented programming is the idea
 of *encapsulation*: the implementation details of an object aren’t accessible

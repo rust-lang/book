@@ -1,68 +1,65 @@
-## `RefCell<T>` and the Interior Mutability Pattern
+## `RefCell<T>` и шаблон внутренней изменяемости (Interior Mutability Pattern)
 
-*Interior mutability* is a design pattern in Rust for allowing you to mutate
-data even though there are immutable references to that data, which would
-normally be disallowed by the borrowing rules. The interior mutability pattern
-involves using `unsafe` code inside a data structure to bend Rust’s usual rules
-around mutation and borrowing. We haven’t yet covered unsafe code; we will in
-Chapter 19. The interior mutability pattern is used when you can ensure that
-the borrowing rules will be followed at runtime, even though the compiler can’t
-ensure that. The `unsafe` code involved is then wrapped in a safe API, and the
-outer type is still immutable.
+*Внутренняя изменяемость* - это шаблон проектирования в Rust, позволяющий изменять
+данные даже если ссылки на эти данные неизменяемые (что обычно нельзя сделать,
+из-за правил владения). Это шаблон предлагает использовать небезопасный код внутри
+структур данных для связи правил Rust заимствования и изменяемости. Мы подробнее
+поговорим о небезопасном коде в Главе 19. Этот шаблон полезен, когда вы уверены,
+что правила заимствования будут действительный во время работы программы, даже если
+компилятор не будет в этом уверен. Небезопасный код будет использован внутри
+безопасной API.
 
-Let’s explore this by looking at the `RefCell<T>` type that follows the
-interior mutability pattern.
+Давайте рассмотрим тип данных `RefCell<T>`, который реализует этот шаблон.
 
-### `RefCell<T>` has Interior Mutability
+### `RefCell<T>` имеет внутреннюю изменяемость
 
-Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
-that it holds. So, what makes `RefCell<T>` different than a type like `Box<T>`?
-Let’s recall the borrowing rules we learned in Chapter 4:
+В отличие от `Rc<T>` тип `RefCell<T>` представляет собой единственного владельца
+данных . Что же отличает `RefCell<T>` от `Box<T>`? Давайте вспомним правила
+заимствования из Главы 4:
+1. В любой момент времени вы можете иметь *одно из*, но не оба:
+   * Одна изменяемая ссылка.
+   * Любое количество неизменяемых ссылок.
+2. Ссылки всегда должны быть действительными.
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+С помощью ссылок и  `Box<T>` правила заимствования применяются на этапе компиляции.
+С помощью `RefCell<T>` они применяются во время работы программы. Если вы нарушите
+эти правила, работая с ссылками - будет ошибка компиляции. Если вы работаете с
+`RefCell<T>` и вы нарушите эти правила - вы получите `panic!`.
 
-With references and `Box<T>`, the borrowing rules’ invariants are enforced at
-compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
-With references, if you break these rules, you’ll get a compiler error. With
-`RefCell<T>`, if you break these rules, you’ll get a `panic!`.
+Статический анализ, который проводит компилятор Rust, по своей сути консервативен.
+Существуют свойства кода, которые невозможно обнаружить, анализируя
+код: самая известная проблема с остановкой, которая выходит за рамки этого
+но интересная тема для исследования, если вы заинтересованы.
 
-Static analysis, like the Rust compiler performs, is inherently conservative.
-There are properties of code that are impossible to detect by analyzing the
-code: the most famous is the Halting Problem, which is out of scope of this
-book but an interesting topic to research if you’re interested.
+Поскольку некоторый анализ невозможен, компилятор Rust не пытается даже
+что-либо предпринять. Если он не может быть уверен, поэтому он консервативен и
+иногда отвергает правильные которые фактически не нарушали бы гарантии Rust.
+Иными словами, если Rust пропускает неверную программу, люди не смогут доверять
+гарантиям Rust. Если Rust отклонит правильную программу, программист будет
+быть неудобным, но ничего катастрофического не может произойти. `RefCell <T>` полезен
+когда вы знаете, что правила заимствования соблюдаются, но компилятор не может
+понять, что это правильно.
 
-Because some analysis is impossible, the Rust compiler does not try to even
-guess if it can’t be sure, so it’s conservative and sometimes rejects correct
-programs that would not actually violate Rust’s guarantees. Put another way, if
-Rust accepts an incorrect program, people would not be able to trust in the
-guarantees Rust makes. If Rust rejects a correct program, the programmer will
-be inconvenienced, but nothing catastrophic can occur. `RefCell<T>` is useful
-when you know that the borrowing rules are respected, but the compiler can’t
-understand that that’s true.
+Подобно `Rc <T>`, `RefCell <T>` используется только для однопоточных
+сценариев. Мы поговорим о том, как получить функциональность `RefCell <T>` в
+многопоточную программу в следующей главе о параллелизме. Пока, все, что вы
+нужно знать, что если вы попытаетесь использовать `RefCell <T>` в многопоточном
+контекст, вы получите ошибку времени компиляции.
 
-Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded
-scenarios. We’ll talk about how to get the functionality of `RefCell<T>` in a
-multithreaded program in the next chapter on concurrency. For now, all you
-need to know is that if you try to use `RefCell<T>` in a multithreaded
-context, you’ll get a compile time error.
+С помощью ссылок мы используем синтаксис `&` и `& mut` для создания простых ссылок
+и изменяемых, соответственно. Но с `RefCell <T>` мы используем методы `borrow`
+и `borrow_mut`, которые являются частью безопасного API, который имеет` RefCell <T> `.
+`borrow` возвращает тип умного указателя` Ref`, а `borrow_mut` возвращает
+умный указатель типа `RefMut`. Эти два типа реализуют `Deref`, чтобы мы могли
+рассматривайте их так, как если бы они были регулярными ссылками. `Ref` и` RefMut`
+отслеживают заимствование динамически, и их реализация `Drop` отпускает заимствования
+динамически.
 
-With references, we use the `&` and `&mut` syntax to create references and
-mutable references, respectively. But with `RefCell<T>`, we use the `borrow`
-and `borrow_mut` methods, which are part of the safe API that `RefCell<T>` has.
-`borrow` returns the smart pointer type `Ref`, and `borrow_mut` returns the
-smart pointer type `RefMut`. These two types implement `Deref` so that we can
-treat them as if they’re regular references. `Ref` and `RefMut` track the
-borrows dynamically, and their implementation of `Drop` releases the borrow
-dynamically.
-
-Listing 15-14 shows what it looks like to use `RefCell<T>` with functions that
-borrow their parameters immutably and mutably. Note that the `data` variable is
-declared as immutable with `let data` rather than `let mut data`, yet
-`a_fn_that_mutably_borrows` is allowed to borrow the data mutably and make
-changes to the data!
+В листинге 15-14 показано, как выглядит `RefCell <T>` с функциями, которые
+заимствовать их параметры неизменно и изменчиво. Обратите внимание, что переменная
+`data` объявляется неизменной с `let data`, а не` let mut data`, но
+`a_fn_that_mutably_borrows` разрешено заимствовать данные динамически и производить
+изменения данных!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -89,7 +86,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-14: Using `RefCell<T>`, `borrow`, and
+<span class="caption">код 15-14: использование `RefCell<T>`, `borrow` и
 `borrow_mut`</span>
 
 This example prints:
@@ -99,25 +96,20 @@ a is 5
 a is 6
 ```
 
-In `main`, we’ve created a new `RefCell<i32>` containing the value 5, and stored
-in the variable `data`, declared without the `mut` keyword. We then call the
-`demo` function with an immutable reference to `data`: as far as `main` is
-concerned, `data` is immutable!
+В методе `main` мы создали экземпляр `RefCell<i32>` содержащий 5 и сохранили в него
+значение 5. Обратите внимание, что этот экземпляр мы сохранили в неизменяемую преременную.
+Далее, мы передали её функции `demo`. Обратите внимание, что аргумент функции тоже
+неизменяемая ссылка.
 
-In the `demo` function, we get an immutable reference to the value inside the
-`RefCell<i32>` by calling the `borrow` method, and we call
-`a_fn_that_immutably_borrows` with that immutable reference. More
-interestingly, we can get a *mutable* reference to the value inside the
-`RefCell<i32>` with the `borrow_mut` method, and the function
-`a_fn_that_mutably_borrows` is allowed to change the value. We can see that the
-next time we call `a_fn_that_immutably_borrows` that prints out the value, it’s
-6 instead of 5.
+В функции `demo` мы передаём неизменяемую ссылку на значение внутри `RefCell<i32>`
+посредством вызова метода `borrow` в функцию `a_fn_that_immutably_borrows`. Далее,
+что более интересно, мы передаём изменяемую ссылку на значение внутри `RefCell<i32>`
+посредством вызова метода `borrow_mut` в функцию `a_fn_that_mutably_borrows`.
 
-### Borrowing Rules are Checked at Runtime on `RefCell<T>`
+### Правила заимствования проверяются `RefCell<T>` в момент работы программы
 
-Recall from Chapter 4 that because of the borrowing rules, this code using
-regular references that tries to create two mutable borrows in the same scope
-won’t compile:
+Рассмотрим пример из Главы 4. Этот код использует ссылки, который пытается
+создать изменяемые ссылки в одной и той же области видимости (ошибка):
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -126,7 +118,7 @@ let r1 = &mut s;
 let r2 = &mut s;
 ```
 
-We’ll get this compiler error:
+Описание ошибки компиляции:
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
@@ -140,8 +132,8 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-In contrast, using `RefCell<T>` and calling `borrow_mut` twice in the same
-scope *will* compile, but it’ll panic at runtime instead. This code:
+Если же использовать `RefCell<T>` и вызвать `borrow_mut` дважды код скомпилируется,
+но в момент работы произойдет ошибка:
 
 ```rust,should_panic
 use std::cell::RefCell;
@@ -154,7 +146,7 @@ fn main() {
 }
 ```
 
-compiles but panics with the following error when we `cargo run`:
+код компилируется, но при его работе (`cargo run`) происходит ошибка:
 
 ```text
     Finished dev [unoptimized + debuginfo] target(s) in 0.83 secs
@@ -164,28 +156,27 @@ thread 'main' panicked at 'already borrowed: BorrowMutError',
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-This runtime `BorrowMutError` is similar to the compiler error: it says we’ve
-already borrowed `s` mutably once, so we’re not allowed to borrow it again. We
-aren’t getting around the borrowing rules, we’re just choosing to have Rust
-enforce them at runtime instead of compile time. You could choose to use
-`RefCell<T>` everywhere all the time, but in addition to having to type
-`RefCell` a lot, you’d find out about possible problems later (possibly in
-production rather than during development). Also, checking the borrowing rules
-while your program is running has a performance penalty.
+Ошибка времени выполнения `BorrowMutError` похожа на ошибку компиляции - сообщается,
+что мы уже заимствовали `s` один раз и нам нельзя заимствовать её снова. Мы не
+можем обойти правила заимствования во время работы. Поэтому использовать обертку
+`RefCell<T>` надо весьма аккуратно. У вас может не быть ошибок при компиляции, но
+при работе кода - ошибка случится - это весьма негативно скажется на отладке такого
+кода.
 
-### Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
+### Множественное владение изменяемыми данными при совместном использовании `Rc<T>`
+и `RefCell<T>`
 
-So why would we choose to make the tradeoffs that using `RefCell<T>` involves?
-Well, remember when we said that `Rc<T>` only lets you have an immutable
-reference to `T`? Given that `RefCell<T>` is immutable, but has interior
-mutability, we can combine `Rc<T>` and `RefCell<T>` to get a type that’s both
-reference counted and mutable. Listing 15-15 shows an example of how to do
-that, again going back to our cons list from Listing 15-5. In this example,
-instead of storing `i32` values in the cons list, we’ll be storing
-`Rc<RefCell<i32>>` values. We want to store that type so that we can have an
-owner of the value that’s not part of the list (the multiple owners
-functionality that `Rc<T>` provides), and so we can mutate the inner `i32`
-value (the interior mutability functionality that `RefCell<T>` provides):
+Итак, почему мы решили компромиссное решение использовать `RefCell <T>`?
+Ну, помните, когда мы говорили, что `Rc <T>` позволяет вам иметь неизменяемый
+ссылка на `T`? Учитывая, что `RefCell <T>` неизменен, но имеет возможность внутреннего
+изменения мы можем комбинировать `Rc<T>` и `RefCell<T>`, чтобы получить тип, который
+ссылка подсчитана и изменена. В листинге 15-15 показан пример того, как это сделать
+что, снова возвращаясь к списку наших минусов из Листинга 15-5. В этом примере,
+вместо сохранения значений `i32` в списке совпадений, мы будем хранить
+`Rc <RefCell <i32>>` значения. Мы хотим сохранить этот тип, чтобы мы могли
+иметь владельца данных, который не входит в список (несколько владельцев
+функциональность, которую предоставляет `Rc <T>`), и поэтому мы можем изменять
+внутреннее значение  `i32`(функция внутренней изменчивости, предоставляемая `RefCell <T>`):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -217,23 +208,17 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-15: Using `Rc<RefCell<i32>>` to create a
-`List` that we can mutate</span>
+<span class="caption">код 15-15: использование `Rc<RefCell<i32>>` для создания
+`List`, который мы можем изменять</span>
 
-We’re creating a value, which is an instance of `Rc<RefCell<i32>>`. We’re
-storing it in a variable named `value` because we want to be able to access it
-directly later. Then we create a `List` in `a` that has a `Cons` variant that
-holds `value`, and `value` needs to be cloned since we want `value` to also
-have ownership in addition to `a`. Then we wrap `a` in an `Rc<T>` so that we
-can create lists `b` and `c` that start differently but both refer to `a`,
-similarly to what we did in Listing 15-12.
+Мы создали экземпляр `Rc<RefCell<i32>>`. Мы сохранили его в `value`.
+Далее мы создали `List` в `a`, который содержит `Cons` . Далее, мы обернули это
+значение в `Rc<T>`, благодаря чему мы смогли создать списки `b` и `c`.
 
-Once we have the lists in `shared_list`, `b`, and `c` created, then we add 10
-to the 5 in `value` by dereferencing the `Rc<i32>` and calling `borrow_mut` on
-the `RefCell<i32>`.
+Далее, мы добавили число 10 к имеющимися значению с помощью разыменования и
+использования функции `borrow_mut`.
 
-When we print out `shared_list`, `b`, and `c`, we can see that they all have
-the modified value of 15:
+Далее мы вывели на печать `shared_list`, `b` и `c`:
 
 ```text
 shared_list after = Cons(RefCell { value: 15 }, Nil)
@@ -241,16 +226,6 @@ b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
 c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
 ```
 
-This is pretty neat! By using `RefCell<T>`, we can have an outwardly immutable
-`List`, but we can use the methods on `RefCell<T>` that provide access to its
-interior mutability to be able to modify our data when we need to. The runtime
-checks of the borrowing rules that `RefCell<T>` does protect us from data
-races, and we’ve decided that we want to trade a bit of speed for the
-flexibility in our data structures.
-
-`RefCell<T>` is not the only standard library type that provides interior
-mutability. `Cell<T>` is similar but instead of giving references to the inner
-value like `RefCell<T>` does, the value is copied in and out of the `Cell<T>`.
-`Mutex<T>` offers interior mutability that is safe to use across threads, and
-we’ll be discussing its use in the next chapter on concurrency. Check out the
-standard library docs for more details on the differences between these types.
+Помимо `RefCell<T>` существует ещё `Cell<T>`, которое копирует в и из.
+`Mutex<T>` предлагает изменяемость между потоками. Об этом мы поговорим в соответствующей
+главе.

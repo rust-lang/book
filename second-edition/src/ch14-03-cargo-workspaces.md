@@ -1,19 +1,20 @@
-## Cargo Workspaces
+## Рабочая среда Cargo
 
-In Chapter 12, we built a package that included both a binary crate and a
-library crate. You may find, as your project develops, that the library crate
-continues to get bigger and you want to split your package up further into
-multiple library crates. In this situation, Cargo has a feature called
-*workspaces* that can help manage multiple related packages that are developed
-in tandem.
+В Главе 12 вы создавали проект, который включал в себе как бинарный, так
+и библиотечный контейнеры. Возможно, вы заметили, что при увеличении проекта
+вполне естественно разделение кода на логически связанные составные части. Для
+упрощения работы над логически связанными контейнерами Cargo предоставляет инфраструктуру
+называемую *рабочим пространством* (*workspaces*).
 
-A *workspace* is a set of packages that will all share the same *Cargo.lock*
-and output directory. Let’s make a project using a workspace, using trivial
-code so we can concentrate on the structure of a workspace. We’ll have a binary
-that uses two libraries: one library that will provide an `add_one` function
-and a second library that will provide an `add_two` function. These three
-crates will all be part of the same workspace. We’ll start by creating a new
-crate for the binary:
+*Рабочее пространство* является способом группировки пакетов, которые совместно
+используют файл *Cargo.lock* и папку для хранения конечных программных продуктов
+(будь то бинарные файлы или библиотеки). Далее бы будем создавать проект используя
+возможности данного функционала. Это будет простой проект. В нём бы уделим внимание
+организации рабочего пространства.
+Итак, описание структуры. У нас есть бинарный проект, который использует библиотеки:
+одна библиотека предоставляет функцию `add_one`, а другая предоставляет функцию
+`add_two`. Эти три контейнера являются частью неявного рабочего пространства.
+Реализуем эти связи явным образом! Первое, создадим новый бинарный контейнер `adder`:
 
 ```text
 $ cargo new --bin adder
@@ -21,34 +22,31 @@ $ cargo new --bin adder
 $ cd adder
 ```
 
-We need to modify the binary package’s *Cargo.toml* and add a `[workspace]`
-section to tell Cargo the `adder` package is a workspace. Add this at the
-bottom of the file:
+Добавим в файл описания секцию `[workspace]` для того, чтобы сообщить Cargo, пакет
+является рабочим пространством:
 
 ```toml
 [workspace]
 ```
 
-Like many Cargo features, workspaces support convention over configuration: we
-don’t need to add anything more than this to *Cargo.toml* to define our
-workspace as long as we follow the convention.
+Как и многие другие опции Cargo, рабочее пространство поддерживает соглашения по
+конфигурации. Поэтому для того, чтобы проект стал рабочим пространством на достаточно
+просто добавить в файл конфигурации данную информацию.
 
 <!-- Below -- any crates what depends on, specifically? The program? -->
 <!-- They're all programs. We mean the top-level crate in the workspace here,
 I've tried to clarify. /Carol -->
 
-### Specifying Workspace Dependencies
+### Определение взаимосвязей в рабочем пространстве
 
-The workspace convention says any crates in any subdirectories that the
-top-level crate depends on are part of the workspace. Any crate, whether in a
-workspace or not, can specify that it has a dependency on a crate in a local
-directory by using the `path` attribute on the dependency specification in
-*Cargo.toml*. If a crate has the `[workspace]` key and we specify path
-dependencies where the paths are subdirectories of the crate’s directory, those
-dependent crates will be considered part of the workspace. Let’s specify in the
-*Cargo.toml* for the top-level `adder` crate that it will have a dependency on
-an `add-one` crate that will be in the `add-one` subdirectory, by changing
-*Cargo.toml* to look like this:
+Все контейнеры в поддиректориях от которых зависит контейнер верхнего уровня являются
+частью рабочего пространства. Любые контейнеры, независимо от их места хранения,
+могут добавлять в зависимости от других контейнеров находящихся в локальных директориях
+с помощью атрибута `path` в файле *Cargo.toml*. Если описание контейнера содержит
+ключ `[workspace]` и имеет описания зависимостей, где пути к зависящим контейнерам
+являются поддиректориями, все эти контейнеры являются частью *рабочего пространства*.
+Давайте определим в файле *Cargo.toml* контейнера `adder`, что он имеет зависимость
+от контейнера `add-one`, которых расположен в поддиректории:
 
 <!-- Above, what is the path dependency actually doing here, can you fill out
 the paragraph above? -->
@@ -59,36 +57,37 @@ the paragraph above? -->
 add-one = { path = "add-one" }
 ```
 
-If we add dependencies to *Cargo.toml* that don’t have a `path` specified,
-those dependencies will be normal dependencies that aren’t in this workspace
-and are assumed to come from Crates.io.
+Если же мы добавим описание зависимости в файл *Cargo.toml*, которое не будет
+содержать `path`, такая зависимость будет считаться внешней зависимостью, данные о
+которой будут запрашиваться из репозитория Crates.io.
 
-### Creating the Second Crate in the Workspace
+### Добавление второго контейнера в рабочую среду
 
 <!-- You can see I'm adding headings, here, trying to add some more navigable
 structure -- can you improve these? I'm not sure mine are accurate -->
 <!-- Yep! /Carol -->
 
-Next, while in the `adder` directory, generate an `add-one` crate:
+Далее, после того как мы описали путь к контейнеру, мы создадим его с помощью
+команды:
 
 ```text
 $ cargo new add-one
      Created library `add-one` project
 ```
 
-Your `adder` directory should now have these directories and files:
+Файловая структура папки `adder` теперь будет иметь следующий вид:
 
 ```text
 ├── Cargo.toml
 ├── add-one
-│   ├── Cargo.toml
-│   └── src
-│       └── lib.rs
+│   ├── Cargo.toml
+│   └── src
+│       └── lib.rs
 └── src
     └── main.rs
 ```
 
-In *add-one/src/lib.rs*, let’s add an `add_one` function:
+В код библиотеки *add-one/src/lib.rs* добавим описание функции `add_one`:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
@@ -101,9 +100,10 @@ pub fn add_one(x: i32) -> i32 {
 <!-- below -- Where are we adding the extern crate line? -->
 <!-- at the top, where all the extern crate lines go and as illustrated by the listing /Carol -->
 
-Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
-the file to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in Listing 14-12:
+Далее, откроем файл *src/main.rs* контейнера `adder` и добавим строку кода `extern crate`
+в верхней строчке файла исходного кода для того, чтобы добавить возможность использовать
+функционал контейнера `add-one` в исходном коде. Далее, изменим код функции `main`.
+Будем использовать функцию импортированного контейнера (14-12):
 
 ```rust,ignore
 extern crate add_one;
@@ -114,10 +114,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 14-12: Using the `add-one` library crate from the
-`adder` crate</span>
+<span class="caption">код 14-12: использование функционала библиотечного контейнера
+`add-one` в исходном коде контейнера `adder`</span>
 
-Let’s build the `adder` crate by running `cargo build` in the *adder* directory!
+Создадим объектный код контейнера `adder` с помощью команды `cargo build` внутри
+папки *adder*.
 
 ```text
 $ cargo build
@@ -126,30 +127,31 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.68 secs
 ```
 
-Note that this builds both the `adder` crate and the `add-one` crate in
-*adder/add-one*. Now your *adder* directory should have these files:
+С помощью данной команды мы создали объектный код контейнеров `adder` и `add-one`.
+Теперь структура каталога `adder` выглядит следующим образом:
 
 ```text
 ├── Cargo.lock
 ├── Cargo.toml
 ├── add-one
-│   ├── Cargo.toml
-│   └── src
-│       └── lib.rs
+│   ├── Cargo.toml
+│   └── src
+│       └── lib.rs
 ├── src
-│   └── main.rs
+│   └── main.rs
 └── target
 ```
 
-The workspace has one *target* directory at the top level; *add-one* doesn’t
-have its own *target* directory. Even if we go into the `add-one` directory and
-run `cargo build`, the compiled artifacts end up in *adder/target* rather than
-*adder/add-one/target*. The crates in a workspace depend on each other. If each
-crate had its own *target* directory, each crate in the workspace would have to
-recompile each other crate in the workspace in order to have the artifacts in
-its own *target* directory. By sharing one *target* directory, the crates in
-the workspace can avoid rebuilding the other crates in the workspace more than
-necessary.
+Рабочее пространство имеет одну директорию для хранения объектных файлов (*target*
+directory). Обратите внимание, что контейнер *add-one* не имеет своей собственной
+директории для хранения объектных файлов (*target* directory). Даже если вы перейдёте
+в папку *adder/add-one/target* и запустим команду `cargo build`, то данный пакет
+будем всё равно скомпилирован в директорию *adder/target*. Контейнеры в рабочем
+пространстве могут быть связаны между собой. Если, по какой-то причине, подчиненному
+контейнеру необходимо иметь свою директорию для хранения объектных файлов, каждый
+то контейнеры, которые зависят от него также будут перекомпилированы. Это источник
+ошибок и множества проблем. Поэтому для упрощения в рабочем пространстве есть только
+одна одна директория для хранения объектных файлов.
 
 <!-- Above -- I have no idea what this means for our project here, can you put
 it in more practical terms, or otherwise maybe just explain what this means for
@@ -159,19 +161,14 @@ added more explanation for the Cargo.lock in the next section, since the
 Cargo.lock advantages aren't as visible until you start adding dependencies on
 external crates. What do you think? /Carol -->
 
-#### Depending on an External Crate in a Workspace
+#### Зависимость от внешних контейнеров в рабочей среде
 
-Also notice the workspace only has one *Cargo.lock*, rather than having a
-top-level *Cargo.lock* and *add-one/Cargo.lock*. This ensures that all crates
-are using the same version of all dependencies. If we add the `rand` crate to
-both *Cargo.toml* and *add-one/Cargo.toml*, Cargo will resolve both of those to
-one version of `rand` and record that in the one *Cargo.lock*. Making all
-crates in the workspace use the same dependencies means the crates in the
-workspace will always be compatible with each other. Let’s try this out now.
+Обратите внимание, что рабочая в рабочей среде есть только один файл *Cargo.lock*
+на все имеющиеся контейнеры. В данном примере мы предполагаем, что все контейнеры
+используют одни и те же зависимости, которые описаны в файле *Cargo.toml*. Также
+такой способ обеспечивает совместимость всем зависимых контейнеров.
 
-Let’s add the `rand` crate to the `[dependencies]` section in
-*add-one/Cargo.toml* in order to be able to use the `rand` crate in the
-`add-one` crate:
+Добавим зависимость `rand` в секцию `[dependencies]` файла *add-one/Cargo.toml*::
 
 <span class="filename">Filename: add-one/Cargo.toml</span>
 
@@ -181,9 +178,9 @@ Let’s add the `rand` crate to the `[dependencies]` section in
 rand = "0.3.14"
 ```
 
-We can now add `extern crate rand;` to *add-one/src/lib.rs*, and building the
-whole workspace by running `cargo build` in the *adder* directory will bring in
-and compile the `rand` crate:
+Далее, мы добавим код `extern crate rand;` в файл *add-one/src/lib.rs* и соберем
+объектные файлы с помощью команды `cargo build` в директории *adder*. Обратите
+внимание, что в этой директории будет скомпилирован контейнер `rand`:
 
 ```text
 $ cargo build
@@ -195,12 +192,11 @@ $ cargo build
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
-
-The top level *Cargo.lock* now contains information about `add-one`’s
-dependency on `rand`. However, even though `rand` is used somewhere in the
-workspace, we can’t use it in other crates in the workspace unless we add
-`rand` to their *Cargo.toml* as well. If we add `extern crate rand;` to
-*src/main.rs* for the top level `adder` crate, for example, we’ll get an error:
+Файл *Cargo.lock* теперь содержит информацию о зависимости контейнера `add-one`
+от `rand`. Хотя `rand` используется рабочем пространстве, вы не можете его
+использовать без явного указания на него в зависимостях контейнера. Например,
+если вы добавите строку кода `extern crate rand;` в файл исходного кода контейнера
+`adder`, то код перестанет компилироваться:
 
 ```text
 $ cargo build
@@ -212,19 +208,16 @@ error[E0463]: can't find crate for `rand`
   | ^^^^^^^^^^^^^^^^^^^ can't find crate
 ```
 
-To fix this, edit *Cargo.toml* for the top level `adder` crate and indicate
-that `rand` is a dependency for that crate as well. Building the `adder` crate
-will add `rand` to the list of dependencies for `adder` in *Cargo.lock*, but no
-additional copies of `rand` will be downloaded. Cargo has ensured for us that
-any crate in the workspace using the `rand` crate will be using the same
-version. Using the same version of `rand` across the workspace saves space
-since we won’t have multiple copies and ensures that the crates in the
-workspace will be compatible with each other.
+Для исправления этой ошибки добавте ссылку на него в файл *Cargo.toml*. После
+запустите команду `cargo build` ещё раз. Описание зависимостей изменится в файле
+*Cargo.lock*, но дополнительных копий контейнера `rand` не будет скачано. Использование
+одной и той же копии зависимости внутри рабочего пространства экономит и упрощает
+хранение контейнеров-зависимостей.
 
-#### Adding a Test to a Workspace
+#### Добавление теста в рабочее пространство
 
-For another enhancement, let’s add a test of the `add_one::add_one` function
-within the `add_one` crate:
+В целях дальнейших улучшений нашего проекта, добавим тест функции `add_one::add_one`
+в контейнере `add_one`:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
@@ -244,7 +237,7 @@ mod tests {
 }
 ```
 
-Now run `cargo test` in the top-level *adder* directory:
+Выполните команду `cargo test` в рабочем пространстве *adder*:
 
 ```text
 $ cargo test
@@ -257,10 +250,9 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Wait a second, zero tests? We just added one! If we look at the output, we can
-see that `cargo test` in a workspace only runs tests for the top level crate.
-To run tests for all of the crates in the workspace, we need to pass the
-`--all` flag:
+Как же так? Нет тестов? Но у нас же есть один? Обратите внимание, что тесты были
+выполнены только дня проекта модуля рабочего пространства. Для того, чтобы выполнить
+все тесты используйте опцию (флаг) `--all`:
 
 ```text
 $ cargo test --all
@@ -285,10 +277,8 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-When passing `--all`, `cargo test` will run the tests for all of the crates in
-the workspace. We can also choose to run tests for one particular crate in a
-workspace from the top level directory by using the `-p` flag and specifying
-the name of the crate we want to test:
+Для того, чтобы запустить тесты определённого контейнера необходимо использовать
+флаг `-p` и имя контейнера:
 
 ```text
 $ cargo test -p add-one
@@ -307,22 +297,16 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-This output shows `cargo test` only ran the tests for the `add-one` crate and
-didn’t run the `adder` crate tests.
+Этот вывод информации сообщил только о тестах в контейнере `add-one`.
 
-If you choose to publish the crates in the workspace to crates.io, each crate
-in the workspace will get published separately. The `cargo publish` command
-does not have an `--all` flag or a `-p` flag, so it is necessary to change to
-each crate’s directory and run `cargo publish` on each crate in the workspace
-in order to publish them.
+Если вы захотите публиковать контейнеры из данной рабочей среды на сайте crates.io,
+каждый контейнер будет публиковаться отдельно. Команда `cargo publish` не имеет
+уточняющих флагов, поэтому должна использоваться только в том контейнере, который
+нужно опубликовать.
 
 <!-- What does that mean, we have to publish them all one at a time?-->
 <!-- Yep, we've tried to clarify /Carol -->
 
-Now try adding an `add-two` crate to this workspace in a similar way as the
-`add-one` crate for some more practice!
+Сейчас создаёте ещё один контейнер в рабочей среде - `add-two`.
 
-As your project grows, consider using a workspace: smaller components are
-easier to understand individually than one big blob of code. Keeping the crates
-in a workspace can make coordination among them easier if they work together
-and are often changed at the same time.
+Использование рабочей среды упрощает разработку многокомпонентных контейнеров.

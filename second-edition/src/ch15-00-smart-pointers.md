@@ -1,41 +1,40 @@
-# Smart Pointers
+# Умные указатели (Smart Pointers)
 
-*Pointer* is a generic programming term for something that refers to a location
-that stores some other data. We learned about Rust’s references in Chapter 4;
-they’re a plain sort of pointer indicated by the `&` symbol and borrow the
-value that they point to. *Smart pointers* are data structures that act like a
-pointer, but also have additional metadata and capabilities, such as reference
-counting. The smart pointer pattern originated in C++. In Rust, an additional
-difference between plain references and smart pointers is that references are a
-kind of pointer that only borrow data; by contrast, in many cases, smart
-pointers *own* the data that they point to.
+Указатели (*Pointer*) - это обобщенный термин в программировании, который обозначает
+что-то что ссылается на место, где хранятся какие-то данные. Мы уже изучали ссылки
+в Главе 4. Это было что-то похожее на ссылки, индикатором которого был `&` символ
+и это опция осуществляла заимствование. Умные указатели - это структуры данных,
+которые ведут себя также как и указатели, но дополнительно к этому имеют метаданные
+и способности (такие как счётчик ссылок). Шаблон "умные указатели" бы заимствован
+из С++. В Rust, ссылки это подобие указателей, которые заимствуют данные. Умные
+указатели в свою очередь *владеют* данными, на которые они ссылаются.
 
-We’ve actually already encountered a few smart pointers in this book, even
-though we didn’t call them that by name at the time. For example, in a certain
-sense, `String` and `Vec<T>` from Chapter 8 are both smart pointers. They own
-some memory and allow you to manipulate it, and have metadata (like their
-capacity) and extra capabilities or guarantees (`String` data will always be
-valid UTF-8). The characteristics that distinguish a smart pointer from an
-ordinary struct are that smart pointers implement the `Deref` and `Drop`
-traits, and in this chapter we’ll be discussing both of those traits and why
-they’re important to smart pointers.
+Хотя мы не упоминали об этом, вы уже работали с некоторыми умными указателями в
+Rust. До этой главы (мы не хотели перегружать изложение материла терминами) мы
+умалчивали о их истинной природе. К примеру, в определенном смысле `String` и
+`Vec<T>` из Главы 8 это всё умные указатели. Они владеют памятью и позволяют
+манипулировать ей, они имеют метаданные (ёмкость) и дополнительные возможности и
+предоставляют гарантии (например всегда содержать действительные UTF-8 данные).
+Характеристиками, по которым отличают умные указатели от структур является то,
+что умные указатели реализуют типажи `Deref` и `Drop`. В этой главе мы расскажем о
+этих типажах и почему они важны для умных указателей.
 
-Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won’t cover every smart pointer that exists.
-Many libraries have their own and you may write some yourself. The ones we
-cover here are the most common ones from the standard library:
+Несмотря на то, что шаблон "умные указатели" это часто используемый шаблон в Rust,
+в этой главе не будем рассказывать о всех существующих в стандартной библиотеке
+подобных конструкциях. Множество библиотек имеют свои умные указатели и вы также
+сможете создать свои. Мы только остановимся на самых часто используемых:
 
-* `Box<T>`, for allocating values on the heap
-* `Rc<T>`, a reference counted type so data can have multiple owners
-* `RefCell<T>`, which isn’t a smart pointer itself, but manages access to the
-  smart pointers `Ref` and `RefMut` to enforce the borrowing rules at runtime
-  instead of compile time
+* `Box<T>` для получения простраства для данных в куче (памяти)
+* `Rc<T>` тип счётчик ссылок, такой что данные могу иметь несколько владельцев
+* `RefCell<T>` этот тип не является умным указателем как таковым, но он управляет
+доступом к умным указателям `Ref` и `RefMut` для того, чтобы применить правила
+владения в момент работы, а не в момент компиляции
 
-Along the way, we’ll also cover:
+Попутно мы также рассмотрим:
 
-* The *interior mutability* pattern where an immutable type exposes an API for
-  mutating an interior value, and the borrowing rules apply at runtime instead
-  of compile time
-* Reference cycles, how they can leak memory, and how to prevent them
+* Шаблон *внутренняя изменчивость* (*interior mutability*), в котором неизменяемый
+  тип предоставляет API для изменяемого внутреннего типа значение. Кроме того правила
+  заимствования применяются в момент работы программы, а не в момент компиляции
+* Зацикленные ссылки. Как они могут привести к утечками памяти и как этого избежать
 
-Let’s dive in!
+Приступим!

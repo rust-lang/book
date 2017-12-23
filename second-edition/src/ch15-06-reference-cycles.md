@@ -1,25 +1,21 @@
-## Creating Reference Cycles and Leaking Memory is Safe
+## Защита от создания ссылочного зацикливания и утечки памяти
 
-Rust makes a number of guarantees that we’ve talked about, for example that
-we’ll never have a null value, and data races will be disallowed at compile
-time. Rust’s memory safety guarantees make it more difficult to create memory
-that never gets cleaned up, which is known as a *memory leak*. Rust does not
-make memory leaks *impossible*, however: preventing memory leaks is *not* one
-of Rust’s guarantees. In other words, memory leaks are memory safe.
+Компилятор обеспечивает множеством различных защит от ошибок: от недействительных
+ссылок, эфект гонки. Также весьма удобна система обеспечения очистки ресурсов памяти
+(что также называют утечкой памяти). В тоже время, компилятор не может гарантировать,
+что это невозможно. Иными словами утечка памяти может быть безопасной.
 
-By using `Rc<T>` and `RefCell<T>`, it is possible to create cycles of
-references where items refer to each other in a cycle. This is bad because the
-reference count of each item in the cycle will never reach 0, and the values
-will never be dropped. Let’s take a look at how that might happen and how to
-prevent it.
+Используя умные указатели `Rc<T>` и `RefCell<T>` возможно создать цепочки ссылок,
+где элементы циклично ссылаются друг на друга. Это плохая ситуация, т.к. количество
+ссылок каждого элемента никогда не достигнет 0 и, следовательно, постоянно будет
+находится в памяти. Давайте разберёмся, как это происходит и постараемся найти
+пути предотвращения.
 
-In Listing 15-16, we’re going to use another variation of the `List` definition
-from Listing 15-5. We’re going back to storing an `i32` value as the first
-element in the `Cons` variant. The second element in the `Cons` variant is now
-`RefCell<Rc<List>>`: instead of being able to modify the `i32` value this time,
-we want to be able to modify which `List` a `Cons` variant is pointing to.
-We’ve also added a `tail` method to make it convenient for us to access the
-second item, if we have a `Cons` variant:
+В примере кода 15-16 мы будем использовать другой вариант определения `List`.
+Мы будем снова сохранять значение `i32` в первом элементе. Второй элемент теперь
+будет `RefCell<Rc<List>>`. Вместо изменения значения первого элемента мы будем
+изменять второй. Мы также добавим метод `tail` для удобного доступак к второму
+элементу:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -40,14 +36,13 @@ impl List {
 }
 ```
 
-<span class="caption">Listing 15-16: A cons list definition that holds a
-`RefCell` so that we can modify what a `Cons` variant is referring to</span>
+<span class="caption">код 15-16: определение списка сons, который содержит `RefCell`.
+Мы можетм изменять `Cons` значение, на которое элемент ссылается</span>
 
-Next, in Listing 15-17, we’re going to create a `List` value in the variable
-`a` that initially is a list of `5, Nil`. Then we’ll create a `List` value in
-the variable `b` that is a list of the value 10 and then points to the list in
-`a`. Finally, we’ll modify `a` so that it points to `b` instead of `Nil`, which
-will then create a cycle:
+Далее, в коде 15-17, мы создадим экземпляр `List` и сохраним его в переменную `a`,
+которая изначально будет иметь значения `5, Nil`. Далее, мы создаём переменную
+`b` содержащую 10 и ссылку на `a`. И в конце мы изменяем `a` так, что она ссылается
+на `b` вместо `Nil`. Так мы создаём зацикливание ссылок:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -97,34 +92,24 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-17: Creating a reference cycle of two `List`
-values pointing to each other</span>
+<span class="caption">код 15-17: создание циклической ссылки</span>
 
-We use the `tail` method to get a reference to the `RefCell` in `a`, which we
-put in the variable `link`. Then we use the `borrow_mut` method on the
-`RefCell` to change the value inside from an `Rc` that holds a `Nil` value to
-the `Rc` in `b`. We’ve created a reference cycle that looks like Figure 15-18:
+Мы использовали метод `tail` для получения ссылки на `RefCell` в `a`, которую мы
+поместили в переменную `link`. Далее, мы использовали метод `borrow_mut` для получения
+ссылки на `RefCell` в для изменения экземпляра `Rc`, который содержал `Nil` на
+`Rc` в `b`. В результате мы создали следующее (15-18):
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 15-18: A reference cycle of lists `a` and `b`
 pointing to each other</span>
 
-If you uncomment the last `println!`, Rust will try and print this cycle out
-with `a` pointing to `b` pointing to `a` and so forth until it overflows the
-stack.
+Если вы раскоментируете посследнюю строку с вызовом макроса `println!` вы получите
+ошибку переполнения (overflow).
 
-Looking at the results of the `println!` calls before the last one, we’ll see
-that the reference count of both `a` and `b` are 2 after we change `a` to point
-to `b`. At the end of `main`, Rust will try and drop `b` first, which will
-decrease the count of the `Rc` by one. However, because `a` is still
-referencing that `Rc`, its count is 1 rather than 0, so the memory the `Rc` has
-on the heap won’t be dropped. It’ll just sit there with a count of one,
-forever. In this specific case, the program ends right away, so it’s not a
-problem, but in a more complex program that allocates lots of memory in a cycle
-and holds onto it for a long time, this would be a problem. The program would
-be using more memory than it needs to be, and might overwhelm the system and
-cause it to run out of memory available to use.
+Посмотрите на результат вывода на консоль! Защита сработала - ничего страшного не
+случилось, но это говорит о более сложной проблема - программа используем больше
+памяти, чем ей нужно.
 
 Now, as you can see, creating reference cycles is difficult and inconvenient in
 Rust. But it’s not impossible: preventing memory leaks in the form of reference
@@ -142,28 +127,17 @@ example. If one of the directions is expressing ownership and the other isn’t,
 one way of being able to model the relationship of the data without creating
 reference cycles and memory leaks is using `Weak<T>`. Let’s explore that next!
 
-### Prevent Reference Cycles: Turn an `Rc<T>` into a `Weak<T>`
+### Предотвращение циклических ссылок: замена умного указателя `Rc<T>` на `Weak<T>`
 
-The Rust standard library provides `Weak<T>`, a smart pointer type for use in
-situations that have cycles of references but only one direction expresses
-ownership. We’ve been showing how cloning an `Rc<T>` increases the
-`strong_count` of references; `Weak<T>` is a way to reference an `Rc<T>` that
-does not increment the `strong_count`: instead it increments the `weak_count`
-of references to an `Rc`. When an `Rc` goes out of scope, the inner value will
-get dropped if the `strong_count` is 0, even if the `weak_count` is not 0. To
-be able to get the value from a `Weak<T>`, we first have to upgrade it to an
-`Option<Rc<T>>` by using the `upgrade` method. The result of upgrading a
-`Weak<T>` will be `Some` if the `Rc` value has not been dropped yet, and `None`
-if the `Rc` value has been dropped. Because `upgrade` returns an `Option`, we
-know Rust will make sure we handle both the `Some` case and the `None` case and
-we won’t be trying to use an invalid pointer.
+Стандартная библиотека Rust предоставляет умный указатель `Weak<T>`. Его необходимо
+использовать для предотвращения циклических ссылок. Эта проблема решается путем
+однапраленного владения. Мы уже показывали, как клонирования `Rc<T>` увеличивает
+`strong_count` ссылки. `Weak<T>` позволяет не увеличивать `strong_count`, а увеличивать
+`weak_count` на `Rc`. Когда `Rc` выходит за область видимости внутреннее значение
+удаляется если `strong_count` = 0. Для того чтобы получить значение из `Weak<T>`
+прежде всего, нам необходимо обновить его с помощью метода `upgrage`. Результатом
+будет `Some` или `None`.
 
-Instead of the list in Listing 15-17 where each item knows only about the
-next item, let’s say we want a tree where the items know about their children
-items *and* their parent items.
-
-Let’s start just with a struct named `Node` that holds its own `i32` value as
-well as references to its children `Node` values:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -177,14 +151,12 @@ struct Node {
     children: RefCell<Vec<Rc<Node>>>,
 }
 ```
-
-We want to be able to have a `Node` own its children, and we also want to be
-able to have variables own each node so we can access them directly. That’s why
-the items in the `Vec` are `Rc<Node>` values. We want to be able to modify what
-nodes are another node’s children, so that’s why we have a `RefCell` in
-`children` around the `Vec`. In Listing 15-19, let’s create one instance of
-`Node` named `leaf` with the value 3 and no children, and another instance
-named `branch` with the value 5 and `leaf` as one of its children:
+Мы хотим, чтобы `Node` мог иметь своих собственных подчиненных узлов и хотим иметь
+возможность непосредственного доступа к ним. Поэтому в `Vec` элементы `Rc<Node>`.
+Мы также хотим иметь возможность изменять узлы и их подчёненность, поэтому `Vec`
+обёрнут умным указателем `RefCell`. В примере 15-19 мы создадим экземпляр `Node`
+с именем `leaf`с значением 3 и без подчиненых узлов и другой экземпляр `branch`
+со значением 5 и `leaf`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -202,9 +174,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-19: Creating a `leaf` node and a `branch` node
-where `branch` has `leaf` as one of its children but `leaf` has no reference to
-`branch`</span>
+<span class="caption">Listing 15-19: Создание узла `leaf` и`branch`, где `branch`
+родитель `leaf`, но `leaf` не имеет ссылки на `branch`</span>
 
 The `Node` in `leaf` now has two owners: `leaf` and `branch`, since we clone
 the `Rc` in `leaf` and store that in `branch`. The `Node` in `branch` knows
@@ -377,25 +348,25 @@ a `Weak<T>` reference in the definition of `Node`, we’re able to have parent
 nodes point to child nodes and vice versa without creating a reference cycle
 and memory leaks.
 
-## Summary
+## Итоги
 
-We’ve now covered how you can use different kinds of smart pointers to choose
-different guarantees and tradeoffs than those Rust makes with regular
-references. `Box<T>` has a known size and points to data allocated on the heap.
-`Rc<T>` keeps track of the number of references to data on the heap so that
-data can have multiple owners. `RefCell<T>` with its interior mutability gives
-us a type that can be used where we need an immutable type, and enforces the
-borrowing rules at runtime instead of at compile time.
+Мы рассмотрели, как вы можете использовать различные типы умных указателей для выбора
+различных гарантий и компромиссов, в отличии от обычных ссылок.
+`Box <T>` имеет известный размер и указывает на данные, выделенные в куче.
+`Rc <T>` отслеживает количество ссылок на данные в куче, так что
+данные могут иметь несколько владельцев.
+`RefCell <T>` с его внутренней изменчивостью дает нам тип, который может использоваться
+там, где нам нужен неизменный тип, и применяет правила заимствования во время
+выполнения, а не во время компиляции.
 
-We’ve also discussed the `Deref` and `Drop` traits that enable a lot of smart
-pointers’ functionality. We explored how it’s possible to create a reference
-cycle that would cause a memory leak, and how to prevent reference cycles by
-using `Weak<T>`.
+Мы также обсудили типажи `Deref` и` Drop`, которые предоставляют функционал умных
+указателей. Мы исследовали, как можно создать циклические ссылки, которые могут
+вызвать утечку памяти, и как это предотвратить используя `Weak <T>`.
 
-If this chapter has piqued your interest and you now want to implement your own
-smart pointers, check out [The Nomicon] for even more useful information.
+Если эта глава заинтересовала вас, и теперь вы хотите реализовать свои собственные
+умные указатели, проверьте [The Nomicon] чтобы узнать от этом функционале подробнее.
 
 [The Nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
-Next, let’s talk about concurrency in Rust. We’ll even learn about a few new
-smart pointers that can help us with it.
+Далее, давайте поговорим о параллелизме в Rust. Мы даже узнаем о нескольких новых
+умных указателях, которые могут помочь нам в этом.

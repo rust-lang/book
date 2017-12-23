@@ -1,64 +1,61 @@
-## Using Threads to Run Code Simultaneously
+## Использование потоков для запуска кода параллельно
 
-In most operating systems in use today, when your program executes, the context
-in which the operating system runs your code is called a *process*. The
-operating system runs many processes, and the operating system managing these
-processes is what lets multiple programs execute at the same time on your
-computer.
+В большинстве современных операционных систем, выполнения кода программы называют
+*процессом*. Операционная система одновременно выполняет и управляет множеством
+процессов.
 
-We can take the idea of processes each running a program down one level of
-abstraction: your program can also have independent parts that run
-simultaneously within the context of your program. The feature that enables
-this functionality is called *threads*.
+Для упрощения работы с процессам вводится логическое понятие *потока*.
 
-Splitting up the computation your program needs to do into multiple threads can
-improve performance, since the program will be doing multiple things at the
-same time. Programming with threads can add complexity, however. Since threads
-run simultaneously, there’s no inherent guarantee about the order in which the
-parts of your code on different threads will run. This can lead to race
-conditions where threads are accessing data or resources in an inconsistent
-order, deadlocks where two threads both prevent each other from continuing, or
-bugs that only happen in certain situations that are hard to reproduce
-reliably. Rust lessens the effect of these and other downsides of using
-threads, but programming in a multithreaded context still takes thought and
-code structured differently than for programs only expected to run in a single
-thread.
+Разделение вычислений, которые ваша программа должна выполнять в нескольких потоках,
+может повысить производительность, поскольку программа будет выполнять несколько
+действий в в то же время. Однако программирование с помощью потоков может добавить
+сложностей. Поскольку потоки выполняются одновременно, нет никакой гарантии
+относительно порядка, в котором будут выполняться части вашего кода в разных потоках.
+Это может привести к гонке условия, при которых потоки получают доступ к данным
+или ресурсам в непоследовательном порядке; взаимоблокировкам, когда два потока
+предотвращают продолжение друг друга или ошибки, которые происходят только в определенных
+ситуациях, которые трудно воспроизвести надежно. Rust уменьшает влияние этих и
+других недостатков использования потоков, но программирование в многопоточном
+контексте все еще требует вдумчивости и код таких программ структурирован по-другому,
+чем для однопотоковых программ.
 
-There are a few different ways that programming languages implement threads.
-Many operating systems provide an API for creating new threads. In addition,
-many programming languages provide their own special implementation of threads.
-Programming language provided threads are sometimes called *lightweight* or
-*green* threads. These languages take a number of green threads and execute
-them in the context of a different number of operating system threads. For this
-reason, the model where a language calls the operating system APIs to create
-threads is sometimes called *1:1*, one OS thread per one language thread. The
-green threaded model is called the *M:N* model, `M` green threads per `N` OS
-threads, where `M` and `N` are not necessarily the same number.
+Существует несколько разных способов, которыми языки программирования реализуют потоки.
+Многие операционные системы предоставляют API для создания новых потоков. К тому же,
+многие языки программирования предоставляют собственную специальную реализацию потоков.
+Язык программирования, предоставляемые потоки, иногда называет *легким* или
+*зеленые* потоки. Эти языки принимают несколько таких зеленых потоков и выполняют
+их в контексте различного количества потоков операционной системы. По этой причине,
+модель, в которой язык вызывает API-интерфейсы операционной системы для создания
+потоки иногда называются *1:1*, один поток ОС для одного языкового потока.
+Модель зеленых потоков называется *M:N* модель, «M» зеленых потоков на `N` ОС
+потоков, где `M` и` N` не обязательно совпадают.
 
-Each model has its own advantages and tradeoffs. The tradeoff that’s most
-important to Rust is runtime support. *Runtime* is a confusing term; it can
-have different meaning in different contexts. Here, we mean some code included
-by the language in every binary. For some languages, this code is large, and
-for others, this code is small. Colloquially, “no runtime” is often what people
-will say when they mean “small runtime”, since every non-assembly language has
-some amount of runtime. Smaller runtimes have fewer features but have the
-advantage of resulting in smaller binaries. Smaller binaries make it easier to
-combine the language with other languages in more contexts. While many
-languages are okay with increasing the runtime in exchange for more features,
-Rust needs to have nearly no runtime, and cannot compromise on being able to
-call into C in order to maintain performance.
+Каждая модель имеет свои преимущества и недостатки. Компромисс, который больше всего
+важен значение для Rust - это поддержка времени выполнения. *Runtime* - запутанный
+термин; он может иметь разное значение в разных контекстах. Здесь мы подразумеваем
+некоторый код, включенный в каждый двоичный формат. Для некоторых языков этот код
+большой, для других этот код невелик. Между собой, в обиходе программистов, когда
+говорят «без времени исполнения» часто бывает имеют ввиду, «небольшое время выполнения».
+Любой язык, не являющийся ассемблером, имеет некоторое количество времени выполнения.
+Языки с малым бинарным кодом имеют меньше возможностей, но в результате это приводит
+к меньшим двоичным файлам. Меньшие двоичные файлы упрощают объединение языка с другими
+языками в других контекстах. Многие языки увеличивают двоичный файл в обмен на
+дополнительные функции. Rust стремиться не использовать двоичные файлы.
 
-The green threading model is a feature that requires a larger language runtime
-in order to manage the threads. As such, the Rust standard library only
-provides an implementation of 1:1 threading. Because Rust is such a low-level
-language, there are crates that implement M:N threading if you would rather
-trade overhead for aspects such as more control over which threads run when and
-lower costs of context switching, for example.
+Лёгкие потоки предполагают использование большие двоичные файлы, которые включают
+в себе механизмы управления потоками. Поэтому Rust предоставляет модель 1:1.
+Т.к. Rust - это низкоуровневый язык программирования, существуют решения позволяющие
+реализовать N:M потоковые модели.
 
-Now that we’ve defined what threads are in Rust, let’s explore how to use the
-thread-related API that the standard library provides for us.
+Теперь, когда мы определили, какие типы потоков использует Rust, давайте рассмотрим,
+как использовать связанных с потоками API в стандартной библиотеке.
 
-### Creating a New Thread with `spawn`
+### Создание нового поток с помощью  `spawn`
+
+Чтобы создать новый поток, мы вызываем функцию `thread::spawn` и передаем ему
+замыкание (мы говорили о замыканиях в главе 13), содержащий код, который мы хотим
+запускать в новом потоке. Пример в листинге 16-1 печатает некоторый текст из
+нового потока и другой текст из основного потока:
 
 To create a new thread, we call the `thread::spawn` function and pass it a
 closure (we talked about closures in Chapter 13), containing the code we want
@@ -83,12 +80,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-1: Creating a new thread to print one thing
-while the main thread is printing something else</span>
+<span class="caption">код 16-1: создание нового потока для печати в отдельном
+потоке чего-либо во время печати в главном потоке</span>
 
-Note that the way this function is written, when the main thread ends, it will
-stop the new thread too. The output from this program might be a little
-different every time, but it will look similar to this:
+Обратите внимание, что когда главный поток прекратит работу, в новом потоке также
+прекратится печать. Вывод может быть различным при каждом запуске программы:
 
 ```text
 hi number 1 from the main thread!
@@ -102,21 +98,18 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The threads will probably take turns, but that’s not guaranteed. In this run,
-the main thread printed first, even though the print statement from the spawned
-thread appears first in the code we wrote. And even though we told the spawned
-thread to print until `i` is 9, it only got to 5 before the main thread shut
-down. If you always only see one thread, or if you don’t see any overlap, try
-increasing the numbers in the ranges to create more opportunities for a thread
-to take a break and give the other thread a turn.
+Потоки, вероятно, по очереди будут работать, но это не гарантировано. В этом примере,
+основной поток, напечатает первым, хотя в коде печать в коде будет объявлена раньше.
+И хотя мы сказали, что создали поток для печати `i` до 9, он только напечатает до 5,
+т.е. до закрытия основного потока. Если вы всегда видите работу только один потока
+или если вы не видите перекрытия, попробуйте увеличивая число в диапазонах, чтобы
+создать больше возможностей для потока сделать перерыв и дать другому потоку поворот.
 
-#### Waiting for All Threads to Finish Using `join` Handles
+#### Ожидание окончания работы всех потоков используя `join`
 
-Not only does the code in Listing 16-1 not allow the spawned thread to finish
-most of the time since the main thread ends before the spawned thread is done,
-there’s actually no guarantee that the spawned thread will get to run at all! We
-can fix this by saving the return value of `thread::spawn`, which is a
-`JoinHandle`. That looks like Listing 16-2:
+Не только код в листинге 16-1 не позволяет завершить запущенный поток. Нет никаких
+гарантий, что потом может быть запущен. Для решения этой задачи используется
+функция `thread :: spawn` и возвращаемому значению `JoinHandle`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -138,14 +131,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
-to guarantee the thread is run to completion</span>
+<span class="caption">код 16-2: сохранение значения `JoinHandle` из `thread::spawn`
+для гарантированного ожидания конца работы потока</span>
 
-A `JoinHandle` is an owned value that can wait for a thread to finish, which is
-what the `join` method does. By calling `join` on the handle, the current
-thread will block until the thread that the handle represents terminates. Since
-we’ve put the call to `join` after the main thread’s `for` loop, running this
-example should produce output that looks something like this:
+`JoinHandle` владеет значением, которое запустить ожидание выполнение потока с
+помощью метода `join()`. Вывод будет примерно таким:
 
 ```text
 hi number 1 from the main thread!
@@ -162,11 +152,10 @@ hi number 7 from the spawned thread!
 hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
+Потоки всё ещё работают хаотично, но главный поток ожидает выполнения дочернего.
 
-The two threads are still alternating, but the main thread waits because of the
-call to `handle.join()` and does not end until the spawned thread is finished.
-
-If we instead move `handle.join()` before the `for` loop in main, like this:
+Если же мы перенесём код `handle.join()` перед циклом основного потока, то последовательность
+строк вывода будет иной:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -188,9 +177,7 @@ fn main() {
 }
 ```
 
-The main thread will wait for the spawned thread to finish before the main
-thread starts running its `for` loop, so the output won’t be interleaved
-anymore:
+Главный поток будет ожидать окончания работы подчинённого:
 
 ```text
 hi number 1 from the spawned thread!
@@ -208,26 +195,19 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Thinking about a small thing such as where to call `join` can affect whether
-your threads are actually running at the same time or not.
 
-### Using `move` Closures with Threads
+### Использование `move`-замыканий в потоках
 
-There’s a feature of closures that we didn’t cover in Chapter 13 that’s often
-useful with `thread::spawn`: `move` closures. We said this in Chapter 13:
+Есть ещё одна опция замыканий, о которой мы ещё не говорили. Это `move`-замыкания
 
-> Creating closures that capture values from their environment is mostly used
-> in the context of starting new threads.
+> Создание замыканий, которые получают доступ к значения из среды выполнения часто
+> используются при запуске нового потока.
 
-Now we’re creating new threads, so let’s talk about capturing values in
-closures!
+Продемонстрируем это на примерах!
 
-Notice the closure that we pass to `thread::spawn` in Listing 16-1 takes no
-arguments: we’re not using any data from the main thread in the spawned
-thread’s code. In order to use data in the spawned thread that comes from the
-main thread, we need the spawned thread’s closure to capture the values it
-needs. Listing 16-3 shows an attempt to create a vector in the main thread and
-use it in the spawned thread, which won’t work the way this example is written:
+Обратите внимание на замыкание, которое мы послали в качестве входных данные в
+функцию `thread::spawn` в коде 16-1. Мы не использовали данных из в основного потока.
+Рассмотрим первое приближение:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -245,14 +225,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-3: Attempting to use a vector created by the
-main thread from another thread</span>
+<span class="caption">код 16-3: попытка использования вектора, созданного в основном
+потоке из дочернего потока</span>
 
-The closure uses `v`, so the closure will capture `v` and make `v` part of the
-closure’s environment. Because `thread::spawn` runs this closure in a new
-thread, we can access `v` inside that new thread.
+Замыкание использует `v`, т.е. `v` будет частью среды замыкания. Т.к. `thread::spawn`
+запускает выполнение замыкания в новом потоке.
 
-When we compile this example, however, we’ll get the following error:
+Описание ошибки:
 
 ```text
 error[E0373]: closure may outlive the current function, but it borrows `v`,
@@ -269,14 +248,10 @@ variables), use the `move` keyword, as shown:
   |     let handle = thread::spawn(move || {
 ```
 
-When we capture something in a closure’s environment, Rust will try to infer
-how to capture it. `println!` only needs a reference to `v`, so the closure
-tries to borrow `v`. There’s a problem, though: we don’t know how long the
-spawned thread will run, so we don’t know if the reference to `v` will always
-be valid.
+К сожалению, существуют определенные проблемы: мы заранее не можем знать время жизни
+дочернего потока и как долго переменная будет действительна.
 
-Consider the code in Listing 16-4 that shows a scenario where it’s more likely
-that the reference to `v` won’t be valid:
+Демонстрация проблемы явным образом (16-4):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -296,17 +271,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-4: A thread with a closure that attempts to
-capture a reference to `v` from a main thread that drops `v`</span>
+<span class="caption">код 16-4: поток с замыканием, который пытается получить ссылку
+на `v` из главного потока, который удаляет `v`</span>
 
-This code could be run, and the spawned thread could immediately get put in the
-background without getting a chance to run at all. The spawned thread has a
-reference to `v` inside, but the main thread is still running: it immediately
-drops `v`, using the `drop` function that we discussed in Chapter 15 that
-explicitly drops its argument. Then, the spawned thread starts to execute. `v`
-is now invalid, so a reference to it is also invalid. Oh no!
 
-To fix this problem, we can listen to the advice of the error message:
+Для решения проблемы последуем совету компилятора:
 
 ```text
 help: to force the closure to take ownership of `v` (and any other referenced
@@ -314,10 +283,8 @@ variables), use the `move` keyword, as shown:
   |     let handle = thread::spawn(move || {
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it’s using, rather than inferring borrowing. This
-modification to the code from Listing 16-3 shown in Listing 16-5 will compile
-and run as we intend:
+Добавив `move` перед замыканием, мы представляем замыканию владение значением.
+Пример рабочего приложения:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -335,12 +302,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-5: Using the `move` keyword to force a closure
-to take ownership of the values it uses</span>
+<span class="caption">код 16-5: использование `move` для передачи владения переменной
+в дочерний поток</span>
 
-What about the code in Listing 16-4 where the main thread called `drop`? If we
-add `move` to the closure, we’ve moved `v` into the closure’s environment, and
-we can no longer call `drop` on it. We get this compiler error instead:
+А что если добавить `drop`? Код не будет скомпилирован:
 
 ```text
 error[E0382]: use of moved value: `v`
@@ -356,7 +321,7 @@ error[E0382]: use of moved value: `v`
    not implement the `Copy` trait
 ```
 
-Rust’s ownership rules have saved us again!
+Функционал "владение" помог компилятору обнаружить и избежать ошибки. Ура!
 
-Now that we have a basic understanding of threads and the thread API, let’s
-talk about what we can actually *do* with threads.
+Теперь, когда вы познакомились с потоками и некоторыми элементами API, пора рассмотреть
+более интересные примеры.
