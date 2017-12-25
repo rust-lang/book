@@ -142,7 +142,7 @@ realistic example would be quite a bit more complicated and obscure why a box
 is useful even more. /Carol -->
 
 Listing 15-2 contains an enum definition for a cons list. Note that this
-won’t compile quite yet because this is type doesn’t have a known size, which
+won’t compile quite yet because this type doesn’t have a known size, which
 we’ll demonstrate:
 
 <!-- why won't it compile? Are we just defining it to use in the next example?
