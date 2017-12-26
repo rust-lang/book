@@ -2,7 +2,7 @@
 
 At the moment we’re writing all of our output to the terminal using the
 `println!` function. Most terminals provide two kinds of output: *standard
-out**put* (`stdout`) for general information and *standard error* (`stderr`)
+output* (`stdout`) for general information and *standard error* (`stderr`)
 for error messages. This distinction enables users to choose to direct the
 successful output of a program to a file but still print error messages to the
 screen.
@@ -120,4 +120,3 @@ nicely, and be well tested.
 
 Next, we’ll explore some Rust features that were influenced by functional
 languages: closures and iterators.
-

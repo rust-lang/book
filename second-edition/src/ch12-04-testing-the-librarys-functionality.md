@@ -35,7 +35,7 @@ Then, in *src/lib.rs*, we’ll add a `test` module with a test function, as we
 did in Chapter 11. The test function specifies the behavior we want the
 `search` function to have: it will take a query and the text to search for the
 query in, and will return only the lines from the text that contain the query.
-Listing 12-15 shows this test:
+Listing 12-15 shows this test, which won't compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -125,15 +125,15 @@ argument that should be connected to the return value using the lifetime syntax.
 
 Other programming languages don’t require you to connect arguments to return
 values in the signature, so although this might seem strange, it will get
-easier over time. You might want to compare this example with “Validating
-References with Lifetimes” in Chapter 10 on page XX.
+easier over time. You might want to compare this example with the “Validating
+References with Lifetimes” section in Chapter 10.
 
 Now let’s run the test:
 
 ```text
 $ cargo test
---warnings--
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
+--warnings--
     Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running target/debug/deps/minigrep-abcabcabc
 
