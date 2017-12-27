@@ -27,8 +27,8 @@ your password. If it all goes well, you’ll see this appear:
 Rust is installed now. Great!
 ```
 
-Of course, if you disapprove of the `curl | sh` pattern, you can download, inspect
-and run the script however you like.
+Of course, if you distrust using `curl URL | sh` to install software, you can download, 
+inspect, and run the script however you like.
 
 The installation script automatically adds Rust to your system PATH after your next login. 
 If you want to start using Rust right away, run the following command in your shell:
