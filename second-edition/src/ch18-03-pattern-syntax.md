@@ -1,12 +1,12 @@
-## All the Pattern Syntax
+## Синтаксис шаблонов
 
-We’ve seen some examples of different kinds of patterns throughout the book.
-This section lists all the syntax valid in patterns and why you might want to
-use each of them.
+В этой секции мы подробно расскажем о видах шаблонов и месте и способах их
+использования.
 
-### Literals
+### Литералы
 
-As we saw in Chapter 6, you can match against literals directly:
+Как мы уже видели в главе 6, вы можете использовать литералы непосредственно к
+коде:
 
 ```rust
 let x = 1;
@@ -19,19 +19,15 @@ match x {
 }
 ```
 
-This prints `one` since the value in `x` is 1.
+Будет напечатано `one`, т.к. `x` равен 1.
 
-### Named Variables
+### Именованные переменные
 
-Named variables are irrefutable patterns that match any value.
+Именованные переменные - это всеохватывающие шаблоны, которые принимают все
+допустимые значения.
 
-As with all variables, variables declared as part of a pattern will shadow
-variables with the same name outside of the `match` construct since a `match`
-starts a new scope. In Listing 18-10, we declare a variable named `x` with the
-value `Some(5)` and a variable `y` with the value `10`. Then we have a `match`
-expression on the value `x`. Take a look at the patterns in the match arms and
-the `println!` at the end, and make a guess about what will be printed before
-running this code or reading further:
+В коде 18-10 мы декларируем переменную `x` со значением `Some(5)` и переменную
+`y` со значением `10`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -50,41 +46,28 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-10: A `match` statement with an arm that
-introduces a shadowed variable `y`</span>
+<span class="caption">код 18-10: Выражение `match`, которое демонстрируют особенности
+работы с включенными внутрь `Some()` значения переменной `y`</span>
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-Let’s walk through what happens when the `match` statement runs. The first
-match arm has the pattern `Some(50)`, and the value in `x` (`Some(5)`) does not
-match `Some(50)`, so we continue. In the second match arm, the pattern
-`Some(y)` introduces a new variable name `y` that will match any value inside a
-`Some` value. Because we’re in a new scope inside the `match` expression, this
-is a new variable, not the `y` we declared at the beginning that has the
-value 10. The new `y` binding will match any value inside a `Some`, which is
-what we have in `x`, so we execute the expression for that arm and print
-`Matched, y = 5` since this `y` binds to the inner value of the `Some` in `x`,
-which is 5.
+Рассмотрим подробнее, что же происходит при работе этого кода. Первый шаблон рукава
+`match` имеет значение `Some(50)` и текущее значение `x` не соответствует этому
+значению. Во втором рукаве шаблон соответствует всем значениям Some.
+Обратите внимание что в этому случае создаётся новая область видимости, в которой
+включается новая переменная с именем `y`, которой присваивается значения внешней
+переменной.
 
-If `x` had been a `None` value instead of `Some(5)`, we would have matched the
-underscore since the other two arms’ patterns would not have matched. In the
-expression for that match arm, since we did not introduce an `x` variable in
-the pattern of the arm, this `x` is still the outer `x` that has not been
-shadowed. In this hypothetical case, the `match` would print `Default case, x =
-None`.
+Если же `x` равно `None`, сработает шаблон `_`. В этом случае, будет напечатано
+`Default case, x = None`.
 
-Once the `match` expression is over, its scope ends, and so does the scope of
-the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
+Последняя строчка кода сообщит о текущем состоянии переменных `x` и `y`.
 
-In order to make a `match` expression that compares the values of the outer `x`
-and `y` rather than introducing a shadowed variable, we would need to use a
-match guard conditional instead. We’ll be talking about match guards later in
-this section.
+### Группа шаблонов
 
-### Multiple patterns
-
-In `match` expressions only, you can match multiple patterns with `|`, which
-means *or*:
+В выражение `match` благодаря логическому оператору `|` можно реализовать группу
+условий, одном из которых должно удовлетворять условие. В результате будет выполнен
+одни блок кода. Эта опция делает код компактнее::
 
 ```rust
 let x = 1;
@@ -96,11 +79,11 @@ match x {
 }
 ```
 
-This prints `one or two`.
+Будет напечатано `one or two`.
 
-### Matching Ranges of Values with `...`
+### Использование `...`
 
-You can match an inclusive range of values with `...`:
+Вы также можете использовать `...` для поиска значения входящего в числовой отрезок:
 
 ```rust
 let x = 5;
@@ -111,10 +94,9 @@ match x {
 }
 ```
 
-If `x` is 1, 2, 3, 4, or 5, the first arm will match.
+Если `x` равно 1, 2, 3, 4 или 5, будет напечатано "one through five".
 
-Ranges are only allowed with numeric values or `char` values. Here’s an example
-using ranges of `char` values:
+Также в `match` можно использовать отрезки символов:
 
 ```rust
 let x = 'c';
@@ -126,14 +108,15 @@ match x {
 }
 ```
 
-This will print `early ASCII letter`.
+Будет напечатано `early ASCII letter`.
 
-### Destructuring to Break Apart Values
+### Деструктуризация для получения значений
 
-Patterns can be used to *destructure* structs, enums, tuples, and references.
-Destructuring means to break a value up into its component pieces. Listing
-18-11 shows a `Point` struct with two fields, `x` and `y`, that we can break
-apart by using a pattern with a `let` statement:
+Шаблоны могут быть использованы для деструктуризации структур, перечислений,
+кортежей и ссылок. Деструктуризация значит получение значений из компонентов
+группировочной структуры. Код 18-11 демонстрирует объявление структуры `Point`.
+Структура содержит два поля `x` и `y`. С помощью `let` мы инициируем несколько
+переменных одновременно:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -152,15 +135,12 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-11: Destructuring using struct field
-shorthand</span>
+<span class="caption">код 18-11: инициализация переменных</span>
 
-This creates the variables `x` and `y` that match the `x` and `y` of `p`. The
-names of the variables must match the names of the fields to use this
-shorthand. If we wanted to use names different than the variable names, we can
-specify `field_name: variable_name` in the pattern. In Listing 18-12, `a` will
-have the value in the `Point` instance’s `x` field and `b` will have the value
-in the `y` field:
+В этом коде создаются переменные `x` и `y`, которые соответствуют переменным `x`
+и `y` в `p` по всем параметрам (имени, типу). Очень важно, чтобы имена переменных
+совпадали. Если же вы хотите использовать другие имена переменных, это тоже можно
+сделать, добавив описание полей структуры:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -179,13 +159,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-12: Destructuring struct fields into variables
-with different names than the fields</span>
+<span class="caption">код 18-12: деструктуризация полей структуры в переменные</span>
 
-We can also use destructuring with literal values in order to test and use
-inner parts of a value. Listing 18-13 shows a `match` statement that determines
-whether a point lies directly on the `x` axis (which is true when `y = 0`), on
-the `y` axis (`x = 0`), or neither:
+Также мы можем одновременно тестировать и использовать поля структуры для инициализации
+переменных:
 
 ```rust
 # struct Point {
@@ -204,23 +181,19 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-13: Destructuring and matching literal values
-in one pattern</span>
+<span class="caption">код 18-13: деструктуризация и тестирование на соответствие
+значению шаблона</span>
 
-This will print `On the y axis at 7` since the value `p` matches the second arm
-by virtue of `x` having the value 0.
+Будет напечатано `On the y axis at 7`, т.к. `x = 0`.
 
-We used destructuring on enums in Chapter 6, such as in Listing 6-5 where we
-destructured an `Option<i32>` using a `match` expression and added one to the
-inner value of the `Some` variant.
+Мы уже приводили пример деструктуризации в главе 6 в коде 6-5, где мы деструктурировали
+тип данных `Option<i32>` используя выражение `match`, добавляя единицу внутреннему
+значению `Some`.
 
-When the value we’re matching against a pattern contains a reference, we can
-specify a `&` in the pattern in order to separate the reference and the value.
-This is especially useful in closures used with iterators that iterate over
-references to values when we want to use the values in the closure rather than
-the references. Listing 18-14 shows how to iterate over references to `Point`
-instances in a vector, and destructure both the reference and the struct in
-order to be able to perform calculations on the `x` and `y` values easily:
+Если значение, которые мы ищем в шаблоне содержит ссылку, мы можем использовать
+`&` в шаблоне для разделения ссылки и значения. Это удобно в замыканиях используемых
+итераторами. Код 18-14 демонстрирует, как реализовать цепочку вызовов, для того, чтобы
+выполнить необходимые расчёты и получить результат:
 
 ```rust
 # struct Point {
@@ -239,12 +212,12 @@ let sum_of_squares: i32 = points
     .sum();
 ```
 
-<span class="caption">Listing 18-14: Destructuring a reference to a struct into
-the struct field values</span>
+<span class="caption">код 18-14: описания ссылки на структуру для доступа к полям
+структуры</span>
 
-Because `iter` iterates over references to the items in the vector, if we
-forgot the `&` in the closure arguments in the `map`, we’d get a type mismatch
-error like this:
+`iter` обрабатывает ссылки на элементы последовательности. Если в коде вы не укажите
+в описании шаблона перед названием структуры символ `&` мы получим ошибку типов
+входных данных:
 
 ```text
 error[E0308]: mismatched types
@@ -257,13 +230,8 @@ error[E0308]: mismatched types
               found type `Point`
 ```
 
-This says Rust was expecting our closure to match `&Point`, but we tried to
-match the value with a pattern that was a `Point` value, not a reference to a
-`Point`.
-
-We can mix, match, and nest destructuring patterns in even more complex ways:
-we can do something complicated like this example where we nest structs and 
-tuples inside of a tuple and destructure all the primitive values out:
+Вы также можете смешивать, искать по шаблону и деструктировать ещё более сложным
+образом. Например, так:
 
 ```rust
 # struct Point {
@@ -274,21 +242,18 @@ tuples inside of a tuple and destructure all the primitive values out:
 let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
 ```
 
-This lets us break complex types into their component parts.
+Эта конструкция разделяет комплексный тип на компоненты.
 
-### Ignoring Values in a Pattern
+### Игнорирование значений в шаблоне
 
-There are a few ways to ignore entire values or parts of values: using the `_`
-pattern, using the `_` pattern within another pattern, using a name that starts
-with an underscore, or using `..` to ignore all remaining parts of a value.
-Let’s explore how and why to do each of these.
+В грамматике шаблонов есть несколько элементов, которые могут быть использованы
+для игнорирования значений или группы значений: `_`, имя с `_` и `..`. Рассмотрим
+каждый такой шаблон подробнее.
 
-#### Ignoring an Entire Value with `_`
+#### Игнорирование всего значения с помощью шаблона `_`
 
-We’ve seen the use of underscore as a wildcard pattern that will match any value
-but not bind to the value. While the underscore pattern is especially useful as
-the last arm in a `match` expression, we can use it in any pattern, such as
-function arguments as shown in Listing 18-15:
+Мы уже познакомились с использование `_` операторе `match`. Его также можно использовать,
+как обозначение как способ игнорирования аргумента:
 
 ```rust
 fn foo(_: i32) {
@@ -296,18 +261,12 @@ fn foo(_: i32) {
 }
 ```
 
-<span class="caption">Listing 18-15: Using `_` in a function signature</span>
+<span class="caption">код 18-15: использование `_` в заголовке функции</span>
 
-Normally, you would change the signature to not have the unused parameter. In
-cases such as implementing a trait, where you need a certain type signature,
-using an underscore lets you ignore a parameter, and the compiler won’t warn
-about unused function parameters like it would if we had used a name instead.
+#### Игнорирование части значения `_`
 
-#### Ignoring Parts of a Value with a Nested `_`
-
-We can also use `_` inside of another pattern to ignore just part of a value.
-In Listing 18-16, the first `match` arm’s pattern matches a `Some` value but
-ignores the value inside of the `Some` variant as specified by the underscore:
+Вы также можете использовать `_` для игнорирования части значения. Код 18-16,
+в операторе `match` находит значение `Some` и игнорирует его содержимое внутри:
 
 ```rust
 let x = Some(5);
@@ -318,15 +277,11 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-16: Ignoring the value inside of the `Some`
-variant by using a nested underscore</span>
+<span class="caption">код 18-16: игнорирование содержания `Some`</span>
 
-This is useful when the code associated with the `match` arm doesn’t use the
-nested part of the variable at all.
+Это весьма удобно, когда просто нужно проигнорировать конкретное значение `Some`.
 
-We can also use underscores in multiple places within one pattern, as shown in
-Listing 18-17 where we’re ignoring the second and fourth values in a tuple of
-five items:
+Мы также можем использовать `_` для игнорирования определённых значений в шаблоне:
 
 ```rust
 let numbers = (2, 4, 8, 16, 32);
@@ -338,39 +293,32 @@ match numbers {
 }
 ```
 
-<span class="caption">Listing 18-17: Ignoring multiple parts of a tuple</span>
+<span class="caption">код 18-17: игнорирование элементы шаблона</span>
 
-This will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
-ignored.
+Будет напечатано `Some numbers: 2, 8, 32`.
 
-#### Ignoring an Unused Variable by Starting its Name with an Underscore
+#### Игнорирование неиспользуемых переменные, у которых в начале имени стоит символ `_`
 
-Usually, Rust will warn you if you create a variable but don’t use it anywhere,
-since that could be a bug. If you’re prototyping or just starting a project,
-though, you might create a variable that you’ll use eventually, but temporarily
-it will be unused. If you’re in this situation and would like to tell Rust not
-to warn you about the unused variable, you can start the name of the variable
-with an underscore. This works just like a variable name in any pattern, only
-Rust won’t warn you if the variable goes unused. In Listing 18-18, we
-do get a warning about not using the variable `y`, but we don’t get a warning
-about not using the variable `_x`:
+Если необходим оставить в коде неиспользуемую переменную это можно сделать с помощью
+символа `_`:
 
 ```rust
 fn main() {
     let _x = 5;
     let y = 10;
+    println!("{}", y);
 }
 ```
 
-<span class="caption">Listing 18-18: Starting a variable name with an underscore
-in order to not get unused variable warnings</span>
+<span class="caption">код 18-18: демонстрация игнорировании компилятором неиспользуемой
+функции</span>
 
-Note that there is a subtle difference between using only `_` and using a name
-that starts with an underscore like `_x`: `_x` still binds the value to the
-variable, but `_` doesn’t bind at all.
+Обратите внимание на смысловой разнице использования символа `_`, как части имени
+переменной и `_` в отдельности.
 
-Listing 18-19 shows a case where this distinction matters: `s` will still be
-moved into `_s`, which prevents us from using `s` again:
+В коде 18_19 демонстрируется пример использования переменной с именем `s`.
+В имени используется `_` для того, чтобы предотвратить многократное использование
+переменной `s`:
 
 ```rust,ignore
 let s = Some(String::from("Hello!"));
@@ -382,11 +330,10 @@ if let Some(_s) = s {
 println!("{:?}", s);
 ```
 
-<span class="caption">Listing 18-19: An unused variable starting with an
-underscore still binds the value, which may take ownership of the value</span>
+<span class="caption">код 18-19: неиспользуемая переменная связывается  с переменой
+`s` и получает владение</span>
 
-Using underscore by itself, however, doesn’t ever bind to the value. Listing
-18-20 will compile without any errors since `s` does not get moved into `_`:
+Если используется `_`, код будет работать:
 
 ```rust
 let s = Some(String::from("Hello!"));
@@ -398,21 +345,14 @@ if let Some(_) = s {
 println!("{:?}", s);
 ```
 
-<span class="caption">Listing 18-20: Using underscore does not bind the
-value</span>
+<span class="caption">код 18-20: использование `_`</span>
 
-This works just fine. Because we never bind `s` to anything, it’s not moved.
+#### Игнорирование оставшихся частей значения с помощью `..`
 
-#### Ignoring Remaining Parts of a Value with `..`
-
-With values that have many parts, we can extract only a few parts and avoid
-having to list underscores for each remaining part by instead using `..`. The
-`..` pattern will ignore any parts of a value that we haven’t explicitly
-matched in the rest of the pattern. In Listing 18-21, we have a `Point` struct
-that holds a coordinate in three dimensional space. In the `match` expression,
-we only want to operate on the `x` coordinate and ignore the values in the `y`
-and `z` fields:
-
+С помощью значений вы можете с помощью шаблонов получить только небольшую часть
+данных. Используя `..` вы можете получить отрезок данных. В примере 18-21 у вас
+есть структура содержащая координаты (x,y,z). В `match` мы хотим получить только
+данные `x`, а остальные данные проигнорировать:
 ```rust
 struct Point {
     x: i32,
@@ -427,15 +367,13 @@ match origin {
 }
 ```
 
-<span class="caption">Listing 18-21: Ignoring all fields of a `Point` except
-for `x` by using `..`</span>
+<span class="caption">код 18-21: игнорирование полей структуры `Point` кроме  `x`
+с помощью `..`</span>
 
-Using `..` is shorter to type than having to list out `y: _` and `z: _`. The
-`..` pattern is especially useful when working with structs that have lots of
-fields in situations where only one or two fields are relevant.
+`..` это сокращённая запись `y: _` and `z: _`. Такая опция удобна при работе со структурой
+ с большим количеством полей.
 
-`..` will expand to as many values as it needs to be. Listing 18-22 shows a use
-of `..` with a tuple:
+`..` также может быть использована для получения только нужных значений в кортеже:
 
 ```rust
 fn main() {
@@ -449,15 +387,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-22: Matching only the first and last values in
-a tuple and ignoring all other values with `..`</span>
+<span class="caption">код 18-22: выбор только первого и последнего значения кортежа</span>
 
-Here, we have the first and last value matched, with `first` and `last`. The
-`..` will match and ignore all of the things in the middle.
 
-Using `..` must be unambiguous, however. Listing 18-23 shows an example where
-it’s not clear to Rust which values we want to match and which values we want
-to ignore:
+В продемонстрированном примере мы получили значения первого и последнего элемента
+кортежа.
+
+Использование `..` должно быть однозначно и очевидно. Если компилятор не сможет
+понять вашего замысла - будет ошибка:
 
 ```rust,ignore
 fn main() {
@@ -471,10 +408,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-23: An attempt to use `..` in a way that is
-ambiguous</span>
+<span class="caption">код 18-23: попытка использовать `..` дважды</span>
 
-If we compile this example, we get this error:
+Описание ошибки:
 
 ```text
 error: `..` can only be used once per tuple or tuple struct pattern
@@ -484,20 +420,15 @@ error: `..` can only be used once per tuple or tuple struct pattern
   |                      ^^
 ```
 
-It’s not possible to determine how many values in the tuple should be ignored
-before one value is matched with `second`, and then how many further values are
-ignored after that. We could mean that we want to ignore 2, bind `second` to 4,
-then ignore 8, 16, and 32, or we could mean that we want to ignore 2 and 4,
-bind `second` to 8, then ignore 16 and 32, and so forth. The variable name
-`second` doesn’t mean anything special to Rust, so we get a compiler error
-since using `..` in two places like this is ambiguous.
+Т.к. невозможно определить сколько значений необходимо проигнорировать. Имя переменной
+не несёт для компилятора какой-либо информации для выборки. Поэтому код не будет
+скомпилирован.
 
-### `ref` and `ref mut` to Create References in Patterns
+### `ref` и `ref mut` для изменений ссылок в шаблонах
 
-Usually, when you match against a pattern, the variables that the pattern
-introduces are bound to a value. This means you’ll end up moving the value into
-the `match` (or wherever you’re using the pattern) since the ownership rules
-apply. Listing 18-24 shows an example:
+Обычно, когда значение совпадает с шаблоном последовательность работы программы
+перемещается внутрь блока `match`, т.е. применяются правила владения. Код 18-24
+демонстрирует пример:
 
 ```rust,ignore
 let robot_name = Some(String::from("Bors"));
@@ -510,16 +441,12 @@ match robot_name {
 println!("robot_name is: {:?}", robot_name);
 ```
 
-<span class="caption">Listing 18-24: Creating a variable in a match arm pattern
-takes ownership of the value</span>
+<span class="caption">код 18-24: создание переменной и попытка получить владение
+ей</span>
 
-This example will fail to compile since the value inside the `Some` value in
-`robot_name` is moved within the `match` when `name` binds to that value.
+Пример не скомпилируется, т.к. значение внутри `Some` будет перемещено `match`.
 
-Using `&` in a pattern matches an existing reference in the value, as we saw in
-the “Destructuring to Break Apart Values” section. If you want to create a
-reference instead in order to borrow the value in a pattern variable, use the
-`ref` keyword before the new variable, as shown in Listing 18-25:
+Воспользумся символом `ref` в шаблоне для того сделать ссылку на полученное значение :
 
 ```rust
 let robot_name = Some(String::from("Bors"));
@@ -532,15 +459,12 @@ match robot_name {
 println!("robot_name is: {:?}", robot_name);
 ```
 
-<span class="caption">Listing 18-25: Creating a reference so that a pattern
-variable does not take ownership of a value</span>
+<span class="caption">код 18-25: создание такой ссылки, что он не будет иметь
+владение своим значеним</span>
 
-This example will compile because the value in the `Some` variant in
-`robot_name` is not moved into the `Some(ref name)` arm of the match; the match
-only took a reference to the data in `robot_name` rather than moving it.
+Этот код скомпилируется, т.к. мы не перемещаем значение внутрь блока.
 
-To create a mutable reference, use `ref mut` for the same reason as shown in
-Listing 18-26:
+Для создания изменяемой ссылки используйте `ref mut`:
 
 ```rust
 let mut robot_name = Some(String::from("Bors"));
@@ -553,19 +477,17 @@ match robot_name {
 println!("robot_name is: {:?}", robot_name);
 ```
 
-<span class="caption">Listing 18-26: Creating a mutable reference to a value as
-part of a pattern using `ref mut`</span>
+<span class="caption">код 18-26: создание изменяемой ссылки на значение</span>
 
-This example will compile and print `robot_name is: Some("Another name")`.
-Since `name` is a mutable reference, within the match arm code, we need to
-dereference using the `*` operator in order to be able to mutate the value.
+Этот пример будет скомпилирован и в результате будет напечатано
+`robot_name is: Some("Another name")`. Т.к. `name` является изменяемой ссылкой,
+мы получим доступ к данным с помощью оператора `*`.
 
-### Extra Conditionals with Match Guards
+### Дополнительные условия с помощью защиты оператора `match`(Match Guards)
 
-You can introduce *match guards* as part of a match arm by specifying an
-additional `if` conditional after the pattern. The conditional can use
-variables created in the pattern. Listing 18-27 has a `match` expression with a
-match guard in the first arm:
+Вы можете представить т.н. дополнительную проверку (защиту) (*match guards*) рукава
+оператора `match` с помощью введения дополнительного условия внутри оператором `if`.
+Например, так:
 
 ```rust
 let num = Some(4);
@@ -577,16 +499,17 @@ match num {
 }
 ```
 
-<span class="caption">Listing 18-27: Adding a match guard to a pattern</span>
+<span class="caption">код 18-27: введение внутреннего дополнительного условия</span>
 
-This example will print `less than five: 4`. If `num` was instead `Some(7)`,
-this example would print `7`. Match guards allow you to express more complexity
-than patterns alone give you.
 
-In Listing 18-10, we saw that since patterns shadow variables, we weren’t able
-to specify a pattern to express the case when a value was equal to a variable
-outside the `match`. Listing 18-28 shows how we can use a match guard to
-accomplish this:
+Будет напечатано `less than five: 4`. Если же `num` был бы увеличен `Some(7)`,
+этот пример напечатал бы `7`. Дополнительная защита позволяет усложнить проверку,
+добавив гибкости (при необходимости).
+
+К примере кода 18-10, мы видели, что если шаблон скрывал переменные, мы не могли
+создать шаблон для отслеживания случая, при котором это значение было равно какому-либо
+значение извне `match`. Код 18-28 показывает реализовать эту задачу с помощью защиты
+`match`:
 
 ```rust
 fn main() {
@@ -603,18 +526,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-28: Using a match guard to test for equality
-with an outer variable</span>
+<span class="caption">код 18-28: использоване защиты match для дополнительного тестирования
+значения</span>
 
-This will now print `Default case, x = Some(5)`. Because the second match arm
-is not introducing a new variable `y` that shadows the outer `y` in the
-pattern, we can use `y` in the match guard. We’re still destructuring `x` to
-get the inner value `n`, and then we can compare `n` and `y` in the match guard.
+Будет напечатано `Default case, x = Some(5)`. Т.к. второе условие не соблюдается
+`x` != `y`, выполняется последние условие в `match`.
 
-If you’re using a match guard with multiple patterns specified by `|`, the
-match guard condition applies to all of the patterns. Listing 18-29 shows a
-match guard that applies to the value matched by all three patterns in the
-first arm:
+Если мы используем защиту match в нескольких шаблонах при помощи `|`, то условие
+применяется ко всем шаблонам. Код 18-29 показывает это на примере:
 
 ```rust
 let x = 4;
@@ -626,30 +545,27 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-29: Combining multiple patterns with a match
-guard</span>
+<span class="caption">код 18-29: комбинация нескольких шаблонов с защитой match</span>
 
-This prints `no` since the `if` condition applies to the whole pattern `4 | 5 |
-6`, not only to the last value `6`. In other words, the precedence of a match
-guard in relation to a pattern behaves like this:
+Будет напечатано `no`, т.к. условие в `if` применяется ко всему шаблону `4 | 5 |
+6`, not only to the last value `6`. Другими словами, работает следующее условие:
 
 ```text
 (4 | 5 | 6) if y => ...
 ```
 
-rather than this:
+а не это:
 
 ```text
 4 | 5 | (6 if y) => ...
 ```
 
-### `@` Bindings
+### Связываение `@`
 
-In order to test a value in a pattern but also be able to create a variable
-bound to the value, we can use `@`. Listing 18-30 shows an example where we
-want to test that a `Message::Hello` `id` field is within the range `3...7` but
-also be able to bind to the value so that we can use it in the code associated
-with the arm:
+Для того, чтобы проверить соответствие шаблону и создать переменную связанную с этим
+значением мы можем использовать `@`. Код 18-30 демонстрирует пример, в котором
+мы хотим проверить наличие поля  `Message::Hello` `id` в отрезке значений `3...7`,
+а также связать найденное значение с переменной:
 
 ```rust
 enum Message {
@@ -671,27 +587,20 @@ match msg {
 }
 ```
 
-<span class="caption">Listing 18-30: Using `@` to bind to a value in a pattern
-while also testing it</span>
+<span class="caption">код 18-30: использование `@` для связывания значения в шаблоне
+во время тестирования</span>
 
-This example will print `Found an id in range: 5`. By specifying `id @` before
-the range, we’re capturing whatever value matched the range while also testing
-it. In the second arm where we only have a range specified in the pattern, the
-code associated with the arm doesn’t know if `id` is 10, 11, or 12, since we
-haven’t saved the `id` value in a variable: we only know that the value matched
-something in that range if that arm’s code is executed. In the last arm where
-we’ve specified a variable without a range, we do have the value available to
-use in the arm’s code, but we haven’t applied any other test to the value.
-Using `@` lets us test a value and save it in a variable within one pattern.
+Будет напечатано `Found an id in range: 5`. Написав `id @` перед отрезком значений
+мы проверяет входит ли значение в этот отрезок. Во втором рукаве проверяется условие.
+Найденное значение не сохраняется. В последнем условии `match` мы только определили
+переменную (она не будет учувствовать ни в каком сравнении). Использование `@`
+добавляет гибкости и лаконичности в код ваших программ.
 
-## Summary
+## Итоги
 
-Patterns are a useful feature of Rust that help to distinguish between
-different kinds of data. When used in `match` statements, Rust makes sure that
-your patterns cover every possible value. Patterns in `let` statements and
-function parameters make those constructs more powerful, enabling the
-destructuring of values into smaller parts at the same time as assigning to
-variables.
+Шаблоны весьма полезны. При использовании оператора `match` компилятор должен
+убедиться, что были проверены все возможные варианты совпадений. Оператор `let`
+ми другие опции могут сделать этот `match` ещё более удобным в применении.
 
-Now, for the penultimate chapter of the book, let’s take a look at some
-advanced parts of a variety of Rust’s features.
+Настало время рассмотреть расширенные возможности Rust. В следующей главе будет
+рассмотрены такие опции языка. Надеюсь, что будет интересно.

@@ -1,15 +1,19 @@
-## All the Places Patterns May be Used
+## Места использования шаблонов
 
+Шаблоны можно использовать в различных частях синтаксических конструкций. Вы уже
+использовали их даже не осознавая этого. В этой секции мы расскажем о местах, где
+можно использовать шаблоны.
 Patterns pop up in a number of places in Rust. You’ve been using them a lot
 without realizing it! This section is a reference to all the places where
 patterns are valid.
 
-### `match` Arms
+### Рукава `match`
 
-As we discussed in Chapter 6, a common place patterns are used is in the arms
-of `match` expressions. Formally, `match` expressions are defined as the
-keyword `match`, a value to match on, and one or more match arms that consist
-of a pattern and an expression to run if the value matches that arm’s pattern:
+Как мы уже обсуждали в главе 6, основным местом, где шаблоны используются - это
+рукава выражений `match`. Формально, выражения `match` определятся как объединение
+ключевого слова `match`, значения которое будет сравниваться и одно или несколько
+рукавов, которые составляют шаблон и выражение, которое будет выполнено, если
+значение будет соответствовать шаблону:
 
 ```text
 match VALUE {
@@ -19,36 +23,27 @@ match VALUE {
 }
 ```
 
-#### Exhaustiveness and the Default Pattern `_`
+#### Исчерпываемость и шаблон по умолчанию `_`
 
-`match` expressions are required to be exhaustive. When we put all of the
-patterns in the arms together, all possibilities for the value in the `match`
-expression must be accounted for. One way to ensure you have every possibility
-covered is to have a catch-all pattern for the last arm, like a variable name.
-A name matching any value can never fail and thus covers every case remaining
-after the previous arms’ patterns.
+Выражения `match` должны охватывать все возможные варианты значения.
 
-There’s an additional pattern that’s often used in the last match arm: `_`. It
-matches anything, but it never binds any variables. This can be useful when you
-only want to run code for some patterns but ignore any other value, for example.
+Есть специальный символ `_`. Его надо располагать последним в списке. Этот шаблон
+выбирает все остальные варианты. Этот шаблон удобно использовать чтобы игнорировать
+все остальные варианты.
 
-### `if let` Expressions
+### Выражения `if let`
 
-We discussed `if let` expressions in Chapter 6, and how they’re mostly a
-shorter way to write the equivalent of a `match` that only cares about matching
-one case. `if let` can optionally have a corresponding `else` with code to run
-if the pattern in the `if let` doesn’t match.
+Мы уже обсуждали выражение `if let` в главер 6. Мы использовали компактную замену
+`match` для поиска по одному варианту. `if let` также может иметь `else` для
+выполнения блока кода, если условие поиске не выполнено.
 
-Listing 18-1 shows that it’s even possible to mix and match `if let`, `else
-if`, and `else if let`. This code shows a series of checks of a bunch of
-different conditions to decide what the background color should be. For the
-purposes of the example, we’ve created variables with hardcoded values that a
-real program might get by asking the user. If the user has specified a favorite
-color, we’ll use that as the background color. If today is Tuesday, the
-background color will be green. If the user has specified their age as a string
-and we can parse it as a number successfully, we’ll use either purple or orange
-depending on the value of the parsed number. Finally, if none of these
-conditions apply, the background color will be blue:
+Код 18-1 показывает как можно совместно использовать `if let`, `else if` и
+`else if let`. Следующий код демонстрирует серию проверок цвета фона. Для этой
+цели мы создали имитацию ввода данных пользователем. Если пользователь ввел любимый
+цвет - мы сообщим этот цвет. Если сегодня вторник - фон основания будет зелёным.
+Если пользователь указал свой возраст и мы смогли прочитать число, цвет будет
+зависеть от значения числа. Если ни одно из условий не будет выполнено цвет фона
+будет синим:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,33 +69,19 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-1: Mixing `if let`, `else if`, `else if let`,
-and `else`</span>
+<span class="caption">код 18-1: смешенное использование `if let`, `else if`,
+`else if let` и `else`</span>
 
-This conditional structure lets us support complex requirements. With the
-hardcoded values we have here, this example will print `Using purple as the
-background color`.
-
-Note that `if let` can also introduce shadowed variables like `match` arms can:
-`if let Ok(age) = age` introduces a new shadowed `age` variable that contains
-the value inside the `Ok` variant. This also means the `if age > 30` condition
-needs to go within the block; we aren’t able to combine these two conditions
-into `if let Ok(age) = age && age > 30` since the shadowed `age` that we want
-to compare to 30 isn’t valid until the new scope starts with the curly brace.
-
-Also note that conditionals with many cases like these are not as powerful as
-`match` expression since exhaustiveness is not checked by the compiler. If we
-leave off the last `else` block and miss handling some cases, the compiler will
-not error. This example might be too complex to rewrite as a readable `match`,
-so we should take extra care to check that we’re handling all the cases since
-the compiler is not checking exhaustiveness for us.
+Как вы видите схема проверки довольно-таки сложная для восприятия и вполне возможно
+не покрывает всех случаев. В отличии от таких конструкций `match` и компилятор
+помогают выявить возможные ошибки. Так что мы рекомендуем использовать этот
+оператор при решении сложных задач поиска данных.
 
 ### `while let`
 
-A similar construction to `if let` is `while let`: this allows you to do a
-`while` loop as long as a pattern continues to match. Listing 18-2 shows an
-example using a `while let` loop to use a vector as a stack and print out the
-values in the vector in the opposite order that we pushed the values in:
+Конструкция `while let` похожа на `if let`. Она позволяет выполнять цикл пока
+выражение внутри `while let` соответствует шаблону. Пример 18-2 использует вектор,
+в качестве стека и печатает значения в вектор в противоположном направлении:
 
 ```rust
 let mut stack = Vec::new();
@@ -114,23 +95,21 @@ while let Some(top) = stack.pop() {
 }
 ```
 
-<span class="caption">Listing 18-2: Using a `while let` loop to print out values
-as long as `stack.pop()` returns `Some`</span>
+<span class="caption">код 18-2: использование `while let` для печати значений в цикле
+пока метод `stack.pop()` возвращает `Some`</span>
 
-This example will print 3, 2, then 1. The `pop` method takes the last element
-out of the vector and returns `Some(value)`. If the vector is empty, it returns
-`None`. The `while` loop will continue running the code in its block as long as
-`pop` is returning `Some`. Once it returns `None`, the `while` loop stops. We
-can use `while let` to pop every element off our stack.
+Этот пример построчно выведет содержание вектора: 3, 2 и затем 1. Метод `pop` возвращает
+последний элемент в списке `Some(value)` и удаляет его из вектора. Если вектор
+пустой, он возвращает `None`. Цикл `while` продолжит выполнять код внутри блока
+пока метод `pop` возвращает `Some`. Как только он вернёт `None`, цикл `while`
+прекращается. Мы можем использовать `while let` для выборки каждого элемента из
+стека.
 
-### `for` loops
+### Цикл `for`
 
-Looping with `for`, as we discussed in Chapter 3, is the most common loop
-construction in Rust code. What we didn’t talk about in that chapter was that
-`for` takes a pattern. In Listing 18-3, we’re demonstrating how we can use a
-pattern in a `for` loop to destructure a tuple. The `enumerate` method adapts
-an iterator to produce a value and the index of the value in the iterator in a
-tuple:
+Работа цикла `for` уже была освещена в главе 3. Это наиболее часто используемый цикл
+в Rust. В примере 18-3 продемонстрировано, как мы можем использовать шаблон для
+получения кортежа - (значение, его индекс):
 
 ```rust
 let v = vec![1, 2, 3];
@@ -140,10 +119,9 @@ for (index, value) in v.iter().enumerate() {
 }
 ```
 
-<span class="caption">Listing 18-3: Using a pattern in a `for` loop to
-destructure the tuple returned from `enumerate` into its pieces</span>
+<span class="caption">код 18-3: использование цикла `for` для получения кортежа:</span>
 
-This will print:
+Будет напечатано:
 
 ```text
 1 is at index 0
@@ -151,62 +129,47 @@ This will print:
 3 is at index 2
 ```
 
-The first call to `enumerate` produces the tuple `(0, 1)`. When this value is
-matched to the pattern `(index, value)`, `index` will be 0 and `value` will
-be 1.
+Первый вызов `enumerate` создаёт кортеж `(0, 1)`. В нём содержится индекс и значение
+ `(index, value)`, где `index` равен 0, а `value` будет равно 1.
 
-### `let` Statements
+### Оператор `let`
 
-`match` and `if let` are the places we’ve explicitly discussed using patterns
-earlier in the book, but they aren’t the only places we’ve *used* patterns. For
-example, consider this straightforward variable assignment with `let`:
+`match` и `if let` я являются конечным списком, где используется шаблоны. Рассмотрим
+обычное объявление переменной `let`:
 
 ```rust
 let x = 5;
 ```
 
-We’ve done this hundreds of times throughout this book. You may not have
-realized it, but you were using patterns! A `let` statement looks like this,
-more formally:
+Мы проделывали это уже сотни раз, реализуя примеры учебника. Возможно, вы не
+осознавали, но вы использовали шаблоны всё это время. Формально оператор выглядит
+так:
 
 ```text
 let PATTERN = EXPRESSION;
 ```
 
-We’ve seen statements like `let x = 5;` with a variable name in the `PATTERN`
-slot; a variable name is just a particularly humble form of pattern.
+Мы видим операторы, такие как `let x = 5;`, где имя переменной является `PATTERN`.
 
-With `let`, we compare the expression against the pattern, and assign any names
-we find. So for example, in our `let x = 5;` case, `x` is a pattern that says
-“bind what matches here to the variable `x`.” And since the name `x` is the
-whole pattern, this pattern effectively means “bind everything to the variable
-`x`, whatever the value is.”
+С помощью `let` мы сравниваем выражение с шаблоном и присваиваем ему значение.
+В примере `let x = 5;` написано, что необходимо связать всё с переменой `x`.
 
-To see the pattern matching aspect of `let` a bit more clearly, consider
-Listing 18-4 where we’re using a pattern with `let` to destructuring a tuple:
+Может быть и такой вариант::
 
 ```rust
 let (x, y, z) = (1, 2, 3);
 ```
 
-<span class="caption">Listing 18-4: Using a pattern to destructure a tuple and
-create 3 variables at once</span>
+<span class="caption">код 18-4: использование шаблона для создания 3-х переменных</span>
 
-Here, we have a tuple that we’re matching against a pattern. Rust will compare
-the value `(1, 2, 3)` to the pattern `(x, y, z)` and see that the value matches
-the pattern. In this case, it will bind `1` to `x`, `2` to `y`, and `3` to `z`.
-You can think of this tuple pattern as nesting three individual variable
-patterns inside of it.
+Мы также видели другой пример разбора кортежа на переменные (в главе 16), где
+функция `mpsc::channel()` возвращает кортеж (`tx`, `rx`).
 
-We saw another example of destructuring a tuple in Chapter 16, Listing 16-6,
-where we destructured the return value of `mpsc::channel()` into the `tx`
-(transmitter) and `rx` (receiver) parts.
+### Параметры функции
 
-### Function Parameters
-
-Similarly to `let`, function parameters can also be patterns. The code in
-Listing 18-5 declaring a function named `foo` that takes one parameter named
-`x` of type `i32` should look familiar:
+Также как и `let`, параметры функции также могут быть шаблоном. Код 18-5
+демонстрирует объявление функции `foo`, у которой есть параметр с именем `x`,
+типа `i32`:
 
 ```rust
 fn foo(x: i32) {
@@ -214,12 +177,9 @@ fn foo(x: i32) {
 }
 ```
 
-<span class="caption">Listing 18-5: A function signature uses patterns in the
-parameters</span>
+<span class="caption">код 18-5: объявление функции</span>
 
-The `x` part is a pattern! In a similar way as we did with `let`, we could
-match a tuple in a function’s arguments. Listing 18-6 shows how we could split
-apart the values in a tuple as part of passing the tuple to a function:
+Демонстрация того, как фунция может иметь параметр тип кортеж:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -234,16 +194,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-6: A function with parameters that destructure
-a tuple</span>
+<span class="caption">код 18-6: объявление функции с кортежем в виде параметра</span>
 
-This will print `Current location: (3, 5)`. When we pass the value `&(3, 5)` to
-`print_coordinates`, the values match the pattern `&(x, y)`. `x` gets the value
-3, and `y` gets the value 5.
+Будет напечатано `Current location: (3, 5)`. Когда мы отправим значение `&(3, 5)`
+в функцию `print_coordinates`, значения будет сопоставлено с шаблоном `&(x, y)`.
+`x` получит значение 3, а `y` получит значение 5.
 
-Because closures are similar to functions, as we discussed in Chapter 13, we
-can use patterns in closure parameter lists as well.
+Т.к. замыкания похожи на функции (мы их обсуждали в главе 13), мы также можем
+использовать шаблоны в списках параметров замыканий.
 
-One difference between the places we can use patterns is that with `for` loops,
-`let`, and in function parameters, the patterns must be *irrefutable*. Let’s
-discuss that next.
+То что роднит шаблоны в циклах `for`,`let` и параметрах функции - это то что они
+должны быть однозначными. Подробнее об этом поговорим в следующей секции.

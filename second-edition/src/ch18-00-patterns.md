@@ -1,19 +1,16 @@
-# Patterns Match the Structure of Values
+# Шаблоны соответствуют структуре значений
 
-Patterns are a special syntax within Rust for matching against the structure of
-our types, complex or simple. A pattern is made up of some combination of
-literals; destructured arrays, enums, structs, or tuples; variables, wildcards,
-and placeholders. These pieces describe the “shape” of the data we’re working
-with.
+Шаблоны - это особый синтаксис в Rust для соответствия структуре наших типов.
+Простых и сложных. Образец состоит из некоторой комбинации литералов;
+неструктурированных массивов, перечислений, структур или кортежей; переменных,
+подстановочных шаблонов заполнителей. Эти части описывают «форму» данных, с
+которыми мы работаем.
 
-We use a pattern by taking some value and comparing it against the pattern. If
-the pattern matches our value, we do something with the value parts. Recall in
-Chapter 6 when we discussed the `match` expression that uses patterns like a
-coin sorting machine. We can name pieces within the shape, like we named the
-state that appeared on quarters in Chapter 6, and if the data fits the shape,
-we can use the named pieces.
+Мы используем шаблон для получения значения и сравнения его с шаблоном. Если
+шаблон соответствует значению, мы делаем что-то со значениями. Напомним,
+В главе 6, когда мы обсуждали выражение `match`, которое использует шаблоны, такие
+как машина для сортировки монет.
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between *refutable* and
-*irrefutable* patterns, and the different kinds of pattern syntax that you
-might see.
+В этой главе мы постараемся освятить все темы связанные с шаблонами. Мы расскажем
+где можно использовать шаблоны (их место в языковых конструкциях). Мы расскажем
+о разнице между различными видами шаблонов и вариациях синтаксиса.
