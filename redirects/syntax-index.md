@@ -4,11 +4,11 @@ There is a new edition of the book and this is an old link.
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 6 — Syntax Index][1]
 
-* [Keywords index in the second edition of The Rust Programming Language][2]
+* [In the second edition: Appendix A — Keywords][2]
 
-* [Operators index in the second edition of The Rust Programming Language][3]
+* [In the second edition: Appendix B — Operators][3]
 
 
 [1]: first-edition/syntax-index.html

@@ -4,10 +4,11 @@ There is a new edition of the book and this is an old link.
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 3.26 — `const` and `static`][1]
 
-* [Related section about `const` in the second edition of The Rust Programming Language][2]
-* [Related section about `static` in the second edition of The Rust Programming Language][3]
+* [In the second edition: Ch 3.01 — Variables and Mutability, section Constants][2]
+
+* [In the second edition: Ch 19.01 — Unsafe Rust, section Static Variables][3]
 
 
 [1]: first-edition/const-and-static.html

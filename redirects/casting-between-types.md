@@ -4,13 +4,13 @@ There is a new edition of the book and this is an old link.
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 3.29 — Casting between types][1]
 
-* [Related page in the second edition of The Rust Programming Language][2]
+* [In the second edition: Appendix B — Operators][2]
 
-* [Related page in The Rust Reference][3]
+* [In the Rust Reference: Type Cast Expressions][3]
 
-* [Documentation of `transmute` in The Rust Standard Library Documentation][4]
+* [In the Rust documentation: `mem::transmute`][4]
 
 [1]: first-edition/casting-between-types.html
 [2]: second-edition/appendix-02-operators.html#type-cast-expressions

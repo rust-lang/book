@@ -6,15 +6,15 @@ You can [continue to the exact older page][1].
 This chapter does not exist yet in [the second edition][2].
 You can check out other resources that describe release channels.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 4.11 — Release Channels][1]
 
-* [This page in the second edition of The Rust Programming Language][2]
+* [In the second edition: Appendix D — Nightly Rust][2]
 
-* [The Rust RFC 507][3]
+* [In the Rust RFCs: RFC 507 — Release Channels][3]
 
-* [Relevant section in the Rustup documentaion][4]
+* [In the Rustup documentation: Keeping Rust Up-to-date][4]
 
-* [‘Install Rust’ page on the official website][5]
+* [On the website: Install Rust][5]
 
 [1]: first-edition/release-channels.html
 [2]: second-edition/appendix-04-nightly-rust.html

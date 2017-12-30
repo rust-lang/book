@@ -6,9 +6,9 @@ You can [continue to the exact older page][1].
 This particular chapter has moved to [a chapter in the Unstable Book][2].
 Please check it out there.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 4.12 — Using Rust without the Standard Library][1]
 
-* [Related page in The Unstable Rust Book][2]
+* [In the Unstable Rust Book: `lang_items` — Writing an executable without stdlib][2]
 
 
 [1]: first-edition/using-rust-without-the-standard-library.html

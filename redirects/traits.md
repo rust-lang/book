@@ -4,11 +4,11 @@ There is a new edition of the book and this is an old link.
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 3.19 — Traits][1]
 
-* [Related page in the second edition of The Rust Programming Language][2]
+* [In the second edition: Ch 10.02 — Traits][2]
 
-* [Related page in the second edition of The Rust Programming Language (covering more advanced topics)][3]
+* [In the second edition: Ch 19.03 — Advanced Traits][3]
 
 
 [1]: first-edition/traits.html

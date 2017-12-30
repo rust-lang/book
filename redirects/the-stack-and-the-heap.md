@@ -4,9 +4,9 @@ There is a new edition of the book and this is an old link.
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* [In the first edition: Ch 4.1 — The Stack and the Heap][1]
 
-* [Related section in the second edition of The Rust Programming Language][2]
+* [In the second edition: Ch 4.01 — What is Ownership, section The Stack and the Heap][2]
 
 
 [1]: first-edition/the-stack-and-the-heap.html
