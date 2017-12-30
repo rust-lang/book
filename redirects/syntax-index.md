@@ -6,8 +6,11 @@ If you're trying to learn Rust, checking out [the second edition][2] might be a 
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Index of the second edition of The Rust Programming Language][2]
+* [Keywords index in the second edition of The Rust Programming Language][2]
+
+* [Operators index in the second edition of The Rust Programming Language][3]
 
 
 [1]: first-edition/syntax-index.html
-[2]: second-edition/index.html
+[2]: second-edition/appendix-01-keywords.html
+[3]: second-edition/appendix-02-operators.html

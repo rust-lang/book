@@ -2,12 +2,14 @@
 
 There is a new edition of the book and this is an old link.
 You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+
+This particular chapter has moved to [a chapter in the Unstable Book][2].
+Please check it out there.
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Index of the second edition of The Rust Programming Language][2]
+* [Related page in The Unstable Rust Book][2]
 
 
 [1]: first-edition/using-rust-without-the-standard-library.html
-[2]: second-edition/index.html
+[2]: ../unstable-book/language-features/lang-items.html#writing-an-executable-without-stdlib
