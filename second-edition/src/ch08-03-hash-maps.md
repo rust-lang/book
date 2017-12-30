@@ -252,7 +252,7 @@ println!("{:?}", map);
 <span class="caption">Listing 8-26: Counting occurrences of words using a hash
 map that stores words and counts</span>
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. The
+This code will print something similar to `{"world": 2, "hello": 1, "wonderful": 1}`. The
 `or_insert` method actually returns a mutable reference (`&mut V`) to the value
 for this key. Here we store that mutable reference in the `count` variable, so
 in order to assign to that value we must first dereference `count` using the
