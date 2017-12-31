@@ -1,11 +1,24 @@
-% There is a new edition of the book
+% Structs
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> A _struct_ is a custom data type that lets us name and package together multiple related values that make up a meaningful group.
 
-* [Related chapter in second edition of The Rust Programming Language][2]
+```rust
+struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In second edition: Ch 5.00 — Structs][2]**
+* <small>[In the first edition: Ch 3.12 — Structs][1]</small>
 
 
 [1]: first-edition/structs.html

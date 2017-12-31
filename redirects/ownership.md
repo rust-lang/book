@@ -1,11 +1,19 @@
-% There is a new edition of the book
+% Ownership
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Ownership is Rust’s most unique feature, and it enables Rust to make memory safety guarantees without needing a garbage collector.
+>
+> 1. Each value in Rust has a variable that’s called its _owner_.
+> 2. There can only be one owner at a time.
+> 3. When the owner goes out of scope, the value will be dropped.
 
-* [Related chapter in the second edition of The Rust Programming Language][2]
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 4.00 — Understanding Ownership][2]**
+* <small>[In the first edition: Ch 3.8 — Ownership][1]</small>
 
 
 [1]: first-edition/ownership.html

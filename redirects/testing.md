@@ -1,11 +1,24 @@
-% There is a new edition of the book
+% Testing
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Rust includes support for writing software tests within the language itself.
 
-* [Related chapter in the second edition of The Rust Programming Language][2]
+```rust
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 11.00 — Testing][2]**
+* <small>[In the first edition: Ch 4.2 — Testing][1]</small>
 
 
 [1]: first-edition/testing.html

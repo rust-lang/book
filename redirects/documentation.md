@@ -1,11 +1,31 @@
-% There is a new edition of the book
+% Documentation
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Documentation comments use `///` instead of `//` and support Markdown notation for formatting the text if you’d like.
+> You place documentation comments just before the item they are documenting. 
 
-* [Related section in the second edition of The Rust Programming Language][2]
+```rust,no_run
+/// Adds one to the number given.
+///
+/// # Examples
+///
+/// ```
+/// let five = 5;
+///
+/// assert_eq!(6, my_crate::add_one(5));
+/// ```
+pub fn add_one(x: i32) -> i32 {
+    x + 1
+}
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 14.02 — Publishing to crates.io, section Making useful documentation][2]**
+* <small>[In the first edition: Ch 4.4 — Documentation][1]</small>
 
 
 [1]: first-edition/documentation.html
