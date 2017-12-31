@@ -1,6 +1,18 @@
 % `const` and `static`
 
 There is a new edition of the book and this is an old link.
+
+> Constants are _always_ immutable, and may only be set to a constant expression, not the result of a function call or any other value that could only be computed at runtime.
+>
+> Global variables are called `static` in Rust.
+
+```rust
+const MAX_POINTS: u32 = 100_000;
+static HELLO_WORLD: &str = "Hello, world!";
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

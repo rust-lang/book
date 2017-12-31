@@ -1,6 +1,23 @@
 % Lifetimes
 
 There is a new edition of the book and this is an old link.
+
+> Every reference in Rust has a lifetime, which is the scope for which that reference is valid.
+> Most of the time lifetimes are implicit and inferred.
+
+```rust
+{
+    let x = 5;            // -----+-- 'b
+                          //      |
+    let r = &x;           // --+--+-- 'a
+                          //   |  |
+    println!("r: {}", r); //   |  |
+                          // --+  |
+}                         // -----+
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

@@ -1,6 +1,15 @@
 % Variable Bindings
 
 There is a new edition of the book and this is an old link.
+
+> Variable bindings bind some value to a name, so it can be used later.
+
+```rust
+let foo = 5;
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

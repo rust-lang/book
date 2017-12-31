@@ -1,6 +1,22 @@
 % Iterators
 
 There is a new edition of the book and this is an old link.
+
+> The iterator pattern allows you to perform some task on a sequence of items in turn.
+> An iterator is responsible for the logic of iterating over each item and determining when the sequence has finished.
+
+```rust
+let v1 = vec![1, 2, 3];
+
+let v1_iter = v1.iter();
+
+for val in v1_iter {
+    println!("Got: {}", val);
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

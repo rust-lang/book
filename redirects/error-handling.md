@@ -1,6 +1,11 @@
 % Error Handling
 
 There is a new edition of the book and this is an old link.
+
+> Rust groups errors into two major categories: _recoverable_ errors with `Result<T, E>` and _unrecoverable_ errors with `panic!`.
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

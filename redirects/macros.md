@@ -1,6 +1,21 @@
 % Macros
 
 There is a new edition of the book and this is an old link.
+
+> While functions and types abstract over code, macros abstract at a syntactic level.
+
+```rust
+macro_rules! five_times {
+    ($x:expr) => (5 * $x);
+}
+
+fn main() {
+    assert_eq!(25, five_times!(2 + 3));
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 
 This chapter does not exist yet in [the second edition][2].

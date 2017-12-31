@@ -1,6 +1,11 @@
 % `unsafe`
 
 There is a new edition of the book and this is an old link.
+
+> Rust has a second language hiding out inside of it, unsafe Rust, which does not enforce memory safety guarantees.
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

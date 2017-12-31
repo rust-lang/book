@@ -1,6 +1,17 @@
 % Traits
 
 There is a new edition of the book and this is an old link.
+
+> Traits abstract over behavior that types can have in common.
+
+```rust
+pub trait Summarizable {
+    fn summary(&self) -> String;
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

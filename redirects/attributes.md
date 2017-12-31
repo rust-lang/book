@@ -1,6 +1,19 @@
 % Attributes
 
 There is a new edition of the book and this is an old link.
+
+> Any item declaration may have an attribute applied to it.
+
+```rust
+// A function marked as a unit test
+#[test]
+fn test_foo() {
+    /* ... */
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 
 This particular chapter does not exist in the second edition.

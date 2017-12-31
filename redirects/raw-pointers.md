@@ -1,6 +1,18 @@
 % Raw Pointers
 
 There is a new edition of the book and this is an old link.
+
+> Raw pointers are allowed to ignore many of the rules that references have to follow.
+
+```rust
+let mut num = 5;
+
+let r1 = &num as *const i32;
+let r2 = &mut num as *mut i32;
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

@@ -1,6 +1,11 @@
 % Procedural Macros (and custom Derive)
 
 There is a new edition of the book and this is an old link.
+
+> Procedural macros allow for all sorts of advanced metaprogramming in Rust.
+
+---
+
 You can [continue to the exact older page][1].
 
 This chapter does not exist yet in [the second edition][2].

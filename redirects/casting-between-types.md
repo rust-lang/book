@@ -1,6 +1,23 @@
 % Casting between types
 
 There is a new edition of the book and this is an old link.
+
+> A type cast expression is denoted with the binary operator `as`.
+> Executing an `as` expression casts the value on the left-hand side to the type on the right-hand side.
+
+```rust
+# fn sum(values: &[f64]) -> f64 { 0.0 }
+# fn len(values: &[f64]) -> i32 { 0 }
+
+fn average(values: &[f64]) -> f64 {
+    let sum: f64 = sum(values);
+    let size: f64 = len(values) as f64;
+    sum / size
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

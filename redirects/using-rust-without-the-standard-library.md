@@ -1,6 +1,12 @@
 % Using Rust without the Standard Library
 
 There is a new edition of the book and this is an old link.
+
+> Rust’s standard library provides a lot of useful functionality, but assumes support for various features of its host system: threads, networking, heap allocation, and others.
+> There are systems that do not have these features, however.
+
+---
+
 You can [continue to the exact older page][1].
 
 This particular chapter has moved to [a chapter in the Unstable Book][2].

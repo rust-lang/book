@@ -1,6 +1,15 @@
 % `type` aliases
 
 There is a new edition of the book and this is an old link.
+
+> Rust provides the ability to declare a _type alias_ with the `type` keyword to give an existing type another name.
+
+```rust
+type Kilometers = i32;
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

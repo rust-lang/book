@@ -1,6 +1,63 @@
 % Trait Objects
 
 There is a new edition of the book and this is an old link.
+
+> Trait objects combine the data made up of the pointer to a concrete object with the behavior of the methods defined in the trait.
+> A trait defines behavior that we need in a given situation.
+> We can then use a trait as a trait object in places where we would use a concrete type or a generic type.
+
+```rust
+pub struct InputBox {
+    pub label: String,
+}
+
+impl Draw for InputBox {
+    fn draw(&self) {
+        // Code to actually draw an input box
+    }
+}
+
+pub struct Button {
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&self) {
+        // Code to actually draw a button
+    }
+}
+
+pub struct Screen<T: Draw> {
+    pub components: Vec<T>,
+}
+
+impl<T> Screen<T>
+    where T: Draw {
+    pub fn run(&self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
+    }
+}
+
+fn main() {
+    let screen = Screen {
+        components: vec![
+            Box::new(InputBox {
+                label: String::from("OK"),
+            }),
+            Box::new(Button {
+                label: String::from("OK"),
+            }),
+        ],
+    };
+
+    screen.run();
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 

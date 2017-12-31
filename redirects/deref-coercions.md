@@ -1,13 +1,32 @@
 % Deref coercions
 
 There is a new edition of the book and this is an old link.
+
+> Implementing the `Deref` trait allows us to customize the behavior of the _dereference operator_ `*`.
+> By implementing `Deref` in such a way that a smart pointer can be treated like a regular reference, we can write code that operates on references and use that code with smart pointers too.
+
+```rust
+use std::ops::Deref;
+
+# struct MyBox<T>(T);
+impl<T> Deref for MyBox<T> {
+    type Target = T;
+
+    fn deref(&self) -> &T {
+        &self.0
+    }
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
 * [In the first edition: Ch 3.33 — Deref coercions][1]
 
-* [In the second edition: Ch 15.02 — Deref, section Implicit Deref coercions][2]
+* [In the second edition: Ch 15.02 — Treating Smart Pointers like Regular References with the `Deref` Trait][2]
 
 
 [1]: first-edition/deref-coercions.html
-[2]: second-edition/ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods
+[2]: second-edition/ch15-02-deref.html

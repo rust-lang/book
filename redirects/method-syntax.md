@@ -1,6 +1,24 @@
 % Method Syntax
 
 There is a new edition of the book and this is an old link.
+
+> Methods are different from functions in that they’re defined within the context of a struct, and their first parameter is always `self`, which represents the instance of the struct the method is being called on.
+
+```rust
+# struct Rectangle {
+#     width: u32,
+#     height: u32,
+# }
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+```
+
+---
+
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
