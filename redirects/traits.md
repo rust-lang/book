@@ -1,6 +1,6 @@
 % Traits
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Traits abstract over behavior that types can have in common.
 
@@ -12,14 +12,11 @@ pub trait Summarizable {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.19 — Traits][1]
-
-* [In the second edition: Ch 10.02 — Traits][2]
-
+* **[In the second edition: Ch 10.02 — Traits][2]**
 * [In the second edition: Ch 19.03 — Advanced Traits][3]
+* <small>[In the first edition: Ch 3.19 — Traits][1]</small>
 
 
 [1]: first-edition/traits.html

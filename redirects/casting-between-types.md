@@ -1,6 +1,6 @@
 % Casting between types
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > A type cast expression is denoted with the binary operator `as`.
 > Executing an `as` expression casts the value on the left-hand side to the type on the right-hand side.
@@ -18,16 +18,13 @@ fn average(values: &[f64]) -> f64 {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.29 — Casting between types][1]
-
-* [In the second edition: Appendix B — Operators][2]
-
+* **[In the second edition: Appendix B — Operators, section Type Cast Expressions][2]**
 * [In the Rust Reference: Type Cast Expressions][3]
-
 * [In the Rust documentation: `mem::transmute`][4]
+* <small>[In the first edition: Ch 3.29 — Casting between types][1]</small>
+
 
 [1]: first-edition/casting-between-types.html
 [2]: second-edition/appendix-02-operators.html#type-cast-expressions

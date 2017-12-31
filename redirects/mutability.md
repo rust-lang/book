@@ -1,6 +1,6 @@
 % Mutability
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Variables are immutable only by default; we can make them mutable by adding mut in front of the variable name.
 
@@ -13,12 +13,10 @@ println!("The value of x is: {}", x);
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.11 — Mutability][1]
-
-* [In the second edition: Ch 3.01 — Variables and Mutability][2]
+* **[In the second edition: Ch 3.01 — Variables and Mutability][2]**
+* <small>[In the first edition: Ch 3.11 — Mutability][1]</small>
 
 
 [1]: first-edition/mutability.html

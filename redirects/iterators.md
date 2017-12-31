@@ -1,6 +1,6 @@
 % Iterators
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > The iterator pattern allows you to perform some task on a sequence of items in turn.
 > An iterator is responsible for the logic of iterating over each item and determining when the sequence has finished.
@@ -17,12 +17,10 @@ for val in v1_iter {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 4.5 — Iterators][1]
-
-* [In the second edition: Ch 13.02 — Iterators][2]
+* **[In the second edition: Ch 13.02 — Iterators][2]**
+* <small>[In the first edition: Ch 4.5 — Iterators][1]</small>
 
 
 [1]: first-edition/iterators.html

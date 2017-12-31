@@ -1,6 +1,6 @@
 % Operators and Overloading
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Rust does not allow you to create your own operators or overload arbitrary operators, but the operations and corresponding traits listed in `std::ops` can be overloaded by implementing the traits associated with the operator.
 
@@ -32,14 +32,11 @@ fn main() {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.32 — Operators and Overloading][1]
-
-* [In the second edition: Ch 19.03 — Advanced Traits, section Operator Overloading][2]
-
+* **[In the second edition: Ch 19.03 — Advanced Traits, section Operator Overloading][2]**
 * [In the Rust documentation: `std::ops`][3]
+* <small>[In the first edition: Ch 3.32 — Operators and Overloading][1]</small>
 
 [1]: first-edition/operators-and-overloading.html
 [2]: second-edition/ch19-03-advanced-traits.html#operator-overloading-and-default-type-parameters

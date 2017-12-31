@@ -1,6 +1,6 @@
 % Strings
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > A `String` is allocated on the heap and as such is able to store an amount of text that is unknown to us at compile time.
 > You can create a `String` from a string literal using the `from` function.
@@ -15,16 +15,12 @@ let world = &s[6..11];
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.17 — Strings][1]
-
-* [In second edition: Ch 8.02 — Strings][2]
-
+* **[In second edition: Ch 8.02 — Strings][2]**
 * [In second edition: Ch 4.01 — Ownership, section The String Type][3]
-
 * [In second edition: Ch 4.03 — Slices, section String Slices][4]
+* <small>[In the first edition: Ch 3.17 — Strings][1]</small>
 
 
 [1]: first-edition/strings.html

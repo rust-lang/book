@@ -1,6 +1,6 @@
 % Trait Objects
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Trait objects combine the data made up of the pointer to a concrete object with the behavior of the methods defined in the trait.
 > A trait defines behavior that we need in a given situation.
@@ -58,12 +58,10 @@ fn main() {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.22 — Trait Objects][1]
-
-* [In the second edition: Ch 17.02 — Trait Objects][2]
+* **[In the second edition: Ch 17.02 — Trait Objects][2]**
+* <small>[In the first edition: Ch 3.22 — Trait Objects][1]</small>
 
 
 [1]: first-edition/trait-objects.html

@@ -1,6 +1,6 @@
 % if let
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > The `if let` syntax lets you combine `if` and `let` into a less verbose way to handle values that match one pattern and ignore the rest.
 
@@ -13,12 +13,10 @@ if let Some(3) = some_u8_value {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.21 — if let][1]
-
-* [In the second edition: Ch 6.03 — Concise Control Flow with `if let`][2]
+* **[In the second edition: Ch 6.03 — Concise Control Flow with `if let`][2]**
+* <small>[In the first edition: Ch 3.21 — if let][1]</small>
 
 
 [1]: first-edition/if-let.html

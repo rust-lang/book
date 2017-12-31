@@ -1,6 +1,6 @@
 % `const` and `static`
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Constants are _always_ immutable, and may only be set to a constant expression, not the result of a function call or any other value that could only be computed at runtime.
 >
@@ -13,14 +13,11 @@ static HELLO_WORLD: &str = "Hello, world!";
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.26 — `const` and `static`][1]
-
-* [In the second edition: Ch 3.01 — Variables and Mutability, section Constants][2]
-
-* [In the second edition: Ch 19.01 — Unsafe Rust, section Static Variables][3]
+* **[In the second edition: Ch 3.01 — Variables and Mutability, section Constants][2]**
+* **[In the second edition: Ch 19.01 — Unsafe Rust, section Static Variables][3]**
+* <small>[In the first edition: Ch 3.26 — `const` and `static`][1]</small>
 
 
 [1]: first-edition/const-and-static.html

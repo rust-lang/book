@@ -1,6 +1,6 @@
 % Loops
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Rust has three kinds of loops: `loop`, `while`, and `for`.
 > The `loop` keyword tells Rust to execute a block of code over and over again forever or until you explicitly tell it to stop.
@@ -26,12 +26,10 @@ for element in a.iter() {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.6 — Loops][1]
-
-* [In the second edition: Ch 3.05 — Control flow][2]
+* **[In the second edition: Ch 3.05 — Control flow][2]**
+* <small>[In the first edition: Ch 3.6 — Loops][1]</small>
 
 
 [1]: first-edition/loops.html

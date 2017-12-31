@@ -1,6 +1,6 @@
 % if
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > An `if` expression allows us to branch our code depending on conditions.
 
@@ -18,12 +18,10 @@ fn main() {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.5 — if][1]
-
-* [In the second edition: Ch 3.05 — Control flow][2]
+* **[In the second edition: Ch 3.05 — Control flow][2]**
+* <small>[In the first edition: Ch 3.5 — if][1]</small>
 
 
 [1]: first-edition/if.html

@@ -1,6 +1,6 @@
 % Patterns
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Patterns are a special syntax within Rust for matching against the structure of our types, complex or simple.
 > A pattern is made up of some combination of literals; destructured arrays, enums, structs, or tuples; variables, wildcards, and placeholders.
@@ -19,14 +19,11 @@ match x {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.15 — Patterns][1]
-
-* [In the second edition: Ch 18.03 — Patterns][2]
-
+* **[In the second edition: Ch 18.03 — Patterns][2]**
 * [In the second edition: Ch 6.02 — Match][3]
+* <small>[In the first edition: Ch 3.15 — Patterns][1]</small>
 
 
 [1]: first-edition/patterns.html

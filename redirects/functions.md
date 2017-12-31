@@ -1,6 +1,6 @@
 % Functions
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Function definitions in Rust start with `fn` and have a set of parentheses after the function name.
 > The curly brackets tell the compiler where the function body begins and ends.
@@ -20,12 +20,10 @@ fn another_function() {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.2 — Functions][1]
-
-* [In the second edition: Ch 3.03 — Functions][2]
+* **[In the first edition: Ch 3.2 — Functions][1]**
+* <small>[In the second edition: Ch 3.03 — Functions][2]</small>
 
 
 [1]: first-edition/functions.html

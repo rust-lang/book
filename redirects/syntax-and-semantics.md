@@ -1,16 +1,14 @@
 % Syntax and Semantics
 
-There is a new edition of the book and this is an old link.
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [In the first edition: Ch 3 — Syntax and Semantics][1]
+Here are the relevant sections in the new and old books:
 
-* [In the second edition: Ch 3.00 — Common Programming Concepts][2]
 
+* **[In the second edition: Ch 3.00 — Common Programming Concepts][2]**
 * [In the second edition: Appendix A — Keywords][3]
-
 * [In the second edition: Appendix B — Operators][4]
+* <small>[In the first edition: Ch 3 — Syntax and Semantics][1]</small>
 
 
 [1]: first-edition/syntax-and-semantics.html

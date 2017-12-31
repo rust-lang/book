@@ -1,6 +1,6 @@
 % Documentation
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Documentation comments use `///` instead of `//` and support Markdown notation for formatting the text if you’d like.
 > You place documentation comments just before the item they are documenting. 
@@ -22,12 +22,10 @@ pub fn add_one(x: i32) -> i32 {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 4.4 — Documentation][1]
-
-* [In the second edition: Ch 14.02 — Publishing to crates.io, section Making useful documentation][2]
+* **[In the second edition: Ch 14.02 — Publishing to crates.io, section Making useful documentation][2]**
+* <small>[In the first edition: Ch 4.4 — Documentation][1]</small>
 
 
 [1]: first-edition/documentation.html

@@ -1,6 +1,6 @@
 % Variable Bindings
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Variable bindings bind some value to a name, so it can be used later.
 
@@ -10,12 +10,10 @@ let foo = 5;
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.1 — Variable Bindings][1]
-
-* [In the second edition: Ch 2.00 — Guessing Game Tutorial, section Variables][2]
+* **[In the second edition: Ch 2.00 — Guessing Game Tutorial, section Variables][2]**
+* <small>[In the first edition: Ch 3.1 — Variable Bindings][1]</small>
 
 
 [1]: first-edition/variable-bindings.html

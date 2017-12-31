@@ -1,6 +1,6 @@
 % Closures
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Anonymous functions you can save in a variable or pass as arguments to other functions.
 
@@ -18,12 +18,10 @@ let expensive_closure = |num| {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.23 — Closures][1]
-
-* [In the second edition: Ch 13.01 — Closures][2]
+* **[In the second edition: Ch 13.01 — Closures][2]**
+* <small>[In the first edition: Ch 3.23 — Closures][1]</small>
 
 
 [1]: first-edition/closures.html

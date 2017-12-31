@@ -1,6 +1,6 @@
 % Crates and Modules
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Rust has a module system that enables the reuse of code in an organized fashion.
 > A module is a namespace that contains definitions of functions or types, and you can choose whether those definitions are visible outside their module (public) or not (private).
@@ -16,14 +16,11 @@ mod network {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.25 — Crates and Modules][1]
-
-* [In the second edition: Ch 7.01 — `mod` and the Filesystem][2]
-
+* **[In the second edition: Ch 7.01 — `mod` and the Filesystem][2]**
 * [In the second edition: Ch 14.02 — Publishing a Crate to Crates.io][2]
+* <small>[In the first edition: Ch 3.25 — Crates and Modules][1]</small>
 
 
 [1]: first-edition/crates-and-modules.html

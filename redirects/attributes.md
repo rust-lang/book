@@ -1,6 +1,6 @@
 % Attributes
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > Any item declaration may have an attribute applied to it.
 
@@ -14,14 +14,10 @@ fn test_foo() {
 
 ---
 
-You can [continue to the exact older page][1].
+Here are the relevant sections in the new and old books:
 
-This particular chapter does not exist in the second edition.
-The best place to learn about it is [the Rust Reference][2].
-
-* [In the first edition: Ch 3.27 — Attributes][1]
-
-* [In the Rust Reference: Ch 5.3 — Attributes][2]
+* **[In the Rust Reference: Ch 5.3 — Attributes][2]**
+* <small>[In the first edition: Ch 3.27 — Attributes][1]</small>
 
 
 [1]: first-edition/attributes.html

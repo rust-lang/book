@@ -1,6 +1,6 @@
 % Drop
 
-There is a new edition of the book and this is an old link.
+<small>There is a new edition of the book and this is an old link.</small>
 
 > `Drop` lets us customize what happens when a value is about to go out of scope.
 
@@ -24,12 +24,10 @@ fn main() {
 
 ---
 
-You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+Here are the relevant sections in the new and old books:
 
-* [In the first edition: Ch 3.20 — Drop][1]
-
-* [In the second edition: Ch 15.03 — The `Drop` Trait Runs Code on Cleanup][2]
+* **[In the second edition: Ch 15.03 — The `Drop` Trait Runs Code on Cleanup][2]**
+* <small>[In the first edition: Ch 3.20 — Drop][1]</small>
 
 
 [1]: first-edition/drop.html
