@@ -39,7 +39,7 @@ It’s a panoply of Rust features with something for everyone! Let’s dive in!
 
 ## Unsafe Rust
 
-All the code we’ve discussed so far has had Rust's memory safety guarantees
+All the code we’ve discussed so far has had Rust’s memory safety guarantees
 enforced at compile time. However, Rust has a second language hiding inside of
 it that does not enforce these memory safety guarantees: unsafe Rust. This
 works just like regular Rust, but gives you extra superpowers.
@@ -58,7 +58,7 @@ computers is inherently not safe. If Rust didn’t let you do unsafe operations,
 there would be some tasks that you simply could not do. Rust needs to allow you
 to do low-level systems programming like directly interacting with your
 operating system, or even writing your own operating system! That’s one of the
-goals of the language. Let's see what you can do with unsafe Rust, and how to
+goals of the language. Let’s see what you can do with unsafe Rust, and how to
 do it.
 
 ### Unsafe Superpowers
@@ -103,11 +103,11 @@ we’ll look at some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
 
-Way back in Chapter 4, when we first discussed references, we covered that the
-compiler ensures references are always valid. Unsafe Rust has two new types
+Way back in Chapter 4, in the “Dangling References” section, we covered that
+the compiler ensures references are always valid. Unsafe Rust has two new types
 similar to references called *raw pointers*. Just like with references, raw
 pointers can be immutable or mutable, written as `*const T` and `*mut T`,
-respectively. The asterisk isn't the dereference operator; it's part of the
+respectively. The asterisk isn’t the dereference operator; it’s part of the
 type name. In the context of raw pointers, “immutable” means that the pointer
 can’t be directly assigned to after being dereferenced.
 
@@ -115,13 +115,13 @@ Different from references and smart pointers, keep in mind that raw pointers:
 
 - Are allowed to ignore the borrowing rules and have both immutable and
   mutable pointers, or multiple mutable pointers to the same location
-- Aren't guaranteed to point to valid memory
+- Aren’t guaranteed to point to valid memory
 - Are allowed to be null
-- Don't implement any automatic clean-up
+- Don’t implement any automatic clean-up
 
 By opting out of having Rust enforce these guarantees, you are able to make the
 tradeoff of giving up guaranteed safety to gain performance or the ability to
-interface with another language or hardware where Rust's guarantees don't apply.
+interface with another language or hardware where Rust’s guarantees don’t apply.
 
 <!-- Can you say here what benefits these provide, over smart pointers and
 references, and using the aspects in these bullets? -->
@@ -147,17 +147,17 @@ operator? Is it worth touching on why? -->
 <!-- It's not the dereference operator, the * is part of the type. Tried to
 clarify above where the types are introduced /Carol -->
 
-Notice we don't include the `unsafe` keyword here---you can *create* raw
+Notice we don’t include the `unsafe` keyword here---you can *create* raw
 pointers in safe code, you just can’t *dereference* raw pointers with an unsafe
-block, as we'll see in a bit.
+block, as we’ll see in a bit.
 
 We’ve created raw pointers by using `as` to cast an immutable and a mutable
 reference into their corresponding raw pointer types. Because we created them
 directly from references that are guaranteed to be valid, we can know that
-these particular raw pointers are valid, but we can't make that assumption
+these particular raw pointers are valid, but we can’t make that assumption
 about just any raw pointer.
 
-Next we'll create a raw pointer whose validity we can't be so certain of.
+Next we’ll create a raw pointer whose validity we can’t be so certain of.
 Listing 19-2 shows how to create a raw pointer to an arbitrary location in
 memory. Trying to use arbitrary memory is undefined: there may be data at that
 address or there may not, the compiler might optimize the code so that there is
@@ -172,7 +172,7 @@ let r = address as *const i32;
 Listing 19-2: Creating a raw pointer to an arbitrary memory address
 
 Remember that we said you can create raw pointers in safe code, but you can’t
-*dereference* raw pointers and read the data being pointed to. We'll do so now
+*dereference* raw pointers and read the data being pointed to. We’ll do so now
 using the dereference operator, `*`, on a raw pointer, which does require an
 `unsafe` block, as shown in Listing 19-3:
 
@@ -195,8 +195,8 @@ it points at that you might end up dealing with an invalid value.
 
 Note also that in Listing 19-1 and 19-3 we created `*const i32` and `*mut i32`
 raw pointers that both pointed to the same memory location, that of `num`. If
-instead we'd tried to create an immutable and a mutable reference to `num`,
-this would not have compiled because Rust's ownership rules don't allow a
+instead we’d tried to create an immutable and a mutable reference to `num`,
+this would not have compiled because Rust’s ownership rules don’t allow a
 mutable reference at the same time as any immutable references. With raw
 pointers, we are able to create a mutable pointer and an immutable pointer to
 the same location, and change data through the mutable pointer, potentially
@@ -214,16 +214,16 @@ The second type of operation that requires an unsafe block is calls to unsafe
 functions. Unsafe functions and methods look exactly like regular functions and
 methods, but they have an extra `unsafe` out front. That `unsafe` indicates the
 function has requirements we as programmers need to uphold when we call this
-function, because Rust can't guarantee we've met these requirements. By calling
-an unsafe function within an `unsafe` block, we are saying that we've read this
-function's documentations and take responsibility for upholding the function's
+function, because Rust can’t guarantee we’ve met these requirements. By calling
+an unsafe function within an `unsafe` block, we are saying that we’ve read this
+function’s documentations and take responsibility for upholding the function’s
 contracts ourselves.
 
 <!-- Above -- so what is the difference, when and why would we ever use the
 unsafe function? -->
 <!-- Tried to clarify /Carol -->
 
-Here’s an unsafe function named `dangerous` that doesn't do anything in its
+Here’s an unsafe function named `dangerous` that doesn’t do anything in its
 body:
 
 ```
@@ -250,14 +250,14 @@ to Rust that we’ve read the documentation for this function, we understand how
 to use it properly, and we’ve verified that everything is correct.
 
 Bodies of unsafe functions are effectively `unsafe` blocks, so to perform other
-unsafe operations within an unsafe function, we don't need to add another
+unsafe operations within an unsafe function, we don’t need to add another
 `unsafe` block.
 
 #### Creating a Safe Abstraction Over Unsafe Code
 
-Just because a function contains unsafe code doesn't mean the whole function
+Just because a function contains unsafe code doesn’t mean the whole function
 needs to be marked as unsafe. In fact, wrapping unsafe code in a safe function
-is a common abstraction. As an example, let's check out a function from the
+is a common abstraction. As an example, let’s check out a function from the
 standard library, `split_at_mut`, that requires some unsafe code and explore
 how we might implement it. This safe method is defined on mutable slices: it
 takes one slice and makes it into two by splitting the slice at the index given
@@ -295,7 +295,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 Listing 19-5: An attempted implementation of `split_at_mut` using only safe Rust
 
 This function first gets the total length of the slice, then asserts that the
-index given as a parameter is within the slice by checking that it's less than
+index given as a parameter is within the slice by checking that it’s less than
 or equal to the length. The assertion means that if we pass an index that’s
 greater than the index to split the slice at, the function will panic before it
 attempts to use that index.
@@ -346,11 +346,12 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 Listing 19-6: Using unsafe code in the implementation of the `split_at_mut`
 function
 
-Recall from Chapter 4 that slices are a pointer to some data and the length of
-the slice. We use the `len` method to get the length of a slice, and the
-`as_mut_ptr` method to access the raw pointer of a slice. In this case, because
-we have a mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer
-with the type `*mut i32`, which we’ve stored in the variable `ptr`.
+Recall from the “Slices” section in Chapter 4 that slices are a pointer to some
+data and the length of the slice. We use the `len` method to get the length of
+a slice, and the `as_mut_ptr` method to access the raw pointer of a slice. In
+this case, because we have a mutable slice to `i32` values, `as_mut_ptr`
+returns a raw pointer with the type `*mut i32`, which we’ve stored in the
+variable `ptr`.
 
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
@@ -370,7 +371,7 @@ less than or equal to `len`, that all the raw pointers used within the `unsafe`
 block will be valid pointers to data within the slice. This is an acceptable
 and appropriate use of `unsafe`.
 
-Note that we don't need to mark the resulting `split_at_mut` function as
+Note that we don’t need to mark the resulting `split_at_mut` function as
 `unsafe`, and we can call this function from safe Rust. We’ve created a safe
 abstraction to the unsafe code with an implementation of the function that uses
 `unsafe` code in a safe way because it creates only valid pointers from the
@@ -445,12 +446,12 @@ You can also use `extern` to create an interface that allows other languages to
 call Rust functions. Instead of an `extern` block, we add the `extern` keyword
 and specify the ABI to use just before the `fn` keyword. We also need to add a
 `#[no_mangle]` annotation to tell the Rust compiler not to mangle the name of
-this function. Mangling is when a compiler changes the name we've given a
+this function. Mangling is when a compiler changes the name we’ve given a
 function to a different name that contains more information for other parts of
 the compilation process to consume but is less human readable. Every
 programming language compiler mangles names slightly differently, so for a Rust
 function to be nameable from other languages, we have to disable the Rust
-compiler's name mangling.
+compiler’s name mangling.
 
 <!-- have we discussed mangling before this? It doesn't ring a bell with me,
 though it may have been in an early chapter that I forgot --- if not could you
@@ -458,7 +459,7 @@ give a quick explanation here? -->
 <!-- I've tried, without going into too much detail! /Carol -->
 
 In this example we make the `call_from_c` function accessible from C code, once
-it's compiled to a shared library and linked from C:
+it’s compiled to a shared library and linked from C:
 
 ```
 #[no_mangle]
@@ -474,7 +475,7 @@ This usage of `extern` does not require `unsafe`.
 ### Accessing or Modifying a Mutable Static Variable
 
 We’ve managed to go this entire book without talking about *global variables*,
-which Rust does support, but which can be problematic with Rust's ownership
+which Rust does support, but which can be problematic with Rust’s ownership
 rules. If you have two threads accessing the same mutable global variable, it
 can cause a data race.
 
@@ -493,12 +494,13 @@ fn main() {
 
 Listing 19-9: Defining and using an immutable static variable
 
-`static` variables are similar to constants: their names are in
-`SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable’s
-type, which is `&'static str` in this case. Static variables may only store
-references with the `'static` lifetime, which means the Rust compiler can
-figure out the lifetime by itself and we don’t need to annotate it explicitly.
-Accessing an immutable static variable is safe.
+`static` variables are similar to constants, which we discussed in the
+“Differences Between Variables and Constants” section in Chapter 3. The names
+of static variables are in `SCREAMING_SNAKE_CASE` by convention, and we *must*
+annotate the variable’s type, which is `&'static str` in this case. Static
+variables may only store references with the `'static` lifetime, which means
+the Rust compiler can figure out the lifetime by itself and we don’t need to
+annotate it explicitly. Accessing an immutable static variable is safe.
 
 Constants and immutable static variables may seem similar, but a subtle
 difference is that values in a static variable have a fixed address in memory.
@@ -538,9 +540,9 @@ keyword. Any code that reads or writes from `COUNTER` must be within an
 because it’s single threaded. Having multiple threads access `COUNTER` would
 likely result in data races.
 
-With mutable data that's globally accessible, it's difficult to ensure there
+With mutable data that’s globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
-unsafe. Where possible, it's preferable to use the concurrency techniques and
+unsafe. Where possible, it’s preferable to use the concurrency techniques and
 threadsafe smart pointers we discussed in Chapter 16, so the compiler checks
 that data accessed from different threads is done safely.
 
@@ -548,7 +550,7 @@ that data accessed from different threads is done safely.
 
 Finally, the last action that only works with `unsafe` is implementing an
 unsafe trait. A trait is unsafe when at least one of its methods has some
-invariant that the compiler can't verify. We can declare that a trait is
+invariant that the compiler can’t verify. We can declare that a trait is
 `unsafe` by adding the `unsafe` keyword before `trait`, and then implementation
 of the trait must be marked as `unsafe` too, as shown in Listing 19-11:
 
@@ -565,16 +567,17 @@ unsafe impl Foo for i32 {
 Listing 19-11: Defining and implementing an unsafe trait
 
 By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
-the compiler can't verify.
+the compiler can’t verify.
 
-As an example, recall the `Sync` and `Send` marker traits from Chapter 16, and
-that the compiler implements these automatically if our types are composed
-entirely of `Send` and `Sync` types. If we implement a type that contains
-something that’s not `Send` or `Sync`, such as raw pointers, and we want to
-mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify
-that our type upholds the guarantees that it can be safely sent across threads
-or accessed from multiple threads, so we need to do those checks ourselves and
-indicate as such with `unsafe`.
+As an example, recall the `Sync` and `Send` marker traits from the “Extensible
+Concurrency with the `Sync` and `Send` Traits” section of Chapter 16, and that
+the compiler implements these automatically if our types are composed entirely
+of `Send` and `Sync` types. If we implement a type that contains something
+that’s not `Send` or `Sync`, such as raw pointers, and we want to mark that
+type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify that our type
+upholds the guarantees that it can be safely sent across threads or accessed
+from multiple threads, so we need to do those checks ourselves and indicate as
+such with `unsafe`.
 
 ### When to Use Unsafe Code
 
@@ -586,16 +589,16 @@ easier to track down the source of problems if they occur.
 
 ## Advanced Lifetimes
 
-Back in Chapter 10, we learned how to annotate references with lifetime
-parameters to tell Rust how lifetimes of different references relate. We saw
-how every reference has a lifetime but, most of the time, Rust will let you
-elide lifetimes. Here we'll look at three advanced features of lifetimes that
-we haven’t covered yet:
+Back in Chapter 10 in the “Validating References with Lifetimes” section, we
+learned how to annotate references with lifetime parameters to tell Rust how
+lifetimes of different references relate. We saw how every reference has a
+lifetime but, most of the time, Rust will let you elide lifetimes. Here we’ll
+look at three advanced features of lifetimes that we haven’t covered yet:
 
 * Lifetime subtyping, a way to ensure that one lifetime outlives another
   lifetime
 * Lifetime bounds, to specify a lifetime for a reference to a generic type
-* Trait object lifetimes, how they're inferred, and when they need to be
+* Trait object lifetimes, how they’re inferred, and when they need to be
   specified
 
 <!-- maybe add a small summary of each here? That would let us launch straight
@@ -610,7 +613,7 @@ We’ll have a structure called `Context` that holds a reference to the string
 we’re parsing. We’ll write a parser that will parse this string and return
 success or failure. The parser will need to borrow the context to do the
 parsing. Implementing this would look like the code in Listing 19-12, except
-this code doesn't have the required lifetime annotations so it won't compile:
+this code doesn’t have the required lifetime annotations so it won’t compile:
 
 Filename: src/lib.rs
 
@@ -647,11 +650,11 @@ error information than that, and would actually return something when parsing
 succeeds, but we’ll leave those off because they aren’t relevant to the
 lifetimes part of this example.
 
-To keep this code simple, we're not going to actually write any parsing logic.
-It's very likely that somewhere in parsing logic we'd handle invalid input by
-returning an error that references the part of the input that's invalid, and
+To keep this code simple, we’re not going to actually write any parsing logic.
+It’s very likely that somewhere in parsing logic we’d handle invalid input by
+returning an error that references the part of the input that’s invalid, and
 this reference is what makes the code example interesting with regards to
-lifetimes. So we're going to pretend that the logic of our parser is that the
+lifetimes. So we’re going to pretend that the logic of our parser is that the
 input is invalid after the first byte. Note that this code may panic if the
 first byte is not on a valid character boundary; again, we’re simplifying the
 example in order to concentrate on the lifetimes involved.
@@ -686,7 +689,7 @@ same lifetime parameter
 
 This compiles fine, and tells Rust that a `Parser` holds a reference to a
 `Context` with lifetime `'a`, and that `Context` holds a string slice that also
-lives as long as the reference to the `Context` in `Parser`. Rust's compiler
+lives as long as the reference to the `Context` in `Parser`. Rust’s compiler
 error message said lifetime parameters were required for these references, and
 we have now added lifetime parameters.
 
@@ -746,7 +749,7 @@ note: borrowed value must be valid for the anonymous lifetime #1 defined on the 
    | |_^
 ```
 
-These errors are saying that both the `Parser` instance that's created and the
+These errors are saying that both the `Parser` instance that’s created and the
 `context` parameter live only from when the `Parser` is created until the end
 of the `parse_context` function, but they both need to live for the entire
 lifetime of the function.
@@ -762,7 +765,7 @@ absolutely ensure they will live for as long as the function? -->
 <!-- Yes, which is what I think we've said in the first sentence of the
 previous paragraph. Is there something that's unclear? /Carol -->
 
-To figure out why we're getting these errors, let's look at the definitions in
+To figure out why we’re getting these errors, let’s look at the definitions in
 Listing 19-13 again, specifically the references in the signature of the
 `parse` method:
 
@@ -795,7 +798,7 @@ the lifetime of the `Parser` as well. But the `Parser` instance created in the
 temporary), and `context` will go out of scope at the end of the function
 (`parse_context` takes ownership of it).
 
-Rust thinks we're trying to return a reference to a value that goes out of
+Rust thinks we’re trying to return a reference to a value that goes out of
 scope at the end of the function, because we annotated all the lifetimes with
 the same lifetime parameter. That told Rust the lifetime of the string slice
 that `Context` holds is the same as that of the lifetime of the reference to
@@ -815,8 +818,8 @@ reference to the `Context` in `Parser` have different lifetimes and that the
 return value of `parse_context` is tied to the lifetime of the string slice in
 `Context`.
 
-First we'll try giving `Parser` and `Context` different lifetime parameters as
-shown in Listing 19-15. We'll use `'s` and `'c` as lifetime parameter names to
+First we’ll try giving `Parser` and `Context` different lifetime parameters as
+shown in Listing 19-15. We’ll use `'s` and `'c` as lifetime parameter names to
 be clear about which lifetime goes with the string slice in `Context` and which
 goes with the reference to `Context` in `Parser`. Note that this won’t
 completely fix the problem, but it’s a start and we’ll look at why this isn’t
@@ -894,6 +897,8 @@ string slice) is guaranteed to live at least as long as `'c` (the lifetime of
 the reference to `Context`), we change the lifetime declarations to look like
 this:
 
+Filename: src/lib.rs
+
 ```
 struct Parser<'c, 's: 'c> {
     context: &'c Context<'s>,
@@ -911,19 +916,20 @@ something you have a reference to.
 
 ### Lifetime Bounds on References to Generic Types
 
-In Chapter 10, we discussed using trait bounds on generic types. We can also
-add lifetime parameters as constraints on generic types, and these are called
-*lifetime bounds*. Lifetime bounds help Rust verify that references in generic
-types won't outlive the data they're referencing.
+In the “Trait Bounds” section of Chapter 10, we discussed using trait bounds on
+generic types. We can also add lifetime parameters as constraints on generic
+types, and these are called *lifetime bounds*. Lifetime bounds help Rust verify
+that references in generic types won’t outlive the data they’re referencing.
 
 <!-- Can you say up front why/when we use these? -->
 <!-- Done -->
 
 For an example, consider a type that is a wrapper over references. Recall the
-`RefCell<T>` type from Chapter 15: its `borrow` and `borrow_mut` methods return
-the types `Ref` and `RefMut`, respectively. These types are wrappers over
-references that keep track of the borrowing rules at runtime. The definition of
-the `Ref` struct is shown in Listing 19-16, without lifetime bounds for now:
+`RefCell<T>` type from the “`RefCell<T>` and the Interior Mutability Pattern”
+section of Chapter 15: its `borrow` and `borrow_mut` methods return the types
+`Ref` and `RefMut`, respectively. These types are wrappers over references that
+keep track of the borrowing rules at runtime. The definition of the `Ref`
+struct is shown in Listing 19-16, without lifetime bounds for now:
 
 Filename: src/lib.rs
 
@@ -1002,8 +1008,9 @@ refers to.
 
 ### Inference of Trait Object Lifetimes
 
-In Chapter 17, we learned about trait objects, consisting of a trait behind a
-reference, that allow us to use dynamic dispatch. We haven't yet discussed what
+In Chapter 17 in the “Using Trait Objects that Allow for Values of Different
+Types” section, we discussed trait objects, consisting of a trait behind a
+reference, that allow us to use dynamic dispatch. We haven’t yet discussed what
 happens if the type implementing the trait in the trait object has a lifetime
 of its own. Consider Listing 19-19, where we have a trait `Red` and a struct
 `Ball`. `Ball` holds a reference (and thus has a lifetime parameter) and also
@@ -1050,9 +1057,9 @@ Next, let’s take a look at some other advanced features dealing with traits!
 
 ## Advanced Traits
 
-We covered traits in Chapter 10 but, like lifetimes, we didn’t get to some of
-the more advanced details. Now that we know more Rust, we can get into the
-nitty-gritty.
+We first covered traits in the “Traits: Defining Shared Behavior” section of
+Chapter 10 but, like lifetimes, we didn’t get to some of the more advanced
+details. Now that we know more Rust, we can get into the nitty-gritty.
 
 ### Associated Types Specify Placeholder Types in Trait Definitions
 
@@ -1073,8 +1080,9 @@ rest of the book, but more commonly than many of the things in this chapter.
 
 One example of a trait with an associated type is the `Iterator` trait provided
 by the standard library. This has an associated type named `Item` that stands
-in for the type of the values it's iterating over. We mentioned in Chapter 13
-that the definition of the `Iterator` trait is as shown in Listing 19-20:
+in for the type of the values it’s iterating over. In “The `Iterator` Trait and
+the `next` Method” section of Chapter 13, we mentioned that the definition of
+the `Iterator` trait is as shown in Listing 19-20:
 
 ```
 pub trait Iterator {
@@ -1097,15 +1105,18 @@ This may seem like a similar concept to generics, in that it allows us to
 define a function without specifying what types it can deal with. So why use
 associated types?
 
-Let's examine the difference with an example that implements the `Iterator`
-trait on the `Counter` struct. In Listing 13-6, we specified that the `Item`
-type was `u32`:
+Let’s examine the difference with an example that implements the `Iterator`
+trait on the `Counter` struct from Chapter 13. In Listing 13-21, we specified
+that the `Item` type was `u32`:
+
+Filename: src/lib.rs
 
 ```
 impl Iterator for Counter {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
+        // --snip--
 ```
 
 This feels similar to generics. So why not just define the `Iterator` trait
@@ -1128,24 +1139,34 @@ times, changing the concrete types of the generic type parameters each time.
 When we use the `next` method on `Counter`, we’d then have to provide type
 annotations to indicate which implementation of `Iterator` we wanted to use.
 
-With associated types, we don't need to annotate types because we can’t
+With associated types, we don’t need to annotate types because we can’t
 implement a trait on a type multiple times. With Listing 19-20, we can only
 choose once what the type of `Item` will be, because there can only be one `impl
 Iterator for Counter`. We don’t have to specify that we want an iterator of
 `u32` values everywhere that we call `next` on `Counter`.
 
-### Operator Overloading and Default Type Parameters
+### Default Generic Type Parameters and Operator Overloading
 
-The `<PlaceholderType=ConcreteType>` syntax is used in another way as well: to
-specify the default type for a generic type. A great example of a situation
-where this is useful is operator overloading.
+When we use generic type parameters, we can specify a default concrete type for
+the generic type. This eliminates the need for implementors of the trait to
+specify a concrete type if the default type works. The syntax for specifying a
+default type for a generic type is to put `<PlaceholderType=ConcreteType>` when
+declaring the generic type.
+
+A great example of a situation where this is useful is with operator
+overloading. Operator overloading is customizing the behavior of an operator
+(like `+`) in particular situations.
+
+<!-- Are we safe in assuming the reader is familiar with operator overloading
+and why/when to use it, or is it worth giving a quick definition here? -->
+<!-- Added /Carol -->
 
 Rust does not allow you to create your own operators or overload arbitrary
-operators, but the operations and corresponding traits listed in `std::ops` can
-be overloaded by implementing the traits associated with the operator. For
-example, Listing 19-25 shows how to overload the `+` operator by implementing
-the `Add` trait on a `Point` struct so that we can add two `Point` instances
-together:
+operators, but you *can* overload the operations and corresponding traits
+listed in `std::ops` by implementing the traits associated with the operator.
+For example, in Listing 19-25 we overload the `+` operator to add two `Point`
+instances together. We do this by implementing the `Add` trait on a `Point`
+struct:
 
 Filename: src/main.rs
 
@@ -1178,12 +1199,12 @@ fn main() {
 Listing 19-25: Implementing the `Add` trait to overload the `+` operator for
 `Point` instances
 
-We’ve implemented the `add` method to add the `x` values of two `Point`
-instances together and the `y` values of two `Point` instances together to
-create a new `Point`. The `Add` trait has an associated type named `Output`
-that’s used to determine the type returned from the `add` method.
+The `add` method adds the `x` values of two `Point` instances together and the
+`y` values of two `Point` instances together to create a new `Point`. The `Add`
+trait has an associated type named `Output` that determines the type returned
+from the `add` method.
 
-Let’s look at the `Add` trait in a bit more detail. Here’s its definition:
+The default generic type here is within the `Add` trait. Here’s its definition:
 
 ```
 trait Add<RHS=Self> {
@@ -1193,32 +1214,35 @@ trait Add<RHS=Self> {
 }
 ```
 
-This should look familiar; it’s a trait with one method and an associated type.
-The new part is the `RHS=Self` in the angle brackets: this syntax is called
-*default type parameters*. `RHS` is a generic type parameter (short for “right
-hand side”) that’s used for the type of the `rhs` parameter in the `add`
-method. If we don’t specify a concrete type for `RHS` when we implement the
-`Add` trait, the type of `RHS` will default to the type of `Self` (the type
-that we’re implementing `Add` on).
+This should look generally familiar, as a trait with one method and an
+associated type. The new part here is the `RHS=Self` in the angle brackets:
+this syntax is called *default type parameters*. The `RHS` generic type
+parameter---short for “right hand side”---that’s used to define the type of the
+`rhs` parameter in the `add` method. If we don’t specify a concrete type for
+`RHS` when we implement the `Add` trait, the type of `RHS` will default to
+`Self`, which will be the type we’re implementing `Add` on.
 
-Let’s look at another example of implementing the `Add` trait. Imagine we have
-two structs holding values in different units, `Millimeters` and `Meters`. We
-can implement `Add` for `Millimeters` in different ways as shown in Listing
-19-26:
+<!-- Can you say what we're looking out for in this next trait -->
+<!-- Done/reworked to be less repetitive with the Point example /Carol -->
+
+When we implemented `Add` for `Point`, we made use of the default for `RHS`
+because we wanted to add two `Point` instances together. Let’s look at an
+example of implementing the `Add` trait where we want to customize the `RHS`
+type rather than using the default.
+
+We have two structs holding values in different units, `Millimeters` and
+`Meters`. We want to be able to add values in millimeters to values in meters,
+and have the implementation of `Add` do the conversion correctly. We can
+implement `Add` for `Millimeters` with `Meters` as the right hand side as shown
+in Listing 19-26:
+
+Filename: src/lib.rs
 
 ```
 use std::ops::Add;
 
 struct Millimeters(u32);
 struct Meters(u32);
-
-impl Add for Millimeters {
-    type Output = Millimeters;
-
-    fn add(self, other: Millimeters) -> Millimeters {
-        Millimeters(self.0 + other.0)
-    }
-}
 
 impl Add<Meters> for Millimeters {
     type Output = Millimeters;
@@ -1230,41 +1254,48 @@ impl Add<Meters> for Millimeters {
 ```
 
 Listing 19-26: Implementing the `Add` trait on `Millimeters` to be able to add
-`Millimeters` to `Millimeters` and `Millimeters` to `Meters`
+`Millimeters` to `Meters`
 
-If we’re adding `Millimeters` to other `Millimeters`, we don’t need to
-parameterize the `RHS` type for `Add` since the default `Self` type is what we
-want. If we want to implement adding `Millimeters` and `Meters`, then we need
-to say `impl Add<Meters>` to set the value of the `RHS` type parameter.
+To be able to add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to
+set the value of the `RHS` type parameter instead of using the default of
+`Self`.
 
 Default type parameters are used in two main ways:
 
 1. To extend a type without breaking existing code.
-2. To allow customization in a way most users don’t want.
+2. To allow customization in specific cases most users won’t need.
 
-The `Add` trait is an example of the second purpose: most of the time, you’re
-adding two like types together. Using a default type parameter in the `Add`
-trait definition makes it easier to implement the trait since you don’t have to
-specify the extra parameter most of the time. In other words, we’ve removed a
-little bit of implementation boilerplate.
+<!-- Above, in 2., do you mean customization used in corner cases? -->
+<!-- Yes, I'm not sure how that's different than what we've stated here or how
+it could be clearer /Carol-->
 
-The first purpose is similar, but in reverse: since existing implementations of
-a trait won’t have specified a type parameter, if we want to add a type
-parameter to an existing trait, giving it a default will let us extend the
+The standard library’s `Add` trait is an example of the second purpose: most of
+the time, you’re adding two like types together, but it gives the ability for
+customizing beyond that. Using a default type parameter in the `Add` trait
+definition means you don’t have to specify the extra parameter most of the
+time. In other words, a little bit of implementation boilerplate isn’t needed,
+making it easier to use the trait.
+
+The first purpose is similar, but in reverse: if we want to add a type
+parameter to an existing trait, we can give it a default to let us extend the
 functionality of the trait without breaking the existing implementation code.
 
-### Fully Qualified Syntax for Disambiguation
+### Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
 
-Rust cannot prevent a trait from having a method with the same name as another
-trait’s method, nor can it prevent us from implementing both of these traits on
-one type. We can also have a method implemented directly on the type with the
-same name as well! In order to be able to call each of the methods with the
-same name, then, we need to tell Rust which one we want to use.
+Nothing in Rust prevents a trait from having a method with the same name as
+another trait’s method, nor can it prevent us from implementing both of these
+traits on one type. It’s also possible to have a method implemented directly on
+the type with the same name as methods from traits as well!
 
-Consider the code in Listing 19-27 where we’ve defined two traits, `Pilot` and
-`Wizard`, that both have a method called `fly`. We then implement both traits
-on a type `Human` that itself already has a method named `fly` implemented on
-it. Each `fly` method does something different:
+<!-- Same name as the type, you mean? -->
+<!-- No, the same name as methods implemented from traits. I've tried to
+clarify /Carol -->
+
+When calling methods with the same name, then, we need to tell Rust which one
+we want to use. Consider the code in Listing 19-27 where we’ve defined two
+traits, `Pilot` and `Wizard`, that both have a method called `fly`. We then
+implement both traits on a type `Human` that itself already has a method named
+`fly` implemented on it. Each `fly` method does something different:
 
 Filename: src/main.rs
 
@@ -1403,11 +1434,11 @@ associated function defined on `Dog` directly. This code prints:
 A baby dog is called a Spot
 ```
 
-This isn’t really what we wanted, in this case we want to call the `baby_name`
-function that’s part of the `Animal` trait that we implemented on `Dog`, so
-that we can print `A baby dog is called a puppy`. The technique we used in
-Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing
-19-31:
+This isn’t what we wanted. We want to call the `baby_name` function that’s part
+of the `Animal` trait that we implemented on `Dog` so that we print `A baby dog
+is called a puppy`. The technique we used in Listing 19-29 doesn’t help here;
+if we change `main` to be the code in Listing 19-31, we’ll get a compilation
+error:
 
 Filename: src/main.rs
 
@@ -1426,7 +1457,7 @@ implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```
 error[E0283]: type annotations required: cannot resolve `_: Animal`
-  --> src/main.rs
+  --> src/main.rs:20:43
    |
 20 |     println!("A baby dog is called a {}", Animal::baby_name());
    |                                           ^^^^^^^^^^^^^^^^^
@@ -1434,10 +1465,10 @@ error[E0283]: type annotations required: cannot resolve `_: Animal`
    = note: required by `Animal::baby_name`
 ```
 
-In order to tell Rust that we want to use the implementation of `Animal` for
-`Dog`, we need to use *fully qualified syntax*, which is the most specific we
-can be when calling a function. Listing 19-32 demonstrates how to use fully
-qualified syntax in this case:
+To disambiguate and tell Rust that we want to use the implementation of
+`Animal` for `Dog`, we need to use *fully qualified syntax*, which is the most
+specific we can be when calling a function. Listing 19-32 demonstrates how to
+use fully qualified syntax:
 
 Filename: src/main.rs
 
@@ -1473,18 +1504,17 @@ information in the program. We only need to use this more verbose syntax in
 cases where there are multiple implementations that use the same name and Rust
 needs help in order to know which implementation we want to call.
 
-### Supertraits to Use One Trait’s Functionality Within Another Trait
+### Using Supertraits to Require One Trait’s Functionality Within Another Trait
 
-Sometimes, we may want a trait to be able to rely on another trait also being
-implemented wherever our trait is implemented, so that our trait can use the
-other trait’s functionality. The required trait is a *supertrait* of the trait
-we’re implementing.
+Sometimes, we may need one trait to use another trait’s functionality. In this
+case, we need to be able to rely on the dependent trait also being implemented.
+The trait we’re relying on is a *supertrait* of the trait we’re implementing.
 
 For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print out a value outlined in asterisks. That
-is, if our `Point` struct implements `Display` to result in `(x, y)`, calling
-`outline_print` on a `Point` instance that has 1 for `x` and 3 for `y` would
-look like:
+`outline_print` method that will print out a value framed in asterisks. That
+is, given a `Point` struct that implements `Display` to result in `(x, y)`,
+when we call `outline_print` on a `Point` instance that has 1 for `x` and 3 for
+`y`, it should print the following:
 
 ```
 **********
@@ -1494,13 +1524,14 @@ look like:
 **********
 ```
 
-In the implementation of `outline_print`, since we want to be able to use the
-`Display` trait’s functionality, we need to be able to say that the
-`OutlinePrint` trait will only work for types that also implement `Display` and
-provide the functionality that `OutlinePrint` needs. We can do that in the
-trait definition by specifying `OutlinePrint: Display`. It’s like adding a
-trait bound to the trait. Listing 19-33 shows an implementation of the
-`OutlinePrint` trait:
+In the implementation of `outline_print`, we want to use the `Display` trait’s
+functionality. We therefore need to specify that the `OutlinePrint` trait will
+only work for types that also implement `Display` and therefore provide the
+functionality that `OutlinePrint` needs. We can do that in the trait definition
+by specifying `OutlinePrint: Display`. This is similar to adding a trait bound
+to the trait. Listing 19-33 shows an implementation of the `OutlinePrint` trait:
+
+Filename: src/main.rs
 
 ```
 use std::fmt;
@@ -1522,14 +1553,15 @@ Listing 19-33: Implementing the `OutlinePrint` trait that requires the
 functionality from `Display`
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
-can use `to_string` in `outline_print` (`to_string` is automatically
-implemented for any type that implements `Display`). If we hadn’t added the `:
-Display` after the trait name and we tried to use `to_string` in
-`outline_print`, we’d get an error that no method named `to_string` was found
-for the type `&Self` in the current scope.
+can use the `to_string` function that’s automatically implemented for any type
+that implements `Display`. If we tried to use `to_string` without adding`:
+Display` after the trait name we’d get an error saying that no method named
+`to_string` was found for the type `&Self` in the current scope.
 
-If we try to implement `OutlinePrint` on a type that doesn’t implement
-`Display`, such as the `Point` struct:
+Let’s see what happens if we try to implement `OutlinePrint` on a type that
+doesn’t implement `Display`, such as the `Point` struct:
+
+Filename: src/main.rs
 
 ```
 struct Point {
@@ -1540,24 +1572,23 @@ struct Point {
 impl OutlinePrint for Point {}
 ```
 
-We’ll get an error that `Display` isn’t implemented and that `Display` is
-required by `OutlinePrint`:
+We’ll get an error saying that `Display` is required but not implemented:
 
 ```
 error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
   --> src/main.rs:20:6
    |
 20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ the trait `std::fmt::Display` is not implemented for
-   `Point`
+   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
+   try using `:?` instead if you are using a format string
    |
-   = note: `Point` cannot be formatted with the default formatter; try using
-   `:?` instead if you are using a format string
-   = note: required by `OutlinePrint`
+   = help: the trait `std::fmt::Display` is not implemented for `Point`
 ```
 
 Once we implement `Display` on `Point` and satisfy the constraint that
 `OutlinePrint` requires, like so:
+
+Filename: src/main.rs
 
 ```
 use std::fmt;
@@ -1575,19 +1606,23 @@ outline of asterisks.
 
 ### The Newtype Pattern to Implement External Traits on External Types
 
-In Chapter 10, we mentioned the orphan rule, which says we’re allowed to
-implement a trait on a type as long as either the trait or the type are local
-to our crate. One way to get around this restriction is to use the *newtype
-pattern*, which involves creating a new type using a tuple struct with one
-field as a thin wrapper around the type we want to implement a trait for. Then
-the wrapper type is local to our crate, and we can implement the trait on the
-wrapper. “Newtype” is a term originating from the Haskell programming language.
-There’s no runtime performance penalty for using this pattern. The wrapper type
-is elided at compile time.
+In Chapter 10 in the “Implementing a Trait on a Type” section, we mentioned the
+orphan rule that says we’re allowed to implement a trait on a type as long as
+either the trait or the type are local to our crate. It is possible to get
+around this restriction using the *newtype pattern*, which involves creating a
+new type in a tuple struct (we covered tuple structs in the “Tuple Structs
+without Named Fields to Create Different Types” section of Chapter 5). The
+tuple struct will have one field and will be a thin wrapper around the type we
+want to implement a trait for. Then the wrapper type is local to our crate, and
+we can implement the trait on the wrapper. “Newtype” is a term originating from
+the Haskell programming language. There’s no runtime performance penalty for
+using this pattern, and the wrapper type is elided at compile time.
 
-For example, if we wanted to implement `Display` on `Vec`, we can make a
-`Wrapper` struct that holds an instance of `Vec`. Then we can implement
-`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-34:
+As an example, we want to implement `Display` on `Vec`, which the orphan rule
+prevents us from doing directly because the `Display` trait and the `Vec` type
+are both defined outside of our crate. We can make a `Wrapper` struct that
+holds an instance of `Vec`, then we can implement `Display` on `Wrapper` and
+use the `Vec` value as shown in Listing 19-34:
 
 Filename: src/main.rs
 
@@ -1611,18 +1646,27 @@ fn main() {
 Listing 19-34: Creating a `Wrapper` type around `Vec<String>` to be able to
 implement `Display`
 
-The implementation of `Display` uses `self.0` to access the inner `Vec`, and
-then we can use the functionality of the `Display` type on `Wrapper`.
+The implementation of `Display` uses `self.0` to access the inner `Vec`,
+because `Wrapper` is a tuple struct and the `Vec` is the item at index 0 in the
+tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
 
-The downside is that since `Wrapper` is a new type, it doesn’t have the methods
-of the value it’s holding; we’d have to implement all the methods of `Vec` like
-`push`, `pop`, and all the rest directly on `Wrapper` to delegate to `self.0`
-in order to be able to treat `Wrapper` exactly like a `Vec`. If we wanted the
-new type to have every single method that the inner type has, implementing the
-`Deref` trait that we discussed in Chapter 15 on the wrapper to return the
-inner type can be a solution. If we don’t want the wrapper type to have all the
-methods of the inner type, in order to restrict the wrapper type’s behavior for
-example, we’d have to implement just the methods we do want ourselves.
+<!-- What is self.0? I think the syntax here might need a bit more talking
+through -->
+<!-- `Wrapper` is a tuple struct; we covered those in chapter 5, added a back
+reference to that section in the first paragraph of this section but we've used
+the `.0` syntax in multiple places before here /Carol -->
+
+The downside of this method is that, because `Wrapper` is a new type, it
+doesn’t have the methods of the value it’s holding; we’d have to implement all
+the methods of `Vec` directly on `Wrapper`, so that it can delegate to
+`self.0`--- this allows us to treat `Wrapper` exactly like a `Vec`. If we
+wanted the new type to have every single method that the inner type has,
+implementing the `Deref` trait (discussed in Chapter 15 in the “Treating Smart
+Pointers like Regular References with the `Deref` Trait” section) on the
+wrapper to return the inner type can be a solution. If we don’t want the
+wrapper type to have all the methods of the inner type, in order to restrict
+the wrapper type’s behavior for example, we’d have to implement just the
+methods we do want ourselves.
 
 That’s how the newtype pattern is used in relation to traits; it’s also a
 useful pattern without having traits involved. Let’s switch focus now to talk
@@ -1630,42 +1674,44 @@ about some advanced ways to interact with Rust’s type system.
 
 ## Advanced Types
 
-The Rust type system has some features that we’ve mentioned or used without
-discussing. We started talking about the newtype pattern in regards to traits;
-we’ll start with a more general discussion about why newtypes are useful as
-types. We’ll then move to type aliases, a feature that is similar to newtypes
-but has slightly different semantics. We’ll also discuss the `!` type and
-dynamically sized types.
+The Rust type system has some features that we’ve mentioned in this book but
+haven’t yet discussed. We’ll start our discussion on advanced types with a more
+general discussion about why newtypes are useful as types. We’ll then move to
+type aliases, a feature similar to newtypes but with slightly different
+semantics. We’ll also discuss the `!` type and dynamically sized types.
 
 ### Using the Newtype Pattern for Type Safety and Abstraction
 
-The newtype pattern that we started discussing at the end of the “Advanced
-Traits” section, where we create a new type as a tuple struct with one field
-that wraps a type can also be useful for statically enforcing that values are
-never confused, and is often used to indicate the units of a value. We actually
-had an example of this in Listing 19-26: the `Millimeters` and `Meters` structs
-both wrap `u32` values in a new type. If we write a function with a parameter
-of type `Millimeters`, we won’t be able to compile a program that accidentally
-tries to call that function with a value of type `Meters` or a plain `u32`.
+> This section assumes you’ve read the newtype pattern section in the “Advanced
+> Traits” section.
 
-Another reason to use the newtype pattern is to abstract away some
-implementation details of a type: the wrapper type can expose a different
-public API than the private inner type would if we used it directly in order to
-restrict the functionality that is available, for example. New types can also
-hide internal generic types. For example, we could provide a `People` type that
-wraps a `HashMap<i32, String>` that stores a person’s ID associated with their
-name. Code using `People` would only interact with the public API we provide,
-such as a method to add a name string to the `People` collection, and that code
-wouldn’t need to know that we assign an `i32` ID to names internally. The
-newtype pattern is a lightweight way to achieve encapsulation to hide
-implementation details that we discussed in Chapter 17.
+The newtype pattern is useful for other things beyond what we’ve discussed so
+far, including statically enforcing that values are never confused, and as
+indication of the units of a value. We actually had an example of this in
+Listing 19-26: the `Millimeters` and `Meters` structs both wrap `u32` values in
+a newtype. If we write a function with a parameter of type `Millimeters`, we
+won’t be able to compile a program that accidentally tries to call that
+function with a value of type `Meters` or a plain `u32`.
+
+Another use is in abstracting away some implementation details of a type: the
+wrapper type can expose a public API that’s different to the API of the private
+inner type, if we used it directly to restrict the available functionality, for
+example.
+
+Newtypes can also hide internal generic types. For example, we could provide a
+`People` type to wrap a `HashMap<i32, String>` that stores a person’s ID
+associated with their name. Code using `People` would only interact with the
+public API we provide, such as a method to add a name string to the `People`
+collection, and that code wouldn’t need to know that we assign an `i32` ID to
+names internally. The newtype pattern is a lightweight way to achieve
+encapsulation to hide implementation details that we discussed in the
+“Encapsulation that Hides Implementation Details” section of Chapter 17.
 
 ### Type Aliases Create Type Synonyms
 
-The newtype pattern involves creating a new struct to be a new, separate type.
-Rust also provides the ability to declare a *type alias* with the `type`
-keyword to give an existing type another name. For example, we can create the
-alias `Kilometers` to `i32` like so:
+Alongside the newtype pattern, Rust provides the ability to declare a *type
+alias* to give an existing type another name. For this we use the `type`
+keyword. For example, we can create the alias `Kilometers` to `i32` like so:
 
 ```
 type Kilometers = i32;
@@ -1685,11 +1731,10 @@ let y: Kilometers = 5;
 println!("x + y = {}", x + y);
 ```
 
-Since `Kilometers` is an alias for `i32`, they’re the same type. We can add
-values of type `i32` and `Kilometers` together, and we can pass `Kilometers`
-values to functions that take `i32` parameters. We don’t get the type checking
-benefits that we get from the newtype pattern that we discussed in the previous
-section.
+Because `Kilometers` and `i32`, are the same type, we can add values of both
+types, and we can also pass `Kilometers` values to functions that take `i32`
+parameters. With this method, though, we don’t get the type checking benefits
+that we get from the newtype pattern discussed in the previous section.
 
 The main use case for type synonyms is to reduce repetition. For example, we
 may have a lengthy type like this:
@@ -1716,10 +1761,9 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 
 Listing 19-35: Using a long type in many places
 
-A type alias makes this code more manageable by reducing the amount of
-repetition this project has. Here, we’ve introduced an alias named `Thunk` for
-the verbose type, and we can replace all uses of the type with the shorter
-`Thunk` as shown in Listing 19-36:
+A type alias makes this code more manageable by reducing the repetition. Here,
+we’ve introduced an alias named `Thunk` for the verbose type, and can replace
+all uses of the type with the shorter `Thunk` as shown in Listing 19-36:
 
 ```
 type Thunk = Box<Fn() + Send + 'static>;
@@ -1741,12 +1785,13 @@ Much easier to read and write! Choosing a good name for a type alias can help
 communicate your intent as well (*thunk* is a word for code to be evaluated at
 a later time, so it’s an appropriate name for a closure that gets stored).
 
-Another common use of type aliases is with the `Result<T, E>` type. Consider
-the `std::io` module in the standard library. I/O operations often return a
-`Result<T, E>`, since their operations may fail to work. There’s a
-`std::io::Error` struct that represents all of the possible I/O errors. Many of
-the functions in `std::io` will be returning `Result<T, E>` where the `E` is
-`std::io::Error`, such as these functions in the `Write` trait:
+Type aliases are also commonly used with the `Result<T, E>` type for reducing
+repetition. Consider the `std::io` module in the standard library. I/O
+operations often return a `Result<T, E>` to handle situations when operations
+fail to work. This library has a `std::io::Error` struct that represents all
+possible I/O errors. Many of the functions in `std::io` will be returning
+`Result<T, E>` where the `E` is `std::io::Error`, such as these functions in
+the `Write` trait:
 
 ```
 use std::io::Error;
@@ -1761,16 +1806,16 @@ pub trait Write {
 }
 ```
 
-We’re writing `Result<..., Error>` a lot. As such, `std::io` has this type
+We have `Result<..., Error>` repeated a lot. As such, `std::io` has this type
 alias declaration:
 
 ```
 type Result<T> = Result<T, std::io::Error>;
 ```
 
-Because this is in the `std::io` module, the fully qualified alias that we can
-use is `std::io::Result<T>`; that is, a `Result<T, E>` with the `E` filled in
-as `std::io::Error`. The `Write` trait function signatures end up looking like
+Because this is in the `std::io` module, we can use the fully qualified alias
+`std::io::Result<T>`; that is, a `Result<T, E>` with the `E` filled in as
+`std::io::Error`. The `Write` trait function signatures end up looking like
 this:
 
 ```
@@ -1786,14 +1831,14 @@ pub trait Write {
 The type alias helps in two ways: this is easier to write *and* it gives us a
 consistent interface across all of `std::io`. Because it’s an alias, it is just
 another `Result<T, E>`, which means we can use any methods that work on
-`Result<T, E>` with it, and special syntax like `?`.
+`Result<T, E>` with it, as well as special syntax like `?`.
 
-### The Never Type, `!`, that Never Returns
+### The `!` Never Type that Never Returns
 
-Rust has a special type named `!`. In type theory lingo, it’s called the *empty
-type*, because it has no values. We prefer to call it the *never type*. The name
-describes what it does: it stands in the place of the return type when a
-function will never return. For example:
+Rust has a special type named `!` that’s known in type theory lingo as the
+*empty type*, because it has no values. We prefer to call it the *never type*,
+because it stands in the place of the return type when a function will never
+return. For example:
 
 ```
 fn bar() -> ! {
@@ -1801,11 +1846,13 @@ fn bar() -> ! {
 }
 ```
 
-This is read as “the function `bar` returns never,” and functions that return
-never are called *diverging functions*. We can’t create values of the type `!`,
-so `bar` can never possibly return. What use is a type you can never create
-values for? If you think all the way back to Chapter 2, we had some code that
-looked like this, reproduced here in Listing 19-37:
+This is read as “the function `bar` returns never.” Functions that return never
+are called *diverging functions*. We can’t create values of the type `!`, so
+`bar` can never possibly return.
+
+But what use is a type you can never create values for? If you think all the
+way back to Chapter 2, we had some code that looked like the code we’ve
+reproduced here in Listing 19-37:
 
 ```
 let guess: u32 = match guess.trim().parse() {
@@ -1816,8 +1863,9 @@ let guess: u32 = match guess.trim().parse() {
 
 Listing 19-37: A `match` with an arm that ends in `continue`
 
-At the time, we skipped over some details in this code. In Chapter 6, we
-learned that `match` arms must return the same type. This doesn’t work:
+At the time, we skipped over some details in this code. In Chapter 6 in “The
+`match` Control Flow Operator” section, we covered that `match` arms must all
+return the same type. This, for example, doesn’t work:
 
 ```
 let guess = match guess.trim().parse()  {
@@ -1826,23 +1874,32 @@ let guess = match guess.trim().parse()  {
 }
 ```
 
-What would the type of `guess` be here? It’d have to be both an integer and a
-string, and Rust requires that `guess` can only have one type. So what does
-`continue` return? Why are we allowed to return a `u32` from one arm in Listing
-19-37 and have another arm that ends with `continue`?
+The type of `guess` here would have to be both an integer and a string, and
+Rust requires that `guess` can only have one type. So what does `continue`
+return? How were we allowed to return a `u32` from one arm and have another arm
+that ends with `continue` in Listing 19-37?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
-to compute the type of `guess`, it looks at both of the match arms. The former
-has a value of `u32`, and the latter has a value of `!`. Since `!` can never
-have a value, Rust is okay with this, and decides that the type of `guess` is
-`u32`. The formal way of describing this behavior is that expressions of type
-`!` can be coerced into any other type. We’re allowed to end this `match` arm
-with `continue` because `continue` doesn’t actually return a value; it instead
-moves control back to the top of the loop, so in the `Err` case, we never
-actually assign a value to `guess`.
+to compute the type of `guess`, it looks at both of the match arms, the former
+with a value of `u32`, and the latter a value of `!`. Because `!` can never
+have a value, Rust decides that the type of `guess` is `u32`.
 
-Another use of the never type is `panic!`. Remember the `unwrap` function that
-we call on `Option<T>` values to produce a value or panic? Here’s its
+The formal way of describing this behavior is that expressions of type `!` can
+be coerced into any other type. We’re allowed to end this `match` arm with
+`continue` because `continue` doesn’t actually return a value; it instead moves
+control back to the top of the loop, so in the `Err` case, we never actually
+assign a value to `guess`.
+
+<!-- I'm not sure I'm following what would then occur in the event of an error,
+literally nothing? -->
+<!-- The block returns control to the enclosing loop; I'm not sure how to
+clarify this other than what we already have here, do you have any suggestions?
+I wouldn't say it's "literally nothing" because it does do something, it
+returns control to the loop and the next iteration of the loop happens...
+/Carol -->
+
+The never type is also useful with `panic!`. Remember the `unwrap` function
+that we call on `Option<T>` values to produce a value or panic? Here’s its
 definition:
 
 ```
@@ -1874,69 +1931,77 @@ loop {
 
 Here, the loop never ends, so the value of the expression is `!`. This wouldn’t
 be true if we included a `break`, however, as the loop would terminate when it
-gets to the `break`.
+got to the `break`.
 
 ### Dynamically Sized Types & `Sized`
 
-Because Rust needs to know things like memory layout, there’s a particular
-corner of its type system that can be confusing, and that’s the concept of
-*dynamically sized types*. Sometimes referred to as ‘DSTs’ or ‘unsized types’,
-these types let us talk about types whose size we can only know at runtime.
+Due to Rust’s need to know things like how much space to allocate for a value
+of a particular type, there’s a corner of its type system that can be
+confusing: the concept of *dynamically sized types*. Sometimes referred to as
+‘DSTs’ or ‘unsized types’, these types let us talk about types whose size we
+can only know at runtime.
 
 Let’s dig into the details of a dynamically sized type that we’ve been using
-this whole book: `str`. That’s right, not `&str`, but `str` on its own. `str`
-is a DST; we can’t know how long the string is until runtime. Since we can’t
-know that, we can’t create a variable of type `str`, nor can we take an
-argument of type `str`. Consider this code, which does not work:
+this whole book: `str`. That’s right, not `&str`, but `str` on its own, is a
+DST. We can’t know how long the string is until runtime, meaning we can’t
+create a variable of type `str`, nor can we take an argument of type `str`.
+Consider this code, which does not work:
 
 ```
 let s1: str = "Hello there!";
 let s2: str = "How's it going?";
 ```
 
-These two `str` values would need to have the exact same memory layout, but
-they have different lengths: `s1` needs 12 bytes of storage, and `s2` needs 15.
-This is why it’s not possible to create a variable holding a dynamically sized
-type.
+<!-- Why do they need to have the same memory layout? Perhaps I'm not
+understanding fully what is meant by the memory layout, is it worth explaining
+that a little in this section? -->
+<!-- I've reworded /Carol -->
 
-So what to do? Well, you already know the answer in this case: the types of
-`s1` and `s2` are `&str` rather than `str`. If you think back to Chapter 4, we
-said this about `&str`:
+Rust needs to know how much memory to allocate for any value of a particular
+type, and all values of a type must use the same amount of memory. If we were
+allowed to write this code, that would mean these two `str` values would need
+to take up the exact same amount of space, but they have different lengths:
+`s1` needs 12 bytes of storage, and `s2` needs 15. This is why it’s not
+possible to create a variable holding a dynamically sized type.
 
-> ... it’s a reference to an internal position in the String and the number of
-> elements that it refers to.
+So what to do? You already know the answer in this case: we make the types of
+`s1` and `s2` a `&str` rather than `str`. If you think back to the “String
+Slices” section of Chapter 4, we said that the slice data structure stores the
+starting position and the length of the slice.
 
 So while a `&T` is a single value that stores the memory address of where the
-`T` is located, a `&str` is *two* values: the address of the `str` and how long
-it is. As such, a `&str` has a size we can know at compile time: it’s two times
-the size of a `usize` in length. That is, we always know the size of a `&str`,
-no matter how long the string it refers to is. This is the general way in which
-dynamically sized types are used in Rust; they have an extra bit of metadata
-that stores the size of the dynamic information. This leads us to the golden
-rule of dynamically sized types: we must always put values of dynamically sized
-types behind a pointer of some kind.
+`T` is located, a `&str` is *two* values: the address of the `str` and its
+length. As such, a `&str` has a size we can know at compile time: it’s two
+times the size of a `usize` in length. That is, we always know the size of a
+`&str`, no matter how long the string it refers to is. This is the general way
+in which dynamically sized types are used in Rust; they have an extra bit of
+metadata that stores the size of the dynamic information. This leads us to the
+golden rule of dynamically sized types: we must always put values of
+dynamically sized types behind a pointer of some kind.
 
-<!-- Note for Carol: `Rc<str>` is only in an accepted RFC right now, check on
-its progress and pull this out if it's not going to be stable by Oct -->
-
-While we’ve talked a lot about `&str`, we can combine `str` with all kinds of
-pointers: `Box<str>`, for example, or `Rc<str>`. In fact, you’ve already seen
-this before, but with a different dynamically sized type: traits. Every trait
-is a dynamically sized type we can refer to by using the name of the trait. In
-Chapter 17, we mentioned that in order to use traits as trait objects, we have
-to put them behind a pointer like `&Trait` or `Box<Trait>` (`Rc<Trait>` would
-work too). Traits being dynamically sized is the reason we have to do that!
+We can combine `str` with all kinds of pointers: `Box<str>`, for example, or
+`Rc<str>`. In fact, you’ve seen this before, but with a different dynamically
+sized type: traits. Every trait is a dynamically sized type we can refer to by
+using the name of the trait. In Chapter 17 in the “Using Trait Objects that
+Allow for Values of Different Types” section, we mentioned that in order to use
+traits as trait objects, we have to put them behind a pointer like `&Trait` or
+`Box<Trait>` (`Rc<Trait>` would work too). Traits being dynamically sized is
+the reason we have to do that!
 
 #### The `Sized` Trait
 
 <!-- If we end up keeping the section on object safety in ch 17, we should add
 a back reference here. /Carol -->
 
-To work with DSTs, Rust has a trait that determines if a type’s size is known
-at compile time or not, which is `Sized`. This trait is automatically
-implemented for everything the compiler knows the size of at compile time. In
-addition, Rust implicitly adds a bound on `Sized` to every generic function.
-That is, a generic function definition like this:
+<!-- I think we dropped that one, right? -->
+<!-- We cut a large portion of it, including the part about `Sized`, so I
+didn't add a back reference. /Carol -->
+
+To work with DSTs, Rust has a particular trait to determine if a type’s size is
+known at compile time or not: the `Sized` trait. This trait is automatically
+implemented for everything whose size is known at compile time. In addition,
+Rust implicitly adds a bound on `Sized` to every generic function. That is, a
+generic function definition like this:
 
 ```
 fn generic<T>(t: T) {
@@ -1966,24 +2031,32 @@ A trait bound on `?Sized` is the opposite of a trait bound on `Sized`; that is,
 we would read this as “`T` may or may not be `Sized`”. This syntax is only
 available for `Sized`, no other traits.
 
-Also note we switched the type of the `t` parameter from `T` to `&T`: since the
-type might not be `Sized`, we need to use it behind some kind of pointer. In
-this case, we’ve chosen a reference.
+Also note we switched the type of the `t` parameter from `T` to `&T`: because
+the type might not be `Sized`, we need to use it behind some kind of pointer.
+In this case, we’ve chosen a reference.
 
 Next let’s talk about functions and closures!
 
 ## Advanced Functions & Closures
 
-Finally, let’s discuss some advanced features having to do with functions and
+Finally, let’s discuss some advanced features related to functions and
 closures: function pointers, diverging functions, and returning closures.
 
-### Function pointers
+### Function Pointers
 
-We’ve talked about how to pass closures to functions, but you can pass regular
-functions to functions too! Functions coerce to the type `fn`, with a lower
-case ‘f’ not to be confused with the `Fn` closure trait. `fn` is called a
-*function pointer*. The syntax for specifying that a parameter is a function
-pointer is similar to that of closures, as shown in Listing 19-38:
+<!-- Maybe give an example of when we'd want to use this? -->
+<!-- Added a short sentence, but we discuss interfacing with languages that
+don't have closures below, which I don't think makes sense until we define how
+function pointers are different than closures... /Carol -->
+
+We’ve talked about how to pass closures to functions; you can also pass regular
+functions to functions! This is useful when we want to pass a function we’ve
+already defined rather than defining a new closure. We do this using function
+pointers to allow us to use functions as arguments to other functions.
+Functions coerce to the type `fn`, with a lower case ‘f’ not to be confused
+with the `Fn` closure trait. The `fn` type is called a *function pointer*. The
+syntax for specifying that a parameter is a function pointer is similar to that
+of closures, as shown in Listing 19-38:
 
 Filename: src/main.rs
 
@@ -2011,19 +2084,22 @@ This prints `The answer is: 12`. We specify that the parameter `f` in
 the function name `add_one` as the first argument to `do_twice`.
 
 Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+parameter type directly, rather than declaring a generic type parameter with
+one of the `Fn` traits as a trait bound.
 
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), so we can always pass a function pointer as an argument when calling
-a function that expects a closure. Prefer to write functions using a generic
-type and one of the closure traits, so that your functions can accept either
-functions or closures. An example of a case where you’d only want to accept
-`fn` is when interfacing with external code that doesn’t have closures: C
-functions can accept functions as arguments, but C doesn’t have closures.
+`FnOnce`), so we can always pass a function pointer as an argument for a
+function that expects a closure. Prefer to write functions using a generic type
+and one of the closure traits, so that your functions can accept either
+functions or closures.
 
-For example, if we wanted to use the `map` function to turn a vector of numbers
-into a vector of strings, we could use a closure:
+An example of a case where you’d want to only accept `fn` and not closures is
+when interfacing with external code that doesn’t have closures: C functions can
+accept functions as arguments, but C doesn’t have closures.
+
+For an example where we can use either a closure defined inline or a named
+function, let’s look at a use of `map`. To use the `map` function to turn a
+vector of numbers into a vector of strings, we could use a closure:
 
 ```
 let list_of_numbers = vec![1, 2, 3];
@@ -2049,17 +2125,17 @@ named `to_string`; here, we’re using the `to_string` function defined in the
 `ToString` trait, which the standard library has implemented for any type that
 implements `Display`.
 
-Some people prefer this style, some people prefer the closure. They end up
+Some people prefer this style, some people prefer to use closures. They end up
 with the same code, so use whichever feels more clear to you.
 
 ### Returning Closures
 
-Because closures are represented by traits, returning closures is a little
-tricky; we can’t do it directly. In most cases where we may want to return a
-trait, we can instead use the concrete type that implements the trait of what
-we’re returning as the return value of the function. We can’t do that with
-closures, though. They don’t have a concrete type that’s returnable; we’re not
-allowed to use the function pointer `fn` as a return type, for example.
+Closures are represented by traits, which means we can’t return closures
+directly. In most cases where we may want to return a trait, we can instead use
+the concrete type that implements the trait as the return value of the
+function. We can’t do that with closures, though, because they don’t have a
+concrete type that’s returnable; we’re not allowed to use the function pointer
+`fn` as a return type, for example.
 
 This code that tries to return a closure directly won’t compile:
 
@@ -2074,20 +2150,20 @@ The compiler error is:
 ```
 error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
 std::marker::Sized` is not satisfied
- --> <anon>:2:25
+ -->
   |
-2 | fn returns_closure() -> Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^ the trait `std::marker::Sized` is
-  not implemented for `std::ops::Fn(i32) -> i32 + 'static`
+1 | fn returns_closure() -> Fn(i32) -> i32 {
+  |                         ^^^^^^^^^^^^^^ `std::ops::Fn(i32) -> i32 + 'static`
+  does not have a constant size known at compile-time
   |
-  = note: `std::ops::Fn(i32) -> i32 + 'static` does not have a constant size
-  known at compile-time
+  = help: the trait `std::marker::Sized` is not implemented for
+  `std::ops::Fn(i32) -> i32 + 'static`
   = note: the return type of a function must have a statically known size
 ```
 
-The `Sized` trait again! Rust doesn’t know how much space it’ll need to store
-the closure. We saw a solution to this in the previous section, though: we can
-use a trait object:
+Our error references the `Sized` trait again! Rust doesn’t know how much space
+it will need to store the closure. We saw a solution to this in the previous
+section: we can use a trait object:
 
 ```
 fn returns_closure() -> Box<Fn(i32) -> i32> {
@@ -2095,14 +2171,17 @@ fn returns_closure() -> Box<Fn(i32) -> i32> {
 }
 ```
 
-For more about trait objects, refer back to Chapter 18.
+This code will compile just fine. For more about trait objects, refer back to
+the “Trait Objects” section in Chapter 17.
 
 ## Summary
 
-Whew! Now we’ve gone over features of Rust that aren’t used very often, but are
-available if you need them. We’ve introduced a lot of complex topics so that
-when you encounter them in error message suggestions or when reading others’
-code, you’ll at least have seen these concepts and syntax once before.
+Whew! Now we’ve gone over features of Rust that aren’t used often, but are
+available if you need them in very particular circumstances. We’ve introduced a
+lot of complex topics so that, when you encounter them in error message
+suggestions or in others’ code, you’ll at least have seen these concepts and
+syntax once before. You can use this chapter as a reference to guide you to
+your solutions.
 
 Now, let’s put everything we’ve learned throughout the book into practice with
 one more project!
