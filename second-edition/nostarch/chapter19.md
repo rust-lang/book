@@ -924,7 +924,7 @@ having to do with lifetimes and trait objects:
 When we must be explicit, we can add a lifetime bound on a trait object like
 `Box<Foo>` with the syntax `Box<Foo + 'a>` or `Box<Foo + 'static>`, depending
 on what’s needed. Just as with the other bounds, this means that any
-implementer of the `Foo` trait that has any references inside must have the
+implementor of the `Foo` trait that has any references inside must have the
 lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
@@ -938,7 +938,7 @@ details. Now that we know more Rust, we can get into the nitty-gritty.
 
 *Associated types* are a way of associating a type placeholder with a trait
 such that the trait method definitions can use these placeholder types in their
-signatures. The implementer of a trait will specify the concrete type to be
+signatures. The implementor of a trait will specify the concrete type to be
 used in this type’s place for the particular implementation.
 
 We’ve described most of the things in this chapter as being very rare.
@@ -962,9 +962,9 @@ type `Item`
 
 This says that the `Iterator` trait has an associated type named `Item`. `Item`
 is a placeholder type, and the return value of the `next` method will return
-values of type `Option<Self::Item>`. Implementers of this trait will specify
+values of type `Option<Self::Item>`. Implementors of this trait will specify
 the concrete type for `Item`, and the `next` method will return an `Option`
-containing a value of whatever type the implementer has specified.
+containing a value of whatever type the implementor has specified.
 
 #### Associated Types Versus Generics
 
@@ -1229,104 +1229,219 @@ Rust cannot prevent a trait from having a method with the same name as another
 trait’s method, nor can it prevent us from implementing both of these traits on
 one type. We can also have a method implemented directly on the type with the
 same name as well! In order to be able to call each of the methods with the
-same name, then, we need to tell Rust which one we want to use. Consider the
-code in Listing 19-27 where traits `Foo` and `Bar` both have method `f` and we
-implement both traits on struct `Baz`, which also has a method named `f`:
+same name, then, we need to tell Rust which one we want to use.
+
+Consider the code in Listing 19-27 where we’ve defined two traits, `Pilot` and
+`Wizard`, that both have a method called `fly`. We then implement both traits
+on a type `Human` that itself already has a method named `fly` implemented on
+it. Each `fly` method does something different:
 
 Filename: src/main.rs
 
 ```
-trait Foo {
-    fn f(&self);
+trait Pilot {
+    fn fly(&self);
 }
 
-trait Bar {
-    fn f(&self);
+trait Wizard {
+    fn fly(&self);
 }
 
-struct Baz;
+struct Human;
 
-impl Foo for Baz {
-    fn f(&self) { println!("Baz’s impl of Foo"); }
+impl Pilot for Human {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
 }
 
-impl Bar for Baz {
-    fn f(&self) { println!("Baz’s impl of Bar"); }
+impl Wizard for Human {
+    fn fly(&self) {
+        println!("Up!");
+    }
 }
 
-impl Baz {
-    fn f(&self) { println!("Baz's impl"); }
-}
-
-fn main() {
-    let b = Baz;
-    b.f();
+impl Human {
+    fn fly(&self) {
+        println!("*waving arms furiously*");
+    }
 }
 ```
 
-Listing 19-27: Implementing two traits that both have a method with the same
-name as a method defined on the struct directly
+Listing 19-27: Two traits defined to have a `fly` method, and implementations
+of those traits on the `Human` type in addition to a `fly` method on `Human`
+directly
 
-For the implementation of the `f` method for the `Foo` trait on `Baz`, we’re
-printing out `Baz's impl of Foo`. For the implementation of the `f` method for
-the `Bar` trait on `Baz`, we’re printing out `Baz's impl of Bar`. The
-implementation of `f` directly on `Baz` prints out `Baz's impl`. What should
-happen when we call `b.f()`? In this case, Rust will always use the
-implementation on `Baz` directly and will print out `Baz's impl`.
-
-In order to be able to call the `f` method from `Foo` and the `f` method from
-`Baz` rather than the implementation of `f` directly on `Baz`, we need to use
-the *fully qualified syntax* for calling methods. It works like this: for any
-method call like:
-
-```
-receiver.method(args);
-```
-
-We can fully qualify the method call like this:
-
-```
-<Type as Trait>::method(receiver, args);
-```
-
-So in order to disambiguate and be able to call all the `f` methods defined in
-Listing 19-27, we specify that we want to treat the type `Baz` as each trait
-within angle brackets, then use two colons, then call the `f` method and pass
-the instance of `Baz` as the first argument. Listing 19-28 shows how to call
-`f` from `Foo` and then `f` from `Bar` on `b`:
+When we call `fly` on an instance of `Human`, the compiler defaults to calling
+the method that is directly implemented on the type, as shown in Listing 19-28:
 
 Filename: src/main.rs
 
 ```
 fn main() {
-    let b = Baz;
-    b.f();
-    <Baz as Foo>::f(&b);
-    <Baz as Bar>::f(&b);
+    let person = Human;
+    person.fly();
 }
 ```
 
-Listing 19-28: Using fully qualified syntax to call the `f` methods defined as
-part of the `Foo` and `Bar` traits
+Listing 19-28: Calling `fly` on an instance of `Human`
 
-This will print:
+Running this will print out `*waving arms furiously*`, which shows that Rust
+called the `fly` method implemented on `Human` directly.
+
+In order to call the `fly` methods from either the `Pilot` trait or the
+`Wizard` trait, we need to use more explicit syntax in order to specify which
+`fly` method we mean. This syntax is demonstrated in Listing 19-29:
+
+Filename: src/main.rs
 
 ```
-Baz's impl
-Baz’s impl of Foo
-Baz’s impl of Bar
+fn main() {
+    let person = Human;
+    Pilot::fly(&person);
+    Wizard::fly(&person);
+    person.fly();
+}
 ```
 
-We only need the `Type as` part if it’s ambiguous, and we only need the `<>`
-part if we need the `Type as` part. So if we only had the `f` method directly
-on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
-`f` method in `Foo` by using `Foo::f(&b)` since we wouldn’t have to
-disambiguate from the `Bar` trait.
+Listing 19-29: Specifying which trait’s `fly` method we want to call
 
-We could also have called the `f` defined directly on `Baz` by using
-`Baz::f(&b)`, but since that definition of `f` is the one that gets used by
-default when we call `b.f()`, it’s not required to fully specify that
-implementation if that’s what we want to call.
+Specifying the trait name before the method name clarifies to Rust which
+implementation of `fly` we want to call. We could also choose to write
+`Human::fly(&person)`, which is equivalent to `person.fly()` that we had in
+Listing 19-28, but is a bit longer to write if we don’t need to disambiguate.
+
+Running this code will print:
+
+```
+This is your captain speaking.
+Up!
+*waving arms furiously*
+```
+
+Because the `fly` method takes a `self` parameter, if we had two *types* that
+both implement one *trait*, Rust can figure out which implementation of a trait
+to use based on the type of `self`.
+
+However, associated functions that are part of traits don’t have a `self`
+parameter. When two types in the same scope implement that trait, Rust can’t
+figure out which type we mean unless we use *fully qualified syntax*. For
+example, take the `Animal` trait in Listing 19-30 that has the associated
+function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
+the associated function `baby_name` defined on `Dog` directly:
+
+Filename: src/main.rs
+
+```
+trait Animal {
+    fn baby_name() -> String;
+}
+
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
+    }
+}
+
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
+    }
+}
+
+fn main() {
+    println!("A baby dog is called a {}", Dog::baby_name());
+}
+```
+
+Listing 19-30: A trait with an associated function and a type that has an
+associated function with the same name that also implements the trait
+
+This code is for an animal shelter where they want to give all puppies the name
+Spot, which is implemented in the `baby_name` associated function that is
+defined on `Dog`. The `Dog` type also implements the trait `Animal`, which
+describes characteristics that all animals have. Baby dogs are called puppies,
+and that is expressed in the implementation of the `Animal` trait on `Dog` in
+the `baby_name` function associated with the `Animal` trait.
+
+In `main`, we’re calling the `Dog::baby_name` function, which calls the
+associated function defined on `Dog` directly. This code prints:
+
+```
+A baby dog is called a Spot
+```
+
+This isn’t really what we wanted, in this case we want to call the `baby_name`
+function that’s part of the `Animal` trait that we implemented on `Dog`, so
+that we can print `A baby dog is called a puppy`. The technique we used in
+Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing
+19-31:
+
+Filename: src/main.rs
+
+```
+fn main() {
+    println!("A baby dog is called a {}", Animal::baby_name());
+}
+```
+
+Listing 19-31: Attempting to call the `baby_name` function from the `Animal`
+trait, but Rust doesn’t know which implementation to use
+
+Because `Animal::baby_name` is an associated function rather than a method, and
+thus doesn’t have a `self` parameter, Rust has no way to figure out which
+implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+
+```
+error[E0283]: type annotations required: cannot resolve `_: Animal`
+  --> src/main.rs
+   |
+20 |     println!("A baby dog is called a {}", Animal::baby_name());
+   |                                           ^^^^^^^^^^^^^^^^^
+   |
+   = note: required by `Animal::baby_name`
+```
+
+In order to tell Rust that we want to use the implementation of `Animal` for
+`Dog`, we need to use *fully qualified syntax*, which is the most specific we
+can be when calling a function. Listing 19-32 demonstrates how to use fully
+qualified syntax in this case:
+
+Filename: src/main.rs
+
+```
+fn main() {
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+}
+```
+
+Listing 19-32: Using fully qualified syntax to specify that we want to call the
+`baby_name` function from the `Animal` trait as implemented on `Dog`
+
+We’re providing Rust with a type annotation within the angle brackets, and
+we’re specifying that we want to call the `baby_name` method from the `Animal`
+trait as implemented on `Dog` by saying that we want to treat the `Dog` type as
+an `Animal` for this function call. This code will now print what we want:
+
+```
+A baby dog is called a puppy
+```
+
+In general, fully qualified syntax is defined as:
+
+```
+<Type as Trait>::function(receiver_if_method, next_arg, ...);
+```
+
+For associated functions, there would not be a `receiver`, there would only be
+the list of other arguments. We could choose to use fully qualified syntax
+everywhere that we call functions or methods. However, we’re allowed to leave
+out any part of this syntax that Rust is able to figure out from other
+information in the program. We only need to use this more verbose syntax in
+cases where there are multiple implementations that use the same name and Rust
+needs help in order to know which implementation we want to call.
 
 ### Supertraits to Use One Trait’s Functionality Within Another Trait
 
@@ -1354,7 +1469,7 @@ In the implementation of `outline_print`, since we want to be able to use the
 `OutlinePrint` trait will only work for types that also implement `Display` and
 provide the functionality that `OutlinePrint` needs. We can do that in the
 trait definition by specifying `OutlinePrint: Display`. It’s like adding a
-trait bound to the trait. Listing 19-29 shows an implementation of the
+trait bound to the trait. Listing 19-33 shows an implementation of the
 `OutlinePrint` trait:
 
 ```
@@ -1373,7 +1488,7 @@ trait OutlinePrint: fmt::Display {
 }
 ```
 
-Listing 19-29: Implementing the `OutlinePrint` trait that requires the
+Listing 19-33: Implementing the `OutlinePrint` trait that requires the
 functionality from `Display`
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
@@ -1442,7 +1557,7 @@ is elided at compile time.
 
 For example, if we wanted to implement `Display` on `Vec`, we can make a
 `Wrapper` struct that holds an instance of `Vec`. Then we can implement
-`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-30:
+`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-34:
 
 Filename: src/main.rs
 
@@ -1463,7 +1578,7 @@ fn main() {
 }
 ```
 
-Listing 19-30: Creating a `Wrapper` type around `Vec<String>` to be able to
+Listing 19-34: Creating a `Wrapper` type around `Vec<String>` to be able to
 implement `Display`
 
 The implementation of `Display` uses `self.0` to access the inner `Vec`, and
@@ -1555,7 +1670,7 @@ Box<Fn() + Send + 'static>
 
 Writing this out in function signatures and as type annotations all over the
 place can be tiresome and error-prone. Imagine having a project full of code
-like that in Listing 19-31:
+like that in Listing 19-35:
 
 ```
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
@@ -1569,12 +1684,12 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 }
 ```
 
-Listing 19-31: Using a long type in many places
+Listing 19-35: Using a long type in many places
 
 A type alias makes this code more manageable by reducing the amount of
 repetition this project has. Here, we’ve introduced an alias named `Thunk` for
 the verbose type, and we can replace all uses of the type with the shorter
-`Thunk` as shown in Listing 19-32:
+`Thunk` as shown in Listing 19-36:
 
 ```
 type Thunk = Box<Fn() + Send + 'static>;
@@ -1590,7 +1705,7 @@ fn returns_long_type() -> Thunk {
 }
 ```
 
-Listing 19-32: Introducing a type alias `Thunk` to reduce repetition
+Listing 19-36: Introducing a type alias `Thunk` to reduce repetition
 
 Much easier to read and write! Choosing a good name for a type alias can help
 communicate your intent as well (*thunk* is a word for code to be evaluated at
@@ -1660,7 +1775,7 @@ This is read as “the function `bar` returns never,” and functions that retur
 never are called *diverging functions*. We can’t create values of the type `!`,
 so `bar` can never possibly return. What use is a type you can never create
 values for? If you think all the way back to Chapter 2, we had some code that
-looked like this, reproduced here in Listing 19-33:
+looked like this, reproduced here in Listing 19-37:
 
 ```
 let guess: u32 = match guess.trim().parse() {
@@ -1669,7 +1784,7 @@ let guess: u32 = match guess.trim().parse() {
 };
 ```
 
-Listing 19-33: A `match` with an arm that ends in `continue`
+Listing 19-37: A `match` with an arm that ends in `continue`
 
 At the time, we skipped over some details in this code. In Chapter 6, we
 learned that `match` arms must return the same type. This doesn’t work:
@@ -1684,17 +1799,17 @@ let guess = match guess.trim().parse()  {
 What would the type of `guess` be here? It’d have to be both an integer and a
 string, and Rust requires that `guess` can only have one type. So what does
 `continue` return? Why are we allowed to return a `u32` from one arm in Listing
-19-33 and have another arm that ends with `continue`?
+19-37 and have another arm that ends with `continue`?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms. The former
 has a value of `u32`, and the latter has a value of `!`. Since `!` can never
 have a value, Rust is okay with this, and decides that the type of `guess` is
-`u32`. The formal way of describing this behavior of `!` is that the never type
-unifies with all other types. We’re allowed to end this `match` arm with
-`continue` because `continue` doesn’t actually return a value; it instead moves
-control back to the top of the loop, so in the `Err` case, we never actually
-assign a value to `guess`.
+`u32`. The formal way of describing this behavior is that expressions of type
+`!` can be coerced into any other type. We’re allowed to end this `match` arm
+with `continue` because `continue` doesn’t actually return a value; it instead
+moves control back to the top of the loop, so in the `Err` case, we never
+actually assign a value to `guess`.
 
 Another use of the never type is `panic!`. Remember the `unwrap` function that
 we call on `Option<T>` values to produce a value or panic? Here’s its
@@ -1838,7 +1953,7 @@ We’ve talked about how to pass closures to functions, but you can pass regular
 functions to functions too! Functions coerce to the type `fn`, with a lower
 case ‘f’ not to be confused with the `Fn` closure trait. `fn` is called a
 *function pointer*. The syntax for specifying that a parameter is a function
-pointer is similar to that of closures, as shown in Listing 19-34:
+pointer is similar to that of closures, as shown in Listing 19-38:
 
 Filename: src/main.rs
 
@@ -1858,7 +1973,7 @@ fn main() {
 }
 ```
 
-Listing 19-34: Using the `fn` type to accept a function pointer as an argument
+Listing 19-38: Using the `fn` type to accept a function pointer as an argument
 
 This prints `The answer is: 12`. We specify that the parameter `f` in
 `do_twice` is an `fn` that takes one parameter of type `i32` and returns an
@@ -1940,9 +2055,9 @@ std::marker::Sized` is not satisfied
   = note: the return type of a function must have a statically known size
 ```
 
-The `Sized` trait again! Rust doesn’t know how much space it’ll need to store the
-closure. We saw a solution to this in the previous section, though: we can use
-a trait object:
+The `Sized` trait again! Rust doesn’t know how much space it’ll need to store
+the closure. We saw a solution to this in the previous section, though: we can
+use a trait object:
 
 ```
 fn returns_closure() -> Box<Fn(i32) -> i32> {
