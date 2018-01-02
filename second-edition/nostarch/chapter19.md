@@ -1050,24 +1050,31 @@ Next, let’s take a look at some other advanced features dealing with traits!
 
 ## Advanced Traits
 
-We covered traits in Chapter 10, but like lifetimes, we didn’t get to all the
-details. Now that we know more Rust, we can get into the nitty-gritty.
+We covered traits in Chapter 10 but, like lifetimes, we didn’t get to some of
+the more advanced details. Now that we know more Rust, we can get into the
+nitty-gritty.
 
-### Associated Types
+### Associated Types Specify Placeholder Types in Trait Definitions
 
 *Associated types* are a way of associating a type placeholder with a trait
 such that the trait method definitions can use these placeholder types in their
 signatures. The implementor of a trait will specify the concrete type to be
-used in this type’s place for the particular implementation.
+used in this type’s place for the particular implementation. That way, we can
+define a trait that uses some types without needing to know exactly what those
+types are until the trait is implemented.
 
-We’ve described most of the things in this chapter as being very rare.
-Associated types are somewhere in the middle; they’re more rare than the rest
-of the book, but more common than many of the things in this chapter.
+<!-- Can you say what this is useful for -- it seems like a way to not to have
+to specify a type prior to use, is that right? -->
+<!-- Prior to trait implementation, yes. /Carol -->
 
-An example of a trait with an associated type is the `Iterator` trait provided
-by the standard library. It has an associated type named `Item` that stands in
-for the type of the values that we’re iterating over. We mentioned in Chapter
-13 that the definition of the `Iterator` trait is as shown in Listing 19-20:
+We’ve described most of the things in this chapter as being needed very rarely.
+Associated types are somewhere in the middle; they’re used more rarely than the
+rest of the book, but more commonly than many of the things in this chapter.
+
+One example of a trait with an associated type is the `Iterator` trait provided
+by the standard library. This has an associated type named `Item` that stands
+in for the type of the values it's iterating over. We mentioned in Chapter 13
+that the definition of the `Iterator` trait is as shown in Listing 19-20:
 
 ```
 pub trait Iterator {
@@ -1079,16 +1086,20 @@ pub trait Iterator {
 Listing 19-20: The definition of the `Iterator` trait that has an associated
 type `Item`
 
-This says that the `Iterator` trait has an associated type named `Item`. `Item`
-is a placeholder type, and the return value of the `next` method will return
-values of type `Option<Self::Item>`. Implementors of this trait will specify
-the concrete type for `Item`, and the `next` method will return an `Option`
-containing a value of whatever type the implementor has specified.
+The `Iterator` trait has an associated type named `Item`. This is a placeholder
+type, and the `next` method will return values of type `Option<Self::Item>`.
+Implementors of this trait will specify the concrete type for `Item`, and the
+`next` method will return an `Option` containing a value of that concrete type.
 
 #### Associated Types Versus Generics
 
-When we implemented the `Iterator` trait on the `Counter` struct in Listing
-13-6, we specified that the `Item` type was `u32`:
+This may seem like a similar concept to generics, in that it allows us to
+define a function without specifying what types it can deal with. So why use
+associated types?
+
+Let's examine the difference with an example that implements the `Iterator`
+trait on the `Counter` struct. In Listing 13-6, we specified that the `Item`
+type was `u32`:
 
 ```
 impl Iterator for Counter {
@@ -1097,8 +1108,8 @@ impl Iterator for Counter {
     fn next(&mut self) -> Option<Self::Item> {
 ```
 
-This feels similar to generics. So why isn’t the `Iterator` trait defined as
-shown in Listing 19-21?
+This feels similar to generics. So why not just define the `Iterator` trait
+with generics as shown in Listing 19-21?
 
 ```
 pub trait Iterator<T> {
@@ -1108,17 +1119,18 @@ pub trait Iterator<T> {
 
 Listing 19-21: A hypothetical definition of the `Iterator` trait using generics
 
-The difference is that with the definition in Listing 19-21, we could also
-implement `Iterator<String> for Counter`, or any other type as well, so that
-we’d have multiple implementations of `Iterator` for `Counter`. In other words,
-when a trait has a generic parameter, we can implement that trait for a type
-multiple times, changing the generic type parameters’ concrete types each time.
-Then when we use the `next` method on `Counter`, we’d have to provide type
+The difference lies in the fact that when using generics like in Listing 19-21,
+we have to annotate the types in each implementation. This is because we can
+also implement `Iterator<String> for Counter`, or any other type, which would
+give us multiple implementations of `Iterator` for `Counter`. In other words,
+when a trait has a generic parameter, it can be implemented for a type multiple
+times, changing the concrete types of the generic type parameters each time.
+When we use the `next` method on `Counter`, we’d then have to provide type
 annotations to indicate which implementation of `Iterator` we wanted to use.
 
-With associated types, we can’t implement a trait on a type multiple times.
-Using the actual definition of `Iterator` from Listing 19-20, we can only
-choose once what the type of `Item` will be, since there can only be one `impl
+With associated types, we don't need to annotate types because we can’t
+implement a trait on a type multiple times. With Listing 19-20, we can only
+choose once what the type of `Item` will be, because there can only be one `impl
 Iterator for Counter`. We don’t have to specify that we want an iterator of
 `u32` values everywhere that we call `next` on `Counter`.
 
