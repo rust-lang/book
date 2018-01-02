@@ -467,6 +467,6 @@ When we must be explicit, we can add a lifetime bound on a trait object like
 `Box<Red>` with the syntax `Box<Red + 'a>` or `Box<Red + 'static>`, depending
 on what’s needed. Just as with the other bounds, this means that any
 implementor of the `Red` trait that has references inside must have the
-lifetime specified in the trait object bounds as those references.
+same lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
