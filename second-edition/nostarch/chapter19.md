@@ -1000,46 +1000,50 @@ references that live forever; both of them are the same for the purpose of
 determining whether or not a reference has a shorter lifetime than what it
 refers to.
 
-### Trait Object Lifetimes
+### Inference of Trait Object Lifetimes
 
-In Chapter 17, we learned about trait objects that consist of putting a trait
-behind a reference in order to use dynamic dispatch. However, we didn’t discuss
-what happens if the type implementing the trait used in the trait object has a
-lifetime. Consider Listing 19-19, where we have a trait `Foo` and a struct
-`Bar` that holds a reference (and thus has a lifetime parameter) that
-implements trait `Foo`, and we want to use an instance of `Bar` as the trait
-object `Box<Foo>`:
+In Chapter 17, we learned about trait objects, consisting of a trait behind a
+reference, that allow us to use dynamic dispatch. We haven't yet discussed what
+happens if the type implementing the trait in the trait object has a lifetime
+of its own. Consider Listing 19-19, where we have a trait `Red` and a struct
+`Ball`. `Ball` holds a reference (and thus has a lifetime parameter) and also
+implements trait `Red`. We want to use an instance of `Ball` as the trait
+object `Box<Red>`:
+
+Filename: src/main.rs
 
 ```
-trait Foo { }
+trait Red { }
 
-struct Bar<'a> {
-    x: &'a i32,
+struct Ball<'a> {
+    diameter: &'a i32,
 }
 
-impl<'a> Foo for Bar<'a> { }
+impl<'a> Red for Ball<'a> { }
 
-let num = 5;
+fn main() {
+    let num = 5;
 
-let obj = Box::new(Bar { x: &num }) as Box<Foo>;
+    let obj = Box::new(Ball { diameter: &num }) as Box<Red>;
+}
 ```
 
 Listing 19-19: Using a type that has a lifetime parameter with a trait object
 
 This code compiles without any errors, even though we haven’t said anything
-about the lifetimes involved in `obj`. This works because there are rules
-having to do with lifetimes and trait objects:
+explicit about the lifetimes involved in `obj`. This works because there are
+rules having to do with lifetimes and trait objects:
 
 * The default lifetime of a trait object is `'static`.
-* If we have `&'a X` or `&'a mut X`, then the default is `'a`.
-* If we have a single `T: 'a` clause, then the default is `'a`.
-* If we have multiple `T: 'a`-like clauses, then there is no default; we must
+* With `&'a Trait` or `&'a mut Trait`, the default lifetime is `'a`.
+* With a single `T: 'a` clause, the default lifetime is `'a`.
+* With multiple `T: 'a`-like clauses, there is no default; we must
   be explicit.
 
 When we must be explicit, we can add a lifetime bound on a trait object like
-`Box<Foo>` with the syntax `Box<Foo + 'a>` or `Box<Foo + 'static>`, depending
+`Box<Red>` with the syntax `Box<Red + 'a>` or `Box<Red + 'static>`, depending
 on what’s needed. Just as with the other bounds, this means that any
-implementor of the `Foo` trait that has any references inside must have the
+implementor of the `Red` trait that has references inside must have the
 lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
