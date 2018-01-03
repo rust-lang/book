@@ -109,8 +109,8 @@ operator? Is it worth touching on why? -->
 clarify above where the types are introduced /Carol -->
 
 Notice we don’t include the `unsafe` keyword here---you can *create* raw
-pointers in safe code, you just can’t *dereference* raw pointers with an unsafe
-block, as we’ll see in a bit.
+pointers in safe code, you just can’t *dereference* raw pointers outside of an
+unsafe block, as we’ll see in a bit.
 
 We’ve created raw pointers by using `as` to cast an immutable and a mutable
 reference into their corresponding raw pointer types. Because we created them
