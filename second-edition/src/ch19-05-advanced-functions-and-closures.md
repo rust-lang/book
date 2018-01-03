@@ -17,7 +17,7 @@ pointers to allow us to use functions as arguments to other functions.
 Functions coerce to the type `fn`, with a lower case ‘f’ not to be confused
 with the `Fn` closure trait. The `fn` type is called a *function pointer*. The
 syntax for specifying that a parameter is a function pointer is similar to that
-of closures, as shown in Listing 19-38:
+of closures, as shown in Listing 19-35:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -37,7 +37,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-38: Using the `fn` type to accept a function
+<span class="caption">Listing 19-35: Using the `fn` type to accept a function
 pointer as an argument</span>
 
 This prints `The answer is: 12`. We specify that the parameter `f` in

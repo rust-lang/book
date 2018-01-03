@@ -14,7 +14,7 @@ semantics. We’ll also discuss the `!` type and dynamically sized types.
 The newtype pattern is useful for other things beyond what we’ve discussed so
 far, including statically enforcing that values are never confused, and as
 indication of the units of a value. We actually had an example of this in
-Listing 19-26: the `Millimeters` and `Meters` structs both wrap `u32` values in
+Listing 19-23: the `Millimeters` and `Meters` structs both wrap `u32` values in
 a newtype. If we write a function with a parameter of type `Millimeters`, we
 won’t be able to compile a program that accidentally tries to call that
 function with a value of type `Meters` or a plain `u32`.
@@ -44,7 +44,7 @@ type Kilometers = i32;
 ```
 
 This means `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters` and
-`Meters` types we created in Listing 19-26, `Kilometers` is not a separate, new
+`Meters` types we created in Listing 19-23, `Kilometers` is not a separate, new
 type. Values that have the type `Kilometers` will be treated exactly the same
 as values of type `i32`:
 
@@ -71,7 +71,7 @@ Box<Fn() + Send + 'static>
 
 Writing this out in function signatures and as type annotations all over the
 place can be tiresome and error-prone. Imagine having a project full of code
-like that in Listing 19-35:
+like that in Listing 19-32:
 
 ```rust
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
@@ -86,11 +86,11 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 }
 ```
 
-<span class="caption">Listing 19-35: Using a long type in many places</span>
+<span class="caption">Listing 19-32: Using a long type in many places</span>
 
 A type alias makes this code more manageable by reducing the repetition. Here,
 we’ve introduced an alias named `Thunk` for the verbose type, and can replace
-all uses of the type with the shorter `Thunk` as shown in Listing 19-36:
+all uses of the type with the shorter `Thunk` as shown in Listing 19-33:
 
 ```rust
 type Thunk = Box<Fn() + Send + 'static>;
@@ -107,7 +107,7 @@ fn returns_long_type() -> Thunk {
 }
 ```
 
-<span class="caption">Listing 19-36: Introducing a type alias `Thunk` to reduce
+<span class="caption">Listing 19-33: Introducing a type alias `Thunk` to reduce
 repetition</span>
 
 Much easier to read and write! Choosing a good name for a type alias can help
@@ -181,7 +181,7 @@ are called *diverging functions*. We can’t create values of the type `!`, so
 
 But what use is a type you can never create values for? If you think all the
 way back to Chapter 2, we had some code that looked like the code we’ve
-reproduced here in Listing 19-37:
+reproduced here in Listing 19-34:
 
 ```rust
 # let guess = "3";
@@ -194,7 +194,7 @@ let guess: u32 = match guess.trim().parse() {
 # }
 ```
 
-<span class="caption">Listing 19-37: A `match` with an arm that ends in
+<span class="caption">Listing 19-34: A `match` with an arm that ends in
 `continue`</span>
 
 At the time, we skipped over some details in this code. In Chapter 6 in “The
@@ -211,7 +211,7 @@ let guess = match guess.trim().parse()  {
 The type of `guess` here would have to be both an integer and a string, and
 Rust requires that `guess` can only have one type. So what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
-that ends with `continue` in Listing 19-37?
+that ends with `continue` in Listing 19-34?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms, the former
@@ -247,7 +247,7 @@ impl<T> Option<T> {
 }
 ```
 
-Here, the same thing happens as in the `match` in Listing 19-33: we know that
+Here, the same thing happens as in the `match` in Listing 19-34: we know that
 `val` has the type `T`, and `panic!` has the type `!`, so the result of the
 overall `match` expression is `T`. This works because `panic!` doesn’t produce
 a value; it ends the program. In the `None` case, we won’t be returning a value

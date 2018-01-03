@@ -1164,7 +1164,7 @@ and why/when to use it, or is it worth giving a quick definition here? -->
 Rust does not allow you to create your own operators or overload arbitrary
 operators, but you *can* overload the operations and corresponding traits
 listed in `std::ops` by implementing the traits associated with the operator.
-For example, in Listing 19-25 we overload the `+` operator to add two `Point`
+For example, in Listing 19-22 we overload the `+` operator to add two `Point`
 instances together. We do this by implementing the `Add` trait on a `Point`
 struct:
 
@@ -1196,7 +1196,7 @@ fn main() {
 }
 ```
 
-Listing 19-25: Implementing the `Add` trait to overload the `+` operator for
+Listing 19-22: Implementing the `Add` trait to overload the `+` operator for
 `Point` instances
 
 The `add` method adds the `x` values of two `Point` instances together and the
@@ -1234,7 +1234,7 @@ We have two structs holding values in different units, `Millimeters` and
 `Meters`. We want to be able to add values in millimeters to values in meters,
 and have the implementation of `Add` do the conversion correctly. We can
 implement `Add` for `Millimeters` with `Meters` as the right hand side as shown
-in Listing 19-26:
+in Listing 19-23:
 
 Filename: src/lib.rs
 
@@ -1253,7 +1253,7 @@ impl Add<Meters> for Millimeters {
 }
 ```
 
-Listing 19-26: Implementing the `Add` trait on `Millimeters` to be able to add
+Listing 19-23: Implementing the `Add` trait on `Millimeters` to be able to add
 `Millimeters` to `Meters`
 
 To be able to add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to
@@ -1292,7 +1292,7 @@ the type with the same name as methods from traits as well!
 clarify /Carol -->
 
 When calling methods with the same name, then, we need to tell Rust which one
-we want to use. Consider the code in Listing 19-27 where we’ve defined two
+we want to use. Consider the code in Listing 19-24 where we’ve defined two
 traits, `Pilot` and `Wizard`, that both have a method called `fly`. We then
 implement both traits on a type `Human` that itself already has a method named
 `fly` implemented on it. Each `fly` method does something different:
@@ -1329,12 +1329,12 @@ impl Human {
 }
 ```
 
-Listing 19-27: Two traits defined to have a `fly` method, and implementations
+Listing 19-24: Two traits defined to have a `fly` method, and implementations
 of those traits on the `Human` type in addition to a `fly` method on `Human`
 directly
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 19-28:
+the method that is directly implemented on the type, as shown in Listing 19-25:
 
 Filename: src/main.rs
 
@@ -1345,14 +1345,14 @@ fn main() {
 }
 ```
 
-Listing 19-28: Calling `fly` on an instance of `Human`
+Listing 19-25: Calling `fly` on an instance of `Human`
 
 Running this will print out `*waving arms furiously*`, which shows that Rust
 called the `fly` method implemented on `Human` directly.
 
 In order to call the `fly` methods from either the `Pilot` trait or the
 `Wizard` trait, we need to use more explicit syntax in order to specify which
-`fly` method we mean. This syntax is demonstrated in Listing 19-29:
+`fly` method we mean. This syntax is demonstrated in Listing 19-26:
 
 Filename: src/main.rs
 
@@ -1365,12 +1365,12 @@ fn main() {
 }
 ```
 
-Listing 19-29: Specifying which trait’s `fly` method we want to call
+Listing 19-26: Specifying which trait’s `fly` method we want to call
 
 Specifying the trait name before the method name clarifies to Rust which
 implementation of `fly` we want to call. We could also choose to write
 `Human::fly(&person)`, which is equivalent to `person.fly()` that we had in
-Listing 19-28, but is a bit longer to write if we don’t need to disambiguate.
+Listing 19-26, but is a bit longer to write if we don’t need to disambiguate.
 
 Running this code will print:
 
@@ -1387,7 +1387,7 @@ to use based on the type of `self`.
 However, associated functions that are part of traits don’t have a `self`
 parameter. When two types in the same scope implement that trait, Rust can’t
 figure out which type we mean unless we use *fully qualified syntax*. For
-example, take the `Animal` trait in Listing 19-30 that has the associated
+example, take the `Animal` trait in Listing 19-27 that has the associated
 function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
 the associated function `baby_name` defined on `Dog` directly:
 
@@ -1417,7 +1417,7 @@ fn main() {
 }
 ```
 
-Listing 19-30: A trait with an associated function and a type that has an
+Listing 19-27: A trait with an associated function and a type that has an
 associated function with the same name that also implements the trait
 
 This code is for an animal shelter where they want to give all puppies the name
@@ -1436,8 +1436,8 @@ A baby dog is called a Spot
 
 This isn’t what we wanted. We want to call the `baby_name` function that’s part
 of the `Animal` trait that we implemented on `Dog` so that we print `A baby dog
-is called a puppy`. The technique we used in Listing 19-29 doesn’t help here;
-if we change `main` to be the code in Listing 19-31, we’ll get a compilation
+is called a puppy`. The technique we used in Listing 19-26 doesn’t help here;
+if we change `main` to be the code in Listing 19-28, we’ll get a compilation
 error:
 
 Filename: src/main.rs
@@ -1448,7 +1448,7 @@ fn main() {
 }
 ```
 
-Listing 19-31: Attempting to call the `baby_name` function from the `Animal`
+Listing 19-28: Attempting to call the `baby_name` function from the `Animal`
 trait, but Rust doesn’t know which implementation to use
 
 Because `Animal::baby_name` is an associated function rather than a method, and
@@ -1467,7 +1467,7 @@ error[E0283]: type annotations required: cannot resolve `_: Animal`
 
 To disambiguate and tell Rust that we want to use the implementation of
 `Animal` for `Dog`, we need to use *fully qualified syntax*, which is the most
-specific we can be when calling a function. Listing 19-32 demonstrates how to
+specific we can be when calling a function. Listing 19-29 demonstrates how to
 use fully qualified syntax:
 
 Filename: src/main.rs
@@ -1478,7 +1478,7 @@ fn main() {
 }
 ```
 
-Listing 19-32: Using fully qualified syntax to specify that we want to call the
+Listing 19-29: Using fully qualified syntax to specify that we want to call the
 `baby_name` function from the `Animal` trait as implemented on `Dog`
 
 We’re providing Rust with a type annotation within the angle brackets, and
@@ -1529,7 +1529,7 @@ functionality. We therefore need to specify that the `OutlinePrint` trait will
 only work for types that also implement `Display` and therefore provide the
 functionality that `OutlinePrint` needs. We can do that in the trait definition
 by specifying `OutlinePrint: Display`. This is similar to adding a trait bound
-to the trait. Listing 19-33 shows an implementation of the `OutlinePrint` trait:
+to the trait. Listing 19-30 shows an implementation of the `OutlinePrint` trait:
 
 Filename: src/main.rs
 
@@ -1549,7 +1549,7 @@ trait OutlinePrint: fmt::Display {
 }
 ```
 
-Listing 19-33: Implementing the `OutlinePrint` trait that requires the
+Listing 19-30: Implementing the `OutlinePrint` trait that requires the
 functionality from `Display`
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
@@ -1622,7 +1622,7 @@ As an example, we want to implement `Display` on `Vec`, which the orphan rule
 prevents us from doing directly because the `Display` trait and the `Vec` type
 are both defined outside of our crate. We can make a `Wrapper` struct that
 holds an instance of `Vec`, then we can implement `Display` on `Wrapper` and
-use the `Vec` value as shown in Listing 19-34:
+use the `Vec` value as shown in Listing 19-31:
 
 Filename: src/main.rs
 
@@ -1643,7 +1643,7 @@ fn main() {
 }
 ```
 
-Listing 19-34: Creating a `Wrapper` type around `Vec<String>` to be able to
+Listing 19-31: Creating a `Wrapper` type around `Vec<String>` to be able to
 implement `Display`
 
 The implementation of `Display` uses `self.0` to access the inner `Vec`,
@@ -1688,7 +1688,7 @@ semantics. We’ll also discuss the `!` type and dynamically sized types.
 The newtype pattern is useful for other things beyond what we’ve discussed so
 far, including statically enforcing that values are never confused, and as
 indication of the units of a value. We actually had an example of this in
-Listing 19-26: the `Millimeters` and `Meters` structs both wrap `u32` values in
+Listing 19-23: the `Millimeters` and `Meters` structs both wrap `u32` values in
 a newtype. If we write a function with a parameter of type `Millimeters`, we
 won’t be able to compile a program that accidentally tries to call that
 function with a value of type `Meters` or a plain `u32`.
@@ -1718,7 +1718,7 @@ type Kilometers = i32;
 ```
 
 This means `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters` and
-`Meters` types we created in Listing 19-26, `Kilometers` is not a separate, new
+`Meters` types we created in Listing 19-23, `Kilometers` is not a separate, new
 type. Values that have the type `Kilometers` will be treated exactly the same
 as values of type `i32`:
 
@@ -1745,7 +1745,7 @@ Box<Fn() + Send + 'static>
 
 Writing this out in function signatures and as type annotations all over the
 place can be tiresome and error-prone. Imagine having a project full of code
-like that in Listing 19-35:
+like that in Listing 19-32:
 
 ```
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
@@ -1759,11 +1759,11 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 }
 ```
 
-Listing 19-35: Using a long type in many places
+Listing 19-32: Using a long type in many places
 
 A type alias makes this code more manageable by reducing the repetition. Here,
 we’ve introduced an alias named `Thunk` for the verbose type, and can replace
-all uses of the type with the shorter `Thunk` as shown in Listing 19-36:
+all uses of the type with the shorter `Thunk` as shown in Listing 19-33:
 
 ```
 type Thunk = Box<Fn() + Send + 'static>;
@@ -1779,7 +1779,7 @@ fn returns_long_type() -> Thunk {
 }
 ```
 
-Listing 19-36: Introducing a type alias `Thunk` to reduce repetition
+Listing 19-33: Introducing a type alias `Thunk` to reduce repetition
 
 Much easier to read and write! Choosing a good name for a type alias can help
 communicate your intent as well (*thunk* is a word for code to be evaluated at
@@ -1852,7 +1852,7 @@ are called *diverging functions*. We can’t create values of the type `!`, so
 
 But what use is a type you can never create values for? If you think all the
 way back to Chapter 2, we had some code that looked like the code we’ve
-reproduced here in Listing 19-37:
+reproduced here in Listing 19-34:
 
 ```
 let guess: u32 = match guess.trim().parse() {
@@ -1861,7 +1861,7 @@ let guess: u32 = match guess.trim().parse() {
 };
 ```
 
-Listing 19-37: A `match` with an arm that ends in `continue`
+Listing 19-34: A `match` with an arm that ends in `continue`
 
 At the time, we skipped over some details in this code. In Chapter 6 in “The
 `match` Control Flow Operator” section, we covered that `match` arms must all
@@ -1877,7 +1877,7 @@ let guess = match guess.trim().parse()  {
 The type of `guess` here would have to be both an integer and a string, and
 Rust requires that `guess` can only have one type. So what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
-that ends with `continue` in Listing 19-37?
+that ends with `continue` in Listing 19-34?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms, the former
@@ -1913,7 +1913,7 @@ impl<T> Option<T> {
 }
 ```
 
-Here, the same thing happens as in the `match` in Listing 19-33: we know that
+Here, the same thing happens as in the `match` in Listing 19-34: we know that
 `val` has the type `T`, and `panic!` has the type `!`, so the result of the
 overall `match` expression is `T`. This works because `panic!` doesn’t produce
 a value; it ends the program. In the `None` case, we won’t be returning a value
@@ -2056,7 +2056,7 @@ pointers to allow us to use functions as arguments to other functions.
 Functions coerce to the type `fn`, with a lower case ‘f’ not to be confused
 with the `Fn` closure trait. The `fn` type is called a *function pointer*. The
 syntax for specifying that a parameter is a function pointer is similar to that
-of closures, as shown in Listing 19-38:
+of closures, as shown in Listing 19-35:
 
 Filename: src/main.rs
 
@@ -2076,7 +2076,7 @@ fn main() {
 }
 ```
 
-Listing 19-38: Using the `fn` type to accept a function pointer as an argument
+Listing 19-35: Using the `fn` type to accept a function pointer as an argument
 
 This prints `The answer is: 12`. We specify that the parameter `f` in
 `do_twice` is an `fn` that takes one parameter of type `i32` and returns an
