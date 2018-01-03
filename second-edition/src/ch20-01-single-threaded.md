@@ -1,29 +1,26 @@
-## A Single Threaded Web Server
+## Однопоточный веб-сервер
 
-First, let’s get a single threaded web server working. We’re going to work with
-the raw bytes of TCP and HTTP requests and responses to send HTML from our
-server to a web browser. Let’s start with a quick overview of the protocols
-involved.
+Для начала рассмотрим работу однопоточного веб-сервера. Мы будет работать с
+байтовыми TCP и HTTP запросами и в качестве ответа будем возвращать HTML от клиента
+к веб-серверу. Кратко рассмотрим протоколы, с которыми будет работать.
 
-The *Hypertext Transfer Protocol* (*HTTP*) that powers the web is built on top
-of the *Transmission Control Protocol* (*TCP*). We won’t get into the details
-too much, but here’s a short overview: TCP is a low-level protocol, and HTTP
-builds a higher-level protocol on top of TCP. Both protocols are what’s called a
-*request-response protocol*, that is, there is a *client* that initiates
-requests, and a *server* that listens to requests and provides a response to
-the client. The contents of those requests and responses are defined by the
-protocols themselves.
+*Протокол передачи гипертекста* (*HTTP*), который использует Интернет, построен
+над *Протоколом управления передачей* (*TCP*). Мы не будем вдаваться в подробности,
+но вот краткий обзор: TCP - это протокол низкого уровня, а HTTP строит протокол
+более высокого уровня поверх TCP. Оба протокола - это то, что называется
+*протокол запроса-ответа*, то есть *клиент*, который инициирует
+запросов и *сервера*, который прослушивает запросы и предоставляет ответ
+клиент. Содержание этих запросов и ответов определяют сами протоколы.
 
-TCP describes the low-level details of how information gets from one server to
-another, but doesn’t specify what that information is; it’s just a bunch of
-ones and zeroes. HTTP builds on top of TCP by defining what the content of the
-requests and responses should be. As such, it’s technically possible to use
-HTTP with other protocols, but in the vast majority of cases, HTTP sends its
-data over TCP.
+TCP описывает низкоуровневые сведения о том, как информация поступает с одного
+сервера на другой, но не указывает, что это за информация; это всего лишь куча
+единиц и нулей. HTTP строит поверх TCP, определяя, чем содержимое запросов и ответов
+ должны быть. Таким образом, технически возможно использовать HTTP с другими протоколами,
+ но в подавляющем большинстве случаев HTTP отправляет данные поверх TCP.
 
-So the first thing we need to build for our web server is to be able to listen
-to a TCP connection. The standard library has a `std::net` module that lets us
-do this. Let’s make a new project:
+Итак, первое, что нам нужно создать для нашего веб-сервера - это прослушивание
+TCP-соединение. В стандартной библиотеке есть модуль `std::net`, который позволяет
+делать это. Создадим новый проект:
 
 ```text
 $ cargo new hello --bin
@@ -31,9 +28,9 @@ $ cargo new hello --bin
 $ cd hello
 ```
 
-And put the code in Listing 20-1 in `src/main.rs` to start. This code will
-listen at the address `127.0.0.1:8080` for incoming TCP streams. When it gets
-an incoming stream, it will print `Connection established!`:
+И добавим код 20-1 в файл `src/main.rs`. Функционал будет прослушивать адрес
+`127.0.0.1:8080` входящих TCP-потоков. Когда мы получим входящий поток, будет
+напечатано `Connection established!`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -51,53 +48,51 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 20-1: Listening for incoming streams and printing
-a message when we receive a stream</span>
+<span class="caption">код 20-1: чтение входящих потоков и печать сообщения, когда
+мы получаем поток </span>
 
-A `TcpListener` allows us to listen for TCP connections. We’ve chosen to listen
-to the address `127.0.0.1:8080`. The part before the colon is an IP address
-representing our own computer, and `8080` is the port. We’ve chosen this port
-because HTTP is normally accepted on port 80, but connecting to port 80 requires
-administrator privileges. Regular users can listen on ports higher than 1024;
-8080 is easy to remember since it’s the HTTP port 80 repeated.
 
-The `bind` function is sort of like `new` in that it returns a new
-`TcpListener` instance, but `bind` is a more descriptive name that fits with
-the domain terminology. In networking, people will often talk about “binding to
-a port”, so the function that the standard library defined to create a new
-`TcpListener` is called `bind`.
+`TcpListener` позволяет прослушивать TCP-соединения. Мы решили прослушивать адрес
+`127.0.0.1:8080`. Адрес делится  `:` на две части. Левая часть содержать IP-адрес,
+идентифицирующий компьютер в сети, а правая часть содержит порт `8080`. Мы выбрали
+именно этот порт, т.к. HTTP обычно принимает порт 80, но подключение к порту 80
+требует привилегий администратора. Обычные пользователи могу прослушивать порты
+с номером начиная с 1024. Порт 8080 легко запомнить, т.к. он повторяет порт HTTP 80.
 
-The `bind` function returns a `Result<T, E>`. Binding may fail, for example, if
-we had tried to connect to port 80 without being an administrator. Another
-example of a case when binding would fail is if we tried to have two programs
-listening to the same port, which would happen if we ran two instances of our
-program. Since we’re writing a basic server here, we’re not going to worry
-about handling these kinds of errors, and `unwrap` lets us just stop the
-program if they happen.
+Функция `bind` что-то типа функции `new`. Она возвращает экземпляр `TcpListener`.
+В сетевой терминологии, мы часто говорим о "связывании с портом", поэтому функция,
+которая создающая прослушивающее соединение называется `bind`.
 
-The `incoming` method on `TcpListener` returns an iterator that gives us a
-sequence of streams (more specifically, streams of type `TcpStream`). A
-*stream* represents an open connection between the client and the server. A
-*connection* is the name for the full request/response process when a client
-connects to the server, the server generates a response, and the server closes
-the connection. As such, the `TcpStream` will let us read from itself to see
-what the client sent, and we can write our response to it. So this `for` loop
-will process each connection in turn and produce a series of streams for us to
-handle.
+Функция `bind` возвращает `Result<T, E>`. Связывание может быть неудачным, например,
+если мы попытаемся соединиться с портом 80 без прав администратора. Другим примером
+неудачи при связывании, это когда несколько программ пытаются получить доступ к
+одному порту (например, два экземпляра одной программы). Т.к. мы собираемся делать
+простой сервер и не собираемся беспокоится о подобных ошибках - мы просто будем
+использовать `unwrap` для обработки возможных ошибок.
 
-For now, handling a stream means calling `unwrap` to terminate our program if
-the stream has any errors, then printing a message. Errors can happen because
-we’re not actually iterating over connections, we’re iterating over *connection
-attempts*. The connection might not work for a number of reasons, many of them
-operating-system specific. For example, many operating systems have a limit to
-the number of simultaneous open connections; new connection attempts will then
-produce an error until some of the open connections are closed.
+Метод `incoming` в` TcpListener` возвращает итератор, который предоставляет
+последовательность потоков (более конкретно, потоки типа `TcpStream`).
+*stream* представляет собой открытое соединение между клиентом и сервером.
+*connection* - это имя для полного процесса запроса / ответа, когда клиент
+подключается к серверу, сервер генерирует ответ, а сервер закрывает соединение.
+Таким образом, «TcpStream» позволяет нам читать, чтобы увидеть, что клиент
+отправил и мы можем написать наш ответ ему. Итак, этот цикл `for` будет обрабатывать
+каждое соединение по очереди и производить серию потоков для обработки.
 
-Let’s try this code out! First invoke `cargo run` in the terminal, then load up
-`127.0.0.1:8080` in a web browser. The browser will show an error message that
-will say something similar to “Connection reset”, since we’re not currently
-sending any data back. If we look at our terminal, though, we’ll see a bunch of
-messages that were printed when the browser connected to the server!
+На данный момент обработка потока означает вызов `unwrap` для завершения нашей
+программы, если поток имеет какие-либо ошибки, а затем печатает сообщение.
+Ошибки могут произойти, потому что мы фактически не итерируем данные соединения,
+мы итерируем через *попытки соединение*. Соединение может не работать по нескольким
+причинам, многие из них специфические для операционной системы. Например, многие
+операционные системы имеют ограниченное количество одновременных открытых соединений;
+новые попытки подключения будут вызвать ошибку, пока некоторые из открытых соединений
+не будут закрыты.
+
+Давайте посмотрим, как работает этот код! Сначала вызовем `cargo run`, затем загрузим
+`127.0.0.1:8080` в веб-браузере. В браузере появится сообщение об ошибке
+скажет что-то похожее на «Сброс соединения», так как мы сейчас
+отправка любых данных назад. Если мы посмотрим на наш терминал, мы увидим кучу
+сообщения, которые были напечатаны при подключении браузера к серверу!
 
 ```text
      Running `target/debug/hello`
@@ -106,31 +101,25 @@ Connection established!
 Connection established!
 ```
 
-We got multiple messages printed out for one browser request; these connections
-might be the browser making a request for the page and a request for a
-`favicon.ico` icon that appears in the browser tab, or the browser might be
-retrying the connection. Our browser is expecting to speak HTTP, but we aren’t
-replying with anything, just closing the connection by moving on to the next
-loop iteration. When `stream` goes out of scope and dropped at the end of the
-loop, its connection gets closed as part of the `drop` implementation for
-`TcpStream`. Browsers sometimes deal with closed connections by retrying, since
-the problem might be temporary. The important thing is that we’ve successfully
-gotten a handle on a TCP connection!
+Мы получили несколько сообщений, распечатанных для одного запроса браузера; эти
+соединения делал браузер для получения различных данных: делающий запрос на страницу
+запрос на значок `favicon.ico`, отображаемый на вкладке браузера, или браузер может
+быть повторить соединение. Наш браузер общается запросами HTTP, но мы не
+ответили ни на один запрос, просто закрываем соединение, перейдя к следующему
+итерации цикла. Когда `stream` выходит за пределы области действия и удалён в конце
+цикла, его соединение закрывается как часть реализации `drop` для
+`TcpStream`. Браузеры иногда обрабатывают закрытые соединения, повторяя, поскольку
+проблема может быть временной. Важно то, что мы успешно создали простой обработчик
+TCP-соединении!
 
-Remember to stop the program with <span class="keystroke">ctrl-C</span> when
-you’re done running a particular version of the code, and restart `cargo run`
-after you’ve made each set of code changes in order to be running the newest
-code.
+Не забудьте остановить программу с помощью комбинации клавиш <span class="keystroke">ctrl-C</span>.
 
-### Reading the Request
+### Чтение запросов
 
-Let’s read in the request from our browser! Since we’re adding more
-functionality that has the purpose of handling the connection, let’s start a
-new function to have a nice separation of the concerns around setting up the
-server and connections versus processing each connection. In this new
-`handle_connection` function, we’ll read data from the `stream` and print it
-out in order to see the data that the browser is sending us. Change the code to
-look like Listing 20-2:
+Давайте прочитаем запрос браузера! Для этого нам понадобится добавить функциональных
+возможностей для этих целей. Создадим новую функцию для обработки соединения. В
+этой функции (назовём её `handle_connection`) мы будем читать данные из потока
+`stream` и выводить их на печать. Код 20-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -158,40 +147,37 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-2: Reading from the `TcpStream` and printing
-out the data</span>
+<span class="caption">код 20-2: чтение из потока `TcpStream` и печать данных</span>
 
-We added `std::io::prelude` to the beginning in order to bring traits into
-scope that let us read from and write to the stream. Instead of printing a
-message that we got a connection in the `for` loop in `main`, we’re calling the
-new `handle_connection` function and passing the `stream` to it.
+Мы добавили `std::io::prelude` в начало, чтобы получить возможность использовать
+функционал чтения и записи потока данных. Вместо того, чтобы печатать сообщение,
+которое мы получили, мы используем функцию `handle_connection` и отправляем
+`stream` в неё.
 
-In `handle_connection`, we made the `stream` parameter mutable with the `mut`
-keyword. As we read from a stream, the `TcpStream` instance might read more
-than what we ask for into a buffer. Internally, it keeps track of what data it
-has returned to us. It needs to be `mut` because of that state changing, so
-even though we usually think of “reading” as not needing mutation, in this
-case, we do need to use the `mut` keyword.
+В функции `handle_connection` параметра `stream` является изменяемым `mut`. Во время
+чтения из потока `TcpStream` мы можем прочитать больше запрашиваемых данных в буфер.
+Также мы можем отслеживать полученную информацию. `mut` нам нужна т.к. поток
+может изменяться.
 
-Next, we need to actually read from the stream. We do this in two steps: first,
-we declare a `buffer` on the stack to hold the data that we read in. We’ve made
-the buffer 512 bytes in size, which is big enough to hold the data of a basic
-request. That’s sufficient for our purposes in this chapter. If we wanted to
-handle requests of an arbitrary size, managing the buffer would need to be more
-complicated, but we’re keeping it simple for now. We then pass the buffer to
-`stream.read`, which will read bytes from the `TcpStream` and put them in the
-buffer.
+Затем нам нужно прочитать из потока. Мы делаем это в два этапа: во-первых,
+мы объявляем переменную `buffer` в стеке для хранения данных, которые мы читаем.
+Мы сделали буфер размером 512 байт, который достаточно велик, чтобы хранить данные
+запроса. Этого достаточно для наших целей в этой главе. Если бы мы хотели
+обрабатывать запросы произвольного размера, управление буфером должно быть больше
+сложным, но мы сохраняем его простым. Затем мы передаем буфер в `stream.read`,
+который будет читать байты из` TcpStream` и помещать их в буфер.
 
-Then we convert the bytes in the buffer to a string and print out that string.
-The `String::from_utf8_lossy` function takes a `&[u8]` and produces a `String`.
-The ‘lossy’ part of the name comes from the behavior when this function sees
-invalid UTF-8 sequences: it replaces the invalid sequences with �, `U+FFFD
-REPLACEMENT CHARACTER`. You might see the replacement characters for remaining
-characters in the buffer that aren’t filled by request data.
+Затем мы преобразуем байты в буфер в строку и распечатаем эту строку.
+Функция `String::from_utf8_lossy` принимает `&[u8]` и создает `String`.
+`lossy` часть имени происходит от поведения, когда эта функция видит недействительные
+последовательности UTF-8: она заменяет недопустимые последовательности на
+�, `U+FFFD REPLACEMENT CHARACTER`. Вы можете увидеть заменяющие символы для оставшихся
+символов в буфере, которые не заполняются данными запроса.
 
-Let’s give this a try! Start up the program and make a request in a web browser
-again. Note that we’ll still get an error page in the browser, but the output
-of our program in the terminal will now look similar to this:
+Давайте попробуем! Запустите программу и сделайте запрос в веб-браузере еще раз.
+Обратите внимание, что в браузере все равно будет отображаться страница с ошибкой,
+но вывод нашей программы в терминале теперь будут выглядеть примерно так:
+
 
 ```text
 $ cargo run
@@ -210,15 +196,15 @@ Upgrade-Insecure-Requests: 1
 ������������������������������������
 ```
 
-You’ll probably get slightly different output depending on your browser. You
-also might see this request repeated again. Now that we’re printing out the
-request data, we can see why we’re getting multiple connections from one
-browser request by looking at the path after `Request: GET`. If the repeated
-connections are all requesting `/`, we know the browser is trying to fetch `/`
-repeatedly since it’s not getting a response from us.
+Вероятно, вы получите немного другой результат (это зависимости от вашего браузера).
+Вы также может повторить этот запрос. Теперь, когда мы печатаем запрашивать данные,
+мы можем понять, почему мы получаем несколько соединений от одного
+запрос браузера, посмотрев путь после `Request: GET`. Если повторение
+все соединения запрашивают `/`, мы знаем, что браузер пытается извлечь `/`
+неоднократно, так как он не получает от нас ответа.
 
-Let’s break down this request data to understand what the browser is asking of
-us. HTTP is a text-based protocol, and a request takes this format:
+Давайте разберем данные запроса, чтобы понять, что браузер запрашивает у нас.
+HTTP - это текстовый протокол, и запрос принимает этот формат:
 
 ```text
 Method Request-URI HTTP-Version CRLF
@@ -226,45 +212,42 @@ headers CRLF
 message-body
 ```
 
-The first line is called the *request line*, and it holds information about
-what the client is requesting. The first part of the request line is a
-*method*, like `GET` or `POST`, that describes how the client is making this
-request.
+Первая строка называется *строкой запроса*, и она содержит информацию о
+что клиенте. Первая часть строки запроса - это *метод*, например `GET` или` POST`,
+который описывает, как клиент делает этот запрос.
 
-Then comes the request’s *URI*, which stands for *Uniform Resource Identifier*.
-URIs are almost, but not quite the same as URLs (*Uniform Resource Locators*),
-which is what we typically call the addresses that we enter into a web browser.
-The HTTP spec uses the term URI, and the difference between URIs and URLs isn’t
-important for our purposes of this chapter, so we can just mentally substitute
-URL for URI here.
+Затем идёт *URI* запроса, который обозначает *Uniform Resource Identifier*.
+URI являются почти, но не совсем такими же, как URL (*Uniform Resource Locators*),
+что мы обычно называем адресами, которые мы вводим в веб-браузер.
+Спецификация HTTP использует термин URI, а разница между URI и URL-адресами не является
+важной для наших целей этой главы, поэтому мы можем просто мысленно заменить
+URL для URI здесь.
 
-Next, we have the HTTP version that the client used, and then the request line
-ends in a CRLF sequence. The CRLF sequence can also be written as `\r\n`: `\r`
-is a *carriage return* and `\n` is a *line feed*. These terms come from the
-typewriter days! The CRLF sequence separates the request line from the rest of
-the request data.
+Затем идёт версия HTTP, которую использовал клиент, а затем строка запроса
+заканчивается последовательностью CRLF. Последовательность CRLF также может быть
+записана как `\ r \ n`:` \ r` - это *возврат каретки*, а `\ n` - *перевод строка*.
+Эти термины остались со времён пишущие машинки! Последовательность CRLF отделяет
+строку запроса от остальной части данные запроса.
 
-Taking a look at the request line data we saw printed out by our code:
+Взглянув на данные строки запроса, мы увидели наш код:
 
 ```text
 GET / HTTP/1.1
 ```
 
-`GET` is the method, `/` is the Request URI, and `HTTP/1.1` is the version.
+`GET` является методом, `/` URI запроса и `HTTP/1.1` версией протокола.
 
-The remaining lines starting from `Host:` onward are headers; `GET` requests
-have no body.
+Остальные строки, начинающиеся с `Host:` - являются заголовками; Запросы `GET`
+не имеют тела.
 
-Try making a request from a different browser, or asking for a different
-address like `127.0.0.1:8080/test` to see how the request data changes, if
-you’d like.
+Посмотрите, как будут меняться данные при использовании разных браузеров или при попытке
+получить разные данные (`127.0.0.1:8080/test`).
 
-Now that we know what the browser is asking for, let’s send some data back!
+Теперь, когда мы знаем, что запрашивает браузер, давайте вернем некоторые данные!
 
-### Writing a Response
+### Написание ответа браузеру
 
-Let’s send data back to our browser in response to its request. Responses have
-this format:
+Отправим данные обратно в наш браузер в ответ на его запрос. Формат ответа:
 
 ```text
 HTTP-Version Status-Code Reason-Phrase CRLF
@@ -272,22 +255,19 @@ headers CRLF
 message-body
 ```
 
-The first line is called a *status line* and contains the HTTP version used in
-the response, a numeric status code that summarizes the result of the request,
-and a reason phrase that provides a text description of the status code. After
-the CRLF sequence comes any headers, another CRLF sequence, and the body of the
-response.
+Первая строка называется *строкой статуса* и содержит версию HTTP, используемую в
+ответе, числовой код состояния, который описывает результат запроса текстовое описание
+кода состояния. После последовательности CRLF могут идти заголовки в любом порядке,
+другую последовательность CRLF и тело ответа.
 
-Here’s an example response that uses version 1.1 of HTTP, has a status code of
-`200`, a reason phrase of `OK`, no headers, and no body:
+Вот пример ответа, который использует версию 1.1 HTTP, имеет код состояния
+`200`, фразу `OK` и никаких заголовков и тела:
 
 ```text
 HTTP/1.1 200 OK\r\n\r\n
 ```
-
-This text is a tiny successful HTTP response. Let’s write this to the stream!
-Remove the `println!` that was printing the request data, and add the code in
-Listing 20-3 in its place:
+Этот текст является простым успешным ответом HTTP. Давайте напишем его в поток!
+Удалите `println!`, который печатает данные запроса, и добавьте код в код 20-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -306,32 +286,30 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-3: Writing a tiny successful HTTP response to
-the stream</span>
+<span class="caption">код 20-3: написание простого успешного HTTP-ответа в поток</span>
 
-The first new line defines the `response` variable that holds the data of the
-tiny success response we’re sending back. Then, we call `as_bytes` on our
-`response` because the `write` method on `stream` takes a `&[u8]` and sends
-those bytes directly down the connection.
+Первая новая строка определяет переменную `response`, которая содержит данные
+успешного ответа, который мы отправляем обратно. Затем мы вызываем `as_bytes`
+`response`, потому что метод` write` в `stream` принимает` & [u8] `и отправляет
+эти байты непосредственно вниз по соединению.
 
-The `write` operation could fail, so `write` returns a `Result<T, E>`; we’re
-continuing to use `unwrap` to make progress on the core ideas in this chapter
-rather than error handling. Finally, `flush` will wait until all of the bytes
-are written to the connection; `TcpStream` contains an internal buffer to
-minimize calls into the underlying operating system.
+Операция `write` может завершиться неудачей, поэтому` write` возвращает `Result <T, E>`;
+мы продолжает использовать `unwrap` для обработки ошибок. Наконец, `flush` будет
+ожидать, пока все байты записываются в соединение; `TcpStream` содержит внутренний
+буфер для минимизирования вызовов в базовую операционную систему.
 
-With these changes, let’s run our code and make a request! We’re no longer
-printing any data to the terminal, so we won’t see any output there other than
-the output from Cargo. When we load `127.0.0.1:8080` in a web browser, though,
-we get a blank page instead of an error. How exciting! You’ve just hand-coded
-an HTTP request and response.
+С этими изменениями давайте запустим наш код и сделаем запрос! Мы больше не будем
+печатать каких-либо данных на терминал, поэтому мы не увидим каких-либо результатов,
+кроме выход от Cargo. Когда мы загружаем `127.0.0.1:8080` в веб-браузере, вместо
+ошибки мы получаем пустую страницу. Ура! Вы только что закодированы вручную
+HTTP-запрос и ответ!
 
-### Returning Real HTML
+### Возвращение HTML браузеру
 
-Let’s return more than a blank page. Create a new file, *hello.html*, in the
-root of your project directory, that is, not in the `src` directory. You can
-put any HTML you want in it; Listing 20-4 shows what the authors used for
-theirs:
+Давайте вернем больше, чем просто пустую страницу. Создайте новый файл, * hello.html *,
+в корневой папке вашего каталога проекта, то есть не в каталоге `src`. Вы можете
+поместите любой HTML-код в него. Например, код 20-4:
+
 
 <span class="filename">Filename: hello.html</span>
 
@@ -349,12 +327,11 @@ theirs:
 </html>
 ```
 
-<span class="caption">Listing 20-4: A sample HTML file to return in a
-response</span>
+<span class="caption">код 20-4: содержание HTML-файла, который будет возвращаться
+при ответе</span>
 
-This is a minimal HTML 5 document with a heading and a little paragraph. Let’s
-modify `handle_connection` as shown in Listing 20-5 to read the HTML file, add
-it to the response as a body, and send it:
+Это простой HTML-файл с заголовком и абзацем. Для его отправке браузеру изменим
+код нашей программы (функцию `handle_connection`), как показано в коде 20-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -381,36 +358,33 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-5: Sending the contents of *hello.html* as the
-body of the response</span>
+<span class="caption">код 20-5: отправка содержания HTML-файла *hello.html* браузеру</span>
 
-We’ve added a line at the top to bring the standard library’s `File` into
-scope, and the file opening and reading code should look familiar since we had
-similar code in Chapter 12 when we read the contents of a file for our I/O
-project in Listing 12-4.
+Мы добавили строку вверху, чтобы добавить ссылку на `File` стандартной библиотеки.
+Код открытия и чтения файла должен быть вам уже знаком, поскольку мы уже имели
+аналогичный код в главе 12, когда мы читали содержимое файла для нашего ввода-вывода
+в коде 12-4.
 
-Next, we’re using `format!` to add the file’s contents as the body of the
-success response that we write to the stream.
+Затем мы используем макрос `format!', чтобы добавить содержимое файла в качестве
+тела ответ ответа, который мы пишем в поток.
 
-Run it with `cargo run`, load up `127.0.0.1:8080` in your browser, and you
-should see your HTML rendered!
+С помощью команды `cargo run` и запроса браузера `127.0.0.1:8080` мы можем увидеть
+результат работы программы в окне браузера.
 
-Note that we’re currently ignoring the request data in `buffer` and sending
-back the contents of the HTML file unconditionally. Try requesting
-`127.0.0.1:8080/something-else` in your browser and you’ll get back your HTML
-for that request too. Sending back the same response for all requests is pretty
-limited and not what most web servers do; let’s examine the request and only
-send back the HTML file for a well-formed request to `/`.
+Обратите внимание, что мы в настоящее время игнорируем данные запроса в переменной
+`buffer` и отправляем содержимое файла HTML. Попробуйте запросить
+`127.0.0.1:8080/something-else` в вашем браузере, и мы увидим тот же HTML-код.
+Отправка назад того же ответа для всех запросов довольно ограничена. Давайте теперь
+анализировать запрос и будем обрабатывать только правильно оформленные запросы
+на адрес `/`.
 
-### Validating the Request and Selectively Responding
+### Проверка запроса и выборочное возвращение ответа
 
-Right now, our web server will return the HTML in the file no matter what the
-client requested. Let’s check that the browser is requesting `/`, and instead
-return an error if the browser requests anything else. Let’s modify
-`handle_connection` as shown in Listing 20-6, which adds part of the code we’ll
-need. This part checks the content of the request we received against what we
-know a request for `/` looks like and adds `if` and `else` blocks where we’ll
-add code to treat requests differently:
+Прямо сейчас наш веб-сервер возвращает HTML независимо от того, что клиент запросил.
+Давайте проверим, что браузер запрашивает `/` или будем возвращать ошибку, если
+браузер запрашивает что-либо еще. Давайте изменим `handle_connection`, как показано
+в коде 20-6, который содержать необходимые изменения. Этот код проверяет содержимое
+полученного нами запроса:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -442,9 +416,8 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-6: Matching the request against the content we
-expect for a request to `/` and setting up conditionally handling requests to
-`/` differently than other requests</span>
+<span class="caption">код 20-6: Согласование запроса с содержанием. Мы ожидаем запрос
+`/`. Для этого мы настраиваем анализ строки</span>
 
 Here, we hardcoded the data corresponding to the request that we’re looking for
 in the variable `get`. Because we’re reading raw bytes into the buffer, we use
@@ -567,8 +540,7 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-9: Refactoring so that the `if` and `else`
-blocks only contain the code that differs between the two cases</span>
+<span class="caption">код 20-9: сокращение строчек кода</span>
 
 Here, the only thing the `if` and `else` blocks do is return the appropriate
 values for the status line and filename in a tuple; we then use destructuring
@@ -582,10 +554,9 @@ makes it so that we only have one place to update the code if we want to change
 how the file reading and response writing works. The behavior of the code in
 Listing 20-9 will be exactly the same as that in Listing 20-8.
 
-Awesome! We have a simple little web server in about 40 lines of Rust code that
-responds to one request with a page of content and responds to all other
-requests with a `404` response.
+Отлично! Мы реализовали простейший веб-сервер и уложилисьв 40 строчек кода. Мы
+реализовали логичные ответ - если запрашивается страница - возвращаем страницу,
+если что-либо ещё - возвращаем страницу с информацией об ошибке `404`.
 
-Since this server runs in a single thread, though, it can only serve one
-request at a time. Let’s see how that can be a problem by simulating some
-slow requests.
+Т.к. сервер работает в однопоточном режиме, одновременно он может обрабатывать
+только один запрос. Далее мы смоделируем работу сервера под нагрузкой.

@@ -1,17 +1,15 @@
-## Creating the Thread Pool and Storing Threads
+## Создание пула потоков и сохранение в него потоков
 
-The warnings are because we aren’t doing anything with the parameters to `new`
-and `execute`. Let’s implement the bodies of both of these with the actual
-behavior we want.
+Предостережения компилятора сообщают о том, что код не использует методы и параметры.
+Далее мы реализуем функционал.
 
-### Validating the Number of Threads in the Pool
+### Проверка количества потоков в пуле
 
-To start, let’s think about `new`. We mentioned before that we picked an
-unsigned type for the `size` parameter since a pool with a negative number of
-threads makes no sense. However, a pool with zero threads also makes no sense,
-yet zero is a perfectly valid `u32`. Let’s check that `size` is greater than
-zero before we return a `ThreadPool` instance and panic if we get zero by using
-the `assert!` macro as shown in Listing 20-13:
+Для начала рассмотрим метод `new`. Он получает целочисленное положительное значение.
+Обратите внимание, что пул с нулевым количеством потоков имеет смысл, т.к. 0 может
+иметь тип `u32`. Реализуем проверку значения параметра количества потоков перед
+возвращение экземпляра `ThreadPool` и используем макрос `panic!` если значение равно
+0. Для этого используем макрос `assert!`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -35,34 +33,29 @@ impl ThreadPool {
 }
 ```
 
-<span class="caption">Listing 20-13: Implementing `ThreadPool::new` to panic if
-`size` is zero</span>
+<span class="caption">код 20-13: реалазация функции `ThreadPool::new`, которая прервёт
+работу программы, если переменная `size` будет равна `0`</span>
 
-We’ve taken this opportunity to add some documentation for our `ThreadPool`
-with doc comments. Note that we followed good documentation practices and added
-a section that calls out the situations in which our function can panic as we
-discussed in Chapter 14. Try running `cargo doc --open` and clicking on the
-`ThreadPool` struct to see what the generate docs for `new` look like!
+Обратите внимание, что добавили информацию для генерации документации. Это хороший
+тон добавлять секции документации. Она будет весьма полезна, чтобы узнать почему
+же код не сработал (это мы обсуждали в главе 14). Запустим нашу программу с помощью
+команды `cargo doc --open` и посмотрим на созданную документацию.
 
-Instead of adding the use of the `assert!` macro as we’ve done here, we could
-make `new` return a `Result` instead like we did with `Config::new` in the I/O
-project in Listing 12-9, but we’ve decided in this case that trying to create a
-thread pool without any threads should be an unrecoverable error. If you’re
-feeling ambitious, try to write a version of `new` with this signature to see
-how you feel about both versions:
+Вместо добавления макроса `assert!` мы также могли бы использовать решение и примера
+12-9. Если вы уверены в своих знаниях Rust API, реализуйте метод `new` такого вида:
 
 ```rust,ignore
 fn new(size: u32) -> Result<ThreadPool, PoolCreationError> {
 ```
 
-### Storing Threads in the Pool
+### Сохранение потоков в пуле
 
-Now that we know we have a valid number of threads to store in the pool, we can
-actually create that many threads and store them in the `ThreadPool` struct
-before returning it.
+После того, как вы проверили корректность входных данных мы можем приступить к
+созданию нужного количества потоков и сохранить их в экземпляре структуры `ThreadPool`
+перед тем как возвратить экземпляр.
 
-This raises a question: how do we “store” a thread? Let’s take another look at
-the signature of `thread::spawn`:
+Возникает вопрос, как же всё-таки сохранять потоки? Рассмотрим метод `thread::spawn`
+ещё раз:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -71,16 +64,16 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         T: Send + 'static
 ```
 
-`spawn` returns a `JoinHandle<T>`, where `T` is the type that’s returned from
-the closure. Let’s try using `JoinHandle` too and see what happens. In our
-case, the closures we’re passing to the thread pool will handle the connection
-and not return anything, so `T` will be the unit type `()`.
+`spawn` возвращает экземпляр `JoinHandle<T>`, где `T` является типом возвращаемого
+значения из замыкания. Попробуем использовать `JoinHandle<T>`.  В нашем случае,
+замыкание, которое мы посылаем в пул потоков будет обрабатывать соединение и ничего
+не возвращать. Т.е. `T` будет действительно пока будет действителен пустой кортеж
+`()`.
 
-This won’t compile yet, but let’s consider the code shown in Listing 20-14.
-We’ve changed the definition of `ThreadPool` to hold a vector of
-`thread::JoinHandle<()>` instances, initialized the vector with a capacity of
-`size`, set up a `for` loop that will run some code to create the threads, and
-returned a `ThreadPool` instance containing them:
+Приведём идею решения, которое ещё пока не будет компилироваться (код 201-14).
+Мы изменим определение `ThreadPool`, чтобы он хранил вектор с объемом и размером,
+реализуем цикл `for` таким образом, чтобы о н создавал потоки и возвращал экземпляр
+`ThreadPool`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -111,23 +104,15 @@ impl ThreadPool {
 }
 ```
 
-<span class="caption">Listing 20-14: Creating a vector for `ThreadPool` to hold
-the threads</span>
+<span class="caption"> 20-14: создание вектора для хранения потоков в `ThreadPool`</span>
 
-We’ve brought `std::thread` into scope in the library crate, since we’re using
-`thread::JoinHandle` as the type of the items in the vector in `ThreadPool`.
+Мы добавили использование `std::thread`, т.к. нам понадобиться использовать
+`thread::JoinHandle` в качестве типа элементов в `ThreadPool`. Мы ещё не использовали
+функцию `with_capacity`. Она делает то же самое, что и `Vec::new` - изменяет размеры
+при вставке элементов. Поскольку мы создали вектор нужного размера, который нам
+нужен, никаких изменений размера не потребуется.
 
-After we have a valid size, we’re creating a new vector that can hold `size`
-items. We haven’t used `with_capacity` in this book yet; it does the same thing
-as `Vec::new`, but with an important difference: it pre-allocates space in the
-vector. Since we know that we need to store `size` elements in the vector,
-doing this allocation up-front is slightly more efficient than only writing
-`Vec::new`, since `Vec::new` resizes itself as elements get inserted. Since
-we’ve created a vector the exact size that we need up front, no resizing of the
-underlying vector will happen while we populate the items.
-
-That is, if this code works, which it doesn’t quite yet! If we check this code,
-we get an error:
+Давайте скомпилируем этот код и посмотрим на ошибку:
 
 ```text
 $ cargo check
@@ -140,49 +125,43 @@ error[E0308]: mismatched types
 
 error: aborting due to previous error
 ```
-
-`size` is a `u32`, but `Vec::with_capacity` needs a `usize`. We have two
-options here: we can change our function’s signature, or we can cast the `u32`
-as a `usize`. If you remember when we defined `new`, we didn’t think too hard
-about what number type made sense, we just chose one. Let’s give it some more
-thought now. Given that `size` is the length of a vector, `usize` makes a lot
-of sense. They even almost share a name! Let’s change the signature of `new`,
-which will get the code in Listing 20-14 to compile:
+`size` имеет тип `u32`. Функции `Vec::with_capacity` нужен входной параметр типа
+`usize`. У нас есть две опции - мы можем изменить тип параметра функции или мы можем
+привести тип `u32` к типу `usize`. Как вы помните, когда мы объявляли функцию `new`
+мы не задумывались о типе входных данных. Задумаемся сейчас. Тип данных `usize`
+имеет большое значение для вектора. Давайте изменим описание функции:
 
 ```rust,ignore
 fn new(size: usize) -> ThreadPool {
 ```
 
-If run `cargo check` again, you’ll get a few more warnings, but it should
-succeed.
+Если вы запустите команду `cargo check` - код скомпилируется.
 
-We left a comment in the `for` loop in Listing 20-14 regarding the creation of
-threads. How do we actually create threads? This is a tough question. What
-should go in these threads? We don’t know what work they need to do at this
-point, since the `execute` method takes the closure and gives it to the pool.
+Как же всё-таки создавать потоки в цикле? Мы ещё не можем знать для чего они нам
+понадобятся - мы просто вносим замыкания Это сложный вопрос. Какие
+должен идти в этих потоках? Мы не знаем, какую работу они должны делать при этом
+поскольку метод `execute` берет замыкание и передаем его в пул.
 
-Let’s refactor slightly: instead of storing a vector of `JoinHandle<()>`
-instances, let’s create a new struct to represent the concept of a *worker*. A
-worker will be what receives a closure in the `execute` method, and it will
-take care of actually calling the closure. In addition to letting us store a
-fixed `size` number of `Worker` instances that don’t yet know about the
-closures they’re going to be executing, we can also give each worker an `id` so
-we can tell the different workers in the pool apart when logging or debugging.
+Давим некоторых изменений. Вместо создания экземпляров  `JoinHandle<()>`,
+создадим новую структуру, которая реализует концепцию *Рабочий* (*Worker*). *Рабочий*
+будет получать замыкание в методе `execute` и будет вызывать её. Дополнительно,
+нам даст это возможность иметь ограниченное количество экземпляров *Рабочих* и
+будет реализована абстракция.
 
-Let’s make these changes:
+Итак, реализуем сттукру. Описание изменений:
 
-1. Define a `Worker` struct that holds an `id` and a `JoinHandle<()>`
-2. Change `ThreadPool` to hold a vector of `Worker` instances
-3. Define a `Worker::new` function that takes an `id` number and returns a
-   `Worker` instance with that `id` and a thread spawned with an empty closure,
-   which we’ll fix soon
-4. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
-   a new `Worker` with that `id`, and store the worker in the vector
+1. Создадим структуры `Worker`, полями которой будут `id` и `JoinHandle<()>`
+2. Сделаем так, чтобы вектор в `ThreadPool` содержал бы экземпляры `Worker`
+3. Опишем функцию `Worker::new`, чтобы она получала бы `id` и возвращала бы
+   экземпляр `Worker` с `id` и поток с пустым замыканием
+4. В `ThreadPool::new`, будем использовать цикл `for` и его счётчик будет `id`.
+   Будет создаваться экземпляр `Worker` с этим `id` и этот вектор будет сохраняться в
+   вектор.
 
-If you’re up for a challenge, try implementing these changes on your own before
-taking a look at the code in Listing 20-15.
+Если вы чувствуете в себе силы, пожалуйста, реализуйте свое решение этой задачи,
+а потом посмотрите на решение 20-15.
 
-Ready? Here’s Listing 20-15 with one way to make these modifications:
+Готовы? Вот код 20-15, который реализует  with one way to make these modifications:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -228,21 +207,12 @@ impl Worker {
 }
 ```
 
-<span class="caption">Listing 20-15: Modifying `ThreadPool` to hold `Worker`
-instances instead of threads directly</span>
+<span class="caption">код 20-15: изменения структуры `ThreadPool` для хранения
+экземпляров `Worker` вместо хранение непосредственно потоков</span>
 
-We’ve chosen to change the name of the field on `ThreadPool` from `threads` to
-`workers` since we’ve changed what we’re holding, which is now `Worker`
-instances instead of `JoinHandle<()>` instances. We use the counter in the
-`for` loop as an argument to `Worker::new`, and we store each new `Worker` in
-the vector named `workers`.
+Мы решили изменить имя поля с `threads` на `workers`, т.к. мы изменили тип данных
+поля. Мы используем счётчик в цикле.
 
-The `Worker` struct and its `new` function are private since external code
-(like our server in *src/bin/main.rs*) doesn’t need to know the implementation
-detail that we’re using a `Worker` struct within `ThreadPool`. The
-`Worker::new` function uses the given `id` and stores a `JoinHandle<()>`
-created by spawning a new thread using an empty closure.
-
-This code compiles and is storing the number of `Worker` instances that we
-specified as an argument to `ThreadPool::new`, but we’re *still* not processing
-the closure that we get in `execute`. Let’s talk about how to do that next.
+Этот код компилируется и сохраняет экземпляры структур. Пока мы никак не обрабатываем,
+т.е. не делаем никаких действий, не предоставляем никаких действий над потоками.
+Об этом мы поговорим в следующий секции.

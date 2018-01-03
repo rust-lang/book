@@ -1,31 +1,30 @@
-# Final Project: Building a Multithreaded Web Server
+# Заключительный проект: реализация многопоточного веб-сервера
 
-It’s been a long journey, but here we are! It’s the end of the book. Parting is
-such sweet sorrow. But before we go, let’s build one more project together, to
-show off some of the things we learned in these final chapters, as well as
-re-cap some of the earlier ones.
+Это было длинным путешествием, но мы сделали это! Это окончание книги. Расставаться
+всегда немного печально. Но прежде чем мы закончим, давайте построим еще один проект,
+чтобы показать некоторые из вещей, которые мы узнали в этих заключительных главах,
+а также переделайте некоторые из предыдущих.
 
-Here’s what we’re going to make: a web server that says hello:
+Вот что мы собираемся сделать: веб-сервер, который приветствует:
 
 ![hello from rust](img/trpl20-01.png)
 
-To do this, we will:
+Шаги решения:
 
-1. Learn a little bit about TCP and HTTP
-2. Listen for TCP connections on a socket
-3. Parse a tiny number of HTTP requests
-4. Create a proper HTTP response
-5. Improve the throughput of our server with a thread pool
 
-Before we get started, however, there’s one thing we should mention: if you
-were writing this code in production, there are a lot of better ways to write
-it. Specifically, there are a number of robust crates on crates.io that provide
-much more complete web server and thread pool implementations than we are going
-to build.
+1. Углубимся в тонкости TCP и HTTP
+2. Реализуем обработчик TCP-соединений с помощью сокета
+3. Проанализируем некоторое количество HTTP-запросов
+4. Реализуем корректный HTTP-ответ (response)
+5. Увеличьте пропускную способность нашего сервера с помощью пула потоков
 
-However, for this chapter, our intention is to learn, not to take the easy
-route. Since Rust is a systems programming language, we’re able to choose what
-level of abstraction we want to work with. We’re able to go to a lower level
-than is possible or practical in other languages if we so choose. So we’ll be
-writing a basic HTTP server and thread pool ourselves in order to learn the
-general ideas and techniques behind the crates we might use in the future.
+Прежде чем мы начнём, мы хотели бы вам сообщить, что уже существует множество
+контейнеров с помощью функционала которых можно реализовать, или уже реализовавших
+описанный нами функционал.
+
+Однако в этой главе мы намерены учиться, а не просто найти простое решение. Т.к.
+ Rust является языком системного программирования, мы можем выбрать уровень абстракции,
+ с которым мы хотим работать. Мы можем перейти на более низкий уровень,
+чем это возможно или практично на других языках. Итак, мы будем создавать
+HTTP-сервер и пул потоков для того, чтобы понять идеи и методы, лежащие в основе
+уже созданных решений, которые мы могли бы использовать в будущем.

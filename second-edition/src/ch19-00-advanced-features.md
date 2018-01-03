@@ -1,24 +1,23 @@
 # Расширенные возможности
 
+Мы прошли долгий путь! К настоящему времени мы узнали 99% всего, что может вам
+понадобятся при написании программ на Rust. Прежде чем мы сделаем еще один проект
+в главе 20, давайте поговорим о нескольких вещах, с которыми вы можете столкнуться
+в течение последнего 1% времени. Не стесняйся пропустите эту главу и вернитесь к ней,
+как только вы столкнетесь с этими вещами в своей работе; функции, которые мы научимся
+использовать здесь, полезны в очень специфических ситуациях. Мы не хотим оставлять
+эти функции без внимания, хотя вы к ним не будет часто обращаться.
 
-We’ve come a long way! By now, we’ve learned 99% of the things you’ll need to
-know when writing Rust. Before we do one more project in Chapter 20, let’s talk
-about a few things that you may run into that last 1% of the time. Feel free to
-skip this chapter and come back to it once you run into these things in the
-wild; the features we’ll learn to use here are useful in very specific
-situations. We don’t want to leave these features out, but you won’t find
-yourself reaching for them often.
+В этой главе мы рассмотрим:
 
-In this chapter, we’re going to cover:
+* Небезопасный Rust: когда вам нужно отказаться от некоторых гарантий Rust и
+   сообщим компилятору, что вы будете нести ответственность за соблюдение гарантий
+* Расширенные сроки жизни: дополнительный синтаксис в сложных ситуациях
+* Расширенные типажи: связанные типы, параметры типа по умолчанию, супертипажи и
+  шаблон newtype для связи с типажами
+* Расширенные типы: еще несколько о шаблоне newtype, псевдонимы типов,
+   Тип «никогда» (“never”) и типы с динамическим размером
+* Расширенные функции и замыкания: указатели на функции и возвращение замыканий
+  из функции.
 
-* Unsafe Rust: for when you need to opt out of some of Rust’s guarantees and
-  tell the compiler that you will be responsible for upholding the guarantees
-  instead
-* Advanced Lifetimes: Additional lifetime syntax for complex situations
-* Advanced Traits: Associated Types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced Types: some more about the newtype pattern, type aliases, the
-  “never” type, and dynamically sized types
-* Advanced Functions and Closures: function pointers and returning closures
-
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+Итак приступим.

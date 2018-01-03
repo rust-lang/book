@@ -1,23 +1,26 @@
-## Advanced Traits
+## Расширенные опции типажей
 
-We covered traits in Chapter 10, but like lifetimes, we didn’t get to all the
-details. Now that we know more Rust, we can get into the nitty-gritty.
+Мы уже познакомились с функционалом типажей в главе 10. Также как и переменные
+времени жизни при первом знакомстве мы не раскрывали всех возможностей компонента
+языка, остановившись лишь на основных. Теперь, когда вы стали уверенными пользователями
+языка Rust, пора углубить ваши знания.
 
-### Associated Types
+### Ассоциированные типы
 
-*Associated types* are a way of associating a type placeholder with a trait
-such that the trait method definitions can use these placeholder types in their
-signatures. The implementor of a trait will specify the concrete type to be
-used in this type’s place for the particular implementation.
+Ассоциированные типы (*Associated types*) - это способ связи ассоциированного
+типа-конетейнера с типажом таким образом, чтобы методы типажа могли бы использовать
+типы ассоциированных типов в своём описании. Реализация типажа будет использовать
+конкретные типы, которые будут использованы в соответствующей реализации.
 
-We’ve described most of the things in this chapter as being very rare.
-Associated types are somewhere in the middle; they’re more rare than the rest
-of the book, but more common than many of the things in this chapter.
+Мы описали большинство вещей в этой главе как очень редкие.
+Связанные типы находятся где-то посередине; они используются реже, чем элементы, которые
+описали ранее (в предыдущих главах), но более распространенны, чем многие из вещей
+этой главы.
 
-An example of a trait with an associated type is the `Iterator` trait provided
-by the standard library. It has an associated type named `Item` that stands in
-for the type of the values that we’re iterating over. We mentioned in Chapter
-13 that the definition of the `Iterator` trait is as shown in Listing 19-20:
+Примером типажа, который ассоциируется с типом является `Iterator`, который входит
+в стандартную библиотеку. Он имеет ассоциированный тип `Item`, который содержит
+тип элементов, которые могут быть использованы. В главе 13 мы уже рассматривали
+использование итератора 19-20:
 
 ```rust
 pub trait Iterator {
@@ -26,19 +29,17 @@ pub trait Iterator {
 }
 ```
 
-<span class="caption">Listing 19-20: The definition of the `Iterator` trait
-that has an associated type `Item`</span>
+<span class="caption">код 19-20: определение типажа `Iterator`, который имеет
+ассоциированный тип `Item`</span>
 
-This says that the `Iterator` trait has an associated type named `Item`. `Item`
-is a placeholder type, and the return value of the `next` method will return
-values of type `Option<Self::Item>`. Implementors of this trait will specify
-the concrete type for `Item`, and the `next` method will return an `Option`
-containing a value of whatever type the implementor has specified.
+Типаж `Iterator` имеет ассоциированный тип `Item`. `Item` является контейнером типа.
+Метод `next` возвращает значение `Option<Self::Item>`. Реализации этого типажа
+должны определить конкретный тип для `Item` и будет возвращать значения этого типа.
 
-#### Associated Types Versus Generics
+#### Ассоциированные типы, как вид обобщенных типов
 
-When we implemented the `Iterator` trait on the `Counter` struct in Listing
-13-6, we specified that the `Item` type was `u32`:
+Когда в коде 13-6 мы реализовали типаж `Iterator` для структуры `Counter`, мы
+установили тип `Item` равным `u32`:
 
 ```rust,ignore
 impl Iterator for Counter {
@@ -47,8 +48,8 @@ impl Iterator for Counter {
     fn next(&mut self) -> Option<Self::Item> {
 ```
 
-This feels similar to generics. So why isn’t the `Iterator` trait defined as
-shown in Listing 19-21?
+Всё это весьма напоминает обобщенные типы. Так почему же типаж `Iterator` не определён,
+как в коде 19-21?
 
 ```rust
 pub trait Iterator<T> {
@@ -56,28 +57,23 @@ pub trait Iterator<T> {
 }
 ```
 
-<span class="caption">Listing 19-21: A hypothetical definition of the
-`Iterator` trait using generics</span>
+<span class="caption">код 19-21: гипотетическое определение типажа `Iterator`
+используя обобщенные типы</span>
 
-The difference is that with the definition in Listing 19-21, we could also
-implement `Iterator<String> for Counter`, or any other type as well, so that
-we’d have multiple implementations of `Iterator` for `Counter`. In other words,
-when a trait has a generic parameter, we can implement that trait for a type
-multiple times, changing the generic type parameters’ concrete types each time.
-Then when we use the `next` method on `Counter`, we’d have to provide type
-annotations to indicate which implementation of `Iterator` we wanted to use.
+Отличием реализации 19-21 является то, что для каждого типа мы должны будет написать
+реализацию. Например, для `String` `Iterator<String> for Counter`. Т.е. если типаж
+имеет обобщенный параметр мы можем реализовать типаж для типа множество раз, при
+этом каждый раз меняя обобщенный параметр на конкретный. Когда мы используем метод
+ `next` мы должны предоставить аннотации для указания какой `Iterator` должен быть
+ использован.
 
-With associated types, we can’t implement a trait on a type multiple times.
-Using the actual definition of `Iterator` from Listing 19-20, we can only
-choose once what the type of `Item` will be, since there can only be one `impl
-Iterator for Counter`. We don’t have to specify that we want an iterator of
-`u32` values everywhere that we call `next` on `Counter`.
+При работе с ассоциированными типам и мы не должны реализовывать типаж множество
+раз. Используя определение `Iterator` из кода 19-20 мы только лишь выбираем один
+раз каким будет тип `Item`. Т.е. необходима только лишь `impl Iterator for Counter`.
 
-The benefit of not having to specify generic type parameters when a trait uses
-associated types shows up in another way as well. Consider the two traits
-defined in Listing 19-22. Both are defining a trait having to do with a graph
-structure that contains nodes of some type and edges of some type. `GGraph` is
-defined using generics, and `AGraph` is defined using associated types:
+Есть ещё одно преимущество использования ассоциированных типов. Рассмотрим два
+типажа в примере 19-22. Оба типажа используют узлы и углы. `GGraph` испльзует обобщенные
+параметры, `AGraph` ассоциированные типы
 
 ```rust
 trait GGraph<Node, Edge> {
@@ -92,13 +88,10 @@ trait AGraph {
 }
 ```
 
-<span class="caption">Listing 19-22: Two graph trait definitions, `GGraph`
-using generics and `AGraph` using associated types for `Node` and `Edge`</span>
+<span class="caption">код 19-22: для варианта определение типажа</span>
 
-Let’s say we wanted to implement a function that computes the distance between
-two nodes in any types that implement the graph trait. With the `GGraph` trait
-defined using generics, our `distance` function signature would have to look
-like Listing 19-23:
+Предположим, что мы хотим реализовать функцию, которая рассчитывать дистанцию
+между узлами любого типа. В типаже  `GGraph` такая реализация будет иметь вид 19-23:
 
 ```rust
 # trait GGraph<Node, Edge> {}
@@ -109,19 +102,16 @@ fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
 }
 ```
 
-<span class="caption">Listing 19-23: The signature of a `distance` function
-that uses the trait `GGraph` and has to specify all the generic
-parameters</span>
+<span class="caption">код 19-23: представление описания функции `distance`, которая
+использует типаж `GGraph` и которая должна указать все обобщенные параметры</span>
 
-Our function would need to specify the generic type parameters `N`, `E`, and
-`G`, where `G` is bound by the trait `GGraph` that has type `N` as its `Node`
-type and type `E` as its `Edge` type. Even though `distance` doesn’t need to
-know the types of the edges, we’re forced to declare an `E` parameter, because
-we need to to use the `GGraph` trait and that requires specifying the type for
-`Edge`.
+Наша функция должна определить типы параметров `N`, `E` и `G`, где `G` ограничена
+типажом `GGraph`, который имеет типы  `N` (`Node`), а `E` (`Edge`). Даже если
+функция  `distance` не будет использовать данные типов углов, мы должны описать
+`E`, т.к. мы используем типаж `GGraph` мы должны указать тип для `Edge`.
 
-Contrast with the definition of `distance` in Listing 19-24 that uses the
-`AGraph` trait from Listing 19-22 with associated types:
+При использовании ассоциированных типов описание метода `distance` будет выглядеть
+следующим образом:
 
 ```rust
 # trait AGraph {
@@ -135,20 +125,18 @@ fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
 }
 ```
 
-<span class="caption">Listing 19-24: The signature of a `distance` function
-that uses the trait `AGraph` and the associated type `Node`</span>
+<span class="caption">код 19-24: описание функции `distance`, которая использует
+типаж `AGraph` и ассоциированный тип `Node`</span>
 
-This is much cleaner. We only need to have one generic type parameter, `G`,
-with the trait bound `AGraph`. Since `distance` doesn’t use the `Edge` type at
-all, it doesn’t need to be specified anywhere. To use the `Node` type
-associated with `AGraph`, we can specify `G::Node`.
+Такой вид намного нагляднее, т.к. нам нужно только один обобщенный параметр типа
+`G`. Для использования типа `Node` ассоциированного с `AGraph` мы можем указать
+`G::Node`.
 
-#### Trait Objects with Associated Types
+#### Использование типажных объектов и ассоциированных типов
 
-You may have been wondering why we didn’t use a trait object in the `distance`
-functions in Listing 19-23 and Listing 19-24. The signature for the `distance`
-function using the generic `GGraph` trait does get a bit more concise using a
-trait object:
+Вы, возможно, удивились почему мы не использовали типажи-объекты в функциях `distance`
+в примерах 19-23 и Listing 19-24. Описание для функции `distance` при работе с
+ `GGraph` было бы более компактным при использование типажных объектов:
 
 ```rust
 # trait GGraph<Node, Edge> {}
@@ -186,24 +174,20 @@ fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {
 }
 ```
 
-While trait objects mean that we don’t need to know the concrete type of the
-`graph` parameter at compile time, we do need to constrain the use of the
-`AGraph` trait in the `traverse` function by the concrete types of the
-associated types. If we didn’t provide this constraint, Rust wouldn’t be able
-to figure out which `impl` to match this trait object to.
+Хотя при использовании типажных объектов вам не нужно знать конкретный тип
+параметра `graph` во время компиляции, необходимо ограничить использование типажа
+`AGraph` с помощью конкретных ассоциированных типов. Без их указания компилятор
+не сможет понять, какую реализацию использовать.
 
-### Operator Overloading and Default Type Parameters
+### Перезагрузка операторов и типы параметров по умолчанию
 
-The `<PlaceholderType=ConcreteType>` syntax is used in another way as well: to
-specify the default type for a generic type. A great example of a situation
-where this is useful is operator overloading.
+Синтаксис `<PlaceholderType=ConcreteType>` используется для указания типа по умолчанию
+в обобщенном типе.
 
-Rust does not allow you to create your own operators or overload arbitrary
-operators, but the operations and corresponding traits listed in `std::ops` can
-be overloaded by implementing the traits associated with the operator. For
-example, Listing 19-25 shows how to overload the `+` operator by implementing
-the `Add` trait on a `Point` struct so that we can add two `Point` instances
-together:
+Rust не позволяет создавать собственные операторы или перезагружать произвольные
+операторы. В тоже время возможно перезагружать операторы определенные в модуле
+`std::ops`. Код 19-25 показывает, как перезагрузить оператор `+` с помощью
+реализации типажа `Add` структурой `Point`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -233,15 +217,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-25: Implementing the `Add` trait to overload
-the `+` operator for `Point` instances</span>
+<span class="caption">код 19-25: реализация типажа `Add` для перезагрузки оператора
+`+` для структуры `Point`</span>
 
-We’ve implemented the `add` method to add the `x` values of two `Point`
-instances together and the `y` values of two `Point` instances together to
-create a new `Point`. The `Add` trait has an associated type named `Output`
-that’s used to determine the type returned from the `add` method.
+Мы реализовали метод `add`. Типаж `Add` имеет ассоциированный тип с именем `Output`,
+который используется для определения типа данных в методе `add`.
 
-Let’s look at the `Add` trait in a bit more detail. Here’s its definition:
+Рассмотрим типаж `Add` более детально. Это его определение:
 
 ```rust
 trait Add<RHS=Self> {
@@ -251,18 +233,15 @@ trait Add<RHS=Self> {
 }
 ```
 
-This should look familiar; it’s a trait with one method and an associated type.
-The new part is the `RHS=Self` in the angle brackets: this syntax is called
-*default type parameters*. `RHS` is a generic type parameter (short for “right
-hand side”) that’s used for the type of the `rhs` parameter in the `add`
-method. If we don’t specify a concrete type for `RHS` when we implement the
-`Add` trait, the type of `RHS` will default to the type of `Self` (the type
-that we’re implementing `Add` on).
+Эта конструкция похожа на типаж с одним методом и ассоциированным типом. Что-то
+новенькое - это `RHS=Self` в угловых скобках. Этот синтаксис называется *параметрами
+по умолчанию* (*default type parameters*). `RHS` является обобщенным типом параметра
+(сокращение от “right hand side”). Если вы не определите конкретный тип для `RHS`
+типом по умолчанию будет `Self`.
 
-Let’s look at another example of implementing the `Add` trait. Imagine we have
-two structs holding values in different units, `Millimeters` and `Meters`. We
-can implement `Add` for `Millimeters` in different ways as shown in Listing
-19-26:
+Рассмотрим другой пример реализации типажа `Add`. Представим, что у нас есть
+структура содержащая значения в различных единицах изменения. Мы можем реализовать
+`Add` для `Millimeters` различными способами 19-26:
 
 ```rust
 use std::ops::Add;
@@ -287,40 +266,34 @@ impl Add<Meters> for Millimeters {
 }
 ```
 
-<span class="caption">Listing 19-26: Implementing the `Add` trait on
-`Millimeters` to be able to add `Millimeters` to `Millimeters` and
-`Millimeters` to `Meters`</span>
+<span class="caption">код 19-26: реализация типажа `Add` для `Millimeters`
+для предоставления возможности добавлять `Millimeters` к `Millimeters` и
+`Millimeters` к `Meters`</span>
 
-If we’re adding `Millimeters` to other `Millimeters`, we don’t need to
-parameterize the `RHS` type for `Add` since the default `Self` type is what we
-want. If we want to implement adding `Millimeters` and `Meters`, then we need
-to say `impl Add<Meters>` to set the value of the `RHS` type parameter.
+Если мы прибавим `Millimeters` к другому `Millimeters` нам не нужно использовать
+`RHS` с помощью определенного типа, т.к. по умолчанию используется тип `Self`.
+Если мы хотим складывать `Millimeters` и `Meters`, в этом случае нам наобходимо
+указать `impl Add<Meters>`.
 
-Default type parameters are used in two main ways:
+Параметры по умолчанию используются в двух основных случаях:
 
-1. To extend a type without breaking existing code.
-2. To allow customization in a way most users don’t want.
 
-The `Add` trait is an example of the second purpose: most of the time, you’re
-adding two like types together. Using a default type parameter in the `Add`
-trait definition makes it easier to implement the trait since you don’t have to
-specify the extra parameter most of the time. In other words, we’ve removed a
-little bit of implementation boilerplate.
+1. Чтобы расширить тип без внесения изменений в существующий код.
+2. Чтобы позволить сделать улучшения, которые не хотят большинство пользователей.
 
-The first purpose is similar, but in reverse: since existing implementations of
-a trait won’t have specified a type parameter, if we want to add a type
-parameter to an existing trait, giving it a default will let us extend the
-functionality of the trait without breaking the existing implementation code.
+Пример второй цели: часто вы добавляете два типа вместе. Используя параметры по
+умолчанию проще реализовать типаж без описания дополнительных параметров. Т.е.
+мы переносим часто используемые определение в описание типажа.
 
-### Fully Qualified Syntax for Disambiguation
 
-Rust cannot prevent a trait from having a method with the same name as another
-trait’s method, nor can it prevent us from implementing both of these traits on
-one type. We can also have a method implemented directly on the type with the
-same name as well! In order to be able to call each of the methods with the
-same name, then, we need to tell Rust which one we want to use. Consider the
-code in Listing 19-27 where traits `Foo` and `Bar` both have method `f` and we
-implement both traits on struct `Baz`, which also has a method named `f`:
+### Использование полного имени для устранения неоднозначности
+
+Компилятор не может предотвратить создание метода с тем же именем, что и в другом
+типаже. Также он не может препятствовать реализовать эти два типажа в одном типе.
+Мы также можем реализовать этот метод непосредственно в типе. Для того чтобы указать
+какой же из этих методов мы хотим использовать необходимо проделать это правильно
+указать. В примере 19-27, где типажи `Foo` и `Bar` оба имеют метод `f` и мы реализуем
+оба типажа в структуре `Baz`, которая также имеет метод `f`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -353,36 +326,32 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-27: Implementing two traits that both have a
-method with the same name as a method defined on the struct directly</span>
+<span class="caption">код 19-27: реализация двух типажей, которые имеют метод с
+одинаковым именем и которое совпадает с именем определенным в структуре</span>
 
-For the implementation of the `f` method for the `Foo` trait on `Baz`, we’re
-printing out `Baz's impl of Foo`. For the implementation of the `f` method for
-the `Bar` trait on `Baz`, we’re printing out `Baz's impl of Bar`. The
-implementation of `f` directly on `Baz` prints out `Baz's impl`. What should
-happen when we call `b.f()`? In this case, Rust will always use the
-implementation on `Baz` directly and will print out `Baz's impl`.
+Для реализации метода `f` для `Foo` в `Baz` мы печатаем `Baz's impl of Foo`.
+Для реализации метода `f` для `Foo` в `Bar` мы печатаем `Baz's impl of Bar`.
+При реализации метода `f` в самом `Foo` будет напечатано `Baz's impl`. При вызове
+метода `b.f()` будет напечатано `Baz's impl`.
 
-In order to be able to call the `f` method from `Foo` and the `f` method from
-`Baz` rather than the implementation of `f` directly on `Baz`, we need to use
-the *fully qualified syntax* for calling methods. It works like this: for any
-method call like:
+Для того, чтобы вызвать метод типажа `Foo` из экземпляра `Foo` необходимо использовать
+полное имя метода (*fully qualified syntax*):
 
 ```rust,ignore
 receiver.method(args);
 ```
 
-We can fully qualify the method call like this:
+Описание полного имени метода выглядит следующим образом:
 
 ```rust,ignore
 <Type as Trait>::method(receiver, args);
 ```
 
-So in order to disambiguate and be able to call all the `f` methods defined in
-Listing 19-27, we specify that we want to treat the type `Baz` as each trait
-within angle brackets, then use two colons, then call the `f` method and pass
-the instance of `Baz` as the first argument. Listing 19-28 shows how to call
-`f` from `Foo` and then `f` from `Bar` on `b`:
+Поэтому для устранения неоднозначности и получения возможности вызова всех методов
+`f`, определенных в листинге 19-27 мы указываем, что мы хотим рассматривать тип
+`Baz`, как каждый признак в угловых скобках, затем используйте два двоеточия, затем
+вызовите метод `f` и использовать экземпляр `Baz` в качестве первого аргумента.
+В листинге 19-28 показано, как вызвать `f` из` Foo`, а затем `f` из` Bar` на `b`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -412,10 +381,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-28: Using fully qualified syntax to call the
-`f` methods defined as part of the `Foo` and `Bar` traits</span>
+<span class="caption">код 19-28: использование синтаксиса полного пути к методу
+`f` в типажах `Foo` и `Bar`</span>
 
-This will print:
+Будет напечатано:
 
 ```text
 Baz's impl
@@ -423,29 +392,21 @@ Baz’s impl of Foo
 Baz’s impl of Bar
 ```
 
-We only need the `Type as` part if it’s ambiguous, and we only need the `<>`
-part if we need the `Type as` part. So if we only had the `f` method directly
-on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
-`f` method in `Foo` by using `Foo::f(&b)` since we wouldn’t have to
-disambiguate from the `Bar` trait.
+Для выбора нужного типажа вам необходимо указать нужный типаж в `<>`. Если же
+необходимо вызвать метод типажа `Foo` непосредственно из `Baz`  можно написать так:
+`Foo::f(&b)`.
 
-We could also have called the `f` defined directly on `Baz` by using
-`Baz::f(&b)`, but since that definition of `f` is the one that gets used by
-default when we call `b.f()`, it’s not required to fully specify that
-implementation if that’s what we want to call.
+Таким образом можно вызвать и метод структуры `Baz::f(&b)`.
 
-### Supertraits to Use One Trait’s Functionality Within Another Trait
+### Супертипажи. Реализация наследования
 
-Sometimes, we may want a trait to be able to rely on another trait also being
-implemented wherever our trait is implemented, so that our trait can use the
-other trait’s functionality. The required trait is a *supertrait* of the trait
-we’re implementing.
+Бывает, что необходимо использовать функционал одного типажа в другом. Родительский
+типаж называют супертипажом (*supertrait*).
 
-For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print out a value outlined in asterisks. That
-is, if our `Point` struct implements `Display` to result in `(x, y)`, calling
-`outline_print` on a `Point` instance that has 1 for `x` and 3 for `y` would
-look like:
+Например, мы хотим реализовать типаж `OutlinePrint` с методом `outline_print`,
+который печатает значения внутри звёздочек. Т.е. если структура `Point` реализует
+`Display` и результатом будет текст `(x, y)`, то вызов `outline_print` текст вывода
+будет выглядеть:
 
 ```text
 **********
@@ -455,13 +416,9 @@ look like:
 **********
 ```
 
-In the implementation of `outline_print`, since we want to be able to use the
-`Display` trait’s functionality, we need to be able to say that the
-`OutlinePrint` trait will only work for types that also implement `Display` and
-provide the functionality that `OutlinePrint` needs. We can do that in the
-trait definition by specifying `OutlinePrint: Display`. It’s like adding a
-trait bound to the trait. Listing 19-29 shows an implementation of the
-`OutlinePrint` trait:
+В реализации `outline_print` мы хотим иметь возможность использовать `Display`.
+Для этого необходимо описать типаж `OutlinePrint`, чтобы дать компилятору понять,
+что он реализовал типаж `Display`. Мы можем сделать это в описании типажа:
 
 ```rust
 use std::fmt;
@@ -479,18 +436,14 @@ trait OutlinePrint: fmt::Display {
 }
 ```
 
-<span class="caption">Listing 19-29: Implementing the `OutlinePrint` trait that
-requires the functionality from `Display`</span>
+<span class="caption">код 19-29: реализация типажа `OutlinePrint`, которая наследует
+функциона `Display`</span>
 
-Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
-can use `to_string` in `outline_print` (`to_string` is automatically
-implemented for any type that implements `Display`). If we hadn’t added the `:
-Display` after the trait name and we tried to use `to_string` in
-`outline_print`, we’d get an error that no method named `to_string` was found
-for the type `&Self` in the current scope.
+Т.к. мы определили зависимость типажа `OutlinePrint` от `Display`, мы можим
+использовать метод `to_string` в `outline_print`.
 
-If we try to implement `OutlinePrint` on a type that doesn’t implement
-`Display`, such as the `Point` struct:
+Если мы попытаемся реализовать `OutlinePrint`, в типе который не реализовал `Display`,
+мы получим ошибку:
 
 ```rust
 # trait OutlinePrint {}
@@ -502,8 +455,7 @@ struct Point {
 impl OutlinePrint for Point {}
 ```
 
-We’ll get an error that `Display` isn’t implemented and that `Display` is
-required by `OutlinePrint`:
+Описание ошибки:
 
 ```text
 error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
@@ -518,8 +470,7 @@ error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
    = note: required by `OutlinePrint`
 ```
 
-Once we implement `Display` on `Point` and satisfy the constraint that
-`OutlinePrint` requires, like so:
+Реализация типажа `Display` в `Point` выглядит следующим образом:
 
 ```rust
 # struct Point {
@@ -536,11 +487,15 @@ impl fmt::Display for Point {
 }
 ```
 
-then implementing the `OutlinePrint` trait on `Point` will compile successfully
-and we can call `outline_print` on a `Point` instance to display it within an
-outline of asterisks.
+реализация типажа `OutlinePrint` в `Point` скомпилируется без ошибок. Мы можем
+вызвать `outline_print` из экземпляра `Point` и увидеть результат.
 
-### The Newtype Pattern to Implement External Traits on External Types
+### Шаблон Newtype для реализация внешних типажей во внешних типах
+
+В главе 10 мы упоминали о правиле, по которому следует, что дозволено реализация
+типажей в типе только если они находятся в одном контейнере. Способом обойти это
+ограничение является *newtype pattern*, который предназначен для создания нового
+типа используя структур кортежа с одним полем.
 
 In Chapter 10, we mentioned the orphan rule, which says we’re allowed to
 implement a trait on a type as long as either the trait or the type are local
@@ -552,9 +507,9 @@ wrapper. “Newtype” is a term originating from the Haskell programming langua
 There’s no runtime performance penalty for using this pattern. The wrapper type
 is elided at compile time.
 
-For example, if we wanted to implement `Display` on `Vec`, we can make a
-`Wrapper` struct that holds an instance of `Vec`. Then we can implement
-`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-30:
+Например, если мы хотим реализовать `Display` в `Vec`, мы можем создать структуру
+`Wrapper`, которая содержит экземпляр `Vec`. Далее, мы реализуем `Display` для
+`Wraper` и используем значение `Vec`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -575,22 +530,21 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-30: Creating a `Wrapper` type around
-`Vec<String>` to be able to implement `Display`</span>
+<span class="caption">код 19-30: создание типа `Wrapper` вокруг `Vec<String>`
+для реализации `Display`</span>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec`, and
-then we can use the functionality of the `Display` type on `Wrapper`.
+Реализация `Display` использует `self.0` для доступа к внутреннему `Vec` и далее
+мы можем использовать функционал `Display` в `Wrapper`.
 
-The downside is that since `Wrapper` is a new type, it doesn’t have the methods
-of the value it’s holding; we’d have to implement all the methods of `Vec` like
-`push`, `pop`, and all the rest directly on `Wrapper` to delegate to `self.0`
-in order to be able to treat `Wrapper` exactly like a `Vec`. If we wanted the
-new type to have every single method that the inner type has, implementing the
-`Deref` trait that we discussed in Chapter 15 on the wrapper to return the
-inner type can be a solution. If we don’t want the wrapper type to have all the
-methods of the inner type, in order to restrict the wrapper type’s behavior for
-example, we’d have to implement just the methods we do want ourselves.
+Недостатком является то, что, поскольку «Wrapper» является новым типом, он не имеет
+методов данных, которую он держит; мы должны были бы реализовать все методы `Vec`,
+как `push`,` pop` и все остальное непосредственно на `Wrapper`, чтобы делегировать
+`self.0` для того, чтобы иметь возможность рассматривать «Wrapper» точно так же,
+как «Vec». Если бы мы хотим, чтобы новый тип имел все методы, который имеет
+внутренний тип, реализуя `Deref`. Если мы не хотим, чтобы тип обертки имел все
+методы внутреннего типа, чтобы ограничить поведение типа обертки, нам нужно будет
+реализовать только те методы, которые мы хотим сами.
 
-That’s how the newtype pattern is used in relation to traits; it’s also a
-useful pattern without having traits involved. Let’s switch focus now to talk
-about some advanced ways to interact with Rust’s type system.
+Вот как используется шаблон newtype по отношению к типажам; это также
+полезный шаблон без вовлечения типажей. В следующей секции мы переключим внимание
+на разговор о некоторых продвинутых способах взаимодействия с системой типов в Rust.

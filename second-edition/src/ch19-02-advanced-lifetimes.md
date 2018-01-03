@@ -1,20 +1,17 @@
-## Advanced Lifetimes
+## Расширенные модификаторы времени жизни (МВЖ) (Lifetimes)
 
-Back in Chapter 10, we learned how to annotate references with lifetime
-parameters to help Rust understand how the lifetimes of different references
-relate. We saw how most of the time, Rust will let you elide lifetimes, but
-every reference has a lifetime. There are three advanced features of lifetimes
-that we haven’t covered though: *lifetime subtyping*, *lifetime bounds*, and
-*trait object lifetimes*.
+В главе 10 мы изучили как аннотировать ссылочные переменные с помощью МВЖ для
+помощи компилятору понять какие взаимосвязи существуют между данными. В этой секции
+мы рассмотрим ещё не освященные опции МВЖ:  *подтипы*, *границы* и *объекты-типажи*.
 
-### Lifetime Subtyping
+### Подтипы
 
-Imagine that we want to write a parser. To do this, we’ll have a structure that
-holds a reference to the string that we’re parsing, and we’ll call that struct
-`Context`. We’ll write a parser that will parse this string and return success
-or failure. The parser will need to borrow the context to do the parsing.
-Implementing this would look like the code in Listing 19-12, which won’t
-compile because we’ve left off the lifetime annotations for now:
+Представьте, что мы хотим реализовать текстовый анализатор (parser). Для этого
+необходимо создать структуру, экземпляры которой будут хранить ссылки на строку, которую
+мы анализируем. Назовём эту структуру `Context`. Мы создадим анализатор, который
+будет анализировать эту строку и возвращать индикатор успеха или неудачи. Анализатору
+необходимо заимствовать сороку для анализа. Реализация может быть похожа на код
+19-12, который не скомпилируется, т.к. мы не указали МВЖ:
 
 ```rust,ignore
 struct Context(&str);
@@ -30,24 +27,16 @@ impl Parser {
 }
 ```
 
-<span class="caption">Listing 19-12: Defining a `Context` struct that holds a
-string slice, a `Parser` struct that holds a reference to a `Context` instance,
-and a `parse` method that always returns an error referencing the string
-slice</span>
+<span class="caption">код 19-12: определение структуры `Context`, которая содержит
+строковый срез. Структура `Parser` содержит ссылку на экземпляр `Context`. Метод
+`parse` всегда возвращает ошибку со ссылкой на строковый срез</span>
 
-For simplicity’s sake, our `parse` function returns a `Result<(), &str>`. That
-is, we don’t do anything on success, and on failure we return the part of the
-string slice that didn’t parse correctly. A real implementation would have more
-error information than that, and would actually return something created when
-parsing succeeds, but we’re leaving those parts of the implementation off since
-they aren’t relevant to the lifetimes part of this example. We’re also defining
-`parse` to always produce an error after the first byte. Note that this may
-panic if the first byte is not on a valid character boundary; again, we’re
-simplifying the example in order to concentrate on the lifetimes involved.
+Для простоты функция `parse`  возвращается `Result<(), &str>`. Поэтому мы ничего
+не делаем для успешной работы и при ошибке возвращаем часть строки, которая не смогла
+быть обработана. Реальные функции такого рода должны содержать больше информации.
 
-So how do we fill in the lifetime parameters for the string slice in `Context`
-and the reference to the `Context` in `Parser`? The most straightforward thing
-to do is to use the same lifetime everywhere, as shown in Listing 19-13:
+Как же записаь МВЖ для строкового среза в `Context` и ссылку в `Parser`? Очевидным
+решением является использование МВЖ везде:
 
 ```rust
 struct Context<'a>(&'a str);
@@ -63,12 +52,10 @@ impl<'a> Parser<'a> {
 }
 ```
 
-<span class="caption">Listing 19-13: Annotating all references in `Context` and
-`Parser` with the same lifetime parameter</span>
+<span class="caption">код 19-13: аннотирование ссылок в `Context` и `Parser`</span>
 
-This compiles fine. Next, in Listing 19-14, let’s write a function that takes
-an instance of `Context`, uses a `Parser` to parse that context, and returns
-what `parse` returns. This won’t quite work:
+Этот код скомпилируется. Следующий код (19-14) декларирует функцию, которая получает
+входной параметр `Context` и используя `Parser` для анализа текста.
 
 ```rust,ignore
 fn parse_context(context: Context) -> Result<(), &str> {
@@ -76,11 +63,10 @@ fn parse_context(context: Context) -> Result<(), &str> {
 }
 ```
 
-<span class="caption">Listing 19-14: An attempt to add a `parse_context`
-function that takes a `Context` and uses a `Parser`</span>
+<span class="caption">Listing 19-14: попытка добавить функцию `parse_context`,
+которая получает `Context` и использует `Parser`</span>
 
-We get two quite verbose errors when we try to compile the code with the
-addition of the `parse_context` function:
+При попытке компиляции мы получаем две хорошо описанные ошибки:
 
 ```text
 error: borrowed value does not live long enough
@@ -120,72 +106,35 @@ body at 15:55...
    | |_^
 ```
 
-These errors are saying that both the `Parser` instance we’re creating and the
-`context` parameter live from the line that the `Parser` is created until the
-end of the `parse_context` function, but they both need to live for the entire
-lifetime of the function.
+Эти ошибки говорят, что время жизниа `Parser`, который мы создаём и параметра метода
+заканчивается после завершения работы функции. Но они должны продолжать жить далее.
 
-In other words, `Parser` and `context` need to *outlive* the entire function
-and be valid before the function starts as well as after it ends in order for
-all the references in this code to always be valid. Both the `Parser` we’re
-creating and the `context` parameter go out of scope at the end of the
-function, though (since `parse_context` takes ownership of `context`).
+Т.е. для `Parser` и `context` необходимо пережить ( *outlive*) работы функции и
+быть действительными после.
 
-Let’s look at the definitions in Listing 19-13 again, especially the signature
-of the `parse` method:
+Давайте рассмотрим определение функции `parse` в 19-13 снова. Обратим внимание на
+сигнатуру метода:
 
 ```rust,ignore
     fn parse(&self) -> Result<(), &str> {
 ```
 
-Remember the elision rules? If we annotate the lifetimes of the references, the
-signature would be:
+Напомним, что при использовании ПВЖ описание должно иметь вид:
 
 ```rust,ignore
     fn parse<'a>(&'a self) -> Result<(), &'a str> {
 ```
 
-That is, the error part of the return value of `parse` has a lifetime that is
-tied to the `Parser` instance’s lifetime (that of `&self` in the `parse` method
-signature). That makes sense, as the returned string slice references the
-string slice in the `Context` instance that the `Parser` holds, and we’ve
-specified in the definition of the `Parser` struct that the lifetime of the
-reference to `Context` that `Parser` holds and the lifetime of the string slice
-that `Context` holds should be the same.
+Проблема этой функции в том, что время жизни экземпляра `Parser` заканчивается после
+завершения функции и время жизни параметра также.
 
-The problem is that the `parse_context` function returns the value returned
-from `parse`, so the lifetime of the return value of `parse_context` is tied to
-the lifetime of the `Parser` as well. But the `Parser` instance created in the
-`parse_context` function won’t live past the end of the function (it’s
-temporary), and the `context` will go out of scope at the end of the function
-(`parse_context` takes ownership of it).
+Необходимо описать время жизни таким образом, чтобы срез в `Context` и ссылка в
+`Parser` имели бы разные времена жизни и возвращаемое значение было связано с временем
+жизни среза.
 
-We’re not allowed to return a reference to a value that goes out of scope at
-the end of the function. Rust thinks that’s what we’re trying to do because we
-annotated all the lifetimes with the same lifetime parameter. That told Rust
-the lifetime of the string slice that `Context` holds is the same as that of
-the lifetime of the reference to `Context` that `Parser` holds.
-
-The `parse_context` function can’t see that within the `parse` function, the
-string slice returned will outlive both `Context` and `Parser`, and that the
-reference `parse_context` returns refers to the string slice, not to `Context`
-or `Parser`.
-
-By knowing what the implementation of `parse` does, we know that the only
-reason that the return value of `parse` is tied to the `Parser` is because it’s
-referencing the `Parser`’s `Context`, which is referencing the string slice, so
-it’s really the lifetime of the string slice that `parse_context` needs to care
-about. We need a way to tell Rust that the string slice in `Context` and the
-reference to the `Context` in `Parser` have different lifetimes and that the
-return value of `parse_context` is tied to the lifetime of the string slice in
-`Context`.
-
-We could try only giving `Parser` and `Context` different lifetime parameters
-as shown in Listing 19-15. We’ve chosen the lifetime parameter names `'s` and
-`'c` here to be clearer about which lifetime goes with the string slice in
-`Context` and which goes with the reference to `Context` in `Parser`. Note that
-this won’t completely fix the problem, but it’s a start and we’ll look at why
-this isn’t sufficient when we try to compile.
+Мы можем попытаться дать `Parser` и `Context` различные параметры времени жизни.
+К сожалению, это решение не решит полностью проблему, но это всё же правильный путь
+на пути к решению:
 
 ```rust,ignore
 struct Context<'s>(&'s str);
@@ -205,8 +154,8 @@ fn parse_context(context: Context) -> Result<(), &str> {
 }
 ```
 
-<span class="caption">Listing 19-15: Specifying different lifetime parameters
-for the references to the string slice and to `Context`</span>
+<span class="caption">код 19-15: определение различных переменных времени жизни</span>
+
 
 We’ve annotated the lifetimes of the references in all the same places that we
 annotated them in Listing 19-13, but used different parameters depending on
@@ -252,10 +201,9 @@ parameters, we can declare a lifetime `'a` as usual, and declare a lifetime
 `'b` that lives at least as long as `'a` by declaring `'b` with the syntax `'b:
 'a`.
 
-In our definition of `Parser`, in order to say that `'s` (the lifetime of the
-string slice) is guaranteed to live at least as long as `'c` (the lifetime of
-the reference to `Context`), we change the lifetime declarations to look like
-this:
+
+Для того, чтобы сообщить компилятору, что время жизни `'s` будет не меньше времени
+жизни `'c`, мы изменим описание структуры следующим образом:
 
 ```rust
 # struct Context<'a>(&'a str);
@@ -265,36 +213,25 @@ struct Parser<'c, 's: 'c> {
 }
 ```
 
-Now, the reference to `Context` in the `Parser` and the reference to the string
-slice in the `Context` have different lifetimes, and we’ve ensured that the
-lifetime of the string slice is longer than the reference to the `Context`.
+Теперь всё в порядке. Такие особенности применяются не часть, но всё же бывают.
 
-That was a very long-winded example, but as we mentioned at the start of this
-chapter, these features are pretty niche. You won’t often need this syntax, but
-it can come up in situations like this one, where you need to refer to
-something you have a reference to.
+### Границы времени жизни переменных
 
-### Lifetime Bounds
-
-In Chapter 10, we discussed how to use trait bounds on generic types. We can
-also add lifetime parameters as constraints on generic types, which are called
-*lifetime bounds*. For example, consider a type that is a wrapper over
-references. Recall the `RefCell<T>` type from Chapter 15: its `borrow` and
-`borrow_mut` methods return the types `Ref` and `RefMut`, respectively. These
-types are wrappers over references that keep track of the borrowing rules at
-runtime. The definition of the `Ref` struct is shown in Listing 19-16, without
-lifetime bounds for now:
+В главе 10 мы обсуждали как использовать границы в типажах обобщенных типах.
+Мы можем также добавить параметры времени жизни как ограничения в обобщенные типы.
+Например, рассмотрим тип, который является оболочкой для ссылок. Вспомним тип
+`RefCell<T>` из главы 15: он имеет методы `borrow` и `borrow_mut`, которые возвращают
+`Ref` и `RefMut`. Это определение структуры `Ref` без переменной времени жизни:
 
 ```rust,ignore
 struct Ref<'a, T>(&'a T);
 ```
 
-<span class="caption">Listing 19-16: Defining a struct to wrap a reference to a
-generic type; without lifetime bounds to start</span>
+<span class="caption">код 19-16: определение структуры-оболочки для ссылки на обобщенный
+тип без переменной времени жизни</span>
 
-Without constraining the lifetime `'a` in relation to the generic parameter
-`T`, we get an error because Rust doesn’t know how long the generic type `T`
-will live:
+Без связи обобщенного параметра и переменной времени жизни мы получим ошибку, т.к.
+компилятор не знает как долго тип `T` будет существовать:
 
 ```text
 error[E0309]: the parameter type `T` may not live long enough
@@ -311,42 +248,35 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
   |                   ^^^^^^
 ```
 
-Since `T` can be any type, `T` could itself be a reference or a type that holds
-one or more references, each of which could have their own lifetimes. Rust
-can’t be sure `T` will live as long as `'a`.
+Т.к. `T` может быть любым типом, `T` сам может быть ссылкой или типом содержащим
+ссылки. Поэтому компилятор не может определить время жизни `T`.
 
-Fortunately, Rust gave us helpful advice on how to specify the lifetime bound in
-this case:
+Для решения этой задачу в Rust есть подсказка:
 
 ```text
 consider adding an explicit lifetime bound `T: 'a` so that the reference type
 `&'a T` does not outlive the data it points at.
 ```
 
-Listing 19-17 shows how to apply this advice by specifying the lifetime bound
-when we declare the generic type `T`. This code now compiles because the `T:
-'a` syntax specifies that `T` can be any type, but if it contains any
-references, the references must live at least as long as `'a`:
+Код 19-17 демонстрирует реализацию данного совета:
 
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
 ```
 
-<span class="caption">Listing 19-17: Adding lifetime bounds on `T` to specify
-that any references in `T` live at least as long as `'a`</span>
+<span class="caption">код 19-17: добавления ограничения времени жизни для `T`</span>
 
-We could choose to solve this in a different way, shown in the definition of a
-`StaticRef` struct in Listing 19-18, by adding the `'static` lifetime bound on
-`T`. This means if `T` contains any references, they must have the `'static`
-lifetime:
+Мы можем решить эту задачу и другим способом. В коде 19-18 продемонстрирована
+работа со статическими переменными. Это означает, что если `T` содержит какую-либо
+ссылку, она должна иметь `'static` время жизни:
 
 ```rust
 struct StaticRef<T: 'static>(&'static T);
 ```
 
-<span class="caption">Listing 19-18: Adding a `'static` lifetime bound to `T`
-to constrain `T` to types that have only `'static` references or no
-references</span>
+<span class="caption">код 19-18: добавление `'static` время жизни для `T` для
+введения ограничения `T`</span>
+
 
 Types without any references count as `T: 'static`. Because `'static` means the
 reference must live as long as the entire program, a type that contains no
@@ -358,15 +288,12 @@ references that live forever; both of them are the same for the purpose of
 determining whether or not a reference has a shorter lifetime than what it
 refers to.
 
-### Trait Object Lifetimes
+### Переменные времени жизни объектов-типажей
 
-In Chapter 17, we learned about trait objects that consist of putting a trait
-behind a reference in order to use dynamic dispatch. However, we didn’t discuss
-what happens if the type implementing the trait used in the trait object has a
-lifetime. Consider Listing 19-19, where we have a trait `Foo` and a struct
-`Bar` that holds a reference (and thus has a lifetime parameter) that
-implements trait `Foo`, and we want to use an instance of `Bar` as the trait
-object `Box<Foo>`:
+В главе 17 вы изучали объекты-типажи. Они применяются при динамической диспетчеризации.
+Но мы ещё не обсуждали случай использования переменных времени жизни в таких
+конструкциях. Рассмотрим такой пример. В коде 19-19 у нас есть типаж `Foo` и структура
+`Bar`, которая содержит ссылку (и, следовательно, имеет переменную времени жизни):
 
 ```rust
 trait Foo { }
@@ -382,23 +309,18 @@ let num = 5;
 let obj = Box::new(Bar { x: &num }) as Box<Foo>;
 ```
 
-<span class="caption">Listing 19-19: Using a type that has a lifetime parameter
-with a trait object</span>
+<span class="caption">код 19-19: использование типа, который имеет переменную времени
+жизни</span>
 
-This code compiles without any errors, even though we haven’t said anything
-about the lifetimes involved in `obj`. This works because there are rules
-having to do with lifetimes and trait objects:
+Этот код компилируется без ошибок. Это происходит потому, что существуют правила
+между типажами объектов и переменными времени жизни:
 
-* The default lifetime of a trait object is `'static`.
-* If we have `&'a X` or `&'a mut X`, then the default is `'a`.
-* If we have a single `T: 'a` clause, then the default is `'a`.
-* If we have multiple `T: 'a`-like clauses, then there is no default; we must
-  be explicit.
+* по умолчанию ПВЖ для типажей-объектов `'static`.
+* если мы имеем `&'a X` or `&'a mut X`, то по умолчанию `'a`.
+* если мы имеем один `T: 'a`, то по умолчанию  `'a`.
+* если мы имеем множество `T: 'a` типов, то время жизни на до указывать явным образом.
 
-When we must be explicit, we can add a lifetime bound on a trait object like
-`Box<Foo>` with the syntax `Box<Foo + 'a>` or `Box<Foo + 'static>`, depending
-on what’s needed. Just as with the other bounds, this means that any
-implementor of the `Foo` trait that has any references inside must have the
-lifetime specified in the trait object bounds as those references.
+В случае явного указания времени жизни типажей-объектов, например `Box<Foo>`,
+синтаксис будет следующий `Box<Foo + 'a>` или `Box<Foo + 'static>`.
 
-Next, let’s take a look at some other advanced features dealing with traits!
+Далее, мы рассмотрим расширенные возможности связанные с типажами.

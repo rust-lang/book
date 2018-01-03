@@ -1,22 +1,21 @@
-## How Slow Requests Affect Throughput
+## Как медленные запросы влияют на пропускную способность
 
-Right now, the server will process each request in turn. That works for
-services like ours that aren’t expected to get very many requests, but as
-applications get more complex, this sort of serial execution isn’t optimal.
+Сейчас наш сервер обрабатывает каждый запрос по очереди. Это работает для систем
+с небольшой загрузкой (которая получает не очень много запросов), но как только
+приложения становятся более сложными, такая реализация уже не будет оптимальной.
 
-Because our current program processes connections sequentially, it won’t
-process a second connection until it’s completed processing the first. If we
-get one request that takes a long time to process, requests coming in during
-that time will have to wait until the long request is finished, even if the new
-requests can be processed quickly. Let’s see this in action.
+Поскольку наша текущая программа последовательно обрабатывает соединения, она не будет
+обработать второе соединение, пока оно не завершит обработку первого. Если мы
+получить один запрос, который требует много времени для обработки, запросам,
+поступающие во время обработки придется подождать, пока длинный запрос не будет
+завершен, даже если новый запрос может быть обработан быстро. Давайте посмотрим
+на это в действии.
 
-### Simulating a Slow Request in the Current Server Implementation
+### Имитация медленного запроса в реализации текущего сервера
 
-Let’s see the effect of a request that takes a long time to process on requests
-made to our current server implementation. Listing 20-10 shows the code to
-respond to another request, `/sleep`, that will cause the server to sleep for
-five seconds before responding. This will simulate a slow request so that we
-can see that our server processes requests serially.
+Давайте посмотрим на эффект от запроса, который требует много времени для обработки.
+В коде 20-10 показано, пример симуляции медленной обработки запроса. Код при ответе
+на запрос `/sleep`, сервер "заснёт" на пять секунд.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -49,62 +48,56 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-10: Simulating a slow request by recognizing
-`/sleep` and sleeping for 5 seconds</span>
+<span class="caption">код 20-10: симуляция обработки медленного запроса</span>
 
-This code is a bit messy, but it’s good enough for our simulation purposes! We
-created a second request `sleep`, whose data we’ll recognize. We added an `else
-if` after the `if` block to check for the request to `/sleep`, and when we see
-that request, we’ll sleep for five seconds before rendering the hello page.
+Мы создали специальный запрос `sleep`. При выполнении данного запроса будет 5-секундная
+задержка, перед тем, как отобразиться содержимое файла "hello.html".
 
-You can really see how primitive our server is here; real libraries would
-handle the recognition of multiple requests in a less verbose way!
+Вы можете увидеть в реальном времени, насколько прост наш сервер. В реальных проекта
+может происходить и более длинная задержка.
 
-Start the server with `cargo run`, and then open up two browser windows: one
-for `http://localhost:8080/` and one for `http://localhost:8080/sleep`. If
-you hit `/` a few times, as before, you’ll see it respond quickly. But if you
-hit `/sleep`, and then load up `/`, you’ll see that `/` waits until `sleep`
-has slept for its full five seconds before going on.
+Запустите программу командой `cargo run`, а затем в окне браузеры запросите данные
+по адресам `http://localhost:8080/` и `http://localhost:8080/sleep`. Если вы запросите
+данные и строка запроса будет начинаться с `/` даже несколько раз - вы получите
+быстрый ответ. Но если вы запросите `/sleep` и затем попробуете ещё раз получить
+данные стартовой страницы - вы будете ожидать пока `sleep` код функции не закончит
+ожидания и не приступит к дальнейшей работе.
 
-There are multiple ways we could change how our web server works in order to
-avoid having all requests back up behind a slow request; the one we’re going to
-implement is a thread pool.
+Существует несколько способов изменить работу нашего веб-сервера, чтобы избежать
+повторного запроса всех запросов следовавших за медленным запросом. Тот, что мы
+собираемся реализовать называется пулом потоков.
 
-### Improving Throughput with a Thread Pool
+### Улучшение пропускной способности пула потоков
 
-A *thread pool* is a group of spawned threads that are ready to handle some
-task. When the program receives a new task, one of the threads in the pool will
-be assigned the task and will go off and process it. The remaining threads in
-the pool are available to handle any other tasks that come in while the first
-thread is processing. When the first thread is done processing its task, it
-gets returned to the pool of idle threads ready to handle a new task.
+*Пул потоков* - группа порожденных потоков, которые готовы обрабатывать некоторые
+задача. Когда программа получает новую задачу, один из потоков в пуле будет
+назначен выполнять эту задачу. Остальные потоки в пуле доступны для обработки
+любых других задач, которые могут возникнуть во врем работы занятого потока.
 
-A thread pool will allow us to process connections concurrently: we can start
-processing a new connection before an older connection is finished. This
-increases the throughput of our server.
+Пул потоков позволит нам одновременно обрабатывать соединения: мы можем начать
+обработку нового соединения до завершения старого соединения. Это увеличит
+пропускную способность нашего сервера.
 
-Here’s what we’re going to implement: instead of waiting for each request to
-process before starting on the next one, we’ll send the processing of each
-connection to a different thread. The threads will come from a pool of four
-threads that we’ll spawn when we start our program. The reason we’re limiting
-the number of threads to a small number is that if we created a new thread for
-each request as the requests come in, someone making ten million requests to
-our server could create havoc by using up all of our server’s resources and
-grinding the processing of all requests to a halt.
+Итак, вот что мы собираемся реализовать: вместо ожидания каждого запроса
+перед тем, как начать с следующей, мы отправим обработку каждого
+соединение с другой поток. Потоки будут поступать из пула, который мы будем создавать
+после запуска программы на выполнение. Причина, по которой мы ограничиваем
+число потоков на небольшое число (четыре) - потому, что если бы мы создавали бы
+новый поток для каждого запроса, то ресурсы системы были бы быстро израсходованы
+при увеличении количества запросов.
 
-Rather than spawning unlimited threads, we’ll have a fixed number of threads
-waiting in the pool. As requests come in, we’ll send the requests to the pool
-for processing. The pool will maintain a queue of incoming requests. Each of
-the threads in the pool will pop a request off of this queue, handle the
-request, and then ask the queue for another request. With this design, we can
-process `N` requests concurrently, where `N` is the number of threads. This
-still means that `N` long-running requests can cause requests to back up in the
-queue, but we’ve increased the number of long-running requests we can handle
-before that point from one to `N`.
+Вместо того, чтобы создавать неограниченное количество потоков, у нас будет фиксированное
+их количество в пуле. По мере поступления запросов мы будем отправлять запросы в
+пул для обработки. Пул будет поддерживать очередь входящих запросов. Каждый из
+потоков в пуле получает запрос из этой очереди, обрабатывает его, а затем запрашивает
+следующий. С таким дизайном мы можем обрабатывает `N` запросы одновременно, где
+`N` - количество потоков. Эта все равно означает, что длительные запросы `N` могут
+привести к резервному копированию запросов в очереди, но мы увеличили количество
+длительных запросов, которые мы можем обрабатывать до этого момента от одного до `N`.
 
-This design is one of many ways to improve the throughput of our web server.
-This isn’t a book about web servers, though, so it’s the one we’re going to
-cover. Other options are the fork/join model and the single threaded async I/O
-model. If you’re interested in this topic, you may want to read more about
-other solutions and try to implement them in Rust; with a low-level language
-like Rust, all of these options are possible.
+Такое решение является одним из способов повысить пропускную способность нашего
+веб-сервера. Однако, это книга не о веб-серверах, поэтому мы не будем углубляться
+в проблемы реализаций. Скажем только, что способами увеличения пропускной способности
+является модель fork/join и модель однопоточного асинхронного ввода-выводы. Если
+вас интересует эта тема, вы можете больше узнать о ней и попытаться реализовать их
+в Rust. Rust является языком низкого уровня и может реализовать все эти модели.

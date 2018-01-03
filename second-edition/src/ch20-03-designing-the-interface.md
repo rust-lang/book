@@ -1,25 +1,23 @@
-## Designing the Thread Pool Interface
+## Проектирование интерфейса пула потоков
 
-Let’s talk about what using the pool should look like. The authors often find
-that when trying to design some code, writing the client interface first can
-really help guide your design. Write the API of the code to be structured in
-the way you’d want to call it, then implement the functionality within that
-structure rather than implementing the functionality then designing the public
-API.
+Давайте поговорим о том, как должен выглядеть пул. Авторы часто находят
+что при попытке создать некоторый код, напив сначала клиентский интерфейс можно
+лучше понять как лучше реализовать серверную часть. Напишите API кода, который будет
+структурирован таким образом, чтобы его было удобно вызывать, а затем реализуйте
+функциональность этой структуры, а не наоборот.
 
-Similar to how we used Test Driven Development in the project in Chapter 12,
-we’re going to use Compiler Driven Development here. We’re going to write the
-code that calls the functions we wish we had, then we’ll lean on the compiler
-to tell us what we should change next. The compiler error messages will guide
-our implementation.
+Подобно тому, как мы использовали Test Driven Development в проекте в главе 12,
+здесь мы собираемся использовать Compiler Driven Development. Мы собираемся написать
+код, который вызывает функции, которые мы хотели бы иметь. Ошибки компиляции будут
+направлять нашу дальнейшую разработку
 
-### Code Structure if We Could Use `thread::spawn`
+### Структура кода при использовании `thread::spawn`
 
-First, let’s explore what the code to create a new thread for every connection
-could look like. This isn’t our final plan due to the problems with potentially
-spawning an unlimited number of threads that we talked about earlier, but it’s
-a start. Listing 20-11 shows the changes to `main` to spawn a new thread to
-handle each stream within the `for` loop:
+Первое, мы рассмотрим код, который нам нужно реализовать для создания нового
+потока. Это не будет окончательным решение, т.к. существует потенциальная проблема
+(создание множества потоков), о которой мы говорили ранее. В коде 20-11 показаны
+изменения в функции `main`, которые необходимы для создания нового потока в цикле
+`for`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -43,21 +41,19 @@ fn main() {
 # fn handle_connection(mut stream: TcpStream) {}
 ```
 
-<span class="caption">Listing 20-11: Spawning a new thread for each
-stream</span>
+<span class="caption">код 20-11: Создание нового потока для каждого соединения с колентом</span>
 
-As we learned in Chapter 16, `thread::spawn` will create a new thread and then
-run the code in the closure in it. If you run this code and load `/sleep` and
-then `/` in two browser tabs, you’ll indeed see the request to `/` doesn’t have
-to wait for `/sleep` to finish. But as we mentioned, this will eventually
-overwhelm the system since we’re making new threads without any limit.
+Как мы узнали в главе 16, `thread::spawn` создаст новый поток, а затем запустит
+код в замыкании. Если вы запустите этот код и загрузите `/sleep` и затем `/` в
+двух вкладках браузера, вы действительно увидите, что запрос `/` не будет
+дождаться окончания `/sleep`. Но, как мы уже говорили, это в конечном итоге
+будет избыточно расходовать ресурсы системы, так как мы создаем новые потоки
+без ограничений.
 
-### Creating a Similar Interface for `ThreadPool`
+### Реализация подобного интерфейса с помощью `ThreadPool`
 
-We want our thread pool to work in a similar, familiar way so that switching
-from threads to a thread pool doesn’t require large changes to the code we want
-to run in the pool. Listing 20-12 shows the hypothetical interface for a
-`ThreadPool` struct we’d like to use instead of `thread::spawn`:
+Мы хотим, чтобы пул потоков работал похожим образом. В коде 20-12 заменим
+предыдущее решения использование структуры `ThreadPool`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -88,17 +84,15 @@ fn main() {
 # fn handle_connection(mut stream: TcpStream) {}
 ```
 
-<span class="caption">Listing 20-12: How we want to be able to use the
-`ThreadPool` we’re going to implement</span>
+<span class="caption">код 20-12: использование `ThreadPool` без реализации</span>
 
-We use `ThreadPool::new` to create a new thread pool with a configurable number
-of threads, in this case four. Then, in the `for` loop, `pool.execute` will
-work in a similar way to `thread::spawn`.
+Мы используем `ThreadPool::new` для создания нового пула с изменяемым количеством
+потоков (в данном случае 4). Далее в цикле `for` мы выполняем `pool.execute` также
+как мы выполняли `thread::spawn`.
 
-### Compiler Driven Development to Get the API Compiling
+### Использование Compiler Driven Development для реализации рабочего кода
 
-Go ahead and make the changes in Listing 20-12 to *src/main.rs*, and let’s use
-the compiler errors to drive our development. Here’s the first error we get:
+Давайте попробуем скомпилировать данный код. Мы получим следующие ошибки:
 
 ```text
 $ cargo check
@@ -113,15 +107,13 @@ error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
 error: aborting due to previous error
 ```
 
-Great, we need a `ThreadPool`. Let’s switch the `hello` crate from a binary
-crate to a library crate to hold our `ThreadPool` implementation, since the
-thread pool implementation will be independent of the particular kind of work
-that we’re doing in our web server. Once we’ve got the thread pool library
-written, we could use that functionality to do whatever work we want to do, not
-just serve web requests.
+Отлично! Нам нужен `ThreadPool`. Давайте вернёмся к контейнеру из бинарного файла.
+Реализация `ThreadPool` будет независимой от работы веб-сервера. После того, как
+библиотека реализующая работу пула потоков будет написана, мы сможем использовать
+её в любых реализациях.
 
-So create *src/lib.rs* that contains the simplest definition of a `ThreadPool`
-struct that we can have for now:
+Итак, контейнер будет содержать файл *src/lib.rs*  с простыми определением структуры
+`ThreadPool`, которую мы сейчас можем иметь:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -129,12 +121,12 @@ struct that we can have for now:
 pub struct ThreadPool;
 ```
 
-Then create a new directory, *src/bin*, and move the binary crate rooted in
-*src/main.rs* into *src/bin/main.rs*. This will make the library crate be the
-primary crate in the *hello* directory; we can still run the binary in
-*src/bin/main.rs* using `cargo run` though. After moving the *main.rs* file,
-edit it to bring the library crate in and bring `ThreadPool` into scope by
-adding this at the top of *src/bin/main.rs*:
+Далее, мы создаём новую папку *src/bin* и перемещаем бинарный контейнер  *src/main.rs*
+в *src/bin/main.rs*. Это сделает библиотечный контейнер основным в папке *hello*.
+Это перемещение не повлияет на порядок запуска `cargo run` бинарного файла. После
+перемещения файла *main.rs* внесите в самом верху текста программы изменения,
+описав подключение библиотеки `hello` и её содержания в область программы
+*src/bin/main.rs*:
 
 <span class="filename">Filename: src/bin/main.rs</span>
 
@@ -143,10 +135,11 @@ extern crate hello;
 use hello::ThreadPool;
 ```
 
-And try again in order to get the next error that we need to address:
+Далее, попытайтесь теперь проверить корректность нашего кода, получил следующие
+указания компилятора для нас:
 
 ```text
-$ cargo check
+$ cargo check --bins
    Compiling hello v0.1.0 (file:///projects/hello)
 error: no associated item named `new` found for type `hello::ThreadPool` in the
 current scope
@@ -157,11 +150,11 @@ current scope
    |
 ```
 
-Cool, the next thing is to create an associated function named `new` for
-`ThreadPool`. We also know that `new` needs to have one parameter that can
-accept `4` as an argument, and `new` should return a `ThreadPool` instance.
-Let’s implement the simplest `new` function that will have those
-characteristics:
+Отлично! Следующим нашим действием будет реализация функции `new` для структуры
+`ThreadPool`. Также мы знаем, что функции `new` потребуется один параметр, который
+может принять знание `4` в качестве аргумента. Также эта функция должна возвращать
+экземпляр структуры `ThreadPool`. Давайте реализуем такую функцию, которая будет
+иметь все эти характеристики:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -175,13 +168,9 @@ impl ThreadPool {
 }
 ```
 
-We picked `u32` as the type of the `size` parameter, since we know that a
-negative number of threads makes no sense. `u32` is a solid default. Once we
-actually implement `new` for real, we’ll reconsider whether this is the right
-choice for what the implementation needs, but for now, we’re just working
-through compiler errors.
-
-Let’s check the code again:
+Му установили `u32` в качестве типа входящего параметра переменной `size`, т.к.
+отрицательные значения не имеют смысла. Запустим проверку узнаем наше следующее
+рекомендуемое действие:
 
 ```text
 $ cargo check
@@ -200,14 +189,11 @@ current scope
    |              ^^^^^^^
 ```
 
-Okay, a warning and an error. Ignoring the warning for a moment, the error is
-because we don’t have an `execute` method on `ThreadPool`. Let’s define one,
-and we need it to take a closure. If you remember from Chapter 13, we can take
-closures as arguments with three different traits: `Fn`, `FnMut`, and `FnOnce`.
-What kind of closure should we use? Well, we know we’re going to end up doing
-something similar to `thread::spawn`; what bounds does the signature of
-`thread::spawn` have on its argument? Let’s look at the documentation, which
-says:
+Отлично. Предостережение и ошибка. Пока проигнорируем предостережение. Исправим
+ошибку. Реализуем метод `execute`. Если вы помните главу 13, мы можем использовать
+замыкание в качестве параметра, как в трёх различных типажах: `Fn`, `FnMut` и `FnOnce`.
+Какой же типаж нам лучше использовать? Т.к. мы должны реализовать что-то вроде
+`thread::spawn` мы можем посмотреть документацию:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -270,15 +256,11 @@ warning: unused variable: `f`, #[warn(unused_variables)] on by default
   |                              ^
 ```
 
-Only warnings now! It compiles! Note that if you try `cargo run` and making a
-request in the browser, though, you’ll see the errors in the browser again that
-we saw in the beginning of the chapter. Our library isn’t actually calling the
-closure passed to `execute` yet!
+Обратите внимание, что код компилируется. Но если вы попытаетесь запустить программу
+`cargo run` вы получите ошибки, как в начала нашей главы. Пока наша библиотека не
+готова к использованию.
 
-> A saying you might hear about languages with strict compilers like Haskell
-> and Rust is “if the code compiles, it works.” This is a good time to remember
-> that this is just a phrase and a feeling people sometimes have, it’s not
-> actually universally true. Our project compiles, but it does absolutely
-> nothing! If we were building a real, complete project, this would be a great
-> time to start writing unit tests to check that the code compiles *and* has
-> the behavior we want.
+> О языках со строгими компиляторами говорят (как о Haskell  и Rust), что если
+> код компилируется - он работает. Очень важно понять, что это всего лишь этап, а
+> не конечное решение. Наш код компилируется, но он пока ещё ничего не делает. Сейчас
+> наступает этап написать тесты, которые бы проверили бы корректность поведения кода.
