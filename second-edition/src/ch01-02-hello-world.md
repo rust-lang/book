@@ -15,11 +15,10 @@ tradition.
 
 ### Creating a Project Directory
 
-First, make a directory to put your Rust code in. Rust doesn’t care where
-your code lives, but for this book, we’d suggest making a *projects*
-directory in your home directory and keeping all your projects there. Open a
-terminal and enter the following commands to make a directory for this
-particular project:
+First, make a directory to put your Rust code in. Rust doesn’t care where your
+code lives, but for this book, we’d suggest making a *projects* directory in
+your home directory and keeping all your projects there. Open a terminal and
+enter the following commands to make a directory for this particular project:
 
 Linux and Mac:
 
@@ -82,9 +81,9 @@ On Windows, use `.\main.exe` instead of `./main`.
 Hello, world!
 ```
 
-Regardless of your operating system, you should see the string `Hello,
-world!` print to the terminal. If you did, then congratulations! You’ve
-officially written a Rust program. That makes you a Rust programmer! Welcome!
+Regardless of your operating system, you should see the string `Hello, world!`
+print to the terminal. If you did, then congratulations! You’ve officially
+written a Rust program. That makes you a Rust programmer! Welcome!
 
 ### Anatomy of a Rust Program
 
@@ -125,12 +124,11 @@ This line does all of the work in this little program: it prints text to the
 screen. There are a number of details to notice here. The first is that Rust
 style is to indent with four spaces, not a tab.
 
-The second important part is `println!`. This is calling a Rust *macro*,
-which is how metaprogramming is done in Rust. If it were calling a function
-instead, it would look like this: `println` (without the `!`). We’ll discuss
-Rust macros in more detail in Appendix D, but for now you just need to know
-that when you see a `!` that means that you’re calling a macro instead of a
-normal function.
+The second important part is `println!`. This is calling a Rust *macro*, which
+is how metaprogramming is done in Rust. If it were calling a function instead,
+it would look like this: `println` (without the `!`). We’ll discuss Rust macros
+in more detail in Appendix D, but for now you just need to know that when you
+see a `!` that means that you’re calling a macro instead of a normal function.
 
 > Why is println! a macro? There's multiple reasons, and we haven't really
 > explained Rust yet, so it's not exactly obvious. Here's the reasons:
@@ -168,7 +166,7 @@ $ rustc main.rs
 
 If you come from a C or C++ background, you’ll notice that this is similar to
 `gcc` or `clang`. After compiling successfully, Rust should output a binary
-executable. 
+executable.
 
 On Linux, Mac, and PowerShell on Windows, you can see the executable by
 entering the `ls` command in your shell as follows:
@@ -187,9 +185,9 @@ main.pdb
 main.rs
 ```
 
-This shows we have two files: the source code, with the *.rs* extension, and the
-executable (*main.exe* on Windows, *main* everywhere else). All that’s left to
-do from here is run the *main* or *main.exe* file, like this:
+This shows we have two files: the source code, with the *.rs* extension, and
+the executable (*main.exe* on Windows, *main* everywhere else). All that’s left
+to do from here is run the *main* or *main.exe* file, like this:
 
 ```text
 $ ./main  # or .\main.exe on Windows
@@ -208,8 +206,8 @@ hand, they need to have a Ruby, Python, or JavaScript implementation installed
 program. Everything is a tradeoff in language design.
 
 Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you’ll want to be able to manage all of the options your project has
-and make it easy to share your code with other people and projects. Next, we’ll
+grows, you’ll want to be able to manage all of the options your project has and
+make it easy to share your code with other people and projects. Next, we’ll
 introduce you to a tool called Cargo, which will help you write real-world Rust
 programs.
 
@@ -268,9 +266,9 @@ $ cd hello_cargo
 
 We passed the `--bin` argument to `cargo new` because our goal is to make an
 executable application, as opposed to a library. Executables are binary
-executable files often called just *binaries*. We’ve given `hello_cargo`
-as the name for our project, and Cargo creates its files in a directory
-of the same name that we can then go into.
+executable files often called just *binaries*. We’ve given `hello_cargo` as the
+name for our project, and Cargo creates its files in a directory of the same
+name that we can then go into.
 
 If we list the files in the *hello_cargo* directory, we can see that Cargo has
 generated two files and one directory for us: a *Cargo.toml* and a *src*
@@ -355,7 +353,8 @@ $ cargo build
 ```
 
 This should have created an executable file in *target/debug/hello_cargo* (or
-*target\\debug\\hello_cargo.exe* on Windows), which you can run with this command:
+*target\\debug\\hello_cargo.exe* on Windows), which you can run with this
+command:
 
 ```text
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
@@ -381,8 +380,8 @@ Realistically, you won’t ever need to touch this file yourself; just let Cargo
 handle it.
 
 We just built a project with `cargo build` and ran it with
-`./target/debug/hello_cargo`, but we can also use `cargo run` to compile
-and then run:
+`./target/debug/hello_cargo`, but we can also use `cargo run` to compile and
+then run:
 
 ```text
 $ cargo run
@@ -405,8 +404,8 @@ $ cargo run
 Hello, world!
 ```
 
-Finally, there's `cargo check`. This will check out your code to make sure
-that it compiles, but not bother producing an executable:
+Finally, there's `cargo check`. This will check out your code to make sure that
+it compiles, but not bother producing an executable:
 
 ```text
 $ cargo check
@@ -414,12 +413,12 @@ $ cargo check
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
 ```
 
-Why would you not want an executable? `cargo check` is often much faster
-than `cargo build`, since we can skip that entire step. If we're checking
-our work, rather than producing a build to run, this will speed things
-up! As such, many Rustaceans run `cargo check` as they write their program
-to make sure that it compiles, and then run `cargo build` once they're
-ready to give it a spin themselves.
+Why would you not want an executable? `cargo check` is often much faster than
+`cargo build`, since we can skip that entire step. If we're checking our work,
+rather than producing a build to run, this will speed things up! As such, many
+Rustaceans run `cargo check` as they write their program to make sure that it
+compiles, and then run `cargo build` once they're ready to give it a spin
+themselves.
 
 So a few more differences we’ve now seen:
 
@@ -440,10 +439,10 @@ executable in *target/release* instead of *target/debug*. These optimizations
 make your Rust code run faster, but turning them on makes your program take
 longer to compile. This is why there are two different profiles: one for
 development when you want to be able to rebuild quickly and often, and one for
-building the final program you’ll give to a user that won’t be rebuilt and
-that we want to run as fast as possible. If you’re benchmarking the running
-time of your code, be sure to run `cargo build --release` and benchmark with
-the executable in *target/release*.
+building the final program you’ll give to a user that won’t be rebuilt and that
+we want to run as fast as possible. If you’re benchmarking the running time of
+your code, be sure to run `cargo build --release` and benchmark with the
+executable in *target/release*.
 
 ### Cargo as Convention
 
@@ -453,8 +452,8 @@ projects composed of multiple crates, it’s much easier to let Cargo coordinate
 the build. With Cargo, you can just run `cargo build`, and it should work the
 right way. Even though this project is simple, it now uses much of the real
 tooling you’ll use for the rest of your Rust career. In fact, you can get
-started with virtually all Rust projects you want to work
-on with the following commands:
+started with virtually all Rust projects you want to work on with the following
+commands:
 
 ```text
 $ git clone someurl.com/someproject
