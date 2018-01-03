@@ -7,18 +7,19 @@ tradition.
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
-> lives, so if you prefer an IDE to the command line, feel free to use your
-> favorite IDE. Many IDEs now have some degree of Rust support; check the
-> documentation of yours to see what kind of things it supports. Enabling great
-> IDE support has been a recent focus of the Rust team, and so things have been
-> changing rapidly on that front!
+> lives, so if you prefer an IDE (Integrated Development Environment) to the
+> command line, feel free to use your favorite IDE. Many IDEs now have some
+> degree of Rust support; check the IDE's documentation for details. Enabling
+> great IDE support has been a recent focus of the Rust team, and progress
+> has been made rapidly on that front!
 
 ### Creating a Project Directory
 
 First, make a directory to put your Rust code in. Rust doesn’t care where your
 code lives, but for this book, we’d suggest making a *projects* directory in
 your home directory and keeping all your projects there. Open a terminal and
-enter the following commands to make a directory for this particular project:
+enter the following commands to make a *projects* directory and a directory
+inside that for the “Hello, world!” project:
 
 Linux and Mac:
 
@@ -54,7 +55,8 @@ the *.rs* extension. If you’re using more than one word in your filename, use
 an underscore to separate them. For example, you’d use *hello_world.rs* rather
 than *helloworld.rs*.
 
-Now open the *main.rs* file you just created, and type the following code:
+Now open the *main.rs* file you just created, and enter the code shown in
+Listing 1-1:
 
 <span class="filename">Filename: main.rs</span>
 
@@ -64,10 +66,12 @@ fn main() {
 }
 ```
 
+<span class="caption">Listing 1-1: A program that prints “Hello, world!”</span>
+
 Save the file, and go back to your terminal window. On Linux or OSX, enter the
 following commands:
 
-```bash
+```text
 $ rustc main.rs
 $ ./main
 Hello, world!
@@ -97,10 +101,9 @@ fn main() {
 ```
 
 These lines define a *function* in Rust. The `main` function is special: it’s
-the first thing that is run for every executable Rust program. The first line
-says, “I’m declaring a function named `main` that has no parameters and returns
-nothing.” If there were parameters, their names would go inside the
-parentheses, `(` and `)`.
+the first code that is run for every executable Rust program. The first line
+declares a function named `main` that has no parameters and returns nothing. If
+there were parameters, their names would go inside the parentheses, `(` and `)`.
 
 Also note that the function body is wrapped in curly brackets, `{` and `}`.
 Rust requires these around all function bodies. It’s considered good style to
@@ -109,12 +112,12 @@ with one space in between.
 
 > At the time of writing, an automatic formatter, `rustfmt`, is under
 > development. If you'd like to stick to a standard style across Rust projects,
-> `rustfmt` is the way to go. The plan is to eventually include it with the
-> standard Rust distribution, like `rustc`, so depending on when you
-> read this book, you may have it already installed! Check the online
-> documentation for more details.
+> `rustfmt` is a tool that will format your code in a particular style. The
+> plan is to eventually include it with the standard Rust distribution, like
+> `rustc`, so depending on when you read this book, you may have it already
+> installed! Check the online documentation for more details.
 
-Inside the `main` function:
+Inside the `main` function, we have this code:
 
 ```rust
     println!("Hello, world!");
@@ -130,18 +133,22 @@ it would look like this: `println` (without the `!`). We’ll discuss Rust macro
 in more detail in Appendix D, but for now you just need to know that when you
 see a `!` that means that you’re calling a macro instead of a normal function.
 
-> Why is println! a macro? There's multiple reasons, and we haven't really
-> explained Rust yet, so it's not exactly obvious. Here's the reasons:
+> ### Why `println!` is a Macro
+>
+> There are multiple reasons why `println!` is a macro rather than a function,
+> and we haven't really explained Rust yet, so it's not exactly obvious. Here
+> are the reasons:
 >
 > * The string passed to `println!` can have formatting specifiers in it,
 >   and those are checked at compile-time.
-> * Rust functions can only have a static number of arguments, but `println!`
->   (and macros generally) can take a variable number of them.
-> * The formatters can take named arguments, which Rust functions cannot.
+> * Rust functions can only have a fixed number of arguments, but `println!`
+>   (and macros generally) can take a variable number.
+> * The formatting specifiers can have named arguments, which Rust functions
+>   cannot.
 > * It implicitly takes its arguments by reference even when they're passed
 >   by value.
 >
-> If none of this makes sense, don't worry about it. We'll cover this stuff
+> If none of this makes sense, don't worry about it. We'll cover these concepts
 > in more detail later.
 
 Next is `"Hello, world!"` which is a *string*. We pass this string as an
@@ -165,13 +172,13 @@ $ rustc main.rs
 ```
 
 If you come from a C or C++ background, you’ll notice that this is similar to
-`gcc` or `clang`. After compiling successfully, Rust should output a binary
+`gcc` or `clang`. After compiling successfully, Rust outputs a binary
 executable.
 
 On Linux, Mac, and PowerShell on Windows, you can see the executable by
 entering the `ls` command in your shell as follows:
 
-```bash
+```text
 $ ls
 main  main.rs
 ```
@@ -199,8 +206,8 @@ world!` to your terminal.
 If you come from a dynamic language like Ruby, Python, or JavaScript, you may
 not be used to compiling and running a program being separate steps. Rust is an
 *ahead-of-time compiled* language, which means that you can compile a program,
-give it to someone else, and they can run it even without having Rust
-installed. If you give someone a `.rb`, `.py`, or `.js` file, on the other
+give the executable to someone else, and they can run it even without having
+Rust installed. If you give someone a `.rb`, `.py`, or `.js` file, on the other
 hand, they need to have a Ruby, Python, or JavaScript implementation installed
 (respectively), but you only need one command to both compile and run your
 program. Everything is a tradeoff in language design.
@@ -227,8 +234,8 @@ easier to do.
 
 As the vast, vast majority of Rust projects use Cargo, we will assume that
 you’re using it for the rest of the book. Cargo comes installed with Rust
-itself, if you used the official installers as covered in the Installation
-chapter. If you installed Rust through some other means, you can check if you
+itself, if you used the official installers as covered in the "Installation"
+section. If you installed Rust through some other means, you can check if you
 have Cargo installed by typing the following into your terminal:
 
 ```text
@@ -274,11 +281,12 @@ If we list the files in the *hello_cargo* directory, we can see that Cargo has
 generated two files and one directory for us: a *Cargo.toml* and a *src*
 directory with a *main.rs* file inside. It has also initialized a new git
 repository in the *hello_cargo* directory for us, along with a *.gitignore*
-file; you can change this to use a different version control system, or no
-version control system, by using the `--vcs` flag.
+file. Git is a common version control system. You can change `cargo new` to use
+a different version control system, or no version control system, by using the
+`--vcs` flag. Run `cargo new --help` to see the available options.
 
-Open up *Cargo.toml* in your text editor of choice. It should look something
-like this:
+Open up *Cargo.toml* in your text editor of choice. It should look similar to
+the code in Listing 1-2:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -291,9 +299,11 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 
+<span class="caption">Listing 1-2: Contents of *Cargo.toml* generated by `cargo
+new`</span>
+
 This file is in the [*TOML*][toml]<!-- ignore --> (Tom’s Obvious, Minimal
-Language) format. TOML is similar to INI but has some extra goodies and is used
-as Cargo’s configuration format.
+Language) format. TOML is used as Cargo’s configuration format.
 
 [toml]: https://github.com/toml-lang/toml
 
@@ -311,7 +321,7 @@ The last line, `[dependencies]`, is the start of a section for you to list any
 *crates* (which is what we call packages of Rust code) that your project will
 depend on so that Cargo knows to download and compile those too. We won’t need
 any other crates for this project, but we will in the guessing game tutorial in
-the next chapter.
+Chapter 2.
 
 Now let’s look at *src/main.rs*:
 
@@ -323,9 +333,9 @@ fn main() {
 }
 ```
 
-Cargo has generated a “Hello World!” for you, just like the one we wrote
-earlier! So that part is the same. The differences between our previous project
-and the project generated by Cargo that we’ve seen so far are:
+Cargo has generated a “Hello World!” for you, just like the one we wrote in
+Listing 1-1! So that part is the same. The differences between our previous
+project and the project generated by Cargo that we’ve seen so far are:
 
 - Our code goes in the *src* directory
 - The top level contains a *Cargo.toml* configuration file
@@ -352,7 +362,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
-This should have created an executable file in *target/debug/hello_cargo* (or
+This creates an executable file in *target/debug/hello_cargo* (or
 *target\\debug\\hello_cargo.exe* on Windows), which you can run with this
 command:
 
@@ -364,7 +374,7 @@ Hello, world!
 Bam! If all goes well, `Hello, world!` should print to the terminal once more.
 
 Running `cargo build` for the first time also causes Cargo to create a new file
-at the top level called *Cargo.lock*, which looks like this:
+at the top level called *Cargo.lock*, which looks like Listing 1-3:
 
 <span class="filename">Filename: Cargo.lock</span>
 
@@ -374,10 +384,13 @@ name = "hello_cargo"
 version = "0.1.0"
 ```
 
-Cargo uses the *Cargo.lock* to keep track of dependencies in your application.
-This project doesn’t have dependencies, so the file is a bit sparse.
-Realistically, you won’t ever need to touch this file yourself; just let Cargo
-handle it.
+<span class="caption">Listing 1-3: Contents of *Cargo.lock* after running
+`cargo build`</span>
+
+Cargo uses *Cargo.lock* to keep track of the exact versions of dependencies
+used to build your project. This project doesn’t have dependencies, so the file
+is a bit sparse. You won’t ever need to touch this file yourself; Cargo will
+manage its contents for you.
 
 We just built a project with `cargo build` and ran it with
 `./target/debug/hello_cargo`, but we can also use `cargo run` to compile and
@@ -393,7 +406,7 @@ Hello, world!
 Notice that this time, we didn’t see the output telling us that Cargo was
 compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
 it just ran the binary. If you had modified your source code, Cargo would have
-rebuilt the project before running it, and you would have seen something like
+rebuilt the project before running it, and you would have seen output like
 this:
 
 ```text
@@ -404,8 +417,8 @@ $ cargo run
 Hello, world!
 ```
 
-Finally, there's `cargo check`. This will check out your code to make sure that
-it compiles, but not bother producing an executable:
+Finally, there's `cargo check`. This will quickly check your code to make sure
+that it compiles, but not bother producing an executable:
 
 ```text
 $ cargo check
@@ -414,11 +427,11 @@ $ cargo check
 ```
 
 Why would you not want an executable? `cargo check` is often much faster than
-`cargo build`, since we can skip that entire step. If we're checking our work,
-rather than producing a build to run, this will speed things up! As such, many
-Rustaceans run `cargo check` as they write their program to make sure that it
-compiles, and then run `cargo build` once they're ready to give it a spin
-themselves.
+`cargo build`, because Cargo can skip the entire step of producing the
+executable. If we're checking our work throughouth the process of writing the
+code, this will speed things up! As such, many Rustaceans run `cargo check` as
+they write their program to make sure that it compiles, and then run `cargo
+build` once they're ready to give it a spin themselves.
 
 So a few more differences we’ve now seen:
 
@@ -450,10 +463,13 @@ With simple projects, Cargo doesn’t provide a whole lot of value over just
 using `rustc`, but it will prove its worth as you continue. With complex
 projects composed of multiple crates, it’s much easier to let Cargo coordinate
 the build. With Cargo, you can just run `cargo build`, and it should work the
-right way. Even though this project is simple, it now uses much of the real
+right way.
+
+Even though the `hello_cargo` project is simple, it now uses much of the real
 tooling you’ll use for the rest of your Rust career. In fact, you can get
 started with virtually all Rust projects you want to work on with the following
-commands:
+commands to check out the code using Git, change into the project directory,
+and build:
 
 ```text
 $ git clone someurl.com/someproject
@@ -461,7 +477,7 @@ $ cd someproject
 $ cargo build
 ```
 
-> Note: If you want to look at Cargo in more detail, check out [its
-> documentation], which covers all of its features.
+If you want to look at Cargo in more detail, check out [its documentation],
+which covers all of its features.
 
-[its documentation]: http://doc.crates.io/
+[its documentation]: https://doc.rust-lang.org/cargo/
