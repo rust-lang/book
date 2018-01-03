@@ -4,8 +4,8 @@ Welcome to “The Rust Programming Language,” an introductory book about Rust.
 Rust is a fast, friendly, and fearless programming language. As a
 general-purpose programming language, Rust is used in production by hundreds of
 companies, large and small, for a variety of tasks, such as command line
-tools, web services, devops tooling, embedded devices, audio and video
-analysis and transcoding, cryptocurrencies, bioinformatics, search enginges,
+tools, web services, DevOps tooling, embedded devices, audio and video
+analysis and transcoding, cryptocurrencies, bioinformatics, search engines,
 internet of things applications, machine learning, and even major parts of
 the Firefox web browser.
 
