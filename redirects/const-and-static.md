@@ -1,12 +1,23 @@
-% There is a new edition of the book
+% `const` and `static`
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Constants are _always_ immutable, and may only be set to a constant expression, not the result of a function call or any other value that could only be computed at runtime.
+>
+> Global variables are called `static` in Rust.
 
-* [Related section about `const` in the second edition of The Rust Programming Language][2]
-* [Related section about `static` in the second edition of The Rust Programming Language][3]
+```rust
+const MAX_POINTS: u32 = 100_000;
+static HELLO_WORLD: &str = "Hello, world!";
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 3.01 — Variables and Mutability, section Constants][2]**
+* **[In the second edition: Ch 19.01 — Unsafe Rust, section Static Variables][3]**
+* <small>[In the first edition: Ch 3.26 — `const` and `static`][1]</small>
 
 
 [1]: first-edition/const-and-static.html

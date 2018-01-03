@@ -1,12 +1,31 @@
-% There is a new edition of the book
+% Macros
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> While functions and types abstract over code, macros abstract at a syntactic level.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+macro_rules! five_times {
+    ($x:expr) => (5 * $x);
+}
+
+fn main() {
+    assert_eq!(25, five_times!(2 + 3));
+}
+```
+
+---
+
+This chapter does not exist yet in [the second edition][2].
+You can check out other resources that describe macros.
+
+* **[Rust By Example: Macros][3]**
+* [In the Rust Reference: Ch 3.1 — Macros by Example][4]
+* [In the second edition: (future) Appendix E — Macros][2]
+* <small>[In the first edition: Ch 3.34 — Macros][1]</small>
 
 
 [1]: first-edition/macros.html
-[2]: second-edition/index.html
+[2]: second-edition/appendix-05-macros.html
+[3]: https://rustbyexample.com/macros.html
+[4]: ../reference/macros-by-example.html

@@ -1,11 +1,26 @@
-% There is a new edition of the book
+% Iterators
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> The iterator pattern allows you to perform some task on a sequence of items in turn.
+> An iterator is responsible for the logic of iterating over each item and determining when the sequence has finished.
 
-* [Related page in the second edition of The Rust Programming Language][2]
+```rust
+let v1 = vec![1, 2, 3];
+
+let v1_iter = v1.iter();
+
+for val in v1_iter {
+    println!("Got: {}", val);
+}
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 13.02 — Iterators][2]**
+* <small>[In the first edition: Ch 4.5 — Iterators][1]</small>
 
 
 [1]: first-edition/iterators.html

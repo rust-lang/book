@@ -456,7 +456,7 @@ fn handle_connection(mut stream: TcpStream) {
         stream.flush().unwrap();
     } else {
         // some other request
-    };
+    }
 }
 ```
 

@@ -1,11 +1,21 @@
-% There is a new edition of the book
+% Vectors
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Vectors store more than one value in a single data structure that puts all the values next to each other in memory.
+> Vectors can only store values of the same type.
 
-* [Related page in the second edition of The Rust Programming Language][2]
+```rust
+let v: Vec<i32> = Vec::new();
+let numbers = vec![1, 2, 3];
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 8.01 — Vectors][2]**
+* <small>[In the first edition: Ch 3.7 — Vectors][1]</small>
 
 
 [1]: first-edition/vectors.html

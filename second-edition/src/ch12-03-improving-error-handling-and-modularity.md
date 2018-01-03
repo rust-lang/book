@@ -629,7 +629,8 @@ Let’s move all the code that isn’t the `main` function from *src/main.rs* to
 * The `Config::new` function definition
 
 The contents of *src/lib.rs* should have the signatures shown in [Listing 12-13][Listing-12-13]
-(we’ve omitted the bodies of the functions for brevity):
+(we’ve omitted the bodies of the functions for brevity). Note that this won't
+compile until we modify *src/main.rs* in the listing after this one:
 
 <span class="filename">Filename: src/lib.rs</span>
 

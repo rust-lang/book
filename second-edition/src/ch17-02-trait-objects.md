@@ -341,7 +341,7 @@ with a `String` as a component:
 
 ```rust,ignore
 extern crate rust_gui;
-use rust_gui::Draw;
+use rust_gui::Screen;
 
 fn main() {
     let screen = Screen {
@@ -357,17 +357,17 @@ fn main() {
 <span class="caption">Listing 17-10: Attempting to use a type that doesn’t
 implement the trait object’s trait</span>
 
-We’ll get this error because `String` doesn’t implement the `Draw` trait:
+We’ll get this error because `String` doesn’t implement the `rust_gui::Draw` trait:
 
 ```text
-error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
+error[E0277]: the trait bound `std::string::String: rust_gui::Draw` is not satisfied
   -->
    |
  4 |             Box::new(String::from("Hi")),
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is not
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `rust_gui::Draw` is not
    implemented for `std::string::String`
    |
-   = note: required for the cast to the object type `Draw`
+   = note: required for the cast to the object type `rust_gui::Draw`
 ```
 
 This lets us know that either we’re passing something to `Screen` we didn’t

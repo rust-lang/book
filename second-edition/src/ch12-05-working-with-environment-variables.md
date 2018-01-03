@@ -12,7 +12,7 @@ once and have all their searches be case insensitive in that terminal session.
 We want to add a new `search_case_insensitive` function that we’ll call when
 the environment variable is on. We’ll continue to follow the TDD process, so
 the first step is again to write a failing test. We’ll add a new test for the
-new `search``_case_insensitive` function and rename our old test from
+new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
 tests, as shown in [Listing 12-20][Listing-12-20]:
 
@@ -181,7 +181,7 @@ won’t compile yet:
 #     case_sensitive: bool,
 # }
 #
-pub fn run(config: Config) -> Result<(), Box<Error>>{
+pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
