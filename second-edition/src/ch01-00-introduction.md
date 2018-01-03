@@ -11,7 +11,7 @@ the Firefox web browser.
 
 MORE STUFF GOES HERE LATER
 
-## Who this book is for
+## Who This Book is For
 
 This book assumes that you've written code in some other programming
 language, but doesn't make any assumptions about which ones. We've tried to
@@ -21,7 +21,7 @@ programming *is* or how to think about it; someone new to programming
 entirely would be better served by reading a book specifically for those new
 to programming.
 
-## How to use this book
+## How to Use This Book
 
 This book generally assumes that you're reading it front-to-back, that is, later
 chapters build on top of concepts in earlier chapters, and earlier chapters may
@@ -57,7 +57,7 @@ you didn't happen to pick one of the in-progress examples.
 Finally, there are some appendices. These contain useful information about
 the language in a more reference-like format.
 
-## Contributing to the book
+## Contributing to the Book
 
 This book is open source. If you find an error, please don’t hesitate to file an
 issue or send a pull request [on GitHub]. Please see [CONTRIBUTING.md] for

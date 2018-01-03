@@ -1,4 +1,4 @@
-# How Rust is made and "nightly Rust"
+## How Rust is Made and "Nightly Rust"
 
 Before we dive into the language itself, we'd like to finish up the
 introductory chapter by talking about how Rust is made, and how that affects
@@ -11,7 +11,7 @@ that this is true!
 Feel free to skip this section and come back to it after you've learned the
 language if you'd like!
 
-## Stability without stagnation
+### Stability Without Stagnation
 
 As a language, Rust cares a *lot* about the stability of your code. We want
 Rust to be a rock-solid foundation that you can build on, and if things were
@@ -28,7 +28,7 @@ upgrading to a new version of stable Rust. Each upgrade should be painless.
 At the same time, the upgrade should bring you new features, less bugs, and
 faster compile times.
 
-## Choo, choo! Release channels and riding the trains
+### Choo, Choo! Release Channels and Riding the Trains
 
 Rust development operates on a *train schedule*. That is, all development is
 done on the `master` branch of the Rust repository, and releases follow "the
@@ -124,7 +124,7 @@ can report it to the team and get it fixed before the next release happens!
 This is relatively rare, but `rustc` is still a piece of software, and
 bugs do exist.
 
-## Unstable features
+### Unstable Features
 
 There's one more catch with this release model: unstable features. Rust uses
 a technique called "feature flags" to determine what features are enabled in
@@ -145,7 +145,7 @@ features are still changing, and surely they'll be different between when
 this book was written and when they were enabled in stable builds. You
 can find documentation for nightly-only features online.
 
-## Rustup and the role of Rust nightly
+### Rustup and the Role of Rust Nightly
 
 Rustup makes it easy to change between different release channels of Rust,
 on a global or per-project basis. By default, you'll have stable Rust
@@ -180,7 +180,7 @@ Now, every time you call `rustc` or `cargo` inside of
 nightly Rust, rather than the default of stable. This comes in handy when you
 have a lot of Rust projects!
 
-## The RFC process and teams
+### The RFC Process and Teams
 
 So how do you learn about these new features? Rust's development model
 follows *the RFC process*. If you'd like an improvement in Rust, you can
@@ -206,3 +206,5 @@ the new feature, team members will discuss the feature, how it's worked out
 on nightly, and decide if it should make it into stable Rust or not. If the
 decision is to move forward, the feature gate is removed, and the feature is
 now considered stable! It rides the trains into a new stable release of Rust.
+
+## Summary

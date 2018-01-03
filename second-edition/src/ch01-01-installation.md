@@ -1,4 +1,4 @@
-# Installation
+## Installation
 
 The first step to using Rust is to install it. You’ll need an internet
 connection to run the commands in this chapter, as we’ll be downloading Rust
@@ -13,7 +13,7 @@ from the internet.
 > output of the previous command. Additionally, PowerShell specific examples
 > will use `>` rather than `$`.
 
-## Installing on Linux or Mac
+### Installing on Linux or Mac
 
 If you’re on Linux or a Mac, 99% of what you need to do is open a terminal
 and type this:
@@ -52,7 +52,7 @@ they usually come with the correct linker as well, given that C needs one
 as well. You may want to do this regardless, as some packages depend on C
 code as well.
 
-## Installing on Windows
+### Installing on Windows
 
 On Windows, go to
 [https://www.rust-lang.org/en-US/install.html](https://www.rust-lang.org/en-US/install.html)
@@ -68,12 +68,12 @@ install select the "C++ tools".
 The rest of this book will use commands that work in both `cmd.exe` and
 PowerShell. If there are specific differences, we'll explain which to use.
 
-## Custom installations
+### Custom Installations
 
 If you have reasons for preferring not to use rustup.rs, please see [the Rust
 installation page](https://www.rust-lang.org/install.html) for other options.
 
-## Updating
+### Updating
 
 Once you have Rust installed, updating to the latest version is easy.
 From your shell, run the update script:
@@ -82,7 +82,7 @@ From your shell, run the update script:
 $ rustup update
 ```
 
-## Uninstalling
+### Uninstalling
 
 Uninstalling Rust is as easy as installing it. From your shell, run
 the uninstall script:
@@ -91,7 +91,7 @@ the uninstall script:
 $ rustup self uninstall
 ```
 
-## Troubleshooting
+### Troubleshooting
 
 If you’ve got Rust installed, you can open up a shell, and type this:
 
@@ -124,7 +124,7 @@ help you out. Other great resources include [the Users forum][users] and
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-## Local documentation
+### Local Documentation
 
 The installer also includes a copy of the documentation locally, so you can
 read it offline. Run `rustup doc` to open the local documentation in your
