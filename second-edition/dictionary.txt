@@ -183,6 +183,7 @@ Iceburgh
 ident
 IDE
 IDEs
+IDE's
 IEEE
 impl
 implementor
@@ -469,6 +470,7 @@ variant's
 vers
 versa
 Versioning
+visualstudio
 vtable
 wasn
 WeatherForecast
