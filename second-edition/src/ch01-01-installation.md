@@ -69,16 +69,16 @@ too.
 
 ### Installing Rustup on Windows
 
-On Windows, go to
-[https://www.rust-lang.org/en-US/install.html](https://www.rust-lang.org/en-US/i
-nstall.html) and follow the instructions. You'll also need the C++ build tools
-for Visual Studio 2013 or later. The easiest way to acquire the build tools is
-by installing [Microsoft Visual C++ Build Tools
-2017](https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017
-) which provides only the Visual C++ build tools. Alternately, you can
-[install](https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-
-2017) Visual Studio 2017, Visual Studio 2015, or Visual Studio 2013 and during
-installation select the "C++ tools".
+On Windows, go to [https://www.rust-lang.org/en-US/install.html][install] and
+follow the instructions. You'll also need the C++ build tools for Visual Studio
+2013 or later. The easiest way to acquire the build tools is by installing
+[Microsoft Visual C++ Build Tools 2017][visualstudio] which provides only the
+Visual C++ build tools. Alternately, you can [install][visualstudio] Visual
+Studio 2017, Visual Studio 2015, or Visual Studio 2013 and during installation
+select the "C++ tools".
+
+[install]: https://www.rust-lang.org/en-US/install.html
+[visualstudio]: https://www.visualstudio.com/downloads/
 
 The rest of this book will use commands that work in both `cmd.exe` and
 PowerShell. If there are specific differences, we'll explain which to use.
