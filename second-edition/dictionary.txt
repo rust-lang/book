@@ -181,6 +181,7 @@ html
 hyperoptimize
 Iceburgh
 ident
+IDE
 IDEs
 IEEE
 impl
@@ -403,6 +404,7 @@ submodules
 Submodules
 suboptimal
 substring
+subteams
 subtree
 subtyping
 Summarizable

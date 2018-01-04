@@ -428,7 +428,7 @@ $ cargo check
 
 Why would you not want an executable? `cargo check` is often much faster than
 `cargo build`, because Cargo can skip the entire step of producing the
-executable. If we're checking our work throughouth the process of writing the
+executable. If we're checking our work throughout the process of writing the
 code, this will speed things up! As such, many Rustaceans run `cargo check` as
 they write their program to make sure that it compiles, and then run `cargo
 build` once they're ready to give it a spin themselves.
