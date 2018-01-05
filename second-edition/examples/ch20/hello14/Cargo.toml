@@ -1,0 +1,10 @@
+[package]
+name = "hello"
+version = "0.1.0"
+authors = ["Kosorukov Anatoly <java1cprog@yandex.ru>"]
+
+[dependencies]
+
+[[bin]]
+name = "hello"
+path = "bin/main.rs"

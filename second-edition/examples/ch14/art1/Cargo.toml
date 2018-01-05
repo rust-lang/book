@@ -1,0 +1,8 @@
+[package]
+name = "art1"
+version = "0.1.0"
+authors = ["Kosorukov Anatoly <java1cprog@yandex.ru>"]
+description = "A fun game where you guess what number the computer has chosen."
+license = "MIT/Apache-2.0"
+
+[dependencies]
