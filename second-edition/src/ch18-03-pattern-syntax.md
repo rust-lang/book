@@ -334,7 +334,7 @@ fn main() {
         Message::Quit => {
             println!("The Quit variant has no data to destructure.")
         },
-        Message::Move { x: x, y: y } => {
+        Message::Move { x, y } => {
             println!(
                 "Move in the x direction {} and in the y direction {}",
                 x,
