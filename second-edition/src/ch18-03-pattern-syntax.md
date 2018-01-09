@@ -378,7 +378,7 @@ matching.
 #### Destructuring References
 
 When the value we’re matching to our pattern contains a reference, we need to
-destructure the reference from the value, which we can do can by specifying a
+destructure the reference from the value, which we can do by specifying a
 `&` in the pattern. This lets us get a variable holding the value that the
 reference points to rather than getting a variable that holds the reference.
 
