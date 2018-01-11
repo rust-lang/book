@@ -554,7 +554,7 @@ fn main() {
 }
 ```
 
-This is a little better, but now we've written a lot more code! The case
+This is a little better, but now we've written much more code! The case
 analysis has once again bitten us.
 
 Combinators to the rescue! Just like `Option`, `Result` has lots of combinators
@@ -815,7 +815,7 @@ type from `i32` to something else.
 The first thing we need to decide: should we use `Option` or `Result`? We
 certainly could use `Option` very easily. If any of the three errors occur, we
 could simply return `None`. This will work *and it is better than panicking*,
-but we can do a lot better. Instead, we should pass some detail about the error
+but we can do much better. Instead, we should pass some detail about the error
 that occurred. Since we want to express the *possibility of error*, we should
 use `Result<i32, E>`. But what should `E` be? Since two *different* types of
 errors can occur, we need to convert them to a common type. One such type is
@@ -1285,7 +1285,7 @@ macro_rules! try {
 ```
 
 There's one tiny but powerful change: the error value is passed through
-`From::from`. This makes the `try!` macro a lot more powerful because it gives
+`From::from`. This makes the `try!` macro much more powerful because it gives
 you automatic type conversion for free.
 
 Armed with our more powerful `try!` macro, let's take a look at code we wrote
