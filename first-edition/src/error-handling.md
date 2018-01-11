@@ -917,7 +917,7 @@ Reasonable people can disagree over whether this code is better than the code
 that uses combinators, but if you aren't familiar with the combinator approach,
 this code looks simpler to read to me. It uses explicit case analysis with
 `match` and `if let`. If an error occurs, it simply stops executing the
-function and returns the error (by converting it to a string).
+function and returns the error (by converting it to string).
 
 Isn't this a step backwards though? Previously, we said that the key to
 ergonomic error handling is reducing explicit case analysis, yet we've reverted
