@@ -647,9 +647,9 @@ a bit nicer to deal with, since it will show your message instead of
 
 My advice boils down to this: use good judgment. There's a reason why the words
 “never do X” or “Y is considered harmful” don't appear in my writing. There are
-trade offs to all things, and it is up to you as the programmer to determine
+trade-offs to all things, and it is up to you as the programmer to determine
 what is acceptable for your use cases. My goal is only to help you evaluate
-trade offs as accurately as possible.
+trade-offs as accurately as possible.
 
 Now that we've covered the basics of error handling in Rust, and
 explained unwrapping, let's start exploring more of the standard
