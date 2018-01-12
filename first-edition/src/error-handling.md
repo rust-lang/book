@@ -473,7 +473,7 @@ it also requires us to add a [`Debug`][8] constraint on the `E` type
 parameter (which represents our error type). Since the vast majority
 of types should satisfy the `Debug` constraint, this tends to work out
 in practice. (`Debug` on a type simply means that there's a reasonable
-way to print a human readable description of values with that type.)
+way to print a human-readable description of values with that type.)
 
 OK, let's move on to an example.
 
@@ -1026,7 +1026,7 @@ use std::io;
 use std::num;
 
 // We derive `Debug` because all types should probably derive `Debug`.
-// This gives us a reasonable human readable description of `CliError` values.
+// This gives us a reasonable human-readable description of `CliError` values.
 #[derive(Debug)]
 enum CliError {
     Io(io::Error),
@@ -1127,7 +1127,7 @@ use std::io;
 use std::num;
 
 // We derive `Debug` because all types should probably derive `Debug`.
-// This gives us a reasonable human readable description of `CliError` values.
+// This gives us a reasonable human-readable description of `CliError` values.
 #[derive(Debug)]
 enum CliError {
     Io(io::Error),
@@ -1367,7 +1367,7 @@ use std::num;
 use std::path::Path;
 
 // We derive `Debug` because all types should probably derive `Debug`.
-// This gives us a reasonable human readable description of `CliError` values.
+// This gives us a reasonable human-readable description of `CliError` values.
 #[derive(Debug)]
 enum CliError {
     Io(io::Error),
