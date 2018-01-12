@@ -1643,7 +1643,7 @@ sure to add `extern crate csv;` to the top of your file.)
 use std::fs::File;
 
 // This struct represents the data in each row of the CSV file.
-// Type based decoding absolves us of a lot of the nitty gritty error
+// Type based decoding absolves us of a lot of the nitty-gritty error
 // handling, like parsing strings as integers or floats.
 #[derive(Debug, RustcDecodable)]
 struct Row {
