@@ -367,7 +367,8 @@ and there are no variables in that pattern.
 For struct-like enum variants such as `Message::Move`, we can use a pattern
 similar to the pattern we specify to match structs. After the variant name, we
 place curly brackets and then list the fields with variables so that we break
-apart the pieces to use in the code for this arm.
+apart the pieces to use in the code for this arm. Here we use the shorthand 
+form as shown in Listing 18-13.
 
 For tuple-like enum variants like `Message::Write`, that holds a tuple with one
 element, and `Message::ChangeColor` that holds a tuple with three elements, the
