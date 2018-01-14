@@ -13,7 +13,7 @@ converted a `String` to a numeric type using `parse` in Chapter 2, we must add
 a type annotation, like this:
 
 ```rust
-let guess: u32 = "42".parse().expect("Not a number!");
+let guess = "42".parse().expect("Not a number!");
 ```
 
 If we don’t add the type annotation here, Rust will display the following
