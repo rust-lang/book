@@ -164,7 +164,7 @@ starting with the cons list, we can explore how boxes let us define a recursive
 data type without much distraction.
 
 Listing 15-2 contains an enum definition for a cons list. Note that this
-won’t compile quite yet because this is type doesn’t have a known size, which
+won’t compile quite yet because this type doesn’t have a known size, which
 we’ll demonstrate:
 
 Filename: src/main.rs
@@ -213,7 +213,7 @@ error[E0072]: recursive type `List` has infinite size
 1 | enum List {
   | ^^^^^^^^^ recursive type has infinite size
 2 |     Cons(i32, List),
-  |     --------------- recursive without indirection
+  |               ----- recursive without indirection
   |
   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
   make `List` representable
@@ -335,7 +335,7 @@ The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
 which allows `Box<T>` values to be treated like references. When a `Box<T>`
 value goes out of scope, the heap data that the box is pointing to is cleaned
 up as well because of the `Box<T>` type’s `Drop` trait implementation. Let’s
-explore these two types in more detail; these traits are going to be even more
+explore these two traits in more detail; these traits are going to be even more
 important to the functionality provided by the other smart pointer types we’ll
 be discussing in the rest of this chapter.
 
@@ -361,7 +361,7 @@ that it’s an arrow to a value stored somewhere else. In Listing 15-8, let’s
 create a reference to an `i32` value then use the dereference operator to
 follow the reference to the data:
 
-<span class="filename">Filename: src/main.rs
+Filename: src/main.rs
 
 ```
 fn main() {
@@ -389,10 +389,10 @@ error:
 ```
 error[E0277]: the trait bound `{integer}: std::cmp::PartialEq<&{integer}>` is
 not satisfied
- --> <assert_eq macros>:5:19
+ --> src/main.rs:6:5
   |
-5 | if ! ( * left_val == * right_val ) {
-  |                   ^^ can't compare `{integer}` with `&{integer}`
+6 |     assert_eq!(5, y);
+  |     ^^^^^^^^^^^^^^^^^ can't compare `{integer}` with `&{integer}`
   |
   = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
   `{integer}`
@@ -408,7 +408,7 @@ We can rewrite the code in Listing 15-8 to use a `Box<T>` instead of a
 reference, and the de-reference operator will work the same way as shown in
 Listing 15-9:
 
-<span class="filename">Filename: src/main.rs
+Filename: src/main.rs
 
 ```
 fn main() {
@@ -506,7 +506,6 @@ Filename: src/main.rs
 ```
 use std::ops::Deref;
 
-# struct MyBox<T>(T);
 impl<T> Deref for MyBox<T> {
     type Target = T;
 
@@ -597,28 +596,6 @@ Listing 15-14:
 Filename: src/main.rs
 
 ```
-# use std::ops::Deref;
-#
-# struct MyBox<T>(T);
-#
-# impl<T> MyBox<T> {
-#     fn new(x: T) -> MyBox<T> {
-#         MyBox(x)
-#     }
-# }
-#
-# impl<T> Deref for MyBox<T> {
-#     type Target = T;
-#
-#     fn deref(&self) -> &T {
-#         &self.0
-#     }
-# }
-#
-# fn hello(name: &str) {
-#     println!("Hello, {}!", name);
-# }
-#
 fn main() {
     let m = MyBox::new(String::from("Rust"));
     hello(&m);
@@ -643,28 +620,6 @@ of the code in Listing 15-14:
 Filename: src/main.rs
 
 ```
-# use std::ops::Deref;
-#
-# struct MyBox<T>(T);
-#
-# impl<T> MyBox<T> {
-#     fn new(x: T) -> MyBox<T> {
-#         MyBox(x)
-#     }
-# }
-#
-# impl<T> Deref for MyBox<T> {
-#     type Target = T;
-#
-#     fn deref(&self) -> &T {
-#         &self.0
-#     }
-# }
-#
-# fn hello(name: &str) {
-#     println!("Hello, {}!", name);
-# }
-#
 fn main() {
     let m = MyBox::new(String::from("Rust"));
     hello(&(*m)[..]);
@@ -855,16 +810,6 @@ Listing 15-8 to call the `drop` function as shown in Listing 15-10:
 Filename: src/main.rs
 
 ```
-# struct CustomSmartPointer {
-#     data: String,
-# }
-#
-# impl Drop for CustomSmartPointer {
-#     fn drop(&mut self) {
-#         println!("Dropping CustomSmartPointer!");
-#     }
-# }
-#
 fn main() {
     let c = CustomSmartPointer { data: String::from("some data") };
     println!("CustomSmartPointer created.");
@@ -880,11 +825,11 @@ Running this code will print the following:
 
 ```
 CustomSmartPointer created.
-Dropping CustomSmartPointer!
+Dropping CustomSmartPointer with data `some data`!
 CustomSmartPointer dropped before the end of main.
 ```
 
-The `Dropping CustomSmartPointer!` is printed between `CustomSmartPointer
+The ```Dropping CustomSmartPointer with data `some data`!``` is printed between `CustomSmartPointer
 created.` and `CustomSmartPointer dropped before the end of main.`, showing
 that the `drop` method code is called to drop `c` at that point.
 
@@ -1035,7 +980,7 @@ new `Rc` in `a`. Then when we create `b` and `c`, we call the `Rc::clone`
 function and pass a reference to the `Rc` in `a` as an argument.
 
 We could have called `a.clone()` rather than `Rc::clone(&a)`, but Rust
-convention is to use `Rc::clone` in this case. The implementation of `clone`
+convention is to use `Rc::clone` in this case. The implementation of `Rc::clone`
 doesn’t make a deep copy of all the data like most types’ implementations of
 `clone` do. `Rc::clone` only increments the reference count, which doesn’t take
 very much time. Deep copies of data can take a lot of time, so by using
@@ -1061,14 +1006,6 @@ preventing reference cycles.
 Filename: src/main.rs
 
 ```
-# enum List {
-#     Cons(i32, Rc<List>),
-#     Nil,
-# }
-#
-# use List::{Cons, Nil};
-# use std::rc::Rc;
-#
 fn main() {
     let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
     println!("count after creating a = {}", Rc::strong_count(&a));
@@ -1108,7 +1045,7 @@ of the owners still exist.
 
 `Rc<T>` allows us to share data between multiple parts of our program for
 reading only, via immutable references. If `Rc<T>` allowed us to have multiple
-mutable references too, we’d be able to violate one of the the borrowing rules
+mutable references too, we’d be able to violate one of the borrowing rules
 that we discussed in Chapter 4: multiple mutable borrows to the same place can
 cause data races and inconsistencies. But being able to mutate data is very
 useful! In the next section, we’ll discuss the interior mutability pattern and
@@ -1416,9 +1353,6 @@ mod tests {
     #[test]
     fn it_sends_an_over_75_percent_warning_message() {
         // --snip--
-#         let mock_messenger = MockMessenger::new();
-#         let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
-#         limit_tracker.set_value(75);
 
         assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
     }
@@ -1657,24 +1591,6 @@ show what the reference counts are at various points in this process.
 Filename: src/main.rs
 
 ```
-# use List::{Cons, Nil};
-# use std::rc::Rc;
-# use std::cell::RefCell;
-# #[derive(Debug)]
-# enum List {
-#     Cons(i32, RefCell<Rc<List>>),
-#     Nil,
-# }
-#
-# impl List {
-#     fn tail(&self) -> Option<&RefCell<Rc<List>>> {
-#         match *self {
-#             Cons(_, ref item) => Some(item),
-#             Nil => None,
-#         }
-#     }
-# }
-#
 fn main() {
     let a = Rc::new(Cons(5, RefCell::new(Rc::new(Nil))));
 
@@ -1831,15 +1747,6 @@ with the value 5 and `leaf` as one of its children, as shown in Listing 15-23:
 Filename: src/main.rs
 
 ```
-# use std::rc::Rc;
-# use std::cell::RefCell;
-#
-# #[derive(Debug)]
-# struct Node {
-#     value: i32,
-#    children: RefCell<Vec<Rc<Node>>>,
-# }
-#
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
@@ -1900,16 +1807,6 @@ that the `leaf` node will have a way to refer to its parent, `branch`:
 Filename: src/main.rs
 
 ```
-# use std::rc::{Rc, Weak};
-# use std::cell::RefCell;
-#
-# #[derive(Debug)]
-# struct Node {
-#     value: i32,
-#     parent: RefCell<Weak<Node>>,
-#     children: RefCell<Vec<Rc<Node>>>,
-# }
-#
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
