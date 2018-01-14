@@ -5,11 +5,6 @@ The most straightforward smart pointer is a *box*, whose type is written
 remains on the stack is the pointer to the heap data. Refer back to Chapter 4
 if you’d like to review the difference between the stack and the heap.
 
-<!-- do we mean, allows you to place a value on the heap rather than the
-default behavior of placing it on the stack? Can you quickly recap on what the
-advantage to this can be, help them know when they'd use this? -->
-<!-- Correct! Recap below: /Carol -->
-
 Boxes don’t have performance overhead other than their data being on the heap
 instead of on the stack, but they don’t have a lot of extra abilities either.
 They’re most often used in these situations:
@@ -64,20 +59,7 @@ single `i32` on the stack, where they’re stored by default is more appropriate
 in the majority of cases. Let’s get into a case where boxes allow us to define
 types that we wouldn’t be allowed to if we didn’t have boxes.
 
-<!-- is this what we mean, we wouldn't bother with a box for something that can
-be done more simply with a variable? -->
-<!-- No, this doesn't really have anything to do with variables; this example
-is using both a variable and a box. I've tried to clarify. /Carol -->
-
 ### Boxes Enable Recursive Types
-
-<!-- (or something that encompasses everything we do with this example) -->
-
-<!-- below: I'm unfamiliar with the cons concept, are we saying each value
-except the first is repeated? does an item contain both its own value and the
-next **item**, or the next **value**? Is it a continually nesting list? I'm
-finding it hard to visualize -->
-<!-- Did Figure 15-4 (trpl15-01.svg that I sent) help at all? /Carol-->
 
 Rust needs to know at compile time how much space a type takes up. One kind of
 type whose size can’t be known at compile time is a *recursive type* where a
@@ -92,17 +74,6 @@ languages, to illustrate this concept. The cons list type we’re going to defin
 is straightforward except for the recursion, so the concepts in this example
 will be useful any time you get into more complex situations involving
 recursive types.
-
-<!-- can you also say why we're discussing cons lists in such depth? It seems
-like a detour from the smart pointers conversation, is it just another concept
-we're covering or is it imperative for learning about smart pointers? Either
-way, can you lay that out up front, I think this could throw readers -->
-<!-- A cons list is an example that's fairly simple but illustrates the use
-case for Box. Readers may find themselves wanting to define a variety of
-recursive types more complicated than cons lists in the future, and this
-chapter demonstrates why box is the solution they should reach for in those
-situations. We've tried to make that clearer in the above two paragraphs.
-/Carol -->
 
 A cons list is a list where each item in the list contains two things: the
 value of the current item and the next item. The last item in the list contains
@@ -132,22 +103,9 @@ recursive data types *are* useful in various situations in Rust, but by
 starting with the cons list, we can explore how boxes let us define a recursive
 data type without much distraction.
 
-<!-- If there isn't a better example for introducing box, I think we need more
-justification for using cons lists here. This is supposed to be showing why box
-is useful, but we're saying the thing we use box for isn't useful either. What
-is it useful for, then? -->
-<!-- We've tried to clarify. This is just a simple example to introduce box so
-that the reader can use these concepts in more complicated situations. A more
-realistic example would be quite a bit more complicated and obscure why a box
-is useful even more. /Carol -->
-
 Listing 15-2 contains an enum definition for a cons list. Note that this
 won’t compile quite yet because this type doesn’t have a known size, which
 we’ll demonstrate:
-
-<!-- why won't it compile? Are we just defining it to use in the next example?
-Can you make it clear to the reader why they are doing this?-->
-<!-- done /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -165,12 +123,6 @@ represent a cons list data structure of `i32` values</span>
 > for the purposes of this example. We could have implemented it using
 > generics, as we discussed in Chapter 10, in order to define a cons list type
 > that could store values of any type.
-
-<!-- any reason, in that case, that we use i32s here? Does it just provide a
-more stable example? -->
-<!-- It's a simpler example; the value within each item doesn't matter much for
-the example; i32 is the default integer type so we chose that. I'm not sure
-what you mean by stable? /Carol-->
 
 Using our cons list type to store the list `1, 2, 3` would look like the code
 in Listing 15-3:
@@ -210,14 +162,6 @@ error[E0072]: recursive type `List` has infinite size
 
 <span class="caption">Listing 15-4: The error we get when attempting to define
 a recursive enum</span>
-
-<!-- above-- but isn't that the definition of a cons list that we gave earlier,
-that is must hold a value of itself? As you can see, I'm struggling with the
-cons definition at the moment! -->
-<!-- Yes, this type is the most literal translation of the concept of a concept
-to a Rust type, but it's not allowed in Rust. We have to use box to make the
-variant hold a pointer to the next value, not the actual value itself. We've
-tried to clarify throughout this section. /Carol -->
 
 The error says this type ‘has infinite size’. The reason is the way we’ve
 defined `List` is with a variant that is recursive: it holds another value of
@@ -324,11 +268,6 @@ variant looks like now:
 <span class="caption">Figure 15-7: A `List` that is not infinitely sized since
 `Cons` holds a `Box`</span>
 
-<!-- Below: why use boxes for this example, then, and not a more common smart
-pointer? -->
-<!-- We're trying to introduce the reader to smart pointers by introducing the
-simplest one first. We've reworded to hopefully address this. /Carol -->
-
 Boxes only provide the indirection and heap allocation; they don’t have any
 other special abilities like those we’ll see with the other smart pointer
 types. They also don’t have any performance overhead that these special
@@ -343,10 +282,3 @@ up as well because of the `Box<T>` type’s `Drop` trait implementation. Let’s
 explore these two traits in more detail; these traits are going to be even more
 important to the functionality provided by the other smart pointer types we’ll
 be discussing in the rest of this chapter.
-
-<!-- so deref and drop are features of Box and not of smart pointers? Or of
-both? I'm not sure it's clear -->
-<!-- We've tried to clarify. We wanted to demonstrate one smart pointer before
-getting into these traits since they don't make much sense out of context, but
-they're more important to understand before explaining the more complicated
-smart pointers /Carol -->

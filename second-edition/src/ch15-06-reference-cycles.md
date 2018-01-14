@@ -48,25 +48,11 @@ instead of having the ability to modify the `i32` value like we did in Listing
 to. We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant.
 
-<!-- Can you link this more clearly, what do we have at this point? This change
-to a new listing feels unexpected. What are we going to do with this cons list?
-Why are we making this next listing, what is it's overall purpose? -->
-<!-- I'm not sure if the new listing you're talking about being unexpected is
-referring to the listing above or the listing below? The listing above is just
-definitions we're going to use, the listing below is the `main` function that
-uses the definitions. We just broke these apart to avoid having a lot of code
-and then a lot of explanation, I'd be fine having this be one big listing if
-you think that would be better /Carol -->
-
 In listing 15-29, we’re adding a `main` function that uses the definitions from
 Listing 15-28. This code creates a list in `a`, a list in `b` that points to
 the list in `a`, and then modifies the list in `a` to point to `b`, which
 creates a reference cycle. There are `println!` statements along the way to
 show what the reference counts are at various points in this process.
-
-<!-- so are we adding this to the end of the previous listing? It's in the same
-file -->
-<!-- yes /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -146,16 +132,6 @@ are 2 after we change the list in `a` to point to `b`. At the end of `main`,
 Rust will try and drop `b` first, which will decrease the count in each of the
 `Rc` instances in `a` and `b` by one.
 
-<!-- Above -- previously `a` and `b` said `Rc`, I wanted to clarify that by Rc
-we mean a and b, is that right? -->
-<!-- There's lots of stuff in `a` and `b`; we specifically mean the `Rc` values
-here which is why we said `Rc`. I've tried to say both `a` & `b` and `Rc` here
-instead, to be most precise. What do you think? /Carol -->
-
-<!-- Below--"that Rc" - what are we referring to, a is still referencing b? Can
-you clarify that? -->
-<!-- Yes, the `Rc` in `b`. /Carol -->
-
 However, because `a` is still referencing the `Rc` that was in `b`, that `Rc`
 has a count of 1 rather than 0, so the memory the `Rc` has on the heap won’t be
 dropped. The memory will just sit there with a count of one, forever.
@@ -171,15 +147,6 @@ If you uncomment the last `println!` and run the program, Rust will try and
 print this cycle out with `a` pointing to `b` pointing to `a` and so forth
 until it overflows the stack.
 
-<!-- Can you show us the output? Also, why are we commenting out the print
-statement in the first place?-->
-<!-- We have the last println commented out to begin with because otherwise you
-get a LOT of output until the stack overflows. We thought that would be
-confusing and make it harder to see the reference counts we're printing out
-before that point. Did you try the code with and without that line commented
-out? Which one would make a better first experience when running this code?
-/Carol -->
-
 In this specific case, right after we create the reference cycle, the program
 ends. The consequences of this cycle aren’t so dire. If a more complex program
 allocates lots of memory in a cycle and holds onto it for a long time, the
@@ -193,16 +160,6 @@ that you have to ensure you don’t create cycles yourself; you can’t rely on
 Rust to catch them. Creating a reference cycle would be a logic bug in your
 program that you should use automated tests, code reviews, and other software
 development practices to minimize.
-
-<!-- Above-- this seems like a vague solution, just not writing the code that
-creates cycles, can you be more specific about which part they should
-exclude/change? -->
-<!-- Not really, this example was deliberately creating a reference cycle, so
-if you don't want reference cycles, you shouldn't write this code. It's similar
-to a logic bug-- if you want your program to add 2 to a number instead of 50,
-then you have to type 2 rather than typing 50. I'm not sure how to be more
-specific or helpful here; I've referenced writing tests and other things that
-can help mitigate logic bugs. /Carol -->
 
 Another solution is reorganizing your data structures so that some references
 express ownership and some references don’t. In this way, we can have cycles
@@ -226,24 +183,10 @@ Instead of increasing the `strong_count` in the `Rc` instance by one, calling
 `strong_count`. The difference is the `weak_count` does not need to be 0 in
 order for the `Rc` instance to be cleaned up.
 
-<!-- What is a weak_count? I don't think we've defined that, or strong_count,
-really. Are we just giving another variable to store the count that has no
-input on whether memory is dropped? When is a count stored in strong_count and
-when is it stored in weak_count? -->
-<!-- We're not giving `Rc` another variable, the standard library has defined
-`Rc` to have both the `strong_count` and `weak_count` as fields. I've tried to
-clarify the paragraph above to address your questions. /Carol -->
-
 Strong references are how we can share ownership of an `Rc` instance. Weak
 references don’t express an ownership relationship. They won’t cause a
 reference cycle since any cycle involving some weak references will be broken
 once the strong reference count of values involved is 0.
-
-<!-- Below: I'm struggling to follow here, why do we want to get a value from
-Weak<T>? This section is losing me somewhat, can you slow this down, make sure
-you define anything new up front and give it’s purpose, what we intend it to
-do? -->
-<!-- I've tried to clarify /Carol -->
 
 Because the value that `Weak<T>` references might have been dropped, in order
 to do anything with the value that a `Weak<T>` is pointing to, we have to check
@@ -337,11 +280,6 @@ parent should still exist. This is a case for weak references!
 So instead of `Rc`, we’ll make the type of `parent` use `Weak<T>`, specifically
 a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks like this:
 
-<!-- I think because I still don't understand what Weak<T> is, I’m not really
-sure what it means for the parent to use Weak<T>, can you make sure that’s
-clear at this point -->
-<!-- I've tried, I'm not sure though /Carol -->
-
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -356,21 +294,9 @@ struct Node {
 }
 ```
 
-<!-- Can you fill out this line, above; talk through the syntax, too? Also,
-below, how does this mean a node can refer to a parent without owning it?
-What's is actually doing here?-->
-<!-- The first line is importing `Weak` from the standard library; the reader
-really should be familiar with bringing types into scope by this point, don't
-you think? It seems repetitive to explain this every time. /Carol
--->
-
 This way, a node will be able to refer to its parent node, but does not own its
 parent. In Listing 15-32, let’s update `main` to use this new definition so
 that the `leaf` node will have a way to refer to its parent, `branch`:
-
-<!-- Why are we updating it, what are we doing here? Can you make that clear?
--->
-<!-- Done /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -409,9 +335,6 @@ fn main() {
 <span class="caption">Listing 15-32: A `leaf` node with a `Weak` reference to
 its parent node, `branch`</span>
 
-<!-- Below: looks similar to what? What are we doing with this listing, can you
-talk it through -->
-
 Creating the `leaf` node looks similar to how creating the `leaf` node looked
 in Listing 15-31, with the exception of the `parent` field: `leaf` starts out
 without a parent, so we create a new, empty `Weak` reference instance.
@@ -424,11 +347,6 @@ first `println!`:
 leaf parent = None
 ```
 
-<!-- Is this the explanation of the previous program? If so, can you change the
-tone to an active tone, make it clear that it's connected? I'm struggling to
-connect things up -->
-<!-- I've tried, this will be better with wingdings /Carol -->
-
 When we create the `branch` node, it will also have a new `Weak` reference,
 since `branch` does not have a parent node. We still have `leaf` as one of the
 children of `branch`. Once we have the `Node` instance in `branch`, we can
@@ -436,10 +354,6 @@ modify `leaf` to give it a `Weak` reference to its parent. We use the
 `borrow_mut` method on the `RefCell` in the `parent` field of `leaf`, then we
 use the `Rc::downgrade` function to create a `Weak` reference to `branch` from
 the `Rc` in `branch.`
-
-<!-- Below: What does this mean for our program, that now leaf recognizes its
-parent? -->
-<!-- Yes /Carol -->
 
 When we print out the parent of `leaf` again, this time we’ll get a `Some`
 variant holding `branch`: `leaf` can now access its parent! When we print out
@@ -530,21 +444,11 @@ If we try to access the parent of `leaf` after the end of the scope, we’ll get
 of 1 and a weak count of 0, because the variable `leaf` is now the only
 reference to the `Rc` again.
 
-<!-- Just to clarify, leaf is pointing to itself? -->
-<!-- `leaf` is the variable pointing to the `Rc`, the `Rc` is what has the
-strong and weak counts. /Carol -->
-
 All of the logic that manages the counts and value dropping is built in to
 `Rc` and `Weak` and their implementations of the `Drop` trait. By specifying
 that the relationship from a child to its parent should be a `Weak<T>`
 reference in the definition of `Node`, we’re able to have parent nodes point to
 child nodes and vice versa without creating a reference cycle and memory leaks.
-
-<!-- Ah! This actually cleared up a lot, we specify in the definition that a
-reference should be weak and therefore ignored by the Drop trait, is that
-right? It would really help to specify that up front, can you add something
-like that to the start of the Weak section? -->
-<!-- Done /Carol -->
 
 ## Summary
 

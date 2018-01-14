@@ -6,15 +6,6 @@ By implementing `Deref` in such a way that a smart pointer can be treated like
 a regular reference, we can write code that operates on references and use that
 code with smart pointers too.
 
-<!-- Why would we want to override the dereference operator? Can you lay that
-out? -->
-<!-- Attempted above. /Carol -->
-
-<!-- I'd suggest introducing what you mean by "convenient" here, if we are
-using it as the reason we want to use Deref -->
-<!-- I've removed convenient from the first paragraph and foreshadowed in a
-different way in the below paragraph /Carol -->
-
 Let’s first take a look at how `*` works with regular references, then try and
 define our own type like `Box<T>` and see why `*` doesn’t work like a
 reference. We’ll explore how implementing the `Deref` trait makes it possible
@@ -24,34 +15,10 @@ references or smart pointers.
 
 ### Following the Pointer to the Value with `*`
 
-<!-- I want to avoid too much cross referencing, I think it can be distracting,
-make the reader feel they need to flip back but they don't really, here -->
-<!-- Ok, guess we went too far then! I've been adding *more* cross referencing
-so that the reader can go back if they've forgotten something we've already
-covered. /Carol -->
-
-<!--Oh! I see, de-reference, meaning we cut the tie between the data and the
-reference? I've assumed so above, please correct if not! -->
-<!-- I wouldn't describe it as "cutting the tie"; the tie is still there. It's
-more like we're following an arrow (the pointer) to find the value. Let us know
-if this explanation is still unclear. /Carol -->
-
 A regular reference is a type of pointer, and one way to think of a pointer is
 that it’s an arrow to a value stored somewhere else. In Listing 15-8, let’s
 create a reference to an `i32` value then use the dereference operator to
 follow the reference to the data:
-
-<!-- We'll start with an example of dereferencing and re-allocating references
-to `i32` values: -->
-<!-- Is this what this is an example of? -->
-<!-- No, there isn't any re-allocation happening here; allocation is a term
-that means asking for more space in order to hold data (as we covered in
-chapter 4). What were you trying to convey with "re-allocating", exactly? Have
-we addressed whatever was confusing here before? /Carol -->
-
-<!-- We've reworked the following sections in this chapter heavily because the
-`Mp3` example seemed to be confusing with the metadata that was involved.
-Interested to see if this breakdown works better or not. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -216,11 +183,6 @@ Associated types are a slightly different way of declaring a generic parameter
 that you don’t need to worry about too much for now; we’ll cover it in more
 detail in Chapter 19.
 
-<!-- Is it possible to just use a method for declaring a generic parameter we
-have seen before, so we can focus on the deref trait here? -->
-<!-- No, this is how the `Deref` trait is defined in the standard library, so
-this is what you have to specify in order to implement it. /Carol -->
-
 We filled in the body of the `deref` method with `&self.0` so that `deref`
 returns a reference to the value we want to access with the `*` operator. The
 `main` function from Listing 15-11 that calls `*` on the `MyBox<T>` value now
@@ -237,10 +199,6 @@ was this code:
 ```rust,ignore
 *(y.deref())
 ```
-
-<!-- why is that happening behind the scenes, rather than us just calling this
-up front? -->
-<!-- we've tried to clarify below /Carol -->
 
 Rust substitutes the `*` operator with a call to the `deref` method and then a
 plain dereference so that we don’t have to think about when we have to call the
@@ -261,12 +219,6 @@ does not recurse infinitely. That’s how we end up with data of type `i32`,
 which matches the `5` in the `assert_eq!` in Listing 15-11.
 
 ### Implicit Deref Coercions with Functions and Methods
-
-<!--Below -- "A deref coercion happens when..." So this isn't something the
-reader is making happen, but something that just happens behind the scene? If
-not, can you change this to an active tone? -->
-<!-- Yes, it is something that happens behind the scenes, which is why we
-describe it as implicit. /Carol -->
 
 *Deref coercion* is a convenience that Rust performs on arguments to functions
 and methods. Deref coercion converts a reference to a type that implements
@@ -397,27 +349,12 @@ there is no run-time penalty for taking advantage of deref coercion!
 
 ### How Deref Coercion Interacts with Mutability
 
-<!-- below: are we talking about any mutable references, or are we talking
-about mutable generic types, below? Can you make sure it's clear throughout, I
-wasn't 100% -->
-<!-- I'm not sure what you're asking, *types* don't have the property of
-mutability or immutability, it's the variables or references to *instances* of
-those types that are mutable or immutable. Also the way to say "any mutable
-reference" is with `&mut` and a generic type parameter. Is that what's
-confusing? /Carol -->
-
 Similar to how we use the `Deref` trait to override `*` on immutable
 references, Rust provides a `DerefMut` trait for overriding `*` on mutable
 references.
 
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
-
-<!-- Would it make sense to move this list to the start of the deref section?
--->
-<!-- I don't think this list makes very much sense until you understand what
-deref coercion *is*. Can you elaborate on why you think it should be moved to
-the beginning? /Carol -->
 
 * From `&T` to `&U` when `T: Deref<Target=U>`.
 * From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`.
@@ -438,7 +375,3 @@ Converting an immutable reference to a mutable reference would require that
 there was only one immutable reference to that data, and the borrowing rules
 don’t guarantee that. Therefore, Rust can’t make the assumption that converting
 an immutable reference to a mutable reference is possible.
-
-<!-- Why does it coerce to an immutable reference, and why cant it go the other
-way?-->
-<!-- Elaborated above /Carol-->

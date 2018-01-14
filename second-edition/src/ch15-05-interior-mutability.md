@@ -1,19 +1,5 @@
 ## `RefCell<T>` and the Interior Mutability Pattern
 
-<!-- I'm concerned here about referencing forward too much, do we need that
-information from Ch 19 to understand this? Should we look at rearranging a few
-things here? -->
-<!-- We don't think the reader needs to *understand* `unsafe` at this point,
-just that `unsafe` is how this is possible and that we'll learn about `unsafe`
-later. After reading this section, did you feel that you needed to know more
-about `unsafe` to understand this section? /Carol -->
-
-<!--below: as in, we use the pattern, or it's used automatically? I'm not clear
-on what's the user's responsibility with this pattern -->
-<!-- When we choose to use types implemented using the interior mutability
-pattern, or when we implement our own types using the interior mutability
-pattern. /Carol -->
-
 *Interior mutability* is a design pattern in Rust for allowing you to mutate
 data even when there are immutable references to that data, normally disallowed
 by the borrowing rules. To do so, the pattern uses `unsafe` code inside a data
@@ -43,10 +29,6 @@ compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
 With references, if you break these rules, you’ll get a compiler error. With
 `RefCell<T>`, if you break these rules, you’ll get a `panic!`.
 
-<!-- Is there an advantage to having these rules enforced at different times?
--->
-<!-- Yes, that's what we were trying to say below, we've tried to make this more explicit /Carol -->
-
 The advantages to checking the borrowing rules at compile time are that errors
 will be caught sooner in the development process and there is no impact on
 runtime performance since all the analysis is completed beforehand. For those
@@ -59,10 +41,6 @@ the compile time checks. Static analysis, like the Rust compiler, is inherently
 conservative. Some properties of code are impossible to detect by analyzing the
 code: the most famous example is the Halting Problem, which is out of scope of
 this book but an interesting topic to research if you’re interested.
-
-<!--below: can't be sure of what, exactly? Sure that the code complies with the
-ownership rules? -->
-<!-- Yes /Carol -->
 
 Because some analysis is impossible, if the Rust compiler can’t be sure the
 code complies with the ownership rules, it may reject a correct program; in
@@ -77,10 +55,6 @@ Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded scenarios
 and will give you a compile time error if you try in a multithreaded context.
 We’ll talk about how to get the functionality of `RefCell<T>` in a
 multithreaded program in Chapter 16.
-
-<!-- I'm not really clear at this point what the difference between Rc<T> and
-RefCell<T> is, perhaps a succinct round up would help? -->
-<!-- Done /Carol -->
 
 To recap the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
 
@@ -363,10 +337,6 @@ methods, which are part of the safe API that belongs to `RefCell<T>`. The
 the smart pointer type `RefMut`. Both types implement `Deref` so we can treat
 them like regular references.
 
-<!-- can you clarify what you mean, practically, by "track borrows
-dynamically"?-->
-<!-- Yep, we've tried to clarify in the next paragraph. /Carol -->
-
 The `RefCell<T>` keeps track of how many `Ref` and `RefMut` smart pointers are
 currently active. Every time we call `borrow`, the `RefCell<T>` increases its
 count of how many immutable borrows are active. When a `Ref` value goes out of
@@ -432,9 +402,6 @@ A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 immutable access to that data. If we have an `Rc<T>` that holds a `RefCell<T>`,
 then we can get a value that can have multiple owners *and* that we can mutate!
 
-<!-- maybe just recap on why we'd want that? -->
-<!-- done, below /Carol -->
-
 For example, recall the cons list example from Listing 15-13 where we used
 `Rc<T>` to let us have multiple lists share ownership of another list. Because
 `Rc<T>` only holds immutable values, we aren’t able to change any of the values
@@ -481,10 +448,6 @@ variable named `value` so we can access it directly later. Then we create a
 `value` so that both `a` and `value` have ownership of the inner `5` value,
 rather than transferring ownership from `value` to `a` or having `a` borrow
 from `value`.
-
-<!-- above: so that `value` has ownership of what, in addition to a? I didn't
-follow the final sentence above -->
-<!-- Of the inner value, I've tried to clarify /Carol -->
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and
 `c`, they can both refer to `a`, the same as we did in Listing 15-13.

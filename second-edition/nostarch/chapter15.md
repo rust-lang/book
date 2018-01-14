@@ -21,16 +21,6 @@ reference counting smart pointer keeps track of how many owners there are, and
 when there aren’t any remaining, the smart pointer takes care of cleaning up
 the data.
 
-<!-- maybe a brief explanation what deref and drop? I'm not really sure what
-reference counting is here too, can you outline that in brief?-->
-<!-- We've added a quick explanation of reference counting here and a brief
-explanation of deref and drop below. /Carol -->
-
-<!--(regarding C++) if this is relevant here, can you expand? Are we saying
-they will be familiar to C++ people? -->
-<!-- We were trying to say that "smart pointer" isn't something particular to
-Rust; we've tried to clarify. /Carol -->
-
 In Rust, where we have the concept of ownership and borrowing, an additional
 difference between references and smart pointers is that references are a kind
 of pointer that only borrow data; by contrast, in many cases, smart pointers
@@ -42,23 +32,6 @@ at the time. Both these types count as smart pointers because they own some
 memory and allow you to manipulate it. They also have metadata (such as their
 capacity) and extra capabilities or guarantees (such as `String` ensuring its
 data will always be valid UTF-8).
-
-<!-- Above: we said smart pointers don't own values earlier but in the
-paragraph above we're saying String and Vec own memory, is that a
-contradiction? -->
-<!-- Our original text read: "In Rust, an additional difference between plain
-references and smart pointers is that references are a kind of pointer that
-only borrow data; by contrast, in many cases, smart pointers *own* the data
-that they point to." You had edited this to say the opposite: "In Rust, smart
-pointers can only borrow data, whereas in many other languages, smart pointers
-*own* the data they point to." We had the "in rust" phrase not to distinguish
-Rust's smart pointer implementation from other languages' smart pointer
-implementations, but to acknowledge that the concept of borrowing and ownership
-doesn't apply in many languages. The distinction between references borrowing
-and smart pointers owning is important in the context of Rust. We've tried to
-clarify the sentence talking about C++ and separate it from the discussion of
-borrowing vs owning. So there shouldn't be a contradiction, and it should be
-clearer that smart pointers usually own the data they point to. /Carol -->
 
 Smart pointers are usually implemented using structs. The characteristics that
 distinguish a smart pointer from an ordinary struct are that smart pointers
@@ -75,23 +48,10 @@ Many libraries have their own smart pointers and you can even write some
 yourself. We’ll just cover the most common smart pointers from the standard
 library:
 
-<!-- Would it make sense to hyphenate reference-counted (and its derivations)
-here? I think that would be more clear, but I don't want to do that if that's
-not the Rust convention -->
-<!-- The hyphenated version doesn't appear to be a general convention to me, it
-looks like "reference counted" is most often not hyphenated. For example:
-http://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon01Concurrent.pdf
- We'd be interested to know if there's a standard that we don't know about
-/Carol -->
-
 * `Box<T>` for allocating values on the heap
 * `Rc<T>`, a reference counted type that enables multiple ownership
 * `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
   the borrowing rules at runtime instead of compile time
-
-<!-- Should we add Ref and RefMut to this list, too? -->
-<!-- They were already sort of in the list; we've flipped the order to make it
-clearer /Carol-->
 
 Along the way, we’ll cover the *interior mutability* pattern where an immutable
 type exposes an API for mutating an interior value. We’ll also discuss
@@ -105,11 +65,6 @@ The most straightforward smart pointer is a *box*, whose type is written
 `Box<T>`. Boxes allow you to store data on the heap rather than the stack. What
 remains on the stack is the pointer to the heap data. Refer back to Chapter 4
 if you’d like to review the difference between the stack and the heap.
-
-<!-- do we mean, allows you to place a value on the heap rather than the
-default behavior of placing it on the stack? Can you quickly recap on what the
-advantage to this can be, help them know when they'd use this? -->
-<!-- Correct! Recap below: /Carol -->
 
 Boxes don’t have performance overhead other than their data being on the heap
 instead of on the stack, but they don’t have a lot of extra abilities either.
@@ -164,20 +119,7 @@ single `i32` on the stack, where they’re stored by default is more appropriate
 in the majority of cases. Let’s get into a case where boxes allow us to define
 types that we wouldn’t be allowed to if we didn’t have boxes.
 
-<!-- is this what we mean, we wouldn't bother with a box for something that can
-be done more simply with a variable? -->
-<!-- No, this doesn't really have anything to do with variables; this example
-is using both a variable and a box. I've tried to clarify. /Carol -->
-
 ### Boxes Enable Recursive Types
-
-<!-- (or something that encompasses everything we do with this example) -->
-
-<!-- below: I'm unfamiliar with the cons concept, are we saying each value
-except the first is repeated? does an item contain both its own value and the
-next **item**, or the next **value**? Is it a continually nesting list? I'm
-finding it hard to visualize -->
-<!-- Did Figure 15-4 (trpl15-01.svg that I sent) help at all? /Carol-->
 
 Rust needs to know at compile time how much space a type takes up. One kind of
 type whose size can’t be known at compile time is a *recursive type* where a
@@ -192,17 +134,6 @@ languages, to illustrate this concept. The cons list type we’re going to defin
 is straightforward except for the recursion, so the concepts in this example
 will be useful any time you get into more complex situations involving
 recursive types.
-
-<!-- can you also say why we're discussing cons lists in such depth? It seems
-like a detour from the smart pointers conversation, is it just another concept
-we're covering or is it imperative for learning about smart pointers? Either
-way, can you lay that out up front, I think this could throw readers -->
-<!-- A cons list is an example that's fairly simple but illustrates the use
-case for Box. Readers may find themselves wanting to define a variety of
-recursive types more complicated than cons lists in the future, and this
-chapter demonstrates why box is the solution they should reach for in those
-situations. We've tried to make that clearer in the above two paragraphs.
-/Carol -->
 
 A cons list is a list where each item in the list contains two things: the
 value of the current item and the next item. The last item in the list contains
@@ -232,22 +163,9 @@ recursive data types *are* useful in various situations in Rust, but by
 starting with the cons list, we can explore how boxes let us define a recursive
 data type without much distraction.
 
-<!-- If there isn't a better example for introducing box, I think we need more
-justification for using cons lists here. This is supposed to be showing why box
-is useful, but we're saying the thing we use box for isn't useful either. What
-is it useful for, then? -->
-<!-- We've tried to clarify. This is just a simple example to introduce box so
-that the reader can use these concepts in more complicated situations. A more
-realistic example would be quite a bit more complicated and obscure why a box
-is useful even more. /Carol -->
-
 Listing 15-2 contains an enum definition for a cons list. Note that this
 won’t compile quite yet because this is type doesn’t have a known size, which
 we’ll demonstrate:
-
-<!-- why won't it compile? Are we just defining it to use in the next example?
-Can you make it clear to the reader why they are doing this?-->
-<!-- done /Carol -->
 
 Filename: src/main.rs
 
@@ -265,12 +183,6 @@ data structure of `i32` values
 > for the purposes of this example. We could have implemented it using
 > generics, as we discussed in Chapter 10, in order to define a cons list type
 > that could store values of any type.
-
-<!-- any reason, in that case, that we use i32s here? Does it just provide a
-more stable example? -->
-<!-- It's a simpler example; the value within each item doesn't matter much for
-the example; i32 is the default integer type so we chose that. I'm not sure
-what you mean by stable? /Carol-->
 
 Using our cons list type to store the list `1, 2, 3` would look like the code
 in Listing 15-3:
@@ -308,14 +220,6 @@ error[E0072]: recursive type `List` has infinite size
 ```
 
 Listing 15-4: The error we get when attempting to define a recursive enum
-
-<!-- above-- but isn't that the definition of a cons list that we gave earlier,
-that is must hold a value of itself? As you can see, I'm struggling with the
-cons definition at the moment! -->
-<!-- Yes, this type is the most literal translation of the concept of a concept
-to a Rust type, but it's not allowed in Rust. We have to use box to make the
-variant hold a pointer to the next value, not the actual value itself. We've
-tried to clarify throughout this section. /Carol -->
 
 The error says this type ‘has infinite size’. The reason is the way we’ve
 defined `List` is with a variant that is recursive: it holds another value of
@@ -420,11 +324,6 @@ variant looks like now:
 
 Figure 15-7: A `List` that is not infinitely sized since `Cons` holds a `Box`
 
-<!-- Below: why use boxes for this example, then, and not a more common smart
-pointer? -->
-<!-- We're trying to introduce the reader to smart pointers by introducing the
-simplest one first. We've reworded to hopefully address this. /Carol -->
-
 Boxes only provide the indirection and heap allocation; they don’t have any
 other special abilities like those we’ll see with the other smart pointer
 types. They also don’t have any performance overhead that these special
@@ -440,13 +339,6 @@ explore these two types in more detail; these traits are going to be even more
 important to the functionality provided by the other smart pointer types we’ll
 be discussing in the rest of this chapter.
 
-<!-- so deref and drop are features of Box and not of smart pointers? Or of
-both? I'm not sure it's clear -->
-<!-- We've tried to clarify. We wanted to demonstrate one smart pointer before
-getting into these traits since they don't make much sense out of context, but
-they're more important to understand before explaining the more complicated
-smart pointers /Carol -->
-
 ## Treating Smart Pointers like Regular References with the `Deref` Trait
 
 Implementing `Deref` trait allows us to customize the behavior of the
@@ -454,15 +346,6 @@ Implementing `Deref` trait allows us to customize the behavior of the
 By implementing `Deref` in such a way that a smart pointer can be treated like
 a regular reference, we can write code that operates on references and use that
 code with smart pointers too.
-
-<!-- Why would we want to override the dereference operator? Can you lay that
-out? -->
-<!-- Attempted above. /Carol -->
-
-<!-- I'd suggest introducing what you mean by "convenient" here, if we are
-using it as the reason we want to use Deref -->
-<!-- I've removed convenient from the first paragraph and foreshadowed in a
-different way in the below paragraph /Carol -->
 
 Let’s first take a look at how `*` works with regular references, then try and
 define our own type like `Box<T>` and see why `*` doesn’t work like a
@@ -473,34 +356,10 @@ references or smart pointers.
 
 ### Following the Pointer to the Value with `*`
 
-<!-- I want to avoid too much cross referencing, I think it can be distracting,
-make the reader feel they need to flip back but they don't really, here -->
-<!-- Ok, guess we went too far then! I've been adding *more* cross referencing
-so that the reader can go back if they've forgotten something we've already
-covered. /Carol -->
-
-<!--Oh! I see, de-reference, meaning we cut the tie between the data and the
-reference? I've assumed so above, please correct if not! -->
-<!-- I wouldn't describe it as "cutting the tie"; the tie is still there. It's
-more like we're following an arrow (the pointer) to find the value. Let us know
-if this explanation is still unclear. /Carol -->
-
 A regular reference is a type of pointer, and one way to think of a pointer is
 that it’s an arrow to a value stored somewhere else. In Listing 15-8, let’s
 create a reference to an `i32` value then use the dereference operator to
 follow the reference to the data:
-
-<!-- We'll start with an example of dereferencing and re-allocating references
-to `i32` values: -->
-<!-- Is this what this is an example of? -->
-<!-- No, there isn't any re-allocation happening here; allocation is a term
-that means asking for more space in order to hold data (as we covered in
-chapter 4). What were you trying to convey with "re-allocating", exactly? Have
-we addressed whatever was confusing here before? /Carol -->
-
-<!-- We've reworked the following sections in this chapter heavily because the
-`Mp3` example seemed to be confusing with the metadata that was involved.
-Interested to see if this breakdown works better or not. /Carol -->
 
 <span class="filename">Filename: src/main.rs
 
@@ -664,11 +523,6 @@ Associated types are a slightly different way of declaring a generic parameter
 that you don’t need to worry about too much for now; we’ll cover it in more
 detail in Chapter 19.
 
-<!-- Is it possible to just use a method for declaring a generic parameter we
-have seen before, so we can focus on the deref trait here? -->
-<!-- No, this is how the `Deref` trait is defined in the standard library, so
-this is what you have to specify in order to implement it. /Carol -->
-
 We filled in the body of the `deref` method with `&self.0` so that `deref`
 returns a reference to the value we want to access with the `*` operator. The
 `main` function from Listing 15-11 that calls `*` on the `MyBox<T>` value now
@@ -685,10 +539,6 @@ was this code:
 ```
 *(y.deref())
 ```
-
-<!-- why is that happening behind the scenes, rather than us just calling this
-up front? -->
-<!-- we've tried to clarify below /Carol -->
 
 Rust substitutes the `*` operator with a call to the `deref` method and then a
 plain dereference so that we don’t have to think about when we have to call the
@@ -709,12 +559,6 @@ does not recurse infinitely. That’s how we end up with data of type `i32`,
 which matches the `5` in the `assert_eq!` in Listing 15-11.
 
 ### Implicit Deref Coercions with Functions and Methods
-
-<!--Below -- "A deref coercion happens when..." So this isn't something the
-reader is making happen, but something that just happens behind the scene? If
-not, can you change this to an active tone? -->
-<!-- Yes, it is something that happens behind the scenes, which is why we
-describe it as implicit. /Carol -->
 
 *Deref coercion* is a convenience that Rust performs on arguments to functions
 and methods. Deref coercion converts a reference to a type that implements
@@ -843,27 +687,12 @@ there is no run-time penalty for taking advantage of deref coercion!
 
 ### How Deref Coercion Interacts with Mutability
 
-<!-- below: are we talking about any mutable references, or are we talking
-about mutable generic types, below? Can you make sure it's clear throughout, I
-wasn't 100% -->
-<!-- I'm not sure what you're asking, *types* don't have the property of
-mutability or immutability, it's the variables or references to *instances* of
-those types that are mutable or immutable. Also the way to say "any mutable
-reference" is with `&mut` and a generic type parameter. Is that what's
-confusing? /Carol -->
-
 Similar to how we use the `Deref` trait to override `*` on immutable
 references, Rust provides a `DerefMut` trait for overriding `*` on mutable
 references.
 
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
-
-<!-- Would it make sense to move this list to the start of the deref section?
--->
-<!-- I don't think this list makes very much sense until you understand what
-deref coercion *is*. Can you elaborate on why you think it should be moved to
-the beginning? /Carol -->
 
 * From `&T` to `&U` when `T: Deref<Target=U>`.
 * From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`.
@@ -885,10 +714,6 @@ there was only one immutable reference to that data, and the borrowing rules
 don’t guarantee that. Therefore, Rust can’t make the assumption that converting
 an immutable reference to a mutable reference is possible.
 
-<!-- Why does it coerce to an immutable reference, and why cant it go the other
-way?-->
-<!-- Elaborated above /Carol-->
-
 ## The `Drop` Trait Runs Code on Cleanup
 
 The second trait important to the smart pointer pattern is `Drop`, which lets
@@ -906,11 +731,6 @@ the system might become overloaded and crash. In Rust, we can specify that a
 particular bit of code should be run whenever a value goes out of scope, and
 the compiler will insert this code automatically.
 
-<!-- Are we saying that any code can be run, and that we can use that to clean
-up, or that this code that can be run is specifically always for clean up? -->
-<!-- I don't understand what the difference between those two choices are?
-/Carol -->
-
 This means we don’t need to be careful about placing clean up code everywhere
 in a program that an instance of a particular type is finished with, but we
 still won’t leak resources!
@@ -920,25 +740,10 @@ We specify the code to run when a value goes out of scope by implementing the
 that takes a mutable reference to `self`. In order to be able to see when Rust
 calls `drop`, let’s implement `drop` with `println!` statements for now.
 
-<!-- Why are we showing this as an example and not an example of it being used
-for clean up? -->
-<!-- To demonstrate the mechanics of implementing the trait and showing when
-this code gets run. It's hard to experience the cleaning up unless we print
-something. /Carol -->
-
 Listing 15-8 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print out `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This will demonstrate when Rust runs the `drop`
 function:
-
-<!-- Is this below just telling us how to adapt it for cleaning up instead?
-Maybe save it for when we have context for it? Instead of a `println!`
-statement, you'd fill in `drop` with whatever cleanup code your smart pointer
-needs to run: -->
-<!-- This is demonstrating what we need to do to use `Drop`, without getting
-into the complexities of what "cleaning up" might mean yet, just to give the
-reader an idea of when this code gets called and that it gets called
-automatically. We're building up to cleaning up. /Carol -->
 
 Filename: src/main.rs
 
@@ -970,11 +775,6 @@ implementation for the `drop` method that calls `println!`. The body of the
 instance of your type goes out of scope. We’re choosing to print out some text
 here in order to demonstrate when Rust will call `drop`.
 
-<!-- Where you'd put this code, or where this code would be called? It seems
-laborious to write this clean up code wherever there's a print call? -->
-<!-- I'm not sure how you concluded that from what we had here, could you
-elaborate? /Carol -->
-
 In `main`, we create a new instance of `CustomSmartPointer` and then print out
 `CustomSmartPointer created.`. At the end of `main`, our instance of
 `CustomSmartPointer` will go out of scope, and Rust will call the code we put
@@ -996,14 +796,7 @@ just to give you a visual guide to how the drop method works, but usually you
 would specify the cleanup code that your type needs to run rather than a print
 message.
 
-<!-- Can you wrap this example up by saying what you would actually put in a
-drop method and why?-->
-<!-- Done /Carol -->
-
 #### Dropping a Value Early with `std::mem::drop`
-
-<!-- is this a new method from Drop or the same method? -->
-<!-- This is a new function. /Carol -->
 
 Rust inserts the call to `drop` automatically when a value goes out of scope,
 and it’s not straightforward to disable this functionality. Disabling `drop`
@@ -1014,11 +807,6 @@ you may want to force the `drop` method that releases the lock to run so that
 other code in the same scope can acquire the lock. First, let’s see what
 happens if we try to call the `Drop` trait’s `drop` method ourselves by
 modifying the `main` function from Listing 15-8 as shown in Listing 15-9:
-
-<!-- Above: I'm not following why we are doing this, if it's not necessary and
-we aren't going to cover it now anyway -- can you lay out why we're discussing
-this here? -->
-<!-- Done. /Carol -->
 
 Filename: src/main.rs
 
@@ -1096,19 +884,9 @@ Dropping CustomSmartPointer!
 CustomSmartPointer dropped before the end of main.
 ```
 
-<!-- What's the destructor code, here? We haven't mentioned that before, not in
-this chapter in any case -->
-<!-- I added a definition for destructor a few paragraphs above, the first time
-we see it in an error message. /Carol -->
-
 The `Dropping CustomSmartPointer!` is printed between `CustomSmartPointer
 created.` and `CustomSmartPointer dropped before the end of main.`, showing
 that the `drop` method code is called to drop `c` at that point.
-
-<!-- How does this show that the destructor code (is that drop?) is called? Is
-this correct, above?-->
-<!-- The order of what gets printed shows that the drop code is called.
-/Carol-->
 
 Code specified in a `Drop` trait implementation can be used in many ways to
 make cleanup convenient and safe: we could use it to create our own memory
@@ -1133,10 +911,6 @@ multiple owners. For example, in graph data structures, multiple edges may
 point to the same node, and that node is conceptually owned by all of the edges
 that point to it. A node shouldn’t be cleaned up unless it doesn’t have any
 edges pointing to it.
-
-<!-- Can you give an example or two for when a variable needs multiple owners?
--->
-<!-- Done /Carol -->
 
 In order to enable multiple ownership, Rust has a type called `Rc<T>`. Its name
 is an abbreviation for reference counting. *Reference counting* means keeping
@@ -1235,12 +1009,6 @@ number of references from 2 to 3. Every time we call `Rc::clone`, the reference
 count to the data within the `Rc` is increased, and the data won’t be cleaned
 up unless there are zero references to it:
 
-<!-- And what will Rc do that's different here, how will the ownership of a b
-c change? Could you write a paragraph equivalent to the one describing the cons
-variants above? That was really useful -->
-<!-- I'm not sure which paragraph about cons you're talking about, but I've
-tried to guess /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -1282,11 +1050,6 @@ memory.
 Let’s change our working example from Listing 15-13 so that we can see the
 reference counts changing as we create and drop references to the `Rc` in `a`.
 
-<!-- Below -- can you let the reader know why we are doing this? What does it
-show us/improve? Is this our working version of the code, or just illustrating
-reference count? -->
-<!-- This is illustrating reference counting /Carol -->
-
 In Listing 15-14, we’ll change `main` so that it has an inner scope around list
 `c`, so that we can see how the reference count changes when `c` goes out of
 scope. At each point in the program where the reference count changes, we’ll
@@ -1294,14 +1057,6 @@ print out the reference count, which we can get by calling the
 `Rc::strong_count` function. We’ll talk about why this function is named
 `strong_count` rather than `count` in the section later in this chapter about
 preventing reference cycles.
-
-<!-- If we need to talk about this later, that might indicate that this chapter
-is out of order --- should the section on reference cycles come first? -->
-<!-- It's not possible to create reference cycles until we've explained both
-`Rc` and `RefCell`, so we don't see a way to reorder these sections. The
-"strong" is the only detail from that section relevant here; we just want to
-have the reader ignore that detail for now but know that we will explain it in
-a bit. /Carol -->
 
 Filename: src/main.rs
 
@@ -1338,10 +1093,6 @@ count after creating c = 3
 count after c goes out of scope = 2
 ```
 
-<!-- is there a reason we call `a` rc here, and not just `a`? -->
-<!-- Yes, because it's not `a`, it's the strong count of the `Rc` in `a`. We've
-changed the text to hopefully be clearer. /Carol -->
-
 We’re able to see that the `Rc` in `a` has an initial reference count of one,
 then each time we call `clone`, the count goes up by one. When `c` goes out of
 scope, the count goes down by one. We don’t have to call a function to decrease
@@ -1365,20 +1116,6 @@ the `RefCell<T>` type that we can use in conjunction with an `Rc<T>` to work
 with this restriction on immutability.
 
 ## `RefCell<T>` and the Interior Mutability Pattern
-
-<!-- I'm concerned here about referencing forward too much, do we need that
-information from Ch 19 to understand this? Should we look at rearranging a few
-things here? -->
-<!-- We don't think the reader needs to *understand* `unsafe` at this point,
-just that `unsafe` is how this is possible and that we'll learn about `unsafe`
-later. After reading this section, did you feel that you needed to know more
-about `unsafe` to understand this section? /Carol -->
-
-<!--below: as in, we use the pattern, or it's used automatically? I'm not clear
-on what's the user's responsibility with this pattern -->
-<!-- When we choose to use types implemented using the interior mutability
-pattern, or when we implement our own types using the interior mutability
-pattern. /Carol -->
 
 *Interior mutability* is a design pattern in Rust for allowing you to mutate
 data even when there are immutable references to that data, normally disallowed
@@ -1409,10 +1146,6 @@ compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
 With references, if you break these rules, you’ll get a compiler error. With
 `RefCell<T>`, if you break these rules, you’ll get a `panic!`.
 
-<!-- Is there an advantage to having these rules enforced at different times?
--->
-<!-- Yes, that's what we were trying to say below, we've tried to make this more explicit /Carol -->
-
 The advantages to checking the borrowing rules at compile time are that errors
 will be caught sooner in the development process and there is no impact on
 runtime performance since all the analysis is completed beforehand. For those
@@ -1425,10 +1158,6 @@ the compile time checks. Static analysis, like the Rust compiler, is inherently
 conservative. Some properties of code are impossible to detect by analyzing the
 code: the most famous example is the Halting Problem, which is out of scope of
 this book but an interesting topic to research if you’re interested.
-
-<!--below: can't be sure of what, exactly? Sure that the code complies with the
-ownership rules? -->
-<!-- Yes /Carol -->
 
 Because some analysis is impossible, if the Rust compiler can’t be sure the
 code complies with the ownership rules, it may reject a correct program; in
@@ -1443,10 +1172,6 @@ Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded scenarios
 and will give you a compile time error if you try in a multithreaded context.
 We’ll talk about how to get the functionality of `RefCell<T>` in a
 multithreaded program in Chapter 16.
-
-<!-- I'm not really clear at this point what the difference between Rc<T> and
-RefCell<T> is, perhaps a succinct round up would help? -->
-<!-- Done /Carol -->
 
 To recap the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
 
@@ -1729,10 +1454,6 @@ methods, which are part of the safe API that belongs to `RefCell<T>`. The
 the smart pointer type `RefMut`. Both types implement `Deref` so we can treat
 them like regular references.
 
-<!-- can you clarify what you mean, practically, by "track borrows
-dynamically"?-->
-<!-- Yep, we've tried to clarify in the next paragraph. /Carol -->
-
 The `RefCell<T>` keeps track of how many `Ref` and `RefMut` smart pointers are
 currently active. Every time we call `borrow`, the `RefCell<T>` increases its
 count of how many immutable borrows are active. When a `Ref` value goes out of
@@ -1798,9 +1519,6 @@ A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 immutable access to that data. If we have an `Rc<T>` that holds a `RefCell<T>`,
 then we can get a value that can have multiple owners *and* that we can mutate!
 
-<!-- maybe just recap on why we'd want that? -->
-<!-- done, below /Carol -->
-
 For example, recall the cons list example from Listing 15-13 where we used
 `Rc<T>` to let us have multiple lists share ownership of another list. Because
 `Rc<T>` only holds immutable values, we aren’t able to change any of the values
@@ -1846,10 +1564,6 @@ variable named `value` so we can access it directly later. Then we create a
 `value` so that both `a` and `value` have ownership of the inner `5` value,
 rather than transferring ownership from `value` to `a` or having `a` borrow
 from `value`.
-
-<!-- above: so that `value` has ownership of what, in addition to a? I didn't
-follow the final sentence above -->
-<!-- Of the inner value, I've tried to clarify /Carol -->
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and
 `c`, they can both refer to `a`, the same as we did in Listing 15-13.
@@ -1934,25 +1648,11 @@ instead of having the ability to modify the `i32` value like we did in Listing
 to. We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant.
 
-<!-- Can you link this more clearly, what do we have at this point? This change
-to a new listing feels unexpected. What are we going to do with this cons list?
-Why are we making this next listing, what is it's overall purpose? -->
-<!-- I'm not sure if the new listing you're talking about being unexpected is
-referring to the listing above or the listing below? The listing above is just
-definitions we're going to use, the listing below is the `main` function that
-uses the definitions. We just broke these apart to avoid having a lot of code
-and then a lot of explanation, I'd be fine having this be one big listing if
-you think that would be better /Carol -->
-
 In listing 15-21, we’re adding a `main` function that uses the definitions from
 Listing 15-20. This code creates a list in `a`, a list in `b` that points to
 the list in `a`, and then modifies the list in `a` to point to `b`, which
 creates a reference cycle. There are `println!` statements along the way to
 show what the reference counts are at various points in this process.
-
-<!-- so are we adding this to the end of the previous listing? It's in the same
-file -->
-<!-- yes /Carol -->
 
 Filename: src/main.rs
 
@@ -2032,16 +1732,6 @@ are 2 after we change the list in `a` to point to `b`. At the end of `main`,
 Rust will try and drop `b` first, which will decrease the count in each of the
 `Rc` instances in `a` and `b` by one.
 
-<!-- Above -- previously `a` and `b` said `Rc`, I wanted to clarify that by Rc
-we mean a and b, is that right? -->
-<!-- There's lots of stuff in `a` and `b`; we specifically mean the `Rc` values
-here which is why we said `Rc`. I've tried to say both `a` & `b` and `Rc` here
-instead, to be most precise. What do you think? /Carol -->
-
-<!-- Below--"that Rc" - what are we referring to, a is still referencing b? Can
-you clarify that? -->
-<!-- Yes, the `Rc` in `b`. /Carol -->
-
 However, because `a` is still referencing the `Rc` that was in `b`, that `Rc`
 has a count of 1 rather than 0, so the memory the `Rc` has on the heap won’t be
 dropped. The memory will just sit there with a count of one, forever.
@@ -2056,15 +1746,6 @@ If you uncomment the last `println!` and run the program, Rust will try and
 print this cycle out with `a` pointing to `b` pointing to `a` and so forth
 until it overflows the stack.
 
-<!-- Can you show us the output? Also, why are we commenting out the print
-statement in the first place?-->
-<!-- We have the last println commented out to begin with because otherwise you
-get a LOT of output until the stack overflows. We thought that would be
-confusing and make it harder to see the reference counts we're printing out
-before that point. Did you try the code with and without that line commented
-out? Which one would make a better first experience when running this code?
-/Carol -->
-
 In this specific case, right after we create the reference cycle, the program
 ends. The consequences of this cycle aren’t so dire. If a more complex program
 allocates lots of memory in a cycle and holds onto it for a long time, the
@@ -2078,16 +1759,6 @@ that you have to ensure you don’t create cycles yourself; you can’t rely on
 Rust to catch them. Creating a reference cycle would be a logic bug in your
 program that you should use automated tests, code reviews, and other software
 development practices to minimize.
-
-<!-- Above-- this seems like a vague solution, just not writing the code that
-creates cycles, can you be more specific about which part they should
-exclude/change? -->
-<!-- Not really, this example was deliberately creating a reference cycle, so
-if you don't want reference cycles, you shouldn't write this code. It's similar
-to a logic bug-- if you want your program to add 2 to a number instead of 50,
-then you have to type 2 rather than typing 50. I'm not sure how to be more
-specific or helpful here; I've referenced writing tests and other things that
-can help mitigate logic bugs. /Carol -->
 
 Another solution is reorganizing your data structures so that some references
 express ownership and some references don’t. In this way, we can have cycles
@@ -2111,24 +1782,10 @@ Instead of increasing the `strong_count` in the `Rc` instance by one, calling
 `strong_count`. The difference is the `weak_count` does not need to be 0 in
 order for the `Rc` instance to be cleaned up.
 
-<!-- What is a weak_count? I don't think we've defined that, or strong_count,
-really. Are we just giving another variable to store the count that has no
-input on whether memory is dropped? When is a count stored in strong_count and
-when is it stored in weak_count? -->
-<!-- We're not giving `Rc` another variable, the standard library has defined
-`Rc` to have both the `strong_count` and `weak_count` as fields. I've tried to
-clarify the paragraph above to address your questions. /Carol -->
-
 Strong references are how we can share ownership of an `Rc` instance. Weak
 references don’t express an ownership relationship. They won’t cause a
 reference cycle since any cycle involving some weak references will be broken
 once the strong reference count of values involved is 0.
-
-<!-- Below: I'm struggling to follow here, why do we want to get a value from
-Weak<T>? This section is losing me somewhat, can you slow this down, make sure
-you define anything new up front and give it’s purpose, what we intend it to
-do? -->
-<!-- I've tried to clarify /Carol -->
 
 Because the value that `Weak<T>` references might have been dropped, in order
 to do anything with the value that a `Weak<T>` is pointing to, we have to check
@@ -2222,11 +1879,6 @@ parent should still exist. This is a case for weak references!
 So instead of `Rc`, we’ll make the type of `parent` use `Weak<T>`, specifically
 a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks like this:
 
-<!-- I think because I still don't understand what Weak<T> is, I’m not really
-sure what it means for the parent to use Weak<T>, can you make sure that’s
-clear at this point -->
-<!-- I've tried, I'm not sure though /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -2241,21 +1893,9 @@ struct Node {
 }
 ```
 
-<!-- Can you fill out this line, above; talk through the syntax, too? Also,
-below, how does this mean a node can refer to a parent without owning it?
-What's is actually doing here?-->
-<!-- The first line is importing `Weak` from the standard library; the reader
-really should be familiar with bringing types into scope by this point, don't
-you think? It seems repetitive to explain this every time. /Carol
--->
-
 This way, a node will be able to refer to its parent node, but does not own its
 parent. In Listing 15-24, let’s update `main` to use this new definition so
 that the `leaf` node will have a way to refer to its parent, `branch`:
-
-<!-- Why are we updating it, what are we doing here? Can you make that clear?
--->
-<!-- Done /Carol -->
 
 Filename: src/main.rs
 
@@ -2294,9 +1934,6 @@ fn main() {
 Listing 15-24: A `leaf` node with a `Weak` reference to its parent node,
 `branch`
 
-<!-- Below: looks similar to what? What are we doing with this listing, can you
-talk it through -->
-
 Creating the `leaf` node looks similar to how creating the `leaf` node looked
 in Listing 15-23, with the exception of the `parent` field: `leaf` starts out
 without a parent, so we create a new, empty `Weak` reference instance.
@@ -2309,11 +1946,6 @@ first `println!`:
 leaf parent = None
 ```
 
-<!-- Is this the explanation of the previous program? If so, can you change the
-tone to an active tone, make it clear that it's connected? I'm struggling to
-connect things up -->
-<!-- I've tried, this will be better with wingdings /Carol -->
-
 When we create the `branch` node, it will also have a new `Weak` reference,
 since `branch` does not have a parent node. We still have `leaf` as one of the
 children of `branch`. Once we have the `Node` instance in `branch`, we can
@@ -2321,10 +1953,6 @@ modify `leaf` to give it a `Weak` reference to its parent. We use the
 `borrow_mut` method on the `RefCell` in the `parent` field of `leaf`, then we
 use the `Rc::downgrade` function to create a `Weak` reference to `branch` from
 the `Rc` in `branch.`
-
-<!-- Below: What does this mean for our program, that now leaf recognizes its
-parent? -->
-<!-- Yes /Carol -->
 
 When we print out the parent of `leaf` again, this time we’ll get a `Some`
 variant holding `branch`: `leaf` can now access its parent! When we print out
@@ -2415,21 +2043,11 @@ If we try to access the parent of `leaf` after the end of the scope, we’ll get
 of 1 and a weak count of 0, because the variable `leaf` is now the only
 reference to the `Rc` again.
 
-<!-- Just to clarify, leaf is pointing to itself? -->
-<!-- `leaf` is the variable pointing to the `Rc`, the `Rc` is what has the
-strong and weak counts. /Carol -->
-
 All of the logic that manages the counts and value dropping is built in to
 `Rc` and `Weak` and their implementations of the `Drop` trait. By specifying
 that the relationship from a child to its parent should be a `Weak<T>`
 reference in the definition of `Node`, we’re able to have parent nodes point to
 child nodes and vice versa without creating a reference cycle and memory leaks.
-
-<!-- Ah! This actually cleared up a lot, we specify in the definition that a
-reference should be weak and therefore ignored by the Drop trait, is that
-right? It would really help to specify that up front, can you add something
-like that to the start of the Weak section? -->
-<!-- Done /Carol -->
 
 ## Summary
 

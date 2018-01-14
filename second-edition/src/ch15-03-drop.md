@@ -15,11 +15,6 @@ the system might become overloaded and crash. In Rust, we can specify that a
 particular bit of code should be run whenever a value goes out of scope, and
 the compiler will insert this code automatically.
 
-<!-- Are we saying that any code can be run, and that we can use that to clean
-up, or that this code that can be run is specifically always for clean up? -->
-<!-- I don't understand what the difference between those two choices are?
-/Carol -->
-
 This means we don’t need to be careful about placing clean up code everywhere
 in a program that an instance of a particular type is finished with, but we
 still won’t leak resources!
@@ -29,25 +24,10 @@ We specify the code to run when a value goes out of scope by implementing the
 that takes a mutable reference to `self`. In order to be able to see when Rust
 calls `drop`, let’s implement `drop` with `println!` statements for now.
 
-<!-- Why are we showing this as an example and not an example of it being used
-for clean up? -->
-<!-- To demonstrate the mechanics of implementing the trait and showing when
-this code gets run. It's hard to experience the cleaning up unless we print
-something. /Carol -->
-
 Listing 15-16 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print out `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This will demonstrate when Rust runs the `drop`
 function:
-
-<!-- Is this below just telling us how to adapt it for cleaning up instead?
-Maybe save it for when we have context for it? Instead of a `println!`
-statement, you'd fill in `drop` with whatever cleanup code your smart pointer
-needs to run: -->
-<!-- This is demonstrating what we need to do to use `Drop`, without getting
-into the complexities of what "cleaning up" might mean yet, just to give the
-reader an idea of when this code gets called and that it gets called
-automatically. We're building up to cleaning up. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -79,11 +59,6 @@ implementation for the `drop` method that calls `println!`. The body of the
 instance of your type goes out of scope. We’re choosing to print out some text
 here in order to demonstrate when Rust will call `drop`.
 
-<!-- Where you'd put this code, or where this code would be called? It seems
-laborious to write this clean up code wherever there's a print call? -->
-<!-- I'm not sure how you concluded that from what we had here, could you
-elaborate? /Carol -->
-
 In `main`, we create a new instance of `CustomSmartPointer` and then print out
 `CustomSmartPointer created.`. At the end of `main`, our instance of
 `CustomSmartPointer` will go out of scope, and Rust will call the code we put
@@ -105,14 +80,7 @@ just to give you a visual guide to how the drop method works, but usually you
 would specify the cleanup code that your type needs to run rather than a print
 message.
 
-<!-- Can you wrap this example up by saying what you would actually put in a
-drop method and why?-->
-<!-- Done /Carol -->
-
 #### Dropping a Value Early with `std::mem::drop`
-
-<!-- is this a new method from Drop or the same method? -->
-<!-- This is a new function. /Carol -->
 
 Rust inserts the call to `drop` automatically when a value goes out of scope,
 and it’s not straightforward to disable this functionality. Disabling `drop`
@@ -123,11 +91,6 @@ you may want to force the `drop` method that releases the lock to run so that
 other code in the same scope can acquire the lock. First, let’s see what
 happens if we try to call the `Drop` trait’s `drop` method ourselves by
 modifying the `main` function from Listing 15-16 as shown in Listing 15-17:
-
-<!-- Above: I'm not following why we are doing this, if it's not necessary and
-we aren't going to cover it now anyway -- can you lay out why we're discussing
-this here? -->
-<!-- Done. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -205,19 +168,9 @@ Dropping CustomSmartPointer with data `some data`!
 CustomSmartPointer dropped before the end of main.
 ```
 
-<!-- What's the destructor code, here? We haven't mentioned that before, not in
-this chapter in any case -->
-<!-- I added a definition for destructor a few paragraphs above, the first time
-we see it in an error message. /Carol -->
-
 The ```Dropping CustomSmartPointer with data `some data`!``` is printed between `CustomSmartPointer
 created.` and `CustomSmartPointer dropped before the end of main.`, showing
 that the `drop` method code is called to drop `c` at that point.
-
-<!-- How does this show that the destructor code (is that drop?) is called? Is
-this correct, above?-->
-<!-- The order of what gets printed shows that the drop code is called.
-/Carol-->
 
 Code specified in a `Drop` trait implementation can be used in many ways to
 make cleanup convenient and safe: we could use it to create our own memory
