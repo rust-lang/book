@@ -24,7 +24,7 @@ We specify the code to run when a value goes out of scope by implementing the
 that takes a mutable reference to `self`. In order to be able to see when Rust
 calls `drop`, let’s implement `drop` with `println!` statements for now.
 
-Listing 15-16 shows a `CustomSmartPointer` struct whose only custom
+Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print out `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This will demonstrate when Rust runs the `drop`
 function:
@@ -49,7 +49,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-16: A `CustomSmartPointer` struct that
+<span class="caption">Listing 15-14: A `CustomSmartPointer` struct that
 implements the `Drop` trait, where we would put our clean up code.</span>
 
 The `Drop` trait is included in the prelude, so we don’t need to import it. We
@@ -90,7 +90,7 @@ up a value early. One example is when using smart pointers that manage locks;
 you may want to force the `drop` method that releases the lock to run so that
 other code in the same scope can acquire the lock. First, let’s see what
 happens if we try to call the `Drop` trait’s `drop` method ourselves by
-modifying the `main` function from Listing 15-16 as shown in Listing 15-17:
+modifying the `main` function from Listing 15-14 as shown in Listing 15-15:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -103,7 +103,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-17: Attempting to call the `drop` method from
+<span class="caption">Listing 15-15: Attempting to call the `drop` method from
 the `Drop` trait manually to clean up early</span>
 
 If we try to compile this, we’ll get this error:
@@ -134,7 +134,7 @@ force a value to be cleaned up early, we can use the `std::mem::drop` function.
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
 an argument. `std::mem::drop` is in the prelude, so we can modify `main` from
-Listing 15-16 to call the `drop` function as shown in Listing 15-18:
+Listing 15-14 to call the `drop` function as shown in Listing 15-16:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -157,7 +157,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-18: Calling `std::mem::drop` to explicitly
+<span class="caption">Listing 15-16: Calling `std::mem::drop` to explicitly
 drop a value before it goes out of scope</span>
 
 Running this code will print the following:

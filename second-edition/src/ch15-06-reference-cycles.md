@@ -13,7 +13,7 @@ never reach 0, and the values will never be dropped.
 
 Let’s take a look at how a reference cycle might happen and how to prevent it,
 starting with the definition of the `List` enum and a `tail` method in Listing
-15-28:
+15-25:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,18 +38,18 @@ impl List {
 }
 ```
 
-<span class="caption">Listing 15-28: A cons list definition that holds a
+<span class="caption">Listing 15-25: A cons list definition that holds a
 `RefCell` so that we can modify what a `Cons` variant is referring to</span>
 
-We’re using another variation of the `List` definition from Listing 15-6. The
+We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
 instead of having the ability to modify the `i32` value like we did in Listing
-15-19, we want to be able to modify which `List` a `Cons` variant is pointing
+15-24, we want to be able to modify which `List` a `Cons` variant is pointing
 to. We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant.
 
-In listing 15-29, we’re adding a `main` function that uses the definitions from
-Listing 15-28. This code creates a list in `a`, a list in `b` that points to
+In listing 15-26, we’re adding a `main` function that uses the definitions from
+Listing 15-25. This code creates a list in `a`, a list in `b` that points to
 the list in `a`, and then modifies the list in `a` to point to `b`, which
 creates a reference cycle. There are `println!` statements along the way to
 show what the reference counts are at various points in this process.
@@ -100,7 +100,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-29: Creating a reference cycle of two `List`
+<span class="caption">Listing 15-26: Creating a reference cycle of two `List`
 values pointing to each other</span>
 
 We create an `Rc` instance holding a `List` value in the variable `a` with an
@@ -136,11 +136,11 @@ However, because `a` is still referencing the `Rc` that was in `b`, that `Rc`
 has a count of 1 rather than 0, so the memory the `Rc` has on the heap won’t be
 dropped. The memory will just sit there with a count of one, forever.
 
-To visualize this, we’ve created a reference cycle that looks like Figure 15-30:
+To visualize this, we’ve created a reference cycle that looks like Figure 15-4:
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
-<span class="caption">Figure 15-30: A reference cycle of lists `a` and `b`
+<span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
 pointing to each other</span>
 
 If you uncomment the last `println!` and run the program, Rust will try and
@@ -165,7 +165,7 @@ Another solution is reorganizing your data structures so that some references
 express ownership and some references don’t. In this way, we can have cycles
 made up of some ownership relationships and some non-ownership relationships,
 and only the ownership relationships affect whether a value may be dropped or
-not. In Listing 15-28, we always want `Cons` variants to own their list, so
+not. In Listing 15-25, we always want `Cons` variants to own their list, so
 reorganizing the data structure isn’t possible. Let’s look at an example using
 graphs made up of parent nodes and child nodes to see when non-ownership
 relationships are an appropriate way to prevent reference cycles.
@@ -227,7 +227,7 @@ a `RefCell` in `children` around the `Vec`.
 
 Next, let’s use our struct definition and create one `Node` instance named
 `leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-31:
+with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -254,7 +254,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-31: Creating a `leaf` node with no children
+<span class="caption">Listing 15-27: Creating a `leaf` node with no children
 and a `branch` node with `leaf` as one of its children</span>
 
 We clone the `Rc` in `leaf` and store that in `branch`, meaning the `Node` in
@@ -295,7 +295,7 @@ struct Node {
 ```
 
 This way, a node will be able to refer to its parent node, but does not own its
-parent. In Listing 15-32, let’s update `main` to use this new definition so
+parent. In Listing 15-28, let’s update `main` to use this new definition so
 that the `leaf` node will have a way to refer to its parent, `branch`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -332,11 +332,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-32: A `leaf` node with a `Weak` reference to
+<span class="caption">Listing 15-28: A `leaf` node with a `Weak` reference to
 its parent node, `branch`</span>
 
 Creating the `leaf` node looks similar to how creating the `leaf` node looked
-in Listing 15-31, with the exception of the `parent` field: `leaf` starts out
+in Listing 15-27, with the exception of the `parent` field: `leaf` starts out
 without a parent, so we create a new, empty `Weak` reference instance.
 
 At this point, when we try to get a reference to the parent of `leaf` by using
@@ -358,7 +358,7 @@ the `Rc` in `branch.`
 When we print out the parent of `leaf` again, this time we’ll get a `Some`
 variant holding `branch`: `leaf` can now access its parent! When we print out
 `leaf`, we also avoid the cycle that eventually ended in a stack overflow like
-we had in Listing 15-29: the `Weak` references are printed as `(Weak)`:
+we had in Listing 15-26: the `Weak` references are printed as `(Weak)`:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -376,7 +376,7 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. This will let us see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-33:
+in Listing 15-29:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -424,7 +424,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-33: Creating `branch` in an inner scope and
+<span class="caption">Listing 15-29: Creating `branch` in an inner scope and
 examining strong and weak reference counts</span>
 
 Once `leaf` is created, its `Rc` has a strong count of 1 and a weak count of 0.

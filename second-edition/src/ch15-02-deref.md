@@ -16,7 +16,7 @@ references or smart pointers.
 ### Following the Pointer to the Value with `*`
 
 A regular reference is a type of pointer, and one way to think of a pointer is
-that it’s an arrow to a value stored somewhere else. In Listing 15-8, let’s
+that it’s an arrow to a value stored somewhere else. In Listing 15-6, let’s
 create a reference to an `i32` value then use the dereference operator to
 follow the reference to the data:
 
@@ -32,7 +32,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-8: Using the dereference operator to follow a
+<span class="caption">Listing 15-6: Using the dereference operator to follow a
 reference to an `i32` value</span>
 
 The variable `x` holds an `i32` value, `5`. We set `y` equal to a reference to
@@ -63,9 +63,9 @@ pointing to.
 
 ### Using `Box<T>` Like a Reference
 
-We can rewrite the code in Listing 15-8 to use a `Box<T>` instead of a
+We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
 reference, and the de-reference operator will work the same way as shown in
-Listing 15-9:
+Listing 15-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -79,10 +79,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-9: Using the dereference operator on a
+<span class="caption">Listing 15-7: Using the dereference operator on a
 `Box<i32>`</span>
 
-The only part of Listing 15-8 that we changed was to set `y` to be an instance
+The only part of Listing 15-6 that we changed was to set `y` to be an instance
 of a box pointing to the value in `x` rather than a reference pointing to the
 value of `x`. In the last assertion, we can use the dereference operator to
 follow the box’s pointer in the same way that we did when `y` was a reference.
@@ -97,7 +97,7 @@ behave like references by default. Then we’ll learn about how to add the
 ability to use the dereference operator.
 
 `Box<T>` is ultimately defined as a tuple struct with one element, so Listing
-15-10 defines a `MyBox<T>` type in the same way. We’ll also define a `new`
+15-8 defines a `MyBox<T>` type in the same way. We’ll also define a `new`
 function to match the `new` function defined on `Box<T>`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -112,16 +112,16 @@ impl<T> MyBox<T> {
 }
 ```
 
-<span class="caption">Listing 15-10: Defining a `MyBox<T>` type</span>
+<span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
 
 We define a struct named `MyBox` and declare a generic parameter `T`, since we
 want our type to be able to hold values of any type. `MyBox` is a tuple struct
 with one element of type `T`. The `MyBox::new` function takes one parameter of
 type `T` and returns a `MyBox` instance that holds the value passed in.
 
-Let’s try adding the code from Listing 15-9 to the code in Listing 15-10 and
+Let’s try adding the code from Listing 15-7 to the code in Listing 15-8 and
 changing `main` to use the `MyBox<T>` type we’ve defined instead of `Box<T>`.
-The code in Listing 15-11 won’t compile because Rust doesn’t know how to
+The code in Listing 15-9 won’t compile because Rust doesn’t know how to
 dereference `MyBox`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -136,7 +136,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-11: Attempting to use `MyBox<T>` in the same
+<span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same
 way we were able to use references and `Box<T>`</span>
 
 The compilation error we get is:
@@ -159,7 +159,7 @@ As we discussed in Chapter 10, in order to implement a trait, we need to
 provide implementations for the trait’s required methods. The `Deref` trait,
 provided by the standard library, requires implementing one method named
 `deref` that borrows `self` and returns a reference to the inner data. Listing
-15-12 contains an implementation of `Deref` to add to the definition of `MyBox`:
+15-10 contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -176,7 +176,7 @@ impl<T> Deref for MyBox<T> {
 }
 ```
 
-<span class="caption">Listing 15-12: Implementing `Deref` on `MyBox<T>`</span>
+<span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
 
 The `type Target = T;` syntax defines an associated type for this trait to use.
 Associated types are a slightly different way of declaring a generic parameter
@@ -185,7 +185,7 @@ detail in Chapter 19.
 
 We filled in the body of the `deref` method with `&self.0` so that `deref`
 returns a reference to the value we want to access with the `*` operator. The
-`main` function from Listing 15-11 that calls `*` on the `MyBox<T>` value now
+`main` function from Listing 15-9 that calls `*` on the `MyBox<T>` value now
 compiles and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
@@ -193,7 +193,7 @@ The `Deref` trait’s `deref` method gives the compiler the ability to take a
 value of any type that implements `Deref` and call the `deref` method in order
 to get a `&` reference that it knows how to dereference.
 
-When we typed `*y` in Listing 15-11, what Rust actually ran behind the scenes
+When we typed `*y` in Listing 15-9, what Rust actually ran behind the scenes
 was this code:
 
 ```rust,ignore
@@ -216,7 +216,7 @@ most cases where we use the dereference operator.
 Note that replacing `*` with a call to the `deref` method and then a call to
 `*` happens once, each time we type a `*` in our code. The substitution of `*`
 does not recurse infinitely. That’s how we end up with data of type `i32`,
-which matches the `5` in the `assert_eq!` in Listing 15-11.
+which matches the `5` in the `assert_eq!` in Listing 15-9.
 
 ### Implicit Deref Coercions with Functions and Methods
 
@@ -235,8 +235,8 @@ with `&` and `*`. This feature also lets us write more code that can work for
 either references or smart pointers.
 
 To illustrate deref coercion in action, let’s use the `MyBox<T>` type we
-defined in Listing 15-10 as well as the implementation of `Deref` that we added
-in Listing 15-12. Listing 15-13 shows the definition of a function that has a
+defined in Listing 15-8 as well as the implementation of `Deref` that we added
+in Listing 15-10. Listing 15-11 shows the definition of a function that has a
 string slice parameter:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -247,13 +247,13 @@ fn hello(name: &str) {
 }
 ```
 
-<span class="caption">Listing 15-13: A `hello` function that has the parameter
+<span class="caption">Listing 15-11: A `hello` function that has the parameter
 `name` of type `&str`</span>
 
 We can call the `hello` function with a string slice as an argument, like
 `hello("Rust");` for example. Deref coercion makes it possible for us to call
 `hello` with a reference to a value of type `MyBox<String>`, as shown in
-Listing 15-14:
+Listing 15-12:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -286,20 +286,20 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-14: Calling `hello` with a reference to a
+<span class="caption">Listing 15-12: Calling `hello` with a reference to a
 `MyBox<String>`, which works because of deref coercion</span>
 
 Here we’re calling the `hello` function with the argument `&m`, which is a
 reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
-on `MyBox<T>` in Listing 15-12, Rust can turn `&MyBox<String>` into `&String`
+on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
 by calling `deref`. The standard library provides an implementation of `Deref`
 on `String` that returns a string slice, which we can see in the API
 documentation for `Deref`. Rust calls `deref` again to turn the `&String` into
 `&str`, which matches the `hello` function’s definition.
 
 If Rust didn’t implement deref coercion, in order to call `hello` with a value
-of type `&MyBox<String>`, we’d have to write the code in Listing 15-15 instead
-of the code in Listing 15-14:
+of type `&MyBox<String>`, we’d have to write the code in Listing 15-13 instead
+of the code in Listing 15-12:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -332,7 +332,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-15: The code we’d have to write if Rust didn’t
+<span class="caption">Listing 15-13: The code we’d have to write if Rust didn’t
 have deref coercion</span>
 
 The `(*m)` is dereferencing the `MyBox<String>` into a `String`. Then the `&`

@@ -198,11 +198,11 @@ of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
 an `i32` plus the size of a `List`. To figure out how much memory the `List`
 type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
-`List`, and this continues infinitely, as shown in Figure 15-5.
+`List`, and this continues infinitely, as shown in Figure 15-1.
 
 <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 15-5: An infinite `List` consisting of infinite
+<span class="caption">Figure 15-1: An infinite `List` consisting of infinite
 `Cons` variants</span>
 
 ### Using `Box<T>` to Get a Recursive Type with a Known Size
@@ -232,7 +232,7 @@ is now more like the items being next to one another rather than inside one
 another.
 
 We can change the definition of the `List` enum from Listing 15-2 and the usage
-of the `List` from Listing 15-3 to the code in Listing 15-6, which will compile:
+of the `List` from Listing 15-3 to the code in Listing 15-5, which will compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -252,7 +252,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-6: Definition of `List` that uses `Box<T>` in
+<span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
 order to have a known size</span>
 
 The `Cons` variant will need the size of an `i32` plus the space to store the
@@ -260,12 +260,12 @@ box’s pointer data. The `Nil` variant stores no values, so it needs less space
 than the `Cons` variant. We now know that any `List` value will take up the
 size of an `i32` plus the size of a box’s pointer data. By using a box, we’ve
 broken the infinite, recursive chain so the compiler is able to figure out the
-size it needs to store a `List` value. Figure 15-7 shows what the `Cons`
+size it needs to store a `List` value. Figure 15-2 shows what the `Cons`
 variant looks like now:
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
-<span class="caption">Figure 15-7: A `List` that is not infinitely sized since
+<span class="caption">Figure 15-2: A `List` that is not infinitely sized since
 `Cons` holds a `Box`</span>
 
 Boxes only provide the indirection and heap allocation; they don’t have any

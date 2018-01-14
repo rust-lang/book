@@ -256,11 +256,11 @@ of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
 an `i32` plus the size of a `List`. To figure out how much memory the `List`
 type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
-`List`, and this continues infinitely, as shown in Figure 15-5.
+`List`, and this continues infinitely, as shown in Figure 15-1.
 
 <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
-Figure 15-5: An infinite `List` consisting of infinite `Cons` variants
+Figure 15-1: An infinite `List` consisting of infinite `Cons` variants
 
 ### Using `Box<T>` to Get a Recursive Type with a Known Size
 
@@ -289,7 +289,7 @@ is now more like the items being next to one another rather than inside one
 another.
 
 We can change the definition of the `List` enum from Listing 15-2 and the usage
-of the `List` from Listing 15-3 to the code in Listing 15-6, which will compile:
+of the `List` from Listing 15-3 to the code in Listing 15-5, which will compile:
 
 Filename: src/main.rs
 
@@ -309,7 +309,7 @@ fn main() {
 }
 ```
 
-Listing 15-6: Definition of `List` that uses `Box<T>` in order to have a known
+Listing 15-5: Definition of `List` that uses `Box<T>` in order to have a known
 size
 
 The `Cons` variant will need the size of an `i32` plus the space to store the
@@ -317,12 +317,12 @@ box’s pointer data. The `Nil` variant stores no values, so it needs less space
 than the `Cons` variant. We now know that any `List` value will take up the
 size of an `i32` plus the size of a box’s pointer data. By using a box, we’ve
 broken the infinite, recursive chain so the compiler is able to figure out the
-size it needs to store a `List` value. Figure 15-7 shows what the `Cons`
+size it needs to store a `List` value. Figure 15-2 shows what the `Cons`
 variant looks like now:
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
-Figure 15-7: A `List` that is not infinitely sized since `Cons` holds a `Box`
+Figure 15-2: A `List` that is not infinitely sized since `Cons` holds a `Box`
 
 Boxes only provide the indirection and heap allocation; they don’t have any
 other special abilities like those we’ll see with the other smart pointer
@@ -357,7 +357,7 @@ references or smart pointers.
 ### Following the Pointer to the Value with `*`
 
 A regular reference is a type of pointer, and one way to think of a pointer is
-that it’s an arrow to a value stored somewhere else. In Listing 15-8, let’s
+that it’s an arrow to a value stored somewhere else. In Listing 15-6, let’s
 create a reference to an `i32` value then use the dereference operator to
 follow the reference to the data:
 
@@ -373,7 +373,7 @@ fn main() {
 }
 ```
 
-Listing 15-8: Using the dereference operator to follow a reference to an `i32`
+Listing 15-6: Using the dereference operator to follow a reference to an `i32`
 value
 
 The variable `x` holds an `i32` value, `5`. We set `y` equal to a reference to
@@ -404,9 +404,9 @@ pointing to.
 
 ### Using `Box<T>` Like a Reference
 
-We can rewrite the code in Listing 15-8 to use a `Box<T>` instead of a
+We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
 reference, and the de-reference operator will work the same way as shown in
-Listing 15-9:
+Listing 15-7:
 
 Filename: src/main.rs
 
@@ -420,9 +420,9 @@ fn main() {
 }
 ```
 
-Listing 15-9: Using the dereference operator on a `Box<i32>`
+Listing 15-7: Using the dereference operator on a `Box<i32>`
 
-The only part of Listing 15-8 that we changed was to set `y` to be an instance
+The only part of Listing 15-6 that we changed was to set `y` to be an instance
 of a box pointing to the value in `x` rather than a reference pointing to the
 value of `x`. In the last assertion, we can use the dereference operator to
 follow the box’s pointer in the same way that we did when `y` was a reference.
@@ -437,7 +437,7 @@ behave like references by default. Then we’ll learn about how to add the
 ability to use the dereference operator.
 
 `Box<T>` is ultimately defined as a tuple struct with one element, so Listing
-15-10 defines a `MyBox<T>` type in the same way. We’ll also define a `new`
+15-8 defines a `MyBox<T>` type in the same way. We’ll also define a `new`
 function to match the `new` function defined on `Box<T>`:
 
 Filename: src/main.rs
@@ -452,16 +452,16 @@ impl<T> MyBox<T> {
 }
 ```
 
-Listing 15-10: Defining a `MyBox<T>` type
+Listing 15-8: Defining a `MyBox<T>` type
 
 We define a struct named `MyBox` and declare a generic parameter `T`, since we
 want our type to be able to hold values of any type. `MyBox` is a tuple struct
 with one element of type `T`. The `MyBox::new` function takes one parameter of
 type `T` and returns a `MyBox` instance that holds the value passed in.
 
-Let’s try adding the code from Listing 15-9 to the code in Listing 15-10 and
+Let’s try adding the code from Listing 15-7 to the code in Listing 15-8 and
 changing `main` to use the `MyBox<T>` type we’ve defined instead of `Box<T>`.
-The code in Listing 15-11 won’t compile because Rust doesn’t know how to
+The code in Listing 15-9 won’t compile because Rust doesn’t know how to
 dereference `MyBox`:
 
 Filename: src/main.rs
@@ -476,7 +476,7 @@ fn main() {
 }
 ```
 
-Listing 15-11: Attempting to use `MyBox<T>` in the same way we were able to use
+Listing 15-9: Attempting to use `MyBox<T>` in the same way we were able to use
 references and `Box<T>`
 
 The compilation error we get is:
@@ -499,7 +499,7 @@ As we discussed in Chapter 10, in order to implement a trait, we need to
 provide implementations for the trait’s required methods. The `Deref` trait,
 provided by the standard library, requires implementing one method named
 `deref` that borrows `self` and returns a reference to the inner data. Listing
-15-12 contains an implementation of `Deref` to add to the definition of `MyBox`:
+15-10 contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 Filename: src/main.rs
 
@@ -515,7 +515,7 @@ impl<T> Deref for MyBox<T> {
 }
 ```
 
-Listing 15-12: Implementing `Deref` on `MyBox<T>`
+Listing 15-10: Implementing `Deref` on `MyBox<T>`
 
 The `type Target = T;` syntax defines an associated type for this trait to use.
 Associated types are a slightly different way of declaring a generic parameter
@@ -524,7 +524,7 @@ detail in Chapter 19.
 
 We filled in the body of the `deref` method with `&self.0` so that `deref`
 returns a reference to the value we want to access with the `*` operator. The
-`main` function from Listing 15-11 that calls `*` on the `MyBox<T>` value now
+`main` function from Listing 15-9 that calls `*` on the `MyBox<T>` value now
 compiles and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
@@ -532,7 +532,7 @@ The `Deref` trait’s `deref` method gives the compiler the ability to take a
 value of any type that implements `Deref` and call the `deref` method in order
 to get a `&` reference that it knows how to dereference.
 
-When we typed `*y` in Listing 15-11, what Rust actually ran behind the scenes
+When we typed `*y` in Listing 15-9, what Rust actually ran behind the scenes
 was this code:
 
 ```
@@ -555,7 +555,7 @@ most cases where we use the dereference operator.
 Note that replacing `*` with a call to the `deref` method and then a call to
 `*` happens once, each time we type a `*` in our code. The substitution of `*`
 does not recurse infinitely. That’s how we end up with data of type `i32`,
-which matches the `5` in the `assert_eq!` in Listing 15-11.
+which matches the `5` in the `assert_eq!` in Listing 15-9.
 
 ### Implicit Deref Coercions with Functions and Methods
 
@@ -574,8 +574,8 @@ with `&` and `*`. This feature also lets us write more code that can work for
 either references or smart pointers.
 
 To illustrate deref coercion in action, let’s use the `MyBox<T>` type we
-defined in Listing 15-10 as well as the implementation of `Deref` that we added
-in Listing 15-12. Listing 15-13 shows the definition of a function that has a
+defined in Listing 15-8 as well as the implementation of `Deref` that we added
+in Listing 15-10. Listing 15-11 shows the definition of a function that has a
 string slice parameter:
 
 Filename: src/main.rs
@@ -586,12 +586,12 @@ fn hello(name: &str) {
 }
 ```
 
-Listing 15-13: A `hello` function that has the parameter `name` of type `&str`
+Listing 15-11: A `hello` function that has the parameter `name` of type `&str`
 
 We can call the `hello` function with a string slice as an argument, like
 `hello("Rust");` for example. Deref coercion makes it possible for us to call
 `hello` with a reference to a value of type `MyBox<String>`, as shown in
-Listing 15-14:
+Listing 15-12:
 
 Filename: src/main.rs
 
@@ -602,20 +602,20 @@ fn main() {
 }
 ```
 
-Listing 15-14: Calling `hello` with a reference to a `MyBox<String>`, which
+Listing 15-12: Calling `hello` with a reference to a `MyBox<String>`, which
 works because of deref coercion
 
 Here we’re calling the `hello` function with the argument `&m`, which is a
 reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
-on `MyBox<T>` in Listing 15-12, Rust can turn `&MyBox<String>` into `&String`
+on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
 by calling `deref`. The standard library provides an implementation of `Deref`
 on `String` that returns a string slice, which we can see in the API
 documentation for `Deref`. Rust calls `deref` again to turn the `&String` into
 `&str`, which matches the `hello` function’s definition.
 
 If Rust didn’t implement deref coercion, in order to call `hello` with a value
-of type `&MyBox<String>`, we’d have to write the code in Listing 15-15 instead
-of the code in Listing 15-14:
+of type `&MyBox<String>`, we’d have to write the code in Listing 15-13 instead
+of the code in Listing 15-12:
 
 Filename: src/main.rs
 
@@ -626,7 +626,7 @@ fn main() {
 }
 ```
 
-Listing 15-15: The code we’d have to write if Rust didn’t have deref coercion
+Listing 15-13: The code we’d have to write if Rust didn’t have deref coercion
 
 The `(*m)` is dereferencing the `MyBox<String>` into a `String`. Then the `&`
 and `[..]` are taking a string slice of the `String` that is equal to the whole
@@ -695,7 +695,7 @@ We specify the code to run when a value goes out of scope by implementing the
 that takes a mutable reference to `self`. In order to be able to see when Rust
 calls `drop`, let’s implement `drop` with `println!` statements for now.
 
-Listing 15-8 shows a `CustomSmartPointer` struct whose only custom
+Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print out `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This will demonstrate when Rust runs the `drop`
 function:
@@ -720,7 +720,7 @@ fn main() {
 }
 ```
 
-Listing 15-8: A `CustomSmartPointer` struct that implements the `Drop` trait,
+Listing 15-14: A `CustomSmartPointer` struct that implements the `Drop` trait,
 where we would put our clean up code.
 
 The `Drop` trait is included in the prelude, so we don’t need to import it. We
@@ -761,7 +761,7 @@ up a value early. One example is when using smart pointers that manage locks;
 you may want to force the `drop` method that releases the lock to run so that
 other code in the same scope can acquire the lock. First, let’s see what
 happens if we try to call the `Drop` trait’s `drop` method ourselves by
-modifying the `main` function from Listing 15-8 as shown in Listing 15-9:
+modifying the `main` function from Listing 15-14 as shown in Listing 15-15:
 
 Filename: src/main.rs
 
@@ -774,7 +774,7 @@ fn main() {
 }
 ```
 
-Listing 15-9: Attempting to call the `drop` method from the `Drop` trait
+Listing 15-15: Attempting to call the `drop` method from the `Drop` trait
 manually to clean up early
 
 If we try to compile this, we’ll get this error:
@@ -805,7 +805,7 @@ force a value to be cleaned up early, we can use the `std::mem::drop` function.
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
 an argument. `std::mem::drop` is in the prelude, so we can modify `main` from
-Listing 15-8 to call the `drop` function as shown in Listing 15-10:
+Listing 15-14 to call the `drop` function as shown in Listing 15-16:
 
 Filename: src/main.rs
 
@@ -818,7 +818,7 @@ fn main() {
 }
 ```
 
-Listing 15-10: Calling `std::mem::drop` to explicitly drop a value before it
+Listing 15-16: Calling `std::mem::drop` to explicitly drop a value before it
 goes out of scope
 
 Running this code will print the following:
@@ -880,13 +880,13 @@ concurrency will cover how to do reference counting in multithreaded programs.
 
 ### Using `Rc<T>` to Share Data
 
-Let’s return to our cons list example from Listing 15-6, as we defined it using
+Let’s return to our cons list example from Listing 15-5, as we defined it using
 `Box<T>`. This time, we want to create two lists that both share ownership of a
-third list, which conceptually will look something like Figure 15-11:
+third list, which conceptually will look something like Figure 15-3:
 
 <img alt="Two lists that share ownership of a third list" src="img/trpl15-03.svg" class="center" />
 
-Figure 15-11: Two lists, `b` and `c`, sharing ownership of a third list, `a`
+Figure 15-3: Two lists, `b` and `c`, sharing ownership of a third list, `a`
 
 We’ll create list `a` that contains 5 and then 10, then make two more lists:
 `b` that starts with 3 and `c` that starts with 4. Both `b` and `c` lists will
@@ -894,7 +894,7 @@ then continue on to the first `a` list containing 5 and 10. In other words,
 both lists will try to share the first list containing 5 and 10.
 
 Trying to implement this using our definition of `List` with `Box<T>` won’t
-work, as shown in Listing 15-12:
+work, as shown in Listing 15-17:
 
 Filename: src/main.rs
 
@@ -915,7 +915,7 @@ fn main() {
 }
 ```
 
-Listing 15-12: Demonstrating we’re not allowed to have two lists using `Box<T>`
+Listing 15-17: Demonstrating we’re not allowed to have two lists using `Box<T>`
 that try to share ownership of a third list
 
 If we compile this, we get this error:
@@ -945,7 +945,7 @@ the list itself. The borrow checker wouldn’t let us compile `let a = Cons(10,
 `a` could take a reference to it.
 
 Instead, we’ll change our definition of `List` to use `Rc<T>` in place of
-`Box<T>` as shown here in Listing 15-13. Each `Cons` variant now holds a value
+`Box<T>` as shown here in Listing 15-18. Each `Cons` variant now holds a value
 and an `Rc` pointing to a `List`. When we create `b`, instead of taking
 ownership of `a`, we clone the `Rc` that `a` is holding, which increases the
 number of references from 1 to 2 and lets `a` and `b` share ownership of the
@@ -972,7 +972,7 @@ fn main() {
 }
 ```
 
-Listing 15-13: A definition of `List` that uses `Rc<T>`
+Listing 15-18: A definition of `List` that uses `Rc<T>`
 
 We need to add a `use` statement to bring `Rc` into scope because it’s not in
 the prelude. In `main`, we create the list holding 5 and 10 and store it in a
@@ -992,10 +992,10 @@ memory.
 
 ### Cloning an `Rc<T>` Increases the Reference Count
 
-Let’s change our working example from Listing 15-13 so that we can see the
+Let’s change our working example from Listing 15-18 so that we can see the
 reference counts changing as we create and drop references to the `Rc` in `a`.
 
-In Listing 15-14, we’ll change `main` so that it has an inner scope around list
+In Listing 15-19, we’ll change `main` so that it has an inner scope around list
 `c`, so that we can see how the reference count changes when `c` goes out of
 scope. At each point in the program where the reference count changes, we’ll
 print out the reference count, which we can get by calling the
@@ -1019,7 +1019,7 @@ fn main() {
 }
 ```
 
-Listing 15-14: Printing out the reference count
+Listing 15-19: Printing out the reference count
 
 This will print out:
 
@@ -1184,7 +1184,7 @@ mechanism for sending the messages: the application could choose to put a
 message in the application, send an email, send a text message, or something
 else. Our library doesn’t need to know about that detail; all it needs is
 something that implements a trait we’ll provide called `Messenger`. Listing
-15-15 shows our library code:
+15-20 shows our library code:
 
 Filename: src/lib.rs
 
@@ -1225,7 +1225,7 @@ impl<'a, T> LimitTracker<'a, T>
 }
 ```
 
-Listing 15-15: A library to keep track of how close to a maximum value a value
+Listing 15-20: A library to keep track of how close to a maximum value a value
 is, and warn when the value is at certain levels
 
 One important part of this code is that the `Messenger` trait has one method,
@@ -1244,7 +1244,7 @@ text message when we call `send`, will only keep track of the messages it’s
 told to send. We can create a new instance of the mock object, create a
 `LimitTracker` that uses the mock object, call the `set_value` method on
 `LimitTracker`, then check that the mock object has the messages we expect.
-Listing 15-16 shows an attempt of implementing a mock object to do just that,
+Listing 15-21 shows an attempt of implementing a mock object to do just that,
 but that the borrow checker won’t allow:
 
 Filename: src/lib.rs
@@ -1282,7 +1282,7 @@ mod tests {
 }
 ```
 
-Listing 15-16: An attempt to implement a `MockMessenger` that isn’t allowed by
+Listing 15-21: An attempt to implement a `MockMessenger` that isn’t allowed by
 the borrow checker
 
 This test code defines a `MockMessenger` struct that has a `sent_messages`
@@ -1323,7 +1323,7 @@ definition (feel free to try and see what error message you get).
 
 This is where interior mutability can help! We’re going to store the
 `sent_messages` within a `RefCell`, and then the `send` message will be able to
-modify `sent_messages` to store the messages we’ve seen. Listing 15-17 shows
+modify `sent_messages` to store the messages we’ve seen. Listing 15-22 shows
 what that looks like:
 
 Filename: src/lib.rs
@@ -1359,7 +1359,7 @@ mod tests {
 }
 ```
 
-Listing 15-17: Using `RefCell<T>` to be able to mutate an inner value while the
+Listing 15-22: Using `RefCell<T>` to be able to mutate an inner value while the
 outer value is considered immutable
 
 The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
@@ -1397,8 +1397,8 @@ mutable borrow at any point in time.
 
 If we try to violate these rules, rather than getting a compiler error like we
 would with references, the implementation of `RefCell<T>` will `panic!` at
-runtime. Listing 15-18 shows a modification to the implementation of `send`
-from Listing 15-17 where we’re deliberately trying to create two mutable
+runtime. Listing 15-23 shows a modification to the implementation of `send`
+from Listing 15-22 where we’re deliberately trying to create two mutable
 borrows active for the same scope in order to illustrate that `RefCell<T>`
 prevents us from doing this at runtime:
 
@@ -1416,7 +1416,7 @@ impl Messenger for MockMessenger {
 }
 ```
 
-Listing 15-18: Creating two mutable references in the same scope to see that
+Listing 15-23: Creating two mutable references in the same scope to see that
 `RefCell<T>` will panic
 
 We create a variable `one_borrow` for the `RefMut` smart pointer returned from
@@ -1453,11 +1453,11 @@ A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 immutable access to that data. If we have an `Rc<T>` that holds a `RefCell<T>`,
 then we can get a value that can have multiple owners *and* that we can mutate!
 
-For example, recall the cons list example from Listing 15-13 where we used
+For example, recall the cons list example from Listing 15-18 where we used
 `Rc<T>` to let us have multiple lists share ownership of another list. Because
 `Rc<T>` only holds immutable values, we aren’t able to change any of the values
 in the list once we’ve created them. Let’s add in `RefCell<T>` to get the
-ability to change the values in the lists. Listing 15-19 shows that by using a
+ability to change the values in the lists. Listing 15-24 shows that by using a
 `RefCell<T>` in the `Cons` definition, we’re allowed to modify the value stored
 in all the lists:
 
@@ -1490,7 +1490,7 @@ fn main() {
 }
 ```
 
-Listing 15-19: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
+Listing 15-24: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
 
 We create a value that’s an instance of `Rc<RefCell<i32>` and store it in a
 variable named `value` so we can access it directly later. Then we create a
@@ -1500,7 +1500,7 @@ rather than transferring ownership from `value` to `a` or having `a` borrow
 from `value`.
 
 We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and
-`c`, they can both refer to `a`, the same as we did in Listing 15-13.
+`c`, they can both refer to `a`, the same as we did in Listing 15-18.
 
 Once we have the lists in `a`, `b`, and `c` created, we add 10 to the value in
 `value`. We do this by calling `borrow_mut` on `value`, which uses the
@@ -1547,7 +1547,7 @@ never reach 0, and the values will never be dropped.
 
 Let’s take a look at how a reference cycle might happen and how to prevent it,
 starting with the definition of the `List` enum and a `tail` method in Listing
-15-20:
+15-25:
 
 Filename: src/main.rs
 
@@ -1572,18 +1572,18 @@ impl List {
 }
 ```
 
-Listing 15-20: A cons list definition that holds a `RefCell` so that we can
+Listing 15-25: A cons list definition that holds a `RefCell` so that we can
 modify what a `Cons` variant is referring to
 
-We’re using another variation of the `List` definition from Listing 15-6. The
+We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
 instead of having the ability to modify the `i32` value like we did in Listing
-15-19, we want to be able to modify which `List` a `Cons` variant is pointing
+15-24, we want to be able to modify which `List` a `Cons` variant is pointing
 to. We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant.
 
-In listing 15-21, we’re adding a `main` function that uses the definitions from
-Listing 15-20. This code creates a list in `a`, a list in `b` that points to
+In listing 15-26, we’re adding a `main` function that uses the definitions from
+Listing 15-25. This code creates a list in `a`, a list in `b` that points to
 the list in `a`, and then modifies the list in `a` to point to `b`, which
 creates a reference cycle. There are `println!` statements along the way to
 show what the reference counts are at various points in this process.
@@ -1616,7 +1616,7 @@ fn main() {
 }
 ```
 
-Listing 15-21: Creating a reference cycle of two `List` values pointing to each
+Listing 15-26: Creating a reference cycle of two `List` values pointing to each
 other
 
 We create an `Rc` instance holding a `List` value in the variable `a` with an
@@ -1652,11 +1652,11 @@ However, because `a` is still referencing the `Rc` that was in `b`, that `Rc`
 has a count of 1 rather than 0, so the memory the `Rc` has on the heap won’t be
 dropped. The memory will just sit there with a count of one, forever.
 
-To visualize this, we’ve created a reference cycle that looks like Figure 15-22:
+To visualize this, we’ve created a reference cycle that looks like Figure 15-4:
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
-Figure 15-22: A reference cycle of lists `a` and `b` pointing to each other
+Figure 15-4: A reference cycle of lists `a` and `b` pointing to each other
 
 If you uncomment the last `println!` and run the program, Rust will try and
 print this cycle out with `a` pointing to `b` pointing to `a` and so forth
@@ -1680,7 +1680,7 @@ Another solution is reorganizing your data structures so that some references
 express ownership and some references don’t. In this way, we can have cycles
 made up of some ownership relationships and some non-ownership relationships,
 and only the ownership relationships affect whether a value may be dropped or
-not. In Listing 15-20, we always want `Cons` variants to own their list, so
+not. In Listing 15-25, we always want `Cons` variants to own their list, so
 reorganizing the data structure isn’t possible. Let’s look at an example using
 graphs made up of parent nodes and child nodes to see when non-ownership
 relationships are an appropriate way to prevent reference cycles.
@@ -1742,7 +1742,7 @@ a `RefCell` in `children` around the `Vec`.
 
 Next, let’s use our struct definition and create one `Node` instance named
 `leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-23:
+with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
 
 Filename: src/main.rs
 
@@ -1760,7 +1760,7 @@ fn main() {
 }
 ```
 
-Listing 15-23: Creating a `leaf` node with no children and a `branch` node with
+Listing 15-27: Creating a `leaf` node with no children and a `branch` node with
 `leaf` as one of its children
 
 We clone the `Rc` in `leaf` and store that in `branch`, meaning the `Node` in
@@ -1801,7 +1801,7 @@ struct Node {
 ```
 
 This way, a node will be able to refer to its parent node, but does not own its
-parent. In Listing 15-24, let’s update `main` to use this new definition so
+parent. In Listing 15-28, let’s update `main` to use this new definition so
 that the `leaf` node will have a way to refer to its parent, `branch`:
 
 Filename: src/main.rs
@@ -1828,11 +1828,11 @@ fn main() {
 }
 ```
 
-Listing 15-24: A `leaf` node with a `Weak` reference to its parent node,
+Listing 15-28: A `leaf` node with a `Weak` reference to its parent node,
 `branch`
 
 Creating the `leaf` node looks similar to how creating the `leaf` node looked
-in Listing 15-23, with the exception of the `parent` field: `leaf` starts out
+in Listing 15-27, with the exception of the `parent` field: `leaf` starts out
 without a parent, so we create a new, empty `Weak` reference instance.
 
 At this point, when we try to get a reference to the parent of `leaf` by using
@@ -1854,7 +1854,7 @@ the `Rc` in `branch.`
 When we print out the parent of `leaf` again, this time we’ll get a `Some`
 variant holding `branch`: `leaf` can now access its parent! When we print out
 `leaf`, we also avoid the cycle that eventually ended in a stack overflow like
-we had in Listing 15-21: the `Weak` references are printed as `(Weak)`:
+we had in Listing 15-26: the `Weak` references are printed as `(Weak)`:
 
 ```
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -1872,7 +1872,7 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. This will let us see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-25:
+in Listing 15-29:
 
 Filename: src/main.rs
 
@@ -1920,7 +1920,7 @@ fn main() {
 }
 ```
 
-Listing 15-25: Creating `branch` in an inner scope and examining strong and
+Listing 15-29: Creating `branch` in an inner scope and examining strong and
 weak reference counts
 
 Once `leaf` is created, its `Rc` has a strong count of 1 and a weak count of 0.
