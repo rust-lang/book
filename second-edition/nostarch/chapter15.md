@@ -139,22 +139,22 @@ A cons list is a list where each item in the list contains two things: the
 value of the current item and the next item. The last item in the list contains
 only a value called `Nil` without a next item.
 
-> #### More Information About the Cons List
->
-> A *cons list* is a data structure that comes from the Lisp programming
-> language and its dialects. In Lisp, the `cons` function (short for “construct
-> function”) constructs a new list from its two arguments, which usually are a
-> single value and another list.
->
-> The cons function concept has made its way into more general functional
-> programming jargon; “to cons x onto y” informally means to construct a new
-> container instance by putting the element x at the start of this new
-> container, followed by the container y.
->
-> A cons list is produced by recursively calling the `cons` function.
-> The canonical name to denote the base case of the recursion is `Nil`, which
-> announces the end of the list. Note that this is not the same as the “null”
-> or “nil” concept from Chapter 6, which is an invalid or absent value.
+#### More Information About the Cons List
+
+A *cons list* is a data structure that comes from the Lisp programming language
+and its dialects. In Lisp, the `cons` function (short for “construct function”)
+constructs a new list from its two arguments, which usually are a single value
+and another list.
+
+The cons function concept has made its way into more general functional
+programming jargon; “to cons x onto y” informally means to construct a new
+container instance by putting the element x at the start of this new container,
+followed by the container y.
+
+A cons list is produced by recursively calling the `cons` function. The
+canonical name to denote the base case of the recursion is `Nil`, which
+announces the end of the list. Note that this is not the same as the “null” or
+“nil” concept from Chapter 6, which is an invalid or absent value.
 
 Note that while functional programming languages use cons lists frequently,
 this isn’t a commonly used data structure in Rust. Most of the time when you
