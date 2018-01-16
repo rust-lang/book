@@ -89,9 +89,7 @@ Listing 10-18 with annotations showing the lifetimes of the variables:
     }                     // -+     |
                           //        |
     println!("r: {}", r); //        |
-                          //        |
-                          // -------+
-}
+}                         // -------+
 ```
 
 <span class="caption">Listing 10-19: Annotations of the lifetimes of `r` and
