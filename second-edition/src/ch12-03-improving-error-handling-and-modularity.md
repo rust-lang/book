@@ -193,8 +193,8 @@ trade-off.
 > make these copies only once, and our filename and query string are very
 > small. It’s better to have a working program that’s a bit inefficient than to
 > try to hyperoptimize code on your first pass. As you become more experienced
-> with Rust, it’ll be easier to start with the desirable solution, but for now,
-> it’s perfectly acceptable to call `clone`.
+> with Rust, it’ll be easier to start with the most efficient solution, but for
+> now, it’s perfectly acceptable to call `clone`.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config`, and we updated the code that
