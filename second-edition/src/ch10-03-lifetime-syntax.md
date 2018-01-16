@@ -81,16 +81,16 @@ Listing 10-18 with annotations showing the lifetimes of the variables:
 
 ```rust,ignore
 {
-    let r;         // -------+-- 'a
-                   //        |
-    {              //        |
-        let x = 5; // -+-----+-- 'b
-        r = &x;    //  |     |
-    }              // -+     |
-                   //        |
-    println!("r: {}", r); // |
-                   //        |
-                   // -------+
+    let r;                // -------+-- 'a
+                          //        |
+    {                     //        |
+        let x = 5;        // -+-----+-- 'b
+        r = &x;           //  |     |
+    }                     // -+     |
+                          //        |
+    println!("r: {}", r); //        |
+                          //        |
+                          // -------+
 }
 ```
 
