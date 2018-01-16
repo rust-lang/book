@@ -3,7 +3,7 @@
 
 # Writing Automated Tests
 
-In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that
+In his 1972 essay, “The Humble Programmer,” Edsger W. Dijkstra said that
 “Program testing can be a very effective way to show the presence of bugs, but
 it is hopelessly inadequate for showing their absence.” That doesn’t mean we
 shouldn’t try to test as much as we can! Correctness in our programs is the
@@ -250,13 +250,13 @@ let’s look at some macros other than `panic!` that are useful in tests.
 
 The `assert!` macro, provided by the standard library, is useful when you want
 to ensure that some condition in a test evaluates to `true`. We give the
-`assert!` macro an argument that evaluates to a boolean. If the value is
+`assert!` macro an argument that evaluates to a Boolean. If the value is
 `true`, `assert!` does nothing and the test passes. If the value is `false`,
 the `assert!` macro calls the `panic!` macro, which causes the test to fail.
 Using the `assert!` macro helps us check that our code is functioning in the
 way we intend.
 
-In Chapter 5, Listing 5-9, we used a `Rectangle` struct and a `can_hold`
+In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
 method, which are repeated here in Listing 11-5. Let’s put this code in the
 *src/lib.rs* file and write some tests for it using the `assert!` macro.
 
@@ -279,7 +279,7 @@ impl Rectangle {
 Listing 11-5: Using the `Rectangle` struct and its `can_hold` method from
 Chapter 5
 
-The `can_hold` method returns a boolean, which means it’s a perfect use case
+The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a length of 8 and
 a width of 7, and asserting that it can hold another `Rectangle` instance that
@@ -472,6 +472,7 @@ failures:
         thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
   left: `4`,
  right: `5`', src/lib.rs:11:8
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::it_adds_two
@@ -574,8 +575,8 @@ test tests::greeting_contains_name ... FAILED
 failures:
 
 ---- tests::greeting_contains_name stdout ----
-    thread 'tests::greeting_contains_name' panicked at 'assertion failed:
-    result.contains("Carol")', src/lib.rs:12:8
+        thread 'tests::greeting_contains_name' panicked at 'assertion failed:
+result.contains("Carol")', src/lib.rs:12:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -603,8 +604,8 @@ Now when we run the test, we’ll get a more informative error message:
 
 ```
 ---- tests::greeting_contains_name stdout ----
-    thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
-    name, value was `Hello!`', src/lib.rs:12:8
+        thread 'tests::greeting_contains_name' panicked at 'Greeting did not
+contain name, value was `Hello!`', src/lib.rs:12:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
