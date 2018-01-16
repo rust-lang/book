@@ -1,33 +1,30 @@
-## Closures: Anonymous Functions that Can Capture Their Environment
+## 클로저: 환경을 캡쳐할 수 있는 익명 함수
 
-Rust’s *closures* are anonymous functions you can save in a variable or pass as
-arguments to other functions. You can create the closure in one place, and then
-call the closure to evaluate it in a different context. Unlike functions,
-closures can capture values from the scope in which they’re called. We’ll
-demonstrate how these closure features allow for code reuse and behavior
-customization.
+러스트의 *클로저*는 변수에 저정하거나 다른 함수에 인자로 넘길 수 있는 익명함수
+입니다. 한 곳에서 클로저를 만들고 다른 문맥에서 그것을 평가하기 위해 호출할 수
+있습니다. 함수와 다르게 클로저는 그들이 호출되는 스코프로 부터 변수들을 캡쳐할
+수 있습니다. 어떻게 이 클로저 특성이 코드 재사용과 행위 맞춤변경을 혀용하는지
+예를 들어 보여줄 것 입니다.
 
-### Creating an Abstraction of Behavior with Closures
+### 클로저로 행위를 추상화 하기
 
-Let’s work on an example of a situation in which it’s useful to store a closure
-to be executed at a later time. Along the way, we’ll talk about the syntax of
-closures, type inference, and traits.
+클로저를 나중에 실행하기 위해 저장하는 것이 유용한 상황에 대한 예제로 작업해
+봅시다. 따라가다 보면, 클로저 문법과 타입 추론, 트레잇에 대해 이야기 할 것
+입니다.
 
-Consider this hypothetical situation: we work at a startup that’s making an app
-to generate custom exercise workout plans. The backend is written in Rust, and
-the algorithm that generates the workout plan takes into account many different
-factors, such as the app user’s age, body mass index, preferences, recent
-workouts, and an intensity number they specify. The actual algorithm used isn’t
-important in this example; what’s important is that this calculation takes a
-few seconds. We want to call this algorithm only when we need to and only call
-it once, so we don’t make the user wait more than necessary.
+이런 가상의 상황을 생각해 봅시다: 우리는 맞춤 연습 운동계획을 생성하는 앱을
+만드는 스타트업에서 일합니다. 백엔드는 러스트로 작성되어 있고, 운동 계획을 생성
+하는 알고리즘은 앱 사용자의 나이, 체질량 지소, 선호도, 최근 운동들과 그들이
+지정한 강도 숫자와 같은 많은 다른 요소들을 고려합니다. 이 예제에서 사용되는
+실제 알고리즘은 중요하지 않습니다; 중요한 것인 이 알고리즘은 몇 초가 걸린다는
+것 입니다. 이 알고리즘을 우리가 필요할 때 한번만 호출하기를 원하고, 그래서 사용
+자가 필요 이상으로 기다리지 않게 만들고 싶습니다.
 
-We’ll simulate calling this hypothetical algorithm with the
-`simulated_expensive_calculation` function shown in Listing 13-1, which will
-print `calculating slowly...`, wait for two seconds, and then return whatever
-number we passed in:
+우리는 리스트 13-1 에 보여지는 `simulated_expensive_calculation` 함수를 사용해서
+이 가상의 알고리즘 호출을 실험할 것입니다. 이 함수는 `calculating slowly...` 을
+출력하고, 2초를 기다린 다음, 인자로 넘어온 어떤 값이든 돌려줍니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 use std::thread;
@@ -40,26 +37,24 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 }
 ```
 
-<span class="caption">Listing 13-1: A function to stand in for a hypothetical
-calculation that takes about two seconds to run</span>
+<span class="caption">리스트 13-1: 실행시간이 2초 걸리는 가상의 계산을 대신하는
+함수</span>
 
-Next is the `main` function that contains the parts of the workout app
-important for this example. This function represents the code that the app will
-call when a user asks for a workout plan. Because the interaction with the
-app’s frontend isn’t relevant to the use of closures, we’ll hardcode values
-representing inputs to our program and print the outputs.
+다음은 이 예제에서 중요한 운동 앱의 일부를 담고 있는 `main` 함수 입니다.
+이 함수는 사용자가 운동 계획을 물어볼 때 앱이 호출 할 코드를 나타냅니다.
+앱의 프론트엔와의 상호작용은 클로저를 사용하기에 적합하지 않기 때문에, 우리 프로
+그램에 대한 입력을 나타내는 값을 코드상에 넣어두고 결과를 출력 할 것 입니다.
 
-The required inputs are:
+필요한 입력들은:
 
-* *An intensity number from the user*, which is specified when they request
-  a workout to indicate whether they want a low-intensity workout or a
-  high-intensity workout.
-* *A random number* that will generate some variety in the workout plans.
+* *사용자로 부터의 강도 숫자*, 이것은 그들이 운동을 요청할 때 지정되며, 낮은 
+  강도 운동을 원하는지 혹은 고강도 운동을 원하는지를 나타냅니다.
+* *임의의 숫자*는 운동 계획에서 어느 정도의 다양함을 생성할 것 입니다.
 
-The output will be the recommended workout plan. Listing 13-2 shows the `main`
-function we’ll use:
+결과는 추천 운동 계획이 될 것 입니다. 리스트 13-2 에 우리가 사용할 `main` 함수
+가 있습니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일이름: src/main.rs</span>
 
 ```rust
 fn main() {
