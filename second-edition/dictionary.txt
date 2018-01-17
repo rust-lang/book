@@ -278,7 +278,6 @@ newtypes
 nitty
 nocapture
 nomicon
-Nomicon
 nonequality
 NotFound
 null's
@@ -353,10 +352,10 @@ runtime
 runtimes
 Rustacean
 Rustaceans
-Rustonomicon
 rUsT
 rustc
 rustdoc
+Rustonomicon
 rustfmt
 rustup
 screenshot
