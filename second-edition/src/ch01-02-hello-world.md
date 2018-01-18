@@ -193,7 +193,7 @@ care of building your code. As you write more complex Rust programs, you’ll
 want to add dependencies, and if you start off using Cargo, that will be a lot
 easier to do.
 
-As the vast, vast majority of Rust projects use Cargo, we will assume that
+As the vast majority of Rust projects use Cargo, we will assume that
 you’re using it for the rest of the book. Cargo comes installed with Rust
 itself, if you used the official installers as covered in the Installation
 chapter. If you installed Rust through some other means, you can check if you
