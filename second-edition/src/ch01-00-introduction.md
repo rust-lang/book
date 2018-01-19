@@ -1,15 +1,47 @@
 # Introduction
 
 Welcome to “The Rust Programming Language,” an introductory book about Rust.
-Rust is a fast, friendly, and fearless programming language. As a
-general-purpose programming language, Rust is used in production by hundreds of
-companies, large and small, for a variety of tasks, such as command line tools,
-web services, DevOps tooling, embedded devices, audio and video analysis and
-transcoding, cryptocurrencies, bioinformatics, search engines, internet of
-things applications, machine learning, and even major parts of the Firefox web
-browser.
 
-MORE STUFF GOES HERE LATER
+Rust is a programming language that gives you the option to control a lot of
+low-level details like memory usage, but still gives you the productivity and
+ergonomics of a higher level language. These two aspects are often at odds in
+other programming languages, and Rust's balancing of powerful technical
+capacity and great developer experience is what makes it special. 
+
+That being said, Rust is great for many people for a variety of reasons:
+
+### Developer Teams
+
+- tell our dev tools story
+- compiler makes things safe and correct
+- cargo for managing deps
+- rustfmt enforces style
+
+### Students
+
+Rust is for students and people who are interested in learning about systems
+concepts. Many people have learned about topics like operating systems
+development through Rust.
+
+### Companies
+
+Rust is used in production by hundreds of companies, large and small, for a
+variety of tasks, such as command line tools, web services, DevOps tooling,
+embedded devices, audio and video analysis and transcoding, cryptocurrencies,
+bioinformatics, search engines, internet of things applications, machine
+learning, and even major parts of the Firefox web browser.
+
+### Open Source Developers
+
+Rust is for people who want to build the Rust programming language, community,
+devtools, and ecosystem. We’d love you to contribute to the Rust language.
+
+### People who like to go fast (and not break things)
+
+- zoom zoom 
+- the only aspect this hasn't hit is speed
+
+CONCLUSION
 
 ## Who This Book is For
 
