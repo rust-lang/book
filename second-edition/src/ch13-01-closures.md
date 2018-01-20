@@ -144,13 +144,13 @@ fn generate_workout(intensity: u32, random_number: u32) {
 불필요하게 함수를 두 번 호출하는 위치 없애고 싶습니다. 즉, 결과가 필요없다면
 함수를 호출하고 싶지 않고, 여전히 그것을 한번만 호출하고 싶습니다.
 
-#### Refactoring Using Functions
+#### 함수를 사용해서 리팩토링 하기
 
-We could restructure the workout program in many ways. First, we’ll try
-extracting the duplicated call to the `expensive_calculation` function into
-a variable, as shown in Listing 13-4:
+우리는 여러 방향으로 운동 프로그램을 다시 구조화 할 수 있습니다. 우선, 리스트
+13-4 에 보여지는 것처럼, 중복된 `expensive_calculation` 함수 호출을 하나의 
+변수로 추출 해볼 것입니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일이름: src/main.rs</span>
 
 ```rust
 # use std::thread;
@@ -188,26 +188,23 @@ fn generate_workout(intensity: u32, random_number: u32) {
 }
 ```
 
-<span class="caption">Listing 13-4: Extracting the calls to
-`simulated_expensive_calculation` to one place and storing the result in the
-`expensive_result` variable</span>
+<span class="caption">리스트 13-4: `simulated_expensive_calculation` 에 대한
+호출들을 한 곳으로 추출하고 결과를 `expensive_result` 변수에 저장하기.</span>
 
-This change unifies all the calls to `simulated_expensive_calculation` and
-solves the problem of the first `if` block unnecessarily calling the function
-twice. Unfortunately, we’re now calling this function and waiting for the
-result in all cases, which includes the inner `if` block that doesn’t use the
-result value at all.
+이 변경은 `simulated_expensive_calculation` 에 대한 모든 호출들을 하나로 합치고
+첫번째 `if` 문에서 불필요하게 이 함수를 여러번 호출하던 문제를 해결 합니다.
+불행하게도, 이제 모든 경우에 대해서 이 함수를 호출하고 결과를 기다리며,
+이 결과를 전혀 사용하지 않는 안쪽 `if` 블럭도 해당됩니다.
 
-We want to define code in one place in our program, but only *execute* that
-code where we actually need the result. This is a use case for closures!
+우리는 프로그램에서 한곳에서 코드를 정의하고, 실제로 결과가 필요한 곳에서만
+그 코드를 *실행하고* 싶습니다. 이것이 클로저의 유스 케이스 입니다.
 
-#### Refactoring with Closures to Store Code
+#### 코드를 저장하기 위해 클로저를 사용해서 리팩토링 하기.
 
-Instead of always calling the `simulated_expensive_calculation` function before
-the `if` blocks, we can define a closure and store the *closure* in a variable
-rather than storing the result, as shown in Listing 13-5. We can actually move
-the whole body of `simulated_expensive_calculation` within the closure we’re
-introducing here:
+`if` 블럭 전에 항상 `simulated_expensive_calculation` 함수를 호출하는 대신,
+리스트 13-5에 보여지는 것 처럼, 클로저를 정의하고 변수에 결과를 저장하기 보단
+*클로저*를 변수에 저장 할 수 있습니다. 여기서 소개하는 것처럼 실제로 클로저 안에
+`simulated_expensive_calculation` 의 전체 내용을 옮길 수 있습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -223,36 +220,32 @@ let expensive_closure = |num| {
 # expensive_closure(5);
 ```
 
-<span class="caption">Listing 13-5: Defining a closure and storing it in the
-`expensive_closure` variable</span>
+<span class="caption">리스트 13-5: 클로저를 정의하고 `expensive_closure` 변수에 저장하기</span>
 
-The closure definition comes after the `=` to assign it to the variable
-`expensive_closure`. To define a closure, we start with a pair of vertical
-pipes (`|`), inside which we specify the parameters to the closure; this syntax
-was chosen because of its similarity to closure definitions in Smalltalk and
-Ruby. This closure has one parameter named `num`: if we had more than one
-parameter, we would separate them with commas, like `|param1, param2|`.
+클로저 정의는 변수 `expensive_closure` 에 그것을 할당하기 위해 `=` 다음에 옵니다.
+클로저를 정의하기 위해, 수직의 파이프 (`|`) 한쌍으로 시작하며, 그 사이에 클로저에
+대한 파라미터를 기술합니다; 이 문법은 스몰토크와 루비에서 클로저 정의와의 유사성
+때문에 선택 되었습니다. 이 클로저는 `num` 이라는 하나의 파라미터를 갖습니다:
+하나 이상의 파라미터를 갖는다면, `|param1, param2|` 와 같이 콤마로 구분합니다.
 
-After the parameters, we place curly brackets that hold the body of the
-closure—these are optional if the closure body is a single expression. The end
-of the closure, after the curly brackets, needs a semicolon to complete the
-`let` statement. The value returned from the last line in the closure body
-(`num`) will be the value returned from the closure when it’s called, because
-that line doesn’t end in a semicolon; just like in function bodies.
+파라미터들 다음에, 클로저의 바디를 포함하는 중괄호를 넣습니다—클로저 바디가 하나의
+표현식이라면 이것은 선택적 입니다. 중괄호 다음에 클로저의 끝에는 `let` 문을 완성하기
+위해 세미콜론이 필요합니다. 클로저 바디에서 마지막 줄로부터 반환되는 값인 (`num`) 은
+그것이 호출되었을 때 클로저로 부터 반환되는 값이 될 것입니다, 왜냐하면 그 줄은
+세미콜론으로 끝나지 않기 때문 입니다; 함수 본문 처럼.
 
-Note that this `let` statement means `expensive_closure` contains the
-*definition* of an anonymous function, not the *resulting value* of calling the
-anonymous function. Recall that we’re using a closure because we want to define
-the code to call at one point, store that code, and call it at a later point;
-the code we want to call is now stored in `expensive_closure`.
+`let` 문은 `expensive_closure` 가 익명함수의 *정의*를 포함하며, 익명함수를 호출한
+*결과 값*을 포함하지 않는다는 것에 유의 하세요. 우리가 클로저를 사용하는 이유는
+호출할 코드를 한 곳에서 정의하고, 그 코드를 저장하며, 이후 다른 곳에서 그것을
+호출하길 원하기 때문이라는 것을 상기하세요; 우리가 호출하고자 하는 코드가 이제
+`expensive_closure` 에 저장되었습니다.
 
-With the closure defined, we can change the code in the `if` blocks to call the
-closure to execute the code and get the resulting value. We call a closure like
-we do a function: we specify the variable name that holds the closure
-definition and follow it with parentheses containing the argument values we
-want to use, as shown in Listing 13-6:
+클로저를 정의하면서, 저장된 코드를 실행하고 결과값을 얻기 위하여 `if` 블록 안의
+코드를 클로저 호출 방식으로 변경할 수 있습니다. 우리는 함수를 호출하는 것 처럼 
+클로저를 호출 합니다: 리스트 13-6 에 보여지는 것처럼, 클로저 정의를 갖고 있는 
+변수명을 쓰고 다음엔 사용할 인자값을 포함하는 괄호가 따라 옵니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 # use std::thread;
@@ -287,20 +280,19 @@ fn generate_workout(intensity: u32, random_number: u32) {
 }
 ```
 
-<span class="caption">Listing 13-6: Calling the `expensive_closure` we’ve
-defined</span>
+<span class="caption">리스트 13-6: 우리가 정의한 `expensive_closure` 호출하기
+</span>
 
-Now the expensive calculation is called in only one place, and we’re only
-executing that code where we need the results.
+이제 비용이 큰 계산은 단 한곳에서만 호출 되고, 우리가 결과가 필요한 곳에서만 
+그 코드를 실행 합니다.
 
-However, we’ve reintroduced one of the problems from Listing 13-3: we’re still
-calling the closure twice in the first `if` block, which will call the
-expensive code twice and make the user wait twice as long as they need to. We
-could fix this problem by creating a variable local to that `if` block to hold
-the result of calling the closure, but closures provide us with another
-solution. We’ll talk about that solution in a bit. But first let’s talk about
-why there aren’t type annotations in the closure definition and the traits
-involved with closures.
+그러나, 리스트 13-3 에 있는 문제중 하나를 다시 소개합니다: 우리는 여전히 첫번째
+`if` 블럭에서 클로저를 두번 호출 하는데, 이는 비용이 큰 코드를 두번 호출하고 사용자가
+실행시간 만큼 긴시간을 두번 기다리게 합니다. 우리는 그 `if` 블럭안에 클로저 호출의
+결과를 저장하는 로컬 변수를 만들어서 그 문제를 해결할 수 있지만, 클로저는 다른
+해결책을 제공합니다. 우리는 그 해결책에 대해 조금 이야기 할 것입니다.
+그러나 우선 클로저 정의에 타입 어노테이션이 없는 이유와 클로저와 연관된 트레잇에
+대해 이야기 합시다.
 
 ### Closure Type Inference and Annotation
 
