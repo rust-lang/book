@@ -22,23 +22,11 @@ shipped to production. We’ve nicknamed this aspect of Rust *fearless
 concurrency*. Fearless concurrency allows you to write code that’s free of
 subtle bugs and is easy to refactor without introducing new bugs.
 
-<!-- Can you say explicitly why making concurrency issues compile time errors
-rather than runtime errors is an advantage? -->
-<!-- I feel like we've explained this a few times now, but I suppose since the
-advantage should be greater in concurrent code it's worth saying again /Carol
--->
-
 > Note: we’ll be referring to many of the problems here as *concurrent* rather
 > than being more precise by saying *concurrent and/or parallel*, for
 > simplicity’s sake. If this were a book specifically about concurrency and/or
 > parallelism, we’d be sure to be more specific. For this chapter, please
 > mentally substitute *concurrent and/or parallel* whenever we say *concurrent*.
-
-<!-- I'm not sure what you mean about languages being strongly opinionated over
-these issues and what kind of strategy that is, below, can you be more
-specific? -->
-<!-- I've added an example and elaborated on the strategy we're talking about
-here. /Carol -->
 
 Many languages are strongly opinionated about the solutions they offer for
 dealing with concurrent problems. For example, Erlang has elegant functionality

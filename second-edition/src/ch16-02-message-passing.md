@@ -10,9 +10,6 @@ documentation:
 >
 > --[Effective Go](http://golang.org/doc/effective_go.html)
 
-<!-- below -- what is the channel, precisely? A crate? a technique?-->
-<!-- I've elaborated /Carol -->
-
 One major tool Rust has for accomplishing message sending concurrency is the
 *channel*, a programming concept that Rust’s standard library provides an
 implementation of. You can imagine a channel in programming like a channel of
@@ -69,20 +66,10 @@ discussing the use of patterns in `let` statements and destructuring in
 Chapter 18. Using a `let` statement in this way is a convenient way to extract
 the pieces of the tuple returned by `mpsc::channel`.
 
-<!-- above -- can you give us a general idea of what that means for us in this
-program? -->
-<!-- A general idea of what *what* means? I'm not sure what you're asking for;
-I've added a bit of explanation of the destructuring but I'm not sure that's
-what you meant /Carol -->
-
 Let’s move the transmitting end into a spawned thread and have it send one
 string so that the spawned thread is communicating with the main thread, shown
 in Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another:
-
-<!-- Can you tell us why we want to do this, what does this do for us and our
-program? -->
-<!-- Elaborated /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -148,11 +135,6 @@ sent, `recv` will return it in a `Result<T, E>`. When the sending end of the
 channel closes, `recv` will return an error to signal that no more values will
 be coming.
 
-<!-- Why do we want it to error when the sending end closes? And what's the
-advantage of blocking here? -->
-<!-- We don't necessarily *want* it to error, that's just how the standard
-library has implemented it. I've tried to clarify that and blocking. /Carol -->
-
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available, and an `Err`
 value if there aren’t any messages this time. Using `try_recv` is useful if
@@ -165,10 +147,6 @@ We’ve chosen to use `recv` in this example for simplicity; we don’t have any
 other work for the main thread to do other than wait for messages, so blocking
 the main thread is appropriate.
 
-<!-- So what is the difference here, what are the different situations you
-would want to return the value immediately? -->
-<!-- Elaborated above /Carol -->
-
 If we run the code in Listing 16-8, we’ll see the value printed out from the
 main thread:
 
@@ -179,18 +157,6 @@ Got: hi
 Perfect!
 
 ### Channels and Ownership Transference
-
-<!-- Hmm i'm not sure we need as it's own section, it seems like it could be
-condensed now the reader is pretty familiar with ownership rules. We might not
-even need the example, but I'll defer to you on this -->
-<!-- We think the examples in this section are important-- there are likely
-readers who are skeptical about Rust's ownership system and whether it's worth
-putting up with, and this section is the payoff. We're trying to convince those
-people that one big benefit Rust's ownership gives you is that it enables you
-to write safe, concurrent code. I'm glad we've convinced *you*, but I'm not so
-sure that we'll have convinced all our readers at this point! I've tried to
-state this a bit more clearly without calling out these readers too
-explicitly... /Carol -->
 
 The ownership rules play a vital role in message sending as far as helping us
 write safe, concurrent code. Preventing errors in concurrent programming is the
@@ -312,15 +278,6 @@ Got: thread
 Because we don’t have any code that pauses or delays in the `for` loop in the
 main thread, we can tell that the main thread is waiting to receive values from
 the spawned thread.
-
-<!-- Above -- just to be clear, this is because the main thread is receiving
-the pauses from the spawned thread, is that right? -->
-<!-- It's not that we're sending the *pauses*, it's that the spawned thread is
-pausing between sending each message, so then the main thread doesn't receive
-all the messages all at the same time, it receives one message per second
-because that's how they were sent. I'm not sure what in the code looks like
-"sending/receiving the pauses" or what isn't clear here, so I'm not sure how to
-fix it /Carol -->
 
 ### Creating Multiple Producers by Cloning the Transmitter
 

@@ -5,10 +5,6 @@ In most operating systems today, an executed program’s code is run in a
 your program, you can also have independent parts that run simultaneously. The
 feature that runs these independent parts is called *threads*.
 
-<!-- I've tried to simplify the text above, can you check that I haven't
-changed meaning? -->
-<!-- Made some small tweaks, overall seems fine /Carol -->
-
 Splitting the computation in your program up into multiple threads can improve
 performance, since the program will be doing multiple things at the same time,
 but it also adds complexity. Because threads may run simultaneously, there’s no
@@ -21,10 +17,6 @@ threads will run. This can lead to problems such as:
   resource the other thread has, which prevents both threads from continuing
 - Bugs that only happen in certain situations and are hard to reproduce and
   fix reliably
-
-<!-- How do threads prevent each other from continuing? Or is that something
-we'll cover later?-->
-<!-- We don't really get into that later, so I've expanded a bit here /Carol -->
 
 Rust attempts to mitigate negative effects of using threads. Programming in a
 multithreaded context still takes careful thought and requires a code structure
@@ -45,13 +37,6 @@ where `M` and `N` are not necessarily the same number.
 Each model has its own advantages and tradeoffs, and the tradeoff most
 important to Rust is runtime support. *Runtime* is a confusing term and can
 have different meanings in different contexts.
-
-<!-- Below - you mean this is the cause of runtime? Or "runtime" literally
-means the code included by Rust in every binary? -->
-<!-- Runtime literally means the code included by Rust in every binary.
-Wikipedia calls this "runtime system":
-https://en.wikipedia.org/wiki/Runtime_system but most people colloquially just
-say "the runtime". I've tried to clarify. /Carol -->
 
 In this context, by runtime we mean code that’s included by the language in
 every binary. This code can be large or small depending on the language, but
@@ -122,16 +107,12 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-<!-- This seems interesting, how come the threads often take turns, but not
-always? -->
-<!-- I've added a bit of clarification /Carol -->
-
-The `thread::sleep` function will force a thread to stop its execution for a 
+The `thread::sleep` function will force a thread to stop its execution for a
 short duration, allowing a different thread to run, so that they will probably
-take turns, but that’s not guaranteed: it depends on how your operating system 
-schedules the threads. In this run, the main thread printed first, even though 
+take turns, but that’s not guaranteed: it depends on how your operating system
+schedules the threads. In this run, the main thread printed first, even though
 the print statement from the spawned thread appears first in the code. And even
-though we told the spawned thread to print until `i` is 9, it only got to 5 
+though we told the spawned thread to print until `i` is 9, it only got to 5
 before the main thread shut down.
 
 If you run this code and only see one thread, or don’t see any overlap, try
@@ -145,21 +126,12 @@ the time, because the main thread ends before the spawned thread is done,
 there’s actually no guarantee that the spawned thread will get to run at all,
 because there’s no guarantee on the order in which threads run!
 
-<!-- Above -- why is this the case, because there are no guarantees over which
-order the threads run in? -->
-<!-- Yep! /Carol -->
-
 We can fix this by saving the return value of `thread::spawn` in a variable.
 The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
 value that, when we call the `join` method on it, will wait for its thread to
 finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
 in Listing 16-1 and call `join` in order to make sure the spawned thread
 finishes before the `main` exits:
-
-<!-- Saving the return value where? I think this explanation of join handle
-needs expanding, this feels cut short -->
-<!-- In a variable. I've expanded a bit, but I'm not sure what information
-seems missing, so I'm not sure if this is sufficient /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -192,10 +164,6 @@ thread represented by the handle terminates. *Blocking* a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
 to `join` after the main thread’s `for` loop, running this example should
 produce output that looks something like this:
-
-<!-- Liz: I've added a definition of "block" in the context of threads here,
-which is the first time we used the term-- it seemed to cause some confusion
-later on. /Carol -->
 
 ```text
 hi number 1 from the main thread!
@@ -393,9 +361,6 @@ fn main() {
 <span class="caption">Listing 16-5: Using the `move` keyword to force a closure
 to take ownership of the values it uses</span>
 
-<!-- Can you be more specific about the question we're asking about 16-4?-->
-<!-- Done /Carol -->
-
 What would happen to the code in Listing 16-4 where the main thread called
 `drop` if we use a `move` closure? Would `move` fix that case? Nope, we get a
 different error, because what Listing 16-4 is trying to do isn’t allowed for a
@@ -426,11 +391,6 @@ If we change Listing 16-4 in the same way, we’re then violating the ownership
 rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
-
-<!-- Uh oh, I'm lost again, I thought we were trying to fix 16-4 with move, but
-we don't want it to work, is that right? Can you talk about this a little?-->
-<!-- I've tried to clarify a bit in the paragraph before this error and a bit
-after the error /Carol -->
 
 Now that we have a basic understanding of threads and the thread API, let’s
 talk about what we can actually *do* with threads.

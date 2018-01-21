@@ -25,23 +25,11 @@ shipped to production. We’ve nicknamed this aspect of Rust *fearless
 concurrency*. Fearless concurrency allows you to write code that’s free of
 subtle bugs and is easy to refactor without introducing new bugs.
 
-<!-- Can you say explicitly why making concurrency issues compile time errors
-rather than runtime errors is an advantage? -->
-<!-- I feel like we've explained this a few times now, but I suppose since the
-advantage should be greater in concurrent code it's worth saying again /Carol
--->
-
 > Note: we’ll be referring to many of the problems here as *concurrent* rather
 > than being more precise by saying *concurrent and/or parallel*, for
 > simplicity’s sake. If this were a book specifically about concurrency and/or
 > parallelism, we’d be sure to be more specific. For this chapter, please
 > mentally substitute *concurrent and/or parallel* whenever we say *concurrent*.
-
-<!-- I'm not sure what you mean about languages being strongly opinionated over
-these issues and what kind of strategy that is, below, can you be more
-specific? -->
-<!-- I've added an example and elaborated on the strategy we're talking about
-here. /Carol -->
 
 Many languages are strongly opinionated about the solutions they offer for
 dealing with concurrent problems. For example, Erlang has elegant functionality
@@ -71,10 +59,6 @@ In most operating systems today, an executed program’s code is run in a
 your program, you can also have independent parts that run simultaneously. The
 feature that runs these independent parts is called *threads*.
 
-<!-- I've tried to simplify the text above, can you check that I haven't
-changed meaning? -->
-<!-- Made some small tweaks, overall seems fine /Carol -->
-
 Splitting the computation in your program up into multiple threads can improve
 performance, since the program will be doing multiple things at the same time,
 but it also adds complexity. Because threads may run simultaneously, there’s no
@@ -87,10 +71,6 @@ threads will run. This can lead to problems such as:
   resource the other thread has, which prevents both threads from continuing
 - Bugs that only happen in certain situations and are hard to reproduce and
   fix reliably
-
-<!-- How do threads prevent each other from continuing? Or is that something
-we'll cover later?-->
-<!-- We don't really get into that later, so I've expanded a bit here /Carol -->
 
 Rust attempts to mitigate negative effects of using threads. Programming in a
 multithreaded context still takes careful thought and requires a code structure
@@ -111,13 +91,6 @@ where `M` and `N` are not necessarily the same number.
 Each model has its own advantages and tradeoffs, and the tradeoff most
 important to Rust is runtime support. *Runtime* is a confusing term and can
 have different meanings in different contexts.
-
-<!-- Below - you mean this is the cause of runtime? Or "runtime" literally
-means the code included by Rust in every binary? -->
-<!-- Runtime literally means the code included by Rust in every binary.
-Wikipedia calls this "runtime system":
-https://en.wikipedia.org/wiki/Runtime_system but most people colloquially just
-say "the runtime". I've tried to clarify. /Carol -->
 
 In this context, by runtime we mean code that’s included by the language in
 every binary. This code can be large or small depending on the language, but
@@ -185,10 +158,6 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-<!-- This seems interesting, how come the threads often take turns, but not
-always? -->
-<!-- I've added a bit of clarification /Carol -->
-
 The threads will probably take turns, but that’s not guaranteed: it depends on
 how your operating system schedules the threads. In this run, the main thread
 printed first, even though the print statement from the spawned thread appears
@@ -206,21 +175,12 @@ the time, because the main thread ends before the spawned thread is done,
 there’s actually no guarantee that the spawned thread will get to run at all,
 because there’s no guarantee on the order in which threads run!
 
-<!-- Above -- why is this the case, because there are no guarantees over which
-order the threads run in? -->
-<!-- Yep! /Carol -->
-
 We can fix this by saving the return value of `thread::spawn` in a variable.
 The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
 value that, when we call the `join` method on it, will wait for its thread to
 finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
 in Listing 16-1 and call `join` in order to make sure the spawned thread
 finishes before the `main` exits:
-
-<!-- Saving the return value where? I think this explanation of join handle
-needs expanding, this feels cut short -->
-<!-- In a variable. I've expanded a bit, but I'm not sure what information
-seems missing, so I'm not sure if this is sufficient /Carol -->
 
 Filename: src/main.rs
 
@@ -250,10 +210,6 @@ thread represented by the handle terminates. *Blocking* a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
 to `join` after the main thread’s `for` loop, running this example should
 produce output that looks something like this:
-
-<!-- Liz: I've added a definition of "block" in the context of threads here,
-which is the first time we used the term-- it seemed to cause some confusion
-later on. /Carol -->
 
 ```
 hi number 1 from the main thread!
@@ -326,8 +282,6 @@ another thread.
 
 In Chapter 13, we said that “Creating closures that capture values from their
 environment is mostly used in the context of starting new threads.”
-
-<!-- PROD: DE to check this quote, see if it has changed -->
 
 Now we’re creating new threads, so let’s talk about capturing values in
 closures!
@@ -448,9 +402,6 @@ fn main() {
 Listing 16-5: Using the `move` keyword to force a closure to take ownership of
 the values it uses
 
-<!-- Can you be more specific about the question we're asking about 16-4?-->
-<!-- Done /Carol -->
-
 What would happen to the code in Listing 16-4 where the main thread called
 `drop` if we use a `move` closure? Would `move` fix that case? Nope, we get a
 different error, because what Listing 16-4 is trying to do isn’t allowed for a
@@ -482,11 +433,6 @@ rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
-<!-- Uh oh, I'm lost again, I thought we were trying to fix 16-4 with move, but
-we don't want it to work, is that right? Can you talk about this a little?-->
-<!-- I've tried to clarify a bit in the paragraph before this error and a bit
-after the error /Carol -->
-
 Now that we have a basic understanding of threads and the thread API, let’s
 talk about what we can actually *do* with threads.
 
@@ -501,9 +447,6 @@ documentation:
 > communicating.
 >
 > --Effective Go at *http://golang.org/doc/effective_go.html*
-
-<!-- below -- what is the channel, precisely? A crate? a technique?-->
-<!-- I've elaborated /Carol -->
 
 One major tool Rust has for accomplishing message sending concurrency is the
 *channel*, a programming concept that Rust’s standard library provides an
@@ -557,20 +500,10 @@ discussing the use of patterns in `let` statements and destructuring in Chapter
 18. Using a `let` statement in this way is a convenient way to extract the
 pieces of the tuple returned by `mpsc::channel`.
 
-<!-- above -- can you give us a general idea of what that means for us in this
-program? -->
-<!-- A general idea of what *what* means? I'm not sure what you're asking for;
-I've added a bit of explanation of the destructuring but I'm not sure that's
-what you meant /Carol -->
-
 Let’s move the transmitting end into a spawned thread and have it send one
 string so that the spawned thread is communicating with the main thread, shown
 in Listing 16-7. This is like putting a rubber duck in the river upstream or
 sending a chat message from one thread to another:
-
-<!-- Can you tell us why we want to do this, what does this do for us and our
-program? -->
-<!-- Elaborated /Carol -->
 
 Filename: src/main.rs
 
@@ -634,11 +567,6 @@ sent, `recv` will return it in a `Result<T, E>`. When the sending end of the
 channel closes, `recv` will return an error to signal that no more values will
 be coming.
 
-<!-- Why do we want it to error when the sending end closes? And what's the
-advantage of blocking here? -->
-<!-- We don't necessarily *want* it to error, that's just how the standard
-library has implemented it. I've tried to clarify that and blocking. /Carol -->
-
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available, and an `Err`
 value if there aren’t any messages this time. Using `try_recv` is useful if
@@ -651,10 +579,6 @@ We’ve chosen to use `recv` in this example for simplicity; we don’t have any
 other work for the main thread to do other than wait for messages, so blocking
 the main thread is appropriate.
 
-<!-- So what is the difference here, what are the different situations you
-would want to return the value immediately? -->
-<!-- Elaborated above /Carol -->
-
 If we run the code in Listing 16-8, we’ll see the value printed out from the
 main thread:
 
@@ -665,18 +589,6 @@ Got: hi
 Perfect!
 
 ### Channels and Ownership Transference
-
-<!-- Hmm i'm not sure we need as it's own section, it seems like it could be
-condensed now the reader is pretty familiar with ownership rules. We might not
-even need the example, but I'll defer to you on this -->
-<!-- We think the examples in this section are important-- there are likely
-readers who are skeptical about Rust's ownership system and whether it's worth
-putting up with, and this section is the payoff. We're trying to convince those
-people that one big benefit Rust's ownership gives you is that it enables you
-to write safe, concurrent code. I'm glad we've convinced *you*, but I'm not so
-sure that we'll have convinced all our readers at this point! I've tried to
-state this a bit more clearly without calling out these readers too
-explicitly... /Carol -->
 
 The ownership rules play a vital role in message sending as far as helping us
 write safe, concurrent code. Preventing errors in concurrent programming is the
@@ -797,15 +709,6 @@ Because we don’t have any code that pauses or delays in the `for` loop in the
 main thread, we can tell that the main thread is waiting to receive values from
 the spawned thread.
 
-<!-- Above -- just to be clear, this is because the main thread is receiving
-the pauses from the spawned thread, is that right? -->
-<!-- It's not that we're sending the *pauses*, it's that the spawned thread is
-pausing between sending each message, so then the main thread doesn't receive
-all the messages all at the same time, it receives one message per second
-because that's how they were sent. I'm not sure what in the code looks like
-"sending/receiving the pauses" or what isn't clear here, so I'm not sure how to
-fix it /Carol -->
-
 ### Creating Multiple Producers by Cloning the Transmitter
 
 Near the start of this section, we mentioned that `mpsc` stood for *multiple
@@ -891,12 +794,6 @@ only one. Consider this slogan again:
 What would “communicate by sharing memory” look like? And moreover, why would
 message passing enthusiasts choose not to use it and do the opposite instead?
 
-<!-- Can you expand here? I wasn't sure where we were getting the idea that
-message passers hated and inverted memory sharing -->
-<!-- I'm not sure where you got "hate" from :) I've tried to reword. We're
-getting this idea from the slogan that the Go programming language espouses
-that we discussed earlier /Carol -->
-
 In a way, channels in any programming language are sort of like single
 ownership, because once you transfer a value down a channel, you shouldn’t use
 that value any longer. Shared memory concurrency is sort of like multiple
@@ -921,10 +818,6 @@ data it holds via the locking system.
 
 Mutexes have a reputation for being hard to use because there are some
 rules you have to remember:
-
-<!-- below -- what is the lock, here? Can you define that outright? And make it
-clear that the mutex is the guard? -->
-<!-- I've added definitions/explanations above /Carol -->
 
 1. You must attempt to acquire the lock before using the data.
 2. Once you’re done with the data that’s guarded by the mutex, you must unlock
@@ -973,17 +866,9 @@ To access the data inside the mutex, we use the `lock` method to acquire the
 lock. This call will block the current thread so that it can’t do any work
 until it’s our turn to have the lock.
 
-<!-- will block what, other requests for the lock? Or block access to the data?
--->
-<!-- This is where I hope our earlier definition of "block" that I added will
-help; I've also reworded to reinforce that /Carol -->
-
 The call to `lock` would fail if another thread holding the lock panicked. In
 that case, no one would ever be able to get the lock, so we’ve chosen to
 `unwrap` and have this thread panic if we’re in that situation.
-
-<!-- As in, the lock would be released? What would failure look like? -->
-<!-- As in we wouldn't ever be able to get the lock, I've clarified /Carol -->
 
 Once we’ve acquired the lock, we can treat the return value, named `num` in
 this case, as a mutable reference to the data inside. The type system ensures
@@ -1054,11 +939,6 @@ point, the main thread will acquire the lock and print out the result of this
 program.
 
 We hinted that this example won’t compile, now let’s find out why!
-
-<!-- Hm, since we already saw this error, where we need to include move, maybe
-we could skip it here and just include move in the initial program, to focus
-more on the new error and new concepts -- what do you think? -->
-<!-- Ok, cut! /Carol -->
 
 ```
 error[E0382]: capture of moved value: `counter`
@@ -1220,11 +1100,6 @@ Send is not satisfied`. We’re going to talk about `Send` in the next section;
 it’s one of the traits that ensures the types we use with threads are meant for
 use in concurrent situations.
 
-<!-- Maybe we need to save this discussion until after talking about Send?
-Otherwise, you might expand on this, what is the reader taking away here? -->
-<!-- The reader should take away that we can't use `Rc<T>` with threads, and
-we're not sure how to point that out without mentioning `Send`. /Carol -->
-
 Unfortunately, `Rc<T>` is not safe to share across threads. When `Rc<T>`
 manages the reference count, it adds to the count for each call to `clone` and
 subtracts from the count when each clone is dropped, but it doesn’t use any
@@ -1318,17 +1193,6 @@ that has a deadlock, then research deadlock mitigation strategies for mutexes
 in any language, and have a go at implementing them in Rust. The standard
 library API documentation for `Mutex<T>` and `MutexGuard` will have useful
 information.
-
-<!--Rust's type system and ownership has made sure that our threads have
-exclusive access to the shared value when they're updating it, so the threads
-won't overwrite each other's answers in unpredictable ways. It took us a while
-to work with the compiler to get everything right, but we've saved future time
-that might be spent trying to reproduce subtly incorrect scenarios that only
-happen when the threads run in a particular order.-->
-<!-- Feel free to contradict me, but I think this has come across in the
-chapters, I'm suggesting cutting just to keep focus, keep it moving -->
-<!-- We're tentatively okay with cutting this, but again we want to convince
-people who are skeptical that dealing with ownership is worth it /Carol -->
 
 Let’s round out this chapter by talking about the `Send` and `Sync` traits and
 how we could use them with custom types.

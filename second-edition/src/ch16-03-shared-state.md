@@ -9,12 +9,6 @@ only one. Consider this slogan again:
 What would “communicate by sharing memory” look like? And moreover, why would
 message passing enthusiasts choose not to use it and do the opposite instead?
 
-<!-- Can you expand here? I wasn't sure where we were getting the idea that
-message passers hated and inverted memory sharing -->
-<!-- I'm not sure where you got "hate" from :) I've tried to reword. We're
-getting this idea from the slogan that the Go programming language espouses
-that we discussed earlier /Carol -->
-
 In a way, channels in any programming language are sort of like single
 ownership, because once you transfer a value down a channel, you shouldn’t use
 that value any longer. Shared memory concurrency is sort of like multiple
@@ -39,10 +33,6 @@ data it holds via the locking system.
 
 Mutexes have a reputation for being hard to use because there are some
 rules you have to remember:
-
-<!-- below -- what is the lock, here? Can you define that outright? And make it
-clear that the mutex is the guard? -->
-<!-- I've added definitions/explanations above /Carol -->
 
 1. You must attempt to acquire the lock before using the data.
 2. Once you’re done with the data that’s guarded by the mutex, you must unlock
@@ -91,17 +81,9 @@ To access the data inside the mutex, we use the `lock` method to acquire the
 lock. This call will block the current thread so that it can’t do any work
 until it’s our turn to have the lock.
 
-<!-- will block what, other requests for the lock? Or block access to the data?
--->
-<!-- This is where I hope our earlier definition of "block" that I added will
-help; I've also reworded to reinforce that /Carol -->
-
 The call to `lock` would fail if another thread holding the lock panicked. In
 that case, no one would ever be able to get the lock, so we’ve chosen to
 `unwrap` and have this thread panic if we’re in that situation.
-
-<!-- As in, the lock would be released? What would failure look like? -->
-<!-- As in we wouldn't ever be able to get the lock, I've clarified /Carol -->
 
 Once we’ve acquired the lock, we can treat the return value, named `num` in
 this case, as a mutable reference to the data inside. The type system ensures
@@ -173,11 +155,6 @@ point, the main thread will acquire the lock and print out the result of this
 program.
 
 We hinted that this example won’t compile, now let’s find out why!
-
-<!-- Hm, since we already saw this error, where we need to include move, maybe
-we could skip it here and just include move in the initial program, to focus
-more on the new error and new concepts -- what do you think? -->
-<!-- Ok, cut! /Carol -->
 
 ```text
 error[E0382]: capture of moved value: `counter`
@@ -339,11 +316,6 @@ Send is not satisfied`. We’re going to talk about `Send` in the next section;
 it’s one of the traits that ensures the types we use with threads are meant for
 use in concurrent situations.
 
-<!-- Maybe we need to save this discussion until after talking about Send?
-Otherwise, you might expand on this, what is the reader taking away here? -->
-<!-- The reader should take away that we can't use `Rc<T>` with threads, and
-we're not sure how to point that out without mentioning `Send`. /Carol -->
-
 Unfortunately, `Rc<T>` is not safe to share across threads. When `Rc<T>`
 manages the reference count, it adds to the count for each call to `clone` and
 subtracts from the count when each clone is dropped, but it doesn’t use any
@@ -437,17 +409,6 @@ that has a deadlock, then research deadlock mitigation strategies for mutexes
 in any language, and have a go at implementing them in Rust. The standard
 library API documentation for `Mutex<T>` and `MutexGuard` will have useful
 information.
-
-<!--Rust's type system and ownership has made sure that our threads have
-exclusive access to the shared value when they're updating it, so the threads
-won't overwrite each other's answers in unpredictable ways. It took us a while
-to work with the compiler to get everything right, but we've saved future time
-that might be spent trying to reproduce subtly incorrect scenarios that only
-happen when the threads run in a particular order.-->
-<!-- Feel free to contradict me, but I think this has come across in the
-chapters, I'm suggesting cutting just to keep focus, keep it moving -->
-<!-- We're tentatively okay with cutting this, but again we want to convince
-people who are skeptical that dealing with ownership is worth it /Carol -->
 
 Let’s round out this chapter by talking about the `Send` and `Sync` traits and
 how we could use them with custom types.
