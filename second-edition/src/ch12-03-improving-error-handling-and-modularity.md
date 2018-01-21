@@ -443,8 +443,8 @@ Great! This output is much friendlier for our users.
 
 Now that we’ve finished refactoring the configuration parsing, let’s turn to
 the program’s logic. As we stated in “Separation of Concerns for Binary
-Projects” on page XX, we’ll extract a function named `run` that will hold all
-the logic currently in the `main` function that isn’t involved with setting up
+Projects”, we’ll extract a function named `run` that will hold all the logic
+currently in the `main` function that isn’t involved with setting up
 configuration or handling errors. When we’re done, `main` will be concise and
 easy to verify by inspection, and we’ll be able to write tests for all the
 other logic.
