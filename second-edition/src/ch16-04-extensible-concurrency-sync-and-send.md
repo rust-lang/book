@@ -17,7 +17,7 @@ but there are some exceptions, including `Rc<T>`: this cannot be `Send` because
 if we cloned an `Rc<T>` value and tried to transfer ownership of the clone to
 another thread, both threads might update the reference count at the same time.
 For this reason, `Rc<T>` is implemented for use in single-threaded situations
-where you don’t want to pay the threadsafe performance penalty.
+where you don’t want to pay the thread-safe performance penalty.
 
 In this way Rust’s type system and trait bounds ensure we can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
@@ -41,7 +41,7 @@ are also `Sync`.
 `Rc<T>` is also not `Sync`, for the same reasons that it’s not `Send`.
 `RefCell<T>` (which we talked about in Chapter 15) and the family of related
 `Cell<T>` types are not `Sync`. The implementation of borrow checking that
-`RefCell<T>` does at runtime is not threadsafe. `Mutex<T>` is `Sync`, and can
+`RefCell<T>` does at runtime is not thread-safe. `Mutex<T>` is `Sync`, and can
 be used to share access with multiple threads as we saw in the previous section.
 
 ### Implementing `Send` and `Sync` Manually is Unsafe

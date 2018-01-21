@@ -511,7 +511,7 @@ likely result in data races.
 With mutable data that’s globally accessible, it’s difficult to ensure there
 are no data races, which is why Rust considers mutable static variables to be
 unsafe. Where possible, it’s preferable to use the concurrency techniques and
-threadsafe smart pointers we discussed in Chapter 16, so the compiler checks
+thread-safe smart pointers we discussed in Chapter 16, so the compiler checks
 that data accessed from different threads is done safely.
 
 ### Implementing an Unsafe Trait
