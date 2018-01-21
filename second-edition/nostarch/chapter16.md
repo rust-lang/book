@@ -124,16 +124,19 @@ Filename: src/main.rs
 
 ```
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     thread::spawn(|| {
         for i in 1..10 {
             println!("hi number {} from the spawned thread!", i);
+            thread::sleep(Duration::from_millis(1));
         }
     });
 
     for i in 1..5 {
         println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
     }
 }
 ```
@@ -158,11 +161,13 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The threads will probably take turns, but that’s not guaranteed: it depends on
-how your operating system schedules the threads. In this run, the main thread
-printed first, even though the print statement from the spawned thread appears
-first in the code. And even though we told the spawned thread to print until
-`i` is 9, it only got to 5 before the main thread shut down.
+The `thread::sleep` function will force a thread to stop its execution for a
+short duration, allowing a different thread to run, so that they will probably
+take turns, but that’s not guaranteed: it depends on how your operating system
+schedules the threads. In this run, the main thread printed first, even though
+the print statement from the spawned thread appears first in the code. And even
+though we told the spawned thread to print until `i` is 9, it only got to 5
+before the main thread shut down.
 
 If you run this code and only see one thread, or don’t see any overlap, try
 increasing the numbers in the ranges to create more opportunities for a thread
@@ -186,16 +191,19 @@ Filename: src/main.rs
 
 ```
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     let handle = thread::spawn(|| {
         for i in 1..10 {
             println!("hi number {} from the spawned thread!", i);
+            thread::sleep(Duration::from_millis(1));
         }
     });
 
     for i in 1..5 {
         println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
     }
 
     handle.join();
@@ -236,11 +244,13 @@ Filename: src/main.rs
 
 ```
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     let handle = thread::spawn(|| {
         for i in 1..10 {
             println!("hi number {} from the spawned thread!", i);
+            thread::sleep(Duration::from_millis(1));
         }
     });
 
@@ -248,6 +258,7 @@ fn main() {
 
     for i in 1..5 {
         println!("hi number {} from the main thread!", i);
+        thread::sleep(Duration::from_millis(1));
     }
 }
 ```
@@ -276,12 +287,14 @@ your threads are actually running at the same time or not.
 
 ### Using `move` Closures with Threads
 
-The `move` closure, which we didn’t cover in Chapter 13, is often used
+The `move` closure, which we mentioned briefly in Chapter 13, is often used
 alongside `thread::spawn`, as it allows us to use data from one thread in
 another thread.
 
-In Chapter 13, we said that “Creating closures that capture values from their
-environment is mostly used in the context of starting new threads.”
+In Chapter 13, we said that “If we want to force the closure to take ownership
+of the values it uses in the environment, we can use the `move` keyword before
+the parameter list. This technique is mostly useful when passing a closure to a
+new thread to move the data so it’s owned by the new thread.”
 
 Now we’re creating new threads, so let’s talk about capturing values in
 closures!
@@ -459,6 +472,8 @@ transmitter half is like the upstream location where we put rubber ducks into
 the river, and the receiver half is the downstream place where the rubber duck
 ends up. One part of our code calls methods on the transmitter with the data we
 want to send, and another part checks the receiving end for arriving messages.
+A channel is said to be *closed* if either the transmitter or the receiver half
+is dropped.
 
 Here we’ll work up to a program that has one thread to generate values and send
 them down a channel, and another thread that will receive the values and print
@@ -643,7 +658,7 @@ error[E0382]: use of moved value: `val`
 
 Our concurrency mistake has caused a compile-time error! The `send` function
 takes ownership of its parameter, and when the value is moved the receiver
-takes ownership of it. This stops us from accidentally use the value again
+takes ownership of it. This stops us from accidentally using the value again
 after sending it; the ownership system checks that everything is okay.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
@@ -754,7 +769,7 @@ thread::spawn(move || {
 // --snip--
 ```
 
-Listing 16-11: Sending multiple messages and pausing between each one
+Listing 16-11: Sending multiple messages from multiple producers
 
 This time, before we create the first spawned thread, we call `clone` on the
 sending end of the channel. This will give us a new sending handle we can pass
@@ -1216,7 +1231,7 @@ but there are some exceptions, including `Rc<T>`: this cannot be `Send` because
 if we cloned an `Rc<T>` value and tried to transfer ownership of the clone to
 another thread, both threads might update the reference count at the same time.
 For this reason, `Rc<T>` is implemented for use in single-threaded situations
-where you don’t want to pay the threadsafe performance penalty.
+where you don’t want to pay the thread-safe performance penalty.
 
 In this way Rust’s type system and trait bounds ensure we can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
@@ -1240,7 +1255,7 @@ are also `Sync`.
 `Rc<T>` is also not `Sync`, for the same reasons that it’s not `Send`.
 `RefCell<T>` (which we talked about in Chapter 15) and the family of related
 `Cell<T>` types are not `Sync`. The implementation of borrow checking that
-`RefCell<T>` does at runtime is not threadsafe. `Mutex<T>` is `Sync`, and can
+`RefCell<T>` does at runtime is not thread-safe. `Mutex<T>` is `Sync`, and can
 be used to share access with multiple threads as we saw in the previous section.
 
 ### Implementing `Send` and `Sync` Manually is Unsafe
