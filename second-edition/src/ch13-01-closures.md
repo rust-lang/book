@@ -294,20 +294,18 @@ fn generate_workout(intensity: u32, random_number: u32) {
 그러나 우선 클로저 정의에 타입 어노테이션이 없는 이유와 클로저와 연관된 트레잇에
 대해 이야기 합시다.
 
-### Closure Type Inference and Annotation
+### 클로저 타입 추론과 어노테이션
 
-Closures don’t require you to annotate the types of the parameters or the
-return value like `fn` functions do. Type annotations are required on functions
-because they’re part of an explicit interface exposed to your users. Defining
-this interface rigidly is important for ensuring that everyone agrees on what
-types of values a function uses and returns. But closures aren’t used in an
-exposed interface like this: they’re stored in variables and used without
-naming them and exposing them to users of our library.
+클로저는 `fn` 함수처럼 파라미터의 타입이나 반환값에 주석을 달 것을 요구하지 않습니다.
+타입 어노테이션은 사용자에게 노출되는 명시적인 인터페이스의 일부이기 때문에 함수에
+필요 합니다. 이 인터페이스를 엄격하게 정의하는 것은 함수가 어떤 타입의 값을 사용하고
+반환하는지에 대해 모두가 합의 한다는 것을 보장하는데 중요 합니다. 그러나 클로저는
+이와 같이 노출된 인터페이스에 사용되지 않습니다: 변수에 저장되고 이름없이 우리의
+라이브러리 사용자들에게 노출되지 않고 사용 됩니다.
 
-Additionally, closures are usually short and only relevant within a narrow
-context rather than in any arbitrary scenario. Within these limited contexts,
-the compiler is reliably able to infer the types of the parameters and return
-type, similar to how it’s able to infer the types of most variables.
+추가적으로, 클로저는 보통 짧고 임의의 시나리오 보다 좁은 문맥 안에서만 관련이 있습니
+다. 이런 제한된 문맥 안에서만, 컴파일러는 안정적으로 파라미터와 리턴타입을 추론할 수
+있으며, 이는 대부분의 변수 타입을 추론 할 수 있는 방법과 비슷 합니다.
 
 Making programmers annotate the types in these small, anonymous functions would
 be annoying and largely redundant with the information the compiler already has
