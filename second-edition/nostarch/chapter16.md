@@ -1269,8 +1269,8 @@ Manually implementing these traits involves implementing unsafe Rust code.
 We’re going to be talking about using unsafe Rust code in Chapter 19; for now,
 the important information is that building new concurrent types not made up of
 `Send` and `Sync` parts requires careful thought, in order to uphold the safety
-guarantees. The Nomicon at *https://doc.rust-lang.org/stable/nomicon/*
-has more information about these guarantees and how to uphold them.
+guarantees. The Rustonomicon at *https://doc.rust-lang.org/stable/nomicon/* has
+more information about these guarantees and how to uphold them.
 
 ## Summary
 

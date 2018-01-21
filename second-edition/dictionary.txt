@@ -341,6 +341,7 @@ runtime
 runtimes
 Rustacean
 Rustaceans
+Rustonomicon
 rUsT
 rustc
 rustdoc
