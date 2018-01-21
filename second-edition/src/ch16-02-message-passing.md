@@ -21,6 +21,8 @@ transmitter half is like the upstream location where we put rubber ducks into
 the river, and the receiver half is the downstream place where the rubber duck
 ends up. One part of our code calls methods on the transmitter with the data we
 want to send, and another part checks the receiving end for arriving messages.
+A channel is said to be *closed* if either the transmitter or the receiver half
+is dropped.
 
 Here we’ll work up to a program that has one thread to generate values and send
 them down a channel, and another thread that will receive the values and print
