@@ -649,7 +649,7 @@ extern crate minigrep;
 use std::env;
 use std::process;
 
-use minigrep::Config;
+use minigrep::{Config, run};
 
 fn main() {
     // --snip--
