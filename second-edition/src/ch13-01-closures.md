@@ -331,12 +331,11 @@ let expensive_closure = |num: u32| -> u32 {
 <span class="caption">리스트 13-7: 클로저에 파라미터와 반환값 타입에 대한 선태적
 인 타입 어노테이션 추가하기</span>
 
-The syntax of closures and functions looks more similar with type annotations.
-The following is a vertical comparison of the syntax for the definition of a
-function that adds one to its parameter, and a closure that has the same
-behavior. We’ve added some spaces to line up the relevant parts. This
-illustrates how closure syntax is similar to function syntax except for the use
-of pipes and the amount of syntax that is optional:
+타입 어노테이션이 있으면 클로저와 함수의 문법은 더 비슷해 보입니다.
+다음은 파라미터에 1을 더하는 함수 정의와 동일한 행위를 하는 클로저를 수직으로 비교한
+것입니다. 관련 있는 부분들을 정렬하기 이해 약간의 공백을 추가했습니다. 이것은
+파이프를 사용한 것과 선택적인 문법의 양을 제외하고 클로저 문법과 함수 문법이 얼마나
+비슷한지 보여줍니다:
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -345,21 +344,18 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition, and the second line shows a fully
-annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the brackets that are
-optional, because the closure body has only one expression. These are all valid
-definitions that will produce the same behavior when they’re called.
+첫번째 줄은 함수 정의를 보여주고, 두번째 줄은 타입을 모두 명기한 클로저 정의를 보여
+줍니다. 세번째 줄은 클로저 정의에서 타입 어노테이션을 지웠고, 네번째 줄은 선택적인
+중괄호를 지웠는데, 클로저 보디가 단 하나의 표현식을 갖기 때문 입니다. 이것은 모두
+호출 했을 때 동일한 행위를 수행하는 유효한 정의들 입니다.
 
-Closure definitions will have one concrete type inferred for each of their
-parameters and for their return value. For instance, Listing 13-8 shows the
-definition of a short closure that just returns the value it receives as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition: if
-we then try to call the closure twice, using a `String` as an argument the
-first time and a `u32` the second time, we’ll get an error:
+클로저 정의는 각 파리미터들과 그들의 반환값에 대해 단 하나의 추론된 구체적인 타입을
+갖을 것 입니다. 예를 들면, 리스트 13-8 은 파리미터로 받은 값을 그대로 반환하는 짧은
+클로저의 정의를 보여줍니다. 이 클로저는 이 예제의 목적 이에외는 유용하지 않습니다.
+정의에 타입 어노테이션을 추가하지 않았다는 것에 유의하세요: 클로저를 두번 호출하는데,
+첫번째는 `String` 을 인자로 사용하고 두번째는 `u32` 을 사용한다면 에러가 발생합니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust,ignore
 let example_closure = |x| x;
@@ -368,10 +364,10 @@ let s = example_closure(String::from("hello"));
 let n = example_closure(5);
 ```
 
-<span class="caption">Listing 13-8: Attempting to call a closure whose types
-are inferred with two different types</span>
+<span class="caption">리스트 13-8: 두개의 다른 타입으로 추론된 타입을 갖는 클로저
+호출 해보기</span>
 
-The compiler gives us this error:
+컴파일러는 이런 에러를 줍니다:
 
 ```text
 error[E0308]: mismatched types
@@ -385,10 +381,10 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked in to the closure in `example_closure`, and we get a type
-error if we try to use a different type with the same closure.
+처음 `String` 값으로 `example_closure` 을 호출하면, 컴파일러는 `x` 의 타입과
+클로저의 반환 타입을 `String` 으로 추론합니다. 이 타입들은 그다음에는
+`example_closure` 에 있는 클로저에 고정되고, 같은 클로저를 다른 타입으로 사용하려고
+할 때 타입 에러를 얻게 됩니다.
 
 ### Storing Closures Using Generic Parameters and the `Fn` Traits
 
