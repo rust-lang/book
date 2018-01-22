@@ -310,12 +310,12 @@ fn generate_workout(intensity: u32, random_number: u32) {
 프로그래머들에게 이런 작고 익명의 함수들에 타입을 달도록하는 것은 짜증나고 컴파일러가
 이미 사용할수 있는 정보와 대게는 중복 됩니다.
 
-Like variables, we can add type annotations if we want to increase explicitness
-and clarity at the cost of being more verbose than is strictly necessary;
-annotating the types for the closure we defined in Listing 13-4 would look like
-the definition shown in Listing 13-7:
+변수 처럼, 엄격하게 필요한 것보다 자세하게 표현하는 비용으로 명확성과 명료성을
+높이려면 타입 어노테이션을 추가할 수 있습니다;
+리스트 13-4 에 정의한 클로저에 타입을 명시하는 것은 리스트 13-7 에 보여지는 것과
+같을 것 입니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 # use std::thread;
@@ -328,8 +328,8 @@ let expensive_closure = |num: u32| -> u32 {
 };
 ```
 
-<span class="caption">Listing 13-7: Adding optional type annotations of the
-parameter and return value types in the closure</span>
+<span class="caption">리스트 13-7: 클로저에 파라미터와 반환값 타입에 대한 선태적
+인 타입 어노테이션 추가하기</span>
 
 The syntax of closures and functions looks more similar with type annotations.
 The following is a vertical comparison of the syntax for the definition of a
