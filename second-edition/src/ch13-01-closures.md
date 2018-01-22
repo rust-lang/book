@@ -307,9 +307,8 @@ fn generate_workout(intensity: u32, random_number: u32) {
 다. 이런 제한된 문맥 안에서만, 컴파일러는 안정적으로 파라미터와 리턴타입을 추론할 수
 있으며, 이는 대부분의 변수 타입을 추론 할 수 있는 방법과 비슷 합니다.
 
-Making programmers annotate the types in these small, anonymous functions would
-be annoying and largely redundant with the information the compiler already has
-available.
+프로그래머들에게 이런 작고 익명의 함수들에 타입을 달도록하는 것은 짜증나고 컴파일러가
+이미 사용할수 있는 정보와 대게는 중복 됩니다.
 
 Like variables, we can add type annotations if we want to increase explicitness
 and clarity at the cost of being more verbose than is strictly necessary;
