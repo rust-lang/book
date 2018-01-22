@@ -2,26 +2,45 @@
 
 Welcome to “The Rust Programming Language,” an introductory book about Rust.
 
-Rust is a programming language that gives you the option to control a lot of
-low-level details like memory usage, but still gives you the productivity and
-ergonomics of a higher level language. These two aspects are often at odds in
-other programming languages, and Rust's balancing of powerful technical
-capacity and great developer experience is what makes it special. 
+Rust is a programming language that helps you write faster, safer software.
+There are two aspects of programming languages that are often seen as being at
+odds with each other: low-level control, and high-level productivity and
+ergonomics. Through balancing powerful technical capacity and a great developer
+experience, Rust gives you the option to control low-level details (such as
+memory usage) without all the hassle traditionally associated with such control.
 
-That being said, Rust is great for many people for a variety of reasons:
+## Who Rust is For
 
-### Developer Teams
+Rust is great for many people for a variety of reasons. Let's discuss a few of
+the most important groups.
 
-- tell our dev tools story
-- compiler makes things safe and correct
-- cargo for managing deps
-- rustfmt enforces style
+### Teams of Developers
+
+Large teams of developers with varying levels of systems programming knowledge
+and experience are finding Rust to be a productive tool for collaborating on
+large codebases. The compiler plays a gatekeeper role by refusing to compile
+code that does not follow rules of memory safety that developers have to ensure
+manually through code reviews and tests in other languages. By offloading this
+burden to the compiler, the team can spend more time focusing on the logic of
+the program rather than the safety.
+
+Rust also brings modern developer tools to the systems programming world.
+Cargo, the included dependency manager and build tool, makes adding, compiling,
+and managing dependencies consistent across the Rust ecosystem. Rustfmt ensures
+a consistent coding style across developers. Clippy is a linting tool that
+provides recommendations for creating idiomatic Rust code. The Rust Language
+Server powers IDE integration for code completion and inline error messages. By
+using these and other tools in the Rust ecosystem, developers can be productive
+while writing systems-level code.
 
 ### Students
 
 Rust is for students and people who are interested in learning about systems
 concepts. Many people have learned about topics like operating systems
-development through Rust.
+development through Rust. The community is helpful and happy to answer student
+questions. Through efforts such as this book, the Rust teams want to make
+systems concepts more accessible to more people, especially those getting
+started with programming in general.
 
 ### Companies
 
@@ -34,14 +53,24 @@ learning, and even major parts of the Firefox web browser.
 ### Open Source Developers
 
 Rust is for people who want to build the Rust programming language, community,
-devtools, and ecosystem. We’d love you to contribute to the Rust language.
+developer tools, and libraries. We’d love for you to contribute to the Rust
+language.
 
-### People who like to go fast (and not break things)
+### People Who Value Speed and Stability
 
-- zoom zoom 
-- the only aspect this hasn't hit is speed
+By speed, we mean both the speed of the programs that Rust lets you create and
+the speed at which Rust lets you write them. The Rust compiler's checks ensure
+stability through feature additions and refactoring, as opposed to brittle
+legacy code in languages without these checks that developers are afraid to
+modify. By striving for zero-cost abstractions, higher level features that
+compile to lower level code as fast as code written manually, Rust endeavors to
+make safe code be fast code as well.
 
-CONCLUSION
+This isn't a complete list of everyone the Rust language hopes to support, but
+these are some of the biggest stakeholders. Overall, Rust's greatest ambition
+is to take trade-offs that have been accepted by programmers for decades and
+eliminate the dichotomy. Safety *and* productivity. Speed *and* ergonomics.
+Give Rust a try, and see if its choices work for you.
 
 ## Who This Book is For
 
