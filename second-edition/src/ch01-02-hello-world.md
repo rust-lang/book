@@ -160,8 +160,8 @@ over, and the next one is ready to begin. Most lines of Rust code end with a
 
 ### Compiling and Running Are Separate Steps
 
-In “Writing and Running a Rust Program”, we showed you how to run a newly
-created program. We’ll break that process down and examine each step now.
+In the “Writing and Running a Rust Program” section, we showed you how to run a
+newly created program. We’ll break that process down and examine each step now.
 
 Before running a Rust program, you have to compile it. You can use the Rust
 compiler by entering the `rustc` command and passing it the name of your source
