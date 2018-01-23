@@ -209,3 +209,18 @@ feature is now considered stable! It rides the trains into a new stable release
 of Rust.
 
 ## Summary
+
+You're already off to a great start on your Rust journey! In this chapter,
+you've:
+
+* Learned what makes Rust unique
+* Installed the latest stable version of Rust
+* Written a "Hello, world!" program using both `rustc` directly and using
+  the conventions of `cargo`
+* Found out about how Rust is developed
+
+This is a great time to build a more substantial program, to get used to
+reading and writing Rust code. In the next chapter, we'll build a guessing game
+program. If you'd rather start by learning about how common programming
+concepts work in Rust, see Chapter 3.
+
