@@ -232,6 +232,7 @@ lookup
 loopback
 lossy
 lval
+macOS
 mathematic
 memoization
 metadata

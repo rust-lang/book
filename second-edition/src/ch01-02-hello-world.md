@@ -68,8 +68,8 @@ fn main() {
 
 <span class="caption">Listing 1-1: A program that prints “Hello, world!”</span>
 
-Save the file, and go back to your terminal window. On Linux or OSX, enter the
-following commands:
+Save the file, and go back to your terminal window. On Linux or macOS, enter
+the following commands:
 
 ```text
 $ rustc main.rs
