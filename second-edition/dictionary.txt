@@ -23,12 +23,14 @@ async
 atomics
 AveragedCollection
 backend
+backported
 backtrace
 backtraces
 BACKTRACE
 Backtraces
 Baz’s
 benchmarking
+bioinformatics
 bitand
 BitAnd
 BitAndAssign
@@ -57,6 +59,7 @@ cargodoc
 ChangeColor
 ChangeColorMessage
 charset
+choo
 chXX
 chYY
 coercions
@@ -71,6 +74,7 @@ couldn
 CPUs
 cratesio
 CRLF
+cryptocurrencies
 cryptographically
 CStr
 CString
@@ -102,6 +106,7 @@ destructures
 destructuring
 Destructuring
 deterministically
+DevOps
 didn
 Dobrý
 doccargo
@@ -144,6 +149,7 @@ FnBox
 FnMut
 FnOnce
 formatter
+formatters
 FrenchToast
 FromIterator
 frontend
@@ -175,6 +181,9 @@ html
 hyperoptimize
 Iceburgh
 ident
+IDE
+IDEs
+IDE's
 IEEE
 impl
 implementor
@@ -223,6 +232,7 @@ lookup
 loopback
 lossy
 lval
+macOS
 mathematic
 memoization
 metadata
@@ -243,6 +253,7 @@ monomorphized
 MoveMessage
 Mozilla
 mpsc
+msvc
 MulAssign
 multibyte
 multithreaded
@@ -345,6 +356,7 @@ Rustonomicon
 rUsT
 rustc
 rustdoc
+rustfmt
 rustup
 screenshot
 searchstring
@@ -360,6 +372,7 @@ Simula
 situps
 sizeof
 Smalltalk
+snuck
 someproject
 someusername
 SPDX
@@ -394,6 +407,7 @@ submodules
 Submodules
 suboptimal
 substring
+subteams
 subtree
 subtyping
 Summarizable
@@ -415,10 +429,13 @@ TODO
 TokenStream
 toml
 TOML
+toolchain
+toolchains
 ToString
 tradeoff
 tradeoffs
 TrafficLight
+transcoding
 trpl
 tuesday
 tuple
@@ -454,6 +471,7 @@ variant's
 vers
 versa
 Versioning
+visualstudio
 vtable
 wasn
 WeatherForecast
