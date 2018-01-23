@@ -2,13 +2,13 @@
 
 The first step to using Rust is to install it. You’ll need an internet
 connection to run the commands in this chapter, as we’ll be downloading Rust
-from the internet. We'll actually be installing Rust using `rustup`, a
+from the internet. We’ll actually be installing Rust using `rustup`, a
 command-line tool for managing Rust versions and associated tools.
 
 The following steps will install the latest stable version of the Rust
 compiler. The examples and output shown in this book used stable Rust 1.21.0.
-Due to Rust's stability guarantees, which we'll discuss further in the "How
-Rust is Made" section later in this chapter, all of the examples that compile
+Due to Rust’s stability guarantees, which we’ll discuss further in the “How
+Rust is Made” section later in this chapter, all of the examples that compile
 will continue to compile with newer versions of Rust. The output may differ
 slightly as error messages and warnings are often improved. In other words, the
 newer, stable version of Rust you will install with these steps should work as
@@ -59,9 +59,9 @@ Alternatively, add the following line to your `~/.bash_profile`:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Finally, you'll need a linker of some kind. You likely have one installed. If
-not, when you compile a Rust program, you'll get errors that a linker could not
-be executed. Check your platform's documentation for how to install a C
+Finally, you’ll need a linker of some kind. You likely have one installed. If
+not, when you compile a Rust program, you’ll get errors that a linker could not
+be executed. Check your platform’s documentation for how to install a C
 compiler; they usually come with the correct linker as well, given that C needs
 one. You may want to install a C compiler regardless of your need for only a
 linker; some common Rust packages depend on C code and will need a C compiler
@@ -70,18 +70,18 @@ too.
 ### Installing Rustup on Windows
 
 On Windows, go to [https://www.rust-lang.org/en-US/install.html][install] and
-follow the instructions. You'll also need the C++ build tools for Visual Studio
+follow the instructions. You’ll also need the C++ build tools for Visual Studio
 2013 or later. The easiest way to acquire the build tools is by installing
 [Microsoft Visual C++ Build Tools 2017][visualstudio] which provides only the
 Visual C++ build tools. Alternately, you can [install][visualstudio] Visual
 Studio 2017, Visual Studio 2015, or Visual Studio 2013 and during installation
-select the "C++ tools".
+select the “C++ tools”.
 
 [install]: https://www.rust-lang.org/en-US/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
 
 The rest of this book will use commands that work in both `cmd.exe` and
-PowerShell. If there are specific differences, we'll explain which to use.
+PowerShell. If there are specific differences, we’ll explain which to use.
 
 ### Custom Installations Without Rustup
 

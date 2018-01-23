@@ -9,7 +9,7 @@ tradition.
 > makes no specific demands about your editing, tooling, or where your code
 > lives, so if you prefer an IDE (Integrated Development Environment) to the
 > command line, feel free to use your favorite IDE. Many IDEs now have some
-> degree of Rust support; check the IDE's documentation for details. Enabling
+> degree of Rust support; check the IDE’s documentation for details. Enabling
 > great IDE support has been a recent focus of the Rust team, and progress
 > has been made rapidly on that front!
 
@@ -111,7 +111,7 @@ put the opening curly bracket on the same line as the function declaration,
 with one space in between.
 
 > At the time of writing, an automatic formatter, `rustfmt`, is under
-> development. If you'd like to stick to a standard style across Rust projects,
+> development. If you’d like to stick to a standard style across Rust projects,
 > `rustfmt` is a tool that will format your code in a particular style. The
 > plan is to eventually include it with the standard Rust distribution, like
 > `rustc`, so depending on when you read this book, you may have it already
@@ -136,7 +136,7 @@ see a `!` that means that you’re calling a macro instead of a normal function.
 > ### Why `println!` is a Macro
 >
 > There are multiple reasons why `println!` is a macro rather than a function,
-> and we haven't really explained Rust yet, so it's not exactly obvious. Here
+> and we haven’t really explained Rust yet, so it’s not exactly obvious. Here
 > are the reasons:
 >
 > * The string passed to `println!` can have formatting specifiers in it,
@@ -145,10 +145,10 @@ see a `!` that means that you’re calling a macro instead of a normal function.
 >   (and macros generally) can take a variable number.
 > * The formatting specifiers can have named arguments, which Rust functions
 >   cannot.
-> * It implicitly takes its arguments by reference even when they're passed
+> * It implicitly takes its arguments by reference even when they’re passed
 >   by value.
 >
-> If none of this makes sense, don't worry about it. We'll cover these concepts
+> If none of this makes sense, don’t worry about it. We’ll cover these concepts
 > in more detail later.
 
 Next is `"Hello, world!"` which is a *string*. We pass this string as an
@@ -234,7 +234,7 @@ easier to do.
 
 As the vast, vast majority of Rust projects use Cargo, we will assume that
 you’re using it for the rest of the book. Cargo comes installed with Rust
-itself, if you used the official installers as covered in the "Installation"
+itself, if you used the official installers as covered in the “Installation”
 section. If you installed Rust through some other means, you can check if you
 have Cargo installed by typing the following into your terminal:
 
@@ -404,7 +404,7 @@ $ cargo run
 Hello, world!
 ```
 
-Finally, there's `cargo check`. This will quickly check your code to make sure
+Finally, there’s `cargo check`. This will quickly check your code to make sure
 that it compiles, but not bother producing an executable:
 
 ```text
@@ -415,10 +415,10 @@ $ cargo check
 
 Why would you not want an executable? `cargo check` is often much faster than
 `cargo build`, because Cargo can skip the entire step of producing the
-executable. If we're checking our work throughout the process of writing the
+executable. If we’re checking our work throughout the process of writing the
 code, this will speed things up! As such, many Rustaceans run `cargo check` as
 they write their program to make sure that it compiles, and then run `cargo
-build` once they're ready to give it a spin themselves.
+build` once they’re ready to give it a spin themselves.
 
 So a few more differences we’ve now seen:
 

@@ -11,7 +11,7 @@ without all the hassle traditionally associated with such control.
 
 ## Who Rust is For
 
-Rust is great for many people for a variety of reasons. Let's discuss a few of
+Rust is great for many people for a variety of reasons. Let’s discuss a few of
 the most important groups.
 
 ### Teams of Developers
@@ -63,60 +63,60 @@ language.
 ### People Who Value Speed and Stability
 
 By speed, we mean both the speed of the programs that Rust lets you create and
-the speed at which Rust lets you write them. The Rust compiler's checks ensure
+the speed at which Rust lets you write them. The Rust compiler’s checks ensure
 stability through feature additions and refactoring, as opposed to brittle
 legacy code in languages without these checks that developers are afraid to
 modify. By striving for zero-cost abstractions, higher level features that
 compile to lower level code as fast as code written manually, Rust endeavors to
 make safe code be fast code as well.
 
-This isn't a complete list of everyone the Rust language hopes to support, but
-these are some of the biggest stakeholders. Overall, Rust's greatest ambition
+This isn’t a complete list of everyone the Rust language hopes to support, but
+these are some of the biggest stakeholders. Overall, Rust’s greatest ambition
 is to take trade-offs that have been accepted by programmers for decades and
 eliminate the dichotomy. Safety *and* productivity. Speed *and* ergonomics.
 Give Rust a try, and see if its choices work for you.
 
 ## Who This Book is For
 
-This book assumes that you've written code in some other programming language,
-but doesn't make any assumptions about which one. We've tried to make the
+This book assumes that you’ve written code in some other programming language,
+but doesn’t make any assumptions about which one. We’ve tried to make the
 material broadly accessible to those from a wide variety of programming
-backgrounds. We don't spend a lot of time talking about what programming *is*
+backgrounds. We don’t spend a lot of time talking about what programming *is*
 or how to think about it; someone new to programming entirely would be better
 served by reading a book specifically providing an introduction to programming.
 
 ## How to Use This Book
 
-This book generally assumes that you're reading it front-to-back, that is,
+This book generally assumes that you’re reading it front-to-back, that is,
 later chapters build on top of concepts in earlier chapters, and earlier
 chapters may not dig into details on a topic, revisiting the topic in a later
 chapter.
 
 There are two kinds of chapters in this book: concept chapters, and project
-chapters. In concept chapters, you'll learn about an aspect of Rust. In the
-project chapters, we'll build small programs together, applying what we've
+chapters. In concept chapters, you’ll learn about an aspect of Rust. In the
+project chapters, we’ll build small programs together, applying what we’ve
 learned so far. Chapters 2, 12, and 20 are project chapters; the rest are
 concept chapters.
 
-Additionally, Chapter 2 is a hands-on introduction to Rust as a language. We'll
+Additionally, Chapter 2 is a hands-on introduction to Rust as a language. We’ll
 cover concepts at a high level, and later chapters will go into them in detail.
-If you're the kind of person who likes to get their hands dirty right away,
-Chapter 2 is great for that. If you're *really* that kind of person, you may
+If you’re the kind of person who likes to get their hands dirty right away,
+Chapter 2 is great for that. If you’re *really* that kind of person, you may
 even wish to skip over Chapter 3, which covers features that are very similar
 to other programming languages, and go straight to Chapter 4 to learn about
-Rust's ownership system. By contrast, if you're a particularly meticulous
+Rust’s ownership system. By contrast, if you’re a particularly meticulous
 learner who prefers to learn every detail before moving onto the next, you may
 want to skip Chapter 2 and go straight to Chapter 3.
 
-In the end, there's no wrong way to read a book: if you want to skip ahead, go
+In the end, there’s no wrong way to read a book: if you want to skip ahead, go
 for it! You may have to jump back if you find things confusing. Do whatever
 works for you.
 
 An important part of the process of learning Rust is learning how to read the
-error messages that the compiler gives you. As such, we'll be showing a lot of
-code that doesn't compile, and the error message the compiler will show you in
+error messages that the compiler gives you. As such, we’ll be showing a lot of
+code that doesn’t compile, and the error message the compiler will show you in
 that situation. As such, if you pick a random example, it may not compile!
-Please read the surrounding text to make sure that you didn't happen to pick
+Please read the surrounding text to make sure that you didn’t happen to pick
 one of the in-progress examples.
 
 Finally, there are some appendices. These contain useful information about the
