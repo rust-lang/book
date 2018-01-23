@@ -2,12 +2,12 @@
 
 Welcome to “The Rust Programming Language,” an introductory book about Rust.
 
-Rust is a programming language that helps you write faster, safer software.
-There are two aspects of programming languages that are often seen as being at
-odds with each other: low-level control, and high-level productivity and
-ergonomics. Through balancing powerful technical capacity and a great developer
-experience, Rust gives you the option to control low-level details (such as
-memory usage) without all the hassle traditionally associated with such control.
+Rust is a programming language that helps you write faster, more robust
+software. High-level ergonomics and low-level control are often at odds with
+each other in programming language design; Rust stands to challenge that.
+Through balancing powerful technical capacity and a great developer experience,
+Rust gives you the option to control low-level details (such as memory usage)
+without all the hassle traditionally associated with such control.
 
 ## Who Rust is For
 
@@ -16,31 +16,33 @@ the most important groups.
 
 ### Teams of Developers
 
-Large teams of developers with varying levels of systems programming knowledge
-and experience are finding Rust to be a productive tool for collaborating on
-large codebases. The compiler plays a gatekeeper role by refusing to compile
-code that does not follow rules of memory safety that developers have to ensure
-manually through code reviews and tests in other languages. By offloading this
-burden to the compiler, the team can spend more time focusing on the logic of
-the program rather than the safety.
+Rust is proving to be a productive tool for collaborating among large teams of
+developers with varying levels of systems programming knowledge. In other
+languages, developers often have to ensure safety manually through code
+reviews. In Rust, the compiler plays a gatekeeper role by refusing to compile
+code that does not follow rules of memory safety. By working alongside the
+compiler, the team can spend more time focusing on the logic of the program
+rather than the safety.
 
-Rust also brings modern developer tools to the systems programming world.
-Cargo, the included dependency manager and build tool, makes adding, compiling,
-and managing dependencies consistent across the Rust ecosystem. Rustfmt ensures
-a consistent coding style across developers. Clippy is a linting tool that
-provides recommendations for creating idiomatic Rust code. The Rust Language
-Server powers IDE integration for code completion and inline error messages. By
-using these and other tools in the Rust ecosystem, developers can be productive
-while writing systems-level code.
+Rust also brings contemporary developer tools to the systems programming world:
+
+* Cargo, the included dependency manager and build tool, makes adding,
+  compiling, and managing dependencies consistent across the Rust ecosystem.
+* Rustfmt ensures a consistent coding style across developers.
+* The Rust Language Server powers IDE integration for code completion and
+  inline error messages.
+
+By using these and other tools in the Rust ecosystem, developers can be
+productive while writing systems-level code.
 
 ### Students
 
 Rust is for students and people who are interested in learning about systems
 concepts. Many people have learned about topics like operating systems
-development through Rust. The community is helpful and happy to answer student
-questions. Through efforts such as this book, the Rust teams want to make
-systems concepts more accessible to more people, especially those getting
-started with programming in general.
+development through Rust. The community is happy to answer student questions.
+Through efforts such as this book, the Rust teams want to make systems concepts
+more accessible to more people, especially those getting started with
+programming.
 
 ### Companies
 
