@@ -33,8 +33,8 @@ $ cd hello_world
 Windows CMD:
 
 ```cmd
-> mkdir %USERPROFILE%\projects
-> cd /d %USERPROFILE%\projects
+> mkdir "%USERPROFILE%\projects"
+> cd /d "%USERPROFILE%\projects"
 > mkdir hello_world
 > cd hello_world
 ```
@@ -261,7 +261,7 @@ $ cd ~/projects
 CMD for Windows:
 
 ```cmd
-> cd %USERPROFILE%\projects
+> cd \d "%USERPROFILE%\projects"
 ```
 
 And then on any operating system run:
