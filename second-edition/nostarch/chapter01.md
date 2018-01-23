@@ -207,11 +207,12 @@ too.
 On Windows, go to https://www.rust-lang.org/en-US/install.html at
 *https://www.rust-lang.org/en-US/install.html* and follow the instructions.
 You’ll also need the C++ build tools for Visual Studio 2013 or later. The
-easiest way to acquire the build tools is by installing Microsoft Visual C++
-Build Tools 2017 at *https://www.visualstudio.com/downloads/* which provides
-only the Visual C++ build tools. Alternately, you can install Visual Studio
-2017, Visual Studio 2015, or Visual Studio 2013 and during installation select
-the “C++ tools”.
+easiest way to acquire the build tools is by installing Build Tools for Visual
+Studio 2017 at *https://www.visualstudio.com/downloads/* which provides only
+the Visual C++ build tools. Alternately, you can install at
+*https://www.visualstudio.com/downloads/* Visual Studio 2017, Visual Studio
+2015, or Visual Studio 2013 and during installation select the desktop
+development with C++ workload.
 
 The rest of this book will use commands that work in both `cmd.exe` and
 PowerShell. If there are specific differences, we’ll explain which to use.
