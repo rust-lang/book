@@ -341,6 +341,7 @@ runtime
 runtimes
 Rustacean
 Rustaceans
+Rustonomicon
 rUsT
 rustc
 rustdoc
@@ -406,7 +407,6 @@ TextField
 That'd
 there'd
 ThreadPool
-threadsafe
 timestamp
 Tiếng
 timeline
