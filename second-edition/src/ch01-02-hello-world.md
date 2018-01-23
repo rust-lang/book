@@ -374,23 +374,10 @@ Hello, world!
 Bam! If all goes well, `Hello, world!` should print to the terminal once more.
 
 Running `cargo build` for the first time also causes Cargo to create a new file
-at the top level called *Cargo.lock*, which looks like Listing 1-3:
-
-<span class="filename">Filename: Cargo.lock</span>
-
-```toml
-[root]
-name = "hello_cargo"
-version = "0.1.0"
-```
-
-<span class="caption">Listing 1-3: Contents of *Cargo.lock* after running
-`cargo build`</span>
-
-Cargo uses *Cargo.lock* to keep track of the exact versions of dependencies
-used to build your project. This project doesn’t have dependencies, so the file
-is a bit sparse. You won’t ever need to touch this file yourself; Cargo will
-manage its contents for you.
+at the top level called *Cargo.lock*. Cargo uses *Cargo.lock* to keep track of
+the exact versions of dependencies used to build your project. This project
+doesn’t have dependencies, so the file is a bit sparse. You won’t ever need to
+touch this file yourself; Cargo will manage its contents for you.
 
 We just built a project with `cargo build` and ran it with
 `./target/debug/hello_cargo`, but we can also use `cargo run` to compile and
