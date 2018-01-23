@@ -2,7 +2,7 @@
 
 Welcome to “The Rust Programming Language,” an introductory book about Rust.
 
-Rust is a programming language that helps you write faster, more robust
+Rust is a programming language that helps you write faster, more reliable
 software. High-level ergonomics and low-level control are often at odds with
 each other in programming language design; Rust stands to challenge that.
 Through balancing powerful technical capacity and a great developer experience,
@@ -17,17 +17,19 @@ the most important groups.
 ### Teams of Developers
 
 Rust is proving to be a productive tool for collaborating among large teams of
-developers with varying levels of systems programming knowledge. In other
-languages, developers often have to ensure safety manually through code
-reviews. In Rust, the compiler plays a gatekeeper role by refusing to compile
-code that does not follow rules of memory safety. By working alongside the
-compiler, the team can spend more time focusing on the logic of the program
-rather than the safety.
+developers with varying levels of systems programming knowledge. Low-level code
+is prone to a variety of subtle bugs, which in most other languages can only be
+caught through extensive testing and careful code review by experienced
+developers. In Rust, the compiler plays a gatekeeper role by refusing to
+compile code with these kinds of bugs--including concurrency bugs. By working
+alongside the compiler, the team can spend more time focusing on the logic of
+the program rather than chasing down bugs.
 
 Rust also brings contemporary developer tools to the systems programming world:
 
 * Cargo, the included dependency manager and build tool, makes adding,
-  compiling, and managing dependencies consistent across the Rust ecosystem.
+  compiling, and managing dependencies painless and consistent across the Rust
+  ecosystem.
 * Rustfmt ensures a consistent coding style across developers.
 * The Rust Language Server powers IDE integration for code completion and
   inline error messages.
