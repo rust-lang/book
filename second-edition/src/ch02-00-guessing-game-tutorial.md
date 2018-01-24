@@ -871,7 +871,7 @@ exactly what we told it to do: ask for another guess forever! It doesn’t seem
 like the user can quit!
 
 The user could always halt the program by using the keyboard shortcut
-<span class="keystroke">ctrl-C</span>. But there’s another way to escape this
+<span class="keystroke">ctrl-c</span>. But there’s another way to escape this
 insatiable monster that we mentioned in the `parse` discussion in “Comparing the
 Guess to the Secret Number”: if the user enters a non-number answer, the program
 will crash. The user can take advantage of that in order to quit, as shown here:
