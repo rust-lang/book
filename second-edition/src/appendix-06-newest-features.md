@@ -58,7 +58,6 @@ fn main() {
 }
 ```
 
-
 ## Nested groups in `use` declarations
 
 If you have a complex module tree with many different submodules and you need
@@ -91,3 +90,25 @@ use foo::{
 #
 # fn main() {}
 ```
+
+## Inclusive ranges
+
+Previously, when a range (`..` or `...`) was used as an expression, it had to be
+`..`, which is exclusive of the upper bound, while patterns had to use `...`,
+which is inclusive of the upper bound. Now, `..=` is accepted as syntax for
+inclusive ranges in both expression and range context:
+
+```rust
+fn main() {
+    for i in 0 ..= 10 {
+        match i {
+            0 ..= 5 => println!("{}: low", i),
+            6 ..= 10 => println!("{}: high", i),
+            _ => println!("{}: out of range", i),
+        }
+    }
+}
+```
+
+The `...` syntax is still accepted in matches, but it is not accepted in
+expressions. `..=` should be preferred.
