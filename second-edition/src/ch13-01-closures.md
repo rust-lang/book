@@ -42,12 +42,13 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 
 다음은 이 예제에서 중요한 운동 앱의 일부를 담고 있는 `main` 함수 입니다.
 이 함수는 사용자가 운동 계획을 물어볼 때 앱이 호출 할 코드를 나타냅니다.
-앱의 프론트엔드와의 상호작용은 클로저를 사용하기에 적합하지 않기 때문에, 우리 프로
-그램에 대한 입력을 나타내는 값을 코드상에 넣어두고 결과를 출력 할 것 입니다.
+앱의 프론트엔드와의 상호작용은 클로저를 사용하기에 적합하지 않기 때문에, 우리
+프로 그램에 대한 입력을 나타내는 값을 코드상에 넣어두고 결과를 출력 할 것
+입니다.
 
 필요한 입력들은:
 
-* *사용자로 부터의 강도 숫자*, 이것은 그들이 운동을 요청할 때 지정되며, 낮은 
+* *사용자로 부터의 강도 숫자*, 이것은 그들이 운동을 요청할 때 지정되며, 낮은
   강도 운동을 원하는지 혹은 고강도 운동을 원하는지를 나타냅니다.
 * *임의의 숫자*는 몇 가지 다양한 운동 계획들을 생성할 것 입니다.
 
@@ -69,10 +70,10 @@ fn main() {
 # fn generate_workout(intensity: u32, random_number: u32) {}
 ```
 
-<span class="caption">리스트 13-2:사용자 입력과 임의의 숫자 생성을 시뮬레이션 
+<span class="caption">리스트 13-2:사용자 입력과 임의의 숫자 생성을 시뮬레이션
 하기 위한  `main` 함수와 하드코딩된 값</span>
 
-단순함을 위해서 `simulated_user_specified_value` 변수의 값을 10 으로하고 
+단순함을 위해서 `simulated_user_specified_value` 변수의 값을 10 으로하고
 `simulated_random_number` 변수의 값을 7로 하드코딩 했습니다; 실제 프로그램에서,
 강도 숫자를 앱 프론트엔드에서 얻고 2장의 추리게임에서 그랬던 것 처럼, 임의의
 숫자 생성을 위해 `rand` 크레이트를 사용합니다. `main` 함수는 `generate_workout`
@@ -139,8 +140,8 @@ fn generate_workout(intensity: u32, random_number: u32) {
 
 데이터 과학팀은 앞으로 알고리즘 호출 방식을 일부 변경해야 한다고 알렸습니다.
 이러한 변경이 발생 했을 때 업데이트를 단순화 하기 위해서, 이 코드를 리팩토링
-하여 `simulated_expensive_calculation` 함수를 단지 한번만 호출 하도록 하려고 
-합니다. 또한 현재 프로세스에서 해당 함수에 대한 다른 호출을 추가하지 않고 
+하여 `simulated_expensive_calculation` 함수를 단지 한번만 호출 하도록 하려고
+합니다. 또한 현재 프로세스에서 해당 함수에 대한 다른 호출을 추가하지 않고
 불필요하게 함수를 두 번 호출하는 위치 없애고 싶습니다. 즉, 결과가 필요없다면
 함수를 호출하고 싶지 않고, 여전히 그것을 한번만 호출하고 싶습니다.
 
@@ -220,29 +221,31 @@ let expensive_closure = |num| {
 # expensive_closure(5);
 ```
 
-<span class="caption">리스트 13-5: 클로저를 정의하고 `expensive_closure` 변수에 저장하기</span>
+<span class="caption">리스트 13-5: 클로저를 정의하고 `expensive_closure` 변수에
+저장하기</span>
 
-클로저 정의는 변수 `expensive_closure` 에 그것을 할당하기 위해 `=` 다음에 옵니다.
-클로저를 정의하기 위해, 수직의 파이프 (`|`) 한쌍으로 시작하며, 그 사이에 클로저에
-대한 파라미터를 기술합니다; 이 문법은 스몰토크와 루비에서 클로저 정의와의 유사성
-때문에 선택 되었습니다. 이 클로저는 `num` 이라는 하나의 파라미터를 갖습니다:
-하나 이상의 파라미터를 갖는다면, `|param1, param2|` 와 같이 콤마로 구분합니다.
+클로저 정의는 변수 `expensive_closure` 에 그것을 할당하기 위해 `=` 다음에
+옵니다. 클로저를 정의하기 위해, 수직의 파이프 (`|`) 한쌍으로 시작하며, 그 사이에
+클로저에 대한 파라미터를 기술합니다; 이 문법은 스몰토크와 루비에서 클로저
+정의와의 유사성 때문에 선택 되었습니다. 이 클로저는 `num` 이라는 하나의
+파라미터를 갖습니다: 하나 이상의 파라미터를 갖는다면, `|param1, param2|` 와 같이
+콤마로 구분합니다.
 
-파라미터들 다음에, 클로저의 바디를 포함하는 중괄호를 넣습니다—클로저 바디가 하나의
-표현식이라면 이것은 선택적 입니다. 중괄호 다음에 클로저의 끝에는 `let` 문을 완성하기
-위해 세미콜론이 필요합니다. 클로저 바디에서 마지막 줄로부터 반환되는 값인 (`num`) 은
-그것이 호출되었을 때 클로저로 부터 반환되는 값이 될 것입니다, 왜냐하면 그 줄은
-세미콜론으로 끝나지 않기 때문 입니다; 함수 본문 처럼.
+파라미터들 다음에, 클로저의 바디를 포함하는 중괄호를 넣습니다—클로저 바디가
+하나의 표현식이라면 이것은 선택적 입니다. 중괄호 다음에 클로저의 끝에는 `let`
+문을 완성하기 위해 세미콜론이 필요합니다. 클로저 바디에서 마지막 줄로부터
+반환되는 값인 (`num`) 은 그것이 호출되었을 때 클로저로 부터 반환되는 값이 될
+것입니다, 왜냐하면 그 줄은 세미콜론으로 끝나지 않기 때문 입니다; 함수 본문 처럼.
 
-`let` 문은 `expensive_closure` 가 익명함수의 *정의*를 포함하며, 익명함수를 호출한
-*결과 값*을 포함하지 않는다는 것에 유의 하세요. 우리가 클로저를 사용하는 이유는
-호출할 코드를 한 곳에서 정의하고, 그 코드를 저장하며, 이후 다른 곳에서 그것을
-호출하길 원하기 때문이라는 것을 상기하세요; 우리가 호출하고자 하는 코드가 이제
-`expensive_closure` 에 저장되었습니다.
+`let` 문은 `expensive_closure` 가 익명함수의 *정의*를 포함하며, 익명함수를
+호출한 *결과 값*을 포함하지 않는다는 것에 유의 하세요. 우리가 클로저를 사용하는
+이유는 호출할 코드를 한 곳에서 정의하고, 그 코드를 저장하며, 이후 다른 곳에서
+그것을 호출하길 원하기 때문이라는 것을 상기하세요; 우리가 호출하고자 하는 코드가
+이제 `expensive_closure` 에 저장되었습니다.
 
 클로저를 정의하면서, 저장된 코드를 실행하고 결과값을 얻기 위하여 `if` 블록 안의
-코드를 클로저 호출 방식으로 변경할 수 있습니다. 우리는 함수를 호출하는 것 처럼 
-클로저를 호출 합니다: 리스트 13-6 에 보여지는 것처럼, 클로저 정의를 갖고 있는 
+코드를 클로저 호출 방식으로 변경할 수 있습니다. 우리는 함수를 호출하는 것 처럼
+클로저를 호출 합니다: 리스트 13-6 에 보여지는 것처럼, 클로저 정의를 갖고 있는
 변수명을 쓰고 다음엔 사용할 인자값을 포함하는 괄호가 따라 옵니다:
 
 <span class="filename">파일명: src/main.rs</span>
@@ -283,42 +286,40 @@ fn generate_workout(intensity: u32, random_number: u32) {
 <span class="caption">리스트 13-6: 우리가 정의한 `expensive_closure` 호출하기
 </span>
 
-이제 비용이 큰 계산은 단 한곳에서만 호출 되고, 우리가 결과가 필요한 곳에서만 
+이제 비용이 큰 계산은 단 한곳에서만 호출 되고, 우리가 결과가 필요한 곳에서만
 그 코드를 실행 합니다.
 
 그러나, 리스트 13-3 에 있는 문제중 하나를 다시 소개합니다: 우리는 여전히 첫번째
-`if` 블럭에서 클로저를 두번 호출 하는데, 이는 비용이 큰 코드를 두번 호출하고 사용자가
-실행시간 만큼 긴시간을 두번 기다리게 합니다. 우리는 그 `if` 블럭안에 클로저 호출의
-결과를 저장하는 로컬 변수를 만들어서 그 문제를 해결할 수 있지만, 클로저는 다른
-해결책을 제공합니다. 우리는 그 해결책에 대해 조금 이야기 할 것입니다.
-그러나 우선 클로저 정의에 타입 어노테이션이 없는 이유와 클로저와 연관된 트레잇에
-대해 이야기 합시다.
+`if` 블럭에서 클로저를 두번 호출 하는데, 이는 비용이 큰 코드를 두번 호출하고
+사용자가 실행시간 만큼 긴시간을 두번 기다리게 합니다. 우리는 그 `if` 블럭안에
+클로저 호출의 결과를 저장하는 로컬 변수를 만들어서 그 문제를 해결할 수 있지만,
+클로저는 다른 해결책을 제공합니다. 우리는 그 해결책에 대해 조금 이야기 할
+것입니다. 그러나 우선 클로저 정의에 타입 어노테이션이 없는 이유와 클로저와
+연관된 트레잇에 대해 이야기 합시다.
 
-### Closure Type Inference and Annotation
+### 클로저 타입 추론과 어노테이션
 
-Closures don’t require you to annotate the types of the parameters or the
-return value like `fn` functions do. Type annotations are required on functions
-because they’re part of an explicit interface exposed to your users. Defining
-this interface rigidly is important for ensuring that everyone agrees on what
-types of values a function uses and returns. But closures aren’t used in an
-exposed interface like this: they’re stored in variables and used without
-naming them and exposing them to users of our library.
+클로저는 `fn` 함수처럼 파라미터나 반환값의 타입을 명시할 것을 요구하지 않습니다.
+타입 어노테이션은 사용자에게 노출되는 명시적인 인터페이스의 일부이기 때문에
+함수에 필요 합니다. 이 인터페이스를 엄격하게 정의하는 것은 함수가 어떤 타입의
+값을 사용하고 반환하는지에 대해 모두가 합의 한다는 것을 보장하는데 중요 합니다.
+그러나 클로저는 이와 같이 노출된 인터페이스에 사용되지 않습니다: 변수에 저장되고
+이름없이 우리의 라이브러리 사용자들에게 노출되지 않고 사용 됩니다.
 
-Additionally, closures are usually short and only relevant within a narrow
-context rather than in any arbitrary scenario. Within these limited contexts,
-the compiler is reliably able to infer the types of the parameters and return
-type, similar to how it’s able to infer the types of most variables.
+추가적으로, 클로저는 보통 짧고 임의의 시나리오 보다 좁은 문맥 안에서만 관련이
+있습니다. 이런 제한된 문맥 안에서만, 컴파일러는 안정적으로 파라미터와 리턴타입을
+추론할 수 있으며, 이는 대부분의 변수 타입을 추론 할 수 있는 방법과 비슷 합니다.
 
-Making programmers annotate the types in these small, anonymous functions would
-be annoying and largely redundant with the information the compiler already has
-available.
+프로그래머들에게 이런 작고 익명의 함수들에 타입을 달도록하는 것은 짜증나고
+컴파일러가 이미 사용할수 있는 정보와 대게는 중복 됩니다.
 
-Like variables, we can add type annotations if we want to increase explicitness
-and clarity at the cost of being more verbose than is strictly necessary;
-annotating the types for the closure we defined in Listing 13-4 would look like
-the definition shown in Listing 13-7:
+변수처럼, 엄밀하게 필요한 것 이상으로 자세히 표현하는 비용을 지불하고서라도
+명확성과 명료성을 높이고 싶다면 타입 어노테이션(혹은 타입 명시)를 추가할 수
+있습니다;
+리스트 13-4 에 정의한 클로저에 타입을 명시하는 것은 리스트 13-7 에 보여지는 것과
+같을 것 입니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 # use std::thread;
@@ -331,15 +332,14 @@ let expensive_closure = |num: u32| -> u32 {
 };
 ```
 
-<span class="caption">Listing 13-7: Adding optional type annotations of the
-parameter and return value types in the closure</span>
+<span class="caption">리스트 13-7: 클로저에 파라미터와 반환값 타입에 대한 선택적
+인 타입 어노테이션 추가하기</span>
 
-The syntax of closures and functions looks more similar with type annotations.
-The following is a vertical comparison of the syntax for the definition of a
-function that adds one to its parameter, and a closure that has the same
-behavior. We’ve added some spaces to line up the relevant parts. This
-illustrates how closure syntax is similar to function syntax except for the use
-of pipes and the amount of syntax that is optional:
+타입 어노테이션이 있으면 클로저와 함수의 문법은 더 비슷해 보입니다.
+다음은 파라미터에 1을 더하는 함수 정의와 동일한 행위를 하는 클로저를 수직으로
+비교한 것입니다. 관련 있는 부분들을 정렬하기 이해 약간의 공백을 추가했습니다.
+이것은 파이프를 사용하는 것과 선택적인 문법의 양을 제외하고 클로저 문법과 함수
+문법이 얼마나 비슷한지 보여줍니다:
 
 ```rust,ignore
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -348,21 +348,19 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-The first line shows a function definition, and the second line shows a fully
-annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the brackets that are
-optional, because the closure body has only one expression. These are all valid
-definitions that will produce the same behavior when they’re called.
+첫번째 줄은 함수 정의를 보여주고, 두번째 줄은 타입을 모두 명기한 클로저 정의를
+보여 줍니다. 세번째 줄은 클로저 정의에서 타입 어노테이션을 지웠고, 네번째 줄은
+선택적인 중괄호를 지웠는데, 클로저 보디가 단 하나의 표현식을 갖기 때문 입니다.
+이것은 모두 호출 했을 때 동일한 행위를 수행하는 유효한 정의들 입니다.
 
-Closure definitions will have one concrete type inferred for each of their
-parameters and for their return value. For instance, Listing 13-8 shows the
-definition of a short closure that just returns the value it receives as a
-parameter. This closure isn’t very useful except for the purposes of this
-example. Note that we haven’t added any type annotations to the definition: if
-we then try to call the closure twice, using a `String` as an argument the
-first time and a `u32` the second time, we’ll get an error:
+클로저 정의는 각 파리미터들과 그들의 반환값에 대해 단 하나의 추론된 구체적인
+타입을 갖을 것 입니다. 예를 들면, 리스트 13-8 은 파리미터로 받은 값을 그대로
+반환하는 짧은 클로저의 정의를 보여줍니다. 이 클로저는 이 예제의 목적 이에외는
+유용하지 않습니다. 정의에 타입 어노테이션을 추가하지 않았다는 것에 유의하세요:
+클로저를 두번 호출하는데, 첫번째는 `String` 을 인자로 사용하고 두번째는 `u32` 을
+사용한다면 에러가 발생합니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust,ignore
 let example_closure = |x| x;
@@ -371,10 +369,10 @@ let s = example_closure(String::from("hello"));
 let n = example_closure(5);
 ```
 
-<span class="caption">Listing 13-8: Attempting to call a closure whose types
-are inferred with two different types</span>
+<span class="caption">리스트 13-8: 두개의 다른 타입으로 추론된 타입을 갖는
+클로저 호출 해보기</span>
 
-The compiler gives us this error:
+컴파일러는 이런 에러를 줍니다:
 
 ```text
 error[E0308]: mismatched types
@@ -388,10 +386,10 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-The first time we call `example_closure` with the `String` value, the compiler
-infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked in to the closure in `example_closure`, and we get a type
-error if we try to use a different type with the same closure.
+처음 `String` 값으로 `example_closure` 을 호출하면, 컴파일러는 `x` 의 타입과
+클로저의 반환 타입을 `String` 으로 추론합니다. 이 타입들은 그다음에는
+`example_closure` 에 있는 클로저에 고정되고, 같은 클로저를 다른 타입으로 
+사용하려고 할 때 타입 에러를 얻게 됩니다.
 
 ### Storing Closures Using Generic Parameters and the `Fn` Traits
 
