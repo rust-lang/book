@@ -506,13 +506,14 @@ impl<T> Cacher<T>
 `Some` 으로 갖고 있는지 체크 합니다; 만약 그렇다면 클로저를 다시 실행하는 대신
 `Some` 안에 있는 값을 반환 합니다.
 
-If `self.value` is `None`, we call the closure stored in `self.calculation`,
-save the result in `self.value` for future use, and return the value as well.
+만약 `self.value` 라 `None` 이라면, `self.calculation` 에 저장된 클로저를 호출
+하고, 나중에 재사용 하기 위해 결과를 `self.value` 저장한 다음 그 값을 반환
+합니다.
 
-Listing 13-11 shows how we can use this `Cacher` struct in the
-`generate_workout` function from Listing 13-6:
+리스트 13-11 는 리스트 13-6 에 있는 `generate_workout` 함수에서 이 `Cacher` 구조
+체를 사용하는 방법을 보여줍니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 # use std::thread;
@@ -576,22 +577,20 @@ fn generate_workout(intensity: u32, random_number: u32) {
 }
 ```
 
-<span class="caption">Listing 13-11: Using `Cacher` in the `generate_workout`
-function to abstract away the caching logic</span>
+<span class="caption">리스트 13-11: 캐싱 로직을 추상화 하기 위해
+`generate_workout` 함수 안에서 `Cacher` 사용하기</span>
 
-Instead of saving the closure in a variable directly, we save a new instance of
-`Cacher` that holds the closure. Then, in each place we want the result, we
-call the `value` method on the `Cacher` instance. We can call the `value`
-method as many times as we want, or not call it at all, and the expensive
-calculation will be run a maximum of once.
+클로저를 변수에 직접 저장하는 대신, 클로저를 갖는 `Cacher` 의 새 인스턴스를
+저장 했습니다. 그러고는, 결과가 필요한 각 위치에 `Cacher` 인스턴스의 `value`
+메소드를 호출 했습니다. 우리는 `value` 메소드를 원하는 만큼 많이 호출할 수 있고,
+전혀 호출하지 않을 수도 있으며, 비싼 비용의 게산은 최대 한번만 수행 될 것입니다.
 
-Try running this program with the `main` function from Listing 13-2. Change the
-values in the `simulated_user_specified_value` and `simulated_random_number`
-variables to verify that in all the cases in the various `if` and `else`
-blocks, `calculating slowly...` only appears once and only when needed. The
-`Cacher` takes care of the logic necessary to ensure we aren’t calling the
-expensive calculation more than we need to, so `generate_workout` can focus on
-the business logic.
+리스트 13-2 의 `main` 함수로 이 프로그램을 실행해 보세요. 다양한 `if` 와 `else`
+블럭에 있는 모든 케이스들을 검증하기 위해 `simulated_user_specified_value` 와
+`simulated_random_number` 변수들을 변경해 보면, `calculating slowly...` 메세지는
+필요할 때 단지 한번만 나타 납니다. `Cacher` 는 필요한것 보다 더 많이 비싼 비용의
+계산을 호출하지 않도록 보장하는 필요한 로직을 처리해서, `generate_workout` 가
+비즈니스 로직에 집중하도록 해줍니다.
 
 ### Limitations of the `Cacher` Implementation
 
