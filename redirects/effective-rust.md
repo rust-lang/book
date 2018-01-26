@@ -11,4 +11,4 @@ It is recommended to start there.
 
 
 [1]: first-edition/effective-rust.html
-[2]: second-edition/
+[2]: second-edition/index.html

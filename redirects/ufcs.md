@@ -51,4 +51,4 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: first-edition/ufcs.html
-[2]: second-edition/ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation
+[2]: second-edition/ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name
