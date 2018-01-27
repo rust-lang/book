@@ -39,5 +39,5 @@ Here are the relevant sections in the new and old books:
 * <small>[In the first edition: Ch 3.32 — Operators and Overloading][1]</small>
 
 [1]: first-edition/operators-and-overloading.html
-[2]: second-edition/ch19-03-advanced-traits.html#operator-overloading-and-default-type-parameters
-[3]: ../std/ops/
+[2]: second-edition/ch19-03-advanced-traits.html#default-generic-type-parameters-and-operator-overloading
+[3]: ../std/ops/index.html

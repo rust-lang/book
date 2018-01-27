@@ -4,8 +4,8 @@ One important feature of Rust is that it lets us control the costs and guarantee
 of a program.
 
 There are various &ldquo;wrapper type&rdquo; abstractions in the Rust standard library which embody
-a multitude of tradeoffs between cost, ergonomics, and guarantees. Many let one choose between
-run time and compile time enforcement. This section will explain a few selected abstractions in
+a multitude of trade-offs between cost, ergonomics, and guarantees. Many let one choose between
+run-time and compile-time enforcement. This section will explain a few selected abstractions in
 detail.
 
 Before proceeding, it is highly recommended that one reads about [ownership][ownership] and
@@ -86,7 +86,7 @@ last. It's a viable alternative to `&T` when `&T` is either impossible to static
 correctness, or creates extremely unergonomic code where the programmer does not wish to spend the
 development cost of working with.
 
-This pointer is _not_ thread safe, and Rust will not let it be sent or shared with other threads.
+This pointer is _not_ thread-safe, and Rust will not let it be sent or shared with other threads.
 This lets one avoid the cost of atomics in situations where they are unnecessary.
 
 There is a sister smart pointer to this one, `Weak<T>`. This is a non-owning, but also non-borrowed,
@@ -243,7 +243,7 @@ At runtime each borrow causes a modification/check of the refcount.
 Many of the types above cannot be used in a threadsafe manner. Particularly, `Rc<T>` and
 `RefCell<T>`, which both use non-atomic reference counts (_atomic_ reference counts are those which
 can be incremented from multiple threads without causing a data race), cannot be used this way. This
-makes them cheaper to use, but we need thread safe versions of these too. They exist, in the form of
+makes them cheaper to use, but we need thread-safe versions of these too. They exist, in the form of
 `Arc<T>` and `Mutex<T>`/`RwLock<T>`
 
 Note that the non-threadsafe types _cannot_ be sent between threads, and this is checked at compile
@@ -271,7 +271,7 @@ behavior, so even monotonicity may not be enough to justify `UnsafeCell`.
 
 #### Guarantees
 
-Like `Rc`, this provides the (thread safe) guarantee that the destructor for the internal data will
+Like `Rc`, this provides the (thread-safe) guarantee that the destructor for the internal data will
 be run when the last `Arc` goes out of scope (barring any cycles).
 
 #### Cost
@@ -354,7 +354,7 @@ When reading code that uses these, go in step by step and look at the guarantees
 
 When choosing a composed type, we must do the reverse; figure out which guarantees we want, and at
 which point of the composition we need them. For example, if there is a choice between
-`Vec<RefCell<T>>` and `RefCell<Vec<T>>`, we should figure out the tradeoffs as done above and pick
+`Vec<RefCell<T>>` and `RefCell<Vec<T>>`, we should figure out the trade-offs as done above and pick
 one.
 
 [^3]: `&[T]` and `&mut [T]` are _slices_; they consist of a pointer and a length and can refer to a portion of a vector or array. `&mut [T]` can have its elements mutated, however its length cannot be touched.

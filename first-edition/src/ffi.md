@@ -532,10 +532,10 @@ This is currently hidden behind the `abi_vectorcall` gate and is subject to chan
 * `win64`
 * `sysv64`
 
-Most of the abis in this list are self-explanatory, but the `system` abi may
+Most of the ABIs in this list are self-explanatory, but the `system` ABI may
 seem a little odd. This constraint selects whatever the appropriate ABI is for
 interoperating with the target's libraries. For example, on win32 with a x86
-architecture, this means that the abi used would be `stdcall`. On x86_64,
+architecture, this means that the ABI used would be `stdcall`. On x86_64,
 however, windows uses the `C` calling convention, so `C` would be used. This
 means that in our previous example, we could have used `extern "system" { ... }`
 to define a block for all windows systems, not only x86 ones.

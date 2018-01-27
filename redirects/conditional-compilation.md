@@ -24,5 +24,5 @@ The best place to learn about it is [the Rust Reference][3].
 
 
 [1]: first-edition/conditional-compilation.html
-[2]: second-edition/
+[2]: second-edition/index.html
 [3]: ../reference/attributes.html#conditional-compilation

@@ -19,7 +19,7 @@ location beyond the end of an array.
 
 Most languages don’t distinguish between these two kinds of errors and handle
 both in the same way using mechanisms like exceptions. Rust doesn’t have
-exceptions. Instead, it has the value `Result<T, E>` for recoverable errors and
+exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
 the `panic!` macro that stops execution when it encounters unrecoverable
 errors. This chapter covers calling `panic!` first and then talks about
 returning `Result<T, E>` values. Additionally, we’ll explore considerations to
@@ -70,15 +70,14 @@ $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished dev [unoptimized + debuginfo] target(s) in 0.25 secs
      Running `target/debug/panic`
-thread 'main' panicked at 'crash and burn', src/main.rs:2
+thread 'main' panicked at 'crash and burn', src/main.rs:2:4
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
 The call to `panic!` causes the error message contained in the last three
 lines. The first line shows our panic message and the place in our source code
-where the panic occurred: *src/main.rs:2* indicates that it’s the second line
-of our *src/main.rs* file.
+where the panic occurred: *src/main.rs:2:4* indicates that it’s the second
+line, fourth character of our *src/main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that
 line, we see the `panic!` macro call. In other cases, the `panic!` call might
@@ -132,17 +131,16 @@ $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
-
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', /stable-dist-rustc/build/src/libcollections/vec.rs:1362
+99', /checkout/src/liballoc/vec.rs:1555:10
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This error points at a file we didn’t write, *libcollections/vec.rs*. That’s
-the implementation of `Vec<T>` in the standard library. The code that gets run
-when we use `[]` on our vector `v` is in *libcollections/vec.rs*, and that is
-where the `panic!` is actually happening.
+This error points at a file we didn’t write, *vec.rs*. That’s the
+implementation of `Vec<T>` in the standard library. The code that gets run when
+we use `[]` on our vector `v` is in *vec.rs*, and that is where the `panic!` is
+actually happening.
 
 The next note line tells us that we can set the `RUST_BACKTRACE` environment
 variable to get a backtrace of exactly what happened to cause the error. A
@@ -160,7 +158,7 @@ $ RUST_BACKTRACE=1 cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', /checkout/src/liballoc/vec.rs:1555:10
+99', /checkout/src/liballoc/vec.rs:1555:10
 stack backtrace:
    0: std::sys::imp::backtrace::tracing::imp::unwind_backtrace
              at /checkout/src/libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
@@ -186,7 +184,7 @@ stack backtrace:
   10: <alloc::vec::Vec<T> as core::ops::index::Index<usize>>::index
              at /checkout/src/liballoc/vec.rs:1555
   11: panic::main
-             at ./src/main.rs:4
+             at src/main.rs:4
   12: __rust_maybe_catch_panic
              at /checkout/src/libpanic_unwind/lib.rs:99
   13: std::rt::lang_start
@@ -213,7 +211,7 @@ want our program to panic, the location pointed to by the first line mentioning
 a file we wrote is where we should start investigating to figure out how we got
 to this location with values that caused the panic. In Listing 9-1 where we
 deliberately wrote code that would panic in order to demonstrate how to use
-backtraces, the way to fix the panic is to not request an element at index 100
+backtraces, the way to fix the panic is to not request an element at index 99
 from a vector that only contains three items. When your code panics in the
 future, you’ll need to figure out what action the code is taking with what
 values that causes the panic and what the code should do instead.
@@ -230,9 +228,9 @@ interpret and respond to. For example, if we try to open a file and that
 operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.
 
-Recall in Chapter 2 in the “Handling Potential Failure with the `Result` Type”
-section that the `Result` enum is defined as having two variants, `Ok` and
-`Err`, as follows:
+Recall from “Handling Potential Failure with the `Result` Type” in Chapter 2
+that the `Result` enum is defined as having two variants, `Ok` and `Err`, as
+follows:
 
 ```
 enum Result<T, E> {
@@ -288,7 +286,7 @@ error[E0308]: mismatched types
 `std::result::Result`
   |
   = note: expected type `u32`
-  = note:    found type `std::result::Result<std::fs::File, std::io::Error>`
+             found type `std::result::Result<std::fs::File, std::io::Error>`
 ```
 
 This tells us the return type of the `File::open` function is a `Result<T, E>`.
@@ -350,7 +348,7 @@ code, we’ll see the following output from the `panic!` macro:
 
 ```
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
-Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
+Os { code: 2, message: "No such file or directory" } }', src/main.rs:9:12
 ```
 
 As usual, this output tells us exactly what has gone wrong.
@@ -366,6 +364,9 @@ open the file, we still want the code to `panic!` in the same way as it did in
 Listing 9-4. Look at Listing 9-5, which adds another arm to the `match`:
 
 Filename: src/main.rs
+
+<!-- ignore this test because otherwise it creates hello.txt which causes other
+tests to fail lol -->
 
 ```
 use std::fs::File;
@@ -451,7 +452,7 @@ the `panic!` call that the `unwrap` method makes:
 ```
 thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
 repr: Os { code: 2, message: "No such file or directory" } }',
-/stable-dist-rustc/build/src/libcore/result.rs:868
+src/libcore/result.rs:906:4
 ```
 
 Another method, `expect`, which is similar to `unwrap`, lets us also choose the
@@ -476,8 +477,7 @@ will be the parameter that we pass to `expect`, rather than the default
 
 ```
 thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
-2, message: "No such file or directory" } }',
-/stable-dist-rustc/build/src/libcore/result.rs:868
+2, message: "No such file or directory" } }', src/libcore/result.rs:906:4
 ```
 
 Because this error message starts with the text we specified, `Failed to open
@@ -600,18 +600,16 @@ is an `Err`, the value inside the `Err` will be returned from the whole
 function as if we had used the `return` keyword so the error value gets
 propagated to the calling code.
 
-The one difference between the `match` expression from Listing 9-6 and what the
-question mark operator does is that when using the question mark operator,
-error values go through the `from` function defined in the `From` trait in the
-standard library. Many error types implement the `from` function to convert an
-error of one type into an error of another type. When used by the question mark
-operator, the call to the `from` function converts the error type that the
-question mark operator gets into the error type defined in the return type of
-the current function that we’re using `?` in. This is useful when parts of a
-function might fail for many different reasons, but the function returns one
-error type that represents all the ways the function might fail. As long as
-each error type implements the `from` function to define how to convert itself
-to the returned error type, the question mark operator takes care of the
+There is a difference between what the `match` expression from Listing 9-6 and
+the question mark operator do: error values used with `?` go through the `from`
+function, defined in the `From` trait in the standard library, which is used to
+convert errors from one type into another. When the question mark calls the
+`from` function, the error type received is converted into the error type
+defined in the return type of the current function. This is useful when a
+function returns one error type to represent all the ways a function might
+fail, even if parts might fail for many different reasons. As long as each
+error type implements the `from` function to define how to convert itself to
+the returned error type, the question mark operator takes care of the
 conversion automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
@@ -673,14 +671,14 @@ fn main() {
 When we compile this code, we get the following error message:
 
 ```
-error[E0277]: the `?` operator can only be used in a function that returns
-`Result` (or another type that implements `std::ops::Try`)
+error[E0277]: the trait bound `(): std::ops::Try` is not satisfied
  --> src/main.rs:4:13
   |
 4 |     let f = File::open("hello.txt")?;
   |             ------------------------
   |             |
-  |             cannot use the `?` operator in a function that returns `()`
+  |             the `?` operator can only be used in a function that returns
+  `Result` (or another type that implements `std::ops::Try`)
   |             in this macro invocation
   |
   = help: the trait `std::ops::Try` is not implemented for `()`
@@ -749,7 +747,7 @@ example:
 ```
 use std::net::IpAddr;
 
-let home = "127.0.0.1".parse::<IpAddr>().unwrap();
+let home: IpAddr = "127.0.0.1".parse().unwrap();
 ```
 
 We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
@@ -837,7 +835,7 @@ number being in range, like so:
 
 ```
 loop {
-    // snip
+    // --snip--
 
     let guess: i32 = match guess.trim().parse() {
         Ok(num) => num,
@@ -850,7 +848,7 @@ loop {
     }
 
     match guess.cmp(&secret_number) {
-    // snip
+    // --snip--
 }
 ```
 

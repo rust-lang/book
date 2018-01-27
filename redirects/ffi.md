@@ -26,4 +26,4 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: first-edition/ffi.html
-[2]: second-edition/ch19-01-unsafe-rust.html#extern--functions-for-calling-external-code-are-unsafe
+[2]: second-edition/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code
