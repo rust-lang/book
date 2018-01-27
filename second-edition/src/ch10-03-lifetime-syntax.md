@@ -87,17 +87,15 @@ determine that all borrows are valid. [Listing 10-19][Listing-10-19] shows the s
 
 ```rust,ignore
 {
-    let r;         // -------+-- 'a
-                   //        |
-    {              //        |
-        let x = 5; // -+-----+-- 'b
-        r = &x;    //  |     |
-    }              // -+     |
-                   //        |
-    println!("r: {}", r); // |
-                   //        |
-                   // -------+
-}
+    let r;                // -------+-- 'a
+                          //        |
+    {                     //        |
+        let x = 5;        // -+-----+-- 'b
+        r = &x;           //  |     |
+    }                     // -+     |
+                          //        |
+    println!("r: {}", r); //        |
+}                         // -------+
 ```
 
 <span class="caption">Listing 10-19: Annotations of the lifetimes of `r` and

@@ -788,7 +788,7 @@ three `Fn` traits as follows:
   closure must take ownership of these variables and move them into the closure
   when it is defined. The `Once` part of the name represents the fact that the
   closure can’t take ownership of the same variables more than once, so it can
-  only be called one time.
+  be called only once.
 * `Fn` borrows values from the environment immutably.
 * `FnMut` can change the environment because it mutably borrows values.
 

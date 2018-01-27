@@ -349,7 +349,7 @@ fn main() {
         Message::Quit => {
             println!("The Quit variant has no data to destructure.")
         },
-        Message::Move { x: x, y: y } => {
+        Message::Move { x, y } => {
             println!(
                 "Move in the x direction {} and in the y direction {}",
                 x,
@@ -382,7 +382,8 @@ and there are no variables in that pattern.
 For struct-like enum variants such as `Message::Move`, we can use a pattern
 similar to the pattern we specify to match structs. After the variant name, we
 place curly brackets and then list the fields with variables so that we break
-apart the pieces to use in the code for this arm.
+apart the pieces to use in the code for this arm. Here we use the shorthand 
+form as shown in [Listing 18-13][Listing-18-13].
 
 For tuple-like enum variants like `Message::Write`, that holds a tuple with one
 element, and `Message::ChangeColor` that holds a tuple with three elements, the
@@ -393,7 +394,7 @@ matching.
 #### Destructuring References
 
 When the value we’re matching to our pattern contains a reference, we need to
-destructure the reference from the value, which we can do can by specifying a
+destructure the reference from the value, which we can do by specifying a
 `&` in the pattern. This lets us get a variable holding the value that the
 reference points to rather than getting a variable that holds the reference.
 

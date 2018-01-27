@@ -50,7 +50,7 @@ example:
 ```rust
 use std::net::IpAddr;
 
-let home = "127.0.0.1".parse::<IpAddr>().unwrap();
+let home: IpAddr = "127.0.0.1".parse().unwrap();
 ```
 
 We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see

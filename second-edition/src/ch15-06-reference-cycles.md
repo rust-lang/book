@@ -106,7 +106,7 @@ fn main() {
     println!("b initial rc count = {}", Rc::strong_count(&b));
     println!("b next item = {:?}", b.tail());
 
-    if let Some(ref link) = a.tail() {
+    if let Some(link) = a.tail() {
         *link.borrow_mut() = Rc::clone(&b);
     }
 
