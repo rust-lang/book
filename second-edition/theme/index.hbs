@@ -33,7 +33,10 @@
               top: 120px;
             }
 
-            p.warning {
+            .warning {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 background-color: rgb(242, 222, 222);
                 border-bottom-color: rgb(238, 211, 215);
                 border-bottom-left-radius: 4px;
@@ -63,14 +66,27 @@
                 margin-top: 30px;
                 padding-bottom: 8px;
                 padding-left: 14px;
-                padding-right: 35px;
+                padding-right: 14px;
                 padding-top: 8px;
             }
-            p.warning strong {
+            .warning strong {
                 color: rgb(185, 74, 72)
             }
-            p.warning a {
+            .warning a {
                 color: rgb(0, 136, 204)
+            }
+            .warning .message {
+                margin-right: 14px;
+            }
+            .warning .message:last-child {
+                margin-right: 21px;
+            }
+            .warning .button {
+                border: none;
+                background: none;
+                color: inherit;
+                cursor: pointer;
+                font-size: 14px;
             }
 
             a .hljs {
@@ -145,7 +161,28 @@
         <div id="page-wrapper" class="page-wrapper has-warning">
 
             <div class="page" tabindex="-1">
-                <header><p class="warning">You are reading a <strong>draft</strong> of the next edition of TRPL. For more, go <a href="../index.html">here</a>.</p></header>
+                <header>
+                    <div id="draft-warning" class="warning">
+                        <span class="message">You are reading a <strong>draft</strong> of the next edition of TRPL. For more, go <a href="../index.html">here</a>.</span>
+                        <button type="button" id="hide-draft-warning" title="Hide draft warning" class="button">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- Hide / unhide warning before it is displayed -->
+                    <script type="text/javascript">
+                        var warning = store.get('mdbook-draft-warning');
+                        if (warning === 'hidden') {
+                            $('#page-wrapper').removeClass('has-warning');
+                            $('#draft-warning').remove();
+                        }
+                        $(document).ready(function() {
+                            $('#hide-draft-warning').click(function(e) {
+                                $('#draft-warning').remove();
+                                store.set('mdbook-draft-warning', 'hidden');
+                            });
+                        });
+                    </script>
+                </header>
                 <div id="menu-bar" class="menu-bar">
                     <div class="left-buttons">
                         <i id="sidebar-toggle" class="fa fa-bars"></i>
