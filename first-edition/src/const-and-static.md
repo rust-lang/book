@@ -38,6 +38,9 @@ reference stored in a static has a [`'static` lifetime][lifetimes]:
 static NAME: &'static str = "Steve";
 ```
 
+The type of a `static` value must be `Sync` unless the `static` value is
+mutable.
+
 [lifetimes]: lifetimes.html
 
 ## Mutability
@@ -63,8 +66,6 @@ unsafe {
 ```
 
 [unsafe]: unsafe.html
-
-Furthermore, any type stored in a `static` must be `Sync`.
 
 # Initializing
 
