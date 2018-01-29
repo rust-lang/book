@@ -24,11 +24,14 @@ thread they’ve spawned. Here’s the plan:
    and execute the closures of any jobs it receives.
 
 Let’s start by creating a channel in `ThreadPool::new` and holding the sending
-side in the `ThreadPool` instance, as shown in Listing 20-16. `Job` is the type
+side in the `ThreadPool` instance, as shown in [Listing 20-16][Listing-20-16]. `Job` is the type
 of item we’re going to be sending down the channel; it’s a struct that doesn’t
 hold anything for now:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-16]: #Listing-20-16
+<a name="Listing-20-16"></a>
 
 ```rust
 # use std::thread;
@@ -89,10 +92,13 @@ to the sending end. This will successfully compile, still with warnings.
 Let’s try passing a receiving end of the channel into each worker when the
 thread pool creates them. We know we want to use the receiving end of the
 channel in the thread that the workers spawn, so we’re going to reference the
-`receiver` parameter in the closure. The code shown here in Listing 20-17
+`receiver` parameter in the closure. The code shown here in [Listing 20-17][Listing-20-17]
 won’t quite compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-17]: #Listing-20-17
+<a name="Listing-20-17"></a>
 
 ```rust,ignore
 impl ThreadPool {
@@ -172,10 +178,13 @@ So remembering the thread-safe smart pointers that we discussed in Chapter 16,
 in order to share ownership across multiple threads and allow the threads to
 mutate the value, we need to use `Arc<Mutex<T>>`. `Arc` will let multiple
 workers own the receiver, and `Mutex` will make sure that only one worker is
-getting a job from the receiver at a time. Listing 20-18 shows the changes we
+getting a job from the receiver at a time. [Listing 20-18][Listing-20-18] shows the changes we
 need to make:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-18]: #Listing-20-18
+<a name="Listing-20-18"></a>
 
 ```rust
 # use std::thread;
@@ -247,9 +256,12 @@ Let’s finally implement the `execute` method on `ThreadPool`. We’re also goi
 to change the `Job` struct: instead of being a struct, `Job` is going to be a
 type alias for a trait object that holds the type of closure that `execute`
 receives. We discussed how type aliases can help make long types shorter, and
-this is such a case! Take a look at Listing 20-19:
+this is such a case! Take a look at [Listing 20-19][Listing-20-19]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-19]: #Listing-20-19
+<a name="Listing-20-19"></a>
 
 ```rust
 // --snip--
@@ -294,9 +306,12 @@ Are we done yet? Not quite! In the worker, we’ve still got a closure being
 passed to `thread::spawn` that only *references* the receiving end of the
 channel. Instead, we need the closure to loop forever, asking the receiving end
 of the channel for a job, and running the job when it gets one. Let’s make the
-change shown in Listing 20-20 to `Worker::new`:
+change shown in [Listing 20-20][Listing-20-20] to `Worker::new`:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-20]: #Listing-20-20
+<a name="Listing-20-20"></a>
 
 ```rust,ignore
 // --snip--
@@ -364,7 +379,7 @@ how big the value inside the `Box<T>` is going to be; recall in Chapter 15 that
 we used `Box<T>` precisely because we had something of an unknown size that we
 wanted to store in a `Box<T>` to get a value of a known size.
 
-We saw in Chapter 17, Listing 17-15 that we can write methods that use the
+We saw in Chapter 17, [Listing 17-15][Listing-17-15] that we can write methods that use the
 syntax `self: Box<Self>` so that the method takes ownership of a `Self` value
 that is stored in a `Box<T>`. That’s what we want to do here, but unfortunately
 the part of Rust that implements what happens when we call a closure isn’t
@@ -372,7 +387,7 @@ implemented using `self: Box<Self>`. So Rust doesn’t yet understand that it
 could use `self: Box<Self>` in this situation in order to take ownership of the
 closure and move the closure out of the `Box<T>`.
 
-In the future, the code in Listing 20-20 should work just fine. Rust is still a
+In the future, the code in [Listing 20-20][Listing-20-20] should work just fine. Rust is still a
 work in progress with places that the compiler could be improved. There are
 people just like you working to fix this and other issues! Once you’ve finished
 the book, we would love for you to join in.
@@ -384,9 +399,12 @@ have ownership of the closure, we can call it. This involves defining a new
 trait that has a method `call_box` that uses `self: Box<Self>` in its
 signature, defining that trait for any type that implements `FnOnce()`,
 changing our type alias to use the new trait, and changing `Worker` to use the
-`call_box` method. These changes are shown in Listing 20-21:
+`call_box` method. These changes are shown in [Listing 20-21][Listing-20-21]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-21]: #Listing-20-21
+<a name="Listing-20-21"></a>
 
 ```rust,ignore
 trait FnBox {
@@ -514,3 +532,11 @@ do something: we never do anything to clean up our thread pool once it’s done
 being used, we just use <span class="keystroke">ctrl-C</span> to stop the
 program and let the operating system clean up after us. Let’s implement a
 graceful shutdown that cleans up everything we’ve created instead.
+
+[Listing-20-16]: ch20-05-sending-requests-via-channels.html#Listing-20-16
+[Listing-20-17]: ch20-05-sending-requests-via-channels.html#Listing-20-17
+[Listing-20-18]: ch20-05-sending-requests-via-channels.html#Listing-20-18
+[Listing-20-19]: ch20-05-sending-requests-via-channels.html#Listing-20-19
+[Listing-20-20]: ch20-05-sending-requests-via-channels.html#Listing-20-20
+[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
+[Listing-20-21]: ch20-05-sending-requests-via-channels.html#Listing-20-21

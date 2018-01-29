@@ -23,10 +23,13 @@ lifetime. To explore lifetime subtyping, imagine we want to write a parser.
 We’ll have a structure called `Context` that holds a reference to the string
 we’re parsing. We’ll write a parser that will parse this string and return
 success or failure. The parser will need to borrow the context to do the
-parsing. Implementing this would look like the code in Listing 19-12, except
+parsing. Implementing this would look like the code in [Listing 19-12][Listing-19-12], except
 this code doesn’t have the required lifetime annotations so it won’t compile:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-19-12]: #Listing-19-12
+<a name="Listing-19-12"></a>
 
 ```rust,ignore
 struct Context(&str);
@@ -78,9 +81,12 @@ parsing logic, which isn't the point. I've explained a bit more above /Carol -->
 To get this code compiling, we need to fill in the lifetime parameters for the
 string slice in `Context` and the reference to the `Context` in `Parser`. The
 most straightforward way to do this is to use the same lifetime everywhere, as
-shown in Listing 19-13:
+shown in [Listing 19-13][Listing-19-13]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-19-13]: #Listing-19-13
+<a name="Listing-19-13"></a>
 
 ```rust
 struct Context<'a>(&'a str);
@@ -109,11 +115,14 @@ we have now added lifetime parameters.
 example? I'm not totally clear on why adding lifetimes here saved the code -->
 <!-- Done -->
 
-Next, in Listing 19-14, let’s add a function that takes an instance of
+Next, in [Listing 19-14][Listing-19-14], let’s add a function that takes an instance of
 `Context`, uses a `Parser` to parse that context, and returns what `parse`
 returns. This won’t quite work:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-19-14]: #Listing-19-14
+<a name="Listing-19-14"></a>
 
 ```rust,ignore
 fn parse_context(context: Context) -> Result<(), &str> {
@@ -178,7 +187,7 @@ absolutely ensure they will live for as long as the function? -->
 previous paragraph. Is there something that's unclear? /Carol -->
 
 To figure out why we’re getting these errors, let’s look at the definitions in
-Listing 19-13 again, specifically the references in the signature of the
+[Listing 19-13][Listing-19-13] again, specifically the references in the signature of the
 `parse` method:
 
 ```rust,ignore
@@ -231,13 +240,16 @@ return value of `parse_context` is tied to the lifetime of the string slice in
 `Context`.
 
 First we’ll try giving `Parser` and `Context` different lifetime parameters as
-shown in Listing 19-15. We’ll use `'s` and `'c` as lifetime parameter names to
+shown in [Listing 19-15][Listing-19-15]. We’ll use `'s` and `'c` as lifetime parameter names to
 be clear about which lifetime goes with the string slice in `Context` and which
 goes with the reference to `Context` in `Parser`. Note that this won’t
 completely fix the problem, but it’s a start and we’ll look at why this isn’t
 sufficient when we try to compile.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-19-15]: #Listing-19-15
+<a name="Listing-19-15"></a>
 
 ```rust,ignore
 struct Context<'s>(&'s str);
@@ -261,7 +273,7 @@ fn parse_context(context: Context) -> Result<(), &str> {
 for the references to the string slice and to `Context`</span>
 
 We’ve annotated the lifetimes of the references in all the same places that we
-annotated them in Listing 19-13, but used different parameters depending on
+annotated them in [Listing 19-13][Listing-19-13], but used different parameters depending on
 whether the reference goes with the string slice or with `Context`. We’ve also
 added an annotation to the string slice part of the return value of `parse` to
 indicate that it goes with the lifetime of the string slice in `Context`.
@@ -343,9 +355,12 @@ For an example, consider a type that is a wrapper over references. Recall the
 section of Chapter 15: its `borrow` and `borrow_mut` methods return the types
 `Ref` and `RefMut`, respectively. These types are wrappers over references that
 keep track of the borrowing rules at runtime. The definition of the `Ref`
-struct is shown in Listing 19-16, without lifetime bounds for now:
+struct is shown in [Listing 19-16][Listing-19-16], without lifetime bounds for now:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-19-16]: #Listing-19-16
+<a name="Listing-19-16"></a>
 
 ```rust,ignore
 struct Ref<'a, T>(&'a T);
@@ -385,8 +400,11 @@ consider adding an explicit lifetime bound `T: 'a` so that the reference type
 `&'a T` does not outlive the data it points at
 ```
 
-Listing 19-17 shows how to apply this advice by specifying the lifetime bound
+[Listing 19-17][Listing-19-17] shows how to apply this advice by specifying the lifetime bound
 when we declare the generic type `T`.
+
+[Listing-19-17]: #Listing-19-17
+<a name="Listing-19-17"></a>
 
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
@@ -400,9 +418,12 @@ type, but if it contains any references, the references must live at least as
 long as `'a`.
 
 We could solve this in a different way, shown in the definition of a
-`StaticRef` struct in Listing 19-18, by adding the `'static` lifetime bound on
+`StaticRef` struct in [Listing 19-18][Listing-19-18], by adding the `'static` lifetime bound on
 `T`. This means if `T` contains any references, they must have the `'static`
 lifetime:
+
+[Listing-19-18]: #Listing-19-18
+<a name="Listing-19-18"></a>
 
 ```rust
 struct StaticRef<T: 'static>(&'static T);
@@ -427,12 +448,15 @@ In Chapter 17 in the “Using Trait Objects that Allow for Values of Different
 Types” section, we discussed trait objects, consisting of a trait behind a
 reference, that allow us to use dynamic dispatch. We haven’t yet discussed what
 happens if the type implementing the trait in the trait object has a lifetime
-of its own. Consider Listing 19-19, where we have a trait `Red` and a struct
+of its own. Consider [Listing 19-19][Listing-19-19], where we have a trait `Red` and a struct
 `Ball`. `Ball` holds a reference (and thus has a lifetime parameter) and also
 implements trait `Red`. We want to use an instance of `Ball` as the trait
 object `Box<Red>`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-19]: #Listing-19-19
+<a name="Listing-19-19"></a>
 
 ```rust
 trait Red { }
@@ -470,3 +494,12 @@ implementor of the `Red` trait that has references inside must have the
 same lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
+
+[Listing-19-12]: ch19-02-advanced-lifetimes.html#Listing-19-12
+[Listing-19-13]: ch19-02-advanced-lifetimes.html#Listing-19-13
+[Listing-19-14]: ch19-02-advanced-lifetimes.html#Listing-19-14
+[Listing-19-15]: ch19-02-advanced-lifetimes.html#Listing-19-15
+[Listing-19-16]: ch19-02-advanced-lifetimes.html#Listing-19-16
+[Listing-19-17]: ch19-02-advanced-lifetimes.html#Listing-19-17
+[Listing-19-18]: ch19-02-advanced-lifetimes.html#Listing-19-18
+[Listing-19-19]: ch19-02-advanced-lifetimes.html#Listing-19-19

@@ -67,10 +67,13 @@ it. Let’s rework our program by following this process.
 
 We’ll extract the functionality for parsing arguments into a function that
 `main` will call to prepare for moving the command line parsing logic to
-*src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
+*src/lib.rs*. [Listing 12-5][Listing-12-5] shows the new start of `main` that calls a new
 function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-5]: #Listing-12-5
+<a name="Listing-12-5"></a>
 
 ```rust,ignore
 fn main() {
@@ -127,12 +130,15 @@ what their purpose is.
 > Note: Some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
 
-Listing 12-6 shows the addition of a struct named `Config` defined to have
+[Listing 12-6][Listing-12-6] shows the addition of a struct named `Config` defined to have
 fields named `query` and `filename`. We’ve also changed the `parse_config`
 function to return an instance of the `Config` struct and updated `main` to use
 the struct fields rather than having separate variables:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-6]: #Listing-12-6
+<a name="Listing-12-6"></a>
 
 ```rust,should_panic
 # use std::env;
@@ -221,10 +227,13 @@ function named `new` that is associated with the `Config` struct. Making this
 change will make the code more idiomatic: we can create instances of types in
 the standard library, such as `String`, by calling `String::new`, and by
 changing `parse_config` into a `new` function associated with `Config`, we’ll
-be able to create instances of `Config` by calling `Config::new`. Listing 12-7
+be able to create instances of `Config` by calling `Config::new`. [Listing 12-7][Listing-12-7]
 shows the changes we need to make:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-7]: #Listing-12-7
+<a name="Listing-12-7"></a>
 
 ```rust,should_panic
 # use std::env;
@@ -285,12 +294,15 @@ happened and what they should do instead. Let’s fix that now.
 
 #### Improving the Error Message
 
-In Listing 12-8, we add a check in the `new` function that will verify that the
+In [Listing 12-8][Listing-12-8], we add a check in the `new` function that will verify that the
 slice is long enough before accessing index `1` and `2`. If the slice isn’t
 long enough, the program panics and displays a better error message than the
 `index out of bounds` message:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-8]: #Listing-12-8
+<a name="Listing-12-8"></a>
 
 ```rust,ignore
 // --snip--
@@ -304,7 +316,7 @@ fn new(args: &[String]) -> Config {
 <span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span>
 
-This code is similar to the `Guess::new` function we wrote in Listing 9-9 where
+This code is similar to the `Guess::new` function we wrote in [Listing 9-9][Listing-9-9] where
 we called `panic!` when the `value` argument was out of the range of valid
 values. Instead of checking for a range of values here, we’re checking that the
 length of `args` is at least `3` and the rest of the function can operate under
@@ -326,7 +338,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
-the technique we used in Listing 9-9 isn’t the best to use here: a call to
+the technique we used in [Listing 9-9][Listing-9-9] isn’t the best to use here: a call to
 `panic!` is more appropriate for a programming problem rather than a usage
 problem, as discussed in Chapter 9. Instead, we can use the other technique you
 learned about in Chapter 9—returning a `Result` that indicates either success
@@ -341,12 +353,15 @@ signal there was a problem. Then we can change `main` to convert an `Err`
 variant into a more practical error for our users without the surrounding text
 about `thread 'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
 
-Listing 12-9 shows the changes we need to make to the return value of
+[Listing 12-9][Listing-12-9] shows the changes we need to make to the return value of
 `Config::new` and the body of the function needed to return a `Result`. Note
 that this won’t compile until we update `main` as well, which we’ll do in the
 next listing:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-9]: #Listing-12-9
+<a name="Listing-12-9"></a>
 
 ```rust,ignore
 impl Config {
@@ -384,12 +399,15 @@ more cleanly in the error case.
 
 To handle the error case and print a user-friendly message, we need to update
 `main` to handle the `Result` being returned by `Config::new`, as shown in
-Listing 12-10. We’ll also take the responsibility of exiting the command line
+[Listing 12-10][Listing-12-10]. We’ll also take the responsibility of exiting the command line
 tool with a nonzero error code from `panic!` and implement it by hand. A
 nonzero exit status is a convention to signal to the process that called our
 program that the program exited with an error state.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-10]: #Listing-12-10
+<a name="Listing-12-10"></a>
 
 ```rust,ignore
 use std::process;
@@ -417,7 +435,7 @@ is an `Err` value, this method calls the code in the *closure*, which is an
 anonymous function we define and pass as an argument to `unwrap_or_else`. We’ll
 cover closures in more detail in Chapter 13. For now, you just need to know
 that `unwrap_or_else` will pass the inner value of the `Err`, which in this
-case is the static string `not enough arguments` that we added in Listing 12-9,
+case is the static string `not enough arguments` that we added in [Listing 12-9][Listing-12-9],
 to our closure in the argument `err` that appears between the vertical pipes.
 The code in the closure can then use the `err` value when it runs.
 
@@ -426,7 +444,7 @@ code in the closure that will be run in the error case is only two lines: we
 print the `err` value and then call `process::exit`. The `process::exit`
 function will stop the program immediately and return the number that was
 passed as the exit status code. This is similar to the `panic!`-based handling
-we used in Listing 12-8, but we no longer get all the extra output. Let’s try
+we used in [Listing 12-8][Listing-12-8], but we no longer get all the extra output. Let’s try
 it:
 
 ```text
@@ -449,11 +467,14 @@ configuration or handling errors. When we’re done, `main` will be concise and
 easy to verify by inspection, and we’ll be able to write tests for all the
 other logic.
 
-Listing 12-11 shows the extracted `run` function. For now, we’re just making
+[Listing 12-11][Listing-12-11] shows the extracted `run` function. For now, we’re just making
 the small, incremental improvement of extracting the function. We’re still
 defining the function in *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-11]: #Listing-12-11
+<a name="Listing-12-11"></a>
 
 ```rust,ignore
 fn main() {
@@ -488,14 +509,17 @@ argument.
 #### Returning Errors from the `run` Function
 
 With the remaining program logic separated into the `run` function, we can
-improve the error handling, as we did with `Config::new` in Listing 12-9.
+improve the error handling, as we did with `Config::new` in [Listing 12-9][Listing-12-9].
 Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
 us further consolidate into `main` the logic around handling errors in a
-user-friendly way. Listing 12-12 shows the changes we need to make to the
+user-friendly way. [Listing 12-12][Listing-12-12] shows the changes we need to make to the
 signature and body of `run`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-12]: #Listing-12-12
+<a name="Listing-12-12"></a>
 
 ```rust,ignore
 use std::error::Error;
@@ -560,7 +584,7 @@ have some error handling code here! Let’s rectify that problem now.
 #### Handling Errors Returned from `run` in `main`
 
 We’ll check for errors and handle them using a technique similar to the way we
-handled errors with `Config::new` in Listing 12-10, but with a slight
+handled errors with `Config::new` in [Listing 12-10][Listing-12-10], but with a slight
 difference:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -604,11 +628,14 @@ Let’s move all the code that isn’t the `main` function from *src/main.rs* to
 * The definition of `Config`
 * The `Config::new` function definition
 
-The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
+The contents of *src/lib.rs* should have the signatures shown in [Listing 12-13][Listing-12-13]
 (we’ve omitted the bodies of the functions for brevity). Note that this won't
 compile until we modify *src/main.rs* in the listing after this one:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-12-13]: #Listing-12-13
+<a name="Listing-12-13"></a>
 
 ```rust,ignore
 use std::error::Error;
@@ -639,9 +666,12 @@ method, and on the `run` function. We now have a library crate that has a
 public API that we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs*, as shown in Listing 12-14:
+binary crate in *src/main.rs*, as shown in [Listing 12-14][Listing-12-14]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-14]: #Listing-12-14
+<a name="Listing-12-14"></a>
 
 ```rust,ignore
 extern crate minigrep;
@@ -675,3 +705,15 @@ modular. Almost all of our work will be done in *src/lib.rs* from here on out.
 Let’s take advantage of this newfound modularity by doing something that would
 have been difficult with the old code but is easy with the new code: we’ll
 write some tests!
+
+[Listing-12-5]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-5
+[Listing-12-6]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-6
+[Listing-12-7]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-7
+[Listing-12-8]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-8
+[Listing-9-9]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-9
+[Listing-12-9]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-9
+[Listing-12-10]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-10
+[Listing-12-11]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-11
+[Listing-12-12]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-12
+[Listing-12-13]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-13
+[Listing-12-14]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-14

@@ -6,10 +6,13 @@ refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the width and height of a rectangle specified in pixels and will calculate the
-area of the rectangle. Listing 5-8 shows a short program with one way of doing
+area of the rectangle. [Listing 5-8][Listing-5-8] shows a short program with one way of doing
 just that in our project’s *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-8]: #Listing-5-8
+<a name="Listing-5-8"></a>
 
 ```rust
 fn main() {
@@ -38,7 +41,7 @@ The area of the rectangle is 1500 square pixels.
 
 ### Refactoring with Tuples
 
-Even though Listing 5-8 works and figures out the area of the rectangle by
+Even though [Listing 5-8][Listing-5-8] works and figures out the area of the rectangle by
 calling the `area` function with each dimension, we can do better. The width
 and the height are related to each other because together they describe one
 rectangle.
@@ -54,9 +57,12 @@ function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
 we might do that in the “Grouping Values into Tuples” section of Chapter 3: by
-using tuples. Listing 5-9 shows another version of our program that uses tuples:
+using tuples. [Listing 5-9][Listing-5-9] shows another version of our program that uses tuples:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-9]: #Listing-5-9
+<a name="Listing-5-9"></a>
 
 ```rust
 fn main() {
@@ -93,9 +99,12 @@ our code.
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a data type with a name for the whole as well as names for the
-parts, as shown in Listing 5-10:
+parts, as shown in [Listing 5-10][Listing-5-10]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-10]: #Listing-5-10
+<a name="Listing-5-10"></a>
 
 ```rust
 struct Rectangle {
@@ -141,10 +150,13 @@ and `1`. This is a win for clarity.
 ### Adding Useful Functionality with Derived Traits
 
 It’d be nice to be able to print out an instance of our `Rectangle` while we’re
-debugging our program and see the values for all its fields. Listing 5-11 tries
+debugging our program and see the values for all its fields. [Listing 5-11][Listing-5-11] tries
 the `println!` macro as we have used it in Chapters 2, 3, and 4:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-11]: #Listing-5-11
+<a name="Listing-5-11"></a>
 
 ```rust,ignore
 struct Rectangle {
@@ -207,9 +219,12 @@ crate, add `#[derive(Debug)]` or manually implement it
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to make that functionality available for our struct.
 To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-12:
+definition, as shown in [Listing 5-12][Listing-5-12]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-5-12]: #Listing-5-12
+<a name="Listing-5-12"></a>
 
 ```rust
 #[derive(Debug)]
@@ -258,3 +273,9 @@ It would be helpful to tie this behavior more closely to our `Rectangle`
 struct, because it won’t work with any other type. Let’s look at how we can
 continue to refactor this code by turning the `area` function into an `area`
 *method* defined on our `Rectangle` type.
+
+[Listing-5-8]: ch05-02-example-structs.html#Listing-5-8
+[Listing-5-9]: ch05-02-example-structs.html#Listing-5-9
+[Listing-5-10]: ch05-02-example-structs.html#Listing-5-10
+[Listing-5-11]: ch05-02-example-structs.html#Listing-5-11
+[Listing-5-12]: ch05-02-example-structs.html#Listing-5-12

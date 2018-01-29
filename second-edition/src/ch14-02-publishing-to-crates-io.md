@@ -23,7 +23,7 @@ your crate is *implemented*.
 
 Documentation comments use `///` instead of `//` and support Markdown notation
 for formatting the text if you want to use it. You place documentation comments
-just before the item they’re documenting. Listing 14-1 shows documentation
+just before the item they’re documenting. [Listing 14-1][Listing-14-1] shows documentation
 comments for an `add_one` function in a crate named `my_crate`:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -36,6 +36,9 @@ comments for an `add_one` function in a crate named `my_crate`:
 /// ```
 /// let five = 5;
 ///
+
+[Listing-14-1]: #Listing-14-1
+<a name="Listing-14-1"></a>
 /// assert_eq!(6, my_crate::add_one(5));
 /// ```
 pub fn add_one(x: i32) -> i32 {
@@ -57,7 +60,10 @@ For convenience, running `cargo doc --open` will build the HTML for your
 current crate’s documentation (as well as the documentation for all of your
 crate’s dependencies) and open the result in a web browser. Navigate to the
 `add_one` function and you’ll see how the text in the documentation comments is
-rendered, as shown in Figure 14-1:
+rendered, as shown in [Figure 14-1][Figure-14-1]:
+
+[Figure-14-1]: #Figure-14-1
+<a name="Figure-14-1"></a>
 
 <img alt="Rendered HTML documentation for the `add_one` function of `my_crate`" src="img/trpl14-01.png" class="center" />
 
@@ -66,13 +72,16 @@ function</span>
 
 #### Commonly Used Sections
 
-We used the `# Examples` Markdown heading in Listing 14-1 to create a section
+We used the `# Examples` Markdown heading in [Listing 14-1][Listing-14-1] to create a section
 in the HTML with the title “Examples.” Some other sections that crate authors
 commonly use in their documentation include:
 
 * **Panics**: The scenarios in which the function being documented could
   `panic!`. Callers of the function who don’t want their programs to panic
   should make sure they don’t call the function in these situations.
+
+[Figure-14-1]: #Figure-14-1
+<a name="Figure-14-1"></a>
 * **Errors**: If the function returns a `Result`, describing the kinds of
   errors that might occur and what conditions might cause those errors to be
   returned can be helpful to callers so they can write code to handle the
@@ -93,7 +102,7 @@ running `cargo test` will run the code examples in your documentation as
 tests! Nothing is better than documentation with examples. But nothing is worse
 than examples that don’t work because the code has changed since the
 documentation was written. Run `cargo test` with the documentation for the
-`add_one` function from Listing 14-1; you should see a section in the test
+`add_one` function from [Listing 14-1][Listing-14-1]; you should see a section in the test
 results like this:
 
 ```text
@@ -120,9 +129,12 @@ module as a whole.
 For example, if we want to add documentation that describes the purpose of the
 `my_crate` crate that contains the `add_one` function, we can add documentation
 comments that start with `//!` to the beginning of the *src/lib.rs* file, as
-shown in Listing 14-2:
+shown in [Listing 14-2][Listing-14-2]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-14-2]: #Listing-14-2
+<a name="Listing-14-2"></a>
 
 ```rust,ignore
 //! # My Crate
@@ -145,7 +157,10 @@ is the crate root. These comments describe the entire crate.
 
 When we run `cargo doc --open`, these comments will display on the front
 page of the documentation for `my_crate` above the list of public items in the
-crate, as shown in Figure 14-2:
+crate, as shown in [Figure 14-2][Figure-14-2]:
+
+[Figure-14-2]: #Figure-14-2
+<a name="Figure-14-2"></a>
 
 <img alt="Rendered HTML documentation with a comment for the crate as a whole" src="img/trpl14-02.png" class="center" />
 
@@ -158,6 +173,9 @@ help your crate users understand your organization.
 
 ### Exporting a Convenient Public API with `pub use`
 
+
+[Figure-14-2]: #Figure-14-2
+<a name="Figure-14-2"></a>
 In Chapter 7, we covered how to organize our code into modules using the `mod`
 keyword, how to make items public using the `pub` keyword, and how to bring
 items into a scope with the `use` keyword. However, the structure that makes
@@ -184,9 +202,12 @@ defined in the other location instead.
 For example, say we made a library named `art` for modeling artistic concepts.
 Within this library are two modules: a `kinds` module containing two enums
 named `PrimaryColor` and `SecondaryColor`, and a `utils` module containing a
-function named `mix`, as shown in Listing 14-3:
+function named `mix`, as shown in [Listing 14-3][Listing-14-3]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-14-3]: #Listing-14-3
+<a name="Listing-14-3"></a>
 
 ```rust,ignore
 //! # Art
@@ -223,8 +244,11 @@ pub mod utils {
 <span class="caption">Listing 14-3: An `art` library with items organized into
 `kinds` and `utils` modules</span>
 
-Figure 14-3 shows what the front page of the documentation for this crate
+[Figure 14-3][Figure-14-3] shows what the front page of the documentation for this crate
 generated by `cargo doc` would look like:
+
+[Figure-14-3]: #Figure-14-3
+<a name="Figure-14-3"></a>
 
 <img alt="Rendered documentation for the `art` crate that lists the `kinds` and `utils` modules" src="img/trpl14-03.png" class="center" />
 
@@ -235,12 +259,18 @@ Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the
 front page, nor is the `mix` function. We have to click `kinds` and `utils` to
 see them.
 
+[Figure-14-3]: #Figure-14-3
+<a name="Figure-14-3"></a>
+
 Another crate that depends on this library would need `use` statements that
 import the items from `art`, including specifying the module structure that’s
-currently defined. Listing 14-4 shows an example of a crate that uses the
+currently defined. [Listing 14-4][Listing-14-4] shows an example of a crate that uses the
 `PrimaryColor` and `mix` items from the `art` crate:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-14-4]: #Listing-14-4
+<a name="Listing-14-4"></a>
 
 ```rust,ignore
 extern crate art;
@@ -258,7 +288,7 @@ fn main() {
 <span class="caption">Listing 14-4: A crate using the `art` crate’s items with
 its internal structure exported</span>
 
-The author of the code in Listing 14-4, which uses the `art` crate, had to
+The author of the code in [Listing 14-4][Listing-14-4], which uses the `art` crate, had to
 figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the
 `utils` module. The module structure of the `art` crate is more relevant to
 developers working on the `art` crate than developers using the `art` crate.
@@ -270,10 +300,13 @@ where to look, and the structure is inconvenient because developers must
 specify the module names in the `use` statements.
 
 To remove the internal organization from the public API, we can modify the
-`art` crate code in Listing 14-3 to add `pub use` statements to re-export the
-items at the top level, as shown in Listing 14-5:
+`art` crate code in [Listing 14-3][Listing-14-3] to add `pub use` statements to re-export the
+items at the top level, as shown in [Listing 14-5][Listing-14-5]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-14-5]: #Listing-14-5
+<a name="Listing-14-5"></a>
 
 ```rust,ignore
 //! # Art
@@ -297,19 +330,28 @@ pub mod utils {
 items</span>
 
 The API documentation that `cargo doc` generates for this crate will now list
-and link re-exports on the front page, as shown in Figure 14-4, which makes the
+and link re-exports on the front page, as shown in [Figure 14-4][Figure-14-4], which makes the
 `PrimaryColor` and `SecondaryColor` types and the `mix` function easier to find:
+
+[Figure-14-4]: #Figure-14-4
+<a name="Figure-14-4"></a>
 
 <img alt="Rendered documentation for the `art` crate with the re-exports on the front page" src="img/trpl14-04.png" class="center" />
 
+
+[Figure-14-4]: #Figure-14-4
+<a name="Figure-14-4"></a>
 <span class="caption">Figure 14-4: Front page of the documentation for `art`
 that lists the re-exports</span>
 
-The `art` crate users can still see and use the internal structure from Listing
-14-3 as demonstrated in Listing 14-4, or they can use the more convenient
-structure in Listing 14-5, as shown in Listing 14-6:
+The `art` crate users can still see and use the internal structure from [Listing 14-3][Listing-14-3]
+as demonstrated in [Listing 14-4][Listing-14-4], or they can use the more convenient
+structure in [Listing 14-5][Listing-14-5], as shown in Listing 14-6:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-14-6]: #Listing-14-6
+<a name="Listing-14-6"></a>
 
 ```rust,ignore
 extern crate art;
@@ -513,3 +555,14 @@ $ cargo yank --vers 1.0.1 --undo
 A yank *does not* delete any code. For example, the yank feature is not
 intended for deleting accidentally uploaded secrets. If that happens, you must
 reset those secrets immediately.
+
+[Listing-14-1]: ch14-02-publishing-to-crates-io.html#Listing-14-1
+[Listing-14-2]: ch14-02-publishing-to-crates-io.html#Listing-14-2
+[Listing-14-3]: ch14-02-publishing-to-crates-io.html#Listing-14-3
+[Listing-14-4]: ch14-02-publishing-to-crates-io.html#Listing-14-4
+[Listing-14-5]: ch14-02-publishing-to-crates-io.html#Listing-14-5
+[Listing-14-6]: ch14-02-publishing-to-crates-io.html#Listing-14-6
+[Figure-14-1]: ch14-02-publishing-to-crates-io.html#Figure-14-1
+[Figure-14-2]: ch14-02-publishing-to-crates-io.html#Figure-14-2
+[Figure-14-3]: ch14-02-publishing-to-crates-io.html#Figure-14-3
+[Figure-14-4]: ch14-02-publishing-to-crates-io.html#Figure-14-4

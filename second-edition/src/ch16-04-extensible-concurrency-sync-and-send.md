@@ -21,7 +21,7 @@ where you don’t want to pay the thread-safe performance penalty.
 
 Therefore, Rust’s type system and trait bounds ensure that we can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
-this in Listing 16-14, we got the error `the trait Send is not implemented for
+this in [Listing 16-14][Listing-16-14], we got the error `the trait Send is not implemented for
 Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`, the code
 compiled.
 
@@ -86,3 +86,5 @@ Next, we’ll talk about idiomatic ways to model problems and structure solution
 as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
 relate to those you might be familiar with from object oriented programming.
 
+
+[Listing-16-14]: ch16-03-shared-state.html#Listing-16-14

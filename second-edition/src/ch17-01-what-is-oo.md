@@ -49,10 +49,13 @@ struct `AveragedCollection` that has a field containing a vector of `i32`
 values. The struct can also have a field that contains the average of the
 values in the vector, meaning the average doesn’t have to be computed on-demand
 whenever anyone needs it. In other words, `AveragedCollection` will cache the
-calculated average for us. Listing 17-1 has the definition of the
+calculated average for us. [Listing 17-1][Listing-17-1] has the definition of the
 `AveragedCollection` struct:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-1]: #Listing-17-1
+<a name="Listing-17-1"></a>
 
 ```rust
 pub struct AveragedCollection {
@@ -69,9 +72,12 @@ The struct itself is marked `pub` so that other code may use it, but the fields
 within the struct remain private. This is important in this case because we
 want to ensure that whenever a value is added or removed from the list, the
 average is also updated. We do this by implementing `add`, `remove`, and
-`average` methods on the struct as shown in Listing 17-2:
+`average` methods on the struct as shown in [Listing 17-2][Listing-17-2]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-17-2]: #Listing-17-2
+<a name="Listing-17-2"></a>
 
 ```rust
 # pub struct AveragedCollection {
@@ -150,7 +156,7 @@ There are two main reasons to choose inheritance. The first is for re-use of
 code: you can implement particular behavior for one type, and inheritance
 enables you to re-use that implementation for a different type. Rust code can
 be shared using default trait method implementations instead, which we saw in
-Listing 10-15 when we added a default implementation of the `summary` method on
+[Listing 10-15][Listing-10-15] when we added a default implementation of the `summary` method on
 the `Summarizable` trait. Any type implementing the `Summarizable` trait would
 have the `summary` method available on it without any further code. This is
 similar to a parent class having an implementation of a method, and an
@@ -194,3 +200,7 @@ design.
 For these reasons, Rust chose to take a different approach, using trait objects
 instead of inheritance. Let’s take a look at how trait objects enable
 polymorphism in Rust.
+
+[Listing-17-1]: ch17-01-what-is-oo.html#Listing-17-1
+[Listing-17-2]: ch17-01-what-is-oo.html#Listing-17-2
+[Listing-10-15]: ch10-02-traits.html#Listing-10-15

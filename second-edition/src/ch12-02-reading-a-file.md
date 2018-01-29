@@ -3,12 +3,15 @@
 Now we’ll add functionality to read the file that is specified in the
 `filename` command line argument. First, we need a sample file to test it with:
 the best kind of file to use to make sure `minigrep` is working is one with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
+small amount of text over multiple lines with some repeated words. [Listing 12-3][Listing-12-3]
 has an Emily Dickinson poem that will work well! Create a file called
 *poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
 
 <span class="filename">Filename: poem.txt</span>
+
+[Listing-12-3]: #Listing-12-3
+<a name="Listing-12-3"></a>
 
 ```text
 I’m nobody! Who are you?
@@ -26,9 +29,12 @@ To an admiring bog!
 test case.</span>
 
 With the text in place, edit *src/main.rs* and add code to open the file, as
-shown in Listing 12-4:
+shown in [Listing 12-4][Listing-12-4]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-4]: #Listing-12-4
+<a name="Listing-12-4"></a>
 
 ```rust,should_panic
 use std::env;
@@ -109,3 +115,6 @@ as we could be. The program is still small so these flaws aren’t a big problem
 but as the program grows, it will be harder to fix them cleanly. It’s good
 practice to begin refactoring early on when developing a program, because it’s
 much easier to refactor smaller amounts of code. We’ll do that next.
+
+[Listing-12-3]: ch12-02-reading-a-file.html#Listing-12-3
+[Listing-12-4]: ch12-02-reading-a-file.html#Listing-12-4

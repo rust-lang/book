@@ -35,7 +35,7 @@ for clean up? -->
 this code gets run. It's hard to experience the cleaning up unless we print
 something. /Carol -->
 
-Listing 15-16 shows a `CustomSmartPointer` struct whose only custom
+[Listing 15-16][Listing-15-16] shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print out `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This will demonstrate when Rust runs the `drop`
 function:
@@ -50,6 +50,9 @@ reader an idea of when this code gets called and that it gets called
 automatically. We're building up to cleaning up. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-16]: #Listing-15-16
+<a name="Listing-15-16"></a>
 
 ```rust
 struct CustomSmartPointer {
@@ -122,7 +125,7 @@ up a value early. One example is when using smart pointers that manage locks;
 you may want to force the `drop` method that releases the lock to run so that
 other code in the same scope can acquire the lock. First, let’s see what
 happens if we try to call the `Drop` trait’s `drop` method ourselves by
-modifying the `main` function from Listing 15-16 as shown in Listing 15-17:
+modifying the `main` function from [Listing 15-16][Listing-15-16] as shown in Listing 15-17:
 
 <!-- Above: I'm not following why we are doing this, if it's not necessary and
 we aren't going to cover it now anyway -- can you lay out why we're discussing
@@ -130,6 +133,9 @@ this here? -->
 <!-- Done. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-17]: #Listing-15-17
+<a name="Listing-15-17"></a>
 
 ```rust,ignore
 fn main() {
@@ -171,9 +177,12 @@ force a value to be cleaned up early, we can use the `std::mem::drop` function.
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
 an argument. `std::mem::drop` is in the prelude, so we can modify `main` from
-Listing 15-16 to call the `drop` function as shown in Listing 15-18:
+[Listing 15-16][Listing-15-16] to call the `drop` function as shown in Listing 15-18:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-18]: #Listing-15-18
+<a name="Listing-15-18"></a>
 
 ```rust
 # struct CustomSmartPointer {
@@ -233,3 +242,7 @@ once when the value is no longer being used.
 Now that we’ve gone over `Box<T>` and some of the characteristics of smart
 pointers, let’s talk about a few other smart pointers defined in the standard
 library.
+
+[Listing-15-16]: ch15-03-drop.html#Listing-15-16
+[Listing-15-17]: ch15-03-drop.html#Listing-15-17
+[Listing-15-18]: ch15-03-drop.html#Listing-15-18

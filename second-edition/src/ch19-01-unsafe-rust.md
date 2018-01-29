@@ -91,8 +91,11 @@ caveats that the reader needs to be aware of when working with raw pointers.
 You'd choose to use raw pointers to do something that you can't do with smart
 pointers or references. I've tried to clarify above /Carol -->
 
-Listing 19-1 shows how to create both an immutable and a mutable raw pointer
+[Listing 19-1][Listing-19-1] shows how to create both an immutable and a mutable raw pointer
 from references.
+
+[Listing-19-1]: #Listing-19-1
+<a name="Listing-19-1"></a>
 
 ```rust
 let mut num = 5;
@@ -119,11 +122,14 @@ these particular raw pointers are valid, but we can’t make that assumption
 about just any raw pointer.
 
 Next we’ll create a raw pointer whose validity we can’t be so certain of.
-Listing 19-2 shows how to create a raw pointer to an arbitrary location in
+[Listing 19-2][Listing-19-2] shows how to create a raw pointer to an arbitrary location in
 memory. Trying to use arbitrary memory is undefined: there may be data at that
 address or there may not, the compiler might optimize the code so that there is
 no memory access, or your program might segfault. There’s not usually a good
 reason to be writing code like this, but it is possible:
+
+[Listing-19-2]: #Listing-19-2
+<a name="Listing-19-2"></a>
 
 ```rust
 let address = 0x012345usize;
@@ -136,7 +142,10 @@ memory address</span>
 Remember that we said you can create raw pointers in safe code, but you can’t
 *dereference* raw pointers and read the data being pointed to. We’ll do so now
 using the dereference operator, `*`, on a raw pointer, which does require an
-`unsafe` block, as shown in Listing 19-3:
+`unsafe` block, as shown in [Listing 19-3][Listing-19-3]:
+
+[Listing-19-3]: #Listing-19-3
+<a name="Listing-19-3"></a>
 
 ```rust
 let mut num = 5;
@@ -156,7 +165,7 @@ unsafe {
 Creating a pointer can’t do any harm; it’s only when accessing the value that
 it points at that you might end up dealing with an invalid value.
 
-Note also that in Listing 19-1 and 19-3 we created `*const i32` and `*mut i32`
+Note also that in [Listing 19-1][Listing-19-1] and 19-3 we created `*const i32` and `*mut i32`
 raw pointers that both pointed to the same memory location, that of `num`. If
 instead we’d tried to create an immutable and a mutable reference to `num`,
 this would not have compiled because Rust’s ownership rules don’t allow a
@@ -224,7 +233,10 @@ is a common abstraction. As an example, let’s check out a function from the
 standard library, `split_at_mut`, that requires some unsafe code and explore
 how we might implement it. This safe method is defined on mutable slices: it
 takes one slice and makes it into two by splitting the slice at the index given
-as an argument. Using `split_at_mut` is demonstrated in Listing 19-4:
+as an argument. Using `split_at_mut` is demonstrated in [Listing 19-4][Listing-19-4]:
+
+[Listing-19-4]: #Listing-19-4
+<a name="Listing-19-4"></a>
 
 ```rust
 let mut v = vec![1, 2, 3, 4, 5, 6];
@@ -241,9 +253,12 @@ assert_eq!(b, &mut [4, 5, 6]);
 function</span>
 
 This function can’t be implemented using only safe Rust. An attempt might look
-something like Listing 19-5, which will not compile. For simplicity, we’re
+something like [Listing 19-5][Listing-19-5], which will not compile. For simplicity, we’re
 implementing `split_at_mut` as a function rather than a method, and only for
 slices of `i32` values rather than for a generic type `T`.
+
+[Listing-19-5]: #Listing-19-5
+<a name="Listing-19-5"></a>
 
 ```rust,ignore
 fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
@@ -289,8 +304,11 @@ Borrowing different parts of a slice is fundamentally okay because our two
 slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
 know something is okay, but Rust doesn’t, it’s time to reach for unsafe code.
 
-Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
+[Listing 19-6][Listing-19-6] shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work:
+
+[Listing-19-6]: #Listing-19-6
+<a name="Listing-19-6"></a>
 
 ```rust
 use std::slice;
@@ -342,9 +360,12 @@ abstraction to the unsafe code with an implementation of the function that uses
 `unsafe` code in a safe way because it creates only valid pointers from the
 data this function has access to.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
+In contrast, the use of `slice::from_raw_parts_mut` in [Listing 19-7][Listing-19-7] would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice ten thousand items long:
+
+[Listing-19-7]: #Listing-19-7
+<a name="Listing-19-7"></a>
 
 ```rust
 use std::slice;
@@ -375,13 +396,16 @@ is a way for a programming language to define functions and enable a different
 <!-- Can you give a definition for FFI? -->
 <!-- Done /Carol -->
 
-Listing 19-8 demonstrates how to set up an integration with the `abs` function
+[Listing 19-8][Listing-19-8] demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
 always unsafe to call from Rust code, because other languages don`t enforce
 Rust's rules and guarantees and Rust can't check them, so responsibility falls
 on the programmer to ensure safety:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-8]: #Listing-19-8
+<a name="Listing-19-8"></a>
 
 ```rust
 extern "C" {
@@ -445,10 +469,13 @@ which Rust does support, but which can be problematic with Rust’s ownership
 rules. If you have two threads accessing the same mutable global variable, it
 can cause a data race.
 
-Global variables are called *static* variables in Rust. Listing 19-9 shows an
+Global variables are called *static* variables in Rust. [Listing 19-9][Listing-19-9] shows an
 example declaration and use of a static variable with a string slice as a value:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-9]: #Listing-19-9
+<a name="Listing-19-9"></a>
 
 ```rust
 static HELLO_WORLD: &str = "Hello, world!";
@@ -476,10 +503,13 @@ are allowed to duplicate their data whenever they are used.
 
 Another difference between constants and static variables is that static
 variables can be mutable. Both accessing and modifying mutable static variables
-is *unsafe*. Listing 19-10 shows how to declare, access, and modify a mutable
+is *unsafe*. [Listing 19-10][Listing-19-10] shows how to declare, access, and modify a mutable
 static variable named `COUNTER`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-10]: #Listing-19-10
+<a name="Listing-19-10"></a>
 
 ```rust
 static mut COUNTER: u32 = 0;
@@ -520,7 +550,10 @@ Finally, the last action that only works with `unsafe` is implementing an
 unsafe trait. A trait is unsafe when at least one of its methods has some
 invariant that the compiler can’t verify. We can declare that a trait is
 `unsafe` by adding the `unsafe` keyword before `trait`, and then implementation
-of the trait must be marked as `unsafe` too, as shown in Listing 19-11:
+of the trait must be marked as `unsafe` too, as shown in [Listing 19-11][Listing-19-11]:
+
+[Listing-19-11]: #Listing-19-11
+<a name="Listing-19-11"></a>
 
 ```rust
 unsafe trait Foo {
@@ -555,3 +588,15 @@ upon, but it is trickier to get `unsafe` code correct because the compiler isn�
 able to help uphold memory safety. When you have a reason to use `unsafe` code,
 it is possible to do so, and having the explicit `unsafe` annotation makes it
 easier to track down the source of problems if they occur.
+
+[Listing-19-1]: ch19-01-unsafe-rust.html#Listing-19-1
+[Listing-19-2]: ch19-01-unsafe-rust.html#Listing-19-2
+[Listing-19-3]: ch19-01-unsafe-rust.html#Listing-19-3
+[Listing-19-4]: ch19-01-unsafe-rust.html#Listing-19-4
+[Listing-19-5]: ch19-01-unsafe-rust.html#Listing-19-5
+[Listing-19-6]: ch19-01-unsafe-rust.html#Listing-19-6
+[Listing-19-7]: ch19-01-unsafe-rust.html#Listing-19-7
+[Listing-19-8]: ch19-01-unsafe-rust.html#Listing-19-8
+[Listing-19-9]: ch19-01-unsafe-rust.html#Listing-19-9
+[Listing-19-10]: ch19-01-unsafe-rust.html#Listing-19-10
+[Listing-19-11]: ch19-01-unsafe-rust.html#Listing-19-11

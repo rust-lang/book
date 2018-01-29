@@ -42,9 +42,12 @@ $ cd adder
 ```
 
 The contents of the *src/lib.rs* file in your adder library should look like
-Listing 11-1:
+[Listing 11-1][Listing-11-1]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-1]: #Listing-11-1
+<a name="Listing-11-1"></a>
 
 ```rust
 #[cfg(test)]
@@ -70,8 +73,10 @@ The function body uses the `assert_eq!` macro to assert that 2 + 2 equals 4.
 This assertion serves as an example of the format for a typical test. Let’s run
 it to see that this test passes.
 
-The `cargo test` command runs all tests in our project, as shown in Listing
-11-2:
+The `cargo test` command runs all tests in our project, as shown in [Listing 11-2][Listing-11-2]:
+
+[Listing-11-2]: #Listing-11-2
+<a name="Listing-11-2"></a>
 
 ```text
 $ cargo test
@@ -148,9 +153,12 @@ when something in the test function panics. Each test is run in a new thread,
 and when the main thread sees that a test thread has died, the test is marked
 as failed. We talked about the simplest way to cause a panic in Chapter 9,
 which is to call the `panic!` macro. Enter the new test, `another`, so your
-*src/lib.rs* file looks like Listing 11-3:
+*src/lib.rs* file looks like [Listing 11-3][Listing-11-3]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-3]: #Listing-11-3
+<a name="Listing-11-3"></a>
 
 ```rust
 #[cfg(test)]
@@ -170,8 +178,11 @@ mod tests {
 <span class="caption">Listing 11-3: Adding a second test that will fail because
 we call the `panic!` macro</span>
 
-Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed:
+Run the tests again using `cargo test`. The output should look like [Listing 11-4][Listing-11-4],
+which shows that our `exploration` test passed and `another` failed:
+
+[Listing-11-4]: #Listing-11-4
+<a name="Listing-11-4"></a>
 
 ```text
 running 2 tests
@@ -221,11 +232,14 @@ the `assert!` macro calls the `panic!` macro, which causes the test to fail.
 Using the `assert!` macro helps us check that our code is functioning in the
 way we intend.
 
-In Chapter 5, Listing 5-15, we used a `Rectangle` struct and a `can_hold`
-method, which are repeated here in Listing 11-5. Let’s put this code in the
+In Chapter 5, [Listing 5-15][Listing-5-15], we used a `Rectangle` struct and a `can_hold`
+method, which are repeated here in [Listing 11-5][Listing-11-5]. Let’s put this code in the
 *src/lib.rs* file and write some tests for it using the `assert!` macro.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-5]: #Listing-11-5
+<a name="Listing-11-5"></a>
 
 ```rust
 #[derive(Debug)]
@@ -245,12 +259,15 @@ impl Rectangle {
 `can_hold` method from Chapter 5</span>
 
 The `can_hold` method returns a Boolean, which means it’s a perfect use case
-for the `assert!` macro. In Listing 11-6, we write a test that exercises the
+for the `assert!` macro. In [Listing 11-6][Listing-11-6], we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a length of 8 and
 a width of 7, and asserting that it can hold another `Rectangle` instance that
 has a length of 5 and a width of 1:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-6]: #Listing-11-6
+<a name="Listing-11-6"></a>
 
 ```rust
 #[cfg(test)]
@@ -383,11 +400,14 @@ fails, which makes it easier to see *why* the test failed; conversely, the
 `assert!` macro only indicates that it got a `false` value for the `==`
 expression, not the values that lead to the `false` value.
 
-In Listing 11-7, we write a function named `add_two` that adds `2` to its
+In [Listing 11-7][Listing-11-7], we write a function named `add_two` that adds `2` to its
 parameter and returns the result. Then we test this function using the
 `assert_eq!` macro.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-7]: #Listing-11-7
+<a name="Listing-11-7"></a>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -482,7 +502,7 @@ of the standard library types implement these traits. For structs and enums
 that you define, you’ll need to implement `PartialEq` to assert that values of
 those types are equal or not equal. You’ll need to implement `Debug` to print
 out the values when the assertion fails. Because both traits are derivable
-traits, as mentioned in Listing 5-12 in Chapter 5, this is usually as
+traits, as mentioned in [Listing 5-12][Listing-5-12] in Chapter 5, this is usually as
 straightforward as adding the `#[derive(PartialEq, Debug)]` annotation to your
 struct or enum definition. See Appendix C for more details about these and
 other derivable traits.
@@ -588,7 +608,7 @@ debug what happened instead of what we were expecting to happen.
 In addition to checking that our code returns the correct values we expect,
 it’s also important to check that our code handles error conditions as we
 expect. For example, consider the `Guess` type that we created in Chapter 9,
-Listing 9-9. Other code that uses `Guess` depends on the guarantee that `Guess`
+[Listing 9-9][Listing-9-9]. Other code that uses `Guess` depends on the guarantee that `Guess`
 instances will only contain values between 1 and 100. We can write a test that
 ensures that attempting to create a `Guess` instance with a value outside that
 range panics.
@@ -597,10 +617,13 @@ We do this by adding another attribute, `should_panic`, to our test function.
 This attribute makes a test pass if the code inside the function panics; the
 test will fail if the code inside the function doesn’t panic.
 
-Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
+[Listing 11-8][Listing-11-8] shows a test that checks that the error conditions of `Guess::new`
 happen when we expect:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-8]: #Listing-11-8
+<a name="Listing-11-8"></a>
 
 ```rust
 pub struct Guess {
@@ -668,7 +691,7 @@ impl Guess {
 }
 ```
 
-When we run the test in Listing 11-8, it will fail:
+When we run the test in [Listing 11-8][Listing-11-8], it will fail:
 
 ```text
 running 1 test
@@ -692,10 +715,13 @@ test panics for a different reason than the one we were expecting to happen. To
 make `should_panic` tests more precise, we can add an optional `expected`
 parameter to the `should_panic` attribute. The test harness will make sure that
 the failure message contains the provided text. For example, consider the
-modified code for `Guess` in Listing 11-9 where the `new` function panics with
+modified code for `Guess` in [Listing 11-9][Listing-11-9] where the `new` function panics with
 different messages depending on whether the value was too small or too large:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-11-9]: #Listing-11-9
+<a name="Listing-11-9"></a>
 
 ```rust
 # pub struct Guess {
@@ -787,3 +813,16 @@ figuring out where our bug is!
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
 test`.
+
+[Listing-11-1]: ch11-01-writing-tests.html#Listing-11-1
+[Listing-11-2]: ch11-01-writing-tests.html#Listing-11-2
+[Listing-11-3]: ch11-01-writing-tests.html#Listing-11-3
+[Listing-11-4]: ch11-01-writing-tests.html#Listing-11-4
+[Listing-5-15]: ch05-03-method-syntax.html#Listing-5-15
+[Listing-11-5]: ch11-01-writing-tests.html#Listing-11-5
+[Listing-11-6]: ch11-01-writing-tests.html#Listing-11-6
+[Listing-11-7]: ch11-01-writing-tests.html#Listing-11-7
+[Listing-5-12]: ch05-02-example-structs.html#Listing-5-12
+[Listing-9-9]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-9
+[Listing-11-8]: ch11-01-writing-tests.html#Listing-11-8
+[Listing-11-9]: ch11-01-writing-tests.html#Listing-11-9

@@ -25,7 +25,10 @@ One example of a trait with an associated type is the `Iterator` trait provided
 by the standard library. This has an associated type named `Item` that stands
 in for the type of the values it’s iterating over. In “The `Iterator` Trait and
 the `next` Method” section of Chapter 13, we mentioned that the definition of
-the `Iterator` trait is as shown in Listing 19-20:
+the `Iterator` trait is as shown in [Listing 19-20][Listing-19-20]:
+
+[Listing-19-20]: #Listing-19-20
+<a name="Listing-19-20"></a>
 
 ```rust
 pub trait Iterator {
@@ -49,7 +52,7 @@ define a function without specifying what types it can deal with. So why use
 associated types?
 
 Let’s examine the difference with an example that implements the `Iterator`
-trait on the `Counter` struct from Chapter 13. In Listing 13-21, we specified
+trait on the `Counter` struct from Chapter 13. In [Listing 13-21][Listing-13-21], we specified
 that the `Item` type was `u32`:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -63,7 +66,10 @@ impl Iterator for Counter {
 ```
 
 This feels similar to generics. So why not just define the `Iterator` trait
-with generics as shown in Listing 19-21?
+with generics as shown in [Listing 19-21][Listing-19-21]?
+
+[Listing-19-21]: #Listing-19-21
+<a name="Listing-19-21"></a>
 
 ```rust
 pub trait Iterator<T> {
@@ -74,7 +80,7 @@ pub trait Iterator<T> {
 <span class="caption">Listing 19-21: A hypothetical definition of the
 `Iterator` trait using generics</span>
 
-The difference lies in the fact that when using generics like in Listing 19-21,
+The difference lies in the fact that when using generics like in [Listing 19-21][Listing-19-21],
 we have to annotate the types in each implementation. This is because we can
 also implement `Iterator<String> for Counter`, or any other type, which would
 give us multiple implementations of `Iterator` for `Counter`. In other words,
@@ -84,7 +90,7 @@ When we use the `next` method on `Counter`, we’d then have to provide type
 annotations to indicate which implementation of `Iterator` we wanted to use.
 
 With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. With Listing 19-20, we can only
+implement a trait on a type multiple times. With [Listing 19-20][Listing-19-20], we can only
 choose once what the type of `Item` will be, because there can only be one `impl
 Iterator for Counter`. We don’t have to specify that we want an iterator of
 `u32` values everywhere that we call `next` on `Counter`.
@@ -108,11 +114,14 @@ and why/when to use it, or is it worth giving a quick definition here? -->
 Rust does not allow you to create your own operators or overload arbitrary
 operators, but you *can* overload the operations and corresponding traits
 listed in `std::ops` by implementing the traits associated with the operator.
-For example, in Listing 19-22 we overload the `+` operator to add two `Point`
+For example, in [Listing 19-22][Listing-19-22] we overload the `+` operator to add two `Point`
 instances together. We do this by implementing the `Add` trait on a `Point`
 struct:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-22]: #Listing-19-22
+<a name="Listing-19-22"></a>
 
 ```rust
 use std::ops::Add;
@@ -178,9 +187,12 @@ We have two structs holding values in different units, `Millimeters` and
 `Meters`. We want to be able to add values in millimeters to values in meters,
 and have the implementation of `Add` do the conversion correctly. We can
 implement `Add` for `Millimeters` with `Meters` as the right hand side as shown
-in Listing 19-23:
+in [Listing 19-23][Listing-19-23]:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-19-23]: #Listing-19-23
+<a name="Listing-19-23"></a>
 
 ```rust
 use std::ops::Add;
@@ -236,12 +248,15 @@ the type with the same name as methods from traits as well!
 clarify /Carol -->
 
 When calling methods with the same name, then, we need to tell Rust which one
-we want to use. Consider the code in Listing 19-24 where we’ve defined two
+we want to use. Consider the code in [Listing 19-24][Listing-19-24] where we’ve defined two
 traits, `Pilot` and `Wizard`, that both have a method called `fly`. We then
 implement both traits on a type `Human` that itself already has a method named
 `fly` implemented on it. Each `fly` method does something different:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-24]: #Listing-19-24
+<a name="Listing-19-24"></a>
 
 ```rust
 trait Pilot {
@@ -278,9 +293,12 @@ and implementations of those traits on the `Human` type in addition to a `fly`
 method on `Human` directly</span>
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 19-25:
+the method that is directly implemented on the type, as shown in [Listing 19-25][Listing-19-25]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-25]: #Listing-19-25
+<a name="Listing-19-25"></a>
 
 ```rust
 # trait Pilot {
@@ -325,9 +343,12 @@ called the `fly` method implemented on `Human` directly.
 
 In order to call the `fly` methods from either the `Pilot` trait or the
 `Wizard` trait, we need to use more explicit syntax in order to specify which
-`fly` method we mean. This syntax is demonstrated in Listing 19-26:
+`fly` method we mean. This syntax is demonstrated in [Listing 19-26][Listing-19-26]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-26]: #Listing-19-26
+<a name="Listing-19-26"></a>
 
 ```rust
 # trait Pilot {
@@ -372,7 +393,7 @@ want to call</span>
 Specifying the trait name before the method name clarifies to Rust which
 implementation of `fly` we want to call. We could also choose to write
 `Human::fly(&person)`, which is equivalent to `person.fly()` that we had in
-Listing 19-26, but is a bit longer to write if we don’t need to disambiguate.
+[Listing 19-26][Listing-19-26], but is a bit longer to write if we don’t need to disambiguate.
 
 Running this code will print:
 
@@ -389,11 +410,14 @@ to use based on the type of `self`.
 However, associated functions that are part of traits don’t have a `self`
 parameter. When two types in the same scope implement that trait, Rust can’t
 figure out which type we mean unless we use *fully qualified syntax*. For
-example, take the `Animal` trait in Listing 19-27 that has the associated
+example, take the `Animal` trait in [Listing 19-27][Listing-19-27] that has the associated
 function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
 the associated function `baby_name` defined on `Dog` directly:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-27]: #Listing-19-27
+<a name="Listing-19-27"></a>
 
 ```rust
 trait Animal {
@@ -439,11 +463,14 @@ A baby dog is called a Spot
 
 This isn’t what we wanted. We want to call the `baby_name` function that’s part
 of the `Animal` trait that we implemented on `Dog` so that we print `A baby dog
-is called a puppy`. The technique we used in Listing 19-26 doesn’t help here;
-if we change `main` to be the code in Listing 19-28, we’ll get a compilation
+is called a puppy`. The technique we used in [Listing 19-26][Listing-19-26] doesn’t help here;
+if we change `main` to be the code in [Listing 19-28][Listing-19-28], we’ll get a compilation
 error:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-28]: #Listing-19-28
+<a name="Listing-19-28"></a>
 
 ```rust,ignore
 fn main() {
@@ -471,10 +498,13 @@ error[E0283]: type annotations required: cannot resolve `_: Animal`
 
 To disambiguate and tell Rust that we want to use the implementation of
 `Animal` for `Dog`, we need to use *fully qualified syntax*, which is the most
-specific we can be when calling a function. Listing 19-29 demonstrates how to
+specific we can be when calling a function. [Listing 19-29][Listing-19-29] demonstrates how to
 use fully qualified syntax:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-29]: #Listing-19-29
+<a name="Listing-19-29"></a>
 
 ```rust
 # trait Animal {
@@ -552,9 +582,12 @@ functionality. We therefore need to specify that the `OutlinePrint` trait will
 only work for types that also implement `Display` and therefore provide the
 functionality that `OutlinePrint` needs. We can do that in the trait definition
 by specifying `OutlinePrint: Display`. This is similar to adding a trait bound
-to the trait. Listing 19-30 shows an implementation of the `OutlinePrint` trait:
+to the trait. [Listing 19-30][Listing-19-30] shows an implementation of the `OutlinePrint` trait:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-30]: #Listing-19-30
+<a name="Listing-19-30"></a>
 
 ```rust
 use std::fmt;
@@ -651,9 +684,12 @@ As an example, we want to implement `Display` on `Vec`, which the orphan rule
 prevents us from doing directly because the `Display` trait and the `Vec` type
 are both defined outside of our crate. We can make a `Wrapper` struct that
 holds an instance of `Vec`, then we can implement `Display` on `Wrapper` and
-use the `Vec` value as shown in Listing 19-31:
+use the `Vec` value as shown in [Listing 19-31][Listing-19-31]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-31]: #Listing-19-31
+<a name="Listing-19-31"></a>
 
 ```rust
 use std::fmt;
@@ -700,3 +736,17 @@ methods we do want ourselves.
 That’s how the newtype pattern is used in relation to traits; it’s also a
 useful pattern without having traits involved. Let’s switch focus now to talk
 about some advanced ways to interact with Rust’s type system.
+
+[Listing-19-20]: ch19-03-advanced-traits.html#Listing-19-20
+[Listing-13-21]: ch13-02-iterators.html#Listing-13-21
+[Listing-19-21]: ch19-03-advanced-traits.html#Listing-19-21
+[Listing-19-22]: ch19-03-advanced-traits.html#Listing-19-22
+[Listing-19-23]: ch19-03-advanced-traits.html#Listing-19-23
+[Listing-19-24]: ch19-03-advanced-traits.html#Listing-19-24
+[Listing-19-25]: ch19-03-advanced-traits.html#Listing-19-25
+[Listing-19-26]: ch19-03-advanced-traits.html#Listing-19-26
+[Listing-19-27]: ch19-03-advanced-traits.html#Listing-19-27
+[Listing-19-28]: ch19-03-advanced-traits.html#Listing-19-28
+[Listing-19-29]: ch19-03-advanced-traits.html#Listing-19-29
+[Listing-19-30]: ch19-03-advanced-traits.html#Listing-19-30
+[Listing-19-31]: ch19-03-advanced-traits.html#Listing-19-31
