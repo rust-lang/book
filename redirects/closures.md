@@ -13,7 +13,7 @@ let expensive_closure = |num| {
     thread::sleep(Duration::from_secs(2));
     num
 };
-#expensive_closure(5);
+# expensive_closure(5);
 ```
 
 ---
