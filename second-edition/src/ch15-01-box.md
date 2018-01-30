@@ -28,7 +28,7 @@ you learn here you’ll apply again in Chapter 17!
 
 ### Using a `Box<T>` to Store Data on the Heap
 
-Before we discuss a use case for `Box<T>`, we’ll cover the syntax and how to
+Before we discuss this use case for `Box<T>`, we’ll cover the syntax and how to
 interact with values stored within a `Box<T>`.
 
 Listing 15-1 shows how to use a box to store an `i32` value on the heap:
