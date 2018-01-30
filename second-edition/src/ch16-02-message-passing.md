@@ -39,9 +39,10 @@ want to send over the channel:
 
 ```rust
 use std::sync::mpsc;
+use std::sync::mpsc::{Sender, Receiver};
 
 fn main() {
-    let (tx, rx) = mpsc::channel();
+    let (tx, rx): (Sender<String>, Receiver<String>) = mpsc::channel();
 #     tx.send(()).unwrap();
 }
 ```
