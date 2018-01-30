@@ -391,43 +391,41 @@ error[E0308]: mismatched types
 `example_closure` 에 있는 클로저에 고정되고, 같은 클로저를 다른 타입으로 
 사용하려고 할 때 타입 에러를 얻게 됩니다.
 
-### Storing Closures Using Generic Parameters and the `Fn` Traits
+### 제너릭 파라미터와 `Fn` 트레잇을 사용하여 클로저 저장하기
 
-Let’s return to our workout generation app. In Listing 13-6, our code was still
-calling the expensive calculation closure more times than it needed to. One
-option to solve this issue is to save the result of the expensive closure in a
-variable for reuse and use the variable instead in each place we need the
-result instead of calling the closure again. However, this method could result
-in a lot of repeated code.
+운동 생성 앱으로 돌아갑시다. 리스트 13-6 에서, 우리의 코드는 아직도 비용이 큰
+계산을 하는 클로저를 필요한 것 보다 더 많이  호출 합니다. 이 문제를 풀기위한
+한가지 옵션은 비싼 비용의 클로저 결과를 재활용을 위해 변수에 저장하고 결과가
+필요한 부분에서 클로저를 다시 호출하는 대신 그 변수를 사용하는 것 입니다.
+그러나, 이 방법은 많은 반복된 코드를 만들 수 있습니다.
 
-Fortunately, another solution is available to us. We can create a struct that
-will hold the closure and the resulting value of calling the closure. The
-struct will only execute the closure if we need the resulting value, and it
-will cache the resulting value so the rest of our code doesn’t have to be
-responsible for saving and reusing the result. You may know this pattern as
-*memoization* or *lazy evaluation*.
+운 좋게도, 다른 해결책이 있습니다. 우리는 클로저와 클로저를 호출한 결과값을
+갖고 있는 구조체를 만들 수 있습니다. 그 구조체는 결과값을 필요로 할 때만
+클로저를 호출 할 것이며, 결과값을 캐시에 저장해 두어 우리의 나머지 코드에서
+결과를 저장하고 재사용 하지 않아도 되도록 할 것 입니다. 이 패턴을
+*메모이제이션(memoization)* 혹은 *지연 평가(lazy evaluation)*로 알고 있을 것
+입니다.
 
-To make a struct that holds a closure, we need to specify the type of the
-closure, because a struct definition needs to know the types of each of its
-fields. Each closure instance has its own unique anonymous type: that is, even
-if two closures have the same signature, their types are still considered
-different. To define structs, enums, or function parameters that use closures,
-we use generics and trait bounds, as we discussed in Chapter 10.
+구조체에서 클로저를 갖고 있도록 하기 위해, 클로저 타입을 기술 할 필요가 있는데,
+구조체 정의는 각 필드의 타입을 알 필요가 있기 때문 입니다. 각 클로저 인스턴스는
+자신의 유일한 익명 타입을 갖습니다: 즉, 두 클로저가 동일한 타입 서명을 갖더라도
+그들의 타입은 여전히 다른 것으로 간주 됩니다. 클로저를 사용하는 구조체, 열거형,
+함수 파라미터를 정의하기 위해, 10장에서 설명한 것 처럼 제네릭과 트레잇 바운드를
+사용합니다.
 
-The `Fn` traits are provided by the standard library. All closures implement
-one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
-between these traits in the next section on capturing the environment; in this
-example, we can use the `Fn` trait.
+`Fn` 트레잇은 표준 라이브러리에서 제공 합니다. 모든 클로저들은 다음 트레잇 중
+하나를 구현 합니다: `Fn`, `FnMut`, 혹은 `FnOnce`. 환경을 캡쳐하는 것에 대한 다음
+절에서 이 트레잇들의 차이점들에 대해 설명할 것 입니다; 이 예제에서, `Fn` 트레잇
+을 사용할 수 있습니다.
 
-We add types to the `Fn` trait bound to represent the types of the parameters
-and return values the closures must have to match this trait bound. In this
-case, our closure has a parameter of type `u32` and returns a `u32`, so the
-trait bound we specify is `Fn(u32) -> u32`.
+클로저가 이 트레잇 바운드에 맞춰야 하는 파라미터와 반환값의 타입을 표현하기 위해
+`Fn` 트레잇 바운드에 타입을 추가 합니다. 이 경우, 클로저는 파라미터 타입이 `u32`
+이고 `u32` 타입을 번환하므로, 명시하는 트레잇 바운드는 `Fn(u32) -> u32` 입니다.
 
-Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
-and an optional result value:
+리스트 13-9 는 `Cacher` 구조체의 정의를 보여주는데 클로저와 선택적인 반환값을
+갖고 있습니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 struct Cacher<T>
@@ -438,31 +436,29 @@ struct Cacher<T>
 }
 ```
 
-<span class="caption">Listing 13-9: Defining a `Cacher` struct that holds a
-closure in `calculation` and an optional result in `value`</span>
+<span class="caption">리스트 13-9: `calculation` 에 클로저를 담고, 선택적인 결과
+를 `value` 에 담는 `Cacher` 구조체 정의하기</span>
 
-The `Cacher` struct has a `calculation` field of the generic type `T`. The
-trait bounds on `T` specify that it’s a closure by using the `Fn` trait. Any
-closure we want to store in the `calculation` field must have one `u32`
-parameter (specified within the parentheses after `Fn`) and must return a
-`u32` (specified after the `->`).
+`Cacher` 구조체는 제너릭 타입 `T` 의 `calculation` 필드를 갖습니다.
+`T` 에 대한 트레잇 바운드는 `Fn` 트레잇을 사용하여 그것이 클로저라는 것을 기술
+합니다. `calculation` 필드에 저장하고자 하는 클로저는 하나의 `u32` 타입 파라미터
+(`Fn` 다음에 괄호안에 명시됨)를 갖고 `u32` (`->` 다음에 명시됨) 타입의 값을
+반환해야 합니다.
 
-> Note: Functions implement all three of the `Fn` traits too. If what we want
-> to do doesn’t require capturing a value from the environment, we can use a
-> function rather than a closure where we need something that implements an `Fn`
-> trait.
+> 노트: 함수는 세개의 `Fn` 트레잇도 모두 구현 합니다. 환경에서 값을 캡쳐할 필요
+> 가 없다면, `Fn` 트레잇을 구현한 어떤것을 필요로 하는 곳에 클로저 대신 함수를
+> 사용할 수 있습니다.
 
-The `value` field is of type `Option<u32>`. Before we execute the closure,
-`value` will be `None`. When code using a `Cacher` asks for the *result* of the
-closure, the `Cacher` will execute the closure at that time and store the
-result within a `Some` variant in the `value` field. Then if the code asks for
-the result of the closure again, instead of executing the closure again, the
-`Cacher` will return the result held in the `Some` variant.
+`value` 필드는 `Option<u32>` 타입 입니다. 클로저를 실행하기 전에는 `value` 는
+`None` 일 것 입니다. `Cacher` 를 사용하는 코드에서 클로저의 *결과* 를 요청할 경
+우, `Cacher` 는 그 때 클로저를 실행하고 결과를 `Some` variant 에 넣어서 `value`
+필드에 저장 할 것 입니다. 그 다음에는 코드에서 클로저의 결과를 다시 요청하면
+클로저를 다시 실행하는 대신, `Cacher` 는 `Some` variant 안에 있는 결과를 돌려줄
+것 입니다.
 
-The logic around the `value` field we’ve just described is defined in Listing
-13-10:
+방금 설명한 `value` 필드에 대한 로직은 리스트 13-10 에 정의되어 있습니다: 
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 # struct Cacher<T>
@@ -495,31 +491,30 @@ impl<T> Cacher<T>
 }
 ```
 
-<span class="caption">Listing 13-10: The caching logic of `Cacher`</span>
+<span class="caption">리스트 13-10: `Cacher` 의 캐싱 로직</span>
 
-We want `Cacher` to manage the struct fields’ values rather than letting the
-calling code potentially change the values in these fields directly, so these
-fields are private.
+우리는 이 필드에 있는 값을 호출하는 코드에서 잠재적으로 변경하도록 두기 보다
+`Cacher` 가 구조체 필드의 값을 관리하도록 하고 싶기 때문에, 이 필드는 비공개
+(private) 입니다.
 
-The `Cacher::new` function takes a generic parameter `T`, which we’ve defined
-as having the same trait bound as the `Cacher` struct. Then `Cacher::new`
-returns a `Cacher` instance that holds the closure specified in the
-`calculation` field and a `None` value in the `value` field, because we haven’t
-executed the closure yet.
+`Cacher::new` 함수는 제네릭 파라미터 `T` 를 받는데, `Cacher` 구조체와 동일한
+트레잇 바운드를 갖도록 정의 되었습니다. 그 다음 `Cacher::new` 는 `calculation`
+필드에 명시된 클로저를 포함하고 클로저를 아직 실행한적이 없기 때문에 `value`
+필드가 `None` 값을 갖는 `Cacher` 인스턴스를 반환 합니다.
 
-When the calling code wants the result of evaluating the closure, instead of
-calling the closure directly, it will call the `value` method. This method
-checks whether we already have a resulting value in `self.value` in a `Some`;
-if we do, it returns the value within the `Some` without executing the closure
-again.
+호출하는 코드에서 클로저를 평가한 결과값을 원할때, 클로저를 직접 호출하기 보다,
+`value` 메서드를 호출 할 것 입니다. 이 메서드는 이미 `self.value` 에 결과값을
+`Some` 으로 갖고 있는지 체크 합니다; 만약 그렇다면 클로저를 다시 실행하는 대신
+`Some` 안에 있는 값을 반환 합니다.
 
-If `self.value` is `None`, we call the closure stored in `self.calculation`,
-save the result in `self.value` for future use, and return the value as well.
+만약 `self.value` 라 `None` 이라면, `self.calculation` 에 저장된 클로저를 호출
+하고, 나중에 재사용 하기 위해 결과를 `self.value` 저장한 다음 그 값을 반환
+합니다.
 
-Listing 13-11 shows how we can use this `Cacher` struct in the
-`generate_workout` function from Listing 13-6:
+리스트 13-11 는 리스트 13-6 에 있는 `generate_workout` 함수에서 이 `Cacher` 구조
+체를 사용하는 방법을 보여줍니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 # use std::thread;
@@ -583,22 +578,20 @@ fn generate_workout(intensity: u32, random_number: u32) {
 }
 ```
 
-<span class="caption">Listing 13-11: Using `Cacher` in the `generate_workout`
-function to abstract away the caching logic</span>
+<span class="caption">리스트 13-11: 캐싱 로직을 추상화 하기 위해
+`generate_workout` 함수 안에서 `Cacher` 사용하기</span>
 
-Instead of saving the closure in a variable directly, we save a new instance of
-`Cacher` that holds the closure. Then, in each place we want the result, we
-call the `value` method on the `Cacher` instance. We can call the `value`
-method as many times as we want, or not call it at all, and the expensive
-calculation will be run a maximum of once.
+클로저를 변수에 직접 저장하는 대신, 클로저를 갖는 `Cacher` 의 새 인스턴스를
+저장 했습니다. 그러고는, 결과가 필요한 각 위치에 `Cacher` 인스턴스의 `value`
+메소드를 호출 했습니다. 우리는 `value` 메소드를 원하는 만큼 많이 호출할 수 있고,
+전혀 호출하지 않을 수도 있으며, 비싼 비용의 게산은 최대 한번만 수행 될 것입니다.
 
-Try running this program with the `main` function from Listing 13-2. Change the
-values in the `simulated_user_specified_value` and `simulated_random_number`
-variables to verify that in all the cases in the various `if` and `else`
-blocks, `calculating slowly...` only appears once and only when needed. The
-`Cacher` takes care of the logic necessary to ensure we aren’t calling the
-expensive calculation more than we need to, so `generate_workout` can focus on
-the business logic.
+리스트 13-2 의 `main` 함수로 이 프로그램을 실행해 보세요. 다양한 `if` 와 `else`
+블럭에 있는 모든 케이스들을 검증하기 위해 `simulated_user_specified_value` 와
+`simulated_random_number` 변수들을 변경해 보면, `calculating slowly...` 메세지는
+필요할 때 단지 한번만 나타 납니다. `Cacher` 는 필요한것 보다 더 많이 비싼 비용의
+계산을 호출하지 않도록 보장하는 필요한 로직을 처리해서, `generate_workout` 가
+비즈니스 로직에 집중하도록 해줍니다.
 
 ### Limitations of the `Cacher` Implementation
 
