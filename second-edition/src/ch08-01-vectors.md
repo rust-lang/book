@@ -194,7 +194,7 @@ to the first element would be pointing to deallocated memory. The borrowing
 rules prevent programs from ending up in that situation.
 
 > Note: For more on the implementation details of the `Vec<T>` type, see “The
-> Nomicon” at https://doc.rust-lang.org/stable/nomicon/vec.html.
+> Rustonomicon” at https://doc.rust-lang.org/stable/nomicon/vec.html.
 
 ### Iterating Over the Values in a Vector
 
