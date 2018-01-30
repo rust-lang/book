@@ -6,7 +6,7 @@
 > A trait defines behavior that we need in a given situation.
 > We can then use a trait as a trait object in places where we would use a concrete type or a generic type.
 
-```rust
+```rust,ignore
 pub struct InputBox {
     pub label: String,
 }
