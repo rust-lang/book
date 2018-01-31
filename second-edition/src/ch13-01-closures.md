@@ -593,16 +593,15 @@ fn generate_workout(intensity: u32, random_number: u32) {
 계산을 호출하지 않도록 보장하는 필요한 로직을 처리해서, `generate_workout` 가
 비즈니스 로직에 집중하도록 해줍니다.
 
-### Limitations of the `Cacher` Implementation
+### `Cacher` 구현의 제약사항
 
-Caching values is a generally useful behavior that we might want to use in
-other parts of our code with different closures. However, there are two
-problems with the current implementation of `Cacher` that would make reusing it
-in different contexts difficult.
+값을 캐싱하는 것은 우리 코드의 다른 파트에서 다른 클로저를 사용해서 쓸수 있을
+만큼 일반적으로 유용한 동작입니다. 그러나 현재 `Cacher` 구현은 다른 문맥에서
+다르게 재사용 하기에는 두 가지 문제가 있습니다.
 
-The first problem is that a `Cacher` instance assumes it will always get the
-same value for the parameter `arg` to the `value` method. That is, this test of
-`Cacher` will fail:
+첫 번째 문제는 `Cacher` 인스턴스는 `value` 메소드의 `arg` 파라미터에 대해
+항상 같은 값을 얻는다는 가정을 합니다. 즉, 이 `Cacher` 테스트는 실패 할 것
+입니다:
 
 ```rust,ignore
 #[test]
