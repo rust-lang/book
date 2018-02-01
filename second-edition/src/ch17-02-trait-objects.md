@@ -167,7 +167,7 @@ type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
 collections, using generics and trait bounds is preferable since the
 definitions will be monomorphized at compile time to use the concrete types.
 
-With the the method using trait objects, on the other hand, one `Screen`
+With the method using trait objects, on the other hand, one `Screen`
 instance can hold a `Vec` that contains a `Box<Button>` as well as a
 `Box<TextField>`. Let’s see how that works, and then talk about the runtime
 performance implications.
