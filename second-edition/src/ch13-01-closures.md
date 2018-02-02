@@ -725,23 +725,22 @@ error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
 * `Fn` 은 그 환경으로 부터 값들을 불변으로 빌려 옵니다.
 * `FnMut` 값들을 가변으로 빌려오기 때문에 그 환경을 변경할 수 있습니다.
 
-When we create a closure, Rust infers which trait to use based on how the
-closure uses the values from the environment. In Listing 13-12, the
-`equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the `Fn` trait)
-because the body of the closure only needs to read the value in `x`.
+우리가 클로저를 만들때, 러스트는 클로저가 환경에 있는 값을 어떻게 사용하는지에
+근거 해서 어떤 트레잇을 사용할지 추론 합니다. 리스트 13-12 에서, `equal_to_x`
+클로저는 `x` 를 불변으로 빌려오기 때문에(그래서 `equal_to_x` 은 `Fn` 트래잇
+입니다) 클로저의 바디에서는 `x` 에 있는 값을 읽기만 하면 됩니다.
 
-If we want to force the closure to take ownership of the values it uses in the
-environment, we can use the `move` keyword before the parameter list. This
-technique is mostly useful when passing a closure to a new thread to move the
-data so it’s owned by the new thread.
+만약 클로저가 환경으로부터 사용하는 값에 대해 소유권을 갖도록 강제하고 싶다면,
+파라미터 리스트 앞에 `move` 키워드를 사용할 수 있습니다. 이 기법은 클로저를
+다른 쓰레드로 넘길때 데이터를 이동시켜 새로운 쓰레드가 소유하도록 할때 대부분
+유용 합니다.
 
-We’ll have more examples of `move` closures in Chapter 16 when we talk about
-concurrency. For now, here’s the code from Listing 13-12 with the `move`
-keyword added to the closure definition and using vectors instead of integers,
-because integers can be copied rather than moved; note that this code will not
-yet compile:
+16장에 병렬성에 대해 이야기 하는 부분에서 더 많은 `move` 클로저에 대한 예제가
+있습니다. 지금은 리스트 13-12 의 코드에서 클로저에 `move` 키워드를 추가하고
+정수 대신 벡터를 사용하도록 했는데, 정수는 이동되지 않고 복사되기 때문 입니다;
+이 코드는 아직 컴파일 되지 않습니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -757,7 +756,7 @@ fn main() {
 }
 ```
 
-We receive the following error:
+아래와 같은 에러가 발생합니다:
 
 ```text
 error[E0382]: use of moved value: `x`
@@ -773,14 +772,14 @@ error[E0382]: use of moved value: `x`
   implement the `Copy` trait
 ```
 
-The `x` value is moved into the closure when the closure is defined, because we
-added the `move` keyword. The closure then has ownership of `x`, and `main`
-isn’t allowed to use `x` anymore in the `println!` statement. Removing
-`println!` will fix this example.
+`move` 키워드를 추가했기 때문에 클로저가 정의될 때 `x` 값은 클로저 안으로
+이동됩니다. `x` 의 소유권은 클로저가 갖게 되었고, `main` 은 더 이상  `println!`
+문에서 `x` 사용하도록 허용되지 않습니다. `println!` 를 삭제하면 이 예제는 수정
+됩니다.
 
-Most of the time when specifying one of the `Fn` trait bounds, you can start
-with `Fn` and the compiler will tell you if you need `FnMut` or `FnOnce` based
-on what happens in the closure body.
+`Fn` 트래잇 바운드 중 하나를 기술할 때 대부분의 경우, `Fn` 으로 시작해보면
+컴파일러는 클로저 바디에서 무슨일을 하는지에 근거해서 `FnMut` 혹은 `FnOnce` 이
+필요한지 말해 줍니다.
 
-To illustrate situations where closures that can capture their environment are
-useful as function parameters, let’s move on to our next topic: iterators.
+클로저가 그들의 환경을 캡쳐할 수 있는 상황을 표현하는 것은 함수 파라미터로써
+유용 합니다. 다음 주제로 넘어가 봅시다: 반복자.
