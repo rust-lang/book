@@ -224,7 +224,7 @@ reference to `y`!
 
 As we’re defining this function, we don’t know the concrete values that will be
 passed into this function, so we don’t know whether the `if` case or the `else`
-case will execute. We also don’t know the concrete lifetimes of the references
+case will executed. We also don’t know the concrete lifetimes of the references
 that will be passed in, so we can’t look at the scopes like we did in Listings
 10-19 and 10-20 in order to determine that the reference we return will always
 be valid. The borrow checker can’t determine this either, because it doesn’t
