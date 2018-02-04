@@ -508,7 +508,7 @@ impl<T: Display> ToString for T {
 ```
 
 Because the standard library has this blanket implementation, we can call the
-`to_string` method defined by the `ToString` type on any type that implements
+`to_string` method defined by the `ToString` trait on any type that implements
 the `Display` trait. For example, we can turn integers into their corresponding
 `String` values like this since integers implement `Display`:
 
