@@ -593,16 +593,15 @@ fn generate_workout(intensity: u32, random_number: u32) {
 계산을 호출하지 않도록 보장하는 필요한 로직을 처리해서, `generate_workout` 가
 비즈니스 로직에 집중하도록 해줍니다.
 
-### Limitations of the `Cacher` Implementation
+### `Cacher` 구현의 제약사항
 
-Caching values is a generally useful behavior that we might want to use in
-other parts of our code with different closures. However, there are two
-problems with the current implementation of `Cacher` that would make reusing it
-in different contexts difficult.
+값을 캐싱하는 것은 일반적으로 유용한 동작이기 때문에 이와는 다른 클로저를 사용
+해서 우리 코드의 다른 부분에서 적용하고 싶을 수도 있습니다. 그러나 현재 `Cacher`
+구현은 다른 문맥에서 다르게 재사용 하기에는 두 가지 문제가 있습니다.
 
-The first problem is that a `Cacher` instance assumes it will always get the
-same value for the parameter `arg` to the `value` method. That is, this test of
-`Cacher` will fail:
+첫 번째 문제는 `Cacher` 인스턴스가 `value` 메소드의 `arg` 파라미터에 대해
+항상 같은 값을 얻는다는 가정을 한다는 것입니다. 즉, 이 `Cacher` 테스트는 실패 할 것
+입니다:
 
 ```rust,ignore
 #[test]
@@ -616,13 +615,14 @@ fn call_with_different_values() {
 }
 ```
 
-This test creates a new `Cacher` instance with a closure that returns the value
-passed into it. We call the `value` method on this `Cacher` instance with an
-`arg` value of 1 and then an `arg` value of 2, and we expect that the call to
-`value` with the `arg` value of 2 should return 2.
+이 테스트는 인자로 받은 값을 그대로 돌려주는 클로저가 포함된 새로운 `Cacher`
+인스턴스를 생성 합니다. `arg` 값을 1로 그리고 `arg` 값을 2로 해서 이 `Cacher`
+인스턴스의 `value` 메소드를 호출하고, `arg` 값을 2로 `value` 를 호출 했을 때
+2를 반환 할 것으로 기대 합니다.
 
-Run this test with the `Cacher` implementation in Listing 13-9 and Listing
-13-10, and the test will fail on the `assert_eq!` with this message:
+리스트 13-9 와 13-10 에 있는 `Cacher` 구현에 대해 이 테스트를 돌리면, 테스트는
+이 메세지와 함께 `assert_eq!` 에서 실패 할 것입니다:
+
 
 ```text
 thread 'call_with_different_values' panicked at 'assertion failed: `(left == right)`
@@ -630,35 +630,33 @@ thread 'call_with_different_values' panicked at 'assertion failed: `(left == rig
  right: `2`', src/main.rs
 ```
 
-The problem is that the first time we called `c.value` with 1, the `Cacher`
-instance saved `Some(1)` in `self.value`. Thereafter, no matter what we pass in
-to the `value` method, it will always return 1.
+문제는 처음 `c.value` 을 1로 호출 했을 때, `Cacher` 인스턴스는 `self.value` 에
+`Some(1)` 을 저장 합니다. 그 후에, `value` 값으로 무엇을 넘기던, 항상 1을 반환
+할 것 입니다.
 
-Try modifying `Cacher` to hold a hash map rather than a single value. The keys
-of the hash map will be the `arg` values that are passed in, and the values of
-the hash map will be the result of calling the closure on that key. Instead of
-looking at whether `self.value` directly has a `Some` or a `None` value, the
-`value` function will look up the `arg` in the hash map and return the value if
-it’s present. If it’s not present, the `Cacher` will call the closure and save
-the resulting value in the hash map associated with its `arg` value.
+`Cacher` 이 하나의 값보다 해시맵을 사용하도록 수정해 봅시다. 해시맵의 키는
+넘겨받은 `arg` 값이 될 것이고, 해시맵의 값은 그 키로 클로저를 호출한 결과가 될
+것 입니다. `self.value` 가 `Some` 혹은 `None` 값인지 직접 살펴보는 대신,
+`value` 함수는 해시맵의 `arg` 값을 살펴보고 값이 있으면 반환 할 것 입니다.
+값이 없으면, `Cacher` 는 클로저를 호출해서 해당 `arg` 값과 연관된 해시맵에
+결과값을 저장 할 것입니다.
 
-The second problem with the current `Cacher` implementation is that it only
-accepts closures that take one parameter of type `u32` and return a `u32`. We
-might want to cache the results of closures that take a string slice and return
-`usize` values, for example. To fix this issue, try introducing more generic
-parameters to increase the flexibility of the `Cacher` functionality.
+현재 `Cacher` 구현의 두 번째 문제는 `u32` 타입 파라미터 한 개만 받고 하나의
+`u32` 을 반환한다는 것 입니다. 예를 들면, 문자열 슬라이스를 넘겨주고 `usize`
+값을 반환하는 클로저의 결과를 캐시에 저장하고 싶을 수도 있습니다. 이 이슈를 수정
+하기 위해, `Cacher` 기능에 유연성을 높여주도록 더 중립적인 파라미터를 사용해
+봅시다.
 
-### Capturing the Environment with Closures
+### 클로저로 환경 캡쳐 하기
 
-In the workout generator example, we only used closures as inline anonymous
-functions. However, closures have an additional capability that functions don’t
-have: they can capture their environment and access variables from the scope in
-which they’re defined.
+운동 생성 예제에서, 우리는 클로저를 단지 인라인 익명 함수로 사용 했습니다.
+그러나 클로저는 함수에 없는 추가적인 능력을 갖고 있습니다: 환경을 캡쳐해서
+클로저가 정의된 스코프의 변수들을 접근할 수 있습니다.
 
-Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
-that uses the variable `x` from the closure’s surrounding environment:
+`equal_to_x` 변수에 저장된 클로저가 클로저를 둘러싼 환경에 있는 `x` 변수를
+사용하는 예제가 리스트 13-12 에 있습니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -672,15 +670,15 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 13-12: Example of a closure that refers to a
-variable in its enclosing scope</span>
+<span class="caption">리스트 13-12: 둘러싼 범위에 있는 변수를 참조하는 클로저의
+예</span>
 
-Here, even though `x` is not one of the parameters of `equal_to_x`, the
-`equal_to_x` closure is allowed to use the `x` variable that’s defined in the
-same scope that `equal_to_x` is defined in.
+비록 `x` 가 `equal_to_x` 의 파라미터 중에 하나가 아니더라도, `equal_to_x` 는
+`equal_to_x` 가 정의된 동일한 스코프에 정의된 `x` 변수를 사용하는 것이 허용
+됩니다.
 
-We can’t do the same with functions; if we try with the following example, our
-code won’t compile:
+함수로는 이와 동일하게 할 수 없습니다; 다음 예제로 시도해 보면, 코드는 컴파일
+되지 않습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -696,7 +694,7 @@ fn main() {
 }
 ```
 
-We get an error:
+에러가 발생 합니다:
 
 ```text
 error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
@@ -707,45 +705,42 @@ error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
   |                                          ^
 ```
 
-The compiler even reminds us that this only works with closures!
+컴파일러는 이것은 클로저에서만 동작한다고 상기시켜 주기까지 합니다!
 
-When a closure captures a value from its environment, it uses memory to store
-the values for use in the closure body. This use of memory is overhead that we
-don’t want to pay in more common cases where we want to execute code that
-doesn’t capture its environment. Because functions are never allowed to capture
-their environment, defining and using functions will never incur this overhead.
+클로저가 그것의 환경에서 값을 캡쳐할 때, 클로저 바디에서 사용하기 위해 그 값을
+저장하기 위한 메모리를 사용 합니다. 이 메모리 사용은 환경을 캡쳐하지 않는 코드를
+실행하길 원하는 더 흔한 상황에서는 지불하기 싶지 않은 오버헤드 입니다.
+왜냐하면 함수는 그들의 환경을 캡쳐할 수 없기 때문에, 함수를 정의하고 사용하는데
+결코 이런 오버헤드는 발생하지 않을 것이기 때문 입니다.
 
-Closures can capture values from their environment in three ways, which
-directly map to the three ways a function can take a parameter: taking
-ownership, borrowing immutably, and borrowing mutably. These are encoded in the
-three `Fn` traits as follows:
+클로저는 세가지 방식으로 그들의 환경에서 값을 캡쳐 할 수 있는데, 함수가 파라미터
+를 받는 세가지 방식과 직접 연결 됩니다: 소유권 받기, 불변으로 빌려오기, 가변으로
+빌려오기. 이것들은 다음과 같이 세개의 `Fn` 트레잇으로 표현 합니다:
 
-* `FnOnce` consumes the variables it captures from its enclosing scope, known
-  as the closure’s *environment*. To consume the captured variables, the
-  closure must take ownership of these variables and move them into the closure
-  when it is defined. The `Once` part of the name represents the fact that the
-  closure can’t take ownership of the same variables more than once, so it can
-  only be called one time.
-* `Fn` borrows values from the environment immutably.
-* `FnMut` can change the environment because it mutably borrows values.
+* `FnOnce` 는 클로저의 *환경*으로 알고 있는, 그것을 둘러싼 환경에서 캡쳐한 변수
+  들을 소비합니다. 캡쳐한 변수를 소비하기 위해, 클로저는 이 변수의 소유권을 
+  가져야 하고 그것이 정의될 때 클로저 안으로 그것들을 옮겨와야 합니다. 이름의
+  일부인 `Once` 는 그 클로저가 동일한 변수들에 대해 한번이상 소유권을 얻을수
+  없다는 사실을 의미하며, 그래서 한번만 호출 될 수 있습니다.
+* `Fn` 은 그 환경으로 부터 값들을 불변으로 빌려 옵니다.
+* `FnMut` 값들을 가변으로 빌려오기 때문에 그 환경을 변경할 수 있습니다.
 
-When we create a closure, Rust infers which trait to use based on how the
-closure uses the values from the environment. In Listing 13-12, the
-`equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the `Fn` trait)
-because the body of the closure only needs to read the value in `x`.
+우리가 클로저를 만들때, 러스트는 클로저가 환경에 있는 값을 어떻게 사용하는지에
+근거 해서 어떤 트레잇을 사용할지 추론 합니다. 리스트 13-12 에서, `equal_to_x`
+클로저의 바디에서는 `x` 에 있는 값을 읽기만 하면 되기 때문에 클로저는 `x` 를 
+불변으로 빌려 옵니다. (그래서 `equal_to_x` 은 `Fn` 트래잇 입니다) 
 
-If we want to force the closure to take ownership of the values it uses in the
-environment, we can use the `move` keyword before the parameter list. This
-technique is mostly useful when passing a closure to a new thread to move the
-data so it’s owned by the new thread.
+만약 클로저가 환경으로부터 사용하는 값에 대해 소유권을 갖도록 강제하고 싶다면,
+파라미터 리스트 앞에 `move` 키워드를 사용할 수 있습니다. 이 기법은 클로저를
+다른 쓰레드로 넘길때 데이터를 이동시켜 새로운 쓰레드가 소유하도록 할때 대부분
+유용 합니다.
 
-We’ll have more examples of `move` closures in Chapter 16 when we talk about
-concurrency. For now, here’s the code from Listing 13-12 with the `move`
-keyword added to the closure definition and using vectors instead of integers,
-because integers can be copied rather than moved; note that this code will not
-yet compile:
+16장에 병렬성에 대해 이야기 하는 부분에서 더 많은 `move` 클로저에 대한 예제가
+있습니다. 지금은 리스트 13-12 의 코드에서 클로저에 `move` 키워드를 추가하고
+정수 대신 벡터를 사용하도록 했는데, 정수는 이동되지 않고 복사되기 때문 입니다;
+이 코드는 아직 컴파일 되지 않습니다:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">파일명: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -761,7 +756,7 @@ fn main() {
 }
 ```
 
-We receive the following error:
+아래와 같은 에러가 발생합니다:
 
 ```text
 error[E0382]: use of moved value: `x`
@@ -777,14 +772,14 @@ error[E0382]: use of moved value: `x`
   implement the `Copy` trait
 ```
 
-The `x` value is moved into the closure when the closure is defined, because we
-added the `move` keyword. The closure then has ownership of `x`, and `main`
-isn’t allowed to use `x` anymore in the `println!` statement. Removing
-`println!` will fix this example.
+`move` 키워드를 추가했기 때문에 클로저가 정의될 때 `x` 값은 클로저 안으로
+이동됩니다. `x` 의 소유권은 클로저가 갖게 되었고, `main` 은 더 이상  `println!`
+문에서 `x` 사용하도록 허용되지 않습니다. `println!` 를 삭제하면 이 예제는 수정
+됩니다.
 
-Most of the time when specifying one of the `Fn` trait bounds, you can start
-with `Fn` and the compiler will tell you if you need `FnMut` or `FnOnce` based
-on what happens in the closure body.
+`Fn` 트래잇 바운드 중 하나를 기술할 때 대부분의 경우, `Fn` 으로 시작해보면
+컴파일러는 클로저 바디에서 무슨일을 하는지에 근거해서 `FnMut` 혹은 `FnOnce` 이
+필요한지 말해 줍니다.
 
-To illustrate situations where closures that can capture their environment are
-useful as function parameters, let’s move on to our next topic: iterators.
+클로저가 그들의 환경을 캡쳐할 수 있는 상황을 표현하는 것은 함수 파라미터로써
+유용 합니다. 다음 주제로 넘어가 봅시다: 반복자.
