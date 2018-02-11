@@ -26,9 +26,10 @@ fn main() {
     let lucky_number = 7; // Сегодня мне повезло.
 }
 
+
 Но вы будете чаще видеть, как они используются в этом формате, с комментарием отдельной строки над кодом, который он комментирует:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Имя файла: src/main.rs</span>
 
 ```rust
 fn main() {
