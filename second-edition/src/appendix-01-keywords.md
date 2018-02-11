@@ -17,7 +17,7 @@ or lifetimes.
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - defining an enumeration
 * `extern` - external crate, function, and variable linkage
-* `false` - boolean false literal
+* `false` - Boolean false literal
 * `fn` - function definition and function pointer type
 * `for` - iterator loop, part of trait impl syntax, and higher-ranked lifetime
   syntax
@@ -39,7 +39,7 @@ or lifetimes.
 * `struct` - structure definition
 * `super` - parent module of the current module
 * `trait` - trait definition
-* `true` - boolean true literal
+* `true` - Boolean true literal
 * `type` - type alias and associated type definition
 * `unsafe` - denotes unsafe code, functions, traits, and implementations
 * `use` - import symbols into scope

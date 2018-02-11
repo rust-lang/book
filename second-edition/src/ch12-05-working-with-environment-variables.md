@@ -1,30 +1,20 @@
 ## Working with Environment Variables
 
-We're going to improve our tool with an extra feature: an option for case
-insensitive searching turned on via an environment variable. We could make this
-a command line option and require that users enter it each time they want it to
-apply, but instead we're going to use an environment variable. This allows our
-users to set the environment variable once and have all their searches be case
-insensitive in that terminal session.
+We’ll improve `minigrep` by adding an extra feature: an option for
+case-insensitive searching that the user can turn on via an environment
+variable. We could make this feature a command line option and require that
+users enter it each time they want it to apply, but instead we’ll use an
+environment variable. Doing so allows our users to set the environment variable
+once and have all their searches be case insensitive in that terminal session.
 
 ### Writing a Failing Test for the Case-Insensitive `search` Function
 
-First, let's add a new function that we will call when the environment variable
-is on.
-
-<!-- You mean, to turn the environment variable on? I'm not sure what we're
-doing here-->
-<!-- No, I'm not sure how this is unclear. We're adding a new function. We will
-call the new function when the user turns on the environment variable. Can you
-elaborate on what part of the above statement leads to the conclusion that the
-new function is going to turn the environment variable on? Can you suggest a
-rewording that makes the causality direction clearer? /Carol -->
-
-We're going to continue following the TDD process that we started doing in the
-last section, and the first step is again to write a failing test. We'll add a
-new test for the new case insensitive search function, and rename our old test
-from `one_result` to `case_sensitive` to be clearer about the differences
-between the two tests, as shown in Listing 12-20:
+We want to add a new `search_case_insensitive` function that we’ll call when
+the environment variable is on. We’ll continue to follow the TDD process, so
+the first step is again to write a failing test. We’ll add a new test for the
+new `search``_case_insensitive` function and rename our old test from
+`one_result` to `case_sensitive` to clarify the differences between the two
+tests, as shown in Listing 12-20:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -65,35 +55,31 @@ Trust me.";
 }
 ```
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<span class="caption">Listing 12-20: Adding a new failing test for the
+case-insensitive function we’re about to add</span>
 
-<span class="caption">Listing 12-20: Adding a new failing test for the case
-insensitive function we're about to add</span>
+Note that we’ve edited the old test’s `contents` too. We’ve added a new line
+with the text `“Duct tape”` using a capital D that shouldn’t match the query
+“duct” when we’re searching in a case-sensitive manner. Changing the old test
+in this way helps ensure that we don’t accidentally break the case-sensitive
+search functionality that we’ve already implemented. This test should pass now
+and should continue to pass as we work on the case-insensitive search.
 
-Note that we've edited the old test's `contents` too. We've added a new line
-with the text "Duct tape", with a capital D, that shouldn't match the query
-"duct" when we're searching for the query in a case sensitive manner. We've
-changed this test to ensure that we don't accidentally break the case sensitive
-search functionality that we've already implemented; this test should pass now
-and should continue to pass as we work on the case insensitive search.
-
-The new test for the case insensitive search uses "rUsT" with some capital
-letters as its query. The expected return value from the
-`search_case_insensitive` function we're going to add is that the query "rust"
-will match both the line containing "Rust:" with a capital R and also the line
-"Trust me." that contains "rust" with a lowercase r. This test will fail to
-compile right now since we haven't yet defined the `search_case_insensitive`
-function; feel free to add a skeleton implementation that always returns an
-empty vector in the same way that we did for the `search` function in Listing
-12-16 in order to see the test compile and fail.
+The new test for the case-*insensitive* search uses “rUsT” as its query. In the
+`search_case_insensitive` function we’re about to add, the query “rUsT” should
+match the line containing “Rust:” with a capital R and also the line “Trust
+me.” even though both have different casing than the query. This is our failing
+test, and it will fail to compile because we haven’t yet defined the
+`search_case_insensitive` function. Feel free to add a skeleton implementation
+that always returns an empty vector, similar to the way we did for the `search`
+function in Listing 12-16 to see the test compile and fail.
 
 ### Implementing the `search_case_insensitive` Function
 
 The `search_case_insensitive` function, shown in Listing 12-21, will be almost
-the same as the `search` function. The difference is that we'll lowercase the
-`query` function and each `line` so that whatever the case of the input
-arguments, they will be the same case when we check whether the line contains
-the query.
+the same as the `search` function. The only difference is that we’ll lowercase
+the `query` and each `line` so whatever the case of the input arguments,
+they’ll be the same case when we check whether the line contains the query:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -113,68 +99,41 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 ```
 
 <span class="caption">Listing 12-21: Defining the `search_case_insensitive`
-function to lowercase both the query and the line before comparing them</span>
+function to lowercase the query and the line before comparing them</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- why do we lowercase the search string? and why does it need to be a string
-rather than a slice? -->
-<!-- We explained this above, that in order to make the search case
-insensitive, we need to lowercase everything so that searches will always match
-no matter what case either the query or each line uses. It needs to be a
-`String` because we're creating new data, not referencing existing data, when
-we call `to_lowercase`. I've tried to make both of these points clearer, but
-I'm not sure exactly what was unclear about it before, so I'm not sure if I've
-helped. /Carol -->
-
-First, we lowercase the `query` string, and store it in a shadowed variable
-with the same name. Calling `to_lowercase` on the query is necessary so that no
-matter if the user's query is "rust", "RUST", "Rust", or "rUsT", we'll treat
-the query as if it was "rust" and be insensitive to the case.
+First, we lowercase the `query` string and store it in a shadowed variable with
+the same name. Calling `to_lowercase` on the query is necessary so no matter
+whether the user’s query is “rust”, “RUST”, “Rust”, or “rUsT”, we’ll treat the
+query as if it was “rust” and be insensitive to the case.
 
 Note that `query` is now a `String` rather than a string slice, because calling
-`to_lowercase` is creating new data, not referencing existing data. If the
-query is "rUsT", that string slice does not contain a lowercase u or t for us
-to use, so we have to allocate a new `String` containing "rust". Because
-`query` is now a `String`, when we pass `query` as an argument to the
-`contains` method, we need to add an ampersand since the signature of
-`contains` is defined to take a string slice.
+`to_lowercase` creates new data rather than referencing existing data. Say the
+query is “rUsT”, as an example: that string slice doesn’t contain a lowercase
+“u” or “t” for us to use, so we have to allocate a new `String` containing
+“rust”. When we pass `query` as an argument to the `contains` method now, we
+need to add an ampersand because the signature of `contains` is defined to take
+a string slice.
 
-Next, we add a call to `to_lowercase` on each `line` before we check if it
-contains `query`. This will turn "Rust:" into "rust:" and "Trust me." into
-"trust me." Now that we've converted both `line` and `query` to all lowercase,
-we'll find matches no matter what case the text in the file has or the user
-entered in the query.
+Next, we add a call to `to_lowercase` on each `line` before we check whether it
+contains `query` to lowercase all characters. Now that we’ve converted `line`
+and `query` to lowercase, we’ll find matches no matter what the case of the
+query is.
 
-Let's see if this implementation passes the tests:
+Let’s see if this implementation passes the tests:
 
 ```text
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/greprs-e58e9b12d35dc861
-
 running 2 tests
 test test::case_insensitive ... ok
 test test::case_sensitive ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
-
-     Running target/debug/greprs-8a7faa2662b5030a
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
-
-   Doc-tests greprs
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-Great! Now, let's actually call the new `search_case_insensitive` function from
-the `run` function. First, we're going to add a configuration option for
-switching between case sensitive and case insensitive search to the `Config`
-struct:
+Great! They passed. Now, let’s call the new `search_case_insensitive` function
+from the `run` function. First, we’ll add a configuration option to the
+`Config` struct to switch between case-sensitive and case-insensitive search.
+Adding this field will cause compiler errors since we aren’t initializing this
+field anywhere yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -186,12 +145,11 @@ pub struct Config {
 }
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
-We add the `case_sensitive` field that holds a boolean. Then we need our `run`
-function to check the `case_sensitive` field's value and use that to decide
-whether to call the `search` function or the `search_case_insensitive` function
-as shown in Listing 12-22:
+Note that we added the `case_sensitive` field that holds a Boolean. Next, we
+need the `run` function to check the `case_sensitive` field’s value and use
+that to decide whether to call the `search` function or the
+`search_case_insensitive` function, as shown in Listing 12-22. Note this still
+won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -237,14 +195,12 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 <span class="caption">Listing 12-22: Calling either `search` or
 `search_case_insensitive` based on the value in `config.case_sensitive`</span>
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
-Finally, we need to actually check for the environment variable. The functions
-for working with environment variables are in the `env` module in the standard
-library, so we want to bring that module into scope with a `use std::env;`
-line at the top of *src/lib.rs*. Then we're going to use the `var` method
-from the `env` module in `Config::new` to check for an environment variable
-named `CASE_INSENSITIVE`, as shown in Listing 12-23:
+Finally, we need to check for the environment variable. The functions for
+working with environment variables are in the `env` module in the standard
+library, so we want to bring that module into scope with a `use std::env;` line
+at the top of *src/lib.rs*. Then we’ll use the `var` method from the `env`
+module to check for an environment variable named `CASE_INSENSITIVE`, as shown
+in Listing 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -256,7 +212,7 @@ use std::env;
 #     case_sensitive: bool,
 # }
 
-// ...snip...
+// --snip--
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
@@ -269,11 +225,7 @@ impl Config {
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
-        Ok(Config {
-            query: query,
-            filename: filename,
-            case_sensitive: case_sensitive,
-        })
+        Ok(Config { query, filename, case_sensitive })
     }
 }
 ```
@@ -281,61 +233,72 @@ impl Config {
 <span class="caption">Listing 12-23: Checking for an environment variable named
 `CASE_INSENSITIVE`</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+Here, we create a new variable `case_sensitive`. To set its value, we call the
+`env::var` function and pass it the name of the `CASE_INSENSITIVE` environment
+variable. The `env::var` method returns a `Result` that will be the successful
+`Ok` variant that contains the value of the environment variable if the
+environment variable is set. It will return the `Err` variant if the
+environment variable is not set.
 
-Here, we create a new variable `case_sensitive`. In order to set its value, we
-call the `env::var` function and pass it the name of the environment variable
-we're looking for, `CASE_INSENSITIVE`. `env::var` returns a `Result` that will
-be the `Ok` variant containing the value if the environment variable is set,
-and will be the `Err` variant if the environment variable is not set. We're
-using the `is_err` method on the `Result` to check to see if it's an error (and
-therefore unset), which means we *should* do a case sensitive search. If the
+We’re using the `is_err` method on the `Result` to check whether it’s an error
+and therefore unset, which means it *should* do a case-sensitive search. If the
 `CASE_INSENSITIVE` environment variable is set to anything, `is_err` will
-return false and we will do a case insensitive search. We don't care about the
-value that the environment variable is set to, just whether it's set or unset,
-so we're checking `is_err` rather than `unwrap`, `expect`, or any of the other
-methods we've seen on `Result`. We pass the value in the `case_sensitive`
-variable to the `Config` instance so that the `run` function can read that
-value and decide whether to call `search` or `search_case_insensitive` as we
-implemented in Listing 12-22.
+return false and will perform a case-insensitive search. We don’t care about
+the *value* of the environment variable, just whether it’s set or unset, so
+we’re checking `is_err` rather than `unwrap`, `expect`, or any of the other
+methods we’ve seen on `Result`.
 
-Let's give it a try! First, we'll run our program without the environment
-variable set and with the query "to", which should match any line that contains
-the word "to" in all lowercase:
+We pass the value in the `case_sensitive` variable to the `Config` instance so
+the `run` function can read that value and decide whether to call `search` or
+`search_case_insensitive` as we implemented in Listing 12-22.
+
+Let’s give it a try! First, we’ll run our program without the environment
+variable set and with the query “to”, which should match any line that contains
+the word “to” in all lowercase:
 
 ```text
 $ cargo run to poem.txt
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs to poem.txt`
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
 
-Looks like that still works! Now, let's run the program with `CASE_INSENSITIVE`
-set to 1 but with the same query "to", and we should get lines that contain
-"to" that might have capital letters:
+Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
+set to `1` but with the same query “to”; we should get lines that contain “to”
+that might have uppercase letters:
 
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs to poem.txt`
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing "To"! Our `greprs` program can now do
-case insensitive searching, controlled by an environment variable. Now you know
+If you’re using PowerShell, you will need to set the environment variable and
+run the program in two commands rather than one:
+
+```text
+$ $env.CASE_INSENSITIVE=1
+$ cargo run to poem.txt
+```
+
+Excellent, we also got lines containing “To”! Our `minigrep` program can now do
+case-insensitive searching controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
 variables!
 
-Some programs allow both arguments *and* environment variables for the same
+Some programs allow arguments *and* environment variables for the same
 configuration. In those cases, the programs decide that one or the other takes
 precedence. For another exercise on your own, try controlling case
-insensitivity through a command line argument as well as through the
-environment variable, and decide which should take precedence if the program is
-run with contradictory values.
+insensitivity through either a command line argument or an environment
+variable. Decide whether the command line argument or the environment variable
+should take precedence if the program is run with one set to case sensitive and
+one set to case insensitive.
 
 The `std::env` module contains many more useful features for dealing with
-environment variables; check out its documentation to see what's available.
+environment variables: check out its documentation to see what is available.

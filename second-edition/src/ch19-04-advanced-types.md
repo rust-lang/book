@@ -76,11 +76,11 @@ like that in Listing 19-35:
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Box<Fn() + Send + 'static>) {
-    // ...snip...
+    // --snip--
 }
 
 fn returns_long_type() -> Box<Fn() + Send + 'static> {
-    // ...snip...
+    // --snip--
 #     Box::new(|| ())
 }
 ```
@@ -98,11 +98,11 @@ type Thunk = Box<Fn() + Send + 'static>;
 let f: Thunk = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Thunk) {
-    // ...snip...
+    // --snip--
 }
 
 fn returns_long_type() -> Thunk {
-    // ...snip...
+    // --snip--
 #     Box::new(|| ())
 }
 ```
@@ -170,7 +170,7 @@ function will never return. For example:
 
 ```rust,ignore
 fn bar() -> ! {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -213,11 +213,11 @@ As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms. The former
 has a value of `u32`, and the latter has a value of `!`. Since `!` can never
 have a value, Rust is okay with this, and decides that the type of `guess` is
-`u32`. The formal way of describing this behavior of `!` is that the never type
-unifies with all other types. We’re allowed to end this `match` arm with
-`continue` because `continue` doesn’t actually return a value; it instead moves
-control back to the top of the loop, so in the `Err` case, we never actually
-assign a value to `guess`.
+`u32`. The formal way of describing this behavior is that expressions of type
+`!` can be coerced into any other type. We’re allowed to end this `match` arm
+with `continue` because `continue` doesn’t actually return a value; it instead
+moves control back to the top of the loop, so in the `Err` case, we never
+actually assign a value to `guess`.
 
 Another use of the never type is `panic!`. Remember the `unwrap` function that
 we call on `Option<T>` values to produce a value or panic? Here’s its
@@ -318,7 +318,7 @@ That is, a generic function definition like this:
 
 ```rust,ignore
 fn generic<T>(t: T) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -326,7 +326,7 @@ is actually treated as if we had written this:
 
 ```rust,ignore
 fn generic<T: Sized>(t: T) {
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -336,7 +336,7 @@ restriction:
 
 ```rust,ignore
 fn generic<T: ?Sized>(t: &T) {
-    // ...snip...
+    // --snip--
 }
 ```
 

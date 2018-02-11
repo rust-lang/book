@@ -363,7 +363,7 @@ it to the response as a body, and send it:
 # use std::net::TcpStream;
 use std::fs::File;
 
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
@@ -418,7 +418,7 @@ add code to treat requests differently:
 # use std::io::prelude::*;
 # use std::net::TcpStream;
 # use std::fs::File;
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
@@ -476,7 +476,7 @@ browser indicating as such to the end user:
 # use std::fs::File;
 # fn handle_connection(mut stream: TcpStream) {
 # if true {
-// ...snip...
+// --snip--
 
 } else {
     let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
@@ -540,14 +540,14 @@ shown in Listing 20-9:
 # use std::io::prelude::*;
 # use std::net::TcpStream;
 # use std::fs::File;
-// ...snip...
+// --snip--
 
 fn handle_connection(mut stream: TcpStream) {
 #     let mut buffer = [0; 512];
 #     stream.read(&mut buffer).unwrap();
 #
 #     let get = b"GET / HTTP/1.1\r\n";
-    // ...snip...
+    // --snip--
 
     let (status_line, filename) = if buffer.starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")

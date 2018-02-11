@@ -202,7 +202,7 @@ error[E0072]: recursive type `List` has infinite size
 1 | enum List {
   | ^^^^^^^^^ recursive type has infinite size
 2 |     Cons(i32, List),
-  |     --------------- recursive without indirection
+  |               ----- recursive without indirection
   |
   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
   make `List` representable
@@ -340,7 +340,7 @@ The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
 which allows `Box<T>` values to be treated like references. When a `Box<T>`
 value goes out of scope, the heap data that the box is pointing to is cleaned
 up as well because of the `Box<T>` type’s `Drop` trait implementation. Let’s
-explore these two types in more detail; these traits are going to be even more
+explore these two traits in more detail; these traits are going to be even more
 important to the functionality provided by the other smart pointer types we’ll
 be discussing in the rest of this chapter.
 

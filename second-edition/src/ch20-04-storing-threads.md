@@ -31,7 +31,7 @@ impl ThreadPool {
         ThreadPool
     }
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -92,7 +92,7 @@ pub struct ThreadPool {
 }
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: u32) -> ThreadPool {
         assert!(size > 0);
 
@@ -107,7 +107,7 @@ impl ThreadPool {
         }
     }
 
-    // ...snip...
+    // --snip--
 }
 ```
 
@@ -194,7 +194,7 @@ pub struct ThreadPool {
 }
 
 impl ThreadPool {
-    // ...snip...
+    // --snip--
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
@@ -208,7 +208,7 @@ impl ThreadPool {
             workers
         }
     }
-    // ...snip...
+    // --snip--
 }
 
 struct Worker {

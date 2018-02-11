@@ -5,7 +5,7 @@
 여는데 해당 파일이 존재하지 않아서 연산에 실패했다면, 프로세스를 멈추는 대신 파일을 새로 만드는
 것을 원할지도 모릅니다.
 
-2장의 “[`Result` 타입으로 잠재된 실패 다루기][handle_failure]<!-- ignore -->”에서
+2장의 “[`Result` 타입으로 잠재된 실패 다루기][handle_failure]<!-- ignore -->” 절에서
 `Result` 열거형은 다음과 같이 `Ok`와 `Err`라는 두 개의 variant를 갖도록 정의되어 있음을
 상기하세요:
 
@@ -24,8 +24,8 @@ enum Result<T, E> {
 이러한 제네릭 타입 파라미터를 갖기 때문에, 우리가 반환하고자 하는 성공적인 값과 에러 값이 다를 수 있는
 다양한 상황 내에서 표준 라이브러리에 정의된 `Result` 타입과 함수들을 사용할 수 있습니다.
 
-Listing 9-2에서 보시는 것 처럼 파일을 열 때 함수가 실패할 수도 있어 `Result` 값을 반환하는 함수를
-호출해 봅시다:
+실패할 수도 있기 때문에 `Result` 값을 반환하는 함수를 호출해 봅시다:
+Listing 9-3에서는 파일 열기를 시도합니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -37,12 +37,12 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 9-2: 파일 열기</span>
+<span class="caption">Listing 9-3: 파일 열기</span>
 
 `File::open`이 `Result`를 반환하는지 어떻게 알까요? 표준 라이브러리 API 문서를 찾아보거나,
 컴파일러에게 물어볼 수 있습니다! 만일 `f`에게 우리가 알고 있고 그 함수의 반환 타입은 *아닐* 어떤 타입에
-대한 타입 명시를 주고, 그리고 그 코드의 컴파일을 시도한다면, 컴파일러는 우리에게 타입이 맞지 않는다고
-알려줄 것입니다. 그후 에러 메세지는 `f`의 타입이 *무엇인지* 알려줄 것입니다! 한번 해봅시다:
+대한 타입 명시를 주고 그 코드의 컴파일을 시도한다면, 컴파일러는 우리에게 타입이 맞지 않는다고
+알려줄 것입니다. 그후 에러 메세지는 `f`의 타입이 *무엇인지* 알려줄 것입니다. 한번 해봅시다:
 우리는 `File::open`의 반환 타입이 `u32`는 아니라는 것을 알고 있으니, `let f` 구문을 이렇게
 바꿔봅시다:
 
@@ -69,17 +69,17 @@ error[E0308]: mismatched types
 사용되는 `E`의 타입은 `std::io::Error`입니다.
 
 이 반환 타입은 `File::open`을 호출하는 것이 성공하여 우리가 읽거나 쓸 수 있는 파일 핸들을 반환해
-줄 수도 있다는 뜻입니다. 함수 호출은 또한 실패할 수도 있습니다: 예를 들면 파일이 존재하지 않을지도
-모르고, 혹은 파일에 접근할 권한이 없을지도 모릅니다. `File::open` 함수는 우리에게 성공했는지 혹은
-실패했는지를 알려주고, 동시에 파일 핸들이나 에러 정보 둘 중 하나를 우리에게 제공할 방법을 가질 필요가
-있습니다. 바로 이러한 정보가 `Result` 열거형이 전달하는 것과 정확히 일치합니다.
+줄 수도 있다는 뜻입니다. 함수 호출은 또한 실패할 수도 있습니다: 예를 들면 파일이 존재하지 않거나
+파일에 접근할 권한이 없을지도 모릅니다. `File::open` 함수는 우리에게 성공했는지 혹은 실패했는지를
+알려주면서 동시에 파일 핸들이나 에러 정보 둘 중 하나를 우리에게 제공할 방법을 가질 필요가 있습니다.
+바로 이러한 정보가 `Result` 열거형이 전달하는 것과 정확히 일치합니다.
 
 `File::open`이 성공한 경우, 변수 `f`가 가지게 될 값은 파일 핸들을 담고 있는 `Ok` 인스턴스가
 될 것입니다. 실패한 경우, `f`의 값은 발생한 에러의 종류에 대한 더 많은 정보를 가지고 있는 `Err`의
 인스턴스가 될 것입니다.
 
-우리는 Listing 9-2의 코드에 `File::open`이 반환하는 값에 따라 다른 행동을 취하는 코드를 추가할
-필요가 있습니다. Listing 9-3은 우리가 6장에서 배웠던 기초 도구 `match` 표현식을 이용하여
+우리는 Listing 9-3의 코드에 `File::open`이 반환하는 값에 따라 다른 행동을 취하는 코드를 추가할
+필요가 있습니다. Listing 9-4은 우리가 6장에서 다뤘던 기초 도구 `match` 표현식을 이용하여
 `Result`를 처리하는 한 가지 방법을 보여줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -99,7 +99,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 9-3: `match` 표현식을 사용하여 발생 가능한 `Result`
+<span class="caption">Listing 9-4: `match` 표현식을 사용하여 발생 가능한 `Result`
 variant들을 처리하기</span>
 
 `Option` 열거형과 같이 `Result` 열거형과 variant들은 프렐루드(prelude)로부터 가져와진다는 점을
@@ -116,19 +116,24 @@ variant들을 처리하기</span>
 
 ```text
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
-Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
+Os { code: 2, message: "No such file or directory" } }', src/main.rs:9:12
 ```
+
+늘 그렇듯이, 이 출력은 어떤 것이 잘못되었는지 정확히 알려줍니다.
 
 ### 서로 다른 에러에 대해 매칭하기
 
 Listing 9-3의 코드는 `File::open`이 실패한 이유가 무엇이든 간에 `panic!`을 일으킬 것입니다.
-대신 우리가 진짜 하고 싶은 것은 실패 이유에 따라 다른 행동을 취하는 것입니다: 파일이 없어서
+대신 우리가 원하는 것은 실패 이유에 따라 다른 행동을 취하는 것입니다: 파일이 없어서
 `File::open`이 실패한 것이라면, 새로운 파일을 만들어서 핸들을 반환하고 싶습니다. 만일 그밖의
-이유로 `File::open`이 실패한 거라면, 예를 들어 파일을 열 권한이 없어서라면, Listing 9-3에서
-했던 것과 마찬가지로 `panic!`을 일으키고 싶습니다. `match`에 새로운 경우를 추가한 Listing 9-4를
-봅시다:
+이유로 `File::open`이 실패한 거라면, 예를 들어 파일을 열 권한이 없어서라면, 예를 들어 우리가
+파일을 열 권한이 없기 때문이라면, Listing 9-4에서 했던 것과 마찬가지로 `panic!`을 일으키고
+싶습니다. `match`에 새로운 경우를 추가한 Listing 9-5를 봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
+
+<!-- ignore this test because otherwise it creates hello.txt which causes other
+tests to fail lol -->
 
 ```rust,ignore
 use std::fs::File;
@@ -160,13 +165,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 9-4: 다른 종류의 에러를 다른 방식으로 처리하기</span>
+<span class="caption">Listing 9-5: 다른 종류의 에러를 다른 방식으로 처리하기</span>
 
 `Err` variant 내에 있는 `File::open`이 반환하는 값의 타입은 `io::Error`인데, 이는
 표준 라이브러리에서 제공하는 구조체입니다. 이 구조체는 `kind` 메소드를 제공하는데 이를 호출하여
 `io::ErrorKind`값을 얻을 수 있습니다. `io::ErrorKind`는 `io` 연산으로부터 발생할 수 있는
 여러 종류의 에러를 표현하는 variant를 가진, 표준 라이브러리에서 제공하는 열거형입니다. 우리가
-관심을 갖고 있는 variant는 `ErrorKind::NotFound`인데, 이는 열고자 하는 파일이 아직 존재하지
+사용하고자 하는 variant는 `ErrorKind::NotFound`인데, 이는 열고자 하는 파일이 아직 존재하지
 않음을 나타냅니다.
 
 조건문 `if error.kind() == ErrorKind::NotFound`는 *매치 가드(match guard)* 라고
@@ -180,16 +185,19 @@ fn main() {
 매치 가드 내에서 확인하고자 하는 조건문은 `error.kind()`에 의해 반환된 값이 `ErrorKind` 열거형의
 `NotFound` variant인가 하는 것입니다. 만일 그렇다면, `File::create`로 파일 생성을 시도합니다.
 그러나, `File::create` 또한 실패할 수 있기 때문에, 안쪽에 `match` 구문을 바깥쪽과 마찬가지로 추가할
-필요가 있습니다! 파일이 열수 없을 때, 다른 에러 메세지가 출력될 것입니다. 바깥쪽 `match`의 마지막 갈래는
+필요가 있습니다. 파일이 열수 없을 때, 다른 에러 메세지가 출력될 것입니다. 바깥쪽 `match`의 마지막 갈래는
 똑같이 남아서, 파일을 못 찾는 에러 외에 다른 어떤 에러에 대해서도 패닉을 일으킵니다.
 
 ### 에러가 났을 때 패닉을 위한 숏컷: `unwrap`과 `expect`
 
 `match`의 사용은 충분히 잘 동작하지만, 살짝 장황하기도 하고 의도를 항상 잘 전달하는 것도 아닙니다.
-`Result<T, E>` 타입은 다양한 것을 하기 위해 정의된 수많은 헬퍼 메소드를 가지고 있습니다. 그 중 하나인
-`unwrap` 이라 부르는 메소드는 Listing 9-3에서 작성한 `match` 구문과 비슷한구현을 한 숏컷
+`Result<T, E>` 타입은 다양한 작업을 하기 위해 정의된 수많은 헬퍼 메소드를 가지고 있습니다. 그 중
+하나인 `unwrap` 이라 부르는 메소드는 Listing 9-4에서 작성한 `match` 구문과 비슷한 구현을 한 숏컷
 메소드입니다. 만일 `Result` 값이 `Ok` variant라면, `unwrap`은 `Ok` 내의 값을 반환할 것입니다.
 만일 `Result`가 `Err` variant라면, `unwrap`은 우리를 위해 `panic!` 매크로를 호출할 것입니다.
+아래에 `unwrap`이 작동하는 예가 있습니다:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 use std::fs::File;
@@ -208,10 +216,12 @@ repr: Os { code: 2, message: "No such file or directory" } }',
 /stable-dist-rustc/build/src/libcore/result.rs:868
 ```
 
-또한 `unwrap`과 유사하면서 우리가 `panic!` 에러 메세지를 선택할 수 있게 해주는 또다른 메소드인
-`expect`도 있습니다. `unwrap`대신 `expect`를 이용하고 좋은 에러 메세지를 제공하는 것은 여러분의
-의도를 전달해주고 패닉의 근원을 추적하는 걸 쉽게 해 줄수 있습니다. `expect`의 문법은 아래와 같이
+또다른 메소드인 `expect`는 `unwrap`과 유사한데, 우리가 `panic!` 에러 메세지를 선택할 수 있게
+해줍니다. `unwrap`대신 `expect`를 이용하고 좋은 에러 메세지를 제공하는 것은 여러분의 의도를
+전달해주고 패닉의 근원을 추적하는 걸 쉽게 해 줄수 있습니다. `expect`의 문법은 아래와 같이
 생겼습니다:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 use std::fs::File;
@@ -223,7 +233,7 @@ fn main() {
 
 `expect`는 `unwrap`과 같은 식으로 사용됩니다: 파일 핸들을 리턴하거나 `panic!` 매크로를 호출하는
 것이죠. `expect`가 `panic!` 호출에 사용하는 에러 메세지는 `unwrap`이 사용하는 기본 `panic!`
-메세지 대신 `expect`에 넘기는 파라미터로 설정될 것입니다. 아래에 어떻게 생겼는지에 대한 예가 있습니다:
+메세지보다는 `expect`에 넘기는 파라미터로 설정될 것입니다. 아래에 어떻게 생겼는지에 대한 예가 있습니다:
 
 ```text
 thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
@@ -231,15 +241,22 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 /stable-dist-rustc/build/src/libcore/result.rs:868
 ```
 
+이 에러 메세지는 우리가 특정한 텍스트인 `Failed to open hello.txt`로 시작하기 때문에, 이 에러 메세지가
+어디서부터 왔는지를 코드 내에서 찾기가 더 수월해질 것입니다. 만일 우리가 여러 군데에 `unwrap`을 사용하면,
+정확히 어떤 `unwrap`이 패닉을 일으켰는지 찾기에 좀 더 많은 시간이 걸릴 수 있는데, 그 이유는 패닉을
+호출하는 모든 `unwrap`이 동일한 메세지를 출력하기 때문입니다.
+
 ### 에러 전파하기
 
 실패할지도 모르는 무언가를 호출하는 구현을 가진 함수를 작성할때, 이 함수 내에서 에러를 처리하는 대신,
-호출자가 에러를 알게 하여 그쪽에서 어떻게 할지 결정하도록 할 수 있습니다. 이는 에러 *전파하기*로 알려져
-있으며, 에러가 어떻게 처리해야 좋을지 좌우해야 할 상황에서, 여러분의 코드 내용 내에서 이용 가능한 것들보다
-더 많은 정보와 로직을 가지고 있을 수도 있는 호출하는 코드쪽에 더 많은 제어권을 줍니다. 
+에러를 호출하는 코드쪽으로 반환하여 그쪽에서 어떻게 할지 결정하도록 할 수 있습니다. 이는 에러
+*전파하기*로 알려져 있으며, 에러가 어떻게 처리해야 좋을지 좌우해야 할 상황에서, 여러분의 코드 내용 내에서
+이용 가능한 것들보다 더 많은 정보와 로직을 가지고 있을 수도 있는 호출하는 코드쪽에 더 많은 제어권을 줍니다. 
 
-예를 들면, Listing 9-5는 파일로부터 사용자 이름을 읽는 함수를 작성한 것입니다. 만일 파일이 존재하지
+예를 들면, Listing 9-6는 파일로부터 사용자 이름을 읽는 함수를 작성한 것입니다. 만일 파일이 존재하지
 않거나 읽을 수 없다면, 이 함수는 호출하는 코드쪽으로 해당 에러를 반환할 것입니다:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::io;
@@ -263,22 +280,22 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">Listing 9-5: `match`를 이용하여 호출 코드 쪽으로 에러를 반환하는 함수
+<span class="caption">Listing 9-6: `match`를 이용하여 호출 코드 쪽으로 에러를 반환하는 함수
 </span>
 
 함수의 반환 타입부터 먼저 살펴봅시다: `Result<String, io::Error>`. 이는 함수가 `Result<T, E>`
 타입의 값을 반환하는데 제네릭 파라미터 `T`는 구체적 타입(concrete type)인 `String`로 채워져 있고,
 제네릭 타입 `E`는 구체적 타입인 `io::Error`로 채워져 있습니다. 만일 이 함수가 어떤 문제 없이 성공하면,
-함수의 호출자는 `String`을 담은 값을 받을 것입니다 - 이 함수가 파일로부터 읽어들인 사용자 이름이겠지요.
-만일 어떤 문제가 발생한다면, 함수의 호출자는 문제가 무엇이었는지에 대한 더 많은 정보를 담고 있는
-`io::Error`의 인스턴스를 담은 `Err` 값을 받을 것입니다. 이 함수의 반환 타입으로서 `io::Error`를
-선택했는데, 그 이유는 우리가 이 함수 내부에서 호출하고 있는 실패 가능한 연산 두 가지가 모두 이 타입의
-에러 값을 반환하기 때문입니다: `File::open` 함수와 `read_to_string` 메소드 말이죠.
+함수를 호출한 코드는 `String`을 담은 값을 받을 것입니다 - 이 함수가 파일로부터 읽어들인 사용자
+이름이겠지요. 만일 어떤 문제가 발생한다면, 이 함수를 호출한 코드는 문제가 무엇이었는지에 대한 더 많은
+정보를 담고 있는 `io::Error`의 인스턴스를 담은 `Err` 값을 받을 것입니다. 이 함수의 반환 타입으로서
+`io::Error`를 선택했는데, 그 이유는 우리가 이 함수 내부에서 호출하고 있는 실패 가능한 연산 두 가지가
+모두 이 타입의 에러 값을 반환하기 때문입니다: `File::open` 함수와 `read_to_string` 메소드 말이죠.
 
-함수의 본체는 `File::open` 함수를 호출하면서 시작합니다. 그 다음에는 Listing 9-3에서 본 `match`와
+함수의 본체는 `File::open` 함수를 호출하면서 시작합니다. 그 다음에는 Listing 9-4에서 본 `match`와
 유사한 식으로 `match`을 이용해서 `Result` 값을 처리하는데, `Err` 경우에 `panic!`을 호출하는 대신
-이 함수를 일찍 끝내고 `File::open`으로부터의 에러 값을 마치 이 함수의 에러 값인것처럼 호출자에게
-전달합니다. 만일 `File::open`이 성공하면, 파일 핸들을 `f`에 저장하고 계속합니다.
+이 함수를 일찍 끝내고 `File::open`으로부터의 에러 값을 마치 이 함수의 에러 값인것처럼 호출하는 쪽의
+코드에게 전달합니다. 만일 `File::open`이 성공하면, 파일 핸들을 `f`에 저장하고 계속합니다.
 
 그 뒤 변수 `s`에 새로운 `String`을 생성하고 파일의 콘텐츠를 읽어 `s`에 넣기 위해 `f`에 있는
 파일 핸들의 `read_to_string` 메소드를 호출합니다. `File::open`가 성공하더라도 `read_to_string`
@@ -286,22 +303,25 @@ fn read_username_from_file() -> Result<String, io::Error> {
 위해서 또다른 `match`가 필요합니다: 만일 `read_to_string`이 성공하면, 우리의 함수가 성공한
 것이고, 이제 `s` 안에 있는 파일로부터 읽어들인 사용자 이름을 `Ok`에 싸서 반환합니다. 만일
 `read_to_string`이 실패하면, `File::open`의 반환값을 처리했던 `match`에서 에러값을
-반환하는 것과 같은 방식으로 에러 값을 반환합니다. 하지만 여기서는 명시적으로 `return`이라 말할 필요는
-없는데, 그 이유는 이 함수의 마지막 표현식이기 때문입니다.
+반환하는 것과 같은 방식으로 에러 값을 반환합니다. 하지만 여기서는 명시적으로 `return`이라 말할
+필요는 없는데, 그 이유는 이 함수의 마지막 표현식이기 때문입니다.
 
 그러면 이 코드를 호출하는 코드는 사용자 이름을 담은 `Ok` 값 혹은 `io::Error`를 담은 `Err` 값을
-얻는 처리를 하게 될 것입니다. 호출자가 이 값을을 가지고 어떤 일을 할 것인지 우리는 알지 못합니다.
-만일 그들이 `Err` 값을 얻었다면, 예를 들면 `panic!`을 호출하여 프로그램을 종료시키는 선택을 할
+얻는 처리를 하게 될 것입니다. 호출하는 코드가 이 값을을 가지고 어떤 일을 할 것인지 우리는 알지 못합니다.
+만일 그 쪽에서 `Err` 값을 얻었다면, 예를 들면 `panic!`을 호출하여 프로그램을 종료시키는 선택을 할
 수도 있고, 기본 사용자 이름을 사용할 수도 있으며, 혹은 파일이 아닌 다른 어딘가에서 사용자 이름을
-찾을 수도 있습니다. 호출자가 정확히 어떤 것을 시도하려 하는지에 대한 충분한 정보가 없기 때문에,
-우리는 모든 성공 혹은 에러 정보를 위로 전파하여 호출자가 그들에 맞는 처리를 하도록 합니다.
+찾을 수도 있습니다. 호출하는 코드가 정확히 어떤 것을 시도하려 하는지에 대한 충분한 정보가 없기 때문에,
+우리는 모든 성공 혹은 에러 정보를 위로 전파하여 호출하는 코드가 적절하게 처리를 하도록 합니다.
 
-러스트에서 에러를 전파하는 패턴은 너무 흔하여 이를 더 쉽게 해주는 전용 문법이 있습니다: 바로 `?` 입니다.
+러스트에서 에러를 전파하는 패턴은 너무 흔하여 러스트에서는 이를 더 쉽게 해주는 물음포 연산자 `?`를
+제공합니다.
 
 ### 에러를 전파하기 위한 숏컷: `?`
 
-Listing 9-6은 Listing 9-5과 같은 기능을 가진 `read_username_from_file`의 구현을 보여주는데,
+Listing 9-7은 Listing 9-6과 같은 기능을 가진 `read_username_from_file`의 구현을 보여주는데,
 다만 이 구현은 물음표 연산자를 이용하고 있습니다:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::io;
@@ -316,19 +336,34 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">Listing 9-6: `?`를 이용하여 에러를 호출 코드쪽으로 반환하는 함수</span>
+<span class="caption">Listing 9-7: `?`를 이용하여 에러를 호출 코드쪽으로 반환하는 함수</span>
 
-`Result` 값 뒤의 `?`는 Listing 9-5에서 `Result` 값을 다루기 위해 정의했던 `match` 표현식과
-정확히 같은 방식으로 동작하게끔 정의되어 있습니다. 만일 `Result`의 값이 `Ok`라면, `Ok` 내의 값이
+`Result` 값 뒤의 `?`는 Listing 9-6에서 `Result` 값을 다루기 위해 정의했던 `match` 표현식과
+거의 같은 방식으로 동작하게끔 정의되어 있습니다. 만일 `Result`의 값이 `Ok`라면, `Ok` 내의 값이
 이 표현식으로부터 얻어지고 프로그램이 계속됩니다. 만일 값이 `Err`라면, 우리가 `return` 키워드를
-사용하여 에러 값을 호출자에게 전파하는 것과 같이 전체 함수로부터 `Err` 내의 값이 반환될 것입니다.
+사용하여 에러 값을 호출하는 코드에게 전파하는 것과 같이 전체 함수로부터 `Err` 내의 값이 반환될
+것입니다.
 
-Listing 9-6의 내용에서, `File::open` 호출 부분의 끝에 있는 `?`는 `Ok`내의 값을 변수 `f`에게
-반환해줄 것입니다. 만일 에러가 발생하면 `?`는 전체 함수로부터 일찍 빠져나와 호출자에게 어떤 `Err` 값을
-줄 것입니다. `read_to_string` 호출의 끝부분에 있는 `?`도 같은 것이 적용되어 있습니다.
+Listing 9-6에 있는 `match` 표현식과 물음표 연산자가 수행하는 한가지 차이점은 물음표 연산자를
+사용할 때 에러값들이 표준 라이브러리 내에 있는 `From` 트레잇에 정의된 `from` 함수를 친다는
+것입니다. 많은 에러 타입들이 어떤 타입의 에러를 다음 타입의 에러로 변환하기 위해 `from` 함수를
+구현하였습니다. 물음표 연산자가 사용되면, `from` 함수의 호출이 물음표 연산자가 얻게 되는 에러
+타입을 `?`이 사용되고 있는 현재 함수의 반환 타입에 정의된 에러 타입으로 변환합니다. 이는
+어떤 함수의 부분들이 수많은 다른 이유로 인해 실패할 수 있지만 이 함수는 실패하는 모든 방식을
+하나의 에러 타입으로 반환할 때 유용합니다. 각각의 에러 타입이 그 자신을 반환되는 에러 타입으로
+변경할 방법을 정의하기 위해 `from` 함수를 구현하기만 한다면, 물음표 연산자는 이 변환을 자동적으로
+다룹니다.
+
+Listing 9-7의 내용에서, `File::open` 호출 부분의 끝에 있는 `?`는 `Ok`내의 값을 변수 `f`에게
+반환해줄 것입니다. 만일 에러가 발생하면 `?`는 전체 함수로부터 일찍 빠져나와 호출하는 코드에게
+어떤 `Err` 값을 줄 것입니다. `read_to_string` 호출의 끝부분에 있는 `?`도 같은 것이 적용되어
+있습니다.
 
 `?`는 많은 수의 보일러플레이트(boilerplate)를 제거해주고 이 함수의 구현을 더 단순하게 만들어 줍니다.
-심지어는 `?` 뒤에 바로 메소드 호출을 연결하는 식으로 이 코드를 더 줄일 수도 있습니다:
+심지어는 Listing 9-8과 같이 `?` 뒤에 바로 메소드 호출을 연결하는 식으로 (chaining) 이 코드를 더
+줄일 수도 있습니다:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::io;
@@ -344,17 +379,19 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
+<span class="caption">Listing 9-8: 물음표 연산자 뒤에 메소드 호출을 연결하기</span>
+
 새로운 `String`을 만들어 `s`에 넣는 부분을 함수의 시작 부분으로 옮겼습니다; 이 부분은 달라진 것이
 없습니다. `f` 변수를 만드는 대신, `File::open("hello.txt")?`의 결과 바로 뒤에
 `read_to_string`의 호출을 연결시켰습니다. `read_to_string` 호출의 끝에는 여전히 `?`가
 남아있고, `File::open`과 `read_to_string`이 모두 에러를 반환하지 않고 성공할 때
-`s` 안의 사용자 이름을 담은 `Ok`를 여전히 반환합니다. 함수의 기능 또한 Lsting 9-5와
-Listing 9-6의 것과 동일하고, 다만 작성하기에 더 인체공학적인 방법이라는 차이만 있을 뿐입니다.
+`s` 안의 사용자 이름을 담은 `Ok`를 여전히 반환합니다. 함수의 기능 또한 Lsting 9-6와
+Listing 9-7의 것과 동일하고, 다만 작성하기에 더 인체공학적인 방법이라는 차이만 있을 뿐입니다.
 
 ### `?`는 `Result`를 반환하는 함수에서만 사용될 수 있습니다
 
-`?`는 `Result` 타입을 반환하는 함수에서만 사용이 가능한데, 이것이 Listing 9-5에 정의된 `match`
-표현식과 정확히 동일한 방식으로 동작하도록 정의되어 있기 때문입니다. `Result` 반환 타입을 요구하는
+`?`는 `Result` 타입을 반환하는 함수에서만 사용이 가능한데, 이것이 Listing 9-6에 정의된 `match`
+표현식과 동일한 방식으로 동작하도록 정의되어 있기 때문입니다. `Result` 반환 타입을 요구하는
 `match` 부분은 `return Err(e)`이며, 따라서 함수의 반환 타입은 반드시 이 `return`과 호환 가능한
 `Result`가 되어야 합니다.
 
@@ -369,34 +406,26 @@ fn main() {
 }
 ```
 
-<!-- NOTE: as of 2016-12-21, the error message when calling `?` in a function
-that doesn't return a result is STILL confusing. Since we want to only explain
-`?` now, I've changed the example, but if you try running this code you WON'T
-get the error message below.
-I'm bugging people to try and get
-https://github.com/rust-lang/rust/issues/35946 fixed soon, hopefully before this
-chapter gets through copy editing-- at that point I'll make sure to update this
-error message. /Carol -->
-
 이걸 컴파일하면, 아래와 같은 에러 메세지가 뜹니다:
 
 ```text
-error[E0308]: mismatched types
- -->
+error[E0277]: the `?` operator can only be used in a function that returns
+`Result` (or another type that implements `std::ops::Try`)
+ --> src/main.rs:4:13
   |
-3 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum
-`std::result::Result`
-  |
-  = note: expected type `()`
-  = note:    found type `std::result::Result<_, _>`
+4 |     let f = File::open("hello.txt")?;
+  |             ------------------------
+  |             |
+  |             cannot use the `?` operator in a function that returns `()`
+  |             in this macro invocation
+  = help: the trait `std::ops::Try` is not implemented for `()`
+  = note: required by `std::ops::Try::from_error`
 ```
 
-이 에러는 잘못 매칭된 타입이 있음을 지적합니다: `main` 함수의 반환 타입은 `()`인데, `?`는
-`Result`를 반환할지도 모른다는 것이죠. `Result`를 반환하지 않는 함수 내에서 여러분이 `Result`를
-반환하는 다른 함수를 호출한다면, 여러분은 이를 처리하는데 있어 `?`를 이용하여 호출자에게 가능한 에러를
-전파하는 대신, `match` 혹은 `Result` 메소드 중 하나를 이용할 필요가 있을 것입니다.
-(역주: 현재는 좀 더 친절하게 상황을 설명하는 에러 메세지가 나오지만, 맥락은 유사합니다.)
+이 에러는 오직 `Result`를 반환하는 함수 내에서만 물음표 연산자를 사용할 수 있음을 지적합니다.
+`Result`를 반환하지 않는 함수 내에서, 여러분이 `Result`를 반환하는 다른 함수를 호출했을 때,
+여러분은 `?`를 사용하여 호출하는 코드에게 잠재적으로 에러를 전파하는 대신 `match`나 `Result`에서
+제공하는 메소드들 중 하나를 사용하여 이를 처리할 필요가 있을 것입니다.
 
 `panic!`을 호출하거나 `Result`를 반환하는 것의 자세한 부분을 논의했으니, 어떤 경우에 어떤 방법을
 사용하는 것이 적합할지를 어떻게 결정하는가에 대한 주제로 돌아갑시다.

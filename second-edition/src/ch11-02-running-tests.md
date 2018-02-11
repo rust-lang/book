@@ -1,32 +1,28 @@
-## 테스트가 실행되는 방식을 제어하기
+## 테스트의 실행 방식 제어하기
 
 `cargo run`이 여러분의 코드를 컴파일하고 난 뒤 그 결과인 바이너리를 실행하는 것과 마찬가지로,
 `cargo test`는 여러분의 코드를 테스트 모드에서 컴파일하고 결과로 발생한 테스트 바이너리를 실행합니다.
-`cargo test`의 기본 동작을 바꾸는데 사용할 수 있는 옵션들이 있습니다. 예를 들어, `cargo test`를
-통해 생성된 바이너리의 기본 동작은 모든 테스트를 병렬적으로 수행하고 테스트가 실행되는 동안 생성된
-결과를 캡처하는 것으로, 테스트 결과와 연관된 출력을 읽기 쉽도록 화면에 표시되는 것을 막아버립니다.
-여러분은 커맨드 라인 옵션을 지정하여 이러한 기본 동작을 변경할 수 있습니다.
+여러분은 커맨드 라인 옵션을 지정하여 `cargo test`의 기본 동작을 변경할 수 있습니다.
+예를 들어, `cargo test`를 통해 생성된 바이너리의 기본 동작은 모든 테스트를 병렬적으로 수행하고
+테스트가 실행되는 동안 생성된 결과를 캡처하는 것으로, 테스트 결과와 연관된 출력을 읽기 쉽도록 화면에
+표시되는 것을 막아버립니다.
 
-어떤 커맨드 라인 옵션은 `cargo test`에 입력될 수 있고, 어떤 옵션은 결과 테스트 바이너리에 입력될
-필요가 있습니다. 이 두 가지 타입의 인자를 구분하기 위해서, `cargo test`에 주어질 인자를 먼저
+어떤 커맨드 라인 옵션은 `cargo test`에 입력되고 어떤 옵션은 결과 테스트 바이너리에 입력됩니다.
+이 두 가지 타입의 인자를 구분하기 위해서, `cargo test`에 주어질 인자를 먼저
 나열하고, 그 다음 구분자(separator)로 `--`를 넣고, 그 뒤 테스트 바이너리에 입력될 인자를
-나열합니다. `cargo test --help`를 실행하는 것은 `cargo test`에서 사용할 수 있는 옵션에
-대해 알려줄 것이고, `cargo test -- --help`를 실행하는 것은 구분자 `--` 이후에 나올 수 있는
-옵션에 대해 알려줄 것입니다.
+나열합니다. `cargo test --help`를 실행하는 것은 `cargo test`에서 사용할 수 있는 옵션을
+표시하고, `cargo test -- --help`를 실행하는 것은 구분자 `--` 이후에 나올 수 있는
+옵션을 표시합니다.
 
 ### 테스트를 병렬 혹은 연속으로 실행하기
 
-<!-- Are we safe assuming the reader will know enough about threads in this
-context? -->
-<!-- Yes /Carol -->
-
-여러 개의 테스트를 실행할 때는, 기본적으로 스레드를 이용하여 별렬적으로 수행됩니다. 이는 테스트가
+여러 개의 테스트를 실행할 때는, 기본적으로 스레드를 이용하여 병렬적으로 수행됩니다. 이는 테스트가
 더 빠르게 실행되어 끝낼 수 있다는 의미이므로, 우리의 코드가 잘 동작하는지 혹은 그렇지 않은지에
-대한 보다 빠른 피드백을 얻을 수 있습니다. 테스트가 동시에 실행되므로, 여러분의 테스트가 서로
+대한 피드백을 더 빨리 얻을 수 있습니다. 테스트가 동시에 실행되므로, 여러분의 테스트가 서로
 다른 테스트 혹은 공유 상태값에 의존하지 않는지 주의해야 하는데, 이는 이를테면 현재 작업 디렉토리나
 환경 변수와 같은 공유 환경값을 포함합니다.
 
-예를 들면, 여러분이 작성한 테스트 각각이 `test-output.txt`라는 파일을 디스크에 만들고 이 파일에
+예를 들면, 여러분이 작성한 테스트 각각이 *test-output.txt*라는 파일을 디스크에 만들고 이 파일에
 어떤 데이터를 쓰는 코드를 실행한다고 가정해봅시다. 그런 다음 각 테스트는 그 파일로부터 데이터를 읽고,
 이 파일이 특정한 값을 담고 있는지 단언하는데, 이 값들은 테스트마다 다릅니다. 모든 테스트들이 동시에
 실행되기 때문에, 어떤 테스트가 파일을 쓰고 읽는 동안 다른 테스트가 파일을 덮어쓸지도 모릅니다. 두번째
@@ -36,22 +32,22 @@ context? -->
 
 만일 여러분이 테스트들을 병렬적으로 실행하고 싶지 않을 경우, 혹은 여러분이 사용되는 스레드의 갯수에
 대한 더 정밀한 제어를 하고 싶을 경우, 여러분은 `--test-threads` 플리그와 테스트 바이너리에서
-사용하고 싶은 스레드 갯수를 넘길 수 있습니다. 예를 들면:
+사용하고 싶은 스레드 갯수를 넘길 수 있습니다. 다음 예제를 봅시다:
 
 ```text
 $ cargo test -- --test-threads=1
 ```
 
 여기서는 테스트 스레드의 개수에 1을 지정했는데, 이는 프로그램이 어떠한 병렬성도 사용하지 않음을
-얘기해줍니다. 이는 테스트들을 병렬로 수행하는 것에 비해 시간이 더 오래 걸리겠지만, 테스트들이
-어떤 상태를 공유할 경우 서로가 간섭할 가능셩이 없어질 것입니다.
+얘기해줍니다. 테스트를 하나의 스레드에서 실행하는 것은 병렬로 수행하는 것에 비해 시간이 더 오래
+걸리겠지만, 테스트들이 어떤 상태를 공유할 경우 서로가 간섭할 가능셩이 없어질 것입니다.
 
 ### 함수 결과 보여주기
 
 기본적으로 어떤 테스트가 통과하면, 러스트의 테스트 라이브러리는 표준 출력(standard output)으로
 출력되는 어떤 것이든 캡처합니다. 예를 들면, 우리가 테스트 내에서 `println!`을 호출하고 이 테스트가
-통과하면, `println!` 출력을 터미널에서 볼 수 없습니다: 우리는 오직 그 테스트가 통과되었다는 말이
-적힌 라인만 볼 뿐입니다. 만일 테스트가 실패하면, 실패 메세지 아래에 표준 출력으로 출력되었던 어떤 것이든
+통과하면, `println!` 출력을 터미널에서 볼 수 없습니다: 우리는 오직 그 테스트가 통과되었다고 표시된
+라인만 볼 뿐입니다. 만일 테스트가 실패하면, 실패 메세지 아래에 표준 출력으로 출력되었던 어떤 것이든
 보게 될 것입니다.
 
 예를 들어, Listing 11-10은 파라미터의 값을 출력한 뒤 10을 반환하는 바보같은 함수를 보여주고
@@ -96,20 +92,21 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-	I got the value 8
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
-right)` (left: `5`, right: `10`)', src/lib.rs:19
+        I got the value 8
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
+  left: `5`,
+ right: `10`', src/lib.rs:19:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
     tests::this_test_will_fail
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 `I got the value 4`라는 메세지를 어디에서도 볼 수 없는데, 이는 성공하는 테스트가 실행시키는
 출력이라는 점을 주목하세요. 이 출력 메세지는 캡처되었습니다. 실패한 테스트로부터 얻어진 출력 메세지인
-`I got the value 8`은 테스트 실패 원인 또한 함께 보여주는 테스트 정리 출력 부분에 나타납니다.
+`I got the value 8`은 테스트 정리 출력 부분에 나타나는데, 이는 테스트 실패 원인 또한 함께 보여줍니다.
 
 만일 성공하는 테스트에 대한 출력값 또한 볼 수 있기를 원한다면, `--nocapture` 플래그를 이용하여
 출력 캡처 동작을 비활성화시킬 수 있습니다:
@@ -125,8 +122,9 @@ running 2 tests
 I got the value 4
 I got the value 8
 test tests::this_test_will_pass ... ok
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
-right)` (left: `5`, right: `10`)', src/lib.rs:19
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
+  left: `5`,
+ right: `10`', src/lib.rs:19:8
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 test tests::this_test_will_fail ... FAILED
 
@@ -135,7 +133,7 @@ failures:
 failures:
     tests::this_test_will_fail
 
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 테스트에서의 출력과 테스트 결과 출력이 분리된 점을 주목하세요; 이는 우리가 이전 절에서 다룬 내용처럼
@@ -146,7 +144,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 
 가끔, 모든 테스트 셋을 실행하는 것은 시간이 오래 걸릴 수 있습니다. 만일 여러분이 특정 영역의 코드에
 대해서 작업하고 있다면, 그 코드와 연관된 테스트만 실행시키고 싶어할 수도 있습니다. 여러분은
-`cargo test`에 여러분이 실행시키고 싶어하는 테스트(들)의 이름(들)을 인자로 넘김으로써 어떤
+`cargo test`에 여러분이 실행시키고 싶어하는 테스트(들)의 이름들을 인자로 넘김으로써 어떤
 테스트들을 실행시킬지 고를 수 있습니다.
 
 테스트의 일부분만을 실행시키는 법을 보여드리기 위해서, Listing 11-11에서 보시는 바와 같이
@@ -182,7 +180,7 @@ mod tests {
 
 <span class="caption">Listing 11-11: 여러 이름으로 된 세 가지 테스트</span>
 
-만일 테스트를 어떠한 인자 없이 실행시키면, 이미 본것과 같이 모든 테스트가 병렬적으로 수행될 것입니다:
+만일 테스트를 어떠한 인자 없이 실행시키면, 전에 본것과 같이 모든 테스트가 병렬적으로 수행될 것입니다:
 
 ```text
 running 3 tests
@@ -190,7 +188,7 @@ test tests::add_two_and_two ... ok
 test tests::add_three_and_two ... ok
 test tests::one_hundred ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 #### 단일 테스트 실행하기
@@ -205,16 +203,20 @@ $ cargo test one_hundred
 running 1 test
 test tests::one_hundred ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out
 ```
+
+`one_hundred`라는 이름의 테스트만 실행되었습니다; 다른 두 개의 테스트는 이 이름에 맞지 않습니다.
+테스트 출력은 정리 라인의 끝에 `2 filtered out`이라고 표시함으로써 이 커맨드로 지정한 것보다
+많은 테스트를 가지고 있음을 우리에게 알려줍니다.
 
 이 방법으로는 여러 테스트의 이름들을 특정할 수는 없고, `cargo test`에 주어진 제일 첫번째 값만
 이용될 것입니다.
 
 #### 여러 개의 테스트를 실행시키기 위한 필터링
 
-그러나, 테스트 이름의 부분을 특정하여 해당 값과 일치하는 어떠한 테스트라도 실행이 되도록 할 수는
-있습니다. 예를 들면, 우리의 테스트 이름들 중에서 두 개가 `add`를 포함하므로, `cargo test add`라고
+우리는 테스트 이름의 일부분을 특정할 수 있고, 해당 값과 일치하는 이름의 테스트가 실행될 것입니다.
+예를 들면, 우리의 테스트 이름들 중에서 두 개가 `add`를 포함하므로, `cargo test add`라고
 실행하여 이 두개의 테스트를 실행시킬 수 있습니다:
 
 ```text
@@ -226,34 +228,26 @@ running 2 tests
 test tests::add_two_and_two ... ok
 test tests::add_three_and_two ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
-이는 `add`가 이름에 포함된 모든 테스트를 실행시켰습니다. 또한 테스트가 있는 모듈이 테스트의 이름의
-일부가 되어 있으므로, 모듈의 이름으로 필터링하여 그 모듈 내의 모든 테스트를 실행시킬 수 있다는 점도
-주목하세요.
-
-<!-- in what kind of situation might you need to run only some tests, when you
-have lots and lots in a program? -->
-<!-- We covered this in the first paragraph of the "Running a Subset of Tests
-by Name" section, do you think it should be repeated so soon? Most people who
-use tests have sufficient motivation for wanting to run a subset of the tests,
-they just need to know how to do it with Rust, so we don't think this is a
-point that needs to be emphasized multiple times. /Carol -->
+이는 `add`가 이름에 포함된 모든 테스트를 실행시켰고 `one_hundred`라는 이름의 테스트를 걸러냈습니다.
+또한 테스트가 있는 모듈이 테스트의 이름의 일부가 되어 있으므로, 모듈의 이름으로 필터링하여 그 모듈
+내의 모든 테스트를 실행시킬 수 있다는 점도 주목하세요.
 
 ### 특별한 요청이 없는 한 몇몇 테스트들 무시하기
 
 이따금씩 몇몇 특정 테스트들은 실행하는데 너무나 시간이 많이 소모될수 있어서, 여러분은 `cargo test`의
 실행시 이 테스트들을 배제하고 싶어할지도 모릅니다. 여러분이 실행시키고자 하는 모든 테스트들을 인자로서
-열거하는 것 대신, 시간이 많이 걸리는 테스트들에 `ignore` 속성을 어노테이션하여 이들을 배제시킬 수
-있습니다:
+열거하는 것 대신, 다음과 같이 시간이 많이 걸리는 테스트들에 `ignore` 속성을 어노테이션하여 이들을
+배제시킬 수 있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
 fn it_works() {
-    assert!(true);
+    assert_eq!(2 + 2, 4);
 }
 
 #[test]
@@ -277,28 +271,11 @@ running 2 tests
 test expensive_test ... ignored
 test it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
 ```
 
 `expensive_test`는 `ignored` 리스트에 포함되었습니다. 만일 무시된 테스트들만 실행시키고
 싶다면, `cargo test -- --ignored`라고 실행함으로써 이를 요청할 수 있습니다.
-
-<!-- what does the double `-- --` mean? That seems interesting -->
-<!-- We covered that in the second paragraph after the "Controlling How Tests
-are Run" heading, and this section is beneath that heading, so I don't think a
-back reference is needed /Carol -->
-
-<!-- is that right, this way the program knows to run only the test with
-`ignore` if we add this, or it knows to run all tests? -->
-<!-- Is this unclear from the output that shows `expensive_test` was run and
-the `it_works` test does not appear? I'm not sure how to make this clearer.
-/Carol -->
 
 ```text
 $ cargo test -- --ignored
@@ -308,10 +285,9 @@ $ cargo test -- --ignored
 running 1 test
 test expensive_test ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
 어떠한 테스트를 실행시킬지를 제어함으로써, 여러분은 `cargo test`의 결과가 빠르게 나오도록 확실히
 할 수 있습니다. `ignored` 테스트들의 결과를 확인하기에 타당한 시점에 있고 해당 결과를 기다릴
-시간을 가지고 있을 때, 여러분은 대신 `cargo test -- --ignored`를 실행시키도록 선택할 수
-있습니다.
+시간을 가지고 있을 때, 여러분은 대신 `cargo test -- --ignored`를 실행시킬 수 있습니다.

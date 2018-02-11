@@ -156,7 +156,7 @@ mechanism for sending the messages: the application could choose to put a
 message in the application, send an email, send a text message, or something
 else. Our library doesn’t need to know about that detail; all it needs is
 something that implements a trait we’ll provide called `Messenger`. Listing
-15-15 shows our library code:
+15-23 shows our library code:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -197,7 +197,7 @@ impl<'a, T> LimitTracker<'a, T>
 }
 ```
 
-<span class="caption">Listing 15-15: A library to keep track of how close to a
+<span class="caption">Listing 15-23: A library to keep track of how close to a
 maximum value a value is, and warn when the value is at certain levels</span>
 
 One important part of this code is that the `Messenger` trait has one method,
@@ -216,7 +216,7 @@ text message when we call `send`, will only keep track of the messages it’s
 told to send. We can create a new instance of the mock object, create a
 `LimitTracker` that uses the mock object, call the `set_value` method on
 `LimitTracker`, then check that the mock object has the messages we expect.
-Listing 15-16 shows an attempt of implementing a mock object to do just that,
+Listing 15-24 shows an attempt of implementing a mock object to do just that,
 but that the borrow checker won’t allow:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -254,7 +254,7 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 15-16: An attempt to implement a `MockMessenger`
+<span class="caption">Listing 15-24: An attempt to implement a `MockMessenger`
 that isn’t allowed by the borrow checker</span>
 
 This test code defines a `MockMessenger` struct that has a `sent_messages`
@@ -295,7 +295,7 @@ definition (feel free to try and see what error message you get).
 
 This is where interior mutability can help! We’re going to store the
 `sent_messages` within a `RefCell`, and then the `send` message will be able to
-modify `sent_messages` to store the messages we’ve seen. Listing 15-17 shows
+modify `sent_messages` to store the messages we’ve seen. Listing 15-25 shows
 what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -324,7 +324,7 @@ mod tests {
 
     #[test]
     fn it_sends_an_over_75_percent_warning_message() {
-        // ...snip...
+        // --snip--
 #         let mock_messenger = MockMessenger::new();
 #         let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
 #         limit_tracker.set_value(75);
@@ -334,7 +334,7 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 15-17: Using `RefCell<T>` to be able to mutate an
+<span class="caption">Listing 15-25: Using `RefCell<T>` to be able to mutate an
 inner value while the outer value is considered immutable</span>
 
 The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
@@ -376,8 +376,8 @@ mutable borrow at any point in time.
 
 If we try to violate these rules, rather than getting a compiler error like we
 would with references, the implementation of `RefCell<T>` will `panic!` at
-runtime. Listing 15-18 shows a modification to the implementation of `send`
-from Listing 15-17 where we’re deliberately trying to create two mutable
+runtime. Listing 15-26 shows a modification to the implementation of `send`
+from Listing 15-25 where we’re deliberately trying to create two mutable
 borrows active for the same scope in order to illustrate that `RefCell<T>`
 prevents us from doing this at runtime:
 
@@ -395,7 +395,7 @@ impl Messenger for MockMessenger {
 }
 ```
 
-<span class="caption">Listing 15-18: Creating two mutable references in the
+<span class="caption">Listing 15-26: Creating two mutable references in the
 same scope to see that `RefCell<T>` will panic</span>
 
 We create a variable `one_borrow` for the `RefMut` smart pointer returned from
@@ -439,7 +439,7 @@ For example, recall the cons list example from Listing 15-13 where we used
 `Rc<T>` to let us have multiple lists share ownership of another list. Because
 `Rc<T>` only holds immutable values, we aren’t able to change any of the values
 in the list once we’ve created them. Let’s add in `RefCell<T>` to get the
-ability to change the values in the lists. Listing 15-19 shows that by using a
+ability to change the values in the lists. Listing 15-27 shows that by using a
 `RefCell<T>` in the `Cons` definition, we’re allowed to modify the value stored
 in all the lists:
 
@@ -472,7 +472,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-19: Using `Rc<RefCell<i32>>` to create a
+<span class="caption">Listing 15-27: Using `Rc<RefCell<i32>>` to create a
 `List` that we can mutate</span>
 
 We create a value that’s an instance of `Rc<RefCell<i32>` and store it in a
