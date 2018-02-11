@@ -20,7 +20,7 @@
 Комментарии также могут быть помещены в конце строк, содержащих код:
 
 
-```<span class="filename">Имя файла: src / main.rs</span>
+<span class="filename">Имя файла: src/main.rs</span>
 
 ```rust
 fn main() {
