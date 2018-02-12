@@ -1,43 +1,42 @@
 # Concurrency
 
-Concurrency and parallelism are incredibly important topics in computer
-science, and are also a hot topic in industry today. Computers are gaining more
-and more cores, yet many programmers aren't prepared to fully utilize them.
+Concurrency dan paralelisme adalah topik yang sangat penting dalam ilmu komputer
+dan juga merupakan topik hangat di industri saat ini. Komputer semakin banyak
+mendapatkan core, namun banyak programmer tidak siap untuk memanfaatkannya sepenuhnya.
 
-Rust's memory safety features also apply to its concurrency story. Even
-concurrent Rust programs must be memory safe, having no data races. Rust's type
-system is up to the task, and gives you powerful ways to reason about
-concurrent code at compile time.
+Fitur keamanan memori Rust juga berlaku untuk bagian concurrency-nya. Bahkan
+ semua program Rust  harus aman mengingat tidak ada persaingan data , Sesuai dengan tipe tugas sistem rust.
+Tipe Sistem rust sampai pada tugasnya, dan memberi Anda cara yang ampuh untuk
+memikirkan kode bersamaan pada waktu kompilasi.
+ 
 
-Before we talk about the concurrency features that come with Rust, it's important
-to understand something: Rust is low-level enough that the vast majority of
-this is provided by the standard library, not by the language. This means that
-if you don't like some aspect of the way Rust handles concurrency, you can
-implement an alternative way of doing things.
-[mio](https://github.com/carllerche/mio) is a real-world example of this
-principle in action.
+Sebelum kita berbicara fitur konkurensi yang disertai Rust, penting untuk
+memahami sesuatu:  rust cukup rendah sehingga sebagian besar ini disediakan 
+oleh perpustakaan standar,  bukan oleh bahasa. Ini berarti bahwa jika 
+Anda tidak menyukai beberapa aspek dari cara Rust menangani konkurensi
+[mio](https://github.com/carllerche/mio) , ini adalah contoh nyata 
+dari prinsip dalam sebuah tindakan
 
-## Background: `Send` and `Sync`
+## Latar Belakang: `Send` dan `Sync`
 
-Concurrency is difficult to reason about. In Rust, we have a strong, static
-type system to help us reason about our code. As such, Rust gives us two traits
-to help us make sense of code that can possibly be concurrent.
-
+Concurrency sulit dipikirkan. Di Rust, kita memiliki yang kuat, statis
+jenis sistem untuk membantu kita alasan tentang kode kita. Dengan demikian, Rust memberi kita dua sifat
+untuk membantu kita memahami kode yang mungkin bisa bersamaan.
 ### `Send`
 
-The first trait we're going to talk about is
-[`Send`](../../std/marker/trait.Send.html). When a type `T` implements `Send`, it
-indicates that something of this type is able to have ownership transferred
-safely between threads.
+Sifat yang pertama akan kita bicarakan adalah
+[`Send`](../../std/marker/trait.Send.html). kapan sebuah tipe `T` menerapkan `Send`, ini 
+menunjukkan bahwa sesuatu dari jenis ini dapat memiliki kepemilikan yang ditransfer 
+dengan aman di antara urutan.
 
-This is important to enforce certain restrictions. For example, if we have a
-channel connecting two threads, we would want to be able to send some data
-down the channel and to the other thread. Therefore, we'd ensure that `Send` was
-implemented for that type.
+Hal ini penting untuk memberlakukan pembatasan tertentu. Misalnya, jika kita memiliki
+saluran yang menghubungkan dua urutan, kita ingin bisa mengirim beberapa data
+ke saluran dan ke urutan lainnya. karena itu, kami memastikan bahwa `Send` diimplementasikan 
+untuk tipe itu.
 
-In the opposite way, if we were wrapping a library with [FFI][ffi] that isn't
-thread-safe, we wouldn't want to implement `Send`, and so the compiler will help
-us enforce that it can't leave the current thread.
+Sebaliknya, jika kita membungkus perpustakaan dengan [FFI][ffi]  yang tidak
+aman dari urutan, kita tidak ingin mengerjakan `Send`, dan kompilator akan membantu 
+kita menegakkannya sehingga tidak dapat meninggalkan urutan saat ini
 
 [ffi]: ffi.html
 
