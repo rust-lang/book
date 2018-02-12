@@ -27,45 +27,45 @@ untuk membantu kita memahami kode yang mungkin bisa bersamaan.
 Sifat yang pertama akan kita bicarakan adalah
 [`Send`](../../std/marker/trait.Send.html). kapan sebuah tipe `T` menerapkan `Send`, ini 
 menunjukkan bahwa sesuatu dari jenis ini dapat memiliki kepemilikan yang ditransfer 
-dengan aman di antara urutan.
+dengan aman di antara thread.
 
 Hal ini penting untuk memberlakukan pembatasan tertentu. Misalnya, jika kita memiliki
-saluran yang menghubungkan dua urutan, kita ingin bisa mengirim beberapa data
-ke saluran dan ke urutan lainnya. karena itu, kami memastikan bahwa `Send` diimplementasikan 
+saluran yang menghubungkan dua thread, kita ingin bisa mengirim beberapa data
+ke saluran dan ke thread lainnya. karena itu, kami memastikan bahwa `Send` diimplementasikan 
 untuk tipe itu.
 
 Sebaliknya, jika kita membungkus perpustakaan dengan [FFI][ffi]  yang tidak
-aman dari urutan, kita tidak ingin mengerjakan `Send`, dan kompilator akan membantu 
-kita menegakkannya sehingga tidak dapat meninggalkan urutan saat ini
+aman dari thread, kita tidak ingin mengerjakan `Send`, dan kompilator akan membantu 
+kita menegakkannya sehingga tidak dapat meninggalkan thread saat ini
 
 [ffi]: ffi.html
 
 ### `Sync`
 
-The second of these traits is called [`Sync`](../../std/marker/trait.Sync.html).
-When a type `T` implements `Sync`, it indicates that something
-of this type has no possibility of introducing memory unsafety when used from
-multiple threads concurrently through shared references. This implies that
-types which don't have [interior mutability](mutability.html) are inherently
-`Sync`, which includes simple primitive types (like `u8`) and aggregate types
-containing them.
+Sifat kedua dari sifat ini disebut [`Sync`](../../std/marker/trait.Sync.html).
+Ketika sebuah tipe `T` diterapkan `Sync`, Ini menunjukkan sesuatu
+dari jenis ini tidak mempunyai kemungkinan untuk mengenalkan memori yang tidak aman saat digunakan
+beberapa thread secara bersamaan melalui referensi bersama. Ini menyiratkan itu
+jenis yang tidak memiliki [interior mutability](mutability.html) secara inherently
+`Sync`, yang mencakup tipe primitif sederhana s (like `u8`) dan tipe agregat 
+mereka sama.
 
-For sharing references across threads, Rust provides a wrapper type called
-`Arc<T>`. `Arc<T>` implements `Send` and `Sync` if and only if `T` implements
-both `Send` and `Sync`. For example, an object of type `Arc<RefCell<U>>` cannot
-be transferred across threads because
-[`RefCell`](choosing-your-guarantees.html#refcellt) does not implement
-`Sync`, consequently `Arc<RefCell<U>>` would not implement `Send`.
+Untuk berbagi thread referensi di, Rust menyediakan jenis yang disebut
+`Arc<T>`. `Arc<T>` penerapan `Send` dan `Sync` jika dan hanya jika... `T` penerapan
+kedua `Send` dan `Sync`. untuk contoh, sebuah objek tipe `Arc<RefCell<U>>` tidak bisa
+ditransfer melintasi threadn karena
+[`RefCell`](choosing-your-guarantees.html#refcellt) tidak diterapkan
+`Sync`, karena itu `Arc<RefCell<U>>` tidak diterapkan `Send`.
 
-These two traits allow you to use the type system to make strong guarantees
-about the properties of your code under concurrency. Before we demonstrate
-why, we need to learn how to create a concurrent Rust program in the first
-place!
+Kedua sifat ini memungkinkan Anda menggunakan jenis sistem untuk membuat jaminan yang kuat
+Tentang rincian kode Anda di bawah concurrency. Sebelum kita berdemonstrasi
+mengapa, kita perlu belajar bagaimana membuat program  bersamaan di sebuah 
+tempat!
 
 ## Threads
 
-Rust's standard library provides a library for threads, which allow you to
-run Rust code in parallel. Here's a basic example of using `std::thread`:
+Perpustakaan standar Rust menyediakan perpustakaan untuk urutan, yang memungkinkan Anda melakukannya
+Jalankan kode Rust secara paralel. Berikut adalah contoh dasar penggunaan `std::thread`:
 
 ```rust
 use std::thread;
@@ -77,9 +77,9 @@ fn main() {
 }
 ```
 
-The `thread::spawn()` method accepts a [closure](closures.html), which is executed in a
-new thread. It returns a handle to the thread, that can be used to
-wait for the child thread to finish and extract its result:
+The `thread::spawn()` Metode menerima [closure](closures.html),yang dilaksanakan 
+di thread baru.  Ia mengembalikan pegangan ke thread, yang bisa digunakan untuk menunggu 
+benang anak selesai dan mengekstrak hasilnya:
 
 ```rust
 use std::thread;
@@ -93,8 +93,8 @@ fn main() {
 }
 ```
 
-As closures can capture variables from their environment, we can also try to
-bring some data into the other thread:
+Karena penutupan bisa mendapatkan variabel dari daerahnya, kita juga bisa mencoba
+membawa beberapa data ke thread lain:
 
 ```rust,ignore
 use std::thread;
@@ -107,7 +107,7 @@ fn main() {
 }
 ```
 
-However, this gives us an error:
+Namun, ini memberi kita kesalahan:
 
 ```text
 5:19: 7:6 error: closure may outlive the current function, but it
@@ -120,13 +120,13 @@ However, this gives us an error:
       });
 ```
 
-This is because by default closures capture variables by reference, and thus the
-closure only captures a _reference to `x`_. This is a problem, because the
-thread may outlive the scope of `x`, leading to a dangling pointer.
+Hal ini karena secara default menutup variabel dengan referensi, dan dengan
+demikian penutupan hanya mendapat _referensi untuk `x`_. Ini adalah sebuah masalah, karena
+thread bisa hidup lebih lama dari lingkup `x`, mengarah ke pointer.
 
-To fix this, we use a `move` closure as mentioned in the error message. `move`
-closures are explained in depth [here](closures.html#move-closures); basically
-they move variables from their environment into themselves.
+Untuk memperbaikinya, kami menggunakan `move` penutupan seperti yang disebutkan dalam pesan kesalahan. `move`
+penutupan dijelaskan secara depth [here](closures.html#move-closures); pada dasarnya
+mereka memindahkan variabel dari lingkungan mereka ke dalam dirinya sendiri.
 
 ```rust
 use std::thread;
@@ -139,30 +139,30 @@ fn main() {
 }
 ```
 
-Many languages have the ability to execute threads, but it's wildly unsafe.
-There are entire books about how to prevent errors that occur from shared
-mutable state. Rust helps out with its type system here as well, by preventing
-data races at compile time. Let's talk about how you actually share things
-between threads.
+Banyak bahasa memiliki kemampuan untuk mengeksekusi thread, tapi sangat tidak aman.
+Ada keseluruhan buku tentang bagaimana mencegah kesalahan yang terjadi dari shared
+keadaan bisa berubah. rust membantu keluar dengan sistem jenis di ini juga, dengan mencegah
+data ras pada waktu kompilasi Mari kita bicara tentang bagaimana Anda benar-benar berbagi sesuatu
+antara thread.
 
 ## Safe Shared Mutable State
 
-Due to Rust's type system, we have a concept that sounds like a lie: "safe
-shared mutable state." Many programmers agree that shared mutable state is
-very, very bad.
+Karena jenis sistem Rust, kita memiliki konsep yang kedengarannya seperti kebohongan "safe
+shared mutable state."Banyak programmer setuju bahwa keadaan mutable bersama adalah
+sangat sangat buruk.
 
-Someone once said this:
+Seseorang pernah mengatakan ini:
 
-> Shared mutable state is the root of all evil. Most languages attempt to deal
-> with this problem through the 'mutable' part, but Rust deals with it by
-> solving the 'shared' part.
+> Keadaan bersama mutable adalah akar dari semua kejahatan. Kebanyakan bahasa berusaha untuk menangani
+> Dengan masalah ini melalui bagian 'murtabel', tapi Rust menangani hal itu
+> memecahkan 'shared' bagian.
 
-The same [ownership system](ownership.html) that helps prevent using pointers
-incorrectly also helps rule out data races, one of the worst kinds of
-concurrency bugs.
+sama [ownership system](ownership.html) yang membantu mencegah salah petunjuk 
+penggunaan  juga membantu menyingkirkan data ras, salah satu jenis
+bug konkurensi terburuk 
 
-As an example, here is a Rust program that would have a data race in many
-languages. It will not compile:
+Sebagai contoh, di sini adalah program Rust yang memiliki banyak data dalam race
+bahasa. Ini tidak akan dikompilasi:
 
 ```rust,ignore
 use std::thread;
@@ -181,7 +181,7 @@ fn main() {
 }
 ```
 
-This gives us an error:
+Ini memberi kita sebuah kesalahan
 
 ```text
 8:17 error: capture of moved value: `data`
@@ -189,18 +189,18 @@ This gives us an error:
         ^~~~
 ```
 
-Rust knows this wouldn't be safe! If we had a reference to `data` in each
-thread, and the thread takes ownership of the reference, we'd have three owners!
-`data` gets moved out of `main` in the first call to `spawn()`, so subsequent
-calls in the loop cannot use this variable.
+rust tahu ini tidak akan aman! Jika kita punya referensi ke `data` di setiap
+thread, dan thread mengambil kepemilikan referensi, kita akan memiliki tiga pemilik!
+`data` akan pindah dari `main` dalam panggilan pertama untuk `spawn()`, jadi selanjutnya
+Panggilan dalam lingkaran tidak dapat menggunakan variabel ini.
 
-So, we need some type that lets us have more than one owning reference to a
-value. Usually, we'd use `Rc<T>` for this, which is a reference counted type
-that provides shared ownership. It has some runtime bookkeeping that keeps track
-of the number of references to it, hence the "reference count" part of its name.
+jadi, kita memerlukan beberapa jenis yang memungkinkan kita memiliki lebih dari satu referensi 
+ke nilai. Biasanya, akan  kita gunakan `Rc<T>` Untuk ini, yang merupakan tipe referensi dihitung
+yang menyediakan kepemilikan bersama. Ini memiliki beberapa pembukuan runtime yang terus melacak
+dari jumlah rujukannya, maka bagian "referensi dihitung" dari namanya.
 
-Calling `clone()` on an `Rc<T>` will return a new owned reference and bump the
-internal reference count. We create one of these for each thread:
+panggilan `clone()` pada `Rc<T>`wasiat akan mengembalikan referensi yang dimiliki 
+baru dan menemukan referensi internal. Kami membuat satu untuk masing-masing thread:
 
 
 ```rust,ignore
@@ -225,7 +225,7 @@ fn main() {
 }
 ```
 
-This won't work, however, and will give us the error:
+Ini tidak akan berhasil, dan akan memberi kita kesalahan::
 
 ```text
 13:9: 13:22 error: the trait bound `alloc::rc::Rc<collections::vec::Vec<i32>> : core::marker::Send`
@@ -235,17 +235,17 @@ This won't work, however, and will give us the error:
             cannot be sent between threads safely
 ```
 
-As the error message mentions, `Rc` cannot be sent between threads safely. This
-is because the internal reference count is not maintained in a thread-safe
-manner and can have a data race.
+Seperti yang disebutkan pesan kesalahan, `Rc` tidak dapat dikirim antara benang dengan aman.  ini
+adalah karena jumlah referensi internal tidak dipertahankan dalam thread-safe
+cara dan bisa memiliki data race.
 
-To solve this, we'll use `Arc<T>`, Rust's standard atomic reference count type.
+Untuk mengatasi ini, kita akan menggunakan `Arc<T>`, Tipe referensi atom standar rust.
 
-The Atomic part means `Arc<T>` can safely be accessed from multiple threads.
-To do this the compiler guarantees that mutations of the internal count use
-indivisible operations which can't have data races.
+Bagian atom berarti `Arc<T>` dapat diakses dengan aman dari banyak thread.
+Untuk melakukan ini, kompiler menjamin bahwa mutasi dari hitungan internal 
+menggunakan operasi yang tidak dapat dibagi yang tidak dapat memiliki data ras.
 
-In essence, `Arc<T>` is a type that lets us share ownership of data _across
+Intinya, `Arc<T>` adalah jenis yang memungkinkan kita berbagi kepemilikan data _across
 threads_.
 
 
@@ -268,10 +268,10 @@ fn main() {
 }
 ```
 
-Similarly to last time, we use `clone()` to create a new owned handle.
-This handle is then moved into the new thread.
+Begitu pula untuk terakhir kalinya, kita gunakan  `clone()` untuk membuat pegangan baru yang dimiliki.
+Pegangan ini kemudian dipindahkan ke thread baru.
 
-And... still gives us an error.
+Dan ... masih memberi kita sebuah kesalahan.
 
 ```text
 <anon>:11:24 error: cannot borrow immutable borrowed content as mutable
@@ -279,25 +279,24 @@ And... still gives us an error.
                              ^~~~
 ```
 
-`Arc<T>` by default has immutable contents. It allows the _sharing_ of data
-between threads, but shared mutable data is unsafe—and when threads are
-involved—can cause data races!
+`Arc<T>`secara default memiliki isi yang tidak berubah. Hal ini memungkinkan _sharing_ odata antar
+thread, namun data yang dapat dibagi bersama tidak aman-dan bila 
+thread terlibat dapat menyebabkan data berantakan!
 
+Biasanya ketika kita ingin membuat sesuatu dalam posisi yang tidak berubah, kita menggunakan
+`Cell<T>` atau `RefCell<T>` membiarkan mutasi aman melalui pemeriksaan runtime atau sebaliknya
+sebaliknya (lihat juga: [Choosing Your Guarantees](choosing-your-guarantees.html)).
+namun, mirip dengan `Rc`, ini tidak thread-aman. Jika kita mencoba menggunakan ini, 
+akan mendapatkan kesalahan tentang jenis ini tidak `Sync`, dan kodenya akan gagal
+tersusun.
 
-Usually when we wish to make something in an immutable position mutable, we use
-`Cell<T>` or `RefCell<T>` which allow safe mutation via runtime checks or
-otherwise (see also: [Choosing Your Guarantees](choosing-your-guarantees.html)).
-However, similar to `Rc`, these are not thread-safe. If we try using these, we
-will get an error about these types not being `Sync`, and the code will fail to
-compile.
+Sepertinya kita memerlukan beberapa jenis yang memungkinkan kita untuk secara aman mengubah nilai bersama
+melintasi benang, misalnya tipe yang hanya bisa memastikan satu benang pada satu waktu
+mampu mengubah nilai di dalamnya dalam satu waktu.
 
-It looks like we need some type that allows us to safely mutate a shared value
-across threads, for example a type that can ensure only one thread at a time is
-able to mutate the value inside it at any one time.
+Untuk itu, kita bisa menggunakan `Mutex<T>` jenis!
 
-For that, we can use the `Mutex<T>` type!
-
-Here's the working version:
+Berikut versi bekerja:
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -319,30 +318,30 @@ fn main() {
 }
 ```
 
-Note that the value of `i` is bound (copied) to the closure and not shared
-among the threads.
+Perhatikan bahwa nilai `i` terikat (disalin) sampai penutupan dan tidak dibagi
+di antara benang.
 
-We're "locking" the mutex here. A mutex (short for "mutual exclusion"), as
-mentioned, only allows one thread at a time to access a value. When we wish to
-access the value, we use `lock()` on it. This will "lock" the mutex, and no
-other thread will be able to lock it (and hence, do anything with the value)
-until we're done with it. If a thread attempts to lock a mutex which is already
-locked, it will wait until the other thread releases the lock.
+kami "mengunci" mutex di sini. Sebuah mutex (singkatan dari "mutual exclusion"), seperti
+yang disebutkan, hanya memungkinkan satu thread pada satu waktu untuk mengakses sebuah nilai. Bila kita 
+ingin mengakses nilai, kita gunakan `lock()` ini di atasnya. Ini akan "kunci" si mutex, dan tidak
+ada thread lain yang bisa menguncinya (dan karenanya, melakukan apapun dengan nilainya)
+ampai kita selesai melakukannya. Jika sebuah thread mencoba mengunci mutex yang sudah terkunci,
+maka akan menunggu sampai thread lain melepaskan kunci.
 
-The lock "release" here is implicit; when the result of the lock (in this case,
-`data`) goes out of scope, the lock is automatically released.
+kunci "rilis" di sini adalah implisit; ketika hasil kunci  (dalam kasus ini,
+`data`) keluar dari ruang lingkup, kunci dilepaskan secara otomatis..
 
-Note that [`lock`](../../std/sync/struct.Mutex.html#method.lock) method of
-[`Mutex`](../../std/sync/struct.Mutex.html) has this signature:
+perhatikan bahwa [`lock`](../../std/sync/struct.Mutex.html#method.lock) metode
+[`Mutex`](../../std/sync/struct.Mutex.html) memiliki tanda tangan ini:
 
 ```rust,ignore
 fn lock(&self) -> LockResult<MutexGuard<T>>
 ```
 
-and because `Send` is not implemented for `MutexGuard<T>`, the guard cannot
-cross thread boundaries, ensuring thread-locality of lock acquire and release.
+dan karena `Send` tidak diimplementasikan untuk `MutexGuard<T>`, penjaga tidak dapat melewati batas benang,
+memastikan area penguncian dan pelepasan benang.
 
-Let's examine the body of the thread more closely:
+Mari memeriksa tubuh benang lebih dekat:
 
 ```rust
 # use std::sync::{Arc, Mutex};
@@ -361,25 +360,25 @@ thread::spawn(move || {
 # }
 ```
 
-First, we call `lock()`, which acquires the mutex's lock. Because this may fail,
-it returns a `Result<T, E>`, and because this is just an example, we `unwrap()`
-it to get a reference to the data. Real code would have more robust error handling
-here. We're then free to mutate it, since we have the lock.
+Pertama, kita panggil  `lock()`, yang mendapatkan kunci mutex. Karena ini mungkin gagal,
+ia mengembalikan sebuah  `Result<T, E>`,  dan karena ini hanyalah sebuah contoh, kita `unwrap()`
+bisa mendapatkan referensi ke data. Kode nyata akan memiliki penanganan kesalahan yang 
+lebih kuat di sini. Kita kemudian bebas untuk bermutasi, karena kita memiliki kunci.
 
-Lastly, while the threads are running, we wait on a short timer. But
-this is not ideal: we may have picked a reasonable amount of time to
-wait but it's more likely we'll either be waiting longer than
-necessary or not long enough, depending on just how much time the
-threads actually take to finish computing when the program runs.
+Terakhir, saat benangnya sedang berjalan, kita tunggu sebentar. Tapi ini tidak ideal: 
+kita mungkin telah memilih waktu yang tepat untuk menunggu tapi kemungkinan kita akan 
+menunggu lebih lama dari yang diperlukan atau tidak cukup lama, tergantung pada berapa
+banyak waktu yang benar-benar dibutuhkan untuk menyelesaikan 
+komputasi saat program berjalan
 
-A more precise alternative to the timer would be to use one of the
-mechanisms provided by the Rust standard library for synchronizing
-threads with each other. Let's talk about one of them: channels.
+Alternatif yang lebih tepat untuk timer adalah menggunakan salah 
+satu mekanisme yang disediakan oleh perpustakaan standar Rust untuk 
+menyinkronkan benang satu sama lain. Mari kita bicara tentang salah satunya: saluran.
 
-## Channels
+## saluran
 
-Here's a version of our code that uses channels for synchronization, rather
-than waiting for a specific time:
+Inilah versi kode kami yang menggunakan saluran untuk sinkronisasi
+daripada menunggu waktu tertentu:
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -410,11 +409,11 @@ fn main() {
 }
 ```
 
-We use the `mpsc::channel()` method to construct a new channel. We `send`
-a simple `()` down the channel, and then wait for ten of them to come back.
+Kami menggunakan `mpsc::channel()` metode untuk membuat saluran baru. kita `send`
+sederhana `()` menyusuri saluran, dan kemudian menunggu sepuluh dari mereka untuk kembali.
 
-While this channel is sending a generic signal, we can send any data that
-is `Send` over the channel!
+Saat saluran ini mengirimkan sinyal generik, kami dapat mengirim data apa pun yang 
+`Send` melebihi saluran!
 
 ```rust
 use std::thread;
@@ -439,14 +438,14 @@ fn main() {
 }
 ```
 
-Here we create 10 threads, asking each to calculate the square of a number (`i`
-at the time of `spawn()`), and then `send()` back the answer over the channel.
+Di sini kita membuat 10 benang, meminta masing-masing untuk menghitung kuadrat sebuah angka (`i`
+pada saat ini `spawn()`), dan kemudian `send()` kembali jawaban atas saluran.
 
 
 ## Panics
 
-A `panic!` will crash the currently executing thread. You can use Rust's
-threads as a simple isolation mechanism:
+A `panic!` akan merusak thread yang sedang dijalankan. Anda bisa menggunakan 
+thread Rust sebagai mekanisme isolasi sederhana::
 
 ```rust
 use std::thread;
@@ -460,5 +459,5 @@ let result = handle.join();
 assert!(result.is_err());
 ```
 
-`Thread.join()` gives us a `Result` back, which allows us to check if the thread
-has panicked or not.
+`Thread.join()` memberi kita `Result` punggung, yang memungkinkan kita untuk 
+memeriksa apakah benang telah panik atau tidak.
