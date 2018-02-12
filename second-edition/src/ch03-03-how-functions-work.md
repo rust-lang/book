@@ -22,6 +22,7 @@ fn another_function() {
     println!("Another function.");
 }
 ```
+
 Las definiciones de funciones en Rust comienzan con "fn" y tienen un paréntesis
 después del nombre de la función. Las llaves le dicen al compilador dónde comienza
 y termina el cuerpo de la función.
