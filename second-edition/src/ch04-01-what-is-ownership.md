@@ -1,120 +1,120 @@
-## What Is Ownership?
+¿Qué es Propiedad?
 
-Rust’s central feature is *ownership*. Although the feature is straightforward
-to explain, it has deep implications for the rest of the language.
+La característica central de Rust es la *propiedad*. Aunque la característica es fácil de 
+explicar, tiene profundas implicaciones para el resto del lenguaje.
 
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that constantly looks for no longer used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks at
-compile time. No run-time costs are incurred for any of the ownership features.
+Todos los programas tienen que administrar la forma en que utilizan la memoria del ordenador mientras se está ejecutando.
+Algunos lenguajes tienen una colección de basura que busca constantemente la memoria que ya no se usa
+mientras se ejecuta el programa; en otros lenguajes, el programador debe explícitamente 
+asignar y liberar la memoria. Rust utiliza un tercer enfoque: la memoria se gestiona
+a través de un sistema de propiedad con un conjunto de reglas que el compilador comprueba en
+tiempo de compilación. No se producen costes de tiempo de ejecución para ninguna de las características de propiedad.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the more you’ll be able to naturally
-develop code that is safe and efficient. Keep at it!
+Debido a que la propiedad es un concepto nuevo para muchos programadores, toma algún tiempo 
+acostumbrarse a ella. La buena noticia es que cuanto más experimentado seas con Rust
+y las reglas del sistema de propiedad, serás más capaz de desarrollar código naturalmente
+seguro y eficiente. ¡Sigue con ello!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+Cuando entiendas la propiedad, tendrás una base sólida para comprender
+las características que hacen que Rust sea único. En este capítulo, aprenderás la propiedad 
+trabajando con algunos ejemplos que se centran en una estructura de datos muy común:
+las cadenas.
 
 <!-- PROD: START BOX -->
 
-> ### The Stack and the Heap
+### La Pila y el Montón
 >
-> In many programming languages, we don’t have to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap has more of an effect on how the language
-> behaves and why we have to make certain decisions. We’ll describe parts of
-> ownership in relation to the stack and the heap later in this chapter, so here
-> is a brief explanation in preparation.
+>En muchos lenguajes de programación, no tenemos que pensar en la pila y
+>el montón muy a menudo. Pero en un lenguaje de programación de sistemas como Rust, si un 
+>valor está en la pila o en el montón tiene más efecto sobre cómo se comporta el lenguaje
+>y por qué tenemos que tomar ciertas decisiones. Vamos a describir partes de 
+>la propiedad en relación con la pila y el montón más adelante en este capítulo, así que aquí 
+>hay una breve explicación en preparación.
 >
-> Both the stack and the heap are parts of memory that is available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
-> This is referred to as *last in, first out*. Think of a stack of plates: when
-> you add more plates, you put them on top of the pile, and when you need a
-> plate, you take one off the top. Adding or removing plates from the middle or
-> bottom wouldn’t work as well! Adding data is called *pushing onto the stack*,
-> and removing data is called *popping off the stack*.
+>Tanto la pila como el montón son partes de la memoria que están disponibles para que tu código
+>las utilice en tiempo de ejecución, pero están estructuradas de diferentes maneras. La pila almacena
+>los valores en el orden en que se obtienen y elimina los valores en el orden opuesto.
+>Esto se conoce como *última entrada, primera salida*.  Piensa en un montón de platos: cuando 
+>añades más platos, los pones encima del montón, y cuando necesitas un
+>plato, lo sacas de la parte superior. ¡Añadir o quitar platos del medio o
+>del fondo no funcionaría tan bien! La adición de datos se llama *pushing en la pila*,
+>y la eliminación de datos se llama *popping de la pila*.
 >
-> The stack is fast because of the way it accesses the data: it never has to
-> search for a place to put new data or a place to get data from because that
-> place is always the top. Another property that makes the stack fast is that all
-> data on the stack must take up a known, fixed size.
+>La pila es rápida debido a la forma en que accede a los datos: nunca tiene que
+>buscar un lugar para poner nuevos datos o un lugar de donde obtener datos, porque ese
+>lugar siempre es la cima. Otra propiedad que hace que la pila sea rápida es que todos los
+>datos de la pila deben tener un tamaño conocido y fijo.
 >
-> For data with a size unknown to us at compile time or a size that might change,
-> we can store data on the heap instead. The heap is less organized: when we put
-> data on the heap, we ask for some amount of space. The operating system finds
-> an empty spot somewhere in the heap that is big enough, marks it as being in
-> use, and returns to us a pointer to that location. This process is called
-> *allocating on the heap*, and sometimes we abbreviate the phrase as just
-> “allocating.” Pushing values onto the stack is not considered allocating.
-> Because the pointer is a known, fixed size, we can store the pointer on the
-> stack, but when we want the actual data, we have to follow the pointer.
+>Para los datos con un tamaño desconocido para nosotros al momento de compilar o un tamaño que podría cambiar,
+>podemos almacenar los datos en el montón en su lugar. El montón es menos organizado: cuando ponemos 
+>datos sobre el montón, pedimos algo de espacio. El sistema operativo encuentra
+>un punto vacío en algún lugar del montón que es lo suficientemente grande, lo marca como en
+>uso, y nos devuelve un puntero a esa ubicación. Este proceso se llama
+>*asignar en el montón*, y a veces abreviamos la frase simplemente como
+>"asignar". Los valores de empuje sobre la pila no se consideran asignados.
+>Debido a que el puntero es un tamaño conocido y fijo, podemos almacenar el puntero en la 
+>pila, pero cuando queremos los datos reales, tenemos que seguir el puntero.
 >
-> Think of being seated at a restaurant. When you enter, you state the number of
-> people in your group, and the staff finds an empty table that fits everyone and
-> leads you there. If someone in your group comes late, they can ask where you’ve
-> been seated to find you.
+>Piensa en sentarte en un restaurante. Cuando ingresas, indicas el número de
+>personas en tu grupo y el personal encuentra una mesa vacía que se ajuste a todos y 
+>te lleve hasta allí. Si alguien en su grupo llega tarde, puede preguntar dónde te
+>has sentado para encontrarte.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> we have to follow a pointer to get there. Contemporary processors are faster if
-> they jump around less in memory. Continuing the analogy, consider a server at a
-> restaurant taking orders from many tables. It’s most efficient to get all the
-> orders at one table before moving on to the next table. Taking an order from
-> table A, then an order from table B, then one from A again, and then one from B
-> again would be a much slower process. By the same token, a processor can do its
-> job better if it works on data that’s close to other data (as it is on the
-> stack) rather than farther away (as it can be on the heap). Allocating a large
-> amount of space on the heap can also take time.
+>Acceder a los datos en el montón es más lento que acceder a los datos de la pila porque
+>tenemos que seguir un puntero para llegar allí. Los procesadores contemporáneos son más rápidos si 
+>saltan menos en la memoria. Siguiendo la analogía, considera un servidor en un 
+>restaurante tomando órdenes de muchas mesas. Es más eficiente obtener todas las 
+>órdenes en una mesa antes de pasar a la siguiente. Tomar un pedido de
+>la mesa A, luego un pedido de la mesa B, luego uno de A otra vez, y luego uno de B 
+>otra vez sería un proceso mucho más lento. De la misma manera, un procesador puede hacer su 
+>trabajo mejor si trabaja con datos que están cerca de otros datos (como lo está en la
+>pila) y no más lejos (como puede estar en el montón). La asignación de una gran cantidad de 
+>espacio en el montón también puede tomar tiempo.
 >
-> When our code calls a function, the values passed into the function (including,
-> potentially, pointers to data on the heap) and the function’s local variables
-> get pushed onto the stack. When the function is over, those values get popped
-> off the stack.
+>Cuando nuestro código llama a una función, los valores pasados a la función (incluyendo,
+>potencialmente, punteros a los datos sobre el montón) y las variables locales de la función
+>se empujan a la pila. Cuando la función termina, esos valores se 
+>eliminan de la pila.
 >
-> Keeping track of what parts of code are using what data on the heap, minimizing
-> the amount of duplicate data on the heap, and cleaning up unused data on the
-> heap so we don’t run out of space are all problems that ownership addresses.
-> Once you understand ownership, you won’t need to think about the stack and the
-> heap very often, but knowing that managing heap data is why ownership exists
-> can help explain why it works the way it does.
+>Mantener un seguimiento de qué partes del código están usando qué datos en el monton, minimizando
+>la cantidad de datos duplicados en el monton, y limpiando los datos no utilizados en el
+>monton para que no nos quedemos sin espacio son todos los problemas que la propiedad trata.
+>Una vez que entiendas la propiedad, no tendrás que pensar en la pila y 
+>el montón muy a menudo, pero saber que la gestión de datos del monton es la razón por la que existe la propiedad
+>puede ayudar a explicar por qué funciona de la forma en que funciona.
 >
 <!-- PROD: END BOX -->
 
-### Ownership Rules
+### Reglas de Propiedad
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate the rules:
+Primero, echemos un vistazo a las reglas de propiedad. Ten en cuenta estas reglas mientras
+trabajamos a través de los ejemplos que ilustran las reglas:
 
-> 1. Each value in Rust has a variable that’s called its *owner*.
-> 2. There can only be one owner at a time.
-> 3. When the owner goes out of scope, the value will be dropped.
+> 1. Cada valor en Rust tiene una variable que se llama *owner*.
+> 2. Sólo puede haber un dueño a la vez.
+> 3. Cuando el propietario salga del alcance, el valor será eliminado.
 
 ### Variable Scope
 
-We’ve walked through an example of a Rust program already in Chapter 2. Now
-that we’re past basic syntax, we won’t include all the `fn main() {` code in
-examples, so if you’re following along, you’ll have to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
-boilerplate code.
+Hemos caminado a través de un ejemplo de un programa en Rust ya en el capítulo 2. Ahora 
+que ya hemos superado la sintaxis básica, no incluiremos todo el código `fn main () {` 
+en ejemplos, así que si estás siguiendo el ejemplo, tendrás que poner los siguientes 
+ejemplos dentro de una función `main` manualmente. Como resultado, nuestros ejemplos serán 
+un poco más concisos, permitiéndonos centrarnos en los detalles reales en lugar de los
+códigos repetitivos.
 
-As a first example of ownership, we’ll look at the *scope* of some variables. A
-scope is the range within a program for which an item is valid. Let’s say we
-have a variable that looks like this:
+Como primer ejemplo de propiedad, veremos el *scope* de algunas variables. Un 
+scope es el rango dentro de un programa para el cual una posición es válida. Digamos que 
+tenemos una variable que se parece a esto:
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 has
-comments annotating where the variable `s` is valid:
+La variable `s` se refiere a una cadena literal, donde el valor de la cadena es
+hardcodeada en el texto de nuestro programa. La variable es válida desde el momento
+en que se declara hasta el final del actual *scope*. Listado 4-1 tiene
+comentarios anotando donde la variable `s` es válida:
 
 ```rust
 {                      // s is not valid here, it’s not yet declared
@@ -127,27 +127,27 @@ comments annotating where the variable `s` is valid:
 <span class="caption">Listing 4-1: A variable and the scope in which it is
 valid</span>
 
-In other words, there are two important points in time here:
+En otras palabras, hay dos puntos importantes en el tiempo:
 
-1. When `s` comes *into scope*, it is valid.
-1. It remains so until it goes *out of scope*.
+1. Cuando `s` viene *into scopee*, es válido.
+1. Permanece así hasta que sale *fuera of scope*.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+En este punto, la relación entre scopes y cuando las variables son válidas es 
+similar a la de otros lenguajes de programación. Ahora vamos a construir encima de este 
+entendimiento introduciendo el tipo de `String`.
 
-### The `String` Type
+### El Tipo De `String`
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than the ones we covered in Chapter 3. All the data types we’ve looked at
-previously are stored on the stack and popped off the stack when their scope is
-over, but we want to look at data that is stored on the heap and explore how
-Rust knows when to clean up that data.
+Para ilustrar las reglas de propiedad, necesitamos un tipo de datos que sea más complejo 
+que los que hemos tratado en el Capítulo 3. Todos los tipos de datos que hemos visto 
+anteriormente se almacenan en la pila y salen de la pila cuando termina su 
+alcance, pero queremos ver los datos que se almacenan en la pila y explorar cómo
+Rust sabe cuándo limpiar esos datos.
 
-We’ll use `String` as the example here and concentrate on the parts of `String`
-that relate to ownership. These aspects also apply to other complex data types
-provided by the standard library and that you create. We’ll discuss `String` in
-more depth in Chapter 8.
+Usaremos `String` como ejemplo aquí y nos concentraremos en las partes de `String`
+que se relacionan con la propiedad. Estos aspectos también se aplican a otros tipos de datos complejos
+proporcionados por la biblioteca estándar y que tu creas. Discutiremos `String` con
+más profundidad en el Capítulo 8.
 
 We’ve already seen string literals, where a string value is hardcoded into our
 program. String literals are convenient, but they aren’t always suitable for
