@@ -272,7 +272,6 @@ primero, la línea `let x = five();` muestra que estamos usando el valor de reto
 una función para inicializar una variable. Debido a que la función `five` devuelve un `5`, 
 esa línea es la misma que la siguiente:
 
-
 ```rust
 let x = 5;
 ```
