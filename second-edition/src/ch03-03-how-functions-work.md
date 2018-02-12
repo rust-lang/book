@@ -139,6 +139,7 @@ lenguaje basado en expresiones, esta es una distinción importante a entender.
 Otros lenguajes no tienen las mismas distinciones, así que veamos qué son las
 declaraciones y expresiones y cómo sus diferencias afectan a los cuerpos de funciones.
 
+
 ### Declaraciones y expresiones
 
 En realidad ya hemos usado declaraciones y expresiones. Las *declaraciones* son 
