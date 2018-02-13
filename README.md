@@ -71,6 +71,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - heap: 힙
 - identifier: 식별자
 - immutable: 불변
+- interior mutability: 내부 가변성
 - instance: 인스턴스
 - integration test: 통합 테스트
 - iterator: 반복자
@@ -90,6 +91,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - public: 공개
 - recover: 복구
 - reference: 참조자
+- reference cycle: 참조 순환
 - return: 반환
 - rust: 러스트
 - scope: 스코프
