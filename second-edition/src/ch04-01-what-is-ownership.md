@@ -330,8 +330,8 @@ let s2 = s1;
 println!("{}, world!", s1);
 ```
 
-You’ll get an error like this because Rust prevents you from using the
-invalidated reference:
+Recibirás un error como este porque Rust te impide usar la
+referencia invalidada:
 
 ```text
 error[E0382]: use of moved value: `s1`
@@ -346,33 +346,33 @@ error[E0382]: use of moved value: `s1`
 which does not implement the `Copy` trait
 ```
 
-If you’ve heard the terms “shallow copy” and “deep copy” while working with
-other languages, the concept of copying the pointer, length, and capacity
-without copying the data probably sounds like a shallow copy. But because Rust
-also invalidates the first variable, instead of calling this a shallow copy,
-it’s known as a *move*. Here we would read this by saying that `s1` was *moved*
-into `s2`. So what actually happens is shown in Figure 4-6.
+Si has escuchado los términos "copia superficial" y "copia profunda" mientras trabajas
+con otros lenguajes, el concepto de copiar el puntero, la longitud y la capacidad
+sin copiar los datos probablemente suena como una copia superficial. Pero debido a que Rust 
+también invalida la primera variable, en lugar de llamarla copia superficial,
+se conoce como *move*. Aquí leíamos esto diciendo que `s1` era *movido*
+en `s2`. Así que lo que realmente sucede se muestra en la Figura 4-6.
 
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-6: Representation in memory after `s1` has been
-invalidated</span>
+<span class="caption">Figura 4-6: Representación en la memoria después de que se haya
+invalidado `s1`</span>
 
-That solves our problem! With only `s2` valid, when it goes out of scope, it
-alone will free the memory, and we’re done.
+Eso resuelve nuestro problema! Con sólo `s2` válido, cuando salga del alcance, solo
+liberará la memoria, y ya está.
 
-In addition, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any *automatic*
-copying can be assumed to be inexpensive in terms of runtime performance.
+Además, hay una elección de diseño que implica esto: Rust nunca 
+creará automáticamente copias "profundas" de sus datos. Por lo tanto, se puede suponer
+que cualquier copia *automática* es barata en términos de rendimiento en tiempo de ejecución.
 
-#### Ways Variables and Data Interact: Clone
+### Variables de Vías e Interacción de Datos: Clonación
 
-If we *do* want to deeply copy the heap data of the `String`, not just the
-stack data, we can use a common method called `clone`. We’ll discuss method
-syntax in Chapter 5, but because methods are a common feature in many
-programming languages, you’ve probably seen them before.
+Si queremos copiar  *do* con profundidad de datos del monton del `String`, no sólo los 
+datos de pila, podemos usar un método común llamado `clone`. Discutiremos la sintaxis 
+del método en el Capítulo 5, pero como los métodos son una característica común en muchos
+lenguajes de programación, probablemente los hayas visto antes.
 
-Here’s an example of the `clone` method in action:
+He aquí un ejemplo del método `clone` en acción:
 
 ```rust
 let s1 = String::from("hello");
@@ -381,17 +381,17 @@ let s2 = s1.clone();
 println!("s1 = {}, s2 = {}", s1, s2);
 ```
 
-This works just fine and is how you can explicitly produce the behavior shown
-in Figure 4-5, where the heap data *does* get copied.
+Esto funciona perfectamente y es cómo se puede producir explícitamente el comportamiento que se muestra 
+en la Figura 4-5, donde los datos de montones *se copian*.
 
-When you see a call to `clone`, you know that some arbitrary code is being
-executed and that code may be expensive. It’s a visual indicator that something
-different is going on.
+Cuando ves una llamada a `clone`, sabes que se está ejecutando algún código arbitrario
+y ese código puede ser caro. Es un indicador visual de que algo
+diferente está pasando.
 
-#### Stack-Only Data: Copy
+#### Datos de Sólo-Pila: Copiar
 
-There’s another wrinkle we haven’t talked about yet. This code using integers,
-part of which was shown earlier in Listing 4-2, works and is valid:
+Hay otra arruga de la que aún no hemos hablado. Este código utilizando números enteros,
+parte de los cuales se mostraron anteriormente en el Listado 4-2, funciona y es válido:
 
 ```rust
 let x = 5;
@@ -400,130 +400,130 @@ let y = x;
 println!("x = {}, y = {}", x, y);
 ```
 
-But this code seems to contradict what we just learned: we don’t have a call to
-`clone`, but `x` is still valid and wasn’t moved into `y`.
+Pero este código parece contradecir lo que acabamos de aprender: no tenemos una llamada a
+`clone`, pero `x` sigue siendo válido y no fue movido a `y`.
 
-The reason is that types like integers that have a known size at compile time
-are stored entirely on the stack, so copies of the actual values are quick to
-make. That means there’s no reason we would want to prevent `x` from being
-valid after we create the variable `y`. In other words, there’s no difference
-between deep and shallow copying here, so calling `clone` wouldn’t do anything
-differently from the usual shallow copying and we can leave it out.
+La razón es que los tipos como enteros que tienen un tamaño conocido en el momento de compilar
+se almacenan enteramente en la pila, por lo que las copias de los valores reales se pueden hacer 
+rápidamente. Eso significa que no hay ninguna razón por la que queramos evitar que `x` sea 
+válido después de crear la variable `y`. En otras palabras, no hay diferencia 
+entre la copia profunda y superficial aquí, por lo que llamar `clone` no haría nada diferente
+de la copia superficial habitual y podemos dejarla fuera.
 
-Rust has a special annotation called the `Copy` trait that we can place on
-types like integers that are stored on the stack (we’ll talk more about traits
-in Chapter 10). If a type has the `Copy` trait, an older variable is still
-usable after assignment. Rust won’t let us annotate a type with the `Copy`
-trait if the type, or any of its parts, has implemented the `Drop` trait. If
-the type needs something special to happen when the value goes out of scope and
-we add the `Copy` annotation to that type, we’ll get a compile time error. To
-learn about how to add the `Copy` annotation to your type, see Appendix C on
-Derivable Traits.
+Rust tiene una anotación especial llamada el rasgo de "Copy" que podemos colocar en
+tipos como números enteros que se almacenan en la pila (hablaremos más sobre rasgos
+en el Capítulo 10). Si un tipo tiene el rasgo `Copy`, una variable antigua sigue 
+siendo utilizable después de la asignación. Rust no nos permite anotar un tipo con el rasgo `Copy`
+si el tipo, o cualquiera de sus partes, ha implementado el rasgo `Drop`. Si 
+el tipo necesita algo especial para que suceda cuando el valor salga del alcance y 
+agreguemos la anotación `Copy` a ese tipo, tendremos un error de tiempo de compilación. Para 
+obtener más información sobre cómo agregar la anotación `Copy` a tu tipo, consulta el Apéndice C sobre
+Rasgos derivables.
 
-So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a general rule, any group of simple scalar values can be
-`Copy`, and nothing that requires allocation or is some form of resource is
-`Copy`. Here are some of the types that are `Copy`:
+Entonces, ¿qué tipos son `Copy`? Puede comprobar la documentación del tipo dado para 
+estar seguro, pero como regla general, cualquier grupo de valores escalares simples puede ser
+`Copy`, y nada que requiera asignación o sea alguna forma de recurso es
+`Copy`. Éstos son algunos de los tipos que son `Copy`:
 
-* All the integer types, like `u32`.
-* The boolean type, `bool`, with values `true` and `false`.
-* All the floating point types, like `f64`.
-* Tuples, but only if they contain types that are also `Copy`. `(i32, i32)` is
-`Copy`, but `(i32, String)` is not.
+* Todos los tipos enteros, como `u32`.
+* El tipo booleano,`bool`, con valores `true` y `false`.
+* Todos los tipos de coma flotante, como `f64`.
+* Tuples, pero sólo si contienen tipos que también son `Copy`. ` (i32, i32)` es
+`Copy`, pero `(i32, String)` no lo es.
 
-### Ownership and Functions
+### Propiedad y Funciones
 
-The semantics for passing a value to a function are similar to assigning a
-value to a variable. Passing a variable to a function will move or copy, just
-like assignment. Listing 4-7 has an example with some annotations showing where
-variables go into and out of scope:
+La semántica para pasar un valor a una función que es similar a la asignación de
+un valor a una variable. Pasar una variable a una función se moverá o copiará, al igual
+que la asignación. El Listado 4-7 tiene un ejemplo con algunas anotaciones que muestran donde
+las variables entran y salen del alcance:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let s = String::from("hello");  // s comes into scope.
+    let s = String::from("hello");  // s entra a alcance.
 
-    takes_ownership(s);             // s's value moves into the function...
-                                    // ... and so is no longer valid here.
-    let x = 5;                      // x comes into scope.
+    takes_ownership(s);             // el valor de s se mueve dentro de la función...
+                                    // ... y por lo tanto ya no es válido aquí.
+    let x = 5;                      // x entra a alcance.
 
-    makes_copy(x);                  // x would move into the function,
-                                    // but i32 is Copy, so it’s okay to still
-                                    // use x afterward.
+    makes_copy(x);                  // x pasaría a la función,
+                                    // pero i32 es Copy, así que está bien seguir
+                                    // uso x después.
 
-} // Here, x goes out of scope, then s. But since s's value was moved, nothing
-  // special happens.
+} // Aquí, X se sale del alcance, luego s. Pero como el valor de s fue movido, nada
+  // especial pasa.
 
-fn takes_ownership(some_string: String) { // some_string comes into scope.
+fn takes_ownership(some_string: String) { // some_string entra a alcance.
     println!("{}", some_string);
-} // Here, some_string goes out of scope and `drop` is called. The backing
-  // memory is freed.
+} // Aquí, some_string se sale del alcance y se llama `drop`. El respaldo
+  // de la memoria se libera.
 
-fn makes_copy(some_integer: i32) { // some_integer comes into scope.
+fn makes_copy(some_integer: i32) { // some_integer entra a alcance.
     println!("{}", some_integer);
-} // Here, some_integer goes out of scope. Nothing special happens.
+} // Aquí, some_integer entero queda fuera del alcance. No pasa nada especial.
 ```
 
-<span class="caption">Listing 4-7: Functions with ownership and scope
-annotated</span>
+<span class="caption">Listado 4-7: Funciones con propiedad y alcance
+anotados</span>
 
-If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
-compile time error. These static checks protect us from mistakes. Try adding
-code to `main` that uses `s` and `x` to see where you can use them and where
-the ownership rules prevent you from doing so.
+Si intentáramos usar `s` después de la llamada a `takes_ownership`, Rust arrojaría un 
+error de compilación de tiempo. Estas comprobaciones estáticas nos protegen de los errores. Intenta agregar
+código a `main` que usa `s` y `x` para ver dónde puedes usarlas y dónde 
+las reglas de propiedad te impiden hacerlo.
 
-### Return Values and Scope
+### Valores de Retorno y Alcance
 
-Returning values can also transfer ownership. Here’s an example with similar
-annotations to those in Listing 4-7:
+Los valores devueltos también pueden transferir la propiedad. Aquí hay un ejemplo con anotaciones similares
+a las del Listado 4-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let s1 = gives_ownership();         // gives_ownership moves its return
-                                        // value into s1.
+    let s1 = gives_ownership();         // gives_ownership mueve su retorno
+                                        // valor en s1.
 
-    let s2 = String::from("hello");     // s2 comes into scope.
+    let s2 = String::from("hello");     // s2 entra a alcance.
 
-    let s3 = takes_and_gives_back(s2);  // s2 is moved into
-                                        // takes_and_gives_back, which also
-                                        // moves its return value into s3.
-} // Here, s3 goes out of scope and is dropped. s2 goes out of scope but was
-  // moved, so nothing happens. s1 goes out of scope and is dropped.
+    let s3 = takes_and_gives_back(s2);  // s2 se traslada a
+                                        // takes_and_gives_back, que también
+                                        // mueve su valor de retorno a s3.
+} // Aquí, s3 se sale del alcance y es eliminado. s2 se sale del ámbito de aplicación pero fue
+  // movido, así que no pasa nada. s1 se sale del alcance y se abandona.
 
-fn gives_ownership() -> String {             // gives_ownership will move its
-                                             // return value into the function
-                                             // that calls it.
+fn gives_ownership() -> String {             // gives_ownership moverá su
+                                             // valor de retorno a la función
+                                             // que lo llama.
 
-    let some_string = String::from("hello"); // some_string comes into scope.
+    let some_string = String::from("hello"); // some_string entra en alcance.
 
-    some_string                              // some_string is returned and
-                                             // moves out to the calling
-                                             // function.
+    some_string                              // some_string es devuelto y
+                                             // se traslada a la función de
+                                             // llamado.
 }
 
-// takes_and_gives_back will take a String and return one.
-fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
-                                                      // scope.
+// takes_and_gives_back tomará una cadena y la devolverá
+fn takes_and_gives_back(a_string: String) -> String { // a_string entra en
+                                                      // alcance.
 
-    a_string  // a_string is returned and moves out to the calling function.
+    a_string  // a_string se devuelve y pasa a la función de llamado.
 }
 ```
 
-The ownership of a variable follows the same pattern every time: assigning a
-value to another variable moves it. When a variable that includes data on the
-heap goes out of scope, the value will be cleaned up by `drop` unless the data
-has been moved to be owned by another variable.
+La propiedad de una variable sigue el mismo patrón cada vez: asignar un 
+valor a otra variable la mueve. Cuando una variable que incluye datos en el 
+monton se sale del alcance, el valor será limpiado por `drop` a menos que los datos
+hayan sido movidos para ser propiedad de otra variable.
 
-Taking ownership and then returning ownership with every function is a bit
-tedious. What if we want to let a function use a value but not take ownership?
-It’s quite annoying that anything we pass in also needs to be passed back if we
-want to use it again, in addition to any data resulting from the body of the
-function that we might want to return as well.
+Tomar posesión y luego devolver la propiedad con cada función es un poco 
+tedioso. ¿Qué pasa si queremos que una función utilice un valor pero no tome posesión? 
+Es bastante molesto que cualquier cosa que pasemos también tenga que ser devuelta si 
+queremos volver a usarla, además de cualquier dato que resulte del cuerpo de la
+función que queramos devolver también.
 
-It’s possible to return multiple values using a tuple, like this:
+Es posible devolver múltiples valores usando un tuple, así:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -537,12 +537,12 @@ fn main() {
 }
 
 fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() returns the length of a String.
+    let length = s.len(); // len() devuelve la longitud de una cadena.
 
     (s, length)
 }
 ```
 
-But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for this concept, and it’s called
-*references*.
+Pero esto es demasiada ceremonia y mucho trabajo para un concepto que debería ser
+común. Afortunadamente para nosotros, Rust tiene una característica para este concepto, y se llama
+*referencias*.
