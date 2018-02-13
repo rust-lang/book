@@ -124,8 +124,8 @@ comments annotating where the variable `s` is valid:
 }                      // this scope is now over, and s is no longer valid
 ```
 
-<span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span>
+<span class="caption">Listado 4-1: Una variable y el alcance en el que es 
+    válida</span>
 
 In other words, there are two important points in time here:
 
@@ -149,27 +149,28 @@ that relate to ownership. These aspects also apply to other complex data types
 provided by the standard library and that you create. We’ll discuss `String` in
 more depth in Chapter 8.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t always suitable for
-every situation in which you want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type is
-allocated on the heap and as such is able to store an amount of text that is
-unknown to us at compile time. You can create a `String` from a string literal
-using the `from` function, like so:
+Ya hemos visto cadenas literales, donde el valor de la cadena está harcodeado en 
+nuestro programa. Las cadenas literales son convenientes, pero no siempre son adecuadas para
+todas las situaciones en las que se quiera utilizar texto. Una razón es que son 
+inmutables. Otro es que no todos los valores de las cadenas pueden ser conocidos cuando escribimos
+nuestro código: por ejemplo, ¿qué pasa si queremos tomar la entrada del usuario y guardarlo? Para
+estas situaciones, Rust tiene un segundo tipo de cadena, `String`. Este tipo se 
+asigna en el monton y como tal es capaz de almacenar una cantidad de texto que es
+desconocido para nosotros en el tiempo de compilación. Puedes crear una `String` desde una cadena literal
+usando la función `from`, así:
 
 ```rust
 let s = String::from("hello");
 ```
 
-The double colon (`::`) is an operator that allows us to namespace this
-particular `from` function under the `String` type rather than using some sort
-of name like `string_from`. We’ll discuss this syntax more in the “Method
-Syntax” section of Chapter 5 and when we talk about namespacing with modules in
-Chapter 7.
+El doble dos puntos (`::`) es un operador que nos permite ponerle un espacio de nombres 
+a esta función particular `from` bajo el tipo `String` en lugar de usar algún tipo de
+nombre como `string_from`. Discutiremos más esta sintaxis en la sección "Métodos
+de Sintaxis" del Capítulo 5 y cuando hablemos de cómo se abre el espacio entre nombres con los módulos
+en el Capítulo 7.
 
-This kind of string *can* be mutated:
+
+Este tipo de cadena *puede* ser mutada:
 
 ```rust
 let mut s = String::from("hello");
@@ -179,43 +180,42 @@ s.push_str(", world!"); // push_str() appends a literal to a String
 println!("{}", s); // This will print `hello, world!`
 ```
 
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is how these two types deal with memory.
+Entonces, ¿cuál es la diferencia aquí? ¿Por qué `String` puede mutar pero los literales
+no? La diferencia es cómo estos dos tipos tratan con la memoria.
 
-### Memory and Allocation
+### Memoria y Asignación
 
-In the case of a string literal, we know the contents at compile time so the
-text is hardcoded directly into the final executable, making string literals
-fast and efficient. But these properties only come from its immutability.
-Unfortunately, we can’t put a blob of memory into the binary for each piece of
-text whose size is unknown at compile time and whose size might change while
-running the program.
+En el caso de una cadena literal, conocemos los contenidos en tiempo de compilación para que el
+texto sea codificado directamente en el ejecutable final, haciendo que las cadenas literales
+sean rápidas y eficientes. Pero estas propiedades sólo provienen de su inmutabilidad.
+Desafortunadamente, no podemos poner una mancha de memoria en el binario para cada pieza de 
+texto cuyo tamaño es desconocido al momento de compilar y cuyo tamaño podría cambiar mientras
+que se ejecuta el programa.
 
-With the `String` type, in order to support a mutable, growable piece of text,
-we need to allocate an amount of memory on the heap, unknown at compile time,
-to hold the contents. This means:
+Con el tipo `String`, para soportar un fragmento de texto mutable y cultivable, 
+necesitamos asignar una cantidad de memoria en el monton, desconocida a la hora de compilar,
+para retener el contenido. Esto significa:
 
-1. The memory must be requested from the operating system at runtime.
-2. We need a way of returning this memory to the operating system when we’re
-done with our `String`.
+1. La memoria debe solicitarse al sistema operativo en tiempo de ejecución.
+2. Necesitamos una forma de devolver esta memoria al sistema operativo cuando terminemos con nuestra `String`.
 
-That first part is done by us: when we call `String::from`, its implementation
-requests the memory it needs. This is pretty much universal in programming
-languages.
+Esa primera parte la hacemos nosotros: cuando llamamos `String::from`, su implementación 
+solicita la memoria que necesita. Esto es bastante universal en lenguajes de 
+programación.
 
-However, the second part is different. In languages with a *garbage collector
-(GC)*, the GC keeps track and cleans up memory that isn’t being used anymore,
-and we, as the programmer, don’t need to think about it. Without a GC, it’s the
-programmer’s responsibility to identify when memory is no longer being used and
-call code to explicitly return it, just as we did to request it. Doing this
-correctly has historically been a difficult programming problem. If we forget,
-we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
-we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
-exactly one `free`.
+Sin embargo, la segunda parte es diferente. En los lenguajes con un *garbage collector
+(GC)*, el GC mantiene un registro y limpia la memoria que ya no se usa, 
+y nosotros, como programador, no necesitamos pensar en ello. Sin un GC, es el
+programador el responsable de identificar cuando la memoria ya no está siendo utilizada y 
+llamar al código para devolverla explícitamente, tal como lo hicimos para solicitarla. Hacer esto
+correctamente ha sido históricamente un problema de programación difícil. Si lo olvidamos,
+perderemos la memoria. Si lo hacemos demasiado pronto, tendremos una variable inválida. Si
+lo hacemos dos veces, eso también es un error. Necesitamos emparejar exactamente una `allocate` con 
+exactamente un `free`.
 
-Rust takes a different path: the memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+Rust toma un camino diferente: la memoria se devuelve automáticamente una vez que
+la variable que posee se sale del scope. Aquí está una versión de nuestro ejemplo 
+de scope de Listado 4-1 usando una `String` en lugar de una cadena literal:
 
 ```rust
 {
@@ -226,102 +226,102 @@ from Listing 4-1 using a `String` instead of a string literal:
                                    // longer valid
 ```
 
-There is a natural point at which we can return the memory our `String` needs
-to the operating system: when `s` goes out of scope. When a variable goes out
-of scope, Rust calls a special function for us. This function is called `drop`,
-and it’s where the author of `String` can put the code to return the memory.
-Rust calls `drop` automatically at the closing `}`.
+Hay un punto natural en el que podemos devolver la memoria que nuestra `String` necesita
+al sistema operativo: cuando la `s` se sale del scope. Cuando una variable se sale 
+del scope, Rust nos llama a una función especial. Esta función se llama `drop`,
+y es donde el autor de `String` puede poner el código para devolver la memoria.
+Rust llama `drop` automáticamente al cierre `}`.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item's
-> lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
-> The `drop` function in Rust will be familiar to you if you’ve used RAII
-> patterns.
+> Nota: En C++, este patrón de distribución de recursos al final de la vida de un artículo 
+> a veces se llama *Resource Acquisition Is Initialization (RAII)*.
+La función `drop` en Rust te resultará familiar si has utilizado patrones 
+RAII.
 
-This pattern has a profound impact on the way Rust code is written. It may seem
-simple right now, but the behavior of code can be unexpected in more
-complicated situations when we want to have multiple variables use the data
-we’ve allocated on the heap. Let’s explore some of those situations now.
+Este patrón tiene un profundo impacto en la forma en que se escribe el código de Rust. Puede parecer
+sencillo ahora mismo, pero el comportamiento del código puede ser inesperado en situaciones más
+complicadas cuando queremos que múltiples variables utilicen los datos 
+que hemos asignado en el montón. Exploremos algunas de esas situaciones.
 
-#### Ways Variables and Data Interact: Move
+#### Las Variables y los Datos Interactúan: Desplazar
 
-Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2:
+Múltiples variables pueden interactuar con los mismos datos de diferentes maneras en Rust. 
+Veamos un ejemplo usando un número entero en Listado 4-2:
 
 ```rust
 let x = 5;
 let y = x;
 ```
 
-<span class="caption">Listing 4-2: Assigning the integer value of variable `x`
-to `y`</span>
+<span class="caption">Listado 4-2: Asignación del valor entero de la variable `x` 
+a `y`.</span>
 
-We can probably guess what this is doing based on our experience with other
-languages: “Bind the value `5` to `x`; then make a copy of the value in `x` and
-bind it to `y`.” We now have two variables, `x` and `y`, and both equal `5`.
-This is indeed what is happening because integers are simple values with a
-known, fixed size, and these two `5` values are pushed onto the stack.
+Probablemente podemos adivinar lo que esto está haciendo basándonos en nuestra experiencia con otros 
+lenguajes: "Vincular el valor `5` a `x`; luego hacer una copia del valor en `x` y
+atarlo a `y`". Ahora tenemos dos variables, `x` y `y`, y ambas iguales `5`.
+Esto es precisamente lo que está ocurriendo porque los números enteros son valores simples con un 
+tamaño fijo conocido, y estos dos valores `5` se empujan sobre la pila.
 
-Now let’s look at the `String` version:
+Ahora veamos la versión `String`:
 
 ```rust
 let s1 = String::from("hello");
 let s2 = s1;
 ```
 
-This looks very similar to the previous code, so we might assume that the way
-it works would be the same: that is, the second line would make a copy of the
-value in `s1` and bind it to `s2`. But this isn’t quite what happens.
+Esto se parece mucho al código anterior, así que podríamos suponer que la forma 
+en que funciona sería la misma: es decir, la segunda línea haría una copia del 
+valor en `s1` y lo uniría a `s2`. Pero esto no es exactamente lo que pasa.
 
-To explain this more thoroughly, let’s look at what `String` looks like under
-the covers in Figure 4-3. A `String` is made up of three parts, shown on the
-left: a pointer to the memory that holds the contents of the string, a length,
-and a capacity. This group of data is stored on the stack. On the right is the
-memory on the heap that holds the contents.
+Para explicar esto más a fondo, veamos cómo es `String` bajo las 
+cubiertas en la Figura 4-3. Una `String` se compone de tres partes, mostradas a la
+izquierda: un puntero a la memoria que contiene el contenido de la cadena, una longitud
+y una capacidad. Este grupo de datos se almacena en la pila. A la derecha está la
+memoria del montón que contiene el contenido.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-3: Representation in memory of a `String`
-holding the value `"hello"` bound to `s1`</span>
+<span class="caption">Figura 4-3: Representación en memoria de una `String` 
+con el valor `"hello"`vinculado a `s1`.</span>
 
-The length is how much memory, in bytes, the contents of the `String` is
-currently using. The capacity is the total amount of memory, in bytes, that the
-`String` has received from the operating system. The difference between length
-and capacity matters, but not in this context, so for now, it’s fine to ignore
-the capacity.
+La longitud es cuánta memoria, en bytes, está utilizando el contenido
+de la `String`. La capacidad es la cantidad total de memoria, en bytes, que la 
+`String` ha recibido del sistema operativo. La diferencia entre la longitud
+y la capacidad es importante, pero no en este contexto, así que por ahora está bien ignorar
+la capacidad.
 
-When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
-pointer, the length, and the capacity that are on the stack. We do not copy the
-data on the heap that the pointer refers to. In other words, the data
-representation in memory looks like Figure 4-4.
+Cuando asignamos `s1` a `s2`, se copian los datos de `String`, lo que significa que copiamos el 
+puntero, la longitud y la capacidad que hay en la pila. No copiamos los
+datos del montón al que se refiere el puntero. En otras palabras, la representación de
+datos en la memoria se parece a la Figura 4-4.
 
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-4: Representation in memory of the variable `s2`
-that has a copy of the pointer, length, and capacity of `s1`</span>
+<span class="caption">Figura 4-4: Representación en memoria de la variable `s2`
+que tiene una copia del puntero, longitud y capacidad de `s1`.</span>
 
-The representation does *not* look like Figure 4-5, which is what memory would
-look like if Rust instead copied the heap data as well. If Rust did this, the
-operation `s2 = s1` could potentially be very expensive in terms of runtime
-performance if the data on the heap was large.
+La representación *no* se parece a la Figura 4-5, que es cómo sería la memoria
+si Rust copiara en su lugar también los datos del montón. Si Rust hizo esto, la 
+operación `s2 = s1` podría ser potencialmente muy costosa en términos de rendimiento
+en tiempo de ejecución si los datos del montón fueran grandes.
 
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-5: Another possibility of what `s2 = s1` might
-do if Rust copied the heap data as well</span>
+<span class="caption">Figura 4-5: Otra posibilidad de lo que `s2 = s1` podría
+hacer si Rust también copiara los datos del montón.</span>
 
-Earlier, we said that when a variable goes out of scope, Rust automatically
-calls the `drop` function and cleans up the heap memory for that variable. But
-Figure 4-4 shows both data pointers pointing to the same location. This is a
-problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a *double free* error and is one of the memory
-safety bugs we mentioned previously. Freeing memory twice can lead to memory
-corruption, which can potentially lead to security vulnerabilities.
+Anteriormente, dijimos que cuando una variable se sale del alcance, Rust llama automáticamente 
+a la función `drop` y limpia la memoria del montón para esa variable. Pero 
+la Figura 4-4 muestra ambos indicadores de datos apuntando a la misma ubicación. Esto es un 
+problema: cuando `s2` y `s1` se salen del alcance, ambos intentarán liberar la
+misma memoria. Esto se conoce como un error *double free* y es uno de los errores de seguridad de memoria 
+que mencionamos anteriormente. Liberar la memoria dos veces puede conducir a la corrupción 
+de la memoria, lo que puede conducir potencialmente a vulnerabilidades de seguridad.
 
-To ensure memory safety, there’s one more detail to what happens in this
-situation in Rust. Instead of trying to copy the allocated memory, Rust
-considers `s1` to no longer be valid and therefore, Rust doesn’t need to free
-anything when `s1` goes out of scope. Check out what happens when you try to
-use `s1` after `s2` is created:
+Para garantizar la seguridad de la memoria, hay un detalle más de lo que sucede en esta
+situación en Rust. En vez de intentar copiar la memoria asignada, Rust 
+considera que `s1` ya no es válido y por lo tanto, Rust no necesita liberar 
+nada cuando `s1` se sale del alcance. Comprueba lo que sucede cuando intentas
+usar `s1` después de crear `s2`:
 
 ```rust,ignore
 let s1 = String::from("hello");
