@@ -196,7 +196,8 @@ necesitamos asignar una cantidad de memoria en el monton, desconocida a la hora 
 para retener el contenido. Esto significa:
 
 1. La memoria debe solicitarse al sistema operativo en tiempo de ejecución.
-2. Necesitamos una forma de devolver esta memoria al sistema operativo cuando terminemos con nuestra `String`.
+2. Necesitamos una forma de devolver esta memoria al sistema operativo cuando
+terminemos con nuestra `String`.
 
 Esa primera parte la hacemos nosotros: cuando llamamos `String::from`, su implementación 
 solicita la memoria que necesita. Esto es bastante universal en lenguajes de 
