@@ -169,7 +169,6 @@ nombre como `string_from`. Discutiremos más esta sintaxis en la sección "Méto
 de Sintaxis" del Capítulo 5 y cuando hablemos de cómo se abre el espacio entre nombres con los módulos
 en el Capítulo 7.
 
-
 Este tipo de cadena *puede* ser mutada:
 
 ```rust
