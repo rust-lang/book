@@ -1,6 +1,6 @@
-## Rebanadas (Slice)
+## Slices
 
-Otro tipo de datos que no tiene propiedad es el *slice*. Las rebanadas te permiten
+Otro tipo de datos que no tiene propiedad es el *slice*. Los slices te permiten
 hacer referencia a una secuencia continua de elementos en una colección en lugar de a 
 toda la colección.
 
@@ -36,7 +36,7 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-<span class="caption">Listing 4-10: Listado 4-10: La función `first_word` que devuelve un 
+<span class="caption">Listado 4-10: La función `first_word` que devuelve un 
 valor de índice de byte al parámetro `String`.</span>
 
 Vamos a descifrar un poco este código. Debido a que necesitamos pasar por el elemento `String` 
@@ -134,11 +134,11 @@ que fueron calculados a partir de datos en un estado particular pero no están v
 ese estado en absoluto. Ahora tenemos tres variables no relacionadas que flotan alrededor y que necesitan 
 mantenerse sincronizadas.
 
-Afortunadamente, Rust tiene una solución a este problema: las rebanadas de cadenas.
+Afortunadamente, Rust tiene una solución a este problema: los slices de cadenas.
 
-### Rebanadas de Cadenas (String Slice)
+### Slices de Cadenas (String Slice)
 
-Una *rebanada de cadena* (String Slice) es una referencia a una parte de una `String`, y se ve así:
+Una *slice de cadena* es una referencia a una parte de una `String`, y se ve así:
 
 ```rust
 let s = String::from("hello world");
