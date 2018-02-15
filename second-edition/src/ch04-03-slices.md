@@ -235,15 +235,15 @@ Returning a slice would also work for a `second_word` function:
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, since the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-11, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile time error:
+Ahora tenemos una API sencilla que es mucho más difícil de desordenar, ya que el
+compilador garantizará que las referencias a la `String` siguen siendo válidas. ¿Recuerdas
+el fallo en el programa de Listado 4-11, cuando obtuvimos el índice al final de la
+primera palabra, pero luego se borró la cadena y que nuestro índice fue inválido? Ese código era
+lógicamente incorrecto pero no mostraba ningún error inmediato. Los problemas aparecerían
+más tarde si continuamos intentando usar el índice de la primera palabra con una cadena 
+vacía. Slices hace este error imposible y nos hace saber que tenemos un problema con 
+nuestro código mucho antes. Usando la versión slice de `first_word` lanzará un
+error de compilación de tiempo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -257,7 +257,7 @@ fn main() {
 }
 ```
 
-Here’s the compiler error:
+Aquí está el error del compilador:
 
 ```text
 17:6 error: cannot borrow `s` as mutable because it is also borrowed as
@@ -275,45 +275,45 @@ fn main() {
 ^
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it tries to take a mutable reference, which fails. Not
-only has Rust made our API easier to use, but it has also eliminated an entire
-class of errors at compile time!
+Recordemos las normas de préstamo que si tenemos una referencia inmutable
+a algo, no podemos también tomar una referencia mutable.  Como `clear` necesita 
+truncar la `String`, intenta tomar una referencia mutable, que falla. Rust no
+sólo ha hecho que nuestra API sea más fácil de usar, sino que también ha eliminado toda 
+una serie de errores en el momento de la compilación!.
 
-#### String Literals Are Slices
+#### Las Cadenas Literales son Slices
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+Recordemos que hablamos de que las cadenas literales se guardan dentro del binario. Ahora
+que sabemos de las slices, podemos entender bien los las cadenas literales:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+El tipo de `s`aquí es `&str`: es una slice que apunta a ese punto específico del
+binario. Por eso también las cadenas literales son inmutables; `&str` es una 
+referencia inmutable.
 
-#### String Slices as Parameters
+#### Cadenas Slices como Parámetros
 
-Knowing that you can take slices of literals and `String`s leads us to one more
-improvement on `first_word`, and that’s its signature:
+Sabiendo que puedes tomar slices de literales y `String`s nos lleva a una 
+mejora más en `first_word`, y esa es su firma:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the following line instead because it
-allows us to use the same function on both `String`s and `&str`s:
+Un Rustacean con más experiencia escribiría la siguiente línea en su lugar porque
+nos permite usar la misma función tanto en `String`s como en `&str`s:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a String makes our API more general and useful
-without losing any functionality:
+Si tenemos una cadena slice, podemos pasar eso directamente. Si tenemos una `String`, podemos 
+pasar una slice de toda la `String`. Definir una función para tomar una cadena
+slice en lugar de una referencia a una String hace que nuestra API sea más general y útil
+sin perder ninguna funcionalidad:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -332,31 +332,31 @@ without losing any functionality:
 fn main() {
     let my_string = String::from("hello world");
 
-    // first_word works on slices of `String`s
+    // first_word funciona en slices de `String`s
     let word = first_word(&my_string[..]);
 
     let my_string_literal = "hello world";
 
-    // first_word works on slices of string literals
+    // first_word funciona en slices de cadenas literales
     let word = first_word(&my_string_literal[..]);
 
-    // since string literals *are* string slices already,
-    // this works too, without the slice syntax!
+    // ya que las cadenas literales ya *son* slices de cadena,
+    // esto también funciona, ¡sin la sintaxis de slice!
     let word = first_word(my_string_literal);
 }
 ```
 
-### Other Slices
+### Otras Slices
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
+Las Cadenas slice, como podrías imaginarte, son específicas de las cadenas. Pero también 
+hay un tipo de slice más general. Considera este arreglo:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just like we might want to refer to a part of a string, we might want to refer
-to part of an array and would do so like this:
+Al igual que podríamos querer referirnos a una parte de una cadena, podríamos querer referirnos
+a una parte de una array y hacerlo así:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -364,19 +364,19 @@ let a = [1, 2, 3, 4, 5];
 let slice = &a[1..3];
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+Esta slice tiene el tipo `&[i32]`. Funciona del mismo modo que las slices de cadena lo hacen, 
+almacenando una referencia al primer elemento y una longitud. Usarás este tipo de 
+slices para todo tipo de colecciones. Discutiremos estas colecciones en 
+detalle cuando hablemos de vectores en el Capítulo 8.
 
-## Summary
+## Resumen
 
-The concepts of ownership, borrowing, and slices are what ensure memory safety
-in Rust programs at compile time. The Rust language gives you control over your
-memory usage like other systems programming languages, but having the owner of
-data automatically clean up that data when the owner goes out of scope means
-you don’t have to write and debug extra code to get this control.
+Los conceptos de propiedad, préstamo y slices son los que aseguran la seguridad de la memoria 
+en los programas de Rust al momento de la compilación. El lenguaje Rust te da control sobre el 
+uso de la memoria como otros lenguajes de programación de sistemas, pero tener la propiedad de 
+los datos automáticamente limpia los datos cuando el propietario sale fuera de alcance significa 
+que tu no tienes que escribir y depurar código extra para obtener este control.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to the
-next chapter and look at grouping pieces of data together in a `struct`.
+La propiedad afecta la forma en que muchas otras partes de Rust trabajan, por lo que hablaremos sobre 
+estos conceptos durante el resto del libro. Pasemos al
+siguiente capítulo y veamos la agrupación de datos en una `struct`.
