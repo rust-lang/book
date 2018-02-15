@@ -1,24 +1,24 @@
-## Data Types
+## Tipos de datos
 
-Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being specified so it knows how to work with that data. In this section,
-we’ll look at a number of types that are built into the language. We split the
-types into two subsets: scalar and compound.
+Cada valor en Rust es de un cierto *tipo*, que le dice a Rust qué tipo de datos 
+se está especificando para que sepa cómo trabajar con esos datos. En esta sección,
+veremos una serie de tipos que se construyen en el lenguaje. Dividimos los
+tipos en dos subconjuntos: escalar y compuesto.
 
-Throughout this section, keep in mind that Rust is a *statically typed*
-language, which means that it must know the types of all variables at compile
-time. The compiler can usually infer what type we want to use based on the
-value and how we use it. In cases when many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in Chapter 2, we must add
-a type annotation, like this:
+A lo largo de esta sección, ten en cuenta que Rust es un lenguaje *estáticamente mecanografiado*,
+lo que significa que debes conocer los tipos de todas las variables en tiempo de
+compilación. El compilador generalmente puede inferir qué tipo de información queremos usar en base al 
+valor y cómo la usamos. En los casos en que muchos tipos son posibles, como cuando 
+convertimos una `String` a un tipo numérico usando `parse` en el Capítulo 2, debemos añadir
+una anotación de tipo, como esta:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-possible type we want to use:
+Si no añadimos el tipo de anotación aquí, Rust mostrará el siguiente
+error, lo que significa que el compilador necesita más información de nosotros para saber 
+qué tipo posible queremos usar:
 
 ```text
 error[E0282]: unable to infer enough type information about `_`
@@ -30,88 +30,88 @@ error[E0282]: unable to infer enough type information about `_`
   = note: type annotations or generic parameter binding required
 ```
 
-You’ll see different type annotations as we discuss the various data types.
+Verás diferentes tipos de anotaciones a medida que discutimos los distintos tipos de datos.
 
-### Scalar Types
+### Tipos Escalares
 
-A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
-recognize these from other programming languages, but let’s jump into how they
-work in Rust.
+Un tipo *escalar* representa un solo valor. Rust tiene cuatro tipos escalares principales:
+enteros, números de coma flotante, booleanos y caracteres. Probablemente los 
+reconocerás de otros lenguajes de programación, pero vamos a saltar a cómo
+funcionan en Rust.
 
-#### Integer Types
+#### tipo Entero
 
-An *integer* is a number without a fractional component. We used one integer
-type earlier in this chapter, the `i32` type. This type declaration indicates
-that the value it’s associated with should be a signed integer (hence the `i`,
-as opposed to a `u` for unsigned) that takes up 32 bits of space. Table 3-1
-shows the built-in integer types in Rust. Each variant in the Signed and
-Unsigned columns (for example, *i32*) can be used to declare the type of an
-integer value.
+Un *integer* es un número sin un componente fraccionario. Usamos un tipo 
+entero antes en este capítulo, el tipo `i32`. Esta tipo de declaración indica 
+que el valor con el que está asociado debe ser un entero firmado (de ahí el `i`, 
+a diferencia de una `u` para no firmado) que ocupa 32 bits de espacio. La Tabla 3-1 
+muestra los tipos enteros incorporados en Rust. Cada variante de las columnas 
+Firmada y No Firmada (por ejemplo, *i32*) puede utilizarse para declarar el tipo de 
+un valor entero.
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+<span class="caption">Tabla 3-1: Tipos enteros en Rust</span>
 
-| Length | Signed | Unsigned |
-|--------|--------|----------|
-| 8-bit  | i8     | u8       |
-| 16-bit | i16    | u16      |
-| 32-bit | i32    | u32      |
-| 64-bit | i64    | u64      |
-| arch   | isize  | usize    |
+| Longitud | Firmada | No firmada |
+|----------|---------|------------|
+| 8-bit    | i8      | u8         |
+| 16-bit   | i16     | u16        |
+| 32-bit   | i32     | u32        |
+| 64-bit   | i64     | u64        |
+| arch     | isize   | usize      |
 
-Each variant can be either signed or unsigned and has an explicit size.
-Signed and unsigned refers to whether it’s possible for the number to be
-negative or positive; in other words, whether the number needs to have a sign
-with it (signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using two’s complement representation (if you’re
-unsure what this is, you can search for it online; an explanation is outside
-the scope of this book).
+Cada variante puede estar firmada o sin firmar y tiene un tamaño explícito. 
+Firmada y no firmada se refiere a si es posible que el número sea 
+negativo o positivo; en otras palabras, si el número necesita tener un signo
+con él (firmada) o si sólo será positivo y por lo tanto puede
+ser representado sin un signo (no firmada). Es como escribir números en papel: cuando
+el signo importa, un número se muestra con un signo más o un signo menos; sin embargo,
+cuando es seguro suponer que el número es positivo, se muestra sin signo.
+Los números firmados se almacenan usando la representación del complemento de dos (si no estás 
+seguro de lo que es esto, puedes buscarlo en línea; una explicación está fuera
+del alcance de este libro).
 
-Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
-1</sup> - 1 inclusive, where `n` is the number of bits that variant uses. So an
-`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
+Cada variante firmada puede almacenar números de - (2<sup>n - 1</sup>) a 2<sup>n - 
+1</sup> - 1 inclusive, donde `n` es el número de bits que usa la variante. Por lo tanto,
+un `i8` puede almacenar números de - (2<sup>7</sup>) a 2<sup>7</sup> - 1, lo que equivale 
+a -128 a 127. Las variantes no firmadas pueden almacenar números de 0 a 2<sup>n</sup> - 1, 
+por lo que un `u8` puede almacenar números de 0 a 2<sup>8</sup> - 1, lo que equivale a 0 a 255.
+ 
+ Además, los tipos `isize` y `usize` dependen del tipo de equipo en el que estes
+ ejecutando el programa: 64 bits si está en una arquitectura de 64 bits y 32 bits
+ si está en una arquitectura de 32 bits.
+ 
+Puede escribir enteros literales en cualquiera de las formas mostradas en la Tabla 3-2. Nota
+que todos los números literales excepto el byte literal permiten un tipo de sufijo, tal como
+`57u8`, y `_` como un separador visual, así como `1_000`.
 
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64-bits if you’re on a 64-bit architecture and 32-bits
-if you’re on a 32-bit architecture.
+<span class="caption">Tabla 3-2: Literales enteros en Rust</span>
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that all number literals except the byte literal allow a type suffix, such as
-`57u8`, and `_` as a visual separator, such as `1_000`.
+| Números Literales  | Ejemplo       |
+|--------------------|---------------|
+| Decimal            | `98_222`      |
+| Hex                | `0xff`        |
+| Octal              | `0o77`        |
+| Binario            | `0b1111_0000` |
+| Byte (solo `u8` )  | `b'A'`        |
 
-<span class="caption">Table 3-2: Integer Literals in Rust</span>
+Entonces, ¿cómo sabes qué tipo de entero usar? Si no estás seguro, los valores
+predeterminados de Rust son generalmente buenas opciones, y los tipos enteros por defecto son `i32`: 
+generalmente es el más rápido, incluso en sistemas de 64 bits. La situación principal en la que
+se utiliza `isize` o `usize` es cuando se indiza algún tipo de colección.
 
-| Number literals  | Example       |
-|------------------|---------------|
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
+#### Tipos de Punto Flotante
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good choices, and integer types default to `i32`: it’s
-generally the fastest, even on 64-bit systems. The primary situation in which
-you’d use `isize` or `usize` is when indexing some sort of collection.
+Rust también tiene dos tipos primitivos para *floating-point numbers*, que son 
+números con decimales. Los tipos de punto flotante de Rust son `f32` y `f64`, 
+que tienen 32 bits y 64 bits de tamaño, respectivamente. El tipo por defecto es `f64`
+porque es más o menos la misma velocidad que `f32` pero es capaz de mayor precisión.
+Es posible usar un tipo `f64` en sistemas de 32 bits, pero será más lento 
+que usar un tipo `f32` en esos sistemas. La mayor parte del tiempo, el potencial de 
+negociación bajar el rendimiento para una mayor precisión es una elección inicial razonable, y tu 
+debes poner a prueba tu código si sospechas que el tamaño del punto flotante es un problema en
+tu situación.
 
-#### Floating-Point Types
-
-Rust also has two primitive types for *floating-point numbers*, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because it’s roughly the same speed as `f32` but is capable of more precision.
-It’s possible to use an `f64` type on 32-bit systems, but it will be slower
-than using an `f32` type on those systems. Most of the time, trading potential
-worse performance for better precision is a reasonable initial choice, and you
-should benchmark your code if you suspect floating-point size is a problem in
-your situation.
-
-Here’s an example that shows floating-point numbers in action:
+Aquí hay un ejemplo que muestra números de punto flotante en acción:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -123,45 +123,45 @@ fn main() {
 }
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard. The
-`f32` type is a single-precision float, and `f64` has double precision.
+Los números de punto flotante se representan según la norma IEEE-754. El 
+tipo `f32` es un flotador de precisión simple, y el `f64` tiene doble precisión.
 
-#### Numeric Operations
+#### Operaciones Numéricas
 
-Rust supports the usual basic mathematical operations you’d expect for all of the
-number types: addition, subtraction, multiplication, division, and remainder.
-The following code shows how you’d use each one in a `let` statement:
+Rust soporta las operaciones matemáticas básicas usuales que tu esperarías para todos los
+tipos de números: suma, resta, multiplicación, división y porcentaje. 
+El siguiente código muestra cómo se usa cada uno de ellos en una declaración `let`:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    // addition
+    // Suma
     let sum = 5 + 10;
 
-    // subtraction
+    // Resta
     let difference = 95.5 - 4.3;
 
-    // multiplication
+    // Multiplicación
     let product = 4 * 30;
 
-    // division
+    // División
     let quotient = 56.7 / 32.2;
 
-    // remainder
+    // Porcentaje
     let remainder = 43 % 5;
 }
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. Appendix B contains a
-list of all operators that Rust provides.
+Cada expresión de estas declaraciones utiliza un operador matemático y evalúa 
+a un único valor, que luego se vincula a una variable. El Apéndice B contiene una
+lista de todos los operadores que Rust proporciona.
 
-#### The Boolean Type
+#### El tipo Booleano
 
-As in most other programming languages, a boolean type in Rust has two possible
-values: `true` and `false`. The boolean type in Rust is specified using `bool`.
-For example:
+Como en la mayoría de los otros lenguajes de programación, un tipo booleano en Rust tiene dos valores
+posibles: `true` y `false`. El tipo booleano en Rust se especifica con `bool`. 
+Por ejemplo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -169,13 +169,13 @@ For example:
 fn main() {
     let t = true;
 
-    let f: bool = false; // with explicit type annotation
+    let f: bool = false; // con anotación de tipo explícita
 }
 ```
 
-The main way to consume boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
-section.
+La forma principal de consumir valores booleanos es a través de condicionales, como una expresión
+`if`. Cubriremos cómo funcionan las expresiones `if` en Rust en la sección 
+"Flujo de Control".
 
 #### The Character Type
 
