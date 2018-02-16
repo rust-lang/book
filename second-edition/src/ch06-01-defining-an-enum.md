@@ -1,22 +1,15 @@
-## Defining an Enum
+## Definiendo una enumeración
 
-Let’s look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. Currently, two major standards are used for IP addresses:
-version four and version six. These are the only possibilities for an IP
-address that our program will come across: we can *enumerate* all possible
-values, which is where enumeration gets its name.
+Veamos una situación que podríamos querer expresar en código y veamos por que las enumeraciones son útiles y más apropiadas que las estructuras en este caso. Digamos que necesitamos trabajar con direcciones IP. 
+Actualmente, se usan dos estándares mayores para las direcciones IP:
+la versión cuatro y versión seis. Estas son las unicas posibilidades para una dirección IP que nuestro programa encontrará: podemos *enumerar* todos los valores posibles,
+que es donde la enumeración obtiene su nombre.
 
-Any IP address can be either a version four or a version six address but not
-both at the same time. That property of IP addresses makes the enum data
-structure appropriate for this case, because enum values can only be one of the
-variants. Both version four and version six addresses are still fundamentally
-IP addresses, so they should be treated as the same type when the code is
-handling situations that apply to any kind of IP address.
+Cualquier dirección IP puede ser una versión cuatro o una versión seis pero no ambas al mismo tiempo. Esa propiedad de las direcciones IP hace la estructura de datos de enumeración apropiada para este caso, porque los valores de la enumeración puede ser solo una de las variantes. Ambas versiones, la cuatro como la seis continúan siendo fundamentalmente direcciones IP, por lo tanto deben tratarse como del mismo tipo cuando el código está manejando situaciones que se aplican a cualquier tipo de direcciones IP.
 
-We can express this concept in code by defining an `IpAddrKind` enumeration and
-listing the possible kinds an IP address can be, `V4` and `V6`. These are known
-as the *variants* of the enum:
+Podemos expresar este concepto en código redefiniendo una enumeración `IpAddrKind` y 
+listando los posibles tipos de direcciones IP que pueden ser `V4` y `V6`. Estas son conocidas
+como *variants* de la enumeración:
 
 ```rust
 enum IpAddrKind {
@@ -25,11 +18,12 @@ enum IpAddrKind {
 }
 ```
 
-`IpAddrKind` is now a custom data type that we can use elsewhere in our code.
 
-### Enum Values
+`IpAddrKind` ahora es un tipo de datos personalizado que podemos utilizar en cualquier parte de nuestro código.
 
-We can create instances of each of the two variants of `IpAddrKind` like this:
+### Valores de enumeración
+
+Podemos crear istancias de cada una de las dos variantes de `IpAddrKind` asi:
 
 ```rust
 # enum IpAddrKind {
@@ -40,11 +34,8 @@ We can create instances of each of the two variants of `IpAddrKind` like this:
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
-
-Note that the variants of the enum are namespaced under its identifier, and we
-use a double colon to separate the two. The reason this is useful is that now
-both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
-`IpAddrKind`. We can then, for instance, define a function that takes any
+Tenga en cuenta que las variantes de la enumeración son espaciadas bajo su identificador, y nosotros usamos dos puntos para separarlas. La razón por la que esto es util es que ahora ambos valores `IpAddrKind::V4` y `IpAddrKind::V6` son del mismo tipo:
+`IpAddrKind`. Podemos entonces, por ejemplo, definir una función que tome cualquier
 `IpAddrKind`:
 
 ```rust
@@ -56,7 +47,8 @@ both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 fn route(ip_type: IpAddrKind) { }
 ```
 
-And we can call this function with either variant:
+Y podemos llamar a esta función con cualquiera de las variantes:
+
 
 ```rust
 # enum IpAddrKind {
@@ -70,10 +62,9 @@ route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
 
-Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address *data*; we
-only know what *kind* it is. Given that you just learned about structs in
-Chapter 5, you might tackle this problem as shown in Listing 6-1:
+Usar enumeraciones tiene incluso más ventajas. Pensando más sobre nuestro tipo de dirección IP,
+por el momento no tenemos forma de almacenar la dirección IP actual *datos*; solo sabemos que *tipo* es. 
+Teniendo en cuenta que acabas de aprender sobre estructuras en el Capítulo 5, puedes llevar a cabo este problema como se muestra en el Listado 6-1:
 
 ```rust
 enum IpAddrKind {
@@ -97,22 +88,17 @@ let loopback = IpAddr {
 };
 ```
 
-<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
-an IP address using a `struct`</span>
+<span class="caption">Listado 6-1: Almacenamiento de los datos y la variante `IpAddrKind` de una dirección IP usando una `struct`</span>
 
-Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
-is of type `IpAddrKind` (the enum we defined previously) and an `address` field
-of type `String`. We have two instances of this struct. The first, `home`, has
-the value `IpAddrKind::V4` as its `kind` with associated address data of
-`127.0.0.1`. The second instance, `loopback`, has the other variant of
-`IpAddrKind` as its `kind` value, `V6`, and has address `::1` associated with
-it. We’ve used a struct to bundle the `kind` and `address` values together, so
-now the variant is associated with the value.
+Aquí, hemos definido una estructura `IpAddr` que tiene dos campos: un `kind` campo
+que es del tipo `IpAddrKind` (la enumeración que definimos previamente) y un `address` campo
+de tipo `String`. Tenemos dos instancias de esta estructura. La primera, `home`, tiene
+el valor `IpAddrKind::V4` como su `kind` con datos de direcciones asociadas de
+`127.0.0.1`. La segunda instancia, `loopback`, tiene la otra variante de
+`IpAddrKind` como su `kind` de valor, `V6`, y tiene la dirección `::1` asociada con eso. Hemos usado una estructura para juntar los valores `kind` y `address`, por lo que la variante ahora está asociada con el valor.
 
-We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
-variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
-variants will have associated `String` values:
+Podemos representar el mismo concepto de una forma más concisa usando solo una enumeración
+en vez de una enumeración como parte de una estructura al poner datos directamente en cada variante de enumeración. Esta nueva definición de enumeración `IpAddr` dice que tanto las variantes `V4` y `V6` tendrán asociados valores `String`:
 
 ```rust
 enum IpAddr {
@@ -125,15 +111,13 @@ let home = IpAddr::V4(String::from("127.0.0.1"));
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We attach data to each variant of the enum directly, so there is no need for an
-extra struct.
 
-There’s another advantage to using an enum rather than a struct: each variant
-can have different types and amounts of associated data. Version four type IP
-addresses will always have four numeric components that will have values
-between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
-still express `V6` addresses as one `String` value, we wouldn’t be able to with
-a struct. Enums handle this case with ease:
+Adjuntamos datos a cada variante de la enumeración directamente, por lo tanto no hay necesidad de una estructura extra.
+
+Existe otra ventaja de usar una enumeración en lugar de una estructura: cada variante
+puede tener diferentes tipos y cantidades de datos asociados. Las direcciones IP
+de versión cuatro siempre tendrán cuatro componentes numéricos que tendrán valores entre 0 y 255. Si deseamos almacenar direcciones `V4` como cuatro valores `u8` pero
+seguimos expresando las direcciones `V6` como un valor `String`, no podríamos con una estructura. Las enumeraciones manejan este caso con facilidad :
 
 ```rust
 enum IpAddr {
@@ -146,14 +130,12 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We’ve shown several different possibilities that we could define in our code
-for storing IP addresses of the two different varieties using an enum. However,
-as it turns out, wanting to store IP addresses and encode which kind they are
-is so common that [the standard library has a definition we can
-use!][IpAddr]<!-- ignore --> Let’s look at how the standard library defines
-`IpAddr`: it has the exact enum and variants that we’ve defined and used, but
-it embeds the address data inside the variants in the form of two different
-structs, which are defined differently for each variant:
+Mostramos muchas posibilidades diferentes que podríamos definir en nuestro código
+para almacenar direcciones IP de dos variedades diferentes usando una enumeración. Sin embargo,
+como resultado,deseando almacenar direcciones IP y codificar de que tipo son 
+es tan común que [la biblioteca estándar tiene una definición que podemos usar!][IpAddr]<!-- ignorar --> Veamos como la biblioteca estándar define
+`IpAddr`: tiene la enumeración exacta y las variantes que hemos definido y usado, pero
+esto inserta los datos de riección adentro de las variantes en forma de dos estructuras diferentes, que son definidas diferentemente para cada variante:
 
 [IpAddr]: ../../std/net/enum.IpAddr.html
 
@@ -172,18 +154,15 @@ enum IpAddr {
 }
 ```
 
-This code illustrates that you can put any kind of data inside an enum variant:
-strings, numeric types, or structs, for example. You can even include another
-enum! Also, standard library types are often not much more complicated than
-what you might come up with.
+Este código ilustra que puedes poner cualquier tipo de datos dentro de una variante de enumeración:
+cadenas, tipos numéricos, o estructuras, por ejemplo. Incluso puedes incluir otra enumeración!
+También, los tipos de biblioteca estándar son a menudo no mucho más complicadas de lo que podrías imaginar.
 
-Note that even though the standard library contains a definition for `IpAddr`,
-we can still create and use our own definition without conflict because we
-haven’t brought the standard library’s definition into our scope. We’ll talk
-more about importing types in Chapter 7.
+Tenga en cuenta que aunque la biblioteca estándar contiene una definición para `IpAddr`,
+aún podemos crear y usar nuestra propia definición sin conflictos porque no hemos traido la definición de bibliotecas estándar a nuestro alcance. Hablaremos más
+sobre importar tipos en el Capítulo 7.
 
-Let’s look at another example of an enum in Listing 6-2: this one has a wide
-variety of types embedded in its variants:
+Veamos otro ejemplo de una enumeración en el Listado 6-2: este tiene una amplia variedad de tipos embebidos en sus variantes:
 
 ```rust
 enum Message {
@@ -194,21 +173,17 @@ enum Message {
 }
 ```
 
-<span class="caption">Listing 6-2: A `Message` enum whose variants each store
-different amounts and types of values</span>
+<span class="caption">Listado 6-2: Una enumeración de `Message` cuyas variantes almacene cada una diferentes cantidades y tipos de valores</span>
 
-This enum has four variants with different types:
+Esta enumeración tiene cuatro variantes con diferentes tipos:
 
-* `Quit` has no data associated with it at all.
-* `Move` includes an anonymous struct inside it.
-* `Write` includes a single `String`.
-* `ChangeColor` includes three `i32`s.
+* `Quit` no tiene datos asociados con el del todo.
+* `Move` incluye una estructura anónima dentro de ella.
+* `Write` incluye un solo `String`.
+* `ChangeColor` incluye tres `i32`.
 
-Defining an enum with variants like the ones in Listing 6-2 is similar to
-defining different kinds of struct definitions except the enum doesn’t use the
-`struct` keyword and all the variants are grouped together under the `Message`
-type. The following structs could hold the same data that the preceding enum
-variants hold:
+La definición de una enumeración con variantes como las del Listado 6-2 es similar a 
+la definición de distintos tipos de definiciones de estructura, excepto que la enumeración no usa la palabra clave `struct` y todas las variantes estan agrupadas bajo el tipo `Message`. Las siguientes estructuras podrían contener los mismos datos que las variantes de contención de la enumeración precedente: 
 
 ```rust
 struct QuitMessage; // unit struct
