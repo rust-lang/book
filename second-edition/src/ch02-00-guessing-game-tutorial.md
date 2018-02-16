@@ -1,16 +1,16 @@
 # Juego de adivinanzas
 
-¡Vamos a adentrarnos en *Rust* trabajando en un proyecto juntos! Este capítulo 
-presenta algunos conceptos comunes en *Rust* mostrándonos cómo usarlos en un 
+¡Vamos a adentrarnos en *Rust* trabajando en un proyecto juntos! Este capítulo
+presenta algunos conceptos comunes en *Rust* mostrándonos cómo usarlos en un
 programa real. Aprenderemos sobre las sentencias `let` y `match`, sobre métodos,
 funciones asociadas, uso de _crates_ externos, ¡y mucho más! Los siguientes
-capítulos se dedican a explorar estas ideas más en detalle. Por el momento, 
+capítulos se dedican a explorar estas ideas más en detalle. Por el momento,
 en este capítulo se ponen en práctica las partes fundamentales.
 
 Vamos a implementar un típico problema de programación para principiantes: Un
 juego de adivinanzas. Funciona así: El programa generará un número aleatorio
 entre 1 y 100 y luego le pedirá al jugador que trate de adivinarlo. Tras
-introducir un número, indicará al jugador si su suposición fue muy alta o 
+introducir un número, indicará al jugador si su suposición fue muy alta o
 muy baja. Si el jugador adivina el número, el juego imprimirá un mensaje de
 felicitación y se cerrará.
 
@@ -62,6 +62,7 @@ comando `cargo run`:
 ```text
 $ cargo run
    Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
      Running `target/debug/adivinanza`
 Hello, world!
 ```
@@ -74,8 +75,8 @@ el código.
 
 ## Procesando un intento de adivinanza
 
-La primera parte del programa pedirá datos al usuario, procesará los datos, y se 
-encargará de verificar que los datos tengan el formato esperado. Para comenzar, 
+La primera parte del programa pedirá datos al usuario, procesará los datos, y se
+encargará de verificar que los datos tengan el formato esperado. Para comenzar,
 vamos a dejar que el jugador introduzca una suposición. Escribe el código que se
 encuentra en Código 2-1 dentro de nuestro archivo *src/main*.
 
@@ -100,8 +101,8 @@ fn main() {
 
 <span class="caption">Código 2-1: Código para obtener una suposición del usuario y mostrarla en pantalla</span>
 
-Este código contiene bastante información, así que vamos paso a paso. 
-Para obtener la entrada del usuario y luego imprimir el resultado como salida, 
+Este código contiene bastante información, así que vamos paso a paso.
+Para obtener la entrada del usuario y luego imprimir el resultado como salida,
 necesitamos importar la librería `io` (entrada/salida o *input/output* en inglés)
 a nuestro código. La librería `io` forma parte de la librería estándar (conocida
 como `std`):
@@ -110,11 +111,11 @@ como `std`):
 use std::io;
 ```
 
-Por defecto, *Rust* solo importa unos cuantos tipos en el contexto de cada programa 
+Por defecto, *Rust* solo importa unos cuantos tipos en el contexto de cada programa
 ([el *preludio*][prelude]<!-- ignore -->). Si queremos usar un tipo que no está en
 el preludio, debemos importarlo explícitamente usando la sentencia `use`. Al
 usar la librería `std::io`, le estamos dando al código nuevas posibilidades
-para operar con entrada y salida de datos, incluyendo la funcionalidad de que 
+para operar con entrada y salida de datos, incluyendo la funcionalidad de que
 el usuario introduzca información.
 
 [prelude]: ../../std/prelude/index.html
@@ -138,7 +139,7 @@ println!("¡Adivina el número!");
 println!("Por favor escribe una suposición.");
 ```
 
-Este código simplemente muestra un mensaje con el propósito de juego, y pide
+Este código muestra un mensaje con el propósito de juego, y pide
 datos al usuario.
 
 ### Almacenando Valores en Variables
@@ -216,17 +217,17 @@ entrada del usuario. También le estamos pasando un argumento a `read_line`:
 
 [read_line]: ../../std/io/struct.Stdin.html#method.read_line
 
-El propósito de `read_line` es leer lo que el usuario escriba en la entrada 
+El propósito de `read_line` es leer lo que el usuario escriba en la entrada
 estándar y ponerlo en un *string*, por lo tanto toma un *string* como argumento.
 Este *string* debe ser mutable para que el método pueda cambiar su contenido y
 agregar la entrada del usuario.
 
 El símbolo `&` indica que este argumento es una *referencia*, lo cual nos
-permite que distintas partes de nuestro código accedan a una parte de los datos 
-sin que haga falta copiarla en memoria varias veces. Las referencias son un 
+permite que distintas partes de nuestro código accedan a una parte de los datos
+sin que haga falta copiarla en memoria varias veces. Las referencias son un
 asunto complejo, una de las grandes ventajas de *Rust* radica en lo sencillo y
 seguro que es usar referencias. No necesitas saber demasiado para terminar este
-programa: el Capítulo 4 trata el tema de las referencias de forma minuciosa. 
+programa: el Capítulo 4 trata el tema de las referencias de forma minuciosa.
 Por ahora, todo lo que hay que saber es que las referencias son inmutables por
 defecto, como las variables, y por tanto necesitamos escribir `&mut suposicion`
 en vez de `&suposicion` para hacerla mutable.
@@ -248,7 +249,7 @@ io::stdin().read_line(&mut suposicion).expect("Error al leer la línea");
 Sin embargo, una sola línea larga es difícil de leer, es mejor dividirla. Ahora
 veamos en detalle que hace esta línea.
 
-### Manejando errores potenciales con el tipo `Result`
+### Manejando posibles errores con el tipo `Result`
 
 Como mencionamos antes, `read_line` pone recibe los datos del usuario y los coloca
 en el *string* que le pasamos, pero también devuelve un valor, en este caso, un
@@ -291,17 +292,20 @@ advertencia:
 ```text
 $ cargo build
    Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
-src/main.rs:10:5: 10:39 warning: unused result which must be used,
-#[warn(unused_must_use)] on by default
-src/main.rs:10     io::stdin().read_line(&mut suposicion);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: unused `std::result::Result` which must be used
+  --> src/main.rs:10:5
+   |
+10 |     io::stdin().read_line(&mut suposicion);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(unused_must_use)] on by default
 ```
 
 Rust nos advierte que no hemos utilizado el valor de tipo `Result` que obtuvimos
 de `read_line`, indicando que el programa no ha manejado un posible error. La
 forma correcta de eliminar este error es escribir código para tratar con él,
-pero de momento sólo queremos que nuestro programa falle cuando haya un problema,
-asi que podemos usar `expect`. Aprenderemos como recuperarnos de errores en el 
+pero de momento queremos que nuestro programa falle cuando haya un problema,
+asi que podemos usar `expect`. Aprenderemos como recuperarnos de errores en el
 capítulo 9.
 
 ### Imprimiendo Valores con marcadores de posición `println!`
@@ -334,10 +338,10 @@ El resultado de este código será `x = 5 e y = 10`.
 Ahora vamos a probar la primera parte del juego de adivinanzas. Puedes ejecutarlo
 usando `cargo run`.
 
-
 ```text
 $ cargo run
    Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/adivinanza`
 ¡Adivina el número!
 Por favor escribe una suposición.
@@ -383,8 +387,8 @@ rand = "0.3.14"
 En el archivo , todo lo que viene después de una cabecera de sección, forma parte
 de dicha sección hasta que otra nueva comience. La sección `[dependencies]` se
 usa para indicar a Cargo qué crates externos - y qué versión específica de éstos -
-necesita tu proyecto. En este ejemplo, vamos a añadir el crate `rand` en su 
-versión `0.3.14`. Cargo utiliza [Versionado Semántico][semver]<!-- ignore --> 
+necesita tu proyecto. En este ejemplo, vamos a añadir el crate `rand` en su
+versión `0.3.14`. Cargo utiliza [Versionado Semántico][semver]<!-- ignore -->
 (que a veces se llama *SemVer*), un estándar para escribir números de versión.
 El número `0.3.14` es una abreviatura de `^0.3.14`, que quiere decir "cualquier
 versión con API pública compatible con la version 0.3.14".
@@ -403,6 +407,7 @@ $ cargo build
    Compiling libc v0.2.14
    Compiling rand v0.3.14
    Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
 <span class="caption">Código 2-2: El resultado de ejecutar `cargo build` tras
@@ -413,7 +418,7 @@ serán compatible con el código, gracias a SemVer), y puede que el orden de las
 líneas no sea exactamente el mismo.
 
 Ahora que tenemos la dependencia externa, Cargo busca las últimas versiones
-del *registro*, el cual es una copia del contenido de [Crates.io][cratesio]. 
+del *registro*, el cual es una copia del contenido de [Crates.io][cratesio].
 Crates.io es el portal del ecosistema Rust en el que se añaden proyectos Rust
 de software libre, para que otros desarrollares los reutilicen.
 
@@ -426,21 +431,22 @@ que `rand` necesita la librería `libc` para funcionar. Tras la descarga, Rust
 compila las librerías y después compila el proyecto completo junto con las
 dependencias disponibles.
 
-Si ejecutas directamente `cargo build` de nuevo sin hacer ningún cambio, no 
-aparecerá nada en la consola. Cargo sabe que ha descargado y compilado las 
+Si ejecutas directamente `cargo build` de nuevo sin hacer ningún cambio, no
+aparecerá nada en la consola. Cargo sabe que ha descargado y compilado las
 dependencias, y que no has hecho cambios en el archivo *Cargo.toml*. Cargo
 también sabe que no has tocado nada en tu código, por lo que no necesita
 volver a compilarlo. Sin más por hacer, la ejecución simplemente acaba. Si por
 ejemplo abres el archivo *src/main.rs* y realizar cualquier pequeño cambio, lo
-guardas, y vuelves a compilar, verás una sola línea en la consola:
+guardas, y vuelves a compilar, verás solo dos líneas en la consola:
 
 
 ```text
 $ cargo build
    Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
-Esta línea muestra que Cargo sólamente realiza una compilación tras tu ligero
+Estas líneas muestra que Cargo sólamente realiza una compilación tras tu ligero
 cambio en el archivo *src/main.rs*. Las dependencias no han cambiado, así que
 que Cargo puede reutilizar lo que ya ha descargado y compilado previamente.
 Simplemente vuelve a compilar tus cambios en el código.
@@ -456,13 +462,13 @@ que continene un bug fix importante, pero que al mismo tiempo continene una
 regresión que va a provocar errores en tu código?
 
 La respuesta a este problema es el fichero *Cargo.lock*, que se crea al mismo
-tiempo que utilizas `cargo build` por primera vez, y que se encuentra en el 
+tiempo que utilizas `cargo build` por primera vez, y que se encuentra en el
 directorio *guessing_game*. Cuando compilas un proyecto por primera vez, Cargo
 busca automáticamente la versión más indicada de las dependencias de tu proyecto,
 y las guarda en el fichero *Cargo.lock*. En posteriores compilaciones, Cargo
 buscará primero si existe este fichero *Cargo.lock*, y usará las versiones de
 las dependencias que estén ahí escritas, en lugar de buscar de nuevo cuál es
-la versión más adecuada. Esto nos permite hacer un build reproducible de 
+la versión más adecuada. Esto nos permite hacer un build reproducible de
 manera automática. Dicho de otro modo, tu proyecto continuará con la versión
 `0.3.14` de `rand` a menos que actualices a mano, gracias al fichero *Cargo.lock*.
 
@@ -631,9 +637,9 @@ fn main() {
     println!("You guessed: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
+        Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Equal => println!("You win!"),
     }
 }
 ```
@@ -651,9 +657,9 @@ Then we add five new lines at the bottom that use the `Ordering` type:
 
 ```rust,ignore
 match guess.cmp(&secret_number) {
-    Ordering::Less    => println!("Too small!"),
+    Ordering::Less => println!("Too small!"),
     Ordering::Greater => println!("Too big!"),
-    Ordering::Equal   => println!("You win!"),
+    Ordering::Equal => println!("You win!"),
 }
 ```
 
@@ -749,9 +755,9 @@ fn main() {
     println!("You guessed: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
+        Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Equal => println!("You win!"),
     }
 }
 ```
@@ -775,11 +781,13 @@ We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with the input in
 it. The `trim` method on a `String` instance will eliminate any whitespace at
 the beginning and end. `u32` can only contain numerical characters, but the
-user must press the Return key to satisfy `read_line`. When the user presses
-Return, a newline character is added to the string. For example, if the user
-types 5 and presses return, `guess` looks like this: `5\n`. The `\n` represents
-“newline,” the return key. The `trim` method eliminates `\n`, resulting in just
-`5`.
+user must press the <span class="keystroke">enter</span> key to satisfy
+`read_line`. When the user presses <span class="keystroke">enter</span>, a
+newline character is added to the string. For example, if the user types <span
+class="keystroke">5</span> and presses <span class="keystroke"> enter</span>,
+`guess` looks like this: `5\n`. The `\n` represents “newline,” the
+<span class="keystroke">enter</span>key. The `trim` method eliminates `\n`,
+resulting in just `5`.
 
 The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
@@ -810,6 +818,7 @@ Let’s run the program now!
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -862,9 +871,9 @@ fn main() {
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => println!("You win!"),
+            Ordering::Equal => println!("You win!"),
         }
     }
 }
@@ -876,11 +885,11 @@ program again. Notice that there is a new problem because the program is doing
 exactly what we told it to do: ask for another guess forever! It doesn’t seem
 like the user can quit!
 
-The user could always halt the program by using the keyboard shortcut `Ctrl-C`.
-But there’s another way to escape this insatiable monster that we mentioned in
-the `parse` discussion in “Comparing the Guess to the Secret Number”: if the user
-enters a non-number answer, the program will crash. The user can take advantage
-of that in order to quit, as shown here:
+The user could always halt the program by using the keyboard shortcut
+<span class="keystroke">ctrl-c</span>. But there’s another way to escape this
+insatiable monster that we mentioned in the `parse` discussion in “Comparing the
+Guess to the Secret Number”: if the user enters a non-number answer, the program
+will crash. The user can take advantage of that in order to quit, as shown here:
 
 ```text
 $ cargo run
@@ -945,9 +954,9 @@ fn main() {
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => {
+            Ordering::Equal => {
                 println!("You win!");
                 break;
             }
@@ -1056,9 +1065,9 @@ fn main() {
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => {
+            Ordering::Equal => {
                 println!("You win!");
                 break;
             }

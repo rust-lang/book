@@ -1,6 +1,13 @@
-% The Rust Programming Language Has Moved
+% Compiler Plugins
 
-This chapter of the book has moved to [a chapter in the Unstable
-Book][unstable book plugins]. Please check it out there.
+<small>There is a new edition of the book and this is an old link.</small>
 
-[unstable book plugins]: ../unstable-book/language-features/plugin.html
+> Compiler plugins are user-provided libraries that extend the compiler's behavior with new syntax extensions, lint checks, etc.
+
+---
+
+This particular chapter has moved to [the Unstable Book][2].
+
+* **[In the Unstable Rust Book: `plugin`][2]**
+
+[2]: ../unstable-book/language-features/plugin.html

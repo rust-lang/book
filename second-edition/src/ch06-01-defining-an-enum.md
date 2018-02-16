@@ -109,8 +109,8 @@ the value `IpAddrKind::V4` as its `kind` with associated address data of
 it. We’ve used a struct to bundle the `kind` and `address` values together, so
 now the variant is associated with the value.
 
-We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
+We can represent the same concept in a more concise way using just an enum,
+rather than an enum inside a struct, by putting data directly into each enum
 variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
 variants will have associated `String` values:
 
@@ -180,7 +180,7 @@ what you might come up with.
 Note that even though the standard library contains a definition for `IpAddr`,
 we can still create and use our own definition without conflict because we
 haven’t brought the standard library’s definition into our scope. We’ll talk
-more about importing types in Chapter 7.
+more about bringing types into scope in Chapter 7.
 
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:
@@ -202,7 +202,7 @@ This enum has four variants with different types:
 * `Quit` has no data associated with it at all.
 * `Move` includes an anonymous struct inside it.
 * `Write` includes a single `String`.
-* `ChangeColor` includes three `i32`s.
+* `ChangeColor` includes three `i32` values.
 
 Defining an enum with variants like the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions except the enum doesn’t use the
@@ -249,7 +249,7 @@ m.call();
 
 The body of the method would use `self` to get the value that we called the
 method on. In this example, we’ve created a variable `m` that has the value
-`Message::Write("hello")`, and that is what `self` will be in the body of the
+`Message::Write(String::from("hello"))`, and that is what `self` will be in the body of the
 `call` method when `m.call()` runs.
 
 Let’s look at another enum in the standard library that is very common and
@@ -278,7 +278,7 @@ null, has this to say:
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
 > goal was to ensure that all use of references should be absolutely safe, with
-> checking performed automatically by the compiler. But I couldn't resist the
+> checking performed automatically by the compiler. But I couldn’t resist the
 > temptation to put in a null reference, simply because it was so easy to
 > implement. This has led to innumerable errors, vulnerabilities, and system
 > crashes, which have probably caused a billion dollars of pain and damage in
@@ -308,8 +308,8 @@ enum Option<T> {
 ```
 
 The `Option<T>` enum is so useful that it’s even included in the prelude; you
-don’t need to import it explicitly.  In addition, so are its variants: you can
-use `Some` and `None` directly without prefixing them with `Option::`.
+don’t need to bring it into scope explicitly. In addition, so are its variants:
+you can use `Some` and `None` directly without prefixing them with `Option::`.
 `Option<T>` is still just a regular enum, and `Some(T)` and `None` are still
 variants of type `Option<T>`.
 
@@ -327,7 +327,7 @@ let absent_number: Option<i32> = None;
 ```
 
 If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have, because the compiler can't infer the type that the `Some`
+`Option<T>` we have, because the compiler can’t infer the type that the `Some`
 variant will hold by looking only at a `None` value.
 
 When we have a `Some` value, we know that a value is present, and the value is
@@ -354,13 +354,13 @@ error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is
 not satisfied
  -->
   |
-7 | let sum = x + y;
-  |           ^^^^^
+5 |     let sum = x + y;
+  |                 ^ no implementation for `i8 + std::option::Option<i8>`
   |
 ```
 
 Intense! In effect, this error message means that Rust doesn’t understand how
-to add an `Option<i8>` and an `i8`, because they’re different types. When we
+to add an `i8` and an `Option<i8>`, because they’re different types. When we
 have a value of a type like `i8` in Rust, the compiler will ensure that we
 always have a valid value. We can proceed confidently without having to check
 for null before using that value. Only when we have an `Option<i8>` (or

@@ -1,12 +1,23 @@
-% There is a new edition of the book
+% Comments
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Comments must start with two slashes and continue until the end of the line.
+> For comments that extend beyond a single line, you’ll need to include // on each line.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+// So we’re doing something complicated here, long enough that we need
+// multiple lines of comments to do it! Whew! Hopefully, this comment will
+// explain what’s going on.
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 3.04 — Comments][2]**
+* <small>[In the first edition: Ch 3.4 — Comments][1]</small>
 
 
 [1]: first-edition/comments.html
-[2]: second-edition/index.html
+[2]: second-edition/ch03-04-comments.html

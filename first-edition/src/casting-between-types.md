@@ -60,7 +60,7 @@ A cast `e as U` is valid if `e` has type `T` and `T` *coerces* to `U`.
 A cast `e as U` is also valid in any of the following cases:
 
 * `e` has type `T` and `T` and `U` are any numeric types; *numeric-cast*
-* `e` is a C-like enum (with no data attached to the variants),
+* `e` is an enum with no data attached to the variants (a "field-less enumeration"),
    and `U` is an integer type; *enum-cast*
 * `e` has type `bool` or `char` and `U` is an integer type; *prim-int-cast*
 * `e` has type `u8` and `U` is `char`; *u8-char-cast*

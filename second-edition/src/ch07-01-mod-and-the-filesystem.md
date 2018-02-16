@@ -3,8 +3,8 @@
 We’ll start our module example by making a new project with Cargo, but instead
 of creating a binary crate, we’ll make a library crate: a project that other
 people can pull into their projects as a dependency. For example, the `rand`
-crate in Chapter 2 is a library crate that we used as a dependency in the
-guessing game project.
+crate discussed in Chapter 2 is a library crate that we used as a dependency in
+the guessing game project.
 
 We’ll create a skeleton of a library that provides some general networking
 functionality; we’ll concentrate on the organization of the modules and
@@ -29,15 +29,16 @@ Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
 
-Cargo creates an empty test to help us get our library started, rather than the
-“Hello, world!” binary that we get when we use the `--bin` option. We’ll look
-at the `#[]` and `mod tests` syntax in the “Using `super` to Access a Parent
-Module” section later in this chapter, but for now, leave this code at the
-bottom of *src/lib.rs*.
+Cargo creates an example test to help us get our library started, rather than
+the “Hello, world!” binary that we get when we use the `--bin` option. We’ll
+look at the `#[]` and `mod tests` syntax in the “Using `super` to Access a
+Parent Module” section later in this chapter, but for now, leave this code at
+the bottom of *src/lib.rs*.
 
 Because we don’t have a *src/main.rs* file, there’s nothing for Cargo to
 execute with the `cargo run` command. Therefore, we’ll use the `cargo build`
@@ -63,9 +64,9 @@ mod network {
 ```
 
 After the `mod` keyword, we put the name of the module, `network`, and then a
-block of code in curly braces. Everything inside this block is inside the
+block of code in curly brackets. Everything inside this block is inside the
 namespace `network`. In this case, we have a single function, `connect`. If we
-wanted to call this function from a script outside the `network` module, we
+wanted to call this function from code outside the `network` module, we
 would need to specify the module and use the namespace syntax `::`, like so:
 `network::connect()` rather than just `connect()`.
 
@@ -88,7 +89,7 @@ mod client {
 ```
 
 <span class="caption">Listing 7-1: The `network` module and the `client` module
-defined side-by-side in *src/lib.rs*</span>
+defined side by side in *src/lib.rs*</span>
 
 Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
@@ -97,7 +98,7 @@ not conflict with each other because they’re in different modules.
 In this case, because we’re building a library, the file that serves as the
 entry point for building our library is *src/lib.rs*. However, in respect to
 creating modules, there’s nothing special about *src/lib.rs*. We could also
-create modules in *src/main.rs* for a binary crate in the same way as we're
+create modules in *src/main.rs* for a binary crate in the same way as we’re
 creating modules in *src/lib.rs* for the library crate. In fact, we can put
 modules inside of modules, which can be useful as your modules grow to keep
 related functionality organized together and separate functionality apart. The
@@ -197,13 +198,13 @@ communicator
 
 If these modules had many functions, and those functions were becoming lengthy,
 it would be difficult to scroll through this file to find the code we wanted to
-work with. Because the functions are nested inside one or more mod blocks, the
-lines of code inside the functions will start getting lengthy as well. These
-would be good reasons to separate the `client`, `network`, and `server` modules
-from *src/lib.rs* and place them into their own files.
+work with. Because the functions are nested inside one or more `mod` blocks,
+the lines of code inside the functions will start getting lengthy as well.
+These would be good reasons to separate the `client`, `network`, and `server`
+modules from *src/lib.rs* and place them into their own files.
 
-First, replace the `client` module code with only the declaration of the `client`
-module, so that your *src/lib.rs* looks like the following:
+First, replace the `client` module code with only the declaration of the
+`client` module, so that your *src/lib.rs* looks like code shown in Listing 7-4:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -220,6 +221,8 @@ mod network {
     }
 }
 ```
+
+<span class="caption">Listing 7-4: Extracting the contents of the `client` module but leaving the declaration in *src/lib.rs*</span>
 
 We’re still *declaring* the `client` module here, but by replacing the block
 with a semicolon, we’re telling Rust to look in another location for the code
@@ -261,29 +264,33 @@ a library crate rather than a binary crate:
 ```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/client.rs:1:1
   |
-1 | fn connect() {
-  | ^
+1 | / fn connect() {
+2 | | }
+  | |_^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:4:5
   |
-4 |     fn connect() {
-  |     ^
+4 | /     fn connect() {
+5 | |     }
+  | |_____^
 
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
+warning: function is never used: `connect`
  --> src/lib.rs:8:9
   |
-8 |         fn connect() {
-  |         ^
+8 | /         fn connect() {
+9 | |         }
+  | |_________^
 ```
 
 These warnings tell us that we have functions that are never used. Don’t worry
-about these warnings for now; we’ll address them in the “Controlling Visibility
-with `pub`” section later in this chapter. The good news is that they’re just
+about these warnings for now; we’ll address them later in this chapter in the
+“Controlling Visibility with `pub`” section. The good news is that they’re just
 warnings; our project built successfully!
 
 Next, let’s extract the `network` module into its own file using the same
@@ -340,7 +347,7 @@ fn connect() {
 }
 ```
 
-When we try to `cargo build`, we’ll get the error shown in Listing 7-4:
+When we try to `cargo build`, we’ll get the error shown in Listing 7-5:
 
 ```text
 $ cargo build
@@ -351,7 +358,7 @@ error: cannot declare a new module at this location
 4 | mod server;
   |     ^^^^^^
   |
-note: maybe move this module `network` to its own directory via `network/mod.rs`
+note: maybe move this module `src/network.rs` to its own directory via `src/network/mod.rs`
  --> src/network.rs:4:5
   |
 4 | mod server;
@@ -363,14 +370,14 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<span class="caption">Listing 7-4: Error when trying to extract the `server`
+<span class="caption">Listing 7-5: Error when trying to extract the `server`
 submodule into *src/server.rs*</span>
 
 The error says we `cannot declare a new module at this location` and is
 pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is
 different than *src/lib.rs* somehow: keep reading to understand why.
 
-The note in the middle of Listing 7-4 is actually very helpful because it
+The note in the middle of Listing 7-5 is actually very helpful because it
 points out something we haven’t yet talked about doing:
 
 ```text
@@ -383,7 +390,7 @@ previously, we can do what the note suggests:
 
 1. Make a new *directory* named *network*, the parent module’s name.
 2. Move the *src/network.rs* file into the new *network* directory, and
-   rename *src/network/mod.rs*.
+   rename it to *src/network/mod.rs*.
 3. Move the submodule file *src/server.rs* into the *network* directory.
 
 Here are commands to carry out these steps:

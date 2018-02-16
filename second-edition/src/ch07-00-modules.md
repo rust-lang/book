@@ -14,7 +14,7 @@ you can choose whether those definitions are visible outside their module
 (public) or not (private). Here’s an overview of how modules work:
 
 * The `mod` keyword declares a new module. Code within the module appears
-  either immediately following this declaration within curly braces or in
+  either immediately following this declaration within curly brackets or in
   another file.
 * By default, functions, types, constants, and modules are private. The `pub`
   keyword makes an item public and therefore visible outside its namespace.
