@@ -177,11 +177,11 @@ La forma principal de consumir valores booleanos es a través de condicionales, 
 `if`. Cubriremos cómo funcionan las expresiones `if` en Rust en la sección 
 "Flujo de Control".
 
-#### The Character Type
+#### El Tipo de Carácter
 
-So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
-`char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it:
+Hasta ahora sólo hemos trabajado con números, pero Rust también soporta letras. El tipo de 
+`char` de Rust es el tipo alfabético más primitivo del lenguaje, y el siguiente
+código muestra una forma de usarlo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -193,29 +193,29 @@ fn main() {
 }
 ```
 
-Rust’s `char` type represents a Unicode Scalar Value, which means it can
-represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
-ideographs, emoji, and zero width spaces are all valid `char` types in Rust.
-Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in the “Strings” section
-in Chapter 8.
+El tipo `char` de Rust representa un valor escalar Unicode, lo que significa que puede
+representar mucho más que ASCII. Letras acentuadas, ideogramas 
+chinos/japoneses/coreanos, emojis y espacios de anchura cero son todos tipos válidos de `char` en Rust.
+Los valores escalares Unicode van desde `U+000000` hasta `U+D7FF` e incluso de `U+E000` hasta
+`U+10FFFF`. Sin embargo, un "caracter" no es realmente un concepto en Unicode, 
+así que tu intuición humana para lo que es un "caracter" puede que no coincida con lo que 
+es un `char` en Rust. Discutiremos este tema en detalle en la sección "Cadenas" 
+en el Capítulo 8.
 
-### Compound Types
+### Tipos de Compuestos
 
-*Compound types* can group multiple values of other types into one type. Rust
-has two primitive compound types: tuples and arrays.
+Los *tipos de compuestos* pueden agrupar múltiples valores de otros tipos a un tipo. Rust
+tiene dos tipos de compuestos primitivos: tuplas y matrices.
 
-#### Grouping Values into Tuples
+#### Clasificación de Valores en Tuplas
 
-A tuple is a general way of grouping together some number of other values with
-a variety of types into one compound type.
+Una tupla es una forma general de agrupar un cierto número de otros valores con 
+una variedad de tipos en un tipo compuesto.
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+Creamos una tupla escribiendo una lista de valores separados por comas dentro
+de paréntesis. Cada posición en la tupla tiene un tipo, y los tipos de los
+diferentes valores en la tupla no tienen que ser los mismos. Hemos añadido anotaciones
+de tipo opcionales en este ejemplo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -225,9 +225,9 @@ fn main() {
 }
 ```
 
-The variable `tup` binds to the entire tuple, since a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+La variable `tup` se une a la tupla entera, ya que una tupla se considera un
+solo elemento compuesto. Para obtener los valores individuales de una tupla, podemos
+usar la coincidencia de patrones para desestructurar el valor de una tupla, como este:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -241,15 +241,15 @@ fn main() {
 }
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+Este programa crea primero una tupla y lo une a la variable `tup`. Luego
+usa un patrón con `lets` para tomar `tup` y convertirlo en tres variables
+separadas, `x`, `y` y `z`. Esto se llama *desestructuración*, porque rompe 
+la tupla simple en tres partes. Finalmente, el programa imprime el valor de
+`y`, que es `6.4`.
 
-In addition to destructuring through pattern matching, we can also access a
-tuple element directly by using a period (`.`) followed by the index of the
-value we want to access. For example:
+Además de la desestructuración por coincidencia de patrones, también podemos acceder 
+directamente a un elemento de tupla utilizando un periodo (`.`) seguido del índice del
+valor al que queremos acceder. Por ejemplo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -265,19 +265,19 @@ fn main() {
 }
 ```
 
-This program creates a tuple, `x`, and then makes new variables for each
-element by using their index. As with most programming languages, the first
-index in a tuple is 0.
+Este programa crea una tupla, `x`, y luego crea nuevas variables para cada
+elemento usando su índice. Como en la mayoría de los lenguajes de programación, el primer 
+índice en una tupla es 0.
 
-#### Arrays
+#### Arrays (Matrices)
 
-Another way to have a collection of multiple values is with an *array*. Unlike
-a tuple, every element of an array must have the same type. Arrays in Rust are
-different than arrays in some other languages because arrays in Rust have a
-fixed length: once declared, they cannot grow or shrink in size.
+Otra forma de tener una colección de múltiples valores es con una *array*. A diferencia
+de una tupla, cada elemento de un array debe tener el mismo tipo. Las arrays en Rust son 
+diferentes a las arrays en otros lenguajes porque las arrays en Rust tienen una 
+longitud fija: una vez declaradas, no pueden crecer o reducirse de tamaño.
 
-In Rust, the values going into an array are written as a comma-separated list
-inside square brackets:
+En Rust, los valores que entran en una array se escriben como una lista separada por comas
+dentro de corchetes:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -287,28 +287,28 @@ fn main() {
 }
 ```
 
-Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in Chapter 4), or when
-you want to ensure you always have a fixed number of elements. They aren’t as
-flexible as the vector type, though. The vector type is a similar collection
-type provided by the standard library that *is* allowed to grow or shrink in
-size. If you’re unsure whether to use an array or a vector, you should probably
-use a vector: Chapter 8 discusses vectors in more detail.
+Las matrices son útiles cuando deseas que tus datos se asignen a la pila en lugar de
+al montón (hablaremos más sobre la pila y el montón en el Capítulo 4), o cuando 
+quieres asegurarte de que siempre tienes un número fijo de elementos. No son tan
+flexibles como el tipo vector. El tipo vector es un tipo de colección similar
+proporcionado por la biblioteca estándar que *se* permite que crezca o se reduzca 
+de tamaño. Si no estás seguro de si debes usar una array o un vector, debes probablemente
+usar un vector: el Capítulo 8 discute los vectores con más detalle.
 
-An example of when you might want to use an array rather than a vector is in a
-program that needs to know the names of the months of the year. It’s very
-unlikely that such a program will need to add or remove months, so you can use
-an array because you know it will always contain 12 items:
+Un ejemplo de cuándo es posible que desees utilizar una matriz en lugar de un vector es en
+un programa que necesita saber los nombres de los meses del año. Es muy poco
+probable que un programa de este tipo necesite añadir o eliminar meses, por lo que puedes utilizar
+una array porque sabes que siempre contendrá 12 elementos:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-##### Accessing Array Elements
+##### Acceso a Los Elementos de la Array
 
-An array is a single chunk of memory allocated on the stack. We can access
-elements of an array using indexing, like this:
+Una array es un único trozo de memoria asignado en la pila. Podemos acceder 
+a elementos de una array usando indexación, así:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -321,14 +321,14 @@ fn main() {
 }
 ```
 
-In this example, the variable named `first` will get the value `1`, because
-that is the value at index `[0]` in the array. The variable named `second` will
-get the value `2` from index `[1]` in the array.
+En este ejemplo, la variable llamada `first` obtendrá el valor `1`, porque
+ese es el valor en el índice `[0]` de la array. La variable llamada `second` obtendrá 
+el valor `2` del índice `[1]` en la array.
 
-##### Invalid Array Element Access
+##### Acceso a Elementos de Array no Válidos
 
-What happens if we try to access an element of an array that is past the end of
-the array? Say we change the example to the following:
+¿Qué sucede si intentamos acceder a un elemento de una array que está más allá del final
+de la array? Digamos que cambiamos el ejemplo a lo siguiente:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -343,7 +343,7 @@ fn main() {
 }
 ```
 
-Running this code using `cargo run` produces the following result:
+Ejecutar este código usando `Cargo Run` produce el siguiente resultado:
 
 ```text
 $ cargo run
@@ -354,14 +354,14 @@ thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-The compilation didn’t produce any errors, but the program results in a
-*runtime* error and didn’t exit successfully. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than the length, Rust will
-*panic*, which is the term Rust uses when a program exits with an error.
+La compilación no produjo ningún error, pero el programa da como resultado un 
+error de *runtime* y no salió con éxito. Cuando intentes acceder a un 
+elemento utilizando la indexación, Rust comprobará que el índice especificado es inferior
+a la longitud de la array. Si el índice es mayor que la longitud, Rust entrará en 
+*panic*, que es el término que usa Rust cuando un programa sale con un error.
 
-This is the first example of Rust’s safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+Este es el primer ejemplo de los principios de seguridad de Rust en acción. En muchos
+lenguajes de bajo nivel, este tipo de comprobación no se realiza y cuando proporcionas un 
+índice incorrecto, se puede acceder a la memoria no válida. Rust te protege contra este 
+tipo de error al salir inmediatamente en lugar de permitir el acceso a la memoria y
+continuar. El Capítulo 9 trata más sobre el manejo de los errores de Rust.
