@@ -294,7 +294,7 @@ El tipo de `s`aquí es `&str`: es una slice que apunta a ese punto específico d
 binario. Por eso también las cadenas literales son inmutables; `&str` es una 
 referencia inmutable.
 
-#### Cadenas Slices como Parámetros
+#### Slices de Cadenas como Parámetros
 
 Sabiendo que puedes tomar slices de literales y `String`s nos lleva a una 
 mejora más en `first_word`, y esa es su firma:
@@ -310,7 +310,7 @@ nos permite usar la misma función tanto en `String`s como en `&str`s:
 fn first_word(s: &str) -> &str {
 ```
 
-Si tenemos una cadena slice, podemos pasar eso directamente. Si tenemos una `String`, podemos 
+Si tenemos una slice de cadena, podemos pasar eso directamente. Si tenemos una `String`, podemos 
 pasar una slice de toda la `String`. Definir una función para tomar una cadena
 slice en lugar de una referencia a una String hace que nuestra API sea más general y útil
 sin perder ninguna funcionalidad:
@@ -348,7 +348,7 @@ fn main() {
 
 ### Otras Slices
 
-Las Cadenas slice, como podrías imaginarte, son específicas de las cadenas. Pero también 
+Las Slice de cadenas, como podrías imaginarte, son específicas de las cadenas. Pero también 
 hay un tipo de slice más general. Considera este arreglo:
 
 ```rust
