@@ -1,15 +1,24 @@
 ## Definiendo una enumeración
 
-Veamos una situación que podríamos querer expresar en código y veamos por que las enumeraciones son útiles y más apropiadas que las estructuras en este caso. Digamos que necesitamos trabajar con direcciones IP. 
+Veamos una situación que podríamos querer expresar en código y veamos
+por que las enumeraciones son útiles y más apropiadas que las estructuras
+en este caso. Digamos que necesitamos trabajar con direcciones IP. 
 Actualmente, se usan dos estándares mayores para las direcciones IP:
-la versión cuatro y versión seis. Estas son las unicas posibilidades para una dirección IP que nuestro programa encontrará: podemos *enumerar* todos los valores posibles,
-que es donde la enumeración obtiene su nombre.
+la versión cuatro y versión seis. Estas son las unicas posibilidades
+para una dirección IP que nuestro programa encontrará: podemos *enumerar*
+todos los valores posibles,que es donde la enumeración obtiene su nombre.
 
-Cualquier dirección IP puede ser una versión cuatro o una versión seis pero no ambas al mismo tiempo. Esa propiedad de las direcciones IP hace la estructura de datos de enumeración apropiada para este caso, porque los valores de la enumeración puede ser solo una de las variantes. Ambas versiones, la cuatro como la seis continúan siendo fundamentalmente direcciones IP, por lo tanto deben tratarse como del mismo tipo cuando el código está manejando situaciones que se aplican a cualquier tipo de direcciones IP.
+Cualquier dirección IP puede ser una versión cuatro o una versión seis
+pero no ambas al mismo tiempo. Esa propiedad de las direcciones IP hace
+la estructura de datos de enumeración apropiada para este caso, porque
+los valores de la enumeración puede ser solo una de las variantes. Ambas
+versiones, la cuatro como la seis continúan siendo fundamentalmente direcciones
+IP, por lo tanto deben tratarse como del mismo tipo cuando el código está
+manejando situaciones que se aplican a cualquier tipo de direcciones IP.
 
-Podemos expresar este concepto en código redefiniendo una enumeración `IpAddrKind` y 
-listando los posibles tipos de direcciones IP que pueden ser `V4` y `V6`. Estas son conocidas
-como *variants* de la enumeración:
+Podemos expresar este concepto en código redefiniendo una enumeración
+`IpAddrKind` y listando los posibles tipos de direcciones IP que pueden
+ser `V4` y `V6`. Estas son conocidas como *variants* de la enumeración:
 
 ```rust
 enum IpAddrKind {
@@ -19,7 +28,8 @@ enum IpAddrKind {
 ```
 
 
-`IpAddrKind` ahora es un tipo de datos personalizado que podemos utilizar en cualquier parte de nuestro código.
+`IpAddrKind` ahora es un tipo de datos personalizado que podemos utilizar
+en cualquier parte de nuestro código.
 
 ### Valores de enumeración
 
@@ -34,9 +44,11 @@ Podemos crear istancias de cada una de las dos variantes de `IpAddrKind` asi:
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
-Tenga en cuenta que las variantes de la enumeración son espaciadas bajo su identificador, y nosotros usamos dos puntos para separarlas. La razón por la que esto es util es que ahora ambos valores `IpAddrKind::V4` y `IpAddrKind::V6` son del mismo tipo:
-`IpAddrKind`. Podemos entonces, por ejemplo, definir una función que tome cualquier
-`IpAddrKind`:
+Tenga en cuenta que las variantes de la enumeración son espaciadas bajo
+su identificador, y nosotros usamos dos puntos para separarlas. La razón
+por la que esto es util es que ahora ambos valores `IpAddrKind::V4`
+y `IpAddrKind::V6` son del mismo tipo: `IpAddrKind`. Podemos entonces,
+por ejemplo, definir una función que tome cualquier `IpAddrKind`:
 
 ```rust
 # enum IpAddrKind {
@@ -62,9 +74,11 @@ route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
 
-Usar enumeraciones tiene incluso más ventajas. Pensando más sobre nuestro tipo de dirección IP,
-por el momento no tenemos forma de almacenar la dirección IP actual *datos*; solo sabemos que *tipo* es. 
-Teniendo en cuenta que acabas de aprender sobre estructuras en el Capítulo 5, puedes llevar a cabo este problema como se muestra en el Listado 6-1:
+Usar enumeraciones tiene incluso más ventajas. Pensando más sobre
+nuestro tipo de dirección IP, por el momento no tenemos forma de 
+almacenar la dirección IP actual *datos*; solo sabemos que *tipo* es. 
+Teniendo en cuenta que acabas de aprender sobre estructuras en el
+Capítulo 5, puedes llevar a cabo este problema como se muestra en el Listado 6-1:
 
 ```rust
 enum IpAddrKind {
@@ -88,17 +102,23 @@ let loopback = IpAddr {
 };
 ```
 
-<span class="caption">Listado 6-1: Almacenamiento de los datos y la variante `IpAddrKind` de una dirección IP usando una `struct`</span>
+<span class="caption">Listado 6-1: Almacenamiento de los datos
+    y la variante `IpAddrKind` de una dirección IP usando una `struct`</span>
 
 Aquí, hemos definido una estructura `IpAddr` que tiene dos campos: un `kind` campo
 que es del tipo `IpAddrKind` (la enumeración que definimos previamente) y un `address` campo
 de tipo `String`. Tenemos dos instancias de esta estructura. La primera, `home`, tiene
 el valor `IpAddrKind::V4` como su `kind` con datos de direcciones asociadas de
 `127.0.0.1`. La segunda instancia, `loopback`, tiene la otra variante de
-`IpAddrKind` como su `kind` de valor, `V6`, y tiene la dirección `::1` asociada con eso. Hemos usado una estructura para juntar los valores `kind` y `address`, por lo que la variante ahora está asociada con el valor.
+`IpAddrKind` como su `kind` de valor, `V6`, y tiene la dirección `::1` asociada
+con eso. Hemos usado una estructura para juntar los valores `kind` y
+`address`, por lo que la variante ahora está asociada con el valor.
 
-Podemos representar el mismo concepto de una forma más concisa usando solo una enumeración
-en vez de una enumeración como parte de una estructura al poner datos directamente en cada variante de enumeración. Esta nueva definición de enumeración `IpAddr` dice que tanto las variantes `V4` y `V6` tendrán asociados valores `String`:
+Podemos representar el mismo concepto de una forma más concisa
+usando solo una enumeración en vez de una enumeración como parte
+de una estructura al poner datos directamente en cada variante de
+enumeración. Esta nueva definición de enumeración `IpAddr` dice
+que tanto las variantes `V4` y `V6` tendrán asociados valores `String`:
 
 ```rust
 enum IpAddr {
@@ -112,12 +132,15 @@ let loopback = IpAddr::V6(String::from("::1"));
 ```
 
 
-Adjuntamos datos a cada variante de la enumeración directamente, por lo tanto no hay necesidad de una estructura extra.
+Adjuntamos datos a cada variante de la enumeración directamente, por
+lo tanto no hay necesidad de una estructura extra.
 
 Existe otra ventaja de usar una enumeración en lugar de una estructura: cada variante
 puede tener diferentes tipos y cantidades de datos asociados. Las direcciones IP
-de versión cuatro siempre tendrán cuatro componentes numéricos que tendrán valores entre 0 y 255. Si deseamos almacenar direcciones `V4` como cuatro valores `u8` pero
-seguimos expresando las direcciones `V6` como un valor `String`, no podríamos con una estructura. Las enumeraciones manejan este caso con facilidad :
+de versión cuatro siempre tendrán cuatro componentes numéricos que tendrán
+valores entre 0 y 255. Si deseamos almacenar direcciones `V4` como cuatro
+valores `u8` pero seguimos expresando las direcciones `V6` como un valor `String`,
+no podríamos con una estructura. Las enumeraciones manejan este caso con facilidad :
 
 ```rust
 enum IpAddr {
@@ -130,12 +153,15 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-Mostramos muchas posibilidades diferentes que podríamos definir en nuestro código
-para almacenar direcciones IP de dos variedades diferentes usando una enumeración. Sin embargo,
-como resultado,deseando almacenar direcciones IP y codificar de que tipo son 
-es tan común que [la biblioteca estándar tiene una definición que podemos usar!][IpAddr]<!-- ignorar --> Veamos como la biblioteca estándar define
-`IpAddr`: tiene la enumeración exacta y las variantes que hemos definido y usado, pero
-esto inserta los datos de riección adentro de las variantes en forma de dos estructuras diferentes, que son definidas diferentemente para cada variante:
+Mostramos muchas posibilidades diferentes que podríamos definir
+en nuestro código para almacenar direcciones IP de dos variedades diferentes
+usando una enumeración. Sin embargo, como resultado,deseando almacenar
+direcciones IP y codificar de que tipo son es tan común que
+[la biblioteca estándar tiene una definición que podemos usar!][IpAddr]
+<!-- ignorar --> Veamos como la biblioteca estándar define 
+`IpAddr`: tiene la enumeración exacta y las variantes que hemos
+definido y usado, pero esto inserta los datos de riección adentro de las variantes
+en forma de dos estructuras diferentes, que son definidas diferentemente para cada variante:
 
 [IpAddr]: ../../std/net/enum.IpAddr.html
 
@@ -159,10 +185,12 @@ cadenas, tipos numéricos, o estructuras, por ejemplo. Incluso puedes incluir ot
 También, los tipos de biblioteca estándar son a menudo no mucho más complicadas de lo que podrías imaginar.
 
 Tenga en cuenta que aunque la biblioteca estándar contiene una definición para `IpAddr`,
-aún podemos crear y usar nuestra propia definición sin conflictos porque no hemos traido la definición de bibliotecas estándar a nuestro alcance. Hablaremos más
+aún podemos crear y usar nuestra propia definición sin conflictos porque
+no hemos traido la definición de bibliotecas estándar a nuestro alcance. Hablaremos más
 sobre importar tipos en el Capítulo 7.
 
-Veamos otro ejemplo de una enumeración en el Listado 6-2: este tiene una amplia variedad de tipos embebidos en sus variantes:
+Veamos otro ejemplo de una enumeración en el Listado 6-2: este tiene
+una amplia variedad de tipos embebidos en sus variantes:
 
 ```rust
 enum Message {
@@ -173,7 +201,8 @@ enum Message {
 }
 ```
 
-<span class="caption">Listado 6-2: Una enumeración de `Message` cuyas variantes almacene cada una diferentes cantidades y tipos de valores</span>
+<span class="caption">Listado 6-2: Una enumeración de `Message` cuyas
+    variantes almacene cada una diferentes cantidades y tipos de valores</span>
 
 Esta enumeración tiene cuatro variantes con diferentes tipos:
 
@@ -183,7 +212,10 @@ Esta enumeración tiene cuatro variantes con diferentes tipos:
 * `ChangeColor` incluye tres `i32`.
 
 La definición de una enumeración con variantes como las del Listado 6-2 es similar a 
-la definición de distintos tipos de definiciones de estructura, excepto que la enumeración no usa la palabra clave `struct` y todas las variantes estan agrupadas bajo el tipo `Message`. Las siguientes estructuras podrían contener los mismos datos que las variantes de contención de la enumeración precedente: 
+la definición de distintos tipos de definiciones de estructura, excepto que
+la enumeración no usa la palabra clave `struct` y todas las variantes estan
+agrupadas bajo el tipo `Message`. Las siguientes estructuras podrían contener
+los mismos datos que las variantes de contención de la enumeración precedente: 
 
 ```rust
 struct QuitMessage; // unit struct
