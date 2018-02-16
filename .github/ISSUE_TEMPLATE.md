@@ -1,26 +1,26 @@
-## What to expect when you file an issue here
+## Qué esperar cuando se te presenta un problema aquí
 
-### First edition
+### Primera edición
 
-The first edition of the book is no longer being actively worked on.
+La primera edición del libro ya no se está trabajando activamente.
 
-Issues for the first edition of the book are worthwhile if you are planning to
-submit a pull request, and want to discuss it first. But as we aren't actively
-working on the first edition, general bugs will be closed.
+Los problemas para la primera edición del libro valen la pena si planea
+envar una solicitud de extracción, y quiere discutirla primero. Pero como no estamos actualmente
+trabajando en la primera edición, los bugs generales serán cerrados.
 
-### Second edition
+### Segunda edición
 
-For the second edition, we are currently working with No Starch Press to bring
-it to print. Chapters go through a number of stages in the editing process, and
-once they've gotten to the layout stage, they're effectively frozen.
+Para la segudna edición, actualmente estamos trabajando con No Starch Press para llevarlo
+a imprimir. Los capítulos pasan por una serie de etapas en el proceso de edición, y
+una vez que han llegado a la etapa de diseño, son efectivamente congelados.
 
-For chapters that have gotten to the layout stage, we will likely only be
-accepting changes that correct factual errors or major problems and not, for
-example, minor wording changes.
+Para los capítulos que han llegado a la etapa de diseño, es probable que solo 
+aceptemos cambios que corrigan los errores hechos o problemas mayores y no, por
+ejemplo, cambios de redacción menores.
 
-Scroll all the way to the right on https://github.com/rust-lang/book/projects/1
-to see which chapters have been frozen.
+Desplazate hacia la derecha en https://github.com/rust-lang/book/projects/1
+para ver qué capítulos han sido congelados.
 
-Please see CONTRIBUTING.md for more details.
+Por favor revisa CONTRIBUTING.md para más detalles.
 
-Thank you for reading, you may now delete this text!
+Gracias por leer, ahora deberías borrar este texto!
