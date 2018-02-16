@@ -75,35 +75,35 @@ fn main() {
 제외하면 직관적입니다; 그러므로, 우리가 작업할 예제에서의 개념은 여러분이
 재귀적 타입을 포함하는 더 복잡한 어떠한 경우에 처하더라도 유용할 것입니다.
 
-#### More Information About the Cons List
+#### Cons List에 대한 더 많은 정보
 
-A *cons list* is a data structure that comes from the Lisp programming language
-and its dialects. In Lisp, the `cons` function (short for “construct function”)
-constructs a new pair from its two arguments, which usually are a single value
-and another pair. These pairs containing pairs form a list.
+*cons list*는 Lisp 프로그래밍 언어 및 그의 파생 언어들로부터 유래된 데이터
+구조입니다. Lisp에서, (“생성 함수 (construct function)”의 줄임말인) `cons`
+함수는 두 개의 인자를 받아 새로운 한 쌍을 생성하는데, 이 인자는 보통 단일
+값과 또다른 쌍입니다. 이러한 쌍들을 담고 있는 쌍들이 리스트를 형성합니다.
 
-The cons function concept has made its way into more general functional
-programming jargon: “to cons x onto y” informally means to construct a new
-container instance by putting the element x at the start of this new container,
-followed by the container y.
+cons 함수 개념은 더 일반적인 함수형 프로그래밍 용어로 나아갑니다:
+“to cons x onto y”는 약식으로 요소 x를 새로운 컨테이너에 집어넣고,
+그 다음 컨테이너 y를 넣는 식으로새로운 컨테이너 인스턴스를 생성하는
+것을 의미합니다.
 
-Each item in a cons list contains two elements: the value of the current item
-and the next item. The last item in the list contains only a value called `Nil`
-without a next item. A cons list is produced by recursively calling the `cons`
-function. The canonical name to denote the base case of the recursion is `Nil`.
-Note that this is not the same as the “null” or “nil” concept in Chapter 6,
-which is an invalid or absent value.
+cons list 내의 각 아이템은 두 개의 요소를 담고 있습니다: 현재 아이템의
+값과 다음 아이템이지요. 리스트의 마지막 아이템은 다음 아이템 없이 `Nil`
+이라 불리우는 값을 담고 있습니다. cons list는 `cons` 함수를 재귀적으로
+호출함으로서 만들어집니다. 재귀의 기본 케이스를 의미하는 표준 이름이 바로
+`Nil` 입니다. 유효하지 않은 값 혹은 값이 없는 것을 말하는 6장의 “null”
+혹은 “nil” 개념과 동일하지 않다는 점을 주의하세요.
 
-Although functional programming languages use cons lists frequently, it isn’t a
-commonly used data structure in Rust. Most of the time when you have a list of
-items in Rust, `Vec<T>` is a better choice to use. Other, more complex
-recursive data types *are* useful in various situations, but by starting with
-the cons list, we can explore how boxes let us define a recursive data type
-without much distraction.
+비록 함수형 프로그래밍 언어들이 cons list를 자주 사용할지라도, 러스트에서는
+흔히 사용되는 데이터 구조가 아닙니다. 러스트에서 아이템의 리스트를 갖는
+대부분의 경우에는, `Vec<T>`이 사용하기에 더 나은 선택입니다. 그와는 다른,
+더 복잡한 재귀적 데이터 타입들은 다양한 상황들에서 유용*하기는* 하지만,
+cons list를 가지고 시작함으로써, 박스가 어떻게 재귀적 데이터 타입을
+정의하도록 해주는지 우리의 집중을 방해하는 것들 없이 탐구할 수 있습니다.
 
-Listing 15-2 contains an enum definition for a cons list. Note that this code
-won’t compile yet because the `List` type doesn’t have a known size, which
-we’ll demonstrate:
+Listing 15-2는 cons list를 위한 열거형 정의를 담고 있습니다. 우리가 보여주고자
+하는 것인데, `List` 타입이 알려진 크기를 가지고 있지 않고 있기 때문에 이 코드는
+아직 컴파일이 안된다는 점을 유의하세요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -114,16 +114,16 @@ enum List {
 }
 ```
 
-<span class="caption">Listing 15-2: The first attempt at defining an enum to
-represent a cons list data structure of `i32` values</span>
+<span class="caption">Listing 15-2: `i32` 값의 cons list 데이터 구조를
+표현하는 열거형 정의에 대한 첫번째 시도</span>
 
-> Note: We’re implementing a cons list that only holds `i32` values for the
-> purposes of this example. We could have implemented it using generics, as we
-> discussed in Chapter 10, to define a cons list type that could store values of
-> any type.
+> 노트: 이 예제의 목적을 위해 오직 `i32` 값만 담는 cons list를 구현하고
+> 있습니다. 우리가 10장에서 논의한 것처럼, 임의의 타입 값을 저장할 수 있는
+> cons list 타입을 정의하기 위해서는 제네릭을 이용해 이를 구현할 수도
+> 있습니다.
 
-Using the `List` type to store the list `1, 2, 3` would look like the code in
-Listing 15-3:
+`List` 타입을 이용하여 리스트 `1, 2, 3`을 저장하는 것은 Listing 15-3의
+코드와 같이 보일 것입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -135,16 +135,16 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-3: Using the `List` enum to store the list `1,
-2, 3`</span>
+<span class="caption">Listing 15-3: `List` 열거형을 이용하여 리스트 `1, 2, 3`
+저장하기</span>
 
-The first `Cons` value holds `1` and another `List` value. This `List` value is
-another `Cons` value that holds `2` and another `List` value. This `List` value
-is one more `Cons` value that holds `3` and a `List` value, which is finally
-`Nil`, the non-recursive variant that signals the end of the list.
+첫번째 `Cons` 값은 `1`과 `List` 값을 갖습니다. 이 `List` 값은 `2`와 또다른
+`List` 값을 갖는 `Cons` 값입니다. 그 안의 `List` 값은 `3`과 `List` 값을
+갖는 추가적인 `Cons`인데, 여기서 마지막의 `List`은 `Nil`로서, 리스트의
+끝을 알리는 비재귀적인 variant입니다.
 
-If we try to compile the code in Listing 15-3, we get the error shown in
-Listing 15-4:
+만일 Listing 15-3의 코드를 컴파일하고자 시도하면, Listing 15-4에 보이는
+에러를 얻습니다:
 
 ```text
 error[E0072]: recursive type `List` has infinite size
@@ -159,15 +159,15 @@ error[E0072]: recursive type `List` has infinite size
   make `List` representable
 ```
 
-<span class="caption">Listing 15-4: The error we get when attempting to define
-a recursive enum</span>
+<span class="caption">Listing 15-4: 재귀적 열거형을 정의하고자 시도했을때
+얻게되는 에러</span>
 
-The error shows this type “has infinite size.” The reason is that we’ve defined
-`List` with a variant that is recursive: it holds another value of itself
-directly. As a result, Rust can’t figure out how much space it needs to store a
-`List` value. Let’s break down why we get this error a bit: first, let’s look
-at how Rust decides how much space it needs to store a value of a non-recursive
-type.
+이 에러는 이 타입이 “무한한 크기를 갖는다”고 말해줍니다. 그 원인은 우리가 재귀적인
+variant를 이용하여 `List`를 정의했기 때문입니다: 즉 이것은 또다른 자신을 직접
+값으로 갖습니다. 결과적으로, 러스트는 `List` 값을 저장하는데 필요한 크기가 얼마나
+되는지 알아낼 수 없습니다. 왜 우리가 이런 에러를 얻게 되는지 좀더 쪼개어 봅시다:
+먼저, 러스트가 비재귀적인 타입의 값을 저장하는데 필요한 용량이 얼마나 되는지
+결정하는 방법을 살펴봅시다.
 
 #### Computing the Size of a Non-Recursive Type
 
