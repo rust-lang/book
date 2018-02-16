@@ -1,12 +1,22 @@
-% There is a new edition of the book
+% Choosing your Guarantees
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Smart pointers are data structures that act like a pointer, but they also have additional metadata and capabilities.
+> The different smart pointers defined in Rust’s standard library provide extra functionality beyond what references provide.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+let b = Box::new(5);
+println!("b = {}", b);
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 15.00 — Smart Pointers][2]**
+* <small>[In the first edition: Ch 4.8 — Choosing your Guarantees][1]</small>
 
 
 [1]: first-edition/choosing-your-guarantees.html
-[2]: second-edition/index.html
+[2]: second-edition/ch15-00-smart-pointers.html

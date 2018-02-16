@@ -1,4 +1,5 @@
 sudo: false
+dist: trusty
 language: rust
 cache: cargo
 rust:
@@ -12,6 +13,6 @@ addons:
       - aspell
       - aspell-en
 before_script:
-  - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
+  - (cargo install mdbook --vers 0.1.0 --force || true)
 script:
   - bash ci/build.sh

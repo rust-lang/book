@@ -35,7 +35,7 @@ All `if` expressions start with the keyword `if`, which is followed by a
 condition. In this case, the condition checks whether or not the variable
 `number` has a value less than 5. The block of code we want to execute if the
 condition is true is placed immediately after the condition inside curly
-braces. Blocks of code associated with the conditions in `if` expressions are
+brackets. Blocks of code associated with the conditions in `if` expressions are
 sometimes called *arms*, just like the arms in `match` expressions that we
 discussed in the “Comparing the Guess to the Secret Number” section of
 Chapter 2. Optionally, we can also include an `else` expression, which we chose
@@ -49,6 +49,7 @@ Try running this code; you should see the following output:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 condition was true
 ```
@@ -65,13 +66,14 @@ Run the program again, and look at the output:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 condition was false
 ```
 
-It’s also worth noting that the condition in this code *must* be a `bool`. To
-see what happens if the condition isn’t a `bool`, try running the following
-code:
+It’s also worth noting that the condition in this code *must* be a `bool`. If
+the condition isn’t a `bool`, we’ll get an error. For example, try running the
+following code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -100,9 +102,9 @@ error[E0308]: mismatched types
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-boolean types to a boolean, unlike
+not automatically try to convert non-Boolean types to a Boolean, unlike
 languages such as Ruby and JavaScript. You must be explicit and always provide
-`if` with a `boolean` as its condition. If we want the `if` code block to run
+`if` with a Boolean as its condition. If we want the `if` code block to run
 only when a number is not equal to `0`, for example, we can change the `if`
 expression to the following:
 
@@ -149,6 +151,7 @@ see the following output:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 number is divisible by 3
 ```
@@ -167,7 +170,7 @@ Rust branching construct called `match` for these cases.
 #### Using `if` in a `let` statement
 
 Because `if` is an expression, we can use it on the right side of a `let`
-statement, for instance in Listing 3-4:
+statement, for instance in Listing 3-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -184,7 +187,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-4: Assigning the result of an `if` expression
+<span class="caption">Listing 3-2: Assigning the result of an `if` expression
 to a variable</span>
 
 The `number` variable will be bound to a value based on the outcome of the `if`
@@ -193,6 +196,7 @@ expression. Run this code to see what happens:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
      Running `target/debug/branches`
 The value of number is: 5
 ```
@@ -201,9 +205,9 @@ Remember that blocks of code evaluate to the last expression in them, and
 numbers by themselves are also expressions. In this case, the value of the
 whole `if` expression depends on which block of code executes. This means the
 values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-4, the results of both the `if` arm and the `else`
-arm were `i32` integers. But what happens if the types are mismatched, as in
-the following example?
+the same type; in Listing 3-2, the results of both the `if` arm and the `else`
+arm were `i32` integers. If the types are mismatched, as in the following
+example, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -238,7 +242,7 @@ error[E0308]: if and else have incompatible types
   | |_____^ expected integral variable, found reference
   |
   = note: expected type `{integer}`
-             found type `&'static str`
+             found type `&str`
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
@@ -279,11 +283,13 @@ fn main() {
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support a keyboard shortcut,
- ctrl-C, to halt a program that is stuck in a continual loop. Give it a try:
+<span class="keystroke">ctrl-c</span>, to halt a program that is stuck in a
+continual loop. Give it a try:
 
 ```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29 secs
      Running `target/debug/loops`
 again!
 again!
@@ -292,9 +298,9 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed ctrl-C. You may or may not see the
-word `again!` printed after the `^C`, depending on where the code was in the
-loop when it received the halt signal.
+The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
+</span>. You may or may not see the word `again!` printed after the `^C`,
+depending on where the code was in the loop when it received the halt signal.
 
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 You can place the `break` keyword within the loop to tell the program when to
@@ -338,7 +344,7 @@ true, the code runs; otherwise, it exits the loop.
 #### Looping Through a Collection with `for`
 
 You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example:
+such as an array. For example, let’s look at Listing 3-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -355,7 +361,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-5: Looping through each element of a collection
+<span class="caption">Listing 3-3: Looping through each element of a collection
 using a `while` loop</span>
 
 Here, the code counts up through the elements in the array. It starts at index
@@ -366,6 +372,7 @@ element in the array:
 ```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
      Running `target/debug/loops`
 the value is: 10
 the value is: 20
@@ -383,8 +390,8 @@ index length is incorrect. It’s also slow, because the compiler adds runtime
 code to perform the conditional check on every element on every iteration
 through the loop.
 
-As a more efficient alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this:
+As a more concise alternative, you can use a `for` loop and execute some code
+for each item in a collection. A `for` loop looks like this code in Listing 3-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -398,15 +405,15 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-6: Looping through each element of a collection
+<span class="caption">Listing 3-4: Looping through each element of a collection
 using a `for` loop</span>
 
-When we run this code, we’ll see the same output as in Listing 3-5. More
+When we run this code, we’ll see the same output as in Listing 3-3. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
-For example, in the code in Listing 3-5, if you removed an item from the `a`
+For example, in the code in Listing 3-3, if you removed an item from the `a`
 array but forgot to update the condition to `while index < 4`, the code would
 panic. Using the `for` loop, you don’t need to remember to change any other
 code if you changed the number of values in the array.
@@ -414,7 +421,7 @@ code if you changed the number of values in the array.
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
 certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-5, most Rustaceans would use a `for` loop. The way to do that
+in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
 would be to use a `Range`, which is a type provided by the standard library
 that generates all numbers in sequence starting from one number and ending
 before another number.

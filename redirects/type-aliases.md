@@ -1,12 +1,21 @@
-% There is a new edition of the book
+% `type` aliases
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Rust provides the ability to declare a _type alias_ with the `type` keyword to give an existing type another name.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+type Kilometers = i32;
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 19.04 — Advanced Types, section Type Synonyms][2]**
+* <small>[In the first edition: Ch 3.28 — `type` aliases][1]</small>
 
 
 [1]: first-edition/type-aliases.html
-[2]: second-edition/index.html
+[2]: second-edition/ch19-04-advanced-types.html#type-aliases-create-type-synonyms
+

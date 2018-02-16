@@ -1,8 +1,8 @@
-## Importing Names
+## Referring to Names in Different Modules
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
-here in Listing 7-6:
+here in Listing 7-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -20,13 +20,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-6: Calling a function by fully specifying its
+<span class="caption">Listing 7-7: Calling a function by fully specifying its
 enclosing module’s path</span>
 
 As you can see, referring to the fully qualified name can get quite lengthy.
 Fortunately, Rust has a keyword to make these calls more concise.
 
-### Concise Imports with `use`
+### Bringing Names into Scope with the `use` Keyword
 
 Rust’s `use` keyword shortens lengthy function calls by bringing the modules of
 the function you want to call into scope. Here’s an example of bringing the
@@ -80,10 +80,10 @@ fn main() {
 Doing so allows us to exclude all the modules and reference the function
 directly.
 
-Because enums also form a sort of namespace like modules, we can import an
-enum’s variants with `use` as well. For any kind of `use` statement, if you’re
-importing multiple items from one namespace, you can list them using curly
-braces and commas in the last position, like so:
+Because enums also form a sort of namespace like modules, we can bring an
+enum’s variants into scope with `use` as well. For any kind of `use` statement,
+if you’re bringing multiple items from one namespace into scope, you can list
+them using curly brackets and commas in the last position, like so:
 
 ```rust
 enum TrafficLight {
@@ -101,13 +101,12 @@ fn main() {
 }
 ```
 
-We're still specifying the `TrafficLight` namespace for the `Green` variant
-because we didn't include `Green` in the `use` statement.
+We’re still specifying the `TrafficLight` namespace for the `Green` variant
+because we didn’t include `Green` in the `use` statement.
 
-### Glob Imports with `*`
+### Bringing All Names into Scope with a Glob
 
-To import all the items in a namespace at once, we can use the `*` syntax. For
-example:
+To bring all the items in a namespace into scope at once, we can use the `*`  syntax, which is called the *glob operator*. This example brings all the variants of an enum into scope without having to list each specifically:
 
 ```rust
 enum TrafficLight {
@@ -125,7 +124,7 @@ fn main() {
 }
 ```
 
-The `*` is called a *glob*, and it will import all items visible inside the
+The `*` will bring into scope all the visible items in the `TrafficLight`
 namespace. You should use globs sparingly: they are convenient, but this might
 also pull in more items than you expected and cause naming conflicts.
 
@@ -146,6 +145,7 @@ pub mod network;
 mod tests {
     #[test]
     fn it_works() {
+        assert_eq!(2 + 2, 4);
     }
 }
 ```
@@ -166,7 +166,7 @@ communicator
 
 Tests are for exercising the code within our library, so let’s try to call our
 `client::connect` function from this `it_works` function, even though we won’t
-be checking any functionality right now:
+be checking any functionality right now. This won’t work yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -189,7 +189,7 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
  --> src/lib.rs:9:9
   |
 9 |         client::connect();
-  |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
+  |         ^^^^^^ Use of undeclared type or module `client`
 ```
 
 The compilation failed, but why? We don’t need to place `communicator::` in
@@ -256,7 +256,7 @@ $ cargo test
 running 1 test
 test tests::it_works ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 ## Summary

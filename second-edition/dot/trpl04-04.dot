@@ -1,5 +1,6 @@
 digraph {
     rankdir=LR;
+    overlap=false;
     dpi=300.0;
     node [shape="plaintext"];
 

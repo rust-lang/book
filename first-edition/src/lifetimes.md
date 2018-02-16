@@ -53,7 +53,7 @@ Uh oh! Your reference is pointing to an invalid resource. This is called a
 dangling pointer or ‘use after free’, when the resource is memory. A small
 example of such a situation would be:
 
-```rust,compile_fail
+```rust,ignore
 let r;              // Introduce reference: `r`.
 {
     let i = 1;      // Introduce scoped value: `i`.
@@ -70,7 +70,7 @@ as it can see the lifetimes of the various values in the function.
 When we have a function that takes arguments by reference the situation becomes
 more complex. Consider the following example:
 
-```rust,compile_fail,E0106
+```rust,ignore
 fn skip_prefix(line: &str, prefix: &str) -> &str {
     // ...
 #   line
