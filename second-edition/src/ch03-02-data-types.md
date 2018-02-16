@@ -196,8 +196,8 @@ fn main() {
 El tipo `char` de Rust representa un valor escalar Unicode, lo que significa que puede
 representar mucho más que ASCII. Letras acentuadas, ideogramas 
 chinos/japoneses/coreanos, emojis y espacios de anchura cero son todos tipos válidos de `char` en Rust.
-Los valores escalares Unicode van desde `U+000000` hasta `U+D7FF` y `U+E000` hasta
-`U+10FFFF` inclusive. Sin embargo, un "caracter" no es realmente un concepto en Unicode, 
+Los valores escalares Unicode van desde `U+000000` hasta `U+D7FF` e incluso de `U+E000` hasta
+`U+10FFFF`. Sin embargo, un "caracter" no es realmente un concepto en Unicode, 
 así que tu intuición humana para lo que es un "caracter" puede que no coincida con lo que 
 es un `char` en Rust. Discutiremos este tema en detalle en la sección "Cadenas" 
 en el Capítulo 8.
