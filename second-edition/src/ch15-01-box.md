@@ -169,10 +169,10 @@ variant를 이용하여 `List`를 정의했기 때문입니다: 즉 이것은 �
 먼저, 러스트가 비재귀적인 타입의 값을 저장하는데 필요한 용량이 얼마나 되는지
 결정하는 방법을 살펴봅시다.
 
-#### Computing the Size of a Non-Recursive Type
+#### 비재귀적 타입의 크기 계산하기
 
-Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
-definitions in Chapter 6:
+6장에서 열거형 정의에 대해 논의할 때 우리가 Listing 6-2에서 정의했던 `Message`
+열거형을 상기해봅시다:
 
 ```rust
 enum Message {
@@ -183,53 +183,54 @@ enum Message {
 }
 ```
 
-To determine how much space to allocate for a `Message` value, Rust goes
-through each of the variants to see which variant needs the most space. Rust
-sees that `Message::Quit` doesn’t need any space, `Message::Move` needs enough
-space to store two `i32` values, and so forth. Because only one variant will be
-used, the most space a `Message` value will need is the space it would take to
-store the largest of its variants.
+`Message` 값을 할당하기 위해 얼마나 많은 공간이 필요한지를 결정하기 위해서, 러스트는
+어떤 variant가 가장 많은 공간을 필요로 하는지를 알기 위해 각각의 variant들 내부를
+봅니다. 러스트는 `Message::Quit`가 어떠한 공간도 필요없음을 알게 되고,
+`Message::Move`는 두 개의 `i32` 값을 저장하기에 충분한 공간이 필요함을 알게 되고,
+그렇게 진행됩니다. 단 하나의 variant만 사용될 것이기 때문에, `Message` 값이 필요로
+하는 가장 큰 공간은 그것의 varient 중 가장 큰 것을 저장하는데 필요한 공간입니다.
 
-Contrast this to what happens when Rust tries to determine how much space a
-recursive type like the `List` enum in Listing 15-2 needs. The compiler starts
-by looking at the `Cons` variant, which holds a value of type `i32` and a value
-of type `List`. Therefore, `Cons` needs an amount of space equal to the size of
-an `i32` plus the size of a `List`. To figure out how much memory the `List`
-type needs, the compiler looks at the variants, starting with the `Cons`
-variant. The `Cons` variant holds a value of type `i32` and a value of type
-`List`, and this process continues infinitely, as shown in Figure 15-1:
+러스트가 Listing 15-2의 `List` 열거형과 같은 재귀적 타입이 필요로 하는 공간을
+결정하고자 시도할 때 어떤 일이 일어나는지를 이와 대조해보세요. 컴파일러는 `Cons`
+variant를 살펴보는 것을 시작하는데, 이는 `i32` 타입의 값과 `List` 타입의 값을
+갖습니다. 그러므로, `Cons`는 `i32`의 크기에 `List` 크기를 더한 만큼의 공간을
+필요로 합니다. `List` 타입이 얼마나 많은 메모리를 차지하는지 알아내기 위해서,
+컴파일러는 그것의 variants를 살펴보는데, 이는 `Cons` variant로 시작됩니다.
+`Cons` variant는 `i32` 타입의 값과 `List` 타입의 값을 갖고, 이 과정은 Figure
+15-1에서 보는 바와 같이 무한히 계속됩니다:
 
 <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 15-1: An infinite `List` consisting of infinite
-`Cons` variants</span>
+<span class="caption">Figure 15-1: 무한한 `Cons` variant를 가지고 있는
+무한한 `List`</span>
 
-#### Using `Box<T>` to Get a Recursive Type with a Known Size
+#### `Box<T>`를 이용하여 알려진 크기를 가진 재귀적 타입 만들기
 
-Rust can’t figure out how much space to allocate for recursively defined types,
-so the compiler gives the error in Listing 15-4. But the error does include
-this helpful suggestion:
+러스트는 제귀적으로 정의된 타입을 위하여 얼만큼의 공간을 할당하는지 알아낼 수
+없으므로, 컴파일러는 Listing 15-4의 에러를 내줍니다. 하지만 이 에러는 아래와 같은
+유용한 제안을 포함하고 있습니다:
 
 ```text
   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
   make `List` representable
 ```
 
-In this suggestion, “indirection” means that instead of storing a value
-directly, we’ll change the data structure to store the value indirectly by
-storing a pointer to the value instead.
+이 제안에서, “간접 (indirection)”은 값을 직접 저장하는 대신,
+간접적으로 값의 포인터를 저장하기 위하여 데이터 구조를 바꿀 수
+있음을 의미합니다.
 
-Because a `Box<T>` is a pointer, Rust always knows how much space a `Box<T>`
-needs: a pointer’s size doesn’t change based on the amount of data it’s
-pointing to. This means we can put a `Box<T>` inside the `Cons` variant instead
-of another `List` value directly. The `Box<T>` will point to the next `List`
-value that will be on the heap rather than inside the `Cons` variant.
-Conceptually, we still have a list, created with lists “holding” other lists,
-but this implementation is now more like the items being next to one another
-rather than inside one another.
+`Box<T>`가 포인터이기 때문에, 러스트는 언제나 `Box<T>`가 필요로하는 공간이
+얼마인지 알고 있습니다: 포인터의 크기는 그것이 가리키고 있는 데이터의 양에
+기반하여 변경되지 않습니다. 이는 우리가 `Cons` variant 내에 또다른 `List`
+값을 직접 넣는 대신 `Box<T>`를 넣을 수 있다는 뜻입니다. `Box<T>`는 `Cons`
+variant 안에 있기 보다는 힙에 있을 다음의 `List` 값을 가리킬 것입니다.
+개념적으로, 우리는 다른 리스트들을 “담은” 리스트들로 만들어진 리스트를 여전히
+갖게 되지만, 이 구현은 이제 또다른 것 안의 아이템들이 아니라 또다른 것 옆에
+있는 아이템들에 더 가깝습니다.
 
-We can change the definition of the `List` enum in Listing 15-2 and the usage
-of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile:
+우리는 Listing 15-2의 `List` 열거형의 정의와 Listing 15-3의 `List`
+사용법을 Listing 15-5의 코드로 바꿀수 있는데, 이는 컴파일 될 것입니다:
+
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -249,33 +250,33 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
-order to have a known size</span>
+<span class="caption">Listing 15-5: 알려진 크기를 갖도록 하기 위해
+`Box<T>`를 이용하는 `List`의 정의</span>
 
-The `Cons` variant will need the size of an `i32` plus the space to store the
-box’s pointer data. The `Nil` variant stores no values, so it needs less space
-than the `Cons` variant. We now know that any `List` value will take up the
-size of an `i32` plus the size of a box’s pointer data. By using a box, we’ve
-broken the infinite, recursive chain, so the compiler can figure out the size
-it needs to store a `List` value. Figure 15-2 shows what the `Cons` variant
-looks like now:
+`Cons` variant는 `i32`와 박스의 포인터 데이터를 저장할 공간을 더한 크기를 요구할
+것입니다. `Nil` variant는 아무런 값도 저장하지 않으므로, `Cons` variant에 비해
+공간을 덜 필요로 합니다. 우리는 이제 어떠한 `List` 값이 `i32`의 크기 더하기 박스의
+포인터 데이터의 크기만큼을 차지할 것인 점을 알게 되었습니다. 박스를 이용함으로써,
+우리는 무한하고, 재귀적인 연결을 부수었고, 따라서 컴파일러는 `List` 값을 저장하는데
+필요한 크기를 알아낼 수 있습니다. Figure 15-2는 `Cons` variant가 이제 어떻게
+생겼는지를 보여주고 있습니다:
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
-<span class="caption">Figure 15-2: A `List` that is not infinitely sized
-because `Cons` holds a `Box`</span>
+<span class="caption">Figure 15-2: `Cons`가 `Box`를 들고 있기 때문에
+무한한 크기가 아니게 된 `List`</span>
 
-Boxes only provide the indirection and heap allocation; they don’t have any
-other special capabilities, like those we’ll see with the other smart pointer
-types. They also don’t have any performance overhead that these special
-capabilities incur, so they can be useful in cases like the cons list where the
-indirection is the only feature we need. We’ll look at more use cases for boxes
-in Chapter 17, too.
+박스는 단지 간접 및 힙 할당만을 제공할 뿐입니다; 이들은 다른 어떤 특별한
+능력들, 우리가 다른 스마트 포인터 타입들에서 보게 될 것 같은 능력들이
+없습니다. 또한 이들은 이러한 특별한 능력들이 초래하는 성능적인 오버헤드도
+가지고 있지 않으므로, 우리가 필요로 하는 기능이 딱 간접 하나인 cons list와
+같은 경우에 유용할 수 있습니다. 우리는 또한 17장에서 박스에 대하여 더 많은
+사용례를 살펴볼 것입니다.
 
-The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
-which allows `Box<T>` values to be treated like references. When a `Box<T>`
-value goes out of scope, the heap data that the box is pointing to is cleaned
-up as well because of the `Drop` trait implementation. Let’s explore these two
-traits in more detail. These two traits will be even more important to the
-functionality provided by the other smart pointer types we’ll discuss in the
-rest of this chapter.
+`Box<T>` 타입은 스마트 포인터인데 그 이유는 이것이 `Deref` 트레잇을 구현하고
+있기 때문이며, 이는 `Box<T>` 값이 참조자와 같이 취급되도록 허용해줍니다.
+`Box<T>` 값이 스코프 밖으로 벗어날 때, 박스가 가리키고 있는 힙 데이터도
+마찬가지로 정리되는데 이는 `Drop` 트레잇의 구현 때문에 그렇습니다. 이 두 가지
+트레잇에 대하여 더 자세히 탐구해 봅시다. 이 두 트레잇이 이 장의 나머지에서
+다루게 될 다른 스마트 포인터 타입에 의해 제공되는 기능들보다 심지어 더 중요할
+것입니다.
