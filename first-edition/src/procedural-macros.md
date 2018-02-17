@@ -267,8 +267,8 @@ fn impl_hello_world(ast: &syn::DeriveInput) -> quote::Tokens {
             }
         }
     } else {
-        //Nope. This is an Enum. We cannot handle these!
-       panic!("#[derive(HelloWorld)] is only defined for structs, not for enums!");
+        // Nope. This is an Enum. We cannot handle these!
+        panic!("#[derive(HelloWorld)] is only defined for structs, not for enums!");
     }
 }
 ```
