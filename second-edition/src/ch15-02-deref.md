@@ -1,24 +1,24 @@
-## Treating Smart Pointers Like Regular References with the `Deref` Trait
+## Deref 트레잇을 가지고 스마트 포인터를 평범한 참조자와 같이 취급하기
 
-Implementing the `Deref` trait allows us to customize the behavior of the
-*dereference operator*, `*` (as opposed to the multiplication or glob
-operator). By implementing `Deref` in such a way that a smart pointer can be
-treated like a regular reference, we can write code that operates on references
-and use that code with smart pointers too.
+Deref 트레잇을 구현하는 것은 우리가 (곱하기 혹은 글롭 연산자와는 반대측에 있는)
+*역참조 연산자 (dereference operator)* `*` 의 동작을 커스터마이징 하는
+것을 허용합니다. 스마트 포인터가 평범한 참조자처럼 취급될 수 있는 방식으로 Deref를
+구현함으로써, 우리는 참조자에 대해 작동하는 코드를 작성하고 이 코드를 또한 스마트
+포인터에도 사용할 수 있습니다.
 
-Let’s first look at how `*` works with regular references, and then try to
-define our own type like `Box<T>` and see why `*` doesn’t work like a reference
-on our newly defined type. We’ll explore how implementing the `Deref` trait
-makes it possible for smart pointers to work in a similar way as references.
-Then we’ll look at Rust’s *deref coercion* feature and how it lets us work with
-either references or smart pointers.
+먼저 `*`가 보통의 참조자와 어떤식으로 동작하는지를 살펴보고, 그런 다음 `Box<T>`와
+비슷한 우리만의 타입을 정의하는 시도를 해서 왜 `*`가 우리의 새로 정의된 타입에서는
+참조자처럼 작동하지 않는지를 봅시다. 우리는 `Defer` 트레잇을 구현하는 것이 어떻게
+스마트 포인터가 참조자와 유사한 방식으로 동작하는 것을 가능하게 해주는지를 탐구할
+것입니다. 그런 뒤 러스트의 *역참조 강제 (deref corecion)* 기능과 이 기능이 어떻게
+참조자 혹은 스마트 포인터와 함께 동작하도록 하는지 살펴보겠습니다.
 
-### Following the Pointer to the Value with `*`
+### `*`와 함께 포인터를 따라가서 값을 얻기
 
-A regular reference is a type of pointer, and one way to think of a pointer is
-as an arrow to a value stored somewhere else. In Listing 15-6, we create a
-reference to an `i32` value and then use the dereference operator to follow the
-reference to the data:
+보통의 참조자는 포인터 타입이며, 포인터를 생각하는 한가지 방법은 다른 어딘가에
+저장된 값을 가리키는 화살표로서 생각하는 것입니다. Listing 15-6에서는 `i32`
+값의 참조자를 생성하고는 참조자를 따라가서 값을 얻기 위해 역참조 연산자를
+사용합니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -32,18 +32,18 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-6: Using the dereference operator to follow a
-reference to an `i32` value</span>
+<span class="caption">Listing 15-6: 역참조 연산자를 사용하여 `i32` 값에 대한
+참조자를 따라가기</span>
 
-The variable `x` holds an `i32` value, `5`. We set `y` equal to a reference to
-`x`. We can assert that `x` is equal to `5`. However, if we want to make an
-assertion about the value in `y`, we have to use `*y` to follow the reference
-to the value it’s pointing to (hence *dereference*). Once we dereference `y`,
-we have access to the integer value `y` is pointing to that we can compare with
-`5`.
+변수 `x`는 `i32` 값을 가지고 있습니다. `y`에는 `x`의 참조자를 설정했습니다.
+우리는 `x`가 `5`와 동일함을 단언할 수 있습니다. 하지만, 만일 `y` 안의 값에
+대한 단언을 만들고 싶다면, 참조자를 따라가서 이 참조자가 가리키고 있는 값을
+얻기 위해 `*y`를 사용해야 합니다 (그래서 *역참조*라 합니다). 일단 `y`를
+역참조하면, `5`와 비교 가능한 `y`가 가리키고 있는 정수값에 접근하게
+됩니다.
 
-If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
-error:
+대신 `assert_eq!(5, y);`라고 작성하길 시도했다면, 아래와 같은 컴파일 에러를
+얻을 것입니다:
 
 ```text
 error[E0277]: the trait bound `{integer}: std::cmp::PartialEq<&{integer}>` is
@@ -57,15 +57,16 @@ not satisfied
   `{integer}`
 ```
 
-Comparing a number and a reference to a number isn’t allowed because they’re
-different types. We must use `*` to follow the reference to the value it’s
-pointing to.
+숫자와 숫자에 대한 참조자를 비교하는 것은 허용되지 않는데 그 이유는 이들이 서로
+다른 타입이기 때문입니다. `*`를 사용하여 해당 잠조자를 따라가서 그것이 가리키고 있는
+값을 얻어야 합니다.
 
-### Using `Box<T>` Like a Reference
+### `Box<T>`를 참조자처럼 사용하기
 
-We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
-reference, and the dereference operator will work the same way as shown in
-Listing 15-7:
+Listing 15-7에서 보는 바와 같이, Listing 15-6의 코드는 참조자 대신
+`Box<T>`를 이용하여 재작성될 수 있으며, 역참조 연산자는 동일한 방식으로
+작동될 것입니다:
+
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -79,15 +80,15 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-7: Using the dereference operator on a
-`Box<i32>`</span>
+<span class="caption">Listing 15-7: `Box<i32>` 상에 역참조 연산자
+사용하기</span>
 
-The only difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a box pointing to the value in `x` rather than a
-reference pointing to the value of `x`. In the last assertion, we can use the
-dereference operator to follow the box’s pointer in the same way that we did
-when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
-that enables us to use the dereference operator by defining our own box type.
+Listing 15-7와 Listing 15-6 사이의 차이점은 오직 `x`의 값을 가리키는
+참조자보다는 `x`를 가리키는 박스의 인스턴스로 `y`를 설정했다는 것입니다.
+마지막 단언문에서, 우리는 `y`가 참조자일때 했던 것과 동일한 방식으로 박스
+포인터 앞에 역참조 연산자를 사용할 수 있습니다. 다음으로, 우리만의 박스 타입을
+정의함으로써 `Box<T>`가 우리에게 역참조 연산자를 사용 가능하게끔 해주는
+특별함이 무엇인지 탐구해 보겠습니다.
 
 ### Defining Our Own Smart Pointer
 
