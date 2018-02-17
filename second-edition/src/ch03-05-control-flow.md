@@ -1,19 +1,19 @@
-## Control Flow
+## Flujo de Control
 
-Deciding whether or not to run some code depending on if a condition is true or
-deciding to run some code repeatedly while a condition is true are basic
-building blocks in most programming languages. The most common constructs that
-let you control the flow of execution of Rust code are `if` expressions and
+Decidir si ejecutar o no algún código dependiendo de si una condición es verdadera o 
+decidir ejecutar un código repetidamente mientras una condición es verdadera son elementos
+básicos en la mayoría de los lenguajes de programación. Las construcciones más comunes que 
+permiten controlar el flujo de ejecución del código Rust son las expresiones `if` y los
 loops.
 
-### `if` Expressions
+### Expresiones `if`
 
-An `if` expression allows us to branch our code depending on conditions. We
-provide a condition and then state, “If this condition is met, run this block
-of code. If the condition is not met, do not run this block of code.”
+Una expresión `if` nos permite ramificar nuestro código dependiendo de las condiciones. 
+Proporcionamos una condición y luego declaramos: "Si se cumple esta condición, se ejecute este bloque
+de código. Si la condición no se cumple, no se ejecute este bloque de código."
 
-Create a new project called *branches* in your *projects* directory to explore
-the `if` expression. In the *src/main.rs* file, input the following:
+Crea un nuevo proyecto llamado *branches* en tu directorio *projects* para explorar
+la expresión `if`. En el archivo *src/main. rs*, escribe lo siguiente:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -31,20 +31,20 @@ fn main() {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-All `if` expressions start with the keyword `if`, which is followed by a
-condition. In this case, the condition checks whether or not the variable
-`number` has a value less than 5. The block of code we want to execute if the
-condition is true is placed immediately after the condition inside curly
-brackets. Blocks of code associated with the conditions in `if` expressions are
-sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the “Comparing the Guess to the Secret Number” section of
-Chapter 2. Optionally, we can also include an `else` expression, which we chose
-to do here, to give the program an alternative block of code to execute should
-the condition evaluate to false. If you don’t provide an `else` expression and
-the condition is false, the program will just skip the `if` block and move on
-to the next bit of code.
+Todas las expresiones `if` comienzan con la palabra clave `if`, que es seguida por una
+condición. En este caso, la condición verifica si la variable `number` 
+tiene un valor inferior a 5. El bloque de código que queremos ejecutar si la 
+condición es verdadera se coloca inmediatamente después de la condición dentro de las
+llaves. Los bloques de código asociados con las condiciones en las expresiones `if`
+a veces se llaman *arms*, al igual que las arms en las expresiones `match` que 
+discutimos en la sección "Comparación de Adivinanzas con el Número Secreto" del
+Capítulo 2. Opcionalmente, también podemos incluir una expresión `else`, que optamos por
+hacer aquí, para dar al programa un bloque de código alternativo a ejecutar en caso
+de que la condición se evalúe como falsa. Si no proporcionas una expresión `else` y
+la condición es falsa, el programa saltará el bloque `if` y pasará al 
+siguiente bit de código.
 
-Try running this code; you should see the following output:
+Intenta ejecutar este código; deberías ver la siguiente salida:
 
 ```text
 $ cargo run
@@ -54,14 +54,14 @@ $ cargo run
 condition was true
 ```
 
-Let’s try changing the value of `number` to a value that makes the condition
-`false` to see what happens:
+Intentemos cambiar el valor de `number` a un valor que haga que la condición
+sea `false` para ver qué sucede:
 
 ```rust,ignore
 let number = 7;
 ```
 
-Run the program again, and look at the output:
+Vuelve a ejecutar el programa y mira la salida:
 
 ```text
 $ cargo run
@@ -71,9 +71,9 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that the condition in this code *must* be a `bool`. If
-the condition isn’t a `bool`, we’ll get an error. For example, try running the
-following code:
+También vale la pena notar que la condición en este código *debe* ser un `bool`. Para
+ver qué sucede si la condición no es un `bool`, intenta ejecutar el siguiente
+código:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -87,7 +87,7 @@ fn main() {
 }
 ```
 
-The `if` condition evaluates to a value of `3` this time, and Rust throws an
+La condición `if` evalúa a un valor de `3` esta vez, y Rust lanza un 
 error:
 
 ```text
@@ -101,12 +101,12 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-Boolean types to a Boolean, unlike
-languages such as Ruby and JavaScript. You must be explicit and always provide
-`if` with a Boolean as its condition. If we want the `if` code block to run
-only when a number is not equal to `0`, for example, we can change the `if`
-expression to the following:
+El error indica que Rust esperaba un `bool` pero obtuvo un entero. Rust no 
+intentará convertir automáticamente tipos no booleanos a booleano, a diferencia
+de lenguajes como Ruby y JavaScript. Tu debes ser explícito y proporcionar siempre
+`if` con un `boolean` como su condición. Si queremos que el bloque de código `if` se ejecute
+sólo cuando un número no es igual a `0`, por ejemplo, podemos cambiar `if` 
+a la siguiente expresión:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -120,12 +120,12 @@ fn main() {
 }
 ```
 
-Running this code will print `number was something other than zero`.
+Al ejecutar este código se imprimirá `number was something other than zero`.
 
-#### Multiple Conditions with `else if`
+#### Multiple Condiciones con `else if`
 
-We can have multiple conditions by combining `if` and `else` in an `else if`
-expression. For example:
+Podemos tener múltiples condiciones combinando `if` y `else` en una expresión 
+`else if`. Por ejemplo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -145,8 +145,8 @@ fn main() {
 }
 ```
 
-This program has four possible paths it can take. After running it, you should
-see the following output:
+Este programa tiene cuatro caminos posibles que puede tomar. Después de ejecutarlo, deberías 
+ver la siguiente salida:
 
 ```text
 $ cargo run
@@ -156,21 +156,21 @@ $ cargo run
 number is divisible by 3
 ```
 
-When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition holds true. Note that even though 6 is
-divisible by 2, we don’t see the output `number is divisible by 2`, nor do we
-see the `number is not divisible by 4, 3, or 2` text from the `else` block. The
-reason is that Rust will only execute the block for the first true condition,
-and once it finds one, it won’t even check the rest.
+Cuando este programa se ejecuta, comprueba cada expresión `if` y ejecuta 
+el primer cuerpo para el cual la condición es verdadera. Nota que aunque 6 es 
+divisible por 2, no vemos la salida `number is divisible by 2`, ni vemos
+el `number is not divisible by 4, 3, or 2` texto del bloque `else`. La 
+razón es que Rust sólo ejecutará el bloque para la primera condición verdadera,
+y una vez que encuentre una, este no comprobará el resto.
 
-Using too many `else if` expressions can clutter your code, so if you have more
-than one, you might want to refactor your code. Chapter 6 describes a powerful
-Rust branching construct called `match` for these cases.
+Usar demasiadas expresiones `else if` puede desordenar tu código, así que si tienes más
+de una, quizás quieras refactorizar tu código. El capítulo 6 describe una poderosa
+construcción de ramificación de Rust llamada `match` para estos casos.
 
-#### Using `if` in a `let` statement
+#### Usando `if` en una Declaración `let`
 
-Because `if` is an expression, we can use it on the right side of a `let`
-statement, for instance in Listing 3-2:
+Debido a que `if` es una expresión, podemos usarla en el lado derecho de una declaración 
+`let`, por ejemplo en Listado 3-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -187,11 +187,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-2: Assigning the result of an `if` expression
-to a variable</span>
+<span class="caption">Listado 3-2: Asignar el resultado de una expresión `if`
+ a una variable</span>
 
-The `number` variable will be bound to a value based on the outcome of the `if`
-expression. Run this code to see what happens:
+La variable `number` estará ligada a un valor basado en el resultado de la expresión
+`if`. Corre este código para ver qué pasa:
 
 ```text
 $ cargo run
@@ -201,13 +201,13 @@ $ cargo run
 The value of number is: 5
 ```
 
-Remember that blocks of code evaluate to the last expression in them, and
-numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
-values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-2, the results of both the `if` arm and the `else`
-arm were `i32` integers. If the types are mismatched, as in the following
-example, we’ll get an error:
+Recuerda que los bloques de código evalúan hasta la última expresión en ellos, y 
+los números por sí mismos son también expresiones. En este caso, el valor completo de la 
+expresión `if` depende del bloque de código que se ejecute. Esto significa que 
+los valores que tienen el potencial de ser resultados de cada arm del `if` deben ser
+del mismo tipo; en el Listado 3-4, los resultados tanto del arm `if` como del arm
+`else` fueron `i32` enteros. Pero, ¿qué sucede si los tipos no coinciden, 
+como en el siguiente ejemplo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -225,9 +225,9 @@ fn main() {
 }
 ```
 
-When we try to run this code, we’ll get an error. The `if` and `else` arms have
-value types that are incompatible, and Rust indicates exactly where to find the
-problem in the program:
+Cuando intentemos ejecutar este código, tendremos un error. Los arms `if` y `else` tienen 
+tipos de valores incompatibles y Rust indica exactamente dónde encontrar el 
+problema en el programa:
 
 ```text
 error[E0308]: if and else have incompatible types
