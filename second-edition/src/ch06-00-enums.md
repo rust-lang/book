@@ -1,15 +1,14 @@
-# Enums and Pattern Matching
+# Enumeraciones y patrones de coincidencia
 
-In this chapter we’ll look at *enumerations*, also referred to as *enums*.
-Enums allow you to define a type by enumerating its possible values. First,
-we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum, called `Option`, which
-expresses that a value can be either something or nothing. Then we’ll look at
-how pattern matching in the `match` expression makes it easy to run different
-code for different values of an enum. Finally, we’ll cover how the `if let`
-construct is another convenient and concise idiom available to you to handle
-enums in your code.
+En este capítulo veremos las *enumeraciones*, que también son conocidas como *enums*.
+Las enumeraciones te permiten definir un tipo enumerando sus posibles valores. Primero,
+definiremos y usaremos un enumerador para mostrar como puede codificar el significado 
+con datos. A continuación, exploraremos una enumeración particularmente útil, llamada
+`Option`, queexpresa que un valor puede tener algo o nada. Luego veremos como la coincidencia
+de patrones en la expresión `match`  facilita ejecutar código para diferentes valores en una
+enumeración. Finalmente, cubriremos como el constructor `if let`es otro conveniente y conciso
+idioma disponible para que puedas manejar enumeraciones en tu código.
 
-Enums are a feature in many languages, but their capabilities differ in each
-language. Rust’s enums are most similar to *algebraic data types* in functional
-languages like F#, OCaml, and Haskell.
+Las enumeraciones son una característica en muchos languajes, pero sus capacidades son distintas
+en cada lenguaje. Las enumeraciones de Rust son más similares a *tipos de datos algebraicos* en 
+lenguajes funcionales como F#, OCaml y Haskell.

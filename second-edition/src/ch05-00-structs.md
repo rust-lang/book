@@ -1,11 +1,11 @@
-# Using Structs to Structure Related Data
+# Utilización de Estructuras Para Estructurar Datos Relacionados
 
-A *struct*, or *structure*, is a custom data type that lets us name and package
-together multiple related values that make up a meaningful group. If you’re
-familiar with an object-oriented language, a *struct* is like an object’s data
-attributes. In this chapter, we’ll compare and contrast tuples with structs,
-demonstrate how to use structs, and discuss how to define methods and
-associated functions to specify behavior associated with a struct’s data. The
-struct and *enum* (which is discussed in Chapter 6) concepts are the building
-blocks for creating new types in your program’s domain to take full advantage
-of Rust’s compile time type checking.
+Una *estruct*, o *estructe*, es un tipo de datos personalizados que nos permite nombrar y empaquetar
+juntos múltiples valores relacionados que forman un grupo significativo. Si estás
+familiarizado con un lenguaje orientado a objetos, una *struct* es como los atributos de datos
+de un objeto. En este capítulo, compararemos y contrastaremos tuplas con estructuras,
+demostraremos cómo usar estructuras y discutiremos cómo definir métodos y
+funciones asociadas a estructuras para especificar el comportamiento asociado con los datos
+de una estructura. Los conceptos de estructura y *enum* (que se discute en el Capítulo 6) son los
+bloques básicos para crear nuevos tipos en el dominio de tu programa para aprovechar al máximo
+las ventajas de la comprobación del tipo de tiempo de compilación de Rust.

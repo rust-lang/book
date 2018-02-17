@@ -1,8 +1,8 @@
-## Installation
+## Instalacion
 
-The first step to using Rust is to install it. You’ll need an internet
-connection to run the commands in this chapter, as we’ll be downloading Rust
-from the internet. We’ll actually be installing Rust using `rustup`, a
+El primer paso para usar Rust es instalarlo. Necesitarás tener conexión a internet
+ para ejecutar los comandos de este capítulo ya que nos vamos a descargar Rust de internet
+We’ll actually be installing Rust using `rustup`, a
 command-line tool for managing Rust versions and associated tools.
 
 The following steps will install the latest stable version of the Rust
@@ -16,44 +16,43 @@ expected with the content of this book.
 
 > #### Command Line Notation
 >
-> We’ll be showing off a number of commands using a terminal, and those lines
-> all start with `$`. You don’t need to type in the `$` character; they are
-> there to indicate the start of each command. You’ll see many tutorials and
-> examples around the web that follow this convention: `$` for commands run as
-> a regular user, and `#` for commands you should be running as an
-> administrator. Lines that don’t start with `$` are typically showing the
-> output of the previous command. Additionally, PowerShell specific examples
-> will use `>` rather than `$`.
+> Vamos a ir mostrando una serie de comandos usando el terminal; todas estas líneas
+> comienzan por `$`. No necesitas teclear el caracter `$`; esto se usa para indicar
+> el inicio de cada comando. Habrás visto muchos tutoriales y ejemplos en internet
+> que siguen esta convención: `$` para comandos ejecutados como un usuario normal
+> y `#` para los comandos que debes ejecutar como administrador o root.
+> Las líneas que no comienzan con `$` muestran, normalmente, la salida por terminal
+> del comando anterior.
+> Additionally, PowerShell specific examples will use `>` rather than `$`.
 
-### Installing Rustup on Linux or Mac
+### Instalación en Linux o Mac
 
-If you’re on Linux or a Mac, 99% of what you need to do is open a terminal and
-type this:
+Si utilizas Linux o Mac, el 99% de lo que tienes que hacer es abrir un terminal
+y escribir lo siguiente:
 
 ```text
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-This will download a script and start the installation of the `rustup` tool,
-which installs the latest stable version of Rust. You may be prompted for your
-password. If it all goes well, you’ll see this appear:
+Esto descargará un script y comenzará la instalación de la herramienta `rustup`,
+que instala la ultima version estable de Rust. El proceso de instalación seguramente
+te pedirá tu contraseña. Si todo va bien verás aparecer este mensaje:
 
 ```text
 Rust is installed now. Great!
 ```
 
-Of course, if you distrust using `curl URL | sh` to install software, you can
-download, inspect, and run the script however you like.
+Por supuesto, si no confias en usar  `curl | sh` puedes descargar, inspeccionar y
+ejecutar el script de instalación del modo que prefieras.
 
-The installation script automatically adds Rust to your system PATH after your
-next login. If you want to start using Rust right away, run the following
-command in your shell:
+El script de instalación añade automáticamente Rust a tu PATH de sistema después del siguiente login.
+Si quieres comenzar a usar Rust ya mismo, ejecuta el siguiente comando en tu terminal:
 
 ```text
 $ source $HOME/.cargo/env
 ```
 
-Alternatively, add the following line to your `~/.bash_profile`:
+Como alternativa, añade la siguiente línea a tu fichero `~/.bash_profile`:
 
 ```text
 $ export PATH="$HOME/.cargo/bin:$PATH"
@@ -67,10 +66,11 @@ one. You may want to install a C compiler regardless of your need for only a
 linker; some common Rust packages depend on C code and will need a C compiler
 too.
 
-### Installing Rustup on Windows
+### Instalación en Windows
 
-On Windows, go to [https://www.rust-lang.org/en-US/install.html][install] and
-follow the instructions. You’ll also need the C++ build tools for Visual Studio
+En Windows ve a [https://rustup.rs](https://rustup.rs/)<!-- ignore --> y sigue
+las instrucciones.
+You’ll also need the C++ build tools for Visual Studio
 2013 or later. The easiest way to acquire the build tools is by installing
 [Build Tools for Visual Studio 2017][visualstudio] which provides only the
 Visual C++ build tools. Alternately, you can [install][visualstudio] Visual
@@ -85,65 +85,67 @@ PowerShell. If there are specific differences, we’ll explain which to use.
 
 ### Custom Installations Without Rustup
 
-If you have reasons for preferring not to use `rustup`, please see [the Rust
-installation page](https://www.rust-lang.org/install.html) for other options.
+Si por alguna razón prefieres no usar `rustup`, mira la
+[página de instalación de Rust](https://www.rust-lang.org/install.html)
+para ver otras opciones.
 
-### Updating
+### Actualización
 
-Once you have Rust installed via `rustup`, updating to the latest version is
-easy. From your shell, run the update script:
+Una vez tienes Rust instalado desde `rustup`, actualizar a la última versión
+es muy sencillo. Desde el terminal, ejecuta el script de actualización:
 
 ```text
 $ rustup update
 ```
 
-### Uninstalling
+### Desinstalación
 
-Uninstalling Rust and Rustup is as easy as installing them. From your shell,
-run the uninstall script:
+Desinstalar Rust y Rustup es tan sencillo como instalarlos. En tu terminal,
+ejecuta el script de desinstalación:
 
 ```text
 $ rustup self uninstall
 ```
 
-### Troubleshooting
+### Solución de problemas
 
-To check that you have Rust installed, you can open up a shell and type this:
+Para comprobar que tienes Rust instalado, puedes abrir un terminal y escribir
+lo siguiente:
 
 ```text
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date in a format
-similar to this for the latest stable version at the time you install:
+Esto te mostrará el número de versión, el hash del commit y la fecha
+de la versión que tienes instalada en un formato similar a este:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this, Rust has been installed successfully! Congrats!
+¡Si ves esto significa que Rust ha sido instalado correctamente! ¡Felicitaciones!
 
-If you don’t and you’re on Windows, check that Rust is in your `%PATH%` system
-variable.
+Si no lo ves y estás usando Windows, comprueba que Rust está en la variable `%PATH%`
+ del sistema.
 
-If it still isn’t working, there are a number of places where you can get help.
-The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
-which you can access through [Mibbit][mibbit]. Go to that address, and you’ll
-be chatting with other Rustaceans (a silly nickname we call ourselves) who can
-help you out. Other great resources include [the Users forum][users] and [Stack
-Overflow][stackoverflow].
+Si aún así no funciona hay numerosos lugares en los que buscar ayuda.
+Lo más sencillo es [el canal #rust del IRC en irc.mozilla.org][irc]<!-- ignore-->,
+al que puedes acceder mediante [Mibbit][mibbit]. Ve a esa dirección para chatear
+con otros Rustaceans (un apodo que usamos para referirnos a nosotros mismos) que
+ te podrán ayudar. Otros recursos importantes son el [foro de Usuarios][users] y
+ [Stack Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-### Local Documentation
+### Documentación local
 
-The installer also includes a copy of the documentation locally, so you can
-read it offline. Run `rustup doc` to open the local documentation in your
-browser.
+La instalación incluye también una copia local de la documentación que puedes
+leer offline. Ejecuta el comando `rustup doc` para abrir la documentación local
+en tu navegador.
 
-Any time there’s a type or function provided by the standard library and you’re
-not sure what it does or how to use it, use the API (Application Programming
-Interface) documentation to find out!
+Cada vez que te encuentres con un tipo o función provista por las bibliotecas
+ standard y no estés seguro de qué hace o como usarlo, ¡consulta la documentación
+ de la API para encontrar la respuesta!

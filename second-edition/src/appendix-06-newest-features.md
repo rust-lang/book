@@ -1,14 +1,14 @@
-# Appendix F - Newest Features
+# Apéndice F - Características más Recientes
 
-This appendix documents features that have been added to stable Rust since the
-main part of the book was completed.
+Este apéndice documenta características que han sido añadidas a Rust estable desde que
+se completó la parte principal del libro.
 
 
-## Field init shorthand
+## Campos en Abreviatura
 
-We can initialize a data structure (struct, enum, union) with named
-fields, by writing `fieldname` as a shorthand for `fieldname: fieldname`.
-This allows a compact syntax for initialization, with less duplication:
+Podemos inicializar una estructura de datos (estruct, enum, unión) con campos
+nombrados, escribiendo `fieldname` como abreviatura de `fieldname: fieldname`.
+Esto permite una sintaxis compacta para la inicialización, con menos duplicación:
 
 ```rust
 #[derive(Debug)]
@@ -21,13 +21,13 @@ fn main() {
     let name = String::from("Peter");
     let age = 27;
 
-    // Using full syntax:
+    // Usando la sintaxis completa:
     let peter = Person { name: name, age: age };
 
     let name = String::from("Portia");
     let age = 27;
 
-    // Using field init shorthand:
+    // Utilizando el campo abreviado:
     let portia = Person { name, age };
 
     println!("{:?}", portia);
@@ -35,12 +35,12 @@ fn main() {
 ```
 
 
-## Returning from loops
+## Retorno desde Loops
 
-One of the uses of a `loop` is to retry an operation you know can fail, such as
-checking if a thread completed its job. However, you might need to pass the
-result of that operation to the rest of your code. If you add it to the `break`
-expression you use to stop the loop, it will be returned by the broken loop:
+Uno de los usos de un `loop` es reintentar una operación que sabe que puede fallar, como
+comprobar si un hilo ha completado su trabajo. Sin embargo, es posible que necesites pasar el
+resultado de esa operación al resto de tu código. Si lo agregas a la expresión `break`
+que usas para detener el loop, este será devuelto por el bucle roto:
 
 ```rust
 fn main() {

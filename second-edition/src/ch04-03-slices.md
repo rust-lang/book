@@ -1,24 +1,24 @@
 ## Slices
 
-Another data type that does not have ownership is the *slice*. Slices let you
-reference a contiguous sequence of elements in a collection rather than the
-whole collection.
+Otro tipo de datos que no tiene propiedad es el *slice*. Los slices te permiten
+hacer referencia a una secuencia continua de elementos en una colección en lugar de a
+toda la colección.
 
-Here’s a small programming problem: write a function that takes a string and
-returns the first word it finds in that string. If the function doesn’t find a
-space in the string, it means the whole string is one word, so the entire
-string should be returned.
+Aquí hay un pequeño problema de programación: escribir una función que toma una cadena y
+devuelve la primera palabra que encuentra en esa cadena. Si la función no encuentra un
+espacio en la cadena, significa que toda la cadena es una palabra, por lo que se debe devolver
+la cadena completa.
 
-Let’s think about the signature of this function:
+Pensemos en la firma de esta función:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-This function, `first_word`, has a `&String` as a parameter. We don’t want
-ownership, so this is fine. But what should we return? We don’t really have a
-way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that as shown in Listing 4-5:
+Esta función, `first_word`, tiene un parámetro `&String` como parámetro. No queremos la
+propiedad, así que está bien. Pero, ¿qué debemos devolver? No tenemos realmente una
+manera de hablar de *parte* de una cadena. Sin embargo, podríamos devolver el índice del
+final de la palabra. Intentemos eso como se muestra en Listado 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -36,39 +36,39 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-<span class="caption">Listing 4-5: The `first_word` function that returns a
-byte index value into the `String` parameter</span>
+<span class="caption">Listado 4-5: La función `first_word` que devuelve un
+valor de índice de byte al parámetro `String`.</span>
 
-Let’s break down this code a bit. Because we need to go through the `String`
-element by element and check whether a value is a space, we’ll convert our
-`String` to an array of bytes using the `as_bytes` method:
+Vamos a descifrar un poco este código. Debido a que necesitamos pasar por el elemento `String`
+elemento por elemento y comprobar si un valor es un espacio, convertiremos nuestra
+`String` a un forma de bytes usando el método `as_bytes`:
 
 ```rust,ignore
 let bytes = s.as_bytes();
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method:
+A continuación, creamos un iterador sobre la matriz de bytes usando el método `iter`  :
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
-is a method that returns each element in a collection, and `enumerate` wraps
-the result of `iter` and returns each element as part of a tuple instead. The
-first element of the returned tuple is the index, and the second element is a
-reference to the element. This is a bit more convenient than calculating the
-index ourselves.
+Discutiremos los iteradores con más detalle en el Capítulo 13. Por ahora, debes saber que `iter`
+es un método que devuelve cada elemento de una colección, y `enumerate` envuelve
+el resultado de `iter` y devuelve cada elemento como parte de una tupla. El
+primer elemento de la tupla devuelta es el índice, y el segundo elemento es una
+referencia al elemento. Esto es un poco más conveniente que calcular el
+índice nosotros mismos.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple, just like everywhere else in Rust. So in the `for`
-loop, we specify a pattern that has `i` for the index in the tuple and `&item`
-for the single byte in the tuple. Because we get a reference to the element
-from `.iter().enumerate()`, we use `&` in the pattern.
+Debido a que el método `enumerate` devuelve una tupla, podemos usar patrones para
+desestructurar esa tupla, igual que en todas partes en Rust. Así que en el bucle
+`for`, especificamos un patrón que tiene `i` para el índice en la tupla y `&item`
+para el byte simple en la tupla. Debido a que obtenemos una referencia al elemento de
+`.iter().enumerate()`, usamos `&` en el patrón.
 
-We search for the byte that represents the space by using the byte literal
-syntax. If we find a space, we return the position. Otherwise, we return the
-length of the string by using `s.len()`:
+Buscamos el byte que representa el espacio utilizando la sintaxis literal del
+byte. Si encontramos un espacio, devolvemos la posición. De lo contrario, devolvemos la
+longitud de la cadena utilizando `s.len()`:
 
 ```rust,ignore
     if item == b' ' {
@@ -78,12 +78,12 @@ length of the string by using `s.len()`:
 s.len()
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-6 that
-uses the `first_word` function from Listing 4-5:
+Ahora tenemos una manera de averiguar el índice del final de la primera palabra en la
+cadena, pero hay un problema. Estamos devolviendo un `usize` por su cuenta, pero es
+sólo un número significativo en el contexto de la `&String`. En otras palabras,
+debido a que es un valor separado de la `String`, no hay garantía de que
+siga siendo válido en el futuro. Considera el programa en Listado 4-6 que
+usa la función `first_word` del Listado 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -103,42 +103,42 @@ uses the `first_word` function from Listing 4-5:
 fn main() {
     let mut s = String::from("hello world");
 
-    let word = first_word(&s); // word will get the value 5.
+    let word = first_word(&s); // la palabra recibirá el valor 5.
 
-    s.clear(); // This empties the String, making it equal to "".
+    s.clear(); // Esto vacía la cadena, haciéndola igual a "".
 
-    // word still has the value 5 here, but there's no more string that
-    // we could meaningfully use the value 5 with. word is now totally invalid!
+    // la palabra aquí todavía tiene el valor 5 pero no hay más cadenas que
+    // podamos usar significativamente con el valor de 5. la palabra es ahora totalmente inválida!
 }
 ```
 
-<span class="caption">Listing 4-6: Storing the result from calling the
-`first_word` function then changing the `String` contents</span>
+<span class="caption">Listing 4-6: Listado 4-11: Almacenar el resultado de la llamada a la función
+`first_word` y luego cambiar el contenido de la 'String`</span>
 
-This program compiles without any errors and also would if we used `word` after
-calling `s.clear()`. `word` isn’t connected to the state of `s` at all, so
-`word` still contains the value `5`. We could use that value `5` with the
-variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+Este programa compila sin errores y también lo haría si utilizamos `word` después
+de llamar a `s.clear()`. `word` no está conectado al estado de `s` en absoluto, así
+que `word` todavía contiene el valor `5`. Podríamos usar ese valor `5` con la
+variable `s` para tratar de extraer la primera palabra, pero esto sería un error
+porque el contenido de `s` ha cambiado desde que guardamos `5` en `word`.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+Tener que preocuparse por el índice en `word` que se sale de la sincronización con los datos en
+`s` es tedioso y propenso al error! La gestión de estos índices es aún más frágil si
+escribimos una función `second_word`. La firma tendría que verse así:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a start *and* an ending index, and we have even more values
-that were calculated from data in a particular state but aren’t tied to that
-state at all. We now have three unrelated variables floating around that need
-to be kept in sync.
+Ahora estamos rastreando un índice inicial *y* un índice final, y tenemos aún más valores
+que fueron calculados a partir de datos en un estado particular pero no están vinculados a
+ese estado en absoluto. Ahora tenemos tres variables no relacionadas que flotan alrededor y que necesitan
+mantenerse sincronizadas.
 
-Luckily, Rust has a solution to this problem: string slices.
+Afortunadamente, Rust tiene una solución a este problema: los slices de cadenas.
 
-### String Slices
+### Slices de Cadenas (String Slice)
 
-A *string slice* is a reference to part of a `String`, and looks like this:
+Una *slice de cadena* es una referencia a una parte de una `String`, y se ve así:
 
 ```rust
 let s = String::from("hello world");
@@ -147,28 +147,28 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-This is similar to taking a reference to the whole `String` but with the extra
-`[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`. The `start..end` syntax is a range that begins at
-`start` and continues up to, but not including, `end`.
+Esto es similar a tomar una referencia al conjunto de la `String` pero con el bit
+extra `[0..5]`. En lugar de una referencia a toda la `String`, es una referencia
+a una parte de la `String`. La sintaxis `start..end` es un rango que comienza en
+`start` y continúa, pero no incluye, `end`.
 
-We can create slices using a range within brackets by specifying
-`[starting_index..ending_index]`, where `starting_index` is the first position
-included in the slice and `ending_index` is one more than the last position
-included in the slice. Internally, the slice data structure stores the starting
-position and the length of the slice, which corresponds to `ending_index` minus
-`starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
+Podemos crear slices usando un rango dentro de los corchetes especificando
+`[starting_index...ending_index]`, donde `starting_index` es la primera posición
+incluida en el slice y `ending_index` es una posición más que la última posición
+incluida en el slice. Internamente, la estructura de datos slice almacena la posición inicial
+y la longitud del slice, que corresponde a `end_index` menos
+`starting_index`. Así que en el caso de `let world = &s[6..11]; `, `world` sería un
+slice que contendría un puntero al 6º byte de `s` y un valor de longitud de 5.
 
-Figure 4-6 shows this in a diagram.
+La Figura 4-6 muestra esto en un diagrama.
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-6: String slice referring to part of a
+<span class="caption">Figura 4-6: String slice que se refiere a una parte de una
 `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at the first index (zero),
-you can drop the value before the two periods. In other words, these are equal:
+Con la sintaxis de rango `..` de Rust, si quieres empezar en el primer índice (cero),
+puedes reducir el valor antes de los dos periodos. En otras palabras, son iguales:
 
 ```rust
 let s = String::from("hello");
@@ -177,8 +177,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+De la misma manera, si tu slice incluye el último byte de la `String`, puedes
+dejar caer(drop) el número de seguimiento. Eso significa que son iguales:
 
 ```rust
 let s = String::from("hello");
@@ -189,8 +189,8 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+También puede soltar ambos valores para tomar un slice de la cadena entera. Así que
+estos son iguales:
 
 ```rust
 let s = String::from("hello");
@@ -208,8 +208,8 @@ let slice = &s[..];
 > more thorough discussion of UTF-8 handling is in the “Strings” section of
 > Chapter 8.
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+Con toda esta información en mente, reescribamos `first_word` para devolver un
+slice. El tipo que significa "string slice" se escribe como `&str`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,30 +227,30 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-5, by looking for the first occurrence of a space. When we find a space, we
-return a string slice using the start of the string and the index of the space
-as the starting and ending indices.
+Obtenemos el índice para el final de la palabra de la misma manera que lo hicimos en Listing
+4-5, buscando la primera aparición de un espacio. Cuando encontramos un espacio, devolvemos
+un string slice utilizando el inicio de la cadena y el índice del espacio
+como índices inicial y final.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+Ahora, cuando llamamos `first_word`, recuperamos un único valor que está ligado a los
+datos subyacentes. El valor está formado por una referencia al punto de partida del
+slice y el número de elementos del mismo.
 
-Returning a slice would also work for a `second_word` function:
+Devolver un slice también funcionaría para una función `second_word`:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, since the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-6, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile time error:
+Ahora tenemos una API sencilla que es mucho más difícil de desordenar, ya que el
+compilador garantizará que las referencias a la `String` siguen siendo válidas. ¿Recuerdas
+el fallo en el programa de Listado 4-6, cuando obtuvimos el índice al final de la
+primera palabra, pero luego se borró la cadena y que nuestro índice fue inválido? Ese código era
+lógicamente incorrecto pero no mostraba ningún error inmediato. Los problemas aparecerían
+más tarde si continuamos intentando usar el índice de la primera palabra con una cadena
+vacía. Slices hace este error imposible y nos hace saber que tenemos un problema con
+nuestro código mucho antes. Usando la versión slice de `first_word` lanzará un
+error de compilación de tiempo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -264,7 +264,7 @@ fn main() {
 }
 ```
 
-Here’s the compiler error:
+Aquí está el error del compilador:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
@@ -279,45 +279,45 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   | - immutable borrow ends here
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it tries to take a mutable reference, which fails. Not
-only has Rust made our API easier to use, but it has also eliminated an entire
-class of errors at compile time!
+Recordemos las normas de préstamo que si tenemos una referencia inmutable
+a algo, no podemos también tomar una referencia mutable.  Como `clear` necesita
+truncar la `String`, intenta tomar una referencia mutable, que falla. Rust no
+sólo ha hecho que nuestra API sea más fácil de usar, sino que también ha eliminado toda
+una serie de errores en el momento de la compilación!.
 
-#### String Literals Are Slices
+#### Las Cadenas Literales son Slices
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+Recordemos que hablamos de que las cadenas literales se guardan dentro del binario. Ahora
+que sabemos de las slices, podemos entender bien los las cadenas literales:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+El tipo de `s`aquí es `&str`: es una slice que apunta a ese punto específico del
+binario. Por eso también las cadenas literales son inmutables; `&str` es una
+referencia inmutable.
 
-#### String Slices as Parameters
+#### Slices de Cadenas como Parámetros
 
-Knowing that you can take slices of literals and `String`s leads us to one more
-improvement on `first_word`, and that’s its signature:
+Sabiendo que puedes tomar slices de literales y `String`s nos lleva a una
+mejora más en `first_word`, y esa es su firma:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the following line instead because it
-allows us to use the same function on both `String`s and `&str`s:
+Un Rustacean con más experiencia escribiría la siguiente línea en su lugar porque
+nos permite usar la misma función tanto en `String`s como en `&str`s:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a String makes our API more general and useful
-without losing any functionality:
+Si tenemos una slice de cadena, podemos pasar eso directamente. Si tenemos una `String`, podemos
+pasar una slice de toda la `String`. Definir una función para tomar una cadena
+slice en lugar de una referencia a una String hace que nuestra API sea más general y útil
+sin perder ninguna funcionalidad:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -336,31 +336,31 @@ without losing any functionality:
 fn main() {
     let my_string = String::from("hello world");
 
-    // first_word works on slices of `String`s
+    // first_word funciona en slices de `String`s
     let word = first_word(&my_string[..]);
 
     let my_string_literal = "hello world";
 
-    // first_word works on slices of string literals
+    // first_word funciona en slices de cadenas literales
     let word = first_word(&my_string_literal[..]);
 
-    // since string literals *are* string slices already,
-    // this works too, without the slice syntax!
+    // ya que las cadenas literales ya *son* slices de cadena,
+    // esto también funciona, ¡sin la sintaxis de slice!
     let word = first_word(my_string_literal);
 }
 ```
 
-### Other Slices
+### Otras Slices
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
+Las Slice de cadenas, como podrías imaginarte, son específicas de las cadenas. Pero también
+hay un tipo de slice más general. Considera este arreglo:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just like we might want to refer to a part of a string, we might want to refer
-to part of an array and would do so like this:
+Al igual que podríamos querer referirnos a una parte de una cadena, podríamos querer referirnos
+a una parte de una array y hacerlo así:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -368,19 +368,19 @@ let a = [1, 2, 3, 4, 5];
 let slice = &a[1..3];
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+Esta slice tiene el tipo `&[i32]`. Funciona del mismo modo que las slices de cadena lo hacen,
+almacenando una referencia al primer elemento y una longitud. Usarás este tipo de
+slices para todo tipo de colecciones. Discutiremos estas colecciones en
+detalle cuando hablemos de vectores en el Capítulo 8.
 
-## Summary
+## Resumen
 
-The concepts of ownership, borrowing, and slices are what ensure memory safety
-in Rust programs at compile time. The Rust language gives you control over your
-memory usage like other systems programming languages, but having the owner of
-data automatically clean up that data when the owner goes out of scope means
-you don’t have to write and debug extra code to get this control.
+Los conceptos de propiedad, préstamo y slices son los que aseguran la seguridad de la memoria
+en los programas de Rust al momento de la compilación. El lenguaje Rust te da control sobre el
+uso de la memoria como otros lenguajes de programación de sistemas, pero tener la propiedad de
+los datos automáticamente limpia los datos cuando el propietario sale fuera de alcance significa
+que tu no tienes que escribir y depurar código extra para obtener este control.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to the
-next chapter and look at grouping pieces of data together in a `struct`.
+La propiedad afecta la forma en que muchas otras partes de Rust trabajan, por lo que hablaremos sobre
+estos conceptos durante el resto del libro. Pasemos al
+siguiente capítulo y veamos la agrupación de datos en una `struct`.

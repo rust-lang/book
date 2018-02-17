@@ -1,13 +1,13 @@
-## References and Borrowing
+## Referencias y Préstamos
 
-The issue with the tuple code at the end of the preceding section is that we
-have to return the `String` to the calling function so we can still use the
-`String` after the call to `calculate_length`, because the `String` was moved
-into `calculate_length`.
+El problema con el código tuple al final de la sección anterior es que tenemos que
+devolver la `String` a la función de llamada para que podamos seguir usando la
+`String` después de la llamada a `calculate_length`, porque la `String` se ha movido
+a `calculate_length`.
 
-Here is how you would define and use a `calculate_length` function that has a
-*reference* to an object as a parameter instead of taking ownership of the
-value:
+A continuación se explica cómo definiría y utilizaría una función `calculate_length` que tiene
+una *referencia* a un objeto como parámetro en lugar de tomar posesión del
+valor:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -25,24 +25,24 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length`, and in its definition, we take `&String` rather than
+Primero, nota que todo el código tuple en la declaración variable y el
+valor de retorno de función ha desaparecido. Segundo, nota que pasamos `&s1` a
+`calculate_length`, y en su definición, tomamos `&String` en lugar de
 `String`.
 
-These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-5 shows a diagram.
+Estos ampersands(&) son *referencias*, y te permiten referirte a algún valor
+sin apropiarte de él. La Figura 4-5 muestra un diagrama.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figure 4-5: `&String s` pointing at `String s1`</span>
+<span class="caption">Figura 4-5: `&String s` señalando `String s1`.</span>
 
 > Note: The opposite of referencing by using `&` is *dereferencing*, which is
 > accomplished with the dereference operator, `*`. We’ll see some uses of the
 > dereference operator in Chapter 8 and discuss details of dereferencing in
 > Chapter 15.
 
-Let’s take a closer look at the function call here:
+Echemos un vistazo más de cerca de la llamada a la función:
 
 ```rust
 # fn calculate_length(s: &String) -> usize {
@@ -53,32 +53,32 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
-but does not own it. Because it does not own it, the value it points to will
-not be dropped when the reference goes out of scope.
+La sintaxis `&s1` nos permite crear una referencia que *refiere* al valor de `s1`
+pero que no lo posee. Debido a que no es de su propiedad, el valor al que apunta no se
+dejará caer cuando la referencia salga del alcance.
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+Del mismo modo, la firma de la función utiliza `&` para indicar que el tipo de
+parámetro `s` es una referencia. Añadamos algunas anotaciones explicativas:
 
 ```rust
-fn calculate_length(s: &String) -> usize { // s is a reference to a String
+fn calculate_length(s: &String) -> usize { // s es una referencia a un String
     s.len()
-} // Here, s goes out of scope. But because it does not have ownership of what
-  // it refers to, nothing happens.
+} // Aquí, s sale del alcance. Pero debido a que no tiene la propiedad
+  // a la que se refiere, no pasa nada.
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but we don’t drop what the reference points to when it goes
-out of scope because we don’t have ownership. Functions that have references as
-parameters instead of the actual values mean we won’t need to return the values
-in order to give back ownership, since we never had ownership.
+El alcance en el que la variable `s` es válida es el mismo que cualquier parámetro
+de la función de scope, pero no dejamos caer lo que la referencia indica cuando se sale
+del alcance porque no tenemos propiedad. Las funciones que tienen referencias como parámetros en
+lugar de los valores reales significan que no necesitaremos devolver los valores
+para devolver la propiedad, ya que nunca tuvimos la propiedad.
 
-We call having references as function parameters *borrowing*. As in real life,
-if a person owns something, you can borrow it from them. When you’re done, you
-have to give it back.
+Llamamos tener referencias como parámetros de la función *préstamo*. Como en la vida real,
+si una persona es dueña de algo, puedes tomarlo prestado. Cuando termines, tienes
+que devolverlo.
 
-So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-4. Spoiler alert: it doesn’t work!
+¿Qué pasa si tratamos de modificar algo que pedimos prestado? Pruebe el código en
+Listado 4-4. Alerta de spoiler: ¡no funciona!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -94,9 +94,9 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">Listing 4-4: Attempting to modify a borrowed value</span>
+<span class="caption">Listado 4-4: Intentar modificar un valor prestado</span>
 
-Here’s the error:
+Aquí está el error:
 
 ```text
 error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
@@ -108,12 +108,12 @@ error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
   |     ^^^^^^^^^^^ cannot borrow as mutable
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+Así como las variables son inmutables por defecto, también lo son las referencias. No se nos
+permite modificar algo a lo que tenemos una referencia.
 
-### Mutable References
+### Referencias Mutables
 
-We can fix the error in the code from Listing 4-4 with just a small tweak:
+Podemos corregir el error en el código de Listing 4-4 con sólo un pequeño ajuste:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -129,13 +129,13 @@ fn change(some_string: &mut String) {
 }
 ```
 
-First, we had to change `s` to be `mut`. Then we had to create a mutable
-reference with `&mut s` and accept a mutable reference with `some_string: &mut
+Primero, tuvimos que cambiar los `s`para ser `mut`. Luego tuvimos que crear una referencia
+mutable con `&mut s` y aceptar una referencia mutable con `some_string: &mut
 String`.
 
-But mutable references have one big restriction: you can only have one mutable
-reference to a particular piece of data in a particular scope. This code will
-fail:
+Pero las referencias mutables tienen una gran restricción: sólo puedes tener una referencia
+mutable en un dato concreto en un scope particular. Este código
+fallará:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -146,7 +146,7 @@ let r1 = &mut s;
 let r2 = &mut s;
 ```
 
-Here’s the error:
+Aquí está el error:
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
@@ -160,24 +160,24 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-This restriction allows for mutation but in a very controlled fashion. It’s
-something that new Rustaceans struggle with, because most languages let you
-mutate whenever you’d like. The benefit of having this restriction is that Rust
-can prevent data races at compile time.
+Esta restricción permite la mutación pero de una manera muy controlada. Es
+algo con lo que los nuevos Rustaceos luchan, porque la mayoría de los lenguajes te
+permiten mutar cuando quieras. El beneficio de tener esta restricción es que Rust
+puede prevenir carreras de datos en el momento de compilar.
 
-A *data race* is similar to a race condition and happens when these three
-behaviors occur:
+Una *carrera de datos* es similar a una condición de carrera, que ocurre cuando
+suceden estos tres comportamientos:
 
-1. Two or more pointers access the same data at the same time.
-1. At least one of the pointers is being used to write to the data.
-1. There’s no mechanism being used to synchronize access to the data.
+1. Dos o más punteros acceden a los mismos datos al mismo tiempo.
+1. Al menos uno de los punteros se está usando para escribir los datos.
+1. No se utiliza ningún mecanismo para sincronizar el acceso a los datos.
 
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem
-from happening because it won’t even compile code with data races!
+Las carreras de datos causan un comportamiento indefinido y pueden ser difíciles de diagnosticar y arreglar
+cuando se está tratando de localizarlas en tiempo de ejecución; Rust previene que este problema
+suceda porque ni siquiera compila código con las carreras de datos!
 
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not *simultaneous* ones:
+Como siempre, podemos utilizar llaves para crear un nuevo scope, permitiendo
+múltiples referencias mutables, pero no *simultáneas*:
 
 ```rust
 let mut s = String::from("hello");
@@ -185,60 +185,60 @@ let mut s = String::from("hello");
 {
     let r1 = &mut s;
 
-} // r1 goes out of scope here, so we can make a new reference with no problems.
+} // r1 se sale del ámbito de aplicación, por lo que podemos hacer una nueva referencia sin problemas.
 
 let r2 = &mut s;
 ```
 
-A similar rule exists for combining mutable and immutable references. This code
-results in an error:
+Una regla similar existe para combinar referencias mutables e inmutables. Este código
+provoca un error:
 
 ```rust,ignore
 let mut s = String::from("hello");
 
-let r1 = &s; // no problem
-let r2 = &s; // no problem
-let r3 = &mut s; // BIG PROBLEM
+let r1 = &s; // sin problema
+let r2 = &s; // sin problema
+let r3 = &mut s; // GRAN PROBLEMA
 ```
 
-Here’s the error:
+Aquí el error:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
 immutable
  --> borrow_thrice.rs:6:19
   |
-4 |     let r1 = &s; // no problem
+4 |     let r1 = &s; // sin problema
   |               - immutable borrow occurs here
 5 |     let r2 = &s; // no problem
-6 |     let r3 = &mut s; // BIG PROBLEM
+6 |     let r3 = &mut s; // GRAN PROBLEMA
   |                   ^ mutable borrow occurs here
 7 | }
   | - immutable borrow ends here
 ```
 
-Whew! We *also* cannot have a mutable reference while we have an immutable one.
-Users of an immutable reference don’t expect the values to suddenly change out
-from under them! However, multiple immutable references are okay because no one
-who is just reading the data has the ability to affect anyone else’s reading of
-the data.
+¡Uf! Nosotros *también* no podemos tener una referencia mutable mientras que tenemos una inmutable.
+Los usuarios de una referencia inmutable no esperan que los valores cambien repentinamente
+de debajo de ellos! Sin embargo, múltiples referencias inmutables están bien porque nadie que
+esté leyendo los datos tiene la habilidad de afectar la lectura de los datos de cualquier
+otra persona.
 
-Even though these errors may be frustrating at times, remember that it’s the
-Rust compiler pointing out a potential bug early (at compile time rather than
-at runtime) and showing you exactly where the problem is instead of you having
-to track down why sometimes your data isn’t what you thought it should be.
+A pesar de que a veces estos errores pueden ser frustrantes, recuerda que es el
+compilador de Rust señalando un potencial error temprano (en tiempo de compilación en lugar de
+en tiempo de ejecución) y mostrarte exactamente dónde está el problema en lugar de tener que
+buscar por qué a veces tus datos no son lo que pensabas que deberían ser.
 
-### Dangling References
+### Referencias Colgantes
 
-In languages with pointers, it’s easy to erroneously create a *dangling
-pointer*, a pointer that references a location in memory that may have been
-given to someone else, by freeing some memory while preserving a pointer to
-that memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if we have a reference to some data, the compiler
-will ensure that the data will not go out of scope before the reference to the
-data does.
+En los lenguajes con punteros, es fácil crear erróneamente un *puntero
+colgante*, un puntero que hace referencia a una ubicación en la memoria que puede haber
+sido dada a alguien más, liberando algo de memoria mientras se conserva un puntero a
+esa memoria. En Rust, por el contrario, el compilador garantiza que las referencias nunca
+serán referencias colgantes: si tenemos una referencia a algunos datos, el compilador
+se asegurará de que los datos no salgan del scope antes que la referencia a los
+datos.
 
-Let’s try to create a dangling reference, which Rust will prevent with a
+Tratemos de crear una referencia colgante, which Rust will prevent with a
 compile-time error:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -255,7 +255,7 @@ fn dangle() -> &String {
 }
 ```
 
-Here’s the error:
+Aquí el error:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -269,35 +269,35 @@ error[E0106]: missing lifetime specifier
   = help: consider giving it a 'static lifetime
 ```
 
-This error message refers to a feature we haven’t covered yet: *lifetimes*.
-We’ll discuss lifetimes in detail in Chapter 10. But, if you disregard the
-parts about lifetimes, the message does contain the key to why this code is a
-problem:
+Este mensaje de error se refiere a una característica que aún no hemos cubierto: *vida útil*.
+Discutiremos la vida útil en detalle en el capítulo 10. Pero, si tu no haces caso de
+las partes sobre vida útil, el mensaje contiene la llave de por qué este código es
+un problema:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+Echemos un vistazo más de cerca a lo que está sucediendo exactamente en cada etapa de nuestro
+código `dangle`:
 
 ```rust,ignore
-fn dangle() -> &String { // dangle returns a reference to a String
+fn dangle() -> &String { // dangle regresa una referencia a String
 
-    let s = String::from("hello"); // s is a new String
+    let s = String::from("hello"); // s es una nueva String
 
-    &s // we return a reference to the String, s
-} // Here, s goes out of scope, and is dropped. Its memory goes away.
-  // Danger!
+    &s // devolvemos una referencia a String, s
+} // Aquí, s sale fuera del alcance, y se deja caer. Su memoria desaparece.
+  // peligro!
 ```
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`! That’s no good. Rust
-won’t let us do this.
+Debido a que la `s`se crea dentro del `dangle`, cuando el código de `dángle` está terminado,
+`s`se deslocalizará. Pero intentamos devolverle una referencia. Eso significa
+que esta referencia estaría apuntando a una "`String` inválida! Eso no es bueno. Rust
+no nos deja hacer esto.
 
-The solution here is to return the `String` directly:
+La solución aquí es devolver la `String` directamente:
 
 ```rust
 fn no_dangle() -> String {
@@ -307,16 +307,16 @@ fn no_dangle() -> String {
 }
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+Esto funciona sin problemas. La propiedad se retira, y nada se
+deslocaliza.
 
-### The Rules of References
+### El Reglamento de Referencias
 
-Let’s recap what we’ve discussed about references:
+Recapitulemos lo que hemos discutido sobre las referencias:
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+1. En cualquier momento dado, puedes tener *cualquiera* pero no ambos:
+  * Una referencia mutable.
+  * Cualquier número de referencias inmutables.
+2. Las referencias deben ser siempre válidas.
 
-Next, we’ll look at a different kind of reference: slices.
+A continuación, veremos un tipo de referencia diferente: porciones.
