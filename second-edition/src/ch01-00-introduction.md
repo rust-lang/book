@@ -1,6 +1,6 @@
 # Introducción
 
-Bienvenido a "El Lenguaje de Programación Rust", un libro introductorio sobre Rust
+Bienvenido a "El Lenguaje de Programación Rust", un libro introductorio sobre Rust.
 
 Rust es un lenguaje de programación que le ayuda a escribir mejor software, de
 forma más rápida. La ergonomía de alto-nivel y el control de bajo-nivel suelen
