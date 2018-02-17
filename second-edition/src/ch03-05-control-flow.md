@@ -245,31 +245,31 @@ error[E0308]: if and else have incompatible types
              found type `&str`
 ```
 
-The expression in the `if` block evaluates to an integer, and the expression in
-the `else` block evaluates to a string. This won’t work because variables must
-have a single type. Rust needs to know at compile time what type the `number`
-variable is, definitively, so it can verify at compile time that its type is
-valid everywhere we use `number`. Rust wouldn’t be able to do that if the type
-of `number` was only determined at runtime; the compiler would be more complex
-and would make fewer guarantees about the code if it had to keep track of
-multiple hypothetical types for any variable.
+La expresión en el bloque `if` evalúa a un entero, y la expresión en
+el bloque `else` evalúa a una cadena. Esto no funcionará porque las variables deben 
+tener un solo tipo. Rust necesita saber a la hora de compilar qué tipo de variable
+`number` es, definitivamente, para que pueda verificar a la hora de compilar que su tipo
+es válido en cualquier lugar donde usemos `number`. Rust no sería capaz de hacer eso si el
+tipo de "number" sólo se determinara en tiempo de ejecución; el compilador sería más complejo
+y daría menos garantías sobre el código si tuviera que hacer un seguimiento de 
+varios tipos hipotéticos para cualquier variable.
 
-### Repetition with Loops
+### Repetición con Loops
 
-It’s often useful to execute a block of code more than once. For this task,
-Rust provides several *loops*. A loop runs through the code inside the loop
-body to the end and then starts immediately back at the beginning. To
-experiment with loops, let’s make a new project called *loops*.
+A menudo es útil ejecutar un bloque de código más de una vez. Para esta tarea,
+Rust proporciona varios *loops*. Un loop pasa el código dentro del cuerpo
+del loop hasta el final y luego vuelve a empezar inmediatamente desde principio. Para
+experimentar con loops, vamos a hacer un nuevo proyecto llamado *loops*.
 
-Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
+Rust tiene tres tipos de bucles: `loop`, `while` y `for`. Probemos cada uno.
 
-#### Repeating Code with `loop`
+#### Repitiendo Código con `loop`
 
-The `loop` keyword tells Rust to execute a block of code over and over again
-forever or until you explicitly tell it to stop.
+La palabra clave "loop" le dice a Rust que ejecute un bloque de código una y otra vez
+por siempre o hasta que le diga explícitamente que se detenga.
 
-As an example, change the *src/main.rs* file in your *loops* directory to look
-like this:
+Como ejemplo, cambia el archivo *src/main.rs* en tu directorio *loops* para que se
+vea así:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -281,10 +281,10 @@ fn main() {
 }
 ```
 
-When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support a keyboard shortcut,
-<span class="keystroke">ctrl-c</span>, to halt a program that is stuck in a
-continual loop. Give it a try:
+Cuando ejecutamos este programa, veremos `again!` impreso una y otra vez 
+hasta que paremos el programa manualmente. La mayoría de los terminales soportan un atajo de teclado,
+<span class="keystroke">ctrl-c</span>, para detener un programa que está 
+atascado en un loop continuo. Inténtalo:
 
 ```text
 $ cargo run
@@ -298,28 +298,28 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
-</span>. You may or may not see the word `again!` printed after the `^C`,
-depending on where the code was in the loop when it received the halt signal.
+El símbolo `^C` representa el lugar donde pulsaste ctrl-C. Puede que veas o no 
+la palabra `again!` impresa después de la palabra `^C`, dependiendo de dónde estaba el código en el
+loop cuando recibió la señal de parada.
 
-Fortunately, Rust provides another, more reliable way to break out of a loop.
-You can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game in the
-“Quitting After a Correct Guess” section of Chapter 2 to exit the
-program when the user won the game by guessing the correct number.
+Afortunadamente, Rust proporciona otra forma más confiable de romper un loop.
+Puedes colocar la palabra clave `break` dentro del loop para indicar al programa cuándo 
+debe detenerse la ejecución del loop. Recuerda que hicimos esto en el juego de adivinanzas en la
+sección "Abandonar Después de una Adivinación Correcta" del Capítulo 2 para salir del
+programa cuando el usuario ganó el juego adivinando el número correcto.
 
-#### Conditional Loops with `while`
+#### Loops Condicionales con `while`
 
-It’s often useful for a program to evaluate a condition within a loop. While
-the condition is true, the loop runs. When the condition ceases to be true, you
-call `break`, stopping the loop. This loop type could be implemented using a
-combination of `loop`, `if`, `else`, and `break`; you could try that now in a
-program, if you’d like.
+A menudo es útil para un programa evaluar una condición dentro de un loop. Mientras
+la condición es verdadera, el loop se ejecuta. Cuando la condición deja de ser verdadera, tu
+llamas a `break`, deteniendo el loop. Este tipo de loop puede ser implementado usando una
+combinación de `loop`, `if`, `else`, y `break`; puedes intentarlo ahora en un
+programa, si quieres.
 
-However, this pattern is so common that Rust has a built-in language construct
-for it, and it’s called a `while` loop. The following example uses `while`: the
-program loops three times, counting down each time. Then, after the loop, it
-prints another message and exits:
+Sin embargo, este patrón es tan común que Rust tiene una construcción de lenguaje
+incorporada para él, y se llama un loop ` while`. El siguiente ejemplo usa ` while`:
+el programa hace un loop tres veces, contando cada vez hacia atrás. Luego, después del loop, 
+imprime otro mensaje y termina:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -337,14 +337,14 @@ fn main() {
 }
 ```
 
-This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
-true, the code runs; otherwise, it exits the loop.
+Este construcción elimina muchas anidaciones que serían necesarias si usas
+`loop`, `if`, `else`, y `break`, y es más claro. Mientras una condición se mantiene
+verdadera, el código se ejecuta; de lo contrario, sale del loop.
 
-#### Looping Through a Collection with `for`
+#### Looping a Través de una Colección con `for`
 
-You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example, let’s look at Listing 3-3:
+Podrías usar el constructor `while` para hacer un bucle sobre los elementos de una colección,
+como una array. Por ejemplo:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -361,13 +361,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-3: Looping through each element of a collection
-using a `while` loop</span>
+<span class="caption">Listing 3-5: Listado 3-5: Looping a través de cada elemento de una colección
+usando un loop `while`</span>
 
-Here, the code counts up through the elements in the array. It starts at index
-`0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer true). Running this code will print out every
-element in the array:
+Aquí, el código cuenta a través de los elementos de la array. Comienza en el índice
+`0`, y luego loops hasta que alcanza el índice final en la array (es decir,
+cuando el `índice < 5` ya no es verdadero). Al ejecutar este código se imprimirán todos
+los elementos de la array:
 
 ```text
 $ cargo run
@@ -381,17 +381,17 @@ the value is: 40
 the value is: 50
 ```
 
-All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `5` at some point, the loop stops executing before trying
-to fetch a sixth value from the array.
+Los cinco valores de la array aparecen en el terminal, como se esperaba. Aunque el `index`
+alcanzará un valor de `5` en algún punto, el loop deja de ejecutarse antes de intentar
+recuperar un sexto valor de la array.
 
-But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds runtime
-code to perform the conditional check on every element on every iteration
-through the loop.
+Pero este enfoque es propenso a errores; podríamos causar pánico en el programa si la 
+longitud del índice es incorrecta. También es lento, porque el compilador añade código 
+de tiempo de ejecución para realizar la comprobación condicional de cada elemento en cada iteración
+a través del loop.
 
-As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this code in Listing 3-4:
+Como alternativa más eficaz, puede utilizar un loop `for` y ejecutar algún código 
+para cada elemento de una colección. Un loop `for` luce así:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -405,29 +405,29 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-4: Looping through each element of a collection
-using a `for` loop</span>
+<span class="caption">Listado 3-4: Looping a través de cada elemento de una colección
+usando un loop `for`</span>
 
-When we run this code, we’ll see the same output as in Listing 3-3. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
+Cuando ejecutemos este código, veremos la misma salida que en Listado 3-3. Y lo que es más
+importante, ahora hemos incrementado la seguridad del código y eliminado la 
+posibilidad de errores que podrían resultar de ir más allá del final de la array o no
+ir lo suficientemente lejos y perder algunos elementos.
 
-For example, in the code in Listing 3-3, if you removed an item from the `a`
-array but forgot to update the condition to `while index < 4`, the code would
-panic. Using the `for` loop, you don’t need to remember to change any other
-code if you changed the number of values in the array.
+Por ejemplo, en el código del Listado 3-3, si eliminas un elemento de la array
+`a` pero olvidaste actualizar la condición a `while index < 4`, el código entraría
+en pánico. Usando el loop `for`, no necesitas recordar cambiar ningún otro
+código si cambias el número de valores en la array.
 
-The safety and conciseness of `for` loops make them the most commonly used loop
-construct in Rust. Even in situations in which you want to run some code a
-certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
-would be to use a `Range`, which is a type provided by the standard library
-that generates all numbers in sequence starting from one number and ending
-before another number.
+La seguridad y concisión de los loops `for` los convierte en el loop más comúnmente utilizado 
+en la construcción de Rust. Incluso en situaciones en las que se quiera ejecutar cierto código un 
+cierto número de veces, como en el ejemplo de cuenta atrás que usó un loop `while` 
+en el Listado 3-3, la mayoría de los rustaceanos usarían un loop `for`. La manera de hacerlo 
+sería usar un `Range`, que es un tipo proporcionado por la biblioteca estándar
+que genera todos los números en secuencia empezando por un número y terminando
+antes de otro número.
 
-Here’s what the countdown would look like using a `for` loop and another method
-we’ve not yet talked about, `rev`, to reverse the range:
+Esto es como se vería la cuenta atrás usando un loop `for` y otro método
+del que aún no hemos hablado, `rev`, para invertir el rango:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -440,18 +440,18 @@ fn main() {
 }
 ```
 
-This code is a bit nicer, isn’t it?
+Este código es un poco más bonito, ¿no?
 
-## Summary
+## Resumen
 
-You made it! That was a sizable chapter: you learned about variables, scalar
-and `if` expressions, and loops! If you want to practice with the concepts
-discussed in this chapter, try building programs to do the following:
+¡Lo lograste! Ese fue un capítulo considerable: aprendiste sobre variables, expresiones
+escalares e `if`, ¡y loops! Si deseas practicar con los conceptos 
+discutidos en este capítulo, intenta crear programas para hacer lo siguiente:
 
-* Convert temperatures between Fahrenheit and Celsius.
-* Generate the nth Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-taking advantage of the repetition in the song.
+* Convierte las temperaturas entre grados Fahrenheit y Celsius.
+* Genera el número n. º Fibonacci.
+* Imprime la letra del villancico navideño "Los Doce Días de Navidad,"
+aprovechando la repetición de la canción.
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
-commonly exist in other programming languages: ownership.
+Cuando estés listo para seguir adelante, hablaremos de un concepto en Rust que *no* 
+existe comúnmente en otros lenguajes de programación: propiedad.
