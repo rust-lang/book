@@ -138,7 +138,7 @@ estilo de Rust es para indentar con cuatro espacios, no con un tab
 La segunda parte importante es `println!`. Esto llama a un *macro* de Rust,
 que es cómo se hace la metaprogramación en Rust. Si llamara a una función,
 se vería así: `println` (sin el `!`). Discutiremos los macros de Rust con
-más detalle en Appendix E, pero por ahora solo debe saber que cuando vea
+más detalle en Appendix E, pero por ahora sólo debe saber que cuando vea
 un `!` significa que usted está llamando a un macro en vez de a una función
 normal.
 
@@ -151,7 +151,7 @@ normal.
 >
 > * La cadena pasada a `println!` puede tener especificadores de formateo
 >   en ella, y esos se revisan en tiempo de compilación.
-> * Las funciones Rust solo pueden tener un número predeterminado de argumentos
+> * Las funciones Rust sólo pueden tener un número predeterminado de argumentos
 >   pero `println!` (y los macros en general) pueden tomar un número variable.
 > * Los especificadores de formateo pueden tener argumentos nombrados, a
 >   diferencia de la funciones de Rust que no pueden tenerlos.
@@ -223,7 +223,7 @@ es un lenguaje *compilado desde-antes*, lo que significa que usted puede compila
 un programa, dárselo a alguien más, y esa persona puede ejecutarlo aunque no
 tenga Rust instalado. Si usted le da un archivo `.rb`, `.py`, o `.js` a otra
 persona, por otro lado, necesitará tener una implementación de Ruby, Python, o
-JavaScript instalada (respectivamente), pero usted solo necesita un comando para
+JavaScript instalada (respectivamente), pero usted sólo necesita un comando para
 compilar y ejecutar su programa. En el diseño de lenguajes, todo es un balance.
 
 Sólo con compilar con `rustc` está bien para programas simples, pero a medida que
@@ -242,7 +242,7 @@ de las cuales depende su código, y de construir esas librerías. Llamamos *depe
 (dependencias) a las librerías que su código necesita.
 
 Los programas en Rust más simples, como el que hemos escrito hasta ahora, no tiene
-ninguna dependencia, así que ahora, usted solo usaría la parte de Cargo que se
+ninguna dependencia, así que ahora, usted sólo usaría la parte de Cargo que se
 encarga de construir su código. A medida que escribe códigos más complejos en
 Rust, usted querrá añadir dependencias, y si empieza usando Cargo, eso será mucho
 más fácil.
