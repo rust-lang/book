@@ -8,9 +8,10 @@ sección, seguiremos esa tradición.
 > Nota: Este libro asume familiarización básica con la línea de comandos. Rust
 > no hace demandas sobre su edición, herramientas usadas, o en donde usted guarde su
 > código, así que si prefiere un IDE en vez de la línea de comandos, siéntase libre de
-> usar su IDE favorito. Many IDEs now have some degree of Rust support; check the IDE’s
-> documentation for details. Enabling great IDE support has been a recent focus of the
-> Rust team, and progress has been made rapidly on that front!
+> usar su IDE favorito. Muchos IDEs ahora tienen cierto grado de soporte para Rust;
+> revise la documentación del IDE para más detalles. Permitiendo gran soporte de
+> IDE ha sido de gran atención recientemente para el equipo de Rust, y el progreso
+> se ha llevado a cabo rápidamente!
 
 ### Creando un Directorio de Proyecto
 
@@ -115,12 +116,13 @@ considerado un buen estilo poner la abertura de las llaves en la misma línea
 de la declaración de la función, con un espacio de por medio
 
 
-> At the time of writing, an automatic formatter, `rustfmt`, is under
-> development. If you’d like to stick to a standard style across Rust projects,
-> `rustfmt` is a tool that will format your code in a particular style. The
-> plan is to eventually include it with the standard Rust distribution, like
-> `rustc`, so depending on when you read this book, you may have it already
-> installed! Check the online documentation for more details.
+> Durante la escritura, un formateador automático, `rustfmt`, está en
+> desarrollo. Si usted quiere apegarse a un estilo estándar a lo largo
+> de los proyectos Rust, `rustfmt` es una herramienta que formateará
+> su código con un estilo particular. El plan es eventualmente incluirlo
+> con la distribución estándar de Rust, así como `rustc`, entonces dependiendo
+> de cuándo usted lea este libro, !Podría ya haberlo instalado! Revise la
+> documentación en línea para más detalles.
 
 Dentro de la función `main`:, tenemos este código:
 
@@ -141,23 +143,23 @@ un `!` significa que usted está llamando a un macro en vez de a una función
 normal.
 
 
-> ### Why `println!` is a Macro
+> ### Porqué `println!` es un Macro
 >
-> There are multiple reasons why `println!` is a macro rather than a function,
-> and we haven’t really explained Rust yet, so it’s not exactly obvious. Here
-> are the reasons:
+> Hay múltiples razones por las cuales `println!` es un macro en vez de
+> una función, y aún no hemos explicado Rust, así que no es exactamente
+> obvio. Aquí están las razones:
 >
-> * The string passed to `println!` can have formatting specifiers in it,
->   and those are checked at compile-time.
-> * Rust functions can only have a fixed number of arguments, but `println!`
->   (and macros generally) can take a variable number.
-> * The formatting specifiers can have named arguments, which Rust functions
->   cannot.
-> * It implicitly takes its arguments by reference even when they’re passed
->   by value.
+> * La cadena pasada a `println!` puede tener especificadores de formateo
+>   en ella, y esos se revisan en tiempo de compilación.
+> * Las funciones Rust solo pueden tener un número predeterminado de argumentos
+>   pero `println!` (y los macros en general) pueden tomar un número variable.
+> * Los especificadores de formateo pueden tener argumentos nombrados, a
+>   diferencia de la funciones de Rust que no pueden tenerlos.
+> * Toma implícitamente sus argumentos por referencia incluso cuando son pasados
+>   por valor.
 >
-> If none of this makes sense, don’t worry about it. We’ll cover these concepts
-> in more detail later.
+> Si nada de esto tiene sentido, no se preocupe. Luego cubriremos estos conceptos con
+> más detalle.
 
 Luego viene `"Hello, world!"` el cual es un *string* (cadena). Pasamos esta cadena
 como argumento a `println!`, el cual imprime la cadena por pantalla. ¡Bastante
