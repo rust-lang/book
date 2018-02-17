@@ -264,7 +264,7 @@ método de instalación para determinar cómo instalar Cargo por separado.
 
 Vamos a crear un nuevo proyecto usando Cargo y ver cómo difiere con nuestro proyecto
 en `hello_world`. Vuelva a su directorio de proyectos (o donde sea que decidió
-almacenar su código)
+almacenar su código):
 
 
 Linux, Mac, and PowerShell:
