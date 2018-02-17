@@ -90,16 +90,16 @@ Listing 15-7와 Listing 15-6 사이의 차이점은 오직 `x`의 값을 가리�
 정의함으로써 `Box<T>`가 우리에게 역참조 연산자를 사용 가능하게끔 해주는
 특별함이 무엇인지 탐구해 보겠습니다.
 
-### Defining Our Own Smart Pointer
+### 우리만의 스마트 포인터 정의하기
 
-Let’s build a smart pointer similar to the `Box<T>` type provided by the
-standard library to experience how smart pointers behave differently to
-references by default. Then we’ll look at how to add the ability to use the
-dereference operator.
+어떤 식으로 스마트 포인터가 기본적으로 참조자와는 다르게 동작하는지를
+경험하기 위해서, 표준 라이브러리가 제공하는 `Box<T>` 타입과 유사한
+스마트 포인터를 만들어 봅시다. 그런 다음 어떻게 역참조 연산자를 사용할
+수 있는 기능을 추가하는지 살펴보겠습니다.
 
-The `Box<T>` type is ultimately defined as a tuple struct with one element, so
-Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
-`new` function to match the `new` function defined on `Box<T>`:
+`Box<T>` 타입은 궁극적으로 하나의 요소를 가진 튜플 구조체로 정의되므로,
+Listing 15-8은 `MyBox<T>` 타입을 동일한 방식으로 정의하였습니다. 또한
+`Box<T>`에 정의되어 있는 `new` 함수에 맞추기 위해 `new` 함수도 정의겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -113,17 +113,17 @@ impl<T> MyBox<T> {
 }
 ```
 
-<span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
+<span class="caption">Listing 15-8: `MyBox<T>` 타입 정의하기</span>
 
-We define a struct named `MyBox` and declare a generic parameter `T`, because
-we want our type to hold values of any type. The `MyBox` type is a tuple struct
-with one element of type `T`. The `MyBox::new` function takes one parameter of
-type `T` and returns a `MyBox` instance that holds the value passed in.
+우리는 `MyBox`라는 이름의 구조체를 정의하고 제네릭 파라미터 `T`를 선언했는데, 이는
+우리의 타입이 어떠한 종류의 타입 값이든 가질 수 있길 원하기 때문입니다. `MyBox`
+타입은 `T` 타입의 하나의 요소를 가진 튜플 구조체입니다. `MyBox::new` 함수는
+`T` 타입인 하나의 파라미터를 받아서 그 값을 갖는 `MyBox` 인스턴스를 반환합니다.
 
-Let’s try adding the `main` function in Listing 15-7 to Listing 15-8 and
-changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The
-code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
-`MyBox`:
+Lisint 15-7의 `main` 함수를 Listing 15-8에 추가하고 `Box<T>` 대신 우리가
+정의한 `MyBox<T>`를 이용하도록 수정해봅시다. Listing 15-9는 컴파일되지
+않을 것인데 그 이유는 러스트가 `MyBox`를 어떻게 역참조하는지 모르기
+때문입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -137,10 +137,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same
-way we used references and `Box<T>`</span>
+<span class="caption">Listing 15-9: 참조자와 `Box<T>`를 사용한 것과 동일한
+방식으로 `MyBox<T>` 사용 시도하기</span>
 
-Here’s the resulting compilation error:
+아래는 그 결과 발생한 컴파일 에러입니다:
 
 ```text
 error[E0614]: type `MyBox<{integer}>` cannot be dereferenced
@@ -150,17 +150,17 @@ error[E0614]: type `MyBox<{integer}>` cannot be dereferenced
    |                   ^^
 ```
 
-Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented that
-ability on our type. To enable dereferencing with the `*` operator, we
-implement the `Deref` trait.
+우리의 `MyBox<T>` 타입은 역참조될 수 없는데 그 이유는 우리의 타입에 대해
+해당 기능을 아직 구현하지 않았기 때문입니다. `*` 연산자로 역참조를 가능케
+하기 위해서, 우리는 `Deref` 트레잇을 구현합니다.
 
-### Treating a Type Like a Reference by Implementing the `Deref` Trait
+### `Deref` 트레잇을 구현하여 임의의 타입을 참조자처럼 다루기
 
-As discussed in Chapter 10, to implement a trait, we need to provide
-implementations for the trait’s required methods. The `Deref` trait, provided
-by the standard library, requires us to implement one method named `deref` that
-borrows `self` and returns a reference to the inner data. Listing 15-10
-contains an implementation of `Deref` to add to the definition of `MyBox`:
+10장에서 논의한 바와 같이, 트레잇을 구현하기 위해서는 트레잇의 요구 메소드들에
+대한 구현체를 제공할 필요가 있습니다. 표준 라이브러리가 제공하는 `Deref` 트레잇은
+우리에게 `self`를 빌려서 내부 데이터에 대한 참조자를 반환하는 `deref`라는 이름의
+메소드 하나를 구현하도록 요구합니다. Listing 15-10은 `MyBox`의 정의에 덧붙여
+`Deref`의 구현을 담고 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -177,47 +177,47 @@ impl<T> Deref for MyBox<T> {
 }
 ```
 
-<span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
+<span class="caption">Listing 15-10: `MyBox<T>` 상의 `Deref` 구현</span>
 
-The `type Target = T;` syntax defines an associated type for the `Deref` trait
-to use. Associated types are a slightly different way of declaring a generic
-parameter, but you don’t need to worry about them for now; we’ll cover them in
-more detail in Chapter 19.
+`type Target = T;` 문법은 `Deref` 트레잇이 사용할 연관 타입 (associated type)
+을 정의합니다. 연관 타입은 제네릭 파라미터를 정의하는 것과 약간 다른 방식이지만,
+여러분은 지금 이를 걱정할 필요는 없습니다; 우리는 이를 19장에서 더 자세히 다룰
+것입니다.
 
-We fill in the body of the `deref` method with `&self.0` so `deref` returns a
-reference to the value we want to access with the `*` operator. The `main`
-function in Listing 15-9 that calls `*` on the `MyBox<T>` value now compiles
-and the assertions pass!
+우리는 `deref` 메소드의 본체를 `&self.0`로 채웠으므로 `deref`는 우리가 `*`
+연산자를 이용해 접근하고자 하는 값의 참조자를 반환합니다. `MyBox<T>` 값에
+대하여 `*`을 호출하는 Listing 15-9의 `main` 함수는 이제 컴파일되고 단언문은
+통과됩니다!
 
-Without the `Deref` trait, the compiler can only dereference `&` references.
-The `deref` method gives the compiler the ability to take a value of any type
-that implements `Deref` and call the `deref` method to get a `&` reference that
-it knows how to dereference.
+`Deref` 트레잇 없이, 컴파일러는 오직 `&` 참조자들만 역참조할 수 있습니다.
+`deref` 메소드는 컴파일러에게 `Deref`를 구현한 어떠한 타입의 값을 가지고
+`&` 참조자를 가져오기 위해서 어떻게 역참조하는지 알고 있는 `deref` 메소드를
+호출하는 기능을 부여합니다.
 
-When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this
-code:
+Listing 15-9의 `*y`에 들어설 때, 무대 뒤에서 러스트는 실제로 아래의 코드를
+실행했습니다:
 
 ```rust,ignore
 *(y.deref())
 ```
 
-Rust substitutes the `*` operator with a call to the `deref` method and then a
-plain dereference so as programmers we don’t have to think about whether or not
-we need to call the `deref` method. This Rust feature lets us write code that
-functions identically whether we have a regular reference or a type that
-implements `Deref`.
+러스트는 `*` 연산자에 `deref` 메소드 호출 후 보통의 역참조를 대입하므로
+프로그래머로서 우리는 `deref` 메소드를 호출할 필요가 있는지 혹은 없는지를
+생각하지 않아도 됩니다. 이 러스트의 기능은 우리가 보통의 참조자를 가지고
+있는 경우 혹은 `Deref`를 구현한 타입을 가지고 있는 경우에 대하여 동일하게
+기능하는 코드를 작성하도록 해줍니다.
 
-The reason the `deref` method returns a reference to a value and that the plain
-dereference outside the parentheses in `*(y.deref())` is still necessary is due
-to the ownership system. If the `deref` method returned the value directly
-instead of a reference to the value, the value would be moved out of `self`. We
-don’t want to take ownership of the inner value inside `MyBox<T>` in this case
-and in most cases where we use the dereference operator.
+`deref` 메소드가 값의 참조자를 반환하고 `*(y.deref())`에서의 괄호
+바깥의 평범한 역참조가 여전히 필요한 이유는 소유권 시스템 때문입니다.
+만일 `deref` 메소드가 값의 참조자 대신 값을 직접 반환했다면, 그 값은
+`self` 바깥으로 이동될 것입니다. 위의 경우 및 우리가 역참조 연산자를
+사용하는 대부분의 경우에서 우리는 `MyBox<T>` 내부의 값에 대한 소유권을
+얻길 원치 않습니다.
 
-Note that the `*` is replaced with a call to the `deref` method and then a call
-to `*` just once, each time we type a `*` in our code. Because the substitution
-of `*` does not recurse infinitely, we end up with data of type `i32`, which
-matches the `5` in `assert_eq!` in Listing 15-9.
+우리의 코드에 `*`를 한번 타이핑할 때마다, `*`는 `deref` 함수의 호출 후
+`*`를 한번 호출하는 것으로 대치된다는 점을 기억하세요. `*`의 대입이
+무한히 재귀적으로 실행되지 않기 때문에, 우리는 결국 `i32` 타입의 데이터를
+얻는데, 이는 Listing 15-9의 `assert_eq!` 내의 `5`와 일치합니다.
 
 ### Implicit Deref Coercions with Functions and Methods
 
