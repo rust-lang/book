@@ -1,13 +1,13 @@
-# Apéndice G - Características más Recientes
+# Apéndice F - Características más Recientes
 
-Este apéndice documenta características que han sido añadidas a Rust estable desde que 
+Este apéndice documenta características que han sido añadidas a Rust estable desde que
 se completó la parte principal del libro.
 
 
 ## Campos en Abreviatura
 
 Podemos inicializar una estructura de datos (estruct, enum, unión) con campos
-nombrados, escribiendo `fieldname` como abreviatura de `fieldname: fieldname`. 
+nombrados, escribiendo `fieldname` como abreviatura de `fieldname: fieldname`.
 Esto permite una sintaxis compacta para la inicialización, con menos duplicación:
 
 ```rust
@@ -35,9 +35,9 @@ fn main() {
 ```
 
 
-## Retorno Desde Loops
+## Retorno desde Loops
 
-Uno de los usos de un `loop` es reintentar una operación que sabe que puede fallar, como 
+Uno de los usos de un `loop` es reintentar una operación que sabe que puede fallar, como
 comprobar si un hilo ha completado su trabajo. Sin embargo, es posible que necesites pasar el
 resultado de esa operación al resto de tu código. Si lo agregas a la expresión `break`
 que usas para detener el loop, este será devuelto por el bucle roto:

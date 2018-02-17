@@ -5,8 +5,8 @@ devolver la `String` a la función de llamada para que podamos seguir usando la
 `String` después de la llamada a `calculate_length`, porque la `String` se ha movido
 a `calculate_length`.
 
-A continuación se explica cómo definiría y utilizaría una función `calculate_length` que tiene 
-una *referencia* a un objeto como parámetro en lugar de tomar posesión del 
+A continuación se explica cómo definiría y utilizaría una función `calculate_length` que tiene
+una *referencia* a un objeto como parámetro en lugar de tomar posesión del
 valor:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -25,17 +25,22 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-Primero, nota que todo el código tuple en la declaración variable y el 
+Primero, nota que todo el código tuple en la declaración variable y el
 valor de retorno de función ha desaparecido. Segundo, nota que pasamos `&s1` a
-`calculate_length`, y en su definición, tomamos `&String` en lugar de 
+`calculate_length`, y en su definición, tomamos `&String` en lugar de
 `String`.
 
-Estos ampersands(&) son *referencias*, y te permiten referirte a algún valor 
-sin apropiarte de él. La Figura 4-8 muestra un diagrama.
+Estos ampersands(&) son *referencias*, y te permiten referirte a algún valor
+sin apropiarte de él. La Figura 4-5 muestra un diagrama.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figura 4-8: `&String s` señalando `String s1`.</span>
+<span class="caption">Figura 4-5: `&String s` señalando `String s1`.</span>
+
+> Note: The opposite of referencing by using `&` is *dereferencing*, which is
+> accomplished with the dereference operator, `*`. We’ll see some uses of the
+> dereference operator in Chapter 8 and discuss details of dereferencing in
+> Chapter 15.
 
 Echemos un vistazo más de cerca de la llamada a la función:
 
@@ -49,7 +54,7 @@ let len = calculate_length(&s1);
 ```
 
 La sintaxis `&s1` nos permite crear una referencia que *refiere* al valor de `s1`
-pero que no lo posee. Debido a que no es de su propiedad, el valor al que apunta no se 
+pero que no lo posee. Debido a que no es de su propiedad, el valor al que apunta no se
 dejará caer cuando la referencia salga del alcance.
 
 Del mismo modo, la firma de la función utiliza `&` para indicar que el tipo de
@@ -58,22 +63,22 @@ parámetro `s` es una referencia. Añadamos algunas anotaciones explicativas:
 ```rust
 fn calculate_length(s: &String) -> usize { // s es una referencia a un String
     s.len()
-} // Aquí, s sale del alcance. Pero debido a que no tiene la propiedad 
+} // Aquí, s sale del alcance. Pero debido a que no tiene la propiedad
   // a la que se refiere, no pasa nada.
 ```
 
-El alcance en el que la variable `s` es válida es el mismo que cualquier parámetro 
-de la función de scope, pero no dejamos caer lo que la referencia indica cuando se sale 
+El alcance en el que la variable `s` es válida es el mismo que cualquier parámetro
+de la función de scope, pero no dejamos caer lo que la referencia indica cuando se sale
 del alcance porque no tenemos propiedad. Las funciones que tienen referencias como parámetros en
 lugar de los valores reales significan que no necesitaremos devolver los valores
 para devolver la propiedad, ya que nunca tuvimos la propiedad.
 
-Llamamos tener referencias como parámetros de la función *préstamo*. Como en la vida real, 
+Llamamos tener referencias como parámetros de la función *préstamo*. Como en la vida real,
 si una persona es dueña de algo, puedes tomarlo prestado. Cuando termines, tienes
 que devolverlo.
 
 ¿Qué pasa si tratamos de modificar algo que pedimos prestado? Pruebe el código en
-Listado 4-9. Alerta de spoiler: ¡no funciona!
+Listado 4-4. Alerta de spoiler: ¡no funciona!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -89,16 +94,18 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">Listado 4-9: Intentar modificar un valor prestado</span>
+<span class="caption">Listado 4-4: Intentar modificar un valor prestado</span>
 
 Aquí está el error:
 
 ```text
-error: cannot borrow immutable borrowed content `*some_string` as mutable
+error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
  --> error.rs:8:5
   |
+7 | fn change(some_string: &String) {
+  |                        ------- use `&mut String` here to make mutable
 8 |     some_string.push_str(", world");
-  |     ^^^^^^^^^^^
+  |     ^^^^^^^^^^^ cannot borrow as mutable
 ```
 
 Así como las variables son inmutables por defecto, también lo son las referencias. No se nos
@@ -106,7 +113,7 @@ permite modificar algo a lo que tenemos una referencia.
 
 ### Referencias Mutables
 
-Podemos corregir el error en el código de Listing 4-9 con sólo un pequeño ajuste:
+Podemos corregir el error en el código de Listing 4-4 con sólo un pequeño ajuste:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -122,11 +129,11 @@ fn change(some_string: &mut String) {
 }
 ```
 
-Primero, tuvimos que cambiar los `s`para ser `mut`. Luego tuvimos que crear una referencia 
-mutable con `&mut s` y aceptar una referencia mutable con `some_string: &mut 
+Primero, tuvimos que cambiar los `s`para ser `mut`. Luego tuvimos que crear una referencia
+mutable con `&mut s` y aceptar una referencia mutable con `some_string: &mut
 String`.
 
-Pero las referencias mutables tienen una gran restricción: sólo puedes tener una referencia 
+Pero las referencias mutables tienen una gran restricción: sólo puedes tener una referencia
 mutable en un dato concreto en un scope particular. Este código
 fallará:
 
@@ -153,13 +160,13 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-Esta restricción permite la mutación pero de una manera muy controlada. Es 
-algo con lo que los nuevos Rustaceos luchan, porque la mayoría de los lenguajes te 
+Esta restricción permite la mutación pero de una manera muy controlada. Es
+algo con lo que los nuevos Rustaceos luchan, porque la mayoría de los lenguajes te
 permiten mutar cuando quieras. El beneficio de tener esta restricción es que Rust
 puede prevenir carreras de datos en el momento de compilar.
 
-Una *carrera de datos* es un tipo particular de condición de carrera en la cual ocurren 
-estos tres comportamientos:
+Una *carrera de datos* es similar a una condición de carrera, que ocurre cuando
+suceden estos tres comportamientos:
 
 1. Dos o más punteros acceden a los mismos datos al mismo tiempo.
 1. Al menos uno de los punteros se está usando para escribir los datos.
@@ -211,27 +218,28 @@ immutable
 ```
 
 ¡Uf! Nosotros *también* no podemos tener una referencia mutable mientras que tenemos una inmutable.
-Los usuarios de una referencia inmutable no esperan que los valores cambien repentinamente 
-de debajo de ellos! Sin embargo, múltiples referencias inmutables están bien porque nadie que 
+Los usuarios de una referencia inmutable no esperan que los valores cambien repentinamente
+de debajo de ellos! Sin embargo, múltiples referencias inmutables están bien porque nadie que
 esté leyendo los datos tiene la habilidad de afectar la lectura de los datos de cualquier
 otra persona.
 
 A pesar de que a veces estos errores pueden ser frustrantes, recuerda que es el
-compilador de Rust señalando un potencial error temprano (en tiempo de compilación en lugar de 
+compilador de Rust señalando un potencial error temprano (en tiempo de compilación en lugar de
 en tiempo de ejecución) y mostrarte exactamente dónde está el problema en lugar de tener que
 buscar por qué a veces tus datos no son lo que pensabas que deberían ser.
 
 ### Referencias Colgantes
 
-En los lenguajes con punteros, es fácil crear erróneamente un *puntero 
-colgante*, un puntero que hace referencia a una ubicación en la memoria que puede haber 
+En los lenguajes con punteros, es fácil crear erróneamente un *puntero
+colgante*, un puntero que hace referencia a una ubicación en la memoria que puede haber
 sido dada a alguien más, liberando algo de memoria mientras se conserva un puntero a
-esa memoria. En Rust, por el contrario, el compilador garantiza que las referencias nunca 
+esa memoria. En Rust, por el contrario, el compilador garantiza que las referencias nunca
 serán referencias colgantes: si tenemos una referencia a algunos datos, el compilador
 se asegurará de que los datos no salgan del scope antes que la referencia a los
 datos.
 
-Tratemos de crear una referencia colgante:
+Tratemos de crear una referencia colgante, which Rust will prevent with a
+compile-time error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -254,17 +262,15 @@ error[E0106]: missing lifetime specifier
  --> dangle.rs:5:16
   |
 5 | fn dangle() -> &String {
-  |                ^^^^^^^
+  |                ^ expected lifetime parameter
   |
-  = help: this function's return type contains a borrowed value, but there is no
-    value for it to be borrowed from
+  = help: this function's return type contains a borrowed value, but there is
+  no value for it to be borrowed from
   = help: consider giving it a 'static lifetime
-
-error: aborting due to previous error
 ```
 
 Este mensaje de error se refiere a una característica que aún no hemos cubierto: *vida útil*.
-Discutiremos la vida útil en detalle en el capítulo 10. Pero, si tu no haces caso de 
+Discutiremos la vida útil en detalle en el capítulo 10. Pero, si tu no haces caso de
 las partes sobre vida útil, el mensaje contiene la llave de por qué este código es
 un problema:
 
@@ -286,7 +292,7 @@ fn dangle() -> &String { // dangle regresa una referencia a String
   // peligro!
 ```
 
-Debido a que la `s`se crea dentro del `dangle`, cuando el código de `dángle` está terminado, 
+Debido a que la `s`se crea dentro del `dangle`, cuando el código de `dángle` está terminado,
 `s`se deslocalizará. Pero intentamos devolverle una referencia. Eso significa
 que esta referencia estaría apuntando a una "`String` inválida! Eso no es bueno. Rust
 no nos deja hacer esto.
@@ -301,7 +307,7 @@ fn no_dangle() -> String {
 }
 ```
 
-Esto funciona sin problemas. La propiedad se retira, y nada se 
+Esto funciona sin problemas. La propiedad se retira, y nada se
 deslocaliza.
 
 ### El Reglamento de Referencias

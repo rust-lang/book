@@ -32,7 +32,7 @@ fn main() {
 ```
 
 But you’ll more often see them used in this format, with the comment on a
-separate line above the code it's annotating:
+separate line above the code it’s annotating:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -43,4 +43,5 @@ fn main() {
 }
 ```
 
-That’s all there is to comments. They’re not particularly complicated.
+Rust also has another kind of comment, documentation comments, which we’ll
+discuss in Chapter 14.

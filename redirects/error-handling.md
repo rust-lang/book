@@ -1,12 +1,16 @@
-% There is a new edition of the book
+% Error Handling
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Rust groups errors into two major categories: _recoverable_ errors with `Result<T, E>` and _unrecoverable_ errors with `panic!`.
 
-* [Index of the second edition of The Rust Programming Language][2]
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 9.00 — Error Handling][2]**
+* <small>[In the first edition: Ch 4.7 — Error Handling][1]</small>
 
 
 [1]: first-edition/error-handling.html
-[2]: second-edition/index.html
+[2]: second-edition/ch09-00-error-handling.html

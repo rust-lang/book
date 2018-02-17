@@ -1,32 +1,126 @@
 # Introduction
 
-Bienvenido al "Lenguaje de Programación Rust" un libro introductorio a Rust.
-Rust es un lenguaje de programación focalizado en la seguridad, velocidad, y
-la concurrencia. Su diseño permite crear programas que tienen el desempeño y
-control de un lenguage de bajo nivel, pero con las poderosas abstraciones de
-unlenguaje de alto nivel. Estas propiedades hacen de Rust una alternativa
-viable para desarrolladores que tienen experiencia en lenguajes como C y que
-buscan una alternativa mas segura, al igual que aquellos que usan lenguajes
-como python que buscan alternativas para excribir código que se desempeña mejor
-sin sacrificar la expresividad.
+Welcome to “The Rust Programming Language,” an introductory book about Rust.
 
-Rust ejecuta la mayor parte de sus verificaciones de seguridad y decisiones de
-manejo de memoria durante la compilación para que el desempeño del programa en
-ejecución no se vea afectado. Esto lo hace útil en algunos casos en los cuales
-otros lenguajes no son buenos: programas con requerimientos precisos de espacio
-y tiempo, incluidos en otros lenguajes, y con escritura de código de bajo nivel,
- por ejemplo *drivers* y sistemas operativos. Es igualmente grandioso para
- aplicaciones web: soporta el sitio web de paquetes de Rust, [crates.io]!.
-Nos gustaría ver todo lo que *tu* puedes crear con Rust.
+Rust is a programming language that helps you write faster, more reliable
+software. High-level ergonomics and low-level control are often at odds with
+each other in programming language design; Rust stands to challenge that.
+Through balancing powerful technical capacity and a great developer experience,
+Rust gives you the option to control low-level details (such as memory usage)
+without all the hassle traditionally associated with such control.
 
-[crates.io]: https://crates.io/
+## Who Rust is For
 
-Este libro está escrito para el lector que ya sabe programar en por lo menos un
-lenguaje de programación. Al finalizar este libro, no deberías tener ningún
-problema escribiendo programas Rust. Vamos a aprender Rust a través de pequeños
-ejemplos focalizados que se contruyen los unos basados en los otros y que
-demuestran cómo utilizar las características de Rust al igual de mostrar como
-funcionan tras bambalinas.
+Rust is great for many people for a variety of reasons. Let’s discuss a few of
+the most important groups.
+
+### Teams of Developers
+
+Rust is proving to be a productive tool for collaborating among large teams of
+developers with varying levels of systems programming knowledge. Low-level code
+is prone to a variety of subtle bugs, which in most other languages can only be
+caught through extensive testing and careful code review by experienced
+developers. In Rust, the compiler plays a gatekeeper role by refusing to
+compile code with these kinds of bugs--including concurrency bugs. By working
+alongside the compiler, the team can spend more time focusing on the logic of
+the program rather than chasing down bugs.
+
+Rust also brings contemporary developer tools to the systems programming world:
+
+* Cargo, the included dependency manager and build tool, makes adding,
+  compiling, and managing dependencies painless and consistent across the Rust
+  ecosystem.
+* Rustfmt ensures a consistent coding style across developers.
+* The Rust Language Server powers IDE integration for code completion and
+  inline error messages.
+
+By using these and other tools in the Rust ecosystem, developers can be
+productive while writing systems-level code.
+
+### Students
+
+Rust is for students and people who are interested in learning about systems
+concepts. Many people have learned about topics like operating systems
+development through Rust. The community is happy to answer student questions.
+Through efforts such as this book, the Rust teams want to make systems concepts
+more accessible to more people, especially those getting started with
+programming.
+
+### Companies
+
+Rust is used in production by hundreds of companies, large and small, for a
+variety of tasks, such as command line tools, web services, DevOps tooling,
+embedded devices, audio and video analysis and transcoding, cryptocurrencies,
+bioinformatics, search engines, internet of things applications, machine
+learning, and even major parts of the Firefox web browser.
+
+### Open Source Developers
+
+Rust is for people who want to build the Rust programming language, community,
+developer tools, and libraries. We’d love for you to contribute to the Rust
+language.
+
+### People Who Value Speed and Stability
+
+By speed, we mean both the speed of the programs that Rust lets you create and
+the speed at which Rust lets you write them. The Rust compiler’s checks ensure
+stability through feature additions and refactoring, as opposed to brittle
+legacy code in languages without these checks that developers are afraid to
+modify. By striving for zero-cost abstractions, higher level features that
+compile to lower level code as fast as code written manually, Rust endeavors to
+make safe code be fast code as well.
+
+This isn’t a complete list of everyone the Rust language hopes to support, but
+these are some of the biggest stakeholders. Overall, Rust’s greatest ambition
+is to take trade-offs that have been accepted by programmers for decades and
+eliminate the dichotomy. Safety *and* productivity. Speed *and* ergonomics.
+Give Rust a try, and see if its choices work for you.
+
+## Who This Book is For
+
+This book assumes that you’ve written code in some other programming language,
+but doesn’t make any assumptions about which one. We’ve tried to make the
+material broadly accessible to those from a wide variety of programming
+backgrounds. We don’t spend a lot of time talking about what programming *is*
+or how to think about it; someone new to programming entirely would be better
+served by reading a book specifically providing an introduction to programming.
+
+## How to Use This Book
+
+This book generally assumes that you’re reading it front-to-back, that is,
+later chapters build on top of concepts in earlier chapters, and earlier
+chapters may not dig into details on a topic, revisiting the topic in a later
+chapter.
+
+There are two kinds of chapters in this book: concept chapters, and project
+chapters. In concept chapters, you’ll learn about an aspect of Rust. In the
+project chapters, we’ll build small programs together, applying what we’ve
+learned so far. Chapters 2, 12, and 20 are project chapters; the rest are
+concept chapters.
+
+Additionally, Chapter 2 is a hands-on introduction to Rust as a language. We’ll
+cover concepts at a high level, and later chapters will go into them in detail.
+If you’re the kind of person who likes to get their hands dirty right away,
+Chapter 2 is great for that. If you’re *really* that kind of person, you may
+even wish to skip over Chapter 3, which covers features that are very similar
+to other programming languages, and go straight to Chapter 4 to learn about
+Rust’s ownership system. By contrast, if you’re a particularly meticulous
+learner who prefers to learn every detail before moving onto the next, you may
+want to skip Chapter 2 and go straight to Chapter 3.
+
+In the end, there’s no wrong way to read a book: if you want to skip ahead, go
+for it! You may have to jump back if you find things confusing. Do whatever
+works for you.
+
+An important part of the process of learning Rust is learning how to read the
+error messages that the compiler gives you. As such, we’ll be showing a lot of
+code that doesn’t compile, and the error message the compiler will show you in
+that situation. As such, if you pick a random example, it may not compile!
+Please read the surrounding text to make sure that you didn’t happen to pick
+one of the in-progress examples.
+
+Finally, there are some appendices. These contain useful information about the
+language in a more reference-like format.
 
 ## Contribuir a este libro
 
@@ -34,5 +128,5 @@ Este es un libro de código abierto. Si encuentras un error por favor no dudes e
 crear un _issue_ o enviar una _pull request_ [a Github]. Mira el [CONTRIBUTING.md]
 para mas detalles.
 
-[a GitHub]: https://github.com/rust-lang/book
+[En GitHub]: https://github.com/rust-lang/book
 [CONTRIBUTING.md]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md

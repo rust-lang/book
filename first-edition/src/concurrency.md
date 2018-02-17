@@ -237,7 +237,7 @@ This won't work, however, and will give us the error:
 ```
 
 As the error message mentions, `Rc` cannot be sent between threads safely. This
-is because the internal reference count is not maintained in a thread safe
+is because the internal reference count is not maintained in a thread-safe
 manner and can have a data race.
 
 To solve this, we'll use `Arc<T>`, Rust's standard atomic reference count type.
@@ -288,7 +288,7 @@ involved—can cause data races!
 Usually when we wish to make something in an immutable position mutable, we use
 `Cell<T>` or `RefCell<T>` which allow safe mutation via runtime checks or
 otherwise (see also: [Choosing Your Guarantees](choosing-your-guarantees.html)).
-However, similar to `Rc`, these are not thread safe. If we try using these, we
+However, similar to `Rc`, these are not thread-safe. If we try using these, we
 will get an error about these types not being `Sync`, and the code will fail to
 compile.
 

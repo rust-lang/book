@@ -19,18 +19,18 @@ in Listing 5-13:
 ```rust
 #[derive(Debug)]
 struct Rectangle {
-    length: u32,
     width: u32,
+    height: u32,
 }
 
 impl Rectangle {
     fn area(&self) -> u32 {
-        self.length * self.width
+        self.width * self.height
     }
 }
 
 fn main() {
-    let rect1 = Rectangle { length: 50, width: 30 };
+    let rect1 = Rectangle { width: 30, height: 50 };
 
     println!(
         "The area of the rectangle is {} square pixels.",
@@ -44,7 +44,7 @@ fn main() {
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (*implementation*) block. Then we move the `area` function within the `impl`
-curly braces and change the first (and in this case, only) parameter to be
+curly brackets and change the first (and in this case, only) parameter to be
 `self` in the signature and everywhere within the body. In `main` where we
 called the `area` function and passed `rect1` as an argument, we can instead
 use *method syntax* to call the `area` method on our `Rectangle` instance.
@@ -131,9 +131,9 @@ method:
 
 ```rust,ignore
 fn main() {
-    let rect1 = Rectangle { length: 50, width: 30 };
-    let rect2 = Rectangle { length: 40, width: 10 };
-    let rect3 = Rectangle { length: 45, width: 60 };
+    let rect1 = Rectangle { width: 30, height: 50 };
+    let rect2 = Rectangle { width: 10, height: 40 };
+    let rect3 = Rectangle { width: 60, height: 45 };
 
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
@@ -161,8 +161,8 @@ parameter will be by looking at the code that calls the method:
 read `rect2` (rather than write, which would mean we’d need a mutable borrow),
 and we want `main` to retain ownership of `rect2` so we can use it again after
 calling the `can_hold` method. The return value of `can_hold` will be a
-boolean, and the implementation will check whether the length and width of
-`self` are both greater than the length and width of the other `Rectangle`,
+Boolean, and the implementation will check whether the width and height of
+`self` are both greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
 Listing 5-13, shown in Listing 5-15:
 
@@ -171,17 +171,17 @@ Listing 5-13, shown in Listing 5-15:
 ```rust
 # #[derive(Debug)]
 # struct Rectangle {
-#     length: u32,
 #     width: u32,
+#     height: u32,
 # }
 #
 impl Rectangle {
     fn area(&self) -> u32 {
-        self.length * self.width
+        self.width * self.height
     }
 
     fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length > other.length && self.width > other.width
+        self.width > other.width && self.height > other.height
     }
 }
 ```
@@ -205,7 +205,7 @@ function.
 
 Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
-that would have one dimension parameter and use that as both length and width,
+that would have one dimension parameter and use that as both width and height,
 thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
 
@@ -214,13 +214,13 @@ specify the same value twice:
 ```rust
 # #[derive(Debug)]
 # struct Rectangle {
-#     length: u32,
 #     width: u32,
+#     height: u32,
 # }
 #
 impl Rectangle {
     fn square(size: u32) -> Rectangle {
-        Rectangle { length: size, width: size }
+        Rectangle { width: size, height: size }
     }
 }
 ```
@@ -228,7 +228,40 @@ impl Rectangle {
 To call this associated function, we use the `::` syntax with the struct name,
 like `let sq = Rectangle::square(3);`, for example. This function is
 namespaced by the struct: the `::` syntax is used for both associated functions
-and namespaces created by modules, which we'll discuss in Chapter 7.
+and namespaces created by modules, which we’ll discuss in Chapter 7.
+
+### Multiple `impl` Blocks
+
+Each struct is allowed to have multiple `impl` blocks. For example, Listing
+5-15 is equivalent to the code shown in Listing 5-16, which has each method
+in its own `impl` block:
+
+```rust
+# #[derive(Debug)]
+# struct Rectangle {
+#     width: u32,
+#     height: u32,
+# }
+#
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+}
+
+impl Rectangle {
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+```
+
+<span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
+blocks</span>
+
+There’s no reason to separate these methods into multiple `impl` blocks here,
+but it’s valid syntax. We will see a case when multiple `impl` blocks are useful
+in Chapter 10 when we discuss generic types and traits.
 
 ## Summary
 

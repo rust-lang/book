@@ -3,9 +3,9 @@
 Rust has an extremely powerful control-flow operator called `match` that allows
 us to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
-names, wildcards, and many other things; Chapter 18 will cover all the
-different kinds of patterns and what they do. The power of `match` comes from
-the expressiveness of the patterns and the compiler checks that make sure all
+names, wildcards, and many other things; Chapter 18 covers all the different
+kinds of patterns and what they do. The power of `match` comes from the
+expressiveness of the patterns and the compiler checks that all
 possible cases are handled.
 
 Think of a `match` expression kind of like a coin sorting machine: coins slide
@@ -43,7 +43,7 @@ the variants of the enum as its patterns.</span>
 Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
 `coin`. This seems very similar to an expression used with `if`, but there’s a
-big difference: with `if`, the expression needs to return a boolean value.
+big difference: with `if`, the expression needs to return a Boolean value.
 Here, it can be any type. The type of `coin` in this example is the `Coin` enum
 that we defined in Listing 6-3.
 
@@ -62,9 +62,9 @@ The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
-Curly braces typically aren’t used if the match arm code is short, as it is in
-Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you can use curly braces. For example, the
+Curly brackets typically aren’t used if the match arm code is short, as it is
+in Listing 6-3 where each arm just returns a value. If you want to run multiple
+lines of code in a match arm, you can use curly brackets. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a `Coin::Penny` but would still return the last value of the block, `1`:
 
@@ -99,8 +99,8 @@ As an example, let’s change one of our enum variants to hold data inside it.
 From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `State` value stored
-inside it, which we've done here in Listing 6-4:
+our `enum` by changing the `Quarter` variant to include a `UsState` value stored
+inside it, which we’ve done here in Listing 6-4:
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
@@ -214,7 +214,7 @@ next arm.
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant.
+Does `Some(5)` match `Some(i)`? Well yes it does! We have the same variant.
 The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
 code in the match arm is then executed, so we add one to the value of `i` and
 create a new `Some` value with our total `6` inside.

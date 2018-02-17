@@ -532,10 +532,10 @@ This is currently hidden behind the `abi_vectorcall` gate and is subject to chan
 * `win64`
 * `sysv64`
 
-Most of the abis in this list are self-explanatory, but the `system` abi may
+Most of the ABIs in this list are self-explanatory, but the `system` ABI may
 seem a little odd. This constraint selects whatever the appropriate ABI is for
 interoperating with the target's libraries. For example, on win32 with a x86
-architecture, this means that the abi used would be `stdcall`. On x86_64,
+architecture, this means that the ABI used would be `stdcall`. On x86_64,
 however, windows uses the `C` calling convention, so `C` would be used. This
 means that in our previous example, we could have used `extern "system" { ... }`
 to define a block for all windows systems, not only x86 ones.
@@ -737,11 +737,11 @@ void foo(struct Foo *arg);
 void bar(struct Bar *arg);
 ```
 
-To do this in Rust, let’s create our own opaque types with `enum`:
+To do this in Rust, let’s create our own opaque types:
 
 ```rust
-pub enum Foo {}
-pub enum Bar {}
+#[repr(C)] pub struct Foo { private: [u8; 0] }
+#[repr(C)] pub struct Bar { private: [u8; 0] }
 
 extern "C" {
     pub fn foo(arg: *mut Foo);
@@ -750,7 +750,9 @@ extern "C" {
 # fn main() {}
 ```
 
-By using an `enum` with no variants, we create an opaque type that we can’t
-instantiate, as it has no variants. But because our `Foo` and `Bar` types are
+By including a private field and no constructor, 
+we create an opaque type that we can’t instantiate outside of this module.
+An empty array is both zero-size and compatible with `#[repr(C)]`.
+But because our `Foo` and `Bar` types are
 different, we’ll get type safety between the two of them, so we cannot
 accidentally pass a pointer to `Foo` to `bar()`.

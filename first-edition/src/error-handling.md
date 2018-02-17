@@ -473,7 +473,7 @@ it also requires us to add a [`Debug`][8] constraint on the `E` type
 parameter (which represents our error type). Since the vast majority
 of types should satisfy the `Debug` constraint, this tends to work out
 in practice. (`Debug` on a type simply means that there's a reasonable
-way to print a human readable description of values with that type.)
+way to print a human-readable description of values with that type.)
 
 OK, let's move on to an example.
 
@@ -554,7 +554,7 @@ fn main() {
 }
 ```
 
-This is a little better, but now we've written a lot more code! The case
+This is a little better, but now we've written much more code! The case
 analysis has once again bitten us.
 
 Combinators to the rescue! Just like `Option`, `Result` has lots of combinators
@@ -647,9 +647,9 @@ a bit nicer to deal with, since it will show your message instead of
 
 My advice boils down to this: use good judgment. There's a reason why the words
 “never do X” or “Y is considered harmful” don't appear in my writing. There are
-trade offs to all things, and it is up to you as the programmer to determine
+trade-offs to all things, and it is up to you as the programmer to determine
 what is acceptable for your use cases. My goal is only to help you evaluate
-trade offs as accurately as possible.
+trade-offs as accurately as possible.
 
 Now that we've covered the basics of error handling in Rust, and
 explained unwrapping, let's start exploring more of the standard
@@ -815,7 +815,7 @@ type from `i32` to something else.
 The first thing we need to decide: should we use `Option` or `Result`? We
 certainly could use `Option` very easily. If any of the three errors occur, we
 could simply return `None`. This will work *and it is better than panicking*,
-but we can do a lot better. Instead, we should pass some detail about the error
+but we can do much better. Instead, we should pass some detail about the error
 that occurred. Since we want to express the *possibility of error*, we should
 use `Result<i32, E>`. But what should `E` be? Since two *different* types of
 errors can occur, we need to convert them to a common type. One such type is
@@ -917,7 +917,7 @@ Reasonable people can disagree over whether this code is better than the code
 that uses combinators, but if you aren't familiar with the combinator approach,
 this code looks simpler to read to me. It uses explicit case analysis with
 `match` and `if let`. If an error occurs, it simply stops executing the
-function and returns the error (by converting it to a string).
+function and returns the error (by converting it to string).
 
 Isn't this a step backwards though? Previously, we said that the key to
 ergonomic error handling is reducing explicit case analysis, yet we've reverted
@@ -1026,7 +1026,7 @@ use std::io;
 use std::num;
 
 // We derive `Debug` because all types should probably derive `Debug`.
-// This gives us a reasonable human readable description of `CliError` values.
+// This gives us a reasonable human-readable description of `CliError` values.
 #[derive(Debug)]
 enum CliError {
     Io(io::Error),
@@ -1127,7 +1127,7 @@ use std::io;
 use std::num;
 
 // We derive `Debug` because all types should probably derive `Debug`.
-// This gives us a reasonable human readable description of `CliError` values.
+// This gives us a reasonable human-readable description of `CliError` values.
 #[derive(Debug)]
 enum CliError {
     Io(io::Error),
@@ -1285,7 +1285,7 @@ macro_rules! try {
 ```
 
 There's one tiny but powerful change: the error value is passed through
-`From::from`. This makes the `try!` macro a lot more powerful because it gives
+`From::from`. This makes the `try!` macro much more powerful because it gives
 you automatic type conversion for free.
 
 Armed with our more powerful `try!` macro, let's take a look at code we wrote
@@ -1367,7 +1367,7 @@ use std::num;
 use std::path::Path;
 
 // We derive `Debug` because all types should probably derive `Debug`.
-// This gives us a reasonable human readable description of `CliError` values.
+// This gives us a reasonable human-readable description of `CliError` values.
 #[derive(Debug)]
 enum CliError {
     Io(io::Error),
@@ -1643,7 +1643,7 @@ sure to add `extern crate csv;` to the top of your file.)
 use std::fs::File;
 
 // This struct represents the data in each row of the CSV file.
-// Type based decoding absolves us of a lot of the nitty gritty error
+// Type based decoding absolves us of a lot of the nitty-gritty error
 // handling, like parsing strings as integers or floats.
 #[derive(Debug, RustcDecodable)]
 struct Row {

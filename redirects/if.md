@@ -1,12 +1,28 @@
-% There is a new edition of the book
+% if
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> An `if` expression allows us to branch our code depending on conditions.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+fn main() {
+    let number = 3;
+
+    if number < 5 {
+        println!("condition was true");
+    } else {
+        println!("condition was false");
+    }
+}
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[In the second edition: Ch 3.05 — Control flow][2]**
+* <small>[In the first edition: Ch 3.5 — if][1]</small>
 
 
 [1]: first-edition/if.html
-[2]: second-edition/index.html
+[2]: second-edition/ch03-05-control-flow.html#if-expressions
