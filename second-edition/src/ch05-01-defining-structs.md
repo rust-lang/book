@@ -218,19 +218,19 @@ El código del Listado 5-7 también crea una instancia en `user2` que tiene un
 valor diferente para los campos `email` y `username` pero tiene los mismos valores para 
 los campos `active` y `sign_in_count` de `user1`.
 
-### Tuple Structs without Named Fields to Create Different Types
+### Estructuras de Tupla sin Campos Especificados Para Crear Tipos Diferentes
 
-We can also define structs that look similar to tuples (which were discussed in
-Chapter 3), called *tuple structs*, that have the added meaning the struct name
-provides, but don’t have names associated with their fields; rather, they just
-have the types of the fields. Tuple structs are useful when you want to give
-the whole tuple a name and make the tuple be a different type than other
-tuples, but naming each field as in a regular struct would be verbose or
-redundant.
+También podemos definir estructuras que parecen similares a tuplas (que se discutieron en 
+el Capítulo 3), llamadas *tuple estructs*, que tienen el significado agregado que el nombre
+de la estructura proporciona, pero no tienen nombres asociados con sus campos; más bien, sólo tienen 
+los tipos de los campos. Las estructuras de tupla son útiles cuando se quiere dar un 
+nombre a la tupla entera y hacer que la tupla sea un tipo diferente a otras 
+tuplas, pero nombrar cada campo como en una estructura regular sería verboso o 
+redundante.
 
-To define a tuple struct you start with the `struct` keyword and the struct
-name followed by the types in the tuple. For example, here are definitions and
-usages of two tuple structs named `Color` and `Point`:
+Para definir una estructura doble se empieza con la palabra clave `struct` y el nombre
+de la estructura seguido por los tipos en la tupla. Por ejemplo, aquí están las definiciones
+y usos de dos estructuras dobles llamadas `Color` y `Point`:
 
 ```rust
 struct Color(i32, i32, i32);
@@ -240,35 +240,35 @@ let black = Color(0, 0, 0);
 let origin = Point(0, 0, 0);
 ```
 
-Note that the `black` and `origin` values are different types, since they’re
-instances of different tuple structs. Each struct we define is its own type,
-even though the fields within the struct have the same types. For example, a
-function that takes a parameter of type `Color` cannot take a `Point` as an
-argument, even though both types are made up of three `i32` values. Otherwise,
-tuple struct instances behave like tuples: you can destructure them into their
-individual pieces and you can use a `.` followed by the index to access an
-individual value, and so on.
+Ten en cuenta que los valores `black` y `originn` son diferentes tipos, ya que son
+instancias de diferentes estructuras de tuplas. Cada estructura que definimos es su propio tipo,
+aunque los campos dentro de la estructura tienen los mismos tipos. Por ejemplo, una
+función que toma un parámetro del tipo `Color` no puede tomar un `Point` como 
+argumento, aunque ambos tipos estén compuestos de tres valores `i32`. De otro modo,
+las instancias de estructura tuplas se comportan como tuplas: puedes desestructurarlas en sus piezas
+individuales y puedes usar un `.` seguido por el índice para acceder a un
+valor individual, y así sucesivamente.
 
-### Unit-Like Structs without Any Fields
+### Estructuras Unitarias sin Ningún Campo
 
-We can also define structs that don’t have any fields! These are called
-*unit-like structs* since they behave similarly to `()`, the unit type.
-Unit-like structs can be useful in situations such as when you need to
-implement a trait on some type, but you don’t have any data that you want to
-store in the type itself. We’ll discuss traits in Chapter 10.
+También podemos definir estructuras que no tienen campos! Éstas se denominan
+"unit-like structs" ya que se comportan de forma similar a `()`, el tipo de unidad.
+Las estructuras unitarias pueden ser útiles en situaciones tales como cuando necesites
+implementar un rasgo en algún tipo, pero no se tiene ningún dato que quieras
+almacenar en el mismo tipo. Discutiremos los rasgos en el capítulo 10.
 
-> ### Ownership of Struct Data
+> ### Posesión de los Datos de una Estructura
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want instances of this struct to own all of its data and for that
-> data to be valid for as long as the entire struct is valid.
+> En la definición de la estructura de `User` en el Listado 5-1, usamos el propio tipo
+> de `String` en lugar del tipo de slice de cadena `&str`. Esta es una elección deliberada
+> porque queremos que las instancias de esta estructura posean todos sus datos y que estos
+> datos sean válidos mientras la estructura entera sea válida.
 >
-> It’s possible for structs to store references to data owned by something else,
-> but to do so requires the use of *lifetimes*, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
-> is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like this:
+> Es posible que las estructuras almacenen referencias a datos que pertenecen a otra cosa,
+> pero para ello se requiere el uso de *lifetimes*, una función de Rust que 
+> discutiremos en el Capítulo 10. La vida útil asegura que los datos referenciados por una estructura
+> son válidos mientras la estructura sea válida. Digamos que intentas guardar una referencia 
+> en una estructura sin especificar la vida útil, como ésta:
 >
 > <span class="filename">Filename: src/main.rs</span>
 >
@@ -290,7 +290,7 @@ store in the type itself. We’ll discuss traits in Chapter 10.
 > }
 > ```
 >
-> The compiler will complain that it needs lifetime specifiers:
+> El compilador reclamará de que necesita especificadores de vida útil:
 >
 > ```text
 > error[E0106]: missing lifetime specifier
@@ -306,6 +306,6 @@ store in the type itself. We’ll discuss traits in Chapter 10.
 >   |            ^ expected lifetime parameter
 > ```
 >
-> In Chapter 10, we’ll discuss how to fix these errors so you can store
-> references in structs, but for now, we’ll fix errors like these using owned
-> types like `String` instead of references like `&str`.
+> En el Capítulo 10, discutiremos cómo corregir estos errores para que puedas almacenar
+> referencias en estructuras, pero por ahora, arreglaremos errores como estos usando tipos
+> propios como `String` en lugar de referencias como `&str`.
