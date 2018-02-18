@@ -19,7 +19,7 @@ in order to define a set of behaviors necessary to accomplish some purpose.
 
 For example, say we have multiple structs that hold various kinds and amounts
 of text: a `NewsArticle` struct that holds a news story filed in a particular
-place in the world, and a `Tweet` that can have at most 140 characters in its
+place in the world, and a `Tweet` that can have at most 280 characters in its
 content along with metadata like whether it was a retweet or a reply to another
 tweet.
 
@@ -62,7 +62,7 @@ shows an implementation of the `Summarizable` trait on the `NewsArticle` struct
 that uses the headline, the author, and the location to create the return value
 of `summary`. For the `Tweet` struct, we’ve chosen to define `summary` as the
 username followed by the whole text of the tweet, assuming that tweet content
-is already limited to 140 characters.
+is already limited to 280 characters.
 
 <span class="filename">Filename: lib.rs</span>
 
