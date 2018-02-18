@@ -220,25 +220,25 @@ Listing 15-9의 `*y`에 들어설 때, 무대 뒤에서 러스트는 실제로 �
 얻는데, 이는 Listing 15-9의 `assert_eq!` 내의 `5`와 일치합니다.
 
 ### Implicit Deref Coercions with Functions and Methods
+### 함수와 메소드를 이용한 암묵적 역참조 강제
 
-*Deref coercion* is a convenience that Rust performs on arguments to functions
-and methods. Deref coercion converts a reference to a type that implements
-`Deref` into a reference to a type that `Deref` can convert the original type
-into. Deref coercion happens automatically when we pass a reference to a
-particular type’s value as an argument to a function or method that doesn’t
-match the parameter type in the function or method definition. A sequence of
-calls to the `deref` method converts the type we provided into the type the
-parameter needs.
+*역참조 강제(deref coercion)* 는 러스트가 함수 및 메소드의 인자에
+수행하는 편의성 기능입니다. 역참조 강제는 `Deref`를 구현한 어떤
+타입의 참조자를 `Deref`가 본래의 타입으로부터 바꿀 수 있는 타입의
+참조자로 바꿔줍니다. 역참조 강제는 우리가 특정 타입의 값에 대한
+참조자를 함수 혹은 메소드의 인자로 넘기는 중 정의된 파라미터 타입에는
+맞지 않을 때 자동적으로 발생합니다. 일련의 `deref` 메소드 호출은
+우리가 제공한 타입을 파라미터가 요구하는 타입으로 변경해줍니다.
 
-Deref coercion was added to Rust so that programmers writing function and
-method calls don’t need to add as many explicit references and dereferences
-with `&` and `*`. The deref coercion feature also lets us write more code that
-can work for either references or smart pointers.
+역참조 강제가 러스트에 도입되어서 함수와 메소드 호출을 작성하는 프로그래머들은
+`&`와 `*`를 이용한 많은 수의 명시적 참조 및 역참조를 추가하지 않아도 됩니다.
+역참조 강제 기능은 또한 우리가 참조자나 스마트 포인터 둘 중 어느 경우라도 작동할
+수 있는 코드를 더 많이 작성할 수 있도록 해줍니다.
 
-To see deref coercion in action, let’s use the `MyBox<T>` type we defined in
-Listing 15-8 as well as the implementation of `Deref` that we added in Listing
-15-10. Listing 15-11 shows the definition of a function that has a string slice
-parameter:
+역참조 강제가 실제 작동하는 것을 보기 위해서, 우리가 Listing 15-8에서
+정의했던 `MyBox<T>`과 Listing 15-10에서 추가했던 `Deref`의 구현체를
+이용합시다. Listing 15-11은 스트링 슬라이스 파라미터를 갖는 함수의
+정의를 보여줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -248,12 +248,12 @@ fn hello(name: &str) {
 }
 ```
 
-<span class="caption">Listing 15-11: A `hello` function that has the parameter
-`name` of type `&str`</span>
+<span class="caption">Listing 15-11: 타입 `&str`의 `name`이라는 파라미터를
+갖는 `hello` 함수</span>
 
-We can call the `hello` function with a string slice as an argument, such as
-`hello("Rust");` for example. Deref coercion makes it possible to call `hello`
-with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
+우리는 예를 들면 `hello("Rust");`와 같이 스트링 슬라이스를 인자로 하여 `hello` 함수를
+호출할 수 있습니다. Listing 15-12에서 보는 바와 같이, 역참조 강제는 `MyBox<String>`
+타입의 값에 대한 참조자를 이용하여 `hello`를 호출하는 것을 가능하게 해줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -286,20 +286,20 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-12: Calling `hello` with a reference to a
-`MyBox<String>` value, which works because of deref coercion</span>
+<span class="caption">Listing 15-12: 역참조 강제 때문에 작동되는,
+`MyBox<String>` 값에 대한 참조자로 `hello` 호출하기</span>
 
-Here we’re calling the `hello` function with the argument `&m`, which is a
-reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
-on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
-by calling `deref`. The standard library provides an implementation of `Deref`
-on `String` that returns a string slice, which is in the API documentation for
-`Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which
-matches the `hello` function’s definition.
+여기서 우리는 `hello` 함수를 호출하는 인자로서 `&m`를 이용했는데, 이는
+`MyBox<String>`의 참조자입니다. 우리가 Listing 15-10에서 `MyBox<T>`의
+`Deref` 트레잇을 구현했기 때문에, 러스트는 `deref`를 호출하여 `&MyBox<String>`을
+`&String`으로 바꿀 수 있습니다. 표준 라이브러리는 스트링 슬라이스를 반환하는
+`String`의 `Deref` 구현체를 제공하는데, 이는 `Deref`에 대한 API 문서에도
+있습니다. 러스트는 `deref`를 다시한번 호출하여 `&String`을 `&str`로 변환하고,
+이는 `hello` 함수의 정의와 일치하게 됩니다.
 
-If Rust didn’t implement deref coercion, we would have to write the code in
-Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value
-of type `&MyBox<String>`:
+만일 러스트가 역참조 강제 기능을 구현하지 않았다면, 우리는 `&MyBox<String>`
+타입의 값을 가지고 `hello` 함수를 호출하는데 있어 Listing 15-12의 코드 대신
+Listing 15-13의 코드를 작성해야 했을 것입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -332,46 +332,46 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-13: The code we would have to write if Rust
-didn’t have deref coercion</span>
+<span class="caption">Listing 15-13: 만일 러스트에 역참조 강제가 없었다면
+우리가 작성했어야 했을 코드</span>
 
-The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and
-`[..]` take a string slice of the `String` that is equal to the whole string to
-match the signature of `hello`. The code without deref coercions is harder to
-read, write, and understand with all of these symbols involved. Deref coercion
-allows Rust to handle these conversions for us automatically.
+`(*m)`은 `MyBox<String>`을 `String`로 역참조해 줍니다. 그런 다음 `&`과
+`[..]`은 `hello` 시그니처와 일치되도록 전체 스트링과 동일한 `String`의
+스트링 슬라이스를 얻습니다. 역참조 강제가 없는 코드는 이러한 모든 기호들이
+수반된 상태에서 읽기도, 쓰기도, 이해하기도 더 힘들어집니다. 역참조 강제는
+러스트가 우리를 위해 이러한 변환을 자동적으로 다룰 수 있도록 해줍니다.
 
-When the `Deref` trait is defined for the types involved, Rust will analyze the
-types and use `Deref::deref` as many times as necessary to get a reference to
-match the parameter’s type. The number of times that `Deref::deref` needs to be
-inserted is resolved at compile time, so there is no runtime penalty for taking
-advantage of deref coercion!
+`Deref` 트레잇이 관련된 타입에 대해 정의될 때, 러스트는 해당 타입을
+분석하여 파라미터의 타입에 맞는 참조자를 얻기 위해 필요한 수만큼의
+`Deref::deref`를 사용할 것입니다. `Deref::deref`가 삽입될 필요가 있는
+횟수는 컴파일 타임에 분석되므로, 역참조 강제의 이점을 얻는데에 관해서
+어떠한 런타임 페널티도 없습니다!
 
-### How Deref Coercion Interacts with Mutability
+### 역참조 강제가 가변성과 상호작용 하는 법
 
-Similar to how we use the `Deref` trait to override `*` on immutable
-references, Rust provides a `DerefMut` trait for overriding `*` on mutable
-references.
+불변 참조자에 대한 `*`를 오버라이딩 하기 위해 `Deref` 트레잇을 이용하는
+방법과 비슷하게, 러스트는 가변 참조자에 대한 `*`를 오버라이딩 하기 위한
+`DerefMut` 트레잇을 제공합니다.
 
-Rust does deref coercion when it finds types and trait implementations in three
-cases:
+러스트는 다음의 세 가지 경우에 해당하는 타입과 트레잇 구현을 찾았을 때
+역참조 강제를 수행합니다: 
 
-* From `&T` to `&U` when `T: Deref<Target=U>`
-* From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
-* From `&mut T` to `&U` when `T: Deref<Target=U>`
+* `T: Deref<Target=U>`일때 `&T`에서 `&U`로
+* `T: DerefMut<Target=U>`일때 `&mut T`에서 `&mut U`로
+* `T: Deref<Target=U>`일때 `&mut T`에서 `&U`로
 
-The first two cases are the same except for mutability. The first case states
-that if you have a `&T`, and `T` implements `Deref` to some type `U`, you can
-get a `&U` transparently. The second case states that the same deref coercion
-happens for mutable references.
+첫 두가지 경우는 가변성 부분만 제외하고는 동일합니다. 첫번째 경우는 만일 여러분이
+`&T`를 가지고 있고, `T`가 어떤 타입 `U`에 대한 `Deref`를 구현했다면, 여러분은
+명료하게 `&U`를 얻을 수 있음을 기술하고 있습니다. 두번째 경우는 동일한 역참조
+강제가 가변 참조자에 대해서도 발생함을 기술합니다.
 
-The third case is trickier: Rust will also coerce a mutable reference to an
-immutable one. But the reverse is *not* possible: immutable references will
-never coerce to mutable references. Because of the borrowing rules, if you have
-a mutable reference, that mutable reference must be the only reference to that
-data (otherwise, the program wouldn’t compile). Converting one mutable
-reference to one immutable reference will never break the borrowing rules.
-Converting an immutable reference to a mutable reference would require that
-there is only one immutable reference to that data, and the borrowing rules
-don’t guarantee that. Therefore, Rust can’t make the assumption that converting
-an immutable reference to a mutable reference is possible.
+세번째 경우는 좀 더 교묘합니다: 러스트는 가변 참조자를 불변 참조자로 강제할
+수도 있습니다. 하지만 그 역은 *불가능합니다*: 불변 참조자는 가변 참조자로 결코
+강제되지 않을 것입니다. 빌림 규칙 때문에, 만일 여러분이 가변 참조자를 가지고
+있다면, 그 가변 참조자는 해당 데이터에 대한 유일한 참조자임에 틀림 없습니다
+(만일 그렇지 않다면, 그 프로그램은 컴파일되지 않을 것입니다). 가변 참조자를
+불변 참조자로 변경하는 것은 결코 빌림 규칙을 깨트리지 않을 것입니다. 불변
+참조자를 가변 참조자로 변경하는 것은 해당 데이터에 대한 단 하나의 불변 참조자가
+있어야 한다는 요구를 하게 되고, 이는 빌림 규칙이 보장해줄 수 없습니다. 따라서,
+러스트는 불변 참조자를 가변 참조자로 변경하는 것이 가능하다는 가정을 할 수
+없습니다.
