@@ -61,11 +61,11 @@ same on each computer, and doesn't represent the authors' computer
 specifically), and `8080` is the port. We’ve chosen this port for two reasons:
 HTTP is normally accepted on this port and 8080 is easy to remember because
 it’s the HTTP port 80 repeated. Note that connecting to port 80 requires
-administrator privileges; non-administraors can only listen on ports higher
+administrator privileges; non-administrators can only listen on ports higher
 than 1024.
 
 The `bind` function in this scenario works like the `new` function, in that it
-will return a new `TcpListener` instance. This functon is called `bind`
+will return a new `TcpListener` instance. This function is called `bind`
 because, in networking, connecting to a port to listen to is known as “binding
 to a port”.
 
@@ -122,7 +122,7 @@ Connection established!
 ```
 
 Sometimes, you'll see multiple messages printed out for one browser request;
-that might be becuase the browser is making a request for the page as well as a
+that might be because the browser is making a request for the page as well as a
 request for other resources, like the `favicon.ico` icon that appears in the
 browser tab.
 
@@ -291,7 +291,7 @@ Now that we know what the browser is asking for, let’s send some data back!
 
 ### Writing a Response
 
-We're going to implement the sending of data in reponse to a client request.
+We're going to implement the sending of data in response to a client request.
 Responses have the following format:
 
 ```text

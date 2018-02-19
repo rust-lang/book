@@ -5,7 +5,7 @@ sweet sorrow. But before we go, let’s build one more project together, to show
 off some of the concepts we covered in these final chapters, as well as recap
 some lessons from earlier.
 
-For our final projct we’re going to make a web server that only says "hello";
+For our final project we’re going to make a web server that only says "hello";
 which will look like Figure 20-1 in a web browser:
 
 ![hello from rust](img/trpl20-01.png)

@@ -8,7 +8,7 @@ sweet sorrow. But before we go, let’s build one more project together, to show
 off some of the concepts we covered in these final chapters, as well as recap
 some lessons from earlier.
 
-For our final projct we’re going to make a web server that only says "hello";
+For our final project we’re going to make a web server that only says "hello";
 which will look like Figure 20-1 in a web browser:
 
 <img src="trpl20-01.png" />
@@ -99,11 +99,11 @@ same on each computer, and doesn't represent the authors' computer
 specifically), and `8080` is the port. We’ve chosen this port for two reasons:
 HTTP is normally accepted on this port and 8080 is easy to remember because
 it’s the HTTP port 80 repeated. Note that connecting to port 80 requires
-administrator privileges; non-administraors can only listen on ports higher
+administrator privileges; non-administrators can only listen on ports higher
 than 1024.
 
 The `bind` function in this scenario works like the `new` function, in that it
-will return a new `TcpListener` instance. This functon is called `bind`
+will return a new `TcpListener` instance. This function is called `bind`
 because, in networking, connecting to a port to listen to is known as “binding
 to a port”.
 
@@ -160,7 +160,7 @@ Connection established!
 ```
 
 Sometimes, you'll see multiple messages printed out for one browser request;
-that might be becuase the browser is making a request for the page as well as a
+that might be because the browser is making a request for the page as well as a
 request for other resources, like the `favicon.ico` icon that appears in the
 browser tab.
 
@@ -328,7 +328,7 @@ Now that we know what the browser is asking for, let’s send some data back!
 
 ### Writing a Response
 
-We're going to implement the sending of data in reponse to a client request.
+We're going to implement the sending of data in response to a client request.
 Responses have the following format:
 
 ```
@@ -650,7 +650,7 @@ Currently our server runs in a single thread, meaning it can only serve one
 request at a time. Let’s see how that can be a problem by simulating some slow
 requests, and then fix it so our server can handle multiple requests at once.
 
-## Turning our Single-Threaded Server into a Multi-Threaded Server
+## Turning our Single Threaded Server into a Multithreaded Server
 
 <!-- Reading ahead, the original heading didn't seem to fit all of the sub
 headings -- this might not be totally right either, so feel free to replace
@@ -660,7 +660,7 @@ with something more appropriate -->
 Right now, the server will process each request in turn, meaning it won't
 process a second connection until the first is finished processing. If this
 server were to receive more and more requests, this sort of serial execution
-would prove to be less and less optimal. If the server recieves a request that
+would prove to be less and less optimal. If the server receives a request that
 takes a long time to process, subsequent requests will have to wait until the
 long request is finished, even if the new requests can be processed quickly.
 We'll need to fix this, but first, we'll look at the problem in action.
@@ -1169,7 +1169,7 @@ Listing 20-14: Creating a vector for `ThreadPool` to hold the threads
 We’ve brought `std::thread` into scope in the library crate, because we’re using
 `thread::JoinHandle` as the type of the items in the vector in `ThreadPool`.
 
-Once a valid size is recevied, our `ThreadPool` creates a new vector that can
+Once a valid size is received, our `ThreadPool` creates a new vector that can
 hold `size` items. We haven’t used the `with_capacity` function in this book
 yet, which does the same thing as `Vec::new`, but with an important difference:
 it pre-allocates space in the vector. Because we know that we need to store
@@ -1181,7 +1181,7 @@ succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-<!-- I wasn't sure what this next paagraph was relevant to, can you connect it
+<!-- I wasn't sure what this next paragraph was relevant to, can you connect it
 up more clearly?-->
 <!-- This is where we're actually getting into the meat of the implementation,
 I've tried to make it clearer :( /Carol-->
@@ -1588,7 +1588,7 @@ Listing 20-20: Receiving and executing the jobs in the worker’s thread
 Here, we first call `lock` on the `receiver` to acquire the mutex, then
 `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex is in
 a *poisoned* state, which can happen if some other thread panicked while
-holding the lock, rather than releasing the lock. In this situtation, calling
+holding the lock, rather than releasing the lock. In this situation, calling
 `unwrap` to have this thread panic is the correct action to take. Feel free to
 change this `unwrap` to an `expect` with an error message that is meaningful to
 you if you’d like.

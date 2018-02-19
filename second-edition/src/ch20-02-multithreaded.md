@@ -1,4 +1,4 @@
-## Turning our Single-Threaded Server into a Multi-Threaded Server
+## Turning our Single Threaded Server into a Multithreaded Server
 
 <!-- Reading ahead, the original heading didn't seem to fit all of the sub
 headings -- this might not be totally right either, so feel free to replace
@@ -8,7 +8,7 @@ with something more appropriate -->
 Right now, the server will process each request in turn, meaning it won't
 process a second connection until the first is finished processing. If this
 server were to receive more and more requests, this sort of serial execution
-would prove to be less and less optimal. If the server recieves a request that
+would prove to be less and less optimal. If the server receives a request that
 takes a long time to process, subsequent requests will have to wait until the
 long request is finished, even if the new requests can be processed quickly.
 We'll need to fix this, but first, we'll look at the problem in action.
@@ -545,7 +545,7 @@ the threads</span>
 We’ve brought `std::thread` into scope in the library crate, because we’re using
 `thread::JoinHandle` as the type of the items in the vector in `ThreadPool`.
 
-Once a valid size is recevied, our `ThreadPool` creates a new vector that can
+Once a valid size is received, our `ThreadPool` creates a new vector that can
 hold `size` items. We haven’t used the `with_capacity` function in this book
 yet, which does the same thing as `Vec::new`, but with an important difference:
 it pre-allocates space in the vector. Because we know that we need to store
@@ -557,7 +557,7 @@ succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-<!-- I wasn't sure what this next paagraph was relevant to, can you connect it
+<!-- I wasn't sure what this next paragraph was relevant to, can you connect it
 up more clearly?-->
 <!-- This is where we're actually getting into the meat of the implementation,
 I've tried to make it clearer :( /Carol-->
@@ -1010,7 +1010,7 @@ worker’s thread</span>
 Here, we first call `lock` on the `receiver` to acquire the mutex, then
 `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex is in
 a *poisoned* state, which can happen if some other thread panicked while
-holding the lock, rather than releasing the lock. In this situtation, calling
+holding the lock, rather than releasing the lock. In this situation, calling
 `unwrap` to have this thread panic is the correct action to take. Feel free to
 change this `unwrap` to an `expect` with an error message that is meaningful to
 you if you’d like.

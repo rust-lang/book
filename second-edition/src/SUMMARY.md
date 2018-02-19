@@ -116,7 +116,7 @@
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
-    - [Turning our Single-Threaded Server into a Multi-Threaded Server](ch20-02-multi-threaded.md)
+    - [Turning our Single Threaded Server into a Multithreaded Server](ch20-02-multithreaded.md)
     - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
