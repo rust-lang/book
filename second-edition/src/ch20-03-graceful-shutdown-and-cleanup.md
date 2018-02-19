@@ -2,7 +2,7 @@
 
 The code in Listing 20-21 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
-`id`, and `thread` fields that we're not using in a direct way that reminds us
+`id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning anything up. When we use the less elegant <span
 class="keystroke">ctrl-C</span> method to halt the main thread, all other
 threads are stopped immediately as well, even if they’re in the middle of
@@ -56,7 +56,7 @@ error[E0507]: cannot move out of borrowed content
    |             ^^^^^^ cannot move out of borrowed content
 ```
 
-This tells use we can't call `join` because we only have a mutable borrow of
+This tells use we can’t call `join` because we only have a mutable borrow of
 each `worker`, and `join` takes ownership of its argument. In order to solve
 this, we need a way to move the thread out of the `Worker` instance that owns
 `thread` so that `join` can consume the thread. We saw a way to do this in
@@ -104,7 +104,7 @@ error[E0308]: mismatched types
               found type `std::thread::JoinHandle<_>`
 ```
 
-Let's address the second error, which points to the code at the end of
+Let’s address the second error, which points to the code at the end of
 `Worker::new`; we need to wrap the `thread` value in `Some` when we create a
 new `Worker`. Make the following changes to fix this:
 
@@ -281,7 +281,7 @@ workers before calling `join` on each worker thread</span>
 
 We’re now iterating over the workers twice, once to send one `Terminate`
 message for each worker, and once to call `join` on each worker’s thread. If we
-tried to send a message and `join` immediately in the same loop, we couldn't
+tried to send a message and `join` immediately in the same loop, we couldn’t
 guarantee that the worker in the current iteration would be the one to get the
 message from the channel.
 
@@ -326,7 +326,7 @@ fn main() {
 <span class="caption">Listing 20-26: Shut down the server after serving two
 requests by exiting the loop</span>
 
-You wouldn't want a real-world web server to shut down after serving only two
+You wouldn’t want a real-world web server to shut down after serving only two
 requests, this just demonstrates the graceful shutdown and cleanup in working
 order.
 

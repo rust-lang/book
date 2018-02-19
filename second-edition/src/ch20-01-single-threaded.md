@@ -1,7 +1,7 @@
 ## Building a Single Threaded Web Server
 
-First we'll get a single threaded web server working, but before we begin,
-let's look at a quick overview of the protocols involved in building web
+First we’ll get a single threaded web server working, but before we begin,
+let’s look at a quick overview of the protocols involved in building web
 servers. The details of these protocols are beyond the scope of this book, but
 a short overview will give you the information you need.
 
@@ -16,13 +16,13 @@ TCP is the lower-level protocol that describes the details of how information
 gets from one server to another, but doesn’t specify what that information is.
 HTTP builds on top of TCP by defining the content of the requests and
 responses. It’s technically possible to use HTTP with other protocols, but in
-the vast majority of cases, HTTP sends its data over TCP. We're going to work
+the vast majority of cases, HTTP sends its data over TCP. We’re going to work
 with the raw bytes of TCP and HTTP requests and responses.
 
 ### Listening to the TCP Connection
 
-Our web server needs to be able to listen to a TCP connection, so that's the
-first part we'll work on. The standard library offers a `std::net` module that
+Our web server needs to be able to listen to a TCP connection, so that’s the
+first part we’ll work on. The standard library offers a `std::net` module that
 lets us do this. Let’s make a new project in the usual fashion:
 
 ```text
@@ -57,7 +57,7 @@ a message when we receive a stream</span>
 The `TcpListener` allows us to listen for TCP connections. We’ve chosen to
 listen to the address `127.0.0.1:8080`. Breaking this address down, the section
 before the colon is an IP address representing your own computer (this is the
-same on each computer, and doesn't represent the authors' computer
+same on each computer, and doesn’t represent the authors’ computer
 specifically), and `8080` is the port. We’ve chosen this port for two reasons:
 HTTP is normally accepted on this port and 8080 is easy to remember because
 it’s the HTTP port 80 repeated. Note that connecting to port 80 requires
@@ -72,7 +72,7 @@ to a port”.
 The `bind` function returns a `Result<T, E>`, which indicates that binding
 might fail. For example, if we tried to connect to port 80 without being an
 administrator, or if we ran two instances of our program and so had two
-programs listening to the same port, binding wouldn't work. Because we’re
+programs listening to the same port, binding wouldn’t work. Because we’re
 writing a basic server for learning purposes here, we’re not going to worry
 about handling these kinds of errors, so we just use `unwrap` to stop the
 program if errors happen.
@@ -98,8 +98,8 @@ clarified.
 /Carol -->
 
 For now, our handling of the stream consists of calling `unwrap` to terminate
-our program if the stream has any errors, and if there aren't any errors, then
-print a message. We'll add more functionality for the success case in the next
+our program if the stream has any errors, and if there aren’t any errors, then
+print a message. We’ll add more functionality for the success case in the next
 Listing. Receiving errors from the `incoming` method when a client connects to
 the server is possible because we’re not actually iterating over connections,
 we’re iterating over *connection attempts*. The connection might not be
@@ -110,7 +110,7 @@ produce an error until some of the open connections are closed.
 
 Let’s try this code out! First invoke `cargo run` in the terminal, then load up
 `127.0.0.1:8080` in a web browser. The browser should show an error message
-like “Connection reset”, because the server isn't currently sending any data
+like “Connection reset”, because the server isn’t currently sending any data
 back. If you look at your terminal, though, you should see a bunch of messages
 that were printed when the browser connected to the server!
 
@@ -121,13 +121,13 @@ Connection established!
 Connection established!
 ```
 
-Sometimes, you'll see multiple messages printed out for one browser request;
+Sometimes, you’ll see multiple messages printed out for one browser request;
 that might be because the browser is making a request for the page as well as a
 request for other resources, like the `favicon.ico` icon that appears in the
 browser tab.
 
 It could also be that the browser is trying to connect to the server multiple
-times because the server isn't responding with any data. When `stream` goes out
+times because the server isn’t responding with any data. When `stream` goes out
 of scope and is dropped at the end of the loop, the connection is closed as
 part of the `drop` implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary. The important
@@ -135,14 +135,14 @@ thing is that we’ve successfully gotten a handle to a TCP connection!
 
 Remember to stop the program with <span class="keystroke">ctrl-C</span> when
 you’re done running a particular version of the code, and restart `cargo run`
-after you’ve made each set of code changes to make sure you're running the
+after you’ve made each set of code changes to make sure you’re running the
 newest code.
 
 ### Reading the Request
 
 Let’s implement the functionality to read in the request from the browser! To
 separate out the concerns of getting a connection and then taking some action
-with the connection, we'll start a new function for processing connections. In
+with the connection, we’ll start a new function for processing connections. In
 this new `handle_connection` function, we’ll read data from the TCP stream and
 print it out so we can see the data being sent from the browser. Change the
 code to look like Listing 20-2:
@@ -181,7 +181,7 @@ us read from and write to the stream. In the `for` loop in the `main` function,
 instead of printing a message that says we made a connection, we now call the
 new `handle_connection` function and pass the `stream` to it.
 
-In the `handle_connection` function, we've made the `stream` parameter mutable.
+In the `handle_connection` function, we’ve made the `stream` parameter mutable.
 This is because the `TcpStream` instance keeps track of what data it returns to
 us internally. It might read more data than we asked for and save that data for
 the next time we ask for data. It therefore needs to be `mut` because its
@@ -194,7 +194,7 @@ when the program tempers what data it takes? -->
 not sure if it's clearer. /Carol -->
 
 Next, we need to actually read from the stream. We do this in two steps: first,
-we declare a `buffer` on the stack to hold the data that's read in. We’ve made
+we declare a `buffer` on the stack to hold the data that’s read in. We’ve made
 the buffer 512 bytes in size, which is big enough to hold the data of a basic
 request and sufficient for our purposes in this chapter. If we wanted to handle
 requests of an arbitrary size, the management of the buffer would need to be
@@ -265,7 +265,7 @@ quite, the same as a URL (*Uniform Resource Locator*). The difference between
 URIs and URLs isn’t important for our purposes of this chapter, but the HTTP
 spec uses the term URI, so we can just mentally substitute URL for URI here.
 
-Finally, we're given the HTTP version used by the client, and then the request
+Finally, we’re given the HTTP version used by the client, and then the request
 line ends in a CRLF sequence. The CRLF sequence can also be written as `\r\n`:
 `\r` is a *carriage return* and `\n` is a *line feed*. (These terms come from
 the typewriter days!) The CRLF sequence separates the request line from the
@@ -291,7 +291,7 @@ Now that we know what the browser is asking for, let’s send some data back!
 
 ### Writing a Response
 
-We're going to implement the sending of data in response to a client request.
+We’re going to implement the sending of data in response to a client request.
 Responses have the following format:
 
 ```text
@@ -441,11 +441,11 @@ success response.
 Run this code with `cargo run`, load up `127.0.0.1:8080` in your browser, and
 you should see your HTML rendered!
 
-Currently we're ignoring the request data in `buffer` and just sending back the
+Currently we’re ignoring the request data in `buffer` and just sending back the
 contents of the HTML file unconditionally. That means if you try requesting
 `127.0.0.1:8080/something-else` in your browser you’ll still get back this same
 HTML response. This makes for a pretty limited server and is not what most web
-servers do. We'd like to customize our responses depending on the request, and
+servers do. We’d like to customize our responses depending on the request, and
 only send back the HTML file for a well-formed request to `/`.
 
 ### Validating the Request and Selectively Responding
@@ -495,8 +495,8 @@ First, we hardcode the data corresponding to the `/` request into the `get`
 variable. Because we’re reading raw bytes into the buffer, we transform `get`
 into a byte string by adding the `b""` byte string syntax at the start of the
 content data. Then, we check to see if `buffer` starts with the bytes in `get`.
-If it does, it means we've received a well-formed request to `/`, which is the
-success case we'll handle in the `if` block that returns the contents of our
+If it does, it means we’ve received a well-formed request to `/`, which is the
+success case we’ll handle in the `if` block that returns the contents of our
 HTML file.
 
 If `buffer` does *not* start with the bytes in `get`, it means we’ve received
@@ -542,8 +542,8 @@ indicating as such to the end user:
 error page if anything other than `/` was requested</span>
 
 Here, our response has a status line with status code `404` and the reason
-phrase `NOT FOUND`. We're still not returning headers, and the body of the
-response will be the HTML in the file *404.html*. You'll need to create a
+phrase `NOT FOUND`. We’re still not returning headers, and the body of the
+response will be the HTML in the file *404.html*. You’ll need to create a
 *404.html* file next to *hello.html* for the error page; again feel free to use
 any HTML you’d like or use the example HTML in Listing 20-8:
 
