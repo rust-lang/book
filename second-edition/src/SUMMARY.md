@@ -7,7 +7,6 @@
 - [Getting Started](ch01-00-getting-started.md)
     - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
-    - [How Rust is Made and “Nightly Rust”](ch01-03-how-rust-is-made-and-nightly-rust.md)
 
 - [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
@@ -131,3 +130,4 @@
     - [D - Macros](appendix-04-macros.md)
     - [E - Translations](appendix-05-translation.md)
     - [F - Newest Features](appendix-06-newest-features.md)
+    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)
