@@ -1759,30 +1759,62 @@ are never more than four threads created, so our system won’t get overloaded i
 the server receives a lot of requests. If we make a request to `/sleep`, the
 server will be able to serve other requests by having another thread run them.
 
-You'll notice we still get warnings, however, telling us the `workers`, `id`,
-and `thread` fields are unused. In reality, right now we’re using all three of
-these fields to hold onto some data, but the code doesn't do anything with the
-data once the thread pool is set up and running the code that sends jobs down
-the channel to the threads. We need to hold onto these values, though, or they
-go out of scope: for example, if we didn’t return the `Vec<Worker>` value as
-part of the `ThreadPool`, the vector would get cleaned up at the end of
-`ThreadPool::new`.
+After learning about the `while let` loop in Chapter 18, you might be
+wondering why we didn't write the worker thread like this:
 
-So are these warnings wrong? In one sense yes, the warnings are wrong, because
-we are using the fields to store data we need to keep around. In another sense,
-the warnings aren’t wrong, because they’re telling us that we’ve forgotten to
-do something: we never do anything to clean up our thread pool once it’s done
-being used. Let’s implement a graceful shutdown that cleans up everything we’ve
-created instead.
+Filename: src/lib.rs
+
+```
+// --snip--
+
+impl Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+        let thread = thread::spawn(move || {
+            while let Ok(job) = receiver.lock().unwrap().recv() {
+                println!("Worker {} got a job; executing.", id);
+
+                job.call_box();
+            }
+        });
+
+        Worker {
+            id,
+            thread,
+        }
+    }
+}
+```
+
+Listing 20-22: An alternative implementation of `Worker::new` using `while let`
+
+This code compiles and runs, but doesn't result in the desired threading
+behavior: a slow request will still cause other requests to wait to be
+processed. The reason why is somewhat subtle: the `Mutex` struct has no public
+`unlock` method because the ownership of the lock is based on the lifetime of
+the `MutexGuard<T>` within the `LockResult<MutexGuard<T>>` that the `lock`
+method returns. This allows the borrow checker to enforce at compile time that
+we never access a resource guarded by a `Mutex` without holding the lock, but
+it can also result in holding the lock longer than intended if we don't think
+carefully about the lifetime of the `MutexGuard<T>`. Because the values in the
+the `while` expression remain in scope for the duration of the block, the lock
+remains held for the duration of the call to `job.call_box()`, meaning other
+workers cannot receive jobs.
+
+By using `loop` instead and acquiring the lock and a job within the block
+rather than outside it, the `MutexGuard` returned from the `lock` method is
+dropped as soon as the `let job` statement ends. This ensures that the lock is
+held during the call to `recv`, but it is released before the call to
+`job.call_box()`, allowing multiple requests to be serviced concurrently.
 
 ## Graceful Shutdown and Cleanup
 
 The code in Listing 20-21 is responding to requests asynchronously through the
-use of a thread pool, as we intended. We get some warnings about fields we’re
-not using in a direct way that reminds us we’re not cleaning anything up. When
-we use the less elegant <span class="keystroke">ctrl-C</span> method to halt
-the main thread, all other threads are stopped immediately as well, even if
-they’re in the middle of serving a request.
+use of a thread pool, as we intended. We get some warnings about the `workers`,
+`id`, and `thread` fields that we're not using in a direct way that reminds us
+we’re not cleaning anything up. When we use the less elegant <span
+class="keystroke">ctrl-C</span> method to halt the main thread, all other
+threads are stopped immediately as well, even if they’re in the middle of
+serving a request.
 
 We’re now going to implement the `Drop` trait to call `join` on each of the
 threads in the pool so they can finish the requests they’re working on before
@@ -1795,7 +1827,7 @@ thread pool.
 
 Let’s start with implementing `Drop` for our thread pool. When the pool is
 dropped, our threads should all join on to make sure they finish their work.
-Listing 20-22 shows a first attempt at a `Drop` implementation; this code won’t
+Listing 20-23 shows a first attempt at a `Drop` implementation; this code won’t
 quite work yet:
 
 Filename: src/lib.rs
@@ -1812,7 +1844,7 @@ impl Drop for ThreadPool {
 }
 ```
 
-Listing 20-22: Joining each thread when the thread pool goes out of scope
+Listing 20-23: Joining each thread when the thread pool goes out of scope
 
 First we loop through each of the thread pool `workers`. We use `&mut` for this
 because `self` is itself a mutable reference and we also need to be able to
@@ -1951,7 +1983,7 @@ thread should run, or it will be a `Terminate` variant that will cause the
 thread to exit its loop and stop.
 
 We need to adjust the channel to use values of type `Message` rather than type
-`Job`, as shown in Listing 20-23:
+`Job`, as shown in Listing 20-24:
 
 Filename: src/lib.rs
 
@@ -2009,7 +2041,7 @@ impl Worker {
 }
 ```
 
-Listing 20-23: Sending and receiving `Message` values and exiting the loop if a
+Listing 20-24: Sending and receiving `Message` values and exiting the loop if a
 `Worker` receives `Message::Terminate`
 
 To incorporate the `Message` enum we need to change `Job` to `Message` in two
@@ -2023,7 +2055,7 @@ is received.
 With these changes, the code will compile and continue to function in the same
 way as it has been. We will get a warning, though, because we aren’t creating
 any messages of the `Terminate` variety. Let’s fix this by changing our `Drop`
-implementation to look like Listing 20-24:
+implementation to look like Listing 20-25:
 
 Filename: src/lib.rs
 
@@ -2049,7 +2081,7 @@ impl Drop for ThreadPool {
 }
 ```
 
-Listing 20-24: Sending `Message::Terminate` to the workers before calling
+Listing 20-25: Sending `Message::Terminate` to the workers before calling
 `join` on each worker thread
 
 We’re now iterating over the workers twice, once to send one `Terminate`
@@ -2075,7 +2107,7 @@ there are workers, each worker will receive a terminate message before `join`
 is called on its thread.
 
 In order to see this code in action, let’s modify `main` to only accept two
-requests before gracefully shutting the server down as shown in Listing 20-25:
+requests before gracefully shutting the server down as shown in Listing 20-26:
 
 Filename: src/bin/main.rs
 
@@ -2096,7 +2128,7 @@ fn main() {
 }
 ```
 
-Listing 20-25: Shut down the server after serving two requests by exiting the
+Listing 20-26: Shut down the server after serving two requests by exiting the
 loop
 
 You wouldn't want a real-world web server to shut down after serving only two
