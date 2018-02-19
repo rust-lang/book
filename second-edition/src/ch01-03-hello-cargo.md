@@ -13,7 +13,7 @@ write more complex Rust programs, you’ll want to add dependencies, and if you
 start the project off using Cargo, that will be a lot easier to do.
 
 As the vast majority of Rust projects use Cargo, the rest of this book will
-assume that you're using Cargo too. Cargo comes installed with Rust itself, if
+assume that you’re using Cargo too. Cargo comes installed with Rust itself, if
 you used the official installers as covered in the “Installation” section. If
 you installed Rust through some other means, you can check if you have Cargo
 installed by entering the following into your terminal:
@@ -92,12 +92,12 @@ this file, we’ll add other sections.
 The next three lines set the configuration information Cargo needs in order to
 know that it should compile your program: the name, the version, and who wrote
 it. Cargo gets your name and email information from your environment, so if
-that's not correct, go ahead and fix that and save the file.
+that’s not correct, go ahead and fix that and save the file.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
-of your project's dependencies. In Rust, packages of code are referred to as
+of your project’s dependencies. In Rust, packages of code are referred to as
 *crates*. We won’t need any other crates for this project, but we will in the
-first project in Chapter 2, so we'll use this dependencies section then.
+first project in Chapter 2, so we’ll use this dependencies section then.
 
 Now open up *src/main.rs* and take a look:
 

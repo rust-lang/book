@@ -2,7 +2,7 @@
 
 Now that you have Rust installed, let’s write your first Rust program. It’s
 traditional when learning a new language to write a little program to print the
-text “Hello, world!” to the screen, so we'll do the same here!
+text “Hello, world!” to the screen, so we’ll do the same here!
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
@@ -87,7 +87,7 @@ Hello, world!
 ```
 
 Regardless of your operating system, you should see the string `Hello, world!`
-print to the terminal. If you don't see this output, see the "Troubleshooting"
+print to the terminal. If you don’t see this output, see the “Troubleshooting”
 section earlier for ways to get help.
 
 If you did see `Hello, world!` printed, then congratulations! You’ve officially
@@ -160,7 +160,7 @@ over, and the next one is ready to begin. Most lines of Rust code end with a
 
 ### Compiling and Running Are Separate Steps
 
-You've just seen how to run a newly created program, so now let's break that
+You’ve just seen how to run a newly created program, so now let’s break that
 process down and examine each step.
 
 Before running a Rust program, you have to compile it using the Rust compiler

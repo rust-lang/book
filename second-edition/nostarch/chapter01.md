@@ -8,17 +8,17 @@ with some other introductory text for the chapter here? Maybe just lay out
 what's in this chapter so they know it's important not to skip it. -->
 <!-- Yep, done! /Carol -->
 
-Let's get your Rust journey started! In this chapter, we'll discuss:
+Let’s get your Rust journey started! In this chapter, we’ll discuss:
 
 - Installing Rust on Linux, Mac, or Windows
-- Writing a program that prints "Hello, world!"
-- Using `cargo`, Rust's package manager and build system
+- Writing a program that prints “Hello, world!”
+- Using `cargo`, Rust’s package manager and build system
 
 ## Installation
 
-The first step to using Rust is to install it. We'll download Rust through
+The first step to using Rust is to install it. We’ll download Rust through
 `rustup`, a command-line tool for managing Rust versions and associated tools.
-For this you'll need an internet connection.
+For this you’ll need an internet connection.
 
 The following steps will install the latest stable version of the Rust
 compiler. The examples and output shown in this book all use stable Rust
@@ -83,9 +83,9 @@ Alternatively, you can add the following line to your `~/.bash_profile`:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Finally, you’ll need a linker of some kind. It's likely you already have one
+Finally, you’ll need a linker of some kind. It’s likely you already have one
 installed, but if you try to compile a Rust program and get errors telling you
-that a linker could not be executed, you'll need to install one. You can
+that a linker could not be executed, you’ll need to install one. You can
 install a C compiler, as that will usually come with the correct linker. Check
 your platform’s documentation for how to install a C compiler. Some common Rust
 packages depend on C code and will need a C compiler too, so it may be worth
@@ -94,7 +94,7 @@ installing one now regardless.
 ### Installing Rustup on Windows
 
 On Windows, go to *https://www.rust-lang.org/en-US/install.html* and follow the
-instructions for installing Rust. At some point in the installation you'll
+instructions for installing Rust. At some point in the installation you’ll
 receive a message telling you you’ll also need the C++ build tools for Visual
 Studio 2013 or later. The easiest way to acquire the build tools is to install
 Build Tools for Visual Studio 2017 at
@@ -144,7 +144,7 @@ If you see this, Rust has been installed successfully! Congrats!
 If you don’t and you’re on Windows, check that Rust is in your `%PATH%` system
 variable.
 
-If that's all correct and Rust still isn’t working, there are a number of
+If that’s all correct and Rust still isn’t working, there are a number of
 places you can get help. The easiest is the #rust IRC channel on
 irc.mozilla.org, which you can access through Mibbit at
 *http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust*. Go to that
@@ -167,7 +167,7 @@ Interface) documentation to find out!
 
 Now that you have Rust installed, let’s write your first Rust program. It’s
 traditional when learning a new language to write a little program to print the
-text “Hello, world!” to the screen, so we'll do the same here!
+text “Hello, world!” to the screen, so we’ll do the same here!
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
@@ -252,7 +252,7 @@ Hello, world!
 ```
 
 Regardless of your operating system, you should see the string `Hello, world!`
-print to the terminal. If you don't see this output, see the "Troubleshooting"
+print to the terminal. If you don’t see this output, see the “Troubleshooting”
 section earlier for ways to get help.
 
 If you did see `Hello, world!` printed, then congratulations! You’ve officially
@@ -325,7 +325,7 @@ over, and the next one is ready to begin. Most lines of Rust code end with a
 
 ### Compiling and Running Are Separate Steps
 
-You've just seen how to run a newly created program, so now let's break that
+You’ve just seen how to run a newly created program, so now let’s break that
 process down and examine each step.
 
 Before running a Rust program, you have to compile it using the Rust compiler
@@ -397,7 +397,7 @@ write more complex Rust programs, you’ll want to add dependencies, and if you
 start the project off using Cargo, that will be a lot easier to do.
 
 As the vast majority of Rust projects use Cargo, the rest of this book will
-assume that you're using Cargo too. Cargo comes installed with Rust itself, if
+assume that you’re using Cargo too. Cargo comes installed with Rust itself, if
 you used the official installers as covered in the “Installation” section. If
 you installed Rust through some other means, you can check if you have Cargo
 installed by entering the following into your terminal:
@@ -473,12 +473,12 @@ this file, we’ll add other sections.
 The next three lines set the configuration information Cargo needs in order to
 know that it should compile your program: the name, the version, and who wrote
 it. Cargo gets your name and email information from your environment, so if
-that's not correct, go ahead and fix that and save the file.
+that’s not correct, go ahead and fix that and save the file.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
-of your project's dependencies. In Rust, packages of code are referred to as
+of your project’s dependencies. In Rust, packages of code are referred to as
 *crates*. We won’t need any other crates for this project, but we will in the
-first project in Chapter 2, so we'll use this dependencies section then.
+first project in Chapter 2, so we’ll use this dependencies section then.
 
 Now open up *src/main.rs* and take a look:
 

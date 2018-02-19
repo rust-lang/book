@@ -1,8 +1,8 @@
 ## Installation
 
-The first step to using Rust is to install it. We'll download Rust through
+The first step to using Rust is to install it. We’ll download Rust through
 `rustup`, a command-line tool for managing Rust versions and associated tools.
-For this you'll need an internet connection.
+For this you’ll need an internet connection.
 
 The following steps will install the latest stable version of the Rust
 compiler. The examples and output shown in this book all use stable Rust
@@ -67,9 +67,9 @@ Alternatively, you can add the following line to your `~/.bash_profile`:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Finally, you’ll need a linker of some kind. It's likely you already have one
+Finally, you’ll need a linker of some kind. It’s likely you already have one
 installed, but if you try to compile a Rust program and get errors telling you
-that a linker could not be executed, you'll need to install one. You can
+that a linker could not be executed, you’ll need to install one. You can
 install a C compiler, as that will usually come with the correct linker. Check
 your platform’s documentation for how to install a C compiler. Some common Rust
 packages depend on C code and will need a C compiler too, so it may be worth
@@ -79,7 +79,7 @@ installing one now regardless.
 
 On Windows, go to [https://www.rust-lang.org/en-US/install.html][install] and
 follow the instructions for installing Rust. At some point in the installation
-you'll receive a message telling you you’ll also need the C++ build tools for
+you’ll receive a message telling you you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
 install [Build Tools for Visual Studio 2017][visualstudio], found in the Other
 Tools and Frameworks section.
@@ -130,7 +130,7 @@ If you see this, Rust has been installed successfully! Congrats!
 If you don’t and you’re on Windows, check that Rust is in your `%PATH%` system
 variable.
 
-If that's all correct and Rust still isn’t working, there are a number of
+If that’s all correct and Rust still isn’t working, there are a number of
 places you can get help. The easiest is [the #rust IRC channel on
 irc.mozilla.org][irc]<!-- ignore -->, which you can access through
 [Mibbit][mibbit]. Go to that address, and you’ll be chatting with other
