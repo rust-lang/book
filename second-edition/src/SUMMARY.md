@@ -116,11 +116,8 @@
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
-    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
-    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
-    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
-    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
-    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
+    - [Turning our Single-Threaded Server into a Multi-Threaded Server](ch20-02-multi-threaded.md)
+    - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
