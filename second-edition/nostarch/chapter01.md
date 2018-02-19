@@ -302,7 +302,7 @@ This line does all of the work in this little program: it prints text to the
 screen. There are a number of details to notice here. The first is that Rust
 style is to indent with four spaces, not a tab.
 
-The second important deatil is the `println!` call. This code is calling a Rust
+The second important detail is the `println!` call. This code is calling a Rust
 *macro*. If it were calling a function instead, it would be entered as
 `println` (without the `!`). We’ll discuss Rust macros in more detail in
 Appendix D, but for now you just need to know that when you see a `!` that
@@ -569,7 +569,7 @@ $ cargo check
 
 Why would you not want an executable? `cargo check` is often much faster than
 `cargo build`, because it skips the entire step of producing the executable. If
-your’re checking your work throughout the process of writing the code, using
+you’re checking your work throughout the process of writing the code, using
 `cargo check` will speed things up! As such, many Rustaceans run `cargo check`
 periodically as they write their program to make sure that it compiles, and
 then run `cargo build` once they’re ready to give it a spin themselves.
@@ -621,7 +621,7 @@ If you want to look at Cargo in more detail, check out its documentation at
 
 <!--Below -- I`m not sure this is the place for this conversation, it seems too
 deep into the weeds for the "getting started" chapter. I know we discussed
-Nightly Rust as an appendix previosuly, but honestly I think this is more
+Nightly Rust as an appendix previously, but honestly I think this is more
 suited somewhere online, perhaps in the extended docs. I like the idea of
 finishing the chapter here, on this practical note, and I think at this point
 readers will want to get stuck in anyway and may skip this and never come back

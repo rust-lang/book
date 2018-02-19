@@ -137,7 +137,7 @@ This line does all of the work in this little program: it prints text to the
 screen. There are a number of details to notice here. The first is that Rust
 style is to indent with four spaces, not a tab.
 
-The second important deatil is the `println!` call. This code is calling a Rust
+The second important detail is the `println!` call. This code is calling a Rust
 *macro*. If it were calling a function instead, it would be entered as
 `println` (without the `!`). We’ll discuss Rust macros in more detail in
 Appendix D, but for now you just need to know that when you see a `!` that
