@@ -10,14 +10,6 @@ look at what each of those mean and whether Rust supports them.
 
 ### Objects Contain Data and Behavior
 
-<!-- Is there a reason we're using this book as the reference, is it generally
-accepted as an authority? -->
-<!-- Yes, it is. For example, Martin Fowler (himself regarded as an authority)
-had this to say about it https://www.martinfowler.com/bliki/GangOfFour.html:
-> In my view the Gang of Four is the best book ever written on object-oriented
-> design - possibly of any style of design.
-/Carol -->
-
 The book “Design Patterns: Elements of Reusable Object-Oriented Software,”
 colloquially referred to as “The Gang of Four book,” is a catalog of
 object-oriented design patterns. It defines object-oriented programming in this
@@ -164,12 +156,6 @@ child type to be used in the same places as the parent type. This is also
 called *polymorphism*, which means that multiple objects can be substituted for
 each other at runtime if they share certain characteristics.
 
-<!-- What does it mean for objects to have the same shape? -->
-<!-- The use of "shape" in this context has to do with the roots of "morph" in
-"polymorphism", but it's not very well defined so I've reworded. /Carol -->
-
-<!-- PROD: START BOX -->
-
 > Polymorphism
 >
 > To many people, polymorphism is synonymous with inheritance. But it’s
@@ -178,8 +164,6 @@ each other at runtime if they share certain characteristics.
 > Rust instead uses generics to abstract over different possible types, and
 > trait bounds to impose constraints on what those types must provide. This is
 > sometimes called *bounded parametric polymorphism*.
-
-<!-- PROD: END BOX -->
 
 Inheritance has recently fallen out of favor as a programming design solution
 in many programming languages because it’s often at risk of sharing more code

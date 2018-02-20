@@ -9,9 +9,6 @@ state is responsible for its own behavior and for governing when it should
 change into another state. The value that holds a state object knows nothing
 about the different behavior of the states or when to transition between states.
 
-<!-- Below -- requirements for what, for what we need the value for? -->
-<!-- I've clarified /Carol -->
-
 Using the state pattern means when the business requirements of the program
 change, we won’t need to change the code of the value holding the state or the
 code that uses the value. We’ll only need to update the code inside one of the
@@ -69,12 +66,6 @@ Next, we want to enable a request for a review of the post, and we want
 `content` to return an empty string while waiting for the review. Lastly, when
 the post receives approval, it should get published, meaning the text of the
 post will be returned when `content` is called.
-
-<!-- Below -- so this is where we'll implement the state pattern? If so, can
-you make that explicit, just to be clear! I've added some text to the second
-line, not sure if that's accurate though -->
-<!-- Yes, the state pattern will be implemented within the `Post` type. I've
-tweaked the wording a bit but you've pretty much got it! /Carol-->
 
 Notice that the only type we’re interacting with from the crate is the `Post`
 type. This type will use the state pattern and will hold a value that will be
@@ -214,12 +205,6 @@ a public method named `request_review` that will take a mutable reference to
 current state of `Post`, and this second `request_review` method will consume
 the current state and return a new state. Listing 17-15 shows this code:
 
-<!-- NOTE TO DE/AU: We might want to move this explanation to after the code if
-you want to add wingdings, we can see once we transfer it to Word -->
-<!-- I decided to move some of this explanation after the code for this reason
-and because we got some questions about this example that I wanted to expand
-upon /Carol -->
-
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -268,10 +253,6 @@ parameter of the method, we have `self: Box<Self>`. This syntax means the
 method is only valid when called on a `Box` holding the type. This syntax takes
 ownership of `Box<Self>`, invalidating the old state so that the state value of
 the `Post` can transform itself into a new state.
-
-<!-- Above -- so Post can transform, or so Draft can transform? -->
-<!-- Technically it's so the Draft value can transform into another value,
-which changes the state of Post-- I've tried to clarify. /Carol -->
 
 To consume the old state, the `request_review` method needs to take ownership
 of the state value. This is where the `Option` in the `state` field of `Post`
@@ -470,11 +451,6 @@ Note that we need lifetime annotations on this method, like we discussed in
 Chapter 10. We’re taking a reference to a `post` as an argument, and returning
 a reference to part of that `post`, so the lifetime of the returned reference
 is related to the lifetime of the `post` argument.
-
-<!-- Is this it finished, without the touch up we make to get rid of the empty
-string? That's pretty awesome coding, maybe give it some ceremony here. Does
-all of 17-11 now work? -->
-<!-- Yep! Good point, so added! /Carol -->
 
 And we’re done-- all of Listing 17-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic around the rules

@@ -50,10 +50,6 @@ Wherever we use a trait object, Rust’s type system will ensure at compile-time
 that any value used in that context will implement the trait object’s trait.
 This way we don’t need to know all the possible types at compile time.
 
-<!-- What will the trait object do in this case? I've taken this last part of
-the line from below, but I'm not 100% on that -->
-<!-- I've moved up more and reworded a bit, hope that clarifies /Carol -->
-
 We’ve mentioned that in Rust we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
 enum, the data in the struct fields and the behavior in `impl` blocks is
@@ -83,12 +79,6 @@ Chapter 10. Next comes something new: Listing 17-4 defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
 `Box<Draw>`, which is a trait object: it’s a stand-in for any type inside a
 `Box` that implements the `Draw` trait.
-
-<!-- Would it be useful to let the reader know why we need a box here, or will
-that be clear at this point? -->
-<!-- We get into this in chapter 19; I've added a reference to the start of
-this section where we talk about needing a `&` or a `Box` to be a trait object.
-/Carol -->
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -293,17 +283,6 @@ component is. It doesn’t check to see if a component is an instance of a
 specifying `Box<Draw>` as the type of the values in the `components` vector,
 we’ve defined `Screen` to need values that we can call the `draw` method on.
 
-<!-- I may be slow on the uptake here, but it seems like we're saying that
-responsibility for how the type trait object behaves with the draw method is
-called on it belongs to the trait object, and not to the draw method itself. Is
-that an accurate summary? I want to make sure I'm clearly following the
-argument! -->
-<!-- Each type (like `Button` or `SelectBox`) that implements the `Draw` trait
-can customize what happens in the body of the `draw` method. The trait object
-is just responsible for making sure that the only things that are usable in
-that context are things that implement the `Draw` trait. Does this clear it up
-at all? Is there something we should clarify in the text? /Carol -->
-
 The advantage of using trait objects and Rust’s type system to do something
 similar to duck typing is that we never have to check that a value implements a
 particular method at runtime or worry about getting errors if a value doesn’t
@@ -362,12 +341,6 @@ compiler knows what method you’re calling at compile time. This is opposed to
 you’re calling. In these cases, the compiler emits code that will figure out at
 runtime which method to call.
 
-<!--I'm struggling to follow the static dispatch definition, can you expand
-that a little? Which part of that is the static dispatch, pre-determining the
-code called with a method and storing it? -->
-<!-- Yes, in a way. We've expanded and moved the definitions of static and
-dynamic dispatch together to better contrast, hopefully this helps? /Carol -->
-
 When we use trait objects, Rust has to use dynamic dispatch. The compiler
 doesn’t know all the types that might be used with the code using trait
 objects, so it doesn’t know which method implemented on which type to call.
@@ -379,21 +352,6 @@ We did get extra flexibility in the code that we wrote and were able to
 support, though, so it’s a tradeoff to consider.
 
 ### Object Safety is Required for Trait Objects
-
-<!-- Liz: we're conflicted on including this section. Not being able to use a
-trait as a trait object because of object safety is something that
-beginner/intermediate Rust developers run into sometimes, but explaining it
-fully is long and complicated. Should we just cut this whole section? Leave it
-(and finish the explanation of how to fix the error at the end)? Shorten it to
-a quick caveat, that just says something like "Some traits can't be trait
-objects. Clone is an example of one. You'll get errors that will let you know
-if a trait can't be a trait object, look up object safety if you're interested
-in the details"? Thanks! /Carol -->
-<!-- That sounds like a good solution, since the compiler will warn them in any
-case. I read through, editing a little, and I agree we could afford to cut it,
-I'm not sure it brings practical skills to the user -->
-<!-- Ok, I've cut section way down to the practical pieces, but still explained
-a little bit /Carol -->
 
 Only *object safe* traits can be made into trait objects. There are some
 complex rules around all the properties that make a trait object safe, but in

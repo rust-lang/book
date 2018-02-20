@@ -25,14 +25,6 @@ look at what each of those mean and whether Rust supports them.
 
 ### Objects Contain Data and Behavior
 
-<!-- Is there a reason we're using this book as the reference, is it generally
-accepted as an authority? -->
-<!-- Yes, it is. For example, Martin Fowler (himself regarded as an authority)
-had this to say about it https://www.martinfowler.com/bliki/GangOfFour.html:
-> In my view the Gang of Four is the best book ever written on object-oriented
-> design - possibly of any style of design.
-/Carol -->
-
 The book “Design Patterns: Elements of Reusable Object-Oriented Software,”
 colloquially referred to as “The Gang of Four book,” is a catalog of
 object-oriented design patterns. It defines object-oriented programming in this
@@ -174,12 +166,6 @@ child type to be used in the same places as the parent type. This is also
 called *polymorphism*, which means that multiple objects can be substituted for
 each other at runtime if they share certain characteristics.
 
-<!-- What does it mean for objects to have the same shape? -->
-<!-- The use of "shape" in this context has to do with the roots of "morph" in
-"polymorphism", but it's not very well defined so I've reworded. /Carol -->
-
-<!-- PROD: START BOX -->
-
 > Polymorphism
 >
 > To many people, polymorphism is synonymous with inheritance. But it’s
@@ -188,8 +174,6 @@ each other at runtime if they share certain characteristics.
 > Rust instead uses generics to abstract over different possible types, and
 > trait bounds to impose constraints on what those types must provide. This is
 > sometimes called *bounded parametric polymorphism*.
-
-<!-- PROD: END BOX -->
 
 Inheritance has recently fallen out of favor as a programming design solution
 in many programming languages because it’s often at risk of sharing more code
@@ -257,10 +241,6 @@ Wherever we use a trait object, Rust’s type system will ensure at compile-time
 that any value used in that context will implement the trait object’s trait.
 This way we don’t need to know all the possible types at compile time.
 
-<!-- What will the trait object do in this case? I've taken this last part of
-the line from below, but I'm not 100% on that -->
-<!-- I've moved up more and reworded a bit, hope that clarifies /Carol -->
-
 We’ve mentioned that in Rust we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
 enum, the data in the struct fields and the behavior in `impl` blocks is
@@ -290,12 +270,6 @@ Chapter 10. Next comes something new: Listing 17-4 defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
 `Box<Draw>`, which is a trait object: it’s a stand-in for any type inside a
 `Box` that implements the `Draw` trait.
-
-<!-- Would it be useful to let the reader know why we need a box here, or will
-that be clear at this point? -->
-<!-- We get into this in chapter 19; I've added a reference to the start of
-this section where we talk about needing a `&` or a `Box` to be a trait object.
-/Carol -->
 
 Filename: src/lib.rs
 
@@ -478,17 +452,6 @@ component is. It doesn’t check to see if a component is an instance of a
 specifying `Box<Draw>` as the type of the values in the `components` vector,
 we’ve defined `Screen` to need values that we can call the `draw` method on.
 
-<!-- I may be slow on the uptake here, but it seems like we're saying that
-responsibility for how the type trait object behaves with the draw method is
-called on it belongs to the trait object, and not to the draw method itself. Is
-that an accurate summary? I want to make sure I'm clearly following the
-argument! -->
-<!-- Each type (like `Button` or `SelectBox`) that implements the `Draw` trait
-can customize what happens in the body of the `draw` method. The trait object
-is just responsible for making sure that the only things that are usable in
-that context are things that implement the `Draw` trait. Does this clear it up
-at all? Is there something we should clarify in the text? /Carol -->
-
 The advantage of using trait objects and Rust’s type system to do something
 similar to duck typing is that we never have to check that a value implements a
 particular method at runtime or worry about getting errors if a value doesn’t
@@ -547,12 +510,6 @@ compiler knows what method you’re calling at compile time. This is opposed to
 you’re calling. In these cases, the compiler emits code that will figure out at
 runtime which method to call.
 
-<!--I'm struggling to follow the static dispatch definition, can you expand
-that a little? Which part of that is the static dispatch, pre-determining the
-code called with a method and storing it? -->
-<!-- Yes, in a way. We've expanded and moved the definitions of static and
-dynamic dispatch together to better contrast, hopefully this helps? /Carol -->
-
 When we use trait objects, Rust has to use dynamic dispatch. The compiler
 doesn’t know all the types that might be used with the code using trait
 objects, so it doesn’t know which method implemented on which type to call.
@@ -564,21 +521,6 @@ We did get extra flexibility in the code that we wrote and were able to
 support, though, so it’s a tradeoff to consider.
 
 ### Object Safety is Required for Trait Objects
-
-<!-- Liz: we're conflicted on including this section. Not being able to use a
-trait as a trait object because of object safety is something that
-beginner/intermediate Rust developers run into sometimes, but explaining it
-fully is long and complicated. Should we just cut this whole section? Leave it
-(and finish the explanation of how to fix the error at the end)? Shorten it to
-a quick caveat, that just says something like "Some traits can't be trait
-objects. Clone is an example of one. You'll get errors that will let you know
-if a trait can't be a trait object, look up object safety if you're interested
-in the details"? Thanks! /Carol -->
-<!-- That sounds like a good solution, since the compiler will warn them in any
-case. I read through, editing a little, and I agree we could afford to cut it,
-I'm not sure it brings practical skills to the user -->
-<!-- Ok, I've cut section way down to the practical pieces, but still explained
-a little bit /Carol -->
 
 Only *object safe* traits can be made into trait objects. There are some
 complex rules around all the properties that make a trait object safe, but in
@@ -654,9 +596,6 @@ state is responsible for its own behavior and for governing when it should
 change into another state. The value that holds a state object knows nothing
 about the different behavior of the states or when to transition between states.
 
-<!-- Below -- requirements for what, for what we need the value for? -->
-<!-- I've clarified /Carol -->
-
 Using the state pattern means when the business requirements of the program
 change, we won’t need to change the code of the value holding the state or the
 code that uses the value. We’ll only need to update the code inside one of the
@@ -714,12 +653,6 @@ Next, we want to enable a request for a review of the post, and we want
 `content` to return an empty string while waiting for the review. Lastly, when
 the post receives approval, it should get published, meaning the text of the
 post will be returned when `content` is called.
-
-<!-- Below -- so this is where we'll implement the state pattern? If so, can
-you make that explicit, just to be clear! I've added some text to the second
-line, not sure if that's accurate though -->
-<!-- Yes, the state pattern will be implemented within the `Post` type. I've
-tweaked the wording a bit but you've pretty much got it! /Carol-->
 
 Notice that the only type we’re interacting with from the crate is the `Post`
 type. This type will use the state pattern and will hold a value that will be
@@ -850,12 +783,6 @@ a public method named `request_review` that will take a mutable reference to
 current state of `Post`, and this second `request_review` method will consume
 the current state and return a new state. Listing 17-15 shows this code:
 
-<!-- NOTE TO DE/AU: We might want to move this explanation to after the code if
-you want to add wingdings, we can see once we transfer it to Word -->
-<!-- I decided to move some of this explanation after the code for this reason
-and because we got some questions about this example that I wanted to expand
-upon /Carol -->
-
 Filename: src/lib.rs
 
 ```
@@ -899,10 +826,6 @@ parameter of the method, we have `self: Box<Self>`. This syntax means the
 method is only valid when called on a `Box` holding the type. This syntax takes
 ownership of `Box<Self>`, invalidating the old state so that the state value of
 the `Post` can transform itself into a new state.
-
-<!-- Above -- so Post can transform, or so Draft can transform? -->
-<!-- Technically it's so the Draft value can transform into another value,
-which changes the state of Post-- I've tried to clarify. /Carol -->
 
 To consume the old state, the `request_review` method needs to take ownership
 of the state value. This is where the `Option` in the `state` field of `Post`
@@ -1075,11 +998,6 @@ Note that we need lifetime annotations on this method, like we discussed in
 Chapter 10. We’re taking a reference to a `post` as an argument, and returning
 a reference to part of that `post`, so the lifetime of the returned reference
 is related to the lifetime of the `post` argument.
-
-<!-- Is this it finished, without the touch up we make to get rid of the empty
-string? That's pretty awesome coding, maybe give it some ceremony here. Does
-all of 17-11 now work? -->
-<!-- Yep! Good point, so added! /Carol -->
 
 And we’re done-- all of Listing 17-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic around the rules
