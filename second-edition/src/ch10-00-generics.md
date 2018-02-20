@@ -113,10 +113,6 @@ lists of numbers</span>
 While this code works, duplicating code is tedious and error-prone, and means
 we have multiple places to update the logic if we need to change it.
 
-<!-- Are we safe assuming the reader will be familiar with the term
-"abstraction" in this context, or do we want to give a brief definition? -->
-<!-- Yes, our audience will be familiar with this term. /Carol -->
-
 To eliminate this duplication, we can create an abstraction, which in this case
 will be in the form of a function that operates on any list of integers given
 to the function in a parameter. This will increase the clarity of our code and

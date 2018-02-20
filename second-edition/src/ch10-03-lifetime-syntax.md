@@ -95,14 +95,6 @@ Listing 10-18 with annotations showing the lifetimes of the variables:
 <span class="caption">Listing 10-19: Annotations of the lifetimes of `r` and
 `x`, named `'a` and `'b` respectively</span>
 
-<!-- Just checking I'm reading this right: the inside block is the b lifetime,
-correct? I want to leave a note for production, make sure we can make that
-clear -->
-<!-- Yes, the inside block for the `'b` lifetime starts with the `let x = 5;`
-line and ends with the first closing curly bracket on the 7th line. Do you
-think the text art comments work or should we make an SVG diagram that has
-nicer looking arrows and labels? /Carol -->
-
 We’ve annotated the lifetime of `r` with `'a` and the lifetime of `x` with
 `'b`. As you can see, the inner `'b` block is much smaller than the outer `'a`
 lifetime block. At compile time, Rust compares the size of the two lifetimes
@@ -164,23 +156,6 @@ we talked about in Chapter 4) since we don’t want the `longest` function to
 take ownership of its arguments. We want the function to be able to accept
 slices of a `String` (which is the type of the variable `string1`) as well as
 string literals (which is what variable `string2` contains).
-
-<!-- why is `a` a slice and `b` a literal? You mean "a" from the string "abcd"? -->
-<!-- I've changed the variable names to remove ambiguity between the variable
-name `a` and the "a" from the string "abcd". `string1` is not a slice, it's a
-`String`, but we're going to pass a slice that refers to that `String` to the
-`longest` function (`string1.as_str()` creates a slice that references the
-`String` stored in `string1`). We chose to have `string2` be a literal since
-the reader might have code with both `String`s and string literals, and the way
-most readers first get into problems with lifetimes is involving string slices,
-so we wanted to demonstrate the flexibility of taking string slices as
-arguments but the issues you might run into because string slices are
-references.
-All of the `String`/string slice/string literal concepts here are covered
-thoroughly in Chapter 4, which is why we put two back references here (above
-and below). If these topics are confusing you in this context, I'd be
-interested to know if rereading Chapter 4 clears up that confusion.
-/Carol -->
 
 Refer back to the “String Slices as Parameters” section of Chapter 4 for more
 discussion about why these are the arguments we want.
@@ -658,14 +633,6 @@ to annotate lifetimes in method signatures very often.
 
 ### Lifetime Annotations in Method Definitions
 
-<!-- Is this different to the reference lifetime annotations, or just a
-finalized explanation? -->
-<!-- This is about lifetimes on references in method signatures, which is where
-the 3rd lifetime elision rule kicks in. It can also be confusing where lifetime
-parameters need to be declared and used since the lifetime parameters could go
-with the struct's fields or with references passed into or returned from
-methods. /Carol -->
-
 When we implement methods on a struct with lifetimes, the syntax is again the
 same as that of generic type parameters that we showed in Listing 10-11: the
 place that lifetime parameters are declared and used depends on whether the
@@ -734,9 +701,6 @@ let s: &'static str = "I have a static lifetime.";
 The text of this string is stored directly in the binary of your program and
 the binary of your program is always available. Therefore, the lifetime of all
 string literals is `'static`.
-
-<!-- How would you add a static lifetime (below)? -->
-<!-- Just like you'd specify any lifetime, see above where it shows `&'static str`. /Carol -->
 
 You may see suggestions to use the `'static` lifetime in error message help
 text, but before specifying `'static` as the lifetime for a reference, think

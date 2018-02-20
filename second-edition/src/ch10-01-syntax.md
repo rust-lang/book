@@ -151,14 +151,6 @@ come back to traits and how to specify that a generic type has a particular
 trait in the next section, but let’s set this example aside for a moment and
 explore other places we can use generic type parameters first.
 
-<!-- Liz: this is the reason we had the topics in the order we did in the first
-draft of this chapter; it's hard to do anything interesting with generic types
-in functions unless you also know about traits and trait bounds. I think this
-ordering could work out okay, though, and keep a stronger thread with the
-`longest` function going through the whole chapter, but we do pause with a
-not-yet-compiling example here, which I know isn't ideal either. Let us know
-what you think. /Carol -->
-
 ### Using Generic Data Types in Struct Definitions
 
 We can define structs to use a generic type parameter in one or more of the

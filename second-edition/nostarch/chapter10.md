@@ -113,10 +113,6 @@ Listing 10-2: Code to find the largest number in *two* lists of numbers
 While this code works, duplicating code is tedious and error-prone, and means
 we have multiple places to update the logic if we need to change it.
 
-<!-- Are we safe assuming the reader will be familiar with the term
-"abstraction" in this context, or do we want to give a brief definition? -->
-<!-- Yes, our audience will be familiar with this term. /Carol -->
-
 To eliminate this duplication, we can create an abstraction, which in this case
 will be in the form of a function that operates on any list of integers given
 to the function in a parameter. This will increase the clarity of our code and
@@ -334,14 +330,6 @@ types that know how to be ordered. The standard library has defined the trait
 come back to traits and how to specify that a generic type has a particular
 trait in the next section, but let’s set this example aside for a moment and
 explore other places we can use generic type parameters first.
-
-<!-- Liz: this is the reason we had the topics in the order we did in the first
-draft of this chapter; it's hard to do anything interesting with generic types
-in functions unless you also know about traits and trait bounds. I think this
-ordering could work out okay, though, and keep a stronger thread with the
-`longest` function going through the whole chapter, but we do pause with a
-not-yet-compiling example here, which I know isn't ideal either. Let us know
-what you think. /Carol -->
 
 ### Using Generic Data Types in Struct Definitions
 
@@ -1197,14 +1185,6 @@ Listing 10-16 with annotations showing the lifetimes of the variables:
 Listing 10-17: Annotations of the lifetimes of `x` and `r`, named `'a` and `'b`
 respectively
 
-<!-- Just checking I'm reading this right: the inside block is the b lifetime,
-correct? I want to leave a note for production, make sure we can make that
-clear -->
-<!-- Yes, the inside block for the `'b` lifetime starts with the `let x = 5;`
-line and ends with the first closing curly brace on the 7th line. Do you think
-the text art comments work or should we make an SVG diagram that has nicer
-looking arrows and labels? /Carol -->
-
 We’ve annotated the lifetime of `r` with `'a` and the lifetime of `x` with
 `'b`. As you can see, the inner `'b` block is much smaller than the outer `'a`
 lifetime block. At compile time, Rust compares the size of the two lifetimes
@@ -1266,23 +1246,6 @@ we talked about in Chapter 4) since we don’t want the `longest` function to
 take ownership of its arguments. We want the function to be able to accept
 slices of a `String` (which is the type of the variable `string1`) as well as
 string literals (which is what variable `string2` contains).
-
-<!-- why is `a` a slice and `b` a literal? You mean "a" from the string "abcd"? -->
-<!-- I've changed the variable names to remove ambiguity between the variable
-name `a` and the "a" from the string "abcd". `string1` is not a slice, it's a
-`String`, but we're going to pass a slice that refers to that `String` to the
-`longest` function (`string1.as_str()` creates a slice that references the
-`String` stored in `string1`). We chose to have `string2` be a literal since
-the reader might have code with both `String`s and string literals, and the way
-most readers first get into problems with lifetimes is involving string slices,
-so we wanted to demonstrate the flexibility of taking string slices as
-arguments but the issues you might run into because string slices are
-references.
-All of the `String`/string slice/string literal concepts here are covered
-thoroughly in Chapter 4, which is why we put two back references here (above
-and below). If these topics are confusing you in this context, I'd be
-interested to know if rereading Chapter 4 clears up that confusion.
-/Carol -->
 
 Refer back to the “String Slices as Arguments” section of Chapter 4 for more
 discussion about why these are the arguments we want.
@@ -1749,14 +1712,6 @@ to annotate lifetimes in method signatures very often.
 
 ### Lifetime Annotations in Method Definitions
 
-<!-- Is this different to the reference lifetime annotations, or just a
-finalized explanation? -->
-<!-- This is about lifetimes on references in method signatures, which is where
-the 3rd lifetime elision rule kicks in. It can also be confusing where lifetime
-parameters need to be declared and used since the lifetime parameters could go
-with the struct's fields or with references passed into or returned from
-methods. /Carol -->
-
 When we implement methods on a struct with lifetimes, the syntax is again the
 same as that of generic type parameters that we showed in Listing 10-10: the
 place that lifetime parameters are declared and used depends on whether the
@@ -1817,9 +1772,6 @@ let s: &'static str = "I have a static lifetime.";
 The text of this string is stored directly in the binary of your program and
 the binary of your program is always available. Therefore, the lifetime of all
 string literals is `'static`.
-
-<!-- How would you add a static lifetime (below)? -->
-<!-- Just like you'd specify any lifetime, see above where it shows `&'static str`. /Carol -->
 
 You may see suggestions to use the `'static` lifetime in error message help
 text, but before specifying `'static` as the lifetime for a reference, think
