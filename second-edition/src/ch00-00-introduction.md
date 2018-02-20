@@ -115,7 +115,8 @@ ways to make custom types in Rust.
 In Chapter 7, you'll learn about Rust's module system and privacy for
 organizing your code and its public API. Chapter 8 discusses some common
 collection data structures provided by the standard library: vectors, strings,
-and hash maps.
+and hash maps. Chapter 9 is all about Rust's error handling philosophy and
+techniques.
 
 Chapter 10 digs into generics, traits, and lifetimes, which give you the power
 to define code that applies to multiple types. Chapter 11 is all about testing,
