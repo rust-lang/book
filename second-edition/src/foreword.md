@@ -1,13 +1,13 @@
-# TRPL foreword
-It wasn’t always so clear, but the Rust programming language is fundamentally about *empowerment*. 
-
-It empowers you to reach farther, to program with confidence in a wider variety of domains than you did before.
+# TRPL foreword (Niko’s tweaks)
+It wasn’t always so clear, but the Rust programming language is fundamentally about *empowerment*: no matter what kind of code you are writing now, Rust empowers you to reach farther, to program with confidence in a wider variety of domains than you did before.
 
 Take, for example, “systems-level” work that deals with low-level details of memory management, data representation, and concurrency. Traditionally, this realm of programming is seen as arcane, accessible only to a select few who have devoted the necessary years learning to avoid its infamous pitfalls. And even those who practice it do so with caution, lest their code be open to exploits, crashes, or corruption.
 
-Rust breaks down these barriers by eliminating the old pitfalls and providing a friendly, polished set of tools to help you along the way. Programmers who need to “dip down” into lower-level control can do so with Rust, without taking on the customary risk of crashes or security holes, and without having to learn the fine points of an arcane toolchain. Programmers who are already working with low-level code can use Rust to grow their ambitions, for example by using parallelism with the confidence that Rust will catch all of the classical mistakes in the domain.
+Rust breaks down these barriers by eliminating the old pitfalls and providing a friendly, polished set of tools to help you along the way. Programmers who need to “dip down” into lower-level control can do so with Rust, without taking on the customary risk of crashes or security holes, and without having to learn the fine points of an arcane toolchain. Better yet, the language is designed to guide you naturally towards a reliable structure that is efficient in terms of speed and memory usage.
 
-But Rust isn’t limited to low-level systems programming. It’s expressive and ergonomic enough to make CLI apps, web servers, and many other kinds of code quite pleasant to write. It’s a language for writing *any* code where speed, resources or reliability are paramount—and doing so fearlessly, knowing that the language will guide you naturally toward these attributes.
+Programmers who are already working with low-level code can use Rust to achieve more. For example, introducing parallelism in Rust is a relatively low-risk operation: the compiler will catch the classical mistakes for you.
+
+But Rust isn’t limited to low-level systems programming. It’s expressive and ergonomic enough to make CLI apps, web servers, and many other kinds of code quite pleasant to write — and in fact you’ll find examples of both in this text.
 
 This book fully embraces the potential of Rust to empower its users. It’s a friendly and approachable text intended to help you level up not just your knowledge of Rust, but also your reach and confidence as a programmer in general. So dive in, get ready to learn—and welcome to the Rust community!
 
