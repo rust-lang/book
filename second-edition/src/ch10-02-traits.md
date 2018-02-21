@@ -128,39 +128,14 @@ know, people`.
 
 Note that because we defined the `Summarizable` trait and the `NewsArticle` and
 `Tweet` types all in the same *lib.rs* in Listing 10-13, they’re all in the
-same scope. But if this *lib.rs* is for a crate we’ve called `aggregator`, and
+same scope. If this *lib.rs* is for a crate we’ve called `aggregator`, and
 someone else wants to use our crate’s functionality to implement the
-`Summarizable` trait on their `WeatherForecast` struct, they would need to
-import the trait into their scope first before they can implement it, as shown
-in Listing 10-14:
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore
-extern crate aggregator;
-
-use aggregator::Summarizable;
-
-struct WeatherForecast {
-    high_temp: f64,
-    low_temp: f64,
-    chance_of_precipitation: f64,
-}
-
-impl Summarizable for WeatherForecast {
-    fn summary(&self) -> String {
-        format!("The high will be {}, and the low will be {}. The chance of
-        precipitation is {}%.", self.high_temp, self.low_temp,
-        self.chance_of_precipitation)
-    }
-}
-```
-
-<span class="caption">Listing 10-14: Bringing the `Summarizable` trait from our
-`aggregator` crate into scope in another crate</span>
-
-This code assumes `Summarizable` is a public trait, which it is because we put
-the `pub` keyword before `trait` in Listing 10-12.
+`Summarizable` trait on a struct defined within their libray’s scope, they
+would need to import the trait into their scope first. They would do so by
+specifying `use aggregator::Summarizable;` which then enables them to
+implement `Summarizable` for their type. `Summarizable` would also need to be a
+public trait for another crate to implement it, which it is because we put the
+`pub` keyword before `trait` in Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
 trait on a type only if either the trait or the type is local to your crate.
@@ -186,7 +161,7 @@ in a trait, instead of requiring implementations for all methods on every type.
 Then, as we implement the trait on a particular type, we can choose to keep or
 override each method’s default behavior.
 
-Listing 10-15 shows how to specify a default string for the `summary` method of
+Listing 10-14 shows how to specify a default string for the `summary` method of
 the `Summarize` trait instead of only defining the method signature like we did
 in Listing 10-12:
 
@@ -200,7 +175,7 @@ pub trait Summarizable {
 }
 ```
 
-<span class="caption">Listing 10-15: Definition of a `Summarizable` trait with
+<span class="caption">Listing 10-14: Definition of a `Summarizable` trait with
 a default implementation of the `summary` method</span>
 
 To use a default implementation to summarize instances of `NewsArticle` instead
@@ -227,10 +202,10 @@ println!("New article available! {}", article.summary());
 This code prints `New article available! (Read more...)`.
 
 Creating a default implementation for `summary` does not require us to change
-anything about the implementations of `Summarizable` on `Tweet` in Listing
-10-13 or `WeatherForecast` in Listing 10-14, because the syntax for overriding
-a default implementation is exactly the same as the syntax for implementing a
-trait method that doesn’t have a default implementation.
+anything about the implementation of `Summarizable` on `Tweet` in Listing 10-13
+because the syntax for overriding a default implementation is exactly the same
+as the syntax for implementing a trait method that doesn’t have a default
+implementation.
 
 Default implementations can call other methods in the same trait, even if those
 other methods don’t have a default implementation. In this way, a trait can
@@ -306,12 +281,9 @@ pub fn notify<T: Summarizable>(item: T) {
 
 We place trait bounds with the declaration of the generic type parameter, after
 a colon and inside the angle brackets. Because of the trait bound on `T`, we
-can call `notify` and pass in any instance of `NewsArticle` or `Tweet`. This
-also allows the external code from Listing 10-14 that’s using our `aggregator`
-crate to call our `notify` function and pass in an instance of
-`WeatherForecast`, because `Summarizable` is implemented for `WeatherForecast`
-as well. Code that calls the function with any other type, like a `String` or
-an `i32`, won’t compile, because those don’t implement `Summarizable`.
+can call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code
+that calls the function with any other type, like a `String` or an `i32`, won’t
+compile, because those don’t implement `Summarizable`.
 
 We can specify multiple trait bounds on a generic type using the `+` syntax.
 For example, to use display formatting on the type `T` in a function as well as
@@ -404,7 +376,7 @@ trait, which would mean we wouldn’t be able to move the value out of `list[0]`
 and into the `largest` variable, resulting in this error.
 
 To call this code with only those types that implement the trait `Copy`, we can
-add `Copy` to the trait bounds of `T`! Listing 10-16 shows the complete code of
+add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
 a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into the function implement both the
 `PartialOrd` and `Copy` traits, like `i32` and `char` do:
@@ -437,7 +409,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-16: A working definition of the `largest`
+<span class="caption">Listing 10-15: A working definition of the `largest`
 function that works on any generic type that implements the `PartialOrd` and
 `Copy` traits</span>
 
@@ -460,7 +432,7 @@ solutions on your own!
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can conditionally implement methods only for types that implement the
-specified traits. For example, the type `Pair<T>` in Listing 10-17 always
+specified traits. For example, the type `Pair<T>` in Listing 10-16 always
 implements the `new` method, but `Pair<T>` only implements the `cmp_display`
 method if its inner type `T` implements the `PartialOrd` trait that enables
 comparison and the `Display` trait that enables printing:
@@ -493,7 +465,7 @@ impl<T: Display + PartialOrd> Pair<T> {
 }
 ```
 
-<span class="caption">Listing 10-17: Conditionally implement methods on a
+<span class="caption">Listing 10-16: Conditionally implement methods on a
 generic type depending on trait bounds</span>
 
 We can also conditionally implement a trait for any type that implements a
