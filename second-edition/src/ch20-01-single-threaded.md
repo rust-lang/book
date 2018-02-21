@@ -73,8 +73,8 @@ might fail. For example, if we tried to connect to port 80 without being an
 administrator, or if we ran two instances of our program and so had two
 programs listening to the same port, binding wouldn’t work. Because we’re
 writing a basic server for learning purposes here, we’re not going to worry
-about handling these kinds of errors, so we just use `unwrap` to stop the
-program if errors happen.
+about handling these kinds of errors, so we use `unwrap` to stop the program if
+errors happen.
 
 The `incoming` method on `TcpListener` returns an iterator that gives us a
 sequence of streams (more specifically, streams of type `TcpStream`). A single
