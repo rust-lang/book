@@ -1619,10 +1619,15 @@ This struct has one field, `part`, that holds a string slice, which is a
 reference. Just like with generic data types, we declare the name of the
 generic lifetime parameter inside angle brackets after the name of the struct
 so that we can use the lifetime parameter in the body of the struct definition.
+This annotation means an instance of `ImportantExcerpt` can't outlive the
+reference it holds in its `part` field.
 
 The `main` function here creates an instance of the `ImportantExcerpt` struct
 that holds a reference to the first sentence of the `String` owned by the
-variable `novel`.
+variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
+instance is created, and it doesn't go out of scope until after the
+`ImportantExcerpt` goes out of scope, so the reference in the
+`ImportantExcerpt` instance is valid.
 
 ### Lifetime Elision
 
