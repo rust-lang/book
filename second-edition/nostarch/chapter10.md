@@ -321,8 +321,8 @@ ways of using generic type parameters.
 ### In Struct Definitions
 
 We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 shows how to define a `Point` struct
-to hold `x` and `y` coordinate values of any type:
+fields using the `<>` syntax. Listing 10-6 shows how to define a `Point<T>`
+struct to hold `x` and `y` coordinate values of any type:
 
 Filename: src/main.rs
 
@@ -338,7 +338,7 @@ fn main() {
 }
 ```
 
-Listing 10-6: A `Point` struct that holds `x` and `y` values of type `T`
+Listing 10-6: A `Point<T>` struct that holds `x` and `y` values of type `T`
 
 The syntax for using generics in struct definitions is similar to that used in
 function definitions. First, we declare the name of the type parameter inside
@@ -346,11 +346,11 @@ angle brackets just after the name of the struct. Then we can use the generic
 type in the struct definition where we would otherwise specify concrete data
 types.
 
-Note that because we’ve only used one generic type to define `Point`, this says
-that the `Point` struct is generic over some type `T`, and the fields `x` and
-`y` are *both* that same type, whatever that type may be. This means that if we
-create an instance of a `Point` that has values of different types, as in
-Listing 10-7, our code won’t compile:
+Note that because we’ve only used one generic type to define `Point<T>`, this
+says that the `Point<T>` struct is generic over some type `T`, and the fields
+`x` and `y` are *both* that same type, whatever that type may be. This means
+that if we create an instance of a `Point<T>` that has values of different
+types, as in Listing 10-7, our code won’t compile:
 
 Filename: src/main.rs
 
@@ -369,9 +369,9 @@ Listing 10-7: The fields `x` and `y` must be the same type because both have
 the same generic data type `T`
 
 In this example, when we assign the integer value 5 to `x`, we let the compiler
-know that the generic type `T` will be an integer for this instance of `Point`.
-Then when we specify 4.0 for `y`, which we’ve defined to have the same type as
-`x`, we will get a type mismatch error like this:
+know that the generic type `T` will be an integer for this instance of
+`Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
+same type as `x`, we will get a type mismatch error like this:
 
 ```
 error[E0308]: mismatched types
@@ -405,13 +405,13 @@ fn main() {
 }
 ```
 
-Listing 10-8: A `Point` generic over two types so that `x` and `y` may be
+Listing 10-8: A `Point<T, U>` generic over two types so that `x` and `y` may be
 values of different types
 
-Now all instances of `Point` are allowed! You can use as many generic type
-parameters in a definition as you want, but using more than a few makes your
-code hard to read. When you find yourself needing lots of generic types, it may
-indicate that your code needs restructuring into smaller pieces.
+Now all instances of `Point<T, U>` are allowed! You can use as many generic
+type parameters in a definition as you want, but using more than a few makes
+your code hard to read. When you find yourself needing lots of generic types,
+it may indicate that your code needs restructuring into smaller pieces.
 
 ### In Enum Definitions
 
@@ -767,17 +767,17 @@ trait on a type only if either the trait or the type is local to your crate.
 For example, we can implement standard library traits like `Display` on a
 custom type like `Tweet` as part of our `aggregator` crate functionality
 because the type `Tweet` is local to our `aggregator` crate. We can also
-implement `Summarizable` on `Vec` in our `aggregator` crate, because the trait
-`Summarizable` is local to our `aggregator` crate.
+implement `Summarizable` on `Vec<T>` in our `aggregator` crate, because the
+trait `Summarizable` is local to our `aggregator` crate.
 
 What we can’t do is implement external traits on external types. We can’t
-implement the `Display` trait on `Vec` within our `aggregator` crate, for
-example, because both `Display` and `Vec` are defined in the standard library
-and aren’t local to our `aggregator` crate. This restriction is part of what’s
-called the *orphan rule*, so named because the parent type is not present. This
-rule ensures that other people’s code can’t break your code and vice versa.
-Without it, two crates could implement the same trait for the same type, and
-Rust wouldn’t know which implementation to use.
+implement the `Display` trait on `Vec<T>` within our `aggregator` crate, for
+example, because both `Display` and `Vec<T>` are defined in the standard
+library and aren’t local to our `aggregator` crate. This restriction is part of
+what’s called the *orphan rule*, so named because the parent type is not
+present. This rule ensures that other people’s code can’t break your code and
+vice versa. Without it, two crates could implement the same trait for the same
+type, and Rust wouldn’t know which implementation to use.
 
 ### Default Implementations
 

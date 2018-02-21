@@ -150,8 +150,8 @@ ways of using generic type parameters.
 ### In Struct Definitions
 
 We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 shows how to define a `Point` struct
-to hold `x` and `y` coordinate values of any type:
+fields using the `<>` syntax. Listing 10-6 shows how to define a `Point<T>`
+struct to hold `x` and `y` coordinate values of any type:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -167,7 +167,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-6: A `Point` struct that holds `x` and `y`
+<span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
 values of type `T`</span>
 
 The syntax for using generics in struct definitions is similar to that used in
@@ -176,11 +176,11 @@ angle brackets just after the name of the struct. Then we can use the generic
 type in the struct definition where we would otherwise specify concrete data
 types.
 
-Note that because we’ve only used one generic type to define `Point`, this says
-that the `Point` struct is generic over some type `T`, and the fields `x` and
-`y` are *both* that same type, whatever that type may be. This means that if we
-create an instance of a `Point` that has values of different types, as in
-Listing 10-7, our code won’t compile:
+Note that because we’ve only used one generic type to define `Point<T>`, this
+says that the `Point<T>` struct is generic over some type `T`, and the fields
+`x` and `y` are *both* that same type, whatever that type may be. This means
+that if we create an instance of a `Point<T>` that has values of different
+types, as in Listing 10-7, our code won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -199,9 +199,9 @@ fn main() {
 type because both have the same generic data type `T`</span>
 
 In this example, when we assign the integer value 5 to `x`, we let the compiler
-know that the generic type `T` will be an integer for this instance of `Point`.
-Then when we specify 4.0 for `y`, which we’ve defined to have the same type as
-`x`, we will get a type mismatch error like this:
+know that the generic type `T` will be an integer for this instance of
+`Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
+same type as `x`, we will get a type mismatch error like this:
 
 ```text
 error[E0308]: mismatched types
@@ -235,10 +235,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-8: A `Point` generic over two types so that
-`x` and `y` may be values of different types</span>
+<span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
+that `x` and `y` may be values of different types</span>
 
-Now all instances of `Point` are allowed! You can use as many generic type
+Now all instances of `Point<T, U>` are allowed! You can use as many generic type
 parameters in a definition as you want, but using more than a few makes your
 code hard to read. When you find yourself needing lots of generic types, it may
 indicate that your code needs restructuring into smaller pieces.

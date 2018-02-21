@@ -142,17 +142,17 @@ trait on a type only if either the trait or the type is local to your crate.
 For example, we can implement standard library traits like `Display` on a
 custom type like `Tweet` as part of our `aggregator` crate functionality
 because the type `Tweet` is local to our `aggregator` crate. We can also
-implement `Summarizable` on `Vec` in our `aggregator` crate, because the trait
-`Summarizable` is local to our `aggregator` crate.
+implement `Summarizable` on `Vec<T>` in our `aggregator` crate, because the
+trait `Summarizable` is local to our `aggregator` crate.
 
 What we can’t do is implement external traits on external types. We can’t
-implement the `Display` trait on `Vec` within our `aggregator` crate, for
-example, because both `Display` and `Vec` are defined in the standard library
-and aren’t local to our `aggregator` crate. This restriction is part of what’s
-called the *orphan rule*, so named because the parent type is not present. This
-rule ensures that other people’s code can’t break your code and vice versa.
-Without it, two crates could implement the same trait for the same type, and
-Rust wouldn’t know which implementation to use.
+implement the `Display` trait on `Vec<T>` within our `aggregator` crate, for
+example, because both `Display` and `Vec<T>` are defined in the standard
+library and aren’t local to our `aggregator` crate. This restriction is part of
+what’s called the *orphan rule*, so named because the parent type is not
+present. This rule ensures that other people’s code can’t break your code and
+vice versa. Without it, two crates could implement the same trait for the same
+type, and Rust wouldn’t know which implementation to use.
 
 ### Default Implementations
 
