@@ -64,7 +64,7 @@ You can really see how primitive our server is here; real libraries would
 handle the recognition of multiple requests in a much less verbose way!
 
 Start the server with `cargo run`, and then open up two browser windows: one
-for `http://localhost:8080/` and one for `http://localhost:8080/sleep`. If you
+for `http://localhost:7878/` and one for `http://localhost:7878/sleep`. If you
 enter the `/` URI a few times, as before, you’ll see it respond quickly. But if
 you enter `/sleep`, and then load up `/`, you’ll see that `/` waits until
 `sleep` has slept for its full five seconds before loading.
@@ -139,7 +139,7 @@ to handle each stream within the `for` loop:
 # use std::net::TcpStream;
 #
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -184,7 +184,7 @@ struct we’d like to use instead of `thread::spawn`:
 # }
 #
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
     for stream in listener.incoming() {

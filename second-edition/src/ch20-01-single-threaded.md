@@ -32,7 +32,7 @@ $ cd hello
 ```
 
 Now enter the code in Listing 20-1 in `src/main.rs` to start. This code will
-listen at the address `127.0.0.1:8080` for incoming TCP streams. When it gets
+listen at the address `127.0.0.1:7878` for incoming TCP streams. When it gets
 an incoming stream, it will print `Connection established!`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -41,7 +41,7 @@ an incoming stream, it will print `Connection established!`:
 use std::net::TcpListener;
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -55,14 +55,13 @@ fn main() {
 a message when we receive a stream</span>
 
 The `TcpListener` allows us to listen for TCP connections. We’ve chosen to
-listen to the address `127.0.0.1:8080`. Breaking this address down, the section
+listen to the address `127.0.0.1:7878`. Breaking this address down, the section
 before the colon is an IP address representing your own computer (this is the
 same on each computer, and doesn’t represent the authors’ computer
-specifically), and `8080` is the port. We’ve chosen this port for two reasons:
-HTTP is normally accepted on this port and 8080 is easy to remember because
-it’s the HTTP port 80 repeated. Note that connecting to port 80 requires
-administrator privileges; non-administrators can only listen on ports higher
-than 1024.
+specifically), and `7878` is the port. We’ve chosen this port for two reasons:
+HTTP is normally accepted on this port and 7878 is "rust" typed on a telephone.
+Note that connecting to port 80 requires administrator privileges;
+non-administrators can only listen on ports higher than 1024.
 
 The `bind` function in this scenario works like the `new` function, in that it
 will return a new `TcpListener` instance. This function is called `bind`
@@ -109,7 +108,7 @@ connections they can support; new connection attempts beyond that number will
 produce an error until some of the open connections are closed.
 
 Let’s try this code out! First invoke `cargo run` in the terminal, then load up
-`127.0.0.1:8080` in a web browser. The browser should show an error message
+`127.0.0.1:7878` in a web browser. The browser should show an error message
 like “Connection reset”, because the server isn’t currently sending any data
 back. If you look at your terminal, though, you should see a bunch of messages
 that were printed when the browser connected to the server!
@@ -155,7 +154,7 @@ use std::net::TcpListener;
 use std::net::TcpStream;
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
@@ -219,7 +218,7 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.42 secs
      Running `target/debug/hello`
 Request: GET / HTTP/1.1
-Host: 127.0.0.1:8080
+Host: 127.0.0.1:7878
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
 Firefox/52.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
@@ -284,7 +283,7 @@ The remaining lines starting from `Host:` onward are headers; `GET` requests
 have no body.
 
 Try making a request from a different browser, or asking for a different
-address like `127.0.0.1:8080/test` to see how the request data changes, if
+address like `127.0.0.1:7878/test` to see how the request data changes, if
 you’d like.
 
 Now that we know what the browser is asking for, let’s send some data back!
@@ -368,7 +367,7 @@ small detail I don't think is worth going into in depth. /Carol -->
 
 With these changes, let’s run our code and make a request! We’re no longer
 printing any data to the terminal, so we won’t see any output other than the
-output from Cargo. Load `127.0.0.1:8080` in a web browser, though, and you
+output from Cargo. Load `127.0.0.1:7878` in a web browser, though, and you
 should get a blank page instead of an error. How exciting! You’ve just
 hand-coded an HTTP request and response.
 
@@ -438,12 +437,12 @@ Chapter 12, when we read the contents of a file for our I/O project in Listing
 Next, we’re using `format!` to add the file’s contents as the body of the
 success response.
 
-Run this code with `cargo run`, load up `127.0.0.1:8080` in your browser, and
+Run this code with `cargo run`, load up `127.0.0.1:7878` in your browser, and
 you should see your HTML rendered!
 
 Currently we’re ignoring the request data in `buffer` and just sending back the
 contents of the HTML file unconditionally. That means if you try requesting
-`127.0.0.1:8080/something-else` in your browser you’ll still get back this same
+`127.0.0.1:7878/something-else` in your browser you’ll still get back this same
 HTML response. This makes for a pretty limited server and is not what most web
 servers do. We’d like to customize our responses depending on the request, and
 only send back the HTML file for a well-formed request to `/`.
@@ -503,9 +502,9 @@ If `buffer` does *not* start with the bytes in `get`, it means we’ve received
 some other request. We’ll add code to the `else` block in a moment to respond
 to all other requests.
 
-Run this code now and request `127.0.0.1:8080`, and you should get the HTML in
+Run this code now and request `127.0.0.1:7878`, and you should get the HTML in
 *hello.html*. If you make any other request, such as
-`127.0.0.1:8080/something-else`, you’ll get a connection error like we saw when
+`127.0.0.1:7878/something-else`, you’ll get a connection error like we saw when
 running the code in Listing 20-1 and Listing 20-2.
 
 Now let’s add the code in Listing 20-7 to the `else` block to return a response
@@ -566,9 +565,9 @@ any HTML you’d like or use the example HTML in Listing 20-8:
 <span class="caption">Listing 20-8: Sample content for the page to send back
 with any `404` response</span>
 
-With these changes, try running your server again. Requesting `127.0.0.1:8080`
+With these changes, try running your server again. Requesting `127.0.0.1:7878`
 should return the contents of *hello.html*, and any other request, like
-`127.0.0.1:8080/foo`, should return the error HTML from *404.html*!
+`127.0.0.1:7878/foo`, should return the error HTML from *404.html*!
 
 ### A Touch of Refactoring
 

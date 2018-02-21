@@ -308,7 +308,7 @@ requests before gracefully shutting the server down as shown in Listing 20-26:
 
 ```rust,ignore
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
     for stream in listener.incoming().take(2) {
@@ -394,7 +394,7 @@ use std::thread;
 use std::time::Duration;
 
 fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
     let pool = ThreadPool::new(4);
 
     for stream in listener.incoming().take(2) {
