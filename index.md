@@ -17,9 +17,9 @@ and is therefore very different from the first edition.
 
 ## Other editions
 
-We keep older editions of TRPL online for history's sake. 
+We keep older editions of TRPL online for history's sake.
 
 ### First Edition
 
-YOu can [read the first edition of "The Rust Programming Language"
+You can [read the first edition of "The Rust Programming Language"
 here](first-edition/index.html).
