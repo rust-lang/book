@@ -24,49 +24,49 @@ to another tweet.
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. To do this, we
 need each struct to be summarizable, and we need to be able to ask for that
-summary by calling a `summary` method on an instance. Listing 10-12 shows the
-definition of a `Summarizable` trait that expresses this behavior:
+summary by calling a `summarize` method on an instance. Listing 10-12 shows the
+definition of a `Summary` trait that expresses this behavior:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub trait Summarizable {
-    fn summary(&self) -> String;
+pub trait Summary {
+    fn summarize(&self) -> String;
 }
 ```
 
-<span class="caption">Listing 10-12: Definition of a `Summarizable` trait that
-consists of the behavior provided by a `summary` method</span>
+<span class="caption">Listing 10-12: Definition of a `Summary` trait that
+consists of the behavior provided by a `summarize` method</span>
 
 Here, we declare a trait with the `trait` keyword, and then the trait’s name,
-which is `Summarizable` in this case. Inside the curly brackets we declare the
+which is `Summary` in this case. Inside the curly brackets we declare the
 method signatures that describe the behaviors of the types that implement this
-trait, which in this case is `fn summary(&self) -> String`.
+trait, which in this case is `fn summarize(&self) -> String`.
 
 After the method signature, instead of providing an implementation within curly
 brackets, we put a semicolon. Each type implementing this trait must provide
 its own custom behavior for the body of the method, but the compiler will
-enforce that any type that has the `Summarizable` trait will have the method
-`summary` defined with this signature exactly.
+enforce that any type that has the `Summary` trait will have the method
+`summarize` defined with this signature exactly.
 
 A trait can have multiple methods in its body, with the method signatures
 listed one per line and each line ending in a semicolon.
 
 ### Implementing a Trait on a Type
 
-Now that we’ve defined our desired behavior using the `Summarizable` trait, we
-can implement it on the types in our media aggregator. Listing 10-13 shows an
-implementation of the `Summarizable` trait on the `NewsArticle` struct that
-uses the headline, the author, and the location to create the return value of
-`summary`. For the `Tweet` struct, we define `summary` as the username followed
-by the whole text of the tweet, assuming that tweet content is already limited
-to 280 characters.
+Now that we’ve defined our desired behavior using the `Summary` trait, we can
+implement it on the types in our media aggregator. Listing 10-13 shows an
+implementation of the `Summary` trait on the `NewsArticle` struct that uses the
+headline, the author, and the location to create the return value of
+`summarize`. For the `Tweet` struct, we define `summarize` as the username
+followed by the whole text of the tweet, assuming that tweet content is already
+limited to 280 characters.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Summarizable {
-#     fn summary(&self) -> String;
+# pub trait Summary {
+#     fn summarize(&self) -> String;
 # }
 #
 pub struct NewsArticle {
@@ -76,8 +76,8 @@ pub struct NewsArticle {
     pub content: String,
 }
 
-impl Summarizable for NewsArticle {
-    fn summary(&self) -> String {
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
         format!("{}, by {} ({})", self.headline, self.author, self.location)
     }
 }
@@ -89,15 +89,15 @@ pub struct Tweet {
     pub retweet: bool,
 }
 
-impl Summarizable for Tweet {
-    fn summary(&self) -> String {
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
         format!("{}: {}", self.username, self.content)
     }
 }
 ```
 
-<span class="caption">Listing 10-13: Implementing the `Summarizable` trait on
-the `NewsArticle` and `Tweet` types</span>
+<span class="caption">Listing 10-13: Implementing the `Summary` trait on the
+`NewsArticle` and `Tweet` types</span>
 
 Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after `impl`, we put the trait name that we want to
@@ -120,30 +120,30 @@ let tweet = Tweet {
     retweet: false,
 };
 
-println!("1 new tweet: {}", tweet.summary());
+println!("1 new tweet: {}", tweet.summarize());
 ```
 
 This prints: `1 new tweet: horse_ebooks: of course, as you probably already
 know, people`.
 
-Note that because we defined the `Summarizable` trait and the `NewsArticle` and
+Note that because we defined the `Summary` trait and the `NewsArticle` and
 `Tweet` types all in the same *lib.rs* in Listing 10-13, they’re all in the
 same scope. If this *lib.rs* is for a crate we’ve called `aggregator`, and
-someone else wants to use our crate’s functionality to implement the
-`Summarizable` trait on a struct defined within their libray’s scope, they
-would need to import the trait into their scope first. They would do so by
-specifying `use aggregator::Summarizable;` which then enables them to
-implement `Summarizable` for their type. `Summarizable` would also need to be a
-public trait for another crate to implement it, which it is because we put the
-`pub` keyword before `trait` in Listing 10-12.
+someone else wants to use our crate’s functionality to implement the `Summary`
+trait on a struct defined within their libray’s scope, they would need to
+import the trait into their scope first. They would do so by specifying `use
+aggregator::Summary;` which then enables them to implement `Summary` for their
+type. `Summary` would also need to be a public trait for another crate to
+implement it, which it is because we put the `pub` keyword before `trait` in
+Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
 trait on a type only if either the trait or the type is local to your crate.
 For example, we can implement standard library traits like `Display` on a
 custom type like `Tweet` as part of our `aggregator` crate functionality
 because the type `Tweet` is local to our `aggregator` crate. We can also
-implement `Summarizable` on `Vec<T>` in our `aggregator` crate, because the
-trait `Summarizable` is local to our `aggregator` crate.
+implement `Summary` on `Vec<T>` in our `aggregator` crate, because the
+trait `Summary` is local to our `aggregator` crate.
 
 What we can’t do is implement external traits on external types. We can’t
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate, for
@@ -161,31 +161,31 @@ in a trait, instead of requiring implementations for all methods on every type.
 Then, as we implement the trait on a particular type, we can choose to keep or
 override each method’s default behavior.
 
-Listing 10-14 shows how to specify a default string for the `summary` method of
-the `Summarize` trait instead of only defining the method signature like we did
-in Listing 10-12:
+Listing 10-14 shows how to specify a default string for the `summarize` method
+of the `Summary` trait instead of only defining the method signature like we
+did in Listing 10-12:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub trait Summarizable {
-    fn summary(&self) -> String {
+pub trait Summary {
+    fn summarize(&self) -> String {
         String::from("(Read more...)")
     }
 }
 ```
 
-<span class="caption">Listing 10-14: Definition of a `Summarizable` trait with
-a default implementation of the `summary` method</span>
+<span class="caption">Listing 10-14: Definition of a `Summary` trait with a
+default implementation of the `summarize` method</span>
 
 To use a default implementation to summarize instances of `NewsArticle` instead
 of defining a custom implementation, we specify an empty `impl` block with
-`impl Summarizable for NewsArticle {}`.
+`impl Summary for NewsArticle {}`.
 
-Even though we’re no longer choosing to define the `summary` method on
+Even though we’re no longer choosing to define the `summarize` method on
 `NewsArticle` directly, we've provided a default implementation and specified
-that `NewsArticle` implements the `Summarizable` trait, so we can still call
-the `summary` method on an instance of `NewsArticle`, like this:
+that `NewsArticle` implements the `Summary` trait, so we can still call the
+`summarize` method on an instance of `NewsArticle`, like this:
 
 ```rust,ignore
 let article = NewsArticle {
@@ -196,13 +196,13 @@ let article = NewsArticle {
     hockey team in the NHL."),
 };
 
-println!("New article available! {}", article.summary());
+println!("New article available! {}", article.summarize());
 ```
 
 This code prints `New article available! (Read more...)`.
 
-Creating a default implementation for `summary` does not require us to change
-anything about the implementation of `Summarizable` on `Tweet` in Listing 10-13
+Creating a default implementation for `summarize` does not require us to change
+anything about the implementation of `Summary` on `Tweet` in Listing 10-13
 because the syntax for overriding a default implementation is exactly the same
 as the syntax for implementing a trait method that doesn’t have a default
 implementation.
@@ -210,37 +210,37 @@ implementation.
 Default implementations can call other methods in the same trait, even if those
 other methods don’t have a default implementation. In this way, a trait can
 provide a lot of useful functionality and only require implementors to specify
-a small part of it. For example, we could define the `Summarizable` trait to
-have an `author_summary` method whose implementation is required, then a
-`summary` method that has a default implementation that calls the
-`author_summary` method:
+a small part of it. For example, we could define the `Summary` trait to have a
+`summarize_author` method whose implementation is required, then a `summarize`
+method that has a default implementation that calls the `summarize_author`
+method:
 
 ```rust
-pub trait Summarizable {
-    fn author_summary(&self) -> String;
+pub trait Summary {
+    fn summarize_author(&self) -> String;
 
-    fn summary(&self) -> String {
-        format!("(Read more from {}...)", self.author_summary())
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.summarize_author())
     }
 }
 ```
 
-To use this version of `Summarizable`, we only need to define `author_summary`
+To use this version of `Summary`, we only need to define `summarize_author`
 when we implement the trait on a type:
 
 ```rust,ignore
-impl Summarizable for Tweet {
-    fn author_summary(&self) -> String {
+impl Summary for Tweet {
+    fn summarize_author(&self) -> String {
         format!("@{}", self.username)
     }
 }
 ```
 
-Once we define `author_summary`, we can call `summary` on instances of the
-`Tweet` struct, and the default implementation of `summary` will call the
-definition of `author_summary` that we’ve provided. Because we’ve implemented
-`author_summary`, the `Summarizable` trait has given us the behavior of the
-`summary` method without requiring us to write any more code.
+Once we define `summarize_author`, we can call `summarize` on instances of the
+`Tweet` struct, and the default implementation of `summarize` will call the
+definition of `summarize_author` that we’ve provided. Because we’ve implemented
+`summarize_author`, the `Summary` trait has given us the behavior of the
+`summarize` method without requiring us to write any more code.
 
 ```rust,ignore
 let tweet = Tweet {
@@ -250,7 +250,7 @@ let tweet = Tweet {
     retweet: false,
 };
 
-println!("1 new tweet: {}", tweet.summary());
+println!("1 new tweet: {}", tweet.summarize());
 ```
 
 This prints `1 new tweet: (Read more from @horse_ebooks...)`.
@@ -265,17 +265,17 @@ types, we can cover how to use traits with generic type parameters. We can use
 *trait bounds* to constrain generic types to ensure the type will be limited to
 those that implement a particular trait and behavior.
 
-For example, in Listing 10-13, we implemented the `Summarizable` trait on the
-types `NewsArticle` and `Tweet`. We can define a function `notify` that calls
-the `summary` method on its parameter `item`, which is of the generic type `T`.
-To be able to call `summary` on `item` without getting an error that the
-generic type `T` doesn’t implement the method `summary`, we can use trait
+For example, in Listing 10-13, we implemented the `Summary` trait on the types
+`NewsArticle` and `Tweet`. We can define a function `notify` that calls the
+`summarize` method on its parameter `item`, which is of the generic type `T`.
+To be able to call `summarize` on `item` without getting an error that the
+generic type `T` doesn’t implement the method `summarize`, we can use trait
 bounds on `T` to specify that `item` must be of a type that implements the
-`Summarizable` trait:
+`Summary` trait:
 
 ```rust,ignore
-pub fn notify<T: Summarizable>(item: T) {
-    println!("Breaking news! {}", item.summary());
+pub fn notify<T: Summary>(item: T) {
+    println!("Breaking news! {}", item.summarize());
 }
 ```
 
@@ -283,12 +283,12 @@ We place trait bounds with the declaration of the generic type parameter, after
 a colon and inside the angle brackets. Because of the trait bound on `T`, we
 can call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code
 that calls the function with any other type, like a `String` or an `i32`, won’t
-compile, because those don’t implement `Summarizable`.
+compile, because those don’t implement `Summary`.
 
 We can specify multiple trait bounds on a generic type using the `+` syntax.
 For example, to use display formatting on the type `T` in a function as well as
-the `summary` method, we can use `T: Summarizable + Display` to say `T` can be
-any type that implements both `Summarizable` and `Display`.
+the `summarize` method, we can use `T: Summary + Display` to say `T` can be any
+type that implements both `Summary` and `Display`.
 
 There are downsides to using too many trait bounds, however. Each generic has
 its own trait bounds, so functions with multiple generic type parameters can

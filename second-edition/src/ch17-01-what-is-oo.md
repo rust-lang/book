@@ -150,14 +150,14 @@ There are two main reasons to choose inheritance. The first is for re-use of
 code: you can implement particular behavior for one type, and inheritance
 enables you to re-use that implementation for a different type. Rust code can
 be shared using default trait method implementations instead, which we saw in
-Listing 10-15 when we added a default implementation of the `summary` method on
-the `Summarizable` trait. Any type implementing the `Summarizable` trait would
-have the `summary` method available on it without any further code. This is
+Listing 10-15 when we added a default implementation of the `summarize` method
+on the `Summary` trait. Any type implementing the `Summary` trait would have
+the `summarize` method available on it without any further code. This is
 similar to a parent class having an implementation of a method, and an
 inheriting child class then also having the implementation of the method. We
-can also choose to override the default implementation of the `summary` method
-when we implement the `Summarizable` trait, similar to a child class overriding
-the implementation of a method inherited from a parent class.
+can also choose to override the default implementation of the `summarize`
+method when we implement the `Summary` trait, similar to a child class
+overriding the implementation of a method inherited from a parent class.
 
 The second reason to use inheritance relates to the type system: to enable a
 child type to be used in the same places as the parent type. This is also
