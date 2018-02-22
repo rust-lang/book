@@ -320,6 +320,7 @@ proc
 pthreads
 pushups
 QuitMessage
+quux
 RAII
 randcrate
 RangeFrom
