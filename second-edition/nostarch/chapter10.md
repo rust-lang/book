@@ -1345,7 +1345,7 @@ annotations do is relate the lifetimes of multiple references to each other.
 Lifetime annotations have a slightly unusual syntax: the names of lifetime
 parameters must start with an apostrophe `'`. The names of lifetime parameters
 are usually all lowercase, and like generic types, their names are usually very
-short. `'a` is the name most people use as a default. Lifetime parameter
+short. `'a` is the name most people use. Lifetime parameter
 annotations go after the `&` of a reference, and a space separates the lifetime
 annotation from the reference’s type.
 

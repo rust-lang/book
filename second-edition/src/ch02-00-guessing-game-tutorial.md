@@ -158,7 +158,7 @@ This line will create a new variable named `foo` and bind it to the value
 `bar`. In Rust, variables are immutable by default. The following example shows
 how to use `mut` before the variable name to make a variable mutable:
 
-```rust
+```rust,ignore
 let foo = 5; // immutable
 let mut bar = 5; // mutable
 ```

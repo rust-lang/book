@@ -19,7 +19,7 @@ in order to define a set of behaviors necessary to accomplish some purpose.
 
 For example, say we have multiple structs that hold various kinds and amounts
 of text: a `NewsArticle` struct that holds a news story filed in a particular
-place in the world, and a `Tweet` that can have at most 140 characters in its
+place in the world, and a `Tweet` that can have at most 280 characters in its
 content along with metadata like whether it was a retweet or a reply to another
 tweet.
 
@@ -62,7 +62,7 @@ shows an implementation of the `Summarizable` trait on the `NewsArticle` struct
 that uses the headline, the author, and the location to create the return value
 of `summary`. For the `Tweet` struct, we’ve chosen to define `summary` as the
 username followed by the whole text of the tweet, assuming that tweet content
-is already limited to 140 characters.
+is already limited to 280 characters.
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -187,7 +187,7 @@ behavior. When we implement the trait on a particular type, we can choose to
 keep or override each method’s default behavior.
 
 Listing 10-15 shows how we could have chosen to specify a default string for
-the `summary` method of the `Summarize` trait instead of choosing to only
+the `summary` method of the `Summarizable` trait instead of choosing to only
 define the method signature like we did in Listing 10-12:
 
 <span class="filename">Filename: lib.rs</span>
@@ -508,7 +508,7 @@ impl<T: Display> ToString for T {
 ```
 
 Because the standard library has this blanket implementation, we can call the
-`to_string` method defined by the `ToString` type on any type that implements
+`to_string` method defined by the `ToString` trait on any type that implements
 the `Display` trait. For example, we can turn integers into their corresponding
 `String` values like this since integers implement `Display`:
 
