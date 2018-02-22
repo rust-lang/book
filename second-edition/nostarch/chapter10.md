@@ -652,8 +652,8 @@ to another tweet.
 
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. To do this, we
-need each struct to be summarizable, and we need to be able to ask for that
-summary by calling a `summarize` method on an instance. Listing 10-12 shows the
+need a summary from each type, and we need to be able to ask for that summary
+by calling a `summarize` method on an instance. Listing 10-12 shows the
 definition of a `Summary` trait that expresses this behavior:
 
 Filename: src/lib.rs
@@ -755,7 +755,7 @@ Note that because we defined the `Summary` trait and the `NewsArticle` and
 `Tweet` types all in the same *lib.rs* in Listing 10-13, they’re all in the
 same scope. If this *lib.rs* is for a crate we’ve called `aggregator`, and
 someone else wants to use our crate’s functionality to implement the `Summary`
-trait on a struct defined within their libray’s scope, they would need to
+trait on a struct defined within their library’s scope, they would need to
 import the trait into their scope first. They would do so by specifying `use
 aggregator::Summary;` which then enables them to implement `Summary` for their
 type. `Summary` would also need to be a public trait for another crate to
@@ -881,7 +881,7 @@ println!("1 new tweet: {}", tweet.summarize());
 This prints `1 new tweet: (Read more from @horse_ebooks...)`.
 
 Note that it is not possible to call the default implementation from an
-overridding implementation of that same method.
+overriding implementation of that same method.
 
 ### Trait Bounds
 
