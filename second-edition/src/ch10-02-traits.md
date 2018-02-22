@@ -183,7 +183,7 @@ of defining a custom implementation, we specify an empty `impl` block with
 `impl Summary for NewsArticle {}`.
 
 Even though we’re no longer choosing to define the `summarize` method on
-`NewsArticle` directly, we've provided a default implementation and specified
+`NewsArticle` directly, we’ve provided a default implementation and specified
 that `NewsArticle` implements the `Summary` trait, so we can still call the
 `summarize` method on an instance of `NewsArticle`, like this:
 
@@ -260,7 +260,7 @@ overridding implementation of that same method.
 
 ### Trait Bounds
 
-Now that you've learned how to define traits and implement those traits on
+Now that you’ve learned how to define traits and implement those traits on
 types, we can cover how to use traits with generic type parameters. We can use
 *trait bounds* to constrain generic types to ensure the type will be limited to
 those that implement a particular trait and behavior.

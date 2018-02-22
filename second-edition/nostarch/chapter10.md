@@ -574,7 +574,7 @@ parameters. The good news is that Rust implements generics in such a way that
 your code doesn’t run any slower using generic types than it would with
 concrete types.
 
-Rust accomplishes this by performing monomorphization of the code that's using
+Rust accomplishes this by performing monomorphization of the code that’s using
 generics at compile time. *Monomorphization* is the process of turning generic
 code into specific code by filling in the concrete types that are actually used
 when compiled.
@@ -808,7 +808,7 @@ of defining a custom implementation, we specify an empty `impl` block with
 `impl Summary for NewsArticle {}`.
 
 Even though we’re no longer choosing to define the `summarize` method on
-`NewsArticle` directly, we've provided a default implementation and specified
+`NewsArticle` directly, we’ve provided a default implementation and specified
 that `NewsArticle` implements the `Summary` trait, so we can still call the
 `summarize` method on an instance of `NewsArticle`, like this:
 
@@ -885,7 +885,7 @@ overridding implementation of that same method.
 
 ### Trait Bounds
 
-Now that you've learned how to define traits and implement those traits on
+Now that you’ve learned how to define traits and implement those traits on
 types, we can cover how to use traits with generic type parameters. We can use
 *trait bounds* to constrain generic types to ensure the type will be limited to
 those that implement a particular trait and behavior.
@@ -1183,7 +1183,7 @@ The outer scope declares a variable named `r` with no initial value, and the
 inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
 the inner scope ends, and we attempt to print out the value in `r`. This code
-won't compile because the value `r` is referring to has gone out of scope
+won’t compile because the value `r` is referring to has gone out of scope
 before we try to use it. Here’s the error message:
 
 ```
@@ -1235,7 +1235,7 @@ lifetimes and sees that `r` has a lifetime of `'a`, but that it refers to
 memory with a lifetime of `'b`. The program is rejected because `'b` is shorter
 than `'a`: the subject of the reference doesn’t live as long as the reference.
 
-Listing 10-19 fixes the code so it doesn't have a dangling reference and
+Listing 10-19 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors:
 
 ```
@@ -1453,7 +1453,7 @@ that have different concrete lifetimes
 
 In this example, `string1` is valid until the end of the outer scope, `string2`
 is valid until the end of the inner scope, and `result` references something
-that is valid until the end of the inner scope. Run this and you'll see that
+that is valid until the end of the inner scope. Run this and you’ll see that
 the borrow checker approves of this code; it will compile and print `The
 longest string is long string is long` when run.
 
@@ -1761,7 +1761,7 @@ is. This is why we got an error trying to compile the code from Listing 10-21:
 the compiler worked through the lifetime elision rules, but still couldn’t
 figure out all the lifetimes of the references in the signature.
 
-Because the third rule only really applies in method signatures, we'll look at
+Because the third rule only really applies in method signatures, we’ll look at
 lifetimes in that context next to see why the third rule means we don’t have to
 annotate lifetimes in method signatures very often.
 

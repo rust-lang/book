@@ -48,7 +48,7 @@ The outer scope declares a variable named `r` with no initial value, and the
 inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
 the inner scope ends, and we attempt to print out the value in `r`. This code
-won't compile because the value `r` is referring to has gone out of scope
+won’t compile because the value `r` is referring to has gone out of scope
 before we try to use it. Here’s the error message:
 
 ```text
@@ -100,7 +100,7 @@ lifetimes and sees that `r` has a lifetime of `'a`, but that it refers to
 memory with a lifetime of `'b`. The program is rejected because `'b` is shorter
 than `'a`: the subject of the reference doesn’t live as long as the reference.
 
-Listing 10-19 fixes the code so it doesn't have a dangling reference and
+Listing 10-19 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors:
 
 ```rust
@@ -328,7 +328,7 @@ references to `String` values that have different concrete lifetimes</span>
 
 In this example, `string1` is valid until the end of the outer scope, `string2`
 is valid until the end of the inner scope, and `result` references something
-that is valid until the end of the inner scope. Run this and you'll see that
+that is valid until the end of the inner scope. Run this and you’ll see that
 the borrow checker approves of this code; it will compile and print `The
 longest string is long string is long` when run.
 
@@ -494,13 +494,13 @@ This struct has one field, `part`, that holds a string slice, which is a
 reference. Just like with generic data types, we declare the name of the
 generic lifetime parameter inside angle brackets after the name of the struct
 so that we can use the lifetime parameter in the body of the struct definition.
-This annotation means an instance of `ImportantExcerpt` can't outlive the
+This annotation means an instance of `ImportantExcerpt` can’t outlive the
 reference it holds in its `part` field.
 
 The `main` function here creates an instance of the `ImportantExcerpt` struct
 that holds a reference to the first sentence of the `String` owned by the
 variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
-instance is created, and it doesn't go out of scope until after the
+instance is created, and it doesn’t go out of scope until after the
 `ImportantExcerpt` goes out of scope, so the reference in the
 `ImportantExcerpt` instance is valid.
 
@@ -637,7 +637,7 @@ is. This is why we got an error trying to compile the code from Listing 10-21:
 the compiler worked through the lifetime elision rules, but still couldn’t
 figure out all the lifetimes of the references in the signature.
 
-Because the third rule only really applies in method signatures, we'll look at
+Because the third rule only really applies in method signatures, we’ll look at
 lifetimes in that context next to see why the third rule means we don’t have to
 annotate lifetimes in method signatures very often.
 

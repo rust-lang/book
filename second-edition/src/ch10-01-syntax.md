@@ -410,7 +410,7 @@ parameters. The good news is that Rust implements generics in such a way that
 your code doesn’t run any slower using generic types than it would with
 concrete types.
 
-Rust accomplishes this by performing monomorphization of the code that's using
+Rust accomplishes this by performing monomorphization of the code that’s using
 generics at compile time. *Monomorphization* is the process of turning generic
 code into specific code by filling in the concrete types that are actually used
 when compiled.

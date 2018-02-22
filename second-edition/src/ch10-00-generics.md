@@ -66,7 +66,7 @@ the first number in the list in a variable named `largest`. Then it iterates
 through all the numbers in the list, and if the current number is greater than
 the number stored in `largest`, it replaces the number in that variable. If the
 current number is smaller than the largest number seen so far, however, the
-variable doesn't change and the code moves on to the next number in the list.
+variable doesn’t change and the code moves on to the next number in the list.
 After all the numbers in the list have been considered, `largest` should hold
 the largest number, which in this case is 100.
 
