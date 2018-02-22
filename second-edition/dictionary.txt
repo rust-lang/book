@@ -235,6 +235,7 @@ loopback
 lossy
 lval
 macOS
+Matsakis
 mathematic
 memoization
 metadata
@@ -442,6 +443,7 @@ tuesday
 tuple
 tuples
 turbofish
+Turon
 typeof
 TypeName
 UFCS

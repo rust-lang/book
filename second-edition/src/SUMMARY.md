@@ -1,5 +1,6 @@
 # The Rust Programming Language
 
+[Foreword](foreword.md)
 [Introduction](ch00-00-introduction.md)
 
 ## Getting started
