@@ -435,10 +435,10 @@ if two closures have the same signature, their types are still considered
 different. To define structs, enums, or function parameters that use closures,
 we use generics and trait bounds, as we discussed in Chapter 10.
 
-The `Fn` traits are provided by the standard library. All closures implement
-one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
-between these traits in the next section on capturing the environment; in this
-example, we can use the `Fn` trait.
+The `Fn` traits are provided by the standard library. All closures implement at
+least one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the
+difference between these traits in the next section on capturing the
+environment; in this example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have to match this trait bound. In this
@@ -754,11 +754,14 @@ three `Fn` traits as follows:
   when it is defined. The `Once` part of the name represents the fact that the
   closure can’t take ownership of the same variables more than once, so it can
   be called only once.
-* `Fn` borrows values from the environment immutably.
 * `FnMut` can change the environment because it mutably borrows values.
+* `Fn` borrows values from the environment immutably.
 
 When we create a closure, Rust infers which trait to use based on how the
-closure uses the values from the environment. In Listing 13-12, the
+closure uses the values from the environment. All closures implement `FnOnce`,
+because they can all be called at least once. Closures that don't move the
+captured variables also implement `FnMut`, and closures that don't need mutable
+access to the captured variables also implement `Fn`. In Listing 13-12, the
 `equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the `Fn` trait)
 because the body of the closure only needs to read the value in `x`.
 
