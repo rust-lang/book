@@ -7,10 +7,11 @@ Rust’s design has taken inspiration from many existing languages and
 techniques, and one significant influence is *functional programming*.
 Programming in a functional style often includes using functions as values by
 passing them in arguments, returning them from other functions, assigning them
-to variables for later execution, and so forth. In this chapter, we won’t
-debate the issue of what functional programming is or isn’t but will instead
-discuss some features of Rust that are similar to features in many languages
-often referred to as functional.
+to variables for later execution, and so forth.
+
+In this chapter, we won’t debate the issue of what functional programming is or
+isn’t but will instead discuss some features of Rust that are similar to
+features in many languages often referred to as functional.
 
 More specifically, we’ll cover:
 
@@ -330,7 +331,7 @@ available.
 
 Like variables, we can add type annotations if we want to increase explicitness
 and clarity at the cost of being more verbose than is strictly necessary;
-annotating the types for the closure we defined in Listing 13-4 would look like
+annotating the types for the closure we defined in Listing 13-5 would look like
 the definition shown in Listing 13-7:
 
 Filename: src/main.rs
@@ -428,10 +429,10 @@ if two closures have the same signature, their types are still considered
 different. To define structs, enums, or function parameters that use closures,
 we use generics and trait bounds, as we discussed in Chapter 10.
 
-The `Fn` traits are provided by the standard library. All closures implement
-one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
-between these traits in the next section on capturing the environment; in this
-example, we can use the `Fn` trait.
+The `Fn` traits are provided by the standard library. All closures implement at
+least one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the
+difference between these traits in the "Capturing the Environment with
+Closures" section; in this example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have to match this trait bound. In this
@@ -699,7 +700,7 @@ their environment, defining and using functions will never incur this overhead.
 
 Closures can capture values from their environment in three ways, which
 directly map to the three ways a function can take a parameter: taking
-ownership, borrowing immutably, and borrowing mutably. These are encoded in the
+ownership, borrowing mutably, and borrowing immutably. These are encoded in the
 three `Fn` traits as follows:
 
 * `FnOnce` consumes the variables it captures from its enclosing scope, known
@@ -707,12 +708,15 @@ three `Fn` traits as follows:
   closure must take ownership of these variables and move them into the closure
   when it is defined. The `Once` part of the name represents the fact that the
   closure can’t take ownership of the same variables more than once, so it can
-  only be called one time.
-* `Fn` borrows values from the environment immutably.
+  be called only once.
 * `FnMut` can change the environment because it mutably borrows values.
+* `Fn` borrows values from the environment immutably.
 
 When we create a closure, Rust infers which trait to use based on how the
-closure uses the values from the environment. In Listing 13-12, the
+closure uses the values from the environment. All closures implement `FnOnce`,
+because they can all be called at least once. Closures that don't move the
+captured variables also implement `FnMut`, and closures that don't need mutable
+access to the captured variables also implement `Fn`. In Listing 13-12, the
 `equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the `Fn` trait)
 because the body of the closure only needs to read the value in `x`.
 
@@ -965,9 +969,9 @@ The code in Listing 13-17 doesn’t do anything; the closure we’ve specified
 never gets called. The warning reminds us why: iterator adaptors are lazy, and
 we need to consume the iterator here.
 
-To fix this and consume the iterator, we’ll use the `collect` method, which you
-saw briefly in Chapter 12. This method consumes the iterator and collects the
-resulting values into a collection data type.
+To fix this and consume the iterator, we’ll use the `collect` method, which we
+used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the
+iterator and collects the resulting values into a collection data type.
 
 In Listing 13-18, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
