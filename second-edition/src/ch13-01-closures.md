@@ -334,7 +334,7 @@ available.
 
 Like variables, we can add type annotations if we want to increase explicitness
 and clarity at the cost of being more verbose than is strictly necessary;
-annotating the types for the closure we defined in Listing 13-4 would look like
+annotating the types for the closure we defined in Listing 13-5 would look like
 the definition shown in Listing 13-7:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -437,8 +437,8 @@ we use generics and trait bounds, as we discussed in Chapter 10.
 
 The `Fn` traits are provided by the standard library. All closures implement at
 least one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the
-difference between these traits in the next section on capturing the
-environment; in this example, we can use the `Fn` trait.
+difference between these traits in the "Capturing the Environment with
+Closures" section; in this example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have to match this trait bound. In this
@@ -745,7 +745,7 @@ their environment, defining and using functions will never incur this overhead.
 
 Closures can capture values from their environment in three ways, which
 directly map to the three ways a function can take a parameter: taking
-ownership, borrowing immutably, and borrowing mutably. These are encoded in the
+ownership, borrowing mutably, and borrowing immutably. These are encoded in the
 three `Fn` traits as follows:
 
 * `FnOnce` consumes the variables it captures from its enclosing scope, known
