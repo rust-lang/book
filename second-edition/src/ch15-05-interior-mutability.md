@@ -1,14 +1,16 @@
 ## `RefCell<T>` and the Interior Mutability Pattern
 
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
 *Interior mutability* is a design pattern in Rust that allows you to mutate
 data even when there are immutable references to that data: normally, this
 action is disallowed by the borrowing rules. To do so, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. We haven’t yet covered unsafe code; we will in Chapter
-19. We can use types that use the interior mutability pattern when we can
-ensure that the borrowing rules will be followed at runtime, even though the
-compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
-safe API, and the outer type is still immutable.
+mutation and borrowing. We haven’t yet covered unsafe code; we will in
+Chapter 19. We can use types that use the interior mutability pattern when we
+can ensure that the borrowing rules will be followed at runtime, even though
+the compiler can’t guarantee that. The `unsafe` code involved is then wrapped
+in a safe API, and the outer type is still immutable.
 
 Let’s explore this concept by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
@@ -19,9 +21,10 @@ Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
 it holds. So, what makes `RefCell<T>` different than a type like `Box<T>`?
 Recall the borrowing rules you learned in Chapter 4:
 
-* At any given time, you can have *either* but not both of the following: one
-  mutable reference or any number of immutable references.
-* References must always be valid.
+1. At any given time, you can have *either* but not both of:
+  * One mutable reference.
+  * Any number of immutable references.
+2. References must always be valid.
 
 With references and `Box<T>`, the borrowing rules’ invariants are enforced at
 compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.

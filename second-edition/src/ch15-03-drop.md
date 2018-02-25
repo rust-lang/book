@@ -58,7 +58,7 @@ an instance of your type goes out of scope. We’re printing some text here to
 demonstrate when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` and then print
-`CustomSmartPointers created.`. At the end of `main`, our instance of
+`CustomSmartPointers created.`. At the end of `main`, our instances of
 `CustomSmartPointer` will go out of scope, and Rust will call the code we put
 in the `drop` method, printing our final message. Note that we didn’t need to
 call the `drop` method explicitly.
@@ -71,7 +71,7 @@ Dropping CustomSmartPointer with data `other stuff`!
 Dropping CustomSmartPointer with data `my stuff`!
 ```
 
-Rust automatically called `drop` for us when our instance went out of scope,
+Rust automatically called `drop` for us when our instances went out of scope,
 calling the code we specified. Variables are dropped in the reverse order of
 the order in which they were created, so `d` was dropped before `c`. This
 example just gives you a visual guide to how the `drop` method works, but
@@ -136,7 +136,7 @@ a value to be cleaned up early, we can use the `std::mem::drop` function.
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
 an argument. The function is in the prelude, so we can modify `main` in Listing
-15-14 to call the `drop` function, as shown in Listing 15-16:
+15-15 to call the `drop` function, as shown in Listing 15-16:
 
 <span class="filename">Filename: src/main.rs</span>
 
