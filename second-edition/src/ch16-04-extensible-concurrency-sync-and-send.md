@@ -55,9 +55,9 @@ useful for enforcing invariants related to concurrency.
 Manually implementing these traits involves implementing unsafe Rust code.
 We’ll talk about using unsafe Rust code in Chapter 19; for now, the important
 information is that building new concurrent types not made up of `Send` and
-`Sync` parts requires careful thought to uphold the safety guarantees. [The
-Rustonomicon] has more information about these guarantees and how to uphold
-them.
+`Sync` parts requires careful thought to uphold the safety guarantees.
+[The Rustonomicon] has more information about these guarantees and how to
+uphold them.
 
 [The Rustonomicon]: https://doc.rust-lang.org/stable/nomicon/
 
