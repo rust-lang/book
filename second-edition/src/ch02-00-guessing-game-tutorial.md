@@ -66,7 +66,7 @@ Hello, world!
 ```
 
 The `run` command comes in handy when you need to rapidly iterate on a project,
-as we'll do in this game, quickly testing each iteration before moving on to
+as we’ll do in this game, quickly testing each iteration before moving on to
 the next one.
 
 Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
@@ -198,7 +198,7 @@ io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
 
-If we hadn't listed the `use std::io` line at the beginning of the program, we
+If we hadn’t listed the `use std::io` line at the beginning of the program, we
 could have written this function call as `std::io::stdin`. The `stdin` function
 returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a
 type that represents a handle to the standard input for your terminal.
@@ -229,7 +229,7 @@ thoroughly.)
 
 ### Handling Potential Failure with the `Result` Type
 
-We’re not quite done with this line of code. Although what we've discussed so
+We’re not quite done with this line of code. Although what we’ve discussed so
 far is a single line of text, it’s only the first part of the single logical
 line of code. The second part is this method:
 
@@ -497,7 +497,7 @@ available and reevaluate your `rand` requirements according to the new version
 you have specified.
 
 There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore --> which we'll discuss in Chapter 14, but
+ecosystem][doccratesio]<!-- ignore --> which we’ll discuss in Chapter 14, but
 for now, that’s all you need to know. Cargo makes it very easy to reuse
 libraries, so Rustaceans are able to write smaller projects that are assembled
 from a number of packages.
@@ -507,7 +507,7 @@ from a number of packages.
 
 ### Generating a Random Number
 
-Now that you've added the `rand` crate to *Cargo.toml*, let’s start using
+Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
 `rand`. The next step is to update *src/main.rs*, as shown in Listing 2-3:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -557,7 +557,7 @@ numbers as arguments and generates a random number between them. It’s inclusiv
 on the lower bound but exclusive on the upper bound, so we need to specify `1`
 and `101` to request a number between 1 and 100.
 
-> Note: You won't just know which traits to use and which methods and functions
+> Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate. Instructions for using a crate are in each crate’s
 > documentation. Another neat feature of Cargo is that you can run the `cargo
 > doc --open` command, which will build documentation provided by all of your
@@ -597,7 +597,7 @@ You should get different random numbers, and they should all be numbers between
 ## Comparing the Guess to the Secret Number
 
 Now that we have user input and a random number, we can compare them. That step
-is shown in Listing 2-4. Note that this code won't compile quite yet, as we
+is shown in Listing 2-4. Note that this code won’t compile quite yet, as we
 will explain.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -656,7 +656,7 @@ used here. Say that the user has guessed 50 and the randomly generated secret
 number this time is 38. When the code compares 50 to 38, the `cmp` method will
 return `Ordering::Greater`, because 50 is greater than 38. The `match`
 expression gets the `Ordering::Greater` value and starts checking each arm’s
-pattern. It looks at the first arm's pattern, `Ordering::Less`, and sees that
+pattern. It looks at the first arm’s pattern, `Ordering::Less`, and sees that
 the value `Ordering::Greater` does not match `Ordering::Less`, so it ignores
 the code in that arm and moves to the next arm. The next arm’s pattern,
 `Ordering::Greater`, *does* match `Ordering::Greater`! The associated code in
@@ -795,7 +795,7 @@ Let’s change that by adding a loop!
 
 ## Allowing Multiple Guesses with Looping
 
-The `loop` keyword creates an infinite loop. We'll add that now to give users
+The `loop` keyword creates an infinite loop. We’ll add that now to give users
 more chances at guessing the number:
 
 <span class="filename">Filename: src/main.rs</span>
