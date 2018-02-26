@@ -202,8 +202,8 @@ in Chapter 8.
 
 ### Compound Types
 
-*Compound types* can group multiple values of other types into one type. Rust
-has two primitive compound types: tuples and arrays.
+*Compound types* can group multiple values into one type. Rust has two
+primitive compound types: tuples and arrays.
 
 #### Grouping Values into Tuples
 
