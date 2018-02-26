@@ -770,7 +770,7 @@ user must press the <span class="keystroke">enter</span> key to satisfy
 `read_line`. When the user presses <span class="keystroke">enter</span>, a
 newline character is added to the string. For example, if the user types <span
 class="keystroke">5</span> and presses <span class="keystroke"> enter</span>,
-`guess` looks like this: `5\n`. The `\n` represents “newline,” the
+`guess` looks like this: `5\n`. The `\n` represents “newline” the
 <span class="keystroke">enter</span>key. The `trim` method eliminates `\n`,
 resulting in just `5`.
 
