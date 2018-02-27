@@ -95,6 +95,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - recover: 복구
 - recursive type: 재귀적 타입
 - reference: 참조자
+- reference counting: 참조 카운팅
 - reference cycle: 참조 순환
 - return: 반환
 - rust: 러스트
