@@ -31,7 +31,7 @@ the features that make Rust unique. In this chapter, you’ll learn ownership by
 working through some examples that focus on a very common data structure:
 strings.
 
-PROD: START BOX
+<!-- PROD: START BOX -->
 
 ### The Stack and the Heap
 
@@ -53,58 +53,58 @@ and removing data is called *popping off the stack*.
 
 The stack is fast because of the way it accesses the data: it never has to
 search for a place to put new data or a place to get data from because that
-place is always the top. Another property that makes the stack fast is that
-all data on the stack must take up a known, fixed size.
+place is always the top. Another property that makes the stack fast is that all
+data on the stack must take up a known, fixed size.
 
-For data with a size unknown to us at compile time or a size that might
-change, we can store data on the heap instead. The heap is less organized:
-when we put data on the heap, we ask for some amount of space. The operating
-system finds an empty spot somewhere in the heap that is big enough, marks it
-as being in use, and returns to us a *pointer*, which is the address of that
-location. This process is called *allocating on the heap*, and sometimes we
-abbreviate the phrase as just “allocating.” Pushing values onto the stack is
-not considered allocating. Because the pointer is a known, fixed size, we can
-store the pointer on the stack, but when we want the actual data, we have to
-follow the pointer.
+For data with a size unknown to us at compile time or a size that might change,
+we can store data on the heap instead. The heap is less organized: when we put
+data on the heap, we ask for some amount of space. The operating system finds
+an empty spot somewhere in the heap that is big enough, marks it as being in
+use, and returns to us a *pointer*, which is the address of that location. This
+process is called *allocating on the heap*, and sometimes we abbreviate the
+phrase as just “allocating.” Pushing values onto the stack is not considered
+allocating. Because the pointer is a known, fixed size, we can store the
+pointer on the stack, but when we want the actual data, we have to follow the
+pointer.
 
 Think of being seated at a restaurant. When you enter, you state the number of
-people in your group, and the staff finds an empty table that fits everyone
-and leads you there. If someone in your group comes late, they can ask where
-you’ve been seated to find you.
+people in your group, and the staff finds an empty table that fits everyone and
+leads you there. If someone in your group comes late, they can ask where you’ve
+been seated to find you.
 
 Accessing data in the heap is slower than accessing data on the stack because
-we have to follow a pointer to get there. Contemporary processors are faster
-if they jump around less in memory. Continuing the analogy, consider a server
-at a restaurant taking orders from many tables. It’s most efficient to get
-all the orders at one table before moving on to the next table. Taking an
-order from table A, then an order from table B, then one from A again, and
-then one from B again would be a much slower process. By the same token, a
-processor can do its job better if it works on data that’s close to other
-data (as it is on the stack) rather than farther away (as it can be on the
-heap). Allocating a large amount of space on the heap can also take time.
+we have to follow a pointer to get there. Contemporary processors are faster if
+they jump around less in memory. Continuing the analogy, consider a server at a
+restaurant taking orders from many tables. It’s most efficient to get all the
+orders at one table before moving on to the next table. Taking an order from
+table A, then an order from table B, then one from A again, and then one from B
+again would be a much slower process. By the same token, a processor can do its
+job better if it works on data that’s close to other data (as it is on the
+stack) rather than farther away (as it can be on the heap). Allocating a large
+amount of space on the heap can also take time.
 
-When our code calls a function, the values passed into the function
-(including, potentially, pointers to data on the heap) and the function’s
-local variables get pushed onto the stack. When the function is over, those
-values get popped off the stack.
+When our code calls a function, the values passed into the function (including,
+potentially, pointers to data on the heap) and the function’s local variables
+get pushed onto the stack. When the function is over, those values get popped
+off the stack.
 
-Keeping track of what parts of code are using what data on the heap,
-minimizing the amount of duplicate data on the heap, and cleaning up unused
-data on the heap so we don’t run out of space are all problems that ownership
-addresses. Once you understand ownership, you won’t need to think about the
-stack and the heap very often, but knowing that managing heap data is why
-ownership exists can help explain why it works the way it does.
+Keeping track of what parts of code are using what data on the heap, minimizing
+the amount of duplicate data on the heap, and cleaning up unused data on the
+heap so we don’t run out of space are all problems that ownership addresses.
+Once you understand ownership, you won’t need to think about the stack and the
+heap very often, but knowing that managing heap data is why ownership exists
+can help explain why it works the way it does.
 
-PROD: END BOX
+<!-- PROD: END BOX -->
 
 ### Ownership Rules
 
 First, let’s take a look at the ownership rules. Keep these rules in mind as we
 work through the examples that illustrate the rules:
 
-1. Each value in Rust has a variable that’s called its *owner*.
-2. There can only be one owner at a time.
-3. When the owner goes out of scope, the value will be dropped.
+> 1. Each value in Rust has a variable that’s called its *owner*.
+> 2. There can only be one owner at a time.
+> 3. When the owner goes out of scope, the value will be dropped.
 
 ### Variable Scope
 
@@ -141,7 +141,7 @@ Listing 4-1: A variable and the scope in which it is valid
 In other words, there are two important points in time here:
 
 1. When `s` comes *into scope*, it is valid.
-1. It remains so until it goes *out of scope*.
+2. It remains so until it goes *out of scope*.
 
 At this point, the relationship between scopes and when variables are valid is
 similar to other programming languages. Now we’ll build on top of this
@@ -436,7 +436,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 `Copy`. Here are some of the types that are `Copy`:
 
 * All the integer types, like `u32`.
-* The boolean type, `bool`, with values `true` and `false`.
+* The Boolean type, `bool`, with values `true` and `false`.
 * The character type, `char`.
 * All the floating point types, like `f64`.
 * Tuples, but only if they contain types that are also `Copy`. `(i32, i32)` is
@@ -726,8 +726,8 @@ A *data race* is similar to a race condition and happens when these three
 behaviors occur:
 
 1. Two or more pointers access the same data at the same time.
-1. At least one of the pointers is being used to write to the data.
-1. There’s no mechanism being used to synchronize access to the data.
+2. At least one of the pointers is being used to write to the data.
+3. There’s no mechanism being used to synchronize access to the data.
 
 Data races cause undefined behavior and can be difficult to diagnose and fix
 when you’re trying to track them down at runtime; Rust prevents this problem
