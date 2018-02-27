@@ -287,7 +287,7 @@ You’ll see different type annotations as we discuss the various data types.
 ### Scalar Types
 
 A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
+integers, floating-point numbers, Booleans, and characters. You’ll likely
 recognize these from other programming languages, but let’s jump into how they
 work in Rust.
 
@@ -407,8 +407,8 @@ list of all operators that Rust provides.
 
 #### The Boolean Type
 
-As in most other programming languages, a boolean type in Rust has two possible
-values: `true` and `false`. The boolean type in Rust is specified using `bool`.
+As in most other programming languages, a Boolean type in Rust has two possible
+values: `true` and `false`. The Boolean type in Rust is specified using `bool`.
 For example:
 
 Filename: src/main.rs
@@ -421,7 +421,7 @@ fn main() {
 }
 ```
 
-The main way to consume boolean values is through conditionals, such as an `if`
+The main way to consume Boolean values is through conditionals, such as an `if`
 expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
 section.
 
@@ -1115,9 +1115,9 @@ error[E0308]: mismatched types
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-boolean types to a boolean, unlike
+not automatically try to convert non-Boolean types to a Boolean, unlike
 languages such as Ruby and JavaScript. You must be explicit and always provide
-`if` with a `boolean` as its condition. If we want the `if` code block to run
+`if` with a Boolean as its condition. If we want the `if` code block to run
 only when a number is not equal to `0`, for example, we can change the `if`
 expression to the following:
 
@@ -1296,7 +1296,7 @@ fn main() {
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support a keyboard shortcut,
-<span class="keystroke">ctrl-C</span>, to halt a program that is stuck in a
+<span class="keystroke">ctrl-c</span>, to halt a program that is stuck in a
 continual loop. Give it a try:
 
 ```
@@ -1311,7 +1311,7 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span class="keystroke">ctrl-C
+The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
 </span>. You may or may not see the word `again!` printed after the `^C`,
 depending on where the code was in the loop when it received the halt signal.
 
