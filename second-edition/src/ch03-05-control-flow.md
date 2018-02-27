@@ -1,14 +1,14 @@
 ## Control Flow
 
-Deciding whether or not to run some code depending on if a condition is true or
-deciding to run some code repeatedly while a condition is true are basic
+Deciding whether or not to run some code depending on if a condition is true
+and deciding to run some code repeatedly while a condition is true are basic
 building blocks in most programming languages. The most common constructs that
 let you control the flow of execution of Rust code are `if` expressions and
 loops.
 
 ### `if` Expressions
 
-An `if` expression allows us to branch our code depending on conditions. We
+An `if` expression allows you to branch your code depending on conditions. You
 provide a condition and then state, “If this condition is met, run this block
 of code. If the condition is not met, do not run this block of code.”
 
@@ -38,7 +38,9 @@ condition is true is placed immediately after the condition inside curly
 brackets. Blocks of code associated with the conditions in `if` expressions are
 sometimes called *arms*, just like the arms in `match` expressions that we
 discussed in the “Comparing the Guess to the Secret Number” section of
-Chapter 2. Optionally, we can also include an `else` expression, which we chose
+Chapter 2.
+
+Optionally, we can also include an `else` expression, which we chose
 to do here, to give the program an alternative block of code to execute should
 the condition evaluate to false. If you don’t provide an `else` expression and
 the condition is false, the program will just skip the `if` block and move on
@@ -72,8 +74,7 @@ condition was false
 ```
 
 It’s also worth noting that the condition in this code *must* be a `bool`. If
-the condition isn’t a `bool`, we’ll get an error. For example, try running the
-following code:
+the condition isn’t a `bool`, we’ll get an error. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -101,9 +102,9 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-Boolean types to a Boolean, unlike
-languages such as Ruby and JavaScript. You must be explicit and always provide
+The error indicates that Rust expected a `bool` but got an integer. Unlike
+languages such as Ruby and JavaScript, Rust will not automatically try to
+convert non-Boolean types to a Boolean. You must be explicit and always provide
 `if` with a Boolean as its condition. If we want the `if` code block to run
 only when a number is not equal to `0`, for example, we can change the `if`
 expression to the following:
@@ -122,9 +123,9 @@ fn main() {
 
 Running this code will print `number was something other than zero`.
 
-#### Multiple Conditions with `else if`
+#### Handling Multiple Conditions with `else if`
 
-We can have multiple conditions by combining `if` and `else` in an `else if`
+You can have multiple conditions by combining `if` and `else` in an `else if`
 expression. For example:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -159,18 +160,18 @@ number is divisible by 3
 When this program executes, it checks each `if` expression in turn and executes
 the first body for which the condition holds true. Note that even though 6 is
 divisible by 2, we don’t see the output `number is divisible by 2`, nor do we
-see the `number is not divisible by 4, 3, or 2` text from the `else` block. The
-reason is that Rust will only execute the block for the first true condition,
-and once it finds one, it won’t even check the rest.
+see the `number is not divisible by 4, 3, or 2` text from the `else` block.
+That’s because Rust only executes the block for the first true condition, and
+once it finds one, it doesn’t even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you have more
 than one, you might want to refactor your code. Chapter 6 describes a powerful
 Rust branching construct called `match` for these cases.
 
-#### Using `if` in a `let` statement
+#### Using `if` in a `let` Statement
 
 Because `if` is an expression, we can use it on the right side of a `let`
-statement, for instance in Listing 3-2:
+statement, as in Listing 3-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -239,7 +240,7 @@ error[E0308]: if and else have incompatible types
 6 | |     } else {
 7 | |         "six"
 8 | |     };
-  | |_____^ expected integral variable, found reference
+  | |_____^ expected integral variable, found &str
   |
   = note: expected type `{integer}`
              found type `&str`
@@ -311,15 +312,15 @@ program when the user won the game by guessing the correct number.
 #### Conditional Loops with `while`
 
 It’s often useful for a program to evaluate a condition within a loop. While
-the condition is true, the loop runs. When the condition ceases to be true, you
-call `break`, stopping the loop. This loop type could be implemented using a
-combination of `loop`, `if`, `else`, and `break`; you could try that now in a
-program, if you’d like.
+the condition is true, the loop runs. When the condition ceases to be true, the
+program calls `break`, stopping the loop. This loop type could be implemented
+using a combination of `loop`, `if`, `else`, and `break`; you could try that
+now in a program, if you’d like.
 
 However, this pattern is so common that Rust has a built-in language construct
-for it, and it’s called a `while` loop. The following example uses `while`: the
-program loops three times, counting down each time. Then, after the loop, it
-prints another message and exits:
+for it, called a `while` loop. Listing 3-3 uses `while`: the program loops
+three times, counting down each time, and then, after the loop, it prints
+another message and exits.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -337,6 +338,9 @@ fn main() {
 }
 ```
 
+<span class="caption">Listing 3-3: Using a `while` loop to run code while a
+condition holds true</span>
+
 This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
 true, the code runs; otherwise, it exits the loop.
@@ -344,7 +348,7 @@ true, the code runs; otherwise, it exits the loop.
 #### Looping Through a Collection with `for`
 
 You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example, let’s look at Listing 3-3:
+such as an array. For example, let’s look at Listing 3-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -361,13 +365,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-3: Looping through each element of a collection
+<span class="caption">Listing 3-4: Looping through each element of a collection
 using a `while` loop</span>
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer true). Running this code will print out every
-element in the array:
+when `index < 5` is no longer true). Running this code will print every element
+in the array:
 
 ```text
 $ cargo run
@@ -391,7 +395,7 @@ code to perform the conditional check on every element on every iteration
 through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this code in Listing 3-4:
+for each item in a collection. A `for` loop looks like this code in Listing 3-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -405,17 +409,17 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-4: Looping through each element of a collection
+<span class="caption">Listing 3-5: Looping through each element of a collection
 using a `for` loop</span>
 
-When we run this code, we’ll see the same output as in Listing 3-3. More
+When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
-For example, in the code in Listing 3-3, if you removed an item from the `a`
+For example, in the code in Listing 3-4, if you removed an item from the `a`
 array but forgot to update the condition to `while index < 4`, the code would
-panic. Using the `for` loop, you don’t need to remember to change any other
+panic. Using the `for` loop, you wouldn’t need to remember to change any other
 code if you changed the number of values in the array.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
@@ -445,8 +449,9 @@ This code is a bit nicer, isn’t it?
 ## Summary
 
 You made it! That was a sizable chapter: you learned about variables, scalar
-and `if` expressions, and loops! If you want to practice with the concepts
-discussed in this chapter, try building programs to do the following:
+and compound data types, functions, comments, `if` expressions, and loops! If
+you want to practice with the concepts discussed in this chapter, try building
+programs to do the following:
 
 * Convert temperatures between Fahrenheit and Celsius.
 * Generate the nth Fibonacci number.
