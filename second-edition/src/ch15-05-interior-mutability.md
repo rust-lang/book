@@ -1,78 +1,78 @@
-## `RefCell<T>` and the Interior Mutability Pattern
+## `RefCell<T>`와 내부 가변성 패턴
 
-*Interior mutability* is a design pattern in Rust that allows you to mutate
-data even when there are immutable references to that data: normally, this
-action is disallowed by the borrowing rules. To do so, the pattern uses
-`unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. We haven’t yet covered unsafe code; we will in Chapter
-19. We can use types that use the interior mutability pattern when we can
-ensure that the borrowing rules will be followed at runtime, even though the
-compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
-safe API, and the outer type is still immutable.
+*내부 가변성 (interior mutability)* 은 어떤 데이터에 대한 불변 참조자가 있을
+때라도 여러분이 데이터를 변형할 수 있게 해주는 러스트의 디자인 패턴입니다: 보통 이러한
+동작은 빌림 규칙에 의해 허용되지 않습니다. 그렇게 하기 위해서, 이 패턴은 변형과 빌림을
+지배하는 러스트의 통상적인 규칙을 구부리기 위하여 데이터 구조 내에서 `unsafe (안전하지
+않은)` 코드를 사용합니다. 우리는 아직 안전하지 않은 코드를 다루지 않았습니다; 이는
+19장에서 다룰 것입니다. 우리가 런타임에 빌림 규칙을 따를 것임을 보장할 수 있을 때라면,
+심지어 컴파일러가 이를 보장하지 못하더라도 내부 가변성 패턴을 이용하는 타입을 사용할 수
+있습니다. 포함되어 있는 `unsafe` 코드는 안전한 API로 감싸져 있고, 외부 타입은
+여전히 불변입니다.
 
-Let’s explore this concept by looking at the `RefCell<T>` type that follows the
-interior mutability pattern.
+내부 가변성 패턴을 따르는 `RefCell<T>` 타입을 살펴보는 것으로 이 개념을
+탐구해 봅시다.
 
-### Enforcing Borrowing Rules at Runtime with `RefCell<T>`
+### `RefCell<T>`을 가지고 런타임에 빌림 규칙을 집행하기
 
-Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
-it holds. So, what makes `RefCell<T>` different than a type like `Box<T>`?
-Recall the borrowing rules you learned in Chapter 4:
+`Rc<T>`와는 다르게, `RefCell<T>` 타입은 가지고 있는 데이터 상에 단일 소유권을
+나타냅니다. 그렇다면, `Box<T>`와 같은 타입에 비교해 `RefCell<T>`의 다른 부분은
+무엇일까요? 여러분이 4장에서 배웠던 빌림 규칙을 상기해보세요:
 
-* At any given time, you can have *either* but not both of the following: one
-  mutable reference or any number of immutable references.
-* References must always be valid.
+* 어떠한 경우이든 간에, 여러분은 다음의 둘 다는 아니고 *둘 중 하나만* 가질 수 있습니다:
+  하나의 가변 참조자 혹은 임의 개수의 불변 참조자들을요.
+* 참조자는 항상 유효해야 합니다.
 
-With references and `Box<T>`, the borrowing rules’ invariants are enforced at
-compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
-With references, if you break these rules, you’ll get a compiler error. With
-`RefCell<T>`, if you break these rules, your program will `panic!` and exit.
+참조자와 `Box<T>`를 이용할 때, 빌림 규칙의 불변성은 컴파일 타임에 집행됩니다.
+`RefCell<T>`를 이용할 때, 이 불변성은 *런타임에* 집행됩니다. 참조자를 가지고서
+여러분이 이 규칙을 어기면 컴파일러 에러를 얻게 될 것입니다. `RefCell<T>`를 가지고서
+여러분이 이 규칙을 어기면, 여러분의 프로그램은 `panic!`을 일으키고 종료될 것입니다.
 
-The advantages of checking the borrowing rules at compile time are that errors
-will be caught sooner in the development process, and there is no impact on
-runtime performance because all the analysis is completed beforehand. For those
-reasons, checking the borrowing rules at compile time is the best choice in the
-majority of cases, which is why this is Rust’s default.
+컴파일 타임에 빌림 규칙을 검사하는 것은 개발 과정에서 에러를 더 일찍 잡을 수
+있다는 점, 그리고 이 모든 분석이 사전에 완료되기 때문에 런타임 성능에 영향이
+없다는 점에서 장점을 가집니다. 이러한 까닭에, 대부분의 경우 컴파일 타임에서
+빌림 규칙을 검사하는 것이 가장 좋은 선택이고, 이것이 러스트의 기본 설정인
+이유이기도 합니다.
 
-The advantage of checking the borrowing rules at runtime instead is that
-certain memory safe scenarios are then allowed, whereas they are disallowed by
-the compile time checks. Static analysis, like the Rust compiler, is inherently
-conservative. Some properties of code are impossible to detect by analyzing the
-code: the most famous example is the Halting Problem, which is beyond the scope
-of this book but is an interesting topic to research.
+대신 런타임에 빌림 규칙을 검사하는 것은 컴파일 타임 검사에 의해서는 허용되지
+않는, 특정한 메모리 안정성 시나리오가 허용된다는 잇점이 있습니다. 러스트
+컴파일러와 같은 정적 분석은 태생적으로 보수적입니다. 어떤 코드 속성은
+코드의 분석을 이용해서는 발견이 불가능합니다: 가장 유명한 예제는 정지 문제
+(halting problem) 인데, 이는 이 책의 범위를 벗어나지만 연구하기에
+흘미로운 주제입니다.
 
-Because some analysis is impossible, if the Rust compiler can’t be sure the
-code complies with the ownership rules, it might reject a correct program; in
-this way, it’s conservative. If Rust accepted an incorrect program, users
-wouldn’t be able to trust in the guarantees Rust makes. However, if Rust
-rejects a correct program, the programmer will be inconvenienced, but nothing
-catastrophic can occur. The `RefCell<T>` type is useful when you’re sure your
-code follows the borrowing rules, but the compiler is unable to understand and
-guarantee that.
+몇몇 분석이 불가능하기 때문에, 만일 코드가 소유권 규칙을 준수한다는 것을 러스트
+컴파일러가 확신할 수 없다면, 컴파일러는 올바를 프로그램을 거부할지도 모릅니다;
+이렇게 하여, 컴파일러는 보수적입니다. 만일 러스트가 올바르지 않은 프로그램을
+받아들이면, 사용자들은 러스트가 보장하는 것을 신뢰할 수 없을 것입니다. 하지만,
+만일 러스트가 올바른 프로그램을 거부한다면, 프로그래머는 불편해할 것이지만,
+어떠한 재앙도 일어나지 않을 수 있습니다. `RefCell<T>` 타입은 여러분의 코드가
+빌림 규칙을 따르는 것을 여러분이 확신하지만, 컴파일러는 이를 이해하고 보장할 수
+없을 경우 유용합니다.
 
-Similar to `Rc<T>`, `RefCell<T>` is only for use in single-threaded scenarios
-and will give you a compile time error if you try using it in a multithreaded
-context. We’ll talk about how to get the functionality of `RefCell<T>` in a
-multithreaded program in Chapter 16.
+`Rc<T>`와 유사하게, `RefCell<T>`은 단일 스레드 시나리오 내에서만 사용
+가능하고, 만일 여러분이 이를 다중 스레드 맥락 내에서 사용을 시도할 경우 여러분에게
+컴파일 타임 에러를 줄 것입니다. `RefCell<T>`의 기능을 다중 스레드 프로그램
+내에서 사용하는 방법에 대해서는 16장에서 이야기할 것입니다.
 
-Here is a recap of the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
+`Box<T>`, `Rc<T>`, 혹은 `RefCell<T>`을 선택하는 이유의 요점은 다음과 같습니다:
 
-* `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>`
-  have single owners.
-* `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>`
-  only allows immutable borrows checked at compile time; `RefCell<T>` allows
-  immutable or mutable borrows checked at runtime.
-* Because `RefCell<T>` allows mutable borrows checked at runtime, we can mutate
-  the value inside the `RefCell<T>` even when the `RefCell<T>` is immutable.
+* `Rc<T>`는 동일한 데이터에 대해 복수개의 소유자를 가능하게 합니다; `Box<T>`와
+  `RefCell<T>`은 단일 소유자만 갖습니다.
+* `Box<T>`는 컴파일 타임에 검사된 불변 혹은 가변 빌림을 허용합니다; `Rc<T>`는
+  오직 컴파일 타임에 검사된 불변 빌림만 허용합니다; `RefCell<T>`는 런타임에
+  검사된 불변 혹은 가변 빌림을 허용합니다.
+* `RefCell<T>`이 런타임에 검사된 가변 빌림을 허용하기 때문에, `RefCell<T>`이
+  불변일 때라도 `RefCell<T>` 내부의 값을 변경할 수 있습니다.
 
-Mutating the value inside an immutable value is the *interior mutability*
-pattern. Let’s look at a situation in which interior mutability is useful and
-examine how it’s possible.
+불변값 내부의 값을 변경하는 것을 *내부 가변성* 패턴이라고 합니다.
+내부 가변성이 유용한 경우를 살펴보고 이것이 어떻게 가능한지 조사해
+봅시다.
 
-### Interior Mutability: A Mutable Borrow to an Immutable Value
+### 내부 가변성: 불변값에 대한 가변 빌림
 
-A consequence of the borrowing rules is that when we have an immutable value,
-we can’t borrow it mutably. For example, this code won’t compile:
+빌림 규칙의 결과로 인해 우리는 불변값을 가지고 있을 때 이를 변경 가능하게
+빌릴 수 없습니다. 예를 들면, 다음 코드는 컴파일되지 않을 것입니다:
 
 ```rust,ignore
 fn main() {
@@ -81,7 +81,7 @@ fn main() {
 }
 ```
 
-When we try to compile this code, we’ll get the following error:
+이 코드의 컴파일을 시도하면, 다음과 같은 에러를 얻을 것입니다:
 
 ```text
 error[E0596]: cannot borrow immutable local variable `x` as mutable
