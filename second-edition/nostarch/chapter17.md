@@ -331,7 +331,7 @@ type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
 collections, using generics and trait bounds is preferable since the
 definitions will be monomorphized at compile time to use the concrete types.
 
-With the the method using trait objects, on the other hand, one `Screen`
+With the method using trait objects, on the other hand, one `Screen`
 instance can hold a `Vec` that contains a `Box<Button>` as well as a
 `Box<TextField>`. Let’s see how that works, and then talk about the runtime
 performance implications.
@@ -465,7 +465,7 @@ Filename: src/main.rs
 
 ```
 extern crate rust_gui;
-use rust_gui::Draw;
+use rust_gui::Screen;
 
 fn main() {
     let screen = Screen {
@@ -481,17 +481,17 @@ fn main() {
 Listing 17-10: Attempting to use a type that doesn’t implement the trait
 object’s trait
 
-We’ll get this error because `String` doesn’t implement the `Draw` trait:
+We’ll get this error because `String` doesn’t implement the `rust_gui::Draw` trait:
 
 ```
-error[E0277]: the trait bound `std::string::String: Draw` is not satisfied
+error[E0277]: the trait bound `std::string::String: rust_gui::Draw` is not satisfied
   -->
    |
  4 |             Box::new(String::from("Hi")),
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is not
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `rust_gui::Draw` is not
    implemented for `std::string::String`
    |
-   = note: required for the cast to the object type `Draw`
+   = note: required for the cast to the object type `rust_gui::Draw`
 ```
 
 This lets us know that either we’re passing something to `Screen` we didn’t
@@ -963,7 +963,7 @@ coercion will take effect on the `&` and the `Box` so that the `content` method
 will ultimately be called on the type that implements the `State` trait.
 
 That means we need to add `content` to the `State` trait definition, and that’s
-where We’ll put the logic for what content to return depending on which state
+where we’ll put the logic for what content to return depending on which state
 we have, as shown in Listing 17-18:
 
 Filename: src/lib.rs
@@ -1053,7 +1053,7 @@ and `approve` methods on `Post`. Both methods delegate to the implementation of
 the same method on the value in the `state` field of `Option`, and set the new
 value of the `state` field to the result. If we had a lot of methods on `Post`
 that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see Appendix E on macros).
+repetition (see Appendix D on macros).
 
 By implementing this pattern exactly as it’s defined for object-oriented
 languages, we’re not taking full advantage of Rust’s strengths as much as we
