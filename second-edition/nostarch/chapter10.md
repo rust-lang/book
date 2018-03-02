@@ -774,10 +774,11 @@ What we can’t do is implement external traits on external types. We can’t
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate, for
 example, because both `Display` and `Vec<T>` are defined in the standard
 library and aren’t local to our `aggregator` crate. This restriction is part of
-what’s called the *orphan rule*, so named because the parent type is not
-present. This rule ensures that other people’s code can’t break your code and
-vice versa. Without it, two crates could implement the same trait for the same
-type, and Rust wouldn’t know which implementation to use.
+a property of programs called *coherence*, and more specifically the *orphan
+rule*, so named because the parent type is not present. This rule ensures that
+other people’s code can’t break your code and vice versa. Without it, two
+crates could implement the same trait for the same type, and Rust wouldn’t know
+which implementation to use.
 
 ### Default Implementations
 
