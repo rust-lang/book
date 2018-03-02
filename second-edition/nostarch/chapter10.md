@@ -1617,11 +1617,11 @@ Listing 10-25: A struct that holds a reference, so its definition needs a
 lifetime annotation
 
 This struct has one field, `part`, that holds a string slice, which is a
-reference. Just like with generic data types, we declare the name of the
-generic lifetime parameter inside angle brackets after the name of the struct
-so that we can use the lifetime parameter in the body of the struct definition.
-This annotation means an instance of `ImportantExcerpt` can’t outlive the
-reference it holds in its `part` field.
+reference. Like with generic data types, we declare the name of the generic
+lifetime parameter inside angle brackets after the name of the struct so that
+we can use the lifetime parameter in the body of the struct definition. This
+annotation means an instance of `ImportantExcerpt` can’t outlive the reference
+it holds in its `part` field.
 
 The `main` function here creates an instance of the `ImportantExcerpt` struct
 that holds a reference to the first sentence of the `String` owned by the
