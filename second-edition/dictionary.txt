@@ -213,6 +213,7 @@ iter
 iterator's
 JavaScript
 JoinHandle
+Kay's
 kinded
 lang
 latin
