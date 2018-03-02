@@ -364,15 +364,15 @@ the trait have the following properties:
 * There are no generic type parameters.
 
 The `Self` keyword is an alias for the type we’re implementing the traits or
-methods on. Trait objects must be object safe because once you’ve implemented a
-trait object, Rust no longer know the concrete type that’s implementing that
-trait. If a trait method returns the concrete `Self` type, but a trait object
-forgets the exact type that `Self` is, there is no way the method can use the
-original concrete type. The same is true of generic type parameters that are
-filled in with concrete type parameters when the trait is used: the concrete
-types become part of the type that implements the trait. When the type is
-erased by the use of a trait object, there is no way to know what types to fill
-in the generic type parameters with.
+methods on. Trait objects must be object safe because once you’ve used a trait
+object, Rust no longer knows the concrete type that’s implementing that trait.
+If a trait method returns the concrete `Self` type, but a trait object forgets
+the exact type that `Self` is, there is no way the method can use the original
+concrete type. The same is true of generic type parameters that are filled in
+with concrete type parameters when the trait is used: the concrete types become
+part of the type that implements the trait. When the type is forgotten through
+the use of a trait object, there is no way to know what types to fill in the
+generic type parameters with.
 
 An example of a trait whose methods are not object safe is the standard
 library’s `Clone` trait. The signature for the `clone` method in the `Clone`

@@ -262,10 +262,10 @@ unpopulated fields in structs. This lets us move the `state` value out of
 `Post` rather than just borrowing it. Then we’ll set the post’s `state` value
 to the result of this operation.
 
-We need to set `state` to `None` temporarily rather than setting it directly to
-code like `self.state = self.state.request_review();` to get ownership of the
-`state` value. This ensures `Post` can’t use the old `state` value after we’ve
-transformed it into a new state.
+We need to set `state` to `None` temporarily rather than setting it directly
+with code like `self.state = self.state.request_review();` to get ownership of
+the `state` value. This ensures `Post` can’t use the old `state` value after
+we’ve transformed it into a new state.
 
 The `request_review` method on `Draft` needs to return a new, boxed instance of
 a new `PendingReview` struct, which represents the state when a post is waiting
