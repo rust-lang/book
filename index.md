@@ -1,4 +1,4 @@
-% The Rust Programming Language
+# The Rust Programming Language
 
 The current edition of "The Rust Programming Language" is the second
 edition, which you can [read here](second-edition/index.html).
