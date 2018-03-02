@@ -26,7 +26,7 @@ way. You can then combine traits with generic types to constrain a generic type
 to only those types that have a particular behavior, as opposed to just any
 type.
 
-Finally, we’ll discuss *lifetimes*, a variety of generic that gives the
+Finally, we’ll discuss *lifetimes*, a variety of generics that gives the
 compiler information about how references are related to each other. Lifetimes
 allow us to borrow values in many situations while still enabling the compiler
 to check that the references are valid.
