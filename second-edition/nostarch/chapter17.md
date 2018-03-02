@@ -957,8 +957,9 @@ move `state` out of the borrowed `&self` of the function parameter.
 We then call the `unwrap` method, which we know will never panic, because we
 know the methods on `Post` ensure that `state` will always contain a `Some`
 value when those methods are done. This is one of the cases we talked about in
-Chapter 12 when we know that a `None` value is never possible, even though the
-compiler isn’t able to understand that.
+the “Cases When You Have More Information Than the Compiler” section of Chapter
+9 when we know that a `None` value is never possible, even though the compiler
+isn’t able to understand that.
 
 At this point, when we call `content` on the `&Box<State>`, deref coercion will
 take effect on the `&` and the `Box` so the `content` method will ultimately be
