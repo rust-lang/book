@@ -110,7 +110,7 @@ let s = "hello";
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current *scope*. Listing 4-1 has
-comments annotating where the variable `s` is valid.
+comments annotating where the variable `s` is valid:
 
 ```rust
 {                      // s is not valid here, it’s not yet declared
