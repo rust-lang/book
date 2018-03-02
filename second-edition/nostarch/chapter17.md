@@ -1029,10 +1029,12 @@ The implementation using the state pattern is easy to extend to add more
 functionality. To see the simplicity of maintaining code that uses the state
 pattern, try a few of these suggestions:
 
-* Allow users to add text content only when a post is in the `Draft` state.
 * Add a `reject` method that changes the post’s state from `PendingReview` back
-to `Draft`.
+  to `Draft`.
 * Require two calls to `approve` before the state can be changed to `Published`.
+* Allow users to add text content only when a post is in the `Draft` state.
+  Hint: have the state object responsible for what might change about the
+  content, but not responsible for modifying the `Post`.
 
 One downside of the state pattern is that, because the states implement the
 transitions between states, some of the states are coupled to each other. If we
@@ -1235,7 +1237,8 @@ production.
 
 Try the tasks suggested for additional requirements that we mentioned at the
 start of this section on the `blog` crate as it is after Listing 17-20 to see
-what you think about the design of this version of the code.
+what you think about the design of this version of the code. Note that some of
+the tasks might be completed already in this design!
 
 We’ve seen that even though Rust is capable of implementing object-oriented
 design patterns, other patterns, such as encoding state into the type system,
