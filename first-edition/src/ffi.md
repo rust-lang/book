@@ -570,7 +570,7 @@ against `libc` and `libm` by default.
 In C, functions can be 'variadic', meaning they accept a variable number of arguments. This can
 be achieved in Rust by specifying `...` within the argument list of a foreign function declaration:
 
-```no_run
+```rust,no_run
 extern {
     fn foo(x: i32, ...);
 }
@@ -584,7 +584,7 @@ fn main() {
 
 Normal Rust functions can *not* be variadic:
 
-```ignore
+```rust,ignore
 // This will not compile
 
 fn foo(x: i32, ...) { }
@@ -750,7 +750,7 @@ extern "C" {
 # fn main() {}
 ```
 
-By including a private field and no constructor, 
+By including a private field and no constructor,
 we create an opaque type that we can’t instantiate outside of this module.
 An empty array is both zero-size and compatible with `#[repr(C)]`.
 But because our `Foo` and `Bar` types are
