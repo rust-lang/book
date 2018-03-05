@@ -93,42 +93,43 @@ error[E0596]: cannot borrow immutable local variable `x` as mutable
   |                  ^ cannot borrow mutably
 ```
 
-However, there are situations in which it would be useful for a value to mutate
-itself in its methods, but to other code, the value would appear immutable.
-Code outside the value’s methods would not be able to mutate the value. Using
-`RefCell<T>` is one way to get the ability to have interior mutability. But
-`RefCell<T>` doesn’t get around the borrowing rules completely: the borrow
-checker in the compiler allows this interior mutability, and the borrowing
-rules are checked at runtime instead. If we violate the rules, we’ll get a
-`panic!` instead of a compiler error.
+하지만, 값이 자신의 메소드 내부에서 변경되지만 다른 코드에서는 불변인
+것으로 보이는 것이 유용할 수 있는 경우가 있습니다. 그 값의 메소드 바깥의
+코드는 값을 변경할 수 없을 것입니다. `RefCell<T>`을 이용하는 것은
+내부 가변성의 기능을 얻는 한가지 방법입니다. 그러나 `RefCell<T>`은
+빌림 규칙을 완벽하게 피하는 것은 아닙니다: 컴파일러 내의 빌림 검사기는
+이러한 내부 가변성을 허용하고, 빌림 규칙은 대신 런타임에 검사됩니다.
+만일 이 규칙을 위반하면, 우리는 컴파일러 에러 대신 `panic!`을 얻을
+것입니다.
 
-Let’s work through a practical example where we can use `RefCell<T>` to mutate
-an immutable value and see why that is useful.
+불변 값을 변경하기 위해 `RefCell<T>`를 이용할 수 있는 실질적인 예제를
+살펴보고 이것이 왜 유용한지를 알아봅시다.
 
 #### A Use Case for Interior Mutability: Mock Objects
+#### 내부 가변성에 대한 용례: 목(mock) 객체
 
-A *test double* is the general programming concept for a type used in place of
-another type during testing. *Mock objects* are specific types of test doubles
-that record what happens during a test so we can assert that the correct
-actions took place.
+*테스트 더블 (test double)* 은 테스트하는 동안 또다른 타입을 대신하여
+사용되는 타입을 위한 일반적인 프로그래밍 개념입니다. *목 객체 (mock object)*
+는 테스트 중 어떤 일이 일어났는지 기록하여 정확한 동작이 일어났음을 단언할 수
+있도록 하는 테스트 더블의 특정한 타입입니다.
 
-Rust doesn’t have objects in the same sense as other languages have objects,
-and Rust doesn’t have mock object functionality built into the standard library
-like some other languages do. However, we can definitely create a struct that
-will serve the same purposes as a mock object.
+러스트는 다른 언어들이 객체를 가지는 것과 동일한 의미의 객체를 가지고 있지
+않고, 러스트는 몇몇 다른 언어들이 제공하는 것 같은 표준 라이브러리에 미리
+만들어진 목 객체 기능이 없습니다. 하지만, 우리는 목 객체와 동일한 목적을
+제공할 구조체를 당연히 만들 수 있습니다.
 
-Here’s the scenario we’ll test: we’ll create a library that tracks a value
-against a maximum value and sends messages based on how close to the maximum
-value the current value is. This library could be used for keeping track of a
-user’s quota for the number of API calls they’re allowed to make, for example.
+다음은 우리가 테스트할 시나리오입니다: 우리는 최대 값에 맞서 값을 추적하고
+현재 값이 최대값에 얼마나 근접한지를 기반으로 메세지를 전송하는 라이브러리를
+만들 것입니다. 이 라이브러리는 예를 들면 한 명의 유저에게 허용되고 있는
+API 호출수의 허용량을 추적하는데 사용될 수 있습니다.
 
-Our library will only provide the functionality of tracking how close to the
-maximum a value is and what the messages should be at what times. Applications
-that use our library will be expected to provide the mechanism for sending the
-messages: the application could put a message in the application, send an
-email, send a text message, or something else. The library doesn’t need to know
-that detail. All it needs is something that implements a trait we’ll provide
-called `Messenger`. Listing 15-20 shows the library code:
+우리의 라이브러리는 오직 어떤 값이 최대값에 얼마나 근접한지를 추적하고 어떤 시간에
+어떤 메세지를 보내야 할지 정하는 기능만을 제공할 것입니다. 우리의 라이브러리를 사용하는
+어플리케이션이 메세지를 전송하는 것에 대한 메카니즘을 제공할 예정입니다: 그 어플리케이션은
+메세지를 어플리케이션 내에 집어넣거나, 이메일을 보내거나, 문자 메세지를 보내거나, 혹은
+기타 다른 것을 할 수 있습니다. 라이브러리는 그런 자세한 사항을 알 필요가 없습니다. 필요한
+모든 것은 우리가 제공할 `Messenger`라는 이름의 프레잇을 구현하는 것입니다. Listing
+15-20는 라이브러리 코드를 보여줍니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
