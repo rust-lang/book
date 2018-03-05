@@ -1,10 +1,11 @@
 # Generic Types, Traits, and Lifetimes
 
-Every programming language has tools for dealing with duplication of concepts.
-In Rust, one such tool is *generics*, which we can use as abstract stand-ins
-for concrete types or other properties. When we’re writing code, generics lets
-us express their behavior or how they relate to other generics without needing
-to know what will actually be in their place.
+Every programming language has tools for dealing effectively with duplication
+of concepts. In Rust, one such tool is *generics*. Generics are abstract
+stand-ins for concrete types or other properties. When we’re writing code, we
+can express generics’ behavior or how they relate to other generics without
+knowing what will actually be in their place when compiling and running the
+code.
 
 Similar to the way a function takes parameters with unknown values to run the
 same code on multiple concrete values, functions can take parameters of some
@@ -23,7 +24,7 @@ way. You can then combine traits with generic types to constrain a generic type
 to only those types that have a particular behavior, as opposed to just any
 type.
 
-Finally, we’ll discuss *lifetimes*, a variety of generics that gives the
+Finally, we’ll discuss *lifetimes*, a variety of generics that give the
 compiler information about how references are related to each other. Lifetimes
 allow us to borrow values in many situations while still enabling the compiler
 to check that the references are valid.

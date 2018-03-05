@@ -3,11 +3,12 @@
 
 # Generic Types, Traits, and Lifetimes
 
-Every programming language has tools for dealing with duplication of concepts.
-In Rust, one such tool is *generics*, which we can use as abstract stand-ins
-for concrete types or other properties. When we’re writing code, generics lets
-us express their behavior or how they relate to other generics without needing
-to know what will actually be in their place.
+Every programming language has tools for dealing effectively with duplication
+of concepts. In Rust, one such tool is *generics*. Generics are abstract
+stand-ins for concrete types or other properties. When we’re writing code, we
+can express generics’ behavior or how they relate to other generics without
+knowing what will actually be in their place when compiling and running the
+code.
 
 Similar to the way a function takes parameters with unknown values to run the
 same code on multiple concrete values, functions can take parameters of some
@@ -26,7 +27,7 @@ way. You can then combine traits with generic types to constrain a generic type
 to only those types that have a particular behavior, as opposed to just any
 type.
 
-Finally, we’ll discuss *lifetimes*, a variety of generics that gives the
+Finally, we’ll discuss *lifetimes*, a variety of generics that give the
 compiler information about how references are related to each other. Lifetimes
 allow us to borrow values in many situations while still enabling the compiler
 to check that the references are valid.
@@ -174,8 +175,8 @@ values. How would we get rid of that duplication? Let’s find out!
 ## Generic Data Types
 
 We can use generics to create definitions for items like function signatures or
-structs that can then be used with for many different concrete data types.
-Let’s first look at how to define functions, structs, enums, and methods using
+structs that can then be used with many different concrete data types. Let’s
+first look at how to define functions, structs, enums, and methods using
 generics. Then we’ll discuss how generics affect code performance.
 
 ### In Function Definitions
@@ -313,10 +314,10 @@ talk about traits in the next section. For now, this error is saying that the
 body of `largest` won’t work for all possible types that `T` could be. Because
 we want to compare values of type `T` in the body, we can only use types whose
 values can be ordered. To enable comparisons, the standard library has the
-`std::cmp::PartialOrd` trait that you can implement on types (see Appendix D
-for more on this trait). You’ll learn how to specify that a generic type has a
-particular trait in the “Trait Bounds” section, but let’s first explore other
-ways of using generic type parameters.
+`std::cmp::PartialOrd` trait that you can implement on types (see Appendix C,
+“Derivable Traits,” for more on this trait). You’ll learn how to specify that a
+generic type has a particular trait in the “Trait Bounds” section, but let’s
+first explore other ways of using generic type parameters.
 
 ### In Struct Definitions
 
@@ -408,7 +409,7 @@ fn main() {
 Listing 10-8: A `Point<T, U>` generic over two types so that `x` and `y` may be
 values of different types
 
-Now all instances of `Point<T, U>` are allowed! You can use as many generic
+Now all the instances of `Point` shown are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few makes
 your code hard to read. When you find yourself needing lots of generic types,
 it may indicate that your code needs restructuring into smaller pieces.
@@ -770,11 +771,11 @@ because the type `Tweet` is local to our `aggregator` crate. We can also
 implement `Summary` on `Vec<T>` in our `aggregator` crate, because the
 trait `Summary` is local to our `aggregator` crate.
 
-What we can’t do is implement external traits on external types. We can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate, for
-example, because both `Display` and `Vec<T>` are defined in the standard
-library and aren’t local to our `aggregator` crate. This restriction is part of
-a property of programs called *coherence*, and more specifically the *orphan
+What we can’t do is implement external traits on external types. For example,
+we can’t implement the `Display` trait on `Vec<T>` within our `aggregator`
+crate, because both `Display` and `Vec<T>` are defined in the standard library
+and aren’t local to our `aggregator` crate. This restriction is part of a
+property of programs called *coherence*, and more specifically the *orphan
 rule*, so named because the parent type is not present. This rule ensures that
 other people’s code can’t break your code and vice versa. Without it, two
 crates could implement the same trait for the same type, and Rust wouldn’t know
@@ -906,9 +907,9 @@ pub fn notify<T: Summary>(item: T) {
 ```
 
 We place trait bounds with the declaration of the generic type parameter, after
-a colon and inside the angle brackets. Because of the trait bound on `T`, we
-can call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code
-that calls the function with any other type, like a `String` or an `i32`, won’t
+a colon and inside angle brackets. Because of the trait bound on `T`, we can
+call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code that
+calls the function with any other type, like a `String` or an `i32`, won’t
 compile, because those don’t implement `Summary`.
 
 We can specify multiple trait bounds on a generic type using the `+` syntax.
@@ -991,17 +992,17 @@ error[E0507]: cannot move out of borrowed content
   |         cannot move out of borrowed content
 ```
 
-The key line to note about this error is `cannot move out of type [T], a
-non-copy slice`. With our non-generic versions of the `largest` function, we
-were only trying to find the largest `i32` or `char`. As we discussed in the
-“Stack-Only Data: Copy” section in Chapter 4, types like `i32` and `char` that
-have a known size can be stored on the stack, so they implement the `Copy`
-trait. But when we made the `largest` function generic, it became possible that
-the `list` parameter could have types in it that don’t implement the `Copy`
-trait, which would mean we wouldn’t be able to move the value out of `list[0]`
-and into the `largest` variable, resulting in this error.
+The key line in this error is `cannot move out of type [T], a non-copy slice`.
+With our non-generic versions of the `largest` function, we were only trying to
+find the largest `i32` or `char`. As we discussed in the “Stack-Only Data:
+Copy” section in Chapter 4, types like `i32` and `char` that have a known size
+can be stored on the stack, so they implement the `Copy` trait. But when we
+made the `largest` function generic, it became possible that the `list`
+parameter could have types in it that don’t implement the `Copy` trait, which
+would mean we wouldn’t be able to move the value out of `list[0]` and into the
+`largest` variable, resulting in this error.
 
-To call this code with only those types that implement the trait `Copy`, we can
+To call this code with only those types that implement the `Copy` trait, we can
 add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
 a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into the function implement both the
@@ -1058,7 +1059,7 @@ solutions on your own!
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can conditionally implement methods only for types that implement the
 specified traits. For example, the type `Pair<T>` in Listing 10-16 always
-implements the `new` method, but `Pair<T>` only implements the `cmp_display`
+implements the `new` function, but `Pair<T>` only implements the `cmp_display`
 method if its inner type `T` implements the `PartialOrd` trait that enables
 comparison and the `Display` trait that enables printing:
 
@@ -1093,12 +1094,12 @@ impl<T: Display + PartialOrd> Pair<T> {
 Listing 10-16: Conditionally implement methods on a generic type depending on
 trait bounds
 
-We can also conditionally implement a trait for any type that implements a
-trait. Implementations of a trait on any type that satisfies the trait bounds
-are called *blanket implementations*, and are extensively used in the Rust
-standard library. For example, the standard library implements the `ToString`
-trait on any type that implements the `Display` trait. The `impl` block in the
-standard library looks similar to this code:
+We can also conditionally implement a trait for any type that implements
+another trait. Implementations of a trait on any type that satisfies the trait
+bounds are called *blanket implementations*, and are extensively used in the
+Rust standard library. For example, the standard library implements the
+`ToString` trait on any type that implements the `Display` trait. The `impl`
+block in the standard library looks similar to this code:
 
 ```
 impl<T: Display> ToString for T {
@@ -1119,7 +1120,7 @@ Blanket implementations appear in the documentation for the trait in the
 “Implementors” section.
 
 Traits and trait bounds let us write code that uses generic type parameters to
-reduce duplication, but also specify to the compiler that we want the generic
+reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 right behavior. Unlike in dynamically typed languages, where we’d get an error
@@ -1173,7 +1174,7 @@ Consider the program in Listing 10-17, with an outer scope and an inner scope:
 
 Listing 10-17: An attempt to use a reference whose value has gone out of scope
 
-> Note: this example and the next few examples declare variables without giving
+> Note: This example and the next few examples declare variables without giving
 > them an initial value, so that the variable name exists in the outer scope.
 > At first glance, this might appear to be in conflict with Rust having no null
 > values. However, if we try to use a variable before giving it a value, we’ll
@@ -1183,9 +1184,9 @@ Listing 10-17: An attempt to use a reference whose value has gone out of scope
 The outer scope declares a variable named `r` with no initial value, and the
 inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print out the value in `r`. This code
-won’t compile because the value `r` is referring to has gone out of scope
-before we try to use it. Here’s the error message:
+the inner scope ends, and we attempt to print the value in `r`. This code won’t
+compile because the value `r` is referring to has gone out of scope before we
+try to use it. Here’s the error message:
 
 ```
 error[E0597]: `x` does not live long enough
@@ -1346,7 +1347,7 @@ Lifetime annotations don’t actually change how long any of the references live
 Just like functions can accept any type when the signature specifies a generic
 type parameter, functions can accept references with any lifetime by specifying
 a generic lifetime parameter. Lifetime annotations describe the relationships
-the lifetimes of multiple references to each other without affecting the
+of the lifetimes of multiple references to each other without affecting the
 lifetimes themselves.
 
 Lifetime annotations have a slightly unusual syntax: the names of lifetime
@@ -1404,8 +1405,8 @@ function in Listing 10-20.
 
 The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
-long as the lifetime `'a`. The function signature also tells Rust that string
-slice returned from the function will also live at least as long as the
+long as the lifetime `'a`. The function signature also tells Rust that the
+string slice returned from the function will live at least as long as the
 lifetime `'a`. This is the rule we want Rust to enforce.
 
 As discussed, by specifying the lifetime parameters in this function signature,
@@ -1505,10 +1506,11 @@ values using the same lifetime parameter, `'a`.
 As humans, we can look at this code and see that `string1` is longer, and
 therefore `result` will contain a reference to `string1`. Because `string1` has
 not gone out of scope yet, a reference to `string1` will still be valid for the
-`println!`. The compiler, however, cannot. We’ve told Rust that the lifetime of
-the reference returned by the `longest` function is the same as the smaller of
-the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-24 as possibly having an invalid reference.
+`println!` statement. However, the compiler can’t see that the reference is
+valid in this case. We’ve told Rust that the lifetime of the reference returned
+by the `longest` function is the same as the smaller of the lifetimes of the
+references passed in. Therefore, the borrow checker disallows the code in
+Listing 10-24 as possibly having an invalid reference.
 
 Try designing some more experiments that vary the values and lifetimes of the
 references passed in to the `longest` function and how the returned reference
@@ -1859,11 +1861,11 @@ This is the `longest` function from Listing 10-22 that returns the longest of
 two string slices, but now with an extra parameter named `ann` of the generic
 type `T`, which may be filled in by any type that implements the `Display`
 trait as specified by the `where` clause. This extra parameter will be printed
-out before the function compares the lengths of the string slices, which is why
-the `Display` trait bound is necessary. Because lifetimes are a type of
-generic, the declarations of both the lifetime parameter `'a` and the generic
-type parameter `T` go in the same list inside the angle brackets after the
-function name.
+before the function compares the lengths of the string slices, which is why the
+`Display` trait bound is necessary. Because lifetimes are a type of generic,
+the declarations of both the lifetime parameter `'a` and the generic type
+parameter `T` go in the same list inside the angle brackets after the function
+name.
 
 ## Summary
 

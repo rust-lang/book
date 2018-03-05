@@ -1,8 +1,8 @@
 ## Generic Data Types
 
 We can use generics to create definitions for items like function signatures or
-structs that can then be used with for many different concrete data types.
-Let’s first look at how to define functions, structs, enums, and methods using
+structs that can then be used with many different concrete data types. Let’s
+first look at how to define functions, structs, enums, and methods using
 generics. Then we’ll discuss how generics affect code performance.
 
 ### In Function Definitions
@@ -142,10 +142,10 @@ talk about traits in the next section. For now, this error is saying that the
 body of `largest` won’t work for all possible types that `T` could be. Because
 we want to compare values of type `T` in the body, we can only use types whose
 values can be ordered. To enable comparisons, the standard library has the
-`std::cmp::PartialOrd` trait that you can implement on types (see Appendix D
-for more on this trait). You’ll learn how to specify that a generic type has a
-particular trait in the “Trait Bounds” section, but let’s first explore other
-ways of using generic type parameters.
+`std::cmp::PartialOrd` trait that you can implement on types (see Appendix C,
+“Derivable Traits,” for more on this trait). You’ll learn how to specify that a
+generic type has a particular trait in the “Trait Bounds” section, but let’s
+first explore other ways of using generic type parameters.
 
 ### In Struct Definitions
 
@@ -238,10 +238,10 @@ fn main() {
 <span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
 that `x` and `y` may be values of different types</span>
 
-Now all instances of `Point<T, U>` are allowed! You can use as many generic type
-parameters in a definition as you want, but using more than a few makes your
-code hard to read. When you find yourself needing lots of generic types, it may
-indicate that your code needs restructuring into smaller pieces.
+Now all the instances of `Point` shown are allowed! You can use as many generic
+type parameters in a definition as you want, but using more than a few makes
+your code hard to read. When you find yourself needing lots of generic types,
+it may indicate that your code needs restructuring into smaller pieces.
 
 ### In Enum Definitions
 

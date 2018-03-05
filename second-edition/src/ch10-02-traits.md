@@ -145,11 +145,11 @@ because the type `Tweet` is local to our `aggregator` crate. We can also
 implement `Summary` on `Vec<T>` in our `aggregator` crate, because the
 trait `Summary` is local to our `aggregator` crate.
 
-What we can’t do is implement external traits on external types. We can’t
-implement the `Display` trait on `Vec<T>` within our `aggregator` crate, for
-example, because both `Display` and `Vec<T>` are defined in the standard
-library and aren’t local to our `aggregator` crate. This restriction is part of
-a property of programs called *coherence*, and more specifically the *orphan
+What we can’t do is implement external traits on external types. For example,
+we can’t implement the `Display` trait on `Vec<T>` within our `aggregator`
+crate, because both `Display` and `Vec<T>` are defined in the standard library
+and aren’t local to our `aggregator` crate. This restriction is part of a
+property of programs called *coherence*, and more specifically the *orphan
 rule*, so named because the parent type is not present. This rule ensures that
 other people’s code can’t break your code and vice versa. Without it, two
 crates could implement the same trait for the same type, and Rust wouldn’t know
@@ -281,9 +281,9 @@ pub fn notify<T: Summary>(item: T) {
 ```
 
 We place trait bounds with the declaration of the generic type parameter, after
-a colon and inside the angle brackets. Because of the trait bound on `T`, we
-can call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code
-that calls the function with any other type, like a `String` or an `i32`, won’t
+a colon and inside angle brackets. Because of the trait bound on `T`, we can
+call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code that
+calls the function with any other type, like a `String` or an `i32`, won’t
 compile, because those don’t implement `Summary`.
 
 We can specify multiple trait bounds on a generic type using the `+` syntax.
@@ -366,17 +366,17 @@ error[E0507]: cannot move out of borrowed content
   |         cannot move out of borrowed content
 ```
 
-The key line to note about this error is `cannot move out of type [T], a
-non-copy slice`. With our non-generic versions of the `largest` function, we
-were only trying to find the largest `i32` or `char`. As we discussed in the
-“Stack-Only Data: Copy” section in Chapter 4, types like `i32` and `char` that
-have a known size can be stored on the stack, so they implement the `Copy`
-trait. But when we made the `largest` function generic, it became possible that
-the `list` parameter could have types in it that don’t implement the `Copy`
-trait, which would mean we wouldn’t be able to move the value out of `list[0]`
-and into the `largest` variable, resulting in this error.
+The key line in this error is `cannot move out of type [T], a non-copy slice`.
+With our non-generic versions of the `largest` function, we were only trying to
+find the largest `i32` or `char`. As we discussed in the “Stack-Only Data:
+Copy” section in Chapter 4, types like `i32` and `char` that have a known size
+can be stored on the stack, so they implement the `Copy` trait. But when we
+made the `largest` function generic, it became possible that the `list`
+parameter could have types in it that don’t implement the `Copy` trait, which
+would mean we wouldn’t be able to move the value out of `list[0]` and into the
+`largest` variable, resulting in this error.
 
-To call this code with only those types that implement the trait `Copy`, we can
+To call this code with only those types that implement the `Copy` trait, we can
 add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
 a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into the function implement both the
@@ -434,7 +434,7 @@ solutions on your own!
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can conditionally implement methods only for types that implement the
 specified traits. For example, the type `Pair<T>` in Listing 10-16 always
-implements the `new` method, but `Pair<T>` only implements the `cmp_display`
+implements the `new` function, but `Pair<T>` only implements the `cmp_display`
 method if its inner type `T` implements the `PartialOrd` trait that enables
 comparison and the `Display` trait that enables printing:
 
@@ -469,12 +469,12 @@ impl<T: Display + PartialOrd> Pair<T> {
 <span class="caption">Listing 10-16: Conditionally implement methods on a
 generic type depending on trait bounds</span>
 
-We can also conditionally implement a trait for any type that implements a
-trait. Implementations of a trait on any type that satisfies the trait bounds
-are called *blanket implementations*, and are extensively used in the Rust
-standard library. For example, the standard library implements the `ToString`
-trait on any type that implements the `Display` trait. The `impl` block in the
-standard library looks similar to this code:
+We can also conditionally implement a trait for any type that implements
+another trait. Implementations of a trait on any type that satisfies the trait
+bounds are called *blanket implementations*, and are extensively used in the
+Rust standard library. For example, the standard library implements the
+`ToString` trait on any type that implements the `Display` trait. The `impl`
+block in the standard library looks similar to this code:
 
 ```rust,ignore
 impl<T: Display> ToString for T {
@@ -495,7 +495,7 @@ Blanket implementations appear in the documentation for the trait in the
 “Implementors” section.
 
 Traits and trait bounds let us write code that uses generic type parameters to
-reduce duplication, but also specify to the compiler that we want the generic
+reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 right behavior. Unlike in dynamically typed languages, where we’d get an error

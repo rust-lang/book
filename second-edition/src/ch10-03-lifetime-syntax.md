@@ -37,7 +37,7 @@ Consider the program in Listing 10-17, with an outer scope and an inner scope:
 <span class="caption">Listing 10-17: An attempt to use a reference whose value
 has gone out of scope</span>
 
-> Note: this example and the next few examples declare variables without giving
+> Note: This example and the next few examples declare variables without giving
 > them an initial value, so that the variable name exists in the outer scope.
 > At first glance, this might appear to be in conflict with Rust having no null
 > values. However, if we try to use a variable before giving it a value, we’ll
@@ -47,9 +47,9 @@ has gone out of scope</span>
 The outer scope declares a variable named `r` with no initial value, and the
 inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print out the value in `r`. This code
-won’t compile because the value `r` is referring to has gone out of scope
-before we try to use it. Here’s the error message:
+the inner scope ends, and we attempt to print the value in `r`. This code won’t
+compile because the value `r` is referring to has gone out of scope before we
+try to use it. Here’s the error message:
 
 ```text
 error[E0597]: `x` does not live long enough
@@ -211,7 +211,7 @@ Lifetime annotations don’t actually change how long any of the references live
 Just like functions can accept any type when the signature specifies a generic
 type parameter, functions can accept references with any lifetime by specifying
 a generic lifetime parameter. Lifetime annotations describe the relationships
-the lifetimes of multiple references to each other without affecting the
+of the lifetimes of multiple references to each other without affecting the
 lifetimes themselves.
 
 Lifetime annotations have a slightly unusual syntax: the names of lifetime
@@ -270,8 +270,8 @@ function in Listing 10-20.
 
 The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
-long as the lifetime `'a`. The function signature also tells Rust that string
-slice returned from the function will also live at least as long as the
+long as the lifetime `'a`. The function signature also tells Rust that the
+string slice returned from the function will live at least as long as the
 lifetime `'a`. This is the rule we want Rust to enforce.
 
 As discussed, by specifying the lifetime parameters in this function signature,
@@ -379,10 +379,11 @@ values using the same lifetime parameter, `'a`.
 As humans, we can look at this code and see that `string1` is longer, and
 therefore `result` will contain a reference to `string1`. Because `string1` has
 not gone out of scope yet, a reference to `string1` will still be valid for the
-`println!`. The compiler, however, cannot. We’ve told Rust that the lifetime of
-the reference returned by the `longest` function is the same as the smaller of
-the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-24 as possibly having an invalid reference.
+`println!` statement. However, the compiler can’t see that the reference is
+valid in this case. We’ve told Rust that the lifetime of the reference returned
+by the `longest` function is the same as the smaller of the lifetimes of the
+references passed in. Therefore, the borrow checker disallows the code in
+Listing 10-24 as possibly having an invalid reference.
 
 Try designing some more experiments that vary the values and lifetimes of the
 references passed in to the `longest` function and how the returned reference
@@ -589,7 +590,7 @@ methods much nicer.
 
 Let’s pretend we’re the compiler and apply these rules to figure out what the
 lifetimes of the references in the signature of the `first_word` function in
-Listing 10-27 are. The signature starts without any lifetimes associated with
+Listing 10-26 are. The signature starts without any lifetimes associated with
 the references:
 
 ```rust,ignore
@@ -741,11 +742,11 @@ This is the `longest` function from Listing 10-22 that returns the longest of
 two string slices, but now with an extra parameter named `ann` of the generic
 type `T`, which may be filled in by any type that implements the `Display`
 trait as specified by the `where` clause. This extra parameter will be printed
-out before the function compares the lengths of the string slices, which is why
-the `Display` trait bound is necessary. Because lifetimes are a type of
-generic, the declarations of both the lifetime parameter `'a` and the generic
-type parameter `T` go in the same list inside the angle brackets after the
-function name.
+before the function compares the lengths of the string slices, which is why the
+`Display` trait bound is necessary. Because lifetimes are a type of generic,
+the declarations of both the lifetime parameter `'a` and the generic type
+parameter `T` go in the same list inside the angle brackets after the function
+name.
 
 ## Summary
 
