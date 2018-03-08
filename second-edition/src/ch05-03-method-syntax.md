@@ -43,20 +43,20 @@ fn main() {
 `Rectangle` struct</span>
 
 To define the function within the context of `Rectangle`, we start an `impl`
-(*implementation*) block. Then we move the `area` function within the `impl`
+(implementation) block. Then we move the `area` function within the `impl`
 curly brackets and change the first (and in this case, only) parameter to be
-`self` in the signature and everywhere within the body. In `main` where we
+`self` in the signature and everywhere within the body. In `main`, where we
 called the `area` function and passed `rect1` as an argument, we can instead
 use *method syntax* to call the `area` method on our `Rectangle` instance.
 The method syntax goes after an instance: we add a dot followed by the method
 name, parentheses, and any arguments.
 
 In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`
-because Rust knows the type of `self` is `Rectangle` due to this method being
+because Rust knows the type of `self` is `Rectangle` due to this method’s being
 inside the `impl Rectangle` context. Note that we still need to use the `&`
-before `self`, just like we did in `&Rectangle`. Methods can take ownership of
+before `self`, just as we did in `&Rectangle`. Methods can take ownership of
 `self`, borrow `self` immutably as we’ve done here, or borrow `self` mutably,
-just like any other parameter.
+just as they can any other parameter.
 
 We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
 function version: we don’t want to take ownership, and we just want to read the
@@ -64,7 +64,7 @@ data in the struct, not write to it. If we wanted to change the instance that
 we’ve called the method on as part of what the method does, we’d use `&mut
 self` as the first parameter. Having a method that takes ownership of the
 instance by using just `self` as the first parameter is rare; this technique is
-usually used when the method transforms `self` into something else and we want
+usually used when the method transforms `self` into something else and you want
 to prevent the caller from using the original instance after the transformation.
 
 The main benefit of using methods instead of functions, in addition to using
@@ -76,10 +76,10 @@ provide.
 
 > ### Where’s the `->` Operator?
 >
-> In languages like C++, two different operators are used for calling methods:
-> you use `.` if you’re calling a method on the object directly and `->` if
-> you’re calling the method on a pointer to the object and need to dereference
-> the pointer first. In other words, if `object` is a pointer,
+> In languages such as C++, two different operators are used for calling
+> methods: you use `.` if you’re calling a method on the object directly and
+> `->` if you’re calling the method on a pointer to the object and need to
+> dereference the pointer first. In other words, if `object` is a pointer,
 > `object->something()` is similar to `(*object).something()`.
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
@@ -140,12 +140,12 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-14: Demonstration of using the as-yet-unwritten
-`can_hold` method</span>
+<span class="caption">Listing 5-14: Using the as-yet-unwritten `can_hold`
+method</span>
 
 And the expected output would look like the following, because both dimensions
-of `rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider
-than `rect1`:
+of `rect2` are smaller than the dimensions of `rect1` but `rect3` is wider than
+`rect1`:
 
 ```text
 Can rect1 hold rect2? true
@@ -225,10 +225,10 @@ impl Rectangle {
 }
 ```
 
-To call this associated function, we use the `::` syntax with the struct name,
-like `let sq = Rectangle::square(3);`, for example. This function is
-namespaced by the struct: the `::` syntax is used for both associated functions
-and namespaces created by modules, which we’ll discuss in Chapter 7.
+To call this associated function, we use the `::` syntax with the struct name;
+`let sq = Rectangle::square(3);` is an example. This function is namespaced by
+the struct: the `::` syntax is used for both associated functions and
+namespaces created by modules. We’ll discuss modules in Chapter 7.
 
 ### Multiple `impl` Blocks
 
@@ -260,17 +260,17 @@ impl Rectangle {
 blocks</span>
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
-but it’s valid syntax. We will see a case when multiple `impl` blocks are useful
-in Chapter 10 when we discuss generic types and traits.
+but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
+useful in Chapter 10 where we discuss generic types and traits.
 
 ## Summary
 
-Structs let us create custom types that are meaningful for our domain. By using
-structs, we can keep associated pieces of data connected to each other and name
-each piece to make our code clear. Methods let us specify the behavior that
-instances of our structs have, and associated functions let us namespace
-functionality that is particular to our struct without having an instance
-available.
+Structs let you create custom types that are meaningful for your domain. By
+using structs, you can keep associated pieces of data connected to each other
+and name each piece to make your code clear. Methods let you specify the
+behavior that instances of your structs have, and associated functions let you
+namespace functionality that is particular to your struct without having an
+instance available.
 
-But structs aren’t the only way we can create custom types: let’s turn to
-Rust’s enum feature to add another tool to our toolbox.
+But structs aren’t the only way you can create custom types: let’s turn to
+Rust’s enum feature to add another tool to your toolbox.
