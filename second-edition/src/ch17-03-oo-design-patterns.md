@@ -259,8 +259,8 @@ of the state value. This is where the `Option` in the `state` field of `Post`
 comes in: we call the `take` method to take the `Some` value out of the `state`
 field and leave a `None` in its place, because Rust doesn’t let us have
 unpopulated fields in structs. This lets us move the `state` value out of
-`Post` rather than just borrowing it. Then we’ll set the post’s `state` value
-to the result of this operation.
+`Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
+result of this operation.
 
 We need to set `state` to `None` temporarily rather than setting it directly
 with code like `self.state = self.state.request_review();` to get ownership of
