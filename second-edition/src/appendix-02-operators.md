@@ -45,12 +45,12 @@ overload that operator is listed.
 * `<<` (`expr << expr`): left-shift. Overloadable (`Shl`).
 * `<<=` (`var <<= expr`): left-shift and assignment. Overloadable (`ShlAssign`).
 * `<` (`expr < expr`): less-than comparison. Overloadable (`PartialOrd`).
-* `<=` (`var <= expr`): less-than or equal-to comparison. Overloadable (`PartialOrd`).
+* `<=` (`expr <= expr`): less-than or equal-to comparison. Overloadable (`PartialOrd`).
 * `=` (`var = expr`, `ident = type`): assignment/equivalence.
-* `==` (`var == expr`): equality comparison. Overloadable (`PartialEq`).
+* `==` (`expr == expr`): equality comparison. Overloadable (`PartialEq`).
 * `=>` (`pat => expr`): part of match arm syntax.
 * `>` (`expr > expr`): greater-than comparison. Overloadable (`PartialOrd`).
-* `>=` (`var >= expr`): greater-than or equal-to comparison. Overloadable (`PartialOrd`).
+* `>=` (`expr >= expr`): greater-than or equal-to comparison. Overloadable (`PartialOrd`).
 * `>>` (`expr >> expr`): right-shift. Overloadable (`Shr`).
 * `>>=` (`var >>= expr`): right-shift and assignment. Overloadable (`ShrAssign`).
 * `@` (`ident @ pat`): pattern binding.

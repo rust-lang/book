@@ -414,7 +414,6 @@ substring
 subteams
 subtree
 subtyping
-Summarizable
 supertrait
 supertraits
 TcpListener
