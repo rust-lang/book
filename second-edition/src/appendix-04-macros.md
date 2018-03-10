@@ -465,8 +465,8 @@ if not, you can specify them as `path` dependencies as follows:
 
 ```toml
 [dependencies]
-hello_world = { path = "../hello-world" }
-hello_world_derive = { path = "../hello-world/hello-world-derive" }
+hello-world = { path = "../hello-world" }
+hello-world-derive = { path = "../hello-world/hello-world-derive" }
 ```
 
 Put the code from Listing A4-1 into *src/main.rs*, and executing `cargo run`
