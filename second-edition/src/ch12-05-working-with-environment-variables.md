@@ -283,7 +283,7 @@ If you’re using PowerShell, you will need to set the environment variable and
 run the program in two commands rather than one:
 
 ```text
-$ $env.CASE_INSENSITIVE=1
+$ $env:CASE_INSENSITIVE=1
 $ cargo run to poem.txt
 ```
 
