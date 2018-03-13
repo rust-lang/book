@@ -6,8 +6,8 @@ refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the width and height of a rectangle specified in pixels and calculate the area
-of the rectangle. Listing 5-8 shows a short program with one way of doing just
-that in our project’s *src/main.rs*:
+of the rectangle. Listing 5-8 shows a short program with one way of doing
+exactly that in our project’s *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
