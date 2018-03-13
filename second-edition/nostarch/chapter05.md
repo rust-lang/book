@@ -661,10 +661,10 @@ provide.
 
 > ### Where’s the `->` Operator?
 >
-> In languages such as C++, two different operators are used for calling
-> methods: you use `.` if you’re calling a method on the object directly and
-> `->` if you’re calling the method on a pointer to the object and need to
-> dereference the pointer first. In other words, if `object` is a pointer,
+> In C and C++, two different operators are used for calling methods: you use
+> `.` if you’re calling a method on the object directly and `->` if you’re
+> calling the method on a pointer to the object and need to dereference the
+> pointer first. In other words, if `object` is a pointer,
 > `object->something()` is similar to `(*object).something()`.
 >
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
