@@ -15,9 +15,9 @@ through each pattern in a `match`, and at the first pattern the value “fits,�
 the value falls into the associated code block to be used during execution.
 
 Because we just mentioned coins, let’s use them as an example using `match`! We
-can write a function that can take an unknown US coin and, in a similar way as
-the counting machine, determine which coin it is and return its value in cents,
-as shown here in Listing 6-3:
+can write a function that can take an unknown United States coin and, in a
+similar way as the counting machine, determine which coin it is and return its
+value in cents, as shown here in Listing 6-3:
 
 ```rust
 enum Coin {
