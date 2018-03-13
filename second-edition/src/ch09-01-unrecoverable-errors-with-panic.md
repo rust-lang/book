@@ -3,19 +3,18 @@
 Sometimes, bad things happen in your code, and there’s nothing you can do about
 it. In these cases, Rust has the `panic!` macro. When the `panic!` macro
 executes, your program will print a failure message, unwind and clean up the
-stack, and then quit. The most common situation this occurs in is when a bug of
-some kind has been detected, and it’s not clear to the programmer how to handle
-the error.
+stack, and then quit. This most commonly occurs when a bug of some kind has
+been detected and it’s not clear to the programmer how to handle the error.
 
-> ### Unwinding the Stack or Aborting in Response to a `panic!`
+> ### Unwinding the Stack or Aborting in Response to a Panic
 >
-> By default, when a `panic!` occurs, the program starts *unwinding*, which
+> By default, when a panic occurs, the program starts *unwinding*, which
 > means Rust walks back up the stack and cleans up the data from each function
 > it encounters. But this walking back and cleanup is a lot of work. The
 > alternative is to immediately *abort*, which ends the program without
 > cleaning up. Memory that the program was using will then need to be cleaned
 > up by the operating system. If in your project you need to make the resulting
-> binary as small as possible, you can switch from unwinding to aborting on
+> binary as small as possible, you can switch from unwinding to aborting upon a
 > panic by adding `panic = 'abort'` to the appropriate `[profile]` sections in
 > your *Cargo.toml* file. For example, if you want to abort on panic in release
 > mode, add this:
@@ -53,12 +52,12 @@ line, fourth character of our *src/main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that
 line, we see the `panic!` macro call. In other cases, the `panic!` call might
-be in code that our code calls. The filename and line number reported by the
-error message will be someone else’s code where the `panic!` macro is called,
-not the line of our code that eventually led to the `panic!` call. We can use
-the backtrace of the functions the `panic!` call came from to figure out the
-part of our code that is causing the problem. We’ll discuss what a backtrace is
-in more detail next.
+be in code that our code calls, and the filename and line number reported by
+the error message will be someone else’s code where the `panic!` macro is
+called, not the line of our code that eventually led to the `panic!` call. We
+can use the backtrace of the functions the `panic!` call came from to figure
+out the part of our code that is causing the problem. We’ll discuss what a
+backtrace is in more detail next.
 
 ### Using a `panic!` Backtrace
 
@@ -106,7 +105,6 @@ $ cargo run
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
 99', /checkout/src/liballoc/vec.rs:1555:10
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
 This error points at a file we didn’t write, *vec.rs*. That’s the
@@ -117,12 +115,13 @@ actually happening.
 The next note line tells us that we can set the `RUST_BACKTRACE` environment
 variable to get a backtrace of exactly what happened to cause the error. A
 *backtrace* is a list of all the functions that have been called to get to this
-point. Backtraces in Rust work like they do in other languages: the key to
+point. Backtraces in Rust work as they do in other languages: the key to
 reading the backtrace is to start from the top and read until you see files you
 wrote. That’s the spot where the problem originated. The lines above the lines
 mentioning your files are code that your code called; the lines below are code
 that called your code. These lines might include core Rust code, standard
-library code, or crates that you’re using. Let’s try getting a backtrace:
+library code, or crates that you’re using. Let’s try getting a backtrace by
+setting the `RUST_BACKTRACE` environment variable to any value except 0.
 Listing 9-2 shows output similar to what you’ll see:
 
 ```text
@@ -173,20 +172,20 @@ stack backtrace:
 That’s a lot of output! The exact output you see might be different depending
 on your operating system and Rust version. In order to get backtraces with this
 information, debug symbols must be enabled. Debug symbols are enabled by
-default when using cargo build or cargo run without the --release flag, as we
-have here.
+default when using `cargo build` or `cargo run` without the `--release` flag,
+as we have here.
 
 In the output in Listing 9-2, line 11 of the backtrace points to the line in
-our project that’s causing the problem: *src/main.rs* in line 4. If we don’t
+our project that’s causing the problem: line 4 of *src/main.rs*. If we don’t
 want our program to panic, the location pointed to by the first line mentioning
-a file we wrote is where we should start investigating to figure out how we got
-to this location with values that caused the panic. In Listing 9-1 where we
-deliberately wrote code that would panic in order to demonstrate how to use
+a file we wrote is where we should start investigating. In Listing 9-1, where
+we deliberately wrote code that would panic in order to demonstrate how to use
 backtraces, the way to fix the panic is to not request an element at index 99
-from a vector that only contains three items. When your code panics in the
-future, you’ll need to figure out what action the code is taking with what
-values that causes the panic and what the code should do instead.
+from a vector that only contains 3 items. When your code panics in the future,
+you’ll need to figure out what action the code is taking with what values to
+cause the panic and what the code should do instead.
 
 We’ll come back to `panic!` and when we should and should not use `panic!` to
-handle error conditions later in the chapter. Next, we’ll look at how to
-recover from an error using `Result`.
+handle error conditions in the “To `panic!` or Not to `panic!`” section later
+in this chapter. Next, we’ll look at how to recover from an error using
+`Result`.
