@@ -9,7 +9,7 @@ For resources in languages other than English. Most are still in progress; see
 - [Português](https://github.com/nunojesus/rust-book-pt-pt) (PT)
 - [Tiếng việt](https://github.com/hngnaig/rust-lang-book/tree/vi-VN)
 - [简体中文](http://www.broadview.com.cn/article/144), [alternate](https://github.com/KaiserY/trpl-zh-cn)
-- [українська мова](https://github.com/pavloslav/rust-book-uk-ua)
+- [Українська](https://github.com/pavloslav/rust-book-uk-ua)
 - [Español](https://github.com/thecodix/book)
 - [Italiano](https://github.com/CodelessFuture/trpl2-it)
 - [Русский](https://github.com/iDeBugger/rust-book-ru)
