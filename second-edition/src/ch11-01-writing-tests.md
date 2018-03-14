@@ -47,6 +47,7 @@ Listing 11-1:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 #[cfg(test)]
 mod tests {
     #[test]
@@ -124,6 +125,7 @@ so:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 #[cfg(test)]
 mod tests {
     #[test]
@@ -153,6 +155,7 @@ which is to call the `panic!` macro. Enter the new test, `another`, so your
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 #[cfg(test)]
 mod tests {
     #[test]
@@ -228,6 +231,7 @@ method, which are repeated here in Listing 11-5. Let’s put this code in the
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 #[derive(Debug)]
 pub struct Rectangle {
     length: u32,
@@ -253,6 +257,7 @@ has a length of 5 and a width of 1:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -295,6 +300,7 @@ rectangle cannot hold a larger rectangle:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -332,6 +338,7 @@ method by replacing the greater-than sign with a less-than sign when it
 compares the lengths:
 
 ```rust
+# fn main() {}
 # #[derive(Debug)]
 # pub struct Rectangle {
 #     length: u32,
@@ -390,6 +397,7 @@ parameter and returns the result. Then we test this function using the
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 pub fn add_two(a: i32) -> i32 {
     a + 2
 }
@@ -426,6 +434,7 @@ uses `assert_eq!` fails. Change the implementation of the `add_two` function to
 instead add `3`:
 
 ```rust
+# fn main() {}
 pub fn add_two(a: i32) -> i32 {
     a + 3
 }
@@ -505,6 +514,7 @@ want to test that the name we pass into the function appears in the output:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 pub fn greeting(name: &str) -> String {
     format!("Hello {}!", name)
 }
@@ -532,6 +542,7 @@ Let’s introduce a bug into this code by changing `greeting` to not include
 `name` to see what this test failure looks like:
 
 ```rust
+# fn main() {}
 pub fn greeting(name: &str) -> String {
     String::from("Hello!")
 }
@@ -603,6 +614,7 @@ happen when we expect:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 pub struct Guess {
     value: u32,
 }
@@ -649,6 +661,7 @@ Looks good! Now let’s introduce a bug in our code by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
 ```rust
+# fn main() {}
 # pub struct Guess {
 #     value: u32,
 # }
@@ -698,6 +711,7 @@ different messages depending on whether the value was too small or too large:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 # pub struct Guess {
 #     value: u32,
 # }
