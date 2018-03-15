@@ -16,21 +16,21 @@ library are doing what you expect them to separately and together.
 
 The purpose of unit tests is to test each unit of code in isolation from the
 rest of the code to quickly pinpoint where code is and isn’t working as
-expected. We put unit tests in the *src* directory in each file with the code
-that they’re testing. The convention is that we create a module named `tests`
-in each file to contain the test functions, and we annotate the module with
+expected. You’ll put unit tests in the *src* directory in each file with the
+code that they’re testing. The convention is to create a module named `tests`
+in each file to contain the test functions and to annotate the module with
 `cfg(test)`.
 
 #### The Tests Module and `#[cfg(test)]`
 
 The `#[cfg(test)]` annotation on the tests module tells Rust to compile and run
-the test code only when we run `cargo test`, but not when we run `cargo build`.
-This saves compile time when we only want to build the library and saves space
+the test code only when you run `cargo test`, not when you run `cargo build`.
+This saves compile time when you only want to build the library and saves space
 in the resulting compiled artifact because the tests are not included. You’ll
 see that because integration tests go in a different directory, they don’t need
 the `#[cfg(test)]` annotation. However, because unit tests go in the same files
-as the code, we use `#[cfg(test)]` to specify that they shouldn’t be included
-in the compiled result.
+as the code, you’ll use `#[cfg(test)]` to specify that they shouldn’t be
+included in the compiled result.
 
 Recall that when we generated the new `adder` project in the first section of
 this chapter, Cargo generated this code for us:
@@ -89,7 +89,7 @@ mod tests {
 <span class="caption">Listing 11-12: Testing a private function</span>
 
 Note that the `internal_adder` function is not marked as `pub`, but because
-tests are just Rust code and the `tests` module is just another module, we can
+tests are just Rust code and the `tests` module is just another module, you can
 import and call `internal_adder` in a test just fine. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
@@ -99,7 +99,7 @@ you to do so.
 In Rust, integration tests are entirely external to your library. They use your
 library in the same way any other code would, which means they can only call
 functions that are part of your library’s public API. Their purpose is to test
-that many parts of your library work together correctly. Units of code that
+whether many parts of your library work together correctly. Units of code that
 work correctly on their own could have problems when integrated, so test
 coverage of the integrated code is important as well. To create integration
 tests, you first need a *tests* directory.
@@ -173,9 +173,9 @@ your output will be different). Next, there is a line for each test function in
 that integration test and a summary line for the results of the integration
 test just before the `Doc-tests adder` section starts.
 
-Recall that adding more unit test functions in any *src* file adds more test
-result lines to the unit tests section. Adding more test functions to the
-integration test file we created adds more lines to that file’s section. Each
+Similarly to how adding more unit test functions adds more result lines to the
+unit tests section, adding more test functions to the integration test file
+adds more result lines to this integration test file’s section. Each
 integration test file has its own section, so if we add more files in the
 *tests* directory, there will be more integration test sections.
 
@@ -207,7 +207,7 @@ file in the *tests* directory is compiled as its own separate crate.
 Treating each integration test file as its own crate is useful to create
 separate scopes that are more like the way end users will be using your crate.
 However, this means files in the *tests* directory don’t share the same
-behavior as files in *src* do, which you learned in Chapter 7 regarding how to
+behavior as files in *src* do, as you learned in Chapter 7 regarding how to
 separate code into modules and files.
 
 The different behavior of files in the *tests* directory is most noticeable
@@ -227,7 +227,7 @@ pub fn setup() {
 ```
 
 When we run the tests again, we’ll see a new section in the test output for the
-*common.rs* file, even though this file doesn’t contain any test functions, nor
+*common.rs* file, even though this file doesn’t contain any test functions nor
 did we call the `setup` function from anywhere:
 
 ```text
@@ -263,13 +263,13 @@ integration test files.
 To avoid having `common` appear in the test output, instead of creating
 *tests/common.rs*, we’ll create *tests/common/mod.rs*. In the “Rules of Module
 Filesystems” section of Chapter 7, we used the naming convention
-*module_name/mod.rs* for files of modules that have submodules, and we don’t
-have submodules for `common` here, but naming the file this way tells Rust not
-to treat the `common` module as an integration test file. When we move the
-`setup` function code into *tests/common/mod.rs* and delete the
-*tests/common.rs* file, the section in the test output will no longer appear.
-Files in subdirectories of the *tests* directory don’t get compiled as separate
-crates or have sections in the test output.
+*module_name/mod.rs* for files of modules that have submodules. We don’t have
+submodules for `common` here, but naming the file this way tells Rust not to
+treat the `common` module as an integration test file. When we move the `setup`
+function code into *tests/common/mod.rs* and delete the *tests/common.rs* file,
+the section in the test output will no longer appear. Files in subdirectories
+of the *tests* directory don’t get compiled as separate crates or have sections
+in the test output.
 
 After we’ve created *tests/common/mod.rs*, we can use it from any of the
 integration test files as a module. Here’s an example of calling the `setup`
@@ -312,14 +312,13 @@ need to be tested.
 ## Summary
 
 Rust’s testing features provide a way to specify how code should function to
-ensure it continues to work as we expect even as we make changes. Unit tests
+ensure it continues to work as you expect, even as you make changes. Unit tests
 exercise different parts of a library separately and can test private
 implementation details. Integration tests check that many parts of the library
 work together correctly, and they use the library’s public API to test the code
 in the same way external code will use it. Even though Rust’s type system and
 ownership rules help prevent some kinds of bugs, tests are still important to
-help reduce logic bugs having to do with how your code is expected to behave.
+reduce logic bugs having to do with how your code is expected to behave.
 
 Let’s combine the knowledge you learned in this chapter and in previous
-chapters and work on a project in the next chapter!
-
+chapters to work on a project!

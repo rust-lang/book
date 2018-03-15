@@ -4,9 +4,9 @@ Tests are Rust functions that verify that the non-test code is functioning in
 the expected manner. The bodies of test functions typically perform these three
 actions:
 
-1. Set up any needed data or state
-2. Run the code we want to test
-3. Assert the results are what we expect
+1. Set up any needed data or state.
+2. Run the code you want to test.
+3. Assert the results are what you expect.
 
 Let’s look at the features Rust provides specifically for writing tests that
 take these actions, which include the `test` attribute, a few macros, and the
@@ -17,16 +17,17 @@ take these actions, which include the `test` attribute, a few macros, and the
 At its simplest, a test in Rust is a function that’s annotated with the `test`
 attribute. Attributes are metadata about pieces of Rust code; one example is
 the `derive` attribute we used with structs in Chapter 5. To change a function
-into a test function, we add `#[test]` on the line before `fn`. When we run our
+into a test function, add `#[test]` on the line before `fn`. When you run your
 tests with the `cargo test` command, Rust builds a test runner binary that runs
 the functions annotated with the `test` attribute and reports on whether each
 test function passes or fails.
 
 In Chapter 7, we saw that when we make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This
-module helps us start writing our tests so we don’t have to look up the exact
-structure and syntax of test functions every time we start a new project. We
-can add as many additional test functions and as many test modules as we want!
+module helps you start writing your tests so you don’t have to look up the
+exact structure and syntax of test functions every time you start a new
+project. You can add as many additional test functions and as many test modules
+as you want!
 
 We’ll explore some aspects of how tests work by experimenting with the template
 test generated for us without actually testing any code. Then we’ll write some
@@ -36,12 +37,12 @@ behavior is correct.
 Let’s create a new library project called `adder`:
 
 ```text
-$ cargo new adder
+$ cargo new adder --lib
      Created library `adder` project
 $ cd adder
 ```
 
-The contents of the *src/lib.rs* file in your adder library should look like
+The contents of the *src/lib.rs* file in your `adder` library should look like
 Listing 11-1:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -109,7 +110,9 @@ tests in the next section, “Controlling How Tests Are Run.”
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
-Chapter 1 for more information about nightly Rust.
+[the documentation about benchmark tests][bench] to learn more.
+
+[bench]: ../../unstable-book/library-features/test.html
 
 The next part of the test output, which starts with `Doc-tests adder`, is for
 the results of any documentation tests. We don’t have any documentation tests
@@ -251,7 +254,7 @@ impl Rectangle {
 The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a length of 8 and
-a width of 7, and asserting that it can hold another `Rectangle` instance that
+a width of 7 and asserting that it can hold another `Rectangle` instance that
 has a length of 5 and a width of 1:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -272,15 +275,15 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-6: A test for `can_hold` that checks that a
+<span class="caption">Listing 11-6: A test for `can_hold` that checks whether a
 larger rectangle can indeed hold a smaller rectangle</span>
 
-Note that we’ve added a new line inside the `tests` module: the `use super::*;`
-line. The `tests` module is a regular module that follows the usual visibility
-rules we covered in Chapter 7 in the “Privacy Rules” section. Because the
-`tests` module is an inner module, we need to bring the code under test in the
-outer module into the scope of the inner module. We use a glob here so anything
-we define in the outer module is available to this `tests` module.
+Note that we’ve added a new line inside the `tests` module: `use super::*;`.
+The `tests` module is a regular module that follows the usual visibility rules
+we covered in Chapter 7 in the “Privacy Rules” section. Because the `tests`
+module is an inner module, we need to bring the code under test in the outer
+module into the scope of the inner module. We use a glob here so anything we
+define in the outer module is available to this `tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
 `Rectangle` instances that we need. Then we called the `assert!` macro and
@@ -380,7 +383,7 @@ less than 5.
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
 
 A common way to test functionality is to compare the result of the code under
-test to the value we expect the code to return to make sure they’re equal. We
+test to the value you expect the code to return to make sure they’re equal. You
 could do this using the `assert!` macro and passing it an expression using the
 `==` operator. However, this is such a common test that the standard library
 provides a pair of macros—`assert_eq!` and `assert_ne!`—to perform this test
@@ -463,7 +466,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 Our test caught the bug! The `it_adds_two` test failed, displaying the message
 `` assertion failed: `(left == right)` `` and showing that `left` was `4` and
 `right` was `5`. This message is useful and helps us start debugging: it means
-the `left` argument to `assert_eq!` was `4`, but the `right` argument, where we
+the `left` argument to `assert_eq!` was `4` but the `right` argument, where we
 had `add_two(2)`, was `5`.
 
 Note that in some languages and test frameworks, the parameters to the
@@ -490,15 +493,15 @@ implement the `PartialEq` and `Debug` traits. All the primitive types and most
 of the standard library types implement these traits. For structs and enums
 that you define, you’ll need to implement `PartialEq` to assert that values of
 those types are equal or not equal. You’ll need to implement `Debug` to print
-out the values when the assertion fails. Because both traits are derivable
-traits, as mentioned in Listing 5-12 in Chapter 5, this is usually as
-straightforward as adding the `#[derive(PartialEq, Debug)]` annotation to your
-struct or enum definition. See Appendix C for more details about these and
-other derivable traits.
+the values when the assertion fails. Because both traits are derivable traits,
+as mentioned in Listing 5-12 in Chapter 5, this is usually as straightforward
+as adding the `#[derive(PartialEq, Debug)]` annotation to your struct or enum
+definition. See Appendix C, “Derivable Traits,” for more details about these
+and other derivable traits.
 
 ### Adding Custom Failure Messages
 
-We can also add a custom message to be printed with the failure message as
+You can also add a custom message to be printed with the failure message as
 optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
 arguments specified after the one required argument to `assert!` or the two
 required arguments to `assert_eq!` and `assert_ne!` are passed along to the
@@ -506,9 +509,9 @@ required arguments to `assert_eq!` and `assert_ne!` are passed along to the
 Operator or the `format!` Macro” section), so you can pass a format string that
 contains `{}` placeholders and values to go in those placeholders. Custom
 messages are useful to document what an assertion means; when a test fails,
-we’ll have a better idea of what the problem is with the code.
+you’ll have a better idea of what the problem is with the code.
 
-For example, let’s say we have a function that greets people by name, and we
+For example, let’s say we have a function that greets people by name and we
 want to test that the name we pass into the function appears in the output:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -533,10 +536,10 @@ mod tests {
 
 The requirements for this program haven’t been agreed upon yet, and we’re
 pretty sure the `Hello` text at the beginning of the greeting will change. We
-decided we don’t want to have to update the test for the name when that
-happens, so instead of checking for exact equality to the value returned from
-the `greeting` function, we’ll just assert that the output contains the text of
-the input parameter.
+decided we don’t want to have to update the test when the requirements change,
+so instead of checking for exact equality to the value returned from the
+`greeting` function, we’ll just assert that the output contains the text of the
+input parameter.
 
 Let’s introduce a bug into this code by changing `greeting` to not include
 `name` to see what this test failure looks like:
@@ -600,7 +603,7 @@ In addition to checking that our code returns the correct values we expect,
 it’s also important to check that our code handles error conditions as we
 expect. For example, consider the `Guess` type that we created in Chapter 9,
 Listing 9-9. Other code that uses `Guess` depends on the guarantee that `Guess`
-instances will only contain values between 1 and 100. We can write a test that
+instances will contain only values between 1 and 100. We can write a test that
 ensures that attempting to create a `Guess` instance with a value outside that
 range panics.
 
@@ -609,7 +612,7 @@ This attribute makes a test pass if the code inside the function panics; the
 test will fail if the code inside the function doesn’t panic.
 
 Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
-happen when we expect:
+happen when we expect them to:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -706,7 +709,7 @@ make `should_panic` tests more precise, we can add an optional `expected`
 parameter to the `should_panic` attribute. The test harness will make sure that
 the failure message contains the provided text. For example, consider the
 modified code for `Guess` in Listing 11-9 where the `new` function panics with
-different messages depending on whether the value was too small or too large:
+different messages depending on whether the value is too small or too large:
 
 <span class="filename">Filename: src/lib.rs</span>
 
