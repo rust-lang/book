@@ -441,12 +441,12 @@ communicator
 The corresponding file layout now looks like this:
 
 ```
-├── src
-│   ├── client.rs
-│   ├── lib.rs
-│   └── network
-│       ├── mod.rs
-│       └── server.rs
+└── src
+    ├── client.rs
+    ├── lib.rs
+    └── network
+        ├── mod.rs
+        └── server.rs
 ```
 
 So when we wanted to extract the `network::server` module, why did we have to
@@ -498,9 +498,9 @@ These rules apply recursively, so if a module named `foo` has a submodule named
 in your *src* directory:
 
 ```
-├── foo
-│   ├── bar.rs (contains the declarations in `foo::bar`)
-│   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+└── foo
+    ├── bar.rs (contains the declarations in `foo::bar`)
+    └── mod.rs (contains the declarations in `foo`, including `mod bar`)
 ```
 
 The modules should be declared in their parent module’s file using the `mod`
