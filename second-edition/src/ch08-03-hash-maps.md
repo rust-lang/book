@@ -1,17 +1,17 @@
-## Hash Maps Store Keys Associated with Values
+## Storing Keys with Associated Values in Hash Maps
 
 The last of our common collections is the *hash map*. The type `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V`. It does this via a
 *hashing function*, which determines how it places these keys and values into
-memory. Many different programming languages support this kind of data
-structure, but often use a different name, such as hash, map, object, hash
-table, or associative array, just to name a few.
+memory. Many programming languages support this kind of data structure, but
+they often use a different name, such as hash, map, object, hash table, or
+associative array, just to name a few.
 
-Hash maps are useful for when you want to look up data not by an index, as you
-can with vectors, but by using a key that can be of any type. For example, in a
-game, you could keep track of each team’s score in a hash map where each key is
-a team’s name and the values are each team’s score. Given a team name, you can
-retrieve its score.
+Hash maps are useful when you want to look up data not by using an index, as
+you can with vectors, but by using a key that can be of any type. For example,
+in a game, you could keep track of each team’s score in a hash map in which
+each key is a team’s name and the values are each team’s score. Given a team
+name, you can retrieve its score.
 
 We’ll go over the basic API of hash maps in this section, but many more goodies
 are hiding in the functions defined on `HashMap<K, V>` by the standard library.
@@ -19,9 +19,9 @@ As always, check the standard library documentation for more information.
 
 ### Creating a New Hash Map
 
-We can create an empty hash map with `new` and add elements with `insert`. In
+You can create an empty hash map with `new` and add elements with `insert`. In
 Listing 8-20, we’re keeping track of the scores of two teams whose names are
-Blue and Yellow. The Blue team will start with 10 points, and the Yellow team
+Blue and Yellow. The Blue team starts with 10 points, and the Yellow team
 starts with 50:
 
 ```rust
@@ -51,9 +51,9 @@ Another way of constructing a hash map is by using the `collect` method on a
 vector of tuples, where each tuple consists of a key and its value. The
 `collect` method gathers data into a number of collection types, including
 `HashMap`. For example, if we had the team names and initial scores in two
-separate vectors, we can use the `zip` method to create a vector of tuples
-where “Blue” is paired with 10, and so forth. Then we can use the `collect`
-method to turn that vector of tuples into a `HashMap` as shown in Listing 8-21:
+separate vectors, we could use the `zip` method to create a vector of tuples
+where “Blue” is paired with 10, and so forth. Then we could use the `collect`
+method to turn that vector of tuples into a hash map, as shown in Listing 8-21:
 
 ```rust
 use std::collections::HashMap;
@@ -68,8 +68,8 @@ let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
 and a list of scores</span>
 
 The type annotation `HashMap<_, _>` is needed here because it’s possible to
-`collect` into many different data structures, and Rust doesn’t know which you
-want unless you specify. For the type parameters for the key and value types,
+`collect` into many different data structures and Rust doesn’t know which you
+want unless you specify. For the parameters for the key and value types,
 however, we use underscores, and Rust can infer the types that the hash map
 contains based on the types of the data in the vectors.
 
@@ -77,7 +77,7 @@ contains based on the types of the data in the vectors.
 
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
-the hash map will be the owner of those values as demonstrated in Listing 8-22:
+the hash map will be the owner of those values, as demonstrated in Listing 8-22:
 
 ```rust
 use std::collections::HashMap;
@@ -104,8 +104,8 @@ the “Validating References with Lifetimes” section in Chapter 10.
 
 ### Accessing Values in a Hash Map
 
-We can get a value out of the hash map by providing its key to the `get` method
-as shown in Listing 8-23:
+We can get a value out of the hash map by providing its key to the `get`
+method, as shown in Listing 8-23:
 
 ```rust
 use std::collections::HashMap;
@@ -154,17 +154,17 @@ Blue: 10
 ### Updating a Hash Map
 
 Although the number of keys and values is growable, each key can only have one
-value associated with it at a time. When we want to change the data in a hash
-map, we have to decide how to handle the case when a key already has a value
-assigned. We could replace the old value with the new value, completely
-disregarding the old value. We could keep the old value and ignore the new
-value, and only add the new value if the key *doesn’t* already have a value. Or
-we could combine the old value and the new value. Let’s look at how to do each
+value associated with it at a time. When you want to change the data in a hash
+map, you have to decide how to handle the case when a key already has a value
+assigned. You could replace the old value with the new value, completely
+disregarding the old value. You could keep the old value and ignore the new
+value, only adding the new value if the key *doesn’t* already have a value. Or
+you could combine the old value and the new value. Let’s look at how to do each
 of these!
 
 #### Overwriting a Value
 
-If we insert a key and a value into a hash map, and then insert that same key
+If we insert a key and a value into a hash map and then insert that same key
 with a different value, the value associated with that key will be replaced.
 Even though the code in Listing 8-24 calls `insert` twice, the hash map will
 only contain one key/value pair because we’re inserting the value for the Blue
@@ -187,11 +187,11 @@ key</span>
 This code will print `{"Blue": 25}`. The original value of `10` has been
 overwritten.
 
-#### Only Insert If the Key Has No Value
+#### Only Inserting a Value If the Key Has No Value
 
-It’s common to check whether a particular key has a value, and if it doesn’t,
+It’s common to check whether a particular key has a value and, if it doesn’t,
 insert a value for it. Hash maps have a special API for this called `entry`
-that takes the key we want to check as a parameter. The return value of the
+that takes the key you want to check as a parameter. The return value of the
 `entry` function is an enum called `Entry` that represents a value that might
 or might not exist. Let’s say we want to check whether the key for the Yellow
 team has a value associated with it. If it doesn’t, we want to insert the value
@@ -213,11 +213,11 @@ println!("{:?}", scores);
 <span class="caption">Listing 8-25: Using the `entry` method to only insert if
 the key does not already have a value</span>
 
-The `or_insert` method on `Entry` is defined to return the value for the
-corresponding `Entry` key if that key exists, and if not, inserts the parameter
-as the new value for this key and returns the modified `Entry`. This technique
-is much cleaner than writing the logic ourselves, and in addition, plays more
-nicely with the borrow checker.
+The `or_insert` method on `Entry` is defined to return a mutable reference to
+the value for the corresponding `Entry` key if that key exists, and if not,
+inserts the parameter as the new value for this key and returns a mutable
+reference to the new value. This technique is much cleaner than writing the
+logic ourselves and, in addition, plays more nicely with the borrow checker.
 
 Running the code in Listing 8-25 will print `{"Yellow": 50, "Blue": 10}`. The
 first call to `entry` will insert the key for the Yellow team with the value
@@ -255,11 +255,11 @@ map that stores words and counts</span>
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. The
 `or_insert` method actually returns a mutable reference (`&mut V`) to the value
 for this key. Here we store that mutable reference in the `count` variable, so
-in order to assign to that value we must first dereference `count` using the
+in order to assign to that value, we must first dereference `count` using the
 asterisk (`*`). The mutable reference goes out of scope at the end of the `for`
 loop, so all of these changes are safe and allowed by the borrowing rules.
 
-### Hashing Function
+### Hashing Functions
 
 By default, `HashMap` uses a cryptographically secure hashing function that can
 provide resistance to Denial of Service (DoS) attacks. This is not the fastest
@@ -276,12 +276,12 @@ algorithms.
 ## Summary
 
 Vectors, strings, and hash maps will provide a large amount of functionality
-that you need in programs where you need to store, access, and modify data.
-Here are some exercises you should now be equipped to solve:
+necessary in programs when you need to store, access, and modify data. Here are
+some exercises you should now be equipped to solve:
 
-* Given a list of integers, use a vector and return the mean (average), median
-  (when sorted, the value in the middle position), and mode (the value that
-  occurs most often; a hash map will be helpful here) of the list.
+* Given a list of integers, use a vector and return the mean (the average
+  value), median (when sorted, the value in the middle position), and mode (the
+  value that occurs most often; a hash map will be helpful here) of the list.
 * Convert strings to pig latin. The first consonant of each word is moved to
   the end of the word and “ay” is added, so “first” becomes “irst-fay.” Words
   that start with a vowel have “hay” added to the end instead (“apple” becomes
@@ -295,5 +295,5 @@ Here are some exercises you should now be equipped to solve:
 The standard library API documentation describes methods that vectors, strings,
 and hash maps have that will be helpful for these exercises!
 
-We’re getting into more complex programs in which operations can fail; so, it’s
-a perfect time to discuss error handling next!
+We’re getting into more complex programs in which operations can fail, so, it’s
+a perfect time to discuss error handling. We’ll do that next!
