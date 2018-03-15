@@ -8,14 +8,12 @@ the guessing game project.
 
 We’ll create a skeleton of a library that provides some general networking
 functionality; we’ll concentrate on the organization of the modules and
-functions but we won’t worry about what code goes in the function bodies. We’ll
-call our library `communicator`. By default, Cargo will create a library unless
-another type of project is specified: if we omit the `--bin` option that we’ve
-been using in all of the chapters preceding this one, our project will be a
-library:
+functions, but we won’t worry about what code goes in the function bodies.
+We’ll call our library `communicator`. To create a library, pass the `--lib`
+option instead of `--bin`:
 
 ```text
-$ cargo new communicator
+$ cargo new communicator --lib
 $ cd communicator
 ```
 
@@ -67,12 +65,12 @@ After the `mod` keyword, we put the name of the module, `network`, and then a
 block of code in curly brackets. Everything inside this block is inside the
 namespace `network`. In this case, we have a single function, `connect`. If we
 wanted to call this function from code outside the `network` module, we
-would need to specify the module and use the namespace syntax `::`, like so:
-`network::connect()` rather than just `connect()`.
+would need to specify the module and use the namespace syntax `::` like so:
+`network::connect()`.
 
 We can also have multiple modules, side by side, in the same *src/lib.rs* file.
-For example, to also have a `client` module that has a function named `connect`
-as well, we can add it as shown in Listing 7-1:
+For example, to also have a `client` module that has a function named
+`connect`, we can add it as shown in Listing 7-1:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -102,7 +100,7 @@ create modules in *src/main.rs* for a binary crate in the same way as we’re
 creating modules in *src/lib.rs* for the library crate. In fact, we can put
 modules inside of modules, which can be useful as your modules grow to keep
 related functionality organized together and separate functionality apart. The
-choice of how you organize your code depends on how you think about the
+way you choose to organize your code depends on how you think about the
 relationship between the parts of your code. For instance, the `client` code
 and its `connect` function might make more sense to users of our library if
 they were inside the `network` namespace instead, as in Listing 7-2:
@@ -126,9 +124,9 @@ mod network {
 
 In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
 definitions with the ones in Listing 7-2, which have the `client` module as an
-inner module of `network`. Now we have the functions `network::connect` and
-`network::client::connect`: again, the two functions named `connect` don’t
-conflict with each other because they’re in different namespaces.
+inner module of `network`. The functions `network::connect` and
+`network::client::connect` are both named `connect`, but they don’t conflict
+with each other because they’re in different namespaces.
 
 In this way, modules form a hierarchy. The contents of *src/lib.rs* are at the
 topmost level, and the submodules are at lower levels. Here’s what the
@@ -151,11 +149,11 @@ communicator
 
 The hierarchy shows that in Listing 7-2, `client` is a child of the `network`
 module rather than a sibling. More complicated projects can have many modules,
-and they’ll need to be organized logically in order to keep track of them. What
-“logically” means in your project is up to you and depends on how you and your
-library’s users think about your project’s domain. Use the techniques shown
-here to create side-by-side modules and nested modules in whatever structure
-you would like.
+and they’ll need to be organized logically in order for you to keep track of
+them. What “logically” means in your project is up to you and depends on how
+you and your library’s users think about your project’s domain. Use the
+techniques shown here to create side-by-side modules and nested modules in
+whatever structure you would like.
 
 ### Moving Modules to Other Files
 
@@ -203,8 +201,8 @@ the lines of code inside the functions will start getting lengthy as well.
 These would be good reasons to separate the `client`, `network`, and `server`
 modules from *src/lib.rs* and place them into their own files.
 
-First, replace the `client` module code with only the declaration of the
-`client` module, so that your *src/lib.rs* looks like code shown in Listing 7-4:
+First, let’s replace the `client` module code with only the declaration of the
+`client` module so that *src/lib.rs* looks like code shown in Listing 7-4:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -227,7 +225,7 @@ mod network {
 We’re still *declaring* the `client` module here, but by replacing the block
 with a semicolon, we’re telling Rust to look in another location for the code
 defined within the scope of the `client` module. In other words, the line `mod
-client;` means:
+client;` means this:
 
 ```rust,ignore
 mod client {
@@ -385,12 +383,12 @@ note: maybe move this module `network` to its own directory via
 `network/mod.rs`
 ```
 
-Instead of continuing to follow the same file naming pattern we used
+Instead of continuing to follow the same file-naming pattern we used
 previously, we can do what the note suggests:
 
 1. Make a new *directory* named *network*, the parent module’s name.
-2. Move the *src/network.rs* file into the new *network* directory, and
-   rename it to *src/network/mod.rs*.
+2. Move the *src/network.rs* file into the new *network* directory and
+   rename it *src/network/mod.rs*.
 3. Move the submodule file *src/server.rs* into the *network* directory.
 
 Here are commands to carry out these steps:
@@ -402,8 +400,8 @@ $ mv src/server.rs src/network
 ```
 
 Now when we try to run `cargo build`, compilation will work (we’ll still have
-warnings though). Our module layout still looks like this, which is exactly the
-same as it did when we had all the code in *src/lib.rs* in Listing 7-3:
+warnings though). Our module layout still looks exactly the same as it did when
+we had all the code in *src/lib.rs* in Listing 7-3:
 
 ```text
 communicator
@@ -415,23 +413,23 @@ communicator
 The corresponding file layout now looks like this:
 
 ```text
-├── src
-│   ├── client.rs
-│   ├── lib.rs
-│   └── network
-│       ├── mod.rs
-│       └── server.rs
+└── src
+    ├── client.rs
+    ├── lib.rs
+    └── network
+        ├── mod.rs
+        └── server.rs
 ```
 
 So when we wanted to extract the `network::server` module, why did we have to
 also change the *src/network.rs* file to the *src/network/mod.rs* file and put
 the code for `network::server` in the *network* directory in
-*src/network/server.rs* instead of just being able to extract the
-`network::server` module into *src/server.rs*? The reason is that Rust wouldn’t
-be able to recognize that `server` was supposed to be a submodule of `network`
-if the *server.rs* file was in the *src* directory. To clarify Rust’s behavior
-here, let’s consider a different example with the following module hierarchy,
-where all the definitions are in *src/lib.rs*:
+*src/network/server.rs*? Why couldn’t we just extract the `network::server`
+module into *src/server.rs*? The reason is that Rust wouldn’t be able to
+recognize that `server` was supposed to be a submodule of `network` if the
+*server.rs* file was in the *src* directory. To clarify Rust’s behavior here,
+let’s consider a different example with the following module hierarchy, where
+all the definitions are in *src/lib.rs*:
 
 ```text
 communicator
@@ -472,9 +470,9 @@ These rules apply recursively, so if a module named `foo` has a submodule named
 in your *src* directory:
 
 ```text
-├── foo
-│   ├── bar.rs (contains the declarations in `foo::bar`)
-│   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+└── foo
+    ├── bar.rs (contains the declarations in `foo::bar`)
+    └── mod.rs (contains the declarations in `foo`, including `mod bar`)
 ```
 
 The modules should be declared in their parent module’s file using the `mod`

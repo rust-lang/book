@@ -106,7 +106,9 @@ because we didn’t include `Green` in the `use` statement.
 
 ### Bringing All Names into Scope with a Glob
 
-To bring all the items in a namespace into scope at once, we can use the `*`  syntax, which is called the *glob operator*. This example brings all the variants of an enum into scope without having to list each specifically:
+To bring all the items in a namespace into scope at once, we can use the `*`
+syntax, which is called the *glob operator*. This example brings all the
+variants of an enum into scope without having to list each specifically:
 
 ```rust
 enum TrafficLight {
@@ -125,12 +127,12 @@ fn main() {
 ```
 
 The `*` will bring into scope all the visible items in the `TrafficLight`
-namespace. You should use globs sparingly: they are convenient, but this might
-also pull in more items than you expected and cause naming conflicts.
+namespace. You should use globs sparingly: they are convenient, but a glob
+might also pull in more items than you expected and cause naming conflicts.
 
 ### Using `super` to Access a Parent Module
 
-As we saw at the beginning of this chapter, when you create a library crate,
+As you saw at the beginning of this chapter, when you create a library crate,
 Cargo makes a `tests` module for you. Let’s go into more detail about that now.
 In your `communicator` project, open *src/lib.rs*:
 
@@ -193,7 +195,7 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
 ```
 
 The compilation failed, but why? We don’t need to place `communicator::` in
-front of the function like we did in *src/main.rs* because we are definitely
+front of the function, as we did in *src/main.rs*, because we are definitely
 within the `communicator` library crate here. The reason is that paths are
 always relative to the current module, which here is `tests`. The only
 exception is in a `use` statement, where paths are relative to the crate root
@@ -219,8 +221,8 @@ These two options don’t look that different in this example, but if you’re
 deeper in a module hierarchy, starting from the root every time would make your
 code lengthy. In those cases, using `super` to get from the current module to
 sibling modules is a good shortcut. Plus, if you’ve specified the path from the
-root in many places in your code and then you rearrange your modules by moving
-a subtree to another place, you’d end up needing to update the path in several
+root in many places in your code and then rearrange your modules by moving a
+subtree to another place, you’ll end up needing to update the path in several
 places, which would be tedious.
 
 It would also be annoying to have to type `super::` in each test, but you’ve
@@ -245,7 +247,7 @@ mod tests {
 }
 ```
 
-When we run `cargo test` again, the test will pass and the first part of the
+When we run `cargo test` again, the test will pass, and the first part of the
 test result output will be the following:
 
 ```text
@@ -266,5 +268,4 @@ to group related functionality together, keep files from becoming too long, and
 present a tidy public API to your library users.
 
 Next, we’ll look at some collection data structures in the standard library
-that you can use in your nice, neat code!
-
+that you can use in your nice, neat code.
