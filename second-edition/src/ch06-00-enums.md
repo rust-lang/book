@@ -12,4 +12,4 @@ enums in your code.
 
 Enums are a feature in many languages, but their capabilities differ in each
 language. Rust’s enums are most similar to *algebraic data types* in functional
-languages like F#, OCaml, and Haskell.
+languages, such as F#, OCaml, and Haskell.
