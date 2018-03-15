@@ -1,9 +1,9 @@
 ## Recoverable Errors with `Result`
 
 Most errors aren’t serious enough to require the program to stop entirely.
-Sometimes, when a function fails, it’s for a reason that we can easily
-interpret and respond to. For example, if we try to open a file and that
-operation fails because the file doesn’t exist, we might want to create the
+Sometimes, when a function fails, it’s for a reason that you can easily
+interpret and respond to. For example, if you try to open a file and that
+operation fails because the file doesn’t exist, you might want to create the
 file instead of terminating the process.
 
 Recall from “[Handling Potential Failure with the `Result`
@@ -29,7 +29,7 @@ library has defined on it in many different situations where the successful
 value and error value we want to return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
-fail: in Listing 9-3 we try to open a file:
+fail. In Listing 9-3 we try to open a file:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -45,11 +45,11 @@ fn main() {
 
 How do we know `File::open` returns a `Result`? We could look at the standard
 library API documentation, or we could ask the compiler! If we give `f` a type
-annotation of a type that we know the return type of the function is *not* and
-then we try to compile the code, the compiler will tell us that the types don’t
-match. The error message will then tell us what the type of `f` *is*. Let’s try
-it: we know that the return type of `File::open` isn’t of type `u32`, so let’s
-change the `let f` statement to this:
+annotation that we know is *not* the return type of the function and then try
+to compile the code, the compiler will tell us that the types don’t match. The
+error message will then tell us what the type of `f` *is*. Let’s try it! We
+know that the return type of `File::open` isn’t of type `u32`, so let’s change
+the `let f` statement to this:
 
 ```rust,ignore
 let f: u32 = File::open("hello.txt");
@@ -74,22 +74,22 @@ The generic parameter `T` has been filled in here with the type of the success
 value, `std::fs::File`, which is a file handle. The type of `E` used in the
 error value is `std::io::Error`.
 
-This return type means the call to `File::open` might succeed and return to us
-a file handle that we can read from or write to. The function call also might
-fail: for example, the file might not exist or we might not have permission to
+This return type means the call to `File::open` might succeed and return a file
+handle that we can read from or write to. The function call also might fail:
+for example, the file might not exist, or we might not have permission to
 access the file. The `File::open` function needs to have a way to tell us
 whether it succeeded or failed and at the same time give us either the file
 handle or error information. This information is exactly what the `Result` enum
 conveys.
 
-In the case where `File::open` succeeds, the value we will have in the variable
-`f` will be an instance of `Ok` that contains a file handle. In the case where
-it fails, the value in `f` will be an instance of `Err` that contains more
-information about the kind of error that happened.
+In the case where `File::open` succeeds, the value in the variable `f` will be
+an instance of `Ok` that contains a file handle. In the case where it fails,
+the value in `f` will be an instance of `Err` that contains more information
+about the kind of error that happened.
 
 We need to add to the code in Listing 9-3 to take different actions depending
-on the value `File::open` returned. Listing 9-4 shows one way to handle the
-`Result` using a basic tool: the `match` expression that we discussed in
+on the value `File::open` returns. Listing 9-4 shows one way to handle the
+`Result` using a basic tool, the `match` expression that we discussed in
 Chapter 6.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -110,7 +110,7 @@ fn main() {
 ```
 
 <span class="caption">Listing 9-4: Using a `match` expression to handle the
-`Result` variants we might have</span>
+`Result` variants that might be returned</span>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
 imported in the prelude, so we don’t need to specify `Result::` before the `Ok`
@@ -118,7 +118,7 @@ and `Err` variants in the `match` arms.
 
 Here we tell Rust that when the result is `Ok`, return the inner `file` value
 out of the `Ok` variant, and we then assign that file handle value to the
-variable `f`. After the `match`, we can then use the file handle for reading or
+variable `f`. After the `match`, we can use the file handle for reading or
 writing.
 
 The other arm of the `match` handles the case where we get an `Err` value from
@@ -135,13 +135,13 @@ As usual, this output tells us exactly what has gone wrong.
 
 ### Matching on Different Errors
 
-The code in Listing 9-4 will `panic!` no matter the reason that `File::open`
-failed. What we want to do instead is take different actions for different
-failure reasons: if `File::open` failed because the file doesn’t exist, we want
-to create the file and return the handle to the new file. If `File::open`
-failed for any other reason, for example because we didn’t have permission to
-open the file, we still want the code to `panic!` in the same way as it did in
-Listing 9-4. Look at Listing 9-5, which adds another arm to the `match`:
+The code in Listing 9-4 will `panic!` no matter why `File::open` failed. What
+we want to do instead is take different actions for different failure reasons:
+if `File::open` failed because the file doesn’t exist, we want to create the
+file and return the handle to the new file. If `File::open` failed for any
+other reason—for example, because we didn’t have permission to open the file—we
+still want the code to `panic!` in the same way as it did in Listing 9-4. Look
+at Listing 9-5, which adds another arm to the `match`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -183,8 +183,8 @@ different ways</span>
 
 The type of the value that `File::open` returns inside the `Err` variant is
 `io::Error`, which is a struct provided by the standard library. This struct
-has a method `kind` that we can call to get an `io::ErrorKind` value.
-`io::ErrorKind` is an enum provided by the standard library that has variants
+has a method `kind` that we can call to get an `io::ErrorKind` value. The enum
+`io::ErrorKind` is provided by the standard library and has variants
 representing the different kinds of errors that might result from an `io`
 operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
 the file we’re trying to open doesn’t exist yet.
@@ -194,10 +194,10 @@ guard*: it’s an extra condition on a `match` arm that further refines the arm�
 pattern. This condition must be true for that arm’s code to be run; otherwise,
 the pattern matching will move on to consider the next arm in the `match`. The
 `ref` in the pattern is needed so `error` is not moved into the guard condition
-but is merely referenced by it. The reason `ref` is used to take a reference in
-a pattern instead of `&` will be covered in detail in Chapter 18. In short, in
-the context of a pattern, `&` matches a reference and gives us its value, but
-`ref` matches a value and gives us a reference to it.
+but is merely referenced by it. The reason you use `ref` to create a reference
+in a pattern instead of `&` will be covered in detail in Chapter 18. In short,
+in the context of a pattern, `&` matches a reference and gives you its value,
+but `ref` matches a value and gives you a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
@@ -272,7 +272,7 @@ calls that panic print the same message.
 When you’re writing a function whose implementation calls something that might
 fail, instead of handling the error within this function, you can return the
 error to the calling code so that it can decide what to do. This is known as
-*propagating* the error and gives more control to the calling code where there
+*propagating* the error and gives more control to the calling code, where there
 might be more information or logic that dictates how the error should be
 handled than what you have available in the context of your code.
 
@@ -345,13 +345,13 @@ don’t know what the calling code will do with those values. If the calling cod
 gets an `Err` value, it could call `panic!` and crash the program, use a
 default username, or look up the username from somewhere other than a file, for
 example. We don’t have enough information on what the calling code is actually
-trying to do, so we propagate all the success or error information upwards for
+trying to do, so we propagate all the success or error information upward for
 it to handle appropriately.
 
 This pattern of propagating errors is so common in Rust that Rust provides the
 question mark operator `?` to make this easier.
 
-#### A Shortcut for Propagating Errors: `?`
+#### A Shortcut for Propagating Errors: the `?` Operator
 
 Listing 9-7 shows an implementation of `read_username_from_file` that has the
 same functionality as it had in Listing 9-6, but this implementation uses the
@@ -378,21 +378,20 @@ calling code using `?`</span>
 The `?` placed after a `Result` value is defined to work in almost the same way
 as the `match` expressions we defined to handle the `Result` values in Listing
 9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
-get returned from this expression and the program will continue. If the value
+get returned from this expression, and the program will continue. If the value
 is an `Err`, the value inside the `Err` will be returned from the whole
 function as if we had used the `return` keyword so the error value gets
 propagated to the calling code.
 
 There is a difference between what the `match` expression from Listing 9-6 and
-the question mark operator do: error values used with `?` go through the `from`
-function, defined in the `From` trait in the standard library, which is used to
-convert errors from one type into another. When the question mark calls the
-`from` function, the error type received is converted into the error type
-defined in the return type of the current function. This is useful when a
-function returns one error type to represent all the ways a function might
-fail, even if parts might fail for many different reasons. As long as each
-error type implements the `from` function to define how to convert itself to
-the returned error type, the question mark operator takes care of the
+`?` do: error values used with `?` go through the `from` function, defined in
+the `From` trait in the standard library, which is used to convert errors from
+one type into another. When `?` calls the `from` function, the error type
+received is converted into the error type defined in the return type of the
+current function. This is useful when a function returns one error type to
+represent all the ways a function might fail, even if parts might fail for many
+different reasons. As long as each error type implements the `from` function to
+define how to convert itself to the returned error type, `?` takes care of the
 conversion automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
@@ -401,9 +400,9 @@ will return early out of the whole function and give any `Err` value to the
 calling code. The same thing applies to the `?` at the end of the
 `read_to_string` call.
 
-The `?` eliminates a lot of boilerplate and makes this function’s
+The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
-method calls immediately after the `?` as shown in Listing 9-8:
+method calls immediately after the `?`, as shown in Listing 9-8:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -421,8 +420,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">Listing 9-8: Chaining method calls after the question
-mark operator</span>
+<span class="caption">Listing 9-8: Chaining method calls after `?`</span>
 
 We’ve moved the creation of the new `String` in `s` to the beginning of the
 function; that part hasn’t changed. Instead of creating a variable `f`, we’ve
@@ -433,13 +431,13 @@ username in `s` when both `File::open` and `read_to_string` succeed rather than
 returning errors. The functionality is again the same as in Listing 9-6 and
 Listing 9-7; this is just a different, more ergonomic way to write it.
 
-#### `?` Can Only Be Used in Functions That Return Result
+#### The `?` Operator Can Only Be Used in Functions That Return `Result`
 
-The `?` can only be used in functions that have a return type of `Result`,
-because it is defined to work in the same way as the `match` expression we
-defined in Listing 9-6. The part of the `match` that requires a return type of
-`Result` is `return Err(e)`, so the return type of the function must be a
-`Result` to be compatible with this `return`.
+The `?` operator can only be used in functions that have a return type of
+`Result`, because it is defined to work in the same way as the `match`
+expression we defined in Listing 9-6. The part of the `match` that requires a
+return type of `Result` is `return Err(e)`, so the return type of the function
+must be a `Result` to be compatible with this `return`.
 
 Let’s look at what happens if we use `?` in the `main` function, which you’ll
 recall has a return type of `()`:
@@ -469,11 +467,11 @@ error[E0277]: the trait bound `(): std::ops::Try` is not satisfied
   = note: required by `std::ops::Try::from_error`
 ```
 
-This error points out that we’re only allowed to use the question mark operator
-in a function that returns `Result`. In functions that don’t return `Result`,
-when you call other functions that return `Result`, you’ll need to use a
-`match` or one of the `Result` methods to handle it instead of using `?` to
-potentially propagate the error to the calling code.
+This error points out that we’re only allowed to use `?` in a function that
+returns `Result`. In functions that don’t return `Result`, when you call other
+functions that return `Result`, you’ll need to use a `match` or one of the
+`Result` methods to handle the `Result` instead of using `?` to potentially
+propagate the error to the calling code.
 
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
