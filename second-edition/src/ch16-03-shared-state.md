@@ -291,8 +291,7 @@ a lot.
 ```text
 error[E0277]: the trait bound `std::rc::Rc<std::sync::Mutex<i32>>:
 std::marker::Send` is not satisfied in `[closure@src/main.rs:11:36:
-15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
   --> src/main.rs:11:22
    |
 11 |         let handle = thread::spawn(move || {
@@ -303,8 +302,7 @@ cannot be sent between threads safely
 counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send` is
 not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
    = note: required because it appears within the type
-`[closure@src/main.rs:11:36: 15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+`[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
    = note: required by `std::thread::spawn`
 ```
 
@@ -343,8 +341,8 @@ single thread, your code can run faster if it doesn’t have to enforce the
 guarantees atomics provide.
 
 Let’s return to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix
-our program by changing the `use` line and the call to `new`. The code in
-Listing 16-15 will finally compile and run:
+our program by changing the `use` line, the call to `new`, and the call to
+`clone`. The code in Listing 16-15 will finally compile and run:
 
 <span class="filename">Filename: src/main.rs</span>
 

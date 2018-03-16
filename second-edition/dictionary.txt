@@ -83,6 +83,7 @@ Ctrl
 customizable
 CustomSmartPointer
 CustomSmartPointers
+data’s
 deallocate
 deallocated
 deallocating
@@ -212,6 +213,7 @@ iter
 iterator's
 JavaScript
 JoinHandle
+Kay's
 kinded
 lang
 latin
@@ -227,12 +229,14 @@ lifecycle
 LimitTracker
 lobally
 locators
+LockResult
 login
 lookup
 loopback
 lossy
 lval
 macOS
+Matsakis
 mathematic
 memoization
 metadata
@@ -277,7 +281,6 @@ newtypes
 nitty
 nocapture
 nomicon
-Nomicon
 nonequality
 NotFound
 null's
@@ -318,6 +321,7 @@ proc
 pthreads
 pushups
 QuitMessage
+quux
 RAII
 randcrate
 RangeFrom
@@ -352,10 +356,10 @@ runtime
 runtimes
 Rustacean
 Rustaceans
-Rustonomicon
 rUsT
 rustc
 rustdoc
+Rustonomicon
 rustfmt
 rustup
 screenshot
@@ -410,7 +414,6 @@ substring
 subteams
 subtree
 subtyping
-Summarizable
 supertrait
 supertraits
 TcpListener
@@ -441,6 +444,7 @@ tuesday
 tuple
 tuples
 turbofish
+Turon
 typeof
 TypeName
 UFCS

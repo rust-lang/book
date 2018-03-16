@@ -131,6 +131,7 @@ Listing 12-23 to use the `next` method:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 # use std::env;
 #
 # struct Config {

@@ -1,12 +1,12 @@
 ## References and Borrowing
 
-The issue with the tuple code at the end of the preceding section is that we
-have to return the `String` to the calling function so we can still use the
-`String` after the call to `calculate_length`, because the `String` was moved
-into `calculate_length`.
+The issue with the tuple code in Listing 4-5 is that we have to return the
+`String` to the calling function so we can still use the `String` after the
+call to `calculate_length`, because the `String` was moved into
+`calculate_length`.
 
 Here is how you would define and use a `calculate_length` function that has a
-*reference* to an object as a parameter instead of taking ownership of the
+reference to an object as a parameter instead of taking ownership of the
 value:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -27,7 +27,7 @@ fn calculate_length(s: &String) -> usize {
 
 First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass `&s1` into
-`calculate_length`, and in its definition, we take `&String` rather than
+`calculate_length` and, in its definition, we take `&String` rather than
 `String`.
 
 These ampersands are *references*, and they allow you to refer to some value
@@ -35,7 +35,8 @@ without taking ownership of it. Figure 4-5 shows a diagram.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figure 4-5: `&String s` pointing at `String s1`</span>
+<span class="caption">Figure 4-5: A diagram of `&String s` pointing at `String
+s1`</span>
 
 > Note: The opposite of referencing by using `&` is *dereferencing*, which is
 > accomplished with the dereference operator, `*`. We’ll see some uses of the
@@ -69,16 +70,16 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 
 The scope in which the variable `s` is valid is the same as any function
 parameter’s scope, but we don’t drop what the reference points to when it goes
-out of scope because we don’t have ownership. Functions that have references as
-parameters instead of the actual values mean we won’t need to return the values
-in order to give back ownership, since we never had ownership.
+out of scope because we don’t have ownership. When functions have references as
+parameters instead of the actual values, we won’t need to return the values in
+order to give back ownership, because we never had ownership.
 
 We call having references as function parameters *borrowing*. As in real life,
 if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.
 
 So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-4. Spoiler alert: it doesn’t work!
+Listing 4-6. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -94,7 +95,7 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">Listing 4-4: Attempting to modify a borrowed value</span>
+<span class="caption">Listing 4-6: Attempting to modify a borrowed value</span>
 
 Here’s the error:
 
@@ -113,7 +114,7 @@ allowed to modify something we have a reference to.
 
 ### Mutable References
 
-We can fix the error in the code from Listing 4-4 with just a small tweak:
+We can fix the error in the code from Listing 4-6 with just a small tweak:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -162,15 +163,15 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 
 This restriction allows for mutation but in a very controlled fashion. It’s
 something that new Rustaceans struggle with, because most languages let you
-mutate whenever you’d like. The benefit of having this restriction is that Rust
-can prevent data races at compile time.
+mutate whenever you’d like.
 
-A *data race* is similar to a race condition and happens when these three
-behaviors occur:
+The benefit of having this restriction is that Rust can prevent data races at
+compile time. A *data race* is similar to a race condition and happens when
+these three behaviors occur:
 
-1. Two or more pointers access the same data at the same time.
-1. At least one of the pointers is being used to write to the data.
-1. There’s no mechanism being used to synchronize access to the data.
+* Two or more pointers access the same data at the same time.
+* At least one of the pointers is being used to write to the data.
+* There’s no mechanism being used to synchronize access to the data.
 
 Data races cause undefined behavior and can be difficult to diagnose and fix
 when you’re trying to track them down at runtime; Rust prevents this problem
@@ -225,8 +226,8 @@ the data.
 
 Even though these errors may be frustrating at times, remember that it’s the
 Rust compiler pointing out a potential bug early (at compile time rather than
-at runtime) and showing you exactly where the problem is instead of you having
-to track down why sometimes your data isn’t what you thought it should be.
+at runtime) and showing you exactly where the problem is. Then you don’t have
+to track down why your data isn’t what you thought it was.
 
 ### Dangling References
 
@@ -234,9 +235,9 @@ In languages with pointers, it’s easy to erroneously create a *dangling
 pointer*, a pointer that references a location in memory that may have been
 given to someone else, by freeing some memory while preserving a pointer to
 that memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if we have a reference to some data, the compiler
-will ensure that the data will not go out of scope before the reference to the
-data does.
+never be dangling references: if you have a reference to some data, the
+compiler will ensure that the data will not go out of scope before the
+reference to the data does.
 
 Let’s try to create a dangling reference, which Rust will prevent with a
 compile-time error:
@@ -294,7 +295,7 @@ fn dangle() -> &String { // dangle returns a reference to a String
 
 Because `s` is created inside `dangle`, when the code of `dangle` is finished,
 `s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`! That’s no good. Rust
+this reference would be pointing to an invalid `String` That’s no good! Rust
 won’t let us do this.
 
 The solution here is to return the `String` directly:
@@ -314,9 +315,8 @@ deallocated.
 
 Let’s recap what we’ve discussed about references:
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+* At any given time, you can have *either* (but not both of) one mutable
+  reference or any number of immutable references.
+* References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.

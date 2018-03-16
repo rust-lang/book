@@ -1,13 +1,16 @@
 # The Rust Programming Language
 
+[Foreword](foreword.md)
+[Introduction](ch00-00-introduction.md)
+
 ## Getting started
 
-- [Introduction](ch01-00-introduction.md)
+- [Getting Started](ch01-00-getting-started.md)
     - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
-    - [How Rust is Made and “Nightly Rust”](ch01-03-how-rust-is-made-and-nightly-rust.md)
+    - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
-- [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
+- [Programming a Guessing Game](ch02-00-guessing-game-tutorial.md)
 
 - [Common Programming Concepts](ch03-00-common-programming-concepts.md)
     - [Variables and Mutability](ch03-01-variables-and-mutability.md)
@@ -116,11 +119,8 @@
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
-    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
-    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
-    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
-    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
-    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
+    - [Turning our Single Threaded Server into a Multithreaded Server](ch20-02-multithreaded.md)
+    - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
@@ -129,3 +129,4 @@
     - [D - Macros](appendix-04-macros.md)
     - [E - Translations](appendix-05-translation.md)
     - [F - Newest Features](appendix-06-newest-features.md)
+    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)

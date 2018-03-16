@@ -20,7 +20,7 @@ let v1_iter = v1.iter();
 <span class="caption">Listing 13-13: Creating an iterator</span>
 
 Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-4 in Chapter 3, we used iterators with `for` loops to execute some code on
+3-5 in Chapter 3, we used iterators with `for` loops to execute some code on
 each item, although we glossed over what the call to `iter` did until now.
 
 The example in Listing 13-14 separates the creation of the iterator from the
@@ -39,8 +39,7 @@ for val in v1_iter {
 }
 ```
 
-<span class="caption">Listing 13-14: Making use of an iterator in a `for`
-loop</span>
+<span class="caption">Listing 13-14: Using an iterator in a `for` loop</span>
 
 In languages that don’t have iterators provided by their standard libraries, we
 would likely write this same functionality by starting a variable at index 0,
@@ -195,9 +194,9 @@ The code in Listing 13-17 doesn’t do anything; the closure we’ve specified
 never gets called. The warning reminds us why: iterator adaptors are lazy, and
 we need to consume the iterator here.
 
-To fix this and consume the iterator, we’ll use the `collect` method, which you
-saw briefly in Chapter 12. This method consumes the iterator and collects the
-resulting values into a collection data type.
+To fix this and consume the iterator, we’ll use the `collect` method, which we
+used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the
+iterator and collects the resulting values into a collection data type.
 
 In Listing 13-18, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up

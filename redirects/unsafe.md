@@ -15,4 +15,4 @@ Here are the relevant sections in the new and old books:
 
 [1]: first-edition/unsafe.html
 [2]: second-edition/ch19-01-unsafe-rust.html
-[3]: ../nomicon/
+[3]: ../nomicon/index.html

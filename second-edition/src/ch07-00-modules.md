@@ -3,9 +3,9 @@
 When you start writing programs in Rust, your code might live solely in the
 `main` function. As your code grows, you’ll eventually move functionality into
 other functions for reuse and better organization. By splitting your code into
-smaller chunks, each chunk is easier to understand on its own. But what happens
-if you have too many functions? Rust has a module system that enables the reuse
-of code in an organized fashion.
+smaller chunks, you make each chunk easier to understand on its own. But what
+happens if you have too many functions? Rust has a module system that enables
+the reuse of code in an organized fashion.
 
 In the same way that you extract lines of code into a function, you can extract
 functions (and other code, like structs and enums) into different modules. A

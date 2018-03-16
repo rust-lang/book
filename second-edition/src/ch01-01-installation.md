@@ -1,34 +1,35 @@
 ## Installation
 
-The first step to using Rust is to install it. You’ll need an internet
-connection to run the commands in this chapter, as we’ll be downloading Rust
-from the internet. We’ll actually be installing Rust using `rustup`, a
-command-line tool for managing Rust versions and associated tools.
+The first step to using Rust is to install it. We’ll download Rust through
+`rustup`, a command-line tool for managing Rust versions and associated tools.
+For this you’ll need an internet connection.
 
 The following steps will install the latest stable version of the Rust
-compiler. The examples and output shown in this book used stable Rust 1.21.0.
-Due to Rust’s stability guarantees, which we’ll discuss further in the “How
-Rust is Made” section later in this chapter, all of the examples that compile
-will continue to compile with newer versions of Rust. The output may differ
-slightly as error messages and warnings are often improved. In other words, the
-newer, stable version of Rust you will install with these steps should work as
-expected with the content of this book.
+compiler. The examples and output shown in this book all use stable Rust
+1.21.0. Rust’s stability guarantees ensure that all of the examples in the book
+that compile will continue to compile with newer versions of Rust. The output
+may differ slightly between versions, as error messages and warnings are often
+improved. In other words, any newer, stable version of Rust you will install
+with these steps should work as expected with the content of this book.
+
+<!-- PROD: Start Box -->
 
 > #### Command Line Notation
 >
-> We’ll be showing off a number of commands using a terminal, and those lines
-> all start with `$`. You don’t need to type in the `$` character; they are
-> there to indicate the start of each command. You’ll see many tutorials and
-> examples around the web that follow this convention: `$` for commands run as
-> a regular user, and `#` for commands you should be running as an
-> administrator. Lines that don’t start with `$` are typically showing the
-> output of the previous command. Additionally, PowerShell specific examples
-> will use `>` rather than `$`.
+> In this chapter and throughout the book we’ll be showing some commands used
+> in the terminal. Lines that should be entered in a terminal all start with
+> `$`. You don’t need to type in the `$` character, it is simply there to
+> indicate the start of each command. Many tutorials use this convention: `$`
+> for commands run as a regular user, and `#` for commands you should be
+> running as an administrator. Lines that don’t start with `$` are typically
+> showing the output of the previous command. Additionally, PowerShell specific
+> examples will use `>` rather than `$`.
+
+<!-- PROD: End box -->
 
 ### Installing Rustup on Linux or Mac
 
-If you’re on Linux or a Mac, 99% of what you need to do is open a terminal and
-type this:
+If you’re on Linux or a Mac, open a terminal and enter the following command:
 
 ```text
 $ curl https://sh.rustup.rs -sSf | sh
@@ -46,36 +47,42 @@ Of course, if you distrust using `curl URL | sh` to install software, you can
 download, inspect, and run the script however you like.
 
 The installation script automatically adds Rust to your system PATH after your
-next login. If you want to start using Rust right away, run the following
-command in your shell:
+next login. If you want to start using Rust right away instead of restarting
+your terminal, run the following command in your shell to add Rust to your
+system PATH manually:
+
+<!-- what does this command do? Do you mean instead of logging out and logging
+in, enter the following? -->
+<!-- It runs a script that adds Rust to your system PATH manually. I've
+clarified that yes, this is instead of logging out and back in to your
+terminal. /Carol -->
 
 ```text
 $ source $HOME/.cargo/env
 ```
 
-Alternatively, add the following line to your `~/.bash_profile`:
+Alternatively, you can add the following line to your `~/.bash_profile`:
 
 ```text
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Finally, you’ll need a linker of some kind. You likely have one installed. If
-not, when you compile a Rust program, you’ll get errors that a linker could not
-be executed. Check your platform’s documentation for how to install a C
-compiler; they usually come with the correct linker as well, given that C needs
-one. You may want to install a C compiler regardless of your need for only a
-linker; some common Rust packages depend on C code and will need a C compiler
-too.
+Finally, you’ll need a linker of some kind. It’s likely you already have one
+installed, but if you try to compile a Rust program and get errors telling you
+that a linker could not be executed, you’ll need to install one. You can
+install a C compiler, as that will usually come with the correct linker. Check
+your platform’s documentation for how to install a C compiler. Some common Rust
+packages depend on C code and will need a C compiler too, so it may be worth
+installing one now regardless.
 
 ### Installing Rustup on Windows
 
 On Windows, go to [https://www.rust-lang.org/en-US/install.html][install] and
-follow the instructions. You’ll also need the C++ build tools for Visual Studio
-2013 or later. The easiest way to acquire the build tools is by installing
-[Build Tools for Visual Studio 2017][visualstudio] which provides only the
-Visual C++ build tools. Alternately, you can [install][visualstudio] Visual
-Studio 2017, Visual Studio 2015, or Visual Studio 2013 and during installation
-select the desktop development with C++ workload.
+follow the instructions for installing Rust. At some point in the installation
+you’ll receive a message telling you you’ll also need the C++ build tools for
+Visual Studio 2013 or later. The easiest way to acquire the build tools is to
+install [Build Tools for Visual Studio 2017][visualstudio], found in the Other
+Tools and Frameworks section.
 
 [install]: https://www.rust-lang.org/en-US/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
@@ -88,7 +95,7 @@ PowerShell. If there are specific differences, we’ll explain which to use.
 If you have reasons for preferring not to use `rustup`, please see [the Rust
 installation page](https://www.rust-lang.org/install.html) for other options.
 
-### Updating
+### Updating and Uninstalling
 
 Once you have Rust installed via `rustup`, updating to the latest version is
 easy. From your shell, run the update script:
@@ -97,10 +104,7 @@ easy. From your shell, run the update script:
 $ rustup update
 ```
 
-### Uninstalling
-
-Uninstalling Rust and Rustup is as easy as installing them. From your shell,
-run the uninstall script:
+To uninstall Rust and `rustup`, from your shell, run the uninstall script:
 
 ```text
 $ rustup self uninstall
@@ -108,14 +112,14 @@ $ rustup self uninstall
 
 ### Troubleshooting
 
-To check that you have Rust installed, you can open up a shell and type this:
+To check whether you have Rust installed correctly, open up a shell and enter:
 
 ```text
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date in a format
-similar to this for the latest stable version at the time you install:
+You should see the version number, commit hash, and commit date for the latest
+stable version at the time you install in the following format:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
@@ -126,11 +130,12 @@ If you see this, Rust has been installed successfully! Congrats!
 If you don’t and you’re on Windows, check that Rust is in your `%PATH%` system
 variable.
 
-If it still isn’t working, there are a number of places where you can get help.
-The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
-which you can access through [Mibbit][mibbit]. Go to that address, and you’ll
-be chatting with other Rustaceans (a silly nickname we call ourselves) who can
-help you out. Other great resources include [the Users forum][users] and [Stack
+If that’s all correct and Rust still isn’t working, there are a number of
+places you can get help. The easiest is [the #rust IRC channel on
+irc.mozilla.org][irc]<!-- ignore -->, which you can access through
+[Mibbit][mibbit]. Go to that address, and you’ll be chatting with other
+Rustaceans (a silly nickname we call ourselves) who can help you out. Other
+great resources include [the Users forum][users] and [Stack
 Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust

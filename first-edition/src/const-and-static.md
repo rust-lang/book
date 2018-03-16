@@ -38,6 +38,9 @@ reference stored in a static has a [`'static` lifetime][lifetimes]:
 static NAME: &'static str = "Steve";
 ```
 
+The type of a `static` value must be `Sync` unless the `static` value is
+mutable.
+
 [lifetimes]: lifetimes.html
 
 ## Mutability
@@ -64,16 +67,19 @@ unsafe {
 
 [unsafe]: unsafe.html
 
-Furthermore, any type stored in a `static` must be `Sync`, and must not have
-a [`Drop`][drop] implementation.
-
-[drop]: drop.html
-
 # Initializing
 
 Both `const` and `static` have requirements for giving them a value. They must
 be given a value that’s a constant expression. In other words, you cannot use
 the result of a function call or anything similarly complex or at runtime.
+
+# Dropping
+
+Types implementing [`Drop`][drop] are allowed in `const` and `static`
+definitions. Constants are inlined where they are used and are dropped
+accordingly. `static` values are not dropped.
+
+[drop]: drop.html
 
 # Which construct should I use?
 

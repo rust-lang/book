@@ -1098,21 +1098,19 @@ a lot.
 
 ```
 error[E0277]: the trait bound `std::rc::Rc<std::sync::Mutex<i32>>:
-std::marker::Send` is not satisfied in `[closure@Filename: src/main.rs:11:36:
-15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+std::marker::Send` is not satisfied in `[closure@src/main.rs:11:36:
+15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
   --> src/main.rs:11:22
    |
 11 |         let handle = thread::spawn(move || {
    |                      ^^^^^^^^^^^^^ `std::rc::Rc<std::sync::Mutex<i32>>`
 cannot be sent between threads safely
    |
-   = help: within `[closure@Filename: src/main.rs:11:36: 15:10
+   = help: within `[closure@src/main.rs:11:36: 15:10
 counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send` is
 not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
    = note: required because it appears within the type
-`[closure@Filename: src/main.rs:11:36: 15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+`[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
    = note: required by `std::thread::spawn`
 ```
 
@@ -1151,8 +1149,8 @@ single thread, your code can run faster if it doesn’t have to enforce the
 guarantees atomics provide.
 
 Let’s return to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix
-our program by changing the `use` line and the call to `new`. The code in
-Listing 16-15 will finally compile and run:
+our program by changing the `use` line, the call to `new`, and the call to
+`clone`. The code in Listing 16-15 will finally compile and run:
 
 Filename: src/main.rs
 
@@ -1278,8 +1276,8 @@ useful for enforcing invariants related to concurrency.
 Manually implementing these traits involves implementing unsafe Rust code.
 We’ll talk about using unsafe Rust code in Chapter 19; for now, the important
 information is that building new concurrent types not made up of `Send` and
-`Sync` parts requires careful thought to uphold the safety guarantees. The
-Rustonomicon at *https://doc.rust-lang.org/stable/nomicon/* has more
+`Sync` parts requires careful thought to uphold the safety guarantees.
+The Rustonomicon at *https://doc.rust-lang.org/stable/nomicon/* has more
 information about these guarantees and how to uphold them.
 
 ## Summary
@@ -1305,5 +1303,4 @@ go forth and make your programs concurrent, fearlessly!
 
 Next, we’ll talk about idiomatic ways to model problems and structure solutions
 as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
-relate to those you might be familiar with from object oriented programming.
-
+relate to those you might be familiar with from object-oriented programming.

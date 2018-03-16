@@ -16,12 +16,12 @@ You can check out other resources that describe release channels.
 * **[In the Rustup documentation: Keeping Rust Up-to-date][4]**
 * [On the website: Install Rust][5]
 * [In the Rust RFCs: RFC 507 — Release Channels][3]
-* [In the second edition: (future) Appendix D — Nightly Rust][2]
+* [In the second edition: How Rust is Made and “Nightly Rust”][2]
 * <small>[In the first edition: Ch 4.11 — Release Channels][1]</small>
 
 
 [1]: first-edition/release-channels.html
-[2]: second-edition/appendix-04-nightly-rust.html
+[2]: second-edition/appendix-07-nightly-rust.html
 [3]: https://github.com/rust-lang/rfcs/blob/master/text/0507-release-channels.md
 [4]: https://github.com/rust-lang-nursery/rustup.rs/blob/master/README.md#keeping-rust-up-to-date
 [5]: https://www.rust-lang.org/en-US/install.html
