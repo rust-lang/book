@@ -183,9 +183,9 @@ single quotes, as opposed to strings, which use double quotes.)
 
 ```rust
 fn main() {
-   let c = 'z';
-   let z = 'ℤ';
-   let heart_eyed_cat = '😻';
+    let c = 'z';
+    let z = 'ℤ';
+    let heart_eyed_cat = '😻';
 }
 ```
 
