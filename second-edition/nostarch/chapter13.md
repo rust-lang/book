@@ -21,15 +21,15 @@ More specifically, we’ll cover:
 * The performance of these two features (Spoiler alert: they’re faster than you
   might think!)
 
-Other Rust features are influenced by the functional style as well, such as
-pattern matching and enums, which we’ve covered in other chapters. Mastering
+Other Rust features, such as pattern matching and enums, which we’ve covered in
+other chapters, are influenced by the functional style as well. Mastering
 closures and iterators is an important part of writing idiomatic, fast Rust
 code, so we’ll devote this entire chapter to them.
 
 ## Closures: Anonymous Functions that Can Capture Their Environment
 
-Rust’s *closures* are anonymous functions you can save in a variable or pass as
-arguments to other functions. You can create the closure in one place, and then
+Rust’s closures are anonymous functions you can save in a variable or pass as
+arguments to other functions. You can create the closure in one place and then
 call the closure to evaluate it in a different context. Unlike functions,
 closures can capture values from the scope in which they’re called. We’ll
 demonstrate how these closure features allow for code reuse and behavior
@@ -38,22 +38,22 @@ customization.
 ### Creating an Abstraction of Behavior with Closures
 
 Let’s work on an example of a situation in which it’s useful to store a closure
-to be executed at a later time. Along the way, we’ll talk about the syntax of
-closures, type inference, and traits.
+to be executed later. Along the way, we’ll talk about the syntax of closures,
+type inference, and traits.
 
 Consider this hypothetical situation: we work at a startup that’s making an app
 to generate custom exercise workout plans. The backend is written in Rust, and
-the algorithm that generates the workout plan takes into account many different
-factors, such as the app user’s age, body mass index, preferences, recent
+the algorithm that generates the workout plan takes into account many factors,
+such as the app user’s age, body mass index, exercise preferences, recent
 workouts, and an intensity number they specify. The actual algorithm used isn’t
 important in this example; what’s important is that this calculation takes a
 few seconds. We want to call this algorithm only when we need to and only call
-it once, so we don’t make the user wait more than necessary.
+it once so we don’t make the user wait more than necessary.
 
-We’ll simulate calling this hypothetical algorithm with the
-`simulated_expensive_calculation` function shown in Listing 13-1, which will
-print `calculating slowly...`, wait for two seconds, and then return whatever
-number we passed in:
+We’ll simulate calling this hypothetical algorithm with the function
+`simulated_expensive_calculation` shown in Listing 13-1, which will print
+`calculating slowly...`, wait for two seconds, and then return whatever number
+we passed in:
 
 Filename: src/main.rs
 
@@ -69,20 +69,20 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 ```
 
 Listing 13-1: A function to stand in for a hypothetical calculation that takes
-about two seconds to run
+about 2 seconds to run
 
-Next is the `main` function that contains the parts of the workout app
+Next is the `main` function, which contains the parts of the workout app
 important for this example. This function represents the code that the app will
 call when a user asks for a workout plan. Because the interaction with the
 app’s frontend isn’t relevant to the use of closures, we’ll hardcode values
 representing inputs to our program and print the outputs.
 
-The required inputs are:
+The required inputs are these:
 
-* *An intensity number from the user*, which is specified when they request
+* An intensity number from the user, which is specified when they request
   a workout to indicate whether they want a low-intensity workout or a
-  high-intensity workout.
-* *A random number* that will generate some variety in the workout plans.
+  high-intensity workout
+* A random number that will generate some variety in the workout plans
 
 The output will be the recommended workout plan. Listing 13-2 shows the `main`
 function we’ll use:
@@ -104,17 +104,17 @@ fn main() {
 Listing 13-2: A `main` function with hardcoded values to simulate user input
 and random number generation
 
-We’ve hardcoded the variable `simulated_user_specified_value` to 10 and the
-variable `simulated_random_number` to 7 for simplicity’s sake; in an actual
-program, we’d get the intensity number from the app frontend and we’d use the
+We’ve hardcoded the variable `simulated_user_specified_value` as 10 and the
+variable `simulated_random_number` as 7 for simplicity’s sake; in an actual
+program, we’d get the intensity number from the app frontend, and we’d use the
 `rand` crate to generate a random number, as we did in the Guessing Game
 example in Chapter 2. The `main` function calls a `generate_workout` function
 with the simulated input values.
 
-Now that we have the context, let’s get to the algorithm. The
-`generate_workout` function in Listing 13-3 contains the business logic of the
+Now that we have the context, let’s get to the algorithm. The function
+`generate_workout` in Listing 13-3 contains the business logic of the
 app that we’re most concerned with in this example. The rest of the code
-changes in this example will be made to this function:
+changes in this example will be made to this function.
 
 Filename: src/main.rs
 
@@ -151,8 +151,8 @@ inside the outer `else` doesn’t call it at all, and the code inside the
 second `else` case calls it once.
 
 The desired behavior of the `generate_workout` function is to first check
-whether the user wants a low-intensity workout (indicated by a number less than
-25) or a high-intensity workout (a number of 25 or greater).
+whether the user wants a low-intensity workout (indicated by a number less
+than 25) or a high-intensity workout (a number of 25 or greater).
 
 Low-intensity workout plans will recommend a number of push-ups and sit-ups
 based on the complex algorithm we’re simulating.
@@ -162,9 +162,10 @@ the value of the random number generated by the app happens to be 3, the app
 will recommend a break and hydration. If not, the user will get a number of
 minutes of running based on the complex algorithm.
 
-The data science team has let us know that we’ll have to make some changes to
-the way we call the algorithm in the future. To simplify the update when those
-changes happen, we want to refactor this code so it calls the
+This code works the way the business wants it to now, but let’s say the data
+science team decides that we need to make some changes to the way we call the
+`simulated_expensive_calculation` function in the future. To simplify the
+update when those changes happen, we want to refactor this code so it calls the
 `simulated_expensive_calculation` function only once. We also want to cut the
 place where we’re currently unnecessarily calling the function twice without
 adding any other calls to that function in the process. That is, we don’t want
@@ -173,8 +174,8 @@ to call it if the result isn’t needed, and we still want to call it only once.
 #### Refactoring Using Functions
 
 We could restructure the workout program in many ways. First, we’ll try
-extracting the duplicated call to the `expensive_calculation` function into
-a variable, as shown in Listing 13-4:
+extracting the duplicated call to the `simulated_expensive_calculation`
+function into a variable, as shown in Listing 13-4:
 
 Filename: src/main.rs
 
@@ -221,9 +222,9 @@ code where we actually need the result. This is a use case for closures!
 
 Instead of always calling the `simulated_expensive_calculation` function before
 the `if` blocks, we can define a closure and store the *closure* in a variable
-rather than storing the result, as shown in Listing 13-5. We can actually move
-the whole body of `simulated_expensive_calculation` within the closure we’re
-introducing here:
+rather than storing the result of the function call, as shown in Listing 13-5.
+We can actually move the whole body of `simulated_expensive_calculation` within
+the closure we’re introducing here:
 
 Filename: src/main.rs
 
@@ -320,19 +321,19 @@ types of values a function uses and returns. But closures aren’t used in an
 exposed interface like this: they’re stored in variables and used without
 naming them and exposing them to users of our library.
 
-Additionally, closures are usually short and only relevant within a narrow
-context rather than in any arbitrary scenario. Within these limited contexts,
-the compiler is reliably able to infer the types of the parameters and return
-type, similar to how it’s able to infer the types of most variables.
+Closures are usually short and relevant only within a narrow context rather
+than in any arbitrary scenario. Within these limited contexts, the compiler is
+reliably able to infer the types of the parameters and the return type, similar
+to how it’s able to infer the types of most variables.
 
 Making programmers annotate the types in these small, anonymous functions would
 be annoying and largely redundant with the information the compiler already has
 available.
 
-Like variables, we can add type annotations if we want to increase explicitness
-and clarity at the cost of being more verbose than is strictly necessary;
-annotating the types for the closure we defined in Listing 13-5 would look like
-the definition shown in Listing 13-7:
+As with variables, we can add type annotations if we want to increase
+explicitness and clarity at the cost of being more verbose than is strictly
+necessary. Annotating the types for the closure we defined in Listing 13-5
+would look like the definition shown in Listing 13-7:
 
 Filename: src/main.rs
 
@@ -347,12 +348,12 @@ let expensive_closure = |num: u32| -> u32 {
 Listing 13-7: Adding optional type annotations of the parameter and return
 value types in the closure
 
-The syntax of closures and functions looks more similar with type annotations.
-The following is a vertical comparison of the syntax for the definition of a
-function that adds one to its parameter, and a closure that has the same
-behavior. We’ve added some spaces to line up the relevant parts. This
-illustrates how closure syntax is similar to function syntax except for the use
-of pipes and the amount of syntax that is optional:
+With type annotations added, the syntax of closures looks more similar to the
+syntax of functions. The following is a vertical comparison of the syntax for
+the definition of a function that adds 1 to its parameter and a closure that
+has the same behavior. We’ve added some spaces to line up the relevant parts.
+This illustrates how closure syntax is similar to function syntax except for
+the use of pipes and the amount of syntax that is optional:
 
 ```
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -363,8 +364,8 @@ let add_one_v4 = |x|               x + 1  ;
 
 The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the brackets that are
-optional, because the closure body has only one expression. These are all valid
+the closure definition, and the fourth line removes the brackets, which are
+optional because the closure body has only one expression. These are all valid
 definitions that will produce the same behavior when they’re called.
 
 Closure definitions will have one concrete type inferred for each of their
@@ -373,7 +374,7 @@ definition of a short closure that just returns the value it receives as a
 parameter. This closure isn’t very useful except for the purposes of this
 example. Note that we haven’t added any type annotations to the definition: if
 we then try to call the closure twice, using a `String` as an argument the
-first time and a `u32` the second time, we’ll get an error:
+first time and a `u32` the second time, we’ll get an error.
 
 Filename: src/main.rs
 
@@ -411,13 +412,13 @@ error if we try to use a different type with the same closure.
 Let’s return to our workout generation app. In Listing 13-6, our code was still
 calling the expensive calculation closure more times than it needed to. One
 option to solve this issue is to save the result of the expensive closure in a
-variable for reuse and use the variable instead in each place we need the
-result instead of calling the closure again. However, this method could result
-in a lot of repeated code.
+variable for reuse and use the variable in each place we need the result,
+instead of calling the closure again. However, this method could result in a
+lot of repeated code.
 
 Fortunately, another solution is available to us. We can create a struct that
 will hold the closure and the resulting value of calling the closure. The
-struct will only execute the closure if we need the resulting value, and it
+struct will execute the closure only if we need the resulting value, and it
 will cache the resulting value so the rest of our code doesn’t have to be
 responsible for saving and reusing the result. You may know this pattern as
 *memoization* or *lazy evaluation*.
@@ -431,8 +432,8 @@ we use generics and trait bounds, as we discussed in Chapter 10.
 
 The `Fn` traits are provided by the standard library. All closures implement at
 least one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the
-difference between these traits in the "Capturing the Environment with
-Closures" section; in this example, we can use the `Fn` trait.
+difference between these traits in the “Capturing the Environment with
+Closures” section; in this example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have to match this trait bound. In this
@@ -515,17 +516,18 @@ returns a `Cacher` instance that holds the closure specified in the
 `calculation` field and a `None` value in the `value` field, because we haven’t
 executed the closure yet.
 
-When the calling code wants the result of evaluating the closure, instead of
+When the calling code needs the result of evaluating the closure, instead of
 calling the closure directly, it will call the `value` method. This method
 checks whether we already have a resulting value in `self.value` in a `Some`;
 if we do, it returns the value within the `Some` without executing the closure
 again.
 
-If `self.value` is `None`, we call the closure stored in `self.calculation`,
-save the result in `self.value` for future use, and return the value as well.
+If `self.value` is `None`, the code calls the closure stored in
+`self.calculation`, saves the result in `self.value` for future use, and
+returns the value as well.
 
-Listing 13-11 shows how we can use this `Cacher` struct in the
-`generate_workout` function from Listing 13-6:
+Listing 13-11 shows how we can use this `Cacher` struct in the function
+`generate_workout` from Listing 13-6:
 
 Filename: src/main.rs
 
@@ -571,9 +573,9 @@ calculation will be run a maximum of once.
 Try running this program with the `main` function from Listing 13-2. Change the
 values in the `simulated_user_specified_value` and `simulated_random_number`
 variables to verify that in all the cases in the various `if` and `else`
-blocks, `calculating slowly...` only appears once and only when needed. The
+blocks, `calculating slowly...` appears only once and only when needed. The
 `Cacher` takes care of the logic necessary to ensure we aren’t calling the
-expensive calculation more than we need to, so `generate_workout` can focus on
+expensive calculation more than we need to so `generate_workout` can focus on
 the business logic.
 
 ### Limitations of the `Cacher` Implementation
@@ -601,7 +603,7 @@ fn call_with_different_values() {
 
 This test creates a new `Cacher` instance with a closure that returns the value
 passed into it. We call the `value` method on this `Cacher` instance with an
-`arg` value of 1 and then an `arg` value of 2, and we expect that the call to
+`arg` value of 1 and then an `arg` value of 2, and we expect the call to
 `value` with the `arg` value of 2 should return 2.
 
 Run this test with the `Cacher` implementation in Listing 13-9 and Listing
@@ -638,8 +640,8 @@ functions. However, closures have an additional capability that functions don’
 have: they can capture their environment and access variables from the scope in
 which they’re defined.
 
-Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
-that uses the variable `x` from the closure’s surrounding environment:
+Listing 13-12 has an example of a closure stored in the `equal_to_x` variable
+that uses the `x` variable from the closure’s surrounding environment:
 
 Filename: src/main.rs
 
@@ -712,16 +714,16 @@ three `Fn` traits as follows:
 * `FnMut` can change the environment because it mutably borrows values.
 * `Fn` borrows values from the environment immutably.
 
-When we create a closure, Rust infers which trait to use based on how the
-closure uses the values from the environment. All closures implement `FnOnce`,
-because they can all be called at least once. Closures that don't move the
-captured variables also implement `FnMut`, and closures that don't need mutable
+When you create a closure, Rust infers which trait to use based on how the
+closure uses the values from the environment. All closures implement `FnOnce`
+because they can all be called at least once. Closures that don’t move the
+captured variables also implement `FnMut`, and closures that don’t need mutable
 access to the captured variables also implement `Fn`. In Listing 13-12, the
 `equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the `Fn` trait)
 because the body of the closure only needs to read the value in `x`.
 
-If we want to force the closure to take ownership of the values it uses in the
-environment, we can use the `move` keyword before the parameter list. This
+If you want to force the closure to take ownership of the values it uses in the
+environment, you can use the `move` keyword before the parameter list. This
 technique is mostly useful when passing a closure to a new thread to move the
 data so it’s owned by the new thread.
 
@@ -729,7 +731,7 @@ We’ll have more examples of `move` closures in Chapter 16 when we talk about
 concurrency. For now, here’s the code from Listing 13-12 with the `move`
 keyword added to the closure definition and using vectors instead of integers,
 because integers can be copied rather than moved; note that this code will not
-yet compile:
+yet compile.
 
 Filename: src/main.rs
 
@@ -778,15 +780,15 @@ useful as function parameters, let’s move on to our next topic: iterators.
 ## Processing a Series of Items with Iterators
 
 The iterator pattern allows you to perform some task on a sequence of items in
-turn. An *iterator* is responsible for the logic of iterating over each item
-and determining when the sequence has finished. When we use iterators, we don’t
-have to reimplement that logic ourselves.
+turn. An iterator is responsible for the logic of iterating over each item and
+determining when the sequence has finished. When you use iterators, you don’t
+have to reimplement that logic yourself.
 
-In Rust, iterators are *lazy*, meaning they have no effect until we call
+In Rust, iterators are *lazy*, meaning they have no effect until you call
 methods that consume the iterator to use it up. For example, the code in
 Listing 13-13 creates an iterator over the items in the vector `v1` by calling
 the `iter` method defined on `Vec`. This code by itself doesn’t do anything
-useful:
+useful.
 
 ```
 let v1 = vec![1, 2, 3];
@@ -797,14 +799,14 @@ let v1_iter = v1.iter();
 Listing 13-13: Creating an iterator
 
 Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-4 in Chapter 3, we used iterators with `for` loops to execute some code on
+3-5 in Chapter 3, we used iterators with `for` loops to execute some code on
 each item, although we glossed over what the call to `iter` did until now.
 
 The example in Listing 13-14 separates the creation of the iterator from the
 use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
 variable, and no iteration takes place at that time. When the `for` loop is
 called using the iterator in `v1_iter`, each element in the iterator is used in
-one iteration of the loop, which prints out each value:
+one iteration of the loop, which prints out each value.
 
 ```
 let v1 = vec![1, 2, 3];
@@ -818,15 +820,15 @@ for val in v1_iter {
 
 Listing 13-14: Using an iterator in a `for` loop
 
-In languages that don’t have iterators provided by their standard libraries, we
-would likely write this same functionality by starting a variable at index 0,
-using that variable to index into the vector to get a value, and incrementing
-the variable value in a loop until it gets to the total number of items in the
-vector.
+In languages that don’t have iterators provided by their standard libraries,
+you would likely write this same functionality by starting a variable at index
+0, using that variable to index into the vector to get a value, and
+incrementing the variable value in a loop until it reached the total number of
+items in the vector.
 
-Iterators handle all that logic for us, cutting down on repetitive code we
-could potentially mess up. Iterators give us more flexibility to use the same
-logic with many different kinds of sequences, not just data structures we can
+Iterators handle all that logic for you, cutting down on repetitive code you
+could potentially mess up. Iterators give you more flexibility to use the same
+logic with many different kinds of sequences, not just data structures you can
 index into, like vectors. Let’s examine how iterators do that.
 
 ### The `Iterator` Trait and the `next` Method
@@ -844,17 +846,17 @@ trait Iterator {
 }
 ```
 
-Notice some new syntax that we haven’t covered yet: `type Item` and
-`Self::Item`, which are defining an *associated type* with this trait. We’ll
-talk about associated types in depth in Chapter 19. For now, all you need to
-know is that this code says implementing the `Iterator` trait requires that you
-also define an `Item` type, and this `Item` type is used in the return type of
-the `next` method. In other words, the `Item` type will be the type returned
-from the iterator.
+Notice this definition uses some new syntax: `type Item` and `Self::Item`,
+which are defining an *associated type* with this trait. We’ll talk about
+associated types in depth in Chapter 19. For now, all you need to know is that
+this code says implementing the `Iterator` trait requires that you also define
+an `Item` type, and this `Item` type is used in the return type of the `next`
+method. In other words, the `Item` type will be the type returned from the
+iterator.
 
 The `Iterator` trait only requires implementors to define one method: the
 `next` method, which returns one item of the iterator at a time wrapped in
-`Some` and, when iteration is over, it returns `None`.
+`Some` and, when iteration is over, returns `None`.
 
 We can call the `next` method on iterators directly; Listing 13-15 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
@@ -879,11 +881,11 @@ fn iterator_demonstration() {
 Listing 13-15: Calling the `next` method on an iterator
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
-iterator changes state that keeps track of where it is in the sequence. In
-other words, this code *consumes*, or uses up, the iterator. Each call to
-`next` eats up an item from the iterator. We didn’t need to make `v1_iter`
-mutable when we used a `for` loop because the loop took ownership of `v1_iter`
-and made it mutable behind the scenes.
+iterator changes internal state that the iterator uses to keep track of where
+it is in the sequence. In other words, this code *consumes*, or uses up, the
+iterator. Each call to `next` eats up an item from the iterator. We didn’t need
+to make `v1_iter` mutable when we used a `for` loop because the loop took
+ownership of `v1_iter` and made it mutable behind the scenes.
 
 Also note that the values we get from the calls to `next` are immutable
 references to the values in the vector. The `iter` method produces an iterator
@@ -895,11 +897,11 @@ ownership of `v1` and returns owned values, we can call `into_iter` instead of
 ### Methods that Consume the Iterator
 
 The `Iterator` trait has a number of different methods with default
-implementations provided for us by the standard library; you can find out about
-these methods by looking in the standard library API documentation for the
-`Iterator` trait. Some of these methods call the `next` method in their
-definition, which is why we’re required to implement the `next` method when
-implementing the `Iterator` trait.
+implementations provided by the standard library; you can find out about these
+methods by looking in the standard library API documentation for the `Iterator`
+trait. Some of these methods call the `next` method in their definition, which
+is why you’re required to implement the `next` method when implementing the
+`Iterator` trait.
 
 Methods that call `next` are called *consuming adaptors*, because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
@@ -932,9 +934,9 @@ ownership of the iterator we call it on.
 ### Methods that Produce Other Iterators
 
 Other methods defined on the `Iterator` trait, known as *iterator adaptors*,
-allow us to change iterators into different kind of iterators. We can chain
+allow you to change iterators into different kinds of iterators. You can chain
 multiple calls to iterator adaptors to perform complex actions in a readable
-way. But because all iterators are lazy, we have to call one of the consuming
+way. But because all iterators are lazy, you have to call one of the consuming
 adaptor methods to get results from calls to iterator adaptors.
 
 Listing 13-17 shows an example of calling the iterator adaptor method `map`,
@@ -952,7 +954,7 @@ v1.iter().map(|x| x + 1);
 
 Listing 13-17: Calling the iterator adaptor `map` to create a new iterator
 
-The warning we get is:
+The warning we get is this:
 
 ```
 warning: unused `std::iter::Map` which must be used: iterator adaptors are lazy
@@ -975,7 +977,7 @@ iterator and collects the resulting values into a collection data type.
 
 In Listing 13-18, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector incremented by 1:
+containing each item from the original vector incremented by 1.
 
 Filename: src/main.rs
 
@@ -987,11 +989,11 @@ let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
-Listing 13-18: Calling the `map` method to create a new iterator, and then
+Listing 13-18: Calling the `map` method to create a new iterator and then
 calling the `collect` method to consume the new iterator and create a vector
 
 Because `map` takes a closure, we can specify any operation we want to perform
-on each item. This is a great example of how closures let us customize some
+on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the `Iterator` trait
 provides.
 
@@ -1004,9 +1006,9 @@ the iterator and returns a Boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
 `false`, the value won’t be included in the resulting iterator.
 
-In Listing 13-19 we use `filter` with a closure that captures the `shoe_size`
+In Listing 13-19, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
-instances. It will return only shoes that are the specified size:
+instances. It will return only shoes that are the specified size.
 
 Filename: src/lib.rs
 
@@ -1060,23 +1062,24 @@ compares the value with each shoe’s size, keeping only shoes of the size
 specified. Finally, calling `collect` gathers the values returned by the
 adapted iterator into a vector that’s returned by the function.
 
-The test shows that when we call `shoes_in_my_size`, we only get back shoes
+The test shows that when we call `shoes_in_my_size`, we get back only shoes
 that have the same size as the value we specified.
 
-### Creating Our Own Iterators with `Iterator`
+### Creating Our Own Iterators with the `Iterator` Trait
 
-We’ve shown that we can create an iterator by calling `iter`, `into_iter`, or
-`iter_mut` on a vector. We can create iterators from the other collection types
-in the standard library, such as hash map. We can also create iterators that do
-anything we want by implementing the `Iterator` trait on our own types. As
-previously mentioned, the only method we’re required to provide a definition
-for is the `next` method. Once we’ve done that, we can use all other methods
-that have default implementations provided by the `Iterator` trait!
+We’ve shown that you can create an iterator by calling `iter`, `into_iter`, or
+`iter_mut` on a vector. You can create iterators from the other collection
+types in the standard library, such as hash map. You can also create iterators
+that do anything you want by implementing the `Iterator` trait on your own
+types. As previously mentioned, the only method you’re required to provide a
+definition for is the `next` method. Once you’ve done that, you can use all
+other methods that have default implementations provided by the `Iterator`
+trait!
 
 To demonstrate, let’s create an iterator that will only ever count from 1 to 5.
-First, we’ll create a struct to hold some values, and then we’ll make this
-struct into an iterator by implementing the `Iterator` trait and use the values
-in that implementation.
+First, we’ll create a struct to hold some values. Then we’ll make this struct
+into an iterator by implementing the `Iterator` trait and using the values in
+that implementation.
 
 Listing 13-20 has the definition of the `Counter` struct and an associated
 `new` function to create instances of `Counter`:
@@ -1132,7 +1135,7 @@ We set the associated `Item` type for our iterator to `u32`, meaning the
 iterator will return `u32` values. Again, don’t worry about associated types
 yet, we’ll cover them in Chapter 19.
 
-We want our iterator to add one to the current state, so we initialized `count`
+We want our iterator to add 1 to the current state, so we initialized `count`
 to 0 so it would return 1 first. If the value of `count` is less than 6, `next`
 will return the current value wrapped in `Some`, but if `count` is 6 or higher,
 our iterator will return `None`.
@@ -1141,8 +1144,8 @@ our iterator will return `None`.
 
 Once we’ve implemented the `Iterator` trait, we have an iterator! Listing 13-22
 shows a test demonstrating that we can use the iterator functionality of our
-`Counter` struct by calling the `next` method on it directly, just like we did
-with the iterator created from a vector in Listing 13-15:
+`Counter` struct by calling the `next` method on it directly, just as we did
+with the iterator created from a vector in Listing 13-15.
 
 Filename: src/lib.rs
 
@@ -1168,14 +1171,14 @@ want this iterator to have: returning the values from 1 to 5.
 
 #### Using Other `Iterator` Trait Methods
 
-Because we implemented the `Iterator` trait by defining the `next` method, we
+We implemented the `Iterator` trait by defining the `next` method, so we
 can now use any `Iterator` trait method’s default implementations as defined in
 the standard library, because they all use the `next` method’s functionality.
 
 For example, if for some reason we wanted to take the values produced by an
 instance of `Counter`, pair them with values produced by another `Counter`
 instance after skipping the first value, multiply each pair together, keep only
-those results that are divisible by three, and add all the resulting values
+those results that are divisible by 3, and add all the resulting values
 together, we could do so, as shown in the test in Listing 13-23:
 
 Filename: src/lib.rs
@@ -1216,7 +1219,7 @@ In Listing 12-6, we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
 values, allowing the `Config` struct to own those values. In Listing 13-24,
 we’ve reproduced the implementation of the `Config::new` function as it was in
-Listing 12-23 at the end of Chapter 12:
+Listing 12-23:
 
 Filename: src/lib.rs
 
@@ -1237,8 +1240,7 @@ impl Config {
 }
 ```
 
-Listing 13-24: Reproduction of the `Config::new` function from the end of
-Chapter 12
+Listing 13-24: Reproduction of the `Config::new` function from Listing 12-23
 
 At the time, we said not to worry about the inefficient `clone` calls because
 we would remove them in the future. Well, that time is now!
@@ -1278,8 +1280,8 @@ fn main() {
 ```
 
 We’ll change the start of the `main` function that we had in Listing 12-24 at
-the end of Chapter 12 to the code in Listing 13-25. This won’t compile yet
-until we update `Config::new` as well:
+to the code in Listing 13-25. This won’t compile until we update `Config::new`
+as well.
 
 Filename: src/main.rs
 
@@ -1303,8 +1305,8 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::new`. In your I/O project’s
 *src/lib.rs* file, let’s change the signature of `Config::new` to look like
-Listing 13-26. This still won’t compile yet because we need to update the
-function body:
+Listing 13-26. This still won’t compile because we need to update the function
+body.
 
 Filename: src/lib.rs
 
@@ -1358,7 +1360,7 @@ Listing 13-27: Changing the body of `Config::new` to use iterator methods
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
-`next` and do nothing with the return value. Second, we call `next` on the
+`next` and do nothing with the return value. Second, we call `next` to get the
 value we want to put in the `query` field of `Config`. If `next` returns a
 `Some`, we use a `match` to extract the value. If it returns `None`, it means
 not enough arguments were given and we return early with an `Err` value. We do
@@ -1367,8 +1369,7 @@ the same thing for the `filename` value.
 ### Making Code Clearer with Iterator Adaptors
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in Listing 13-28 as it was in Listing 12-19
-at the end of Chapter 12:
+project, which is reproduced here in Listing 13-28 as it was in Listing 12-19:
 
 Filename: src/lib.rs
 
@@ -1386,15 +1387,14 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 13-28: The implementation of the `search` function from Chapter 12
+Listing 13-28: The implementation of the `search` function from Listing 12-19
 
 We can write this code in a more concise way using iterator adaptor methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
-make code clearer. Removing the mutable state might make it easier for us to
-make a future enhancement to make searching happen in parallel, because we
-wouldn’t have to manage concurrent access to the `results` vector. Listing
-13-29 shows this change:
+make code clearer. Removing the mutable state might enable a future enhancement
+to make searching happen in parallel, because we wouldn’t have to manage
+concurrent access to the `results` vector. Listing 13-29 shows this change:
 
 Filename: src/lib.rs
 
@@ -1411,8 +1411,8 @@ Listing 13-29: Using iterator adaptor methods in the implementation of the
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
-13-19, we can use the `filter` adaptor to keep only the lines that
-`line.contains(query)` returns true for. We then collect the matching lines
+13-19, this code uses the `filter` adaptor to keep only the lines that
+`line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
 well.
@@ -1434,13 +1434,13 @@ performance.
 
 ## Comparing Performance: Loops vs. Iterators
 
-To determine whether to use loops or iterators, we need to know which version
+To determine whether to use loops or iterators, you need to know which version
 of our `search` functions is faster: the version with an explicit `for` loop or
 the version with iterators.
 
 We ran a benchmark by loading the entire contents of *The Adventures of
 Sherlock Holmes* by Sir Arthur Conan Doyle into a `String` and looking for the
-word “the” in the contents. Here are the results of the benchmark on the
+word *the* in the contents. Here are the results of the benchmark on the
 version of `search` using the `for` loop and the version using iterators:
 
 ```
@@ -1453,20 +1453,19 @@ here, because the point is not to prove that the two versions are equivalent
 but to get a general sense of how these two implementations compare
 performance-wise.
 
-For a more comprehensive benchmark, you should check various texts of various
-sizes, different words, words of different lengths, and all kinds of other
-variations. The point is this: iterators, although a high-level abstraction,
-get compiled down to roughly the same code as if you’d written the lower-level
-code yourself. Iterators are one of Rust’s *zero-cost* *abstractions*, by which
-we mean using the abstraction imposes no additional runtime overhead in the
-same way that Bjarne Stroustrup, the original designer and implementor of C++,
-defines *zero-overhead*:
+For a more comprehensive benchmark, you should check using various texts of
+various sizes as the `contents`, different words and words of different lengths
+as the `query`, and all kinds of other variations. The point is this:
+iterators, although a high-level abstraction, get compiled down to roughly the
+same code as if you’d written the lower-level code yourself. Iterators are one
+of Rust’s *zero-cost abstractions*, by which we mean using the abstraction
+imposes no additional runtime overhead. This is analogous to how Bjarne
+Stroustrup, the original designer and implementor of C++, defines
+*zero-overhead* in “Foundations of C++” (2012):
 
 > In general, C++ implementations obey the zero-overhead principle: What you
 > don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
 > code any better.
->
-> Bjarne Stroustrup’s “Foundations of C++”
 
 As another example, the following code is taken from an audio decoder. The
 decoding algorithm uses the linear prediction mathematical operation to
@@ -1476,7 +1475,7 @@ code uses an iterator chain to do some math on three variables in scope: a
 to shift data in `qlp_shift`. We’ve declared the variables within this example
 but not given them any values; although this code doesn’t have much meaning
 outside of its context, it’s still a concise, real-world example of how Rust
-translates high-level ideas to low-level code:
+translates high-level ideas to low-level code.
 
 ```
 let buffer: &mut [i32];
@@ -1509,12 +1508,12 @@ loop. *Unrolling* is an optimization that removes the overhead of the loop
 controlling code and instead generates repetitive code for each iteration of
 the loop.
 
-All of the coefficients get stored in registers, which means it’s very fast to
-access the values. There are no bounds checks on the array access at runtime.
-All these optimizations Rust is able to apply make the resulting code extremely
-efficient. Now that you know this, you can use iterators and closures without
-fear! They make code seem like it’s higher level but don’t impose a runtime
-performance penalty for doing so.
+All of the coefficients get stored in registers, which means accessing the
+values is very fast. There are no bounds checks on the array access at runtime.
+All these optimizations that Rust is able to apply make the resulting code
+extremely efficient. Now that you know this, you can use iterators and closures
+without fear! They make code seem like it’s higher level but don’t impose a
+runtime performance penalty for doing so.
 
 ## Summary
 

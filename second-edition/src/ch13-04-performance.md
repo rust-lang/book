@@ -1,12 +1,12 @@
 ## Comparing Performance: Loops vs. Iterators
 
-To determine whether to use loops or iterators, we need to know which version
+To determine whether to use loops or iterators, you need to know which version
 of our `search` functions is faster: the version with an explicit `for` loop or
 the version with iterators.
 
 We ran a benchmark by loading the entire contents of *The Adventures of
 Sherlock Holmes* by Sir Arthur Conan Doyle into a `String` and looking for the
-word “the” in the contents. Here are the results of the benchmark on the
+word *the* in the contents. Here are the results of the benchmark on the
 version of `search` using the `for` loop and the version using iterators:
 
 ```text
@@ -19,20 +19,19 @@ here, because the point is not to prove that the two versions are equivalent
 but to get a general sense of how these two implementations compare
 performance-wise.
 
-For a more comprehensive benchmark, you should check various texts of various
-sizes, different words, words of different lengths, and all kinds of other
-variations. The point is this: iterators, although a high-level abstraction,
-get compiled down to roughly the same code as if you’d written the lower-level
-code yourself. Iterators are one of Rust’s *zero-cost* *abstractions*, by which
-we mean using the abstraction imposes no additional runtime overhead in the
-same way that Bjarne Stroustrup, the original designer and implementor of C++,
-defines *zero-overhead*:
+For a more comprehensive benchmark, you should check using various texts of
+various sizes as the `contents`, different words and words of different lengths
+as the `query`, and all kinds of other variations. The point is this:
+iterators, although a high-level abstraction, get compiled down to roughly the
+same code as if you’d written the lower-level code yourself. Iterators are one
+of Rust’s *zero-cost abstractions*, by which we mean using the abstraction
+imposes no additional runtime overhead. This is analogous to how Bjarne
+Stroustrup, the original designer and implementor of C++, defines
+*zero-overhead* in “Foundations of C++” (2012):
 
 > In general, C++ implementations obey the zero-overhead principle: What you
 > don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
 > code any better.
->
-> Bjarne Stroustrup’s “Foundations of C++”
 
 As another example, the following code is taken from an audio decoder. The
 decoding algorithm uses the linear prediction mathematical operation to
@@ -42,7 +41,7 @@ code uses an iterator chain to do some math on three variables in scope: a
 to shift data in `qlp_shift`. We’ve declared the variables within this example
 but not given them any values; although this code doesn’t have much meaning
 outside of its context, it’s still a concise, real-world example of how Rust
-translates high-level ideas to low-level code:
+translates high-level ideas to low-level code.
 
 ```rust,ignore
 let buffer: &mut [i32];
@@ -75,12 +74,12 @@ loop. *Unrolling* is an optimization that removes the overhead of the loop
 controlling code and instead generates repetitive code for each iteration of
 the loop.
 
-All of the coefficients get stored in registers, which means it’s very fast to
-access the values. There are no bounds checks on the array access at runtime.
-All these optimizations Rust is able to apply make the resulting code extremely
-efficient. Now that you know this, you can use iterators and closures without
-fear! They make code seem like it’s higher level but don’t impose a runtime
-performance penalty for doing so.
+All of the coefficients get stored in registers, which means accessing the
+values is very fast. There are no bounds checks on the array access at runtime.
+All these optimizations that Rust is able to apply make the resulting code
+extremely efficient. Now that you know this, you can use iterators and closures
+without fear! They make code seem like it’s higher level but don’t impose a
+runtime performance penalty for doing so.
 
 ## Summary
 
