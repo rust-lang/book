@@ -327,28 +327,28 @@ mod tests {
 
 이제 여러분이 `RefCell<T>`를 어떻게 사용하는지 보았으니, 이것이 어떤 식으로 동작하는지 파고 들어 봅시다! 
 
-#### `RefCell<T>` Keeps Track of Borrows at Runtime
+#### `RefCell<T>`는 런타임에 빌림을 추적합니다
 
-When creating immutable and mutable references, we use the `&` and `&mut`
-syntax, respectively. With `RefCell<T>`, we use the `borrow` and `borrow_mut`
-methods, which are part of the safe API that belongs to `RefCell<T>`. The
-`borrow` method returns the smart pointer type `Ref<T>`, and `borrow_mut`
-returns the smart pointer type `RefMut<T>`. Both types implement `Deref` so
-we can treat them like regular references.
+불변 및 가변 참조자를 만들때, 우리는 각각 `&` 및 `&mut` 문법을 사용합니다.
+`RefCell<T>`을 이용할때는 `borrow`와 `borrow_mut` 메소드를 사용하는데,
+이들은 `RefCell<T>`가 소유한 안전한 API 중 일부입니다. `borrow` 메소드는
+스마트 포인터 타입인 `Ref<T>`를 반환하고, `borrow_mut`는 스마트 포인터
+타입 `RefMut<T>`을 반환합니다. 두 타입 모두 `Deref`를 구현하였으므로
+우리는 이들을 보통의 참조자처럼 다룰 수 있습니다.
 
-The `RefCell<T>` keeps track of how many `Ref<T>` and `RefMut<T>` smart
-pointers are currently active. Every time we call `borrow`, the `RefCell<T>`
-increases its count of how many immutable borrows are active. When a `Ref<T>`
-value goes out of scope, the count of immutable borrows goes down by one. Just
-like the compile time borrowing rules, `RefCell<T>` lets us have many immutable
-borrows or one mutable borrow at any point in time.
+`RefCell<T>`는 현재 활성화된 `Ref<T>`와 `RefMut<T>` 스마트 포인터들이
+몇개나 있느닞 추적합니다. 우리가 `borrow`를 호출할 때마다, `RefCell<T>`는
+불변 참조자가 활성화된 갯수를 증가시킵니다. `Ref<T>` 값이 스코프 밖으로 벗어날
+때, 불변 빌림의 갯수는 하나 감소합니다. 컴파일 타임에서의 빌림 규칙과 똑같이,
+`RefCell<T>`는 우리가 어떤 시점에서든 여러 개의 불변 빌림 혹은 하나의 가변
+빌림을 가질 수 있도록 합니다.
 
-If we try to violate these rules, rather than getting a compiler error like we
-would with references, the implementation of `RefCell<T>` will `panic!` at
-runtime. Listing 15-23 shows a modification of the implementation of `send` in
-Listing 15-22. We’re deliberately trying to create two mutable borrows active
-for the same scope to illustrate that `RefCell<T>` prevents us from doing this
-at runtime:
+만일 이 규칙들을 위반한다면, `RefCell<T>`의 구현체는 우리가 참조자들을
+가지고 했을 때처럼 컴파일 에러를 내기 보다는 런타임에 `panic!`을 일으킬
+것입니다. Listing 15-23은 Listing 15-22의 `send` 구현의 수정을
+보여줍니다. 우리는 `RefCell<T>`가 런타임에 두개의 활성화된 가변 빌림을
+같은 스코프에 만드는 일을 하는 것을 막아주는 것을 보여주기 위해서 의도적으로
+그런 시도를 하는 중입니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -364,14 +364,14 @@ impl Messenger for MockMessenger {
 }
 ```
 
-<span class="caption">Listing 15-23: Creating two mutable references in the
-same scope to see that `RefCell<T>` will panic</span>
+<span class="caption">Listing 15-23: `RefCell<T>`이 패닉을 일으킬
+것을 보기 위한 같은 스코프 내에 두 개의 가변 참조자 만들기</span>
 
-We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
-from `borrow_mut`. Then we create another mutable borrow in the same way in the
-variable `two_borrow`. This makes two mutable references in the same scope,
-which isn’t allowed. When we run the tests for our library, the code in Listing
-15-23 will compile without any errors, but the test will fail:
+우리는 `borrow_mut`로부터 반환된 `RefMut<T>` 스마트 포인터를 위한 `one_borrow`
+변수를 만들었습니다. 그런 다음 또다른 가변 빌림을 같은 방식으로 `two_borrow` 변수에
+만들어 넣었습니다. 이는 같은 스코프에 두개의 가변 참조자를 만드는데, 이는 허용되지
+않습니다. 우리가 우리의 라이브러리를 위한 테스트를 실행할 때, Listing 15-23의
+코드는 어떠한 에러 없이 컴파일될 것이지만, 테스트는 실패할 것입니다:
 
 ```text
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
@@ -380,21 +380,21 @@ which isn’t allowed. When we run the tests for our library, the code in Listin
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-Notice that the code panicked with the message `already borrowed:
-BorrowMutError`. This is how `RefCell<T>` handles violations of the borrowing
-rules at runtime.
+코드가 `already borrowed: BorrowMutError`라는 메세지와 함꼐 패닉을
+일으켰음을 주목하세요. 이것이 바로 `RefCell<T>`가 런타임에 빌림 규칙의 위반을
+다루는 방법입니다.
 
-Catching borrowing errors at runtime rather than compile time means that we
-would find a mistake in our code later in the development process and possibly
-not even until our code was deployed to production. Also, our code will incur a
-small runtime performance penalty as a result of keeping track of the borrows
-at runtime rather than compile time. However, using `RefCell<T>` makes it
-possible for us to write a mock object that can modify itself to keep track of
-the messages it has seen while we’re using it in a context where only immutable
-values are allowed. We can use `RefCell<T>` despite its trade-offs to get more
-functionality than regular references give us.
+빌림 에러를 컴파일 타임보다 런타임에 잡는다는 것은 개발 과정 이후에 우리
+코드의 실수를 발견할 것이란 의미이고, 심지어는 우리 코드가 프로덕션으로
+배포될 때 까지도 발견되지 않을 가능성도 있습니다. 또한, 우리 코드는
+컴파일 타임 대신 런타임에 빌림을 추적하는 결과로서 약간의 런타임 성능
+페널티를 초래할 것입니다. 그러나, `RefCell<T>`를 이용하는 것은
+우리가 오직 불변 값만 허용하는 콘텍스트 내에서 그것이 본 메세지를 추적하기
+위해서 스스로를 변경할 수 있는 목 객체를 작성하도록 해줍니다. 우리는 일반적인
+참조자가 우리에게 제공하는 것보다 더 많은 기능을 얻기 위해서 트레이드 오프에도
+불구하고 `RefCell<T>`를 이용할 수 있습니다.
 
-### Having Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
+### `Rc<T>`와 `RefCell<T>`를 조합하여 가변 데이터의 복수 소유자 만들기
 
 A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 `Rc<T>` lets us have multiple owners of some data, but it only gives us
