@@ -74,7 +74,7 @@ it, we’ll need a function provided in Rust’s standard library, which is
 arguments that were given to `minigrep`. We haven’t discussed iterators yet
 (we’ll cover them fully in Chapter 13), but for now, you only need to know two
 details about iterators: iterators produce a series of values, and we can call
-the `collect` function on an iterator to turn it into a collection, such as a
+the `collect` method on an iterator to turn it into a collection, such as a
 vector, containing all the elements the iterator produces.
 
 Use the code in Listing 12-1 to allow your `minigrep` program to read any
