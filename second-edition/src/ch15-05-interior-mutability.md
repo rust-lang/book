@@ -118,7 +118,7 @@ error[E0596]: cannot borrow immutable local variable `x` as mutable
 만들어진 목 객체 기능이 없습니다. 하지만, 우리는 목 객체와 동일한 목적을
 제공할 구조체를 당연히 만들 수 있습니다.
 
-다음은 우리가 테스트할 시나리오입니다: 우리는 최대 값에 맞서 값을 추적하고
+다음은 우리가 테스트할 시나리오입니다: 우리는 최대값에 맞서 값을 추적하고
 현재 값이 최대값에 얼마나 근접한지를 기반으로 메세지를 전송하는 라이브러리를
 만들 것입니다. 이 라이브러리는 예를 들면 한 명의 유저에게 허용되고 있는
 API 호출수의 허용량을 추적하는데 사용될 수 있습니다.
@@ -170,27 +170,27 @@ impl<'a, T> LimitTracker<'a, T>
 }
 ```
 
-<span class="caption">Listing 15-20: A library to keep track of how close to a
-maximum value a value is and warn when the value is at certain levels</span>
+<span class="caption">Listing 15-20: 어떤 값이 최대값에 얼마나 근접하는지를
+추적하고 특정 수준에 값이 있으면 경고해주는 라이브러리</span>
 
-One important part of this code is that the `Messenger` trait has one method
-called `send` that takes an immutable reference to `self` and text of the
-message. This is the interface our mock object needs to have. The other
-important part is that we want to test the behavior of the `set_value` method
-on the `LimitTracker`. We can change what we pass in for the `value` parameter,
-but `set_value` doesn’t return anything for us to make assertions on. We want
-to be able to say that if we create a `LimitTracker` with something that
-implements the `Messenger` trait and a particular value for `max`, when we pass
-different numbers for `value`, the messenger is told to send the appropriate
-messages.
+이 코드에서 한가지 중요한 부분은 `Messenger` 트레잇이 `self`에 대한
+불변 참조자와 메세지의 텍스트를 인자로 갖는 `send`라는 이름의 하나의
+메소드를 갖고 있다는 것입니다. 이는 우리의 목 객제가 가질 필요가 있는
+인터페이스입니다. 그 외에 중요한 부분은 우리가 `LimitTracker` 상의
+`set_value` 메소드의 동작을 테스트하고 싶어한다는 점입니다. 우리는
+`value` 파라미터에 대해에 어떤 것을 넘길지 바꿀 수 있지만,
+`set_value`는 우리가 단언을 하기 위한 어떤 것도 반환하지 않습니다.
+우리는 `Messenger` 트레잇을 구현한 무언가와 `max`에 대한 특정값과 함께
+`LimitTracker`를 만든다면, `value`에 대해 다른 숫자들을 넘겼을 때
+메신저가 적합한 메세지를 보낸다고 말하고 싶습니다.
 
-We need a mock object that instead of sending an email or text message when we
-call `send` will only keep track of the messages it’s told to send. We can
-create a new instance of the mock object, create a `LimitTracker` that uses the
-mock object, call the `set_value` method on `LimitTracker`, and then check that
-the mock object has the messages we expect. Listing 15-21 shows an attempt of
-implementing a mock object to do just that but that the borrow checker won’t
-allow:
+우리는 `send`를 호출했을 때 메일이나 텍스트 메세지를 보내는 대신 보냈다고
+언급하는 메세지만 추적할 목 객체가 필요합니다. 우리는 목 객체의 새로운 인스턴스를
+만들고, 이 목 객체를 사용하는 `LimitTracker`를 만들고, `LimitTracker`
+상의 `set_value` 메소드를 호출하고, 그 다음 목 객체는 우리가 기대했던
+메세지를 가지고 있는지를 검사할 수 있습니다.  Listing 15-21은 바로 이런
+일을 하지만 빌림 검사기가 허용하지는 않을 목 객체 구현 시도를 보여주고
+있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -227,28 +227,28 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 15-21: An attempt to implement a `MockMessenger`
-that isn’t allowed by the borrow checker</span>
+<span class="caption">Listing 15-21: 빌림 검사기가 허용하지 않는
+`MockMessenger` 구현 시도</span>
 
-This test code defines a `MockMessenger` struct that has a `sent_messages`
-field with a `Vec` of `String` values to keep track of the messages it’s told
-to send. We also define an associated function `new` to make it convenient to
-create new `MockMessenger` values that start with an empty list of messages. We
-then implement the `Messenger` trait for `MockMessenger` so we can give a
-`MockMessenger` to a `LimitTracker`. In the definition of the `send` method, we
-take the message passed in as a parameter and store it in the `MockMessenger`
-list of `sent_messages`.
+이 테스트 코드는 보내질 메세지들을 추적하기 위한 `String` 값의 `Vec`인
+`sent_messages` 필드를 갖는 `MockMessenger` 구조체를 정의하고
+있습니다. 우리는 또한 빈 메세지 리스트로 시작하는 새로운 `MockMessenger`
+값을 생성하기 쉽도록 하기 위해 연관 함수 `new`를 정의하였습니다. 그런
+다음에는 `MockMessenger`를 `LimitTracker`에 넘겨줄 수 있도록
+`MockMessenger`를 위한 `Messenger` 트레잇을 구현하였습니다. `send`
+메소드의 정의 부분에서는 파라미터로서 넘겨진 메세지를 가져와서 `MockMessenger`
+내의 `Sent_messages` 리스트에 저장합니다.
 
-In the test, we’re testing what happens when the `LimitTracker` is told to set
-`value` to something that is more than 75 percent of the `max` value. First, we
-create a new `MockMessenger`, which will start with an empty list of messages.
-Then we create a new `LimitTracker` and give it a reference to the new
-`MockMessenger` and a `max` value of 100. We call the `set_value` method on the
-`LimitTracker` with a value of 80, which is more than 75 percent of 100. Then
-we assert that the list of messages that the `MockMessenger` is keeping track
-of should now have one message in it.
+테스트 내에서는 `max` 값의 75 퍼센트 이상의 무언가가 `value`로 설정되었을
+때 `LimitTracker`는 어떤 메세지를 듣는지를 테스트하고 있습니다. 먼저 우리는
+새로운 `MockMessenger`를 만드는데, 이는 비어있는 메시지 리스트로 시작할
+것입니다. 그 다음에는 새로운 `LimitTracker`를 만들고 여기에 새로운
+`MockMessenger`의 참조자와 `max`값 100을 파라미터로 넘깁니다. 우리는
+`LimitTracker` 상의 `set_value` 메소드를 80 값으로 호출하였습니다.
+그 다음 우리는 `MockMessenger`가 추적하고 있는 메세지 리스트가 이제
+한 개의 메세지를 가지고 있는지를 검사합니다.
 
-However, there’s one problem with this test, as shown here:
+하지만, 아래에서 보는 것과 같이 이 테스트에 한가지 문제점이 있습니다:
 
 ```text
 error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
@@ -260,16 +260,16 @@ error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
    |             ^^^^^^^^^^^^^^^^^^ cannot mutably borrow immutable field
 ```
 
-We can’t modify the `MockMessenger` to keep track of the messages because the
-`send` method takes an immutable reference to `self`. We also can’t take the
-suggestion from the error text to use `&mut self` instead because then the
-signature of `send` wouldn’t match the signature in the `Messenger` trait
-definition (feel free to try and see what error message you get).
+우리는 메세지를 추적하기 위해 `MockMessenger`를 수정할 수 없는데 그 이유는
+`send` 메소드가 `self`의 불변 참조자를 파라미터로 갖기 때문입니다. 우리는 또한
+에러 메세지로부터 `&mut self`를 대신 사용하라는 제안도 얻을 수 없는데, 그렇게
+되면 `send`의 시그니처가 `Messenger` 트레잇의 정의에 있는 시그니처와 일치하지
+않을 것이지 때문입니다 (마음 편하게 한번 시도해보고 어떤 에러가 나오는지 보세요).
 
-This is a situation in which interior mutability can help! We’ll store the
-`sent_messages` within a `RefCell<T>`, and then the `send` message will be
-able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
-shows what that looks like:
+이는 내부 가변성이 도움을 줄 수 있는 상황입니다! 우리는 `sent_messages`를
+`RefCell<T>` 내에 저장할 것이고, 그러면 `send` 메소드는 우리가 보게 되는
+메세지를 저장하기 위해 `sent_message`를 수정할 수 있을 것입니다. Listing
+15-22는 이것이 어떤 형태인지를 보여줍니다: 
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -307,25 +307,25 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 15-22: Using `RefCell<T>` to mutate an inner
-value while the outer value is considered immutable</span>
+<span class="caption">Listing 15-22: `RefCell<T>`를 사용하여 바깥쪽에서는
+불변으로 간주되는 동안 내부의 값을 변경하기</span>
 
-The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
-`Vec<String>`. In the `new` function, we create a new `RefCell<Vec<String>>`
-instance around the empty vector.
+`sent_message` 필드는 이제 `Vec<String>` 대신 `RefCell<Vec<String>>`
+타입입니다. `new` 함수 내에서, 우리는 빈 벡터를 감싼 새로운 `RefCell<Vec<String>>`
+인스턴스를 생성합니다.
 
-For the implementation of the `send` method, the first parameter is still an
-immutable borrow of `self`, which matches the trait definition. We call
-`borrow_mut` on the `RefCell<Vec<String>>` in `self.sent_messages` to get a
-mutable reference to the value inside the `RefCell<Vec<String>>`, which is
-the vector. Then we can call `push` on the mutable reference to the vector to
-keep track of the messages sent during the test.
+`send` 메소드의 구현부에 대하여, 첫번째 파라미터는 여전히 `self`의 불변
+빌림 형태인데, 이는 트레잇의 정의와 일치합니다. 우리는 `self.sent_messages`
+내의 `RefCell<Vec<String>>` 상에 있는 `borrow_mut`를 호출하여
+`RefCell<Vec<String>>` 내의 값에 대한 가변 참조자를 얻는데, 이는
+벡터입니다. 그런 다음에는 그 벡터에 대한 가변 참조자 상의 `push`를 호출하여
+테스트하는 동안 보내진 메세지를 추적할 수 있습니다.
 
-The last change we have to make is in the assertion: to see how many items are
-in the inner vector, we call `borrow` on the `RefCell<Vec<String>>` to get an
-immutable reference to the vector.
+마지막으로 우리가 변경한 부분은 단언 부분 내에 있습니다: 내부 벡터 내에
+몇개의 아이템이 있는지 보기 위해서, 우리는 `RefCell<Vec<String>>` 상의
+`borrow`를 호출하여 벡터에 대한 불변 참조자를 얻습니다.
 
-Now that you’ve seen how to use `RefCell<T>`, let’s dig into how it works!
+이제 여러분이 `RefCell<T>`를 어떻게 사용하는지 보았으니, 이것이 어떤 식으로 동작하는지 파고 들어 봅시다! 
 
 #### `RefCell<T>` Keeps Track of Borrows at Runtime
 
