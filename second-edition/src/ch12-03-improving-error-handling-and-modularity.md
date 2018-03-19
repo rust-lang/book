@@ -633,8 +633,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 <span class="caption">Listing 12-13: Moving `Config` and `run` into
 *src/lib.rs*</span>
 
-We’ve made liberal use of `pub`: on `Config`, on its fields and its `new`
-method, and on the `run` function. We now have a library crate that has a
+We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
+`new` method, and on the `run` function. We now have a library crate that has a
 public API that we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
