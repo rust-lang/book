@@ -608,10 +608,10 @@ We’ll implement a blog post workflow in an incremental way. The blog’s final
 functionality will look like this:
 
 1. A blog post starts as an empty draft.
-1. When the draft is done, a review of the post is requested.
-1. When the post is approved, it gets published.
-1. Only published blog posts return content to print, so unapproved posts can’t
-accidentally be published.
+2. When the draft is done, a review of the post is requested.
+3. When the post is approved, it gets published.
+4. Only published blog posts return content to print, so unapproved posts can’t
+   accidentally be published.
 
 Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
@@ -819,7 +819,7 @@ trait
 We give `Post` a public method named `request_review` that will take a mutable
 reference to `self`. Then we call an internal `request_review` method on the
 current state of `Post`, and this second `request_review` method consumes the
-current state and return a new state.
+current state and returns a new state.
 
 We’ve added the `request_review` method to the `State` trait; all types that
 implement the trait will now need to implement the `request_review` method.
@@ -1114,7 +1114,7 @@ impl Post {
     }
 
     pub fn content(&self) -> &str {
-       &self.content
+        &self.content
     }
 }
 
@@ -1265,4 +1265,3 @@ option.
 Next, we’ll look at patterns, which are another of Rust’s features that enable
 lots of flexibility. We’ve looked at them briefly throughout the book but
 haven’t seen their full capability yet. Let’s go!
-

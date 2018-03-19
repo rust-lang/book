@@ -244,7 +244,7 @@ impl State for PendingReview {
 We give `Post` a public method named `request_review` that will take a mutable
 reference to `self`. Then we call an internal `request_review` method on the
 current state of `Post`, and this second `request_review` method consumes the
-current state and return a new state.
+current state and returns a new state.
 
 We’ve added the `request_review` method to the `State` trait; all types that
 implement the trait will now need to implement the `request_review` method.
@@ -565,7 +565,7 @@ impl Post {
     }
 
     pub fn content(&self) -> &str {
-       &self.content
+        &self.content
     }
 }
 
