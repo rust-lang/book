@@ -302,7 +302,7 @@ and link re-exports on the front page, as shown in Figure 14-4, which makes the
 
 <img alt="Rendered documentation for the `art` crate with the re-exports on the front page" src="img/trpl14-04.png" class="center" />
 
-<span class="caption">Figure 14-4: Front page of the documentation for `art`
+<span class="caption">Figure 14-4: The front page of the documentation for `art`
 that lists the re-exports</span>
 
 The `art` crate users can still see and use the internal structure from Listing
@@ -330,8 +330,8 @@ level with `pub use` can make a significant difference in the experience of
 people who use the crate.
 
 Creating a useful public API structure is more of an art than a science, and
-you can iterate to find the API that works best for your users. Choosing `pub`
-`use` gives you flexibility in how you structure your crate internally and
+you can iterate to find the API that works best for your users. Choosing `pub
+use` gives you flexibility in how you structure your crate internally and
 decouples that internal structure with what you present to your users. Look at
 some of the code of crates you’ve installed to see if their internal structure
 differs from their public API.
@@ -345,7 +345,7 @@ via a GitHub account: the GitHub account is currently a requirement, but the
 site might support other ways of creating an account in the future. Once you’re
 logged in, visit your account settings at
 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
-API key. Then run the `cargo` `login` command with your API key, like this:
+API key. Then run the `cargo login` command with your API key, like this:
 
 ```text
 $ cargo login abcdefghijklmnopqrstuvwxyz012345

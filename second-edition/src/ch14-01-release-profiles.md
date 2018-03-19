@@ -61,10 +61,10 @@ file:
 opt-level = 1
 ```
 
-This code overrides the default setting of `0`. Now when we run `cargo`
-`build`, Cargo will use the defaults for the `dev` profile plus our
-customization to `opt-level`. Because we set `opt-level` to `1`, Cargo will
-apply more optimizations than the default, but not as many as a release build.
+This code overrides the default setting of `0`. Now when we run `cargo build`,
+Cargo will use the defaults for the `dev` profile plus our customization to
+`opt-level`. Because we set `opt-level` to `1`, Cargo will apply more
+optimizations than the default, but not as many as a release build.
 
 For the full list of configuration options and defaults for each profile, see
 [Cargo’s documentation](https://doc.rust-lang.org/cargo/).

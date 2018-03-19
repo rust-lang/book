@@ -33,5 +33,5 @@ Updating registry `https://github.com/rust-lang/crates.io-index`
 
 The last line of the output shows the location and the name of the installed
 binary, which in the case of `ripgrep` is `rg`. As long as the installation
-directory is in your `$PATH`, as mentioned previously, you can then run `rg`
-`--help` and start using a faster, rustier tool for searching files!
+directory is in your `$PATH`, as mentioned previously, you can then run `rg
+--help` and start using a faster, rustier tool for searching files!
