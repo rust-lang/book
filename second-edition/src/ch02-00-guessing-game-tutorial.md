@@ -63,7 +63,7 @@ Hello, world!
 ```
 
 `run` 명령어는 이번 실습 프로젝트처럼 빠르게 반복(iteration)을 하고 싶을 때 유용합니다.
-우리는 다음 iteartion으로 넘어가기 전 빠르게 각 iteration을 테스트하고 싶습니다.
+우리는 다음 iteration으로 넘어가기 전 빠르게 각 iteration을 테스트하고 싶습니다.
 
 *src/main.rs* 를 다시 열어 두세요. 이 파일에 모든 코드를 작성할 것입니다.
 
