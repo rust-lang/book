@@ -171,6 +171,7 @@ HashMap
 HashSet
 Haskell
 hasn
+HelloMacro
 helloworld
 HelloWorld
 HelloWorldName
