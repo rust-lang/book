@@ -8,12 +8,12 @@ binary. You can specify command line options to change the default behavior of
 during test runs, preventing the output from being displayed and making it
 easier to read the output related to the test results.
 
-Some command line options go to `cargo test` and some go to the resulting test
+Some command line options go to `cargo test`, and some go to the resulting test
 binary. To separate these two types of arguments, you list the arguments that
-go to `cargo test` followed by the separator `--` and then the arguments that
-go to the test binary. Running `cargo test --help` displays the options you can
-use with `cargo test`, and running `cargo test -- --help` displays the options
-you can use after the separator `--`.
+go to `cargo test` followed by the separator `--` and then the ones that go to
+the test binary. Running `cargo test --help` displays the options you can use
+with `cargo test`, and running `cargo test -- --help` displays the options you
+can use after the separator `--`.
 
 ### Running Tests in Parallel or Consecutively
 
@@ -29,7 +29,7 @@ named *test-output.txt* and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
 which is different in each test. Because the tests run at the same time, one
 test might overwrite the file between when another test writes and reads the
-file. The second test will then fail, not because the code is incorrect, but
+file. The second test will then fail, not because the code is incorrect but
 because the tests have interfered with each other while running in parallel.
 One solution is to make sure each test writes to a different file; another
 solution is to run the tests one at a time.
@@ -52,7 +52,7 @@ state.
 
 By default, if a test passes, Rust’s test library captures anything printed to
 standard output. For example, if we call `println!` in a test and the test
-passes, we won’t see the `println!` output in the terminal: we’ll only see the
+passes, we won’t see the `println!` output in the terminal; we’ll see only the
 line that indicates the test passed. If a test fails, we’ll see whatever was
 printed to standard output with the rest of the failure message.
 
@@ -242,10 +242,10 @@ test tests::add_three_and_two ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
-This command ran all tests with `add` in the name name and filtered out the
-test named `one_hundred`. Also note that the module in which tests appear
-becomes part of the test’s name, so we can run all the tests in a module by
-filtering on the module’s name.
+This command ran all tests with `add` in the name and filtered out the test
+named `one_hundred`. Also note that the module in which tests appear becomes
+part of the test’s name, so we can run all the tests in a module by filtering
+on the module’s name.
 
 ### Ignoring Some Tests Unless Specifically Requested
 
