@@ -18,7 +18,7 @@ More specifically, we’ll cover:
 * The performance of these two features (Spoiler alert: they’re faster than you
   might think!)
 
-Other Rust features are influenced by the functional style as well, such as
-pattern matching and enums, which we’ve covered in other chapters. Mastering
+Other Rust features, such as pattern matching and enums, which we’ve covered in
+other chapters, are influenced by the functional style as well. Mastering
 closures and iterators is an important part of writing idiomatic, fast Rust
 code, so we’ll devote this entire chapter to them.
