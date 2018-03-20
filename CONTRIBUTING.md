@@ -31,7 +31,7 @@ sections! These sections may be incorporated into the book at some point, but
 we have no timeline for doing so; see the Post-publication section below for
 more details.
 
-[new]: https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-07-newest-features.md
+[new]: https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-06-newest-features.md
 [rfc]: https://github.com/rust-lang/rfcs/pull/1636#issuecomment-247325313
 
 ### Corrections and Modifications
