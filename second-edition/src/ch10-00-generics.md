@@ -1,43 +1,41 @@
 # Generic Types, Traits, and Lifetimes
 
-Every programming language has tools for dealing effectively with duplication
+Every programming language has tools for effectively handling the duplication
 of concepts. In Rust, one such tool is *generics*. Generics are abstract
 stand-ins for concrete types or other properties. When we’re writing code, we
-can express generics’ behavior or how they relate to other generics without
-knowing what will actually be in their place when compiling and running the
-code.
+can express the behavior of generics or how they relate to other generics
+without knowing what will be in their place when compiling and running the code.
 
 Similar to the way a function takes parameters with unknown values to run the
 same code on multiple concrete values, functions can take parameters of some
-generic type instead of a concrete type like `i32` or `String`. In fact, we’ve
+generic type instead of a concrete type, like `i32` or `String`. In fact, we’ve
 already used generics in Chapter 6 with `Option<T>`, Chapter 8 with `Vec<T>`
 and `HashMap<K, V>`, and Chapter 9 with `Result<T, E>`. In this chapter, you’ll
 explore how to define your own types, functions, and methods with generics!
 
-First, we’ll review how to extract a function to reduce code duplication. Then
-we’ll use the same technique to make a generic function out of two functions
-that only differ in the types of their parameters. We’ll go over how to use
-generic types in struct and enum definitions too.
+First, we’ll review how to extract a function to reduce code duplication. Next,
+we’ll use the same technique to make a generic function from two functions that
+only differ in the types of their parameters. We’ll also explain how to use
+generic types in struct and enum definitions.
 
-After that, you’ll learn how to use *traits* to define behavior in a generic
-way. You can then combine traits with generic types to constrain a generic type
-to only those types that have a particular behavior, as opposed to just any
-type.
+Then you’ll learn how to use *traits* to define behavior in a generic way. You
+can then combine traits with generic types to constrain a generic type to only
+those types that have a particular behavior, as opposed to just any type.
 
 Finally, we’ll discuss *lifetimes*, a variety of generics that give the
-compiler information about how references are related to each other. Lifetimes
-allow us to borrow values in many situations while still enabling the compiler
-to check that the references are valid.
+compiler information about how references relate to each other. Lifetimes allow
+us to borrow values in many situations while still enabling the compiler to
+check that the references are valid.
 
 ## Removing Duplication by Extracting a Function
 
-Before diving into generics syntax, let’s first review how to remove
-duplication that doesn’t involve generic types by extracting a function. Then,
+Before diving into generics syntax, let’s first look at how to remove
+duplication that doesn’t involve generic types by extracting a function. Then
 we’ll apply this technique to extract a generic function! In the same way that
 you recognize duplicated code to extract into a function, you’ll start to
 recognize duplicated code that can use generics.
 
-Consider a small program that finds the largest number in a list, as shown in
+Consider a short program that finds the largest number in a list, as shown in
 Listing 10-1:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -65,15 +63,15 @@ of numbers</span>
 This code stores a list of integers in the variable `number_list` and places
 the first number in the list in a variable named `largest`. Then it iterates
 through all the numbers in the list, and if the current number is greater than
-the number stored in `largest`, it replaces the number in that variable. If the
-current number is smaller than the largest number seen so far, however, the
+the number stored in `largest`, it replaces the number in that variable.
+However, if the current number is less than the largest number seen so far, the
 variable doesn’t change and the code moves on to the next number in the list.
-After all the numbers in the list have been considered, `largest` should hold
-the largest number, which in this case is 100.
+After considering all the numbers in the list, `largest` should hold the
+largest number, which in this case is 100.
 
 To find the largest number in two different lists of numbers, we can duplicate
 the code in Listing 10-1 and use the same logic at two different places in the
-program, as in Listing 10-2:
+program, as shown in Listing 10-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -108,15 +106,15 @@ fn main() {
 <span class="caption">Listing 10-2: Code to find the largest number in *two*
 lists of numbers</span>
 
-While this code works, duplicating code is tedious and error-prone. It also
-means that we have to update the code in multiple places to change it.
+Although this code works, duplicating code is tedious and error prone. We also
+have to update the code in multiple places to change it.
 
 To eliminate this duplication, we can create an abstraction by defining a
 function that operates on any list of integers given to it in a parameter. This
-makes our code clearer and lets us express the concept of finding the largest
-number in a list abstractly.
+solution makes our code clearer and lets us express the concept of finding the
+largest number in a list abstractly.
 
-In Listing 10-3, we’ve extracted the code that finds the largest number into a
+In Listing 10-3, we extracted the code that finds the largest number into a
 function named `largest`. Unlike the code in Listing 10-1, which can find the
 largest number in only one particular list, this program can find the largest
 number in two different lists:
@@ -155,11 +153,12 @@ fn main() {
 in two lists</span>
 
 The `largest` function has a parameter called `list`, which represents any
-concrete slice of `i32` values that we might pass into the function. This means
-that when we call the function, the code runs on the specific values that we
+concrete slice of `i32` values that we might pass into the function. As a
+result, when we call the function, the code runs on the specific values that we
 pass in.
 
-In sum, here are the steps we used to get from Listing 10-2 to Listing 10-3:
+In sum, here are the steps we took to change the code from Listing 10-2 to
+Listing 10-3:
 
 1. Identify duplicate code.
 2. Extract the duplicate code into the body of the function, and specify the
@@ -173,4 +172,4 @@ abstract types.
 
 For example, say we had two functions: one that finds the largest item in a
 slice of `i32` values and one that finds the largest item in a slice of `char`
-values. How would we get rid of that duplication? Let’s find out!
+values. How would we eliminate that duplication? Let’s find out!
