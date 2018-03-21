@@ -120,7 +120,7 @@ Rust 1.26.0 added 128-bit integer primitives:
 - `u128`: A 128-bit unsigned integer with range [0, 2^128 - 1]
 - `i128`: A 128-bit signed integer with range [-(2^127), 2^127 - 1]
 
-These primitive are implemented efficiently via LLVM support. They
+These primitives are implemented efficiently via LLVM support. They
 are available even on platforms that don't natively support 128-bit
 integers and can be used like the other integer types.
 
