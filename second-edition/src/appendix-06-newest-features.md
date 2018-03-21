@@ -112,3 +112,18 @@ fn main() {
 
 The `...` syntax is still accepted in matches, but it is not accepted in
 expressions. `..=` should be preferred.
+
+## 128-bit integers
+
+Rust 1.26.0 added 128-bit integer primitives:
+
+- `u128`: A 128-bit unsigned integer with range [0, 2^128 - 1]
+- `i128`: A 128-bit signed integer with range [-(2^127), 2^127 - 1]
+
+These primitive are implemented efficiently via LLVM support. They
+are available even on platforms that don't natively support 128-bit
+integers and can be used like the other integer types.
+
+These primitives can be very useful for algorithms that need to use
+very large integers efficiently, such as certain cryptographic
+algorithms.

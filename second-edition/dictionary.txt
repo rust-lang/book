@@ -75,6 +75,7 @@ CPUs
 cratesio
 CRLF
 cryptocurrencies
+cryptographic
 cryptographically
 CStr
 CString
@@ -227,6 +228,7 @@ libreoffice
 libstd
 lifecycle
 LimitTracker
+LLVM
 lobally
 locators
 LockResult
@@ -272,6 +274,7 @@ namespace
 namespaced
 namespaces
 namespacing
+natively
 newfound
 NewJob
 NewsArticle
