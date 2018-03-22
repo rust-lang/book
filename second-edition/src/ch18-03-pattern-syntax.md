@@ -151,7 +151,7 @@ in order to use different parts of these values. Let’s go through each of thos
 Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can
 break apart using a pattern with a `let` statement:
 
-<span class="filename">Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 struct Point {
