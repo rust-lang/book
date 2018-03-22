@@ -66,12 +66,6 @@ if let Some(x) = some_option_value {
 <span class="caption">Listing 18-9: Using `if let` and a block with refutable
 patterns instead of `let`</span>
 
-<!-- Whats the first commented out line here, I had though this was copied from
-8-7 but it isn't quite the same -->
-<!-- Sorry, that line has to do with the way we test our code examples and I
-missed removing it before sending this chapter to you. Sorry about that! /Carol
--->
-
 We’ve given the code an out! This code is perfectly valid, though does now of
 course mean we cannot use an irrefutable pattern without receiving an error. If
 we give `if let` a pattern that will always match, such as `x` as shown in

@@ -37,12 +37,6 @@ way to write the equivalent of a `match` that only cares about matching one
 case. Optionally,`if let` can have a corresponding `else` with code to run if
 the pattern in the `if let` doesn’t match.
 
-<!-- Can you say up front why we'd use this, and not just a match? I've just
-added something here, not sure if it's right -->
-<!-- The first sentence says why-- it's a shorter way to write a `match` when
-there's only one case we care about. Can you elaborate on why that's not clear
-or up front? /Carol -->
-
 Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. This gives us more flexibility than a
 `match` expression where we can only express one value to compare with the
@@ -104,10 +98,6 @@ is not checked by the compiler, whereas with `match` expressions it is. If we
 left off the last `else` block and so missed handling some cases, the compiler
 would not alert us of the possible logic bug.
 
-<!-- So what would happen, we'd just end up with a program that wasn't correct,
-in the Rust sense? -->
-<!-- Yes, we would have a logic bug. /Carol -->
-
 ### `while let` Conditional Loops
 
 Similar in construction to `if let`, the `while let` conditional loop allows
@@ -131,8 +121,6 @@ while let Some(top) = stack.pop() {
 <span class="caption">Listing 18-2: Using a `while let` loop to print out
 values for as long as `stack.pop()` returns `Some`</span>
 
-<!-- Some lovely simple, but edifying, examples in this chapter!-->
-
 This example will print 3, 2, then 1. The `pop` method takes the last element
 out of the vector and returns `Some(value)`. If the vector is empty, it returns
 `None`. The `while` loop will continue running the code in its block as long as
@@ -146,19 +134,8 @@ construction in Rust code, but we haven’t yet discussed the pattern that `for`
 takes. In a `for` loop, the pattern is the value that directly follows the
 keyword `for`, so the `x` in `for x in y`.
 
-<!-- Can you check the line I added above? I think it'd help to point out the
-pattern section of a for loop straight away -->
-<!-- Yep, looks good! /Carol -->
-
 Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
 or break apart, a tuple as part of the `for` loop:
-
-<!-- Liz: We've been using the word "destructure" throughout the book in
-chapters 3, 4, 5, and 16. In chapter 3, in the "Grouping Values into Tuples"
-section, we said "This is called *destructuring*, because it breaks the single
-tuple into three parts.". So I don't think we need to define destructure again
-in this chapter, but I've added a small parenthetical here in case the reader
-forgets. /Carol -->
 
 ```rust
 let v = vec!['a', 'b', 'c'];
@@ -225,11 +202,6 @@ Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
 to the pattern `(x, y, z)` and sees that the value matches the pattern, so will
 bind `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
 pattern as nesting three individual variable patterns inside of it.
-
-<!-- so if we have a pattern of four elements, say (w, x, y, z), but only three
-values, would the values would not bind at all? -->
-<!-- Either too many or too few elements in the pattern is a type error. I've
-added a small example below to illustrate. /Carol -->
 
 If the number of elements in the pattern don’t match the number of elements in
 the tuple, the overall type won’t match and we’ll get a compiler error. For

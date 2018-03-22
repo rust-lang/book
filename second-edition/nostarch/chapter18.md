@@ -18,12 +18,6 @@ These pieces describe the shape of the data we’re working with, which we then
 match against values to determine whether our program has the correct data to
 continue running a particular bit of code.
 
-<!-- I think we need a concise description of what we use patterns for here,
-what they provide the programmer. Hopefully you can see what I've trying to do,
-above! But I think you'll agree it's not quite right, can you have a whack, try
-to give the reader that explanation? -->
-<!-- We tweaked the wording a bit, how's this? /Carol -->
-
 To use a pattern we compare it to some value. If the pattern matches our value,
 we use the value parts in our code. Recall our `match` expressions from Chapter
 6 that used patterns like a coin sorting machine. If the value fits the shape
@@ -74,12 +68,6 @@ In Chapter 6 we discussed how `if let` expressions are used mainly as a shorter
 way to write the equivalent of a `match` that only cares about matching one
 case. Optionally,`if let` can have a corresponding `else` with code to run if
 the pattern in the `if let` doesn’t match.
-
-<!-- Can you say up front why we'd use this, and not just a match? I've just
-added something here, not sure if it's right -->
-<!-- The first sentence says why-- it's a shorter way to write a `match` when
-there's only one case we care about. Can you elaborate on why that's not clear
-or up front? /Carol -->
 
 Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. This gives us more flexibility than a
@@ -141,10 +129,6 @@ is not checked by the compiler, whereas with `match` expressions it is. If we
 left off the last `else` block and so missed handling some cases, the compiler
 would not alert us of the possible logic bug.
 
-<!-- So what would happen, we'd just end up with a program that wasn't correct,
-in the Rust sense? -->
-<!-- Yes, we would have a logic bug. /Carol -->
-
 ### `while let` Conditional Loops
 
 Similar in construction to `if let`, the `while let` conditional loop allows
@@ -168,8 +152,6 @@ while let Some(top) = stack.pop() {
 Listing 18-2: Using a `while let` loop to print out values for as long as
 `stack.pop()` returns `Some`
 
-<!-- Some lovely simple, but edifying, examples in this chapter!-->
-
 This example will print 3, 2, then 1. The `pop` method takes the last element
 out of the vector and returns `Some(value)`. If the vector is empty, it returns
 `None`. The `while` loop will continue running the code in its block as long as
@@ -183,19 +165,8 @@ construction in Rust code, but we haven’t yet discussed the pattern that `for`
 takes. In a `for` loop, the pattern is the value that directly follows the
 keyword `for`, so the `x` in `for x in y`.
 
-<!-- Can you check the line I added above? I think it'd help to point out the
-pattern section of a for loop straight away -->
-<!-- Yep, looks good! /Carol -->
-
 Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
 or break apart, a tuple as part of the `for` loop:
-
-<!-- Liz: We've been using the word "destructure" throughout the book in
-chapters 3, 4, 5, and 16. In chapter 3, in the "Grouping Values into Tuples"
-section, we said "This is called *destructuring*, because it breaks the single
-tuple into three parts.". So I don't think we need to define destructure again
-in this chapter, but I've added a small parenthetical here in case the reader
-forgets. /Carol -->
 
 ```
 let v = vec![1, 2, 3];
@@ -261,11 +232,6 @@ Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
 to the pattern `(x, y, z)` and sees that the value matches the pattern, so will
 bind `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
 pattern as nesting three individual variable patterns inside of it.
-
-<!-- so if we have a pattern of four elements, say (w, x, y, z), but only three
-values, would the values would not bind at all? -->
-<!-- Either too many or too few elements in the pattern is a type error. I've
-added a small example below to illustrate. /Carol -->
 
 If the number of elements in the pattern don’t match the number of elements in
 the tuple, the overall type won’t match and we’ll get a compiler error. For
@@ -408,12 +374,6 @@ if let Some(x) = some_option_value {
 Listing 18-9: Using `if let` and a block with refutable patterns instead of
 `let`
 
-<!-- Whats the first commented out line here, I had though this was copied from
-8-7 but it isn't quite the same -->
-<!-- Sorry, that line has to do with the way we test our code examples and I
-missed removing it before sending this chapter to you. Sorry about that! /Carol
--->
-
 We’ve given the code an out! This code is perfectly valid, though does now of
 course mean we cannot use an irrefutable pattern without receiving an error. If
 we give `if let` a pattern that will always match, such as `x` as shown in
@@ -453,12 +413,6 @@ We’ve seen examples of many different kinds of patterns throughout the book, s
 we’ll gather all the syntax valid in patterns in one place here, and why you
 might want to use each of them.
 
-<!-- We don't always go over why we might want to use them for each section
-here, presumably because it's clear why it's useful. I might recommend you do
-just add a line to each, since we've promised it, and just to really hammer the
-point home. Definitely keep it short and sweet though, where it's pretty clear.
--->
-
 ### Matching Literals
 
 As we saw in Chapter 6, you can match patterns against literals directly. This
@@ -479,10 +433,6 @@ This prints `one` since the value in `x` is 1. This is useful when you want to
 take some action if you get a concrete value in particular.
 
 ### Matching Named Variables
-
-<!-- I found this next bit a little tougher to follow, I've tried to clarify in
-this opening paragraph, connect it all up, can you please check it? -->
-<!-- Yep! Looks good! /Carol -->
 
 Named variables are irrefutable patterns that match any value, which we have
 used many times before. There is a complication, however, when used in `match`
@@ -526,13 +476,6 @@ inside a `Some`, which is what we have in `x`. Therefore this `y` binds to the
 inner value of the `Some` in `x`. That value is 5, and so the expression for
 that arm executes and prints `Matched, y = 5`.
 
-<!-- Below -- We haven't fully introduced the underscore yet, is there anything
-else we could use for that final arm? -->
-<!-- We have *used* the underscore briefly before, though-- we actually
-introduced the underscore in chapter 6. There really isn't anything else that
-we can put that will still have this example illustrating what we want to
-illustrate. /Carol -->
-
 If `x` had been a `None` value instead of `Some(5)`, the patterns in the first
 two arms would not have matched, so we would have matched to the underscore. We
 did not introduce the `x` variable in the pattern of that arm, so the `x` in
@@ -554,9 +497,6 @@ which means *or*. For example, the following code matches the value of `x`
 against the match arms, the first of which has an *or* option, meaning if the
 value of `x` matches either of the values in that arm, it will run:
 
-<!-- I've tried to flesh this out a bit, can you check? -->
-<!-- Yep, it's fine! /Carol -->
-
 ```
 let x = 1;
 
@@ -569,24 +509,11 @@ match x {
 
 This code will print `one or two`.
 
-<!-- Is there a corresponding "and" operator? Is that worth tacking on here? -->
-<!-- No, there is not-- how could one value match, say, 1 AND 2? Does it make
-sense why there isn't an "and" operator? /Carol -->
-
 ### Matching Ranges of Values with `...`
 
 The `...` syntax allows you to match to an inclusive range of values. In the
 following code, when a pattern matches any of the values within the range,
 that arm will execute:
-
-<!-- Above--this seems like it's true, that the range allows you to match to
-just one of the values? If so, can you say how this differs to using the or
-operator? -->
-<!-- I'm not sure what you mean by "match to just one of the values". `...`
-matches any value between the two specified endpoints, which I thought would be
-clear by the text below the code, and I changed "just one of" to "any of the
-values within" above, and mentioned what the equivalent "or" pattern would look
-like below. Does that clear it up? /Carol -->
 
 ```
 let x = 5;
@@ -608,9 +535,6 @@ compiler checks that the range isn’t empty at compile time. `char` and numeric
 values are the only types that Rust knows how to tell if a range is empty or
 not.
 
-<!-- why, because they are the only types with inherent order? -->
-<!-- Nope, I've added the explanation /Carol -->
-
 Here’s an example using ranges of `char` values:
 
 ```
@@ -628,17 +552,8 @@ Rust can tell that `c` is within the first pattern’s range, and this will prin
 
 ### Destructuring to Break Apart Values
 
-<!-- I moved the definition of destructure earlier in the chapter, to when we
-first use it -->
-<!-- See my comment there; we first use destructure in chapter 3 /Carol -->
-
 We can also use patterns to destructure structs, enums, tuples, and references
 in order to use different parts of these values. Let’s go through each of those!
-
-<!-- Above -- I think that's what we say later, that, we're skipping enums, but
-please delete if not! You'll see my note where it comes up later -->
-<!-- We actually had someone point out a detail we could cover regarding enums,
-so we've added an enums section. /Carol -->
 
 #### Destructuring Structs
 
@@ -663,14 +578,6 @@ fn main() {
 ```
 
 Listing 18-12: Destructuring a struct’s fields into separate variables
-
-<!-- I'm not sure I follow which part of this is the shorthand, what is it
-shorthand for, and which syntax here counts as the shorthand? Can you slow this
-down, talk it through a little more. Is the point of this section that we have
-a shorthand for destructuring, or that we are able to destructure these items
-with patterns at all? -->
-<!-- I've reorganized this section to start with the non-shorthand instead, is
-this clearer? /Carol -->
 
 This code creates the variables `a` and `b` that match the values of the `x`
 and `y` fields of the `p` variable.
@@ -717,10 +624,6 @@ destructure the other fields.
 Listing 18-14 shows a `match` statement that separates `Point` values into
 three cases: points that lie directly on the `x` axis (which is true when `y =
 0`), on the `y` axis (`x = 0`), or neither:
-
-<!-- I'm not sure what you mean by "inner parts of a value" -- that we aren't
-matching a whole value but part of it? -->
-<!-- I've reworded, is this version clearer? /Carol -->
 
 Filename: src/main.rs
 
@@ -822,12 +725,6 @@ destructure the reference from the value, which we can do can by specifying a
 `&` in the pattern. This lets us get a variable holding the value that the
 reference points to rather than getting a variable that holds the reference.
 
-<!-- What does it mean, to separate the reference and the value, precisely? So
-that we specify Rust use the value in place of the reference? And what does &
-here do, tell Rust to follow the reference to the value itself, rather than
-work on the reference?-->
-<!-- Yes, pretty much. I've tried rewording, is this clearer? /Carol -->
-
 This is especially useful in closures where we have iterators that iterate over
 references, but we want to use the values in the closure rather than the
 references.
@@ -850,9 +747,6 @@ let sum_of_squares: i32 = points
 
 Listing 18-16: Destructuring a reference to a struct into the struct field
 values
-
-<!-- and what do we actually get, instead of the error? -->
-<!-- Added explanation text below /Carol -->
 
 This code results in the value 135 in the variable `sum_of_squares`, which is
 the result from squaring the `x` value and the `y` value, adding those
@@ -890,10 +784,6 @@ let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
 This lets us break complex types into their component parts so that we can use
 the values we’re interested in separately.
 
-<!-- Can you round up the destructuring section here before we move on. For
-this bit, maybe say explicitly what this would be useful for -->
-<!-- Done /Carol -->
-
 Destructuring with patterns is a convenient way to use pieces of values, such
 as the value from each field in a struct, separately from each other.
 
@@ -928,11 +818,6 @@ fn main() {
 
 Listing 18-17: Using `_` in a function signature
 
-<!-- What is this doing exactly, can you help the reader out here? Are we
-letting the function run without a parameter at all? I'm not sure the purpose
-clear enough at the moment -->
-<!-- Done /Carol -->
-
 This code will completely ignore the value passed as the first argument, 3, and
 will print out `This code only uses the y parameter: 4`. In most cases when you
 no longer need a particular function parameter, you would change the signature
@@ -945,10 +830,6 @@ compiler will then not warn about unused function parameters, as it would if we
 used a name instead.
 
 #### Ignoring Parts of a Value with a Nested `_`
-
-<!-- When would we want to do this? -->
-<!-- Done, moved the explanation up and made the example have a bit more
-motivation /Carol -->
 
 We can also use `_` inside of another pattern to ignore just part of a value,
 when we only want to test for part of a value but have no use for the other
@@ -987,10 +868,6 @@ variant. In that case, we want to print out why we’re not changing
 In all other cases (if either `setting_value` or `new_setting_value` are
 `None`), which is expressed by the `_` pattern in the second arm, we do want to
 allow `new_setting_value` to become `setting_value`.
-
-<!-- So when we need to match but don't actually need the value, is that what
-we're saying? -->
-<!-- Yes /Carol -->
 
 We can also use underscores in multiple places within one pattern to ignore
 particular values, as shown in Listing 18-19 where we’re ignoring the second
@@ -1172,10 +1049,6 @@ a pattern with a variable, and then another usage of the entire value after the
 `robot_name` value is transferred to the `name` variable in the pattern of the
 first `match` arm:
 
-<!-- Can you lay out what is supposed to happen with this code, that doesn't
-work? -->
-<!-- Done /Carol -->
-
 ```
 let robot_name = Some(String::from("Bors"));
 
@@ -1195,13 +1068,6 @@ to within the `match` when `name` binds to that value. Because ownership of
 part of `robot_name` has been moved to `name`, we can no longer use
 `robot_name` in the `println!` after the `match` because `robot_name` no longer
 has ownership.
-
-<!-- Above -- why will that make it fail, because the bind is then invalid? -->
-<!-- Yes, I've clarified a bit /Carol -->
-
-<!--Below -- Is this then the solution, introducing &? I assume so, because we
-don’t have & in the example above, but the connection isn't clear -->
-<!-- No, the solution is introducing `ref`. I've clarified /Carol -->
 
 In order to fix this code, we want to have the `Some(name)` pattern borrow that
 part of `robot_name` rather than taking ownership. Outside of patterns, we’ve
@@ -1260,9 +1126,6 @@ arm code using the `*` operator in order to be able to mutate the value.
 
 ### Extra Conditionals with Match Guards
 
-<!-- Can you give a full definition of a match guard here, and what we use it
-for, before covering how to do it? -->
-
 A *match guard* is an additional `if` condition specified after the pattern in
 a `match` arm that also must match if the pattern matches in order for that arm
 to be chosen. Match guards are useful for expressing more complex ideas than a
@@ -1297,19 +1160,11 @@ therefore matches any `Some` variant.
 There’s no way to express the `if x < 5` condition within a pattern, so the
 match guard has given us the ability to express this logic.
 
-<!-- I think we need this spelled out, can you say what it is the match guard
-is doing here? I've had a guess above, but I think it needs your review! -->
-<!-- Reviewed and tweaked a bit! /Carol -->
-
 In Listing 18-11, we mentioned that we could use match guards to solve our
 pattern shadowing problem, where a new variable was created inside the pattern
 in the `match` expression instead of using the variable outside the `match`.
 That new variable meant we couldn’t test against the value that the outer
 variable had. Listing 18-30 shows how we can use a match guard to fix this:
-
-<!-- Can you check this above -- I've tried to paraphrase the final paragraph
-from that section. -->
-<!-- Checked and reworded a bit /Carol -->
 
 ```
 fn main() {
@@ -1340,26 +1195,12 @@ introduce new variables. This `y` *is* the outer `y` rather than a new shadowed
 `y`, and we can express the idea that we’re looking for a value that has the
 same value as the outer `y` by comparing `n` to `y`.
 
-<!-- Why is this one not introducing a new variable y but 18-10 was? Instead we
-create a new variable n and then compare it to the outer y, is that it? In
-which case, I'm not understanding how we get n from destructuring x, can you
-lay this out?-->
-<!-- I've elaborated a bit, does this clear it up? /Carol -->
-
 You can also use the or operator `|` in a match guard to specify multiple
 patterns, and the match guard condition will apply to all of the patterns.
 Listing 18-31 shows the precedence of combining a match guard with a pattern
 that uses `|`. The important part of this example is that the `if y` match
 guard applies to 4, 5, *and* 6, even though it might look like `if y` only
 applies to 6:
-
-<!-- What's the match condition actually doing here, with y having a value of
-`false`? Can you let us know how that's being applied to all the values in that
-match arm? -->
-<!-- The point of the example here is to illustrate operator precedence, that
-this code might look like it's saying `4 | 5 | (6 if y)` but it's actually
-saying `(4 | 5 | 6) if y`. I've tried to elaborate above and below, does that
-make sense now? /Carol -->
 
 ```
 let x = 4;
@@ -1378,12 +1219,6 @@ equal to 4, 5, or 6 *and* if `y` is `true`. What happens when this code runs is
 that the pattern of the first arm matches because `x` is 4, but the match guard
 `if y` is false, so the first arm is not chosen. The code moves on to the
 second arm, which does match, and this program prints `no`.
-
-<!-- Is this what we mean, if 4 or 5 or 6 being equal to x is false, run the
-first arm? And so, because it's applying that to all of the values (including
-4), the second arm is run and not the first? -->
-<!-- It seems like `if y` was confusing, I've tried to spell it out a bit more.
-Does this make sense now? /Carol -->
 
 This is because the `if` condition applies to the whole pattern `4 | 5 | 6`,
 and not only to the last value `6`. In other words, the precedence of a match
@@ -1405,13 +1240,6 @@ was only applied to the final value in the list of values specified using the
 `yes`.
 
 ### `@` Bindings
-
-<!-- Below - use @ to what, can you say explicitly what it does. Also what the
-name of the operator is? -->
-<!-- I don't think it has a name other than "the at operator". And we tried to
-say what it does-- it creates a variable at the same time as letting us test
-it, I've tried rewording a bit but I'm not sure why that wasn't explicit
-enough, can you clarify if this still doesn't make sense? /Carol -->
 
 The at operator, `@`, lets us create a variable that holds a value at the same
 time we’re testing that value to see if it matches a pattern. Listing 18-32
