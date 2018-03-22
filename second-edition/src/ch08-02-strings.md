@@ -286,7 +286,7 @@ let len = String::from("Hola").len();
 In this case, `len` will be 4, which means the vector storing the string “Hola”
 is 4 bytes long. Each of these letters takes 1 byte when encoded in UTF-8. But
 what about the following line? (Note that this line begins with the capital
-Cyrillic letter Ze, not the Arabic number 3.)
+Cyrillic letter Ze, not the Arabic digit 3.)
 
 ```rust
 let len = String::from("Здравствуйте").len();
