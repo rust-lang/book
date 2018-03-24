@@ -33,8 +33,8 @@ overload that operator is listed.
 * `..` (`..`, `expr..`, `..expr`, `expr..expr`): right-exclusive range literal.
 * `..` (`..expr`): struct literal update syntax.
 * `..` (`variant(x, ..)`, `struct_type { x, .. }`): “and the rest” pattern binding.
-* `...` (`...expr`, `expr...expr`) *in an expression*: inclusive range expression.
-* `...` (`expr...expr`) *in a pattern*: inclusive range pattern.
+* `..=` (`..=expr`, `expr..=expr`) *in an expression*: inclusive range expression.
+* `...`, `..=` (`expr...expr` or `expr..=expr`) *in a pattern*: inclusive range pattern.
 * `/` (`expr / expr`): arithmetic division. Overloadable (`Div`).
 * `/=` (`var /= expr`): arithmetic division and assignment. Overloadable (`DivAssign`).
 * `:` (`pat: type`, `ident: type`): constraints.
@@ -151,4 +151,4 @@ overload that operator is listed.
 * `[expr; len]`: array literal containing `len` copies of `expr`.
 * `[type; len]`: array type containing `len` instances of `type`.
 * `expr[expr]`: collection indexing. Overloadable (`Index`, `IndexMut`).
-* `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]`: collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, `RangeFull` as the “index”.
+* `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]`, `expr[..=b]`, `expr[a..=b]`: collection indexing pretending to be collection slicing, using `RangeFull`, `RangeFrom`, `RangeTo`, `Range`, `RangeToInclusive`, `RangeInclusive` as the “index”.
