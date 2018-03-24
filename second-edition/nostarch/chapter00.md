@@ -1,3 +1,6 @@
+
+[TOC]
+
 # Introduction
 
 Welcome to *The Rust Programming Language*, an introductory book about Rust.
@@ -168,8 +171,7 @@ that doesn’t compile.
 ## Contributing to the Book
 
 This book is open source. If you find an error, please don’t hesitate to file
-an issue or send a pull request [on GitHub]. Please see [CONTRIBUTING.md] for
-more details.
-
-[on GitHub]: https://github.com/rust-lang/book
-[CONTRIBUTING.md]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
+an issue or send a pull request on GitHub at
+*https://github.com/rust-lang/book/*. Please see CONTRIBUTING.md at
+*https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md* for more
+details.
