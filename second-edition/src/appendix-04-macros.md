@@ -37,7 +37,7 @@ example, implement a trait on a given type. A function can’t, because it gets
 called at runtime and a trait needs to be implemented at compile time.
 
 The downside to implementing a macro over a function is that macro definitions
-are more complex than function definitions becuase you’re writing Rust code
+are more complex than function definitions because you’re writing Rust code
 that writes Rust code. Due to this indirection, macro definitions are generally
 more difficult to read, understand, and maintain than function definitions.
 

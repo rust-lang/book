@@ -167,7 +167,7 @@ returned from `to_vec` will need to own its instances, so `to_vec` calls
 `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no abritrary code is necessary. See the "Stack-Only Data: Copy"
+the stack; no arbitrary code is necessary. See the "Stack-Only Data: Copy"
 section in Chapter 4 for more information on `Copy`.
 
 <!-- I'm not clear on why the clone trait uses arbitrary code but copy doesn't
@@ -180,7 +180,7 @@ being run. That way, all programmers can assume that copying a value will be
 very fast.
 
 <!-- above -- I couldn't follow this either, what does that mean practically
-for the programmer? What does overloading methods that vioate the assumtion
+for the programmer? What does overloading methods that violate the assumption
 mean? -->
 <!-- I added a sentence at the end of the paragraph, does that clear it up?
 /Carol -->
