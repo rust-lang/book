@@ -1,105 +1,78 @@
-## `RefCell<T>` and the Interior Mutability Pattern
+## `RefCell<T>`와 내부 가변성 패턴
 
-<!-- I'm concerned here about referencing forward too much, do we need that
-information from Ch 19 to understand this? Should we look at rearranging a few
-things here? -->
-<!-- We don't think the reader needs to *understand* `unsafe` at this point,
-just that `unsafe` is how this is possible and that we'll learn about `unsafe`
-later. After reading this section, did you feel that you needed to know more
-about `unsafe` to understand this section? /Carol -->
+*내부 가변성 (interior mutability)* 은 어떤 데이터에 대한 불변 참조자가 있을
+때라도 여러분이 데이터를 변형할 수 있게 해주는 러스트의 디자인 패턴입니다: 보통 이러한
+동작은 빌림 규칙에 의해 허용되지 않습니다. 그렇게 하기 위해서, 이 패턴은 변형과 빌림을
+지배하는 러스트의 통상적인 규칙을 구부리기 위하여 데이터 구조 내에서 `unsafe (안전하지
+않은)` 코드를 사용합니다. 우리는 아직 안전하지 않은 코드를 다루지 않았습니다; 이는
+19장에서 다룰 것입니다. 우리가 런타임에 빌림 규칙을 따를 것임을 보장할 수 있을 때라면,
+심지어 컴파일러가 이를 보장하지 못하더라도 내부 가변성 패턴을 이용하는 타입을 사용할 수
+있습니다. 포함되어 있는 `unsafe` 코드는 안전한 API로 감싸져 있고, 외부 타입은
+여전히 불변입니다.
 
-<!--below: as in, we use the pattern, or it's used automatically? I'm not clear
-on what's the user's responsibility with this pattern -->
-<!-- When we choose to use types implemented using the interior mutability
-pattern, or when we implement our own types using the interior mutability
-pattern. /Carol -->
+내부 가변성 패턴을 따르는 `RefCell<T>` 타입을 살펴보는 것으로 이 개념을
+탐구해 봅시다.
 
-*Interior mutability* is a design pattern in Rust for allowing you to mutate
-data even when there are immutable references to that data, normally disallowed
-by the borrowing rules. To do so, the pattern uses `unsafe` code inside a data
-structure to bend Rust’s usual rules around mutation and borrowing. We haven’t
-yet covered unsafe code; we will in Chapter 19. We can choose to use types that
-make use of the interior mutability pattern when we can ensure that the
-borrowing rules will be followed at runtime, even though the compiler can’t
-ensure that. The `unsafe` code involved is then wrapped in a safe API, and the
-outer type is still immutable.
+### `RefCell<T>`을 가지고 런타임에 빌림 규칙을 집행하기
 
-Let’s explore this by looking at the `RefCell<T>` type that follows the
-interior mutability pattern.
+`Rc<T>`와는 다르게, `RefCell<T>` 타입은 가지고 있는 데이터 상에 단일 소유권을
+나타냅니다. 그렇다면, `Box<T>`와 같은 타입에 비교해 `RefCell<T>`의 다른 부분은
+무엇일까요? 여러분이 4장에서 배웠던 빌림 규칙을 상기해보세요:
 
-### Enforcing Borrowing Rules at Runtime with `RefCell<T>`
+* 어떠한 경우이든 간에, 여러분은 다음의 둘 다는 아니고 *둘 중 하나만* 가질 수 있습니다:
+  하나의 가변 참조자 혹은 임의 개수의 불변 참조자들을요.
+* 참조자는 항상 유효해야 합니다.
 
-Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
-it holds. So, what makes `RefCell<T>` different than a type like `Box<T>`?
-Let’s recall the borrowing rules we learned in Chapter 4:
+참조자와 `Box<T>`를 이용할 때, 빌림 규칙의 불변성은 컴파일 타임에 집행됩니다.
+`RefCell<T>`를 이용할 때, 이 불변성은 *런타임에* 집행됩니다. 참조자를 가지고서
+여러분이 이 규칙을 어기면 컴파일러 에러를 얻게 될 것입니다. `RefCell<T>`를 가지고서
+여러분이 이 규칙을 어기면, 여러분의 프로그램은 `panic!`을 일으키고 종료될 것입니다.
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+컴파일 타임에 빌림 규칙을 검사하는 것은 개발 과정에서 에러를 더 일찍 잡을 수
+있다는 점, 그리고 이 모든 분석이 사전에 완료되기 때문에 런타임 성능에 영향이
+없다는 점에서 장점을 가집니다. 이러한 까닭에, 대부분의 경우 컴파일 타임에서
+빌림 규칙을 검사하는 것이 가장 좋은 선택이고, 이것이 러스트의 기본 설정인
+이유이기도 합니다.
 
-With references and `Box<T>`, the borrowing rules’ invariants are enforced at
-compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
-With references, if you break these rules, you’ll get a compiler error. With
-`RefCell<T>`, if you break these rules, you’ll get a `panic!`.
+대신 런타임에 빌림 규칙을 검사하는 것은 컴파일 타임 검사에 의해서는 허용되지
+않는, 특정한 메모리 안정성 시나리오가 허용된다는 잇점이 있습니다. 러스트
+컴파일러와 같은 정적 분석은 태생적으로 보수적입니다. 어떤 코드 속성은
+코드의 분석을 이용해서는 발견이 불가능합니다: 가장 유명한 예제는 정지 문제
+(halting problem) 인데, 이는 이 책의 범위를 벗어나지만 연구하기에
+흘미로운 주제입니다.
 
-<!-- Is there an advantage to having these rules enforced at different times?
--->
-<!-- Yes, that's what we were trying to say below, we've tried to make this more explicit /Carol -->
+몇몇 분석이 불가능하기 때문에, 만일 코드가 소유권 규칙을 준수한다는 것을 러스트
+컴파일러가 확신할 수 없다면, 컴파일러는 올바를 프로그램을 거부할지도 모릅니다;
+이렇게 하여, 컴파일러는 보수적입니다. 만일 러스트가 올바르지 않은 프로그램을
+받아들이면, 사용자들은 러스트가 보장하는 것을 신뢰할 수 없을 것입니다. 하지만,
+만일 러스트가 올바른 프로그램을 거부한다면, 프로그래머는 불편해할 것이지만,
+어떠한 재앙도 일어나지 않을 수 있습니다. `RefCell<T>` 타입은 여러분의 코드가
+빌림 규칙을 따르는 것을 여러분이 확신하지만, 컴파일러는 이를 이해하고 보장할 수
+없을 경우 유용합니다.
 
-The advantages to checking the borrowing rules at compile time are that errors
-will be caught sooner in the development process and there is no impact on
-runtime performance since all the analysis is completed beforehand. For those
-reasons, checking the borrowing rules at compile time is the best choice for
-the majority of cases, which is why this is Rust’s default.
+`Rc<T>`와 유사하게, `RefCell<T>`은 단일 스레드 시나리오 내에서만 사용
+가능하고, 만일 여러분이 이를 다중 스레드 맥락 내에서 사용을 시도할 경우 여러분에게
+컴파일 타임 에러를 줄 것입니다. `RefCell<T>`의 기능을 다중 스레드 프로그램
+내에서 사용하는 방법에 대해서는 16장에서 이야기할 것입니다.
 
-The advantage to checking the borrowing rules at runtime instead is that
-certain memory safe scenarios are then allowed, whereas they are disallowed by
-the compile time checks. Static analysis, like the Rust compiler, is inherently
-conservative. Some properties of code are impossible to detect by analyzing the
-code: the most famous example is the Halting Problem, which is out of scope of
-this book but an interesting topic to research if you’re interested.
+`Box<T>`, `Rc<T>`, 혹은 `RefCell<T>`을 선택하는 이유의 요점은 다음과 같습니다:
 
-<!--below: can't be sure of what, exactly? Sure that the code complies with the
-ownership rules? -->
-<!-- Yes /Carol -->
+* `Rc<T>`는 동일한 데이터에 대해 복수개의 소유자를 가능하게 합니다; `Box<T>`와
+  `RefCell<T>`은 단일 소유자만 갖습니다.
+* `Box<T>`는 컴파일 타임에 검사된 불변 혹은 가변 빌림을 허용합니다; `Rc<T>`는
+  오직 컴파일 타임에 검사된 불변 빌림만 허용합니다; `RefCell<T>`는 런타임에
+  검사된 불변 혹은 가변 빌림을 허용합니다.
+* `RefCell<T>`이 런타임에 검사된 가변 빌림을 허용하기 때문에, `RefCell<T>`이
+  불변일 때라도 `RefCell<T>` 내부의 값을 변경할 수 있습니다.
 
-Because some analysis is impossible, if the Rust compiler can’t be sure the
-code complies with the ownership rules, it may reject a correct program; in
-this way, it is conservative. If Rust were to accept an incorrect program,
-users would not be able to trust in the guarantees Rust makes. However, if Rust
-rejects a correct program, the programmer will be inconvenienced, but nothing
-catastrophic can occur. `RefCell<T>` is useful when you yourself are sure that
-your code follows the borrowing rules, but the compiler is not able to
-understand and guarantee that.
+불변값 내부의 값을 변경하는 것을 *내부 가변성* 패턴이라고 합니다.
+내부 가변성이 유용한 경우를 살펴보고 이것이 어떻게 가능한지 조사해
+봅시다.
 
-Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded scenarios
-and will give you a compile time error if you try in a multithreaded context.
-We’ll talk about how to get the functionality of `RefCell<T>` in a
-multithreaded program in Chapter 16.
+### 내부 가변성: 불변값에 대한 가변 빌림
 
-<!-- I'm not really clear at this point what the difference between Rc<T> and
-RefCell<T> is, perhaps a succinct round up would help? -->
-<!-- Done /Carol -->
-
-To recap the reasons to choose `Box<T>`, `Rc<T>`, or `RefCell<T>`:
-
-- `Rc<T>` enables multiple owners of the same data; `Box<T>` and `RefCell<T>`
-  have single owners.
-- `Box<T>` allows immutable or mutable borrows checked at compile time; `Rc<T>`
-  only allows immutable borrows checked at compile time; `RefCell<T>` allows
-  immutable or mutable borrows checked at runtime.
-- Because `RefCell<T>` allows mutable borrows checked at runtime, we can mutate
-  the value inside the `RefCell<T>` even when the `RefCell<T>` is itself
-  immutable.
-
-The last reason is the *interior mutability* pattern. Let’s look at a case when
-interior mutability is useful and discuss how this is possible.
-
-### Interior Mutability: A Mutable Borrow to an Immutable Value
-
-A consequence of the borrowing rules is that when we have an immutable value,
-we can’t borrow it mutably. For example, this code won’t compile:
+빌림 규칙의 결과로 인해 우리는 불변값을 가지고 있을 때 이를 변경 가능하게
+빌릴 수 없습니다. 예를 들면, 다음 코드는 컴파일되지 않을 것입니다:
 
 ```rust,ignore
 fn main() {
@@ -108,7 +81,7 @@ fn main() {
 }
 ```
 
-If we try to compile this, we’ll get this error:
+이 코드의 컴파일을 시도하면, 다음과 같은 에러를 얻을 것입니다:
 
 ```text
 error[E0596]: cannot borrow immutable local variable `x` as mutable
@@ -120,43 +93,43 @@ error[E0596]: cannot borrow immutable local variable `x` as mutable
   |                  ^ cannot borrow mutably
 ```
 
-However, there are situations where it would be useful for a value to be able
-to mutate itself in its methods, but to other code, the value would appear to
-be immutable. Code outside the value’s methods would not be able to mutate the
-value. `RefCell<T>` is one way to get the ability to have interior mutability.
-`RefCell<T>` isn’t getting around the borrowing rules completely, but the
-borrow checker in the compiler allows this interior mutability and the
-borrowing rules are checked at runtime instead. If we violate the rules, we’ll
-get a `panic!` instead of a compiler error.
+하지만, 값이 자신의 메소드 내부에서 변경되지만 다른 코드에서는 불변인
+것으로 보이는 것이 유용할 수 있는 경우가 있습니다. 그 값의 메소드 바깥의
+코드는 값을 변경할 수 없을 것입니다. `RefCell<T>`을 이용하는 것은
+내부 가변성의 기능을 얻는 한가지 방법입니다. 그러나 `RefCell<T>`은
+빌림 규칙을 완벽하게 피하는 것은 아닙니다: 컴파일러 내의 빌림 검사기는
+이러한 내부 가변성을 허용하고, 빌림 규칙은 대신 런타임에 검사됩니다.
+만일 이 규칙을 위반하면, 우리는 컴파일러 에러 대신 `panic!`을 얻을
+것입니다.
 
-Let’s work through a practical example where we can use `RefCell<T>` to make it
-possible to mutate an immutable value and see why that’s useful.
+불변 값을 변경하기 위해 `RefCell<T>`를 이용할 수 있는 실질적인 예제를
+살펴보고 이것이 왜 유용한지를 알아봅시다.
 
 #### A Use Case for Interior Mutability: Mock Objects
+#### 내부 가변성에 대한 용례: 목(mock) 객체
 
-A *test double* is the general programming concept for a type that stands in
-the place of another type during testing. *Mock objects* are specific types of
-test doubles that record what happens during a test so that we can assert that
-the correct actions took place.
+*테스트 더블 (test double)* 은 테스트하는 동안 또다른 타입을 대신하여
+사용되는 타입을 위한 일반적인 프로그래밍 개념입니다. *목 객체 (mock object)*
+는 테스트 중 어떤 일이 일어났는지 기록하여 정확한 동작이 일어났음을 단언할 수
+있도록 하는 테스트 더블의 특정한 타입입니다.
 
-While Rust doesn’t have objects in the exact same sense that other languages
-have objects, and Rust doesn’t have mock object functionality built into the
-standard library like some other languages do, we can definitely create a
-struct that will serve the same purposes as a mock object.
+러스트는 다른 언어들이 객체를 가지는 것과 동일한 의미의 객체를 가지고 있지
+않고, 러스트는 몇몇 다른 언어들이 제공하는 것 같은 표준 라이브러리에 미리
+만들어진 목 객체 기능이 없습니다. 하지만, 우리는 목 객체와 동일한 목적을
+제공할 구조체를 당연히 만들 수 있습니다.
 
-Here’s the scenario we’d like to test: we’re creating a library that tracks a
-value against a maximum value, and sends messages based on how close to the
-maximum value the current value is. This could be used for keeping track of a
-user’s quota for the number of API calls they’re allowed to make, for example.
+다음은 우리가 테스트할 시나리오입니다: 우리는 최대값에 맞서 값을 추적하고
+현재 값이 최대값에 얼마나 근접한지를 기반으로 메세지를 전송하는 라이브러리를
+만들 것입니다. 이 라이브러리는 예를 들면 한 명의 유저에게 허용되고 있는
+API 호출수의 허용량을 추적하는데 사용될 수 있습니다.
 
-Our library is only going to provide the functionality of tracking how close to
-the maximum a value is, and what the messages should be at what times.
-Applications that use our library will be expected to provide the actual
-mechanism for sending the messages: the application could choose to put a
-message in the application, send an email, send a text message, or something
-else. Our library doesn’t need to know about that detail; all it needs is
-something that implements a trait we’ll provide called `Messenger`. Listing
-15-23 shows our library code:
+우리의 라이브러리는 오직 어떤 값이 최대값에 얼마나 근접한지를 추적하고 어떤 시간에
+어떤 메세지를 보내야 할지 정하는 기능만을 제공할 것입니다. 우리의 라이브러리를 사용하는
+어플리케이션이 메세지를 전송하는 것에 대한 메카니즘을 제공할 예정입니다: 그 어플리케이션은
+메세지를 어플리케이션 내에 집어넣거나, 이메일을 보내거나, 문자 메세지를 보내거나, 혹은
+기타 다른 것을 할 수 있습니다. 라이브러리는 그런 자세한 사항을 알 필요가 없습니다. 필요한
+모든 것은 우리가 제공할 `Messenger`라는 이름의 프레잇을 구현하는 것입니다. Listing
+15-20는 라이브러리 코드를 보여줍니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -197,27 +170,27 @@ impl<'a, T> LimitTracker<'a, T>
 }
 ```
 
-<span class="caption">Listing 15-23: A library to keep track of how close to a
-maximum value a value is, and warn when the value is at certain levels</span>
+<span class="caption">Listing 15-20: 어떤 값이 최대값에 얼마나 근접하는지를
+추적하고 특정 수준에 값이 있으면 경고해주는 라이브러리</span>
 
-One important part of this code is that the `Messenger` trait has one method,
-`send`, that takes an immutable reference to `self` and text of the message.
-This is the interface our mock object will need to have. The other important
-part is that we want to test the behavior of the `set_value` method on the
-`LimitTracker`. We can change what we pass in for the `value` parameter, but
-`set_value` doesn’t return anything for us to make assertions on. What we want
-to be able to say is that if we create a `LimitTracker` with something that
-implements the `Messenger` trait and a particular value for `max`, when we pass
-different numbers for `value`, the messenger gets told to send the appropriate
-messages.
+이 코드에서 한가지 중요한 부분은 `Messenger` 트레잇이 `self`에 대한
+불변 참조자와 메세지의 텍스트를 인자로 갖는 `send`라는 이름의 하나의
+메소드를 갖고 있다는 것입니다. 이는 우리의 목 객제가 가질 필요가 있는
+인터페이스입니다. 그 외에 중요한 부분은 우리가 `LimitTracker` 상의
+`set_value` 메소드의 동작을 테스트하고 싶어한다는 점입니다. 우리는
+`value` 파라미터에 대해에 어떤 것을 넘길지 바꿀 수 있지만,
+`set_value`는 우리가 단언을 하기 위한 어떤 것도 반환하지 않습니다.
+우리는 `Messenger` 트레잇을 구현한 무언가와 `max`에 대한 특정값과 함께
+`LimitTracker`를 만든다면, `value`에 대해 다른 숫자들을 넘겼을 때
+메신저가 적합한 메세지를 보낸다고 말하고 싶습니다.
 
-What we need is a mock object that, instead of actually sending an email or
-text message when we call `send`, will only keep track of the messages it’s
-told to send. We can create a new instance of the mock object, create a
-`LimitTracker` that uses the mock object, call the `set_value` method on
-`LimitTracker`, then check that the mock object has the messages we expect.
-Listing 15-24 shows an attempt of implementing a mock object to do just that,
-but that the borrow checker won’t allow:
+우리는 `send`를 호출했을 때 메일이나 텍스트 메세지를 보내는 대신 보냈다고
+언급하는 메세지만 추적할 목 객체가 필요합니다. 우리는 목 객체의 새로운 인스턴스를
+만들고, 이 목 객체를 사용하는 `LimitTracker`를 만들고, `LimitTracker`
+상의 `set_value` 메소드를 호출하고, 그 다음 목 객체는 우리가 기대했던
+메세지를 가지고 있는지를 검사할 수 있습니다.  Listing 15-21은 바로 이런
+일을 하지만 빌림 검사기가 허용하지는 않을 목 객체 구현 시도를 보여주고
+있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -254,49 +227,49 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 15-24: An attempt to implement a `MockMessenger`
-that isn’t allowed by the borrow checker</span>
+<span class="caption">Listing 15-21: 빌림 검사기가 허용하지 않는
+`MockMessenger` 구현 시도</span>
 
-This test code defines a `MockMessenger` struct that has a `sent_messages`
-field with a `Vec` of `String` values to keep track of the messages it’s told
-to send. We also defined an associated function `new` to make it convenient to
-create new `MockMessenger` values that start with an empty list of messages. We
-then implement the `Messenger` trait for `MockMessenger` so that we can give a
-`MockMessenger` to a `LimitTracker`. In the definition of the `send` method, we
-take the message passed in as a parameter and store it in the `MockMessenger`
-list of `sent_messages`.
+이 테스트 코드는 보내질 메세지들을 추적하기 위한 `String` 값의 `Vec`인
+`sent_messages` 필드를 갖는 `MockMessenger` 구조체를 정의하고
+있습니다. 우리는 또한 빈 메세지 리스트로 시작하는 새로운 `MockMessenger`
+값을 생성하기 쉽도록 하기 위해 연관 함수 `new`를 정의하였습니다. 그런
+다음에는 `MockMessenger`를 `LimitTracker`에 넘겨줄 수 있도록
+`MockMessenger`를 위한 `Messenger` 트레잇을 구현하였습니다. `send`
+메소드의 정의 부분에서는 파라미터로서 넘겨진 메세지를 가져와서 `MockMessenger`
+내의 `Sent_messages` 리스트에 저장합니다.
 
-In the test, we’re testing what happens when the `LimitTracker` is told to set
-`value` to something that’s over 75% of the `max` value. First, we create a new
-`MockMessenger`, which will start with an empty list of messages. Then we
-create a new `LimitTracker` and give it a reference to the new `MockMessenger`
-and a `max` value of 100. We call the `set_value` method on the `LimitTracker`
-with a value of 80, which is more than 75% of 100. Then we assert that the list
-of messages that the `MockMessenger` is keeping track of should now have one
-message in it.
+테스트 내에서는 `max` 값의 75 퍼센트 이상의 무언가가 `value`로 설정되었을
+때 `LimitTracker`는 어떤 메세지를 듣는지를 테스트하고 있습니다. 먼저 우리는
+새로운 `MockMessenger`를 만드는데, 이는 비어있는 메시지 리스트로 시작할
+것입니다. 그 다음에는 새로운 `LimitTracker`를 만들고 여기에 새로운
+`MockMessenger`의 참조자와 `max`값 100을 파라미터로 넘깁니다. 우리는
+`LimitTracker` 상의 `set_value` 메소드를 80 값으로 호출하였습니다.
+그 다음 우리는 `MockMessenger`가 추적하고 있는 메세지 리스트가 이제
+한 개의 메세지를 가지고 있는지를 검사합니다.
 
-There’s one problem with this test, however:
+하지만, 아래에서 보는 것과 같이 이 테스트에 한가지 문제점이 있습니다:
 
 ```text
 error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
-  --> src/lib.rs:46:13
+  --> src/lib.rs:52:13
    |
-45 |         fn send(&self, message: &str) {
+51 |         fn send(&self, message: &str) {
    |                 ----- use `&mut self` here to make mutable
-46 |             self.sent_messages.push(String::from(message));
+52 |             self.sent_messages.push(String::from(message));
    |             ^^^^^^^^^^^^^^^^^^ cannot mutably borrow immutable field
 ```
 
-We can’t modify the `MockMessenger` to keep track of the messages because the
-`send` method takes an immutable reference to `self`. We also can’t take the
-suggestion from the error text to use `&mut self` instead because then the
-signature of `send` wouldn’t match the signature in the `Messenger` trait
-definition (feel free to try and see what error message you get).
+우리는 메세지를 추적하기 위해 `MockMessenger`를 수정할 수 없는데 그 이유는
+`send` 메소드가 `self`의 불변 참조자를 파라미터로 갖기 때문입니다. 우리는 또한
+에러 메세지로부터 `&mut self`를 대신 사용하라는 제안도 얻을 수 없는데, 그렇게
+되면 `send`의 시그니처가 `Messenger` 트레잇의 정의에 있는 시그니처와 일치하지
+않을 것이지 때문입니다 (마음 편하게 한번 시도해보고 어떤 에러가 나오는지 보세요).
 
-This is where interior mutability can help! We’re going to store the
-`sent_messages` within a `RefCell`, and then the `send` message will be able to
-modify `sent_messages` to store the messages we’ve seen. Listing 15-25 shows
-what that looks like:
+이는 내부 가변성이 도움을 줄 수 있는 상황입니다! 우리는 `sent_messages`를
+`RefCell<T>` 내에 저장할 것이고, 그러면 `send` 메소드는 우리가 보게 되는
+메세지를 저장하기 위해 `sent_message`를 수정할 수 있을 것입니다. Listing
+15-22는 이것이 어떤 형태인지를 보여줍니다: 
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -334,52 +307,48 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 15-25: Using `RefCell<T>` to be able to mutate an
-inner value while the outer value is considered immutable</span>
+<span class="caption">Listing 15-22: `RefCell<T>`를 사용하여 바깥쪽에서는
+불변으로 간주되는 동안 내부의 값을 변경하기</span>
 
-The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
-`Vec<String>`. In the `new` function, we create a new `RefCell` instance around
-the empty vector.
+`sent_message` 필드는 이제 `Vec<String>` 대신 `RefCell<Vec<String>>`
+타입입니다. `new` 함수 내에서, 우리는 빈 벡터를 감싼 새로운 `RefCell<Vec<String>>`
+인스턴스를 생성합니다.
 
-For the implementation of the `send` method, the first parameter is still an
-immutable borrow of `self`, which matches the trait definition. We call
-`borrow_mut` on the `RefCell` in `self.sent_messages` to get a mutable
-reference to the value inside the `RefCell`, which is the vector. Then we can
-call `push` on the mutable reference to the vector in order to keep track of
-the messages seen during the test.
+`send` 메소드의 구현부에 대하여, 첫번째 파라미터는 여전히 `self`의 불변
+빌림 형태인데, 이는 트레잇의 정의와 일치합니다. 우리는 `self.sent_messages`
+내의 `RefCell<Vec<String>>` 상에 있는 `borrow_mut`를 호출하여
+`RefCell<Vec<String>>` 내의 값에 대한 가변 참조자를 얻는데, 이는
+벡터입니다. 그런 다음에는 그 벡터에 대한 가변 참조자 상의 `push`를 호출하여
+테스트하는 동안 보내진 메세지를 추적할 수 있습니다.
 
-The last change we have to make is in the assertion: in order to see how many
-items are in the inner vector, we call `borrow` on the `RefCell` to get an
-immutable reference to the vector.
+마지막으로 우리가 변경한 부분은 단언 부분 내에 있습니다: 내부 벡터 내에
+몇개의 아이템이 있는지 보기 위해서, 우리는 `RefCell<Vec<String>>` 상의
+`borrow`를 호출하여 벡터에 대한 불변 참조자를 얻습니다.
 
-Now that we’ve seen how to use `RefCell<T>`, let’s dig into how it works!
+이제 여러분이 `RefCell<T>`를 어떻게 사용하는지 보았으니, 이것이 어떤 식으로 동작하는지 파고 들어 봅시다! 
 
-#### `RefCell<T>` Keeps Track of Borrows at Runtime
+#### `RefCell<T>`는 런타임에 빌림을 추적합니다
 
-When creating immutable and mutable references we use the `&` and `&mut`
-syntax, respectively. With `RefCell<T>`, we use the `borrow` and `borrow_mut`
-methods, which are part of the safe API that belongs to `RefCell<T>`. The
-`borrow` method returns the smart pointer type `Ref`, and `borrow_mut` returns
-the smart pointer type `RefMut`. Both types implement `Deref` so we can treat
-them like regular references.
+불변 및 가변 참조자를 만들때, 우리는 각각 `&` 및 `&mut` 문법을 사용합니다.
+`RefCell<T>`을 이용할때는 `borrow`와 `borrow_mut` 메소드를 사용하는데,
+이들은 `RefCell<T>`가 소유한 안전한 API 중 일부입니다. `borrow` 메소드는
+스마트 포인터 타입인 `Ref<T>`를 반환하고, `borrow_mut`는 스마트 포인터
+타입 `RefMut<T>`을 반환합니다. 두 타입 모두 `Deref`를 구현하였으므로
+우리는 이들을 보통의 참조자처럼 다룰 수 있습니다.
 
-<!-- can you clarify what you mean, practically, by "track borrows
-dynamically"?-->
-<!-- Yep, we've tried to clarify in the next paragraph. /Carol -->
+`RefCell<T>`는 현재 활성화된 `Ref<T>`와 `RefMut<T>` 스마트 포인터들이
+몇개나 있느닞 추적합니다. 우리가 `borrow`를 호출할 때마다, `RefCell<T>`는
+불변 참조자가 활성화된 갯수를 증가시킵니다. `Ref<T>` 값이 스코프 밖으로 벗어날
+때, 불변 빌림의 갯수는 하나 감소합니다. 컴파일 타임에서의 빌림 규칙과 똑같이,
+`RefCell<T>`는 우리가 어떤 시점에서든 여러 개의 불변 빌림 혹은 하나의 가변
+빌림을 가질 수 있도록 합니다.
 
-The `RefCell<T>` keeps track of how many `Ref` and `RefMut` smart pointers are
-currently active. Every time we call `borrow`, the `RefCell<T>` increases its
-count of how many immutable borrows are active. When a `Ref` value goes out of
-scope, the count of immutable borrows goes down by one. Just like the compile
-time borrowing rules, `RefCell<T>` lets us have many immutable borrows or one
-mutable borrow at any point in time.
-
-If we try to violate these rules, rather than getting a compiler error like we
-would with references, the implementation of `RefCell<T>` will `panic!` at
-runtime. Listing 15-26 shows a modification to the implementation of `send`
-from Listing 15-25 where we’re deliberately trying to create two mutable
-borrows active for the same scope in order to illustrate that `RefCell<T>`
-prevents us from doing this at runtime:
+만일 이 규칙들을 위반한다면, `RefCell<T>`의 구현체는 우리가 참조자들을
+가지고 했을 때처럼 컴파일 에러를 내기 보다는 런타임에 `panic!`을 일으킬
+것입니다. Listing 15-23은 Listing 15-22의 `send` 구현의 수정을
+보여줍니다. 우리는 `RefCell<T>`가 런타임에 두개의 활성화된 가변 빌림을
+같은 스코프에 만드는 일을 하는 것을 막아주는 것을 보여주기 위해서 의도적으로
+그런 시도를 하는 중입니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -395,14 +364,14 @@ impl Messenger for MockMessenger {
 }
 ```
 
-<span class="caption">Listing 15-26: Creating two mutable references in the
-same scope to see that `RefCell<T>` will panic</span>
+<span class="caption">Listing 15-23: `RefCell<T>`이 패닉을 일으킬
+것을 보기 위한 같은 스코프 내에 두 개의 가변 참조자 만들기</span>
 
-We create a variable `one_borrow` for the `RefMut` smart pointer returned from
-`borrow_mut`. Then we create another mutable borrow in the same way in the
-variable `two_borrow`. This makes two mutable references in the same scope,
-which isn’t allowed. If we run the tests for our library, this code will
-compile without any errors, but the test will fail:
+우리는 `borrow_mut`로부터 반환된 `RefMut<T>` 스마트 포인터를 위한 `one_borrow`
+변수를 만들었습니다. 그런 다음 또다른 가변 빌림을 같은 방식으로 `two_borrow` 변수에
+만들어 넣었습니다. 이는 같은 스코프에 두개의 가변 참조자를 만드는데, 이는 허용되지
+않습니다. 우리가 우리의 라이브러리를 위한 테스트를 실행할 때, Listing 15-23의
+코드는 어떠한 에러 없이 컴파일될 것이지만, 테스트는 실패할 것입니다:
 
 ```text
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
@@ -411,37 +380,34 @@ compile without any errors, but the test will fail:
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-We can see that the code panicked with the message `already borrowed:
-BorrowMutError`. This is how `RefCell<T>` handles violations of the borrowing
-rules at runtime.
+코드가 `already borrowed: BorrowMutError`라는 메세지와 함꼐 패닉을
+일으켰음을 주목하세요. 이것이 바로 `RefCell<T>`가 런타임에 빌림 규칙의 위반을
+다루는 방법입니다.
 
-Catching borrowing errors at runtime rather than compile time means that we’d
-find out that we made a mistake in our code later in the development process--
-and possibly not even until our code was deployed to production. There’s also a
-small runtime performance penalty our code will incur as a result of keeping
-track of the borrows at runtime rather than compile time. However, using
-`RefCell` made it possible for us to write a mock object that can modify itself
-to keep track of the messages it has seen while we’re using it in a context
-where only immutable values are allowed. We can choose to use `RefCell<T>`
-despite its tradeoffs to get more abilities than regular references give us.
+빌림 에러를 컴파일 타임보다 런타임에 잡는다는 것은 개발 과정 이후에 우리
+코드의 실수를 발견할 것이란 의미이고, 심지어는 우리 코드가 프로덕션으로
+배포될 때 까지도 발견되지 않을 가능성도 있습니다. 또한, 우리 코드는
+컴파일 타임 대신 런타임에 빌림을 추적하는 결과로서 약간의 런타임 성능
+페널티를 초래할 것입니다. 그러나, `RefCell<T>`를 이용하는 것은
+우리가 오직 불변 값만 허용하는 콘텍스트 내에서 그것이 본 메세지를 추적하기
+위해서 스스로를 변경할 수 있는 목 객체를 작성하도록 해줍니다. 우리는 일반적인
+참조자가 우리에게 제공하는 것보다 더 많은 기능을 얻기 위해서 트레이드 오프에도
+불구하고 `RefCell<T>`를 이용할 수 있습니다.
 
-### Having Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
+### `Rc<T>`와 `RefCell<T>`를 조합하여 가변 데이터의 복수 소유자 만들기
 
-A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
-`Rc<T>` lets us have multiple owners of some data, but it only gives us
-immutable access to that data. If we have an `Rc<T>` that holds a `RefCell<T>`,
-then we can get a value that can have multiple owners *and* that we can mutate!
+`RefCell<T>`를 사용하는 일반적인 방법은 `Rc<T>`와 함께 조합하는 것입니다. `Rc<T>`이
+어떤 데이터에 대해 복수의 소유자를 허용하지만, 그 데이터에 대한 불변 접근만 제공하는 것을
+상기하세요. 만일 우리가 `RefCell<T>`을 들고 있는 `Rc<T>`를 갖는다면, 우리가 변경
+가능*하면서* 복수의 소유자를 갖는 값을 가질 수 있습니다!
 
-<!-- maybe just recap on why we'd want that? -->
-<!-- done, below /Carol -->
-
-For example, recall the cons list example from Listing 15-13 where we used
-`Rc<T>` to let us have multiple lists share ownership of another list. Because
-`Rc<T>` only holds immutable values, we aren’t able to change any of the values
-in the list once we’ve created them. Let’s add in `RefCell<T>` to get the
-ability to change the values in the lists. Listing 15-27 shows that by using a
-`RefCell<T>` in the `Cons` definition, we’re allowed to modify the value stored
-in all the lists:
+예를 들면, Listing 15-18에서 우리가 어떤 리스트의 소유권을 공유하는 여러 개의
+리스트를 가질 수 있도록 하기 위해 `Rc<T>`를 사용했던 cons 리스트 예제를 상기해보세요.
+`Rc<T>`가 오직 불변의 값만을 가질 수 있기 때문에, 우리가 이들을 일단 만들면 리스트
+안의 값들을 변경하는 것은 불가능했습니다. 이 리스트 안의 값을 변경하는 능력을 얻기
+위해서 `RefCell<T>`을 추가해 봅시다. Listing 15-24는 `Cons` 정의 내에
+`RefCell<T>`를 사용함으로써 우리가 모든 리스트 내에 저장된 값을 변경할 수 있음을
+보여줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -472,32 +438,28 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-27: Using `Rc<RefCell<i32>>` to create a
-`List` that we can mutate</span>
+<span class="caption">Listing 15-24: `Rc<RefCell<i32>>`을 사용하여
+변경 가능한 `List` 생성하기</span>
 
-We create a value that’s an instance of `Rc<RefCell<i32>` and store it in a
-variable named `value` so we can access it directly later. Then we create a
-`List` in `a` with a `Cons` variant that holds `value`. We need to clone
-`value` so that both `a` and `value` have ownership of the inner `5` value,
-rather than transferring ownership from `value` to `a` or having `a` borrow
-from `value`.
+우리는 `Rc<RefCell<i32>>`의 인스턴스인 값을 생성하고 `value`라는 이름의
+변수 안에 이를 저장하여 나중에 이를 직접 접근할 수 있게 했습니다. 그런 다음
+우리는 `value`를 가지고 있는 `Cons` variant와 함께 `a`에다 `List`를
+생성하였습니다. `value`에서 `a`로 소유권이 이전되거나 `value`로부터 빌린
+`a` 보다는 `a`와 `value` 둘다 내부의 `5` 값에 대한 소유권을 얻기 위해서는
+`value`를 클론할 필요가 있습니다.
 
-<!-- above: so that `value` has ownership of what, in addition to a? I didn't
-follow the final sentence above -->
-<!-- Of the inner value, I've tried to clarify /Carol -->
+리스트 `a`는 `Rc<T>`로 감싸져서 우리가 `b`와 `c` 리스트를 만들때, 이 리스트들은
+둘다 `a`를 참조할 수 있는데, 이는 Listing 15-18에서 해본 것입니다.
 
-We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and
-`c`, they can both refer to `a`, the same as we did in Listing 15-13.
+`a`, `b`, 그리고 `c` 리스트를 생성한 이후, 우리는 `value` 내의 값에 10을
+더했습니다. `value` 상의 `borrow_mut`를 호출함으로써 수행되었는데, 이는
+내부의 `RefCell<T>`값을 가리키는 `Rc<T>`를 역참조하기 위해서 우리가 5장에서
+논의했던 자동 역참조 기능을 사용한 것입니다 (“`->` 연산자는 어디로 갔나요?”절을 보세요).
+`borrow_mut` 메소드는 `RefMut<T>` 스마트 포인터를 반환하고, 우리는 여기에 역참조
+연산자를 사용한 다음 내부 값을 변경합니다.
 
-Once we have the lists in `a`, `b`, and `c` created, we add 10 to the value in
-`value`. We do this by calling `borrow_mut` on `value`, which uses the
-automatic dereferencing feature we discussed in Chapter 5 (“Where’s the `->`
-Operator?”) to dereference the `Rc<T>` to the inner `RefCell<T>` value. The
-`borrow_mut` method returns a `RefMut<T>` smart pointer, and we use the
-dereference operator on it and change the inner value.
-
-When we print out `a`, `b`, and `c`, we can see that they all have the modified
-value of 15 rather than 5:
+`a`, `b`, 그리고 `c`를 출력할때, 우리는 이 리스트들이 모두 5가 아니라 변경된
+값 15를 가지고 있는 것을 볼 수 있습니다:
 
 ```text
 a after = Cons(RefCell { value: 15 }, Nil)
@@ -505,16 +467,16 @@ b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
 c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
 ```
 
-This is pretty neat! By using `RefCell<T>`, we have an outwardly immutable
-`List`, but we can use the methods on `RefCell<T>` that provide access to its
-interior mutability so we can modify our data when we need to. The runtime
-checks of the borrowing rules protect us from data races, and it’s sometimes
-worth trading a bit of speed for this flexibility in our data structures.
+이 기술은 매우 깔끔합니다! `RefCell<T>`을 이용함으로써, 우리는 표면상으로는
+불변인 `List`를 갖고 있습니다. 하지만 우리는 내부 가변성 접근을 제공하여
+우리가 원할때 데이터를 변경시킬 수 있는 `RefCell<T>` 내의 메소드를 사용할
+수 있습니다. 빌림 규칙의 런타임 검사는 데이터 레이스로부터 우리를 지켜주고, 우리
+데이터 구조의 이러한 유연성을 위해서 약간의 속도를 맞거래하는 것이 때때로
+가치있습니다.
 
-The standard library has other types that provide interior mutability, too,
-like `Cell<T>`, which is similar except that instead of giving references to
-the inner value, the value is copied in and out of the `Cell<T>`. There’s also
-`Mutex<T>`, which offers interior mutability that’s safe to use across threads,
-and we’ll be discussing its use in the next chapter on concurrency. Check out
-the standard library docs for more details on the differences between these
-types.
+표준 라이브러리는 내부 가변성을 제공하는 다른 타입을 가지고 있는데, 이를 테면
+`Cell<T>`는 내부 값의 참조자를 주는 대신 값이 복사되어 `Cell<T>` 밖으로
+나오는 점만 제외하면 비슷합니다. 또한 `Mutex<T>`가 있는데, 이는 스레드들을
+건너가며 사용해도 안전한 내부 가변성을 제공합니다; 이것의 사용법은 16장에서
+다룰 것입니다. 이 타입들의 차이점에 대해 더 자세히 알고 싶다면 표준 라이브러리
+문서를 참조하세요.

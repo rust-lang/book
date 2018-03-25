@@ -164,11 +164,11 @@ distribute the jobs across the threads.
 
 Additionally, taking a job off the channel queue involves mutating `receiver`,
 so the threads need a safe way to share `receiver` and be allowed to modify it.
-If the modifications weren’t threadsafe, we might get race conditions such as
+If the modifications weren’t thread-safe, we might get race conditions such as
 two threads executing the same job if they both take the same job off the queue
 at the same time.
 
-So remembering the threadsafe smart pointers that we discussed in Chapter 16,
+So remembering the thread-safe smart pointers that we discussed in Chapter 16,
 in order to share ownership across multiple threads and allow the threads to
 mutate the value, we need to use `Arc<Mutex<T>>`. `Arc` will let multiple
 workers own the receiver, and `Mutex` will make sure that only one worker is

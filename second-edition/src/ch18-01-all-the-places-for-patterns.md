@@ -161,7 +161,7 @@ in this chapter, but I've added a small parenthetical here in case the reader
 forgets. /Carol -->
 
 ```rust
-let v = vec![1, 2, 3];
+let v = vec!['a', 'b', 'c'];
 
 for (index, value) in v.iter().enumerate() {
     println!("{} is at index {}", value, index);
@@ -174,15 +174,15 @@ destructure a tuple</span>
 This will print:
 
 ```text
-1 is at index 0
-2 is at index 1
-3 is at index 2
+a is at index 0
+b is at index 1
+c is at index 2
 ```
 
 We use the `enumerate` method to adapt an iterator to produce a value and that
 value’s index in the iterator, placed into a tuple. The first call to
-`enumerate` produces the tuple `(0, 1)`. When this value is matched to the
-pattern `(index, value)`, `index` will be 0 and `value` will be 1, printing our
+`enumerate` produces the tuple `(0, 'a')`. When this value is matched to the
+pattern `(index, value)`, `index` will be 0 and `value` will be 'a', printing our
 first line of output.
 
 ### `let` Statements

@@ -46,10 +46,12 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - assertion: 어서션, 단언
 - assign: 대입하다
 - associated function: 연관함수
+- associated type: 연관 타입
 - binary: 바이너리
 - bind: 묶다
 - boilerplate code: 보일러플레이트 코드
 - borrowing: 빌림
+- box: 박스
 - CamelCase: 낙타 표기법
 - cargo: 카고
 - clone: 클론
@@ -59,10 +61,12 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - crate: 크래이트
 - dangling reference: 댕글링 참조자
 - data race: 데이터 레이스
+- deep copy: 깊은 복사
 - dependency: 디펜던시
 - deref coercion: 역참조 강제
 - derived trait: 파생 트레잇
 - documentation comments: 문서화 주석
+- double free: 중복 해제
 - `drop`: `drop`한다, 버리다
 - feature: 특성
 - format string: 형식 문자열
@@ -71,6 +75,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - heap: 힙
 - identifier: 식별자
 - immutable: 불변
+- interior mutability: 내부 가변성
 - instance: 인스턴스
 - integration test: 통합 테스트
 - iterator: 반복자
@@ -89,7 +94,10 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - private: 비공개
 - public: 공개
 - recover: 복구
+- recursive type: 재귀적 타입
 - reference: 참조자
+- reference counting: 참조 카운팅
+- reference cycle: 참조 순환
 - return: 반환
 - rust: 러스트
 - scope: 스코프
@@ -99,6 +107,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - string literal: 스트링 리터럴
 - test harness: 테스트 도구
 - trait bound: 트레잇 바운드
+- trait object: 트레잇 객체
 - type annotation: 타입 명시
 - unit test: 단위 테스트
 - variable: 변수
