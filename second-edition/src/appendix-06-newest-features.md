@@ -63,7 +63,7 @@ fn main() {
 If you have a complex module tree with many different submodules and you need
 to import a few items from each one, it might be useful to group all the
 imports in the same declaration to keep your code clean and avoid repeating the
-base modules' name.
+base modules’ name.
 
 The `use` declaration supports nesting to help you in those cases, both with
 simple imports and glob ones. For example this snippets imports `bar`, `Foo`,
@@ -121,7 +121,7 @@ Rust 1.26.0 added 128-bit integer primitives:
 - `i128`: A 128-bit signed integer with range [-(2^127), 2^127 - 1]
 
 These primitives are implemented efficiently via LLVM support. They are
-available even on platforms that don't natively support 128-bit integers and
+available even on platforms that don’t natively support 128-bit integers and
 can be used like the other integer types.
 
 These primitives can be very useful for algorithms that need to use very large

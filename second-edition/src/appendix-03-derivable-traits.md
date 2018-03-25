@@ -1,6 +1,6 @@
 ## C - Derivable Traits
 
-In various places in the book, we've discussed the `derive` attribute
+In various places in the book, we’ve discussed the `derive` attribute
 that you can apply to a struct or enum definition.
 
 <!-- Above -- I wasn't clear throughout whether the derive attribute is
@@ -43,7 +43,7 @@ traits here and then moved the section headings out a level, what do you think?
 
 The rest of the traits defined in the standard library can’t be implemented on
 your types using `derive`. These traits don’t have sensible default behavior,
-so it's up to you to implement them in the way that makes sense for what you're
+so it’s up to you to implement them in the way that makes sense for what you’re
 trying to accomplish.
 
 An example of a trait that can’t be derived is `Display`, which handles
@@ -51,7 +51,7 @@ formatting for end users. You should always put thought into the appropriate
 way to display a type to an end user: what parts of the type should an end user
 be allowed to see? What parts would they find relevant? What format of the data
 would be most relevant to them? The Rust compiler doesn’t have this insight and
-so can't provide appropriate default behavior for you.
+so can’t provide appropriate default behavior for you.
 
 The list of derivable traits provided in this appendix is not comprehensive:
 libraries can implement `derive` for their own traits! In this way, the list of
@@ -112,7 +112,7 @@ that also implement `PartialEq`.
 
 Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that will be `None` when the values given do not produce an
-ordering. An example of a value that doesn't produce an ordering, even though
+ordering. An example of a value that doesn’t produce an ordering, even though
 most values of that type can be compared, is the not-a-number (`NaN`) floating
 point value. Calling `partial_cmp` with any floating point number and the `NaN`
 floating point value will return `None`.
@@ -154,7 +154,7 @@ explanation) -->
 
 The `Clone` trait allows you to explicitly create a deep copy of a value, and
 the duplication process might involve running arbitrary code and copying heap
-data. See the "Ways Variables and Data Interact: Clone" section in Chapter 4
+data. See the “Ways Variables and Data Interact: Clone” section in Chapter 4
 for more information on `Clone`.
 
 Deriving `Clone` implements the `clone` method which, when implemented for the
@@ -167,7 +167,7 @@ returned from `to_vec` will need to own its instances, so `to_vec` calls
 `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See the "Stack-Only Data: Copy"
+the stack; no arbitrary code is necessary. See the “Stack-Only Data: Copy”
 section in Chapter 4 for more information on `Copy`.
 
 <!-- I'm not clear on why the clone trait uses arbitrary code but copy doesn't
@@ -191,7 +191,7 @@ implements `Copy` has a trivial implementation of `Clone`, doing the same thing
 as `Copy`.
 
 `Copy` is rarely required; types implement `Copy` have optimizations available
-mean you don't have to call `clone`, making the code more concise.
+mean you don’t have to call `clone`, making the code more concise.
 
 <!-- By "nicer" do you mean more efficient and understandable? -->
 <!-- concise, I've changed /Carol -->

@@ -97,7 +97,7 @@ listen to the address `127.0.0.1:7878`. Breaking this address down, the section
 before the colon is an IP address representing your own computer (this is the
 same on each computer, and doesn’t represent the authors’ computer
 specifically), and `7878` is the port. We’ve chosen this port for two reasons:
-HTTP is normally accepted on this port and 7878 is "rust" typed on a telephone.
+HTTP is normally accepted on this port and 7878 is “rust” typed on a telephone.
 Note that connecting to port 80 requires administrator privileges;
 non-administrators can only listen on ports higher than 1024.
 

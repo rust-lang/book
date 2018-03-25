@@ -88,7 +88,7 @@ potential future use.
 text about what this appendix contains? Quick example below -->
 <!-- Done! /Carol -->
 
-This appendix is a glossary of Rust's syntax, including operators and other
+This appendix is a glossary of Rust’s syntax, including operators and other
 symbols that appear by themselves or in the context of paths, generics, trait
 bounds, macros, attributes, comments, tuples, and brackets.
 
@@ -165,8 +165,8 @@ symbols/what counts as a non-operator symbol? -->
 <!-- I've tried but it's hard to explain, it's the kind of thing you know when
 you see it? /Carol -->
 
-The following lists all non-letters that don't function as operators; that is,
-they don't behave like a function or method call.
+The following lists all non-letters that don’t function as operators; that is,
+they don’t behave like a function or method call.
 
 #### Standalone Syntax
 
@@ -257,7 +257,7 @@ they don't behave like a function or method call.
 
 ## C - Derivable Traits
 
-In various places in the book, we've discussed the `derive` attribute
+In various places in the book, we’ve discussed the `derive` attribute
 that you can apply to a struct or enum definition.
 
 <!-- Above -- I wasn't clear throughout whether the derive attribute is
@@ -300,7 +300,7 @@ traits here and then moved the section headings out a level, what do you think?
 
 The rest of the traits defined in the standard library can’t be implemented on
 your types using `derive`. These traits don’t have sensible default behavior,
-so it's up to you to implement them in the way that makes sense for what you're
+so it’s up to you to implement them in the way that makes sense for what you’re
 trying to accomplish.
 
 An example of a trait that can’t be derived is `Display`, which handles
@@ -308,7 +308,7 @@ formatting for end users. You should always put thought into the appropriate
 way to display a type to an end user: what parts of the type should an end user
 be allowed to see? What parts would they find relevant? What format of the data
 would be most relevant to them? The Rust compiler doesn’t have this insight and
-so can't provide appropriate default behavior for you.
+so can’t provide appropriate default behavior for you.
 
 The list of derivable traits provided in this appendix is not comprehensive:
 libraries can implement `derive` for their own traits! In this way, the list of
@@ -369,7 +369,7 @@ that also implement `PartialEq`.
 
 Deriving `PartialOrd` implements the `partial_cmp` method, which returns an
 `Option<Ordering>` that will be `None` when the values given do not produce an
-ordering. An example of a value that doesn't produce an ordering, even though
+ordering. An example of a value that doesn’t produce an ordering, even though
 most values of that type can be compared, is the not-a-number (`NaN`) floating
 point value. Calling `partial_cmp` with any floating point number and the `NaN`
 floating point value will return `None`.
@@ -411,7 +411,7 @@ explanation) -->
 
 The `Clone` trait allows you to explicitly create a deep copy of a value, and
 the duplication process might involve running arbitrary code and copying heap
-data. See the "Ways Variables and Data Interact: Clone" section in Chapter 4
+data. See the “Ways Variables and Data Interact: Clone” section in Chapter 4
 for more information on `Clone`.
 
 Deriving `Clone` implements the `clone` method which, when implemented for the
@@ -424,7 +424,7 @@ returned from `to_vec` will need to own its instances, so `to_vec` calls
 `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See the "Stack-Only Data: Copy"
+the stack; no arbitrary code is necessary. See the “Stack-Only Data: Copy”
 section in Chapter 4 for more information on `Copy`.
 
 <!-- I'm not clear on why the clone trait uses arbitrary code but copy doesn't
@@ -448,7 +448,7 @@ implements `Copy` has a trivial implementation of `Clone`, doing the same thing
 as `Copy`.
 
 `Copy` is rarely required; types implement `Copy` have optimizations available
-mean you don't have to call `clone`, making the code more concise.
+mean you don’t have to call `clone`, making the code more concise.
 
 <!-- By "nicer" do you mean more efficient and understandable? -->
 <!-- concise, I've changed /Carol -->
@@ -488,20 +488,20 @@ the `Option<T>`.
 
 ## Appendix D: Macros
 
-We’ve used macros like `println!` throughout this book, but haven't fully
+We’ve used macros like `println!` throughout this book, but haven’t fully
 explored what a macro is and how it works. This appendix will explain:
 
 - What macros are and how they differ from functions
 - How to define a declarative macro to do metaprogramming
 - How to define a procedural macro to create custom `derive` traits
 
-We're covering the details of macros in an appendix because they’re still
+We’re covering the details of macros in an appendix because they’re still
 evolving in Rust. Macros have changed and, in the near future, will change at a
 quicker rate than the rest of the language and standard library since Rust 1.0,
 so this section is more likely to date than the rest of the book. The code
 shown here will still continue to work with future versions, due to Rust’s
 stability guarantees, but there may be additional capabilities or easier ways
-to write macros that weren't available at the time of this publication. Bear
+to write macros that weren’t available at the time of this publication. Bear
 that in mind if you try to implement anything from this appendix.
 
 ### The Difference Between Macros and Functions
@@ -576,7 +576,7 @@ let v: Vec<u32> = vec![1, 2, 3];
 ```
 
 We could also use the `vec!` macro to make a vector of two integers or a vector
-of five string slices---we wouldn't be able to use a function to do the same
+of five string slices---we wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
 Let’s take a look at a slightly simplified definition of the `vec!` macro in
@@ -640,7 +640,7 @@ whatever precedes the `*`.
 When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
 times with the three expressions `1`, `2`, and `3`.
 
-Now let's look at the pattern in the body of the code associated with this arm:
+Now let’s look at the pattern in the body of the code associated with this arm:
 The `temp_vec.push()` code within the `$()*` part is generated for each part
 that matches `$()` in the pattern, zero or more times depending on how many
 times the pattern matches. The `$x` is replaced with each expression matched.
@@ -679,7 +679,7 @@ code as declarative macros do. At the time of writing, you can only really
 define procedural macros to allow your traits to be implemented on a type by
 specifying the trait name in a `derive` annotation.
 
-We're going to create a crate named `hello_macro` that defines a trait named
+We’re going to create a crate named `hello_macro` that defines a trait named
 `HelloMacro` with one associated function named `hello_macro`. Rather than
 making users of our crate implement the `HelloMacro` trait for each of their
 types, we’ll provide a procedural macro so users can annotate their type with
@@ -781,12 +781,12 @@ procedural macro in `hello_macro_derive` as well. The two crates will need to
 be published separately, though, and programmers using these crates will need
 to add both as dependencies and bring them both into scope. We could instead
 have the `hello_macro` crate use `hello_macro_derive` as a dependency and
-re-export the procedural macro code, but the way we've structured the project
+re-export the procedural macro code, but the way we’ve structured the project
 makes it possible for programmers to use `hello_macro` even if they don’t want
 the `derive` functionality.
 
 We need to declare the `hello_macro_derive` crate as a procedural macro crate.
-We'll also need functionality from the `syn` and `quote` crates, as we'll see
+We’ll also need functionality from the `syn` and `quote` crates, as we’ll see
 in a moment, so we need to add them as dependencies. Add the following to the
 *Cargo.toml* file for `hello_macro_derive`:
 
@@ -805,7 +805,7 @@ To start defining the procedural macro, place the code from Listing AD-3 in
 your *src/lib.rs* for the `hello_macro_derive` crate. Note that this won’t
 compile until we add a definition for the `impl_hello_macro` function.
 
-Note the way we've split the functions in AD-3; this will be the same for
+Note the way we’ve split the functions in AD-3; this will be the same for
 almost every procedural macro crate you see or create, as it makes writing a
 procedural macro more convenient. What you choose to do in the place where the
 `impl_hello_macro` function is called will be different depending on the

@@ -115,26 +115,26 @@ Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
 expressions, and the `if let` control flow construct. Structs and enums are the
 ways to make custom types in Rust.
 
-In Chapter 7, you'll learn about Rust's module system and privacy for
+In Chapter 7, you’ll learn about Rust’s module system and privacy for
 organizing your code and its public API. Chapter 8 discusses some common
 collection data structures provided by the standard library: vectors, strings,
-and hash maps. Chapter 9 is all about Rust's error handling philosophy and
+and hash maps. Chapter 9 is all about Rust’s error handling philosophy and
 techniques.
 
 Chapter 10 digs into generics, traits, and lifetimes, which give you the power
 to define code that applies to multiple types. Chapter 11 is all about testing,
-which is still necessary even with Rust's safety guarantees to ensure your
-program's logic is correct. In Chapter 12, we'll build a subset of the
+which is still necessary even with Rust’s safety guarantees to ensure your
+program’s logic is correct. In Chapter 12, we’ll build a subset of the
 functionality of the `grep` command line tool that searches for text within
-files and we'll use many of the concepts we discussed in the previous chapters.
+files and we’ll use many of the concepts we discussed in the previous chapters.
 
 Chapter 13 explores closures and iterators: features of Rust that come from
-functional programming languages. In Chapter 14, we'll explore more about Cargo
+functional programming languages. In Chapter 14, we’ll explore more about Cargo
 and talk about best practices for sharing your libraries with others. Chapter
 15 discusses smart pointers provided by the standard library and the traits
 that enable their functionality.
 
-In Chapter 16, we'll go through different models of concurrent programming and
+In Chapter 16, we’ll go through different models of concurrent programming and
 how Rust helps you to program using multiple threads fearlessly. Chapter 17
 looks at how Rust idioms compare to Object Oriented Programming principles you
 may be familiar with.
@@ -144,7 +144,7 @@ ways of expressing ideas throughout Rust programs. Chapter 19 is a smorgasbord
 of advanced topics that you might be interested in, including unsafe Rust and
 more about lifetimes, traits, types, functions, and closures.
 
-In Chapter 20, we'll finish up with a project where we'll implement a low-level
+In Chapter 20, we’ll finish up with a project where we’ll implement a low-level
 multithreaded web server!
 
 Finally, there are some appendices. These contain useful information about the

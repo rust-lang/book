@@ -4,7 +4,7 @@
 text about what this appendix contains? Quick example below -->
 <!-- Done! /Carol -->
 
-This appendix is a glossary of Rust's syntax, including operators and other
+This appendix is a glossary of Rust’s syntax, including operators and other
 symbols that appear by themselves or in the context of paths, generics, trait
 bounds, macros, attributes, comments, tuples, and brackets.
 
@@ -81,8 +81,8 @@ symbols/what counts as a non-operator symbol? -->
 <!-- I've tried but it's hard to explain, it's the kind of thing you know when
 you see it? /Carol -->
 
-The following lists all non-letters that don't function as operators; that is,
-they don't behave like a function or method call.
+The following lists all non-letters that don’t function as operators; that is,
+they don’t behave like a function or method call.
 
 #### Standalone Syntax
 

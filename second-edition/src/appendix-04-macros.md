@@ -1,19 +1,19 @@
 ## Appendix D: Macros
 
-We’ve used macros like `println!` throughout this book, but haven't fully
+We’ve used macros like `println!` throughout this book, but haven’t fully
 explored what a macro is and how it works. This appendix will explain:
 
 - What macros are and how they differ from functions
 - How to define a declarative macro to do metaprogramming
 - How to define a procedural macro to create custom `derive` traits
 
-We're covering the details of macros in an appendix because they’re still
+We’re covering the details of macros in an appendix because they’re still
 evolving in Rust. Macros have changed and, in the near future, will change at a
 quicker rate than the rest of the language and standard library since Rust 1.0,
 so this section is more likely to date than the rest of the book. The code
 shown here will still continue to work with future versions, due to Rust’s
 stability guarantees, but there may be additional capabilities or easier ways
-to write macros that weren't available at the time of this publication. Bear
+to write macros that weren’t available at the time of this publication. Bear
 that in mind if you try to implement anything from this appendix.
 
 ### The Difference Between Macros and Functions
@@ -88,7 +88,7 @@ let v: Vec<u32> = vec![1, 2, 3];
 ```
 
 We could also use the `vec!` macro to make a vector of two integers or a vector
-of five string slices---we wouldn't be able to use a function to do the same
+of five string slices---we wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
 Let’s take a look at a slightly simplified definition of the `vec!` macro in
@@ -153,7 +153,7 @@ whatever precedes the `*`.
 When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
 times with the three expressions `1`, `2`, and `3`.
 
-Now let's look at the pattern in the body of the code associated with this arm:
+Now let’s look at the pattern in the body of the code associated with this arm:
 The `temp_vec.push()` code within the `$()*` part is generated for each part
 that matches `$()` in the pattern, zero or more times depending on how many
 times the pattern matches. The `$x` is replaced with each expression matched.
@@ -193,7 +193,7 @@ code as declarative macros do. At the time of writing, you can only really
 define procedural macros to allow your traits to be implemented on a type by
 specifying the trait name in a `derive` annotation.
 
-We're going to create a crate named `hello_macro` that defines a trait named
+We’re going to create a crate named `hello_macro` that defines a trait named
 `HelloMacro` with one associated function named `hello_macro`. Rather than
 making users of our crate implement the `HelloMacro` trait for each of their
 types, we’ll provide a procedural macro so users can annotate their type with
@@ -294,12 +294,12 @@ procedural macro in `hello_macro_derive` as well. The two crates will need to
 be published separately, though, and programmers using these crates will need
 to add both as dependencies and bring them both into scope. We could instead
 have the `hello_macro` crate use `hello_macro_derive` as a dependency and
-re-export the procedural macro code, but the way we've structured the project
+re-export the procedural macro code, but the way we’ve structured the project
 makes it possible for programmers to use `hello_macro` even if they don’t want
 the `derive` functionality.
 
 We need to declare the `hello_macro_derive` crate as a procedural macro crate.
-We'll also need functionality from the `syn` and `quote` crates, as we'll see
+We’ll also need functionality from the `syn` and `quote` crates, as we’ll see
 in a moment, so we need to add them as dependencies. Add the following to the
 *Cargo.toml* file for `hello_macro_derive`:
 
@@ -318,7 +318,7 @@ To start defining the procedural macro, place the code from Listing AD-3 in
 your *src/lib.rs* for the `hello_macro_derive` crate. Note that this won’t
 compile until we add a definition for the `impl_hello_macro` function.
 
-Note the way we've split the functions in AD-3; this will be the same for
+Note the way we’ve split the functions in AD-3; this will be the same for
 almost every procedural macro crate you see or create, as it makes writing a
 procedural macro more convenient. What you choose to do in the place where the
 `impl_hello_macro` function is called will be different depending on the
