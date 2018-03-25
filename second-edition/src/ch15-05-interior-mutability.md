@@ -396,18 +396,18 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 ### `Rc<T>`와 `RefCell<T>`를 조합하여 가변 데이터의 복수 소유자 만들기
 
-A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
-`Rc<T>` lets us have multiple owners of some data, but it only gives us
-immutable access to that data. If we have an `Rc<T>` that holds a `RefCell<T>`,
-we can get a value that can have multiple owners *and* that we can mutate!
+`RefCell<T>`를 사용하는 일반적인 방법은 `Rc<T>`와 함께 조합하는 것입니다. `Rc<T>`이
+어떤 데이터에 대해 복수의 소유자를 허용하지만, 그 데이터에 대한 불변 접근만 제공하는 것을
+상기하세요. 만일 우리가 `RefCell<T>`을 들고 있는 `Rc<T>`를 갖는다면, 우리가 변경
+가능*하면서* 복수의 소유자를 갖는 값을 가질 수 있습니다!
 
-For example, recall the cons list example in Listing 15-18 where we used
-`Rc<T>` to let us have multiple lists share ownership of another list. Because
-`Rc<T>` only holds immutable values, we can’t change any of the values in the
-list once we’ve created them. Let’s add in `RefCell<T>` to gain the ability to
-change the values in the lists. Listing 15-24 shows that by using a
-`RefCell<T>` in the `Cons` definition, we can modify the value stored in all
-the lists:
+예를 들면, Listing 15-18에서 우리가 어떤 리스트의 소유권을 공유하는 여러 개의
+리스트를 가질 수 있도록 하기 위해 `Rc<T>`를 사용했던 cons 리스트 예제를 상기해보세요.
+`Rc<T>`가 오직 불변의 값만을 가질 수 있기 때문에, 우리가 이들을 일단 만들면 리스트
+안의 값들을 변경하는 것은 불가능했습니다. 이 리스트 안의 값을 변경하는 능력을 얻기
+위해서 `RefCell<T>`을 추가해 봅시다. Listing 15-24는 `Cons` 정의 내에
+`RefCell<T>`를 사용함으로써 우리가 모든 리스트 내에 저장된 값을 변경할 수 있음을
+보여줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -438,28 +438,28 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-24: Using `Rc<RefCell<i32>>` to create a
-`List` that we can mutate</span>
+<span class="caption">Listing 15-24: `Rc<RefCell<i32>>`을 사용하여
+변경 가능한 `List` 생성하기</span>
 
-We create a value that is an instance of `Rc<RefCell<i32>` and store it in a
-variable named `value` so we can access it directly later. Then we create a
-`List` in `a` with a `Cons` variant that holds `value`. We need to clone
-`value` so both `a` and `value` have ownership of the inner `5` value rather
-than transferring ownership from `value` to `a` or having `a` borrow from
-`value`.
+우리는 `Rc<RefCell<i32>>`의 인스턴스인 값을 생성하고 `value`라는 이름의
+변수 안에 이를 저장하여 나중에 이를 직접 접근할 수 있게 했습니다. 그런 다음
+우리는 `value`를 가지고 있는 `Cons` variant와 함께 `a`에다 `List`를
+생성하였습니다. `value`에서 `a`로 소유권이 이전되거나 `value`로부터 빌린
+`a` 보다는 `a`와 `value` 둘다 내부의 `5` 값에 대한 소유권을 얻기 위해서는
+`value`를 클론할 필요가 있습니다.
 
-We wrap the list `a` in an `Rc<T>` so when we create lists `b` and `c`, they
-can both refer to `a`, which is what we did in Listing 15-18.
+리스트 `a`는 `Rc<T>`로 감싸져서 우리가 `b`와 `c` 리스트를 만들때, 이 리스트들은
+둘다 `a`를 참조할 수 있는데, 이는 Listing 15-18에서 해본 것입니다.
 
-After we’ve created the lists in `a`, `b`, and `c`, we add 10 to the value in
-`value`. We do this by calling `borrow_mut` on `value`, which uses the
-automatic dereferencing feature we discussed in Chapter 5 (see the section
-“Where’s the `->` Operator?”) to dereference the `Rc<T>` to the inner
-`RefCell<T>` value. The `borrow_mut` method returns a `RefMut<T>` smart
-pointer, and we use the dereference operator on it and change the inner value.
+`a`, `b`, 그리고 `c` 리스트를 생성한 이후, 우리는 `value` 내의 값에 10을
+더했습니다. `value` 상의 `borrow_mut`를 호출함으로써 수행되었는데, 이는
+내부의 `RefCell<T>`값을 가리키는 `Rc<T>`를 역참조하기 위해서 우리가 5장에서
+논의했던 자동 역참조 기능을 사용한 것입니다 (“`->` 연산자는 어디로 갔나요?”절을 보세요).
+`borrow_mut` 메소드는 `RefMut<T>` 스마트 포인터를 반환하고, 우리는 여기에 역참조
+연산자를 사용한 다음 내부 값을 변경합니다.
 
-When we print `a`, `b`, and `c`, we can see that they all have the modified
-value of 15 rather than 5:
+`a`, `b`, 그리고 `c`를 출력할때, 우리는 이 리스트들이 모두 5가 아니라 변경된
+값 15를 가지고 있는 것을 볼 수 있습니다:
 
 ```text
 a after = Cons(RefCell { value: 15 }, Nil)
@@ -467,16 +467,16 @@ b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
 c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
 ```
 
-This technique is pretty neat! By using `RefCell<T>`, we have an outwardly
-immutable `List`. But we can use the methods on `RefCell<T>` that provide
-access to its interior mutability so we can modify our data when we need to.
-The runtime checks of the borrowing rules protect us from data races, and it’s
-sometimes worth trading a bit of speed for this flexibility in our data
-structures.
+이 기술은 매우 깔끔합니다! `RefCell<T>`을 이용함으로써, 우리는 표면상으로는
+불변인 `List`를 갖고 있습니다. 하지만 우리는 내부 가변성 접근을 제공하여
+우리가 원할때 데이터를 변경시킬 수 있는 `RefCell<T>` 내의 메소드를 사용할
+수 있습니다. 빌림 규칙의 런타임 검사는 데이터 레이스로부터 우리를 지켜주고, 우리
+데이터 구조의 이러한 유연성을 위해서 약간의 속도를 맞거래하는 것이 때때로
+가치있습니다.
 
-The standard library has other types that provide interior mutability, such as
-`Cell<T>`, which is similar except that instead of giving references to the
-inner value, the value is copied in and out of the `Cell<T>`. There’s also
-`Mutex<T>`, which offers interior mutability that’s safe to use across threads;
-we’ll discuss its use in Chapter 16. Check out the standard library docs for
-more details on the differences between these types.
+표준 라이브러리는 내부 가변성을 제공하는 다른 타입을 가지고 있는데, 이를 테면
+`Cell<T>`는 내부 값의 참조자를 주는 대신 값이 복사되어 `Cell<T>` 밖으로
+나오는 점만 제외하면 비슷합니다. 또한 `Mutex<T>`가 있는데, 이는 스레드들을
+건너가며 사용해도 안전한 내부 가변성을 제공합니다; 이것의 사용법은 16장에서
+다룰 것입니다. 이 타입들의 차이점에 대해 더 자세히 알고 싶다면 표준 라이브러리
+문서를 참조하세요.
