@@ -175,10 +175,10 @@ type in the struct definition where we would otherwise specify concrete data
 types.
 
 Note that because we’ve only used one generic type to define `Point<T>`, this
-says that the `Point<T>` struct is generic over some type `T`, and the fields
-`x` and `y` are *both* that same type, whatever that type may be. This means
-that if we create an instance of a `Point<T>` that has values of different
-types, as in Listing 10-7, our code won’t compile:
+definition says that the `Point<T>` struct is generic over some type `T`, and
+the fields `x` and `y` are *both* that same type, whatever that type may be. If
+we create an instance of a `Point<T>` that has values of different types, as in
+Listing 10-7, our code won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -384,8 +384,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-11: Methods that use different generic types
-than their struct’s definition</span>
+<span class="caption">Listing 10-11: A method that uses different generic types
+than its struct’s definition</span>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
