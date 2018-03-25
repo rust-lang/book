@@ -80,12 +80,12 @@
     - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
     - [Extending Cargo with Custom Commands](ch14-05-extending-cargo.md)
 
-- [Smart Pointers](ch15-00-smart-pointers.md)
-    - [`Box<T>` Points to Data on the Heap and Has a Known Size](ch15-01-box.md)
-    - [The `Deref` Trait Allows Access to the Data Through a Reference](ch15-02-deref.md)
-    - [The `Drop` Trait Runs Code on Cleanup](ch15-03-drop.md)
-    - [`Rc<T>`, the Reference Counted Smart Pointer](ch15-04-rc.md)
-    - [`RefCell<T>` and the Interior Mutability Pattern](ch15-05-interior-mutability.md)
+- [스마트 포인터](ch15-00-smart-pointers.md)
+    - [`Box<T>`는 힙에 있는 데이터를 가리키고 알려진 크기를 갖습니다](ch15-01-box.md)
+    - [`Deref` 트레잇은 참조자를 통하여 데이터로의 접근을 허용합니다](ch15-02-deref.md)
+    - [`Drop` 트레잇은 메모리 정리 코드를 실행시킵니다](ch15-03-drop.md)
+    - [`Rc<T>`, 참조 카운팅 스마트 포인터](ch15-04-rc.md)
+    - [`RefCell<T>`와 내부 가변성 패턴](ch15-05-interior-mutability.md)
     - [Creating Reference Cycles and Leaking Memory is Safe](ch15-06-reference-cycles.md)
 
 - [Fearless Concurrency](ch16-00-concurrency.md)

@@ -1,4 +1,3 @@
-## `Box<T>` Points to Data on the Heap and Has a Known Size
 ## `Box<T>`는 힙에 있는 데이터를 가리키고 알려진 크기를 갖습니다
 
 가장 직관적인 스마트 포인터는 *박스 (box)* 인데, 이 타입은 `Box<T>`

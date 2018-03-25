@@ -1,4 +1,3 @@
-## The `Drop` Trait Runs Code on Cleanup
 ## `Drop` 트레잇은 메모리 정리 코드를 실행시킵니다
 
 스마트 포인터 패턴에서 중요한 두번째 트레잇은 `Drop`인데, 이는 값이 스코프
