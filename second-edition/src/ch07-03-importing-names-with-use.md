@@ -162,7 +162,7 @@ looks like this:
 communicator
  ├── client
  ├── network
- |   └── client
+ |   └── server
  └── tests
 ```
 
