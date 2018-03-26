@@ -30,7 +30,8 @@ installation to determine how to install Cargo separately.
 
 Let’s create a new project using Cargo and look at how it differs from our
 original Hello World project. Navigate back to your *projects* directory (or
-wherever you decided to put your code) and then on any operating system run:
+whichever location you decided to place your code) and then on any operating
+system run:
 
 ```text
 $ cargo new hello_cargo --bin
