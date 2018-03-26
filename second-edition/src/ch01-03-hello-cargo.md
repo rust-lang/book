@@ -210,8 +210,8 @@ providing specific instructions for Linux and Mac versus Windows.
 When your project is finally ready for release, you can use `cargo build
 --release` to compile your project with optimizations. This will create an
 executable in *target/release* instead of *target/debug*. These optimizations
-make your Rust code run faster, but turning them on makes your program take
-longer to compile. This is why there are two different profiles: one for
+make your Rust code run faster, but turning them on increases the compilation
+time of your program. This is why there are two different profiles: one for
 development when you want to be able to rebuild quickly and often, and one for
 building the final program you’ll give to a user that won’t be rebuilt
 repeatedly and that will run as fast as possible. If you’re benchmarking the
