@@ -226,7 +226,7 @@ separate the annotation from the reference’s type.
 
 Here are some examples: a reference to an `i32` without a lifetime parameter, a
 reference to an `i32` that has a lifetime parameter named `'a`, and a mutable
-reference to an `i32` that also has the lifetime `'a`:
+reference to an `i32` that also has the lifetime `'a`.
 
 ```rust,ignore
 &i32        // a reference
@@ -276,14 +276,13 @@ The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
 long as lifetime `'a`. The function signature also tells Rust that the string
 slice returned from the function will live at least as long as lifetime `'a`.
-These constraints are what we want Rust to enforce.
-
-As discussed earlier, by specifying the lifetime parameters in this function
-signature, we’re not changing the lifetimes of any values passed in or
-returned. Instead, we’re specifying that the borrow checker should reject any
-values that don’t adhere to these constraints. Note that the `longest` function
-doesn’t need to know exactly how long `x` and `y` will live, only that some
-scope can be substituted for `'a` that will satisfy this signature.
+These constraints are what we want Rust to enforce. Remember, when we specify
+the lifetime parameters in this function signature, we’re not changing the
+lifetimes of any values passed in or returned. Rather, we’re specifying that
+the borrow checker should reject any values that don’t adhere to these
+constraints. Note that the `longest` function doesn’t need to know exactly how
+long `x` and `y` will live, only that some scope can be substituted for `'a`
+that will satisfy this signature.
 
 When annotating lifetimes in functions, the annotations go in the function
 signature, not in the function body. Rust can analyze the code within the
@@ -546,7 +545,7 @@ fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
 After writing a lot of Rust code, the Rust team found that Rust programmers
-were entering the same lifetime annotations repeatedly in particular
+were entering the same lifetime annotations over and over in particular
 situations. These situations were predictable and followed a few deterministic
 patterns. The developers programmed these patterns into the compiler’s code so
 the borrow checker could infer the lifetimes in these situations and not need
@@ -706,7 +705,8 @@ and all lifetimes have been accounted for.
 
 One special lifetime we need to discuss is `'static`, which denotes the entire
 duration of the program. All string literals have the `'static` lifetime, which
-we can annotate as follows: `let s: &'static str = "I have a static lifetime.";`
+we can annotate as follows: `let s: &'static str = "I have a static
+lifetime.";`.
 
 The text of this string is stored directly in the binary of your program, which
 is always available. Therefore, the lifetime of all string literals is
@@ -753,7 +753,7 @@ the declarations of the lifetime parameter `'a` and the generic type parameter
 
 We covered a lot in this chapter! Now that you know about generic type
 parameters, traits and trait bounds, and generic lifetime parameters, you’re
-ready to write code without repetition yet works in many different situations.
+ready to write code without repetition that works in many different situations.
 Generic type parameters let you apply the code to different types. Traits and
 trait bounds ensure that even though the types are generic, they’ll have the
 behavior the code needs. You learned how to use lifetime annotations to ensure

@@ -345,10 +345,10 @@ type in the struct definition where we would otherwise specify concrete data
 types.
 
 Note that because we’ve only used one generic type to define `Point<T>`, this
-says that the `Point<T>` struct is generic over some type `T`, and the fields
-`x` and `y` are *both* that same type, whatever that type may be. This means
-that if we create an instance of a `Point<T>` that has values of different
-types, as in Listing 10-7, our code won’t compile:
+definition says that the `Point<T>` struct is generic over some type `T`, and
+the fields `x` and `y` are *both* that same type, whatever that type may be. If
+we create an instance of a `Point<T>` that has values of different types, as in
+Listing 10-7, our code won’t compile:
 
 Filename: src/main.rs
 
@@ -548,7 +548,7 @@ fn main() {
 }
 ```
 
-Listing 10-11: Methods that use different generic types than their struct’s
+Listing 10-11: A method that uses different generic types than its struct’s
 definition
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
@@ -662,8 +662,8 @@ pub trait Summary {
 }
 ```
 
-Listing 10-12: Definition of a `Summary` trait that consists of the behavior
-provided by a `summarize` method
+Listing 10-12: A `Summary` trait that consists of the behavior provided by a
+`summarize` method
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
 which is `Summary` in this case. Inside the curly brackets we declare the
@@ -760,7 +760,7 @@ crate to implement it, which it is because we put the `pub` keyword before
 `trait` in Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
-trait on a type only if either the trait or the type is local to your crate.
+trait on a type only if either the trait or the type is local to our crate.
 For example, we can implement standard library traits like `Display` on a
 custom type like `Tweet` as part of our `aggregator` crate functionality,
 because the type `Tweet` is local to our `aggregator` crate. We can also
@@ -990,12 +990,13 @@ error[E0507]: cannot move out of borrowed content
 
 The key line in this error is `cannot move out of type [T], a non-copy slice`.
 With our non-generic versions of the `largest` function, we were only trying to
-find the largest `i32` or `char`. As discussed in “Stack-Only Data: Copy”
+find the largest `i32` or `char`. As discussed in the “Stack-Only Data: Copy”
 section in Chapter 4, types like `i32` and `char` that have a known size can be
 stored on the stack, so they implement the `Copy` trait. But when we made the
-`largest` function generic, the `list` parameter could have types in it that
-don’t implement the `Copy` trait. Consequently, we wouldn’t be able to move the
-value out of `list[0]` and into the `largest` variable, resulting in this error.
+`largest` function generic, it became possible for the `list` parameter to have
+types in it that don’t implement the `Copy` trait. Consequently, we wouldn’t be
+able to move the value out of `list[0]` and into the `largest` variable,
+resulting in this error.
 
 To call this code with only those types that implement the `Copy` trait, we can
 add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
@@ -1356,7 +1357,7 @@ separate the annotation from the reference’s type.
 
 Here are some examples: a reference to an `i32` without a lifetime parameter, a
 reference to an `i32` that has a lifetime parameter named `'a`, and a mutable
-reference to an `i32` that also has the lifetime `'a`:
+reference to an `i32` that also has the lifetime `'a`.
 
 ```
 &i32        // a reference
@@ -1405,14 +1406,13 @@ The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
 long as lifetime `'a`. The function signature also tells Rust that the string
 slice returned from the function will live at least as long as lifetime `'a`.
-These constraints are what we want Rust to enforce.
-
-As discussed earlier, by specifying the lifetime parameters in this function
-signature, we’re not changing the lifetimes of any values passed in or
-returned. Instead, we’re specifying that the borrow checker should reject any
-values that don’t adhere to these constraints. Note that the `longest` function
-doesn’t need to know exactly how long `x` and `y` will live, only that some
-scope can be substituted for `'a` that will satisfy this signature.
+These constraints are what we want Rust to enforce. Remember, when we specify
+the lifetime parameters in this function signature, we’re not changing the
+lifetimes of any values passed in or returned. Rather, we’re specifying that
+the borrow checker should reject any values that don’t adhere to these
+constraints. Note that the `longest` function doesn’t need to know exactly how
+long `x` and `y` will live, only that some scope can be substituted for `'a`
+that will satisfy this signature.
 
 When annotating lifetimes in functions, the annotations go in the function
 signature, not in the function body. Rust can analyze the code within the
@@ -1666,7 +1666,7 @@ fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
 After writing a lot of Rust code, the Rust team found that Rust programmers
-were entering the same lifetime annotations repeatedly in particular
+were entering the same lifetime annotations over and over in particular
 situations. These situations were predictable and followed a few deterministic
 patterns. The developers programmed these patterns into the compiler’s code so
 the borrow checker could infer the lifetimes in these situations and not need
@@ -1818,7 +1818,8 @@ and all lifetimes have been accounted for.
 
 One special lifetime we need to discuss is `'static`, which denotes the entire
 duration of the program. All string literals have the `'static` lifetime, which
-we can annotate as follows: `let s: &'static str = "I have a static lifetime.";`
+we can annotate as follows: `let s: &'static str = "I have a static
+lifetime.";`.
 
 The text of this string is stored directly in the binary of your program, which
 is always available. Therefore, the lifetime of all string literals is
@@ -1866,7 +1867,7 @@ the declarations of the lifetime parameter `'a` and the generic type parameter
 
 We covered a lot in this chapter! Now that you know about generic type
 parameters, traits and trait bounds, and generic lifetime parameters, you’re
-ready to write code without repetition yet works in many different situations.
+ready to write code without repetition that works in many different situations.
 Generic type parameters let you apply the code to different types. Traits and
 trait bounds ensure that even though the types are generic, they’ll have the
 behavior the code needs. You learned how to use lifetime annotations to ensure
