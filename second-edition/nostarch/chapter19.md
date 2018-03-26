@@ -1,19 +1,6 @@
 
 [TOC]
 
-<!-- This is a long chapter! I was trying to consider whether to split it, and
-if so where --- the only solution I could come up with was to split it into the
-five main subjects: Unsafe, Lifetimes, Traits, Types, and Functions and
-Closures. However, I'm not convinced that's ideal, so I thought we might
-include a ToC at the top of this chapter in print so the reader can use it as a
-reference when they come across something they can't figure out. What do you
-think? -->
-<!-- A ToC to make this chapter more easily used as a reference sounds okay,
-would it be redundant with the ToC at the beginning of the whole book though?
-Or would this ToC be more detailed than the beginning of the book? Would it
-just be adding page numbers to the bullet points after the first paragraph?
-We're curious about implementation :) /Carol -->
-
 # Advanced Features
 
 We’ve come a long way! By now, you’ve learned 99% of the things you’ll need to
@@ -123,13 +110,6 @@ By opting out of having Rust enforce these guarantees, you are able to make the
 tradeoff of giving up guaranteed safety to gain performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
-<!-- Can you say here what benefits these provide, over smart pointers and
-references, and using the aspects in these bullets? -->
-<!-- There aren't really benefits to each of these individually. These are the
-caveats that the reader needs to be aware of when working with raw pointers.
-You'd choose to use raw pointers to do something that you can't do with smart
-pointers or references. I've tried to clarify above /Carol -->
-
 Listing 19-1 shows how to create both an immutable and a mutable raw pointer
 from references.
 
@@ -141,11 +121,6 @@ let r2 = &mut num as *mut i32;
 ```
 
 Listing 19-1: Creating raw pointers from references
-
-<!--So we create a raw pointer using the dereference operator? Is that the same
-operator? Is it worth touching on why? -->
-<!-- It's not the dereference operator, the * is part of the type. Tried to
-clarify above where the types are introduced /Carol -->
 
 Notice we don’t include the `unsafe` keyword here---you can *create* raw
 pointers in safe code, you just can’t *dereference* raw pointers outside of an
@@ -218,10 +193,6 @@ function, because Rust can’t guarantee we’ve met these requirements. By call
 an unsafe function within an `unsafe` block, we are saying that we’ve read this
 function’s documentations and take responsibility for upholding the function’s
 contracts ourselves.
-
-<!-- Above -- so what is the difference, when and why would we ever use the
-unsafe function? -->
-<!-- Tried to clarify /Carol -->
 
 Here’s an unsafe function named `dangerous` that doesn’t do anything in its
 body:
@@ -406,9 +377,6 @@ and use of a *Foreign Function Interface* (FFI). A Foreign Function Interface
 is a way for a programming language to define functions and enable a different
 (foreign) programming language to call those functions.
 
-<!-- Can you give a definition for FFI? -->
-<!-- Done /Carol -->
-
 Listing 19-8 demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
 always unsafe to call from Rust code, because other languages don`t enforce
@@ -438,8 +406,6 @@ defines which *application binary interface* (ABI) the external function
 uses---the ABI defines how to call the function at the assembly level. The
 `"C"` ABI is the most common, and follows the C programming language’s ABI.
 
-<!-- PROD: START BOX -->
-
 ##### Calling Rust Functions from Other Languages
 
 You can also use `extern` to create an interface that allows other languages to
@@ -453,11 +419,6 @@ programming language compiler mangles names slightly differently, so for a Rust
 function to be nameable from other languages, we have to disable the Rust
 compiler’s name mangling.
 
-<!-- have we discussed mangling before this? It doesn't ring a bell with me,
-though it may have been in an early chapter that I forgot --- if not could you
-give a quick explanation here? -->
-<!-- I've tried, without going into too much detail! /Carol -->
-
 In this example we make the `call_from_c` function accessible from C code, once
 it’s compiled to a shared library and linked from C:
 
@@ -469,8 +430,6 @@ pub extern "C" fn call_from_c() {
 ```
 
 This usage of `extern` does not require `unsafe`.
-
-<!-- PROD: END BOX -->
 
 ### Accessing or Modifying a Mutable Static Variable
 
@@ -601,10 +560,6 @@ look at three advanced features of lifetimes that we haven’t covered yet:
 * Trait object lifetimes, how they’re inferred, and when they need to be
   specified
 
-<!-- maybe add a small summary of each here? That would let us launch straight
-into examples in the next section -->
-<!-- I've switched to bullets and added a small summary /Carol -->
-
 ### Lifetime Subtyping Ensures One Lifetime Outlives Another
 
 Lifetime subtyping is a way to specify that one lifetime should outlive another
@@ -637,12 +592,6 @@ Compiling the code results in errors saying that Rust expected lifetime
 parameters on the string slice in `Context` and the reference to a `Context` in
 `Parser`.
 
-<!-- What will the compile time error be here? I think it'd be worth showing
-that to the reader -->
-<!-- The errors just say "expected lifetime parameter", they're pretty boring.
-We've shown error messages like that before so I've explained in words instead.
-/Carol -->
-
 For simplicity’s sake, our `parse` function returns a `Result<(), &str>`. That
 is, it will do nothing on success, and on failure will return the part of the
 string slice that didn’t parse correctly. A real implementation would have more
@@ -658,10 +607,6 @@ lifetimes. So we’re going to pretend that the logic of our parser is that the
 input is invalid after the first byte. Note that this code may panic if the
 first byte is not on a valid character boundary; again, we’re simplifying the
 example in order to concentrate on the lifetimes involved.
-
-<!-- why do we want to always error after the first byte? -->
-<!-- For simplicity of the example to avoid cluttering up the code with actual
-parsing logic, which isn't the point. I've explained a bit more above /Carol -->
 
 To get this code compiling, we need to fill in the lifetime parameters for the
 string slice in `Context` and the reference to the `Context` in `Parser`. The
@@ -692,10 +637,6 @@ This compiles fine, and tells Rust that a `Parser` holds a reference to a
 lives as long as the reference to the `Context` in `Parser`. Rust’s compiler
 error message said lifetime parameters were required for these references, and
 we have now added lifetime parameters.
-
-<!-- can you let the reader know they should be taking away from this previous
-example? I'm not totally clear on why adding lifetimes here saved the code -->
-<!-- Done -->
 
 Next, in Listing 19-14, let’s add a function that takes an instance of
 `Context`, uses a `Parser` to parse that context, and returns what `parse`
@@ -760,11 +701,6 @@ all the references in this code to always be valid. Both the `Parser` we’re
 creating and the `context` parameter go out of scope at the end of the
 function, though (because `parse_context` takes ownership of `context`).
 
-<!-- Oh interesting, why do they need to outlive the function, simply to
-absolutely ensure they will live for as long as the function? -->
-<!-- Yes, which is what I think we've said in the first sentence of the
-previous paragraph. Is there something that's unclear? /Carol -->
-
 To figure out why we’re getting these errors, let’s look at the definitions in
 Listing 19-13 again, specifically the references in the signature of the
 `parse` method:
@@ -772,9 +708,6 @@ Listing 19-13 again, specifically the references in the signature of the
 ```
     fn parse(&self) -> Result<(), &str> {
 ```
-
-<!-- What exactly is it the reader should be looking at in this signature? -->
-<!-- Added above /Carol -->
 
 Remember the elision rules? If we annotate the lifetimes of the references
 rather than eliding, the signature would be:
@@ -920,9 +853,6 @@ In the “Trait Bounds” section of Chapter 10, we discussed using trait bounds
 generic types. We can also add lifetime parameters as constraints on generic
 types, and these are called *lifetime bounds*. Lifetime bounds help Rust verify
 that references in generic types won’t outlive the data they’re referencing.
-
-<!-- Can you say up front why/when we use these? -->
-<!-- Done -->
 
 For an example, consider a type that is a wrapper over references. Recall the
 `RefCell<T>` type from the “`RefCell<T>` and the Interior Mutability Pattern”
@@ -1070,10 +1000,6 @@ used in this type’s place for the particular implementation. That way, we can
 define a trait that uses some types without needing to know exactly what those
 types are until the trait is implemented.
 
-<!-- Can you say what this is useful for -- it seems like a way to not to have
-to specify a type prior to use, is that right? -->
-<!-- Prior to trait implementation, yes. /Carol -->
-
 We’ve described most of the things in this chapter as being needed very rarely.
 Associated types are somewhere in the middle; they’re used more rarely than the
 rest of the book, but more commonly than many of the things in this chapter.
@@ -1157,10 +1083,6 @@ A great example of a situation where this is useful is with operator
 overloading. Operator overloading is customizing the behavior of an operator
 (like `+`) in particular situations.
 
-<!-- Are we safe in assuming the reader is familiar with operator overloading
-and why/when to use it, or is it worth giving a quick definition here? -->
-<!-- Added /Carol -->
-
 Rust does not allow you to create your own operators or overload arbitrary
 operators, but you *can* overload the operations and corresponding traits
 listed in `std::ops` by implementing the traits associated with the operator.
@@ -1222,9 +1144,6 @@ parameter---short for “right hand side”---that’s used to define the type o
 `RHS` when we implement the `Add` trait, the type of `RHS` will default to
 `Self`, which will be the type we’re implementing `Add` on.
 
-<!-- Can you say what we're looking out for in this next trait -->
-<!-- Done/reworked to be less repetitive with the Point example /Carol -->
-
 When we implemented `Add` for `Point`, we made use of the default for `RHS`
 because we wanted to add two `Point` instances together. Let’s look at an
 example of implementing the `Add` trait where we want to customize the `RHS`
@@ -1265,10 +1184,6 @@ Default type parameters are used in two main ways:
 1. To extend a type without breaking existing code.
 2. To allow customization in specific cases most users won’t need.
 
-<!-- Above, in 2., do you mean customization used in corner cases? -->
-<!-- Yes, I'm not sure how that's different than what we've stated here or how
-it could be clearer /Carol-->
-
 The standard library’s `Add` trait is an example of the second purpose: most of
 the time, you’re adding two like types together, but it gives the ability for
 customizing beyond that. Using a default type parameter in the `Add` trait
@@ -1286,10 +1201,6 @@ Nothing in Rust prevents a trait from having a method with the same name as
 another trait’s method, nor can it prevent us from implementing both of these
 traits on one type. It’s also possible to have a method implemented directly on
 the type with the same name as methods from traits as well!
-
-<!-- Same name as the type, you mean? -->
-<!-- No, the same name as methods implemented from traits. I've tried to
-clarify /Carol -->
 
 When calling methods with the same name, then, we need to tell Rust which one
 we want to use. Consider the code in Listing 19-24 where we’ve defined two
@@ -1650,12 +1561,6 @@ The implementation of `Display` uses `self.0` to access the inner `Vec`,
 because `Wrapper` is a tuple struct and the `Vec` is the item at index 0 in the
 tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
 
-<!-- What is self.0? I think the syntax here might need a bit more talking
-through -->
-<!-- `Wrapper` is a tuple struct; we covered those in chapter 5, added a back
-reference to that section in the first paragraph of this section but we've used
-the `.0` syntax in multiple places before here /Carol -->
-
 The downside of this method is that, because `Wrapper` is a new type, it
 doesn’t have the methods of the value it’s holding; we’d have to implement all
 the methods of `Vec` directly on `Wrapper`, so that it can delegate to
@@ -1890,14 +1795,6 @@ be coerced into any other type. We’re allowed to end this `match` arm with
 control back to the top of the loop, so in the `Err` case, we never actually
 assign a value to `guess`.
 
-<!-- I'm not sure I'm following what would then occur in the event of an error,
-literally nothing? -->
-<!-- The block returns control to the enclosing loop; I'm not sure how to
-clarify this other than what we already have here, do you have any suggestions?
-I wouldn't say it's "literally nothing" because it does do something, it
-returns control to the loop and the next iteration of the loop happens...
-/Carol -->
-
 The never type is also useful with `panic!`. Remember the `unwrap` function
 that we call on `Option<T>` values to produce a value or panic? Here’s its
 definition:
@@ -1952,11 +1849,6 @@ let s1: str = "Hello there!";
 let s2: str = "How's it going?";
 ```
 
-<!-- Why do they need to have the same memory layout? Perhaps I'm not
-understanding fully what is meant by the memory layout, is it worth explaining
-that a little in this section? -->
-<!-- I've reworded /Carol -->
-
 Rust needs to know how much memory to allocate for any value of a particular
 type, and all values of a type must use the same amount of memory. If we were
 allowed to write this code, that would mean these two `str` values would need
@@ -1989,13 +1881,6 @@ traits as trait objects, we have to put them behind a pointer like `&Trait` or
 the reason we have to do that!
 
 #### The `Sized` Trait
-
-<!-- If we end up keeping the section on object safety in ch 17, we should add
-a back reference here. /Carol -->
-
-<!-- I think we dropped that one, right? -->
-<!-- We cut a large portion of it, including the part about `Sized`, so I
-didn't add a back reference. /Carol -->
 
 To work with DSTs, Rust has a particular trait to determine if a type’s size is
 known at compile time or not: the `Sized` trait. This trait is automatically
@@ -2043,11 +1928,6 @@ Finally, let’s discuss some advanced features related to functions and
 closures: function pointers, diverging functions, and returning closures.
 
 ### Function Pointers
-
-<!-- Maybe give an example of when we'd want to use this? -->
-<!-- Added a short sentence, but we discuss interfacing with languages that
-don't have closures below, which I don't think makes sense until we define how
-function pointers are different than closures... /Carol -->
 
 We’ve talked about how to pass closures to functions; you can also pass regular
 functions to functions! This is useful when we want to pass a function we’ve

@@ -5,11 +5,6 @@ closures: function pointers, diverging functions, and returning closures.
 
 ### Function Pointers
 
-<!-- Maybe give an example of when we'd want to use this? -->
-<!-- Added a short sentence, but we discuss interfacing with languages that
-don't have closures below, which I don't think makes sense until we define how
-function pointers are different than closures... /Carol -->
-
 We’ve talked about how to pass closures to functions; you can also pass regular
 functions to functions! This is useful when we want to pass a function we’ve
 already defined rather than defining a new closure. We do this using function

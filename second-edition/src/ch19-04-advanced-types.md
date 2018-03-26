@@ -224,14 +224,6 @@ be coerced into any other type. We’re allowed to end this `match` arm with
 control back to the top of the loop, so in the `Err` case, we never actually
 assign a value to `guess`.
 
-<!-- I'm not sure I'm following what would then occur in the event of an error,
-literally nothing? -->
-<!-- The block returns control to the enclosing loop; I'm not sure how to
-clarify this other than what we already have here, do you have any suggestions?
-I wouldn't say it's "literally nothing" because it does do something, it
-returns control to the loop and the next iteration of the loop happens...
-/Carol -->
-
 The never type is also useful with `panic!`. Remember the `unwrap` function
 that we call on `Option<T>` values to produce a value or panic? Here’s its
 definition:
@@ -286,11 +278,6 @@ let s1: str = "Hello there!";
 let s2: str = "How's it going?";
 ```
 
-<!-- Why do they need to have the same memory layout? Perhaps I'm not
-understanding fully what is meant by the memory layout, is it worth explaining
-that a little in this section? -->
-<!-- I've reworded /Carol -->
-
 Rust needs to know how much memory to allocate for any value of a particular
 type, and all values of a type must use the same amount of memory. If we were
 allowed to write this code, that would mean these two `str` values would need
@@ -323,13 +310,6 @@ traits as trait objects, we have to put them behind a pointer like `&Trait` or
 the reason we have to do that!
 
 #### The `Sized` Trait
-
-<!-- If we end up keeping the section on object safety in ch 17, we should add
-a back reference here. /Carol -->
-
-<!-- I think we dropped that one, right? -->
-<!-- We cut a large portion of it, including the part about `Sized`, so I
-didn't add a back reference. /Carol -->
 
 To work with DSTs, Rust has a particular trait to determine if a type’s size is
 known at compile time or not: the `Sized` trait. This trait is automatically

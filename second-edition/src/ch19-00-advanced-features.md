@@ -1,16 +1,3 @@
-<!-- This is a long chapter! I was trying to consider whether to split it, and
-if so where --- the only solution I could come up with was to split it into the
-five main subjects: Unsafe, Lifetimes, Traits, Types, and Functions and
-Closures. However, I'm not convinced that's ideal, so I thought we might
-include a ToC at the top of this chapter in print so the reader can use it as a
-reference when they come across something they can't figure out. What do you
-think? -->
-<!-- A ToC to make this chapter more easily used as a reference sounds okay,
-would it be redundant with the ToC at the beginning of the whole book though?
-Or would this ToC be more detailed than the beginning of the book? Would it
-just be adding page numbers to the bullet points after the first paragraph?
-We're curious about implementation :) /Carol -->
-
 # Advanced Features
 
 We’ve come a long way! By now, you’ve learned 99% of the things you’ll need to

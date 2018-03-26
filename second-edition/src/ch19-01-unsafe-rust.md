@@ -84,13 +84,6 @@ By opting out of having Rust enforce these guarantees, you are able to make the
 tradeoff of giving up guaranteed safety to gain performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
-<!-- Can you say here what benefits these provide, over smart pointers and
-references, and using the aspects in these bullets? -->
-<!-- There aren't really benefits to each of these individually. These are the
-caveats that the reader needs to be aware of when working with raw pointers.
-You'd choose to use raw pointers to do something that you can't do with smart
-pointers or references. I've tried to clarify above /Carol -->
-
 Listing 19-1 shows how to create both an immutable and a mutable raw pointer
 from references.
 
@@ -102,11 +95,6 @@ let r2 = &mut num as *mut i32;
 ```
 
 <span class="caption">Listing 19-1: Creating raw pointers from references</span>
-
-<!--So we create a raw pointer using the dereference operator? Is that the same
-operator? Is it worth touching on why? -->
-<!-- It's not the dereference operator, the * is part of the type. Tried to
-clarify above where the types are introduced /Carol -->
 
 Notice we don’t include the `unsafe` keyword here---you can *create* raw
 pointers in safe code, you just can’t *dereference* raw pointers outside of an
@@ -181,10 +169,6 @@ function, because Rust can’t guarantee we’ve met these requirements. By call
 an unsafe function within an `unsafe` block, we are saying that we’ve read this
 function’s documentations and take responsibility for upholding the function’s
 contracts ourselves.
-
-<!-- Above -- so what is the difference, when and why would we ever use the
-unsafe function? -->
-<!-- Tried to clarify /Carol -->
 
 Here’s an unsafe function named `dangerous` that doesn’t do anything in its
 body:
@@ -372,9 +356,6 @@ and use of a *Foreign Function Interface* (FFI). A Foreign Function Interface
 is a way for a programming language to define functions and enable a different
 (foreign) programming language to call those functions.
 
-<!-- Can you give a definition for FFI? -->
-<!-- Done /Carol -->
-
 Listing 19-8 demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
 always unsafe to call from Rust code, because other languages don`t enforce
@@ -404,8 +385,6 @@ defines which *application binary interface* (ABI) the external function
 uses---the ABI defines how to call the function at the assembly level. The
 `"C"` ABI is the most common, and follows the C programming language’s ABI.
 
-<!-- PROD: START BOX -->
-
 ##### Calling Rust Functions from Other Languages
 
 You can also use `extern` to create an interface that allows other languages to
@@ -419,11 +398,6 @@ programming language compiler mangles names slightly differently, so for a Rust
 function to be nameable from other languages, we have to disable the Rust
 compiler’s name mangling.
 
-<!-- have we discussed mangling before this? It doesn't ring a bell with me,
-though it may have been in an early chapter that I forgot --- if not could you
-give a quick explanation here? -->
-<!-- I've tried, without going into too much detail! /Carol -->
-
 In this example we make the `call_from_c` function accessible from C code, once
 it’s compiled to a shared library and linked from C:
 
@@ -435,8 +409,6 @@ pub extern "C" fn call_from_c() {
 ```
 
 This usage of `extern` does not require `unsafe`.
-
-<!-- PROD: END BOX -->
 
 ### Accessing or Modifying a Mutable Static Variable
 

@@ -13,10 +13,6 @@ used in this type’s place for the particular implementation. That way, we can
 define a trait that uses some types without needing to know exactly what those
 types are until the trait is implemented.
 
-<!-- Can you say what this is useful for -- it seems like a way to not to have
-to specify a type prior to use, is that right? -->
-<!-- Prior to trait implementation, yes. /Carol -->
-
 We’ve described most of the things in this chapter as being needed very rarely.
 Associated types are somewhere in the middle; they’re used more rarely than the
 rest of the book, but more commonly than many of the things in this chapter.
@@ -101,10 +97,6 @@ A great example of a situation where this is useful is with operator
 overloading. Operator overloading is customizing the behavior of an operator
 (like `+`) in particular situations.
 
-<!-- Are we safe in assuming the reader is familiar with operator overloading
-and why/when to use it, or is it worth giving a quick definition here? -->
-<!-- Added /Carol -->
-
 Rust does not allow you to create your own operators or overload arbitrary
 operators, but you *can* overload the operations and corresponding traits
 listed in `std::ops` by implementing the traits associated with the operator.
@@ -166,9 +158,6 @@ parameter---short for “right hand side”---that’s used to define the type o
 `RHS` when we implement the `Add` trait, the type of `RHS` will default to
 `Self`, which will be the type we’re implementing `Add` on.
 
-<!-- Can you say what we're looking out for in this next trait -->
-<!-- Done/reworked to be less repetitive with the Point example /Carol -->
-
 When we implemented `Add` for `Point`, we made use of the default for `RHS`
 because we wanted to add two `Point` instances together. Let’s look at an
 example of implementing the `Add` trait where we want to customize the `RHS`
@@ -209,10 +198,6 @@ Default type parameters are used in two main ways:
 1. To extend a type without breaking existing code.
 2. To allow customization in specific cases most users won’t need.
 
-<!-- Above, in 2., do you mean customization used in corner cases? -->
-<!-- Yes, I'm not sure how that's different than what we've stated here or how
-it could be clearer /Carol-->
-
 The standard library’s `Add` trait is an example of the second purpose: most of
 the time, you’re adding two like types together, but it gives the ability for
 customizing beyond that. Using a default type parameter in the `Add` trait
@@ -230,10 +215,6 @@ Nothing in Rust prevents a trait from having a method with the same name as
 another trait’s method, nor can it prevent us from implementing both of these
 traits on one type. It’s also possible to have a method implemented directly on
 the type with the same name as methods from traits as well!
-
-<!-- Same name as the type, you mean? -->
-<!-- No, the same name as methods implemented from traits. I've tried to
-clarify /Carol -->
 
 When calling methods with the same name, then, we need to tell Rust which one
 we want to use. Consider the code in Listing 19-24 where we’ve defined two
@@ -678,12 +659,6 @@ fn main() {
 The implementation of `Display` uses `self.0` to access the inner `Vec`,
 because `Wrapper` is a tuple struct and the `Vec` is the item at index 0 in the
 tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
-
-<!-- What is self.0? I think the syntax here might need a bit more talking
-through -->
-<!-- `Wrapper` is a tuple struct; we covered those in chapter 5, added a back
-reference to that section in the first paragraph of this section but we've used
-the `.0` syntax in multiple places before here /Carol -->
 
 The downside of this method is that, because `Wrapper` is a new type, it
 doesn’t have the methods of the value it’s holding; we’d have to implement all

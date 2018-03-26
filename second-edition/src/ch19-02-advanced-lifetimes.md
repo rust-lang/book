@@ -12,10 +12,6 @@ look at three advanced features of lifetimes that we haven’t covered yet:
 * Trait object lifetimes, how they’re inferred, and when they need to be
   specified
 
-<!-- maybe add a small summary of each here? That would let us launch straight
-into examples in the next section -->
-<!-- I've switched to bullets and added a small summary /Carol -->
-
 ### Lifetime Subtyping Ensures One Lifetime Outlives Another
 
 Lifetime subtyping is a way to specify that one lifetime should outlive another
@@ -49,12 +45,6 @@ Compiling the code results in errors saying that Rust expected lifetime
 parameters on the string slice in `Context` and the reference to a `Context` in
 `Parser`.
 
-<!-- What will the compile time error be here? I think it'd be worth showing
-that to the reader -->
-<!-- The errors just say "expected lifetime parameter", they're pretty boring.
-We've shown error messages like that before so I've explained in words instead.
-/Carol -->
-
 For simplicity’s sake, our `parse` function returns a `Result<(), &str>`. That
 is, it will do nothing on success, and on failure will return the part of the
 string slice that didn’t parse correctly. A real implementation would have more
@@ -70,10 +60,6 @@ lifetimes. So we’re going to pretend that the logic of our parser is that the
 input is invalid after the first byte. Note that this code may panic if the
 first byte is not on a valid character boundary; again, we’re simplifying the
 example in order to concentrate on the lifetimes involved.
-
-<!-- why do we want to always error after the first byte? -->
-<!-- For simplicity of the example to avoid cluttering up the code with actual
-parsing logic, which isn't the point. I've explained a bit more above /Carol -->
 
 To get this code compiling, we need to fill in the lifetime parameters for the
 string slice in `Context` and the reference to the `Context` in `Parser`. The
@@ -104,10 +90,6 @@ This compiles fine, and tells Rust that a `Parser` holds a reference to a
 lives as long as the reference to the `Context` in `Parser`. Rust’s compiler
 error message said lifetime parameters were required for these references, and
 we have now added lifetime parameters.
-
-<!-- can you let the reader know they should be taking away from this previous
-example? I'm not totally clear on why adding lifetimes here saved the code -->
-<!-- Done -->
 
 Next, in Listing 19-14, let’s add a function that takes an instance of
 `Context`, uses a `Parser` to parse that context, and returns what `parse`
@@ -172,11 +154,6 @@ all the references in this code to always be valid. Both the `Parser` we’re
 creating and the `context` parameter go out of scope at the end of the
 function, though (because `parse_context` takes ownership of `context`).
 
-<!-- Oh interesting, why do they need to outlive the function, simply to
-absolutely ensure they will live for as long as the function? -->
-<!-- Yes, which is what I think we've said in the first sentence of the
-previous paragraph. Is there something that's unclear? /Carol -->
-
 To figure out why we’re getting these errors, let’s look at the definitions in
 Listing 19-13 again, specifically the references in the signature of the
 `parse` method:
@@ -184,9 +161,6 @@ Listing 19-13 again, specifically the references in the signature of the
 ```rust,ignore
     fn parse(&self) -> Result<(), &str> {
 ```
-
-<!-- What exactly is it the reader should be looking at in this signature? -->
-<!-- Added above /Carol -->
 
 Remember the elision rules? If we annotate the lifetimes of the references
 rather than eliding, the signature would be:
@@ -334,9 +308,6 @@ In the “Trait Bounds” section of Chapter 10, we discussed using trait bounds
 generic types. We can also add lifetime parameters as constraints on generic
 types, and these are called *lifetime bounds*. Lifetime bounds help Rust verify
 that references in generic types won’t outlive the data they’re referencing.
-
-<!-- Can you say up front why/when we use these? -->
-<!-- Done -->
 
 For an example, consider a type that is a wrapper over references. Recall the
 `RefCell<T>` type from the “`RefCell<T>` and the Interior Mutability Pattern”
