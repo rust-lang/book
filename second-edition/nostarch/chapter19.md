@@ -976,9 +976,12 @@ annotated the lifetimes involved in `obj`. This code works because there are
 rules for working with lifetimes and trait objects:
 
 * The default lifetime of a trait object is `'static`.
-* With `&'a Trait` or `&'a mut Trait`, the default lifetime is `'a`.
-* With a single `T: 'a` clause, the default lifetime is `'a`.
-* With multiple `T: 'a`-like clauses, there is no default; we must be explicit.
+* With `&'a Trait` or `&'a mut Trait`, the default lifetime of the trait object
+  is `'a`.
+* With a single `T: 'a` clause, the default lifetime of the trait object is
+  `'a`.
+* With multiple `T: 'a`-like clauses, there is no default lifetime; we must be
+  explicit.
 
 When we must be explicit, we can add a lifetime bound on a trait object like
 `Box<Red>` using the syntax `Box<Red + 'static>` or `Box<Red + 'a>`, depending
