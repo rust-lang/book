@@ -613,6 +613,15 @@ string slice in `Context` and the reference to the `Context` in `Parser`. The
 most straightforward way to do this is to use the same lifetime everywhere, as
 shown in Listing 19-13:
 
+To get this code to compile, we need to fill in the lifetime parameters for the
+string slice in `Context` and the reference to the `Context` in `Parser`. The
+most straightforward way to do this is to use the same lifetime name
+everywhere, as shown in Listing 19-13. Recall from the “Lifetime Annotations in
+Struct Definitions” section in Chapter 10 that each of `struct Context<'a>`,
+`struct Parser<'a>`, and `impl<'a>` is declaring a new lifetime parameter.
+While their names happen to all be the same, the three lifetime parameters
+declared in this example aren’t related.
+
 Filename: src/lib.rs
 
 ```
