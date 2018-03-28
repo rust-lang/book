@@ -7,12 +7,14 @@ multiple library crates. In this situation, Cargo offers a feature called
 *workspaces* that can help manage multiple related packages that are developed
 in tandem.
 
+### Creating a Workspace
+
 A *workspace* is a set of packages that share the same *Cargo.lock* and output
 directory. Let’s make a project using a workspace—we’ll use trivial code so we
 can concentrate on the structure of the workspace. There are multiple ways to
 structure a workspace; we’re going to show one common way. We’ll have a
-workspace containing a binary and two libraries. The binary will provide the
-main functionality, and will depend on the two libraries. One library will
+workspace containing a binary and two libraries. The binary, which will provide
+the main functionality, will depend on the two libraries. One library will
 provide an `add_one` function, and a second library an `add_two` function.
 These three crates will be part of the same workspace. We’ll start by creating
 a new directory for the workspace:
@@ -24,7 +26,7 @@ $ cd add
 
 Next, in the *add* directory, we create the *Cargo.toml* file that will
 configure the entire workspace. This file won’t have a `[package]` section or
-the metadata we’ve seen in other *Cargo.toml* files, but will instead start
+the metadata we’ve seen in other *Cargo.toml* files. Instead, it will start
 with a `[workspace]` section that will allow us to add members to the workspace
 by specifying the path to our binary crate; in this case, that path is *adder*:
 
@@ -233,7 +235,7 @@ issue #27703)
 To fix this, edit the *Cargo.toml* file for the `adder` crate and indicate that
 `rand` is a dependency for that crate as well. Building the `adder` crate will
 add `rand` to the list of dependencies for `adder` in *Cargo.lock*, but no
-additional copies of `rand` will be downloaded. Cargo has ensured that any
+additional copies of `rand` will be downloaded. Cargo has ensured that every
 crate in the workspace using the `rand` crate will be using the same version.
 Using the same version of `rand` across the workspace saves space because we
 won’t have multiple copies and ensures that the crates in the workspace will be
@@ -290,10 +292,10 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
 The first section of the output shows that the `it_works` test in the `add-one`
-crate passed. The next section shows that 0 tests were found in the `adder`
-crate, and then the last section shows 0 documentation tests were found in the
-`add-one` crate. Running `cargo test` in a workspace structured like this one
-will run the tests for all the crates in the workspace.
+crate passed. The next section shows that zero tests were found in the `adder`
+crate, and then the last section shows zero documentation tests were found in
+the `add-one` crate. Running `cargo test` in a workspace structured like this
+one will run the tests for all the crates in the workspace.
 
 We can also run tests for one particular crate in a workspace from the
 top-level directory by using the `-p` flag and specifying the name of the crate
@@ -323,12 +325,12 @@ If you publish the crates in the workspace to *https://crates.io/*, each crate
 in the workspace will need to be published separately. The `cargo publish`
 command does not have an `--all` flag or a `-p` flag, so you must change to
 each crate’s directory and run `cargo publish` on each crate in the workspace
-to publish them.
+to publish the crates.
 
 For additional practice, add an `add-two` crate to this workspace in a similar
 way as the `add-one` crate!
 
 As your project grows, consider using a workspace: it’s easier to understand
-smaller, individual components than one big blob of code. Keeping the crates in
-a workspace can make coordination between them easier if they are often changed
-at the same time.
+smaller, individual components than one big blob of code. Furthermore, keeping
+the crates in a workspace can make coordination between them easier if they are
+often changed at the same time.
