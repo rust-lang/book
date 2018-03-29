@@ -903,7 +903,7 @@ variable you won’t use yet, such as when you’re prototyping or just starting
 project. In this situation, you can tell Rust not to warn you about the unused
 variable by starting the name of the variable with an underscore. In Listing
 18-20, we create two unused variables, but when we run this code, we should
-only get a warning about one of them:
+only get a warning about one of them.
 
 Filename: src/main.rs
 
