@@ -19,9 +19,9 @@ than features explained in the rest of the book, but more commonly than many of
 the other features discussed in this chapter.
 
 One example of a trait with an associated type is the `Iterator` trait that the
-standard library provides. This trait has an associated type named `Item` that
-stands in for the type of the values the type implementing the `Iterator` trait
-is iterating over. In “The `Iterator` Trait and the `next` Method” section of
+standard library provides. The associated type is named `Item` and stands in
+for the type of the values the type implementing the `Iterator` trait is
+iterating over. In “The `Iterator` Trait and the `next` Method” section of
 Chapter 13, we mentioned that the definition of the `Iterator` trait is as
 shown in Listing 19-20:
 
