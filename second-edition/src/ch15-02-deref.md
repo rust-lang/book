@@ -1,19 +1,20 @@
 ## Treating Smart Pointers Like Regular References with the `Deref` Trait
 
-Implementing the `Deref` trait allows us to customize the behavior of the
+Implementing the `Deref` trait allows you to customize the behavior of the
 *dereference operator*, `*` (as opposed to the multiplication or glob
 operator). By implementing `Deref` in such a way that a smart pointer can be
-treated like a regular reference, we can write code that operates on references
-and use that code with smart pointers too.
+treated like a regular reference, you can write code that operates on
+references and use that code with smart pointers too.
 
-Let’s first look at how `*` works with regular references, and then try to
-define our own type like `Box<T>` and see why `*` doesn’t work like a reference
-on our newly defined type. We’ll explore how implementing the `Deref` trait
-makes it possible for smart pointers to work in a similar way as references.
-Then we’ll look at Rust’s *deref coercion* feature and how it lets us work with
-either references or smart pointers.
+Let’s first look at how the dereference operator works with regular references.
+Then we’ll try to define a custom type that behaves like `Box<T>`, and see why
+the dereference operator doesn’t work like a reference on our newly defined
+type. We’ll explore how implementing the `Deref` trait makes it possible for
+smart pointers to work in a similar way as references. Then we’ll look at
+Rust’s *deref coercion* feature and how it lets us work with either references
+or smart pointers.
 
-### Following the Pointer to the Value with `*`
+### Following the Pointer to the Value with the Dereference Operator
 
 A regular reference is a type of pointer, and one way to think of a pointer is
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
@@ -58,14 +59,13 @@ not satisfied
 ```
 
 Comparing a number and a reference to a number isn’t allowed because they’re
-different types. We must use `*` to follow the reference to the value it’s
-pointing to.
+different types. We must use the dereference operator to follow the reference
+to the value it’s pointing to.
 
 ### Using `Box<T>` Like a Reference
 
 We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
-reference, and the dereference operator will work the same way as shown in
-Listing 15-7:
+reference; the dereference operator will work as shown in Listing 15-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -92,13 +92,13 @@ that enables us to use the dereference operator by defining our own box type.
 ### Defining Our Own Smart Pointer
 
 Let’s build a smart pointer similar to the `Box<T>` type provided by the
-standard library to experience how smart pointers behave differently to
+standard library to experience how smart pointers behave differently than
 references by default. Then we’ll look at how to add the ability to use the
 dereference operator.
 
 The `Box<T>` type is ultimately defined as a tuple struct with one element, so
 Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
-`new` function to match the `new` function defined on `Box<T>`:
+`new` function to match the `new` function defined on `Box<T>`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -122,7 +122,7 @@ type `T` and returns a `MyBox` instance that holds the value passed in.
 Let’s try adding the `main` function in Listing 15-7 to Listing 15-8 and
 changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The
 code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
-`MyBox`:
+`MyBox`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -185,7 +185,7 @@ more detail in Chapter 19.
 
 We fill in the body of the `deref` method with `&self.0` so `deref` returns a
 reference to the value we want to access with the `*` operator. The `main`
-function in Listing 15-9 that calls `*` on the `MyBox<T>` value now compiles
+function in Listing 15-9 that calls `*` on the `MyBox<T>` value now compiles,
 and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
@@ -201,22 +201,23 @@ code:
 ```
 
 Rust substitutes the `*` operator with a call to the `deref` method and then a
-plain dereference so as programmers we don’t have to think about whether or not
-we need to call the `deref` method. This Rust feature lets us write code that
-functions identically whether we have a regular reference or a type that
-implements `Deref`.
+plain dereference so we don’t have to think about whether or not we need to
+call the `deref` method. This Rust feature lets us write code that functions
+identically whether we have a regular reference or a type that implements
+`Deref`.
 
 The reason the `deref` method returns a reference to a value and that the plain
-dereference outside the parentheses in `*(y.deref())` is still necessary is due
-to the ownership system. If the `deref` method returned the value directly
-instead of a reference to the value, the value would be moved out of `self`. We
-don’t want to take ownership of the inner value inside `MyBox<T>` in this case
-and in most cases where we use the dereference operator.
+dereference outside the parentheses in `*(y.deref())` is still necessary is the
+ownership system. If the `deref` method returned the value directly instead of
+a reference to the value, the value would be moved out of `self`. We don’t want
+to take ownership of the inner value inside `MyBox<T>` in this case or in most
+cases where we use the dereference operator.
 
-Note that the `*` is replaced with a call to the `deref` method and then a call
-to `*` just once, each time we type a `*` in our code. Because the substitution
-of `*` does not recurse infinitely, we end up with data of type `i32`, which
-matches the `5` in `assert_eq!` in Listing 15-9.
+Note that the `*` operator is replaced with a call to the `deref` method and
+then a call to the `*` operator just once, each time we use a `*` in our code.
+Because the substitution of the `*` operator does not recurse infinitely, we
+end up with data of type `i32`, which matches the `5` in `assert_eq!` in
+Listing 15-9.
 
 ### Implicit Deref Coercions with Functions and Methods
 
@@ -292,13 +293,13 @@ Here we’re calling the `hello` function with the argument `&m`, which is a
 reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
 on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
 by calling `deref`. The standard library provides an implementation of `Deref`
-on `String` that returns a string slice, which is in the API documentation for
-`Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which
+on `String` that returns a string slice, and this is in the API documentation
+for `Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which
 matches the `hello` function’s definition.
 
 If Rust didn’t implement deref coercion, we would have to write the code in
 Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value
-of type `&MyBox<String>`:
+of type `&MyBox<String>`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -348,9 +349,9 @@ advantage of deref coercion!
 
 ### How Deref Coercion Interacts with Mutability
 
-Similar to how we use the `Deref` trait to override `*` on immutable
-references, Rust provides a `DerefMut` trait for overriding `*` on mutable
-references.
+Similar to how you use the `Deref` trait to override the `*` operator on
+immutable references, you can use the `DerefMut` trait to override the `*`
+operator on mutable references.
 
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
