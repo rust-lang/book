@@ -1091,9 +1091,6 @@ library](../../std/error/trait.Error.html):
 use std::fmt::{Debug, Display};
 
 trait Error: Debug + Display {
-  /// A short description of the error.
-  fn description(&self) -> &str;
-
   /// The lower level cause of this error, if any.
   fn cause(&self) -> Option<&Error> { None }
 }
@@ -1106,7 +1103,6 @@ following things:
 
 * Obtain a `Debug` representation of the error.
 * Obtain a user-facing `Display` representation of the error.
-* Obtain a short description of the error (via the `description` method).
 * Inspect the causal chain of an error, if one exists (via the `cause` method).
 
 The first two are a result of `Error` requiring impls for both `Debug` and
@@ -1159,15 +1155,6 @@ impl fmt::Display for CliError {
 }
 
 impl error::Error for CliError {
-    fn description(&self) -> &str {
-        // Both underlying errors already impl `Error`, so we defer to their
-        // implementations.
-        match *self {
-            CliError::Io(ref err) => err.description(),
-            CliError::Parse(ref err) => err.description(),
-        }
-    }
-
     fn cause(&self) -> Option<&error::Error> {
         match *self {
             // N.B. Both of these implicitly cast `err` from their concrete
@@ -1182,8 +1169,7 @@ impl error::Error for CliError {
 ```
 
 We note that this is a very typical implementation of `Error`: match on your
-different error types and satisfy the contracts defined for `description` and
-`cause`.
+different error types and satisfy the contracts defined for `cause`.
 
 ## The `From` trait
 
@@ -1340,8 +1326,7 @@ There's one little nit left: the `Box<Error>` type is *opaque*. If we
 return a `Box<Error>` to the caller, the caller can't (easily) inspect
 underlying error type. The situation is certainly better than `String`
 because the caller can call methods like
-[`description`](../../std/error/trait.Error.html#tymethod.description)
-and [`cause`](../../std/error/trait.Error.html#method.cause), but the
+[`cause`](../../std/error/trait.Error.html#method.cause), but the
 limitation remains: `Box<Error>` is opaque. (N.B. This isn't entirely
 true because Rust does have runtime reflection, which is useful in
 some scenarios that are [beyond the scope of this
@@ -2008,14 +1993,6 @@ impl fmt::Display for CliError {
 }
 
 impl Error for CliError {
-    fn description(&self) -> &str {
-        match *self {
-            CliError::Io(ref err) => err.description(),
-            CliError::Csv(ref err) => err.description(),
-            CliError::NotFound => "not found",
-        }
-    }
-
     fn cause(&self) -> Option<&Error> {
         match *self {
             CliError::Io(ref err) => Some(err),
