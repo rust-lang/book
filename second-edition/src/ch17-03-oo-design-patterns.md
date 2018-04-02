@@ -211,7 +211,7 @@ change its state from `Draft` to `PendingReview`. Listing 17-15 shows this code:
 impl Post {
     // --snip--
     pub fn request_review(&mut self) {
-        if let Some(s) = self.state.take() {
+        if let Some(s) == self.state.take() {
             self.state = Some(s.request_review())
         }
     }
@@ -300,7 +300,7 @@ state is approved, as shown in Listing 17-16:
 impl Post {
     // --snip--
     pub fn approve(&mut self) {
-        if let Some(s) = self.state.take() {
+        if let Some(s) == self.state.take() {
             self.state = Some(s.approve())
         }
     }
