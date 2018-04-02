@@ -1,18 +1,19 @@
-## What Does Object Oriented Mean?
+## Characteristics of Object-Oriented Languages
 
 There is no consensus in the programming community about what features a
-language needs to be considered object oriented. Rust is influenced by many
-different programming paradigms, including OOP; for example, we explored the
-features that came from functional programming in Chapter 13. Arguably, OOP
-languages share certain common characteristics, namely objects, encapsulation,
-and inheritance. Let’s look at what each of those characteristics mean and
-whether Rust supports them.
+language must have to be considered object oriented. Rust is influenced by many
+programming paradigms, including OOP; for example, we explored the features
+that came from functional programming in Chapter 13. Arguably, OOP languages
+share certain common characteristics, namely objects, encapsulation, and
+inheritance. Let’s look at what each of those characteristics means and whether
+Rust supports it.
 
 ### Objects Contain Data and Behavior
 
-The book *Design Patterns: Elements of Reusable Object-Oriented Software*,
-colloquially referred to as *The Gang of Four book*, is a catalog of
-object-oriented design patterns. It defines OOP this way:
+The book *Design Patterns: Elements of Reusable Object-Oriented Software* by
+Enoch Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
+Professional, 1994) colloquially referred to as *The Gang of Four* book, is a
+catalog of object-oriented design patterns. It defines OOP this way:
 
 > Object-oriented programs are made up of objects. An *object* packages both
 > data and the procedures that operate on that data. The procedures are
@@ -39,7 +40,7 @@ should be public, and by default everything else is private. For example, we
 can define a struct `AveragedCollection` that has a field containing a vector
 of `i32` values. The struct can also have a field that contains the average of
 the values in the vector, meaning the average doesn’t have to be computed
-on-demand whenever anyone needs it. In other words, `AveragedCollection` will
+on demand whenever anyone needs it. In other words, `AveragedCollection` will
 cache the calculated average for us. Listing 17-1 has the definition of the
 `AveragedCollection` struct:
 
@@ -112,14 +113,15 @@ the `average` field might become out of sync when the `list` changes. The
 `average` method returns the value in the `average` field, allowing external
 code to read the `average` but not modify it.
 
-Because we’ve encapsulated the implementation details of `AveragedCollection`,
-we can easily change aspects, such as the data structure, in the future. For
-instance, we could use a `HashSet` instead of a `Vec` for the `list` field. As
-long as the signatures of the `add`, `remove`, and `average` public methods
-stay the same, code using `AveragedCollection` wouldn’t need to change. If we
-made `list` public instead, this wouldn’t necessarily be the case: `HashSet`
-and `Vec` have different methods for adding and removing items, so the external
-code would likely have to change if it was modifying `list` directly.
+Because we’ve encapsulated the implementation details of the struct
+`AveragedCollection`, we can easily change aspects, such as the data structure,
+in the future. For instance, we could use a `HashSet` instead of a `Vec` for
+the `list` field. As long as the signatures of the `add`, `remove`, and
+`average` public methods stay the same, code using `AveragedCollection`
+wouldn’t need to change. If we made `list` public instead, this wouldn’t
+necessarily be the case: `HashSet` and `Vec` have different methods for adding
+and removing items, so the external code would likely have to change if it were
+modifying `list` directly.
 
 If encapsulation is a required aspect for a language to be considered object
 oriented, then Rust meets that requirement. The option to use `pub` or not for
@@ -132,9 +134,9 @@ object’s definition, thus gaining the parent object’s data and behavior with
 you having to define them again.
 
 If a language must have inheritance to be an object-oriented language, then
-Rust is not. There is no way to define a struct that inherits the parent
+Rust is not one. There is no way to define a struct that inherits the parent
 struct’s fields and method implementations. However, if you’re used to having
-inheritance in your programming toolbox, you can use other solutions in Rust
+inheritance in your programming toolbox, you can use other solutions in Rust,
 depending on your reason for reaching for inheritance in the first place.
 
 You choose inheritance for two main reasons. One is for reuse of code: you can
@@ -167,12 +169,13 @@ each other at runtime if they share certain characteristics.
 
 Inheritance has recently fallen out of favor as a programming design solution
 in many programming languages because it’s often at risk of sharing more code
-than needs be. Subclasses shouldn’t always share all characteristics of their
+than necessary. Subclasses shouldn’t always share all characteristics of their
 parent class but will do so with inheritance. This can make a program’s design
-less flexible and introduces the possibility of calling methods on subclasses
-that don’t make sense or that cause errors because the methods don’t apply to
-the subclass. Some languages will also only allow a subclass to inherit from
-one class, further restricting the flexibility of a program’s design.
+less flexible. It also introduces the possibility of calling methods on
+subclasses that don’t make sense or that cause errors because the methods don’t
+apply to the subclass. In addition, some languages will only allow a subclass
+to inherit from one class, further restricting the flexibility of a program’s
+design.
 
 For these reasons, Rust takes a different approach, using trait objects instead
 of inheritance. Let’s look at how trait objects enable polymorphism in Rust.

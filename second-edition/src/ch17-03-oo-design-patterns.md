@@ -30,7 +30,7 @@ should remain an unpublished draft.
 
 Listing 17-11 shows this workflow in code form: this is an example usage of the
 API we’ll implement in a library crate named `blog`. This won’t compile yet
-because we haven’t implemented the `blog` crate yet:
+because we haven’t implemented the `blog` crate yet.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -87,11 +87,6 @@ instance of `Post`, as shown in Listing 17-12. We’ll also make a private
 `Option` in a private field named `state`. You’ll see why the `Option` is
 necessary in a bit.
 
-The `State` trait defines the behavior shared by different post states, and the
-`Draft`, `PendingReview`, and `Published` states will all implement the `State`
-trait. For now, the trait doesn’t have any methods, and we’ll start by defining
-just the `Draft` state because that is the state we want a post to start in:
-
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -120,16 +115,21 @@ impl State for Draft {}
 function that creates a new `Post` instance, a `State` trait, and a `Draft`
 struct</span>
 
+The `State` trait defines the behavior shared by different post states, and the
+`Draft`, `PendingReview`, and `Published` states will all implement the `State`
+trait. For now, the trait doesn’t have any methods, and we’ll start by defining
+just the `Draft` state because that is the state we want a post to start in.
+
 When we create a new `Post`, we set its `state` field to a `Some` value that
 holds a `Box`. This `Box` points to a new instance of the `Draft` struct. This
 ensures whenever we create a new instance of `Post`, it will start out as a
 draft. Because the `state` field of `Post` is private, there is no way to
-create a `Post` in any other state!
+create a `Post` in any other state! In the `Post::new` function, we set the
+`content` field to a new, empty `String`.
 
 ### Storing the Text of the Post Content
 
-In the `Post::new` function, we set the `content` field to a new, empty
-`String`. Listing 17-11 showed that we want to be able to call a method named
+Listing 17-11 showed that we want to be able to call a method named
 `add_text` and pass it a `&str` that is then added to the text content of the
 blog post. We implement this as a method rather than exposing the `content`
 field as `pub`. This means we can implement a method later that will control
@@ -158,7 +158,7 @@ text to a post’s `content`</span>
 The `add_text` method takes a mutable reference to `self`, because we’re
 changing the `Post` instance that we’re calling `add_text` on. We then call
 `push_str` on the `String` in `content` and pass the `text` argument to add to
-the saved `content`. This behavior doesn’t depend on the state the post is in
+the saved `content`. This behavior doesn’t depend on the state the post is in,
 so it’s not part of the state pattern. The `add_text` method doesn’t interact
 with the `state` field at all, but it is part of the behavior we want to
 support.
@@ -461,20 +461,20 @@ rules lives in the state objects rather than being scattered throughout `Post`.
 We’ve shown that Rust is capable of implementing the object-oriented state
 pattern to encapsulate the different kinds of behavior a post should have in
 each state. The methods on `Post` know nothing about the various behaviors. The
-way we organized the code, we only have to look in one place to know the
+way we organized the code, we have to look in only one place to know the
 different ways a published post can behave: the implementation of the `State`
 trait on the `Published` struct.
 
 If we were to create an alternative implementation that didn’t use the state
-pattern, we might instead use `match` statements in the methods on `Post` or
+pattern, we might instead use `match` expressions in the methods on `Post` or
 even in the `main` code that checks the state of the post and changes behavior
 in those places. That would mean we would have to look in several places to
 understand all the implications of a post being in the published state! This
-would only increase the more states we added: each of those `match` statements
+would only increase the more states we added: each of those `match` expressions
 would need another arm.
 
 With the state pattern, the `Post` methods and the places we use `Post` don’t
-need `match` statements, and to add a new state, we would only need to add a
+need `match` expressions, and to add a new state, we would only need to add a
 new struct and implement the trait methods on that one struct.
 
 The implementation using the state pattern is easy to extend to add more
@@ -486,7 +486,7 @@ pattern, try a few of these suggestions:
 * Require two calls to `approve` before the state can be changed to `Published`.
 * Allow users to add text content only when a post is in the `Draft` state.
   Hint: have the state object responsible for what might change about the
-  content, but not responsible for modifying the `Post`.
+  content but not responsible for modifying the `Post`.
 
 One downside of the state pattern is that, because the states implement the
 transitions between states, some of the states are coupled to each other. If we
@@ -508,11 +508,11 @@ and `approve` methods on `Post`. Both methods delegate to the implementation of
 the same method on the value in the `state` field of `Option` and set the new
 value of the `state` field to the result. If we had a lot of methods on `Post`
 that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see Appendix D, Macros).
+repetition (see Appendix D for more on macros).
 
 By implementing the state pattern exactly as it’s defined for object-oriented
-languages, we’re not taking full advantage of Rust’s strengths as much as we
-could. Let’s look at some changes we can make to the `blog` crate that can make
+languages, we’re not taking as full advantage of Rust’s strengths as we could.
+Let’s look at some changes we can make to the `blog` crate that can make
 invalid states and transitions into compile time errors.
 
 #### Encoding States and Behavior as Types
@@ -543,8 +543,8 @@ draft posts don’t have the `content` method at all. That way, if we try to get
 a draft post’s content, we’ll get a compiler error telling us the method
 doesn’t exist. As a result, it will be impossible for us to accidentally
 display draft post content in production, because that code won’t even compile.
-Listing 17-19 shows the definition of a `Post` struct, a `DraftPost` struct,
-and methods on each:
+Listing 17-19 shows the definition of a `Post` struct and a `DraftPost` struct,
+as well as methods on each:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -586,15 +586,15 @@ struct will represent a published post, and it has a `content` method that
 returns the `content`.
 
 We still have a `Post::new` function, but instead of returning an instance of
-`Post`, it returns an instance of `DraftPost`. Because `content` is private,
+`Post`, it returns an instance of `DraftPost`. Because `content` is private
 and there aren’t any functions that return `Post`, it’s not possible to create
 an instance of `Post` right now.
 
-The `DraftPost` struct has an `add_text` method so we can add text to `content`
-as before, but note that `DraftPost` does not have a `content` method defined!
-So now the program ensures all posts start as draft posts, and draft posts
-don’t have their content available for display. Any attempt to get around these
-constraints will result in a compiler error.
+The `DraftPost` struct has an `add_text` method, so we can add text to
+`content` as before, but note that `DraftPost` does not have a `content` method
+defined! So now the program ensures all posts start as draft posts, and draft
+posts don’t have their content available for display. Any attempt to get around
+these constraints will result in a compiler error.
 
 #### Implementing Transitions as Transformations into Different Types
 
@@ -691,14 +691,13 @@ implementation doesn’t quite follow the object-oriented state pattern anymore:
 the transformations between the states are no longer encapsulated entirely
 within the `Post` implementation. However, our gain is that invalid states are
 now impossible because of the type system and the type checking that happens at
-compile time! This ensures that certain bugs, such as the content of an
-unpublished post being displayed, will be discovered before they make it to
-production.
+compile time! This ensures that certain bugs, such as display of the content of
+an unpublished post, will be discovered before they make it to production.
 
 Try the tasks suggested for additional requirements that we mentioned at the
 start of this section on the `blog` crate as it is after Listing 17-20 to see
 what you think about the design of this version of the code. Note that some of
-the tasks might be completed already in this design!
+the tasks might be completed already in this design.
 
 We’ve seen that even though Rust is capable of implementing object-oriented
 design patterns, other patterns, such as encoding state into the type system,
