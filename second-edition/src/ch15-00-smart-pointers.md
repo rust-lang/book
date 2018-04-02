@@ -8,17 +8,17 @@ point to. They don’t have any special capabilities other than referring to
 data. Also, they don’t have any overhead and are the kind of pointer we use
 most often.
 
-*Smart pointers*, on the other hand, are data structures that act like a
-pointer but also have additional metadata and capabilities. The concept of
+*Smart pointers*, on the other hand, are data structures that not only act like
+a pointer but also have additional metadata and capabilities. The concept of
 smart pointers isn’t unique to Rust: smart pointers originated in C++ and exist
 in other languages as well. In Rust, the different smart pointers defined in
-the standard library provide extra functionality beyond that provided by
-references. One example that we’ll explore in this chapter is the *reference
-counting* smart pointer type. This pointer enables you to have multiple owners
-of data by keeping track of the number of owners and, when no owners remain,
-taking care of cleaning up the data.
+the standard library provide functionality beyond that provided by references.
+One example that we’ll explore in this chapter is the *reference counting*
+smart pointer type. This pointer enables you to have multiple owners of data by
+keeping track of the number of owners and, when no owners remain, cleaning up
+the data.
 
-In Rust, where we have the concept of ownership and borrowing, an additional
+In Rust, which uses the concept of ownership and borrowing, an additional
 difference between references and smart pointers is that references are
 pointers that only borrow data; in contrast, in many cases, smart pointers
 *own* the data they point to.
@@ -33,11 +33,11 @@ will always be valid UTF-8).
 Smart pointers are usually implemented using structs. The characteristic that
 distinguishes a smart pointer from an ordinary struct is that smart pointers
 implement the `Deref` and `Drop` traits. The `Deref` trait allows an instance
-of the smart pointer struct to behave like a reference so we can write code
-that works with either references or smart pointers. The `Drop` trait allows us
-to customize the code that is run when an instance of the smart pointer goes
-out of scope. In this chapter, we’ll discuss both traits and demonstrate why
-they’re important to smart pointers.
+of the smart pointer struct to behave like a reference so you can write code
+that works with either references or smart pointers. The `Drop` trait allows
+you to customize the code that is run when an instance of the smart pointer
+goes out of scope. In this chapter, we’ll discuss both traits and demonstrate
+why they’re important to smart pointers.
 
 Given that the smart pointer pattern is a general design pattern used
 frequently in Rust, this chapter won’t cover every existing smart pointer. Many
@@ -45,7 +45,7 @@ libraries have their own smart pointers, and you can even write your own. We’l
 cover the most common smart pointers in the standard library:
 
 * `Box<T>` for allocating values on the heap
-* `Rc<T>`, a reference counted type that enables multiple ownership
+* `Rc<T>`, a reference counting type that enables multiple ownership
 * `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
   the borrowing rules at runtime instead of compile time
 
