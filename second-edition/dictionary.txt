@@ -285,6 +285,7 @@ newtypes
 nitty
 nocapture
 nomicon
+nondeterministic
 nonequality
 NotFound
 null's

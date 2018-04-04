@@ -1,24 +1,22 @@
-## Message Passing to Transfer Data Between Threads
+## Using Message Passing to Transfer Data Between Threads
 
 One increasingly popular approach to ensuring safe concurrency is *message
 passing*, where threads or actors communicate by sending each other messages
-containing data. Here’s the idea in a slogan from the Go language documentation:
+containing data. Here’s the idea in a slogan from [the Go language
+documentation](http://golang.org/doc/effective_go.html): "Do not communicate by
+sharing memory; instead, share memory by communicating."
 
-> Do not communicate by sharing memory; instead, share memory by
-> communicating.
->
-> --[Effective Go](http://golang.org/doc/effective_go.html)
-
-One major tool Rust has for accomplishing message sending concurrency is the
+One major tool Rust has for accomplishing message-sending concurrency is the
 *channel*, a programming concept that Rust’s standard library provides an
-implementation of. You can imagine a channel in programming like a channel of
-water, such as a stream or a river. If you put something like a rubber duck or
-a boat into a stream, it will travel downstream to the end of the river.
+implementation of. You can imagine a channel in programming as being like a
+channel of water, such as a stream or a river. If you put something like a
+rubber duck or boat into a stream, it will travel downstream to the end of the
+waterway.
 
 A channel in programming has two halves: a transmitter and a receiver. The
-transmitter half is the upstream location where we put rubber ducks into the
+transmitter half is the upstream location where you put rubber ducks into the
 river, and the receiver half is where the rubber duck ends up downstream. One
-part of our code calls methods on the transmitter with the data we want to
+part of your code calls methods on the transmitter with the data you want to
 send, and another part checks the receiving end for arriving messages. A
 channel is said to be *closed* if either the transmitter or receiver half is
 dropped.
@@ -33,7 +31,7 @@ results.
 
 First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
-want to send over the channel:
+want to send over the channel.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -53,10 +51,10 @@ We create a new channel using the `mpsc::channel` function; `mpsc` stands for
 *multiple producer, single consumer*. In short, the way Rust’s standard library
 implements channels means a channel can have multiple *sending* ends that
 produce values but only one *receiving* end that consumes those values. Imagine
-multiple rivers and streams flowing together into one big river: everything
-sent down any of the streams will end up in one river at the end. We’ll start
-with a single producer for now, but we’ll add multiple producers when we get
-this example working.
+multiple streams flowing together into one big river: everything sent down any
+of the streams will end up in one river at the end. We’ll start with a single
+producer for now, but we’ll add multiple producers when we get this example
+working.
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
@@ -72,7 +70,7 @@ extract the pieces of the tuple returned by `mpsc::channel`.
 Let’s move the transmitting end into a spawned thread and have it send one
 string so the spawned thread is communicating with the main thread, as shown in
 Listing 16-7. This is like putting a rubber duck in the river upstream or
-sending a chat message from one thread to another:
+sending a chat message from one thread to another.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -107,7 +105,7 @@ Chapter 9 to review strategies for proper error handling.
 
 In Listing 16-8, we’ll get the value from the receiving end of the channel in
 the main thread. This is like retrieving the rubber duck from the water at the
-end of the river or like getting a chat message:
+end of the river or like getting a chat message.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -161,13 +159,13 @@ Perfect!
 
 ### Channels and Ownership Transference
 
-The ownership rules play a vital role in message sending because they help us
+The ownership rules play a vital role in message sending because they help you
 write safe, concurrent code. Preventing errors in concurrent programming is the
-advantage we get by making the trade-off of having to think about ownership
-throughout our Rust programs. Let’s do an experiment to show how channels and
-ownership work together to prevent problems: we’ll try to use a `val` value in
-the spawned thread *after* we’ve sent it down the channel. Try compiling the
-code in Listing 16-9:
+advantage of thinking about ownership throughout your Rust programs. Let’s do
+an experiment to show how channels and ownership work together to prevent
+problems: we’ll try to use a `val` value in the spawned thread *after* we’ve
+sent it down the channel. Try compiling the code in Listing 16-9 to see why
+this code isn't allowed:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -223,7 +221,7 @@ The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
 two separate threads were talking to each other over the channel. In Listing
 16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
 running concurrently: the spawned thread will now send multiple messages and
-pause for a second between each message:
+pause for a second between each message.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -256,19 +254,19 @@ fn main() {
 ```
 
 <span class="caption">Listing 16-10: Sending multiple messages and pausing
-between each one</span>
+between each</span>
 
 This time, the spawned thread has a vector of strings that we want to send to
 the main thread. We iterate over them, sending each individually, and pause
 between each by calling the `thread::sleep` function with a `Duration` value of
-one second.
+1 second.
 
 In the main thread, we’re not calling the `recv` function explicitly anymore:
 instead, we’re treating `rx` as an iterator. For each value received, we’re
 printing it. When the channel is closed, iteration will end.
 
 When running the code in Listing 16-10, you should see the following output
-with a one second pause in between each line:
+with a 1-second pause in between each line:
 
 ```text
 Got: hi
@@ -283,7 +281,7 @@ the spawned thread.
 
 ### Creating Multiple Producers by Cloning the Transmitter
 
-Earlier we mentioned that `mpsc` was an acronym for *multiple* *producer,
+Earlier we mentioned that `mpsc` was an acronym for *multiple producer,
 single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
 so by cloning the transmitting half of the channel, as shown in Listing 16-11:
@@ -346,7 +344,7 @@ to the first spawned thread. We pass the original sending end of the channel to
 a second spawned thread. This gives us two threads, each sending different
 messages to the receiving end of the channel.
 
-When you run the code, you’ll *probably* see output like this:
+When you run the code, your output should look something like this:
 
 ```text
 Got: hi
@@ -362,7 +360,7 @@ Got: you
 You might see the values in another order; it depends on your system. This is
 what makes concurrency interesting as well as difficult. If you experiment with
 `thread::sleep`, giving it various values in the different threads, each run
-will be more non-deterministic and create different output each time.
+will be more nondeterministic and create different output each time.
 
 Now that we’ve looked at how channels work, let’s look at a different method of
 concurrency.
