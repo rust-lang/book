@@ -153,7 +153,7 @@ an argument. The function is in the prelude, so we can modify `main` in Listing
 fn main() {
     let c = CustomSmartPointer { data: String::from("some data") };
     println!("CustomSmartPointer created.");
-    drop(c);
+    std::mem::drop(c);
     println!("CustomSmartPointer dropped before the end of main.");
 }
 ```
