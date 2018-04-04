@@ -1,8 +1,8 @@
 ## Using Trait Objects that Allow for Values of Different Types
 
-In Chapter 8, we mentioned that one limitation of vectors is that they can only
-store elements of one type. We created a workaround in Listing 8-10 where we
-defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
+In Chapter 8, we mentioned that one limitation of vectors is that they can
+store elements of only one type. We created a workaround in Listing 8-10 where
+we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
 and text. This meant we could store different types of data in each cell and
 still have a vector that represented a row of cells. This is a perfectly good
 solution when our interchangeable items are a fixed set of types that we know
@@ -43,17 +43,17 @@ To implement the behavior we want `gui` to have, we’ll define a trait named
 takes a *trait object*. A trait object points to an instance of a type that
 implements the trait we specify. We create a trait object by specifying some
 sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, and then
-specifying the relevant trait (we’ll talk about the reason trait objects must
-use a pointer in Chapter 19 in the section “Dynamically Sized Types & Sized”).
+specifying the relevant trait. (We’ll talk about the reason trait objects must
+use a pointer in Chapter 19 in the section “Dynamically Sized Types & Sized”.)
 We can use trait objects in place of a generic or concrete type. Wherever we
 use a trait object, Rust’s type system will ensure at compile time that any
 value used in that context will implement the trait object’s trait.
 Consequently, we don’t need to know all the possible types at compile time.
 
-We’ve mentioned that in Rust we refrain from calling structs and enums
+We’ve mentioned that in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
 enum, the data in the struct fields and the behavior in `impl` blocks are
-separated, whereas in other languages the data and behavior combined into one
+separated, whereas in other languages, the data and behavior combined into one
 concept is often labeled an object. However, trait objects *are* more like
 objects in other languages in the sense that they combine data and behavior.
 But trait objects differ from traditional objects in that we can’t add data to
@@ -77,7 +77,7 @@ pub trait Draw {
 This syntax should look familiar from our discussions on how to define traits
 in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
-`Box<Draw>`, which is a trait object: it’s a stand-in for any type inside a
+`Box<Draw>`, which is a trait object; it’s a stand-in for any type inside a
 `Box` that implements the `Draw` trait.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -119,8 +119,8 @@ impl Screen {
 }
 ```
 
-<span class="caption">Listing 17-5: Implementing a `run` method on `Screen`
-that calls the `draw` method on each component</span>
+<span class="caption">Listing 17-5: A `run` method on `Screen` that calls the
+`draw` method on each component</span>
 
 This works differently than defining a struct that uses a generic type
 parameter with trait bounds. A generic type parameter can only be substituted
@@ -186,7 +186,7 @@ pub struct Button {
 
 impl Draw for Button {
     fn draw(&self) {
-        // Code to actually draw a button
+        // code to actually draw a button
     }
 }
 ```
@@ -198,9 +198,9 @@ The `width`, `height`, and `label` fields on `Button` will differ from the
 fields on other components, such as a `TextField` type, that might have those
 fields plus a `placeholder` field instead. Each of the types we want to draw on
 the screen will implement the `Draw` trait but will use different code in the
-`draw` method to define how to draw that particular type, like `Button` has
-here (without the actual GUI code that is beyond the scope of this chapter).
-`Button`, for instance, might have an additional `impl` block containing
+`draw` method to define how to draw that particular type, as `Button` has here
+(without the actual GUI code, which is beyond the scope of this chapter). The
+`Button` type, for instance, might have an additional `impl` block containing
 methods related to what happens when a user clicks the button. These kinds of
 methods won’t apply to types like `TextField`.
 
@@ -222,7 +222,7 @@ struct SelectBox {
 
 impl Draw for SelectBox {
     fn draw(&self) {
-        // Code to actually draw a select box
+        // code to actually draw a select box
     }
 }
 ```
@@ -284,10 +284,10 @@ It doesn’t check whether a component is an instance of a `Button` or a
 `Screen` to need values that we can call the `draw` method on.
 
 The advantage of using trait objects and Rust’s type system to write code
-similar to code using duck typing is that we never have to check that a value
-implements a particular method at runtime or worry about getting errors if a
-value doesn’t implement a method, but we call it anyway. Rust won’t compile our
-code if the values don’t implement the traits that the trait objects need.
+similar to code using duck typing is that we never have to check whether a
+value implements a particular method at runtime or worry about getting errors
+if a value doesn’t implement a method but we call it anyway. Rust won’t compile
+our code if the values don’t implement the traits that the trait objects need.
 
 For example, Listing 17-10 shows what happens if we try to create a `Screen`
 with a `String` as a component:
@@ -326,19 +326,19 @@ error[E0277]: the trait bound `std::string::String: gui::Draw` is not satisfied
 ```
 
 This error lets us know that either we’re passing something to `Screen` we
-didn’t mean to pass and we should pass a different type, or we should implement
+didn’t mean to pass and we should pass a different type or we should implement
 `Draw` on `String` so that `Screen` is able to call `draw` on it.
 
 ### Trait Objects Perform Dynamic Dispatch
 
 Recall in the “Performance of Code Using Generics” section in Chapter 10 our
 discussion on the monomorphization process performed by the compiler when we
-use trait bounds on generics: the compiler generates non-generic
-implementations of functions and methods for each concrete type that we use in
-place of a generic type parameter. The code that results from monomorphization
-is doing *static dispatch*, which is when the compiler knows what method you’re
-calling at compile time. This is opposed to *dynamic dispatch*, which is when
-the compiler can’t tell at compile time which method you’re calling. In dynamic
+use trait bounds on generics: the compiler generates nongeneric implementations
+of functions and methods for each concrete type that we use in place of a
+generic type parameter. The code that results from monomorphization is doing
+*static dispatch*, which is when the compiler knows what method you’re calling
+at compile time. This is opposed to *dynamic dispatch*, which is when the
+compiler can’t tell at compile time which method you’re calling. In dynamic
 dispatch cases, the compiler emits code that at runtime will figure out which
 method to call.
 
@@ -346,16 +346,16 @@ When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’
 know all the types that might be used with the code that is using trait
 objects, so it doesn’t know which method implemented on which type to call.
 Instead, at runtime, Rust uses the pointers inside the trait object to know
-which specific method to call. There is a runtime cost when this lookup happens
-that doesn’t occur with static dispatch. Dynamic dispatch also prevents the
-compiler from choosing to inline a method’s code, which in turn prevents some
+which method to call. There is a runtime cost when this lookup happens that
+doesn’t occur with static dispatch. Dynamic dispatch also prevents the compiler
+from choosing to inline a method’s code, which in turn prevents some
 optimizations. However, we did get extra flexibility in the code that we wrote
 in Listing 17-5 and were able to support in Listing 17-9, so it’s a trade-off
 to consider.
 
 ### Object Safety Is Required for Trait Objects
 
-You can only make *object safe* traits into trait objects. Some complex rules
+You can only make *object-safe* traits into trait objects. Some complex rules
 govern all the properties that make a trait object safe, but in practice, only
 two rules are relevant. A trait is object safe if all the methods defined in
 the trait have the following properties:
@@ -391,7 +391,7 @@ of `Vec`. The signature of `clone` needs to know what type will stand in for
 `Self`, because that’s the return type.
 
 The compiler will indicate when you’re trying to do something that violates the
-rules of object safety in regards to trait objects. For example, let’s say we
+rules of object safety in regard to trait objects. For example, let’s say we
 tried to implement the `Screen` struct in Listing 17-4 to hold types that
 implement the `Clone` trait instead of the `Draw` trait, like this:
 

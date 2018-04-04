@@ -98,10 +98,10 @@
     - [Shared State](ch16-03-shared-state.md)
     - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Is Rust an Object-Oriented Programming Language?](ch17-00-oop.md)
-    - [What Does Object-Oriented Mean?](ch17-01-what-is-oo.md)
-    - [Trait Objects for Using Values of Different Types](ch17-02-trait-objects.md)
-    - [Object-Oriented Design Pattern Implementations](ch17-03-oo-design-patterns.md)
+- [Object Oriented Programming Features of Rust](ch17-00-oop.md)
+    - [Characteristics of Object-Oriented Languages](ch17-01-what-is-oo.md)
+    - [Using Trait Objects that Allow for Values of Different Types](ch17-02-trait-objects.md)
+    - [Implementing an Object-Oriented Design Pattern](ch17-03-oo-design-patterns.md)
 
 ## Advanced Topics
 
