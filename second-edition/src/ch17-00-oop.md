@@ -1,4 +1,4 @@
-# Rust in Relation to Object-oriented Programming
+# Object Oriented Programming Features of Rust
 
 Object-oriented programming (OOP) is a way of modeling programs. Objects came
 from Simula in the 1960s. Those objects influenced Alan Kay’s programming
