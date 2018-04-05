@@ -1,38 +1,24 @@
-# NOTICE ABOUT STATUS
-
-The second edition of The Rust Programming Language is getting ever closer to being printed!
-This means we're not able to make large changes to chapters that are in any column to the
-right of, and including, the "Frozen" column [on our Project board][proj]. Issues or pull
-requests submitted for frozen chapters are welcome but will be closed until we start work
-on a third edition. Thank you!
-
-[proj]: https://github.com/rust-lang/book/projects/1
-
 # The Rust Programming Language
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
-This repo contains two editions of “The Rust Programming Language”; we
-recommend starting with the second edition.
+This repository contains the source of all editions of "the Rust Programming
+Language".
 
-The second edition is a rewrite that will be printed by No Starch Press,
-available around May 2018. Check [the No Starch Page][nostarch] for the latest
-information on the release date and how to order.
+The second edition will also be available in dead-tree form by No Starch
+Press, available around May 2018. Check [the No Starch Page][nostarch] for
+the latest information on the release date and how to order.
 
 [nostarch]: https://nostarch.com/rust
 
-You can read the book for free online! Please see the book as shipped with the
-latest [stable], [beta], or [nightly] Rust releases. Be aware that issues in
-those versions may have been fixed in this repository already.
+You can read all editions of the book for free online! Please see the book as
+shipped with the latest [stable], [beta], or [nightly] Rust releases. Be
+aware that issues in those versions may have been fixed in this repository
+already, as those releases are updated less frequently.
 
-[stable]: https://doc.rust-lang.org/stable/book/second-edition/
-[beta]: https://doc.rust-lang.org/beta/book/second-edition/
-[nightly]: https://doc.rust-lang.org/nightly/book/second-edition/
-
-[The first edition is still available to read online][first].
-
-[first]: https://doc.rust-lang.org/book/
-
+[stable]: https://doc.rust-lang.org/stable/book/
+[beta]: https://doc.rust-lang.org/beta/book/
+[nightly]: https://doc.rust-lang.org/nightly/book/
 
 ## Requirements
 
@@ -48,9 +34,9 @@ $ cargo install mdbook --vers [version-num]
 
 ## Building
 
-To build the book, first `cd` into either the `first-edition` or
-`second-edition` directory depending on which edition of the book you would
-like to build. Then type:
+To build the book, first `cd` into one of the directory of the edition of the
+book you'd like to build. For example, the `first-edition` or
+`second-edition` directory. Then type:
 
 ```bash
 $ mdbook build
@@ -85,6 +71,15 @@ $ mdbook test
 
 We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
 kinds of contributions we're looking for.
+
+### Second Edition
+
+The second edition of The Rust Programming Language is getting ever closer to being printed!
+
+### First Edition
+
+The first edition is frozen, and is not accepting any changes at this time.
+
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
@@ -122,8 +117,6 @@ the word doc as markdown in order to backport changes to the online book:
    copy the changes to the *src* directory as appropriate.
 
 ## Graphviz dot
-
-This is mostly for Carol's reference because she keeps having to look it up.
 
 We're using [Graphviz](http://graphviz.org/) for some of the diagrams in the
 book. The source for those files live in the `dot` directory. To turn a `dot`

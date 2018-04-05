@@ -17,6 +17,7 @@ cd ci/stable-check
 
 cargo run -- ../../first-edition/src
 cargo run -- ../../second-edition/src
+cargo run -- ../../2018-edition/src
 
 cd ../..
 
@@ -38,4 +39,17 @@ mdbook test
 echo 'Building second edition...'
 mdbook build
 echo 'Linting second edition for local file paths...'
+cargo run --bin lfp src
+
+cd ..
+
+# tests for the 2018 edition
+cd 2018-edition
+echo 'Spellchecking 2018 edition...'
+bash spellcheck.sh list
+echo 'Testing 2018 edition...'
+mdbook test
+echo 'Building 2018 edition...'
+mdbook build
+echo 'Linting 2018 edition for local file paths...'
 cargo run --bin lfp src
