@@ -41,6 +41,8 @@ mdbook build
 echo 'Linting second edition for local file paths...'
 cargo run --bin lfp src
 
+cd ..
+
 # tests for the 2018 edition
 cd 2018-edition
 echo 'Spellchecking 2018 edition...'
