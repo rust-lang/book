@@ -263,6 +263,64 @@ There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
 useful in Chapter 10 where we discuss generic types and traits.
 
+### Testing
+
+We'll learn about testing later in Chapter 11, but if you've been following along
+and implemented the Rectangle program, then we'd encourage you to write a simple
+unit test below your implementation code in main.rs to check its robustness. 
+
+We've given you an example of how you could approach writing tests for the Rectange program in Listing 5.17.
+
+Assuming that you created your Rectangle program with the following:
+```bash
+mkdir projects && cd projects && cargo new rectangle --bin && cd rectangle
+```
+
+And assuming you then executed it with `cargo run` (or equivalently with `cargo build; ./target/debug/rectangle`), 
+then you would compile and then run your tests with `cargo build; cargo test`.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rect_area() {
+        let actual_rect_instance: Rectangle = Rectangle { width: 30, height: 50 };
+        let expected_response: u32 = 1500;
+        assert_eq!(actual_rect_instance.area(), expected_response);
+    }
+
+    #[test]
+    fn test_rect_can_hold_smaller_rect() {
+        let actual_rect_instance_1: Rectangle = Rectangle { width: 30, height: 50 };
+        let actual_rect_instance_2: Rectangle = Rectangle { width: 10, height: 40 };
+        let expected_response: bool = true;
+        assert_eq!(actual_rect_instance_1.can_hold(&actual_rect_instance_2), expected_response);
+    }
+
+    #[test]
+    fn test_rect_can_hold_larger_rect() {
+        let actual_rect_instance_1: Rectangle = Rectangle { width: 30, height: 50 };
+        let actual_rect_instance_3: Rectangle = Rectangle { width: 60, height: 45 };
+        let expected_response: bool = false;
+        assert_eq!(actual_rect_instance_1.can_hold(&actual_rect_instance_3), expected_response);
+    }
+
+    #[test]
+    fn test_rect_can_hold_smaller_square() {
+        let actual_rect_instance_1: Rectangle = Rectangle { width: 30, height: 50 };
+        let actual_rect_instance_4: Rectangle = Rectangle::square(3);
+        let expected_response: bool = true;
+        assert_eq!(actual_rect_instance_1.can_hold(&actual_rect_instance_4), expected_response);
+    }
+}
+```
+
+<span class="caption">Listing 5-17: Testing the Methods and Associated Functions of the Rectangle program</span>
+
 ## Summary
 
 Structs let you create custom types that are meaningful for your domain. By
