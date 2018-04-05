@@ -205,7 +205,7 @@ function.
 
 Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
-that would have one dimension parameter and use that as both width and height,
+that would have one dimension parameter and use that has both width and height,
 thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
 
