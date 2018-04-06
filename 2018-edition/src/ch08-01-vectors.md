@@ -96,17 +96,33 @@ read their contents is a good next step. There are two ways to reference a
 value stored in a vector. In the examples, we’ve annotated the types of the
 values that are returned from these functions for extra clarity.
 
-Listing 8-5 shows both methods of accessing a value in a vector, either with
-indexing syntax or the `get` method:
+Listing 8-5 shows the method of accessing a value in a vector with
+indexing syntax:
 
 ```rust
 let v = vec![1, 2, 3, 4, 5];
 
 let third: &i32 = &v[2];
-let third: Option<&i32> = v.get(2);
 ```
 
-<span class="caption">Listing 8-5: Using indexing syntax or the `get` method to
+<span class="caption">Listing 8-5: Using indexing syntax to
+access an item in a vector</span>
+
+Listing 8-6 shows the method of accessing a value in a vector, with
+the `get` method:
+
+```rust
+let v = vec![1, 2, 3, 4, 5];
+
+let third: Option<&i32> = v.get(2);
+
+match third {
+    Some(x) => { println!("Reachable element {}", x); () },
+    None => { println!("Unreachable element"); }
+}
+```
+
+<span class="caption">Listing 8-6: Using the `get` method to
 access an item in a vector</span>
 
 Note two details here. First, we use the index value of `2` to get the third
@@ -119,7 +135,7 @@ Rust has two ways to reference an element so you can choose how the program
 behaves when you try to use an index value that the vector doesn’t have an
 element for. As an example, let’s see what a program will do if it has a vector
 that holds five elements and then tries to access an element at index 100, as
-shown in Listing 8-6:
+shown in Listing 8-7:
 
 ```rust,should_panic
 let v = vec![1, 2, 3, 4, 5];
@@ -128,7 +144,7 @@ let does_not_exist = &v[100];
 let does_not_exist = v.get(100);
 ```
 
-<span class="caption">Listing 8-6: Attempting to access the element at index
+<span class="caption">Listing 8-7: Attempting to access the element at index
 100 in a vector containing five elements</span>
 
 When we run this code, the first `[]` method will cause the program to panic
@@ -150,7 +166,7 @@ When the program has a valid reference, the borrow checker enforces the
 ownership and borrowing rules (covered in Chapter 4) to ensure this reference
 and any other references to the contents of the vector remain valid. Recall the
 rule that states you can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-7, where we hold an immutable reference to
+scope. That rule applies in Listing 8-8, where we hold an immutable reference to
 the first element in a vector and try to add an element to the end, which won’t
 work:
 
@@ -162,7 +178,7 @@ let first = &v[0];
 v.push(6);
 ```
 
-<span class="caption">Listing 8-7: Attempting to add an element to a vector
+<span class="caption">Listing 8-8: Attempting to add an element to a vector
 while holding a reference to an item</span>
 
 Compiling this code will result in this error:
@@ -181,7 +197,7 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
   | - immutable borrow ends here
 ```
 
-The code in Listing 8-7 might look like it should work: why should a reference
+The code in Listing 8-8 might look like it should work: why should a reference
 to the first element care about what changes at the end of the vector? This
 error is due to the way vectors work: adding a new element onto the end of the
 vector might require allocating new memory and copying the old elements to the
@@ -197,7 +213,7 @@ programs from ending up in that situation.
 
 If we want to access each element in a vector in turn, we can iterate through
 all of the elements rather than use indexes to access one at a time. Listing
-8-8 shows how to use a `for` loop to get immutable references to each element
+8-9 shows how to use a `for` loop to get immutable references to each element
 in a vector of `i32` values and print them:
 
 ```rust
@@ -207,11 +223,11 @@ for i in &v {
 }
 ```
 
-<span class="caption">Listing 8-8: Printing each element in a vector by
+<span class="caption">Listing 8-9: Printing each element in a vector by
 iterating over the elements using a `for` loop</span>
 
 We can also iterate over mutable references to each element in a mutable vector
-in order to make changes to all the elements. The `for` loop in Listing 8-9
+in order to make changes to all the elements. The `for` loop in Listing 8-10
 will add `50` to each element:
 
 ```rust
@@ -221,7 +237,7 @@ for i in &mut v {
 }
 ```
 
-<span class="caption">Listing 8-9: Iterating over mutable references to
+<span class="caption">Listing 8-10: Iterating over mutable references to
 elements in a vector</span>
 
 To change the value that the mutable reference refers to, we have to use the
@@ -241,7 +257,7 @@ some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and then all the enum variants will be considered the same type:
 that of the enum. Then we can create a vector that holds that enum and so,
-ultimately, holds different types. We’ve demonstrated this in Listing 8-10:
+ultimately, holds different types. We’ve demonstrated this in Listing 8-11:
 
 ```rust
 enum SpreadsheetCell {
@@ -257,7 +273,7 @@ let row = vec![
 ];
 ```
 
-<span class="caption">Listing 8-10: Defining an `enum` to store values of
+<span class="caption">Listing 8-11: Defining an `enum` to store values of
 different types in one vector</span>
 
 Rust needs to know what types will be in the vector at compile time so it knows
