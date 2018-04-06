@@ -1,12 +1,11 @@
 ## What to expect when you file an issue here
 
-### First edition
+Thank you for caring about the quality of the book! Each edition has
+different types of issues we can accept, please read on for details.
 
-The first edition of the book is no longer being actively worked on.
+### 2018 edition
 
-Issues for the first edition of the book are worthwhile if you are planning to
-submit a pull request, and want to discuss it first. But as we aren't actively
-working on the first edition, general bugs will be closed.
+This version of the book is under development, please file issues liberally!
 
 ### Second edition
 
@@ -22,5 +21,11 @@ Scroll all the way to the right on https://github.com/rust-lang/book/projects/1
 to see which chapters have been frozen.
 
 Please see CONTRIBUTING.md for more details.
+
+### First edition
+
+The first edition of the book is frozen, and bugs filed against it will
+be closed.
+
 
 Thank you for reading, you may now delete this text!

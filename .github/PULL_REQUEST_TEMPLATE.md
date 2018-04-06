@@ -1,10 +1,13 @@
 ## What to expect when you open a pull request here
 
-### First edition
+### 2018 Edition
 
-The first edition is no longer being actively worked on. We accept pull
-requests for the first edition, but prefer small tweaks to large changes, as
-larger work should be spent improving the second edition.
+The 2018 is a "living" edition; it's not scheduled for in-print publication at
+this time, and so is able to be updated at any time. We'd love pull requests to
+fix issues with this edition, but we're not interested in extremely large
+changes without discussing them first. If you'd like to make a big change,
+please open an issue first! We'd hate for you to do some hard work that we
+ultimately wouldn't accept.
 
 ### Second edition
 
@@ -20,5 +23,11 @@ Scroll all the way to the right on https://github.com/rust-lang/book/projects/1
 to see which chapters have been frozen.
 
 Please see CONTRIBUTING.md for more details.
+
+### First edition
+
+The first edition is frozen, and no longer accepting changes. Pull requests
+made against it will be closed.
+
 
 Thank you for reading, you may now delete this text!
