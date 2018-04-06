@@ -38,18 +38,6 @@ $ cargo new hello_cargo --bin
 $ cd hello_cargo
 ```
 
-<!-- Below -- so we always have to start a cargo project with the --bin option
-if we want it to be something we can execute and not just a library, is that
-right? It might be worth laying that out -->
-<!-- As of Rust 1.21.0 (the version we're using for the book), yes, you must
-always specify `--bin`. In a version of Rust in the near future (1.25 or 1.26),
-binary crates will become the default kind of crate that `cargo new` makes, so
-you won't have to specify `--bin` (but you can if you want and the behavior
-will be the same). We'd rather not go into any more detail than we have here
-because of this change; I think "The `--bin` argument to passed to `cargo new`
-makes an executable application (often just called a *binary*), as opposed to a
-library." lays this out enough. /Carol -->
-
 This creates a new binary executable called `hello_cargo`. The `--bin` argument
 to passed to `cargo new` makes an executable application (often just called a
 *binary*), as opposed to a library. We’ve given `hello_cargo` as the name for
@@ -239,17 +227,6 @@ $ cargo build
 If you want to look at Cargo in more detail, check out [its documentation].
 
 [its documentation]: https://doc.rust-lang.org/cargo/
-
-<!--Below -- I`m not sure this is the place for this conversation, it seems too
-deep into the weeds for the "getting started" chapter. I know we discussed
-Nightly Rust as an appendix previously, but honestly I think this is more
-suited somewhere online, perhaps in the extended docs. I like the idea of
-finishing the chapter here, on this practical note, and I think at this point
-readers will want to get stuck in anyway and may skip this and never come back
-because it's buried at the end of a chapter that's not really related to it. If
-it's online somewhere separate they can come to it when they're ready. What do
-you think?-->
-<!-- Ok, I can see that. /Carol -->
 
 ## Summary
 

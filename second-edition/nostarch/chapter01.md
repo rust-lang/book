@@ -3,11 +3,6 @@
 
 # Getting Started
 
-<!-- If you want to use this paragraph in the Introduction, can you replace it
-with some other introductory text for the chapter here? Maybe just lay out
-what's in this chapter so they know it's important not to skip it. -->
-<!-- Yep, done! /Carol -->
-
 Let’s get your Rust journey started! In this chapter, we’ll discuss:
 
 - Installing Rust on Linux, Mac, or Windows
@@ -28,8 +23,6 @@ may differ slightly between versions, as error messages and warnings are often
 improved. In other words, any newer, stable version of Rust you will install
 with these steps should work as expected with the content of this book.
 
-<!-- PROD: Start Box -->
-
 > #### Command Line Notation
 >
 > In this chapter and throughout the book we’ll be showing some commands used
@@ -40,8 +33,6 @@ with these steps should work as expected with the content of this book.
 > running as an administrator. Lines that don’t start with `$` are typically
 > showing the output of the previous command. Additionally, PowerShell specific
 > examples will use `>` rather than `$`.
-
-<!-- PROD: End box -->
 
 ### Installing Rustup on Linux or Mac
 
@@ -66,12 +57,6 @@ The installation script automatically adds Rust to your system PATH after your
 next login. If you want to start using Rust right away instead of restarting
 your terminal, run the following command in your shell to add Rust to your
 system PATH manually:
-
-<!-- what does this command do? Do you mean instead of logging out and logging
-in, enter the following? -->
-<!-- It runs a script that adds Rust to your system PATH manually. I've
-clarified that yes, this is instead of logging out and back in to your
-terminal. /Carol -->
 
 ```
 $ source $HOME/.cargo/env
@@ -258,11 +243,6 @@ section earlier for ways to get help.
 If you did see `Hello, world!` printed, then congratulations! You’ve officially
 written a Rust program. That makes you a Rust programmer! Welcome!
 
-<!-- Any quick words of advice for if they didn't? (Disclosure: I tried
-following this using Bash on windows and couldn't get it working) -->
-<!-- Added a pointer to the previous troubleshooting section which also applies
-here /Carol -->
-
 ### Anatomy of a Rust Program
 
 Now, let’s go over what just happened in your “Hello, world!” program in
@@ -307,13 +287,6 @@ The second important detail is the `println!` call. This code is calling a Rust
 `println` (without the `!`). We’ll discuss Rust macros in more detail in
 Appendix D, but for now you just need to know that when you see a `!` that
 means that you’re calling a macro instead of a normal function.
-
-<!-- I might suggest just cutting this next macro section -- for the sake of
-the intro, we don't really need this info, and I feel like this first exercise
-should be short and sweet and simple -->
-<!-- I'm ok with cutting this; it's a fairly common question that some folks
-have at this point, but I'm ok with those people having to do some research
-online if they're curious /Carol -->
 
 Next comes`"Hello, world!"` which is a *string*. We pass this string as an
 argument to `println!` and the total effect is that the string is printed to
@@ -420,18 +393,6 @@ wherever you decided to put your code) and then on any operating system run:
 $ cargo new hello_cargo --bin
 $ cd hello_cargo
 ```
-
-<!-- Below -- so we always have to start a cargo project with the --bin option
-if we want it to be something we can execute and not just a library, is that
-right? It might be worth laying that out -->
-<!-- As of Rust 1.21.0 (the version we're using for the book), yes, you must
-always specify `--bin`. In a version of Rust in the near future (1.25 or 1.26),
-binary crates will become the default kind of crate that `cargo new` makes, so
-you won't have to specify `--bin` (but you can if you want and the behavior
-will be the same). We'd rather not go into any more detail than we have here
-because of this change; I think "The `--bin` argument to passed to `cargo new`
-makes an executable application (often just called a *binary*), as opposed to a
-library." lays this out enough. /Carol -->
 
 This creates a new binary executable called `hello_cargo`. The `--bin` argument
 to passed to `cargo new` makes an executable application (often just called a
@@ -618,17 +579,6 @@ $ cargo build
 
 If you want to look at Cargo in more detail, check out its documentation at
 *https://doc.rust-lang.org/cargo/*.
-
-<!--Below -- I`m not sure this is the place for this conversation, it seems too
-deep into the weeds for the "getting started" chapter. I know we discussed
-Nightly Rust as an appendix previously, but honestly I think this is more
-suited somewhere online, perhaps in the extended docs. I like the idea of
-finishing the chapter here, on this practical note, and I think at this point
-readers will want to get stuck in anyway and may skip this and never come back
-because it's buried at the end of a chapter that's not really related to it. If
-it's online somewhere separate they can come to it when they're ready. What do
-you think?-->
-<!-- Ok, I can see that. /Carol -->
 
 ## Summary
 

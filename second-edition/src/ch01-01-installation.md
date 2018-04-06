@@ -12,8 +12,6 @@ may differ slightly between versions, as error messages and warnings are often
 improved. In other words, any newer, stable version of Rust you will install
 with these steps should work as expected with the content of this book.
 
-<!-- PROD: Start Box -->
-
 > #### Command Line Notation
 >
 > In this chapter and throughout the book we’ll be showing some commands used
@@ -24,8 +22,6 @@ with these steps should work as expected with the content of this book.
 > running as an administrator. Lines that don’t start with `$` are typically
 > showing the output of the previous command. Additionally, PowerShell specific
 > examples will use `>` rather than `$`.
-
-<!-- PROD: End box -->
 
 ### Installing Rustup on Linux or Mac
 
@@ -50,12 +46,6 @@ The installation script automatically adds Rust to your system PATH after your
 next login. If you want to start using Rust right away instead of restarting
 your terminal, run the following command in your shell to add Rust to your
 system PATH manually:
-
-<!-- what does this command do? Do you mean instead of logging out and logging
-in, enter the following? -->
-<!-- It runs a script that adds Rust to your system PATH manually. I've
-clarified that yes, this is instead of logging out and back in to your
-terminal. /Carol -->
 
 ```text
 $ source $HOME/.cargo/env

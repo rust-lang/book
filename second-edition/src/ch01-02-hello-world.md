@@ -93,11 +93,6 @@ section earlier for ways to get help.
 If you did see `Hello, world!` printed, then congratulations! You’ve officially
 written a Rust program. That makes you a Rust programmer! Welcome!
 
-<!-- Any quick words of advice for if they didn't? (Disclosure: I tried
-following this using Bash on windows and couldn't get it working) -->
-<!-- Added a pointer to the previous troubleshooting section which also applies
-here /Carol -->
-
 ### Anatomy of a Rust Program
 
 Now, let’s go over what just happened in your “Hello, world!” program in
@@ -142,13 +137,6 @@ The second important detail is the `println!` call. This code is calling a Rust
 `println` (without the `!`). We’ll discuss Rust macros in more detail in
 Appendix D, but for now you just need to know that when you see a `!` that
 means that you’re calling a macro instead of a normal function.
-
-<!-- I might suggest just cutting this next macro section -- for the sake of
-the intro, we don't really need this info, and I feel like this first exercise
-should be short and sweet and simple -->
-<!-- I'm ok with cutting this; it's a fairly common question that some folks
-have at this point, but I'm ok with those people having to do some research
-online if they're curious /Carol -->
 
 Next comes`"Hello, world!"` which is a *string*. We pass this string as an
 argument to `println!` and the total effect is that the string is printed to
