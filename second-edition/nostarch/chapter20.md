@@ -124,16 +124,6 @@ the client sent, and allow us to write our response to the stream. Overall,
 this `for` loop will process each connection in turn and produce a series of
 streams for us to handle.
 
-<!-- Below -- What if there aren't errors, how is the stream handled? Or is
-there no functionality for that yet, only functionality for errors?
-Also, highlighted below -- can you specify what errors we're talking
-about---errors in *producing* the streams or connecting to the port?-->
-<!--
-There is no functionality for a stream without errors yet; I've clarified.
-The errors happen when a client attempts to connect to the server; I've
-clarified.
-/Carol -->
-
 For now, our handling of the stream consists of calling `unwrap` to terminate
 our program if the stream has any errors, and if there aren’t any errors, then
 print a message. We’ll add more functionality for the success case in the next
@@ -224,11 +214,6 @@ the next time we ask for data. It therefore needs to be `mut` because its
 internal state might change; usually we think of “reading” as not needing
 mutation, but in this case we need the `mut` keyword.
 
-<!-- Above -- I'm not clear what state will change here, the content of stream
-when the program tempers what data it takes? -->
-<!-- Yes, which is what we mean by "internally". I've tried to reword a bit,
-not sure if it's clearer. /Carol -->
-
 Next, we need to actually read from the stream. We do this in two steps: first,
 we declare a `buffer` on the stack to hold the data that’s read in. We’ve made
 the buffer 512 bytes in size, which is big enough to hold the data of a basic
@@ -291,10 +276,6 @@ is requesting. The first part of the request line tells us the *method* being
 used, like `GET` or `POST`, that describes how the client is making this
 request. Our client used a `GET` request.
 
-<!-- Below, is that right that the / part is the URI *being requested*, and not
-the URI of the requester? -->
-<!-- Yes /Carol -->
-
 The next part of the `Request` line is `/` which tells us the *URI* (Uniform
 Resource Identifier) that the client is requesting---a URI is almost, but not
 quite, the same as a URL (*Uniform Resource Locator*). The difference between
@@ -307,10 +288,6 @@ line ends in a CRLF sequence. The CRLF sequence can also be written as `\r\n`:
 the typewriter days!) The CRLF sequence separates the request line from the
 rest of the request data. Note that when CRLF is printed out, we see a new line
 started rather than `\r\n`.
-
-<!-- Above, I don't see a CRLF here in the request line in the actual output,
-is it just implied because the next line begins on the next line? -->
-<!-- Yes, I've clarified. /Carol -->
 
 Taking a look at the request line data we received rom running our program so
 far, we see that `GET` is the method, `/` is the Request URI, and `HTTP/1.1` is
@@ -373,31 +350,16 @@ fn handle_connection(mut stream: TcpStream) {
 
 Listing 20-3: Writing a tiny successful HTTP response to the stream
 
-<!-- Flagging for addition of wingdings later -->
-
 The first new line defines the `response` variable that holds the data of the
 success message. Then we call `as_bytes` on our `response` to convert the
 string data to bytes. The `write` method on `stream` takes a `&[u8]` and sends
 those bytes directly down the connection.
-
-<!-- Above--So what does adding as_bytes actually do, *allow* us to send bytes
-directly? -->
-<!-- It converts the string data to bytes, I've clarified /Carol -->
 
 Because the `write` operation could fail, we use `unwrap` on any error result
 as before. Again, in a real application you would add error-handling here.
 Finally, `flush` will wait and prevent the program from continuing until all of
 the bytes are written to the connection; `TcpStream` contains an internal
 buffer to minimize calls into the underlying operating system.
-
-<!-- Above -- Will flush wait until all bytes are written and then do
-something? I'm not sure what task it's performing -->
-<!-- `flush` just makes sure all the bytes we sent to `write` are actually
-written to the stream before the function ends. Because writing to a stream
-takes time, the `handle_connection` function could potentially finish and
-`stream` could go out of scope before all the bytes given to `write` are sent,
-unless we call `flush`. This is how streams work in many languages and is a
-small detail I don't think is worth going into in depth. /Carol -->
 
 With these changes, let’s run our code and make a request! We’re no longer
 printing any data to the terminal, so we won’t see any output other than the
@@ -651,11 +613,6 @@ requests, and then fix it so our server can handle multiple requests at once.
 
 ## Turning our Single Threaded Server into a Multithreaded Server
 
-<!-- Reading ahead, the original heading didn't seem to fit all of the sub
-headings -- this might not be totally right either, so feel free to replace
-with something more appropriate -->
-<!-- This is fine! /Carol -->
-
 Right now, the server will process each request in turn, meaning it won’t
 process a second connection until the first is finished processing. If this
 server were to receive more and more requests, this sort of serial execution
@@ -720,11 +677,6 @@ avoid having all requests back up behind a slow request; the one we’re going t
 implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool
-
-<!--There seems to be some repetition throughout these thread pool sections, is
-there any way to condense it? I've edited with this in mind, but am wary of
-changing too much -->
-<!-- Your edits that removed repetition are fine! /Carol -->
 
 A *thread pool* is a group of spawned threads that are waiting and ready to
 handle some task. When the program receives a new task, it will assign one of
@@ -835,10 +787,6 @@ that it takes the closure and gives it to a thread in the pool to run. This
 code won’t yet compile, but we’re going to try so the compiler can guide us in
 how to fix it.
 
-<!-- Can you be more specific here about how pool.execute will work? -->
-<!-- So clarified. I hope this helps with some of the future confusion as well
-/Carol -->
-
 #### Building the `ThreadPool` Struct Using Compiler Driven Development
 
 Go ahead and make the changes in Listing 20-12 to *src/main.rs*, and let’s use
@@ -947,14 +895,6 @@ error[E0599]: no method named `execute` found for type `hello::ThreadPool` in th
    |              ^^^^^^^
 ```
 
-<!--Can you say a few words on why we would need an execute method, what Rust
-needs it for? Also why we need a closure/what indicated that we need a closure
-here? -->
-<!-- *Rust* doesn't need it, the thread pool functionality we're working on
-implementing needs it. I've tried to clarify without getting too repetitive
-with the "Creating a Similar Interface for a Finite Number of Threads" section
-/Carol -->
-
 Now we get a warning and an error. Ignoring the warning for a moment, the error
 occurs because we don’t have an `execute` method on `ThreadPool`. Recall from
 the “Creating a Similar Interface for a Finite Number of Threads” section that
@@ -986,11 +926,6 @@ eventually be passing the argument we get in `execute` to `spawn`. We can be
 further confident that `FnOnce` is the trait we want to use because the thread
 for running a request is only going to execute that request’s closure one time,
 which matches the `Once` in `FnOnce`.
-
-<!-- Above -- why does that second reason mean FnOnce is the trait to use, can
-you remind us? -->
-<!-- Attempted, we're just pointing out that it's in the name Fn*Once* /Carol
--->
 
 `F` also has the trait bound `Send` and the lifetime bound `'static`, which are
 useful for our situation: we need `Send` to transfer the closure from one
@@ -1180,11 +1115,6 @@ succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-<!-- I wasn't sure what this next paragraph was relevant to, can you connect it
-up more clearly?-->
-<!-- This is where we're actually getting into the meat of the implementation,
-I've tried to make it clearer :( /Carol-->
-
 We left a comment in the `for` loop in Listing 20-14 regarding the creation of
 threads. How do we actually create threads? This is a tough question. The way
 to create a thread provided by the standard library, `thread::spawn`, expects
@@ -1193,12 +1123,6 @@ However, we want to start up the threads and have them wait for code that we
 will send them later. The standard library’s implementation of threads doesn’t
 include any way to do that; we have to implement it.
 
-<!-- Can you say how doing this refactoring will improve the code -- why don't
-we want the pool to store threads directly? (I got that from the listing
-caption because I wasn't sure what the end game was) -->
-<!-- I hope the end game is now clearer in the previous paragraph: we *can't*
-store the threads directly and get the behavior we want. /Carol -->
-
 The way we’re going to implement the behavior of creating threads and sending
 code later is to introduce a new data structure between the `ThreadPool` and
 the threads that will manage this new behavior. We’re going to call this data
@@ -1206,13 +1130,6 @@ structure `Worker`; this is a common term in pooling implementations. Think of
 people working in the kitchen at a restaurant: the workers wait until orders
 come in from customers, then they’re responsible for taking those orders and
 fulfilling them.
-
-<!-- I was unclear on what a worker actually is here -- is this a
-programming/Rust term, or just what we're calling the struct? Can you make it
-clearer what the worker is and its responsibilities? -->
-<!-- I've tried in the previous paragraph; it's a common term in job
-queue/pooling implementations in programming in general but I think should make
-sense in plain English with the real-life metaphor I've added /Carol -->
 
 Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
 we’ll store instances of the `Worker` struct. Each `Worker` will store a single
@@ -1444,10 +1361,6 @@ by Rust is multiple *producer*, single *consumer*. This means we can’t just
 clone the consuming end of the channel to fix this. Even if we could, that’s
 not the technique we’d want to use; we want to distribute the jobs across
 threads by sharing the single `receiver` between all of the workers.
-
-<!-- Above - you may be able to tell I struggled to follow this explanation,
-can you double check my edits and correct here? -->
-<!-- Yep, the text we had here was nonsensical. The edits are fine! /Carol -->
 
 Additionally, taking a job off the channel queue involves mutating the
 `receiver`, so the threads need a safe way to share and modify `receiver`,
@@ -2184,12 +2097,6 @@ that uses a thread pool to respond asynchronously. We’re able to perform a
 graceful shutdown of the server, which cleans up all the threads in the pool.
 See the website for this book to download the full code for this chapter for
 reference.
-
-<!-- As an option, we could refer to the full code file that the readers will
-be able to download from the book's page to save printing it all out again
-here, since this is already a really long chapter -- what do you think? -->
-<!-- That's fine, I've changed the text above and removed the full code /Carol
--->
 
 There’s more we could do here! If you’d like to continue enhancing this
 project, here are some ideas:

@@ -86,16 +86,6 @@ the client sent, and allow us to write our response to the stream. Overall,
 this `for` loop will process each connection in turn and produce a series of
 streams for us to handle.
 
-<!-- Below -- What if there aren't errors, how is the stream handled? Or is
-there no functionality for that yet, only functionality for errors?
-Also, highlighted below -- can you specify what errors we're talking
-about---errors in *producing* the streams or connecting to the port?-->
-<!--
-There is no functionality for a stream without errors yet; I've clarified.
-The errors happen when a client attempts to connect to the server; I've
-clarified.
-/Carol -->
-
 For now, our handling of the stream consists of calling `unwrap` to terminate
 our program if the stream has any errors, and if there aren’t any errors, then
 print a message. We’ll add more functionality for the success case in the next
@@ -187,11 +177,6 @@ the next time we ask for data. It therefore needs to be `mut` because its
 internal state might change; usually we think of “reading” as not needing
 mutation, but in this case we need the `mut` keyword.
 
-<!-- Above -- I'm not clear what state will change here, the content of stream
-when the program tempers what data it takes? -->
-<!-- Yes, which is what we mean by "internally". I've tried to reword a bit,
-not sure if it's clearer. /Carol -->
-
 Next, we need to actually read from the stream. We do this in two steps: first,
 we declare a `buffer` on the stack to hold the data that’s read in. We’ve made
 the buffer 512 bytes in size, which is big enough to hold the data of a basic
@@ -254,10 +239,6 @@ is requesting. The first part of the request line tells us the *method* being
 used, like `GET` or `POST`, that describes how the client is making this
 request. Our client used a `GET` request.
 
-<!-- Below, is that right that the / part is the URI *being requested*, and not
-the URI of the requester? -->
-<!-- Yes /Carol -->
-
 The next part of the `Request` line is `/` which tells us the *URI* (Uniform
 Resource Identifier) that the client is requesting---a URI is almost, but not
 quite, the same as a URL (*Uniform Resource Locator*). The difference between
@@ -270,10 +251,6 @@ line ends in a CRLF sequence. The CRLF sequence can also be written as `\r\n`:
 the typewriter days!) The CRLF sequence separates the request line from the
 rest of the request data. Note that when CRLF is printed out, we see a new line
 started rather than `\r\n`.
-
-<!-- Above, I don't see a CRLF here in the request line in the actual output,
-is it just implied because the next line begins on the next line? -->
-<!-- Yes, I've clarified. /Carol -->
 
 Taking a look at the request line data we received rom running our program so
 far, we see that `GET` is the method, `/` is the Request URI, and `HTTP/1.1` is
@@ -339,31 +316,16 @@ fn handle_connection(mut stream: TcpStream) {
 <span class="caption">Listing 20-3: Writing a tiny successful HTTP response to
 the stream</span>
 
-<!-- Flagging for addition of wingdings later -->
-
 The first new line defines the `response` variable that holds the data of the
 success message. Then we call `as_bytes` on our `response` to convert the
 string data to bytes. The `write` method on `stream` takes a `&[u8]` and sends
 those bytes directly down the connection.
-
-<!-- Above--So what does adding as_bytes actually do, *allow* us to send bytes
-directly? -->
-<!-- It converts the string data to bytes, I've clarified /Carol -->
 
 Because the `write` operation could fail, we use `unwrap` on any error result
 as before. Again, in a real application you would add error-handling here.
 Finally, `flush` will wait and prevent the program from continuing until all of
 the bytes are written to the connection; `TcpStream` contains an internal
 buffer to minimize calls into the underlying operating system.
-
-<!-- Above -- Will flush wait until all bytes are written and then do
-something? I'm not sure what task it's performing -->
-<!-- `flush` just makes sure all the bytes we sent to `write` are actually
-written to the stream before the function ends. Because writing to a stream
-takes time, the `handle_connection` function could potentially finish and
-`stream` could go out of scope before all the bytes given to `write` are sent,
-unless we call `flush`. This is how streams work in many languages and is a
-small detail I don't think is worth going into in depth. /Carol -->
 
 With these changes, let’s run our code and make a request! We’re no longer
 printing any data to the terminal, so we won’t see any output other than the

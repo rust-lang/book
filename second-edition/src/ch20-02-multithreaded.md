@@ -1,10 +1,5 @@
 ## Turning our Single Threaded Server into a Multithreaded Server
 
-<!-- Reading ahead, the original heading didn't seem to fit all of the sub
-headings -- this might not be totally right either, so feel free to replace
-with something more appropriate -->
-<!-- This is fine! /Carol -->
-
 Right now, the server will process each request in turn, meaning it won’t
 process a second connection until the first is finished processing. If this
 server were to receive more and more requests, this sort of serial execution
@@ -74,11 +69,6 @@ avoid having all requests back up behind a slow request; the one we’re going t
 implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool
-
-<!--There seems to be some repetition throughout these thread pool sections, is
-there any way to condense it? I've edited with this in mind, but am wary of
-changing too much -->
-<!-- Your edits that removed repetition are fine! /Carol -->
 
 A *thread pool* is a group of spawned threads that are waiting and ready to
 handle some task. When the program receives a new task, it will assign one of
@@ -208,10 +198,6 @@ that it takes the closure and gives it to a thread in the pool to run. This
 code won’t yet compile, but we’re going to try so the compiler can guide us in
 how to fix it.
 
-<!-- Can you be more specific here about how pool.execute will work? -->
-<!-- So clarified. I hope this helps with some of the future confusion as well
-/Carol -->
-
 #### Building the `ThreadPool` Struct Using Compiler Driven Development
 
 Go ahead and make the changes in Listing 20-12 to *src/main.rs*, and let’s use
@@ -320,14 +306,6 @@ error[E0599]: no method named `execute` found for type `hello::ThreadPool` in th
    |              ^^^^^^^
 ```
 
-<!--Can you say a few words on why we would need an execute method, what Rust
-needs it for? Also why we need a closure/what indicated that we need a closure
-here? -->
-<!-- *Rust* doesn't need it, the thread pool functionality we're working on
-implementing needs it. I've tried to clarify without getting too repetitive
-with the "Creating a Similar Interface for a Finite Number of Threads" section
-/Carol -->
-
 Now we get a warning and an error. Ignoring the warning for a moment, the error
 occurs because we don’t have an `execute` method on `ThreadPool`. Recall from
 the “Creating a Similar Interface for a Finite Number of Threads” section that
@@ -359,11 +337,6 @@ eventually be passing the argument we get in `execute` to `spawn`. We can be
 further confident that `FnOnce` is the trait we want to use because the thread
 for running a request is only going to execute that request’s closure one time,
 which matches the `Once` in `FnOnce`.
-
-<!-- Above -- why does that second reason mean FnOnce is the trait to use, can
-you remind us? -->
-<!-- Attempted, we're just pointing out that it's in the name Fn*Once* /Carol
--->
 
 `F` also has the trait bound `Send` and the lifetime bound `'static`, which are
 useful for our situation: we need `Send` to transfer the closure from one
@@ -557,11 +530,6 @@ succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-<!-- I wasn't sure what this next paragraph was relevant to, can you connect it
-up more clearly?-->
-<!-- This is where we're actually getting into the meat of the implementation,
-I've tried to make it clearer :( /Carol-->
-
 We left a comment in the `for` loop in Listing 20-14 regarding the creation of
 threads. How do we actually create threads? This is a tough question. The way
 to create a thread provided by the standard library, `thread::spawn`, expects
@@ -570,12 +538,6 @@ However, we want to start up the threads and have them wait for code that we
 will send them later. The standard library’s implementation of threads doesn’t
 include any way to do that; we have to implement it.
 
-<!-- Can you say how doing this refactoring will improve the code -- why don't
-we want the pool to store threads directly? (I got that from the listing
-caption because I wasn't sure what the end game was) -->
-<!-- I hope the end game is now clearer in the previous paragraph: we *can't*
-store the threads directly and get the behavior we want. /Carol -->
-
 The way we’re going to implement the behavior of creating threads and sending
 code later is to introduce a new data structure between the `ThreadPool` and
 the threads that will manage this new behavior. We’re going to call this data
@@ -583,13 +545,6 @@ structure `Worker`; this is a common term in pooling implementations. Think of
 people working in the kitchen at a restaurant: the workers wait until orders
 come in from customers, then they’re responsible for taking those orders and
 fulfilling them.
-
-<!-- I was unclear on what a worker actually is here -- is this a
-programming/Rust term, or just what we're calling the struct? Can you make it
-clearer what the worker is and its responsibilities? -->
-<!-- I've tried in the previous paragraph; it's a common term in job
-queue/pooling implementations in programming in general but I think should make
-sense in plain English with the real-life metaphor I've added /Carol -->
 
 Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
 we’ll store instances of the `Worker` struct. Each `Worker` will store a single
@@ -839,10 +794,6 @@ by Rust is multiple *producer*, single *consumer*. This means we can’t just
 clone the consuming end of the channel to fix this. Even if we could, that’s
 not the technique we’d want to use; we want to distribute the jobs across
 threads by sharing the single `receiver` between all of the workers.
-
-<!-- Above - you may be able to tell I struggled to follow this explanation,
-can you double check my edits and correct here? -->
-<!-- Yep, the text we had here was nonsensical. The edits are fine! /Carol -->
 
 Additionally, taking a job off the channel queue involves mutating the
 `receiver`, so the threads need a safe way to share and modify `receiver`,
