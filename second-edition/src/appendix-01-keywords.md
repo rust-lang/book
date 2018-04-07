@@ -1,19 +1,19 @@
 ## Appendix A: Keywords
 
-The following is a list of keywords that are reserved for current or future use
-by the Rust language. As such, these may not be used as identifiers, such as
+The following list contains keywords that are reserved for current or future
+use by the Rust language. As such, they cannot be used as identifiers, such as
 names of functions, variables, parameters, struct fields, modules, crates,
 constants, macros, static values, attributes, types, traits, or lifetimes.
 
 ### Keywords Currently in Use
 
-* `as` - perform primitive casting, disambiguate the specific trait
-  containing an item, or rename items in `use` and `extern crate` statements
+* `as` - perform primitive casting, disambiguate the specific trait containing
+  an item, or rename items in `use` and `extern crate` statements
 * `break` - exit a loop immediately
 * `const` - define constant items or constant raw pointers
 * `continue` - continue to the next loop iteration
-* `crate` - link an external crate or a macro variable representing the crate
-  in which the macro is defined
+* `crate` - link an external crate or a macro variable representing the crate in
+  which the macro is defined
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - define an enumeration
 * `extern` - link an external crate, function, or variable
@@ -48,8 +48,8 @@ constants, macros, static values, attributes, types, traits, or lifetimes.
 
 ### Keywords Reserved for Future Use
 
-These keywords do not have any functionality, but are reserved by Rust for
-potential future use.
+The following keywords do not have any functionality but are reserved by Rust
+for potential future use.
 
 * `abstract`
 * `alignof`
