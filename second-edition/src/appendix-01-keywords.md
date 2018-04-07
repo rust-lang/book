@@ -46,16 +46,6 @@ constants, macros, static values, attributes, types, traits, or lifetimes.
 * `where` - denote clauses that constrain a type
 * `while` - loop conditionally based on the result of an expression
 
-<!-- we should make sure the definitions for each keyword are consistently
-phrased, so for example for enum we say "defining an enumeration" but for fn we
-passively call it a "function definition" -- perhaps a good medium would be
-"define an enumeration" and "define a function"? Can you go through and make
-those consistent? I've attempted it for a few, but am wary of changing meaning.
-Also, you may decide to go the passive definition route, which is fine by me,
-as long as it's consistent-->
-<!-- I've tried, I'm not sure how to be active for keywords that are nouns
-though. Please let me know if any still seem inconsistent /Carol -->
-
 ### Keywords Reserved for Future Use
 
 These keywords do not have any functionality, but are reserved by Rust for

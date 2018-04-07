@@ -160,11 +160,6 @@ times the pattern matches. The `$x` is replaced with each expression matched.
 When we call this macro with `vec![1, 2, 3];`, the code generated that replaces
 this macro call will be:
 
-<!-- Above What about temp_vec.push, do you want to quickly mention that? Or do
-you mean "The `$()*` part and the content of the parentheses is generated for
-each part that matches `$()` in the pattern"-->
-<!-- The latter, I've tried to clarify /Carol -->
-
 ```rust,ignore
 let mut temp_vec = Vec::new();
 temp_vec.push(1);
@@ -272,10 +267,6 @@ Additionally, we can’t yet provide a default implementation for the
 implemented on: Rust doesn’t have reflection capabilities, so can’t look up the
 type’s name at runtime. We need a macro to generate code at compile time.
 
-<!--Defining Procedural Macros Requires a Separate Crate--> <!-- Since this is
-a lone subheading, okay to merge with the general procedural macros section? -->
-<!-- Sure /Carol -->
-
 The next step is to define the procedural macro. At the time of writing,
 procedural macros need to be in their own crate. Eventually, this restriction
 may be lifted. The convention for structuring crates and macro crates is as
@@ -376,11 +367,6 @@ calling `to_string`. This `String` is a string representation of the Rust code
 for which we are deriving `HelloMacro`. In the example in Listing AD-2, `s`
 will have the `String` value `struct Pancakes;` because that’s the Rust code we
 added the `#[derive(HelloMacro)]` annotation to.
-
-<!-- I'm not sure why we convert to a string then to a structure we can use,
-will that be clear to the reader here? -->
-<!-- This is just how procedural macros work and what you have to do, which is
-why we have the next note. /Carol -->
 
 > Note: At the time of writing, the only thing you can do with a `TokenStream`
 > is convert it to a string. A richer API will exist in the future.

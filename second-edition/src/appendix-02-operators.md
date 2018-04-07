@@ -1,9 +1,5 @@
 ## Appendix B: Operators and Symbols
 
-<!-- We try not to stack headings even in the appendix, can you add some intro
-text about what this appendix contains? Quick example below -->
-<!-- Done! /Carol -->
-
 This appendix is a glossary of Rust’s syntax, including operators and other
 symbols that appear by themselves or in the context of paths, generics, trait
 bounds, macros, attributes, comments, tuples, and brackets.
@@ -14,9 +10,6 @@ The following lists the operators in Rust, an example of how the operator would
 appear in context, a short explanation, and whether that operator is
 overloadable. If an operator is overloadable, the relevant trait to use to
 overload that operator is listed.
-
-<!-- PROD: I'm not sure how to handle this, would it be too big for a table? I
-think some structure with aligned columns would make it a great reference -->
 
 * `!` (`ident!(…)`, `ident!{…}`, `ident![…]`): denotes macro expansion.
 * `!` (`!expr`): bitwise or logical complement. Overloadable (`Not`).
@@ -75,11 +68,6 @@ think some structure with aligned columns would make it a great reference -->
 * `?` (`expr?`): Error propagation.
 
 ### Non-operator Symbols
-
-<!-- And maybe a quick explanation of what you mean by non-operator
-symbols/what counts as a non-operator symbol? -->
-<!-- I've tried but it's hard to explain, it's the kind of thing you know when
-you see it? /Carol -->
 
 The following lists all non-letters that don’t function as operators; that is,
 they don’t behave like a function or method call.
