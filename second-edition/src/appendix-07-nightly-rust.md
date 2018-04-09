@@ -152,8 +152,8 @@ You can see all of the *toolchains* (releases of Rust and associated
 components) you have installed with `rustup` as well. Here’s an example on one
 of your authors’ computers:
 
-```powershell
-> rustup toolchain list
+```text
+$ rustup toolchain list
 stable-x86_64-pc-windows-msvc (default)
 beta-x86_64-pc-windows-msvc
 nightly-x86_64-pc-windows-msvc
