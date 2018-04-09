@@ -285,6 +285,7 @@ newtypes
 nitty
 nocapture
 nomicon
+nonadministrators
 nondeterministic
 nonequality
 nongeneric
@@ -317,6 +318,7 @@ portia
 powershell
 PowerShell
 powi
+preallocates
 preprocessing
 Preprocessing
 preprocessor
