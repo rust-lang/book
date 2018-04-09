@@ -324,7 +324,7 @@ variables in the pattern must match the number of elements in the variant we’r
 matching.
 
 #### Destructuring Nested Structs & Enums
-Up until now, all of our examples have been matching structures that were 1 level deep. Matching can work on nested structures too!
+Up until now, all of our examples have been matching structures that were one level deep. Matching can work on nested structures too!
 
 We can refactor the example above to support both RGB and HSV colors:
 
