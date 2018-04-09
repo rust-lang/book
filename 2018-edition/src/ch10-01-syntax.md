@@ -47,13 +47,13 @@ fn main() {
 
     let result = largest_i32(&number_list);
     println!("The largest number is {}", result);
-#    assert_eq!(result, 100);
+//  assert_eq!(result, 100);
 
     let char_list = vec!['y', 'm', 'a', 'q'];
 
     let result = largest_char(&char_list);
     println!("The largest char is {}", result);
-#    assert_eq!(result, 'y');
+//  assert_eq!(result, 'y');
 }
 ```
 
@@ -328,11 +328,11 @@ than on `Point<T>` instances with any generic type. In Listing 10-10 we use the
 concrete type `f32`, meaning we don’t declare any types after `impl`:
 
 ```rust
-# struct Point<T> {
-#     x: T,
-#     y: T,
-# }
-#
+// struct Point<T> {
+//     x: T,
+//     y: T,
+// }
+//
 impl Point<f32> {
     fn distance_from_origin(&self) -> f32 {
         (self.x.powi(2) + self.y.powi(2)).sqrt()
