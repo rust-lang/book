@@ -318,6 +318,7 @@ portia
 powershell
 PowerShell
 powi
+preallocate
 preallocates
 preprocessing
 Preprocessing
