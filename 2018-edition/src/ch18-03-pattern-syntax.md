@@ -323,6 +323,50 @@ pattern is similar to the pattern we specify to match tuples. The number of
 variables in the pattern must match the number of elements in the variant we’re
 matching.
 
+#### Destructuring Nested Structs & Enums
+Up until now, all of our examples have been matching structures that were 1 level deep. Matching can work on nested structures too!
+
+We can refactor the example above to support both RGB and HSV colors:
+
+```rust
+enum Color {
+   Rgb(i32, i32, i32),
+   Hsv(i32, i32, i32)
+}
+
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(Color),
+}
+
+fn main() {
+    let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
+
+    match msg {
+        Message::ChangeColor(Color::Rgb(r, g, b)) => {
+            println!(
+                "Change the color to red {}, green {}, and blue {}",
+                r,
+                g,
+                b
+            )     
+        },
+        Message::ChangeColor(Color::Hsv(h, s, v)) => {
+            println!(
+                "Change the color to hue {}, saturation {}, and value {}",
+                h,
+                s,
+                v
+            )
+        }
+        _ => ()
+    }
+}
+```
+
+
 #### Destructuring References
 
 When the value we’re matching to our pattern contains a reference, we need to
