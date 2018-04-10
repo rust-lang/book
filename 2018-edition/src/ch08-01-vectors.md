@@ -113,12 +113,11 @@ the `get` method:
 
 ```rust
 let v = vec![1, 2, 3, 4, 5];
+let v_index = 2;
 
-let third: Option<&i32> = v.get(2);
-
-match third {
-    Some(x) => { println!("Reachable element {}", x); () },
-    None => { println!("Unreachable element"); }
+match v.get(v_index) {
+    Some(_) => { println!("Reachable element at index: {}", v_index); },
+    None => { println!("Unreachable element at index: {}", v_index); }
 }
 ```
 
