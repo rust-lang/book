@@ -5,7 +5,7 @@ Let’s create a new project with, as always, `cargo new`. We’ll call our proj
 on your system.
 
 ```text
-$ cargo new --bin minigrep
+$ cargo new minigrep
      Created binary (application) `minigrep` project
 $ cd minigrep
 ```

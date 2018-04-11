@@ -33,14 +33,13 @@ wherever you decided to store your code). Then, on any operating system, run
 the following:
 
 ```text
-$ cargo new hello_cargo --bin
+$ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
-The first command creates a new binary executable called *hello_cargo*. The
-`--bin` argument passed to `cargo new` makes an executable application (often
-just called a *binary*) as opposed to a library. We’ve named our project
-*hello_cargo*, and Cargo creates its files in a directory of the same name.
+The first command creates a new binary executable called *hello_cargo*.
+We’ve named our project *hello_cargo*, and Cargo creates its files in a directory 
+of the same name.
 
 Go into the *hello_cargo* directory and list the files. You’ll see that Cargo
 has generated two files and one directory for us: a *Cargo.toml* file and a
