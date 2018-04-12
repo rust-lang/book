@@ -93,8 +93,8 @@ easy. From your shell, run the following update script:
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, from your shell run the following uninstall
-script:
+To uninstall Rust and `rustup`, run the following uninstall script from your
+shell:
 
 ```text
 $ rustup self uninstall
