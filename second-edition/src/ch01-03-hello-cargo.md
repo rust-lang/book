@@ -28,8 +28,9 @@ determine how to install Cargo separately.
 ### Creating a Project with Cargo
 
 Let’s create a new project using Cargo and look at how it differs from our
-original “Hello, world!” project. Navigate back to your *projects* directory.
-Then, on any operating system, run the following:
+original “Hello, world!” project. Navigate back to your *projects* directory
+(or wherever you decided to store your code). Then, on any operating system,
+run the following:
 
 ```text
 $ cargo new hello_cargo --bin
@@ -47,7 +48,7 @@ has generated two files and one directory for us: a *Cargo.toml* file and a
 repository along with a *.gitignore* file.
 
 > Note: Git is a common version control system. You can change `cargo new` to
-> use  a different version control system or no version control system by using
+> use a different version control system or no version control system by using
 > the `--vcs` flag. Run `cargo new --help` to see the available options.
 
 Open *Cargo.toml* in your text editor of choice. It should look similar to the
@@ -107,10 +108,10 @@ configuration files, and anything else not related to your code. Using Cargo
 helps you organize your projects. There’s a place for everything, and
 everything is in its place.
 
-If you started a project that doesn’t use Cargo, as we did with our project in
-the *hello_world* directory, you can convert it to a project that does use
-Cargo. Move the project code into the *src* directory and create an appropriate
-*Cargo.toml* file.
+If you started a project that doesn’t use Cargo, as we did with the Hello,
+world! project, you can convert it to a project that does use Cargo. Move the
+project code into the *src* directory and create an appropriate *Cargo.toml*
+file.
 
 ### Building and Running a Cargo Project
 

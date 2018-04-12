@@ -16,8 +16,8 @@ the text “Hello, world!” to the screen, so we’ll do the same here!
 
 You’ll start by making a directory to store your Rust code. It doesn’t matter
 to Rust where your code lives, but for the exercises and projects in this book,
-you’ll make a *projects* directory in your home directory to keep all your
-projects there.
+we suggest making a *projects* directory in your home directory and keeping all
+your projects there.
 
 Open a terminal and enter the following commands to make a *projects* directory
 and a directory for the “Hello, world!” project within the *projects* directory.
@@ -89,8 +89,8 @@ Regardless of your operating system, the string `Hello, world!` should print to
 the terminal. If you don’t see this output, refer back to the “Troubleshooting”
 section for ways to get help.
 
-If you did see `Hello, world!` printed, congratulations! You’ve officially
-written a Rust program. That makes you a Rust programmer! Welcome!
+If `Hello, world!` did print, congratulations! You’ve officially written a Rust
+program. That makes you a Rust programmer! Welcome!
 
 ### Anatomy of a Rust Program
 
