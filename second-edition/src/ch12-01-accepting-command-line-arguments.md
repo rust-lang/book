@@ -128,7 +128,7 @@ argument and filename argument</span>
 
 As we saw when we printed the vector, the program’s name takes up the first
 value in the vector at `args[0]`, so we’re starting at index `1`. The first
-argument `minigrep` takes is the string we’re searching for, so we put a
+argument `minigrep` takes in the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.
