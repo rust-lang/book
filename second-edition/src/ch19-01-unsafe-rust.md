@@ -86,7 +86,7 @@ trade-off of giving up guaranteed safety to gain performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
 Listing 19-1 shows how to create an immutable and a mutable raw pointer from
-references:
+references.
 
 ```rust
 let mut num = 5;
@@ -124,7 +124,7 @@ memory address</span>
 
 Recall that we can create raw pointers in safe code, but we can’t *dereference*
 raw pointers and read the data being pointed to. In Listing 19-3, we use the
-dereference operator `*` on a raw pointer that requires an `unsafe` block:
+dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
 ```rust
 let mut num = 5;
@@ -210,7 +210,7 @@ a common abstraction. As an example, let’s study a function from the standard
 library, `split_at_mut`, that requires some unsafe code and explore how we
 might implement it. This safe method is defined on mutable slices: it takes one
 slice and makes it two by splitting the slice at the index given as an
-argument. Listing 19-4 shows how to use `split_at_mut`:
+argument. Listing 19-4 shows how to use `split_at_mut`.
 
 ```rust
 let mut v = vec![1, 2, 3, 4, 5, 6];
@@ -276,7 +276,7 @@ slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
 know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
 
 Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
-to unsafe functions to make the implementation of `split_at_mut` work:
+to unsafe functions to make the implementation of `split_at_mut` work.
 
 ```rust
 use std::slice;
@@ -297,12 +297,12 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 <span class="caption">Listing 19-6: Using unsafe code in the implementation of
 the `split_at_mut` function</span>
 
-Recall from the “Slices” section in Chapter 4 that slices are a pointer to some
-data and the length of the slice. We use the `len` method to get the length of
-a slice and the `as_mut_ptr` method to access the raw pointer of a slice. In
-this case, because we have a mutable slice to `i32` values, `as_mut_ptr`
-returns a raw pointer with the type `*mut i32`, which we’ve stored in the
-variable `ptr`.
+Recall from “The Slice Type” section in Chapter 4 that slices are a pointer to
+some data and the length of the slice. We use the `len` method to get the
+length of a slice and the `as_mut_ptr` method to access the raw pointer of a
+slice. In this case, because we have a mutable slice to `i32` values,
+`as_mut_ptr` returns a raw pointer with the type `*mut i32`, which we’ve stored
+in the variable `ptr`.
 
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
@@ -360,7 +360,7 @@ programming language to call those functions.
 
 Listing 19-8 demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
-always unsafe to call from Rust code. The reason is that other languages don`t
+always unsafe to call from Rust code. The reason is that other languages don’t
 enforce Rust’s rules and guarantees, and Rust can’t check them, so
 responsibility falls on the programmer to ensure safety.
 
@@ -387,30 +387,30 @@ functions from another language we want to call. The `"C"` part defines which
 defines how to call the function at the assembly level. The `"C"` ABI is the
 most common and follows the C programming language’s ABI.
 
-#### Calling Rust Functions from Other Languages
-
-We can also use `extern` to create an interface that allows other languages to
-call Rust functions. Instead of an `extern` block, we add the `extern` keyword
-and specify the ABI to use just before the `fn` keyword. We also need to add a
-`#[no_mangle]` annotation to tell the Rust compiler not to mangle the name of
-this function. *Mangling* is when a compiler changes the name we’ve given a
-function to a different name that contains more information for other parts of
-the compilation process to consume but is less human readable. Every
-programming language compiler mangles names slightly differently, so for a Rust
-function to be nameable by other languages, we must disable the Rust compiler’s
-name mangling.
-
-In the following example, we make the `call_from_c` function accessible from C
-code, after it’s compiled to a shared library and linked from C:
-
-```rust
-#[no_mangle]
-pub extern "C" fn call_from_c() {
-    println!("Just called a Rust function from C!");
-}
-```
-
-This usage of `extern` does not require `unsafe`.
+> #### Calling Rust Functions from Other Languages
+>
+> We can also use `extern` to create an interface that allows other languages
+> to call Rust functions. Instead of an `extern` block, we add the `extern`
+> keyword and specify the ABI to use just before the `fn` keyword. We also need
+> to add a `#[no_mangle]` annotation to tell the Rust compiler not to mangle
+> the name of this function. *Mangling* is when a compiler changes the name
+> we’ve given a function to a different name that contains more information for
+> other parts of the compilation process to consume but is less human readable.
+> Every programming language compiler mangles names slightly differently, so
+> for a Rust function to be nameable by other languages, we must disable the
+> Rust compiler’s name mangling.
+>
+> In the following example, we make the `call_from_c` function accessible from
+> C code, after it’s compiled to a shared library and linked from C:
+>
+> ```rust
+> #[no_mangle]
+> pub extern "C" fn call_from_c() {
+>     println!("Just called a Rust function from C!");
+> }
+> ```
+>
+> This usage of `extern` does not require `unsafe`.
 
 ### Accessing or Modifying a Mutable Static Variable
 
@@ -420,7 +420,7 @@ accessing the same mutable global variable, it can cause a data race.
 
 In Rust, global variables are called *static* variables. Listing 19-9 shows an
 example declaration and use of a static variable with a string slice as a
-value:
+value.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -451,7 +451,7 @@ are allowed to duplicate their data whenever they’re used.
 Another difference between constants and static variables is that static
 variables can be mutable. Accessing and modifying mutable static variables is
 *unsafe*. Listing 19-10 shows how to declare, access, and modify a mutable
-static variable named `COUNTER`:
+static variable named `COUNTER`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -494,7 +494,7 @@ The final action that only works with `unsafe` is implementing an unsafe trait.
 A trait is unsafe when at least one of its methods has some invariant that the
 compiler can’t verify. We can declare that a trait is `unsafe` by adding the
 `unsafe` keyword before `trait`; then implementation of the trait must be
-marked as `unsafe` too, as shown in Listing 19-11:
+marked as `unsafe` too, as shown in Listing 19-11.
 
 ```rust
 unsafe trait Foo {

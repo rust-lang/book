@@ -19,7 +19,7 @@ We’ll use a structure called `Context` that holds a reference to the string
 we’re parsing. We’ll write a parser that will parse this string and return
 success or failure. The parser will need to borrow the `Context` to do the
 parsing. Listing 19-12 implements this parser code, except the code doesn’t
-have the required lifetime annotations, so it won’t compile:
+have the required lifetime annotations, so it won’t compile.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -37,7 +37,8 @@ impl Parser {
 }
 ```
 
-Listing 19-12: Defining a parser without lifetime annotations
+<span class="caption">Listing 19-12: Defining a parser without lifetime
+annotations</span>
 
 Compiling the code results in errors because Rust expects lifetime parameters
 on the string slice in `Context` and the reference to a `Context` in `Parser`.
@@ -60,8 +61,12 @@ lifetimes involved.
 
 To get this code to compile, we need to fill in the lifetime parameters for the
 string slice in `Context` and the reference to the `Context` in `Parser`. The
-most straightforward way to do this is to use the same lifetime everywhere, as
-shown in Listing 19-13:
+most straightforward way to do this is to use the same lifetime name
+everywhere, as shown in Listing 19-13. Recall from the “Lifetime Annotations in
+Struct Definitions” section in Chapter 10 that each of `struct Context<'a>`,
+`struct Parser<'a>`, and `impl<'a>` is declaring a new lifetime parameter.
+While their names happen to all be the same, the three lifetime parameters
+declared in this example aren’t related.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -80,7 +85,7 @@ impl<'a> Parser<'a> {
 ```
 
 <span class="caption">Listing 19-13: Annotating all references in `Context` and
-`Parser` with the same lifetime parameter</span>
+`Parser` with lifetime parameters</span>
 
 This code compiles just fine. It tells Rust that a `Parser` holds a reference
 to a `Context` with lifetime `'a`, and that `Context` holds a string slice that
