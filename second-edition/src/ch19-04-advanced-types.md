@@ -6,10 +6,10 @@ examine why newtypes are useful as types. Then we’ll move on to type aliases, 
 feature similar to newtypes but with slightly different semantics. We’ll also
 discuss the `!` type and dynamically sized types.
 
-### Using the Newtype Pattern for Type Safety and Abstraction
+> Note: The next section assumes you’ve read the earlier section “The Newtype
+> Pattern to Implement External Traits on External Types.”
 
-> Note: This section assumes you’ve read the earlier section “The Newtype
-> Pattern to Implement External Traits on External Types”.
+### Using the Newtype Pattern for Type Safety and Abstraction
 
 The newtype pattern is useful for other tasks beyond what we’ve discussed so
 far, including statically enforcing that values are never confused and as an
@@ -72,7 +72,7 @@ Box<Fn() + Send + 'static>
 
 Writing this lengthy type in function signatures and as type annotations all
 over the code can be tiresome and error prone. Imagine having a project full of
-code like that in Listing 19-32:
+code like that in Listing 19-32.
 
 ```rust
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
@@ -91,7 +91,7 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 
 A type alias makes this code more manageable by reducing the repetition. In
 Listing 19-33, we’ve introduced an alias named `Thunk` for the verbose type and
-can replace all uses of the type with the shorter alias `Thunk`:
+can replace all uses of the type with the shorter alias `Thunk`.
 
 ```rust
 type Thunk = Box<Fn() + Send + 'static>;
@@ -181,9 +181,8 @@ This code is read as “the function `bar` returns never.” Functions that retu
 never are called *diverging functions*. We can’t create values of the type `!`
 so `bar` can never possibly return.
 
-But what use is a type you can never create values for? Recall the code in
-Chapter 2 that we added in the “Handling Invalid Input” section; we’ve
-reproduced it here in Listing 19-34:
+But what use is a type you can never create values for? Recall the code from
+Listing 2-5; we’ve reproduced it here in Listing 19-34.
 
 ```rust
 # let guess = "3";

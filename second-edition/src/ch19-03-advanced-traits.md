@@ -23,7 +23,7 @@ standard library provides. The associated type is named `Item` and stands in
 for the type of the values the type implementing the `Iterator` trait is
 iterating over. In “The `Iterator` Trait and the `next` Method” section of
 Chapter 13, we mentioned that the definition of the `Iterator` trait is as
-shown in Listing 19-20:
+shown in Listing 19-20.
 
 ```rust
 pub trait Iterator {
@@ -112,7 +112,7 @@ struct:
 ```rust
 use std::ops::Add;
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 struct Point {
     x: i32,
     y: i32,
@@ -170,7 +170,7 @@ default.
 We have two structs holding values in different units, `Millimeters` and
 `Meters`. We want to add values in millimeters to values in meters and have the
 implementation of `Add` do the conversion correctly. We can implement `Add` for
-`Millimeters` with `Meters` as the `RHS`, as shown in Listing 19-23:
+`Millimeters` with `Meters` as the `RHS`, as shown in Listing 19-23.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -223,7 +223,7 @@ When calling methods with the same name, we need to tell Rust which one we want
 to use. Consider the code in Listing 19-24 where we’ve defined two traits,
 `Pilot` and `Wizard`, that both have a method called `fly`. We then implement
 both traits on a type `Human` that already has a method named `fly` implemented
-on it. Each `fly` method does something different:
+on it. Each `fly` method does something different.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -262,7 +262,7 @@ and implementations of those traits on the `Human` type in addition to a `fly`
 method on `Human` directly</span>
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
-the method that is directly implemented on the type, as shown in Listing 19-25:
+the method that is directly implemented on the type, as shown in Listing 19-25.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -309,7 +309,7 @@ called the `fly` method implemented on `Human` directly.
 
 To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
 we need to use more explicit syntax to specify which `fly` method we mean.
-Listing 19-26 demonstrates this syntax:
+Listing 19-26 demonstrates this syntax.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -375,7 +375,7 @@ parameter. When two types in the same scope implement that trait, Rust can’t
 figure out which type we mean unless we use *fully qualified syntax*. For
 example, the `Animal` trait in Listing 19-27 has the associated function
 `baby_name`, the implementation of `Animal` for the struct `Dog`, and the
-associated function `baby_name` defined on `Dog` directly:
+associated function `baby_name` defined on `Dog` directly.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -425,7 +425,7 @@ This output isn’t what we wanted. We want to call the `baby_name` function tha
 is part of the `Animal` trait that we implemented on `Dog` so the code prints
 `A baby dog is called a puppy`. The technique of specifying the trait name that
 we used in Listing 19-26 doesn’t help here; if we change `main` to the code in
-Listing 19-28, we’ll get a compilation error:
+Listing 19-28, we’ll get a compilation error.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -456,7 +456,7 @@ error[E0283]: type annotations required: cannot resolve `_: Animal`
 To disambiguate and tell Rust that we want to use the implementation of
 `Animal` for `Dog`, we need to use *fully qualified syntax*, which is the most
 specific we can be when calling a function. Listing 19-29 demonstrates how to
-use fully qualified syntax:
+use fully qualified syntax.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -561,7 +561,7 @@ requires the functionality from `Display`</span>
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
 can use the `to_string` function that is automatically implemented for any type
-that implements `Display`. If we tried to use `to_string` without adding`:
+that implements `Display`. If we tried to use `to_string` without adding `:
 Display` after the trait name, we’d get an error saying that no method named
 `to_string` was found for the type `&Self` in the current scope.
 
@@ -588,7 +588,7 @@ error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
    |
 20 | impl OutlinePrint for Point {}
    |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
-   try using `:?` instead if you are using a format string
+try using `:?` instead if you are using a format string
    |
    = help: the trait `std::fmt::Display` is not implemented for `Point`
 ```
@@ -635,7 +635,7 @@ As an example, let’s say we want to implement `Display` on `Vec`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
 `Vec` type are defined outside our crate. We can make a `Wrapper` struct that
 holds an instance of `Vec`; then we can implement `Display` on `Wrapper` and
-use the `Vec` value, as shown in Listing 19-31:
+use the `Vec` value, as shown in Listing 19-31.
 
 <span class="filename">Filename: src/main.rs</span>
 

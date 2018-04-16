@@ -12,7 +12,7 @@ using function pointers to allow us to use functions as arguments to other
 functions. Functions coerce to the type `fn` (with a lowercase f), not to be
 confused with the `Fn` closure trait. The `fn` type is called a function
 pointer. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-35:
+similar to that of closures, as shown in Listing 19-35.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -130,7 +130,8 @@ fn returns_closure() -> Box<Fn(i32) -> i32> {
 ```
 
 This code will compile just fine. For more about trait objects, refer to the
-“Trait Objects” section in Chapter 17.
+“Using Trait Objects That Allow for Values of Different Types” section in
+Chapter 17.
 
 ## Summary
 
@@ -143,4 +144,3 @@ you to solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
-
