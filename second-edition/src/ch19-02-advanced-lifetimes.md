@@ -271,8 +271,8 @@ referenced data in `Context` with lifetime `'s` needs to be constrained to
 guarantee that it lives longer than the reference with lifetime `'c`. If `'s`
 is not longer than `'c`, the reference to `Context` might not be valid.
 
-Now we get to the point of this section: the Rust feature *lifetime*
-*subtyping* specifies that one lifetime parameter lives at least as long as
+Now we get to the point of this section: the Rust feature *lifetime
+subtyping* specifies that one lifetime parameter lives at least as long as
 another one. In the angle brackets where we declare lifetime parameters, we can
 declare a lifetime `'a` as usual and declare a lifetime `'b` that lives at
 least as long as `'a` by declaring `'b` using the syntax `'b: 'a`.
@@ -371,7 +371,7 @@ long as `'a`.
 We could solve this problem in a different way, as shown in the definition of a
 `StaticRef` struct in Listing 19-18, by adding the `'static` lifetime bound on
 `T`. This means if `T` contains any references, they must have the `'static`
-lifetime:
+lifetime.
 
 ```rust
 struct StaticRef<T: 'static>(&'static T);
