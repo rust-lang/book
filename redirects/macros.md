@@ -16,12 +16,11 @@ fn main() {
 
 ---
 
-This chapter does not exist yet in [the second edition][2].
-You can check out other resources that describe macros.
+Here are the relevant sections in the new and old books:
 
-* **[Rust By Example: Macros][3]**
+* **[In the second edition: Appendix D — Macros][2]**
+* [Rust By Example: Macros][3]
 * [In the Rust Reference: Ch 3.1 — Macros by Example][4]
-* [In the second edition: (future) Appendix D — Macros][2]
 * <small>[In the first edition: Ch 3.34 — Macros][1]</small>
 
 
