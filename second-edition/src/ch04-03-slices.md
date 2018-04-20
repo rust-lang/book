@@ -307,12 +307,16 @@ improvement on `first_word`, and that’s its signature:
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the following line instead because it
-allows us to use the same function on both `String`s and `&str`s:
+A more experienced Rustacean would write the signature shown in Listing 4-9
+instead because it allows us to use the same function on both `String`s and
+`&str`s.
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
+
+<span class="caption">Listing 4-9: Improving the first_word function by using a
+string slice for the type of the s parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the entire `String`. Defining a function to take a string

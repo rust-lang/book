@@ -25,7 +25,7 @@ We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. To do this, we
 need a summary from each type, and we need to request that summary by calling a
 `summarize` method on an instance. Listing 10-12 shows the definition of a
-`Summary` trait that expresses this behavior:
+`Summary` trait that expresses this behavior.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -39,7 +39,7 @@ pub trait Summary {
 behavior provided by a `summarize` method</span>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. Inside the curly brackets we declare the
+which is `Summary` in this case. Inside the curly brackets, we declare the
 method signatures that describe the behaviors of the types that implement this
 trait, which in this case is `fn summarize(&self) -> String`.
 
@@ -127,14 +127,14 @@ know, people`.
 
 Note that because we defined the `Summary` trait and the `NewsArticle` and
 `Tweet` types in the same *lib.rs* in Listing 10-13, they’re all in the same
-scope. Let’s say this *lib.rs* is for a crate we’ve called `aggregator`, and
+scope. Let’s say this *lib.rs* is for a crate we’ve called `aggregator` and
 someone else wants to use our crate’s functionality to implement the `Summary`
 trait on a struct defined within their library’s scope. They would need to
 import the trait into their scope first. They would do so by specifying `use
-aggregator::Summary;`, which then enables them to implement `Summary` for their
-type. The `Summary` trait would also need to be a public trait for another
-crate to implement it, which it is because we put the `pub` keyword before
-`trait` in Listing 10-12.
+aggregator::Summary;`, which then would enable them to implement `Summary` for
+their type. The `Summary` trait would also need to be a public trait for
+another crate to implement it, which it is because we put the `pub` keyword
+before `trait` in Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
 trait on a type only if either the trait or the type is local to our crate.
@@ -162,8 +162,8 @@ Then, as we implement the trait on a particular type, we can keep or override
 each method’s default behavior.
 
 Listing 10-14 shows how to specify a default string for the `summarize` method
-of the `Summary` trait instead of only defining the method signature, like we
-did in Listing 10-12:
+of the `Summary` trait instead of only defining the method signature, as we did
+in Listing 10-12.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -291,7 +291,7 @@ the `summarize` method, we can use `T: Summary + Display` to say `T` can be any
 type that implements `Summary` and `Display`.
 
 However, there are downsides to using too many trait bounds. Each generic has
-its own trait bounds; so functions with multiple generic type parameters can
+its own trait bounds, so functions with multiple generic type parameters can
 have lots of trait bound information between a function’s name and its
 parameter list, making the function signature hard to read. For this reason,
 Rust has alternate syntax for specifying trait bounds inside a `where` clause
@@ -379,7 +379,7 @@ To call this code with only those types that implement the `Copy` trait, we can
 add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
 a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into the function implement the `PartialOrd`
-*and* `Copy` traits, like `i32` and `char` do:
+*and* `Copy` traits, like `i32` and `char` do.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -434,7 +434,7 @@ we can implement methods conditionally for types that implement the specified
 traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
 `new` function. But `Pair<T>` only implements the `cmp_display` method if its
 inner type `T` implements the `PartialOrd` trait that enables comparison *and*
-the `Display` trait that enables printing:
+the `Display` trait that enables printing.
 
 ```rust
 use std::fmt::Display;
