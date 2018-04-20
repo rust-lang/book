@@ -1340,12 +1340,8 @@ There's one little nit left: the `Box<Error>` type is *opaque*. If we
 return a `Box<Error>` to the caller, the caller can't (easily) inspect
 underlying error type. The situation is certainly better than `String`
 because the caller can call methods like
-[`description`](../../std/error/trait.Error.html#tymethod.description)
-and [`cause`](../../std/error/trait.Error.html#method.cause), but the
-limitation remains: `Box<Error>` is opaque. (N.B. This isn't entirely
-true because Rust does have runtime reflection, which is useful in
-some scenarios that are [beyond the scope of this
-section](https://crates.io/crates/error).)
+[`cause`](../../std/error/trait.Error.html#method.cause), but the
+limitation remains: `Box<Error>` is opaque.
 
 It's time to revisit our custom `CliError` type and tie everything together.
 
