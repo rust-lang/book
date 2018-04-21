@@ -226,7 +226,7 @@ fn main() {
 }
 ```
 
-When we try to run this code, we’ll get an error. The `if` and `else` arms have
+When we try to compile this code, we’ll get an error. The `if` and `else` arms have
 value types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:
 
