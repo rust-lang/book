@@ -133,24 +133,22 @@ The value of y is: 6
 Because we called the function with `5` as the value for  `x` and `6` is passed
 as the value for `y`, the two strings are printed with these values.
 
-### Function Bodies
+### Function Bodies Contain Statements and Expressions
 
 Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we’ve only covered functions without an ending expression,
-but you have seen an expression as part of statements. Because Rust is an
+but you have seen an expression as part of a statement. Because Rust is an
 expression-based language, this is an important distinction to understand.
 Other languages don’t have the same distinctions, so let’s look at what
 statements and expressions are and how their differences affect the bodies of
 functions.
-
-### Statements and Expressions
 
 We’ve actually already used statements and expressions. *Statements* are
 instructions that perform some action and do not return a value. *Expressions*
 evaluate to a resulting value. Let’s look at some examples.
 
 Creating a variable and assigning a value to it with the `let` keyword is a
-statement. In Listing 3-1, `let y = 6;` is a statement:
+statement. In Listing 3-1, `let y = 6;` is a statement.
 
 <span class="filename">Filename: src/main.rs</span>
 

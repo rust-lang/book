@@ -3,8 +3,8 @@
 Let’s jump into Rust by working through a hands-on project together! This
 chapter introduces you to a few common Rust concepts by showing you how to use
 them in a real program. You’ll learn about `let`, `match`, methods, associated
-functions, using external crates, and more! The following chapters will explore
-these ideas in more detail. In this chapter, you’ll practice the fundamentals.
+functions, external crates, and more! The following chapters will explore these
+ideas in more detail. In this chapter, you’ll practice the fundamentals.
 
 We’ll implement a classic beginner programming problem: a guessing game. Here’s
 how it works: the program will generate a random integer between 1 and 100. It
@@ -155,8 +155,8 @@ line. Notice that this is a `let` statement, which is used to create a
 let foo = bar;
 ```
 
-This line creates a new variable named `foo` and bind it to the value `bar`. In
-Rust, variables are immutable by default. We’ll be discussing this concept in
+This line creates a new variable named `foo` and binds it to the value `bar`.
+In Rust, variables are immutable by default. We’ll discuss this concept in
 detail in the “Variables and Mutability” section in Chapter 3. The following
 example shows how to use `mut` before the variable name to make a variable
 mutable:
@@ -170,12 +170,12 @@ let mut bar = 5; // mutable
 > line. Rust ignores everything in comments, which are discussed in more detail
 > in Chapter 3.
 
-Now you know that `let mut guess` will introduce a mutable variable named
-`guess`. On the other side of the equal sign (`=`) is the value that `guess` is
-bound to, which is the result of calling `String::new`, a function that returns
-a new instance of a `String`. [`String`][string]<!-- ignore --> is a string
-type provided by the standard library that is a growable, UTF-8 encoded bit of
-text.
+Let's return to the guessing game program. You now know that `let mut guess`
+will introduce a mutable variable named `guess`. On the other side of the equal
+sign (`=`) is the value that `guess` is bound to, which is the result of
+calling `String::new`, a function that returns a new instance of a `String`.
+[`String`][string]<!-- ignore --> is a string type provided by the standard
+library that is a growable, UTF-8 encoded bit of text.
 
 [string]: ../../std/string/struct.String.html
 
@@ -272,7 +272,7 @@ The `Err` variant means the operation failed, and `Err` contains information
 about how or why the operation failed.
 
 The purpose of these `Result` types is to encode error-handling information.
-Values of the `Result` type, like any type, have methods defined on them. An
+Values of the `Result` type, like values of any type, have methods defined on them. An
 instance of `io::Result` has an [`expect` method][expect]<!-- ignore --> that
 you can call. If this instance of `io::Result` is an `Err` value, `expect` will
 cause the program to crash and display the message that you passed as an
@@ -303,7 +303,7 @@ Rust warns that you haven’t used the `Result` value returned from `read_line`,
 indicating that the program hasn’t handled a possible error.
 
 The right way to suppress the warning is to actually write error handling, but
-since you just want to crash this program when a problem occurs, you can use
+because you just want to crash this program when a problem occurs, you can use
 `expect`. You’ll learn about recovering from errors in Chapter 9.
 
 ### Printing Values with `println!` Placeholders
@@ -392,7 +392,7 @@ version 0.3.14.”
 [semver]: http://semver.org
 
 Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2:
+Listing 2-2.
 
 ```text
 $ cargo build
@@ -450,9 +450,8 @@ your part of the code.
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
-happens if next week version `v0.3.15` of the `rand` crate comes out and
-contains an important bug fix but also contains a regression that will break
-your code?
+happens if next week version 0.3.15 of the `rand` crate comes out and contains
+an important bug fix but also contains a regression that will break your code?
 
 The answer to this problem is the *Cargo.lock* file, which was created the
 first time you ran `cargo build` and is now in your *guessing_game* directory.
@@ -510,7 +509,7 @@ from a number of packages.
 ### Generating a Random Number
 
 Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
-`rand`. The next step is to update *src/main.rs*, as shown in Listing 2-3:
+`rand`. The next step is to update *src/main.rs*, as shown in Listing 2-3.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -612,6 +611,7 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
+
     // ---snip---
 
     println!("You guessed: {}", guess);
@@ -633,9 +633,8 @@ The first new bit here is another `use` statement, bringing a type called
 `Greater`, and `Equal`. These are the three outcomes that are possible when you
 compare two values.
 
-Then we add five new lines at the bottom that use the `Ordering` type.
-
-The `cmp` method compares two values and can be called on anything that can be
+Then we add five new lines at the bottom that use the `Ordering` type. The
+`cmp` method compares two values and can be called on anything that can be
 compared. It takes a reference to whatever you want to compare with: here it’s
 comparing the `guess` to the `secret_number`. Then it returns a variant of the
 `Ordering` enum we brought into scope with the `use` statement. We use a
@@ -733,7 +732,7 @@ a variable named `guess`? It does, but Rust allows us to *shadow* the previous
 value of `guess` with a new one. This feature is often used in situations in
 which you want to convert a value from one type to another type. Shadowing lets
 us reuse the `guess` variable name rather than forcing us to create two unique
-variables, like `guess_str` and `guess` for example. (Chapter 3 covers
+variables, such as `guess_str` and `guess`, for example. (Chapter 3 covers
 shadowing in more detail.)
 
 We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
@@ -778,7 +777,7 @@ Let’s run the program now!
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running `target/guessing_game`
+     Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 58
 Please input your guess.
@@ -838,7 +837,7 @@ shown here:
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
-     Running `target/guessing_game`
+     Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 59
 Please input your guess.
@@ -894,14 +893,28 @@ exiting the program, because the loop is the last part of `main`.
 To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`:
+is converted from a `String` to a `u32`, as shown in Listing 2-5.
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+// --snip--
+
+io::stdin().read_line(&mut guess)
+    .expect("Failed to read line");
+
 let guess: u32 = match guess.trim().parse() {
     Ok(num) => num,
     Err(_) => continue,
 };
+
+println!("You guessed: {}", guess);
+
+// --snip--
 ```
+
+<span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
+another guess instead of crashing the program</span>
 
 Switching from an `expect` call to a `match` expression is how you generally
 move from crashing on an error to handling the error. Remember that `parse`
@@ -921,16 +934,16 @@ does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
 catchall value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
-execute the second arm’s code, `continue`, which means to go to the next
-iteration of the `loop` and ask for another guess. So effectively, the program
-ignores all errors that `parse` might encounter!
+execute the second arm’s code, `continue`, which tells the program to go to the
+next iteration of the `loop` and ask for another guess. So effectively, the
+program ignores all errors that `parse` might encounter!
 
 Now everything in the program should work as expected. Let’s try it:
 
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-     Running `target/guessing_game`
+     Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 61
 Please input your guess.
@@ -952,7 +965,7 @@ You win!
 Awesome! With one tiny final tweak, we will finish the guessing game. Recall
 that the program is still printing the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-5 shows the final code:
+secret number. Listing 2-6 shows the final code.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -995,16 +1008,16 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 2-5: Complete guessing game code</span>
+<span class="caption">Listing 2-6: Complete guessing game code</span>
 
 ## Summary
 
-At this point, you’ve successfully built the guessing game! Congratulations!
+At this point, you’ve successfully built the guessing game. Congratulations!
 
 This project was a hands-on way to introduce you to many new Rust concepts:
-`let`, `match`, methods, associated functions, the use of external crates, and
-more. In the next few chapters, you’ll learn about these concepts in more
-detail. Chapter 3 covers concepts that most programming languages have, such as
+`let`, `match`, methods, associated functions, external crates, and more. In
+the next few chapters, you’ll learn about these concepts in more detail.
+Chapter 3 covers concepts that most programming languages have, such as
 variables, data types, and functions, and shows how to use them in Rust.
 Chapter 4 explores ownership, a feature that makes Rust different from other
 languages. Chapter 5 discusses structs and method syntax, and Chapter 6

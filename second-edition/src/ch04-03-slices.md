@@ -18,7 +18,7 @@ fn first_word(s: &String) -> ?
 This function, `first_word`, has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that, as shown in Listing 4-7:
+end of the word. Let’s try that, as shown in Listing 4-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -75,6 +75,7 @@ Otherwise, we return the length of the string by using `s.len()`:
         return i;
     }
 }
+
 s.len()
 ```
 
@@ -83,7 +84,7 @@ string, but there’s a problem. We’re returning a `usize` on its own, but it�
 only a meaningful number in the context of the `&String`. In other words,
 because it’s a separate value from the `String`, there’s no guarantee that it
 will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7:
+uses the `first_word` function from Listing 4-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -105,7 +106,7 @@ fn main() {
 
     let word = first_word(&s); // word will get the value 5
 
-    s.clear(); // This empties the String, making it equal to ""
+    s.clear(); // this empties the String, making it equal to ""
 
     // word still has the value 5 here, but there's no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
@@ -158,7 +159,7 @@ in the slice and `ending_index` is one more than the last position in the
 slice. Internally, the slice data structure stores the starting position and
 the length of the slice, which corresponds to `ending_index` minus
 `starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
+a slice that contains a pointer to the 6th byte of `s` with a length value of 5.
 
 Figure 4-6 shows this in a diagram.
 
@@ -205,8 +206,8 @@ let slice = &s[..];
 > boundaries. If you attempt to create a string slice in the middle of a
 > multibyte character, your program will exit with an error. For the purposes
 > of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the “Strings” section of
-> Chapter 8.
+> more thorough discussion of UTF-8 handling is in the “Storing UTF-8 Encoded
+> Text with Strings” section of Chapter 8.
 
 With all this information in mind, let’s rewrite `first_word` to return a
 slice. The type that signifies “string slice” is written as `&str`:
@@ -250,7 +251,7 @@ logically incorrect but didn’t show any immediate errors. The problems would
 show up later if we kept trying to use the first word index with an emptied
 string. Slices make this bug impossible and let us know we have a problem with
 our code much sooner. Using the slice version of `first_word` will throw a
-compile time error:
+compile-time error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -260,7 +261,7 @@ fn main() {
 
     let word = first_word(&s);
 
-    s.clear(); // Error!
+    s.clear(); // error!
 }
 ```
 
@@ -273,7 +274,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 4 |     let word = first_word(&s);
   |                            - immutable borrow occurs here
 5 |
-6 |     s.clear(); // Error!
+6 |     s.clear(); // error!
   |     ^ mutable borrow occurs here
 7 | }
   | - immutable borrow ends here
@@ -300,23 +301,23 @@ immutable reference.
 
 #### String Slices as Parameters
 
-Knowing that you can take slices of literals and `String`s leads us to one more
-improvement on `first_word`, and that’s its signature:
+Knowing that you can take slices of literals and `String` values leads us to
+one more improvement on `first_word`, and that’s its signature:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
 A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `String`s and
-`&str`s.
+instead because it allows us to use the same function on both `String` values
+and `&str` values.
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-<span class="caption">Listing 4-9: Improving the first_word function by using a
-string slice for the type of the s parameter</span>
+<span class="caption">Listing 4-9: Improving the `first_word` function by using
+a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the entire `String`. Defining a function to take a string

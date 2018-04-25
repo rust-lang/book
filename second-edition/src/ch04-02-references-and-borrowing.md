@@ -134,11 +134,9 @@ First, we had to change `s` to be `mut`. Then we had to create a mutable
 reference with `&mut s` and accept a mutable reference with `some_string: &mut
 String`.
 
-But mutable references have one big restriction: you can only have one mutable
+But mutable references have one big restriction: you can have only one mutable
 reference to a particular piece of data in a particular scope. This code will
 fail:
-
-<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -260,7 +258,7 @@ Here’s the error:
 
 ```text
 error[E0106]: missing lifetime specifier
- --> dangle.rs:5:16
+ --> main.rs:5:16
   |
 5 | fn dangle() -> &String {
   |                ^ expected lifetime parameter
@@ -270,10 +268,9 @@ error[E0106]: missing lifetime specifier
   = help: consider giving it a 'static lifetime
 ```
 
-This error message refers to a feature we haven’t covered yet: *lifetimes*.
-We’ll discuss lifetimes in detail in Chapter 10. But, if you disregard the
-parts about lifetimes, the message does contain the key to why this code is a
-problem:
+This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
+discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
+about lifetimes, the message does contain the key to why this code is a problem:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
@@ -282,6 +279,8 @@ for it to be borrowed from.
 
 Let’s take a closer look at exactly what’s happening at each stage of our
 `dangle` code:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn dangle() -> &String { // dangle returns a reference to a String
@@ -315,8 +314,8 @@ deallocated.
 
 Let’s recap what we’ve discussed about references:
 
-* At any given time, you can have *either* (but not both of) one mutable
-  reference or any number of immutable references.
+* At any given time, you can have *either* one mutable reference *or* any
+  number of immutable references.
 * References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.

@@ -74,7 +74,8 @@ condition was false
 ```
 
 It’s also worth noting that the condition in this code *must* be a `bool`. If
-the condition isn’t a `bool`, we’ll get an error. For example:
+the condition isn’t a `bool`, we’ll get an error. For example, try running the
+following code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -171,7 +172,7 @@ Rust branching construct called `match` for these cases.
 #### Using `if` in a `let` Statement
 
 Because `if` is an expression, we can use it on the right side of a `let`
-statement, as in Listing 3-2:
+statement, as in Listing 3-2.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -226,9 +227,9 @@ fn main() {
 }
 ```
 
-When we try to compile this code, we’ll get an error. The `if` and `else` arms have
-value types that are incompatible, and Rust indicates exactly where to find the
-problem in the program:
+When we try to compile this code, we’ll get an error. The `if` and `else` arms
+have value types that are incompatible, and Rust indicates exactly where to
+find the problem in the program:
 
 ```text
 error[E0308]: if and else have incompatible types
@@ -306,8 +307,8 @@ depending on where the code was in the loop when it received the halt signal.
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 You can place the `break` keyword within the loop to tell the program when to
 stop executing the loop. Recall that we did this in the guessing game in the
-“Quitting After a Correct Guess” section of Chapter 2 to exit the
-program when the user won the game by guessing the correct number.
+“Quitting After a Correct Guess” section of Chapter 2 to exit the program when
+the user won the game by guessing the correct number.
 
 #### Conditional Loops with `while`
 
@@ -348,7 +349,7 @@ true, the code runs; otherwise, it exits the loop.
 #### Looping Through a Collection with `for`
 
 You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example, let’s look at Listing 3-4:
+such as an array. For example, let’s look at Listing 3-4.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -395,7 +396,7 @@ code to perform the conditional check on every element on every iteration
 through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this code in Listing 3-5:
+for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -456,7 +457,7 @@ programs to do the following:
 * Convert temperatures between Fahrenheit and Celsius.
 * Generate the nth Fibonacci number.
 * Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-taking advantage of the repetition in the song.
+  taking advantage of the repetition in the song.
 
 When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
 commonly exist in other programming languages: ownership.

@@ -44,9 +44,9 @@ Even though compiler errors can be frustrating, they only mean your program
 isn’t safely doing what you want it to do yet; they do *not* mean that you’re
 not a good programmer! Experienced Rustaceans still get compiler errors.
 
-The error indicates that the cause of the error is that you `cannot assign twice
-to immutable variable x`, because you tried to assign a second value to the
-immutable `x` variable.
+The error message indicates that the cause of the error is that you `cannot
+assign twice to immutable variable x`, because you tried to assign a second
+value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
 value that we previously designated as immutable because this very situation
@@ -126,8 +126,8 @@ not the result of a function call or any other value that could only be
 computed at runtime.
 
 Here’s an example of a constant declaration where the constant’s name is
-`MAX_POINTS` and its value is set to 100,000. (Rust’s constant naming
-convention is to use all uppercase with underscores between words):
+`MAX_POINTS` and its value is set to 100,000. (Rust’s naming convention for
+constants is to use all uppercase with underscores between words):
 
 ```rust
 const MAX_POINTS: u32 = 100_000;
@@ -146,13 +146,13 @@ hardcoded value needed to be updated in the future.
 
 ### Shadowing
 
-As you saw in the “Comparing the Guess to the Secret Number” section in Chapter
-2, you can declare a new variable with the same name as a previous variable,
-and the new variable shadows the previous variable. Rustaceans say that the
-first variable is *shadowed* by the second, which means that the second
-variable’s value is what appears when the variable is used. We can shadow a
-variable by using the same variable’s name and repeating the use of the `let`
-keyword as follows:
+As you saw in the guessing game tutorial in the “Comparing the Guess to the
+Secret Number” section in Chapter 2, you can declare a new variable with the
+same name as a previous variable, and the new variable shadows the previous
+variable. Rustaceans say that the first variable is *shadowed* by the second,
+which means that the second variable’s value is what appears when the variable
+is used. We can shadow a variable by using the same variable’s name and
+repeating the use of the `let` keyword as follows:
 
 <span class="filename">Filename: src/main.rs</span>
 
