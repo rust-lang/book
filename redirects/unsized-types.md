@@ -21,4 +21,4 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: first-edition/unsized-types.html
-[2]: second-edition/ch19-04-advanced-types.html#dynamically-sized-types--sized
+[2]: second-edition/ch19-04-advanced-types.html#dynamically-sized-types-and-sized
