@@ -1,7 +1,13 @@
 # Introduction
 
-Welcome to *The Rust Programming Language*, an introductory book about Rust.
+> Note: This edition of the book is the same as [The Rust Programming
+> Language][nsprust] available in print and ebook format from [No Starch
+> Press][nsp].
 
+[nsprust]: https://nostarch.com/rust
+[nsp]: https://nostarch.com/
+
+Welcome to *The Rust Programming Language*, an introductory book about Rust.
 The Rust programming language helps you write faster, more reliable software.
 High-level ergonomics and low-level control are often at odds in programming
 language design; Rust challenges that conflict. Through balancing powerful
