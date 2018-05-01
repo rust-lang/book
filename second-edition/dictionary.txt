@@ -119,6 +119,7 @@ disambiguating
 DivAssign
 DraftPost
 DSTs
+ebook
 ebooks
 Edsger
 egular
@@ -290,6 +291,7 @@ nondeterministic
 nonequality
 nongeneric
 NotFound
+nsprust
 null's
 OCaml
 offsetof
