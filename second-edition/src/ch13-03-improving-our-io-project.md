@@ -12,7 +12,7 @@ In Listing 12-6, we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
 values, allowing the `Config` struct to own those values. In Listing 13-24,
 we’ve reproduced the implementation of the `Config::new` function as it was in
-Listing 12-23 at the end of Chapter 12:
+Listing 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -34,7 +34,7 @@ impl Config {
 ```
 
 <span class="caption">Listing 13-24: Reproduction of the `Config::new` function
-from the end of Chapter 12</span>
+from Listing 12-23</span>
 
 At the time, we said not to worry about the inefficient `clone` calls because
 we would remove them in the future. Well, that time is now!
@@ -74,8 +74,8 @@ fn main() {
 ```
 
 We’ll change the start of the `main` function that we had in Listing 12-24 at
-the end of Chapter 12 to the code in Listing 13-25. This won’t compile yet
-until we update `Config::new` as well:
+to the code in Listing 13-25. This won’t compile until we update `Config::new`
+as well.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -100,8 +100,8 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::new`. In your I/O project’s
 *src/lib.rs* file, let’s change the signature of `Config::new` to look like
-Listing 13-26. This still won’t compile yet because we need to update the
-function body:
+Listing 13-26. This still won’t compile because we need to update the function
+body.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -131,6 +131,7 @@ Listing 12-23 to use the `next` method:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
 # use std::env;
 #
 # struct Config {
@@ -165,7 +166,7 @@ iterator methods</span>
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
-`next` and do nothing with the return value. Second, we call `next` on the
+`next` and do nothing with the return value. Second, we call `next` to get the
 value we want to put in the `query` field of `Config`. If `next` returns a
 `Some`, we use a `match` to extract the value. If it returns `None`, it means
 not enough arguments were given and we return early with an `Err` value. We do
@@ -174,8 +175,7 @@ the same thing for the `filename` value.
 ### Making Code Clearer with Iterator Adaptors
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in Listing 13-28 as it was in Listing 12-19
-at the end of Chapter 12:
+project, which is reproduced here in Listing 13-28 as it was in Listing 12-19:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -194,15 +194,14 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 ```
 
 <span class="caption">Listing 13-28: The implementation of the `search`
-function from Chapter 12</span>
+function from Listing 12-19</span>
 
 We can write this code in a more concise way using iterator adaptor methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
-make code clearer. Removing the mutable state might make it easier for us to
-make a future enhancement to make searching happen in parallel, because we
-wouldn’t have to manage concurrent access to the `results` vector. Listing
-13-29 shows this change:
+make code clearer. Removing the mutable state might enable a future enhancement
+to make searching happen in parallel, because we wouldn’t have to manage
+concurrent access to the `results` vector. Listing 13-29 shows this change:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -219,8 +218,8 @@ implementation of the `search` function</span>
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
-13-19, we can use the `filter` adaptor to keep only the lines that
-`line.contains(query)` returns true for. We then collect the matching lines
+13-19, this code uses the `filter` adaptor to keep only the lines that
+`line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
 well.

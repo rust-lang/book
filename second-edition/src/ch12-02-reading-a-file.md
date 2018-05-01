@@ -22,8 +22,8 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-<span class="caption">Listing 12-3: A poem by Emily Dickinson will make a good
-test case.</span>
+<span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test
+case</span>
 
 With the text in place, edit *src/main.rs* and add code to open the file, as
 shown in Listing 12-4:
@@ -64,8 +64,8 @@ standard library: we need `std::fs::File` to handle files, and
 file I/O. In the same way that Rust has a general prelude that brings certain
 types and functions into scope automatically, the `std::io` module has its own
 prelude of common types and functions you’ll need when working with I/O. Unlike
-the default prelude, we must explicitly add a `use` statement for the prelude
-from `std::io`.
+with the default prelude, we must explicitly add a `use` statement for the
+prelude from `std::io`.
 
 In `main`, we’ve added three statements: first, we get a mutable handle to the
 file by calling the `File::open` function and passing it the value of the
@@ -101,11 +101,11 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Great! The code read and then printed the content of the file. But the code has
-a few flaws. The `main` function has multiple responsibilities: generally,
+Great! The code read and then printed the contents of the file. But the code
+has a few flaws. The `main` function has multiple responsibilities: generally,
 functions are clearer and easier to maintain if each function is responsible
 for only one idea. The other problem is that we’re not handling errors as well
-as we could be. The program is still small so these flaws aren’t a big problem,
+as we could. The program is still small, so these flaws aren’t a big problem,
 but as the program grows, it will be harder to fix them cleanly. It’s good
 practice to begin refactoring early on when developing a program, because it’s
 much easier to refactor smaller amounts of code. We’ll do that next.

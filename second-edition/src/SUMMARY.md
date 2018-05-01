@@ -1,10 +1,14 @@
 # The Rust Programming Language
 
+[Foreword](foreword.md)
+[Introduction](ch00-00-introduction.md)
+
 ## Getting started
 
-- [Introduction](ch01-00-introduction.md)
+- [Getting Started](ch01-00-getting-started.md)
     - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
+    - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
 - [추리 게임 튜토리얼](ch02-00-guessing-game-tutorial.md)
 
@@ -57,24 +61,24 @@
     - [테스트 실행하기](ch11-02-running-tests.md)
     - [테스트 조직화](ch11-03-test-organization.md)
 
-- [An I/O Project](ch12-00-an-io-project.md)
+- [An I/O Project: Building a Command Line Program](ch12-00-an-io-project.md)
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
     - [Reading a File](ch12-02-reading-a-file.md)
-    - [Improving Error Handling and Modularity](ch12-03-improving-error-handling-and-modularity.md)
-    - [Testing the Library's Functionality](ch12-04-testing-the-librarys-functionality.md)
+    - [Refactoring to Improve Modularity and Error Handling](ch12-03-improving-error-handling-and-modularity.md)
+    - [Developing the Library’s Functionality with Test Driven Development](ch12-04-testing-the-librarys-functionality.md)
     - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
-    - [Writing to `stderr` instead of `stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
+    - [Writing Error Messages to Standard Error Instead of Standard Output](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
 ## Thinking in Rust
 
-- [Functional Language Features in Rust](ch13-00-functional-features.md)
-    - [Closures](ch13-01-closures.md)
-    - [Iterators](ch13-02-iterators.md)
-    - [Improving our I/O Project](ch13-03-improving-our-io-project.md)
-    - [Performance](ch13-04-performance.md)
+- [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)
+    - [Closures: Anonymous Functions that Can Capture Their Environment](ch13-01-closures.md)
+    - [Processing a Series of Items with Iterators](ch13-02-iterators.md)
+    - [Improving Our I/O Project](ch13-03-improving-our-io-project.md)
+    - [Comparing Performance: Loops vs. Iterators](ch13-04-performance.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
-    - [Release Profiles](ch14-01-release-profiles.md)
+    - [Customizing Builds with Release Profiles](ch14-01-release-profiles.md)
     - [Publishing a Crate to Crates.io](ch14-02-publishing-to-crates-io.md)
     - [Cargo Workspaces](ch14-03-cargo-workspaces.md)
     - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
@@ -94,10 +98,10 @@
     - [Shared State](ch16-03-shared-state.md)
     - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Is Rust an Object-Oriented Programming Language?](ch17-00-oop.md)
-    - [What Does Object-Oriented Mean?](ch17-01-what-is-oo.md)
-    - [Trait Objects for Using Values of Different Types](ch17-02-trait-objects.md)
-    - [Object-Oriented Design Pattern Implementations](ch17-03-oo-design-patterns.md)
+- [Object Oriented Programming Features of Rust](ch17-00-oop.md)
+    - [Characteristics of Object-Oriented Languages](ch17-01-what-is-oo.md)
+    - [Using Trait Objects that Allow for Values of Different Types](ch17-02-trait-objects.md)
+    - [Implementing an Object-Oriented Design Pattern](ch17-03-oo-design-patterns.md)
 
 ## Advanced Topics
 
@@ -115,17 +119,14 @@
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
-    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
-    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
-    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
-    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
-    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
+    - [Turning our Single Threaded Server into a Multithreaded Server](ch20-02-multithreaded.md)
+    - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
-    - [B - Operators](appendix-02-operators.md)
-    - [C - Derivable Traits](_.md)
-    - [D - Nightly Rust](_.md)
-    - [E - Macros](_.md)
-    - [F - Translations](_.md)
-    - [G - Newest Features](appendix-07-newest-features.md)
+    - [B - Operators and Symbols](appendix-02-operators.md)
+    - [C - Derivable Traits](appendix-03-derivable-traits.md)
+    - [D - Macros](appendix-04-macros.md)
+    - [E - Translations](appendix-05-translation.md)
+    - [F - Newest Features](appendix-06-newest-features.md)
+    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)

@@ -1,4 +1,4 @@
-## Developing the Library’s Functionality with Test Driven Development
+## Developing the Library’s Functionality with Test-Driven Development
 
 Now that we’ve extracted the logic into *src/lib.rs* and left the argument
 collecting and error handling in *src/main.rs*, it’s much easier to write tests
@@ -8,13 +8,13 @@ from the command line. Feel free to write some tests for the functionality in
 the `Config::new` and `run` functions on your own.
 
 In this section, we’ll add the searching logic to the `minigrep` program by
-using the Test Driven Development (TDD) process. This software development
+using the Test-driven development (TDD) process. This software development
 technique follows these steps:
 
-1. Write a test that fails, and run it to make sure it fails for the reason you
-   expected.
+1. Write a test that fails and run it to make sure it fails for the reason you
+   expect.
 2. Write or modify just enough code to make the new test pass.
-3. Refactor the code you just added or changed, and make sure the tests
+3. Refactor the code you just added or changed and make sure the tests
    continue to pass.
 4. Repeat from step 1!
 
@@ -34,8 +34,8 @@ Because we don’t need them anymore, let’s remove the `println!` statements f
 Then, in *src/lib.rs*, we’ll add a `test` module with a test function, as we
 did in Chapter 11. The test function specifies the behavior we want the
 `search` function to have: it will take a query and the text to search for the
-query in, and will return only the lines from the text that contain the query.
-Listing 12-15 shows this test:
+query in, and it will return only the lines from the text that contain the
+query. Listing 12-15 shows this test, which won’t compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -67,8 +67,8 @@ Pick three.";
 <span class="caption">Listing 12-15: Creating a failing test for the `search`
 function we wish we had</span>
 
-This test searches for the string “duct.” The text we’re searching is three
-lines, only one of which contains “duct.” We assert that the value returned
+This test searches for the string `"duct"`. The text we’re searching is three
+lines, only one of which contains `"duct"`. We assert that the value returned
 from the `search` function contains only the line we expect.
 
 We aren’t able to run this test and watch it fail because the test doesn’t even
@@ -76,7 +76,7 @@ compile: the `search` function doesn’t exist yet! So now we’ll add just enou
 code to get the test to compile and run by adding a definition of the `search`
 function that always returns an empty vector, as shown in Listing 12-16. Then
 the test should compile and fail because an empty vector doesn’t match a vector
-containing the line `"safe, fast, productive."`.
+containing the line `"safe, fast, productive."`
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -124,16 +124,16 @@ want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
 Other programming languages don’t require you to connect arguments to return
-values in the signature, so although this might seem strange, it will get
-easier over time. You might want to compare this example with “Validating
-References with Lifetimes” in Chapter 10 on page XX.
+values in the signature. So although this might seem strange, it will get
+easier over time. You might want to compare this example with the “Validating
+References with Lifetimes” section in Chapter 10.
 
 Now let’s run the test:
 
 ```text
 $ cargo test
---warnings--
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
+--warnings--
     Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running target/debug/deps/minigrep-abcabcabc
 
@@ -194,7 +194,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 Chapter 13, but recall that you saw this way of using an iterator in Listing
-3-4, where we used a `for` loop with an iterator to run some code on each item
+3-5, where we used a `for` loop with an iterator to run some code on each item
 in a collection.
 
 #### Searching Each Line for the Query
@@ -263,7 +263,7 @@ At this point, we could consider opportunities for refactoring the
 implementation of the search function while keeping the tests passing to
 maintain the same functionality. The code in the search function isn’t too bad,
 but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in Chapter 13 where we’ll explore iterators in detail
+return to this example in Chapter 13, where we’ll explore iterators in detail,
 and look at how to improve it.
 
 #### Using the `search` Function in the `run` Function
