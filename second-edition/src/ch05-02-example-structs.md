@@ -167,7 +167,7 @@ instance</span>
 When we run this code, we get an error with this core message:
 
 ```text
-error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 ```
 
 The `println!` macro can do many kinds of formatting, and by default, curly
@@ -197,7 +197,7 @@ we can see its value while we’re debugging our code.
 Run the code with this change. Drat! We still get an error:
 
 ```text
-error[E0277]: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
 ```
 
 But again, the compiler gives us a helpful note:
