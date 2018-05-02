@@ -1,7 +1,13 @@
 # Introduction
 
-Welcome to *The Rust Programming Language*, an introductory book about Rust.
+> Note: This edition of the book is the same as [The Rust Programming
+> Language][nsprust] available in print and ebook format from [No Starch
+> Press][nsp].
 
+[nsprust]: https://nostarch.com/rust
+[nsp]: https://nostarch.com/
+
+Welcome to *The Rust Programming Language*, an introductory book about Rust.
 The Rust programming language helps you write faster, more reliable software.
 High-level ergonomics and low-level control are often at odds in programming
 language design; Rust challenges that conflict. Through balancing powerful
@@ -18,8 +24,8 @@ the most important groups.
 
 Rust is proving to be a productive tool for collaborating among large teams of
 developers with varying levels of systems programming knowledge. Low-level code
-is prone to a variety of subtle bugs, which in most other languages can only be
-caught through extensive testing and careful code review by experienced
+is prone to a variety of subtle bugs, which in most other languages can be
+caught only through extensive testing and careful code review by experienced
 developers. In Rust, the compiler plays a gatekeeper role by refusing to
 compile code with these elusive bugs, including concurrency bugs. By working
 alongside the compiler, the team can spend more time focusing on the program’s
@@ -51,7 +57,7 @@ programming.
 Hundreds of companies, large and small, use Rust in production for a variety of
 tasks. Those tasks include command line tools, web services, DevOps tooling,
 embedded devices, audio and video analysis and transcoding, cryptocurrencies,
-bioinformatics, search engines, internet of things applications, machine
+bioinformatics, search engines, Internet of Things applications, machine
 learning, and even major parts of the Firefox web browser.
 
 ### Open Source Developers
@@ -65,18 +71,17 @@ language.
 Rust is for people who crave speed and stability in a language. By speed, we
 mean the speed of the programs that you can create with Rust and the speed at
 which Rust lets you write them. The Rust compiler’s checks ensure stability
-through feature additions and refactoring as opposed to brittle legacy code in
-languages without these checks that developers are afraid to modify. By
-striving for zero-cost abstractions, higher-level features that compile to
-lower-level code as fast as code written manually, Rust endeavors to make safe
-code be fast code as well.
+through feature additions and refactoring. This is in contrast to the brittle
+legacy code in languages without these checks, which developers are often
+afraid to modify. By striving for zero-cost abstractions, higher-level features
+that compile to lower-level code as fast as code written manually, Rust
+endeavors to make safe code be fast code as well.
 
-Although we’ve not provided a complete list of everyone the Rust language hopes
-to support, those we have mentioned are some of the biggest stakeholders.
-Overall, Rust’s greatest ambition is to eliminate the dichotomy of the
-trade-offs that programmers have accepted for decades: safety *and*
-productivity, speed *and* ergonomics. Give Rust a try, and see if its choices
-work for you.
+The Rust language hopes to support many other users as well; those mentioned
+here are merely some of the biggest stakeholders. Overall, Rust’s greatest
+ambition is to eliminate the trade-offs that programmers have accepted for
+decades by providing safety *and* productivity, speed *and* ergonomics. Give
+Rust a try and see if its choices work for you.
 
 ## Who This Book Is For
 
@@ -99,16 +104,17 @@ chapters. In concept chapters, you’ll learn about an aspect of Rust. In projec
 chapters, we’ll build small programs together, applying what you’ve learned so
 far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
 
-Additionally, Chapter 2 is a hands-on introduction to the Rust language. We’ll
-cover concepts at a high level, and later chapters will provide additional
-detail. If you want to get your hands dirty right away, Chapter 2 is the one
-for that. At first, you might even want to skip Chapter 3, which covers Rust
-features similar to other programming language features, and head straight to
-Chapter 4 to learn about Rust’s ownership system. However, if you’re a
-particularly meticulous learner who prefers to learn every detail before moving
-onto the next, you might want to skip Chapter 2 and go straight to Chapter 3,
-returning to Chapter 2 when you’d like to work on a project applying those
-details.
+Chapter 1 explains how to install Rust, how to write a "Hello, world!" program,
+and how to use Cargo, Rust's package manager and build tool. Chapter 2 is a
+hands-on introduction to the Rust language. Here we cover concepts at a high
+level, and later chapters will provide additional detail. If you want to get
+your hands dirty right away, Chapter 2 is the place for that. At first, you
+might even want to skip Chapter 3, which covers Rust features similar to other
+programming language features, and head straight to Chapter 4 to learn about
+Rust’s ownership system. However, if you’re a particularly meticulous learner
+who prefers to learn every detail before moving on to the next, you might want
+to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
+you’d like to work on a project applying the details you've learned.
 
 Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
 expressions, and the `if let` control flow construct. You’ll use structs and
@@ -118,15 +124,15 @@ In Chapter 7, you’ll learn about Rust’s module system and about privacy rule
 for organizing your code and its public Application Programming Interface
 (API). Chapter 8 discusses some common collection data structures that the
 standard library provides, such as vectors, strings, and hash maps. Chapter 9
-explores Rust’s error handling philosophy and techniques.
+explores Rust’s error-handling philosophy and techniques.
 
 Chapter 10 digs into generics, traits, and lifetimes, which give you the power
 to define code that applies to multiple types. Chapter 11 is all about testing,
-which is still necessary even with Rust’s safety guarantees to ensure your
-program’s logic is correct. In Chapter 12, we’ll build our own implementation
-of a subset of functionality from the `grep` command line tool that searches
-for text within files. For this, we’ll use many of the concepts we discussed in
-the previous chapters.
+which even with Rust’s safety guarantees is necessary to ensure your program’s
+logic is correct. In Chapter 12, we’ll build our own implementation of a subset
+of functionality from the `grep` command line tool that searches for text
+within files. For this, we’ll use many of the concepts we discussed in the
+previous chapters.
 
 Chapter 13 explores closures and iterators: features of Rust that come from
 functional programming languages. In Chapter 14, we’ll examine Cargo in more
@@ -136,7 +142,7 @@ traits that enable their functionality.
 
 In Chapter 16, we’ll walk through different models of concurrent programming
 and talk about how Rust helps you to program in multiple threads fearlessly.
-Chapter 17 looks at how Rust idioms compare to object oriented programming
+Chapter 17 looks at how Rust idioms compare to object-oriented programming
 principles you might be familiar with.
 
 Chapter 18 is a reference on patterns and pattern matching, which are powerful
@@ -148,9 +154,9 @@ In Chapter 20, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!
 
 Finally, some appendixes contain useful information about the language in a
-more reference-like format. Appendix A covers Rust’s keywords. Appendix B
-covers Rust’s operators and symbols. Appendix C covers derivable traits
-provided by the standard library. Appendix D covers macros.
+more reference-like format. Appendix A covers Rust’s keywords, Appendix B
+covers Rust’s operators and symbols, Appendix C covers derivable traits
+provided by the standard library, and Appendix D covers macros.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any
