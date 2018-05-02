@@ -473,6 +473,7 @@ which syntactic form it matches.
   `{ log(error, "hi"); return 12; }`.
 * `item`: an [item][item]. Examples: `fn foo() { }`; `struct Bar;`.
 * `meta`: a "meta item", as found in attributes. Example: `cfg(target_os = "windows")`.
+* `lifetime`: a lifetime. Examples: `'static`, `'a`.
 * `tt`: a single token tree.
 
 There are additional rules regarding the next token after a metavariable:
