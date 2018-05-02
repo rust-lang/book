@@ -1,8 +1,8 @@
 ## All the Places Patterns Can Be Used
 
 Patterns pop up in a number of places in Rust, and you’ve been using them a lot
-without realizing it! This section provides you with a reference to all the
-places where patterns are valid.
+without realizing it! This section discusses all the places where patterns are
+valid.
 
 ### `match` Arms
 
@@ -40,20 +40,14 @@ the pattern in the `if let` doesn’t match.
 
 Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. Doing so gives us more flexibility than a
-`match` expression in which we can only express one value to compare with the
+`match` expression in which we can express only one value to compare with the
 patterns. Also, the conditions in a series of `if let`, `else if`, `else if
 let` arms aren’t required to relate to each other.
 
-The code in Listing 18-1 shows a series of checks for several different
-conditions that decide what the background color should be. For this example,
-we’ve created variables with hardcoded values that a real program might receive
-from user input.
-
-If the user specifies a favorite color, that color is the background color. If
-today is Tuesday, the background color will be green. If the user specifies
-their age as a string and we can parse it as a number successfully, the color
-is either purple or orange depending on the value of the number. If none of
-these conditions apply, the background color will be blue:
+The code in Listing 18-1 shows a series of checks for several conditions that
+decide what the background color should be. For this example, we’ve created
+variables with hardcoded values that a real program might receive from user
+input.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -82,6 +76,12 @@ fn main() {
 <span class="caption">Listing 18-1: Mixing `if let`, `else if`, `else if let`,
 and `else`</span>
 
+If the user specifies a favorite color, that color is the background color. If
+today is Tuesday, the background color is green. If the user specifies
+their age as a string and we can parse it as a number successfully, the color
+is either purple or orange depending on the value of the number. If none of
+these conditions apply, the background color is blue.
+
 This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the
 background color`.
@@ -104,7 +104,7 @@ not alert us to the possible logic bug.
 Similar in construction to `if let`, the `while let` conditional loop allows a
 `while` loop to run for as long as a pattern continues to match. The example in
 Listing 18-2 shows a `while let` loop that uses a vector as a stack and prints
-out the values in the vector in the opposite order in which they were pushed:
+the values in the vector in the opposite order in which they were pushed.
 
 ```rust
 let mut stack = Vec::new();
@@ -118,8 +118,8 @@ while let Some(top) = stack.pop() {
 }
 ```
 
-<span class="caption">Listing 18-2: Using a `while let` loop to print out
-values for as long as `stack.pop()` returns `Some`</span>
+<span class="caption">Listing 18-2: Using a `while let` loop to print values
+for as long as `stack.pop()` returns `Some`</span>
 
 This example prints 3, 2, and then 1. The `pop` method takes the last element
 out of the vector and returns `Some(value)`. If the vector is empty, `pop`
@@ -129,13 +129,13 @@ use `while let` to pop every element off our stack.
 
 ### `for` Loops
 
-In Chapter 3 we mentioned that the `for` loop is the most common loop
+In Chapter 3, we mentioned that the `for` loop is the most common loop
 construction in Rust code, but we haven’t yet discussed the pattern that `for`
 takes. In a `for` loop, the pattern is the value that directly follows the
 keyword `for`, so in `for x in y` the `x` is the pattern.
 
 Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
-or break apart, a tuple as part of the `for` loop:
+or break apart, a tuple as part of the `for` loop.
 
 ```rust
 let v = vec!['a', 'b', 'c'];
@@ -189,7 +189,7 @@ the variable `x`.” Because the name `x` is the whole pattern, this pattern
 effectively means “bind everything to the variable `x`, whatever the value is.”
 
 To see the pattern matching aspect of `let` more clearly, consider Listing
-18-4, which uses a pattern with `let` to destructure a tuple:
+18-4, which uses a pattern with `let` to destructure a tuple.
 
 ```rust
 let (x, y, z) = (1, 2, 3);
@@ -206,7 +206,7 @@ pattern as nesting three individual variable patterns inside it.
 If the number of elements in the pattern doesn’t match the number of elements
 in the tuple, the overall type won’t match and we’ll get a compiler error. For
 example, Listing 18-5 shows an attempt to destructure a tuple with three
-elements into two variables, which won’t work:
+elements into two variables, which won’t work.
 
 ```rust,ignore
 let (x, y) = (1, 2, 3);
@@ -229,7 +229,7 @@ error[E0308]: mismatched types
 ```
 
 If we wanted to ignore one or more of the values in the tuple, we could use `_`
-or `..` as you’ll see in the “Ignoring Values in a Pattern” section. If the
+or `..`, as you’ll see in the “Ignoring Values in a Pattern” section. If the
 problem is that we have too many variables in the pattern, the solution is to
 make the types match by removing variables so the number of variables equals
 the number of elements in the tuple.
@@ -238,7 +238,7 @@ the number of elements in the tuple.
 
 Function parameters can also be patterns. The code in Listing 18-6, which
 declares a function named `foo` that takes one parameter named `x` of type
-`i32`, should by now look familiar:
+`i32`, should by now look familiar.
 
 ```rust
 fn foo(x: i32) {
@@ -251,7 +251,7 @@ parameters</span>
 
 The `x` part is a pattern! As we did with `let`, we could match a tuple in a
 function’s arguments to the pattern. Listing 18-7 splits the values in a tuple
-as we pass it to a function:
+as we pass it to a function.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -278,5 +278,5 @@ discussed in Chapter 13.
 
 At this point, you’ve seen several ways of using patterns, but patterns don’t
 work the same in every place we can use them. In some places, the patterns must
-be *irrefutable*, meaning they must match any value provided. In other
-circumstances, they can be refutable. Let’s discuss these two concepts next.
+be irrefutable; in other circumstances, they can be refutable. We’ll discuss
+these two concepts next.

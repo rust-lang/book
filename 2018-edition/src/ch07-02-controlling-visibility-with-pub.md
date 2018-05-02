@@ -14,7 +14,7 @@ functions go unused. The point of creating them is that they will be used by
 another project, not our own.
 
 To understand why this program invokes these warnings, let’s try using the
-`connect` library from another project, calling it externally. To do that,
+`communicator` library from another project, calling it externally. To do that,
 we’ll create a binary crate in the same directory as our library crate by
 making a *src/main.rs* file containing this code:
 
