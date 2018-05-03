@@ -67,6 +67,8 @@ Consider the code in Listing 11-12 with the private function `internal_adder`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn main() {}
+
 pub fn add_two(a: i32) -> i32 {
     internal_adder(a, 2)
 }
