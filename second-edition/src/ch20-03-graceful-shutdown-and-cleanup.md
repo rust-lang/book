@@ -329,7 +329,7 @@ You wouldn’t want a real-world web server to shut down after serving only two
 requests. This code just demonstrates that the graceful shutdown and cleanup is
 in working order.
 
- The `take` method is defined in the `Iterator` trait and limits the iteration
+The `take` method is defined in the `Iterator` trait and limits the iteration
 to the first two items at most. The `ThreadPool` will go out of scope at the
 end of `main`, and the `drop` implementation will run.
 

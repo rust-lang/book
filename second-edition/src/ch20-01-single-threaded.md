@@ -243,11 +243,11 @@ and URLs isn’t important for our purposes in this chapter, but the HTTP spec
 uses the term URI, so we can just mentally substitute URL for URI here.
 
 The last part is the HTTP version the client uses, and then the request line
-ends in a CRLF sequence. The CRLF sequence can also be written as `\r\n`: the
-`\r` part is a *carriage return* and `\n` is a *line feed*. (These terms come
-from the typewriter days!) The CRLF sequence separates the request line from
-the rest of the request data. Note that when the CRLF is printed, we see a new
-line start rather than `\r\n`.
+ends in a *CRLF sequence*. (CRLF stands for *carriage return* and *line feed*,
+which are terms from the typewriter days!) The CRLF sequence can also be
+written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
+CRLF sequence separates the request line from the rest of the request data.
+Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
 
 Looking at the request line data we received from running our program so far,
 we see that `GET` is the method, `/` is the request URI, and `HTTP/1.1` is the
