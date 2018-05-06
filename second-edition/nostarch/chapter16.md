@@ -28,7 +28,7 @@ subtle bugs and is easy to refactor without introducing new bugs.
 > Note: For simplicity’s sake, we’ll refer to many of the problems as
 > concurrent rather than being more precise by saying concurrent and/or
 > parallel. If this book was specifically about concurrency and/or parallelism,
-> we’d be more. specific. For this chapter, please mentally substitute
+> we’d be more specific. For this chapter, please mentally substitute
 > concurrent and/or parallel whenever we use concurrent.
 
 Many languages are dogmatic about the solutions they offer for handling
