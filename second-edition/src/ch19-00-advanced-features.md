@@ -10,13 +10,13 @@ make sure you have a grasp of all the features Rust has to offer.
 
 In this chapter, we’ll cover:
 
-* Unsafe Rust: How to opt out of some of Rust’s guarantees and take
+* Unsafe Rust: how to opt out of some of Rust’s guarantees and take
   responsibility for manually upholding those guarantees
-* Advanced lifetimes: Syntax for complex lifetime situations
-* Advanced traits: Associated types, default type parameters, fully qualified
+* Advanced lifetimes: syntax for complex lifetime situations
+* Advanced traits: associated types, default type parameters, fully qualified
   syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced types: More about the newtype pattern, type aliases, the *never*
-  type, and dynamically sized types
-* Advanced functions and closures: Function pointers and returning closures
+* Advanced types: more about the newtype pattern, type aliases, the never type,
+  and dynamically sized types
+* Advanced functions and closures: function pointers and returning closures
 
 It’s a panoply of Rust features with something for everyone! Let’s dive in!

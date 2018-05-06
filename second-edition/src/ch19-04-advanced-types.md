@@ -11,14 +11,13 @@ discuss the `!` type and dynamically sized types.
 
 ### Using the Newtype Pattern for Type Safety and Abstraction
 
-The newtype pattern is useful for other tasks beyond what we’ve discussed so
-far, including statically enforcing that values are never confused and as an
-indication of the units of a value. You saw an example of using newtypes to
-indicate units in Listing 19-23: recall that the `Millimeters` and `Meters`
-structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we couldn’t compile a program that
-accidentally tried to call that function with a value of type `Meters` or a
-plain `u32`.
+The newtype pattern is useful for tasks beyond those we’ve discussed so far,
+including statically enforcing that values are never confused and indicating
+the units of a value. You saw an example of using newtypes to indicate units in
+Listing 19-23: recall that the `Millimeters` and `Meters` structs wrapped `u32`
+values in a newtype. If we wrote a function with a parameter of type
+`Millimeters`, we couldn’t compile a program that accidentally tried to call
+that function with a value of type `Meters` or a plain `u32`.
 
 Another use of the newtype pattern is in abstracting away some implementation
 details of a type: the new type can expose a public API that is different from
@@ -34,7 +33,7 @@ internally. The newtype pattern is a lightweight way to achieve encapsulation
 to hide implementation details, which we discussed in the “Encapsulation that
 Hides Implementation Details” section of Chapter 17.
 
-### Type Aliases Create Type Synonyms
+### Creating Type Synonyms with Type Aliases
 
 Along with the newtype pattern, Rust provides the ability to declare a *type
 alias* to give an existing type another name. For this we use the `type`
@@ -145,7 +144,7 @@ type Result<T> = Result<T, std::io::Error>;
 ```
 
 Because this declaration is in the `std::io` module, we can use the fully
-qualified alias `std::io::Result<T>`; that is, a `Result<T, E>` with the `E`
+qualified alias `std::io::Result<T>`—that is, a `Result<T, E>` with the `E`
 filled in as `std::io::Error`. The `Write` trait function signatures end up
 looking like this:
 
@@ -162,9 +161,9 @@ pub trait Write {
 The type alias helps in two ways: it makes code easier to write *and* it gives
 us a consistent interface across all of `std::io`. Because it’s an alias, it’s
 just another `Result<T, E>`, which means we can use any methods that work on
-`Result<T, E>` with it, as well as special syntax like `?`.
+`Result<T, E>` with it, as well as special syntax like the `?` operator.
 
-### The `!` Never Type that Never Returns
+### The Never Type that Never Returns
 
 Rust has a special type named `!` that’s known in type theory lingo as the
 *empty type* because it has no values. We prefer to call it the *never type*
@@ -182,7 +181,7 @@ never are called *diverging functions*. We can’t create values of the type `!`
 so `bar` can never possibly return.
 
 But what use is a type you can never create values for? Recall the code from
-Listing 2-5; we’ve reproduced it here in Listing 19-34.
+Listing 2-5; we’ve reproduced part of it here in Listing 19-34.
 
 ```rust
 # let guess = "3";
@@ -210,7 +209,7 @@ let guess = match guess.trim().parse() {
 ```
 
 The type of `guess` in this code would have to be an integer *and* a string,
-and Rust requires that `guess` can only have one type. So what does `continue`
+and Rust requires that `guess` have only one type. So what does `continue`
 return? How were we allowed to return a `u32` from one arm and have another arm
 that ends with `continue` in Listing 19-34?
 
@@ -241,10 +240,10 @@ impl<T> Option<T> {
 ```
 
 In this code, the same thing happens as in the `match` in Listing 19-34: Rust
-sees that `val` has the type `T` and `panic!` has the type `!` so the result of
-the overall `match` expression is `T`. This code works because `panic!` doesn’t
-produce a value; it ends the program. In the `None` case, we won’t be returning
-a value from `unwrap`, so this code is valid.
+sees that `val` has the type `T` and `panic!` has the type `!`, so the result
+of the overall `match` expression is `T`. This code works because `panic!`
+doesn’t produce a value; it ends the program. In the `None` case, we won’t be
+returning a value from `unwrap`, so this code is valid.
 
 One final expression that has the type `!` is a `loop`:
 
@@ -260,13 +259,13 @@ Here, the loop never ends, so `!` is the value of the expression. However, this
 wouldn’t be true if we included a `break`, because the loop would terminate
 when it got to the `break`.
 
-### Dynamically Sized Types and `Sized`
+### Dynamically Sized Types and the `Sized` Trait
 
 Due to Rust’s need to know certain details, such as how much space to allocate
 for a value of a particular type, there is a corner of its type system that can
 be confusing: the concept of *dynamically sized types*. Sometimes referred to
 as *DSTs* or *unsized types*, these types let us write code using values whose
-size we can only know at runtime.
+size we can know only at runtime.
 
 Let’s dig into the details of a dynamically sized type called `str`, which
 we’ve been using throughout the book. That’s right, not `&str`, but `str` on
@@ -288,18 +287,18 @@ holding a dynamically sized type.
 
 So what do we do? In this case, you already know the answer: we make the types
 of `s1` and `s2` a `&str` rather than a `str`. Recall that in the “String
-Slices” section of Chapter 4 we said the slice data structure stores the
+Slices” section of Chapter 4, we said the slice data structure stores the
 starting position and the length of the slice.
 
 So although a `&T` is a single value that stores the memory address of where
 the `T` is located, a `&str` is *two* values: the address of the `str` and its
 length. As such, we can know the size of a `&str` value at compile time: it’s
-two times the size of a `usize` in length. That is, we always know the size of
-a `&str`, no matter how long the string it refers to is. In general, this is
-the way in which dynamically sized types are used in Rust: they have an extra
-bit of metadata that stores the size of the dynamic information. The golden
-rule of dynamically sized types is that we must always put values of
-dynamically sized types behind a pointer of some kind.
+twice the length of a `usize`. That is, we always know the size of a `&str`, no
+matter how long the string it refers to is. In general, this is the way in
+which dynamically sized types are used in Rust: they have an extra bit of
+metadata that stores the size of the dynamic information. The golden rule of
+dynamically sized types is that we must always put values of dynamically sized
+types behind a pointer of some kind.
 
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
@@ -329,7 +328,7 @@ fn generic<T: Sized>(t: T) {
 }
 ```
 
-By default, generic functions will only work on types that have a known size at
+By default, generic functions will work only on types that have a known size at
 compile time. However, you can use the following special syntax to relax this
 restriction:
 

@@ -6,12 +6,12 @@ lifetimes of different references relate. You saw how every reference has a
 lifetime, but most of the time, Rust will let you elide lifetimes. Now we’ll
 look at three advanced features of lifetimes that we haven’t covered yet:
 
-* Lifetime subtyping: Ensures that one lifetime outlives another lifetime
-* Lifetime bounds: Specifies a lifetime for a reference to a generic type
-* Inference of trait object lifetimes: How the compiler infers trait object
-  lifetimes and when they need to be specified
+* Lifetime subtyping: ensures that one lifetime outlives another lifetime
+* Lifetime bounds: specifies a lifetime for a reference to a generic type
+* Inference of trait object lifetimes: allows the compiler to infer trait
+  object lifetimes and when they need to be specified
 
-### Lifetime Subtyping Ensures One Lifetime Outlives Another
+### Ensuring One Lifetime Outlives Another with Lifetime Subtyping
 
 *Lifetime subtyping* specifies that one lifetime should outlive another
 lifetime. To explore lifetime subtyping, imagine we want to write a parser.
@@ -44,7 +44,7 @@ Compiling the code results in errors because Rust expects lifetime parameters
 on the string slice in `Context` and the reference to a `Context` in `Parser`.
 
 For simplicity’s sake, the `parse` function returns `Result<(), &str>`. That
-is, the function will do nothing on success, and on failure will return the
+is, the function will do nothing on success and, on failure, will return the
 part of the string slice that didn’t parse correctly. A real implementation
 would provide more error information and would return a structured data type
 when parsing succeeds. We won’t be discussing those details because they aren’t
@@ -88,14 +88,14 @@ impl<'a> Parser<'a> {
 `Parser` with lifetime parameters</span>
 
 This code compiles just fine. It tells Rust that a `Parser` holds a reference
-to a `Context` with lifetime `'a`, and that `Context` holds a string slice that
+to a `Context` with lifetime `'a` and that `Context` holds a string slice that
 also lives as long as the reference to the `Context` in `Parser`. Rust’s
 compiler error message stated that lifetime parameters were required for these
 references, and we’ve now added lifetime parameters.
 
 Next, in Listing 19-14, we’ll add a function that takes an instance of
 `Context`, uses a `Parser` to parse that context, and returns what `parse`
-returns. This code doesn’t quite work:
+returns. This code doesn’t quite work.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -191,18 +191,18 @@ string slice that `Context` holds is the same as that of the lifetime of the
 reference to `Context` that `Parser` holds.
 
 The `parse_context` function can’t see that within the `parse` function, the
-string slice returned will outlive `Context` and `Parser`, and that the
+string slice returned will outlive `Context` and `Parser` and that the
 reference `parse_context` returns refers to the string slice, not to `Context`
 or `Parser`.
 
 By knowing what the implementation of `parse` does, we know that the only
-reason the return value of `parse` is tied to the `Parser` is because it’s
-referencing the `Parser`’s `Context`, which is referencing the string slice.
-So, it’s really the lifetime of the string slice that `parse_context` needs to
-care about. We need a way to tell Rust that the string slice in `Context` and
-the reference to the `Context` in `Parser` have different lifetimes and that
-the return value of `parse_context` is tied to the lifetime of the string slice
-in `Context`.
+reason the return value of `parse` is tied to the `Parser` instance is that
+it’s referencing the `Parser` instance’s `Context`, which is referencing the
+string slice. So, it’s really the lifetime of the string slice that
+`parse_context` needs to care about. We need a way to tell Rust that the string
+slice in `Context` and the reference to the `Context` in `Parser` have
+different lifetimes and that the return value of `parse_context` is tied to the
+lifetime of the string slice in `Context`.
 
 First, we’ll try giving `Parser` and `Context` different lifetime parameters,
 as shown in Listing 19-15. We’ll use `'s` and `'c` as lifetime parameter names
@@ -298,7 +298,7 @@ lifetime of the string slice is longer than the reference to the `Context`.
 That was a very long-winded example, but as we mentioned at the start of this
 chapter, Rust’s advanced features are very specific. You won’t often need the
 syntax we described in this example, but in such situations, you’ll know how to
-refer to something you have a reference to.
+refer to something and give it the necessary lifetime.
 
 ### Lifetime Bounds on References to Generic Types
 
@@ -312,7 +312,7 @@ As an example, consider a type that is a wrapper over references. Recall the
 section in Chapter 15: its `borrow` and `borrow_mut` methods return the types
 `Ref` and `RefMut`, respectively. These types are wrappers over references that
 keep track of the borrowing rules at runtime. The definition of the `Ref`
-struct is shown in Listing 19-16, without lifetime bounds for now:
+struct is shown in Listing 19-16, without lifetime bounds for now.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -321,7 +321,7 @@ struct Ref<'a, T>(&'a T);
 ```
 
 <span class="caption">Listing 19-16: Defining a struct to wrap a reference to a
-generic type, without lifetime bounds to start</span>
+generic type, without lifetime bounds</span>
 
 Without explicitly constraining the lifetime `'a` in relation to the generic
 parameter `T`, Rust will error because it doesn’t know how long the generic
@@ -355,7 +355,7 @@ consider adding an explicit lifetime bound `T: 'a` so that the reference type
 ```
 
 Listing 19-17 shows how to apply this advice by specifying the lifetime bound
-when we declare the generic type `T`:
+when we declare the generic type `T`.
 
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
@@ -398,7 +398,7 @@ happens if the type implementing the trait in the trait object has a lifetime
 of its own. Consider Listing 19-19 where we have a trait `Red` and a struct
 `Ball`. The `Ball` struct holds a reference (and thus has a lifetime parameter)
 and also implements trait `Red`. We want to use an instance of `Ball` as the
-trait object `Box<Red>`:
+trait object `Box<Red>`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -430,7 +430,7 @@ rules for working with lifetimes and trait objects:
   is `'a`.
 * With a single `T: 'a` clause, the default lifetime of the trait object is
   `'a`.
-* With multiple `T: 'a`-like clauses, there is no default lifetime; we must be
+* With multiple clauses like `T: 'a`, there is no default lifetime; we must be
   explicit.
 
 When we must be explicit, we can add a lifetime bound on a trait object like
