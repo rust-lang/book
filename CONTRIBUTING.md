@@ -62,7 +62,7 @@ that we ultimately wouldn't accept.
 
 We're currently working with No Starch Press to bring the second edition of
 the book to print. Each chapter goes through [a number of stages][project].
-At this This means we're not able to make large changes to chapters that are
+Of particular note we're not able to make large changes to chapters that are
 in any column to the right of, and including, the "Frozen" column on that
 board.
 
