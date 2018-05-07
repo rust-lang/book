@@ -7,6 +7,8 @@ constants, macros, static values, attributes, types, traits, or lifetimes.
 
 ### Keywords Currently in Use
 
+The following keywords currently have the functionality described.
+
 * `as` - perform primitive casting, disambiguate the specific trait containing
   an item, or rename items in `use` and `extern crate` statements
 * `break` - exit a loop immediately
