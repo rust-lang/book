@@ -4,6 +4,10 @@ The first step is to install Rust. We’ll download Rust through `rustup`, a
 command line tool for managing Rust versions and associated tools. You’ll need
 an internet connection for the download.
 
+> Note: If you prefer not to use `rustup` for some reason, please see [the Rust
+> installation page](https://www.rust-lang.org/install.html) for other options.
+
+
 The following steps install the latest stable version of the Rust compiler. All
 the examples and output in this book use stable Rust 1.21.0. Rust’s stability
 guarantees ensure that all the examples in the book that compile will continue
@@ -17,12 +21,11 @@ work as expected with the content of this book.
 > In this chapter and throughout the book, we’ll show some commands used in the
 > terminal. Lines that you should enter in a terminal all start with `$`. You
 > don’t need to type in the `$` character; it indicates the start of each
-> command. Many tutorials use the convention `$` for commands you run as a
-> regular user and `#` for commands you run as an administrator. Lines that
-> don’t start with `$` typically show the output of the previous command.
-> Additionally, PowerShell specific examples will use `>` rather than `$`.
+> command. Lines that don’t start with `$` typically show the output of the
+> previous command. Additionally, PowerShell specific examples will use `>`
+> rather than `$`.
 
-### Installing Rustup on Linux or macOS
+### Installing `rustup` on Linux or macOS
 
 If you’re using Linux or macOS, open a terminal and enter the following command:
 
@@ -38,8 +41,8 @@ for your password. If the install is successful, the following line will appear:
 Rust is installed now. Great!
 ```
 
-Of course, if you distrust using `curl URL | sh` to install software, you can
-download, inspect, and run the script however you like.
+If you prefer, feel free to download the script and inspect it before running
+it.
 
 The installation script automatically adds Rust to your system PATH after your
 next login. If you want to start using Rust right away instead of restarting
@@ -56,33 +59,28 @@ Alternatively, you can add the following line to your *~/.bash_profile*:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Additionally, you’ll need a linker of some kind. It’s likely one is already
+Additionally, you’ll need a linker of some kind. It's likely one is already
 installed, but when you try to compile a Rust program and get errors indicating
-that a linker could not execute, you’ll need to install one. You can install a
-C compiler, because that will usually come with the correct linker. Check your
-platform’s documentation for how to install a C compiler. Some common Rust
-packages depend on C code and will need a C compiler too, so it might be worth
-installing one now regardless.
+that a linker could not execute, that means a linker isn't installed on your
+system and you'll need to install one manually. C compilers usually come with
+the correct linker. Check your platform’s documentation for how to install a C
+compiler. Also, some common Rust packages depend on C code and will need a C
+compiler. Therefore, it might be worth installing one now.
 
-### Installing Rustup on Windows
+### Installing `rustup` on Windows
 
-On Windows, go to [https://www.rust-lang.org/en-US/install.html][install] and
-follow the instructions for installing Rust. At some point in the installation,
-you’ll receive a message explaining that you’ll also need the C++ build tools
-for Visual Studio 2013 or later. The easiest way to acquire the build tools is
-to install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
+On Windows, go to [https://www.rust-lang.org/install.html][install] and follow
+the instructions for installing Rust. At some point in the installation, you’ll
+receive a message explaining that you’ll also need the C++ build tools for
+Visual Studio 2013 or later. The easiest way to acquire the build tools is to
+install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
 the Other Tools and Frameworks section.
 
-[install]: https://www.rust-lang.org/en-US/install.html
+[install]: https://www.rust-lang.org/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
 
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
-
-### Custom Installations Without Rustup
-
-If you prefer not to use `rustup` for some reason, please see [the Rust
-installation page](https://www.rust-lang.org/install.html) for other options.
 
 ### Updating and Uninstalling
 
