@@ -150,7 +150,7 @@ $ rustup install nightly
 
 You can see all of the *toolchains* (releases of Rust and associated
 components) you have installed with `rustup` as well. Here’s an example on one
-of your authors’ computers:
+of your authors’ Windows computer:
 
 ```powershell
 > rustup toolchain list
