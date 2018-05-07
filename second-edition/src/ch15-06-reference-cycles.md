@@ -1,19 +1,19 @@
-## Reference Cycles Can Leak Memory
+## 순환 참조는 메모리 릭을 발생시킬 수 있습니다
 
-Rust’s memory safety guarantees make it difficult, but not impossible, to
-accidentally create memory that is never cleaned up (known as a *memory leak*).
-Preventing memory leaks entirely is not one of Rust’s guarantees in the same
-way that disallowing data races at compile time is, meaning memory leaks are
-memory safe in Rust. We can see that Rust allows memory leaks by using `Rc<T>`
-and `RefCell<T>`: it’s possible to create references where items refer to each
-other in a cycle. This creates memory leaks because the reference count of each
-item in the cycle will never reach 0, and the values will never be dropped.
+러스트의 메모리 안정성 보장은 (*메모리 릭 (memory leak)* 이라고도 알려져 있는) 뜻하지
+않게 해제되지 않는 메모리를 생성하기 힘들게 하지만, 그게 불가능한 것은 아닙니다.
+메모리 릭을 완전히 방지하는 것은 컴파일 타임에 데이터 레이스를 허용하지 않는 것과 마찬가지로
+러스트가 보장하는 것들 중 하나가 아닌데, 이는 메모리 릭도 러스트에서는 메모리 안정성에 포함됨을
+의미합니다. 러스트가 `Rc<T>` 및 `RefCell<T>`를 사용하여 메모리 릭을 허용하는 것을 우리는
+알 수 있습니다: 즉 아이템들이 서로를 순환 참조하는 참조자를 만드는 것이 가능합니다. 이는
+메모리 릭을 발생시키는데, 그 이유는 순환 고리 안의 각 아이템들의 참조 카운트는 결코 0이
+되지 않을 것이고, 그러므로 값들은 버려지지 않을 것이기 때문입니다.
 
-### Creating a Reference Cycle
+### 순환 참조 만들기
 
-Let’s look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing
-15-25:
+Listing 15-25의 `List` 열거형과 `tail` 메소드 정의를 가지고서
+어떻게 순환 참조가 생길 수 있고, 이를 어떻게 방지하는지
+알아봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -42,21 +42,21 @@ impl List {
 }
 ```
 
-<span class="caption">Listing 15-25: A cons list definition that holds a
-`RefCell<T>` so we can modify what a `Cons` variant is referring to</span>
+<span class="caption">Listing 15-25: `RefCell<T>`를 가지고 있어서
+`Cons` variant가 참조하는 것을 변경할 수 있는 cons 리스트 정의</span>
 
-We’re using another variation of the `List` definition in Listing 15-5. The
-second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value as we did in Listing
-15-24, we want to modify which `List` value a `Cons` variant is pointing to.
-We’re also adding a `tail` method to make it convenient for us to access the
-second item if we have a `Cons` variant.
+우리는 Listing 15-5의 `List` 정의의 또다른 변형을 이용하고 있습니다.
+이제 `Cons` variant 내의 두번째 요소는 `RefCell<Rc<List>>`인데,
+이는 Listing 15-24에서 우리가 했던 것처럼 `i32` 값을 변경하는 능력을
+갖는 대신, `Cons` variant가 가리키고 있는 `List` 값을 변경하길 원한다는
+의미입니다. 또한 `Cons` variant를 갖고 있다면 두번째 아이템에 접근하기
+편하도록 `tail` 메소드를 추가하고 있습니다.
 
-In Listing 15-26, we’re adding a `main` function that uses the definitions in
-Listing 15-25. This code creates a list in `a` and a list in `b` that points to
-the list in `a`. Then it modifies the list in `a` to point to `b`, creating a
-reference cycle. There are `println!` statements along the way to show what the
-reference counts are at various points in this process.
+Listing 15-26에서 우리는 Listing 15-25의 정의를 사용하는 `main` 함수를
+추가하고 있습니다. 이 코드는 `a`에 리스트를 만들고 `b`에는 `a`의 리스트를 가리키고
+있는 리스트를 만들어 넣었습니다. 그 다음 `a`의 리스트가 `b`를 가리키도록 수정하는데,
+이것이 순환 참조를 생성합니다. 이 과정 내의 다양한 지점에서 참조 카운트가 얼마인지를
+보기 위해 곳곳에 `println!` 구문들이 있습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -104,22 +104,22 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-26: Creating a reference cycle of two `List`
-values pointing to each other</span>
+<span class="caption">Listing 15-26: 두 개의 `List` 값이 서로를 가리키는
+순환 참조 생성하기</span>
 
-We create an `Rc<List>` instance holding a `List` value in the variable `a`
-with an initial list of `5, Nil`. We then create an `Rc<List>` instance
-holding another `List` value in the variable `b` that contains the value 10 and
-points to the list in `a`.
+우리는 초기값 리스트 `5, Nil`를 가진 `List` 값을 갖는 `Rc<List>`
+인스턴스를 만들어 `a` 변수에 넣었습니다. 그런 다음 값 10과 `a`의 리스트를
+가리키는 또다른 `List` 값을 갖는 `Rc<List>` 인스턴스를 만들어서 `b`
+변수에 넣었습니다.
 
-We modify `a` so it points to `b` instead of `Nil`, creating a cycle. We
-do that by using the `tail` method to get a reference to the
-`RefCell<Rc<List>>` in `a`, which we put in the variable `link`. Then we use
-the `borrow_mut` method on the `RefCell<Rc<List>>` to change the value inside
-from an `Rc<List>` that holds a `Nil` value to the `Rc<List>` in `b`.
+우리는 `a`를 수정하여 이것이 `Nil` 대신 `b`를 가리키도록 하였습니다. `a` 내의
+`RefCell<Rc<List>>`에 대한 참조자를 얻어오기 위해 `tail` 메소드를 사용했는데,
+이 참조자는 `link` 변수에 집어넣습니다. 그런 다음 `RefCell<Rc<List>>`의
+`borrow_mut` 메소드를 사용하여 `Nil` 값을 가지고 있는`Rc<List>` 내부의 값을
+`b`의 `Rc<List>`로 바꾸었습니다.
 
-When we run this code, keeping the last `println!` commented out for the
-moment, we’ll get this output:
+지금 잠깐동안 마지막 `println!` 문이 들어가지 않도록 주석처리하고 이 코드를 실행시킬
+때, 아래와 같은 출력을 얻을 것입니다:
 
 ```text
 a initial rc count = 1
