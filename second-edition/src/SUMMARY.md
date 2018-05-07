@@ -1,12 +1,12 @@
-# The Rust Programming Language
+# 러스트 프로그래밍 언어
 
-[Foreword](foreword.md)
-[Introduction](ch00-00-introduction.md)
+[들어가기 앞서](foreword.md)
+[소개](ch00-00-introduction.md)
 
-## Getting started
+## 시작하기
 
-- [Getting Started](ch01-00-getting-started.md)
-    - [Installation](ch01-01-installation.md)
+- [시작하기](ch01-00-getting-started.md)
+    - [설치하기](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
     - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
@@ -34,7 +34,7 @@
     - [`match` 흐름 제어 연산자](ch06-02-match.md)
     - [`if let`을 사용한 간결한 흐름 제어](ch06-03-if-let.md)
 
-## Basic Rust Literacy
+## 기초적인 러스트 사용하기
 
 - [모듈](ch07-00-modules.md)
     - [`mod`와 파일 시스템](ch07-01-mod-and-the-filesystem.md)
