@@ -631,11 +631,11 @@ can implement the trait on the wrapper. *Newtype* is a term that originates
 from the Haskell programming language. There is no runtime performance penalty
 for using this pattern, and the wrapper type is elided at compile time.
 
-As an example, let’s say we want to implement `Display` on `Vec`, which the
+As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
-`Vec` type are defined outside our crate. We can make a `Wrapper` struct that
-holds an instance of `Vec`; then we can implement `Display` on `Wrapper` and
-use the `Vec` value, as shown in Listing 19-31.
+`Vec<T>` type are defined outside our crate. We can make a `Wrapper` struct
+that holds an instance of `Vec<T>`; then we can implement `Display` on
+`Wrapper` and use the `Vec<T>` value, as shown in Listing 19-31.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -659,20 +659,21 @@ fn main() {
 <span class="caption">Listing 19-31: Creating a `Wrapper` type around
 `Vec<String>` to implement `Display`</span>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec`,
-because `Wrapper` is a tuple struct and `Vec` is the item at index 0 in the
+The implementation of `Display` uses `self.0` to access the inner `Vec<T>`,
+because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
 tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
 
 The downside of using this technique is that `Wrapper` is a new type, so it
 doesn’t have the methods of the value it’s holding. We would have to implement
-all the methods of `Vec` directly on `Wrapper` such that the methods delegate
-to `self.0`, which would allow us to treat `Wrapper` exactly like a `Vec`. If
-we wanted the new type to have every method the inner type has, implementing
-the `Deref` trait (discussed in Chapter 15 in the “Treating Smart Pointers like
-Regular References with the `Deref` Trait” section) on the `Wrapper` to return
-the inner type would be a solution. If we don’t want the `Wrapper` type to have
-all the methods of the inner type—for example, to restrict the `Wrapper` type’s
-behavior—we would have to implement just the methods we do want manually.
+all the methods of `Vec<T>` directly on `Wrapper` such that the methods
+delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
+`Vec<T>`. If we wanted the new type to have every method the inner type has,
+implementing the `Deref` trait (discussed in Chapter 15 in the “Treating Smart
+Pointers like Regular References with the `Deref` Trait” section) on the
+`Wrapper` to return the inner type would be a solution. If we don’t want the
+`Wrapper` type to have all the methods of the inner type—for example, to
+restrict the `Wrapper` type’s behavior—we would have to implement just the
+methods we do want manually.
 
 Now you know how the newtype pattern is used in relation to traits; it’s also a
 useful pattern even when traits are not involved. Let’s switch focus and look
