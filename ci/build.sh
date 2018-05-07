@@ -33,7 +33,7 @@ cd ..
 # tests for the second edition
 cd second-edition
 echo 'Spellchecking second edition...'
-bash spellcheck.sh list
+bash ../ci/spellcheck.sh list
 echo 'Testing second edition...'
 mdbook test
 echo 'Building second edition...'
@@ -46,7 +46,7 @@ cd ..
 # tests for the 2018 edition
 cd 2018-edition
 echo 'Spellchecking 2018 edition...'
-bash spellcheck.sh list
+bash ../ci/spellcheck.sh list
 echo 'Testing 2018 edition...'
 mdbook test
 echo 'Building 2018 edition...'
