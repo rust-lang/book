@@ -1,15 +1,18 @@
-## Advanced Functions & Closures
+## Advanced Functions and Closures
 
-Finally, let's discuss some advanced features having to do with functions and
-closures: function pointers, diverging functions, and returning closures.
+Finally, we’ll explore some advanced features related to functions and
+closures, which include function pointers and returning closures.
 
-### Function pointers
+### Function Pointers
 
-We've talked about how to pass closures to functions, but you can pass regular
-functions to functions too! Functions have the type `fn`, with a lower case 'f'
-not to be confused with the `Fn` closure trait. `fn` is called a *function
-pointer*. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-34:
+We’ve talked about how to pass closures to functions; you can also pass regular
+functions to functions! This technique is useful when we want to pass a
+function we’ve already defined rather than defining a new closure. We do this
+using function pointers to allow us to use functions as arguments to other
+functions. Functions coerce to the type `fn` (with a lowercase f), not to be
+confused with the `Fn` closure trait. The `fn` type is called a function
+pointer. The syntax for specifying that a parameter is a function pointer is
+similar to that of closures, as shown in Listing 19-35.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -29,10 +32,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-34: Using the `fn` type to accept a function
+<span class="caption">Listing 19-35: Using the `fn` type to accept a function
 pointer as an argument</span>
 
-This prints `The answer is: 12`. We specify that the parameter `f` in
+This code prints `The answer is: 12`. We specify that the parameter `f` in
 `do_twice` is an `fn` that takes one parameter of type `i32` and returns an
 `i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
 the function name `add_one` as the first argument to `do_twice`.
@@ -42,15 +45,18 @@ parameter type directly rather than declaring a generic type parameter with one
 of the `Fn` traits as a trait bound.
 
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), so we can always pass a function pointer as an argument when calling
-a function that expects a closure. Prefer to write functions using a generic
-type and one of the closure traits, so that your functions can accept either
-functions or closures. An example of a case where you'd only want to accept
-`fn` is when interfacing with external code that doesn't have closures: C
-functions can accept functions as arguments, but C doesn't have closures.
+`FnOnce`), so we can always pass a function pointer as an argument for a
+function that expects a closure. It’s best to write functions using a generic
+type and one of the closure traits so your functions can accept either
+functions or closures.
 
-For example, if we wanted to use the `map` function to turn a vector of numbers
-into a vector of strings, we could use a closure:
+An example of where you would want to only accept `fn` and not closures is when
+interfacing with external code that doesn’t have closures: C functions can
+accept functions as arguments, but C doesn’t have closures.
+
+As an example of where we can use either a closure defined inline or a named
+function, let’s look at a use of `map`. To use the `map` function to turn a
+vector of numbers into a vector of strings, we could use a closure, like this:
 
 ```rust
 let list_of_numbers = vec![1, 2, 3];
@@ -60,7 +66,8 @@ let list_of_strings: Vec<String> = list_of_numbers
     .collect();
 ```
 
-Or we could name a function as the argument to `map` instead of the closure:
+Or we could name a function as the argument to `map` instead of the closure,
+like this:
 
 ```rust
 let list_of_numbers = vec![1, 2, 3];
@@ -70,25 +77,25 @@ let list_of_strings: Vec<String> = list_of_numbers
     .collect();
 ```
 
-Note that we do have to use the fully qualified syntax that we talked about in
-the "Advanced Traits" section because there are multiple functions available
-named `to_string`; here, we're using the `to_string` function defined in the
+Note that we must use the fully qualified syntax that we talked about earlier
+in the “Advanced Traits” section because there are multiple functions available
+named `to_string`. Here, we’re using the `to_string` function defined in the
 `ToString` trait, which the standard library has implemented for any type that
 implements `Display`.
 
-Some people prefer this style, some people prefer the closure. They end up
-with the same code, so use whichever feels more clear to you.
+Some people prefer this style, and some people prefer to use closures. They end
+up compiling to the same code, so use whichever style is clearer to you.
 
 ### Returning Closures
 
-Because closures are represented by traits, returning closures is a little
-tricky; we can't do it directly. In most cases where we may want to return a
-trait, we can instead use the concrete type that implements the trait of what
-we're returning as the return value of the function. We can't do that with
-closures, though. They don't have a concrete type that's returnable; we're not
-allowed to use the function pointer `fn` as a return type, for example.
+Closures are represented by traits, which means we can’t return closures
+directly. In most cases where we might want to return a trait, we can instead
+use the concrete type that implements the trait as the return value of the
+function. But we can’t do that with closures because they don’t have a concrete
+type that is returnable; we’re not allowed to use the function pointer `fn` as
+a return type, for example.
 
-This code that tries to return a closure directly won't compile:
+The following code tries to return a closure directly, but it won’t compile:
 
 ```rust,ignore
 fn returns_closure() -> Fn(i32) -> i32 {
@@ -96,25 +103,25 @@ fn returns_closure() -> Fn(i32) -> i32 {
 }
 ```
 
-The compiler error is:
+The compiler error is as follows:
 
 ```text
 error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
 std::marker::Sized` is not satisfied
- --> <anon>:2:25
+ -->
   |
-2 | fn returns_closure() -> Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^ the trait `std::marker::Sized` is
-  not implemented for `std::ops::Fn(i32) -> i32 + 'static`
+1 | fn returns_closure() -> Fn(i32) -> i32 {
+  |                         ^^^^^^^^^^^^^^ `std::ops::Fn(i32) -> i32 + 'static`
+  does not have a constant size known at compile-time
   |
-  = note: `std::ops::Fn(i32) -> i32 + 'static` does not have a constant size
-  known at compile-time
+  = help: the trait `std::marker::Sized` is not implemented for
+  `std::ops::Fn(i32) -> i32 + 'static`
   = note: the return type of a function must have a statically known size
 ```
 
-The `Sized` trait again! Rust doesn't know much space it'll need to store the
-closure. We saw a solution to this in the previous section, though: we can use
-a trait object:
+The error references the `Sized` trait again! Rust doesn’t know how much space
+it will need to store the closure. We saw a solution to this problem earlier.
+We can use a trait object:
 
 ```rust
 fn returns_closure() -> Box<Fn(i32) -> i32> {
@@ -122,14 +129,18 @@ fn returns_closure() -> Box<Fn(i32) -> i32> {
 }
 ```
 
-For more about trait objects, refer back to Chapter 18.
+This code will compile just fine. For more about trait objects, refer to the
+“Using Trait Objects That Allow for Values of Different Types” section in
+Chapter 17.
 
 ## Summary
 
-Whew! Now we've gone over features of Rust that aren't used very often, but are
-available if you need them. We've introduced a lot of complex topics so that
-when you encounter them in error message suggestions or when reading others'
-code, you'll at least have seen these concepts and syntax once before.
+Whew! Now you have some features of Rust in your toolbox that you won’t use
+often, but you’ll know they’re available in very particular circumstances.
+We’ve introduced several complex topics so that when you encounter them in
+error message suggestions or in other peoples’ code, you’ll be able to
+recognize these concepts and syntax. Use this chapter as a reference to guide
+you to solutions.
 
-Now, let's put everything we've learned throughout the book into practice with
-one more project!
+Next, we’ll put everything we’ve discussed throughout the book into practice
+and do one more project!

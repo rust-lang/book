@@ -1,13 +1,11 @@
-## How Functions Work
+## 함수 동작 원리
 
-Functions are pervasive in Rust code. You’ve already seen one of the most
-important functions in the language: the `main` function, which is the entry
-point of many programs. You’ve also seen the `fn` keyword, which allows you to
-declare new functions.
+함수는 Rust에 녹아들어 있습니다. 여러분은 이미 언어에서 가장 중요하게 생각하는 `main`함수를 보셨습니다. 
+이는 다수의 프로그램에서 실행 지점입니다. 여러분은 또한 `fn` 키워드도 보셨을텐데, 이는 새로운 함수의 선언을
+가용하게 합니다.
 
-Rust code uses *snake case* as the conventional style for function and variable
-names. In snake case, all letters are lowercase and underscores separate words.
-Here’s a program that contains an example function definition:
+Rust 코드는 *뱀 형태*를 변수나 함수 이름의 형식 규칙으로 사용합니다. 뱀 형태에서, 모든 문자는 소문자를 사용하며
+밑줄 표시로 단어를 구분합니다. 다음은 예제로 함수를 선언하는 프로그램 입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -23,45 +21,38 @@ fn another_function() {
 }
 ```
 
-Function definitions in Rust start with `fn` and have a set of parentheses
-after the function name. The curly braces tell the compiler where the function
-body begins and ends.
+Rust 에서의 함수 선언은 `fn`으로 시작하며 함수 이름 뒤에 괄호의 형식으로 되어 있습니다. 중괄호는 컴파일러에게
+함수의 시작과 종료 지점을 알려주게 됩니다. 
 
-We can call any function we’ve defined by entering its name followed by a set
-of parentheses. Because `another_function` is defined in the program, it can be
-called from inside the `main` function. Note that we defined `another_function`
-*after* the `main` function in the source code; we could have defined it before
-as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere.
+우리는 함수의 이름과 괄호 형식을 기입하는 것을 통해 우리가 선언했던 어떤 함수든 호출할 수 있습니다. 
+`another_function`이 프로그램 내에 정의되어 있으므로, `main` 함수에서 해당 함수를 호출할 수 있습니다. 
+주의할 점은, 소스 코드 내에서 `another_function`이 `main` 함수 *이후에* 정의했다는 점 입니다. 우리는
+이를 이전에도 정의할 수 있습니다. Rust는 당신의 함수의 위치를 신경쓰지 않습니다, 어디든 정의만 되어 있으면 됩니다.
 
-Let’s start a new binary project named *functions* to explore functions
-further. Place the `another_function` example in *src/main.rs* and run it. You
-should see the following output:
+
+함수를 추가로 탐색하기 위해 *functions* 이라는 이름의 새로운 바이너리 프로젝트를 시작합시다.
+`another_function` 예제를 * src / main.rs *에 넣고 실행해보세요.
+다음과 같은 결과가 나타납니다:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.28 secs
      Running `target/debug/functions`
 Hello, world!
 Another function.
 ```
 
-The lines execute in the order in which they appear in the `main` function.
-First, the “Hello, world!” message prints, and then `another_function` is
-called and its message is printed.
+`main` 함수 안의 내용이 줄의 순서대로 수행됩니다. 처음으로, "Hello, world!" 메시지가 출력되고, 
+`another_function`이 호출되고 그의 메시지를 출력합니다. 
 
-### Function Parameters
+### 함수 매개변수 
 
-Functions can also be defined to have *parameters*, which are special variables
-that are part of a function's signature. When a function has parameters, we can
-provide it with concrete values for those parameters. Technically, the concrete
-values are called *arguments*, but in casual conversation people tend to use
-the words “parameter” and “argument” interchangeably for either the variables
-in a function's definition or the concrete values passed in when you call a
-function.
+함수는 함수 고유한 부분인 특별한 변수 *매개변수*를 갖는 형식으로 선언될 수 있습니다. 함수가 매개변수를 취할 때, 우리는
+상수를 그들의 전달인자로 제공할 수 있습니다. 기술적으로, 여기서 전달되는 상수를 *전달인자*라고 부릅니다만, 사람들은 보통
+“전달인자”와 “매개변수”를 혼용해서 사용하는 경향이 있습니다.
 
-The following rewritten version of `another_function` shows what parameters
-look like in Rust:
+다음의 재작성 된 `another_function`은 Rust에서 매개변수가 어떤 것이지 보여줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -75,27 +66,23 @@ fn another_function(x: i32) {
 }
 ```
 
-Try running this program; you should get the following output:
+이 프로그램을 실행해보시면 다음과 같은 결과가 출력되는 것을 보게 될 겁니다:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
      Running `target/debug/functions`
 The value of x is: 5
 ```
 
-The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When `5` is passed to `another_function`, the
-`println!` macro puts `5` where the pair of curly braces were in the format
-string.
+`another_function`의 선언은 `x`로 명명된 하나의 매개변수를 갖습니다. `x`의 타입은 `i32`로 정의됩니다.
+`5`가 `another_function`으로 전달되면, `println!` 매크로는 중괄호 짝으로 된 형식 문자열에 `5`를
+전달합니다. 함수의 선언부에서, 여러분은 *반드시* 각 매개변수의 타입을 정의해야 합니다. 이 사항은 Rust를 설계하며 
+내린 신중한 결정사항 입니다: 함수의 정의에 타입을 명시하여 코드내 다른 부분에서 이들을 사용하는 것을 통해 당신의 의도를 
+추측하지 않아도 되게 됩니다. 
 
-In function signatures, you *must* declare the type of each parameter. This is
-a deliberate decision in Rust’s design: requiring type annotations in function
-definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what you mean.
-
-When you want a function to have multiple parameters, separate the parameter
-declarations with commas, like this:
+여러분의 함수에 여러 개의 매개변수를 사용하고 싶으면, 매개변수들을 다음처럼 쉼표와 함께 구분해서 사용할 수 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -110,44 +97,35 @@ fn another_function(x: i32, y: i32) {
 }
 ```
 
-This example creates a function with two parameters, both of which are `i32`
-types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type, they just happen
-to be in this example.
-
-Let’s try running this code. Replace the program currently in your *function*
-project’s *src/main.rs* file with the preceding example, and run it using
-`cargo run`:
+이 예제는 각각 `i32` 타입인 두 개의 매개변수를 갖는 함수를 생성합니다. 함수는 그의 두 매개변수의 값을 출력합니다. 
+주의할 점은, 함수 매개변수는 이번 예제처럼 굳이 같은 타입이 아니여도 된다는 점 입니다. 한번 코드를 실행해봅시다. 
+여러분의 *function* 프로젝트의 *src/main.rs* 내용을 위의 예제로 변경한 뒤에, 
+`cargo run`을 통해 수행시키면 됩니다:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
 ```
 
-Because we called the function with `5` as the value for  `x` and `6` is passed
-as the value for `y`, the two strings are printed with these values.
+우리는 값 `5`와 `6`을 `x`와 `y`로 전달했기 때문에, 이 값들이 담긴 두 문장을 출력합니다.
 
-### Function Bodies
+### 함수 본문 
 
-Function bodies are made up of a series of statements optionally ending in an
-expression. So far, we’ve only covered functions without an ending expression,
-but we have seen expressions as parts of statements. Because Rust is an
-expression-based language, this is an important distinction to understand.
-Other languages don’t have the same distinctions, so let’s look at what
-statements and expressions are and how their differences affect the bodies of
-functions.
+함수 본문은 필요에 따라 표현식으로 종결되는 구문의 나열로 구성됩니다. 지금까지 우리는 종결 표현식이 없는 함수만 
+다뤘기에, 표현식이 구문의 일부처럼 여겨질지 모르겠습니다. Rust가 표현식에 기반한 언어기 때문에, 이것은 이해하셔야
+하는 중요한 차이점 입니다. 다른 언어들은 이와 같은 차이가 없으니, 구문과 표현식이 함수의 본문에 어떤 식으로 차이나게 
+적용되는지 살펴보도록 하겠습니다. 
 
-### Statements and Expressions
+### 구문과 표현식
 
-We’ve actually already used statements and expressions. *Statements* are
-instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let’s look at some examples.
+사실 우리는 이미 구문과 표현식을 사용했습니다. *구문*은 어떤 명령들의 나열로 값을 반환하지 않는 어떤 동작을 수행 
+합니다. *포현식*은 결과 값을 산출해냅니다. 다음 몇 개의 예제를 살펴보도록 합시다. `let` 키워드를 통해 변수를 
+만들고 값을 할당하는 구문을 만듭니다. 항목 3-3의, `let y = 6;`은 구문 입니다:
 
-Creating a variable and assigning a value to it with the `let` keyword is a
-statement. In Listing 3-3, `let y = 6;` is a statement:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -157,13 +135,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-3: A `main` function declaration containing one statement.</span>
+<span class="caption">항목 3-3: 하나의 구문을 갖는 `main` 함수를 선언하였다. </span>
 
-Function definitions are also statements; the entire preceding example is a
-statement in itself.
-
-Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do:
+함수 정의는 또 하나의 구문입니다; 상기 예제는 자신 그 자체가 구문 입니다. 구문은 값을 반환하지 않습니다. 
+그러니, 여러분은 다음처럼 `let` 구문을 사용해서는 다른 변수에 값을 대입할 수 없습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -173,7 +148,7 @@ fn main() {
 }
 ```
 
-When you run this program, you’ll get an error like this:
+여러분이 이 프로그램을 수행하면, 다음과 같은 에러를 보게 될 겁니다:
 
 ```text
 $ cargo run
@@ -187,19 +162,15 @@ error: expected expression, found statement (`let`)
   = note: variable declaration using `let` is a statement
 ```
 
-The `let y = 6` statement does not return a value, so there isn’t anything for
-`x` to bind to. This is different than in other languages, such as C and Ruby,
-where the assignment returns the value of the assignment. In those languages,
-you can write `x = y = 6` and have both `x` and `y` have the value `6`; that is
-not the case in Rust.
+`let y = 6` 구문은 반환 값이 없으므로, `x`에 bind 시킬 것이 없습니다. 이것이 다른 언어인 C나 
+Ruby와의 차이점 입니다. 이들 언어들은 `x = y = 6`와 같은 코드가 `x`와 `y`에 모두 `6`의 값을 
+대입할 수 있습니다; Rust에서는 허용되지 않습니다. 여러분이 작성하는 Rust 코드의 대부분은 표현식이며 
+이는 어떤 값을 산출합니다. `5 + 6`과 같은 간단한 수학 연산을 살펴보면, 이는 `11`이란 값을 산출하는 
+표현식입니다. 
 
-Expressions evaluate to something and make up most of the rest of the code that
-you’ll write in Rust. Consider a simple math operation, such as `5 + 6`, which
-is an expression that evaluates to the value `11`. Expressions can be part of
-statements: in Listing 3-3 that had the statement `let y = 6;`, `6` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. The block that we use to create
-new scopes, `{}`, is an expression, for example:
+표현식은 구문의 부분일 수 있습니다: 항목 3-3은 `let y = 6;`이란 구문을 갖는데, `6`은 `6`이란 값을 
+산출하는 표현식입니다. 함수를 호출하는 것은 표현식입니다. 매크로를 호출하는 것은 표현식입니다. 예제처럼 새로운 
+범위를 생성하는데 사용하는 block, `{}`, 은 표현식입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -216,7 +187,7 @@ fn main() {
 }
 ```
 
-This expression:
+표현식 부:
 
 ```rust,ignore
 {
@@ -225,20 +196,18 @@ This expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note the line without a semicolon at the end,
-unlike most of the lines you’ve seen so far. Expressions do not include ending
-semicolons. If you add a semicolon to the end of an expression, you turn it
-into a statement, which will then not return a value. Keep this in mind as you
-explore function return values and expressions next.
+이번 경우에 해당 block은 `4`를 산출합니다. 이 값은 `let` 구문의 일부로 `y`에 bound됩니다. 
+여러분이 앞서 봐온 것과 다르게 `x + 1` 줄의 마지막이 세미콜론으로 끝나지 않은 점을 주목하세요.
+표현식은 종결을 나타내는 세미콜론을 사용하지 않습니다. 만약 세미콜론을 표현식 마지막에 추가하면,
+이는 구문으로 변경되고 반환 값이 아니게 됩니다. 이후부터 함수의 반환 값과 표현식을 살펴보실때
+이 점을 유의하세요. 
 
-### Functions with Return Values
+### 반환 값을 갖는 함수
 
-Functions can return values to the code that calls them. We don’t name return
-values, but we do declare their type after an arrow (`->`). In Rust, the return
-value of the function is synonymous with the value of the final expression in
-the block of the body of a function. Here’s an example of a function that
-returns a value:
+함수는 그들을 호출한 코드에 값을 반환할 수 있습니다. 우리는 반환되는 값을 명명해야 할 필요는 없지만, 그들의 
+타입은 화살표(`->`) 뒤에 선언해야 합니다. Rust에서 반환 값은 함수 본문의 마지막 표현식의 값과 동일합니다.
+`return` 키워드와 값을 써서 함수로부터 일찍 반환할 수 있지만, 대부분의 함수들은 암묵적으로 마지막
+표현식을 반환합니다. 값을 반환하는 함수의 예를 보겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -254,32 +223,30 @@ fn main() {
 }
 ```
 
-There are no function calls, macros, or even `let` statements in the `five`
-function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified, too, as `-> i32`. Try
-running this code; the output should look like this:
+`five` 함수에는 함수 호출, 매크로, 심지어 `let` 구문도 없이 그저 `5`란 숫자 하나가 있습니다. 
+이는 Rust에서 완벽하게 함수로 허용됩니다. 함수 반환 값의 타입이 `-> i32`로 명시되어 있다는 점 
+또한 주목하세요. 해당 코드를 수행하면 다음과 같은 결과를 얻게 될 겁니다:
 
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
      Running `target/debug/functions`
 The value of x is: 5
 ```
 
-The `5` in `five` is the function’s return value, which is why the return type
-is `i32`. Let’s examine this in more detail. There are two important bits:
-first, the line `let x = five();` shows that we’re using the return value of a
-function to initialize a variable. Because the function `five` returns a `5`,
-that line is the same as the following:
+`5`는 `five` 함수가 반환한 값이고, 이 때문에 반환 타입을 `i32`으로 한 것이지요. 좀더 자세히 
+설명해보겠습니다. 중요한 지점이 두 곳 있습니다: 첫 째, `let x = five();` 줄은 우리가 반환 값을 
+변수의 초기 값으로 사용하는 것을 보여줍니다. `five`의 반환 값이 `5`이기 때문에, 해당 줄은 다음과 
+동일합니다:
 
 ```rust
 let x = 5;
 ```
 
-Second, the `five` function has no parameters and defines the type of the
-return value, but the body of the function is a lonely `5` with no semicolon
-because it’s an expression whose value we want to return. Let’s look at another
-example:
+둘 째, `five` 함수는 매개변수 없이 반환 값에 대한 타입만 정의되어 있지만, 본문에는 `5`만이 세미콜론 없이 
+외로이 있는 이유는 이것이 우리가 값을 반환하고자 할때 사용하는 하는 표현식이기 때문입니다. 다른 예제를 통해 
+살펴보겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -295,9 +262,8 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Running this code will print `The value of x is: 6`. What happens if we place a
-semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement?
+이 코드를 수행하면 `The value of x is: 6`를 출력하게 됩니다. 우리가 `x + 1` 끝에 세미콜론을 
+추가하여 표현식을 구문으로 변경하면 어떤 일이 일어날까요?
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -313,7 +279,7 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Running this code produces an error, as follows:
+이 코드를 실행하면 다음과 같은 에러를 얻게 됩니다:
 
 ```text
 error[E0308]: mismatched types
@@ -322,22 +288,16 @@ error[E0308]: mismatched types
 7 |   fn plus_one(x: i32) -> i32 {
   |  ____________________________^
 8 | |     x + 1;
+  | |          - help: consider removing this semicolon
 9 | | }
   | |_^ expected i32, found ()
   |
   = note: expected type `i32`
              found type `()`
-help: consider removing this semicolon:
- --> src/main.rs:8:10
-  |
-8 |     x + 1;
-  |          ^
 ```
 
-The main error message, “mismatched types,” reveals the core issue with this
-code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the empty tuple. Therefore, nothing is returned, which contradicts the function
-definition and results in an error. In this output, Rust provides a message to
-possibly help rectify this issue: it suggests removing the semicolon, which
-would fix the error.
+에러 메시지의 중요 포인트는 “mismatched types,”으로 이 코드의 주요 문제를 보여줍니다. 
+`plus_one` 함수의 정의는 `i32` 값을 반환하겠다고 하였으나, 구문은 값을 산출하지 않기에 `()`처럼 
+비어있는 튜플로 표현됩니다. 이런 이유로, 반환할 것이 없어서 함수가 정의된 내용과 상충하게 되고 이는 에러를 
+발생시킵니다. 이번 결과에서는, Rust가 문제를 해결할 수 있도록 도와주는 메시지를 제공합니다: 세미콜론을 
+제거하면 에러가 교정될 수도 있다고 제안하네요. 

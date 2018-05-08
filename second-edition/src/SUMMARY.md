@@ -1,10 +1,14 @@
-# The Rust Programming Language
+# 러스트 프로그래밍 언어
 
-## Getting started
+[들어가기 앞서](foreword.md)
+[소개](ch00-00-introduction.md)
 
-- [Introduction](ch01-00-introduction.md)
-    - [Installation](ch01-01-installation.md)
+## 시작하기
+
+- [시작하기](ch01-00-getting-started.md)
+    - [설치하기](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
+    - [Hello, Cargo!](ch01-03-hello-cargo.md)
 
 - [추리 게임 튜토리얼](ch02-00-guessing-game-tutorial.md)
 
@@ -22,15 +26,15 @@
 
 - [연관된 데이터들을 구조체로 다루기](ch05-00-structs.md)
     - [구조체를 정의하고 생성하기](ch05-01-defining-structs.md)
-    - [An Example Program Using Structs](ch05-02-example-structs.md)
-    - [Method Syntax](ch05-03-method-syntax.md)
+    - [구조체를 이용한 예제 프로그램](ch05-02-example-structs.md)
+    - [메소드 문법](ch05-03-method-syntax.md)
 
 - [열거형과 패턴 매칭](ch06-00-enums.md)
-    - [Defining an Enum](ch06-01-defining-an-enum.md)
-    - [The `match` Control Flow Operator](ch06-02-match.md)
-    - [Concise Control Flow with `if let`](ch06-03-if-let.md)
+    - [열거형 정의하기](ch06-01-defining-an-enum.md)
+    - [`match` 흐름 제어 연산자](ch06-02-match.md)
+    - [`if let`을 사용한 간결한 흐름 제어](ch06-03-if-let.md)
 
-## Basic Rust Literacy
+## 기초적인 러스트 사용하기
 
 - [모듈](ch07-00-modules.md)
     - [`mod`와 파일 시스템](ch07-01-mod-and-the-filesystem.md)
@@ -47,45 +51,45 @@
     - [`Result`와 함께하는 복구 가능한 에러](ch09-02-recoverable-errors-with-result.md)
     - [`panic!`이냐, `panic!`이 아니냐, 그것이 문제로다](ch09-03-to-panic-or-not-to-panic.md)
 
-- [Generic Types, Traits, and Lifetimes](ch10-00-generics.md)
-    - [Generic Data Types](ch10-01-syntax.md)
-    - [Traits: Defining Shared Behavior](ch10-02-traits.md)
-    - [Validating References with Lifetimes](ch10-03-lifetime-syntax.md)
+- [제네릭 타입, 트레잇, 그리고 라이프타임](ch10-00-generics.md)
+    - [제네릭 데이터 타입](ch10-01-syntax.md)
+    - [트레잇: 공유 동작을 정의하기](ch10-02-traits.md)
+    - [라이프타임을 이용한 참조자 유효화](ch10-03-lifetime-syntax.md)
 
-- [Testing](ch11-00-testing.md)
-    - [Writing tests](ch11-01-writing-tests.md)
-    - [Running tests](ch11-02-running-tests.md)
-    - [Test Organization](ch11-03-test-organization.md)
+- [테스팅](ch11-00-testing.md)
+    - [테스트 작성하기](ch11-01-writing-tests.md)
+    - [테스트 실행하기](ch11-02-running-tests.md)
+    - [테스트 조직화](ch11-03-test-organization.md)
 
-- [An I/O Project](ch12-00-an-io-project.md)
+- [An I/O Project: Building a Command Line Program](ch12-00-an-io-project.md)
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
     - [Reading a File](ch12-02-reading-a-file.md)
-    - [Improving Error Handling and Modularity](ch12-03-improving-error-handling-and-modularity.md)
-    - [Testing the Library's Functionality](ch12-04-testing-the-librarys-functionality.md)
+    - [Refactoring to Improve Modularity and Error Handling](ch12-03-improving-error-handling-and-modularity.md)
+    - [Developing the Library’s Functionality with Test Driven Development](ch12-04-testing-the-librarys-functionality.md)
     - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
-    - [Writing to `stderr` instead of `stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
+    - [Writing Error Messages to Standard Error Instead of Standard Output](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
 ## Thinking in Rust
 
-- [Functional Language Features in Rust](ch13-00-functional-features.md)
-    - [Closures](ch13-01-closures.md)
-    - [Iterators](ch13-02-iterators.md)
-    - [Improving our I/O Project](ch13-03-improving-our-io-project.md)
-    - [Performance](ch13-04-performance.md)
+- [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)
+    - [Closures: Anonymous Functions that Can Capture Their Environment](ch13-01-closures.md)
+    - [Processing a Series of Items with Iterators](ch13-02-iterators.md)
+    - [Improving Our I/O Project](ch13-03-improving-our-io-project.md)
+    - [Comparing Performance: Loops vs. Iterators](ch13-04-performance.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
-    - [Release Profiles](ch14-01-release-profiles.md)
+    - [Customizing Builds with Release Profiles](ch14-01-release-profiles.md)
     - [Publishing a Crate to Crates.io](ch14-02-publishing-to-crates-io.md)
     - [Cargo Workspaces](ch14-03-cargo-workspaces.md)
     - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
     - [Extending Cargo with Custom Commands](ch14-05-extending-cargo.md)
 
-- [Smart Pointers](ch15-00-smart-pointers.md)
-    - [`Box<T>` Points to Data on the Heap and Has a Known Size](ch15-01-box.md)
-    - [The `Deref` Trait Allows Access to the Data Through a Reference](ch15-02-deref.md)
-    - [The `Drop` Trait Runs Code on Cleanup](ch15-03-drop.md)
-    - [`Rc<T>`, the Reference Counted Smart Pointer](ch15-04-rc.md)
-    - [`RefCell<T>` and the Interior Mutability Pattern](ch15-05-interior-mutability.md)
+- [스마트 포인터](ch15-00-smart-pointers.md)
+    - [`Box<T>`는 힙에 있는 데이터를 가리키고 알려진 크기를 갖습니다](ch15-01-box.md)
+    - [`Deref` 트레잇은 참조자를 통하여 데이터로의 접근을 허용합니다](ch15-02-deref.md)
+    - [`Drop` 트레잇은 메모리 정리 코드를 실행시킵니다](ch15-03-drop.md)
+    - [`Rc<T>`, 참조 카운팅 스마트 포인터](ch15-04-rc.md)
+    - [`RefCell<T>`와 내부 가변성 패턴](ch15-05-interior-mutability.md)
     - [Creating Reference Cycles and Leaking Memory is Safe](ch15-06-reference-cycles.md)
 
 - [Fearless Concurrency](ch16-00-concurrency.md)
@@ -94,10 +98,10 @@
     - [Shared State](ch16-03-shared-state.md)
     - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
-- [Is Rust an Object-Oriented Programming Language?](ch17-00-oop.md)
-    - [What Does Object-Oriented Mean?](ch17-01-what-is-oo.md)
-    - [Trait Objects for Using Values of Different Types](ch17-02-trait-objects.md)
-    - [Object-Oriented Design Pattern Implementations](ch17-03-oo-design-patterns.md)
+- [Object Oriented Programming Features of Rust](ch17-00-oop.md)
+    - [Characteristics of Object-Oriented Languages](ch17-01-what-is-oo.md)
+    - [Using Trait Objects that Allow for Values of Different Types](ch17-02-trait-objects.md)
+    - [Implementing an Object-Oriented Design Pattern](ch17-03-oo-design-patterns.md)
 
 ## Advanced Topics
 
@@ -115,17 +119,14 @@
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
-    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
-    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
-    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
-    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
-    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
+    - [Turning our Single Threaded Server into a Multithreaded Server](ch20-02-multithreaded.md)
+    - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
-    - [B - Operators](appendix-02-operators.md)
-    - [C - Derivable Traits]()
-    - [D - Nightly Rust]()
-    - [E - Macros]()
-    - [F - Translations]()
-    - [G - Newest Features](appendix-07-newest-features.md)
+    - [B - Operators and Symbols](appendix-02-operators.md)
+    - [C - Derivable Traits](appendix-03-derivable-traits.md)
+    - [D - Macros](appendix-04-macros.md)
+    - [E - Translations](appendix-05-translation.md)
+    - [F - Newest Features](appendix-06-newest-features.md)
+    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)

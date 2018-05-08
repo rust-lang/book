@@ -1,23 +1,19 @@
-## The `match` Control Flow Operator
+## `match` 흐름 제어 연산자
 
-Rust has an extremely powerful control-flow operator called `match` that allows
-us to compare a value against a series of patterns and then execute code based
-on which pattern matches. Patterns can be made up of literal values, variable
-names, wildcards, and many other things; Chapter 18 will cover all the
-different kinds of patterns and what they do. The power of `match` comes from
-the expressiveness of the patterns and the compiler checks that make sure all
-possible cases are handled.
+러스트는 `match`라고 불리우는 극도로 강력한 흐름 제어 연산자를 가지고 있는데 이는 우리에게 일련의
+패턴에 대해 어떤 값을 비교한 뒤 어떤 패턴에 매치되었는지를 바탕으로 코드를 수행하도록 해줍니다
+패턴은 리터럴 값, 변수명, 와일드 카드, 그리고 많은 다른 것들로 구성될 수 있습니다; 18장에서
+다른 모든 종류의 패턴들과 이것들로 할 수 있는 것에 대해 다룰 것입니다. `match`의 힘은
+패턴의 표현성으로부터 오며 컴파일러는 모든 가능한 경우가 다루어지는지를 검사합니다.
 
-Think of a `match` expression kind of like a coin sorting machine: coins slide
-down a track with variously sized holes along it, and each coin falls through
-the first hole it encounters that it fits into. In the same way, values go
-through each pattern in a `match`, and at the first pattern the value “fits,”
-the value will fall into the associated code block to be used during execution.
+`match` 표현식을 동전 분류기와 비슷한 종류로 생각해보세요: 동전들은 다양한 크기의 구멍들이 있는
+트랙으로 미끄러져 내려가고, 각 동전은 그것에 맞는 첫번째 구멍을 만났을 때 떨어집니다. 동일한 방식으로,
+값들은 `match` 내의 각 패턴을 통과하고, 해당 값에 “맞는” 첫번째 패턴에서, 그 값은 실행중에 사용될
+연관된 코드 블록 안으로 떨어질 것입니다.
 
-Because we just mentioned coins, let’s use them as an example using `match`! We
-can write a function that can take an unknown United States coin and, in a
-similar way as the counting machine, determine which coin it is and return its
-value in cents, as shown here in Listing 6-3:
+우리가 방금 동전들을 언급했으니, `match`를 이용한 예제로 동전들을 이용해봅시다! Listing 6-3에서
+보는 바와 같이, 우리는 익명의 미국 동전을 입력받아서, 동전 계수기와 동일한 방식으로 그 동전이 어떤
+것이고 센트로 해당 값을 반환하는 함수를 작성할 수 있습니다.
 
 ```rust
 enum Coin {
@@ -27,7 +23,7 @@ enum Coin {
     Quarter,
 }
 
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -37,36 +33,30 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-<span class="caption">Listing 6-3: An enum and a `match` expression that has
-the variants of the enum as its patterns.</span>
+<span class="caption">Listing 6-3: 열거형과 열거형의 variant를 패턴으로서 사용하는
+`match` 표현식</span>
 
-Let’s break down the `match` in the `value_in_cents` function. First, we list
-the `match` keyword followed by an expression, which in this case is the value
-`coin`. This seems very similar to an expression used with `if`, but there’s a
-big difference: with `if`, the expression needs to return a boolean value.
-Here, it can be any type. The type of `coin` in this example is the `Coin` enum
-that we defined in Listing 6-3.
+`value_in_cents` 함수 내의 `match`를 쪼개봅시다. 먼저, `match` 키워드 뒤에 표현식을 써줬는데,
+위의 경우에는 `coin` 값입니다. 이는 `if`를 사용한 표현식과 매우 유사하지만, 큰 차이점이 있습니다:
+`if`를 사용하는 경우, 해당 표현식은 부울린 값을 반환할 필요가 있습니다. 여기서는 어떤 타입이든
+가능합니다. 위 예제에서 `coin`의 타입은 Listing 6-3에서 정의했던 `Coin` 열거형입니다.
 
-Next are the `match` arms. An arm has two parts: a pattern and some code. The
-first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
-operator that separates the pattern and the code to run. The code in this case
-is just the value `1`. Each arm is separated from the next with a comma.
+다음은 `match` 갈래(arm)들입니다. 하나의 갈래는 두 부분을 갖고 있습니다: 패턴과 어떤 코드로 되어
+있죠. 여기서의 첫번째 갈래는 값 `Coin::Penny`로 되어있는 패턴을 가지고 있고 그 후에 패턴과 실행되는
+코드를 구분해주는 `=>` 연산자가 있습니다. 위의 경우에서 코드는 그냥 값 `1`입니다. 각 갈래는
+그 다음 갈래와 쉼표로 구분됩니다.
 
-When the `match` expression executes, it compares the resulting value against
-the pattern of each arm, in order. If a pattern matches the value, the code
-associated with that pattern is executed. If that pattern doesn’t match the
-value, execution continues to the next arm, much like a coin sorting machine.
-We can have as many arms as we need: in Listing 6-3, our `match` has four arms.
+`match` 표현식이 실행될 때, 결과 값을 각 갈래의 패턴에 대해서 순차적으로 비교합니다. 만일 어떤
+패턴이 그 값과 매치되면, 그 패턴과 연관된 코드가 실행됩니다. 만일 그 패턴이 값과 매치되지 않는다면,
+동전 분류기와 비슷하게 다음 갈래로 실행을 계속합니다.
 
-The code associated with each arm is an expression, and the resulting value of
-the expression in the matching arm is the value that gets returned for the
-entire `match` expression.
+각 갈래와 연관된 코드는 표현식이고, 이 매칭 갈래에서의 표현식의 결과 값은 전체 `match` 표현식에
+대해 반환되는 값입니다.
 
-Curly braces typically aren’t used if the match arm code is short, as it is in
-Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you can use curly braces. For example, the
-following code would print out “Lucky penny!” every time the method was called
-with a `Coin::Penny` but would still return the last value of the block, `1`:
+각 갈래가 그냥 값을 리턴하는 Listing 6-3에서처럼 매치 갈래의 코드가 짧다면, 중괄호는 보통 사용하지
+않습니다. 만일 매치 갈래 내에서 여러 줄의 코드를 실행시키고 싶다면, 중괄호를 이용할 수 있습니다.
+예를 들어, 아래의 코드는 `Coin::Penny`와 함께 메소드가 호출될 때마다 “Lucky penny!”를
+출력하지만 여전히 해당 블록의 마지막 값인 `1`을 반환할 것입니다:
 
 ```rust
 # enum Coin {
@@ -76,7 +66,7 @@ with a `Coin::Penny` but would still return the last value of the block, `1`:
 #    Quarter,
 # }
 #
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -89,18 +79,16 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-### Patterns that Bind to Values
+### 값들을 바인딩하는 패턴들
 
-Another useful feature of match arms is that they can bind to parts of the
-values that match the pattern. This is how we can extract values out of enum
-variants.
+매치 갈래의 또다른 유용한 기능은 패턴과 매치된 값들의 부분을 바인딩할 수 있다는 것입니다.
+이것이 열거형 variant로부터 어떤 값들을 추출할 수 있는 방법입니다.
 
-As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States minted quarters with different
-designs for each of the 50 states on one side. No other coins got state
-designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `State` value stored
-inside it, which we've done here in Listing 6-4:
+한 가지 예로서, 우리의 열거형 variant 중 하나를 내부에 값을 들고 있도록 바꿔봅시다. 1999년부터
+2008년까지, 미국은 각 50개 주마다 한쪽 면의 디자인이 다른 쿼터 동전을 주조했습니다. 다른 동전들은
+주의 디자인을 갖지 않고, 따라서 오직 쿼터 동전들만 이 특별값을 갖습니다. 우리는 이 정보를
+`Quarter` variant 내에 `UsState` 값을 포함하도록 우리의 `enum`을 변경함으로써 추가할 수
+있는데, 이는 Listing 6-4에서 한 바와 같습니다:
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
@@ -118,18 +106,17 @@ enum Coin {
 }
 ```
 
-<span class="caption">Listing 6-4: A `Coin` enum where the `Quarter` variant
-also holds a `UsState` value</span>
+<span class="caption">Listing 6-4: `Quarter` variant가 `UsSate` 값 또한 들고
+있는 `Coin` 열거형</span>
 
-Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
-While we sort our loose change by coin type, we’ll also call out the name of
-the state associated with each quarter so if it’s one our friend doesn’t have,
-they can add it to their collection.
+우리의 친구가 모든 50개주 쿼터 동전을 모으기를 시도하는 중이라고 상상해봅시다. 동전의 종류에 따라
+동전을 분류하는 동안, 우리는 또한 각 쿼터 동전에 연관된 주의 이름을 외쳐서, 만일 그것이 우리 친구가
+가지고 있지 않은 것이라면, 그 친구는 자기 컬렉션에 그 동전을 추가할 수 있겠지요.
 
-In the match expression for this code, we add a variable called `state` to the
-pattern that matches values of the variant `Coin::Quarter`. When a
-`Coin::Quarter` matches, the `state` variable will bind to the value of that
-quarter’s state. Then we can use `state` in the code for that arm, like so:
+이 코드를 위한 매치 표현식 내에서는 variant `Coin::Quarter`의 값과 매치되는 패턴에 `state`라는
+이름의 변수를 추가합니다. `Coin::Quarter`이 매치될 때, `state` 변수는 그 쿼터 동전의 주에 대한
+값에 바인드될 것입니다. 그러면 우리는 다음과 같이 해당 갈래에서의 코드 내에서 `state`를 사용할 수
+있습니다:
 
 ```rust
 # #[derive(Debug)]
@@ -145,7 +132,7 @@ quarter’s state. Then we can use `state` in the code for that arm, like so:
 #    Quarter(UsState),
 # }
 #
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -158,28 +145,25 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
-would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
-of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
-that point, the binding for `state` will be the value `UsState::Alaska`. We can
-then use that binding in the `println!` expression, thus getting the inner
-state value out of the `Coin` enum variant for `Quarter`.
+만일 우리가 `value_in_cents(Coin::Quarter(UsState::Alaska))`를 호출했다면, `coin`은
+`Coin::Quarter(UsState::Alaska)`가 될테지요. 각각의 매치 갈래들과 이 값을 비교할때,
+`Coin::Quarter(state)`에 도달할 때까지 아무것도 매치되지 않습니다. 이 시점에서, `state`에
+대한 바인딩은 값 `UsState::Alaska`가 될 것입니다. 그러면 이 바인딩을 `println!` 표현식
+내에서 사용할 수 있고, 따라서 `Quarter`에 대한 `Coin` 열거형 variant로부터 내부의 주에 대한
+값을 얻었습니다.
 
-### Matching with `Option<T>`
+### `Option<T>`를 이용하는 매칭
 
-In the previous section we wanted to get the inner `T` value out of the `Some`
-case when using `Option<T>`; we can also handle `Option<T>` using `match` as we
-did with the `Coin` enum! Instead of comparing coins, we’ll compare the
-variants of `Option<T>`, but the way that the `match` expression works remains
-the same.
+이전 절에서 `Option<T>`을 사용할 때 `Some` 케이스로부터 내부의 `T` 값을 얻을 필요가 있었습니다;
+우리는 `Coin` 열거형을 가지고 했던 것처럼 `match`를 이용하여 `Option<T>`를 다룰 수 있습니다!
+동전들을 비교하는 대신, `Option<T>`의 variant를 비교할 것이지만, `match` 표현식이 동작하는
+방법은 동일하게 남아있습니다.
 
-Let’s say we want to write a function that takes an `Option<i32>`, and if
-there’s a value inside, adds one to that value. If there isn’t a value inside,
-the function should return the `None` value and not attempt to perform any
-operations.
+`Option<i32>`를 파라미터로 받아서, 내부에 값이 있으면, 그 값에 1을 더하는 함수를 작성하고
+싶다고 칩시다. 만일 내부에 값이 없으면, 이 함수는 `Non` 값을 반환하고 다른 어떤 연산도 수행하는
+시도를 하지 않아야 합니다.
 
-This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5:
+`match`에 감사하게도, 이 함수는 매우 작성하기 쉽고, Listing 6-5와 같이 보일 것입니다:
 
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
@@ -194,54 +178,50 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<span class="caption">Listing 6-5: A function that uses a `match` expression on
-an `Option<i32>`</span>
+<span class="caption">Listing 6-5: `Option<i32>` 상에서 `match`를 이용하는
+함수</span>
 
-#### Matching `Some(T)`
+#### `Some(T)` 매칭하기
 
-Let’s examine the first execution of `plus_one` in more detail. When we call
-`plus_one(five)`, the variable `x` in the body of `plus_one` will have the
-value `Some(5)`. We then compare that against each match arm.
+`plus_one`의 첫번째 실행을 좀 더 자세히 시험해봅시다. `plus_one(five)`가 호출될 때,
+`plus_one`의 본체 내의 변수 `x`는 값 `Some(5)`를 갖게 될 것입니다. 그런 다음 각각의
+매치 갈래에 대하여 이 값을 비교합니다.
 
 ```rust,ignore
 None => None,
 ```
 
-The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
-next arm.
+`Some(5)` 값은 패턴 `None`과 매칭되지 않으므로, 다음 갈래로 계속 갑니다.
 
 ```rust,ignore
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant.
-The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
-code in the match arm is then executed, so we add one to the value of `i` and
-create a new `Some` value with our total `6` inside.
+`Some(5)`가 `Some(i)`랑 매칭되나요? 예, 바로 그렇습니다! 동일한 variant를 갖고 있습니다.
+`Some` 내부에 담긴 값은 `i`에 바인드되므로, `i`는 값 `5`를 갖습니다. 그런 다음 매치 갈래 내의
+코드가 실행되므로, `i`의 값에 1을 더한 다음 최종적으로 `6`을 담은 새로운 `Some` 값을 생성합니다.
 
-#### Matching `None`
+#### `None` 매칭하기
 
-Now let’s consider the second call of `plus_one` in Listing 6-5 where `x` is
-`None`. We enter the `match` and compare to the first arm.
+이제 `x`가 `None`인 Listing 6-5에서의 `plus_one`의 두번째 호출을 살펴봅시다.
+`match` 안으로 들어와서 첫번째 갈래와 비교합니다.
 
 ```rust,ignore
 None => None,
 ```
 
-It matches! There’s no value to add to, so the program stops and returns the
-`None` value on the right side of `=>`. Because the first arm matched, no other
-arms are compared.
+매칭되었군요! 더할 값은 없으므로, 프로그램은 멈추고 `=>`의 우측 편에 있는 `None` 값을 반환합니다.
+첫번째 갈래에 매칭되었으므로, 다른 갈래와는 비교하지 않습니다.
 
-Combining `match` and enums is useful in many situations. You’ll see this
-pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, and then execute code based on it. It’s a bit tricky at first, but
-once you get used to it, you’ll wish you had it in all languages. It’s
-consistently a user favorite.
+`match`와 열거형을 조합하는 것은 다양한 경우에 유용합니다. 여러분은 러스트 코드 내에서 이러한 패턴을
+많이 보게 될 것입니다: 열거형에 대한 `match`, 내부의 데이터에 변수 바인딩, 그런 다음 그에 대한
+수행 코드 말이지요. 처음에는 약간 까다롭지만, 여러분이 일단 익숙해지면, 이를 모든 언어에서 쓸 수
+있게되기를 바랄 것입니다. 이것은 꾸준히 사용자들이 가장 좋아하는 기능입니다.
 
-### Matches Are Exhaustive
+### 매치는 하나도 빠뜨리지 않습니다
 
-There’s one other aspect of `match` we need to discuss. Consider this version
-of our `plus_one` function:
+우리가 논의할 피요가 있는 `match`의 다른 관점이 있습니다. `plus_one` 함수의 아래 버전을 고려해
+보세요:
 
 ```rust,ignore
 fn plus_one(x: Option<i32>) -> Option<i32> {
@@ -251,9 +231,9 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
 }
 ```
 
-We didn’t handle the `None` case, so this code will cause a bug. Luckily, it’s
-a bug Rust knows how to catch. If we try to compile this code, we’ll get this
-error:
+여기서는 `None` 케이스를 다루지 않았고, 따라서 이 코드는 버그를 일으킬 것입니다. 다행히도,
+이는 러스트가 어떻게 잡는지 알고 있는 버그입니다. 이 코드를 컴파일하고자 시도하면, 아래와 같은
+에러를 얻게 됩니다:
 
 ```text
 error[E0004]: non-exhaustive patterns: `None` not covered
@@ -263,20 +243,18 @@ error[E0004]: non-exhaustive patterns: `None` not covered
   |               ^ pattern `None` not covered
 ```
 
-Rust knows that we didn’t cover every possible case and even knows which
-pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last
-possibility in order for the code to be valid. Especially in the case of
-`Option<T>`, when Rust prevents us from forgetting to explicitly handle the
-`None` case, it protects us from assuming that we have a value when we might
-have null, thus making the billion dollar mistake discussed earlier.
+러스트는 우리가 다루지 않은 모든 가능한 경우를 알고 있고, 심지어 우리가 어떤 패턴을 잊어먹었는지도
+알고 있습니다! 러스트에서 매치는 *하나도 빠뜨리지 않습니다(exhaustive):* 코드가 유효해지기
+위해서는 모든 마지막 가능성까지 샅샅이 다루어야 합니다. 특히 `Option<T>`의 경우, 즉 러스트가
+우리로 하여금 `None` 케이스를 명시적으로 다루는 일을 잊는 것을 방지하는 경우에는, 널일지도 모를
+값을 가지고 있음을 가정하여, 앞서 논의했던 수십억 달러짜리 실수를 하는 일을 방지해줍니다.
 
-### The `_` Placeholder
+### `_` 변경자(placeholder)
 
-Rust also has a pattern we can use in situations when we don’t want to list all
-possible values. For example, a `u8` can have valid values of 0 through 255. If
-we only care about the values 1, 3, 5, and 7, we don’t want to have to list out
-0, 2, 4, 6, 8, 9 all the way up to 255. Fortunately, we don’t have to: we can
-use the special pattern `_` instead:
+러스트는 또한 우리가 모든 가능한 값을 나열하고 싶지 않을 경우에 사용할 수 있는 패턴을 가지고 있습니다.
+예를 들어, `u8`은 0에서부터 255까지 유효한 값을 가질 수 있습니다. 만일 우리가 1, 3, 5, 그리고 7
+값에 대해서만 신경쓰고자 한다면, 나머지 0, 2, 4, 6, 8, 그리고 9부터 255까지를 모두 나열하고
+싶진 않을 겁니다. 다행히도, 그럴 필요 없습니다: 대신 특별 패턴인 `_`를 이용할 수 있습니다.
 
 ```rust
 let some_u8_value = 0u8;
@@ -289,11 +267,10 @@ match some_u8_value {
 }
 ```
 
-The `_` pattern will match any value. By putting it after our other arms, the
-`_` will match all the possible cases that aren’t specified before it. The `()`
-is just the unit value, so nothing will happen in the `_` case. As a result, we
-can say that we want to do nothing for all the possible values that we don’t
-list before the `_` placeholder.
+`_` 패턴은 어떠한 값이랑도 매칭될 것입니다. 우리의 다른 갈래 뒤에 이를 집어넣음으로써, `_`는
+그 전에 명시하지 않은 모든 가능한 경우에 대해 매칭될 것입니다. `()`는 단지 단위 값이므로, `_`
+케이스에서는 어떤 일도 일어나지 않을 것입니다. 결과적으로, 우리가 `_` 변경자 이전에 나열하지 않은
+모든 가능한 값들에 대해서는 아무것도 하고 싶지 않다는 것을 말해줄 수 있습니다.
 
-However, the `match` expression can be a bit wordy in a situation in which we
-only care about *one* of the cases. For this situation, Rust provides `if let`.
+하지만 `match` 표현식은 우리가 단 *한가지* 경우에 대해 고려하는 상황에서는 다소 장황할 수 있습니다.
+이러한 상황을 위하여, 러스트는 `if let`을 제공합니다.

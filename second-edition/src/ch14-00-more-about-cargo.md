@@ -1,15 +1,15 @@
-# More about Cargo and Crates.io
+# More About Cargo and Crates.io
 
-We've used some features of Cargo in this book so far, but only the most basic
-ones. We've used Cargo to build, run, and test our code, but it can do a lot
-more. Let's go over some of its other features now. Cargo can do even more than
-what we will cover in this chapter; for a full explanation, see its
-documentation.
+So far we’ve used only the most basic features of Cargo to build, run, and test
+our code, but it can do a lot more. In this chapter, we’ll discuss some of its
+other, more advanced features to show you how to do the following:
 
-We're going to cover:
+* Customize your build through release profiles
+* Publish libraries on [crates.io](https://crates.io)<!-- ignore -->
+* Organize large projects with workspaces
+* Install binaries from [crates.io](https://crates.io)<!-- ignore -->
+* Extend Cargo using custom commands
 
-* Customizing your build through release profiles
-* Publishing libraries on crates.io
-* Organizing larger projects with workspaces
-* Installing binaries from crates.io
-* Extending Cargo with your own custom commands
+Cargo can do even more than what we cover in this chapter, so for a full
+explanation of all its features, see [its
+documentation](https://doc.rust-lang.org/cargo/).

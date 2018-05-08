@@ -1,55 +1,48 @@
-## Data Types
+## 데이터 타입들 
 
-Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being specified so it knows how to work with that data. In this section,
-we’ll look at a number of types that are built into the language. We split the
-types into two subsets: scalar and compound.
+Rust에서 사용되는 모든 값들은 어떤 *타입*을 갖습니다. 그러니 어떤 형태의 데이터인지 명시하여 Rust에게 알려줘서 
+이를 통해 데이터를 어떻게 다룰지 알 수 있도록 해야 합니다. 이번 장에서, 우리는 언어에 포함되어 있는 여러 타입들을
+살펴보고자 합니다. 타입은 크게 스칼라와 컴파운드, 둘로 나눌 수 있습니다.  
 
-Throughout this section, keep in mind that Rust is a *statically typed*
-language, which means that it must know the types of all variables at compile
-time. The compiler can usually infer what type we want to use based on the
-value and how we use it. In cases when many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in Chapter 2, we must add
-a type annotation, like this:
+이번 장의 전체에 걸쳐 주지해야 할 점은 Rust는 *타입이 고정된* 언어라는 점 입니다. 이게 의미하는 바는 모든 변수의
+타입이 컴파일 시에 반드시 정해져 있어야 한다는 겁니다. 보통 컴파일러는 우리가 값을 사용하는 지에 따라 타입을 추측할 
+수 있습니다. 2장에서 `String`을 `parse`를 사용하여 숫자로 변환했던 경우처럼 타입의 선택 폭이 넓은 경우는
+반드시 타입의 명시를 첨가해야 합니다. 다음처럼: 
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-possible type we want to use:
+여기에 타입 명시를 첨가하지 않은 경우, Rust는 다음과 같은 에러를 발생시킵니다.  
+이와 같은 에러는 컴파일러가 우리에게 사용하고 싶은 타입이 무엇인지 추가적인 정보를 요구하는 겁니다. 
 
 ```text
-error[E0282]: unable to infer enough type information about `_`
+error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^ cannot infer type for `_`
-  |
-  = note: type annotations or generic parameter binding required
+  |         ^^^^^
+  |         cannot infer type for `_`
+  |         consider giving `guess` a type
 ```
 
-You’ll see different type annotations as we discuss the various data types.
+우리가 다루고자 하는 다양한 데이터 타입들 각각의 타입 명시를 살펴보겠습니다.
 
-### Scalar Types
+### 스칼라 타입들
 
-A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
-recognize these from other programming languages, but let’s jump into how they
-work in Rust.
+*스칼라*는 하나의 값으로 표현되는 타입입니다. Rust는 정수형, 부동소수점 숫자, boolean, 그리고 문자, 네 가지 
+스칼라 타입을 보유하고 있습니다. 아마 다른 프로그래밍 언어에서도 본 적이 있겠지만, Rust에서 이들이 어떻게 동작하
+는지 살펴보도록 합시다.
 
-#### Integer Types
+#### 정수형
 
-An *integer* is a number without a fractional component. We used one integer
-type earlier in this chapter, the `i32` type. This type declaration indicates
-that the value it’s associated with should be a signed integer (hence the `i`,
-as opposed to a `u` for unsigned) that takes up 32 bits of space. Table 3-1
-shows the built-in integer types in Rust. Each variant in the Signed and
-Unsigned columns (for example, *i32*) can be used to declare the type of an
-integer value.
+*정수형*은 소수점이 없는 숫자 입니다. 우리는 이번 장의 앞부분에서 `u32`타입인 정수형을 사용했었습니다. 해당 타입의
+선언은 부호 없는 32비트 변수임을 나타냅니다 (부호 있는 타입은 `u`대신 `i`로 시작합니다.) 표 3-1은 Rust에서 
+사용되는 정수형들을 보여줍니다. 부호, 미부호로 나뉜 다른 열의 타입을 사용하여(*i16*처럼) 정수 값의 타입을 선언할 
+수 있습니다.
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+
+<span class="caption">Table 3-1: Rust에서의 정수 타입 </span>
 
 | Length | Signed | Unsigned |
 |--------|--------|----------|
@@ -59,32 +52,26 @@ integer value.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-Each variant can be either signed or unsigned and has an explicit size.
-Signed and unsigned refers to whether it’s possible for the number to be
-negative or positive; in other words, whether the number needs to have a sign
-with it (signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using two’s complement representation (if you’re
-unsure what this is, you can search for it online; an explanation is outside
-the scope of this book).
+각각의 타입은 부호 혹은 미부호이며 명시된 크기를 갖습니다. 부호 혹은 미부호의 의미는, 숫자가 양수 혹은 음수를 다룰 수 
+있는지 혹은 없는지를 나타냅니다. 다르게 말하면, 숫자가 부호를 가져야 하는 경우(부호) 혹은 오직 양수만을 가질 것이기에 
+부호가 없이도 표현할 수 있는가(미부호)를 나타냅니다. 종이에 숫자 기재하는 것과 같죠: 부호와 함께 다뤄야 하는 경우에 
+숫자는 더하기 혹은 빼기 기호와 함께 표시하죠. 숫자가 양수라고 가정되도 문제 없는 상황에는 부호가 없이 표시하게 됩니다. 
+부호된 숫자는 2의 보수 형태를 사용하여 저장됩니다. (2의 보수가 모른다면 검색해보세요. 이 책에서 다루는 내용이 아닙니다.)
 
-Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
-1</sup> - 1 inclusive, where `n` is the number of bits that variant uses. So an
-`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64-bits if you’re on a 64-bit architecture and 32-bits
-if you’re on a 32-bit architecture.
+각 부호 변수는 -(2<sup>n - 1</sup>) 부터 2<sup>n - 1</sup> - 1 까지의 값을 포괄합니다. 여기서 
+`n`은 사용되는 타입의 비트 수 입니다. 즉, `i8`은 -(2<sup>7</sup>) 에서 2<sup>7</sup> - 1 
+까지의 값, 즉 -128 에서 127 사이의 값을 저장할 수 있습니다. 미부호 타입은 0 에서 2<sup>n</sup> - 1
+까지의 값을 저장할 수 있습니다. 즉, `u8` 타입은 0 에서 2<sup>8</sup> - 1 다시 말해, 0 에서 255 
+까지의 값을 저장할 수 있습니다. 
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that all number literals except the byte literal allow a type suffix, such as
-`57u8`, and `_` as a visual separator, such as `1_000`.
+추가로, `isize`와 `usize`타입은 당신의 프로그램이 동작하는 컴퓨터 환경이 64-bits인지 아닌지에 따라 결정됩니다.
+64-bit 아키텍처이면 64bit를, 32-bit 아키텍처이면 32bit를 갖게 됩니다.
 
-<span class="caption">Table 3-2: Integer Literals in Rust</span>
+당신은 테이블 3-2에서 보여주는 형태들처럼 정수형 리터럴을 사용할 수 있습니다. byte 리터럴을 제외하고 모든 정수형 
+리터럴은 `57u8`과 같은 타입 접미사와 `1_000`과 같이 시각적인 구분을 위한 `_`의 사용을 허용합니다.
+
+<span class="caption">Table 3-2: Rust의 정수형 리터럴들</span>
 
 | Number literals  | Example       |
 |------------------|---------------|
@@ -94,24 +81,18 @@ that all number literals except the byte literal allow a type suffix, such as
 | Binary           | `0b1111_0000` |
 | Byte (`u8` only) | `b'A'`        |
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good choices, and integer types default to `i32`: it’s
-generally the fastest, even on 64-bit systems. The primary situation in which
-you’d use `isize` or `usize` is when indexing some sort of collection.
 
-#### Floating-Point Types
+그렇다면 어떤 타입의 정수를 사용해야 할까요? 확실하게 정해진 경우가 아니면 Rust의 기본 값인 `i32`가 일반적으로
+는 좋은 선택입니다. 이는 일반적으로 가장 빠르기 때문이죠. 심지어 64-bit 시스템에서도요. `isize`나 `usize`는
+주로 콜렉션의 정렬을 색인할 때 사용됩니다. 
 
-Rust also has two primitive types for *floating-point numbers*, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because it’s roughly the same speed as `f32` but is capable of more precision.
-It’s possible to use an `f64` type on 32-bit systems, but it will be slower
-than using an `f32` type on those systems. Most of the time, trading potential
-worse performance for better precision is a reasonable initial choice, and you
-should benchmark your code if you suspect floating-point size is a problem in
-your situation.
+#### 부동 소수점 타입
 
-Here’s an example that shows floating-point numbers in action:
+Rust에는 소수점을 갖는 숫자인 *부동소수점 숫자*를 위한 두 가지 기본 타입도 있습니다. Rust의 부동소수점 타입은
+`f32`와 `f64`로, 예상하신 대로 각기 32bit와 64bit의 크기를 갖습니다. 기본 타입은 `f64`인데, 그 이유는
+최신의 CPU 상에서는 `f64`가 `f32`와 대략 비슷한 속도를 내면서도 더 정밀한 표현이 가능하기 때문입니다.
+
+다음은 부동소수점 숫자가 활용되는 예제입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -123,14 +104,13 @@ fn main() {
 }
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard. The
-`f32` type is a single-precision float, and `f64` has double precision.
+부동소수점 숫자는 IEEE-754 표준에 따라 표현됩니다. `f32` 타입은 1배수의 정밀도인 부동소수점이고, 
+`f64`는 2배수의 정밀도인 부동소수점 입니다.
 
-#### Numeric Operations
+#### 수학적 연산들.
 
-Rust supports the usual basic mathematical operations you’d expect for all of the
-number types: addition, subtraction, multiplication, division, and remainder.
-The following code shows how you’d use each one in a `let` statement:
+Rust가 지원하는 일반적인 기본 수학적 연산은 기대하신 것처럼 모든 숫자 타입에 적용됩니다: 더하기, 빼기, 곱하기, 
+나누기 등등. 다음의 코드로 보여주려는 것은 각 경우를 `let`문 내에서 사용할 수 있는 방법입니다. 
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -153,15 +133,16 @@ fn main() {
 }
 ```
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. Appendix B contains a
-list of all operators that Rust provides.
+위의 문장에서 각 표현식들은 수학 연산자를 사용하여 산출된 값을 변수로 bound 합니다. 부록 B에 Rust에서 
+제공하는 모든 연산자 목록이 들어있습니다. 
 
-#### The Boolean Type
+#### Boolean 타입 
 
-As in most other programming languages, a boolean type in Rust has two possible
-values: `true` and `false`. The boolean type in Rust is specified using `bool`.
-For example:
+대부분의 다른 언어들처럼, boolean 타입은 Rust에서 둘 중 하나의 값만 갖을 수 있습니다: 
+`true`와 `false`. boolean 타입은 러스트에서 `bool`로 명시됩니다. 
+
+예제:
+
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -173,15 +154,14 @@ fn main() {
 }
 ```
 
-The main way to consume boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
-section.
+boolean 값을 사용하는 주된 방법은 `if`문과 같은 조건문에서 조건으로 사용하는 것입니다. 우리는 `if`문이 
+Rust에서 동작하는 방식을 “제어 흐름” 장에서 다루게 될 겁니다.
 
-#### The Character Type
+#### 문자 타입 
 
-So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
-`char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it:
+지금까지 숫자 타입만을 살펴봤는데, Rust는 문자 또한 지원합니다. Rust의 `char`는 이 언어의 가장 근본적인
+알파벳 타입이고, 다음의 코드는 이를 사용하는 한 가지 방법입니다. 스트링이 큰따옴표를 쓰는 것에 반하여 `char`
+타입은 작은따옴표로 쓰는 점을 주목하세요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -193,29 +173,25 @@ fn main() {
 }
 ```
 
-Rust’s `char` type represents a Unicode Scalar Value, which means it can
-represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
-ideographs, emoji, and zero width spaces are all valid `char` types in Rust.
-Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in the “Strings” section
-in Chapter 8.
+Rust의 `char`타입은 Unicode Scalar를 표현하는 값이고 이는 ASCII 보다 많은 표현을 가능하게 합니다.
+억양 표시가 있는 문자, 한국어/중국어/일본어 표의 문자, 이모티콘, 넓이가 0인 공백문자 모두가 Rust에서는 
+`char`타입으로 사용할 수 있습니다. Unicode Scalar 값의 범위는 `U+0000`에서 `U+D7FF` 그리고 
+`U+E000`에서 `U+10FFFF` 를 포괄합니다. 그럼에도 불구하고 “문자”는 Unicode을 위한 개념이 아니기 
+때문에, 당신의 인간적 직관에 따른 “문자”와 Rust의 `char`가 동일하지 않을 수 있습니다. 우리는 8장 
+“Strings” 부에서 이 주제에 대해 상세히 다루게 될 겁니다. 
 
-### Compound Types
 
-*Compound types* can group multiple values of other types into one type. Rust
-has two primitive compound types: tuples and arrays.
+### 복합 타입들 
 
-#### Grouping Values into Tuples
+*복합 타입들*은 다른 타입의 다양한 값들을 하나의 타입으로 묶을 수 있습니다. Rust는 두 개의 기본 타입들을 갖고 
+있습니다: 튜플과 배열. 
 
-A tuple is a general way of grouping together some number of other values with
-a variety of types into one compound type.
+#### 값들을 집합시켜서 튜플화하기.
 
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+튜플은 다양한 타입의 몇 개의 숫자를 집합시켜 하나의 복합 타입으로 만드는 일반적인 방법입니다. 
+
+우리는 괄호 안에 콤마로 구분되는 값들의 목록을 작성하여 튜플을 만듭니다. 튜플에 포함되는 각 값의 타입이 동일할 
+필요없이 서로 달라도 됩니다. 다음의 예제에 우리는 선택 사항인 타입 명시를 추가했습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -225,9 +201,8 @@ fn main() {
 }
 ```
 
-The variable `tup` binds to the entire tuple, since a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+튜플은 단일 요소를 위한 복합계로 고려되었기에 변수 `tup`에는 튜플 전체가 bind 됩니다. 개별 값을 튜플의 밖으로 
+빼내오기 위해서는, 패턴 매칭을 사용하여 튜플의 값을 구조해체 시키면 됩니다. 다음을 봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -241,15 +216,12 @@ fn main() {
 }
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
+해당 프로그램은 처음에 튜플을 만들고 변수 `tup`에 bind 시킵니다. 이후 패턴과 `let`을 통해 `tup`을 세개의 
+분리된 변수 `x`, `y`, 그리고 `z`에 이동시킵니다. 이것을 *구조해체*라고 부르는 이유는 하나의 튜플을 세 부분으로
+나누기 때문입니다. 최종적으로 프로그램은 `y`의 값을 출력할 것이고 이는 `6.4`입니다. 
 
-In addition to destructuring through pattern matching, we can also access a
-tuple element directly by using a period (`.`) followed by the index of the
-value we want to access. For example:
+패턴 매칭을 통한 구조해체에 추가로, 우리는 마침표(`.`) 뒤에 우리가 접근하길 원하는 값의 색인을 넣는 것을 통해 
+튜플의 요소에 직접적으로 접근할 수 있습니다. 예제를 봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -265,19 +237,16 @@ fn main() {
 }
 ```
 
-This program creates a tuple, `x`, and then makes new variables for each
-element by using their index. As with most programming languages, the first
-index in a tuple is 0.
+위의 프로그램은 튜플 `x`를 만들고, 이의 각 요소들을 그들의 색인을 통해 접근하여 새 변수를 만듭니다. 대부분의
+언어가 그렇듯이, 튜플의 첫 번째 색인은 0 입니다. 
 
-#### Arrays
+#### 배열 
 
-Another way to have a collection of multiple values is with an *array*. Unlike
-a tuple, every element of an array must have the same type. Arrays in Rust are
-different than arrays in some other languages because arrays in Rust have a
-fixed length: once declared, they cannot grow or shrink in size.
+여러 값들의 집합체를 만드는 다른 방법은 *배열*입니다. 튜플과는 다르게, 배열의 모든 요소는 모두 같은 타입이여야
+합니다. Rust의 배열이 몇 다른 언어들의 배열과 다른 점은 Rust에서는 배열은 고정된 길이를 갖는다는 점입니다:
+한번 선언되면, 이들은 크기는 커지거나 작아지지 않습니다.
 
-In Rust, the values going into an array are written as a comma-separated list
-inside square brackets:
+Rust에서는 대괄호 안에 값들을 콤마로 구분하여 나열해서 배열을 만듭니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -287,28 +256,22 @@ fn main() {
 }
 ```
 
-Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in Chapter 4), or when
-you want to ensure you always have a fixed number of elements. They aren’t as
-flexible as the vector type, though. The vector type is a similar collection
-type provided by the standard library that *is* allowed to grow or shrink in
-size. If you’re unsure whether to use an array or a vector, you should probably
-use a vector: Chapter 8 discusses vectors in more detail.
+배열이 유용할 때는 당신의 데이터를 heap보다 stack에 할당하는 것을 원하거나(stack 과 heap에 대해서는 4장에서
+다루게 될 것입니다), 당신이 항상 고정된 숫자의 요소를 갖는다고 확신하고 싶을 때 입니다. 이들은 벡터 타입처럼 가변적
+이지 않습니다. 벡터 타입은 유사 집합체로 표준 라이브러리에서 제공되며 확장 혹은 축소가 가능합니다. 배열이나 벡터 중에
+뭘 선택해야 할지 확실하지 않은 상황이라면 벡터를 사용하도록 하세요. 8장에서 벡터에 대해 더 자세히 다룹니다.
 
-An example of when you might want to use an array rather than a vector is in a
-program that needs to know the names of the months of the year. It’s very
-unlikely that such a program will need to add or remove months, so you can use
-an array because you know it will always contain 12 items:
+벡터가 아닌 배열을 선택하게 되는 경우의 예로, 프로그램이 올해의 달 이름을 알고자 할 경우 입니다. 프로그램이 달을 
+추가하거나 삭제하는 경우는 거의 없을 것이므로, 고정적으로 12개의 아이템을 가질테니 배열을 사용하면 됩니다. 
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-##### Accessing Array Elements
+##### 배열 요소에 접근하기
 
-An array is a single chunk of memory allocated on the stack. We can access
-elements of an array using indexing, like this:
+배열은 stack에 단일 메모리 뭉치로 할당됩니다. 우리는 색인을 통해 배열의 요소에 접근할 수 있습니다. 이렇게요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -321,14 +284,12 @@ fn main() {
 }
 ```
 
-In this example, the variable named `first` will get the value `1`, because
-that is the value at index `[0]` in the array. The variable named `second` will
-get the value `2` from index `[1]` in the array.
+이번 예제에서, `first`로 명명된 변수는 값 `1`이 될텐데, 왜냐면 배열 색인 `[0]`에 들어있는 값이기 때문이죠. 
+`second`로 명명된 변수는 배열의 색인 `[1]`의 값인 `2`가 되겠죠. 
 
-##### Invalid Array Element Access
+##### 유효하지 않은 배열 요소에 대한 접근 
 
-What happens if we try to access an element of an array that is past the end of
-the array? Say we change the example to the following:
+만약 우리가 배열의 끝을 넘어선 요소에 접근하려고 하면 어떻게 될까요? 예제를 다음처럼 변경해봤습니다. 
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -343,25 +304,24 @@ fn main() {
 }
 ```
 
-Running this code using `cargo run` produces the following result:
+이번 코드를 `cargo run`을 통해 동작시키면 다음의 결과를 얻게 됩니다:
 
 ```text
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/arrays`
 thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
  10', src/main.rs:6
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-The compilation didn’t produce any errors, but the program results in a
-*runtime* error and didn’t exit successfully. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than the length, Rust will
-*panic*, which is the term Rust uses when a program exits with an error.
+컴파일 시에는 아무런 에러도 발생시키지 않습니다만, 프로그램의 결과는 *실행간에* 에러가 발생했고 성공적으로 종료되지 
+못했다고 나옵니다. 
 
-This is the first example of Rust’s safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+색인을 사용하여 요소에 접근하려고 하면 Rust는 지정한 색인이 배열 길이보다 작은지 확인합니다. 색인이 길이보다 길면 
+Rust는 프로그램이 오류와 함께 종료 될 때 Rust가 사용하는 용어인 *패닉(panic)*합니다.
+
+이것은 Rust의 안전 원칙이 동작하는 첫 번째 예입니다. 많은 저수준 언어에서 이러한 타입의 검사는 수행되지 않으며 잘못된
+색인을 제공하면 유효하지 않은 메모리에 액세스 할 수 있습니다. Rust는 메모리 접근을 허용하고 계속 진행하는 대신 즉시 
+종료하여 이러한 종류의 오류로부터 사용자를 보호합니다. 9 장에서는 Rust의 오류 처리에 대해 자세히 설명합니다.

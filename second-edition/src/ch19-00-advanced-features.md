@@ -1,23 +1,22 @@
 # Advanced Features
 
-We've come a long way! By now, we've learned 99% of the things you'll need to
-know when writing Rust. Before we do one more project in Chapter 20, let's talk
-about a few things that you may run into that last 1% of the time. Feel free to
-skip this chapter and come back to it once you run into these things in the
-wild; the features we'll learn to use here are useful in very specific
-situations. We don't want to leave these features out, but you won't find
-yourself reaching for them often.
+By now, you’ve learned the most commonly used parts of the Rust programming
+language. Before we do one more project in Chapter 20, we’ll look at a few
+aspects of the language you might run into every once in a while. You can use
+this chapter as a reference for when you encounter any unknowns when using
+Rust. The features you’ll learn to use in this chapter are useful in very
+specific situations. Although you might not reach for them often, we want to
+make sure you have a grasp of all the features Rust has to offer.
 
-In this chapter, we're going to cover:
+In this chapter, we’ll cover:
 
-* Unsafe Rust: for when you need to opt out of some of Rust's guarantees and
-  tell the compiler that you will be responsible for upholding the guarantees
-  instead
-* Advanced Lifetimes: Additional lifetime syntax for complex situations
-* Advanced Traits: Associated Types, default type parameters, fully qualified
+* Unsafe Rust: How to opt out of some of Rust’s guarantees and take
+  responsibility for manually upholding those guarantees
+* Advanced lifetimes: Syntax for complex lifetime situations
+* Advanced traits: Associated types, default type parameters, fully qualified
   syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced Types: some more about the newtype pattern, type aliases, the
-  "never" type, and dynamically sized types
-* Advanced Functions and Closures: function pointers and returning closures
+* Advanced types: More about the newtype pattern, type aliases, the *never*
+  type, and dynamically sized types
+* Advanced functions and closures: Function pointers and returning closures
 
-It's a panoply of Rust features with something for everyone! Let's dive in!
+It’s a panoply of Rust features with something for everyone! Let’s dive in!

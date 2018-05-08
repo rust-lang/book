@@ -1,107 +1,141 @@
-## Installation
+## 설치하기
 
-The first step to using Rust is to install it. You’ll need an internet
-connection to run the commands in this chapter, as we’ll be downloading Rust
-from the internet.
+첫 번째 단계는 러스트를 설차하는 것입니다. 우리는 `rustup`이라고 하는 러스트
+버전 및 관련 도구들을 관리하기 위한 커멘드 라인 도구를 통하여 러스트를 다운로드할
+것입니다. 다운로드를 위해서는 인터넷 연결이 필요할 것입니다.
 
-We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don't need to type in the `$` character; they are there to indicate
-the start of each command. You’ll see many tutorials and examples around the web
-that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator. Lines that don't start
-with `$` are typically showing the output of the previous command.
+다음 단계들이 러스트 컴파일러의 최신 안정 버전을 설치합니다. 이 책에 나오는
+모든 예제들과 출력들은 안정화된 러스트 1.21.0을 사용했습니다. 러스트의
+안정성에 대한 보장은 책에 나오는 모든 예제들이 새로운 러스트 버전에서도
+계속해서 잘 컴파일 되도록 해줍니다. 버전마다 출력이 약간씩 다를 수도 있는데,
+이는 러스트가 종종 에러 메시지와 경고들을 개선하기 때문입니다. 바꿔 말하면,
+이 단계들을 이용하여 여러분이 설치한 러스트가 어떤 새로운 안정화 버전이라도
+이 책의 내용에 기대하는 수준으로 동작해야 합니다.
 
-### Installing on Linux or Mac
+> ### 커맨드 라인 표기법
+>
+> 이 장 및 책 곳곳에서, 우리는 터미널에서 사용되는 몇몇 커맨드를 보여줄
+> 것입니다. 여러분이 터미널에 입력해야 하는 라인들은 모두 `$`로 시작합니다.
+> 여러분은 `$` 문자를 입력할 필요가 없습니다; 이는 각 커맨드의 시작을
+> 나타냅니다. 여러분이 일반 사용자로서 실행할 커맨드를 위해 `$`를 그리고
+> 여러분이 관리자로서 실행할 커맨드를 위해 `#`를 쓰는 관례는 많은 튜토리얼들이
+> 사용합니다. `$`로 시작하지 않는 라인들은 보통 이전 커맨드의 출력을 나타냅니다.
+> 추가적으로, 파워쉘 한정 예제는 `$` 대신 `>`를 이용할 것입니다.
 
-If you're on Linux or a Mac, all you need to do is open a terminal and type
-this:
+### Linux와 macOS에서 Rustup 설치하기
+
+만일 여러분들이 Linux 혹은 macOS를 사용중이라면, 터미널을 열고 다음 커멘드를 입력하세요:
 
 ```text
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-This will download a script and start the installation. You may be prompted for
-your password. If it all goes well, you’ll see this appear:
+이 커맨드는 스크립트를 다운로드하고 `rustup` 도구의 설치를 시작하는데, 이 도구는
+가장 최신의 러스트 안정화 버전을 설치해줍니다. 여러분의 패스워드를 입력하라는 프롬프트가
+나올 수도 있습니다. 설치가 성공적이면, 다음과 같은 라인이 나타날 것입니다:
 
 ```text
 Rust is installed now. Great!
 ```
 
-Of course, if you disapprove of the `curl | sh` pattern, you can download, inspect
-and run the script however you like.
+물론 여러분이 어떤 소프트웨어를 설치하기 위해 `curl URL | sh`를 사용하는 것을 신용하지 않는다면,
+여러분이 원하는 어떤 방식으로든 이 스크립트를 다운로드하고, 검사하고, 실행할 수 있습니다.
 
-### Installing on Windows
+설치 스크립트는 여러분의 다음 로그인 이후에 러스트를 자동적으로 여러분의 시스템
+패스에 추가합니다. 만일 여러분이 터미널을 재시작하지 않고 러스트를 바로 사용하기를
+원한다면, 다음과 같은 커멘트를 쉘에서 실행하여 수동적으로 러스트를 시스템 패스에
+추가하세요:
 
-On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
-follow the instructions to download rustup-init.exe. Run that and follow the
-rest of the instructions it gives you.
+```text
+$ source $HOME/.cargo/env
+```
 
-The rest of the Windows-specific commands in the book will assume that you are
-using `cmd` as your shell. If you use a different shell, you may be able to run
-the same commands that Linux and Mac users do. If neither work, consult the
-documentation for the shell you are using.
+혹은 그 대신에, 여러분의 *~/.bash_profile*에 다음과 같은 라인을 추가할 수 있습니다:
 
-### Custom installations
+```text
+$ export PATH="$HOME/.cargo/bin:$PATH"
+```
 
-If you have reasons for preferring not to use rustup.rs, please see [the Rust
-installation page](https://www.rust-lang.org/install.html) for other options.
+추가적으로, 여러분은 어떤 종류의 링커가 필요할 것입니다. 이미 설치되어 있을 것
+같지만, 여러분이 러스트 프로그램을 컴파일하다가 링커를 실행할 수 없음을 나타내는
+에러를 보게 되면, 링커를 설치해야 합니다. 여러분은 C 컴파일러를 설치할 수 있는데,
+이것이 보통 올바른 링커와 함께 설치되기 때문입니다. C 컴파일러를 인스톨하는 방법을
+위해서는 여러분의 플랫폼 문서를 확인하세요. 몇몇의 일반적인 러스트 패키지는 C 코드에
+의존적이고 C 컴파일러 또한 사용할 것이므로, 지금 상황에 상관없이 하나 설치하는것이
+좋을 수도 있습니다.
 
-### Updating
+### Windows에서 Rustup 설치하기
 
-Once you have Rust installed, updating to the latest version is easy.
-From your shell, run the update script:
+Windows에서는 [https://www.rust-lang.org/en-US/install.html][install]
+페이지로 가서 러스트 설치를 위한 지시를 따르세요. 설치의 몇몇 지점에서, 여러분이
+Visual Studio 2013이나 이후 버전용 C++ 빌드 도구 또한 설치할 필요가 있음을
+설명하는 메세지를 받을 것입니다. 이 빌드 도구를 얻는 가장 쉬운 방법은
+[Visual Studio 2017용 빌드 도구][visualstudio]를 설치하는 것입니다.
+이 도구들은 아든 도구 및 프레임워크 섹션 내에 있습니다.
+
+[install]: https://www.rust-lang.org/en-US/install.html
+[visualstudio]: https://www.visualstudio.com/downloads/
+
+이 책의 나머지 부분에서는 *cmd.exe* 및 파워쉘 모두에서 동작하는 커멘드를 사용합니다.
+만일 특별히 다른 부분이 있다면, 어떤 것을 이용하는지 설명할 것입니다.
+
+### Rustup 없이 커스텀 설치하기
+
+만일 여러분이 어떤 이유로 `rustup`를 쓰지 않기를 선호한다면, [the Rust installation
+page](https://www.rust-lang.org/install.html) 페이지에서 다른 옵션을 확인하세요.
+
+### 업데이트 및 설치 제거하기
+
+`rustup`을 통해 러스트를 설치한 뒤라면, 최신 버전을 업데이트하는 것은 쉽습니다.
+여러분의 쉘에서 다음과 같은 업데이트 스크립트를 실행하세요:
 
 ```text
 $ rustup update
 ```
 
-### Uninstalling
-
-Uninstalling Rust is as easy as installing it. From your shell, run
-the uninstall script:
+러스트와 `rustup`을 제거하려면 다음과 같은 설치 제거용 스크립트를 쉘에서
+실행하세요:
 
 ```text
 $ rustup self uninstall
 ```
 
-### Troubleshooting
+### 문제 해결하기
 
-If you've got Rust installed, you can open up a shell, and type this:
+러스트가 올바르게 설치되었는지를 확인하기 위해서는, 쉘을 열고 다음 라인을
+입력하세요:
 
 ```text
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date in a format
-similar to this for the latest stable version at the time you install:
+버전 번호, 커밋 해쉬, 그리고 배포된 최신 안정 버전에 대한 커밋 일자가 다음과
+같은 형식으로 보여야 합니다:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this, Rust has been installed successfully!
-Congrats!
-
-If you don't and you're on Windows, check that Rust is in your `%PATH%` system
-variable.
-
-If it still isn't working, there are a number of places where you can get help.
-The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
-which you can access through [Mibbit][mibbit]. Go to that address, and you'll
-be chatting with other Rustaceans (a silly nickname we call ourselves) who can
-help you out. Other great resources include [the Users forum][users] and
-[Stack Overflow][stackoverflow].
+이 정보가 보인다면, 여러분은 러스트를 성공적으로 설치한 것입니다! 만일 이 정보가
+보이지 않고 Windows를 이용중이라면, `%PATH%` 시스템 변수 내에 러스트가 있는지
+확인해주세요. 만일 이 설정이 모두 정확하고 러스트가 여전히 동작하지 않는다면, 여러분이
+도움을 구할 수 있는 몇 군데의 장소가 있습니다. 가장 쉬운 방법은 [irc.mozilla.org
+안에 있는 #rust IRC 채널][irc]<!-- ignore -->인데, 이는 [Mibbit][mibbit]을
+통해 접속할 수 있습니다. 이 주소에서 여러분을 도와줄 수 있는 다른 러스티시안(Rustacean,
+우리가 스스로를 부르는 우스운 별명입니다)들과 채팅을 할 수 있습니다. 다른 훌륭한 리소스들에는
+[유저 포럼][users]과 [Stack Overflow][stackoverflow]가 있습니다.
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-### Local documentation
+### 로컬 문서
 
-The installer also includes a copy of the documentation locally, so you can
-read it offline. Run `rustup doc` to open the local documentation in your
-browser.
+인스톨러에는 또한 문서 복사본이 로컬에 포함되어 있으므로, 여러분은 이를 오프라인으로
+읽을 수 있습니다. 여러분의 브라우저에서 로컬 문서를 열려면 `rustup doc`을
+실행하세요.
 
-Any time there's a type or function provided by the standard library and you're
-not sure what it does, use the API documentation to find out!
+표준 라이브러리가 제공하는 타입이나 함수가 무엇을 하는지 혹은 어떻게 사용하는지 확신이
+들지 않는다면 언제라도 API (application programming interface) 문서를
+이용하여 알아보세요!

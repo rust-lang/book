@@ -1,23 +1,28 @@
 ## Hello, World!
 
-Now that you have Rust installed, let’s write your first Rust program. It's
-traditional when learning a new language to write a little program to print the
-text “Hello, world!” to the screen, and in this section, we'll follow that
-tradition.
+여러분이 러스트를 설치했으니, 이제 여러분의 첫번째 러스트 프로그램을 작성해봅시다.
+새로운 언어를 배울 때면 “Hello, world!”라는 텍스트를 스크린에 출력하는 짧은
+프로그램을 작성하는 것이 전통이니, 우리도 여기서 그렇게 할 것입니다!
 
-> Note: This book assumes basic familiarity with the command line. Rust itself
-> makes no specific demands about your editing, tooling, or where your code
-> lives, so if you prefer an IDE to the command line, feel free to use your
-> favorite IDE.
+> 노트: 이 책은 커맨드 라인에 대한 기본적인 친숙성을 가정하고 있습니다. 러스트는
+> 여러분의 코드 수정, 도구 사용, 혹은 어디에 여러분의 코드가 있는지에 대한 어떠한 특별
+> 요구도 없으므로, 커맨드 라인 대신 IDE (Integrated Development Environment,
+> 통합 개발 환경)를 이용하는 것은 선호한다면, 여러분이 좋아하는 IDE를 편히 이용하세요.
+> 이제 많은 IDE들이 어느 정도 수준의 러스트 지원을 해줍니다; 자세한 사항은 해당 IDE의
+> 문서를 확인하세요. 최근에는 러스트 팀이 훌륭한 IDE 지원을 활성화하는데 집중해왔으며,
+> 매우 급격한 진전이 이루어지고 있습니다!
 
-### Creating a Project Directory
+### 프로젝트 디렉토리 만들기
 
-First, make a directory to put your Rust code in. Rust doesn't care where your code
-lives, but for this book, we'd suggest making a *projects* directory in your
-home directory and keeping all your projects there. Open a terminal and enter
-the following commands to make a directory for this particular project:
+여러분의 러스트 코드를 저장하기 위한 디렉토리를 만드는 것으로 시작할 것입니다. 여러분의
+코드가 어디에 있는지는 러스트에게 문제가 되지 않습니다만, 이 책의 예제 및 프로젝트들을
+위해서, 우리는 여러분의 홈 디렉토리에 *projects* 디렉토리를 만들고 모든 프로젝트를
+그곳에 유지하는 것을 제안합니다.
 
-Linux and Mac:
+터미널을 열고 다음 커맨드를 입력하여 *projects* 디렉토리를 만들고 *project*
+디렉토리 내에 “Hello, world!” 프로젝트를 위한 디렉토리를 만드세요.
+
+Linux와 macOS에서는 다음을 입력하세요:
 
 ```text
 $ mkdir ~/projects
@@ -26,16 +31,16 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-Windows CMD:
+Windows CMD에서는 다음을 입력하세요:
 
 ```cmd
-> mkdir %USERPROFILE%\projects
-> cd %USERPROFILE%\projects
+> mkdir "%USERPROFILE%\projects"
+> cd /d "%USERPROFILE%\projects"
 > mkdir hello_world
 > cd hello_world
 ```
 
-Windows PowerShell:
+Windows 파워쉘에서는 다음을 입력하세요:
 
 ```powershell
 > mkdir $env:USERPROFILE\projects
@@ -44,14 +49,14 @@ Windows PowerShell:
 > cd hello_world
 ```
 
-### Writing and Running a Rust Program
+### 러스트 프로그램을 작성하고 실행하기
 
-Next, make a new source file and call it *main.rs*. Rust files always end with
-the *.rs* extension. If you’re using more than one word in your filename, use
-an underscore to separate them. For example, you'd use *hello_world.rs* rather
-than *helloworld.rs*.
+다음으로, *main.rs*이라 불리우는 새로운 소스 파일을 만드세요. 러스트 파일들은 언제나
+*.rs* 확장자로 끝납니다. 만일 여러분이 한 단어 이상을 여러분의 파일에 사용하겠다면, 단어
+구분을 위해서 언더스코어(_)를 사용하세요. 예를 들면, *helloworld.rs* 보다는
+*hello_world.rs*를 사용하세요.
 
-Now open the *main.rs* file you just created, and type the following code:
+이제 여러분이 방금 만든 *main.rs*을 열고 Listing 1-1의 코드를 입력하세요.
 
 <span class="filename">Filename: main.rs</span>
 
@@ -61,8 +66,10 @@ fn main() {
 }
 ```
 
-Save the file, and go back to your terminal window. On Linux or OSX, enter the
-following commands:
+<span class="caption">Listing 1-1: “Hello, world!”를 출력하는 프로그램</span>
+
+파일을 저장하고, 여러분의 터미널 윈도우로 돌아가세요. Linux나 macOS에서는 다음
+커맨드를 입력하여 파일을 컴파일하고 실행하세요:
 
 ```text
 $ rustc main.rs
@@ -70,15 +77,25 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, run `.\main.exe` instead of `./main`. Regardless of your
-operating system, you should see the string `Hello, world!` print to the
-terminal. If you did, then congratulations! You've officially written a Rust
-program. That makes you a Rust programmer! Welcome!
+Windows에서는 `./main` 대신 `.\main.exe` 커맨드를 입력하세요.
 
-### Anatomy of a Rust Program
+```powershell
+> rustc main.rs
+> .\main.exe
+Hello, world!
+```
 
-Now, let’s go over what just happened in your "Hello, world!" program in
-detail. Here's the first piece of the puzzle:
+여러분의 운영체제와 상관없이, `Hello, world!` 문자열이 터미널에 출력되어야 합니다.
+만일 여러분이 이 출력을 보지 못한다면, “문제 해결하기”절로 돌아가서 도움을 구할 방법을
+참조하세요.
+
+`Hello, world!`이 출력되었다면, 축하드립니다! 여러분은 공식적으로 러스트 프로그렘을
+작성하셨어요. 즉 러스트 프로그래머가 되셨다는 말이지요! 환영합니다!
+
+### 러스트 프로그램 해부하기
+
+여러분의 “Hello, world!” 프로그램에서 어떤 일이 벌어졌는지를 상세하게 짚어보겠습니다.
+여기 첫번째 퍼즐 조각이 있습니다:
 
 ```rust
 fn main() {
@@ -86,329 +103,101 @@ fn main() {
 }
 ```
 
-These lines define a *function* in Rust. The `main` function is special: it's
-the first thing that is run for every executable Rust program. The first line
-says, “I’m declaring a function named `main` that has no parameters and returns
-nothing.” If there were parameters, their names would go inside the
-parentheses, `(` and `)`.
+이 라인들은 러스트의 *함수(function)*를 정의합니다. `main` 함수는 특별합니다:
+이것은 모든 실행가능한 러스트 프로그램 내에서 첫번째로 실행되는 코드입니다. 첫번째
+라인은 파라미터가 없고 아무것도 반환하지 않는 `main`이라는 이름의 함수를 정의합니다.
+만일 파라미터가 있었다면, 파라미터들이 괄호 기호 `(`와 `)` 내에 위치했을
+것입니다.
 
-Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
-requires these around all function bodies. It's considered good style to put
-the opening curly brace on the same line as the function declaration, with one
-space in between.
+또한 함수의 본체가 중괄호 기호 `{`와 `}`로 감싸저 있음을 주목하세요.
+러스트는 모든 함수 본체들 주위에 이것들을 요구합니다. 여는 중괄호
+기호를 함수 정의부와 같은 줄에 한 칸 띄워서 위치시키는 것은 좋은
+스타일입니다.
 
-Inside the `main` function:
+이 글을 쓰는 시점에서 `rustfmt`라 불리우는 자동 포맷팅 도구가 개발중에 있습니다.
+만일 여러분이 러스트 프로젝트를 가로지르는 표준 스타일을 고수하길 원한다면, `rustfmt`가
+여러분의 코드를 특정한 스타일로 포매팅해줄 것입니다. 러스트 팀은 궁극적으로 이 도구가
+`rustc`처럼 표준 러스트 배포에 포함되기를 계획하고 있습니다. 따라서 여러분이 이 책을
+언제 읽는가에 따라써, 이 툴이 여러분의 컴퓨터에 이미 설치되어 있을지도 모릅니다!
+더 자세한 사항에 대해서는 온라인 문서를 참고하세요.
+
+`main` 함수 내부에는 다음과 같은 코드가 있습니다:
 
 ```rust
     println!("Hello, world!");
 ```
 
-This line does all of the work in this little program: it prints text to the
-screen. There are a number of details to notice here. The first is that Rust
-style is to indent with four spaces, not a tab.
+이 라인이 이 짧은 프로그램 내의 모든 일을 합니다: 스크린에 텍스트를 출력합니다.
+여기에 주목할만 한 네 가지의 중요한 디테일이 있습니다. 첫째로, 러스트 스타일은
+탭이 아닌 네 개의 스페이스로 들여쓰기를 합니다.
 
-The second important part is `println!`. This is calling a Rust *macro*,
-which is how metaprogramming is done in Rust. If it were calling a function
-instead, it would look like this: `println` (without the `!`). We'll discuss
-Rust macros in more detail in Appendix E, but for now you just need to know
-that when you see a `!` that means that you’re calling a macro instead of a
-normal function.
+둘째로, `println!`은 러스트 *매크로 (macro)* 라고 불립니다. 만일 대신에 함수라고
+불리려면, (`!` 없이) `println`으로 입력되었어야 할 것입니다. 러스트 매크로에 대한
+자세한 사항은 부록 D에서 다룰 것입니다. 지금은 `!`이 보통의 함수 대신 매크로를 호출하고
+있음을 의미한다는 것만 알아두면 됩니다. 
 
-Next is `"Hello, world!"` which is a *string*. We pass this string as an
-argument to `println!`, which prints the string to the screen. Easy enough!
+셋째로, 여러분은 `"Hello, world!"` *스트링 (string)* 볼 수 있습니다. 우리는
+이 스트링을 `println!`의 인자로 넘기고, 이 스트링이 화면에 화면에 출력됩니다.
 
-The line ends with a semicolon (`;`). The `;` indicates that this expression is
-over, and the next one is ready to begin. Most lines of Rust code end with a
-`;`.
+넷째로, 우리는 이 라인을 세미콜론 `;`으로 끝내는데, 이는 이 표현식이 끝났고
+다음 것이 시작될 준비가 되었음을 나타냅니다. 대다수의 러스트 코드 라인들이
+세미콜론으로 끝납니다.
 
-### Compiling and Running Are Separate Steps
+### 컴파일과 실행은 개별적인 단계입니다
 
-In "Writing and Running a Rust Program", we showed you how to run a newly
-created program. We'll break that process down and examine each step now.
+여러분이 이제 막 새로 만든 프로그램을 실행했으므로, 이 과정의 각 단계를 검토해
+봅시다.
 
-Before running a Rust program, you have to compile it. You can use the Rust
-compiler by entering the `rustc` command and passing it the name of your source
-file, like this:
+러스트 프로그램을 실행하기 전에, 여러분은 아래와 같이 `rustc` 커맨드를 입력하고
+여기에 여러분의 소스코드를 넘기는 식으로 러스트 컴파일러를 사용하여 이를 컴파일해야
+합니다:
 
 ```text
 $ rustc main.rs
 ```
 
-If you come from a C or C++ background, you'll notice that this is similar to
-`gcc` or `clang`. After compiling successfully, Rust should output a binary
-executable, which you can see on Linux or OSX by entering the `ls` command in
-your shell as follows:
+만일 여러분이 C 혹은 C++ 배경지식을 갖고 있다면, 이것이 `gcc` 혹은 `clang`과 유사하다는
+것을 눈치챘을 것입니다. 컴파일을 성공적으로 한 뒤, 러스트는 실행가능한 바이너리를 출력합니다.
+
+Linux, macOS, 그리고 Windows의 파워쉘 상에서는 여러분의 쉘에 다음과 같이
+`ls` 커맨드를 입력하여 이 실행 파일을 볼 수 있습니다:
 
 ```text
 $ ls
 main  main.rs
 ```
 
-On Windows, you'd enter:
+Windows의 CMD 환경에서는 다음과 같이 입력해야 합니다:
 
 ```cmd
 > dir /B %= the /B option says to only show the file names =%
 main.exe
+main.pdb
 main.rs
 ```
 
-This shows we have two files: the source code, with the *.rs* extension, and the
-executable (*main.exe* on Windows, *main* everywhere else). All that's left to
-do from here is run the *main* or *main.exe* file, like this:
+이 커맨드는 *.rs* 확장자를 가진 소스 코드 파일, 실행 파일 (Windows에서는 *main.exe*,
+다른 모든 플랫폼에서는 *main*), 그리고 만일 CMD를 이용하는 중이라면, *.pdb* 확장자를
+가지고 있는 디버깅 정보를 담고 있는 파일을 보여줍니다. 이기서 여러분은 아래와 같이 *main*
+혹은 *main.exe* 파일을 실행합니다:
 
 ```text
-$ ./main  # or .\main.exe on Windows
+$ ./main # or .\main.exe on Windows
 ```
 
-If *main.rs* were your "Hello, world!" program, this would print `Hello,
-world!` to your terminal.
+만일 *main.rs*이 여러분의 “Hello, world!” 프로그램이었다면, 위의 라인이 여러분의
+터미널에 `Hello, world!`라고 출력해줄 것입니다.
 
-If you come from a dynamic language like Ruby, Python, or JavaScript, you may
-not be used to compiling and running a program being separate steps. Rust is an
-*ahead-of-time compiled* language, which means that you can compile a program,
-give it to someone else, and they can run it even without having Rust
-installed. If you give someone a `.rb`, `.py`, or `.js` file, on the other
-hand, they need to have a Ruby, Python, or JavaScript implementation installed
-(respectively), but you only need one command to both compile and run your
-program. Everything is a tradeoff in language design.
+여러분이 루비, 파이썬, 자바스크립트와 같은 동적 언어에 더 친숙하다면, 아마도
+프로그램의 컴파일과 실행을 개별적인 단계로 이용하지 않았을지도 모릅니다. 러스트는
+*ahead-of-time compiled* 언어인데, 이는 여러분이 프로그램을 컴퍼일하고,
+그 실행파일을 다른 이들에게 주면, 그들은 러스트를 설치하지 않고도 이를 실행할
+수 있다는 의미입니다. 만일 여러분이 누군가에게 *.rb*, *.py* 혹은 *.js*
+파일을 준다면, 그는 (각각) 루비, 파이썬, 혹은 자바스크립트 구현체가 설치되어
+있어야 합니다. 하지만 그러한 언어들에서는 하나의 커맨드로 여러분의 프로그램을
+컴파일하고 실행할 수 있습니다. 언어 디자인에서는 모든 것이 트레이드 오프입니다.
 
-Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you'll want to be able to manage all of the options your project has
-and make it easy to share your code with other people and projects. Next, we'll
-introduce you to a tool called Cargo, which will help you write real-world Rust
-programs.
-
-## Hello, Cargo!
-
-Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
-manage their Rust projects because it makes a lot of tasks easier. For example,
-Cargo takes care of building your code, downloading the libraries your code
-depends on, and building those libraries. We call libraries your code needs
-*dependencies*.
-
-The simplest Rust programs, like the one we've written so far, don’t have any
-dependencies, so right now, you'd only be using the part of Cargo that can take
-care of building your code. As you write more complex Rust programs, you’ll
-want to add dependencies, and if you start off using Cargo, that will be a lot
-easier to do.
-
-As the vast, vast majority of Rust projects use Cargo, we will assume that
-you’re using it for the rest of the book. Cargo comes installed with Rust
-itself, if you used the official installers as covered in the Installation
-chapter. If you installed Rust through some other means, you can check if you
-have Cargo installed by typing the following into your terminal:
-
-```text
-$ cargo --version
-```
-
-If you see a version number, great! If you see an error like `command not
-found`, then you should look at the documentation for your method of
-installation to determine how to install Cargo separately.
-
-### Creating a Project with Cargo
-
-Let's create a new project using Cargo and look at how it differs from our
-project in `hello_world`. Go back to your projects directory (or wherever you
-decided to put your code):
-
-Linux and Mac:
-
-```text
-$ cd ~/projects
-```
-
-Windows:
-
-```cmd
-> cd %USERPROFILE%\projects
-```
-
-And then on any operating system run:
-
-```text
-$ cargo new hello_cargo --bin
-$ cd hello_cargo
-```
-
-We passed the `--bin` argument to `cargo new` because our goal is to make an
-executable application, as opposed to a library. Executables are binary
-executable files often called just *binaries*. We've given `hello_cargo`
-as the name for our project, and Cargo creates its files in a directory
-of the same name that we can then go into.
-
-If we list the files in the *hello_cargo* directory, we can see that Cargo has
-generated two files and one directory for us: a *Cargo.toml* and a *src*
-directory with a *main.rs* file inside. It has also initialized a new git
-repository in the *hello_cargo* directory for us, along with a *.gitignore*
-file; you can change this to use a different version control system, or no
-version control system, by using the `--vcs` flag.
-
-Open up *Cargo.toml* in your text editor of choice. It should look something
-like this:
-
-<span class="filename">Filename: Cargo.toml</span>
-
-```toml
-[package]
-name = "hello_cargo"
-version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
-
-[dependencies]
-```
-
-This file is in the [*TOML*][toml]<!-- ignore --> (Tom's Obvious, Minimal
-Language) format. TOML is similar to INI but has some extra goodies and is used
-as Cargo’s configuration format.
-
-[toml]: https://github.com/toml-lang/toml
-
-The first line, `[package]`, is a section heading that indicates that the
-following statements are configuring a package. As we add more information to
-this file, we’ll add other sections.
-
-The next three lines set the three bits of configuration that Cargo needs to
-see in order to know that it should compile your program: its name, what
-version it is, and who wrote it. Cargo gets your name and email information
-from your environment. If it’s not correct, go ahead and fix that and save the
-file.
-
-The last line, `[dependencies]`, is the start of a section for you to list any
-*crates* (which is what we call packages of Rust code) that your project will
-depend on so that Cargo knows to download and compile those too. We won't need
-any other crates for this project, but we will in the guessing game tutorial in
-the next chapter.
-
-Now let's look at *src/main.rs*:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-fn main() {
-    println!("Hello, world!");
-}
-```
-
-Cargo has generated a "Hello World!" for you, just like the one we wrote
-earlier! So that part is the same. The differences between our previous project
-and the project generated by Cargo that we've seen so far are:
-
-- Our code goes in the *src* directory
-- The top level contains a *Cargo.toml* configuration file
-
-Cargo expects your source files to live inside the *src* directory so that the
-top-level project directory is just for READMEs, license information,
-configuration files, and anything else not related to your code. In this way,
-using Cargo helps you keep your projects nice and tidy. There's a place for
-everything, and everything is in its place.
-
-If you started a project that doesn't use Cargo, as we did with our project in
-the *hello_world* directory, you can convert it to a project that does use
-Cargo by moving your code into the *src* directory and creating an appropriate
-*Cargo.toml*.
-
-### Building and Running a Cargo Project
-
-Now let's look at what's different about building and running your Hello World
-program through Cargo! To do so, enter the following commands:
-
-```text
-$ cargo build
-   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
-```
-
-This should have created an executable file in *target/debug/hello_cargo* (or
-*target\debug\hello_cargo.exe* on Windows), which you can run with this command:
-
-```text
-$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
-Hello, world!
-```
-
-Bam! If all goes well, `Hello, world!` should print to the terminal once more.
-
-Running `cargo build` for the first time also causes Cargo to create a new file
-at the top level called *Cargo.lock*, which looks like this:
-
-<span class="filename">Filename: Cargo.lock</span>
-
-```toml
-[root]
-name = "hello_cargo"
-version = "0.1.0"
-```
-
-Cargo uses the *Cargo.lock* to keep track of dependencies in your application.
-This project doesn't have dependencies, so the file is a bit sparse.
-Realistically, you won't ever need to touch this file yourself; just let Cargo
-handle it.
-
-We just built a project with `cargo build` and ran it with
-`./target/debug/hello_cargo`, but we can also use `cargo run` to compile
-and then run:
-
-```text
-$ cargo run
-     Running `target/debug/hello_cargo`
-Hello, world!
-```
-
-Notice that this time, we didn't see the output telling us that Cargo was
-compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
-it just ran the binary. If you had modified your source code, Cargo would have
-rebuilt the project before running it, and you would have seen something like
-this:
-
-```text
-$ cargo run
-   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
-     Running `target/debug/hello_cargo`
-Hello, world!
-```
-
-So a few more differences we've now seen:
-
-- Instead of using `rustc`, build a project using `cargo build` (or build and
-  run it in one step with `cargo run`)
-- Instead of the result of the build being put in the same directory as our
-  code, Cargo will put it in the *target/debug* directory.
-
-The other advantage of using Cargo is that the commands are the same no matter
-what operating system you're on, so at this point we will no longer be
-providing specific instructions for Linux and Mac versus Windows.
-
-### Building for Release
-
-When your project is finally ready for release, you can use `cargo build
---release` to compile your project with optimizations. This will create an
-executable in *target/release* instead of *target/debug*. These optimizations
-make your Rust code run faster, but turning them on makes your program take
-longer to compile. This is why there are two different profiles: one for
-development when you want to be able to rebuild quickly and often, and one for
-building the final program you’ll give to a user that won't be rebuilt and
-that we want to run as fast as possible. If you're benchmarking the running
-time of your code, be sure to run `cargo build --release` and benchmark with
-the executable in *target/release*.
-
-### Cargo as Convention
-
-With simple projects, Cargo doesn't provide a whole lot of value over just
-using `rustc`, but it will prove its worth as you continue. With complex
-projects composed of multiple crates, it’s much easier to let Cargo coordinate
-the build. With Cargo, you can just run `cargo build`, and it should work the
-right way. Even though this project is simple, it now uses much of the real
-tooling you’ll use for the rest of your Rust career. In fact, you can get
-started with virtually all Rust projects you want to work
-on with the following commands:
-
-```text
-$ git clone someurl.com/someproject
-$ cd someproject
-$ cargo build
-```
-
-> Note: If you want to look at Cargo in more detail, check out the official
-[Cargo guide], which covers all of its features.
-
-[Cargo guide]: http://doc.crates.io/guide.html
+간단한 프로그램에 대해 그낭 `rustc`만으로 컴파일하는 것은 괜찮지만, 여러분의
+프로젝트가 커지면서, 여러분은 모든 옵션을 관리하고 여러분의 코드를 공유하기 쉽도록
+하길 원할 것입니다. 다음 절에서 우리는 여러분에게 Cargo 도구를 소개할 것인데,
+이것이 여러분의 실생활 러스트 프로그램 작성을 도와줄 것입니다.

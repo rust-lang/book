@@ -1,22 +1,20 @@
-## Generic Data Types
+## 제네릭 데이터 타입
 
-Using generics where we usually place types, like in function signatures or
-structs, lets us create definitions that we can use for many different concrete
-data types. Let's take a look at how to define functions, structs, enums, and
-methods using generics, and at the end of this section we'll discuss the
-performance of code using generics.
+함수 시그니처나 구조체에서와 같은 방식으로, 우리가 일반적으로 타입을 쓰는 곳에다 제네릭을 이용하는 것은
+여러 다른 종류의 구체적인 데이터 타입에 대해 사용할 수 있는 정의를 생성하도록 해줍니다. 제네릭을
+이용하여 함수, 구조체, 열거형, 그리고 메소드를 정의하는 방법을 살펴본 뒤, 이 절의 끝에서 제네릭을
+이용한 코드의 성능에 대해 논의하겠습니다.
 
-### Using Generic Data Types in Function Definitions
+### 함수 정의 내에서 제네릭 데이터 타입을 이용하기
 
-We can define functions that use generics in the signature of the function
-where the data types of the parameters and return value go. In this way, the
-code we write can be more flexible and provide more functionality to callers of
-our function, while not introducing code duplication.
+우리는 함수의 시그니처 내에서 파라미터의 데이터 타입과 반환 값이 올 자리에 제네릭을 사용하는 함수를
+정의할 수 있습니다. 이러한 방식으로 작성된 코드는 더 유연해지고 우리 함수를 호출하는 쪽에서 더 많은
+기능을 제공할 수 있는 한편, 코드 중복을 야기하지도 않습니다.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions
-providing the same functionality to find the largest value in a slice. The
-first function is the one we extracted in Listing 10-3 that finds the largest
-`i32` in a slice. The second function finds the largest `char` in a slice:
+우리의 `largest` 함수로 계속 진행하면, Listing 10-4는 슬라이스 내에서 가장 큰 값을 찾는
+동일한 기능을 제공하는 두 함수를 보여주고 있습니다. 첫번째 함수는 Listing 10-3에서 추출한
+슬라이스에서 가장 큰 `i32`를 찾는 함수입니다. 두번째 함수는 슬라이스에서 가장 큰 `char`를
+찾습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -60,44 +58,37 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-4: Two functions that differ only in their
-names and the types in their signatures</span>
+<span class="caption">Listing 10-4: 이름과 시그니처만 다른 두 함수들</span>
 
-Here, the functions `largest_i32` and `largest_char` have the exact same body,
-so it would be nice if we could turn these two functions into one and get rid
-of the duplication. Luckily, we can do that by introducing a generic type
-parameter!
+여기서 함수 `largest_i32`와 `largest_char`는 정확히 똑같은 본체를 가지고 있으므로, 만일 우리가
+이 두 함수를 하나로 바꿔서 중복을 제거할 수 있다면 좋을 것입니다. 운좋게도, 제네릭 타입 파라미터를
+도입해서 그렇게 할 수 있습니다!
 
-To parameterize the types in the signature of the one function we're going to
-define, we need to create a name for the type parameter, just like how we give
-names for the value parameters to a function. We're going to choose the name
-`T`. Any identifier can be used as a type parameter name, but we're choosing
-`T` because Rust's type naming convention is CamelCase. Generic type parameter
-names also tend to be short by convention, often just one letter. Short for
-"type", `T` is the default choice of most Rust programmers.
+우리가 정의하고자 하는 함수의 시그니처 내에 있는 타입들을 파라미터화 하기 위해서, 타입 파라미터를 위한
+이름을 만들 필요가 있는데, 이는 값 파라미터들의 이름을 함수에 제공하는 방법과 유사합니다. 우리는
+`T`라는 이름을 선택할 겁니다. 어떤 식별자(identifier)든지 타입 파라미터의 이름으로 사용될 수
+있지만, 러스트의 타입 이름에 대한 관례가 낙타 표기법(CamelCase)이기 때문에 `T`를 사용하려고
+합니다. 제네릭 타입 파라미터의 이름은 또한 관례상 짧은 경향이 있는데, 종종 그냥 한글자로 되어
+있습니다. "type"을 줄인 것으로서, `T`가 대부분의 러스트 프로그래머의 기본 선택입니다.
 
-When we use a parameter in the body of the function, we have to declare the
-parameter in the signature so that the compiler knows what that name in the
-body means. Similarly, when we use a type parameter name in a function
-signature, we have to declare the type parameter name before we use it. Type
-name declarations go in angle brackets between the name of the function and the
-parameter list.
+함수의 본체에 파라미터를 이용할 때는, 시그니처 내에 그 파라미터를 선언하여 해당 이름이 함수 본체
+내에서 무엇을 의미하는지 컴파일러가 할수 있도록 합니다. 비슷하게, 함수 시그니처 내에서 타입 파라미터
+이름을 사용할 때는, 사용 전에 그 타입 파라미터 이름을 선언해야 합니다. 타입 이름 선언은 함수의 이름과
+파라미터 리스트 사이에 꺾쇠 괄호를 쓰고 그 안에 넣습니다.
 
-The function signature of the generic `largest` function we're going to define
-will look like this:
+우리가 정의하고자 하는 제네릭 `largest` 함수의 함수 시그니처는 아래와 같이 생겼습니다:
 
 ```rust,ignore
 fn largest<T>(list: &[T]) -> T {
 ```
 
-We would read this as: the function `largest` is generic over some type `T`. It
-has one parameter named `list`, and the type of `list` is a slice of values of
-type `T`. The `largest` function will return a value of the same type `T`.
+이를 다음과 같이 읽습니다: 함수 `largest`는 어떤 타입 `T`을 이용한 제네릭입니다. 이것은 `list`라는
+이름을 가진 하나의 파라미터를 가지고 있고, `list`의 타입은 `T` 타입 값들의 슬라이스입니다.
+`largest` 함수는 동일한 타입 `T` 값을 반환할 것입니다.
 
-Listing 10-5 shows the unified `largest` function definition using the generic
-data type in its signature, and shows how we'll be able to call `largest` with
-either a slice of `i32` values or `char` values. Note that this code won't
-compile yet!
+Listing 10-5는 함수 시그니처 내에 제네릭 데이터 타입을 이용한 통합된 형태의 `largest` 함수 정의를
+보여주며, 또한 `i32` 값들의 슬라이스 혹은 `char` 값들의 슬라이스를 가지고 어떻게 `largest`를 호출할
+수 있을지를 보여줍니다. 이 코드가 아직 컴파일되지 않는다는 점을 주의하세요!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -127,10 +118,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-5: A definition of the `largest` function that
-uses generic type parameters but doesn't compile yet</span>
+<span class="caption">Listing 10-5: 제네릭 타입 파라미터를 이용하지만 아직
+컴파일되지 않는 `largest` 함수의 정의</span>
 
-If we try to compile this code right now, we'll get this error:
+이 코드를 지금 컴파일하고자 시도하면, 다음과 같은 에러를 얻게될 것입니다:
 
 ```text
 error[E0369]: binary operation `>` cannot be applied to type `T`
@@ -141,15 +132,14 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 ```
 
-The note mentions `std::cmp::PartialOrd`, which is a *trait*. We're going to
-talk about traits in the next section, but briefly, what this error is saying
-is that the body of `largest` won't work for all possible types that `T` could
-be; since we want to compare values of type `T` in the body, we can only use
-types that know how to be ordered. The standard library has defined the trait
-`std::cmp::PartialOrd` that types can implement to enable comparisons. We'll
-come back to traits and how to specify that a generic type has a particular
-trait in the next section, but let's set this example aside for a moment and
-explore other places we can use generic type parameters first.
+위 노트는 `std::cmp::PartialOrd`를 언급하는데, 이는 *트레잇(trait)* 입니다. 트레잇에
+대해서는 다음 절에서 살펴볼 것이지만, 간략하게 설명하자면, 이 에러가 말하고 있는 것은 `T`가
+될 수 있는 모든 가능한 타입에 대해서 동작하지 않으리라는 것입니다: 함수 본체 내에서 `T` 타입의
+값을 비교하고자 하기 때문에, 어떻게 순서대로 정렬하는지 알고 있는 타입만 사용할 수 있는 것입니다.
+표준 라이브러리는 어떤 타입에 대해 비교 연산이 가능하도록 구현할 수 있는 트레잇인
+`std::cmp::PartialOrd`을 정의해뒀습니다. 다음 절에서 트레잇, 그리고 어떤 제네릭 타입이 특정
+트레잇을 갖도록 명시하는 방법을 알아보기 위해 돌아올 것이지만, 이 예제는 잠시 옆으로 치워두고
+제네릭 타입 파라미터를 이용할 수 있는 다른 곳을 먼저 돌아봅시다.
 
 <!-- Liz: this is the reason we had the topics in the order we did in the first
 draft of this chapter; it's hard to do anything interesting with generic types
@@ -159,11 +149,11 @@ ordering could work out okay, though, and keep a stronger thread with the
 not-yet-compiling example here, which I know isn't ideal either. Let us know
 what you think. /Carol -->
 
-### Using Generic Data Types in Struct Definitions
+### 구조체 정의 내에서 제네릭 데이터 타입 사용하기
 
-We can define structs to use a generic type parameter in one or more of the
-struct's fields with the `<>` syntax too. Listing 10-6 shows the definition and
-use of a `Point` struct that can hold `x` and `y` coordinate values of any type:
+우리는 또한 하나 혹은 그 이상의 구조체 필드 내에 제네릭 타입 파라미터를 사용하여 구조체를 정의할 수
+있습니다. Listing 10-6은 임의의 타입으로 된 `x`와 `y` 좌표값을 가질 수 있는 `Point` 구조체의
+정의 및 사용법을 보여주고 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -179,19 +169,18 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-6: A `Point` struct that holds `x` and `y`
-values of type `T`</span>
+<span class="caption">Listing 10-6: `T` 타입의 값 `x`와 `y`를 갖는 `Point`
+구조체</span>
 
-The syntax is similar to using generics in function definitions. First, we have
-to declare the name of the type parameter within angle brackets just after the
-name of the struct. Then we can use the generic type in the struct definition
-where we would specify concrete data types.
+문법은 함수 정의 내에서의 제네릭을 사용하는 것과 유사합니다. 먼저, 구조체 이름 바로 뒤에 꺾쇠 괄호를
+쓰고 그 안에 타입 파라미터의 이름을 선언해야 합니다. 그러면 구조체 정의부 내에서 구체적인 데이터 타입을
+명시하는 곳에 제네릭 타입을 이용할 수 있습니다.
 
-Note that because we've only used one generic type in the definition of
-`Point`, what we're saying is that the `Point` struct is generic over some type
-`T`, and the fields `x` and `y` are *both* that same type, whatever it ends up
-being. If we try to create an instance of a `Point` that has values of
-different types, as in Listing 10-7, our code won't compile:
+`Point`의 정의 내에서 단 하나의 제네릭 타입을 사용했기 때문에, `Point` 구조체는 어떤 타입 `T`를
+이용한 제네릭이고 `x`와 `y`가 이게 결국 무엇이 되든 간에 *둘 다* 동일한 타입을 가지고 있다고
+말할 수 있음을 주목하세요. 만일 Listing 10-7에서와 같이 다른 타입의 값을 갖는 `Point`의
+인스턴스를 만들고자 한다면, 컴파일이 되지 않을 것입니다:
+`
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -206,10 +195,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
-type because both have the same generic data type `T`</span>
+<span class="caption">Listing 10-7: `x`와 `y` 필드는 둘 모두 동일한 제네릭
+데이터 타입 `T`를 가지고 있기 때문에 동일한 타입이어야 합니다</span>
 
-If we try to compile this, we'll get the following error:
+이 코드를 컴파일하고자 하면, 다음과 같은 에러를 얻게 될 것입니다:
 
 ```text
 error[E0308]: mismatched types
@@ -223,16 +212,14 @@ error[E0308]: mismatched types
   = note:    found type `{float}`
 ```
 
-When we assigned the integer value 5 to `x`, the compiler then knows for this
-instance of `Point` that the generic type `T` will be an integer. Then when we
-specified 4.0 for `y`, which is defined to have the same type as `x`, we get a
-type mismatch error.
+`x`에 정수 5를 대입할 때, 컴파일러는 이 `Point`의 인스턴스에 대해 제네릭 타입 `T`가 정수일 것이고
+알게 됩니다. 그 다음 `y`에 대해 4.0을 지정했는데, 이 `y`는 `x`와 동일한 타입을 갖도록 정의되었으므로,
+타입 불일치 에러를 얻게 됩니다. 
 
-If we wanted to define a `Point` struct where `x` and `y` could have different
-types but still have those types be generic, we can use multiple generic type
-parameters. In listing 10-8, we've changed the definition of `Point` to be
-generic over types `T` and `U`. The field `x` is of type `T`, and the field `y`
-is of type `U`:
+만일 `x`와 `y`가 서로 다른 타입을 가지지만 해당 타입들이 여전히 제네릭인 `Point` 구조체를 정의하길
+원한다면, 여러 개의 제네릭 타입 파라미터를 이용할 수 있습니다. Listing 10-8에서는 `Point`의 정의를
+`T`와 `U`를 이용한 제네릭이 되도록 변경했습니다. 필드 `x`의 타입은 `T`이고, 필드 `y`의 타입은
+`U`입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -249,21 +236,19 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-8: A `Point` generic over two types so that
-`x` and `y` may be values of different types</span>
+<span class="caption">Listing 10-8: 두 타입을 이용한 제네릭이어서 `x`와 `y`가
+다른 타입의 값일 수도 있는 `Point`</span>
 
-Now all of these instances of `Point` are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few gets
-hard to read and understand. If you get to a point of needing lots of generic
-types, it's probably a sign that your code could use some restructuring to be
-separated into smaller pieces.
+이제 위와 같은 모든 `Point` 인스턴스가 허용됩니다! 정의 부분에 여러분이 원하는 만큼 많은 수의 제네릭
+타입 파라미터를 이용할 수 있지만, 몇몇개보다 더 많이 이용하는 것은 읽고 이해하는 것을 어렵게 만듭니다.
+여러분이 많은 수의 제네릭 타입을 필요로 하는 지점에 다다랐다면, 이는 아마도 여러분의 코드가 좀더 작은
+조각들로 나뉘는 재구조화가 필요할 지도 모른다는 징조입니다.
 
-### Using Generic Data Types in Enum Definitions
+### 열거형 정의 내에서 제네릭 데이터 타입 사용하기
 
-Similarly to structs, enums can be defined to hold generic data types in their
-variants. We used the `Option<T>` enum provided by the standard library in
-Chapter 6, and now its definition should make more sense. Let's take another
-look:
+구조체와 유사하게, 열거형도 그 variant 내에서 제네릭 데이터 타입을 갖도록 정의될 수 있습니다.
+6장에서 표준 라이브러리가 제공하는 `Option<T>` 열거형을 이용해봤는데, 이제는 그 정의를 좀 더
+잘 이해할 수 있겠지요. 다시 한번 봅시다:
 
 ```rust
 enum Option<T> {
@@ -272,16 +257,14 @@ enum Option<T> {
 }
 ```
 
-In other words, `Option<T>` is an enum generic in type `T`. It has two
-variants: `Some`, which holds one value of type `T`, and a `None` variant that
-doesn't hold any value. The standard library only has to have this one
-definition to support the creation of values of this enum that have any
-concrete type. The idea of "an optional value" is a more abstract concept than
-one specific type, and Rust lets us express this abstract concept without lots
-of duplication.
+달리 말하면, `Option<T>`는 `T` 타입에 제네릭인 열거형입니다. 이것은 두 개의 variant를 가지고
+있습니다: 타입 `T` 값 하나를 들고 있는 `Some`, 그리고 어떠한 값도 들고 있지 않는 `None` variant
+입니다. 표준 라이브러리는 구체적인 타입을 가진 이 열거형에 대한 값의 생성을 지원하기 위해서 딱 이 한가지
+정의만 가지고 있으면 됩니다. "옵션 값"의 아이디어는 하나의 명시적인 타입에 비해 더 추상화된 개념이고,
+러스트는 이 추상화 개념을 수많은 중복 없이 표현할 수 있도록 해줍니다.
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+열거형은 또한 여러 개의 제네릭 타입을 이용할 수 있습니다. 우리가 9장에서 사용해본 `Result` 열거형의
+정의가 한가지 예입니다:
 
 ```rust
 enum Result<T, E> {
@@ -290,26 +273,24 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`. `Result` has two
-variants: `Ok`, which holds a value of type `T`, and `Err`, which holds a value
-of type `E`. This definition makes it convenient to use the `Result` enum
-anywhere we have an operation that might succeed (and return a value of some
-type `T`) or fail (and return an error of some type `E`). Recall Listing 9-2
-when we opened a file: in that case, `T` was filled in with the type
-`std::fs::File` when the file was opened successfully and `E` was filled in
-with the type `std::io::Error` when there were problems opening the file.
+`Result` 열거형은 `T`와 `E`, 두 개의 타입을 이용한 제네릭입니다. `Result`는 두 개의 variant를
+가지고 있습니다: 타입 `T`의 값을 들고 있는 `Ok`, 그리고 타입 `E`의 값을 들고 있는 `Err`입니다.
+이 정의는 성공하거나 (그래서 어떤 `T` 값을 반환하거나) 혹은 실패하는 (그래서 `E` 타입으로 된 에러를
+반환하는) 연산이 필요한 어디에서든 편리하게 `Result` 열거형을 이용하도록 해줍니다. Listing 9-2에
+우리가 파일을 열때를 상기해보세요: 이 경우, 파일이 성공적으로 열렸을 때는 `T`에 `std::fs::File`
+타입의 값이 채워지고 파일을 여는데 문제가 생겼을 때는 `E`에 `std::io::Error` 타입으로 된 값이
+채워졌습니다.
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-remove the duplication by using the same process we used with the function
-definitions to introduce generic types instead.
+여러분의 코드에서 단지 들고 있는 값의 타입만 다른 여러 개의 구조체나 열거형이 있는 상황을 인지했다면,
+우리가 함수 정의에서 제네릭 타입을 대신 도입하여 사용했던 것과 똑같은 절차를 통해 그러한 중복을
+제거할 수 있습니다.
 
-### Using Generic Data Types in Method Definitions
+### 메소드 정의 내에서 제네릭 데이터 타입 사용하기
 
-Like we did in Chapter 5, we can implement methods on structs and enums that
-have generic types in their definitions. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6. We've then defined a method named `x` on
-`Point<T>` that returns a reference to the data in the field `x`:
+5장에서 했던 것과 유사하게, 정의부에 제네릭 타입을 갖는 구조체와 열거형 상의 메소드를 구현할 수도
+있습니다. Listing 10-9는 우리가 Listing 10-6에서 정의했던 `Point<T>` 구조체를 보여주고
+있습니다. 그리고나서 필드 `x`의 값에 대한 참조자를 반환하는 `x`라는 이름의 메소드를 `Point<T>`
+상에 정의했습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -332,21 +313,19 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-9: Implementing a method named `x` on the
-`Point<T>` struct that will return a reference to the `x` field, which is of
-type `T`.</span>
+<span class="caption">Listing 10-9: `T` 타입의 `x` 필트에 대한 참조자를 반환하는
+`Point<T>` 구조체 상에 `x`라는 이름의 메소드 정의</span>
 
-Note that we have to declare `T` just after `impl`, so that we can use it when
-we specify that we're implementing methods on the type `Point<T>`.
+`impl` 바로 뒤에 `T`를 정의해야만 타입 `Point<T>` 메소드를 구현하는 중에 이를 사용할 수 있음을
+주목하세요.
 
-Generic type parameters in a struct definition aren't always the same generic
-type parameters you want to use in that struct's method signatures. Listing
-10-10 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
-The method takes another `Point` as a parameter, which might have different
-types than the `self` `Point` that we're calling `mixup` on. The method creates
-a new `Point` instance that has the `x` value from the `self` `Point` (which is
-of type `T`) and the `y` value from the passed-in `Point` (which is of type
-`W`):
+구조체 정의 내에서의 제네릭 타입 파라미터는 여러분이 구조체의 메소드 시그니처 내에서 사용하고 싶어하는
+제네릭 타입 파라미터와 항상 같지 않습니다. Listing 10-10에서는 Listing 10-8에서의
+`Point<T, U>` 구조체 상에 `mixup` 이라는 메소드를 정의했습니다. 이 메소드는 또다른 `Point`를
+파라미터로 갖는데, 이는 우리가 호출하는 `mixup` 상의 `self`의 `Point`와 다른 타입을 가지고 있을
+수도 있습니다. 이 메소드는 새로운 `Point`를 생성하는데 `self` `Point`로부터 (`T` 타입인) `x`
+값을 가져오고, 파라미터로 넘겨받은 `Point`로부터 (`W` 타입인) `y` 값을 가져온 것입니다:
+
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -375,52 +354,48 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-10: Methods that use different generic types
-than their struct's definition</span>
+<span class="caption">Listing 10-10: 구조체 정의에서와는 다른 제네릭 타입을 사용하는
+메소드</span>
 
-In `main`, we've defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). `p2` is a `Point` that has a string
-slice for `x` (with value `"Hello"`) and a `char` for `y` (with value `c`).
-Calling `mixup` on `p1` with the argument `p2` gives us `p3`, which will have
-an `i32` for `x`, since `x` came from `p1`. `p3` will have a `char` for `y`,
-since `y` came from `p2`. The `println!` will print `p3.x = 5, p3.y = c`.
+`main`에서, 우리는 (`5` 값을 갖는) `x`에 대해 `i32`를, (`10.4` 값을 갖는) `y`에 대해
+`f64`를 사용하는 `Point`를 정의했습니다. `p2`는 (`"Hello"` 값을 갖는) `x`에 대해 스트링
+슬라이스를, (`c` 값을 갖는) `y`에 대해 `char`를 사용하는 `Point`입니다. `p1`상에서 인자로
+`p2`를 넘기는 `mixup` 호출은 `p3`을 반환하는데, 이는 `x`가 `p1`으로부터 오기 때문에 `x`는
+`i32` 타입을 갖게 될 것입니다. 또한 `y`는 `p2`로부터 오기 때문에 `p3`은 `y`에 대해 `char`
+타입을 가지게 될 것입니다. `println!`은 `p3.x = 5, p3.y = c`를 출력하겠지요.
 
-Note that the generic parameters `T` and `U` are declared after `impl`, since
-they go with the struct definition. The generic parameters `V` and `W` are
-declared after `fn mixup`, since they are only relevant to the method.
+제네릭 파라미터 `T`와 `U`는 `impl` 뒤에 선언되었는데, 이는 구조체 정의와 함께 사용되기 때문임을
+주목하세요. 제네릭 파라미터 `V`와 `W`는 `fn mixup` 뒤에 선언되었는데, 이는 이들이 오직
+해당 메소드에 대해서만 관련이 있기 때문입니다.
 
-### Performance of Code Using Generics
+### 제네릭을 이용한 코드의 성능
 
-You may have been reading this section and wondering if there's a run-time cost
-to using generic type parameters. Good news: the way that Rust has implemented
-generics means that your code will not run any slower than if you had specified
-concrete types instead of generic type parameters!
+여러분이 이 절을 읽으면서 제네릭 타입 파라미터를 이용한 런타임 비용이 있는지 궁금해하고 있을런지도
+모르겠습니다. 좋은 소식을 알려드리죠: 러스트가 제네릭을 구현한 방식이 의미하는 바는 여러분이 제네릭
+파리미터 대신 구체적인 타입을 명시했을때와 비교해 전혀 느려지지 않을 것이란 점입니다!
 
-Rust accomplishes this by performing *monomorphization* of code using generics
-at compile time. Monomorphization is the process of turning generic code into
-specific code with the concrete types that are actually used filled in.
+러스트는 컴파일 타임에 제네릭을 사용하는 코드에 대해 *단형성화(monomorphization)* 를 수행함으로써
+이러한 성능을 이루어 냈습니다. 단형성화란 제네릭 코드를 실제로 채워질 구체적인 타입으로 된 특정 코드로
+바꾸는 과정을 말합니다.
 
-What the compiler does is the opposite of the steps that we performed to create
-the generic function in Listing 10-5. The compiler looks at all the places that
-generic code is called and generates code for the concrete types that the
-generic code is called with.
+컴파일러가 하는 일은 Listing 10-5에서 우리가 제네릭 함수를 만들때 수행한 단계들을 반대로 한 것입니다.
+컴파일러는 제네릭 코드가 호출되는 모든 곳을 살펴보고 제네릭 코드가 호출될 때 사용된 구체적인 타입에 대한
+코드를 생성합니다.
 
-Let's work through an example that uses the standard library's `Option` enum:
+표준 라이브러리의 `Option` 열거형을 사용하는 예제를 통해 알아봅시다:
 
 ```rust
 let integer = Some(5);
 let float = Some(5.0);
 ```
 
-When Rust compiles this code, it will perform monomorphization. The compiler
-will read the values that have been passed to `Option` and see that we have two
-kinds of `Option<T>`: one is `i32`, and one is `f64`. As such, it will expand
-the generic definition of `Option<T>` into `Option_i32` and `Option_f64`,
-thereby replacing the generic definition with the specific ones.
+러스트가 이 코드를 컴파일할때, 단형성화를 수행할 것입니다. 컴파일러는 `Option`에 넘겨진 값들을 읽고
+두 종류의 `Option<T>`를 가지고 있다는 사실을 알게 됩니다: 하나는 `i32`이고 나머지 하나는 `f64`
+이지요. 그리하여 컴파일러는 제네릭 정의를 명시적인 것들로 교체함으로써 `Option<T>`에 대한 제네릭
+정의를 `Option_i32`와 `Option_f64`로 확장시킬 것입니다.
 
-The monomorphized version of our code that the compiler generates looks like
-this, with the uses of the generic `Option` replaced with the specific
-definitions created by the compiler:
+컴파일러가 생성한 우리의 단형성화된 버전의 코드는 아래와 같이 보이게 되는데, 컴파일러에 의해 생성된
+구체화된 정의로 교체된 제네릭 `Option`이 사용되었습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -441,8 +416,7 @@ fn main() {
 }
 ```
 
-We can write the non-duplicated code using generics, and Rust will compile that
-into code that specifies the type in each instance. That means we pay no
-runtime cost for using generics; when the code runs, it performs just like it
-would if we had duplicated each particular definition by hand. The process of
-monomorphization is what makes Rust's generics extremely efficient at runtime.
+우리는 제네릭을 사용하여 중복 없는 코드를 작성할 수 있고, 러스트는 이를 각 인스턴스에 대해 구체적인
+타입을 갖는 코드로 컴파일할 것입니다. 이는 우리가 제네릭을 사용하는 데에 어떠한 런타임 비용도 없음을
+의미합니다; 코드가 실행될 때, 손으로 각각 특정 정의를 중복시킨 것과 같이 실행될 것입니다.  단형성화의
+과정은 러스트의 제네릭이 런타임에 극도로 효율적이도록 만들어 주는 것입니다.

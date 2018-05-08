@@ -1,23 +1,29 @@
 ## Advanced Traits
 
-We covered traits in Chapter 10, but like lifetimes, we didn't get to all the
-details. Now that we know more Rust, we can get into the nitty-gritty.
+We first covered traits in the “Traits: Defining Shared Behavior” section of
+Chapter 10, but as with lifetimes, we didn’t discuss the more advanced details.
+Now that you know more about Rust, we can get into the nitty-gritty.
 
-### Associated Types
+### Associated Types Specify Placeholder Types in Trait Definitions
 
-*Associated types* are a way of associating a type placeholder with a trait
-such that the trait method definitions can use these placeholder types in their
-signatures. The implementer of a trait will specify the concrete type to be
-used in this type's place for the particular implementation.
+*Associated types* connect a type placeholder with a trait such that the trait
+method definitions can use these placeholder types in their signatures. The
+implementor of a trait will specify the concrete type to be used in this type’s
+place for the particular implementation. That way, we can define a trait that
+uses some types without needing to know exactly what those types are until the
+trait is implemented.
 
-We've described most of the things in this chapter as being very rare.
-Associated types are somewhere in the middle; they're more rare than the rest
-of the book, but more common than many of the things in this chapter.
+We’ve described most of the advanced features in this chapter as being rarely
+needed. Associated types are somewhere in the middle: they’re used more rarely
+than features explained in the rest of the book, but more commonly than many of
+the other features discussed in this chapter.
 
-An example of a trait with an associated type is the `Iterator` trait provided
-by the standard library. It has an associated type named `Item` that stands in
-for the type of the values that we're iterating over. We mentioned in Chapter
-13 that the definition of the `Iterator` trait is as shown in Listing 19-20:
+One example of a trait with an associated type is the `Iterator` trait that the
+standard library provides. The associated type is named `Item` and stands in
+for the type of the values the type implementing the `Iterator` trait is
+iterating over. In “The `Iterator` Trait and the `next` Method” section of
+Chapter 13, we mentioned that the definition of the `Iterator` trait is as
+shown in Listing 19-20.
 
 ```rust
 pub trait Iterator {
@@ -29,26 +35,33 @@ pub trait Iterator {
 <span class="caption">Listing 19-20: The definition of the `Iterator` trait
 that has an associated type `Item`</span>
 
-This says that the `Iterator` trait has an associated type named `Item`. `Item`
-is a placeholder type, and the return value of the `next` method will return
-values of type `Option<Self::Item>`. Implementers of this trait will specify
-the concrete type for `Item`, and the `next` method will return an `Option`
-containing a value of whatever type the implementer has specified.
+The type `Item` is a placeholder type, and the `next` method’s definition shows
+that it will return values of type `Option<Self::Item>`. Implementors of the
+`Iterator` trait will specify the concrete type for `Item`, and the `next`
+method will return an `Option` containing a value of that concrete type.
 
-#### Associated Types Versus Generics
+#### Associated Types vs. Generics
 
-When we implemented the `Iterator` trait on the `Counter` struct in Listing
-13-6, we specified that the `Item` type was `u32`:
+Associated types might seem like a similar concept to generics, in that they
+allow us to define a function without specifying what types it can handle. So
+why use associated types?
+
+Let’s examine the difference between the two concepts with an example from
+Chapter 13 that implements the `Iterator` trait on the `Counter` struct. In
+Listing 13-21, we specified that the `Item` type was `u32`:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 impl Iterator for Counter {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
+        // --snip--
 ```
 
-This feels similar to generics. So why isn't the `Iterator` trait defined as
-shown in Listing 19-21?
+This syntax seems comparable to generics. So why not just define the `Iterator`
+trait with generics, as shown in Listing 19-21?
 
 ```rust
 pub trait Iterator<T> {
@@ -59,155 +72,47 @@ pub trait Iterator<T> {
 <span class="caption">Listing 19-21: A hypothetical definition of the
 `Iterator` trait using generics</span>
 
-The difference is that with the definition in Listing 19-21, we could also
-implement `Iterator<String> for Counter`, or any other type as well, so that
-we'd have multiple implementations of `Iterator` for `Counter`. In other words,
-when a trait has a generic parameter, we can implement that trait for a type
-multiple times, changing the generic type parameters' concrete types each time.
-Then when we use the `next` method on `Counter`, we'd have to provide type
-annotations to indicate which implementation of `Iterator` we wanted to use.
+The difference is that when using generics, as in Listing 19-21, we must
+annotate the types in each implementation. The reason is that we can also
+implement `Iterator<String> for Counter` or any other type, which would give us
+multiple implementations of `Iterator` for `Counter`. In other words, when a
+trait has a generic parameter, it can be implemented for a type multiple times,
+changing the concrete types of the generic type parameters each time. When we
+use the `next` method on `Counter`, we would have to provide type annotations
+to indicate which implementation of `Iterator` we want to use.
 
-With associated types, we can't implement a trait on a type multiple times.
-Using the actual definition of `Iterator` from Listing 19-20, we can only
-choose once what the type of `Item` will be, since there can only be one `impl
-Iterator for Counter`. We don't have to specify that we want an iterator of
-`u32` values everywhere that we call `next` on `Counter`.
+With associated types, we don’t need to annotate types because we can’t
+implement a trait on a type multiple times. In Listing 19-20 with the
+definition that uses associated types, we can only choose what the type of
+`Item` will be once, because there can only be one `impl Iterator for Counter`.
+We don’t have to specify that we want an iterator of `u32` values everywhere
+that we call `next` on `Counter`.
 
-The benefit of not having to specify generic type parameters when a trait uses
-associated types shows up in another way as well. Consider the two traits
-defined in Listing 19-22. Both are defining a trait having to do with a graph
-structure that contains nodes of some type and edges of some type. `GGraph` is
-defined using generics, and `AGraph` is defined using associated types:
+### Default Generic Type Parameters and Operator Overloading
 
-```rust
-trait GGraph<Node, Edge> {
-    // methods would go here
-}
+When we use generic type parameters, we can specify a default concrete type for
+the generic type. This eliminates the need for implementors of the trait to
+specify a concrete type if the default type works. The syntax for specifying a
+default type for a generic type is `<PlaceholderType=ConcreteType>` when
+declaring the generic type.
 
-trait AGraph {
-    type Node;
-    type Edge;
+A great example of a situation where this technique is useful is with operator
+overloading. *Operator overloading* is customizing the behavior of an operator
+(such as `+`) in particular situations.
 
-    // methods would go here
-}
-```
-
-<span class="caption">Listing 19-22: Two graph trait definitions, `GGraph`
-using generics and `AGraph` using associated types for `Node` and `Edge`</span>
-
-Let's say we wanted to implement a function that computes the distance between
-two nodes in any types that implement the graph trait. With the `GGraph` trait
-defined using generics, our `distance` function signature would have to look
-like Listing 19-23:
-
-```rust
-# trait GGraph<Node, Edge> {}
-#
-fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
-#     0
-}
-```
-
-<span class="caption">Listing 19-23: The signature of a `distance` function
-that uses the trait `GGraph` and has to specify all the generic
-parameters</span>
-
-Our function would need to specify the generic type parameters `N`, `E`, and
-`G`, where `G` is bound by the trait `GGraph` that has type `N` as its `Node`
-type and type `E` as its `Edge` type. Even though `distance` doesn't need to
-know the types of the edges, we're forced to declare an `E` parameter, because
-we need to to use the `GGraph` trait and that requires specifying the type for
-`Edge`.
-
-Contrast with the definition of `distance` in Listing 19-24 that uses the
-`AGraph` trait from Listing 19-22 with associated types:
-
-```rust
-# trait AGraph {
-#     type Node;
-#     type Edge;
-# }
-#
-fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
-#     0
-}
-```
-
-<span class="caption">Listing 19-24: The signature of a `distance` function
-that uses the trait `AGraph` and the associated type `Node`</span>
-
-This is much cleaner. We only need to have one generic type parameter, `G`,
-with the trait bound `AGraph`. Since `distance` doesn't use the `Edge` type at
-all, it doesn't need to be specified anywhere. To use the `Node` type
-associated with `AGraph`, we can specify `G::Node`.
-
-#### Trait Objects with Associated Types
-
-You may have been wondering why we didn't use a trait object in the `distance`
-functions in Listing 19-23 and Listing 19-24. The signature for the `distance`
-function using the generic `GGraph` trait does get a bit more concise using a
-trait object:
-
-```rust
-# trait GGraph<Node, Edge> {}
-#
-fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
-#     0
-}
-```
-
-This might be a more fair comparison to Listing 19-24. Specifying the `Edge`
-type is still required, though, which means Listing 19-24 is still preferable
-since we don't have to specify something we don't use.
-
-It's not possible to change Listing 19-24 to use a trait object for the graph,
-since then there would be no way to refer to the `AGraph` trait's associated
-type.
-
-It is possible in general to use trait objects of traits that have associated
-types, though; Listing 19-25 shows a function named `traverse` that doesn't
-need to use the trait's associated types in other arguments. We do, however,
-have to specify the concrete types for the associated types in this case. Here,
-we've chosen to accept types that implement the `AGraph` trait with the
-concrete type of `usize` as their `Node` type and a tuple of two `usize` values
-for their `Edge` type:
-
-```rust
-# trait AGraph {
-#     type Node;
-#     type Edge;
-# }
-#
-fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {}
-```
-
-While trait objects mean that we don't need to know the concrete type of the
-`graph` parameter at compile time, we do need to constrain the use of the
-`AGraph` trait in the `traverse` function by the concrete types of the
-associated types. If we didn’t provide this constraint, Rust wouldn't be able
-to figure out which `impl` to match this trait object to, because the
-associated types can be part of the signatures of the methods that Rust needs
-to look up in the vtable.
-
-### Operator Overloading and Default Type Parameters
-
-The `<PlaceholderType=ConcreteType>` syntax is used in another way as well: to
-specify the default type for a generic type. A great example of a situation
-where this is useful is operator overloading.
-
-Rust does not allow you to create your own operators or overload arbitrary
-operators, but the operations and corresponding traits listed in `std::ops` can
-be overloaded by implementing the traits associated with the operator. For
-example, Listing 19-25 shows how to overload the `+` operator by implementing
-the `Add` trait on a `Point` struct so that we can add two `Point` instances
-together:
+Rust doesn’t allow you to create your own operators or overload arbitrary
+operators. But you can overload the operations and corresponding traits listed
+in `std::ops` by implementing the traits associated with the operator. For
+example, in Listing 19-22 we overload the `+` operator to add two `Point`
+instances together. We do this by implementing the `Add` trait on a `Point`
+struct:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::ops::Add;
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 struct Point {
     x: i32,
     y: i32,
@@ -230,15 +135,16 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-25: Implementing the `Add` trait to overload
+<span class="caption">Listing 19-22: Implementing the `Add` trait to overload
 the `+` operator for `Point` instances</span>
 
-We've implemented the `add` method to add the `x` values of two `Point`
-instances together and the `y` values of two `Point` instances together to
-create a new `Point`. The `Add` trait has an `Output` associated type that's
-used to determine the type returned from `add`. result of the operation.
+The `add` method adds the `x` values of two `Point` instances and the `y`
+values of two `Point` instances to create a new `Point`. The `Add` trait has an
+associated type named `Output` that determines the type returned from the `add`
+method.
 
-Let's look at the `Add` trait in a bit more detail. Here's its definition:
+The default generic type in this code is within the `Add` trait. Here is its
+definition:
 
 ```rust
 trait Add<RHS=Self> {
@@ -248,32 +154,31 @@ trait Add<RHS=Self> {
 }
 ```
 
-This should look familiar; it's a trait with one method and an associated type.
-The new part is the `RHS=Self` in the angle brackets: this syntax is called
-*default type parameters*. `RHS` is a generic type parameter (short for "right
-hand side") that's used for the type of the `rhs` parameter in the `add`
-method. If we don't specify a concrete type for `RHS` when we implement the
-`Add` trait, the type of `RHS` will default to the type of `Self` (the type
-that we're implementing `Add` on).
+This code should look generally familiar: a trait with one method and an
+associated type. The new part is `RHS=Self` in the angle brackets: this syntax
+is called *default type parameters*. The `RHS` generic type parameter (short
+for “right hand side”) defines the type of the `rhs` parameter in the `add`
+method. If we don’t specify a concrete type for `RHS` when we implement the
+`Add` trait, the type of `RHS` will default to `Self`, which will be the type
+we’re implementing `Add` on.
 
-Let's look at another example of implementing the `Add` trait. Imagine we have
-two structs holding values in different units, `Millimeters` and `Meters`. We
-can implement `Add` for `Millimeters` in different ways as shown in Listing
-19-26:
+When we implemented `Add` for `Point`, we used the default for `RHS` because we
+wanted to add two `Point` instances. Let’s look at an example of implementing
+the `Add` trait where we want to customize the `RHS` type rather than using the
+default.
+
+We have two structs holding values in different units, `Millimeters` and
+`Meters`. We want to add values in millimeters to values in meters and have the
+implementation of `Add` do the conversion correctly. We can implement `Add` for
+`Millimeters` with `Meters` as the `RHS`, as shown in Listing 19-23.
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::ops::Add;
 
 struct Millimeters(u32);
 struct Meters(u32);
-
-impl Add for Millimeters {
-    type Output = Millimeters;
-
-    fn add(self, other: Millimeters) -> Millimeters {
-        Millimeters(self.0 + other.0)
-    }
-}
 
 impl Add<Meters> for Millimeters {
     type Output = Millimeters;
@@ -284,165 +189,339 @@ impl Add<Meters> for Millimeters {
 }
 ```
 
-<span class="caption">Listing 19-26: Implementing the `Add` trait on
-`Millimeters` to be able to add `Millimeters` to `Millimeters` and
-`Millimeters` to `Meters`</span>
+<span class="caption">Listing 19-23: Implementing the `Add` trait on
+`Millimeters` to add `Millimeters` to `Meters`</span>
 
-If we're adding `Millimeters` to other `Millimeters`, we don't need to
-parameterize the `RHS` type for `Add` since the default `Self` type is what we
-want. If we want to implement adding `Millimeters` and `Meters`, then we need
-to say `impl Add<Meters>` to set the value of the `RHS` type parameter.
+To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
+value of the `RHS` type parameter instead of using the default of `Self`.
 
-Default type parameters are used in two main ways:
+We use default type parameters in two main ways:
 
-1. To extend a type without breaking existing code.
-2. To allow customization in a way most users don't want.
+* To extend a type without breaking existing code
+* To allow customization in specific cases most users won’t need
 
-The `Add` trait is an example of the second purpose: most of the time, you're
-adding two like types together. Using a default type parameter in the `Add`
-trait definition makes it easier to implement the trait since you don't have to
-specify the extra parameter most of the time. In other words, we've removed a
-little bit of implementation boilerplate.
+The standard library’s `Add` trait is an example of the second purpose:
+usually, you’ll add two like types, but the `Add` trait provides the ability
+for customizing beyond that. Using a default type parameter in the `Add` trait
+definition means you don’t have to specify the extra parameter most of the
+time. In other words, a bit of implementation boilerplate isn’t needed, making
+it easier to use the trait.
 
-The first purpose is similar, but in reverse: since existing implementations of
-a trait won't have specified a type parameter, if we want to add a type
-parameter to an existing trait, giving it a default will let us extend the
-functionality of the trait without breaking the existing implementation code.
+The first purpose is similar to the second but in reverse: if we want to add a
+type parameter to an existing trait, we can give it a default to let us extend
+the functionality of the trait without breaking the existing implementation
+code.
 
-### Fully Qualified Syntax for Disambiguation
+### Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
 
-Rust cannot prevent a trait from having a method with the same name as another
-trait's method, nor can it prevent us from implementing both of these traits on
-one type. We can also have a method implemented directly on the type with the
-same name as well! In order to be able to call each of the methods with the
-same name, then, we need to tell Rust which one we want to use. Consider the
-code in Listing 19-27 where traits `Foo` and `Bar` both have method `f` and we
-implement both traits on struct `Baz`, which also has a method named `f`:
+Nothing in Rust prevents a trait from having a method with the same name as
+another trait’s method, nor does Rust prevent us from implementing both traits
+on one type. It’s also possible to implement a method directly on the type with
+the same name as methods from traits.
 
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-trait Foo {
-    fn f(&self);
-}
-
-trait Bar {
-    fn f(&self);
-}
-
-struct Baz;
-
-impl Foo for Baz {
-    fn f(&self) { println!("Baz’s impl of Foo"); }
-}
-
-impl Bar for Baz {
-    fn f(&self) { println!("Baz’s impl of Bar"); }
-}
-
-impl Baz {
-    fn f(&self) { println!("Baz's impl"); }
-}
-
-fn main() {
-    let b = Baz;
-    b.f();
-}
-```
-
-<span class="caption">Listing 19-27: Implementing two traits that both have a
-method with the same name as a method defined on the struct directly</span>
-
-For the implementation of the `f` method for the `Foo` trait on `Baz`, we're
-printing out `Baz's impl of Foo`. For the implementation of the `f` method for
-the `Bar` trait on `Baz`, we're printing out `Baz's impl of Bar`. The
-implementation of `f` directly on `Baz` prints out `Baz's impl`. What should
-happen when we call `b.f()`? In this case, Rust will always use the
-implementation on `Baz` directly and will print out `Baz's impl`.
-
-In order to be able to call the `f` method from `Foo` and the `f` method from
-`Baz` rather than the implementation of `f` directly on `Baz`, we need to use
-the *fully qualified syntax* for calling methods. It works like this: for any
-method call like:
-
-```rust,ignore
-receiver.method(args);
-```
-
-We can fully qualify the method call like this:
-
-```rust,ignore
-<Type as Trait>::method(receiver, args);
-```
-
-So in order to disambiguate and be able to call all the `f` methods defined in
-Listing 19-27, we specify that we want to treat the type `Baz` as each trait
-within angle brackets, then use two colons, then call the `f` method and pass
-the instance of `Baz` as the first argument. Listing 19-28 shows how to call
-`f` from `Foo` and then `f` from `Bar` on `b`:
+When calling methods with the same name, we need to tell Rust which one we want
+to use. Consider the code in Listing 19-24 where we’ve defined two traits,
+`Pilot` and `Wizard`, that both have a method called `fly`. We then implement
+both traits on a type `Human` that already has a method named `fly` implemented
+on it. Each `fly` method does something different.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Foo {
-#     fn f(&self);
+trait Pilot {
+    fn fly(&self);
+}
+
+trait Wizard {
+    fn fly(&self);
+}
+
+struct Human;
+
+impl Pilot for Human {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
+}
+
+impl Wizard for Human {
+    fn fly(&self) {
+        println!("Up!");
+    }
+}
+
+impl Human {
+    fn fly(&self) {
+        println!("*waving arms furiously*");
+    }
+}
+```
+
+<span class="caption">Listing 19-24: Two traits defined to have a `fly` method
+and implementations of those traits on the `Human` type in addition to a `fly`
+method on `Human` directly</span>
+
+When we call `fly` on an instance of `Human`, the compiler defaults to calling
+the method that is directly implemented on the type, as shown in Listing 19-25.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# trait Pilot {
+#     fn fly(&self);
 # }
-# trait Bar {
-#     fn f(&self);
+#
+# trait Wizard {
+#     fn fly(&self);
 # }
-# struct Baz;
-# impl Foo for Baz {
-#     fn f(&self) { println!("Baz’s impl of Foo"); }
+#
+# struct Human;
+#
+# impl Pilot for Human {
+#     fn fly(&self) {
+#         println!("This is your captain speaking.");
+#     }
 # }
-# impl Bar for Baz {
-#     fn f(&self) { println!("Baz’s impl of Bar"); }
+#
+# impl Wizard for Human {
+#     fn fly(&self) {
+#         println!("Up!");
+#     }
 # }
-# impl Baz {
-#     fn f(&self) { println!("Baz's impl"); }
+#
+# impl Human {
+#     fn fly(&self) {
+#         println!("*waving arms furiously*");
+#     }
 # }
 #
 fn main() {
-    let b = Baz;
-    b.f();
-    <Baz as Foo>::f(&b);
-    <Baz as Bar>::f(&b);
+    let person = Human;
+    person.fly();
 }
 ```
 
-<span class="caption">Listing 19-28: Using fully qualified syntax to call the
-`f` methods defined as part of the `Foo` and `Bar` traits</span>
+<span class="caption">Listing 19-25: Calling `fly` on an instance of
+`Human`</span>
 
-This will print:
+Running this code will print `*waving arms furiously*`, which shows that Rust
+called the `fly` method implemented on `Human` directly.
 
-```text
-Baz's impl
-Baz’s impl of Foo
-Baz’s impl of Bar
+To call the `fly` methods from either the `Pilot` trait or the `Wizard` trait,
+we need to use more explicit syntax to specify which `fly` method we mean.
+Listing 19-26 demonstrates this syntax.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# trait Pilot {
+#     fn fly(&self);
+# }
+#
+# trait Wizard {
+#     fn fly(&self);
+# }
+#
+# struct Human;
+#
+# impl Pilot for Human {
+#     fn fly(&self) {
+#         println!("This is your captain speaking.");
+#     }
+# }
+#
+# impl Wizard for Human {
+#     fn fly(&self) {
+#         println!("Up!");
+#     }
+# }
+#
+# impl Human {
+#     fn fly(&self) {
+#         println!("*waving arms furiously*");
+#     }
+# }
+#
+fn main() {
+    let person = Human;
+    Pilot::fly(&person);
+    Wizard::fly(&person);
+    person.fly();
+}
 ```
 
-We only need the `Type as` part if it's ambiguous, and we only need the `<>`
-part if we need the `Type as` part. So if we only had the `f` method directly
-on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
-`f` method in `Foo` by using `Foo::f(&b)` since we wouldn't have to
-disambiguate from the `Bar` trait.
+<span class="caption">Listing 19-26: Specifying which trait’s `fly` method we
+want to call</span>
 
-We could also have called the `f` defined directly on `Baz` by using
-`Baz::f(&b)`, but since that definition of `f` is the one that gets used by
-default when we call `b.f()`, it's not required to fully specify that
-implementation if that's what we want to call.
+Specifying the trait name before the method name clarifies to Rust which
+implementation of `fly` we want to call. We could also write
+`Human::fly(&person)`, which is equivalent to `person.fly()` that we used in
+Listing 19-26 but is a bit longer to write if we don’t need to disambiguate.
 
-### Supertraits to Use One Trait's Functionality Within Another Trait
+Running this code prints the following:
 
-Sometimes, we may want a trait to be able to rely on another trait also being
-implemented wherever our trait is implemented, so that our trait can use the
-other trait's functionality. The required trait is a *supertrait* of the trait
-we're implementing.
+```text
+This is your captain speaking.
+Up!
+*waving arms furiously*
+```
 
-For example, let's say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print out a value outlined in asterisks. That
-is, if our `Point` struct implements `Display` to result in `(x, y)`, calling
-`outline_print` on a `Point` instance that has 1 for `x` and 3 for `y` would
-look like:
+Because the `fly` method takes a `self` parameter, if we had two *types* that
+both implement one *trait*, Rust can figure out which implementation of a trait
+to use based on the type of `self`.
+
+However, associated functions that are part of traits don’t have a `self`
+parameter. When two types in the same scope implement that trait, Rust can’t
+figure out which type we mean unless we use *fully qualified syntax*. For
+example, the `Animal` trait in Listing 19-27 has the associated function
+`baby_name`, the implementation of `Animal` for the struct `Dog`, and the
+associated function `baby_name` defined on `Dog` directly.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+trait Animal {
+    fn baby_name() -> String;
+}
+
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
+    }
+}
+
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
+    }
+}
+
+fn main() {
+    println!("A baby dog is called a {}", Dog::baby_name());
+}
+```
+
+<span class="caption">Listing 19-27: A trait with an associated function and a
+type that has an associated function with the same name that also implements
+the trait</span>
+
+This code is for an animal shelter that wants to name all puppies Spot, which
+is implemented in the `baby_name` associated function that is defined on `Dog`.
+The `Dog` type also implements the trait `Animal`, which describes
+characteristics that all animals have. Baby dogs are called puppies, and that
+is expressed in the implementation of the `Animal` trait on `Dog` in the
+`baby_name` function associated with the `Animal` trait.
+
+In `main`, we call the `Dog::baby_name` function, which calls the associated
+function defined on `Dog` directly. This code prints the following:
+
+```text
+A baby dog is called a Spot
+```
+
+This output isn’t what we wanted. We want to call the `baby_name` function that
+is part of the `Animal` trait that we implemented on `Dog` so the code prints
+`A baby dog is called a puppy`. The technique of specifying the trait name that
+we used in Listing 19-26 doesn’t help here; if we change `main` to the code in
+Listing 19-28, we’ll get a compilation error.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore
+fn main() {
+    println!("A baby dog is called a {}", Animal::baby_name());
+}
+```
+
+<span class="caption">Listing 19-28: Attempting to call the `baby_name`
+function from the `Animal` trait, but Rust doesn’t know which implementation to
+use</span>
+
+Because `Animal::baby_name` is an associated function rather than a method, and
+thus doesn’t have a `self` parameter, Rust can’t figure out which
+implementation of `Animal::baby_name` we want. We’ll get this compiler error:
+
+```text
+error[E0283]: type annotations required: cannot resolve `_: Animal`
+  --> src/main.rs:20:43
+   |
+20 |     println!("A baby dog is called a {}", Animal::baby_name());
+   |                                           ^^^^^^^^^^^^^^^^^
+   |
+   = note: required by `Animal::baby_name`
+```
+
+To disambiguate and tell Rust that we want to use the implementation of
+`Animal` for `Dog`, we need to use *fully qualified syntax*, which is the most
+specific we can be when calling a function. Listing 19-29 demonstrates how to
+use fully qualified syntax.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# trait Animal {
+#     fn baby_name() -> String;
+# }
+#
+# struct Dog;
+#
+# impl Dog {
+#     fn baby_name() -> String {
+#         String::from("Spot")
+#     }
+# }
+#
+# impl Animal for Dog {
+#     fn baby_name() -> String {
+#         String::from("puppy")
+#     }
+# }
+#
+fn main() {
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+}
+```
+
+<span class="caption">Listing 19-29: Using fully qualified syntax to specify
+that we want to call the `baby_name` function from the `Animal` trait as
+implemented on `Dog`</span>
+
+We’re providing Rust with a type annotation within the angle brackets, which
+indicates we want to call the `baby_name` method from the `Animal` trait as
+implemented on `Dog` by saying that we want to treat the `Dog` type as an
+`Animal` for this function call. This code will now print what we want:
+
+```text
+A baby dog is called a puppy
+```
+
+In general, fully qualified syntax is defined as follows:
+
+```rust,ignore
+<Type as Trait>::function(receiver_if_method, next_arg, ...);
+```
+
+For associated functions, there would not be a `receiver`: there would only be
+the list of other arguments. We could use fully qualified syntax everywhere
+that we call functions or methods. However, we’re allowed to omit any part of
+this syntax that Rust can figure out from other information in the program. We
+only need to use this more verbose syntax in cases where there are multiple
+implementations that use the same name and Rust needs help to identify which
+implementation we want to call.
+
+### Using Supertraits to Require One Trait’s Functionality Within Another Trait
+
+Sometimes, we might need one trait to use another trait’s functionality. In
+this case, we need to rely on the dependent trait also being implemented. The
+trait we’re relying on is a *supertrait* of the trait we’re implementing.
+
+For example, let’s say we want to make an `OutlinePrint` trait with an
+`outline_print` method that will print a value framed in asterisks. That is,
+given a `Point` struct that implements `Display` to result in `(x, y)`, when we
+call `outline_print` on a `Point` instance that has `1` for `x` and `3` for
+`y`, it should print the following:
 
 ```text
 **********
@@ -452,18 +531,19 @@ look like:
 **********
 ```
 
-In the implementation of `outline_print`, since we want to be able to use the
-`Display` trait's functionality, we need to be able to say that the
-`OutlinePrint` trait will only work for types that also implement `Display` and
-provide the functionality that `OutlinePrint` needs. We can do that in the
-trait definition by specifying `OutlinePrint: Display`. It's like adding a
-trait bound to the trait. Listing 19-29 shows an implementation of the
-`OutlinePrint` trait:
+In the implementation of `outline_print`, we want to use the `Display` trait’s
+functionality. Therefore, we need to specify that the `OutlinePrint` trait will
+only work for types that also implement `Display` and provide the functionality
+that `OutlinePrint` needs. We can do that in the trait definition by specifying
+`OutlinePrint: Display`. This technique is similar to adding a trait bound to
+the trait. Listing 19-30 shows an implementation of the `OutlinePrint` trait:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt::Display;
+use std::fmt;
 
-trait OutlinePrint: Display {
+trait OutlinePrint: fmt::Display {
     fn outline_print(&self) {
         let output = self.to_string();
         let len = output.len();
@@ -476,18 +556,19 @@ trait OutlinePrint: Display {
 }
 ```
 
-<span class="caption">Listing 19-29: Implementing the `OutlinePrint` trait that
+<span class="caption">Listing 19-30: Implementing the `OutlinePrint` trait that
 requires the functionality from `Display`</span>
 
-Because we've specified that `OutlinePrint` requires the `Display` trait, we
-can use `to_string` in `outline_print` (`to_string` is automatically
-implemented for any type that implements `Display`). If we hadn't added the `:
-Display` after the trait name and we tried to use `to_string` in
-`outline_print`, we'd get an error that no method named `to_string` was found
-for the type `&Self` in the current scope.
+Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
+can use the `to_string` function that is automatically implemented for any type
+that implements `Display`. If we tried to use `to_string` without adding `:
+Display` after the trait name, we’d get an error saying that no method named
+`to_string` was found for the type `&Self` in the current scope.
 
-If we try to implement `OutlinePrint` on a type that doesn't implement
-`Display`, such as the `Point` struct:
+Let’s see what happens when we try to implement `OutlinePrint` on a type that
+doesn’t implement `Display`, such as the `Point` struct:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait OutlinePrint {}
@@ -499,24 +580,23 @@ struct Point {
 impl OutlinePrint for Point {}
 ```
 
-We'll get an error that `Display` isn't implemented and that `Display` is
-required by `OutlinePrint`:
+We get an error saying that `Display` is required but not implemented:
 
 ```text
 error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
   --> src/main.rs:20:6
    |
 20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ the trait `std::fmt::Display` is not implemented for
-   `Point`
+   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
+try using `:?` instead if you are using a format string
    |
-   = note: `Point` cannot be formatted with the default formatter; try using
-   `:?` instead if you are using a format string
-   = note: required by `OutlinePrint`
+   = help: the trait `std::fmt::Display` is not implemented for `Point`
 ```
 
-Once we implement `Display` on `Point` and satisfy the constraint that
+To fix this, we implement `Display` on `Point` and satisfy the constraint that
 `OutlinePrint` requires, like so:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # struct Point {
@@ -533,25 +613,29 @@ impl fmt::Display for Point {
 }
 ```
 
-then implementing the `OutlinePrint` trait on `Point` will compile successfully
-and we can call `outline_print` on a `Point` instance to display it within an
-outline of asterisks.
+Then implementing the `OutlinePrint` trait on `Point` will compile
+successfully, and we can call `outline_print` on a `Point` instance to display
+it within an outline of asterisks.
 
 ### The Newtype Pattern to Implement External Traits on External Types
 
-In Chapter 10, we mentioned the orphan rule, which says we're allowed to
-implement a trait on a type as long as either the trait or the type are local
-to our crate. One way to get around this restriction is to use the *newtype
-pattern*, which involves creating a new type using a tuple struct with one
-field as a thin wrapper around the type we want to implement a trait for. Then
-the wrapper type is local to our crate, and we can implement the trait on the
-wrapper. "Newtype" is a term originating from the Haskell programming language.
-There's no runtime performance penalty for using this pattern. The wrapper type
-is elided at compile time.
+In Chapter 10 in the “Implementing a Trait on a Type” section, we mentioned the
+orphan rule that states we’re allowed to implement a trait on a type as long as
+either the trait or the type are local to our crate. It’s possible to get
+around this restriction using the *newtype pattern*, which involves creating a
+new type in a tuple struct. (We covered tuple structs in the “Tuple Structs
+without Named Fields to Create Different Types” section of Chapter 5.) The
+tuple struct will have one field and be a thin wrapper around the type we want
+to implement a trait for. Then the wrapper type is local to our crate, and we
+can implement the trait on the wrapper. *Newtype* is a term that originates
+from the Haskell programming language. There is no runtime performance penalty
+for using this pattern, and the wrapper type is elided at compile time.
 
-For example, if we wanted to implement `Display` on `Vec`, we can make a
-`Wrapper` struct that holds an instance of `Vec`. Then we can implement
-`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-30:
+As an example, let’s say we want to implement `Display` on `Vec`, which the
+orphan rule prevents us from doing directly because the `Display` trait and the
+`Vec` type are defined outside our crate. We can make a `Wrapper` struct that
+holds an instance of `Vec`; then we can implement `Display` on `Wrapper` and
+use the `Vec` value, as shown in Listing 19-31.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -572,22 +656,25 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-30: Creating a `Wrapper` type around
-`Vec<String>` to be able to implement `Display`</span>
+<span class="caption">Listing 19-31: Creating a `Wrapper` type around
+`Vec<String>` to implement `Display`</span>
 
-The implementation of `Display` uses `self.0` to access the inner `Vec`, and
-then we can use the functionality of the `Display` type on `Wrapper`.
+The implementation of `Display` uses `self.0` to access the inner `Vec`,
+because `Wrapper` is a tuple struct and `Vec` is the item at index 0 in the
+tuple. Then we can use the functionality of the `Display` type on `Wrapper`.
 
-The downside is that since `Wrapper` is a new type, it doesn't have the methods
-of the value it's holding; we'd have to implement all the methods of `Vec` like
-`push`, `pop`, and all the rest directly on `Wrapper` to delegate to `self.0`
-in order to be able to treat `Wrapper` exactly like a `Vec`. If we wanted the
-new type to have every single method that the inner type has, implementing the
-`Deref` trait that we discussed in Chapter 15 on the wrapper to return the
-inner type can be a solution. If we don't want the wrapper type to have all the
-methods of the inner type, in order to restrict the wrapper type's behavior for
-example, we'd have to implement just the methods we do want ourselves.
+The downside of using this technique is that `Wrapper` is a new type, so it
+doesn’t have the methods of the value it’s holding. We would have to implement
+all the methods of `Vec` directly on `Wrapper` so it can delegate to `self.0`,
+allowing us to treat `Wrapper` exactly like a `Vec`. If we wanted the new type
+to have every method the inner type has, implementing the `Deref` trait
+(discussed in Chapter 15 in the “Treating Smart Pointers like Regular
+References with the `Deref` Trait” section) on the `Wrapper` to return the
+inner type would be a solution. If we don’t want the `Wrapper` type to have all
+the methods of the inner type, in order to restrict the `Wrapper` type’s
+behavior for example, we would have to implement just the methods we do want
+manually.
 
-That's how the newtype pattern is used in relation to traits; it's also a
-useful pattern without having traits involved. Let's switch focus now to talk
-about some advanced ways to interact with Rust's type system.
+Now you know how the newtype pattern is used in relation to traits; it’s also a
+useful pattern even when traits are not involved. Let’s switch focus and look
+at some advanced ways to interact with Rust’s type system.
