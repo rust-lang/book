@@ -4,6 +4,7 @@ cd second-edition
 rm -rf book
 mdbook build
 cd book
+touch .nojekyll
 git init
 git remote add upstream "https://rinthel@github.com/rinthel/rust-lang-book-ko"
 git fetch upstream
