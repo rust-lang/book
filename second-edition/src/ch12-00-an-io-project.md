@@ -1,4 +1,4 @@
-# 작은 Grep을 만드는 I/O 프로젝트
+# I/O 프로젝트: 커맨드 라인 프로그램 만들기
 
 <!-- We might need a more descriptive title, something that captures the new
 elements we're introducing -- are we going to cover things like environment
@@ -54,7 +54,7 @@ $ cargo new --bin greprs
 $ cd greprs
 ```
 
-<!-- 업데이트된 원본
+<!-- 업데이트된 원본:
 # An I/O Project: Building a Command Line Program
 
 This chapter is a recap of the many skills you’ve learned so far and an
