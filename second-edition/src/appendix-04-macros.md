@@ -11,11 +11,11 @@ follows:
 We’re covering the details of macros in an appendix because they’re still
 evolving in Rust. Macros have changed and, in the near future, will change at a
 quicker rate than the rest of the language and standard library since Rust 1.0,
-so this section is more likely to date than the rest of the book. Due to Rust’s
-stability guarantees, the code shown here will continue to work with future
-versions. But there may be additional capabilities or easier ways to write
-macros that weren’t available at the time of this publication. Bear that in
-mind when you try to implement anything from this appendix.
+so this section is more likely to become out-of-date than the rest of the book.
+Due to Rust’s stability guarantees, the code shown here will continue to work
+with future versions, but there may be additional capabilities or easier ways
+to write macros that weren’t available at the time of this publication. Bear
+that in mind when you try to implement anything from this appendix.
 
 ### The Difference Between Macros and Functions
 
@@ -90,11 +90,11 @@ let v: Vec<u32> = vec![1, 2, 3];
 ```
 
 We could also use the `vec!` macro to make a vector of two integers or a vector
-of five string slices: we wouldn’t be able to use a function to do the same
+of five string slices. We wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
 Let’s look at a slightly simplified definition of the `vec!` macro in Listing
-D-1:
+D-1.
 
 ```rust
 #[macro_export]
@@ -309,12 +309,6 @@ To start defining the procedural macro, place the code in Listing D-3 into your
 *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code won’t
 compile until we add a definition for the `impl_hello_macro` function.
 
-Notice the way we’ve split the functions in D-3; this will be the same for
-almost every procedural macro crate you see or create, because it makes writing
-a procedural macro more convenient. What you choose to do in the place where
-the `impl_hello_macro` function is called will be different depending on your
-procedural macro’s purpose.
-
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
 ```rust,ignore
@@ -343,6 +337,12 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 
 <span class="caption">Listing D-3: Code that most procedural macro crates will
 need to have for processing Rust code</span>
+
+Notice the way we’ve split the functions in D-3; this will be the same for
+almost every procedural macro crate you see or create, because it makes writing
+a procedural macro more convenient. What you choose to do in the place where
+the `impl_hello_macro` function is called will be different depending on your
+procedural macro’s purpose.
 
 We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 `proc_macro` crate comes with Rust, so we didn’t need to add that to the
@@ -403,7 +403,7 @@ where we’ll build the new Rust code we want to include. But before we do, note
 that the last part of this `hello_macro_derive` function uses the `parse`
 function from the `quote` crate to turn the output of the `impl_hello_macro`
 function back into a `TokenStream`. The returned `TokenStream` is added to the
-code that our crate users write, so when they compile their crate, they get
+code that our crate users write, so when they compile their crate, they’ll get
 extra functionality that we provide.
 
 You might have noticed that we’re calling `unwrap` to panic if the calls to the
@@ -439,7 +439,7 @@ annotated type using `ast.ident`. The code in Listing D-2 specifies that the
 
 The `quote!` macro lets us write the Rust code that we want to return and
 convert it into `quote::Tokens`. This macro also provides some very cool
-templating mechanics; we can write `#name` and `quote!` will replace it with
+templating mechanics; we can write `#name`, and `quote!` will replace it with
 the value in the variable named `name`. You can even do some repetition similar
 to the way regular macros work. Check out [the `quote` crate’s
 docs][quote-docs] for a thorough introduction.
