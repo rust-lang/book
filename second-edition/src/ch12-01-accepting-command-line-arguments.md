@@ -1,3 +1,127 @@
+## 커맨드라인 인자 허용하기
+
+우리의 첫 번째 작업은 `greprs`가 두 개의 커맨드라인 인자를 받을 수 있도록 하는 것 입니다: 파일이름과 검색할 문자.
+즉, `cargo run`을 통해 함께 우리의 프로그램을 수행시킬 때, 검색할 문자와 검색할 파일의 경로를 사용할 수 있도록
+하고자 합니다, 다음처럼 말이죠:
+ 
+
+```text
+$ cargo run searchstring example-filename.txt
+```
+
+현재로서는, `cargo new`를 통해 생성된 프로그램은 우리가 입력한 인자를 모두 무시합니다. crates.io 라이브러리에
+커맨드라인 인자들을 받아들이도록 도와줄 라이브러리가 이미 존재하지만, 우리 스스로 이를 구현해봅시다. 
+
+### 인자값 읽어들이기 
+
+우리 프로그램에 전달된 커맨드라인 인자의 값을 얻으려면 Rust의 표준 라이브러리에서 제공되는 함수를 호출해야합니다:
+`std::env::args`. 이 함수는 *반복자(iterator)* 형식으로 커맨드라인 인자들을 우리 프로그램에 전달해줍니다.
+우리는 아직 반복자에 대해 다루지 않았고, 13장에서 다룰 예정이니, 지금은 반복자에 대해서 두 가지 성질만 알고 갑시다. 
+ 
+1. 반복자는 하나의 연속된 값을 생성합니다. 
+2. 반복자에 `collect` 함수 호출을 통해 반복자가 생성하는 일련의 값을 벡터로 변환할 수 있습니다.
+
+한번 해볼까요? 항목 12-1의 코드를 사용하여 모든 커맨드라인 인자들을 벡터 형태로 `greprs`로 전달해봅시다.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+use std::env;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    println!("{:?}", args);
+}
+```
+
+항목 12-1: 커맨드라인 인자를 벡터 형태로 모으고 그들을 출력하기.
+
+가장 먼저, 우리는 `std::env` 모듈을 `use`를 통해 모듈 범위 내로 가져와서 그 안의 `args` 함수를 호출할 수
+있도록 합니다. `std::env::args` 함수는 두 단계 모듈들로 중첩된 호출임을 주지하세요. 7장에서 우리가 이야기
+나눴듯이, 원하는 함수가 두 개 이상의 중첩된 모듈에 있는 경우에는 함수 자체가 아닌 부모 모듈을 범위로 가져오는게
+일반적입니다. 
+ 
+
+이런 방식은 우리가 `std::env`의 다른 함수를 사용하기 용이하도록하며 덜 모호합니다. `use std::env::args;`를
+사용하여 `args`처럼 함수를 호출하면 현재 모듈에 이 함수가 정의된 것처럼 착각할 수 있습니다. 
+
+> 참고: 어떤 인자가 잘못된 유니코드를 포함하고 있으면 `std::env::args`는 패닉을 발생합니다. 유효하지 않은
+> 유니코드를 포함한 인자를 허용해야 하는 경우에는 `std::env::args_os`를 대신 사용하도록 하세요. 이 함수는
+> `String`대신 `OsString` 값을 반환합니다. `OsString` 값은 플랫폼마다 다르며 `String` 값보다 다루기가
+> 더 복잡하기 때문에 여기서는 `std::env::args`를 사용하여 좀더 단순화 했습니다.
+
+`main`의 첫 번째 줄에서, 우리가 호출한 `env::args`, 그리고 동시에 사용한 `collect`는 반복자가 가진 모든
+값들을 벡터 형태로 변환하여 반환합니다. `collect` 함수는 많은 종류의 콜렉션들과 사용될 수 있기 때문에, 우리가
+원하는 타입이 문자열 벡터라고 `args`의 타입을 명시합니다. Rust에서 타입 명시를 할 필요는 거의 없지만, Rust는
+우리가 원하는 콜렉션의 타입을 추론 할 수 없기 때문에 `collect`는 타입을 명시할 필요가있는 함수 중 하나입니다. 
+ 
+
+마지막으로, 우리는 디버그 형식자인 `:?`으로 벡터를 출력합니다. 인자 없이, 그리고 두 개의 인자들로 우리의 코드를
+실행시켜 봅시다. 
+
+```text
+$ cargo run
+["target/debug/greprs"]
+
+$ cargo run needle haystack
+...snip...
+["target/debug/greprs", "needle", "haystack"]
+```
+
+벡터의 첫 번째 값은 바이너리의 이름 인 "target / debug / minigrep"입니다. 이것은 C에서 인수 목록의 동작을
+일치시키고 프로그램은 실행시 호출 된 이름을 사용하게합니다. 메시지를 인쇄하거나 프로그램을 호출하는 데 사용 된 명령 줄 별칭을 기반으로 프로그램의 동작을 변경하려는 경우 프로그램 이름에 액세스하는 것이 편리하지만이 장의 목적을 위해 무시할
+것입니다 우리가 필요로하는 두 가지 주장 만 저장하면됩니다.
+ 
+
+벡터의 첫 값이 "target/debug/greprs"으로 바이너리의 이름임을 알 수 있습니다. 왜 그런지에 대한 내용은 이번 장을
+넘어가니, 우리가 필요한 두 인자를 저장하였음을 기억하면 되겠습니다.
+
+### 변수에 인자 값들 저장하기.
+
+인자값들이 들어있는 벡터의 값들을 출력하는 것을 통해 우리의 프로그램에서 커맨드라인 인자의 원하는 값에 접근하는 것이
+가능하다는 것을 상상할 수 있습니다. 다음은 정확히 우리가 원하는 방식이 아니지만, 두개의 인자값을 변수로 저장하여 그
+값들을 우리의 프로그램에서 사용할 수 있도록 합니다. 
+ 
+항목 12-2대로 해봅시다:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,should_panic
+use std::env;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let query = &args[1];
+    let filename = &args[2];
+
+    println!("Searching for {}", query);
+    println!("In file {}", filename);
+}
+```
+
+항목 12-2: 쿼리와 파일이름 인자를 보관하는 두 변수를 만듭니다. 
+
+우리가 벡터를 출력했을 때 봤듯이, 프로그램의 이름이 벡터의 첫 번째 값으로 `args[0]`에 저장되어 있으니, 우리는
+`1`번째 색인부터 접근하면 됩니다. `greprs`의 첫 번째 인자는 검색하고자 하는 문자열이므로, 우리는 첫 번째 인자의
+참조자를 `query`에 저장합니다. 두 번째 인자는 파일이름이니, 두 번째 인자의 참조자를 변수 `filename`에 저장합니다. 
+ 
+
+임시적으로 우리는 이 값들을 단순 출력하고 있으니, 우리의 코드가 우리가 원하는 방식으로 동작하고 있다는 것을 증명하기
+위해, 이 프로그램을 `test`와 `sample.txt`를 인자로 주고 다시 실행해봅시다:
+
+```text
+$ cargo run test sample.txt
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs test sample.txt`
+Searching for test
+In file sample.txt
+```
+
+훌륭하게, 동작하네요! 우리는 인자 값들을 우리가 원하는 변수에 정확히 저장했습니다. 후에 사용자가 아무런 인자를 넣지 않은
+상황을 다루기 위해 오류처리를 추가해볼 겁니다. 하지만 당장은 그것보다 파일 읽기 기능을 추가해봅시다.
+
+<!-- 업데이트된 원본:
 ## Accepting Command Line Arguments
 
 Let’s create a new project with, as always, `cargo new`. We’ll call our project
@@ -151,3 +275,4 @@ saved into the right variables. Later we’ll add some error handling to deal
 with certain potential erroneous situations, such as when the user provides no
 arguments; for now, we’ll ignore that situation and work on adding file-reading
 capabilities instead.
+-->
