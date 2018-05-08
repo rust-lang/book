@@ -1,15 +1,14 @@
-## Processing a Series of Items with Iterators
+## 반복자로 일련의 항목들 처리하기
 
-The iterator pattern allows you to perform some task on a sequence of items in
-turn. An iterator is responsible for the logic of iterating over each item and
-determining when the sequence has finished. When you use iterators, you don’t
-have to reimplement that logic yourself.
+반복자 패턴은 일련의 항목들에 대해 순서대로 어떤 작업을 수행할 수 있도록 해줍
+니다. 반복자는 각 항목들을 순회하고 언제 시퀀스가 종료될지 결정하는 로직을
+담당 합니다. 반복자를 사용하면, 저런 로직을 다시 구현할 필요가 없습니다.
 
-In Rust, iterators are *lazy*, meaning they have no effect until you call
-methods that consume the iterator to use it up. For example, the code in
-Listing 13-13 creates an iterator over the items in the vector `v1` by calling
-the `iter` method defined on `Vec`. This code by itself doesn’t do anything
-useful.
+러스트에서, 반복자는 *게으른데*, 항목들을 사용하기위해 반복자를 소비하는
+메서드를 호출하기 전까지 반복자는 아무런 동작을 하지 않습니다.
+예를 들면, 리스트 13-13 의 코드는 `Vec` 에 정의된 `iter` 메서드를 호출함으로써,
+벡터 `v1` 에 있는 항목들에 대한 반복자를 생성 합니다. 이 코드 자체로는 어떤
+유용한 동작을 하진 않습니다.
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -17,17 +16,16 @@ let v1 = vec![1, 2, 3];
 let v1_iter = v1.iter();
 ```
 
-<span class="caption">Listing 13-13: Creating an iterator</span>
+<span class="caption">리스트 13-13: 반복자 생성하기</span>
 
-Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-5 in Chapter 3, we used iterators with `for` loops to execute some code on
-each item, although we glossed over what the call to `iter` did until now.
+일단 반복자를 만들면, 다양한 방법으로 사용할 수 있습니다. 3장의 리스트 3-5 에서,
+각 항목에 대해 어떤 코드를 수행하기 위해 `for` 루프에서 반복자를 사용
+했습니다만, 지금까지 `iter` 에 대한 호출이 무엇을 했는지 대충 넘어 갔었습니다.
 
-The example in Listing 13-14 separates the creation of the iterator from the
-use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
-variable, and no iteration takes place at that time. When the `for` loop is
-called using the iterator in `v1_iter`, each element in the iterator is used in
-one iteration of the loop, which prints out each value.
+리스트 13-14 의 예제는 `for` 루프에서 반복자를 사용하는 부분에서 반복자 생성을
+분리 했습니다. 반복자는 `v1_iter` 변수에 저장되고, 그 시점에 순회는 발생하지
+않습니다. `v1_iter` 에 있는 반복자를 사용하는 `for` 루프가 호출되면,
+루프 순회 마다 반복자의 각 요소가 사용되는데, 각각의 값을 출력 합니다.
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -39,18 +37,17 @@ for val in v1_iter {
 }
 ```
 
-<span class="caption">Listing 13-14: Using an iterator in a `for` loop</span>
+<span class="caption">리스트 13-14: `for` 루프에서 반복자 사용하기</span>
 
-In languages that don’t have iterators provided by their standard libraries,
-you would likely write this same functionality by starting a variable at index
-0, using that variable to index into the vector to get a value, and
-incrementing the variable value in a loop until it reached the total number of
-items in the vector.
+표준 라이브러리에서 반복자를 제공하지 않는 언어에서는, 변수를 인덱스 0으로
+시작해서, 그 변수로 벡터를 색인해서 값을 가져오는데 사용하며, 루프안에서
+벡터에 있는 아이템의 총 갯수까지 그 변수를 증가시키는 방식으로 동일한 기능을
+작성할 수 있습니다.
 
-Iterators handle all that logic for you, cutting down on repetitive code you
-could potentially mess up. Iterators give you more flexibility to use the same
-logic with many different kinds of sequences, not just data structures you can
-index into, like vectors. Let’s examine how iterators do that.
+반복자는 모든 로직을 대신 처리 하며, 잠재적으로 엉망이 될 수 있는 반복적인
+코드를 줄여 줍니다. 반복자는 벡터처럼 색인할 수 있는 자료구조 뿐만 아니라,
+많은 다른 종류의 시퀀스에 대해 동일한 로직을 사용할 수 있도록 더 많은 유연성을
+제공 합니다. 반복자가 어떻게 그렇게 하는지 살펴 봅시다.
 
 ### The `Iterator` Trait and the `next` Method
 
