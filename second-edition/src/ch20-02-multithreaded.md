@@ -1,4 +1,4 @@
-## Turning Our Single Threaded Server into a Multithreaded Server
+## Turning Our Single-Threaded Server into a Multithreaded Server
 
 Right now, the server will process each request in turn, meaning it won’t
 process a second connection until the first is finished processing. If the
@@ -12,8 +12,8 @@ this, but first, we’ll look at the problem in action.
 
 We’ll look at how a slow-processing request can affect other requests made to
 our current server implementation. Listing 20-10 implements handling a request
-to `/sleep` with a simulated slow response that will cause the server to sleep
-for five seconds before responding.
+to */sleep* with a simulated slow response that will cause the server to sleep
+for 5 seconds before responding.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -47,26 +47,26 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 <span class="caption">Listing 20-10: Simulating a slow request by recognizing
-`/sleep` and sleeping for five seconds</span>
+*/sleep* and sleeping for 5 seconds</span>
 
 This code is a bit messy, but it’s good enough for simulation purposes. We
 created a second request `sleep`, whose data our server recognizes. We added an
-`else if` after the `if` block to check for the request to `/sleep`. When that
-request is received, the server will sleep for five seconds before rendering
-the successful HTML page.
+`else if` after the `if` block to check for the request to */sleep*. When that
+request is received, the server will sleep for 5 seconds before rendering the
+successful HTML page.
 
 You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
-Start the server using `cargo run`, and then open two browser windows: one for
-`http://localhost:7878/` and the other for `http://localhost:7878/sleep`. If
-you enter the `/` URI a few times, as before, you’ll see it respond quickly.
-But if you enter `/sleep`, and then load `/`, you’ll see that `/` waits until
-`sleep` has slept for its full five seconds before loading.
+Start the server using `cargo run`. Then open two browser windows: one for
+*http://127.0.0.1:7878/* and the other for *http://127.0.0.1:7878/sleep*. If
+you enter the */* URI a few times, as before, you’ll see it respond quickly.
+But if you enter */sleep* and then load */*, you’ll see that */* waits until
+`sleep` has slept for its full 5 seconds before loading.
 
 There are multiple ways we could change how our web server works to avoid
-having all requests back up behind a slow request; the one we’ll implement is a
-thread pool.
+having more requests back up behind a slow request; the one we’ll implement is
+a thread pool.
 
 ### Improving Throughput with a Thread Pool
 
@@ -75,15 +75,15 @@ handle a task. When the program receives a new task, it assigns one of the
 threads in the pool to the task, and that thread will process the task. The
 remaining threads in the pool are available to handle any other tasks that come
 in while the first thread is processing. When the first thread is done
-processing its task, it’s returned to the pool of idle threads ready to handle
-a new task. A thread pool will allow us to process connections concurrently,
-increasing the throughput of our server.
+processing its task, it’s returned to the pool of idle threads, ready to handle
+a new task. A thread pool allows you to process connections concurrently,
+increasing the throughput of your server.
 
 We’ll limit the number of threads in the pool to a small number to protect us
 from Denial of Service (DoS) attacks; if we had our program create a new thread
-for each request as it comes in, someone making ten million requests to our
+for each request as it came in, someone making 10 million requests to our
 server could create havoc by using up all our server’s resources and grinding
-the processing of all requests to a halt.
+the processing of requests to a halt.
 
 Rather than spawning unlimited threads, we’ll have a fixed number of threads
 waiting in the pool. As requests come in, they’ll be sent to the pool for
@@ -93,23 +93,23 @@ and then ask the queue for another request. With this design, we can process
 `N` requests concurrently, where `N` is the number of threads. If each thread
 is responding to a long-running request, subsequent requests can still back up
 in the queue, but we’ve increased the number of long-running requests we can
-handle before that point.
+handle before reaching that point.
 
-This technique is just one of many ways to improve the throughput of our web
-server. Other options you might explore are the fork/join model and the single
-threaded async I/O model. If you’re interested in this topic, you can read more
-about other solutions and try to implement them in Rust; with a low-level
-language like Rust, all of these options are possible.
+This technique is just one of many ways to improve the throughput of a web
+server. Other options you might explore are the fork/join model and the
+single-threaded async I/O model. If you’re interested in this topic, you can
+read more about other solutions and try to implement them in Rust; with a
+low-level language like Rust, all of these options are possible.
 
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
 interface first can help guide your design. Write the API of the code so it’s
-structured in the way you want to call it, and then implement the functionality
+structured in the way you want to call it; then implement the functionality
 within that structure rather than implementing the functionality and then
 designing the public API.
 
-Similar to how we used Test Driven Development in the project in Chapter 12,
-we’ll use Compiler Driven Development here. We’ll write the code that calls the
+Similar to how we used test-driven development in the project in Chapter 12,
+we’ll use compiler-driven development here. We’ll write the code that calls the
 functions we want, and then we’ll look at errors from the compiler to determine
 what we should change next to get the code to work.
 
@@ -148,10 +148,10 @@ stream</span>
 
 As you learned in Chapter 16, `thread::spawn` will create a new thread and then
 run the code in the closure in the new thread. If you run this code and load
-`/sleep` in your browser, then `/` in two more browser tabs, you’ll indeed see
-that the requests to `/` don’t have to wait for `/sleep` to finish. But as we
-mentioned, this will eventually overwhelm the system because we’re making new
-threads without any limit.
+*/sleep* in your browser, then */* in two more browser tabs, you’ll indeed see
+that the requests to */* don’t have to wait for */sleep* to finish. But as we
+mentioned, this will eventually overwhelm the system because you’d be making
+new threads without any limit.
 
 #### Creating a Similar Interface for a Finite Number of Threads
 
@@ -217,7 +217,7 @@ error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
 error: aborting due to previous error
 ```
 
-Great, this error tells us we need a `ThreadPool` type or module, so we’ll
+Great! This error tells us we need a `ThreadPool` type or module, so we’ll
 build one now. Our `ThreadPool` implementation will be independent of the kind
 of work our web server is doing. So, let’s switch the `hello` crate from a
 binary crate to a library crate to hold our `ThreadPool` implementation. After
@@ -331,7 +331,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 ```
 
 The `F` type parameter is the one we’re concerned with here; the `T` type
-parameter is related to the return value and we’re not concerned with that. We
+parameter is related to the return value, and we’re not concerned with that. We
 can see that `spawn` uses `FnOnce` as the trait bound on `F`. This is probably
 what we want as well, because we’ll eventually pass the argument we get in
 `execute` to `spawn`. We can be further confident that `FnOnce` is the trait we
@@ -533,7 +533,7 @@ We left a comment in the `for` loop in Listing 20-14 regarding the creation of
 threads. Here, we’ll look at how we actually create threads. The standard
 library provides `thread::spawn` as a way to create threads, and
 `thread::spawn` expects to get some code the thread should run as soon as the
-thread is created. However, in our case we want to create the threads and have
+thread is created. However, in our case, we want to create the threads and have
 them *wait* for code that we’ll send later. The standard library’s
 implementation of threads doesn’t include any way to do that; we have to
 implement it manually.
@@ -721,9 +721,9 @@ In `ThreadPool::new`, we create our new channel and have the pool hold the
 sending end. This will successfully compile, still with warnings.
 
 Let’s try passing a receiving end of the channel into each worker as the thread
-pool creates them. We know we want to use the receiving end in the thread that
-the workers spawn, so we’ll reference the `receiver` parameter in the closure.
-The code in Listing 20-17 won’t quite compile yet.
+pool creates the channel. We know we want to use the receiving end in the
+thread that the workers spawn, so we’ll reference the `receiver` parameter in
+the closure. The code in Listing 20-17 won’t quite compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -792,8 +792,7 @@ won’t work, as you’ll recall from Chapter 16: the channel implementation tha
 Rust provides is multiple *producer*, single *consumer*. This means we can’t
 just clone the consuming end of the channel to fix this code. Even if we could,
 that is not the technique we would want to use; instead, we want to distribute
-the jobs across threads by sharing the single `receiver` between all the
-workers.
+the jobs across threads by sharing the single `receiver` among all the workers.
 
 Additionally, taking a job off the channel queue involves mutating the
 `receiver`, so the threads need a safe way to share and modify `receiver`;
@@ -865,7 +864,7 @@ impl Worker {
 ```
 
 <span class="caption">Listing 20-18: Sharing the receiving end of the channel
-between the workers using `Arc` and `Mutex`</span>
+among the workers using `Arc` and `Mutex`</span>
 
 In `ThreadPool::new`, we put the receiving end of the channel in an `Arc` and a
 `Mutex`. For each new worker, we clone the `Arc` to bump the reference count so
@@ -877,9 +876,9 @@ With these changes, the code compiles! We’re getting there!
 
 Let’s finally implement the `execute` method on `ThreadPool`. We’ll also change
 `Job` from a struct to a type alias for a trait object that holds the type of
-closure that `execute` receives. As discussed the “Type Aliases Create Type
-Synonyms” section of Chapter 19, type aliases allow us to make long types
-shorter. Look at Listing 20-19.
+closure that `execute` receives. As discussed in the “Creating Type Synonyms
+with Type Aliases” section of Chapter 19, type aliases allow us to make long
+types shorter. Look at Listing 20-19.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -915,7 +914,7 @@ that holds each closure and then sending the job down the channel</span>
 
 After creating a new `Job` instance using the closure we get in `execute`, we
 send that job down the sending end of the channel. We’re calling `unwrap` on
-`send` for the case that sending fails, which might happen if, for example, we
+`send` for the case that sending fails. This might happen if, for example, we
 stop all our threads from executing, meaning the receiving end has stopped
 receiving new messages. At the moment, we can’t stop our threads from
 executing: our threads continue executing as long as the pool exists. The
@@ -956,7 +955,7 @@ impl Worker {
 <span class="caption">Listing 20-20: Receiving and executing the jobs in the
 worker’s thread</span>
 
-Here, we first call `lock` on the `receiver` to acquire the mutex, and then
+Here, we first call `lock` on the `receiver` to acquire the mutex, and then we
 call `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex
 is in a *poisoned* state, which can happen if some other thread panicked while
 holding the lock rather than releasing the lock. In this situation, calling
@@ -1077,8 +1076,8 @@ recognize that what we want to do is fine.
 This trick is very sneaky and complicated. Don’t worry if it doesn’t make
 perfect sense; someday, it will be completely unnecessary.
 
-By implementing this trick, our thread pool is in a working state! Give it a
-`cargo run`, and make some requests:
+With the implementation of this trick, our thread pool is in a working state!
+Give it a `cargo run` and make some requests:
 
 ```text
 $ cargo run
@@ -1124,7 +1123,7 @@ Worker 2 got a job; executing.
 Success! We now have a thread pool that executes connections asynchronously.
 There are never more than four threads created, so our system won’t get
 overloaded if the server receives a lot of requests. If we make a request to
-`/sleep`, the server will be able to serve other requests by having another
+*/sleep*, the server will be able to serve other requests by having another
 thread run them.
 
 After learning about the `while let` loop in Chapter 18, you might be wondering
