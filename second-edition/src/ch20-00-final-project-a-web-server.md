@@ -5,8 +5,8 @@ chapter, we’ll build one more project together to demonstrate some of the
 concepts we covered in the final chapters, as well as recap some earlier
 lessons.
 
-For our final project, we’ll make a web server that only says “hello” and looks
-like Figure 20-1 in a web browser.
+For our final project, we’ll make a web server that says “hello” and looks like
+Figure 20-1 in a web browser.
 
 ![hello from rust](img/trpl20-01.png)
 
@@ -14,11 +14,11 @@ like Figure 20-1 in a web browser.
 
 Here is the plan to build the web server:
 
-1. Learn a bit about TCP and HTTP
-2. Listen for TCP connections on a socket
-3. Parse a small number of HTTP requests
-4. Create a proper HTTP response
-5. Improve the throughput of our server with a thread pool
+1. Learn a bit about TCP and HTTP.
+2. Listen for TCP connections on a socket.
+3. Parse a small number of HTTP requests.
+4. Create a proper HTTP response.
+5. Improve the throughput of our server with a thread pool.
 
 But before we get started, we should mention one detail: the method we’ll use
 won’t be the best way to build a web server with Rust. A number of
