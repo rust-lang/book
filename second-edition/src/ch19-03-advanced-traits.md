@@ -623,11 +623,11 @@ In Chapter 10 in the “Implementing a Trait on a Type” section, we mentioned 
 orphan rule that states we’re allowed to implement a trait on a type as long as
 either the trait or the type are local to our crate. It’s possible to get
 around this restriction using the *newtype pattern*, which involves creating a
-new type in a tuple struct. (We covered tuple structs in the “Tuple Structs
-without Named Fields to Create Different Types” section of Chapter 5.) The
-tuple struct will have one field and be a thin wrapper around the type we want
-to implement a trait for. Then the wrapper type is local to our crate, and we
-can implement the trait on the wrapper. *Newtype* is a term that originates
+new type in a tuple struct. (We covered tuple structs in the “Using Tuple
+Structs without Named Fields to Create Different Types” section of Chapter 5.)
+The tuple struct will have one field and be a thin wrapper around the type we
+want to implement a trait for. Then the wrapper type is local to our crate, and
+we can implement the trait on the wrapper. *Newtype* is a term that originates
 from the Haskell programming language. There is no runtime performance penalty
 for using this pattern, and the wrapper type is elided at compile time.
 

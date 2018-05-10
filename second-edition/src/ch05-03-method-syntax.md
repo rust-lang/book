@@ -12,7 +12,7 @@ instance of the struct the method is being called on.
 
 Let’s change the `area` function that has a `Rectangle` instance as a parameter
 and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13:
+in Listing 5-13.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -125,7 +125,7 @@ struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self`; otherwise it should return `false`. That is, we want to be able
 to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
-method:
+method.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -164,7 +164,7 @@ calling the `can_hold` method. The return value of `can_hold` will be a
 Boolean, and the implementation will check whether the width and height of
 `self` are both greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-13, shown in Listing 5-15:
+Listing 5-13, shown in Listing 5-15.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -234,7 +234,7 @@ namespaces created by modules. We’ll discuss modules in Chapter 7.
 
 Each struct is allowed to have multiple `impl` blocks. For example, Listing
 5-15 is equivalent to the code shown in Listing 5-16, which has each method
-in its own `impl` block:
+in its own `impl` block.
 
 ```rust
 # #[derive(Debug)]
@@ -261,7 +261,7 @@ blocks</span>
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
-useful in Chapter 10 where we discuss generic types and traits.
+useful in Chapter 10, where we discuss generic types and traits.
 
 ## Summary
 
