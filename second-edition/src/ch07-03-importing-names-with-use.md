@@ -2,7 +2,7 @@
 
 We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
-here in Listing 7-7:
+here in Listing 7-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -126,9 +126,10 @@ fn main() {
 }
 ```
 
-The `*` will bring into scope all the visible items in the `TrafficLight`
-namespace. You should use globs sparingly: they are convenient, but a glob
-might also pull in more items than you expected and cause naming conflicts.
+The `*` operator will bring into scope all the visible items in the
+`TrafficLight` namespace. You should use globs sparingly: they are convenient,
+but a glob might also pull in more items than you expected and cause naming
+conflicts.
 
 ### Using `super` to Access a Parent Module
 

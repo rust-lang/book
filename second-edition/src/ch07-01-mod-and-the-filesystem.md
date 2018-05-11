@@ -70,7 +70,7 @@ would need to specify the module and use the namespace syntax `::` like so:
 
 We can also have multiple modules, side by side, in the same *src/lib.rs* file.
 For example, to also have a `client` module that has a function named
-`connect`, we can add it as shown in Listing 7-1:
+`connect`, we can add it as shown in Listing 7-1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -103,7 +103,7 @@ related functionality organized together and separate functionality apart. The
 way you choose to organize your code depends on how you think about the
 relationship between the parts of your code. For instance, the `client` code
 and its `connect` function might make more sense to users of our library if
-they were inside the `network` namespace instead, as in Listing 7-2:
+they were inside the `network` namespace instead, as in Listing 7-2.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -161,7 +161,7 @@ Modules form a hierarchical structure, much like another structure in computing
 that you’re used to: filesystems! We can use Rust’s module system along with
 multiple files to split up Rust projects so not everything lives in
 *src/lib.rs* or *src/main.rs*. For this example, let’s start with the code in
-Listing 7-3:
+Listing 7-3.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,7 +202,7 @@ These would be good reasons to separate the `client`, `network`, and `server`
 modules from *src/lib.rs* and place them into their own files.
 
 First, let’s replace the `client` module code with only the declaration of the
-`client` module so that *src/lib.rs* looks like code shown in Listing 7-4:
+`client` module so that *src/lib.rs* looks like code shown in Listing 7-4.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -345,7 +345,7 @@ fn connect() {
 }
 ```
 
-When we try to `cargo build`, we’ll get the error shown in Listing 7-5:
+When we try to run `cargo build`, we’ll get the error shown in Listing 7-5.
 
 ```text
 $ cargo build
@@ -400,7 +400,7 @@ $ mv src/server.rs src/network
 ```
 
 Now when we try to run `cargo build`, compilation will work (we’ll still have
-warnings though). Our module layout still looks exactly the same as it did when
+warnings, though). Our module layout still looks exactly the same as it did when
 we had all the code in *src/lib.rs* in Listing 7-3:
 
 ```text

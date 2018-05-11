@@ -3,9 +3,9 @@
 We resolved the error messages shown in Listing 7-5 by moving the `network` and
 `network::server` code into the *src/network/mod.rs* and
 *src/network/server.rs* files, respectively. At that point, `cargo build` was
-able to build our project, but we still get warning messages about the
+able to build our project, but we still get warning messages saying that the
 `client::connect`, `network::connect`, and `network::server::connect` functions
-not being used.
+are not being used.
 
 So why are we receiving these warnings? After all, we’re building a library
 with functions that are intended to be used by our *users*, not necessarily by
@@ -14,7 +14,7 @@ functions go unused. The point of creating them is that they will be used by
 another project, not our own.
 
 To understand why this program invokes these warnings, let’s try using the
-`connect` library from another project, calling it externally. To do that,
+`communicator` library from another project, calling it externally. To do that,
 we’ll create a binary crate in the same directory as our library crate by
 making a *src/main.rs* file containing this code:
 
@@ -217,7 +217,7 @@ Overall, these are the rules for item visibility:
 
 Let’s look at a few more privacy examples to get some practice. Create a new
 library project and enter the code in Listing 7-6 into your new project’s
-*src/lib.rs*:
+*src/lib.rs*.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -258,8 +258,7 @@ the current (root) module, as is `try_me`.
 
 The call to `outermost::middle_function` will work because `middle_function` is
 public and `try_me` is accessing `middle_function` through its parent module
-`outermost`. We determined in the previous paragraph that this module is
-accessible.
+`outermost`. We already determined that this module is accessible.
 
 The call to `outermost::middle_secret_function` will cause a compilation error.
 Because `middle_secret_function` is private, the second rule applies. The root
