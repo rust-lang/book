@@ -45,10 +45,10 @@ thread 'main' panicked at 'crash and burn', src/main.rs:2:4
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-The call to `panic!` causes the error message contained in the last three
-lines. The first line shows our panic message and the place in our source code
-where the panic occurred: *src/main.rs:2:4* indicates that it’s the second
-line, fourth character of our *src/main.rs* file.
+The call to `panic!` causes the error message contained in the last two lines.
+The first line shows our panic message and the place in our source code where
+the panic occurred: *src/main.rs:2:4* indicates that it’s the second line,
+fourth character of our *src/main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that
 line, we see the `panic!` macro call. In other cases, the `panic!` call might
@@ -64,7 +64,7 @@ backtrace is in more detail next.
 Let’s look at another example to see what it’s like when a `panic!` call comes
 from a library because of a bug in our code instead of from our code calling
 the macro directly. Listing 9-1 has some code that attempts to access an
-element by index in a vector:
+element by index in a vector.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -77,13 +77,13 @@ fn main() {
 ```
 
 <span class="caption">Listing 9-1: Attempting to access an element beyond the
-end of a vector, which will cause a `panic!`</span>
+end of a vector, which will cause a call to `panic!`</span>
 
-Here, we’re attempting to access the hundredth element of our vector (which is
-at index 99 because indexing starts at zero), but it has only three elements.
-In this situation, Rust will panic. Using `[]` is supposed to return an
-element, but if you pass an invalid index, there’s no element that Rust could
-return here that would be correct.
+Here, we’re attempting to access the 100th element of our vector (which is at
+index 99 because indexing starts at zero), but it has only 3 elements. In this
+situation, Rust will panic. Using `[]` is supposed to return an element, but if
+you pass an invalid index, there’s no element that Rust could return here that
+would be correct.
 
 Other languages, like C, will attempt to give you exactly what you asked for in
 this situation, even though it isn’t what you want: you’ll get whatever is at
@@ -122,7 +122,7 @@ mentioning your files are code that your code called; the lines below are code
 that called your code. These lines might include core Rust code, standard
 library code, or crates that you’re using. Let’s try getting a backtrace by
 setting the `RUST_BACKTRACE` environment variable to any value except 0.
-Listing 9-2 shows output similar to what you’ll see:
+Listing 9-2 shows output similar to what you’ll see.
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
