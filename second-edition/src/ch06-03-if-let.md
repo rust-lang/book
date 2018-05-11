@@ -3,7 +3,7 @@
 The `if let` syntax lets you combine `if` and `let` into a less verbose way to
 handle values that match one pattern while ignoring the rest. Consider the
 program in Listing 6-6 that matches on an `Option<u8>` value but only wants to
-execute code if the value is 3:
+execute code if the value is 3.
 
 ```rust
 let some_u8_value = Some(0u8);
@@ -31,15 +31,15 @@ if let Some(3) = some_u8_value {
 }
 ```
 
-The syntax `if let` takes a pattern and an expression separated by an `=`. It
-works the same way as a `match`, where the expression is given to the `match`
-and the pattern is its first arm.
+The syntax `if let` takes a pattern and an expression separated by an equal
+sign. It works the same way as a `match`, where the expression is given to the
+`match` and the pattern is its first arm.
 
-Using `if let` means you have less typing, less indentation, and less
-boilerplate code. However, you lose the exhaustive checking that `match`
-enforces. Choosing between `match` and `if let` depends on what you’re doing in
-your particular situation and whether gaining conciseness is an appropriate
-trade-off for losing exhaustive checking.
+Using `if let` means less typing, less indentation, and less boilerplate code.
+However, you lose the exhaustive checking that `match` enforces. Choosing
+between `match` and `if let` depends on what you’re doing in your particular
+situation and whether gaining conciseness is an appropriate trade-off for
+losing exhaustive checking.
 
 In other words, you can think of `if let` as syntax sugar for a `match` that
 runs code when the value matches one pattern and then ignores all other values.
