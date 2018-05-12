@@ -35,7 +35,7 @@ Then, in *src/lib.rs*, we’ll add a `test` module with a test function, as we
 did in Chapter 11. The test function specifies the behavior we want the
 `search` function to have: it will take a query and the text to search for the
 query in, and it will return only the lines from the text that contain the
-query. Listing 12-15 shows this test, which won’t compile yet:
+query. Listing 12-15 shows this test, which won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -124,8 +124,8 @@ want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
 Other programming languages don’t require you to connect arguments to return
-values in the signature. So although this might seem strange, it will get
-easier over time. You might want to compare this example with the “Validating
+values in the signature. Although this might seem strange, it will get easier
+over time. You might want to compare this example with the “Validating
 References with Lifetimes” section in Chapter 10.
 
 Now let’s run the test:
@@ -177,7 +177,7 @@ Let’s work through each step, starting with iterating through lines.
 
 Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17. Note this
-won’t compile yet:
+won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,7 +202,7 @@ in a collection.
 Next, we’ll check whether the current line contains our query string.
 Fortunately, strings have a helpful method named `contains` that does this for
 us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note this still won’t compile yet:
+Listing 12-18. Note this still won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -224,7 +224,7 @@ line contains the string in `query`</span>
 We also need a way to store the lines that contain our query string. For that,
 we can make a mutable vector before the `for` loop and call the `push` method
 to store a `line` in the vector. After the `for` loop, we return the vector, as
-shown in Listing 12-19:
+shown in Listing 12-19.
 
 <span class="filename">Filename: src/lib.rs</span>
 

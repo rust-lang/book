@@ -26,7 +26,7 @@ To an admiring bog!
 case</span>
 
 With the text in place, edit *src/main.rs* and add code to open the file, as
-shown in Listing 12-4:
+shown in Listing 12-4.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -90,10 +90,10 @@ $ cargo run the poem.txt
 Searching for the
 In file poem.txt
 With text:
-I’m nobody! Who are you?
+I'm nobody! Who are you?
 Are you nobody, too?
-Then there’s a pair of us — don’t tell!
-They’d banish us, you know.
+Then there's a pair of us - don't tell!
+They'd banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog

@@ -14,7 +14,7 @@ the environment variable is on. We’ll continue to follow the TDD process, so
 the first step is again to write a failing test. We’ll add a new test for the
 new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
-tests, as shown in Listing 12-20:
+tests, as shown in Listing 12-20.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -60,7 +60,7 @@ case-insensitive function we’re about to add</span>
 
 Note that we’ve edited the old test’s `contents` too. We’ve added a new line
 with the text `"Duct tape."` using a capital D that shouldn’t match the query
-“duct” when we’re searching in a case-sensitive manner. Changing the old test
+`"duct"` when we’re searching in a case-sensitive manner. Changing the old test
 in this way helps ensure that we don’t accidentally break the case-sensitive
 search functionality that we’ve already implemented. This test should pass now
 and should continue to pass as we work on the case-insensitive search.
@@ -132,8 +132,8 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 Great! They passed. Now, let’s call the new `search_case_insensitive` function
 from the `run` function. First, we’ll add a configuration option to the
 `Config` struct to switch between case-sensitive and case-insensitive search.
-Adding this field will cause compiler errors since we aren’t initializing this
-field anywhere yet:
+Adding this field will cause compiler errors because we aren’t initializing
+this field anywhere yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -149,7 +149,7 @@ Note that we added the `case_sensitive` field that holds a Boolean. Next, we
 need the `run` function to check the `case_sensitive` field’s value and use
 that to decide whether to call the `search` function or the
 `search_case_insensitive` function, as shown in Listing 12-22. Note this still
-won’t compile yet:
+won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -200,7 +200,7 @@ working with environment variables are in the `env` module in the standard
 library, so we want to bring that module into scope with a `use std::env;` line
 at the top of *src/lib.rs*. Then we’ll use the `var` method from the `env`
 module to check for an environment variable named `CASE_INSENSITIVE`, as shown
-in Listing 12-23:
+in Listing 12-23.
 
 <span class="filename">Filename: src/lib.rs</span>
 
