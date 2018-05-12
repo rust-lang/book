@@ -11,10 +11,10 @@ Who are you?”
 <span class="filename">Filename: poem.txt</span>
 
 ```text
-I’m nobody! Who are you?
+I'm nobody! Who are you?
 Are you nobody, too?
-Then there’s a pair of us — don’t tell!
-They’d banish us, you know.
+Then there's a pair of us - don't tell!
+They'd banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog
