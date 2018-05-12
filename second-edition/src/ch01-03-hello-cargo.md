@@ -115,9 +115,9 @@ file.
 
 ### Building and Running a Cargo Project
 
-Now let’s look what's different when we build and run the Hello, world! program
-with Cargo! From your *hello_cargo* directory, build your project by entering
-the following command:
+Now let’s look at what's different when we build and run the Hello, world!
+program with Cargo! From your *hello_cargo* directory, build your project by
+entering the following command:
 
 ```text
 $ cargo build
@@ -185,8 +185,8 @@ Let's recap what we’ve learned so far about Cargo:
 
 * We can build a project using `cargo build` or `cargo check`.
 * We can build and run a project in one step using `cargo run`.
-* Instead of the result of the build being saved in the same directory as our
-  code, Cargo stores it in the *target/debug* directory.
+* Instead of saving the result of the build in the same directory as our code,
+  Cargo stores it in the *target/debug* directory.
 
 An additional advantage of using Cargo is that the commands are the same no
 matter which operating system you’re working on. So, at this point, we’ll no

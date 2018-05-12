@@ -5,7 +5,7 @@ traditional when learning a new language to write a little program that prints
 the text `Hello, world!` to the screen, so we’ll do the same here!
 
 > Note: This book assumes basic familiarity with the command line. Rust makes
-> no specific demands about your editing, tooling, or where your code lives, so
+> no specific demands about your editing or tooling or where your code lives, so
 > if you prefer to use an integrated development environment (IDE) instead of
 > the command line, feel free to use your favorite IDE. Many IDEs now have some
 > degree of Rust support; check the IDE’s documentation for details. Recently,
@@ -20,7 +20,7 @@ we suggest making a *projects* directory in your home directory and keeping all
 your projects there.
 
 Open a terminal and enter the following commands to make a *projects* directory
-and a directory for the “Hello, world!” project within the *projects* directory.
+and a directory for the Hello, world! project within the *projects* directory.
 
 For Linux and macOS, enter this:
 
@@ -56,7 +56,7 @@ the *.rs* extension. If you’re using more than one word in your filename, use
 an underscore to separate them. For example, use *hello_world.rs* rather than
 *helloworld.rs*.
 
-Now open the *main.rs* file you just created, and enter the code in Listing 1-1.
+Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
 <span class="filename">Filename: main.rs</span>
 
