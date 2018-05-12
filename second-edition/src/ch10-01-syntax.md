@@ -194,11 +194,11 @@ fn main() {
 ```
 
 <span class="caption">Listing 10-7: The fields `x` and `y` must be the same
-type because both have the same generic data type `T`</span>
+type because both have the same generic data type `T`.</span>
 
-In this example, when we assign the integer value `5` to `x`, we let the
+In this example, when we assign the integer value 5 to `x`, we let the
 compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
+`Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
 same type as `x`, we’ll get a type mismatch error like this:
 
 ```text
@@ -287,7 +287,7 @@ avoid duplication by using generic types instead.
 ### In Method Definitions
 
 We can implement methods on structs and enums (as we did in Chapter 5) and use
-generic types in their definitions too. Listing 10-9 shows the `Point<T>`
+generic types in their definitions, too. Listing 10-9 shows the `Point<T>`
 struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -344,7 +344,7 @@ impl Point<f32> {
 struct with a particular concrete type for the generic type parameter `T`</span>
 
 This code means the type `Point<f32>` will have a method named
-`distance_from_origin`, and other instances of `Point<T>` where `T` is not of
+`distance_from_origin` and other instances of `Point<T>` where `T` is not of
 type `f32` will not have this method defined. The method measures how far our
 point is from the point at coordinates (0.0, 0.0) and uses mathematical
 operations that are available only for floating point types.
@@ -355,7 +355,7 @@ the method `mixup` on the `Point<T, U>` struct from Listing 10-8. The method
 takes another `Point` as a parameter, which might have different types than the
 `self` `Point` we’re calling `mixup` on. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `T`) and the `y`
-value from the passed-in `Point` (of type `W`):
+value from the passed-in `Point` (of type `W`).
 
 <span class="filename">Filename: src/main.rs</span>
 

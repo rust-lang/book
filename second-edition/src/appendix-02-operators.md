@@ -57,14 +57,14 @@ binding.
 * `;` (`[...; len]`): part of fixed-size array syntax
 * `<<` (`expr << expr`): left-shift. Overloadable (`Shl`).
 * `<<=` (`var <<= expr`): left-shift and assignment. Overloadable (`ShlAssign`).
-* `<` (`expr < expr`): less-than comparison. Overloadable (`PartialOrd`).
-* `<=` (`expr <= expr`): less-than or equal-to comparison. Overloadable
+* `<` (`expr < expr`): less than comparison. Overloadable (`PartialOrd`).
+* `<=` (`expr <= expr`): less than or equal to comparison. Overloadable
 (`PartialOrd`).
 * `=` (`var = expr`, `ident = type`): assignment/equivalence.
 * `==` (`expr == expr`): equality comparison. Overloadable (`PartialEq`).
 * `=>` (`pat => expr`): part of match arm syntax.
-* `>` (`expr > expr`): greater-than comparison. Overloadable (`PartialOrd`).
-* `>=` (`expr >= expr`): greater-than or equal-to comparison. Overloadable
+* `>` (`expr > expr`): greater than comparison. Overloadable (`PartialOrd`).
+* `>=` (`expr >= expr`): greater than or equal to comparison. Overloadable
 (`PartialOrd`).
 * `>>` (`expr >> expr`): right-shift. Overloadable (`Shr`).
 * `>>=` (`var >>= expr`): right-shift and assignment. Overloadable

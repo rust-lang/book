@@ -332,7 +332,7 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 ```
 
 In the body of `largest` we wanted to compare two values of type `T` using the
-greater-than (`>`) operator. Because that operator is defined as a default
+greater than (`>`) operator. Because that operator is defined as a default
 method on the standard library trait `std::cmp::PartialOrd`, we need to specify
 `PartialOrd` in the trait bounds for `T` so the `largest` function can work on
 slices of any type that we can compare. We don’t need to bring `PartialOrd`

@@ -43,11 +43,11 @@ has gone out of scope</span>
 > without giving them an initial value, so the variable name exists in the
 > outer scope. At first glance, this might appear to be in conflict with Rust’s
 > having no null values. However, if we try to use a variable before giving it
-> a value, we’ll get a compile time error, which shows that Rust indeed does
+> a value, we’ll get a compile-time error, which shows that Rust indeed does
 > not allow null values.
 
 The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of `5`. Inside
+inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
 the inner scope ends, and we attempt to print the value in `r`. This code won’t
 compile because the value `r` is referring to has gone out of scope before we
@@ -512,8 +512,8 @@ the `ImportantExcerpt` goes out of scope, so the reference in the
 
 You’ve learned that every reference has a lifetime and that you need to specify
 lifetime parameters for functions or structs that use references. However, in
-Chapter 4 we had a function in the “String Slices” section, which is shown again
-in Listing 10-26, that compiled without lifetime annotations.
+Chapter 4 we had a function in Listing 4-9, which is shown again in Listing
+10-26, that compiled without lifetime annotations.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -601,7 +601,8 @@ fn first_word(s: &str) -> &str {
 ```
 
 Then the compiler applies the first rule, which specifies that each parameter
-gets its own lifetime. We’ll call it `'a` as usual, so now the signature is:
+gets its own lifetime. We’ll call it `'a` as usual, so now the signature is
+this:
 
 ```rust,ignore
 fn first_word<'a>(s: &'a str) -> &str {
