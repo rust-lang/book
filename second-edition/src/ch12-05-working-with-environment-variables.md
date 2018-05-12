@@ -84,7 +84,7 @@ they’ll be the same case when we check whether the line contains the query.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let query = query.to_lowercase();
     let mut results = Vec::new();
 
@@ -162,7 +162,7 @@ won’t compile yet:
 #      vec![]
 # }
 #
-# fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+# pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 #      vec![]
 # }
 #
