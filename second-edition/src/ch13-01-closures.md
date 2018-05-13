@@ -649,7 +649,7 @@ fn call_with_different_values() {
 This test creates a new `Cacher` instance with a closure that returns the value
 passed into it. We call the `value` method on this `Cacher` instance with an
 `arg` value of 1 and then an `arg` value of 2, and we expect the call to
-`value` with the `arg` value of 2 should return 2.
+`value` with the `arg` value of 2 to return 2.
 
 Run this test with the `Cacher` implementation in Listing 13-9 and Listing
 13-10, and the test will fail on the `assert_eq!` with this message:
