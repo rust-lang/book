@@ -159,9 +159,9 @@ collections, using generics and trait bounds is preferable because the
 definitions will be monomorphized at compile time to use the concrete types.
 
 On the other hand, with the method using trait objects, one `Screen` instance
-can hold a `Vec` that contains a `Box<Button>` as well as a `Box<TextField>`.
-Let’s look at how this works, and then we’ll talk about the runtime performance
-implications.
+can hold a `Vec<T>` that contains a `Box<Button>` as well as a
+`Box<TextField>`. Let’s look at how this works, and then we’ll talk about the
+runtime performance implications.
 
 ### Implementing the Trait
 
@@ -386,9 +386,9 @@ pub trait Clone {
 
 The `String` type implements the `Clone` trait, and when we call the `clone`
 method on an instance of `String` we get back an instance of `String`.
-Similarly, if we call `clone` on an instance of `Vec`, we get back an instance
-of `Vec`. The signature of `clone` needs to know what type will stand in for
-`Self`, because that’s the return type.
+Similarly, if we call `clone` on an instance of `Vec<T>`, we get back an
+instance of `Vec<T>`. The signature of `clone` needs to know what type will
+stand in for `Self`, because that’s the return type.
 
 The compiler will indicate when you’re trying to do something that violates the
 rules of object safety in regard to trait objects. For example, let’s say we
