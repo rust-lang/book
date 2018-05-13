@@ -51,8 +51,8 @@ for val in v1_iter {
 
 ### The `Iterator` Trait and the `next` Method
 
-All iterators implement a trait named `Iterator` that is defined in the
-standard library. The definition of the trait looks like this:
+모든 반복자는 표준 라이브러리에 정의된 `Iterator` 라는 이름의 트레잇을 구현 합니
+다. 트레잇의 정의는 아래와 같습니다:
 
 ```rust
 trait Iterator {
@@ -64,21 +64,19 @@ trait Iterator {
 }
 ```
 
-Notice this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an *associated type* with this trait. We’ll talk about
-associated types in depth in Chapter 19. For now, all you need to know is that
-this code says implementing the `Iterator` trait requires that you also define
-an `Item` type, and this `Item` type is used in the return type of the `next`
-method. In other words, the `Item` type will be the type returned from the
-iterator.
+이 정의는 몇 개의 새로운 문법을 사용하는데 유의하세요: `type Item` 과
+`Self::Item` 은 이 트레잇과 *연관 타입* 을 정의 합니다. 우리는 19장에서
+연관 타입에 대해 자세히 이야기 할 것 입니다. 지금 당장 알아야 할 것은 이 코드가
+`Iterator` 트레잇을 구현하는 것은 `Item` 타입을 정의하는 것 또한 요구하며, 이 
+`Item` 타입이 `next` 메서드의 리턴 타입으로 사용된다는 것을 나타낸다는 것 입니
+다. 다른 말로, `Item` 타입은 반복자로 부터 반환되는 타입이 될 것 입니다.
 
-The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time wrapped in
-`Some` and, when iteration is over, returns `None`.
+`Iterator` 트레잇은 단지 구현자가 하나의 메서드를 정의하도록 요구 합니다: 
+`next` 메서드 입니다. 이 메서드는 반복자의 하나의 항목을 `Some` 에 넣어서 반환
+하고, 반복자가 종료되면 `None` 을 반환 합니다.
 
-We can call the `next` method on iterators directly; Listing 13-15 demonstrates
-what values are returned from repeated calls to `next` on the iterator created
-from the vector:
+반복자의 `next` 메서드를 ㅈ기접 호출할 수 있습니다; 리스트 13-15 는 벡터로 부터
+생성된 반복자에 대해 반복된 `next` 호출이 어떤 값들을 반환하는지 보여줍니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -96,24 +94,23 @@ fn iterator_demonstration() {
 }
 ```
 
-<span class="caption">Listing 13-15: Calling the `next` method on an
-iterator</span>
+<span class="caption">리스트 13-15: 반복자의 `next` 메서드 호출하기</span>
 
-Note that we needed to make `v1_iter` mutable: calling the `next` method on an
-iterator changes internal state that the iterator uses to keep track of where
-it is in the sequence. In other words, this code *consumes*, or uses up, the
-iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop because the loop took
-ownership of `v1_iter` and made it mutable behind the scenes.
+`v1_iter` 가 변경 가능하도록 만들 필요가 있다는 것에 유의 하세요: 반복자에 대해
+`next` 메서드를 호출하면 시퀀스의 어디에 있는지 추적하기 위해 반복자가 사용하는
+내부 상태를 변경합니다. 다른 말로, 이 코드는 반복자를 *소비 합니다*, 혹은 사용
+합니다. `next` 에 대한 각 호출은 반복자로 부터 하나의 항목을 소비 합니다. 
+`for` 루프를 사용할 때는 `v1_iter` 를 변경할 수 있도록 만들 필요가 없는데, 
+루프가 `v1_iter` 의 소유권을 갖고 보이진 않지만 변경 가능하도록 만들기 때문
+입니다.
 
-Also note that the values we get from the calls to `next` are immutable
-references to the values in the vector. The `iter` method produces an iterator
-over immutable references. If we want to create an iterator that takes
-ownership of `v1` and returns owned values, we can call `into_iter` instead of
-`iter`. Similarly, if we want to iterate over mutable references, we can call
-`iter_mut` instead of `iter`.
+`next` 호출로 얻어온 값들은 벡터 안에 있는 값들에 대한 불변 참조라는 점 역시
+유이 하세요. `iter` 메서드는 불변 참조에 대한 반복자를 만듭니다. 만약 `v1` 의
+소유권을 갖고 소유된 값들을 반환하도록 하고 싶다면, `iter` 대신 `into_iter` 를
+호출해야 합니다. 비슷하게, 가변 참조에 대한 반복자를 원한다면, `iter` 대신
+`iter_mut` 을 호출할 수 있습니다.
 
-### Methods that Consume the Iterator
+### 반복자를 소비하는 메서드들
 
 The `Iterator` trait has a number of different methods with default
 implementations provided by the standard library; you can find out about these
