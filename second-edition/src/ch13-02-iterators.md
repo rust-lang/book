@@ -81,7 +81,7 @@ The `Iterator` trait only requires implementors to define one method: the
 
 We can call the `next` method on iterators directly; Listing 13-15 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
-from the vector:
+from the vector.
 
 <span class="filename">Filename: src/lib.rs</span>
 
