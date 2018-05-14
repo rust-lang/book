@@ -112,19 +112,17 @@ fn iterator_demonstration() {
 
 ### 반복자를 소비하는 메서드들
 
-The `Iterator` trait has a number of different methods with default
-implementations provided by the standard library; you can find out about these
-methods by looking in the standard library API documentation for the `Iterator`
-trait. Some of these methods call the `next` method in their definition, which
-is why you’re required to implement the `next` method when implementing the
-`Iterator` trait.
+`Iterator` 트레잇에는 표준 라이브러리에서 기본 구현을 제공하는 다수의 다른
+메서드들이 있습니다; `Iterator` 트레잇에 대한 표준 라이브러리 API 문서를 살펴
+보면, 이 메서드들을 찾을 수 있습니다. 이 메서드들 중 일부는 그들의 구현에서
+`next` 메서드를 호출하는데, 이것이 `Iterator` 트레잇을 구현할 때 `next` 메서드를
+구현해야만 하는 이유 입니다.
 
-Methods that call `next` are called *consuming adaptors*, because calling them
-uses up the iterator. One example is the `sum` method, which takes ownership of
-the iterator and iterates through the items by repeatedly calling `next`, thus
-consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-16 has a
-test illustrating a use of the `sum` method:
+`next` 를 호출하는 메서드들을 *소비하는 어댑터들* 이라고 하는데, 거들을 호출하면
+반복자를 써버리기 때문 입니다. `sum` 메서드가 하나의 예인데, 반복자의 소유권을
+가져오고 반복적으로 `next` 를 호출해서 순회함으로써 반복자를 소비 합니다.
+순회해 나가면서 누적합계에 각 아이템을 더하고 순회가 완료되면 합계를 반환
+합니다. 리스트 13-16 은 `sum` 메서드의 사용을 보여주는 테스트 입니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -141,11 +139,11 @@ fn iterator_sum() {
 }
 ```
 
-<span class="caption">Listing 13-16: Calling the `sum` method to get the total
-of all items in the iterator</span>
+<span class="caption">리스트 13-16: 반복자의 모든 항목에 대한 합계를 얻기 위해
+`sum` 메서드 호출 하기</span>
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
-ownership of the iterator we call it on.
+`sum` 은 호출한 반복자의 소유권을 갖기 때문에, `sum` 을 호출한 후 `v1_iter` 은
+사용할 수 없습니다.
 
 ### Methods that Produce Other Iterators
 
