@@ -145,18 +145,18 @@ fn iterator_sum() {
 `sum` 은 호출한 반복자의 소유권을 갖기 때문에, `sum` 을 호출한 후 `v1_iter` 은
 사용할 수 없습니다.
 
-### Methods that Produce Other Iterators
+### 다른 반복자를 생성하는 메서드들
 
-Other methods defined on the `Iterator` trait, known as *iterator adaptors*,
-allow you to change iterators into different kinds of iterators. You can chain
-multiple calls to iterator adaptors to perform complex actions in a readable
-way. But because all iterators are lazy, you have to call one of the consuming
-adaptor methods to get results from calls to iterator adaptors.
+`Iterator` 트레잇에 정의된 다른 메서드들 중에 *반복자 어댑터들* 로 알려진 메서드
+들은 반복자를 다른 종류의 반복자로 변경하도록 허용 합니다. 복잡한 행위를 수행하
+기 위해 읽기 쉬운 방법으로 반복자 어댑터에 대한 여러개의 호출을 연결할 수 있습
+니다. 모든 반복자는 게으르지만, 반복자 어댑터들로 부터 결과를 얻기 위해 소비하는
+메서드들 중 하나를 호출 해야 합니다.
 
-Listing 13-17 shows an example of calling the iterator adaptor method `map`,
-which takes a closure to call on each item to produce a new iterator. The
-closure here creates a new iterator in which each item from the vector has been
-incremented by 1. However, this code produces a warning:
+리스트 13-17 은 반복자 어댑터 메서드인 `map` 을 호출하는 예를 보여주는데,
+새로운 반복자를 생성하기 위해 각 항목에 대해 호출할 클로저를 인자로 받습니다.
+여기서 클로저는 벡터의 각 항목에서 1이 증가된 새로운 반복자를 만듭니다.
+그러나, 이 코드는 경로를 발생 합니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -166,10 +166,10 @@ let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-<span class="caption">Listing 13-17: Calling the iterator adaptor `map` to
-create a new iterator</span>
+<span class="caption">리스트 13-17: 새로운 반복자를 만들기 위해 반복자 어댑터
+`map` 호출 하기</span>
 
-The warning we get is this:
+경고 메세지는 이것 입니다:
 
 ```text
 warning: unused `std::iter::Map` which must be used: iterator adaptors are lazy
@@ -181,18 +181,17 @@ and do nothing unless consumed
   |
   = note: #[warn(unused_must_use)] on by default
 ```
+리스트 13-17 의 코드는 아무것도 하지 않습니다; 인자로 넘긴 클로저는 결고 호출
+도지 않습니다. 경고는 이유를 알도록 해주니다: 반복자 어댑터는 게으르고,
+반복자를 여기서 소비할 필요가 있다.
 
-The code in Listing 13-17 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adaptors are lazy, and
-we need to consume the iterator here.
+이것을 고치고 반복자를 소비하기 위해, `collect` 메서드를 사용할 것인데, 12장의
+리스트 12-1 에서 `env::args` 와 함께 사용했습니다. 이 메서드는 반복자를 소비하고
+결과값을 수집 데이터 타입으로 모읍니다.
 
-To fix this and consume the iterator, we’ll use the `collect` method, which we
-used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the
-iterator and collects the resulting values into a collection data type.
-
-In Listing 13-18, we collect the results of iterating over the iterator that’s
-returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector incremented by 1.
+리스트 13-18 에서, 벡터에 대한 `map` 호출로 부터 반환된 반복자를 순회하면서
+결과를 모읍니다. 이 벡터는 각 항목이 원본 벡터로 부터 1씩 증가된 상태로 될 것
+입니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -204,16 +203,16 @@ let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
-<span class="caption">Listing 13-18: Calling the `map` method to create a new
-iterator and then calling the `collect` method to consume the new iterator and
-create a vector</span>
+<span class="caption">리스트 13-18: 새로운 반복자를 만들기 위해 `map` 메서드를
+호출하고, 새로운 반복자를 소비하고 벡터를 생성하기 위해 `collect` 메서드 호출
+하기</span>
 
-Because `map` takes a closure, we can specify any operation we want to perform
-on each item. This is a great example of how closures let you customize some
-behavior while reusing the iteration behavior that the `Iterator` trait
-provides.
+`map` 은 클로저를 인자로 받기 때문에, 각 항목에 대해 수행하기를 원하는 어떤
+연산도 기술할 수 있습니다. 이것은 `Iterator` 트레잇이 제공하는 반복자 행위를
+재사용 하면서 클로저가 어떻게 일부 행위를 맞춤 조작할 수 있는지를 보여주는
+굉장한 예제 입니다.
 
-### Using Closures that Capture Their Environment
+### 환경을 갈무리 하는 클로저 사용하기
 
 Now that we’ve introduced iterators, we can demonstrate a common use of
 closures that capture their environment by using the `filter` iterator adaptor.
