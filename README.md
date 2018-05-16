@@ -6,7 +6,7 @@ This repository contains the source of all editions of "the Rust Programming
 Language".
 
 The second edition will also be available in dead-tree form by No Starch
-Press, available around May 2018. Check [the No Starch Page][nostarch] for
+Press, available around June 2018. Check [the No Starch Page][nostarch] for
 the latest information on the release date and how to order.
 
 [nostarch]: https://nostarch.com/rust
@@ -72,9 +72,15 @@ $ mdbook test
 We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
 kinds of contributions we're looking for.
 
+### 2018 Edition
+
+The "2018" Edition is in the process of being updated with the language changes 
+that will be available with the 2018 Edition of the Rust language. All new 
+contributions should be to this edition.
+
 ### Second Edition
 
-The second edition of The Rust Programming Language is getting ever closer to being printed!
+The second edition is frozen, and is not accepting any changes at this time.
 
 ### First Edition
 
@@ -85,16 +91,15 @@ The first edition is frozen, and is not accepting any changes at this time.
 
 ### Translations
 
-We'd especially love help translating the second edition of the book! See the
+We'd especially love help translating the second edition or 2018 edition of the book! See the
 [Translations] label to join in efforts that are currently in progress. Open
 a new issue to start working on a new language! We're waiting on [mdbook
 support] for multiple languages before we merge any in, but feel free to
-start! The chapters in [the frozen column] of the project won't see major
-changes, so if you start with those, you won't have to redo work :)
+start! The second edition is frozen and won't see major
+changes, so if you start with that, you won't have to redo work :)
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/azerupi/mdBook/issues/5
-[the frozen column]: https://github.com/rust-lang/book/projects/1
 
 ## No Starch
 
