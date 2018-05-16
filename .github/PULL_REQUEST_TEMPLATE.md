@@ -11,18 +11,9 @@ ultimately wouldn't accept.
 
 ### Second edition
 
-For the second edition, we are currently working with No Starch Press to bring
-it to print. Chapters go through a number of stages in the editing process, and
-once they've gotten to the layout stage, they're effectively frozen.
-
-For chapters that have gotten to the layout stage, we will likely only be
-accepting changes that correct factual errors or major problems and not, for
-example, minor wording changes.
-
-Scroll all the way to the right on https://github.com/rust-lang/book/projects/1
-to see which chapters have been frozen.
-
-Please see CONTRIBUTING.md for more details.
+No Starch Press has brought the second edition to print. Pull requests fixing
+factual errors will be accepted and documented as errata; pull requests changing
+wording or other small corrections should be made against the 2018 edition instead.
 
 ### First edition
 
