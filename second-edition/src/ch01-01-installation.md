@@ -7,7 +7,6 @@ an internet connection for the download.
 > Note: If you prefer not to use `rustup` for some reason, please see [the Rust
 > installation page](https://www.rust-lang.org/install.html) for other options.
 
-
 The following steps install the latest stable version of the Rust compiler. All
 the examples and output in this book use stable Rust 1.21.0. Rust’s stability
 guarantees ensure that all the examples in the book that compile will continue
@@ -22,7 +21,7 @@ work as expected with the content of this book.
 > terminal. Lines that you should enter in a terminal all start with `$`. You
 > don’t need to type in the `$` character; it indicates the start of each
 > command. Lines that don’t start with `$` typically show the output of the
-> previous command. Additionally, PowerShell specific examples will use `>`
+> previous command. Additionally, PowerShell-specific examples will use `>`
 > rather than `$`.
 
 ### Installing `rustup` on Linux or macOS

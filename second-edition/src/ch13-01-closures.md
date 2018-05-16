@@ -25,7 +25,7 @@ it once so we don’t make the user wait more than necessary.
 We’ll simulate calling this hypothetical algorithm with the function
 `simulated_expensive_calculation` shown in Listing 13-1, which will print
 `calculating slowly...`, wait for two seconds, and then return whatever number
-we passed in:
+we passed in.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -57,7 +57,7 @@ The required inputs are these:
 * A random number that will generate some variety in the workout plans
 
 The output will be the recommended workout plan. Listing 13-2 shows the `main`
-function we’ll use:
+function we’ll use.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -160,7 +160,7 @@ to call it if the result isn’t needed, and we still want to call it only once.
 
 We could restructure the workout program in many ways. First, we’ll try
 extracting the duplicated call to the `simulated_expensive_calculation`
-function into a variable, as shown in Listing 13-4:
+function into a variable, as shown in Listing 13-4.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -219,7 +219,7 @@ Instead of always calling the `simulated_expensive_calculation` function before
 the `if` blocks, we can define a closure and store the *closure* in a variable
 rather than storing the result of the function call, as shown in Listing 13-5.
 We can actually move the whole body of `simulated_expensive_calculation` within
-the closure we’re introducing here:
+the closure we’re introducing here.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -250,7 +250,7 @@ closure—these are optional if the closure body is a single expression. The end
 of the closure, after the curly brackets, needs a semicolon to complete the
 `let` statement. The value returned from the last line in the closure body
 (`num`) will be the value returned from the closure when it’s called, because
-that line doesn’t end in a semicolon; just like in function bodies.
+that line doesn’t end in a semicolon; just as in function bodies.
 
 Note that this `let` statement means `expensive_closure` contains the
 *definition* of an anonymous function, not the *resulting value* of calling the
@@ -262,7 +262,7 @@ With the closure defined, we can change the code in the `if` blocks to call the
 closure to execute the code and get the resulting value. We call a closure like
 we do a function: we specify the variable name that holds the closure
 definition and follow it with parentheses containing the argument values we
-want to use, as shown in Listing 13-6:
+want to use, as shown in Listing 13-6.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -336,7 +336,7 @@ available.
 As with variables, we can add type annotations if we want to increase
 explicitness and clarity at the cost of being more verbose than is strictly
 necessary. Annotating the types for the closure we defined in Listing 13-5
-would look like the definition shown in Listing 13-7:
+would look like the definition shown in Listing 13-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -447,7 +447,7 @@ case, our closure has a parameter of type `u32` and returns a `u32`, so the
 trait bound we specify is `Fn(u32) -> u32`.
 
 Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
-and an optional result value:
+and an optional result value.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -482,7 +482,7 @@ the result of the closure again, instead of executing the closure again, the
 `Cacher` will return the result held in the `Some` variant.
 
 The logic around the `value` field we’ve just described is defined in Listing
-13-10:
+13-10.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -540,7 +540,7 @@ If `self.value` is `None`, the code calls the closure stored in
 returns the value as well.
 
 Listing 13-11 shows how we can use this `Cacher` struct in the function
-`generate_workout` from Listing 13-6:
+`generate_workout` from Listing 13-6.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -649,7 +649,7 @@ fn call_with_different_values() {
 This test creates a new `Cacher` instance with a closure that returns the value
 passed into it. We call the `value` method on this `Cacher` instance with an
 `arg` value of 1 and then an `arg` value of 2, and we expect the call to
-`value` with the `arg` value of 2 should return 2.
+`value` with the `arg` value of 2 to return 2.
 
 Run this test with the `Cacher` implementation in Listing 13-9 and Listing
 13-10, and the test will fail on the `assert_eq!` with this message:
@@ -686,7 +686,7 @@ have: they can capture their environment and access variables from the scope in
 which they’re defined.
 
 Listing 13-12 has an example of a closure stored in the `equal_to_x` variable
-that uses the `x` variable from the closure’s surrounding environment:
+that uses the `x` variable from the closure’s surrounding environment.
 
 <span class="filename">Filename: src/main.rs</span>
 

@@ -43,7 +43,7 @@ $ cd adder
 ```
 
 The contents of the *src/lib.rs* file in your `adder` library should look like
-Listing 11-1:
+Listing 11-1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -73,7 +73,7 @@ This assertion serves as an example of the format for a typical test. Let’s ru
 it to see that this test passes.
 
 The `cargo test` command runs all tests in our project, as shown in Listing
-11-2:
+11-2.
 
 ```text
 $ cargo test
@@ -118,8 +118,8 @@ The next part of the test output, which starts with `Doc-tests adder`, is for
 the results of any documentation tests. We don’t have any documentation tests
 yet, but Rust can compile any code examples that appear in our API
 documentation. This feature helps us keep our docs and our code in sync! We’ll
-discuss how to write documentation tests in the “Documentation Comments”
-section of Chapter 14. For now, we’ll ignore the `Doc-tests` output.
+discuss how to write documentation tests in the “Documentation Comments as
+Tests” section of Chapter 14. For now, we’ll ignore the `Doc-tests` output.
 
 Let’s change the name of our test to see how that changes the test output.
 Change the `it_works` function to a different name, such as `exploration`, like
@@ -153,7 +153,7 @@ when something in the test function panics. Each test is run in a new thread,
 and when the main thread sees that a test thread has died, the test is marked
 as failed. We talked about the simplest way to cause a panic in Chapter 9,
 which is to call the `panic!` macro. Enter the new test, `another`, so your
-*src/lib.rs* file looks like Listing 11-3:
+*src/lib.rs* file looks like Listing 11-3.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -177,7 +177,7 @@ mod tests {
 we call the `panic!` macro</span>
 
 Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed:
+11-4, which shows that our `exploration` test passed and `another` failed.
 
 ```text
 running 2 tests
@@ -255,7 +255,7 @@ The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
 `can_hold` method by creating a `Rectangle` instance that has a length of 8 and
 a width of 7 and asserting that it can hold another `Rectangle` instance that
-has a length of 5 and a width of 1:
+has a length of 5 and a width of 1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -337,7 +337,7 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 Two tests that pass! Now let’s see what happens to our test results when we
 introduce a bug in our code. Let’s change the implementation of the `can_hold`
-method by replacing the greater-than sign with a less-than sign when it
+method by replacing the greater than sign with a less than sign when it
 compares the lengths:
 
 ```rust
@@ -496,8 +496,8 @@ those types are equal or not equal. You’ll need to implement `Debug` to print
 the values when the assertion fails. Because both traits are derivable traits,
 as mentioned in Listing 5-12 in Chapter 5, this is usually as straightforward
 as adding the `#[derive(PartialEq, Debug)]` annotation to your struct or enum
-definition. See Appendix C, “Derivable Traits,” for more details about these
-and other derivable traits.
+definition. See Appendix C for more details about these and other derivable
+traits.
 
 ### Adding Custom Failure Messages
 
@@ -612,7 +612,7 @@ This attribute makes a test pass if the code inside the function panics; the
 test will fail if the code inside the function doesn’t panic.
 
 Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
-happen when we expect them to:
+happen when we expect them to.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -709,7 +709,7 @@ make `should_panic` tests more precise, we can add an optional `expected`
 parameter to the `should_panic` attribute. The test harness will make sure that
 the failure message contains the provided text. For example, consider the
 modified code for `Guess` in Listing 11-9 where the `new` function panics with
-different messages depending on whether the value is too small or too large:
+different messages depending on whether the value is too small or too large.
 
 <span class="filename">Filename: src/lib.rs</span>
 

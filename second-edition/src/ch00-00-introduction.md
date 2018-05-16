@@ -28,7 +28,7 @@ is prone to a variety of subtle bugs, which in most other languages can be
 caught only through extensive testing and careful code review by experienced
 developers. In Rust, the compiler plays a gatekeeper role by refusing to
 compile code with these elusive bugs, including concurrency bugs. By working
-alongside the compiler, the team can spend more time focusing on the program’s
+alongside the compiler, the team can spend their time focusing on the program’s
 logic rather than chasing down bugs.
 
 Rust also brings contemporary developer tools to the systems programming world:
@@ -104,13 +104,13 @@ chapters. In concept chapters, you’ll learn about an aspect of Rust. In projec
 chapters, we’ll build small programs together, applying what you’ve learned so
 far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
 
-Chapter 1 explains how to install Rust, how to write a "Hello, world!" program,
+Chapter 1 explains how to install Rust, how to write a Hello, world! program,
 and how to use Cargo, Rust's package manager and build tool. Chapter 2 is a
 hands-on introduction to the Rust language. Here we cover concepts at a high
 level, and later chapters will provide additional detail. If you want to get
 your hands dirty right away, Chapter 2 is the place for that. At first, you
-might even want to skip Chapter 3, which covers Rust features similar to other
-programming language features, and head straight to Chapter 4 to learn about
+might even want to skip Chapter 3, which covers Rust features similar to those
+of other programming languages, and head straight to Chapter 4 to learn about
 Rust’s ownership system. However, if you’re a particularly meticulous learner
 who prefers to learn every detail before moving on to the next, you might want
 to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
@@ -164,9 +164,9 @@ confusion. But do whatever works for you.
 
 An important part of the process of learning Rust is learning how to read the
 error messages the compiler displays: these will guide you toward working code.
-As such, we’ll provide many examples of code that don’t compile along with the
-error message the compiler will show you in each situation. Know that if you
-enter and run a random example, it may not compile! Make sure you read the
+As such, we’ll provide many examples of code that doesn’t compile along with
+the error message the compiler will show you in each situation. Know that if
+you enter and run a random example, it may not compile! Make sure you read the
 surrounding text to see whether the example you’re trying to run is meant to
 error. In most situations, we’ll lead you to the correct version of any code
 that doesn’t compile.
