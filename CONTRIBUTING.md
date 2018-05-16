@@ -37,12 +37,11 @@ We'd especially love help translating the second edition of the book! See the
 [Translations] label to join in efforts that are currently in progress. Open
 a new issue to start working on a new language! We're waiting on [mdbook
 support] for multiple languages before we merge any in, but feel free to
-start! The chapters in [the frozen column] of the project won't see major
-changes, so if you start with those, you won't have to redo work :)
+start! The second edition is frozen and won't see major changes, so if 
+you start with that, you won't have to redo work :)
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/azerupi/mdBook/issues/5
-[the frozen column]: https://github.com/rust-lang/book/projects/1
 
 ## Edition specific details
 
@@ -60,19 +59,9 @@ that we ultimately wouldn't accept.
 
 ## Contributing to the Second Edition
 
-We're currently working with No Starch Press to bring the second edition of
-the book to print. Each chapter goes through [a number of stages][project].
-Of particular note we're not able to make large changes to chapters that are
-in any column to the right of, and including, the "Frozen" column on that
-board.
-
-[project]: https://github.com/rust-lang/book/projects/1
-
-We *may* still able to make very small corrections that pertain to
-correctness issues. If you find something, don't hesitate to open a pull
-request, but we may not be able to accept it. You might want to check
-in the 2018 edition to see if the corresponding error is still there,
-and make the fix against that as well.
+The second edition is completely frozen, and not accepting changes. It's
+meant to be in sync with the print version available from No Starch
+Press.
 
 ## Contributing to the First Edition
 
