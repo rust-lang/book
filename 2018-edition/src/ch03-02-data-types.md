@@ -177,8 +177,8 @@ section.
 
 So far we’ve worked only with numbers, but Rust supports letters too. Rust’s
 `char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it. (Note that the `char` type is specified with
-single quotes, as opposed to strings, which use double quotes.)
+code shows one way to use it. (Note that the `char` literal is specified with
+single quotes, as opposed to string literals, which use double quotes.)
 
 <span class="filename">Filename: src/main.rs</span>
 
