@@ -58,10 +58,10 @@ Alternatively, you can add the following line to your *~/.bash_profile*:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Additionally, you’ll need a linker of some kind. It's likely one is already
+Additionally, you’ll need a linker of some kind. It’s likely one is already
 installed, but when you try to compile a Rust program and get errors indicating
-that a linker could not execute, that means a linker isn't installed on your
-system and you'll need to install one manually. C compilers usually come with
+that a linker could not execute, that means a linker isn’t installed on your
+system and you’ll need to install one manually. C compilers usually come with
 the correct linker. Check your platform’s documentation for how to install a C
 compiler. Also, some common Rust packages depend on C code and will need a C
 compiler. Therefore, it might be worth installing one now.

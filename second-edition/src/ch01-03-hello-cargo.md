@@ -115,7 +115,7 @@ file.
 
 ### Building and Running a Cargo Project
 
-Now let’s look at what's different when we build and run the Hello, world!
+Now let’s look at what’s different when we build and run the Hello, world!
 program with Cargo! From your *hello_cargo* directory, build your project by
 entering the following command:
 
@@ -181,7 +181,7 @@ speed up the process! As such, many Rustaceans run `cargo check` periodically
 as they write their program to make sure it compiles. Then they run `cargo
 build` when they’re ready to use the executable.
 
-Let's recap what we’ve learned so far about Cargo:
+Let’s recap what we’ve learned so far about Cargo:
 
 * We can build a project using `cargo build` or `cargo check`.
 * We can build and run a project in one step using `cargo run`.

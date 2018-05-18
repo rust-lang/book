@@ -3,8 +3,8 @@
 One increasingly popular approach to ensuring safe concurrency is *message
 passing*, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from [the Go language
-documentation](http://golang.org/doc/effective_go.html): "Do not communicate by
-sharing memory; instead, share memory by communicating."
+documentation](http://golang.org/doc/effective_go.html): “Do not communicate by
+sharing memory; instead, share memory by communicating.”
 
 One major tool Rust has for accomplishing message-sending concurrency is the
 *channel*, a programming concept that Rust’s standard library provides an
@@ -165,7 +165,7 @@ advantage of thinking about ownership throughout your Rust programs. Let’s do
 an experiment to show how channels and ownership work together to prevent
 problems: we’ll try to use a `val` value in the spawned thread *after* we’ve
 sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn't allowed:
+this code isn’t allowed:
 
 <span class="filename">Filename: src/main.rs</span>
 

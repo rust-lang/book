@@ -170,7 +170,7 @@ let mut bar = 5; // mutable
 > line. Rust ignores everything in comments, which are discussed in more detail
 > in Chapter 3.
 
-Let's return to the guessing game program. You now know that `let mut guess`
+Let’s return to the guessing game program. You now know that `let mut guess`
 will introduce a mutable variable named `guess`. On the other side of the equal
 sign (`=`) is the value that `guess` is bound to, which is the result of
 calling `String::new`, a function that returns a new instance of a `String`.

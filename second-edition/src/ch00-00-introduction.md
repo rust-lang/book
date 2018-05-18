@@ -105,7 +105,7 @@ chapters, we’ll build small programs together, applying what you’ve learned 
 far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
 
 Chapter 1 explains how to install Rust, how to write a Hello, world! program,
-and how to use Cargo, Rust's package manager and build tool. Chapter 2 is a
+and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
 hands-on introduction to the Rust language. Here we cover concepts at a high
 level, and later chapters will provide additional detail. If you want to get
 your hands dirty right away, Chapter 2 is the place for that. At first, you
@@ -114,7 +114,7 @@ of other programming languages, and head straight to Chapter 4 to learn about
 Rust’s ownership system. However, if you’re a particularly meticulous learner
 who prefers to learn every detail before moving on to the next, you might want
 to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
-you’d like to work on a project applying the details you've learned.
+you’d like to work on a project applying the details you’ve learned.
 
 Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
 expressions, and the `if let` control flow construct. You’ll use structs and
