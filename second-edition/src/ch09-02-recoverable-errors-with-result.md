@@ -212,8 +212,8 @@ the missing file error.
 Using `match` works well enough, but it can be a bit verbose and doesn’t always
 communicate intent well. The `Result<T, E>` type has many helper methods
 defined on it to do various tasks. One of those methods, called `unwrap`, is a
-shortcut method that is implemented just like the `match` statement we wrote in
-Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
+shortcut method that is implemented just like the `match` expression we wrote
+in Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
 the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
