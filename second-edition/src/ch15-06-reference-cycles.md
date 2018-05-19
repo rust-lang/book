@@ -131,86 +131,86 @@ b rc count after changing a = 2
 a rc count after changing a = 2
 ```
 
-The reference count of the `Rc<List>` instances in both `a` and `b` are 2
-after we change the list in `a` to point to `b`. At the end of `main`, Rust
-will try to drop `b` first, which will decrease the count in each of the
-`Rc<List>` instances in `a` and `b` by 1.
+`a`의 리스트가 `b`를 가리키도록 변경한 이후 `a`와 `b`의 `Rc<List>`
+인스턴스의 참조 카운트는 둘 다 2입니다. `main`의 끝에서, 러스트는
+`b`를 먼저 버리는 시도를 할 것인데, 이는 `a`와 `b`의 각각의 `Rc<List>`
+인스턴스 내의 카운트를 1로 줄일 것입니다.
 
-However, because `a` is still referencing the `Rc<List>` that was in `b`, that
-`Rc<List>` has a count of 1 rather than 0, so the memory the `Rc<List>` has on
-the heap won’t be dropped. The memory will just sit there with a count of 1,
-forever. To visualize this reference cycle, we’ve created a diagram in Figure
-15-4.
+하지만 `a`가 여전히 `b` 내에 있는 `Rc<List>`를 참조하는 상태기 때문에, 이
+`Rc<List>`는 0이 아니라 1의 카운트를 갖게 되고, 따라서 `Rc<List>`가 힙에
+가지고 있는 메모리는 버려지지 않을 것입니다. 그 메모리는 참조 카운트 1을 가진 채로
+영원히 그 자리에 그냥 있을 것입니다. 이러한 순환 참조를 시각화하기 위해 Figure
+15-4의 다이어그램을 만들었습니다.
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
-<span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
-pointing to each other</span>
+<span class="caption">Figure 15-4: 리스트 `a`와 `b`가 서로를 가리키고
+있는 순환 참조</span>
 
-If you uncomment the last `println!` and run the program, Rust will try to
-print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
-overflows the stack.
+만일 여러분이 마지막 `println!`의 주석을 해제하고 프로그램을 실행해보면, 러스트는
+`a`를 가리키고 있는 `b`를 가리키고 있는 `a`를 가리키고 있는... 과 같은 식으로
+스택 오버플로우가 날 때까지 이 순환을 출력하려 할 것입니다.
 
-In this case, right after we create the reference cycle, the program ends. The
-consequences of this cycle aren’t very dire. However, if a more complex program
-allocated lots of memory in a cycle and held onto it for a long time, the
-program would use more memory than it needed and might overwhelm the system,
-causing it to run out of available memory.
+이 경우, 우리가 순환 참조를 만든 직후, 프로그램은 종료됩니다. 위의 순환의
+결과는 그렇게까지 심각하지는 않습니다. 하지만, 만일 좀더 복잡한 프로그램이
+많은 매모리를 순환 형태로 할당했고 오랫동안 이를 유지했더라면, 프로그램은 
+필요한 것보다 더 많은 메모리를 사용하게 되고, 사용 가능한 메모리를 동나게
+하여 시스템을 멈추게 했을런지도 모릅니다.
 
-Creating reference cycles is not easily done, but it’s not impossible either.
-If you have `RefCell<T>` values that contain `Rc<T>` values or similar nested
-combinations of types with interior mutability and reference counting, you must
-ensure that you don’t create cycles; you can’t rely on Rust to catch them.
-Creating a reference cycle would be a logic bug in your program that you should
-use automated tests, code reviews, and other software development practices to
-minimize.
+순환 참조를 만드는 것은 쉽게 이루어지지는 않지만, 불가능한 것도 아닙니다.
+만일 여러분이 `Rc<T>` 값을 가지고 있는 `RefCell<T>` 혹은 내부 가변성
+및 참조 카운팅 기능이 있는 타입들로 유사한 조합을 사용한다면, 여러분은 순환을
+만들지 않음을 보장해야 합니다; 이 순환들을 찾아내는 것을 러스트에 의지할 수는
+없습니다. 순환 참조를 만드는 것은 여러분이 자동화된 테스트, 코드 리뷰, 그 외
+소프트웨어 개발 연습 등을 이용하여 최소화해야 할 프로그램 내의 논리적
+버그입니다.
 
-Another solution for avoiding reference cycles is reorganizing your data
-structures so that some references express ownership and some references don’t.
-As a result, you can have cycles made up of some ownership relationships and
-some non-ownership relationships, and only the ownership relationships affect
-whether or not a value can be dropped. In Listing 15-25, we always want `Cons`
-variants to own their list, so reorganizing the data structure isn’t possible.
-Let’s look at an example using graphs made up of parent nodes and child nodes
-to see when non-ownership relationships are an appropriate way to prevent
-reference cycles.
+순환 참조를 피하는 또다른 해결책은 여러분의 데이터 구조를 재구성하여
+어떤 참조자는 소유권을 갖고 어떤 참조자는 그렇지 않도록 하는 것입니다.
+결과적으로 여러분은 몇 개의 소유권 관계와 몇 개의 소유권 없는 관계로
+이루어진 순환을 가질 수 있으며, 소유권 관계들만이 값을 버릴지 말지에
+관해 영향을 주게 됩니다. Listing 15-25에서 우리는 `Cons` variant가
+언제나 리스트를 소유하기를 원하므로, 데이터 구조를 재구성하는 것은 불가능합니다.
+언제 소유권 없는 관계가 순환 참조를 방지하는 적절한 방법이 되는 때인지를
+알기 위해서 부모 노드와 자식 노드로 구성된 그래프를 이용하는 예제를
+살펴봅시다.
 
-### Preventing Reference Cycles: Turning an `Rc<T>` into a `Weak<T>`
+### 참조 순환 방지하기: `Rc<T>`를 `Weak<T>`로 바꾸기
 
-So far, we’ve demonstrated that calling `Rc::clone` increases the
-`strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
-up if its `strong_count` is 0. You can also create a *weak reference* to the
-value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
-reference to the `Rc<T>`. When you call `Rc::downgrade`, you get a smart
-pointer of type `Weak<T>`. Instead of increasing the `strong_count` in the
-`Rc<T>` instance by 1, calling `Rc::downgrade` increases the `weak_count` by 1.
-The `Rc<T>` type uses `weak_count` to keep track of how many `Weak<T>`
-references exist, similar to `strong_count`. The difference is the `weak_count`
-doesn’t need to be 0 for the `Rc<T>` instance to be cleaned up.
+이제까지 우리는 `Rc::clone`을 호출하는 것이 `Rc<T>` 인스턴스의 `strong_count`를
+증가시키고, `Rc<T>` 인스턴스는 이것의 `strong_count`가 0이 된 경우에만 제거되는
+것을 보았습니다. 여러분은 또한 `Rc::downgrade`를 호출하고 여기에 `Rc<T>`에 대한
+참조자를 넘김겨서 `Rc<T>` 인스턴스 내의 값을 가리키는 *약한 참조 (weak reference)*
+를 만들 수 있습니다. 여러분이 `Rc::downgrade`를 호출하면, 여러분은 `Weak<T>` 타입의
+스마트 포인터를 얻게 됩니다. `Rc<T>` 인스턴스의 `strong_count`를 1 증가시키는 대신,
+`Rc::downgrade`는 `weak_count`를 1 증가시킵니다. `Rc<T>` 타입은 몇 개의
+`Weak<T>` 참조가 있는지 추적하기 위해서 `strong_count`와 유사한 방식으로
+`weak_count`를 사용합니다. 차이점은 `Rc<T>`인스턴스가 제거되기 위해서 `weak_count`가 
+0일 필요는 없다는 것입니다.
 
-Strong references are how you can share ownership of an `Rc<T>` instance. Weak
-references don’t express an ownership relationship. They won’t cause a
-reference cycle because any cycle involving some weak references will be broken
-once the strong reference count of values involved is 0.
+강한 참조는 여러분이 `Rc<T>` 인스턴스의 소유권을 공유할 수 있는 방법입니다. 약한
+참조는 소유권 관계를 표현하지 않습니다. 이것은 순환 참조를 야기하지 않는데 그 이유는
+몇몇의 약한 참조를 포함하는 순환이라도 강한 참조의 카운트가 0이 되고 나면 깨지게
+될 것이기 때문입니다.
 
-Because the value that `Weak<T>` references might have been dropped, to do
-anything with the value that a `Weak<T>` is pointing to, you must make sure the
-value still exists. Do this by calling the `upgrade` method on a `Weak<T>`
-instance, which will return an `Option<Rc<T>>`. You’ll get a result of `Some`
-if the `Rc<T>` value has not been dropped yet and a result of `None` if the
-`Rc<T>` value has been dropped. Because `upgrade` returns an `Option<T>`, Rust
-will ensure that the `Some` case and the `None` case are handled, and there
-won’t be an invalid pointer.
+`Weak<T>`가 참조하고 있는 값이 이미 버려졌을지도 모르기 때문에, `Weak<T>`가
+가리키고 있는 값을 가지고 어떤 일을 하기 위해서는 그 값이 여전히 존재하는지를 반드시
+확인해야 합니다. 이를 위해 `Weak<T>`의 `upgrade` 메소드를 호출하는데, 이 메소드는
+`Option<Rc<T>>`를 반환할 것입니다. 만일 `Rc<T>` 값이 아직 버려지지 않았다면
+여러분은 `Some` 결과를 얻게 될 것이고 `Rc<T>` 값이 버려졌다면 `None` 결과값을
+얻게 될 것입니다. `upgrade`가 `Option<T>`를 반환하기 때문에, 러스트는 `Some`의
+경우와 `None`의 경우가 반드시 처리되도록 할 것이고, 따라서 유효하지 않은 포인터는
+없을 것입니다.
 
-As an example, rather than using a list whose items know only about the next
-item, we’ll create a tree whose items know about their children items *and*
-their parent items.
+예제로서 어떤 아이템이 오직 다음 아이템에 대해서만 알고 있는 리스트를 이용하는
+것보다는 자식 아이템 *그리고* 부모 아이템에 대해 모두 알고 있는 아이템을 갖는
+트리를 만들어 보겠습니다.
 
-#### Creating a Tree Data Structure: a `Node` with Child Nodes
+#### 트리 데이터 구조 만들기: 자식 노드를 가진 `Node`
 
-To start, we’ll build a tree with nodes that know about their child nodes.
-We’ll create a struct named `Node` that holds its own `i32` value as well as
-references to its children `Node` values:
+자신의 자식 노드에 대해 알고 있는 노드를 갖는 트리를 만드는 것으로 시작해 보겠습니다.
+우리는 `i32`값은 물론 자식 `Node`들의 참조자들 또한 가지고 있는 `Node`라는 이름의
+구조체를 만들 것입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -225,15 +225,15 @@ struct Node {
 }
 ```
 
-We want a `Node` to own its children, and we want to share that ownership with
-variables so we can access each `Node` in the tree directly. To do this, we
-define the `Vec<T>` items to be values of type `Rc<Node>`. We also want to
-modify which nodes are children of another node, so we have a `RefCell<T>` in
-`children` around the `Vec<Rc<Node>>`.
+우리는 `Node`가 자신의 자식들을 소유하기를 원하고, 이 소유권을 공유하여 트리의 각
+`Node`에 직접 접근할 수 있도록 하기를 원합니다. 이를 하기 위해서 `Vec<T>` 아이템이
+`Rc<Node>` 타입의 값이 되도록 정의하였습니다. 또한 우리는 어떤 노드가 다른 노드의
+자식이 되도록 수정하기를 원하므로, `Vec<Rc<Node>>`를 `RefCell<T>`로 감싼
+`children`을 갖도록 하였습니다.
 
-Next, we’ll use our struct definition and create one `Node` instance named
-`leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
+그 다음, Listing 15-27에서 보시는 것처럼 이 구조체 정의를 이용하여 3의 값과
+자식 노드가 없는 `leaf`라는 이름의 `Node` 인스턴스, 그리고 5의 값과 `leaf`를
+자식으로 갖는 `branch`라는 이름의 인스턴스를 만들도록 하겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -260,17 +260,17 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-27: Creating a `leaf` node with no children
-and a `branch` node with `leaf` as one of its children</span>
+<span class="caption">Listing 15-27: 자식이 없는 `leaf` 노드와
+이 `leaf`를 자식 중 하나로 갖는 `branch` 노드 만들기</span>
 
-We clone the `Rc<Node>` in `leaf` and store that in `branch`, meaning the
-`Node` in `leaf` now has two owners: `leaf` and `branch`. We can get from
-`branch` to `leaf` through `branch.children`, but there’s no way to get from
-`leaf` to `branch`. The reason is that `leaf` has no reference to `branch` and
-doesn’t know they’re related. We want `leaf` to know that `branch` is its
-parent. We’ll do that next.
+`leaf` 내의 `Rc<Node>`를 클론하여 이를 `branch` 내에 저장했는데, 이는 `leaf` 내의
+`Node`가 이제 두 소유권자를 가지게 되었다는 의미입니다. 우리는 `branch.children`를
+통하여 `branch`에서부터 `leaf`까지 접근할 수 있게 되었지만, `leaf`에서부터 `branch`로
+접근할 방법은 없습니다. 그 이유는 `leaf`가 `branch`에 대한 참조자를 가지고 있지 않아서
+이들간의 연관성을 알지 못하기 때문입니다. 우리는 `leaf`로 하여금 `branch`가 그의
+부모임을 알도록 하기를 원합니다. 이걸 다음에 해보겠습니다.
 
-#### Adding a Reference from a Child to Its Parent
+#### 자식으로부터 부모로 가는 참조자 추가하기
 
 To make the child node aware of its parent, we need to add a `parent` field to
 our `Node` struct definition. The trouble is in deciding what the type of
