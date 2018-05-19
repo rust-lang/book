@@ -90,7 +90,7 @@
     - [`Drop` 트레잇은 메모리 정리 코드를 실행시킵니다](ch15-03-drop.md)
     - [`Rc<T>`, 참조 카운팅 스마트 포인터](ch15-04-rc.md)
     - [`RefCell<T>`와 내부 가변성 패턴](ch15-05-interior-mutability.md)
-    - [Creating Reference Cycles and Leaking Memory is Safe](ch15-06-reference-cycles.md)
+    - [순환 참조를 만드는 것과 메모리 누수는 안전한 것에 해당됩니다](ch15-06-reference-cycles.md)
 
 - [Fearless Concurrency](ch16-00-concurrency.md)
     - [Threads](ch16-01-threads.md)

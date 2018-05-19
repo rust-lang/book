@@ -272,21 +272,21 @@ fn main() {
 
 #### 자식으로부터 부모로 가는 참조자 추가하기
 
-To make the child node aware of its parent, we need to add a `parent` field to
-our `Node` struct definition. The trouble is in deciding what the type of
-`parent` should be. We know it can’t contain an `Rc<T>`, because that would
-create a reference cycle with `leaf.parent` pointing to `branch` and
-`branch.children` pointing to `leaf`, which would cause their `strong_count`
-values to never be 0.
+자식 노드가 그의 부모를 알도록 만들기 위하여, `parent` 필드를 우리의 `Node` 구조체
+정의에 추가할 필요가 있습니다. 문제는 `parent`의 타입이 어떤 것이 되어야 하는지를 결정하는
+중에 발생합니다. 이것이 `Rc<T>`를 담을 수 없음을 우리는 알고 있는데, 그렇게 하게 되면
+`branch`를 가리키고 있는 `leaf.parent`와 `leaf`를 가리키고 있는 `branch.children`을
+가지고 있는 순환 참조를 만들게 되며, 이것들의 `strong_count`값을 결코 0이 안되도록 하는
+일을 야기하기 때문입니다.
 
-Thinking about the relationships another way, a parent node should own its
-children: if a parent node is dropped, its child nodes should be dropped as
-well. However, a child should not own its parent: if we drop a child node, the
-parent should still exist. This is a case for weak references!
+이 관계들을 다른 방식으로 생각해보면, 부모 노드는 그의 자식들을 소유해야 합니다:
+만일 부모 노드가 버려지게 되면, 그의 자식 노드들도 또한 버려져야 합니다. 하지만,
+자식은 그의 부모를 소유해서는 안됩니다: 만일 우리가 자식 노드를 버리면, 그 부모는
+여전히 존재해야 합니다. 이것이 바로 약한 참조를 위한 경우에 해당됩니다!
 
-So instead of `Rc<T>`, we’ll make the type of `parent` use `Weak<T>`,
-specifically a `RefCell<Weak<Node>>`. Now our `Node` struct definition looks
-like this:
+따라서 `Rc<T>` 대신 `Weak<T>`를 이용하여, 특별히 `RefCell<Weak<Node>>`를
+이용하여 `parent`의 타입을 만들겠습니다. 이제 우리의 `Node` 구조체 정의는 아래와
+같이 생기게 되었습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -302,9 +302,9 @@ struct Node {
 }
 ```
 
-A node will be able to refer to its parent node but doesn’t own its parent.
-In Listing 15-28, we update `main` to use this new definition so the `leaf`
-node will have a way to refer to its parent, `branch`:
+노드는 그의 부모 노드를 참조할 수 있게 되겠지만 그 부모를 소유하지는 않습니다.
+Listing 15-28에서, 우리는 이 새로운 정의를 사용하도록 `main`을 업데이트하여
+`leaf` 노드가 그의 부모인 `branch`를 참조할 수 있는 방법을 갖도록 할 것입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -340,34 +340,34 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-28: A `leaf` node with a weak reference to its
-parent node `branch`</span>
+<span class="caption">Listing 15-28: 부모 노드 `branch`의 약한 참조를
+갖는 `leaf` 노드</span>
 
-Creating the `leaf` node looks similar to how creating the `leaf` node looked
-in Listing 15-27 with the exception of the `parent` field: `leaf` starts out
-without a parent, so we create a new, empty `Weak<Node>` reference instance.
+`leaf` 노드를 만드는 것은 `parent` 필드를 제외하고는 Listing 15-27에서 `leaf`
+노드를 만드는 방법과 비슷해 보입니다: `leaf`는 부모없이 시작되어서, 새로운 비어있는
+`Weak<Node>` 참조자 인스턴스를 생성하였습니다.
 
-At this point, when we try to get a reference to the parent of `leaf` by using
-the `upgrade` method, we get a `None` value. We see this in the output from the
-first `println!` statement:
+이 시점에서, 우리가 `upgrade` 메소드를 사용하여 `leaf`의 부모에 대한 참조자를
+얻는 시도를 했을 때, 우리는 `None` 값을 얻습니다. 첫번째 `println!` 구문에서는
+아래와 같은 출력을 보게됩니다:
 
 ```text
 leaf parent = None
 ```
 
-When we create the `branch` node, it will also have a new `Weak<Node>`
-reference in the `parent` field, because `branch` doesn’t have a parent node.
-We still have `leaf` as one of the children of `branch`. Once we have the
-`Node` instance in `branch`, we can modify `leaf` to give it a `Weak<Node>`
-reference to its parent. We use the `borrow_mut` method on the
-`RefCell<Weak<Node>>` in the `parent` field of `leaf`, and then we use the
-`Rc::downgrade` function to create a `Weak<Node>` reference to `branch` from
-the `Rc<Node>` in `branch.`
+`branch` 노드를 생성할 때, 이 또한 `parent` 필드에 새로운 `Weak<Node>`
+참조자를 가지도록 하는데, 이는 `branch`가 부모 노드를 가지지 않기 때문입니다.
+우리는 여전히 `leaf`를 `branch`의 자식 중 하나로서 가지게 됩니다. 일단
+`branch` 내의 `Node` 인스턴스를 가지게 되면, `leaf`에게 그의 부모에 대한
+`Weak<Node>` 참조자를 가지도록 수정할 수 있습니다. 우리는 `leaf`의 `parent`
+필드 내의 `RefCell<Weak<Node>>` 상의 `borrow_mut` 메소드를 사용하고,
+그런 다음 `Rc::downgrade` 함수를 이용하여 `branch`의 `Rc<Node>`로부터
+`branch`에 대한 `Weoak<Node>` 참조자를 생성하였습니다.
 
-When we print the parent of `leaf` again, this time we’ll get a `Some` variant
-holding `branch`: now `leaf` can access its parent! When we print `leaf`, we
-also avoid the cycle that eventually ended in a stack overflow like we had in
-Listing 15-26; the `Weak<Node>` references are printed as `(Weak)`:
+`leaf`의 부모를 다시한번 출력할 때, 이번에는 `branch`를 가지고 있는 `Some` variant를
+얻게될 것입니다: 이제 `leaf`는 그의 부모에 접근할 수 있습니다! `leaf`를 출력할 때, 우리는
+또한 Listing 15-26에서 발생했던 것과 같이 궁극적으로 스택 오버플로우로 끝나버리는 순환을
+피하게 되었습니다; `Weak<Node>` 참조자는 `(Weak)`로 출력됩니다:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -375,17 +375,17 @@ children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
 children: RefCell { value: [] } }] } })
 ```
 
-The lack of infinite output indicates that this code didn’t create a reference
-cycle. We can also tell this by looking at the values we get from calling
-`Rc::strong_count` and `Rc::weak_count`.
+무한 출력이 없다는 것은 이 코드가 순환 참조를 생성하지 않는 것을 나타냅니다.
+이것은 또한 `Rc::strong_count`와 `Rc::weak_count`를 호출함으로써
+얻은 값을 살펴보는 것으로도 알 수 있습니다.
 
-#### Visualizing Changes to `strong_count` and `weak_count`
+#### `strong_count`와 `weak_count`의 변화를 시각화하기
 
-Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
-instances change by creating a new inner scope and moving the creation of
-`branch` into that scope. By doing so, we can see what happens when `branch` is
-created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29:
+새로운 내부 스코프를 만들고 `branch`의 생성을 이 스코프로 옮기는 것으로
+`Rc<Node>` 인스턴스의 `strong_count`와 `weak_count` 값이 어떻게
+변하는지 살펴보기로 합시다. 그렇게 함으로써, 우리는 `branch`가 만들어질 때와
+그 다음 스코프 밖으로 벗어났을 때 어떤일이 생기는지 알 수 있습니다. 수정본은
+Listing 15-29와 같습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -444,55 +444,55 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 15-29: Creating `branch` in an inner scope and
-examining strong and weak reference counts</span>
+<span class="caption">Listing 15-29: `branch`를 내부 스코프에서 만들고
+강한 참조 및 약한 참조 카운트를 시험하기</span>
 
-After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
-count of 0. In the inner scope, we create `branch` and associate it with
-`leaf`, at which point when we print the counts, the `Rc<Node>` in `branch`
-will have a strong count of 1 and a weak count of 1 (for `leaf.parent` pointing
-to `branch` with a `Weak<Node>`). When we print the counts in `leaf`, we’ll see
-it will have a strong count of 2, because `branch` now has a clone of the
-`Rc<Node>` of `leaf` stored in `branch.children`, but will still have a weak
-count of 0.
+`leaf`가 생성된 다음, 이것의 `Rc<Node>`는 강한 참조 카운트 1개와 약한 참조 카운트
+0개를 갖습니다. 내부 스코프에서 `branch`를 만들고 `leaf`와 연관짓게 되는데, 이때
+우리가 카운트를 출력하면 `branch`의 `Rc<Node>`는 강한 참조 카운트 1개와
+(`Weak<Node`를 가지고 `branch`를 가리키는 `leaf.parent`에 대한) 약한 참조 카운트
+1개를 갖고 있을 것입니다. `leaf` 내의 카운트를 출력하면 강한 참조 카운트 2개를 갖고 있음을
+보게될 것인제, 이는 `branch`가 이제 `branch.children`에 저장된 `leaf`의
+`Rc<Node>`에 대한 클론을 가지게 되었지만, 여전히 약한 참조 0개를 갖게 될 것이기
+때문입니다.
 
-When the inner scope ends, `branch` goes out of scope and the strong count of
-the `Rc<Node>` decreases to 0, so its `Node` is dropped. The weak count of 1
-from `leaf.parent` has no bearing on whether or not `Node` is dropped, so we
-don’t get any memory leaks!
+내부 스코프가 끝나게 되면, `branch`는 스포프 밖으로 벗어나게 되며 `Rc<Node>`의
+강한 참조 카운트는 0으로 줄어들게 되므로, 이것의 `Node`는 버려지게 됩니다.
+`leaf.parent`로부터 발생된 1개의 약한 참조 카운트는 `Node`가 버려질지 말지에
+대한 어떠한 영향도 주지 않으므로, 아무런 메모리 릭도 발생하지 않았습니다!
 
-If we try to access the parent of `leaf` after the end of the scope, we’ll get
-`None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong
-count of 1 and a weak count of 0, because the variable `leaf` is now the only
-reference to the `Rc<Node>` again.
+만일 우리가 이 스코프의 끝 이후에 `leaf`의 부모에 접근하기를 시도한다면, 우리는
+다시 `None`을 얻게 될 것입니다. 프로그램의 끝 부분에서, `leaf`의 `Rc<Node>`는
+강한 참조 카운트 1개와 약한 참조 카운트 0개를 갖고 있는데, 그 이유는 `leaf` 변수가
+이제 다시 `Rc<Node>`에 대한 유일한 참조자이기 때문입니다.
 
-All of the logic that manages the counts and value dropping is built into
-`Rc<T>` and `Weak<T>` and their implementations of the `Drop` trait. By
-specifying that the relationship from a child to its parent should be a
-`Weak<T>` reference in the definition of `Node`, you’re able to have parent
-nodes point to child nodes and vice versa without creating a reference cycle
-and memory leaks.
+참조 카운트들과 버리는 값들을 관리하는 모든 로직은 `Rc<T>`와
+`Weak<T>`, 그리고 이들의 `Drop` 트레잇에 대한 구현부에 만들어져
+있습니다. 자식으로부터 부모로의 관계를 가 `Node`의 정의 내에서
+`Weak<T>` 참조자로 되어야 함을 특정함으로서, 여러분은 순환 참조와
+메모리 릭을 만들지 않고도 자식 노드를 가리키는 부모 노드 혹은 그 반대의
+것을 가지게 될 수 있습니다.
 
-## Summary
+## 정리
 
-This chapter covered how to use smart pointers to make different guarantees and
-trade-offs than those Rust makes by default with regular references. The
-`Box<T>` type has a known size and points to data allocated on the heap. The
-`Rc<T>` type keeps track of the number of references to data on the heap so
-that data can have multiple owners. The `RefCell<T>` type with its interior
-mutability gives us a type that we can use when we need an immutable type but
-need to change an inner value of that type; it also enforces the borrowing
-rules at runtime instead of at compile time.
+이번 장에서는 러스트가 일반적인 참조자를 가지고 기본적으로 보장하는 것들과는
+다른 보장 및 트레이드 오프를 만들어내기 위해 스마트 포인터를 사용하는 방법을
+다루었습니다. `Box<T>` 타입은 알려진 크기를 갖고 있고 힙에 할당된 데이터를
+가리킵니다. `Rc<T>` 타입은 힙에 있는 데이터에 대한 참조자의 개수를 추적하여
+그 데이터가 여러 개의 소유자들을 갖을 수 있도록 합니다. 내부 가변성을 갖춘
+`RefCell<T>` 타입은 불변 타입을 원하지만 그 타입의 내부 값을 변경하기를
+원할 때 사용할 수 있는 타입을 제공합니다; 이는 또한 컴파일 타임 대신 런타임에
+빌림 규칙을 따르도록 강제합니다.
 
-Also discussed were the `Deref` and `Drop` traits, which enable a lot of the
-functionality of smart pointers. We explored reference cycles that can cause
-memory leaks and how to prevent them using `Weak<T>`.
+또한 `Deref` 및 `Drop` 트레잇을 다루었는데, 이는 스마트 포인터의 수많은
+기능을 활성화해줍니다. 우리는 메모리 릭을 발생시킬 수 있는 순환 참조에 대한
+것과 `Weak<T>`을 이용하여 이들을 방지하는 방법도 탐구하였습니다.
 
-If this chapter has piqued your interest and you want to implement your own
-smart pointers, check out [“The Rustonomicon”][nomicon] for more useful
-information.
+만일 이번 장이 여러분의 흥미를 언짢게 하고 여러분이 직접 여러분만의 스마트
+포인터를 구현하기를 원한다면, [“러스토노미콘”][nomicon]에서 더 유용한
+정보를 확인하세요.
 
 [nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
-Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
-smart pointers.
+다음으로 우리는 러스트의 동시성에 대해 이야기해볼 것입니다. 여러분은 심지어 몇 개의
+새로운 스마트 포인터에 대해서도 배우게 될 것입니다.
