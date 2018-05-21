@@ -13,7 +13,7 @@ parameters and return value. Doing so makes our code more flexible and provides
 more functionality to callers of our function while preventing code duplication.
 
 Continuing with our `largest` function, Listing 10-4 shows two functions that
-both find the largest value in a slice:
+both find the largest value in a slice.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -66,17 +66,17 @@ the largest `i32` in a slice. The `largest_char` function finds the largest
 the duplication by introducing a generic type parameter in a single function.
 
 To parameterize the types in the new function we’ll define, we need to name the
-type parameter, just like we do for the value parameters to a function. You can
+type parameter, just as we do for the value parameters to a function. You can
 use any identifier as a type parameter name. But we’ll use `T` because, by
 convention, parameter names in Rust are short, often just a letter, and Rust’s
-type naming convention is CamelCase. Short for “type,” `T` is the default
+type-naming convention is CamelCase. Short for “type,” `T` is the default
 choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
-parameter name in the signature so that the compiler knows what that name
-means. Similarly, when we use a type parameter name in a function signature, we
-have to declare the type parameter name before we use it. To define the generic
-`largest` function, place type name declarations inside angle brackets (`<>`)
+parameter name in the signature so the compiler knows what that name means.
+Similarly, when we use a type parameter name in a function signature, we have
+to declare the type parameter name before we use it. To define the generic
+`largest` function, place type name declarations inside angle brackets, `<>`,
 between the name of the function and the parameter list, like this:
 
 ```rust,ignore
@@ -140,16 +140,16 @@ traits in the next section. For now, this error states that the body of
 `largest` won’t work for all possible types that `T` could be. Because we want
 to compare values of type `T` in the body, we can only use types whose values
 can be ordered. To enable comparisons, the standard library has the
-`std::cmp::PartialOrd` trait that you can implement on types (see Appendix C,
-“Derivable Traits,” for more on this trait). You’ll learn how to specify that a
-generic type has a particular trait in the “Trait Bounds” section, but let’s
-first explore other ways of using generic type parameters.
+`std::cmp::PartialOrd` trait that you can implement on types (see Appendix C
+for more on this trait). You’ll learn how to specify that a generic type has a
+particular trait in the “Trait Bounds” section, but let’s first explore other
+ways of using generic type parameters.
 
 ### In Struct Definitions
 
 We can also define structs to use a generic type parameter in one or more
 fields using the `<>` syntax. Listing 10-6 shows how to define a `Point<T>`
-struct to hold `x` and `y` coordinate values of any type:
+struct to hold `x` and `y` coordinate values of any type.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -174,11 +174,11 @@ angle brackets just after the name of the struct. Then we can use the generic
 type in the struct definition where we would otherwise specify concrete data
 types.
 
-Note that because we’ve only used one generic type to define `Point<T>`, this
+Note that because we’ve used only one generic type to define `Point<T>`, this
 definition says that the `Point<T>` struct is generic over some type `T`, and
 the fields `x` and `y` are *both* that same type, whatever that type may be. If
 we create an instance of a `Point<T>` that has values of different types, as in
-Listing 10-7, our code won’t compile:
+Listing 10-7, our code won’t compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -194,11 +194,11 @@ fn main() {
 ```
 
 <span class="caption">Listing 10-7: The fields `x` and `y` must be the same
-type because both have the same generic data type `T`</span>
+type because both have the same generic data type `T`.</span>
 
-In this example, when we assign the integer value `5` to `x`, we let the
+In this example, when we assign the integer value 5 to `x`, we let the
 compiler know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
+`Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
 same type as `x`, we’ll get a type mismatch error like this:
 
 ```text
@@ -216,7 +216,7 @@ floating-point variable
 To define a `Point` struct where `x` and `y` are both generics but could have
 different types, we can use multiple generic type parameters. For example, in
 Listing 10-8, we can change the definition of `Point` to be generic over types
-`T` and `U` where `x` is of type `T` and `y` is of type `U`:
+`T` and `U` where `x` is of type `T` and `y` is of type `U`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -245,7 +245,7 @@ could indicate that your code needs restructuring into smaller pieces.
 
 As we did with structs, we can define enums to hold generic data types in their
 variants. Let’s take another look at the `Option<T>` enum that the standard
-library provides that we used in Chapter 6:
+library provides, which we used in Chapter 6:
 
 ```rust
 enum Option<T> {
@@ -276,7 +276,7 @@ The `Result` enum is generic over two types, `T` and `E`, and has two variants:
 `E`. This definition makes it convenient to use the `Result` enum anywhere we
 have an operation that might succeed (return a value of some type `T`) or fail
 (return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3 where `T` was filled in with the type `std::fs::File` when
+file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
 the file was opened successfully and `E` was filled in with the type
 `std::io::Error` when there were problems opening the file.
 
@@ -286,9 +286,9 @@ avoid duplication by using generic types instead.
 
 ### In Method Definitions
 
-As we did in Chapter 5, we can implement methods on structs and enums that have
-generic types in their definitions. Listing 10-9 shows the `Point<T>` struct we
-defined in Listing 10-6 with a method named `x` implemented on it:
+We can implement methods on structs and enums (as we did in Chapter 5) and use
+generic types in their definitions, too. Listing 10-9 shows the `Point<T>`
+struct we defined in Listing 10-6 with a method named `x` implemented on it.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -325,7 +325,7 @@ brackets in `Point` is a generic type rather than a concrete type.
 
 We could, for example, implement methods only on `Point<f32>` instances rather
 than on `Point<T>` instances with any generic type. In Listing 10-10 we use the
-concrete type `f32`, meaning we don’t declare any types after `impl`:
+concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 ```rust
 # struct Point<T> {
@@ -344,10 +344,10 @@ impl Point<f32> {
 struct with a particular concrete type for the generic type parameter `T`</span>
 
 This code means the type `Point<f32>` will have a method named
-`distance_from_origin`, and other instances of `Point<T>` where `T` is not of
+`distance_from_origin` and other instances of `Point<T>` where `T` is not of
 type `f32` will not have this method defined. The method measures how far our
 point is from the point at coordinates (0.0, 0.0) and uses mathematical
-operations that are only available for floating point types.
+operations that are available only for floating point types.
 
 Generic type parameters in a struct definition aren’t always the same as those
 you use in that struct’s method signatures. For example, Listing 10-11 defines
@@ -355,7 +355,7 @@ the method `mixup` on the `Point<T, U>` struct from Listing 10-8. The method
 takes another `Point` as a parameter, which might have different types than the
 `self` `Point` we’re calling `mixup` on. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `T`) and the `y`
-value from the passed-in `Point` (of type `W`):
+value from the passed-in `Point` (of type `W`).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -427,8 +427,8 @@ let float = Some(5.0);
 ```
 
 When Rust compiles this code, it performs monomorphization. During that
-process, the compiler reads the values that have been used in the instances of
-`Option<T>` and identifies two kinds of `Option<T>`: one is `i32` and the other
+process, the compiler reads the values that have been used in `Option<T>`
+instances and identifies two kinds of `Option<T>`: one is `i32` and the other
 is `f64`. As such, it expands the generic definition of `Option<T>` into
 `Option_i32` and `Option_f64`, thereby replacing the generic definition with
 the specific ones.
@@ -457,6 +457,6 @@ fn main() {
 
 Because Rust compiles generic code into code that specifies the type in each
 instance, we pay no runtime cost for using generics. When the code runs, it
-performs just like it would if we had duplicated each definition by hand. The
+performs just as it would if we had duplicated each definition by hand. The
 process of monomorphization makes Rust’s generics extremely efficient at
 runtime.

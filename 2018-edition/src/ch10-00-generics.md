@@ -15,11 +15,11 @@ explore how to define your own types, functions, and methods with generics!
 
 First, we’ll review how to extract a function to reduce code duplication. Next,
 we’ll use the same technique to make a generic function from two functions that
-only differ in the types of their parameters. We’ll also explain how to use
+differ only in the types of their parameters. We’ll also explain how to use
 generic types in struct and enum definitions.
 
 Then you’ll learn how to use *traits* to define behavior in a generic way. You
-can then combine traits with generic types to constrain a generic type to only
+can combine traits with generic types to constrain a generic type to only
 those types that have a particular behavior, as opposed to just any type.
 
 Finally, we’ll discuss *lifetimes*, a variety of generics that give the
@@ -36,7 +36,7 @@ you recognize duplicated code to extract into a function, you’ll start to
 recognize duplicated code that can use generics.
 
 Consider a short program that finds the largest number in a list, as shown in
-Listing 10-1:
+Listing 10-1.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -65,13 +65,13 @@ the first number in the list in a variable named `largest`. Then it iterates
 through all the numbers in the list, and if the current number is greater than
 the number stored in `largest`, it replaces the number in that variable.
 However, if the current number is less than the largest number seen so far, the
-variable doesn’t change and the code moves on to the next number in the list.
+variable doesn’t change, and the code moves on to the next number in the list.
 After considering all the numbers in the list, `largest` should hold the
 largest number, which in this case is 100.
 
 To find the largest number in two different lists of numbers, we can duplicate
 the code in Listing 10-1 and use the same logic at two different places in the
-program, as shown in Listing 10-2:
+program, as shown in Listing 10-2.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -107,7 +107,7 @@ fn main() {
 lists of numbers</span>
 
 Although this code works, duplicating code is tedious and error prone. We also
-have to update the code in multiple places to change it.
+have to update the code in multiple places when we want to change it.
 
 To eliminate this duplication, we can create an abstraction by defining a
 function that operates on any list of integers given to it in a parameter. This
@@ -117,7 +117,7 @@ largest number in a list abstractly.
 In Listing 10-3, we extracted the code that finds the largest number into a
 function named `largest`. Unlike the code in Listing 10-1, which can find the
 largest number in only one particular list, this program can find the largest
-number in two different lists:
+number in two different lists.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -161,7 +161,7 @@ In sum, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
 1. Identify duplicate code.
-2. Extract the duplicate code into the body of the function, and specify the
+2. Extract the duplicate code into the body of the function and specify the
    inputs and return values of that code in the function signature.
 3. Update the two instances of duplicated code to call the function instead.
 
