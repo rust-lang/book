@@ -5,8 +5,8 @@ for any possible value passed are *irrefutable*. An example would be `x` in the
 statement `let x = 5;` because `x` matches anything and therefore cannot fail
 to match. Patterns that can fail to match for some possible value are
 *refutable*. An example would be `Some(x)` in the expression `if let Some(x) =
-a_value`; if the value in `a_value` variable is `None` rather than `Some`, the
-`Some(x)` pattern would not match.
+a_value` because if the value in the `a_value` variable is `None` rather than
+`Some`, the `Some(x)` pattern will not match.
 
 Function parameters, `let` statements, and `for` loops can only accept
 irrefutable patterns, because the program cannot do anything meaningful when
@@ -24,7 +24,7 @@ using the pattern with, depending on the intended behavior of the code.
 Let’s look at an example of what happens when we try to use a refutable pattern
 where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
-pattern. As you might expect, this code will error:
+pattern. As you might expect, this code will not compile.
 
 ```rust,ignore
 let Some(x) = some_option_value;
@@ -54,7 +54,7 @@ To fix the problem where we have a refutable pattern where an irrefutable
 pattern is needed, we can change the code that uses the pattern: instead of
 using `let`, we can use `if let`. Then if the pattern doesn’t match, the code
 will just skip the code in the curly brackets, giving it a way to continue
-validly. Listing 18-9 shows how to fix the code in Listing 18-8:
+validly. Listing 18-9 shows how to fix the code in Listing 18-8.
 
 ```rust
 # let some_option_value: Option<i32> = None;
@@ -69,7 +69,7 @@ patterns instead of `let`</span>
 We’ve given the code an out! This code is perfectly valid, although it means we
 cannot use an irrefutable pattern without receiving an error. If we give `if
 let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
-it will error:
+it will not compile.
 
 ```rust,ignore
 if let x = 5 {

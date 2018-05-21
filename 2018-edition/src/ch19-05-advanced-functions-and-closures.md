@@ -6,13 +6,13 @@ closures, which include function pointers and returning closures.
 ### Function Pointers
 
 We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when we want to pass a
-function we’ve already defined rather than defining a new closure. We do this
-using function pointers to allow us to use functions as arguments to other
+functions to functions! This technique is useful when you want to pass a
+function you’ve already defined rather than defining a new closure. Doing this
+with function pointers will allow you to use functions as arguments to other
 functions. Functions coerce to the type `fn` (with a lowercase f), not to be
-confused with the `Fn` closure trait. The `fn` type is called a function
-pointer. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-35:
+confused with the `Fn` closure trait. The `fn` type is called a *function
+pointer*. The syntax for specifying that a parameter is a function pointer is
+similar to that of closures, as shown in Listing 19-35.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -45,7 +45,7 @@ parameter type directly rather than declaring a generic type parameter with one
 of the `Fn` traits as a trait bound.
 
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), so we can always pass a function pointer as an argument for a
+`FnOnce`), so you can always pass a function pointer as an argument for a
 function that expects a closure. It’s best to write functions using a generic
 type and one of the closure traits so your functions can accept either
 functions or closures.
@@ -54,7 +54,7 @@ An example of where you would want to only accept `fn` and not closures is when
 interfacing with external code that doesn’t have closures: C functions can
 accept functions as arguments, but C doesn’t have closures.
 
-As an example of where we can use either a closure defined inline or a named
+As an example of where you could use either a closure defined inline or a named
 function, let’s look at a use of `map`. To use the `map` function to turn a
 vector of numbers into a vector of strings, we could use a closure, like this:
 
@@ -88,12 +88,12 @@ up compiling to the same code, so use whichever style is clearer to you.
 
 ### Returning Closures
 
-Closures are represented by traits, which means we can’t return closures
-directly. In most cases where we might want to return a trait, we can instead
+Closures are represented by traits, which means you can’t return closures
+directly. In most cases where you might want to return a trait, you can instead
 use the concrete type that implements the trait as the return value of the
-function. But we can’t do that with closures because they don’t have a concrete
-type that is returnable; we’re not allowed to use the function pointer `fn` as
-a return type, for example.
+function. But you can’t do that with closures because they don’t have a
+concrete type that is returnable; you’re not allowed to use the function
+pointer `fn` as a return type, for example.
 
 The following code tries to return a closure directly, but it won’t compile:
 
@@ -130,7 +130,8 @@ fn returns_closure() -> Box<Fn(i32) -> i32> {
 ```
 
 This code will compile just fine. For more about trait objects, refer to the
-“Trait Objects” section in Chapter 17.
+“Using Trait Objects That Allow for Values of Different Types” section in
+Chapter 17.
 
 ## Summary
 
@@ -143,4 +144,3 @@ you to solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
-
