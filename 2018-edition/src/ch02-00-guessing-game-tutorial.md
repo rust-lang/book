@@ -685,8 +685,8 @@ Could not compile `guessing_game`.
 
 The core of the error states that there are *mismatched types*. Rust has a
 strong, static type system. However, it also has type inference. When we wrote
-`let guess = String::new()`, Rust was able to infer that `guess` should be a
-`String` and didn’t make us write the type. The `secret_number`, on the other
+`let mut guess = String::new();`, Rust was able to infer that `guess` should be
+a `String` and didn’t make us write the type. The `secret_number`, on the other
 hand, is a number type. A few number types can have a value between 1 and 100:
 `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a 64-bit
 number; as well as others. Rust defaults to an `i32`, which is the type of
