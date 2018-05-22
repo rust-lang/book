@@ -469,10 +469,10 @@ closure we want to store in the `calculation` field must have one `u32`
 parameter (specified within the parentheses after `Fn`) and must return a
 `u32` (specified after the `->`).
 
-> Note: Functions implement all three of the `Fn` traits too. If what we want
-> to do doesn’t require capturing a value from the environment, we can use a
-> function rather than a closure where we need something that implements an `Fn`
-> trait.
+> Note: Functions can implement all three of the `Fn` traits too. If what we
+> want to do doesn’t require capturing a value from the environment, we can use
+> a function rather than a closure where we need something that implements an
+> `Fn` trait.
 
 The `value` field is of type `Option<u32>`. Before we execute the closure,
 `value` will be `None`. When code using a `Cacher` asks for the *result* of the
