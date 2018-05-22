@@ -71,9 +71,9 @@
 
 ## Thinking in Rust
 
-- [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)
-    - [Closures: Anonymous Functions that Can Capture Their Environment](ch13-01-closures.md)
-    - [Processing a Series of Items with Iterators](ch13-02-iterators.md)
+- [함수형 언어의 특성들: 반복자들과 클로저들](ch13-00-functional-features.md)
+    - [클로저: 환경을 캡쳐할 수 있는 익명 함수](ch13-01-closures.md)
+    - [반복자로 일련의 항목들 처리하기](ch13-02-iterators.md)
     - [Improving Our I/O Project](ch13-03-improving-our-io-project.md)
     - [Comparing Performance: Loops vs. Iterators](ch13-04-performance.md)
 
