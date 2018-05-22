@@ -1,15 +1,14 @@
-## Processing a Series of Items with Iterators
+## 반복자로 일련의 항목들 처리하기
 
-The iterator pattern allows you to perform some task on a sequence of items in
-turn. An iterator is responsible for the logic of iterating over each item and
-determining when the sequence has finished. When you use iterators, you don’t
-have to reimplement that logic yourself.
+반복자 패턴은 일련의 항목들에 대해 순서대로 어떤 작업을 수행할 수 있도록 해줍
+니다. 반복자는 각 항목들을 순회하고 언제 시퀀스가 종료될지 결정하는 로직을
+담당 합니다. 반복자를 사용하면, 저런 로직을 다시 구현할 필요가 없습니다.
 
-In Rust, iterators are *lazy*, meaning they have no effect until you call
-methods that consume the iterator to use it up. For example, the code in
-Listing 13-13 creates an iterator over the items in the vector `v1` by calling
-the `iter` method defined on `Vec`. This code by itself doesn’t do anything
-useful.
+러스트에서, 반복자는 *게으른데*, 항목들을 사용하기위해 반복자를 소비하는
+메서드를 호출하기 전까지 반복자는 아무런 동작을 하지 않습니다.
+예를 들면, 리스트 13-13 의 코드는 `Vec` 에 정의된 `iter` 메서드를 호출함으로써,
+벡터 `v1` 에 있는 항목들에 대한 반복자를 생성 합니다. 이 코드 자체로는 어떤
+유용한 동작을 하진 않습니다.
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -17,17 +16,16 @@ let v1 = vec![1, 2, 3];
 let v1_iter = v1.iter();
 ```
 
-<span class="caption">Listing 13-13: Creating an iterator</span>
+<span class="caption">리스트 13-13: 반복자 생성하기</span>
 
-Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-5 in Chapter 3, we used iterators with `for` loops to execute some code on
-each item, although we glossed over what the call to `iter` did until now.
+일단 반복자를 만들면, 다양한 방법으로 사용할 수 있습니다. 3장의 리스트 3-5 에서,
+각 항목에 대해 어떤 코드를 수행하기 위해 `for` 루프에서 반복자를 사용
+했습니다만, 지금까지 `iter` 에 대한 호출이 무엇을 했는지 대충 넘어 갔었습니다.
 
-The example in Listing 13-14 separates the creation of the iterator from the
-use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
-variable, and no iteration takes place at that time. When the `for` loop is
-called using the iterator in `v1_iter`, each element in the iterator is used in
-one iteration of the loop, which prints out each value.
+리스트 13-14 의 예제는 `for` 루프에서 반복자를 사용하는 부분에서 반복자 생성을
+분리 했습니다. 반복자는 `v1_iter` 변수에 저장되고, 그 시점에 순회는 발생하지
+않습니다. `v1_iter` 에 있는 반복자를 사용하는 `for` 루프가 호출되면,
+루프 순회 마다 반복자의 각 요소가 사용되는데, 각각의 값을 출력 합니다.
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -39,23 +37,22 @@ for val in v1_iter {
 }
 ```
 
-<span class="caption">Listing 13-14: Using an iterator in a `for` loop</span>
+<span class="caption">리스트 13-14: `for` 루프에서 반복자 사용하기</span>
 
-In languages that don’t have iterators provided by their standard libraries,
-you would likely write this same functionality by starting a variable at index
-0, using that variable to index into the vector to get a value, and
-incrementing the variable value in a loop until it reached the total number of
-items in the vector.
+표준 라이브러리에서 반복자를 제공하지 않는 언어에서는, 변수를 인덱스 0으로
+시작해서, 그 변수로 벡터를 색인해서 값을 가져오는데 사용하며, 루프안에서
+벡터에 있는 아이템의 총 갯수까지 그 변수를 증가시키는 방식으로 동일한 기능을
+작성할 수 있습니다.
 
-Iterators handle all that logic for you, cutting down on repetitive code you
-could potentially mess up. Iterators give you more flexibility to use the same
-logic with many different kinds of sequences, not just data structures you can
-index into, like vectors. Let’s examine how iterators do that.
+반복자는 그러한 모든 로직을 대신 처리 하며, 잠재적으로 엉망이 될 수 있는 
+반복적인 코드를 줄여 줍니다. 반복자는 벡터처럼 색인할 수 있는 자료구조 뿐만
+아니라, 많은 다른 종류의 시퀀스에 대해 동일한 로직을 사용할 수 있도록 더 많은
+유연성을 제공 합니다. 반복자가 어떻게 그렇게 하는지 살펴 봅시다.
 
-### The `Iterator` Trait and the `next` Method
+### `Iterator`트레잇과 `next` 메서드
 
-All iterators implement a trait named `Iterator` that is defined in the
-standard library. The definition of the trait looks like this:
+모든 반복자는 표준 라이브러리에 정의된 `Iterator` 라는 이름의 트레잇을 구현 합니
+다. 트레잇의 정의는 아래와 같습니다:
 
 ```rust
 trait Iterator {
@@ -67,21 +64,19 @@ trait Iterator {
 }
 ```
 
-Notice this definition uses some new syntax: `type Item` and `Self::Item`,
-which are defining an *associated type* with this trait. We’ll talk about
-associated types in depth in Chapter 19. For now, all you need to know is that
-this code says implementing the `Iterator` trait requires that you also define
-an `Item` type, and this `Item` type is used in the return type of the `next`
-method. In other words, the `Item` type will be the type returned from the
-iterator.
+이 정의는 몇 개의 새로운 문법을 사용하는 것에 유의하세요: `type Item` 과
+`Self::Item` 은 이 트레잇과 *연관 타입* 을 정의 합니다. 우리는 19장에서
+연관 타입에 대해 자세히 이야기 할 것 입니다. 지금 당장 알아야 할 것은 이 코드가
+`Iterator` 트레잇을 구현하는 것은 `Item` 타입을 정의하는 것 또한 요구하며, 이 
+`Item` 타입이 `next` 메서드의 리턴 타입으로 사용된다는 것을 나타낸다는 것 입니
+다. 다른 말로, `Item` 타입은 반복자로 부터 반환되는 타입이 될 것 입니다.
 
-The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time wrapped in
-`Some` and, when iteration is over, returns `None`.
+`Iterator` 트레잇은 단지 구현자가 하나의 메서드를 정의하도록 요구 합니다: 
+`next` 메서드 입니다. 이 메서드는 반복자의 하나의 항목을 `Some` 에 넣어서 반환
+하고, 반복자가 종료되면 `None` 을 반환 합니다.
 
-We can call the `next` method on iterators directly; Listing 13-15 demonstrates
-what values are returned from repeated calls to `next` on the iterator created
-from the vector:
+반복자의 `next` 메서드를 직접 호출할 수 있습니다; 리스트 13-15 는 벡터로 부터
+생성된 반복자에 대해 반복된 `next` 호출이 어떤 값들을 반환하는지 보여줍니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -99,38 +94,34 @@ fn iterator_demonstration() {
 }
 ```
 
-<span class="caption">Listing 13-15: Calling the `next` method on an
-iterator</span>
+<span class="caption">리스트 13-15: 반복자의 `next` 메서드 호출하기</span>
 
-Note that we needed to make `v1_iter` mutable: calling the `next` method on an
-iterator changes internal state that the iterator uses to keep track of where
-it is in the sequence. In other words, this code *consumes*, or uses up, the
-iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop because the loop took
-ownership of `v1_iter` and made it mutable behind the scenes.
+`v1_iter` 가 변경 가능하도록 만들 필요가 있다는 것에 유의 하세요: 반복자에 대해
+`next` 메서드를 호출하면 시퀀스의 어디에 있는지 추적하기 위해 반복자가 사용하는
+내부 상태를 변경합니다. 다른 말로, 이 코드는 반복자를 *소비 합니다*, 혹은 다 써
+버립니다. `next` 에 대한 각 호출은 반복자로 부터 하나의 항목을 소비 합니다. 
+`for` 루프를 사용할 때는 `v1_iter` 를 변경할 수 있도록 만들 필요가 없는데, 
+루프가 `v1_iter` 의 소유권을 갖고 내부적으로 변경 가능하도록 만들기 때문 입니다.
 
-Also note that the values we get from the calls to `next` are immutable
-references to the values in the vector. The `iter` method produces an iterator
-over immutable references. If we want to create an iterator that takes
-ownership of `v1` and returns owned values, we can call `into_iter` instead of
-`iter`. Similarly, if we want to iterate over mutable references, we can call
-`iter_mut` instead of `iter`.
+`next` 호출로 얻어온 값들은 벡터 안에 있는 값들에 대한 불변 참조라는 점 역시
+유의 하세요. `iter` 메서드는 불변 참조에 대한 반복자를 만듭니다. 만약 `v1` 의
+소유권을 갖고 소유된 값들을 반환하도록 하고 싶다면, `iter` 대신 `into_iter` 를
+호출해야 합니다. 비슷하게, 가변 참조에 대한 반복자를 원한다면, `iter` 대신
+`iter_mut` 을 호출할 수 있습니다.
 
-### Methods that Consume the Iterator
+### 반복자를 소비하는 메서드들
 
-The `Iterator` trait has a number of different methods with default
-implementations provided by the standard library; you can find out about these
-methods by looking in the standard library API documentation for the `Iterator`
-trait. Some of these methods call the `next` method in their definition, which
-is why you’re required to implement the `next` method when implementing the
-`Iterator` trait.
+`Iterator` 트레잇에는 표준 라이브러리에서 기본 구현을 제공하는 다수의 다른
+메서드들이 있습니다; `Iterator` 트레잇에 대한 표준 라이브러리 API 문서를 살펴
+보면, 이 메서드들을 찾을 수 있습니다. 이 메서드들 중 일부는 그들의 구현에서
+`next` 메서드를 호출하는데, 이것이 `Iterator` 트레잇을 구현할 때 `next` 메서드를
+구현해야만 하는 이유 입니다.
 
-Methods that call `next` are called *consuming adaptors*, because calling them
-uses up the iterator. One example is the `sum` method, which takes ownership of
-the iterator and iterates through the items by repeatedly calling `next`, thus
-consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-16 has a
-test illustrating a use of the `sum` method:
+`next` 를 호출하는 메서드들을 *소비하는 어댑터들* 이라고 하는데, 그들을 호출하면
+반복자를 써버리기 때문 입니다. `sum` 메서드가 하나의 예인데, 반복자의 소유권을
+가져오고 반복적으로 `next` 를 호출해서 순회함으로써 반복자를 소비 합니다.
+순회해 나가면서 누적합계에 각 아이템을 더하고 순회가 완료되면 합계를 반환
+합니다. 리스트 13-16 은 `sum` 메서드의 사용을 보여주는 테스트 입니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -147,24 +138,24 @@ fn iterator_sum() {
 }
 ```
 
-<span class="caption">Listing 13-16: Calling the `sum` method to get the total
-of all items in the iterator</span>
+<span class="caption">리스트 13-16: 반복자의 모든 항목에 대한 합계를 얻기 위해
+`sum` 메서드 호출 하기</span>
 
-We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
-ownership of the iterator we call it on.
+`sum` 은 호출한 반복자의 소유권을 갖기 때문에, `sum` 을 호출한 후 `v1_iter` 은
+사용할 수 없습니다.
 
-### Methods that Produce Other Iterators
+### 다른 반복자를 생성하는 메서드들
 
-Other methods defined on the `Iterator` trait, known as *iterator adaptors*,
-allow you to change iterators into different kinds of iterators. You can chain
-multiple calls to iterator adaptors to perform complex actions in a readable
-way. But because all iterators are lazy, you have to call one of the consuming
-adaptor methods to get results from calls to iterator adaptors.
+`Iterator` 트레잇에 정의된 다른 메서드들 중에 *반복자 어댑터들* 로 알려진 메서드
+들은 반복자를 다른 종류의 반복자로 변경하도록 허용 합니다. 복잡한 행위를 수행하
+기 위해 읽기 쉬운 방법으로 반복자 어댑터에 대한 여러개의 호출을 연결할 수 있습
+니다. 하지만 모든 반복자는 게으르기 때문에, 반복자 어댑터들로 부터 결과를 얻기
+위해 소비하는 메서드들 중 하나를 호출 해야 합니다.
 
-Listing 13-17 shows an example of calling the iterator adaptor method `map`,
-which takes a closure to call on each item to produce a new iterator. The
-closure here creates a new iterator in which each item from the vector has been
-incremented by 1. However, this code produces a warning:
+리스트 13-17 은 반복자 어댑터 메서드인 `map` 을 호출하는 예를 보여주는데,
+새로운 반복자를 생성하기 위해 각 항목에 대해 호출할 클로저를 인자로 받습니다.
+여기서 클로저는 벡터의 각 항목에서 1이 증가된 새로운 반복자를 만듭니다.
+그러나, 이 코드는 경고를 발생 합니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -174,10 +165,10 @@ let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-<span class="caption">Listing 13-17: Calling the iterator adaptor `map` to
-create a new iterator</span>
+<span class="caption">리스트 13-17: 새로운 반복자를 만들기 위해 반복자 어댑터
+`map` 호출 하기</span>
 
-The warning we get is this:
+경고 메세지는 이것 입니다:
 
 ```text
 warning: unused `std::iter::Map` which must be used: iterator adaptors are lazy
@@ -189,18 +180,17 @@ and do nothing unless consumed
   |
   = note: #[warn(unused_must_use)] on by default
 ```
+리스트 13-17 의 코드는 아무것도 하지 않습니다; 인자로 넘긴 클로저는 결코 호출
+되지 않습니다. 경고는 이유를 알도록 해주니다: 반복자 어댑터는 게으르고,
+반복자를 여기서 소비할 필요가 있다.
 
-The code in Listing 13-17 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adaptors are lazy, and
-we need to consume the iterator here.
+이것을 고치고 반복자를 소비하기 위해, `collect` 메서드를 사용할 것인데, 12장의
+리스트 12-1 에서 `env::args` 와 함께 사용했습니다. 이 메서드는 반복자를 소비하고
+결과값을 수집 데이터 타입으로 모읍니다.
 
-To fix this and consume the iterator, we’ll use the `collect` method, which we
-used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the
-iterator and collects the resulting values into a collection data type.
-
-In Listing 13-18, we collect the results of iterating over the iterator that’s
-returned from the call to `map` into a vector. This vector will end up
-containing each item from the original vector incremented by 1.
+리스트 13-18 에서, 벡터에 대한 `map` 호출로 부터 반환된 반복자를 순회하면서
+결과를 모읍니다. 이 벡터는 각 항목이 원본 벡터로 부터 1씩 증가된 상태로 될 것
+입니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -212,27 +202,26 @@ let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
-<span class="caption">Listing 13-18: Calling the `map` method to create a new
-iterator and then calling the `collect` method to consume the new iterator and
-create a vector</span>
+<span class="caption">리스트 13-18: 새로운 반복자를 만들기 위해 `map` 메서드를
+호출하고, 새로운 반복자를 소비하고 벡터를 생성하기 위해 `collect` 메서드 호출
+하기</span>
 
-Because `map` takes a closure, we can specify any operation we want to perform
-on each item. This is a great example of how closures let you customize some
-behavior while reusing the iteration behavior that the `Iterator` trait
-provides.
+`map` 은 클로저를 인자로 받기 때문에, 각 항목에 대해 수행하기를 원하는 어떤
+연산도 기술할 수 있습니다. 이것은 `Iterator` 트레잇이 제공하는 반복자 행위를
+재사용 하면서 클로저가 어떻게 일부 행위를 맞춤 조작할 수 있는지를 보여주는
+굉장한 예제 입니다.
 
-### Using Closures that Capture Their Environment
+### 환경을 캡쳐하는 클로저 사용하기
 
-Now that we’ve introduced iterators, we can demonstrate a common use of
-closures that capture their environment by using the `filter` iterator adaptor.
-The `filter` method on an iterator takes a closure that takes each item from
-the iterator and returns a Boolean. If the closure returns `true`, the value
-will be included in the iterator produced by `filter`. If the closure returns
-`false`, the value won’t be included in the resulting iterator.
+이제 반복자를 소개했으니, `filter` 반복자 어댑터를 사용해서 환경을 캡쳐하는
+클로저의 일반적인 사용을 보여줄 수 있습니다. 반복자의 `filter` 메서드는 반복자로
+부터 각 항목을 받아 Boolean 을 반환하는 클로저를 인자로 받습니다. 만약 클로저가
+`true` 를 반환하면, 그 값은 `filter` 에 의해 생성되는 반복자에 포함될 것 입니다.
+클로저가 `false` 를 반환하면, 결과로 나오는 반복자에 포함되지 않을 것 입니다.
 
-In Listing 13-19, we use `filter` with a closure that captures the `shoe_size`
-variable from its environment to iterate over a collection of `Shoe` struct
-instances. It will return only shoes that are the specified size.
+리스트 13-19 에서, `Shoe` 구조체 인스턴스들의 컬렉션을 순회하기 위해 `filter`
+와 그 환경으로 부터 `shoe_size` 변수를 캡쳐하는 클로저를 사용 합니다. 그것은
+기술된 크기의 신발들만 반환 할 것 입니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -269,44 +258,39 @@ fn filters_by_size() {
 }
 ```
 
-<span class="caption">Listing 13-19: Using the `filter` method with a closure
-that captures `shoe_size`</span>
+<span class="caption">리스팅 13-19: `shoe_size` 를 캡쳐하는 클로저와 `filter`
+메서드 사용하기</span>
 
-The `shoes_in_my_size` function takes ownership of a vector of shoes and a shoe
-size as parameters. It returns a vector containing only shoes of the specified
-size.
+`shoes_in_my_size` 함수는 파라미터로 신발들의 벡터에 대한 소유권과 신발 크기를
+받습니다. 그것은 지정된 크기의 신발들만을 포함하는 벡터를 반환 합니다.
 
-In the body of `shoes_in_my_size`, we call `into_iter` to create an iterator
-that takes ownership of the vector. Then we call `filter` to adapt that
-iterator into a new iterator that only contains elements for which the closure
-returns `true`.
+`shoes_in_my_size` 의 구현부에서, 벡터의 소유권을 갖는 반복자를 생성하기 위해
+`into_iter` 를 호출 합니다. 그 다음 그 반복자를 클로저가 `true` 를 반환한
+요소들만 포함하는 새로운 반복자로 바꾸기 위해 `filter` 를 호출 합니다.
 
-The closure captures the `shoe_size` parameter from the environment and
-compares the value with each shoe’s size, keeping only shoes of the size
-specified. Finally, calling `collect` gathers the values returned by the
-adapted iterator into a vector that’s returned by the function.
+클로저는 환경에서 `shoe_size` 매개 변수를 캡처하고, 지정된 크기의 신발만
+유지하면서 각 신발의 크기와 값을 비교합니다. 마지막으로,`collect`를 호출하면
+적용된 반복자에 의해 리턴된 값을 함수가 리턴한 벡터로 모으게됩니다.
 
-The test shows that when we call `shoes_in_my_size`, we get back only shoes
-that have the same size as the value we specified.
+테스트는 `shoes_in_my_size` 를 호출 했을 때, 지정된 값과 동일한 사이즈를 갖는
+신발들만 돌려받는 다는 것을 보여 줍니다.
 
-### Creating Our Own Iterators with the `Iterator` Trait
+### `Iterator` 트레잇으로 자신만의 반복자 만들기
 
-We’ve shown that you can create an iterator by calling `iter`, `into_iter`, or
-`iter_mut` on a vector. You can create iterators from the other collection
-types in the standard library, such as hash map. You can also create iterators
-that do anything you want by implementing the `Iterator` trait on your own
-types. As previously mentioned, the only method you’re required to provide a
-definition for is the `next` method. Once you’ve done that, you can use all
-other methods that have default implementations provided by the `Iterator`
-trait!
+벡터에 대해 `iter`, `into_iter` 혹은 `iter_mut` 을 호출해서 반복자를 생성할 수
+있다는 것을 보았습니다. 해시맵과 같은 표준 라이브러리에 있는 다른 컬렉션
+타입으로 부터 반복자를 생성할 수 있습니다. 자신만의 타입에 대해 `Iterator`
+트레잇을 구현함으로써 원하는 동작을하는 반복자를 생성하는것 역시 가능 합니다.
+이전에 언급했던 것 처럼, 정의를 제공해야 하는 유일한 메서드는 `next` 메서드 입
+니다. 그러고 나면, `Iterator` 트레잇에서 제공하는 기본구현을 갖는 다른 모든
+메서드를 사용할 수 있습니다!
 
-To demonstrate, let’s create an iterator that will only ever count from 1 to 5.
-First, we’ll create a struct to hold some values. Then we’ll make this struct
-into an iterator by implementing the `Iterator` trait and using the values in
-that implementation.
+이것을 보여주기 위해 1부터 5까지 셀 수있는 반복자를 만듭니다.
+우선, 어떤 값들을 유지하는 구조체를 만들 것 입니다. 그 다음 `Iterator` 트레잇을
+구현하고 그 구현에서 값들을 사용함으로써 이 구조체를 반복자로 만들 것 입니다.
 
-Listing 13-20 has the definition of the `Counter` struct and an associated
-`new` function to create instances of `Counter`:
+리스트 13-20 에는 `Counter` 구조체의 정의와 `Counter` 인스턴스를 생성하는 연관된
+`new` 함수가 있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -322,19 +306,18 @@ impl Counter {
 }
 ```
 
-<span class="caption">Listing 13-20: Defining the `Counter` struct and a `new`
-function that creates instances of `Counter` with an initial value of 0 for
-`count`</span>
+<span class="caption">리스트 13-20: `Counter` 구조체와 `count` 의 초기값 0 으로
+`Counter` 의 인스턴스를 생성하는 `new` 함수 정의하기</span>
 
-The `Counter` struct has one field named `count`. This field holds a `u32`
-value that will keep track of where we are in the process of iterating from 1
-to 5. The `count` field is private because we want the implementation of
-`Counter` to manage its value. The `new` function enforces the behavior of
-always starting new instances with a value of 0 in the `count` field.
+`Counter` 구조체는 `count` 라는 이름의 하나의 필드를 갖습니다. 이 필드는 `u32`
+타입의 값을 갖는데 1부터 5까지 순회하는데 어디까지 진행했는지를 추적할 것
+입니다. `count` 필드는 `Counter` 구현이 그 값을 관리하길 원하기 때문에 외부로
+노출되지 않습니다. `new` 함수는 항상 새로운 인스턴스가 `count` 필드에 0을 담은
+채로 시작하도록 강제합니다.
 
-Next, we’ll implement the `Iterator` trait for our `Counter` type by defining
-the body of the `next` method to specify what we want to happen when this
-iterator is used, as shown in Listing 13-21:
+다음으로, 이 반복자가 사용될 때 우리가 원하는 것을 지정하기 위해 `next` 메소드의
+본문을 정의함으로써 `Counter` 타입에 대한 `Iterator` 특성을 구현할 것입니다,
+리스트 13-21 참조:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -358,24 +341,24 @@ impl Iterator for Counter {
 }
 ```
 
-<span class="caption">Listing 13-21: Implementing the `Iterator` trait on our
-`Counter` struct</span>
+<span class="caption">리스트 13-21: `Counter` 구조체에 대해 `Iterator` 트레잇
+구현하기</span>
 
-We set the associated `Item` type for our iterator to `u32`, meaning the
-iterator will return `u32` values. Again, don’t worry about associated types
-yet, we’ll cover them in Chapter 19.
+우리의 반복자를 위해 연관된 `Item` 타입을 `u32` 로 지정했는데, 이는 반복자가
+`u32` 값을 반환한다는 것을 의미 합니다. 다시, 아직 연관 타입에 대해 걱정하시
+마세요, 19장에서 다룰 것입니다.
 
-We want our iterator to add 1 to the current state, so we initialized `count`
-to 0 so it would return 1 first. If the value of `count` is less than 6, `next`
-will return the current value wrapped in `Some`, but if `count` is 6 or higher,
-our iterator will return `None`.
+우리는 우리의 반복자가 현재 상태에 1을 더하길 원합니다, 그래서 `count` 를 0 으로
+초기화 했고 처음엔 1을 반환할 것 입니다. `count` 의 값이 6 보다 작다면, `next`
+는 `Some` 으로 포장된 현재 값을 리턴할 것이며, `count` 가 6 이거나 더 크다면,
+우리의 반복자는 `None` 을 반환할 것 입니다.
 
-#### Using Our `Counter` Iterator’s `next` Method
+#### `Counter` 반복자의 `next` 메서드 사용하기
 
-Once we’ve implemented the `Iterator` trait, we have an iterator! Listing 13-22
-shows a test demonstrating that we can use the iterator functionality of our
-`Counter` struct by calling the `next` method on it directly, just as we did
-with the iterator created from a vector in Listing 13-15.
+`Iterator` 트레잇을 구현 했다면, 반복자를 갖게 됩니다! 리스트 13-22 는 리스트
+13-15 에서 벡터로 부터 생셩된 반복자에 했던 것 처럼, `Counter` 구조체에 직접
+`next` 메서드를 호출 함으로써 반복자 기능을 사용할 수 있다는 것을 보여주는
+테스트를 보여 줍니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -411,24 +394,22 @@ fn calling_next_directly() {
 }
 ```
 
-<span class="caption">Listing 13-22: Testing the functionality of the `next`
-method implementation</span>
+<span class="caption">리스트 13-22: `next` 메서드 구현의 기능 테스트</span>
 
-This test creates a new `Counter` instance in the `counter` variable and then
-calls `next` repeatedly, verifying that we have implemented the behavior we
-want this iterator to have: returning the values from 1 to 5.
+이 테스트는 `counter` 변수에 새로운 `Counter` 인스턴스를 생성하고 `next` 를
+반복적으로 호출하면서, 이 반복자가 우리가 원하는 행위를 구현했다는 것을 검증
+합니다: 1 부터 5까지의 값을 반환함.
 
-#### Using Other `Iterator` Trait Methods
+#### 다른 `Iterator` 메서드들 사용하기
 
-We implemented the `Iterator` trait by defining the `next` method, so we
-can now use any `Iterator` trait method’s default implementations as defined in
-the standard library, because they all use the `next` method’s functionality.
+우리는 `next` 메서드를 정의함으로써 `Iterator` 트레잇을 구현했습니다, 그래서
+표준 라이브러리에 정의된 `Iterator` 트레잇 메서드들의 기본 구현을 사용할 수 있
+는데, 그들은 모두 `next` 메서드의 기능을 사용하기 때문 입니다.
 
-For example, if for some reason we wanted to take the values produced by an
-instance of `Counter`, pair them with values produced by another `Counter`
-instance after skipping the first value, multiply each pair together, keep only
-those results that are divisible by 3, and add all the resulting values
-together, we could do so, as shown in the test in Listing 13-23:
+예를 들면, 만약 어떤 이유에서든 `Counter` 인스턴스에 의해 생성된 값들을 얻고,
+다른 `Counter` 인스턴스에 의해 생성된 값과 쌍을 이루며, 각 쌍을 함께 곱하고,
+3으로 나눠지는 값들만 유지하며, 모든 결과 값을 함께 더하고 싶다면, 리스트 12-23
+의 테스트에서 보여지는 것처럼, 그렇게 할 수 있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -470,13 +451,13 @@ fn using_other_iterator_trait_methods() {
 }
 ```
 
-<span class="caption">Listing 13-23: Using a variety of `Iterator` trait
-methods on our `Counter` iterator</span>
+<span class="caption">리스트 13-23: `Counter` 반복자에 대해 `Iterator` 트레잇의
+다양햔 메서드 사용하기</span>
 
-Note that `zip` produces only four pairs; the theoretical fifth pair `(5,
-None)` is never produced because `zip` returns `None` when either of its input
-iterators return `None`.
+`zip` 은 단지 네 개의 쌍을 생성한다는데 유의 하세요; 이론적으로 다섯번째 쌍인
+`(5, None)` 은 결코 생성되지 않는데, `zip` 은 입력 반복자 중 하나라도 `None` 을
+반환하면 `None` 을 반환하기 때문 입니다.
 
-All of these method calls are possible because we specified how the `next`
-method works, and the standard library provides default implementations for
-other methods that call `next`.
+우리가 `next` 메서드가 어떻게 동작하는지에 대해 기술했기 때문에 이 모든 메서드
+호출이 가능하며, 표준 라이브러리는 `next` 를 호출하는 다른 메서드들의 기본 구현
+을 제공 합니다.
