@@ -92,7 +92,7 @@ members = [
 Then generate a new library crate named `add-one`:
 
 ```text
-$ cargo new add-one
+$ cargo new add-one --lib
      Created library `add-one` project
 ```
 
