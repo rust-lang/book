@@ -20,4 +20,4 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: first-edition/associated-types.html
-[2]: second-edition/ch19-03-advanced-traits.html#associated-types-specify-placeholder-types-in-trait-definitions
+[2]: second-edition/ch19-03-advanced-traits.html#specifying-placeholder-types-in-trait-definitions-with-associated-types

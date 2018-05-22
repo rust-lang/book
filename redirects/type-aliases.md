@@ -17,5 +17,5 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: first-edition/type-aliases.html
-[2]: second-edition/ch19-04-advanced-types.html#type-aliases-create-type-synonyms
+[2]: second-edition/ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
 
