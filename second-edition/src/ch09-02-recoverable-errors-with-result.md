@@ -9,7 +9,7 @@
 `Result` 열거형은 다음과 같이 `Ok`와 `Err`라는 두 개의 variant를 갖도록 정의되어 있음을
 상기하세요:
 
-[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
+[handle_failure]: ch02-00-guessing-game-tutorial.html#result-타입으로-잠재된-실패-다루기
 
 ```rust
 enum Result<T, E> {
