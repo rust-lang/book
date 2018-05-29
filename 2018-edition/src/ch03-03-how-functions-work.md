@@ -320,7 +320,7 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Running this code produces an error, as follows:
+Compiling this code produces an error, as follows:
 
 ```text
 error[E0308]: mismatched types
