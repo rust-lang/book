@@ -37,9 +37,9 @@ $ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
-The first command creates a new binary executable called *hello_cargo*.
-We’ve named our project *hello_cargo*, and Cargo creates its files in a directory 
-of the same name.
+The first command creates a new directory called *hello_cargo*. We’ve named
+our project *hello_cargo*, and Cargo creates its files in a directory of the
+same name.
 
 Go into the *hello_cargo* directory and list the files. You’ll see that Cargo
 has generated two files and one directory for us: a *Cargo.toml* file and a
