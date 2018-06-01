@@ -18,13 +18,12 @@ To set up a new project, go to the *projects* directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
 ```text
-$ cargo new guessing_game --bin
+$ cargo new guessing_game
 $ cd guessing_game
 ```
 
 The first command, `cargo new`, takes the name of the project (`guessing_game`)
-as the first argument. The `--bin` flag tells Cargo to make a binary project,
-like the one in Chapter 1. The second command changes to the new project’s
+as the first argument. The second command changes to the new project’s
 directory.
 
 Look at the generated *Cargo.toml* file:

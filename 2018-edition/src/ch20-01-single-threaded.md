@@ -26,7 +26,7 @@ we’ll work on. The standard library offers a `std::net` module that lets us do
 this. Let’s make a new project in the usual fashion:
 
 ```text
-$ cargo new hello --bin
+$ cargo new hello
      Created binary (application) `hello` project
 $ cd hello
 ```

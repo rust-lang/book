@@ -10,7 +10,7 @@ We’ll create a skeleton of a library that provides some general networking
 functionality; we’ll concentrate on the organization of the modules and
 functions, but we won’t worry about what code goes in the function bodies.
 We’ll call our library `communicator`. To create a library, pass the `--lib`
-option instead of `--bin`:
+option:
 
 ```text
 $ cargo new communicator --lib
@@ -32,8 +32,7 @@ mod tests {
 }
 ```
 
-Cargo creates an example test to help us get our library started, rather than
-the “Hello, world!” binary that we get when we use the `--bin` option. We’ll
+Cargo creates an example test to help us get our library started. We’ll
 look at the `#[]` and `mod tests` syntax in the “Using `super` to Access a
 Parent Module” section later in this chapter, but for now, leave this code at
 the bottom of *src/lib.rs*.

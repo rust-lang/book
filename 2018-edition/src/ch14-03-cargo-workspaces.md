@@ -44,7 +44,7 @@ Next, we’ll create the `adder` binary crate by running `cargo new` within the
 *add* directory:
 
 ```text
-$ cargo new --bin adder
+$ cargo new adder
      Created binary (application) `adder` project
 ```
 
