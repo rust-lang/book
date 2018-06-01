@@ -124,7 +124,7 @@ it will need to store the closure. We saw a solution to this problem earlier.
 We can use a trait object:
 
 ```rust
-fn returns_closure() -> Box<Fn(i32) -> i32> {
+fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
     Box::new(|x| x + 1)
 }
 ```

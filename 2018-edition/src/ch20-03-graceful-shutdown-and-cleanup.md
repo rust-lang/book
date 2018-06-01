@@ -452,16 +452,16 @@ pub struct ThreadPool {
 }
 
 trait FnBox {
-    fn call_box(self: Box<Self>);
+    fn call_box(self: Box<dyn Self>);
 }
 
 impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
+    fn call_box(self: Box<dyn F>) {
         (*self)()
     }
 }
 
-type Job = Box<FnBox + Send + 'static>;
+type Job = Box<dyn FnBox + Send + 'static>;
 
 impl ThreadPool {
     /// Create a new ThreadPool.

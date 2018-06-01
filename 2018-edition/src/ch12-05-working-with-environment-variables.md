@@ -172,11 +172,10 @@ won’t compile yet:
 #     case_sensitive: bool,
 # }
 #
-pub fn run(config: Config) -> Result<(), Box<Error>> {
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let mut f = File::open(config.filename)?;
 
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+    let contents = fs::read_to_string(config.filename)?;
 
     let results = if config.case_sensitive {
         search(&config.query, &contents)

@@ -276,7 +276,7 @@ will print each line returned from `search`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn run(config: Config) -> Result<(), Box<Error>> {
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let mut f = File::open(config.filename)?;
 
     let contents = fs::read_to_string(config.filename)?;

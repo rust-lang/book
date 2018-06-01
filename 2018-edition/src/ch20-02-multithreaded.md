@@ -891,7 +891,7 @@ types shorter. Look at Listing 20-19.
 # use std::sync::mpsc;
 # struct Worker {}
 
-type Job = Box<FnOnce() + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     // --snip--
@@ -995,11 +995,11 @@ the value inside the `Box<T>` will be: recall in Chapter 15 that we used
 to store in a `Box<T>` to get a value of a known size.
 
 As you saw in Listing 17-15, we can write methods that use the syntax `self:
-Box<Self>`, which allows the method to take ownership of a `Self` value stored
+Box<dyn Self>`, which allows the method to take ownership of a `Self` value stored
 in a `Box<T>`. That’s exactly what we want to do here, but unfortunately Rust
 won’t let us: the part of Rust that implements behavior when a closure is
-called isn’t implemented using `self: Box<Self>`. So Rust doesn’t yet
-understand that it could use `self: Box<Self>` in this situation to take
+called isn’t implemented using `self: Box<dyn Self>`. So Rust doesn’t yet
+understand that it could use `self: Box<dyn Self>` in this situation to take
 ownership of the closure and move the closure out of the `Box<T>`.
 
 Rust is still a work in progress with places where the compiler could be
@@ -1009,9 +1009,9 @@ finished this book, we would love for you to join in.
 
 But for now, let’s work around this problem using a handy trick. We can tell
 Rust explicitly that in this case we can take ownership of the value inside the
-`Box<T>` using `self: Box<Self>`; then, once we have ownership of the closure,
+`Box<T>` using `self: Box<dyn Self>`; then, once we have ownership of the closure,
 we can call it. This involves defining a new trait `FnBox` with the method
-`call_box` that will use `self: Box<Self>` in its signature, defining `FnBox`
+`call_box` that will use `self: Box<dyn Self>` in its signature, defining `FnBox`
 for any type that implements `FnOnce()`, changing our type alias to use the new
 trait, and changing `Worker` to use the `call_box` method. These changes are
 shown in Listing 20-21.
@@ -1020,16 +1020,16 @@ shown in Listing 20-21.
 
 ```rust,ignore
 trait FnBox {
-    fn call_box(self: Box<Self>);
+    fn call_box(self: Box<dyn Self>);
 }
 
 impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
+    fn call_box(self: Box<dyn F>) {
         (*self)()
     }
 }
 
-type Job = Box<FnBox + Send + 'static>;
+type Job = Box<dyn FnBox + Send + 'static>;
 
 // --snip--
 
@@ -1054,11 +1054,11 @@ impl Worker {
 ```
 
 <span class="caption">Listing 20-21: Adding a new trait `FnBox` to work around
-the current limitations of `Box<FnOnce()>`</span>
+the current limitations of `Box<dyn FnOnce()>`</span>
 
 First, we create a new trait named `FnBox`. This trait has the one method
 `call_box`, which is similar to the `call` methods on the other `Fn*` traits
-except that it takes `self: Box<Self>` to take ownership of `self` and move the
+except that it takes `self: Box<dyn Self>` to take ownership of `self` and move the
 value out of the `Box<T>`.
 
 Next, we implement the `FnBox` trait for any type `F` that implements the

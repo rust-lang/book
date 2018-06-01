@@ -83,15 +83,15 @@ Let’s get started on the implementation of the library! We know we need a
 public `Post` struct that holds some content, so we’ll start with the
 definition of the struct and an associated public `new` function to create an
 instance of `Post`, as shown in Listing 17-12. We’ll also make a private
-`State` trait. Then `Post` will hold a trait object of `Box<State>` inside an
-`Option` in a private field named `state`. You’ll see why the `Option` is
-necessary in a bit.
+`State` trait. Then `Post` will hold a trait object of `Box<dyn State>`
+inside an `Option<T>` in a private field named `state`. You’ll see why the
+`Option<T>` is necessary in a bit.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub struct Post {
-    state: Option<Box<State>>,
+    state: Option<Box<dyn State>>,
     content: String,
 }
 
@@ -204,7 +204,7 @@ change its state from `Draft` to `PendingReview`. Listing 17-15 shows this code:
 
 ```rust
 # pub struct Post {
-#     state: Option<Box<State>>,
+#     state: Option<Box<dyn State>>,
 #     content: String,
 # }
 #
@@ -218,13 +218,13 @@ impl Post {
 }
 
 trait State {
-    fn request_review(self: Box<Self>) -> Box<State>;
+    fn request_review(self: Box<dyn Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
-    fn request_review(self: Box<Self>) -> Box<State> {
+    fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
         Box::new(PendingReview {})
     }
 }
@@ -232,7 +232,7 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-    fn request_review(self: Box<Self>) -> Box<State> {
+    fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
         self
     }
 }
@@ -249,9 +249,9 @@ current state and returns a new state.
 We’ve added the `request_review` method to the `State` trait; all types that
 implement the trait will now need to implement the `request_review` method.
 Note that rather than having `self`, `&self`, or `&mut self` as the first
-parameter of the method, we have `self: Box<Self>`. This syntax means the
+parameter of the method, we have `self: Box<dyn Self>`. This syntax means the
 method is only valid when called on a `Box` holding the type. This syntax takes
-ownership of `Box<Self>`, invalidating the old state so the state value of the
+ownership of `Box<dyn Self>`, invalidating the old state so the state value of the
 `Post` can transform into a new state.
 
 To consume the old state, the `request_review` method needs to take ownership
@@ -293,7 +293,7 @@ state is approved, as shown in Listing 17-16:
 
 ```rust
 # pub struct Post {
-#     state: Option<Box<State>>,
+#     state: Option<Box<dyn State>>,
 #     content: String,
 # }
 #
@@ -307,19 +307,19 @@ impl Post {
 }
 
 trait State {
-    fn request_review(self: Box<Self>) -> Box<State>;
-    fn approve(self: Box<Self>) -> Box<State>;
+    fn request_review(self: Box<dyn Self>) -> Box<dyn State>;
+    fn approve(self: Box<dyn Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
-#     fn request_review(self: Box<Self>) -> Box<State> {
+#     fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
 #         Box::new(PendingReview {})
 #     }
 #
     // --snip--
-    fn approve(self: Box<Self>) -> Box<State> {
+    fn approve(self: Box<dyn Self>) -> Box<dyn State> {
         self
     }
 }
@@ -327,12 +327,12 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-#     fn request_review(self: Box<Self>) -> Box<State> {
+#     fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
 #         self
 #     }
 #
     // --snip--
-    fn approve(self: Box<Self>) -> Box<State> {
+    fn approve(self: Box<dyn Self>) -> Box<dyn State> {
         Box::new(Published {})
     }
 }
@@ -340,11 +340,11 @@ impl State for PendingReview {
 struct Published {}
 
 impl State for Published {
-    fn request_review(self: Box<Self>) -> Box<State> {
+    fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
         self
     }
 
-    fn approve(self: Box<Self>) -> Box<State> {
+    fn approve(self: Box<dyn Self>) -> Box<dyn State> {
         self
     }
 }
@@ -374,7 +374,7 @@ otherwise, we want to return an empty string slice, as shown in Listing 17-17:
 #     fn content<'a>(&self, post: &'a Post) -> &'a str;
 # }
 # pub struct Post {
-#     state: Option<Box<State>>,
+#     state: Option<Box<dyn State>>,
 #     content: String,
 # }
 #
@@ -397,7 +397,7 @@ returned from using the `content` method on the `state` value.
 
 We call the `as_ref` method on the `Option` because we want a reference to the
 value inside the `Option` rather than ownership of the value. Because `state`
-is an `Option<Box<State>>`, when we call `as_ref`, an `Option<&Box<State>>` is
+is an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn State>>` is
 returned. If we didn’t call `as_ref`, we would get an error because we can’t
 move `state` out of the borrowed `&self` of the function parameter.
 
@@ -408,7 +408,7 @@ the “Cases When You Have More Information Than the Compiler” section of Chap
 9 when we know that a `None` value is never possible, even though the compiler
 isn’t able to understand that.
 
-At this point, when we call `content` on the `&Box<State>`, deref coercion will
+At this point, when we call `content` on the `&Box<dyn State>`, deref coercion will
 take effect on the `&` and the `Box` so the `content` method will ultimately be
 called on the type that implements the `State` trait. That means we need to add
 `content` to the `State` trait definition, and that is where we’ll put the

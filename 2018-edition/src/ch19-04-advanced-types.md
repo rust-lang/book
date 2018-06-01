@@ -66,7 +66,7 @@ The main use case for type synonyms is to reduce repetition. For example, we
 might have a lengthy type like this:
 
 ```rust,ignore
-Box<Fn() + Send + 'static>
+Box<dyn Fn() + Send + 'static>
 ```
 
 Writing this lengthy type in function signatures and as type annotations all
@@ -74,13 +74,13 @@ over the code can be tiresome and error prone. Imagine having a project full of
 code like that in Listing 19-32.
 
 ```rust
-let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
+let f: Box<dyn Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
-fn takes_long_type(f: Box<Fn() + Send + 'static>) {
+fn takes_long_type(f: Box<dyn Fn() + Send + 'static>) {
     // --snip--
 }
 
-fn returns_long_type() -> Box<Fn() + Send + 'static> {
+fn returns_long_type() -> Box<dyn Fn() + Send + 'static> {
     // --snip--
 #     Box::new(|| ())
 }
@@ -93,7 +93,7 @@ Listing 19-33, we’ve introduced an alias named `Thunk` for the verbose type an
 can replace all uses of the type with the shorter alias `Thunk`.
 
 ```rust
-type Thunk = Box<Fn() + Send + 'static>;
+type Thunk = Box<dyn Fn() + Send + 'static>;
 
 let f: Thunk = Box::new(|| println!("hi"));
 
@@ -305,8 +305,8 @@ We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 sized type: traits. Every trait is a dynamically sized type we can refer to by
 using the name of the trait. In Chapter 17 in the “Using Trait Objects that
 Allow for Values of Different Types” section, we mentioned that to use traits
-as trait objects, we must put them behind a pointer, such as `&Trait` or
-`Box<Trait>` (`Rc<Trait>` would work too).
+as trait objects, we must put them behind a pointer, such as `&dyn Trait` or
+`Box<dyn Trait>` (`Rc<dyn Trait>` would work too).
 
 To work with DSTs, Rust has a particular trait called the `Sized` trait to
 determine whether or not a type’s size is known at compile time. This trait is

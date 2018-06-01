@@ -398,7 +398,7 @@ happens if the type implementing the trait in the trait object has a lifetime
 of its own. Consider Listing 19-19 where we have a trait `Red` and a struct
 `Ball`. The `Ball` struct holds a reference (and thus has a lifetime parameter)
 and also implements trait `Red`. We want to use an instance of `Ball` as the
-trait object `Box<Red>`.
+trait object `Box<dyn Red>`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -414,7 +414,7 @@ impl<'a> Red for Ball<'a> { }
 fn main() {
     let num = 5;
 
-    let obj = Box::new(Ball { diameter: &num }) as Box<Red>;
+    let obj = Box::new(Ball { diameter: &num }) as Box<dyn Red>;
 }
 ```
 
@@ -434,10 +434,10 @@ rules for working with lifetimes and trait objects:
   explicit.
 
 When we must be explicit, we can add a lifetime bound on a trait object like
-`Box<Red>` using the syntax `Box<Red + 'static>` or `Box<Red + 'a>`, depending
-on whether the reference lives for the entire program or not. As with the other
-bounds, the syntax adding a lifetime bound means that any implementor of the
-`Red` trait that has references inside the type must have the same lifetime
-specified in the trait object bounds as those references.
+`Box<dyn Red>` using the syntax `Box<dyn Red + 'static>` or `Box<dyn Red +
+'a>`, depending on whether the reference lives for the entire program or not.
+As with the other bounds, the syntax adding a lifetime bound means that any
+implementor of the `Red` trait that has references inside the type must have
+the same lifetime specified in the trait object bounds as those references.
 
 Next, let’s look at some other advanced features that manage traits.

@@ -43,12 +43,13 @@ To implement the behavior we want `gui` to have, we’ll define a trait named
 takes a *trait object*. A trait object points to an instance of a type that
 implements the trait we specify. We create a trait object by specifying some
 sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, and then
-specifying the relevant trait. (We’ll talk about the reason trait objects must
-use a pointer in Chapter 19 in the section “Dynamically Sized Types & Sized”.)
-We can use trait objects in place of a generic or concrete type. Wherever we
-use a trait object, Rust’s type system will ensure at compile time that any
-value used in that context will implement the trait object’s trait.
-Consequently, we don’t need to know all the possible types at compile time.
+specifying the relevant trait, and add a `dyn` keyword. (We’ll talk about the
+reason trait objects must use a pointer in Chapter 19 in the section
+“Dynamically Sized Types & Sized”.) We can use trait objects in place of a
+generic or concrete type. Wherever we use a trait object, Rust’s type system
+will ensure at compile time that any value used in that context will
+implement the trait object’s trait. Consequently, we don’t need to know all
+the possible types at compile time.
 
 We’ve mentioned that in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
@@ -77,8 +78,8 @@ pub trait Draw {
 This syntax should look familiar from our discussions on how to define traits
 in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
 `Screen` that holds a vector named `components`. This vector is of type
-`Box<Draw>`, which is a trait object; it’s a stand-in for any type inside a
-`Box` that implements the `Draw` trait.
+`Box<dyn Draw>`, which is a trait object; it’s a stand-in for any type inside
+a `Box` that implements the `Draw` trait.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -88,7 +89,7 @@ in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
 # }
 #
 pub struct Screen {
-    pub components: Vec<Box<Draw>>,
+    pub components: Vec<Box<dyn Draw>>,
 }
 ```
 
@@ -107,7 +108,7 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 # }
 #
 # pub struct Screen {
-#     pub components: Vec<Box<Draw>>,
+#     pub components: Vec<Box<dyn Draw>>,
 # }
 #
 impl Screen {
@@ -280,8 +281,8 @@ then it must be a duck! In the implementation of `run` on `Screen` in Listing
 17-5, `run` doesn’t need to know what the concrete type of each component is.
 It doesn’t check whether a component is an instance of a `Button` or a
 `SelectBox`, it just calls the `draw` method on the component. By specifying
-`Box<Draw>` as the type of the values in the `components` vector, we’ve defined
-`Screen` to need values that we can call the `draw` method on.
+`Box<dyn Draw>` as the type of the values in the `components` vector, we’ve
+defined `Screen` to need values that we can call the `draw` method on.
 
 The advantage of using trait objects and Rust’s type system to write code
 similar to code using duck typing is that we never have to check whether a
@@ -397,7 +398,7 @@ implement the `Clone` trait instead of the `Draw` trait, like this:
 
 ```rust,ignore
 pub struct Screen {
-    pub components: Vec<Box<Clone>>,
+    pub components: Vec<Box<dyn Clone>>,
 }
 ```
 
@@ -407,7 +408,7 @@ We would get this error:
 error[E0038]: the trait `std::clone::Clone` cannot be made into an object
  --> src/lib.rs:2:5
   |
-2 |     pub components: Vec<Box<Clone>>,
+2 |     pub components: Vec<Box<dyn Clone>>,
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be
 made into an object
   |
