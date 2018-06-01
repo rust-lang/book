@@ -173,6 +173,8 @@ The main way to consume Boolean values is through conditionals, such as an `if`
 expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
 section.
 
+Booleans are one byte in size.
+
 #### The Character Type
 
 So far we’ve worked only with numbers, but Rust supports letters too. Rust’s
