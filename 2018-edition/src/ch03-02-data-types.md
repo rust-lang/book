@@ -205,8 +205,9 @@ primitive compound types: tuples and arrays.
 
 #### The Tuple Type
 
-A tuple is a general way of grouping together some number of other values with
-a variety of types into one compound type.
+A tuple is a general way of grouping together some number of other values
+with a variety of types into one compound type. Tuples have a fixed length:
+once declared, they cannot grow or shrink in size.
 
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a type, and the types of the
@@ -270,7 +271,7 @@ index in a tuple is 0.
 Another way to have a collection of multiple values is with an *array*. Unlike
 a tuple, every element of an array must have the same type. Arrays in Rust are
 different from arrays in some other languages because arrays in Rust have a
-fixed length: once declared, they cannot grow or shrink in size.
+fixed length, like tuples.
 
 In Rust, the values going into an array are written as a comma-separated list
 inside square brackets:
