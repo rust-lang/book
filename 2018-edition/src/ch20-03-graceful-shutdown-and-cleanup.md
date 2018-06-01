@@ -452,11 +452,11 @@ pub struct ThreadPool {
 }
 
 trait FnBox {
-    fn call_box(self: Box<dyn Self>);
+    fn call_box(self: Box<Self>);
 }
 
 impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<dyn F>) {
+    fn call_box(self: Box<F>) {
         (*self)()
     }
 }

@@ -155,7 +155,7 @@ won’t compile yet:
 
 ```rust
 # use std::error::Error;
-# use std::fs::File;
+# use std::fs::{self, File};
 # use std::io::prelude::*;
 #
 # fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -166,15 +166,13 @@ won’t compile yet:
 #      vec![]
 # }
 #
-# struct Config {
+# pub struct Config {
 #     query: String,
 #     filename: String,
 #     case_sensitive: bool,
 # }
 #
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let mut f = File::open(config.filename)?;
-
     let contents = fs::read_to_string(config.filename)?;
 
     let results = if config.case_sensitive {

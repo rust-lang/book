@@ -218,13 +218,13 @@ impl Post {
 }
 
 trait State {
-    fn request_review(self: Box<dyn Self>) -> Box<dyn State>;
+    fn request_review(self: Box<Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
-    fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
         Box::new(PendingReview {})
     }
 }
@@ -232,7 +232,7 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-    fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }
@@ -249,9 +249,9 @@ current state and returns a new state.
 We’ve added the `request_review` method to the `State` trait; all types that
 implement the trait will now need to implement the `request_review` method.
 Note that rather than having `self`, `&self`, or `&mut self` as the first
-parameter of the method, we have `self: Box<dyn Self>`. This syntax means the
+parameter of the method, we have `self: Box<Self>`. This syntax means the
 method is only valid when called on a `Box` holding the type. This syntax takes
-ownership of `Box<dyn Self>`, invalidating the old state so the state value of the
+ownership of `Box<Self>`, invalidating the old state so the state value of the
 `Post` can transform into a new state.
 
 To consume the old state, the `request_review` method needs to take ownership
@@ -307,19 +307,19 @@ impl Post {
 }
 
 trait State {
-    fn request_review(self: Box<dyn Self>) -> Box<dyn State>;
-    fn approve(self: Box<dyn Self>) -> Box<dyn State>;
+    fn request_review(self: Box<Self>) -> Box<dyn State>;
+    fn approve(self: Box<Self>) -> Box<dyn State>;
 }
 
 struct Draft {}
 
 impl State for Draft {
-#     fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
+#     fn request_review(self: Box<Self>) -> Box<dyn State> {
 #         Box::new(PendingReview {})
 #     }
 #
     // --snip--
-    fn approve(self: Box<dyn Self>) -> Box<dyn State> {
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }
@@ -327,12 +327,12 @@ impl State for Draft {
 struct PendingReview {}
 
 impl State for PendingReview {
-#     fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
+#     fn request_review(self: Box<Self>) -> Box<dyn State> {
 #         self
 #     }
 #
     // --snip--
-    fn approve(self: Box<dyn Self>) -> Box<dyn State> {
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         Box::new(Published {})
     }
 }
@@ -340,11 +340,11 @@ impl State for PendingReview {
 struct Published {}
 
 impl State for Published {
-    fn request_review(self: Box<dyn Self>) -> Box<dyn State> {
+    fn request_review(self: Box<Self>) -> Box<dyn State> {
         self
     }
 
-    fn approve(self: Box<dyn Self>) -> Box<dyn State> {
+    fn approve(self: Box<Self>) -> Box<dyn State> {
         self
     }
 }

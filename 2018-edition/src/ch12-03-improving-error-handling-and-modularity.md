@@ -136,7 +136,7 @@ the struct fields rather than having separate variables:
 
 ```rust,should_panic
 # use std::env;
-# use std::fs::File;
+# use std::fs;
 #
 fn main() {
     let args: Vec<String> = env::args().collect();
