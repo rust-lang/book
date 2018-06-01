@@ -279,8 +279,7 @@ will print each line returned from `search`:
 pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
 
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+    let contents = fs::read_to_string(config.filename)?;
 
     for line in search(&config.query, &contents) {
         println!("{}", line);

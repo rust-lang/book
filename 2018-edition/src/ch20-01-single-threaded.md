@@ -366,17 +366,14 @@ and send it.
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
-use std::fs::File;
+use std::fs;
 // --snip--
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     stream.read(&mut buffer).unwrap();
 
-    let mut file = File::open("hello.html").unwrap();
-
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).unwrap();
+    let contents = fs::read_to_string("hello.html").unwrap();
 
     let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
 
@@ -421,7 +418,7 @@ received against what we know a request for */* looks like and adds `if` and
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
-# use std::fs::File;
+# use std::fs;
 // --snip--
 
 fn handle_connection(mut stream: TcpStream) {
@@ -431,10 +428,7 @@ fn handle_connection(mut stream: TcpStream) {
     let get = b"GET / HTTP/1.1\r\n";
 
     if buffer.starts_with(get) {
-        let mut file = File::open("hello.html").unwrap();
-
-        let mut contents = String::new();
-        file.read_to_string(&mut contents).unwrap();
+        let contents = fs::read_to_string("hello.html").unwrap();
 
         let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
 
@@ -476,17 +470,14 @@ indicating the response to the end user.
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
-# use std::fs::File;
+# use std::fs;
 # fn handle_connection(mut stream: TcpStream) {
 # if true {
 // --snip--
 
 } else {
     let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
-    let mut file = File::open("404.html").unwrap();
-    let mut contents = String::new();
-
-    file.read_to_string(&mut contents).unwrap();
+    let contents = fs::read_to_string("404.html").unwrap();
 
     let response = format!("{}{}", status_line, contents);
 
@@ -544,7 +535,7 @@ the large `if` and `else` blocks.
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
-# use std::fs::File;
+# use std::fs;
 // --snip--
 
 fn handle_connection(mut stream: TcpStream) {
@@ -560,10 +551,7 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
 
-    let mut file = File::open(filename).unwrap();
-    let mut contents = String::new();
-
-    file.read_to_string(&mut contents).unwrap();
+    let contents = fs::read_to_string(filename).unwrap();
 
     let response = format!("{}{}", status_line, contents);
 

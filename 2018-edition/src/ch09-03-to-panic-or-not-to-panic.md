@@ -192,7 +192,7 @@ impl Guess {
 }
 ```
 
-<span class="caption">Listing 9-9: A `Guess` type that will only continue with
+<span class="caption">Listing 9-10: A `Guess` type that will only continue with
 values between 1 and 100</span>
 
 First, we define a struct named `Guess` that has a field named `value` that

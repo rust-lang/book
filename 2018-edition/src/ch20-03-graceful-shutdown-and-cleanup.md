@@ -389,7 +389,7 @@ use hello::ThreadPool;
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
-use std::fs::File;
+use std::fs;
 use std::thread;
 use std::time::Duration;
 
@@ -424,10 +424,7 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
 
-     let mut file = File::open(filename).unwrap();
-     let mut contents = String::new();
-
-     file.read_to_string(&mut contents).unwrap();
+     let contents = fs::read_to_string(filename).unwrap();
 
      let response = format!("{}{}", status_line, contents);
 

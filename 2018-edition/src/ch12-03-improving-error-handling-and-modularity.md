@@ -146,7 +146,8 @@ fn main() {
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
 
-    let mut f = File::open(config.filename).expect("file not found");
+    let contents = fs::read_to_string(config.filename)
+        .expect("Something went wrong reading the file");
 
     // --snip--
 }
@@ -466,10 +467,7 @@ fn main() {
 }
 
 fn run(config: Config) {
-    let mut f = File::open(config.filename).expect("file not found");
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)
+    let contents = fs::read_to_string(config.filename)
         .expect("something went wrong reading the file");
 
     println!("With text:\n{}", contents);
@@ -503,10 +501,7 @@ use std::error::Error;
 // --snip--
 
 fn run(config: Config) -> Result<(), Box<Error>> {
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+    let contents = fs::read_to_string(config.filename)?;
 
     println!("With text:\n{}", contents);
 
@@ -530,7 +525,7 @@ have to specify what particular type the return value will be. This gives us
 flexibility to return error values that may be of different types in different
 error cases.
 
-Second, we’ve removed the calls to `expect` in favor of `?`, as we talked about
+Second, we’ve removed the call to `expect` in favor of `?`, as we talked about
 in Chapter 9. Rather than `panic!` on an error, `?` will return the error value
 from the current function for the caller to handle.
 

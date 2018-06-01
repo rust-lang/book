@@ -32,7 +32,7 @@ shown in Listing 12-4:
 
 ```rust,should_panic
 use std::env;
-use std::fs::File;
+use std::fs;
 use std::io::prelude::*;
 
 fn main() {
@@ -45,11 +45,8 @@ fn main() {
     // --snip--
     println!("In file {}", filename);
 
-    let mut f = File::open(filename).expect("file not found");
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)
-        .expect("something went wrong reading the file");
+    let contents = fs::read_to_string(filename)
+        .expect("Something went wrong reading the file");
 
     println!("With text:\n{}", contents);
 }
@@ -59,22 +56,18 @@ fn main() {
 by the second argument</span>
 
 First, we add some more `use` statements to bring in relevant parts of the
-standard library: we need `std::fs::File` to handle files, and
+standard library: we need `std::fs` to handle files, and
 `std::io::prelude::*` contains various useful traits for doing I/O, including
 file I/O. In the same way that Rust has a general prelude that brings certain
-types and functions into scope automatically, the `std::io` module has its own
-prelude of common types and functions you’ll need when working with I/O. Unlike
-with the default prelude, we must explicitly add a `use` statement for the
-prelude from `std::io`.
+types and functions into scope automatically, the `std::io` module has its
+own prelude of common types and functions you’ll need when working with I/O.
+Unlike with the default prelude, we must explicitly add a `use` statement for
+the prelude from `std::io`.
 
-In `main`, we’ve added three statements: first, we get a mutable handle to the
-file by calling the `File::open` function and passing it the value of the
-`filename` variable. Second, we create a variable called `contents` and set it
-to a mutable, empty `String`. This will hold the content of the file after we
-read it in. Third, we call `read_to_string` on our file handle and pass a
-mutable reference to `contents` as an argument.
+In `main`, we’ve added a new statement: `fs::read_to_string` will take the
+`filename`, open that file, and then produce a new `String` with its contents.
 
-After those lines, we’ve again added a temporary `println!` statement that
+After that lines, we’ve again added a temporary `println!` statement that
 prints the value of `contents` after the file is read, so we can check that the
 program is working so far.
 
