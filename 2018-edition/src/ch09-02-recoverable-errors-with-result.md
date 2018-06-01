@@ -379,12 +379,12 @@ The `?` placed after a `Result` value is defined to work in almost the same way
 as the `match` expressions we defined to handle the `Result` values in Listing
 9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
 get returned from this expression, and the program will continue. If the value
-is an `Err`, the value inside the `Err` will be returned from the whole
-function as if we had used the `return` keyword so the error value gets
-propagated to the calling code.
+is an `Err`, the `Err` will be returned from the whole function as if we had
+used the `return` keyword so the error value gets propagated to the calling
+code.
 
 There is a difference between what the `match` expression from Listing 9-6 and
-`?` do: error values used with `?` go through the `from` function, defined in
+`?` do: error values taken by `?` go through the `from` function, defined in
 the `From` trait in the standard library, which is used to convert errors from
 one type into another. When `?` calls the `from` function, the error type
 received is converted into the error type defined in the return type of the
