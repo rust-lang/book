@@ -304,6 +304,21 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
+Arrays have an interesting type; it looks like this: `[type; number]`. For
+example:
+
+```rust
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+```
+
+First, there's square brackets; they look like the syntax for creating an
+array. Inside, there's two pieces of information, separated by a semicolon.
+The first is the type of each element of the array. Since all elements have
+the same type, we only need to list it once. After the semicolon, there's
+a number that indicates the length of the array. Since an array has a fixed size,
+this number is always the same, even if the array's elements are modified, it
+cannot grow or shrink.
+
 ##### Accessing Array Elements
 
 An array is a single chunk of memory allocated on the stack. You can access
