@@ -158,12 +158,29 @@ $ rustc main.rs
 If you have a C or C++ background, you’ll notice that this is similar to `gcc`
 or `clang`. After compiling successfully, Rust outputs a binary executable.
 
-On Linux, macOS, and PowerShell on Windows, you can see the executable by
-entering the `ls` command in your shell as follows:
+On Linux and macOS you can see the executable by entering the `ls` command in
+your shell as follows:
 
 ```text
 $ ls
 main  main.rs
+```
+
+With PowerShell on Windows, you can use `ls` as well, but you'll see three files:
+
+```text
+$ls
+> ls
+
+
+    Directory: Path:\to\the\project
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         6/1/2018   7:31 AM         137728 main.exe
+-a----         6/1/2018   7:31 AM        1454080 main.pdb
+-a----         6/1/2018   7:31 AM             14 main.rs
 ```
 
 With CMD on Windows, you would enter the following:
