@@ -237,20 +237,20 @@ hi number 4 from the main thread!
 
 ### 스레드에 `move` 클로저 사용하기
 
-The `move` closure is often used alongside `thread::spawn` because it allows
-you to use data from one thread in another thread.
+`move` 클로저는 `thread::spawn`와 함께 자주 사용되는데 그 이유는 이것이 여러분으로
+하여금 어떤 스레드의 데이터를 다른 스레드 내에서 사용하도록 해주기 때문입니다.
 
-In Chapter 13, we mentioned we can use the `move` keyword before the parameter
-list of a closure to force the closure to take ownership of the values it uses
-in the environment. This technique is especially useful when creating new
-threads in order to transfer ownership of values from one thread to another.
+13장에서는 클로저의 파라미터 목록 앞에 `move` 키워드를 이용하여
+클로저가 그 환경에서 사용하는 값의 소유권을 강제로 갖게 한다고
+언급했습니다. 이 기술은 값의 소유권을 한 스레드에서 다른 스레드로
+이전하기 위해 새로운 스레드를 생성할 때 특히 유용합니다.
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
-arguments: we’re not using any data from the main thread in the spawned
-thread’s code. To use data from the main thread in the spawned thread, the
-spawned thread’s closure must capture the values it needs. Listing 16-3 shows
-an attempt to create a vector in the main thread and use it in the spawned
-thread. However, this won’t yet work, as you’ll see in a moment.
+Listing 16-1에서 우리가 'thread::spawn'에 넘기는 클로저는 아무런 인자도 갖지
+갖지 않는다는 점을 주목하세요: 생성된 스레드의 코드 내에서는 메인 스레드로부터 온 어떤 데이터도
+이용하고 있지 않습니다. 메인 스레드로부터의 데이터를 생성된 스레드 내에서 사용하기 위해서는
+생성된 스레드의 클로저가 필요로 하는 값을 캡처해야 합니다. Listing 16-3은 메인 스레드에서
+백터 생성하여 이를 생성된 스레드 내에서 사용하는 시도를 보여주고 있습니다. 그러나 잠시 후에
+보시게 될 것처럼 아직은 동작하지 않습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -268,13 +268,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-3: Attempting to use a vector created by the
-main thread in another thread</span>
+<span class="caption">Listing 16-3: 메인 스레드에서 생성된 벡터를 다른
+스레드 내에서 사용하는 시도</span>
 
-The closure uses `v`, so it will capture `v` and make it part of the closure’s
-environment. Because `thread::spawn` runs this closure in a new thread, we
-should be able to access `v` inside that new thread. But when we compile this
-example, we get the following error:
+클로저는 `v`를 사용하므로, `v`는 캡처되어 클로저의 환경의 일부가 됩니다.
+`thread::spawn`이 이 클로저를 새로운 스레드 내에서 실행하므로, `v`는
+새로운 스레드 내에서 접근 가능해야 합니다. 하지만 이 예제를 컴파일하면
+아래와 같은 에러를 얻게 됩니다:
 
 ```text
 error[E0373]: closure may outlive the current function, but it borrows `v`,
@@ -293,13 +293,13 @@ variables), use the `move` keyword
   |                                ^^^^^^^
 ```
 
-Rust *infers* how to capture `v`, and because `println!` only needs a reference
-to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can’t
-tell how long the spawned thread will run, so it doesn’t know if the reference
-to `v` will always be valid.
+러스트는 `v`를 어떻게 캡처하는지 *추론하고*, `println!`이 `v`의 참조자만
+필요로 하기 때문에, 클로저는 `v`를 빌리는 시도를 합니다. 하지만 문제가 있습니다:
+러스트는 생성된 스레드가 얼마나 오랫동안 실행될지 말해줄 수 없으므로, `v`에 대한
+참조자가 항상 유효할 것인지를 알지 못합니다.
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
-that won’t be valid:
+Listing 16-4는 유효하지 않게 된 `v`의 참조자를 갖게 될 가능성이 더 높은
+시나리오를 제공합니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -319,18 +319,18 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-4: A thread with a closure that attempts to
-capture a reference to `v` from a main thread that drops `v`</span>
+<span class="caption">Listing 16-4: `v`를 드롭하는 메인 스레드로부터 `v`에
+대한 참조자를 캡처하는 시도를 하는 클로저를 갖는 스레드</span>
 
-If we were allowed to run this code, there’s a possibility the spawned thread
-would be immediately put in the background without running at all. The spawned
-thread has a reference to `v` inside, but the main thread immediately drops
-`v`, using the `drop` function we discussed in Chapter 15. Then, when the
-spawned thread starts to execute, `v` is no longer valid, so a reference to it
-is also invalid. Oh no!
+만약 우리가 이 코드를 실행할 수 있다면, 생성된 스레드가 전혀 실행되지 않고
+즉시 백그라운드에 들어갈 가능성이 있습니다. 생성된 스레드는 내부에 `v`의
+참조자를 가지고 있지만, 메인 스레드는 우리가 15장에서 다루었던 `drop`
+함수를 사용하여 `v`를 즉시 드롭시킵니다. 그러면 생성된 스레드가 실행되기
+시작할 때 `v`가 더 이상 유효하지 않게 되어, 참조자 또한 유요하지 않게
+됩니다. 이런!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s
-advice:
+Listing 16-3의 컴파일 에러를 고치기 위해서는 에러 메세지의 조언을 이용할
+수 있습니다:
 
 ```text
 help: to force the closure to take ownership of `v` (and any other referenced
@@ -340,10 +340,10 @@ variables), use the `move` keyword
   |                                ^^^^^^^
 ```
 
-By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it’s using rather than allowing Rust to infer that it
-should borrow the values. The modification to Listing 16-3 shown in Listing
-16-5 will compile and run as we intend:
+`move` 키워드를 클로저 앞에 추가함으로서 우리는 러스트가 값을 빌려와야
+된다고 추론하도록 하는 것이 아니라 사용하는 값의 소유권을 강제로 가지도록
+합니다. Listing 16-3을 Listing 16-5에서 보이는 것처럼 수정하면
+컴파일되어 우리가 원하는 대로 실행됩니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -361,15 +361,15 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-5: Using the `move` keyword to force a closure
-to take ownership of the values it uses</span>
+<span class="caption">Listing 16-5: `move` 키워드를 사용하여 사용하는 값의
+소유권을 클로저가 갖도록 강제하기</span>
 
-What would happen to the code in Listing 16-4 where the main thread called
-`drop` if we use a `move` closure? Would `move` fix that case? Unfortunately,
-no; we would get a different error because what Listing 16-4 is trying to do
-isn’t allowed for a different reason. If we added `move` to the closure, we
-would move `v` into the closure’s environment, and we could no longer call
-`drop` on it in the main thread. We would get this compiler error instead:
+메인 스레드에서 `drop`을 호출하는 Listing 16-4의 코드에서 `move` 클로저를
+이용한다면 어떤 일이 벌어질까요? `move`가 이 경우도 고칠 수 있을까요? 불행하게도,
+아닙니다; Listing 16-4이 시도하고자 하는 것이 다른 이유로 허용되지 않기 때문에
+우리는 다은 에러를 얻게 됩니다. 만일 클로저에 `move`를 추가하면, `v`를 클로저의
+환경으로 이동시킬 것이고, 더이상 메인 스레드에서 이것에 대한 `drop` 호출을 할
+수 없게 됩니다. 대신 우리는 아래와 같은 컴파일 에러를 얻게 됩니다:
 
 ```text
 error[E0382]: use of moved value: `v`
@@ -385,15 +385,15 @@ error[E0382]: use of moved value: `v`
    not implement the `Copy` trait
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
-thread, which meant the main thread could theoretically invalidate the spawned
-thread’s reference. By telling Rust to move ownership of `v` to the spawned
-thread, we’re guaranteeing Rust that the main thread won’t use `v` anymore. If
-we change Listing 16-4 in the same way, we’re then violating the ownership
-rules when we try to use `v` in the main thread. The `move` keyword overrides
-Rust’s conservative default of borrowing; it doesn’t let us violate the
-ownership rules.
+러스트의 소유권 규칙이 다시 한번 우리를 구해주었습니다! Listing 16-3의
+코드로부터 에러를 받은 이유는 러스트가 보수적이고 스레드를 위해 `v`를 단지
+빌리려고만 했기 때문이었는데, 이는 메인스레드가 이론적으로 생성된 스레드의
+참조자를 무효화할 수 있음을 의미합니다. 러스트에게 `v`의 소유권을 생성된 스레드로
+이동시키라 말해줌으로서, 우리는 러스트에게 메인 스레드가 `v`를 더 이상 이용하지
+않음을 보장하고 있습니다. 만일 우리가 Listing 16-4를 같은 방식으로 바꾸면,
+우리가 `v`를 메인스레드 상에서 사용하고자 할 때 소유권 규칙을 위반하게 됩니다.
+`move` 키워드는 러스트의 빌림에 대한 보수적인 기본 기준을 무효화합니다;
+즉 우리가 소유권 규칙을 위반하지 않도록 해줍니다.
 
-With a basic understanding of threads and the thread API, let’s look at what we
-can *do* with threads.
+스레드와 스레드 API에 대한 기본적인 이해를 하고서, 우리가 스레드를 가지고 어떤 것을
+*할 수* 있는지 살펴봅시다.
