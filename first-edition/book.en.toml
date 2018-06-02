@@ -1,11 +1,8 @@
 [book]
 title = "The Rust Programming Language"
 author = "The Rust Project Developers"
-src = "src/de/src/"  # Select language to build                                             
+src = "src/en"  # Select language to build                                             
 
-[build]
-build-dir = "book-de"
-create-missing = false
 
 [output.html]
 additional-css = ["src/theme/first-edition.css"]
