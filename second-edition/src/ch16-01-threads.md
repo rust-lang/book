@@ -121,20 +121,20 @@ hi number 5 from the spawned thread!
 오버랩도 보지 못했다면, 숫자 범위를 늘려서 운영 체제로 하여금 스레드간의 전환에
 더 많은 기회를 주는 시도를 해보세요.
 
-### Waiting for All Threads to Finish Using `join` Handles
+### `join` 핸들을 사용하여 모든 스레드들이 끝날때까지 기다리기
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but also can't guarantee that the
-spawned thread will get to run at all. The reason is that there is no guarantee
-on the order in which threads run!
+Listing 16-1의 코드는 대개의 경우 메인 스레드가 종료되는 이유로 생성된
+스레드가 조기에 멈출 뿐만 아니라, 생성된 스레드가 모든 코드를 실행할 것임을
+보장해 줄수도 없습니다. 그 이유는 스레드들이 실행되는 순서에 대한 보장이
+없기 때문입니다!
 
-We can fix the problem of the spawned thread not getting to run, or not getting
-to run completely, by saving the return value of `thread::spawn` in a variable.
-The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
-value that, when we call the `join` method on it, will wait for its thread to
-finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
-in Listing 16-1 and call `join` to make sure the spawned thread finishes before
-`main` exits:
+생성된 스레드가 실행되지 않거나, 전부 실행되지 않는 문제는
+`thread::spawn`의 반환값을 변수에 저장함으로서 해결할 수 있습니다.
+`thread::spawn`의 반환 타입은 `JoinHandle`입니다. `JoinHandle`은
+이것이 가지고 있는 `join` 메소드를 호출했을 때 그 스레드가 끝날때까지 기다리는
+소유된 값입니다. Listing 16-2는 어떤식으로 우리가 Listing 16-1에서 만들었던
+스레드의 `JoinHandle`을 사용하고 `join`을 호출하여 `main`이 끝나기 전에
+생성된 스레드가 종료되는 것을 확실하게 하는지를 보여줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -159,14 +159,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
-to guarantee the thread is run to completion</span>
+<span class="caption">Listing 16-2: 스레드가 완전시 실행되는 것을 보장하기
+위해 `thread::spawn`으로부터 `JoinHandle`을 저장하기</span>
 
-Calling `join` on the handle blocks the thread currently running until the
-thread represented by the handle terminates. *Blocking* a thread means that
-thread is prevented from performing work or exiting. Because we’ve put the call
-to `join` after the main thread’s `for` loop, running Listing 16-2 should
-produce output similar to this:
+핸들에 대해 `join`을 호출하는 것은 핸들에 대한 스레드가 종료될 때까지 현재
+실행중인 스레드를 블록합니다. 스레드를 *블록 (Block)* 한다는 것은 그 스레드의
+작업을 수행하거나 종료되는 것이 방지된다는 의미입니다. 우리가 메인 스레드의 `for`
+루프 이후에 `join`의 호출을 넣었으므로, Listing 16-2의 실행은 아래와 비슷한
+출력을 만들어야 합니다:
 
 ```text
 hi number 1 from the main thread!
@@ -184,11 +184,11 @@ hi number 8 from the spawned thread!
 hi number 9 from the spawned thread!
 ```
 
-The two threads continue alternating, but the main thread waits because of the
-call to `handle.join()` and does not end until the spawned thread is finished.
+두 스레드가 교차를 계속하지만, `handle.join()`의 호출로 인하여 메인
+스레드는 기다리고 생성된 스레드가 종료되기 전까지 끝나지 않습니다.
 
-But let’s see what happens when we instead move `handle.join()` before the
-`for` loop in `main`, like this:
+그런데 만일 아래와 같이 `main`의 `for` 루프 이전으로 `handle.join()`을
+이동시키면 어떤 일이 생기는지 봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -213,8 +213,8 @@ fn main() {
 }
 ```
 
-The main thread will wait for the spawned thread to finish and then run its
-`for` loop, so the output won’t be interleaved anymore, as shown here:
+메인 스레드는 생성된 스레드가 종료될 때까지 기다릴 것이고 그 다음 자신의 `for`
+루프를 실행시키게 되어, 아래처럼 출력값이 더 이상 교차되지 않을 것입니다:
 
 ```text
 hi number 1 from the spawned thread!
@@ -232,10 +232,10 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your
-threads run at the same time.
+`join`이 호출되는 위치와 같은 작은 디테일들이 여러분의 스레드가 동시에 실행되는지
+혹은 아닌지에 대해 영향을 미칠 수 있습니다.
 
-### Using `move` Closures with Threads
+### 스레드에 `move` 클로저 사용하기
 
 The `move` closure is often used alongside `thread::spawn` because it allows
 you to use data from one thread in another thread.
