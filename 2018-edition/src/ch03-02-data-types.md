@@ -99,6 +99,21 @@ defaults are generally good choices, and integer types default to `i32`: this
 type is generally the fastest, even on 64-bit systems. The primary situation in
 which you’d use `isize` or `usize` is when indexing some sort of collection.
 
+##### Integer Overflow
+
+Let's say that you have a `u8`, which can hold values between zero and `255`.
+What happens if you try to change it to `256`? This is called "integer
+overflow", and Rust has some interesting rules around this behavior. When
+compiling in debug mode, Rust checks for this kind of issue and will cause
+your program to *panic*, which is the term Rust uses when a program exits
+with an error. We'll discuss panics more in Chapter 9.
+
+In release builds, Rust does not check for overflow, and instead will
+do something called "two's compliment wrapping." In short, `256` becomes
+`0`, `257` becomes `1`, etc. Relying on overflow is considered an error,
+even if this behavior happens. If you want this behavior explicitly, the
+standard library has a type, `Wrapping`, that provides it explicitly.
+
 #### Floating-Point Types
 
 Rust also has two primitive types for *floating-point numbers*, which are
@@ -374,7 +389,7 @@ The compilation didn’t produce any errors, but the program resulted in a
 *runtime* error and didn’t exit successfully. When you attempt to access an
 element using indexing, Rust will check that the index you’ve specified is less
 than the array length. If the index is greater than the length, Rust will
-*panic*, which is the term Rust uses when a program exits with an error.
+panic.
 
 This is the first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
