@@ -157,15 +157,15 @@ Got: hi
 
 완벽하군요!
 
-### Channels and Ownership Transference
+### 채널과 소유권 전달
 
-The ownership rules play a vital role in message sending because they help you
-write safe, concurrent code. Preventing errors in concurrent programming is the
-advantage of thinking about ownership throughout your Rust programs. Let’s do
-an experiment to show how channels and ownership work together to prevent
-problems: we’ll try to use a `val` value in the spawned thread *after* we’ve
-sent it down the channel. Try compiling the code in Listing 16-9 to see why
-this code isn't allowed:
+소유권 규칙은 여러분들이 안전하고 동시적인 코드를 작성하는 것을 돕기 때문에
+메세지 보내기 방식 내에서 강건한 역할을 합니다. 동시성 프로그래밍 내에서 에러를
+방지하는 것은 여러분의 러스트 프로그램 전체에 걸친 소유권에 대한 생각해볼 수 있는
+장점이 있습니다. 어떤 식으로 채널과 소유권이 문제를 방지하기 위해 함께 동작하는지를
+보기 위한 실험을 해봅시다: 우리가 채널로 `val` 값을 내려보낸 *이후에* 생성된
+스레드에서 이 값을 사용하는 시도를 해볼 것입니다. Listing 16-9의 코드를 컴파일하여
+이 코드가 왜 허용되지 않는지를 보세요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -187,15 +187,15 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-9: Attempting to use `val` after we’ve sent it
-down the channel</span>
+<span class="caption">Listing 16-9: `val`을 채널로 내려보낸 뒤
+이에 대한 사용 시도</span>
 
-Here, we try to print `val` after we’ve sent it down the channel via `tx.send`.
-Allowing this would be a bad idea: once the value has been sent to another
-thread, that thread could modify or drop it before we try to use the value
-again. Potentially, the other thread’s modifications could cause errors or
-unexpected results due to inconsistent or nonexistent data. However, Rust gives
-us an error if we try to compile the code in Listing 16-9:
+여기서는 `tx.send`를 통하여 채널에 `val`을 내려보낸 뒤 이를 출력하는 시도를
+하였습니다. 이 코드를 허용하는 것은 나쁜 생각입니다: 일단 값이 다른 스렏로 보내지고
+나면, 우리가 값을 다시 사용해보기 전에 그 스레드에서 수정되거나 버려질 수 있습니다.
+잠재적으로, 다른 스레드에서의 수정은 불일치하거나 존재하지 않는 데이터로 인한 에러를
+일으킬 수 있습니다. 그러나, 우리가 Listing 16-9의 코드를 컴파일 시도하면 러스트는
+에러를 내놓습니다:
 
 ```text
 error[E0382]: use of moved value: `val`
@@ -210,10 +210,10 @@ error[E0382]: use of moved value: `val`
 not implement the `Copy` trait
 ```
 
-Our concurrency mistake has caused a compile time error. The `send` function
-takes ownership of its parameter, and when the value is moved, the receiver
-takes ownership of it. This stops us from accidentally using the value again
-after sending it; the ownership system checks that everything is okay.
+우리의 동시성에 관한 실수가 컴파일 타임 에러를 야기했습니다. `send` 함수가
+그 파라미터의 소유권을 가져가고, 이 값이 이동될 때, 수신자가 이에 대한 소유권을
+얻습니다. 이는 우리가 값을 보낸 이후에 우발적으로 이 값을 다시 사용하는 것을
+방지합니다; 소유권 시스템은 모든게 정상인지 확인합니다.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
 
