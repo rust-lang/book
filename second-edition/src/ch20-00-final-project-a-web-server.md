@@ -1,33 +1,33 @@
-# Final Project: Building a Multithreaded Web Server
+# 마지막 프로젝트: 멀티 스레드 웹 서버 만들기
 
-It’s been a long journey, but we’ve reached the end of the book. In this
-chapter, we’ll build one more project together to demonstrate some of the
-concepts we covered in the final chapters, as well as recap some earlier
-lessons.
+오랜 여정이었습니다만 이제 우린 이 책의 마지막에 도달했습니다.
+이번 챕터에서는 여태까지의 내용을 요약하고
+마지막 챕터의 내용을 정리하기 위해
+프로젝트를 하나 더 만들것 입니다.
 
-For our final project, we’ll make a web server that only says “hello” and looks
-like Figure 20-1 in a web browser.
+"hello"를 나타내는 웹 서버를 우리의 마지막 프로젝트로 만들어 봅시다.
+완성하면 웹 브라우저에서는 그림 20-1과 같은 모습으로 보일 것입니다.
 
 ![hello from rust](img/trpl20-01.png)
 
-<span class="caption">Figure 20-1: Our final shared project</span>
+<span class="caption">그림 20-1: 마지막 프로젝트</span>
 
-Here is the plan to build the web server:
+웹서버를 만들 계획은 아래와 같습니다.
 
-1. Learn a bit about TCP and HTTP
-2. Listen for TCP connections on a socket
-3. Parse a small number of HTTP requests
-4. Create a proper HTTP response
-5. Improve the throughput of our server with a thread pool
+1. TCP와 HTTP에 대해 간단히 배우기
+2. TCP 소켓 연결요청을 수신하기
+3. HTTP 요청의 일부를 분석하기
+4. 적절한 HTTP 응답 만들기
+5. 스레드 풀을 이용해 서버의 응답속도를 개선하기
 
-But before we get started, we should mention one detail: the method we’ll use
-won’t be the best way to build a web server with Rust. A number of
-production-ready crates are available on *https://crates.io/* that provide more
-complete web server and thread pool implementations than we’ll build.
+시작하기전에 한가지 알려드릴게 있습니다.
+우리가 사용할 방법이 러스트를 이용해 웹 서버를 만드는 최고의 방법은 아닙니다.
+다수의 크레이트가 *https://crates.io/* 에 등록되어 있으며
+이들은 우리가 만들것보다 뛰어나게 웹 서버와 스레드 풀을 구현했습니다.
 
-However, our intention in this chapter is to help you learn, not to take the
-easy route. Because Rust is a systems programming language, we can choose the
-level of abstraction we want to work with and can go to a lower level than is
-possible or practical in other languages. We’ll write the basic HTTP server and
-thread pool manually so you can learn the general ideas and techniques behind
-the crates you might use in the future.
+어쨋든, 이번 챕터에서 우리가 원하는건 배우는 것이지,
+쉬운길로 돌아가는것이 아닙니다. 이는 러스트가 시스템 프로그래밍 언어이며,
+우리는 다른 언어로는 불가능 하거나, 하기 힘든 저레벨 작업을 할 수 있기 때문이기도 합니다.
+우린 기본적인 HTTP 서버와 스레드 풀을 직접 구현할 것이며,
+이를 통해 여러분이 나중에 사용하게 될 크레이트들의 기반이 되는
+일반적인 기술들에 대해 배울 수 있습니다.
