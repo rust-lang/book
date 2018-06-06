@@ -117,8 +117,8 @@
     - [Advanced Types](ch19-04-advanced-types.md)
     - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
-- [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
-    - [A Single Threaded Web Server](ch20-01-single-threaded.md)
+- [마지막 프로젝트: 멀티스레드 웹서버 만들기](ch20-00-final-project-a-web-server.md)
+    - [싱글 스레드 웹서버](ch20-01-single-threaded.md)
     - [Turning our Single Threaded Server into a Multithreaded Server](ch20-02-multithreaded.md)
     - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
