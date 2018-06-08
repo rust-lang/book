@@ -258,20 +258,29 @@ This code prints `1 new tweet: (Read more from @horse_ebooks...)`.
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
 
-### Trait Bounds
+### Traits as arguments
 
 Now that you know how to define traits and implement those traits on types, we
-can explore how to use traits with generic type parameters. We can use *trait
-bounds* to constrain generic types to ensure the type will be limited to those
-that implement a particular trait and behavior.
+can explore how to use traits to accept arguments of many different types.
 
 For example, in Listing 10-13, we implemented the `Summary` trait on the types
 `NewsArticle` and `Tweet`. We can define a function `notify` that calls the
-`summarize` method on its parameter `item`, which is of the generic type `T`.
-To be able to call `summarize` on `item` without getting an error telling us
-that the generic type `T` doesn’t implement the method `summarize`, we can use
-trait bounds on `T` to specify that `item` must be of a type that implements
-the `Summary` trait:
+`summarize` method on its parameter `item`, which is of some type that implements
+the `Summary` trait. To do this, we can use the '`impl Trait`' syntax, like this:
+
+```rust,ignore
+pub fn notify(item: impl Summary) {
+    println!("Breaking news! {}", item.summarize());
+}
+```
+
+In the body of `notify`, we can call any methods on `item` that come from
+the `Summary` trait, like `summarize`.
+
+#### Trait Bounds
+
+The `impl Trait` syntax works for short examples, but is syntax sugar for a
+longer form. This is called a 'trait bound', and it looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -279,16 +288,37 @@ pub fn notify<T: Summary>(item: T) {
 }
 ```
 
-We place trait bounds with the declaration of the generic type parameter, after
-a colon and inside angle brackets. Because of the trait bound on `T`, we can
+This is equivalent to the example above, but is a bit more verbose. We place
+trait bounds with the declaration of the generic type parameter, after a
+colon and inside angle brackets. Because of the trait bound on `T`, we can
 call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code that
 calls the function with any other type, like a `String` or an `i32`, won’t
 compile, because those types don’t implement `Summary`.
 
+When should you use this form over `impl Trait`? While `impl Trait` is nice for
+shorter examples, trait bounds are nice for more complex ones. For example,
+say we wanted to take two things that implement `Summary`:
+
+```rust,ignore
+pub fn notify(item1: impl Summary, item2: impl Summary) {
+pub fn notify<T: Summary>(item1: T, item2: T) {
+```
+
+The version with the bound is a bit easier. In general, you should use whatever
+form makes your code the most understandable.
+
+##### Multiple trait bounds with `+`
+
 We can specify multiple trait bounds on a generic type using the `+` syntax.
 For example, to use display formatting on the type `T` in a function as well as
 the `summarize` method, we can use `T: Summary + Display` to say `T` can be any
-type that implements `Summary` and `Display`.
+type that implements `Summary` and `Display`. This can grow quite complex!
+
+```rust,ignore
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+```
+
+#### `where` clauses for clearer code
 
 However, there are downsides to using too many trait bounds. Each generic has
 its own trait bounds, so functions with multiple generic type parameters can
@@ -296,10 +326,6 @@ have lots of trait bound information between a function’s name and its
 parameter list, making the function signature hard to read. For this reason,
 Rust has alternate syntax for specifying trait bounds inside a `where` clause
 after the function signature. So instead of writing this:
-
-```rust,ignore
-fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
-```
 
 we can use a `where` clause, like this:
 
@@ -313,6 +339,60 @@ fn some_function<T, U>(t: T, u: U) -> i32
 This function’s signature is less cluttered in that the function name,
 parameter list, and return type are close together, similar to a function
 without lots of trait bounds.
+
+### Returning Traits
+
+We can use the `impl Trait` syntax in return position as well, to return
+something that implements a trait:
+
+```rust,ignore
+fn returns_summarizable() -> impl Summary {
+    Tweet {
+        username: String::from("horse_ebooks"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
+    }
+}
+```
+
+This signature says, "I'm going to return something that implements the
+`Summary` trait, but I'm not going to tell you the exact type. In our case,
+we're returning a `Tweet`, but the caller doesn't know that.
+
+Why is this useful? In chapter 13, we're going to learn about two features
+that rely heavily on traits: closures, and iterators. These features create
+types that only the compiler knows, or types that are very, very long.
+`impl  Trait` lets you simply say "this returns an `Iterator`" without
+needing to write out a really long type.
+
+This only works if you have a single type that you're returning, however.
+For example, this would *not* work:
+
+```rust
+fn returns_summarizable(switch: bool) -> impl Summary {
+    if switch {
+        NewsArticle {
+            headline: String::from("Penguins win the Stanley Cup Championship!"),
+            location: String::from("Pittsburgh, PA, USA"),
+            author: String::from("Iceburgh"),
+            content: String::from("The Pittsburgh Penguins once again are the best
+            hockey team in the NHL."),
+        }
+    } else {
+        Tweet {
+            username: String::from("horse_ebooks"),
+            content: String::from("of course, as you probably already know, people"),
+            reply: false,
+            retweet: false,
+        }
+    }
+}
+```
+
+Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
+due to restrictions around how `impl Trait` works. To write this code, you'll
+have to wait until Chapter 17, "trait objects".
 
 ### Fixing the `largest` Function with Trait Bounds
 
