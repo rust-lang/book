@@ -104,6 +104,39 @@ fn main() {
 We’re still specifying the `TrafficLight` namespace for the `Green` variant
 because we didn’t include `Green` in the `use` statement.
 
+#### Nested groups in `use` declarations
+
+If you have a complex module tree with many different submodules and you need
+to import a few items from each one, it might be useful to group all the
+imports in the same declaration to keep your code clean and avoid repeating the
+base modules’ name.
+
+The `use` declaration supports nesting to help you in those cases, both with
+simple imports and glob ones. For example this snippets imports `bar`, `Foo`,
+all the items in `baz` and `Bar`:
+
+```rust
+# #![allow(unused_imports, dead_code)]
+#
+# mod foo {
+#     pub mod bar {
+#         pub type Foo = ();
+#     }
+#     pub mod baz {
+#         pub mod quux {
+#             pub type Bar = ();
+#         }
+#     }
+# }
+#
+use foo::{
+    bar::{self, Foo},
+    baz::{*, quux::Bar},
+};
+#
+# fn main() {}
+```
+
 ### Bringing All Names into Scope with a Glob
 
 To bring all the items in a namespace into scope at once, we can use the `*`

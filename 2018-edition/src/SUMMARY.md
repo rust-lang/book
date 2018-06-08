@@ -128,5 +128,4 @@
     - [C - Derivable Traits](appendix-03-derivable-traits.md)
     - [D - Macros](appendix-04-macros.md)
     - [E - Translations](appendix-05-translation.md)
-    - [F - Newest Features](appendix-06-newest-features.md)
-    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)
+    - [F - How Rust is Made and “Nightly Rust”](appendix-06-nightly-rust.md)
