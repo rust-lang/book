@@ -109,7 +109,135 @@ Rust같은 저레벨 언어로는 이와 같은 방법들이 전부 가능합니
 해당 구조 내에서 기능을 구현하세요.
 
 12장의 프로젝트에서 테스트 주도 개발을 할때와 흡사하게,
-우린 여기서 컴파일러 주도 개발을 할 것입니다. 우리가 원하는대로
+우린 여기서 컴파일러 주도 개발을 할 것입니다. 이는 우리가 원하는대로
 기능을 호출하는 코드를 작성하고, 컴파일러로부터의 에러를 조사하여
-우리가 다음엔 어떻게 코드를 변화시켜야 작동시킬 수 있을지 알아냅니다.
+어떻게 코드를 변화시켜야 작동시킬 수 있을지 알아내는 과정을 말합니다.
+
+#### 요청마다 스레드를 생성할 수 있는 코드 구조
+
+먼저, 모든 연결에 대해 스레드를 새로 생성했을때의 코드는 어떤 모습이 될지 알아봅시다.
+물론 앞에서 말했듯이, 이는 스레드들을 무한대로 만들어낼 수 있기 때문에
+문제를 해결하기 위한 최종적인 대책은 될 수 없습니다만,
+그에 대한 출발점 정도로는 볼 수 있습니다.
+예제 20-11는 `main` 함수의 `for` 반복문을 모든 요청에 대해 새 스레드를 생성하도록 변경한 모습을 보여줍니다.
+
+<span class="filename">파일명: src/main.rs</span>
+
+```rust,no_run
+# use std::thread;
+# use std::io::prelude::*;
+# use std::net::TcpListener;
+# use std::net::TcpStream;
+#
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        thread::spawn(|| {
+            handle_connection(stream);
+        });
+    }
+}
+# fn handle_connection(mut stream: TcpStream) {}
+```
+
+<span class="caption">예제 20-11: 매 요청마다
+새 스레드 생성</span>
+
+여러분이 16장에서 배우신대로, `thread::spawn` 은 새 스레드를 생성하고,
+내부에 있는 클로저의 코드를 실행합니다.
+만약 여러분이 이 코드를 실행하고 브라우저로 `/sleep` 으로 접속하신 후,
+둘 이상의 브라우저 탭으로 `/` 에 접속하신다면, `/` 로의 요청이
+`/sleep` 이 끝나길 기다리지 않고 완료 되는 것을 보실 수 있을 것입니다.
+하지만 말했듯이, 스레드를 무한정 생성하는 것은 결국 시스템을 과부화시킬 것입니다.
+
+#### 스레드 생성 개수 제한을 위한 인터페이스 만들기
+
+우린 스레드 풀을 비슷하고 익숙하게 작동하도록 만들어서
+스레드 풀 방식으로 변경할때 우리 API를 사용하는
+코드를 크게 변경할 필요가 없도록 하고자 합니다.
+예제 20-12는 `thread::spawn` 대신 이용하고자 하는 `ThreadPool` 이라는 가상의 인터페이스를 보여줍니다.
+
+<span class="filename">파일명: src/main.rs</span>
+
+```rust,no_run
+# use std::thread;
+# use std::io::prelude::*;
+# use std::net::TcpListener;
+# use std::net::TcpStream;
+# struct ThreadPool;
+# impl ThreadPool {
+#    fn new(size: u32) -> ThreadPool { ThreadPool }
+#    fn execute<F>(&self, f: F)
+#        where F: FnOnce() + Send + 'static {}
+# }
+#
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
+    let pool = ThreadPool::new(4);
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
+    }
+}
+# fn handle_connection(mut stream: TcpStream) {}
+```
+
+<span class="caption">예제 20-12: 우리의 이상적인 `ThreadPool` 인터페이스</span>
+
+우린 새로운 스레드 풀을 만들때 `ThreadPool::new` 를
+설정할 스레드의 개수를 나타내는 수(이 경우는 4)와 함께 사용했습니다.
+그 후 `for` 반복문에선 `thread::spawn` 과 비슷한 인터페이스를 가진 `pool.execute` 에
+pool이 각각의 스트림에 대해 실행해야 할 클로저를 넘겨줍니다.
+우린 이제  `pool.execute` 를 클로저를 받고 pool 안의 스레드에게 넘겨주어서 실행하도록 구현해야 합니다.
+이 코드는 아직 컴파일 되지 않지만 컴파일러가 문제를 해결하는 방법을 안내 할 수 있도록 노력할 것입니다.
+
+#### `ThreadPool` 구조체를 컴파일러 주도 개발을 이용해 제작
+
+*src/main.rs* 를 예제 20-12와 같이 변경하고, `cargo check` 로 얻은
+컴파일러 에러를 이용해 개발을 진행해 봅시다.
+여기 우리가 얻은 첫번째 에러가 있습니다.
+
+```text
+$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
+  --> src\main.rs:10:16
+   |
+10 |     let pool = ThreadPool::new(4);
+   |                ^^^^^^^^^^^^^^^ Use of undeclared type or module
+   `ThreadPool`
+
+error: aborting due to previous error
+```
+
+훌륭합니다. 이 에러는 우리가 `ThreadPool` 타입이나 모듈이 필요하다고 알려주고 있으니 지금 하나 만들어 봅시다.
+우리가 만들 `ThreadPool` 은 우리의 웹 서버가 하는 일의 성향과는
+독립되어 있어야 합니다.
+그러니 `hello` 크레이트를 바이너리 크레이트에서
+라이브러리 크레이트로 변경하여 `ThreadPool` 구현을 유지합시다.
+라이브러리 크레이트로 변경한 뒤에는, 우린 분리된 스레드 풀 라이브러리를 웹 요청을 처리하는것 만이 아닌
+우리가 스레드 풀을 사용하길 원하는 어떤 작업에서든 사용할 수 있습니다.
+
+가장 간단한 `ThreadPool` 구조체 정의가 포함된
+*src/lib.rs* 를 생성합니다.
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+pub struct ThreadPool;
+```
+
+그 후 *src/bin* 이라는 새 디렉토리를 생성하고
+*src/main.rs* 바이너리 크레이트를 *src/bin/main.rs* 의 위치로 이동시킵니다.
+이로써 *hello* 디렉토리 안의 라이브러리 크레이트가 주요 크레이트가 될 것입니다;
+우린 여전히 *src/bin/main.rs* 바이너리 크레이트를 `cargo run` 명령어를 이용해 실행시킬 수 있습니다.
+*main.rs* 파일을 이동시킨 후 라이브러리 크레이트를 가져와서 *src/bin/main.rs* 상단에 다음 코드를 추가하여
+`ThreadPool` 을 스코프 내로 가져옵니다:
 
