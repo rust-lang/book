@@ -215,13 +215,13 @@ not implement the `Copy` trait
 얻습니다. 이는 우리가 값을 보낸 이후에 우발적으로 이 값을 다시 사용하는 것을
 방지합니다; 소유권 시스템은 모든게 정상인지 확인합니다.
 
-### Sending Multiple Values and Seeing the Receiver Waiting
+### 복수의 값들을 보내고 수신자가 기다리는지 보기
 
-The code in Listing 16-8 compiled and ran, but it didn’t clearly show us that
-two separate threads were talking to each other over the channel. In Listing
-16-10 we’ve made some modifications that will prove the code in Listing 16-8 is
-running concurrently: the spawned thread will now send multiple messages and
-pause for a second between each message.
+Listing 16-8의 코드는 컴파일되고 실행도 되지만, 두개의 분리된 스레드가
+채널을 통해 서로 대화를 했는지를 우리에게 명확히 보여주진 못했습니다.
+Listing 16-10에서는 Listing 16-8의 코드가 동시에 실행된다는 것을
+입증해 중 수정본을 만들었습니다: 이제 생성된 스레드가 여러 메세지를 보내면서
+각 메세지 사이에 1초씩 잠깐 멈출 것입니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -253,20 +253,20 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-10: Sending multiple messages and pausing
-between each</span>
+<span class="caption">Listing 16-10: 여러 메세지를 보내고 각
+사이마다 멈추기</span>
 
-This time, the spawned thread has a vector of strings that we want to send to
-the main thread. We iterate over them, sending each individually, and pause
-between each by calling the `thread::sleep` function with a `Duration` value of
-1 second.
+이번에 생성된 스레드는 우리가 메인 스레드로 보내고 싶어하는 스트링의 벡터를 
+가지고 있습니다. 스트링마다 반복하여 각각의 값을 개별적으로 보내고,
+`Duration` 값에 1을 넣어서 `thread::sleep` 함수를 호출하는 것으로 각각의
+사이에 멈춥니다.
 
-In the main thread, we’re not calling the `recv` function explicitly anymore:
-instead, we’re treating `rx` as an iterator. For each value received, we’re
-printing it. When the channel is closed, iteration will end.
+메인 스레드에서는 더 이상 `recv` 함수를 명시적으로 호출하지 않고 있습니다:
+대신 `rx`를 반복자처럼 다루고 있습니다. 각각의 수신된 값에 대해서 이를
+출력합니다. 채널이 닫힐 때는 반복이 종료될 것입니다.
 
-When running the code in Listing 16-10, you should see the following output
-with a 1-second pause in between each line:
+Listing 16-10의 코드를 실행시키면 다음과 같은 출력이 각 줄마다 1초씩
+멈추면서 보일 것입니다:
 
 ```text
 Got: hi
@@ -275,16 +275,16 @@ Got: the
 Got: thread
 ```
 
-Because we don’t have any code that pauses or delays in the `for` loop in the
-main thread, we can tell that the main thread is waiting to receive values from
-the spawned thread.
+메인 스레드의 `for` 루프 내에는 어떠한 멈춤 혹은 지연 코드를 넣지 않았으므로,
+우리는 메인 스레드가 생성된 스레드로부터 값을 전달받는 것을 기다리는 중이라고
+말할 수 있습니다.
 
-### Creating Multiple Producers by Cloning the Transmitter
+### 송신자를 복제하여 여러 생성자 만들기
 
-Earlier we mentioned that `mpsc` was an acronym for *multiple producer,
-single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
-to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitting half of the channel, as shown in Listing 16-11:
+이전에 `mpsc`가 *복수 생성자 단일 소비자 (multiple producer, single consumer)*
+의 약어라는 것을 언급했었지요. `mpsc`를 Listing 16-10의 코드에 넣어 모두 동일한
+수신자로 값들을 보내는 여러 스레드들을 만들도록 코드를 확장해봅시다. Listing 16-11에서
+보시는 것처럼 채널의 송신자를 복제하는 것으로 그렇게 할 수 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -335,16 +335,16 @@ for received in rx {
 # }
 ```
 
-<span class="caption">Listing 16-11: Sending multiple messages from multiple
-producers</span>
+<span class="caption">Listing 16-11: 여러 개의 생성자로부터 여러 메세지
+보내기</span>
 
-This time, before we create the first spawned thread, we call `clone` on the
-sending end of the channel. This will give us a new sending handle we can pass
-to the first spawned thread. We pass the original sending end of the channel to
-a second spawned thread. This gives us two threads, each sending different
-messages to the receiving end of the channel.
+이번에는 우리가 첫번째 스레드를 생성하기 전에, 채널의 송신 단말에
+대해 `clone`을 호출했습니다. 이는 우리에게 첫번째 생성된 스레드로
+값을 보낼 수 있는 새로운 송신 핸들을 제공해줄 것입니다. 두번째 생성된
+스레드에게는 원래의 채널 송신 단발을 넘깁니다. 이렇게 함으로써 각각이
+다른 메세지를 채널의 수신 단말로 보내주는 두 스레드를 만듭니다.
 
-When you run the code, your output should look something like this:
+여러분이 이 코드를 실행시키면, 다음과 같은 출력과 비슷하게 보여야 합니다:
 
 ```text
 Got: hi
@@ -357,10 +357,10 @@ Got: thread
 Got: you
 ```
 
-You might see the values in another order; it depends on your system. This is
-what makes concurrency interesting as well as difficult. If you experiment with
-`thread::sleep`, giving it various values in the different threads, each run
-will be more nondeterministic and create different output each time.
+값들의 순서가 다르게 보일 수도 있습니다; 이는 여러분의 시스템에 따라 다릅니다.
+이것이 바로 동시성을 흥미로울 뿐만 아니라 어렵게 만드는 것입니다. 만일 여러분이
+`thread::sleep`을 가지고 실험하면서 서로 다른 스레드마다 다양한 값을 썼다면,
+각각의 실행이 더욱 비결정적이고 매번 다른 출력을 생성할 것입니다.
 
-Now that we’ve looked at how channels work, let’s look at a different method of
-concurrency.
+이제 채널이 어떤 식으로 동작하는지 보았으니, 동시성을 위한 다른 방법을
+알아봅시다.
