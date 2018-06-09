@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in Listing 20-21 is responding to requests asynchronously through the
+The code in [Listing 20-21][Listing-20-21] is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant <span
@@ -18,10 +18,13 @@ accept only two requests before gracefully shutting down its thread pool.
 
 Let’s start with implementing `Drop` on our thread pool. When the pool is
 dropped, our threads should all join to make sure they finish their work.
-Listing 20-23 shows a first attempt at a `Drop` implementation; this code won’t
+[Listing 20-23][Listing-20-23] shows a first attempt at a `Drop` implementation; this code won’t
 quite work yet.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-23]: #Listing-20-23
+<a name="Listing-20-23"></a>
 
 ```rust,ignore
 impl Drop for ThreadPool {
@@ -58,8 +61,8 @@ error[E0507]: cannot move out of borrowed content
 The error tells us we can’t call `join` because we only have a mutable borrow
 of each `worker` and `join` takes ownership of its argument. To solve this
 issue, we need to move the thread out of the `Worker` instance that owns
-`thread` so `join` can consume the thread. We did this in Listing 17-15: if
-`Worker` holds an `Option<thread::JoinHandle<()>>` instead, we can call the
+`thread` so `join` can consume the thread. We did this in [Listing 17-15][Listing-17-15]: if
+`Worker` holds an `Option<thread::JoinHandle<()>` instead, we can call the
 `take` method on the `Option` to move the value out of the `Some` variant and
 leave a `None` variant in its place. In other words, a `Worker` that is running
 will have a `Some` variant in `thread`, and when we want to clean up a
@@ -178,9 +181,12 @@ thread should run, or it will be a `Terminate` variant that will cause the
 thread to exit its loop and stop.
 
 We need to adjust the channel to use values of type `Message` rather than type
-`Job`, as shown in Listing 20-24.
+`Job`, as shown in [Listing 20-24][Listing-20-24].
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-24]: #Listing-20-24
+<a name="Listing-20-24"></a>
 
 ```rust,ignore
 pub struct ThreadPool {
@@ -248,11 +254,14 @@ received, and the thread will break out of the loop if the `Terminate` variant
 is received.
 
 With these changes, the code will compile and continue to function in the same
-way as it did after Listing 20-21. But we’ll get a warning because we aren’t
+way as it did after [Listing 20-21][Listing-20-21]. But we’ll get a warning because we aren’t
 creating any messages of the `Terminate` variety. Let’s fix this warning by
-changing our `Drop` implementation to look like Listing 20-25.
+changing our `Drop` implementation to look like [Listing 20-25][Listing-20-25].
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-25]: #Listing-20-25
+<a name="Listing-20-25"></a>
 
 ```rust,ignore
 impl Drop for ThreadPool {
@@ -302,9 +311,12 @@ messages as there are workers, each worker will receive a terminate message
 before `join` is called on its thread.
 
 To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 20-26.
+before gracefully shutting down the server, as shown in [Listing 20-26][Listing-20-26].
 
 <span class="filename">Filename: src/bin/main.rs</span>
+
+[Listing-20-26]: #Listing-20-26
+<a name="Listing-20-26"></a>
 
 ```rust,ignore
 fn main() {
@@ -577,3 +589,10 @@ joining us on this tour of Rust. You’re now ready to implement your own Rust
 projects and help with other peoples’ projects. Keep in mind that there is a
 welcoming community of other Rustaceans who would love to help you with any
 challenges you encounter on your Rust journey.
+
+[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
+[Listing-20-23]: ch20-03-graceful-shutdown-and-cleanup.html#Listing-20-23
+[Listing-20-24]: ch20-03-graceful-shutdown-and-cleanup.html#Listing-20-24
+[Listing-20-25]: ch20-03-graceful-shutdown-and-cleanup.html#Listing-20-25
+[Listing-20-26]: ch20-03-graceful-shutdown-and-cleanup.html#Listing-20-26
+[Listing-20-21]: ch20-02-multithreaded.html#Listing-20-21
