@@ -93,8 +93,10 @@ We could also use the `vec!` macro to make a vector of two integers or a vector
 of five string slices. We wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
-Let’s look at a slightly simplified definition of the `vec!` macro in Listing
-D-1.
+Let’s look at a slightly simplified definition of the `vec!` macro in Listing D-1.
+
+[Listing-D-1]: #Listing-D-1
+<a name="Listing-D-1"></a>
 
 ```rust
 #[macro_export]
@@ -201,6 +203,9 @@ been defined. In other words, we’ll write a crate that enables another
 programmer to write code like Listing D-2 using our crate.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-D-2]: #Listing-D-2
+<a name="Listing-D-2"></a>
 
 ```rust,ignore
 extern crate hello_macro;
@@ -310,6 +315,9 @@ To start defining the procedural macro, place the code in Listing D-3 into your
 compile until we add a definition for the `impl_hello_macro` function.
 
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
+
+[Listing-D-3]: #Listing-D-3
+<a name="Listing-D-3"></a>
 
 ```rust,ignore
 extern crate proc_macro;

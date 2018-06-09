@@ -12,13 +12,15 @@ item in the cycle will never reach 0, and the values will never be dropped.
 ### Creating a Reference Cycle
 
 Let’s look at how a reference cycle might happen and how to prevent it,
-starting with the definition of the `List` enum and a `tail` method in Listing
-15-25:
+starting with the definition of the `List` enum and a `tail` method in [Listing 15-25][Listing-15-25]:
 
 <span class="filename">Filename: src/main.rs</span>
 
 <!-- Hidden fn main is here to disable the automatic wrapping in fn main that
 doc tests do; the `use List` fails if this listing is put within a main -->
+
+[Listing-15-25]: #Listing-15-25
+<a name="Listing-15-25"></a>
 
 ```rust
 # fn main() {}
@@ -45,20 +47,23 @@ impl List {
 <span class="caption">Listing 15-25: A cons list definition that holds a
 `RefCell<T>` so we can modify what a `Cons` variant is referring to</span>
 
-We’re using another variation of the `List` definition in Listing 15-5. The
+We’re using another variation of the `List` definition in [Listing 15-5][Listing-15-5]. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
-instead of having the ability to modify the `i32` value as we did in Listing
-15-24, we want to modify which `List` value a `Cons` variant is pointing to.
+instead of having the ability to modify the `i32` value as we did in [Listing 15-24][Listing-15-24],
+we want to modify which `List` value a `Cons` variant is pointing to.
 We’re also adding a `tail` method to make it convenient for us to access the
 second item if we have a `Cons` variant.
 
-In Listing 15-26, we’re adding a `main` function that uses the definitions in
-Listing 15-25. This code creates a list in `a` and a list in `b` that points to
+In [Listing 15-26][Listing-15-26], we’re adding a `main` function that uses the definitions in
+[Listing 15-25][Listing-15-25]. This code creates a list in `a` and a list in `b` that points to
 the list in `a`. Then it modifies the list in `a` to point to `b`, creating a
 reference cycle. There are `println!` statements along the way to show what the
 reference counts are at various points in this process.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-26]: #Listing-15-26
+<a name="Listing-15-26"></a>
 
 ```rust
 # use List::{Cons, Nil};
@@ -139,8 +144,10 @@ will try to drop `b` first, which will decrease the count in each of the
 However, because `a` is still referencing the `Rc<List>` that was in `b`, that
 `Rc<List>` has a count of 1 rather than 0, so the memory the `Rc<List>` has on
 the heap won’t be dropped. The memory will just sit there with a count of 1,
-forever. To visualize this reference cycle, we’ve created a diagram in Figure
-15-4.
+forever. To visualize this reference cycle, we’ve created a diagram in [Figure 15-4][Figure-15-4].
+
+[Figure-15-4]: #Figure-15-4
+<a name="Figure-15-4"></a>
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
@@ -169,7 +176,7 @@ Another solution for avoiding reference cycles is reorganizing your data
 structures so that some references express ownership and some references don’t.
 As a result, you can have cycles made up of some ownership relationships and
 some non-ownership relationships, and only the ownership relationships affect
-whether or not a value can be dropped. In Listing 15-25, we always want `Cons`
+whether or not a value can be dropped. In [Listing 15-25][Listing-15-25], we always want `Cons`
 variants to own their list, so reorganizing the data structure isn’t possible.
 Let’s look at an example using graphs made up of parent nodes and child nodes
 to see when non-ownership relationships are an appropriate way to prevent
@@ -233,9 +240,12 @@ modify which nodes are children of another node, so we have a `RefCell<T>` in
 
 Next, we’ll use our struct definition and create one `Node` instance named
 `leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children, as shown in Listing 15-27:
+with the value 5 and `leaf` as one of its children, as shown in [Listing 15-27][Listing-15-27]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-27]: #Listing-15-27
+<a name="Listing-15-27"></a>
 
 ```rust
 # use std::rc::Rc;
@@ -303,10 +313,13 @@ struct Node {
 ```
 
 A node will be able to refer to its parent node but doesn’t own its parent.
-In Listing 15-28, we update `main` to use this new definition so the `leaf`
+In [Listing 15-28][Listing-15-28], we update `main` to use this new definition so the `leaf`
 node will have a way to refer to its parent, `branch`:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-28]: #Listing-15-28
+<a name="Listing-15-28"></a>
 
 ```rust
 # use std::rc::{Rc, Weak};
@@ -344,7 +357,7 @@ fn main() {
 parent node `branch`</span>
 
 Creating the `leaf` node looks similar to how creating the `leaf` node looked
-in Listing 15-27 with the exception of the `parent` field: `leaf` starts out
+in [Listing 15-27][Listing-15-27] with the exception of the `parent` field: `leaf` starts out
 without a parent, so we create a new, empty `Weak<Node>` reference instance.
 
 At this point, when we try to get a reference to the parent of `leaf` by using
@@ -367,7 +380,7 @@ the `Rc<Node>` in `branch.`
 When we print the parent of `leaf` again, this time we’ll get a `Some` variant
 holding `branch`: now `leaf` can access its parent! When we print `leaf`, we
 also avoid the cycle that eventually ended in a stack overflow like we had in
-Listing 15-26; the `Weak<Node>` references are printed as `(Weak)`:
+[Listing 15-26][Listing-15-26]; the `Weak<Node>` references are printed as `(Weak)`:
 
 ```text
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
@@ -385,9 +398,12 @@ Let’s look at how the `strong_count` and `weak_count` values of the `Rc<Node>`
 instances change by creating a new inner scope and moving the creation of
 `branch` into that scope. By doing so, we can see what happens when `branch` is
 created and then dropped when it goes out of scope. The modifications are shown
-in Listing 15-29:
+in [Listing 15-29][Listing-15-29]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-29]: #Listing-15-29
+<a name="Listing-15-29"></a>
 
 ```rust
 # use std::rc::{Rc, Weak};
@@ -496,3 +512,12 @@ information.
 
 Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
 smart pointers.
+
+[Listing-15-24]: ch15-05-interior-mutability.html#Listing-15-24
+[Listing-15-5]: ch15-01-box.html#Listing-15-5
+[Listing-15-25]: ch15-06-reference-cycles.html#Listing-15-25
+[Listing-15-26]: ch15-06-reference-cycles.html#Listing-15-26
+[Figure-15-4]: ch15-06-reference-cycles.html#Figure-15-4
+[Listing-15-27]: ch15-06-reference-cycles.html#Listing-15-27
+[Listing-15-28]: ch15-06-reference-cycles.html#Listing-15-28
+[Listing-15-29]: ch15-06-reference-cycles.html#Listing-15-29

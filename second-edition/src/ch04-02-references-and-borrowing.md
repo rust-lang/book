@@ -1,6 +1,6 @@
 ## References and Borrowing
 
-The issue with the tuple code in Listing 4-5 is that we have to return the
+The issue with the tuple code in [Listing 4-5][Listing-4-5] is that we have to return the
 `String` to the calling function so we can still use the `String` after the
 call to `calculate_length`, because the `String` was moved into
 `calculate_length`.
@@ -31,7 +31,10 @@ function return value is gone. Second, note that we pass `&s1` into
 `String`.
 
 These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-5 shows a diagram.
+without taking ownership of it. [Figure 4-5][Figure-4-5] shows a diagram.
+
+[Figure-4-5]: #Figure-4-5
+<a name="Figure-4-5"></a>
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
@@ -79,9 +82,12 @@ if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.
 
 So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+[Listing 4-6][Listing-4-6]. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-4-6]: #Listing-4-6
+<a name="Listing-4-6"></a>
 
 ```rust,ignore
 fn main() {
@@ -114,7 +120,7 @@ allowed to modify something we have a reference to.
 
 ### Mutable References
 
-We can fix the error in the code from Listing 4-6 with just a small tweak:
+We can fix the error in the code from [Listing 4-6][Listing-4-6] with just a small tweak:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -319,3 +325,7 @@ Let’s recap what we’ve discussed about references:
 * References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.
+
+[Listing-4-5]: ch04-01-what-is-ownership.html#Listing-4-5
+[Figure-4-5]: ch04-02-references-and-borrowing.html#Figure-4-5
+[Listing-4-6]: ch04-02-references-and-borrowing.html#Listing-4-6
