@@ -1,8 +1,8 @@
-# Getting Started
+# Начало работы
 
-Let’s start your Rust journey! There’s a lot to learn, but every journey starts
-somewhere. In this chapter, we’ll discuss:
+Давайте начнём ваше путешествие с Rust! Придётся много чему научиться, но любое путешествие имеет начало
+. В этой главе мы обсудим:
 
-* Installing Rust on Linux, macOS, and Windows
-* Writing a program that prints `Hello, world!`
-* Using `cargo`, Rust’s package manager and build system
+* Установку Rust на Linux, macOS, и Windows
+* Написание программы, выводящей на экран `Hello, world!`
+* Использование `cargo`, менеджера пакетов и системы сборки языка Rust
