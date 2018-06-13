@@ -238,6 +238,72 @@ pub struct ThreadPool;
 *src/main.rs* 바이너리 크레이트를 *src/bin/main.rs* 의 위치로 이동시킵니다.
 이로써 *hello* 디렉토리 안의 라이브러리 크레이트가 주요 크레이트가 될 것입니다;
 우린 여전히 *src/bin/main.rs* 바이너리 크레이트를 `cargo run` 명령어를 이용해 실행시킬 수 있습니다.
-*main.rs* 파일을 이동시킨 후 라이브러리 크레이트를 가져와서 *src/bin/main.rs* 상단에 다음 코드를 추가하여
-`ThreadPool` 을 스코프 내로 가져옵니다:
+*main.rs* 파일을 이동시킨 후 라이브러리 크레이트를 가져와서
+*src/bin/main.rs* 상단에 다음 코드를 추가하여 `ThreadPool` 을 스코프 내로 가져옵니다:
+
+<span class="filename">파일명: src/bin/main.rs</span>
+
+```rust,ignore
+extern crate hello;
+use hello::ThreadPool;
+```
+
+이 코드는 여전히 작동하지 않지만,
+다음 오류를 확인하기 위해 다시 확인해 보겠습니다.
+
+```text
+$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+error[E0599]: no function or associated item named `new` found for type
+`hello::ThreadPool` in the current scope
+ --> src/bin/main.rs:13:16
+   |
+13 |     let pool = ThreadPool::new(4);
+   |                ^^^^^^^^^^^^^^^ function or associated item not found in
+   `hello::ThreadPool`
+```
+
+이 에러는 우리가 `ThreadPool` 의 `new` 함수를 생성해야 한다는 것을 나타냅니다.
+우리는 `new` 가 `4` 를 인수로 받을 수 있도록 하나의 인자를 가져야 하고
+`ThreadPool` 객체를 반환해야 한다는 것을 알고 있으니
+해당하는 특성을 가진 가장 간단한 `new` 함수를
+구현해 봅시다.
+
+<span class="filename">파일명: src/lib.rs</span>
+
+```rust
+pub struct ThreadPool;
+
+impl ThreadPool {
+    pub fn new(size: usize) -> ThreadPool {
+        ThreadPool
+    }
+}
+```
+
+스레드의 개수가 음수라는 것은 말이 안되기 때문에
+`size` 인자의 타입을 `usize` 로 정했습니다.
+3장의 "정수 타입" 절에서 설명했듯이
+이 4 라는 숫자를 스레드 컬렉션 요소의 개수로 사용합니다.
+
+코드를 다시한번 체크해 봅시다:
+
+```text
+$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+warning: unused variable: `size`
+ --> src/lib.rs:4:16
+  |
+4 |     pub fn new(size: usize) -> ThreadPool {
+  |                ^^^^
+  |
+  = note: #[warn(unused_variables)] on by default
+  = note: to avoid this warning, consider using `_size` instead
+
+error[E0599]: no method named `execute` found for type `hello::ThreadPool` in the current scope
+  --> src/bin/main.rs:18:14
+   |
+18 |         pool.execute(|| {
+   |              ^^^^^^^
+```
 
