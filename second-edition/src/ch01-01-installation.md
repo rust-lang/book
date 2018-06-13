@@ -1,40 +1,38 @@
-## Installation
+## Установка 
 
-The first step is to install Rust. We’ll download Rust through `rustup`, a
-command line tool for managing Rust versions and associated tools. You’ll need
-an internet connection for the download.
+Первым делом необходимо установить Rust. Мы загрузим Rust при помощи `rustup`,
+утилиты командной строки для управления версиями Rust и связанным с ним инструментарием. Для скачивания вам понадобится
+подключение к интернету.
 
-> Note: If you prefer not to use `rustup` for some reason, please see [the Rust
-> installation page](https://www.rust-lang.org/install.html) for other options.
+> Заметка: Если вы по некоторым причинам не желаете использовать `rustup`, пожалуйста посетите [the Rust
+> installation page](https://www.rust-lang.org/install.html) для рассмотрения иных способов установки.
 
-The following steps install the latest stable version of the Rust compiler. All
-the examples and output in this book use stable Rust 1.21.0. Rust’s stability
-guarantees ensure that all the examples in the book that compile will continue
-to compile with newer Rust versions. The output might differ slightly between
-versions, because Rust often improves error messages and warnings. In other
-words, any newer, stable version of Rust you install using these steps should
-work as expected with the content of this book.
+Следующие шаги ведут к установке последней стабильной версии компилятора Rust. Все
+примеры и выводы программ в этой книге приведены для стабильной версии Rust 1.21.0. Гарантии стабильности Rust обеспечивают то, что все примеры в книге, которые компилируются, будут продолжать компилироваться и с более новыми версиями Rust. Выходные данные могут незначительно отличаться от версии к 
+версии, потому что Rust часто улучшает сообщения об ошибках и предупреждениях. Иначе говоря
+, любая более новая, стабильная версия Rust, которую вы установите при помощи следующих шагов будет работать
+ в соответствии с поведением, описанным в этой книге.
 
-> ### Command Line Notation
+> ### Примечание к командной строке
 >
-> In this chapter and throughout the book, we’ll show some commands used in the
-> terminal. Lines that you should enter in a terminal all start with `$`. You
-> don’t need to type in the `$` character; it indicates the start of each
-> command. Lines that don’t start with `$` typically show the output of the
-> previous command. Additionally, PowerShell-specific examples will use `>`
-> rather than `$`.
+> В этой главе и во всей книге, мы будем показывать некоторые команды, используемые в
+> терминале. Строки, которые вы должны ввести в терминал, начинаются с `$`. Вам
+> не нужно вводить символ `$`; он указывает на начало каждой 
+> команды. Строки, которые не начинаются с `$` обычно показывают вывод
+> предыдущей команды. Кроме того, в примерах с PowerShell вместо `$` будет
+> использоваться `>`.
 
-### Installing `rustup` on Linux or macOS
+### Установка `rustup` на Linux или macOS
 
-If you’re using Linux or macOS, open a terminal and enter the following command:
+Если вы используете Linux или macOS, откройте терминал и введите следующую команду:
 
 ```text
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+Команда загружает скрипт и запускает установку инструмента `rustup`
+, который устанавливает последнюю стабильную версию Rust. Вам может быть понадобится ввести свой пароль
+. Если установка прошла успешно, появится следующая строка:
 
 ```text
 Rust is installed now. Great!
