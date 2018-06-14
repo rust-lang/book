@@ -56,13 +56,9 @@ $ source $HOME/.cargo/env
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-Additionally, you’ll need a linker of some kind. It’s likely one is already
-installed, but when you try to compile a Rust program and get errors indicating
-that a linker could not execute, that means a linker isn’t installed on your
-system and you’ll need to install one manually. C compilers usually come with
-the correct linker. Check your platform’s documentation for how to install a C
-compiler. Also, some common Rust packages depend on C code and will need a C
-compiler. Therefore, it might be worth installing one now.
+Вдобавок вам понадобится какой-нибудь компоновщик(linker). Возможно, он уже установлен , но если во время компиляции программы на Rust вы получаете ошибку, сообщающую о том, что компоновщик не может выполняться,  это означает, что компоновщик не установлен в вашей системе и вам нужно установить его вручную. Компиляторы C обычно поставляются с
+подходящим компоновщиком. Инструкции по установке компилятора C см. в документации к платформе. Также, некоторые пакеты Rust зависят от кода на C и нуждаются в компиляторе C
+. Вследствие чего, возможно, стоит установить его сейчас.
 
 ### Установка `rustup` на Windows
 
