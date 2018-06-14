@@ -41,16 +41,16 @@ Rust is installed now. Great!
 If you prefer, feel free to download the script and inspect it before running
 it.
 
-The installation script automatically adds Rust to your system PATH after your
-next login. If you want to start using Rust right away instead of restarting
-your terminal, run the following command in your shell to add Rust to your
-system PATH manually:
+Установочный скрипт автоматически добавляет Rust в системную переменную PATH после следующего входа в систему
+. Если вы хотите начать использовать Rust сразу, вместо того чтобы перезапускать сеанс
+, выполните следующую команду в консоли, чтобы вручную добавить Rust в вашу системную переменную
+ PATH:
 
 ```text
 $ source $HOME/.cargo/env
 ```
 
-Alternatively, you can add the following line to your *~/.bash_profile*:
+Или же вы можете добавить следующую строку в *~/.bash_profile*:
 
 ```text
 $ export PATH="$HOME/.cargo/bin:$PATH"
@@ -64,48 +64,47 @@ the correct linker. Check your platform’s documentation for how to install a C
 compiler. Also, some common Rust packages depend on C code and will need a C
 compiler. Therefore, it might be worth installing one now.
 
-### Installing `rustup` on Windows
+### Установка `rustup` на Windows
 
-On Windows, go to [https://www.rust-lang.org/install.html][install] and follow
-the instructions for installing Rust. At some point in the installation, you’ll
-receive a message explaining that you’ll also need the C++ build tools for
-Visual Studio 2013 or later. The easiest way to acquire the build tools is to
-install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
-the Other Tools and Frameworks section.
+На Windows, перейдите на [https://www.rust-lang.org/install.html][install] и следуйте
+инструкциям по установке Rust. На одном из этапов установки, вы
+получите сообщение о том, что вам также необходимы инструменты сборки C++ для
+Visual Studio 2013 и новее. Самый простой способ получить инструменты сборки — это установить
+[Build Tools for Visual Studio 2017][visualstudio]. Инструменты находятся в разделе
+Other Tools and Frameworks.
 
 [install]: https://www.rust-lang.org/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
 
-The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
-If there are specific differences, we’ll explain which to use.
+В этой книге будут использоваться команды, работающие и а *cmd.exe*, и в PowerShell.
+Если будут какие-либо специфические различия, мы укажем что использовать.
 
-### Updating and Uninstalling
+### Обновление и Удаление
 
-After you’ve installed Rust via `rustup`, updating to the latest version is
-easy. From your shell, run the following update script:
+ После того, как вы установите Rust при помощи `rustup`, вы можете легко его обновлять
+. Для этого запустите следующий сценарий обновления из вашей консоли:
 
 ```text
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
+Чтобы удалить Rust и `rustup`, запустите следующий сценарий удаления из вашей консоли:
 
 ```text
 $ rustup self uninstall
 ```
 
-### Troubleshooting
+### Решение проблем
 
-To check whether you have Rust installed correctly, open a shell and enter this
-line:
+Чтобы проверить, правильно ли вы установили Rust, откройте консоль и введите эту
+строку:
 
 ```text
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest
-stable version that has been released in the following format:
+ Вы должны увидеть версию, хэш коммита, и дату коммита последней стабильной версии
+в следующем формате:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
