@@ -66,7 +66,7 @@ compiler. Therefore, it might be worth installing one now.
 
 ### Установка `rustup` на Windows
 
-На Windows, перейдите на [https://www.rust-lang.org/install.html][install] и следуйте
+На Windows, перейдите на [Installation][install] и следуйте
 инструкциям по установке Rust. На одном из этапов установки, вы
 получите сообщение о том, что вам также необходимы инструменты сборки C++ для
 Visual Studio 2013 и новее. Самый простой способ получить инструменты сборки — это установить
