@@ -124,12 +124,10 @@ nickname we call ourselves) who can help you out. Other great resources include
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-### Local Documentation
+### Локальная документация
 
-The installer also includes a copy of the documentation locally, so you can
-read it offline. Run `rustup doc` to open the local documentation in your
-browser.
+Установщик также включает в себя копию документации, доступной локально, так что вы можете
+читать её оффлайн. Выполните `rustup doc` чтобы открыть локальную документацию в вашем
+браузере.
 
-Any time a type or function is provided by the standard library and you’re not
-sure what it does or how to use it, use the application programming interface
-(API) documentation to find out!
+В любое время используйте документацию API, чтобы понять, что из себя представляет тип или функция, предоставляемые стандартной библиотекой, и как их использовать.
