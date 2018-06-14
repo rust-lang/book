@@ -38,8 +38,8 @@ $ curl https://sh.rustup.rs -sSf | sh
 Rust is installed now. Great!
 ```
 
-If you prefer, feel free to download the script and inspect it before running
-it.
+По желанию вы можете загрузить скрипт и изучить его перед запуском
+.
 
 Установочный скрипт автоматически добавляет Rust в системную переменную PATH после следующего входа в систему
 . Если вы хотите начать использовать Rust сразу, вместо того чтобы перезапускать сеанс
