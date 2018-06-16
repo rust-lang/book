@@ -169,7 +169,6 @@ main  main.rs
 With PowerShell on Windows, you can use `ls` as well, but you'll see three files:
 
 ```text
-$ls
 > ls
 
 
