@@ -369,7 +369,7 @@ needing to write out a really long type.
 This only works if you have a single type that you're returning, however.
 For example, this would *not* work:
 
-```rust
+```rust,ignore
 fn returns_summarizable(switch: bool) -> impl Summary {
     if switch {
         NewsArticle {
