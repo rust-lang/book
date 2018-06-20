@@ -103,7 +103,7 @@ function to lowercase the query and the line before comparing them</span>
 
 First, we lowercase the `query` string and store it in a shadowed variable with
 the same name. Calling `to_lowercase` on the query is necessary so no matter
-whether the user’s query is `"rust"`, `"RUST"`, `"Rust:"`, or `"rUsT"`, we’ll
+whether the user’s query is `"rust"`, `"RUST"`, `"Rust"`, or `"rUsT"`, we’ll
 treat the query as if it were `"rust"` and be insensitive to the case.
 
 Note that `query` is now a `String` rather than a string slice, because calling
