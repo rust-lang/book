@@ -294,9 +294,9 @@ let len = String::from("Здравствуйте").len();
 
 Asked how long the string is, you might say 12. However, Rust’s answer is 24:
 that’s the number of bytes it takes to encode “Здравствуйте” in UTF-8, because
-each Unicode scalar value takes 2 bytes of storage. Therefore, an index into
-the string’s bytes will not always correlate to a valid Unicode scalar value.
-To demonstrate, consider this invalid Rust code:
+each Unicode scalar value in that string takes 2 bytes of storage. Therefore,
+an index into the string’s bytes will not always correlate to a valid Unicode
+scalar value. To demonstrate, consider this invalid Rust code:
 
 ```rust,ignore
 let hello = "Здравствуйте";
