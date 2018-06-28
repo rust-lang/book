@@ -48,8 +48,8 @@ strings.
 > stored on the heap instead. The heap is less organized: when you put data on
 > the heap, you ask for some amount of space. The operating system finds an
 > empty spot somewhere in the heap that is big enough, marks it as being in
-> use, and returns a *pointer*, which is the address of that location. This
-> process is called *allocating on the heap*, sometimes abbreviated as just
+> use, and returns a *pointer*, which contains the address of that location.
+> This process is called *allocating on the heap*, sometimes abbreviated as just
 > “allocating.” Pushing values onto the stack is not considered allocating.
 > Because the pointer is a known, fixed size, you can store the pointer on the
 > stack, but when you want the actual data, you have to follow the pointer.
