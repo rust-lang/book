@@ -31,8 +31,10 @@ strings.
 > here is a brief explanation in preparation.
 >
 > Both the stack and the heap are parts of memory that is available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
+> to use at runtime, but they are structured in different ways. When discussing
+> the stack, the term "frame" is often mentioned.  A stack frame houses all of
+> the associated values contained within a function. The stack stores these
+> frames in the order it receives them and removes them in the opposite order.
 > This is referred to as *last in, first out*. Think of a stack of plates: when
 > you add more plates, you put them on top of the pile, and when you need a
 > plate, you take one off the top. Adding or removing plates from the middle or
