@@ -169,7 +169,7 @@ your code to make sure it compiles but doesn’t produce an executable:
 
 ```text
 $ cargo check
-   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+   Checking hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
 ```
 
