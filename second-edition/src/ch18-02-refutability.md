@@ -30,7 +30,8 @@
 let Some(x) = some_option_value;
 ```
 
-<span class="caption">예제 18-8: `let`에서 반증 가능 패턴의 사용</span>
+<span class="caption">예제 18-8: `let`에서 반증 가능 패턴의 사용
+</span>
 
 `some_option_value`가 `None`일 경우 `Some(x)`에 대응하는데 실패합니다.
 즉 반증 가능 패턴입니다. 하지만 `let`구문은 반증 불가한 패턴만을 허용합니다.
@@ -62,7 +63,8 @@ if let Some(x) = some_option_value {
 }
 ```
 
-<span class="caption">예제 18-9: `let` 대신 `if let`과 반증 가능 패턴의 사용</span>
+<span class="caption">예제 18-9: `let` 대신 `if let`과 반증 가능 패턴의 사용
+</span>
 
 코드에게 탈출구를 만들어줬습니다!
 이 코드에 문제는 없습니다. 다만 반증 불가 패턴을 사용할 경우 에러를 받게 되겠죠.
@@ -75,7 +77,8 @@ if let x = 5 {
 };
 ```
 
-<span class="caption">예제 18-10: `if let`과 반증 불가 패턴의 사용</span>
+<span class="caption">예제 18-10: `if let`과 반증 불가 패턴의 사용
+</span>
 
 러스트는 틀려도 되야할 `if let` 구문에 틀릴리 없는 패턴을 쓰는 것은 말이 되지
 않는다고 불평할겁니다:
