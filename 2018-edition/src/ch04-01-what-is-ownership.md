@@ -74,8 +74,8 @@ strings.
 >
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> local variables get pushed onto the stack in the form of a stack frame. When
+> the end of the function is reached, those values get popped off the stack.
 >
 > Keeping track of what parts of code are using what data on the heap,
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
