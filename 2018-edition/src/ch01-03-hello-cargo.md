@@ -178,7 +178,8 @@ Why would you not want an executable? Often, `cargo check` is much faster than
 continually checking your work while writing the code, using `cargo check` will
 speed up the process! As such, many Rustaceans run `cargo check` periodically
 as they write their program to make sure it compiles. Then they run `cargo
-build` when they’re ready to use the executable.
+build` when they’re ready to produce an executable for either debugging or for
+distribution.
 
 Let’s recap what we’ve learned so far about Cargo:
 
