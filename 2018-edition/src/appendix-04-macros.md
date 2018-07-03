@@ -301,8 +301,8 @@ in a moment, so we need to add them as dependencies. Add the following to the
 proc-macro = true
 
 [dependencies]
-syn = "0.11.11"
-quote = "0.3.15"
+syn = "0.14.4"
+quote = "0.6.3"
 ```
 
 To start defining the procedural macro, place the code in Listing D-3 into your
@@ -321,17 +321,12 @@ use proc_macro::TokenStream;
 
 #[proc_macro_derive(HelloMacro)]
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
-    // Construct a string representation of the type definition
-    let s = input.to_string();
+    // Construct a represntation of Rust code as a syntax tree
+    // that we can manipulate
+    let ast = syn::parse(input).unwrap();
 
-    // Parse the string representation
-    let ast = syn::parse_derive_input(&s).unwrap();
-
-    // Build the impl
-    let gen = impl_hello_macro(&ast);
-
-    // Return the generated impl
-    gen.parse().unwrap()
+    // Build the trait implementation
+    impl_hello_macro(&ast)
 }
 ```
 
@@ -362,21 +357,12 @@ the `hello_macro_derive` function here with `proc_macro_derive` and specified
 the name, `HelloMacro`, which matches our trait name; that’s the convention
 most procedural macros follow.
 
-This function first converts the `input` from a `TokenStream` to a `String` by
-calling `to_string`. This `String` is a string representation of the Rust code
-for which we are deriving `HelloMacro`. In the example in Listing D-2, `s` will
-have the `String` value `struct Pancakes;` because that is the Rust code we
-added the `#[derive(HelloMacro)]` annotation to.
-
-> Note: At the time of this writing, you can only convert a `TokenStream` to a
-> string. A richer API will exist in the future.
-
-Now we need to parse the Rust code `String` into a data structure that we can
-then interpret and perform operations on. This is where `syn` comes into play.
-The `parse_derive_input` function in `syn` takes a `String` and returns a
-`DeriveInput` struct representing the parsed Rust code. The following code
-shows the relevant parts of the `DeriveInput` struct we get from parsing the
-string `struct Pancakes;`:
+This function first converts the `input` from a `TokenStream` to a data
+structure that we can then interpret and perform operations on. This is where
+`syn` comes into play. The `parse` function in `syn` takes a `TokenStream` and
+returns a `DeriveInput` struct representing the parsed Rust code. The following
+code shows the relevant parts of the `DeriveInput` struct we get from parsing
+the string `struct Pancakes;`:
 
 ```rust,ignore
 DeriveInput {
@@ -400,36 +386,34 @@ documentation for `DeriveInput`][syn-docs] for more information.
 
 At this point, we haven’t defined the `impl_hello_macro` function, which is
 where we’ll build the new Rust code we want to include. But before we do, note
-that the last part of this `hello_macro_derive` function uses the `parse`
-function from the `quote` crate to turn the output of the `impl_hello_macro`
-function back into a `TokenStream`. The returned `TokenStream` is added to the
-code that our crate users write, so when they compile their crate, they’ll get
-extra functionality that we provide.
+that its output is also a `TokenStream` which is added to the code that our
+crate users write, so when they compile their crate, they’ll get extra
+functionality that we provide.
 
-You might have noticed that we’re calling `unwrap` to panic if the calls to the
-`parse_derive_input` or `parse` functions fail here. Panicking on errors is
-necessary in procedural macro code because `proc_macro_derive` functions must
-return `TokenStream` rather than `Result` to conform to the procedural macro
-API. We’ve chosen to simplify this example by using `unwrap`; in production
-code, you should provide more specific error messages about what went wrong by
-using `panic!` or `expect`.
+You might have noticed that we’re calling `unwrap` to panic if the call to the
+`syn::parse`function fails here. Panicking on errors is necessary in procedural
+macro code because `proc_macro_derive` functions must return `TokenStream`
+rather than `Result` to conform to the procedural macro API. We’ve chosen to
+simplify this example by using `unwrap`; in production code, you should provide
+more specific error messages about what went wrong by using `panic!` or `expect`.
 
 Now that we have the code to turn the annotated Rust code from a `TokenStream`
-into a `String` and a `DeriveInput` instance, let’s generate the code that
-implements the `HelloMacro` trait on the annotated type:
+into a `DeriveInput` instance, let’s generate the code that implements the
+`HelloMacro` trait on the annotated type:
 
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
 ```rust,ignore
-fn impl_hello_macro(ast: &syn::DeriveInput) -> quote::Tokens {
+fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    quote! {
+    let gen = quote! {
         impl HelloMacro for #name {
             fn hello_macro() {
                 println!("Hello, Macro! My name is {}", stringify!(#name));
             }
         }
-    }
+    };
+    gen.into()
 }
 ```
 
@@ -437,12 +421,16 @@ We get an `Ident` struct instance containing the name (identifier) of the
 annotated type using `ast.ident`. The code in Listing D-2 specifies that the
 `name` will be `Ident("Pancakes")`.
 
-The `quote!` macro lets us write the Rust code that we want to return and
-convert it into `quote::Tokens`. This macro also provides some very cool
-templating mechanics; we can write `#name`, and `quote!` will replace it with
-the value in the variable named `name`. You can even do some repetition similar
-to the way regular macros work. Check out [the `quote` crate’s
-docs][quote-docs] for a thorough introduction.
+The `quote!` macro lets us write the Rust code that we want to return, but the
+direct result of its execution is not what is expected by the compiler and needs
+to be converted to a `TokenStream` by calling the `into` method. `into` consumes
+this intermediate representation and returns a value of the required type.
+
+This macro also provides some very cool templating mechanics; we can write
+`#name`, and `quote!` will replace it with the value in the variable named
+`name`. You can even do some repetition similar
+to the way regular macros work. Check out [the `quote` crate’s docs][quote-docs]
+for a thorough introduction.
 
 [quote-docs]: https://docs.rs/quote
 
