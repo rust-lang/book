@@ -607,7 +607,7 @@ compile until we modify *src/main.rs* in the listing after this one.
 
 ```rust,ignore
 use std::error::Error;
-use std::fs::File;
+use std::fs;
 use std::io::prelude::*;
 
 pub struct Config {
