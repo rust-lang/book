@@ -30,7 +30,7 @@ strings.
 > be described in relation to the stack and the heap later in this chapter, so
 > here is a brief explanation in preparation.
 >
-> Both the stack and the heap are parts of memory that is available to your code
+> Both the stack and the heap are parts of memory that are available to your code
 > to use at runtime, but they are structured in different ways. The stack stores
 > values in the order it gets them and removes the values in the opposite order.
 > This is referred to as *last in, first out*. Think of a stack of plates: when
