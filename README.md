@@ -78,6 +78,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - interior mutability: 내부 가변성
 - instance: 인스턴스
 - integration test: 통합 테스트
+- irrefutable pattern: 반증 불가 패턴
 - iterator: 반복자
 - lifetime: 라이프타임
 - library: 라이브러리
@@ -98,6 +99,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - reference: 참조자
 - reference counting: 참조 카운팅
 - reference cycle: 참조 순환
+- refutable pattern: 반증 가능 패턴
 - return: 반환
 - rust: 러스트
 - scope: 스코프

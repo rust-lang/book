@@ -1,28 +1,28 @@
-# Patterns and Matching
+# 패턴과 매칭
 
-Patterns are a special syntax in Rust for matching against the structure of
-types, both complex and simple. Using patterns in conjunction with `match`
-expressions and other constructs gives you more control over a program’s
-control flow. A pattern consists of some combination of the following:
+패턴은 단순하거나 복잡한 타입의 구조에 값들을 비교하기 위한 러스트의 특별한 문법입니다.
+패턴을 `match` 표현 및 다른 구문들과 함께 사용하면 프로그램 흐름을 더 많이 제어할 수
+있습니다.
+패턴은 다음의 조합으로 이루어집니다:
 
-* Literals
-* Destructured arrays, enums, structs, or tuples
-* Variables
-* Wildcards
-* Placeholders
+* 리터럴 값(Literals)
+* 분해한 배열(Array), 열거형(Enum), 구조체(Struct), 튜플(Tuple)
+* 변수(Variable)
+* 와일드카드(Wildcard)
+* 임시 값(Placeholders)
 
-These components describe the shape of the data we’re working with, which we
-then match against values to determine whether our program has the correct data
-to continue running a particular piece of code.
+이들은 프로그램이 처리 할 자료들의 형태를 나타냅니다. 자료들을 이 구조들에 대응시키고,
+대응 시킨 자료를 값들과 비교하여 특정 구간의 코드가 실행 될 수 있는지 판단할 수 있게
+됩니다.
 
-To use a pattern, we compare it to some value. If the pattern matches the
-value, we use the value parts in our code. Recall the `match` expressions in
-Chapter 6 that used patterns, such as the coin sorting machine example. If the
-value fits the shape of the pattern, we can use the named pieces. If it
-doesn’t, the code associated with the pattern won’t run.
+패턴을 이용하기 위해선 그 패턴을 어떠한 값에 비교해야 합니다. 만일 패턴이 값에
+대응된다면 그 값에 해당되는 부분을 코드상에서 이용하게 됩니다. 6장의 `match` 표현 예제,
+동전 계수기 예제를 떠올려 봅시다. 값이 패턴의 형태에 들어맞는다면 패턴이 정한
+이름들로 값들을 이용할 수 있었습니다. 형태가 다르다면 해당 패턴과 관련된 코드는
+실행 되지 않았습니다.
 
-This chapter is a reference on all things related to patterns. We’ll cover the
-valid places to use patterns, the difference between *refutable* and
-*irrefutable* patterns, and the different kinds of pattern syntax that you
-might see. By the end of the chapter, you’ll know how to use patterns to
-express many concepts in a clear way.
+18장은 패턴과 관련된 모든 것의 레퍼런스입니다. 이 장에선 패턴을 사용할 수 있는
+모든 곳, *반증 가능 패턴(refutable patterns)*과
+*반증 불가 패턴(irrefutable patterns)*의 차이, 접해볼 수 있는 다양한 종류의 패턴 문법을
+다룹니다. 이번 장을 읽는 것으로 여러분은 패턴을 통해 다양한 개념을 명확하게 표현 할 수
+있게 될 것입니다.

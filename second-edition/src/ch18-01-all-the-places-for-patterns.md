@@ -1,59 +1,59 @@
-## All the Places Patterns Can Be Used
+## 패턴이 사용될 수 있는 모든 곳
 
-Patterns pop up in a number of places in Rust, and you’ve been using them a lot
-without realizing it! This section provides you with a reference to all the
-places where patterns are valid.
+패턴은 러스트 코드 곳곳에 튀어나옵니다. 아마 모르는 사이 이미 아주 많이 쓰고있었을
+겁니다! 이번 절에선 패턴을 사용할 수 있는 모든 코드상의 장소에 대한 레퍼런스를
+제공합니다.
 
-### `match` Arms
+### `match` 갈래
 
-As discussed in Chapter 6, we use patterns in the arms of `match` expressions.
-Formally, `match` expressions are defined as the keyword `match`, a value to
-match on, and one or more match arms that consist of a pattern and an
-expression to run if the value matches that arm’s pattern, like this:
+6장에서도 다루었듯, 패턴은 `match`표현의 각 갈래에 사용됩니다. `match`표현은
+`match` 키워드, 대응 시킬 값, 갈래들로 이루어지고, 각 갈래는 갈래를 나타내는 패턴,
+해당 패턴에 값이 대응 될때 실행할 표현으로 구성됩니다.
+결국 다음과 같은 구조를 가집니다:
 
 ```text
-match VALUE {
-    PATTERN => EXPRESSION,
-    PATTERN => EXPRESSION,
-    PATTERN => EXPRESSION,
+match 값 {
+    패턴 => 표현,
+    패턴 => 표현,
+    패턴 => 표현,
 }
 ```
 
-One requirement for `match` expressions is that they need to be *exhaustive* in
-the sense that all possibilities for the value in the `match` expression must
-be accounted for. One way to ensure you’ve covered every possibility is to have
-a catchall pattern for the last arm: for example, a variable name matching any
-value can never fail and thus covers every remaining case.
+`match` 표현을 사용하기 위해 지켜야할 사항이 있습니다. `match` 표현에 대응 시킬 값이 가질
+수 있는 모든 경우의 수를 *빠짐 없이* 표현해야 합니다. 이 조건을 보장하는 하나의 방법은 
+`match`의 마지막 갈래에 모든 경우에 대응되는 패턴을 이용하는 것입니다. 예를 들자면
+아무 값에나 대응될 변수명 하나를 놓는 패턴이죠. 이 경우 주어진 그 어떠한 값도 해당 변수에
+묶이게 되어 실패할 수 없게 되고, 즉 가능한 모든 경우를 표현한게 됩니다.
 
-A particular pattern `_` will match anything, but it never binds to a variable,
-so it’s often used in the last match arm. The `_` pattern can be useful when
-you want to ignore any value not specified, for example. We’ll cover the `_`
-pattern in more detail in the “Ignoring Values in a Pattern” section later in
-this chapter.
+`_`라는 특별한 패턴은 아무 값에나 대응되지만 그 어떠한 변수에도 묶이지 않습니다.
+그래서 `match`의 마지막 갈래에 종종 쓰입니다.
+`_`패턴은 명시 하지 않은 값들을 무시할 때 유용합니다.
+이 특별한 패턴은 뒤의 "패턴에서 값 무시하기" 절에서 더 자세하게
+다룰 것입니다.
 
-### Conditional `if let` Expressions
+### `if let` 조건 표현
 
-In Chapter 6 we discussed how to use `if let` expressions mainly as a shorter
-way to write the equivalent of a `match` that only matches one case.
-Optionally, `if let` can have a corresponding `else` containing code to run if
-the pattern in the `if let` doesn’t match.
+6장에서 `if let` 표현을 사용하는 법을 다뤘습니다. 
+주로 갈래가 하나 밖에 없는 `match `표현을 더 짧게 표현하는 방법으로 사용됐습니다.
+추가적으로 `if let`은 `else`절을 가질 수 있습니다.
+예상 하셨듯 `if let`의 패턴에 값이 대응되지 않을 때 실행됩니다.
 
-Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
-if`, and `else if let` expressions. Doing so gives us more flexibility than a
-`match` expression in which we can only express one value to compare with the
-patterns. Also, the conditions in a series of `if let`, `else if`, `else if
-let` arms aren’t required to relate to each other.
+예제 18-1은 `if let`, `else if`, `else if let` 표현을 섞어서 사용할 수 있음을 알려주는
+코드입니다.
+이들을 이용 하면 여러 패턴에 하나의 값밖에 대응시키지 못 하는 `match` 표현보다
+더 유연하게 표현 가능합니다.
+또 연속된 `if let`, `else if`, `else if let`의 각 조건이 꼭 연관될 필요도 없습니다.
 
-The code in Listing 18-1 shows a series of checks for several different
-conditions that decide what the background color should be. For this example,
-we’ve created variables with hardcoded values that a real program might receive
-from user input.
+예제 18-1의 코드는 배경 색이 어떤 색이 될지 정하기 위해 여러개의 조건을 연이어 체크하는
+것을 보여줍니다.
+이번 예제에서는 실제 프로그램이 받을 지도 모르는 유저의 입력 값들이 하드코딩된
+변수들을 이용합니다.
 
-If the user specifies a favorite color, that color is the background color. If
-today is Tuesday, the background color will be green. If the user specifies
-their age as a string and we can parse it as a number successfully, the color
-is either purple or orange depending on the value of the number. If none of
-these conditions apply, the background color will be blue:
+유저가 좋아하는 색을 지정할 경우 그 색이 배경 색이 됩니다.
+만일 오늘이 화요일이라면 배경은 녹색이 됩니다.
+만일 유저가 나이를 스트링으로 입력했고, 이를 성공적으로 숫자로 파싱해낼 수 있다면
+숫자 값에 따라 보라나 주황으로 배경 색이 정해집니다.
+위의 그 어떤 조건에도 맞지 않을 경우 배경은 파란색이 됩니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -79,32 +79,32 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-1: Mixing `if let`, `else if`, `else if let`,
-and `else`</span>
+<span class="caption">예제 18-1: `if let`, `else if`, `else if let`, `else`의
+조합</span>
 
-This conditional structure lets us support complex requirements. With the
-hardcoded values we have here, this example will print `Using purple as the
-background color`.
+이런 조건절 구조는 복잡한 요구사항도 대응할 수 있게 해줍니다. 주어진 하드코딩된
+값들로 예제코드를 실행할 경우 `Using purple as the background color`를 출력 할
+것입니다.
 
-You can see that `if let` can also introduce shadowed variables in the same way
-that `match` arms can: the line `if let Ok(age) = age` introduces a new
-shadowed `age` variable that contains the value inside the `Ok` variant. This
-means we need to place the `if age > 30` condition within that block: we can’t
-combine these two conditions into `if let Ok(age) = age && age > 30`. The
-shadowed `age` we want to compare to 30 isn’t valid until the new scope starts
-with the curly bracket.
+보시다시피 `if let`표현은 `match`의 각 갈래가 그랬듯 변수를 가리는 변수를 새로이 등장
+시킬  수 있습니다. `if let Ok(age) = age`는 `Ok`에서 값을 추출한 새로운 `age`변수가
+전의 `age`를 가리게 됩니다. 이는 `if age > 30`을 조건절 밑의 새로운 스코프에서 사용
+해야 함을 의미합니다. 우리의 새로운 `age`는 새로운 중괄호가 나타나 새로운 스코프가
+시작하기 전까지 유효하지 않으므로 위의 조건절 밑의 스코프 안에서 사용해야 합니다.
+`if let Ok(age) = age && age > 30`처럼 두 조건을 합쳐서 하나의 절에서 사용 할 수
+없습니다.
 
-The downside of using `if let` expressions is that the compiler doesn’t check
-exhaustiveness, whereas with `match` expressions it does. If we omitted the
-last `else` block and therefore missed handling some cases, the compiler would
-not alert us to the possible logic bug.
+`if let`표현의 단점은 `match`표현과 다르게 컴파일러가 해당 구문이 모든 경우를 다뤘는지
+판단하지 않는다는 점입니다. 예제의 마지막 `else`절을 빼먹어서 처리 되지 않는 경우가
+생기더라도 컴파일러가 이를 찾아내지 않고 이에 따라 발생 할 수 있는 논리 버그를 사전에
+경고해주지 않습니다.
 
-### `while let` Conditional Loops
+### `while let` 조건 루프
 
-Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. The example in
-Listing 18-2 shows a `while let` loop that uses a vector as a stack and prints
-out the values in the vector in the opposite order in which they were pushed:
+`if let`과 구조적으로 비슷하게 생긴 `while let` 조건 루프는 주어진 값이 패턴에
+계속 대응 되는한 실행 되는 `while` 루프입니다.
+예제 18-2는 vector를 스택처럼 이용해 push된 역순으로 값을 출력하는
+`while let` 조건 루프입니다.
 
 ```rust
 let mut stack = Vec::new();
@@ -118,24 +118,24 @@ while let Some(top) = stack.pop() {
 }
 ```
 
-<span class="caption">Listing 18-2: Using a `while let` loop to print out
-values for as long as `stack.pop()` returns `Some`</span>
+<span class="caption">예제 18-2: `while let`을 이용해 `stack.pop()`이
+`Some`을 반환하는 한 값을 출력</span>
 
-This example prints 3, 2, and then 1. The `pop` method takes the last element
-out of the vector and returns `Some(value)`. If the vector is empty, `pop`
-returns `None`. The `while` loop continues running the code in its block as
-long as `pop` returns `Some`. When `pop` returns `None`, the loop stops. We can
-use `while let` to pop every element off our stack.
+이 예제는 3, 2, 1을 출력할 것입니다. `pop`메소드는 vector의 마지막 값을 꺼내서
+`Some(value)`를 반환합니다. 만일 vector가 비었을 경우 `None`을 반환합니다.
+코드의 `while`루프는 `pop`이 `Some`을 반환 할 동안 실행됩니다. `None`이 반환되는
+경우에 더 이상 패턴에 맞지 않으므로 멈춥니다. `while let` 표현으로 스택의 모든
+값들을 간편하게 꺼낼 수 있습니다.
 
-### `for` Loops
+### `for` 루프
 
-In Chapter 3 we mentioned that the `for` loop is the most common loop
-construction in Rust code, but we haven’t yet discussed the pattern that `for`
-takes. In a `for` loop, the pattern is the value that directly follows the
-keyword `for`, so in `for x in y` the `x` is the pattern.
+3장에서 `for` 루프가 러스트에서 가장 흔하게 쓰이는 반복문 구문인 것을 언급 했습니다.
+다만 그 `for` 루프들에서 사용하는 패턴에 대해선 아직 다루지 않았습니다.
+`for` 루프의 패턴은 `for` 키워드 바로 다음에 오는 값입니다.
+즉 `for x in y`에서 `x`가 패턴입니다.
 
-Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
-or break apart, a tuple as part of the `for` loop:
+예제 18-3은 `for`에서 패턴을 이용해 튜플을 분해하여 튜플을 `for` 루프의 일부로써
+사용하는 것을 보여줍니다.
 
 ```rust
 let v = vec!['a', 'b', 'c'];
@@ -145,10 +145,10 @@ for (index, value) in v.iter().enumerate() {
 }
 ```
 
-<span class="caption">Listing 18-3: Using a pattern in a `for` loop to
-destructure a tuple</span>
+<span class="caption">예제 18-3: 튜플을 분해해기 위해 `for` 루프에서 패턴 사용
+</span>
 
-The code in Listing 18-3 will print the following:
+예제의 출력결과는 다음과 같습니다.
 
 ```text
 a is at index 0
@@ -156,66 +156,66 @@ b is at index 1
 c is at index 2
 ```
 
-We use the `enumerate` method to adapt an iterator to produce a value and that
-value’s index in the iterator, placed into a tuple. The first call to
-`enumerate` produces the tuple `(0, 'a')`. When this value is matched to the
-pattern `(index, value)`, `index` will be `0` and `value` will be `'a'`,
-printing the first line of the output.
+`enumerate` 메소드는 해당 반복자를 자신의 값과 값의 index를 포함한 튜플들을 순회하도록
+바꿔 줍니다. 그래서 `enumerate`의 첫 호출은 `(0, 'a')`를 반환합니다.
+이 반환된 튜플은 `(index, value)` 패턴에 대응 되면 `index`는 `0`, `value`는 `'a'`값을
+갖게 합니다.
+이들의 값은 출력의 첫 줄에 등장하게 됩니다.
 
-### `let` Statements
+### `let` 구문
 
-Prior to this chapter, we had only explicitly discussed using patterns with
-`match` and `if let`, but in fact, we’ve used patterns in other places as well,
-including in `let` statements. For example, consider this straightforward
-variable assignment with `let`:
+이번 장 전까지 `match`나 `if let`에서만 직접적으로 패턴의 사용을 언급했습니다.
+하지만 이미 여러 곳에서 패턴을 사용하고 있었습니다.
+대표적으로 `let`구문이 있습니다.
+`let`을 이용한 변수 대입을 예로 들어 봅시다:
 
 ```rust
 let x = 5;
 ```
 
-Throughout this book, we’ve used `let` like this hundreds of times, and
-although you might not have realized it, you were using patterns! More
-formally, a `let` statement looks like this:
+이미 수백번은 봤을 `let`입니다. 하지만 아셨을지 모르겠지만 사실 이 구문에는
+패턴이 쓰이고 있습니다!
+`let` 구문을 더 형식에 맞춰 나타내면 다음과 같습니다:
 
 ```text
 let PATTERN = EXPRESSION;
 ```
 
-In statements like `let x = 5;` with a variable name in the `PATTERN` slot, the
-variable name is just a particularly simple form of a pattern. Rust compares
-the expression against the pattern and assigns any names it finds. So in the
-`let x = 5;` example, `x` is a pattern that means “bind what matches here to
-the variable `x`.” Because the name `x` is the whole pattern, this pattern
-effectively means “bind everything to the variable `x`, whatever the value is.”
+`let x = 5;`처럼 `PATTERN`자리에 변수명이 들어가는 경우, 그 변수명 자체가 하나의
+무지하게 단순한 패턴의 한 형태입니다. 러스트는 `EXPRESSION`을 `PATTERN`에 비교하고
+거기서 발견한 이름들에 그 `EXPRESSION`을 대입합니다.
+`let x = 5;` 예제에서 `x`라는 패턴은 "이 패턴에 대응 되는 값을 변수 `x`에 대입하는"
+패턴입니다. 이 경우 `x`가 패턴의 전부이므로 "아무 값을 통으로 `x`에 대입한다"는
+의미를 갖게 됩니다.
 
-To see the pattern matching aspect of `let` more clearly, consider Listing
-18-4, which uses a pattern with `let` to destructure a tuple:
+`let`의 좀 더 "패턴 매칭"스러운 면모를 보기 위해 예제 18-4를 봅시다. 이 예제는
+튜플을 분해하는 패턴을 사용하고 있습니다.
 
 ```rust
 let (x, y, z) = (1, 2, 3);
 ```
 
-<span class="caption">Listing 18-4: Using a pattern to destructure a tuple and
-create three variables at once</span>
+<span class="caption">예제 18-4: 패턴을 이용해 튜플을 분해하며 세개의 변수를
+생성</span>
 
-Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust
-binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
-pattern as nesting three individual variable patterns inside it.
+이 코드는 튜플을 하나의 패턴에 대응시키고 있습니다. 러스트는 튜플 `(1, 2, 3)`을
+`(x, y, z)`에 비교하고 튜플이 해당 패턴에 대응된다는 것을 알아 냅니다. 그래서 러스트는
+`1`을 `x`에, `2`를 `y`에, `3`을 `z`에 각각 묶습니다. 이 튜플예제를 3개의 변수 대입
+패턴을 하나의 패턴으로 묶은 것으로 생각하셔도 좋습니다.
 
-If the number of elements in the pattern doesn’t match the number of elements
-in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 18-5 shows an attempt to destructure a tuple with three
-elements into two variables, which won’t work:
+만약 패턴의 원소의 수가 주어진 튜플의 원소의 수와 다를 경우, 둘의 타입이 서로 달라
+대응에 실패하고 컴파일 에러가 발생하게 됩니다.
+예제18-5는 원소가 3개인 튜플을 원소가 2개인 패턴에 대응시키려고 하고 있습니다.
+물론 실패합니다:
 
 ```rust,ignore
 let (x, y) = (1, 2, 3);
 ```
 
-<span class="caption">Listing 18-5: Incorrectly constructing a pattern whose
-variables don’t match the number of elements in the tuple</span>
+<span class="caption">예제 18-5: 대응시키려는 튜플과 원소의 개수가 맞지 않는
+패턴의 사용</span>
 
-Attempting to compile this code results in this type error:
+컴파일을 시도할 경우 다음과 같은 타입에러가 발생합니다:
 
 ```text
 error[E0308]: mismatched types
@@ -228,17 +228,17 @@ error[E0308]: mismatched types
              found type `(_, _)`
 ```
 
-If we wanted to ignore one or more of the values in the tuple, we could use `_`
-or `..` as you’ll see in the “Ignoring Values in a Pattern” section. If the
-problem is that we have too many variables in the pattern, the solution is to
-make the types match by removing variables so the number of variables equals
-the number of elements in the tuple.
+튜플의 원소중 하나, 혹은 여럿을 무시하고 싶을 경우 "패턴에서 값 무시하기"에서
+자세하게 다룰 `_`나 `..`를 사용할 수 있습니다.
+반대로 문제가 패턴 쪽의 변수가 너무 많아서 생겼다면 패턴의 변수 일부를 없에는
+것으로 튜플의 원소의 수와 패턴의 변수 원소의 수를 맞추어 둘의 타입을 맞춰주면
+됩니다.
 
-### Function Parameters
+### 함수의 매개변수
 
-Function parameters can also be patterns. The code in Listing 18-6, which
-declares a function named `foo` that takes one parameter named `x` of type
-`i32`, should by now look familiar:
+함수의 매개변수들도 물론 패턴입니다.
+예제 18-6은 `i32`타입의 매개변수 `x`를 가지는 함수 `foo`를 정의 하는 코드입니다.
+이제는 익숙한 코드라 생각합니다.
 
 ```rust
 fn foo(x: i32) {
@@ -246,12 +246,12 @@ fn foo(x: i32) {
 }
 ```
 
-<span class="caption">Listing 18-6: A function signature uses patterns in the
-parameters</span>
+<span class="caption">예제 18-6: 함수 선언의 매개변수는 패턴을 사용
+</span>
 
-The `x` part is a pattern! As we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 18-7 splits the values in a tuple
-as we pass it to a function:
+예상대로 `x` 부분은 패턴입니다! `let`에서도 그랬듯, 함수에 인자를 넘기는 과정에서
+튜플을 패턴에 대응시킬 수 있습니다.
+예제 18-7은 함수에 튜플을 넘기면서 그 값들을 분해해서 사용하는 코드입니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -266,17 +266,17 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-7: A function with parameters that destructure
-a tuple</span>
+<span class="caption">예제 18-7: 튜플을 분해하는 매개변수를 가진 함수
+</span>
 
-This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
-pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
+이 코드는 `Current location: (3, 5)`를 출력합니다. 값 `&(3, 5)`는 패턴 `&(x, y)`에
+대응되므로 `x`는 `3`, `y`는 `5`의 값을 갖게 됩니다.
 
-We can also use patterns in closure parameter lists in the same way as in
-function parameter lists, because closures are similar to functions, as
-discussed in Chapter 13.
+패턴은 함수의 매개변수에서 사용한 방법 그대로 클로져의 매개변수에서도 사용할 수
+있습니다.
+13장에서도 다뤘듯 함수와 클로져는 매우 닮았기 때문입니다.
 
-At this point, you’ve seen several ways of using patterns, but patterns don’t
-work the same in every place we can use them. In some places, the patterns must
-be *irrefutable*, meaning they must match any value provided. In other
-circumstances, they can be refutable. Let’s discuss these two concepts next.
+지금까지 다양한 패턴의 사용법을 보았습니다. 하지만 패턴은 사용하는 장소마다 다른
+방식으로 작동합니다. 몇 장소에서는 패턴은 *반증 불가*해야 합니다. 이는 패턴이 어떠한
+값이든 대응해야 한다는 뜻입니다. 그외의 경우엔 *반증 가능*해도 됩니다. 이 둘의 차이를
+다음 절에서 자세히 다루도록 합시다.

@@ -1,43 +1,43 @@
-## Refutability: Whether a Pattern Might Fail to Match
+## 반증 가능성(Refutability): 패턴이 매칭에 실패할지의 여부
 
-Patterns come in two forms: refutable and irrefutable. Patterns that will match
-for any possible value passed are *irrefutable*. An example would be `x` in the
-statement `let x = 5;` because `x` matches anything and therefore cannot fail
-to match. Patterns that can fail to match for some possible value are
-*refutable*. An example would be `Some(x)` in the expression `if let Some(x) =
-a_value`; if the value in `a_value` variable is `None` rather than `Some`, the
-`Some(x)` pattern would not match.
+패턴은 2가지 형태가 존재합니다. 반증 가능 패턴과 반증 불가 패턴. 주어진 어떠한 값에도
+대응되는 패턴을 *반증 불가(irrefutable)* 패턴이라 합니다.
+예를 들면 `let x = 5;`의 `x`가 있습니다. `x`에 어떠한 값이 오건 대응하기 때문에
+실패할 수 없고, 곧 반증 불가합니다.
+주어진 값에 대응이 실패할 수 있는 패턴을 *반증 가능(refutable)* 패턴이라 합니다.
+`if let Some(x) = a_value;`의 `Some(x)`가 그 예시입니다. `a_value`의 값이
+`None`인 경우가 있다면 `Some(x)`에 대응하지 못하고 실패하게 됩니다. 즉 반증 가능합니다.
 
-Function parameters, `let` statements, and `for` loops can only accept
-irrefutable patterns, because the program cannot do anything meaningful when
-values don’t match. The `if let` and `while let` expressions only accept
-refutable patterns, because by definition they’re intended to handle possible
-failure: the functionality of a conditional is in its ability to perform
-differently depending on success or failure.
+함수의 매개변수, `let`구문, `for`루프들은 반증 불가한 패턴만 허용합니다.
+이 표현들의 경우 값을 패턴에 대응하는데 실패할 경우 프로그램이 할 수 있는 행동이
+없기 때문입니다.
+반대로 `if let`과 `while let`표현은 반증 가능 패턴만 허용합니다. 이 표현들은
+성공 여부에 따라 다른 행동을 하도록 설계 됐기 때문에 실패의 여지가 있는 패턴이 올 것을
+가정합니다.
 
-In general, you shouldn’t have to worry about the distinction between refutable
-and irrefutable patterns; however, you do need to be familiar with the concept
-of refutability so you can respond when you see it in an error message. In
-those cases, you’ll need to change either the pattern or the construct you’re
-using the pattern with, depending on the intended behavior of the code.
+일반적으로 반증 가능 패턴과 반증 불가 패턴의 차이에 대해 걱정 할 필요는 없습니다.
+다만 관련된 에러메세지를 보고 코드를 고치기 위해선 이 반증 가능성이라는 개념을
+숙지 해야할 필요가 있습니다.
+만일 관련된 에러가 생길 경우 원래 의도한 기능에 맞춰 패턴을 고치거나,
+패턴을 이용하는 구문을 고치셔야 합니다.
 
-Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
-`let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
-pattern. As you might expect, this code will error:
+반증 불가한 패턴이 필요한 곳에서 반증 가능 패턴을 쓰는 경우와
+그 반대의 경우를 살펴 봅시다.
+예제 18-8은 `let`구문에서 반증 가능 패턴 `Some(x)`를 쓰고 있습니다.
+예상 하셨듯 해당 코드는 에러가 발생합니다.
 
 ```rust,ignore
 let Some(x) = some_option_value;
 ```
 
-<span class="caption">Listing 18-8: Attempting to use a refutable pattern with
-`let`</span>
+<span class="caption">예제 18-8: `let`에서 반증 가능 패턴의 사용
+</span>
 
-If `some_option_value` was a `None` value, it would fail to match the pattern
-`Some(x)`, meaning the pattern is refutable. However, the `let` statement can
-only accept an irrefutable pattern because there is nothing valid the code can
-do with a `None` value. At compile time, Rust will complain that we’ve tried to
-use a refutable pattern where an irrefutable pattern is required:
+`some_option_value`가 `None`일 경우 `Some(x)`에 대응하는데 실패합니다.
+즉 반증 가능 패턴입니다. 하지만 `let`구문은 반증 불가한 패턴만을 허용합니다.
+`None`이 왔을 경우 할 수 있는 일이 없기 때문입니다.
+러스트는 컴파일 시에 반증 불가 패턴이 필요한 곳에 반증 가능 패턴이 왔다고
+불평할겁니다.
 
 ```text
 error[E0005]: refutable pattern in local binding: `None` not covered
@@ -47,14 +47,14 @@ error[E0005]: refutable pattern in local binding: `None` not covered
   |     ^^^^^^^ pattern `None` not covered
 ```
 
-Because we didn’t cover (and couldn’t cover!) every valid value with the
-pattern `Some(x)`, Rust rightfully produces a compiler error.
+`Some(x)`의 가능한 모든 경우를 다루지 않았기에 (정확히는 다룰 수 없었기에) 러스트는
+컴파일 에러를 냅니다.
 
-To fix the problem where we have a refutable pattern where an irrefutable
-pattern is needed, we can change the code that uses the pattern: instead of
-using `let`, we can use `if let`. Then if the pattern doesn’t match, the code
-will just skip the code in the curly brackets, giving it a way to continue
-validly. Listing 18-9 shows how to fix the code in Listing 18-8:
+이런 문제를 해결하기 위해 패턴을 이용하는 구문을 바꾸는 방법이 있습니다.
+`let`을 쓰는 대신 `if let`을 쓰는 것입니다.
+이 경우 패턴에 값을 대응하는데 실패하면 중괄호 안의 코드를 넘어가면 됩니다.
+전 처럼 할 수 있는 일이 없지 않습니다.
+예제 18-9는 18-8을 고친 코드입니다.
 
 ```rust
 # let some_option_value: Option<i32> = None;
@@ -63,13 +63,13 @@ if let Some(x) = some_option_value {
 }
 ```
 
-<span class="caption">Listing 18-9: Using `if let` and a block with refutable
-patterns instead of `let`</span>
+<span class="caption">예제 18-9: `let` 대신 `if let`과 반증 가능 패턴의 사용
+</span>
 
-We’ve given the code an out! This code is perfectly valid, although it means we
-cannot use an irrefutable pattern without receiving an error. If we give `if
-let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
-it will error:
+코드에게 탈출구를 만들어줬습니다!
+이 코드에 문제는 없습니다. 다만 반증 불가 패턴을 사용할 경우 에러를 받게 되겠죠.
+예제 18-10 처럼 `if let`에 `x`처럼 모든 값에 대응되는 패턴을 쓸 경우 에러가
+발생할 겁니다:
 
 ```rust,ignore
 if let x = 5 {
@@ -77,11 +77,11 @@ if let x = 5 {
 };
 ```
 
-<span class="caption">Listing 18-10: Attempting to use an irrefutable pattern
-with `if let`</span>
+<span class="caption">예제 18-10: `if let`과 반증 불가 패턴의 사용
+</span>
 
-Rust complains that it doesn’t make sense to use `if let` with an irrefutable
-pattern:
+러스트는 틀려도 되야할 `if let` 구문에 틀릴리 없는 패턴을 쓰는 것은 말이 되지
+않는다고 불평할겁니다:
 
 ```text
 error[E0162]: irrefutable if-let pattern
@@ -91,12 +91,12 @@ error[E0162]: irrefutable if-let pattern
   |        ^ irrefutable pattern
 ```
 
-For this reason, match arms must use refutable patterns, except for the last
-arm, which should match any remaining values with an irrefutable pattern. Rust
-allows us to use an irrefutable pattern in a `match` with only one arm, but
-this syntax isn’t particularly useful and could be replaced with a simpler
-`let` statement.
+이 때문에 match의 갈래는 마지막 갈래를 제외하고는 반증 가능한 패턴을 써야합니다.
+마지막 갈래는 빠짐 없이 대응해야 하는 `match`표현의 특성상 반증 불가한 패턴을
+써야하고요.
+러스트에서 `match`를 반증 불가 패턴을 가진 하나의 갈래만으로 구성하는 것은
+가능합니다만 `let`구문 하나로 대체될 수 있기에 딱히 득 볼 것이 없습니다.
 
-Now that you know where to use patterns and the difference between refutable
-and irrefutable patterns, let’s cover all the syntax we can use to create
-patterns.
+패턴이 사용 될 수 있는 코드 상의 모든 곳을 알고, 반증 가능 패턴과 반증 불가 패턴의
+차이를 이해 했으니 이 다음은 패턴들을 만드는데 사용할 수 있는 모든 문법에 대해
+알아봅시다.
