@@ -69,7 +69,7 @@
     - [환경 변수들을 활용하기](ch12-05-working-with-environment-variables.md)
     - [표준출력 대신 표준에러로 에러메시지 출력하기](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
-## Thinking in Rust
+## 러스트로 생각하기
 
 - [함수형 언어의 특성들: 반복자들과 클로저들](ch13-00-functional-features.md)
     - [클로저: 환경을 캡쳐할 수 있는 익명 함수](ch13-01-closures.md)
@@ -103,11 +103,11 @@
     - [Using Trait Objects that Allow for Values of Different Types](ch17-02-trait-objects.md)
     - [Implementing an Object-Oriented Design Pattern](ch17-03-oo-design-patterns.md)
 
-## Advanced Topics
+## 고급 주제
 
-- [Patterns Match the Structure of Values](ch18-00-patterns.md)
-    - [All the Places Patterns May be Used](ch18-01-all-the-places-for-patterns.md)
-    - [Refutability: Whether a Pattern Might Fail to Match](ch18-02-refutability.md)
+- [값의 구조와 매칭되는 패턴](ch18-00-patterns.md)
+    - [패턴이 사용될 수 있는 모든 곳](ch18-01-all-the-places-for-patterns.md)
+    - [반증 가능성: 패턴의 매칭이 실패할 수도 있는 경우](ch18-02-refutability.md)
     - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
 
 - [Advanced Features](ch19-00-advanced-features.md)
