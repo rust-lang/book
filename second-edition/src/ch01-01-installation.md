@@ -106,10 +106,8 @@ $ rustc --version
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information and you’re on Windows, check that Rust is in your `%PATH%`
-system variable. If that’s all correct and Rust still isn’t working, there are
-a number of places you can get help. The easiest is [the #rust IRC channel on
+Если вы видите эту информацию, вы успешно установили Rust! Если Вы её не видите, и вы используете Windows, убедитесь, что Rust находится в системной переменной `% PATH%`. Если все правильно, но Rust все еще не работает, есть
+множество мест где вы можете получить помощь. The easiest is [the #rust IRC channel on
 irc.mozilla.org][irc]<!-- ignore -->, which you can access through
 [Mibbit][mibbit]. At that address you can chat with other Rustaceans (a silly
 nickname we call ourselves) who can help you out. Other great resources include
