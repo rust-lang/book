@@ -107,11 +107,8 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
 Если вы видите эту информацию, вы успешно установили Rust! Если Вы её не видите, и вы используете Windows, убедитесь, что Rust находится в системной переменной `%PATH%`. Если все правильно, но Rust все еще не работает, есть
-множество мест где вы можете получить помощь. The easiest is [the #rust IRC channel on
-irc.mozilla.org][irc]<!-- ignore -->, which you can access through
-[Mibbit][mibbit]. At that address you can chat with other Rustaceans (a silly
-nickname we call ourselves) who can help you out. Other great resources include
-[the Users forum][users] and [Stack Overflow][stackoverflow].
+множество мест где вы можете получить помощь. Самый простой способ — подключиться при помощи [Mibbit][mibbit] к [IRC каналу #rust на
+irc.mozilla.org][irc]<!-- ignore -->. По этому адресу вы сможете общаться с другими Rustaceans (глупое прозвище, которым мы называем себя), которые могут помочь вам. Другие великолепные ресурсы — [Форум пользователей][users] и [Stack Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
