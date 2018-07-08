@@ -347,7 +347,7 @@ without losing any functionality:
 fn main() {
     let my_string = String::from("hello world");
 
-    // first_word works on slices of `String`s
+    // first_word works on references of `String`s
     let word = first_word(&my_string);
 
     let my_string_literal = "hello world";
