@@ -129,3 +129,4 @@
     - [D - Macros](appendix-04-macros.md)
     - [E - Translations](appendix-05-translation.md)
     - [F - How Rust is Made and “Nightly Rust”](appendix-06-nightly-rust.md)
+    - [G - Other useful tools](appendix-07-other-useful-tools.md)
