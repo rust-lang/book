@@ -295,7 +295,7 @@ fn dangle() -> &String { // dangle returns a reference to a String
 
 Because `s` is created inside `dangle`, when the code of `dangle` is finished,
 `s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String` That’s no good! Rust
+this reference would be pointing to an invalid `String`. That’s no good! Rust
 won’t let us do this.
 
 The solution here is to return the `String` directly:
