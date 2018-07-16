@@ -897,7 +897,7 @@ println!("robot_name is: {:?}", robot_name);
 Here, `robot_name` is a `&Option<String>`. Rust would then complain that
 `Some(name)` doesn't match up with `&Option<T>`, so you'd have to write this:
 
-```rust
+```rust,ignore
 let robot_name = &Some(String::from("Bors"));
 
 match robot_name {
