@@ -157,22 +157,12 @@ fn main() {
 
     let f = match f {
         Ok(file) => file,
-        Err(ref error) if error.kind() == ErrorKind::NotFound => {
-            match File::create("hello.txt") {
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
                 Ok(fc) => fc,
-                Err(e) => {
-                    panic!(
-                        "Tried to create file but there was a problem: {:?}",
-                        e
-                    )
-                },
-            }
-        },
-        Err(error) => {
-            panic!(
-                "There was a problem opening the file: {:?}",
-                error
-            )
+                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+            },
+            other_error => panic!("There was a problem opening the file: {:?}", other_error),
         },
     };
 }
@@ -187,25 +177,44 @@ has a method `kind` that we can call to get an `io::ErrorKind` value. The enum
 `io::ErrorKind` is provided by the standard library and has variants
 representing the different kinds of errors that might result from an `io`
 operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
-the file we’re trying to open doesn’t exist yet.
-
-The condition `if error.kind() == ErrorKind::NotFound` is called a *match
-guard*: it’s an extra condition on a `match` arm that further refines the arm’s
-pattern. This condition must be true for that arm’s code to be run; otherwise,
-the pattern matching will move on to consider the next arm in the `match`. The
-`ref` in the pattern is needed so `error` is not moved into the guard condition
-but is merely referenced by it. The reason you use `ref` to create a reference
-in a pattern instead of `&` will be covered in detail in Chapter 18. In short,
-in the context of a pattern, `&` matches a reference and gives you its value,
-but `ref` matches a value and gives you a reference to it.
+the file we’re trying to open doesn’t exist yet. So, we `match` on `f`, but we
+also then have an inner `match` on `error.kind()`.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
 we try to create the file with `File::create`. However, because `File::create`
-could also fail, we need to add an inner `match` statement as well. When the
-file can’t be opened, a different error message will be printed. The last arm
-of the outer `match` stays the same so the program panics on any error besides
-the missing file error.
+could also fail, we need to add another inner `match` statement as well. When
+the file can’t be opened, a different error message will be printed. The last
+arm of the outer `match` stays the same so the program panics on any error
+besides the missing file error.
+
+That's a lot of `match`! `match` is very powerful, but also very much a primitive.
+In Chapter 13, we'll learn about closures. The `Result<T, E>` type has many
+methods that accept a closure, and are implemented as `match` statements. A more
+seasoned Rustacean might write this:
+
+```rust
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let f = File::open("hello.txt").map_err(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt").unwrap_or_else(|error| {
+                panic!("Tried to create file but there was a problem: {:?}", error);
+            })
+        } else {
+            panic!("There was a problem opening the file: {:?}", error);
+        }
+    });
+}
+```
+
+Come back to this example after you've read Chapter 13, and look up what the
+`map_err` and `unwrap_or_else` methods do in the standard library
+documentation. There's many more of these methods that can clean up huge
+nested `match`es when dealing with errors. We'll be looking at some other
+strategies shortly!
 
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 

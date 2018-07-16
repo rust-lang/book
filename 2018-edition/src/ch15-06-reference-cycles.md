@@ -34,8 +34,8 @@ enum List {
 
 impl List {
     fn tail(&self) -> Option<&RefCell<Rc<List>>> {
-        match *self {
-            Cons(_, ref item) => Some(item),
+        match self {
+            Cons(_, item) => Some(item),
             Nil => None,
         }
     }
@@ -72,8 +72,8 @@ reference counts are at various points in this process.
 #
 # impl List {
 #     fn tail(&self) -> Option<&RefCell<Rc<List>>> {
-#         match *self {
-#             Cons(_, ref item) => Some(item),
+#         match self {
+#             Cons(_, item) => Some(item),
 #             Nil => None,
 #         }
 #     }

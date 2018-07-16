@@ -707,91 +707,6 @@ ignore thereafter. This code could mean that we want to ignore `2`, bind
 The variable name `second` doesn’t mean anything special to Rust, so we get a
 compiler error because using `..` in two places like this is ambiguous.
 
-### Creating References in Patterns with `ref` and `ref mut`
-
-Let’s look at using `ref` to make references so ownership of the values isn’t
-moved to variables in the pattern. Usually, when you match against a pattern,
-the variables introduced by the pattern are bound to a value. Rust’s ownership
-rules mean the value will be moved into the `match` or wherever you’re using
-the pattern. Listing 18-26 shows an example of a `match` that has a pattern
-with a variable and then usage of the entire value in the `println!` statement
-later, after the `match`. This code will fail to compile because ownership of
-part of the `robot_name` value is transferred to the `name` variable in the
-pattern of the first `match` arm.
-
-```rust,ignore
-let robot_name = Some(String::from("Bors"));
-
-match robot_name {
-    Some(name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-<span class="caption">Listing 18-26: Creating a variable in a `match` arm
-pattern takes ownership of the value</span>
-
-Because ownership of part of `robot_name` has been moved to `name`, we can no
-longer use `robot_name` in the `println!` after the `match` because
-`robot_name` no longer has ownership.
-
-To fix this code, we want to make the `Some(name)` pattern *borrow* that part
-of `robot_name` rather than taking ownership. You’ve already seen that, outside
-of patterns, the way to borrow a value is to create a reference using `&`, so
-you might think the solution is changing `Some(name)` to `Some(&name)`.
-
-However, as you saw in the “Destructuring to Break Apart Values” section, the
-syntax `&` in patterns does not *create* a reference but *matches* an existing
-reference in the value. Because `&` already has that meaning in patterns, we
-can’t use `&` to create a reference in a pattern.
-
-Instead, to create a reference in a pattern, we use the `ref` keyword before
-the new variable, as shown in Listing 18-27.
-
-```rust
-let robot_name = Some(String::from("Bors"));
-
-match robot_name {
-    Some(ref name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-<span class="caption">Listing 18-27: Creating a reference so a pattern variable
-does not take ownership of a value</span>
-
-This example will compile because the value in the `Some` variant in
-`robot_name` is not moved into the `match`; the `match` only took a reference
-to the data in `robot_name` rather than moving it.
-
-To create a mutable reference so we’re able to mutate a value matched in a
-pattern, we use `ref mut` instead of `&mut`. The reason is, again, that in
-patterns, the latter is for matching existing mutable references, not creating
-new ones. Listing 18-28 shows an example of a pattern creating a mutable
-reference.
-
-```rust
-let mut robot_name = Some(String::from("Bors"));
-
-match robot_name {
-    Some(ref mut name) => *name = String::from("Another name"),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-<span class="caption">Listing 18-28: Creating a mutable reference to a value as
-part of a pattern using `ref mut`</span>
-
-This example will compile and print `robot_name is: Some("Another name")`.
-Because `name` is a mutable reference, we need to dereference within the match
-arm code using the `*` operator to mutate the value.
-
 ### Extra Conditionals with Match Guards
 
 A *match guard* is an additional `if` condition specified after the pattern in
@@ -799,7 +714,7 @@ a `match` arm that must also match, along with the pattern matching, for that
 arm to be chosen. Match guards are useful for expressing more complex ideas
 than a pattern alone allows.
 
-The condition can use variables created in the pattern. Listing 18-29 shows a
+The condition can use variables created in the pattern. Listing 18-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
 guard of `if x < 5`.
 
@@ -813,7 +728,7 @@ match num {
 }
 ```
 
-<span class="caption">Listing 18-29: Adding a match guard to a pattern</span>
+<span class="caption">Listing 18-26: Adding a match guard to a pattern</span>
 
 This example will print `less than five: 4`. When `num` is compared to the
 pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
@@ -852,7 +767,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-30: Using a match guard to test for equality
+<span class="caption">Listing 18-27: Using a match guard to test for equality
 with an outer variable</span>
 
 This code will now print `Default case, x = Some(5)`. The pattern in the second
@@ -884,7 +799,7 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-31: Combining multiple patterns with a match
+<span class="caption">Listing 18-18: Combining multiple patterns with a match
 guard</span>
 
 The match condition states that the arm only matches if the value of `x` is
@@ -941,7 +856,7 @@ match msg {
 }
 ```
 
-<span class="caption">Listing 18-32: Using `@` to bind to a value in a pattern
+<span class="caption">Listing 18-19: Using `@` to bind to a value in a pattern
 while also testing it</span>
 
 This example will print `Found an id in range: 5`. By specifying `id_variable
@@ -962,6 +877,66 @@ applied any test to the value in the `id` field in this arm, as we did with the
 first two arms: any value would match this pattern.
 
 Using `@` lets us test a value and save it in a variable within one pattern.
+
+### Legacy patterns: `ref` and `ref mut`
+
+In older versions of Rust, `match` would assume that you want to move what is
+matched. But sometimes, that's not what you wanted. For example:
+
+```rust
+let robot_name = &Some(String::from("Bors"));
+
+match robot_name {
+    Some(name) => println!("Found a name: {}", name),
+    None => (),
+}
+
+println!("robot_name is: {:?}", robot_name);
+```
+
+Here, `robot_name` is a `&Option<String>`. Rust would then complain that
+`Some(name)` doesn't match up with `&Option<T>`, so you'd have to write this:
+
+```rust
+let robot_name = &Some(String::from("Bors"));
+
+match robot_name {
+    &Some(name) => println!("Found a name: {}", name),
+    None => (),
+}
+
+println!("robot_name is: {:?}", robot_name);
+```
+
+Next, Rust would complain that `name` is trying to move the `String` out of
+the option, but because it's a reference to an option, it's borrowed, and so
+can't be moved out of. This is where the `ref` keyword comes into play:
+
+```rust
+let robot_name = &Some(String::from("Bors"));
+
+match robot_name {
+    &Some(ref name) => println!("Found a name: {}", name),
+    None => (),
+}
+
+println!("robot_name is: {:?}", robot_name);
+```
+
+The `ref` keyword is like the opposite of `&` in patterns; this says "please
+bind `ref` to be a `&String`, don't try to move it out. In other words, the
+`&` in `&Some` is matching against a reference, but `ref` *creates* a
+reference. `ref mut` is like `ref`, but for mutable references.
+
+Anyway, today's Rust doesn't work like this. If you try to `match` on
+something borrowed, then all of the bindings you create will attempt to
+borrow as well. This means that the original code works as you'd expect.
+
+Because Rust is backwards compatible, we couldn't remove `ref` and `ref mut`,
+and they're sometimes useful in obscure situations, where you want to
+partially borrow part of a struct as mutable and another part as immutable.
+But you may see them in older Rust code, so knowing what they do is still
+useful.
 
 ## Summary
 
