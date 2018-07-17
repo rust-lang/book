@@ -453,6 +453,7 @@ struct StrWrap<'a>(&'a str);
 We can write a function that returns one of these like this:
 
 ```rust
+# struct StrWrap<'a>(&'a str);
 fn foo<'a>(string: &'a str) -> StrWrap<'a> {
     StrWrap(string)
 }
@@ -462,6 +463,7 @@ But that's a lot of `'a`s! To cut down on some of this noise, we can use the
 anonymous lifetime, `'_`, like this:
 
 ```rust
+# struct StrWrap<'a>(&'a str);
 fn foo(string: &str) -> StrWrap<'_> {
     StrWrap(string)
 }

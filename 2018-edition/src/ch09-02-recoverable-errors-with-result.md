@@ -193,7 +193,7 @@ In Chapter 13, we'll learn about closures. The `Result<T, E>` type has many
 methods that accept a closure, and are implemented as `match` statements. A more
 seasoned Rustacean might write this:
 
-```rust
+```rust,ignore
 use std::fs::File;
 use std::io::ErrorKind;
 
