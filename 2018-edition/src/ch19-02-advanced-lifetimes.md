@@ -10,6 +10,7 @@ look at three advanced features of lifetimes that we haven’t covered yet:
 * Lifetime bounds: specifies a lifetime for a reference to a generic type
 * Inference of trait object lifetimes: allows the compiler to infer trait
   object lifetimes and when they need to be specified
+* The anonymous lifetime: making elision more obvious
 
 ### Ensuring One Lifetime Outlives Another with Lifetime Subtyping
 
@@ -439,5 +440,48 @@ When we must be explicit, we can add a lifetime bound on a trait object like
 As with the other bounds, the syntax adding a lifetime bound means that any
 implementor of the `Red` trait that has references inside the type must have
 the same lifetime specified in the trait object bounds as those references.
+
+### The anonymous lifetime
+
+Let's say that we have a struct that's a wrapper around a string slice, like
+this:
+
+```rust
+struct StrWrap<'a>(&'a str);
+```
+
+We can write a function that returns one of these like this:
+
+```rust
+# struct StrWrap<'a>(&'a str);
+fn foo<'a>(string: &'a str) -> StrWrap<'a> {
+    StrWrap(string)
+}
+```
+
+But that's a lot of `'a`s! To cut down on some of this noise, we can use the
+anonymous lifetime, `'_`, like this:
+
+```rust
+# struct StrWrap<'a>(&'a str);
+fn foo(string: &str) -> StrWrap<'_> {
+    StrWrap(string)
+}
+```
+
+The `'_` says "use the elidied lifetime here." This means that we can still see
+that `StrWrap` contains a reference, but we don't need all of the lifetime
+annotations to make sense of it.
+
+It works in `impl` headers too; for example:
+
+```rust,ignore
+// verbose
+impl<'a> fmt::Debug for StrWrap<'a> {
+
+// elided
+impl fmt::Debug for StrWrap<'_> {
+
+```
 
 Next, let’s look at some other advanced features that manage traits.

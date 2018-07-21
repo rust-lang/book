@@ -801,6 +801,32 @@ less than or equal to 100'`. The panic message that we did get in this case was
 `Guess value must be greater than or equal to 1, got 200.` Now we can start
 figuring out where our bug is!
 
+### Using `Result<T, E>` in tests
+
+So far, we've written tests that panic when they fail. We can also write tests
+that use `Result<T, E>` too! Here's that first example, but with results instead:
+
+```rust
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() -> Result<(), String> {
+        if 2 + 2 == 4 {
+            Ok(())
+        } else {
+            Err(String::from("two plus two does not equal four"))
+        }
+    }
+}
+```
+
+Here, we've changed the `it_works` function to return a result. And in the body,
+rather than `assert_eq!`, we return `Ok(())` for the success case, and an `Err`
+with a `String` inside for the failure case. As before, this test will fail or
+succeed, but instead of being based on panics, it will use the `Result<T, E>` to
+make that determination. Because of this, you can't use `#[should_panic]` with one
+of these functions; you should have it be returning an `Err` instead!
+
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
 test`.
