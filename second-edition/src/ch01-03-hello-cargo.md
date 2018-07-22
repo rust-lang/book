@@ -37,8 +37,8 @@ $ cargo new hello_cargo --bin
 $ cd hello_cargo
 ```
 
-The first command creates a new binary executable called *hello_cargo*. The
-`--bin` argument passed to `cargo new` makes an executable application (often
+The first command creates a new binary executable package called *hello_cargo*.
+The `--bin` argument passed to `cargo new` makes an executable application (often
 just called a *binary*) as opposed to a library. We’ve named our project
 *hello_cargo*, and Cargo creates its files in a directory of the same name.
 
