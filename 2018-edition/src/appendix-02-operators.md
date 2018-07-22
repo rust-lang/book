@@ -39,6 +39,7 @@ overload that operator is listed.
 | `->` | `fn(...) -> type`, <code>\|...\| -> type</code> | Function and closure return type | |
 | `.` | `expr.ident` | Member access | |
 | `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | |
+| `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | |
 | `..` | `..expr` | Struct literal update syntax | |
 | `..` | `variant(x, ..)`, `struct_type { x, .. }` | “And the rest” pattern binding | |
 | `...` | `expr...expr` | In a pattern: inclusive range pattern | |
