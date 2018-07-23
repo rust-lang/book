@@ -197,8 +197,11 @@ an `i32` plus the size of a `List`. To figure out how much memory the `List`
 type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, and this process continues infinitely, as shown in Figure 15-1.
-
+<!--
 <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+-->
+
+![alt text](img/trpl15-01.png "An infinite Cons list")
 
 <span class="caption">Figure 15-1: An infinite `List` consisting of infinite
 `Cons` variants</span>
@@ -258,8 +261,11 @@ size of an `i32` plus the size of a box’s pointer data. By using a box, we’v
 broken the infinite, recursive chain, so the compiler can figure out the size
 it needs to store a `List` value. Figure 15-2 shows what the `Cons` variant
 looks like now.
-
+<!--
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
+-->
+
+![alt text](img/trpl15-02.png "A finite Cons list")
 
 <span class="caption">Figure 15-2: A `List` that is not infinitely sized
 because `Cons` holds a `Box`</span>
