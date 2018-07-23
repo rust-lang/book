@@ -160,7 +160,7 @@ The `Default` trait allows you to create a default value for a type. Deriving
 `Default` implements the `default` function. The derived implementation of the
 `default` function calls the `default` function on each part of the type,
 meaning all fields or values in the type must also implement `Default` to
-derive `Default.`
+derive `Default`.
 
 The `Default::default` function is commonly used in combination with the struct
 update syntax discussed in the “Creating Instances From Other Instances With
