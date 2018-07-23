@@ -19,7 +19,7 @@ mod network {
 Here are the relevant sections in the new and old books:
 
 * **[In the second edition: Ch 7.01 — `mod` and the Filesystem][2]**
-* [In the second edition: Ch 14.02 — Publishing a Crate to Crates.io][2]
+* [In the second edition: Ch 14.02 — Publishing a Crate to Crates.io][3]
 * <small>[In the first edition: Ch 3.25 — Crates and Modules][1]</small>
 
 
