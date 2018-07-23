@@ -85,7 +85,7 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 ```rust,ignore
 fn main() {
-    let s = String::from("hello");
+    let mut s = String::from("hello");
 
     change(&s);
 }
