@@ -11,7 +11,7 @@ Rust supports it.
 ### Objects Contain Data and Behavior
 
 The book *Design Patterns: Elements of Reusable Object-Oriented Software* by
-Enoch Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
+Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides (Addison-Wesley
 Professional, 1994) colloquially referred to as *The Gang of Four* book, is a
 catalog of object-oriented design patterns. It defines OOP this way:
 
