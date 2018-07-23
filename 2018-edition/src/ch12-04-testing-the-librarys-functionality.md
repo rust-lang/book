@@ -31,7 +31,7 @@ lines that match the query. We’ll add this functionality in a function called
 
 Because we don’t need them anymore, let’s remove the `println!` statements from
 *src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
-Then, in *src/lib.rs*, we’ll add a `test` module with a test function, as we
+Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
 did in Chapter 11. The test function specifies the behavior we want the
 `search` function to have: it will take a query and the text to search for the
 query in, and it will return only the lines from the text that contain the
@@ -45,7 +45,7 @@ query. Listing 12-15 shows this test, which won’t compile yet:
 # }
 #
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]
@@ -138,12 +138,12 @@ $ cargo test
      Running target/debug/deps/minigrep-abcabcabc
 
 running 1 test
-test test::one_result ... FAILED
+test tests::one_result ... FAILED
 
 failures:
 
----- test::one_result stdout ----
-        thread 'test::one_result' panicked at 'assertion failed: `(left ==
+---- tests::one_result stdout ----
+        thread 'tests::one_result' panicked at 'assertion failed: `(left ==
 right)`
 left: `["safe, fast, productive."]`,
 right: `[]`)', src/lib.rs:48:8
@@ -151,7 +151,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 
 failures:
-    test::one_result
+    tests::one_result
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 
@@ -252,7 +252,7 @@ and our test should pass. Let’s run the test:
 $ cargo test
 --snip--
 running 1 test
-test test::one_result ... ok
+test tests::one_result ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
