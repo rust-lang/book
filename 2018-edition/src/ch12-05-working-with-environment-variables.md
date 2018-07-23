@@ -20,7 +20,7 @@ tests, as shown in Listing 12-20:
 
 ```rust
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     #[test]
@@ -123,8 +123,8 @@ Let’s see if this implementation passes the tests:
 
 ```text
 running 2 tests
-test test::case_insensitive ... ok
-test test::case_sensitive ... ok
+test tests::case_insensitive ... ok
+test tests::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
