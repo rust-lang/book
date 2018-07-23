@@ -81,7 +81,7 @@ containing the line `"safe, fast, productive."`
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     vec![]
 }
 ```
@@ -110,7 +110,7 @@ get this error:
 error[E0106]: missing lifetime specifier
  --> src/lib.rs:5:51
   |
-5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
+5 | fn search(query: &str, contents: &str) -> Vec<&str> {
   |                                                   ^ expected lifetime
 parameter
   |
@@ -182,7 +182,7 @@ won’t compile yet:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         // do something with line
     }
@@ -207,7 +207,7 @@ Listing 12-18. Note this still won’t compile yet:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         if line.contains(query) {
             // do something with line
@@ -229,7 +229,7 @@ shown in Listing 12-19:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
