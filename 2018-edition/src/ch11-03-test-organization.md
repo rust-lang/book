@@ -170,7 +170,7 @@ seeing: one line for each unit test (one named `internal` that we added in
 Listing 11-12) and then a summary line for the unit tests.
 
 The integration tests section starts with the line `Running
-target/debug/deps/integration-test-ce99bcc2479f4607` (the hash at the end of
+target/debug/deps/integration_test-ce99bcc2479f4607` (the hash at the end of
 your output will be different). Next, there is a line for each test function in
 that integration test and a summary line for the results of the integration
 test just before the `Doc-tests adder` section starts.
