@@ -12,7 +12,7 @@ To create a new, empty vector, we can call the `Vec::new` function, as shown in
 Listing 8-1.
 
 ```rust
-let v: Vec<i32> = Vec::new();
+let mut v: Vec<i32> = Vec::new();
 ```
 
 <span class="caption">Listing 8-1: Creating a new, empty vector to hold values
