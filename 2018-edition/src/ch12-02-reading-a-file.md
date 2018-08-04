@@ -67,7 +67,7 @@ the prelude from `std::io`.
 In `main`, we’ve added a new statement: `fs::read_to_string` will take the
 `filename`, open that file, and then produce a new `String` with its contents.
 
-After that lines, we’ve again added a temporary `println!` statement that
+After that line, we’ve again added a temporary `println!` statement that
 prints the value of `contents` after the file is read, so we can check that the
 program is working so far.
 
