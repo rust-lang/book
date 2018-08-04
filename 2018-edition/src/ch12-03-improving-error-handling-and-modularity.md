@@ -12,11 +12,11 @@ without breaking one of its parts. It’s best to separate functionality so each
 function is responsible for one task.
 
 This issue also ties into the second problem: although `query` and `filename`
-are configuration variables to our program, variables like `f` and `contents`
-are used to perform the program’s logic. The longer `main` becomes, the more
-variables we’ll need to bring into scope; the more variables we have in scope,
-the harder it will be to keep track of the purpose of each. It’s best to group
-the configuration variables into one structure to make their purpose clear.
+are configuration variables to our program, variables like `contents` are used
+to perform the program’s logic. The longer `main` becomes, the more variables
+we’ll need to bring into scope; the more variables we have in scope, the harder
+it will be to keep track of the purpose of each. It’s best to group the
+configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
 opening the file fails, but the error message just prints `file not found`.
@@ -608,7 +608,6 @@ compile until we modify *src/main.rs* in the listing after this one.
 ```rust,ignore
 use std::error::Error;
 use std::fs;
-use std::io::prelude::*;
 
 pub struct Config {
     pub query: String,
