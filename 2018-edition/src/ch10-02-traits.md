@@ -314,10 +314,6 @@ For example, to use display formatting on the type `T` in a function as well as
 the `summarize` method, we can use `T: Summary + Display` to say `T` can be any
 type that implements `Summary` and `Display`. This can grow quite complex!
 
-```rust,ignore
-fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
-```
-
 #### `where` clauses for clearer code
 
 However, there are downsides to using too many trait bounds. Each generic has
@@ -326,6 +322,10 @@ have lots of trait bound information between a function’s name and its
 parameter list, making the function signature hard to read. For this reason,
 Rust has alternate syntax for specifying trait bounds inside a `where` clause
 after the function signature. So instead of writing this:
+
+```rust,ignore
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+```
 
 we can use a `where` clause, like this:
 
