@@ -24,7 +24,7 @@ Programmers who are already working with low-level code can use Rust to raise
 their ambitions. For example, introducing parallelism in Rust is a relatively
 low-risk operation: the compiler will catch the classical mistakes for you. And
 you can tackle more aggressive optimizations in your code with the confidence
-that you won’t accidentally introduce crashes or exploits.
+that you won’t accidentally introduce crashes or vulnerabilities.
 
 But Rust isn’t limited to low-level systems programming. It’s expressive and
 ergonomic enough to make CLI apps, web servers, and many other kinds of code
