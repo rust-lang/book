@@ -73,7 +73,9 @@ the instructions for installing Rust. At some point in the installation, you’l
 receive a message explaining that you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
 install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
-the Other Tools and Frameworks section.
+the Other Tools and Frameworks section. Make sure to install 
+`Visual C++ 2015 toolset for desktop`; as of the time of writing, the Rust
+compiler canot use VC++ 17, thus you need the 2015 version.
 
 [install]: https://www.rust-lang.org/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
