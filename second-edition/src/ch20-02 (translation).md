@@ -338,4 +338,281 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 또한 스레드가 요청을 처리할때 요청 클로저를 한번만 실행할 것이기 때문에
 `Once` 에 매치되는 `FnOnce` 가 우리가 원하던 트레잇이라고 확신할 수 있습니다.
 
-`F` 타입 인자는 `Send` 트레잇 또한 가지고 있으며 우리의 상황에서 유용한 `'static` 생명주기가 바인딩 되어 있습니다. 
+`F` 타입 인자는 `Send` 트레잇과 `'static` 생명주기가 바인딩되어 있습니다.
+한 스레드에서 다른 스레드로 클로저를 전달해야하기에 `Send` 가 필요하고 스레드가
+언제 파괴될지 모르기 때문에 `'static'` 이 필요합니다.
+`execute` 메소드를 `ThreadPool` 에 생성하고 이들이 바인딩된 `F` 타입
+제네릭 인자를 받도록 합시다.
+
+<span class="filename">파일명: src/lib.rs</span>
+
+```rust
+# pub struct ThreadPool;
+impl ThreadPool {
+    // --snip--
+
+    pub fn execute<F>(&self, f: F)
+        where
+            F: FnOnce() + Send + 'static
+    {
+
+    }
+}
+```
+
+우린 클로저가 인자를 받지 않고 반환값도 없기 때문에
+`FnOnce` 뒤에 `()` 를 사용합니다.
+이처럼 함수의 반환값은 생략될 수 있습니다.
+하지만 인자가 없더라도 괄호는 필요합니다.
+
+이는 `execute` 메소드의 가장 간단한 구현입니다. 이 코드는 아무것도 하지 않지만,
+우리 코드를 컴파일 시도해 볼 순 있습니다. 다시 한번 체크해봅시다.
+
+```text
+$ cargo check
+   Compiling hello v0.1.0 (file:///projects/hello)
+warning: unused variable: `size`
+ --> src/lib.rs:4:16
+  |
+4 |     pub fn new(size: usize) -> ThreadPool {
+  |                ^^^^
+  |
+  = note: #[warn(unused_variables)] on by default
+  = note: to avoid this warning, consider using `_size` instead
+
+warning: unused variable: `f`
+ --> src/lib.rs:8:30
+  |
+8 |     pub fn execute<F>(&self, f: F)
+  |                              ^
+  |
+  = note: to avoid this warning, consider using `_f` instead
+```
+
+에러를 받긴 햇지만, 컴파일은 성공했습니다.
+하지만 여러분이 만약 `cargo run` 을 실행하고 브라우저로 요청을 보내보시면,
+이 장의 초반에서 본 에러를 받게되실겁니다. 우리 라이브러리는 `execute` 로
+전달된 클로저를 실행하지 않기 때문입니다.
+
+> Note: 여러분이 만약 하스켈이나 러스트같이 엄격한 컴파일러를 사용하는 언어를 사용하신다면,
+> "코드가 컴파일이 되면, 작동한단 뜻입니다." 라는 말이 통용됩니다. 하지만 이게 항상
+> 적용되는게 아닌것이, 우리 프로젝트는 컴파일 되었지만 아무것도 하지 않습니다. 만약
+> 우리가 실제 완성을 목표로 프로젝트를 제작중이었다면 이 상황은 코드가 컴파일되는지
+> 체크하는것에 *더해서* 우리가 원하는 기능이 구현됐는지 확인하기 위해 유닛테스트를
+> 진행하기 시작할 좋은 기회가 될 것입니다.
+
+#### `new` 의 스레드 개수에 대한 유효성 검사
+
+`new` 와 `execute` 의 파라미터로 아무것도 하지 않기 때문에 여전히 에러가 나타납니다.
+이제 우리가 원하는 기능을 이 함수의 몸체부분에 구현해봅시다. 시작하기 전에,
+`new` 에 대해서 생각해보죠. 이전에 우리가 스레드풀의 스레드 개수가 음수라는건
+말이 안되기 때문에 `size` 인자를 양수형 타입으로 정한것을 기억하시나요?
+어쨋든, 스레드가 하나도 없는것도 말이 안되는건 마찬가지입니다.
+`usize` 타입엔 0이 들어갈 수 있으므로, 우린 예시 20-13 처럼
+`ThreadPool` 인스턴스를 반환하기 이전에 `size` 가 0보다 큰지 검사하고,
+0일 경우 `assert!` 매크로를 이용해
+프로그램 패닉을 일으키는 코드를 추가할 것입니다.
+
+<span class="filename">파일명: src/lib.rs</span>
+
+```rust
+# pub struct ThreadPool;
+impl ThreadPool {
+    /// 새 스레드풀 생성
+    ///
+    /// size 는 풀 안의 스레드 개수입니다.
+    ///
+    /// # Panics
+    ///
+    /// `new` 함수는 size 가 0일때 패닉이 일어납니다
+    pub fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
+
+        ThreadPool
+    }
+
+    // --생략--
+}
+```
+
+<span class="caption">예제 20-13: `ThreadPool::new` 를 `size` 가 0일 경우 패닉을
+일으키도록 구현</span>
+
+`ThreadPool` 에 문서 주석(doc comments)을 좀 추가해 봤습니다.
+14장에서 논의했듯이 우리 함수가 패닉을 일으킬 수 있는 상황을
+설명하는 절을 추가함으로써 좋은 문서화방법을 따랐습니다.
+`cargo doc --open` 을 입력하고 `ThreadPool` 구조체를 클릭한 뒤
+`new` 에 대한 문서가 어떻게 만들어 졌는지 확인해보세요!
+
+위에서 한 것처럼 `assert!` 매크로를 추가하는 대신에, `new` 를
+예제 12-9 의 I/O 프로젝트의 `Config::new` 처럼 `Result` 를 반환하도록 바꿔봅시다.
+하지만 이처럼 스레드풀을 스레드 없이 생성하려 하는것은 회복할 수 없는(unrecoverable)
+에러가 되어야 합니다. 만약 여러분이 오기가 생기신다면,
+`new` 를 다음과 같이 시그니처를 만든 새 버전을 작성해 보시고,
+두 버전을 비교해보세요.
+
+```rust,ignore
+pub fn new(size: usize) -> Result<ThreadPool, PoolCreationError> {
+```
+
+#### 스레드를 보관하기 위한 공간 생성하기
+
+이제 우린 스레드풀에 보관할 스레드의 개수가 유효하단 것을 확인했으니,
+반환하기 전에 `ThreadPool` 구조체에 스레드들을 생성하고 보관해 놓을 수 있습니다.
+그런데, 어떻게 스레드를 "보관" 할까요?
+`thread::spawn` 의 시그니처를 다시 살펴봅시다.
+
+```rust,ignore
+pub fn spawn<F, T>(f: F) -> JoinHandle<T>
+    where
+        F: FnOnce() -> T + Send + 'static,
+        T: Send + 'static
+```
+
+`spawn` 함수는 `JoinHandle<T>` 를 반환합니다. 여기서 `T` 는 클로저가
+반환할 타입입니다. `JoinHandle` 을 사용해보고 무슨 일이 일어나는지 살펴봅시다.
+우리의 경우, 스레드풀로 전달된 클로저는 커넥션을 다루고
+아무것도 반환하지 않을테니 `T` 는 `()` 가 되겠네요.
+
+예제 20-14의 코드는 컴파일엔 문제가 없지만 아직 아무 스레드도 만들지 않습니다.
+`thread::JoinHandle<()>` 객체를 담는 벡터를 취급하도록
+`ThreadPool` 의 정의를 변경했습니다.
+벡터의 크기를 `size` 로 초기화하고 `for` 반목문에서 스레드들을 생성한뒤,
+스레드들을 가진 `ThreadPool` 객체를 반환할 것입니다.
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust,ignore
+use std::thread;
+
+pub struct ThreadPool {
+    threads: Vec<thread::JoinHandle<()>>,
+}
+
+impl ThreadPool {
+    // --생략--
+    pub fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
+
+        let mut threads = Vec::with_capacity(size);
+
+        for _ in 0..size {
+            // 스레드들을 생성하고 벡터 내에 보관합니다
+        }
+
+        ThreadPool {
+            threads
+        }
+    }
+
+    // --생략--
+}
+```
+
+<span class="caption">예제 20-14: `ThreadPool` 에 스레드들을 보관하기 위한
+벡터 만들기</span>
+
+`std::thread` 를 라이브러리 크레이트의 스코프 내로 가져왔습니다.
+우리가 `thread::JoinHandle` 를 `ThreadPool` 내 벡터 요소의 타입으로
+사용하고 있으니까요.
+
+`ThreadPool` 은 유효한 숫자를 전달받을 경우 `size` 크기대로 새로운 벡터를 생성합니다.
+이 책에선 아직 `Vec::new` 와 비슷한 기능을 하는 `with_capacity` 함수를 사용하진
+않습니다:
+다만 이 두 함수는 중요한 차이가 있는데, `with_capacity` 함수는 벡터의
+공간을 미리 할당합니다. 우린 벡터 안에 들어갈 요소의 개수를 알고 있기 때문에 사전에
+공간을 할당 함으로써 요소의 삽입마다 재할당이 일어나는 `Vec::new` 를
+사용할 때 보다 효율을 높일 수 있습니다.
+
+`cargo check` 를 재실행 하시면 몇개의 경고는 발생하겠지만
+문제 없이 성공하실겁니다.
+
+#### `ThreadPool` 에서 스레드로 코드를 보내는 `Worker` 구조체
+
+예제 20-14 의 `for` 반복문에 스레드 생성에 관해 주석을 남겨놨습니다.
+여기서 우리가 스레드들을 실제로 만드는 방법을 알아볼 예정입니다.
+표준 라이브러리는 `thread:::spawn` 를 이용해 스레드를 생성할 수 있도록 제공하며,
+`thread::spawn` 은 스레드가 생성되는 즉시 스레드가 실행할 코드를 전달 받도록
+되어있습니다. 하지만 우린 스레드를 생성하고 나중에 코드를 전달받을 때까지
+`기다리도록` 해야 합니다.
+안타깝게도 표준 라이브러리의 스레드 구현에는 이러한 방법을 지원하지 않아서
+우리가 직접 구현해야합니다.
+
+우린 이 기능을 `ThreadPool` 과 스레드들 사이에 새로운 데이터 구조를 도입하여 구현할 것입니다.
+앞으로 이 데이터 구조를 `Worker` 라고 부르겠습니다.
+이 용어는 풀링 구현에서 흔하게 사용됩니다.
+한번 식당의 부엌에서 일하는 사람들을 예로 들어보죠.
+이 `Worker` 들은 고객으로부터 주문을 받을 때까지 기다린 다음,
+주문을 받고 일합니다. 뭐 대충 비슷하지 않나요?
+
+스레드 풀 안에 `JoinHandle<()>` 인스턴스 벡터 대신,
+`Worker` 구조체의 인스턴스들을 내장하도록 해 봅시다.
+이때 각각의 `Worker` 는 단일 `JoinHandle<()>` 인스턴스를 내장하게 됩니다.
+그리고 실행할 코드의 클로저를 전달받고 스레드에게 전달해 실행하도록 하는 함수를
+`Worker` 에 구현할 것입니다. 또한 우린 각각의 워커에 `id` 를 부여해
+로그를 남기거나 디버깅을 할때 서로 다른 워커들을 구별할 수 있게 할 것입니다.
+
+`ThreadPool` 을 생성할때 일어나는 일을 다음과 같이 변경해 보겠습니다.
+다음과 같은 방법으로 `Worker` 를 설정하고 스레드에 클로저를 전송하는 코드를
+구현합니다.
+
+1. `id` 와 `JoinHandle<()>` 를 갖는 `Worker` 구조체를 정의 합니다.
+2. `ThreadPool` 을 `Worker` 인스턴스들의 벡터를 갖도록 변경합니다.
+3. `id` 숫자를 받고 전달받은 `Worker` 인스턴스를 반환하는 `Worker::new` 함수를
+   정의합니다. 반환된 `Worker` 인스턴스에는 `id` 와 빈 클로저로 생성된 스레드가
+   포함되어 있습니다.
+4. `ThreadPool::new` 안에서, `for` 루프 카운터를 이용해 `id` 를 생성하고 생성된 `id`
+   를 이용해 새 `Worker` 를 생성한 뒤 해당 워커를 벡터안에 저장합니다.
+
+도전해보실 분은 예제 20-15 코드를 보기 전에
+직접 구현해보시길 바랍니다.
+
+준비 되셨나요? 여기 앞선 수정사항들을 구현한 방법중 하나로 예제 20-15 를 가져와 보았습니다.
+
+<span class="filename">파일명: src/lib.rs</span>
+
+```rust
+use std::thread;
+
+pub struct ThreadPool {
+    workers: Vec<Worker>,
+}
+
+impl ThreadPool {
+    // --생략--
+    pub fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
+
+        let mut workers = Vec::with_capacity(size);
+
+        for id in 0..size {
+            workers.push(Worker::new(id));
+        }
+
+        ThreadPool {
+            workers
+        }
+    }
+    // --생략--
+}
+
+struct Worker {
+    id: usize,
+    thread: thread::JoinHandle<()>,
+}
+
+impl Worker {
+    fn new(id: usize) -> Worker {
+        let thread = thread::spawn(|| {});
+
+        Worker {
+            id,
+            thread,
+        }
+    }
+}
+```
+
+<span class="caption">예제 20-15: `ThreadPool` 을 스레드들을 직접 내장하는 대신
+`Worker` 인스턴스들을 내장하게 변경</span>
+
