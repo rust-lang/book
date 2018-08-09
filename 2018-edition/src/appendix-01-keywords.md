@@ -1,9 +1,10 @@
 ## Appendix A: Keywords
 
 The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers, such as
-names of functions, variables, parameters, struct fields, modules, crates,
-constants, macros, static values, attributes, types, traits, or lifetimes.
+use by the Rust language. As such, they cannot be used as identifiers (except as
+[raw identifiers][raw-identifiers]), including names of functions, variables,
+parameters, struct fields, modules, crates, constants, macros, static values,
+attributes, types, traits, or lifetimes.
 
 ### Keywords Currently in Use
 
@@ -70,3 +71,49 @@ for potential future use.
 * `unsized`
 * `virtual`
 * `yield`
+
+### Raw identifiers
+[raw-identifiers]: #raw-identifiers
+
+Raw identifiers let you use keywords where they would not normally be allowed by
+prefixing them with `r#`.
+
+For example, `match` is a keyword. If you try to compile this function:
+
+```rust,ignore
+fn match(needle: &str, haystack: &str) -> bool {
+    haystack.contains(needle)
+}
+```
+
+You'll get this error:
+
+```text
+error: expected identifier, found keyword `match`
+ --> src/main.rs:4:4
+  |
+4 | fn match(needle: &str, haystack: &str) -> bool {
+  |    ^^^^^ expected identifier, found keyword
+```
+
+You can write this with a raw identifier:
+
+```rust
+fn r#match(needle: &str, haystack: &str) -> bool {
+    haystack.contains(needle)
+}
+
+fn main() {
+    assert!(r#match("foo", "foobar"));
+}
+```
+
+Note the `r#` prefix on both the function name as well as the call.
+
+#### Motivation
+
+This feature is useful for a few reasons, but the primary motivation was
+inter-edition situations. For example, `try` is not a keyword in the 2015
+edition, but is in the 2018 edition. So if you have a library that is written
+in Rust 2015 and has a `try` function, to call it in Rust 2018, you'll need
+to use the raw identifier.
