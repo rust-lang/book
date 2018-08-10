@@ -279,16 +279,19 @@ the `Summary` trait, like `summarize`.
 
 #### Trait Bounds
 
-The `impl Trait` syntax works for short examples, but is syntax sugar for a
+The `impl Trait` syntax works for short examples, but except one small thing it is syntax sugar for a
 longer form. This is called a 'trait bound', and it looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
-    println!("Breaking news! {}", item.summarize());
+    //The type name T is now in scope so you can do this
+    let i:T = item; 
+    println!("Breaking news! {}", i.summarize());    
 }
 ```
 
-This is equivalent to the example above, but is a bit more verbose. We place
+This is roughly equivalent to the example above, except that it is a bit more 
+verbose but allow you to refer to the type of `item` with a name `T`. We place
 trait bounds with the declaration of the generic type parameter, after a
 colon and inside angle brackets. Because of the trait bound on `T`, we can
 call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code that
@@ -296,15 +299,42 @@ calls the function with any other type, like a `String` or an `i32`, won’t
 compile, because those types don’t implement `Summary`.
 
 When should you use this form over `impl Trait`? While `impl Trait` is nice for
-shorter examples, trait bounds are nice for more complex ones. For example,
-say we wanted to take two things that implement `Summary`:
+shorter examples and makes refactoring slightly easier as you have one less 
+identifier in the scope, trait bounds allow you to do more by letting you refer
+to the types it involves. For example, say we wanted to take two things that 
+implement `Summary`:
 
 ```rust,ignore
+//If you don't care whether item1 and item2 have the exact same type,
+//use this:
 pub fn notify(item1: impl Summary, item2: impl Summary) {
+
+//Or the roughtly equivlent:
+pub fn notify<T1:Summary, T2:Summary>(item1: T1, item2: T2) {
+//with the ability to refer to T1 and T2.
+
+//If you need to ensure they have the exact same type, 
+//use this:
 pub fn notify<T: Summary>(item1: T, item2: T) {
+//There is no equivlent in the impl Trait form as you have to name
+//the type to be able to refer to it.
 ```
 
-The version with the bound is a bit easier. In general, you should use whatever
+One common mistake is to treat the last form above to be the same as 
+the first. They are in fact behave quite differently.
+
+The situation is simular to the following examples:
+
+```rust,ignore
+let _v = calculate();
+//The above is equivlent to
+let _ = calculate();
+//except that you can still use _v afterwards (like use named 
+//types with trait bounds), but _ is not even a variable name
+//(like impl Trait).
+```
+
+As usual, both options have their pros and cons. In general, you should use whatever
 form makes your code the most understandable.
 
 ##### Multiple trait bounds with `+`
@@ -334,6 +364,10 @@ fn some_function<T, U>(t: T, u: U) -> i32
     where T: Display + Clone,
           U: Clone + Debug
 {
+//This is roughly equivlent to 
+fn some_function(t: impl Display + Clone, u: impl Clone + Debug) -> i32
+{
+//(again except that you didn't name the types)
 ```
 
 This function’s signature is less cluttered in that the function name,
@@ -356,14 +390,25 @@ fn returns_summarizable() -> impl Summary {
 }
 ```
 
-This signature says, "I'm going to return something that implements the
-`Summary` trait, but I'm not going to tell you the exact type. In our case,
-we're returning a `Tweet`, but the caller doesn't know that.
+As in the case `impl Trait` syntax in the parameter position, the above involves 
+a type that is present in the function signature, but not able to be named or 
+refered to in any other places. However, there is a single type behind it, and 
+it is determined by the function's return value.
+
+In other words, this signature says, "I'm going to return something that 
+implements the `Summary` trait, but I'm not going to tell you the name of it,
+so you will not be able to know the exact type." In our case, we're returning 
+a `Tweet`, but the caller doesn't know that.
+
+(It is insteresting to compare this with the case of the parameter above. 
+Which will be syaing "You can send me anything that implements `Summary`, 
+and its name is completely irelevent to me and so I will not assume any 
+relationship between this and anything else you gave me.")
 
 Why is this useful? In chapter 13, we're going to learn about two features
 that rely heavily on traits: closures, and iterators. These features create
 types that only the compiler knows, or types that are very, very long.
-`impl  Trait` lets you simply say "this returns an `Iterator`" without
+`impl Trait` lets you simply say "this returns an `Iterator`" without
 needing to write out a really long type.
 
 This only works if you have a single type that you're returning, however.
@@ -391,8 +436,26 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 ```
 
 Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
-due to restrictions around how `impl Trait` works. To write this code, you'll
-have to wait until Chapter 17, "trait objects".
+due to restrictions around how `impl Trait` works. To write this code, one 
+option is to use "trait objects", which we will introduce in Chapter 17, or 
+you can try the "new enum" trick:
+
+```rust,ignore
+enum SomeSummaries {
+    NewsArticle(NewsArticle),
+    Tweet(Tweet)
+}
+impl Summary for SomeSummaries{
+    ...
+}
+fn returns_summarizable(switch: bool) -> impl Summary {
+    if switch {
+        SomeSummaries::NewsArticle(NewsArticle{...})
+    } else {
+        SomeSummaries::Tweet(Tweet{...})
+    }
+}
+```
 
 ### Fixing the `largest` Function with Trait Bounds
 
