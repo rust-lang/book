@@ -279,8 +279,9 @@ the `Summary` trait, like `summarize`.
 
 #### Trait Bounds
 
-The `impl Trait` syntax works for short examples, but except one small thing it is syntax sugar for a
-longer form. This is called a 'trait bound', and it looks like this:
+The `impl Trait` syntax works for short examples, but except one small thing 
+it is syntax sugar for a longer form. This is called a 'trait bound', and it 
+looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -307,26 +308,38 @@ implement `Summary`:
 ```rust,ignore
 //If you don't care whether item1 and item2 have the exact same type,
 //use this:
-pub fn notify(item1: impl Summary, item2: impl Summary) {
+pub fn notify1(item1: impl Summary, item2: impl Summary) {
 
 //Or the roughtly equivlent:
-pub fn notify<T1:Summary, T2:Summary>(item1: T1, item2: T2) {
+pub fn notify2<T1:Summary, T2:Summary>(item1: T1, item2: T2) {
 //with the ability to refer to T1 and T2.
 
 //If you need to ensure they have the exact same type, 
 //use this:
-pub fn notify<T: Summary>(item1: T, item2: T) {
+pub fn notify3<T: Summary>(item1: T, item2: T) {
 //There is no equivlent in the impl Trait form as you have to name
 //the type to be able to refer to it.
 ```
 
-One common mistake is to treat the last form above to be the same as 
-the first. They are in fact behave quite differently.
-
-The situation is simular to the following examples:
+It is safe to assume that `notify1` and `notify2` doing the same thing, but 
+it is easy to confuse with `notify1` and `notify3`. In fact they behave quite 
+differently. For example, you can write
 
 ```rust,ignore
-let _v = calculate();
+notify1(a_news_article, a_tweet);
+```
+
+but not
+
+```rust,ignore
+notify3(a_news_article, a_tweet);
+```
+because `notify3` requires both items to have the same type!
+
+In some sense, making decisions to choose between `impl Trait` and named type is similar to choose between:
+
+```rust,ignore
+let _v1 = calculate();
 //The above is equivlent to
 let _ = calculate();
 //except that you can still use _v afterwards (like use named 
@@ -334,8 +347,7 @@ let _ = calculate();
 //(like impl Trait).
 ```
 
-As usual, both options have their pros and cons. In general, you should use whatever
-form makes your code the most understandable.
+As usual, both options have their pros and cons. In general, you should use whatever form makes your code the most understandable.
 
 ##### Multiple trait bounds with `+`
 
@@ -346,6 +358,8 @@ type that implements `Summary` and `Display`. This can grow quite complex!
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+//If you don't want to name the types, you can write
+fn some_function(t: impl Display + Clone, u: Clone + Debug) -> i32 {
 ```
 
 #### `where` clauses for clearer code
@@ -364,10 +378,6 @@ fn some_function<T, U>(t: T, u: U) -> i32
     where T: Display + Clone,
           U: Clone + Debug
 {
-//This is roughly equivlent to 
-fn some_function(t: impl Display + Clone, u: impl Clone + Debug) -> i32
-{
-//(again except that you didn't name the types)
 ```
 
 This function’s signature is less cluttered in that the function name,
@@ -390,10 +400,10 @@ fn returns_summarizable() -> impl Summary {
 }
 ```
 
-As in the case `impl Trait` syntax in the parameter position, the above involves 
-a type that is present in the function signature, but not able to be named or 
-refered to in any other places. However, there is a single type behind it, and 
-it is determined by the function's return value.
+As in the case `impl Trait` syntax in the parameter position, the above 
+involves a type that is present in the function signature, but not able to be 
+named or refered to in any other places. However, there is a single type behind 
+it, and it is determined by the function's return value.
 
 In other words, this signature says, "I'm going to return something that 
 implements the `Summary` trait, but I'm not going to tell you the name of it,
@@ -436,26 +446,67 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 ```
 
 Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
-due to restrictions around how `impl Trait` works. To write this code, one 
-option is to use "trait objects", which we will introduce in Chapter 17, or 
-you can try the "new enum" trick:
+because a single `impl Trait` item, regardless it is in parameter position or the return position, can only bind to a single (hidden) type in a specific context. To write this code, one can use "trait objects" when possible, which we will introduce in Chapter 17:
 
 ```rust,ignore
-enum SomeSummaries {
-    NewsArticle(NewsArticle),
-    Tweet(Tweet)
-}
-impl Summary for SomeSummaries{
-    ...
-}
-fn returns_summarizable(switch: bool) -> impl Summary {
+//We will discuss the dyn keyword in Chapter 17!
+fn returns_summarizable(switch: bool) -> Box<dyn Summary> {
     if switch {
-        SomeSummaries::NewsArticle(NewsArticle{...})
+        Box::new(NewsArticle {
+            headline: String::from("Penguins win the Stanley Cup Championship!"),
+            location: String::from("Pittsburgh, PA, USA"),
+            author: String::from("Iceburgh"),
+            content: String::from("The Pittsburgh Penguins once again are the best
+            hockey team in the NHL."),
+        })
     } else {
-        SomeSummaries::Tweet(Tweet{...})
+        Box::new(Tweet {
+            username: String::from("horse_ebooks"),
+            content: String::from("of course, as you probably already know, people"),
+            reply: false,
+            retweet: false,
+        })
     }
 }
 ```
+
+or try the "new enum" trick like in the following:
+
+```rust,ignore
+fn returns_summarizable(switch: bool) -> impl Summary {
+    //You can define local enums to avoid poluting the module scope
+    enum SomeSummaries {
+        NewsArticle(NewsArticle),
+        Tweet(Tweet)
+    }
+    impl Summary for SomeSummaries{
+        fn summarize(&self) -> String {
+            match self {
+                SomeSummaries::NewsArticle(na) => na.summarize(),
+                SomeSummaries::Tweet(t) => t.summarize()
+            }
+        }
+    }
+    if switch {
+        SomeSummaries::NewsArticle(NewsArticle {
+            headline: String::from("Penguins win the Stanley Cup Championship!"),
+            location: String::from("Pittsburgh, PA, USA"),
+            author: String::from("Iceburgh"),
+            content: String::from("The Pittsburgh Penguins once again are the best
+            hockey team in the NHL."),
+        })
+    } else {
+        SomeSummaries::Tweet(Tweet {
+            username: String::from("horse_ebooks"),
+            content: String::from("of course, as you probably already know, people"),
+            reply: false,
+            retweet: false,
+        })
+    }
+}
+```
+
+As you will see in Chapter 17, it is not always possible to use trait objects. The enum trick usually works though; but it takes much effort and is not easy to new Rust users. However, this is the best we can have right now. A 
 
 ### Fixing the `largest` Function with Trait Bounds
 
