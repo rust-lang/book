@@ -336,7 +336,8 @@ notify3(a_news_article, a_tweet);
 ```
 because `notify3` requires both items to have the same type!
 
-In some sense, making decisions to choose between `impl Trait` and named type is similar to choose between:
+In some sense, making decisions to choose between `impl Trait` and named type is 
+similar to choose between:
 
 ```rust,ignore
 let _v1 = calculate();
@@ -347,7 +348,8 @@ let _ = calculate();
 //(like impl Trait).
 ```
 
-As usual, both options have their pros and cons. In general, you should use whatever form makes your code the most understandable.
+As usual, both options have their pros and cons. In general, you should use 
+whatever form makes your code the most understandable.
 
 ##### Multiple trait bounds with `+`
 
@@ -359,7 +361,7 @@ type that implements `Summary` and `Display`. This can grow quite complex!
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
 //If you don't want to name the types, you can write
-fn some_function(t: impl Display + Clone, u: Clone + Debug) -> i32 {
+fn some_function(t: impl Display + Clone, u: impl Clone + Debug) -> i32 {
 ```
 
 #### `where` clauses for clearer code
@@ -367,7 +369,9 @@ fn some_function(t: impl Display + Clone, u: Clone + Debug) -> i32 {
 However, there are downsides to using too many trait bounds. Each generic has
 its own trait bounds, so functions with multiple generic type parameters can
 have lots of trait bound information between a function’s name and its
-parameter list, making the function signature hard to read. For this reason,
+parameter list, making the function signature hard to read (note this argument does
+not apply to the `impl Trait` form; if your bound have too many traits, you should
+consider seperate each input parameters in seperated lines). For this reason,
 Rust has alternate syntax for specifying trait bounds inside a `where` clause
 after the function signature. So instead of writing this:
 
@@ -377,6 +381,11 @@ we can use a `where` clause, like this:
 fn some_function<T, U>(t: T, u: U) -> i32
     where T: Display + Clone,
           U: Clone + Debug
+{
+//The impl Trait form can also be formatted like
+fn some_function(
+    t: impl Display + Clone,
+    u: impl Clone + Debug)
 {
 ```
 
@@ -446,7 +455,10 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 ```
 
 Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
-because a single `impl Trait` item, regardless it is in parameter position or the return position, can only bind to a single (hidden) type in a specific context. To write this code, one can use "trait objects" when possible, which we will introduce in Chapter 17:
+because a single `impl Trait` item, regardless it is in parameter position or 
+the return position, can only bind to a single (hidden) type in a specific 
+context. To write this code, one can use "trait objects" when possible, which 
+we will introduce in Chapter 17:
 
 ```rust,ignore
 //We will discuss the dyn keyword in Chapter 17!
@@ -506,7 +518,9 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 }
 ```
 
-As you will see in Chapter 17, it is not always possible to use trait objects. The enum trick usually works though; but it takes much effort and is not easy to new Rust users. However, this is the best we can have right now. A 
+As you will see in Chapter 17, it is not always possible to use trait objects. 
+The enum trick usually works though; but it takes much effort and is not easy 
+to new Rust users. However, this is the best we can have right now. 
 
 ### Fixing the `largest` Function with Trait Bounds
 
