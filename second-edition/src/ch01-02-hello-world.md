@@ -550,7 +550,7 @@ Hello, world!
 ```shell
 $ cargo --help
 ```
-А также из материалов [сайта](http://doc.crates.io/).
+А также из материалов [сайта](https://doc.rust-lang.org/cargo/).
 
 ### Сборка готовых (оптимизированных) Rust-приложений
 
