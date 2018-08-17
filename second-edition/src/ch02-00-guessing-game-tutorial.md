@@ -26,7 +26,7 @@ $ cd guessing_game
 ```
 or
 ```shell
-$ cargo new guessing_game --bin && cd guessing_game
+$ cargo new guessing_game --bin --vcs none && cd guessing_game
 ```
 
 Данная команда `cargo new` принимает аргумент — имя нового проекта
@@ -63,7 +63,7 @@ $ cargo run
 Hello, world!
 ```
 
-Испльзуйте команду `run`, когда нужно быстро скомпилировать и запусть программу на
+Используйте команду `run`, когда нужно быстро скомпилировать и запусть программу на
 выполнение. Что-то подобное будет происходить и той программе, которую мы будем
 создавать.
 
@@ -83,16 +83,16 @@ Hello, world!
 use std::io;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадай число!");
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введи число.");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Ошибка чтения файла");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 }
 ```
 
