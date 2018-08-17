@@ -85,7 +85,7 @@ use std::io;
 fn main() {
     println!("Угадай число!");
 
-    println!("Пожалуйста, введи число.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
 
@@ -133,11 +133,10 @@ fn main() {
 ```rust,ignore
     println!("Угадай число!");
 
-    println!("Пожалуйста, введи число.");
+    println!("Пожалуйста, введите число.");
 ```
 
-Этот код просто печатает предложение ввести строку для начала игры и далее печатает
-введённое значение.
+Этот код просто печатает информационные сообщение на консоль.
 
 ### Создание переменной для хранения значений
 
@@ -199,10 +198,10 @@ let mut guess = String::new();
 изменяемую переменную `guess`, которая связывается с новым пустым экземпляром типа
 `String`. Всё просто и ясно. Отлично!
 
-Теперь перейдем к следующей сроки нашей программы. Рассмотрим длинную строку кода:
+Теперь перейдем к следующей сроке нашей программы. Рассмотрим длинную строку кода:
 
 ```rust
-io::stdin().read_line(&mut guess).expect("Failed to read line");
+io::stdin().read_line(&mut guess).expect("Ошибка чтения файла");
 ```
 
 Тут мы видим вызов методов `read_line` и `expect` стандартной библиотеки `std::io`.
@@ -220,16 +219,16 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 //use std::io;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадай число!");
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
   // ↓↓ мы добавили префикс std:: ↓↓
     std::io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Ошибка чтения файла");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 }
 ```
 
@@ -239,17 +238,17 @@ fn main() {
 //use std::io;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
   // ↓↓ мы добавили префикс std:: ↓↓
     std::
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+		io::stdin().read_line(&mut guess)
+			.expect("Ошибка чтения файла");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 }
 ```
 
@@ -285,9 +284,9 @@ fn main() {
 use std::io;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
 
@@ -295,34 +294,34 @@ fn main() {
       &
       //mut
       guess)
-        .expect("Failed to read line");
+        .expect("Ошибка чтения файла");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 }
 ```
 
-При компиляции данного кода — получим ошибку, сообщающую нам о том, что входной параметр
+При компиляции данного кода — получим ошибку, которая сообщает о том, что входной параметр
 данной функции должен быть изменяемым. Пожалуйста исправьте ошибку (раскомментировав
 строку кода с ключевым словом `mut` и перекомпилировав программу)!
 
 Далее перейдём к следующему методы этой длинной цепочки вызовов методов:
 
 ```rust,ignore
-.expect("Failed to read line");
+.expect("Ошибка чтения файла");
 ```
 На практике мы уже научились размещать код на нескольких строках (это может быть
 необходимо по разным причинам: для удобства чтения длинных цепочек кода, для
 включения/отключения некоторых звеньев). Поэтому даная запись:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess).expect("Failed to read line");
+io::stdin().read_line(&mut guess).expect("Ошибка чтения файла");
 ```
 
 для удобства чтения, разделена на две строки
 
 ```rust,ignore
 io::stdin().read_line(&mut guess)
-.expect("Failed to read line");
+	.expect("Ошибка чтения файла");
 ```
 
 Оставим рассуждения о стиле. Вернёмся к сути! Далее мы продолжим изучать нашу
@@ -338,7 +337,7 @@ io::stdin().read_line(&mut guess)
 [ioresult]: https://doc.rust-lang.org/std/io/type.Result.html
 [result]: https://doc.rust-lang.org/std/result/enum.Result.html
 
-Типа данных `Result` чаще всего являются *перечисления*[enums]<!-- ignore -->
+Типа данных `Result` чаще всего являются *перечисления* [enums]<!-- ignore -->
 (*[enums]*). Это такой тип данных, который имеет фиксированный набор значений.
 В главе № 6 мы подробнее познакомится с этим типом данных.
 
@@ -359,7 +358,7 @@ io::stdin().read_line(&mut guess)
 [expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
 ```rust,ignore
-.expect("Failed to read line");
+.expect("Ошибка чтения файла");
 ```
 
 Если же экземпляром типа `io::Result` является значение `Ok`, метод `expect`
@@ -369,7 +368,7 @@ io::stdin().read_line(&mut guess)
 введено с клавиатуры.
 
 ```rust,ignore
-  let number_of_bytes = io::stdin().read_line(&mut guess).expect("Failed to read line");
+  let number_of_bytes = io::stdin().read_line(&mut guess).expect("Ошибка чтения файла");
   println!("number of bytes was entered: {}", number_of_bytes);
 ```
 Если мы сохраним код программы, закомментировав вызов метода `expect`:
@@ -378,17 +377,17 @@ io::stdin().read_line(&mut guess)
 use std::io;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
 
     std::io::stdin().read_line(&mut guess)
-        //.expect("Failed to read line")
+        //.expect("Ошибка чтения файла")
         ;
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 }
 ```
 
@@ -491,8 +490,8 @@ fn main() {
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
-Guess the number!
-Please input your guess.
+Угадайте число!
+Пожалуйста, введите число.
 6
 You guessed: 6
 ```
@@ -660,20 +659,20 @@ use rand::Rng;
 
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     println!("The secret number is: {}", secret_number);
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Ошибка чтения файла");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 }
 ```
 
@@ -730,16 +729,16 @@ Try running the program a few times:
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
-Guess the number!
+Угадайте число!
 The secret number is: 7
-Please input your guess.
+Пожалуйста, введите число.
 4
 You guessed: 4
 $ cargo run
      Running `target/debug/guessing_game`
-Guess the number!
+Угадайте число!
 The secret number is: 83
-Please input your guess.
+Пожалуйста, введите число.
 5
 You guessed: 5
 ```
@@ -765,20 +764,20 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     println!("The secret number is: {}", secret_number);
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Ошибка чтения файла");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 
     match guess.cmp(&secret_number) {
         Ordering::Less    => println!("Too small!"),
@@ -863,23 +862,23 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     println!("The secret number is: {}", secret_number);
 
-    println!("Please input your guess.");
+    println!("Пожалуйста, введите число.");
 
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("Ошибка чтения файла");
 
     let guess: u32 = guess.trim().parse()
         .expect("Please type a number!");
 
-    println!("You guessed: {}", guess);
+    println!("Вы угадали: {}", guess);
 
     match guess.cmp(&secret_number) {
         Ordering::Less    => println!("Too small!"),
@@ -928,9 +927,9 @@ let guess: u32 = guess.trim().parse()
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
-Guess the number!
+Угадайте число!
 The secret number is: 58
-Please input your guess.
+Пожалуйста, введите число.
   76
 You guessed: 76
 Too big!
@@ -957,24 +956,24 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     println!("The secret number is: {}", secret_number);
 
     loop {
-        println!("Please input your guess.");
+        println!("Пожалуйста, введите число.");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Ошибка чтения файла");
 
         let guess: u32 = guess.trim().parse()
             .expect("Please type a number!");
 
-        println!("You guessed: {}", guess);
+        println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
             Ordering::Less    => println!("Too small!"),
@@ -992,21 +991,21 @@ fn main() {
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
-Guess the number!
+Угадайте число!
 The secret number is: 59
-Please input your guess.
+Пожалуйста, введите число.
 45
 You guessed: 45
 Too small!
-Please input your guess.
+Пожалуйста, введите число.
 60
 You guessed: 60
 Too big!
-Please input your guess.
+Пожалуйста, введите число.
 59
 You guessed: 59
 You win!
-Please input your guess.
+Пожалуйста, введите число.
 quit
 thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -1032,24 +1031,24 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     println!("The secret number is: {}", secret_number);
 
     loop {
-        println!("Please input your guess.");
+        println!("Пожалуйста, введите число.");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Ошибка чтения файла");
 
         let guess: u32 = guess.trim().parse()
             .expect("Please type a number!");
 
-        println!("You guessed: {}", guess);
+        println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
             Ordering::Less    => println!("Too small!"),
@@ -1093,26 +1092,26 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     println!("The secret number is: {}", secret_number);
 
     loop {
-        println!("Please input your guess.");
+        println!("Пожалуйста, введите число.");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Ошибка чтения файла");
 
 		let guess: u32 = match guess.trim().parse() {
 			Ok(num) => num,
 			Err(_) => continue,
 		};
 
-        println!("You guessed: {}", guess);
+        println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
             Ordering::Less    => println!("Too small!"),
@@ -1143,19 +1142,19 @@ fn main() {
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
-Guess the number!
+Угадайте число!
 The secret number is: 61
-Please input your guess.
+Пожалуйста, введите число.
 10
 You guessed: 10
 Too small!
-Please input your guess.
+Пожалуйста, введите число.
 99
 You guessed: 99
 Too big!
-Please input your guess.
+Пожалуйста, введите число.
 foo
-Please input your guess.
+Пожалуйста, введите число.
 61
 You guessed: 61
 You win!
@@ -1177,24 +1176,24 @@ use std::cmp::Ordering;
 use rand::Rng;
 
 fn main() {
-    println!("Guess the number!");
+    println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     loop {
-        println!("Please input your guess.");
+        println!("Пожалуйста, введите число.");
 
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("Ошибка чтения файла");
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
 
-        println!("You guessed: {}", guess);
+        println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
             Ordering::Less    => println!("Too small!"),
