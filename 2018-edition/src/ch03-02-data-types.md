@@ -109,7 +109,7 @@ your program to *panic*, which is the term Rust uses when a program exits
 with an error. We'll discuss panics more in Chapter 9.
 
 In release builds, Rust does not check for overflow, and instead will
-do something called "two's compliment wrapping." In short, `256` becomes
+do something called "two's complement wrapping." In short, `256` becomes
 `0`, `257` becomes `1`, etc. Relying on overflow is considered an error,
 even if this behavior happens. If you want this behavior explicitly, the
 standard library has a type, `Wrapping`, that provides it explicitly.
