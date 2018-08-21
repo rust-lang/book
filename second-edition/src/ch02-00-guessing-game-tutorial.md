@@ -416,8 +416,8 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
 fn main() {
     let guess1 = "text string1";
     let guess2 = "text string2";
-    println!("You guessed1: {}", guess1);
-    println!("You guessed2: {}", guess2);
+    println!("Вы угадали1: {}", guess1);
+    println!("Вы угадали2: {}", guess2);
 
     let x = 5;
     let y = 10;
@@ -437,7 +437,7 @@ println!("x = {} and y = {}", x, y);
 Пожалуйста, напишите программу с множеством переменных разных типов (числами, строками)
 и передайте их макросу `println!`! Проверьте результаты работы вашей программы!
 Попробуйте ввести больше параметров, чем блоков `{}` в вашем шаблоне; введите
-меньше данных, чем блоков `{}` в вашем шаблоне; откажитесь от переменных в вписывайте
+меньше данных, чем блоков `{}` в вашем шаблоне; откажитесь от переменных - вписывайте
 данные непосредственно в параметры макроса! Экспериментируйте! Добейтесь уверенности
 в использовании уже имеющихся у Вас знаний языка Rust!
 Желаем успехов!
@@ -493,7 +493,7 @@ $ cargo run
 Угадайте число!
 Пожалуйста, введите число.
 6
-You guessed: 6
+Вы угадали: 6
 ```
 
 Итак, первая часть (ввод и отображения введённых вами данных) игры готова.
@@ -510,7 +510,7 @@ You guessed: 6
 
 [randcrate]: https://crates.io/crates/rand
 
-### Испльзование контейнеров для расширения функциональных возможностей приложений
+### Использование контейнеров для расширения функциональных возможностей приложений
 
 Внимание! Новая и важная информация — контейнеры *crate* (их ещё называют пакетами)
 — это набор переносимого программного определённого созданного по определённым
@@ -525,7 +525,7 @@ You guessed: 6
 ```toml
 [dependencies]
 
-rand = "0.4.2"
+rand = "0.5.5"
 ```
 > Для того чтобы  узнать последнюю версию пакета, пожалуйста воспользуйтесь строкой
 > поиска на сайте (crates.io)[https://crates.io/search]
@@ -533,11 +533,11 @@ rand = "0.4.2"
 Обрате внимание, что вся информация в файле конфигурации сгруппирована по секциям.
 Секция `[dependencies]` необходима для описания необходимого внешнего пакета.
 В данном примере мы указали уникальный идентификатор и версию пакета. Обратите
-внимание, что мы указали семантический номер версии `0.4.2`. Менеджер Cargo
+внимание, что мы указали семантический номер версии `0.5.5`. Менеджер Cargo
 использует [semver]<!-- ignore -->(*SemVer*) — методологию написания и анализа
-номера версии. В данном случае `0.4.2` — это сокращенная вид полного идентификатора
- `^0.4.2`. Этот текст значит следующее: "любая версия, которая имеет открытый API
- и совместима с версией 0.4.2".
+номера версии. В данном случае `0.5.5` — это сокращенная вид полного идентификатора
+ `^0.5.5`. Этот текст значит следующее: "любая версия, которая имеет открытый API
+ и совместима с версией 0.5.5".
 
 [semver]: http://semver.org
 
@@ -606,7 +606,7 @@ $ cargo build
 2. Если загрузка и компиляция зависимостей прошла успешно, происходит обновление данных файла *Cargo.lock*.
 
 По умолчанию (согласно семантической теории версий), Cargo производит поиск новых
-версий пакета `rand`, которые большое `0.3.0` и меньше `0.4.0`. Если существует
+версий пакета `rand`, которые больше `0.3.0` и меньше `0.4.0`. Если существует
 несколько новых версий `rand` (`0.3.15` и `0.4.0`), при выполнений команды `udate`
 вы увидите подобное сообщение:
 
@@ -657,13 +657,12 @@ extern crate rand;
 use std::io;
 use rand::Rng;
 
-
 fn main() {
     println!("Угадайте число!");
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Загаданное число: {}", secret_number);
 
     println!("Пожалуйста, введите число.");
 
@@ -711,7 +710,7 @@ fn main() {
 Строка кода:
 
 ```text
-println!("The secret number is: {}", secret_number);
+println!("Загаданное число: {}", secret_number);
 ```
 
 печатает созданное случайное число. Вывод на печать текущих переменных — это одно
@@ -730,17 +729,17 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Угадайте число!
-The secret number is: 7
+Загаданное число: 7
 Пожалуйста, введите число.
 4
-You guessed: 4
+Вы угадали: 4
 $ cargo run
      Running `target/debug/guessing_game`
 Угадайте число!
-The secret number is: 83
+Загаданное число: 83
 Пожалуйста, введите число.
 5
-You guessed: 5
+Вы угадали: 5
 ```
 
 Обратите внимание, что выбор числа на заданном отрезке будет случайный. Программа
@@ -768,7 +767,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Загаданное число: {}", secret_number);
 
     println!("Пожалуйста, введите число.");
 
@@ -780,9 +779,9 @@ fn main() {
     println!("Вы угадали: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Less    => println!("Слишком маленькое!"),
+        Ordering::Greater => println!("Слишком большое!"),
+        Ordering::Equal   => println!("Вы выйграли!"),
     }
 }
 ```
@@ -806,13 +805,13 @@ use std::cmp::Ordering;
 
 ```rust,ignore
 match guess.cmp(&secret_number) {
-    Ordering::Less    => println!("Too small!"),
-    Ordering::Greater => println!("Too big!"),
-    Ordering::Equal   => println!("You win!"),
+    Ordering::Less    => println!("Слишком маленькое!"),
+    Ordering::Greater => println!("Слишком большое!"),
+    Ordering::Equal   => println!("Вы выйграли!"),
 }
 ```
 
-Метод `cmp` сравнивает два значения и может быть вызван любой значение, которое
+Метод `cmp` сравнивает два значения и может быть вызван любым значением, которое
 имеет такую функциональную возможность (возможность быть равной с чем-либо).
 Этот метод получает ссылку в качестве входного параметра. Метод возвращает значения
 перечисления `Ordering`. Это значение передаётся выражению [`match`][match]<!-- ignore -->,
@@ -821,7 +820,7 @@ match guess.cmp(&secret_number) {
 
 [match]: ch06-02-match.html
 
-Работа с этой оригинальной синтксической конструкцией быдет подробно описана в
+Работа с этой оригинальной синтксической конструкцией будет подробно описана в
 главах 6 и 18. Сейчас вы должны понять, что это весьма удобная кострукция решает
 поставленную перед нами задачу — по шаблону выполняется действие. Входные данные
 сравниваются со значением шаблона и выполняется соответствующий код программы.
@@ -866,7 +865,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Загаданное число: {}", secret_number);
 
     println!("Пожалуйста, введите число.");
 
@@ -876,14 +875,14 @@ fn main() {
         .expect("Ошибка чтения файла");
 
     let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
+        .expect("Пожалуйста, введите число!");
 
     println!("Вы угадали: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Less    => println!("Слишком маленькое!"),
+        Ordering::Greater => println!("Слишком большое!"),
+        Ordering::Equal   => println!("Вы выйграли!"),
     }
 }
 ```
@@ -892,7 +891,7 @@ fn main() {
 
 ```rust,ignore
 let guess: u32 = guess.trim().parse()
-    .expect("Please type a number!");
+    .expect("Пожалуйста, введите число!");
 ```
 
 Обратите также внимание, на название числовой переменной, которую мы создали — `guess`!
@@ -928,11 +927,11 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Угадайте число!
-The secret number is: 58
+Загаданное число: 58
 Пожалуйста, введите число.
   76
-You guessed: 76
-Too big!
+Вы угадали: 76
+Слишком большое!
 ```
 
 Отлично! Обратите внимания, что мы ввели пробелы перед и послед числа. Пожалуйста,
@@ -960,7 +959,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Загаданное число: {}", secret_number);
 
     loop {
         println!("Пожалуйста, введите число.");
@@ -971,14 +970,14 @@ fn main() {
             .expect("Ошибка чтения файла");
 
         let guess: u32 = guess.trim().parse()
-            .expect("Please type a number!");
+            .expect("Пожалуйста, введите число!");
 
         println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => println!("You win!"),
+            Ordering::Less    => println!("Слишком маленькое!"),
+            Ordering::Greater => println!("Слишком большое!"),
+            Ordering::Equal   => println!("Вы выйграли!"),
         }
     }
 }
@@ -992,22 +991,22 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Угадайте число!
-The secret number is: 59
+Загаданное число: 59
 Пожалуйста, введите число.
 45
-You guessed: 45
-Too small!
+Вы угадали: 45
+Слишком маленькое!
 Пожалуйста, введите число.
 60
-You guessed: 60
-Too big!
+Вы угадали: 60
+Слишком большое!
 Пожалуйста, введите число.
 59
-You guessed: 59
-You win!
+Вы угадали: 59
+Вы выйграли!
 Пожалуйста, введите число.
 quit
-thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
+thread 'main' panicked at 'Пожалуйста, введите число!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 ```
@@ -1035,7 +1034,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Загаданное число: {}", secret_number);
 
     loop {
         println!("Пожалуйста, введите число.");
@@ -1046,15 +1045,15 @@ fn main() {
             .expect("Ошибка чтения файла");
 
         let guess: u32 = guess.trim().parse()
-            .expect("Please type a number!");
+            .expect("Пожалуйста, введите число!");
 
         println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less    => println!("Слишком маленькое!"),
+            Ordering::Greater => println!("Слишком большое!"),
             Ordering::Equal   => {
-                println!("You win!");
+                println!("Вы выйграли!");
                 break;
             }
         }
@@ -1096,7 +1095,7 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+    println!("Загаданное число: {}", secret_number);
 
     loop {
         println!("Пожалуйста, введите число.");
@@ -1114,10 +1113,10 @@ fn main() {
         println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less    => println!("Слишком маленькое!"),
+            Ordering::Greater => println!("Слишком большое!"),
             Ordering::Equal   => {
-                println!("You win!");
+                println!("Вы выйграли!");
                 break;
             }
         }
@@ -1143,21 +1142,21 @@ $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Угадайте число!
-The secret number is: 61
+Загаданное число: 61
 Пожалуйста, введите число.
 10
-You guessed: 10
-Too small!
+Вы угадали: 10
+Слишком маленькое!
 Пожалуйста, введите число.
 99
-You guessed: 99
-Too big!
+Вы угадали: 99
+Слишком большое!
 Пожалуйста, введите число.
 foo
 Пожалуйста, введите число.
 61
-You guessed: 61
-You win!
+Вы угадали: 61
+Вы выйграли!
 ```
 
 Отлично! Благодаря этому улучшению кода наша программа замечательно работает. :-)
@@ -1196,10 +1195,10 @@ fn main() {
         println!("Вы угадали: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less    => println!("Слишком маленькое!"),
+            Ordering::Greater => println!("Слишком большое!"),
             Ordering::Equal   => {
-                println!("You win!");
+                println!("Вы выйграли!");
                 break;
             }
         }
