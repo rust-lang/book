@@ -335,7 +335,7 @@ location and creates a slice 10,000 items long.
 ```rust
 use std::slice;
 
-let address = 0x012345usize;
+let address = 0x01234usize;
 let r = address as *mut i32;
 
 let slice = unsafe {

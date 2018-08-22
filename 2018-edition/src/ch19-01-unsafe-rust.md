@@ -335,10 +335,10 @@ location and creates a slice 10,000 items long.
 ```rust
 use std::slice;
 
-let address = 0x012345usize;
+let address = 0x01234usize;
 let r = address as *mut i32;
 
-let slice = unsafe {
+let slice : &[i32] = unsafe {
     slice::from_raw_parts_mut(r, 10000)
 };
 ```
@@ -348,7 +348,11 @@ location</span>
 
 We don’t own the memory at this arbitrary location, and there is no guarantee
 that the slice this code creates contains valid `i32` values. Attempting to use
-`slice` as though it’s a valid slice results in undefined behavior.
+`slice` as though it’s a valid slice results in undefined behavior. If we would
+not have taken care to align `address` to 4 (the alignment of `i32`), then even
+just calling `slice::from_raw_parts_mut` would already be undefined behavior --
+slices must always be aligned, even if they are not used (and even if they are
+empty).
 
 #### Using `extern` Functions to Call External Code
 
