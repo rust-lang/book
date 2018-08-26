@@ -31,11 +31,14 @@ $ cargo new hello --bin
 $ cd hello
 ```
 
-Now enter the code in Listing 20-1 in *src/main.rs* to start. This code will
+Now enter the code in [Listing 20-1][Listing-20-1] in *src/main.rs* to start. This code will
 listen at the address `127.0.0.1:7878` for incoming TCP streams. When it gets
 an incoming stream, it will print `Connection established!`.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-1]: #Listing-20-1
+<a name="Listing-20-1"></a>
 
 ```rust,no_run
 use std::net::TcpListener;
@@ -135,9 +138,12 @@ separate the concerns of first getting a connection and then taking some action
 with the connection, we’ll start a new function for processing connections. In
 this new `handle_connection` function, we’ll read data from the TCP stream and
 print it so we can see the data being sent from the browser. Change the code to
-look like Listing 20-2.
+look like [Listing 20-2][Listing-20-2].
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-2]: #Listing-20-2
+<a name="Listing-20-2"></a>
 
 ```rust,no_run
 use std::io::prelude::*;
@@ -291,9 +297,12 @@ The status code 200 is the standard success response. The text is a tiny
 successful HTTP response. Let’s write this to the stream as our response to a
 successful request! From the `handle_connection` function, remove the
 `println!` that was printing the request data and replace it with the code in
-Listing 20-3.
+[Listing 20-3][Listing-20-3].
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-3]: #Listing-20-3
+<a name="Listing-20-3"></a>
 
 ```rust
 # use std::io::prelude::*;
@@ -334,10 +343,13 @@ and response!
 
 Let’s implement the functionality for returning more than a blank page. Create
 a new file, *hello.html*, in the root of your project directory, not in the
-*src* directory. You can input any HTML you want; Listing 20-4 shows one
+*src* directory. You can input any HTML you want; [Listing 20-4][Listing-20-4] shows one
 possibility.
 
 <span class="filename">Filename: hello.html</span>
+
+[Listing-20-4]: #Listing-20-4
+<a name="Listing-20-4"></a>
 
 ```html
 <!DOCTYPE html>
@@ -358,10 +370,13 @@ response</span>
 
 This is a minimal HTML5 document with a heading and some text. To return this
 from the server when a request is received, we’ll modify `handle_connection` as
-shown in Listing 20-5 to read the HTML file, add it to the response as a body,
+shown in [Listing 20-5][Listing-20-5] to read the HTML file, add it to the response as a body,
 and send it.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-5]: #Listing-20-5
+<a name="Listing-20-5"></a>
 
 ```rust
 # use std::io::prelude::*;
@@ -391,7 +406,7 @@ body of the response</span>
 We’ve added a line at the top to bring the standard library’s `File` into
 scope. The code for opening a file and reading the contents should look
 familiar; we used it in Chapter 12 when we read the contents of a file for our
-I/O project in Listing 12-4.
+I/O project in [Listing 12-4][Listing-12-4].
 
 Next, we use `format!` to add the file’s contents as the body of the success
 response.
@@ -412,11 +427,14 @@ Right now, our web server will return the HTML in the file no matter what the
 client requested. Let’s add functionality to check that the browser is
 requesting */* before returning the HTML file and return an error if the
 browser requests anything else. For this we need to modify `handle_connection`,
-as shown in Listing 20-6. This new code checks the content of the request
+as shown in [Listing 20-6][Listing-20-6]. This new code checks the content of the request
 received against what we know a request for */* looks like and adds `if` and
 `else` blocks to treat requests differently.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-6]: #Listing-20-6
+<a name="Listing-20-6"></a>
 
 ```rust
 # use std::io::prelude::*;
@@ -464,14 +482,17 @@ to all other requests.
 Run this code now and request *127.0.0.1:7878*; you should get the HTML in
 *hello.html*. If you make any other request, such as
 *127.0.0.1:7878/something-else*, you’ll get a connection error like those you
-saw when running the code in Listing 20-1 and Listing 20-2.
+saw when running the code in [Listing 20-1][Listing-20-1] and [Listing 20-2][Listing-20-2].
 
-Now let’s add the code in Listing 20-7 to the `else` block to return a response
+Now let’s add the code in [Listing 20-7][Listing-20-7] to the `else` block to return a response
 with the status code 404, which signals that the content for the request was
 not found. We’ll also return some HTML for a page to render in the browser
 indicating the response to the end user.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-7]: #Listing-20-7
+<a name="Listing-20-7"></a>
 
 ```rust
 # use std::io::prelude::*;
@@ -503,9 +524,12 @@ Here, our response has a status line with status code 404 and the reason
 phrase `NOT FOUND`. We’re still not returning headers, and the body of the
 response will be the HTML in the file *404.html*. You’ll need to create a
 *404.html* file next to *hello.html* for the error page; again feel free to use
-any HTML you want or use the example HTML in Listing 20-8.
+any HTML you want or use the example HTML in [Listing 20-8][Listing-20-8].
 
 <span class="filename">Filename: 404.html</span>
+
+[Listing-20-8]: #Listing-20-8
+<a name="Listing-20-8"></a>
 
 ```html
 <!DOCTYPE html>
@@ -536,10 +560,13 @@ differences are the status line and the filename. Let’s make the code more
 concise by pulling out those differences into separate `if` and `else` lines
 that will assign the values of the status line and the filename to variables;
 we can then use those variables unconditionally in the code to read the file
-and write the response. Listing 20-9 shows the resulting code after replacing
+and write the response. [Listing 20-9][Listing-20-9] shows the resulting code after replacing
 the large `if` and `else` blocks.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-9]: #Listing-20-9
+<a name="Listing-20-9"></a>
 
 ```rust
 # use std::io::prelude::*;
@@ -584,8 +611,8 @@ The previously duplicated code is now outside the `if` and `else` blocks and
 uses the `status_line` and `filename` variables. This makes it easier to see
 the difference between the two cases, and it means we have only one place to
 update the code if we want to change how the file reading and response writing
-work. The behavior of the code in Listing 20-9 will be the same as that in
-Listing 20-8.
+work. The behavior of the code in [Listing 20-9][Listing-20-9] will be the same as that in
+[Listing 20-8][Listing-20-8].
 
 Awesome! We now have a simple web server in approximately 40 lines of Rust code
 that responds to one request with a page of content and responds to all other
@@ -595,3 +622,14 @@ Currently, our server runs in a single thread, meaning it can only serve one
 request at a time. Let’s examine how that can be a problem by simulating some
 slow requests. Then we’ll fix it so our server can handle multiple requests at
 once.
+
+[Listing-12-4]: ch12-02-reading-a-file.html#Listing-12-4
+[Listing-20-1]: ch20-01-single-threaded.html#Listing-20-1
+[Listing-20-2]: ch20-01-single-threaded.html#Listing-20-2
+[Listing-20-3]: ch20-01-single-threaded.html#Listing-20-3
+[Listing-20-4]: ch20-01-single-threaded.html#Listing-20-4
+[Listing-20-5]: ch20-01-single-threaded.html#Listing-20-5
+[Listing-20-6]: ch20-01-single-threaded.html#Listing-20-6
+[Listing-20-7]: ch20-01-single-threaded.html#Listing-20-7
+[Listing-20-8]: ch20-01-single-threaded.html#Listing-20-8
+[Listing-20-9]: ch20-01-single-threaded.html#Listing-20-9

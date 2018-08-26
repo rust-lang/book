@@ -38,18 +38,21 @@ way to write the equivalent of a `match` that only matches one case.
 Optionally, `if let` can have a corresponding `else` containing code to run if
 the pattern in the `if let` doesn’t match.
 
-Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
+[Listing 18-1][Listing-18-1] shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. Doing so gives us more flexibility than a
 `match` expression in which we can express only one value to compare with the
 patterns. Also, the conditions in a series of `if let`, `else if`, `else if
 let` arms aren’t required to relate to each other.
 
-The code in Listing 18-1 shows a series of checks for several conditions that
+The code in [Listing 18-1][Listing-18-1] shows a series of checks for several conditions that
 decide what the background color should be. For this example, we’ve created
 variables with hardcoded values that a real program might receive from user
 input.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-1]: #Listing-18-1
+<a name="Listing-18-1"></a>
 
 ```rust
 fn main() {
@@ -103,8 +106,11 @@ not alert us to the possible logic bug.
 
 Similar in construction to `if let`, the `while let` conditional loop allows a
 `while` loop to run for as long as a pattern continues to match. The example in
-Listing 18-2 shows a `while let` loop that uses a vector as a stack and prints
+[Listing 18-2][Listing-18-2] shows a `while let` loop that uses a vector as a stack and prints
 the values in the vector in the opposite order in which they were pushed.
+
+[Listing-18-2]: #Listing-18-2
+<a name="Listing-18-2"></a>
 
 ```rust
 let mut stack = Vec::new();
@@ -134,8 +140,11 @@ construction in Rust code, but we haven’t yet discussed the pattern that `for`
 takes. In a `for` loop, the pattern is the value that directly follows the
 keyword `for`, so in `for x in y` the `x` is the pattern.
 
-Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
+[Listing 18-3][Listing-18-3] demonstrates how to use a pattern in a `for` loop to destructure,
 or break apart, a tuple as part of the `for` loop.
+
+[Listing-18-3]: #Listing-18-3
+<a name="Listing-18-3"></a>
 
 ```rust
 let v = vec!['a', 'b', 'c'];
@@ -148,7 +157,7 @@ for (index, value) in v.iter().enumerate() {
 <span class="caption">Listing 18-3: Using a pattern in a `for` loop to
 destructure a tuple</span>
 
-The code in Listing 18-3 will print the following:
+The code in [Listing 18-3][Listing-18-3] will print the following:
 
 ```text
 a is at index 0
@@ -188,8 +197,11 @@ the expression against the pattern and assigns any names it finds. So in the
 the variable `x`.” Because the name `x` is the whole pattern, this pattern
 effectively means “bind everything to the variable `x`, whatever the value is.”
 
-To see the pattern matching aspect of `let` more clearly, consider Listing
-18-4, which uses a pattern with `let` to destructure a tuple.
+To see the pattern matching aspect of `let` more clearly, consider [Listing 18-4][Listing-18-4],
+which uses a pattern with `let` to destructure a tuple.
+
+[Listing-18-4]: #Listing-18-4
+<a name="Listing-18-4"></a>
 
 ```rust
 let (x, y, z) = (1, 2, 3);
@@ -205,8 +217,11 @@ pattern as nesting three individual variable patterns inside it.
 
 If the number of elements in the pattern doesn’t match the number of elements
 in the tuple, the overall type won’t match and we’ll get a compiler error. For
-example, Listing 18-5 shows an attempt to destructure a tuple with three
+example, [Listing 18-5][Listing-18-5] shows an attempt to destructure a tuple with three
 elements into two variables, which won’t work.
+
+[Listing-18-5]: #Listing-18-5
+<a name="Listing-18-5"></a>
 
 ```rust,ignore
 let (x, y) = (1, 2, 3);
@@ -236,9 +251,12 @@ the number of elements in the tuple.
 
 ### Function Parameters
 
-Function parameters can also be patterns. The code in Listing 18-6, which
+Function parameters can also be patterns. The code in [Listing 18-6][Listing-18-6], which
 declares a function named `foo` that takes one parameter named `x` of type
 `i32`, should by now look familiar.
+
+[Listing-18-6]: #Listing-18-6
+<a name="Listing-18-6"></a>
 
 ```rust
 fn foo(x: i32) {
@@ -250,10 +268,13 @@ fn foo(x: i32) {
 parameters</span>
 
 The `x` part is a pattern! As we did with `let`, we could match a tuple in a
-function’s arguments to the pattern. Listing 18-7 splits the values in a tuple
+function’s arguments to the pattern. [Listing 18-7][Listing-18-7] splits the values in a tuple
 as we pass it to a function.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-18-7]: #Listing-18-7
+<a name="Listing-18-7"></a>
 
 ```rust
 fn print_coordinates(&(x, y): &(i32, i32)) {
@@ -280,3 +301,11 @@ At this point, you’ve seen several ways of using patterns, but patterns don’
 work the same in every place we can use them. In some places, the patterns must
 be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
+
+[Listing-18-1]: ch18-01-all-the-places-for-patterns.html#Listing-18-1
+[Listing-18-2]: ch18-01-all-the-places-for-patterns.html#Listing-18-2
+[Listing-18-3]: ch18-01-all-the-places-for-patterns.html#Listing-18-3
+[Listing-18-4]: ch18-01-all-the-places-for-patterns.html#Listing-18-4
+[Listing-18-5]: ch18-01-all-the-places-for-patterns.html#Listing-18-5
+[Listing-18-6]: ch18-01-all-the-places-for-patterns.html#Listing-18-6
+[Listing-18-7]: ch18-01-all-the-places-for-patterns.html#Listing-18-7
