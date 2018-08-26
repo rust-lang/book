@@ -4,9 +4,6 @@ language: rust
 cache: cargo
 rust:
   - nightly
-branches:
-  only:
-  - master
 addons:
   apt:
     packages:
@@ -14,5 +11,14 @@ addons:
       - aspell-en
 before_script:
   - (cargo install mdbook --vers 0.1.7 --force || true)
+  - (cargo install crowbook --vers 0.14.1 --force || true)
 script:
   - bash ci/build.sh
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: books/
+  target-branch: e-books
+  on:
+    branch: master
