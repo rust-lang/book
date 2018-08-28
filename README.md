@@ -80,7 +80,9 @@ contributions should be to this edition.
 
 ### Second Edition
 
-The second edition is frozen, and is not accepting any changes at this time.
+No Starch Press has brought the second edition to print. Pull requests fixing
+factual errors will be accepted and documented as errata; pull requests changing
+wording or other small corrections should be made against the 2018 edition instead.
 
 ### First Edition
 
