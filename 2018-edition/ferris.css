@@ -1,0 +1,24 @@
+body.light .does_not_compile,
+body.light .panics,
+body.rust .does_not_compile,
+body.rust .panics {
+  background: #fff1f1;
+}
+
+body.coal .does_not_compile,
+body.coal .panics,
+body.navy .does_not_compile,
+body.navy .panics,
+body.ayu .does_not_compile,
+body.ayu .panics {
+  background: #501f21;
+}
+
+.ferris {
+  position: absolute;
+  z-index: 99;
+  right: 5px;
+  top: 30px;
+	width: 10%;
+	height: auto;
+}
