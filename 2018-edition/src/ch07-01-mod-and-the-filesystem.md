@@ -327,7 +327,7 @@ try anyway so you can see the error. First, change *src/network.rs* to have
 
 <span class="filename">Filename: src/network.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn connect() {
 }
 

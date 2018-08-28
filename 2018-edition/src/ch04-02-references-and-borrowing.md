@@ -83,7 +83,7 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let s = String::from("hello");
 
@@ -140,7 +140,7 @@ fail:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let mut s = String::from("hello");
 
 let r1 = &mut s;
@@ -194,7 +194,7 @@ let r2 = &mut s;
 A similar rule exists for combining mutable and immutable references. This code
 results in an error:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let mut s = String::from("hello");
 
 let r1 = &s; // no problem
@@ -244,7 +244,7 @@ compile-time error:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let reference_to_nothing = dangle();
 }

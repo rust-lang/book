@@ -250,7 +250,7 @@ string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
 get an error. Consider the invalid code in Listing 8-19:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let s1 = String::from("hello");
 let h = s1[0];
 ```
@@ -298,7 +298,7 @@ each Unicode scalar value in that string takes 2 bytes of storage. Therefore,
 an index into the string’s bytes will not always correlate to a valid Unicode
 scalar value. To demonstrate, consider this invalid Rust code:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```
