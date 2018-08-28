@@ -242,7 +242,7 @@ struct Rectangle {
 }
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
+    fn can_hold(&self, other: &Rectangle) -> bool {
         self.width > other.width && self.height > other.height
     }
 }
@@ -343,14 +343,14 @@ compares the widths:
 ```rust
 # fn main() {}
 # #[derive(Debug)]
-# pub struct Rectangle {
+# struct Rectangle {
 #     width: u32,
 #     height: u32,
 # }
 // --snip--
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
+    fn can_hold(&self, other: &Rectangle) -> bool {
         self.width < other.width && self.height > other.height
     }
 }
