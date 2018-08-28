@@ -23,7 +23,7 @@ quite work yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         for worker in &mut self.workers {
