@@ -136,7 +136,7 @@ element for. As an example, let’s see what a program will do if it has a vecto
 that holds five elements and then tries to access an element at index 100, as
 shown in Listing 8-7:
 
-```rust,panics
+```rust,should_panic,panics
 let v = vec![1, 2, 3, 4, 5];
 
 let does_not_exist = &v[100];
