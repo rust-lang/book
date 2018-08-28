@@ -2,6 +2,7 @@ var ferrisTypes = [
   'does_not_compile',
   'panics',
   'unsafe',
+  'not_desired_behavior',
 ]
 
 document.addEventListener('DOMContentLoaded', () => {
