@@ -61,7 +61,7 @@ parameter and returns 10, as well as a test that passes and a test that fails.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,panics
 fn prints_and_returns_10(a: i32) -> i32 {
     println!("I got the value {}", a);
     10

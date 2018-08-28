@@ -157,7 +157,7 @@ which is to call the `panic!` macro. Enter the new test, `another`, so your
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,panics
 # fn main() {}
 #[cfg(test)]
 mod tests {
@@ -340,7 +340,7 @@ introduce a bug in our code. Let’s change the implementation of the `can_hold`
 method by replacing the greater-than sign with a less-than sign when it
 compares the lengths:
 
-```rust
+```rust,not_desired_behavior
 # fn main() {}
 # #[derive(Debug)]
 # pub struct Rectangle {
@@ -436,7 +436,7 @@ Let’s introduce a bug into our code to see what it looks like when a test that
 uses `assert_eq!` fails. Change the implementation of the `add_two` function to
 instead add `3`:
 
-```rust
+```rust,not_desired_behavior
 # fn main() {}
 pub fn add_two(a: i32) -> i32 {
     a + 3
@@ -544,7 +544,7 @@ input parameter.
 Let’s introduce a bug into this code by changing `greeting` to not include
 `name` to see what this test failure looks like:
 
-```rust
+```rust,not_desired_behavior
 # fn main() {}
 pub fn greeting(name: &str) -> String {
     String::from("Hello!")
@@ -663,7 +663,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 Looks good! Now let’s introduce a bug in our code by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
-```rust
+```rust,not_desired_behavior
 # fn main() {}
 # pub struct Guess {
 #     value: u32,
@@ -766,7 +766,7 @@ To see what happens when a `should_panic` test with an `expected` message
 fails, let’s again introduce a bug into our code by swapping the bodies of the
 `if value < 1` and the `else if value > 100` blocks:
 
-```rust,ignore
+```rust,ignore,not_desired_behavior
 if value < 1 {
     panic!("Guess value must be less than or equal to 100, got {}.", value);
 } else if value > 100 {
