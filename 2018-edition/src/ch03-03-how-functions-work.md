@@ -170,7 +170,7 @@ to another variable, as the following code tries to do; you’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = (let y = 6);
 }
@@ -308,7 +308,7 @@ expression to a statement, we’ll get an error.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = plus_one(5);
 

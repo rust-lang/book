@@ -201,7 +201,7 @@ At the time, we skipped over some details in this code. In Chapter 6 in “The
 `match` Control Flow Operator” section, we discussed that `match` arms must all
 return the same type. So, for example, the following code doesn’t work:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let guess = match guess.trim().parse() {
     Ok(_) => 5,
     Err(_) => "hello",
@@ -273,7 +273,7 @@ its own, is a DST. We can’t know how long the string is until runtime, meaning
 we can’t create a variable of type `str`, nor can we take an argument of type
 `str`. Consider the following code, which does not work:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let s1: str = "Hello there!";
 let s2: str = "How's it going?";
 ```

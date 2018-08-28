@@ -362,7 +362,7 @@ compile but exit with an error when it runs:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,panics
 fn main() {
     let a = [1, 2, 3, 4, 5];
     let index = 10;
