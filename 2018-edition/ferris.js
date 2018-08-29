@@ -1,8 +1,20 @@
 var ferrisTypes = [
-  'does_not_compile',
-  'panics',
-  'unsafe',
-  'not_desired_behavior',
+  {
+    attr: 'does_not_compile',
+    title: 'This code does not compile!'
+  },
+  {
+    attr: 'panics',
+    title: 'This code panics!'
+  },
+  {
+    attr: 'unsafe',
+    title: 'This code block contains unsafe code.'
+  },
+  {
+    attr: 'not_desired_behavior',
+    title: 'This code does not produce the desired behavior.'
+  }
 ]
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,11 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 function makeFerris (type) {
-  var elements = document.getElementsByClassName(type)
+  var elements = document.getElementsByClassName(type.attr)
 
   for (var codeBlock of elements) {
     var img = document.createElement("img")
-    img.setAttribute('src', 'img/ferris/' + type + '.svg')
+    img.setAttribute('src', 'img/ferris/' + type.attr + '.svg')
+    img.setAttribute('title', type.title)
     img.className = 'ferris'
     codeBlock.parentElement.insertBefore(img, codeBlock)
   }
