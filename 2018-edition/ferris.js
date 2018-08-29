@@ -27,10 +27,17 @@ function makeFerris (type) {
   var elements = document.getElementsByClassName(type.attr)
 
   for (var codeBlock of elements) {
-    var img = document.createElement("img")
+    var a = document.createElement('a')
+    a.setAttribute('href', 'ch00-00-introduction.html#ferris')
+    a.setAttribute('target', '_blank')
+
+    var img = document.createElement('img')
     img.setAttribute('src', 'img/ferris/' + type.attr + '.svg')
     img.setAttribute('title', type.title)
     img.className = 'ferris'
-    codeBlock.parentElement.insertBefore(img, codeBlock)
+
+    a.appendChild(img)
+
+    codeBlock.parentElement.insertBefore(a, codeBlock)
   }
 }
