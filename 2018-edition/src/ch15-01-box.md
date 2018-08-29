@@ -106,7 +106,7 @@ we’ll demonstrate.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 enum List {
     Cons(i32, List),
     Nil,

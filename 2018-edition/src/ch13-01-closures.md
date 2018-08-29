@@ -384,7 +384,7 @@ first time and a `u32` the second time, we’ll get an error.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let example_closure = |x| x;
 
 let s = example_closure(String::from("hello"));
@@ -634,7 +634,7 @@ The first problem is that a `Cacher` instance assumes it will always get the
 same value for the parameter `arg` to the `value` method. That is, this test of
 `Cacher` will fail:
 
-```rust,ignore
+```rust,ignore,panics
 #[test]
 fn call_with_different_values() {
     let mut c = Cacher::new(|a| a);
@@ -714,7 +714,7 @@ code won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = 4;
 
@@ -780,7 +780,7 @@ yet compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = vec![1, 2, 3];
 

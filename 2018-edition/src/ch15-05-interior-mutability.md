@@ -77,7 +77,7 @@ examine how it’s possible.
 A consequence of the borrowing rules is that when you have an immutable value,
 you can’t borrow it mutably. For example, this code won’t compile:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = 5;
     let y = &mut x;
@@ -195,7 +195,7 @@ implement a mock object to do just that, but the borrow checker won’t allow it
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,does_not_compile
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -353,7 +353,7 @@ at runtime.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,panics
 impl Messenger for MockMessenger {
     fn send(&self, message: &str) {
         let mut one_borrow = self.sent_messages.borrow_mut();
