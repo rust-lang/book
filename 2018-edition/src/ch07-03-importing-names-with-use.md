@@ -205,7 +205,7 @@ be checking any functionality right now. This won’t work yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,does_not_compile
 #[cfg(test)]
 mod tests {
     #[test]
