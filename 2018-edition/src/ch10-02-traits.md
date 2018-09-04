@@ -279,8 +279,9 @@ the `Summary` trait, like `summarize`.
 
 #### Trait Bounds
 
-The `impl Trait` syntax works for short examples, but is syntax sugar for a
-longer form. This is called a 'trait bound', and it looks like this:
+The `impl Trait` syntax works well in some cases, but it doesn't let us refer to 
+the type of `item` anywhere else in the function. Instead, we could use a 
+'trait bound':
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -295,37 +296,72 @@ call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code that
 calls the function with any other type, like a `String` or an `i32`, won’t
 compile, because those types don’t implement `Summary`.
 
-When should you use this form over `impl Trait`? While `impl Trait` is nice for
-shorter examples, trait bounds are nice for more complex ones. For example,
-say we wanted to take two things that implement `Summary`:
+However, we can now refer to the type of `item` in the body of the function,
+because we're using the generic type `T`:
 
 ```rust,ignore
-pub fn notify(item1: impl Summary, item2: impl Summary) {
+pub fn notify<T: Summary>(item: T) {
+    // This is not very useful in this context, but it is possible now
+    let i: T = item;
+    println!("Breaking news! {}", i.summarize());
+}
+```
+
+We were able to declare a new variable with the same type as `item`, represented
+by the generic type `T`, and call the `summarize` method from that new variable.
+
+Besides using `T` in the body of the function, we can also use it multiple
+arguments, to make sure that their types are the same:
+
+```rust,ignore
 pub fn notify<T: Summary>(item1: T, item2: T) {
 ```
 
-The version with the bound is a bit easier. In general, you should use whatever
-form makes your code the most understandable.
-
-##### Multiple trait bounds with `+`
-
-We can specify multiple trait bounds on a generic type using the `+` syntax.
-For example, to use display formatting on the type `T` in a function as well as
-the `summarize` method, we can use `T: Summary + Display` to say `T` can be any
-type that implements `Summary` and `Display`. This can grow quite complex!
+If we tried to do this with `impl`:
 
 ```rust,ignore
-fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+pub fn notify(item1: impl Summary, item2: impl Summary) {
+```
+
+The result would be different. Now, even though both `item1` and `item2` have
+to implement `Summary`, they don't necessarily have to be the same. For example,
+one could be a `NewsArticle` and the other a `Tweet`.
+
+In other words, it would have the same effect as doing:
+
+```rust,ignore
+pub fn notify<T: Summary, U: Summary>(item1: T, item2: U) {
+```
+
+#### Specify multiple traits with `+`
+
+If `notify` needed to display formatting on `item`, as well as use the `summarize`
+method, it would need to specify two different traits: `Display` and `Summary`. 
+This could be done using the `+` syntax:
+
+```rust,ignore
+pub fn notify(item: impl Summary + Display) {
+```
+
+This syntax is also valid with trait bounds:
+
+```rust,ignore
+pub fn notify<T: Summary + Display>(item: T) {
 ```
 
 #### `where` clauses for clearer code
 
-However, there are downsides to using too many trait bounds. Each generic has
-its own trait bounds, so functions with multiple generic type parameters can
-have lots of trait bound information between a function’s name and its
-parameter list, making the function signature hard to read. For this reason,
-Rust has alternate syntax for specifying trait bounds inside a `where` clause
-after the function signature. So instead of writing this:
+However, there are downsides to using too many trait bounds. Functions with 
+multiple generic type parameters can have lots of trait bound information 
+between a function’s name and its parameter list, making the function signature 
+hard to read. For this reason, Rust has alternate syntax for specifying trait 
+bounds inside a `where` clause after the function signature. So instead of 
+writing this:
+
+```rust,ignore
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32
+{
+```
 
 we can use a `where` clause, like this:
 
