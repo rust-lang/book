@@ -135,7 +135,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```rust,should_panic
 fn main() {
     let v = vec![1, 2, 3, 4, 5];
-    println!("{}", v[100]);
+    println!("{:?}", v.get(100));
 }
 ```
 
