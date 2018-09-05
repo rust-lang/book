@@ -415,7 +415,7 @@ to fetch a sixth value from the array.
 
 But this approach is error prone; we could cause the program to panic if the
 index length is incorrect. It’s also slow, because the compiler adds runtime
-code to perform the conditional check on every element on every iteration
+code to perform the conditional check on every iteration
 through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
