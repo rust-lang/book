@@ -396,7 +396,7 @@ Here are commands to carry out these steps:
 ```text
 $ mkdir src/network
 $ mv src/network.rs src/network/mod.rs
-$ mv src/server.rs src/network
+$ mv src/server.rs src/network/server.rs
 ```
 
 Now when we try to run `cargo build`, compilation will work (we’ll still have
