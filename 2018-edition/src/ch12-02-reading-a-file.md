@@ -33,7 +33,6 @@ shown in Listing 12-4:
 ```rust,should_panic
 use std::env;
 use std::fs;
-use std::io::prelude::*;
 
 fn main() {
 #     let args: Vec<String> = env::args().collect();
@@ -55,14 +54,8 @@ fn main() {
 <span class="caption">Listing 12-4: Reading the contents of the file specified
 by the second argument</span>
 
-First, we add some more `use` statements to bring in relevant parts of the
-standard library: we need `std::fs` to handle files, and
-`std::io::prelude::*` contains various useful traits for doing I/O, including
-file I/O. In the same way that Rust has a general prelude that brings certain
-types and functions into scope automatically, the `std::io` module has its
-own prelude of common types and functions you’ll need when working with I/O.
-Unlike with the default prelude, we must explicitly add a `use` statement for
-the prelude from `std::io`.
+First, we add another `use` statement to bring in a relevant part of the
+standard library: we need `std::fs` to handle files.
 
 In `main`, we’ve added a new statement: `fs::read_to_string` will take the
 `filename`, open that file, and then produce a new `String` with its contents.
