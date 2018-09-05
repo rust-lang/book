@@ -359,8 +359,7 @@ bounds inside a `where` clause after the function signature. So instead of
 writing this:
 
 ```rust,ignore
-fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32
-{
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
 ```
 
 we can use a `where` clause, like this:
@@ -393,7 +392,7 @@ fn returns_summarizable() -> impl Summary {
 ```
 
 This signature says, "I'm going to return something that implements the
-`Summary` trait, but I'm not going to tell you the exact type. In our case,
+`Summary` trait, but I'm not going to tell you the exact type." In our case,
 we're returning a `Tweet`, but the caller doesn't know that.
 
 Why is this useful? In chapter 13, we're going to learn about two features

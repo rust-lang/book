@@ -15,8 +15,8 @@ library that you can use with `derive`. Each section covers:
 * Examples of operations that require the trait
 
 If you want different behavior than that provided by the `derive` attribute,
-consult the standard library documentation for each trait for details on how to
-manually implement them.
+consult the [standard library documentation](../../std/index.html)
+for each trait for details of how to manually implement them.
 
 The rest of the traits defined in the standard library can’t be implemented on
 your types using `derive`. These traits don’t have sensible default behavior,

@@ -12,18 +12,19 @@ without breaking one of its parts. It’s best to separate functionality so each
 function is responsible for one task.
 
 This issue also ties into the second problem: although `query` and `filename`
-are configuration variables to our program, variables like `f` and `contents`
-are used to perform the program’s logic. The longer `main` becomes, the more
-variables we’ll need to bring into scope; the more variables we have in scope,
-the harder it will be to keep track of the purpose of each. It’s best to group
-the configuration variables into one structure to make their purpose clear.
+are configuration variables to our program, variables like `contents` are used
+to perform the program’s logic. The longer `main` becomes, the more variables
+we’ll need to bring into scope; the more variables we have in scope, the harder
+it will be to keep track of the purpose of each. It’s best to group the
+configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
-opening the file fails, but the error message just prints `file not found`.
-Opening a file can fail in a number of ways besides the file being missing: for
-example, the file might exist, but we might not have permission to open it.
-Right now, if we’re in that situation, we’d print the `file not found` error
-message, which would give the user the wrong information!
+opening the file fails, but the error message just prints
+`something went wrong`. Opening a file can fail in a number of ways: for
+example, the file could be missing, or we might not have permission to open
+it. Right now, regardless of the situation, we’d print the
+`something went wrong` error message, which wouldn't give the user any
+information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
 runs our program without specifying enough arguments, they’ll get an `index out
@@ -608,7 +609,6 @@ compile until we modify *src/main.rs* in the listing after this one.
 ```rust,ignore
 use std::error::Error;
 use std::fs;
-use std::io::prelude::*;
 
 pub struct Config {
     pub query: String,

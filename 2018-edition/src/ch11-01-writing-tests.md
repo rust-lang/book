@@ -619,11 +619,11 @@ happen when we expect them to:
 ```rust
 # fn main() {}
 pub struct Guess {
-    value: u32,
+    value: i32,
 }
 
 impl Guess {
-    pub fn new(value: u32) -> Guess {
+    pub fn new(value: i32) -> Guess {
         if value < 1 || value > 100 {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }
@@ -666,13 +666,13 @@ that the `new` function will panic if the value is greater than 100:
 ```rust
 # fn main() {}
 # pub struct Guess {
-#     value: u32,
+#     value: i32,
 # }
 #
 // --snip--
 
 impl Guess {
-    pub fn new(value: u32) -> Guess {
+    pub fn new(value: i32) -> Guess {
         if value < 1  {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }
@@ -716,13 +716,13 @@ different messages depending on whether the value is too small or too large:
 ```rust
 # fn main() {}
 # pub struct Guess {
-#     value: u32,
+#     value: i32,
 # }
 #
 // --snip--
 
 impl Guess {
-    pub fn new(value: u32) -> Guess {
+    pub fn new(value: i32) -> Guess {
         if value < 1 {
             panic!("Guess value must be greater than or equal to 1, got {}.",
                    value);

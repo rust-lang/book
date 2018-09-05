@@ -513,7 +513,7 @@ implementation you want to call.
 ### Using Supertraits to Require One Trait’s Functionality Within Another Trait
 
 Sometimes, you might need one trait to use another trait’s functionality. In
-this case, you need to rely on the dependent trait’s also being implemented.
+this case, you need to rely on the dependent traits also being implemented.
 The trait you rely on is a *supertrait* of the trait you’re implementing.
 
 For example, let’s say we want to make an `OutlinePrint` trait with an

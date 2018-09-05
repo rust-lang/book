@@ -211,8 +211,8 @@ call the `deref` method. This Rust feature lets us write code that functions
 identically whether we have a regular reference or a type that implements
 `Deref`.
 
-The reason the `deref` method returns a reference to a value and that the plain
-dereference outside the parentheses in `*(y.deref())` is still necessary is the
+The reason the `deref` method returns a reference to a value, and that the plain
+dereference outside the parentheses in `*(y.deref())` is still necessary, is the
 ownership system. If the `deref` method returned the value directly instead of
 a reference to the value, the value would be moved out of `self`. We don’t want
 to take ownership of the inner value inside `MyBox<T>` in this case or in most

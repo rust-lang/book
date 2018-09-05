@@ -1020,11 +1020,11 @@ shown in Listing 20-21.
 
 ```rust,ignore
 trait FnBox {
-    fn call_box(self: Box<dyn Self>);
+    fn call_box(self: Box<Self>);
 }
 
 impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<dyn F>) {
+    fn call_box(self: Box<F>) {
         (*self)()
     }
 }
@@ -1125,6 +1125,11 @@ There are never more than four threads created, so our system won’t get
 overloaded if the server receives a lot of requests. If we make a request to
 */sleep*, the server will be able to serve other requests by having another
 thread run them.
+
+Note that if you open */sleep* in multiple browser windows simultaneously, they
+might load 5 seconds apart from each other, because some web browsers execute
+multiple instances of the same request sequentially for caching reasons. This
+limitation is not caused by our web server.
 
 After learning about the `while let` loop in Chapter 18, you might be wondering
 why we didn’t write the worker thread code as shown in Listing 20-22.

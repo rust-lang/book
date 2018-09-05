@@ -127,7 +127,8 @@ computed at runtime.
 
 Here’s an example of a constant declaration where the constant’s name is
 `MAX_POINTS` and its value is set to 100,000. (Rust’s constant naming
-convention is to use all uppercase with underscores between words):
+convention is to use all uppercase with underscores between words,
+and underscores can be inserted in numeric literals to improve readability):
 
 ```rust
 const MAX_POINTS: u32 = 100_000;
