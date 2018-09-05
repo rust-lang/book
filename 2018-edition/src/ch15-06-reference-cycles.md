@@ -141,8 +141,11 @@ However, because `a` is still referencing the `Rc<List>` that was in `b`, that
 the heap won’t be dropped. The memory will just sit there with a count of 1,
 forever. To visualize this reference cycle, we’ve created a diagram in Figure
 15-4.
-
+<!--
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+-->
+
+![alt text](img/trpl15-04.png "Reference cycle of lists")
 
 <span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
 pointing to each other</span>

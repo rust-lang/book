@@ -273,8 +273,11 @@ covers. A `String` is made up of three parts, shown on the left: a pointer to
 the memory that holds the contents of the string, a length, and a capacity.
 This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
-
+<!--
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+-->
+
+![alt text](img/trpl04-01.png "String in memory")
 
 <span class="caption">Figure 4-1: Representation in memory of a `String`
 holding the value `"hello"` bound to `s1`</span>
@@ -289,8 +292,11 @@ When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
 pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-2.
-
+<!--
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+-->
+
+![alt text](img/trpl04-02.png "s1 and s2 pointing to the same value")
 
 <span class="caption">Figure 4-2: Representation in memory of the variable `s2`
 that has a copy of the pointer, length, and capacity of `s1`</span>
@@ -299,8 +305,11 @@ The representation does *not* look like Figure 4-3, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could be very expensive in terms of runtime performance if
 the data on the heap were large.
-
+<!--
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+-->
+
+![alt text](img/trpl04-03.png "s1 and s2 to two places")
 
 <span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
 do if Rust copied the heap data as well</span>
@@ -349,8 +358,11 @@ without copying the data probably sounds like making a shallow copy. But
 because Rust also invalidates the first variable, instead of being called a
 shallow copy, it’s known as a *move*. Here we would read this by saying that
 `s1` was *moved* into `s2`. So what actually happens is shown in Figure 4-4.
-
+<!--
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+-->
+
+![alt text](img/trpl04-04.png "s1 moved to s2")
 
 <span class="caption">Figure 4-4: Representation in memory after `s1` has been
 invalidated</span>
