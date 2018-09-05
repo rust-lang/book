@@ -528,6 +528,9 @@ Let’s consider the first part of `main` in Listing 17-11:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+# extern crate blog;
+# use blog::Post;
+
 fn main() {
     let mut post = Post::new();
 
