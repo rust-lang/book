@@ -187,12 +187,11 @@ fn main() {
     let mut value = <i8>::min_value();
     loop {
         
-        print!("{}, ", value);
-		
-		if value == max {
+        if value == max {
+            print!("{}", value);
             break;
         }
-		
+        print!("{}, ", value);	
 		value = value + 1;
     }
 }
