@@ -21,12 +21,17 @@ cargo run -- ../../2018-edition/src
 
 cd ../..
 
+# create directory for deploy
+mkdir books
+
 # tests for the first edition
 cd first-edition
 echo 'Testing first edition...'
 mdbook test
 echo 'Building first edition...'
 mdbook build
+echo 'Generating .epub and .html files for first edition'
+crowbook crowbook.book
 
 cd ..
 
@@ -40,6 +45,8 @@ echo 'Building second edition...'
 mdbook build
 echo 'Linting second edition for local file paths...'
 cargo run --bin lfp src
+echo 'Generating .epub and .html files for second edition'
+crowbook crowbook.book
 
 cd ..
 
@@ -53,3 +60,7 @@ echo 'Building 2018 edition...'
 mdbook build
 echo 'Linting 2018 edition for local file paths...'
 cargo run --bin lfp src
+echo 'Generating .epub and .html files for 2018 edition'
+crowbook crowbook.book
+
+cd ..

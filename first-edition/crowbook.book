@@ -1,0 +1,81 @@
+# from https://github.com/lise-henry/books
+
+title: The Rust Programming Language
+author: The Rust Project Developpers
+lang: en
+
+crowbook.html_as_text: false
+# tex.hyperref: false
+rendering.highlight: syntect
+tex.links_as_footnotes: false
+rendering.num_depth: 1
+rendering.inline_toc: true
+
+output.base_path: ../books/
+
+output.html: trpl1.html
+output.epub: trpl1.epub
+
+@ Introduction
++ src/README.md
+@ Getting Started
++ src/getting-started.md
+@ Tutorial: Guessing Games
++ src/guessing-game.md
+@ Syntax and Semantics
++ src/syntax-and-semantics.md
+-- src/variable-bindings.md
+-- src/functions.md
+-- src/primitive-types.md
+-- src/comments.md
+-- src/if.md
+-- src/loops.md
+-- src/vectors.md
+-- src/ownership.md
+-- src/references-and-borrowing.md
+-- src/lifetimes.md
+-- src/mutability.md
+-- src/structs.md
+-- src/enums.md
+-- src/match.md
+-- src/patterns.md
+-- src/method-syntax.md
+-- src/strings.md
+-- src/generics.md
+-- src/traits.md
+-- src/drop.md
+-- src/if-let.md
+-- src/trait-objects.md
+-- src/closures.md
+-- src/ufcs.md
+-- src/crates-and-modules.md
+-- src/const-and-static.md
+-- src/attributes.md
+-- src/type-aliases.md
+-- src/casting-between-types.md
+-- src/associated-types.md
+-- src/unsized-types.md
+-- src/operators-and-overloading.md
+-- src/deref-coercions.md
+-- src/macros.md
+-- src/raw-pointers.md
+-- src/unsafe.md
+@ Effective Rust
++ src/effective-rust.md
+-- src/the-stack-and-the-heap.md
+-- src/testing.md
+-- src/conditional-compilation.md
+-- src/documentation.md
+-- src/iterators.md
+-- src/concurrency.md
+-- src/error-handling.md
+-- src/choosing-your-guarantees.md
+-- src/ffi.md
+-- src/borrow-and-asref.md
+-- src/release-channels.md
+-- src/using-rust-without-the-standard-library.md
+-- src/procedural-macros.md
+@ Appendix
++ src/glossary.md
++ src/syntax-index.md
++ src/bibliography.md

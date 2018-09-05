@@ -1,0 +1,129 @@
+#from https://github.com/kaajo/Rust-books
+
+title: "The Rust Programming Language - 2018 edition"
+author: "Steve Klabnik and Carol Nichols, with Contributions from the Rust Community"
+lang: en
+
+crowbook.html_as_text: false
+# tex.hyperref: false
+rendering.highlight: syntect
+tex.links_as_footnotes: false
+rendering.num_depth: 2
+rendering.inline_toc: true
+
+resources.base_path.images: src/
+output.base_path: ../books/
+
+output.html: trpl-2018.html
+output.epub: trpl-2018.epub
+#output.pdf: trpl-2018.pdf
+
+@ Getting started
+- src/foreword.md
+- src/SUMMARY.md
+- src/ch00-00-introduction.md
++ src/ch01-00-getting-started.md
+-- src/ch01-01-installation.md
+-- src/ch01-02-hello-world.md
+-- src/ch01-03-hello-cargo.md
++ src/ch02-00-guessing-game-tutorial.md
++ src/ch03-00-common-programming-concepts.md
+-- src/ch03-01-variables-and-mutability.md
+-- src/ch03-02-data-types.md
+-- src/ch03-03-how-functions-work.md
+-- src/ch03-04-comments.md
+-- src/ch03-05-control-flow.md
++ src/ch04-00-understanding-ownership.md
+-- src/ch04-01-what-is-ownership.md
+-- src/ch04-02-references-and-borrowing.md
+-- src/ch04-03-slices.md
++ src/ch05-00-structs.md
+-- src/ch05-01-defining-structs.md
+-- src/ch05-02-example-structs.md
+-- src/ch05-03-method-syntax.md
++ src/ch06-00-enums.md
+-- src/ch06-01-defining-an-enum.md
+-- src/ch06-02-match.md
+-- src/ch06-03-if-let.md
+
+@ Basic Rust Literacy
++ src/ch07-00-modules.md
+-- src/ch07-01-mod-and-the-filesystem.md
+-- src/ch07-02-controlling-visibility-with-pub.md
+-- src/ch07-03-importing-names-with-use.md
++ src/ch08-00-common-collections.md
+-- src/ch08-01-vectors.md
+-- src/ch08-02-strings.md
+-- src/ch08-03-hash-maps.md
++ src/ch09-00-error-handling.md
+-- src/ch09-01-unrecoverable-errors-with-panic.md
+-- src/ch09-02-recoverable-errors-with-result.md
+-- src/ch09-03-to-panic-or-not-to-panic.md
++ src/ch10-00-generics.md
+-- src/ch10-01-syntax.md
+-- src/ch10-02-traits.md
+-- src/ch10-03-lifetime-syntax.md
++ src/ch11-00-testing.md
+-- src/ch11-01-writing-tests.md
+-- src/ch11-02-running-tests.md
+-- src/ch11-03-test-organization.md
++ src/ch12-00-an-io-project.md
+-- src/ch12-01-accepting-command-line-arguments.md
+-- src/ch12-02-reading-a-file.md
+-- src/ch12-03-improving-error-handling-and-modularity.md
+-- src/ch12-04-testing-the-librarys-functionality.md
+-- src/ch12-05-working-with-environment-variables.md
+-- src/ch12-06-writing-to-stderr-instead-of-stdout.md
+
+@ Thinking in Rust
++ src/ch13-00-functional-features.md
+-- src/ch13-01-closures.md
+-- src/ch13-02-iterators.md
+-- src/ch13-03-improving-our-io-project.md
+-- src/ch13-04-performance.md
++ src/ch14-00-more-about-cargo.md
+-- src/ch14-01-release-profiles.md
+-- src/ch14-02-publishing-to-crates-io.md
+-- src/ch14-03-cargo-workspaces.md
+-- src/ch14-04-installing-binaries.md
+-- src/ch14-05-extending-cargo.md
++ src/ch15-00-smart-pointers.md
+-- src/ch15-01-box.md
+-- src/ch15-02-deref.md
+-- src/ch15-03-drop.md
+-- src/ch15-04-rc.md
+-- src/ch15-05-interior-mutability.md
+-- src/ch15-06-reference-cycles.md
++ src/ch16-00-concurrency.md
+-- src/ch16-01-threads.md
+-- src/ch16-02-message-passing.md
+-- src/ch16-03-shared-state.md
+-- src/ch16-04-extensible-concurrency-sync-and-send.md
++ src/ch17-00-oop.md
+-- src/ch17-01-what-is-oo.md
+-- src/ch17-02-trait-objects.md
+-- src/ch17-03-oo-design-patterns.md
+
+@ Advanced Topics
++ src/ch18-00-patterns.md
+-- src/ch18-01-all-the-places-for-patterns.md
+-- src/ch18-02-refutability.md
+-- src/ch18-03-pattern-syntax.md
++ src/ch19-00-advanced-features.md
+-- src/ch19-01-unsafe-rust.md
+-- src/ch19-02-advanced-lifetimes.md
+-- src/ch19-03-advanced-traits.md
+-- src/ch19-04-advanced-types.md
+-- src/ch19-05-advanced-functions-and-closures.md
++ src/ch20-00-final-project-a-web-server.md
+-- src/ch20-01-single-threaded.md
+-- src/ch20-02-multithreaded.md
+-- src/ch20-03-graceful-shutdown-and-cleanup.md
+- src/appendix-00.md
+-- src/appendix-01-keywords.md
+-- src/appendix-02-operators.md
+-- src/appendix-03-derivable-traits.md
+-- src/appendix-04-macros.md
+-- src/appendix-05-translation.md
+-- src/appendix-06-nightly-rust.md
+-- src/appendix-07-other-useful-tools.md
