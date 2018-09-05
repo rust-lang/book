@@ -357,7 +357,7 @@ fn returns_summarizable() -> impl Summary {
 ```
 
 This signature says, "I'm going to return something that implements the
-`Summary` trait, but I'm not going to tell you the exact type. In our case,
+`Summary` trait, but I'm not going to tell you the exact type." In our case,
 we're returning a `Tweet`, but the caller doesn't know that.
 
 Why is this useful? In chapter 13, we're going to learn about two features
