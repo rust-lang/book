@@ -40,15 +40,17 @@ allow users to extend it with new types.
 
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
-takes a *trait object*. A trait object points to an instance of a type that
-implements the trait we specify. We create a trait object by specifying some
+takes a *trait object*. A trait object points to both an instance of a type
+implementing our specified trait, as well as a table used to look up trait
+methods on that type at runtime. We create a trait object by specifying some
 sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, and then
 specifying the relevant trait. (We’ll talk about the reason trait objects must
-use a pointer in Chapter 19 in the section “Dynamically Sized Types & Sized”.)
-We can use trait objects in place of a generic or concrete type. Wherever we
-use a trait object, Rust’s type system will ensure at compile time that any
-value used in that context will implement the trait object’s trait.
-Consequently, we don’t need to know all the possible types at compile time.
+use a pointer in Chapter 19 in the section “Dynamically Sized Types and the
+`Sized` Trait”.) We can use trait objects in place of a generic or concrete
+type. Wherever we use a trait object, Rust’s type system will ensure at compile
+time that any value used in that context will implement the trait object’s
+trait.  Consequently, we don’t need to know all the possible types at compile
+time.
 
 We’ve mentioned that in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
