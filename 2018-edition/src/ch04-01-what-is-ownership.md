@@ -30,9 +30,11 @@ strings.
 > be described in relation to the stack and the heap later in this chapter, so
 > here is a brief explanation in preparation.
 >
-> Both the stack and the heap are parts of memory that are available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
+> Both the stack and the heap are parts of memory that is available to your code
+> to use at runtime, but they are structured in different ways. When discussing
+> the stack, the term "frame" is often mentioned.  A stack frame houses all of
+> the associated values contained within a function. The stack stores these
+> frames in the order it receives them and removes them in the opposite order.
 > This is referred to as *last in, first out*. Think of a stack of plates: when
 > you add more plates, you put them on top of the pile, and when you need a
 > plate, you take one off the top. Adding or removing plates from the middle or
@@ -48,8 +50,8 @@ strings.
 > stored on the heap instead. The heap is less organized: when you put data on
 > the heap, you ask for some amount of space. The operating system finds an
 > empty spot somewhere in the heap that is big enough, marks it as being in
-> use, and returns a *pointer*, which is the address of that location. This
-> process is called *allocating on the heap*, sometimes abbreviated as just
+> use, and returns a *pointer*, which contains the address of that location.
+> This process is called *allocating on the heap*, sometimes abbreviated as just
 > “allocating.” Pushing values onto the stack is not considered allocating.
 > Because the pointer is a known, fixed size, you can store the pointer on the
 > stack, but when you want the actual data, you have to follow the pointer.
@@ -72,8 +74,8 @@ strings.
 >
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> local variables get pushed onto the stack in the form of a stack frame. When
+> the end of the function is reached, the stack frame is popped off the stack.
 >
 > Keeping track of what parts of code are using what data on the heap,
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
