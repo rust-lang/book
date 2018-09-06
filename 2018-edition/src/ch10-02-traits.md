@@ -279,9 +279,9 @@ the `Summary` trait, like `summarize`.
 
 #### Trait Bounds
 
-The `impl Trait` syntax works well in some cases, but it doesn't let us refer to 
-the type of `item` anywhere else in the function. Instead, we could use a 
-'trait bound':
+The `impl Trait` syntax works well in small cases, but it doesn't let us refer to 
+the type of `item` anywhere else in the function. If we needed that, we could use 
+a 'trait bound' instead:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -289,7 +289,7 @@ pub fn notify<T: Summary>(item: T) {
 }
 ```
 
-This is equivalent to the example above, but is a bit more verbose. We place
+This is equivalent to the example above, but it is a bit more verbose. We place
 trait bounds with the declaration of the generic type parameter, after a
 colon and inside angle brackets. Because of the trait bound on `T`, we can
 call `notify` and pass in any instance of `NewsArticle` or `Tweet`. Code that
@@ -301,7 +301,7 @@ because we're using the generic type `T`:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
-    // This is not very useful in this context, but it is possible now
+    // This is not very useful in this context, but it is possible to do now
     let i: T = item;
     println!("Breaking news! {}", i.summarize());
 }
@@ -310,8 +310,8 @@ pub fn notify<T: Summary>(item: T) {
 We were able to declare a new variable with the same type as `item`, represented
 by the generic type `T`, and call the `summarize` method from that new variable.
 
-Besides using `T` in the body of the function, we can also use it multiple
-arguments, to make sure that their types are the same:
+We can now also make use of characteristics unique to generic types, such as 
+forcing multiple parameters to have the same type:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item1: T, item2: T) {
@@ -324,10 +324,10 @@ pub fn notify(item1: impl Summary, item2: impl Summary) {
 ```
 
 The result would be different. Now, even though both `item1` and `item2` have
-to implement `Summary`, they don't necessarily have to be the same. For example,
+to implement `Summary`, they don't necessarily have to be of the same type. For example,
 one could be a `NewsArticle` and the other a `Tweet`.
 
-In other words, it would have the same effect as doing:
+In other words, the last example would have the same effect as doing:
 
 ```rust,ignore
 pub fn notify<T: Summary, U: Summary>(item1: T, item2: U) {
@@ -336,14 +336,14 @@ pub fn notify<T: Summary, U: Summary>(item1: T, item2: U) {
 #### Specify multiple traits with `+`
 
 If `notify` needed to display formatting on `item`, as well as use the `summarize`
-method, it would need to specify two different traits: `Display` and `Summary`. 
-This could be done using the `+` syntax:
+method, then `item` would need to implement two different traits at the same time: 
+`Display` and `Summary`. This can be done using the `+` syntax:
 
 ```rust,ignore
 pub fn notify(item: impl Summary + Display) {
 ```
 
-This syntax is also valid with trait bounds:
+This syntax is also valid with trait bounds on generic types:
 
 ```rust,ignore
 pub fn notify<T: Summary + Display>(item: T) {
@@ -351,12 +351,12 @@ pub fn notify<T: Summary + Display>(item: T) {
 
 #### `where` clauses for clearer code
 
-However, there are downsides to using too many trait bounds. Functions with 
-multiple generic type parameters can have lots of trait bound information 
-between a function’s name and its parameter list, making the function signature 
-hard to read. For this reason, Rust has alternate syntax for specifying trait 
-bounds inside a `where` clause after the function signature. So instead of 
-writing this:
+However, there are downsides to using too many trait bounds. Each generic has
+its own trait bounds, so functions with multiple generic type parameters can
+have lots of trait bound information between a function’s name and its
+parameter list, making the function signature hard to read. For this reason,
+Rust has alternate syntax for specifying trait bounds inside a `where` clause
+after the function signature. So instead of writing this:
 
 ```rust,ignore
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
