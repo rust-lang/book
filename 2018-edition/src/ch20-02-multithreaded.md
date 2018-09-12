@@ -891,7 +891,7 @@ types shorter. Look at Listing 20-19.
 # use std::sync::mpsc;
 # struct Worker {}
 
-type Job = Box<dyn FnOnce() + Send + 'static>;
+type Job = Box<FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     // --snip--
@@ -1029,7 +1029,7 @@ impl<F: FnOnce()> FnBox for F {
     }
 }
 
-type Job = Box<dyn FnBox + Send + 'static>;
+type Job = Box<FnBox + Send + 'static>;
 
 // --snip--
 
