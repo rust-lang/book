@@ -74,8 +74,8 @@
 - [함수형 언어의 특성들: 반복자들과 클로저들](ch13-00-functional-features.md)
     - [클로저: 환경을 캡쳐할 수 있는 익명 함수](ch13-01-closures.md)
     - [반복자로 일련의 항목들 처리하기](ch13-02-iterators.md)
-    - [Improving Our I/O Project](ch13-03-improving-our-io-project.md)
-    - [Comparing Performance: Loops vs. Iterators](ch13-04-performance.md)
+    - [I/O 프로젝트 개선하기](ch13-03-improving-our-io-project.md)
+    - [성능 비교하기: 루프 vs. 반복자](ch13-04-performance.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
     - [Customizing Builds with Release Profiles](ch14-01-release-profiles.md)
@@ -119,7 +119,7 @@
 
 - [마지막 프로젝트: 멀티스레드 웹서버 만들기](ch20-00-final-project-a-web-server.md)
     - [싱글 스레드 웹서버](ch20-01-single-threaded.md)
-    - [Turning our Single Threaded Server into a Multithreaded Server](ch20-02-multithreaded.md)
+    - [싱글 스레드 서버를 멀티스레드 서버로 바꾸기](ch20-02-multithreaded.md)
     - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
