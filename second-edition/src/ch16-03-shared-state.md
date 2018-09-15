@@ -1,55 +1,55 @@
-## Shared-State Concurrency
+## 공유 상태 동시성
 
-Message passing is a fine way of handling concurrency, but it’s not the only
-one. Consider this part of the slogan from the Go language documentation again:
-“communicate by sharing memory.”
+메세지 패싱은 동시성을 다루는 좋은 방법이지만, 유일한 수단은
+아닙니다. Go 언어 문서로부터 나온 슬로건의 일부를 다시한번 고려해보죠:
+“메모리를 공유함으로써 소통하세요.”
 
-What would communicating by sharing memory look like? In addition, why would
-message-passing enthusiasts not use it and do the opposite instead?
+메모리를 공유하는 통신은 어떤 형태로 보일까요? 더불어서 메세지 패싱의
+열광적인 지지자들은 왜 이걸 안쓰고 대신 반대편의 것을 쓸까요?
 
-In a way, channels in any programming language are similar to single ownership,
-because once you transfer a value down a channel, you should no longer use that
-value. Shared memory concurrency is like multiple ownership: multiple threads
-can access the same memory location at the same time. As you saw in Chapter 15,
-where smart pointers made multiple ownership possible, multiple ownership can
-add complexity because these different owners need managing. Rust’s type system
-and ownership rules greatly assist in getting this management correct. For an
-example, let’s look at mutexes, one of the more common concurrency primitives
-for shared memory.
+어떤 면에서, 프로그래밍 언어의 채널들은 단일 소유권과 유사한데,
+이는 여러분이 채널로 값을 송신하면, 그 값을 더이상 쓸 수 없게되기
+때문입니다. 공유 메모리 동시성은 복수 소유권과 유사합니다: 복수개의
+스레드들이 동시에 동일한 메모리 위치를 접근할 수 있지요. 스마트 포인터들이
+복수 소유권을 가능하게 만드는 내용을 담은 15장에서 보셨듯이, 복수 소유권은
+이 서로 다른 소유자들의 관리가 필요하기 때문에 복잡성을 더할 수 있습니다.
+러스트의 타입 시스템과 소유권 규칙은 이러한 관리를 올바르도록 훌륭히 유도합니다.
+예를 들면, 공유 메모리를 위한 더 일반적인 동시성의 기초 재료 중 하나인
+뮤텍스 (mutex)를 살펴 봅시다.
 
-### Using Mutexes to Allow Access to Data from One Thread at a Time
+### 뮤텍스를 사용하여 한번에 한 스레드에서의 데이터 접근을 허용하기
 
-*Mutex* is an abbreviation for *mutual exclusion*, as in, a mutex allows only
-one thread to access some data at any given time. To access the data in a
-mutex, a thread must first signal that it wants access by asking to acquire the
-mutex’s *lock*. The lock is a data structure that is part of the mutex that
-keeps track of who currently has exclusive access to the data. Therefore, the
-mutex is described as *guarding* the data it holds via the locking system.
+*뮤텍스*는 *상호 배제 (mutual exclusion)* 의 줄임말로서, 내부에서 뮤텍스는
+주어진 시간에 오직 하나의 스레드만 데이터 접근을 허용합니다. 뮤텍스 내부의 데이터에
+접근하기 위해서 스레드는 먼저 뮤텍스의 *락 (lock)* 을 얻기를 요청함으로써 접근을
+윈한다는 신호를 보내야 합니다. 락은 누가 배타적으로 데이터에 접근하는지를 추적하는
+뮤텍스의 부분인 데이터 구조입니다. 그러므로, 뮤텍스는 잠금 시스템을 통해 가지고 있는
+데이터를 *보호하는* 것으로 묘사됩니다.
 
-Mutexes have a reputation for being difficult to use because you have to
-remember two rules:
+뮤텍스는 사용하기 어렵다는 평판을 가지고 있는데 이는 여러분이 다음 두 가지 규칙을
+기억해야 하기 때문입니다:
 
-* You must attempt to acquire the lock before using the data.
-* When you’re done with the data that the mutex guards, you must unlock the
-  data so other threads can acquire the lock.
+* 여러분은 데이터를 사용하기 전에 반드시 락을 얻는 시도를 해야 합니다.
+* 만일 뮤텍스가 보호하는 데이터의 사용이 끝났다면, 다른 스레드들이 락을
+  얻을 수 있도록 반드시 언락해야 합니다.
 
-For a real-world metaphor for a mutex, imagine a panel discussion at a
-conference with only one microphone. Before a panelist can speak, they have to
-ask or signal that they want to use the microphone. When they get the
-microphone, they can talk for as long as they want to and then hand the
-microphone to the next panelist who requests to speak. If a panelist forgets to
-hand the microphone off when they’re finished with it, no one else is able to
-speak. If management of the shared microphone goes wrong, the panel won’t work
-as planned!
+뮤텍스에 대한 실세계 은유를 위해서, 마이크가 딱 하나만 있는 컨퍼런스 패널
+토의를 상상해보세요. 패널 참가자들이 말하기 전, 그들은 마이크 사용을
+원한다고 요청하거나 신호를 줘야 합니다. 마이크를 얻었을 때는
+원하는 만큼 길게 말을 한 다음 말하기를 원하는 다음 매널 참가자에게
+마이크를 건네줍니다. 만일 패널 참여자가 마이크 사용을 끝냈을 때
+이를 건네주는 것을 잊어먹는다면, 그 외 아무도 말할 수 없게 됩니다.
+공유된 마이크의 관리가 잘못되면, 패널은 계획된데로 되지
+않을겁니다!
 
-Management of mutexes can be incredibly tricky to get right, which is why so
-many people are enthusiastic about channels. However, thanks to Rust’s type
-system and ownership rules, you can’t get locking and unlocking wrong.
+뮤텍스의 관리는 바로잡기 위해 믿을 수 없으리만치 교묘해질 수 있는데, 이것이 바로
+많은 사람들이 체널의 열성 지지자가 되는 이유입니다. 하지만, 러스트의 타입 시스템과
+소유권 규칙에 감사하게도, 여러분은 잘못 락을 얻거나 언락 할 수가 없습니다.
 
-#### The API of `Mutex<T>`
+#### `Mutex<T>`의 API
 
-As an example of how to use a mutex, let’s start by using a mutex in a
-single-threaded context, as shown in Listing 16-12:
+어떻게 뮤텍스를 이용하는지에 대한 예제로서, Listing 16-12와 같이 단일
+스레드 맥락 내에서 뮤텍스를 사용하는 것으로 시작해봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -68,44 +68,44 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-12: Exploring the API of `Mutex<T>` in a
-single-threaded context for simplicity</span>
+<span class="caption">Listing 16-12: 단순함을 위해 단일 스레드 맥락 내에서
+`Mutex<T>`의 API 탐색하기</span>
 
-As with many types, we create a `Mutex<T>` using the associated function `new`.
-To access the data inside the mutex, we use the `lock` method to acquire the
-lock. This call will block the current thread so it can’t do any work until
-it’s our turn to have the lock.
+많은 타입들처럼 `Mutex<T>`는 연관함수 `new`를 사용하여 만들어집니다.
+뮤텍스 내의 데이터에 접근하기 위해서는 `lock` 메소드를 사용하여 락을
+엇습니다. 이 호출은 현재의 스레드를 막아설 것이므로, 락을 얻는 차례가
+될 때까지 아무런 작업도 할 수 없습니다.
 
-The call to `lock` would fail if another thread holding the lock panicked. In
-that case, no one would ever be able to get the lock, so we’ve chosen to
-`unwrap` and have this thread panic if we’re in that situation.
+`lock`의 호출은 다른 스레드가 패닉 상태의 락을 가지고 있을 경우 실패할 수 있습니다.
+그런 경우 아무도 락을 얻을 수 없게 되므로, `unwrap`을 택하여 그런 상황일
+경우 이 스레드에 패닉을 일으킵니다.
 
-After we’ve acquired the lock, we can treat the return value, named `num` in
-this case, as a mutable reference to the data inside. The type system ensures
-that we acquire a lock before using the value in `m`: `Mutex<i32>` is not an
-`i32`, so we *must* acquire the lock to be able to use the `i32` value. We
-can’t forget; the type system won’t let us access the inner `i32` otherwise.
+락을 얻고난 다음에는 그 반환값 (위의 경우에는 `num`이라는 이름의 값) 을 내부의 데이터에
+대한 가변 참조자처럼 다룰 수 있습니다. 타입 시스템은 `m` 내부의 값을 사용하기 전에 우리가
+락을 얻는 것을 확실히 해줍니다: `Mutex<i32>`는 `i32`가 아니므로 우리는 *반드시*
+`i32` 값을 사용하기 위해 락을 얻어야 합니다. 우리는 이를 잊어버릴 수 없습니다;
+잊어버린다면 타입 시스템이 내부의 `i32`에 접근할 수 없게 할 것입니다.
 
-As you might suspect, `Mutex<T>` is a smart pointer. More accurately, the call
-to `lock` *returns* a smart pointer called `MutexGuard`. This smart pointer
-implements `Deref` to point at our inner data; the smart pointer also has a
-`Drop` implementation that releases the lock automatically when a `MutexGuard`
-goes out of scope, which happens at the end of the inner scope in Listing
-16-12. As a result, we don’t risk forgetting to release the lock and blocking
-the mutex from being used by other threads because the lock release happens
-automatically.
+여러분이 의심한 것처럼, `Mutex<T>`는 스마트 포인터입니다. 더 정확하게는, `lock`의
+호출은 `MutexGuard`라고 불리우는 스마트 포인터를 *반환합니다.* 이 스마트 포인터는
+우리의 내부 데이터를 가리키도록 `Deref`가 구현되어 있습니다; 이 스마트 포인터는 또한
+`MutexGuard`가 스코프 밖으로 벗어났을 때 자동으로 락을 해제하는 `Drop` 구현체를
+가지고 있는데, 이는 Listing 16-12의 내부 스코프의 끝에서 일어나는 일입니다.
+결과적으로 락이 자동으로 해제되기 때문에, 우리는 락을 해제하는 것을 잊어버리고
+다른 스레드에 의해 뮤텍스가 사용되는 것을 막는 위험을 짊어지지 않아도
+됩니다.
 
-After dropping the lock, we can print the mutex value and see that we were able
-to change the inner `i32` to 6.
+락이 버려진 후, 뮤텍스 값을 출력하여 내부의 `i32`를 6으로 바꿀 수 있음을
+확인할 수 있습니다.
 
-#### Sharing a `Mutex<T>` Between Multiple Threads
+#### 여러 스레드들 사이에서 `Mutex<T>` 공유하기
 
-Now, let’s try to share a value between multiple threads using `Mutex<T>`.
-We’ll spin up 10 threads and have them each increment a counter value by 1, so
-the counter goes from 0 to 10. Note that the next few examples will have
-compiler errors, and we’ll use those errors to learn more about using
-`Mutex<T>` and how Rust helps us use it correctly. Listing 16-13 has our
-starting example:
+이제 `Mutex<T>`를 사용하여 여러 스레드들 사이에서 값을 공유하는 시도를 해봅시다.
+우리는 10개의 스레드를 돌리고 이들이 카운터 값을 1만큼씩 증가 시켜서,
+카운터가 0에서 10으로 가도록 할 것입니다. 다음 몇 개의 예제가 컴파일
+에러가 날 것이고, 우리가 이 에러를 사용하여 `Mutex<T>`를 사용하는 방법과
+러스트가 이를 고치는 것을 어떻게 돕는지에 대해 학습할 것임을 주의하세요.
+Listing 16-13이 시작 예제입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -134,8 +134,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-13: Ten threads each increment a counter
-guarded by a `Mutex<T>`</span>
+<span class="caption">Listing 16-13: `Mutex<T>`에 의해 보소되는 카운터를
+각자 증가시키는 10개의 스레드</span>
 
 We create a `counter` variable to hold an `i32` inside a `Mutex<T>`, as we
 did in Listing 16-12. Next, we create 10 threads by iterating over a range
