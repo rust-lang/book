@@ -92,11 +92,11 @@
     - [`RefCell<T>`와 내부 가변성 패턴](ch15-05-interior-mutability.md)
     - [순환 참조를 만드는 것과 메모리 누수는 안전한 것에 해당됩니다](ch15-06-reference-cycles.md)
 
-- [Fearless Concurrency](ch16-00-concurrency.md)
-    - [Threads](ch16-01-threads.md)
-    - [Message Passing](ch16-02-message-passing.md)
-    - [Shared State](ch16-03-shared-state.md)
-    - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
+- [겁없는 동시성](ch16-00-concurrency.md)
+    - [스레드](ch16-01-threads.md)
+    - [메세지 패싱](ch16-02-message-passing.md)
+    - [공유 상태](ch16-03-shared-state.md)
+    - [확장 가능한 동시성: `Sync`와 `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Object Oriented Programming Features of Rust](ch17-00-oop.md)
     - [Characteristics of Object-Oriented Languages](ch17-01-what-is-oo.md)
