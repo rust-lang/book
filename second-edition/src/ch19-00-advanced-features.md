@@ -1,22 +1,22 @@
-# Advanced Features
+# 고급 기능들
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 20, we’ll look at a few
-aspects of the language you might run into every once in a while. You can use
-this chapter as a reference for when you encounter any unknowns when using
-Rust. The features you’ll learn to use in this chapter are useful in very
-specific situations. Although you might not reach for them often, we want to
-make sure you have a grasp of all the features Rust has to offer.
+지금까지, 여러분은 러스트 프로그래밍 언어의 가장 일반적으로 사용되는 부분들을
+공부했습니다. 20장에서 한가지 프로젝트를 더 하기 전에, 우리는 여러분이 가끔
+마주치게 될지 모를 이 언어의 몇 가지 측면들을 살펴볼 것입니다. 여러분이 러스트를
+사용하다가 어떤 모르겠는 것을 마추칠때 이 장을 참고자료로 쓸 수 있습니다.
+이 장에서 여러분이 공부하게될 기능들은 매우 특정한 경우에서만 유용합니다.
+여러분이 종종 이것들에 근접하지 않게 될지라도, 우리는 여러분이 러스트가 제공해야
+하는 모든 기능들에 대해 확실히 이해하기를 바랍니다.
 
-In this chapter, we’ll cover:
+이 장에서 우리가 다룰 것들입니다:
 
-* Unsafe Rust: How to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-* Advanced lifetimes: Syntax for complex lifetime situations
-* Advanced traits: Associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced types: More about the newtype pattern, type aliases, the *never*
-  type, and dynamically sized types
-* Advanced functions and closures: Function pointers and returning closures
+* 안전하지 않은 러스트: 어떻게 러스트가 보장하는 것들로부터 손을 떼고 수동으로
+  이러한 보장들을 책임질 수 있는가에 대하여
+* 고급 라이프타임: 복잡한 라이프타임 상황에 대한 문법
+* 고급 트레잇: 연관 타입, 기본 타입 파라미터, 전체 자격 (fully qualified) 문법,
+  슈퍼트레잇 (supertrait), 그리고 트레잇과 관련된 신종 패턴
+* 고급 타입: 신종 타입 패턴, 타입 별칭 (alias), *never* 타입, 동적 크기 조절 타입에
+  대한 더 많은 것들
+* 고급 함수 및 클로저: 함수 포인터와 클로저 반환하기
 
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+모두를 위한 것을 갖춘 러스트 기능들의 모음입니다! 뛰어들어 봅시다!
