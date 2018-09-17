@@ -236,14 +236,14 @@ method, which are repeated here in Listing 11-5. Let’s put this code in the
 ```rust
 # fn main() {}
 #[derive(Debug)]
-pub struct Rectangle {
-    length: u32,
+struct Rectangle {
     width: u32,
+    height: u32,
 }
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length > other.length && self.width > other.width
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
     }
 }
 ```
@@ -253,9 +253,9 @@ impl Rectangle {
 
 The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
-`can_hold` method by creating a `Rectangle` instance that has a length of 8 and
-a width of 7 and asserting that it can hold another `Rectangle` instance that
-has a length of 5 and a width of 1.
+`can_hold` method by creating a `Rectangle` instance that has a width of 8 and
+a height of 7 and asserting that it can hold another `Rectangle` instance that
+has a width of 5 and a height of 1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -267,8 +267,8 @@ mod tests {
 
     #[test]
     fn larger_can_hold_smaller() {
-        let larger = Rectangle { length: 8, width: 7 };
-        let smaller = Rectangle { length: 5, width: 1 };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(larger.can_hold(&smaller));
     }
@@ -315,8 +315,8 @@ mod tests {
 
     #[test]
     fn smaller_cannot_hold_larger() {
-        let larger = Rectangle { length: 8, width: 7 };
-        let smaller = Rectangle { length: 5, width: 1 };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(!smaller.can_hold(&larger));
     }
@@ -338,20 +338,20 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 Two tests that pass! Now let’s see what happens to our test results when we
 introduce a bug in our code. Let’s change the implementation of the `can_hold`
 method by replacing the greater than sign with a less than sign when it
-compares the lengths:
+compares the widths:
 
 ```rust
 # fn main() {}
 # #[derive(Debug)]
-# pub struct Rectangle {
-#     length: u32,
+# struct Rectangle {
 #     width: u32,
+#     height: u32,
 # }
 // --snip--
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length < other.length && self.width > other.width
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width < other.width && self.height > other.height
     }
 }
 ```
@@ -376,8 +376,8 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-Our tests caught the bug! Because `larger.length` is 8 and `smaller.length` is
-5, the comparison of the lengths in `can_hold` now returns `false`: 8 is not
+Our tests caught the bug! Because `larger.width` is 8 and `smaller.width` is
+5, the comparison of the widths in `can_hold` now returns `false`: 8 is not
 less than 5.
 
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
