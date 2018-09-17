@@ -58,7 +58,7 @@ First, we add another `use` statement to bring in a relevant part of the
 standard library: we need `std::fs` to handle files.
 
 In `main`, we’ve added a new statement: `fs::read_to_string` will take the
-`filename`, open that file, and then produce a new `String` with its contents.
+`filename`, open that file, and then return `Result<String>` with its contents.
 
 After that line, we’ve again added a temporary `println!` statement that
 prints the value of `contents` after the file is read, so we can check that the
