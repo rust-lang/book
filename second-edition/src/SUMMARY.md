@@ -13,11 +13,11 @@
 - [추리 게임 튜토리얼](ch02-00-guessing-game-tutorial.md)
 
 - [보편적인 프로그래밍 개념](ch03-00-common-programming-concepts.md)
-    - [Variables and Mutability](ch03-01-variables-and-mutability.md)
-    - [Data Types](ch03-02-data-types.md)
-    - [How Functions Work](ch03-03-how-functions-work.md)
-    - [Comments](ch03-04-comments.md)
-    - [Control Flow](ch03-05-control-flow.md)
+    - [변수와 가변성](ch03-01-variables-and-mutability.md)
+    - [데이터 타입들](ch03-02-data-types.md)
+    - [함수 동작 원리](ch03-03-how-functions-work.md)
+    - [주석](ch03-04-comments.md)
+    - [제어문](ch03-05-control-flow.md)
 
 - [소유권 이해하기](ch04-00-understanding-ownership.md)
     - [소유권이 뭔가요?](ch04-01-what-is-ownership.md)
