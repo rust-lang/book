@@ -120,7 +120,7 @@
 - [마지막 프로젝트: 멀티스레드 웹서버 만들기](ch20-00-final-project-a-web-server.md)
     - [싱글 스레드 웹서버](ch20-01-single-threaded.md)
     - [싱글 스레드 서버를 멀티스레드 서버로 바꾸기](ch20-02-multithreaded.md)
-    - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
+    - [우아한 종료와 정리](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
