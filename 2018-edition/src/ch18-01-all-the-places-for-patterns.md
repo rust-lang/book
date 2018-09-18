@@ -208,7 +208,7 @@ in the tuple, the overall type won’t match and we’ll get a compiler error. F
 example, Listing 18-5 shows an attempt to destructure a tuple with three
 elements into two variables, which won’t work.
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let (x, y) = (1, 2, 3);
 ```
 

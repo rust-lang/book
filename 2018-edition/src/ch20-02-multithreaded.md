@@ -482,7 +482,7 @@ returned a `ThreadPool` instance containing them.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,not_desired_behavior
 use std::thread;
 
 pub struct ThreadPool {
@@ -727,7 +727,7 @@ the closure. The code in Listing 20-17 won’t quite compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 impl ThreadPool {
     // --snip--
     pub fn new(size: usize) -> ThreadPool {
@@ -929,7 +929,7 @@ shown in Listing 20-20 to `Worker::new`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 // --snip--
 
 impl Worker {
@@ -1136,7 +1136,7 @@ why we didn’t write the worker thread code as shown in Listing 20-22.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,not_desired_behavior
 // --snip--
 
 impl Worker {

@@ -239,7 +239,7 @@ consistently a user favorite.
 There’s one other aspect of `match` we need to discuss. Consider this version
 of our `plus_one` function that has a bug and won’t compile:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         Some(i) => Some(i + 1),

@@ -148,7 +148,7 @@ work, however:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 struct Rectangle {
     width: u32,
     height: u32,

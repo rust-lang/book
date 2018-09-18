@@ -94,7 +94,7 @@ compile yet, but we’ll fix it later in this chapter.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn largest<T>(list: &[T]) -> T {
     let mut largest = list[0];
 
@@ -182,7 +182,7 @@ Listing 10-7, our code won’t compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 struct Point<T> {
     x: T,
     y: T,

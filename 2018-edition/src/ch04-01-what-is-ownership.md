@@ -319,7 +319,7 @@ considers `s1` to no longer be valid and, therefore, Rust doesn’t need to free
 anything when `s1` goes out of scope. Check out what happens when you try to
 use `s1` after `s2` is created; it won’t work:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let s1 = String::from("hello");
 let s2 = s1;
 

@@ -26,7 +26,7 @@ where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let Some(x) = some_option_value;
 ```
 
@@ -71,7 +71,7 @@ cannot use an irrefutable pattern without receiving an error. If we give `if
 let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
 it will not compile.
 
-```rust,ignore
+```rust,ignore,does_not_compile
 if let x = 5 {
     println!("{}", x);
 };

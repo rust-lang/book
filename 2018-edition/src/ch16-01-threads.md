@@ -254,7 +254,7 @@ thread. However, this won’t yet work, as you’ll see in a moment.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::thread;
 
 fn main() {
@@ -303,7 +303,7 @@ that won’t be valid:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::thread;
 
 fn main() {

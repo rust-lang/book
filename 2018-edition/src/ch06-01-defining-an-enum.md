@@ -339,7 +339,7 @@ types, the compiler won’t let us use an `Option<T>` value as if it were
 definitely a valid value. For example, this code won’t compile because it’s
 trying to add an `i8` to an `Option<i8>`:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let x: i8 = 5;
 let y: Option<i8> = Some(5);
 

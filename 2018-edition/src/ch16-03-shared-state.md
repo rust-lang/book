@@ -109,7 +109,7 @@ starting example:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::sync::Mutex;
 use std::thread;
 
@@ -187,7 +187,7 @@ Let’s figure this out by simplifying the program. Instead of making 10 threads
 in a `for` loop, let’s just make two threads without a loop and see what
 happens. Replace the first `for` loop in Listing 16-13 with this code instead:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::sync::Mutex;
 use std::thread;
 
@@ -269,7 +269,7 @@ errors, we’ll also switch back to using the `for` loop, and we’ll keep the
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::rc::Rc;
 use std::sync::Mutex;
 use std::thread;

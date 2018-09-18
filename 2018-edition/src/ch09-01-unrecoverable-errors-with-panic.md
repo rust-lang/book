@@ -28,7 +28,7 @@ Let’s try calling `panic!` in a simple program:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,should_panic
+```rust,should_panic,panics
 fn main() {
     panic!("crash and burn");
 }
@@ -68,7 +68,7 @@ element by index in a vector:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,should_panic
+```rust,should_panic,panics
 fn main() {
     let v = vec![1, 2, 3];
 

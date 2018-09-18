@@ -20,7 +20,7 @@ making a *src/main.rs* file containing this code:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 extern crate communicator;
 
 fn main() {

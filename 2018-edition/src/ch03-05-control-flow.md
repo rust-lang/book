@@ -78,7 +78,7 @@ the condition isn’t a `bool`, we’ll get an error. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let number = 3;
 
@@ -212,7 +212,7 @@ example, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let condition = true;
 

@@ -24,7 +24,7 @@ have the required lifetime annotations, so it won’t compile.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 struct Context(&str);
 
 struct Parser {
@@ -100,7 +100,7 @@ returns. This code doesn’t quite work.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn parse_context(context: Context) -> Result<(), &str> {
     Parser { context: &context }.parse()
 }
@@ -214,7 +214,7 @@ sufficient when we try to compile.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 struct Context<'s>(&'s str);
 
 struct Parser<'c, 's> {
@@ -317,7 +317,7 @@ struct is shown in Listing 19-16, without lifetime bounds for now.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 struct Ref<'a, T>(&'a T);
 ```
 

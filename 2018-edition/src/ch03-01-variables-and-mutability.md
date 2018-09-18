@@ -16,7 +16,7 @@ code with the following code that won’t compile just yet:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     let x = 5;
     println!("The value of x is: {}", x);
@@ -207,7 +207,7 @@ from having to come up with different names, such as `spaces_str` and
 `spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
 try to use `mut` for this, as shown here, we’ll get a compile-time error:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let mut spaces = "   ";
 spaces = spaces.len();
 ```

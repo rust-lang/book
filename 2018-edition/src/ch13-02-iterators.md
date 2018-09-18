@@ -168,7 +168,7 @@ incremented by 1. However, this code produces a warning:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,not_desired_behavior
 let v1: Vec<i32> = vec![1, 2, 3];
 
 v1.iter().map(|x| x + 1);

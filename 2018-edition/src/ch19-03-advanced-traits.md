@@ -429,7 +429,7 @@ Listing 19-28, we’ll get a compilation error.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn main() {
     println!("A baby dog is called a {}", Animal::baby_name());
 }

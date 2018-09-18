@@ -136,7 +136,7 @@ element for. As an example, let’s see what a program will do if it has a vecto
 that holds five elements and then tries to access an element at index 100, as
 shown in Listing 8-7:
 
-```rust,should_panic
+```rust,should_panic,panics
 let v = vec![1, 2, 3, 4, 5];
 
 let does_not_exist = &v[100];
@@ -169,7 +169,7 @@ scope. That rule applies in Listing 8-8, where we hold an immutable reference to
 the first element in a vector and try to add an element to the end, which won’t
 work:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let mut v = vec![1, 2, 3, 4, 5];
 
 let first = &v[0];
