@@ -36,10 +36,9 @@
 
 ## Basic Rust Literacy
 
-- [Modules](ch07-00-modules.md)
-    - [`mod` and the Filesystem](ch07-01-mod-and-the-filesystem.md)
-    - [Controlling Visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
-    - [Referring to Names in Different Modules](ch07-03-importing-names-with-use.md)
+- [Pacakges, Crates, and Modules](ch07-00-packages-crates-and-modules.md)
+    - [Packages and crates for making libraries and executables](ch07-01-packages-and-crates-for-making-libraries-and-executables.md)
+    - [Modules and `use` to control scope and privacy](ch07-02-modules-and-use-to-control-scope-and-privacy.md)
 
 - [Common Collections](ch08-00-common-collections.md)
     - [Vectors](ch08-01-vectors.md)
