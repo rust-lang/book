@@ -138,7 +138,7 @@ we have a problem: this example does not compile!
 
 ```console
 > cargo build
-   Compiling sampleproject v0.1.0 (file:///home/you/projects/sampleproject)
+   Compiling sampleproject v0.1.0 (file:///projects/sampleproject)
 error[E0603]: module `branch2` is private
   --> src\main.rs:10:5
    |
@@ -201,7 +201,7 @@ We still have an error, though:
 
 ```console
 > cargo build
-   Compiling sampleproject v0.1.0 (C:\Users\steve\tmp\sampleproject)
+   Compiling sampleproject v0.1.0 (file:///projects/sampleproject)
 error[E0603]: function `leaf` is private
   --> src\main.rs:10:5
    |
