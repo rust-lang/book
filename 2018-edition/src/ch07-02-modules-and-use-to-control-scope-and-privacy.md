@@ -364,7 +364,7 @@ currently. Your authors rarely use `self`, preferring to always use `crate`
 and absolute paths. This way, when you move code around, the imports it needs
 don't change. Up to you!
 
-A breif note about idioms:
+A brief note about idioms:
 
 ```rust,ignore
 // idiomatic import
