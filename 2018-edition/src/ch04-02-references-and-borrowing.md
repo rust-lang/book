@@ -145,20 +145,22 @@ let mut s = String::from("hello");
 
 let r1 = &mut s;
 let r2 = &mut s;
+
+println!("{}, {}", r1, r2);
 ```
 
 Here’s the error:
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
- --> borrow_twice.rs:5:19
+ --> src/main.rs:5:10
   |
-4 |     let r1 = &mut s;
-  |                   - first mutable borrow occurs here
-5 |     let r2 = &mut s;
-  |                   ^ second mutable borrow occurs here
-6 | }
-  | - first borrow ends here
+4 | let r1 = &mut s;
+  |          ------ first mutable borrow occurs here
+5 | let r2 = &mut s;
+  |          ^^^^^^ second mutable borrow occurs here
+6 | println!("{}, {}", r1, r2);
+  |                    -- borrow later used here
 ```
 
 This restriction allows for mutation but in a very controlled fashion. It’s
@@ -200,22 +202,24 @@ let mut s = String::from("hello");
 let r1 = &s; // no problem
 let r2 = &s; // no problem
 let r3 = &mut s; // BIG PROBLEM
+
+println!("{}, {}, and {}", r1, r2, r3);
 ```
 
 Here’s the error:
 
 ```text
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
-immutable
- --> borrow_thrice.rs:6:19
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+ --> src/main.rs:6:10
   |
-4 |     let r1 = &s; // no problem
-  |               - immutable borrow occurs here
-5 |     let r2 = &s; // no problem
-6 |     let r3 = &mut s; // BIG PROBLEM
-  |                   ^ mutable borrow occurs here
-7 | }
-  | - immutable borrow ends here
+4 | let r1 = &s; // no problem
+  |          -- immutable borrow occurs here
+5 | let r2 = &s; // no problem
+6 | let r3 = &mut s; // BIG PROBLEM
+  |          ^^^^^^ mutable borrow occurs here
+7 | 
+8 | println!("{}, {}, and {}", r1, r2, r3);
+  |                            -- borrow later used here
 ```
 
 Whew! We *also* cannot have a mutable reference while we have an immutable one.
