@@ -535,7 +535,9 @@ Be careful with this! This makes it a little harder to tell what names are in
 scope.
 
 Glob imports are often used when testing; we'll talk about that in Chapter
-11.
+11. They're also sometimes used as part of the "prelude pattern", see [the
+standard library documentation](../../std/prelude/index.html#other-preludes)
+for more.
 
 ## Putting modules in different files
 
