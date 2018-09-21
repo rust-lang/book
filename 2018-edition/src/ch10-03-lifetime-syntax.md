@@ -576,6 +576,8 @@ and the second and third rules apply to output lifetimes. If the compiler gets
 to the end of the three rules and there are still references for which it can’t
 figure out lifetimes, the compiler will stop with an error.
 
+These rules apply to `fn` definitions, as well as `impl` blocks.
+
 The first rule is that each parameter that is a reference gets its own lifetime
 parameter. In other words, a function with one parameter gets one lifetime
 parameter: `fn foo<'a>(x: &'a i32)`; a function with two parameters gets two
