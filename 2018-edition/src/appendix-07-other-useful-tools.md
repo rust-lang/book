@@ -25,6 +25,26 @@ you both `rustc` and `cargo`. To take any Cargo project and format it:
 $ cargo fmt
 ```
 
+## More lints with `clippy`
+
+`clippy` is a bunch of lints to catch common mistakes and improve your Rust
+code.
+
+`clippy` is not at 1.0 yet, but a preview is available for you to use in the
+meantime. Please give it a try and let us know how it goes!
+
+To install `clippy`:
+
+```shell
+$ rustup component add clippy-preview
+```
+
+To take any Cargo project and run clippy's lints on it:
+
+```shell
+$ cargo clippy
+```
+
 ## IDE integration with the Rust Language Server
 
 To help IDE integration, the Rust project distributes `rls`, the Rust
