@@ -60,6 +60,7 @@ code in Listing 1-2.
 name = "hello_cargo"
 version = "0.1.0"
 authors = ["Your Name <you@example.com>"]
+edition = "2018"
 
 [dependencies]
 ```
@@ -76,10 +77,11 @@ The first line, `[package]`, is a section heading that indicates that the
 following statements are configuring a package. As we add more information to
 this file, we’ll add other sections.
 
-The next three lines set the configuration information Cargo needs to compile
+The next four lines set the configuration information Cargo needs to compile
 your program: the name, the version, and who wrote it. Cargo gets your name and
 email information from your environment, so if that information is not correct,
-fix the information now and then save the file.
+fix the information now and then save the file. We'll talk about the `edition`
+key in Appendix H.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
 of your project’s dependencies. In Rust, packages of code are referred to as

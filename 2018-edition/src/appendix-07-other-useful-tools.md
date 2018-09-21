@@ -25,6 +25,65 @@ you both `rustc` and `cargo`. To take any Cargo project and format it:
 $ cargo fmt
 ```
 
+## Fix up your code with `rustfix`
+
+If you’ve written code in Rust before, you’ve probably seen a compiler
+warning before. For example, consider this code:
+
+```rust
+fn do_something() {}
+
+fn main() {
+    for i in 0..100 {
+        do_something();
+    }
+}
+```
+
+Here, we’re calling do_something a hundred times. But we never use the
+variable i. And so Rust warns:
+
+```text
+> cargo build
+   Compiling myprogram v0.1.0 (file:///projects/myprogram)
+warning: unused variable: `i`
+ --> src\main.rs:4:9
+  |
+4 |     for i in 1..100 {
+  |         ^ help: consider using `_i` instead
+  |
+  = note: #[warn(unused_variables)] on by default
+
+    Finished dev [unoptimized + debuginfo] target(s) in 0.50s
+```
+
+See how it suggests that we use `_i` as a name instead? We can automatically
+apply that suggestion with cargo fix:
+
+```console
+> cargo fix
+    Checking myprogram v0.1.0 (file:///projects/myprogram)
+      Fixing src\main.rs (1 fix)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.59s
+```
+
+If we look at `src\main.rs` again, we’ll see that the code has changed:
+
+```rust
+fn do_something() {}
+
+fn main() {
+    for _i in 0..100 {
+        do_something();
+    }
+}
+```
+
+We’re now using `_i`, and the warning will no longer appear.
+
+`cargo fix` can also be used to transition your code between different editions
+of Rust. Editions are covered in Appendix H.
+
 ## More lints with `clippy`
 
 `clippy` is a bunch of lints to catch common mistakes and improve your Rust
