@@ -489,25 +489,37 @@ fn main() {
 When we compile this code, we get the following error message:
 
 ```text
-error[E0277]: the trait bound `(): std::ops::Try` is not satisfied
+error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `std::ops::Try`)
  --> src/main.rs:4:13
   |
 4 |     let f = File::open("hello.txt")?;
-  |             ------------------------
-  |             |
-  |             the `?` operator can only be used in a function that returns
-  `Result` (or another type that implements `std::ops::Try`)
-  |             in this macro invocation
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^ cannot use the `?` operator in a function that returns `()`
   |
   = help: the trait `std::ops::Try` is not implemented for `()`
   = note: required by `std::ops::Try::from_error`
 ```
 
 This error points out that we’re only allowed to use `?` in a function that
-returns `Result`. In functions that don’t return `Result`, when you call other
-functions that return `Result`, you’ll need to use a `match` or one of the
-`Result` methods to handle the `Result` instead of using `?` to potentially
-propagate the error to the calling code.
+returns `Result<T, E>`. In functions that don’t return `Result<T, E>`, when
+you call other functions that return `Result<T, E>`, you’ll need to use a
+`match` or one of the `Result<T, E>` methods to handle the `Result<T, E>`
+instead of using `?` to potentially propagate the error to the calling code.
+
+However, the `main` function can return a `Result<T, E>`:
+
+```rust,ignore
+use std::error::Error;
+use std::fs::File;
+
+fn main() -> Result<(), Box<dyn Error>> {
+    let f = File::open("hello.txt")?;
+
+    Ok(())
+}
+```
+
+The `Box<dyn Error>` is called a "trait object", which we'll talk about in Chapter 17.
+For now, you can read `Box<dyn Error>` to mean "any kind of error."
 
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
