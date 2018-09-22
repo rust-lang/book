@@ -386,21 +386,21 @@ fn main() {
 API는 어셈플리 수준에서 함수를 어떻게 호출하는지를 정의합니다. `"C"` ABI는
 가장 흔하며 C 프로그래밍 언어의 ABI를 준수합니다.
 
-> #### Calling Rust Functions from Other Languages
+> #### 다른 언어로부터 러스트 함수 호출하기
 >
-> We can also use `extern` to create an interface that allows other languages
-> to call Rust functions. Instead of an `extern` block, we add the `extern`
-> keyword and specify the ABI to use just before the `fn` keyword. We also need
-> to add a `#[no_mangle]` annotation to tell the Rust compiler not to mangle
-> the name of this function. *Mangling* is when a compiler changes the name
-> we’ve given a function to a different name that contains more information for
-> other parts of the compilation process to consume but is less human readable.
-> Every programming language compiler mangles names slightly differently, so
-> for a Rust function to be nameable by other languages, we must disable the
-> Rust compiler’s name mangling.
+> 우리는 또한 `extern`을 사용하여 다른 언어들이 러스트 함수를 호출할 수 있도록
+> 하는 인터페이스를 만들 수 있습니다. `extern` 블록 대신, `fn` 키워드 전에
+> `extern` 키워드를 추가하고 사용할 ABI를 명시합니다. 우리는 또한
+> `#[no_mangle]` 어노테이션을 추가하여 러스트 컴파일러가 이 함수의 이름을
+> 맹글링하지 않도록 할 필요가 있습니다. *맹글링 (mangling)* 이란 우리가 함수에게
+> 준 이름을 컴파일 과정의 다른 부분에서 사용하기 위한 더 많은 정보를 담고 있지만 사람이
+> 읽기엔 별로 안좋은 이름으로 컴파일러가 바꾸는 과정입니다. 모든 프로그래밍 언어
+> 컴파일러가 약간씩 다르게 이름을 맹글링하므로, 러스트 함수가 다른 언어에 의해 이름을
+> 불릴 수 있도록 하기 위해, 우리는 반드시 러스트 컴파일러의 이름 맹글링 기능을
+> 꺼야 합니다.
 >
-> In the following example, we make the `call_from_c` function accessible from
-> C code, after it’s compiled to a shared library and linked from C:
+> 아래의 예제에서, 우리는 `call_from_c`를 공유 라이브러리로 컴파일하고 C로 링크한 다음,
+> 이 함수를 C 코드에서 접근 가능하게 만들었습니다:
 >
 > ```rust
 > #[no_mangle]
@@ -409,17 +409,17 @@ API는 어셈플리 수준에서 함수를 어떻게 호출하는지를 정의�
 > }
 > ```
 >
-> This usage of `extern` does not require `unsafe`.
+> 이러한 `extern`의 사용에는 `unsafe`가 필요 없습니다.
 
-### Accessing or Modifying a Mutable Static Variable
+### 가변 정적 변수의 접근 혹은 수정하기
 
-Until now, we’ve not talked about *global variables*, which Rust does support
-but can be problematic with Rust’s ownership rules. If two threads are
-accessing the same mutable global variable, it can cause a data race.
+지금까지 우리는 *전역 변수 (global variable)* 에 대하여 이야기한 적이 없는데,
+이는 러스트가 지원하기는 하지만 러스트의 소유권 규칙에 문제를 일으킬 수 있습니다. 만일 두
+스레드가 동일한 가변 전역 변수에 접근하는 중이라면, 이는 데이터 레이스를 야기할 수 있습니다.
 
-In Rust, global variables are called *static* variables. Listing 19-9 shows an
-example declaration and use of a static variable with a string slice as a
-value.
+러스트에서 전역 변수는 *정적 (static)* 변수라고 불립니다. Listing
+19-9는 스트링 슬라이스를 값으로 갖는 정적 변수의 정의 및 사용의 예를
+보여줍니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -431,26 +431,26 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-9: Defining and using an immutable static
-variable</span>
+<span class="caption">Listing 19-9: 불변 정적 변수의 정의 및
+사용</span>
 
-Static variables are similar to constants, which we discussed in the
-“Differences Between Variables and Constants” section in Chapter 3. The names
-of static variables are in `SCREAMING_SNAKE_CASE` by convention, and we *must*
-annotate the variable’s type, which is `&'static str` in this example. Static
-variables can only store references with the `'static` lifetime, which means
-the Rust compiler can figure out the lifetime; we don’t need to annotate it
-explicitly. Accessing an immutable static variable is safe.
+정적 변수는 상수와 유사한데, 이는 우리가 3장의 “변수와 상수의 차이점”
+절에서 논의했었습니다. 정적 변수의 이름은 관례에 따라 `SCREAMING_SNAKE_CASE`
+형식을 따르며, 우리는 *반드시* 변수의 타입을 명시해야 하는데, 위의 예제에서는
+`&'static str`입니다. 정적 변수는 `'static` 라이프타임을 갖는 참조자만을
+저장할 수 있는데, 이는 러스트 컴파일러가 라이프 타임을 알아낼 수 있음을
+의미합니다; 우리는 이를 명시적으로 작성할 필요가 없습니다. 불변 정적 변수에의
+접근은 안전합니다.
 
-Constants and immutable static variables might seem similar, but a subtle
-difference is that values in a static variable have a fixed address in memory.
-Using the value will always access the same data. Constants, on the other hand,
-are allowed to duplicate their data whenever they’re used.
+상수와 불변 정적 변수는 비슷해 보일지도 모르겠으나, 정적 변수의 값이
+메모리 내의 고정된 주소값을 갖는다는 점에서 미묘한 차이점이 있습니다.
+값을 사용하면 언제나 동일한 데이터에 접근하게 될 것입니다. 반면 상수는
+사용될 때마다 데이터가 복사되는 것이 허용됩니다.
 
-Another difference between constants and static variables is that static
-variables can be mutable. Accessing and modifying mutable static variables is
-*unsafe*. Listing 19-10 shows how to declare, access, and modify a mutable
-static variable named `COUNTER`.
+상수와 정적 변수 간의 또다른 차이점은 정적 변수가 가변일 수 있다는
+점입니다. 가변 정적 변수에 접근하고 수정하는 것은 *안전하지 않습니다.*
+Listing 19-10는 `COUNTER`라는 이름의 가변 정적 변수를 선언하고,
+접근하고, 수정하는 방법을 보여줍니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -472,28 +472,28 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-10: Reading from or writing to a mutable
-static variable is unsafe</span>
+<span class="caption">Listing 19-10: 가변 정적 변수를 읽거나 쓰는 것은
+안전하지 않습니다</span>
 
-As with regular variables, we specify mutability using the `mut` keyword. Any
-code that reads or writes from `COUNTER` must be within an `unsafe` block. This
-code compiles and prints `COUNTER: 3` as we would expect because it’s single
-threaded. Having multiple threads access `COUNTER` would likely result in data
-races.
+보통의 변수때처럼, 우리는 `mut` 키워드를 사용하여 가변성을 명시합니다. `COUNTER`를
+읽거나 쓰는 어떠한 코드라도 `unsafe` 블록 내에 있어야 합니다. 이 코드는 컴파일 되고
+우리가 기대한 바와 같이 `COUNTER: 3`을 출력하는데, 그 이유는 이 프로그램이 단일
+스레드이기 때문입니다. 여러 수래드가 `COUNTER`에 접근하도록 하는 것은 데이터 레이스를
+일으키기 쉽습니다.
 
-With mutable data that is globally accessible, it’s difficult to ensure there
-are no data races, which is why Rust considers mutable static variables to be
-unsafe. Where possible, it’s preferable to use the concurrency techniques and
-thread-safe smart pointers we discussed in Chapter 16, so the compiler checks
-that data accessed from different threads is done safely.
+전역적으로 접근 가능한 가변 데이터를 이용하는 것은 데이터 레이서가 없음을
+확신하기 힘들게 만드는데, 이것이 러스트가 가변 정적 변수를 안전하지 않은 것으로
+간주하는 이유입니다. 가능하다면 우리가 16장에서 논의했던 동시성 기술과 스레드-안전한
+스마트 포인터를 이용하여, 컴파일러가 서로 다른 스레드로부터 접근되는 데이터가 안전하게
+사용됨을 검사하도록 하는 편이 좋습니다.
 
-### Implementing an Unsafe Trait
+### 안전하지 않은 트레잇 구현하기
 
-The final action that only works with `unsafe` is implementing an unsafe trait.
-A trait is unsafe when at least one of its methods has some invariant that the
-compiler can’t verify. We can declare that a trait is `unsafe` by adding the
-`unsafe` keyword before `trait`; then implementation of the trait must be
-marked as `unsafe` too, as shown in Listing 19-11.
+`unsafe`에서만 동작하는 마지막 기능은 안전하지 않은 트레잇 구현하기 입니다. 트레잇은
+적어도 메소드 중 하나가 컴파일러가 검사할 수 없는 몇몇 불변성 (invariant) 을 갖고 있을
+때 안전하지 않게 됩니다. 우리는 `trait` 전에 `unsafe`를 추가함으로써 어떤 트레잇이
+`unsafe`함을 선언할 수 있습니다; 그 다음 트레잇의 구현체 또한 Listing 19-11에서
+보는 바와 같이 `unsafe`로 표시되어야 합니다.
 
 ```rust
 unsafe trait Foo {
@@ -505,26 +505,26 @@ unsafe impl Foo for i32 {
 }
 ```
 
-<span class="caption">Listing 19-11: Defining and implementing an unsafe
-trait</span>
+<span class="caption">Listing 19-11: 안전하지 않은 트레잇의 정의 및
+구현</span>
 
-By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
-the compiler can’t verify.
+`unsafe impl`을 이용함으로써 우리는 컴파일러가 검증할 수 없는 불변성을 우리가 유지할
+것임을 약속하고 있습니다.
 
-As an example, recall the `Sync` and `Send` marker traits we discussed in the
-“Extensible Concurrency with the `Sync` and `Send` Traits” section in Chapter
-16: the compiler implements these traits automatically if our types are
-composed entirely of `Send` and `Sync` types. If we implement a type that
-contains a type that is not `Send` or `Sync`, such as raw pointers, and we want
-to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify
-that our type upholds the guarantees that it can be safely sent across threads
-or accessed from multiple threads; therefore, we need to do those checks
-manually and indicate as such with `unsafe`.
+한 가지 예로서, 16장의 “`Sync`와 `Send` 트레잇을 이용한 확장 가능한 동시성”
+절에서 논했던 `Sync`와 `Send` 마커 트레잇을 상기해보세요: 우리의 타입이
+전체적으로 `Send`되고 `Sync`한 타입으로 구성되어 있다면 컴파일러는 이
+트레잇을 자동적으로 구현합니다. 만일 우리가 로우 포인터와 같이 `Send`되지
+않거나 `Sync`하지 않은 타입을 포함한 타입을 구현하고, 이 타입을 `Send`되거나
+`Sync`한 것으로 표시하고 싶다면, 우리는 `unsafe`를 이용해야 합니다. 러스트는
+우리의 타입이 스레드 사이로 안전하게 보내지거나 여러 스레드로부터 안전하게 접근되는
+것에 대한 보장을 유지하는 것을 검사할 수 없습니다; 따라서, 우리는 손수 이를
+검사하고 `unsafe`를 이용하여 이러한 사항을 나타낼 필요가 있습니다.
 
-### When to Use Unsafe Code
+### 언제 안전하지 않은 코드를 이용할까요?
 
-Using `unsafe` to take one of the four actions (superpowers) just discussed
-isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
-correct because the compiler can’t help uphold memory safety. When you have a
-reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
-annotation makes it easier to track down the source of problems if they occur.
+방금까지 논했던 네 가지 행동 (슈퍼파워) 을 얻기 위해 `unsafe`를 사용하는 것은 잘못된 것도
+아니고, 심지어 눈살을 찌푸릴 일도 아닙니다. 하지만 `unsafe` 코드를 올바르게 이용하는 것은 좀
+더 힘든데 그 이유는 컴파일러가 메모리 안전성응 유지하는데 도움을 줄 수 없기 때문입니다. 여러분이
+`unsafe` 코드를 사용할 이유를 갖게 될 때, 여러분은 그렇게 할 수 있고, 명시적인 `unsafe`
+어노테이션을 갖는 것이 문제가 일어났을 때 그 근원을 추적해 나가는 것을 더 수월하게 만들어 줍니다.
