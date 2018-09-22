@@ -13,11 +13,11 @@
 - [추리 게임 튜토리얼](ch02-00-guessing-game-tutorial.md)
 
 - [보편적인 프로그래밍 개념](ch03-00-common-programming-concepts.md)
-    - [Variables and Mutability](ch03-01-variables-and-mutability.md)
-    - [Data Types](ch03-02-data-types.md)
-    - [How Functions Work](ch03-03-how-functions-work.md)
-    - [Comments](ch03-04-comments.md)
-    - [Control Flow](ch03-05-control-flow.md)
+    - [변수와 가변성](ch03-01-variables-and-mutability.md)
+    - [데이터 타입들](ch03-02-data-types.md)
+    - [함수 동작 원리](ch03-03-how-functions-work.md)
+    - [주석](ch03-04-comments.md)
+    - [제어문](ch03-05-control-flow.md)
 
 - [소유권 이해하기](ch04-00-understanding-ownership.md)
     - [소유권이 뭔가요?](ch04-01-what-is-ownership.md)
@@ -120,7 +120,7 @@
 - [마지막 프로젝트: 멀티스레드 웹서버 만들기](ch20-00-final-project-a-web-server.md)
     - [싱글 스레드 웹서버](ch20-01-single-threaded.md)
     - [싱글 스레드 서버를 멀티스레드 서버로 바꾸기](ch20-02-multithreaded.md)
-    - [Graceful Shutdown and Cleanup](ch20-03-graceful-shutdown-and-cleanup.md)
+    - [우아한 종료와 정리](ch20-03-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
