@@ -110,8 +110,8 @@
     - [반증 가능성: 패턴의 매칭이 실패할 수도 있는 경우](ch18-02-refutability.md)
     - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
 
-- [Advanced Features](ch19-00-advanced-features.md)
-    - [Unsafe Rust](ch19-01-unsafe-rust.md)
+- [고급 기능들](ch19-00-advanced-features.md)
+    - [안전하지 않은 러스트](ch19-01-unsafe-rust.md)
     - [Advanced Lifetimes](ch19-02-advanced-lifetimes.md)
     - [Advanced Traits](ch19-03-advanced-traits.md)
     - [Advanced Types](ch19-04-advanced-types.md)
