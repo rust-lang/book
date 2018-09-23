@@ -83,6 +83,25 @@ named `to_string`. Here, we’re using the `to_string` function defined in the
 `ToString` trait, which the standard library has implemented for any type that
 implements `Display`.
 
+Another useful pattern exploits an implementation detail of tuple structs and
+tuple-struct enum variants. These items use `()` as initialiser syntax, which
+looks like a function call, and they're actually implemented as functions
+returning an instance constructed from their arguments. They can also be called
+as a function pointer implementing the closure traits, and so can be used
+similarly to the above:
+
+```rust
+enum Status {
+    Value(u32),
+    Stop,
+}
+
+let list_of_statuses: Vec<Status> =
+    (0u32..20)
+    .map(Status::Value)
+    .collect();
+```
+
 Some people prefer this style, and some people prefer to use closures. They end
 up compiling to the same code, so use whichever style is clearer to you.
 
