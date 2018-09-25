@@ -81,6 +81,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - irrefutable pattern: 반증 불가 패턴
 - iterator: 반복자
 - lifetime: 라이프타임
+- lifetime bound: 라이프타임 바운드
 - library: 라이브러리
 - module: 모듈
 - monomorphization: 단형성화
