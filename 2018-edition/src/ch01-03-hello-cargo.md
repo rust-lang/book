@@ -33,7 +33,7 @@ wherever you decided to store your code). Then, on any operating system, run
 the following:
 
 ```text
-$ cargo new hello_cargo
+$ cargo new hello_cargo --bin
 $ cd hello_cargo
 ```
 
