@@ -104,7 +104,7 @@ portions of your code.
 
 For example:
 
-```rust
+```rust,ignore,does_not_compile
 #![deny(unused_variables)]
 
 fn main() {
@@ -150,7 +150,7 @@ was also unused: the nested use of the `allow` attribute overrode
 
 Compare that with this example:
 
-```rust
+```rust,ignore,does_not_compile
 #![forbid(unused_variables)]
 
 fn main() {
