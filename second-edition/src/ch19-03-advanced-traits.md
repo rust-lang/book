@@ -1,29 +1,29 @@
-## Advanced Traits
+## 고급 트레잇
 
-We first covered traits in the “Traits: Defining Shared Behavior” section of
-Chapter 10, but as with lifetimes, we didn’t discuss the more advanced details.
-Now that you know more about Rust, we can get into the nitty-gritty.
+우리는 10장의 “트레잇: 공유 동작 정의하기”절에서 먼저 트레잇을 다루었지만,
+라이프타임 사용처럼 더 고급 수준의 상세한 내용을 논하지는 않았습니다.
+이제 여러분이 러스트에 대해 더 많은 것을 알고 있으니, 우리는 핵심으로 다가갈 수 있습니다.
 
-### Associated Types Specify Placeholder Types in Trait Definitions
+### 연관 타입은 트레잇 정의 내에서 플레이스홀더 타입을 명시합니다
 
-*Associated types* connect a type placeholder with a trait such that the trait
-method definitions can use these placeholder types in their signatures. The
-implementor of a trait will specify the concrete type to be used in this type’s
-place for the particular implementation. That way, we can define a trait that
-uses some types without needing to know exactly what those types are until the
-trait is implemented.
+*연관 타입 (associated type)* 은 타입 플레이스홀더와 트레잇을 연결하여 트레잇
+메소드 정의를 할때 이 플레이스홀더 타입을 시그니처 내에서 이용할 수 있도록 합니다.
+트레잇을 구현하는 사람은 이 빈칸의 타입이 특정 구현을 위해 사용될 수 있도록
+구체 타입을 명시하게 됩니다. 이러한 방법으로, 우리는 트레잇이 구현되기 전까지 어떠한
+타입이 필요한지 정확히 알 필요 없이 임의의 타입을 사용하는 트레잇을 정의할 수
+있습니다.
 
-We’ve described most of the advanced features in this chapter as being rarely
-needed. Associated types are somewhere in the middle: they’re used more rarely
-than features explained in the rest of the book, but more commonly than many of
-the other features discussed in this chapter.
+우리는 이 장에서 거의 필요하지 않은 고급 기능의 대부분을 기술했습니다.
+연관 타입은 그 중간 어딘가에 있습니다: 이것은 이 책의 나머지 부분에서
+설명하는 기능보다 더 희귀하게 사용되지만, 이 장에서 논의하는 많은 수의
+다른 기능들보다는 더 흔하게 쓰입니다.
 
-One example of a trait with an associated type is the `Iterator` trait that the
-standard library provides. The associated type is named `Item` and stands in
-for the type of the values the type implementing the `Iterator` trait is
-iterating over. In “The `Iterator` Trait and the `next` Method” section of
-Chapter 13, we mentioned that the definition of the `Iterator` trait is as
-shown in Listing 19-20.
+연관 타입을 가진 트레잇의 한 예는 표준 라이브러리에서 제공하는 `Iterator`
+트레잇입니다. 그 연관 타입은 `Item`이라는 이름이 붙어있고 `Iterator`
+트레잇을 구현하는 타입이 반복하는 값의 타입을 대신합니다. 13장의
+“`Iterator` 트레잇과 `next` 메소드”절에서, 우리는 `Iterator`
+트레잇의 정의가 Listing 19-20에서 보는 바과 같다고
+언급했었습니다.
 
 ```rust
 pub trait Iterator {
@@ -32,23 +32,23 @@ pub trait Iterator {
 }
 ```
 
-<span class="caption">Listing 19-20: The definition of the `Iterator` trait
-that has an associated type `Item`</span>
+<span class="caption">Listing 19-20: 연관 타입 `Item`을 가진
+`Iterator` 트레잇의 정의</span>
 
-The type `Item` is a placeholder type, and the `next` method’s definition shows
-that it will return values of type `Option<Self::Item>`. Implementors of the
-`Iterator` trait will specify the concrete type for `Item`, and the `next`
-method will return an `Option` containing a value of that concrete type.
+타입 `Item`은 플레이스홀더 타입이고, `next` 메소드의 정의는
+`Option<Self::Item>` 타입으로 된 값을 반환할 것임을 보여주고 있습니다.
+`Iterator` 트레잇을 구현하는 사람은 `Item`의 구체적인 타입을 명시할 것이고,
+`next` 메소드는 해당하는 구체적 타입의 값을 담고 있는 `Option`을 반환할 것입니다.
 
-#### Associated Types vs. Generics
+#### 연관 타입 vs. 제네릭
 
-Associated types might seem like a similar concept to generics, in that they
-allow us to define a function without specifying what types it can handle. So
-why use associated types?
+연관 타입이 함수를 정의할 때 어떤 타입을 다룰지 특정하지 않고서도 정의할 수
+있게 해준다는 점에서, 연관 타입은 제네릭과 유사한 개념같아 보일지도 모르겠습니다.
+그럼 왜 연관 타입을 이용할까요?
 
-Let’s examine the difference between the two concepts with an example from
-Chapter 13 that implements the `Iterator` trait on the `Counter` struct. In
-Listing 13-21, we specified that the `Item` type was `u32`:
+13장에서 `Counter` 구조체에 대한 `Iterator` 트레잇을 구현했던
+예제를 가지고 두 개념 사이의 차이점을 시험해봅시다.  Listing 13-21에서,
+우리는 `Item` 타입을 `u32`로 명시했었죠:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -60,8 +60,8 @@ impl Iterator for Counter {
         // --snip--
 ```
 
-This syntax seems comparable to generics. So why not just define the `Iterator`
-trait with generics, as shown in Listing 19-21?
+이 문법은 제네릭과 비슷해 보입니다. 그럼 왜 Listing 19-21처럼 그냥
+제네릭을 사용하여 `Iterator` 트레잇을 정의하지 않을까요?
 
 ```rust
 pub trait Iterator<T> {
@@ -69,43 +69,43 @@ pub trait Iterator<T> {
 }
 ```
 
-<span class="caption">Listing 19-21: A hypothetical definition of the
-`Iterator` trait using generics</span>
+<span class="caption">Listing 19-21: 제네릭을 사용한 `Iterator` 트레잇의
+가상 정의</span>
 
-The difference is that when using generics, as in Listing 19-21, we must
-annotate the types in each implementation. The reason is that we can also
-implement `Iterator<String> for Counter` or any other type, which would give us
-multiple implementations of `Iterator` for `Counter`. In other words, when a
-trait has a generic parameter, it can be implemented for a type multiple times,
-changing the concrete types of the generic type parameters each time. When we
-use the `next` method on `Counter`, we would have to provide type annotations
-to indicate which implementation of `Iterator` we want to use.
+그 차이점은 Listing 19-21에서처럼 제네릭을 이용할 경우, 우리는 각 구현마다
+타입을 명시해야 한다는 점입니다. 그 이유는 `Iterator<String> for Counter`
+이나 어떠한 다른 타입도 구현할 수 있는데, 이는 `Counter`에 대한 `Iterator`의
+복수 구현을 얻을 수 있게 됩니다. 바꿔 말하면, 트레잇이 제네릭 파라미터를 가지게 될 때,
+이것이 하나의 타입에 대해서 매번 제네릭 타입 파라미터의 구체적 타입을 변경해가면서
+여러번 구현이 가능해진다는 것입니다. 우리가 `Counter`의 `next` 메소드를 이용할
+경우, 우리는 어떤 `Iterator`의 구현체를 이용하고자 하는지를 나타내기 위해 타입
+명시를 제공해야만 할 것입니다.
 
-With associated types, we don’t need to annotate types because we can’t
-implement a trait on a type multiple times. In Listing 19-20 with the
-definition that uses associated types, we can only choose what the type of
-`Item` will be once, because there can only be one `impl Iterator for Counter`.
-We don’t have to specify that we want an iterator of `u32` values everywhere
-that we call `next` on `Counter`.
+연관 타입을 이용하면 하나의 트레잇에 대해 여러번의 구현을 할 수 없게 되므로
+타입 명시를 할 필요가 없어집니다. 연관 타입을 이용하는 Listing 19-20에서의
+정의에서, 우리는 `Item`의 타입이 무엇이 될지를 한번만 선택할 수 있는데,
+이는 `impl Iterator for Counter`이 한번만 나타나게 될 것이기 때문입니다.
+우리는 `Counter`의 `next`를 호출하는 것마다 `u32` 값의 반복자를 요구한다고
+명시할 필요가 없습니다.
 
-### Default Generic Type Parameters and Operator Overloading
+### 기본 제네릭 타입 파라미터와 연산자 오버로딩
 
-When we use generic type parameters, we can specify a default concrete type for
-the generic type. This eliminates the need for implementors of the trait to
-specify a concrete type if the default type works. The syntax for specifying a
-default type for a generic type is `<PlaceholderType=ConcreteType>` when
-declaring the generic type.
+우리가 제네릭 타입 파라미터를 사용할 때, 해당 제네릭 타입에 대한 기본 구체 타입을
+명시할 수 있습니다. 이는 기본 타입이 동작할 경우 트레잇을 구현할 사람이 구체 타입을
+명시해야 하는 수고를 덜어줍니다. 제네릭 타입에 대한 기본 타입의 명시 문법은
+제네릭 타입을 선언할 때 `<PlaceholderType=ConcreteType>`
+꼴입니다.
 
-A great example of a situation where this technique is useful is with operator
-overloading. *Operator overloading* is customizing the behavior of an operator
-(such as `+`) in particular situations.
+이 테크닉이 유용한 경우 중 좋은 예가 연산자 오버로딩과 함께 쓰이는 경우입니다.
+*연산자 오버로딩 (operator overloading)* 은 특정한 상황에서 (`+` 같은)
+연산자의 동작을 커스터마이징 하는 것입니다.
 
-Rust doesn’t allow you to create your own operators or overload arbitrary
-operators. But you can overload the operations and corresponding traits listed
-in `std::ops` by implementing the traits associated with the operator. For
-example, in Listing 19-22 we overload the `+` operator to add two `Point`
-instances together. We do this by implementing the `Add` trait on a `Point`
-struct:
+러스트는 여러분 만의 연산자를 만들거나 임의의 연산자를 오버로딩하는 것을 허용하지는
+않습니다. 하지만 여러분은 `std::ops`에 나열되어 있는 연산자와 연관된 구현하는
+것으로서 연산자 및 관련된 트레잇을 오버로딩 할 수 있습니다. 예를 들어,
+Listing 19-22에서는 두 개의 `Point` 인스턴스를 함께 더하기 위해서
+`+` 연산자를 오버로딩 하였습니다. 이는 `Point` 구조체 상에 `Add` 트레잇을
+구현하는 것으로 되었습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -135,16 +135,16 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-22: Implementing the `Add` trait to overload
-the `+` operator for `Point` instances</span>
+<span class="caption">Listing 19-22: `Point` 인스턴스에 대한 `+` 연산자
+오버로딩을 위하여 `Add` 트레잇 구현하기</span>
 
-The `add` method adds the `x` values of two `Point` instances and the `y`
-values of two `Point` instances to create a new `Point`. The `Add` trait has an
-associated type named `Output` that determines the type returned from the `add`
-method.
+`add` 메소드는 새로운 `Point`를 생성하기 위해 두 `Point` 인스턴스의
+`x` 값과 `y` 값을 각각 더합니다. `Add` 트레잇은 `Output`이라는
+연관 타입을 가지고 있는데 이는 `add` 메소드로부터 반환되는 타입을
+결정합니다.
 
-The default generic type in this code is within the `Add` trait. Here is its
-definition:
+이 코드에서 기본 제네릭 타입은 `Add` 트레잇 내에 있습니다. 아래는
+이 트레잇의 정의입니다:
 
 ```rust
 trait Add<RHS=Self> {
@@ -154,23 +154,23 @@ trait Add<RHS=Self> {
 }
 ```
 
-This code should look generally familiar: a trait with one method and an
-associated type. The new part is `RHS=Self` in the angle brackets: this syntax
-is called *default type parameters*. The `RHS` generic type parameter (short
-for “right hand side”) defines the type of the `rhs` parameter in the `add`
-method. If we don’t specify a concrete type for `RHS` when we implement the
-`Add` trait, the type of `RHS` will default to `Self`, which will be the type
-we’re implementing `Add` on.
+이 코드가 일반적으로 친숙하게 보여야 합니다: 하나의 메소드와 연관 타입을 가진
+트레잇 입니다. 새로운 부분은 꺽쇠 괄호 내에 있는 `RHS=Self` 부분입니다:
+이 문법을 *기본 타입 파라미터* 라고 부릅니다. `RHS` 제네릭 타입 파라미터 (
+“right hand side” (우변) 의 줄임말) 은 `add` 메소드의 `rhs` 파라미터의
+타입을 정의합니다. 만일 우리가 `Add` 트레잇을 구현할 때 `RHS`의 구체 타입을
+지정하지 않는다면, `RHS`의 타입은 기본적으로 `Self`가 될 것인데, 이는 곧
+우리가 `Add`를 구현하고 있는 그 타입이 될 것입니다.
 
-When we implemented `Add` for `Point`, we used the default for `RHS` because we
-wanted to add two `Point` instances. Let’s look at an example of implementing
-the `Add` trait where we want to customize the `RHS` type rather than using the
-default.
+`Point`에 대하여 `Add`를 구현했을 때, 우리는 두 `Point` 인스턴스를
+더하고 싶었기 때문에 `RHS`에 대한 기본 타입을 사용했습니다. 기본 타입보다
+`RHS` 타입을 커스터마이징 하고 싶은 경우에서의 `Add` 트레잇 구현 예제를
+살펴봅시다.
 
-We have two structs holding values in different units, `Millimeters` and
-`Meters`. We want to add values in millimeters to values in meters and have the
-implementation of `Add` do the conversion correctly. We can implement `Add` for
-`Millimeters` with `Meters` as the `RHS`, as shown in Listing 19-23.
+우리는 `Millimeters`와 `Meters`라는, 서로 다른 단위의 값을 가지고 있는 두 개의
+구조체를 가지고 있습니다. 우리는 밀리미터 단위의 값과 미터 단위의 값을 더하고 `Add`의
+구현체가 변환을 올바르게 하기를 원합니다. Listing 19-23에서 보시는 것처럼, `RHS`로
+`Meters`를 사용하여 `Millimeters`에 대한 `Add`의 구현을 할 수 있습니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -189,28 +189,28 @@ impl Add<Meters> for Millimeters {
 }
 ```
 
-<span class="caption">Listing 19-23: Implementing the `Add` trait on
-`Millimeters` to add `Millimeters` to `Meters`</span>
+<span class="caption">Listing 19-23: `Millimeters`와 `Meters`를
+더하기 위해 `Millimeters` 상에 `Add` 트레잇 구현하기</span>
 
-To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
-value of the `RHS` type parameter instead of using the default of `Self`.
+`Millimeters`와 `Meters`를 더하기 위해, `impl Add<Meters>`라고 명시하여
+기본값 `Self` 대신 `RHS` 타입 파라미터를 지정합니다.
 
-We use default type parameters in two main ways:
+우리는 두가지 주요 방식 내에서 기본 타입 파라미터를 사용합니다:
 
-* To extend a type without breaking existing code
-* To allow customization in specific cases most users won’t need
+* 기존 코드를 깨는 일 없이 타입을 확장하기 위해
+* 대부분의 유저는 원하지 않을 특정한 상황에 대한 커스터마이징을 허용하기 위해
 
-The standard library’s `Add` trait is an example of the second purpose:
-usually, you’ll add two like types, but the `Add` trait provides the ability
-for customizing beyond that. Using a default type parameter in the `Add` trait
-definition means you don’t have to specify the extra parameter most of the
-time. In other words, a bit of implementation boilerplate isn’t needed, making
-it easier to use the trait.
+표준 라이브러리의 `Add` 트레잇은 두번째 목적에 맞는 예입니다: 보통 여러분은
+비슷한 타입 두 개를 더할 것이지만, `Add` 트레잇은 이를 뛰어넘어서 커스터마이징
+할 수 있는 기능을 제공합니다. `Add` 트레잇 정의에 있는 기본 타입 파라미터를
+사용한다는 것은 대부분의 경우 여러분이 추가적인 파라미터를 명시할 필요가 없음을
+뜻합니다. 바꿔 말하면, 약간의 구현 보일러 플레이트가 필요 없어서, 트레잇의
+구현을 좀 더 간편하게 해준다는 말입니다.
 
-The first purpose is similar to the second but in reverse: if we want to add a
-type parameter to an existing trait, we can give it a default to let us extend
-the functionality of the trait without breaking the existing implementation
-code.
+첫번째 목적은 두번째 것과 유사하지만 방향이 반대입니다: 만일 우리가 이미 있던
+트레잇에 타입 파라미터를 추가하고자 한다면, 우리가 기존 구현 코드를 깨트리는
+일 없이 트레잇의 기능을 확장할 수 있도록 하기 위해 기본 파라미터를 제공할 수
+있습니다.
 
 ### Fully Qualified Syntax for Disambiguation: Calling Methods with the Same Name
 
