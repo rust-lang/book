@@ -113,7 +113,7 @@
 - [고급 기능들](ch19-00-advanced-features.md)
     - [안전하지 않은 러스트](ch19-01-unsafe-rust.md)
     - [고급 라이프타임](ch19-02-advanced-lifetimes.md)
-    - [Advanced Traits](ch19-03-advanced-traits.md)
+    - [고급 트레잇](ch19-03-advanced-traits.md)
     - [Advanced Types](ch19-04-advanced-types.md)
     - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
