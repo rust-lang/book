@@ -22,12 +22,15 @@ Specify the code to run when a value goes out of scope by implementing the
 `drop` that takes a mutable reference to `self`. To see when Rust calls `drop`,
 let’s implement `drop` with `println!` statements for now.
 
-Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
+[Listing 15-14][Listing-15-14] shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
 instance goes out of scope. This example demonstrates when Rust runs the `drop`
 function.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-14]: #Listing-15-14
+<a name="Listing-15-14"></a>
 
 ```rust
 struct CustomSmartPointer {
@@ -90,10 +93,13 @@ you have to call the `std::mem::drop` function provided by the standard library
 if you want to force a value to be dropped before the end of its scope.
 
 If we try to call the `Drop` trait’s `drop` method manually by modifying the
-`main` function from Listing 15-14, as shown in Listing 15-15, we’ll get a
+`main` function from [Listing 15-14][Listing-15-14], as shown in [Listing 15-15][Listing-15-15], we’ll get a
 compiler error:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-15]: #Listing-15-15
+<a name="Listing-15-15"></a>
 
 ```rust,ignore,does_not_compile
 fn main() {
@@ -134,10 +140,13 @@ a value to be cleaned up early, we can use the `std::mem::drop` function.
 
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
-an argument. The function is in the prelude, so we can modify `main` in Listing
-15-15 to call the `drop` function, as shown in Listing 15-16:
+an argument. The function is in the prelude, so we can modify `main` in [Listing 15-15][Listing-15-15]
+to call the `drop` function, as shown in [Listing 15-16][Listing-15-16]:
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-15-16]: #Listing-15-16
+<a name="Listing-15-16"></a>
 
 ```rust
 # struct CustomSmartPointer {
@@ -187,3 +196,7 @@ the value is no longer being used.
 Now that we’ve examined `Box<T>` and some of the characteristics of smart
 pointers, let’s look at a few other smart pointers defined in the standard
 library.
+
+[Listing-15-14]: ch15-03-drop.html#Listing-15-14
+[Listing-15-15]: ch15-03-drop.html#Listing-15-15
+[Listing-15-16]: ch15-03-drop.html#Listing-15-16

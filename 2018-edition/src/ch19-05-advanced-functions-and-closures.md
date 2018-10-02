@@ -12,9 +12,12 @@ with function pointers will allow you to use functions as arguments to other
 functions. Functions coerce to the type `fn` (with a lowercase f), not to be
 confused with the `Fn` closure trait. The `fn` type is called a *function
 pointer*. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-35.
+similar to that of closures, as shown in [Listing 19-35][Listing-19-35].
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-19-35]: #Listing-19-35
+<a name="Listing-19-35"></a>
 
 ```rust
 fn add_one(x: i32) -> i32 {
@@ -144,3 +147,5 @@ you to solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
+
+[Listing-19-35]: ch19-05-advanced-functions-and-closures.html#Listing-19-35
