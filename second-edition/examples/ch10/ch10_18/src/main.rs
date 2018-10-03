@@ -1,3 +1,4 @@
+// illigal: `x` does not live long enough
 fn main(){
     let r;
 
