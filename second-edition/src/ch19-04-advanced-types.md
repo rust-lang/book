@@ -1,53 +1,53 @@
-## Advanced Types
+## 고급 타입
 
-The Rust type system has some features that we’ve mentioned in this book but
-haven’t yet discussed. We’ll start by discussing newtypes in general as we
-examine why newtypes are useful as types. Then we’ll move on to type aliases, a
-feature similar to newtypes but with slightly different semantics. We’ll also
-discuss the `!` type and dynamically sized types.
+러스트의 타입 시스템은 이 책에서 언급은 했지만 아직 논의하지는 않았던 몇가지
+기능들을 가지고 있습니다. 우리는 대개 왜 뉴타입이 타입으로서 유용한지를 시험함으로서
+뉴타입에 대해 논하는 것으로 시작할 것입니다. 그 다음 뉴타입과 비슷안 기능이지만
+약간 다른 의미를 가지고 있는 타입 별칭(type alias)으로 넘어가겠습니다. 또한 `!`
+타입과 동적인 크기의 (dynamically sized) 타입에 대해 논할 것입니다.
 
-> Note: The next section assumes you’ve read the earlier section “The Newtype
-> Pattern to Implement External Traits on External Types.”
+> 노트: 다음 절은 여러분이 이전 절 “외부 타입에 대해 외부 트레잇을 구현하기
+> 위한 뉴타입 패턴”을 읽었음을 가정합니다.
 
-### Using the Newtype Pattern for Type Safety and Abstraction
+### 타입 안전성과 추상화를 위한 뉴타입 패턴 사용하기
 
-The newtype pattern is useful for other tasks beyond what we’ve discussed so
-far, including statically enforcing that values are never confused and as an
-indication of the units of a value. You saw an example of using newtypes to
-indicate units in Listing 19-23: recall that the `Millimeters` and `Meters`
-structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we couldn’t compile a program that
-accidentally tried to call that function with a value of type `Meters` or a
-plain `u32`.
+뉴타입 패턴은 우리가 지금까지 논했던 것 이상으로 다른 작업에 대해서도 유용한데,
+여기에는 어떤 값이 혼동되지 않도록 정적으로 강제하는 것과 어떤 값의 단위
+표시로서의 기능을 포함합니다. 여러분은 Listing 19-23에서 단위를 나타내기
+위해 뉴타입을 사용하는 예제를 봤습니다: `u32` 값을 뉴타입으로 감싼
+`Millimeters`와 `Meters` 구조체를 상기하세요. 만일 우리가 `Millimeters`
+타입의 파라미터를 가지고 함수를 작성했다면, 의도치않게 그 함수에 `Meters`
+타입의 값이나 그냥 `u32` 값을 넣어서 호출 시도를 하는 프로그램의 컴파일을
+하지 못하게 됩니다.
 
-Another use of the newtype pattern is in abstracting away some implementation
-details of a type: the new type can expose a public API that is different from
-the API of the private inner type if we used the new type directly to restrict
-the available functionality, for example.
+뉴타입 패턴의 또다른 사용례는 어떤 타입의 몇몇 자세한 구현 사항을 추상화
+하는 것입니다: 예를 들어 우리가 가능한 기능을 제약하기 위해 뉴타입을 직접
+사용했다면 뉴타입은 내부의 비공개 타입이 가진 API와 다른 공개 API를 노출할
+수 있습니다.
 
-Newtypes can also hide internal implementation. For example, we could provide a
-`People` type to wrap a `HashMap<i32, String>` that stores a person’s ID
-associated with their name. Code using `People` would only interact with the
-public API we provide, such as a method to add a name string to the `People`
-collection; that code wouldn’t need to know that we assign an `i32` ID to names
-internally. The newtype pattern is a lightweight way to achieve encapsulation
-to hide implementation details, which we discussed in the “Encapsulation that
-Hides Implementation Details” section of Chapter 17.
+뉴타입은 또한 내부 구현사항을 숨길 수 있습니다. 예을 들어, 우리는 사람의
+ID와 그의 이름을 저장하는 `HashMap<i32, String>`을 감싸는 `People`
+타입을 제공할 수 있습니다. `People`을 사용하는 코드는 오직 우리가 제공하는
+공개 API만을 통해 상호작용할 것이며, 여기에는 `People` 컬렉션에 이름
+문자열을 추가하는 메소드 같은게 있겠지요; 이 코드에서는 우리가 내부적으로
+이름에 대해 `i32` ID를 할당한다는 점을 알 필요가 없을 것입니다. 뉴타입
+패턴은 캡술화를 하여 자세한 구현 사항을 숨기기 위한 가벼운 방식으로, 캡술화에
+대한 것은 17장의 “자세한 구현사항을 숨기는 캡슐화” 절에서 다루었습니다.
 
-### Type Aliases Create Type Synonyms
+### 타입 별칭은 타입의 동의어를 만듭니다
 
-Along with the newtype pattern, Rust provides the ability to declare a *type
-alias* to give an existing type another name. For this we use the `type`
-keyword. For example, we can create the alias `Kilometers` to `i32` like so:
+뉴타입 패턴에 덧붙여서, 러스트는 존재하는 타입에게 다른 이름을 부여하기 위한 *타입 별칭
+(type alias)* 선언 기능을 제공합니다. 이를 위해서는 `type` 키워드를 사용합니다.
+예를 들어, 우리는 아래와 같이 `i32`에 대한 별칭 `Kilometers`를 생성할 수 있습니다:
 
 ```rust
 type Kilometers = i32;
 ```
 
-Now, the alias `Kilometers` is a *synonym* for `i32`; unlike the `Millimeters`
-and `Meters` types we created in Listing 19-23, `Kilometers` is not a separate,
-new type. Values that have the type `Kilometers` will be treated the same as
-values of type `i32`:
+이제 별칭인 `Kilometers`는 `i32`와 *동의어*입니다; 우리가 Listing 19-23에서
+만들었던 `Millimeters` 및 `Meters`와는 달리, `Kilometers`는 분리된, 새로운
+타입이 아닙니다. `Kilometers` 타입의 값은 `i32` 타입의 갑과 동일한 것으로
+취급될 것입니다:
 
 ```rust
 type Kilometers = i32;
@@ -58,21 +58,21 @@ let y: Kilometers = 5;
 println!("x + y = {}", x + y);
 ```
 
-Because `Kilometers` and `i32` are the same type, we can add values of both
-types and we can pass `Kilometers` values to functions that take `i32`
-parameters. However, using this method, we don’t get the type checking benefits
-that we get from the newtype pattern discussed earlier.
+`Kilometers`와 `i32`가 동일한 타입이기 때문에, 우리는 두 타입의 값을
+더할 수 있고 `i32` 파라미터를 갖는 함수에게 `Kilometers` 값을 넘길 수
+있습니다. 그러나, 이 방법을 사용하면 우리는 앞서 논의했던 뉴타입 패턴이
+제공하는 타입 검사의 이점을 얻지 못합니다.
 
-The main use case for type synonyms is to reduce repetition. For example, we
-might have a lengthy type like this:
+타입 동의어의 주요 사용 사례는 반복 줄이기 입니다. 예를 들어, 우리는
+아래와 같이 길다란 타입을 가질지도 모릅니다:
 
 ```rust,ignore
 Box<Fn() + Send + 'static>
 ```
 
-Writing this lengthy type in function signatures and as type annotations all
-over the code can be tiresome and error prone. Imagine having a project full of
-code like that in Listing 19-32.
+이러한 길다란 타입을 함수 시그니처 혹은 타입 명시로 코드의 모든 곳에
+작성하는 것은 성가시고 에러를 내기도 쉽습니다. Listing 19-32와 같은
+코드로 가득한 프로젝트가 있다고 상상해보세요.
 
 ```rust
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
@@ -87,11 +87,11 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 }
 ```
 
-<span class="caption">Listing 19-32: Using a long type in many places</span>
+<span class="caption">Listing 19-32: 수많은 곳에 긴 타입을 사용하기</span>
 
-A type alias makes this code more manageable by reducing the repetition. In
-Listing 19-33, we’ve introduced an alias named `Thunk` for the verbose type and
-can replace all uses of the type with the shorter alias `Thunk`.
+타입 별칭은 반복을 줄임으로서 이 코드의 관리를 더 잘되게끔 만들어줍니다.
+Listing 19-33에서 우리는 이 장황한 타입에 대해 `Thunk`라는 이름의 별칭을
+도입해서 이 타입이 사용되는 모든 부분을 짧은 별칭인 `Thunk`로 대체할 수 있습니다.
 
 ```rust
 type Thunk = Box<Fn() + Send + 'static>;
@@ -108,21 +108,21 @@ fn returns_long_type() -> Thunk {
 }
 ```
 
-<span class="caption">Listing 19-33: Introducing a type alias `Thunk` to reduce
-repetition</span>
+<span class="caption">Listing 19-33: 반복을 줄이기 위해 타입 별칭 `Thunk`을
+도입하기</span>
 
-This code is much easier to read and write! Choosing a meaningful name for a
-type alias can help communicate your intent as well (*thunk* is a word for code
-to be evaluated at a later time, so it’s an appropriate name for a closure that
-gets stored).
+이 코드가 훨씬 읽고 쓰기 쉽습니다! 타입 별칭을 위한 의미잆는 이름을 고르는
+것은 또한 여러분의 의도를 전달하는 데에 도움을 줄 수 있습니다 (*thunk*는
+이후에 실행될 코드를 위한 단어로, 저징되는 클로저를 위한 적절한
+이름입니다.)
 
-Type aliases are also commonly used with the `Result<T, E>` type for reducing
-repetition. Consider the `std::io` module in the standard library. I/O
-operations often return a `Result<T, E>` to handle situations when operations
-fail to work. This library has a `std::io::Error` struct that represents all
-possible I/O errors. Many of the functions in `std::io` will be returning
-`Result<T, E>` where the `E` is `std::io::Error`, such as these functions in
-the `Write` trait:
+타입 별칭은 또한 `Result<T, E>`타입의 반복을 줄이기 위해 흔하게 사용됩니다.
+표준 라이브러리의 `std::io` 모듈을 고려해 보세요. I/O 연산들은 작동에
+실패하는 상황을 다루기 위해서 자주 `Result<T, E>`을 반환합니다.
+이 라이브러리는 모든 가능한 I/O 에러를 표현하는 `std::io::Error`
+구조체를 가지고 있습니다. `std::io` 내의 많은 함수들이 `E`가
+`std::io::Error`인 `Result<T, E>`을 반환합니다. `Write` 트레잇의
+아래 함수들 같이 말이죠:
 
 ```rust
 use std::io::Error;
@@ -137,17 +137,17 @@ pub trait Write {
 }
 ```
 
-The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type of
-alias declaration:
+`Result<..., Error>`이 너무 많이 반복됩니다. 그렇기 때문에, `std::io`는
+이 타입의 별칭 선언을 갖고 있습니다:
 
 ```rust,ignore
 type Result<T> = Result<T, std::io::Error>;
 ```
 
-Because this declaration is in the `std::io` module, we can use the fully
-qualified alias `std::io::Result<T>`; that is, a `Result<T, E>` with the `E`
-filled in as `std::io::Error`. The `Write` trait function signatures end up
-looking like this:
+이 선언이 `std::io` 모듈 내에 있으므로, 우리는 완전 정규화된 별칭
+`std::io::Result<T>`을 사용할 수 있습니다; 이는 `E`가 `std::io::Error`로
+채워진 `Result<T, E>`입니다. `Write` 트레잇 함수 시그니처는 결국 아래와 같이
+보이게 됩니다:
 
 ```rust,ignore
 pub trait Write {
@@ -159,10 +159,10 @@ pub trait Write {
 }
 ```
 
-The type alias helps in two ways: it makes code easier to write *and* it gives
-us a consistent interface across all of `std::io`. Because it’s an alias, it’s
-just another `Result<T, E>`, which means we can use any methods that work on
-`Result<T, E>` with it, as well as special syntax like `?`.
+이 타입 별칭은 두 가지 방식으로 도움을 줍니다; 코드를 작성하기 더 편하게 해주고
+*그러면서도* 모든 `std::io`에 걸쳐 일관된 인터페이스를 제공합니다. 이것이 별칭이기
+때문에, 이것은 그저 또다른 `Result<T, E>`일 뿐이고, 이는 우리가 `Result<T, E>`을
+가지고 쓸 수 있는 어떠한 메소드는 물론, `?`같은 특별 문법도 사용할 수 있음을 의미합니다.
 
 ### The `!` Never Type that Never Returns
 
