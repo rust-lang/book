@@ -114,8 +114,8 @@
     - [안전하지 않은 러스트](ch19-01-unsafe-rust.md)
     - [고급 라이프타임](ch19-02-advanced-lifetimes.md)
     - [고급 트레잇](ch19-03-advanced-traits.md)
-    - [Advanced Types](ch19-04-advanced-types.md)
-    - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
+    - [고급 타입](ch19-04-advanced-types.md)
+    - [고급 함수와 클로저](ch19-05-advanced-functions-and-closures.md)
 
 - [마지막 프로젝트: 멀티스레드 웹서버 만들기](ch20-00-final-project-a-web-server.md)
     - [싱글 스레드 웹서버](ch20-01-single-threaded.md)

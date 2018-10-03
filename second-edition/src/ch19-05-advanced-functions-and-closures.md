@@ -1,18 +1,18 @@
-## Advanced Functions and Closures
+## 고급 함수와 클로저
 
-Finally, we’ll explore some advanced features related to functions and
-closures, which include function pointers and returning closures.
+마지막으로, 우리는 함수와 클로저와 관련된 몇가지 고급 기능들을 탐구할 것이며,
+여기에 함수 포인터 및 클로저 반환이 포함됩니다.
 
-### Function Pointers
+### 함수 포인터
 
-We’ve talked about how to pass closures to functions; you can also pass regular
-functions to functions! This technique is useful when we want to pass a
-function we’ve already defined rather than defining a new closure. We do this
-using function pointers to allow us to use functions as arguments to other
-functions. Functions coerce to the type `fn` (with a lowercase f), not to be
-confused with the `Fn` closure trait. The `fn` type is called a function
-pointer. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-35.
+우리는 어떻게 클로저를 함수 인자로 넘기는지에 대해 이야기 했었습니다;
+여러분은 또한 일반 함수를 함수 인자로 넘길 수 있습니다! 이 기법은 새로운
+클로저를 정의하는 것보다는 우리가 이미 정의해둔 함수를 넘기고 싶을때
+유용합니다. 우리가 함수를 다른 함수의 인자로서 사용하게끔 하기 위해서는
+함수 포인터를 이용합니다. 함수는 (소문자 f를 써서) 타입 `fn`이 되는데,
+`Fn` 클로저 트레잇과 혼동하면 안됩니다. `fn` 타입을 함수 포인터라
+부릅니다. 어떤 파라미터가 함수 포인터임을 명시하기 위한 문법은 클로저의
+그것과 비슷한데, Listing 19-35에서 보시는 것과 같습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -32,31 +32,31 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-35: Using the `fn` type to accept a function
-pointer as an argument</span>
+<span class="caption">Listing 19-35: `fn` 타입을 사용하여
+함수 포인터를 인자로서 허용하기</span>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
-`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
-`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
-the function name `add_one` as the first argument to `do_twice`.
+이 코드는 `The answer is: 12`를 출력합니다. 여기서는 `do_twice` 내의 파라미터
+`f`가 타입 `i32`을 파라미터로 받아서 `i32`를 반환하는 `fn`이라고 명시하였습니다.
+그러면 우리는 `do_twice`의 본체 안에서 `f`를 호출할 수 있습니다. `main` 내에서는
+`do_twice`의 첫번째 인자로서 함수 이름인 `add_one`을 넘길 수 있습니다.
 
-Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
-parameter type directly rather than declaring a generic type parameter with one
-of the `Fn` traits as a trait bound.
+클로저와 달리 `fn`은 트레잇이 아니고 타입이므로, 우리는 `fn`을 트레잇 바운드로
+`Fn` 트레잇 중 하나를 사용한 제네릭 타입 파라미터를 정의하기보다는 직접 파라미터
+타입으로 특정합니다.
 
-Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), so we can always pass a function pointer as an argument for a
-function that expects a closure. It’s best to write functions using a generic
-type and one of the closure traits so your functions can accept either
-functions or closures.
+함수 포인터는 클로저 트레잇 세 종류 (`Fn`, `FnMut`, 그리고 `FnOnce`)
+모두를 구현하므로, 우리는 언제나 클로저를 인자로서 기대하는 함수에게 함수
+포인터를 넘길 수 있습니다. 제네릭 타입과 클로저 트레잇 중 하나를 사용하는
+함수를 작성하여 여러분의 함수가 함수 혹은 클로저를 허용할 수 있게 하는 것이
+가장 좋습니다.
 
-An example of where you would want to only accept `fn` and not closures is when
-interfacing with external code that doesn’t have closures: C functions can
-accept functions as arguments, but C doesn’t have closures.
+여러분이 오직 `fn`만 허용하고 클로저는 허용하지 않고 싶을 수 있는 예는
+클로저를 가지고 있지 않은 외부 코드와의 인터페이싱을 할 때입니다: C 함수는
+함수를 인자로서 허용하지만, 클로저를 가지고 있지 않지요.
 
-As an example of where we can use either a closure defined inline or a named
-function, let’s look at a use of `map`. To use the `map` function to turn a
-vector of numbers into a vector of strings, we could use a closure, like this:
+우리가 인라인으로 정의된 클로저 혹은 이름을 가진 함수 중 하나를 사용할 수 있는
+경우의 예제로서, `map`의 사용을 살펴봅시다. `map` 함수를 사용하여 숫자
+벡터를 스트링 벡터로 전환하기 위해서는 아래와 같이 클로저를 이용할 수 있습니다:
 
 ```rust
 let list_of_numbers = vec![1, 2, 3];
@@ -66,8 +66,8 @@ let list_of_strings: Vec<String> = list_of_numbers
     .collect();
 ```
 
-Or we could name a function as the argument to `map` instead of the closure,
-like this:
+혹은 아래와 같이 클로저 대신 `map`의 인자로서 함수 이름을 쓸 수도
+있습니다:
 
 ```rust
 let list_of_numbers = vec![1, 2, 3];
@@ -77,25 +77,25 @@ let list_of_strings: Vec<String> = list_of_numbers
     .collect();
 ```
 
-Note that we must use the fully qualified syntax that we talked about earlier
-in the “Advanced Traits” section because there are multiple functions available
-named `to_string`. Here, we’re using the `to_string` function defined in the
-`ToString` trait, which the standard library has implemented for any type that
-implements `Display`.
+`to_string`이라는 이름의 사용 가능한 함수가 여러개이므로, 앞서 “고급
+트레잇” 절에서 이야기했던 완전 정규화 문법을 사용해야 하는 점을 주목하세요.
+여기서 우리는 `ToString` 트레잇 내에 정의된 `to_string` 함수를
+사용하는데, 이는 표준 라이브러리가 `Display`를 구현한 어떤 타입에
+대해서든 구현체를 가지고 있습니다.
 
-Some people prefer this style, and some people prefer to use closures. They end
-up compiling to the same code, so use whichever style is clearer to you.
+어떤 이들은 이런 스타일을 선호하고, 어떤 이들은 클로저의 사용을 선호합니다. 이들은 컴파일되어
+결국 같은 코드가 되므로, 어떤 스타일이든 여러분에게 더 깔끔해보이는 스타일로 이용하세요.
 
-### Returning Closures
+### 클로저 반환하기
 
-Closures are represented by traits, which means we can’t return closures
-directly. In most cases where we might want to return a trait, we can instead
-use the concrete type that implements the trait as the return value of the
-function. But we can’t do that with closures because they don’t have a concrete
-type that is returnable; we’re not allowed to use the function pointer `fn` as
-a return type, for example.
+클로저는 트레잇에 의해 표현되는데, 이는 우리가 클로저를 직접 반환할 수 없음을
+의미합니다. 우리가 트레잇을 반환하고 싶어하는 대부분의 경우에는 함수의
+반환값으로서 그 트레잇을 구현한 구체 타입을 대신 이용할 수 있습니다.
+그러나 클로저에 대해서는 그렇게 할 수 없는데, 이는 클로저가 반환 가능한
+구체타입을 가지고 있지 않기 때문입니다; 예를 들면 함수 포인터 `fn`을 반환
+타입으로 사용하는 것은 허용되지 않습니다.
 
-The following code tries to return a closure directly, but it won’t compile:
+아래의 코드는 클로저를 직접 반환 시도를 하지만, 컴파일되지 않을 것입니다:
 
 ```rust,ignore
 fn returns_closure() -> Fn(i32) -> i32 {
@@ -103,7 +103,7 @@ fn returns_closure() -> Fn(i32) -> i32 {
 }
 ```
 
-The compiler error is as follows:
+컴파일 에러는 다음과 같습니다:
 
 ```text
 error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
@@ -119,9 +119,9 @@ std::marker::Sized` is not satisfied
   = note: the return type of a function must have a statically known size
 ```
 
-The error references the `Sized` trait again! Rust doesn’t know how much space
-it will need to store the closure. We saw a solution to this problem earlier.
-We can use a trait object:
+에러가 또 `Sized` 트레잇을 참조하는군요! 러스트는 클로저를 저장하기 위해
+얼만큼의 공간이 필요한지 알지 못합니다. 이 문제에 대한 해결책은 이전에 봤습니다.
+우리는 트레잇 객체를 사용할 수 있습니다:
 
 ```rust
 fn returns_closure() -> Box<Fn(i32) -> i32> {
@@ -129,18 +129,18 @@ fn returns_closure() -> Box<Fn(i32) -> i32> {
 }
 ```
 
-This code will compile just fine. For more about trait objects, refer to the
-“Using Trait Objects That Allow for Values of Different Types” section in
-Chapter 17.
+이 코드는 그냥 잘 컴파일 될 것입니다. 트레잇 객체에 대한 더 자세한 내용은
+17장의 “서로 다른 타입의 값을 허용하기 위한 트레잇 객체 사용하기” 절을
+참고하세요.
 
-## Summary
+## 정리
 
-Whew! Now you have some features of Rust in your toolbox that you won’t use
-often, but you’ll know they’re available in very particular circumstances.
-We’ve introduced several complex topics so that when you encounter them in
-error message suggestions or in other peoples’ code, you’ll be able to
-recognize these concepts and syntax. Use this chapter as a reference to guide
-you to solutions.
+휘유! 이제 여러분은 자주 사용하지는 않겠지만 매우 특정한 환경에서는
+필요한 것임을 알게될 러스트의 몇가지 기능들을 여러분의 도구함에 챙겼습니다.
+우리가 몇몇 복잡한 주제를 소개했으므로 여러분이 이들을 에러 메세지
+제안이나 다른 사람들의 코드에서 마주쳤을때는 이 개념들과 문법을 인식할
+수 있을 것입니다. 이 장을 여러분에게 해결책을 안내할 참고자료로서
+사용하세요.
 
-Next, we’ll put everything we’ve discussed throughout the book into practice
-and do one more project!
+다음으로, 우리는 책 전체에 걸처 논의한 모든 것을 실전 예제에 넣어서
+한가지 프로젝트를 더 해볼 것입니다!
