@@ -164,12 +164,12 @@ pub trait Write {
 때문에, 이것은 그저 또다른 `Result<T, E>`일 뿐이고, 이는 우리가 `Result<T, E>`을
 가지고 쓸 수 있는 어떠한 메소드는 물론, `?`같은 특별 문법도 사용할 수 있음을 의미합니다.
 
-### The `!` Never Type that Never Returns
+### 결코 반환하지 않는 `!` 부정 타입
 
-Rust has a special type named `!` that’s known in type theory lingo as the
-*empty type* because it has no values. We prefer to call it the *never type*
-because it stands in the place of the return type when a function will never
-return. Here is an example:
+러스트는 `!`로 칭하는 특별한 타입을 가지고 있는데 타입 이론 용어에서는 이 타입이 값을
+가지지 않기 때문에 *빈 타입 (empty type)* 으로 알려져 있습니다. 우리는 이를
+*부정 타입 (never type)* 이라고 부르는 편을 선호하는데, 그 이유는 어떤 함수가 결코
+값을 반환하지 않을 때 반환 타입의 자리에 대신하기 때문입니다. 아래에 예제가 있습니다:
 
 ```rust,ignore
 fn bar() -> ! {
@@ -177,12 +177,12 @@ fn bar() -> ! {
 }
 ```
 
-This code is read as “the function `bar` returns never.” Functions that return
-never are called *diverging functions*. We can’t create values of the type `!`
-so `bar` can never possibly return.
+이 코드는 “함수 `bar`가 결코 반환하지 않는다” 라고 읽힙니다. 결코 반환하지 않는
+함수는 *발산 함수 (diverging function)* 라고 부릅니다. 우리는 `!` 타입의
+값을 만들수 없으므로 `bar`는 결코 반환이 가능하지 않습니다.
 
-But what use is a type you can never create values for? Recall the code from
-Listing 2-5; we’ve reproduced it here in Listing 19-34.
+하지만 여러분이 값을 전혀 만들 수 없는 타입의 사용처는 무엇일까요? Listing 2-5의
+코드를 상기해보세요; 여기 Listing 19-34에 재현해두었습니다.
 
 ```rust
 # let guess = "3";
@@ -195,12 +195,12 @@ let guess: u32 = match guess.trim().parse() {
 # }
 ```
 
-<span class="caption">Listing 19-34: A `match` with an arm that ends in
-`continue`</span>
+<span class="caption">Listing 19-34: continue로 끝나는 갈래를
+가진 `match`</span>
 
-At the time, we skipped over some details in this code. In Chapter 6 in “The
-`match` Control Flow Operator” section, we discussed that `match` arms must all
-return the same type. So, for example, the following code doesn’t work:
+이 시점에서, 이 코드의 몇가지 세부 사항은 생략하겠습니다. 6장의 “`match` 흐름
+제어 연산자” 절에서, 우리는 `match`의 갈래들이 동일한 타입을 반환해야 한다고
+논했습니다. 따라서, 예를 들어 다음과 같은 코드는 동작하지 않습니다:
 
 ```rust,ignore
 let guess = match guess.trim().parse() {
@@ -209,25 +209,25 @@ let guess = match guess.trim().parse() {
 }
 ```
 
-The type of `guess` in this code would have to be an integer *and* a string,
-and Rust requires that `guess` can only have one type. So what does `continue`
-return? How were we allowed to return a `u32` from one arm and have another arm
-that ends with `continue` in Listing 19-34?
+이 코드의 `guess` 타입은 정수 *및* 문자열 이어야 할 것이고, 러스트는
+`guess`가 단 하나의 타입을 가져야 함을 요구합니다. 그러면 `continue`가
+반환하는 것은 무엇일까요? 어떻게 Listing 19-34에서 한 쪽의 갈래에서는 `u32`를
+반환하고 다른 갈래에서는 `continue`로 끝나는 것이 허용되었을까요?
 
-As you might have guessed, `continue` has a `!` value. That is, when Rust
-computes the type of `guess`, it looks at both match arms, the former with a
-value of `u32` and the latter with a `!` value. Because `!` can never have a
-value, Rust decides that the type of `guess` is `u32`.
+여러분이 짐작하셨던 것처럼, `continue`는 `!` 값을 갖습니다. 즉, 러스트가
+`guess`의 타입을 계산할 때, 컴파일러는 매치의 두 갈래를 살펴보는데, 전자는
+`u32`의 값이고 후자는 `!` 값입니다. `!`가 값을 가질 수 없으므로,
+러스트는 `guess`의 타입이 `u32`이라고 결정합니다.
 
-The formal way of describing this behavior is that expressions of type `!` can
-be coerced into any other type. We’re allowed to end this `match` arm with
-`continue` because `continue` doesn’t return a value; instead, it moves control
-back to the top of the loop, so in the `Err` case, we never assign a value to
-`guess`.
+이 동작을 기술하는 정규적인 방법은 타입 `!`의 표현식이 어떠한 다른
+타입으로도 강제될 수 있다는 것입니다. `continue`가 값을 반환하지
+않으므로 이 `match`의 갈래를 `continue`로 끝내는 것이 허용됩니다;
+대신 실행 지점이 루프의 상단으로 이동되므로, 우리는 `guess`에 결코
+값을 대입할 수 없습니다.
 
-The never type is useful with the `panic!` macro as well. Remember the `unwrap`
-function that we call on `Option<T>` values to produce a value or panic? Here
-is its definition:
+부정 타입은 또한 `panic!` 매크로에서도 유용하게 쓰입니다. `Option<T>` 값
+상에서 값을 생산하거나 패닝을 일으키기 위해 호출한 `unwrap` 함수 기억하시죠?
+여기 그 정의가 있습니다:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -240,13 +240,13 @@ impl<T> Option<T> {
 }
 ```
 
-In this code, the same thing happens as in the `match` in Listing 19-34: Rust
-sees that `val` has the type `T` and `panic!` has the type `!` so the result of
-the overall `match` expression is `T`. This code works because `panic!` doesn’t
-produce a value; it ends the program. In the `None` case, we won’t be returning
-a value from `unwrap`, so this code is valid.
+이 코드에서 Listing 19-34의 `match`와 동일한 일이 일어납니다: 러스트는
+`val`이 `T` 타입을 갖고 `panic!`이 `!` 타입을 가지므로 전체 `match` 표현식의
+결과값은 `T`라고 봅니다. 이 코드는 `panic!`이 값을 생산하지 않기 때문에 동작합니다;
+패닉은 프로그램을 끝내죠. `None` 케이스에서는 `unwrap`으로부터의 값을
+반환하지 않을 것이므로, 이 코드는 유효합니다.
 
-One final expression that has the type `!` is a `loop`:
+`!` 타입을 갖는 마지막 하나의 표현식은 `loop` 입니다:
 
 ```rust,ignore
 print!("forever ");
@@ -256,64 +256,64 @@ loop {
 }
 ```
 
-Here, the loop never ends, so `!` is the value of the expression. However, this
-wouldn’t be true if we included a `break`, because the loop would terminate
-when it got to the `break`.
+여기서 루프는 결코 끝나지 않으므로, `!`가 이 표현식의 값입니다. 그러나,
+`break`을 포함시키면 이는 참이 아니게 되는데, 이는 루프가 `break`에
+도달했을 때 멈추게 될 것이기 때문입니다.
 
-### Dynamically Sized Types and `Sized`
+### 동적인 크기의 타입과 `Sized`
 
-Due to Rust’s need to know certain details, such as how much space to allocate
-for a value of a particular type, there is a corner of its type system that can
-be confusing: the concept of *dynamically sized types*. Sometimes referred to
-as *DSTs* or *unsized types*, these types let us write code using values whose
-size we can only know at runtime.
+특정 타입의 값을 할당하기 위한 공간의 크기 등 특정한 세부사항을 알기 위한
+러스트의 요구로 인하여, 타입 시스템에서 혼란할 수 있는 구석이 있습니다: 바로
+*동적인 크기의 타입 (dynamically sized type)* 에 대한 개념입니다. 이따금
+*DST* 혹은 *크기 없는 타입 (unsized type)* 이라고도 불리는 이 타입은 우리가
+오직 런타임에서만 그 크기를 알 수 있는 값을 이용하는 코드를 작성할 수 있게 해줍니다.
 
-Let’s dig into the details of a dynamically sized type called `str`, which
-we’ve been using throughout the book. That’s right, not `&str`, but `str` on
-its own, is a DST. We can’t know how long the string is until runtime, meaning
-we can’t create a variable of type `str`, nor can we take an argument of type
-`str`. Consider the following code, which does not work:
+우리가 이 책을 통틀어 사용해온 `str`이라고 불리우는 동적인 크기의 타입의
+세부사항을 파해쳐봅시다. 그렇습니다. `&str`이 아니라 `str` 그 자체가 바로
+DST 입니다. 우리는 그 문자열이 얼마나 긴지 런타임이 될때까지 알수 없는데,
+이는 우리가 `str` 타입의 변수를 만들수도, `str` 타입의 인자를 가질수도
+없음을 의미합니다. 아래의 동작하지 않는 코드를 고려해보세요:
 
 ```rust,ignore
 let s1: str = "Hello there!";
 let s2: str = "How's it going?";
 ```
 
-Rust needs to know how much memory to allocate for any value of a particular
-type, and all values of a type must use the same amount of memory. If Rust
-allowed us to write this code, these two `str` values would need to take up the
-same amount of space. But they have different lengths: `s1` needs 12 bytes of
-storage and `s2` needs 15. This is why it’s not possible to create a variable
-holding a dynamically sized type.
+러스트는 특정한 타입의 어떤 값을 위해 얼마나 많은 메모리를 할당해야 하는지 알 필요가
+있으며, 하나의 타입의 모든 값은 동일한 크기의 메모리를 사용해야 합니다. 만일 러스트가
+위의 코드의 작성을 허용한다면, 위의 두 `str` 값은 동일한 크기의 공간을 차지할 필요가
+있을 것입니다. 그러나 이 둘은 서로 다른 길이를 가지고 있습니다: `s1`은 12 바이트의
+저장소가 필요하고 `s2는 15가 필요하군요. 이것이 바로 동적인 크기의 타입을 보유하는
+변수를 만들수 없는 이유입니다.
 
-So what do we do? In this case, you already know the answer: we make the types
-of `s1` and `s2` a `&str` rather than a `str`. Recall that in the “String
-Slices” section of Chapter 4 we said the slice data structure stores the
-starting position and the length of the slice.
+그러면 우리는 뭘 할까요? 위의 경우, 여러분은 이미 해답을 알고 있습니다: 우리는
+`s1`과 `s2`의 타입을 `str`가 아닌 `&str`로 만듭니다. 4장의 “스트링
+슬라이스” 절에서 슬라이스 데이터 구조는 슬라이스의 시작 위치와 길이를 저장한다고
+얘기했던 것을 상기하세요.
 
-So although a `&T` is a single value that stores the memory address of where
-the `T` is located, a `&str` is *two* values: the address of the `str` and its
-length. As such, we can know the size of a `&str` value at compile time: it’s
-two times the size of a `usize` in length. That is, we always know the size of
-a `&str`, no matter how long the string it refers to is. In general, this is
-the way in which dynamically sized types are used in Rust: they have an extra
-bit of metadata that stores the size of the dynamic information. The golden
-rule of dynamically sized types is that we must always put values of
-dynamically sized types behind a pointer of some kind.
+따라서 `&T`는 `T`가 위치한 곳의 메모리 주소값을 저장한 단일값임에도
+불구하고, `&str`는 *두 개의* 값입니다: `str`의 주소와 길이 말이죠.
+그런 점에서, 우리는 `&str` 값의 크기를 컴파일 시점에 알 수 있습니다:
+길이상 `unize`의 크기의 두 배가 되지요. 즉, 참조하고 있는 문자열의 길이가
+얼마든 상관없이, 우리는 언제나 `&str`의 크기를 알 수 있습니다. 대개의 경우
+이것이 러스트 내에서 동적인 크기의 타입이 사용되는 방식입니다: 이들은 동적인
+정보의 크기를 저장하는 추가적인 메타데이터를 가지고 있습니다. 동적인 크기의
+타입의 황금률은 우리가 언제나 동적인 크기의 타입의 값을 어떤 종류의 포인터에
+저장해야 한다는 것입니다.
 
-We can combine `str` with all kinds of pointers: for example, `Box<str>` or
-`Rc<str>`. In fact, you’ve seen this before but with a different dynamically
-sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In Chapter 17 in the “Using Trait Objects that
-Allow for Values of Different Types” section, we mentioned that to use traits
-as trait objects, we must put them behind a pointer, such as `&Trait` or
-`Box<Trait>` (`Rc<Trait>` would work too).
+우리는 `str`을 모든 종류의 포인터와 결합할 수 있습니다: 예를 들어, `Box<str>`
+혹은 `Rc<str>` 같은 것들 말이죠. 사실, 여러분은 다른 동적인 크기의 타입을
+통해 이미 이를 보셨습니다: 바로 트레잇입니다. 모든 트레잇은 그 트레잇의 이름을 사용함으로서
+참조할 수 있는 동적인 크기의 타입입니다. 17장의 “서로 다른 타입의 값을 허용하기 위한 트레잇
+객체 사용하기” 절에서, 트레잇을 트레잇 객체로 사용하기 위해서는 이를 `&Trait` 혹은
+`Box<Trait>`와 같은 식으로 포인터에 넣어야 한다고 언급했었습니다 (`Rc<Trait>`
+또한 동작할 것입니다).
 
-To work with DSTs, Rust has a particular trait called the `Sized` trait to
-determine whether or not a type’s size is known at compile time. This trait is
-automatically implemented for everything whose size is known at compile time.
-In addition, Rust implicitly adds a bound on `Sized` to every generic function.
-That is, a generic function definition like this:
+DST를 가지고 작업하기 위해서, 러스트는 어떤 타입의 크기를 컴파일 타임에 알 수 있는지
+혹은 없는지를 결정하기 위해 `Sized`라는 이름의 특별한 트레잇을 가지고 있습니다.
+이 트레잇은 크기가 컴파일 타임에 알려진 모든 것들에 대해 자동으로 구현됩니다.
+추가적으로, 러스트는 암묵적으로 모든 제네릭 함수들에게 `Sized`를 바운드로 추가합니다.
+즉, 아래와 같은 제네릭 함수의 정의는:
 
 ```rust,ignore
 fn generic<T>(t: T) {
@@ -321,7 +321,7 @@ fn generic<T>(t: T) {
 }
 ```
 
-is actually treated as though we had written this:
+실제로는 우리가 아래와 같이 작성한 것처럼 취급됩니다:
 
 ```rust,ignore
 fn generic<T: Sized>(t: T) {
@@ -329,9 +329,9 @@ fn generic<T: Sized>(t: T) {
 }
 ```
 
-By default, generic functions will only work on types that have a known size at
-compile time. However, you can use the following special syntax to relax this
-restriction:
+기본적으로, 제네릭 함수는 컴파일 타임에 크기를 알 수 있는 타입에 대해서만 작동할
+것입니다. 그러나, 여러분은 이 제한사항을 느슨하게 하기 위해 다음과 같은 특별 문법을
+사용할 수 있습니다:
 
 ```rust,ignore
 fn generic<T: ?Sized>(t: &T) {
@@ -339,12 +339,12 @@ fn generic<T: ?Sized>(t: &T) {
 }
 ```
 
-A trait bound on `?Sized` is the opposite of a trait bound on `Sized`: we would
-read this as “`T` may or may not be `Sized`.” This syntax is only available for
-`Sized`, not any other traits.
+`?Sized` 트레잇 바운드는 `Sized` 트레잇 바운드의 반대 개념입니다: 우리는 이를
+“`T`가 `Sized` 일수도 있고 아닐 수도 있다” 라고 읽을 수 있습니다. 이 문법은
+다른 트레잇들 말고 오직 `Sized`에 대해서만 사용 가능합니다.
 
-Also note that we switched the type of the `t` parameter from `T` to `&T`.
-Because the type might not be `Sized`, we need to use it behind some kind of
-pointer. In this case, we’ve chosen a reference.
+또한 `t` 파라미터가 `T`에서 `&T`로 바뀐 점을 주목하세요. 이 타입이 `Sized`가
+아닐지도 모르기 때문에, 우리는 이를 어떤 종류의 포인터 뒤에 놓고 사용할 필요가
+있습니다. 위의 경우에서는 참조자를 선택했습니다.
 
-Next, we’ll talk about functions and closures!
+다음으로는 함수와 클로저에 대해 다루겠습니다!

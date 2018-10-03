@@ -65,9 +65,11 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - dependency: 디펜던시
 - deref coercion: 역참조 강제
 - derived trait: 파생 트레잇
+- diverging function: 발산 함수
 - documentation comments: 문서화 주석
 - double free: 중복 해제
 - `drop`: `drop`한다, 버리다
+- dynamically sized type: 동적인 크기의 타입
 - feature: 특성
 - format string: 형식 문자열
 - fully qualified syntax: 완전 정규화 문법
@@ -89,6 +91,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - move: 이동
 - mutable: 가변
 - namespace: 이름공간
+- never type: 부정 타입
 - newtype pattern: 뉴타입 패턴
 - orphan rule: 고아 규칙
 - ownership: 소유권
