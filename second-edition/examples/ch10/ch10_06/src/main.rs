@@ -14,5 +14,5 @@ fn main() {
     let p2 = Point { x: p1.x, y: p1.y };
 
     println!("p1.x() = {}", p1.x());
-    println!("p2.x = {}", p2.x());
+    println!("p2.x = {}", p2.x);
 }
