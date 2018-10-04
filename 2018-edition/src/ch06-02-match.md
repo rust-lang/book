@@ -124,7 +124,7 @@ also holds a `UsState` value</span>
 Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we’ll also call out the name of
 the state associated with each quarter so if it’s one our friend doesn’t have,
-they can add it to their collection.
+she can add it to her collection.
 
 In the match expression for this code, we add a variable called `state` to the
 pattern that matches values of the variant `Coin::Quarter`. When a
