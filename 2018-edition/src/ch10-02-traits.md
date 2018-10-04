@@ -307,12 +307,19 @@ pub fn notify<T: Summary>(item1: T, item2: T) {
 The version with the bound is a bit easier. In general, you should use whatever
 form makes your code the most understandable.
 
-##### Multiple trait bounds with `+`
+#### Specify multiple traits with `+`
 
-We can specify multiple trait bounds on a generic type using the `+` syntax.
-For example, to use display formatting on the type `T` in a function as well as
-the `summarize` method, we can use `T: Summary + Display` to say `T` can be any
-type that implements `Summary` and `Display`. This can grow quite complex!
+If `notify` needed to display formatting on `item`, as well as use the `summarize`
+method, then `item` would need to implement two different traits at the same time: 
+`Display` and `Summary`. This can be done using the `+` syntax:
+
+```rust,ignore
+pub fn notify(item: impl Summary + Display) {
+```
+ This syntax is also valid with trait bounds on generic types:
+ ```rust,ignore
+pub fn notify<T: Summary + Display>(item: T) {
+```
 
 #### `where` clauses for clearer code
 
