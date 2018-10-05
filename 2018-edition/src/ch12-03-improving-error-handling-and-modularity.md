@@ -306,7 +306,7 @@ fn new(args: &[String]) -> Config {
 <span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span>
 
-This code is similar to the `Guess::new` function we wrote in Listing 9-9, where
+This code is similar to the `Guess::new` function we wrote in Listing 9-10, where
 we called `panic!` when the `value` argument was out of the range of valid
 values. Instead of checking for a range of values here, we’re checking that the
 length of `args` is at least `3` and the rest of the function can operate under
@@ -328,7 +328,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
-the technique we used in Listing 9-9 isn’t the best to use here: a call to
+the technique we used in Listing 9-10 isn’t the best to use here: a call to
 `panic!` is more appropriate for a programming problem rather than a usage
 problem, as discussed in Chapter 9. Instead, we can use the other technique you
 learned about in Chapter 9—returning a `Result` that indicates either success
