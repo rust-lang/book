@@ -1,6 +1,6 @@
 ## Crates.io 에 크레이트 배포하기
 
-우린 [crates.io](https://crates.io)<!-- ignore --> 의 패키지를 프로젝트의 디펜던시로만 사용했습니다. 하지만 여러분이 직접 여러분의 패키지를 배포해서 코드를 다른 사람들과 공유 할 수도 있습니다.
+우린 [crates.io](https://crates.io)<!-- ignore --> 의 패키지를 프로젝트의 디펜던시로만 사용했습니다. 하지만 여러분이 직접 여러분의 패키지를 배포(publish)해서 코드를 다른 사람들과 공유 할 수도 있습니다.
 
 ### (검수 필요) The crate registry at [crates.io](https://crates.io)<!-- ignore --> distributes the source code of your packages, so it primarily hosts code that is open source.
 
@@ -90,10 +90,10 @@ HTML 문서화</span>
 여러분의 문서화 주석에 예시 코드를 추가하는 건 여러분의 라이브러리를 어떻게
 사용하는지 알려줄 수 있을뿐더러 또 다른 효과도 있습니다: 무려 `cargo test` 를
 실행하면 여러분의 문서에 들어있던 예시 코드들이 테스트로서 실행됩니다! 백문이
-불여일견이라고, 예시를 포함한 문서보다 좋은 문서는 없습니다. (하지만 코드를
-변경하고 문서를 업데이트하지 않아서 예시 코드가 작동하지 않는 일은 절대 있어선
-안됩니다) 우리가 Listing 14-1 의 `add_one` 함수에 대한 문서로 `cargo test` 를
-실행하면 다음과 같은 테스트 결과를 보실수 있습니다.
+불여일견이라는 말이 있듯이, 예시를 포함한 문서보다 좋은 문서는 없습니다.
+(하지만 코드를 변경하고 문서를 업데이트하지 않아서 예시 코드가 작동하지 않는
+일은 절대 있어선 안됩니다) 우리가 Listing 14-1 의 `add_one` 함수에 대한 문서로
+`cargo test` 를 실행하면 다음과 같은 테스트 결과를 보실수 있습니다.
 
 ```text
    Doc-tests my_crate
@@ -155,7 +155,7 @@ Figure 14-2 처럼 `my_crate` 문서 첫 페이지 내용 중
 이를 이용해 사용자들이 크레이트의 구조를 이해할 수 있도록
 컨테이너의 중심 목적을 설명하세요.
 
-## (검수 필요) `pub use` 로 편리한 공개 API 를 export 하기
+## `pub use` 를 이용해 공개 API 를 편리한 형태로 export 하기
 
 7 장에서 우린 `mod` 키워드를 이용해 우리 코드를 체계화 하는 법과,
 `pub` 키워드로 공개 아이템을 만드는 법, `use` 를 이용해 스코프 내로 가져오는
@@ -303,3 +303,214 @@ pub mod utils {
 
 <span class="caption">Figure 14-4: Re-exports 목록이 포함된
 `art` 크레이트 문서의 첫 페이지</span>
+
+`art` 크레이트의 사용자는 기존의 Listing 14-3 의 내부 구조를 이용하여
+Listing 14-4 처럼 사용하거나, 혹은 좀 더 편한 방식으로 Listing 14-5 의
+구조를 이용하여 Listing 14-6 과 같이 사용할 수 있습니다:
+
+<span class="filename">파일명: src/main.rs</span>
+
+```rust,ignore
+extern crate art;
+
+use art::PrimaryColor;
+use art::mix;
+
+fn main() {
+    // --생략--
+}
+```
+
+<span class="caption">Listing 14-6: `art` 크레이트의 Re-export 된 항목들을
+사용하는 프로그램</span>
+
+만약 특정 부분에서 중첩된 모듈이 많을 경우,
+모듈의 상위 계층에서 `pub use` 를 이용해 타입을 다시 export 함으로써
+크레이트의 사용자들에게 더 뛰어난 경험을 제공할 수 있습니다.
+
+쓰기 좋고 편한 형태의 공개 API 를 만드는 일은 기술보단 예술에 가까운 일입니다.
+따라서 한번에 완벽한 형태를 만들려고 하기보다는 계속해서 사용자들을 위한
+최적의 구조를 찾아 개선해 나가야 합니다. 이럴때 `pub use` 를 이용하면 크레이트
+내부를 보다 유연하게 구조화 할 수 있고, 사용자에게 제공하는 것에서 내부 구조의
+흔적을 없앨 수 있습니다. 한번 여러분이 설치한 크레이트 중에 아무거나 코드를
+열어서 그의 공개 API 구조와 내부 구조를 비교해 보세요. 아마 상당히 다를걸요?
+
+### Cartes.io 계정 설정하기
+
+여러분은 첫 크레이트를 배포하기에 앞서,
+[crates.io](https://crates.io)<!-- ignore --> 에 계정을 만들고 API 토큰을 얻어야 합니다.
+[crates.io](https://crates.io)<!-- ignore --> 홈페이지에 방문하고 GitHub
+계정을 통해 로그인 해주세요. (현재는 GitHub 계정이 필수지만, 추후에 사이트에서
+다른 방법을 통한 계정 생성을 지원하게 될 수 있습니다) 로그인 하셨다면 계정
+설정 페이지인[https://crates.io/me/](https://crates.io/me/)<!-- ignore -->
+로 들어가 주세요. 그리고 페이지에서 API 키를 얻어온 후에,
+여러분의 API 키를 이용해 `cargo login` 명령어를 실행해 주세요. 이런식으로요:
+
+```text
+$ cargo login abcdefghijklmnopqrstuvwxyz012345
+```
+
+이 명령어는 Cargo 에게 여러분의 API 토큰을 알려주고 내부
+(*~/.cargo/credentials*) 에 저장하도록 합니다. 미리 말하지만 여러분의 토큰은
+남들에겐 *비밀* 입니다: 어떤 이유로 남들에게 알려졌다면,
+그 사람을 처리하거나, 혹은 [crates.io](https://crates.io)<!-- ignore--> 에서
+기존의 토큰을 무효화하고 새 토큰을 발급받으세요.
+
+### 새 크레이트에 Metadata 추가하기
+
+계정을 만들었으니, 여러분이 크레이트를 배포하려고 한다고 가정합시다.
+여러분은 배포하기 전에 *Cargo.toml* 파일에 `[package]` 구절을
+추가하여 메타데이터(metadata) 를 추가해야합니다.
+
+여러분의 크레이트명은 고유해야 합니다. 여러분이 로컬에서 작업 할 땐 문제
+없지만, [crates.io](https://crates.io)<!-- ignore --> 에 올라갈 크레이트의
+이름은 선착순으로 배정되기에, 여러분이 정한 크레이트명을 누군가 이미 쓰고
+있다면 해당 크레이트명으로는 크레이트를 배포할 수 없습니다. 크레이트를
+배포하기 전에 사이트에서 여러분이 사용하려는 이름을 검색해보고 해당
+크레이트명이 이미 사용중인지 확인하세요. 만약 아직 사용중이지 않다면 다음과
+같이 *Cargo.toml* 파일 내 `[package]` 절 아래의 이름을 수정하세요:
+
+<span class="filename">파일명: Cargo.toml</span>
+
+```toml
+[package]
+name = "guessing_game"
+```
+
+고유한 이름을 선택하고, 크레이트를 배포하기 위해 `cargo publish` 를 실행하면
+다음과 같은 경고와 에러가 나타날 겁니다.
+
+```text
+$ cargo publish
+    Updating registry `https://github.com/rust-lang/crates.io-index`
+warning: manifest has no description, license, license-file, documentation,
+homepage or repository.
+--snip--
+error: api errors: missing or empty metadata fields: description, license.
+```
+
+이 에러는 중요한 정보를 몇개 입력하지 않았다는 의미입니다: 설명(description)
+과 라이센스(license) 는 필수적인데, 이들은 각각 사람들에게 해당 크레이트가
+어떤 작업을 하는지와 해당 크레이트를 이용할 수 있는 조건을 알려줍니다.
+이 에러를 고치려면 이 정보들을 *Cargo.toml* 에 포함시켜야 합니다.
+
+설명은 한 문장이나 두 문장정도면 충분합니다. 크레이트를 검색 했을때의 결과에
+여러분의 크레이트명과 같이 표시되거든요. `license` 필드엔
+*라이센스 식별자 값(license identifier value)* 을 부여해야 합니다.
+[Linux Foundation’s Software Package Data Exchange (SPDX)][spdx] 에
+여러분이 사용할 수 있는 식별자가 나열되어 있으니 참고 바랍니다.
+예를 들어, 만약 여러분의 크레이트에 MIT 라이센스를 적용하고 싶으시다면, 다음과 같이 `MIT` 식별자를 추가하시면 됩니다.
+
+[spdx]: http://spdx.org/licenses/
+
+<span class="filename">파일명: Cargo.toml</span>
+
+```toml
+[package]
+name = "guessing_game"
+license = "MIT"
+```
+
+SPDX 에 없는 라이센스를 사용하고 싶으실 경우엔
+해당 라이센스의 텍스트를 파일로 만들고
+자신의 프로젝트에 해당 파일을 포함시킨 뒤,
+`license` 대신 `license-file` 을 추가해 해당 파일의 이름을 넣으시면 됩니다.
+
+여러분의 프로젝트에 어떤 라이센스가 적합한지에 대해 알아보는 내용은 이 책 범위
+이상의 내용입니다. 다만 알아두실 건 러스트 커뮤니티의 많은 이들은 자신의
+프로젝트에 러스트 자체가 쓰는 라이센스인 `MIT OR Apache-2.0` 이중 라이센스를
+사용한다는 겁니다, 즉 여러분은 프로젝트의 라이선스에 `OR` 을 이용해
+여러 라이센스 식별자를 명시할 수 있습니다.
+
+고유한 프로젝트명, 버전, `cargo new` 로 크레이트를 생성할때 추가된 작성자 정보,
+설명, 라이센스를 모두 추가하셨다면 배포할 준비가 끝났습니다.
+이때 *Cargo.toml* 파일의 모습은 다음과 같은 형태일 겁니다:
+
+<span class="filename">파일명: Cargo.toml</span>
+
+```toml
+[package]
+name = "guessing_game"
+version = "0.1.0"
+authors = ["Your Name <you@example.com>"]
+description = "A fun game where you guess what number the computer has chosen."
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+```
+
+[Cargo 공식 문서](https://doc.rust-lang.org/cargo/) 에 다른 사람들이
+여러분의 크레이트를 좀 더 찾기 쉽게 해주고, 쓰기 편하게 해주는
+나머지 메타데이터들이 설명 되어 있으니, 참고 바랍니다.
+
+### Crates.io 에 배포하기
+
+계정도 만들었고, API 토큰도 얻었고, 크레이트명도 정했고,
+메타데이터도 작성했으니 이제 여러분은 크레이트를 배포할 준비 만전이에요!
+여러분이 크레이트를 배포하면 [crates.io](https://crates.io)<!-- ignore --> 에
+다른 사람이 사용할 특정 버전도 올라가게 됩니다.
+
+크레이트를 배포할땐 주의하시기 바랍니다. 기본적으로 낙장불입이거든요.
+버전은 중복될 수 없으며, 한번 올라간 코드는 수정할 수 없습니다.
+[crates.io](https://crates.io)<!-- ignore --> 의 원대한 목표중 하나는
+[crates.io](https://crates.io)<!-- ignore --> 에 등록된 크레이트들에 의존하는
+모든 프로젝트의 빌드가 계속 작동할 수 있도록 영구적인 코드 보관소의 역할을 맡는 것이기 때문에, 버전을 삭제하거나 수정하는 행위는 용납하지 않습니다.
+(만약 용납한다면 목표를 이룰 수 없으니까요)
+대신 버전의 개수에 대한 제한은 없으니 버전을 올리는 것 자체는 얼마든지 가능합니다.
+
+`cargo publish` 명령어를 재실행 해보면 이번엔 성공할 겁니다:
+
+```text
+$ cargo publish
+ Updating registry `https://github.com/rust-lang/crates.io-index`
+Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
+Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
+Compiling guessing_game v0.1.0
+(file:///projects/guessing_game/target/package/guessing_game-0.1.0)
+ Finished dev [unoptimized + debuginfo] target(s) in 0.19 secs
+Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
+```
+
+축하합니다! 이제 여러분의 코드는 러스트 커뮤니티와 공유되고, 아무나 여러분의
+크레이트를 자신들의 프로젝트 의존성 목록에 쉽게 추가할 수 있을 겁니다.
+
+### 이미 배포한 크레이트의 버전 업데이트하기
+
+여러분의 크레이트에 변경사항을 적용하고 새 버전을 릴리즈하려면
+*Cargo.toml* 파일의 `version` 값을 새 버전으로 변경하면 됩니다.
+이때 변경사항의 종류에 맞춰서 적절한 버전을 결정하는 방법은
+[유의적 버전 규칙(Semantic Versioning rules)][semver] 을 참고하시기 바랍니다.
+버전을 변경하고 나면 `cargo publish` 를 실행해 새 버전을 배포합시다.
+
+[semver]: http://semver.org/
+
+### `cargo yank` 를 이용해 Crates.io 에서 버전 제거하기
+
+크레이트의 이전 버전을 제거할 순 없지만, Cargo 는 크레이트의 버전을
+*yanking(끌어내리는)* 기능을 지원합니다. 이는 특정 크레이트의 버전이 어떤
+이유에선가 문제가 생긴 등의 경우에 새롭게 만들어지는 프로젝트들이
+해당 버전을 종속성으로 추가할 수 없도록 막아주는 주는 기능입니다. (역주: *yank* 의 사전적 의미는 *홱 당기다* 입니다)
+
+버전을 끌어내려도 해당 버전에 의존하던 기존의 프로젝트들은 계속해서 그 버전에
+의존성을 가질 수 있고 해당 버전을 다운로드 받을 수도 있지만, 새로운
+프로젝트들이 끌어내려진 버전을 의존성으로 가지는 시작하는것은 불가능합니다.
+근본적인 yank 의 의미는 *Cargo.lock* 을 가진 모든 프로젝트는 문제가 없을 것이며,
+추후에 새로 생성될 *Cargo.lock* 파일은 끌어내려진 버전을 사용하지 않을 것이란 의미입니다.
+
+크레이트의 버전을 yank 하기 위해서는 `cargo yank` 에
+yank 하고자 하는 버전을 명시하고 실행하시면 됩니다:
+
+```text
+$ cargo yank --vers 1.0.1
+```
+
+또한 여러분은 `--undo` 를 붙여서 yank 를 취소하고 다시 새 프로젝트들이
+해당 버전을 의존성으로 갖는 것을 허용할 수 있습니다:
+
+```text
+$ cargo yank --vers 1.0.1 --undo
+```
+
+yank 는 어떤 코드도 삭제하지 *않습니다*. 예를 들어, 여러분이 실수로 자신의
+비밀 정보를 업로드한 상황에 대한 해결책으로 yank 기능을 사용하셨다면, 이는
+잘못된 방법입니다. 만약 그런 일이 일어나면 비밀 정보를 재설정하셔야 합니다.
