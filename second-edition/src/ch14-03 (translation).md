@@ -1,11 +1,11 @@
 ## Cargo 작업공간
 
-12 장에서 바이너리 크레이트와 라이브러리 크레이트를 포함하는 패키지를 만들어 봤습니다. (검수 필요) As your project develops, you might find that the library crate
-continues to get bigger and you want to split up your package further into
-multiple library crates. In this situation, Cargo offers a feature called
-*workspaces* that can help manage multiple related packages that are developed
-in tandem.
-
+12 장에서 바이너리 크레이트와 라이브러리 크레이트를 포함하는 패키지를 만들어
+봤습니다. 하지만 여러분이 프로젝트를 개발하다 보면, 라이브러리 크레이트가 점점
+거대해져서 여러분의 패키지를 여러개의 라이브러리 크레이트로 분리하고 싶으실
+겁니다. Cargo 는 이런 상황에서 사용할 수 있는 *작업공간(workspace)* 이라는
+기능을 제공하며, 이 기능은 함께 개발된 여러개의 관련된 패키지를 관리하는데
+도움이 됩니다.
 
 ### 작업공간 생성
 
@@ -330,7 +330,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 추가 과제로는, 한번 이 작업공간에 `add-two` 크레이트를 추가해 보세요!
 `add-one` 크레이트를 추가할때와 비슷한 방법으로 하시면 됩니다.
 
-여러분의 프로젝트가 커지면 작업공간을 사용하는 걸 고려해보세요:
+언젠가 여러분의 프로젝트가 커지면 작업공간을 사용하는 걸 고려해보세요:
 하나의 거대한 코드보다 작은 개별 요소를 이해하는 일이 훨씬 쉽고,
-작업공간에서 크레이트를 관리하면 각 크레이트가 동시에 변경될 경우
+작업공간에서 크레이트를 관리한다면 각 크레이트가 동시에 변경되는 경우도
 쉽게 조정할 수 있습니다.

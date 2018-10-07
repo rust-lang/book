@@ -67,4 +67,4 @@ opt-level = 1
 빌드 만큼은 아니지만 기본 설정 보다 많은 최적화를 진행할 겁니다.
 
 각 프로필의 설정 옵션 및 기본값의 전체 목록을 보시려면
-[Cargo 문서](https://doc.rust-lang.org/cargo/) 를 참고해 주시기 바랍니다.
+[Cargo 공식 문서](https://doc.rust-lang.org/cargo/) 를 참고해 주시기 바랍니다.
