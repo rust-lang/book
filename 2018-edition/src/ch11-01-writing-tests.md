@@ -622,7 +622,7 @@ debug what happened instead of what we were expecting to happen.
 In addition to checking that our code returns the correct values we expect,
 it’s also important to check that our code handles error conditions as we
 expect. For example, consider the `Guess` type that we created in Chapter 9,
-[Listing 9-9][Listing-9-9]. Other code that uses `Guess` depends on the guarantee that `Guess`
+[Listing 9-10][Listing-9-10]. Other code that uses `Guess` depends on the guarantee that `Guess`
 instances will contain only values between 1 and 100. We can write a test that
 ensures that attempting to create a `Guess` instance with a value outside that
 range panics.
@@ -868,4 +868,4 @@ test`.
 [Listing-11-7]: ch11-01-writing-tests.html#Listing-11-7
 [Listing-11-8]: ch11-01-writing-tests.html#Listing-11-8
 [Listing-11-9]: ch11-01-writing-tests.html#Listing-11-9
-[Listing-9-9]: ch09-02-recoverable-errors-with-result.html#Listing-9-9
+[Listing-9-10]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-10
