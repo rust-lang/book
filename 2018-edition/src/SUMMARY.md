@@ -36,7 +36,7 @@
 
 ## Basic Rust Literacy
 
-- [Pacakges, Crates, and Modules](ch07-00-packages-crates-and-modules.md)
+- [Packages, Crates, and Modules](ch07-00-packages-crates-and-modules.md)
     - [Packages and crates for making libraries and executables](ch07-01-packages-and-crates-for-making-libraries-and-executables.md)
     - [Modules and `use` to control scope and privacy](ch07-02-modules-and-use-to-control-scope-and-privacy.md)
 

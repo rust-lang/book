@@ -1,4 +1,4 @@
-# Pacakges, Crates, and Modules
+# Packages, Crates, and Modules
 
 A key question when writing programs is scope: what names do I know about?
 What functions am I allowed to call? What does this variable refer to?
