@@ -11,11 +11,14 @@ this, but first, we’ll look at the problem in action.
 ### Simulating a Slow Request in the Current Server Implementation
 
 We’ll look at how a slow-processing request can affect other requests made to
-our current server implementation. Listing 20-10 implements handling a request
+our current server implementation. [Listing 20-10][Listing-20-10] implements handling a request
 to */sleep* with a simulated slow response that will cause the server to sleep
 for 5 seconds before responding.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-10]: #Listing-20-10
+<a name="Listing-20-10"></a>
 
 ```rust
 use std::thread;
@@ -118,10 +121,13 @@ what we should change next to get the code to work.
 First, let’s explore how our code might look if it did create a new thread for
 every connection. As mentioned earlier, this isn’t our final plan due to the
 problems with potentially spawning an unlimited number of threads, but it is a
-starting point. Listing 20-11 shows the changes to make to `main` to spawn a
+starting point. [Listing 20-11][Listing-20-11] shows the changes to make to `main` to spawn a
 new thread to handle each stream within the `for` loop.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-11]: #Listing-20-11
+<a name="Listing-20-11"></a>
 
 ```rust,no_run
 # use std::thread;
@@ -157,10 +163,13 @@ new threads without any limit.
 
 We want our thread pool to work in a similar, familiar way so switching from
 threads to a thread pool doesn’t require large changes to the code that uses
-our API. Listing 20-12 shows the hypothetical interface for a `ThreadPool`
+our API. [Listing 20-12][Listing-20-12] shows the hypothetical interface for a `ThreadPool`
 struct we want to use instead of `thread::spawn`.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-20-12]: #Listing-20-12
+<a name="Listing-20-12"></a>
 
 ```rust,no_run
 # use std::thread;
@@ -200,7 +209,7 @@ compile, but we’ll try so the compiler can guide us in how to fix it.
 
 #### Building the `ThreadPool` Struct Using Compiler Driven Development
 
-Make the changes in Listing 20-12 to *src/main.rs*, and then let’s use the
+Make the changes in [Listing 20-12][Listing-20-12] to *src/main.rs*, and then let’s use the
 compiler errors from `cargo check` to drive our development. Here is the first
 error we get:
 
@@ -411,9 +420,12 @@ negative number of threads makes no sense. However, a pool with zero threads
 also makes no sense, yet zero is a perfectly valid `usize`. We’ll add code to
 check that `size` is greater than zero before we return a `ThreadPool` instance
 and have the program panic if it receives a zero by using the `assert!` macro,
-as shown in Listing 20-13.
+as shown in [Listing 20-13][Listing-20-13].
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-13]: #Listing-20-13
+<a name="Listing-20-13"></a>
 
 ```rust
 # pub struct ThreadPool;
@@ -445,8 +457,8 @@ Try running `cargo doc --open` and clicking the `ThreadPool` struct to see what
 the generated docs for `new` look like!
 
 Instead of adding the `assert!` macro as we’ve done here, we could make `new`
-return a `Result` like we did with `Config::new` in the I/O project in Listing
-12-9. But we’ve decided in this case that trying to create a thread pool
+return a `Result` like we did with `Config::new` in the I/O project in [Listing 12-9][Listing-12-9].
+But we’ve decided in this case that trying to create a thread pool
 without any threads should be an unrecoverable error. If you’re feeling
 ambitious, try to write a version of `new` with the following signature to
 compare both versions:
@@ -474,13 +486,16 @@ closure returns. Let’s try using `JoinHandle` too and see what happens. In our
 case, the closures we’re passing to the thread pool will handle the connection
 and not return anything, so `T` will be the unit type `()`.
 
-The code in Listing 20-14 will compile but doesn’t create any threads yet.
+The code in [Listing 20-14][Listing-20-14] will compile but doesn’t create any threads yet.
 We’ve changed the definition of `ThreadPool` to hold a vector of
 `thread::JoinHandle<()>` instances, initialized the vector with a capacity of
 `size`, set up a `for` loop that will run some code to create the threads, and
 returned a `ThreadPool` instance containing them.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-14]: #Listing-20-14
+<a name="Listing-20-14"></a>
 
 ```rust,ignore,not_desired_behavior
 use std::thread;
@@ -529,7 +544,7 @@ succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
-We left a comment in the `for` loop in Listing 20-14 regarding the creation of
+We left a comment in the `for` loop in [Listing 20-14][Listing-20-14] regarding the creation of
 threads. Here, we’ll look at how we actually create threads. The standard
 library provides `thread::spawn` as a way to create threads, and
 `thread::spawn` expects to get some code the thread should run as soon as the
@@ -565,11 +580,14 @@ We’ll implement the code that sends the closure to the thread after we have
    a new `Worker` with that `id`, and store the worker in the vector.
 
 If you’re up for a challenge, try implementing these changes on your own before
-looking at the code in Listing 20-15.
+looking at the code in [Listing 20-15][Listing-20-15].
 
-Ready? Here is Listing 20-15 with one way to make the preceding modifications.
+Ready? Here is [Listing 20-15][Listing-20-15] with one way to make the preceding modifications.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-15]: #Listing-20-15
+<a name="Listing-20-15"></a>
 
 ```rust
 use std::thread;
@@ -658,11 +676,14 @@ Here is the plan:
    and execute the closures of any jobs it receives.
 
 Let’s start by creating a channel in `ThreadPool::new` and holding the sending
-side in the `ThreadPool` instance, as shown in Listing 20-16. The `Job` struct
+side in the `ThreadPool` instance, as shown in [Listing 20-16][Listing-20-16]. The `Job` struct
 doesn’t hold anything for now but will be the type of item we’re sending down
 the channel.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-16]: #Listing-20-16
+<a name="Listing-20-16"></a>
 
 ```rust
 # use std::thread;
@@ -723,9 +744,12 @@ sending end. This will successfully compile, still with warnings.
 Let’s try passing a receiving end of the channel into each worker as the thread
 pool creates the channel. We know we want to use the receiving end in the
 thread that the workers spawn, so we’ll reference the `receiver` parameter in
-the closure. The code in Listing 20-17 won’t quite compile yet.
+the closure. The code in [Listing 20-17][Listing-20-17] won’t quite compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-17]: #Listing-20-17
+<a name="Listing-20-17"></a>
 
 ```rust,ignore,does_not_compile
 impl ThreadPool {
@@ -802,9 +826,12 @@ Recall the thread-safe smart pointers discussed in Chapter 16: to share
 ownership across multiple threads and allow the threads to mutate the value, we
 need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple workers own the
 receiver, and `Mutex` will ensure that only one worker gets a job from the
-receiver at a time. Listing 20-18 shows the changes we need to make.
+receiver at a time. [Listing 20-18][Listing-20-18] shows the changes we need to make.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-18]: #Listing-20-18
+<a name="Listing-20-18"></a>
 
 ```rust
 # use std::thread;
@@ -878,9 +905,12 @@ Let’s finally implement the `execute` method on `ThreadPool`. We’ll also cha
 `Job` from a struct to a type alias for a trait object that holds the type of
 closure that `execute` receives. As discussed in the “Creating Type Synonyms
 with Type Aliases” section of Chapter 19, type aliases allow us to make long
-types shorter. Look at Listing 20-19.
+types shorter. Look at [Listing 20-19][Listing-20-19].
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-19]: #Listing-20-19
+<a name="Listing-20-19"></a>
 
 ```rust
 // --snip--
@@ -925,9 +955,12 @@ But we’re not quite done yet! In the worker, our closure being passed to
 `thread::spawn` still only *references* the receiving end of the channel.
 Instead, we need the closure to loop forever, asking the receiving end of the
 channel for a job and running the job when it gets one. Let’s make the change
-shown in Listing 20-20 to `Worker::new`.
+shown in [Listing 20-20][Listing-20-20] to `Worker::new`.
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-20]: #Listing-20-20
+<a name="Listing-20-20"></a>
 
 ```rust,ignore,does_not_compile
 // --snip--
@@ -994,7 +1027,7 @@ the value inside the `Box<T>` will be: recall in Chapter 15 that we used
 `Box<T>` precisely because we had something of an unknown size that we wanted
 to store in a `Box<T>` to get a value of a known size.
 
-As you saw in Listing 17-15, we can write methods that use the syntax `self:
+As you saw in [Listing 17-15][Listing-17-15], we can write methods that use the syntax `self:
 Box<Self>`, which allows the method to take ownership of a `Self` value stored
 in a `Box<T>`. That’s exactly what we want to do here, but unfortunately Rust
 won’t let us: the part of Rust that implements behavior when a closure is
@@ -1003,7 +1036,7 @@ understand that it could use `self: Box<Self>` in this situation to take
 ownership of the closure and move the closure out of the `Box<T>`.
 
 Rust is still a work in progress with places where the compiler could be
-improved, but in the future, the code in Listing 20-20 should work just fine.
+improved, but in the future, the code in [Listing 20-20][Listing-20-20] should work just fine.
 People just like you are working to fix this and other issues! After you’ve
 finished this book, we would love for you to join in.
 
@@ -1014,9 +1047,12 @@ we can call it. This involves defining a new trait `FnBox` with the method
 `call_box` that will use `self: Box<Self>` in its signature, defining `FnBox`
 for any type that implements `FnOnce()`, changing our type alias to use the new
 trait, and changing `Worker` to use the `call_box` method. These changes are
-shown in Listing 20-21.
+shown in [Listing 20-21][Listing-20-21].
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-21]: #Listing-20-21
+<a name="Listing-20-21"></a>
 
 ```rust,ignore
 trait FnBox {
@@ -1132,9 +1168,12 @@ multiple instances of the same request sequentially for caching reasons. This
 limitation is not caused by our web server.
 
 After learning about the `while let` loop in Chapter 18, you might be wondering
-why we didn’t write the worker thread code as shown in Listing 20-22.
+why we didn’t write the worker thread code as shown in [Listing 20-22][Listing-20-22].
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-20-22]: #Listing-20-22
+<a name="Listing-20-22"></a>
 
 ```rust,ignore,not_desired_behavior
 // --snip--
@@ -1178,3 +1217,19 @@ rather than outside it, the `MutexGuard` returned from the `lock` method is
 dropped as soon as the `let job` statement ends. This ensures that the lock is
 held during the call to `recv`, but it is released before the call to
 `job.call_box()`, allowing multiple requests to be serviced concurrently.
+
+[Listing-17-15]: ch17-03-oo-design-patterns.html#Listing-17-15
+[Listing-20-10]: ch20-02-multithreaded.html#Listing-20-10
+[Listing-20-11]: ch20-02-multithreaded.html#Listing-20-11
+[Listing-20-12]: ch20-02-multithreaded.html#Listing-20-12
+[Listing-20-13]: ch20-02-multithreaded.html#Listing-20-13
+[Listing-20-14]: ch20-02-multithreaded.html#Listing-20-14
+[Listing-20-15]: ch20-02-multithreaded.html#Listing-20-15
+[Listing-20-16]: ch20-02-multithreaded.html#Listing-20-16
+[Listing-20-17]: ch20-02-multithreaded.html#Listing-20-17
+[Listing-20-18]: ch20-02-multithreaded.html#Listing-20-18
+[Listing-20-19]: ch20-02-multithreaded.html#Listing-20-19
+[Listing-20-20]: ch20-02-multithreaded.html#Listing-20-20
+[Listing-20-21]: ch20-02-multithreaded.html#Listing-20-21
+[Listing-20-22]: ch20-02-multithreaded.html#Listing-20-22
+[Listing-12-9]: ch12-03-improving-error-handling-and-modularity.html#Listing-12-9

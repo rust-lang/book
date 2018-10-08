@@ -1,6 +1,6 @@
 ## Controlling Visibility with `pub`
 
-We resolved the error messages shown in Listing 7-5 by moving the `network` and
+We resolved the error messages shown in [Listing 7-5][Listing-7-5] by moving the `network` and
 `network::server` code into the *src/network/mod.rs* and
 *src/network/server.rs* files, respectively. At that point, `cargo build` was
 able to build our project, but we still get warning messages about the
@@ -216,10 +216,13 @@ Overall, these are the rules for item visibility:
 ### Privacy Examples
 
 Let’s look at a few more privacy examples to get some practice. Create a new
-library project and enter the code in Listing 7-6 into your new project’s
+library project and enter the code in [Listing 7-6][Listing-7-6] into your new project’s
 *src/lib.rs*:
 
 <span class="filename">Filename: src/lib.rs</span>
+
+[Listing-7-6]: #Listing-7-6
+<a name="Listing-7-6"></a>
 
 ```rust,ignore
 mod outermost {
@@ -286,3 +289,6 @@ them out!
   that we want to refer to the modules starting from the root module.)
 
 Next, let’s talk about bringing items into scope with the `use` keyword.
+
+[Listing-7-5]: ch07-01-mod-and-the-filesystem.html#Listing-7-5
+[Listing-7-6]: ch07-02-controlling-visibility-with-pub.html#Listing-7-6

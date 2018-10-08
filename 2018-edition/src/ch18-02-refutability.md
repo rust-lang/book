@@ -22,9 +22,12 @@ those cases, you’ll need to change either the pattern or the construct you’r
 using the pattern with, depending on the intended behavior of the code.
 
 Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
+where Rust requires an irrefutable pattern and vice versa. [Listing 18-8][Listing-18-8] shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
+
+[Listing-18-8]: #Listing-18-8
+<a name="Listing-18-8"></a>
 
 ```rust,ignore,does_not_compile
 let Some(x) = some_option_value;
@@ -54,7 +57,10 @@ To fix the problem where we have a refutable pattern where an irrefutable
 pattern is needed, we can change the code that uses the pattern: instead of
 using `let`, we can use `if let`. Then if the pattern doesn’t match, the code
 will just skip the code in the curly brackets, giving it a way to continue
-validly. Listing 18-9 shows how to fix the code in Listing 18-8.
+validly. [Listing 18-9][Listing-18-9] shows how to fix the code in [Listing 18-8][Listing-18-8].
+
+[Listing-18-9]: #Listing-18-9
+<a name="Listing-18-9"></a>
 
 ```rust
 # let some_option_value: Option<i32> = None;
@@ -68,8 +74,11 @@ patterns instead of `let`</span>
 
 We’ve given the code an out! This code is perfectly valid, although it means we
 cannot use an irrefutable pattern without receiving an error. If we give `if
-let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
+let` a pattern that will always match, such as `x`, as shown in [Listing 18-10][Listing-18-10],
 it will not compile.
+
+[Listing-18-10]: #Listing-18-10
+<a name="Listing-18-10"></a>
 
 ```rust,ignore,does_not_compile
 if let x = 5 {
@@ -100,3 +109,7 @@ this syntax isn’t particularly useful and could be replaced with a simpler
 Now that you know where to use patterns and the difference between refutable
 and irrefutable patterns, let’s cover all the syntax we can use to create
 patterns.
+
+[Listing-18-8]: ch18-02-refutability.html#Listing-18-8
+[Listing-18-9]: ch18-02-refutability.html#Listing-18-9
+[Listing-18-10]: ch18-02-refutability.html#Listing-18-10

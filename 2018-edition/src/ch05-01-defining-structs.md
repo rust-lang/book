@@ -9,8 +9,11 @@ order of the data to specify or access the values of an instance.
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
 grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
+the pieces of data, which we call *fields*. For example, [Listing 5-1][Listing-5-1] shows a
 struct that stores information about a user account:
+
+[Listing-5-1]: #Listing-5-1
+<a name="Listing-5-1"></a>
 
 ```rust
 struct User {
@@ -31,7 +34,10 @@ data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2:
+example, we can declare a particular user as shown in [Listing 5-2][Listing-5-2]:
+
+[Listing-5-2]: #Listing-5-2
+<a name="Listing-5-2"></a>
 
 ```rust
 # struct User {
@@ -55,8 +61,11 @@ struct</span>
 To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we could use `user1.email` wherever we wanted
 to use this value. If the instance is mutable, we can change a value by using
-the dot notation and assigning into a particular field. Listing 5-3 shows how
+the dot notation and assigning into a particular field. [Listing 5-3][Listing-5-3] shows how
 to change the value in the `email` field of a mutable `User` instance:
+
+[Listing-5-3]: #Listing-5-3
+<a name="Listing-5-3"></a>
 
 ```rust
 # struct User {
@@ -84,9 +93,12 @@ only certain fields as mutable.
 
 As with any expression, we can construct a new instance of the struct as the
 last expression in the function body to implicitly return that new instance.
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
+[Listing 5-4][Listing-5-4] shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
 the `sign_in_count` gets a value of `1`.
+
+[Listing-5-4]: #Listing-5-4
+<a name="Listing-5-4"></a>
 
 ```rust
 # struct User {
@@ -117,9 +129,12 @@ would get even more annoying. Luckily, there’s a convenient shorthand!
 ### Using the Field Init Shorthand when Variables and Fields Have the Same Name
 
 Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the *field init shorthand* syntax to rewrite
+[Listing 5-4][Listing-5-4], we can use the *field init shorthand* syntax to rewrite
 `build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `email` and `username` as shown in Listing 5-5.
+repetition of `email` and `username` as shown in [Listing 5-5][Listing-5-5].
+
+[Listing-5-5]: #Listing-5-5
+<a name="Listing-5-5"></a>
 
 ```rust
 # struct User {
@@ -154,9 +169,12 @@ than `email: email`.
 It’s often useful to create a new instance of a struct that uses most of an old
 instance’s values but changes some. You’ll do this using *struct update syntax*.
 
-First, Listing 5-6 shows how we create a new `User` instance in `user2` without
+First, [Listing 5-6][Listing-5-6] shows how we create a new `User` instance in `user2` without
 the update syntax. We set new values for `email` and `username` but otherwise
-use the same values from `user1` that we created in Listing 5-2:
+use the same values from `user1` that we created in [Listing 5-2][Listing-5-2]:
+
+[Listing-5-6]: #Listing-5-6
+<a name="Listing-5-6"></a>
 
 ```rust
 # struct User {
@@ -185,8 +203,11 @@ let user2 = User {
 the values from `user1`</span>
 
 Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
+shown in [Listing 5-7][Listing-5-7]. The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
+
+[Listing-5-7]: #Listing-5-7
+<a name="Listing-5-7"></a>
 
 ```rust
 # struct User {
@@ -214,7 +235,7 @@ let user2 = User {
 `email` and `username` values for a `User` instance but use the rest of the
 values from the fields of the instance in the `user1` variable</span>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
+The code in [Listing 5-7][Listing-5-7] also creates an instance in `user2` that has a
 different value for `email` and `username` but has the same values for the
 `active` and `sign_in_count` fields from `user1`.
 
@@ -258,7 +279,7 @@ itself. We’ll discuss traits in Chapter 10.
 
 > ### Ownership of Struct Data
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
+> In the `User` struct definition in [Listing 5-1][Listing-5-1], we used the owned `String`
 > type rather than the `&str` string slice type. This is a deliberate choice
 > because we want instances of this struct to own all of its data and for that
 > data to be valid for as long as the entire struct is valid.
@@ -308,3 +329,11 @@ itself. We’ll discuss traits in Chapter 10.
 > In Chapter 10, we’ll discuss how to fix these errors so you can store
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
+
+[Listing-5-1]: ch05-01-defining-structs.html#Listing-5-1
+[Listing-5-2]: ch05-01-defining-structs.html#Listing-5-2
+[Listing-5-3]: ch05-01-defining-structs.html#Listing-5-3
+[Listing-5-4]: ch05-01-defining-structs.html#Listing-5-4
+[Listing-5-5]: ch05-01-defining-structs.html#Listing-5-5
+[Listing-5-6]: ch05-01-defining-structs.html#Listing-5-6
+[Listing-5-7]: ch05-01-defining-structs.html#Listing-5-7
