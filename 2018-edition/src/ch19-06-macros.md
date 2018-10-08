@@ -152,7 +152,8 @@ generate code to create a vector containing the specified elements.
 
 There are some strange corners with `macro_rules!`. In the future, there
 will be a second kind of declarative macro, with the `macro` keyword, that
-will work in a similar fashion, but fix some of these edge cases. With this
+will work in a similar fashion, but fix some of these edge cases. After that
+is done, `macro_rules` will be effectively deprecated. With this
 in mind, as well as the fact that most Rust programmers will *use* macros
 more than *write* macros, we won’t discuss `macro_rules!` any further. To
 learn more about how to write macros, consult the online documentation or
@@ -347,12 +348,13 @@ procedural macro’s purpose.
 
 We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 `proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in *Cargo.toml*. The `proc_macro` crate allows us to convert Rust
-code into a string containing that Rust code. The `syn` crate parses Rust code
-from a string into a data structure that we can perform operations on. The
-`quote` crate takes `syn` data structures and turns them back into Rust code.
-These crates make it much simpler to parse any sort of Rust code we might want
-to handle: writing a full parser for Rust code is no simple task.
+dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler's API to
+be able to read and manipulate Rust code from our code. The `syn` crate
+parses Rust code from a string into a data structure that we can perform
+operations on. The `quote` crate takes `syn` data structures and turns them
+back into Rust code. These crates make it much simpler to parse any sort of
+Rust code we might want to handle: writing a full parser for Rust code is no
+simple task.
 
 [`syn`]: https://crates.io/crates/syn
 [`quote`]: https://crates.io/crates/quote
@@ -479,8 +481,10 @@ trait implementation.
 
 Attribute-like macros are similar to custom derive macros, but instead of
 generating code for `#[derive]`, they allow you to create new, custom
-attributes of your own. For example, you might have something like this when
-using a web application framework:
+attributes of your own. They're also more flexible; derive only works for
+structs and enums; attributes can go on other places as well, like functions.
+As an example of using an attribute-like macro, you might have something like
+this when using a web application framework:
 
 ```rust,ignore
 #[route(GET, "/")]
@@ -505,4 +509,20 @@ crate type, and you're good to go!
 
 ### Function-like macros
 
-Finally, 
+Finally, function-like macros define macros that look like function calls. For
+example, an `sql!` macro:
+
+```rust,ignore
+let sql = sql!(SELECT * FROM posts WHERE id=1);
+```
+
+This macro would parse the SQL statement inside of it and check that it's
+syntactically correct. This macro would be defined like this:
+
+```rust,ignore
+#[proc_macro]
+pub fn sql(input: TokenStream) -> TokenStream {
+```
+
+This is similar to the derive macro's signature: we get in the tokens that are
+inside of the parentheses, and return the code we wanted to generate.
