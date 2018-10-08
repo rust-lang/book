@@ -43,10 +43,13 @@ these from other programming languages. Let’s jump into how they work in Rust.
 An *integer* is a number without a fractional component. We used one integer
 type in Chapter 2, the `u32` type. This type declaration indicates that the
 value it’s associated with should be an unsigned integer (signed integer types
-start with `i`, instead of `u`) that takes up 32 bits of space. Table 3-1 shows
+start with `i`, instead of `u`) that takes up 32 bits of space. [Table 3-1][Table-3-1] shows
 the built-in integer types in Rust. Each variant in the Signed and Unsigned
 columns (for example, `i16`) can be used to declare the type of an integer
 value.
+
+[Table-3-1]: #Table-3-1
+<a name="Table-3-1"></a>
 
 <span class="caption">Table 3-1: Integer Types in Rust</span>
 
@@ -79,9 +82,12 @@ Additionally, the `isize` and `usize` types depend on the kind of computer your
 program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits
 if you’re on a 32-bit architecture.
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
+You can write integer literals in any of the forms shown in [Table 3-2][Table-3-2]. Note
 that all number literals except the byte literal allow a type suffix, such as
 `57u8`, and `_` as a visual separator, such as `1_000`.
+
+[Table-3-2]: #Table-3-2
+<a name="Table-3-2"></a>
 
 <span class="caption">Table 3-2: Integer Literals in Rust</span>
 
@@ -362,3 +368,6 @@ low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
 continuing. Chapter 9 discusses more of Rust’s error handling.
+
+[Table-3-1]: ch03-02-data-types.html#Table-3-1
+[Table-3-2]: ch03-02-data-types.html#Table-3-2

@@ -47,7 +47,7 @@ data from a successful run ends up in the file. We’ll change that.
 
 ### Printing Errors to Standard Error
 
-We’ll use the code in Listing 12-24 to change how error messages are printed.
+We’ll use the code in [Listing 12-24][Listing-12-24] to change how error messages are printed.
 Because of the refactoring we did earlier in this chapter, all the code that
 prints error messages is in one function, `main`. The standard library provides
 the `eprintln!` macro that prints to the standard error stream, so let’s change
@@ -55,6 +55,9 @@ the two places we were calling `println!` to print errors to use `eprintln!`
 instead.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-12-24]: #Listing-12-24
+<a name="Listing-12-24"></a>
 
 ```rust,ignore
 fn main() {
@@ -119,3 +122,5 @@ well tested.
 
 Next, we’ll explore some Rust features that were influenced by functional
 languages: closures and iterators.
+
+[Listing-12-24]: ch12-06-writing-to-stderr-instead-of-stdout.html#Listing-12-24
