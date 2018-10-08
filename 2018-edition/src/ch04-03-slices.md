@@ -272,6 +272,8 @@ fn main() {
     let word = first_word(&s);
 
     s.clear(); // Error!
+
+    println!("the first word is: {}", word);
 }
 ```
 
@@ -279,15 +281,16 @@ Here’s the compiler error:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:5
-  |
-4 |     let word = first_word(&s);
-  |                            - immutable borrow occurs here
-5 |
-6 |     s.clear(); // Error!
-  |     ^ mutable borrow occurs here
-7 | }
-  | - immutable borrow ends here
+  --> src/main.rs:10:5
+   |
+8  |     let word = first_word(&s);
+   |                           -- immutable borrow occurs here
+9  | 
+10 |     s.clear(); // Error!
+   |     ^^^^^^^^^ mutable borrow occurs here
+11 |     
+12 |     println!("the first word is: {}", word);
+   |                                       ---- borrow later used here
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to
