@@ -310,11 +310,15 @@ say we wanted to take two things that implement `Summary`:
 
 ```rust,ignore
 pub fn notify(item1: impl Summary, item2: impl Summary) {
-pub fn notify<T: Summary>(item1: T, item2: T) {
 ```
 
-The version with the bound is a bit easier. In general, you should use whatever
-form makes your code the most understandable.
+This would work well if `item1` and `item2` were allowed to have diferent types
+(as long as both implement `Summary`). But what if you wanted to force both to
+have the exact same type? That is only possible if you use a trait bound:
+
+```rust,ignore
+pub fn notify<T: Summary>(item1: T, item2: T) {
+```
 
 ##### Multiple trait bounds with `+`
 
