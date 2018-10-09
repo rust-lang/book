@@ -2,9 +2,9 @@
 
 우린 [crates.io](https://crates.io)<!-- ignore --> 의 패키지를 프로젝트의
 의존성으로만 사용했지만 여러분이 직접 여러분의 패키지를 배포(publish)해서
-코드를 다른 사람들과 공유 할 수도 있습니다. 만약 여러분이
-[crates.io](https://crates.io)<!-- ignore --> 에 크레이트를 등록하면, 여러분이
-만든 패키지의 소스코드는 오픈소스로서 기능하게 될 겁니다.
+코드를 다른 사람들과 공유 할 수도 있습니다.
+[crates.io](https://crates.io)<!-- ignore --> 의 크레이트 등기소 (registry)는 여러분이 만든 패키지의 소스코드를 배포하므로,
+[crates.io](https://crates.io)<!-- ignore --> 는 주로 오픈 소스인 코드를 관리합니다.
 
 러스트와 Cargo 는 여러분이 배포한 패키지를 사람들이 더 쉽게 찾고 사용할 수
 있도록 도와주는 기능이 있습니다. 다음 내용이 바로 이런 기능들 몇개에 대한
@@ -26,7 +26,7 @@ comment)* 이라고 불리는 문서화를 위한 특별한 주석이 존재합�
 배치하면 됩니다. Listing 14-1 은 `my_crate` 크레이트의 `add_one` 함수에 대한'
 문서화 주석의 예시를 보여줍니다:
 
-<span class="filename">파일명: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 /// Adds one to the number given.
@@ -78,22 +78,22 @@ HTML 문서화</span>
   설명해 주어서 호출하는 사람이 여러 에러를 여러 방법으로
   처리할 수 있도록 해야합니다.
 * **Safety**: 함수가 `안전하지 않을(unsafe)` 경우에
-  (19장에서 다루는 내용입니다) 왜 이 함수가 안전하지 않은지와 호출하는 사람이
-  이 함수의 불변성을 유지할 수 있도록 알려주는 구절이 있어야합니다.
+  (19장에서 다루는 내용입니다) 왜 이 함수가 안전하지 않은지와 이 함수가
+  호출하는 사람에게 지키길 기대하는 불변성에 대해 알려주는 구절이 있어야 합니다.
 
 대부분의 문서화 주석은 이 구절들이 모두 필요하진 않습니다.
-하지만 여러분의 코드를 사람들의 관심과 흥미를 갖도록 만드는데
-사용할 좋은 체크리스트가 될 수 있습니다.
+하지만 여러분의 코드를 사용하는 사람들이 관심을 가지고 알아보게 될 측면에 대해
+곱씹어 보게 만드는 좋은 체크리스트가 될 수 있습니다.
 
-### 테스트로서의 문서화 주석
+#### 테스트로서의 문서화 주석
 
 여러분의 문서화 주석에 예시 코드를 추가하는 건 여러분의 라이브러리를 어떻게
 사용하는지 알려줄 수 있을뿐더러 또 다른 효과도 있습니다: 무려 `cargo test` 를
 실행하면 여러분의 문서에 들어있던 예시 코드들이 테스트로서 실행됩니다! 백문이
 불여일견이라는 말이 있듯이, 예시를 포함한 문서보다 좋은 문서는 없습니다.
-(하지만 코드를 변경하고 문서를 업데이트하지 않아서 예시 코드가 작동하지 않는
-일은 절대 있어선 안됩니다) 우리가 Listing 14-1 의 `add_one` 함수에 대한 문서로
-`cargo test` 를 실행하면 다음과 같은 테스트 결과를 보실수 있습니다.
+다만, 코드를 변경하고 문서를 업데이트하지 않아서 예시 코드가 작동하지 않는
+일은 절대 있어선 안되니 주의하세요. 우리가 Listing 14-1 의 `add_one` 함수에 대한
+문서로 `cargo test` 를 실행하면 다음과 같은 테스트 결과를 보실수 있습니다.
 
 ```text
    Doc-tests my_crate
@@ -121,7 +121,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 Listing 14-2 처럼 *src/lib.rs* 에 `//!` 로 시작하는
 문서화 주석을 추가할 수 있습니다.
 
-<span class="filename">파일명: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 //! # My Crate
@@ -151,9 +151,9 @@ Figure 14-2 처럼 `my_crate` 문서 첫 페이지 내용 중
 <span class="caption">Figure 14-2: 전체 크레이트를 설명하는 주석이 포함된
 `my_crate` 의 문서가 렌더링된 모습</span>
 
-항목 내? 문서화 주석은 크레이트나 모듈을 설명하는데 유용합니다.
+항목 내 문서화 주석은 크레이트나 모듈을 설명하는데 유용합니다.
 이를 이용해 사용자들이 크레이트의 구조를 이해할 수 있도록
-컨테이너의 중심 목적을 설명하세요.
+크레이트의 중심 목적을 설명하세요.
 
 ## `pub use` 를 이용해 공개 API 를 편리한 형태로 export 하기
 
@@ -177,10 +177,10 @@ Figure 14-2 처럼 `my_crate` 문서 첫 페이지 내용 중
 *않다고* 해서 굳이 내부 구조를 뒤엎을 필요는 없다는 겁니다. 대신에 여러분은
 `pub use` 를 이용해 내부 항목을 다시 export(*re-export*) 하여 기존의 private
 구조와 다른 public 구조를 만들 수 있다는 겁니다. 다시 export 한다는 것은 한
-위치에서 공개 항목(public item)을 가져오고 마치 다른 위치에서 정의 된 것처럼
-다른 위치의 공개 항목으로 만드는 것을 의미합니다.
+위치에서 공개 항목(public item)을 가져오고
+이것을 마치 다른 위치에서 정의한 것처럼 공개 항목으로 만드는 것을 의미합니다.
 
-예를 들어, 우리가 예술의 개념을 모델링 하기 위해 `art` 라는 라이브러리를
+예를 들어, 우리가 예술적인 개념을 모델링 하기 위해 `art` 라는 라이브러리를
 만들었다고 가정해 봅시다. 해당 라이브러리에는 두 모듈이 들어 있습니다:
 `kinds` 모듈은 `PrimaryColor` 과 `SecondaryColor` 열거체를 포함하고,
 `utils` 모듈은 `mix` 라는 이름의 함수를 포함합니다. Listing 14-3 처럼요.
@@ -234,12 +234,12 @@ Figure 14-3 은 `cargo doc` 으로 생성된 이 크레이트 문서의
 첫 화면에 나오지 않는 걸 주목하세요.
 이들을 보려면 각각 `kinds` 와 `utils` 를 클릭하셔야 합니다.
 
-이 라이브러리를 의존성으로 가지고 있는 다른 크레이트에선 `use` 를 이용해 `art`
+이 라이브러리를 의존성으로 가지고 있는 다른 크레이트에서 `use` 를 이용해 `art`
 의 항목을 가져오기 위해선, 현재 정의된 `art` 모듈의 구조대로 일일이 입력해야
 합니다. Listing 14-4 에서 다른 크레이트에서 `art` 크레이트의 `PrimaryColor` 과
 `mix` 를 이용하는 예시를 볼 수 있습니다.
 
-<span class="filename">파일명: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate art;
@@ -272,7 +272,7 @@ Listing 14-4 의 코드를 작성한, 즉 `art` 크레이트를 사용하는 사
 Listing 14-3 처럼 맨 위에서 `pub use` 를 이용해
 다시 export 하도록 `art` 크레이트의 코드를 수정해야 합니다:
 
-<span class="filename">파일명: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 //! # Art
@@ -308,7 +308,7 @@ pub mod utils {
 Listing 14-4 처럼 사용하거나, 혹은 좀 더 편한 방식으로 Listing 14-5 의
 구조를 이용하여 Listing 14-6 과 같이 사용할 수 있습니다:
 
-<span class="filename">파일명: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate art;
@@ -353,7 +353,7 @@ $ cargo login abcdefghijklmnopqrstuvwxyz012345
 이 명령어는 Cargo 에게 여러분의 API 토큰을 알려주고 내부
 (*~/.cargo/credentials*) 에 저장하도록 합니다. 미리 말하지만 여러분의 토큰은
 남들에겐 *비밀* 입니다: 어떤 이유로 남들에게 알려졌다면,
-그 사람을 처리하거나, 혹은 [crates.io](https://crates.io)<!-- ignore--> 에서
+(그 사람을 처리하거나, 혹은) [crates.io](https://crates.io)<!-- ignore--> 에서
 기존의 토큰을 무효화하고 새 토큰을 발급받으세요.
 
 ### 새 크레이트에 Metadata 추가하기
@@ -370,7 +370,7 @@ $ cargo login abcdefghijklmnopqrstuvwxyz012345
 크레이트명이 이미 사용중인지 확인하세요. 만약 아직 사용중이지 않다면 다음과
 같이 *Cargo.toml* 파일 내 `[package]` 절 아래의 이름을 수정하세요:
 
-<span class="filename">파일명: Cargo.toml</span>
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [package]
@@ -403,7 +403,7 @@ error: api errors: missing or empty metadata fields: description, license.
 
 [spdx]: http://spdx.org/licenses/
 
-<span class="filename">파일명: Cargo.toml</span>
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [package]
@@ -426,7 +426,7 @@ SPDX 에 없는 라이센스를 사용하고 싶으실 경우엔
 설명, 라이센스를 모두 추가하셨다면 배포할 준비가 끝났습니다.
 이때 *Cargo.toml* 파일의 모습은 다음과 같은 형태일 겁니다:
 
-<span class="filename">파일명: Cargo.toml</span>
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [package]
@@ -447,15 +447,15 @@ license = "MIT OR Apache-2.0"
 
 계정도 만들었고, API 토큰도 얻었고, 크레이트명도 정했고,
 메타데이터도 작성했으니 이제 여러분은 크레이트를 배포할 준비 만전이에요!
-여러분이 크레이트를 배포하면 [crates.io](https://crates.io)<!-- ignore --> 에
-다른 사람이 사용할 특정 버전도 올라가게 됩니다.
+크레이트를 배포한다는 것은 다른 사람이 사용할 특정 버전을
+[crates.io](https://crates.io)<!-- ignore --> 에 올리는 것입니다.
 
 크레이트를 배포할땐 주의하시기 바랍니다. 기본적으로 낙장불입이거든요.
 버전은 중복될 수 없으며, 한번 올라간 코드는 수정할 수 없습니다.
 [crates.io](https://crates.io)<!-- ignore --> 의 원대한 목표중 하나는
 [crates.io](https://crates.io)<!-- ignore --> 에 등록된 크레이트들에 의존하는
-모든 프로젝트의 빌드가 계속 작동할 수 있도록 영구적인 코드 보관소의 역할을 맡는 것이기 때문에, 버전을 삭제하거나 수정하는 행위는 용납하지 않습니다.
-(만약 용납한다면 목표를 이룰 수 없으니까요)
+모든 프로젝트의 빌드가 계속 작동할 수 있도록 영구적인 코드 보관소의 역할을 맡는 것이기 때문에,
+버전을 삭제하거나 수정하는 행위는 용납하지 않습니다. 만약 용납한다면 목표를 이룰 수 없으니까요.
 대신 버전의 개수에 대한 제한은 없으니 버전을 올리는 것 자체는 얼마든지 가능합니다.
 
 `cargo publish` 명령어를 재실행 해보면 이번엔 성공할 겁니다:

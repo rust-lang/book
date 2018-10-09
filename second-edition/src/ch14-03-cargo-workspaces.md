@@ -30,7 +30,7 @@ $ cd add
 시작하는 구절을 갖는데, 이걸 이용해 작업공간에 members 를 추가할 수 있습니다;
 추가하는 법은 우리의 바이너리 크레이트 경로를 명시하는 것이며, 이 경우 해당 경로는 *adder* 입니다:
 
-<span class="filename">파일명: Cargo.toml</span>
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [workspace]
@@ -66,7 +66,7 @@ $ cargo new --bin adder
 갖지 않습니다. 만약 *adder* 디렉토리 내에서 `cargo build` 명령어를
 실행하더라도 컴파일 결과는 *add/adder/target* 이 아닌 *add/target* 에 위치하게
 될 겁니다. Cargo 가 작업공간 내에 이와 같이 *target* 디렉토리를 구성한 이유는,
-작업공간 내의 크레이트들은 서로에게 의존하기 때문입니다. 만약 각 크레이트가
+작업공간 내의 크레이트들이 서로 의존하기로 되어있기 때문입니다. 만약 각 크레이트가
 각각의 *target* 디렉토리를 갖게 된다면, 각각의 크레이트를 컴파일 할때마다
 자신의 *target* 디렉토리에 컴파일 결과를 넣기 위해 다른 크레이트들을 매번
 재컴파일 하게 될 겁니다. 이와 같은 불필요한 재빌드를 피하기 위해,
@@ -78,7 +78,7 @@ $ cargo new --bin adder
 `members` 목록에 *add-one* 경로를 지정하기 위해
 최상위의 *Cargo.toml* 파일을 수정합시다.
 
-<span class="filename">파일명: Cargo.toml</span>
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [workspace]
@@ -114,7 +114,7 @@ $ cargo new add-one
 
 *add-one/src/lib.rs* 파일에 `add_one` 함수를 추가합시다:
 
-<span class="filename">파일명: add-one/src/lib.rs</span>
+<span class="filename">Filename: add-one/src/lib.rs</span>
 
 ```rust
 pub fn add_one(x: i32) -> i32 {
@@ -126,7 +126,7 @@ pub fn add_one(x: i32) -> i32 {
 크레이트를 `add-one` 라이브러리 크레이트에 의존하도록 만들 수 있습니다.
 먼저, *adder/Cargo.toml* 에 `add-one` 에 대한 의존성 경로를 추가합시다.
 
-<span class="filename">파일명: adder/Cargo.toml</span>
+<span class="filename">Filename: adder/Cargo.toml</span>
 
 ```toml
 [dependencies]
@@ -142,7 +142,7 @@ Cargo 는 작업공간 내 크레이트들이 서로 의존하고 있을 것이�
 행을 추가해 스코프 내로 `add-one` 라이브러리를 가져오도록 한 뒤,
 `main` 함수를 `add_one` 함수를 호출하도록 변경합니다. Listing 14-7 처럼요:
 
-<span class="filename">파일명: adder/src/main.rs</span>
+<span class="filename">Filename: adder/src/main.rs</span>
 
 ```rust,ignore
 extern crate add_one;
@@ -192,7 +192,7 @@ Hello, world! 10 plus one is 11!
 있도록 *add-one/Cargo.toml* 파일의 `[dependencies]` 절에 `rand` 를 추가해
 봅시다:
 
-<span class="filename">파일명: add-one/Cargo.toml</span>
+<span class="filename">Filename: add-one/Cargo.toml</span>
 
 ```toml
 [dependencies]
@@ -246,7 +246,7 @@ Cargo 는 `rand` 를 사용하는 작업공간 내의 크레이트는 모두 같
 또 다른 향상을 위해, `add_one` 크레이트의
 `add_one::add_one` 함수에 대한 테스트를 추가해 봅시다.
 
-<span class="filename">파일명: add-one/src/lib.rs</span>
+<span class="filename">Filename: add-one/src/lib.rs</span>
 
 ```rust
 pub fn add_one(x: i32) -> i32 {
