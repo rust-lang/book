@@ -77,12 +77,12 @@
     - [I/O 프로젝트 개선하기](ch13-03-improving-our-io-project.md)
     - [성능 비교하기: 루프 vs. 반복자](ch13-04-performance.md)
 
-- [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
-    - [Customizing Builds with Release Profiles](ch14-01-release-profiles.md)
-    - [Publishing a Crate to Crates.io](ch14-02-publishing-to-crates-io.md)
-    - [Cargo Workspaces](ch14-03-cargo-workspaces.md)
-    - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
-    - [Extending Cargo with Custom Commands](ch14-05-extending-cargo.md)
+- [Cargo와 Crates.io 더 알아보기](ch14-00-more-about-cargo.md)
+    - [릴리즈 프로필을 이용해 빌드 커스터마이징하기](ch14-01-release-profiles.md)
+    - [Crates.io에 크레이트 배포하기](ch14-02-publishing-to-crates-io.md)
+    - [Cargo 작업공간](ch14-03-cargo-workspaces.md)
+    - [`cargo install`을 이용해 Crates.io에서 바이너리 설치하기](ch14-04-installing-binaries.md)
+    - [커스텀 명령어로 Cargo 확장하기](ch14-05-extending-cargo.md)
 
 - [스마트 포인터](ch15-00-smart-pointers.md)
     - [`Box<T>`는 힙에 있는 데이터를 가리키고 알려진 크기를 갖습니다](ch15-01-box.md)
