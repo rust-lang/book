@@ -1,17 +1,17 @@
-## Extending Cargo with Custom Commands
+## 커스텀 명령어로 Cargo 확장하기
 
-Cargo is designed so you can extend it with new subcommands without having to
-modify Cargo. If a binary in your `$PATH` is named `cargo-something`, you can
-run it as if it was a Cargo subcommand by running `cargo something`. Custom
-commands like this are also listed when you run `cargo --list`. Being able to
-use `cargo install` to install extensions and then run them just like the
-built-in Cargo tools is a super convenient benefit of Cargo’s design!
+Cargo 는 여러분이 직접 Cargo 를 수정하지 않고도 새 보조 명령어를 추가할 수 있도록 되어 있습니다.
+만약 여러분의 `$PATH` 내 어떤 바이너리의 이름이 `cargo-something` 이고, 해당 바이너리가
+Cargo 의 보조 명령어 바이너리일 경우 `cargo something` 라는 명령어를 이용해
+실행할 수 있습니다. 이와 같은 커스텀 명령어들은 `cargo --list` 를 실행 할 때의
+목록에도 포함됩니다. 이런식으로 `cargo install` 을 이용해 확장 모듈을 설치하고
+Cargo 의 자체 툴처럼 이용할 수 있다는 점은 Cargo 의 무척 편리한 점 중 하나입니다.
 
-## Summary
+## 정리
 
-Sharing code with Cargo and [crates.io](https://crates.io)<!-- ignore --> is
-part of what makes the Rust ecosystem useful for many different tasks. Rust’s
-standard library is small and stable, but crates are easy to share, use, and
-improve on a timeline different from that of the language. Don’t be shy about
-sharing code that’s useful to you on [crates.io](https://crates.io)<!-- ignore
--->; it’s likely that it will be useful to someone else as well!
+Cargo 와 [crates.io](https://crates.io)<!-- ignore --> 를 통해 코드를 공유하는
+행위는 러스트 생태계를 발전시키고, 러스트가 많은 방면에서 활약하도록 만드는데
+주축이 되는 행위입니다. 러스트의 기본 라이브러리는 작고 고정되어 있지만,
+크레이트들은 쉽게 공유될 수 있고, 쉽게 사용될 수 있으며 러스트 언어 자체보다
+훨씬 빠른 속도로 발전합니다. 여러분에게 유용한 코드가 있다면 주저말고
+[crates.io](https://crates.io)<!-- ignore --> 에 공유하세요; 분명 다른 누군가에게도 도움이 될 테니까요!
