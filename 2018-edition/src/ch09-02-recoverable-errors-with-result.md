@@ -142,7 +142,7 @@ if `File::open` failed because the file doesn’t exist, we want to create the
 file and return the handle to the new file. If `File::open` failed for any
 other reason—for example, because we didn’t have permission to open the file—we
 still want the code to `panic!` in the same way as it did in Listing 9-4. Look
-at Listing 9-5, which adds another arm to the `match`:
+at Listing 9-5, which adds an inner `match` statement:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -181,11 +181,11 @@ operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
 the file we’re trying to open doesn’t exist yet. So, we `match` on `f`, but we
 also then have an inner `match` on `error.kind()`.
 
-The condition we want to check in the match guard is whether the value returned
+The condition we want to check in the inner match is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
 we try to create the file with `File::create`. However, because `File::create`
-could also fail, we need to add another inner `match` statement as well. When
-the file can’t be opened, a different error message will be printed. The last
+could also fail, we need a second arm in the  inner `match` statement. When
+the file can’t be created, a different error message will be printed. The second
 arm of the outer `match` stays the same so the program panics on any error
 besides the missing file error.
 
