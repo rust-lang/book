@@ -203,7 +203,7 @@ The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
 we try to create the file with `File::create`. However, because `File::create`
 could also fail, we need to add an inner `match` expression as well. When the
-file can’t be opened, a different error message will be printed. The last arm
+file can’t be created, a different error message will be printed. The last arm
 of the outer `match` stays the same so the program panics on any error besides
 the missing file error.
 
