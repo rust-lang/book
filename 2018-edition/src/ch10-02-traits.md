@@ -310,7 +310,7 @@ implement `Summary`:
 //use this:
 pub fn notify1(item1: impl Summary, item2: impl Summary) {
 
-//Or the roughtly equivlent:
+//Or the roughly equivalent:
 pub fn notify2<T1:Summary, T2:Summary>(item1: T1, item2: T2) {
 //with the ability to refer to T1 and T2.
 
