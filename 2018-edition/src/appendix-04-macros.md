@@ -79,6 +79,15 @@ source code passed to the macro, the patterns are compared with the structure
 of that source code, and the code associated with each pattern is the code that
 replaces the code passed to the macro. This all happens during compilation.
 
+> Note: Unlike macros in C, Rust macros cannot return entirely arbritary chunks
+> of code; there are restrictions that require that it be something well-formed.
+> Also, the code returned from a macro, if given as a parameter to another macro
+> call, matches against a token tree; the macro pattern matching will not
+> destructure that token tree, it sees it as an opaque object. Thus, for
+> instance, you cannot create a pair of macros where one returns a fixed array
+> of items, and pass the returned code into the second for it to add one or
+> more additional items.
+
 To define a macro, you use the `macro_rules!` construct. Let’s explore how to
 use `macro_rules!` by looking at how the `vec!` macro is defined. Chapter 8
 covered how we can use the `vec!` macro to create a new vector with particular
