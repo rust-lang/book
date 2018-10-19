@@ -69,9 +69,9 @@ can define functions anywhere and call them anywhere.
 
 The most widely used form of macros in Rust are *declarative macros*. These are
 also sometimes referred to as *macros by example*, *`macro_rules!` macros*, or
-just plain *macros*. At their core, declarative macros allow you to write
-something similar to a Rust `match` expression. As discussed in Chapter 6,
-`match` expressions are control structures that take an expression, compare the
+just plain *macros*. At their core, declarative macros are written in a form
+similar to a Rust `match` expression. As discussed in Chapter 6, `match`
+expressions are control structures that take an expression, compare the
 resulting value of the expression to patterns, and then run the code associated
 with the matching pattern. Macros also compare a value to patterns that have
 code associated with them; in this situation, the value is the literal Rust
