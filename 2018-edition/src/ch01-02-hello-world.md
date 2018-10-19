@@ -56,12 +56,9 @@ the *.rs* extension. If you’re using more than one word in your filename, use
 an underscore to separate them. For example, use *hello_world.rs* rather than
 *helloworld.rs*.
 
-Now open the *main.rs* file you just created and enter the code in [Listing 1-1][Listing-1-1].
+Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
 <span class="filename">Filename: main.rs</span>
-
-[Listing-1-1]: #Listing-1-1
-<a name="Listing-1-1"></a>
 
 ```rust
 fn main() {
@@ -219,5 +216,3 @@ Just compiling with `rustc` is fine for simple programs, but as your project
 grows, you’ll want to manage all the options and make it easy to share your
 code. Next, we’ll introduce you to the Cargo tool, which will help you write
 real-world Rust programs.
-
-[Listing-1-1]: ch01-02-hello-world.html#Listing-1-1

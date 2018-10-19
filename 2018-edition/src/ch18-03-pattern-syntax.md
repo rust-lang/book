@@ -31,16 +31,13 @@ them many times in the book. However, there is a complication when you use
 named variables in `match` expressions. Because `match` starts a new scope,
 variables declared as part of a pattern inside the `match` expression will
 shadow those with the same name outside the `match` construct, as is the case
-with all variables. In [Listing 18-11][Listing-18-11], we declare a variable named `x` with the
+with all variables. In Listing 18-11, we declare a variable named `x` with the
 value `Some(5)` and a variable `y` with the value `10`. We then create a
 `match` expression on the value `x`. Look at the patterns in the match arms and
 `println!` at the end, and try to figure out what the code will print before
 running this code or reading further.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-11]: #Listing-18-11
-<a name="Listing-18-11"></a>
 
 ```rust
 fn main() {
@@ -154,13 +151,10 @@ to use different parts of these values. Let’s walk through each value.
 
 #### Destructuring Structs
 
-[Listing 18-12][Listing-18-12] shows a `Point` struct with two fields, `x` and `y`, that we can
+Listing 18-12 shows a `Point` struct with two fields, `x` and `y`, that we can
 break apart using a pattern with a `let` statement.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-12]: #Listing-18-12
-<a name="Listing-18-12"></a>
 
 ```rust
 struct Point {
@@ -190,14 +184,11 @@ Because having variable names match the fields is common and because writing
 `let Point { x: x, y: y } = p;` contains a lot of duplication, there is a
 shorthand for patterns that match struct fields: you only need to list the name
 of the struct field, and the variables created from the pattern will have the
-same names. [Listing 18-13][Listing-18-13] shows code that behaves in the same way as the code
-in [Listing 18-12][Listing-18-12], but the variables created in the `let` pattern are `x` and
+same names. Listing 18-13 shows code that behaves in the same way as the code
+in Listing 18-12, but the variables created in the `let` pattern are `x` and
 `y` instead of `a` and `b`.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-13]: #Listing-18-13
-<a name="Listing-18-13"></a>
 
 ```rust
 struct Point {
@@ -226,14 +217,11 @@ rather than creating variables for all the fields. Doing so allows us to test
 some of the fields for particular values while creating variables to
 destructure the other fields.
 
-[Listing 18-14][Listing-18-14] shows a `match` expression that separates `Point` values into
+Listing 18-14 shows a `match` expression that separates `Point` values into
 three cases: points that lie directly on the `x` axis (which is true when `y =
 0`), on the `y` axis (`x = 0`), or neither.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-14]: #Listing-18-14
-<a name="Listing-18-14"></a>
 
 ```rust
 # struct Point {
@@ -270,16 +258,13 @@ containing a 0, so this code will print `On the y axis at 7`.
 #### Destructuring Enums
 
 We’ve destructured enums earlier in this book, for example, when we
-destructured `Option<i32>` in [Listing 6-5][Listing-6-5] in Chapter 6. One detail we haven’t
+destructured `Option<i32>` in Listing 6-5 in Chapter 6. One detail we haven’t
 mentioned explicitly is that the pattern to destructure an enum should
 correspond to the way the data stored within the enum is defined. As an
-example, in [Listing 18-15][Listing-18-15] we use the `Message` enum from [Listing 6-2][Listing-6-2] and write
+example, in Listing 18-15 we use the `Message` enum from Listing 6-2 and write
 a `match` with patterns that will destructure each inner value.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-15]: #Listing-18-15
-<a name="Listing-18-15"></a>
 
 ```rust
 enum Message {
@@ -330,7 +315,7 @@ For struct-like enum variants, such as `Message::Move`, we can use a pattern
 similar to the pattern we specify to match structs. After the variant name, we
 place curly brackets and then list the fields with variables so we break apart
 the pieces to use in the code for this arm. Here we use the shorthand form as
-we did in [Listing 18-13][Listing-18-13].
+we did in Listing 18-13.
 
 For tuple-like enum variants, like `Message::Write` that holds a tuple with one
 element and `Message::ChangeColor` that holds a tuple with three elements, the
@@ -393,12 +378,9 @@ This technique is especially useful in closures where we have iterators that
 iterate over references, but we want to use the values in the closure rather
 than the references.
 
-The example in [Listing 18-16][Listing-18-16] iterates over references to `Point` instances in a
+The example in Listing 18-16 iterates over references to `Point` instances in a
 vector, destructuring the reference and the struct so we can perform
 calculations on the `x` and `y` values easily.
-
-[Listing-18-16]: #Listing-18-16
-<a name="Listing-18-16"></a>
 
 ```rust
 # struct Point {
@@ -480,12 +462,9 @@ parts of a value. Let’s explore how and why to use each of these patterns.
 We’ve used the underscore (`_`) as a wildcard pattern that will match any value
 but not bind to the value. Although the underscore `_` pattern is especially
 useful as the last arm in a `match` expression, we can use it in any pattern,
-including function parameters, as shown in [Listing 18-17][Listing-18-17].
+including function parameters, as shown in Listing 18-17.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-17]: #Listing-18-17
-<a name="Listing-18-17"></a>
 
 ```rust
 fn foo(_: i32, y: i32) {
@@ -514,14 +493,11 @@ name instead.
 
 We can also use `_` inside another pattern to ignore just part of a value, for
 example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. [Listing 18-18][Listing-18-18] shows code
+other parts in the corresponding code we want to run. Listing 18-18 shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and can give the setting a value if it is
 currently unset.
-
-[Listing-18-18]: #Listing-18-18
-<a name="Listing-18-18"></a>
 
 ```rust
 let mut setting_value = Some(5);
@@ -555,11 +531,8 @@ In all other cases (if either `setting_value` or `new_setting_value` are
 `new_setting_value` to become `setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
-particular values. [Listing 18-19][Listing-18-19] shows an example of ignoring the second and
+particular values. Listing 18-19 shows an example of ignoring the second and
 fourth values in a tuple of five items.
-
-[Listing-18-19]: #Listing-18-19
-<a name="Listing-18-19"></a>
 
 ```rust
 let numbers = (2, 4, 8, 16, 32);
@@ -582,14 +555,11 @@ If you create a variable but don’t use it anywhere, Rust will usually issue a
 warning because that could be a bug. But sometimes it’s useful to create a
 variable you won’t use yet, such as when you’re prototyping or just starting a
 project. In this situation, you can tell Rust not to warn you about the unused
-variable by starting the name of the variable with an underscore. In [Listing 18-20][Listing-18-20],
-we create two unused variables, but when we run this code, we should
+variable by starting the name of the variable with an underscore. In Listing
+18-20, we create two unused variables, but when we run this code, we should
 only get a warning about one of them.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-20]: #Listing-18-20
-<a name="Listing-18-20"></a>
 
 ```rust
 fn main() {
@@ -607,10 +577,7 @@ warning about not using the variable preceded by the underscore.
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore. The syntax `_x` still binds the value to the
 variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, [Listing 18-21][Listing-18-21] will provide us with an error.
-
-[Listing-18-21]: #Listing-18-21
-<a name="Listing-18-21"></a>
+distinction matters, Listing 18-21 will provide us with an error.
 
 ```rust,ignore,does_not_compile
 let s = Some(String::from("Hello!"));
@@ -627,11 +594,8 @@ underscore still binds the value, which might take ownership of the value</span>
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. [Listing 18-22][Listing-18-22] will compile without any errors
+doesn’t ever bind to the value. Listing 18-22 will compile without any errors
 because `s` doesn’t get moved into `_`.
-
-[Listing-18-22]: #Listing-18-22
-<a name="Listing-18-22"></a>
 
 ```rust
 let s = Some(String::from("Hello!"));
@@ -653,13 +617,10 @@ This code works just fine because we never bind `s` to anything; it isn’t move
 With values that have many parts, we can use the `..` syntax to use only a few
 parts and ignore the rest, avoiding the need to list underscores for each
 ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In [Listing 18-23][Listing-18-23], we have a
+explicitly matched in the rest of the pattern. In Listing 18-23, we have a
 `Point` struct that holds a coordinate in three-dimensional space. In the
 `match` expression, we want to operate only on the `x` coordinate and ignore
 the values in the `y` and `z` fields.
-
-[Listing-18-23]: #Listing-18-23
-<a name="Listing-18-23"></a>
 
 ```rust
 struct Point {
@@ -683,13 +644,10 @@ than having to list `y: _` and `z: _`, particularly when we’re working with
 structs that have lots of fields in situations where only one or two fields are
 relevant.
 
-The syntax `..` will expand to as many values as it needs to be. [Listing 18-24][Listing-18-24]
+The syntax `..` will expand to as many values as it needs to be. Listing 18-24
 shows how to use `..` with a tuple.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-24]: #Listing-18-24
-<a name="Listing-18-24"></a>
 
 ```rust
 fn main() {
@@ -711,13 +669,10 @@ In this code, the first and last value are matched with `first` and `last`. The
 
 However, using `..` must be unambiguous. If it is unclear which values are
 intended for matching and which should be ignored, Rust will give us an error.
-[Listing 18-25][Listing-18-25] shows an example of using `..` ambiguously, so it will not
+Listing 18-25 shows an example of using `..` ambiguously, so it will not
 compile.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-25]: #Listing-18-25
-<a name="Listing-18-25"></a>
 
 ```rust,ignore,does_not_compile
 fn main() {
@@ -759,12 +714,9 @@ a `match` arm that must also match, along with the pattern matching, for that
 arm to be chosen. Match guards are useful for expressing more complex ideas
 than a pattern alone allows.
 
-The condition can use variables created in the pattern. [Listing 18-26][Listing-18-26] shows a
+The condition can use variables created in the pattern. Listing 18-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
 guard of `if x < 5`.
-
-[Listing-18-26]: #Listing-18-26
-<a name="Listing-18-26"></a>
 
 ```rust
 let num = Some(4);
@@ -791,17 +743,14 @@ therefore matches any `Some` variant.
 There is no way to express the `if x < 5` condition within a pattern, so the
 match guard gives us the ability to express this logic.
 
-In [Listing 18-11][Listing-18-11], we mentioned that we could use match guards to solve our
+In Listing 18-11, we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that a new variable was created inside the
 pattern in the `match` expression instead of using the variable outside the
 `match`. That new variable meant we couldn’t test against the value of the
-outer variable. [Listing 18-30][Listing-18-30] shows how we can use a match guard to fix this
+outer variable. Listing 18-30 shows how we can use a match guard to fix this
 problem.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-18-27]: #Listing-18-27
-<a name="Listing-18-27"></a>
 
 ```rust
 fn main() {
@@ -834,14 +783,11 @@ we can look for a value that has the same value as the outer `y` by comparing
 `n` to `y`.
 
 You can also use the *or* operator `|` in a match guard to specify multiple
-patterns; the match guard condition will apply to all the patterns. [Listing 18-31][Listing-18-31]
-shows the precedence of combining a match guard with a pattern that uses
+patterns; the match guard condition will apply to all the patterns. Listing
+18-31 shows the precedence of combining a match guard with a pattern that uses
 `|`. The important part of this example is that the `if y` match guard applies
 to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to
 `6`.
-
-[Listing-18-18]: #Listing-18-18
-<a name="Listing-18-18"></a>
 
 ```rust
 let x = 4;
@@ -883,15 +829,12 @@ were applied only to the final value in the list of values specified using the
 ### `@` Bindings
 
 The *at* operator (`@`) lets us create a variable that holds a value at the
-same time we’re testing that value to see whether it matches a pattern. [Listing 18-32][Listing-18-32]
-shows an example where we want to test that a `Message::Hello` `id` field
+same time we’re testing that value to see whether it matches a pattern. Listing
+18-32 shows an example where we want to test that a `Message::Hello` `id` field
 is within the range `3...7`. But we also want to bind the value to the variable
 `id_variable` so we can use it in the code associated with the arm. We could
 name this variable `id`, the same as the field, but for this example we’ll use
 a different name.
-
-[Listing-18-19]: #Listing-18-19
-<a name="Listing-18-19"></a>
 
 ```rust
 enum Message {
@@ -1006,24 +949,3 @@ variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced
 aspects of a variety of Rust’s features.
-
-[Listing-18-11]: ch18-03-pattern-syntax.html#Listing-18-11
-[Listing-18-12]: ch18-03-pattern-syntax.html#Listing-18-12
-[Listing-18-13]: ch18-03-pattern-syntax.html#Listing-18-13
-[Listing-18-14]: ch18-03-pattern-syntax.html#Listing-18-14
-[Listing-18-15]: ch18-03-pattern-syntax.html#Listing-18-15
-[Listing-18-16]: ch18-03-pattern-syntax.html#Listing-18-16
-[Listing-18-17]: ch18-03-pattern-syntax.html#Listing-18-17
-[Listing-18-18]: ch18-03-pattern-syntax.html#Listing-18-18
-[Listing-18-19]: ch18-03-pattern-syntax.html#Listing-18-19
-[Listing-18-20]: ch18-03-pattern-syntax.html#Listing-18-20
-[Listing-18-21]: ch18-03-pattern-syntax.html#Listing-18-21
-[Listing-18-22]: ch18-03-pattern-syntax.html#Listing-18-22
-[Listing-18-23]: ch18-03-pattern-syntax.html#Listing-18-23
-[Listing-18-24]: ch18-03-pattern-syntax.html#Listing-18-24
-[Listing-18-25]: ch18-03-pattern-syntax.html#Listing-18-25
-[Listing-18-26]: ch18-03-pattern-syntax.html#Listing-18-26
-[Listing-18-18]: ch18-03-pattern-syntax.html#Listing-18-18
-[Listing-18-19]: ch18-03-pattern-syntax.html#Listing-18-19
-[Listing-6-5]: ch06-02-match.html#Listing-6-5
-[Listing-6-2]: ch06-01-defining-an-enum.html#Listing-6-2

@@ -6,13 +6,10 @@ trait bounds, macros, attributes, comments, tuples, and brackets.
 
 ### Operators
 
-[Table B-1][Table-B-1] contains the operators in Rust, an example of how the operator would
+Table B-1 contains the operators in Rust, an example of how the operator would
 appear in context, a short explanation, and whether that operator is
 overloadable. If an operator is overloadable, the relevant trait to use to
 overload that operator is listed.
-
-[Table-B-1]: #Table-B-1
-<a name="Table-B-1"></a>
 
 <span class="caption">Table B-1: Operators</span>
 
@@ -78,11 +75,8 @@ overload that operator is listed.
 The following list contains all non-letters that don’t function as operators;
 that is, they don’t behave like a function or method call.
 
-[Table B-2][Table-B-2] shows symbols that appear on their own and are valid in a variety of
+Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
-
-[Table-B-2]: #Table-B-2
-<a name="Table-B-2"></a>
 
 <span class="caption">Table B-2: Stand-Alone Syntax</span>
 
@@ -100,11 +94,8 @@ locations.
 | `!` | Always empty bottom type for diverging functions |
 | `_` | “Ignored” pattern binding; also used to make integer literals readable |
 
-[Table B-3][Table-B-3] shows symbols that appear in the context of a path through the module
+Table B-3 shows symbols that appear in the context of a path through the module
 hierarchy to an item.
-
-[Table-B-3]: #Table-B-3
-<a name="Table-B-3"></a>
 
 <span class="caption">Table B-3: Path-Related Syntax</span>
 
@@ -120,11 +111,8 @@ hierarchy to an item.
 | `type::method(...)` | Disambiguating a method call by naming the type for which it’s defined |
 | `<type as trait>::method(...)` | Disambiguating a method call by naming the trait and type |
 
-[Table B-4][Table-B-4] shows symbols that appear in the context of using generic type
+Table B-4 shows symbols that appear in the context of using generic type
 parameters.
-
-[Table-B-4]: #Table-B-4
-<a name="Table-B-4"></a>
 
 <span class="caption">Table B-4: Generics</span>
 
@@ -139,11 +127,8 @@ parameters.
 | `for<...> type` | Higher-ranked lifetime bounds |
 | `type<ident=type>` | A generic type where one or more associated types have specific assignments (e.g., `Iterator<Item=T>`) |
 
-[Table B-5][Table-B-5] shows symbols that appear in the context of constraining generic type
+Table B-5 shows symbols that appear in the context of constraining generic type
 parameters with trait bounds.
-
-[Table-B-5]: #Table-B-5
-<a name="Table-B-5"></a>
 
 <span class="caption">Table B-5: Trait Bound Constraints</span>
 
@@ -156,11 +141,8 @@ parameters with trait bounds.
 | `T: ?Sized` | Allow generic type parameter to be a dynamically sized type |
 | `'a + trait`, `trait + trait` | Compound type constraint |
 
-[Table B-6][Table-B-6] shows symbols that appear in the context of calling or defining
+Table B-6 shows symbols that appear in the context of calling or defining
 macros and specifying attributes on an item.
-
-[Table-B-6]: #Table-B-6
-<a name="Table-B-6"></a>
 
 <span class="caption">Table B-6: Macros and Attributes</span>
 
@@ -172,10 +154,7 @@ macros and specifying attributes on an item.
 | `$ident:kind` | Macro capture |
 | `$(…)…` | Macro repetition |
 
-[Table B-7][Table-B-7] shows symbols that create comments.
-
-[Table-B-7]: #Table-B-7
-<a name="Table-B-7"></a>
+Table B-7 shows symbols that create comments.
 
 <span class="caption">Table B-7: Comments</span>
 
@@ -188,10 +167,7 @@ macros and specifying attributes on an item.
 | `/*!...*/` | Inner block doc comment |
 | `/**...*/` | Outer block doc comment |
 
-[Table B-8][Table-B-8] shows symbols that appear in the context of using tuples.
-
-[Table-B-8]: #Table-B-8
-<a name="Table-B-8"></a>
+Table B-8 shows symbols that appear in the context of using tuples.
 
 <span class="caption">Table B-8: Tuples</span>
 
@@ -207,10 +183,7 @@ macros and specifying attributes on an item.
 | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation |
 | `expr.0`, `expr.1`, etc. | Tuple indexing |
 
-[Table B-9][Table-B-9] shows the contexts in which curly braces are used.
-
-[Table-B-9]: #Table-B-9
-<a name="Table-B-9"></a>
+Table B-9 shows the contexts in which curly braces are used.
 
 <span class="caption">Table B-9: Curly Brackets</span>
 
@@ -219,10 +192,7 @@ macros and specifying attributes on an item.
 | `{...}` | Block expression |
 | `Type {...}` | `struct` literal |
 
-[Table B-10][Table-B-10] shows the contexts in which square brackets are used.
-
-[Table-B-10]: #Table-B-10
-<a name="Table-B-10"></a>
+Table B-10 shows the contexts in which square brackets are used.
 
 <span class="caption">Table B-10: Square Brackets</span>
 
@@ -233,14 +203,3 @@ macros and specifying attributes on an item.
 | `[type; len]` | Array type containing `len` instances of `type` |
 | `expr[expr]` | Collection indexing. Overloadable (`Index`, `IndexMut`) |
 | `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or `RangeFull` as the “index” |
-
-[Table-B-1]: appendix-02-operators.html#Table-B-1
-[Table-B-2]: appendix-02-operators.html#Table-B-2
-[Table-B-3]: appendix-02-operators.html#Table-B-3
-[Table-B-4]: appendix-02-operators.html#Table-B-4
-[Table-B-5]: appendix-02-operators.html#Table-B-5
-[Table-B-6]: appendix-02-operators.html#Table-B-6
-[Table-B-7]: appendix-02-operators.html#Table-B-7
-[Table-B-8]: appendix-02-operators.html#Table-B-8
-[Table-B-9]: appendix-02-operators.html#Table-B-9
-[Table-B-10]: appendix-02-operators.html#Table-B-10
