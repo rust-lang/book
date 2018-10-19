@@ -75,13 +75,10 @@ Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
 
 The first part of the guessing game program will ask for user input, process
 that input, and check that the input is in the expected form. To start, we’ll
-allow the player to input a guess. Enter the code in [Listing 2-1][Listing-2-1] into
+allow the player to input a guess. Enter the code in Listing 2-1 into
 *src/main.rs*.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-2-1]: #Listing-2-1
-<a name="Listing-2-1"></a>
 
 ```rust,ignore
 use std::io;
@@ -395,10 +392,7 @@ version 0.3.14.”
 [semver]: http://semver.org
 
 Now, without changing any of the code, let’s build the project, as shown in
-[Listing 2-2][Listing-2-2].
-
-[Listing-2-2]: #Listing-2-2
-<a name="Listing-2-2"></a>
+Listing 2-2.
 
 ```text
 $ cargo build
@@ -515,12 +509,9 @@ from a number of packages.
 ### Generating a Random Number
 
 Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
-`rand`. The next step is to update *src/main.rs*, as shown in [Listing 2-3][Listing-2-3].
+`rand`. The next step is to update *src/main.rs*, as shown in Listing 2-3.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-2-3]: #Listing-2-3
-<a name="Listing-2-3"></a>
 
 ```rust,ignore
 extern crate rand;
@@ -607,13 +598,10 @@ You should get different random numbers, and they should all be numbers between
 ## Comparing the Guess to the Secret Number
 
 Now that we have user input and a random number, we can compare them. That step
-is shown in [Listing 2-4][Listing-2-4]. Note that this code won’t compile quite yet, as we
+is shown in Listing 2-4. Note that this code won’t compile quite yet, as we
 will explain.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-2-4]: #Listing-2-4
-<a name="Listing-2-4"></a>
 
 ```rust,ignore
 extern crate rand;
@@ -676,7 +664,7 @@ the code in that arm and moves to the next arm. The next arm’s pattern,
 that arm will execute and print `Too big!` to the screen. The `match`
 expression ends because it has no need to look at the last arm in this scenario.
 
-However, the code in [Listing 2-4][Listing-2-4] won’t compile yet. Let’s try it:
+However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
 ```text
 $ cargo build
@@ -905,12 +893,9 @@ exiting the program, because the loop is the last part of `main`.
 To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in [Listing 2-5][Listing-2-5].
+is converted from a `String` to a `u32`, as shown in Listing 2-5.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-2-5]: #Listing-2-5
-<a name="Listing-2-5"></a>
 
 ```rust,ignore
 // --snip--
@@ -980,12 +965,9 @@ You win!
 Awesome! With one tiny final tweak, we will finish the guessing game. Recall
 that the program is still printing the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. [Listing 2-6][Listing-2-6] shows the final code.
+secret number. Listing 2-6 shows the final code.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-2-6]: #Listing-2-6
-<a name="Listing-2-6"></a>
 
 ```rust,ignore
 extern crate rand;
@@ -1040,10 +1022,3 @@ variables, data types, and functions, and shows how to use them in Rust.
 Chapter 4 explores ownership, a feature that makes Rust different from other
 languages. Chapter 5 discusses structs and method syntax, and Chapter 6
 explains how enums work.
-
-[Listing-2-1]: ch02-00-guessing-game-tutorial.html#Listing-2-1
-[Listing-2-2]: ch02-00-guessing-game-tutorial.html#Listing-2-2
-[Listing-2-3]: ch02-00-guessing-game-tutorial.html#Listing-2-3
-[Listing-2-4]: ch02-00-guessing-game-tutorial.html#Listing-2-4
-[Listing-2-5]: ch02-00-guessing-game-tutorial.html#Listing-2-5
-[Listing-2-6]: ch02-00-guessing-game-tutorial.html#Listing-2-6

@@ -6,10 +6,7 @@ concepts we covered in the final chapters, as well as recap some earlier
 lessons.
 
 For our final project, we’ll make a web server that says “hello” and looks like
-[Figure 20-1][Figure-20-1] in a web browser.
-
-[Figure-20-1]: #Figure-20-1
-<a name="Figure-20-1"></a>
+Figure 20-1 in a web browser.
 
 ![hello from rust](img/trpl20-01.png)
 
@@ -34,5 +31,3 @@ level of abstraction we want to work with and can go to a lower level than is
 possible or practical in other languages. We’ll write the basic HTTP server and
 thread pool manually so you can learn the general ideas and techniques behind
 the crates you might use in the future.
-
-[Figure-20-1]: ch20-00-final-project-a-web-server.html#Figure-20-1

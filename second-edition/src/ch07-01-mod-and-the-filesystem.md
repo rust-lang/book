@@ -70,12 +70,9 @@ would need to specify the module and use the namespace syntax `::` like so:
 
 We can also have multiple modules, side by side, in the same *src/lib.rs* file.
 For example, to also have a `client` module that has a function named
-`connect`, we can add it as shown in [Listing 7-1][Listing-7-1].
+`connect`, we can add it as shown in Listing 7-1.
 
 <span class="filename">Filename: src/lib.rs</span>
-
-[Listing-7-1]: #Listing-7-1
-<a name="Listing-7-1"></a>
 
 ```rust
 mod network {
@@ -106,12 +103,9 @@ related functionality organized together and separate functionality apart. The
 way you choose to organize your code depends on how you think about the
 relationship between the parts of your code. For instance, the `client` code
 and its `connect` function might make more sense to users of our library if
-they were inside the `network` namespace instead, as in [Listing 7-2][Listing-7-2].
+they were inside the `network` namespace instead, as in Listing 7-2.
 
 <span class="filename">Filename: src/lib.rs</span>
-
-[Listing-7-2]: #Listing-7-2
-<a name="Listing-7-2"></a>
 
 ```rust
 mod network {
@@ -129,14 +123,14 @@ mod network {
 `network` module</span>
 
 In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
-definitions with the ones in [Listing 7-2][Listing-7-2], which have the `client` module as an
+definitions with the ones in Listing 7-2, which have the `client` module as an
 inner module of `network`. The functions `network::connect` and
 `network::client::connect` are both named `connect`, but they don’t conflict
 with each other because they’re in different namespaces.
 
 In this way, modules form a hierarchy. The contents of *src/lib.rs* are at the
 topmost level, and the submodules are at lower levels. Here’s what the
-organization of our example in [Listing 7-1][Listing-7-1] looks like when thought of as a
+organization of our example in Listing 7-1 looks like when thought of as a
 hierarchy:
 
 ```text
@@ -145,7 +139,7 @@ communicator
  └── client
 ```
 
-And here’s the hierarchy corresponding to the example in [Listing 7-2][Listing-7-2]:
+And here’s the hierarchy corresponding to the example in Listing 7-2:
 
 ```text
 communicator
@@ -153,7 +147,7 @@ communicator
      └── client
 ```
 
-The hierarchy shows that in [Listing 7-2][Listing-7-2], `client` is a child of the `network`
+The hierarchy shows that in Listing 7-2, `client` is a child of the `network`
 module rather than a sibling. More complicated projects can have many modules,
 and they’ll need to be organized logically in order for you to keep track of
 them. What “logically” means in your project is up to you and depends on how
@@ -167,12 +161,9 @@ Modules form a hierarchical structure, much like another structure in computing
 that you’re used to: filesystems! We can use Rust’s module system along with
 multiple files to split up Rust projects so not everything lives in
 *src/lib.rs* or *src/main.rs*. For this example, let’s start with the code in
-[Listing 7-3][Listing-7-3].
+Listing 7-3.
 
 <span class="filename">Filename: src/lib.rs</span>
-
-[Listing-7-3]: #Listing-7-3
-<a name="Listing-7-3"></a>
 
 ```rust
 mod client {
@@ -211,12 +202,9 @@ These would be good reasons to separate the `client`, `network`, and `server`
 modules from *src/lib.rs* and place them into their own files.
 
 First, let’s replace the `client` module code with only the declaration of the
-`client` module so that *src/lib.rs* looks like code shown in [Listing 7-4][Listing-7-4].
+`client` module so that *src/lib.rs* looks like code shown in Listing 7-4.
 
 <span class="filename">Filename: src/lib.rs</span>
-
-[Listing-7-4]: #Listing-7-4
-<a name="Listing-7-4"></a>
 
 ```rust,ignore
 mod client;
@@ -357,10 +345,7 @@ fn connect() {
 }
 ```
 
-When we try to run `cargo build`, we’ll get the error shown in [Listing 7-5][Listing-7-5].
-
-[Listing-7-5]: #Listing-7-5
-<a name="Listing-7-5"></a>
+When we try to run `cargo build`, we’ll get the error shown in Listing 7-5.
 
 ```text
 $ cargo build
@@ -390,7 +375,7 @@ The error says we `cannot declare a new module at this location` and is
 pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is
 different than *src/lib.rs* somehow: keep reading to understand why.
 
-The note in the middle of [Listing 7-5][Listing-7-5] is actually very helpful because it
+The note in the middle of Listing 7-5 is actually very helpful because it
 points out something we haven’t yet talked about doing:
 
 ```text
@@ -416,7 +401,7 @@ $ mv src/server.rs src/network
 
 Now when we try to run `cargo build`, compilation will work (we’ll still have
 warnings, though). Our module layout still looks exactly the same as it did when
-we had all the code in *src/lib.rs* in [Listing 7-3][Listing-7-3]:
+we had all the code in *src/lib.rs* in Listing 7-3:
 
 ```text
 communicator
@@ -494,9 +479,3 @@ The modules should be declared in their parent module’s file using the `mod`
 keyword.
 
 Next, we’ll talk about the `pub` keyword and get rid of those warnings!
-
-[Listing-7-1]: ch07-01-mod-and-the-filesystem.html#Listing-7-1
-[Listing-7-2]: ch07-01-mod-and-the-filesystem.html#Listing-7-2
-[Listing-7-3]: ch07-01-mod-and-the-filesystem.html#Listing-7-3
-[Listing-7-4]: ch07-01-mod-and-the-filesystem.html#Listing-7-4
-[Listing-7-5]: ch07-01-mod-and-the-filesystem.html#Listing-7-5
