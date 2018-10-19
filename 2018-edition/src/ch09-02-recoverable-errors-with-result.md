@@ -29,12 +29,9 @@ library has defined on it in many different situations where the successful
 value and error value we want to return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
-fail. In [Listing 9-3][Listing-9-3] we try to open a file:
+fail. In Listing 9-3 we try to open a file:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-9-3]: #Listing-9-3
-<a name="Listing-9-3"></a>
 
 ```rust
 use std::fs::File;
@@ -91,15 +88,12 @@ an instance of `Ok` that contains a file handle. In the case where it fails,
 the value in `f` will be an instance of `Err` that contains more information
 about the kind of error that happened.
 
-We need to add to the code in [Listing 9-3][Listing-9-3] to take different actions depending
-on the value `File::open` returns. [Listing 9-4][Listing-9-4] shows one way to handle the
+We need to add to the code in Listing 9-3 to take different actions depending
+on the value `File::open` returns. Listing 9-4 shows one way to handle the
 `Result` using a basic tool, the `match` expression that we discussed in
 Chapter 6.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-9-4]: #Listing-9-4
-<a name="Listing-9-4"></a>
 
 ```rust,should_panic
 use std::fs::File;
@@ -142,21 +136,18 @@ As usual, this output tells us exactly what has gone wrong.
 
 ### Matching on Different Errors
 
-The code in [Listing 9-4][Listing-9-4] will `panic!` no matter why `File::open` failed. What
+The code in Listing 9-4 will `panic!` no matter why `File::open` failed. What
 we want to do instead is take different actions for different failure reasons:
 if `File::open` failed because the file doesn’t exist, we want to create the
 file and return the handle to the new file. If `File::open` failed for any
 other reason—for example, because we didn’t have permission to open the file—we
-still want the code to `panic!` in the same way as it did in [Listing 9-4][Listing-9-4]. Look
-at [Listing 9-5][Listing-9-5], which adds another arm to the `match`:
+still want the code to `panic!` in the same way as it did in Listing 9-4. Look
+at Listing 9-5, which adds another arm to the `match`:
 
 <span class="filename">Filename: src/main.rs</span>
 
 <!-- ignore this test because otherwise it creates hello.txt which causes other
 tests to fail lol -->
-
-[Listing-9-5]: #Listing-9-5
-<a name="Listing-9-5"></a>
 
 ```rust,ignore
 use std::fs::File;
@@ -232,7 +223,7 @@ Using `match` works well enough, but it can be a bit verbose and doesn’t alway
 communicate intent well. The `Result<T, E>` type has many helper methods
 defined on it to do various tasks. One of those methods, called `unwrap`, is a
 shortcut method that is implemented just like the `match` statement we wrote in
-[Listing 9-4][Listing-9-4]. If the `Result` value is the `Ok` variant, `unwrap` will return
+Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
 the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
@@ -295,14 +286,11 @@ error to the calling code so that it can decide what to do. This is known as
 might be more information or logic that dictates how the error should be
 handled than what you have available in the context of your code.
 
-For example, [Listing 9-6][Listing-9-6] shows a function that reads a username from a file. If
+For example, Listing 9-6 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-9-6]: #Listing-9-6
-<a name="Listing-9-6"></a>
 
 ```rust
 use std::io;
@@ -348,7 +336,7 @@ method.
 
 The body of the function starts by calling the `File::open` function. Then we
 handle the `Result` value returned with a `match` similar to the `match` in
-[Listing 9-4][Listing-9-4], only instead of calling `panic!` in the `Err` case, we return
+Listing 9-4, only instead of calling `panic!` in the `Err` case, we return
 early from this function and pass the error value from `File::open` back to the
 calling code as this function’s error value. If `File::open` succeeds, we store
 the file handle in the variable `f` and continue.
@@ -378,14 +366,11 @@ question mark operator `?` to make this easier.
 
 #### A Shortcut for Propagating Errors: the `?` Operator
 
-[Listing 9-7][Listing-9-7] shows an implementation of `read_username_from_file` that has the
-same functionality as it had in [Listing 9-6][Listing-9-6], but this implementation uses the
+Listing 9-7 shows an implementation of `read_username_from_file` that has the
+same functionality as it had in Listing 9-6, but this implementation uses the
 question mark operator:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-9-7]: #Listing-9-7
-<a name="Listing-9-7"></a>
 
 ```rust
 use std::io;
@@ -404,14 +389,14 @@ fn read_username_from_file() -> Result<String, io::Error> {
 calling code using `?`</span>
 
 The `?` placed after a `Result` value is defined to work in almost the same way
-as the `match` expressions we defined to handle the `Result` values in [Listing 9-6][Listing-9-6].
-If the value of the `Result` is an `Ok`, the value inside the `Ok` will
+as the `match` expressions we defined to handle the `Result` values in Listing
+9-6. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
 get returned from this expression, and the program will continue. If the value
 is an `Err`, the `Err` will be returned from the whole function as if we had
 used the `return` keyword so the error value gets propagated to the calling
 code.
 
-There is a difference between what the `match` expression from [Listing 9-6][Listing-9-6] and
+There is a difference between what the `match` expression from Listing 9-6 and
 `?` do: error values taken by `?` go through the `from` function, defined in
 the `From` trait in the standard library, which is used to convert errors from
 one type into another. When `?` calls the `from` function, the error type
@@ -422,7 +407,7 @@ different reasons. As long as each error type implements the `from` function to
 define how to convert itself to the returned error type, `?` takes care of the
 conversion automatically.
 
-In the context of [Listing 9-7][Listing-9-7], the `?` at the end of the `File::open` call will
+In the context of Listing 9-7, the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the variable `f`. If an error occurs, `?`
 will return early out of the whole function and give any `Err` value to the
 calling code. The same thing applies to the `?` at the end of the
@@ -430,12 +415,9 @@ calling code. The same thing applies to the `?` at the end of the
 
 The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
-method calls immediately after the `?`, as shown in [Listing 9-8][Listing-9-8]:
+method calls immediately after the `?`, as shown in Listing 9-8:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-9-8]: #Listing-9-8
-<a name="Listing-9-8"></a>
 
 ```rust
 use std::io;
@@ -459,16 +441,13 @@ chained the call to `read_to_string` directly onto the result of
 `File::open("hello.txt")?`. We still have a `?` at the end of the
 `read_to_string` call, and we still return an `Ok` value containing the
 username in `s` when both `File::open` and `read_to_string` succeed rather than
-returning errors. The functionality is again the same as in [Listing 9-6][Listing-9-6] and
-[Listing 9-7][Listing-9-7]; this is just a different, more ergonomic way to write it.
+returning errors. The functionality is again the same as in Listing 9-6 and
+Listing 9-7; this is just a different, more ergonomic way to write it.
 
 Speaking of different ways to write this function, there's a way to make this even
 shorter:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-9-9]: #Listing-9-9
-<a name="Listing-9-9"></a>
 
 ```rust
 use std::io;
@@ -492,7 +471,7 @@ so we did it the hard way at first.
 
 The `?` operator can only be used in functions that have a return type of
 `Result`, because it is defined to work in the same way as the `match`
-expression we defined in [Listing 9-6][Listing-9-6]. The part of the `match` that requires a
+expression we defined in Listing 9-6. The part of the `match` that requires a
 return type of `Result` is `return Err(e)`, so the return type of the function
 must be a `Result` to be compatible with this `return`.
 
@@ -545,10 +524,3 @@ For now, you can read `Box<dyn Error>` to mean "any kind of error."
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
-
-[Listing-9-3]: ch09-02-recoverable-errors-with-result.html#Listing-9-3
-[Listing-9-4]: ch09-02-recoverable-errors-with-result.html#Listing-9-4
-[Listing-9-5]: ch09-02-recoverable-errors-with-result.html#Listing-9-5
-[Listing-9-6]: ch09-02-recoverable-errors-with-result.html#Listing-9-6
-[Listing-9-7]: ch09-02-recoverable-errors-with-result.html#Listing-9-7
-[Listing-9-8]: ch09-02-recoverable-errors-with-result.html#Listing-9-8

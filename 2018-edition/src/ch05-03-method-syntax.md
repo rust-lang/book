@@ -12,12 +12,9 @@ instance of the struct the method is being called on.
 
 Let’s change the `area` function that has a `Rectangle` instance as a parameter
 and instead make an `area` method defined on the `Rectangle` struct, as shown
-in [Listing 5-13][Listing-5-13]:
+in Listing 5-13:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-5-13]: #Listing-5-13
-<a name="Listing-5-13"></a>
 
 ```rust
 #[derive(Debug)]
@@ -127,13 +124,10 @@ Let’s practice using methods by implementing a second method on the `Rectangle
 struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self`; otherwise it should return `false`. That is, we want to be able
-to write the program shown in [Listing 5-14][Listing-5-14], once we’ve defined the `can_hold`
+to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
 method:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-5-14]: #Listing-5-14
-<a name="Listing-5-14"></a>
 
 ```rust,ignore
 fn main() {
@@ -170,12 +164,9 @@ calling the `can_hold` method. The return value of `can_hold` will be a
 Boolean, and the implementation will check whether the width and height of
 `self` are both greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
-[Listing 5-13][Listing-5-13], shown in [Listing 5-15][Listing-5-15]:
+Listing 5-13, shown in Listing 5-15:
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-5-15]: #Listing-5-15
-<a name="Listing-5-15"></a>
 
 ```rust
 # #[derive(Debug)]
@@ -198,7 +189,7 @@ impl Rectangle {
 <span class="caption">Listing 5-15: Implementing the `can_hold` method on
 `Rectangle` that takes another `Rectangle` instance as a parameter</span>
 
-When we run this code with the `main` function in [Listing 5-14][Listing-5-14], we’ll get our
+When we run this code with the `main` function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
 signature after the `self` parameter, and those parameters work just like
 parameters in functions.
@@ -241,12 +232,9 @@ namespaces created by modules. We’ll discuss modules in Chapter 7.
 
 ### Multiple `impl` Blocks
 
-Each struct is allowed to have multiple `impl` blocks. For example, [Listing 5-15][Listing-5-15]
-is equivalent to the code shown in [Listing 5-16][Listing-5-16], which has each method
+Each struct is allowed to have multiple `impl` blocks. For example, Listing
+5-15 is equivalent to the code shown in Listing 5-16, which has each method
 in its own `impl` block:
-
-[Listing-5-16]: #Listing-5-16
-<a name="Listing-5-16"></a>
 
 ```rust
 # #[derive(Debug)]
@@ -268,7 +256,7 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">Listing 5-16: Rewriting [Listing 5-15][Listing-5-15] using multiple `impl`
+<span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
 blocks</span>
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
@@ -286,8 +274,3 @@ instance available.
 
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
-
-[Listing-5-13]: ch05-03-method-syntax.html#Listing-5-13
-[Listing-5-14]: ch05-03-method-syntax.html#Listing-5-14
-[Listing-5-15]: ch05-03-method-syntax.html#Listing-5-15
-[Listing-5-16]: ch05-03-method-syntax.html#Listing-5-16
