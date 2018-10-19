@@ -23,14 +23,11 @@ few seconds. We want to call this algorithm only when we need to and only call
 it once so we don’t make the user wait more than necessary.
 
 We’ll simulate calling this hypothetical algorithm with the function
-`simulated_expensive_calculation` shown in [Listing 13-1][Listing-13-1], which will print
+`simulated_expensive_calculation` shown in Listing 13-1, which will print
 `calculating slowly...`, wait for two seconds, and then return whatever number
 we passed in.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-1]: #Listing-13-1
-<a name="Listing-13-1"></a>
 
 ```rust
 use std::thread;
@@ -59,13 +56,10 @@ The required inputs are these:
   high-intensity workout
 * A random number that will generate some variety in the workout plans
 
-The output will be the recommended workout plan. [Listing 13-2][Listing-13-2] shows the `main`
+The output will be the recommended workout plan. Listing 13-2 shows the `main`
 function we’ll use.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-2]: #Listing-13-2
-<a name="Listing-13-2"></a>
 
 ```rust
 fn main() {
@@ -91,14 +85,11 @@ example in Chapter 2. The `main` function calls a `generate_workout` function
 with the simulated input values.
 
 Now that we have the context, let’s get to the algorithm. The function
-`generate_workout` in [Listing 13-3][Listing-13-3] contains the business logic of the
+`generate_workout` in Listing 13-3 contains the business logic of the
 app that we’re most concerned with in this example. The rest of the code
 changes in this example will be made to this function.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-3]: #Listing-13-3
-<a name="Listing-13-3"></a>
 
 ```rust
 # use std::thread;
@@ -137,7 +128,7 @@ fn generate_workout(intensity: u32, random_number: u32) {
 plans based on the inputs and calls to the `simulated_expensive_calculation`
 function</span>
 
-The code in [Listing 13-3][Listing-13-3] has multiple calls to the slow calculation function.
+The code in Listing 13-3 has multiple calls to the slow calculation function.
 The first `if` block calls `simulated_expensive_calculation` twice, the `if`
 inside the outer `else` doesn’t call it at all, and the code inside the
 second `else` case calls it once.
@@ -169,12 +160,9 @@ to call it if the result isn’t needed, and we still want to call it only once.
 
 We could restructure the workout program in many ways. First, we’ll try
 extracting the duplicated call to the `simulated_expensive_calculation`
-function into a variable, as shown in [Listing 13-4][Listing-13-4].
+function into a variable, as shown in Listing 13-4.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-4]: #Listing-13-4
-<a name="Listing-13-4"></a>
 
 ```rust
 # use std::thread;
@@ -229,14 +217,11 @@ code where we actually need the result. This is a use case for closures!
 
 Instead of always calling the `simulated_expensive_calculation` function before
 the `if` blocks, we can define a closure and store the *closure* in a variable
-rather than storing the result of the function call, as shown in [Listing 13-5][Listing-13-5].
+rather than storing the result of the function call, as shown in Listing 13-5.
 We can actually move the whole body of `simulated_expensive_calculation` within
 the closure we’re introducing here.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-5]: #Listing-13-5
-<a name="Listing-13-5"></a>
 
 ```rust
 # use std::thread;
@@ -277,12 +262,9 @@ With the closure defined, we can change the code in the `if` blocks to call the
 closure to execute the code and get the resulting value. We call a closure like
 we do a function: we specify the variable name that holds the closure
 definition and follow it with parentheses containing the argument values we
-want to use, as shown in [Listing 13-6][Listing-13-6].
+want to use, as shown in Listing 13-6.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-6]: #Listing-13-6
-<a name="Listing-13-6"></a>
 
 ```rust
 # use std::thread;
@@ -323,7 +305,7 @@ defined</span>
 Now the expensive calculation is called in only one place, and we’re only
 executing that code where we need the results.
 
-However, we’ve reintroduced one of the problems from [Listing 13-3][Listing-13-3]: we’re still
+However, we’ve reintroduced one of the problems from Listing 13-3: we’re still
 calling the closure twice in the first `if` block, which will call the
 expensive code twice and make the user wait twice as long as they need to. We
 could fix this problem by creating a variable local to that `if` block to hold
@@ -353,13 +335,10 @@ available.
 
 As with variables, we can add type annotations if we want to increase
 explicitness and clarity at the cost of being more verbose than is strictly
-necessary. Annotating the types for the closure we defined in [Listing 13-5][Listing-13-5]
-would look like the definition shown in [Listing 13-7][Listing-13-7].
+necessary. Annotating the types for the closure we defined in Listing 13-5
+would look like the definition shown in Listing 13-7.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-7]: #Listing-13-7
-<a name="Listing-13-7"></a>
 
 ```rust
 # use std::thread;
@@ -396,7 +375,7 @@ optional because the closure body has only one expression. These are all valid
 definitions that will produce the same behavior when they’re called.
 
 Closure definitions will have one concrete type inferred for each of their
-parameters and for their return value. For instance, [Listing 13-8][Listing-13-8] shows the
+parameters and for their return value. For instance, Listing 13-8 shows the
 definition of a short closure that just returns the value it receives as a
 parameter. This closure isn’t very useful except for the purposes of this
 example. Note that we haven’t added any type annotations to the definition: if
@@ -404,9 +383,6 @@ we then try to call the closure twice, using a `String` as an argument the
 first time and a `u32` the second time, we’ll get an error.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-8]: #Listing-13-8
-<a name="Listing-13-8"></a>
 
 ```rust,ignore
 let example_closure = |x| x;
@@ -439,7 +415,7 @@ error if we try to use a different type with the same closure.
 
 ### Storing Closures Using Generic Parameters and the `Fn` Traits
 
-Let’s return to our workout generation app. In [Listing 13-6][Listing-13-6], our code was still
+Let’s return to our workout generation app. In Listing 13-6, our code was still
 calling the expensive calculation closure more times than it needed to. One
 option to solve this issue is to save the result of the expensive closure in a
 variable for reuse and use the variable in each place we need the result,
@@ -470,13 +446,10 @@ and return values the closures must have to match this trait bound. In this
 case, our closure has a parameter of type `u32` and returns a `u32`, so the
 trait bound we specify is `Fn(u32) -> u32`.
 
-[Listing 13-9][Listing-13-9] shows the definition of the `Cacher` struct that holds a closure
+Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
 and an optional result value.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-9]: #Listing-13-9
-<a name="Listing-13-9"></a>
 
 ```rust
 struct Cacher<T>
@@ -508,12 +481,10 @@ result within a `Some` variant in the `value` field. Then if the code asks for
 the result of the closure again, instead of executing the closure again, the
 `Cacher` will return the result held in the `Some` variant.
 
-The logic around the `value` field we’ve just described is defined in [Listing 13-10][Listing-13-10].
+The logic around the `value` field we’ve just described is defined in Listing
+13-10.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-10]: #Listing-13-10
-<a name="Listing-13-10"></a>
 
 ```rust
 # struct Cacher<T>
@@ -568,13 +539,10 @@ If `self.value` is `None`, the code calls the closure stored in
 `self.calculation`, saves the result in `self.value` for future use, and
 returns the value as well.
 
-[Listing 13-11][Listing-13-11] shows how we can use this `Cacher` struct in the function
-`generate_workout` from [Listing 13-6][Listing-13-6].
+Listing 13-11 shows how we can use this `Cacher` struct in the function
+`generate_workout` from Listing 13-6.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-11]: #Listing-13-11
-<a name="Listing-13-11"></a>
 
 ```rust
 # use std::thread;
@@ -647,7 +615,7 @@ call the `value` method on the `Cacher` instance. We can call the `value`
 method as many times as we want, or not call it at all, and the expensive
 calculation will be run a maximum of once.
 
-Try running this program with the `main` function from [Listing 13-2][Listing-13-2]. Change the
+Try running this program with the `main` function from Listing 13-2. Change the
 values in the `simulated_user_specified_value` and `simulated_random_number`
 variables to verify that in all the cases in the various `if` and `else`
 blocks, `calculating slowly...` appears only once and only when needed. The
@@ -683,8 +651,8 @@ passed into it. We call the `value` method on this `Cacher` instance with an
 `arg` value of 1 and then an `arg` value of 2, and we expect the call to
 `value` with the `arg` value of 2 to return 2.
 
-Run this test with the `Cacher` implementation in [Listing 13-9][Listing-13-9] and [Listing 13-10][Listing-13-10],
-and the test will fail on the `assert_eq!` with this message:
+Run this test with the `Cacher` implementation in Listing 13-9 and Listing
+13-10, and the test will fail on the `assert_eq!` with this message:
 
 ```text
 thread 'call_with_different_values' panicked at 'assertion failed: `(left == right)`
@@ -717,13 +685,10 @@ functions. However, closures have an additional capability that functions don’
 have: they can capture their environment and access variables from the scope in
 which they’re defined.
 
-[Listing 13-12][Listing-13-12] has an example of a closure stored in the `equal_to_x` variable
+Listing 13-12 has an example of a closure stored in the `equal_to_x` variable
 that uses the `x` variable from the closure’s surrounding environment.
 
 <span class="filename">Filename: src/main.rs</span>
-
-[Listing-13-12]: #Listing-13-12
-<a name="Listing-13-12"></a>
 
 ```rust
 fn main() {
@@ -798,7 +763,7 @@ When you create a closure, Rust infers which trait to use based on how the
 closure uses the values from the environment. All closures implement `FnOnce`
 because they can all be called at least once. Closures that don’t move the
 captured variables also implement `FnMut`, and closures that don’t need mutable
-access to the captured variables also implement `Fn`. In [Listing 13-12][Listing-13-12], the
+access to the captured variables also implement `Fn`. In Listing 13-12, the
 `equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the `Fn` trait)
 because the body of the closure only needs to read the value in `x`.
 
@@ -808,7 +773,7 @@ technique is mostly useful when passing a closure to a new thread to move the
 data so it’s owned by the new thread.
 
 We’ll have more examples of `move` closures in Chapter 16 when we talk about
-concurrency. For now, here’s the code from [Listing 13-12][Listing-13-12] with the `move`
+concurrency. For now, here’s the code from Listing 13-12 with the `move`
 keyword added to the closure definition and using vectors instead of integers,
 because integers can be copied rather than moved; note that this code will not
 yet compile.
@@ -856,16 +821,3 @@ on what happens in the closure body.
 
 To illustrate situations where closures that can capture their environment are
 useful as function parameters, let’s move on to our next topic: iterators.
-
-[Listing-13-1]: ch13-01-closures.html#Listing-13-1
-[Listing-13-2]: ch13-01-closures.html#Listing-13-2
-[Listing-13-3]: ch13-01-closures.html#Listing-13-3
-[Listing-13-4]: ch13-01-closures.html#Listing-13-4
-[Listing-13-5]: ch13-01-closures.html#Listing-13-5
-[Listing-13-6]: ch13-01-closures.html#Listing-13-6
-[Listing-13-7]: ch13-01-closures.html#Listing-13-7
-[Listing-13-8]: ch13-01-closures.html#Listing-13-8
-[Listing-13-9]: ch13-01-closures.html#Listing-13-9
-[Listing-13-10]: ch13-01-closures.html#Listing-13-10
-[Listing-13-11]: ch13-01-closures.html#Listing-13-11
-[Listing-13-12]: ch13-01-closures.html#Listing-13-12
