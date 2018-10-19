@@ -44,26 +44,53 @@ generally more difficult to read, understand, and maintain than function
 definitions.
 
 Another difference between macros and functions is that macro definitions
-aren’t namespaced within modules like function definitions are. To prevent
-unexpected name clashes when using external crates, you have to explicitly
-bring the macros into the scope of your project at the same time as you bring
-the external crate into scope, using the `#[macro_use]` annotation. The
-following example would bring all the macros defined in the `serde` crate into
-the scope of the current crate:
+aren’t namespaced within modules like function definitions are (and thus normal
+`use` statements are not involved in bringing them into scope):
 
-```rust,ignore
-#[macro_use]
-extern crate serde;
+ - Within a crate: Macros defined within a module are, by default, private to
+   that module (and its submodules); They are automatically visible within all
+   submodules beneath the module that defines them; Tagging a module with a
+   `#[macro_use]` attribute brings the macros defined within (or within scope
+   of) that module into the visible scope of its parent. (Note, a macro does not
+   need to be defined at module level, it can privately be defined within a
+   function for example).
+ - Externally: Only macros tagged with a `#[macro_export]` attribute are visible
+   externally to users of a crate; All exported macros are made available at the
+   root of the crate's API only, and they must all have unique names; and
+   similar to how `#[macro_use]` is required to bring macros into scope of a
+   parent module, this is also required on an `extern crate` statement to use
+   exported macros (they are not imported by default to prevent unexpected name
+   clashes when using multiple external crates).
+
+   The following example would bring all the macros defined in the `serde` crate
+   into the scope of the current crate:
+
+   ```rust,ignore
+   #[macro_use]
+   extern crate serde;
+   ```
+
+There is one last important difference between macros and functions: order of
+definition (or import) and use is important! You must define or bring macros
+into scope *before* you call them in a file, whereas you can define functions
+anywhere and call them anywhere. Example:
+
+```rust
+// Note, attributing the `example` mod with `#[macro_use]` here would change
+// the example, making `my_macros` macros available to everything within it.
+mod example {
+    // At this point `my_macros` macros are not available.
+    mod foo;
+
+    // From this point, they are available to everything defined below (within
+    // `example`). This also gives the parent `example` mod opportunity to
+    // bring them into its scope.
+    #[macro_use]
+    mod my_macros;
+
+    mod bar; // Available within here for instance!
+}
 ```
-
-If `extern crate` was able to bring macros into scope by default without this
-explicit annotation, you would be prevented from using two crates that happened
-to define macros with the same name. In practice, this conflict doesn’t occur
-often, but the more crates you use, the more likely it is.
-
-There is one last important difference between macros and functions: you must
-define or bring macros into scope *before* you call them in a file, whereas you
-can define functions anywhere and call them anywhere.
 
 ### Declarative Macros with `macro_rules!` for General Metaprogramming
 
@@ -118,14 +145,11 @@ definition</span>
 > includes code to preallocate the correct amount of memory up front. That code
 > is an optimization that we don’t include here to make the example simpler.
 
-The `#[macro_export]` annotation indicates that this macro should be made
-available whenever the crate in which we’re defining the macro is imported.
-Without this annotation, even if someone depending on this crate uses the
-`#[macro_use]` annotation, the macro wouldn’t be brought into scope.
+The #[macro_export] annotation was mentioned above.
 
-We then start the macro definition with `macro_rules!` and the name of the
-macro we’re defining *without* the exclamation mark. The name, in this case
-`vec`, is followed by curly brackets denoting the body of the macro definition.
+We start the macro definition with `macro_rules!` and the name of the macro
+we’re defining *without* the exclamation mark. The name, in this case `vec`,
+is followed by curly brackets denoting the body of the macro definition.
 
 The structure in the `vec!` body is similar to the structure of a `match`
 expression. Here we have one arm with the pattern `( $( $x:expr ),* )`,
