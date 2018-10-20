@@ -125,8 +125,8 @@ struct fields a meaningful name. Doing so will make it easier for future
 maintainers of this code to understand how the different values relate to each
 other and what their purpose is.
 
-> Note: Some people call this anti-pattern of using primitive values when a
-> complex type would be more appropriate *primitive obsession*.
+> Note: Using primitive values when a complex type would be more appropriate is
+> an anti-pattern known as *primitive obsession*.
 
 Listing 12-6 shows the addition of a struct named `Config` defined to have
 fields named `query` and `filename`. We’ve also changed the `parse_config`
