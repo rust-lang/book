@@ -140,9 +140,12 @@ we need to be explicit about the dependency relationships between the crates.
 Next, let’s use the `add_one` function from the `add-one` crate in the `adder`
 crate. Open the *adder/src/main.rs* file and add an `extern crate` line at
 the top to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in Listing 14-7:
+`main` function to call the `add_one` function, as in [Listing 14-7][Listing-14-7]:
 
 <span class="filename">Filename: adder/src/main.rs</span>
+
+[Listing-14-7]: #Listing-14-7
+<a id="Listing-14-7"></a>
 
 ```rust,ignore
 extern crate add_one;
@@ -334,3 +337,5 @@ As your project grows, consider using a workspace: it’s easier to understand
 smaller, individual components than one big blob of code. Furthermore, keeping
 the crates in a workspace can make coordination between them easier if they are
 often changed at the same time.
+
+[Listing-14-7]: ch14-03-cargo-workspaces.html#Listing-14-7

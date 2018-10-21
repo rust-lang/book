@@ -36,9 +36,12 @@ you recognize duplicated code to extract into a function, you’ll start to
 recognize duplicated code that can use generics.
 
 Consider a short program that finds the largest number in a list, as shown in
-Listing 10-1.
+[Listing 10-1][Listing-10-1].
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-1]: #Listing-10-1
+<a id="Listing-10-1"></a>
 
 ```rust
 fn main() {
@@ -70,10 +73,13 @@ After considering all the numbers in the list, `largest` should hold the
 largest number, which in this case is 100.
 
 To find the largest number in two different lists of numbers, we can duplicate
-the code in Listing 10-1 and use the same logic at two different places in the
-program, as shown in Listing 10-2.
+the code in [Listing 10-1][Listing-10-1] and use the same logic at two different places in the
+program, as shown in [Listing 10-2][Listing-10-2].
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-2]: #Listing-10-2
+<a id="Listing-10-2"></a>
 
 ```rust
 fn main() {
@@ -114,12 +120,15 @@ function that operates on any list of integers given to it in a parameter. This
 solution makes our code clearer and lets us express the concept of finding the
 largest number in a list abstractly.
 
-In Listing 10-3, we extracted the code that finds the largest number into a
-function named `largest`. Unlike the code in Listing 10-1, which can find the
+In [Listing 10-3][Listing-10-3], we extracted the code that finds the largest number into a
+function named `largest`. Unlike the code in [Listing 10-1][Listing-10-1], which can find the
 largest number in only one particular list, this program can find the largest
 number in two different lists.
 
 <span class="filename">Filename: src/main.rs</span>
+
+[Listing-10-3]: #Listing-10-3
+<a id="Listing-10-3"></a>
 
 ```rust
 fn largest(list: &[i32]) -> i32 {
@@ -157,8 +166,8 @@ concrete slice of `i32` values that we might pass into the function. As a
 result, when we call the function, the code runs on the specific values that we
 pass in.
 
-In sum, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+In sum, here are the steps we took to change the code from [Listing 10-2][Listing-10-2] to
+[Listing 10-3][Listing-10-3]:
 
 1. Identify duplicate code.
 2. Extract the duplicate code into the body of the function and specify the
@@ -173,3 +182,7 @@ abstract types.
 For example, say we had two functions: one that finds the largest item in a
 slice of `i32` values and one that finds the largest item in a slice of `char`
 values. How would we eliminate that duplication? Let’s find out!
+
+[Listing-10-1]: ch10-00-generics.html#Listing-10-1
+[Listing-10-2]: ch10-00-generics.html#Listing-10-2
+[Listing-10-3]: ch10-00-generics.html#Listing-10-3

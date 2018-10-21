@@ -168,9 +168,12 @@ tedious (and might impact performance).
 Instead, we can make a new type and put the validations in a function to create
 an instance of the type rather than repeating the validations everywhere. That
 way, it’s safe for functions to use the new type in their signatures and
-confidently use the values they receive. Listing 9-9 shows one way to define a
+confidently use the values they receive. [Listing 9-9][Listing-9-9] shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
+
+[Listing-9-9]: #Listing-9-9
+<a id="Listing-9-9"></a>
 
 ```rust
 pub struct Guess {
@@ -242,3 +245,5 @@ situations will make your code more reliable in the face of inevitable problems.
 Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code.
+
+[Listing-9-9]: ch09-03-to-panic-or-not-to-panic.html#Listing-9-9

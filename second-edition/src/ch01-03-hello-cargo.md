@@ -52,9 +52,12 @@ repository along with a *.gitignore* file.
 > the `--vcs` flag. Run `cargo new --help` to see the available options.
 
 Open *Cargo.toml* in your text editor of choice. It should look similar to the
-code in Listing 1-2.
+code in [Listing 1-2][Listing-1-2].
 
 <span class="filename">Filename: Cargo.toml</span>
+
+[Listing-1-2]: #Listing-1-2
+<a id="Listing-1-2"></a>
 
 ```toml
 [package]
@@ -98,7 +101,7 @@ fn main() {
 ```
 
 Cargo has generated a Hello, world! program for you, just like the one we wrote
-in Listing 1-1! So far, the differences between our previous project and the
+in [Listing 1-1][Listing-1-1]! So far, the differences between our previous project and the
 project Cargo generates are that Cargo placed the code in the *src* directory,
 and we have a *Cargo.toml* configuration file in the top directory.
 
@@ -242,3 +245,6 @@ This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
 If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
+
+[Listing-1-1]: ch01-02-hello-world.html#Listing-1-1
+[Listing-1-2]: ch01-03-hello-cargo.html#Listing-1-2
