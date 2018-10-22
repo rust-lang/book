@@ -55,18 +55,14 @@ The following keywords do not have any functionality but are reserved by Rust
 for potential future use.
 
 * `abstract`
-* `alignof`
 * `become`
 * `box`
 * `do`
 * `final`
 * `macro`
-* `offsetof`
 * `override`
 * `priv`
 * `proc`
-* `pure`
-* `sizeof`
 * `typeof`
 * `unsized`
 * `virtual`
