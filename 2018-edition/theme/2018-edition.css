@@ -7,3 +7,7 @@ span.caption code {
     font-size: 0.875em;
     font-weight: 400;
 }
+
+a code {
+    color: inherit !important;
+}
