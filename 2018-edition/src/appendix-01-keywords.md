@@ -55,6 +55,7 @@ The following keywords do not have any functionality but are reserved by Rust
 for potential future use.
 
 * `abstract`
+* `async`
 * `become`
 * `box`
 * `do`
@@ -63,6 +64,7 @@ for potential future use.
 * `override`
 * `priv`
 * `proc`
+* `try`
 * `typeof`
 * `unsized`
 * `virtual`
