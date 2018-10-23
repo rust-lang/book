@@ -17,6 +17,7 @@ The following keywords currently have the functionality described.
 * `continue` - continue to the next loop iteration
 * `crate` - link an external crate or a macro variable representing the crate in
   which the macro is defined
+* `dyn` - dynamic dispatch to a trait object
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - define an enumeration
 * `extern` - link an external crate, function, or variable
@@ -55,18 +56,15 @@ The following keywords do not have any functionality but are reserved by Rust
 for potential future use.
 
 * `abstract`
-* `alignof`
+* `async`
 * `become`
 * `box`
 * `do`
 * `final`
 * `macro`
-* `offsetof`
 * `override`
 * `priv`
-* `proc`
-* `pure`
-* `sizeof`
+* `try`
 * `typeof`
 * `unsized`
 * `virtual`
