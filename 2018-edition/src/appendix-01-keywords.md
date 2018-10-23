@@ -64,7 +64,6 @@ for potential future use.
 * `macro`
 * `override`
 * `priv`
-* `proc`
 * `try`
 * `typeof`
 * `unsized`
