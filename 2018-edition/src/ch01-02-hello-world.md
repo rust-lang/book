@@ -86,7 +86,8 @@ Hello, world!
 ```
 
 Regardless of your operating system, the string `Hello, world!` should print to
-the terminal. If you don’t see this output, refer back to the “Troubleshooting”
+the terminal. If you don’t see this output, refer back to the [“Troubleshooting”]
+[troubleshooting]
 part of the Installation section for ways to get help.
 
 If `Hello, world!` did print, congratulations! You’ve officially written a Rust
@@ -216,3 +217,6 @@ Just compiling with `rustc` is fine for simple programs, but as your project
 grows, you’ll want to manage all the options and make it easy to share your
 code. Next, we’ll introduce you to the Cargo tool, which will help you write
 real-world Rust programs.
+
+[troubleshooting]:
+ch01-01-installation.html#troubleshooting

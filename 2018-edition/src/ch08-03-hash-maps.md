@@ -100,7 +100,9 @@ they’ve been moved into the hash map with the call to `insert`.
 If we insert references to values into the hash map, the values won’t be moved
 into the hash map. The values that the references point to must be valid for at
 least as long as the hash map is valid. We’ll talk more about these issues in
-the “Validating References with Lifetimes” section in Chapter 10.
+the [“Validating References with Lifetimes”]
+[validating-references-with-lifetimes]
+section in Chapter 10.
 
 ### Accessing Values in a Hash Map
 
@@ -299,3 +301,6 @@ and hash maps have that will be helpful for these exercises!
 
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
+
+[validating-references-with-lifetimes]:
+ch10-03-lifetime-syntax.html#validating-references-with-lifetimes

@@ -284,7 +284,9 @@ impl ThreadPool {
 We chose `usize` as the type of the `size` parameter, because we know that a
 negative number of threads doesn’t make any sense. We also know we’ll use this
 4 as the number of elements in a collection of threads, which is what the
-`usize` type is for, as discussed in the “Integer Types” section of Chapter 3.
+`usize` type is for, as discussed in the [“Integer Types”]
+[integer-types]
+section of Chapter 3.
 
 Let’s check the code again:
 
@@ -309,14 +311,17 @@ error[E0599]: no method named `execute` found for type `hello::ThreadPool` in th
 
 Now we get a warning and an error. Ignoring the warning for a moment, the error
 occurs because we don’t have an `execute` method on `ThreadPool`. Recall from
-the “Creating a Similar Interface for a Finite Number of Threads” section that
+the [“Creating a Similar Interface for a Finite Number of Threads”](#creating-a-similar-interface-for-a-finite-number-of-threads)
+section that
 we decided our thread pool should have an interface similar to `thread::spawn`.
 In addition, we’ll implement the `execute` function so it takes the closure
 it’s given and gives it to an idle thread in the pool to run.
 
 We’ll define the `execute` method on `ThreadPool` to take a closure as a
-parameter. Recall from the “Storing Closures Using Generic Parameters and the
-`Fn` Traits” section in Chapter 13 that we can take closures as parameters with
+parameter. Recall from the [“Storing Closures Using Generic Parameters and the
+`Fn` Traits”]
+[storing-closures-using-generic-parameters-and-the-fn-traits]
+section in Chapter 13 that we can take closures as parameters with
 three different traits: `Fn`, `FnMut`, and `FnOnce`. We need to decide which
 kind of closure to use here. We know we’ll end up doing something similar to
 the standard library `thread::spawn` implementation, so we can look at what
@@ -876,8 +881,10 @@ With these changes, the code compiles! We’re getting there!
 
 Let’s finally implement the `execute` method on `ThreadPool`. We’ll also change
 `Job` from a struct to a type alias for a trait object that holds the type of
-closure that `execute` receives. As discussed in the “Creating Type Synonyms
-with Type Aliases” section of Chapter 19, type aliases allow us to make long
+closure that `execute` receives. As discussed in the [“Creating Type Synonyms
+with Type Aliases”]
+[creating-type-synonyms-with-type-aliases]
+section of Chapter 19, type aliases allow us to make long
 types shorter. Look at Listing 20-19.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -1178,3 +1185,10 @@ rather than outside it, the `MutexGuard` returned from the `lock` method is
 dropped as soon as the `let job` statement ends. This ensures that the lock is
 held during the call to `recv`, but it is released before the call to
 `job.call_box()`, allowing multiple requests to be serviced concurrently.
+
+[creating-type-synonyms-with-type-aliases]:
+ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
+[integer-types]:
+ch03-02-data-types.html#integer-types
+[storing-closures-using-generic-parameters-and-the-fn-traits]:
+ch13-01-closures.html#storing-closures-using-generic-parameters-and-the-fn-traits

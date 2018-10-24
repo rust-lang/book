@@ -332,7 +332,9 @@ didn’t mean to pass and we should pass a different type or we should implement
 
 ### Trait Objects Perform Dynamic Dispatch
 
-Recall in the “Performance of Code Using Generics” section in Chapter 10 our
+Recall in the [“Performance of Code Using Generics”]
+[performance-of-code-using-generics]
+section in Chapter 10 our
 discussion on the monomorphization process performed by the compiler when we
 use trait bounds on generics: the compiler generates nongeneric implementations
 of functions and methods for each concrete type that we use in place of a
@@ -419,3 +421,6 @@ This error means you can’t use this trait as a trait object in this way. If
 you’re interested in more details on object safety, see [Rust RFC 255].
 
 [Rust RFC 255]: https://github.com/rust-lang/rfcs/blob/master/text/0255-object-safety.md
+
+[performance-of-code-using-generics]:
+ch10-01-syntax.html#performance-of-code-using-generics

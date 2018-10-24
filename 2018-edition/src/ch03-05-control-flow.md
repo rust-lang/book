@@ -37,7 +37,9 @@ condition. In this case, the condition checks whether or not the variable
 condition is true is placed immediately after the condition inside curly
 brackets. Blocks of code associated with the conditions in `if` expressions are
 sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the “Comparing the Guess to the Secret Number” section of
+discussed in the [“Comparing the Guess to the Secret Number”]
+[comparing-the-guess-to-the-secret-number]
+section of
 Chapter 2.
 
 Optionally, we can also include an `else` expression, which we chose
@@ -306,7 +308,9 @@ depending on where the code was in the loop when it received the halt signal.
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 You can place the `break` keyword within the loop to tell the program when to
 stop executing the loop. Recall that we did this in the guessing game in the
-“Quitting After a Correct Guess” section of Chapter 2 to exit the
+[“Quitting After a Correct Guess”]
+[quitting-after-a-correct-guess]
+section of Chapter 2 to exit the
 program when the user won the game by guessing the correct number.
 
 
@@ -484,3 +488,8 @@ taking advantage of the repetition in the song.
 
 When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
 commonly exist in other programming languages: ownership.
+
+[comparing-the-guess-to-the-secret-number]:
+ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[quitting-after-a-correct-guess]:
+ch02-00-guessing-game-tutorial.html#quitting-after-a-correct-guess

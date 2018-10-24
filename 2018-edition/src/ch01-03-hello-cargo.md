@@ -13,7 +13,9 @@ using Cargo, adding dependencies will be much easier to do.
 
 Because the vast majority of Rust projects use Cargo, the rest of this book
 assumes that you’re using Cargo too. Cargo comes installed with Rust if you
-used the official installers discussed in the “Installation” section. If you
+used the official installers discussed in the [“Installation”]
+[installation]
+section. If you
 installed Rust through some other means, check whether Cargo is installed by
 entering the following into your terminal:
 
@@ -243,3 +245,6 @@ This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
 If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
+
+[installation]:
+ch01-01-installation.html#installation

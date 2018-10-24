@@ -1,6 +1,8 @@
 ## Advanced Traits
 
-We first covered traits in the “Traits: Defining Shared Behavior” section of
+We first covered traits in the [“Traits: Defining Shared Behavior”]
+[traits-defining-shared-behavior]
+section of
 Chapter 10, but as with lifetimes, we didn’t discuss the more advanced details.
 Now that you know more about Rust, we can get into the nitty-gritty.
 
@@ -21,7 +23,9 @@ the other features discussed in this chapter.
 One example of a trait with an associated type is the `Iterator` trait that the
 standard library provides. The associated type is named `Item` and stands in
 for the type of the values the type implementing the `Iterator` trait is
-iterating over. In “The `Iterator` Trait and the `next` Method” section of
+iterating over. In [“The `Iterator` Trait and the `next` Method”]
+[the-iterator-trait-and-the-next-method]
+section of
 Chapter 13, we mentioned that the definition of the `Iterator` trait is as
 shown in Listing 19-20.
 
@@ -619,7 +623,9 @@ it within an outline of asterisks.
 
 ### Using the Newtype Pattern to Implement External Traits on External Types
 
-In Chapter 10 in the “Implementing a Trait on a Type” section, we mentioned the
+In Chapter 10 in the [“Implementing a Trait on a Type”]
+[implementing-a-trait-on-a-type]
+section, we mentioned the
 orphan rule that states we’re allowed to implement a trait on a type as long as
 either the trait or the type are local to our crate. It’s possible to get
 around this restriction using the *newtype pattern*, which involves creating a
@@ -678,3 +684,10 @@ methods we do want manually.
 Now you know how the newtype pattern is used in relation to traits; it’s also a
 useful pattern even when traits are not involved. Let’s switch focus and look
 at some advanced ways to interact with Rust’s type system.
+
+[implementing-a-trait-on-a-type]:
+ch10-02-traits.html#implementing-a-trait-on-a-type
+[the-iterator-trait-and-the-next-method]:
+ch13-02-iterators.html#the-iterator-trait-and-the-next-method
+[traits-defining-shared-behavior]:
+ch10-02-traits.html#traits-defining-shared-behavior

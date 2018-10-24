@@ -369,8 +369,10 @@ impl Config {
 `Config::new`</span>
 
 Our `new` function now returns a `Result` with a `Config` instance in the
-success case and a `&'static str` in the error case. Recall from “The Static
-Lifetime” section in Chapter 10 that `&'static str` is the type of string
+success case and a `&'static str` in the error case. Recall from [“The Static
+Lifetime”]
+[the-static-lifetime]
+section in Chapter 10 that `&'static str` is the type of string
 literals, which is our error message type for now.
 
 We’ve made two changes in the body of the `new` function: instead of calling
@@ -444,8 +446,9 @@ Great! This output is much friendlier for our users.
 ### Extracting Logic from `main`
 
 Now that we’ve finished refactoring the configuration parsing, let’s turn to
-the program’s logic. As we stated in “Separation of Concerns for Binary
-Projects”, we’ll extract a function named `run` that will hold all the logic
+the program’s logic. As we stated in [“Separation of Concerns for Binary
+Projects”](#separation-of-concerns-for-binary-projects)
+, we’ll extract a function named `run` that will hold all the logic
 currently in the `main` function that isn’t involved with setting up
 configuration or handling errors. When we’re done, `main` will be concise and
 easy to verify by inspection, and we’ll be able to write tests for all the
@@ -670,3 +673,5 @@ modular. Almost all of our work will be done in *src/lib.rs* from here on out.
 Let’s take advantage of this newfound modularity by doing something that would
 have been difficult with the old code but is easy with the new code: we’ll
 write some tests!
+[the-static-lifetime]:
+ch10-03-lifetime-syntax.html#the-static-lifetime

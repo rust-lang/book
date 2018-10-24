@@ -458,7 +458,8 @@ error[E0507]: cannot move out of borrowed content
 
 The key line in this error is `cannot move out of type [T], a non-copy slice`.
 With our non-generic versions of the `largest` function, we were only trying to
-find the largest `i32` or `char`. As discussed in the “Stack-Only Data: Copy”
+find the largest `i32` or `char`. As discussed in the [“Stack-Only Data: Copy”]
+[stack-only-data-copy]
 section in Chapter 4, types like `i32` and `char` that have a known size can be
 stored on the stack, so they implement the `Copy` trait. But when we made the
 `largest` function generic, it became possible for the `list` parameter to have
@@ -599,3 +600,6 @@ Another kind of generic that we’ve already been using is called *lifetimes*.
 Rather than ensuring that a type has the behavior we want, lifetimes ensure
 that references are valid as long as we need them to be. Let’s look at how
 lifetimes do that.
+
+[stack-only-data-copy]:
+ch04-01-what-is-ownership.html#stack-only-data-copy

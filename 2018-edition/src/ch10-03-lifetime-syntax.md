@@ -1,6 +1,8 @@
 ## Validating References with Lifetimes
 
-One detail we didn’t discuss in the “References and Borrowing” section in
+One detail we didn’t discuss in the [“References and Borrowing”]
+[references-and-borrowing]
+section in
 Chapter 4 is that every reference in Rust has a *lifetime*, which is the scope
 for which that reference is valid. Most of the time, lifetimes are implicit and
 inferred, just like most of the time, types are inferred. We must annotate types
@@ -13,7 +15,9 @@ The concept of lifetimes is somewhat different from tools in other programming
 languages, arguably making lifetimes Rust’s most distinctive feature. Although
 we won’t cover lifetimes in their entirety in this chapter, we’ll discuss
 common ways you might encounter lifetime syntax so you can become familiar with
-the concepts. See the “Advanced Lifetimes” section in Chapter 19 for more
+the concepts. See the [“Advanced Lifetimes”]
+[advanced-lifetimes]
+section in Chapter 19 for more
 detailed information.
 
 ### Preventing Dangling References with Lifetimes
@@ -156,7 +160,9 @@ parameters. We want to allow the function to accept slices of a `String` (the
 type stored in the variable `string1`) as well as string literals (which is
 what variable `string2` contains).
 
-Refer to the “String Slices as Parameters” section in Chapter 4 for more
+Refer to the [“String Slices as Parameters”]
+[string-slices-as-parameters]
+section in Chapter 4 for more
 discussion about why the parameters we use in Listing 10-20 are the ones we
 want.
 
@@ -771,3 +777,10 @@ this chapter: Chapter 17 discusses trait objects, which are another way to use
 traits. Chapter 19 covers more complex scenarios involving lifetime annotations
 as well as some advanced type system features. But next, you’ll learn how to
 write tests in Rust so you can make sure your code is working the way it should.
+
+[advanced-lifetimes]:
+ch19-02-advanced-lifetimes.html#advanced-lifetimes
+[references-and-borrowing]:
+ch04-02-references-and-borrowing.html#references-and-borrowing
+[string-slices-as-parameters]:
+ch04-03-slices.html#string-slices-as-parameters

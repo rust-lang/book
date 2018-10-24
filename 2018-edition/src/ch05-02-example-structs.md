@@ -51,7 +51,9 @@ The `area` function is supposed to calculate the area of one rectangle, but the
 function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
-we might do that in “The Tuple Type” section of Chapter 3: by using tuples.
+we might do that in [“The Tuple Type”]
+[the-tuple-type]
+section of Chapter 3: by using tuples.
 
 ### Refactoring with Tuples
 
@@ -262,3 +264,6 @@ It would be helpful to tie this behavior more closely to our `Rectangle`
 struct, because it won’t work with any other type. Let’s look at how we can
 continue to refactor this code by turning the `area` function into an `area`
 *method* defined on our `Rectangle` type.
+
+[the-tuple-type]:
+ch03-02-data-types.html#the-tuple-type

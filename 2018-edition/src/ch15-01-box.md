@@ -16,8 +16,9 @@ either. You’ll use them most often in these situations:
 * When you want to own a value and you care only that it’s a type that
   implements a particular trait rather than being of a specific type
 
-We’ll demonstrate the first situation in the “Enabling Recursive Types with
-Boxes” section. In the second case, transferring ownership of a large amount of
+We’ll demonstrate the first situation in the [“Enabling Recursive Types with
+Boxes”](#enabling-recursive-types-with-boxes)
+section. In the second case, transferring ownership of a large amount of
 data can take a long time because the data is copied around on the stack. To
 improve performance in this situation, we can store the large amount of data on
 the heap in a box. Then, only the small amount of pointer data is copied around
@@ -278,3 +279,5 @@ up as well because of the `Drop` trait implementation. Let’s explore these two
 traits in more detail. These two traits will be even more important to the
 functionality provided by the other smart pointer types we’ll discuss in the
 rest of this chapter.
+
+

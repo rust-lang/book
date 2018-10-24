@@ -78,7 +78,9 @@ let list_of_strings: Vec<String> = list_of_numbers
 ```
 
 Note that we must use the fully qualified syntax that we talked about earlier
-in the “Advanced Traits” section because there are multiple functions available
+in the [“Advanced Traits”]
+[advanced-traits]
+section because there are multiple functions available
 named `to_string`. Here, we’re using the `to_string` function defined in the
 `ToString` trait, which the standard library has implemented for any type that
 implements `Display`.
@@ -163,3 +165,6 @@ you to solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
+
+[advanced-traits]:
+ch19-03-advanced-traits.html#advanced-traits

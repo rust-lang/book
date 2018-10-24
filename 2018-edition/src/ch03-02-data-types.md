@@ -8,7 +8,9 @@ Keep in mind that Rust is a *statically typed* language, which means that it
 must know the types of all variables at compile time. The compiler can usually
 infer what type we want to use based on the value and how we use it. In cases
 when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the “Comparing the Guess to the Secret Number” section in
+type using `parse` in the [“Comparing the Guess to the Secret Number”]
+[comparing-the-guess-to-the-secret-number]
+section in
 Chapter 2, we must add a type annotation, like this:
 
 ```rust
@@ -185,7 +187,8 @@ fn main() {
 ```
 
 The main way to consume Boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
+expression. We’ll cover how `if` expressions work in Rust in the [“Control Flow”]
+[control-flow]
 section.
 
 Booleans are one byte in size.
@@ -396,3 +399,8 @@ low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
 continuing. Chapter 9 discusses more of Rust’s error handling.
+
+[comparing-the-guess-to-the-secret-number]:
+ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[control-flow]:
+ch03-05-control-flow.html#control-flow

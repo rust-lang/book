@@ -81,8 +81,9 @@ the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 
 To create a `match` expression that compares the values of the outer `x` and
 `y`, rather than introducing a shadowed variable, we would need to use a match
-guard conditional instead. We’ll talk about match guards later in the “Extra
-Conditionals with Match Guards” section.
+guard conditional instead. We’ll talk about match guards later in the [“Extra
+Conditionals with Match Guards”](#extra-conditionals-with-match-guards)
+section.
 
 ### Multiple Patterns
 
@@ -949,3 +950,5 @@ variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced
 aspects of a variety of Rust’s features.
+
+

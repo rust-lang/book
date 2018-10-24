@@ -42,7 +42,8 @@ The smart pointer `Rc<T>` is also not `Sync` for the same reasons that it’s no
 family of related `Cell<T>` types are not `Sync`. The implementation of borrow
 checking that `RefCell<T>` does at runtime is not thread-safe. The smart
 pointer `Mutex<T>` is `Sync` and can be used to share access with multiple
-threads as you saw in the “Sharing a `Mutex<T>` Between Multiple Threads”
+threads as you saw in the [“Sharing a `Mutex<T>` Between Multiple Threads”]
+[sharing-a-mutext-between-multiple-threads]
 section.
 
 ### Implementing `Send` and `Sync` Manually Is Unsafe
@@ -85,3 +86,6 @@ go forth and make your programs concurrent, fearlessly!
 Next, we’ll talk about idiomatic ways to model problems and structure solutions
 as your Rust programs get bigger. In addition, we’ll discuss how Rust’s idioms
 relate to those you might be familiar with from object-oriented programming.
+
+[sharing-a-mutext-between-multiple-threads]:
+ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
