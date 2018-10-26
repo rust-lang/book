@@ -43,7 +43,7 @@ or:
 Sometimes, you may need to use a name that's a keyword for another purpose.
 Maybe you need to call a function named *match* that is coming from a C
 library, where 'match' is not a keyword. To do this, you can use a "raw identifier."
-Raw identifiers start with `#r`:
+Raw identifiers start with `r#`:
 
 ```rust,ignore
 let r#fn = "this variable is named 'fn' even though that's a keyword";
