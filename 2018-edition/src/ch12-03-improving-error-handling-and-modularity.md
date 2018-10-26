@@ -4,7 +4,7 @@ To improve our program, we’ll fix four problems that have to do with the
 program’s structure and how it’s handling potential errors.
 
 First, our `main` function now performs two tasks: it parses arguments and
-opens files. For such a small function, this isn’t a major problem. However, if
+reads files. For such a small function, this isn’t a major problem. However, if
 we continue to grow our program inside `main`, the number of separate tasks the
 `main` function handles will increase. As a function gains responsibilities, it
 becomes more difficult to reason about, harder to test, and harder to change
