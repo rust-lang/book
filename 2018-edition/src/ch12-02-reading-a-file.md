@@ -25,7 +25,7 @@ To an admiring bog!
 <span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test
 case</span>
 
-With the text in place, edit *src/main.rs* and add code to open the file, as
+With the text in place, edit *src/main.rs* and add code to read the file, as
 shown in Listing 12-4:
 
 <span class="filename">Filename: src/main.rs</span>
