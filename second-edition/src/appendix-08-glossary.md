@@ -1,0 +1,87 @@
+# Appendix H - 번역 용어 정리
+
+이 절은 한국어 번역본에만 포함되어 있는 절로서, 원문에 대한 번역 용어를 정리한 곳입니다.
+
+- annotation: 어노테이션
+- arm: (match 문에서의 arm) 갈래
+- assertion: 어서션, 단언
+- assign: 대입하다
+- associated function: 연관함수
+- associated type: 연관 타입
+- binary: 바이너리
+- bind: 묶다
+- boilerplate code: 보일러플레이트 코드
+- borrowing: 빌림
+- box: 박스
+- CamelCase: 낙타 표기법
+- cargo: 카고
+- clone: 클론
+- collection: 컬렉션
+- crate: 크레이트
+- copy: 복사
+- control flow: 제어문
+- crate: 크래이트
+- dangling reference: 댕글링 참조자
+- data race: 데이터 레이스
+- deep copy: 깊은 복사
+- dependency: 디펜던시
+- deref coercion: 역참조 강제
+- derived trait: 파생 트레잇
+- diverging function: 발산 함수
+- documentation comments: 문서화 주석
+- double free: 중복 해제
+- `drop`: `drop`한다, 버리다
+- dynamically sized type: 동적인 크기의 타입
+- expression: 표현식
+- feature: 특성
+- format string: 형식 문자열
+- fully qualified syntax: 완전 정규화 문법
+- generic: 제네릭
+- handle: 핸들
+- heap: 힙
+- identifier: 식별자
+- immutable: 불변
+- interior mutability: 내부 가변성
+- instance: 인스턴스
+- integration test: 통합 테스트
+- irrefutable pattern: 반증 불가 패턴
+- iterator: 반복자
+- lifetime: 라이프타임
+- lifetime bound: 라이프타임 바운드
+- library: 라이브러리
+- module: 모듈
+- monomorphization: 단형성화
+- move: 이동
+- mutable: 가변
+- namespace: 이름공간
+- never type: 부정 타입
+- newtype pattern: 뉴타입 패턴
+- orphan rule: 고아 규칙
+- ownership: 소유권
+- placeholder: 변경자
+- pointer: 포인터
+- prelude: 프렐루드
+- private: 비공개
+- public: 공개
+- recover: 복구
+- recursive type: 재귀적 타입
+- reference: 참조자
+- reference counting: 참조 카운팅
+- reference cycle: 참조 순환
+- refutable pattern: 반증 가능 패턴
+- return: 반환
+- rust: 러스트
+- scope: 스코프
+- slice: 슬라이스
+- stack: 스택
+- statement: 구문
+- signature: 시그니처
+- string literal: 스트링 리터럴
+- test harness: 테스트 도구
+- trait bound: 트레잇 바운드
+- trait object: 트레잇 객체
+- type alias: 타입 별칭
+- type annotation: 타입 명시
+- unit test: 단위 테스트
+- variable: 변수
+- visibility: 가시성
