@@ -45,18 +45,18 @@ API documentation for more about how to use them and when each is appropriate.
 
 Many of the same operations available with `Vec<T>` are available with `String`
 as well, starting with the `new` function to create a string, shown in Listing
-8-11:
+8-12:
 
 ```rust
 let mut s = String::new();
 ```
 
-<span class="caption">Listing 8-11: Creating a new, empty `String`</span>
+<span class="caption">Listing 8-12: Creating a new, empty `String`</span>
 
 This line creates a new empty string called `s`, which we can then load data
 into. Often, we’ll have some initial data that we want to start the string
 with. For that, we use the `to_string` method, which is available on any type
-that implements the `Display` trait, as string literals do. Listing 8-12 shows
+that implements the `Display` trait, as string literals do. Listing 8-13 shows
 two examples:
 
 ```rust
@@ -68,20 +68,20 @@ let s = data.to_string();
 let s = "initial contents".to_string();
 ```
 
-<span class="caption">Listing 8-12: Using the `to_string` method to create a
+<span class="caption">Listing 8-13: Using the `to_string` method to create a
 `String` from a string literal</span>
 
 This code creates a string containing `initial contents`.
 
 We can also use the function `String::from` to create a `String` from a string
-literal. The code in Listing 8-13 is equivalent to the code from Listing 8-12
+literal. The code in Listing 8-14 is equivalent to the code from Listing 8-13
 that uses `to_string`:
 
 ```rust
 let s = String::from("initial contents");
 ```
 
-<span class="caption">Listing 8-13: Using the `String::from` function to create
+<span class="caption">Listing 8-14: Using the `String::from` function to create
 a `String` from a string literal</span>
 
 Because strings are used for so many things, we can use many different generic
@@ -90,7 +90,7 @@ redundant, but they all have their place! In this case, `String::from` and
 `to_string` do the same thing, so which you choose is a matter of style.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
-data in them, as shown in Listing 8-14:
+data in them, as shown in Listing 8-15:
 
 ```rust
 let hello = String::from("السلام عليكم");
@@ -106,7 +106,7 @@ let hello = String::from("Здравствуйте");
 let hello = String::from("Hola");
 ```
 
-<span class="caption">Listing 8-14: Storing greetings in different languages in
+<span class="caption">Listing 8-15: Storing greetings in different languages in
 strings</span>
 
 All of these are valid `String` values.
@@ -120,19 +120,19 @@ use the `+` operator or the `format!` macro to concatenate `String` values.
 #### Appending to a String with `push_str` and `push`
 
 We can grow a `String` by using the `push_str` method to append a string slice,
-as shown in Listing 8-15:
+as shown in Listing 8-16:
 
 ```rust
 let mut s = String::from("foo");
 s.push_str("bar");
 ```
 
-<span class="caption">Listing 8-15: Appending a string slice to a `String`
+<span class="caption">Listing 8-16: Appending a string slice to a `String`
 using the `push_str` method</span>
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
-parameter. For example, the code in Listing 8-16 shows that it would be
+parameter. For example, the code in Listing 8-17 shows that it would be
 unfortunate if we weren’t able to use `s2` after appending its contents to `s1`:
 
 ```rust
@@ -142,14 +142,14 @@ s1.push_str(s2);
 println!("s2 is {}", s2);
 ```
 
-<span class="caption">Listing 8-16: Using a string slice after appending its
+<span class="caption">Listing 8-17: Using a string slice after appending its
 contents to a `String`</span>
 
 If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 shows code that adds the letter l to a `String` using
+`String`. Listing 8-18 shows code that adds the letter l to a `String` using
 the `push` method:
 
 ```rust
@@ -157,7 +157,7 @@ let mut s = String::from("lo");
 s.push('l');
 ```
 
-<span class="caption">Listing 8-17: Adding one character to a `String` value
+<span class="caption">Listing 8-18: Adding one character to a `String` value
 using `push`</span>
 
 As a result of this code, `s` will contain `lol`.
@@ -165,7 +165,7 @@ As a result of this code, `s` will contain `lol`.
 #### Concatenation with the `+` Operator or the `format!` Macro
 
 Often, you’ll want to combine two existing strings. One way is to use the `+`
-operator, as shown in Listing 8-18:
+operator, as shown in Listing 8-19:
 
 ```rust
 let s1 = String::from("Hello, ");
@@ -173,7 +173,7 @@ let s2 = String::from("world!");
 let s3 = s1 + &s2; // Note s1 has been moved here and can no longer be used
 ```
 
-<span class="caption">Listing 8-18: Using the `+` operator to combine two
+<span class="caption">Listing 8-19: Using the `+` operator to combine two
 `String` values into a new `String` value</span>
 
 The string `s3` will contain `Hello, world!` as a result of this code. The
@@ -197,7 +197,7 @@ First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
 string to the first string because of the `s` parameter in the `add` function:
 we can only add a `&str` to a `String`; we can’t add two `String` values
 together. But wait—the type of `&s2` is `&String`, not `&str`, as specified in
-the second parameter to `add`. So why does Listing 8-18 compile?
+the second parameter to `add`. So why does Listing 8-19 compile?
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
 can *coerce* the `&String` argument into a `&str`. When we call the `add`
@@ -207,7 +207,7 @@ not take ownership of the `s` parameter, `s2` will still be a valid `String`
 after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`,
-because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
+because `self` does *not* have an `&`. This means `s1` in Listing 8-19 will be
 moved into the `add` call and no longer be valid after that. So although `let
 s3 = s1 + &s2;` looks like it will copy both strings and create a new one, this
 statement actually takes ownership of `s1`, appends a copy of the contents of
@@ -248,14 +248,14 @@ easier to read and doesn’t take ownership of any of its parameters.
 In many other programming languages, accessing individual characters in a
 string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
-get an error. Consider the invalid code in Listing 8-19:
+get an error. Consider the invalid code in Listing 8-20:
 
 ```rust,ignore,does_not_compile
 let s1 = String::from("hello");
 let h = s1[0];
 ```
 
-<span class="caption">Listing 8-19: Attempting to use indexing syntax with a
+<span class="caption">Listing 8-20: Attempting to use indexing syntax with a
 String</span>
 
 This code will result in the following error:
@@ -277,7 +277,7 @@ memory.
 #### Internal Representation
 
 A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly
-encoded UTF-8 example strings from Listing 8-14. First, this one:
+encoded UTF-8 example strings from Listing 8-15. First, this one:
 
 ```rust
 let len = String::from("Hola").len();
