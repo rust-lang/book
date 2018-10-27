@@ -130,3 +130,4 @@
     - [E - Translations](appendix-05-translation.md)
     - [F - Newest Features](appendix-06-newest-features.md)
     - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)
+    - [F - 번역 용어 정리](appendix-08-glossary.md)
