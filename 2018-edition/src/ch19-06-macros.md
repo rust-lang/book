@@ -72,7 +72,7 @@ of five string slices. We wouldn’t be able to use a function to do the same
 because we wouldn’t know the number or type of values up front.
 
 Let’s look at a slightly simplified definition of the `vec!` macro in Listing
-D-1.
+19-36.
 
 ```rust
 #[macro_export]
@@ -89,7 +89,7 @@ macro_rules! vec {
 }
 ```
 
-<span class="caption">Listing D-1: A simplified version of the `vec!` macro
+<span class="caption">Listing 19-36: A simplified version of the `vec!` macro
 definition</span>
 
 > Note: The actual definition of the `vec!` macro in the standard library
@@ -114,7 +114,7 @@ other will be an error. More complex macros will have more than one arm.
 Valid pattern syntax in macro definitions is different than the pattern syntax
 covered in Chapter 18 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pieces of the pattern
-in Listing D-1 mean; for the full macro pattern syntax, see [the reference].
+in Listing 19-36 mean; for the full macro pattern syntax, see [the reference].
 
 [the reference]: ../../reference/macros.html
 
@@ -212,7 +212,7 @@ types, we’ll provide a procedural macro so users can annotate their type with
 function. The default implementation will print `Hello, Macro! My name is
 TypeName!` where `TypeName` is the name of the type on which this trait has
 been defined. In other words, we’ll write a crate that enables another
-programmer to write code like Listing D-2 using our crate.
+programmer to write code like Listing 19-37 using our crate.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,7 +227,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing D-2: The code a user of our crate will be able to
+<span class="caption">Listing 19-37: The code a user of our crate will be able to
 write when using our procedural macro</span>
 
 This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
@@ -313,7 +313,7 @@ syn = "0.14.4"
 quote = "0.6.3"
 ```
 
-To start defining the procedural macro, place the code in Listing D-3 into your
+To start defining the procedural macro, place the code in Listing 19-38 into your
 *src/lib.rs* file for the `hello_macro_derive` crate. Note that this code won’t
 compile until we add a definition for the `impl_hello_macro` function.
 
@@ -337,10 +337,10 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 }
 ```
 
-<span class="caption">Listing D-3: Code that most procedural macro crates will
+<span class="caption">Listing 19-38: Code that most procedural macro crates will
 need to have for processing Rust code</span>
 
-Notice the way we’ve split the functions in D-3; this will be the same for
+Notice the way we’ve split the functions in Listing 19-38; this will be the same for
 almost every procedural macro crate you see or create, because it makes writing
 a procedural macro more convenient. What you choose to do in the place where
 the `impl_hello_macro` function is called will be different depending on your
@@ -426,7 +426,7 @@ fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
 ```
 
 We get an `Ident` struct instance containing the name (identifier) of the
-annotated type using `ast.ident`. The code in Listing D-2 specifies that the
+annotated type using `ast.ident`. The code in Listing 19-37 specifies that the
 `name` will be `Ident("Pancakes")`.
 
 The `quote!` macro lets us write the Rust code that we want to return, but the
@@ -457,7 +457,7 @@ to print literally, so we use `stringify!`. Using `stringify!` also saves an
 allocation by converting `#name` to a string literal at compile time.
 
 At this point, `cargo build` should complete successfully in both `hello_macro`
-and `hello_macro_derive`. Let’s hook up these crates to the code in Listing D-2
+and `hello_macro_derive`. Let’s hook up these crates to the code in Listing 19-37
 to see the procedural macro in action! Create a new binary project in your
 *projects* directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
@@ -471,7 +471,7 @@ hello_macro = { path = "../hello_macro" }
 hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
 ```
 
-Put the code from Listing D-2 into *src/main.rs*, and run `cargo run`: it
+Put the code from Listing 19-37 into *src/main.rs*, and run `cargo run`: it
 should print `Hello, Macro! My name is Pancakes!` The implementation of the
 `HelloMacro` trait from the procedural macro was included without the
 `pancakes` crate needing to implement it; the `#[derive(HelloMacro)]` added the
