@@ -64,7 +64,7 @@ name as the crate, `communicator`. We call the top-level module of a crate the
 모듈을 *루트 모듈 (root module)* 이라 부릅니다.
 
 또한. 비록 우리의 프로젝트의 서브모듈 내에서 외부 크레이트를 이용하고 있을지라도,
-`extern create`이 루트 모듈에 와 있어야 한다는 점(즉 *src/main.rs* 혹은
+`extern crate`이 루트 모듈에 와 있어야 한다는 점(즉 *src/main.rs* 혹은
 *src/lib.rs*)을 기억하세요. 그러면 서브모듈 안에서 마치 최상위 모듈의 아이템을 참조하듯
 외부 크레이트로부터 아이템들을 참조할 수 있습니다.
 
