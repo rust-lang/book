@@ -126,7 +126,7 @@
     - [A - Keywords](appendix-01-keywords.md)
     - [B - Operators and Symbols](appendix-02-operators.md)
     - [C - Derivable Traits](appendix-03-derivable-traits.md)
-    - [D - Other useful tools](appendix-04-other-useful-tools.md)
+    - [D - Useful Development Tools](appendix-04-useful-development-tools.md)
     - [E - Editions](appendix-05-editions.md)
     - [F - Translations](appendix-06-translation.md)
     - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)
