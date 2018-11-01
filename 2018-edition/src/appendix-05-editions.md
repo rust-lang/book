@@ -1,9 +1,9 @@
-# Appendix H - Editions
+# Appendix E - Editions
 
 Way back in Chapter 1, we saw that `cargo new` adds a bit of metadata to your
 `Cargo.toml` about an `edition`. We can finally talk about what that means!
 
-In Appendix F, we talked about Rust's six-week release cycle. This means that
+The Rust language and compiler have a six-week release cycle. This means that
 users get a constant stream of new features. This is much faster than updates
 for other languages, but this also means that each update is smaller. After a
 while, all of those tiny changes add up. But, from release to release, it can

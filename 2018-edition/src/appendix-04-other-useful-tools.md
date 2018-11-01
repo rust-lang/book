@@ -1,4 +1,4 @@
-# G - Other useful tools
+# D - Other useful tools
 
 In this appendix, we'll talk about some additional tools that are provided by
 the Rust project, and are useful when developing Rust code.
@@ -82,7 +82,7 @@ fn main() {
 We’re now using `_i`, and the warning will no longer appear.
 
 `cargo fix` can also be used to transition your code between different editions
-of Rust. Editions are covered in Appendix H.
+of Rust. Editions are covered in Appendix E.
 
 ## More lints with `clippy`
 
