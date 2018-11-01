@@ -33,7 +33,8 @@ it can’t provide appropriate default behavior for you.
 The list of derivable traits provided in this appendix is not comprehensive:
 libraries can implement `derive` for their own traits, making the list of
 traits you can use `derive` with truly open-ended. Implementing `derive`
-involves using a procedural macro, which is covered in Appendix D.
+involves using a procedural macro, which is covered in the “Macros” section of
+Chapter 19.
 
 ### `Debug` for Programmer Output
 

@@ -147,16 +147,16 @@ principles you might be familiar with.
 
 Chapter 18 is a reference on patterns and pattern matching, which are powerful
 ways of expressing ideas throughout Rust programs. Chapter 19 contains a
-smorgasbord of advanced topics of interest, including unsafe Rust and more
-about lifetimes, traits, types, functions, and closures.
+smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
+more about lifetimes, traits, types, functions, and closures.
 
 In Chapter 20, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!
 
 Finally, some appendixes contain useful information about the language in a
 more reference-like format. Appendix A covers Rust’s keywords, Appendix B
-covers Rust’s operators and symbols, Appendix C covers derivable traits
-provided by the standard library, and Appendix D covers macros.
+covers Rust’s operators and symbols, and Appendix C covers derivable traits
+provided by the standard library.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any

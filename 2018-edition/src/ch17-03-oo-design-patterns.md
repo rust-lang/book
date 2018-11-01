@@ -508,7 +508,7 @@ and `approve` methods on `Post`. Both methods delegate to the implementation of
 the same method on the value in the `state` field of `Option` and set the new
 value of the `state` field to the result. If we had a lot of methods on `Post`
 that followed this pattern, we might consider defining a macro to eliminate the
-repetition (see Appendix D for more on macros).
+repetition (see the “Macros” section in Chapter 19).
 
 By implementing the state pattern exactly as it’s defined for object-oriented
 languages, we’re not taking as full advantage of Rust’s strengths as we could.

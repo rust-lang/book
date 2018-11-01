@@ -126,7 +126,6 @@
     - [A - Keywords](appendix-01-keywords.md)
     - [B - Operators and Symbols](appendix-02-operators.md)
     - [C - Derivable Traits](appendix-03-derivable-traits.md)
-    - [D - Macros](appendix-04-macros.md)
     - [E - Translations](appendix-05-translation.md)
     - [F - How Rust is Made and “Nightly Rust”](appendix-06-nightly-rust.md)
     - [G - Other useful tools](appendix-07-other-useful-tools.md)
