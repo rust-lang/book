@@ -52,15 +52,13 @@ If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
 error:
 
 ```text
-error[E0277]: the trait bound `{integer}: std::cmp::PartialEq<&{integer}>` is
-not satisfied
+error[E0277]: can't compare `{integer}` with `&{integer}`
  --> src/main.rs:6:5
   |
 6 |     assert_eq!(5, y);
-  |     ^^^^^^^^^^^^^^^^^ can't compare `{integer}` with `&{integer}`
+  |     ^^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
   |
-  = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
-  `{integer}`
+  = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for `{integer}`
 ```
 
 Comparing a number and a reference to a number isn’t allowed because they’re
