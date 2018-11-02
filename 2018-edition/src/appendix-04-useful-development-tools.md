@@ -1,6 +1,6 @@
 # D - Useful Development Tools
 
-In this appendix, we'll talk about tools provided by the Rust project that are
+In this appendix, we’ll talk about tools provided by the Rust project that are
 useful when developing Rust code.
 
 ## Automatic Formatting with `rustfmt`
@@ -114,7 +114,7 @@ To install `clippy`:
 $ rustup component add clippy-preview
 ```
 
-To take any Cargo project and run clippy's lints on it:
+To take any Cargo project and run clippy’s lints on it:
 
 ```text
 $ cargo clippy
@@ -147,7 +147,7 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
 
 This lets you know that Rust has this constant defined more precisely, and that
 your program would be more correct if you used the constant instead. This code
-doesn't result in any errors or warnings from `clippy`:
+doesn’t result in any errors or warnings from `clippy`:
 
 <span class="filename">Filename: src/main.rs</span>
 

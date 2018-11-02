@@ -84,7 +84,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-You'll get this error:
+You’ll get this error:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -113,5 +113,5 @@ Note the `r#` prefix on both the function name as well as the call.
 This feature is useful for a few reasons, but the primary motivation was
 inter-edition situations. For example, `try` is not a keyword in the 2015
 edition, but is in the 2018 edition. So if you have a library that is written
-in Rust 2015 and has a `try` function, to call it in Rust 2018, you'll need
+in Rust 2015 and has a `try` function, to call it in Rust 2018, you’ll need
 to use the raw identifier.

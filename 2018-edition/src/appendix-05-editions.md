@@ -7,8 +7,8 @@ The Rust language and compiler have a six-week release cycle. This means users
 get a constant stream of new features. Other programming languages release
 larger changes less often; Rust chooses to release smaller updates more
 frequently. After a while, all of those tiny changes add up. But from release
-to release, it can be hard to look back and say "Wow, between Rust 1.10 and
-Rust 1.31, Rust has changed a lot!"
+to release, it can be hard to look back and say “Wow, between Rust 1.10 and
+Rust 1.31, Rust has changed a lot!”
 
 Every two or three years, the Rust team produces a new *edition* of Rust.
 Each edition brings together the features that have landed into a clear
@@ -37,9 +37,9 @@ a new keyword that might conflict with identifiers in code or turning warnings
 into errors. But unless you opt in to those changes, your code will continue to
 compile even as you upgrade the version of the Rust compiler that you use. All
 Rust compiler versions support any edition that existed prior to that
-compiler's release, and they can link crates of any supported editions
+compiler’s release, and they can link crates of any supported editions
 together. Edition changes only affect the way the compiler initially parses
-code. Therefore, if you're using Rust 2015 and one of your dependencies uses
+code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
 Rust 2018, your project will compile and be able to use that dependency. The
 opposite situation, where your project uses Rust 2018 and a dependency uses
 Rust 2015, works as well.
