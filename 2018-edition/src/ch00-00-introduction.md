@@ -155,8 +155,9 @@ multithreaded web server!
 
 Finally, some appendixes contain useful information about the language in a
 more reference-like format. Appendix A covers Rust’s keywords, Appendix B
-covers Rust’s operators and symbols, and Appendix C covers derivable traits
-provided by the standard library.
+covers Rust’s operators and symbols, Appendix C covers derivable traits
+provided by the standard library, Appendix D covers some useful development
+tools, and Appendix E explains Rust editions.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any
