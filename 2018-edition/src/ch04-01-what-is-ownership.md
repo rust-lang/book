@@ -426,7 +426,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 * The Boolean type, `bool`, with values `true` and `false`.
 * All the floating point types, such as `f64`.
 * The character type, `char`.
-* Tuples, but only if they contain types that are also `Copy`. For example,
+* Tuples, if they only contain types that are also `Copy`. For example,
   `(i32, i32)` is `Copy`, but `(i32, String)` is not.
 
 ### Ownership and Functions
