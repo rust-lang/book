@@ -4,7 +4,7 @@ To improve our program, we’ll fix four problems that have to do with the
 program’s structure and how it’s handling potential errors.
 
 First, our `main` function now performs two tasks: it parses arguments and
-opens files. For such a small function, this isn’t a major problem. However, if
+reads files. For such a small function, this isn’t a major problem. However, if
 we continue to grow our program inside `main`, the number of separate tasks the
 `main` function handles will increase. As a function gains responsibilities, it
 becomes more difficult to reason about, harder to test, and harder to change
@@ -19,8 +19,8 @@ it will be to keep track of the purpose of each. It’s best to group the
 configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
-opening the file fails, but the error message just prints
-`something went wrong`. Opening a file can fail in a number of ways: for
+reading the file fails, but the error message just prints
+`something went wrong`. Reading a file can fail in a number of ways: for
 example, the file could be missing, or we might not have permission to open
 it. Right now, regardless of the situation, we’d print the
 `something went wrong` error message, which wouldn't give the user any
