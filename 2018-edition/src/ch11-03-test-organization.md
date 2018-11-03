@@ -92,7 +92,7 @@ mod tests {
 
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, you can
-import and call `internal_adder` in a test just fine. If you don’t think
+bring `internal_adder` into a test's scope and call it. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
 
@@ -133,7 +133,7 @@ fn it_adds_two() {
 
 We’ve added `use adder` at the top of the code, which we didn’t need in the
 unit tests. The reason is that each test in the `tests` directory is a separate
-crate, so we need to import our library into each of them.
+crate, so we need to bring our library into each test crate's scope.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files
@@ -299,14 +299,14 @@ we demonstrated in Listing 7-4. Then in the test function, we can call the
 
 If our project is a binary crate that only contains a *src/main.rs* file and
 doesn’t have a *src/lib.rs* file, we can’t create integration tests in the
-*tests* directory and use `use` to import functions defined in the
-*src/main.rs* file. Only library crates expose functions that other crates can
-call and use; binary crates are meant to be run on their own.
+*tests* directory and bring functions defined in the *src/main.rs* file into
+scope with a `use` statement. Only library crates expose functions that other
+crates can use; binary crates are meant to be run on their own.
 
 This is one of the reasons Rust projects that provide a binary have a
 straightforward *src/main.rs* file that calls logic that lives in the
 *src/lib.rs* file. Using that structure, integration tests *can* test the
-library crate by using `use` to make the important functionality available.
+library crate with `use` to make the important functionality available.
 If the important functionality works, the small amount of code in the
 *src/main.rs* file will work as well, and that small amount of code doesn’t
 need to be tested.

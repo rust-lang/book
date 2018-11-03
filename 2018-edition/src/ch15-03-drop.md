@@ -50,8 +50,8 @@ fn main() {
 <span class="caption">Listing 15-14: A `CustomSmartPointer` struct that
 implements the `Drop` trait where we would put our cleanup code</span>
 
-The `Drop` trait is included in the prelude, so we don’t need to import it. We
-implement the `Drop` trait on `CustomSmartPointer` and provide an
+The `Drop` trait is included in the prelude, so we don’t need to bring it into
+scope. We implement the `Drop` trait on `CustomSmartPointer` and provide an
 implementation for the `drop` method that calls `println!`. The body of the
 `drop` function is where you would place any logic that you wanted to run when
 an instance of your type goes out of scope. We’re printing some text here to

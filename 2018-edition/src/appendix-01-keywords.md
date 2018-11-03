@@ -46,7 +46,7 @@ The following keywords currently have the functionality described.
 * `true` - Boolean true literal
 * `type` - define a type alias or associated type
 * `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - import symbols into scope
+* `use` - bring symbols into scope
 * `where` - denote clauses that constrain a type
 * `while` - loop conditionally based on the result of an expression
 

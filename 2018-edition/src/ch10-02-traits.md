@@ -130,7 +130,7 @@ Note that because we defined the `Summary` trait and the `NewsArticle` and
 scope. Let’s say this *lib.rs* is for a crate we’ve called `aggregator` and
 someone else wants to use our crate’s functionality to implement the `Summary`
 trait on a struct defined within their library’s scope. They would need to
-import the trait into their scope first. They would do so by specifying `use
+bring the trait into their scope first. They would do so by specifying `use
 aggregator::Summary;`, which then would enable them to implement `Summary` for
 their type. The `Summary` trait would also need to be a public trait for
 another crate to implement it, which it is because we put the `pub` keyword
@@ -314,7 +314,7 @@ pub fn notify<T: Summary>(item1: T, item2: T) {
 #### Specify multiple traits with `+`
 
 If `notify` needed to display formatting on `item`, as well as use the `summarize`
-method, then `item` would need to implement two different traits at the same time: 
+method, then `item` would need to implement two different traits at the same time:
 `Display` and `Summary`. This can be done using the `+` syntax:
 
 ```rust,ignore

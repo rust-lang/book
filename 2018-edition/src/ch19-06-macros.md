@@ -97,8 +97,8 @@ definition</span>
 > is an optimization that we don’t include here to make the example simpler.
 
 The `#[macro_export]` annotation indicates that this macro should be made
-available whenever the crate in which we’re defining the macro is imported.
-Without this annotation, the macro can't be brought into scope.
+available whenever the crate in which we’re defining the macro is brought into
+scope. Without this annotation, the macro can't be brought into scope.
 
 We then start the macro definition with `macro_rules!` and the name of the
 macro we’re defining *without* the exclamation mark. The name, in this case

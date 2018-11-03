@@ -114,8 +114,8 @@ fn main() {
 `Result` variants that might be returned</span>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
-imported in the prelude, so we don’t need to specify `Result::` before the `Ok`
-and `Err` variants in the `match` arms.
+brought into scope by the prelude, so we don’t need to specify `Result::`
+before the `Ok` and `Err` variants in the `match` arms.
 
 Here we tell Rust that when the result is `Ok`, return the inner `file` value
 out of the `Ok` variant, and we then assign that file handle value to the

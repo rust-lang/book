@@ -235,9 +235,9 @@ front page, nor is the `mix` function. We have to click `kinds` and `utils` to
 see them.
 
 Another crate that depends on this library would need `use` statements that
-import the items from `art`, specifying the module structure that’s currently
-defined. Listing 14-4 shows an example of a crate that uses the `PrimaryColor`
-and `mix` items from the `art` crate:
+bring the items from `art` into scope, specifying the module structure that’s
+currently defined. Listing 14-4 shows an example of a crate that uses the
+`PrimaryColor` and `mix` items from the `art` crate:
 
 <span class="filename">Filename: src/main.rs</span>
 

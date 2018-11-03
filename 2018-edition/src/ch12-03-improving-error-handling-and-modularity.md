@@ -423,13 +423,13 @@ case is the static string `not enough arguments` that we added in Listing 12-9,
 to our closure in the argument `err` that appears between the vertical pipes.
 The code in the closure can then use the `err` value when it runs.
 
-We’ve added a new `use` line to import `process` from the standard library. The
-code in the closure that will be run in the error case is only two lines: we
-print the `err` value and then call `process::exit`. The `process::exit`
-function will stop the program immediately and return the number that was
-passed as the exit status code. This is similar to the `panic!`-based handling
-we used in Listing 12-8, but we no longer get all the extra output. Let’s try
-it:
+We’ve added a new `use` line to bring `process` from the standard library into
+scope. The code in the closure that will be run in the error case is only two
+lines: we print the `err` value and then call `process::exit`. The
+`process::exit` function will stop the program immediately and return the
+number that was passed as the exit status code. This is similar to the
+`panic!`-based handling we used in Listing 12-8, but we no longer get all the
+extra output. Let’s try it:
 
 ```text
 $ cargo run
