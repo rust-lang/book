@@ -12,5 +12,5 @@ Rust has a number of features related to scopes. This is sometimes called
 * *Modules* and the *use* keyword let you control the scope and privacy of paths.
 * A *path* is a way of naming an item such as a struct, function, or module.
 
-This chapter will cover all of these concepts. You'll be importing and
-exporting names to different scopes like a pro soon!
+This chapter will cover all of these concepts. You'll be bringing names into
+scopes, defining scopes, and exporting names to scopes like a pro soon!
