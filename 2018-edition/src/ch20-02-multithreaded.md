@@ -244,7 +244,6 @@ following code to the top of *src/bin/main.rs*:
 <span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-extern crate hello;
 use hello::ThreadPool;
 ```
 

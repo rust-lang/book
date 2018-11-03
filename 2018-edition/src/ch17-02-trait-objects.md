@@ -212,7 +212,6 @@ If someone using our library decides to implement a `SelectBox` struct that has
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-extern crate gui;
 use gui::Draw;
 
 struct SelectBox {
@@ -296,7 +295,6 @@ with a `String` as a component:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-extern crate gui;
 use gui::Screen;
 
 fn main() {

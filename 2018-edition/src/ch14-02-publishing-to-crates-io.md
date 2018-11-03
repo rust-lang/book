@@ -242,8 +242,6 @@ and `mix` items from the `art` crate:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-extern crate art;
-
 use art::kinds::PrimaryColor;
 use art::utils::mix;
 
@@ -311,8 +309,6 @@ structure in Listing 14-5, as shown in Listing 14-6:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-extern crate art;
-
 use art::PrimaryColor;
 use art::mix;
 

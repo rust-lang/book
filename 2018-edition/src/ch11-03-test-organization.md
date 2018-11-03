@@ -120,7 +120,7 @@ Let’s create an integration test. With the code in Listing 11-12 still in the
 <span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
-extern crate adder;
+use adder;
 
 #[test]
 fn it_adds_two() {
@@ -131,9 +131,9 @@ fn it_adds_two() {
 <span class="caption">Listing 11-13: An integration test of a function in the
 `adder` crate</span>
 
-We’ve added `extern crate adder` at the top of the code, which we didn’t need
-in the unit tests. The reason is that each test in the `tests` directory is a
-separate crate, so we need to import our library into each of them.
+We’ve added `use adder` at the top of the code, which we didn’t need in the
+unit tests. The reason is that each test in the `tests` directory is a separate
+crate, so we need to import our library into each of them.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files
@@ -280,7 +280,7 @@ function from the `it_adds_two` test in *tests/integration_test.rs*:
 <span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
-extern crate adder;
+use adder;
 
 mod common;
 
@@ -299,14 +299,14 @@ we demonstrated in Listing 7-4. Then in the test function, we can call the
 
 If our project is a binary crate that only contains a *src/main.rs* file and
 doesn’t have a *src/lib.rs* file, we can’t create integration tests in the
-*tests* directory and use `extern crate` to import functions defined in the
+*tests* directory and use `use` to import functions defined in the
 *src/main.rs* file. Only library crates expose functions that other crates can
 call and use; binary crates are meant to be run on their own.
 
 This is one of the reasons Rust projects that provide a binary have a
 straightforward *src/main.rs* file that calls logic that lives in the
 *src/lib.rs* file. Using that structure, integration tests *can* test the
-library crate by using `extern crate` to exercise the important functionality.
+library crate by using `use` to make the important functionality available.
 If the important functionality works, the small amount of code in the
 *src/main.rs* file will work as well, and that small amount of code doesn’t
 need to be tested.

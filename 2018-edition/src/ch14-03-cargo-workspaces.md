@@ -138,14 +138,14 @@ Cargo doesn’t assume that crates in a workspace will depend on each other, so
 we need to be explicit about the dependency relationships between the crates.
 
 Next, let’s use the `add_one` function from the `add-one` crate in the `adder`
-crate. Open the *adder/src/main.rs* file and add an `extern crate` line at
-the top to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in Listing 14-7:
+crate. Open the *adder/src/main.rs* file and add an `use` line at the top to
+bring the new `add-one` library crate into scope. Then change the `main`
+function to call the `add_one` function, as in Listing 14-7:
 
 <span class="filename">Filename: adder/src/main.rs</span>
 
 ```rust,ignore
-extern crate add_one;
+use add_one;
 
 fn main() {
     let num = 10;
@@ -200,9 +200,9 @@ crate:
 rand = "0.3.14"
 ```
 
-We can now add `extern crate rand;` to the *add-one/src/lib.rs* file, and
-building the whole workspace by running `cargo build` in the *add* directory
-will bring in and compile the `rand` crate:
+We can now add `use rand;` to the *add-one/src/lib.rs* file, and building the
+whole workspace by running `cargo build` in the *add* directory will bring in
+and compile the `rand` crate:
 
 ```text
 $ cargo build
@@ -229,7 +229,7 @@ error: use of unstable library feature 'rand': use `rand` from crates.io (see
 issue #27703)
  --> adder/src/main.rs:1:1
   |
-1 | extern crate rand;
+1 | use rand;
 ```
 
 To fix this, edit the *Cargo.toml* file for the `adder` crate and indicate that
