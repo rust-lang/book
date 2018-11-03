@@ -383,7 +383,6 @@ Here’s the full code for reference:
 <span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-extern crate hello;
 use hello::ThreadPool;
 
 use std::io::prelude::*;

@@ -167,7 +167,7 @@ The second form of macros is called *procedural macros* because they’re more
 like functions (which are a type of procedure). Procedural macros accept some
 Rust code as an input, operate on that code, and produce some Rust code as an
 output rather than matching against patterns and replacing the code with other
-code as declarative macros do. 
+code as declarative macros do.
 
 While there are three kinds of procedural macros, they all work in a similar
 fashion. First, they must reside in their own crate, with a special crate type.
@@ -175,19 +175,15 @@ This is for complex technical reasons that we hope to eliminate in the future,
 and so won't discuss here. Second, they all take a form like this:
 
 ```rust,ignore
-extern crate proc_macro;
+use proc_macro;
 
 #[some_attribute]
 pub fn some_name(input: TokenStream) -> TokenStream {
 }
 ```
 
-First, the `extern crate` line. `extern crate` is a holdover from the old
-Rust module system; for now, when defining a proc macro, you must add this
-line to your `src/lib.rs`. Someday, this will not be necessary.
-
-Second, procedural macros consist of a function, which is how they get their
-name: "procedure" is a synonym for "function." Why not call them "functional
+Procedural macros consist of a function, which is how they get their name:
+"procedure" is a synonym for "function." Why not call them "functional
 macros"? Well, one of the types is "function-like", and that would get
 confusing. Anyway, the function takes a `TokenStream` as an input, and
 produces a `TokenStream` as an output. This is the core of the macro;
@@ -196,7 +192,7 @@ and the code we produce from our macro is the output `TokenStream`.
 We'll talk more about `TokenStream` when we actually build one of these
 things. Finally, the function has an attribute on it; this attribute
 says which kind of procedural macro we're creating. We can have multiple
-kinds of procedual macros in the same crate.
+kinds of procedural macros in the same crate.
 
 Given that the kinds of macros are so similar, we'll start with a custom
 derive macro, and then in the other sections, we'll explain the small
@@ -320,8 +316,6 @@ compile until we add a definition for the `impl_hello_macro` function.
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
 ```rust,ignore
-extern crate proc_macro;
-
 use proc_macro::TokenStream;
 use quote::quote;
 use syn;
