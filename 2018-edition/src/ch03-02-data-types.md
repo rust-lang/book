@@ -388,8 +388,8 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 The compilation didn’t produce any errors, but the program resulted in a
 *runtime* error and didn’t exit successfully. When you attempt to access an
 element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than the length, Rust will
-panic.
+than the array length. If the index is greater than or equal to the array
+length, Rust will panic.
 
 This is the first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
