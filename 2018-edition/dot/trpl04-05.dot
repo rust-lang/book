@@ -1,0 +1,32 @@
+digraph {
+    rankdir=LR;
+    overlap=false;
+    dpi=300.0;
+    node [shape="plaintext"];
+
+    table0[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
+        <TR><TD>name</TD><TD>value</TD></TR>
+        <TR><TD>ptr</TD><TD PORT="borrower"></TD></TR>
+    </TABLE>>];
+    table1[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD COLSPAN="2" SIDES="B">s1</TD></TR>
+        <TR><TD>name</TD><TD>value</TD></TR>
+        <TR><TD PORT="borrowee">ptr</TD><TD PORT="pointer"></TD></TR>
+        <TR><TD>len</TD><TD>5</TD></TR>
+        <TR><TD>capacity</TD><TD>5</TD></TR>
+    </TABLE>>];
+    table2[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD>index</TD><TD>value</TD></TR>
+        <TR><TD PORT="pointee">0</TD><TD>h</TD></TR>
+        <TR><TD>1</TD><TD>e</TD></TR>
+        <TR><TD>2</TD><TD>l</TD></TR>
+        <TR><TD>3</TD><TD>l</TD></TR>
+        <TR><TD>4</TD><TD>o</TD></TR>
+    </TABLE>>];
+
+    edge[tailclip="false"];
+    table1:pointer:c -> table2:pointee;
+    table0:borrower:c -> table1:borrowee;
+}
+
