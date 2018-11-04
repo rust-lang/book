@@ -9,7 +9,7 @@
 - associated function: 연관함수
 - associated type: 연관 타입
 - binary: 바이너리
-- bind: 묶다
+- bind: 묶다, 바인드
 - boilerplate code: 보일러플레이트 코드
 - borrowing: 빌림
 - box: 박스
@@ -27,6 +27,7 @@
 - dependency: 디펜던시
 - deref coercion: 역참조 강제
 - derived trait: 파생 트레잇
+- destructuring: 해체, 디스트럭처링
 - diverging function: 발산 함수
 - documentation comments: 문서화 주석
 - double free: 중복 해제
@@ -46,13 +47,15 @@
 - integration test: 통합 테스트
 - irrefutable pattern: 반증 불가 패턴
 - iterator: 반복자
+- library: 라이브러리
 - lifetime: 라이프타임
 - lifetime bound: 라이프타임 바운드
-- library: 라이브러리
+- literal: 리터럴, 상수
 - module: 모듈
 - monomorphization: 단형성화
 - move: 이동
 - mutable: 가변
+- named variables: 명명 변수
 - namespace: 이름공간
 - never type: 부정 타입
 - newtype pattern: 뉴타입 패턴
@@ -72,11 +75,13 @@
 - return: 반환
 - rust: 러스트
 - scope: 스코프
+- shorthand: 약칭 (구문)
+- signature: 시그니처
 - slice: 슬라이스
 - stack: 스택
 - statement: 구문
-- signature: 시그니처
 - string literal: 스트링 리터럴
+- syntax: 구문, 문법
 - test harness: 테스트 도구
 - trait bound: 트레잇 바운드
 - trait object: 트레잇 객체
