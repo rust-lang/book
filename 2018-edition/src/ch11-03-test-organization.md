@@ -214,11 +214,11 @@ separate code into modules and files.
 
 The different behavior of files in the *tests* directory is most noticeable
 when you have a set of helper functions that would be useful in multiple
-integration test files and you try to follow the steps in the “Moving Modules
-to Other Files” section of Chapter 7 to extract them into a common module. For
-example, if we create *tests/common.rs* and place a function named `setup` in
-it, we can add some code to `setup` that we want to call from multiple test
-functions in multiple test files:
+integration test files and you try to follow the steps in the “Separating
+Modules into Different Files” section of Chapter 7 to extract them into a
+common module. For example, if we create *tests/common.rs* and place a function
+named `setup` in it, we can add some code to `setup` that we want to call from
+multiple test functions in multiple test files:
 
 <span class="filename">Filename: tests/common.rs</span>
 
@@ -263,15 +263,13 @@ it is not what we wanted. We just wanted to share some code with the other
 integration test files.
 
 To avoid having `common` appear in the test output, instead of creating
-*tests/common.rs*, we’ll create *tests/common/mod.rs*. In the “Rules of Module
-Filesystems” section of Chapter 7, we used the naming convention
-*module_name/mod.rs* for files of modules that have submodules. We don’t have
-submodules for `common` here, but naming the file this way tells Rust not to
-treat the `common` module as an integration test file. When we move the `setup`
-function code into *tests/common/mod.rs* and delete the *tests/common.rs* file,
-the section in the test output will no longer appear. Files in subdirectories
-of the *tests* directory don’t get compiled as separate crates or have sections
-in the test output.
+*tests/common.rs*, we’ll create *tests/common/mod.rs*. This is an alternate
+naming convention that Rust also understands. Naming the file this way tells
+Rust not to treat the `common` module as an integration test file. When we move
+the `setup` function code into *tests/common/mod.rs* and delete the
+*tests/common.rs* file, the section in the test output will no longer appear.
+Files in subdirectories of the *tests* directory don’t get compiled as separate
+crates or have sections in the test output.
 
 After we’ve created *tests/common/mod.rs*, we can use it from any of the
 integration test files as a module. Here’s an example of calling the `setup`
@@ -291,8 +289,8 @@ fn it_adds_two() {
 }
 ```
 
-Note that the `mod common;` declaration is the same as the module declarations
-we demonstrated in Listing 7-4. Then in the test function, we can call the
+Note that the `mod common;` declaration is the same as the module declaration
+we demonstrated in Listing 7-25. Then in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates

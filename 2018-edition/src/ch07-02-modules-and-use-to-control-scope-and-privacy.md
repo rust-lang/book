@@ -907,7 +907,7 @@ separate file to make the code easier to navigate.
 
 For example, if we started from the code in Listing 7-8, we can move the
 `sound` module to its own file *src/sound.rs* by changing the crate root file
-(in this case, *src/main.rs*) to contain:
+(in this case, *src/main.rs*) to contain the code shown in Listing 7-25.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -923,7 +923,11 @@ fn main() {
 }
 ```
 
-And *src/sound.rs* gets the definitions from the body of the `sound` module:
+<span class="caption">Listing 7-25: Declaring the `sound` module whose body
+will be in *src/sound.rs*</span>
+
+And *src/sound.rs* gets the definitions from the body of the `sound` module,
+shown in Listing 7-26.
 
 <span class="filename">Filename: src/sound.rs</span>
 
@@ -934,6 +938,9 @@ pub mod instrument {
     }
 }
 ```
+
+<span class="caption">Listing 7-26: Definitions inside the `sound` module in
+*src/sound.rs*</span>
 
 Using a semicolon after `mod sound` instead of a block tells Rust to load the
 contents of the module from another file with the same name as the module.

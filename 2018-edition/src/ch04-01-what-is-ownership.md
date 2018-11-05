@@ -164,7 +164,7 @@ The double colon (`::`) is an operator that allows us to namespace this
 particular `from` function under the `String` type rather than using some sort
 of name like `string_from`. We’ll discuss this syntax more in the “Method
 Syntax” section of Chapter 5 and when we talk about namespacing with modules in
-“Module Definitions” in Chapter 7.
+“Paths for Referring to an Item in the Module Tree” in Chapter 7.
 
 This kind of string *can* be mutated:
 
