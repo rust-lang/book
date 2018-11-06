@@ -266,7 +266,7 @@ can explore how to use traits to accept arguments of many different types.
 For example, in Listing 10-13, we implemented the `Summary` trait on the types
 `NewsArticle` and `Tweet`. We can define a function `notify` that calls the
 `summarize` method on its parameter `item`, which is of some type that implements
-the `Summary` trait. To do this, we can use the '`impl Trait`' syntax, like this:
+the `Summary` trait. To do this, we can use the ‘`impl Trait`’ syntax, like this:
 
 ```rust,ignore
 pub fn notify(item: impl Summary) {
@@ -280,7 +280,7 @@ the `Summary` trait, like `summarize`.
 #### Trait Bounds
 
 The `impl Trait` syntax works for short examples, but is syntax sugar for a
-longer form. This is called a 'trait bound', and it looks like this:
+longer form. This is called a ‘trait bound’, and it looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -313,15 +313,17 @@ pub fn notify<T: Summary>(item1: T, item2: T) {
 
 #### Specify multiple traits with `+`
 
-If `notify` needed to display formatting on `item`, as well as use the `summarize`
-method, then `item` would need to implement two different traits at the same time:
-`Display` and `Summary`. This can be done using the `+` syntax:
+If `notify` needed to display formatting on `item`, as well as use the
+`summarize` method, then `item` would need to implement two different traits at
+the same time: `Display` and `Summary`. This can be done using the `+` syntax:
 
 ```rust,ignore
 pub fn notify(item: impl Summary + Display) {
 ```
- This syntax is also valid with trait bounds on generic types:
- ```rust,ignore
+
+This syntax is also valid with trait bounds on generic types:
+
+```rust,ignore
 pub fn notify<T: Summary + Display>(item: T) {
 ```
 
@@ -367,17 +369,17 @@ fn returns_summarizable() -> impl Summary {
 }
 ```
 
-This signature says, "I'm going to return something that implements the
-`Summary` trait, but I'm not going to tell you the exact type." In our case,
-we're returning a `Tweet`, but the caller doesn't know that.
+This signature says, “I’m going to return something that implements the
+`Summary` trait, but I’m not going to tell you the exact type.” In our case,
+we’re returning a `Tweet`, but the caller doesn’t know that.
 
-Why is this useful? In chapter 13, we're going to learn about two features
+Why is this useful? In chapter 13, we’re going to learn about two features
 that rely heavily on traits: closures, and iterators. These features create
 types that only the compiler knows, or types that are very, very long.
-`impl  Trait` lets you simply say "this returns an `Iterator`" without
+`impl  Trait` lets you simply say “this returns an `Iterator`” without
 needing to write out a really long type.
 
-This only works if you have a single type that you're returning, however.
+This only works if you have a single type that you’re returning, however.
 For example, this would *not* work:
 
 ```rust,ignore,does_not_compile
@@ -402,8 +404,8 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 ```
 
 Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
-due to restrictions around how `impl Trait` works. To write this code, you'll
-have to wait until Chapter 17, "trait objects".
+due to restrictions around how `impl Trait` works. To write this code, you’ll
+have to wait until Chapter 17, “trait objects”.
 
 ### Fixing the `largest` Function with Trait Bounds
 

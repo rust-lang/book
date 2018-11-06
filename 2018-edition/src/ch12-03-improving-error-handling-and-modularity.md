@@ -23,7 +23,7 @@ reading the file fails, but the error message just prints
 `something went wrong`. Reading a file can fail in a number of ways: for
 example, the file could be missing, or we might not have permission to open
 it. Right now, regardless of the situation, we’d print the
-`something went wrong` error message, which wouldn't give the user any
+`something went wrong` error message, which wouldn’t give the user any
 information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
@@ -524,8 +524,8 @@ We’ll cover trait objects in Chapter 17. For now, just know that `Box<dyn
 Error>` means the function will return a type that implements the `Error`
 trait, but we don’t have to specify what particular type the return value
 will be. This gives us flexibility to return error values that may be of
-different types in different error cases. This is what the `dyn` means, it's
-short for "dynamic."
+different types in different error cases. This is what the `dyn` means, it’s
+short for “dynamic.”
 
 Second, we’ve removed the call to `expect` in favor of `?`, as we talked about
 in Chapter 9. Rather than `panic!` on an error, `?` will return the error value

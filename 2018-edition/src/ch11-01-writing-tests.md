@@ -802,8 +802,8 @@ figuring out where our bug is!
 
 ### Using `Result<T, E>` in tests
 
-So far, we've written tests that panic when they fail. We can also write tests
-that use `Result<T, E>` too! Here's that first example, but with results instead:
+So far, we’ve written tests that panic when they fail. We can also write tests
+that use `Result<T, E>` too! Here’s that first example, but with results instead:
 
 ```rust
 #[cfg(test)]
@@ -819,11 +819,11 @@ mod tests {
 }
 ```
 
-Here, we've changed the `it_works` function to return a result. And in the body,
+Here, we’ve changed the `it_works` function to return a result. And in the body,
 rather than `assert_eq!`, we return `Ok(())` for the success case, and an `Err`
 with a `String` inside for the failure case. As before, this test will fail or
 succeed, but instead of being based on panics, it will use the `Result<T, E>` to
-make that determination. Because of this, you can't use `#[should_panic]` with one
+make that determination. Because of this, you can’t use `#[should_panic]` with one
 of these functions; you should have it be returning an `Err` instead!
 
 Now that you know several ways to write tests, let’s look at what is happening

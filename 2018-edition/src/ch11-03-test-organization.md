@@ -92,7 +92,7 @@ mod tests {
 
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, you can
-bring `internal_adder` into a test's scope and call it. If you don’t think
+bring `internal_adder` into a test’s scope and call it. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
 
@@ -133,7 +133,7 @@ fn it_adds_two() {
 
 We’ve added `use adder` at the top of the code, which we didn’t need in the
 unit tests. The reason is that each test in the `tests` directory is a separate
-crate, so we need to bring our library into each test crate's scope.
+crate, so we need to bring our library into each test crate’s scope.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files

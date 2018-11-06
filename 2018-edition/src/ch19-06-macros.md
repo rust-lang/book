@@ -1,8 +1,8 @@
 ## Macros
 
 We’ve used macros like `println!` throughout this book but haven’t fully
-explored what a macro is and how it works. There's a lot more to them,
-though; "macros" refer to a family of different features in Rust:
+explored what a macro is and how it works. There’s a lot more to them,
+though; “macros” refer to a family of different features in Rust:
 
 * *Declarative* macros with `macro_rules`
 * *Procedural*, which have three sub-kinds:
@@ -10,7 +10,7 @@ though; "macros" refer to a family of different features in Rust:
     * Attribute-like macros
     * Function-like macros
 
-We'll talk about each of these in turn, but first, why do we even
+We’ll talk about each of these in turn, but first, why do we even
 need macros when we already have functions?
 
 ### The Difference Between Macros and Functions
@@ -98,7 +98,7 @@ definition</span>
 
 The `#[macro_export]` annotation indicates that this macro should be made
 available whenever the crate in which we’re defining the macro is brought into
-scope. Without this annotation, the macro can't be brought into scope.
+scope. Without this annotation, the macro can’t be brought into scope.
 
 We then start the macro definition with `macro_rules!` and the name of the
 macro we’re defining *without* the exclamation mark. The name, in this case
@@ -172,7 +172,7 @@ code as declarative macros do.
 While there are three kinds of procedural macros, they all work in a similar
 fashion. First, they must reside in their own crate, with a special crate type.
 This is for complex technical reasons that we hope to eliminate in the future,
-and so won't discuss here. Second, they all take a form like this:
+and so won’t discuss here. Second, they all take a form like this:
 
 ```rust,ignore
 use proc_macro;
@@ -183,24 +183,24 @@ pub fn some_name(input: TokenStream) -> TokenStream {
 ```
 
 Procedural macros consist of a function, which is how they get their name:
-"procedure" is a synonym for "function." Why not call them "functional
-macros"? Well, one of the types is "function-like", and that would get
+“procedure” is a synonym for “function.” Why not call them “functional
+macros”? Well, one of the types is “function-like”, and that would get
 confusing. Anyway, the function takes a `TokenStream` as an input, and
 produces a `TokenStream` as an output. This is the core of the macro;
 the source that the macro is operating on makes up the input `TokenStream`,
 and the code we produce from our macro is the output `TokenStream`.
-We'll talk more about `TokenStream` when we actually build one of these
+We’ll talk more about `TokenStream` when we actually build one of these
 things. Finally, the function has an attribute on it; this attribute
-says which kind of procedural macro we're creating. We can have multiple
+says which kind of procedural macro we’re creating. We can have multiple
 kinds of procedural macros in the same crate.
 
-Given that the kinds of macros are so similar, we'll start with a custom
-derive macro, and then in the other sections, we'll explain the small
+Given that the kinds of macros are so similar, we’ll start with a custom
+derive macro, and then in the other sections, we’ll explain the small
 differences that make the other forms different.
 
 ### Custom Derive
 
-Let's create a crate named `hello_macro` that defines a trait named
+Let’s create a crate named `hello_macro` that defines a trait named
 `HelloMacro` with one associated function named `hello_macro`. Rather than
 making our crate users implement the `HelloMacro` trait for each of their
 types, we’ll provide a procedural macro so users can annotate their type with
@@ -342,7 +342,7 @@ procedural macro’s purpose.
 
 We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 `proc_macro` crate comes with Rust, so we didn’t need to add that to the
-dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler's API to
+dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler’s API to
 be able to read and manipulate Rust code from our code. The `syn` crate
 parses Rust code from a string into a data structure that we can perform
 operations on. The `quote` crate takes `syn` data structures and turns them
@@ -475,7 +475,7 @@ trait implementation.
 
 Attribute-like macros are similar to custom derive macros, but instead of
 generating code for `#[derive]`, they allow you to create new, custom
-attributes of your own. They're also more flexible; derive only works for
+attributes of your own. They’re also more flexible; derive only works for
 structs and enums; attributes can go on other places as well, like functions.
 As an example of using an attribute-like macro, you might have something like
 this when using a web application framework:
@@ -496,10 +496,10 @@ pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
 Here, we have two input `TokenStream`s; the first is for the contents of the
 attribute itself, that is, the `GET, "/"` stuff. The second is the body of
 the thing the attribute is attached to, in this case, `fn index() {}` and the
-rest of the function's body.
+rest of the function’s body.
 
 Other than that, they work the same way: create a crate with the `proc-macro`
-crate type, and you're good to go!
+crate type, and you’re good to go!
 
 ### Function-like macros
 
@@ -510,7 +510,7 @@ example, an `sql!` macro:
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
 
-This macro would parse the SQL statement inside of it and check that it's
+This macro would parse the SQL statement inside of it and check that it’s
 syntactically correct. This macro would be defined like this:
 
 ```rust,ignore
@@ -518,5 +518,5 @@ syntactically correct. This macro would be defined like this:
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-This is similar to the derive macro's signature: we get in the tokens that are
+This is similar to the derive macro’s signature: we get in the tokens that are
 inside of the parentheses, and return the code we wanted to generate.

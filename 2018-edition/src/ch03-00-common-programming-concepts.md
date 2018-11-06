@@ -22,9 +22,9 @@ can find a list of the keywords in Appendix A.
 
 ## Identifiers
 
-We're going to be explaining a bunch of concepts in this book: variables,
+We’re going to be explaining a bunch of concepts in this book: variables,
 functions, structs, lots of things. All of these things need names. A name
-in Rust is called an "identifier," and can be made up of any nonempty ASCII
+in Rust is called an “identifier,” and can be made up of any nonempty ASCII
 string, with some restrictions:
 
 Either:
@@ -40,9 +40,9 @@ or:
 
 ### Raw identifiers
 
-Sometimes, you may need to use a name that's a keyword for another purpose.
+Sometimes, you may need to use a name that’s a keyword for another purpose.
 Maybe you need to call a function named *match* that is coming from a C
-library, where 'match' is not a keyword. To do this, you can use a "raw identifier."
+library, where ‘match’ is not a keyword. To do this, you can use a “raw identifier.”
 Raw identifiers start with `r#`:
 
 ```rust,ignore
@@ -52,4 +52,4 @@ let r#fn = "this variable is named 'fn' even though that's a keyword";
 r#match();
 ```
 
-You won't need raw identifiers often, but when you do, you *really* need them.
+You won’t need raw identifiers often, but when you do, you *really* need them.
