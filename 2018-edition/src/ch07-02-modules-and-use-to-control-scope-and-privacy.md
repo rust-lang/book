@@ -625,11 +625,6 @@ For structs, enums, and other items, specifying the full path to the item with
 `use` is idiomatic. For example, Listing 7-17 shows the idiomatic way to bring
 the standard library's `HashMap` struct into scope.
 
-<!-- TODO: why is this idiomatic but different than what's idiomatic for
-functions? I found some discussion in
-https://github.com/rust-lang-nursery/fmt-rfcs/issues/24 but nothing more than
-people saying "i like it" :( -->
-
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -645,7 +640,9 @@ fn main() {
 idiomatic way</span>
 
 In contrast, the code in Listing 7-18 that brings the parent module of
-`HashMap` into scope would not be considered idiomatic.
+`HashMap` into scope would not be considered idiomatic. There's not a strong
+reason for this idiom; this is the convention that has emerged and folks have
+gotten used to reading and writing.
 
 <span class="filename">Filename: src/main.rs</span>
 
