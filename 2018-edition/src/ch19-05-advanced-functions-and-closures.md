@@ -152,14 +152,4 @@ This code will compile just fine. For more about trait objects, refer to the
 “Using Trait Objects That Allow for Values of Different Types” section in
 Chapter 17.
 
-## Summary
-
-Whew! Now you have some features of Rust in your toolbox that you won’t use
-often, but you’ll know they’re available in very particular circumstances.
-We’ve introduced several complex topics so that when you encounter them in
-error message suggestions or in other peoples’ code, you’ll be able to
-recognize these concepts and syntax. Use this chapter as a reference to guide
-you to solutions.
-
-Next, we’ll put everything we’ve discussed throughout the book into practice
-and do one more project!
+Next, let’s look at macros!

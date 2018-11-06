@@ -18,5 +18,6 @@ In this chapter, we’ll cover:
 * Advanced types: more about the newtype pattern, type aliases, the never type,
   and dynamically sized types
 * Advanced functions and closures: function pointers and returning closures
+* Macros: ways to define code that defines more code at compile time
 
 It’s a panoply of Rust features with something for everyone! Let’s dive in!
