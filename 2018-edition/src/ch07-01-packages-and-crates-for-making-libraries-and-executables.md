@@ -36,13 +36,8 @@ a package.
 
 If a package contains both *src/main.rs* and *src/lib.rs*, then it has two
 crates: a library and a binary, both with the same name. If we only had one of
-the two, the package would have either a single library or binary crate. We'll
-talk about how to have more than one binary crate in a package in the TODO
-section of Chapter 14.
-
-<!-- Steve, are you talking about the workspaces section of chapter 14? That
-actually talks about having a binary and two libraries in a workspace..... we
-don't talk about src/bin/*.rs in chapter 14 at all, which is what i expected
-you to be alluding to here? /Carol -->
+the two, the package would have either a single library or binary crate. A
+package can have multiple binary crates by placing files in the *src/bin*
+directory: each file will be a separate binary crate.
 
 Next, let's talk about modules!
