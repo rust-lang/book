@@ -1,8 +1,7 @@
 ## The Module System to Control Scope and Privacy
 
-Rust has a feature that's often referred to as "the module system," but
-it encompasses a few more features than just modules. In this section,
-we'll talk about:
+Rust has a feature that's often referred to as "the module system," but it
+encompasses a few more features than modules. In this section, we'll talk about:
 
 * Modules, a way to organize code and control the privacy of paths
 * Paths, a way to name items
