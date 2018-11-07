@@ -280,7 +280,7 @@ the `Summary` trait, like `summarize`.
 #### Trait Bounds
 
 The `impl Trait` syntax works for short examples, but is syntax sugar for a
-longer form. This is called a ‘trait bound’, and it looks like this:
+longer form. This is called a *trait bound*, and it looks like this:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item: T) {
@@ -405,7 +405,8 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 
 Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
 due to restrictions around how `impl Trait` works. To write this code, you’ll
-have to wait until Chapter 17, “trait objects”.
+have to wait until the “Using Trait Objects that Allow for Values of Different
+Types” section of Chapter 17.
 
 ### Fixing the `largest` Function with Trait Bounds
 
