@@ -108,7 +108,7 @@
 - [값의 구조와 매칭되는 패턴](ch18-00-patterns.md)
     - [패턴이 사용될 수 있는 모든 곳](ch18-01-all-the-places-for-patterns.md)
     - [반증 가능성: 패턴의 매칭이 실패할 수도 있는 경우](ch18-02-refutability.md)
-    - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
+    - [패턴 문법의 모든 것](ch18-03-pattern-syntax.md)
 
 - [고급 기능들](ch19-00-advanced-features.md)
     - [안전하지 않은 러스트](ch19-01-unsafe-rust.md)
