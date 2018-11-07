@@ -17,7 +17,7 @@
 - backtrace: 백트레이스
 - binary: 바이너리
 - binary target: 바이너리 타겟
-- bind: 묶다
+- bind: 묶다, 바인드
 - boilerplate code: 보일러플레이트 코드
 - borrowing: 빌림
 - borrow checker: 빌림 검사기
@@ -54,6 +54,7 @@
 - derivable: 추론 가능한
 - derivable traits: 파생 가능한 트레잇
 - derived trait: 파생 트레잇
+- destructuring: 해체, 디스트럭처링
 - destructor: 소멸자
 - diverging function: 발산 함수
 - doc comments: 문서 주석
@@ -100,10 +101,11 @@
 - lazy evaluation: 지연 평가
 - license: 라이센스
 - license identifier value: 라이센스 식별자 값
+- library: 라이브러리
 - lifetime: 라이프타임
 - lifetime bound: 라이프타임 바운드
 - lifetime elision rules: 라이프타임 생략 규칙
-- library: 라이브러리
+- literal: 리터럴, 상수
 - macro: 매크로
 - mangling: 맹글링
 - memoization: 메모이제이션
@@ -121,6 +123,7 @@
 - mutable static variable: 가변 정적 변수
 - mutex: 뮤텍스
 - mutual exclusion: 상호 배제
+- named variables: 명명 변수
 - namespace: 이름공간
 - naming conflict: 이름 간의 충돌
 - never type: 부정 타입
@@ -167,6 +170,7 @@
 - semantics: 의미론
 - separator: 구분자
 - shallow copy: 얕은 복사
+- shorthand: 약칭 (구문)
 - signature: 시그니처
 - slice: 슬라이스
 - smart pointer: 스마트 포인터
@@ -177,6 +181,7 @@
 - string literal: 스트링 리터럴
 - subtyping: 서브타이핑
 - supertrait: 슈퍼트레잇
+- syntax: 구문, 문법
 - syntax sugar: 문법적 설탕
 - test double: 테스트 더블
 - test harness: 테스트 도구
