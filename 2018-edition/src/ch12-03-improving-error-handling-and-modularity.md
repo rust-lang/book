@@ -401,7 +401,7 @@ fn main() {
 
     let config = Config::new(&args).unwrap_or_else(|err| {
         println!("Problem parsing arguments: {}", err);
-        process::exit(1);
+        process::exit(1)
     });
 
     // --snip--
