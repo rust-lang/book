@@ -443,7 +443,7 @@ the same lifetime specified in the trait object bounds as those references.
 
 ### The anonymous lifetime
 
-Let's say that we have a struct that's a wrapper around a string slice, like
+Let’s say that we have a struct that’s a wrapper around a string slice, like
 this:
 
 ```rust
@@ -459,7 +459,7 @@ fn foo<'a>(string: &'a str) -> StrWrap<'a> {
 }
 ```
 
-But that's a lot of `'a`s! To cut down on some of this noise, we can use the
+But that’s a lot of `'a`s! To cut down on some of this noise, we can use the
 anonymous lifetime, `'_`, like this:
 
 ```rust
@@ -469,8 +469,8 @@ fn foo(string: &str) -> StrWrap<'_> {
 }
 ```
 
-The `'_` says "use the elidied lifetime here." This means that we can still see
-that `StrWrap` contains a reference, but we don't need all of the lifetime
+The `'_` says “use the elidied lifetime here.” This means that we can still see
+that `StrWrap` contains a reference, but we don’t need all of the lifetime
 annotations to make sense of it.
 
 It works in `impl` headers too; for example:

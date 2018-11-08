@@ -22,12 +22,11 @@ tests with the `cargo test` command, Rust builds a test runner binary that runs
 the functions annotated with the `test` attribute and reports on whether each
 test function passes or fails.
 
-In Chapter 7, we saw that when we make a new library project with Cargo, a test
-module with a test function in it is automatically generated for us. This
-module helps you start writing your tests so you don’t have to look up the
-exact structure and syntax of test functions every time you start a new
-project. You can add as many additional test functions and as many test modules
-as you want!
+When we make a new library project with Cargo, a test module with a test
+function in it is automatically generated for us. This module helps you start
+writing your tests so you don’t have to look up the exact structure and syntax
+of test functions every time you start a new project. You can add as many
+additional test functions and as many test modules as you want!
 
 We’ll explore some aspects of how tests work by experimenting with the template
 test generated for us without actually testing any code. Then we’ll write some
@@ -280,10 +279,10 @@ larger rectangle can indeed hold a smaller rectangle</span>
 
 Note that we’ve added a new line inside the `tests` module: `use super::*;`.
 The `tests` module is a regular module that follows the usual visibility rules
-we covered in Chapter 7 in the “Privacy Rules” section. Because the `tests`
-module is an inner module, we need to bring the code under test in the outer
-module into the scope of the inner module. We use a glob here so anything we
-define in the outer module is available to this `tests` module.
+we covered in Chapter 7 in the “Modules as the Privacy Boundary” section.
+Because the `tests` module is an inner module, we need to bring the code under
+test in the outer module into the scope of the inner module. We use a glob here
+so anything we define in the outer module is available to this `tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
 `Rectangle` instances that we need. Then we called the `assert!` macro and
@@ -803,8 +802,8 @@ figuring out where our bug is!
 
 ### Using `Result<T, E>` in tests
 
-So far, we've written tests that panic when they fail. We can also write tests
-that use `Result<T, E>` too! Here's that first example, but with results instead:
+So far, we’ve written tests that panic when they fail. We can also write tests
+that use `Result<T, E>` too! Here’s that first example, but with results instead:
 
 ```rust
 #[cfg(test)]
@@ -820,11 +819,11 @@ mod tests {
 }
 ```
 
-Here, we've changed the `it_works` function to return a result. And in the body,
+Here, we’ve changed the `it_works` function to return a result. And in the body,
 rather than `assert_eq!`, we return `Ok(())` for the success case, and an `Err`
 with a `String` inside for the failure case. As before, this test will fail or
 succeed, but instead of being based on panics, it will use the `Result<T, E>` to
-make that determination. Because of this, you can't use `#[should_panic]` with one
+make that determination. Because of this, you can’t use `#[should_panic]` with one
 of these functions; you should have it be returning an `Err` instead!
 
 Now that you know several ways to write tests, let’s look at what is happening

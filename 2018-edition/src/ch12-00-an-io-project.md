@@ -28,7 +28,7 @@ the background knowledge you need to understand a real-world project such as
 
 Our `grep` project will combine a number of concepts you’ve learned so far:
 
-* Organizing code (using what you learned in modules, Chapter 7)
+* Organizing code (using what you learned about modules in Chapter 7)
 * Using vectors and strings (collections, Chapter 8)
 * Handling errors (Chapter 9)
 * Using traits and lifetimes where appropriate (Chapter 10)

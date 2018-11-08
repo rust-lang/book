@@ -23,7 +23,7 @@ reading the file fails, but the error message just prints
 `something went wrong`. Reading a file can fail in a number of ways: for
 example, the file could be missing, or we might not have permission to open
 it. Right now, regardless of the situation, we’d print the
-`something went wrong` error message, which wouldn't give the user any
+`something went wrong` error message, which wouldn’t give the user any
 information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
@@ -423,13 +423,13 @@ case is the static string `not enough arguments` that we added in Listing 12-9,
 to our closure in the argument `err` that appears between the vertical pipes.
 The code in the closure can then use the `err` value when it runs.
 
-We’ve added a new `use` line to import `process` from the standard library. The
-code in the closure that will be run in the error case is only two lines: we
-print the `err` value and then call `process::exit`. The `process::exit`
-function will stop the program immediately and return the number that was
-passed as the exit status code. This is similar to the `panic!`-based handling
-we used in Listing 12-8, but we no longer get all the extra output. Let’s try
-it:
+We’ve added a new `use` line to bring `process` from the standard library into
+scope. The code in the closure that will be run in the error case is only two
+lines: we print the `err` value and then call `process::exit`. The
+`process::exit` function will stop the program immediately and return the
+number that was passed as the exit status code. This is similar to the
+`panic!`-based handling we used in Listing 12-8, but we no longer get all the
+extra output. Let’s try it:
 
 ```text
 $ cargo run
@@ -524,8 +524,8 @@ We’ll cover trait objects in Chapter 17. For now, just know that `Box<dyn
 Error>` means the function will return a type that implements the `Error`
 trait, but we don’t have to specify what particular type the return value
 will be. This gives us flexibility to return error values that may be of
-different types in different error cases. This is what the `dyn` means, it's
-short for "dynamic."
+different types in different error cases. This is what the `dyn` means, it’s
+short for “dynamic.”
 
 Second, we’ve removed the call to `expect` in favor of `?`, as we talked about
 in Chapter 9. Rather than `panic!` on an error, `?` will return the error value

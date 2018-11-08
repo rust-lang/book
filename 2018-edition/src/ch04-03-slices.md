@@ -160,7 +160,7 @@ let hello = &s[0..=4];
 let world = &s[6..=10];
 ```
 
-The `=` means that we're including the last number, if that helps you remember
+The `=` means that we’re including the last number, if that helps you remember
 the difference between `..` and `..=`.
 
 We can create slices using a range within brackets by specifying

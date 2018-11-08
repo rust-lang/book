@@ -85,7 +85,7 @@ implements `Display`.
 
 Another useful pattern exploits an implementation detail of tuple structs and
 tuple-struct enum variants. These items use `()` as initialiser syntax, which
-looks like a function call, and they're actually implemented as functions
+looks like a function call, and they’re actually implemented as functions
 returning an instance constructed from their arguments. They can also be called
 as a function pointer implementing the closure traits, and so can be used
 similarly to the above:

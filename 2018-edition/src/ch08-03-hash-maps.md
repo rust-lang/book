@@ -261,7 +261,7 @@ loop, so all of these changes are safe and allowed by the borrowing rules.
 
 ### Hashing Functions
 
-By default, `HashMap` uses a "cryptographically strong"[^siphash] hashing function that can
+By default, `HashMap` uses a “cryptographically strong”[^siphash] hashing function that can
 provide resistance to Denial of Service (DoS) attacks. This is not the fastest
 hashing algorithm available, but the trade-off for better security that comes
 with the drop in performance is worth it. If you profile your code and find

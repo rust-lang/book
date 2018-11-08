@@ -92,7 +92,7 @@ mod tests {
 
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, you can
-import and call `internal_adder` in a test just fine. If you don’t think
+bring `internal_adder` into a test’s scope and call it. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
 
@@ -133,7 +133,7 @@ fn it_adds_two() {
 
 We’ve added `use adder` at the top of the code, which we didn’t need in the
 unit tests. The reason is that each test in the `tests` directory is a separate
-crate, so we need to import our library into each of them.
+crate, so we need to bring our library into each test crate’s scope.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files
@@ -214,11 +214,11 @@ separate code into modules and files.
 
 The different behavior of files in the *tests* directory is most noticeable
 when you have a set of helper functions that would be useful in multiple
-integration test files and you try to follow the steps in the “Moving Modules
-to Other Files” section of Chapter 7 to extract them into a common module. For
-example, if we create *tests/common.rs* and place a function named `setup` in
-it, we can add some code to `setup` that we want to call from multiple test
-functions in multiple test files:
+integration test files and you try to follow the steps in the “Separating
+Modules into Different Files” section of Chapter 7 to extract them into a
+common module. For example, if we create *tests/common.rs* and place a function
+named `setup` in it, we can add some code to `setup` that we want to call from
+multiple test functions in multiple test files:
 
 <span class="filename">Filename: tests/common.rs</span>
 
@@ -263,15 +263,13 @@ it is not what we wanted. We just wanted to share some code with the other
 integration test files.
 
 To avoid having `common` appear in the test output, instead of creating
-*tests/common.rs*, we’ll create *tests/common/mod.rs*. In the “Rules of Module
-Filesystems” section of Chapter 7, we used the naming convention
-*module_name/mod.rs* for files of modules that have submodules. We don’t have
-submodules for `common` here, but naming the file this way tells Rust not to
-treat the `common` module as an integration test file. When we move the `setup`
-function code into *tests/common/mod.rs* and delete the *tests/common.rs* file,
-the section in the test output will no longer appear. Files in subdirectories
-of the *tests* directory don’t get compiled as separate crates or have sections
-in the test output.
+*tests/common.rs*, we’ll create *tests/common/mod.rs*. This is an alternate
+naming convention that Rust also understands. Naming the file this way tells
+Rust not to treat the `common` module as an integration test file. When we move
+the `setup` function code into *tests/common/mod.rs* and delete the
+*tests/common.rs* file, the section in the test output will no longer appear.
+Files in subdirectories of the *tests* directory don’t get compiled as separate
+crates or have sections in the test output.
 
 After we’ve created *tests/common/mod.rs*, we can use it from any of the
 integration test files as a module. Here’s an example of calling the `setup`
@@ -291,22 +289,22 @@ fn it_adds_two() {
 }
 ```
 
-Note that the `mod common;` declaration is the same as the module declarations
-we demonstrated in Listing 7-4. Then in the test function, we can call the
+Note that the `mod common;` declaration is the same as the module declaration
+we demonstrated in Listing 7-25. Then in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates
 
 If our project is a binary crate that only contains a *src/main.rs* file and
 doesn’t have a *src/lib.rs* file, we can’t create integration tests in the
-*tests* directory and use `use` to import functions defined in the
-*src/main.rs* file. Only library crates expose functions that other crates can
-call and use; binary crates are meant to be run on their own.
+*tests* directory and bring functions defined in the *src/main.rs* file into
+scope with a `use` statement. Only library crates expose functions that other
+crates can use; binary crates are meant to be run on their own.
 
 This is one of the reasons Rust projects that provide a binary have a
 straightforward *src/main.rs* file that calls logic that lives in the
 *src/lib.rs* file. Using that structure, integration tests *can* test the
-library crate by using `use` to make the important functionality available.
+library crate with `use` to make the important functionality available.
 If the important functionality works, the small amount of code in the
 *src/main.rs* file will work as well, and that small amount of code doesn’t
 need to be tested.
