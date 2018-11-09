@@ -22,7 +22,7 @@ your projects there.
 Open a terminal and enter the following commands to make a *projects* directory
 and a directory for the Hello, world! project within the *projects* directory.
 
-For Linux and macOS, enter this:
+For Linux, macOS, and PowerShell on Windows, enter this:
 
 ```text
 $ mkdir ~/projects
@@ -36,15 +36,6 @@ For Windows CMD, enter this:
 ```cmd
 > mkdir "%USERPROFILE%\projects"
 > cd /d "%USERPROFILE%\projects"
-> mkdir hello_world
-> cd hello_world
-```
-
-For Windows PowerShell, enter this:
-
-```powershell
-> mkdir $env:USERPROFILE\projects
-> cd $env:USERPROFILE\projects
 > mkdir hello_world
 > cd hello_world
 ```
