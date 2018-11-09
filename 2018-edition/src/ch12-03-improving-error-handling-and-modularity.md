@@ -178,7 +178,7 @@ we’d violate Rust’s borrowing rules if `Config` tried to take ownership of t
 values in `args`.
 
 We could manage the `String` data in a number of different ways, but the
-easiest, though somewhat inefficient, route is to call the `clone` method on
+easiest, though somewhat inefficient route, is to call the `clone` method on
 the values. This will make a full copy of the data for the `Config` instance to
 own, which takes more time and memory than storing a reference to the string
 data. However, cloning the data also makes our code very straightforward
