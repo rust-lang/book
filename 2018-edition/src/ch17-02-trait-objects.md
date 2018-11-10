@@ -270,7 +270,7 @@ different types that implement the same trait</span>
 
 When we wrote the library, we didn’t know that someone might add the
 `SelectBox` type, but our `Screen` implementation was able to operate on the
-new type and draw it because `SelectBox` implements the `Draw` type, which
+new type and draw it because `SelectBox` implements the `Draw` trait, which
 means it implements the `draw` method.
 
 This concept—of being concerned only with the messages a value responds to
