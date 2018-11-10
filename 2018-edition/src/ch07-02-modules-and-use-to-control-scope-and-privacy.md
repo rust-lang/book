@@ -536,7 +536,7 @@ fn main() {
 a relative path starting with `self`</span>
 
 Starting relative paths with `self` when specified after `use` might not be
-neccesary in the future; it’s an inconsistency in the language that people are
+necessary in the future; it’s an inconsistency in the language that people are
 working on eliminating.
 
 Choosing to specify absolute paths with `use` can make updates easier if the
