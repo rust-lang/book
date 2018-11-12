@@ -1,4 +1,4 @@
-# D - Useful Development Tools
+# Appendix D - Useful Development Tools
 
 In this appendix, we’ll talk about tools provided by the Rust project that are
 useful when developing Rust code.
@@ -120,7 +120,8 @@ To take any Cargo project and run clippy’s lints on it:
 $ cargo clippy
 ```
 
-For example, if you write a program that uses an approximation of a mathematical constant such as pi, as this program does:
+For example, if you write a program that uses an approximation of a
+mathematical constant such as pi, as this program does:
 
 <span class="filename">Filename: src/main.rs</span>
 
