@@ -195,7 +195,7 @@ macro</span>
 
 Procedural macros consist of a function, which is how they get their name:
 “procedure” is a synonym for “function.” Why not call them “functional macros”?
-Well, one of the types is “function-like”, and that would get confusing.
+Well, one of the types is “function-like,” and that would get confusing.
 Anyway, the function defining a procedural macro takes a `TokenStream` as an
 input and produces a `TokenStream` as an output. This is the core of the macro:
 the source code that the macro is operating on makes up the input
