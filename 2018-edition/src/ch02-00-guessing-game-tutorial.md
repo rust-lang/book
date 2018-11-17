@@ -691,8 +691,8 @@ to infer a different numerical type. The reason for the error is that Rust
 cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
-real number type so we can compare it numerically to the guess. We can do that
-by adding the following two lines to the `main` function body:
+real number type so we can compare it numerically to the secret number. We can
+do that by adding the following two lines to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -758,7 +758,7 @@ comparison will be between two values of the same type!
 [parse]: ../../std/primitive.str.html#method.parse
 
 The call to `parse` could easily cause an error. If, for example, the string
-contained `A👍%`, there would be no way to convert that to a number. Because it
+contained `A?%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much as the `read_line`
 method does (discussed earlier in “Handling Potential Failure with the Result
 Type”). We’ll treat this `Result` the same way by using the `expect` method
@@ -918,7 +918,7 @@ match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
 catchall value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
 execute the second arm’s code, `continue`, which means to go to the next
-iteration of the `loop` and ask for another guess. So effectively, the program
+iteration of the `loop` and ask for another guess. So, effectively, the program
 ignores all errors that `parse` might encounter!
 
 Now everything in the program should work as expected. Let’s try it:
