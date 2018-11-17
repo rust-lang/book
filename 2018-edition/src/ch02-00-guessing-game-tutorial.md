@@ -758,7 +758,7 @@ comparison will be between two values of the same type!
 [parse]: ../../std/primitive.str.html#method.parse
 
 The call to `parse` could easily cause an error. If, for example, the string
-contained `A?%`, there would be no way to convert that to a number. Because it
+contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much as the `read_line`
 method does (discussed earlier in “Handling Potential Failure with the Result
 Type”). We’ll treat this `Result` the same way by using the `expect` method
