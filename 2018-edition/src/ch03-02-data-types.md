@@ -101,7 +101,7 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 
 ##### Integer Overflow
 
-Let’s say that you have a `u8`, which can hold values between zero and `255`.
+Let’s say that you have an `u8`, which can hold values between zero and `255`.
 What happens if you try to change it to `256`? This is called “integer
 overflow,” and Rust has some interesting rules around this behavior. When
 compiling in debug mode, Rust checks for this kind of issue and will cause
