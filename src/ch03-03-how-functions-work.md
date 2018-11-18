@@ -259,7 +259,7 @@ fn main() {
 
 There are no function calls, macros, or even `let` statements in the `five`
 function—just the number `5` by itself. That’s a perfectly valid function in
-Rust. Note that the function’s return type is specified, too, as `-> i32`. Try
+Rust. Note that the function’s return type is specified too, as `-> i32`. Try
 running this code; the output should look like this:
 
 ```text
@@ -338,7 +338,7 @@ error[E0308]: mismatched types
 The main error message, “mismatched types,” reveals the core issue with this
 code. The definition of the function `plus_one` says that it will return an
 `i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the empty tuple. Therefore, nothing is returned, which contradicts the function
+an empty tuple. Therefore, nothing is returned, which contradicts the function
 definition and results in an error. In this output, Rust provides a message to
 possibly help rectify this issue: it suggests removing the semicolon, which
 would fix the error.
