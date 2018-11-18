@@ -104,6 +104,7 @@ let hello = String::from("你好");
 let hello = String::from("Olá");
 let hello = String::from("Здравствуйте");
 let hello = String::from("Hola");
+let hello = String::from("Dzień dobry");
 ```
 
 <span class="caption">Listing 8-14: Storing greetings in different languages in
