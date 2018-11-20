@@ -1,4 +1,4 @@
-# Appendix
+# 부록
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+이번 장에는 러스트를 사용하는데 유용한 참고자료들이
+포함되어 있습니다.

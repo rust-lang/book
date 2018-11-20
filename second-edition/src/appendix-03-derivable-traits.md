@@ -1,10 +1,10 @@
 ## Appendix C: Derivable Traits
 
-In various places in the book, we’ve discussed the `derive` attribute that you
-can apply to a struct or enum definition.
+In various places in the book, we’ve discussed the `derive` attribute, which
+you can apply to a struct or enum definition. The `derive` attribute generates
+code that will implement a trait with its own default implementation on the
+type you’ve annotated with the `derive` syntax.
 
-The `derive` attribute generates code that will implement a trait with its own
-default implementation on the type you’ve annotated with the `derive` syntax.
 In this appendix, we provide a reference of all the traits in the standard
 library that you can use with `derive`. Each section covers:
 
@@ -25,15 +25,15 @@ trying to accomplish.
 
 An example of a trait that can’t be derived is `Display`, which handles
 formatting for end users. You should always consider the appropriate way to
-display a type to an end user: for example, what parts of the type should an
-end user be allowed to see? What parts would they find relevant? What format of
-the data would be most relevant to them? The Rust compiler doesn’t have this
-insight, so it can’t provide appropriate default behavior for you.
+display a type to an end user. What parts of the type should an end user be
+allowed to see? What parts would they find relevant? What format of the data
+would be most relevant to them? The Rust compiler doesn’t have this insight, so
+it can’t provide appropriate default behavior for you.
 
 The list of derivable traits provided in this appendix is not comprehensive:
 libraries can implement `derive` for their own traits, making the list of
 traits you can use `derive` with truly open-ended. Implementing `derive`
-involves using a procedural macro, which is covered in Appendix D, “Macros.”
+involves using a procedural macro, which is covered in Appendix D.
 
 ### `Debug` for Programmer Output
 
@@ -54,9 +54,9 @@ The `PartialEq` trait allows you to compare instances of a type to check for
 equality and enables use of the `==` and `!=` operators.
 
 Deriving `PartialEq` implements the `eq` method. When `PartialEq` is derived on
-structs, two instances are equal only if *all* fields are equal and not equal
-if any fields are not equal. When derived on enums, each variant is equal to
-itself and not equal to the other variants.
+structs, two instances are equal only if *all* fields are equal, and the
+instances are not equal if any fields are not equal. When derived on enums,
+each variant is equal to itself and not equal to the other variants.
 
 The `PartialEq` trait is required, for example, with the use of the
 `assert_eq!` macro, which needs to be able to compare two instances of a type
@@ -69,8 +69,8 @@ implement `PartialEq` can implement `Eq`. One example of this is floating point
 number types: the implementation of floating point numbers states that two
 instances of the not-a-number (`NaN`) value are not equal to each other.
 
-An example of when `Eq` is required is for keys in a `HashMap` so the `HashMap`
-can tell whether two keys are the same.
+An example of when `Eq` is required is for keys in a `HashMap<K, V>` so the
+`HashMap<K, V>` can tell whether two keys are the same.
 
 ### `PartialOrd` and `Ord` for Ordering Comparisons
 
@@ -146,13 +146,13 @@ code might be slower or have to use `clone` in places.
 ### `Hash` for Mapping a Value to a Value of Fixed Size
 
 The `Hash` trait allows you to take an instance of a type of arbitrary size and
-map that instance to a value of fixed size, using a hash function. Deriving
+map that instance to a value of fixed size using a hash function. Deriving
 `Hash` implements the `hash` method. The derived implementation of the `hash`
 method combines the result of calling `hash` on each of the parts of the type,
 meaning all fields or values must also implement `Hash` to derive `Hash`.
 
-An example of when `Hash` is required is in storing keys in a `HashMap` to
-store data efficiently.
+An example of when `Hash` is required is in storing keys in a `HashMap<K, V>`
+to store data efficiently.
 
 ### `Default` for Default Values
 
@@ -168,7 +168,7 @@ Struct Update Syntax” section in Chapter 5. You can customize a few fields of 
 struct and then set and use a default value for the rest of the fields by using
 `..Default::default()`.
 
-The `Default` trait is required when, for example, you use the
-`unwrap_or_default` method on `Option<T>` instances. If the `Option<T>` is
-`None`, the `unwrap_or_default` method will return the result of
-`Default::default` for the type `T` stored in the `Option<T>`.
+The `Default` trait is required when you use the method `unwrap_or_default` on
+`Option<T>` instances, for example. If the `Option<T>` is `None`, the method
+`unwrap_or_default` will return the result of `Default::default` for the type
+`T` stored in the `Option<T>`.
