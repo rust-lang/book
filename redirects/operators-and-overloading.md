@@ -32,12 +32,5 @@ fn main() {
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 19.03 — Advanced Traits, section Operator Overloading][2]**
-* [In the Rust documentation: `std::ops`][3]
-* <small>[In the first edition: Ch 3.32 — Operators and Overloading][1]</small>
-
-[1]: first-edition/operators-and-overloading.html
-[2]: second-edition/ch19-03-advanced-traits.html#default-generic-type-parameters-and-operator-overloading
-[3]: ../std/ops/index.html
+You can find the latest version of this information
+[here](ch19-03-advanced-traits.html).

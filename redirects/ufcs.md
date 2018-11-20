@@ -44,11 +44,5 @@ fn main() {
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 19.03 — Advanced Traits, section Fully Qualified Syntax][2]**
-* <small>[In the first edition: Ch 3.24 — Universal Function Call Syntax][1]</small>
-
-
-[1]: first-edition/ufcs.html
-[2]: second-edition/ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name
+You can find the latest version of this information
+[here](ch19-03-advanced-traits.html#fully-qualified-syntax-for-disambiguation-calling-methods-with-the-same-name).

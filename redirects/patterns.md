@@ -19,13 +19,5 @@ match x {
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 18.03 — Patterns][2]**
-* [In the second edition: Ch 6.02 — Match][3]
-* <small>[In the first edition: Ch 3.15 — Patterns][1]</small>
-
-
-[1]: first-edition/patterns.html
-[2]: second-edition/ch18-00-patterns.html
-[3]: second-edition/ch06-02-match.html#patterns-that-bind-to-values
+You can find the latest version of this information
+[here](ch06-02-match.html).

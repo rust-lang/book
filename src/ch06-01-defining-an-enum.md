@@ -387,7 +387,7 @@ number of methods that are useful in a variety of situations; you can check
 them out in [its documentation][docs]<!-- ignore -->. Becoming familiar with
 the methods on `Option<T>` will be extremely useful in your journey with Rust.
 
-[docs]: ../../std/option/enum.Option.html
+[docs]: ../std/option/enum.Option.html
 
 In general, in order to use an `Option<T>` value, you want to have code that
 will handle each variant. You want some code that will run only when you have a
