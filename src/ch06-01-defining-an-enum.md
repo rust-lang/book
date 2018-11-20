@@ -155,7 +155,7 @@ we’ve defined and used, but it embeds the address data inside the variants in
 the form of two different structs, which are defined differently for each
 variant:
 
-[IpAddr]: ../../std/net/enum.IpAddr.html
+[IpAddr]: ../std/net/enum.IpAddr.html
 
 ```rust
 struct Ipv4Addr {
@@ -297,7 +297,7 @@ that can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
 as follows:
 
-[option]: ../../std/option/enum.Option.html
+[option]: ../std/option/enum.Option.html
 
 ```rust
 enum Option<T> {

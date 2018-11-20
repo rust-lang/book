@@ -111,7 +111,7 @@ The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
 [the documentation about benchmark tests][bench] to learn more.
 
-[bench]: ../../unstable-book/library-features/test.html
+[bench]: ../unstable-book/library-features/test.html
 
 The next part of the test output, which starts with `Doc-tests adder`, is for
 the results of any documentation tests. We don’t have any documentation tests

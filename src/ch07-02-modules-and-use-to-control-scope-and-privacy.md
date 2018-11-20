@@ -892,7 +892,7 @@ The glob operator is often used when testing to bring everything under test
 into the `tests` module; we’ll talk about that in the “How to Write Tests”
 section of Chapter 11. The glob operator is also sometimes used as part of the
 prelude pattern; see [the standard library
-documentation](../../std/prelude/index.html#other-preludes) for more
+documentation](../std/prelude/index.html#other-preludes) for more
 information on that pattern.
 
 ### Separating Modules into Different Files
