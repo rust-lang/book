@@ -1,8 +1,10 @@
 # Getting Started
 
-Let’s start your Rust journey! There’s a lot to learn, but every journey starts
-somewhere. In this chapter, we’ll discuss:
+The 2018 edition of the book is no longer distributed with Rust's documentation.
 
-* Installing Rust on Linux, macOS, and Windows
-* Writing a program that prints `Hello, world!`
-* Using `cargo`, Rust’s package manager and build system
+If you came here via a link or web search, you may want to check out [the current
+version of the book](../index.html) instead.
+
+If you have an internet connection, you can [find a copy distributed with
+Rust
+1.30](https://doc.rust-lang.org/1.30.0/book/2018-edition/ch10-00-getting-started.html).

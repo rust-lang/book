@@ -1,15 +1,10 @@
 # More About Cargo and Crates.io
 
-So far we’ve used only the most basic features of Cargo to build, run, and test
-our code, but it can do a lot more. In this chapter, we’ll discuss some of its
-other, more advanced features to show you how to do the following:
+The 2018 edition of the book is no longer distributed with Rust's documentation.
 
-* Customize your build through release profiles
-* Publish libraries on [crates.io](https://crates.io)<!-- ignore -->
-* Organize large projects with workspaces
-* Install binaries from [crates.io](https://crates.io)<!-- ignore -->
-* Extend Cargo using custom commands
+If you came here via a link or web search, you may want to check out [the current
+version of the book](../index.html) instead.
 
-Cargo can do even more than what we cover in this chapter, so for a full
-explanation of all its features, see [its
-documentation](https://doc.rust-lang.org/cargo/).
+If you have an internet connection, you can [find a copy distributed with
+Rust
+1.30](https://doc.rust-lang.org/1.30.0/book/2018-edition/ch14-00-more-about-cargo.html).

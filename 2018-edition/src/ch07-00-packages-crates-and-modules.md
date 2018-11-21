@@ -1,16 +1,10 @@
 # Packages, Crates, and Modules
 
-A key question when writing programs is *scope*: what names does the compiler
-know about at this location in the code? What functions am I allowed to call?
-What does this variable refer to?
+The 2018 edition of the book is no longer distributed with Rust's documentation.
 
-Rust has a number of features related to scopes. This is sometimes called
-“the module system,” but it encompases more than just modules:
+If you came here via a link or web search, you may want to check out [the current
+version of the book](../index.html) instead.
 
-* *Packages* are a Cargo feature that let you build, test, and share crates.
-* *Crates* are a tree of modules that produce a library or executable.
-* *Modules* and the *use* keyword let you control the scope and privacy of paths.
-* A *path* is a way of naming an item such as a struct, function, or module.
-
-This chapter will cover all of these concepts. You’ll be bringing names into
-scopes, defining scopes, and exporting names to scopes like a pro soon!
+If you have an internet connection, you can [find a copy distributed with
+Rust
+1.30](https://doc.rust-lang.org/1.30.0/book/2018-edition/ch07-00-packages-crates-and-modules.html).
