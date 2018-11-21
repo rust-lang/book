@@ -9,11 +9,5 @@
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 4.01 — What is Ownership, section The Stack and the Heap][2]**
-* <small>[In the first edition: Ch 4.1 — The Stack and the Heap][1]</small>
-
-
-[1]: first-edition/the-stack-and-the-heap.html
-[2]: second-edition/ch04-01-what-is-ownership.html#the-stack-and-the-heap
+You can find the latest version of this information
+[here](ch04-01-what-is-ownership.html#the-stack-and-the-heap).

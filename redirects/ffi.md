@@ -19,11 +19,5 @@ fn main() {
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 19.01 — Unsafe Rust, section `extern` functions][2]**
-* <small>[In the first edition: Ch 4.9 — FFI][1]</small>
-
-
-[1]: first-edition/ffi.html
-[2]: second-edition/ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code
+You can find the latest version of this information
+[here](ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code)
