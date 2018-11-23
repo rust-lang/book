@@ -175,7 +175,7 @@ fn main() {
 separate variables</span>
 
 This code creates the variables `a` and `b` that match the values of the `x`
-and `y` fields of the `p` variable. This example shows that the names of the
+and `y` fields of the `p` structure. This example shows that the names of the
 variables in the pattern don’t have to match the field names of the struct. But
 it’s common to want the variable names to match the field names to make it
 easier to remember which variables came from which fields.
