@@ -42,7 +42,7 @@ $ cd adder
 ```
 
 The contents of the *src/lib.rs* file in your `adder` library should look like
-Listing 11-1:
+Listing 11-1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -72,7 +72,7 @@ This assertion serves as an example of the format for a typical test. Let’s ru
 it to see that this test passes.
 
 The `cargo test` command runs all tests in our project, as shown in Listing
-11-2:
+11-2.
 
 ```text
 $ cargo test
@@ -154,7 +154,7 @@ when something in the test function panics. Each test is run in a new thread,
 and when the main thread sees that a test thread has died, the test is marked
 as failed. We talked about the simplest way to cause a panic in Chapter 9,
 which is to call the `panic!` macro. Enter the new test, `another`, so your
-*src/lib.rs* file looks like Listing 11-3:
+*src/lib.rs* file looks like Listing 11-3.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -178,7 +178,7 @@ mod tests {
 we call the `panic!` macro</span>
 
 Run the tests again using `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed:
+11-4, which shows that our `exploration` test passed and `another` failed.
 
 ```text
 running 2 tests
@@ -238,14 +238,14 @@ method, which are repeated here in Listing 11-5. Let’s put this code in the
 ```rust
 # fn main() {}
 #[derive(Debug)]
-pub struct Rectangle {
-    length: u32,
+struct Rectangle {
     width: u32,
+    height: u32,
 }
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length > other.length && self.width > other.width
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
     }
 }
 ```
@@ -255,9 +255,9 @@ impl Rectangle {
 
 The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
-`can_hold` method by creating a `Rectangle` instance that has a length of 8 and
-a width of 7 and asserting that it can hold another `Rectangle` instance that
-has a length of 5 and a width of 1:
+`can_hold` method by creating a `Rectangle` instance that has a width of 8 and
+a height of 7 and asserting that it can hold another `Rectangle` instance that
+has a width of 5 and a height of 1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -269,8 +269,8 @@ mod tests {
 
     #[test]
     fn larger_can_hold_smaller() {
-        let larger = Rectangle { length: 8, width: 7 };
-        let smaller = Rectangle { length: 5, width: 1 };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(larger.can_hold(&smaller));
     }
@@ -318,8 +318,8 @@ mod tests {
 
     #[test]
     fn smaller_cannot_hold_larger() {
-        let larger = Rectangle { length: 8, width: 7 };
-        let smaller = Rectangle { length: 5, width: 1 };
+        let larger = Rectangle { width: 8, height: 7 };
+        let smaller = Rectangle { width: 5, height: 1 };
 
         assert!(!smaller.can_hold(&larger));
     }
@@ -340,21 +340,21 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 Two tests that pass! Now let’s see what happens to our test results when we
 introduce a bug in our code. Let’s change the implementation of the `can_hold`
-method by replacing the greater-than sign with a less-than sign when it
-compares the lengths:
+method by replacing the greater than sign with a less than sign when it
+compares the widths:
 
 ```rust,not_desired_behavior
 # fn main() {}
 # #[derive(Debug)]
-# pub struct Rectangle {
-#     length: u32,
+# struct Rectangle {
 #     width: u32,
+#     height: u32,
 # }
 // --snip--
 
 impl Rectangle {
-    pub fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length < other.length && self.width > other.width
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width < other.width && self.height > other.height
     }
 }
 ```
@@ -379,8 +379,8 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-Our tests caught the bug! Because `larger.length` is 8 and `smaller.length` is
-5, the comparison of the lengths in `can_hold` now returns `false`: 8 is not
+Our tests caught the bug! Because `larger.width` is 8 and `smaller.width` is
+5, the comparison of the widths in `can_hold` now returns `false`: 8 is not
 less than 5.
 
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
@@ -617,7 +617,7 @@ This attribute makes a test pass if the code inside the function panics; the
 test will fail if the code inside the function doesn’t panic.
 
 Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
-happen when we expect them to:
+happen when we expect them to.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -714,7 +714,7 @@ make `should_panic` tests more precise, we can add an optional `expected`
 parameter to the `should_panic` attribute. The test harness will make sure that
 the failure message contains the provided text. For example, consider the
 modified code for `Guess` in Listing 11-9 where the `new` function panics with
-different messages depending on whether the value is too small or too large:
+different messages depending on whether the value is too small or too large.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -809,7 +809,8 @@ figuring out where our bug is!
 ### Using `Result<T, E>` in tests
 
 So far, we’ve written tests that panic when they fail. We can also write tests
-that use `Result<T, E>` too! Here’s that first example, but with results instead:
+that use `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use
+`Result<T, E>` instead of panicking:
 
 ```rust
 #[cfg(test)]
@@ -825,12 +826,17 @@ mod tests {
 }
 ```
 
-Here, we’ve changed the `it_works` function to return a result. And in the body,
-rather than `assert_eq!`, we return `Ok(())` for the success case, and an `Err`
-with a `String` inside for the failure case. As before, this test will fail or
-succeed, but instead of being based on panics, it will use the `Result<T, E>` to
-make that determination. Because of this, you can’t use `#[should_panic]` with one
-of these functions; you should have it be returning an `Err` instead!
+The `it_works` function now has a return type, `Result<(), String>`. In the
+body of the function, rather than call the `assert_eq!` macro, we return
+`Ok(())` when the test passes and an `Err` with a `String` inside when the test
+fails. Writing tests that return a `Result<T, E>` enables you to use the
+question mark operator in the body of tests, which can be a convenient way to
+write tests that should fail if any operation within them returns an `Err`
+variant.
+
+You can't use the `#[should_panic]` annotation on tests that use `Result<T,
+E>`. Instead, you should return an `Err` value directly when the test should
+fail.
 
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo

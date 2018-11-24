@@ -8,7 +8,7 @@ have to reimplement that logic yourself.
 In Rust, iterators are *lazy*, meaning they have no effect until you call
 methods that consume the iterator to use it up. For example, the code in
 Listing 13-13 creates an iterator over the items in the vector `v1` by calling
-the `iter` method defined on `Vec`. This code by itself doesn’t do anything
+the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
 useful.
 
 ```rust
@@ -81,7 +81,7 @@ The `Iterator` trait only requires implementors to define one method: the
 
 We can call the `next` method on iterators directly; Listing 13-15 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
-from the vector:
+from the vector.
 
 <span class="filename">Filename: src/lib.rs</span>
 

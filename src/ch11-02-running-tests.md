@@ -157,7 +157,7 @@ that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll create three tests for our
-`add_two` function, as shown in Listing 11-11, and choose which ones to run:
+`add_two` function, as shown in Listing 11-11, and choose which ones to run.
 
 <span class="filename">Filename: src/lib.rs</span>
 

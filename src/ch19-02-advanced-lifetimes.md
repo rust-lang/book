@@ -446,39 +446,41 @@ As with the other bounds, the syntax adding a lifetime bound means that any
 implementor of the `Red` trait that has references inside the type must have
 the same lifetime specified in the trait object bounds as those references.
 
-### The anonymous lifetime
+### The Anonymous Lifetime
 
-Let’s say that we have a struct that’s a wrapper around a string slice, like
-this:
+Say that we have a struct named `StrWrap` that’s a wrapper around a string
+slice:
 
 ```rust
 struct StrWrap<'a>(&'a str);
 ```
 
-We can write a function that returns one of these like this:
+We can write a function that creates an instance of the `StrWrap` struct from a
+string slice:
 
 ```rust
 # struct StrWrap<'a>(&'a str);
-fn foo<'a>(string: &'a str) -> StrWrap<'a> {
+fn wrap<'a>(string: &'a str) -> StrWrap<'a> {
     StrWrap(string)
 }
 ```
 
-But that’s a lot of `'a`s! To cut down on some of this noise, we can use the
-anonymous lifetime, `'_`, like this:
+But that’s a lot of lifetime annotations! To cut down on some of the
+annotations, we can use the anonymous lifetime , `'_`, in the function
+signature as shown here:
 
 ```rust
 # struct StrWrap<'a>(&'a str);
-fn foo(string: &str) -> StrWrap<'_> {
+fn wrap(string: &str) -> StrWrap<'_> {
     StrWrap(string)
 }
 ```
 
-The `'_` says “use the elided lifetime here.” This means that we can still see
-that `StrWrap` contains a reference, but we don’t need all of the lifetime
-annotations to make sense of it.
+The `'_` tells the compiler to use the elided lifetime. The `StrWrap` instance
+still contains a reference, but we don’t need to specify all of the lifetime
+annotations for the compiler to understand which references are related.
 
-It works in `impl` headers too; for example:
+It works in `impl` blocks too; for example, here are two ways to write an impl block that implements the `fmt::Debug` trait on the `StrWrap<'a>` struct:
 
 ```rust,ignore
 // verbose
@@ -486,8 +488,12 @@ impl<'a> fmt::Debug for StrWrap<'a> {
 
 // elided
 impl fmt::Debug for StrWrap<'_> {
-
 ```
+
+In the verbose version, we declare the lifetime `'a` after the `impl` keyword
+and annotate the `StrWrap` struct with the `'a` lifetime. In the elided
+version, we used the anonymous lifetime for the `StrWrap` struct, which means
+we don't need to declare a lifetime after `impl`.
 
 Next, let’s look at some other advanced features that manage traits.
 

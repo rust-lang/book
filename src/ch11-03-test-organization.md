@@ -10,7 +10,7 @@ external code would, using only the public interface and potentially exercising
 multiple modules per test.
 
 Writing both kinds of tests is important to ensure that the pieces of your
-library are doing what you expect them to separately and together.
+library are doing what you expect them to, separately and together.
 
 ### Unit Tests
 
@@ -62,7 +62,7 @@ There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
 impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
-Consider the code in Listing 11-12 with the private function `internal_adder`:
+Consider the code in Listing 11-12 with the private function `internal_adder`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -115,7 +115,7 @@ will compile each of the files as an individual crate.
 
 Let’s create an integration test. With the code in Listing 11-12 still in the
 *src/lib.rs* file, make a *tests* directory, create a new file named
-*tests/integration_test.rs*, and enter the code in Listing 11-13:
+*tests/integration_test.rs*, and enter the code in Listing 11-13.
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 

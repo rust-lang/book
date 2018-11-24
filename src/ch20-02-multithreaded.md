@@ -1130,10 +1130,10 @@ overloaded if the server receives a lot of requests. If we make a request to
 */sleep*, the server will be able to serve other requests by having another
 thread run them.
 
-Note that if you open */sleep* in multiple browser windows simultaneously, they
-might load 5 seconds apart from each other, because some web browsers execute
-multiple instances of the same request sequentially for caching reasons. This
-limitation is not caused by our web server.
+> Note: if you open */sleep* in multiple browser windows simultaneously, they
+> might load one at a time in 5 second intervals. Some web browsers execute
+> multiple instances of the same request sequentially for caching reasons. This
+> limitation is not caused by our web server.
 
 After learning about the `while let` loop in Chapter 18, you might be wondering
 why we didn’t write the worker thread code as shown in Listing 20-22.

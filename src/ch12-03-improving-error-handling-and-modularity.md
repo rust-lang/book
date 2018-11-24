@@ -19,12 +19,11 @@ it will be to keep track of the purpose of each. It’s best to group the
 configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
-reading the file fails, but the error message just prints
-`something went wrong`. Reading a file can fail in a number of ways: for
-example, the file could be missing, or we might not have permission to open
-it. Right now, regardless of the situation, we’d print the
-`something went wrong` error message, which wouldn’t give the user any
-information!
+reading the file fails, but the error message just prints `something went
+wrong`. Reading a file can fail in a number of ways: for example, the file
+could be missing, or we might not have permission to open it. Right now,
+regardless of the situation, we’d print the `something went wrong` error
+message, which wouldn’t give the user any information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
 runs our program without specifying enough arguments, they’ll get an `index out
@@ -50,13 +49,14 @@ process has the following steps:
   *main.rs*.
 * When the command line parsing logic starts getting complicated, extract it
   from *main.rs* and move it to *lib.rs*.
-* The responsibilities that remain in the `main` function after this process
-  should be limited to the following:
 
-  * Calling the command line parsing logic with the argument values
-  * Setting up any other configuration
-  * Calling a `run` function in *lib.rs*
-  * Handling the error if `run` returns an error
+The responsibilities that remain in the `main` function after this process
+should be limited to the following:
+
+* Calling the command line parsing logic with the argument values
+* Setting up any other configuration
+* Calling a `run` function in *lib.rs*
+* Handling the error if `run` returns an error
 
 This pattern is about separating concerns: *main.rs* handles running the
 program, and *lib.rs* handles all the logic of the task at hand. Because you
@@ -95,8 +95,8 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 `main`</span>
 
 We’re still collecting the command line arguments into a vector, but instead of
-assigning the argument value at index `1` to the variable `query` and the
-argument value at index `2` to the variable `filename` within the `main`
+assigning the argument value at index 1 to the variable `query` and the
+argument value at index 2 to the variable `filename` within the `main`
 function, we pass the whole vector to the `parse_config` function. The
 `parse_config` function then holds the logic that determines which argument
 goes in which variable and passes the values back to `main`. We still create
@@ -128,10 +128,7 @@ other and what their purpose is.
 > Note: Using primitive values when a complex type would be more appropriate is
 > an anti-pattern known as *primitive obsession*.
 
-Listing 12-6 shows the addition of a struct named `Config` defined to have
-fields named `query` and `filename`. We’ve also changed the `parse_config`
-function to return an instance of the `Config` struct and updated `main` to use
-the struct fields rather than having separate variables:
+Listing 12-6 shows the improvements to the `parse_config` function.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -169,13 +166,14 @@ fn parse_config(args: &[String]) -> Config {
 <span class="caption">Listing 12-6: Refactoring `parse_config` to return an
 instance of a `Config` struct</span>
 
-The signature of `parse_config` now indicates that it returns a `Config` value.
-In the body of `parse_config`, where we used to return string slices that
-reference `String` values in `args`, we now define `Config` to contain owned
-`String` values. The `args` variable in `main` is the owner of the argument
-values and is only letting the `parse_config` function borrow them, which means
-we’d violate Rust’s borrowing rules if `Config` tried to take ownership of the
-values in `args`.
+We’ve added a struct named `Config` defined to have fields named `query` and
+`filename`. The signature of `parse_config` now indicates that it returns a
+`Config` value. In the body of `parse_config`, where we used to return string
+slices that reference `String` values in `args`, we now define `Config` to
+contain owned `String` values. The `args` variable in `main` is the owner of
+the argument values and is only letting the `parse_config` function borrow
+them, which means we’d violate Rust’s borrowing rules if `Config` tried to take
+ownership of the values in `args`.
 
 We could manage the `String` data in a number of different ways, but the
 easiest, though somewhat inefficient, route is to call the `clone` method on
@@ -224,7 +222,7 @@ will make the code more idiomatic. We can create instances of types in the
 standard library, such as `String`, by calling `String::new`. Similarly, by
 changing `parse_config` into a `new` function associated with `Config`, we’ll
 be able to create instances of `Config` by calling `Config::new`. Listing 12-7
-shows the changes we need to make:
+shows the changes we need to make.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -267,9 +265,9 @@ compiling this code again to make sure it works.
 ### Fixing the Error Handling
 
 Now we’ll work on fixing our error handling. Recall that attempting to access
-the values in the `args` vector at index `1` or index `2` will cause the
-program to panic if the vector contains fewer than three items. Try running the
-program without any arguments; it will look like this:
+the values in the `args` vector at index 1 or index 2 will cause the program to
+panic if the vector contains fewer than three items. Try running the program
+without any arguments; it will look like this:
 
 ```text
 $ cargo run
@@ -288,9 +286,9 @@ happened and what they should do instead. Let’s fix that now.
 #### Improving the Error Message
 
 In Listing 12-8, we add a check in the `new` function that will verify that the
-slice is long enough before accessing index `1` and `2`. If the slice isn’t
-long enough, the program panics and displays a better error message than the
-`index out of bounds` message.
+slice is long enough before accessing index 1 and 2. If the slice isn’t long
+enough, the program panics and displays a better error message than the `index
+out of bounds` message.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -306,13 +304,13 @@ fn new(args: &[String]) -> Config {
 <span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span>
 
-This code is similar to the `Guess::new` function we wrote in Listing 9-10, where
-we called `panic!` when the `value` argument was out of the range of valid
-values. Instead of checking for a range of values here, we’re checking that the
-length of `args` is at least `3` and the rest of the function can operate under
-the assumption that this condition has been met. If `args` has fewer than three
-items, this condition will be true, and we call the `panic!` macro to end the
-program immediately.
+This code is similar to the `Guess::new` function we wrote in Listing 9-10,
+where we called `panic!` when the `value` argument was out of the range of
+valid values. Instead of checking for a range of values here, we’re checking
+that the length of `args` is at least 3 and the rest of the function can
+operate under the assumption that this condition has been met. If `args` has
+fewer than three items, this condition will be true, and we call the `panic!`
+macro to end the program immediately.
 
 With these extra few lines of code in `new`, let’s run the program without any
 arguments again to see what the error looks like now:
@@ -329,10 +327,10 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
 the technique we used in Listing 9-10 isn’t the best to use here: a call to
-`panic!` is more appropriate for a programming problem rather than a usage
-problem, as discussed in Chapter 9. Instead, we can use the other technique you
-learned about in Chapter 9—returning a `Result` that indicates either success
-or an error.
+`panic!` is more appropriate for a programming problem than a usage problem, as
+discussed in Chapter 9. Instead, we can use the other technique you learned
+about in Chapter 9—returning a `Result` that indicates either success or an
+error.
 
 #### Returning a `Result` from `new` Instead of Calling `panic!`
 
@@ -493,7 +491,7 @@ Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
 us further consolidate into `main` the logic around handling errors in a
 user-friendly way. Listing 12-12 shows the changes we need to make to the
-signature and body of `run`:
+signature and body of `run`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -528,9 +526,9 @@ will be. This gives us flexibility to return error values that may be of
 different types in different error cases. This is what the `dyn` means, it’s
 short for “dynamic.”
 
-Second, we’ve removed the call to `expect` in favor of `?`, as we talked about
-in Chapter 9. Rather than `panic!` on an error, `?` will return the error value
-from the current function for the caller to handle.
+Second, we’ve removed the call to `expect` in favor of the `?` operator, as we
+talked about in Chapter 9. Rather than `panic!` on an error, `?` will return
+the error value from the current function for the caller to handle.
 
 Third, the `run` function now returns an `Ok` value in the success case. We’ve
 declared the `run` function’s success type as `()` in the signature, which
@@ -553,7 +551,7 @@ warning: unused `std::result::Result` which must be used
 Rust tells us that our code ignored the `Result` value and the `Result` value
 might indicate that an error occurred. But we’re not checking to see whether or
 not there was an error, and the compiler reminds us that we probably meant to
-have some error handling code here! Let’s rectify that problem now.
+have some error-handling code here! Let’s rectify that problem now.
 
 #### Handling Errors Returned from `run` in `main`
 
@@ -603,7 +601,7 @@ Let’s move all the code that isn’t the `main` function from *src/main.rs* to
 
 The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
 (we’ve omitted the bodies of the functions for brevity). Note that this won’t
-compile until we modify *src/main.rs* in the listing after this one.
+compile until we modify *src/main.rs* in Listing 12-14.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -635,7 +633,7 @@ We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and it
 public API that we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs*, as shown in Listing 12-14:
+binary crate in *src/main.rs*, as shown in Listing 12-14.
 
 <span class="filename">Filename: src/main.rs</span>
 
