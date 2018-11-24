@@ -7,7 +7,7 @@ refactor the program until we’re using structs instead.
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the width and height of a rectangle specified in pixels and calculate the area
 of the rectangle. Listing 5-8 shows a short program with one way of doing
-exactly that in our project’s *src/main.rs*:
+exactly that in our project’s *src/main.rs*.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -55,7 +55,7 @@ we might do that in “The Tuple Type” section of Chapter 3: by using tuples.
 
 ### Refactoring with Tuples
 
-Listing 5-9 shows another version of our program that uses tuples:
+Listing 5-9 shows another version of our program that uses tuples.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -94,7 +94,7 @@ our code.
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a data type with a name for the whole as well as names for the
-parts, as shown in Listing 5-10:
+parts, as shown in Listing 5-10.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -144,7 +144,7 @@ and `1`. This is a win for clarity.
 It’d be nice to be able to print an instance of `Rectangle` while we’re
 debugging our program and see the values for all its fields. Listing 5-11 tries
 using the `println!` macro as we have used in previous chapters. This won’t
-work, however:
+work, however.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -170,7 +170,7 @@ When we run this code, we get an error with this core message:
 error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
-The `println!` macro can do many kinds of formatting, and by default, curly
+The `println!` macro can do many kinds of formatting, and by default, the curly
 brackets tell `println!` to use formatting known as `Display`: output intended
 for direct end user consumption. The primitive types we’ve seen so far
 implement `Display` by default, because there’s only one way you’d want to show
@@ -190,9 +190,9 @@ If we continue reading the errors, we’ll find this helpful note:
 
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
 {:?}", rect1);`. Putting the specifier `:?` inside the curly brackets tells
-`println!` we want to use an output format called `Debug`. `Debug` is a trait
-that enables us to print our struct in a way that is useful for developers so
-we can see its value while we’re debugging our code.
+`println!` we want to use an output format called `Debug`. The `Debug` trait
+enables us to print our struct in a way that is useful for developers so we can
+see its value while we’re debugging our code.
 
 Run the code with this change. Drat! We still get an error:
 
@@ -210,7 +210,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-12:
+definition, as shown in Listing 5-12.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -253,9 +253,8 @@ rect1 is Rectangle {
 
 Rust has provided a number of traits for us to use with the `derive` annotation
 that can add useful behavior to our custom types. Those traits and their
-behaviors are listed in Appendix C, “Derivable Traits.” We’ll cover how to
-implement these traits with custom behavior as well as how to create your own
-traits in Chapter 10.
+behaviors are listed in Appendix C. We’ll cover how to implement these traits
+with custom behavior as well as how to create your own traits in Chapter 10.
 
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle`

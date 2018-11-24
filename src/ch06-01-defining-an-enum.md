@@ -73,7 +73,7 @@ route(IpAddrKind::V6);
 Using enums has even more advantages. Thinking more about our IP address type,
 at the moment we don’t have a way to store the actual IP address *data*; we
 only know what *kind* it is. Given that you just learned about structs in
-Chapter 5, you might tackle this problem as shown in Listing 6-1:
+Chapter 5, you might tackle this problem as shown in Listing 6-1.
 
 ```rust
 enum IpAddrKind {
@@ -183,7 +183,7 @@ haven’t brought the standard library’s definition into our scope. We’ll ta
 more about bringing types into scope in Chapter 7.
 
 Let’s look at another example of an enum in Listing 6-2: this one has a wide
-variety of types embedded in its variants:
+variety of types embedded in its variants.
 
 ```rust
 enum Message {
@@ -204,7 +204,7 @@ This enum has four variants with different types:
 * `Write` includes a single `String`.
 * `ChangeColor` includes three `i32` values.
 
-Defining an enum with variants like the ones in Listing 6-2 is similar to
+Defining an enum with variants such as the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions, except the enum doesn’t use the
 `struct` keyword and all the variants are grouped together under the `Message`
 type. The following structs could hold the same data that the preceding enum

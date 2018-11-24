@@ -87,9 +87,9 @@ strings.
 First, let’s take a look at the ownership rules. Keep these rules in mind as we
 work through the examples that illustrate them:
 
-> 1. Each value in Rust has a variable that’s called its *owner*.
-> 2. There can only be one owner at a time.
-> 3. When the owner goes out of scope, the value will be dropped.
+* Each value in Rust has a variable that’s called its *owner*.
+* There can only be one owner at a time.
+* When the owner goes out of scope, the value will be dropped.
 
 ### Variable Scope
 
@@ -111,7 +111,7 @@ let s = "hello";
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current *scope*. Listing 4-1 has
-comments annotating where the variable `s` is valid:
+comments annotating where the variable `s` is valid.
 
 ```rust
 {                      // s is not valid here, it’s not yet declared
@@ -226,7 +226,7 @@ There is a natural point at which we can return the memory our `String` needs
 to the operating system: when `s` goes out of scope. When a variable goes out
 of scope, Rust calls a special function for us. This function is called `drop`,
 and it’s where the author of `String` can put the code to return the memory.
-Rust calls `drop` automatically at the closing `}`.
+Rust calls `drop` automatically at the closing curly bracket.
 
 > Note: In C++, this pattern of deallocating resources at the end of an item’s
 > lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
@@ -241,7 +241,7 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 #### Ways Variables and Data Interact: Move
 
 Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2:
+Let’s look at an example using an integer in Listing 4-2.
 
 ```rust
 let x = 5;
@@ -347,7 +347,7 @@ If you’ve heard the terms *shallow copy* and *deep copy* while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like making a shallow copy. But
 because Rust also invalidates the first variable, instead of being called a
-shallow copy, it’s known as a *move*. Here we would read this by saying that
+shallow copy, it’s known as a *move*. In this example, we would say that
 `s1` was *moved* into `s2`. So what actually happens is shown in Figure 4-4.
 
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
@@ -388,7 +388,7 @@ different is going on.
 #### Stack-Only Data: Copy
 
 There’s another wrinkle we haven’t talked about yet. This code using integers,
-part of which was shown earlier in Listing 4-2, works and is valid:
+part of which was shown in Listing 4-2, works and is valid:
 
 ```rust
 let x = 5;
@@ -413,7 +413,7 @@ in Chapter 10). If a type has the `Copy` trait, an older variable is still
 usable after assignment. Rust won’t let us annotate a type with the `Copy`
 trait if the type, or any of its parts, has implemented the `Drop` trait. If
 the type needs something special to happen when the value goes out of scope and
-we add the `Copy` annotation to that type, we’ll get a compile time error. To
+we add the `Copy` annotation to that type, we’ll get a compile-time error. To
 learn about how to add the `Copy` annotation to your type, see “Derivable
 Traits” in Appendix C.
 
@@ -434,7 +434,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 The semantics for passing a value to a function are similar to those for
 assigning a value to a variable. Passing a variable to a function will move or
 copy, just as assignment does. Listing 4-3 has an example with some annotations
-showing where variables go into and out of scope:
+showing where variables go into and out of scope.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -468,14 +468,14 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope
 annotated</span>
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
-compile time error. These static checks protect us from mistakes. Try adding
+compile-time error. These static checks protect us from mistakes. Try adding
 code to `main` that uses `s` and `x` to see where you can use them and where
 the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
 
 Returning values can also transfer ownership. Listing 4-4 is an example with
-similar annotations to those in Listing 4-3:
+similar annotations to those in Listing 4-3.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -500,10 +500,10 @@ fn gives_ownership() -> String {             // gives_ownership will move its
 
     some_string                              // some_string is returned and
                                              // moves out to the calling
-                                             // function.
+                                             // function
 }
 
-// takes_and_gives_back will take a String and return one.
+// takes_and_gives_back will take a String and return one
 fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
                                                       // scope
 
@@ -525,7 +525,7 @@ It’s quite annoying that anything we pass in also needs to be passed back if w
 want to use it again, in addition to any data resulting from the body of the
 function that we might want to return as well.
 
-It’s possible to return multiple values using a tuple, as shown in Listing 4-5:
+It’s possible to return multiple values using a tuple, as shown in Listing 4-5.
 
 <span class="filename">Filename: src/main.rs</span>
 

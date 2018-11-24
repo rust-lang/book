@@ -9,7 +9,7 @@ lines of text in a file or the prices of items in a shopping cart.
 ### Creating a New Vector
 
 To create a new, empty vector, we can call the `Vec::new` function, as shown in
-Listing 8-1:
+Listing 8-1.
 
 ```rust
 let v: Vec<i32> = Vec::new();
@@ -32,7 +32,7 @@ store once you insert values, so you rarely need to do this type annotation.
 It’s more common to create a `Vec<T>` that has initial values, and Rust
 provides the `vec!` macro for convenience. The macro will create a new vector
 that holds the values you give it. Listing 8-2 creates a new `Vec<i32>` that
-holds the values `1`, `2`, and `3`:
+holds the values `1`, `2`, and `3`.
 
 ```rust
 let v = vec![1, 2, 3];
@@ -48,7 +48,7 @@ to modify a vector.
 ### Updating a Vector
 
 To create a vector and then add elements to it, we can use the `push` method,
-as shown in Listing 8-3:
+as shown in Listing 8-3.
 
 ```rust
 let mut v = Vec::new();
@@ -70,7 +70,7 @@ we don’t need the `Vec<i32>` annotation.
 ### Dropping a Vector Drops Its Elements
 
 Like any other `struct`, a vector is freed when it goes out of scope, as
-annotated in Listing 8-4:
+annotated in Listing 8-4.
 
 ```rust
 {
@@ -157,7 +157,7 @@ and any other references to the contents of the vector remain valid. Recall the
 rule that states you can’t have mutable and immutable references in the same
 scope. That rule applies in Listing 8-7, where we hold an immutable reference to
 the first element in a vector and try to add an element to the end, which won’t
-work:
+work.
 
 ```rust,ignore,does_not_compile
 let mut v = vec![1, 2, 3, 4, 5];
@@ -233,7 +233,7 @@ elements in a vector</span>
 
 To change the value that the mutable reference refers to, we have to use the
 dereference operator (`*`) to get to the value in `i` before we can use the
-`+=` operator . We’ll talk more about `*` in Chapter 15.
+`+=` operator. We’ll talk more about `*` in Chapter 15.
 
 ### Using an Enum to Store Multiple Types
 

@@ -17,7 +17,7 @@ the value falls into the associated code block to be used during execution.
 Because we just mentioned coins, let’s use them as an example using `match`! We
 can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
-value in cents, as shown here in Listing 6-3:
+value in cents, as shown here in Listing 6-3.
 
 ```rust
 enum Coin {
@@ -100,10 +100,10 @@ From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `UsState` value stored
-inside it, which we’ve done here in Listing 6-4:
+inside it, which we’ve done here in Listing 6-4.
 
 ```rust
-#[derive(Debug)] // So we can inspect the state in a minute
+#[derive(Debug)] // so we can inspect the state in a minute
 enum UsState {
     Alabama,
     Alaska,
@@ -179,7 +179,7 @@ the function should return the `None` value and not attempt to perform any
 operations.
 
 This function is very easy to write, thanks to `match`, and will look like
-Listing 6-5:
+Listing 6-5.
 
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
@@ -292,4 +292,4 @@ can say that we want to do nothing for all the possible values that we don’t
 list before the `_` placeholder.
 
 However, the `match` expression can be a bit wordy in a situation in which we
-only care about *one* of the cases. For this situation, Rust provides `if let`.
+care about only *one* of the cases. For this situation, Rust provides `if let`.

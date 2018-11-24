@@ -1,7 +1,7 @@
 ## Storing UTF-8 Encoded Text with Strings
 
 We talked about strings in Chapter 4, but we’ll look at them in more depth now.
-New Rustaceans commonly get stuck on strings due to a combination of three
+New Rustaceans commonly get stuck on strings for a combination of three
 reasons: Rust’s propensity for exposing possible errors, strings being a more
 complicated data structure than many programmers give them credit for, and
 UTF-8. These factors combine in a way that can seem difficult when you’re
@@ -45,7 +45,7 @@ API documentation for more about how to use them and when each is appropriate.
 
 Many of the same operations available with `Vec<T>` are available with `String`
 as well, starting with the `new` function to create a string, shown in Listing
-8-11:
+8-11.
 
 ```rust
 let mut s = String::new();
@@ -57,7 +57,7 @@ This line creates a new empty string called `s`, which we can then load data
 into. Often, we’ll have some initial data that we want to start the string
 with. For that, we use the `to_string` method, which is available on any type
 that implements the `Display` trait, as string literals do. Listing 8-12 shows
-two examples:
+two examples.
 
 ```rust
 let data = "initial contents";
@@ -75,7 +75,7 @@ This code creates a string containing `initial contents`.
 
 We can also use the function `String::from` to create a `String` from a string
 literal. The code in Listing 8-13 is equivalent to the code from Listing 8-12
-that uses `to_string`:
+that uses `to_string`.
 
 ```rust
 let s = String::from("initial contents");
@@ -90,7 +90,7 @@ redundant, but they all have their place! In this case, `String::from` and
 `to_string` do the same thing, so which you choose is a matter of style.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
-data in them, as shown in Listing 8-14:
+data in them, as shown in Listing 8-14.
 
 ```rust
 let hello = String::from("السلام عليكم");
@@ -120,7 +120,7 @@ use the `+` operator or the `format!` macro to concatenate `String` values.
 #### Appending to a String with `push_str` and `push`
 
 We can grow a `String` by using the `push_str` method to append a string slice,
-as shown in Listing 8-15:
+as shown in Listing 8-15.
 
 ```rust
 let mut s = String::from("foo");
@@ -133,7 +133,7 @@ using the `push_str` method</span>
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
 parameter. For example, the code in Listing 8-16 shows that it would be
-unfortunate if we weren’t able to use `s2` after appending its contents to `s1`:
+unfortunate if we weren’t able to use `s2` after appending its contents to `s1`.
 
 ```rust
 let mut s1 = String::from("foo");
@@ -149,8 +149,8 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 shows code that adds the letter l to a `String` using
-the `push` method:
+`String`. Listing 8-17 shows code that adds the letter *l* to a `String` using
+the `push` method.
 
 ```rust
 let mut s = String::from("lo");
@@ -165,12 +165,12 @@ As a result of this code, `s` will contain `lol`.
 #### Concatenation with the `+` Operator or the `format!` Macro
 
 Often, you’ll want to combine two existing strings. One way is to use the `+`
-operator, as shown in Listing 8-18:
+operator, as shown in Listing 8-18.
 
 ```rust
 let s1 = String::from("Hello, ");
 let s2 = String::from("world!");
-let s3 = s1 + &s2; // Note s1 has been moved here and can no longer be used
+let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
 ```
 
 <span class="caption">Listing 8-18: Using the `+` operator to combine two
@@ -248,7 +248,7 @@ easier to read and doesn’t take ownership of any of its parameters.
 In many other programming languages, accessing individual characters in a
 string by referencing them by index is a valid and common operation. However,
 if you try to access parts of a `String` using indexing syntax in Rust, you’ll
-get an error. Consider the invalid code in Listing 8-19:
+get an error. Consider the invalid code in Listing 8-19.
 
 ```rust,ignore,does_not_compile
 let s1 = String::from("hello");
@@ -285,7 +285,7 @@ let len = String::from("Hola").len();
 
 In this case, `len` will be 4, which means the vector storing the string “Hola”
 is 4 bytes long. Each of these letters takes 1 byte when encoded in UTF-8. But
-what about the following line? (Note that this line begins with the capital
+what about the following line? (Note that this string begins with the capital
 Cyrillic letter Ze, not the Arabic number 3.)
 
 ```rust
@@ -393,7 +393,7 @@ Fortunately, you can access elements in a string in other ways.
 If you need to perform operations on individual Unicode scalar values, the best
 way to do so is to use the `chars` method. Calling `chars` on “नमस्ते” separates
 out and returns six values of type `char`, and you can iterate over the result
-in order to access each element:
+to access each element:
 
 ```rust
 for c in "नमस्ते".chars() {

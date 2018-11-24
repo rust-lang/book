@@ -8,7 +8,7 @@ reading the source code may find useful.
 Here’s a simple comment:
 
 ```rust
-// Hello, world.
+// hello, world
 ```
 
 In Rust, comments must start with two slashes and continue until the end of the
@@ -27,7 +27,7 @@ Comments can also be placed at the end of lines containing code:
 
 ```rust
 fn main() {
-    let lucky_number = 7; // I’m feeling lucky today.
+    let lucky_number = 7; // I’m feeling lucky today
 }
 ```
 
@@ -38,7 +38,7 @@ separate line above the code it’s annotating:
 
 ```rust
 fn main() {
-    // I’m feeling lucky today.
+    // I’m feeling lucky today
     let lucky_number = 7;
 }
 ```

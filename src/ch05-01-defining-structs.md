@@ -10,7 +10,7 @@ To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
 grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
-struct that stores information about a user account:
+struct that stores information about a user account.
 
 ```rust
 struct User {
@@ -31,7 +31,7 @@ data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2:
+example, we can declare a particular user as shown in Listing 5-2.
 
 ```rust
 # struct User {
@@ -56,7 +56,7 @@ To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we could use `user1.email` wherever we wanted
 to use this value. If the instance is mutable, we can change a value by using
 the dot notation and assigning into a particular field. Listing 5-3 shows how
-to change the value in the `email` field of a mutable `User` instance:
+to change the value in the `email` field of a mutable `User` instance.
 
 ```rust
 # struct User {
@@ -80,10 +80,10 @@ user1.email = String::from("anotheremail@example.com");
 `User` instance</span>
 
 Note that the entire instance must be mutable; Rust doesn’t allow us to mark
-only certain fields as mutable.
+only certain fields as mutable. As with any expression, we can construct a new
+instance of the struct as the last expression in the function body to
+implicitly return that new instance.
 
-As with any expression, we can construct a new instance of the struct as the
-last expression in the function body to implicitly return that new instance.
 Listing 5-4 shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
 the `sign_in_count` gets a value of `1`.
@@ -119,7 +119,7 @@ would get even more annoying. Luckily, there’s a convenient shorthand!
 Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the *field init shorthand* syntax to rewrite
 `build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `email` and `username` as shown in Listing 5-5.
+repetition of `email` and `username`, as shown in Listing 5-5.
 
 ```rust
 # struct User {
@@ -156,7 +156,7 @@ instance’s values but changes some. You’ll do this using *struct update synt
 
 First, Listing 5-6 shows how we create a new `User` instance in `user2` without
 the update syntax. We set new values for `email` and `username` but otherwise
-use the same values from `user1` that we created in Listing 5-2:
+use the same values from `user1` that we created in Listing 5-2.
 
 ```rust
 # struct User {
@@ -218,7 +218,7 @@ The code in Listing 5-7 also creates an instance in `user2` that has a
 different value for `email` and `username` but has the same values for the
 `active` and `sign_in_count` fields from `user1`.
 
-### Tuple Structs without Named Fields to Create Different Types
+### Using Tuple Structs without Named Fields to Create Different Types
 
 You can also define structs that look similar to tuples, called *tuple
 structs*. Tuple structs have the added meaning the struct name provides but
@@ -227,7 +227,7 @@ of the fields. Tuple structs are useful when you want to give the whole tuple a
 name and make the tuple be a different type than other tuples, and naming each
 field as in a regular struct would be verbose or redundant.
 
-To define a tuple struct start with the `struct` keyword and the struct name
+To define a tuple struct, start with the `struct` keyword and the struct name
 followed by the types in the tuple. For example, here are definitions and
 usages of two tuple structs named `Color` and `Point`:
 

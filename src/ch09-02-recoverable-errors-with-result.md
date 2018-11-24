@@ -29,7 +29,7 @@ library has defined on it in many different situations where the successful
 value and error value we want to return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
-fail. In Listing 9-3 we try to open a file:
+fail. In Listing 9-3 we try to open a file.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -43,14 +43,13 @@ fn main() {
 
 <span class="caption">Listing 9-3: Opening a file</span>
 
-How do we know `File::open` returns a `Result`? We could look at the 
-[standard library API documentation](../std/index.html),
-or we could ask the compiler! If we give `f` a type
-annotation that we know is *not* the return type of the function and then try
-to compile the code, the compiler will tell us that the types don’t match. The
-error message will then tell us what the type of `f` *is*. Let’s try it! We
-know that the return type of `File::open` isn’t of type `u32`, so let’s change
-the `let f` statement to this:
+How do we know `File::open` returns a `Result`? We could look at the [standard
+library API documentation](../std/index.html)<!-- ignore -->, or we could ask
+the compiler! If we give `f` a type annotation that we know is *not* the return
+type of the function and then try to compile the code, the compiler will tell
+us that the types don’t match. The error message will then tell us what the
+type of `f` *is*. Let’s try it! We know that the return type of `File::open`
+isn’t of type `u32`, so let’s change the `let f` statement to this:
 
 ```rust,ignore
 let f: u32 = File::open("hello.txt");
@@ -142,7 +141,7 @@ if `File::open` failed because the file doesn’t exist, we want to create the
 file and return the handle to the new file. If `File::open` failed for any
 other reason—for example, because we didn’t have permission to open the file—we
 still want the code to `panic!` in the same way as it did in Listing 9-4. Look
-at Listing 9-5, which adds another arm to the `match`:
+at Listing 9-5, which adds another arm to the `match`.
 
 <span class="filename">Filename: src/main.rs</span>
 
