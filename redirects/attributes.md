@@ -16,7 +16,7 @@ fn test_foo() {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the Rust Reference: Ch 5.3 — Attributes][2]**
+* **[In the Rust Reference: Ch 6.5 — Attributes][2]**
 * <small>[In the first edition: Ch 3.27 — Attributes][1]</small>
 
 
