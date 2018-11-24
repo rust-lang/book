@@ -45,10 +45,10 @@ thread 'main' panicked at 'crash and burn', src/main.rs:2:4
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-The call to `panic!` causes the error message contained in the last two
-lines. The first line shows our panic message and the place in our source code
-where the panic occurred: *src/main.rs:2:4* indicates that it’s the second
-line, fourth character of our *src/main.rs* file.
+The call to `panic!` causes the error message contained in the last two lines.
+The first line shows our panic message and the place in our source code where
+the panic occurred: *src/main.rs:2:4* indicates that it’s the second line,
+fourth character of our *src/main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that
 line, we see the `panic!` macro call. In other cases, the `panic!` call might
