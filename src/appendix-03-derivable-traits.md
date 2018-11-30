@@ -138,7 +138,7 @@ type that implements `Copy` has a trivial implementation of `Clone` that
 performs the same task as `Copy`.
 
 The `Copy` trait is rarely required; types that implement `Copy` have
-optimizations available, meaning you don’t have to call `clone`, which makes
+optimizations available, and you don’t have to call `clone`, which makes
 the code more concise.
 
 Everything possible with `Copy` you can also accomplish with `Clone`, but the
@@ -158,7 +158,7 @@ to store data efficiently.
 ### `Default` for Default Values
 
 The `Default` trait allows you to create a default value for a type. Deriving
-`Default` implements the `default` function. The derived implementation of the
+`Default` implements the `default` method. The derived implementation of the
 `default` function calls the `default` function on each part of the type,
 meaning all fields or values in the type must also implement `Default` to
 derive `Default`.
