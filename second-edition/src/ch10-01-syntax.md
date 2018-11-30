@@ -313,7 +313,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-9: `T` 타입의 `x` 필트에 대한 참조자를 반환하는
+<span class="caption">Listing 10-9: `T` 타입의 `x` 필드에 대한 참조자를 반환하는
 `Point<T>` 구조체 상에 `x`라는 이름의 메소드 정의</span>
 
 `impl` 바로 뒤에 `T`를 정의해야만 타입 `Point<T>` 메소드를 구현하는 중에 이를 사용할 수 있음을
