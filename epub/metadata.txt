@@ -1,0 +1,13 @@
+--- 
+title: The Rust Programming Language
+creator: 
+- role: author
+  text: Steve Klabnik 
+- role: author
+  text: Carol Nichols
+cover-image: ../epub/cover.svg.png
+css: ../epub/style.css
+ibooks:
+  version: 0.0.1
+---
+
