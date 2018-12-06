@@ -704,7 +704,7 @@ by adding the following two lines to the `main` function body:
     io::stdin().read_line(&mut guess)
         .expect("Failed to read line");
 
-    let guess: u32 = guess.trim().parse()
+    let guess: u8 = guess.trim().parse()
         .expect("Please type a number!");
 
     println!("You guessed: {}", guess);
@@ -720,7 +720,7 @@ by adding the following two lines to the `main` function body:
 The two new lines are:
 
 ```rust,ignore
-let guess: u32 = guess.trim().parse()
+let guess: u8 = guess.trim().parse()
     .expect("Please type a number!");
 ```
 
@@ -735,7 +735,7 @@ shadowing in more detail.)
 We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with the input in
 it. The `trim` method on a `String` instance will eliminate any whitespace at
-the beginning and end. Although `u32` can contain only numerical characters,
+the beginning and end. Although `u8` can contain only numerical characters,
 the user must press <span class="keystroke">enter</span> to satisfy
 `read_line`. When the user presses <span class="keystroke">enter</span>, a
 newline character is added to the string. For example, if the user types <span
@@ -746,13 +746,13 @@ pressing <span class="keystroke">enter</span>. The `trim` method eliminates
 
 The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
-need to tell Rust the exact number type we want by using `let guess: u32`. The
+need to tell Rust the exact number type we want by using `let guess: u8`. The
 colon (`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust
-has a few built-in number types; the `u32` seen here is an unsigned, 32-bit
+has a few built-in number types; the `u8` seen here is an unsigned, 8-bit
 integer. It’s a good default choice for a small positive number. You’ll learn
-about other number types in Chapter 3. Additionally, the `u32` annotation in
+about other number types in Chapter 3. Additionally, the `u8` annotation in
 this example program and the comparison with `secret_number` means that Rust
-will infer that `secret_number` should be a `u32` as well. So now the
+will infer that `secret_number` should be a `u8` as well. So now the
 comparison will be between two values of the same type!
 
 [parse]: ../std/primitive.str.html#method.parse
@@ -890,7 +890,7 @@ exiting the program, because the loop is the last part of `main`.
 To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in Listing 2-5.
+is converted from a `String` to a `u8`, as shown in Listing 2-5.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -900,7 +900,7 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 
-let guess: u32 = match guess.trim().parse() {
+let guess: u8 = match guess.trim().parse() {
     Ok(num) => num,
     Err(_) => continue,
 };
@@ -984,7 +984,7 @@ fn main() {
         io::stdin().read_line(&mut guess)
             .expect("Failed to read line");
 
-        let guess: u32 = match guess.trim().parse() {
+        let guess: u8 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => continue,
         };
