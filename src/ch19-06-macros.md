@@ -327,12 +327,10 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
 <!--
-This usage of `extern crate` is required for the moment with the 1.31 code
-that's currently rustc 1.31.0-beta.4 (04da282bb 2018-11-01), see:
-
-- https://github.com/rust-lang/rust/issues/54418
-- https://github.com/rust-lang/rust/pull/54658
-- https://github.com/rust-lang/rust/issues/55599
+This usage of `extern crate` is required for the moment with 1.31.0, see:
+https://github.com/rust-lang/rust/issues/54418
+https://github.com/rust-lang/rust/pull/54658
+https://github.com/rust-lang/rust/issues/55599
 -->
 
 ```rust,ignore
