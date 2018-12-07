@@ -23,8 +23,8 @@ fn another_function() {
 Here are the relevant sections in the new and old books:
 
 * **[In the first edition: Ch 3.2 — Functions][1]**
-* <small>[In the second edition: Ch 3.03 — Functions][2]</small>
+* <small>[in the current edition: Ch 3.03 — Functions][2]</small>
 
 
-[1]: first-edition/functions.html
-[2]: second-edition/ch03-03-how-functions-work.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/functions.html
+[2]: ch03-03-how-functions-work.html

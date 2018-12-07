@@ -14,9 +14,9 @@ println!("b = {}", b);
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 15.00 — Smart Pointers][2]**
+* **[In the current edition: Ch 15.00 — Smart Pointers][2]**
 * <small>[In the first edition: Ch 4.8 — Choosing your Guarantees][1]</small>
 
 
-[1]: first-edition/choosing-your-guarantees.html
-[2]: second-edition/ch15-00-smart-pointers.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/choosing-your-guarantees.html
+[2]: ch15-00-smart-pointers.html

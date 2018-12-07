@@ -12,9 +12,9 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 4.00 — Understanding Ownership][2]**
+* **[in the current edition: Ch 4.00 — Understanding Ownership][2]**
 * <small>[In the first edition: Ch 3.8 — Ownership][1]</small>
 
 
-[1]: first-edition/ownership.html
-[2]: second-edition/ch04-00-understanding-ownership.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/ownership.html
+[2]: ch04-00-understanding-ownership.html

@@ -20,6 +20,6 @@ The best place to learn more about this is [the Rust documentation][3].
 * <small>[In the first edition: Ch 4.10 — Borrow and AsRef][1]</small>
 
 
-[1]: first-edition/borrow-and-asref.html
-[2]: second-edition/index.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/borrow-and-asref.html
+[2]: index.html
 [3]: ../std/convert/trait.AsRef.html

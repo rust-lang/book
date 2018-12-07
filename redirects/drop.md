@@ -26,9 +26,9 @@ fn main() {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 15.03 — The `Drop` Trait Runs Code on Cleanup][2]**
+* **[in the current edition: Ch 15.03 — The `Drop` Trait Runs Code on Cleanup][2]**
 * <small>[In the first edition: Ch 3.20 — Drop][1]</small>
 
 
-[1]: first-edition/drop.html
-[2]: second-edition/ch15-03-drop.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/drop.html
+[2]: ch15-03-drop.html

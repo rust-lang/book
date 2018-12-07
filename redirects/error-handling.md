@@ -8,9 +8,9 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 9.00 — Error Handling][2]**
+* **[in the current edition: Ch 9.00 — Error Handling][2]**
 * <small>[In the first edition: Ch 4.7 — Error Handling][1]</small>
 
 
-[1]: first-edition/error-handling.html
-[2]: second-edition/ch09-00-error-handling.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/error-handling.html
+[2]: ch09-00-error-handling.html
