@@ -5,9 +5,9 @@
 You can [continue to the exact older page][1].
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* **[In the second edition: Getting Started][2]**
+* **[in the current edition: Getting Started][2]**
 * <small>[In the first edition: Getting Started][1]</small>
 
 
-[1]: first-edition/getting-started.html
-[2]: second-edition/ch01-00-getting-started.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/getting-started.html
+[2]: ch01-00-getting-started.html

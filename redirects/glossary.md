@@ -10,5 +10,5 @@ It is recommended to start there.
 * <small>[In the first edition: Glossary][1]</small>
 
 
-[1]: first-edition/glossary.html
-[2]: second-edition/index.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/glossary.html
+[2]: index.html

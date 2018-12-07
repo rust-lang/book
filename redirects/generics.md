@@ -21,10 +21,10 @@ fn main() {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 10.00 — Generic Types, Traits, and Lifetimes][2]**
+* **[in the current edition: Ch 10.00 — Generic Types, Traits, and Lifetimes][2]**
 * <small>[In the first edition: Ch 3.18 — Generics][1]</small>
 
 
-[1]: first-edition/generics.html
-[2]: second-edition/ch10-00-generics.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/generics.html
+[2]: ch10-00-generics.html
 

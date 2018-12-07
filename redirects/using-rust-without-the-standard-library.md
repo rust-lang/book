@@ -13,5 +13,5 @@ This particular chapter has moved to [the Unstable Book][2].
 * <small>[In the first edition: Ch 4.12 — Using Rust without the Standard Library][1]</small>
 
 
-[1]: first-edition/using-rust-without-the-standard-library.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/using-rust-without-the-standard-library.html
 [2]: ../unstable-book/language-features/lang-items.html#writing-an-executable-without-stdlib

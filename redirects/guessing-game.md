@@ -5,8 +5,8 @@
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
 * **[In the first edition: Tutorial — Guessing Game][1]**
-* <small>[In the second edition: Ch 2.00 — Guessing Game tutorial][2]</small>
+* <small>[in the current edition: Ch 2.00 — Guessing Game tutorial][2]</small>
 
 
-[1]: first-edition/guessing-game.html
-[2]: second-edition/ch02-00-guessing-game-tutorial.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/guessing-game.html
+[2]: ch02-00-guessing-game-tutorial.html
