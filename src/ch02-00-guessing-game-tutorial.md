@@ -35,6 +35,7 @@ Look at the generated *Cargo.toml* file:
 name = "guessing_game"
 version = "0.1.0"
 authors = ["Your Name <you@example.com>"]
+edition = "2018"
 
 [dependencies]
 ```
