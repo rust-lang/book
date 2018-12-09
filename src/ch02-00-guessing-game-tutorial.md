@@ -516,6 +516,8 @@ Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use rand::Rng;
 
@@ -604,6 +606,8 @@ will explain.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
+extern crate rand;
+
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
@@ -968,6 +972,8 @@ secret number. Listing 2-6 shows the final code.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
