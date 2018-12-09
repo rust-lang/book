@@ -73,9 +73,9 @@ fn main() {
 }
 ```
 
-We’ll change the start of the `main` function that we had in Listing 12-24 at
-to the code in Listing 13-25. This won’t compile until we update `Config::new`
-as well.
+We’ll change the start of the `main` function that we had in Listing 12-24 to
+the code in Listing 13-25. This won’t compile until we update `Config::new` as
+well.
 
 <span class="filename">Filename: src/main.rs</span>
 
