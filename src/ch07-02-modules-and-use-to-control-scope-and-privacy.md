@@ -536,7 +536,7 @@ fn main() {
 a relative path starting with `self`</span>
 
 Starting relative paths with `self` when specified after `use` might not be
-neccesary in the future; it’s an inconsistency in the language that people are
+necessary in the future; it’s an inconsistency in the language that people are
 working on eliminating.
 
 Choosing to specify absolute paths with `use` can make updates easier if the
@@ -613,7 +613,7 @@ fn main() {
 ```
 
 <span class="caption">Listing 7-16: Bringing the `clarinet` function into
-scoope with `use`, which is unidiomatic</span>
+scope with `use`, which is unidiomatic</span>
 
 For functions, it’s considered idiomatic to specify the function’s parent
 module with `use`, and then specify the parent module when calling the
@@ -672,6 +672,7 @@ use std::io;
 fn function1() -> fmt::Result {
 #     Ok(())
 }
+
 fn function2() -> io::Result<()> {
 #     Ok(())
 }
