@@ -516,6 +516,8 @@ Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use rand::Rng;
 
@@ -540,9 +542,10 @@ fn main() {
 <span class="caption">Listing 2-3: Adding code to generate a random
 number</span>
 
-First, we add a line that lets Rust know we’ll be using the `rand` crate as an
-external dependency. This also does the equivalent of calling `use rand`, so
-now we can call anything in the `rand` crate by placing `rand::` before it.
+First, we add the line `extern crate rand`. This line lets Rust know we’ll be
+using the `rand` crate as an external dependency. It also does the equivalent of
+calling `use rand`, so now we can call anything in the `rand` crate by placing
+`rand::` before it.
 
 Next, we add another `use` line: `use rand::Rng`. The `Rng` trait defines
 methods that random number generators implement, and this trait must be in
@@ -604,6 +607,8 @@ will explain.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
+extern crate rand;
+
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
@@ -968,6 +973,8 @@ secret number. Listing 2-6 shows the final code.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
