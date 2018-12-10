@@ -147,13 +147,14 @@ hardcoded value needed to be updated in the future.
 
 ### Shadowing
 
-As you saw in the guessing game tutorial in the “Comparing the Guess to the
-Secret Number” section in Chapter 2, you can declare a new variable with the
-same name as a previous variable, and the new variable shadows the previous
-variable. Rustaceans say that the first variable is *shadowed* by the second,
-which means that the second variable’s value is what appears when the variable
-is used. We can shadow a variable by using the same variable’s name and
-repeating the use of the `let` keyword as follows:
+As you saw in the guessing game tutorial in the [“Comparing the Guess to the
+Secret Number”][comparing-the-guess-to-the-secret-number]<!-- ignore -->
+section in Chapter 2, you can declare a new variable with the same name as a
+previous variable, and the new variable shadows the previous variable.
+Rustaceans say that the first variable is *shadowed* by the second, which means
+that the second variable’s value is what appears when the variable is used. We
+can shadow a variable by using the same variable’s name and repeating the use
+of the `let` keyword as follows:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,3 +228,6 @@ error[E0308]: mismatched types
 
 Now that we’ve explored how variables work, let’s look at more data types they
 can have.
+
+[comparing-the-guess-to-the-secret-number]:
+ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number

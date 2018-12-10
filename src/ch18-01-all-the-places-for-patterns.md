@@ -28,8 +28,8 @@ value can never fail and thus covers every remaining case.
 A particular pattern `_` will match anything, but it never binds to a variable,
 so it’s often used in the last match arm. The `_` pattern can be useful when
 you want to ignore any value not specified, for example. We’ll cover the `_`
-pattern in more detail in the “Ignoring Values in a Pattern” section later in
-this chapter.
+pattern in more detail in the [“Ignoring Values in a Pattern”]
+[ignoring-values-in-a-pattern]<!-- ignore --> section later in this chapter.
 
 ### Conditional `if let` Expressions
 
@@ -229,10 +229,11 @@ error[E0308]: mismatched types
 ```
 
 If we wanted to ignore one or more of the values in the tuple, we could use `_`
-or `..`, as you’ll see in the “Ignoring Values in a Pattern” section. If the
-problem is that we have too many variables in the pattern, the solution is to
-make the types match by removing variables so the number of variables equals
-the number of elements in the tuple.
+or `..`, as you’ll see in the [“Ignoring Values in a Pattern”]
+[ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem is that
+we have too many variables in the pattern, the solution is to make the types
+match by removing variables so the number of variables equals the number of
+elements in the tuple.
 
 ### Function Parameters
 
@@ -280,3 +281,6 @@ At this point, you’ve seen several ways of using patterns, but patterns don’
 work the same in every place we can use them. In some places, the patterns must
 be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
+
+[ignoring-values-in-a-pattern]:
+ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern

@@ -105,7 +105,8 @@ reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 Because we don’t have any tests we’ve marked as ignored, the summary shows `0
 ignored`. We also haven’t filtered the tests being run, so the end of the
 summary shows `0 filtered out`. We’ll talk about ignoring and filtering out
-tests in the next section, “Controlling How Tests Are Run.”
+tests in the next section, [“Controlling How Tests Are Run.”]
+[controlling-how-tests-are-run]<!-- ignore -->
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
@@ -208,7 +209,8 @@ on line 10 in the *src/lib.rs* file. The next section lists just the names of
 all the failing tests, which is useful when there are lots of tests and lots of
 detailed failing test output. We can use the name of a failing test to run just
 that test to more easily debug it; we’ll talk more about ways to run tests in
-the “Controlling How Tests Are Run” section.
+the [“Controlling How Tests Are Run”][controlling-how-tests-are-run]<!-- ignore
+--> section.
 
 The summary line displays at the end: overall, our test result is `FAILED`.
 We had one test pass and one test fail.
@@ -504,11 +506,13 @@ You can also add a custom message to be printed with the failure message as
 optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
 arguments specified after the one required argument to `assert!` or the two
 required arguments to `assert_eq!` and `assert_ne!` are passed along to the
-`format!` macro (discussed in Chapter 8 in the “Concatenation with the `+`
-Operator or the `format!` Macro” section), so you can pass a format string that
-contains `{}` placeholders and values to go in those placeholders. Custom
-messages are useful to document what an assertion means; when a test fails,
-you’ll have a better idea of what the problem is with the code.
+`format!` macro (discussed in Chapter 8 in the [“Concatenation with the `+`
+Operator or the `format!` Macro”]
+[concatenation-with-the--operator-or-the-format-macro]<!-- ignore --> section),
+so you can pass a format string that contains `{}` placeholders and values to
+go in those placeholders. Custom messages are useful to document what an
+assertion means; when a test fails, you’ll have a better idea of what the
+problem is with the code.
 
 For example, let’s say we have a function that greets people by name and we
 want to test that the name we pass into the function appears in the output:
@@ -829,3 +833,8 @@ of these functions; you should have it be returning an `Err` instead!
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
 test`.
+
+[concatenation-with-the--operator-or-the-format-macro]:
+ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
+[controlling-how-tests-are-run]:
+ch11-02-running-tests.html#controlling-how-tests-are-run

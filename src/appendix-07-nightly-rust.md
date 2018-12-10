@@ -191,7 +191,7 @@ If the feature is accepted, an issue is opened on the Rust repository, and
 someone can implement it. The person who implements it very well may not be the
 person who proposed the feature in the first place! When the implementation is
 ready, it lands on the `master` branch behind a feature gate, as we discussed
-in the “Unstable Features” section.
+in the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
 
 After some time, once Rust developers who use nightly releases have been able
 to try out the new feature, team members will discuss the feature, how it’s

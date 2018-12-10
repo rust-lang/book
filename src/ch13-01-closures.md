@@ -438,8 +438,9 @@ we use generics and trait bounds, as we discussed in Chapter 10.
 
 The `Fn` traits are provided by the standard library. All closures implement at
 least one of the traits: `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the
-difference between these traits in the “Capturing the Environment with
-Closures” section; in this example, we can use the `Fn` trait.
+difference between these traits in the [“Capturing the Environment with
+Closures”](#capturing-the-environment-with-closures)<!-- ignore --> section; in
+this example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have to match this trait bound. In this

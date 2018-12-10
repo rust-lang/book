@@ -30,8 +30,10 @@ associated with their name. Code using `People` would only interact with the
 public API we provide, such as a method to add a name string to the `People`
 collection; that code wouldn’t need to know that we assign an `i32` ID to names
 internally. The newtype pattern is a lightweight way to achieve encapsulation
-to hide implementation details, which we discussed in the “Encapsulation that
-Hides Implementation Details” section of Chapter 17.
+to hide implementation details, which we discussed in the [“Encapsulation that
+Hides Implementation Details”]
+[encapsulation-that-hides-implementation-details]<!-- ignore --> section of
+Chapter 17.
 
 ### Creating Type Synonyms with Type Aliases
 
@@ -197,9 +199,10 @@ let guess: u32 = match guess.trim().parse() {
 <span class="caption">Listing 19-34: A `match` with an arm that ends in
 `continue`</span>
 
-At the time, we skipped over some details in this code. In Chapter 6 in “The
-`match` Control Flow Operator” section, we discussed that `match` arms must all
-return the same type. So, for example, the following code doesn’t work:
+At the time, we skipped over some details in this code. In Chapter 6 in [“The
+`match` Control Flow Operator”][the-match-control-flow-operator]<!-- ignore
+--> section, we discussed that `match` arms must all return the same type. So,
+for example, the following code doesn’t work:
 
 ```rust,ignore,does_not_compile
 let guess = match guess.trim().parse() {
@@ -286,9 +289,9 @@ storage and `s2` needs 15. This is why it’s not possible to create a variable
 holding a dynamically sized type.
 
 So what do we do? In this case, you already know the answer: we make the types
-of `s1` and `s2` a `&str` rather than a `str`. Recall that in the “String
-Slices” section of Chapter 4, we said the slice data structure stores the
-starting position and the length of the slice.
+of `s1` and `s2` a `&str` rather than a `str`. Recall that in the [“String
+Slices”][string-slices]<!-- ignore --> section of Chapter 4, we said the slice
+data structure stores the starting position and the length of the slice.
 
 So although a `&T` is a single value that stores the memory address of where
 the `T` is located, a `&str` is *two* values: the address of the `str` and its
@@ -303,10 +306,12 @@ types behind a pointer of some kind.
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In Chapter 17 in the “Using Trait Objects that
-Allow for Values of Different Types” section, we mentioned that to use traits
-as trait objects, we must put them behind a pointer, such as `&dyn Trait` or
-`Box<dyn Trait>` (`Rc<dyn Trait>` would work too).
+using the name of the trait. In Chapter 17 in the [“Using Trait Objects that
+Allow for Values of Different Types”]
+[using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore -->
+section, we mentioned that to use traits as trait objects, we must put them
+behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>`
+would work too).
 
 To work with DSTs, Rust has a particular trait called the `Sized` trait to
 determine whether or not a type’s size is known at compile time. This trait is
@@ -347,3 +352,11 @@ Because the type might not be `Sized`, we need to use it behind some kind of
 pointer. In this case, we’ve chosen a reference.
 
 Next, we’ll talk about functions and closures!
+
+[encapsulation-that-hides-implementation-details]:
+ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
+[string-slices]: ch04-03-slices.html#string-slices
+[the-match-control-flow-operator]:
+ch06-02-match.html#the-match-control-flow-operator
+[using-trait-objects-that-allow-for-values-of-different-types]:
+ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

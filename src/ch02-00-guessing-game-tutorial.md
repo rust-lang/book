@@ -157,9 +157,10 @@ let foo = bar;
 
 This line creates a new variable named `foo` and binds it to the value of the
 `bar` variable. In Rust, variables are immutable by default. We’ll be
-discussing this concept in detail in the “Variables and Mutability” section in
-Chapter 3. The following example shows how to use `mut` before the variable
-name to make a variable mutable:
+discussing this concept in detail in the [“Variables and Mutability”]
+[variables-and-mutability]<!-- ignore --> section in Chapter 3. The following
+example shows how to use `mut` before the variable name to make a variable
+mutable:
 
 ```rust,ignore
 let foo = 5; // immutable
@@ -826,10 +827,10 @@ It doesn’t seem like the user can quit!
 
 The user could always halt the program by using the keyboard shortcut <span
 class="keystroke">ctrl-c</span>. But there’s another way to escape this
-insatiable monster, as mentioned in the `parse` discussion in “Comparing the
-Guess to the Secret Number”: if the user enters a non-number answer, the
-program will crash. The user can take advantage of that in order to quit, as
-shown here:
+insatiable monster, as mentioned in the `parse` discussion in [“Comparing the
+Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
+ignore -->: if the user enters a non-number answer, the program will crash. The
+user can take advantage of that in order to quit, as shown here:
 
 ```text
 $ cargo run
@@ -1018,3 +1019,6 @@ variables, data types, and functions, and shows how to use them in Rust.
 Chapter 4 explores ownership, a feature that makes Rust different from other
 languages. Chapter 5 discusses structs and method syntax, and Chapter 6
 explains how enums work.
+
+[variables-and-mutability]:
+ch03-01-variables-and-mutability.html#variables-and-mutability

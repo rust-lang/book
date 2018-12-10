@@ -125,8 +125,9 @@ argument that should be connected to the return value using the lifetime syntax.
 
 Other programming languages don’t require you to connect arguments to return
 values in the signature. So although this might seem strange, it will get
-easier over time. You might want to compare this example with the “Validating
-References with Lifetimes” section in Chapter 10.
+easier over time. You might want to compare this example with the [“Validating
+References with Lifetimes”][validating-references-with-lifetimes]<!-- ignore
+--> section in Chapter 10.
 
 Now let’s run the test:
 
@@ -327,3 +328,6 @@ and output, lifetimes, testing, and command line parsing.
 To round out this project, we’ll briefly demonstrate how to work with
 environment variables and how to print to standard error, both of which are
 useful when you’re writing command line programs.
+
+[validating-references-with-lifetimes]:
+ch10-03-lifetime-syntax.html#validating-references-with-lifetimes

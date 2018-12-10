@@ -65,13 +65,14 @@ some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
 
-In Chapter 4, in the “Dangling References” section, we mentioned that the
-compiler ensures references are always valid. Unsafe Rust has two new types
-called *raw pointers* that are similar to references. As with references, raw
-pointers can be immutable or mutable and are written as `*const T` and `*mut
-T`, respectively. The asterisk isn’t the dereference operator; it’s part of the
-type name. In the context of raw pointers, *immutable* means that the pointer
-can’t be directly assigned to after being dereferenced.
+In Chapter 4, in the [“Dangling References”][dangling-references]<!-- ignore
+--> section, we mentioned that the compiler ensures references are always
+valid. Unsafe Rust has two new types called *raw pointers* that are similar to
+references. As with references, raw pointers can be immutable or mutable and
+are written as `*const T` and `*mut T`, respectively. The asterisk isn’t the
+dereference operator; it’s part of the type name. In the context of raw
+pointers, *immutable* means that the pointer can’t be directly assigned to
+after being dereferenced.
 
 Different from references and smart pointers, raw pointers:
 
@@ -297,12 +298,12 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 <span class="caption">Listing 19-6: Using unsafe code in the implementation of
 the `split_at_mut` function</span>
 
-Recall from “The Slice Type” section in Chapter 4 that slices are a pointer to
-some data and the length of the slice. We use the `len` method to get the
-length of a slice and the `as_mut_ptr` method to access the raw pointer of a
-slice. In this case, because we have a mutable slice to `i32` values,
-`as_mut_ptr` returns a raw pointer with the type `*mut i32`, which we’ve stored
-in the variable `ptr`.
+Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> section in
+Chapter 4 that slices are a pointer to some data and the length of the slice.
+We use the `len` method to get the length of a slice and the `as_mut_ptr`
+method to access the raw pointer of a slice. In this case, because we have a
+mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
+`*mut i32`, which we’ve stored in the variable `ptr`.
 
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
@@ -440,12 +441,13 @@ fn main() {
 variable</span>
 
 Static variables are similar to constants, which we discussed in the
-“Differences Between Variables and Constants” section in Chapter 3. The names
-of static variables are in `SCREAMING_SNAKE_CASE` by convention, and we *must*
-annotate the variable’s type, which is `&'static str` in this example. Static
-variables can only store references with the `'static` lifetime, which means
-the Rust compiler can figure out the lifetime; we don’t need to annotate it
-explicitly. Accessing an immutable static variable is safe.
+[“Differences Between Variables and Constants”]
+[differences-between-variables-and-constants]<!-- ignore --> section in Chapter
+3. The names of static variables are in `SCREAMING_SNAKE_CASE` by convention,
+and we *must* annotate the variable’s type, which is `&'static str` in this
+example. Static variables can only store references with the `'static`
+lifetime, which means the Rust compiler can figure out the lifetime; we don’t
+need to annotate it explicitly. Accessing an immutable static variable is safe.
 
 Constants and immutable static variables might seem similar, but a subtle
 difference is that values in a static variable have a fixed address in memory.
@@ -517,9 +519,10 @@ By using `unsafe impl`, we’re promising that we’ll uphold the invariants tha
 the compiler can’t verify.
 
 As an example, recall the `Sync` and `Send` marker traits we discussed in the
-“Extensible Concurrency with the `Sync` and `Send` Traits” section in Chapter
-16: the compiler implements these traits automatically if our types are
-composed entirely of `Send` and `Sync` types. If we implement a type that
+[“Extensible Concurrency with the `Sync` and `Send` Traits”]
+[extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore --> section
+in Chapter 16: the compiler implements these traits automatically if our types
+are composed entirely of `Send` and `Sync` types. If we implement a type that
 contains a type that is not `Send` or `Sync`, such as raw pointers, and we want
 to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify
 that our type upholds the guarantees that it can be safely sent across threads
@@ -533,3 +536,11 @@ isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
 correct because the compiler can’t help uphold memory safety. When you have a
 reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
 annotation makes it easier to track down the source of problems if they occur.
+
+[dangling-references]:
+ch04-02-references-and-borrowing.html#dangling-references
+[differences-between-variables-and-constants]:
+ch03-01-variables-and-mutability.html#differences-between-variables-and-constants
+[extensible-concurrency-with-the-sync-and-send-traits]:
+ch16-04-extensible-concurrency-sync-and-sen.html#extensible-concurrency-with-the-sync-and-send-traits
+[the-slice-type]: ch04-03-slices.html#the-slice-type

@@ -81,8 +81,9 @@ the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 
 To create a `match` expression that compares the values of the outer `x` and
 `y`, rather than introducing a shadowed variable, we would need to use a match
-guard conditional instead. We’ll talk about match guards later in the “Extra
-Conditionals with Match Guards” section.
+guard conditional instead. We’ll talk about match guards later in the [“Extra
+Conditionals with Match Guards”](#extra-conditionals-with-match-guards)<!--
+ignore --> section.
 
 ### Multiple Patterns
 
@@ -353,7 +354,7 @@ fn main() {
                 r,
                 g,
                 b
-            )     
+            )
         },
         Message::ChangeColor(Color::Hsv(h, s, v)) => {
             println!(

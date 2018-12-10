@@ -78,10 +78,10 @@ let list_of_strings: Vec<String> = list_of_numbers
 ```
 
 Note that we must use the fully qualified syntax that we talked about earlier
-in the “Advanced Traits” section because there are multiple functions available
-named `to_string`. Here, we’re using the `to_string` function defined in the
-`ToString` trait, which the standard library has implemented for any type that
-implements `Display`.
+in the [“Advanced Traits”][advanced-traits]<!-- ignore --> section because
+there are multiple functions available named `to_string`. Here, we’re using the
+`to_string` function defined in the `ToString` trait, which the standard
+library has implemented for any type that implements `Display`.
 
 Another useful pattern exploits an implementation detail of tuple structs and
 tuple-struct enum variants. These items use `()` as initialiser syntax, which
@@ -153,3 +153,6 @@ This code will compile just fine. For more about trait objects, refer to the
 Chapter 17.
 
 Next, let’s look at macros!
+
+[advanced-traits]:
+ch19-03-advanced-traits.html#advanced-traits

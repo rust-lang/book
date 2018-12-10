@@ -136,10 +136,11 @@ understanding by introducing the `String` type.
 ### The `String` Type
 
 To illustrate the rules of ownership, we need a data type that is more complex
-than the ones we covered in the “Data Types” section of Chapter 3. The types
-covered previously are all stored on the stack and popped off the stack when
-their scope is over, but we want to look at data that is stored on the heap and
-explore how Rust knows when to clean up that data.
+than the ones we covered in the [“Data Types”][data-types]<!-- ignore -->
+section of Chapter 3. The types covered previously are all stored on the stack
+and popped off the stack when their scope is over, but we want to look at data
+that is stored on the heap and explore how Rust knows when to clean up that
+data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
 that relate to ownership. These aspects also apply to other complex data types
@@ -162,9 +163,10 @@ let s = String::from("hello");
 
 The double colon (`::`) is an operator that allows us to namespace this
 particular `from` function under the `String` type rather than using some sort
-of name like `string_from`. We’ll discuss this syntax more in the “Method
-Syntax” section of Chapter 5 and when we talk about namespacing with modules in
-“Paths for Referring to an Item in the Module Tree” in Chapter 7.
+of name like `string_from`. We’ll discuss this syntax more in the [“Method
+Syntax”][method-syntax]<!-- ignore --> section of Chapter 5 and when we talk
+about namespacing with modules in “Paths for Referring to an Item in the Module
+Tree” in Chapter 7.
 
 This kind of string *can* be mutated:
 
@@ -414,8 +416,8 @@ usable after assignment. Rust won’t let us annotate a type with the `Copy`
 trait if the type, or any of its parts, has implemented the `Drop` trait. If
 the type needs something special to happen when the value goes out of scope and
 we add the `Copy` annotation to that type, we’ll get a compile-time error. To
-learn about how to add the `Copy` annotation to your type, see “Derivable
-Traits” in Appendix C.
+learn about how to add the `Copy` annotation to your type, see [“Derivable
+Traits”][derivable-traits]<!-- ignore --> in Appendix C.
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a general rule, any group of simple scalar values can be
@@ -550,3 +552,7 @@ fn calculate_length(s: String) -> (String, usize) {
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for this concept, called
 *references*.
+
+[data-types]: ch03-02-data-types.html#data-types
+[derivable-traits]: appendix-03-derivable-traits.html#derivable-traits
+[method-syntax]: ch05-03-method-syntax.html#method-syntax

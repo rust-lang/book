@@ -142,8 +142,8 @@ to compare values of type `T` in the body, we can only use types whose values
 can be ordered. To enable comparisons, the standard library has the
 `std::cmp::PartialOrd` trait that you can implement on types (see Appendix C
 for more on this trait). You’ll learn how to specify that a generic type has a
-particular trait in the “Trait Bounds” section, but let’s first explore other
-ways of using generic type parameters.
+particular trait in the [“Trait Bounds”][trait-bounds]<!-- ignore --> section,
+but let’s first explore other ways of using generic type parameters.
 
 ### In Struct Definitions
 
@@ -460,3 +460,5 @@ instance, we pay no runtime cost for using generics. When the code runs, it
 performs just as it would if we had duplicated each definition by hand. The
 process of monomorphization makes Rust’s generics extremely efficient at
 runtime.
+
+[trait-bounds]: ch10-02-traits.html#trait-bounds
