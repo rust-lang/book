@@ -165,8 +165,8 @@ The double colon (`::`) is an operator that allows us to namespace this
 particular `from` function under the `String` type rather than using some sort
 of name like `string_from`. We’ll discuss this syntax more in the [“Method
 Syntax”][method-syntax]<!-- ignore --> section of Chapter 5 and when we talk
-about namespacing with modules in “Paths for Referring to an Item in the Module
-Tree” in Chapter 7.
+about namespacing with modules in [“Paths for Referring to an Item in the
+Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
 This kind of string *can* be mutated:
 
@@ -556,3 +556,4 @@ common. Luckily for us, Rust has a feature for this concept, called
 [data-types]: ch03-02-data-types.html#data-types
 [derivable-traits]: appendix-03-derivable-traits.html#derivable-traits
 [method-syntax]: ch05-03-method-syntax.html#method-syntax
+[paths-module-tree]: ch07-02-modules-and-use-to-control-scope-and-privacy.html#paths-for-referring-to-an-item-in-the-module-tree

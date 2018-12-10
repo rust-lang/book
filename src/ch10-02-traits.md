@@ -405,8 +405,9 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 
 Here, we try to return either a `NewsArticle` or a `Tweet`. This cannot work,
 due to restrictions around how `impl Trait` works. To write this code, you’ll
-have to wait until the “Using Trait Objects that Allow for Values of Different
-Types” section of Chapter 17.
+have to wait until the [“Using Trait Objects That Allow for Values of Different
+Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
+ignore --> section of Chapter 17.
 
 ### Fixing the `largest` Function with Trait Bounds
 
@@ -605,3 +606,5 @@ lifetimes do that.
 
 [stack-only-data-copy]:
 ch04-01-what-is-ownership.html#stack-only-data-copy
+[using-trait-objects-that-allow-for-values-of-different-types]:
+ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

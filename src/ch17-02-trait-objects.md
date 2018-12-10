@@ -1,4 +1,4 @@
-## Using Trait Objects that Allow for Values of Different Types
+## Using Trait Objects That Allow for Values of Different Types
 
 In Chapter 8, we mentioned that one limitation of vectors is that they can
 store elements of only one type. We created a workaround in Listing 8-10 where
@@ -45,11 +45,11 @@ implements the trait we specify. We create a trait object by specifying some
 sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, and then
 specifying the relevant trait, and add a `dyn` keyword. (We’ll talk about the
 reason trait objects must use a pointer in Chapter 19 in the section
-“Dynamically Sized Types & Sized”.) We can use trait objects in place of a
-generic or concrete type. Wherever we use a trait object, Rust’s type system
-will ensure at compile time that any value used in that context will
-implement the trait object’s trait. Consequently, we don’t need to know all
-the possible types at compile time.
+[“Dynamically Sized Types and the `Sized` Trait.”][dynamically-sized]<!--
+ignore -->) We can use trait objects in place of a generic or concrete type.
+Wherever we use a trait object, Rust’s type system will ensure at compile time
+that any value used in that context will implement the trait object’s trait.
+Consequently, we don’t need to know all the possible types at compile time.
 
 We’ve mentioned that in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
@@ -421,3 +421,4 @@ you’re interested in more details on object safety, see [Rust RFC 255].
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics
+[dynamically-sized]: ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait

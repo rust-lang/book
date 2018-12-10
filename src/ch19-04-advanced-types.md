@@ -6,8 +6,9 @@ examine why newtypes are useful as types. Then we’ll move on to type aliases, 
 feature similar to newtypes but with slightly different semantics. We’ll also
 discuss the `!` type and dynamically sized types.
 
-> Note: The next section assumes you’ve read the earlier section “The Newtype
-> Pattern to Implement External Traits on External Types.”
+> Note: The next section assumes you’ve read the earlier section [“Using the
+> Newtype Pattern to Implement External Traits on External
+> Types.”][using-the-newtype-pattern]<!-- ignore -->
 
 ### Using the Newtype Pattern for Type Safety and Abstraction
 
@@ -306,7 +307,7 @@ types behind a pointer of some kind.
 We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
-using the name of the trait. In Chapter 17 in the [“Using Trait Objects that
+using the name of the trait. In Chapter 17 in the [“Using Trait Objects That
 Allow for Values of Different Types”]
 [using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore -->
 section, we mentioned that to use traits as trait objects, we must put them
@@ -360,3 +361,4 @@ ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
 ch06-02-match.html#the-match-control-flow-operator
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[using-the-newtype-pattern]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types

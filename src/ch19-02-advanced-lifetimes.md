@@ -396,7 +396,7 @@ a reference has a shorter lifetime than what it refers to.
 
 ### Inference of Trait Object Lifetimes
 
-In Chapter 17 in the [“Using Trait Objects that Allow for Values of Different
+In Chapter 17 in the [“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> section, we discussed trait objects, consisting of a trait behind a
 reference, that allow us to use dynamic dispatch. We haven’t yet discussed what

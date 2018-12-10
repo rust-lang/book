@@ -156,10 +156,11 @@ a data race. Be careful!
 
 With all of these dangers, why would you ever use raw pointers? One major use
 case is when interfacing with C code, as you’ll see in the next section,
-“Calling an Unsafe Function or Method.” Another case is when building up safe
-abstractions that the borrow checker doesn’t understand. We’ll introduce unsafe
-functions and then look at an example of a safe abstraction that uses unsafe
-code.
+[“Calling an Unsafe Function or
+Method.”](#calling-an-unsafe-function-or-method)<!-- ignore --> Another case is
+when building up safe abstractions that the borrow checker doesn’t understand.
+We’ll introduce unsafe functions and then look at an example of a safe
+abstraction that uses unsafe code.
 
 ### Calling an Unsafe Function or Method
 
@@ -440,12 +441,14 @@ fn main() {
 <span class="caption">Listing 19-9: Defining and using an immutable static
 variable</span>
 
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
 Static variables are similar to constants, which we discussed in the
 [“Differences Between Variables and Constants”]
-[differences-between-variables-and-constants]<!-- ignore --> section in Chapter
-3. The names of static variables are in `SCREAMING_SNAKE_CASE` by convention,
-and we *must* annotate the variable’s type, which is `&'static str` in this
-example. Static variables can only store references with the `'static`
+[differences-between-variables-and-constants]<!-- ignore --> section in
+Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
+convention, and we *must* annotate the variable’s type, which is `&'static str`
+in this example. Static variables can only store references with the `'static`
 lifetime, which means the Rust compiler can figure out the lifetime; we don’t
 need to annotate it explicitly. Accessing an immutable static variable is safe.
 

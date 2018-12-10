@@ -762,8 +762,9 @@ comparison will be between two values of the same type!
 The call to `parse` could easily cause an error. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much as the `read_line`
-method does (discussed earlier in “Handling Potential Failure with the Result
-Type”). We’ll treat this `Result` the same way by using the `expect` method
+method does (discussed earlier in [“Handling Potential Failure with the
+`Result` Type”](#handling-potential-failure-with-the-result-type)<!-- ignore
+-->). We’ll treat this `Result` the same way by using the `expect` method
 again. If `parse` returns an `Err` `Result` variant because it couldn’t create
 a number from the string, the `expect` call will crash the game and print the
 message we give it. If `parse` can successfully convert the string to a number,

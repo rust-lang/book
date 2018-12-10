@@ -214,11 +214,12 @@ separate code into modules and files.
 
 The different behavior of files in the *tests* directory is most noticeable
 when you have a set of helper functions that would be useful in multiple
-integration test files and you try to follow the steps in the “Separating
-Modules into Different Files” section of Chapter 7 to extract them into a
-common module. For example, if we create *tests/common.rs* and place a function
-named `setup` in it, we can add some code to `setup` that we want to call from
-multiple test functions in multiple test files:
+integration test files and you try to follow the steps in the [“Separating
+Modules into Different Files”][separating-modules-into-files]<!-- ignore -->
+section of Chapter 7 to extract them into a common module. For example, if we
+create *tests/common.rs* and place a function named `setup` in it, we can add
+some code to `setup` that we want to call from multiple test functions in
+multiple test files:
 
 <span class="filename">Filename: tests/common.rs</span>
 
@@ -322,3 +323,6 @@ reduce logic bugs having to do with how your code is expected to behave.
 
 Let’s combine the knowledge you learned in this chapter and in previous
 chapters to work on a project!
+
+[separating-modules-into-files]:
+ch07-02-modules-and-use-to-control-scope-and-privacy.html#separating-modules-into-different-files

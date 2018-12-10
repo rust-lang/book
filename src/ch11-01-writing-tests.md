@@ -118,8 +118,9 @@ The next part of the test output, which starts with `Doc-tests adder`, is for
 the results of any documentation tests. We don’t have any documentation tests
 yet, but Rust can compile any code examples that appear in our API
 documentation. This feature helps us keep our docs and our code in sync! We’ll
-discuss how to write documentation tests in the “Documentation Comments”
-section of Chapter 14. For now, we’ll ignore the `Doc-tests` output.
+discuss how to write documentation tests in the [“Making Useful Documentation
+Comments”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
+ignore the `Doc-tests` output.
 
 Let’s change the name of our test to see how that changes the test output.
 Change the `it_works` function to a different name, such as `exploration`, like
@@ -281,10 +282,11 @@ larger rectangle can indeed hold a smaller rectangle</span>
 
 Note that we’ve added a new line inside the `tests` module: `use super::*;`.
 The `tests` module is a regular module that follows the usual visibility rules
-we covered in Chapter 7 in the “Modules as the Privacy Boundary” section.
-Because the `tests` module is an inner module, we need to bring the code under
-test in the outer module into the scope of the inner module. We use a glob here
-so anything we define in the outer module is available to this `tests` module.
+we covered in Chapter 7 in the [“Modules as the Privacy
+Boundary”][modules-as-privacy-boundary]<!-- ignore --> section. Because the
+`tests` module is an inner module, we need to bring the code under test in the
+outer module into the scope of the inner module. We use a glob here so anything
+we define in the outer module is available to this `tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
 `Rectangle` instances that we need. Then we called the `assert!` macro and
@@ -497,8 +499,8 @@ those types are equal or not equal. You’ll need to implement `Debug` to print
 the values when the assertion fails. Because both traits are derivable traits,
 as mentioned in Listing 5-12 in Chapter 5, this is usually as straightforward
 as adding the `#[derive(PartialEq, Debug)]` annotation to your struct or enum
-definition. See Appendix C, “Derivable Traits,” for more details about these
-and other derivable traits.
+definition. See Appendix C, [“Derivable Traits,”][derivable-traits]<!-- ignore
+--> for more details about these and other derivable traits.
 
 ### Adding Custom Failure Messages
 
@@ -838,3 +840,6 @@ test`.
 ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 [controlling-how-tests-are-run]:
 ch11-02-running-tests.html#controlling-how-tests-are-run
+[derivable-traits]: appendix-03-derivable-traits.html#derivable-traits
+[doc-comments]: ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments
+[modules-as-privacy-boundary]: ch07-02-modules-and-use-to-control-scope-and-privacy.html#modules-as-the-privacy-boundary

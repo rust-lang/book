@@ -6,8 +6,8 @@ interpret and respond to. For example, if you try to open a file and that
 operation fails because the file doesn’t exist, you might want to create the
 file instead of terminating the process.
 
-Recall from “[Handling Potential Failure with the `Result`
-Type][handle_failure]<!-- ignore -->” in Chapter 2 that the `Result` enum is
+Recall from [“Handling Potential Failure with the `Result`
+Type”][handle_failure]<!-- ignore --> in Chapter 2 that the `Result` enum is
 defined as having two variants, `Ok` and `Err`, as follows:
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type

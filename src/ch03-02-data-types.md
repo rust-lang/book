@@ -214,7 +214,8 @@ Korean characters; emoji; and zero-width spaces are all valid `char` values in
 Rust. Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
 `U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
 so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in “Strings” in Chapter 8.
+`char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
+Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
 
 ### Compound Types
 
@@ -401,3 +402,4 @@ continuing. Chapter 9 discusses more of Rust’s error handling.
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [control-flow]: ch03-05-control-flow.html#control-flow
+[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings

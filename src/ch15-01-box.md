@@ -23,9 +23,10 @@ time because the data is copied around on the stack. To improve performance in
 this situation, we can store the large amount of data on the heap in a box.
 Then, only the small amount of pointer data is copied around on the stack,
 while the data it references stays in one place on the heap. The third case is
-known as a *trait object*, and Chapter 17 devotes an entire section, “Using
-Trait Objects That Allow for Values of Different Types,” just to that topic. So
-what you learn here you’ll apply again in Chapter 17!
+known as a *trait object*, and Chapter 17 devotes an entire section, [“Using
+Trait Objects That Allow for Values of Different Types,”][trait-objects]<!--
+ignore --> just to that topic. So what you learn here you’ll apply again in
+Chapter 17!
 
 ### Using a `Box<T>` to Store Data on the Heap
 
@@ -279,3 +280,5 @@ up as well because of the `Drop` trait implementation. Let’s explore these two
 traits in more detail. These two traits will be even more important to the
 functionality provided by the other smart pointer types we’ll discuss in the
 rest of this chapter.
+
+[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

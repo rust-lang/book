@@ -149,10 +149,13 @@ fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
 ```
 
 This code will compile just fine. For more about trait objects, refer to the
-“Using Trait Objects That Allow for Values of Different Types” section in
-Chapter 17.
+[“Using Trait Objects That Allow for Values of Different Types”]
+[using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore -->
+section in Chapter 17.
 
 Next, let’s look at macros!
 
 [advanced-traits]:
 ch19-03-advanced-traits.html#advanced-traits
+[using-trait-objects-that-allow-for-values-of-different-types]:
+ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

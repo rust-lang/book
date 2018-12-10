@@ -217,8 +217,8 @@ let slice = &s[..];
 > boundaries. If you attempt to create a string slice in the middle of a
 > multibyte character, your program will exit with an error. For the purposes
 > of introducing string slices, we are assuming ASCII only in this section; a
-> more thorough discussion of UTF-8 handling is in the “Storing UTF-8 Encoded
-> Text with Strings” section of Chapter 8.
+> more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded
+> Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
 
 With all this information in mind, let’s rewrite `first_word` to return a
 slice. The type that signifies “string slice” is written as `&str`:
@@ -403,3 +403,5 @@ means you don’t have to write and debug extra code to get this control.
 Ownership affects how lots of other parts of Rust work, so we’ll talk about
 these concepts further throughout the rest of the book. Let’s move on to
 Chapter 5 and look at grouping pieces of data together in a `struct`.
+
+[strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
