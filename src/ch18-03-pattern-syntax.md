@@ -748,7 +748,7 @@ In Listing 18-11, we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that a new variable was created inside the
 pattern in the `match` expression instead of using the variable outside the
 `match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 18-30 shows how we can use a match guard to fix this
+outer variable. Listing 18-27 shows how we can use a match guard to fix this
 problem.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -785,7 +785,7 @@ we can look for a value that has the same value as the outer `y` by comparing
 
 You can also use the *or* operator `|` in a match guard to specify multiple
 patterns; the match guard condition will apply to all the patterns. Listing
-18-31 shows the precedence of combining a match guard with a pattern that uses
+18-28 shows the precedence of combining a match guard with a pattern that uses
 `|`. The important part of this example is that the `if y` match guard applies
 to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to
 `6`.
@@ -800,7 +800,7 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-18: Combining multiple patterns with a match
+<span class="caption">Listing 18-28: Combining multiple patterns with a match
 guard</span>
 
 The match condition states that the arm only matches if the value of `x` is
@@ -831,7 +831,7 @@ were applied only to the final value in the list of values specified using the
 
 The *at* operator (`@`) lets us create a variable that holds a value at the
 same time we’re testing that value to see whether it matches a pattern. Listing
-18-32 shows an example where we want to test that a `Message::Hello` `id` field
+18-29 shows an example where we want to test that a `Message::Hello` `id` field
 is within the range `3...7`. But we also want to bind the value to the variable
 `id_variable` so we can use it in the code associated with the arm. We could
 name this variable `id`, the same as the field, but for this example we’ll use
@@ -857,7 +857,7 @@ match msg {
 }
 ```
 
-<span class="caption">Listing 18-19: Using `@` to bind to a value in a pattern
+<span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern
 while also testing it</span>
 
 This example will print `Found an id in range: 5`. By specifying `id_variable
