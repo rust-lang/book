@@ -1,22 +1,10 @@
 # Advanced Features
 
-By now, you’ve learned the most commonly used parts of the Rust programming
-language. Before we do one more project in Chapter 20, we’ll look at a few
-aspects of the language you might run into every once in a while. You can use
-this chapter as a reference for when you encounter any unknowns when using
-Rust. The features you’ll learn to use in this chapter are useful in very
-specific situations. Although you might not reach for them often, we want to
-make sure you have a grasp of all the features Rust has to offer.
+The second edition of the book is no longer distributed with Rust's documentation.
 
-In this chapter, we’ll cover:
+If you came here via a link or web search, you may want to check out [the current
+version of the book](../index.html) instead.
 
-* Unsafe Rust: how to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-* Advanced lifetimes: syntax for complex lifetime situations
-* Advanced traits: associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced types: more about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
-* Advanced functions and closures: function pointers and returning closures
-
-It’s a panoply of Rust features with something for everyone! Let’s dive in!
+If you have an internet connection, you can [find a copy distributed with
+Rust
+1.30](https://doc.rust-lang.org/1.30.0/book/second-edition/ch19-00-advanced-features.html).

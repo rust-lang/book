@@ -17,9 +17,9 @@ mod tests {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 11.00 — Testing][2]**
+* **[in the current edition: Ch 11.00 — Testing][2]**
 * <small>[In the first edition: Ch 4.2 — Testing][1]</small>
 
 
-[1]: first-edition/testing.html
-[2]: second-edition/ch11-00-testing.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/testing.html
+[2]: ch11-00-testing.html

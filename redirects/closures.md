@@ -20,9 +20,9 @@ let expensive_closure = |num| {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 13.01 — Closures][2]**
+* **[in the current edition: Ch 13.01 — Closures][2]**
 * <small>[In the first edition: Ch 3.23 — Closures][1]</small>
 
 
-[1]: first-edition/closures.html
-[2]: second-edition/ch13-01-closures.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/closures.html
+[2]: ch13-01-closures.html

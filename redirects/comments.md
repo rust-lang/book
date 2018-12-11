@@ -15,9 +15,9 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 3.04 — Comments][2]**
+* **[in the current edition: Ch 3.04 — Comments][2]**
 * <small>[In the first edition: Ch 3.4 — Comments][1]</small>
 
 
-[1]: first-edition/comments.html
-[2]: second-edition/ch03-04-comments.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/comments.html
+[2]: ch03-04-comments.html

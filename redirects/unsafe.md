@@ -8,11 +8,11 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 19.01 — Unsafe Rust][2]**
+* **[in the current edition: Ch 19.01 — Unsafe Rust][2]**
 * [The Rustonomicon, The Dark Arts of Advanced and Unsafe Rust Programming][3]
 * <small>[In the first edition: Ch 3.36 — `unsafe`][1]</small>
 
 
-[1]: first-edition/unsafe.html
-[2]: second-edition/ch19-01-unsafe-rust.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/unsafe.html
+[2]: ch19-01-unsafe-rust.html
 [3]: ../nomicon/index.html

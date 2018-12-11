@@ -16,9 +16,9 @@ let y: f32 = 3.0; // f32
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 3.02 — Data Types][2]**
+* **[in the current edition: Ch 3.02 — Data Types][2]**
 * <small>[In the first edition: Ch 3.3 — Primitive Types][1]</small>
 
 
-[1]: first-edition/primitive-types.html
-[2]: second-edition/ch03-02-data-types.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/primitive-types.html
+[2]: ch03-02-data-types.html

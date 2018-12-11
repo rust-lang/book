@@ -9,6 +9,6 @@ You might be interested in a similar page in [the Rust Reference][3].
 * <small>[In the first edition: Section 7 — Bibliography][1]</small>
 
 
-[1]: first-edition/bibliography.html
-[2]: second-edition/index.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/bibliography.html
+[2]: index.html
 [3]: ../reference/influences.html

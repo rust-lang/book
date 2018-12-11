@@ -10,12 +10,5 @@ type Kilometers = i32;
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 19.04 — Advanced Types, section Type Synonyms][2]**
-* <small>[In the first edition: Ch 3.28 — `type` aliases][1]</small>
-
-
-[1]: first-edition/type-aliases.html
-[2]: second-edition/ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
-
+You can find the latest version of this information
+[here](ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases).

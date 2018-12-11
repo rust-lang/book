@@ -9,13 +9,13 @@
 This chapter does not exist yet in [the second edition][2].
 You can check out other resources that describe macros.
 
-* **[In the Rust Reference: Ch 3.2 — Procedural Macros][4]**
+* **[In the current edition: Ch 19.06 Macros][2]**
+* [In the Rust Reference: Ch 3.2 — Procedural Macros][4]
 * [The `proc_macro` crate documentation][3]
-* [In the second edition: (future) Appendix D — Macros][2]
 * <small>[In the first edition: Ch 4.13 — Procedural Macros (and custom Derive)][1]</small>
 
 
-[1]: first-edition/procedural-macros.html
-[2]: second-edition/appendix-04-macros.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/procedural-macros.html
+[2]: ch19-06-macros.html
 [3]: ../proc_macro/index.html
 [4]: ../reference/procedural-macros.html
