@@ -77,7 +77,7 @@ installing one now regardless.
 
 ### Installing Rustup on Windows
 
-On Windows, go to *https://www.rust-lang.org/en-US/install.html* and follow the
+On Windows, go to *https://www.rust-lang.org/en-US/tools/install* and follow the
 instructions for installing Rust. At some point in the installation, you’ll
 receive a message explaining that you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
@@ -91,7 +91,7 @@ If there are specific differences, we’ll explain which to use.
 ### Custom Installations Without Rustup
 
 If you prefer not to use `rustup` for some reason, please see the Rust
-installation page at *https://www.rust-lang.org/install.html* for other options.
+installation page at *https://www.rust-lang.org/tools/install* for other options.
 
 ### Updating and Uninstalling
 

@@ -181,7 +181,7 @@ you can write up a proposal, called an RFC.
 Anyone can write RFCs to improve Rust, and the proposals are reviewed and
 discussed by the Rust team, which is comprised of many topic subteams. There’s
 a full list of the teams [on Rust’s
-website](https://www.rust-lang.org/en-US/team.html), which includes teams for
+website](https://www.rust-lang.org/governance), which includes teams for
 each area of the project: language design, compiler implementation,
 infrastructure, documentation, and more. The appropriate team reads the
 proposal and the comments, writes some comments of their own, and eventually,
