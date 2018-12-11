@@ -8,4 +8,3 @@ version of the book](../index.html) instead.
 If you have an internet connection, you can [find a copy distributed with
 Rust
 1.30](https://doc.rust-lang.org/1.30.0/book/2018-edition/ch03-03-how-functions-work.html).
-
