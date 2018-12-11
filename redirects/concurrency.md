@@ -9,9 +9,9 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 16.00 — Fearless Concurrency][2]**
+* **[in the current edition: Ch 16.00 — Fearless Concurrency][2]**
 * <small>[In the first edition: Ch 4.6 — Concurrency][1]</small>
 
 
-[1]: first-edition/concurrency.html
-[2]: second-edition/ch16-00-concurrency.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/concurrency.html
+[2]: ch16-00-concurrency.html

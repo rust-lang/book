@@ -13,11 +13,5 @@ let r2 = &mut num as *mut i32;
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 19.01 — Unsafe Rust, section Dereferencing a Raw Pointer][2]**
-* <small>[In the first edition: Ch 3.35 — Raw Pointers][1]</small>
-
-
-[1]: first-edition/raw-pointers.html
-[2]: second-edition/ch19-01-unsafe-rust.html#dereferencing-a-raw-pointer
+You can find the latest version of this information
+[here](ch19-01-unsafe-rust.html#dereferencing-a-raw-pointer)

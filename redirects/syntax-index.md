@@ -4,11 +4,10 @@
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Appendix A — Keywords][2]**
-* **[In the second edition: Appendix B — Operators][3]**
+* **[In the current edition: Appendix A — Keywords][2]**
+* **[In the current edition: Appendix B — Operators][3]**
 * <small>[In the first edition: Ch 6 — Syntax Index][1]</small>
 
-
-[1]: first-edition/syntax-index.html
-[2]: second-edition/appendix-01-keywords.html
-[3]: second-edition/appendix-02-operators.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/syntax-index.html
+[2]: appendix-01-keywords.html
+[3]: appendix-02-operators.html

@@ -26,11 +26,5 @@ for element in a.iter() {
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 3.05 — Control flow][2]**
-* <small>[In the first edition: Ch 3.6 — Loops][1]</small>
-
-
-[1]: first-edition/loops.html
-[2]: second-edition/ch03-05-control-flow.html#repetition-with-loops
+You can find the latest version of this information
+[here](ch03-05-control-flow.html#repetition-with-loops).

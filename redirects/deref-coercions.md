@@ -22,9 +22,9 @@ impl<T> Deref for MyBox<T> {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Ch 15.02 — Treating Smart Pointers like Regular References with the `Deref` Trait][2]**
+* **[in the current edition: Ch 15.02 — Treating Smart Pointers like Regular References with the `Deref` Trait][2]**
 * <small>[In the first edition: Ch 3.33 — Deref coercions][1]</small>
 
 
-[1]: first-edition/deref-coercions.html
-[2]: second-edition/ch15-02-deref.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/deref-coercions.html
+[2]: ch15-02-deref.html

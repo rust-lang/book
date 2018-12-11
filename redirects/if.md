@@ -18,11 +18,5 @@ fn main() {
 
 ---
 
-Here are the relevant sections in the new and old books:
-
-* **[In the second edition: Ch 3.05 — Control flow][2]**
-* <small>[In the first edition: Ch 3.5 — if][1]</small>
-
-
-[1]: first-edition/if.html
-[2]: second-edition/ch03-05-control-flow.html#if-expressions
+You can find the latest version of this information
+[here](ch03-05-control-flow.html#if-expressions).

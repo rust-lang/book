@@ -20,13 +20,13 @@ fn average(values: &[f64]) -> f64 {
 
 Here are the relevant sections in the new and old books:
 
-* **[In the second edition: Appendix A — Keywords][2]**
+* **[in the current edition: Appendix A — Keywords][2]**
 * [In the Rust Reference: Type Cast Expressions][3]
 * [In the Rust documentation: `mem::transmute`][4]
 * <small>[In the first edition: Ch 3.29 — Casting between types][1]</small>
 
 
-[1]: first-edition/casting-between-types.html
-[2]: second-edition/appendix-01-keywords.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/casting-between-types.html
+[2]: appendix-01-keywords.html
 [3]: ../reference/expressions/operator-expr.html#type-cast-expressions
 [4]: ../std/mem/fn.transmute.html
