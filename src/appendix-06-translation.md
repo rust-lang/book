@@ -20,3 +20,4 @@ For resources in languages other than English. Most are still in progress; see
 - [עברית](https://github.com/idanmel/rust-book-heb)
 - [Cebuano](https://github.com/agentzero1/book)
 - [Tagalog](https://github.com/josephace135/book)
+- [Esperanto](https://github.com/psychoslave/Rust-libro)
