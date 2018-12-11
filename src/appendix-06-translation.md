@@ -21,3 +21,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Cebuano](https://github.com/agentzero1/book)
 - [Tagalog](https://github.com/josephace135/book)
 - [Esperanto](https://github.com/psychoslave/Rust-libro)
+- [ελληνική](https://github.com/TChatzigiannakis/rust-book-greek)
