@@ -10,7 +10,7 @@ For resources in languages other than English. Most are still in progress; see
 - [Tiếng việt](https://github.com/hngnaig/rust-lang-book/tree/vi-VN)
 - [简体中文](https://github.com/KaiserY/trpl-zh-cn)
 - [Українська](https://github.com/pavloslav/rust-book-uk-ua)
-- [Español](https://github.com/thecodix/book)
+- [Español](https://github.com/thecodix/book), [alternate](https://github.com/ManRR/rust-book-es)
 - [Italiano](https://github.com/AgeOfWar/rust-book-it)
 - [Русский](https://github.com/iDeBugger/rust-book-ru)
 - [한국어](https://github.com/rinthel/rust-lang-book-ko)
