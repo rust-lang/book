@@ -5,7 +5,7 @@ command line tool for managing Rust versions and associated tools. You’ll need
 an internet connection for the download.
 
 > Note: If you prefer not to use `rustup` for some reason, please see [the Rust
-> installation page](https://www.rust-lang.org/install.html) for other options.
+> installation page](https://www.rust-lang.org/tools/install) for other options.
 
 The following steps install the latest stable version of the Rust compiler.
 Rust’s stability guarantees ensure that all the examples in the book that
@@ -67,14 +67,14 @@ compiler. Therefore, it might be worth installing one now.
 
 ### Installing `rustup` on Windows
 
-On Windows, go to [https://www.rust-lang.org/install.html][install] and follow
+On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
 the instructions for installing Rust. At some point in the installation, you’ll
 receive a message explaining that you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
 install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
 the Other Tools and Frameworks section.
 
-[install]: https://www.rust-lang.org/install.html
+[install]: https://www.rust-lang.org/tools/install
 [visualstudio]: https://www.visualstudio.com/downloads/
 
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.

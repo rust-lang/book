@@ -24,5 +24,5 @@ You can check out other resources that describe release channels.
 [2]: appendix-07-nightly-rust.html
 [3]: https://github.com/rust-lang/rfcs/blob/master/text/0507-release-channels.md
 [4]: https://github.com/rust-lang-nursery/rustup.rs/blob/master/README.md#keeping-rust-up-to-date
-[5]: https://www.rust-lang.org/en-US/install.html
+[5]: https://www.rust-lang.org/en-US/tools/install
 
