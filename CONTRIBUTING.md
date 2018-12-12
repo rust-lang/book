@@ -33,37 +33,10 @@ enhance the book in some way!
 
 ## Translations
 
-We'd especially love help translating the second edition of the book! See the
-[Translations] label to join in efforts that are currently in progress. Open
-a new issue to start working on a new language! We're waiting on [mdbook
-support] for multiple languages before we merge any in, but feel free to
-start! The second edition is frozen and won't see major changes, so if 
-you start with that, you won't have to redo work :)
+We'd love help translating the book! See the [Translations] label to join in
+efforts that are currently in progress. Open a new issue to start working on
+a new language! We're waiting on [mdbook support] for multiple languages
+before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/azerupi/mdBook/issues/5
-
-## Edition specific details
-
-Each edition of the book may be taking contributions, but only of certain
-kinds depending on the edition. Read on to learn the details!
-
-### Contributing to the 2018 Edition
-
-The 2018 is a "living" edition; it's not scheduled for in-print publication
-at this time, and so is able to be updated at any time. We'd love pull
-requests to fix issues with this edition, but we're not interested in
-extremely large changes without discussing them first. If you'd like to make
-a big change, please open an issue first! We'd hate for you to do some hard work
-that we ultimately wouldn't accept.
-
-## Contributing to the Second Edition
-
-The second edition is completely frozen, and not accepting changes. It's
-meant to be in sync with the print version available from No Starch
-Press.
-
-## Contributing to the First Edition
-
-The first edition is completely frozen, and not accepting changes. It's
-mostly kept around for history's sake.

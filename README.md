@@ -2,19 +2,18 @@
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
-This repository contains the source of all editions of "the Rust Programming
-Language".
+This repository contains the source of "the Rust Programming Language".
 
-The second edition will also be available in dead-tree form by No Starch
-Press, available around June 2018. Check [the No Starch Page][nostarch] for
-the latest information on the release date and how to order.
+The book is available in dead-tree form from No Starch Press! Check [the No
+Starch Page][nostarch] for the latest information on the release date and how
+to order.
 
 [nostarch]: https://nostarch.com/rust
 
-You can read all editions of the book for free online! Please see the book as
-shipped with the latest [stable], [beta], or [nightly] Rust releases. Be
-aware that issues in those versions may have been fixed in this repository
-already, as those releases are updated less frequently.
+You can read the book for free online! Please see the book as shipped with
+the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
+in those versions may have been fixed in this repository already, as those
+releases are updated less frequently.
 
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
@@ -34,9 +33,7 @@ $ cargo install mdbook --vers [version-num]
 
 ## Building
 
-To build the book, first `cd` into the directory of the edition of the
-book you'd like to build. For example, the `first-edition` or
-`second-edition` directory. Then type:
+To build the book, type:
 
 ```bash
 $ mdbook build
@@ -72,42 +69,22 @@ $ mdbook test
 We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
 kinds of contributions we're looking for.
 
-### 2018 Edition
-
-The "2018" Edition is in the process of being updated with the language changes 
-that will be available with the 2018 Edition of the Rust language. All new 
-contributions should be to this edition.
-
-### Second Edition
-
-No Starch Press has brought the second edition to print. Pull requests fixing
-factual errors will be accepted and documented as errata; pull requests changing
-wording or other small corrections should be made against the 2018 edition instead.
-
-### First Edition
-
-The first edition is frozen, and is not accepting any changes at this time.
-
-
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
 ### Translations
 
-We'd especially love help translating the second edition or 2018 edition of the book! See the
-[Translations] label to join in efforts that are currently in progress. Open
-a new issue to start working on a new language! We're waiting on [mdbook
-support] for multiple languages before we merge any in, but feel free to
-start! The second edition is frozen and won't see major
-changes, so if you start with that, you won't have to redo work :)
+We'd love help translating the book! See the [Translations] label to join in
+efforts that are currently in progress. Open a new issue to start working on
+a new language! We're waiting on [mdbook support] for multiple languages
+before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/azerupi/mdBook/issues/5
 
 ## No Starch
 
-As the second edition of the book will be published by No Starch, we first
-iterate here, then ship the text off to No Starch. Then they do editing, and we
-fold it back in.
+As the book is published by No Starch, we first iterate here, then ship the
+text off to No Starch. Then they do editing, and we fold it back in.
 
 As such, there’s a directory, *nostarch*, which corresponds to the text in No
 Starch’s system.
