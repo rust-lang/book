@@ -541,18 +541,14 @@ fn main() {
 <span class="caption">Listing 2-3: Adding code to generate a random
 number</span>
 
-First, we add a line that lets Rust know we’ll be using the `rand` crate as an
-external dependency. This also does the equivalent of calling `use rand`, so
-now we can call anything in the `rand` crate by placing `rand::` before it.
-
-Next, we add another `use` line: `use rand::Rng`. The `Rng` trait defines
+First, we add a `use` line: `use rand::Rng`. The `Rng` trait defines
 methods that random number generators implement, and this trait must be in
 scope for us to use those methods. Chapter 10 will cover traits in detail.
 
-Also, we’re adding two more lines in the middle. The `rand::thread_rng` function
+Next, we’re adding two lines in the middle. The `rand::thread_rng` function
 will give us the particular random number generator that we’re going to use:
 one that is local to the current thread of execution and seeded by the
-operating system. Next, we call the `gen_range` method on the random number
+operating system. Then we call the `gen_range` method on the random number
 generator. This method is defined by the `Rng` trait that we brought into
 scope with the `use rand::Rng` statement. The `gen_range` method takes two
 numbers as arguments and generates a random number between them. It’s inclusive
@@ -567,10 +563,10 @@ and `101` to request a number between 1 and 100.
 > other functionality in the `rand` crate, for example, run `cargo doc --open`
 > and click `rand` in the sidebar on the left.
 
-The second line that we added to the code prints the secret number. This is
-useful while we’re developing the program to be able to test it, but we’ll
-delete it from the final version. It’s not much of a game if the program prints
-the answer as soon as it starts!
+The second line that we added to the middle of the code prints the secret
+number. This is useful while we’re developing the program to be able to test
+it, but we’ll delete it from the final version. It’s not much of a game if the
+program prints the answer as soon as it starts!
 
 Try running the program a few times:
 
