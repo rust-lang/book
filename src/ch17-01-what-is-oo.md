@@ -101,11 +101,11 @@ impl AveragedCollection {
 <span class="caption">Listing 17-2: Implementations of the public methods
 `add`, `remove`, and `average` on `AveragedCollection`</span>
 
-The public methods `add`, `remove`, and `average` are the only ways to modify
-an instance of `AveragedCollection`. When an item is added to `list` using the
-`add` method or removed using the `remove` method, the implementations of each
-call the private `update_average` method that handles updating the `average`
-field as well.
+The public methods `add`, `remove`, and `average` are the only ways to access
+or modify data in an instance of `AveragedCollection`. When an item is added
+to `list` using the `add` method or removed using the `remove` method, the
+implementations of each call the private `update_average` method that handles
+updating the `average` field as well.
 
 We leave the `list` and `average` fields private so there is no way for
 external code to add or remove items to the `list` field directly; otherwise,
