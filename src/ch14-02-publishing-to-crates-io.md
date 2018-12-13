@@ -362,9 +362,10 @@ Your crate will need a unique name. While you’re working on a crate locally,
 you can name a crate whatever you’d like. However, crate names on
 [crates.io](https://crates.io)<!-- ignore --> are allocated on a first-come,
 first-served basis. Once a crate name is taken, no one else can publish a crate
-with that name. Search for the name you want to use on the site to find out
-whether it has been used. If it hasn’t, edit the name in the *Cargo.toml* file
-under `[package]` to use the name for publishing, like so:
+with that name. Before attempting to publish a crate, search for the name you
+want to use on the site. If the name has been used by another crate, you will
+need to find another name and edit the `name` field in the *Cargo.toml* file
+under the `[package]` section to use the new name for publishing, like so:
 
 <span class="filename">Filename: Cargo.toml</span>
 
