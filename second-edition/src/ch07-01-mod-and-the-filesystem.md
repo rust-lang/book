@@ -153,11 +153,6 @@ Listing 7-2에서 계층 구조는 `client`가 `network`의 형제이기 보다�
 
 ### 모듈을 다른 파일로 옮기기
 
-Modules form a hierarchical structure, much like another structure in computing
-that you’re used to: filesystems! We can use Rust’s module system along with
-multiple files to split up Rust projects so not everything lives in
-*src/lib.rs* or *src/main.rs*. For this example, let’s start with the code in
-Listing 7-3:
 모듈은 계층적인 구조를 형성하는데, 여러분이 익숙하게 사용하고 있는 다른 구조와 매우 닮았습니다: 바로
 파일 시스템이죠! 러스트에서는 프로젝트를 잘게 나누기 위해 여러 개의 파일 상에서 모듈 시스템을 사용할
 수 있어, 모든 것들이 *src/lib.rs*나 *src/main.rs* 안에 존재하지 않게할 수 있습니다. 이러한
@@ -309,11 +304,6 @@ mod server {
 이 모듈 파일 내에는 `mod` 선언이 여전히 있음을 주목하세요; 이는 `server`가 `network`의 서브모듈로서
 여전히 필요하기 때문입니다.
 
-Run `cargo build` again. Success! We have one more module to extract: `server`.
-Because it’s a submodule—that is, a module within a module—our current tactic
-of extracting a module into a file named after that module won’t work. We’ll
-try anyway so you can see the error. First, change *src/network.rs* to have
-`mod server;` instead of the `server` module’s contents:
 `cargo build`를 다시 실행시키세요. 성공! 여기 또 추출할만한 모듈이 하나 더 있습니다: `server` 말이죠.
 이것이 서브모듈(즉, 모듈 내의 모듈)이기 때문에, 모듈을 파일로 추출해서 파일 이름을 모듈 이름으로 사용하는
 전략은 사용하기 힘듭니다. 어쨌든 시도해서 에러를 확인해보겠습니다. 먼저, *src/network.rs* 내에서
@@ -328,8 +318,6 @@ fn connect() {
 mod server;
 ```
 
-Then create a *src/server.rs* file and enter the contents of the `server`
-module that we extracted:
 그후 *src/server.rs* 파일을 만들고 추출해둔 `server` 모듈의 내용물을 입력하세요:
 
 <span class="filename">Filename: src/server.rs</span>
