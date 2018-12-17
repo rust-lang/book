@@ -9,7 +9,7 @@
 // except according to those terms.
 
 #[macro_use] extern crate lazy_static;
-extern crate regex;
+
 
 use std::env;
 use std::io;
@@ -89,18 +89,18 @@ fn group_by_target(matched_files: Vec<(PathBuf, PathBuf)>) -> BTreeMap<PathBuf, 
 
 fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<()> {
     println!("Concatenating into {}:", target_path.to_string_lossy());
-    let mut target = try!(File::create(target_path));
-    try!(target.write_all(b"\n[TOC]\n"));
+    let mut target = File::create(target_path)?;
+    target.write_all(b"\n[TOC]\n")?;
 
     for path in source_paths {
         println!("  {}", path.to_string_lossy());
-        let mut source = try!(File::open(path));
+        let mut source = File::open(path)?;
         let mut contents: Vec<u8> = Vec::new();
-        try!(source.read_to_end(&mut contents));
+        source.read_to_end(&mut contents)?;
 
-        try!(target.write_all(b"\n"));
-        try!(target.write_all(&contents));
-        try!(target.write_all(b"\n"));
+        target.write_all(b"\n")?;
+        target.write_all(&contents)?;
+        target.write_all(b"\n")?;
     }
     Ok(())
 }
@@ -108,7 +108,7 @@ fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<
 fn ensure_dir_exists(dir_string: &str) -> io::Result<&Path> {
     let path = Path::new(dir_string);
     if !path.exists() {
-        try!(create_dir(path));
+        create_dir(path)?;
     }
     Ok(&path)
 }

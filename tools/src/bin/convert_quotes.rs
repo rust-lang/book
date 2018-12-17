@@ -34,7 +34,7 @@ fn main() {
             is_in_html_tag = false;
             write!(io::stdout(), "{}\n", line).unwrap();
         } else {
-            let mut modified_line = &mut String::new();
+            let modified_line = &mut String::new();
             let mut previous_char = std::char::REPLACEMENT_CHARACTER;
             let mut chars_in_line = line.chars();
 
