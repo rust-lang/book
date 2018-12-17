@@ -689,8 +689,8 @@ to infer a different numerical type. The reason for the error is that Rust
 cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
-real number type so we can compare it numerically to the guess. We can do that
-by adding the following two lines to the `main` function body:
+real number type so we can compare it numerically to the secret number. We can
+do that by adding the following two lines to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -931,7 +931,7 @@ match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
 catchall value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
 execute the second arm’s code, `continue`, which tells the program to go to the
-next iteration of the `loop` and ask for another guess. So effectively, the
+next iteration of the `loop` and ask for another guess. So, effectively, the
 program ignores all errors that `parse` might encounter!
 
 Now everything in the program should work as expected. Let’s try it:
