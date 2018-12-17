@@ -303,9 +303,10 @@ say we wanted to take two things that implement `Summary`:
 pub fn notify(item1: impl Summary, item2: impl Summary) {
 ```
 
-This would work well if `item1` and `item2` were allowed to have diferent types
-(as long as both implement `Summary`). But what if you wanted to force both to
-have the exact same type? That is only possible if you use a trait bound:
+This would work well if `item1` and `item2` were allowed to have different
+types (as long as both implement `Summary`). But what if you wanted to force
+both to have the exact same type? That is only possible if you use a trait
+bound:
 
 ```rust,ignore
 pub fn notify<T: Summary>(item1: T, item2: T) {

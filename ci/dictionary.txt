@@ -22,6 +22,7 @@ associativity
 async
 atomics
 attr
+autocompletion
 AveragedCollection
 backend
 backported
@@ -64,6 +65,7 @@ choo
 chXX
 chYY
 clippy
+clippy's
 coercions
 combinator
 ConcreteType

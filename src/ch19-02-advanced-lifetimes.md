@@ -474,7 +474,7 @@ fn foo(string: &str) -> StrWrap<'_> {
 }
 ```
 
-The `'_` says “use the elidied lifetime here.” This means that we can still see
+The `'_` says “use the elided lifetime here.” This means that we can still see
 that `StrWrap` contains a reference, but we don’t need all of the lifetime
 annotations to make sense of it.
 

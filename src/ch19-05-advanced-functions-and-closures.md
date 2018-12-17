@@ -84,7 +84,7 @@ there are multiple functions available named `to_string`. Here, we’re using th
 library has implemented for any type that implements `Display`.
 
 Another useful pattern exploits an implementation detail of tuple structs and
-tuple-struct enum variants. These items use `()` as initialiser syntax, which
+tuple-struct enum variants. These items use `()` as initializer syntax, which
 looks like a function call, and they’re actually implemented as functions
 returning an instance constructed from their arguments. They can also be called
 as a function pointer implementing the closure traits, and so can be used
