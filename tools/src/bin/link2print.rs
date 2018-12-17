@@ -12,7 +12,7 @@
 // FIXME: We have some long lines that could be refactored, but it's not a big deal.
 // ignore-tidy-linelength
 
-extern crate regex;
+
 
 use std::collections::HashMap;
 use std::io;
@@ -40,7 +40,7 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
     let mut ref_map = HashMap::new();
     // FIXME: Currently doesn't handle "title" in following line
     let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###).unwrap();
-    let output = re.replace_all(&buffer, |caps: &Captures| {
+    let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         let key = caps.at(1).unwrap().to_owned().to_uppercase();
         let val = caps.at(2).unwrap().to_owned();
         if ref_map.insert(key, val).is_some() {
@@ -55,7 +55,7 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
     // FIXME: check which punctuation is allowed by spec
     let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
     let error_code = Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
-    let output = re.replace_all(&buffer, |caps: &Captures| {
+    let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         match caps.name("pre") {
             Some(pre_section) => format!("{}", pre_section.to_owned()),
             None => {

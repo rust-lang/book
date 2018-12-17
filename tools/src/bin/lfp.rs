@@ -11,10 +11,10 @@
 // We have some long regex literals, so:
 // ignore-tidy-linelength
 
-extern crate rustc_serialize;
-extern crate docopt;
+
+
 use docopt::Docopt;
-extern crate walkdir;
+use walkdir;
 use std::{path, fs, io};
 use std::io::{BufRead, Write};
 

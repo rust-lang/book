@@ -8,7 +8,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate regex;
+
 use std::io;
 use std::io::{Read, Write};
 use regex::{Regex, Captures};
@@ -50,7 +50,7 @@ fn remove_markup(input: String) -> String {
         // Remove the span around filenames and captions
         } else {
             let result = regexen.iter().fold(line.to_string(), |result, regex| {
-                regex.replace_all(&result, |caps: &Captures| {
+                regex.replace_all(&result, |caps: &Captures<'_>| {
                     caps.at(1).unwrap().to_owned()
                 })
             });

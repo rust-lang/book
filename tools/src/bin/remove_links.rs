@@ -8,7 +8,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-extern crate regex;
+
 
 use std::io;
 use std::io::{Read, Write};
@@ -26,7 +26,7 @@ fn main () {
     // capture all links and link references
     let regex = r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!-- ignore -->";
     let link_regex = Regex::new(regex).unwrap();
-    let first_pass = link_regex.replace_all(&buffer, |caps: &Captures| {
+    let first_pass = link_regex.replace_all(&buffer, |caps: &Captures<'_>| {
 
         // save the link reference we want to delete
         if let Some(reference) = caps.at(2) {
@@ -39,7 +39,7 @@ fn main () {
 
     // search for the references we need to delete
     let ref_regex = Regex::new(r"\n\[([^\]]+)\]:\s.*\n").unwrap();
-    let out = ref_regex.replace_all(&first_pass, |caps: &Captures| {
+    let out = ref_regex.replace_all(&first_pass, |caps: &Captures<'_>| {
         let capture = caps.at(1).unwrap().to_owned();
 
         // check if we've marked this reference for deletion...

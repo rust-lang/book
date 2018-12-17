@@ -9,7 +9,7 @@
 // except according to those terms.
 
 #[macro_use] extern crate lazy_static;
-extern crate regex;
+
 
 use std::env;
 use std::io;
