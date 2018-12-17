@@ -41,16 +41,23 @@ aspell --version
 
 shopt -s nullglob
 
-dict_filename=./dictionary.txt
+dict_filename=./ci/dictionary.txt
 markdown_sources=(./src/*.md)
 mode="check"
 
 # aspell repeatedly modifies personal dictionary for some purpose,
 # so we should use a copy of our dictionary
-dict_path="/tmp/$dict_filename"
+dict_path="/tmp/dictionary.txt"
 
 if [[ "$1" == "list" ]]; then
     mode="list"
+fi
+
+# Error if running in list (CI) mode and there isn't a dictionary file;
+# creating one in CI won't do any good :(
+if [[ "$mode" == "list" && ! -f "$dict_filename" ]]; then
+    echo "No dictionary file found! A dictionary file is required in CI!"
+    exit 1
 fi
 
 if [[ ! -f "$dict_filename" ]]; then

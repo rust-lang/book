@@ -21,6 +21,8 @@ args
 associativity
 async
 atomics
+attr
+autocompletion
 AveragedCollection
 backend
 backported
@@ -28,7 +30,7 @@ backtrace
 backtraces
 BACKTRACE
 Backtraces
-Baz’s
+Baz's
 benchmarking
 bioinformatics
 bitand
@@ -62,12 +64,15 @@ charset
 choo
 chXX
 chYY
+clippy
+clippy's
 coercions
 combinator
 ConcreteType
 config
 Config
 const
+consts
 constant's
 copyeditor
 couldn
@@ -84,13 +89,16 @@ Ctrl
 customizable
 CustomSmartPointer
 CustomSmartPointers
-data’s
+data's
+DataStruct
 deallocate
 deallocated
 deallocating
 deallocation
 debuginfo
 decrementing
+deduplicate
+deduplicating
 deps
 deref
 Deref
@@ -134,10 +142,11 @@ Enums
 eprintln
 Erlang
 ErrorKind
-Executables
+executables
 expr
 extern
 favicon
+ferris
 FFFD
 FFFF
 figcaption
@@ -207,6 +216,7 @@ invariants
 ioerror
 iokind
 ioresult
+IoResult
 iostdin
 IpAddr
 IpAddrKind
@@ -219,6 +229,7 @@ JoinHandle
 Kay's
 kinded
 lang
+LastWriteTime
 latin
 liballoc
 libc
@@ -271,7 +282,9 @@ Mutex
 mutexes
 Mutexes
 MutexGuard
+mutext
 MyBox
+myprogram
 namespace
 namespaced
 namespaces
@@ -349,7 +362,9 @@ refactor
 refactoring
 refcell
 RefCell
+refcellt
 RefMut
+reformats
 refutability
 reimplement
 RemAssign
@@ -371,8 +386,10 @@ rUsT
 rustc
 rustdoc
 Rustonomicon
+rustfix
 rustfmt
 rustup
+sampleproject
 screenshot
 searchstring
 SecondaryColor
@@ -384,8 +401,10 @@ ShlAssign
 ShrAssign
 shouldn
 Simula
+siphash
 situps
 sizeof
+SliceIndex
 Smalltalk
 snuck
 someproject
@@ -411,6 +430,7 @@ Struct
 structs
 struct's
 Structs
+StrWrap
 SubAssign
 subclasses
 subcommand
@@ -425,6 +445,7 @@ substring
 subteams
 subtree
 subtyping
+summarizable
 supertrait
 supertraits
 TcpListener
@@ -463,6 +484,7 @@ unary
 Unary
 uncomment
 Uncomment
+uncommenting
 unevaluated
 Uninstalling
 uninstall
@@ -488,8 +510,10 @@ versa
 Versioning
 visualstudio
 Vlissides
+vscode
 vtable
 wasn
+weakt
 WeatherForecast
 WebSocket
 whitespace
