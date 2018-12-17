@@ -28,7 +28,7 @@ backtrace
 backtraces
 BACKTRACE
 Backtraces
-Baz’s
+Baz's
 benchmarking
 bioinformatics
 bitand
@@ -84,7 +84,7 @@ Ctrl
 customizable
 CustomSmartPointer
 CustomSmartPointers
-data’s
+data's
 deallocate
 deallocated
 deallocating
