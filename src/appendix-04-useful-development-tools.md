@@ -171,14 +171,10 @@ as [the Rust plugin for Visual Studio: Code][vscode].
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust
 
-The `rls` is not yet at the quality of a version 1.0 release, but a preview is
-available for you to use in the meantime. Please give it a try and let us know
-how it goes!
-
 To install the `rls`:
 
 ```text
-$ rustup component add rls-preview
+$ rustup component add rls
 ```
 
 Then install the language server support in your particular IDE, and you will
