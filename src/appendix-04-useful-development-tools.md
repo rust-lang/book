@@ -9,14 +9,10 @@ The tool `rustfmt` reformats your code according to the community code style.
 Many projects use `rustfmt` to prevent arguments about which style to use when
 writing Rust: everyone formats their code with the tool!
 
-The `rustfmt` tool is not yet at the quality of a version 1.0 release, but
-a preview is available for you to use in the meantime. Please give it a try and
-let us know how it goes!
-
 To install `rustfmt`:
 
 ```text
-$ rustup component add rustfmt-preview
+$ rustup component add rustfmt
 ```
 
 This will give you both `rustfmt` and `cargo-fmt`, similar to how Rust gives
@@ -175,14 +171,10 @@ as [the Rust plugin for Visual Studio: Code][vscode].
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust
 
-The `rls` is not yet at the quality of a version 1.0 release, but a preview is
-available for you to use in the meantime. Please give it a try and let us know
-how it goes!
-
 To install the `rls`:
 
 ```text
-$ rustup component add rls-preview
+$ rustup component add rls
 ```
 
 Then install the language server support in your particular IDE, and you will
