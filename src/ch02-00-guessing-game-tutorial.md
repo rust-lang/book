@@ -966,6 +966,8 @@ secret number. Listing 2-6 shows the final code.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
