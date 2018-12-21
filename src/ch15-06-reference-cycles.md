@@ -133,8 +133,8 @@ a rc count after changing a = 2
 
 The reference count of the `Rc<List>` instances in both `a` and `b` are 2
 after we change the list in `a` to point to `b`. At the end of `main`, Rust
-will try to drop `b` first, which will decrease the count in each of the
-`Rc<List>` instances in `a` and `b` by 1.
+will try to drop `b` first, which will decrease the count of the `Rc<List>`
+instance in `b` by 1.
 
 However, because `a` is still referencing the `Rc<List>` that was in `b`, that
 `Rc<List>` has a count of 1 rather than 0, so the memory the `Rc<List>` has on
