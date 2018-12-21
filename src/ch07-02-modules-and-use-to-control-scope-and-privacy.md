@@ -878,7 +878,7 @@ This brings both `std::io` and `std::io::Write` into scope.
 ### Bringing All Public Definitions into Scope with the Glob Operator
 
 If you’d like to bring *all* public items defined in a path into scope, you can
-use specify that path followed by `*`, the glob operator:
+specify that path followed by `*`, the glob operator:
 
 ```rust
 use std::collections::*;
