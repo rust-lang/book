@@ -268,7 +268,7 @@ $ cargo test
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 2 tests
-test expensive_test ... ignored
+test expensive_test ... ignored 
 test it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
