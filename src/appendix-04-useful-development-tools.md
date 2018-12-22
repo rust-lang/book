@@ -100,14 +100,10 @@ different editions of Rust. Editions are covered in Appendix E.
 The `clippy` tool is a collection of lints to catch common mistakes and improve
 your Rust code.
 
-The `clippy` tool is not yet at the quality of a version 1.0 release, but a
-preview is available for you to use in the meantime. Please give it a try and
-let us know how it goes!
-
 To install `clippy`:
 
 ```text
-$ rustup component add clippy-preview
+$ rustup component add clippy
 ```
 
 To take any Cargo project and run clippy’s lints on it:
