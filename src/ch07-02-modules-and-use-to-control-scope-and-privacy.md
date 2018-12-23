@@ -5,7 +5,7 @@ encompasses a few more features than modules. In this section, we’ll talk abou
 
 * Modules, a way to organize code and control the privacy of paths
 * Paths, a way to name items
-* `use` a keyword to bring a path into scope
+* `use`, a keyword to bring a path into scope
 * `pub`, a keyword to make items public
 * Renaming items when bringing them into scope with the `as` keyword
 * Using external packages
@@ -193,7 +193,7 @@ organization. There’s another reason Rust has modules: modules are the *privac
 boundary* in Rust. If you want to make an item like a function or struct
 private, you put it in a module. Here are the privacy rules:
 
-* All items (functions, methods, structs, enums, modules, annd constants) are
+* All items (functions, methods, structs, enums, modules, and constants) are
   private by default.
 * You can use the `pub` keyword to make an item public.
 * You aren’t allowed to use private code defined in modules that are children
@@ -320,7 +320,7 @@ You can also construct relative paths beginning with `super`. Doing so is like
 starting a filesystem path with `..`: the path starts from the *parent* module,
 rather than the current module. This is useful in situations such as the
 example in Listing 7-9, where the function `clarinet` calls the function
-`breathe_in` by specifying the path to `breathe_in` start with `super`:
+`breathe_in` by specifying its path to start with `super`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -795,7 +795,7 @@ fn main() {
 ```
 
 There are many packages that members of the community have published on
-*https://crates.io*, and pulling any of them in to your package involves these
+*https://crates.io*, and pulling any of them into your package involves these
 same steps: listing them in your package’s *Cargo.toml* and bringing items
 defined in them into a scope in your package with `use`.
 
@@ -877,8 +877,8 @@ This brings both `std::io` and `std::io::Write` into scope.
 
 ### Bringing All Public Definitions into Scope with the Glob Operator
 
-If you’d like to bring *all* public items defined in a path into scope, you can
-use specify that path followed by `*`, the glob operator:
+If you’d like to bring *all* public items defined in a path into scope, you
+can specify that path in `use` followed by `*`, the glob operator:
 
 ```rust
 use std::collections::*;
