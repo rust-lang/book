@@ -49,6 +49,7 @@
     - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
     - [Recoverable Errors with `Result`](ch09-02-recoverable-errors-with-result.md)
     - [To `panic!` or Not To `panic!`](ch09-03-to-panic-or-not-to-panic.md)
+    - [Using `Option` with `Result` and `?`](ch09-04-using-option-with-result.md)
 
 - [Generic Types, Traits, and Lifetimes](ch10-00-generics.md)
     - [Generic Data Types](ch10-01-syntax.md)
