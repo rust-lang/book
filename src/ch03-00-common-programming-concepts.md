@@ -27,16 +27,9 @@ functions, structs, lots of things. All of these things need names. A name
 in Rust is called an “identifier,” and can be made up of any nonempty ASCII
 string, with some restrictions:
 
-Either:
-
-* The first character is a letter.
-* The remaining characters are alphanumeric or _.
-
-or:
-
-* The first character is _.
-* The identifier is more than one character. _ alone is not an identifier.
-* The remaining characters are alphanumeric or _.
+* The first character is a letter or `_`.
+* The remaining characters are alphanumeric or `_`.
+* `_` alone is not an identifier.
 
 ### Raw identifiers
 
