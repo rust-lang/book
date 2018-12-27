@@ -43,5 +43,7 @@ fn main() {
 }
 ```
 
+A good guideline is to comment not about what you’re doing but rather about
+why you’re doing it.
 Rust also has another kind of comment, documentation comments, which we’ll
 discuss in Chapter 14.
