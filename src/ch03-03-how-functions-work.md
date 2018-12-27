@@ -200,7 +200,8 @@ is an expression that evaluates to the value `11`. Expressions can be part of
 statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
 expression that evaluates to the value `6`. Calling a function is an
 expression. Calling a macro is an expression. The block that we use to create
-new scopes, `{}`, is an expression, for example:
+new scopes, `{}`, can also be an expression; namely if its content ends with
+an expression. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -217,7 +218,7 @@ fn main() {
 }
 ```
 
-This expression:
+This expression
 
 ```rust,ignore
 {
