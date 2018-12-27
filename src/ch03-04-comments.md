@@ -44,4 +44,4 @@ fn main() {
 ```
 
 Rust also has another kind of comment, documentation comments, which we’ll
-discuss in Chapter 14.
+discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
