@@ -643,8 +643,7 @@ binary crate in *src/main.rs*, as shown in Listing 12-14:
 use std::env;
 use std::process;
 
-use minigrep;
-use minigrep::Config;
+use minigrep::{self, Config};
 
 fn main() {
     // --snip--
