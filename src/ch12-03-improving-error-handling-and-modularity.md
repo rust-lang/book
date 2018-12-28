@@ -643,7 +643,6 @@ binary crate in *src/main.rs*, as shown in Listing 12-14:
 use std::env;
 use std::process;
 
-use minigrep;
 use minigrep::Config;
 
 fn main() {
@@ -657,11 +656,11 @@ fn main() {
 <span class="caption">Listing 12-14: Bringing the `minigrep` crate into the
 scope of *src/main.rs*</span>
 
-To bring the library crate into the binary crate, we use `use minigrep`.
-Then we add a `use minigrep::Config` line to bring the `Config` type
-into scope as well, and we prefix the `run` function with our crate name. Now
-all the functionality should be connected and should work. Run the program with
-`cargo run` and make sure everything works correctly.
+We add a `use minigrep::Config` line to bring the `Config` type from the
+library crate into the binary crate's scope, and we prefix the `run` function
+with our crate name. Now all the functionality should be connected and should
+work. Run the program with `cargo run` and make sure everything works
+correctly.
 
 Whew! That was a lot of work, but we’ve set ourselves up for success in the
 future. Now it’s much easier to handle errors, and we’ve made the code more
