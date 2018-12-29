@@ -187,7 +187,7 @@ function named `mix`, as shown in Listing 14-3:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -209,14 +209,16 @@ pub mod kinds {
 }
 
 pub mod utils {
-    use kinds::*;
+    use crate::kinds::*;
 
     /// Combines two primary colors in equal amounts to create
     /// a secondary color.
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
         // --snip--
+#         SecondaryColor::Orange
     }
 }
+# fn main() {}
 ```
 
 <span class="caption">Listing 14-3: An `art` library with items organized into
