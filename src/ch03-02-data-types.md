@@ -215,8 +215,7 @@ so your human intuition for what a “character” is may not match up with what
 `char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
 Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
 
-A `char` is four bytes in size because a Unicode Scalar Value doesn’t fit into
-two bytes.
+A `char` is four bytes in size.
 
 ### Compound Types
 
