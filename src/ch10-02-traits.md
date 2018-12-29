@@ -396,7 +396,7 @@ concisely specify that a function returns some type that implements the
 `Iterator` trait without needing to write out a really long type.
 
 However, using `impl Trait` is only allowed if you have a single type that
-you’re returning. For example, this code returing either a `NewsArticle` or a
+you’re returning. For example, this code returning either a `NewsArticle` or a
 `Tweet` with the return type specified as `impl Summary` would *not* work:
 
 ```rust,ignore,does_not_compile
