@@ -279,9 +279,9 @@ items at the top level, as shown in Listing 14-5:
 //!
 //! A library for modeling artistic concepts.
 
-pub use kinds::PrimaryColor;
-pub use kinds::SecondaryColor;
-pub use utils::mix;
+pub use self::kinds::PrimaryColor;
+pub use self::kinds::SecondaryColor;
+pub use self::utils::mix;
 
 pub mod kinds {
     // --snip--
