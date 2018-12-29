@@ -2,6 +2,8 @@
 
 [빌드된 페이지 바로가기](https://rinthel.github.io/rust-lang-book-ko)
 
+[![빌드 상태](https://api.travis-ci.com/rinthel/rust-lang-book-ko.svg?branch=master)](https://travis-ci.org/rust-lang/book)
+
 안녕하세요? 한국어를 쓰시는 러스트 유저 여러분들을 환영합니다. 이 저장소는 러스트 프로그래밍 언어
 문서(소위 the book이라고 일컫는)의 2번째 판에 대한 번역 작업을 위해 만들어졌습니다.
 1번째 판에 대한 번역 작업은 [sarojaba님께서 운영하시는 penflip 페이지](
@@ -47,8 +49,6 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 ---
 
 # The Rust Programming Language
-
-[![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
 This repo contains two editions of “The Rust Programming Language”.
 
