@@ -275,7 +275,7 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep`
 thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', src/main.rs:29:21
+but the index is 1', src/main.rs:25:21
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -320,7 +320,7 @@ $ cargo run
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep`
-thread 'main' panicked at 'not enough arguments', src/main.rs:30:12
+thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -540,12 +540,14 @@ it doesn’t return a value we need.
 When you run this code, it will compile but will display a warning:
 
 ```text
-warning: unused `std::result::Result` which must be used
-  --> src/main.rs:18:5
+warning: unused `std::result::Result` that must be used
+  --> src/main.rs:17:5
    |
-18 |     run(config);
+17 |     run(config);
    |     ^^^^^^^^^^^^
-= note: #[warn(unused_must_use)] on by default
+   |
+   = note: #[warn(unused_must_use)] on by default
+   = note: this `Result` may be an `Err` variant, which should be handled
 ```
 
 Rust tells us that our code ignored the `Result` value and the `Result` value
@@ -651,8 +653,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 12-14: Bringing the `minigrep` crate into the
-scope of *src/main.rs*</span>
+<span class="caption">Listing 12-14: Using the `minigrep` library crate in
+*src/main.rs*</span>
 
 We add a `use minigrep::Config` line to bring the `Config` type from the
 library crate into the binary crate's scope, and we prefix the `run` function
