@@ -517,6 +517,8 @@ Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+extern crate rand;
+
 use std::io;
 use rand::Rng;
 
