@@ -16,4 +16,13 @@ before_script:
   - cargo install-update -a
 
 script:
-  - cd second-edition && mdbook build && mdbook test
+  - cd second-edition && mdbook build && mdbook test && cd book && touch .nojekyll
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: second-edition/book
+  on:
+    branch: master
