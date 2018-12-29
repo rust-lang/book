@@ -1,17 +1,19 @@
-sudo: false
 language: rust
-cache: cargo
+sudo: false
+cache:
+  - cargo
+
 rust:
-  - nightly
+  - stable
+
 branches:
   only:
   - master
-addons:
-  apt:
-    packages:
-      - aspell
-      - aspell-en
+
 before_script:
-  - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
+  - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
+  - (test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.1" mdbook)
+  - cargo install-update -a
+
 script:
-  - bash ci/build.sh
+  - cd second-edition && mdbook build && mdbook test
