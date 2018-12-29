@@ -78,10 +78,10 @@ like Listing 7-3:
 
 ```text
 crate
- └── sound
-     └── instrument
-        └── woodwind
-     └── voice
+└── sound
+    ├── instrument
+    │   └── woodwind
+    └── voice
 ```
 
 <span class="caption">Listing 7-3: The module tree for the code in Listing
