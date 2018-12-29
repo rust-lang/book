@@ -645,7 +645,7 @@ $ cargo new --bin adder
 At this point, we can build the workspace by running `cargo build`. The files
 in your *add* directory should look like this:
 
-```
+```text
 ├── Cargo.lock
 ├── Cargo.toml
 ├── adder
@@ -692,7 +692,7 @@ $ cargo new add-one
 
 Your *add* directory should now have these directories and files:
 
-```
+```text
 ├── Cargo.lock
 ├── Cargo.toml
 ├── add-one

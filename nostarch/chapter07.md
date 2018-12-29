@@ -139,12 +139,12 @@ called crate roots because the contents of either of these two files form a
 module named `crate` at the root of the crate’s module tree. So in Listing 7-2,
 we have a module tree that looks like Listing 7-3:
 
-```
+```text
 crate
- └── sound
-     └── instrument
-        └── woodwind
-     └── voice
+└── sound
+    ├── instrument
+    │   └── woodwind
+    └── voice
 ```
 
 Listing 7-3: The module tree for the code in Listing 7-2
