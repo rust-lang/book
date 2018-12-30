@@ -168,7 +168,7 @@ instance</span>
 When we run this code, we get an error with this core message:
 
 ```text
-error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 ```
 
 The `println!` macro can do many kinds of formatting, and by default, the curly
@@ -185,8 +185,8 @@ implementation of `Display`.
 If we continue reading the errors, we’ll find this helpful note:
 
 ```text
-`Rectangle` cannot be formatted with the default formatter; try using
-`:?` instead if you are using a format string
+= help: the trait `std::fmt::Display` is not implemented for `Rectangle`
+= note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 ```
 
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
@@ -198,14 +198,14 @@ see its value while we’re debugging our code.
 Run the code with this change. Drat! We still get an error:
 
 ```text
-error[E0277]: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
 ```
 
 But again, the compiler gives us a helpful note:
 
 ```text
-`Rectangle` cannot be formatted using `:?`; if it is defined in your
-crate, add `#[derive(Debug)]` or manually implement it
+= help: the trait `std::fmt::Debug` is not implemented for `Rectangle`
+= note: add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
 ```
 
 Rust *does* include functionality to print out debugging information, but we
