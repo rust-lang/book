@@ -200,7 +200,7 @@ pub mod kinds {
         Blue,
     }
 
-    /// The secondary colors according to the RYB color model.
+    /// The secondary colors according to the OGP color model.
     pub enum SecondaryColor {
         Orange,
         Green,
