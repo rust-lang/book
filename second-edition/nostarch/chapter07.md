@@ -160,18 +160,18 @@ topmost level, and the submodules are at lower levels. Here’s what the
 organization of our example in Listing 7-1 looks like when thought of as a
 hierarchy:
 
-```
+```text
 communicator
- ├── network
- └── client
+├── network
+└── client
 ```
 
 And here’s the hierarchy corresponding to the example in Listing 7-2:
 
-```
+```text
 communicator
- └── network
-     └── client
+└── network
+    └── client
 ```
 
 The hierarchy shows that in Listing 7-2, `client` is a child of the `network`
@@ -214,11 +214,11 @@ defined in *src/lib.rs*
 
 The file *src/lib.rs* has this module hierarchy:
 
-```
+```text
 communicator
- ├── client
- └── network
-     └── server
+├── client
+└── network
+    └── server
 ```
 
 If these modules had many functions, and those functions were becoming lengthy,
@@ -431,16 +431,16 @@ Now when we try to run `cargo build`, compilation will work (we’ll still have
 warnings though). Our module layout still looks exactly the same as it did when
 we had all the code in *src/lib.rs* in Listing 7-3:
 
-```
+```text
 communicator
- ├── client
- └── network
-     └── server
+├── client
+└── network
+    └── server
 ```
 
 The corresponding file layout now looks like this:
 
-```
+```text
 └── src
     ├── client.rs
     ├── lib.rs
@@ -459,11 +459,11 @@ recognize that `server` was supposed to be a submodule of `network` if the
 let’s consider a different example with the following module hierarchy, where
 all the definitions are in *src/lib.rs*:
 
-```
+```text
 communicator
- ├── client
- └── network
-     └── client
+├── client
+└── network
+    └── client
 ```
 
 In this example, we have three modules again: `client`, `network`, and
@@ -497,7 +497,7 @@ These rules apply recursively, so if a module named `foo` has a submodule named
 `bar` and `bar` does not have submodules, you should have the following files
 in your *src* directory:
 
-```
+```text
 └── foo
     ├── bar.rs (contains the declarations in `foo::bar`)
     └── mod.rs (contains the declarations in `foo`, including `mod bar`)
@@ -956,12 +956,12 @@ and contains one function named `it_works`. Even though there are special
 annotations, the `tests` module is just another module! So our module hierarchy
 looks like this:
 
-```
+```text
 communicator
- ├── client
- ├── network
- |   └── client
- └── tests
+├── client
+├── network
+│   └── client
+└── tests
 ```
 
 Tests are for exercising the code within our library, so let’s try to call our
