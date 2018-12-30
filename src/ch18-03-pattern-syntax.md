@@ -369,64 +369,6 @@ fn main() {
 }
 ```
 
-#### Destructuring References
-
-When the value we’re matching to our pattern contains a reference, we need to
-destructure the reference from the value, which we can do by specifying a `&`
-in the pattern. Doing so lets us get a variable holding the value that the
-reference points to rather than getting a variable that holds the reference.
-This technique is especially useful in closures where we have iterators that
-iterate over references, but we want to use the values in the closure rather
-than the references.
-
-The example in Listing 18-16 iterates over references to `Point` instances in a
-vector, destructuring the reference and the struct so we can perform
-calculations on the `x` and `y` values easily.
-
-```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-let points = vec![
-    Point { x: 0, y: 0 },
-    Point { x: 1, y: 5 },
-    Point { x: 10, y: -3 },
-];
-
-let sum_of_squares: i32 = points
-    .iter()
-    .map(|&Point { x, y }| x * x + y * y)
-    .sum();
-```
-
-<span class="caption">Listing 18-16: Destructuring a reference to a struct into
-the struct field values</span>
-
-This code gives us the variable `sum_of_squares` holding the value 135, which
-is the result of squaring the `x` value and the `y` value, adding those
-together, and then adding the result for each `Point` in the `points` vector to
-get one number.
-
-If we had not included the `&` in `&Point { x, y }`, we’d get a type mismatch
-error, because `iter` would then iterate over references to the items in the
-vector rather than the actual values. The error would look like this:
-
-```text
-error[E0308]: mismatched types
-  -->
-   |
-14 |         .map(|Point { x, y }| x * x + y * y)
-   |               ^^^^^^^^^^^^ expected &Point, found struct `Point`
-   |
-   = note: expected type `&Point`
-              found type `Point`
-```
-
-This error indicates that Rust was expecting our closure to match `&Point`, but
-we tried to match directly to a `Point` value, not a reference to a `Point`.
-
 #### Destructuring Structs and Tuples
 
 We can mix, match, and nest destructuring patterns in even more complex ways.
@@ -463,7 +405,7 @@ parts of a value. Let’s explore how and why to use each of these patterns.
 We’ve used the underscore (`_`) as a wildcard pattern that will match any value
 but not bind to the value. Although the underscore `_` pattern is especially
 useful as the last arm in a `match` expression, we can use it in any pattern,
-including function parameters, as shown in Listing 18-17.
+including function parameters, as shown in Listing 18-16.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -477,7 +419,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-17: Using `_` in a function signature</span>
+<span class="caption">Listing 18-16: Using `_` in a function signature</span>
 
 This code will completely ignore the value passed as the first argument, `3`,
 and will print `This code only uses the y parameter: 4`.
@@ -494,7 +436,7 @@ name instead.
 
 We can also use `_` inside another pattern to ignore just part of a value, for
 example, when we want to test for only part of a value but have no use for the
-other parts in the corresponding code we want to run. Listing 18-18 shows code
+other parts in the corresponding code we want to run. Listing 18-17 shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and can give the setting a value if it is
@@ -516,7 +458,7 @@ match (setting_value, new_setting_value) {
 println!("setting is {:?}", setting_value);
 ```
 
-<span class="caption">Listing 18-18: Using an underscore within patterns that
+<span class="caption">Listing 18-17: Using an underscore within patterns that
 match `Some` variants when we don’t need to use the value inside the
 `Some`</span>
 
@@ -532,7 +474,7 @@ In all other cases (if either `setting_value` or `new_setting_value` are
 `new_setting_value` to become `setting_value`.
 
 We can also use underscores in multiple places within one pattern to ignore
-particular values. Listing 18-19 shows an example of ignoring the second and
+particular values. Listing 18-18 shows an example of ignoring the second and
 fourth values in a tuple of five items.
 
 ```rust
@@ -545,7 +487,7 @@ match numbers {
 }
 ```
 
-<span class="caption">Listing 18-19: Ignoring multiple parts of a tuple</span>
+<span class="caption">Listing 18-18: Ignoring multiple parts of a tuple</span>
 
 This code will print `Some numbers: 2, 8, 32`, and the values 4 and 16 will be
 ignored.
@@ -557,7 +499,7 @@ warning because that could be a bug. But sometimes it’s useful to create a
 variable you won’t use yet, such as when you’re prototyping or just starting a
 project. In this situation, you can tell Rust not to warn you about the unused
 variable by starting the name of the variable with an underscore. In Listing
-18-20, we create two unused variables, but when we run this code, we should
+18-19, we create two unused variables, but when we run this code, we should
 only get a warning about one of them.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -569,7 +511,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-20: Starting a variable name with an
+<span class="caption">Listing 18-19: Starting a variable name with an
 underscore to avoid getting unused variable warnings</span>
 
 Here we get a warning about not using the variable `y`, but we don’t get a
@@ -578,7 +520,7 @@ warning about not using the variable preceded by the underscore.
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore. The syntax `_x` still binds the value to the
 variable, whereas `_` doesn’t bind at all. To show a case where this
-distinction matters, Listing 18-21 will provide us with an error.
+distinction matters, Listing 18-20 will provide us with an error.
 
 ```rust,ignore,does_not_compile
 let s = Some(String::from("Hello!"));
@@ -590,12 +532,12 @@ if let Some(_s) = s {
 println!("{:?}", s);
 ```
 
-<span class="caption">Listing 18-21: An unused variable starting with an
+<span class="caption">Listing 18-20: An unused variable starting with an
 underscore still binds the value, which might take ownership of the value</span>
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. However, using the underscore by itself
-doesn’t ever bind to the value. Listing 18-22 will compile without any errors
+doesn’t ever bind to the value. Listing 18-21 will compile without any errors
 because `s` doesn’t get moved into `_`.
 
 ```rust
@@ -608,7 +550,7 @@ if let Some(_) = s {
 println!("{:?}", s);
 ```
 
-<span class="caption">Listing 18-22: Using an underscore does not bind the
+<span class="caption">Listing 18-21: Using an underscore does not bind the
 value</span>
 
 This code works just fine because we never bind `s` to anything; it isn’t moved.
@@ -618,7 +560,7 @@ This code works just fine because we never bind `s` to anything; it isn’t move
 With values that have many parts, we can use the `..` syntax to use only a few
 parts and ignore the rest, avoiding the need to list underscores for each
 ignored value. The `..` pattern ignores any parts of a value that we haven’t
-explicitly matched in the rest of the pattern. In Listing 18-23, we have a
+explicitly matched in the rest of the pattern. In Listing 18-22, we have a
 `Point` struct that holds a coordinate in three-dimensional space. In the
 `match` expression, we want to operate only on the `x` coordinate and ignore
 the values in the `y` and `z` fields.
@@ -637,7 +579,7 @@ match origin {
 }
 ```
 
-<span class="caption">Listing 18-23: Ignoring all fields of a `Point` except
+<span class="caption">Listing 18-22: Ignoring all fields of a `Point` except
 for `x` by using `..`</span>
 
 We list the `x` value and then just include the `..` pattern. This is quicker
@@ -645,7 +587,7 @@ than having to list `y: _` and `z: _`, particularly when we’re working with
 structs that have lots of fields in situations where only one or two fields are
 relevant.
 
-The syntax `..` will expand to as many values as it needs to be. Listing 18-24
+The syntax `..` will expand to as many values as it needs to be. Listing 18-23
 shows how to use `..` with a tuple.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -662,7 +604,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-24: Matching only the first and last values in
+<span class="caption">Listing 18-23: Matching only the first and last values in
 a tuple and ignoring all other values</span>
 
 In this code, the first and last value are matched with `first` and `last`. The
@@ -670,7 +612,7 @@ In this code, the first and last value are matched with `first` and `last`. The
 
 However, using `..` must be unambiguous. If it is unclear which values are
 intended for matching and which should be ignored, Rust will give us an error.
-Listing 18-25 shows an example of using `..` ambiguously, so it will not
+Listing 18-24 shows an example of using `..` ambiguously, so it will not
 compile.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -687,7 +629,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-25: An attempt to use `..` in an ambiguous
+<span class="caption">Listing 18-24: An attempt to use `..` in an ambiguous
 way</span>
 
 When we compile this example, we get this error:
@@ -715,7 +657,7 @@ a `match` arm that must also match, along with the pattern matching, for that
 arm to be chosen. Match guards are useful for expressing more complex ideas
 than a pattern alone allows.
 
-The condition can use variables created in the pattern. Listing 18-26 shows a
+The condition can use variables created in the pattern. Listing 18-25 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
 guard of `if x < 5`.
 
@@ -729,7 +671,7 @@ match num {
 }
 ```
 
-<span class="caption">Listing 18-26: Adding a match guard to a pattern</span>
+<span class="caption">Listing 18-25: Adding a match guard to a pattern</span>
 
 This example will print `less than five: 4`. When `num` is compared to the
 pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
@@ -748,7 +690,7 @@ In Listing 18-11, we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that a new variable was created inside the
 pattern in the `match` expression instead of using the variable outside the
 `match`. That new variable meant we couldn’t test against the value of the
-outer variable. Listing 18-27 shows how we can use a match guard to fix this
+outer variable. Listing 18-26 shows how we can use a match guard to fix this
 problem.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -768,7 +710,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-27: Using a match guard to test for equality
+<span class="caption">Listing 18-26: Using a match guard to test for equality
 with an outer variable</span>
 
 This code will now print `Default case, x = Some(5)`. The pattern in the second
@@ -785,7 +727,7 @@ we can look for a value that has the same value as the outer `y` by comparing
 
 You can also use the *or* operator `|` in a match guard to specify multiple
 patterns; the match guard condition will apply to all the patterns. Listing
-18-28 shows the precedence of combining a match guard with a pattern that uses
+18-27 shows the precedence of combining a match guard with a pattern that uses
 `|`. The important part of this example is that the `if y` match guard applies
 to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to
 `6`.
@@ -800,7 +742,7 @@ match x {
 }
 ```
 
-<span class="caption">Listing 18-28: Combining multiple patterns with a match
+<span class="caption">Listing 18-27: Combining multiple patterns with a match
 guard</span>
 
 The match condition states that the arm only matches if the value of `x` is
@@ -831,7 +773,7 @@ were applied only to the final value in the list of values specified using the
 
 The *at* operator (`@`) lets us create a variable that holds a value at the
 same time we’re testing that value to see whether it matches a pattern. Listing
-18-29 shows an example where we want to test that a `Message::Hello` `id` field
+18-28 shows an example where we want to test that a `Message::Hello` `id` field
 is within the range `3...7`. But we also want to bind the value to the variable
 `id_variable` so we can use it in the code associated with the arm. We could
 name this variable `id`, the same as the field, but for this example we’ll use
@@ -857,7 +799,7 @@ match msg {
 }
 ```
 
-<span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern
+<span class="caption">Listing 18-28: Using `@` to bind to a value in a pattern
 while also testing it</span>
 
 This example will print `Found an id in range: 5`. By specifying `id_variable
