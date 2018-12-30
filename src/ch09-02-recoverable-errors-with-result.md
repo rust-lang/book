@@ -198,7 +198,7 @@ use std::fs::File;
 use std::io::ErrorKind;
 
 fn main() {
-    let f = File::open("hello.txt").map_err(|error| {
+    let f = File::open("hello.txt").unwrap_or_else(|error| {
         if error.kind() == ErrorKind::NotFound {
             File::create("hello.txt").unwrap_or_else(|error| {
                 panic!("Tried to create file but there was a problem: {:?}", error);
@@ -210,10 +210,10 @@ fn main() {
 }
 ```
 
-Come back to this example after you’ve read Chapter 13, and look up what the
-`map_err` and `unwrap_or_else` methods do in the standard library
-documentation. There’s many more of these methods that can clean up huge nested
-`match` expressions when dealing with errors.
+Come back to this example after you’ve read Chapter 13, and look up the
+`unwrap_or_else` method in the standard library documentation. There’s many
+more of these methods that can clean up huge nested `match` expressions when
+dealing with errors.
 
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 
