@@ -175,8 +175,8 @@ list of all operators that Rust provides.
 #### The Boolean Type
 
 As in most other programming languages, a Boolean type in Rust has two possible
-values: `true` and `false`. The Boolean type in Rust is specified using `bool`.
-For example:
+values: `true` and `false`. Booleans are one byte in size. The Boolean type in
+Rust is specified using `bool`. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -191,8 +191,6 @@ fn main() {
 The main way to use Boolean values is through conditionals, such as an `if`
 expression. We’ll cover how `if` expressions work in Rust in the [“Control
 Flow”][control-flow]<!-- ignore --> section.
-
-Booleans are one byte in size.
 
 #### The Character Type
 
@@ -211,16 +209,15 @@ fn main() {
 }
 ```
 
-Rust’s `char` type represents a Unicode Scalar Value, which means it can
-represent a lot more than just ASCII. Accented letters; Chinese, Japanese, and
-Korean characters; emoji; and zero-width spaces are all valid `char` values in
-Rust. Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
-Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
-
-A `char` is four bytes in size.
+Rust’s `char` type is four bytes in size and represents a Unicode Scalar Value,
+which means it can represent a lot more than just ASCII. Accented letters;
+Chinese, Japanese, and Korean characters; emoji; and zero-width spaces are all
+valid `char` values in Rust. Unicode Scalar Values range from `U+0000` to
+`U+D7FF` and `U+E000` to `U+10FFFF` inclusive. However, a “character” isn’t
+really a concept in Unicode, so your human intuition for what a “character” is
+may not match up with what a `char` is in Rust. We’ll discuss this topic in
+detail in [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore -->
+in Chapter 8.
 
 ### Compound Types
 
