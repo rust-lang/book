@@ -323,20 +323,29 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-Arrays have an interesting type; it looks like this: `[type; number]`. For
-example:
+Writing an array's type is done with square brackets containing the type of
+each element in the array followed by a semicolon and the number of elements in
+the array, like so:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
-First, there’s square brackets; they look like the syntax for creating an
-array. Inside, there’s two pieces of information, separated by a semicolon.
-The first is the type of each element of the array. Since all elements have
-the same type, we only need to list it once. After the semicolon, there’s
-a number that indicates the length of the array. Since an array has a fixed size,
-this number is always the same, even if the array’s elements are modified, it
-cannot grow or shrink.
+Here, `i32` is the type of each element. After the semicolon, the number `5`
+indicates the element contains five items.
+
+The way an array's type is written looks similar to an alternative syntax for
+initializing an array: if you want to create an array that contains the same
+value for each element, you can specify the initial value, then a semicolon,
+then the length of the array in square brackets as shown here:
+
+```rust
+let a = [3; 5];
+```
+
+The array named `a` will contain 5 elements that will all be set to the value
+`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
+more concise way.
 
 ##### Accessing Array Elements
 
