@@ -98,20 +98,25 @@ defaults are generally good choices, and integer types default to `i32`: this
 type is generally the fastest, even on 64-bit systems. The primary situation in
 which you’d use `isize` or `usize` is when indexing some sort of collection.
 
-##### Integer Overflow
-
-Let’s say that you have a `u8`, which can hold values between zero and `255`.
-What happens if you try to change it to `256`? This is called “integer
-overflow,” and Rust has some interesting rules around this behavior. When
-compiling in debug mode, Rust checks for this kind of issue and will cause
-your program to *panic*, which is the term Rust uses when a program exits
-with an error. We’ll discuss panics more in Chapter 9.
-
-In release builds, Rust does not check for overflow, and instead will
-do something called “two’s complement wrapping.” In short, `256` becomes
-`0`, `257` becomes `1`, etc. Relying on overflow is considered an error,
-even if this behavior happens. If you want this behavior explicitly, the
-standard library has a type, `Wrapping`, that provides it explicitly.
+> ##### Integer Overflow
+>
+> Let’s say that you have a variable of type `u8`, which can hold values
+> between 0 and 255. What happens if you try to change the variable's value to
+> 256? This is called *integer overflow*, and Rust has some interesting rules
+> around this behavior. When compiling in debug mode, Rust includes checks for
+> integer overflow that will cause your program to *panic* at runtime if integer
+> overflow occurs. Panicking is the term Rust uses when a program exits with an
+> error; we’ll discuss panics more in the ["Unrecoverable Errors with `panic!`
+> section"][unrecoverable-errors-with-panic] of Chapter 9.
+>
+> When compiling in release mode with the `--release` flag, Rust does not
+> include checks for integer overflow that cause panics. Instead, if overflow
+> occurs, Rust will perform something called *two’s complement wrapping*. In
+> short, values greater than the maximum value the type can hold "wrap around"
+> to the minimum of the values the type can hold. In the case of a `u8`, 256
+> becomes 0, 257 becomes 1, etc. Relying on the wrapping behavior of integer
+> overflow is considered an error. If you want to wrap explicitly, the standard
+> library has a type named `Wrapping` that provides this behavior.
 
 #### Floating-Point Types
 
@@ -403,3 +408,4 @@ continuing. Chapter 9 discusses more of Rust’s error handling.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [control-flow]: ch03-05-control-flow.html#control-flow
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.md
