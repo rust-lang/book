@@ -98,10 +98,10 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-        I got the value 8
+I got the value 8
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
- right: `10`', src/lib.rs:19:8
+ right: `10`', src/lib.rs:19:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -132,7 +132,7 @@ I got the value 8
 test tests::this_test_will_pass ... ok
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
- right: `10`', src/lib.rs:19:8
+ right: `10`', src/lib.rs:19:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 test tests::this_test_will_fail ... FAILED
 
