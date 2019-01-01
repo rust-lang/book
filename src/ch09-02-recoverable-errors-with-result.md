@@ -141,7 +141,7 @@ if `File::open` failed because the file doesn’t exist, we want to create the
 file and return the handle to the new file. If `File::open` failed for any
 other reason—for example, because we didn’t have permission to open the file—we
 still want the code to `panic!` in the same way as it did in Listing 9-4. Look
-at Listing 9-5, which adds an inner `match` expression:
+at Listing 9-5, which adds an inner `match` expression.
 
 <span class="filename">Filename: src/main.rs</span>
 
