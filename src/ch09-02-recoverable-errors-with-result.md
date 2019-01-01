@@ -460,7 +460,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<span class="caption">Listing 9-9: Using `fs::read_to_string`</span>
+<span class="caption">Listing 9-9: Using `fs::read_to_string` instead of
+opening then reading the file</span>
 
 Reading a file into a string is a fairly common operation, so Rust provides a
 convenience function called `fs::read_to_string` that will open the file,
