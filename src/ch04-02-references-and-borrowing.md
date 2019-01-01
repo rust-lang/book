@@ -153,14 +153,15 @@ Here’s the error:
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
- --> src/main.rs:5:10
+ --> src/main.rs:5:14
   |
-4 | let r1 = &mut s;
-  |          ------ first mutable borrow occurs here
-5 | let r2 = &mut s;
-  |          ^^^^^^ second mutable borrow occurs here
-6 | println!("{}, {}", r1, r2);
-  |                    -- borrow later used here
+4 |     let r1 = &mut s;
+  |              ------ first mutable borrow occurs here
+5 |     let r2 = &mut s;
+  |              ^^^^^^ second mutable borrow occurs here
+6 |
+7 |     println!("{}, {}", r1, r2);
+  |                        -- first borrow later used here
 ```
 
 This restriction allows for mutation but in a very controlled fashion. It’s
@@ -210,16 +211,16 @@ Here’s the error:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:10
+ --> src/main.rs:6:14
   |
-4 | let r1 = &s; // no problem
-  |          -- immutable borrow occurs here
-5 | let r2 = &s; // no problem
-6 | let r3 = &mut s; // BIG PROBLEM
-  |          ^^^^^^ mutable borrow occurs here
+4 |     let r1 = &s; // no problem
+  |              -- immutable borrow occurs here
+5 |     let r2 = &s; // no problem
+6 |     let r3 = &mut s; // BIG PROBLEM
+  |              ^^^^^^ mutable borrow occurs here
 7 |
-8 | println!("{}, {}, and {}", r1, r2, r3);
-  |                            -- borrow later used here
+8 |     println!("{}, {}, and {}", r1, r2, r3);
+  |                                -- immutable borrow later used here
 ```
 
 Whew! We *also* cannot have a mutable reference while we have an immutable one.
@@ -285,6 +286,8 @@ for it to be borrowed from.
 
 Let’s take a closer look at exactly what’s happening at each stage of our
 `dangle` code:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn dangle() -> &String { // dangle returns a reference to a String
