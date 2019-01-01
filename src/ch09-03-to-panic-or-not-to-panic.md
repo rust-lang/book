@@ -81,7 +81,7 @@ bug in their code so they can fix it during development. Similarly, `panic!` is
 often appropriate if you’re calling external code that is out of your control
 and it returns an invalid state that you have no way of fixing.
 
-However, when failure is expected, it is more appropriate to return a `Result`
+However, when failure is expected, it's more appropriate to return a `Result`
 than to make a `panic!` call. Examples include a parser being given malformed
 data or an HTTP request returning a status that indicates you have hit a rate
 limit. In these cases, returning a `Result` indicates that failure is an
