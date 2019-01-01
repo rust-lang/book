@@ -261,7 +261,8 @@ overriding implementation of that same method.
 ### Traits as Parameters
 
 Now that you know how to define traits and implement those traits on types, we
-can explore how to use traits to define functions that accept many different types.
+can explore how to use traits to define functions that accept many different
+types.
 
 For example, in Listing 10-13, we implemented the `Summary` trait on the types
 `NewsArticle` and `Tweet`. We can define a function `notify` that calls the

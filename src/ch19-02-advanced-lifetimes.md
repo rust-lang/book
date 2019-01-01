@@ -305,11 +305,11 @@ refer to something and give it the necessary lifetime.
 
 ### Lifetime Bounds on References to Generic Types
 
-In the [“Trait Bounds”][trait-bounds]<!-- ignore --> section in Chapter 10, we
-discussed using trait bounds on generic types. We can also add lifetime
-parameters as constraints on generic types; these are called *lifetime bounds*.
-Lifetime bounds help Rust verify that references in generic types won’t outlive
-the data they’re referencing.
+In the [“Traits as Parameters”][traits-as-parameters]<!-- ignore --> section in
+Chapter 10, we discussed using trait bounds on generic types. We can also add
+lifetime parameters as constraints on generic types; these are called *lifetime
+bounds*. Lifetime bounds help Rust verify that references in generic types
+won’t outlive the data they’re referencing.
 
 As an example, consider a type that is a wrapper over references. Recall the
 `RefCell<T>` type from the [“`RefCell<T>` and the Interior Mutability Pattern”]
@@ -501,7 +501,7 @@ Next, let’s look at some other advanced features that manage traits.
 ch10-03-lifetime-syntax.html#lifetime-annotations-in-struct-definitions
 [refcellt-and-the-interior-mutability-pattern]:
 ch15-05-interior-mutability.html#refcellt-and-the-interior-mutability-pattern
-[trait-bounds]: ch10-02-traits.html#trait-bounds
+[traits-as-parameters]: ch10-02-traits.html#traits-as-parameters
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [validating-references-with-lifetimes]:
