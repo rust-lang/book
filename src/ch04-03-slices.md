@@ -270,16 +270,16 @@ Here’s the compiler error:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
-  --> src/main.rs:10:5
+  --> src/main.rs:18:5
    |
-8  |     let word = first_word(&s);
+16 |     let word = first_word(&s);
    |                           -- immutable borrow occurs here
-9  |
-10 |     s.clear(); // error!
+17 |
+18 |     s.clear(); // error!
    |     ^^^^^^^^^ mutable borrow occurs here
-11 |
-12 |     println!("the first word is: {}", word);
-   |                                       ---- borrow later used here
+19 |
+20 |     println!("the first word is: {}", word);
+   |                                       ---- immutable borrow later used here
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to
