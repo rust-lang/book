@@ -176,16 +176,16 @@ Compiling this code will result in this error:
 
 ```text
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
-  --> src/main.rs:10:5
-   |
-8  |     let first = &v[0];
-   |                  - immutable borrow occurs here
-9  |
-10 |     v.push(6);
-   |     ^^^^^^^^^ mutable borrow occurs here
-11 |
-12 |     println!("The first element is: {}", first);
-   |                                          ----- borrow later used here
+ --> src/main.rs:6:5
+  |
+4 |     let first = &v[0];
+  |                  - immutable borrow occurs here
+5 |
+6 |     v.push(6);
+  |     ^^^^^^^^^ mutable borrow occurs here
+7 |
+8 |     println!("The first element is: {}", first);
+  |                                          ----- immutable borrow later used here
 ```
 
 The code in Listing 8-7 might look like it should work: why should a reference
