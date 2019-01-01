@@ -118,8 +118,8 @@ The next part of the test output, which starts with `Doc-tests adder`, is for
 the results of any documentation tests. We don’t have any documentation tests
 yet, but Rust can compile any code examples that appear in our API
 documentation. This feature helps us keep our docs and our code in sync! We’ll
-discuss how to write documentation tests in the [“Making Useful Documentation
-Comments”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
+discuss how to write documentation tests in the [“Documentation Comments as
+Tests”][doc-comments]<!-- ignore --> section of Chapter 14. For now, we’ll
 ignore the `Doc-tests` output.
 
 Let’s change the name of our test to see how that changes the test output.
@@ -847,5 +847,5 @@ ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 [controlling-how-tests-are-run]:
 ch11-02-running-tests.html#controlling-how-tests-are-run
 [derivable-traits]: appendix-03-derivable-traits.html#derivable-traits
-[doc-comments]: ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments
+[doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
 [modules-as-privacy-boundary]: ch07-02-modules-and-use-to-control-scope-and-privacy.html#modules-as-the-privacy-boundary
