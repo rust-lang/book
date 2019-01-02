@@ -51,6 +51,7 @@ Boolean
 Booleans
 Bors
 BorrowMutError
+BoxMeUp
 BTreeSet
 BuildHasher
 Cacher
@@ -319,6 +320,7 @@ other's
 OutlinePrint
 overloadable
 overread
+PanicPayload
 param
 parameterize
 ParseIntError
