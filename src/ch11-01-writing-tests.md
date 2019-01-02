@@ -806,7 +806,7 @@ less than or equal to 100'`. The panic message that we did get in this case was
 `Guess value must be greater than or equal to 1, got 200.` Now we can start
 figuring out where our bug is!
 
-### Using `Result<T, E>` in tests
+### Using `Result<T, E>` in Tests
 
 So far, we’ve written tests that panic when they fail. We can also write tests
 that use `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use
