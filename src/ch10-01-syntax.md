@@ -207,8 +207,8 @@ error[E0308]: mismatched types
  --> src/main.rs:7:38
   |
 7 |     let wont_work = Point { x: 5, y: 4.0 };
-  |                                      ^^^ expected integral variable, found
-floating-point variable
+  |                                      ^^^ expected integer, found
+floating-point number
   |
   = note: expected type `{integer}`
              found type `{float}`

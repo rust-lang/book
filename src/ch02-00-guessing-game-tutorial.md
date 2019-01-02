@@ -668,7 +668,7 @@ error[E0308]: mismatched types
   --> src/main.rs:23:21
    |
 23 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integral variable
+   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integer
    |
    = note: expected type `&std::string::String`
    = note:    found type `&{integer}`
