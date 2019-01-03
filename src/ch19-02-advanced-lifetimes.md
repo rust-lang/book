@@ -11,7 +11,6 @@ advanced features of lifetimes that we haven’t covered yet:
 * Lifetime bounds: specifies a lifetime for a reference to a generic type
 * Inference of trait object lifetimes: allows the compiler to infer trait
   object lifetimes and when they need to be specified
-* The anonymous lifetime: making elision more obvious
 
 ### Ensuring One Lifetime Outlives Another with Lifetime Subtyping
 
@@ -445,55 +444,6 @@ When we must be explicit, we can add a lifetime bound on a trait object like
 As with the other bounds, the syntax adding a lifetime bound means that any
 implementor of the `Red` trait that has references inside the type must have
 the same lifetime specified in the trait object bounds as those references.
-
-### The Anonymous Lifetime
-
-Say that we have a struct named `StrWrap` that’s a wrapper around a string
-slice:
-
-```rust
-struct StrWrap<'a>(&'a str);
-```
-
-We can write a function that creates an instance of the `StrWrap` struct from a
-string slice:
-
-```rust
-# struct StrWrap<'a>(&'a str);
-fn wrap<'a>(string: &'a str) -> StrWrap<'a> {
-    StrWrap(string)
-}
-```
-
-But that’s a lot of lifetime annotations! To cut down on some of the
-annotations, we can use the anonymous lifetime , `'_`, in the function
-signature as shown here:
-
-```rust
-# struct StrWrap<'a>(&'a str);
-fn wrap(string: &str) -> StrWrap<'_> {
-    StrWrap(string)
-}
-```
-
-The `'_` tells the compiler to use the elided lifetime. The `StrWrap` instance
-still contains a reference, but we don’t need to specify all of the lifetime
-annotations for the compiler to understand which references are related.
-
-It works in `impl` blocks too; for example, here are two ways to write an impl block that implements the `fmt::Debug` trait on the `StrWrap<'a>` struct:
-
-```rust,ignore
-// verbose
-impl<'a> fmt::Debug for StrWrap<'a> {
-
-// elided
-impl fmt::Debug for StrWrap<'_> {
-```
-
-In the verbose version, we declare the lifetime `'a` after the `impl` keyword
-and annotate the `StrWrap` struct with the `'a` lifetime. In the elided
-version, we used the anonymous lifetime for the `StrWrap` struct, which means
-we don't need to declare a lifetime after `impl`.
 
 Next, let’s look at some other advanced features that manage traits.
 
