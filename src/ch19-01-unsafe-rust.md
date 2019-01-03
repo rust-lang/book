@@ -350,11 +350,7 @@ location</span>
 
 We don’t own the memory at this arbitrary location, and there is no guarantee
 that the slice this code creates contains valid `i32` values. Attempting to use
-`slice` as though it’s a valid slice results in undefined behavior. If we would
-not have taken care to align `address` to 4 (the alignment of `i32`), then even
-just calling `slice::from_raw_parts_mut` would already be undefined behavior --
-slices must always be aligned, even if they are not used (and even if they are
-empty).
+`slice` as though it’s a valid slice results in undefined behavior.
 
 #### Using `extern` Functions to Call External Code
 
