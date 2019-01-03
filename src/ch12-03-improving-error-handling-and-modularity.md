@@ -19,11 +19,11 @@ it will be to keep track of the purpose of each. It’s best to group the
 configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
-reading the file fails, but the error message just prints `something went
-wrong`. Reading a file can fail in a number of ways: for example, the file
-could be missing, or we might not have permission to open it. Right now,
-regardless of the situation, we’d print the `something went wrong` error
-message, which wouldn’t give the user any information!
+reading the file fails, but the error message just prints `Something went wrong
+reading the file`. Reading a file can fail in a number of ways: for example,
+the file could be missing, or we might not have permission to open it. Right
+now, regardless of the situation, we’d print the `Something went wrong reading
+the file` error message, which wouldn’t give the user any information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
 runs our program without specifying enough arguments, they’ll get an `index out
@@ -468,7 +468,7 @@ fn main() {
 
 fn run(config: Config) {
     let contents = fs::read_to_string(config.filename)
-        .expect("something went wrong reading the file");
+        .expect("Something went wrong reading the file");
 
     println!("With text:\n{}", contents);
 }
@@ -523,8 +523,8 @@ We’ll cover trait objects in Chapter 17. For now, just know that `Box<dyn
 Error>` means the function will return a type that implements the `Error`
 trait, but we don’t have to specify what particular type the return value
 will be. This gives us flexibility to return error values that may be of
-different types in different error cases. This is what the `dyn` means, it’s
-short for “dynamic.”
+different types in different error cases. The `dyn` keyword is short for
+“dynamic.”
 
 Second, we’ve removed the call to `expect` in favor of the `?` operator, as we
 talked about in Chapter 9. Rather than `panic!` on an error, `?` will return

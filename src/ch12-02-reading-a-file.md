@@ -57,10 +57,11 @@ by the second argument</span>
 First, we add another `use` statement to bring in a relevant part of the
 standard library: we need `std::fs` to handle files.
 
-In `main`, we’ve added a new statement: `fs::read_to_string` will take the
-`filename`, open that file, and then return `Result<String>` with its contents.
+In `main`, we’ve added a new statement: `fs::read_to_string` takes the
+`filename`, opens that file, and returns a `Result<String>` of the file's
+contents.
 
-After that line, we’ve again added a temporary `println!` statement that
+After that statement, we’ve again added a temporary `println!` statement that
 prints the value of `contents` after the file is read, so we can check that the
 program is working so far.
 

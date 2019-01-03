@@ -58,7 +58,8 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
 6 |     assert_eq!(5, y);
   |     ^^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
   |
-  = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for `{integer}`
+  = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
+  `{integer}`
 ```
 
 Comparing a number and a reference to a number isn’t allowed because they’re
