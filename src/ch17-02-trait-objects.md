@@ -40,10 +40,11 @@ allow users to extend it with new types.
 
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
-takes a *trait object*. A trait object points to an instance of a type that
-implements the trait we specify. We create a trait object by specifying some
-sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, and then
-specifying the relevant trait, and add a `dyn` keyword. (We’ll talk about the
+takes a *trait object*. A trait object points to both an instance of a type
+implementing our specified trait as well as a table used to look up trait
+methods on that type at runtime. We create a trait object by specifying some
+sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, then the
+`dyn` keyword, and then specifying the relevant trait. (We’ll talk about the
 reason trait objects must use a pointer in Chapter 19 in the section
 [“Dynamically Sized Types and the `Sized` Trait.”][dynamically-sized]<!--
 ignore -->) We can use trait objects in place of a generic or concrete type.
@@ -408,8 +409,8 @@ error[E0038]: the trait `std::clone::Clone` cannot be made into an object
  --> src/lib.rs:2:5
   |
 2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be
-made into an object
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone`
+  cannot be made into an object
   |
   = note: the trait cannot require that `Self : Sized`
 ```

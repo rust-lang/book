@@ -232,7 +232,7 @@ impl Config {
 
 Here, we create a new variable `case_sensitive`. To set its value, we call the
 `env::var` function and pass it the name of the `CASE_INSENSITIVE` environment
-variable. The `env::var` method returns a `Result` that will be the successful
+variable. The `env::var` function returns a `Result` that will be the successful
 `Ok` variant that contains the value of the environment variable if the
 environment variable is set. It will return the `Err` variant if the
 environment variable is not set.

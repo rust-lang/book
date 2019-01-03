@@ -111,7 +111,7 @@ error[E0106]: missing lifetime specifier
  --> src/lib.rs:5:51
   |
 5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
-  |                                                       ^ expected lifetime
+  |                                                   ^ expected lifetime
 parameter
   |
   = help: this function's return type contains a borrowed value, but the
