@@ -243,7 +243,7 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
 This command ran all tests with `add` in the name and filtered out the test
-named `one_hundred`. Also note that the module in which tests appear becomes
+named `one_hundred`. Also note that the module in which a test appears becomes
 part of the test’s name, so we can run all the tests in a module by filtering
 on the module’s name.
 
