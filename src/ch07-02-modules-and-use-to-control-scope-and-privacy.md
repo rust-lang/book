@@ -1,53 +1,62 @@
-## The Module System to Control Scope and Privacy
+<!--## The Module System-->
 
-Rust has a feature that’s often referred to as “the module system,” but it
-encompasses a few more features than modules. In this section, we’ll talk about:
+<!--- Below: earlier, we included crates and packages in the module system, but
+they seem to be excluded here. I've tried to make the structure of the chapter
+more indicative of connected topics, take a look at the ToC and feel free to
+rearrange heading levels if I've misunderstood anything! --->
 
-* Modules, a way to organize code and control the privacy of paths
-* Paths, a way to name items
-* `use`, a keyword to bring a path into scope
-* `pub`, a keyword to make items public
-* Renaming items when bringing them into scope with the `as` keyword
-* Using external packages
-* Nested paths to clean up large `use` lists
-* Using the glob operator to bring everything in a module into scope
-* How to split modules into individual files
+## Defining Modules
 
-First up, modules. Modules let us organize code into groups. Listing 7-1 has an
-example of some code that defines a module named `sound` that contains a
-function named `guitar`.
+In reality, the module system includes far more features than just modules. In
+this section, we’ll talk about modules, but this chapter will cover the other
+aspects that are considered part of the module system, namely *paths* that
+allow you to name items; the `use` keyword that brings a path into scope; and
+the * `pub` keyword to make items public. We'll also cover using the `as`
+keyword, external packages, and the glob operator. For now, modules!
 
-<span class="filename">Filename: src/main.rs</span>
+<!--I added a quick motivation for using modules, feel free to replace! -->
 
-```rust
+*Modules* let us organize code into groups for readability and easy re-use. In
+Listing 7-1 we've defined a module named `sound` that contains a function named
+`guitar`.
+
+Filename: src/main.rs
+
+```
 mod sound {
     fn guitar() {
         // Function body code goes here
     }
 }
-
 fn main() {
 
 }
 ```
 
-<span class="caption">Listing 7-1: A `sound` module containing a `guitar`
-function and a `main` function</span>
+Listing 7-1: A `sound` module containing a `guitar` function and a `main`
+function
 
-We’ve defined two functions, `guitar` and `main`. We’ve defined the `guitar`
-function within a `mod` block. This block defines a module named `sound`.
+We pen with a `mod` block, which defines a module named `sounds`. Inside this
+block, We’ve defined the `guitar` function. This organization [fill in with the
+result of organizing code like this]
+
+<!---can you open this part with a small motivation for why we'd want to
+organize the code into a hierarchy of modules. And also mention main() and it's
+purpose here. I think if we do that once here we can forget about it for the
+rest of the chapter. --->
 
 To organize code into a hierarchy of modules, you can nest modules inside of
 other modules, as shown in Listing 7-2:
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 mod sound {
     mod instrument {
         mod woodwind {
             fn clarinet() {
                 // Function body code goes here
+
             }
         }
     }
@@ -62,72 +71,78 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-2: Modules inside modules</span>
+Listing 7-2: Modules inside modules
 
-In this example, we defined a `sound` module in the same way as we did in
-Listing 7-1. We then defined two modules within the `sound` module named
-`instrument` and `voice`. The `instrument` module has another module defined
-within it, `woodwind`, and that module contains a function named `clarinet`.
+In this example, we defined a `sound` module in the same way as in Listing 7-1.
+We then defined two modules within the `sound` module named `instrument` and
+`voice`. The `instrument` module has another module defined within it,
+`woodwind`, and that module contains a function named `clarinet`. Here, nesting
+allows us to [fill in with what we can do with nesting]
 
-We mentioned in the [“Packages and Crates for Making Libraries and
-Executables”][packages]<!-- ignore --> section that *src/main.rs* and
-*src/lib.rs* are called *crate roots*. They are called crate roots because the
-contents of either of these two files form a module named `crate` at the root
-of the crate’s module tree. So in Listing 7-2, we have a module tree that looks
-like Listing 7-3:
+<!-- Above: Can you also say why we'd want to do this, what advantage it has?
+-->
 
-```text
+Now we mentioned in the “Packages and Crates for Making Libraries and
+Executables” section that *src/main.rs* and *src/lib.rs* are called *crate
+roots*. They are called crate roots because the contents of either of these two
+files form a module named `crate` at the root of the crate’s module structure,
+known as the *module tree*.
+
+Listing 7-3 shows the module tree for the structure in Listing 7-2:
+
+```
 crate
-└── sound
-    ├── instrument
-    │   └── woodwind
-    └── voice
+ └── sound
+     └── instrument
+        └── woodwind
+     └── voice
 ```
 
-<span class="caption">Listing 7-3: The module tree for the code in Listing
-7-2</span>
+Listing 7-3: The module tree for the code in Listing 7-2
 
 This tree shows how some of the modules nest inside one another (such as
-`woodwind` nests inside `instrument`) and how some modules are siblings to
-each other (`instrument` and `voice` are both defined within `sound`). The
-entire module tree is rooted under the implicit module named `crate`.
+`woodwind` nests inside `instrument`) and how some modules are *siblings* to
+each other, meaning they are defined in the same module (`instrument` and
+`voice` are both defined within `sound`). To continue the family metaphor, if
+module A is contained inside module, we say say that module A is the *child* of
+module B, and that module B is the *parent* of module A. Notice that the entire
+module tree is rooted under the implicit module named `crate`.
 
 This tree might remind you of the directory tree of the filesystem you have on
 your computer; this is a very apt comparison! Just like directories in a
-filesystem, you place code inside whichever module will create the organization
-you’d like. Another similarity is that to refer to an item in a filesystem or a
-module tree, you use its *path*.
+filesystem, you use modules to organize your code. And just like files in a
+directory, we need to have a way to find our modules.
 
-### Paths for Referring to an Item in the Module Tree
+## Paths
 
-If we want to call a function, we need to know its *path*. “Path” is a synonym
-for “name” in a way, but it evokes that filesystem metaphor. Additionally,
-functions, structs, and other items may have multiple paths that refer to the
-same item, so “name” isn’t quite the right concept.
+To show Rust where to find a module in a module tree, we use a *path*, in the
+same way that, when navigating a file system, we use a path. If we want to call
+a function, we need to know its path.
 
 A *path* can take two forms:
 
 * An *absolute path* starts from a crate root by using a crate name or a
   literal `crate`.
 * A *relative path* starts from the current module and uses `self`, `super`, or
-  an identifier in the current module.
+  another identifier in the current module.
 
 Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
 
-How do we call the `clarinet` function in the `main` function in Listing 7-2?
-That is, what’s the path of the `clarinet` function? In Listing 7-4, let’s
-simplify our code a bit by removing some of the modules, and we’ll show two
-ways to call the `clarinet` function from `main`. This example won’t compile
-just yet, we’ll explain why in a bit.
+Let's return to our example in Listing 7-2. How do we call the `clarinet`
+function? This is the same thing as asking, what’s the path of the `clarinet`
+function? In Listing 7-4, we simplified our code a bit by removing some of the
+modules. We’ll show two ways to call the `clarinet` function from `main`. Note
+that this example won’t compile just yet, we’ll explain why in a bit.
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust,ignore,does_not_compile
+```
 mod sound {
     mod instrument {
         fn clarinet() {
             // Function body code goes here
+
         }
     }
 }
@@ -139,30 +154,34 @@ fn main() {
     // Relative path
     sound::instrument::clarinet();
 }
+
 ```
 
-<span class="caption">Listing 7-4: Calling the `clarinet` function in a
-simplified module tree from the `main` function using absolute and relative
-paths</span>
+Listing 7-4: Calling the `clarinet` function using absolute and relative paths
 
-The first way we’re calling the `clarinet` function from the `main` function
-uses an absolute path. Because `clarinet` is defined within the same crate as
-`main`, we use the `crate` keyword to start an absolute path. Then we include
-each of the modules until we make our way to `clarinet`. This is similar to
-specifying the path `/sound/instrument/clarinet` to run the program at that
-location on your computer; using the `crate` name to start from the crate root
-is like using `/` to start from the filesystem root in your shell.
+The first time we call the `clarinet` function in `main`, we use an absolute
+path. The `clarinet` function is defined in the same crate as `main`, which
+means we can use the `crate` keyword to start an absolute path.
 
-The second way we’re calling the `clarinet` function from the `main` function
-uses a relative path. The path starts with the name `sound`, a module defined
-at the same level of the module tree as the `main` function. This is similar to
-specifying the path `sound/instrument/clarinet` to run the program at that
-location on your computer; starting with a name means that the path is relative.
+After `crate`, we include each of the successive modules until we make our way
+to `clarinet`. You could imagine a file system with the same structure, and
+we'd specify the path `/sound/instrument/clarinet` to run the `clarinet`
+program; using the `crate` name to start from the crate root is like using `/`
+to start from the filesystem root in your shell.
+
+The second time we call `clarinet` in `main`, we use a relative path. The path
+starts with the `sound`, the name of a module defined at the same level of the
+module tree as `main`. Here the filesystem equivalent would be using the path
+`sound/instrument/clarinet`. Starting with a name means that the path is
+relative.
+
+<!--- Can you outline briefly what effect the path being relative or absolyte
+has on the code? I'm not totally clear why or when you'd use either --->
 
 We mentioned that Listing 7-4 won’t compile yet, let’s try to compile it and
 find out why not! The error we get is shown in Listing 7-5.
 
-```text
+```
 $ cargo build
    Compiling sampleproject v0.1.0 (file:///projects/sampleproject)
 error[E0603]: module `instrument` is private
@@ -174,81 +193,96 @@ error[E0603]: module `instrument` is private
 error[E0603]: module `instrument` is private
   --> src/main.rs:14:12
    |
+
 14 |     sound::instrument::clarinet();
    |            ^^^^^^^^^^
 ```
 
-<span class="caption">Listing 7-5: Compiler errors from building the code in
-Listing 7-4</span>
+Listing 7-5: Compiler errors from building the code in Listing 7-4
 
-The error messages say that module `instrument` is private. We can see that we
-have the correct paths for the `instrument` module and the `clarinet` function,
-but Rust won’t let us use them because they’re private. It’s time to learn
-about the `pub` keyword!
+<!-- Have we covered private and public modules yet? If not can you quickly say
+what the module being private means? -->
 
-### Modules as the Privacy Boundary
+The error messages say that module `instrument` is *private*. In other words,
+we have the correct paths for the `instrument` module and the `clarinet`
+function, but Rust won’t let us use them because it doesn't have access to the
+private sections.
 
-Earlier, we talked about the syntax of modules and that they can be used for
-organization. There’s another reason Rust has modules: modules are the *privacy
-boundary* in Rust. If you want to make an item like a function or struct
-private, you put it in a module. Here are the privacy rules:
+<!--I'm trying to tidy up the structure of the chapter a little so we are
+nesting subjects that relate to each other, rather than having every be a HeadB
+level -- I think that'll help the reader navigate. It's a little tricky since
+so many topics are so interrelated, bear with me, I have a plan! -->
 
-* All items (functions, methods, structs, enums, modules, and constants) are
-  private by default.
-* You can use the `pub` keyword to make an item public.
-* You aren’t allowed to use private code defined in modules that are children
-  of the current module.
-* You are allowed to use any code defined in ancestor modules or the current
-  module.
+<!--In the next section, we'll explore how Rust uses privacy.#### The Privacy
+Boundary-->
 
-In other words, items without the `pub` keyword are private as you look “down”
-the module tree from the current module, but items without the `pub` keyword
-are public as you look “up” the tree from the current module. Again, think of a
-filesystem: if you don’t have permissions to a directory, you can’t look into
-it from its parent directory. If you do have permissions to a directory, you
-can look inside it and any of its ancestor directories.
+<!-- Below: Can you define privacy boundary and say what it's useful for
+briefly here? What does it mean for an item to be private? -->
 
-### Using the `pub` Keyword to Make Items Public
+Modules are not only useful for organizing your code, they also help define
+Rust's *privacy boundary*, the [fill in with what a privacy boundary is] that
+[fill in with purpose of privacy boundary]. Thus if you want to make an item
+like a function or struct private, you put it in a module.
 
-The error in Listing 7-5 said the `instrument` module is private. Let’s mark
-the `instrument` module with the `pub` keyword so that we can use it from the
-`main` function. This change is shown in Listing 7-6, which still won’t
-compile, but we’ll get a different error:
+<!--- I didn't think we needed to have this as bullets, and likewise found the
+up/down metaphor confusing. What do you think of this rewrite? --->
 
-<span class="filename">Filename: src/main.rs</span>
+There are a few privacy rules in Rust. The first is that all items (functions,
+methods, structs, enums, modules, annd constants) are private by default.
+Normally in Rust, items in a parent module cannot use the items inside that
+module's children, while items in child modules can use the items in their
+parent modules. *This is because child modules are private but parent modules
+are not.*
 
-```rust,ignore,does_not_compile
+<!-- above: Is this line I added true? Can you quickly say why the child can
+access the parent but not the other way round? -->
+
+However, you can access items in a child module from a parent module if those
+items are made *public*. You can use the `pub` keyword to make an item public.
+
+### Gaining Access to Paths with the `pub` Keyword
+
+<!-- I'm not sure this is an accurate heading, can you fix it? I wanted to
+expand a little to show its relation to the path topics that surround it-->
+
+With that understanding, let's look back at the error in Listing 7-5, that told
+us the `instrument` module is private. We now know to mark the `instrument`
+module with the `pub` keyword so that we can use it from the `main` function,
+shown in Listing 7-6.
+
+Filename: src/main.rs
+
+```
 mod sound {
     pub mod instrument {
         fn clarinet() {
+
             // Function body code goes here
+
         }
     }
 }
 
 fn main() {
+
     // Absolute path
     crate::sound::instrument::clarinet();
 
     // Relative path
     sound::instrument::clarinet();
+
 }
 ```
 
-<span class="caption">Listing 7-6: Declaring the `instrument` module as `pub`
-so that we’re allowed to use it from `main`</span>
+Listing 7-6: Declaring the `instrument` module as `pub` so that we’re allowed
+to use it from `main`
 
-Adding the `pub` keyword in front of `mod instrument` makes the module public.
-With this change, if we’re allowed to access `sound`, we can access
-`instrument`. The contents of `instrument` are still private; making the module
-public does not make its contents public. The `pub` keyword on a module lets
-code in its parent module refer to it.
+Unfortunately, as you may have just found out, the code in Listing 7-6 still
+results in an error (Listing 7-7):
 
-The code in Listing 7-6 still results in an error, though, as shown in Listing
-7-7:
-
-```text
+```
 $ cargo build
+
    Compiling sampleproject v0.1.0 (file:///projects/sampleproject)
 error[E0603]: function `clarinet` is private
   --> src/main.rs:11:31
@@ -263,18 +297,24 @@ error[E0603]: function `clarinet` is private
    |                        ^^^^^^^^
 ```
 
-<span class="caption">Listing 7-7: Compiler errors from building the code in
-Listing 7-6</span>
+Listing 7-7: Compiler errors from building the code in Listing 7-6
 
-The errors now say that the `clarinet` function is private. The privacy rules
-apply to structs, enums, functions, and methods as well as modules.
+What happened? Adding the `pub` keyword in front of `mod instrument` makes the
+module public. With this change, if we’re allowed to access `sound`, we can
+access `instrument`. But the *contents* of `instrument` are still private;
+making the module public does not make its contents public. The `pub` keyword
+on a module only lets code in its parent module refer to it.
 
-Let’s make the `clarinet` function public as well by adding the `pub` keyword
-before its definition, as shown in Listing 7-8:
+The errors in Listing 7-7 now say that the `clarinet` function is private. The
+privacy rules apply to structs, enums, functions, and methods as well as
+modules.
 
-<span class="filename">Filename: src/main.rs</span>
+Let’s also make the `clarinet` function public by adding the `pub` keyword
+before its definition, like in Listing 7-8:
 
-```rust
+Filename: src/main.rs
+
+```
 mod sound {
     pub mod instrument {
         pub fn clarinet() {
@@ -292,41 +332,44 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-8: Adding the `pub` keyword to both `mod
-instrument` and `fn clarinet` lets us call the function from `main`</span>
+Listing 7-8: Adding the `pub` keyword to both `mod instrument` and `fn
+clarinet` lets us call the function from `main`
 
-This will now compile! Let’s look at both the absolute and the relative path
-and double check why adding the `pub` keyword lets us use these paths in `main`.
+Now it'll compile! Let’s look at both the absolute and the relative path and
+double check why adding the `pub` keyword lets us use these paths in `main`.
 
-In the absolute path case, we start with `crate`, the root of our crate. From
-there, we have `sound`, and it is a module that is defined in the crate root.
-The `sound` module isn’t public, but because the `main` function is defined in
-the same module that `sound` is defined, we’re allowed to refer to `sound` from
-`main`. Next is `instrument`, which is a module marked with `pub`. We can
-access the parent module of `instrument`, so we’re allowed to access
-`instrument`. Finally, `clarinet` is a function marked with `pub` and we can
-access its parent module, so this function call works!
+In the absolute path case, we start with `crate`, the root of our crate <!---
+is a crate the same as a "module tree"? what does it mean to be the root of the
+crate. --->
+
+From here, we have the `sound` module defined in the crate root. The `sound`
+module isn’t public, but because the `main` function is defined in the same
+module that `sound` is defined (`main` and `sound` are siblings), we’re allowed
+to refer to `sound` from `main`. Next is the `instrument` module marked with
+`pub`. We can access the parent module of `instrument`, so we’re allowed to
+access `instrument`. Finally, the `clarinet` function is marked with `pub` and
+we can access its parent module, so this function call works!
 
 In the relative path case, the logic is the same as the absolute path except
-for the first step. Rather than starting from the crate root, the path starts
-from `sound`. The `sound` module is defined within the same module as `main`
-is, so the relative path starting from the module in which `main` is defined
-works. Then because `instrument` and `clarinet` are marked with `pub`, the rest
-of the path works and this function call is valid as well!
+for the first step: rather than starting from the crate root, the path starts
+from `sound`. The `sound` module is defined within the same module as `main`,
+so the relative path starting from the module in which `main` is defined works.
+Then because `instrument` and `clarinet` are marked with `pub`, the rest of the
+path works and this function call is valid!
 
 ### Starting Relative Paths with `super`
 
-You can also construct relative paths beginning with `super`. Doing so is like
-starting a filesystem path with `..`: the path starts from the *parent* module,
-rather than the current module. This is useful in situations such as the
-example in Listing 7-9, where the function `clarinet` calls the function
-`breathe_in` by specifying its path to start with `super`:
+You can also construct relative paths that begin in the parent module by using
+`super` at the start of the path. This is like starting a filesystem path with
+`..`. Why would we want to do this?
 
-<span class="filename">Filename: src/lib.rs</span>
+Consider the situation in Listing 7-9, where the function `clarinet` calls the
+function `breathe_in` by specifying the path to `breathe_in` starting with
+`super`:
 
-```rust
-# fn main() {}
-#
+Filename: src/lib.rs
+
+```
 mod instrument {
     fn clarinet() {
         super::breathe_in();
@@ -338,24 +381,26 @@ fn breathe_in() {
 }
 ```
 
-<span class="caption">Listing 7-9: Calling a function using a relative path
-starting with `super` to look in the parent module</span>
+Listing 7-9: Calling a function using a relative path starting with `super`
 
 The `clarinet` function is in the `instrument` module, so we can use `super` to
 go to the parent module of `instrument`, which in this case is `crate`, the
-root. From there, we look for `breathe_in`, and find it. Success!
+root. From there, we look for `breathe_in`, and find it. Success! Here, we used
+`super` because[fill in with why we used super as opposed to something else]
 
-The reason you might want to choose a relative path starting with `super`
-rather than an absolute path starting with `crate` is that using `super` may
-make it easier to update your code to have a different module hierarchy, if the
+<!-- Can you broaden this out and let them know the general reason we would use
+super over the other methods here? -->
+
+Another reason you might want to choose to use `super` is that it can simplify
+your code updates when you want to change the module hierarchy, as long as the
 code defining the item and the code calling the item are moved together. For
 example, if we decide to put the `instrument` module and the `breathe_in`
 function into a module named `sound`, we would only need to add the `sound`
 module, as shown in Listing 7-10.
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
+```
 mod sound {
     mod instrument {
         fn clarinet() {
@@ -365,35 +410,33 @@ mod sound {
 
     fn breathe_in() {
         // Function body code goes here
+
     }
 }
 ```
 
-<span class="caption">Listing 7-10: Adding a parent module named `sound`
-doesn’t affect the relative path `super::breathe_in`</span>
+Listing 7-10: Adding a parent module named `sound` doesn’t affect the relative
+path `super::breathe_in`
 
 The call to `super::breathe_in` from the `clarinet` function will continue to
-work in Listing 7-10 as it did in Listing 7-9, without needing to update the
-path. If instead of `super::breathe_in` we had used `crate::breathe_in` in the
+work in Listing 7-10 as it did in Listing 7-9, without needing be updated. If
+instead of `super::breathe_in` we had used `crate::breathe_in` in the
 `clarinet` function, when we add the parent `sound` module, we would need to
 update the `clarinet` function to use the path `crate::sound::breathe_in`
-instead. Using a relative path can mean fewer updates are necessary when
-rearranging modules.
+instead. Using a relative path can mean fewer updates as you rearrange modules.
 
-### Using `pub` with Structs and Enums
+### Making Structs and Enums Public
 
-You can designate structs and enums to be public in a similar way as we’ve
-shown with modules and functions, with a few additional details.
+You can also use `pub` to designate structs and enums as public, but there are
+a few extra details. If you use `pub` before a struct definition, you make the
+struct public, but the struct’s fields will still be private. You can choose to
+make each field public or not on a case-by-case basis. In Listing 7-11, we’ve
+defined a public `plant::Vegetable` struct with a public `name` field but a
+private `id` field.
 
-If you use `pub` before a struct definition, you make the struct public.
-However, the struct’s fields are still private. You can choose to make each
-field public or not on a case-by-case basis. In Listing 7-11, we’ve defined a
-public `plant::Vegetable` struct with a public `name` field but a private `id`
-field.
+Filename: src/main.rs
 
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
+```
 mod plant {
     pub struct Vegetable {
         pub name: String,
@@ -412,7 +455,6 @@ mod plant {
 
 fn main() {
     let mut v = plant::Vegetable::new("squash");
-
     v.name = String::from("butternut squash");
     println!("{} are delicious", v.name);
 
@@ -421,25 +463,27 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-11: A struct with some public fields and some
-private fields</span>
+Listing 7-11: A struct with some public fields and some private fields
 
 Because the `name` field of the `plant::Vegetable` struct is public, in `main`
-we can write and read to the `name` field by using dot notation. We’re not
-allowed to use the `id` field in `main` because it’s private. Try uncommenting
-the line printing the `id` field value to see what error you get! Also note
-that because `plant::Vegetable` has a private field, the struct needs to
-provide a public associated function that constructs an instance of `Vegetable`
-(we’ve used the conventional name `new` here). If `Vegetable` didn’t have such
-a function, we wouldn’t be able to create an instance of `Vegetable` in `main`
-because we’re not allowed to set the value of the private `id` field in `main`.
+we can write and read to the `name` field using dot notation. Notice, though,
+that we’re not allowed to use the `id` field in `main` because `id` is private.
+Try uncommenting the line printing the `id` field value to see what error you
+get!
 
-In contrast, if you make a public enum, all of its variants are public. You
-only need the `pub` before the `enum` keyword, as shown in Listing 7-12.
+Also note that because `plant::Vegetable` has a private field, the struct needs
+to provide a public associated function that constructs an instance of
+`Vegetable` (we’ve used the conventional name `new` here). If `Vegetable`
+didn’t have such a function, we wouldn’t be able to create an instance of
+`Vegetable` in `main` because we’re not allowed to set the value of the private
+`id` field in `main`.
 
-<span class="filename">Filename: src/main.rs</span>
+In contrast, if you make an enum public, all of its variants are then public.
+You only need the `pub` before the `enum` keyword, as shown in Listing 7-12.
 
-```rust
+Filename: src/main.rs
+
+```
 mod menu {
     pub enum Appetizer {
         Soup,
@@ -453,31 +497,35 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-12: Designating an enum as public makes all its
-variants public</span>
+Listing 7-12: Designating an enum as public makes all its variants public
 
 Because we made the `Appetizer` enum public, we’re able to use the `Soup` and
 `Salad` variants in `main`.
 
-There’s one more situation involving `pub` that we haven’t covered, and that’s
-with our last module system feature: the `use` keyword. Let’s cover `use` by
-itself, and then we’ll show how `pub` and `use` can be combined.
+<!-- Is there a reason rust developers chose to have enum arms public but the
+content of structs not, using pub? -->
 
-### The `use` Keyword to Bring Paths into a Scope
+There’s one more situation involving `pub` that we haven’t covered, and that
+concerns our last module system feature: the `use` keyword. Let’s cover `use`
+by itself first, and then we’ll show how `pub` and `use` can be combined.
 
-You may have been thinking that many of the paths we’ve written to call
-functions in the listings in this chapter are long and repetitive. For example,
-in Listing 7-8, whether we chose the absolute or relative path to the
-`clarinet` function, every time we wanted to call `clarinet` we had to specify
-`sound` and `instrument` too. Luckily, there’s a way to bring a path into a
-scope once and then call the items in that path as if they’re local items: with
-the `use` keyword. In Listing 7-13, we bring the `crate::sound::instrument`
-module into the scope of the `main` function so that we only have to specify
-`instrument::clarinet` to call the `clarinet` function in `main`.
+### Bringing Paths Into Scope with the `use` Keyword
 
-<span class="filename">Filename: src/main.rs</span>
+It may seem like the paths we’ve written to call functions so far are
+inconveniently long and repetitive. For example, in Listing 7-8, whether we
+chose the absolute or relative path to the `clarinet` function, every time we
+wanted to call `clarinet` we had to specify `sound` and `instrument` too.
+Luckily, there’s a way to simplify this process. We can bring a path into a
+scope once and then call the items in that path as if they’re local items. To
+do this, we use the `use` keyword.
 
-```rust
+In Listing 7-13, we bring the `crate::sound::instrument` module into the scope
+of the `main` function so that we only have to specify `instrument::clarinet`
+to call the `clarinet` function in `main`.
+
+Filename: src/main.rs
+
+```
 mod sound {
     pub mod instrument {
         pub fn clarinet() {
@@ -495,31 +543,27 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-13: Bringing a module into scope with `use` and
-an absolute path to shorten the path we have to specify to call an item within
-that module</span>
+Listing 7-13: Bringing a module into scope with `use`
 
 Adding `use` and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding `use crate::sound::instrument` in the crate root,
-`instrument` is now a valid name in that scope as if the `instrument` module
-had been defined in the crate root. We can now reach items in the `instrument`
-module through the older, full paths, or we can reach items through the new,
-shorter path that we’ve created with `use`. Paths brought into scope with `use`
+`instrument` is now a valid name in that scope, just as if the `instrument`
+module had been defined in the crate root. Paths brought into scope with `use`
 also check privacy, like any other paths.
 
-If you want to bring an item into scope with `use` and a relative path, there’s
-a small difference from directly calling the item using a relative path:
-instead of starting from a name in the current scope, you must start the path
-given to `use` with `self`. Listing 7-14 shows how to specify a relative path
-to get the same behavior as Listing 7-13 that used an absolute path.
+Using `use` with a relative path is slightly different. Instead of starting
+from a name in the current scope, you must start the path given to `use` with
+the keyword `self`. Listing 7-14 shows how to specify a relative path to get
+the same behavior as Listing 7-13.
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 mod sound {
     pub mod instrument {
         pub fn clarinet() {
             // Function body code goes here
+
         }
     }
 }
@@ -533,36 +577,35 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-14: Bringing a module into scope with `use` and
-a relative path starting with `self`</span>
+Listing 7-14: Bringing a module into scope with `use` and a relative path
+starting with `self`
 
-Starting relative paths with `self` when specified after `use` might not be
-necessary in the future; it’s an inconsistency in the language that people are
-working on eliminating.
+Note that using `self` in this way might not be necessary in the future; it’s
+an inconsistency in the language that Ruse developers are working on
+eliminating.
 
-Choosing to specify absolute paths with `use` can make updates easier if the
-code calling the items moves to a different place in the module tree but the
-code defining the items does not, as opposed to when they moved together in the
-changes we made in Listing 7-10. For example, if we decide to take the code
-from Listing 7-13, extract the behavior in the `main` function to a function
-called `clarinet_trio`, and move that function into a module named
+Using `use` with absolute paths make updates easier if you move the code
+calling the item to a different place in the module tree but the code defining
+the item stays where it is. For example, if we decide to take the code from
+Listing 7-13 and move the behavior in the `main` function to a function called
+`clarinet_trio`, and then move that function into a module named
 `performance_group`, the path specified in `use` wouldn’t need to change, as
 shown in Listing 7-15.
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 mod sound {
     pub mod instrument {
         pub fn clarinet() {
             // Function body code goes here
+
         }
     }
 }
 
 mod performance_group {
     use crate::sound::instrument;
-
     pub fn clarinet_trio() {
         instrument::clarinet();
         instrument::clarinet();
@@ -575,27 +618,33 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-15: The absolute path doesn’t need to be
-updated when moving the code that calls the item</span>
+Listing 7-15: The absolute path doesn’t need to be updated when moving the code
+that calls the item
 
-In contrast, if we made the same change to the code in Listing 7-14 that
-specifies a relative path, we would need to change `use
-self::sound::instrument` to `use super::sound::instrument`. Choosing whether
-relative or absolute paths will result in fewer updates can be a guess if
-you’re not sure how your module tree will change in the future, but your
-authors tend to specify absolute paths starting with `crate` because code
-defining and calling items is more likely to be moved around the module tree
-independently of each other, rather than together as we saw in Listing 7-10.
+In contrast, if we made the same change to the code in Listing 7-14 but
+specified a relative path, we would need to change `use
+self::sound::instrument` to `use super::sound::instrument`.
 
-### Idiomatic `use` Paths for Functions vs. Other Items
+Choosing whether to use a relative or absolute paths is always a decision
+you'll have to make based on your specific project. That said, we tend to
+specify absolute paths starting with `crate` as we've found that it's more
+likely to move code definitions and item calls independently of each other,
+rather than together as we saw in Listing 7-10.
+
+<!--- Above: did this preserve the meaning? --->
+
+### Creating Idiomatic `use` Paths
 
 In Listing 7-13, you may have wondered why we specified `use
 crate::sound::instrument` and then called `instrument::clarinet` in `main`,
-rather than the code shown in Listing 7-16 that has the same behavior:
+rather than [explain what you're doing in Listing 7-16] to achieve the same
+result, like in Listing 7-16:
 
-<span class="filename">Filename: src/main.rs</span>
+<!-- Can you specify what we're doing differently here? -->
 
-```rust
+Filename: src/main.rs
+
+```
 mod sound {
     pub mod instrument {
         pub fn clarinet() {
@@ -613,22 +662,23 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-16: Bringing the `clarinet` function into
-scope with `use`, which is unidiomatic</span>
+Listing 7-16: Bringing the `clarinet` function into scope with `use`, which is
+unidiomatic
 
-For functions, it’s considered idiomatic to specify the function’s parent
-module with `use`, and then specify the parent module when calling the
-function. Doing so rather than specifying the path to the function with `use`,
-as Listing 7-16 does, makes it clear that the function isn’t locally defined,
-while still minimizing repetition of the full path.
+While both Listing 7-13 and 7-16 accomplish the same thing, Listing 7-13 is the
+idiomatic way to bring a function into scope using `use`. We want to specify
+the function’s parent module with `use` so we have to specify the parent module
+when calling the function, making it clear that the function isn’t locally
+defined, while still minimizing repetition of the full path. The code in
+Listing 7-16 is unclear as to where `clarinet` is defined.
 
-For structs, enums, and other items, specifying the full path to the item with
-`use` is idiomatic. For example, Listing 7-17 shows the idiomatic way to bring
-the standard library’s `HashMap` struct into scope.
+On the other hand, when bringing in structs, enums, and other items with `use`,
+it's idiomatic to specify the full path. Listing 7-17 shows the idiomatic way
+to bring the standard library’s `HashMap` struct into scope.
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 use std::collections::HashMap;
 
 fn main() {
@@ -637,105 +687,100 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-17: Bringing `HashMap` into scope in an
-idiomatic way</span>
+Listing 7-17: Bringing `HashMap` into scope in an idiomatic way
 
-In contrast, the code in Listing 7-18 that brings the parent module of
-`HashMap` into scope would not be considered idiomatic. There’s not a strong
-reason for this idiom; this is the convention that has emerged and folks have
-gotten used to reading and writing.
+There’s no strong reason behind this idiom; this is just the convention that
+has emerged, and folks have gotten used to reading and writing Rust code this
+way.
 
-<span class="filename">Filename: src/main.rs</span>
+<!--- deleted the example here because it seemed unnecessary. If you want to
+keep it, feel free to add it back in! If you do, please update the listing nums
+below. --->
 
-```rust
-use std::collections;
+The exception to this idiom is if you are using the `use` statements to bring
+two items with the same name into scope, as Rust does not allow that. Listing
+7-18 shows how to bring two `Result` types that have the same name but
+different parent modules into scope, and how to refer to them.
 
-fn main() {
-    let mut map = collections::HashMap::new();
-    map.insert(1, 2);
-}
+Filename: src/lib.rs
+
 ```
-
-<span class="caption">Listing 7-18: Bringing `HashMap` into scope in an
-unidiomatic way</span>
-
-The exception to this idiom is if the `use` statements would bring two items
-with the same name into scope, which isn’t allowed. Listing 7-19 shows how to
-bring two `Result` types that have different parent modules into scope and
-refer to them.
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust
 use std::fmt;
 use std::io;
 
 fn function1() -> fmt::Result {
-#     Ok(())
+
 }
 
 fn function2() -> io::Result<()> {
-#     Ok(())
+
 }
 ```
 
-<span class="caption">Listing 7-19: Bringing two types with the same name into
-the same scope requires using their parent modules</span>
+Listing 7-18: Bringing two types with the same name into the same scope
+requires using their parent modules
 
+As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
 have two `Result` types in the same scope and Rust wouldn’t know which one we
 meant when we used `Result`. Try it and see what compiler error you get!
 
-### Renaming Types Brought Into Scope with the `as` Keyword
+## Providing New Names with the `as` Keyword
 
 There’s another solution to the problem of bringing two types of the same name
-into the same scope: we can specify a new local name for the type by adding
-`as` and a new name after the `use`. Listing 7-20 shows another way to write
-the code from Listing 7-19 by renaming one of the two `Result` types using `as`.
+into the same scope: we can use `as` after the `use` to specify a new local
+name, or alias, for the type. Listing 7-19 shows another way to write the code
+from Listing 7-18 by renaming one of the two `Result` types using `as`.
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
+```
 use std::fmt::Result;
 use std::io::Result as IoResult;
 
 fn function1() -> Result {
-#     Ok(())
+
 }
+
 fn function2() -> IoResult<()> {
-#     Ok(())
+
 }
 ```
 
-<span class="caption">Listing 7-20: Renaming a type when it’s brought into
-scope with the `as` keyword</span>
+Listing 7-19: Renaming a type when it’s brought into scope with the `as` keyword
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. This is also considered idiomatic; choosing
-between the code in Listing 7-19 and Listing 7-20 is up to you.
+that we’ve also brought into scope. Both Listing 7-19 and Listing 7-20 are
+considered idiomatic, the choice is up to you!
 
-### Re-exporting Names with `pub use`
+## Re-exporting Names with `pub use`
 
-When you bring a name into scope with the `use` keyword, the name being
-available in the new scope is private. If you want to enable code calling your
-code to be able to refer to the type as if it was defined in that scope just as
-your code does, you can combine `pub` and `use`. This technique is called
-*re-exporting* because you’re bringing an item into scope but also making that
-item available for others to bring into their scope.
+<!--- I found this paragrah a little difficult to follow and have tried to
+clarify -- can you please check my edits and correct anywhere I may have
+changed meaning? --->
 
-For example, Listing 7-21 shows the code from Listing 7-15 with the `use`
-within the `performance_group` module changed to `pub use`.
+When you bring a name into scope with the `use` keyword, the name available in
+the new scope is private. To enable the code that calls your code to refer to
+that name as if it had been defined in that code's scope, you can combine `pub`
+and `use`. This technique is called *re-exporting* because you’re bringing an
+item into scope but also making that item available for others to bring into
+their scope.
 
-<span class="filename">Filename: src/main.rs</span>
+Listing 7-20 shows the code from Listing 7-15 with the `use` in the
+`performance_group` module changed to `pub use`.
 
-```rust
+Filename: src/main.rs
+
+```
 mod sound {
     pub mod instrument {
         pub fn clarinet() {
             // Function body code goes here
+
         }
     }
+
 }
 
 mod performance_group {
@@ -746,6 +791,7 @@ mod performance_group {
         instrument::clarinet();
         instrument::clarinet();
     }
+
 }
 
 fn main() {
@@ -754,164 +800,162 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-21: Making a name available for any code to use
-from a new scope with `pub use`</span>
+Listing 7-20: Making a name available for any code to use from a new scope with
+`pub use`
 
 By using `pub use`, the `main` function can now call the `clarinet` function
-through this new path with `performance_group::instrument::clarinet`. If we
-hadn’t specified `pub use`, the `clarinet_trio` function can call
-`instrument::clarinet` in its scope but `main` wouldn’t be allowed to take
-advantage of this new path.
+using `performance_group::instrument::clarinet`. If we hadn’t specified `pub
+use`, the `clarinet_trio` function can call `instrument::clarinet` in its scope
+but `main` wouldn’t be allowed to take advantage of this new path.
 
-### Using External Packages
+## Using External Packages
 
-In Chapter 2, we programmed a guessing game. That project used an external
+In Chapter 2 we programmed a guessing game project that used an external
 package, `rand`, to get random numbers. To use `rand` in our project, we added
 this line to *Cargo.toml*:
 
-<span class="filename">Filename: Cargo.toml</span>
+Filename: Cargo.toml
 
-```toml
+```
 [dependencies]
 rand = "0.5.5"
 ```
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
-`rand` package and its dependencies from *https://crates.io* and make its code
+`rand` package and any of its dependencies from *https://crates.io* and make it
 available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
 `use` line starting with the name of the package, `rand`, and listing the items
-we wanted to bring into scope. Recall that in the [“Generating a Random
-Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
-into scope and called the `rand::thread_rng` function:
+we wanted to bring into scope. Recall that in the “Generating a Random Number”
+section in Chapter 2, we brought the `Rng` trait into scope and called the
+`rand::thread_rng` function:
 
-```rust,ignore
+```
 use rand::Rng;
-
 fn main() {
     let secret_number = rand::thread_rng().gen_range(1, 101);
 }
 ```
 
-There are many packages that members of the community have published on
-*https://crates.io*, and pulling any of them into your package involves these
-same steps: listing them in your package’s *Cargo.toml* and bringing items
-defined in them into a scope in your package with `use`.
+Member of the Rust have made many packages that available at
+*https://crates.io*, and pulling any of them in to your package involves these
+same steps: listing them in your package’s *Cargo.toml* and using `use` to
+bring items into scope.
 
 Note that the standard library (`std`) is also a crate that’s external to your
 package. Because the standard library is shipped with the Rust language, you
-don’t need to change *Cargo.toml* to include `std`, but you refer to it in
-`use` to bring items the standard library defines into your package’s scope,
-such as with `HashMap`:
+don’t need to change *Cargo.toml* to include `std`, but you do need to refer to
+it with `use` to bring items from there into your package’s scope. For example,
+with `HashMap`:
 
-```rust
+```
 use std::collections::HashMap;
 ```
 
 This is an absolute path starting with `std`, the name of the standard library
 crate.
 
-### Nested Paths for Cleaning Up Large `use` Lists
+### Using Nested Paths to Clean Up Large `use` Lists
 
-When you use many items defined by the same package or in the same module,
+If you're using multiples items defined in the same package or same module,
 listing each item on its own line can take up a lot of vertical space in your
 files. For example, these two `use` statements we had in Listing 2-4 in the
 Guessing Game both bring items from `std` into scope:
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 use std::cmp::Ordering;
 use std::io;
 // ---snip---
 ```
 
-We can use nested paths to bring the same items into scope in one line instead
-of two, by specifying the common part of the path, then two colons, then curly
-brackets around a list of the parts of the paths that differ, as shown in
-Listing 7-22.
+We can instead use nested paths to bring the same items into scope in one line.
+We do this by specifying the common part of the path, then two colons, then
+curly brackets around a list of the parts of the paths that differ, as shown in
+Listing 7-21.
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 use std::{cmp::Ordering, io};
 // ---snip---
 ```
 
-<span class="caption">Listing 7-22: Specifying a nested path to bring multiple
-items with the same prefix into scope in one line instead of two</span>
+Listing 7-21: Specifying a nested path to bring multiple items with the same
+prefix into scope
 
-In programs bringing many items into scope from the same package or module,
-using nested paths can reduce the number of separate `use` statements needed by
-a lot!
+In bigger programs, bringing many items into scope from the same package or
+module using nested paths can reduce the number of separate `use` statements
+needed by a lot!
 
-We can also deduplicate paths where one path is completely shared with part of
-another path. For example, Listing 7-23 shows two `use` statements: one that
-brings `std::io` into scope, and one that brings `std::io::Write` into scope:
+<!--- Below: is this what you meant? I found deduplicate to be a confusing
+word, if that's a technical term, please revert these changes. --->
 
-<span class="filename">Filename: src/lib.rs</span>
+You can do use a nested path at any level in a path, which is useful when
+combining two `use` statements that share a subpath. For example, Listing 7-22
+shows two `use` statements: one that brings `std::io` into scope, and one that
+brings `std::io::Write` into scope:
 
-```rust
+Filename: src/lib.rs
+
+```
 use std::io;
 use std::io::Write;
 ```
 
-<span class="caption">Listing 7-23: Bringing two paths into scope in two `use`
-statements where one is a sub-path of the other</span>
+Listing 7-22: Two `use` statements where one is a sub-path of the other
 
-The common part between these two paths is `std::io`, and that’s the complete
-first path. To deduplicate these two paths into one `use` statement, we can use
-`self` in the nested path as shown in Listing 7-24.
+The common part of these two paths is `std::io`, and that’s the complete first
+path. To merge these two paths into one `use` statement, we can use `self` in
+the nested path as shown in Listing 7-23.
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
+```
 use std::io::{self, Write};
 ```
 
-<span class="caption">Listing 7-24: Deduplicating the paths from Listing 7-23
-into one `use` statement</span>
+Listing 7-23: Combining the paths from Listing 7-22 into one `use` statement
 
 This brings both `std::io` and `std::io::Write` into scope.
 
-### Bringing All Public Definitions into Scope with the Glob Operator
+### The Glob Operator
 
 If you’d like to bring *all* public items defined in a path into scope, you can
 specify that path followed by `*`, the glob operator:
 
-```rust
+```
 use std::collections::*;
 ```
 
 This `use` statements brings all public items defined in `std::collections`
-into the current scope.
-
-Be careful with using the glob operator! It makes it harder to tell what names
-are in scope and where a name your program uses was defined.
+into the current scope. Be careful when using the glob operator! Glob can make
+it harder to tell what names are in scope and where a name used in your program
+was defined.
 
 The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the [“How to Write
-Tests”][writing-tests]<!-- ignore --> section of Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern; see [the standard
-library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
-for more information on that pattern.
+into the `tests` module; we’ll talk about that in the “How to Write Tests”
+section of Chapter 11. The glob operator is also sometimes used as part of the
+prelude pattern; see the standard library documentation at
+*../../std/prelude/index.html#other-preludes* for more information on that
+pattern.
 
-### Separating Modules into Different Files
+## Separating Modules into Different Files
 
-All of the examples in this chapter so far defined multiple modules in one
+So far, all of the examples in this chapter defined multiple modules in one
 file. When modules get large, you may want to move their definitions to a
 separate file to make the code easier to navigate.
 
-For example, if we started from the code in Listing 7-8, we can move the
-`sound` module to its own file *src/sound.rs* by changing the crate root file
-(in this case, *src/main.rs*) to contain the code shown in Listing 7-25.
+For example, lets take the code in Listing 7-8 and move the `sound` module to
+its own file *src/sound.rs* by changing the crate root file (in this case,
+*src/main.rs*) so that it contain the code shown in Listing 7-24.
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust,ignore
+```
 mod sound;
-
 fn main() {
     // Absolute path
     crate::sound::instrument::clarinet();
@@ -921,15 +965,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-25: Declaring the `sound` module whose body
-will be in *src/sound.rs*</span>
+Listing 7-24: Declaring the `sound` module whose body will be in *src/sound.rs*
 
 And *src/sound.rs* gets the definitions from the body of the `sound` module,
-shown in Listing 7-26.
+shown in Listing 7-25.
 
-<span class="filename">Filename: src/sound.rs</span>
+Filename: src/sound.rs
 
-```rust
+```
 pub mod instrument {
     pub fn clarinet() {
         // Function body code goes here
@@ -937,49 +980,43 @@ pub mod instrument {
 }
 ```
 
-<span class="caption">Listing 7-26: Definitions inside the `sound` module in
-*src/sound.rs*</span>
+Listing 7-25: Definitions inside the `sound` module in *src/sound.rs*
 
-Using a semicolon after `mod sound` instead of a block tells Rust to load the
-contents of the module from another file with the same name as the module.
+Using a semicolon after `mod sound`, rather than using a block, tells Rust to
+load the contents of the module from another file with the same name as the
+module. To continue with our example and extract the `instrument` module to its
+own file as well, we change *src/sound.rs* to contain only the declaration of
+the `instrument` module:
 
-To continue with our example and extract the `instrument` module to its own
-file as well, we change *src/sound.rs* to contain only the declaration of the
-`instrument` module:
+Filename: src/sound.rs
 
-<span class="filename">Filename: src/sound.rs</span>
-
-```rust
+```
 pub mod instrument;
 ```
 
 Then we create a *src/sound* directory and a file *src/sound/instrument.rs* to
 contain the definitions made in the `instrument` module:
 
-<span class="filename">Filename: src/sound/instrument.rs</span>
+Filename: src/sound/instrument.rs
 
-```rust
+```
 pub fn clarinet() {
     // Function body code goes here
 }
 ```
 
-The module tree remains the same and the function calls in `main` continue to
-work without any modification, even though the definitions live in different
-files. This lets you move modules to new files as they grow in size.
+The module tree remains the same and the function calls in `main` will work
+without any modification, even though the definitions live in different files.
+This lets you move modules to new files as they grow in size.
 
 ## Summary
 
-Rust provides ways to organize your packages into crates, your crates into
-modules, and to refer to items defined in one module from another by specifying
-absolute or relative paths. These paths can be brought into a scope with a
-`use` statement so that you can use a shorter path for multiple uses of the
-item in that scope. Modules define code that’s private by default, but you can
+Rust lets you organize your packages into crates and your crates into modules
+so you can refer to items defined in one module from another module. You can do
+this by specifying absolute or relative paths. These paths can be brought into
+scope with a `use` statement so that you can use a shorter path for multiple
+uses of the item in that scope. Modules code is private by default, but you can
 choose to make definitions public by adding the `pub` keyword.
 
-Next, we’ll look at some collection data structures in the standard library
-that you can use in your nice, neat code.
-
-[packages]: ch07-01-packages-and-crates-for-making-libraries-and-executables.html#packages-and-crates-for-making-libraries-and-executables
-[rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
-[writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
+Next chapter, we’ll look at some collection data structures in the standard
+library that you can use in your nice, neatly organized code.
