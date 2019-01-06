@@ -2,15 +2,13 @@
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
-This repository contains the source of "the Rust Programming Language".
+This repository contains the source of "The Rust Programming Language" book.
 
-The book is available in dead-tree form from No Starch Press! Check [the No
-Starch Page][nostarch] for the latest information on the release date and how
-to order.
+[The book is available in dead-tree form from No Starch Press][nostarch]
 
 [nostarch]: https://nostarch.com/rust
 
-You can read the book for free online! Please see the book as shipped with
+You can also read the book for free online. Please see the book as shipped with
 the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
 in those versions may have been fixed in this repository already, as those
 releases are updated less frequently.
@@ -80,25 +78,6 @@ before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/azerupi/mdBook/issues/5
-
-## No Starch
-
-As the book is published by No Starch, we first iterate here, then ship the
-text off to No Starch. Then they do editing, and we fold it back in.
-
-As such, there’s a directory, *nostarch*, which corresponds to the text in No
-Starch’s system.
-
-When we've started working with No Starch in a word doc, we will also check
-those into the repo in the *nostarch/odt* directory. To extract the text from
-the word doc as markdown in order to backport changes to the online book:
-
-1. Open the doc file in LibreOffice
-1. Accept all tracked changes
-1. Save as Microsoft Word 2007-2013 XML (.docx) in the *tmp* directory
-1. Run `./doc-to-md.sh`
-1. Inspect changes made to the markdown file in the *nostarch* directory and
-   copy the changes to the *src* directory as appropriate.
 
 ## Graphviz dot
 
