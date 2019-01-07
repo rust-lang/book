@@ -363,7 +363,7 @@ the trait have the following properties:
 * The return type isn’t `Self`.
 * There are no generic type parameters.
 
-The `Self` keyword is an alias for the type on which we’re implementing the traits or
+`Self` is a keyword. It represents the type for which we’re implementing the traits or
 methods. Trait objects must be object safe because once you’ve used a trait
 object, Rust no longer knows the concrete type that’s implementing that trait.
 If a trait method returns the concrete `Self` type, but a trait object forgets
