@@ -35,11 +35,14 @@ $ cargo run > output.txt
 The `>` syntax tells the shell to write the contents of standard output to
 *output.txt* instead of the screen. We didn’t see the error message we were
 expecting printed to the screen, so that means it must have ended up in the
-file. This is what *output.txt* contains:
+file. *output.txt* will contain something like this:
 
 ```text
 Problem parsing arguments: not enough arguments
 ```
+
+There also may be an additional line from Cargo, it's important that the line
+above is there, not that it's the only line.
 
 Yup, our error message is being printed to standard output. It’s much more
 useful for error messages like this to be printed to standard error so only
