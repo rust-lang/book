@@ -203,7 +203,7 @@ io::stdin().read_line(&mut guess)
 
 If we hadn’t listed the `use std::io` line at the beginning of the program, we
 could have written this function call as `std::io::stdin`. The `stdin` function
-returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a
+returns an instance of [`std::io::stdin`][iostdin]<!-- ignore -->, which is a
 type that represents a handle to the standard input for your terminal.
 
 [iostdin]: ../std/io/struct.Stdin.html
