@@ -297,7 +297,7 @@ Listing 20-3.
 
 ```rust
 # use std::io::prelude::*;
-# use std::net::TcpStream;
+# use std::net::{TcpStream, Shutdown};
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
 
@@ -307,6 +307,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
+    stream.shutdown(Shutdown::Both);
 }
 ```
 
@@ -323,6 +324,10 @@ as before. Again, in a real application you would add error handling here.
 Finally, `flush` will wait and prevent the program from continuing until all
 the bytes are written to the connection; `TcpStream` contains an internal
 buffer to minimize calls to the underlying operating system.
+
+The `shutdown` method on `stream` closes the connection to signal end
+of body to the client. `Shutdown::Both` closes both `read` and `write`
+on the `stream`.
 
 With these changes, let’s run our code and make a request. We’re no longer
 printing any data to the terminal, so we won’t see any output other than the
@@ -365,7 +370,7 @@ and send it.
 
 ```rust
 # use std::io::prelude::*;
-# use std::net::TcpStream;
+# use std::net::{TcpStream, Shutdown};
 use std::fs;
 // --snip--
 
@@ -379,6 +384,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
+    stream.shutdown(Shutdown::Both);
 }
 ```
 
@@ -417,7 +423,7 @@ received against what we know a request for */* looks like and adds `if` and
 
 ```rust
 # use std::io::prelude::*;
-# use std::net::TcpStream;
+# use std::net::{TcpStream, Shutdown};
 # use std::fs;
 // --snip--
 
@@ -434,6 +440,7 @@ fn handle_connection(mut stream: TcpStream) {
 
         stream.write(response.as_bytes()).unwrap();
         stream.flush().unwrap();
+        stream.shutdown(Shutdown::Both);
     } else {
         // some other request
     }
@@ -469,7 +476,7 @@ indicating the response to the end user.
 
 ```rust
 # use std::io::prelude::*;
-# use std::net::TcpStream;
+# use std::net::{TcpStream, Shutdown};
 # use std::fs;
 # fn handle_connection(mut stream: TcpStream) {
 # if true {
@@ -483,6 +490,7 @@ indicating the response to the end user.
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
+    stream.shutdown(Shutdown::Both);
 }
 # }
 ```
@@ -534,7 +542,7 @@ the large `if` and `else` blocks.
 
 ```rust
 # use std::io::prelude::*;
-# use std::net::TcpStream;
+# use std::net::{TcpStream, Shutdown};
 # use std::fs;
 // --snip--
 
@@ -557,6 +565,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
+    stream.shutdown(Shutdown::Both);
 }
 ```
 
