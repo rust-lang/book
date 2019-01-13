@@ -1,15 +1,4 @@
-// Copyright 2012-2014 The Rust Project Developers. See the COPYRIGHT
-// file at the top-level directory of this distribution and at
-// http://rust-lang.org/COPYRIGHT.
-//
-// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-// option. This file may not be copied, modified, or distributed
-// except according to those terms.
-
-
-// FIXME: We have some long lines that could be refactored, but it's not a big deal.
+// FIXME: we have some long lines that could be refactored, but it's not a big deal.
 // ignore-tidy-linelength
 
 extern crate regex;
@@ -20,7 +9,6 @@ use std::io::{Read, Write};
 use regex::{Regex, Captures};
 
 fn main() {
-
     write_md(parse_links(parse_references(read_md())));
 }
 
@@ -38,7 +26,7 @@ fn write_md(output: String) {
 
 fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
     let mut ref_map = HashMap::new();
-    // FIXME: Currently doesn't handle "title" in following line
+    // FIXME: currently doesn't handle "title" in following line.
     let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###).unwrap();
     let output = re.replace_all(&buffer, |caps: &Captures| {
         let key = caps.at(1).unwrap().to_owned().to_uppercase();
@@ -52,7 +40,7 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
 }
 
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
-    // FIXME: check which punctuation is allowed by spec
+    // FIXME: check which punctuation is allowed by spec.
     let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
     let error_code = Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures| {
@@ -62,7 +50,7 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                 let name = caps.name("name").expect("could not get name").to_owned();
                 // Really we should ignore text inside code blocks,
                 // this is a hack to not try to treat `#[derive()]`,
-                // `[profile]`, `[test]`, or `[E\d\d\d\d]` like a link
+                // `[profile]`, `[test]`, or `[E\d\d\d\d]` like a link.
                 if name.starts_with("derive(") ||
                    name.starts_with("profile") ||
                    name.starts_with("test") ||
@@ -71,19 +59,19 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                 }
 
                 let val = match caps.name("val") {
-                    // [name](link)
+                    // `[name](link)`
                     Some(value) => value.to_owned(),
                     None => {
                         match caps.name("key") {
                             Some(key) => {
                                 match key {
-                                    // [name][]
+                                    // `[name][]`
                                     "" => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
-                                    // [name][reference]
+                                    // `[name][reference]`
                                     _ => format!("{}", ref_map.get(&key.to_uppercase()).expect(&format!("could not find url for the link text `{}`", key))),
                                 }
                             }
-                            // [name] as reference
+                            // `[name]` as reference
                             None => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
                         }
                     }
@@ -415,7 +403,4 @@ Some text to show that the reference links can follow later.
             .to_string();
         assert_eq!(parse(source), target);
     }
-
-
-
 }
