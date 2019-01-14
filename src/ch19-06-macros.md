@@ -113,7 +113,7 @@ pattern matches, the associated block of code will be emitted. Given that this
 is the only pattern in this macro, there is only one valid way to match; any
 other will be an error. More complex macros will have more than one arm.
 
-Valid pattern syntax in macro definitions is different than the pattern syntax
+Valid pattern syntax in macro definitions is different from the pattern syntax
 covered in Chapter 18 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pieces of the pattern
 in Listing D-1 mean; for the full macro pattern syntax, see [the reference].
@@ -483,7 +483,7 @@ the name of the annotated type.
 
 The `stringify!` macro used here is built into Rust. It takes a Rust
 expression, such as `1 + 2`, and at compile time turns the expression into a
-string literal, such as `"1 + 2"`. This is different than `format!` or
+string literal, such as `"1 + 2"`. This is different from `format!` or
 `println!`, which evaluate the expression and then turn the result into a
 `String`. There is a possibility that the `#name` input might be an expression
 to print literally, so we use `stringify!`. Using `stringify!` also saves an

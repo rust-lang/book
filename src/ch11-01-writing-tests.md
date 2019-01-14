@@ -709,7 +709,7 @@ means that the code in the test function did not cause a panic.
 
 Tests that use `should_panic` can be imprecise because they only indicate that
 the code has caused some panic. A `should_panic` test would pass even if the
-test panics for a different reason than the one we were expecting to happen. To
+test panics for a different reason from the one we were expecting to happen. To
 make `should_panic` tests more precise, we can add an optional `expected`
 parameter to the `should_panic` attribute. The test harness will make sure that
 the failure message contains the provided text. For example, consider the
