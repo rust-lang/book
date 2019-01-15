@@ -193,8 +193,8 @@ To summarize, the `let mut guess = String::new();` line has created a mutable
 variable that is currently bound to a new, empty instance of a `String`. Whew!
 
 Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we’ll call an
-associated function, `stdin`, on `io`:
+library with `use std::io;` on the first line of the program. Now we’ll call
+the `stdin` function from the `io` module:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess)
