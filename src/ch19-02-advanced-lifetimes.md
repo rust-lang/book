@@ -162,14 +162,14 @@ To figure out why these errors occur, let’s look at the definitions in Listing
 19-13 again, specifically the references in the signature of the `parse` method:
 
 ```rust,ignore
-    fn parse(&self) -> Result<(), &str> {
+fn parse(&self) -> Result<(), &str> {
 ```
 
 Remember the elision rules? If we annotate the lifetimes of the references
 rather than eliding, the signature would be as follows:
 
 ```rust,ignore
-    fn parse<'a>(&'a self) -> Result<(), &'a str> {
+fn parse<'a>(&'a self) -> Result<(), &'a str> {
 ```
 
 That is, the error part of the return value of `parse` has a lifetime that is
