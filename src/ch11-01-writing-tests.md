@@ -846,6 +846,6 @@ test`.
 ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 [controlling-how-tests-are-run]:
 ch11-02-running-tests.html#controlling-how-tests-are-run
-[derivable-traits]: appendix-03-derivable-traits.html#derivable-traits
+[derivable-traits]: appendix-03-derivable-traits.html
 [doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
 [modules-as-privacy-boundary]: ch07-02-modules-and-use-to-control-scope-and-privacy.html#modules-as-the-privacy-boundary

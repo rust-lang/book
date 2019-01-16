@@ -126,4 +126,4 @@ has a `try` function, to call that function from your 2018 edition code, you’l
 need to use the raw identifier syntax, `r#try` in this case. See [Appendix
 E][appendix-e] for more information on editions.
 
-[appendix-e]: appendix-05-editions.md
+[appendix-e]: appendix-05-editions.html
