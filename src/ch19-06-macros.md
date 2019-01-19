@@ -116,7 +116,7 @@ other will be an error. More complex macros will have more than one arm.
 Valid pattern syntax in macro definitions is different from the pattern syntax
 covered in Chapter 18 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pieces of the pattern
-in Listing D-1 mean; for the full macro pattern syntax, see [the reference].
+in Listing 19-36 mean; for the full macro pattern syntax, see [the reference].
 
 [the reference]: ../reference/macros.html
 
