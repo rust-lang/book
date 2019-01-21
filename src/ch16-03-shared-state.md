@@ -102,10 +102,9 @@ to change the inner `i32` to 6.
 
 Now, let’s try to share a value between multiple threads using `Mutex<T>`.
 We’ll spin up 10 threads and have them each increment a counter value by 1, so
-the counter goes from 0 to 10. Note that the next few examples will have
+the counter goes from 0 to 10. The next example in Listing 16-13 will have
 compiler errors, and we’ll use those errors to learn more about using
-`Mutex<T>` and how Rust helps us use it correctly. Listing 16-13 has our
-starting example:
+`Mutex<T>` and how Rust helps us use it correctly.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -153,110 +152,25 @@ program.
 We hinted that this example wouldn’t compile. Now let’s find out why!
 
 ```text
-error[E0382]: capture of moved value: `counter`
-  --> src/main.rs:10:27
+error[E0382]: use of moved value: `counter`
+  --> src/main.rs:9:36
    |
 9  |         let handle = thread::spawn(move || {
-   |                                    ------- value moved (into closure) here
+   |                                    ^^^^^^^ value moved into closure here,
+   in previous iteration of loop
 10 |             let mut num = counter.lock().unwrap();
-   |                           ^^^^^^^ value captured here after move
+   |                           ------- use occurs due to use in closure
    |
    = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
    which does not implement the `Copy` trait
 
-error[E0382]: use of moved value: `counter`
-  --> src/main.rs:21:29
-   |
-9  |         let handle = thread::spawn(move || {
-   |                                    ------- value moved (into closure) here
-...
-21 |     println!("Result: {}", *counter.lock().unwrap());
-   |                             ^^^^^^^ value used here after move
-   |
-   = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-   which does not implement the `Copy` trait
-
-error: aborting due to 2 previous errors
+error: aborting due to previous error
 ```
 
-The error message states that the `counter` value is moved into the closure and
-then captured when we call `lock`. That description sounds like what we wanted,
-but it’s not allowed!
-
-Let’s figure this out by simplifying the program. Instead of making 10 threads
-in a `for` loop, let’s just make two threads without a loop and see what
-happens. Replace the first `for` loop in Listing 16-13 with this code instead:
-
-```rust,ignore,does_not_compile
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Mutex::new(0);
-    let mut handles = vec![];
-
-    let handle = thread::spawn(move || {
-        let mut num = counter.lock().unwrap();
-
-        *num += 1;
-    });
-    handles.push(handle);
-
-    let handle2 = thread::spawn(move || {
-        let mut num2 = counter.lock().unwrap();
-
-        *num2 += 1;
-    });
-    handles.push(handle2);
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
-```
-
-We make two threads and change the variable names used with the second thread
-to `handle2` and `num2`. When we run the code this time, compiling gives us the
-following:
-
-```text
-error[E0382]: capture of moved value: `counter`
-  --> src/main.rs:16:24
-   |
-8  |     let handle = thread::spawn(move || {
-   |                                ------- value moved (into closure) here
-...
-16 |         let mut num2 = counter.lock().unwrap();
-   |                        ^^^^^^^ value captured here after move
-   |
-   = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-   which does not implement the `Copy` trait
-
-error[E0382]: use of moved value: `counter`
-  --> src/main.rs:26:29
-   |
-8  |     let handle = thread::spawn(move || {
-   |                                ------- value moved (into closure) here
-...
-26 |     println!("Result: {}", *counter.lock().unwrap());
-   |                             ^^^^^^^ value used here after move
-   |
-   = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-   which does not implement the `Copy` trait
-
-error: aborting due to 2 previous errors
-```
-
-Aha! The first error message indicates that `counter` is moved into the closure
-for the thread associated with `handle`. That move is preventing us from
-capturing `counter` when we try to call `lock` on it and store the result in
-`num2` in the second thread! So Rust is telling us that we can’t move ownership
-of `counter` into multiple threads. This was hard to see earlier because our
-threads were in a loop, and Rust can’t point to different threads in different
-iterations of the loop. Let’s fix the compiler error with a multiple-ownership
-method we discussed in Chapter 15.
+The error message states that the `counter` value was moved in the previous
+iteration of the loop. So Rust is telling us that we can’t move the ownership
+of lock `counter` into multiple threads. Let’s fix the compiler error with a
+multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads
 
