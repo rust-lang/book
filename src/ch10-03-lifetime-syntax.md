@@ -276,7 +276,7 @@ This code should compile and produce the result we want when we use it with the
 The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
 long as lifetime `'a`. The function signature also tells Rust that the string
-slice returned from the function will live at least as long as lifetime `'a`.
+slice returned from the function will live at most as long as lifetime `'a`.
 These constraints are what we want Rust to enforce. Remember, when we specify
 the lifetime parameters in this function signature, we’re not changing the
 lifetimes of any values passed in or returned. Rather, we’re specifying that
