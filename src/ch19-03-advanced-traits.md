@@ -542,9 +542,9 @@ the trait. Listing 19-30 shows an implementation of the `OutlinePrint` trait.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt;
+use std::fmt::Display;
 
-trait OutlinePrint: fmt::Display {
+trait OutlinePrint: Display {
     fn outline_print(&self) {
         let output = self.to_string();
         let len = output.len();
@@ -606,10 +606,10 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 #     y: i32,
 # }
 #
-use std::fmt;
+use std::fmt::{Display, Formatter, Result};
 
-impl fmt::Display for Point {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Display for Point {
+    fn fmt(&self, f: &mut Formatter) -> Result {
         write!(f, "({}, {})", self.x, self.y)
     }
 }
@@ -644,12 +644,12 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt;
+use std::fmt::{Display, Formatter, Result};
 
 struct Wrapper(Vec<String>);
 
-impl fmt::Display for Wrapper {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl Display for Wrapper {
+    fn fmt(&self, f: &mut Formatter) -> Result {
         write!(f, "[{}]", self.0.join(", "))
     }
 }
