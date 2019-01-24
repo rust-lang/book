@@ -103,7 +103,7 @@ to change the inner `i32` to 6.
 Now, let’s try to share a value between multiple threads using `Mutex<T>`.
 We’ll spin up 10 threads and have them each increment a counter value by 1, so
 the counter goes from 0 to 10. The next example in Listing 16-13 will have
-compiler errors, and we’ll use those errors to learn more about using
+a compiler error, and we’ll use that error to learn more about using
 `Mutex<T>` and how Rust helps us use it correctly.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -157,14 +157,12 @@ error[E0382]: use of moved value: `counter`
    |
 9  |         let handle = thread::spawn(move || {
    |                                    ^^^^^^^ value moved into closure here,
-   in previous iteration of loop
+in previous iteration of loop
 10 |             let mut num = counter.lock().unwrap();
    |                           ------- use occurs due to use in closure
    |
    = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-   which does not implement the `Copy` trait
-
-error: aborting due to previous error
+which does not implement the `Copy` trait
 ```
 
 The error message states that the `counter` value was moved in the previous
@@ -217,30 +215,27 @@ Once again, we compile and get... different errors! The compiler is teaching us
 a lot.
 
 ```text
-error[E0277]: the trait bound `std::rc::Rc<std::sync::Mutex<i32>>:
-std::marker::Send` is not satisfied in `[closure@src/main.rs:11:36:
-15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+error[E0277]: `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
   --> src/main.rs:11:22
    |
 11 |         let handle = thread::spawn(move || {
    |                      ^^^^^^^^^^^^^ `std::rc::Rc<std::sync::Mutex<i32>>`
 cannot be sent between threads safely
    |
-   = help: within `[closure@src/main.rs:11:36: 15:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send` is
-not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
+   = help: within `[closure@src/main.rs:11:36: 14:10
+counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send`
+is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
    = note: required because it appears within the type
-`[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
+`[closure@src/main.rs:11:36: 14:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
    = note: required by `std::thread::spawn`
 ```
 
-Wow, that error message is very wordy! Here are some important parts to focus
-on: the first inline error says `` `std::rc::Rc<std::sync::Mutex<i32>>` cannot
-be sent between threads safely ``. The reason for this is in the next important
-part to focus on, the error message. The distilled error message says `` the
-trait bound `Send` is not satisfied ``. We’ll talk about `Send` in the next
-section: it’s one of the traits that ensures the types we use with threads are
-meant for use in concurrent situations.
+Wow, that error message is very wordy! Here’s the important part to focus
+on: `` `Rc<Mutex<i32>>` cannot be sent between threads safely ``. The compiler
+is also telling us the reason why: ``the trait `Send` is not implemented for
+`Rc<Mutex<i32>>` ``. We’ll talk about `Send` in the next section: it’s one of
+the traits that ensures the types we use with threads are meant for use in
+concurrent situations.
 
 Unfortunately, `Rc<T>` is not safe to share across threads. When `Rc<T>`
 manages the reference count, it adds to the count for each call to `clone` and
