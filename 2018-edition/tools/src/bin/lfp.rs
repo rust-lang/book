@@ -7,16 +7,7 @@ extern crate walkdir;
 
 use docopt::Docopt;
 use std::{path, fs, io};
-use std::io::{BufRead, Write};
-
-macro_rules! println_stderr(
-    ($($arg:tt)*) => (
-        match writeln!(&mut ::std::io::stderr(), $($arg)* ) {
-            Ok(_) => {},
-            Err(x) => panic!("Unable to write to stderr: {}", x),
-        }
-    )
-);
+use std::io::BufRead;
 
 fn main () {
     let args: Args = Docopt::new(USAGE)
@@ -31,7 +22,7 @@ fn main () {
             match entry {
                 Ok(entry) => entry,
                 Err(err) => {
-                    println_stderr!("{:?}", err);
+                    eprintln!("{:?}", err);
                     std::process::exit(911)
                 },
             }
@@ -43,9 +34,9 @@ fn main () {
                 for err in &err_vec {
                     match *err {
                         LintingError::LineOfInterest(line_num, ref line) =>
-                            println_stderr!("{}:{}\t{}", path.display(), line_num, line),
+                            eprintln!("{}:{}\t{}", path.display(), line_num, line),
                         LintingError::UnableToOpenFile =>
-                            println_stderr!("Unable to open {}.", path.display()),
+                            eprintln!("Unable to open {}.", path.display()),
                     }
                 }
                 !err_vec.is_empty()
