@@ -1,4 +1,4 @@
-## Bringing Paths Into Scope with the `use` Keyword
+## Bringing Paths into Scope with the `use` Keyword
 
 <!-- Liz: All the subsections of this section have to do with `use`, so they
 should be HeadC rather than HeadB as you had them. /Carol -->

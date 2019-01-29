@@ -647,7 +647,7 @@ There’s one more situation involving `pub` that we haven’t covered, and that
 concerns our last module system feature: the `use` keyword. Let’s cover `use`
 by itself first, and then we’ll show how `pub` and `use` can be combined.
 
-## Bringing Paths Into Scope with the `use` Keyword
+## Bringing Paths into Scope with the `use` Keyword
 
 <!-- Liz: All the subsections of this section have to do with `use`, so they
 should be HeadC rather than HeadB as you had them. /Carol -->
