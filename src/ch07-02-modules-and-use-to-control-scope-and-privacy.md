@@ -686,7 +686,7 @@ If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
 have two `Result` types in the same scope and Rust wouldn’t know which one we
 meant when we used `Result`. Try it and see what compiler error you get!
 
-### Renaming Types Brought Into Scope with the `as` Keyword
+### Renaming Types Brought into Scope with the `as` Keyword
 
 There’s another solution to the problem of bringing two types of the same name
 into the same scope: we can specify a new local name for the type by adding
