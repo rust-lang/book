@@ -18,14 +18,17 @@ error[E0277]: the `?` operator can only be used in a function that returns
 Then, please replace the highlighted paragraph on page 161 with this text:
 
 This error points out that we’re only allowed to use the `?` operator in a
-function that returns `Result<T, E>`. In functions that don’t return `Result<T,
-E>`, when you call other functions that return `Result<T, E>`, you’ll need to
-use a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>`
-instead of using the `?` operator to potentially propagate the error to the
-calling code.
+function that returns `Result<T, E>`. When you’re writing code in a function
+that doesn’t return `Result<T, E>`, and you want to use `?` when you call other
+functions that return `Result<T, E>`, you have two choices to fix this problem.
+One technique is to change the return type of your function to be `Result<T,
+E>` if you have no restrictions preventing that. The other technique is to use
+a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>` in
+whatever way is appropriate.
 
-However, we can change how we write the `main` function so that it does return
-a `Result<T, E>`:
+The `main` function is special, and there are restrictions on what its return
+type must be. One valid return type for main is `()`, and conveniently, another
+valid return type is `Result<T, E>`, as shown here:
 
 ```
 use std::error::Error;
@@ -38,6 +41,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-The `Box<dyn Error>` type is called a “trait object,” which we’ll talk about in
-the “Using Trait Objects that Allow for Values of Different Types” section of
-Chapter 17. For now, you can read `Box<dyn Error>` to mean “any kind of error.”
+The `Box<dyn Error>` type is called a *trait object*, which we’ll talk
+about in the section “Using Trait Objects that Allow for Values of Different
+Types” in Chapter 17. For now, you can read `Box<dyn Error>` to mean “any
+kind of error.” Using `?` in a `main` function with this return type is allowed.
