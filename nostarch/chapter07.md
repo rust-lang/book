@@ -256,7 +256,7 @@ A *path* can take two forms:
 * An *absolute path* starts from a crate root by using a crate name or a
   literal `crate`.
 * A *relative path* starts from the current module and uses `self`, `super`, or
-  another identifier in the current module.
+  an identifier in the current module.
 
 Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
