@@ -8,9 +8,11 @@ A *crate* is a binary or library.
 in text? --->
 <!-- Done /Carol -->
 
-The *crate root* is a source file that the Rust compiler uses to know how to
-build a crate. A *package* is one or more crates that, together, provide a set
-of functionality. A package contains a *Cargo.toml* that describes how to build
+The *crate root* is a source file that the Rust compiler starts from, and makes
+up the root module of your crate (we'll be explaining modules in depth in the
+["Defining Modules to Control Scope and Privacy"][modules]<!-- ignore -->
+section). A *package* is one or more crates that, together, provide a set of
+functionality. A package contains a *Cargo.toml* that describes how to build
 those crates.
 
 <!--- Above: can you say what a package is? don't think this is technically
@@ -84,3 +86,5 @@ refers to. In our crate, it refers to the `struct Rng` that we defined. The
 <!-- Done, above /Carol -->
 
 Now that we’ve covered crates, let’s talk about the module system!
+
+[modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
