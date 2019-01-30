@@ -183,6 +183,8 @@ HashMap
 HashSet
 Haskell
 hasn
+HeadB
+HeadC
 HelloMacro
 helloworld
 HelloWorld
@@ -445,6 +447,7 @@ submodule
 submodules
 Submodules
 suboptimal
+subpath
 substring
 subteams
 subtree

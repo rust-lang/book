@@ -61,7 +61,7 @@ filesystem equivalent would be using the path
 `front_of_house/hosting/add_to_waitlist`. Starting with a name means that the
 path is relative.
 
-<!--- Can you outline briefly what effect the path being relative or absolyte
+<!--- Can you outline briefly what effect the path being relative or absolute
 has on the code? I'm not totally clear why or when you'd use either --->
 <!-- Done /Carol -->
 

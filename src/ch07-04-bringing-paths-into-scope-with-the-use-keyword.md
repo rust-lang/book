@@ -197,7 +197,7 @@ considered idiomatic, the choice is up to you!
 
 ### Re-exporting Names with `pub use`
 
-<!--- I found this paragrah a little difficult to follow and have tried to
+<!--- I found this paragraph a little difficult to follow and have tried to
 clarify -- can you please check my edits and correct anywhere I may have
 changed meaning? --->
 <!-- Looks fine! /Carol -->
