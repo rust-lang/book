@@ -441,7 +441,7 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 <span class="caption">Listing 20-6: Matching the request and handling requests
-to */* differently than other requests</span>
+to */* differently from other requests</span>
 
 First, we hardcode the data corresponding to the */* request into the `get`
 variable. Because we’re reading raw bytes into the buffer, we transform `get`
