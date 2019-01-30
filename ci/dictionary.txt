@@ -193,6 +193,7 @@ Hola
 homogenous
 html
 hyperoptimize
+hypotheticals
 Iceburgh
 ident
 IDE
@@ -515,6 +516,7 @@ visualstudio
 Vlissides
 vscode
 vtable
+waitlist
 wasn
 weakt
 WeatherForecast
