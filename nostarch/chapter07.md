@@ -30,7 +30,7 @@ detail you have to keep in your head.
 
 A related aspect to organization and encapsulation is *scope*: the nested
 context code is written in that has a set of names that are defined as “in
-scope”. When reading, writing, and compiling code, programmers and compilers
+scope.” When reading, writing, and compiling code, programmers and compilers
 need to know whether a particular name at a particular spot refers to a
 variable, function, struct, enum, module, constant, or other item, and what
 that item means. We can create scopes and change what names are in or out of
