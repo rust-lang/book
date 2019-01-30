@@ -470,7 +470,6 @@ pub fn eat_at_restaurant() {
     // Relative path
     front_of_house::hosting::add_to_waitlist();
 }
-# fn main() {}
 ```
 
 Listing 7-7: Adding the `pub` keyword to both `mod hosting` and `fn
@@ -530,7 +529,6 @@ mod back_of_house {
 
     fn cook_order() {}
 }
-# fn main() {}
 ```
 
 Listing 7-8: Calling a function using a relative path starting with `super`
@@ -682,7 +680,6 @@ pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
     hosting::add_to_waitlist();
 }
-# fn main() {}
 ```
 
 Listing 7-11: Bringing a module into scope with `use`
@@ -714,7 +711,6 @@ pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
     hosting::add_to_waitlist();
 }
-# fn main() {}
 ```
 
 Listing 7-12: Bringing a module into scope with `use` and a relative path
@@ -750,7 +746,6 @@ pub fn eat_at_restaurant() {
     add_to_waitlist();
     add_to_waitlist();
 }
-# fn main() {}
 ```
 
 Listing 7-13: Bringing the `add_to_waitlist` function into scope with `use`,
@@ -797,11 +792,9 @@ use std::fmt;
 use std::io;
 
 fn function1() -> fmt::Result {
-#     Ok(())
 }
 
 fn function2() -> io::Result<()> {
-#     Ok(())
 }
 ```
 
@@ -827,11 +820,9 @@ use std::fmt::Result;
 use std::io::Result as IoResult;
 
 fn function1() -> Result {
-#     Ok(())
 }
 
 fn function2() -> IoResult<()> {
-#     Ok(())
 }
 ```
 
@@ -875,7 +866,6 @@ pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
     hosting::add_to_waitlist();
 }
-# fn main() {}
 ```
 
 Listing 7-17: Making a name available for any code to use from a new scope with
