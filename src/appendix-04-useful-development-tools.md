@@ -26,7 +26,7 @@ Running this command will reformat all of the Rust code in the current crate.
 This should only change the code style, not the code semantics. For more
 information on `rustfmt`, see [its documentation][rustfmt].
 
-[rustfmt]: https://github.com/rust-lang-nursery/rustfmt
+[rustfmt]: https://github.com/rust-lang/rustfmt
 
 ## Fix Up Your Code with `rustfix`
 
@@ -135,7 +135,7 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   |             ^^^^^^
   |
   = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/v0.0.212/index.html#approx_constant
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/v0.0.212/index.html#approx_constant
 ```
 
 This lets you know that Rust has this constant defined more precisely, and that
@@ -154,7 +154,7 @@ fn main() {
 
 For more information on `clippy`, see [its documentation][clippy].
 
-[clippy]: https://github.com/rust-lang-nursery/rust-clippy
+[clippy]: https://github.com/rust-lang/rust-clippy
 
 ## IDE Integration Using the Rust Language Server
 
@@ -178,4 +178,4 @@ gain abilities such as autocompletion, jump to definition, and inline errors.
 
 For more information on the `rls`, see [its documentation][rls].
 
-[rls]: https://github.com/rust-lang-nursery/rls
+[rls]: https://github.com/rust-lang/rls
