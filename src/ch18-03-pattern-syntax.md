@@ -449,8 +449,7 @@ example, when we want to test for only part of a value but have no use for the
 other parts in the corresponding code we want to run. Listing 18-18 shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
-setting but can unset the setting and can give the setting a value if it is
-currently unset.
+setting but can unset the setting and give it a value if it is currently unset.
 
 ```rust
 let mut setting_value = Some(5);
