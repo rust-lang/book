@@ -13,7 +13,7 @@ then multiple files. A package can contain multiple binary crates and
 optionally one library crate. As a package grows, you can extract parts into
 separate crates that become external dependencies. We’ll be covering all these
 techniques in this chapter. For really large projects of a set of interrelated
-crates that evolve together, Cargo provides the concept of *workspaces* that
+packages that evolve together, Cargo provides the concept of *workspaces* that
 we’ll cover in the [“Cargo Workspaces”][workspaces]<!-- ignore --> section of
 Chapter 14.
 
