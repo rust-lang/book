@@ -243,6 +243,10 @@ way as `println!`, but instead of printing the output to the screen, it returns
 a `String` with the contents. The version of the code using `format!` is much
 easier to read and doesn’t take ownership of any of its parameters.
 
+> Note: The literal `{` and `}` characters may be included in a string by
+preceding them with the same character. For example, the `{` character is escaped
+with `{{` and the `}` character is escaped with `}}`.
+
 ### Indexing into Strings
 
 In many other programming languages, accessing individual characters in a
