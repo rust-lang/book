@@ -9,7 +9,7 @@ write your own concurrency features or use those written by others.
 However, two concurrency concepts are embedded in the language: the
 `std::marker` traits `Sync` and `Send`.
 
-### Allowing Transference of Ownership Between Threads with `Send`
+### Allowing Ownership Transfer Between Threads with `Send`
 
 The `Send` marker trait indicates that ownership of the type implementing
 `Send` can be transferred between threads. Almost every Rust type is `Send`,
