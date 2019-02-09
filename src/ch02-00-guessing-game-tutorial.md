@@ -381,6 +381,8 @@ you:
 rand = "0.3.14"
 ```
 
+(P.S. If the autocompelete in the [official vscode plugin](https://github.com/rust-lang/rls-vscode) doesn't work for `rand`, specifying a version greater than `0.4` can do the fix.)
+
 In the *Cargo.toml* file, everything that follows a header is part of a section
 that continues until another section starts. The `[dependencies]` section is
 where you tell Cargo which external crates your project depends on and which
