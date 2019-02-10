@@ -218,9 +218,8 @@ $ cargo build
 The top-level *Cargo.lock* now contains information about the dependency of
 `add-one` on `rand`. However, even though `rand` is used somewhere in the
 workspace, we can’t use it in other crates in the workspace unless we add
-`rand` to their *Cargo.toml* files as well. For example, if we add `extern
-crate rand;` to the *adder/src/main.rs* file for the `adder` crate, we’ll get
-an error:
+`rand` to their *Cargo.toml* files as well. For example, if we add `use rand;`
+to the *adder/src/main.rs* file for the `adder` crate, we’ll get an error:
 
 ```text
 $ cargo build
