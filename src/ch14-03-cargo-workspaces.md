@@ -156,6 +156,12 @@ fn main() {
 <span class="caption">Listing 14-7: Using the `add-one` library crate from the
 `adder` crate</span>
 
+> #### Rust Crate Naming Tip
+>
+> Use hyphens not underscores to name your Crate. Hyphens are idiomatic and
+> Cargo does the conversion to underscore in your Rust code automatically since
+> a name like `add-one` is not a valid identifier in Rust.
+
 Let’s build the workspace by running `cargo build` in the top-level *add*
 directory!
 
