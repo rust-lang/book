@@ -5,8 +5,8 @@
 어떻게 그리고 왜 Rust에서 불변성을 애호해주길 권장하는지 알아보면 그런 생각을 포기할 수 있을지도 모르겠습니다.
 
 변수가 불변성인 경우, 일단 값이 이름에 bound되면 해당 값을 변경할 수 없습니다. 시험 삼아 
-`cargo new --bin variables`을 실행해서 * projects * 디렉토리에 * variables *라는 새 프로젝트를 
-생성 해 봅시다. 그런 다음 새 * variables * 디렉토리에서 * src / main.rs *를 열고 코드를 다음과 같이 
+`cargo new --bin variables`을 실행해서 *projects* 디렉토리에 *variables* 라는 새 프로젝트를
+생성 해 봅시다. 그런 다음 새 *variables* 디렉토리에서 *src/main.rs* 를 열고 코드를 다음과 같이
 바꿉니다.
 
 <span class="filename">Filename: src/main.rs</span>
