@@ -31,7 +31,7 @@ Rust 에서의 함수 선언은 `fn`으로 시작하며 함수 이름 뒤에 괄
 
 
 함수를 추가로 탐색하기 위해 *functions* 이라는 이름의 새로운 바이너리 프로젝트를 시작합시다.
-`another_function` 예제를 * src / main.rs *에 넣고 실행해보세요.
+`another_function` 예제를 *src/main.rs* 에 넣고 실행해보세요.
 다음과 같은 결과가 나타납니다:
 
 ```text
