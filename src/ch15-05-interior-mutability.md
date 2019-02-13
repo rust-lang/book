@@ -156,7 +156,7 @@ impl<'a, T> LimitTracker<'a, T>
         }
     }
 
-    pub fn set_value(&mut self, value: usize) {
+    pub fn set_value(&self, value: usize) {
         self.value = value;
 
         let percentage_of_max = self.value as f64 / self.max as f64;
