@@ -509,6 +509,40 @@ instance is created. In addition, `novel` doesn’t go out of scope until after
 the `ImportantExcerpt` goes out of scope, so the reference in the
 `ImportantExcerpt` instance is valid.
 
+It would be pointless to have lifetimes on structs just to note that a field
+will outlive the struct itself. In practical terms this is true because the
+referenced value must already exist when the struct fields are being filled but
+annotating lifetimes can be used to define a relationship between the lifetimes on
+the struct. This is necessary to differ the lifetimes and the code will not compile
+in such cases, otherwise lifetimes could all be ellided by the compiler.
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+struct Foo<'a, 'b> {
+	x: &'a i32,
+	y: &'b i32
+}
+
+fn main() {
+	let x = 1;
+	let v;
+	{
+		let y = 2;
+		let a = Foo {x: &x, y: &y};
+		v = a.x;
+	}
+	println!("{}", *v);
+}
+```
+
+<span class="caption">Listing 10-25: A struct that has multiple lifetimes</span>
+
+The code would not compile if the lifetime of x was reused for y because the
+compiler would pick the shortest lifetime and apply it to both x and y.
+Sometimes defining lifetimes can be quite confusing because they are quite
+dependent on the code that is using the struct.
+
 ### Lifetime Elision
 
 You’ve learned that every reference has a lifetime and that you need to specify
