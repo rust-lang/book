@@ -74,6 +74,22 @@ instance of a type in one `impl` block rather than making future users of our
 code search for capabilities of `Rectangle` in various places in the library we
 provide.
 
+Another benefit of methods over functions is being able to use the so-called
+"intelligent" or context-aware code completion features of many editors and
+IDEs. As soon as you type the `.` character after a variable name, they will
+display a list of existing methods, sometimes with their accompanying
+documentation, and prompt you to choose the desired one, instead of having to
+type it out. This workflow can oftentimes save the time needed to check the
+documentation, the time needed to type the method name out, and help prevent
+mistakes.
+
+Finally, a sequence or "chain" of method calls can be read more naturally, left
+to right, in the same order in which the computer will execute the operations,
+as opposed to a sequence of nested functions. Compare this hypothetical sequence
+of operations: `rect1.getShape().flip().draw()` to an equivalent sequence of
+functions: `draw(flip(getShape(rect1)))` which is arguably harder to parse
+visually, because it must be read inside out, as opposed to left to right.
+
 > ### Where’s the `->` Operator?
 >
 > In C and C++, two different operators are used for calling methods: you use
