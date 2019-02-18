@@ -69,7 +69,7 @@ To parameterize the types in the new function we’ll define, we need to name th
 type parameter, just as we do for the value parameters to a function. You can
 use any identifier as a type parameter name. But we’ll use `T` because, by
 convention, parameter names in Rust are short, often just a letter, and Rust’s
-type-naming convention is PascalCase. Short for “type,” `T` is the default
+type-naming convention is PascalCase. Short for “type”, `T` is the default
 choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
