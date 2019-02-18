@@ -474,7 +474,7 @@ annotated</span>
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
 compile-time error. These static checks protect us from mistakes. Try adding
-code to `main` that uses `s` and `x` to see where you can use them and where
+code to `main` that uses `s` to see where you can use them and where
 the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
