@@ -1,6 +1,8 @@
-Please view this file in monospace to see how the error messages should line up vertically.
+Please view this file in monospace to see how the error messages should line up
+vertically.
 
-Here is the new error message for page 70, I've included the whole message for clarity:
+Here is the new error message for page 70, I’ve included the whole message for
+clarity:
 
 ```
 error[E0499]: cannot borrow `s` as mutable more than once at a time
@@ -18,7 +20,8 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 For page 71:
 
 ```
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
+immutable
  --> src/main.rs:6:14
   |
 4 |     let r1 = &s; // no problem
@@ -34,7 +37,8 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 For page 77:
 
 ```
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
+immutable
   --> src/main.rs:18:5
    |
 16 |     let word = first_word(&s);
@@ -46,4 +50,3 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 20 |     println!("the first word is: {}", word);
    |                                       ---- immutable borrow later used here
 ```
-

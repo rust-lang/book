@@ -184,15 +184,15 @@ The condition we want to check in the inner match is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
 we try to create the file with `File::create`. However, because `File::create`
 could also fail, we need a second arm in the inner `match` expression. When the
-file can’t be created, a different error message will be printed. The second
-arm of the outer `match` stays the same so the program panics on any error
-besides the missing file error.
+file can’t be created, a different error message is printed. The second arm of
+the outer `match` stays the same, so the program panics on any error besides
+the missing file error.
 
-That’s a lot of `match`! The `match` expression is very useful, but also very
-much a primitive. In Chapter 13, we’ll learn about closures. The `Result<T, E>`
-type has many methods that accept a closure and are implemented using `match`
-expressions, and using those methods will make your code more concise. A more
-seasoned Rustacean might write this code instead of Listing 9-5:
+That’s a lot of `match`! The `match` expression is very useful but also very
+much a primitive. In Chapter 13, you’ll learn about closures; the `Result<T,
+E>` type has many methods that accept a closure and are implemented using
+`match` expressions. Using those methods will make your code more concise. A
+more seasoned Rustacean might write this code instead of Listing 9-5:
 
 ```rust,ignore
 use std::fs::File;
@@ -211,11 +211,11 @@ fn main() {
 }
 ```
 
-This code has the same behavior as that of Listing 9-5 but doesn't contain any
-`match` expressions and is a bit cleaner to read. Come back to this example
-after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the
-standard library documentation. There’s many more of these methods that can
-clean up huge nested `match` expressions when dealing with errors.
+Although this code has the same behavior as Listing 9-5, it doesn’t contain any
+`match` expressions and is cleaner to read. Come back to this example after
+you’ve read Chapter 13, and look up the `unwrap_or_else` method in the standard
+library documentation. Many more of these methods can clean up huge nested
+`match` expressions when you’re dealing with errors.
 
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 
@@ -446,8 +446,8 @@ username in `s` when both `File::open` and `read_to_string` succeed rather than
 returning errors. The functionality is again the same as in Listing 9-6 and
 Listing 9-7; this is just a different, more ergonomic way to write it.
 
-Speaking of different ways to write this function, there’s a way to make this
-even shorter, shown in Listing 9-9.
+Speaking of different ways to write this function, Listing 9-9 shows that
+there’s a way to make this even shorter.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -461,13 +461,14 @@ fn read_username_from_file() -> Result<String, io::Error> {
 ```
 
 <span class="caption">Listing 9-9: Using `fs::read_to_string` instead of
-opening then reading the file</span>
+opening and then reading the file</span>
 
-Reading a file into a string is a fairly common operation, so Rust provides a
-convenience function called `fs::read_to_string` that will open the file,
-create a new `String`, read the contents of the file, put the contents into
-that `String`, and return it. Of course, this doesn’t give us the opportunity
-to explain all the error handling, so we did it the longer way first.
+Reading a file into a string is a fairly common operation, so Rust provides the
+convenient `fs::read_to_string` function that opens the file, creates a new
+`String`, reads the contents of the file, puts the contents into that `String`,
+and returns it. Of course, using `fs::read_to_string` doesn’t give us the
+opportunity to explain all the error handling, so we did it the longer way
+first.
 
 #### The `?` Operator Can Only Be Used in Functions That Return `Result`
 
@@ -504,14 +505,17 @@ error[E0277]: the `?` operator can only be used in a function that returns
 ```
 
 This error points out that we’re only allowed to use the `?` operator in a
-function that returns `Result<T, E>`. In functions that don’t return `Result<T,
-E>`, when you call other functions that return `Result<T, E>`, you’ll need to
-use a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>`
-instead of using the `?` operator to potentially propagate the error to the
-calling code.
+function that returns `Result<T, E>`. When you’re writing code in a function
+that doesn’t return `Result<T, E>`, and you want to use `?` when you call other
+functions that return `Result<T, E>`, you have two choices to fix this problem.
+One technique is to change the return type of your function to be `Result<T,
+E>` if you have no restrictions preventing that. The other technique is to use
+a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>` in
+whatever way is appropriate.
 
-However, we can change how we write the `main` function so that it does return
-a `Result<T, E>`:
+The `main` function is special, and there are restrictions on what its return
+type must be. One valid return type for main is `()`, and conveniently, another
+valid return type is `Result<T, E>`, as shown here:
 
 ```rust,ignore
 use std::error::Error;
@@ -524,10 +528,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-The `Box<dyn Error>` type is called a “trait object,” which we’ll talk about in
-the “Using Trait Objects that Allow for Values of Different Types” section of
-Chapter 17. For now, you can read `Box<dyn Error>` to mean “any kind of error.”
+The `Box<dyn Error>` type is called a *trait object*, which we’ll talk about in
+the [“Using Trait Objects that Allow for Values of Different
+Types”][trait-objects]<!-- ignore --> section in Chapter 17. For now, you can
+read `Box<dyn Error>` to mean “any kind of error.” Using `?` in a `main`
+function with this return type is allowed.
 
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
+
+[trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

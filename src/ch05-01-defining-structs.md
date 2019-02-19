@@ -224,7 +224,7 @@ You can also define structs that look similar to tuples, called *tuple
 structs*. Tuple structs have the added meaning the struct name provides but
 don’t have names associated with their fields; rather, they just have the types
 of the fields. Tuple structs are useful when you want to give the whole tuple a
-name and make the tuple be a different type than other tuples, and naming each
+name and make the tuple be a different type from other tuples, and naming each
 field as in a regular struct would be verbose or redundant.
 
 To define a tuple struct, start with the `struct` keyword and the struct name

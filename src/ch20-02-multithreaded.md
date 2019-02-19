@@ -1033,7 +1033,7 @@ impl<F: FnOnce()> FnBox for F {
     }
 }
 
-type Job = Box<FnBox + Send + 'static>;
+type Job = Box<dyn FnBox + Send + 'static>;
 
 // --snip--
 

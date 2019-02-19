@@ -124,7 +124,7 @@ impl Screen {
 <span class="caption">Listing 17-5: A `run` method on `Screen` that calls the
 `draw` method on each component</span>
 
-This works differently than defining a struct that uses a generic type
+This works differently from defining a struct that uses a generic type
 parameter with trait bounds. A generic type parameter can only be substituted
 with one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we

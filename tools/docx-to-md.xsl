@@ -16,6 +16,8 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Standard']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'AuthorQuery']" />
 
+    <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
+
     <!-- Paragraph styles -->
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterTitle']">

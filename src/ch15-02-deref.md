@@ -96,7 +96,7 @@ that enables us to use the dereference operator by defining our own box type.
 ### Defining Our Own Smart Pointer
 
 Let’s build a smart pointer similar to the `Box<T>` type provided by the
-standard library to experience how smart pointers behave differently than
+standard library to experience how smart pointers behave differently from
 references by default. Then we’ll look at how to add the ability to use the
 dereference operator.
 

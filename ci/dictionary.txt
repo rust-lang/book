@@ -183,6 +183,8 @@ HashMap
 HashSet
 Haskell
 hasn
+HeadB
+HeadC
 HelloMacro
 helloworld
 HelloWorld
@@ -193,6 +195,7 @@ Hola
 homogenous
 html
 hyperoptimize
+hypotheticals
 Iceburgh
 ident
 IDE
@@ -444,6 +447,7 @@ submodule
 submodules
 Submodules
 suboptimal
+subpath
 substring
 subteams
 subtree
@@ -515,6 +519,7 @@ visualstudio
 Vlissides
 vscode
 vtable
+waitlist
 wasn
 weakt
 WeatherForecast
