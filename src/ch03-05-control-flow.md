@@ -283,8 +283,8 @@ fn main() {
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support a keyboard shortcut,
-<span class="keystroke">ctrl-c</span>, to halt a program that is stuck in a
-continual loop. Give it a try:
+<span class="keystroke">ctrl-c</span>, to interrupt a program that is stuck in
+a continual loop. Give it a try:
 
 ```text
 $ cargo run
@@ -300,7 +300,8 @@ again!
 
 The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
 </span>. You may or may not see the word `again!` printed after the `^C`,
-depending on where the code was in the loop when it received the halt signal.
+depending on where the code was in the loop when it received the interrupt
+signal.
 
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 You can place the `break` keyword within the loop to tell the program when to

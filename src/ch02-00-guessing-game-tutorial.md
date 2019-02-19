@@ -822,7 +822,7 @@ and run the program again. Notice that there is a new problem because the
 program is doing exactly what we told it to do: ask for another guess forever!
 It doesn’t seem like the user can quit!
 
-The user could always halt the program by using the keyboard shortcut <span
+The user could always interrupt the program by using the keyboard shortcut <span
 class="keystroke">ctrl-c</span>. But there’s another way to escape this
 insatiable monster, as mentioned in the `parse` discussion in [“Comparing the
 Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
