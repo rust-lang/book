@@ -253,7 +253,7 @@ organization. There’s another reason Rust has modules: modules are the *privac
 boundary* in Rust. If you want to make an item like a function or struct
 private, you put it in a module. Here are the privacy rules:
 
-* All items (functions, methods, structs, enums, modules, annd constants) are
+* All items (functions, methods, structs, enums, modules, and constants) are
   private by default.
 * You can use the `pub` keyword to make an item public.
 * You aren’t allowed to use private code defined in modules that are children
