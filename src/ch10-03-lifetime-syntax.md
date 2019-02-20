@@ -680,9 +680,9 @@ impl<'a> ImportantExcerpt<'a> {
 }
 ```
 
-The lifetime parameter declaration after `impl` and use after the type name is
-required, but we’re not required to annotate the lifetime of the reference to
-`self` because of the first elision rule.
+The lifetime parameter declaration after `impl` and its use after the type name
+are required, but we’re not required to annotate the lifetime of the reference
+to `self` because of the first elision rule.
 
 Here is an example where the third lifetime elision rule applies:
 
