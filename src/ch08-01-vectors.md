@@ -203,7 +203,7 @@ programs from ending up in that situation.
 ### Iterating over the Values in a Vector
 
 If we want to access each element in a vector in turn, we can iterate through
-all of the elements rather than use indexes to access one at a time. Listing
+all of the elements rather than use indices to access one at a time. Listing
 8-8 shows how to use a `for` loop to get immutable references to each element
 in a vector of `i32` values and print them.
 
