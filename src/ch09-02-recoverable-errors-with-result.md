@@ -464,11 +464,12 @@ fn read_username_from_file() -> Result<String, io::Error> {
 opening and then reading the file</span>
 
 Reading a file into a string is a fairly common operation, so Rust provides the
-convenient `fs::read_to_string` function that opens the file, creates a new
-`String`, reads the contents of the file, puts the contents into that `String`,
-and returns it. Of course, using `fs::read_to_string` doesn’t give us the
-opportunity to explain all the error handling, so we did it the longer way
-first.
+convenient `fs::read_to_string` function (This function becomes effective in
+rust 1.26.0 and will fail if the build environment is lower than this version)
+that opens the file, creates a new `String`, reads the contents of the file,
+puts the contents into that `String`, and returns it. Of course, using
+`fs::read_to_string` doesn’t give us the opportunity to explain all the error
+handling, so we did it the longer way first.
 
 #### The `?` Operator Can Only Be Used in Functions That Return `Result`
 
