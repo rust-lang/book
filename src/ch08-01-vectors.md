@@ -234,7 +234,7 @@ elements in a vector</span>
 To change the value that the mutable reference refers to, we have to use the
 dereference operator (`*`) to get to the value in `i` before we can use the
 `+=` operator. We’ll talk more about the dereference operator in the
-["Following the Pointer to the Value with the Dereference Operator"][deref]
+[“Following the Pointer to the Value with the Dereference Operator”][deref]
 section of Chapter 15.
 
 ### Using an Enum to Store Multiple Types

@@ -2,7 +2,7 @@
 
 The following list contains keywords that are reserved for current or future
 use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we'll discuss in the "[Raw Identifiers][raw-identifiers]"
+as raw identifiers as we’ll discuss in the “[Raw Identifiers][raw-identifiers]”
 section), including names of functions, variables, parameters, struct fields,
 modules, crates, constants, macros, static values, attributes, types, traits,
 or lifetimes.
@@ -98,7 +98,7 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error says that you can't use the keyword `match` as the function
+The error says that you can’t use the keyword `match` as the function
 identifier. You can use `match` as a function name by using a raw identifier:
 
 <span class="filename">Filename: src/main.rs</span>
