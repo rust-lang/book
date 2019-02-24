@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="{{ language }}" class="no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Outdated link: {{ title }}</title>
+        <meta name="robots" content="noindex,follow">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+        <base href="{{ path_to_root }}">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        {{#each additional_css}}
+        <link rel="stylesheet" href="{{this}}">
+        {{/each}}
+    </head>
+    <body class="light">
+        <div id="page-wrapper" class="page-wrapper">
+            <div class="page">
+                {{> header}}
+                <div id="content" class="content">
+                    <main>
+                        {{{ content }}}
+                    </main>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
