@@ -346,9 +346,9 @@ struct with a particular concrete type for the generic type parameter `T`</span>
 
 This code means the type `Point<f32>` will have a method named
 `distance_from_origin` and other instances of `Point<T>` where `T` is not of
-type `f32` will not have this method defined. The method measures how far our
-point is from the point at coordinates (0.0, 0.0) and uses mathematical
-operations that are available only for floating point types.
+type `f32` will not have this method defined. This method measures the distance
+between two points in a function graph, and uses mathematical operations that
+are available only for floating point types.
 
 Generic type parameters in a struct definition aren’t always the same as those
 you use in that struct’s method signatures. For example, Listing 10-11 defines
