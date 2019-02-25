@@ -325,4 +325,4 @@ Let’s combine the knowledge you learned in this chapter and in previous
 chapters to work on a project!
 
 [separating-modules-into-files]:
-ch07-02-defining-modules-to-control-scope-and-privacy.html#separating-modules-into-different-files
+ch07-05-separating-modules-into-different-files.html
