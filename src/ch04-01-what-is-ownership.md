@@ -559,4 +559,4 @@ common. Luckily for us, Rust has a feature for this concept, called
 [data-types]: ch03-02-data-types.html#data-types
 [derivable-traits]: appendix-03-derivable-traits.html
 [method-syntax]: ch05-03-method-syntax.html#method-syntax
-[paths-module-tree]: ch07-02-modules-and-use-to-control-scope-and-privacy.html#paths-for-referring-to-an-item-in-the-module-tree
+[paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

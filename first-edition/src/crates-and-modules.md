@@ -3,7 +3,7 @@
 The first edition of the book is no longer distributed with Rust's documentation.
 
 If you came here via a link or web search, you may want to check out [the current
-version of the book](../ch07-00-packages-crates-and-modules.html) instead.
+version of the book](../ch07-00-managing-growing-projects-with-packages-crates-and-modules.html) instead.
 
 If you have an internet connection, you can [find a copy distributed with
 Rust
