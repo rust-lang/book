@@ -55,10 +55,6 @@ fn main() {
 바이너리 크레이트는 이 라이브러리 크레이트를 이용합니다. 결과적으로, 다른 프로그램 또한
 그 라이브러리 크레이트를 이용할 수 있고, 이는 멋지게 근심을 덜어줍니다.
 
-From the point of view of a crate outside the `communicator` library looking
-in, all the modules we’ve been creating are within a module that has the same
-name as the crate, `communicator`. We call the top-level module of a crate the
-*root module*.
 `communicator` 라이브러리 밖의 크레이트가 안을 들여다 보는 시점에서, 우리가 만들어왔던
 모든 모듈들은 `communicator`라는 이름을 갖는 모듈 내에 있습니다. 크레이트의 최상위
 모듈을 *루트 모듈 (root module)* 이라 부릅니다.
