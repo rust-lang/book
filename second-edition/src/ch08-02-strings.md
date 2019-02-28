@@ -195,8 +195,7 @@ fn add(self, s: &str) -> String {
 `s2`의 내용물의 복사본을 추가한 다음, 결과물의 소유권을 반환합니다. 달리 말하면, 이 구문은 여러
 복사본을 만드는 것처럼 보여도 그렇지 않습니다: 이러한 구현은 복사보다 더 효율적입니다.
 
-If we need to concatenate multiple strings, the behavior of `+` gets unwieldy:
-만일 여러 스트링을 접하고자 한다면, `+`의 동작은 다루기 불편해 집니다.
+만일 여러 스트링을 접하고자 한다면, `+`의 동작은 다루기 불편해 집니다.:
 
 ```rust
 let s1 = String::from("tic");
