@@ -241,7 +241,7 @@ error[E0603]: module `instrument` is private
 
 Listing 7-5: Compiler errors from building the code in Listing 7-4
 
-The error messsages say that module `instrument` is private. We can see that we
+The error messages say that module `instrument` is private. We can see that we
 have the correct paths for the `instrument` module and the `clarinet` function,
 but Rust won’t let us use them because they’re private. It’s time to learn
 about the `pub` keyword!
