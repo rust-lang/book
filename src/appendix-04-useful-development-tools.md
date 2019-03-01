@@ -1,37 +1,39 @@
 # Appendix D - Useful Development Tools
 
-In this appendix, we’ll talk about tools provided by the Rust project that are
-useful when developing Rust code.
+In this appendix, we talk about some useful development tools that the Rust
+project provides. We’ll look at automatic formatting, quick ways to apply
+warning fixes, a linter, and integrating with IDEs.
 
 ## Automatic Formatting with `rustfmt`
 
-The tool `rustfmt` reformats your code according to the community code style.
-Many projects use `rustfmt` to prevent arguments about which style to use when
-writing Rust: everyone formats their code with the tool!
+The `rustfmt` tool reformats your code according to the community code style.
+Many collaborative projects use `rustfmt` to prevent arguments about which
+style to use when writing Rust: everyone formats their code using the tool.
 
-To install `rustfmt`:
+To install `rustfmt`, enter the following:
 
 ```text
 $ rustup component add rustfmt
 ```
 
-This will give you both `rustfmt` and `cargo-fmt`, similar to how Rust gives
-you both `rustc` and `cargo`. To take any Cargo project and format it:
+This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
+both `rustc` and `cargo`. To format any Cargo project, enter the following:
 
 ```text
 $ cargo fmt
 ```
 
-Running this command will reformat all of the Rust code in the current crate.
-This should only change the code style, not the code semantics. For more
-information on `rustfmt`, see [its documentation][rustfmt].
+Running this command reformats all the Rust code in the current crate. This
+should only change the code style, not the code semantics. For more information
+on `rustfmt`, see [its documentation][rustfmt].
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 
-## Fix Up Your Code with `rustfix`
+## Fix Your Code with `rustfix`
 
-If you’ve written code in Rust, you’ve probably seen compiler warnings. For
-example, consider this code:
+The rustfix tool is included with Rust installations and can automatically fix
+some compiler warnings. If you’ve written code in Rust, you’ve probably seen
+compiler warnings. For example, consider this code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,7 +76,7 @@ $ cargo fix
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-If we look at *src/main.rs* again, we’ll see that `cargo fix` has changed the
+When we look at *src/main.rs* again, we’ll see that `cargo fix` has changed the
 code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -89,31 +91,30 @@ fn main() {
 }
 ```
 
-The `for` loop variable is now named `_i`, and the warning will no longer
-appear.
+The `for` loop variable is now named `_i`, and the warning no longer appears.
 
-The `cargo fix` command can also be used to transition your code between
-different editions of Rust. Editions are covered in Appendix E.
+You can also use the `cargo fix` command to transition your code between
+different Rust editions. Editions are covered in Appendix E.
 
-## More Lints with `clippy`
+## More Lints with Clippy
 
-The `clippy` tool is a collection of lints to catch common mistakes and improve
-your Rust code.
+The Clippy tool is a collection of lints to analyze your code to catch common
+mistakes and improve your Rust code.
 
-To install `clippy`:
+To install Clippy, enter the following:
 
 ```text
 $ rustup component add clippy
 ```
 
-To take any Cargo project and run clippy’s lints on it:
+To run Clippy’s lints on any Cargo project, enter the following:
 
 ```text
 $ cargo clippy
 ```
 
-For example, if you write a program that uses an approximation of a
-mathematical constant such as pi, as this program does:
+For example, say you write a program that uses an approximation of a
+mathematical constant, such as pi, as this program does:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -125,7 +126,7 @@ fn main() {
 }
 ```
 
-Running `cargo clippy` on this project will result in this error:
+Running `cargo clippy` on this project results in this error:
 
 ```text
 error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
@@ -135,12 +136,13 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   |             ^^^^^^
   |
   = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang.github.io/rust-clippy/v0.0.212/index.html#approx_constant
+  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This lets you know that Rust has this constant defined more precisely, and that
-your program would be more correct if you used the constant instead. This code
-doesn’t result in any errors or warnings from `clippy`:
+This error lets you know that Rust has this constant defined more precisely,
+and that your program would be more correct if you used the constant instead.
+You would then change your code to use the `PI` constant. The following code
+doesn’t result in any errors or warnings from Clippy:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -152,29 +154,29 @@ fn main() {
 }
 ```
 
-For more information on `clippy`, see [its documentation][clippy].
+For more information on Clippy, see [its documentation][clippy].
 
 [clippy]: https://github.com/rust-lang/rust-clippy
 
 ## IDE Integration Using the Rust Language Server
 
-To help IDE integration, the Rust project distributes the `rls`, which stands
-for the Rust Language Server. This tool speaks the [Language Server
-Protocol][lsp], which is a specification for IDEs and programming languages to
-communicate with each other. The `rls` can be used by different clients, such
-as [the Rust plugin for Visual Studio: Code][vscode].
+To help IDE integration, the Rust project distributes the *Rust Language
+Server* (`rls`). This tool speaks the [Language Server
+Protocol][lsp], which is a specification for IDEs and programming
+languages to communicate with each other. Different clients can use the `rls`,
+such as [the Rust plug-in for Visual Studio Code][vscode].
 
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust
 
-To install the `rls`:
+To install the `rls`, enter the following:
 
 ```text
 $ rustup component add rls
 ```
 
-Then install the language server support in your particular IDE, and you will
-gain abilities such as autocompletion, jump to definition, and inline errors.
+Then install the language server support in your particular IDE; you’ll gain
+abilities such as autocompletion, jump to definition, and inline errors.
 
 For more information on the `rls`, see [its documentation][rls].
 
