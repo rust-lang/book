@@ -247,6 +247,7 @@ libreoffice
 libstd
 lifecycle
 LimitTracker
+linter
 LLVM
 lobally
 locators
