@@ -156,7 +156,7 @@ entire module tree is rooted under the implicit module named `crate`.
 
 This tree might remind you of the directory tree of the filesystem you have on
 your computer; this is a very apt comparison! Just like directories in a
-filesystem, you place code inside whichever module will create the organization
+filesystem, you place code inside whichever module that will create the organization
 you’d like. Another similarity is that to refer to an item in a filesystem or a
 module tree, you use its *path*.
 
