@@ -53,7 +53,7 @@ both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 #     V6,
 # }
 #
-fn route(ip_type: IpAddrKind) { }
+fn route(ip_kind: IpAddrKind) { }
 ```
 
 And we can call this function with either variant:
@@ -64,7 +64,7 @@ And we can call this function with either variant:
 #     V6,
 # }
 #
-# fn route(ip_type: IpAddrKind) { }
+# fn route(ip_kind: IpAddrKind) { }
 #
 route(IpAddrKind::V4);
 route(IpAddrKind::V6);
