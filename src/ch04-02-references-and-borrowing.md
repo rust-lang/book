@@ -234,7 +234,7 @@ through the last time that reference is used. For instance, this code will
 compile because the last usage of the immutable references occurs before the
 mutable reference is introduced:
 
-```rust
+```rust,edition2018
 let mut s = String::from("hello");
 
 let r1 = &s; // no problem
