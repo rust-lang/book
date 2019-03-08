@@ -27,7 +27,7 @@ enum Coin {
     Quarter,
 }
 
-fn value_in_cents(coin: Coin) -> u32 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -76,7 +76,7 @@ a `Coin::Penny` but would still return the last value of the block, `1`:
 #    Quarter,
 # }
 #
-fn value_in_cents(coin: Coin) -> u32 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -145,7 +145,7 @@ quarter’s state. Then we can use `state` in the code for that arm, like so:
 #    Quarter(UsState),
 # }
 #
-fn value_in_cents(coin: Coin) -> u32 {
+fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,

@@ -98,20 +98,26 @@ defaults are generally good choices, and integer types default to `i32`: this
 type is generally the fastest, even on 64-bit systems. The primary situation in
 which you’d use `isize` or `usize` is when indexing some sort of collection.
 
-##### Integer Overflow
-
-Let’s say that you have a `u8`, which can hold values between zero and `255`.
-What happens if you try to change it to `256`? This is called “integer
-overflow,” and Rust has some interesting rules around this behavior. When
-compiling in debug mode, Rust checks for this kind of issue and will cause
-your program to *panic*, which is the term Rust uses when a program exits
-with an error. We’ll discuss panics more in Chapter 9.
-
-In release builds, Rust does not check for overflow, and instead will
-do something called “two’s complement wrapping.” In short, `256` becomes
-`0`, `257` becomes `1`, etc. Relying on overflow is considered an error,
-even if this behavior happens. If you want this behavior explicitly, the
-standard library has a type, `Wrapping`, that provides it explicitly.
+> ##### Integer Overflow
+>
+> Let’s say you have a variable of type `u8` that can hold values between 0 and
+> 255. If you try to change the variable to a value outside of that range, such
+> as 256, *integer overflow* will occur. Rust has some interesting rules
+> involving this behavior. When you’re compiling in debug mode, Rust includes
+> checks for integer overflow that causes your program to *panic* at runtime if
+> this behavior occurs. Rust uses the term panicking when a program exits with
+> an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors
+> with `panic!`”][unrecoverable-errors-with-panic] section in Chapter 9.
+>
+> When you’re compiling in release mode with the `--release` flag, Rust does
+> *not* include checks for integer overflow that cause panics. Instead, if
+> overflow occurs, Rust performs *two’s complement wrapping*. In short, values
+> greater than the maximum value the type can hold “wrap around” to the minimum
+> of the values the type can hold. In the case of a `u8`, 256 becomes 0, 257
+> becomes 1, and so on. The program won’t panic, but the variable will have a
+> value that probably isn’t what you were expecting it to have. Relying on
+> integer overflow’s wrapping behavior is considered an error. If you want to
+> wrap explicitly, you can use the standard library type [`Wrapping`][wrapping].
 
 #### Floating-Point Types
 
@@ -170,8 +176,8 @@ list of all operators that Rust provides.
 #### The Boolean Type
 
 As in most other programming languages, a Boolean type in Rust has two possible
-values: `true` and `false`. The Boolean type in Rust is specified using `bool`.
-For example:
+values: `true` and `false`. Booleans are one byte in size. The Boolean type in
+Rust is specified using `bool`. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -187,13 +193,11 @@ The main way to use Boolean values is through conditionals, such as an `if`
 expression. We’ll cover how `if` expressions work in Rust in the [“Control
 Flow”][control-flow]<!-- ignore --> section.
 
-Booleans are one byte in size.
-
 #### The Character Type
 
 So far we’ve worked only with numbers, but Rust supports letters too. Rust’s
 `char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it. (Note that the `char` literal is specified with
+code shows one way to use it. (Note that `char` literals are specified with
 single quotes, as opposed to string literals, which use double quotes.)
 
 <span class="filename">Filename: src/main.rs</span>
@@ -206,14 +210,15 @@ fn main() {
 }
 ```
 
-Rust’s `char` type represents a Unicode Scalar Value, which means it can
-represent a lot more than just ASCII. Accented letters; Chinese, Japanese, and
-Korean characters; emoji; and zero-width spaces are all valid `char` values in
-Rust. Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in [“Storing UTF-8
-Encoded Text with Strings”][strings]<!-- ignore --> in Chapter 8.
+Rust’s `char` type is four bytes in size and represents a Unicode Scalar Value,
+which means it can represent a lot more than just ASCII. Accented letters;
+Chinese, Japanese, and Korean characters; emoji; and zero-width spaces are all
+valid `char` values in Rust. Unicode Scalar Values range from `U+0000` to
+`U+D7FF` and `U+E000` to `U+10FFFF` inclusive. However, a “character” isn’t
+really a concept in Unicode, so your human intuition for what a “character” is
+may not match up with what a `char` is in Rust. We’ll discuss this topic in
+detail in [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore -->
+in Chapter 8.
 
 ### Compound Types
 
@@ -319,20 +324,29 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-Arrays have an interesting type; it looks like this: `[type; number]`. For
-example:
+You would write an array’s type by using square brackets, and within the
+brackets include the type of each element, a semicolon, and then the number of
+elements in the array, like so:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
-First, there’s square brackets; they look like the syntax for creating an
-array. Inside, there’s two pieces of information, separated by a semicolon.
-The first is the type of each element of the array. Since all elements have
-the same type, we only need to list it once. After the semicolon, there’s
-a number that indicates the length of the array. Since an array has a fixed size,
-this number is always the same, even if the array’s elements are modified, it
-cannot grow or shrink.
+Here, `i32` is the type of each element. After the semicolon, the number `5`
+indicates the element contains five items.
+
+Writing an array’s type this way looks similar to an alternative syntax for
+initializing an array: if you want to create an array that contains the same
+value for each element, you can specify the initial value, followed by a
+semicolon, and then the length of the array in square brackets, as shown here:
+
+```rust
+let a = [3; 5];
+```
+
+The array named `a` will contain `5` elements that will all be set to the value
+`3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
+more concise way.
 
 ##### Accessing Array Elements
 
@@ -401,3 +415,5 @@ continuing. Chapter 9 discusses more of Rust’s error handling.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [control-flow]: ch03-05-control-flow.html#control-flow
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
+[wrapping]: ../std/num/struct.Wrapping.html

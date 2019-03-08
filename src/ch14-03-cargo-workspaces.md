@@ -138,9 +138,9 @@ Cargo doesn’t assume that crates in a workspace will depend on each other, so
 we need to be explicit about the dependency relationships between the crates.
 
 Next, let’s use the `add_one` function from the `add-one` crate in the `adder`
-crate. Open the *adder/src/main.rs* file and add an `use` line at the top to
+crate. Open the *adder/src/main.rs* file and add a `use` line at the top to
 bring the new `add-one` library crate into scope. Then change the `main`
-function to call the `add_one` function, as in Listing 14-7:
+function to call the `add_one` function, as in Listing 14-7.
 
 <span class="filename">Filename: adder/src/main.rs</span>
 
@@ -218,9 +218,8 @@ $ cargo build
 The top-level *Cargo.lock* now contains information about the dependency of
 `add-one` on `rand`. However, even though `rand` is used somewhere in the
 workspace, we can’t use it in other crates in the workspace unless we add
-`rand` to their *Cargo.toml* files as well. For example, if we add `extern
-crate rand;` to the *adder/src/main.rs* file for the `adder` crate, we’ll get
-an error:
+`rand` to their *Cargo.toml* files as well. For example, if we add `use rand;`
+to the *adder/src/main.rs* file for the `adder` crate, we’ll get an error:
 
 ```text
 $ cargo build

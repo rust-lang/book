@@ -385,8 +385,8 @@ fn handle_connection(mut stream: TcpStream) {
 <span class="caption">Listing 20-5: Sending the contents of *hello.html* as the
 body of the response</span>
 
-We’ve added a line at the top to bring the standard library’s `File` into
-scope. The code for opening a file and reading the contents should look
+We’ve added a line at the top to bring the standard library’s filesystem module
+into scope. The code for reading the contents of a file to a string should look
 familiar; we used it in Chapter 12 when we read the contents of a file for our
 I/O project in Listing 12-4.
 
@@ -441,7 +441,7 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 <span class="caption">Listing 20-6: Matching the request and handling requests
-to */* differently than other requests</span>
+to */* differently from other requests</span>
 
 First, we hardcode the data corresponding to the */* request into the `get`
 variable. Because we’re reading raw bytes into the buffer, we transform `get`

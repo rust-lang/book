@@ -129,7 +129,7 @@ Listing 15-3:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use List::{Cons, Nil};
+use crate::List::{Cons, Nil};
 
 fn main() {
     let list = Cons(1, Cons(2, Cons(3, Nil)));
@@ -240,7 +240,7 @@ enum List {
     Nil,
 }
 
-use List::{Cons, Nil};
+use crate::List::{Cons, Nil};
 
 fn main() {
     let list = Cons(1,

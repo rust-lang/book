@@ -11,7 +11,6 @@ advanced features of lifetimes that we haven’t covered yet:
 * Lifetime bounds: specifies a lifetime for a reference to a generic type
 * Inference of trait object lifetimes: allows the compiler to infer trait
   object lifetimes and when they need to be specified
-* The anonymous lifetime: making elision more obvious
 
 ### Ensuring One Lifetime Outlives Another with Lifetime Subtyping
 
@@ -162,14 +161,14 @@ To figure out why these errors occur, let’s look at the definitions in Listing
 19-13 again, specifically the references in the signature of the `parse` method:
 
 ```rust,ignore
-    fn parse(&self) -> Result<(), &str> {
+fn parse(&self) -> Result<(), &str> {
 ```
 
 Remember the elision rules? If we annotate the lifetimes of the references
 rather than eliding, the signature would be as follows:
 
 ```rust,ignore
-    fn parse<'a>(&'a self) -> Result<(), &'a str> {
+fn parse<'a>(&'a self) -> Result<(), &'a str> {
 ```
 
 That is, the error part of the return value of `parse` has a lifetime that is
@@ -305,11 +304,11 @@ refer to something and give it the necessary lifetime.
 
 ### Lifetime Bounds on References to Generic Types
 
-In the [“Trait Bounds”][trait-bounds]<!-- ignore --> section in Chapter 10, we
-discussed using trait bounds on generic types. We can also add lifetime
-parameters as constraints on generic types; these are called *lifetime bounds*.
-Lifetime bounds help Rust verify that references in generic types won’t outlive
-the data they’re referencing.
+In the [“Traits as Parameters”][traits-as-parameters]<!-- ignore --> section in
+Chapter 10, we discussed using trait bounds on generic types. We can also add
+lifetime parameters as constraints on generic types; these are called *lifetime
+bounds*. Lifetime bounds help Rust verify that references in generic types
+won’t outlive the data they’re referencing.
 
 As an example, consider a type that is a wrapper over references. Recall the
 `RefCell<T>` type from the [“`RefCell<T>` and the Interior Mutability Pattern”]
@@ -446,56 +445,13 @@ As with the other bounds, the syntax adding a lifetime bound means that any
 implementor of the `Red` trait that has references inside the type must have
 the same lifetime specified in the trait object bounds as those references.
 
-### The anonymous lifetime
-
-Let’s say that we have a struct that’s a wrapper around a string slice, like
-this:
-
-```rust
-struct StrWrap<'a>(&'a str);
-```
-
-We can write a function that returns one of these like this:
-
-```rust
-# struct StrWrap<'a>(&'a str);
-fn foo<'a>(string: &'a str) -> StrWrap<'a> {
-    StrWrap(string)
-}
-```
-
-But that’s a lot of `'a`s! To cut down on some of this noise, we can use the
-anonymous lifetime, `'_`, like this:
-
-```rust
-# struct StrWrap<'a>(&'a str);
-fn foo(string: &str) -> StrWrap<'_> {
-    StrWrap(string)
-}
-```
-
-The `'_` says “use the elided lifetime here.” This means that we can still see
-that `StrWrap` contains a reference, but we don’t need all of the lifetime
-annotations to make sense of it.
-
-It works in `impl` headers too; for example:
-
-```rust,ignore
-// verbose
-impl<'a> fmt::Debug for StrWrap<'a> {
-
-// elided
-impl fmt::Debug for StrWrap<'_> {
-
-```
-
 Next, let’s look at some other advanced features that manage traits.
 
 [lifetime-annotations-in-struct-definitions]:
 ch10-03-lifetime-syntax.html#lifetime-annotations-in-struct-definitions
 [refcellt-and-the-interior-mutability-pattern]:
 ch15-05-interior-mutability.html#refcellt-and-the-interior-mutability-pattern
-[trait-bounds]: ch10-02-traits.html#trait-bounds
+[traits-as-parameters]: ch10-02-traits.html#traits-as-parameters
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [validating-references-with-lifetimes]:

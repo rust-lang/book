@@ -142,8 +142,9 @@ to compare values of type `T` in the body, we can only use types whose values
 can be ordered. To enable comparisons, the standard library has the
 `std::cmp::PartialOrd` trait that you can implement on types (see Appendix C
 for more on this trait). You’ll learn how to specify that a generic type has a
-particular trait in the [“Trait Bounds”][trait-bounds]<!-- ignore --> section,
-but let’s first explore other ways of using generic type parameters.
+particular trait in the [“Traits as Parameters”][traits-as-parameters]<!--
+ignore --> section, but let’s first explore other ways of using generic type
+parameters.
 
 ### In Struct Definitions
 
@@ -352,7 +353,7 @@ operations that are available only for floating point types.
 Generic type parameters in a struct definition aren’t always the same as those
 you use in that struct’s method signatures. For example, Listing 10-11 defines
 the method `mixup` on the `Point<T, U>` struct from Listing 10-8. The method
-takes another `Point` as a parameter, which might have different types than the
+takes another `Point` as a parameter, which might have different types from the
 `self` `Point` we’re calling `mixup` on. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `T`) and the `y`
 value from the passed-in `Point` (of type `W`).
@@ -385,7 +386,7 @@ fn main() {
 ```
 
 <span class="caption">Listing 10-11: A method that uses different generic types
-than its struct’s definition</span>
+from its struct’s definition</span>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
@@ -461,4 +462,4 @@ performs just as it would if we had duplicated each definition by hand. The
 process of monomorphization makes Rust’s generics extremely efficient at
 runtime.
 
-[trait-bounds]: ch10-02-traits.html#trait-bounds
+[traits-as-parameters]: ch10-02-traits.html#traits-as-parameters

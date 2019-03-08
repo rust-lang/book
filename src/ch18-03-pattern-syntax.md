@@ -324,12 +324,13 @@ pattern is similar to the pattern we specify to match tuples. The number of
 variables in the pattern must match the number of elements in the variant we’re
 matching.
 
-#### Destructuring Nested Structs & Enums
+#### Destructuring Nested Structs and Enums
 
-Up until now, all of our examples have been matching structures that were one
-level deep. Matching can work on nested structures too!
+Until now, all our examples have been matching structs or enums that were one
+level deep. Matching can work on nested items too!
 
-We can refactor the example above to support both RGB and HSV colors:
+For example, we can refactor the code in Listing 18-15 to support RGB and HSV
+colors in the `ChangeColor` message, as shown in Listing 18-16.
 
 ```rust
 enum Color {
@@ -369,63 +370,14 @@ fn main() {
 }
 ```
 
-#### Destructuring References
+<span class="caption">Listing 18-16: Matching on nested enums</span>
 
-When the value we’re matching to our pattern contains a reference, we need to
-destructure the reference from the value, which we can do by specifying a `&`
-in the pattern. Doing so lets us get a variable holding the value that the
-reference points to rather than getting a variable that holds the reference.
-This technique is especially useful in closures where we have iterators that
-iterate over references, but we want to use the values in the closure rather
-than the references.
-
-The example in Listing 18-16 iterates over references to `Point` instances in a
-vector, destructuring the reference and the struct so we can perform
-calculations on the `x` and `y` values easily.
-
-```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-let points = vec![
-    Point { x: 0, y: 0 },
-    Point { x: 1, y: 5 },
-    Point { x: 10, y: -3 },
-];
-
-let sum_of_squares: i32 = points
-    .iter()
-    .map(|&Point { x, y }| x * x + y * y)
-    .sum();
-```
-
-<span class="caption">Listing 18-16: Destructuring a reference to a struct into
-the struct field values</span>
-
-This code gives us the variable `sum_of_squares` holding the value 135, which
-is the result of squaring the `x` value and the `y` value, adding those
-together, and then adding the result for each `Point` in the `points` vector to
-get one number.
-
-If we had not included the `&` in `&Point { x, y }`, we’d get a type mismatch
-error, because `iter` would then iterate over references to the items in the
-vector rather than the actual values. The error would look like this:
-
-```text
-error[E0308]: mismatched types
-  -->
-   |
-14 |         .map(|Point { x, y }| x * x + y * y)
-   |               ^^^^^^^^^^^^ expected &Point, found struct `Point`
-   |
-   = note: expected type `&Point`
-              found type `Point`
-```
-
-This error indicates that Rust was expecting our closure to match `&Point`, but
-we tried to match directly to a `Point` value, not a reference to a `Point`.
+The pattern of the first arm in the `match` expression matches a
+`Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
+the pattern binds to the three inner `i32` values. The pattern of the second
+arm also matches a `Message::ChangeColor` enum variant, but the inner enum
+matches the `Color::Hsv` variant instead. We can specify these complex
+conditions in one `match` expression, even though two enums are involved.
 
 #### Destructuring Structs and Tuples
 
@@ -497,8 +449,7 @@ example, when we want to test for only part of a value but have no use for the
 other parts in the corresponding code we want to run. Listing 18-18 shows code
 responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
-setting but can unset the setting and can give the setting a value if it is
-currently unset.
+setting but can unset the setting and give it a value if it is currently unset.
 
 ```rust
 let mut setting_value = Some(5);
@@ -878,66 +829,6 @@ applied any test to the value in the `id` field in this arm, as we did with the
 first two arms: any value would match this pattern.
 
 Using `@` lets us test a value and save it in a variable within one pattern.
-
-### Legacy patterns: `ref` and `ref mut`
-
-In older versions of Rust, `match` would assume that you want to move what is
-matched. But sometimes, that’s not what you wanted. For example:
-
-```rust
-let robot_name = &Some(String::from("Bors"));
-
-match robot_name {
-    Some(name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-Here, `robot_name` is a `&Option<String>`. Rust would then complain that
-`Some(name)` doesn’t match up with `&Option<T>`, so you’d have to write this:
-
-```rust,ignore
-let robot_name = &Some(String::from("Bors"));
-
-match robot_name {
-    &Some(name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-Next, Rust would complain that `name` is trying to move the `String` out of
-the option, but because it’s a reference to an option, it’s borrowed, and so
-can’t be moved out of. This is where the `ref` keyword comes into play:
-
-```rust
-let robot_name = &Some(String::from("Bors"));
-
-match robot_name {
-    &Some(ref name) => println!("Found a name: {}", name),
-    None => (),
-}
-
-println!("robot_name is: {:?}", robot_name);
-```
-
-The `ref` keyword is like the opposite of `&` in patterns; this says “please
-bind `ref` to be a `&String`, don’t try to move it out. In other words, the
-`&` in `&Some` is matching against a reference, but `ref` *creates* a
-reference. `ref mut` is like `ref`, but for mutable references.
-
-Anyway, today’s Rust doesn’t work like this. If you try to `match` on
-something borrowed, then all of the bindings you create will attempt to
-borrow as well. This means that the original code works as you’d expect.
-
-Because Rust is backwards compatible, we couldn’t remove `ref` and `ref mut`,
-and they’re sometimes useful in obscure situations, where you want to
-partially borrow part of a struct as mutable and another part as immutable.
-But you may see them in older Rust code, so knowing what they do is still
-useful.
 
 ## Summary
 

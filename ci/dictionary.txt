@@ -51,6 +51,7 @@ Boolean
 Booleans
 Bors
 BorrowMutError
+BoxMeUp
 BTreeSet
 BuildHasher
 Cacher
@@ -155,6 +156,7 @@ filename
 Filename
 filesystem
 Filesystem
+filesystem's
 filesystems
 Firefox
 FnBox
@@ -182,6 +184,8 @@ HashMap
 HashSet
 Haskell
 hasn
+HeadB
+HeadC
 HelloMacro
 helloworld
 HelloWorld
@@ -192,6 +196,7 @@ Hola
 homogenous
 html
 hyperoptimize
+hypotheticals
 Iceburgh
 ident
 IDE
@@ -207,6 +212,7 @@ IndexMut
 indices
 init
 initializer
+initializers
 inline
 instantiation
 internet
@@ -241,6 +247,7 @@ libreoffice
 libstd
 lifecycle
 LimitTracker
+linter
 LLVM
 lobally
 locators
@@ -319,6 +326,7 @@ other's
 OutlinePrint
 overloadable
 overread
+PanicPayload
 param
 parameterize
 ParseIntError
@@ -441,6 +449,7 @@ submodule
 submodules
 Submodules
 suboptimal
+subpath
 substring
 subteams
 subtree
@@ -512,6 +521,7 @@ visualstudio
 Vlissides
 vscode
 vtable
+waitlist
 wasn
 weakt
 WeatherForecast

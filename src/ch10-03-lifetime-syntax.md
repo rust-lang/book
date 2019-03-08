@@ -575,9 +575,8 @@ The compiler uses three rules to figure out what lifetimes references have when
 there aren’t explicit annotations. The first rule applies to input lifetimes,
 and the second and third rules apply to output lifetimes. If the compiler gets
 to the end of the three rules and there are still references for which it can’t
-figure out lifetimes, the compiler will stop with an error.
-
-These rules apply to `fn` definitions, as well as `impl` blocks.
+figure out lifetimes, the compiler will stop with an error. These rules apply
+to `fn` definitions as well as `impl` blocks.
 
 The first rule is that each parameter that is a reference gets its own lifetime
 parameter. In other words, a function with one parameter gets one lifetime
@@ -681,9 +680,9 @@ impl<'a> ImportantExcerpt<'a> {
 }
 ```
 
-The lifetime parameter declaration after `impl` and use after the type name is
-required, but we’re not required to annotate the lifetime of the reference to
-`self` because of the first elision rule.
+The lifetime parameter declaration after `impl` and its use after the type name
+are required, but we’re not required to annotate the lifetime of the reference
+to `self` because of the first elision rule.
 
 Here is an example where the third lifetime elision rule applies:
 
@@ -707,15 +706,15 @@ and all lifetimes have been accounted for.
 
 ### The Static Lifetime
 
-One special lifetime we need to discuss is `'static`, which denotes the entire
-duration of the program. All string literals have the `'static` lifetime, which
-we can annotate as follows:
+One special lifetime we need to discuss is `'static`, which means that this
+reference *can* live for the entire duration of the program. All string
+literals have the `'static` lifetime, which we can annotate as follows:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the binary of your program, which
+The text of this string is stored directly in the program’s binary, which
 is always available. Therefore, the lifetime of all string literals is
 `'static`.
 

@@ -1,17 +1,8 @@
 #!/bin/bash
-# Copyright 2016 The Rust Project Developers. See the COPYRIGHT
-# file at the top-level directory of this distribution and at
-# http://rust-lang.org/COPYRIGHT.
-#
-# Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-# http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-# <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-# option. This file may not be copied, modified, or distributed
-# except according to those terms.
 
 aspell --version
 
-# Checks project markdown files for spell errors
+# Checks project Markdown files for spelling mistakes.
 
 # Notes:
 
@@ -45,8 +36,8 @@ dict_filename=./ci/dictionary.txt
 markdown_sources=(./src/*.md)
 mode="check"
 
-# aspell repeatedly modifies personal dictionary for some purpose,
-# so we should use a copy of our dictionary
+# aspell repeatedly modifies the personal dictionary for some reason,
+# so we should use a copy of our dictionary.
 dict_path="/tmp/dictionary.txt"
 
 if [[ "$1" == "list" ]]; then
@@ -70,7 +61,7 @@ if [[ ! -f "$dict_filename" ]]; then
     echo "personal_ws-1.1 en 0 utf-8" > "$dict_filename"
     cat "${markdown_sources[@]}" | aspell --ignore 3 list | sort -u >> "$dict_filename"
 elif [[ "$mode" == "list" ]]; then
-    # List (default) mode: scan all files, report errors
+    # List (default) mode: scan all files, report errors.
     declare -i retval=0
 
     cp "$dict_filename" "$dict_path"
@@ -84,9 +75,9 @@ elif [[ "$mode" == "list" ]]; then
         command=$(aspell --ignore 3 --personal="$dict_path" "$mode" < "$fname")
         if [[ -n "$command" ]]; then
             for error in $command; do
-                # FIXME: Find more correct way to get line number
+                # FIXME: find more correct way to get line number
                 # (ideally from aspell). Now it can make some false positives,
-                # because it is just a grep
+                # because it is just a grep.
                 grep --with-filename --line-number --color=always "$error" "$fname"
             done
             retval=1
@@ -94,7 +85,7 @@ elif [[ "$mode" == "list" ]]; then
     done
     exit "$retval"
 elif [[ "$mode" == "check" ]]; then
-    # Interactive mode: fix typos
+    # Interactive mode: fix typos.
     cp "$dict_filename" "$dict_path"
 
     if [ ! -f $dict_path ]; then

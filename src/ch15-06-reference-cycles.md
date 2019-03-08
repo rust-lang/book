@@ -24,7 +24,7 @@ doc tests do; the `use List` fails if this listing is put within a main -->
 # fn main() {}
 use std::rc::Rc;
 use std::cell::RefCell;
-use List::{Cons, Nil};
+use crate::List::{Cons, Nil};
 
 #[derive(Debug)]
 enum List {
@@ -45,7 +45,7 @@ impl List {
 <span class="caption">Listing 15-25: A cons list definition that holds a
 `RefCell<T>` so we can modify what a `Cons` variant is referring to</span>
 
-We’re using another variation of the `List` definition in Listing 15-25. The
+We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
 instead of having the ability to modify the `i32` value as we did in Listing
 15-24, we want to modify which `List` value a `Cons` variant is pointing to.
@@ -61,7 +61,7 @@ reference counts are at various points in this process.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use List::{Cons, Nil};
+# use crate::List::{Cons, Nil};
 # use std::rc::Rc;
 # use std::cell::RefCell;
 # #[derive(Debug)]
@@ -133,8 +133,8 @@ a rc count after changing a = 2
 
 The reference count of the `Rc<List>` instances in both `a` and `b` are 2
 after we change the list in `a` to point to `b`. At the end of `main`, Rust
-will try to drop `b` first, which will decrease the count in each of the
-`Rc<List>` instances in `a` and `b` by 1.
+will try to drop `b` first, which will decrease the count of the `Rc<List>`
+instance in `b` by 1.
 
 However, because `a` is still referencing the `Rc<List>` that was in `b`, that
 `Rc<List>` has a count of 1 rather than 0, so the memory the `Rc<List>` has on
@@ -476,7 +476,7 @@ and memory leaks.
 ## Summary
 
 This chapter covered how to use smart pointers to make different guarantees and
-trade-offs than those Rust makes by default with regular references. The
+trade-offs from those Rust makes by default with regular references. The
 `Box<T>` type has a known size and points to data allocated on the heap. The
 `Rc<T>` type keeps track of the number of references to data on the heap so
 that data can have multiple owners. The `RefCell<T>` type with its interior

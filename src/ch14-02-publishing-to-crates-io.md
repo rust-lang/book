@@ -34,9 +34,10 @@ for an `add_one` function in a crate named `my_crate`:
 /// # Examples
 ///
 /// ```
-/// let five = 5;
+/// let arg = 5;
+/// let answer = my_crate::add_one(arg);
 ///
-/// assert_eq!(6, my_crate::add_one(5));
+/// assert_eq!(6, answer);
 /// ```
 pub fn add_one(x: i32) -> i32 {
     x + 1
@@ -187,7 +188,7 @@ function named `mix`, as shown in Listing 14-3:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -209,14 +210,16 @@ pub mod kinds {
 }
 
 pub mod utils {
-    use kinds::*;
+    use crate::kinds::*;
 
     /// Combines two primary colors in equal amounts to create
     /// a secondary color.
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
         // --snip--
+#         SecondaryColor::Orange
     }
 }
+# fn main() {}
 ```
 
 <span class="caption">Listing 14-3: An `art` library with items organized into
@@ -277,9 +280,9 @@ items at the top level, as shown in Listing 14-5:
 //!
 //! A library for modeling artistic concepts.
 
-pub use kinds::PrimaryColor;
-pub use kinds::SecondaryColor;
-pub use utils::mix;
+pub use self::kinds::PrimaryColor;
+pub use self::kinds::SecondaryColor;
+pub use self::utils::mix;
 
 pub mod kinds {
     // --snip--

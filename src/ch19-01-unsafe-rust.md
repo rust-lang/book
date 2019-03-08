@@ -340,7 +340,7 @@ use std::slice;
 let address = 0x01234usize;
 let r = address as *mut i32;
 
-let slice : &[i32] = unsafe {
+let slice: &[i32] = unsafe {
     slice::from_raw_parts_mut(r, 10000)
 };
 ```
@@ -350,11 +350,7 @@ location</span>
 
 We don’t own the memory at this arbitrary location, and there is no guarantee
 that the slice this code creates contains valid `i32` values. Attempting to use
-`slice` as though it’s a valid slice results in undefined behavior. If we would
-not have taken care to align `address` to 4 (the alignment of `i32`), then even
-just calling `slice::from_raw_parts_mut` would already be undefined behavior --
-slices must always be aligned, even if they are not used (and even if they are
-empty).
+`slice` as though it’s a valid slice results in undefined behavior.
 
 #### Using `extern` Functions to Call External Code
 
@@ -545,5 +541,5 @@ ch04-02-references-and-borrowing.html#dangling-references
 [differences-between-variables-and-constants]:
 ch03-01-variables-and-mutability.html#differences-between-variables-and-constants
 [extensible-concurrency-with-the-sync-and-send-traits]:
-ch16-04-extensible-concurrency-sync-and-sen.html#extensible-concurrency-with-the-sync-and-send-traits
+ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type

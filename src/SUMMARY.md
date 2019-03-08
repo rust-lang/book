@@ -1,5 +1,6 @@
 # The Rust Programming Language
 
+[The Rust Programming Language](title-page.md)
 [Foreword](foreword.md)
 [Introduction](ch00-00-introduction.md)
 
@@ -36,9 +37,12 @@
 
 ## Basic Rust Literacy
 
-- [Packages, Crates, and Modules](ch07-00-packages-crates-and-modules.md)
-    - [Packages and Crates for Making Libraries and Executables](ch07-01-packages-and-crates-for-making-libraries-and-executables.md)
-    - [The Module System to Control Scope and Privacy](ch07-02-modules-and-use-to-control-scope-and-privacy.md)
+- [Managing Growing Projects with Packages, Crates, and Modules](ch07-00-managing-growing-projects-with-packages-crates-and-modules.md)
+    - [Packages and Crates](ch07-01-packages-and-crates.md)
+    - [Defining Modules to Control Scope and Privacy](ch07-02-defining-modules-to-control-scope-and-privacy.md)
+    - [Paths for Referring to an Item in the Module Tree](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
+    - [Bringing Paths Into Scope with the `use` Keyword](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
+    - [Separating Modules into Different Files](ch07-05-separating-modules-into-different-files.md)
 
 - [Common Collections](ch08-00-common-collections.md)
     - [Storing Lists of Values with Vectors](ch08-01-vectors.md)

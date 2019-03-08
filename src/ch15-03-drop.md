@@ -132,7 +132,7 @@ We can’t disable the automatic insertion of `drop` when a value goes out of
 scope, and we can’t call the `drop` method explicitly. So, if we need to force
 a value to be cleaned up early, we can use the `std::mem::drop` function.
 
-The `std::mem::drop` function is different than the `drop` method in the `Drop`
+The `std::mem::drop` function is different from the `drop` method in the `Drop`
 trait. We call it by passing the value we want to force to be dropped early as
 an argument. The function is in the prelude, so we can modify `main` in Listing
 15-15 to call the `drop` function, as shown in Listing 15-16:

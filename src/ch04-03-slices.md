@@ -150,19 +150,7 @@ let world = &s[6..11];
 
 This is similar to taking a reference to the whole `String` but with the extra
 `[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`. The `start..end` syntax is a range that begins at
-`start` and continues up to, but not including, `end`. If we wanted to include
-`end`, we can use `..=` instead of `..`:
-
-```rust
-let s = String::from("hello world");
-
-let hello = &s[0..=4];
-let world = &s[6..=10];
-```
-
-The `=` means that we’re including the last number, if that helps you remember
-the difference between `..` and `..=`.
+to a portion of the `String`.
 
 We can create slices using a range within brackets by specifying
 `[starting_index..ending_index]`, where `starting_index` is the first position
@@ -282,16 +270,16 @@ Here’s the compiler error:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
-  --> src/main.rs:10:5
+  --> src/main.rs:18:5
    |
-8  |     let word = first_word(&s);
+16 |     let word = first_word(&s);
    |                           -- immutable borrow occurs here
-9  |
-10 |     s.clear(); // error!
+17 |
+18 |     s.clear(); // error!
    |     ^^^^^^^^^ mutable borrow occurs here
-11 |
-12 |     println!("the first word is: {}", word);
-   |                                       ---- borrow later used here
+19 |
+20 |     println!("the first word is: {}", word);
+   |                                       ---- immutable borrow later used here
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to

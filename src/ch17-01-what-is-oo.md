@@ -115,13 +115,13 @@ code to read the `average` but not modify it.
 
 Because we’ve encapsulated the implementation details of the struct
 `AveragedCollection`, we can easily change aspects, such as the data structure,
-in the future. For instance, we could use a `HashSet` instead of a `Vec` for
-the `list` field. As long as the signatures of the `add`, `remove`, and
-`average` public methods stay the same, code using `AveragedCollection`
-wouldn’t need to change. If we made `list` public instead, this wouldn’t
-necessarily be the case: `HashSet` and `Vec` have different methods for adding
-and removing items, so the external code would likely have to change if it were
-modifying `list` directly.
+in the future. For instance, we could use a `HashSet<i32>` instead of a
+`Vec<i32>` for the `list` field. As long as the signatures of the `add`,
+`remove`, and `average` public methods stay the same, code using
+`AveragedCollection` wouldn’t need to change. If we made `list` public instead,
+this wouldn’t necessarily be the case: `HashSet<i32>` and `Vec<i32>` have
+different methods for adding and removing items, so the external code would
+likely have to change if it were modifying `list` directly.
 
 If encapsulation is a required aspect for a language to be considered object
 oriented, then Rust meets that requirement. The option to use `pub` or not for

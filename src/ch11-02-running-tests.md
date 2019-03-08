@@ -98,10 +98,10 @@ test tests::this_test_will_fail ... FAILED
 failures:
 
 ---- tests::this_test_will_fail stdout ----
-        I got the value 8
+I got the value 8
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
- right: `10`', src/lib.rs:19:8
+ right: `10`', src/lib.rs:19:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 failures:
@@ -132,7 +132,7 @@ I got the value 8
 test tests::this_test_will_pass ... ok
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
- right: `10`', src/lib.rs:19:8
+ right: `10`', src/lib.rs:19:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 test tests::this_test_will_fail ... FAILED
 
@@ -157,7 +157,7 @@ that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll create three tests for our
-`add_two` function, as shown in Listing 11-11, and choose which ones to run:
+`add_two` function, as shown in Listing 11-11, and choose which ones to run.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -243,7 +243,7 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
 ```
 
 This command ran all tests with `add` in the name and filtered out the test
-named `one_hundred`. Also note that the module in which tests appear becomes
+named `one_hundred`. Also note that the module in which a test appears becomes
 part of the test’s name, so we can run all the tests in a module by filtering
 on the module’s name.
 

@@ -1,10 +1,13 @@
 ## Appendix A: Keywords
 
 The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers (except as
-[raw identifiers][raw-identifiers]), including names of functions, variables,
-parameters, struct fields, modules, crates, constants, macros, static values,
-attributes, types, traits, or lifetimes.
+use by the Rust language. As such, they cannot be used as identifiers (except
+as raw identifiers as we’ll discuss in the “[Raw
+Identifiers][raw-identifiers]<!-- ignore -->” section), including names of
+functions, variables, parameters, struct fields, modules, crates, constants,
+macros, static values, attributes, types, traits, or lifetimes.
+
+[raw-identifiers]: #raw-identifiers
 
 ### Keywords Currently in Use
 
@@ -70,21 +73,23 @@ for potential future use.
 * `virtual`
 * `yield`
 
-### Raw identifiers
-[raw-identifiers]: #raw-identifiers
+### Raw Identifiers
 
-Raw identifiers let you use keywords where they would not normally be allowed by
-prefixing them with `r#`.
+*Raw identifiers* are the syntax that lets you use keywords where they wouldn’t
+normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
 
-For example, `match` is a keyword. If you try to compile this function:
+For example, `match` is a keyword. If you try to compile the following function
+that uses `match` as its name:
 
-```rust,ignore
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore,does_not_compile
 fn match(needle: &str, haystack: &str) -> bool {
     haystack.contains(needle)
 }
 ```
 
-You’ll get this error:
+you’ll get this error:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -94,7 +99,11 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-You can write this with a raw identifier:
+The error shows that you can’t use the keyword `match` as the function
+identifier. To use `match` as a function name, you need to use the raw
+identifier syntax, like this:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn r#match(needle: &str, haystack: &str) -> bool {
@@ -106,12 +115,16 @@ fn main() {
 }
 ```
 
-Note the `r#` prefix on both the function name as well as the call.
+This code will compile without any errors. Note the `r#` prefix on the function
+name in its definition as well as where the function is called in `main`.
 
-#### Motivation
+Raw identifiers allow you to use any word you choose as an identifier, even if
+that word happens to be a reserved keyword. In addition, raw identifiers allow
+you to use libraries written in a different Rust edition than your crate uses.
+For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
+edition. If you depend on a library that’s written using the 2015 edition and
+has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
+this case, to call that function from your 2018 edition code. See [Appendix
+E][appendix-e]<!-- ignore --> for more information on editions.
 
-This feature is useful for a few reasons, but the primary motivation was
-inter-edition situations. For example, `try` is not a keyword in the 2015
-edition, but is in the 2018 edition. So if you have a library that is written
-in Rust 2015 and has a `try` function, to call it in Rust 2018, you’ll need
-to use the raw identifier.
+[appendix-e]: appendix-05-editions.html

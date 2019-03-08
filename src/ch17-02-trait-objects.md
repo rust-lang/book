@@ -40,10 +40,11 @@ allow users to extend it with new types.
 
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
-takes a *trait object*. A trait object points to an instance of a type that
-implements the trait we specify. We create a trait object by specifying some
-sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, and then
-specifying the relevant trait, and add a `dyn` keyword. (We’ll talk about the
+takes a *trait object*. A trait object points to both an instance of a type
+implementing our specified trait as well as a table used to look up trait
+methods on that type at runtime. We create a trait object by specifying some
+sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, then the
+`dyn` keyword, and then specifying the relevant trait. (We’ll talk about the
 reason trait objects must use a pointer in Chapter 19 in the section
 [“Dynamically Sized Types and the `Sized` Trait.”][dynamically-sized]<!--
 ignore -->) We can use trait objects in place of a generic or concrete type.
@@ -123,7 +124,7 @@ impl Screen {
 <span class="caption">Listing 17-5: A `run` method on `Screen` that calls the
 `draw` method on each component</span>
 
-This works differently than defining a struct that uses a generic type
+This works differently from defining a struct that uses a generic type
 parameter with trait bounds. A generic type parameter can only be substituted
 with one concrete type at a time, whereas trait objects allow for multiple
 concrete types to fill in for the trait object at runtime. For example, we
@@ -160,9 +161,9 @@ collections, using generics and trait bounds is preferable because the
 definitions will be monomorphized at compile time to use the concrete types.
 
 On the other hand, with the method using trait objects, one `Screen` instance
-can hold a `Vec` that contains a `Box<Button>` as well as a `Box<TextField>`.
-Let’s look at how this works, and then we’ll talk about the runtime performance
-implications.
+can hold a `Vec<T>` that contains a `Box<Button>` as well as a
+`Box<TextField>`. Let’s look at how this works, and then we’ll talk about the
+runtime performance implications.
 
 ### Implementing the Trait
 
@@ -386,9 +387,9 @@ pub trait Clone {
 
 The `String` type implements the `Clone` trait, and when we call the `clone`
 method on an instance of `String` we get back an instance of `String`.
-Similarly, if we call `clone` on an instance of `Vec`, we get back an instance
-of `Vec`. The signature of `clone` needs to know what type will stand in for
-`Self`, because that’s the return type.
+Similarly, if we call `clone` on an instance of `Vec<T>`, we get back an
+instance of `Vec<T>`. The signature of `clone` needs to know what type will
+stand in for `Self`, because that’s the return type.
 
 The compiler will indicate when you’re trying to do something that violates the
 rules of object safety in regard to trait objects. For example, let’s say we
@@ -408,8 +409,8 @@ error[E0038]: the trait `std::clone::Clone` cannot be made into an object
  --> src/lib.rs:2:5
   |
 2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be
-made into an object
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone`
+  cannot be made into an object
   |
   = note: the trait cannot require that `Self : Sized`
 ```

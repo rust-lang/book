@@ -171,7 +171,7 @@ let mut bar = 5; // mutable
 > line. Rust ignores everything in comments, which are discussed in more detail
 > in Chapter 3.
 
-Let's return to the guessing game program. You now know that `let mut guess`
+Let’s return to the guessing game program. You now know that `let mut guess`
 will introduce a mutable variable named `guess`. On the other side of the equal
 sign (`=`) is the value that `guess` is bound to, which is the result of
 calling `String::new`, a function that returns a new instance of a `String`.
@@ -193,8 +193,8 @@ To summarize, the `let mut guess = String::new();` line has created a mutable
 variable that is currently bound to a new, empty instance of a `String`. Whew!
 
 Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we’ll call an
-associated function, `stdin`, on `io`:
+library with `use std::io;` on the first line of the program. Now we’ll call
+the `stdin` function from the `io` module:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess)
@@ -679,7 +679,7 @@ Could not compile `guessing_game`.
 
 The core of the error states that there are *mismatched types*. Rust has a
 strong, static type system. However, it also has type inference. When we wrote
-`let mut guess = String::new();`, Rust was able to infer that `guess` should be
+`let mut guess = String::new()`, Rust was able to infer that `guess` should be
 a `String` and didn’t make us write the type. The `secret_number`, on the other
 hand, is a number type. A few number types can have a value between 1 and 100:
 `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a 64-bit
@@ -822,7 +822,7 @@ and run the program again. Notice that there is a new problem because the
 program is doing exactly what we told it to do: ask for another guess forever!
 It doesn’t seem like the user can quit!
 
-The user could always halt the program by using the keyboard shortcut <span
+The user could always interrupt the program by using the keyboard shortcut <span
 class="keystroke">ctrl-c</span>. But there’s another way to escape this
 insatiable monster, as mentioned in the `parse` discussion in [“Comparing the
 Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
