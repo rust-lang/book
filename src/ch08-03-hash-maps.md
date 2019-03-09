@@ -36,7 +36,7 @@ scores.insert(String::from("Yellow"), 50);
 <span class="caption">Listing 8-20: Creating a new hash map and inserting some
 keys and values</span>
 
-Note that we need to first `use` the `HashMap` from the collections portion of
+Note that we need to first use the `HashMap` from the collections portion of
 the standard library. Of our three common collections, this one is the least
 often used, so it’s not included in the features brought into scope
 automatically in the prelude. Hash maps also have less support from the
