@@ -277,7 +277,7 @@ The `Result` enum is generic over two types, `T` and `E`, and has two variants:
 `E`. This definition makes it convenient to use the `Result` enum anywhere we
 have an operation that might succeed (return a value of some type `T`) or fail
 (return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
+file in Listing 9-2, where `T` was filled in with the type `std::fs::File` when
 the file was opened successfully and `E` was filled in with the type
 `std::io::Error` when there were problems opening the file.
 
