@@ -97,6 +97,7 @@ deallocated
 deallocating
 deallocation
 debuginfo
+decl
 decrementing
 deduplicate
 deduplicating
