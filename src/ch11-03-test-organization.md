@@ -58,7 +58,7 @@ annotated with `#[test]`.
 
 #### Testing Private Functions
 
-There’s debate within the testing community about whether or not private
+There’s [debate][test-debate-on-stackoverflow] within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
 impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
@@ -326,3 +326,5 @@ chapters to work on a project!
 
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html
+[test-debate-on-stackoverflow]:
+https://stackoverflow.com/questions/105007/should-i-test-private-methods-or-only-public-ones
