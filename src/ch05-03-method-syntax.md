@@ -17,7 +17,6 @@ in Listing 5-13.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-#[derive(Debug)]
 struct Rectangle {
     width: u32,
     height: u32,
