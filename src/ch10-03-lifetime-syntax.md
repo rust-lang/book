@@ -673,7 +673,7 @@ First, we’ll use a method named `level` whose only parameter is a reference to
 #     part: &'a str,
 # }
 #
-impl<'a> ImportantExcerpt<'a> {
+impl ImportantExcerpt<'_> {
     fn level(&self) -> i32 {
         3
     }
@@ -691,7 +691,7 @@ Here is an example where the third lifetime elision rule applies:
 #     part: &'a str,
 # }
 #
-impl<'a> ImportantExcerpt<'a> {
+impl ImportantExcerpt<'_> {
     fn announce_and_return_part(&self, announcement: &str) -> &str {
         println!("Attention please: {}", announcement);
         self.part
