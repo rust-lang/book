@@ -367,7 +367,7 @@ the thread pool calls `join` to shut down each worker thread.
 
 Notice one interesting aspect of this particular execution: the `ThreadPool`
 sent the terminate messages down the channel, and before any worker received
-the messages, we tried to join worker 0. Worker 0 had not yet received the
+the messages, we tried to `join` worker 0. Worker 0 had not yet received the
 terminate message, so the main thread blocked waiting for worker 0 to finish.
 In the meantime, each of the workers received the termination messages. When
 worker 0 finished, the main thread waited for the rest of the workers to
