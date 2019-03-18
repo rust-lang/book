@@ -100,8 +100,8 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 
 > ##### Integer Overflow
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and
-> 255. If you try to change the variable to a value outside of that range, such
+> Let’s say you have a variable of type `u8` that can hold values between 0 and 255.
+> If you try to change the variable to a value outside of that range, such
 > as 256, *integer overflow* will occur. Rust has some interesting rules
 > involving this behavior. When you’re compiling in debug mode, Rust includes
 > checks for integer overflow that causes your program to *panic* at runtime if
