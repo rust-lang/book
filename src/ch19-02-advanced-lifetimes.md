@@ -276,8 +276,8 @@ is not longer than `'c`, the reference to `Context` might not be valid.
 Now we get to the point of this section: the Rust feature *lifetime
 subtyping* specifies that one lifetime parameter lives at least as long as
 another one. In the angle brackets where we declare lifetime parameters, we can
-declare a lifetime `'a` as usual and declare a lifetime `'b` that lives at
-least as long as `'a` by declaring `'b` using the syntax `'b: 'a`.
+declare a lifetime `'c` as usual and declare a lifetime `'s` that lives at
+least as long as `'c` by declaring `'s` using the syntax `'s: 'c`.
 
 In our definition of `Parser`, to say that `'s` (the lifetime of the string
 slice) is guaranteed to live at least as long as `'c` (the lifetime of the
