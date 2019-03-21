@@ -235,6 +235,7 @@ JavaScript
 JoinHandle
 Kay's
 kinded
+Klabnik
 lang
 LastWriteTime
 latin
