@@ -133,7 +133,7 @@ trait on a struct defined within their library’s scope. They would need to
 bring the trait into their scope first. They would do so by specifying `use
 aggregator::Summary;`, which then would enable them to implement `Summary` for
 their type. The `Summary` trait would also need to be a public trait for
-another crate to implement it, which it is because we put the `pub` keyword
+another crate to implement it, that's why we put the `pub` keyword
 before `trait` in Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
