@@ -104,7 +104,7 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 > If you try to change the variable to a value outside of that range, such
 > as 256, *integer overflow* will occur. Rust has some interesting rules
 > involving this behavior. When you’re compiling in debug mode, Rust includes
-> checks for integer overflow that causes your program to *panic* at runtime if
+> checks for integer overflow that cause your program to *panic* at runtime if
 > this behavior occurs. Rust uses the term panicking when a program exits with
 > an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors
 > with `panic!`”][unrecoverable-errors-with-panic] section in Chapter 9.
