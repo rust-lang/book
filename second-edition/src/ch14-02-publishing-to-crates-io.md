@@ -182,7 +182,7 @@ Figure 14-2 처럼 `my_crate` 문서 첫 페이지 내용 중
 
 예를 들어, 우리가 예술적인 개념을 모델링 하기 위해 `art` 라는 라이브러리를
 만들었다고 가정해 봅시다. 해당 라이브러리에는 두 모듈이 들어 있습니다:
-`kinds` 모듈은 `PrimaryColor` 과 `SecondaryColor` 열거체를 포함하고,
+`kinds` 모듈은 `PrimaryColor` 과 `SecondaryColor` 열거형를 포함하고,
 `utils` 모듈은 `mix` 라는 이름의 함수를 포함합니다. Listing 14-3 처럼요.
 
 <span class="filename">Filename: src/lib.rs</span>

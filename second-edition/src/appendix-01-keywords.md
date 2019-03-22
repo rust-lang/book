@@ -1,57 +1,57 @@
-## Appendix A: Keywords
+## 부록 A: 키워드
 
-The following list contains keywords that are reserved for current or future
-use by the Rust language. As such, they cannot be used as identifiers, such as
-names of functions, variables, parameters, struct fields, modules, crates,
-constants, macros, static values, attributes, types, traits, or lifetimes.
+다음 목록은 러스트에서 현재 사용중이거나 미래에 사용될 키워드들입니다.
+따라서 이들은 식별자, 함수명, 변수, 매개변수, 구조체 필드, 모듈,
+크레이트, 상수, 매크로, 정적 변수, 속성, 타입, 트레잇, 라이프타임에
+사용할 수 없습니다.
 
-### Keywords Currently in Use
+### 현재 사용되고 있는 키워드
 
-The following keywords currently have the functionality described.
+다음 키워드들은 현재 각각의 설명에 해당하는 기능으로 사용되고 있습니다.
 
-* `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` and `extern crate` statements
-* `break` - exit a loop immediately
-* `const` - define constant items or constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - link an external crate or a macro variable representing the crate in
-  which the macro is defined
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - define an enumeration
-* `extern` - link an external crate, function, or variable
-* `false` - Boolean false literal
-* `fn` - define a function or the function pointer type
-* `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-* `if` - branch based on the result of a conditional expression
-* `impl` - implement inherent or trait functionality
-* `in` - part of `for` loop syntax
-* `let` - bind a variable
-* `loop` - loop unconditionally
-* `match` - match a value to patterns
-* `mod` - define a module
-* `move` - make a closure take ownership of all its captures
-* `mut` - denote mutability in references, raw pointers, or pattern bindings
-* `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-* `ref` - bind by reference
-* `return` - return from function
-* `Self` - a type alias for the type implementing a trait
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - define a structure
-* `super` - parent module of the current module
-* `trait` - define a trait
-* `true` - Boolean true literal
-* `type` - define a type alias or associated type
-* `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - import symbols into scope
-* `where` - denote clauses that constrain a type
-* `while` - loop conditionally based on the result of an expression
+* `as` - 캐스팅하거나, 항목을 포함하는 특정 트레잇을 명확히 하거나,
+  `use` 와 `extern crate` 구문에서 항목의 이름을 변경
+* `break` - 반복문 즉각 탈출
+* `const` - 상수 혹은 상수 로우 포인터 정의
+* `continue` - 다음 반복 루프로 넘어감
+* `crate` - 외부 크레이트를 링크하거나 해당 매크로가 정의되어 있는 크레이트를
+  대표하는 매크로 변수를 생성합니다.
+* `else` - `if` 와 `if let` 제어 흐름 구조에 대한 대비책
+* `enum` - 열거형 정의
+* `extern` - 외부 크레이트, 함수 혹은 변수를 링크
+* `false` - Boolean 의 거짓(false)을 나타내는 상수
+* `fn` - 함수 혹은 함수 포인터 타입 정의
+* `for` - 반복자의 항목들을 반복하거나, 트레잇을 구현하거나,
+  더 높은 수준의 라이프타임을 명시
+* `if` - 조건식 결과를 이용한 분기
+* `impl` - 내재된 특성 혹은 트레잇 특성 구현
+* `in` - `for` 반복문 문법의 일부
+* `let` - 변수 바인딩
+* `loop` - 무조건적인 반복
+* `match` - 패턴에 값을 매치
+* `mod` - 모듈 정의
+* `move` - 클로저가 사용하는 모든 값에 대해 소유권을 갖도록 만듬
+* `mut` - 레퍼런스, 로우 포인터, 배턴 바인딩에 대한 가변성 표시
+* `pub` - 구조체 필드, `impl` 블록, 모듈의 public 가시성 표시
+* `ref` - 레퍼런스로 바인딩
+* `return` - 함수의 반환
+* `Self` - 트레잇을 구현하고 있는 타입의 별칭
+* `self` - 메소드의 주체 혹은 현재 모듈
+* `static` - 글로벌 변수 혹은 전체 프로그램 실행에서 지속되는 라이프타임
+* `struct` - 구조체 선언
+* `super` - 현재 모듈의 부모 모듈
+* `trait` - 트레잇 선언
+* `true` - Boolean 의 참(true)을 나타내는 상수
+* `type` - 타입 별칭 혹은 관련 타입 선언
+* `unsafe` - 코드, 함수, 트레잇, 구현이 안전하지 않다는 것을 표시
+* `use` - 심볼을 범위 내로 불러옴
+* `where` - 특정 타입으로 제한하는 절을 나타냄
+* `while` - 표현식의 결과에 따라 반복
 
-### Keywords Reserved for Future Use
+### 추후 이용하도록 예약된 키워드들
 
-The following keywords do not have any functionality but are reserved by Rust
-for potential future use.
+다음 키워드들은 아무 기능도 갖지 않지만,
+러스트가 장래에 이용하도록 예약되어 있습니다.
 
 * `abstract`
 * `alignof`

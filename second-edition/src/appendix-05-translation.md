@@ -1,7 +1,7 @@
-## Appendix E: Translations of the Book
+## 부록 E: 본 책의 번역본 목록
 
-For resources in languages other than English. Most are still in progress; see
-[the Translations label][label] to help or let us know about a new translation!
+영어 원본 이외의 번역본 대다수는 아직 진행중입니다;
+각 번역에 참여할 의사가 있는 분은 [번역 라벨 목록][label]을 살펴보시고, 만약 여기에 등록되지 않은 번역본이 있다면 저희에게 알려주세요!
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 
