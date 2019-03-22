@@ -7,7 +7,7 @@ warning fixes, a linter, and integrating with IDEs.
 ## Automatic Formatting with `rustfmt`
 
 The `rustfmt` tool reformats your code according to the community code style.
-Many collaborative projects use `rustfmt` to prevent arguments about which
+Many collaborative projects use `rustfmt` to prevent arguing about which
 style to use when writing Rust: everyone formats their code using the tool.
 
 To install `rustfmt`, enter the following:
