@@ -20,7 +20,7 @@ releases are updated less frequently.
 ## Requirements
 
 Building the book requires [mdBook], ideally the same version that
-[rust-lang/rust uses in this file][rust-mdbook]. To get it:
+rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 
 [mdBook]: https://github.com/azerupi/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
