@@ -142,7 +142,7 @@ pub trait Write {
 The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type of
 alias declaration:
 
-```rust,ignore
+```rust
 type Result<T> = std::result::Result<T, std::io::Error>;
 ```
 
