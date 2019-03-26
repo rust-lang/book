@@ -365,7 +365,7 @@ fn main() {
     while number != 0 {
         println!("{}!", number);
 
-        number = number - 1;
+        number -= 1;
     }
 
     println!("LIFTOFF!!!");
@@ -394,7 +394,7 @@ fn main() {
     while index < 5 {
         println!("the value is: {}", a[index]);
 
-        index = index + 1;
+        index += 1;
     }
 }
 ```
