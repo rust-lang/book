@@ -41,28 +41,7 @@ yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn one_result() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-15: Creating a failing test for the `search`
@@ -82,9 +61,7 @@ containing the line `"safe, fast, productive."`
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-16: Defining just enough of the `search`
@@ -185,11 +162,7 @@ won’t compile yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    for line in contents.lines() {
-        // do something with line
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-17: Iterating through each line in `contents`
@@ -210,13 +183,7 @@ Listing 12-18. Note this still won’t compile yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    for line in contents.lines() {
-        if line.contains(query) {
-            // do something with line
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-18: Adding functionality to see whether the
@@ -232,17 +199,7 @@ shown in Listing 12-19.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-19: Storing the lines that match so we can
@@ -279,15 +236,7 @@ will print each line returned from `search`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    for line in search(&config.query, &contents) {
-        println!("{}", line);
-    }
-
-    Ok(())
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
 ```
 
 We’re still using a `for` loop to return each line from `search` and print it.

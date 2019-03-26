@@ -19,40 +19,7 @@ tests, as shown in Listing 12-20.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn case_sensitive() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Duct tape.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
-    }
-
-    #[test]
-    fn case_insensitive() {
-        let query = "rUsT";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            search_case_insensitive(query, contents)
-        );
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-20: Adding a new failing test for the
@@ -84,18 +51,7 @@ they’ll be the same case when we check whether the line contains the query.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let query = query.to_lowercase();
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-21/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-21: Defining the `search_case_insensitive`
@@ -137,12 +93,8 @@ this field anywhere yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-pub struct Config {
-    pub query: String,
-    pub filename: String,
-    pub case_sensitive: bool,
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:here}}
 ```
 
 Note that we added the `case_sensitive` field that holds a Boolean. Next, we
@@ -153,40 +105,8 @@ won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# use std::error::Error;
-# use std::fs::{self, File};
-# use std::io::prelude::*;
-#
-# pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-# pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-# pub struct Config {
-#     query: String,
-#     filename: String,
-#     case_sensitive: bool,
-# }
-#
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    let results = if config.case_sensitive {
-        search(&config.query, &contents)
-    } else {
-        search_case_insensitive(&config.query, &contents)
-    };
-
-    for line in results {
-        println!("{}", line);
-    }
-
-    Ok(())
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:there}}
 ```
 
 <span class="caption">Listing 12-22: Calling either `search` or
@@ -202,29 +122,7 @@ in Listing 12-23.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::env;
-# struct Config {
-#     query: String,
-#     filename: String,
-#     case_sensitive: bool,
-# }
-
-// --snip--
-
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-23: Checking for an environment variable named

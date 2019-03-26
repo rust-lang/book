@@ -29,13 +29,7 @@ reference to the data:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-    let y = &x;
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 15-6: Using the dereference operator to follow a
@@ -74,13 +68,7 @@ reference; the dereference operator will work as shown in Listing 15-7:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-    let y = Box::new(x);
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
 ```
 
 <span class="caption">Listing 15-7: Using the dereference operator on a
@@ -107,13 +95,7 @@ Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct MyBox<T>(T);
-
-impl<T> MyBox<T> {
-    fn new(x: T) -> MyBox<T> {
-        MyBox(x)
-    }
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
@@ -131,13 +113,7 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 5;
-    let y = MyBox::new(x);
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same
@@ -168,16 +144,7 @@ contains an implementation of `Deref` to add to the definition of `MyBox`:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::ops::Deref;
-
-# struct MyBox<T>(T);
-impl<T> Deref for MyBox<T> {
-    type Target = T;
-
-    fn deref(&self) -> &T {
-        &self.0
-    }
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
@@ -247,9 +214,7 @@ parameter:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn hello(name: &str) {
-    println!("Hello, {}!", name);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-11: A `hello` function that has the parameter
@@ -262,32 +227,7 @@ with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use std::ops::Deref;
-#
-# struct MyBox<T>(T);
-#
-# impl<T> MyBox<T> {
-#     fn new(x: T) -> MyBox<T> {
-#         MyBox(x)
-#     }
-# }
-#
-# impl<T> Deref for MyBox<T> {
-#     type Target = T;
-#
-#     fn deref(&self) -> &T {
-#         &self.0
-#     }
-# }
-#
-# fn hello(name: &str) {
-#     println!("Hello, {}!", name);
-# }
-#
-fn main() {
-    let m = MyBox::new(String::from("Rust"));
-    hello(&m);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-12: Calling `hello` with a reference to a
@@ -308,32 +248,7 @@ of type `&MyBox<String>`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use std::ops::Deref;
-#
-# struct MyBox<T>(T);
-#
-# impl<T> MyBox<T> {
-#     fn new(x: T) -> MyBox<T> {
-#         MyBox(x)
-#     }
-# }
-#
-# impl<T> Deref for MyBox<T> {
-#     type Target = T;
-#
-#     fn deref(&self) -> &T {
-#         &self.0
-#     }
-# }
-#
-# fn hello(name: &str) {
-#     println!("Hello, {}!", name);
-# }
-#
-fn main() {
-    let m = MyBox::new(String::from("Rust"));
-    hello(&(*m)[..]);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-13: The code we would have to write if Rust

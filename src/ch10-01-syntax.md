@@ -18,43 +18,7 @@ both find the largest value in a slice.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn largest_i32(list: &[i32]) -> i32 {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn largest_char(list: &[char]) -> char {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest_i32(&number_list);
-    println!("The largest number is {}", result);
-#    assert_eq!(result, 100);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest_char(&char_list);
-    println!("The largest char is {}", result);
-#    assert_eq!(result, 'y');
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-4: Two functions that differ only in their
@@ -95,29 +59,7 @@ compile yet, but we’ll fix it later in this chapter.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn largest<T>(list: &[T]) -> T {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest(&char_list);
-    println!("The largest char is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-5: A definition of the `largest` function that
@@ -155,15 +97,7 @@ struct to hold `x` and `y` coordinate values of any type.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-fn main() {
-    let integer = Point { x: 5, y: 10 };
-    let float = Point { x: 1.0, y: 4.0 };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
@@ -184,14 +118,7 @@ Listing 10-7, our code won’t compile.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-fn main() {
-    let wont_work = Point { x: 5, y: 4.0 };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-7: The fields `x` and `y` must be the same
@@ -222,16 +149,7 @@ Listing 10-8, we can change the definition of `Point` to be generic over types
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T, U> {
-    x: T,
-    y: U,
-}
-
-fn main() {
-    let both_integer = Point { x: 5, y: 10 };
-    let both_float = Point { x: 1.0, y: 4.0 };
-    let integer_and_float = Point { x: 5, y: 4.0 };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
@@ -294,22 +212,7 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-impl<T> Point<T> {
-    fn x(&self) -> &T {
-        &self.x
-    }
-}
-
-fn main() {
-    let p = Point { x: 5, y: 10 };
-
-    println!("p.x = {}", p.x());
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-9: Implementing a method named `x` on the
@@ -328,17 +231,10 @@ We could, for example, implement methods only on `Point<f32>` instances rather
 than on `Point<T>` instances with any generic type. In Listing 10-10 we use the
 concrete type `f32`, meaning we don’t declare any types after `impl`.
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
-# struct Point<T> {
-#     x: T,
-#     y: T,
-# }
-#
-impl Point<f32> {
-    fn distance_from_origin(&self) -> f32 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-10: An `impl` block that only applies to a
@@ -361,28 +257,7 @@ value from the passed-in `Point` (of type `W`).
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T, U> {
-    x: T,
-    y: U,
-}
-
-impl<T, U> Point<T, U> {
-    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
-        Point {
-            x: self.x,
-            y: other.y,
-        }
-    }
-}
-
-fn main() {
-    let p1 = Point { x: 5, y: 10.4 };
-    let p2 = Point { x: "Hello", y: 'c'};
-
-    let p3 = p1.mixup(p2);
-
-    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-11: A method that uses different generic types

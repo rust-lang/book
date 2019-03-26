@@ -17,12 +17,7 @@ code with the following code that won’t compile just yet:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
 Save and run the program using `cargo run`. You should receive an error
@@ -72,12 +67,7 @@ For example, let’s change *src/main.rs* to the following:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
 When we run the program now, we get this:
@@ -160,15 +150,7 @@ of the `let` keyword as follows:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-
-    let x = x + 1;
-
-    let x = x * 2;
-
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
 This program first binds `x` to a value of `5`. Then it shadows `x` by
@@ -198,8 +180,7 @@ program asks a user to show how many spaces they want between some text by
 inputting space characters, but we really want to store that input as a number:
 
 ```rust
-let spaces = "   ";
-let spaces = spaces.len();
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
 This construct is allowed because the first `spaces` variable is a string type
@@ -210,8 +191,7 @@ from having to come up with different names, such as `spaces_str` and
 try to use `mut` for this, as shown here, we’ll get a compile-time error:
 
 ```rust,ignore,does_not_compile
-let mut spaces = "   ";
-spaces = spaces.len();
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
 The error says we’re not allowed to mutate a variable’s type:

@@ -81,20 +81,7 @@ allow the player to input a guess. Enter the code in Listing 2-1 into
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-
-fn main() {
-    println!("Guess the number!");
-
-    println!("Please input your guess.");
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {}", guess);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 2-1: Code that gets a guess from the user and
@@ -376,9 +363,7 @@ you:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[dependencies]
-
-rand = "0.3.14"
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:7:}}
 ```
 
 In the *Cargo.toml* file, everything that follows a header is part of a section
@@ -517,25 +502,7 @@ Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-use rand::Rng;
-
-fn main() {
-    println!("Guess the number!");
-
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-
-    println!("The secret number is: {}", secret_number);
-
-    println!("Please input your guess.");
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {}", guess);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
 <span class="caption">Listing 2-3: Adding code to generate a random
@@ -601,22 +568,7 @@ will explain.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
-fn main() {
-
-    // ---snip---
-
-    println!("You guessed: {}", guess);
-
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 2-4: Handling the possible return values of
@@ -695,24 +647,7 @@ do that by adding the following two lines to the `main` function body:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
-
-    println!("You guessed: {}", guess);
-
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-convert-string-to-number/src/main.rs:here}}
 ```
 
 The two new lines are:
@@ -798,22 +733,7 @@ more chances at guessing the number:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-    println!("The secret number is: {}", secret_number);
-
-    loop {
-        println!("Please input your guess.");
-
-        // --snip--
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => println!("You win!"),
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-02-looping/src/main.rs:here}}
 ```
 
 As you can see, we’ve moved everything into a loop from the guess input prompt
@@ -866,18 +786,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-quitting/src/main.rs:here}}
 ```
 
 Adding the `break` line after `You win!` makes the program exit the loop when
@@ -894,19 +803,7 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
-
-let guess: u32 = match guess.trim().parse() {
-    Ok(num) => num,
-    Err(_) => continue,
-};
-
-println!("You guessed: {}", guess);
-
-// --snip--
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
@@ -966,40 +863,7 @@ secret number. Listing 2-6 shows the final code.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
-fn main() {
-    println!("Guess the number!");
-
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-
-    loop {
-        println!("Please input your guess.");
-
-        let mut guess = String::new();
-
-        io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
-
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-
-        println!("You guessed: {}", guess);
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 2-6: Complete guessing game code</span>

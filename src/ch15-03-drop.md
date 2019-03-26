@@ -30,21 +30,7 @@ function.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct CustomSmartPointer {
-    data: String,
-}
-
-impl Drop for CustomSmartPointer {
-    fn drop(&mut self) {
-        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
-    }
-}
-
-fn main() {
-    let c = CustomSmartPointer { data: String::from("my stuff") };
-    let d = CustomSmartPointer { data: String::from("other stuff") };
-    println!("CustomSmartPointers created.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 15-14: A `CustomSmartPointer` struct that
@@ -96,12 +82,7 @@ compiler error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
-    c.drop();
-    println!("CustomSmartPointer dropped before the end of main.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-15/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-15: Attempting to call the `drop` method from
@@ -140,22 +121,7 @@ an argument. The function is in the prelude, so we can modify `main` in Listing
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# struct CustomSmartPointer {
-#     data: String,
-# }
-#
-# impl Drop for CustomSmartPointer {
-#     fn drop(&mut self) {
-#         println!("Dropping CustomSmartPointer!");
-#     }
-# }
-#
-fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
-    drop(c);
-    println!("CustomSmartPointer dropped before the end of main.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-16/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-16: Calling `std::mem::drop` to explicitly

@@ -69,9 +69,7 @@ Listing 17-3 shows how to define a trait named `Draw` with one method named
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub trait Draw {
-    fn draw(&self);
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-03/src/lib.rs}}
 ```
 
 <span class="caption">Listing 17-3: Definition of the `Draw` trait</span>
@@ -85,13 +83,7 @@ a `Box` that implements the `Draw` trait.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Screen {
-    pub components: Vec<Box<dyn Draw>>,
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-04/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-4: Definition of the `Screen` struct with a
@@ -104,21 +96,7 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-# pub struct Screen {
-#     pub components: Vec<Box<dyn Draw>>,
-# }
-#
-impl Screen {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-05/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-5: A `run` method on `Screen` that calls the
@@ -134,22 +112,7 @@ as in Listing 17-6:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Screen<T: Draw> {
-    pub components: Vec<T>,
-}
-
-impl<T> Screen<T>
-    where T: Draw {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-06/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-6: An alternate implementation of the `Screen`
@@ -176,21 +139,7 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 17-7:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Button {
-    pub width: u32,
-    pub height: u32,
-    pub label: String,
-}
-
-impl Draw for Button {
-    fn draw(&self) {
-        // code to actually draw a button
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-07/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-7: A `Button` struct that implements the
@@ -213,19 +162,7 @@ If someone using our library decides to implement a `SelectBox` struct that has
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use gui::Draw;
-
-struct SelectBox {
-    width: u32,
-    height: u32,
-    options: Vec<String>,
-}
-
-impl Draw for SelectBox {
-    fn draw(&self) {
-        // code to actually draw a select box
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 17-8: Another crate using `gui` and implementing
@@ -240,30 +177,7 @@ components. Listing 17-9 shows this implementation:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use gui::{Screen, Button};
-
-fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(SelectBox {
-                width: 75,
-                height: 10,
-                options: vec![
-                    String::from("Yes"),
-                    String::from("Maybe"),
-                    String::from("No")
-                ],
-            }),
-            Box::new(Button {
-                width: 50,
-                height: 10,
-                label: String::from("OK"),
-            }),
-        ],
-    };
-
-    screen.run();
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 17-9: Using trait objects to store values of
@@ -296,17 +210,7 @@ with a `String` as a component:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use gui::Screen;
-
-fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(String::from("Hi")),
-        ],
-    };
-
-    screen.run();
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-10/src/main.rs}}
 ```
 
 <span class="caption">Listing 17-10: Attempting to use a type that doesn’t
@@ -397,9 +301,7 @@ tried to implement the `Screen` struct in Listing 17-4 to hold types that
 implement the `Clone` trait instead of the `Draw` trait, like this:
 
 ```rust,ignore,does_not_compile
-pub struct Screen {
-    pub components: Vec<Box<dyn Clone>>,
-}
+{{#rustdoc_include ../listings/ch17-oop/no-listing-01-trait-object-of-clone/src/lib.rs}}
 ```
 
 We would get this error:

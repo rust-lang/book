@@ -18,15 +18,7 @@ the `if` expression. In the *src/main.rs* file, input the following:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number = 3;
-
-    if number < 5 {
-        println!("condition was true");
-    } else {
-        println!("condition was false");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
 All `if` expressions start with the keyword `if`, which is followed by a
@@ -59,7 +51,7 @@ Let’s try changing the value of `number` to a value that makes the condition
 `false` to see what happens:
 
 ```rust,ignore
-let number = 7;
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/src/main.rs:here}}
 ```
 
 Run the program again, and look at the output:
@@ -79,13 +71,7 @@ following code:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let number = 3;
-
-    if number {
-        println!("number was three");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
 The `if` condition evaluates to a value of `3` this time, and Rust throws an
@@ -112,13 +98,7 @@ expression to the following:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number = 3;
-
-    if number != 0 {
-        println!("number was something other than zero");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-29-if-not-equal-0/src/main.rs}}
 ```
 
 Running this code will print `number was something other than zero`.
@@ -131,19 +111,7 @@ expression. For example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number = 6;
-
-    if number % 4 == 0 {
-        println!("number is divisible by 4");
-    } else if number % 3 == 0 {
-        println!("number is divisible by 3");
-    } else if number % 2 == 0 {
-        println!("number is divisible by 2");
-    } else {
-        println!("number is not divisible by 4, 3, or 2");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/src/main.rs}}
 ```
 
 This program has four possible paths it can take. After running it, you should
@@ -176,16 +144,7 @@ statement, as in Listing 3-2.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let condition = true;
-    let number = if condition {
-        5
-    } else {
-        6
-    };
-
-    println!("The value of number is: {}", number);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-2: Assigning the result of an `if` expression
@@ -213,17 +172,7 @@ example, we’ll get an error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let condition = true;
-
-    let number = if condition {
-        5
-    } else {
-        "six"
-    };
-
-    println!("The value of number is: {}", number);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
 ```
 
 When we try to compile this code, we’ll get an error. The `if` and `else` arms
@@ -275,11 +224,7 @@ like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    loop {
-        println!("again!");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
 When we run this program, we’ll see `again!` printed over and over continuously
@@ -321,19 +266,7 @@ the loop; that value will be returned out of the loop so you can use it, as
 shown here:
 
 ```rust
-fn main() {
-    let mut counter = 0;
-
-    let result = loop {
-        counter += 1;
-
-        if counter == 10 {
-            break counter * 2;
-        }
-    };
-
-    println!("The result is {}", result);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
 Before the loop, we declare a variable named `counter` and initialize it to
@@ -360,17 +293,7 @@ another message and exits.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut number = 3;
-
-    while number != 0 {
-        println!("{}!", number);
-
-        number -= 1;
-    }
-
-    println!("LIFTOFF!!!");
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-3: Using a `while` loop to run code while a
@@ -388,16 +311,7 @@ such as an array. For example, let’s look at Listing 3-4.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [10, 20, 30, 40, 50];
-    let mut index = 0;
-
-    while index < 5 {
-        println!("the value is: {}", a[index]);
-
-        index += 1;
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-4: Looping through each element of a collection
@@ -435,13 +349,7 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [10, 20, 30, 40, 50];
-
-    for element in a.iter() {
-        println!("the value is: {}", element);
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-5: Looping through each element of a collection
@@ -471,12 +379,7 @@ we’ve not yet talked about, `rev`, to reverse the range:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    for number in (1..4).rev() {
-        println!("{}!", number);
-    }
-    println!("LIFTOFF!!!");
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-34-for-range/src/main.rs}}
 ```
 
 This code is a bit nicer, isn’t it?

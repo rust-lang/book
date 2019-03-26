@@ -54,18 +54,7 @@ single-threaded context, as shown in Listing 16-12:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::sync::Mutex;
-
-fn main() {
-    let m = Mutex::new(5);
-
-    {
-        let mut num = m.lock().unwrap();
-        *num = 6;
-    }
-
-    println!("m = {:?}", m);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-12/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-12: Exploring the API of `Mutex<T>` in a
@@ -111,28 +100,7 @@ starting example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Mutex::new(0);
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-13/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-13: Ten threads each increment a counter
@@ -189,33 +157,7 @@ in a `for` loop, let’s just make two threads without a loop and see what
 happens. Replace the first `for` loop in Listing 16-13 with this code instead:
 
 ```rust,ignore,does_not_compile
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Mutex::new(0);
-    let mut handles = vec![];
-
-    let handle = thread::spawn(move || {
-        let mut num = counter.lock().unwrap();
-
-        *num += 1;
-    });
-    handles.push(handle);
-
-    let handle2 = thread::spawn(move || {
-        let mut num2 = counter.lock().unwrap();
-
-        *num2 += 1;
-    });
-    handles.push(handle2);
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/no-listing-02-no-loop-to-understand-error/src/main.rs}}
 ```
 
 We make two threads and change the variable names used with the second thread
@@ -271,30 +213,7 @@ errors, we’ll also switch back to using the `for` loop, and we’ll keep the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::rc::Rc;
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Rc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let counter = Rc::clone(&counter);
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-14: Attempting to use `Rc<T>` to allow
@@ -362,29 +281,7 @@ our program by changing the `use` line, the call to `new`, and the call to
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::sync::{Mutex, Arc};
-use std::thread;
-
-fn main() {
-    let counter = Arc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let counter = Arc::clone(&counter);
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-15/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-15: Using an `Arc<T>` to wrap the `Mutex<T>`

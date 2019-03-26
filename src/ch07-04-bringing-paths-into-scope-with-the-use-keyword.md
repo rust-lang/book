@@ -16,19 +16,7 @@ scope of the `eat_at_restaurant` function so we only have to specify
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 # fn main() {}
 ```
 
@@ -49,19 +37,7 @@ path to get the same behavior as in Listing 7-11.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use self::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 # fn main() {}
 ```
 
@@ -81,19 +57,7 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use crate::front_of_house::hosting::add_to_waitlist;
-
-pub fn eat_at_restaurant() {
-    add_to_waitlist();
-    add_to_waitlist();
-    add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 # fn main() {}
 ```
 
@@ -115,12 +79,7 @@ crate.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::collections::HashMap;
-
-fn main() {
-    let mut map = HashMap::new();
-    map.insert(1, 2);
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 7-14: Bringing `HashMap` into scope in an
@@ -137,18 +96,7 @@ different parent modules and how to refer to them.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::fmt;
-use std::io;
-
-fn function1() -> fmt::Result {
-    // --snip--
-#     Ok(())
-}
-
-fn function2() -> io::Result<()> {
-    // --snip--
-#     Ok(())
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-15: Bringing two types with the same name into
@@ -169,18 +117,7 @@ code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::fmt::Result;
-use std::io::Result as IoResult;
-
-fn function1() -> Result {
-    // --snip--
-#     Ok(())
-}
-
-fn function2() -> IoResult<()> {
-    // --snip--
-#     Ok(())
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-16: Renaming a type when it’s brought into
@@ -206,19 +143,7 @@ changed to `pub use`.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-pub use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 # fn main() {}
 ```
 
@@ -248,8 +173,7 @@ added this line to *Cargo.toml*:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[dependencies]
-rand = "0.5.5"
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:7:}}
 ```
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
@@ -263,10 +187,7 @@ Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
 into scope and called the `rand::thread_rng` function:
 
 ```rust,ignore
-use rand::Rng;
-fn main() {
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
 Members of the Rust community have made many packages available at
@@ -297,9 +218,7 @@ Listing 2-4 bring items from `std` into scope:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::io;
-use std::cmp::Ordering;
-// ---snip---
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:ch7}}
 ```
 
 Instead, we can use nested paths to bring the same items into scope in one
@@ -310,8 +229,8 @@ differ, as shown in Listing 7-18.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::{cmp::Ordering, io};
-// ---snip---
+{{#include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:1}}
+// --snip--
 ```
 
 <span class="caption">Listing 7-18: Specifying a nested path to bring multiple
@@ -329,8 +248,7 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::io;
-use std::io::Write;
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-19: Two `use` statements where one is a subpath
@@ -343,7 +261,7 @@ the nested path, as shown in Listing 7-20.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::io::{self, Write};
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into

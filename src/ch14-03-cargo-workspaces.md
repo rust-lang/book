@@ -33,11 +33,7 @@ by specifying the path to our binary crate; in this case, that path is *adder*:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[workspace]
-
-members = [
-    "adder",
-]
+{{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace-with-adder-crate/add/Cargo.toml}}
 ```
 
 Next, we’ll create the `adder` binary crate by running `cargo new` within the
@@ -81,12 +77,7 @@ Change the top-level *Cargo.toml* to specify the *add-one* path in the
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[workspace]
-
-members = [
-    "adder",
-    "add-one",
-]
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
 Then generate a new library crate named `add-one`:
@@ -117,9 +108,7 @@ In the *add-one/src/lib.rs* file, let’s add an `add_one` function:
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
 ```rust
-pub fn add_one(x: i32) -> i32 {
-    x + 1
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add-one/src/lib.rs}}
 ```
 
 Now that we have a library crate in the workspace, we can have the binary crate
@@ -129,9 +118,7 @@ dependency on `add-one` to *adder/Cargo.toml*.
 <span class="filename">Filename: adder/Cargo.toml</span>
 
 ```toml
-[dependencies]
-
-add-one = { path = "../add-one" }
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:7:9}}
 ```
 
 Cargo doesn’t assume that crates in a workspace will depend on each other, so
@@ -145,12 +132,7 @@ function to call the `add_one` function, as in Listing 14-7.
 <span class="filename">Filename: adder/src/main.rs</span>
 
 ```rust,ignore
-use add_one;
-
-fn main() {
-    let num = 10;
-    println!("Hello, world! {} plus one is {}!", num, add_one::add_one(num));
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 
 <span class="caption">Listing 14-7: Using the `add-one` library crate from the
@@ -195,9 +177,7 @@ crate:
 <span class="filename">Filename: add-one/Cargo.toml</span>
 
 ```toml
-[dependencies]
-
-rand = "0.3.14"
+{{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add-one/Cargo.toml:7:9}}
 ```
 
 We can now add `use rand;` to the *add-one/src/lib.rs* file, and building the
@@ -248,19 +228,7 @@ within the `add_one` crate:
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
 ```rust
-pub fn add_one(x: i32) -> i32 {
-    x + 1
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        assert_eq!(3, add_one(2));
-    }
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add-one/src/lib.rs}}
 ```
 
 Now run `cargo test` in the top-level *add* directory:

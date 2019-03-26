@@ -71,22 +71,7 @@ thread and other text from a new thread:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-1: Creating a new thread to print one thing
@@ -139,24 +124,7 @@ in Listing 16-1 and call `join` to make sure the spawned thread finishes before
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
@@ -193,24 +161,7 @@ But let’s see what happens when we instead move `handle.join()` before the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    handle.join().unwrap();
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/no-listing-01-join-too-early/src/main.rs}}
 ```
 
 The main thread will wait for the spawned thread to finish and then run its
@@ -255,17 +206,7 @@ thread. However, this won’t yet work, as you’ll see in a moment.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(|| {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-3: Attempting to use a vector created by the
@@ -304,19 +245,7 @@ that won’t be valid:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(|| {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    drop(v); // oh no!
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-4: A thread with a closure that attempts to
@@ -348,17 +277,7 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(move || {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-5: Using the `move` keyword to force a closure

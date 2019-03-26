@@ -29,9 +29,7 @@ Let’s try calling `panic!` in a simple program:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    panic!("crash and burn");
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
 
 When you run the program, you’ll see something like this:
@@ -69,11 +67,7 @@ element by index in a vector.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    let v = vec![1, 2, 3];
-
-    v[99];
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 9-1: Attempting to access an element beyond the

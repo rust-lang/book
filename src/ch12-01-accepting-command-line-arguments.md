@@ -41,12 +41,7 @@ command line arguments passed to it and then collect the values into a vector.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::env;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 12-1: Collecting the command line arguments into
@@ -110,17 +105,7 @@ throughout the rest of the program. We do that in Listing 12-2.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-use std::env;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let query = &args[1];
-    let filename = &args[2];
-
-    println!("Searching for {}", query);
-    println!("In file {}", filename);
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 12-2: Creating variables to hold the query

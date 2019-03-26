@@ -38,13 +38,7 @@ this chapter, Cargo generated this code for us:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs:here}}
 ```
 
 This code is the automatically generated test module. The attribute `cfg`
@@ -67,25 +61,7 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# fn main() {}
-
-pub fn add_two(a: i32) -> i32 {
-    internal_adder(a, 2)
-}
-
-fn internal_adder(a: i32, b: i32) -> i32 {
-    a + b
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn internal() {
-        assert_eq!(4, internal_adder(2, 2));
-    }
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 11-12: Testing a private function</span>
@@ -120,12 +96,7 @@ Let’s create an integration test. With the code in Listing 11-12 still in the
 <span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
-use adder;
-
-#[test]
-fn it_adds_two() {
-    assert_eq!(4, adder::add_two(2));
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
 <span class="caption">Listing 11-13: An integration test of a function in the
@@ -224,9 +195,7 @@ multiple test files:
 <span class="filename">Filename: tests/common.rs</span>
 
 ```rust
-pub fn setup() {
-    // setup code specific to your library's tests would go here
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/tests/common.rs}}
 ```
 
 When we run the tests again, we’ll see a new section in the test output for the
@@ -279,15 +248,7 @@ function from the `it_adds_two` test in *tests/integration_test.rs*:
 <span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
-use adder;
-
-mod common;
-
-#[test]
-fn it_adds_two() {
-    common::setup();
-    assert_eq!(4, adder::add_two(2));
-}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-13-fix-shared-test-code-problem/tests/integration_test.rs}}
 ```
 
 Note that the `mod common;` declaration is the same as the module declaration

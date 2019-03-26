@@ -25,16 +25,7 @@ Consider the program in Listing 10-17, which has an outer scope and an inner
 scope.
 
 ```rust,ignore,does_not_compile
-{
-    let r;
-
-    {
-        let x = 5;
-        r = &x;
-    }
-
-    println!("r: {}", r);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-17: An attempt to use a reference whose value
@@ -82,16 +73,7 @@ whether all borrows are valid. Listing 10-18 shows the same code as Listing
 10-17 but with annotations showing the lifetimes of the variables.
 
 ```rust,ignore,does_not_compile
-{
-    let r;                // ---------+-- 'a
-                          //          |
-    {                     //          |
-        let x = 5;        // -+-- 'b  |
-        r = &x;           //  |       |
-    }                     // -+       |
-                          //          |
-    println!("r: {}", r); //          |
-}                         // ---------+
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-18: Annotations of the lifetimes of `r` and
@@ -108,14 +90,7 @@ Listing 10-19 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
 ```rust
-{
-    let x = 5;            // ----------+-- 'b
-                          //           |
-    let r = &x;           // --+-- 'a  |
-                          //   |       |
-    println!("r: {}", r); //   |       |
-                          // --+       |
-}                         // ----------+
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-19: A valid reference because the data has a
@@ -139,13 +114,7 @@ longest string is abcd`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let string1 = String::from("abcd");
-    let string2 = "xyz";
-
-    let result = longest(string1.as_str(), string2);
-    println!("The longest string is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-20: A `main` function that calls the `longest`
@@ -167,13 +136,7 @@ won’t compile.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn longest(x: &str, y: &str) -> &str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-21: An implementation of the `longest`
@@ -257,13 +220,7 @@ Listing 10-22.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-22: The `longest` function definition
@@ -310,23 +267,7 @@ a straightforward example.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-#     if x.len() > y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
-fn main() {
-    let string1 = String::from("long string is long");
-
-    {
-        let string2 = String::from("xyz");
-        let result = longest(string1.as_str(), string2.as_str());
-        println!("The longest string is {}", result);
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-23: Using the `longest` function with
@@ -349,15 +290,7 @@ compile.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let string1 = String::from("long string is long");
-    let result;
-    {
-        let string2 = String::from("xyz");
-        result = longest(string1.as_str(), string2.as_str());
-    }
-    println!("The longest string is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-24: Attempting to use `result` after `string2`
@@ -408,9 +341,7 @@ following code will compile:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn longest<'a>(x: &'a str, y: &str) -> &'a str {
-    x
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-08-only-one-reference-with-lifetime/src/main.rs:here}}
 ```
 
 In this example, we’ve specified a lifetime parameter `'a` for the parameter
@@ -427,10 +358,7 @@ this attempted implementation of the `longest` function that won’t compile:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn longest<'a>(x: &str, y: &str) -> &'a str {
-    let result = String::from("really long string");
-    result.as_str()
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/src/main.rs:here}}
 ```
 
 Here, even though we’ve specified a lifetime parameter `'a` for the return
@@ -481,17 +409,7 @@ struct named `ImportantExcerpt` that holds a string slice.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct ImportantExcerpt<'a> {
-    part: &'a str,
-}
-
-fn main() {
-    let novel = String::from("Call me Ishmael. Some years ago...");
-    let first_sentence = novel.split('.')
-        .next()
-        .expect("Could not find a '.'");
-    let i = ImportantExcerpt { part: first_sentence };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-25: A struct that holds a reference, so its
@@ -521,17 +439,7 @@ Chapter 4 we had a function in Listing 4-9, which is shown again in Listing
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-fn first_word(s: &str) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
-        }
-    }
-
-    &s[..]
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-26/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-26: A function we defined in Listing 4-9 that
@@ -671,15 +579,7 @@ First, we’ll use a method named `level` whose only parameter is a reference to
 `self` and whose return value is an `i32`, which is not a reference to anything:
 
 ```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn level(&self) -> i32 {
-        3
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
 The lifetime parameter declaration after `impl` and its use after the type name
@@ -689,16 +589,7 @@ to `self` because of the first elision rule.
 Here is an example where the third lifetime elision rule applies:
 
 ```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn announce_and_return_part(&self, announcement: &str) -> &str {
-        println!("Attention please: {}", announcement);
-        self.part
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
 There are two input lifetimes, so Rust applies the first lifetime elision rule
@@ -734,18 +625,7 @@ Let’s briefly look at the syntax of specifying generic type parameters, trait
 bounds, and lifetimes all in one function!
 
 ```rust
-use std::fmt::Display;
-
-fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
-    where T: Display
-{
-    println!("Announcement! {}", ann);
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
 This is the `longest` function from Listing 10-22 that returns the longer of

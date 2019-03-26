@@ -27,7 +27,7 @@ where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
 pattern. As you might expect, this code will not compile.
 
 ```rust,ignore,does_not_compile
-let Some(x) = some_option_value;
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-8: Attempting to use a refutable pattern with
@@ -57,10 +57,7 @@ will just skip the code in the curly brackets, giving it a way to continue
 validly. Listing 18-9 shows how to fix the code in Listing 18-8.
 
 ```rust
-# let some_option_value: Option<i32> = None;
-if let Some(x) = some_option_value {
-    println!("{}", x);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-9: Using `if let` and a block with refutable
@@ -72,9 +69,7 @@ let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
 it will not compile.
 
 ```rust,ignore,does_not_compile
-if let x = 5 {
-    println!("{}", x);
-};
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-10: Attempting to use an irrefutable pattern

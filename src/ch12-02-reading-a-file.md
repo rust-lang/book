@@ -11,15 +11,7 @@ Who are you?”
 <span class="filename">Filename: poem.txt</span>
 
 ```text
-I'm nobody! Who are you?
-Are you nobody, too?
-Then there's a pair of us - don't tell!
-They'd banish us, you know.
-
-How dreary to be somebody!
-How public, like a frog
-To tell your name the livelong day
-To an admiring bog!
+{{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
 ```
 
 <span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test
@@ -31,24 +23,7 @@ shown in Listing 12-4.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-use std::env;
-use std::fs;
-
-fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let query = &args[1];
-#     let filename = &args[2];
-#
-#     println!("Searching for {}", query);
-    // --snip--
-    println!("In file {}", filename);
-
-    let contents = fs::read_to_string(filename)
-        .expect("Something went wrong reading the file");
-
-    println!("With text:\n{}", contents);
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-4: Reading the contents of the file specified

@@ -17,33 +17,8 @@ for 5 seconds before responding.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-use std::thread;
-use std::time::Duration;
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs::File;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-#     let mut buffer = [0; 512];
-#     stream.read(&mut buffer).unwrap();
-    // --snip--
-
-    let get = b"GET / HTTP/1.1\r\n";
-    let sleep = b"GET /sleep HTTP/1.1\r\n";
-
-    let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else if buffer.starts_with(sleep) {
-        thread::sleep(Duration::from_secs(5));
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
-    };
-
-    // --snip--
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-10: Simulating a slow request by recognizing
@@ -124,23 +99,7 @@ new thread to handle each stream within the `for` loop.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-# use std::thread;
-# use std::io::prelude::*;
-# use std::net::TcpListener;
-# use std::net::TcpStream;
-#
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        thread::spawn(|| {
-            handle_connection(stream);
-        });
-    }
-}
-# fn handle_connection(mut stream: TcpStream) {}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-11: Spawning a new thread for each
@@ -162,31 +121,8 @@ struct we want to use instead of `thread::spawn`.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,no_run
-# use std::thread;
-# use std::io::prelude::*;
-# use std::net::TcpListener;
-# use std::net::TcpStream;
-# struct ThreadPool;
-# impl ThreadPool {
-#    fn new(size: u32) -> ThreadPool { ThreadPool }
-#    fn execute<F>(&self, f: F)
-#        where F: FnOnce() + Send + 'static {}
-# }
-#
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    let pool = ThreadPool::new(4);
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        pool.execute(|| {
-            handle_connection(stream);
-        });
-    }
-}
-# fn handle_connection(mut stream: TcpStream) {}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-12/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-12: Our ideal `ThreadPool` interface</span>
@@ -231,7 +167,7 @@ definition of a `ThreadPool` struct that we can have for now:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub struct ThreadPool;
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/lib.rs}}
 ```
 
 Then create a new directory, *src/bin*, and move the binary crate rooted in
@@ -244,7 +180,7 @@ following code to the top of *src/bin/main.rs*:
 <span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-use hello::ThreadPool;
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/bin/main.rs:here}}
 ```
 
 This code still won’t work, but let’s check it again to get the next error that
@@ -271,13 +207,7 @@ characteristics:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub struct ThreadPool;
-
-impl ThreadPool {
-    pub fn new(size: usize) -> ThreadPool {
-        ThreadPool
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-02-impl-threadpool-new/src/lib.rs:here}}
 ```
 
 We chose `usize` as the type of the `size` parameter, because we know that a
@@ -350,17 +280,7 @@ the thread will take to execute. Let’s create an `execute` method on
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub struct ThreadPool;
-impl ThreadPool {
-    // --snip--
-
-    pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
-    {
-
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-03-define-execute/src/lib.rs:here}}
 ```
 
 We still use the `()` after `FnOnce` because this `FnOnce` represents a closure
@@ -419,23 +339,7 @@ as shown in Listing 20-13.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub struct ThreadPool;
-impl ThreadPool {
-    /// Create a new ThreadPool.
-    ///
-    /// The size is the number of threads in the pool.
-    ///
-    /// # Panics
-    ///
-    /// The `new` function will panic if the size is zero.
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        ThreadPool
-    }
-
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-13/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-13: Implementing `ThreadPool::new` to panic if
@@ -486,30 +390,7 @@ returned a `ThreadPool` instance containing them.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,not_desired_behavior
-use std::thread;
-
-pub struct ThreadPool {
-    threads: Vec<thread::JoinHandle<()>>,
-}
-
-impl ThreadPool {
-    // --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let mut threads = Vec::with_capacity(size);
-
-        for _ in 0..size {
-            // create some threads and store them in the vector
-        }
-
-        ThreadPool {
-            threads
-        }
-    }
-
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-14/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-14: Creating a vector for `ThreadPool` to hold
@@ -575,45 +456,7 @@ Ready? Here is Listing 20-15 with one way to make the preceding modifications.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::thread;
-
-pub struct ThreadPool {
-    workers: Vec<Worker>,
-}
-
-impl ThreadPool {
-    // --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(Worker::new(id));
-        }
-
-        ThreadPool {
-            workers
-        }
-    }
-    // --snip--
-}
-
-struct Worker {
-    id: usize,
-    thread: thread::JoinHandle<()>,
-}
-
-impl Worker {
-    fn new(id: usize) -> Worker {
-        let thread = thread::spawn(|| {});
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-15/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-15: Modifying `ThreadPool` to hold `Worker`
@@ -668,53 +511,7 @@ the channel.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# use std::thread;
-// --snip--
-use std::sync::mpsc;
-
-pub struct ThreadPool {
-    workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
-}
-
-struct Job;
-
-impl ThreadPool {
-    // --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (sender, receiver) = mpsc::channel();
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(Worker::new(id));
-        }
-
-        ThreadPool {
-            workers,
-            sender,
-        }
-    }
-    // --snip--
-}
-#
-# struct Worker {
-#     id: usize,
-#     thread: thread::JoinHandle<()>,
-# }
-#
-# impl Worker {
-#     fn new(id: usize) -> Worker {
-#         let thread = thread::spawn(|| {});
-#
-#         Worker {
-#             id,
-#             thread,
-#         }
-#     }
-# }
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-16/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-16: Modifying `ThreadPool` to store the
@@ -731,41 +528,7 @@ the closure. The code in Listing 20-17 won’t quite compile yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-impl ThreadPool {
-    // --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (sender, receiver) = mpsc::channel();
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(Worker::new(id, receiver));
-        }
-
-        ThreadPool {
-            workers,
-            sender,
-        }
-    }
-    // --snip--
-}
-
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
-        let thread = thread::spawn(|| {
-            receiver;
-        });
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-17/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-17: Passing the receiving end of the channel
@@ -810,60 +573,7 @@ receiver at a time. Listing 20-18 shows the changes we need to make.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# use std::thread;
-# use std::sync::mpsc;
-use std::sync::Arc;
-use std::sync::Mutex;
-// --snip--
-
-# pub struct ThreadPool {
-#     workers: Vec<Worker>,
-#     sender: mpsc::Sender<Job>,
-# }
-# struct Job;
-#
-impl ThreadPool {
-    // --snip--
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (sender, receiver) = mpsc::channel();
-
-        let receiver = Arc::new(Mutex::new(receiver));
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(Worker::new(id, Arc::clone(&receiver)));
-        }
-
-        ThreadPool {
-            workers,
-            sender,
-        }
-    }
-
-    // --snip--
-}
-
-# struct Worker {
-#     id: usize,
-#     thread: thread::JoinHandle<()>,
-# }
-#
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        // --snip--
-#         let thread = thread::spawn(|| {
-#            receiver;
-#         });
-#
-#         Worker {
-#             id,
-#             thread,
-#         }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-18/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-18: Sharing the receiving end of the channel
@@ -887,30 +597,7 @@ at Listing 20-19.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-// --snip--
-# pub struct ThreadPool {
-#     workers: Vec<Worker>,
-#     sender: mpsc::Sender<Job>,
-# }
-# use std::sync::mpsc;
-# struct Worker {}
-
-type Job = Box<FnOnce() + Send + 'static>;
-
-impl ThreadPool {
-    // --snip--
-
-    pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
-    {
-        let job = Box::new(f);
-
-        self.sender.send(job).unwrap();
-    }
-}
-
-// --snip--
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-19/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-19: Creating a `Job` type alias for a `Box`
@@ -934,26 +621,7 @@ shown in Listing 20-20 to `Worker::new`.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || {
-            loop {
-                let job = receiver.lock().unwrap().recv().unwrap();
-
-                println!("Worker {} got a job; executing.", id);
-
-                (*job)();
-            }
-        });
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-20/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-20: Receiving and executing the jobs in the
@@ -1023,38 +691,7 @@ shown in Listing 20-21.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
-
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || {
-            loop {
-                let job = receiver.lock().unwrap().recv().unwrap();
-
-                println!("Worker {} got a job; executing.", id);
-
-                job.call_box();
-            }
-        });
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-21/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-21: Adding a new trait `FnBox` to work around
@@ -1141,24 +778,7 @@ why we didn’t write the worker thread code as shown in Listing 20-22.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,not_desired_behavior
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || {
-            while let Ok(job) = receiver.lock().unwrap().recv() {
-                println!("Worker {} got a job; executing.", id);
-
-                job.call_box();
-            }
-        });
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-22/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 20-22: An alternative implementation of
