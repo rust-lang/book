@@ -1,0 +1,23 @@
+$ cargo run
+   Compiling unsafe-example v0.1.0 (file:///projects/unsafe-example)
+error[E0499]: cannot borrow `*slice` as mutable more than once at a time
+ --> src/main.rs:7:11
+  |
+1 |   fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+  |                          - let's call the lifetime of this reference `'1`
+...
+6 |       (&mut slice[..mid],
+  |       -     ----- first mutable borrow occurs here
+  |  _____|
+  | |
+7 | |      &mut slice[mid..])
+  | |___________^^^^^_______- returning this value requires that `*slice` is borrowed for `'1`
+  |             |
+  |             second mutable borrow occurs here
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0499`.
+error: Could not compile `unsafe-example`.
+
+To learn more, run the command again with --verbose.

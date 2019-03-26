@@ -1,0 +1,20 @@
+$ cargo run
+   Compiling traits-example v0.1.0 (file:///projects/traits-example)
+error[E0283]: type annotations required: cannot resolve `_: Animal`
+  --> src/main.rs:20:43
+   |
+20 |     println!("A baby dog is called a {}", Animal::baby_name());
+   |                                           ^^^^^^^^^^^^^^^^^
+   |
+note: required by `Animal::baby_name`
+  --> src/main.rs:2:5
+   |
+2  |     fn baby_name() -> String;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0283`.
+error: Could not compile `traits-example`.
+
+To learn more, run the command again with --verbose.

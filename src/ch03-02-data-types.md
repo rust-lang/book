@@ -21,14 +21,7 @@ error, which means the compiler needs more information from us to know which
 type we want to use:
 
 ```text
-error[E0282]: type annotations needed
- --> src/main.rs:2:9
-  |
-2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^
-  |         |
-  |         cannot infer type for `_`
-  |         consider giving `guess` a type
+{{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
 You’ll see different type annotations for other data types.
@@ -133,11 +126,7 @@ Here’s an example that shows floating-point numbers in action:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 2.0; // f64
-
-    let y: f32 = 3.0; // f32
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-06-floating-point/src/main.rs}}
 ```
 
 Floating-point numbers are represented according to the IEEE-754 standard. The
@@ -152,22 +141,7 @@ The following code shows how you’d use each one in a `let` statement:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    // addition
-    let sum = 5 + 10;
-
-    // subtraction
-    let difference = 95.5 - 4.3;
-
-    // multiplication
-    let product = 4 * 30;
-
-    // division
-    let quotient = 56.7 / 32.2;
-
-    // remainder
-    let remainder = 43 % 5;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-07-numeric-operations/src/main.rs}}
 ```
 
 Each expression in these statements uses a mathematical operator and evaluates
@@ -183,11 +157,7 @@ Rust is specified using `bool`. For example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let t = true;
-
-    let f: bool = false; // with explicit type annotation
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-08-boolean/src/main.rs}}
 ```
 
 The main way to use Boolean values is through conditionals, such as an `if`
@@ -204,11 +174,7 @@ single quotes, as opposed to string literals, which use double quotes.)
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let c = 'z';
-    let z = 'ℤ';
-    let heart_eyed_cat = '😻';
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
 Rust’s `char` type is four bytes in size and represents a Unicode Scalar Value,
@@ -240,9 +206,7 @@ type annotations in this example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let tup: (i32, f64, u8) = (500, 6.4, 1);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
 The variable `tup` binds to the entire tuple, because a tuple is considered a
@@ -252,13 +216,7 @@ use pattern matching to destructure a tuple value, like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let tup = (500, 6.4, 1);
-
-    let (x, y, z) = tup;
-
-    println!("The value of y is: {}", y);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-11-destructuring-tuples/src/main.rs}}
 ```
 
 This program first creates a tuple and binds it to the variable `tup`. It then
@@ -274,15 +232,7 @@ want to access. For example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x: (i32, f64, u8) = (500, 6.4, 1);
-
-    let five_hundred = x.0;
-
-    let six_point_four = x.1;
-
-    let one = x.2;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
 This program creates a tuple, `x`, and then makes new variables for each
@@ -302,9 +252,7 @@ inside square brackets:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-13-arrays/src/main.rs}}
 ```
 
 Arrays are useful when you want your data allocated on the stack rather than
@@ -357,12 +305,7 @@ elements of an array using indexing, like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-
-    let first = a[0];
-    let second = a[1];
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
 In this example, the variable named `first` will get the value `1`, because
@@ -378,26 +321,13 @@ compile but exit with an error when it runs:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,panics
-fn main() {
-    let a = [1, 2, 3, 4, 5];
-    let index = 10;
-
-    let element = a[index];
-
-    println!("The value of element is: {}", element);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
 Running this code using `cargo run` produces the following result:
 
 ```text
-$ cargo run
-   Compiling arrays v0.1.0 (file:///projects/arrays)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/arrays`
-thread 'main' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:5:19
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+{{#include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/output.txt}}
 ```
 
 The compilation didn’t produce any errors, but the program resulted in a

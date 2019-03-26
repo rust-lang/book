@@ -25,16 +25,7 @@ Consider the program in Listing 10-17, which has an outer scope and an inner
 scope.
 
 ```rust,ignore,does_not_compile
-{
-    let r;
-
-    {
-        let x = 5;
-        r = &x;
-    }
-
-    println!("r: {}", r);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-17: An attempt to use a reference whose value
@@ -55,16 +46,7 @@ compile because the value `r` is referring to has gone out of scope before we
 try to use it. Here is the error message:
 
 ```text
-error[E0597]: `x` does not live long enough
-  --> src/main.rs:7:5
-   |
-6  |         r = &x;
-   |              - borrow occurs here
-7  |     }
-   |     ^ `x` dropped here while still borrowed
-...
-10 | }
-   | - borrowed value needs to live until here
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/output.txt}}
 ```
 
 The variable `x` doesn’t “live long enough.” The reason is that `x` will be out
@@ -82,16 +64,7 @@ whether all borrows are valid. Listing 10-18 shows the same code as Listing
 10-17 but with annotations showing the lifetimes of the variables.
 
 ```rust,ignore,does_not_compile
-{
-    let r;                // ---------+-- 'a
-                          //          |
-    {                     //          |
-        let x = 5;        // -+-- 'b  |
-        r = &x;           //  |       |
-    }                     // -+       |
-                          //          |
-    println!("r: {}", r); //          |
-}                         // ---------+
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-18: Annotations of the lifetimes of `r` and
@@ -108,14 +81,7 @@ Listing 10-19 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
 ```rust
-{
-    let x = 5;            // ----------+-- 'b
-                          //           |
-    let r = &x;           // --+-- 'a  |
-                          //   |       |
-    println!("r: {}", r); //   |       |
-                          // --+       |
-}                         // ----------+
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-19: A valid reference because the data has a
@@ -139,13 +105,7 @@ longest string is abcd`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let string1 = String::from("abcd");
-    let string2 = "xyz";
-
-    let result = longest(string1.as_str(), string2);
-    println!("The longest string is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-20: A `main` function that calls the `longest`
@@ -167,13 +127,7 @@ won’t compile.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn longest(x: &str, y: &str) -> &str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-21: An implementation of the `longest`
@@ -183,14 +137,7 @@ compile</span>
 Instead, we get the following error that talks about lifetimes:
 
 ```text
-error[E0106]: missing lifetime specifier
- --> src/main.rs:1:33
-  |
-1 | fn longest(x: &str, y: &str) -> &str {
-  |                                 ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but the
-signature does not say whether it is borrowed from `x` or `y`
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/output.txt}}
 ```
 
 The help text reveals that the return type needs a generic lifetime parameter
@@ -257,13 +204,7 @@ Listing 10-22.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-22: The `longest` function definition
@@ -310,23 +251,7 @@ a straightforward example.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-#     if x.len() > y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
-fn main() {
-    let string1 = String::from("long string is long");
-
-    {
-        let string2 = String::from("xyz");
-        let result = longest(string1.as_str(), string2.as_str());
-        println!("The longest string is {}", result);
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-23: Using the `longest` function with
@@ -349,15 +274,7 @@ compile.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let string1 = String::from("long string is long");
-    let result;
-    {
-        let string2 = String::from("xyz");
-        result = longest(string1.as_str(), string2.as_str());
-    }
-    println!("The longest string is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-24: Attempting to use `result` after `string2`
@@ -366,16 +283,7 @@ has gone out of scope</span>
 When we try to compile this code, we’ll get this error:
 
 ```text
-error[E0597]: `string2` does not live long enough
-  --> src/main.rs:15:5
-   |
-14 |         result = longest(string1.as_str(), string2.as_str());
-   |                                            ------- borrow occurs here
-15 |     }
-   |     ^ `string2` dropped here while still borrowed
-16 |     println!("The longest string is {}", result);
-17 | }
-   | - borrowed value needs to live until here
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/output.txt}}
 ```
 
 The error shows that for `result` to be valid for the `println!` statement,
@@ -408,9 +316,7 @@ following code will compile:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn longest<'a>(x: &'a str, y: &str) -> &'a str {
-    x
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-08-only-one-reference-with-lifetime/src/main.rs:here}}
 ```
 
 In this example, we’ve specified a lifetime parameter `'a` for the parameter
@@ -427,10 +333,7 @@ this attempted implementation of the `longest` function that won’t compile:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn longest<'a>(x: &str, y: &str) -> &'a str {
-    let result = String::from("really long string");
-    result.as_str()
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/src/main.rs:here}}
 ```
 
 Here, even though we’ve specified a lifetime parameter `'a` for the return
@@ -439,23 +342,7 @@ lifetime is not related to the lifetime of the parameters at all. Here is the
 error message we get:
 
 ```text
-error[E0597]: `result` does not live long enough
- --> src/main.rs:3:5
-  |
-3 |     result.as_str()
-  |     ^^^^^^ does not live long enough
-4 | }
-  | - borrowed value only lives until here
-  |
-note: borrowed value must be valid for the lifetime 'a as defined on the
-function body at 1:1...
- --> src/main.rs:1:1
-  |
-1 | / fn longest<'a>(x: &str, y: &str) -> &'a str {
-2 | |     let result = String::from("really long string");
-3 | |     result.as_str()
-4 | | }
-  | |_^
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
 The problem is that `result` goes out of scope and gets cleaned up at the end
@@ -481,17 +368,7 @@ struct named `ImportantExcerpt` that holds a string slice.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct ImportantExcerpt<'a> {
-    part: &'a str,
-}
-
-fn main() {
-    let novel = String::from("Call me Ishmael. Some years ago...");
-    let first_sentence = novel.split('.')
-        .next()
-        .expect("Could not find a '.'");
-    let i = ImportantExcerpt { part: first_sentence };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-25: A struct that holds a reference, so its
@@ -521,17 +398,7 @@ Chapter 4 we had a function in Listing 4-9, which is shown again in Listing
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-fn first_word(s: &str) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
-        }
-    }
-
-    &s[..]
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-26/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-26: A function we defined in Listing 4-9 that
@@ -671,15 +538,7 @@ First, we’ll use a method named `level` whose only parameter is a reference to
 `self` and whose return value is an `i32`, which is not a reference to anything:
 
 ```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn level(&self) -> i32 {
-        3
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
 The lifetime parameter declaration after `impl` and its use after the type name
@@ -689,16 +548,7 @@ to `self` because of the first elision rule.
 Here is an example where the third lifetime elision rule applies:
 
 ```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn announce_and_return_part(&self, announcement: &str) -> &str {
-        println!("Attention please: {}", announcement);
-        self.part
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
 There are two input lifetimes, so Rust applies the first lifetime elision rule
@@ -734,18 +584,7 @@ Let’s briefly look at the syntax of specifying generic type parameters, trait
 bounds, and lifetimes all in one function!
 
 ```rust
-use std::fmt::Display;
-
-fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
-    where T: Display
-{
-    println!("Announcement! {}", ann);
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
 This is the `longest` function from Listing 10-22 that returns the longer of

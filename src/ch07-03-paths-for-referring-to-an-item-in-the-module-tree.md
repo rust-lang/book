@@ -28,19 +28,7 @@ in a bit.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-mod front_of_house {
-    mod hosting {
-        fn add_to_waitlist() {}
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-3: Calling the `add_to_waitlist` function using
@@ -80,19 +68,7 @@ Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
 
 ```text
-$ cargo build
-   Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0603]: module `hosting` is private
- --> src/lib.rs:9:28
-  |
-9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                            ^^^^^^^
-
-error[E0603]: module `hosting` is private
-  --> src/lib.rs:12:21
-   |
-12 |     front_of_house::hosting::add_to_waitlist();
-   |                     ^^^^^^^
+{{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
 <span class="caption">Listing 7-4: Compiler errors from building the code in
@@ -134,19 +110,7 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-mod front_of_house {
-    pub mod hosting {
-        fn add_to_waitlist() {}
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-5: Declaring the `hosting` module as `pub` to
@@ -156,19 +120,7 @@ Unfortunately, the code in Listing 7-5 still results in an error, as shown in
 Listing 7-6.
 
 ```text
-$ cargo build
-   Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0603]: function `add_to_waitlist` is private
- --> src/lib.rs:9:37
-  |
-9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                                     ^^^^^^^^^^^^^^^
-
-error[E0603]: function `add_to_waitlist` is private
-  --> src/lib.rs:12:30
-   |
-12 |     front_of_house::hosting::add_to_waitlist();
-   |                              ^^^^^^^^^^^^^^^
+{{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 
 <span class="caption">Listing 7-6: Compiler errors from building the code in
@@ -190,20 +142,7 @@ keyword before its definition, as in Listing 7-7.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
-# fn main() {}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-7: Adding the `pub` keyword to `mod hosting`
@@ -246,17 +185,7 @@ the path to `serve_order` starting with `super`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-fn serve_order() {}
-
-mod back_of_house {
-    fn fix_incorrect_order() {
-        cook_order();
-        super::serve_order();
-    }
-
-    fn cook_order() {}
-}
-# fn main() {}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-8: Calling a function using a relative path
@@ -287,33 +216,7 @@ or even see which fruit they’ll get.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod back_of_house {
-    pub struct Breakfast {
-        pub toast: String,
-        seasonal_fruit: String,
-    }
-
-    impl Breakfast {
-        pub fn summer(toast: &str) -> Breakfast {
-            Breakfast {
-                toast: String::from(toast),
-                seasonal_fruit: String::from("peaches"),
-            }
-        }
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Order a breakfast in the summer with Rye toast
-    let mut meal = back_of_house::Breakfast::summer("Rye");
-    // Change our mind about what bread we'd like
-    meal.toast = String::from("Wheat");
-    println!("I'd like {} toast please", meal.toast);
-
-    // The next line won't compile if we uncomment it; we're not allowed
-    // to see or modify the seasonal fruit that comes with the meal
-    // meal.seasonal_fruit = String::from("blueberries");
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-9: A struct with some public fields and some
@@ -338,17 +241,7 @@ only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod back_of_house {
-    pub enum Appetizer {
-        Soup,
-        Salad,
-    }
-}
-
-pub fn eat_at_restaurant() {
-    let order1 = back_of_house::Appetizer::Soup;
-    let order2 = back_of_house::Appetizer::Salad;
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-10: Designating an enum as public makes all its

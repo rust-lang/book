@@ -12,11 +12,18 @@ and the `release` profile has good defaults for release builds.
 
 These profile names might be familiar from the output of your builds:
 
+<!-- manual-regeneration
+anywhere, run:
+cargo build
+cargo build --release
+and ensure output below is accurate
+-->
+
 ```text
 $ cargo build
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
 $ cargo build --release
-    Finished release [optimized] target(s) in 0.0 secs
+    Finished release [optimized] target(s) in 0.0s
 ```
 
 The `dev` and `release` shown in this build output indicate that the compiler

@@ -48,9 +48,7 @@ have an `Err` variant, it’s perfectly acceptable to call `unwrap`. Here’s an
 example:
 
 ```rust
-use std::net::IpAddr;
-
-let home: IpAddr = "127.0.0.1".parse().unwrap();
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-08-unwrap-that-cant-fail/src/main.rs:here}}
 ```
 
 We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
@@ -133,22 +131,7 @@ One way to do this would be to parse the guess as an `i32` instead of only a
 number being in range, like so:
 
 ```rust,ignore
-loop {
-    // --snip--
-
-    let guess: i32 = match guess.trim().parse() {
-        Ok(num) => num,
-        Err(_) => continue,
-    };
-
-    if guess < 1 || guess > 100 {
-        println!("The secret number will be between 1 and 100.");
-        continue;
-    }
-
-    match guess.cmp(&secret_number) {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
 
 The `if` expression checks whether our value is out of range, tells the user
@@ -169,26 +152,13 @@ confidently use the values they receive. Listing 9-10 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
 
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file requires the `rand` crate. We do want to include it for reader
+experimentation purposes, but don't want to include it for rustdoc testing
+purposes. -->
+
 ```rust
-pub struct Guess {
-    value: i32,
-}
-
-impl Guess {
-    pub fn new(value: i32) -> Guess {
-        if value < 1 || value > 100 {
-            panic!("Guess value must be between 1 and 100, got {}.", value);
-        }
-
-        Guess {
-            value
-        }
-    }
-
-    pub fn value(&self) -> i32 {
-        self.value
-    }
-}
+{{#include ../listings/ch09-error-handling/listing-09-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-10: A `Guess` type that will only continue with

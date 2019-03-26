@@ -1,0 +1,11 @@
+[[package]]
+name = "hello_macro"
+version = "0.1.0"
+
+[[package]]
+name = "pancakes"
+version = "0.1.0"
+dependencies = [
+ "hello_macro 0.1.0",
+]
+
