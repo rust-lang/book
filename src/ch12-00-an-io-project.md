@@ -16,8 +16,8 @@ in that file that contain the string argument, and prints those lines.
 Along the way, we’ll show how to make our command line tool use features of the
 terminal that many command line tools use. We’ll read the value of an
 environment variable to allow the user to configure the behavior of our tool.
-We’ll also print to the standard error console stream (`stderr`) instead of
-standard output (`stdout`), so, for example, the user can redirect successful
+We’ll also print error messages to the standard error console stream (`stderr`) instead
+of standard output (`stdout`), so, for example, the user can redirect successful
 output to a file while still seeing error messages onscreen.
 
 One Rust community member, Andrew Gallant, has already created a fully
