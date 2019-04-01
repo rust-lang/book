@@ -518,7 +518,7 @@ fn first_word(s: &str) -> &str {
 fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-수많은 러스트 코드를 작성하고 난 후, 러스트 팀은 러스트 프로그래머들이 특정항 상황에서 똑같은 라이프타임
+수많은 러스트 코드를 작성하고 난 후, 러스트 팀은 러스트 프로그래머들이 특정한 상황에서 똑같은 라이프타임
 명시를 계속하여 타이핑하고 있다는 사실을 발견하게 되었습니다. 이 상황들은 예측 가능하며 몇 가지 결정론적인
 패턴을 따르고 있었습니다. 그리하여 러스트 팀은 러스트 컴파일러 코드 내에 이 패턴들을 프로그래밍하여
 이러한 상황 내에서는 프로그래머가 명시적으로 라이프타임 명시를 추가하도록 강제하지 않고 빌림 검사기가
@@ -606,9 +606,6 @@ fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
 때 에러가 발생한 이유입니다: 컴파일러는 자신이 알고 있는 라이프타임 생략 규칙들을 통해 작업을 수행했지만,
 여전히 이 시그니처의 참조자들에 대한 모든 라이프타임을 알아낼 수 없으니까요.
 
-Because the third rule only really applies in method signatures, let's look at
-lifetimes in that context now, and see why the third rule means we don't have
-to annotate lifetimes in method signatures very often.
 세번째 규칙이 오직 메소드 시그니처에 대해서만 실제로 적용되므로, 이제 그러한 경우에서의 라이프타임을
 살펴보고, 어째서 세번서 규칙이 메소드 시그니처의 라이프타임을 매우 흔하게 생략해도 된다는 것을
 의미하는지 알아봅시다.
