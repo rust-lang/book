@@ -1,6 +1,6 @@
 # The Rust Programming Language
 
-[![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
+[![Build Status](https://travis-ci.com/rust-lang/book.svg?branch=master)](https://travis-ci.com/rust-lang/book)
 
 This repository contains the source of "The Rust Programming Language" book.
 
