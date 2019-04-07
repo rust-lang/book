@@ -17,12 +17,12 @@ Let’s walk through what happens when we create a package. First, we enter the
 command `cargo new`:
 
 ```text
-$ cargo new my-project
-     Created binary (application) `my-project` package
-$ ls my-project
+$ cargo new my_project
+     Created binary (application) `my_project` package
+$ ls my_project
 Cargo.toml
 src
-$ ls my-project/src
+$ ls my_project/src
 main.rs
 ```
 
@@ -36,7 +36,7 @@ crate root. Cargo passes the crate root files to `rustc` to build the library
 or binary.
 
 Here, we have a package that only contains *src/main.rs*, meaning it only
-contains a binary crate named `my-project`. If a package contains *src/main.rs*
+contains a binary crate named `my_project`. If a package contains *src/main.rs*
 and *src/lib.rs*, it has two crates: a library and a binary, both with the same
 name as the package. A package can have multiple binary crates by placing files
 in the *src/bin* directory: each file will be a separate binary crate.
