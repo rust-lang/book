@@ -31,7 +31,7 @@ mod front_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
+fn eat_at_restaurant() {
     // Absolute path
     crate::front_of_house::hosting::add_to_waitlist();
 
@@ -137,7 +137,7 @@ mod front_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
+fn eat_at_restaurant() {
     // Absolute path
     crate::front_of_house::hosting::add_to_waitlist();
 
@@ -193,7 +193,7 @@ mod front_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
+fn eat_at_restaurant() {
     // Absolute path
     crate::front_of_house::hosting::add_to_waitlist();
 
@@ -300,7 +300,7 @@ mod back_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
+fn eat_at_restaurant() {
     // Order a breakfast in the summer with Rye toast
     let mut meal = back_of_house::Breakfast::summer("Rye");
     // Change our mind about what bread we'd like
@@ -342,7 +342,7 @@ mod back_of_house {
     }
 }
 
-pub fn eat_at_restaurant() {
+fn eat_at_restaurant() {
     let order1 = back_of_house::Appetizer::Soup;
     let order2 = back_of_house::Appetizer::Salad;
 }
