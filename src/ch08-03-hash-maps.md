@@ -36,6 +36,24 @@ scores.insert(String::from("Yellow"), 50);
 <span class="caption">Listing 8-20: Creating a new hash map and inserting some
 keys and values</span>
 
+>### Why do we use `String`s and not plain `&str` literals?
+>
+>Astute readers will notice that the following code will also compile:
+>
+>```rust
+>use std::collections::HashMap;
+>
+>let mut scores = HashMap::new();
+>
+>scores.insert("Blue", 10);
+>scores.insert("Yellow", 50);
+>```
+>
+>Why then use `String::from()` instead of plain `&str`s? The answer is that
+>we want owned data in the HashMap. The above example only works because we
+>used literal values, which has `'static` lifetimes. This example would not
+>work with non-`'static` `&str`s. To solve that, we use `String`s.
+
 Note that we need to first `use` the `HashMap` from the collections portion of
 the standard library. Of our three common collections, this one is the least
 often used, so it’s not included in the features brought into scope
