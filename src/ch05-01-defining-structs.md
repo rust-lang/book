@@ -218,6 +218,10 @@ The code in Listing 5-7 also creates an instance in `user2` that has a
 different value for `email` and `username` but has the same values for the
 `active` and `sign_in_count` fields from `user1`.
 
+Note that `user1` is moved and cannot be accessed anymore. To keep `user1`
+available you can derive `Clone` trait for the `User` struct and call
+`..user1.clone()` instead. We'll learn about derived traits in the next section.
+
 ### Using Tuple Structs without Named Fields to Create Different Types
 
 You can also define structs that look similar to tuples, called *tuple
