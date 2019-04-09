@@ -123,7 +123,7 @@ match x {
 If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
 convenient than using the `|` operator to express the same idea; instead of
 `1...5`, we would have to specify `1 | 2 | 3 | 4 | 5` if we used `|`.
-Specifyinga range is much shorter, especially if we want to match, say, any
+Specifying a range is much shorter, especially if we want to match, say, any
 number between 1 and 1,000!
 
 Ranges are only allowed with numeric values or `char` values, because the
