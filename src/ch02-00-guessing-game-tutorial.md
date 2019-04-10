@@ -124,8 +124,8 @@ program:
 fn main() {
 ```
 
-The `fn` syntax declares a new function, the parentheses, `()`, indicate there
-are no parameters, and the curly bracket, `{`, starts the body of the function.
+The `fn` keyword is used to declare a new function, the parentheses, `()`, indicate
+there are no parameters, and the curly bracket, `{`, starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
