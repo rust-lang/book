@@ -24,5 +24,5 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/crates-and-modules.html
-[2]: ch07-00-packages-crates-and-modules.html
+[2]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
 [3]: ch14-02-publishing-to-crates-io.html

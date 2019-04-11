@@ -83,13 +83,13 @@ there are multiple functions available named `to_string`. Here, we’re using th
 `to_string` function defined in the `ToString` trait, which the standard
 library has implemented for any type that implements `Display`.
 
-Another useful pattern exploits an implementation detail of tuple structs and
-tuple-struct enum variants. These items use `()` as initializer syntax, which
-looks like a function call. The initializers are actually implemented as
-functions returning an instance constructed from their arguments. These
-initializer functions can also be used as a function pointer that implements
-the closure traits, so they can also be specified as arguments for methods that
-take closures:
+We have another useful pattern that exploits an implementation detail of tuple
+structs and tuple-struct enum variants. These types use `()` as initializer
+syntax, which looks like a function call. The initializers are actually
+implemented as functions returning an instance that’s constructed from their
+arguments. We can use these initializer functions as function pointers that
+implement the closure traits, which means we can specify the initializer
+functions as arguments for methods that take closures, like so:
 
 ```rust
 enum Status {
@@ -103,10 +103,10 @@ let list_of_statuses: Vec<Status> =
     .collect();
 ```
 
-This code creates `Status::Value` instances using each `u32` value in the range
+Here we create `Status::Value` instances using each `u32` value in the range
 that `map` is called on by using the initializer function of `Status::Value`.
-Some people prefer this style, and some people prefer to use closures. They end
-up compiling to the same code, so use whichever style is clearer to you.
+Some people prefer this style, and some people prefer to use closures. They
+compile to the same code, so use whichever style is clearer to you.
 
 ### Returning Closures
 
@@ -152,9 +152,9 @@ fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
 ```
 
 This code will compile just fine. For more about trait objects, refer to the
-[“Using Trait Objects That Allow for Values of Different Types”]
+section [“Using Trait Objects That Allow for Values of Different Types”]
 [using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore -->
-section in Chapter 17.
+in Chapter 17.
 
 Next, let’s look at macros!
 

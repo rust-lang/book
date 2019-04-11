@@ -185,7 +185,7 @@ $ cargo run
 The value of x is: 12
 ```
 
-Shadowing is different than marking a variable as `mut`, because we’ll get a
+Shadowing is different from marking a variable as `mut`, because we’ll get a
 compile-time error if we accidentally try to reassign to this variable without
 using the `let` keyword. By using `let`, we can perform a few transformations
 on a value but have the variable be immutable after those transformations have

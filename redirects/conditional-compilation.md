@@ -19,10 +19,10 @@ fn macos_only() {
 This particular chapter does not exist in [the second edition][2].
 The best place to learn about it is [the Rust Reference][3].
 
-* **[In the Rust Reference: Ch 5.3 — Attributes, Conditional Compilation section][3]**
+* **[In the Rust Reference: Ch 5 — Conditional Compilation][3]**
 * <small>[In the first edition: Ch 4.3 — Conditional Compilation][1]</small>
 
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/conditional-compilation.html
 [2]: index.html
-[3]: ../reference/attributes.html#conditional-compilation
+[3]: ../reference/conditional-compilation.html

@@ -100,23 +100,24 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 
 > ##### Integer Overflow
 >
-> Let’s say that you have a variable of type `u8`, which can hold values
-> between 0 and 255. What happens if you try to change the variable's value to
-> 256? This is called *integer overflow*, and Rust has some interesting rules
-> around this behavior. When compiling in debug mode, Rust includes checks for
-> integer overflow that will cause your program to *panic* at runtime if integer
-> overflow occurs. Panicking is the term Rust uses when a program exits with an
-> error; we’ll discuss panics more in the ["Unrecoverable Errors with `panic!`
-> section"][unrecoverable-errors-with-panic] of Chapter 9.
+> Let’s say you have a variable of type `u8` that can hold values between 0 and 255.
+> If you try to change the variable to a value outside of that range, such
+> as 256, *integer overflow* will occur. Rust has some interesting rules
+> involving this behavior. When you’re compiling in debug mode, Rust includes
+> checks for integer overflow that cause your program to *panic* at runtime if
+> this behavior occurs. Rust uses the term panicking when a program exits with
+> an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors
+> with `panic!`”][unrecoverable-errors-with-panic] section in Chapter 9.
 >
-> When compiling in release mode with the `--release` flag, Rust does not
-> include checks for integer overflow that cause panics. Instead, if overflow
-> occurs, Rust will perform something called *two’s complement wrapping*. In
-> short, values greater than the maximum value the type can hold "wrap around"
-> to the minimum of the values the type can hold. In the case of a `u8`, 256
-> becomes 0, 257 becomes 1, etc. Relying on the wrapping behavior of integer
-> overflow is considered an error. If you want to wrap explicitly, the standard
-> library has a type named `Wrapping` that provides this behavior.
+> When you’re compiling in release mode with the `--release` flag, Rust does
+> *not* include checks for integer overflow that cause panics. Instead, if
+> overflow occurs, Rust performs *two’s complement wrapping*. In short, values
+> greater than the maximum value the type can hold “wrap around” to the minimum
+> of the values the type can hold. In the case of a `u8`, 256 becomes 0, 257
+> becomes 1, and so on. The program won’t panic, but the variable will have a
+> value that probably isn’t what you were expecting it to have. Relying on
+> integer overflow’s wrapping behavior is considered an error. If you want to
+> wrap explicitly, you can use the standard library type [`Wrapping`][wrapping].
 
 #### Floating-Point Types
 
@@ -323,9 +324,9 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-Writing an array's type is done with square brackets containing the type of
-each element in the array followed by a semicolon and the number of elements in
-the array, like so:
+You would write an array’s type by using square brackets, and within the
+brackets include the type of each element, a semicolon, and then the number of
+elements in the array, like so:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
@@ -334,16 +335,16 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 Here, `i32` is the type of each element. After the semicolon, the number `5`
 indicates the element contains five items.
 
-The way an array's type is written looks similar to an alternative syntax for
+Writing an array’s type this way looks similar to an alternative syntax for
 initializing an array: if you want to create an array that contains the same
-value for each element, you can specify the initial value, then a semicolon,
-then the length of the array in square brackets as shown here:
+value for each element, you can specify the initial value, followed by a
+semicolon, and then the length of the array in square brackets, as shown here:
 
 ```rust
 let a = [3; 5];
 ```
 
-The array named `a` will contain 5 elements that will all be set to the value
+The array named `a` will contain `5` elements that will all be set to the value
 `3` initially. This is the same as writing `let a = [3, 3, 3, 3, 3];` but in a
 more concise way.
 
@@ -414,4 +415,5 @@ continuing. Chapter 9 discusses more of Rust’s error handling.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [control-flow]: ch03-05-control-flow.html#control-flow
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
-[unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.md
+[unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
+[wrapping]: ../std/num/struct.Wrapping.html
