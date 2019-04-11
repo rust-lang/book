@@ -657,7 +657,7 @@ fn main() {
 *src/main.rs*</span>
 
 We add a `use minigrep::Config` line to bring the `Config` type from the
-library crate into the binary crate's scope, and we prefix the `run` function
+library crate into the binary crate’s scope, and we prefix the `run` function
 with our crate name. Now all the functionality should be connected and should
 work. Run the program with `cargo run` and make sure everything works
 correctly.

@@ -97,6 +97,7 @@ deallocated
 deallocating
 deallocation
 debuginfo
+decl
 decrementing
 deduplicate
 deduplicating
@@ -156,6 +157,7 @@ filename
 Filename
 filesystem
 Filesystem
+filesystem's
 filesystems
 Firefox
 FnBox
@@ -183,6 +185,8 @@ HashMap
 HashSet
 Haskell
 hasn
+HeadB
+HeadC
 HelloMacro
 helloworld
 HelloWorld
@@ -193,6 +197,7 @@ Hola
 homogenous
 html
 hyperoptimize
+hypotheticals
 Iceburgh
 ident
 IDE
@@ -230,6 +235,7 @@ JavaScript
 JoinHandle
 Kay's
 kinded
+Klabnik
 lang
 LastWriteTime
 latin
@@ -243,6 +249,7 @@ libreoffice
 libstd
 lifecycle
 LimitTracker
+linter
 LLVM
 lobally
 locators
@@ -444,6 +451,7 @@ submodule
 submodules
 Submodules
 suboptimal
+subpath
 substring
 subteams
 subtree
@@ -515,6 +523,7 @@ visualstudio
 Vlissides
 vscode
 vtable
+waitlist
 wasn
 weakt
 WeatherForecast

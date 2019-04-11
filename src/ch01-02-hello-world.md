@@ -151,7 +151,7 @@ If you have a C or C++ background, you’ll notice that this is similar to `gcc`
 or `clang`. After compiling successfully, Rust outputs a binary executable.
 
 On Linux, macOS, and PowerShell on Windows, you can see the executable by
-entering the `ls` command in your shell. On Linux and macOS, you'll see two
+entering the `ls` command in your shell. On Linux and macOS, you’ll see two
 files. With PowerShell on Windows, you’ll see the same three files that you
 would see using CMD.
 

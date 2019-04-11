@@ -709,7 +709,7 @@ means that the code in the test function did not cause a panic.
 
 Tests that use `should_panic` can be imprecise because they only indicate that
 the code has caused some panic. A `should_panic` test would pass even if the
-test panics for a different reason than the one we were expecting to happen. To
+test panics for a different reason from the one we were expecting to happen. To
 make `should_panic` tests more precise, we can add an optional `expected`
 parameter to the `should_panic` attribute. The test harness will make sure that
 the failure message contains the provided text. For example, consider the
@@ -810,7 +810,7 @@ figuring out where our bug is!
 
 So far, we’ve written tests that panic when they fail. We can also write tests
 that use `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use
-`Result<T, E>` instead of panicking:
+`Result<T, E>` and return an `Err` instead of panicking:
 
 ```rust
 #[cfg(test)]
@@ -827,14 +827,15 @@ mod tests {
 ```
 
 The `it_works` function now has a return type, `Result<(), String>`. In the
-body of the function, rather than call the `assert_eq!` macro, we return
+body of the function, rather than calling the `assert_eq!` macro, we return
 `Ok(())` when the test passes and an `Err` with a `String` inside when the test
-fails. Writing tests that return a `Result<T, E>` enables you to use the
-question mark operator in the body of tests, which can be a convenient way to
-write tests that should fail if any operation within them returns an `Err`
-variant.
+fails.
 
-You can't use the `#[should_panic]` annotation on tests that use `Result<T,
+Writing tests so they return a `Result<T, E>` enables you to use the question
+mark operator in the body of tests, which can be a convenient way to write
+tests that should fail if any operation within them returns an `Err` variant.
+
+You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
 E>`. Instead, you should return an `Err` value directly when the test should
 fail.
 
@@ -848,4 +849,4 @@ ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 ch11-02-running-tests.html#controlling-how-tests-are-run
 [derivable-traits]: appendix-03-derivable-traits.html
 [doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
-[modules-as-privacy-boundary]: ch07-02-modules-and-use-to-control-scope-and-privacy.html#modules-as-the-privacy-boundary
+[modules-as-privacy-boundary]: ch07-02-defining-modules-to-control-scope-and-privacy.html

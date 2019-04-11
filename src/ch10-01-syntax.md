@@ -353,7 +353,7 @@ operations that are available only for floating point types.
 Generic type parameters in a struct definition aren’t always the same as those
 you use in that struct’s method signatures. For example, Listing 10-11 defines
 the method `mixup` on the `Point<T, U>` struct from Listing 10-8. The method
-takes another `Point` as a parameter, which might have different types than the
+takes another `Point` as a parameter, which might have different types from the
 `self` `Point` we’re calling `mixup` on. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `T`) and the `y`
 value from the passed-in `Point` (of type `W`).
@@ -386,7 +386,7 @@ fn main() {
 ```
 
 <span class="caption">Listing 10-11: A method that uses different generic types
-than its struct’s definition</span>
+from its struct’s definition</span>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
