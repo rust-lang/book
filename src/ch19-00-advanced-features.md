@@ -12,7 +12,6 @@ In this chapter, we’ll cover:
 
 * Unsafe Rust: how to opt out of some of Rust’s guarantees and take
   responsibility for manually upholding those guarantees
-* Advanced lifetimes: syntax for complex lifetime situations
 * Advanced traits: associated types, default type parameters, fully qualified
   syntax, supertraits, and the newtype pattern in relation to traits
 * Advanced types: more about the newtype pattern, type aliases, the never type,

@@ -14,8 +14,7 @@ The concept of lifetimes is somewhat different from tools in other programming
 languages, arguably making lifetimes Rust’s most distinctive feature. Although
 we won’t cover lifetimes in their entirety in this chapter, we’ll discuss
 common ways you might encounter lifetime syntax so you can become familiar with
-the concepts. See the [“Advanced Lifetimes”][advanced-lifetimes]<!-- ignore -->
-section in Chapter 19 for more detailed information.
+the concepts.
 
 ### Preventing Dangling References with Lifetimes
 
@@ -772,8 +771,6 @@ traits. Chapter 19 covers more complex scenarios involving lifetime annotations
 as well as some advanced type system features. But next, you’ll learn how to
 write tests in Rust so you can make sure your code is working the way it should.
 
-[advanced-lifetimes]:
-ch19-02-advanced-lifetimes.html#advanced-lifetimes
 [references-and-borrowing]:
 ch04-02-references-and-borrowing.html#references-and-borrowing
 [string-slices-as-parameters]:
