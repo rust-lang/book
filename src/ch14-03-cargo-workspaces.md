@@ -145,11 +145,11 @@ function to call the `add_one` function, as in Listing 14-7.
 <span class="filename">Filename: adder/src/main.rs</span>
 
 ```rust,ignore
-use add_one;
+use add-one;
 
 fn main() {
     let num = 10;
-    println!("Hello, world! {} plus one is {}!", num, add_one::add_one(num));
+    println!("Hello, world! {} plus one is {}!", num, add-one::add_one(num));
 }
 ```
 
