@@ -19,8 +19,11 @@ Let’s return to the example in Listing 7-1. How do we call the
 `add_to_waitlist` function? In Listing 7-3, we simplified our code a bit by
 removing some of the modules and functions. We’ll show two ways to call the
 `add_to_waitlist` function from a new function `eat_at_restaurant` defined in
-the crate root. Note that this example won’t compile just yet; we’ll explain
-why in a bit.
+the crate root. The `eat_at_restaurant` function is part of our library crate's
+public API, so we mark it with the `pub` keyword. In the ["Exposing Paths with
+the `pub` Keyword"][pub]<!-- ignore --> section, we'll go into more detail
+about `pub`. Note that this example won’t compile just yet; we’ll explain why
+in a bit.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -70,8 +73,8 @@ need to update the absolute path to `add_to_waitlist`, but the relative path
 would still be valid. However, if we moved the `eat_at_restaurant` function
 separately into a module named `dining`, the absolute path to the
 `add_to_waitlist` call would stay the same, but the relative path would need to
-be updated. We tend to specify absolute paths because it’s more likely to move
-code definitions and item calls independently of each other.
+be updated. Our preference is to specify absolute paths because it’s more
+likely to move code definitions and item calls independently of each other.
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
@@ -361,3 +364,5 @@ general rule of everything being private by default unless annotated with `pub`.
 There’s one more situation involving `pub` that we haven’t covered, and that is
 our last module system feature: the `use` keyword. We’ll cover `use` by itself
 first, and then we’ll show how to combine `pub` and `use`.
+
+[pub]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
