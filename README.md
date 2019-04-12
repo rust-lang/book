@@ -19,7 +19,7 @@ releases are updated less frequently.
 
 ## Requirements
 
-Building the book requires [mdBook], ideally the same version that
+Building the book requires [mdBook], ideally the same 0.2.x version that
 rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 
 [mdBook]: https://github.com/azerupi/mdBook
