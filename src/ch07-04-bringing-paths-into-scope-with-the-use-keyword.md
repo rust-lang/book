@@ -258,9 +258,9 @@ available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
 `use` line starting with the name of the package, `rand`, and listing the items
-we wanted to bring into scope. Recall that in the section [“Generating a Random
-Number”][rand]<!-- ignore --> in Chapter 2, we brought the `Rng` trait into
-scope and called the `rand::thread_rng` function:
+we wanted to bring into scope. Recall that in the [“Generating a Random
+Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
+into scope and called the `rand::thread_rng` function:
 
 ```rust,ignore
 use rand::Rng;
@@ -366,11 +366,11 @@ harder to tell what names are in scope and where a name used in your program
 was defined.
 
 The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the section [“How to Write
-Tests”][writing-tests]<!-- ignore --> in Chapter 11. The glob operator is also
-sometimes used as part of the prelude pattern: see [the standard library
-documentation](../std/prelude/index.html#other-preludes)<!-- ignore --> for
-more information on that pattern.
+into the `tests` module; we’ll talk about that in the [“How to Write
+Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The glob operator
+is also sometimes used as part of the prelude pattern: see [the standard
+library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
+for more information on that pattern.
 
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
 [writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
