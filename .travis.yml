@@ -13,6 +13,6 @@ addons:
       - aspell
       - aspell-en
 before_script:
-  - (cargo install mdbook --vers 0.1.7 --force || true)
+  - (cargo install mdbook --vers 0.2.3 --force || true)
 script:
   - bash ci/build.sh
