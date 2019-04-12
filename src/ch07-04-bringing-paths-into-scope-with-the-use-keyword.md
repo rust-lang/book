@@ -141,10 +141,12 @@ use std::fmt;
 use std::io;
 
 fn function1() -> fmt::Result {
+    // --snip--
 #     Ok(())
 }
 
 fn function2() -> io::Result<()> {
+    // --snip--
 #     Ok(())
 }
 ```
@@ -155,7 +157,7 @@ the same scope requires using their parent modules.</span>
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
 have two `Result` types in the same scope and Rust wouldn’t know which one we
-meant when we used `Result`. Try it and see what compiler error you get!
+meant when we used `Result`.
 
 ### Providing New Names with the `as` Keyword
 
@@ -171,10 +173,12 @@ use std::fmt::Result;
 use std::io::Result as IoResult;
 
 fn function1() -> Result {
+    // --snip--
 #     Ok(())
 }
 
 fn function2() -> IoResult<()> {
+    // --snip--
 #     Ok(())
 }
 ```
