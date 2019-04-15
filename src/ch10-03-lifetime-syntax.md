@@ -276,13 +276,15 @@ The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
 long as lifetime `'a`. The function signature also tells Rust that the string
 slice returned from the function will live at least as long as lifetime `'a`.
-These constraints are what we want Rust to enforce. Remember, when we specify
-the lifetime parameters in this function signature, we’re not changing the
-lifetimes of any values passed in or returned. Rather, we’re specifying that
-the borrow checker should reject any values that don’t adhere to these
-constraints. Note that the `longest` function doesn’t need to know exactly how
-long `x` and `y` will live, only that some scope can be substituted for `'a`
-that will satisfy this signature.
+In practice, it means that the lifetime of the reference returned by the
+`longest` function is the same as the smaller of the lifetimes of the
+references passed in. These constraints are what we want Rust to enforce.
+Remember, when we specify the lifetime parameters in this function signature,
+we’re not changing the lifetimes of any values passed in or returned. Rather,
+we’re specifying that the borrow checker should reject any values that don’t
+adhere to these constraints. Note that the `longest` function doesn’t need to
+know exactly how long `x` and `y` will live, only that some scope can be
+substituted for `'a` that will satisfy this signature.
 
 When annotating lifetimes in functions, the annotations go in the function
 signature, not in the function body. Rust can analyze the code within the
