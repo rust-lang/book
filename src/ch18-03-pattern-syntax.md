@@ -335,7 +335,7 @@ colors in the `ChangeColor` message, as shown in Listing 18-16.
 ```rust
 enum Color {
    Rgb(i32, i32, i32),
-   Hsv(i32, i32, i32)
+   Hsv(i32, i32, i32),
 }
 
 enum Message {
