@@ -311,7 +311,7 @@ fn first_word(s: &String) -> &str {
 ```
 
 A more experienced Rustacean would write the signature shown in Listing 4-9
-instead because it allows us to use the same function on both `String` values
+instead because it allows us to use the same function on both `&String` values
 and `&str` values.
 
 ```rust,ignore
