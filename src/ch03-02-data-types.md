@@ -394,8 +394,8 @@ $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
     Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/arrays`
-thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:6
+thread 'main' panicked at 'index out of bounds: the len is 5 but the index is
+ 10', src/main.rs:5:19
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
