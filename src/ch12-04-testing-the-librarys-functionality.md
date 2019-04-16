@@ -32,10 +32,11 @@ lines that match the query. We’ll add this functionality in a function called
 Because we don’t need them anymore, let’s remove the `println!` statements from
 *src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
 Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
-did in Chapter 11. The test function specifies the behavior we want the
-`search` function to have: it will take a query and the text to search for the
-query in, and it will return only the lines from the text that contain the
-query. Listing 12-15 shows this test, which won’t compile yet.
+did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
+the behavior we want the `search` function to have: it will take a query and
+the text to search for the query in, and it will return only the lines from the
+text that contain the query. Listing 12-15 shows this test, which won’t compile
+yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -91,10 +92,11 @@ function so our test will compile</span>
 
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Recall in
-Chapter 10 that the lifetime parameters specify which argument lifetime is
-connected to the lifetime of the return value. In this case, we indicate that
-the returned vector should contain string slices that reference slices of the
-argument `contents` (rather than the argument `query`).
+[Chapter 10][ch10-lifetimes]<!-- ignore --> that the lifetime parameters
+specify which argument lifetime is connected to the lifetime of the return
+value. In this case, we indicate that the returned vector should contain string
+slices that reference slices of the argument `contents` (rather than the
+argument `query`).
 
 In other words, we tell Rust that the data returned by the `search` function
 will live as long as the data passed into the `search` function in the
@@ -194,9 +196,9 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 </span>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-Chapter 13, but recall that you saw this way of using an iterator in Listing
-3-5, where we used a `for` loop with an iterator to run some code on each item
-in a collection.
+[Chapter 13][ch13]<!-- ignore -->, but recall that you saw this way of using an
+iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a `for` loop
+with an iterator to run some code on each item in a collection.
 
 #### Searching Each Line for the Query
 
@@ -264,8 +266,8 @@ At this point, we could consider opportunities for refactoring the
 implementation of the search function while keeping the tests passing to
 maintain the same functionality. The code in the search function isn’t too bad,
 but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in Chapter 13, where we’ll explore iterators in detail,
-and look at how to improve it.
+return to this example in [Chapter 13][ch13]<!-- ignore -->, where we’ll
+explore iterators in detail, and look at how to improve it.
 
 #### Using the `search` Function in the `run` Function
 
@@ -331,3 +333,6 @@ useful when you’re writing command line programs.
 
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+[ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
+[ch10-lifetimes]: ch10-03-lifetime-syntax.html
+[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for

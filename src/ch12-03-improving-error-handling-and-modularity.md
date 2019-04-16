@@ -187,14 +187,14 @@ trade-off.
 > ### The Trade-Offs of Using `clone`
 >
 > There’s a tendency among many Rustaceans to avoid using `clone` to fix
-> ownership problems because of its runtime cost. In Chapter 13, you’ll learn
-> how to use more efficient methods in this type of situation. But for now,
-> it’s okay to copy a few strings to continue making progress because you’ll
-> make these copies only once and your filename and query string are very
-> small. It’s better to have a working program that’s a bit inefficient than to
-> try to hyperoptimize code on your first pass. As you become more experienced
-> with Rust, it’ll be easier to start with the most efficient solution, but for
-> now, it’s perfectly acceptable to call `clone`.
+> ownership problems because of its runtime cost. In [Chapter 13][ch13]<!--
+> ignore -->, you’ll learn how to use more efficient methods in this type of
+> situation. But for now, it’s okay to copy a few strings to continue making
+> progress because you’ll make these copies only once and your filename and
+> query string are very small. It’s better to have a working program that’s a
+> bit inefficient than to try to hyperoptimize code on your first pass. As you
+> become more experienced with Rust, it’ll be easier to start with the most
+> efficient solution, but for now, it’s perfectly acceptable to call `clone`.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config`, and we updated the code that
@@ -304,13 +304,13 @@ fn new(args: &[String]) -> Config {
 <span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span>
 
-This code is similar to the `Guess::new` function we wrote in Listing 9-10,
-where we called `panic!` when the `value` argument was out of the range of
-valid values. Instead of checking for a range of values here, we’re checking
-that the length of `args` is at least 3 and the rest of the function can
-operate under the assumption that this condition has been met. If `args` has
-fewer than three items, this condition will be true, and we call the `panic!`
-macro to end the program immediately.
+This code is similar to [the `Guess::new` function we wrote in Listing
+9-10][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
+`value` argument was out of the range of valid values. Instead of checking for
+a range of values here, we’re checking that the length of `args` is at least 3
+and the rest of the function can operate under the assumption that this
+condition has been met. If `args` has fewer than three items, this condition
+will be true, and we call the `panic!` macro to end the program immediately.
 
 With these extra few lines of code in `new`, let’s run the program without any
 arguments again to see what the error looks like now:
@@ -327,10 +327,10 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
 the technique we used in Listing 9-10 isn’t the best to use here: a call to
-`panic!` is more appropriate for a programming problem than a usage problem, as
-discussed in Chapter 9. Instead, we can use the other technique you learned
-about in Chapter 9—returning a `Result` that indicates either success or an
-error.
+`panic!` is more appropriate for a programming problem than a usage problem,
+[as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead, we
+can use the other technique you learned about in Chapter 9—[returning a
+`Result`][ch9-result]<!-- ignore --> that indicates either success or an error.
 
 #### Returning a `Result` from `new` Instead of Calling `panic!`
 
@@ -416,11 +416,12 @@ handling. If the `Result` is an `Ok` value, this method’s behavior is similar
 to `unwrap`: it returns the inner value `Ok` is wrapping. However, if the value
 is an `Err` value, this method calls the code in the *closure*, which is an
 anonymous function we define and pass as an argument to `unwrap_or_else`. We’ll
-cover closures in more detail in Chapter 13. For now, you just need to know
-that `unwrap_or_else` will pass the inner value of the `Err`, which in this
-case is the static string `not enough arguments` that we added in Listing 12-9,
-to our closure in the argument `err` that appears between the vertical pipes.
-The code in the closure can then use the `err` value when it runs.
+cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For now,
+you just need to know that `unwrap_or_else` will pass the inner value of the
+`Err`, which in this case is the static string `not enough arguments` that we
+added in Listing 12-9, to our closure in the argument `err` that appears
+between the vertical pipes. The code in the closure can then use the `err`
+value when it runs.
 
 We’ve added a new `use` line to bring `process` from the standard library into
 scope. The code in the closure that will be run in the error case is only two
@@ -519,16 +520,17 @@ returned the unit type, `()`, and we keep that as the value returned in the
 
 For the error type, we used the *trait object* `Box<dyn Error>` (and we’ve
 brought `std::error::Error` into scope with a `use` statement at the top).
-We’ll cover trait objects in Chapter 17. For now, just know that `Box<dyn
-Error>` means the function will return a type that implements the `Error`
-trait, but we don’t have to specify what particular type the return value
-will be. This gives us flexibility to return error values that may be of
-different types in different error cases. The `dyn` keyword is short for
-“dynamic.”
+We’ll cover trait objects in [Chapter 17][ch17]<!-- ignore -->. For now, just
+know that `Box<dyn Error>` means the function will return a type that
+implements the `Error` trait, but we don’t have to specify what particular type
+the return value will be. This gives us flexibility to return error values that
+may be of different types in different error cases. The `dyn` keyword is short
+for “dynamic.”
 
 Second, we’ve removed the call to `expect` in favor of the `?` operator, as we
-talked about in Chapter 9. Rather than `panic!` on an error, `?` will return
-the error value from the current function for the caller to handle.
+talked about in [Chapter 9][ch9-question-mark]<!-- ignore -->. Rather than
+`panic!` on an error, `?` will return the error value from the current function
+for the caller to handle.
 
 Third, the `run` function now returns an `Ok` value in the success case. We’ve
 declared the `run` function’s success type as `()` in the signature, which
@@ -671,3 +673,9 @@ have been difficult with the old code but is easy with the new code: we’ll
 write some tests!
 
 [the-static-lifetime]: ch10-03-lifetime-syntax.html#the-static-lifetime
+[ch13]: ch13-00-functional-features.html
+[ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
+[ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
+[ch9-result]: ch09-02-recoverable-errors-with-result.html
+[ch17]: ch17-00-oop.html
+[ch9-question-mark]: ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-the--operator

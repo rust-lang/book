@@ -29,11 +29,11 @@ just learning this concept, let’s implement this capability ourselves.
 To enable `minigrep` to read the values of command line arguments we pass to
 it, we’ll need a function provided in Rust’s standard library, which is
 `std::env::args`. This function returns an iterator of the command line
-arguments that were given to `minigrep`. We’ll cover iterators fully in Chapter 13.
-For now, you only need to know two details about iterators: iterators
-produce a series of values, and we can call the `collect` method on an iterator
-to turn it into a collection, such as a vector, containing all the elements the
-iterator produces.
+arguments that were given to `minigrep`. We’ll cover iterators fully in
+[Chapter 13][ch13]<!-- ignore -->. For now, you only need to know two details
+about iterators: iterators produce a series of values, and we can call the
+`collect` method on an iterator to turn it into a collection, such as a vector,
+containing all the elements the iterator produces.
 
 Use the code in Listing 12-1 to allow your `minigrep` program to read any
 command line arguments passed to it and then collect the values into a vector.
@@ -54,13 +54,13 @@ a vector and printing them</span>
 
 First, we bring the `std::env` module into scope with a `use` statement so we
 can use its `args` function. Notice that the `std::env::args` function is
-nested in two levels of modules. As we discussed in Chapter 7, in cases where
-the desired function is nested in more than one module, it’s conventional to
-bring the parent module into scope rather than the function. By doing so, we
-can easily use other functions from `std::env`. It’s also less ambiguous than
-adding `use std::env::args` and then calling the function with just `args`,
-because `args` might easily be mistaken for a function that’s defined in the
-current module.
+nested in two levels of modules. As we discussed in [Chapter
+7][ch7-idiomatic-use]<!-- ignore -->, in cases where the desired function is
+nested in more than one module, it’s conventional to bring the parent module
+into scope rather than the function. By doing so, we can easily use other
+functions from `std::env`. It’s also less ambiguous than adding `use
+std::env::args` and then calling the function with just `args`, because `args`
+might easily be mistaken for a function that’s defined in the current module.
 
 > ### The `args` Function and Invalid Unicode
 >
@@ -151,3 +151,6 @@ saved into the right variables. Later we’ll add some error handling to deal
 with certain potential erroneous situations, such as when the user provides no
 arguments; for now, we’ll ignore that situation and work on adding file-reading
 capabilities instead.
+
+[ch13]: ch13-00-functional-features.html
+[ch7-idiomatic-use]: ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#creating-idiomatic-use-paths
