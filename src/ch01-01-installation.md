@@ -71,11 +71,11 @@ On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
 the instructions for installing Rust. At some point in the installation, you’ll
 receive a message explaining that you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
-install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
+install [Build Tools for Visual Studio 2019][visualstudio]. The tools are in
 the Other Tools and Frameworks section.
 
 [install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017
+[visualstudio]: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
 
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
