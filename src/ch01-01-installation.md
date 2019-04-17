@@ -115,14 +115,12 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 If you see this information, you have installed Rust successfully! If you don’t
 see this information and you’re on Windows, check that Rust is in your `%PATH%`
 system variable. If that’s all correct and Rust still isn’t working, there are
-a number of places you can get help. The easiest is [the #rust IRC channel on
-irc.mozilla.org][irc]<!-- ignore -->, which you can access through
-[Mibbit][mibbit]. At that address you can chat with other Rustaceans (a silly
-nickname we call ourselves) who can help you out. Other great resources include
-[the Users forum][users] and [Stack Overflow][stackoverflow].
+a number of places you can get help. The easiest is the #beginners channel on
+[the official Rust Discord][discord]. There, you can chat with other Rustaceans
+(a silly nickname we call ourselves) who can help you out. Other great
+resources include [the Users forum][users] and [Stack Overflow][stackoverflow].
 
-[irc]: irc://irc.mozilla.org/#rust
-[mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
+[discord]: https://discord.gg/rust-lang
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
