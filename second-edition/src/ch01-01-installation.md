@@ -1,6 +1,6 @@
 ## 설치하기
 
-첫 번째 단계는 러스트를 설차하는 것입니다. 우리는 `rustup`이라고 하는 러스트
+첫 번째 단계는 러스트를 설치하는 것입니다. 우리는 `rustup`이라고 하는 러스트
 버전 및 관련 도구들을 관리하기 위한 커멘드 라인 도구를 통하여 러스트를 다운로드할
 것입니다. 다운로드를 위해서는 인터넷 연결이 필요할 것입니다.
 
@@ -71,7 +71,7 @@ Windows에서는 [https://www.rust-lang.org/en-US/install.html][install]
 Visual Studio 2013이나 이후 버전용 C++ 빌드 도구 또한 설치할 필요가 있음을
 설명하는 메세지를 받을 것입니다. 이 빌드 도구를 얻는 가장 쉬운 방법은
 [Visual Studio 2017용 빌드 도구][visualstudio]를 설치하는 것입니다.
-이 도구들은 아든 도구 및 프레임워크 섹션 내에 있습니다.
+이 도구들은 다른 도구 및 프레임워크 섹션 내에 있습니다.
 
 [install]: https://www.rust-lang.org/en-US/install.html
 [visualstudio]: https://www.visualstudio.com/downloads/
