@@ -133,7 +133,7 @@ let r1 = &mut s;
 let r2 = &mut s;
 ```
 
-Here’s the error:
+여기 오류를 보시죠:
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
@@ -300,7 +300,7 @@ fn no_dangle() -> String {
 1. 어떠한 경우이든 간에, 여러분은 아래 둘 다는 아니고 *둘 중 하나만* 가질 수 있습니다:
   * 하나의 가변 참조자
   * 임의 개수의 불변 참조자들
-2. 참조자는 항상 유효하다.
+2. 참조자는 항상 유효해야만 한다.
 
 다음으로, 우리는 다른 종류의 참조자인 슬라이스(slice)를 볼 것입니다.
 

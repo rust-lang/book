@@ -171,8 +171,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-4: Assigning the result of an `if` expression
-to a variable</span>
+<span class="caption">Listing 3-4: `if` 표현식의 결과값을 변수에 대입하기</span>
 
 변수 `number`에는 `if`식에서 산출된 값이 bound되게 됩니다. 어떤 일이 일어날지 코드를 실행해보죠:
 
@@ -227,7 +226,7 @@ error[E0308]: if and else have incompatible types
 `if` 블록이 정수형을 산출하는 식이고 `else` 블록은 문자열을 산출하는 식 입니다. 이런 경우가 성립하지 않는 
 이유는 변수가 가질 수 있는 타입이 오직 하나이기 때문입니다. Rust는 컴파일 시에 `number` 변수의 타입이 뭔지 
 확실히! 정의해야 합니다. 그래야 `number`가 사용되는 모든 곳에서 유효한지 검증할 수 있으니까요. Rust는 
-`number`의 타입을 실행 시에 정의되도록 할 수 없습니다. 컴파일러가 모든 변수의 다양한 타입을 추적해서 알아내야  
+`number`의 타입을 실행 시에 정의되도록 할 수 없습니다. 컴파일러가 모든 변수의 다양한 타입을 추적해서 알아내야 
 한다면 컴파일러는 보다 복잡해지고 보증할 수 있는 것은 적어지게 됩니다.
 
 ### 반복문과 반복
@@ -326,8 +325,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-5: Looping through each element of a collection
-using a `while` loop</span>
+<span class="caption">Listing 3-5: `while` 반복문을 사용해 콜렉션의 각 요소들을 순회하기</span>
 
 여기서, 코드는 배열의 요소에 걸쳐 카운트를 증가시킵니다. 이 색인은 `0`에서 시작하고, 배열의 마지막 순서까지 반복됩니다
 (즉, `index < 5`가 참이 아닐 때까지). 이 코드를 수행하면 배열의 모든 요소가 출력되게 됩니다. 
@@ -351,7 +349,7 @@ the value is: 50
 또한 느린데, 이유는 컴파일러가 실행 간에 반복문을 통해 반복될 때마다 요소에 대한 조건 검사를 수행하는 런타임 코드를 
 추가하기 때문입니다.
 
-보다 효율적은 대안으로, 우리는 `for` 반복문을 사용하여 콜렉션의 각 요소에 대한 코드를 수행할 수 있습니다.
+보다 효율적인 대안으로, 우리는 `for` 반복문을 사용하여 콜렉션의 각 요소에 대한 코드를 수행할 수 있습니다.
 `for` 반복문은 다음 Listing 3-6과 같습니다:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -366,8 +364,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-6: Looping through each element of a collection
-using a `for` loop</span>
+<span class="caption">Listing 3-6: `for` 반복문을 사용해 콜렉션의 각 요소를 순회하기</span>
 
 우리가 이 코드를 수행하면, 항목 3-5와 같은 결과를 볼 수 있습니다. 더 중요한 것은, 우리는 이제 코드의 안전성을 높이고 
 배열의 끝을 넘어가거나 충분한 길이를 지정하지 못해 일부 아이템이 누락되어 발생할 수있는 버그의 가능성을 제거했습니다.
