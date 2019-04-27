@@ -139,7 +139,7 @@ as in Listing 17-6:
 # }
 #
 pub struct Screen<T: Draw> {
-    pub components: Vec<T>,
+    pub components: Vec<Box<T>>,
 }
 
 impl<T> Screen<T>
