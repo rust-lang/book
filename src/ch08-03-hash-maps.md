@@ -24,6 +24,14 @@ Listing 8-20, we’re keeping track of the scores of two teams whose names are
 Blue and Yellow. The Blue team starts with 10 points, and the Yellow team
 starts with 50.
 
+Since we want the HashMap to own its keys, we'll use the `String::from()` function
+to create owned strings instead of simply `"Blue"`, which would pass a string
+reference. Since the HashMap will own its keys, we can then guarantee that
+the keys will live as long as the HashMap will. This will be explained in more
+detail in the [“Validating References with Lifetimes”]
+[validating-references-with-lifetimes]<!-- ignore --> section in Chapter 10.
+
+
 ```rust
 use std::collections::HashMap;
 
