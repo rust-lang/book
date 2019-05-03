@@ -7,7 +7,7 @@ extern crate walkdir;
 
 use docopt::Docopt;
 use std::{path, fs, io};
-use std::io::{BufRead, Write};
+use std::io::BufRead;
 
 fn main () {
     let args: Args = Docopt::new(USAGE)
