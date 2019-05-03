@@ -31,7 +31,6 @@ the keys will live as long as the HashMap will. This will be explained in more
 detail in the [“Validating References with Lifetimes”]
 [validating-references-with-lifetimes]<!-- ignore --> section in Chapter 10.
 
-
 ```rust
 use std::collections::HashMap;
 
