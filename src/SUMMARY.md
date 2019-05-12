@@ -43,6 +43,7 @@
     - [Paths for Referring to an Item in the Module Tree](ch07-03-paths-for-referring-to-an-item-in-the-module-tree.md)
     - [Bringing Paths Into Scope with the `use` Keyword](ch07-04-bringing-paths-into-scope-with-the-use-keyword.md)
     - [Separating Modules into Different Files](ch07-05-separating-modules-into-different-files.md)
+    - [Non-exhaustive Types](ch07-06-non-exhaustive-types.md)
 
 - [Common Collections](ch08-00-common-collections.md)
     - [Storing Lists of Values with Vectors](ch08-01-vectors.md)

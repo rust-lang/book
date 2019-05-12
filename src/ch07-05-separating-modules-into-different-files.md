@@ -73,15 +73,3 @@ Note that the `pub use crate::front_of_house::hosting` statement in
 are compiled as part of the crate. The `mod` keyword declares modules, and Rust
 looks in a file with the same name as the module for the code that goes into
 that module.
-
-## Summary
-
-Rust lets you organize your packages into crates and your crates into modules
-so you can refer to items defined in one module from another module. You can do
-this by specifying absolute or relative paths. These paths can be brought into
-scope with a `use` statement so you can use a shorter path for multiple uses of
-the item in that scope. Module code is private by default, but you can make
-definitions public by adding the `pub` keyword.
-
-In the next chapter, we’ll look at some collection data structures in the
-standard library that you can use in your neatly organized code.
