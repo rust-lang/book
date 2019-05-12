@@ -1,12 +1,19 @@
-% There is a new edition of the book
+% Strings
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> A `String` is allocated on the heap and as such is able to store an amount of text that is unknown to us at compile time.
+> You can create a `String` from a string literal using the `from` function.
+> A _string slice_ is a reference to part of a `String`.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+let s = String::from("hello world");
 
+let hello = &s[0..5];
+let world = &s[6..11];
+```
 
-[1]: first-edition/strings.html
-[2]: second-edition/index.html
+---
+
+You can find the latest version of this information
+[here](ch08-02-strings.html).

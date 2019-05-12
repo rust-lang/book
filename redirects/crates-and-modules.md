@@ -1,12 +1,28 @@
-% There is a new edition of the book
+% Crates and Modules
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Rust has a module system that enables the reuse of code in an organized fashion.
+> A module is a namespace that contains definitions of functions or types, and you can choose whether those definitions are visible outside their module (public) or not (private).
+>
+> A crate is a project that other people can pull into their projects as a dependency.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+mod network {
+    fn connect() {
+    }
+}
+```
+
+---
+
+Here are the relevant sections in the new and old books:
+
+* **[in the current edition: Ch 7.01 — `mod` and the Filesystem][2]**
+* [in the current edition: Ch 14.02 — Publishing a Crate to Crates.io][3]
+* <small>[In the first edition: Ch 3.25 — Crates and Modules][1]</small>
 
 
-[1]: first-edition/crates-and-modules.html
-[2]: second-edition/index.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/crates-and-modules.html
+[2]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
+[3]: ch14-02-publishing-to-crates-io.html

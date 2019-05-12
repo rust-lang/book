@@ -1,12 +1,13 @@
-% There is a new edition of the book
+% Syntax Index
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+Here are the relevant sections in the new and old books:
 
-* [Index of the second edition of The Rust Programming Language][2]
+* **[In the current edition: Appendix A — Keywords][2]**
+* **[In the current edition: Appendix B — Operators][3]**
+* <small>[In the first edition: Ch 6 — Syntax Index][1]</small>
 
-
-[1]: first-edition/syntax-index.html
-[2]: second-edition/index.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/syntax-index.html
+[2]: appendix-01-keywords.html
+[3]: appendix-02-operators.html

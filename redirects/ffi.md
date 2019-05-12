@@ -1,12 +1,23 @@
-% There is a new edition of the book
+% FFI
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Sometimes, your Rust code may need to interact with code written in another language.
+> To do this, Rust has a keyword, `extern`, that facilitates creating and using a _Foreign Function Interface_ (FFI).
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+extern "C" {
+    fn abs(input: i32) -> i32;
+}
 
+fn main() {
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
+}
+```
 
-[1]: first-edition/ffi.html
-[2]: second-edition/index.html
+---
+
+You can find the latest version of this information
+[here](ch19-01-unsafe-rust.html#using-extern-functions-to-call-external-code)

@@ -1,12 +1,18 @@
-% There is a new edition of the book
+% Unsized Types
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Sometimes referred to as ‘DSTs’ or ‘unsized types’, these types let us talk about types whose size we can only know at runtime.
+> The `Sized` trait is automatically implemented for everything the compiler knows the size of at compile time.
+> A trait bound on `?Sized` is the opposite of a trait bound on `Sized`; that is, we would read this as “`T` may or may not be `Sized`”.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust,ignore
+fn generic<T: ?Sized>(t: &T) {
+    // ...snip...
+}
+```
 
+---
 
-[1]: first-edition/unsized-types.html
-[2]: second-edition/index.html
+You can find the latest version of this information
+[here](ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait).

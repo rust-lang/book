@@ -1,12 +1,17 @@
-% There is a new edition of the book
+% Associated Types
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Associated types are a way of associating a type placeholder with a trait such that the trait method definitions can use these placeholder types in their signatures.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+pub trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
+}
+```
 
+---
 
-[1]: first-edition/associated-types.html
-[2]: second-edition/index.html
+You can find the latest version of this information
+[here](ch19-03-advanced-traits.html#specifying-placeholder-types-in-trait-definitions-with-associated-types).

@@ -1,12 +1,23 @@
-% There is a new edition of the book
+% Patterns
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Patterns are a special syntax within Rust for matching against the structure of our types, complex or simple.
+> A pattern is made up of some combination of literals; destructured arrays, enums, structs, or tuples; variables, wildcards, and placeholders.
+> These pieces describe the “shape” of the data we’re working with.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+let x = Some(5);
+let y = 10;
 
+match x {
+    Some(50) => println!("Got 50"),
+    Some(y) => println!("Matched, y = {:?}", y),
+    _ => println!("Default case, x = {:?}", x),
+}
+```
 
-[1]: first-edition/patterns.html
-[2]: second-edition/index.html
+---
+
+You can find the latest version of this information
+[here](ch06-02-match.html).

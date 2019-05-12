@@ -1,12 +1,36 @@
-% There is a new edition of the book
+% Operators and Overloading
 
-This is an old link. You can [continue to the exact older page][1].
-If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
+<small>There is a new edition of the book and this is an old link.</small>
 
-* [This page in the first edition of the The Rust Programming Language][1]
+> Rust does not allow you to create your own operators or overload arbitrary operators, but the operations and corresponding traits listed in `std::ops` can be overloaded by implementing the traits associated with the operator.
 
-* [Index of the second edition of The Rust Programming Language][2]
+```rust
+use std::ops::Add;
 
+#[derive(Debug,PartialEq)]
+struct Point {
+    x: i32,
+    y: i32,
+}
 
-[1]: first-edition/operators-and-overloading.html
-[2]: second-edition/index.html
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, other: Point) -> Point {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+fn main() {
+    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
+               Point { x: 3, y: 3 });
+}
+```
+
+---
+
+You can find the latest version of this information
+[here](ch19-03-advanced-traits.html).

@@ -1,12 +1,12 @@
-% There is a new edition of the book
+% Tutorial: Guessing Game
 
-This is an old link. You can [continue to the exact older page][1].
+<small>There is a new edition of the book and this is an old link.</small>
+
 If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-* [This page in the first edition of the The Rust Programming Language][1]
+* **[In the first edition: Tutorial — Guessing Game][1]**
+* <small>[in the current edition: Ch 2.00 — Guessing Game tutorial][2]</small>
 
-* [Index of the second edition of The Rust Programming Language][2]
 
-
-[1]: first-edition/guessing-game.html
-[2]: second-edition/index.html
+[1]: https://doc.rust-lang.org/1.30.0/book/first-edition/guessing-game.html
+[2]: ch02-00-guessing-game-tutorial.html
