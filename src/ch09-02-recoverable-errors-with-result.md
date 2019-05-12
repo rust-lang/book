@@ -246,7 +246,7 @@ repr: Os { code: 2, message: "No such file or directory" } }',
 src/libcore/result.rs:906:4
 ```
 
-Another method, `expect`, which is similar to `unwrap`, lets us also choose the
+Another method, `expect`, which is similar to `unwrap`, let us also choose the
 `panic!` error message. Using `expect` instead of `unwrap` and providing good
 error messages can convey your intent and make tracking down the source of a
 panic easier. The syntax of `expect` looks like this:
