@@ -195,7 +195,7 @@ implement a mock object to do just that, but the borrow checker won’t allow it
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,does_not_compile
+```rust,ignore,does_not_compile
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -274,7 +274,7 @@ shows what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore
 #[cfg(test)]
 mod tests {
     use super::*;
