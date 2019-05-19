@@ -572,8 +572,9 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# trait OutlinePrint {}
+```rust,ignore,does_not_compile
+# use std::fmt;
+# trait OutlinePrint: fmt::Display {}
 struct Point {
     x: i32,
     y: i32,
@@ -585,14 +586,14 @@ impl OutlinePrint for Point {}
 We get an error saying that `Display` is required but not implemented:
 
 ```text
-error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
-  --> src/main.rs:20:6
+error[E0277]: `main::Point` doesn't implement `std::fmt::Display`
+  --> src/main.rs:11:10
    |
-20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
-try using `:?` instead if you are using a format string
+11 |     impl OutlinePrint for Point {}
+   |          ^^^^^^^^^^^^ `main::Point` cannot be formatted with the default formatter
    |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
+   = help: the trait `std::fmt::Display` is not implemented for `main::Point`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 ```
 
 To fix this, we implement `Display` on `Point` and satisfy the constraint that
