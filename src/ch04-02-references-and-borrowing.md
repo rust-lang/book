@@ -314,7 +314,7 @@ Let’s take a closer look at exactly what’s happening at each stage of our
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 fn dangle() -> &String { // dangle returns a reference to a String
 
     let s = String::from("hello"); // s is a new String
