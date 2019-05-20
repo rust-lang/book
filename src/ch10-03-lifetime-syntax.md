@@ -393,8 +393,8 @@ disallows the code in Listing 10-24 as possibly having an invalid reference.
 
 Try designing more experiments that vary the values and lifetimes of the
 references passed in to the `longest` function and how the returned reference
-is used. Make hypotheses about whether or not your experiments will pass the
-borrow checker before you compile; then check to see if you’re right!
+is used. Make hypotheses about whether your experiments will pass the borrow
+checker before you compile; then check to see if you’re right!
 
 ### Thinking in Terms of Lifetimes
 

@@ -1,7 +1,7 @@
 ## Control Flow
 
-Deciding whether or not to run some code depending on if a condition is true
-and deciding to run some code repeatedly while a condition is true are basic
+Deciding whether to run some code depending on if a condition is true and
+deciding to run some code repeatedly while a condition is true are basic
 building blocks in most programming languages. The most common constructs that
 let you control the flow of execution of Rust code are `if` expressions and
 loops.
@@ -30,12 +30,12 @@ fn main() {
 ```
 
 All `if` expressions start with the keyword `if`, which is followed by a
-condition. In this case, the condition checks whether or not the variable
-`number` has a value less than 5. The block of code we want to execute if the
-condition is true is placed immediately after the condition inside curly
-brackets. Blocks of code associated with the conditions in `if` expressions are
-sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the [“Comparing the Guess to the Secret Number”]
+condition. In this case, the condition checks whether the variable `number` has
+a value less than 5. The block of code we want to execute if the condition is
+true is placed immediately after the condition inside curly brackets. Blocks of
+code associated with the conditions in `if` expressions are sometimes called
+*arms*, just like the arms in `match` expressions that we discussed in the
+[“Comparing the Guess to the Secret Number”]
 [comparing-the-guess-to-the-secret-number]<!-- ignore --> section of Chapter 2.
 
 Optionally, we can also include an `else` expression, which we chose

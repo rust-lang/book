@@ -169,7 +169,7 @@ Another solution for avoiding reference cycles is reorganizing your data
 structures so that some references express ownership and some references don’t.
 As a result, you can have cycles made up of some ownership relationships and
 some non-ownership relationships, and only the ownership relationships affect
-whether or not a value can be dropped. In Listing 15-25, we always want `Cons`
+whether a value can be dropped. In Listing 15-25, we always want `Cons`
 variants to own their list, so reorganizing the data structure isn’t possible.
 Let’s look at an example using graphs made up of parent nodes and child nodes
 to see when non-ownership relationships are an appropriate way to prevent
@@ -458,8 +458,8 @@ count of 0.
 
 When the inner scope ends, `branch` goes out of scope and the strong count of
 the `Rc<Node>` decreases to 0, so its `Node` is dropped. The weak count of 1
-from `leaf.parent` has no bearing on whether or not `Node` is dropped, so we
-don’t get any memory leaks!
+from `leaf.parent` has no bearing on whether `Node` is dropped, so we don’t get
+any memory leaks!
 
 If we try to access the parent of `leaf` after the end of the scope, we’ll get
 `None` again. At the end of the program, the `Rc<Node>` in `leaf` has a strong

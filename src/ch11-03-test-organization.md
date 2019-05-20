@@ -58,11 +58,11 @@ annotated with `#[test]`.
 
 #### Testing Private Functions
 
-There’s debate within the testing community about whether or not private
-functions should be tested directly, and other languages make it difficult or
-impossible to test private functions. Regardless of which testing ideology you
-adhere to, Rust’s privacy rules do allow you to test private functions.
-Consider the code in Listing 11-12 with the private function `internal_adder`.
+There’s debate within the testing community about whether private functions
+should be tested directly, and other languages make it difficult or impossible
+to test private functions. Regardless of which testing ideology you adhere to,
+Rust’s privacy rules do allow you to test private functions. Consider the code
+in Listing 11-12 with the private function `internal_adder`.
 
 <span class="filename">Filename: src/lib.rs</span>
 

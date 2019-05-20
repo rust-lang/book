@@ -205,10 +205,9 @@ code:
 ```
 
 Rust substitutes the `*` operator with a call to the `deref` method and then a
-plain dereference so we don’t have to think about whether or not we need to
-call the `deref` method. This Rust feature lets us write code that functions
-identically whether we have a regular reference or a type that implements
-`Deref`.
+plain dereference so we don’t have to think about whether we need to call the
+`deref` method. This Rust feature lets us write code that functions identically
+whether we have a regular reference or a type that implements `Deref`.
 
 The reason the `deref` method returns a reference to a value, and that the plain
 dereference outside the parentheses in `*(y.deref())` is still necessary, is the

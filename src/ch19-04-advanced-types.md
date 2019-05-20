@@ -315,7 +315,7 @@ behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>`
 would work too).
 
 To work with DSTs, Rust has a particular trait called the `Sized` trait to
-determine whether or not a type’s size is known at compile time. This trait is
+determine whether a type’s size is known at compile time. This trait is
 automatically implemented for everything whose size is known at compile time.
 In addition, Rust implicitly adds a bound on `Sized` to every generic function.
 That is, a generic function definition like this:

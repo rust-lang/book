@@ -19,9 +19,9 @@ can use after the separator `--`.
 
 When you run multiple tests, by default they run in parallel using threads.
 This means the tests will finish running faster so you can get feedback quicker
-on whether or not your code is working. Because the tests are running at the
-same time, make sure your tests don’t depend on each other or on any shared
-state, including a shared environment, such as the current working directory or
+on whether your code is working. Because the tests are running at the same
+time, make sure your tests don’t depend on each other or on any shared state,
+including a shared environment, such as the current working directory or
 environment variables.
 
 For example, say each of your tests runs some code that creates a file on disk

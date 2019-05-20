@@ -232,8 +232,8 @@ hi number 3 from the main thread!
 hi number 4 from the main thread!
 ```
 
-Small details, such as where `join` is called, can affect whether or not your
-threads run at the same time.
+Small details, such as where `join` is called, can affect whether your threads
+run at the same time.
 
 ### Using `move` Closures with Threads
 

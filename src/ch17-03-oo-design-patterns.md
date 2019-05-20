@@ -711,7 +711,7 @@ object-oriented languages don’t have.
 
 ## Summary
 
-No matter whether or not you think Rust is an object-oriented language after
+Regardless of whether you consider Rust an object-oriented language after
 reading this chapter, you now know that you can use trait objects to get some
 object-oriented features in Rust. Dynamic dispatch can give your code some
 flexibility in exchange for a bit of runtime performance. You can use this
