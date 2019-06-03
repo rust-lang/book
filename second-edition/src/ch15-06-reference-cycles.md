@@ -362,7 +362,7 @@ leaf parent = None
 `Weak<Node>` 참조자를 가지도록 수정할 수 있습니다. 우리는 `leaf`의 `parent`
 필드 내의 `RefCell<Weak<Node>>` 상의 `borrow_mut` 메소드를 사용하고,
 그런 다음 `Rc::downgrade` 함수를 이용하여 `branch`의 `Rc<Node>`로부터
-`branch`에 대한 `Weoak<Node>` 참조자를 생성하였습니다.
+`branch`에 대한 `Weak<Node>` 참조자를 생성하였습니다.
 
 `leaf`의 부모를 다시한번 출력할 때, 이번에는 `branch`를 가지고 있는 `Some` variant를
 얻게될 것입니다: 이제 `leaf`는 그의 부모에 접근할 수 있습니다! `leaf`를 출력할 때, 우리는
