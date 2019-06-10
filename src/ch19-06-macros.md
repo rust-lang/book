@@ -172,8 +172,8 @@ operate on that code, and produce some code as an output rather than matching
 against patterns and replacing the code with other code as declarative macros
 do.
 
-The three kinds of procedural macros: custom derive, attribute-like, and
-function-like, all work in a similar fashion.
+The three kinds of procedural macros (custom derive, attribute-like, and
+function-like) all work in a similar fashion.
 
 When creating procedural macros, the definitions must reside in their own crate
 with a special crate type. This is for complex technical reasons that we hope
@@ -353,14 +353,14 @@ pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
 <span class="caption">Listing 19-31: Code that most procedural macro crates
 will require in order to process Rust code</span>
 
-Notice that we’ve split the code into the `hello_macro_derive` function
-responsible for parsing the `TokenStream` and the `impl_hello_macro` function
-responsible for transforming the syntax tree: this makes writing a procedural
-macro more convenient. The code in the outer function (`hello_macro_derive` in
-this case) will be the same for almost every procedural macro crate you see or
-create. The code you specify in the body of the inner function
-(`impl_hello_macro` in this case) will be different depending on your
-procedural macro’s purpose.
+Notice that we’ve split the code into the `hello_macro_derive` function, which
+is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
+function, which is responsible for transforming the syntax tree: this makes
+writing a procedural macro more convenient. The code in the outer function
+(`hello_macro_derive` in this case) will be the same for almost every
+procedural macro crate you see or create. The code you specify in the body of
+the inner function (`impl_hello_macro` in this case) will be different
+depending on your procedural macro’s purpose.
 
 We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 `proc_macro` crate comes with Rust, so we didn’t need to add that to the
@@ -550,14 +550,14 @@ function that generates the code you want!
 ### Function-like macros
 
 Function-like macros define macros that look like function calls. Similarly to
-`macro_rules!` macros, they’re more flexible than functions in that they can
-take an unknown number of arguments, for example. However, `macro_rules!`
-macros can only be defined using the match-like syntax we discussed in the
-section [“Declarative Macros with `macro_rules!` for General
-Metaprogramming”][decl] earlier. Function-like macros take a `TokenStream`
-parameter and their definition manipulates that `TokenStream` using Rust code
-as the other two types of procedural macros do. An example of a function-like
-macro is an `sql!` macro that might be called like so:
+`macro_rules!` macros, they’re more flexible than functions; for example, they
+can take an unknown number of arguments. However, `macro_rules!` macros can be
+defined only using the match-like syntax we discussed in the section
+[“Declarative Macros with `macro_rules!` for General Metaprogramming”][decl]
+earlier. Function-like macros take a `TokenStream` parameter and their
+definition manipulates that `TokenStream` using Rust code as the other two
+types of procedural macros do. An example of a function-like macro is an `sql!`
+macro that might be called like so:
 
 [decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
 
@@ -581,10 +581,11 @@ generate.
 ## Summary
 
 Whew! Now you have some Rust features in your toolbox that you won’t use often,
-but you’ll know they’re available in particular circumstances. We’ve introduced
-several complex topics, so when you encounter them in error message suggestions
-or in other peoples’ code, you’ll recognize these concepts and syntax. Use this
-chapter as a reference to guide you to solutions.
+but you’ll know they’re available in very particular circumstances. We’ve
+introduced several complex topics so that when you encounter them in error
+message suggestions or in other peoples’ code, you’ll be able to recognize
+these concepts and syntax. Use this chapter as a reference to guide you to
+solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
