@@ -43,7 +43,7 @@ let six = IpAddrKind::V6;
 
 열거형의 variants 는 열거형을 정의한 식별자에 의해 이름 공간이 생기며, 두 개의 
 콜론을 사용하여 둘을 구분할 수 있습니다. `IpAddrKind::V4` 와 `IpAddrKind::V6` 의
-값은 동일한 타입이기 때문에, 이 방식이 유용합니다: `IpAddrKind`
+값은 동일한 타입이기 때문에, 이 방식이 유용합니다: `IpAddrKind`.
 이제 `IpAddrKind` 타입을 인자로 받는 함수를 정의할 수 있습니다:
 
 ```rust
@@ -241,7 +241,7 @@ let m = Message::Write(String::from("hello"));
 m.call();
 ```
 
-열거형의 값을 가져오기 위해 메소드 안에서 `self` 를 사용할 것입니다. 이 에제에서 생성한
+열거형의 값을 가져오기 위해 메소드 안에서 `self` 를 사용할 것입니다. 이 예제에서 생성한
 변수 `m` 은 `Message::Write(String::from("hello"))` 값을 갖게 되고, 이 값은
 `m.call()`이 실행될 때, `call` 메소드 안에서 `self`가 될 것입니다.
 
