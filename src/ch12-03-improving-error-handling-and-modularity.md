@@ -187,14 +187,15 @@ trade-off.
 > ### The Trade-Offs of Using `clone`
 >
 > There’s a tendency among many Rustaceans to avoid using `clone` to fix
-> ownership problems because of its runtime cost. In [Chapter 13][ch13]<!--
-> ignore -->, you’ll learn how to use more efficient methods in this type of
-> situation. But for now, it’s okay to copy a few strings to continue making
-> progress because you’ll make these copies only once and your filename and
-> query string are very small. It’s better to have a working program that’s a
-> bit inefficient than to try to hyperoptimize code on your first pass. As you
-> become more experienced with Rust, it’ll be easier to start with the most
-> efficient solution, but for now, it’s perfectly acceptable to call `clone`.
+> ownership problems because of its runtime cost. In
+> [Chapter 13][ch13]<!-- ignore -->, you’ll learn how to use more efficient
+> methods in this type of situation. But for now, it’s okay to copy a few
+> strings to continue making progress because you’ll make these copies only
+> once and your filename and query string are very small. It’s better to have
+> a working program that’s a bit inefficient than to try to hyperoptimize code
+> on your first pass. As you become more experienced with Rust, it’ll be
+> easier to start with the most efficient solution, but for now, it’s
+> perfectly acceptable to call `clone`.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config`, and we updated the code that
