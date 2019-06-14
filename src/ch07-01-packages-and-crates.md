@@ -1,7 +1,7 @@
 ## Packages and Crates
 
-The first parts of the module system we’ll cover are *packages* and *crates*. A
-*crate* is a binary or library. The *crate root* is a source file that the Rust
+The first parts of the module system we’ll cover are packages and crates. A
+crate is a binary or library. The *crate root* is a source file that the Rust
 compiler starts from and makes up the root module of your crate (we’ll explain
 modules in depth in the [“Defining Modules to Control Scope and
 Privacy”][modules]<!-- ignore -->) section. A *package* is one or more crates
@@ -43,10 +43,11 @@ in the *src/bin* directory: each file will be a separate binary crate.
 
 A crate will group related functionality together in a scope so the
 functionality is easy to share between multiple projects. For example, the
-`rand` crate we used in Chapter 2 provides functionality that generates random
-numbers. We can use that functionality in our own projects by bringing the
-`rand` crate into our project’s scope. All the functionality provided by the
-`rand` crate is accessible through the crate’s name, `rand`.
+`rand` crate we used in [Chapter 2][rand]<!-- ignore --> provides functionality
+that generates random numbers. We can use that functionality in our own
+projects by bringing the `rand` crate into our project’s scope. All the
+functionality provided by the `rand` crate is accessible through the crate’s
+name, `rand`.
 
 Keeping a crate’s functionality in its own scope clarifies whether particular
 functionality is defined in our crate or the `rand` crate and prevents
@@ -60,3 +61,4 @@ our crate, it refers to the `struct Rng` that we defined. We would access the
 Let’s move on and talk about the module system!
 
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
+[rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
