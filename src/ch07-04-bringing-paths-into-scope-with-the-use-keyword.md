@@ -253,8 +253,8 @@ rand = "0.5.5"
 ```
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
-`rand` package and any dependencies from *https://crates.io* and make `rand`
-available to our project.
+`rand` package and any dependencies from [crates.io](https://crates.io/) and
+make `rand` available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
 `use` line starting with the name of the package, `rand`, and listed the items
@@ -270,9 +270,9 @@ fn main() {
 ```
 
 Members of the Rust community have made many packages available at
-*https://crates.io*, and pulling any of them into your package involves these
-same steps: listing them in your package’s *Cargo.toml* file and using `use` to
-bring items into scope.
+[crates.io](https://crates.io/), and pulling any of them into your package
+involves these same steps: listing them in your package’s *Cargo.toml* file and
+using `use` to bring items into scope.
 
 Note that the standard library (`std`) is also a crate that’s external to our
 package. Because the standard library is shipped with the Rust language, we

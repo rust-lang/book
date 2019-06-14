@@ -271,7 +271,7 @@ purposes, you can switch to another function by specifying a different
 *hasher*. A hasher is a type that implements the `BuildHasher` trait. We’ll
 talk about traits and how to implement them in Chapter 10. You don’t
 necessarily have to implement your own hasher from scratch;
-[crates.io](https://crates.io) has libraries shared by other Rust users that
+[crates.io](https://crates.io/) has libraries shared by other Rust users that
 provide hashers implementing many common hashing algorithms.
 
 [^siphash]: [https://www.131002.net/siphash/siphash.pdf](https://www.131002.net/siphash/siphash.pdf)

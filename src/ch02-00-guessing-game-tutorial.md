@@ -418,7 +418,7 @@ everything from the *registry*, which is a copy of data from
 [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem post
 their open source Rust projects for others to use.
 
-[cratesio]: https://crates.io
+[cratesio]: https://crates.io/
 
 After updating the registry, Cargo checks the `[dependencies]` section and
 downloads any crates you don’t have yet. In this case, although we only listed

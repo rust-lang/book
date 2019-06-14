@@ -1,9 +1,9 @@
 ## Publishing a Crate to Crates.io
 
-We’ve used packages from [crates.io](https://crates.io)<!-- ignore --> as
+We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as
 dependencies of our project, but you can also share your code with other people
 by publishing your own packages. The crate registry at
-[crates.io](https://crates.io)<!-- ignore --> distributes the source code of
+[crates.io](https://crates.io/)<!-- ignore --> distributes the source code of
 your packages, so it primarily hosts code that is open source.
 
 Rust and Cargo have features that help make your published package easier for
@@ -337,8 +337,8 @@ differs from their public API.
 ### Setting Up a Crates.io Account
 
 Before you can publish any crates, you need to create an account on
-[crates.io](https://crates.io)<!-- ignore --> and get an API token. To do so,
-visit the home page at [crates.io](https://crates.io)<!-- ignore --> and log in
+[crates.io](https://crates.io/)<!-- ignore --> and get an API token. To do so,
+visit the home page at [crates.io](https://crates.io/)<!-- ignore --> and log in
 via a GitHub account. (The GitHub account is currently a requirement, but the
 site might support other ways of creating an account in the future.) Once
 you’re logged in, visit your account settings at
@@ -352,7 +352,7 @@ $ cargo login abcdefghijklmnopqrstuvwxyz012345
 This command will inform Cargo of your API token and store it locally in
 *~/.cargo/credentials*. Note that this token is a *secret*: do not share it
 with anyone else. If you do share it with anyone for any reason, you should
-revoke it and generate a new token on [crates.io](https://crates.io)<!-- ignore
+revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
 -->.
 
 ### Adding Metadata to a New Crate
@@ -363,7 +363,7 @@ to the `[package]` section of the crate’s *Cargo.toml* file.
 
 Your crate will need a unique name. While you’re working on a crate locally,
 you can name a crate whatever you’d like. However, crate names on
-[crates.io](https://crates.io)<!-- ignore --> are allocated on a first-come,
+[crates.io](https://crates.io/)<!-- ignore --> are allocated on a first-come,
 first-served basis. Once a crate name is taken, no one else can publish a crate
 with that name. Before attempting to publish a crate, search for the name you
 want to use on the site. If the name has been used by another crate, you will
@@ -449,13 +449,13 @@ easily.
 Now that you’ve created an account, saved your API token, chosen a name for
 your crate, and specified the required metadata, you’re ready to publish!
 Publishing a crate uploads a specific version to
-[crates.io](https://crates.io)<!-- ignore --> for others to use.
+[crates.io](https://crates.io/)<!-- ignore --> for others to use.
 
 Be careful when publishing a crate because a publish is *permanent*. The
 version can never be overwritten, and the code cannot be deleted. One major
-goal of [crates.io](https://crates.io)<!-- ignore --> is to act as a permanent
+goal of [crates.io](https://crates.io/)<!-- ignore --> is to act as a permanent
 archive of code so that builds of all projects that depend on crates from
-[crates.io](https://crates.io)<!-- ignore --> will continue to work. Allowing
+[crates.io](https://crates.io/)<!-- ignore --> will continue to work. Allowing
 version deletions would make fulfilling that goal impossible. However, there is
 no limit to the number of crate versions you can publish.
 

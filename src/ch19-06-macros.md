@@ -498,7 +498,7 @@ and `hello_macro_derive`. Let’s hook up these crates to the code in Listing
 your *projects* directory using `cargo new pancakes`. We need to add
 `hello_macro` and `hello_macro_derive` as dependencies in the `pancakes`
 crate’s *Cargo.toml*. If you’re publishing your versions of `hello_macro` and
-`hello_macro_derive` to *https://crates.io/*, they would be regular
+`hello_macro_derive` to [crates.io](https://crates.io/), they would be regular
 dependencies; if not, you can specify them as `path` dependencies as follows:
 
 ```toml

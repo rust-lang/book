@@ -320,11 +320,11 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 This output shows `cargo test` only ran the tests for the `add-one` crate and
 didn’t run the `adder` crate tests.
 
-If you publish the crates in the workspace to *https://crates.io/*, each crate
-in the workspace will need to be published separately. The `cargo publish`
-command does not have an `--all` flag or a `-p` flag, so you must change to
-each crate’s directory and run `cargo publish` on each crate in the workspace
-to publish the crates.
+If you publish the crates in the workspace to [crates.io](https://crates.io/),
+each crate in the workspace will need to be published separately. The `cargo
+publish` command does not have an `--all` flag or a `-p` flag, so you must
+change to each crate’s directory and run `cargo publish` on each crate in the
+workspace to publish the crates.
 
 For additional practice, add an `add-two` crate to this workspace in a similar
 way as the `add-one` crate!
