@@ -146,9 +146,9 @@ that is stored on the heap and explore how Rust knows when to clean up that
 data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
-that relate to ownership. These aspects also apply to other complex data types
-provided by the standard library and that you create. We’ll discuss `String` in
-more depth in Chapter 8.
+that relate to ownership. These aspects also apply to other complex data types,
+whether they are provided by the standard library or created by you. We’ll 
+discuss `String` in more depth in Chapter 8.
 
 We’ve already seen string literals, where a string value is hardcoded into our
 program. String literals are convenient, but they aren’t suitable for every
