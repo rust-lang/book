@@ -437,8 +437,6 @@ fn main() {
 <span class="caption">Listing 19-9: Defining and using an immutable static
 variable</span>
 
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-
 Static variables are similar to constants, which we discussed in the
 [“Differences Between Variables and
 Constants”][differences-between-variables-and-constants]<!-- ignore -->
