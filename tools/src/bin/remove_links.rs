@@ -28,7 +28,7 @@ fn main () {
     });
 
     // Search for the references we need to delete.
-    let ref_regex = Regex::new(r"\n\[([^\]]+)\]:\s.*\n").unwrap();
+    let ref_regex = Regex::new(r"(?m)^\[([^\]]+)\]:\s.*\n").unwrap();
     let out = ref_regex.replace_all(&first_pass, |caps: &Captures<'_>| {
         let capture = caps.at(1).unwrap().to_owned();
 
