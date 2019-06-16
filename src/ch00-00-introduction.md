@@ -104,7 +104,7 @@ chapters. In concept chapters, you’ll learn about an aspect of Rust. In projec
 chapters, we’ll build small programs together, applying what you’ve learned so
 far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
 
-Chapter 1 explains how to install Rust, how to write a Hello, world! program,
+Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
 and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
 hands-on introduction to the Rust language. Here we cover concepts at a high
 level, and later chapters will provide additional detail. If you want to get
