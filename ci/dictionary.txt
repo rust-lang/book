@@ -519,6 +519,7 @@ variable's
 variant's
 vers
 versa
+vert
 Versioning
 visualstudio
 Vlissides

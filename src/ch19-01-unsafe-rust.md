@@ -437,16 +437,15 @@ fn main() {
 <span class="caption">Listing 19-9: Defining and using an immutable static
 variable</span>
 
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-
 Static variables are similar to constants, which we discussed in the
-[“Differences Between Variables and Constants”]
-[differences-between-variables-and-constants]<!-- ignore --> section in
-Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
-convention, and we *must* annotate the variable’s type, which is `&'static str`
-in this example. Static variables can only store references with the `'static`
-lifetime, which means the Rust compiler can figure out the lifetime; we don’t
-need to annotate it explicitly. Accessing an immutable static variable is safe.
+[“Differences Between Variables and
+Constants”][differences-between-variables-and-constants]<!-- ignore -->
+section in Chapter 3. The names of static variables are in
+`SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable’s
+type, which is `&'static str` in this example. Static variables can only store
+references with the `'static` lifetime, which means the Rust compiler can
+figure out the lifetime; we don’t need to annotate it explicitly. Accessing an
+immutable static variable is safe.
 
 Constants and immutable static variables might seem similar, but a subtle
 difference is that values in a static variable have a fixed address in memory.
@@ -518,15 +517,15 @@ By using `unsafe impl`, we’re promising that we’ll uphold the invariants tha
 the compiler can’t verify.
 
 As an example, recall the `Sync` and `Send` marker traits we discussed in the
-[“Extensible Concurrency with the `Sync` and `Send` Traits”]
-[extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore --> section
-in Chapter 16: the compiler implements these traits automatically if our types
-are composed entirely of `Send` and `Sync` types. If we implement a type that
-contains a type that is not `Send` or `Sync`, such as raw pointers, and we want
-to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify
-that our type upholds the guarantees that it can be safely sent across threads
-or accessed from multiple threads; therefore, we need to do those checks
-manually and indicate as such with `unsafe`.
+[“Extensible Concurrency with the `Sync` and `Send`
+Traits”][extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore -->
+section in Chapter 16: the compiler implements these traits automatically if
+our types are composed entirely of `Send` and `Sync` types. If we implement a
+type that contains a type that is not `Send` or `Sync`, such as raw pointers,
+and we want to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust
+can’t verify that our type upholds the guarantees that it can be safely sent
+across threads or accessed from multiple threads; therefore, we need to do
+those checks manually and indicate as such with `unsafe`.
 
 ### When to Use Unsafe Code
 

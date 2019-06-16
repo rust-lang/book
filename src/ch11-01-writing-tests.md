@@ -105,8 +105,8 @@ reads `1 passed; 0 failed` totals the number of tests that passed or failed.
 Because we don’t have any tests we’ve marked as ignored, the summary shows `0
 ignored`. We also haven’t filtered the tests being run, so the end of the
 summary shows `0 filtered out`. We’ll talk about ignoring and filtering out
-tests in the next section, [“Controlling How Tests Are Run.”]
-[controlling-how-tests-are-run]<!-- ignore -->
+tests in the next section, [“Controlling How Tests Are
+Run.”][controlling-how-tests-are-run]<!-- ignore -->
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
@@ -509,12 +509,12 @@ optional arguments to the `assert!`, `assert_eq!`, and `assert_ne!` macros. Any
 arguments specified after the one required argument to `assert!` or the two
 required arguments to `assert_eq!` and `assert_ne!` are passed along to the
 `format!` macro (discussed in Chapter 8 in the [“Concatenation with the `+`
-Operator or the `format!` Macro”]
-[concatenation-with-the--operator-or-the-format-macro]<!-- ignore --> section),
-so you can pass a format string that contains `{}` placeholders and values to
-go in those placeholders. Custom messages are useful to document what an
-assertion means; when a test fails, you’ll have a better idea of what the
-problem is with the code.
+Operator or the `format!`
+Macro”][concatenation-with-the--operator-or-the-format-macro]<!-- ignore -->
+section), so you can pass a format string that contains `{}` placeholders and
+values to go in those placeholders. Custom messages are useful to document
+what an assertion means; when a test fails, you’ll have a better idea of what
+the problem is with the code.
 
 For example, let’s say we have a function that greets people by name and we
 want to test that the name we pass into the function appears in the output:

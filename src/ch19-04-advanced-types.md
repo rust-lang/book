@@ -32,9 +32,9 @@ public API we provide, such as a method to add a name string to the `People`
 collection; that code wouldn’t need to know that we assign an `i32` ID to names
 internally. The newtype pattern is a lightweight way to achieve encapsulation
 to hide implementation details, which we discussed in the [“Encapsulation that
-Hides Implementation Details”]
-[encapsulation-that-hides-implementation-details]<!-- ignore --> section of
-Chapter 17.
+Hides Implementation
+Details”][encapsulation-that-hides-implementation-details]<!-- ignore -->
+section of Chapter 17.
 
 ### Creating Type Synonyms with Type Aliases
 
@@ -308,11 +308,11 @@ We can combine `str` with all kinds of pointers: for example, `Box<str>` or
 `Rc<str>`. In fact, you’ve seen this before but with a different dynamically
 sized type: traits. Every trait is a dynamically sized type we can refer to by
 using the name of the trait. In Chapter 17 in the [“Using Trait Objects That
-Allow for Values of Different Types”]
-[using-trait-objects-that-allow-for-values-of-different-types]<!-- ignore -->
-section, we mentioned that to use traits as trait objects, we must put them
-behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn Trait>`
-would work too).
+Allow for Values of Different
+Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
+ignore --> section, we mentioned that to use traits as trait objects, we must
+put them behind a pointer, such as `&dyn Trait` or `Box<dyn Trait>` (`Rc<dyn
+Trait>` would work too).
 
 To work with DSTs, Rust has a particular trait called the `Sized` trait to
 determine whether or not a type’s size is known at compile time. This trait is

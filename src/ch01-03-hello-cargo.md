@@ -13,10 +13,10 @@ using Cargo, adding dependencies will be much easier to do.
 
 Because the vast majority of Rust projects use Cargo, the rest of this book
 assumes that you’re using Cargo too. Cargo comes installed with Rust if you
-used the official installers discussed in the [“Installation”]
-[installation]<!-- ignore --> section. If you installed Rust through some other
-means, check whether Cargo is installed by entering the following into your
-terminal:
+used the official installers discussed in the
+[“Installation”][installation]<!-- ignore --> section. If you installed Rust
+through some other means, check whether Cargo is installed by entering the
+following into your terminal:
 
 ```text
 $ cargo --version

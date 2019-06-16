@@ -36,7 +36,7 @@ overload that operator is listed.
 | `-` | `- expr` | Arithmetic negation | `Neg` |
 | `-` | `expr - expr` | Arithmetic subtraction | `Sub` |
 | `-=` | `var -= expr` | Arithmetic subtraction and assignment | `SubAssign` |
-| `->` | `fn(...) -> type`, <code>\|...\| -> type</code> | Function and closure return type | |
+| `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type | |
 | `.` | `expr.ident` | Member access | |
 | `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | |
 | `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | |
@@ -64,10 +64,10 @@ overload that operator is listed.
 | `@` | `ident @ pat` | Pattern binding | |
 | `^` | `expr ^ expr` | Bitwise exclusive OR | `BitXor` |
 | `^=` | `var ^= expr` | Bitwise exclusive OR and assignment | `BitXorAssign` |
-| <code>\|</code> | <code>pat \| pat</code> | Pattern alternatives | |
-| <code>\|</code> | <code>expr \| expr</code> | Bitwise OR | `BitOr` |
-| <code>\|=</code> | <code>var \|= expr</code> | Bitwise OR and assignment | `BitOrAssign` |
-| <code>\|\|</code> | <code>expr \|\| expr</code> | Logical OR | |
+| <code>&vert;</code> | <code>pat &vert; pat</code> | Pattern alternatives | |
+| <code>&vert;</code> | <code>expr &vert; expr</code> | Bitwise OR | `BitOr` |
+| <code>&vert;=</code> | <code>var &vert;= expr</code> | Bitwise OR and assignment | `BitOrAssign` |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | Logical OR | |
 | `?` | `expr?` | Error propagation | |
 
 ### Non-operator Symbols
@@ -90,7 +90,7 @@ locations.
 | `br"..."`, `br#"..."#`, `br##"..."##`, etc. | Raw byte string literal, combination of raw and byte string literal |
 | `'...'` | Character literal |
 | `b'...'` | ASCII byte literal |
-| <code>\|...\| expr</code> | Closure |
+| <code>&vert;...&vert; expr</code> | Closure |
 | `!` | Always empty bottom type for diverging functions |
 | `_` | “Ignored” pattern binding; also used to make integer literals readable |
 

@@ -192,9 +192,9 @@ you’ll need to figure out what action the code is taking with what values to
 cause the panic and what the code should do instead.
 
 We’ll come back to `panic!` and when we should and should not use `panic!` to
-handle error conditions in the [“To `panic!` or Not to `panic!`”]
-[to-panic-or-not-to-panic]<!-- ignore --> section later in this chapter. Next,
-we’ll look at how to recover from an error using `Result`.
+handle error conditions in the [“To `panic!` or Not to
+`panic!`”][to-panic-or-not-to-panic]<!-- ignore --> section later in this
+chapter. Next, we’ll look at how to recover from an error using `Result`.
 
 [to-panic-or-not-to-panic]:
 ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic
