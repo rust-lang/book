@@ -107,7 +107,8 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 > checks for integer overflow that cause your program to *panic* at runtime if
 > this behavior occurs. Rust uses the term panicking when a program exits with
 > an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors
-> with `panic!`”][unrecoverable-errors-with-panic] section in Chapter 9.
+> with `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in
+> Chapter 9.
 >
 > When you’re compiling in release mode with the `--release` flag, Rust does
 > *not* include checks for integer overflow that cause panics. Instead, if
