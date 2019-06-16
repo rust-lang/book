@@ -14,7 +14,7 @@ fn main () {
     let mut refs = HashSet::new();
 
     // Capture all links and link references.
-    let regex = r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!-- ignore -->";
+    let regex = r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!--\signore\s-->";
     let link_regex = Regex::new(regex).unwrap();
     let first_pass = link_regex.replace_all(&buffer, |caps: &Captures<'_>| {
 
