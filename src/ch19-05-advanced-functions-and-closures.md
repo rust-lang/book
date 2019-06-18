@@ -115,7 +115,7 @@ directly. In most cases where you might want to return a trait, you can instead
 use the concrete type that implements the trait as the return value of the
 function. But you can’t do that with closures because they don’t have a
 concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+pointer `fn` type as the type of a closure, for example.
 
 The following code tries to return a closure directly, but it won’t compile:
 
