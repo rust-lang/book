@@ -76,7 +76,7 @@ the loop.
 
 All of the coefficients get stored in registers, which means accessing the
 values is very fast. There are no bounds checks on the array access at runtime.
-All these optimizations that Rust is able to apply make the resulting code
+All these optimizations mean that Rust is able to apply make the resulting code
 extremely efficient. Now that you know this, you can use iterators and closures
 without fear! They make code seem like it’s higher level but don’t impose a
 runtime performance penalty for doing so.
