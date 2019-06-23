@@ -228,9 +228,9 @@ primitive compound types: tuples and arrays.
 
 #### The Tuple Type
 
-A tuple is a general way of grouping together some number of other values
-with a variety of types into one compound type. Tuples have a fixed length:
-once declared, they cannot grow or shrink in size.
+A tuple is a general way of grouping together a number of values with a variety
+of types into one compound type. Tuples have a fixed length: once declared,
+they cannot grow or shrink in size.
 
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a type, and the types of the
