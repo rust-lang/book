@@ -286,8 +286,8 @@ fn main() {
 ```
 
 This program creates a tuple, `x`, and then makes new variables for each
-element by using their index. As with most programming languages, the first
-index in a tuple is 0.
+element by using their respective indices. As with most programming languages,
+the first index in a tuple is 0.
 
 #### The Array Type
 
