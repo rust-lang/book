@@ -291,7 +291,7 @@ fn it_adds_two() {
 ```
 
 Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in Listing 7-25. Then in the test function, we can call the
+we demonstrated in Listing 7-21. Then in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates

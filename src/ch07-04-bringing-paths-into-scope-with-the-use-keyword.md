@@ -291,14 +291,14 @@ crate.
 
 If we’re using multiple items defined in the same package or same module,
 listing each item on its own line can take up a lot of vertical space in our
-files. For example, these two `use` statements we had in Listing 2-4 in the
-Guessing Game bring items from `std` into scope:
+files. For example, these two `use` statements we had in the Guessing Game in
+Listing 2-4 bring items from `std` into scope:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::cmp::Ordering;
 use std::io;
+use std::cmp::Ordering;
 // ---snip---
 ```
 

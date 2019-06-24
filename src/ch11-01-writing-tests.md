@@ -282,11 +282,12 @@ larger rectangle can indeed hold a smaller rectangle</span>
 
 Note that we’ve added a new line inside the `tests` module: `use super::*;`.
 The `tests` module is a regular module that follows the usual visibility rules
-we covered in Chapter 7 in the [“Modules as the Privacy
-Boundary”][modules-as-privacy-boundary]<!-- ignore --> section. Because the
-`tests` module is an inner module, we need to bring the code under test in the
-outer module into the scope of the inner module. We use a glob here so anything
-we define in the outer module is available to this `tests` module.
+we covered in Chapter 7 in the [“Paths for Referring to an Item in the Module
+Tree”][paths-for-referring-to-an-item-in-the-module-tree]<!-- ignore -->
+section. Because the `tests` module is an inner module, we need to bring the
+code under test in the outer module into the scope of the inner module. We use
+a glob here so anything we define in the outer module is available to this
+`tests` module.
 
 We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
 `Rectangle` instances that we need. Then we called the `assert!` macro and
@@ -849,4 +850,4 @@ ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 ch11-02-running-tests.html#controlling-how-tests-are-run
 [derivable-traits]: appendix-03-derivable-traits.html
 [doc-comments]: ch14-02-publishing-to-crates-io.html#documentation-comments-as-tests
-[modules-as-privacy-boundary]: ch07-02-defining-modules-to-control-scope-and-privacy.html
+[paths-for-referring-to-an-item-in-the-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

@@ -22,9 +22,8 @@ removing some of the modules and functions. We’ll show two ways to call the
 the crate root. The `eat_at_restaurant` function is part of our library crate’s
 public API, so we mark it with the `pub` keyword. In the [”Exposing Paths with
 the `pub` Keyword”][pub]<!-- ignore --> section, we’ll go into more detail
-about `pub`.
-
-Note that this example won’t compile just yet; we’ll explain why in a bit.
+about `pub`. Note that this example won’t compile just yet; we’ll explain why
+in a bit.
 
 <span class="filename">Filename: src/lib.rs</span>
 

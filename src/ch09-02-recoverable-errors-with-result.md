@@ -528,7 +528,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-The `Box<dyn Error>` type is called a *trait object*, which we’ll talk about in
+The `Box<dyn Error>` type is called a trait object, which we’ll talk about in
 the [“Using Trait Objects that Allow for Values of Different
 Types”][trait-objects]<!-- ignore --> section in Chapter 17. For now, you can
 read `Box<dyn Error>` to mean “any kind of error.” Using `?` in a `main`
