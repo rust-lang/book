@@ -19,9 +19,9 @@ Let’s return to the example in Listing 7-1. How do we call the
 `add_to_waitlist` function? In Listing 7-3, we simplified our code a bit by
 removing some of the modules and functions. We’ll show two ways to call the
 `add_to_waitlist` function from a new function `eat_at_restaurant` defined in
-the crate root. The `eat_at_restaurant` function is part of our library crate's
-public API, so we mark it with the `pub` keyword. In the ["Exposing Paths with
-the `pub` Keyword"][pub]<!-- ignore --> section, we'll go into more detail
+the crate root. The `eat_at_restaurant` function is part of our library crate’s
+public API, so we mark it with the `pub` keyword. In the [”Exposing Paths with
+the `pub` Keyword”][pub]<!-- ignore --> section, we’ll go into more detail
 about `pub`.
 
 Note that this example won’t compile just yet; we’ll explain why in a bit.
