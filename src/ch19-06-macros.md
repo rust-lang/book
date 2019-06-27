@@ -298,7 +298,7 @@ definition in `hello_macro`, we’ll have to change the implementation of the
 procedural macro in `hello_macro_derive` as well. The two crates will need to
 be published separately, and programmers using these crates will need to add
 both as dependencies and bring them both into scope. We could instead have the
-`hello_macro` crate use `hello_macro_derive` as a dependency and reexport the
+`hello_macro` crate use `hello_macro_derive` as a dependency and re-export the
 procedural macro code. However, the way we’ve structured the project makes it
 possible for programmers to use `hello_macro` even if they don’t want the
 `derive` functionality.
