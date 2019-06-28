@@ -115,7 +115,7 @@ on your computer! Check the online documentation for more details.
 Inside the `main` function is the following code:
 
 ```rust
-    println!("Hello, world!");
+println!("Hello, world!");
 ```
 
 This line does all the work in this little program: it prints text to the
