@@ -470,13 +470,18 @@ and returns it. Of course, using `fs::read_to_string` doesn’t give us the
 opportunity to explain all the error handling, so we did it the longer way
 first.
 
-#### The `?` Operator Can Only Be Used in Functions That Return `Result`
+#### The `?` Operator Can Only Be Used in Functions That Return `Result` or `Option`
 
-The `?` operator can only be used in functions that have a return type of
-`Result`, because it is defined to work in the same way as the `match`
+The `?` operator can only be used to propagate errors in functions that have a
+return type of `Result`, because it is defined to work in the same way as the `match`
 expression we defined in Listing 9-6. The part of the `match` that requires a
 return type of `Result` is `return Err(e)`, so the return type of the function
 must be a `Result` to be compatible with this `return`.
+
+Besides `Result`, you can also use the `?` operator on expressions of type `Option<T>`
+where it will unwrap to the contents, if the option is `Some(contents)`. If the option
+is `None`, it will return `None` from the function or closure. Thus, this use is
+only allowed if the return type is also an `Option`.
 
 Let’s look at what happens if we use the `?` operator in the `main` function,
 which you’ll recall has a return type of `()`:
