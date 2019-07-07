@@ -1,191 +1,191 @@
-# Introduction
+# 소개
 
-> Note: This edition of the book is the same as [The Rust Programming
-> Language][nsprust] available in print and ebook format from [No Starch
-> Press][nsp].
+> Note: 이 책은 [No Starch Press][nsp] 에서 ebook 형태로
+> 무료 제공되는 [The Rust Programming Language][nsprust]
+> 와 동일한 내용을 원작자의 동의 하에 번역한 것입니다.
 
 [nsprust]: https://nostarch.com/rust
 [nsp]: https://nostarch.com/
 
-Welcome to *The Rust Programming Language*, an introductory book about Rust.
-The Rust programming language helps you write faster, more reliable software.
-High-level ergonomics and low-level control are often at odds in programming
-language design; Rust challenges that conflict. Through balancing powerful
-technical capacity and a great developer experience, Rust gives you the option
-to control low-level details (such as memory usage) without all the hassle
-traditionally associated with such control.
+*The Rust Programming Language(보통 줄여서 TRPL이라고 부릅니다)* 는 러스트 프로그래밍 언어를 소개하는 책입니다.
 
-## Who Rust Is For
+여태 프로그래밍 언어 디자인에 있어 저수준(low-level) 제어와 고수준(high-level) 문법은 양립하기 어려웠으며,
+메모리 제어 등 저수준을 세부적으로 제어할 땐 온갖 귀찮은 것들이 동반하는 것이 당연시되었습니다.
 
-Rust is ideal for many people for a variety of reasons. Let’s look at a few of
-the most important groups.
+하지만 러스트는 강력한 기술적 능력과 뛰어난 개발자 경험(developer experience)을 통해 이러한 인식을 바꾸는데 도전했습니다.
+즉, 러스트를 사용하면 개발자 친화적인 고수준 문법으로 저수준을 제어할 수 있어 저수준 제어에 동반되는 귀찮은 것들이 사라지고, 프로그래머는 더 빠르고 안정적인 소프트웨어를 만들 수 있습니다.
 
-### Teams of Developers
+## 러스트는 누구에게 적합할까요?
 
-Rust is proving to be a productive tool for collaborating among large teams of
-developers with varying levels of systems programming knowledge. Low-level code
-is prone to a variety of subtle bugs, which in most other languages can be
-caught only through extensive testing and careful code review by experienced
-developers. In Rust, the compiler plays a gatekeeper role by refusing to
-compile code with these elusive bugs, including concurrency bugs. By working
-alongside the compiler, the team can spend their time focusing on the program’s
-logic rather than chasing down bugs.
+러스트는 다양한 사람들에게 이상적입니다. 이유도 각각 다양하나,
+대표적인 몇 가지 경우를 살펴보도록 하겠습니다.
 
-Rust also brings contemporary developer tools to the systems programming world:
+### 개발팀
 
-* Cargo, the included dependency manager and build tool, makes adding,
-  compiling, and managing dependencies painless and consistent across the Rust
-  ecosystem.
-* Rustfmt ensures a consistent coding style across developers.
-* The Rust Language Server powers Integrated Development Environment (IDE)
-  integration for code completion and inline error messages.
+일반적으로 저수준 코드는 다양한 버그들에 노출되기 쉬워,
+시스템 프로그래밍 지식이 적은 사람부터 많은 사람까지 다양하게 구성된
+보통 개발팀에선 시니어 개발자를 투입해 대규모 테스트 및 상세한 코드 리뷰를 진행하여 버그를 해결하는 것이 일반적입니다.
 
-By using these and other tools in the Rust ecosystem, developers can be
-productive while writing systems-level code.
+하지만 러스트에선 컴파일러가 동시성 버그 등 찾기 어려운 버그가
+숨은 코드는 컴파일하지 않음으로써 버그를 원천봉쇄합니다.
+이는 개발팀이 디버깅보다 프로그램 로직 개발에 집중하게
+만드는 효과를 가져왔으며, 실제로도 생산적인 도구임이 입증되고 있습니다.
 
-### Students
+러스트는 시스템 프로그래밍 세계에 현대적인 개발자 도구를 도입하기도 했습니다:
 
-Rust is for students and those who are interested in learning about systems
-concepts. Using Rust, many people have learned about topics like operating
-systems development. The community is very welcoming and happy to answer
-student questions. Through efforts such as this book, the Rust teams want to
-make systems concepts more accessible to more people, especially those new to
-programming.
+* Cargo 라는 기본 구성에 포함된 의존성 관리자 및 빌드 도구로
+  손쉽게 러스트 생태계에서 의존성(dependency)을
+  추가, 컴파일, 관리할 수 있습니다.
+* Rustfmt는 개발자들 사이에서 코딩 스타일을 통일시킵니다.
+* 러스트 언어 서버(Rust Language Server)는 코드 자동완성과
+  인라인 에러 메시지를 결합해 IDE(통합 개발 환경)의 편의성을 높입니다.
 
-### Companies
+개발자들은 이 3가지를 포함한 러스트 생태계의 여러 툴들을 이용하여
+생산성을 희생하지 않고 저수준 코드를 작성할 수 있습니다.
 
-Hundreds of companies, large and small, use Rust in production for a variety of
-tasks. Those tasks include command line tools, web services, DevOps tooling,
-embedded devices, audio and video analysis and transcoding, cryptocurrencies,
-bioinformatics, search engines, Internet of Things applications, machine
-learning, and even major parts of the Firefox web browser.
+### 학생
 
-### Open Source Developers
+학생 및 시스템 개념을 공부하려는 분도 환영입니다.
+많은 이들이 러스트로 운영체제 개발 등의 주제를 공부해왔으며,
+커뮤니티 역시 초보자를 환영하고 질문에 친절히 대답해주는 분위기가 형성되어 있습니다.
 
-Rust is for people who want to build the Rust programming language, community,
-developer tools, and libraries. We’d love to have you contribute to the Rust
-language.
+러스트 팀은 이 책과 같은 노력을 통해 더 많은 사람,
+특히 프로그래밍 입문자들이 시스템 개념에 접근하기 쉬워지길 바랍니다.
 
-### People Who Value Speed and Stability
+### 회사
 
-Rust is for people who crave speed and stability in a language. By speed, we
-mean the speed of the programs that you can create with Rust and the speed at
-which Rust lets you write them. The Rust compiler’s checks ensure stability
-through feature additions and refactoring. This is in contrast to the brittle
-legacy code in languages without these checks, which developers are often
-afraid to modify. By striving for zero-cost abstractions, higher-level features
-that compile to lower-level code as fast as code written manually, Rust
-endeavors to make safe code be fast code as well.
+회사의 규모를 불문하고, 수많은 회사가 이미 웹 서비스, 데브옵스 도구화 등 다양한 작업에 러스트를 사용하고 있습니다.
 
-The Rust language hopes to support many other users as well; those mentioned
-here are merely some of the biggest stakeholders. Overall, Rust’s greatest
-ambition is to eliminate the trade-offs that programmers have accepted for
-decades by providing safety *and* productivity, speed *and* ergonomics. Give
-Rust a try and see if its choices work for you.
+그 이외에도 러스트는 커맨드 라인 도구, 임베디드 장치, 오디오 및 비디오 분석,
+암호화폐, 생물정보학, 검색 엔진, IOT 애플리케이션, 머신 러닝,
+심지어 파이어폭스 웹 브라우저의 핵심 부분을 만드는데에도 사용됩니다.
 
-## Who This Book Is For
+### 오픈소스 개발자
 
-This book assumes that you’ve written code in another programming language but
-doesn’t make any assumptions about which one. We’ve tried to make the material
-broadly accessible to those from a wide variety of programming backgrounds. We
-don’t spend a lot of time talking about what programming *is* or how to think
-about it. If you’re entirely new to programming, you would be better served by
-reading a book that specifically provides an introduction to programming.
+러스트는 여러분의 기여가 절실합니다.
+그렇기에 러스트 프로그래밍 언어 자체에 기여하실 분이나 커뮤니티 활동,
+개발자 도구 제작, 라이브러리 개발 등에 참여하실 분께도 정말 적합한 언어입니다.
 
-## How to Use This Book
+### 속도와 안정성을 중시하는 사람
 
-In general, this book assumes that you’re reading it in sequence from front to
-back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a topic; we typically revisit the
-topic in a later chapter.
+러스트는 속도와 안정성을 중시하는 사람들을 위한 언어입니다
+(이때의 속도란 프로그램을 작성하는 속도 및 만들어진 프로그램의 속도를 지칭합니다).
 
-You’ll find two kinds of chapters in this book: concept chapters and project
-chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
-chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
+개발자가 불안정한 레거시 코드를 수정하길 꺼려하는 타 언어의 컴파일러 검사와는 달리
+러스트 컴파일러의 검사는 기능 추가 및 리팩토링을 통해 안정성을 보장합니다.
+또한 비용 없는 추상화, 즉 컴파일러가 생성하는 저수준 코드를
+개발자가 직접 작성한 만큼 빠르게 만들 수 있도록 노력하여
+안정적인 코드가 빠른 코드도 될 수 있도록 합니다.
 
-Chapter 1 explains how to install Rust, how to write a Hello, world! program,
-and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
-hands-on introduction to the Rust language. Here we cover concepts at a high
-level, and later chapters will provide additional detail. If you want to get
-your hands dirty right away, Chapter 2 is the place for that. At first, you
-might even want to skip Chapter 3, which covers Rust features similar to those
-of other programming languages, and head straight to Chapter 4 to learn about
-Rust’s ownership system. However, if you’re a particularly meticulous learner
-who prefers to learn every detail before moving on to the next, you might want
-to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
-you’d like to work on a project applying the details you’ve learned.
+앞서 언급해온 대상도 대표적인 이해관계자 중 일부일 뿐입니다.
+러스트의 최종 목표는, 기존의 안정성**이나** 생산성 중 하나를 택하면 나머지 하나를 잃는 것이 당연시되던, 프로그래머들이 여태 받아들여 온 트레이드오프를 제거하는 것입니다.
+러스트는 안정성**과** 생산성 두 마리 토끼를 모두 잡고, 마찬가지 취급을 받던 성능**과** 개발자 친화성(ergonomics)까지 동시에 끌어안았습니다.
 
-Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
-expressions, and the `if let` control flow construct. You’ll use structs and
-enums to make custom types in Rust.
+한번 러스트를 사용해보고, 이 특성이 여러분과도 잘 맞는지 판단해보세요.
 
-In Chapter 7, you’ll learn about Rust’s module system and about privacy rules
-for organizing your code and its public Application Programming Interface
-(API). Chapter 8 discusses some common collection data structures that the
-standard library provides, such as vectors, strings, and hash maps. Chapter 9
-explores Rust’s error-handling philosophy and techniques.
+## 이 책은 어떤 사람을 위한 책인가요?
 
-Chapter 10 digs into generics, traits, and lifetimes, which give you the power
-to define code that applies to multiple types. Chapter 11 is all about testing,
-which even with Rust’s safety guarantees is necessary to ensure your program’s
-logic is correct. In Chapter 12, we’ll build our own implementation of a subset
-of functionality from the `grep` command line tool that searches for text
-within files. For this, we’ll use many of the concepts we discussed in the
-previous chapters.
+이 책은 여러분이 이미 다른 프로그래밍 언어를 배운 적이 있다는
+가정하에 집필되었습니다(어떤 언어를 배웠었는지는 상관하지 않습니다).
+따라서 이 책에선 프로그래밍이라는 게 무엇인지,
+어떤 자세로 코드를 작성해야 하는지 길게 설명하지 않을 겁니다.
+프로그래밍을 처음 배우시는 분은 이 책 이외의 다른
+프로그래밍 입문 서적을 먼저 읽고 오시길 권유 드립니다.
 
-Chapter 13 explores closures and iterators: features of Rust that come from
-functional programming languages. In Chapter 14, we’ll examine Cargo in more
-depth and talk about best practices for sharing your libraries with others.
-Chapter 15 discusses smart pointers that the standard library provides and the
-traits that enable their functionality.
+## 이 책을 어떻게 읽어야 할까요?
 
-In Chapter 16, we’ll walk through different models of concurrent programming
-and talk about how Rust helps you to program in multiple threads fearlessly.
-Chapter 17 looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with.
+먼저, 이 책은 앞에서부터 뒤 순서대로
+읽는 가정하에 작성되었음을 알려드립니다.
+따라서 보통 앞 장에선 기초 내용을 배우고,
+뒷 장에선 앞서 나온 내용을 기반으로 한 심화 내용을 배웁니다.
 
-Chapter 18 is a reference on patterns and pattern matching, which are powerful
-ways of expressing ideas throughout Rust programs. Chapter 19 contains a
-smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
-more about lifetimes, traits, types, functions, and closures.
+등장하는 내용은 크게 두 종류입니다.
+주된 내용은 러스트 개념을 배우는 내용이며,
+2, 10, 20장에선 앞서 배운 내용을 토대로
+작은 프로그램을 만들어 보는 내용도 등장합니다.
 
-In Chapter 20, we’ll complete a project in which we’ll implement a low-level
-multithreaded web server!
+1장은 러스트를 설치하고 Hello, world! 프로그램을 작성하는 방법과
+Cargo(앞서 말한 러스트에서 사용하는 패키지 매니저 및 빌드 도구입니다.) 사용법을 다룹니다.
 
-Finally, some appendixes contain useful information about the language in a
-more reference-like format. Appendix A covers Rust’s keywords, Appendix B
-covers Rust’s operators and symbols, Appendix C covers derivable traits
-provided by the standard library, Appendix D covers some useful development
-tools, and Appendix E explains Rust editions.
+2장은 직접 러스트를 실습하는 내용입니다.
+뒷 내용에서 심화적으로 배울 여러 개념을 추상적으로 다뤄볼 수 있죠.
+자신의 손으로 직접 실습해보는 걸 선호하시는 분에게 제격입니다.
 
-There is no wrong way to read this book: if you want to skip ahead, go for it!
-You might have to jump back to earlier chapters if you experience any
-confusion. But do whatever works for you.
+3장은 다른 프로그래밍 언어와 유사한 러스트 특성을 다루는 내용이며, 4장은 소유권 시스템을 다루는 내용입니다.
+이 부분은 여러 방법으로 읽을 수 있습니다. 3장을 건너뛰고 바로 4장 소유권 시스템부터 배우거나,
+하나씩 차근차근 배우는 걸 선호하면 2장을 건너뛰고 3장부터 본 후,
+2장으로 돌아와 배운 내용을 프로젝트에 적용해볼 수도 있죠.
+
+5장은 구조체 및 메소드를 다루며,
+6장은 열거형과 `match` 표현식, `if let` 흐름 제어문을 다룹니다.
+구조체와 열거형은 앞으로 커스텀 타입을 만드는 데 사용할 겁니다.
+
+7장은 공개 API(Application Programming Interface)를 만들 때,
+작성한 코드와 해당 API를 체계화하기 위한 모듈 시스템 및 접근 권한 규칙을 다루며,
+8장은 벡터, 문자열, 해쉬맵 등 표준 라이브러리가
+제공하는 일반적인 컬렉션 자료구조를 다룹니다.
+9장에선 러스트의 에러 처리 철학 및 기법을 알아보겠습니다.
+
+10장은 여러 타입을 처리하는 코드를 정의하는 데
+사용하는 제네릭(generic), 트레잇(trait), 라이프타임(lifetime)을 다루며
+11장에선 작성한 프로그램 로직이 잘 작동함을
+확인하는 데 필요한 테스트 관련 내용을 다룹니다.
+12장에선 그때까지 배운 수많은 개념을 이용해
+커맨드 라인 도구 `grep` 의 일부 기능을
+직접 구현해볼 겁니다.
+
+13장은 클로저 및 반복자(함수형 프로그래밍 언어에서 넘어온 기능입니다)를 다룹니다.
+14장은 Cargo 심화 내용 및 여러분이 만든 라이브러리를
+남들이 쓸 수 있도록 배포하는 방법을 다룹니다.
+15장은 표준 라이브러리가 제공하는 스마트 포인터와
+스마트 포인터를 구현하는 트레잇을 다룹니다.
+
+16장에선 여러 동시성 프로그래밍 모델과
+어째서 러스트에선 안심하고 멀티쓰레드 프로그래밍을 할 수 있는지 알아보고,
+17장에선 여러분에게 익숙할 객체 지향 프로그래밍 원칙과
+러스트의 표현 양식 간에 차이를 살펴보겠습니다.
+
+18장은 러스트에서 자신의 사고를 코드로 구현하는데
+유용한 패턴, 패턴 매칭을 참고자료 형식으로 다룹니다.
+19장은 unsafe 러스트, 매크로, 라이프타임, 트레잇, 타입, 함수, 클로저 등
+다양한 고급 주제를 다룹니다.
+
+20장에서는 저수준 멀티스레드 웹서버를 직접 구현하는 것으로
+프로젝트 실습을 마칠 예정입니다.
+
+마지막으로, 부록에는 러스트 관련 유용한 정보를 참고 자료 형식으로 담아두었습니다.
+각각 부록 A에는 러스트에서 사용하는 키워드들을, 부록 B에는 연산자 및 기호를,
+부록 C에는 표준 라이브러리가 제공하는 derivable 트레잇을,
+부록 D에는 여러 유용한 개발 도구에 대한 내용을,
+부록 E에는 러스트 에디션 설명을 담아두었으니 필요할 때 참고해주세요.
+
+이 책은 어떻게 읽든 상관 없습니다. 일단 넘기고 싶은 부분은 넘긴 뒤,
+뒷부분을 읽다가 내용이 헷갈릴 때 다시 앞으로 돌아와 읽으셔도 됩니다.
+다만, 자신에게 가장 도움이 되는 방식대로 읽으시길 권합니다.
 
 <span id="ferris"></span>
 
-An important part of the process of learning Rust is learning how to read the
-error messages the compiler displays: these will guide you toward working code.
-As such, we’ll provide many examples that don’t compile along with the error
-message the compiler will show you in each situation. Know that if you enter
-and run a random example, it may not compile! Make sure you read the
-surrounding text to see whether the example you’re trying to run is meant to
-error. Ferris will also help you distinguish code that isn’t meant to work:
+러스트를 배우면서 가장 중요한 건 컴파일러가 보여주는 에러 메시지를 읽는 법입니다.
+에러 메시지만 잘 읽어도 코드 속 오류를 고칠 수 있기 때문이죠.
+따라서, 여러분이 에러 메시지를 읽는 실력을 자연스럽게 늘릴 수 있도록 컴파일되지
+않는 예제 코드와 해당 예제서 발생하는 에러 메시지를 다양하게 보여드릴 겁니다.
+그러니 눈에 보이는 아무 예제나 컴파일을 돌렸더니 에러가 나타나더라도,
+일부러 에러가 나타나게 만든 예제일 수도 있으니 당황하지 마시고 해당 예제 주위의 글을 읽어보세요.
+편의를 위해, 오작동하도록 만든 코드에는 Ferris 가 등장하니 구분하는 데 참고하셔도 좋습니다.
 
-| Ferris                                                                 | Meaning                                          |
-|------------------------------------------------------------------------|--------------------------------------------------|
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain"/>    | This code does not compile!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain"/>              | This code panics!                                |
-| <img src="img/ferris/unsafe.svg" class="ferris-explain"/>              | This code block contains unsafe code.            |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"/>| This code does not produce the desired behavior. |
+| Ferris                                                                 | 각각의 의미          |
+|------------------------------------------------------------------------|-----------------------------|
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain"/>    | 컴파일되지 않는 코드        |
+| <img src="img/ferris/panics.svg" class="ferris-explain"/>              | Panic 이 발생하는 코드      |
+| <img src="img/ferris/unsafe.svg" class="ferris-explain"/>              | unsafe 코드가 포함된 코드   |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"/>| 의도대로 작동하지 않는 코드 |
 
-In most situations, we’ll lead you to the correct version of any code that
-doesn’t compile.
+덧붙이자면, 컴파일되지 않는 코드가 등장하는 내용 중 대부분은
+해당 코드가 정상 작동하도록 수정해 나가는 내용입니다.
 
-## Source Code
+## 소스코드
 
-The source files from which this book is generated can be found on
-[GitHub][book].
+이 책을 만드는데 사용한 원본 파일은
+[GitHub(한국어 번역본)][translated_book] 에서 찾아보실 수 있습니다.
 
-[book]: https://github.com/rust-lang/book/tree/master/src
+[translated_book]: https://github.com/rinthel/rust-lang-book-ko/tree/master/src
