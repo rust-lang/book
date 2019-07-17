@@ -35,12 +35,11 @@ want to send over the channel.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore,does_not_compile
 use std::sync::mpsc;
 
 fn main() {
     let (tx, rx) = mpsc::channel();
-#     tx.send(()).unwrap();
 }
 ```
 
