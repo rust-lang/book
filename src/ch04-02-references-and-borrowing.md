@@ -229,7 +229,7 @@ from under them! However, multiple immutable references are okay because no one
 who is just reading the data has the ability to affect anyone else’s reading of
 the data.
 
-Note that a reference's scope starts from where it is introduced and continues
+Note that a reference’s scope starts from where it is introduced and continues
 through the last time that reference is used. For instance, this code will
 compile because the last usage of the immutable references occurs before the
 mutable reference is introduced:
@@ -252,7 +252,7 @@ println!("{}", r3);
 
 The scopes of the immutable references `r1` and `r2` end after the `println!`
 where they are last used, which is before the mutable reference `r3` is
-created. These scopes don't overlap, so this code is allowed.
+created. These scopes don’t overlap, so this code is allowed.
 
 Even though borrowing errors may be frustrating at times, remember that it’s
 the Rust compiler pointing out a potential bug early (at compile time rather

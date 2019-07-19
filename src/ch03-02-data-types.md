@@ -8,9 +8,9 @@ Keep in mind that Rust is a *statically typed* language, which means that it
 must know the types of all variables at compile time. The compiler can usually
 infer what type we want to use based on the value and how we use it. In cases
 when many types are possible, such as when we converted a `String` to a numeric
-type using `parse` in the [“Comparing the Guess to the Secret Number”]
-[comparing-the-guess-to-the-secret-number]<!-- ignore --> section in Chapter 2,
-we must add a type annotation, like this:
+type using `parse` in the [“Comparing the Guess to the Secret
+Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
+Chapter 2, we must add a type annotation, like this:
 
 ```rust
 let guess: u32 = "42".parse().expect("Not a number!");
@@ -107,7 +107,8 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 > checks for integer overflow that cause your program to *panic* at runtime if
 > this behavior occurs. Rust uses the term panicking when a program exits with
 > an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors
-> with `panic!`”][unrecoverable-errors-with-panic] section in Chapter 9.
+> with `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in
+> Chapter 9.
 >
 > When you’re compiling in release mode with the `--release` flag, Rust does
 > *not* include checks for integer overflow that cause panics. Instead, if

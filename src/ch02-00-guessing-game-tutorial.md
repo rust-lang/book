@@ -157,10 +157,10 @@ let foo = bar;
 
 This line creates a new variable named `foo` and binds it to the value of the
 `bar` variable. In Rust, variables are immutable by default. We’ll be
-discussing this concept in detail in the [“Variables and Mutability”]
-[variables-and-mutability]<!-- ignore --> section in Chapter 3. The following
-example shows how to use `mut` before the variable name to make a variable
-mutable:
+discussing this concept in detail in the [“Variables and
+Mutability”][variables-and-mutability]<!-- ignore --> section in Chapter 3.
+The following example shows how to use `mut` before the variable name to make
+a variable mutable:
 
 ```rust,ignore
 let foo = 5; // immutable
@@ -418,7 +418,7 @@ everything from the *registry*, which is a copy of data from
 [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem post
 their open source Rust projects for others to use.
 
-[cratesio]: https://crates.io
+[cratesio]: https://crates.io/
 
 After updating the registry, Cargo checks the `[dependencies]` section and
 downloads any crates you don’t have yet. In this case, although we only listed

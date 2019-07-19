@@ -1,9 +1,9 @@
 ## Advanced Traits
 
-We first covered traits in the [“Traits: Defining Shared Behavior”]
-[traits-defining-shared-behavior]<!-- ignore --> section of Chapter 10, but as
-with lifetimes, we didn’t discuss the more advanced details. Now that you know
-more about Rust, we can get into the nitty-gritty.
+We first covered traits in the [“Traits: Defining Shared
+Behavior”][traits-defining-shared-behavior]<!-- ignore --> section of Chapter
+10, but as with lifetimes, we didn’t discuss the more advanced details. Now
+that you know more about Rust, we can get into the nitty-gritty.
 
 ### Specifying Placeholder Types in Trait Definitions with Associated Types
 
@@ -22,10 +22,10 @@ the other features discussed in this chapter.
 One example of a trait with an associated type is the `Iterator` trait that the
 standard library provides. The associated type is named `Item` and stands in
 for the type of the values the type implementing the `Iterator` trait is
-iterating over. In [“The `Iterator` Trait and the `next` Method”]
-[the-iterator-trait-and-the-next-method]<!-- ignore --> section of Chapter 13,
-we mentioned that the definition of the `Iterator` trait is as shown in Listing
-19-12.
+iterating over. In [“The `Iterator` Trait and the `next`
+Method”][the-iterator-trait-and-the-next-method]<!-- ignore --> section of
+Chapter 13, we mentioned that the definition of the `Iterator` trait is as
+shown in Listing 19-12.
 
 ```rust
 pub trait Iterator {
@@ -621,19 +621,19 @@ it within an outline of asterisks.
 
 ### Using the Newtype Pattern to Implement External Traits on External Types
 
-In Chapter 10 in the [“Implementing a Trait on a Type”]
-[implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned the
-orphan rule that states we’re allowed to implement a trait on a type as long as
-either the trait or the type are local to our crate. It’s possible to get
-around this restriction using the *newtype pattern*, which involves creating a
-new type in a tuple struct. (We covered tuple structs in the [“Using Tuple
-Structs without Named Fields to Create Different Types”][tuple-structs]<!--
-ignore --> section of Chapter 5.) The tuple struct will have one field and be a
-thin wrapper around the type we want to implement a trait for. Then the wrapper
-type is local to our crate, and we can implement the trait on the wrapper.
-*Newtype* is a term that originates from the Haskell programming language.
-There is no runtime performance penalty for using this pattern, and the wrapper
-type is elided at compile time.
+In Chapter 10 in the [“Implementing a Trait on a
+Type”][implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned
+the orphan rule that states we’re allowed to implement a trait on a type as
+long as either the trait or the type are local to our crate. It’s possible to
+get around this restriction using the *newtype pattern*, which involves
+creating a new type in a tuple struct. (We covered tuple structs in the
+[“Using Tuple Structs without Named Fields to Create Different
+Types”][tuple-structs]<!-- ignore --> section of Chapter 5.) The tuple struct
+will have one field and be a thin wrapper around the type we want to implement
+a trait for. Then the wrapper type is local to our crate, and we can implement
+the trait on the wrapper. *Newtype* is a term that originates from the Haskell
+programming language. There is no runtime performance penalty for using this
+pattern, and the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the

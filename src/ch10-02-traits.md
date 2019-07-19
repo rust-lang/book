@@ -480,13 +480,14 @@ error[E0507]: cannot move out of borrowed content
 
 The key line in this error is `cannot move out of type [T], a non-copy slice`.
 With our non-generic versions of the `largest` function, we were only trying to
-find the largest `i32` or `char`. As discussed in the [“Stack-Only Data: Copy”]
-[stack-only-data-copy]<!-- ignore --> section in Chapter 4, types like `i32`
-and `char` that have a known size can be stored on the stack, so they implement
-the `Copy` trait. But when we made the `largest` function generic, it became
-possible for the `list` parameter to have types in it that don’t implement the
-`Copy` trait. Consequently, we wouldn’t be able to move the value out of
-`list[0]` and into the `largest` variable, resulting in this error.
+find the largest `i32` or `char`. As discussed in the [“Stack-Only Data:
+Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4, types like
+`i32` and `char` that have a known size can be stored on the stack, so they
+implement the `Copy` trait. But when we made the `largest` function generic,
+it became possible for the `list` parameter to have types in it that don’t
+implement the `Copy` trait. Consequently, we wouldn’t be able to move the
+value out of `list[0]` and into the `largest` variable, resulting in this
+error.
 
 To call this code with only those types that implement the `Copy` trait, we can
 add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of

@@ -14,7 +14,7 @@ fn main () {
     let mut refs = HashSet::new();
 
     // Capture all links and link references.
-    let regex = r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!-- ignore -->";
+    let regex = r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!--\signore\s-->";
     let link_regex = Regex::new(regex).unwrap();
     let first_pass = link_regex.replace_all(&buffer, |caps: &Captures<'_>| {
 
@@ -28,7 +28,7 @@ fn main () {
     });
 
     // Search for the references we need to delete.
-    let ref_regex = Regex::new(r"\n\[([^\]]+)\]:\s.*\n").unwrap();
+    let ref_regex = Regex::new(r"(?m)^\[([^\]]+)\]:\s.*\n").unwrap();
     let out = ref_regex.replace_all(&first_pass, |caps: &Captures<'_>| {
         let capture = caps.at(1).unwrap().to_owned();
 

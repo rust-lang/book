@@ -54,6 +54,7 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                 if name.starts_with("derive(") ||
                    name.starts_with("profile") ||
                    name.starts_with("test") ||
+                   name.starts_with("no_mangle") ||
                    error_code.is_match(&name) {
                     return name
                 }

@@ -98,8 +98,8 @@ different Rust editions. Editions are covered in Appendix E.
 
 ## More Lints with Clippy
 
-The Clippy tool is a collection of lints to analyze your code to catch common
-mistakes and improve your Rust code.
+The Clippy tool is a collection of lints to analyze your code so you can catch
+common mistakes and improve your Rust code.
 
 To install Clippy, enter the following:
 
@@ -139,9 +139,9 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust has this constant defined more precisely,
-and that your program would be more correct if you used the constant instead.
-You would then change your code to use the `PI` constant. The following code
+This error lets you know that Rust has this constant defined more precisely and
+that your program would be more correct if you used the constant instead. You
+would then change your code to use the `PI` constant. The following code
 doesn’t result in any errors or warnings from Clippy:
 
 <span class="filename">Filename: src/main.rs</span>

@@ -331,17 +331,17 @@ didn’t mean to pass and we should pass a different type or we should implement
 
 ### Trait Objects Perform Dynamic Dispatch
 
-Recall in the [“Performance of Code Using Generics”]
-[performance-of-code-using-generics]<!-- ignore --> section in Chapter 10 our
-discussion on the monomorphization process performed by the compiler when we
-use trait bounds on generics: the compiler generates nongeneric implementations
-of functions and methods for each concrete type that we use in place of a
-generic type parameter. The code that results from monomorphization is doing
-*static dispatch*, which is when the compiler knows what method you’re calling
-at compile time. This is opposed to *dynamic dispatch*, which is when the
-compiler can’t tell at compile time which method you’re calling. In dynamic
-dispatch cases, the compiler emits code that at runtime will figure out which
-method to call.
+Recall in the [“Performance of Code Using
+Generics”][performance-of-code-using-generics]<!-- ignore --> section in
+Chapter 10 our discussion on the monomorphization process performed by the
+compiler when we use trait bounds on generics: the compiler generates
+nongeneric implementations of functions and methods for each concrete type
+that we use in place of a generic type parameter. The code that results from
+monomorphization is doing *static dispatch*, which is when the compiler knows
+what method you’re calling at compile time. This is opposed to *dynamic
+dispatch*, which is when the compiler can’t tell at compile time which method
+you’re calling. In dynamic dispatch cases, the compiler emits code that at
+runtime will figure out which method to call.
 
 When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
 know all the types that might be used with the code that is using trait
