@@ -24,7 +24,7 @@ that you reserve the right to change. This is another way to limit the amount
 of detail you have to keep in your head.
 
 A related concept is scope: the nested context in which code is written has a
-set of names that are defined as “in scope.” When reading, writing, and
+set of names that are defined as “in scope”. When reading, writing, and
 compiling code, programmers and compilers need to know whether a particular
 name at a particular spot refers to a variable, function, struct, enum, module,
 constant, or other item and what that item means. You can create scopes and
