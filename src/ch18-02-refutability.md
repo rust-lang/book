@@ -11,7 +11,7 @@ a_value` because if the value in the `a_value` variable is `None` rather than
 Function parameters, `let` statements, and `for` loops can only accept
 irrefutable patterns, because the program cannot do anything meaningful when
 values don’t match. The `if let` and `while let` expressions accept
-refutable patterns and irrefutable patterns, but the compiler warns against
+refutable and irrefutable patterns, but the compiler warns against
 irrefutable patterns because by definition they’re intended to handle possible
 failure: the functionality of a conditional is in its ability to perform
 differently depending on success or failure.
