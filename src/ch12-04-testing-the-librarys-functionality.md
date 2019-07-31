@@ -266,7 +266,7 @@ At this point, we could consider opportunities for refactoring the
 implementation of the search function while keeping the tests passing to
 maintain the same functionality. The code in the search function isn’t too bad,
 but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13]<!-- ignore -->, where we’ll
+return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where we’ll
 explore iterators in detail, and look at how to improve it.
 
 #### Using the `search` Function in the `run` Function
