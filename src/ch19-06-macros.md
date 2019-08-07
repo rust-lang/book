@@ -143,11 +143,13 @@ macro with `vec![1, 2, 3];`, the code generated that replaces this macro call
 will be the following:
 
 ```rust,ignore
-let mut temp_vec = Vec::new();
-temp_vec.push(1);
-temp_vec.push(2);
-temp_vec.push(3);
-temp_vec
+{
+    let mut temp_vec = Vec::new();
+    temp_vec.push(1);
+    temp_vec.push(2);
+    temp_vec.push(3);
+    temp_vec
+}
 ```
 
 We’ve defined a macro that can take any number of arguments of any type and can
