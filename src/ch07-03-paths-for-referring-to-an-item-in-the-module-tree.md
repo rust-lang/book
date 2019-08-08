@@ -293,12 +293,18 @@ mod back_of_house {
         seasonal_fruit: String,
     }
 
+    pub struct TotalCost(pub f32);
+
     impl Breakfast {
         pub fn summer(toast: &str) -> Breakfast {
             Breakfast {
                 toast: String::from(toast),
                 seasonal_fruit: String::from("peaches"),
             }
+        }
+
+        pub fn checkout() -> TotalCost {
+            TotalCost(7.99)
         }
     }
 }
