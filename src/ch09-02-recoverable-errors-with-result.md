@@ -481,7 +481,7 @@ must be a `Result` to be compatible with this `return`.
 Let’s look at what happens if we use the `?` operator in the `main` function,
 which you’ll recall has a return type of `()`:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::fs::File;
 
 fn main() {
