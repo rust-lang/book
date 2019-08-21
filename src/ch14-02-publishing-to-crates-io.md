@@ -68,7 +68,7 @@ function</span>
 #### Commonly Used Sections
 
 We used the `# Examples` Markdown heading in Listing 14-1 to create a section
-in the HTML with the title “Examples.” Here are some other sections that crate
+in the HTML with the title “Examples”. Here are some other sections that crate
 authors commonly use in their documentation:
 
 * **Panics**: The scenarios in which the function being documented could
