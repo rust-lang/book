@@ -115,39 +115,45 @@ is printed when the test that passes runs. That output has been captured. The
 output from the test that failed, `I got the value 8`, appears in the section
 of the test summary output, which also shows the cause of the test failure.
 
-If we want to see printed values for passing tests as well, we can disable the
-output capture behavior by using the `--nocapture` flag:
+If we want to see printed values for passing tests as well, we can tell Rust
+to also show the output of successful tests at the end with `--show-output`.
 
 ```text
-$ cargo test -- --nocapture
+$ cargo test -- --show-output
 ```
 
-When we run the tests in Listing 11-10 again with the `--nocapture` flag, we
+When we run the tests in Listing 11-10 again with the `--show-output` flag, we
 see the following output:
 
 ```text
 running 2 tests
-I got the value 4
-I got the value 8
 test tests::this_test_will_pass ... ok
+test tests::this_test_will_fail ... FAILED
+
+successes:
+
+---- tests::this_test_will_pass stdout ----
+I got the value 4
+
+
+successes:
+    tests::this_test_will_pass
+
+failures:
+
+---- tests::this_test_will_fail stdout ----
+I got the value 8
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
   left: `5`,
  right: `10`', src/lib.rs:19:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-test tests::this_test_will_fail ... FAILED
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 
-failures:
 
 failures:
     tests::this_test_will_fail
 
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
-
-Note that the output for the tests and the test results are interleaved; the
-reason is that the tests are running in parallel, as we talked about in the
-previous section. Try using the `--test-threads=1` option and the `--nocapture`
-flag, and see what the output looks like then!
 
 ### Running a Subset of Tests by Name
 
