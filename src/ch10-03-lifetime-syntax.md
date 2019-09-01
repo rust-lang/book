@@ -67,9 +67,9 @@ error[E0597]: `x` does not live long enough
    | - borrowed value needs to live until here
 ```
 
-The variable `x` doesn’t “live long enough.” The reason is that `x` will be out
+The variable `x` doesn’t “live long enough”. The reason is that `x` will be out
 of scope when the inner scope ends on line 7. But `r` is still valid for the
-outer scope; because its scope is larger, we say that it “lives longer.” If
+outer scope; because its scope is larger, we say that it “lives longer”. If
 Rust allowed this code to work, `r` would be referencing memory that was
 deallocated when `x` went out of scope, and anything we tried to do with `r`
 wouldn’t work correctly. So how does Rust determine that this code is invalid?
