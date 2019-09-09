@@ -143,7 +143,7 @@ dependencies in your project. This project doesn’t have dependencies, so the
 file is a bit sparse. You won’t ever need to change this file manually; Cargo
 manages its contents for you.
 
-We just built a project with `cargo build` and ran it with
+We just built a project with `cargo build` and run it with
 `./target/debug/hello_cargo`, but we can also use `cargo run` to compile the
 code and then run the resulting executable all in one command:
 
@@ -155,7 +155,7 @@ Hello, world!
 ```
 
 Notice that this time we didn’t see output indicating that Cargo was compiling
-`hello_cargo`. Cargo figured out that the files hadn’t changed, so it just ran
+`hello_cargo`. Cargo figured out that the files hadn’t changed, so it just run
 the binary. If you had modified your source code, Cargo would have rebuilt the
 project before running it, and you would have seen this output:
 
