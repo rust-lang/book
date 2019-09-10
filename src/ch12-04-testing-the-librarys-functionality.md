@@ -266,7 +266,7 @@ At this point, we could consider opportunities for refactoring the
 implementation of the search function while keeping the tests passing to
 maintain the same functionality. The code in the search function isn’t too bad,
 but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in [Chapter 13][ch13]<!-- ignore -->, where we’ll
+return to this example in [Chapter 13][ch13-improve]<!-- ignore -->, where we’ll
 explore iterators in detail, and look at how to improve it.
 
 #### Using the `search` Function in the `run` Function
@@ -335,4 +335,6 @@ useful when you’re writing command line programs.
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
+[ch13]: ch13-00-functional-features.html
 [ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
+[ch13-improve]: ch13-03-improving-our-io-project.html
