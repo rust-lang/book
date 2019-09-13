@@ -196,7 +196,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 </span>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-[Chapter 13][ch13]<!-- ignore -->, but recall that you saw this way of using an
+[Chapter 13][ch13-iter]<!-- ignore -->, but recall that you saw this way of using an
 iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a `for` loop
 with an iterator to run some code on each item in a collection.
 
@@ -336,3 +336,4 @@ ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
 [ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
+[ch13-iter]: ch13-02-iterators.html
