@@ -402,7 +402,7 @@ error[E0308]: mismatched types
   |
   | let n = example_closure(5);
   |                         ^ expected struct `std::string::String`, found
-  integral variable
+  integer
   |
   = note: expected type `std::string::String`
              found type `{integer}`

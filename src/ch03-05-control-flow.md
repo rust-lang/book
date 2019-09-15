@@ -96,7 +96,7 @@ error[E0308]: mismatched types
  --> src/main.rs:4:8
   |
 4 |     if number {
-  |        ^^^^^^ expected bool, found integral variable
+  |        ^^^^^^ expected bool, found integer
   |
   = note: expected type `bool`
              found type `{integer}`
@@ -240,7 +240,7 @@ error[E0308]: if and else have incompatible types
 6 | |     } else {
 7 | |         "six"
 8 | |     };
-  | |_____^ expected integral variable, found &str
+  | |_____^ expected integer, found &str
   |
   = note: expected type `{integer}`
              found type `&str`
