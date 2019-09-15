@@ -165,7 +165,7 @@ fn main() {
 <span class="caption">Listing 5-11: Attempting to print a `Rectangle`
 instance</span>
 
-When we run this code, we get an error with this core message:
+When we compile this code, we get an error with this core message:
 
 ```text
 error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
@@ -195,7 +195,7 @@ Let’s try it! The `println!` macro call will now look like `println!("rect1 is
 enables us to print our struct in a way that is useful for developers so we can
 see its value while we’re debugging our code.
 
-Run the code with this change. Drat! We still get an error:
+Compile the code with this change. Drat! We still get an error:
 
 ```text
 error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
