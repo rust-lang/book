@@ -105,9 +105,9 @@ match x {
 
 This code prints `one or two`.
 
-### Matching Ranges of Values with `...`
+### Matching Ranges of Values with `..=`
 
-The `...` syntax allows us to match to an inclusive range of values. In the
+The `..=` syntax allows us to match to an inclusive range of values. In the
 following code, when a pattern matches any of the values within the range, that
 arm will execute:
 
@@ -115,14 +115,14 @@ arm will execute:
 let x = 5;
 
 match x {
-    1...5 => println!("one through five"),
+    1..=5 => println!("one through five"),
     _ => println!("something else"),
 }
 ```
 
 If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
 convenient than using the `|` operator to express the same idea; instead of
-`1...5`, we would have to specify `1 | 2 | 3 | 4 | 5` if we used `|`.
+`1..=5`, we would have to specify `1 | 2 | 3 | 4 | 5` if we used `|`.
 Specifying a range is much shorter, especially if we want to match, say, any
 number between 1 and 1,000!
 
@@ -136,8 +136,8 @@ Here is an example using ranges of `char` values:
 let x = 'c';
 
 match x {
-    'a'...'j' => println!("early ASCII letter"),
-    'k'...'z' => println!("late ASCII letter"),
+    'a'..='j' => println!("early ASCII letter"),
+    'k'..='z' => println!("late ASCII letter"),
     _ => println!("something else"),
 }
 ```
@@ -783,7 +783,7 @@ were applied only to the final value in the list of values specified using the
 The *at* operator (`@`) lets us create a variable that holds a value at the
 same time we’re testing that value to see whether it matches a pattern. Listing
 18-29 shows an example where we want to test that a `Message::Hello` `id` field
-is within the range `3...7`. But we also want to bind the value to the variable
+is within the range `3..=7`. But we also want to bind the value to the variable
 `id_variable` so we can use it in the code associated with the arm. We could
 name this variable `id`, the same as the field, but for this example we’ll use
 a different name.
@@ -796,10 +796,10 @@ enum Message {
 let msg = Message::Hello { id: 5 };
 
 match msg {
-    Message::Hello { id: id_variable @ 3...7 } => {
+    Message::Hello { id: id_variable @ 3..=7 } => {
         println!("Found an id in range: {}", id_variable)
     },
-    Message::Hello { id: 10...12 } => {
+    Message::Hello { id: 10..=12 } => {
         println!("Found an id in another range")
     },
     Message::Hello { id } => {
@@ -812,7 +812,7 @@ match msg {
 while also testing it</span>
 
 This example will print `Found an id in range: 5`. By specifying `id_variable
-@` before the range `3...7`, we’re capturing whatever value matched the range
+@` before the range `3..=7`, we’re capturing whatever value matched the range
 while also testing that the value matched the range pattern.
 
 In the second arm, where we only have a range specified in the pattern, the code
