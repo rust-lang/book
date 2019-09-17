@@ -106,7 +106,7 @@ use std::io;
 명시적으로 그 타입을 가져와야 합니다. `std::io`는 사용자의 입력을 받는 것을
 포함하여 `io`와 관련된 기능들을 제공합니다.
 
-[prelude]: ../../std/prelude/index.html
+[prelude]:https://doc.rust-lang.org/std/prelude/index.html
 
 1장에서 보았듯이 `main` 함수는 프로그램의 진입점입니다.
 
@@ -159,7 +159,7 @@ let mut bar = 5; // mutable
 새로운 `String` 인스턴스가 묶이는 대상이 됩니다. [`String`][string]<!-- ignore -->은
 표준 라이브러리에서 제공하는 확장 가능한(growable) UTF-8 인코딩의 문자열 타입입니다.
 
-[string]: ../../std/string/struct.String.html
+[string]: https://doc.rust-lang.org/std/string/struct.String.html
 
 `::new`에 있는 `::`는 `new`가 `String` 타입의 *연관함수* 임을 나타냅니다. 연관함수는
 하나의 타입을 위한 함수이며, 이 경우에는 하나의 `String` 인스턴스가 아니라 `String`
@@ -183,13 +183,13 @@ io::stdin().read_line(&mut guess)
 합니다. `stdin` 함수는 터미널의 표준 입력의 핸들(handle)의 타입인 [`std::io::Stdin`][iostdin]<!-- ignore -->의
 인스턴스를 돌려줍니다.
 
-[iostdin]: ../../std/io/struct.Stdin.html
+[iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
 
 코드의 다음 부분인 `.read_line(&mut guess)`는 사용자로부터 입력을 받기 위해 표준
 입력 핸들에서 `.read_line(&mut guess)` 메소드를 호출합니다. 또한 `read_line`에 `&mut guess`
 를 인자로 하나 넘깁니다.
 
-[read_line]: ../../std/io/struct.Stdin.html#method.read_line
+[read_line]: https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line
 
 `read_line`은 사용자가 표준 입력에 입력할 때마다 입력된 문자들을 하나의 문자열에 저장하므로
 인자로 값을 저장할 문자열이 필요합니다. 그 문자열 인자는 사용자 입력을 추가하면서 변경되므로
@@ -226,8 +226,8 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 입니다. 러스트는 표준 라이브러리에 여러 종류의 `Result` 타입을 가지고 있습니다.
 제네릭 [`Result`][result]<!-- ignore -->이나 `io:Result`가 그 예시입니다.
 
-[ioresult]: ../../std/io/type.Result.html
-[result]: ../../std/result/enum.Result.html
+[ioresult]: https://doc.rust-lang.org/std/io/type.Result.html
+[result]: https://doc.rust-lang.org/std/result/enum.Result.html
 
 `Result` 타입은 [*열거형(enumerations)*][enums]<!-- ignore -->로써 *enums* 라고 부르기도
 합니다. 열거형은 정해진 값들만을 가질 수 있으며 이러한 값들은 열거형의 *variants*
@@ -248,7 +248,7 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 결과값을 돌려주어 사용할 수 있도록 합니다. 이 경우 결과값은 사용자가 표준 입력으로 입력했던
 바이트의 개수입니다.
 
-[expect]: ../../std/result/enum.Result.html#method.expect
+[expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 
 만약 `expect`를 호출하지 않는다면 컴파일은 되지만 경고가 나타납니다.
 
@@ -712,7 +712,7 @@ Shadowing은 우리들이 `guess_str`과 `guess`처럼 고유의 변수명을
 `secret_number`와의 비교는 러스트가 `secret_number`의 타입을 `u32`로 유추해야
 함을 의미합니다. 이제 이 비교는 같은 타입의 두 값의 비교가 됩니다.
 
-[parse]: ../../std/primitive.str.html#method.parse
+[parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse
 
 `parse` 메소드의 호출은 에러가 발생하기 쉽습니다. 만약 `A👍%`과 같은 문자열이
 포함되어 있다면 정수로 바꿀 방법이 없습니다. "Result 타입으로 잠재된 실패 다루기"에서
