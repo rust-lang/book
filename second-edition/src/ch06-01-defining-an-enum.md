@@ -151,7 +151,7 @@ let loopback = IpAddr::V6(String::from("::1"));
 variant 에 포함된 주소 데이터는 두 가지 다른 구조체로 되어 있으며, 각 variant 
 마다 다르게 정의하고 있습니다:
 
-[IpAddr]: ../../std/net/enum.IpAddr.html
+[IpAddr]: https://doc.rust-lang.org/std/net/enum.IpAddr.html
 
 ```rust
 struct Ipv4Addr {
@@ -288,7 +288,7 @@ null 값으로 발생하는 문제는, null 값을 null 이 아닌 값처럼 사
 혹은 부재의 개념을 표현할 수 있는 열거형이 있습니다. 이 열거형은 `Option<T>` 이며, 다음과 같이
 [표준 라이브러리에 정의되어][option]<!-- ignore --> 있습니다:
 
-[option]: ../../std/option/enum.Option.html
+[option]: https://doc.rust-lang.org/std/option/enum.Option.html
 
 ```rust
 enum Option<T> {
@@ -372,7 +372,7 @@ null 이 아닌 값을 갖는다는 가정을 놓치는 경우에 대해 걱정�
 수 있습니다. `Option<T>` 의 메소드들에 익숙해지는 것은 러스트를 사용하는데
 매우 유용할 것입니다.
 
-[docs]: ../../std/option/enum.Option.html
+[docs]: https://doc.rust-lang.org/std/option/enum.Option.html
 
 일반적으로, `Option<T>` 값을 사용하기 위해서는 각 variant 를 처리할 코드가 필요할 것입니다.
 `Some(T)` 값일 경우만 실행되는 코드가 필요하고, 이 코드는 안에 있는
