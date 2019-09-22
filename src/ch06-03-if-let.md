@@ -44,6 +44,18 @@ losing exhaustive checking.
 In other words, you can think of `if let` as syntax sugar for a `match` that
 runs code when the value matches one pattern and then ignores all other values.
 
+Another way to look at it is, for example:
+
+```rust
+let some_value = Some(5);
+if let Some(i) = some_value {
+    println!("some value is {}", i);
+}
+```
+
+`if let` can be interpreted as: if variable `i` can be constructed from the
+wrapped value inside `some_value`, execute the statements inside the `if`.
+
 We can include an `else` with an `if let`. The block of code that goes with the
 `else` is the same as the block of code that would go with the `_` case in the
 `match` expression that is equivalent to the `if let` and `else`. Recall the
