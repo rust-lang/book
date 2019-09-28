@@ -248,6 +248,22 @@ tuple struct instances behave like tuples: you can destructure them into their
 individual pieces, you can use a `.` followed by the index to access an
 individual value, and so on.
 
+```rust
+# struct Point(i32, i32, i32);
+#
+let origin = Point(0, 0, 0);
+
+let Point(x, y, z) = origin;
+
+println!("The origin co-ordinates are x:{} y:{} z:{}", x, y, z);
+```
+
+<span class="caption">Listing 5-8: Accessing values in a tuple struct by
+destructuring syntax</span>
+
+The code in Listing 5-8 accesses values from a tuple struct using the
+destructuring syntax.
+
 ### Unit-Like Structs Without Any Fields
 
 You can also define structs that don’t have any fields! These are called
