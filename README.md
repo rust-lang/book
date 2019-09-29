@@ -4,7 +4,7 @@
 
 This repository contains the source of "The Rust Programming Language" book.
 
-[The book is available in dead-tree form from No Starch Press][nostarch]
+[The book is available in dead-tree form from No Starch Press][nostarch].
 
 [nostarch]: https://nostarch.com/rust
 
@@ -16,6 +16,10 @@ releases are updated less frequently.
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
+
+See the [releases] to download just the code of all the code listings that appear in the book.
+
+[releases]: https://github.com/rust-lang/book/releases
 
 ## Requirements
 
