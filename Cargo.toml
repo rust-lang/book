@@ -10,6 +10,10 @@ name = "concat_chapters"
 path = "tools/src/bin/concat_chapters.rs"
 
 [[bin]]
+name = "convert_quotes"
+path = "tools/src/bin/convert_quotes.rs"
+
+[[bin]]
 name = "lfp"
 path = "tools/src/bin/lfp.rs"
 
@@ -18,20 +22,16 @@ name = "link2print"
 path = "tools/src/bin/link2print.rs"
 
 [[bin]]
+name = "release_listings"
+path = "tools/src/bin/release_listings.rs"
+
+[[bin]]
 name = "remove_links"
 path = "tools/src/bin/remove_links.rs"
 
 [[bin]]
 name = "remove_markup"
 path = "tools/src/bin/remove_markup.rs"
-
-[[bin]]
-name = "convert_quotes"
-path = "tools/src/bin/convert_quotes.rs"
-
-[[bin]]
-name = "release_listings"
-path = "tools/src/bin/release_listings.rs"
 
 [dependencies]
 walkdir = "0.1.5"
