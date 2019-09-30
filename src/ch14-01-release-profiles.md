@@ -66,4 +66,4 @@ Cargo will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as in a release build.
 
 For the full list of configuration options and defaults for each profile, see
-[Cargo’s documentation](https://doc.rust-lang.org/cargo/).
+[Cargo’s documentation](https://doc.rust-lang.org/cargo/reference/manifest.html#the-profile-sections).

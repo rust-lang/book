@@ -60,6 +60,7 @@ for potential future use.
 
 * `abstract`
 * `async`
+* `await`
 * `become`
 * `box`
 * `do`

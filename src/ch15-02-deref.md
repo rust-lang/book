@@ -10,7 +10,7 @@ Let’s first look at how the dereference operator works with regular references
 Then we’ll try to define a custom type that behaves like `Box<T>`, and see why
 the dereference operator doesn’t work like a reference on our newly defined
 type. We’ll explore how implementing the `Deref` trait makes it possible for
-smart pointers to work in a similar way as references. Then we’ll look at
+smart pointers to work in ways similar to references. Then we’ll look at
 Rust’s *deref coercion* feature and how it lets us work with either references
 or smart pointers.
 

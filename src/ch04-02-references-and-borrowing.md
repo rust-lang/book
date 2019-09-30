@@ -246,7 +246,7 @@ Let’s take a closer look at exactly what’s happening at each stage of our
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
 ```
 

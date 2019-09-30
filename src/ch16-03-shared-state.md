@@ -2,7 +2,7 @@
 
 Message passing is a fine way of handling concurrency, but it’s not the only
 one. Consider this part of the slogan from the Go language documentation again:
-“communicate by sharing memory.”
+“do not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts not use it and do the opposite instead?

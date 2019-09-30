@@ -11,7 +11,7 @@ pub struct ThreadPool {
 // ANCHOR: here
 // --snip--
 
-type Job = Box<FnOnce() + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     // --snip--
