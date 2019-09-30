@@ -26,6 +26,10 @@ name = "release_listings"
 path = "tools/src/bin/release_listings.rs"
 
 [[bin]]
+name = "remove_hidden_lines"
+path = "tools/src/bin/remove_hidden_lines.rs"
+
+[[bin]]
 name = "remove_links"
 path = "tools/src/bin/remove_links.rs"
 
