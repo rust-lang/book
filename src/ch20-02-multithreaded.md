@@ -895,7 +895,7 @@ at Listing 20-19.
 # use std::sync::mpsc;
 # struct Worker {}
 
-type Job = Box<FnOnce() + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     // --snip--

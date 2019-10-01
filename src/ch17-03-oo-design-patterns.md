@@ -380,7 +380,7 @@ otherwise, we want to return an empty string slice, as shown in Listing 17-17:
 impl Post {
     // --snip--
     pub fn content(&self) -> &str {
-        self.state.as_ref().unwrap().content(&self)
+        self.state.as_ref().unwrap().content(self)
     }
     // --snip--
 }

@@ -51,7 +51,7 @@ us that the types don’t match. The error message will then tell us what the
 type of `f` *is*. Let’s try it! We know that the return type of `File::open`
 isn’t of type `u32`, so let’s change the `let f` statement to this:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 let f: u32 = File::open("hello.txt");
 ```
 
@@ -481,7 +481,7 @@ must be a `Result` to be compatible with this `return`.
 Let’s look at what happens if we use the `?` operator in the `main` function,
 which you’ll recall has a return type of `()`:
 
-```rust,ignore
+```rust,ignore,does_not_compile
 use std::fs::File;
 
 fn main() {

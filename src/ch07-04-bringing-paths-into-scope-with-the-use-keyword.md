@@ -41,10 +41,9 @@ root, `hosting` is now a valid name in that scope, just as though the `hosting`
 module had been defined in the crate root. Paths brought into scope with `use`
 also check privacy, like any other paths.
 
-Specifying a relative path with `use` is slightly different. Instead of
-starting from a name in the current scope, we must start the path given to
-`use` with the keyword `self`. Listing 7-12 shows how to specify a relative
-path to get the same behavior as in Listing 7-11.
+You can also bring an item into scope with `use` and a relative path. Listing
+7-12 shows how to specify a relative path to get the same behavior as in
+Listing 7-11.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -55,7 +54,7 @@ mod front_of_house {
     }
 }
 
-use self::front_of_house::hosting;
+use front_of_house::hosting;
 
 pub fn eat_at_restaurant() {
     hosting::add_to_waitlist();
@@ -66,10 +65,7 @@ pub fn eat_at_restaurant() {
 ```
 
 <span class="caption">Listing 7-12: Bringing a module into scope with `use` and
-a relative path starting with `self`</span>
-
-Note that using `self` in this way might not be necessary in the future; it’s
-an inconsistency in the language that Rust developers are working to eliminate.
+a relative path</span>
 
 ### Creating Idiomatic `use` Paths
 
