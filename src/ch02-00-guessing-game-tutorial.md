@@ -51,10 +51,7 @@ using the `cargo run` command:
 
 ```text
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
-     Running `target/debug/guessing_game`
-Hello, world!
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
 The `run` command comes in handy when you need to rapidly iterate on a project,
