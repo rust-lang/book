@@ -31,13 +31,7 @@ Look at the generated *Cargo.toml* file:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[package]
-name = "guessing_game"
-version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
-edition = "2018"
-
-[dependencies]
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
 If the author information that Cargo obtained from your environment is not
@@ -49,9 +43,7 @@ you. Check out the *src/main.rs* file:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    println!("Hello, world!");
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
 Now let’s compile this “Hello, world!” program and run it in the same step
@@ -647,7 +639,7 @@ do that by adding the following two lines to the `main` function body:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-convert-string-to-number/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-02-convert-string-to-number/src/main.rs:here}}
 ```
 
 The two new lines are:
@@ -733,7 +725,7 @@ more chances at guessing the number:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-02-looping/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-looping/src/main.rs:here}}
 ```
 
 As you can see, we’ve moved everything into a loop from the guess input prompt
@@ -786,7 +778,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-quitting/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-quitting/src/main.rs:here}}
 ```
 
 Adding the `break` line after `You win!` makes the program exit the loop when
