@@ -32,7 +32,8 @@ store once you insert values, so you rarely need to do this type annotation.
 It’s more common to create a `Vec<T>` that has initial values, and Rust
 provides the `vec!` macro for convenience. The macro will create a new vector
 that holds the values you give it. Listing 8-2 creates a new `Vec<i32>` that
-holds the values `1`, `2`, and `3`.
+holds the values `1`, `2`, and `3`. `i32` is inferred because it is the default
+ integer type.
 
 ```rust
 let v = vec![1, 2, 3];
