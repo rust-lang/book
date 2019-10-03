@@ -334,7 +334,7 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
 Here, `i32` is the type of each element. After the semicolon, the number `5`
-indicates the element contains five items.
+indicates the array contains five items.
 
 Writing an array’s type this way looks similar to an alternative syntax for
 initializing an array: if you want to create an array that contains the same
