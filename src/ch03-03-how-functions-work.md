@@ -214,6 +214,7 @@ fn main() {
     };
 
     println!("The value of y is: {}", y);
+    println!("The value of x is: {}", x);
 }
 ```
 
