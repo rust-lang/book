@@ -21,7 +21,12 @@ do
 
     # Regenerate output
     cargo clean
-    cargo run &> output.txt
+
+    cargo_command=$(sed -ne "s/$ \(.*\)/\1/p" output.txt)
+
+    echo "$ ${cargo_command}" > output.txt
+
+    $cargo_command >> output.txt 2>&1
 
     # Set the file path to the projects directory plus the crate name
     sed -i '' -e "s/Compiling \([a-z_]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" output.txt

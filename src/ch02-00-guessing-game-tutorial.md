@@ -265,15 +265,7 @@ entered into standard input.
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
 ```text
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-warning: unused `std::result::Result` which must be used
-  --> src/main.rs:10:5
-   |
-10 |     io::stdin().read_line(&mut guess);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: #[warn(unused_must_use)] on by default
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
 Rust warns that you haven’t used the `Result` value returned from `read_line`,
