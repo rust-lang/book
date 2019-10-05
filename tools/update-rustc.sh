@@ -31,8 +31,10 @@ do
     # Set the file path to the projects directory plus the crate name
     sed -i '' -e "s/Compiling \([a-z_]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" output.txt
 
-    # Restore the previous compile time
-    sed -i '' -e "s/Finished dev \[unoptimized \+ debuginfo] target(s) in [0-9.]*/Finished dev [unoptimized + debuginfo] target(s) in ${compile_time}/" output.txt
+    # Restore the previous compile time, if there is one
+    if [ -n  "${compile_time}" ]; then
+        sed -i '' -e "s/Finished dev \[unoptimized \+ debuginfo] target(s) in [0-9.]*/Finished dev [unoptimized + debuginfo] target(s) in ${compile_time}/" output.txt
+    fi
 
     cd -
 done
