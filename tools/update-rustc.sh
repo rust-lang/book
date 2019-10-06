@@ -9,6 +9,7 @@ mdbook build -d tmp/book-before
 # for f in listings/*
 # do
 #   rustfmt
+#   cargo build to get any Cargo.lock changes?
 # done
 
 for f in listings/*/*/output.txt
