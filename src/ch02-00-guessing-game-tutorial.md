@@ -50,7 +50,6 @@ Now let’s compile this “Hello, world!” program and run it in the same step
 using the `cargo run` command:
 
 ```text
-$ cargo run
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
