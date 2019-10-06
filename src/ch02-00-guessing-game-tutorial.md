@@ -637,19 +637,7 @@ expression ends because it has no need to look at the last arm in this scenario.
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
 ```text
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-error[E0308]: mismatched types
-  --> src/main.rs:23:21
-   |
-23 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integer
-   |
-   = note: expected type `&std::string::String`
-   = note:    found type `&{integer}`
-
-error: aborting due to previous error
-Could not compile `guessing_game`.
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
 The core of the error states that there are *mismatched types*. Rust has a
