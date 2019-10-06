@@ -174,10 +174,16 @@ each other. Let’s add the `rand` crate to the `[dependencies]` section in the
 *add-one/Cargo.toml* file to be able to use the `rand` crate in the `add-one`
 crate:
 
+<!-- When updating the version of `rand` used, also update the version of
+`rand` used in these files so they all match:
+* ch02-00-guessing-game-tutorial.md
+* ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
+-->
+
 <span class="filename">Filename: add-one/Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add-one/Cargo.toml:7:9}}
+{{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add-one/Cargo.toml:7:8}}
 ```
 
 We can now add `use rand;` to the *add-one/src/lib.rs* file, and building the
@@ -186,10 +192,10 @@ and compile the `rand` crate:
 
 ```text
 $ cargo build
-    Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading rand v0.3.14
+    Updating crates.io index
+  Downloaded rand v0.5.5
    --snip--
-   Compiling rand v0.3.14
+   Compiling rand v0.5.5
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs

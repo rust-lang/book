@@ -346,21 +346,27 @@ code that uses `rand`, we need to modify the *Cargo.toml* file to include the
 the bottom beneath the `[dependencies]` section header that Cargo created for
 you:
 
+<!-- When updating the version of `rand` used, also update the version of
+`rand` used in these files so they all match:
+* ch07-04-bringing-paths-into-scope-with-the-use-keyword.md
+* ch14-03-cargo-workspaces.md
+-->
+
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:7:}}
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
 In the *Cargo.toml* file, everything that follows a header is part of a section
 that continues until another section starts. The `[dependencies]` section is
 where you tell Cargo which external crates your project depends on and which
 versions of those crates you require. In this case, we’ll specify the `rand`
-crate with the semantic version specifier `0.3.14`. Cargo understands [Semantic
+crate with the semantic version specifier `0.5.5`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
-standard for writing version numbers. The number `0.3.14` is actually shorthand
-for `^0.3.14`, which means “any version that has a public API compatible with
-version 0.3.14.”
+standard for writing version numbers. The number `0.5.5` is actually shorthand
+for `^0.5.5`, which means “any version that has a public API compatible with
+version 0.5.5.”
 
 [semver]: http://semver.org
 
@@ -369,13 +375,19 @@ Listing 2-2.
 
 ```text
 $ cargo build
-    Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading rand v0.3.14
- Downloading libc v0.2.14
-   Compiling libc v0.2.14
-   Compiling rand v0.3.14
+    Updating crates.io index
+  Downloaded rand v0.5.5
+  Downloaded libc v0.2.62
+  Downloaded rand_core v0.2.2
+  Downloaded rand_core v0.3.1
+  Downloaded rand_core v0.4.2
+   Compiling rand_core v0.4.2
+   Compiling libc v0.2.62
+   Compiling rand_core v0.3.1
+   Compiling rand_core v0.2.2
+   Compiling rand v0.5.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 s
 ```
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after
@@ -393,8 +405,8 @@ their open source Rust projects for others to use.
 
 After updating the registry, Cargo checks the `[dependencies]` section and
 downloads any crates you don’t have yet. In this case, although we only listed
-`rand` as a dependency, Cargo also grabbed a copy of `libc`, because `rand`
-depends on `libc` to work. After downloading the crates, Rust compiles them and
+`rand` as a dependency, Cargo also grabbed `libc` and `rand_core`, because `rand`
+depends on those to work. After downloading the crates, Rust compiles them and
 then compiles the project with the dependencies available.
 
 If you immediately run `cargo build` again without making any changes, you
@@ -410,7 +422,7 @@ and build again, you’ll only see two lines of output:
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
 These lines show Cargo only updates the build with your tiny change to the
@@ -423,7 +435,7 @@ your part of the code.
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
-happens if next week version 0.3.15 of the `rand` crate comes out and
+happens if next week version 0.5.6 of the `rand` crate comes out and
 contains an important bug fix but also contains a regression that will break
 your code?
 
@@ -435,7 +447,7 @@ the *Cargo.lock* file. When you build your project in the future, Cargo will
 see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at `0.3.14` until you explicitly upgrade, thanks to the *Cargo.lock*
+remain at `0.5.5` until you explicitly upgrade, thanks to the *Cargo.lock*
 file.
 
 #### Updating a Crate to Get a New Version
@@ -445,26 +457,25 @@ which will ignore the *Cargo.lock* file and figure out all the latest versions
 that fit your specifications in *Cargo.toml*. If that works, Cargo will write
 those versions to the *Cargo.lock* file.
 
-But by default, Cargo will only look for versions greater than `0.3.0` and less
-than `0.4.0`. If the `rand` crate has released two new versions, `0.3.15` and
-`0.4.0`, you would see the following if you ran `cargo update`:
+But by default, Cargo will only look for versions greater than `0.5.5` and less
+than `0.6.0`. If the `rand` crate has released two new versions, `0.5.6` and
+`0.6.0`, you would see the following if you ran `cargo update`:
 
 ```text
 $ cargo update
-    Updating registry `https://github.com/rust-lang/crates.io-index`
-    Updating rand v0.3.14 -> v0.3.15
+    Updating crates.io index
+    Updating rand v0.5.5 -> v0.5.6
 ```
 
 At this point, you would also notice a change in your *Cargo.lock* file noting
-that the version of the `rand` crate you are now using is `0.3.15`.
+that the version of the `rand` crate you are now using is `0.5.6`.
 
-If you wanted to use `rand` version `0.4.0` or any version in the `0.4.x`
+If you wanted to use `rand` version `0.6.0` or any version in the `0.6.x`
 series, you’d have to update the *Cargo.toml* file to look like this instead:
 
 ```toml
 [dependencies]
-
-rand = "0.4.0"
+rand = "0.6.0"
 ```
 
 The next time you run `cargo build`, Cargo will update the registry of crates
