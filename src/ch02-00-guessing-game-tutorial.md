@@ -306,7 +306,8 @@ Let’s test the first part of the guessing game. Run it using `cargo run`:
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-01/
 cargo clean
-cargo run -->
+cargo run
+input 6 -->
 
 ```text
 $ cargo run
@@ -372,6 +373,11 @@ version 0.5.5.”
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2.
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-02/
+cargo clean
+cargo build -->
+
 ```text
 $ cargo build
     Updating crates.io index
@@ -386,7 +392,7 @@ $ cargo build
    Compiling rand_core v0.2.2
    Compiling rand v0.5.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 s
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after
@@ -417,6 +423,11 @@ do, it simply exits.
 
 If you open up the *src/main.rs* file, make a trivial change, and then save it
 and build again, you’ll only see two lines of output:
+
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-02/
+touch src/main.rs
+cargo build -->
 
 ```text
 $ cargo build
@@ -459,6 +470,12 @@ those versions to the *Cargo.lock* file.
 But by default, Cargo will only look for versions greater than `0.5.5` and less
 than `0.6.0`. If the `rand` crate has released two new versions, `0.5.6` and
 `0.6.0`, you would see the following if you ran `cargo update`:
+
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-02/
+cargo update
+assuming there is a new 0.5.x version of rand; otherwise use another update
+as a guide to creating the hypothetical output shown here -->
 
 ```text
 $ cargo update
@@ -533,17 +550,27 @@ program prints the answer as soon as it starts!
 
 Try running the program a few times:
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-03/
+cargo run
+4
+cargo run
+5
+-->
+
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
 Please input your guess.
 4
 You guessed: 4
+
 $ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.02s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 83
