@@ -67,12 +67,15 @@ fn copy_cleaned_listing_files(from: PathBuf, to: PathBuf) -> Result<(), Box<dyn 
                 copy_cleaned_listing_files(item_path, output_item)?;
             }
         } else {
-            let item_extension = item_path.extension();
-            if item_extension.is_some() && item_extension.unwrap() == "rs" {
-                copy_cleaned_rust_file(item_name, &item_path, &output_item)?;
-            } else {
-                // Copy any non-Rust files without modification
-                fs::copy(item_path, output_item)?;
+            // Don't copy output files
+            if item_name != "output.txt" {
+                let item_extension = item_path.extension();
+                if item_extension.is_some() && item_extension.unwrap() == "rs" {
+                    copy_cleaned_rust_file(item_name, &item_path, &output_item)?;
+                } else {
+                    // Copy any non-Rust files without modification
+                    fs::copy(item_path, output_item)?;
+                }
             }
         }
     }
