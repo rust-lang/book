@@ -12,29 +12,42 @@ mdbook build -d tmp/book-before
 #   cargo build to get any Cargo.lock changes?
 # done
 
+# Get listings without anchor comments in tmp by compiling a release listings artifact
+cargo run --bin release_listings
+
+root_dir=$(pwd)
+
+# For any listings where we show the output,
 for f in listings/*/*/output.txt
 do
     build_directory=$(dirname $f)
-    cd $build_directory
+    full_build_directory="${root_dir}/${build_directory}"
+    full_output_path="${full_build_directory}/output.txt"
+    tmp_build_directory="tmp/${build_directory}"
+
+    cd $tmp_build_directory
 
     # Save the previous compile time
-    compile_time=$(sed -ne "s/.*Finished dev \[unoptimized \+ debuginfo] target(s) in \([0-9.]*\).*/\1/p" output.txt)
+    compile_time=$(sed -ne "s/.*Finished dev \[unoptimized \+ debuginfo] target(s) in \([0-9.]*\).*/\1/p" ${full_output_path})
 
-    # Regenerate output
+    # Act like this is the first time this listing has been built
     cargo clean
 
-    cargo_command=$(sed -ne "s/$ \(.*\)/\1/p" output.txt)
+    # Run the command in the existing output file
+    cargo_command=$(sed -ne "s/$ \(.*\)/\1/p" ${full_output_path})
 
-    echo "$ ${cargo_command}" > output.txt
+    # Clear the output file of everything except the command
+    echo "$ ${cargo_command}" > ${full_output_path}
 
-    $cargo_command >> output.txt 2>&1 || true
+    # Regenerate the output and append to the output file
+    $cargo_command >> ${full_output_path} 2>&1 || true
 
-    # Set the file path to the projects directory plus the crate name
-    sed -i '' -e "s/Compiling \([a-z_]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" output.txt
+    # Set the project file path to the projects directory plus the crate name
+    sed -i '' -e "s/Compiling \([a-z_]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" ${full_output_path}
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then
-        sed -i '' -e "s/Finished dev \[unoptimized \+ debuginfo] target(s) in [0-9.]*/Finished dev [unoptimized + debuginfo] target(s) in ${compile_time}/" output.txt
+        sed -i '' -e "s/Finished dev \[unoptimized \+ debuginfo] target(s) in [0-9.]*/Finished dev [unoptimized + debuginfo] target(s) in ${compile_time}/" ${full_output_path}
     fi
 
     cd - > /dev/null
