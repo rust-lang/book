@@ -47,8 +47,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut archive = tar::Builder::new(encoder);
     archive.append_dir_all("listings", "tmp/listings")?;
 
-    fs::remove_dir_all(out_dir)?;
-
     println!("Release tarball of listings in tmp/listings.tar.gz");
 
     Ok(())
