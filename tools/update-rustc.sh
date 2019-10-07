@@ -37,7 +37,7 @@ do
         sed -i '' -e "s/Finished dev \[unoptimized \+ debuginfo] target(s) in [0-9.]*/Finished dev [unoptimized + debuginfo] target(s) in ${compile_time}/" output.txt
     fi
 
-    cd -
+    cd - > /dev/null
 done
 
 # Build the book after making all the changes
