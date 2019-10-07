@@ -5,9 +5,9 @@ $ cargo build
    Compiling rand v0.5.6
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
-  --> src/main.rs:32:21
+  --> src/main.rs:22:21
    |
-32 |     match guess.cmp(&secret_number) {
+22 |     match guess.cmp(&secret_number) {
    |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integer
    |
    = note: expected type `&std::string::String`

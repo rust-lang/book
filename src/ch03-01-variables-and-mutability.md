@@ -181,14 +181,7 @@ try to use `mut` for this, as shown here, we’ll get a compile-time error:
 The error says we’re not allowed to mutate a variable’s type:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:3:14
-  |
-3 |     spaces = spaces.len();
-  |              ^^^^^^^^^^^^ expected &str, found usize
-  |
-  = note: expected type `&str`
-             found type `usize`
+{{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
 Now that we’ve explored how variables work, let’s look at more data types they

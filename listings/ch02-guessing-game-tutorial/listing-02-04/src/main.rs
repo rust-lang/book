@@ -11,7 +11,6 @@ use rand::Rng;
 fn main() {
 
     // --snip--
-
     // ANCHOR_END: here
     println!("Guess the number!");
 
@@ -25,8 +24,8 @@ fn main() {
 
     io::stdin().read_line(&mut guess)
         .expect("Failed to read line");
-
     // ANCHOR: here
+
     println!("You guessed: {}", guess);
 
     match guess.cmp(&secret_number) {
