@@ -123,10 +123,10 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 #### Floating-Point Types
 
 Rust also has two primitive types for *floating-point numbers*, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs it’s roughly the same speed as `f32` but is capable of
-more precision.
+numbers that can have a fractional part. Rust’s floating-point types are
+`f32` and `f64`, which are 32 bits and 64 bits in size, respectively. The default
+type is `f64` because on modern CPUs it’s roughly the same speed as `f32` but is
+capable of more precision.
 
 Here’s an example that shows floating-point numbers in action:
 
