@@ -143,7 +143,7 @@ data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
 that relate to ownership. These aspects also apply to other complex data types,
-whether they are provided by the standard library or created by you. We’ll 
+whether they are provided by the standard library or created by you. We’ll
 discuss `String` in more depth in Chapter 8.
 
 We’ve already seen string literals, where a string value is hardcoded into our
@@ -317,17 +317,7 @@ You’ll get an error like this because Rust prevents you from using the
 invalidated reference:
 
 ```text
-error[E0382]: use of moved value: `s1`
- --> src/main.rs:5:28
-  |
-3 |     let s2 = s1;
-  |         -- value moved here
-4 |
-5 |     println!("{}, world!", s1);
-  |                            ^^ value used here after move
-  |
-  = note: move occurs because `s1` has type `std::string::String`, which does
-  not implement the `Copy` trait
+{{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
 If you’ve heard the terms *shallow copy* and *deep copy* while working with

@@ -40,11 +40,7 @@ to the next bit of code.
 Try running this code; you should see the following output:
 
 ```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/branches`
-condition was true
+{{#include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/output.txt}}
 ```
 
 Let’s try changing the value of `number` to a value that makes the condition
@@ -57,11 +53,7 @@ Let’s try changing the value of `number` to a value that makes the condition
 Run the program again, and look at the output:
 
 ```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/branches`
-condition was false
+{{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
 It’s also worth noting that the condition in this code *must* be a `bool`. If
@@ -78,14 +70,7 @@ The `if` condition evaluates to a value of `3` this time, and Rust throws an
 error:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:4:8
-  |
-4 |     if number {
-  |        ^^^^^^ expected bool, found integer
-  |
-  = note: expected type `bool`
-             found type `{integer}`
+{{#include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/output.txt}}
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Unlike
@@ -118,11 +103,7 @@ This program has four possible paths it can take. After running it, you should
 see the following output:
 
 ```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/branches`
-number is divisible by 3
+{{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
 When this program executes, it checks each `if` expression in turn and executes
@@ -154,11 +135,7 @@ The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
 
 ```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
-     Running `target/debug/branches`
-The value of number is: 5
+{{#include ../listings/ch03-common-programming-concepts/listing-03-02/output.txt}}
 ```
 
 Remember that blocks of code evaluate to the last expression in them, and
@@ -180,19 +157,7 @@ have value types that are incompatible, and Rust indicates exactly where to
 find the problem in the program:
 
 ```text
-error[E0308]: if and else have incompatible types
- --> src/main.rs:4:18
-  |
-4 |       let number = if condition {
-  |  __________________^
-5 | |         5
-6 | |     } else {
-7 | |         "six"
-8 | |     };
-  | |_____^ expected integer, found &str
-  |
-  = note: expected type `{integer}`
-             found type `&str`
+{{#include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/output.txt}}
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
@@ -232,10 +197,16 @@ until we stop the program manually. Most terminals support a keyboard shortcut,
 <span class="keystroke">ctrl-c</span>, to interrupt a program that is stuck in
 a continual loop. Give it a try:
 
+<!-- manual-regeneration
+cd listings/ch03-common-programming-concepts/no-listing-32-loop
+cargo run
+CTRL-C
+-->
+
 ```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.29 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
      Running `target/debug/loops`
 again!
 again!
@@ -323,15 +294,7 @@ when `index < 5` is no longer true). Running this code will print every element
 in the array:
 
 ```text
-$ cargo run
-   Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
-     Running `target/debug/loops`
-the value is: 10
-the value is: 20
-the value is: 30
-the value is: 40
-the value is: 50
+{{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 
 All five array values appear in the terminal, as expected. Even though `index`

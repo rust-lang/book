@@ -74,13 +74,7 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 Here’s the error:
 
 ```text
-error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
- --> error.rs:8:5
-  |
-7 | fn change(some_string: &String) {
-  |                        ------- use `&mut String` here to make mutable
-8 |     some_string.push_str(", world");
-  |     ^^^^^^^^^^^ cannot borrow as mutable
+{{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
 Just as variables are immutable by default, so are references. We’re not

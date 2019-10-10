@@ -31,12 +31,7 @@ further. Place the `another_function` example in *src/main.rs* and run it. You
 should see the following output:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.28 secs
-     Running `target/debug/functions`
-Hello, world!
-Another function.
+{{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
 The lines execute in the order in which they appear in the `main` function.
@@ -65,11 +60,7 @@ look like in Rust:
 Try running this program; you should get the following output:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
-     Running `target/debug/functions`
-The value of x is: 5
+{{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
 The declaration of `another_function` has one parameter named `x`. The type of
@@ -101,12 +92,7 @@ project’s *src/main.rs* file with the preceding example and run it using `carg
 run`:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/functions`
-The value of x is: 5
-The value of y is: 6
+{{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
 Because we called the function with `5` as the value for  `x` and `6` is passed
@@ -150,6 +136,9 @@ to another variable, as the following code tries to do; you’ll get an error:
 ```
 
 When you run this program, the error you’ll get looks like this:
+
+<!--TODO: not extracting this because the new error message is incorrect; see
+https://github.com/rust-lang/rust/issues/65254 -->
 
 ```text
 $ cargo run
@@ -221,11 +210,7 @@ Rust. Note that the function’s return type is specified too, as `-> i32`. Try
 running this code; the output should look like this:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
-     Running `target/debug/functions`
-The value of x is: 5
+{{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
 The `5` in `five` is the function’s return value, which is why the return type
@@ -263,18 +248,7 @@ expression to a statement, we’ll get an error.
 Compiling this code produces an error, as follows:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:7:28
-  |
-7 |   fn plus_one(x: i32) -> i32 {
-  |  ____________________________^
-8 | |     x + 1;
-  | |          - help: consider removing this semicolon
-9 | | }
-  | |_^ expected i32, found ()
-  |
-  = note: expected type `i32`
-             found type `()`
+{{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
 The main error message, “mismatched types,” reveals the core issue with this
