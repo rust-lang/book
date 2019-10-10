@@ -21,14 +21,7 @@ error, which means the compiler needs more information from us to know which
 type we want to use:
 
 ```text
-error[E0282]: type annotations needed
- --> src/main.rs:2:9
-  |
-2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^
-  |         |
-  |         cannot infer type for `_`
-  |         consider giving `guess` a type
+{{#include ../listings/ch03-common-programming-concepts/output-only-00-no-type-annotations/output.txt}}
 ```
 
 You’ll see different type annotations for other data types.
