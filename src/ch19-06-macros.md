@@ -334,10 +334,11 @@ https://github.com/rust-lang/rust/issues/55599
 
 ```rust,ignore
 extern crate proc_macro;
+extern crate quote;
+extern crate syn;
 
 use crate::proc_macro::TokenStream;
 use quote::quote;
-use syn;
 
 #[proc_macro_derive(HelloMacro)]
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
