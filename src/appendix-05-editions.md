@@ -1,4 +1,4 @@
-# Appendix E - Editions
+## Appendix E - Editions
 
 In Chapter 1, you saw that `cargo new` adds a bit of metadata to your
 *Cargo.toml* file about an edition. This appendix talks about what that means!
