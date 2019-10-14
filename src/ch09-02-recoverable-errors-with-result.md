@@ -470,13 +470,13 @@ and returns it. Of course, using `fs::read_to_string` doesn’t give us the
 opportunity to explain all the error handling, so we did it the longer way
 first.
 
-#### The `?` Operator Can Only Be Used in Functions That Return `Result`
+#### The `?` Operator Can Be Used in Functions That Return `Result`
 
-The `?` operator can only be used in functions that have a return type of
+The `?` operator can be used in functions that have a return type of
 `Result`, because it is defined to work in the same way as the `match`
 expression we defined in Listing 9-6. The part of the `match` that requires a
 return type of `Result` is `return Err(e)`, so the return type of the function
-must be a `Result` to be compatible with this `return`.
+can be a `Result` to be compatible with this `return`.
 
 Let’s look at what happens if we use the `?` operator in the `main` function,
 which you’ll recall has a return type of `()`:
@@ -505,8 +505,9 @@ error[E0277]: the `?` operator can only be used in a function that returns
 ```
 
 This error points out that we’re only allowed to use the `?` operator in a
-function that returns `Result<T, E>`. When you’re writing code in a function
-that doesn’t return `Result<T, E>`, and you want to use `?` when you call other
+function that returns `Result` or `Option` or another type that implements
+`std::ops::Try`. When you’re writing code in a function
+that doesn’t return one of these types, and you want to use `?` when you call other
 functions that return `Result<T, E>`, you have two choices to fix this problem.
 One technique is to change the return type of your function to be `Result<T,
 E>` if you have no restrictions preventing that. The other technique is to use
