@@ -611,12 +611,12 @@ reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
 correct behavior. In dynamically typed languages, we would get an error at
-runtime if we called a method on a type that the type didn’t implement. But
-Rust moves these errors to compile time so we’re forced to fix the problems
-before our code is even able to run. Additionally, we don’t have to write code
-that checks for behavior at runtime because we’ve already checked at compile
-time. Doing so improves performance without having to give up the flexibility
-of generics.
+runtime if we called a method on a type which didn’t implement the type which
+defines the method. But Rust moves these errors to compile time so we’re forced
+to fix the problems before our code is even able to run. Additionally, we don’t
+have to write code that checks for behavior at runtime because we’ve already
+checked at compile time. Doing so improves performance without having to give
+up the flexibility of generics.
 
 Another kind of generic that we’ve already been using is called *lifetimes*.
 Rather than ensuring that a type has the behavior we want, lifetimes ensure
