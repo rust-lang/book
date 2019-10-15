@@ -228,9 +228,9 @@ primitive compound types: tuples and arrays.
 
 #### The Tuple Type
 
-A tuple is a general way of grouping together some number of other values
-with a variety of types into one compound type. Tuples have a fixed length:
-once declared, they cannot grow or shrink in size.
+A tuple is a general way of grouping together a number of values with a variety
+of types into one compound type. Tuples have a fixed length: once declared,
+they cannot grow or shrink in size.
 
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a type, and the types of the
@@ -286,8 +286,8 @@ fn main() {
 ```
 
 This program creates a tuple, `x`, and then makes new variables for each
-element by using their index. As with most programming languages, the first
-index in a tuple is 0.
+element by using their respective indices. As with most programming languages,
+the first index in a tuple is 0.
 
 #### The Array Type
 
@@ -318,7 +318,7 @@ vector. Chapter 8 discusses vectors in more detail.
 An example of when you might want to use an array rather than a vector is in a
 program that needs to know the names of the months of the year. It’s very
 unlikely that such a program will need to add or remove months, so you can use
-an array because you know it will always contain 12 items:
+an array because you know it will always contain 12 elements:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
@@ -334,7 +334,7 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 ```
 
 Here, `i32` is the type of each element. After the semicolon, the number `5`
-indicates the element contains five items.
+indicates the array contains five elements.
 
 Writing an array’s type this way looks similar to an alternative syntax for
 initializing an array: if you want to create an array that contains the same
