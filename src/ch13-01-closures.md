@@ -370,7 +370,9 @@ The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
 the closure definition, and the fourth line removes the brackets, which are
 optional because the closure body has only one expression. These are all valid
-definitions that will produce the same behavior when they’re called.
+definitions that will produce the same behavior when they’re called, although
+v3 and v4 will only work if the type can be inferred from the rest of the
+code.
 
 Closure definitions will have one concrete type inferred for each of their
 parameters and for their return value. For instance, Listing 13-8 shows the
