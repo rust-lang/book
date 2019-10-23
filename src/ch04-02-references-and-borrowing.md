@@ -157,11 +157,7 @@ through the last time that reference is used. For instance, this code will
 compile because the last usage of the immutable references occurs before the
 mutable reference is introduced:
 
-<!-- This example is being ignored because there's a bug in rustdoc making the
-edition2018 not work. The bug is currently fixed in nightly, so when we update
-the book to >= 1.35, `ignore` can be removed from this example. -->
-
-```rust,edition2018,ignore
+```rust,edition2018
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
