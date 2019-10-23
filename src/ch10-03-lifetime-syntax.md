@@ -46,16 +46,7 @@ compile because the value `r` is referring to has gone out of scope before we
 try to use it. Here is the error message:
 
 ```text
-error[E0597]: `x` does not live long enough
-  --> src/main.rs:7:5
-   |
-6  |         r = &x;
-   |              - borrow occurs here
-7  |     }
-   |     ^ `x` dropped here while still borrowed
-...
-10 | }
-   | - borrowed value needs to live until here
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/output.txt}}
 ```
 
 The variable `x` doesn’t “live long enough.” The reason is that `x` will be out
@@ -146,14 +137,7 @@ compile</span>
 Instead, we get the following error that talks about lifetimes:
 
 ```text
-error[E0106]: missing lifetime specifier
- --> src/main.rs:1:33
-  |
-1 | fn longest(x: &str, y: &str) -> &str {
-  |                                 ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but the
-signature does not say whether it is borrowed from `x` or `y`
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/output.txt}}
 ```
 
 The help text reveals that the return type needs a generic lifetime parameter
@@ -299,16 +283,7 @@ has gone out of scope</span>
 When we try to compile this code, we’ll get this error:
 
 ```text
-error[E0597]: `string2` does not live long enough
-  --> src/main.rs:15:5
-   |
-14 |         result = longest(string1.as_str(), string2.as_str());
-   |                                            ------- borrow occurs here
-15 |     }
-   |     ^ `string2` dropped here while still borrowed
-16 |     println!("The longest string is {}", result);
-17 | }
-   | - borrowed value needs to live until here
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/output.txt}}
 ```
 
 The error shows that for `result` to be valid for the `println!` statement,
@@ -367,23 +342,7 @@ lifetime is not related to the lifetime of the parameters at all. Here is the
 error message we get:
 
 ```text
-error[E0597]: `result` does not live long enough
- --> src/main.rs:3:5
-  |
-3 |     result.as_str()
-  |     ^^^^^^ does not live long enough
-4 | }
-  | - borrowed value only lives until here
-  |
-note: borrowed value must be valid for the lifetime 'a as defined on the
-function body at 1:1...
- --> src/main.rs:1:1
-  |
-1 | / fn longest<'a>(x: &str, y: &str) -> &'a str {
-2 | |     let result = String::from("really long string");
-3 | |     result.as_str()
-4 | | }
-  | |_^
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
 The problem is that `result` goes out of scope and gets cleaned up at the end

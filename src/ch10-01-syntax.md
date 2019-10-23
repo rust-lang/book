@@ -68,13 +68,7 @@ uses generic type parameters but doesn’t compile yet</span>
 If we compile this code right now, we’ll get this error:
 
 ```text
-error[E0369]: binary operation `>` cannot be applied to type `T`
- --> src/main.rs:5:12
-  |
-5 |         if item > largest {
-  |            ^^^^^^^^^^^^^^
-  |
-  = note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
 The note mentions `std::cmp::PartialOrd`, which is a *trait*. We’ll talk about

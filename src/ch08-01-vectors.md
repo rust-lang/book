@@ -148,17 +148,7 @@ while holding a reference to an item</span>
 Compiling this code will result in this error:
 
 ```text
-error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:5
-  |
-4 |     let first = &v[0];
-  |                  - immutable borrow occurs here
-5 |
-6 |     v.push(6);
-  |     ^^^^^^^^^ mutable borrow occurs here
-7 |
-8 |     println!("The first element is: {}", first);
-  |                                          ----- immutable borrow later used here
+{{#include ../listings/ch08-common-collections/listing-08-07/output.txt}}
 ```
 
 The code in Listing 8-7 might look like it should work: why should a reference

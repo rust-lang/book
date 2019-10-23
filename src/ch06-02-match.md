@@ -173,11 +173,7 @@ a bug Rust knows how to catch. If we try to compile this code, we’ll get this
 error:
 
 ```text
-error[E0004]: non-exhaustive patterns: `None` not covered
- -->
-  |
-6 |         match x {
-  |               ^ pattern `None` not covered
+{{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 
 Rust knows that we didn’t cover every possible case and even knows which

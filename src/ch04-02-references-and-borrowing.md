@@ -192,15 +192,7 @@ compile-time error:
 Here’s the error:
 
 ```text
-error[E0106]: missing lifetime specifier
- --> main.rs:5:16
-  |
-5 | fn dangle() -> &String {
-  |                ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but there is
-  no value for it to be borrowed from
-  = help: consider giving it a 'static lifetime
+{{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
 
 This error message refers to a feature we haven’t covered yet: lifetimes. We’ll

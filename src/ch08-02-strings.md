@@ -230,13 +230,7 @@ String</span>
 This code will result in the following error:
 
 ```text
-error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` is not satisfied
- -->
-  |
-3 |     let h = s1[0];
-  |             ^^^^^ the type `std::string::String` cannot be indexed by `{integer}`
-  |
-  = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
+{{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
 The error and the note tell the story: Rust strings don’t support indexing. But
@@ -349,7 +343,7 @@ What would happen if we used `&hello[0..1]`? The answer: Rust would panic at
 runtime in the same way as if an invalid index were accessed in a vector:
 
 ```text
-thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/libcore/str/mod.rs:2188:4
+{{#include ../listings/ch08-common-collections/output-only-00-not-char-boundary/output.txt}}
 ```
 
 You should use ranges to create string slices with caution, because doing so

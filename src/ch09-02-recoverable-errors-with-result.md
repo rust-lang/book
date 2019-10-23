@@ -54,15 +54,7 @@ isn’t of type `u32`, so let’s change the `let f` statement to this:
 Attempting to compile now gives us the following output:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:4:18
-  |
-4 |     let f: u32 = File::open("hello.txt");
-  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum
-`std::result::Result`
-  |
-  = note: expected type `u32`
-             found type `std::result::Result<std::fs::File, std::io::Error>`
+{{#include ../listings/ch09-error-handling/no-listing-02-ask-compiler-for-type/output.txt}}
 ```
 
 This tells us the return type of the `File::open` function is a `Result<T, E>`.
@@ -112,8 +104,7 @@ there’s no file named *hello.txt* in our current directory and we run this
 code, we’ll see the following output from the `panic!` macro:
 
 ```text
-thread 'main' panicked at 'Problem opening the file: Error { repr:
-Os { code: 2, message: "No such file or directory" } }', src/main.rs:9:12
+{{#include ../listings/ch09-error-handling/listing-09-04/output.txt}}
 ```
 
 As usual, this output tells us exactly what has gone wrong.
@@ -410,16 +401,7 @@ which you’ll recall has a return type of `()`:
 When we compile this code, we get the following error message:
 
 ```text
-error[E0277]: the `?` operator can only be used in a function that returns
-`Result` or `Option` (or another type that implements `std::ops::Try`)
- --> src/main.rs:4:13
-  |
-4 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^ cannot use the `?` operator in a
-  function that returns `()`
-  |
-  = help: the trait `std::ops::Try` is not implemented for `()`
-  = note: required by `std::ops::Try::from_error`
+{{#include ../listings/ch09-error-handling/no-listing-06-question-mark-in-main/output.txt}}
 ```
 
 This error points out that we’re only allowed to use the `?` operator in a

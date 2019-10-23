@@ -68,19 +68,7 @@ Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
 
 ```text
-$ cargo build
-   Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0603]: module `hosting` is private
- --> src/lib.rs:9:28
-  |
-9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                            ^^^^^^^
-
-error[E0603]: module `hosting` is private
-  --> src/lib.rs:12:21
-   |
-12 |     front_of_house::hosting::add_to_waitlist();
-   |                     ^^^^^^^
+{{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
 <span class="caption">Listing 7-4: Compiler errors from building the code in
@@ -132,19 +120,7 @@ Unfortunately, the code in Listing 7-5 still results in an error, as shown in
 Listing 7-6.
 
 ```text
-$ cargo build
-   Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0603]: function `add_to_waitlist` is private
- --> src/lib.rs:9:37
-  |
-9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                                     ^^^^^^^^^^^^^^^
-
-error[E0603]: function `add_to_waitlist` is private
-  --> src/lib.rs:12:30
-   |
-12 |     front_of_house::hosting::add_to_waitlist();
-   |                              ^^^^^^^^^^^^^^^
+{{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 
 <span class="caption">Listing 7-6: Compiler errors from building the code in
@@ -166,8 +142,7 @@ keyword before its definition, as in Listing 7-7.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs}}
-# fn main() {}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-7: Adding the `pub` keyword to `mod hosting`
@@ -210,8 +185,7 @@ the path to `serve_order` starting with `super`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
-# fn main() {}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-8: Calling a function using a relative path

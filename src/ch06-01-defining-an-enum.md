@@ -264,13 +264,7 @@ trying to add an `i8` to an `Option<i8>`:
 If we run this code, we get an error message like this:
 
 ```text
-error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is
-not satisfied
- -->
-  |
-5 |     let sum = x + y;
-  |                 ^ no implementation for `i8 + std::option::Option<i8>`
-  |
+{{#include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/output.txt}}
 ```
 
 Intense! In effect, this error message means that Rust doesn’t understand how
