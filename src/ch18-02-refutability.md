@@ -10,8 +10,9 @@ a_value` because if the value in the `a_value` variable is `None` rather than
 
 Function parameters, `let` statements, and `for` loops can only accept
 irrefutable patterns, because the program cannot do anything meaningful when
-values don’t match. The `if let` and `while let` expressions only accept
-refutable patterns, because by definition they’re intended to handle possible
+values don’t match. The `if let` and `while let` expressions accept
+refutable and irrefutable patterns, but the compiler warns against
+irrefutable patterns because by definition they’re intended to handle possible
 failure: the functionality of a conditional is in its ability to perform
 differently depending on success or failure.
 
@@ -69,9 +70,9 @@ patterns instead of `let`</span>
 We’ve given the code an out! This code is perfectly valid, although it means we
 cannot use an irrefutable pattern without receiving an error. If we give `if
 let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
-it will not compile.
+the compiler will give a warning.
 
-```rust,ignore,does_not_compile
+```rust,ignore
 if let x = 5 {
     println!("{}", x);
 };
@@ -84,11 +85,15 @@ Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:
 
 ```text
-error[E0162]: irrefutable if-let pattern
- --> <anon>:2:8
+warning: irrefutable if-let pattern
+ --> <anon>:2:5
   |
-2 | if let x = 5 {
-  |        ^ irrefutable pattern
+2 | /     if let x = 5 {
+3 | |     println!("{}", x);
+4 | | };
+  | |_^
+  |
+  = note: #[warn(irrefutable_let_patterns)] on by default
 ```
 
 For this reason, match arms must use refutable patterns, except for the last
