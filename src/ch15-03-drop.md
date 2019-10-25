@@ -146,7 +146,7 @@ an argument. The function is in the prelude, so we can modify `main` in Listing
 #
 # impl Drop for CustomSmartPointer {
 #     fn drop(&mut self) {
-#         println!("Dropping CustomSmartPointer!");
+#         println!("Dropping CustomSmartPointer with data `{}`!", self.data);
 #     }
 # }
 #
