@@ -8,11 +8,11 @@ an internet connection for the download.
 > installation page](https://www.rust-lang.org/tools/install) for other options.
 
 The following steps install the latest stable version of the Rust compiler.
-Rust’s stability guarantees ensure that all the examples in the book that
-compile will continue to compile with newer Rust versions. The output might
-differ slightly between versions, because Rust often improves error messages
-and warnings. In other words, any newer, stable version of Rust you install
-using these steps should work as expected with the content of this book.
+Rust’s stability guarantees that all the examples in the book that compile will
+continue to compile with newer Rust versions. The output might differ slightly
+between versions, because Rust often improves error messages and warnings. In
+other words, any newer, stable version of Rust you install using these steps
+should work as expected with the content of this book.
 
 > ### Command Line Notation
 >
