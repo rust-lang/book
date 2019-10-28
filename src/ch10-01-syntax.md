@@ -130,15 +130,7 @@ compiler know that the generic type `T` will be an integer for this instance of
 same type as `x`, we’ll get a type mismatch error like this:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:7:38
-  |
-7 |     let wont_work = Point { x: 5, y: 4.0 };
-  |                                      ^^^ expected integer, found
-floating-point number
-  |
-  = note: expected type `{integer}`
-             found type `{float}`
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
 To define a `Point` struct where `x` and `y` are both generics but could have

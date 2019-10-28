@@ -43,7 +43,7 @@ do
     RUSTFLAGS="-A unused_variables" $cargo_command >> ${full_output_path} 2>&1 || true
 
     # Set the project file path to the projects directory plus the crate name
-    sed -i '' -e "s/Compiling \([a-z_]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" ${full_output_path}
+    sed -i '' -e "s/Compiling \([^\)]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" ${full_output_path}
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then
