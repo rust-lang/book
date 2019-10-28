@@ -5,18 +5,18 @@ are useful and more appropriate than structs in this case. Say we need to work
 with IP addresses. Currently, two major standards are used for IP addresses:
 version four and version six. These are the only possibilities for an IP
 address that our program will come across: we can *enumerate* all possible
-values, which is where enumeration gets its name.
+variants, which is where enumeration gets its name.
 
 Any IP address can be either a version four or a version six address, but not
 both at the same time. That property of IP addresses makes the enum data
-structure appropriate, because enum values can only be one of the variants.
+structure appropriate, because enum values can only be one of its variants.
 Both version four and version six addresses are still fundamentally IP
 addresses, so they should be treated as the same type when the code is handling
 situations that apply to any kind of IP address.
 
 We can express this concept in code by defining an `IpAddrKind` enumeration and
-listing the possible kinds an IP address can be, `V4` and `V6`. These are known
-as the *variants* of the enum:
+listing the possible kinds an IP address can be, `V4` and `V6`. These are the
+variants of the enum:
 
 ```rust
 enum IpAddrKind {
