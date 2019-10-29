@@ -251,7 +251,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 This function first gets the total length of the slice. Then it asserts that
 the index given as a parameter is within the slice by checking whether it’s
 less than or equal to the length. The assertion means that if we pass an index
-that is greater than the index to split the slice at, the function will panic
+that is greater than the length to split the slice at, the function will panic
 before it attempts to use that index.
 
 Then we return two mutable slices in a tuple: one from the start of the
