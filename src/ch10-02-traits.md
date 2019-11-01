@@ -151,7 +151,7 @@ local to our `aggregator` crate. This restriction is part of a property of
 programs called *coherence*, and more specifically the *orphan rule*, so named
 because the parent type is not present. This rule ensures that other people’s
 code can’t break your code and vice versa. Without the rule, two crates could
-implement the same trait for the same type, and Rust wouldn’t know which
+implement the same trait differently for the same type, and Rust wouldn’t know which
 implementation to use.
 
 ### Default Implementations
