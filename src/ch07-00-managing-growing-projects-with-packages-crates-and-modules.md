@@ -33,7 +33,7 @@ same name in the same scope; tools are available to resolve name conflicts.
 
 Rust has a number of features that allow you to manage your code’s
 organization, including which details are exposed, which details are private,
-and what names are in each scope in your programs. These features, sometimes
+and what names are in each scope in your programs. These features are sometimes
 collectively referred to as the *module system*, and include:
 
 * **Packages:** A Cargo feature that lets you build, test, and share crates
