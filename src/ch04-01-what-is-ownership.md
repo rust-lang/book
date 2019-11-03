@@ -1,328 +1,327 @@
-## What Is Ownership?
+## 소유권이 뭔가요?
 
-Rust’s central feature is *ownership*. Although the feature is straightforward
-to explain, it has deep implications for the rest of the language.
+소유권은 러스트의 핵심 기능으로, 기능 자체는 단순하지만
+러스트 언어의 전반적인 요소에 많은 영향을 미치는 기능입니다.
 
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that constantly looks for no longer used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks at
-compile time. None of the ownership features slow down your program while it’s
-running.
+모든 프로그램은 작동하는 동안 컴퓨터의 메모리 사용 방법을 관리해야 합니다.
+몇몇 언어는 가비지 컬렉션으로 프로그램에서 더 이상 사용하지 않는 메모리를
+끊임없이 찾는 방식을 채용했고, 다른 언어는 프로그래머가 직접 명시적으로
+메모리를 할당하고 해제하는 방식을 택했습니다.
+이때 러스트는 제 3의 방식을 택했습니다. '소유권(ownership)' 이라는 시스템을 만들고,
+컴파일러가 컴파일 중 검사할 여러 규칙을 정해 메모리를 관리하는 방식이죠.
+이 방식은 프로그램 실행 속도에 악영향을 줄 일이 없습니다. 컴파일 타임에 전부 해결하니까요.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the more you’ll be able to naturally
-develop code that is safe and efficient. Keep at it!
+소유권은 상당히 생소한 개념이기 때문에
+이해하고 사용하는 데 시간이 좀 걸릴 겁니다.
+하지만 여러분이 러스트라는 언어와, 소유권 시스템 규칙에 익숙해질수록
+더 안정적이고 더 효율적인 코드를 술술 작성할 수 있게 될 테니 포기하지 마세요!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+소유권을 이해하고 나면,
+러스트라는 언어를 특별한 존재로 만든 나머지 기능들도 이해할 수 있을 겁니다.
+이번 장에선 흔한 자료구조인 문자열 위주 예제로
+소유권을 배워보겠습니다.
 
-> ### The Stack and the Heap
+> ### 스택, 힙 영역
 >
-> In many programming languages, you don’t have to think about the stack and
-> the heap very often. But in a systems programming language like Rust, whether
-> a value is on the stack or the heap has more of an effect on how the language
-> behaves and why you have to make certain decisions. Parts of ownership will
-> be described in relation to the stack and the heap later in this chapter, so
-> here is a brief explanation in preparation.
+> 대부분의 프로그래밍 언어에서는
+> 스택, 힙 영역을 주제로 고민할 필요가 많지 않습니다.
+> 하지만 러스트 같은 시스템 프로그래밍 언어에서는
+> 값을 스택에 저장하느냐 힙에 저장하느냐의 차이가
+> 프로그램의 동작 및 프로그래머의 의사 결정에 훨씬 큰 영향을 미칩니다.
+> 소유권과 스택, 힙을 엮은 설명은 후술해뒀기에 여기서는 각 영역에 대해서만 간략히 설명하겠습니다.
 >
-> Both the stack and the heap are parts of memory that are available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
-> This is referred to as *last in, first out*. Think of a stack of plates: when
-> you add more plates, you put them on top of the pile, and when you need a
-> plate, you take one off the top. Adding or removing plates from the middle or
-> bottom wouldn’t work as well! Adding data is called *pushing onto the stack*,
-> and removing data is called *popping off the stack*.
+> 스택, 힙 둘 다 여러분이 작성한 프로그램이 런타임 중 이용할
+> 메모리 영역이라는 공통점이 있지만 구조는 각각 다릅니다.
+> 스택은 값이 들어온 순서대로 저장하고, 역순으로 제거합니다.
+> 이를 *last in, fist out* 이라 하죠. 쌓여 있는 접시로 예를 들어 보겠습니다.
+> 여러분이 접시 더미에 접시를 추가할 땐 접시 더미의 꼭대기에 쌓고, 반대로 접시를 꺼낼 땐
+> 꼭대기에서 한 장 꺼낼 겁니다. 중간이나 맨 아래에 끼워 넣는 건 쉽지 않겠죠.
+> 이런 식으로 접시 더미, 즉 스택에 데이터를 추가하는 행위를 *푸시(push)* 라고 하며,
+> 반대로 스택에서 데이터를 제거하는 행위는 *팝(pop)* 이라 합니다.
 >
-> All data stored on the stack must have a known, fixed size. Data with an
-> unknown size at compile time or a size that might change must be stored on
-> the heap instead. The heap is less organized: when you put data on the heap,
-> you request a certain amount of space. The operating system finds an empty
-> spot in the heap that is big enough, marks it as being in use, and returns a
-> *pointer*, which is the address of that location. This process is called
-> *allocating on the heap* and is sometimes abbreviated as just *allocating*.
-> Pushing values onto the stack is not considered allocating. Because the
-> pointer is a known, fixed size, you can store the pointer on the stack, but
-> when you want the actual data, you must follow the pointer.
+> 스택에 저장되는 데이터는 모두 명확하고 크기가 정해져 있어야 합니다.
+> 컴파일 타임에 크기를 알 수 없거나, 크기가 변경될 수 있는 데이터는 스택 대신 힙에 저장됩니다.
 >
-> Think of being seated at a restaurant. When you enter, you state the number of
-> people in your group, and the staff finds an empty table that fits everyone
-> and leads you there. If someone in your group comes late, they can ask where
-> you’ve been seated to find you.
+> 힙은 스택보다 복잡합니다. 데이터를 힙에 넣을때 먼저 저장할 공간이 있는지 운영체제한테 물어봅니다.
+> 그럼 운영체제는 커다란 힙 영역 안에서 어떤 빈 지점을 찾고,
+> 이 지점은 사용 중이라고 표시한 뒤 해당 지점을 가리키는 *포인터(pointer)* 를 우리한테 반환합니다.
+> 이 과정을 *힙 공간 할당(allocating on the heap)*, 줄여서 *할당(allocationg)* 이라 합니다
+> (스택에 값을 푸시하는 것은 할당이라 부르지 않습니다). 포인터는 크기가 정해져 있어
+> 스택에 저장할 수 있으나, 포인터가 가르키는 실제 데이터를 사용하고자 할 때는
+> 포인터를 참조해 해당 포인터가 가리키는 위치로 이동하는 과정을 거쳐야 합니다.
 >
-> Pushing to the stack is faster than allocating on the heap because the
-> operating system never has to search for a place to store new data; that
-> location is always at the top of the stack. Comparatively, allocating space
-> on the heap requires more work, because the operating system must first find
-> a big enough space to hold the data and then perform bookkeeping to prepare
-> for the next allocation.
+> 힙 구조는 레스토랑에서 자리에 앉는 과정으로 비교할 수 있습니다.
+> 레스토랑에 입장하면, 직원에게 인원수를 알립니다.
+> 그러면 직원은 인원수에 맞는 빈 테이블을 찾아 안내하겠죠.
+> 이후에 온 일행이 우리 테이블을 찾을 땐 직원에게 물어 안내받을 겁니다.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> you have to follow a pointer to get there. Contemporary processors are faster
-> if they jump around less in memory. Continuing the analogy, consider a server
-> at a restaurant taking orders from many tables. It’s most efficient to get
-> all the orders at one table before moving on to the next table. Taking an
-> order from table A, then an order from table B, then one from A again, and
-> then one from B again would be a much slower process. By the same token, a
-> processor can do its job better if it works on data that’s close to other
-> data (as it is on the stack) rather than farther away (as it can be on the
-> heap). Allocating a large amount of space on the heap can also take time.
+> 스택 영역은 데이터에 접근하는 방식상 힙 영역보다 속도가 빠릅니다.
+> 스택에서는 항상 스택의 가장 위에 데이터를 저장하니
+> 새로운 데이터를 저장할 공간을 탐색할 필요가 없기 때문이죠.
+> 스택에 담긴 모든 데이터는 크기가 정해져 있다는 점 또한
+> 속도를 빠르게 만들어주는데
+> 한몫합니다.
 >
-> When your code calls a function, the values passed into the function
-> (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> 힙 영역은 포인터가 가리키는 곳을 찾아가는 과정으로 인해 느려집니다.
+> 현대 프로세서는 메모리 내부를 이리저리 왔다 갔다 하는 작업이 적을수록 속도가 빨라지는데,
+> 힙에 있는 데이터들은 서로 멀리 떨어져 있어 프로세서가 계속해서 돌아다녀야 하기 때문이죠.
+> 앞서 예로 든 레스토랑을 다시 한번 생각해봅시다.
+> 여러분이 웨이터라면, 다른 테이블로 이동하기 전에 지금 있는 테이블의 주문을 모두 다
+> 받고 나서 이동하는 게 가장 효율적일 겁니다. 반대로 A 테이블에서 하나 주문받고,
+> B 테이블로 이동해서 하나 주문받고, 다시 A로, 다시 B로 이동해가며 주문받으면 훨씬 느려지겠죠.
+> 프로세서도 마찬가지입니다. 힙 영역처럼 데이터가 서로 멀리 떨어져 있으면 작업이 느려지고,
+> 반대로 스택 영역처럼 데이터가 서로 붙어있으면 작업이 빨라집니다.
+> 이외에도, 큰 공간을 할당하는 작업도 힙 영역의 속도를 늦추는 요인입니다.
 >
-> Keeping track of what parts of code are using what data on the heap,
-> minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so you don’t run out of space are all problems that ownership
-> addresses. Once you understand ownership, you won’t need to think about the
-> stack and the heap very often, but knowing that managing heap data is why
-> ownership exists can help explain why it works the way it does.
+> 여러분이 함수를 호출하면,
+> 호출한 함수에 넘겨준 값(값 중엔 힙 영역의 데이터를 가르키는 포인터도 있을 수 있습니다)과
+> 해당 함수의 지역 변수들이 스택에 푸시됩니다.
+> 그리고 이 데이터들은 함수가 종료될 때 pop 됩니다.
+>
+> 코드 어느 부분에서 힙의 어떤 데이터를 사용하는지 추적하고,
+> 힙에서 중복되는 데이터를 최소화하고, 쓰지 않는 데이터를 힙에서 정리해
+> 영역을 확보하는 등의 작업은 모두 소유권과 관련되어 있습니다.
+> 반대로 말하면 여러분이 소유권을 한번 이해하고 나면 스택, 힙 영역으로
+> 고민할 일이 줄어들 거란 뜻이지만, 소유권의 존재 이유가 힙 데이터의 관리라는
+> 점을 알고 있으면 소유권의 동작 방식을 이해하는데에 도움이 됩니다.
 
-### Ownership Rules
+### 소유권 규칙
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate them:
+소유권 규칙부터 알아보겠습니다.
+앞으로 나올 내용을 보는 동안 다음 규칙을 명심하세요:
 
-* Each value in Rust has a variable that’s called its *owner*.
-* There can only be one owner at a time.
-* When the owner goes out of scope, the value will be dropped.
+* 러스트에서, 각각의 값은 *소유자(owner)* 라는 변수가 정해져 있다.
+* 한 값의 소유자는 동시에 여럿 존재할 수 없다.
+* 소유자가 스코프 밖으로 벗어날 때, 값은 버려진다(dropped).
 
-### Variable Scope
+### 변수의 스코프(Scope)
 
-We’ve walked through an example of a Rust program already in Chapter 2. Now
-that we’re past basic syntax, we won’t include all the `fn main() {` code in
-examples, so if you’re following along, you’ll have to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
-boilerplate code.
+기본 문법은 2장에서 이미 살펴봤으므로,
+예제를 좀 더 간략화하고 여러분이 핵심 내용에 더 집중할 수 있도록
+앞으로는 예제에서 `fn main() {` 코드를 생략하겠습니다.
+따라서, 앞으로 예제를 따라 하실 땐
+직접 `main` 함수에 코드를
+작성해주셔야 하니 주의해주세요.
 
-As a first example of ownership, we’ll look at the *scope* of some variables. A
-scope is the range within a program for which an item is valid. Let’s say we
-have a variable that looks like this:
+소유권 첫 예제로는 변수의 스코프를 다뤄보도록 하겠습니다.
+스코프란, 프로그램 내에서 개체가 유효한 범위를 말합니다.
+한번 다음과 같은 변수가 있다고 가정해 봅시다.
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 has
-comments annotating where the variable `s` is valid.
+변수 `s`는 문자열 리터럴을 나타내며,
+문자열 리터럴의 값은 코드 내에 하드코딩되어 있습니다.
+이 변수는 선언된 시점부터 현재의 *스코프*를 벗어날 때까지 유효합니다.
+Listing 4-1에 변수 `s`가 유효한 지점을 주석으로 표시했습니다:
 
 ```rust
-{                      // s is not valid here, it’s not yet declared
-    let s = "hello";   // s is valid from this point forward
+{                      // s를 아직 선언하지 않았으므로, 유효하지 않습니다
+    let s = "hello";   // 이 시점 이후로 s는 유효합니다.
 
-    // do stuff with s
-}                      // this scope is now over, and s is no longer valid
+    // 변수 s 를 사용하는 코드
+}                      // 스코프가 닫혔으므로, s 는 더 이상 유효하지 않습니다.
 ```
 
-<span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span>
+<span class="caption">Listing 4-1: 변수와,
+해당 변수가 유효한 스코프</span>
 
-In other words, there are two important points in time here:
+중요한 점은 두 가지입니다.
 
-* When `s` comes *into scope*, it is valid.
-* It remains valid until it goes *out of scope*.
+1. `s` 가 *스코프 내에* 나타나면 유효합니다.
+2. 유효기간은 *스코프 밖으로* 벗어나기 전까지 입니다.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to that in other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+여기까지 보면 변수의 유효성과 스코프는 다른 프로그래밍 언어와 비슷합니다.
+이제, `String` 타입을 탐구해가며 본격적으로
+소유권을 이해해봅시다.
 
-### The `String` Type
+### `String` 타입
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than the ones we covered in the [“Data Types”][data-types]<!-- ignore -->
-section of Chapter 3. The types covered previously are all stored on the stack
-and popped off the stack when their scope is over, but we want to look at data
-that is stored on the heap and explore how Rust knows when to clean up that
-data.
+소유권 규칙을 설명하려면
+3장 ["데이터 타입들"][data-types]<!-- ignore -->
+에서 다룬 타입보다 복잡한 타입이 필요합니다.
+앞서 다룬 것들은 전부 스택에 저장되고 스코프를 벗어날 때 pop 되는 타입이지만,
+이번에 필요한 건 힙에 저장되면서, 러스트의 데이터 정리과정을 알아보는 데
+적합한 타입이거든요.
 
-We’ll use `String` as the example here and concentrate on the parts of `String`
-that relate to ownership. These aspects also apply to other complex data types
-provided by the standard library and that you create. We’ll discuss `String` in
-more depth in Chapter 8.
+따라서 `String` 타입을 예제로 활용하되,
+여기서 `String` 타입을 전부 설명할 순 없으므로 자세한 내용은 8장에서 다루고,
+이번 장에선 소유권 관련 부분에만 집중하겠습니다.
+이러한 관점은 다른 표준 라이브러리나 여러분이 만들 복잡한 데이터 타입에도 적용됩니다.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t suitable for every
-situation in which we may want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type is
-allocated on the heap and as such is able to store an amount of text that is
-unknown to us at compile time. You can create a `String` from a string literal
-using the `from` function, like so:
+여태 보아온 문자열은 코드 내에 하드코딩하는 방식의 '문자열 리터럴(string literal)'이었습니다.
+문자열 리터럴은 쓰기 편리하지만, 만능은 아닙니다.
+그 이유는 문자열 리터럴이 불변성(immutable)을 지니기에 변경할 수 없다는 점과,
+프로그램에 필요한 모든 문자열을 우리가 프로그래밍하는 시점에 알 수는 없다는 점 때문입니다.
+사용자한테 문자열을 입력받아 저장하는 기능 등을
+만들어야 하는 상황에선 문자열 리터럴을 사용할 수 없죠.
+따라서 러스트는 또 다른 문자열 타입인 `String` 을 제공합니다.
+이 타입은 힙에 할당되기 때문에, 컴파일 타임에 크기를 알 수 없는 텍스트도 저장할 수 있습니다.
+`String` 타입은 다음과 같이 `from` 함수와 문자열 리터럴을 이용해 생성 가능합니다.
 
 ```rust
 let s = String::from("hello");
 ```
 
-The double colon (`::`) is an operator that allows us to namespace this
-particular `from` function under the `String` type rather than using some sort
-of name like `string_from`. We’ll discuss this syntax more in the [“Method
-Syntax”][method-syntax]<!-- ignore --> section of Chapter 5 and when we talk
-about namespacing with modules in [“Paths for Referring to an Item in the
-Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
+이중 콜론(`::`)은 우리가 함수를 사용할 때,
+`string_from` 같은 함수명 대신 `String` 타입 하위라는 것을 특정해서
+함수를 호출할 수 있도록 하려고 사용하는 네임스페이스 연산자입니다.
+메소드 관련 문법은 5장 [“메소드 문법”][method-syntax]<!-- ignore --> 에서 자세히 다루며,
+모듈 및 네임스페이스는 7장 [“Paths for Referring to an Item in the Module Tree”][paths-module-tree]<!-- ignore -->
+에서 다루고 있습니다.
 
-This kind of string *can* be mutated:
+이 `String` 문자열은 변경 가능합니다:
 
 ```rust
 let mut s = String::from("hello");
 
-s.push_str(", world!"); // push_str() appends a literal to a String
+s.push_str(", world!"); // push_str()은 문자열 리터럴을 String 에 덧붙이는 함수입니다.
 
-println!("{}", s); // This will print `hello, world!`
+println!("{}", s); // 이 부분에서 `hello, world!` 를 출력합니다.
 ```
 
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is how these two types deal with memory.
+하지만, 문자열 리터럴과 `String` 에 무슨 차이가 있길래 어떤 것은 변경할 수 있고
+어떤 것은 변경할 수 없을까요? 차이점은 각 타입의 메모리 사용 방식에 있습니다.
 
-### Memory and Allocation
+### 메모리와 할당
 
-In the case of a string literal, we know the contents at compile time, so the
-text is hardcoded directly into the final executable. This is why string
-literals are fast and efficient. But these properties only come from the string
-literal’s immutability. Unfortunately, we can’t put a blob of memory into the
-binary for each piece of text whose size is unknown at compile time and whose
-size might change while running the program.
+문자열 리터럴은 컴파일 타임에 내용을 알 수 있으므로,
+텍스트가 최종 실행파일에 하드코딩됩니다.
+이 방식은 빠르고 효율적이지만,
+문자열이 변하지 않을 경우에만 사용할 수 있습니다.
+컴파일 타임에 크기를 알 수 없는 텍스트는
+바이너리 파일에 집어넣을 수 없죠.
 
-With the `String` type, in order to support a mutable, growable piece of text,
-we need to allocate an amount of memory on the heap, unknown at compile time,
-to hold the contents. This means:
+반면 `String` 타입은 힙에 메모리를 할당하는 방식을 사용하기 때문에
+텍스트 내용 및 크기를 변경할 수 있습니다.
+하지만 이는 다음을 의미하기도 합니다:
 
-* The memory must be requested from the operating system at runtime.
-* We need a way of returning this memory to the operating system when we’re
-  done with our `String`.
+1. 런타임 중 운영체제에 메모리를 요청해야 합니다.
+2. `String` 사용을 마쳤을 때 메모리를 해제할(운영체제에게 메모리를 반납할)
+  방법이 필요합니다.
 
-That first part is done by us: when we call `String::from`, its implementation
-requests the memory it needs. This is pretty much universal in programming
-languages.
+이 중 첫 번째는 이미 우리 손으로 해결했습니다.
+`String::from` 호출 시, 필요한 만큼 메모리를 요청하도록 구현되어 있거든요.
+프로그래밍 언어 사이에서 일반적으로 사용하는 방식이죠.
 
-However, the second part is different. In languages with a *garbage collector
-(GC)*, the GC keeps track and cleans up memory that isn’t being used anymore,
-and we don’t need to think about it. Without a GC, it’s our responsibility to
-identify when memory is no longer being used and call code to explicitly return
-it, just as we did to request it. Doing this correctly has historically been a
-difficult programming problem. If we forget, we’ll waste memory. If we do it
-too early, we’ll have an invalid variable. If we do it twice, that’s a bug too.
-We need to pair exactly one `allocate` with exactly one `free`.
+하지만 두 번째는 다릅니다.
+*가비지 콜렉터(GC)* 를 갖는 언어에선 GC가
+사용하지 않는 메모리를 찾아 없애주므로 프로그래머가 신경 쓸 필요 없으나,
+GC가 없는 언어에선 할당받은 메모리가 필요 없어지는 지점을
+프로그래머가 직접 찾아 메모리 해제 코드를 작성해야 합니다.
+굉장히 어려운 일이죠. 프로그래머가 놓친 부분이 있다면 메모리 낭비가 발생하고,
+메모리 해제 시점을 잘못 잡으면 버그가 생깁니다. 두 번 해제할 경우도 마찬가지로 버그가 발생하겠죠.
+따라서 우린 `할당(allocate)` 과 `해제(free)` 가 하나씩 짝짓도록 만들어야 합니다.
 
-Rust takes a different path: the memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+이 문제를 러스트에선 변수가 자신이 소속된 스코프를 벗어나는 순간
+자동으로 메모리를 해제하는 방식으로 해결했습니다. 예시로 보여드리도록 하죠.
+Listing 4-1 에서 문자열 리터럴을 `String` 으로 바꿔보았습니다:
 
 ```rust
 {
-    let s = String::from("hello"); // s is valid from this point forward
+    let s = String::from("hello"); // 이 시점 이후로 s는 유효합니다.
 
-    // do stuff with s
-}                                  // this scope is now over, and s is no
-                                   // longer valid
+    // 변수 s 를 사용하는 코드
+}                                  // 스코프가 닫혔으므로,
+                                   // s 는 더 이상 유효하지 않습니다.
 ```
 
-There is a natural point at which we can return the memory our `String` needs
-to the operating system: when `s` goes out of scope. When a variable goes out
-of scope, Rust calls a special function for us. This function is called `drop`,
-and it’s where the author of `String` can put the code to return the memory.
-Rust calls `drop` automatically at the closing curly bracket.
+보시면 `String` 에서 사용한 메모리를 자연스럽게 해제하는 지점이 있습니다.
+`s` 가 스코프 밖으로 벗어날 때인데, 러스트는 변수가 스코프 밖으로 벗어나면 `drop` 이라는 특별한 함수를 호출합니다.
+이 함수는 개발자가 직접 메모리 해제 코드를 작성해 넣을 수 있게 되어있으며,
+이 경우 `String` 개발자가 작성한 메모리 해제 코드가 실행되겠죠.
+`drop` 은 닫힌 중괄호 `}` 가 나타나는 지점에서 자동으로 호출됩니다.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item’s
-> lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
-> The `drop` function in Rust will be familiar to you if you’ve used RAII
-> patterns.
+> Note: C++ 에선 이런 식으로 객체의 수명이 끝나는 시점에 리소스를 해제하는 패턴을
+> *Resource Acquisition Is Initialization (RAII)* 라 합니다.
+> RAII 패턴에 익숙하신 분들이라면
+> 러스트의 `drop` 함수가 친숙할지도 모르겠네요.
 
-This pattern has a profound impact on the way Rust code is written. It may seem
-simple right now, but the behavior of code can be unexpected in more
-complicated situations when we want to have multiple variables use the data
-we’ve allocated on the heap. Let’s explore some of those situations now.
+이 패턴은 러스트 코드를 작성하는 데 깊은 영향을 미칩니다.
+지금은 단순해 보이지만, 힙 영역을 사용하는 변수가 많아져 상황이 복잡해지면
+코드가 예기치 못한 방향으로 동작할 수도 있죠.
+그러니 이제, 그런 복잡한 상황들을 더 알아보도록 합시다.
 
-#### Ways Variables and Data Interact: Move
+#### 변수와 데이터 간 상호작용 방식: 이동(move)
 
-Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2.
+러스트에선 동일한 데이터에 여러 변수가 서로 다른 방식으로 상호작용할 수 있습니다.
+정수형을 이용한 예제로 살펴보겠습니다.
 
 ```rust
 let x = 5;
 let y = x;
 ```
 
-<span class="caption">Listing 4-2: Assigning the integer value of variable `x`
-to `y`</span>
+<span class="caption">Listing 4-2: 변수 `x`의 정숫값을
+`y`에 대입</span>
 
-We can probably guess what this is doing: “bind the value `5` to `x`; then make
-a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
-and `y`, and both equal `5`. This is indeed what is happening, because integers
-are simple values with a known, fixed size, and these two `5` values are pushed
-onto the stack.
+대충 어떤 일이 일어날지 예상되네요.
+“`5` 를 `x` 에 바인드(bind)하고, `x` 값의 복사본을 만들어 `y` 에 바인드”
+그럼 `x`, `y` 두 변수가 생길 겁니다. 각각의 값은 `5` 가 되겠죠.
+실제로도 이와 같은데, 정수형 값은 크기가 정해진 단순한 값이기 때문입니다.
+이는 다시 말해, 두 `5` 값은 스택에 push 된다는 뜻입니다.
 
-Now let’s look at the `String` version:
+이번엔 앞선 예제를 `String` 으로 바꿔보았습니다:
 
 ```rust
 let s1 = String::from("hello");
 let s2 = s1;
 ```
 
-This looks very similar to the previous code, so we might assume that the way
-it works would be the same: that is, the second line would make a copy of the
-value in `s1` and bind it to `s2`. But this isn’t quite what happens.
+이전 코드와 매우 비슷하니, 동작 방식도 같을 거라고 생각하실 수도 있습니다.
+두 번째 줄에서 `s1` 의 복사본을 생성해 `s2` 에 바인딩하는 식으로 말이죠.
+하지만 이번엔 전혀 다른 방식으로 동작합니다.
 
-Take a look at Figure 4-1 to see what is happening to `String` under the
-covers. A `String` is made up of three parts, shown on the left: a pointer to
-the memory that holds the contents of the string, a length, and a capacity.
-This group of data is stored on the stack. On the right is the memory on the
-heap that holds the contents.
+Figure 4-1 를 참고해주세요. `String` 은 그림 좌측에서 나타나듯,
+문자열 내용이 들어 있는 메모리를 가리키는 포인터, 문자열 길이, 메모리 용량
+세 부분으로 이루어져 있습니다.
+이 데이터는 스택에 저장되며,
+우측의 문자열 내용은 힙에 저장됩니다.
 
-<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<img alt="메모리 속 String 의 모습" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-1: Representation in memory of a `String`
-holding the value `"hello"` bound to `s1`</span>
+<span class="caption">Figure 4-1: `s1` 에 바인드된, `"hello"` 값을 저장하고 있는
+`String` 의 메모리 속 모습</span>
 
-The length is how much memory, in bytes, the contents of the `String` is
-currently using. The capacity is the total amount of memory, in bytes, that the
-`String` has received from the operating system. The difference between length
-and capacity matters, but not in this context, so for now, it’s fine to ignore
-the capacity.
+문자열 길이와 메모리 용량이 무슨 차이인가 궁금하실 분들을 위해 간단히 설명해드리자면,
+문자열 길이는 `String` 의 내용이 현재 사용하고 있는 메모리를 바이트 단위로 나타낸 것이고,
+메모리 용량은 운영체제가 `String` 에 할당한 메모리의 양을 뜻합니다.
+이번 내용에서는 길이, 용량 사이의 차이는 중요한 내용이 아니니,
+이해가 잘 안 되면 용량 값은 무시하셔도 좋습니다.
 
-When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
-pointer, the length, and the capacity that are on the stack. We do not copy the
-data on the heap that the pointer refers to. In other words, the data
-representation in memory looks like Figure 4-2.
+`s2` 에 `s` 을 대입하면 `String` 데이터가 복사됩니다.
+이때 데이터는 스택에 있는 데이터, 즉 포인터, 길이, 용량 값을 말하며,
+포인터가 가리키는 힙 영역의 데이터는 복사되지 않습니다.
+즉, 다음과 같은 메모리 구조를 갖게 됩니다.
 
-<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<img alt="s1, s2 는 동일한 데이터를 가리킵니다" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-2: Representation in memory of the variable `s2`
-that has a copy of the pointer, length, and capacity of `s1`</span>
+<span class="caption">Figure 4-2: 변수 `s2` 가 `s1` 의
+포인터, 길이, 용량 값을 복사했을 때 나타나는 메모리 구조</span>
 
-The representation does *not* look like Figure 4-3, which is what memory would
-look like if Rust instead copied the heap data as well. If Rust did this, the
-operation `s2 = s1` could be very expensive in terms of runtime performance if
-the data on the heap were large.
+다음 Figure 4-3 은 힙 메모리 상 데이터까지
+복사했을 경우 나타날 구조로, *실제로는 이와 다릅니다*.
+만약 러스트가 이런 식으로 동작한다면,
+힙 내 데이터가 커질수록 `s2 = s1` 연산은 굉장히 느려질겁니다.
 
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
-do if Rust copied the heap data as well</span>
+<span class="caption">Figure 4-3: 러스트에서 힙 데이터까지 복사할 경우의
+`s2 = s1` 연산 결과</span>
 
-Earlier, we said that when a variable goes out of scope, Rust automatically
-calls the `drop` function and cleans up the heap memory for that variable. But
-Figure 4-2 shows both data pointers pointing to the same location. This is a
-problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a *double free* error and is one of the memory
-safety bugs we mentioned previously. Freeing memory twice can lead to memory
-corruption, which can potentially lead to security vulnerabilities.
+앞서 언급한 내용 중 변수가 스코프 밖으로 벗어날 때
+러스트에서 자동으로 `drop` 함수를 호출하여 해당 변수가 사용하는
+힙 메모리를 제거한다는 내용이 있었습니다.
+하지만 Figure 4-2 처럼 두 포인터가 같은 곳을 가리킬 경우에는 어떻게 될까요?
+`s2`, `s1` 이 스코프 밖으로 벗어날 때 각각 메모리를 해제하게 되면
+*중복 해제(double free)* 오류가 발생할 겁니다.
+이는 메모리 안정성 버그 중 하나이며, 보안을 취약하게 만드는 메모리 손상의 원인입니다.
 
-To ensure memory safety, there’s one more detail to what happens in this
-situation in Rust. Instead of trying to copy the allocated memory, Rust
-considers `s1` to no longer be valid and, therefore, Rust doesn’t need to free
-anything when `s1` goes out of scope. Check out what happens when you try to
-use `s1` after `s2` is created; it won’t work:
+따라서, 러스트에는 여러 포인터가 한 곳을 가리킬 경우를 대비한 규칙이 존재합니다.
+`s1` 에 할당한 메모리를 새로 복사하는 대신, 기존의 `s1` 을 무효화하는 것이죠.
+이로써 러스트는 `s1` 이 스코프를 벗어나더라도 아무것도 해제할 필요가 없어집니다.
+그럼 `s2` 가 만들어진 이후에 `s1` 을 사용하면 어떻게 될까요? 결론부터 말씀드리면, 사용할 수 없습니다:
 
 ```rust,ignore,does_not_compile
 let s1 = String::from("hello");
@@ -331,8 +330,8 @@ let s2 = s1;
 println!("{}, world!", s1);
 ```
 
-You’ll get an error like this because Rust prevents you from using the
-invalidated reference:
+보시는 것과 같이 유효하지 않은 참조자의 사용을 감지했다는 에러가
+발생하네요:
 
 ```text
 error[E0382]: use of moved value: `s1`
@@ -348,33 +347,34 @@ error[E0382]: use of moved value: `s1`
   not implement the `Copy` trait
 ```
 
-If you’ve heard the terms *shallow copy* and *deep copy* while working with
-other languages, the concept of copying the pointer, length, and capacity
-without copying the data probably sounds like making a shallow copy. But
-because Rust also invalidates the first variable, instead of being called a
-shallow copy, it’s known as a *move*. In this example, we would say that
-`s1` was *moved* into `s2`. So what actually happens is shown in Figure 4-4.
+여러분이 다른 프로그래밍 언어에서 “얕은 복사(shallow copy)”,
+“깊은 복사(deep copy)” 라는 용어를 들어보셨다면, 힙 데이터를 복사하지 않고
+포인터, 길이, 용량 값만 복사하는 것을 얕은 복사라고 생각하셨을 수도 있지만,
+러스트에선 기존의 변수를 무효화하기 때문에
+이를 얕은 복사가 아닌 *이동(move)* 이라 하고,
+앞선 코드는 `s1` 이 `s2` 로 *이동되었다* 라고 표현합니다.
 
-<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<img alt="s1 이 s2 로 이동됨" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-4: Representation in memory after `s1` has been
-invalidated</span>
+<span class="caption">Figure 4-4: `s1` 이 무효화 된 후의
+메모리 구조</span>
 
-That solves our problem! With only `s2` valid, when it goes out of scope, it
-alone will free the memory, and we’re done.
+이로써 문제가 사라졌네요!
+`s2` 만이 유효하니, 스코프 밖으로 벗어나면 그대로 자신의 메모리를 해제하면 됩니다.
 
-In addition, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any *automatic*
-copying can be assumed to be inexpensive in terms of runtime performance.
+덧붙이자면, 러스트는 절대 자동으로 “깊은 복사” 로 데이터를 복사하는 일이 없습니다.
+따라서, 러스트가 자동으로 수행하는 모든 복사는
+런타임 성능면에서 효율적이라 할 수 있습니다.
 
-#### Ways Variables and Data Interact: Clone
+#### 변수와 데이터 간 상호작용 방식: 클론(clone)
 
-If we *do* want to deeply copy the heap data of the `String`, not just the
-stack data, we can use a common method called `clone`. We’ll discuss method
-syntax in Chapter 5, but because methods are a common feature in many
-programming languages, you’ve probably seen them before.
+`String` 의 힙 데이터까지 깊이 복사하고 싶을 땐
+`clone` 이라는 공용 메소드를 사용할 수 있습니다.
+메소드 문법은 5장에서 다룰 예정이지만,
+메소드라는 개념은 대부분의 프로그래밍 언어가 갖는 특성이기 때문에
+여러분은 이미 다뤄보셨을 겁니다.
 
-Here’s an example of the `clone` method in action:
+다음은 `clone` 메소드의 사용 예제입니다:
 
 ```rust
 let s1 = String::from("hello");
@@ -383,17 +383,18 @@ let s2 = s1.clone();
 println!("s1 = {}, s2 = {}", s1, s2);
 ```
 
-This works just fine and explicitly produces the behavior shown in Figure 4-3,
-where the heap data *does* get copied.
+이 코드의 실행 결과는 힙 데이터까지 복사됐을 때의 메모리 구조를 나타낸
+Figure 4-3 과 정확히 일치합니다.
 
-When you see a call to `clone`, you know that some arbitrary code is being
-executed and that code may be expensive. It’s a visual indicator that something
-different is going on.
+여러분은 이 코드에서 `clone` 호출을 보고,
+이 지점에서 성능에 영향이 갈지도 모르는 코드가 실행될 것을 알 수 있습니다.
+즉, `clone` 은 해당 위치에서 무언가 다른 일이 수행될 것을 알려주는 시각적 지시자이기도 합니다.
 
-#### Stack-Only Data: Copy
+#### 스택에만 저장된 데이터: 복사(copy)
 
-There’s another wrinkle we haven’t talked about yet. This code using integers,
-part of which was shown in Listing 4-2, works and is valid:
+아직 다루지 않은 부분이 남았습니다.
+다음 코드는 앞서 Listing 4-2 에서 본 정수형을 이용하는 코드입니다
+(정상적으로 작동합니다):
 
 ```rust
 let x = 5;
@@ -402,135 +403,134 @@ let y = x;
 println!("x = {}, y = {}", x, y);
 ```
 
-But this code seems to contradict what we just learned: we don’t have a call to
-`clone`, but `x` is still valid and wasn’t moved into `y`.
+하지만 이 코드는 방금 우리가 배운 내용과 맞지 않는 것처럼 보이네요.
+`clone` 을 호출하지도 않았는데 `x` 는 계속해서 유효하며 `y` 로 이동되지도 않았습니다.
 
-The reason is that types such as integers that have a known size at compile
-time are stored entirely on the stack, so copies of the actual values are quick
-to make. That means there’s no reason we would want to prevent `x` from being
-valid after we create the variable `y`. In other words, there’s no difference
-between deep and shallow copying here, so calling `clone` wouldn’t do anything
-different from the usual shallow copying and we can leave it out.
+이유는 정수형 등 컴파일 타임에 크기가 고정된 타입은
+모두 스택에 저장되기 때문입니다. 스택에 저장되니, 복사본을 빠르게 만들 수 있고,
+따라서 굳이 `y` 를 생성하고 나면 `x` 를 무효화 할 필요가 없습니다.
+다시 말해 이런 경우엔 깊은 복사와 얕은 복사 간 차이가 없습니다.
+여기선 `clone` 을 호출해도 얕은 복사와 차이가 없으니 생략해도 상관없죠.
 
-Rust has a special annotation called the `Copy` trait that we can place on
-types like integers that are stored on the stack (we’ll talk more about traits
-in Chapter 10). If a type has the `Copy` trait, an older variable is still
-usable after assignment. Rust won’t let us annotate a type with the `Copy`
-trait if the type, or any of its parts, has implemented the `Drop` trait. If
-the type needs something special to happen when the value goes out of scope and
-we add the `Copy` annotation to that type, we’ll get a compile-time error. To
-learn about how to add the `Copy` annotation to your type, see [“Derivable
-Traits”][derivable-traits]<!-- ignore --> in Appendix C.
+러스트에는 정수형 등 스택에 저장되는 타입에
+달아 놓을 수 있는 `Copy` 트레잇이 있습니다(트레잇은 10장에서 자세히 다룹니다).
+만약 어떤 타입에 이 `Copy` 트레잇이 구현되어 있다면, 대입 연산 후에도 기존 변수를 사용할 수 있죠.
+하지만 구현하려는 타입이나, 구현하려는 타입 중 일부분에 `Drop` 트레잇이 구현된 경우엔
+`Copy` 트레잇을 어노테이션(annotation) 할 수 없습니다.
+즉, 스코프 밖으로 벗어났을 때 특정 동작이 요구되는 타입에
+`Copy` 어노테이션을 추가하면 컴파일 오류가 발생합니다.
+여러분이 만든 타입에 `Copy` 어노테이션을 추가하는 방법은
+부록 C의 [“Derivable Traits”][derivable-traits]<!-- ignore --> 을 참고 바랍니다.
 
-So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a general rule, any group of simple scalar values can be
-`Copy`, and nothing that requires allocation or is some form of resource is
-`Copy`. Here are some of the types that are `Copy`:
+그래서, `Copy` 가능한 타입은 뭘까요?
+타입마다 문서를 뒤져 정보를 찾아보고 확신을 얻을 수도 있겠지만, 일반적으로
+단순한 스칼라 값의 묶음은 `Copy` 가능하고, 할당이 필요하거나 리소스의 일종인 경우엔 불가능합니다.
+`Copy` 가능한 타입 목록 중 일부를 보여드리겠습니다.
 
-* All the integer types, such as `u32`.
-* The Boolean type, `bool`, with values `true` and `false`.
-* All the floating point types, such as `f64`.
-* The character type, `char`.
-* Tuples, if they only contain types that are also `Copy`. For example,
-  `(i32, i32)` is `Copy`, but `(i32, String)` is not.
+* 모든 정수형 타입 (예: `u32`)
+* `true`, `false` 값을 갖는 논리 자료형 `bool`
+* 모든 부동 소수점 타입 (예: `f64`)
+* 문자 타입 `char`
+* `Copy` 가능한 타입만으로 구성된 튜플
+  (예를 들어, `(i32, i32)` 는 `Copy` 가능하지만 `(i32, String)` 은 불가능합니다)
 
-### Ownership and Functions
+### 소유권과 함수
 
-The semantics for passing a value to a function are similar to those for
-assigning a value to a variable. Passing a variable to a function will move or
-copy, just as assignment does. Listing 4-3 has an example with some annotations
-showing where variables go into and out of scope.
+함수로 값을 전달하는 행위는 변수에 값을 대입하는 행위와 의미가 유사합니다.
+함수에 변수를 전달하면 대입 연산과 마찬가지로 이동이나 복사가 일어나기 때문이죠.
+Listing 4-3 에 변수가 스코프를 벗어나는 부분을
+주석으로 표시해보았습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let s = String::from("hello");  // s comes into scope
+    let s = String::from("hello");  // s 가 스코프 내에 들어옵니다.
 
-    takes_ownership(s);             // s's value moves into the function...
-                                    // ... and so is no longer valid here
+    takes_ownership(s);             // s 의 값이 함수로 이동
+                                    // 따라서 s 는 더 이상 유효하지 않습니다.
 
-    let x = 5;                      // x comes into scope
+    let x = 5;                      // x 가 스코프 내에 들어옵니다.
 
-    makes_copy(x);                  // x would move into the function,
-                                    // but i32 is Copy, so it’s okay to still
-                                    // use x afterward
+    makes_copy(x);                  // x 는 함수 안으로 이동하지만,
+                                    // i32는 Copy 가능한 타입이므로,
+                                    // 이후에도 x 를 사용할 수 있습니다.
 
-} // Here, x goes out of scope, then s. But because s's value was moved, nothing
-  // special happens.
+} // 이 지점에서 x 와 s 는 스코프를 벗어납니다.
+  // 하지만 s 의 값은 이미 이동되었으므로, 별다른 일이 발생하지 않습니다.
 
-fn takes_ownership(some_string: String) { // some_string comes into scope
+fn takes_ownership(some_string: String) { // some_string 이 스코프 내에 들어옵니다.
     println!("{}", some_string);
-} // Here, some_string goes out of scope and `drop` is called. The backing
-  // memory is freed.
+} // 이 지점에서 some_string 은 스코프를 벗어나고 `drop` 이 호출됩니다.
+  // 이로써 사용하던 메모리는 해제되었습니다.
 
-fn makes_copy(some_integer: i32) { // some_integer comes into scope
+fn makes_copy(some_integer: i32) { // some_integer 가 스코프 내에 들어옵니다.
     println!("{}", some_integer);
-} // Here, some_integer goes out of scope. Nothing special happens.
+} // 이 지점에서 some_integer 가 스코프를 벗어나고 별다른 일은 발생하지 않습니다.
 ```
 
-<span class="caption">Listing 4-3: Functions with ownership and scope
-annotated</span>
+<span class="caption">Listing 4-3: 소유권, 스코프가 주석으로
+표시된 함수</span>
 
-If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
-compile-time error. These static checks protect us from mistakes. Try adding
-code to `main` that uses `s` and `x` to see where you can use them and where
-the ownership rules prevent you from doing so.
+러스트는 `takes_ownership` 함수를 호출한 이후에 `s` 를 사용하려 할 경우,
+컴파일 타입 오류를 발생시킵니다. 이런 정적 검사들이 프로그래머의 여러 실수를 방지해주죠.
+어느 지점에서 변수를 사용할 수 있고, 어느 지점에서 소유권 규칙이 여러분을 제재하는지
+확인해보려면 `main` 함수에 `s`, `x` 변수를 사용하는 코드를 여기저기 추가해보세요.
 
-### Return Values and Scope
+### 반환 값과 스코프
 
-Returning values can also transfer ownership. Listing 4-4 is an example with
-similar annotations to those in Listing 4-3.
+소유권은 값을 반환하는 과정에서도 이동합니다.
+앞서 본 Listing 4-3 과 비슷한 주석이 달린 유사한 예제를 살펴봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let s1 = gives_ownership();         // gives_ownership moves its return
-                                        // value into s1
+    let s1 = gives_ownership();         // gives_ownership 은 반환 값을
+                                        // s1 으로 이동시킵니다.
 
-    let s2 = String::from("hello");     // s2 comes into scope
+    let s2 = String::from("hello");     // s2 가 스코프 내에 들어옵니다.
 
-    let s3 = takes_and_gives_back(s2);  // s2 is moved into
-                                        // takes_and_gives_back, which also
-                                        // moves its return value into s3
-} // Here, s3 goes out of scope and is dropped. s2 goes out of scope but was
-  // moved, so nothing happens. s1 goes out of scope and is dropped.
+    let s3 = takes_and_gives_back(s2);  // s2 가 takes_and_gives_back 로 이동하고,
+                                        // takes_and_gives_back 은 반환 값을
+                                        // s3 으로 이동시킵니다.
+} // 이 지점에서 s3 는 스코프를 벗어나고 drop 됩니다.
+  // 반면 s2 는 이동되며, s1 는 별다른 일 없이 스코프를 벗어납니다.
 
-fn gives_ownership() -> String {             // gives_ownership will move its
-                                             // return value into the function
-                                             // that calls it
+fn gives_ownership() -> String {             // gives_ownership 함수는
+                                             // 자신을 호출한 함수(이 경우 main)로
+                                             // 반환 값을 이동시킵니다.
 
-    let some_string = String::from("hello"); // some_string comes into scope
+    let some_string = String::from("hello"); // some_string 이 스코프 내에 들어옵니다.
 
-    some_string                              // some_string is returned and
-                                             // moves out to the calling
-                                             // function
+    some_string                              // some_string 이 반환되고,
+                                             // gives_ownership 을 호출한 함수로
+                                             // 이동합니다.
 }
 
-// takes_and_gives_back will take a String and return one
-fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
-                                                      // scope
+// takes_and_gives_back 함수는 String 을 전달받고, String 을 반환합니다.
+fn takes_and_gives_back(a_string: String) -> String { // a_string 이
+                                                      // 스코프 내에 들어옵니다.
 
-    a_string  // a_string is returned and moves out to the calling function
+    a_string  // some_string 이 반환되고, takes_and_gives_back 함수를 호출한 함수로 이동합니다.
 }
 ```
 
-<span class="caption">Listing 4-4: Transferring ownership of return
-values</span>
+<span class="caption">Listing 4-4: 반환 값으로 일어나는
+소유권 이동</span>
 
-The ownership of a variable follows the same pattern every time: assigning a
-value to another variable moves it. When a variable that includes data on the
-heap goes out of scope, the value will be cleaned up by `drop` unless the data
-has been moved to be owned by another variable.
+상황은 다양할지라도, 변수의 소유권 규칙은 언제나 동일합니다.
+어떤 값을 다른 변수에 대입하면 값이 이동하고,
+힙에 데이터를 갖는 변수가 스코프를 벗어나면, 사전에 해당 데이터가 이동되어
+다른 변수가 소유하고 있지 않은 이상 `drop` 에 의해 데이터가 제거됩니다.
 
-Taking ownership and then returning ownership with every function is a bit
-tedious. What if we want to let a function use a value but not take ownership?
-It’s quite annoying that anything we pass in also needs to be passed back if we
-want to use it again, in addition to any data resulting from the body of the
-function that we might want to return as well.
+모든 함수가 소유권을 가졌다가 반납하는 것은 조금 번거롭습니다.
+함수에 넘겨줄 값을 함수 호출 이후에도 쓰고 싶은데,
+그렇다고 해서 우리가 함수로부터 얻고자 하는 결과에 더해,
+이후 다시 쓰고 싶은 변수까지 같이 반환받아야 한다면 본말전도나 다름없죠.
+그럼, 함수가 값을 사용할 수 있도록 하되 소유권은 가져가지 않도록 하고 싶다면 어떻게 해야 할까요?
 
-It’s possible to return multiple values using a tuple, as shown in Listing 4-5.
+그래도 일단 다음과 같이 튜플을 이용해 여러 값을 돌려받는 게 가능하긴 하다는 걸 알려드리겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -544,17 +544,17 @@ fn main() {
 }
 
 fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() returns the length of a String
+    let length = s.len(); // len() 은 String 의 길이를 반환하는 함수입니다.
 
     (s, length)
 }
 ```
 
-<span class="caption">Listing 4-5: Returning ownership of parameters</span>
+<span class="caption">Listing 4-5: 매개변수의 소유권을 되돌려주는 방법</span>
 
-But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for this concept, called
-*references*.
+당연하지만 이런 방식으로 매개변수의 소유권을 되돌려받는 것은 좋지 않습니다.
+거추장스럽고, 작업량이 필요 이상으로 많아지죠.
+다행히도, 러스트에는 이 대신 사용할 *참조자(references)* 라는 기능을 가지고 있습니다.
 
 [data-types]: ch03-02-data-types.html#data-types
 [derivable-traits]: appendix-03-derivable-traits.html
