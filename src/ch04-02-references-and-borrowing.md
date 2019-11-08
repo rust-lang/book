@@ -256,7 +256,7 @@ created. These scopes don’t overlap, so this code is allowed.
 
 It is important to note that while data races are specific to
 multi-threaded programs, rules we have just discussed apply to
-single-threaded (sequeltial) programms too. Consider following example,
+single-threaded (sequential) programms too. Consider following example,
 where we iterate over a vector whilst also mutating it inside the loop:
 
 ```rust,ignore,does_not_compile
