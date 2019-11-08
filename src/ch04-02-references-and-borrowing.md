@@ -259,7 +259,7 @@ multi-threaded programs, rules we have just discussed apply to
 single-threaded (sequeltial) programms too. Consider following example,
 where we iterate over a vector whilst also mutating it inside the loop:
 
-```rust,does_not_compile
+```rust,ignore,does_not_compile
 let mut buffer = vec![1, 2, 3, 4];
 
 for i in &buffer {
