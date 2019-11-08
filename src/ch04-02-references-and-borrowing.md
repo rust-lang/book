@@ -254,6 +254,40 @@ The scopes of the immutable references `r1` and `r2` end after the `println!`
 where they are last used, which is before the mutable reference `r3` is
 created. These scopes don’t overlap, so this code is allowed.
 
+It is important to note that while data races are specific to
+multi-threaded programs, rules we have just discussed apply to
+single-threaded (sequeltial) programms too. Consider following example,
+where we iterate over a vector whilst also mutating it inside the loop:
+
+```rust,does_not_compile
+let mut buffer = vec![1, 2, 3, 4];
+
+for i in &buffer {
+    buffer.push(*i);
+}
+```
+
+Here's the error message:
+
+```text
+error[E0502]: cannot borrow `buffer` as mutable because it is also borrowed as immutable
+ --> src/main.rs:5:9
+  |
+4 |     for i in &buffer {
+  |              -------
+  |              |
+  |              immutable borrow occurs here
+  |              immutable borrow later used here
+5 |         buffer.push(*i);
+  |         ^^^^^^^^^^^^^^^ mutable borrow occurs here
+```
+
+If this code was to compile, the `for` loop body would be adding values to
+`buf` vector while it's being iterated over. In best case this will result in
+a never ending loop, in worst — in iterator invalidation and program crash.
+Worst case scenario has something to do with `Vec` type internals, but we
+will not get into this right now.
+
 Even though borrowing errors may be frustrating at times, remember that it’s
 the Rust compiler pointing out a potential bug early (at compile time rather
 than at runtime) and showing you exactly where the problem is. Then you don’t
