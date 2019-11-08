@@ -22,7 +22,7 @@ fn add_one(x: i32) -> i32 {
 }
 
 fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
-    f(arg) + f(arg)
+    f(f(arg))
 }
 
 fn main() {
@@ -35,7 +35,7 @@ fn main() {
 <span class="caption">Listing 19-27: Using the `fn` type to accept a function
 pointer as an argument</span>
 
-This code prints `The answer is: 12`. We specify that the parameter `f` in
+This code prints `The answer is: 7`. We specify that the parameter `f` in
 `do_twice` is an `fn` that takes one parameter of type `i32` and returns an
 `i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
 the function name `add_one` as the first argument to `do_twice`.
