@@ -21,7 +21,7 @@ both find the largest value in a slice.
 fn largest_i32(list: &[i32]) -> i32 {
     let mut largest = list[0];
 
-    for &item in list.iter() {
+    for &item in list {
         if item > largest {
             largest = item;
         }
@@ -33,7 +33,7 @@ fn largest_i32(list: &[i32]) -> i32 {
 fn largest_char(list: &[char]) -> char {
     let mut largest = list[0];
 
-    for &item in list.iter() {
+    for &item in list {
         if item > largest {
             largest = item;
         }
@@ -98,7 +98,7 @@ compile yet, but we’ll fix it later in this chapter.
 fn largest<T>(list: &[T]) -> T {
     let mut largest = list[0];
 
-    for &item in list.iter() {
+    for &item in list {
         if item > largest {
             largest = item;
         }
