@@ -335,7 +335,7 @@ error[E0308]: mismatched types
              found type `()`
 ```
 
-The main error message, “mismatched types,” reveals the core issue with this
+The main error message, “mismatched types”, reveals the core issue with this
 code. The definition of the function `plus_one` says that it will return an
 `i32`, but statements don’t evaluate to a value, which is expressed by `()`,
 an empty tuple. Therefore, nothing is returned, which contradicts the function
