@@ -555,7 +555,7 @@ take a closure of code to run and send it to the already running thread for
 execution. We’ll also give each worker an `id` so we can distinguish between
 the different workers in the pool when logging or debugging.
 
-Let’s make the following changes to what happens when we create a `ThreadPool`.
+Let’s make the following changes to see what happens when we create a `ThreadPool`.
 We’ll implement the code that sends the closure to the thread after we have
 `Worker` set up in this way:
 
