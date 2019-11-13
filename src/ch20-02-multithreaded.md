@@ -944,7 +944,7 @@ impl Worker {
 
                 println!("Worker {} got a job; executing.", id);
 
-                (*job)();
+                job();
             }
         });
 
@@ -976,109 +976,6 @@ The call to `recv` blocks, so if there is no job yet, the current thread will
 wait until a job becomes available. The `Mutex<T>` ensures that only one
 `Worker` thread at a time is trying to request a job.
 
-Theoretically, this code should compile. Unfortunately, the Rust compiler isn’t
-perfect yet, and we get this error:
-
-```text
-error[E0161]: cannot move a value of type std::ops::FnOnce() +
-std::marker::Send: the size of std::ops::FnOnce() + std::marker::Send cannot be
-statically determined
-  --> src/lib.rs:63:17
-   |
-63 |                 (*job)();
-   |                 ^^^^^^
-```
-
-This error is fairly cryptic because the problem is fairly cryptic. To call a
-`FnOnce` closure that is stored in a `Box<T>` (which is what our `Job` type
-alias is), the closure needs to move itself *out* of the `Box<T>` because the
-closure takes ownership of `self` when we call it. In general, Rust doesn’t
-allow us to move a value out of a `Box<T>` because Rust doesn’t know how big
-the value inside the `Box<T>` will be: recall in Chapter 15 that we used
-`Box<T>` precisely because we had something of an unknown size that we wanted
-to store in a `Box<T>` to get a value of a known size.
-
-As you saw in Listing 17-15, we can write methods that use the syntax `self:
-Box<Self>`, which allows the method to take ownership of a `Self` value stored
-in a `Box<T>`. That’s exactly what we want to do here, but unfortunately Rust
-won’t let us: the part of Rust that implements behavior when a closure is
-called isn’t implemented using `self: Box<Self>`. So Rust doesn’t yet
-understand that it could use `self: Box<Self>` in this situation to take
-ownership of the closure and move the closure out of the `Box<T>`.
-
-Rust is still a work in progress with places where the compiler could be
-improved, but in the future, the code in Listing 20-20 should work just fine.
-People just like you are working to fix this and other issues! After you’ve
-finished this book, we would love for you to join in.
-
-But for now, let’s work around this problem using a handy trick. We can tell
-Rust explicitly that in this case we can take ownership of the value inside the
-`Box<T>` using `self: Box<Self>`; then, once we have ownership of the closure,
-we can call it. This involves defining a new trait `FnBox` with the method
-`call_box` that will use `self: Box<Self>` in its signature, defining `FnBox`
-for any type that implements `FnOnce()`, changing our type alias to use the new
-trait, and changing `Worker` to use the `call_box` method. These changes are
-shown in Listing 20-21.
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
-
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || {
-            loop {
-                let job = receiver.lock().unwrap().recv().unwrap();
-
-                println!("Worker {} got a job; executing.", id);
-
-                job.call_box();
-            }
-        });
-
-        Worker {
-            id,
-            thread,
-        }
-    }
-}
-```
-
-<span class="caption">Listing 20-21: Adding a new trait `FnBox` to work around
-the current limitations of `Box<FnOnce()>`</span>
-
-First, we create a new trait named `FnBox`. This trait has the one method
-`call_box`, which is similar to the `call` methods on the other `Fn*` traits
-except that it takes `self: Box<Self>` to take ownership of `self` and move the
-value out of the `Box<T>`.
-
-Next, we implement the `FnBox` trait for any type `F` that implements the
-`FnOnce()` trait. Effectively, this means that any `FnOnce()` closures can use
-our `call_box` method. The implementation of `call_box` uses `(*self)()` to
-move the closure out of the `Box<T>` and call the closure.
-
-We now need our `Job` type alias to be a `Box` of anything that implements our
-new trait `FnBox`. This will allow us to use `call_box` in `Worker` when we get
-a `Job` value instead of invoking the closure directly. Implementing the
-`FnBox` trait for any `FnOnce()` closure means we don’t have to change anything
-about the actual values we’re sending down the channel. Now Rust is able to
-recognize that what we want to do is fine.
-
-This trick is very sneaky and complicated. Don’t worry if it doesn’t make
-perfect sense; someday, it will be completely unnecessary.
 
 With the implementation of this trick, our thread pool is in a working state!
 Give it a `cargo run` and make some requests:
@@ -1136,7 +1033,7 @@ thread run them.
 > limitation is not caused by our web server.
 
 After learning about the `while let` loop in Chapter 18, you might be wondering
-why we didn’t write the worker thread code as shown in Listing 20-22.
+why we didn’t write the worker thread code as shown in Listing 20-21.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -1149,7 +1046,7 @@ impl Worker {
             while let Ok(job) = receiver.lock().unwrap().recv() {
                 println!("Worker {} got a job; executing.", id);
 
-                job.call_box();
+                job();
             }
         });
 
@@ -1161,7 +1058,7 @@ impl Worker {
 }
 ```
 
-<span class="caption">Listing 20-22: An alternative implementation of
+<span class="caption">Listing 20-21: An alternative implementation of
 `Worker::new` using `while let`</span>
 
 This code compiles and runs but doesn’t result in the desired threading
@@ -1175,13 +1072,13 @@ lock. But this implementation can also result in the lock being held longer
 than intended if we don’t think carefully about the lifetime of the
 `MutexGuard<T>`. Because the values in the `while` expression remain in scope
 for the duration of the block, the lock remains held for the duration of the
-call to `job.call_box()`, meaning other workers cannot receive jobs.
+call to `job()`, meaning other workers cannot receive jobs.
 
 By using `loop` instead and acquiring the lock and a job within the block
 rather than outside it, the `MutexGuard` returned from the `lock` method is
 dropped as soon as the `let job` statement ends. This ensures that the lock is
 held during the call to `recv`, but it is released before the call to
-`job.call_box()`, allowing multiple requests to be serviced concurrently.
+`job()`, allowing multiple requests to be serviced concurrently.
 
 [creating-type-synonyms-with-type-aliases]:
 ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
