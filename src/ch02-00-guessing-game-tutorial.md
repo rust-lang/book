@@ -624,7 +624,7 @@ fn main() {
     match guess.cmp(&secret_number) {
         Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
+        Ordering::Equal => println!("You win!")
     }
 }
 ```
@@ -720,7 +720,7 @@ do that by adding the following two lines to the `main` function body:
     match guess.cmp(&secret_number) {
         Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
+        Ordering::Equal => println!("You win!")
     }
 }
 ```
@@ -820,7 +820,7 @@ more chances at guessing the number:
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => println!("You win!"),
+            Ordering::Equal => println!("You win!")
         }
     }
 }
@@ -883,7 +883,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
                 println!("You win!");
-                break;
+                break
             }
         }
     }
@@ -911,7 +911,7 @@ io::stdin().read_line(&mut guess)
 
 let guess: u32 = match guess.trim().parse() {
     Ok(num) => num,
-    Err(_) => continue,
+    Err(_) => continue
 };
 
 println!("You guessed: {}", guess);
@@ -995,7 +995,7 @@ fn main() {
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
-            Err(_) => continue,
+            Err(_) => continue
         };
 
         println!("You guessed: {}", guess);
@@ -1005,7 +1005,7 @@ fn main() {
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
                 println!("You win!");
-                break;
+                break
             }
         }
     }
