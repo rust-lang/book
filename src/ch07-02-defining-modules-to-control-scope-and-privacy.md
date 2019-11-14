@@ -29,7 +29,7 @@ Listing 7-1 into *src/lib.rs* to define some modules and function signatures.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore
 mod front_of_house {
     mod hosting {
         fn add_to_waitlist() {}
