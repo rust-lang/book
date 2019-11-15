@@ -297,7 +297,7 @@ use std::io;
 use std::io::Read;
 use std::fs::File;
 
-fn read_username_from_file() -> Result<String, io::Error> {
+fn read_username_from_file() -> Result<String, Box<dyn std::error::Error>> {
     let f = File::open("hello.txt");
 
     let mut f = match f {
@@ -320,19 +320,17 @@ calling code using `match`</span>
 This function can be written in a much shorter way, but we’re going to start by
 doing a lot of it manually in order to explore error handling; at the end,
 we’ll show the shorter way. Let’s look at the return type of the function first:
-`Result<String, io::Error>`. This means the function is returning a value of
+`Result<String, Box<dyn std::error::Error>>`. This means the function is returning a value of
 the type `Result<T, E>` where the generic parameter `T` has been filled in
 with the concrete type `String` and the generic type `E` has been filled in
-with the concrete type `io::Error`. If this function succeeds without any
+with the concrete type `Box<dyn std::error::Error>`. For now, you can read it to mean "any kind of error". If this function succeeds without any
 problems, the code that calls this function will receive an `Ok` value that
 holds a `String`—the username that this function read from the file. If this
 function encounters any problems, the code that calls this function will
-receive an `Err` value that holds an instance of `io::Error` that contains
-more information about what the problems were. We chose `io::Error` as the
-return type of this function because that happens to be the type of the error
-value returned from both of the operations we’re calling in this function’s
-body that might fail: the `File::open` function and the `read_to_string`
-method.
+receive an `Err` value that holds an instance of `Box<dyn std::error::Error>` that contains
+more information about what the problems were. The `Box<dyn std::error::Error>` type is called a trait object, which we’ll talk about in
+the [“Using Trait Objects that Allow for Values of Different
+Types”][trait-objects]<!-- ignore --> section in Chapter 17. It can contain any kind of error, but frequently, functions are declared to return more specific errors. This can help others reason about their failure points. As an example, `File::open` and `read_to_string` both can return `io::Error`, which - as you have learned - contains helpful information such as `io::ErrorKind::NotFound`.
 
 The body of the function starts by calling the `File::open` function. Then we
 handle the `Result` value returned with a `match` similar to the `match` in
@@ -353,7 +351,7 @@ returned the error value in the `match` that handled the return value of
 is the last expression in the function.
 
 The code that calls this code will then handle getting either an `Ok` value
-that contains a username or an `Err` value that contains an `io::Error`. We
+that contains a username or an `Err` value that contains an error. We
 don’t know what the calling code will do with those values. If the calling code
 gets an `Err` value, it could call `panic!` and crash the program, use a
 default username, or look up the username from somewhere other than a file, for
@@ -377,7 +375,7 @@ use std::io;
 use std::io::Read;
 use std::fs::File;
 
-fn read_username_from_file() -> Result<String, io::Error> {
+fn read_username_from_file() -> Result<String, Box<dyn std::error::Error>> {
     let mut f = File::open("hello.txt")?;
     let mut s = String::new();
     f.read_to_string(&mut s)?;
@@ -425,7 +423,7 @@ use std::io;
 use std::io::Read;
 use std::fs::File;
 
-fn read_username_from_file() -> Result<String, io::Error> {
+fn read_username_from_file() -> Result<String, Box<dyn std::error::Error>> {
     let mut s = String::new();
 
     File::open("hello.txt")?.read_to_string(&mut s)?;
@@ -469,6 +467,8 @@ convenient `fs::read_to_string` function that opens the file, creates a new
 and returns it. Of course, using `fs::read_to_string` doesn’t give us the
 opportunity to explain all the error handling, so we did it the longer way
 first.
+
+In addition, the only error this function could encounter during its execution is the one returned by `fs::read_to_string`, which is `io::Error`, so we changed its return type to `Result<String, io::Error>`. This will help the developers who decide to use `read_username_from_file()` reason about the potential errors.
 
 #### The `?` Operator Can Be Used in Functions That Return `Result`
 
@@ -529,10 +529,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-The `Box<dyn Error>` type is called a trait object, which we’ll talk about in
-the [“Using Trait Objects that Allow for Values of Different
-Types”][trait-objects]<!-- ignore --> section in Chapter 17. For now, you can
-read `Box<dyn Error>` to mean “any kind of error.” Using `?` in a `main`
+Using `?` in a `main`
 function with this return type is allowed.
 
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
