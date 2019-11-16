@@ -1086,7 +1086,7 @@ Give it a `cargo run` and make some requests:
 ```text
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-warning: field is never used: `workers`
+warning: field is never read: `workers`
  --> src/lib.rs:7:5
   |
 7 |     workers: Vec<Worker>,
@@ -1094,7 +1094,7 @@ warning: field is never used: `workers`
   |
   = note: #[warn(dead_code)] on by default
 
-warning: field is never used: `id`
+warning: field is never read: `id`
   --> src/lib.rs:61:5
    |
 61 |     id: usize,
@@ -1102,7 +1102,7 @@ warning: field is never used: `id`
    |
    = note: #[warn(dead_code)] on by default
 
-warning: field is never used: `thread`
+warning: field is never read: `thread`
   --> src/lib.rs:62:5
    |
 62 |     thread: thread::JoinHandle<()>,
