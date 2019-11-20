@@ -38,7 +38,7 @@ the ability to:
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any other of Rust’s safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
-these four features that are then not checked by the compiler for memory
+these five features that are then not checked by the compiler for memory
 safety. You’ll still get some degree of safety inside of an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
