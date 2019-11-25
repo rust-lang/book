@@ -514,6 +514,10 @@ E>` if you have no restrictions preventing that. The other technique is to use
 a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>` in
 whatever way is appropriate.
 
+Note that changing from `Result<T,E>` to `Option<T> or the other way around,
+is possible with the methods `ok()`, `err()` and, respectively, `Option<T>`'s
+`ok\_or()` or `ok\_or\_else()`.
+
 The `main` function is special, and there are restrictions on what its return
 type must be. One valid return type for main is `()`, and conveniently, another
 valid return type is `Result<T, E>`, as shown here:
