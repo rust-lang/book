@@ -347,9 +347,9 @@ impl Iterator for Counter {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.count += 1;
 
-        if self.count < 6 {
+        if self.count < 5 {
+            self.count += 1;
             Some(self.count)
         } else {
             None
@@ -366,9 +366,9 @@ iterator will return `u32` values. Again, don’t worry about associated types
 yet, we’ll cover them in Chapter 19.
 
 We want our iterator to add 1 to the current state, so we initialized `count`
-to 0 so it would return 1 first. If the value of `count` is less than 6, `next`
-will return the current value wrapped in `Some`, but if `count` is 6 or higher,
-our iterator will return `None`.
+to 0 so it would return 1 first. If the value of `count` is less than 5, `next`
+will increment `count` and return the current value wrapped in `Some`, but once
+`count` is 5, our iterator will stop incrementing `count` and always return `None`.
 
 #### Using Our `Counter` Iterator’s `next` Method
 
@@ -388,9 +388,9 @@ with the iterator created from a vector in Listing 13-15.
 #     type Item = u32;
 #
 #     fn next(&mut self) -> Option<Self::Item> {
-#         self.count += 1;
 #
-#         if self.count < 6 {
+#         if self.count < 5 {
+#             self.count += 1;
 #             Some(self.count)
 #         } else {
 #             None
@@ -449,10 +449,10 @@ together, we could do so, as shown in the test in Listing 13-23:
 #
 #     fn next(&mut self) -> Option<Self::Item> {
 #         // increment our count. This is why we started at zero.
-#         self.count += 1;
 #
 #         // check to see if we've finished counting or not.
-#         if self.count < 6 {
+#         if self.count < 5 {
+#             self.count += 1;
 #             Some(self.count)
 #         } else {
 #             None
