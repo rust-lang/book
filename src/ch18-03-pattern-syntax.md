@@ -281,7 +281,7 @@ fn main() {
     match msg {
         Message::Quit => {
             println!("The Quit variant has no data to destructure.")
-        },
+        }
         Message::Move { x, y } => {
             println!(
                 "Move in the x direction {} and in the y direction {}",
@@ -356,7 +356,7 @@ fn main() {
                 g,
                 b
             )
-        },
+        }
         Message::ChangeColor(Color::Hsv(h, s, v)) => {
             println!(
                 "Change the color to hue {}, saturation {}, and value {}",
