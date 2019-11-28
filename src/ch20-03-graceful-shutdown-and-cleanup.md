@@ -217,7 +217,7 @@ impl Worker {
                     Message::NewJob(job) => {
                         println!("Worker {} got a job; executing.", id);
 
-                        job.call_box();
+                        job();
                     },
                     Message::Terminate => {
                         println!("Worker {} was told to terminate.", id);
