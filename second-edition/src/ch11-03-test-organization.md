@@ -247,7 +247,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 `common`이 테스트 출력에 나타나는 것을 막기 위해서는, *tests/common.rs*을 만드는 대신,
 *tests/common/mod.rs*를 만듭니다. 7장의 "모듈 파일 시스템의 규칙"절에서 서브모듈을 가지고 있는
 모듈의 파일들을 위해 *module_name/mod.rs*라는 이름 규칙을 이용했었고, 여기서 `common`에 대한
-서브모듈을 가조기 있지는 않지만, 이러한 방식으로 파일명을 정하는 것이 러스트에게 `common` 모듈을
+서브모듈을 가지고 있지는 않지만, 이러한 방식으로 파일명을 정하는 것이 러스트에게 `common` 모듈을
 통합 테스트 파일로 취급하지 않게끔 전달해줍니다. `setup` 함수 코드를 *tests/common/mod.rs*로
 옮기고 *tests/common.rs* 파일을 제거하면, 테스트 출력에서 해당 섹션이 더 이상 나타나지 않을 것입니다.
 *tests* 디렉토리의 서브 디렉토리 내의 파일들은 개별적인 크레이트처럼 컴파일되지도, 테스트 출력의

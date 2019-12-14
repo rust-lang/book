@@ -212,8 +212,8 @@ error: test failed
 기능하고 있는지를 체크하는 것을 도와주는 매크로 중 하나입니다.
 
 5장에 있는 Listing 5-9에서, `Rectangle` 구조체와 `can_hold` 메소드를 다루었는데,
-여기 Listing 11-5에 다시 나왔습니다. 이 코드를 *src/main.rs* 대신 *src/lib.rs*에
-넣고, `assert!` 매크로를 사용하여 테스트를 작성해봅시다.
+여기 Listing 11-5에 다시 나왔습니다. 이 코드를 *src/lib.rs*에 넣고, `assert!` 매크로를 사용하여 
+테스트를 작성해봅시다.
 
 <!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
 5 for editing. /Carol -->
