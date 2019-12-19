@@ -150,7 +150,7 @@ failures:
 right)`
 left: `["safe, fast, productive."]`,
 right: `[]`)', src/lib.rs:48:8
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 
 
 failures:

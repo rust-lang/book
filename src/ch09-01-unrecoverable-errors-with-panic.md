@@ -42,7 +42,7 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.25s
      Running `target/debug/panic`
 thread 'main' panicked at 'crash and burn', src/main.rs:2:5
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 ```
 
 The call to `panic!` causes the error message contained in the last two lines.
@@ -103,7 +103,7 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.27s
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 ```
 
 This error points at a file we didn’t write, *libcore/slice/mod.rs*. That’s the

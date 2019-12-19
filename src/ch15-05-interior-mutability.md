@@ -412,7 +412,7 @@ which isn’t allowed. When we run the tests for our library, the code in Listin
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
 	thread 'tests::it_sends_an_over_75_percent_warning_message' panicked at
 'already borrowed: BorrowMutError', src/libcore/result.rs:906:4
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 ```
 
 Notice that the code panicked with the message `already borrowed:
