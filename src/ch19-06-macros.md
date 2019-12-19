@@ -315,8 +315,8 @@ in a moment, so we need to add them as dependencies. Add the following to the
 proc-macro = true
 
 [dependencies]
-syn = "0.14.4"
-quote = "0.6.3"
+syn = "1.0"
+quote = "1.0"
 ```
 
 To start defining the procedural macro, place the code in Listing 19-31 into
@@ -417,7 +417,7 @@ with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
 fields on this struct for describing all sorts of Rust code; check the [`syn`
 documentation for `DeriveInput`][syn-docs] for more information.
 
-[syn-docs]: https://docs.rs/syn/0.14.4/syn/struct.DeriveInput.html
+[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
 
 Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
 the new Rust code we want to include. But before we do, note that the output
