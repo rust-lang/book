@@ -325,17 +325,10 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
-<!--
-This usage of `extern crate` is required for the moment with 1.31.0, see:
-https://github.com/rust-lang/rust/issues/54418
-https://github.com/rust-lang/rust/pull/54658
-https://github.com/rust-lang/rust/issues/55599
--->
-
 ```rust,ignore
 extern crate proc_macro;
 
-use crate::proc_macro::TokenStream;
+use proc_macro::TokenStream;
 use quote::quote;
 use syn;
 
