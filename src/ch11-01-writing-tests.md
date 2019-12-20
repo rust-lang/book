@@ -106,11 +106,9 @@ Because we don’t have any tests we’ve marked as ignored, the summary shows `
 ignored`. We also haven’t filtered the tests being run, so the end of the
 summary shows `0 filtered out`. We’ll talk about ignoring and filtering out
 tests in the next section, [“Controlling How Tests Are
-Run.”][controlling-how-tests-are-run]<!-- ignore -->
-
-The `0 measured` statistic is for benchmark tests that measure performance.
-Benchmark tests are, as of this writing, only available in nightly Rust. See
-[the documentation about benchmark tests][bench] to learn more.
+Run.”][controlling-how-tests-are-run]<!-- ignore -->. The `0 measured` statistic
+is for benchmark tests that measure performance. See [the documentation about
+benchmark tests][bench] to learn more.
 
 [bench]: ../unstable-book/library-features/test.html
 
