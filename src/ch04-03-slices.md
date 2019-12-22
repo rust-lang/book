@@ -5,7 +5,7 @@ reference a contiguous sequence of elements in a collection rather than the
 whole collection.
 
 Here’s a small programming problem: write a function that takes a string and
-returns the first word it finds in that string. If the function doesn’t find a
+returns the first space it finds in that string. If the function doesn’t find a
 space in the string, the whole string must be one word, so the entire string
 should be returned.
 
