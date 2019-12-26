@@ -1,5 +1,7 @@
 # 러스트 프로그래밍 언어
 
+### [빌드된 문서 바로가기: https://rinthel.github.io/rust-lang-book-ko](https://rinthel.github.io/rust-lang-book-ko)
+
 ### 알림: 2판 번역이 이제 완료되었습니다! 이제 2018-edition으로 넘어갈 수 있겠네요!
 
 ### 2018-edition 번역 과정 제안
@@ -11,8 +13,6 @@
 - 새로 추가된 부분에 대한 번역을 진행한 뒤, 2차 pull-request를 날려줍시다.
 
 ### 환영합니다!
-
-[빌드된 페이지 바로가기](https://rinthel.github.io/rust-lang-book-ko)
 
 [![빌드 상태](https://api.travis-ci.com/rinthel/rust-lang-book-ko.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
