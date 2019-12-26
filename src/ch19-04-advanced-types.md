@@ -166,6 +166,18 @@ us a consistent interface across all of `std::io`. Because it’s an alias, it�
 just another `Result<T, E>`, which means we can use any methods that work on
 `Result<T, E>` with it, as well as special syntax like the `?` operator.
 
+You may also have noticed that we have used `Self` as a type alias for the type
+we are defining or implementing:
+
+```rust
+struct S { s: Option<Box<Self>> } ;
+impl S {
+    pub fn new() -> Self {
+        S { s: None }
+    }
+}
+```
+
 ### The Never Type that Never Returns
 
 Rust has a special type named `!` that’s known in type theory lingo as the
