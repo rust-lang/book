@@ -3,7 +3,7 @@
 All the code we’ve discussed so far has had Rust’s memory safety guarantees
 enforced at compile time. However, Rust has a second language hidden inside it
 that doesn’t enforce these memory safety guarantees: it’s called *unsafe Rust*
-and works just like regular Rust, but gives us extra superpowers.
+and works just like regular Rust, but gives us extra abilities.
 
 Unsafe Rust exists because, by nature, static analysis is conservative. When
 the compiler tries to determine whether or not code upholds the guarantees,
@@ -22,12 +22,11 @@ writing your own operating system. Working with low-level systems programming
 is one of the goals of the language. Let’s explore what we can do with unsafe
 Rust and how to do it.
 
-### Unsafe Superpowers
+### Unsafe Abilities
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take four actions in unsafe Rust, called
-*unsafe superpowers*, that you can’t in safe Rust. Those superpowers include
-the ability to:
+that holds the unsafe code. You can take actions in unsafe Rust that you can’t
+in safe Rust. Those abilities include:
 
 * Dereference a raw pointer
 * Call an unsafe function or method
@@ -38,7 +37,7 @@ the ability to:
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any other of Rust’s safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
-these four features that are then not checked by the compiler for memory
+these features that are then not checked by the compiler for memory
 safety. You’ll still get some degree of safety inside of an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
@@ -46,7 +45,7 @@ dangerous or that it will definitely have memory safety problems: the intent is
 that as the programmer, you’ll ensure the code inside an `unsafe` block will
 access memory in a valid way.
 
-People are fallible, and mistakes will happen, but by requiring these four
+People are fallible, and mistakes will happen, but by requiring these
 unsafe operations to be inside blocks annotated with `unsafe` you’ll know that
 any errors related to memory safety must be within an `unsafe` block. Keep
 `unsafe` blocks small; you’ll be thankful later when you investigate memory
@@ -61,7 +60,7 @@ from leaking out into all the places that you or your users might want to use
 the functionality implemented with `unsafe` code, because using a safe
 abstraction is safe.
 
-Let’s look at each of the four unsafe superpowers in turn. We’ll also look at
+Let’s look at each of the unsafe abilities in turn. We’ll also look at
 some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
@@ -530,7 +529,7 @@ those checks manually and indicate as such with `unsafe`.
 
 ### When to Use Unsafe Code
 
-Using `unsafe` to take one of the four actions (superpowers) just discussed
+Using `unsafe` to take one of these actions just discussed
 isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
 correct because the compiler can’t help uphold memory safety. When you have a
 reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
