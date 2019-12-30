@@ -12,14 +12,14 @@
 
 이 문제는 우리의 두 번째 문제와도 관련이 있습니다: `query` 와 `filename` 은  프로그램의 설정을 
 저장하는 변수이고 `f` 와 `contents` 같은 변수는 프로그램의 논리 수행에 사용됩니다.
-`main`이 길어질수록 범위 내에 더 많은 변수 생깁니다. 범위 내에 더 많은 변수가 존재할수록,
+`main`이 길어질수록 범위 내에 더 많은 변수가 생깁니다. 범위 내에 더 많은 변수가 존재할수록,
 각각의 변수를 추적하기 힘들어집니다. 목적을 분명히 하기 위해 설정 변수를 그룹화하여 하나의 구조로
 결합시키는 것이 좋습니다.
 
 세 번째 문제는 파일 열기가 실패 할 경우`expect`를 사용하여 오류 메시지를 출력해주는데,
-에러 메시지가 `파일을 찾을 수 없음` 밖에 없습니다. 파일이 존재하지 않는 경우 외에도 파일
+에러 메시지가 `Something went wrong reading the file` 밖에 없습니다. 파일이 존재하지 않는 경우 외에도 파일
 열기가 실패하는 경우들이 있습니다. 예를 들어 파일은 존재하지만 파일을 열 수있는 권한이 없을 수
-있습니다. 현재는 이런 상황에도 `파일을 찾을 수 없음` 이란 오류 메시지를 출력하여 사용자에게
+있습니다. 현재는 이런 상황에도 `Something went wrong reading the file` 이란 오류 메시지를 출력하여 사용자에게
 잘못된 조언을 해주게 됩니다.
 
 넷째, 우리는 서로 다른 오류를 다루기 위해 `expect`를 반복적으로 사용하고 있습니다. 헌데
@@ -107,8 +107,8 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 보수 담당자가 서로 다른 값이 서로 어떻게 관련되어 있고 그 목적이 무엇인지 쉽게 이해할 수
 있습니다.
 
-> Note: some people call this anti-pattern of using primitive values when a
-> complex type would be more appropriate *primitive obsession*.
+
+> 주의: 어떤 사람들은 복합 타입(complex type)이 더 적절할 경우에도 기본 타입(primitive type)을 사용하는데 이러한 안티 패턴을 강박적 기본타입 사용(primitive obsession) 이라 부릅니다
 
 항목 12-6에서 `query`와 `filename`을 필드로 갖는 `Config`란 구조체 정의가
 추가된 것을 볼 수 있습니다. 우리는 또한 `parse_config` 함수를 변경하여 `Config`

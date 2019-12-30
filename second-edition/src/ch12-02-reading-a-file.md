@@ -42,7 +42,7 @@ fn main() {
     let mut f = File::open(filename).expect("file not found");
 
     let mut contents = String::new();
-    f.read_to_string(&mut contents).expect("something went wrong reading the file");
+    f.read_to_string(&mut contents).expect("Something went wrong reading the file");
 
     println!("With text:\n{}", contents);
 }
@@ -88,7 +88,7 @@ To an admiring bog!
 ```
 
 좋군요! 우리의 코드가 파일 내용을 읽고 출력했습니다. 우리 프로그램은 몇 가지 결점이 있습니다: `main` 함수는 많은 책임을 
-지고(역주:단일책임의법칙 참고), 우리가 할 수 있는 에러처리를 하지 않았습니다. 아직 우리의 프로그램이 작기 때문에, 이 결점들은 
+지고(역주: [단일 책임 원칙](https://ko.wikipedia.org/wiki/%EB%8B%A8%EC%9D%BC_%EC%B1%85%EC%9E%84_%EC%9B%90%EC%B9%99) 참고), 우리가 할 수 있는 에러처리를 하지 않았습니다. 아직 우리의 프로그램이 작기 때문에, 이 결점들은 
 큰 문제가 아닐 수도 있습니다. 하지만 우리 프로그램 커져가면, 점점 이를 깔끔하게 수정하기 어렵게 됩니다. 프로그램의 개발 초기 
 단계에 리팩토링을 하면 코드의 양이 적은만큼 리팩토링을 하기 훨씬 쉬워지기 때문에 훌륭한 단련법 입니다. 그러니 지금 해봅시다.
 
