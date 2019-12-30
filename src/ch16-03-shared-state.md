@@ -82,8 +82,8 @@ that case, no one would ever be able to get the lock, so we’ve chosen to
 
 After we’ve acquired the lock, we can treat the return value, named `num` in
 this case, as a mutable reference to the data inside. The type system ensures
-that we acquire a lock before using the value in `m`: `Mutex<i32>` is not an
-`i32`, so we *must* acquire the lock to be able to use the `i32` value. We
+that we acquire a lock before using the value in `m` (`Mutex<i32>` is not an
+`i32`), so we *must* acquire the lock to be able to use the `i32` value. We
 can’t forget; the type system won’t let us access the inner `i32` otherwise.
 
 As you might suspect, `Mutex<T>` is a smart pointer. More accurately, the call
