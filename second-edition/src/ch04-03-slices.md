@@ -237,6 +237,8 @@ fn main() {
     let word = first_word(&s);
 
     s.clear(); // Error!
+
+    println!("the first word is: {}", word);
 }
 ```
 
