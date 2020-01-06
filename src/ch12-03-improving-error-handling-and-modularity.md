@@ -207,13 +207,7 @@ panic if the vector contains fewer than three items. Try running the program
 without any arguments; it will look like this:
 
 ```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep`
-thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', src/main.rs:25:21
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+{{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
 The line `index out of bounds: the len is 1 but the index is 1` is an error
@@ -248,12 +242,7 @@ With these extra few lines of code in `new`, let’s run the program without any
 arguments again to see what the error looks like now:
 
 ```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep`
-thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+{{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
 This output is better: we now have a reasonable error message. However, we also
@@ -343,11 +332,7 @@ number that was passed as the exit status code. This is similar to the
 extra output. Let’s try it:
 
 ```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target/debug/minigrep`
-Problem parsing arguments: not enough arguments
+{{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
 Great! This output is much friendlier for our users.
@@ -427,14 +412,7 @@ it doesn’t return a value we need.
 When you run this code, it will compile but will display a warning:
 
 ```text
-warning: unused `std::result::Result` that must be used
-  --> src/main.rs:17:5
-   |
-17 |     run(config);
-   |     ^^^^^^^^^^^^
-   |
-   = note: #[warn(unused_must_use)] on by default
-   = note: this `Result` may be an `Err` variant, which should be handled
+{{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 
 Rust tells us that our code ignored the `Result` value and the `Result` value

@@ -71,23 +71,7 @@ parameter and returns 10, as well as a test that passes and a test that fails.
 When we run these tests with `cargo test`, we’ll see the following output:
 
 ```text
-running 2 tests
-test tests::this_test_will_pass ... ok
-test tests::this_test_will_fail ... FAILED
-
-failures:
-
----- tests::this_test_will_fail stdout ----
-I got the value 8
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
-  left: `5`,
- right: `10`', src/lib.rs:19:9
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-failures:
-    tests::this_test_will_fail
-
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/listing-11-10/output.txt}}
 ```
 
 Note that nowhere in this output do we see `I got the value 4`, which is what
@@ -135,6 +119,8 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
+<!--TODO: replace with {{#include ../listings/ch11-writing-automated-tests/output-only-00-show-output/output.txt}}when we're using 1.39 where the --show-output option was added -->
+
 ### Running a Subset of Tests by Name
 
 Sometimes, running a full test suite can take a long time. If you’re working on
@@ -158,12 +144,7 @@ If we run the tests without passing any arguments, as we saw earlier, all the
 tests will run in parallel:
 
 ```text
-running 3 tests
-test tests::add_two_and_two ... ok
-test tests::add_three_and_two ... ok
-test tests::one_hundred ... ok
-
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/listing-11-11/output.txt}}
 ```
 
 #### Running Single Tests
@@ -171,14 +152,7 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 We can pass the name of any test function to `cargo test` to run only that test:
 
 ```text
-$ cargo test one_hundred
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
-
-running 1 test
-test tests::one_hundred ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out
+{{#include ../listings/ch11-writing-automated-tests/output-only-01-single-test/output.txt}}
 ```
 
 Only the test with the name `one_hundred` ran; the other two tests didn’t match
@@ -195,15 +169,7 @@ will be run. For example, because two of our tests’ names contain `add`, we ca
 run those two by running `cargo test add`:
 
 ```text
-$ cargo test add
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
-
-running 2 tests
-test tests::add_two_and_two ... ok
-test tests::add_three_and_two ... ok
-
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
+{{#include ../listings/ch11-writing-automated-tests/output-only-02-multiple-tests/output.txt}}
 ```
 
 This command ran all tests with `add` in the name and filtered out the test
@@ -229,30 +195,14 @@ After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now
 when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
 ```text
-$ cargo test
-   Compiling adder v0.1.0 (file:///projects/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
-
-running 2 tests
-test expensive_test ... ignored
-test it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/output.txt}}
 ```
 
 The `expensive_test` function is listed as `ignored`. If we want to run only
 the ignored tests, we can use `cargo test -- --ignored`:
 
 ```text
-$ cargo test -- --ignored
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
-
-running 1 test
-test expensive_test ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
+{{#include ../listings/ch11-writing-automated-tests/output-only-03-running-ignored/output.txt}}
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results

@@ -141,16 +141,7 @@ compiler errors from `cargo check` to drive our development. Here is the first
 error we get:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
-  --> src\main.rs:10:16
-   |
-10 |     let pool = ThreadPool::new(4);
-   |                ^^^^^^^^^^^^^^^ Use of undeclared type or module
-   `ThreadPool`
-
-error: aborting due to previous error
+{{#include ../listings/ch20-web-server/listing-20-12/output.txt}}
 ```
 
 Great! This error tells us we need a `ThreadPool` type or module, so we’ll
@@ -187,15 +178,7 @@ This code still won’t work, but let’s check it again to get the next error t
 we need to address:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error[E0599]: no function or associated item named `new` found for type
-`hello::ThreadPool` in the current scope
- --> src/bin/main.rs:13:16
-   |
-13 |     let pool = ThreadPool::new(4);
-   |                ^^^^^^^^^^^^^^^ function or associated item not found in
-   `hello::ThreadPool`
+{{#include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/output.txt}}
 ```
 
 This error indicates that next we need to create an associated function named
@@ -219,27 +202,11 @@ ignore --> section of Chapter 3.
 Let’s check the code again:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-warning: unused variable: `size`
- --> src/lib.rs:4:16
-  |
-4 |     pub fn new(size: usize) -> ThreadPool {
-  |                ^^^^
-  |
-  = note: #[warn(unused_variables)] on by default
-  = note: to avoid this warning, consider using `_size` instead
-
-error[E0599]: no method named `execute` found for type `hello::ThreadPool` in the current scope
-  --> src/bin/main.rs:18:14
-   |
-18 |         pool.execute(|| {
-   |              ^^^^^^^
+{{#include ../listings/ch20-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
-Now we get a warning and an error. Ignoring the warning for a moment, the error
-occurs because we don’t have an `execute` method on `ThreadPool`. Recall from
-the [“Creating a Similar Interface for a Finite Number of
+Now the error occurs because we don’t have an `execute` method on `ThreadPool`.
+Recall from the [“Creating a Similar Interface for a Finite Number of
 Threads”](#creating-a-similar-interface-for-a-finite-number-of-threads)<!--
 ignore --> section that we decided our thread pool should have an interface
 similar to `thread::spawn`. In addition, we’ll implement the `execute` function
@@ -292,30 +259,13 @@ Again, this is the simplest implementation of the `execute` method: it does
 nothing, but we’re trying only to make our code compile. Let’s check it again:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-warning: unused variable: `size`
- --> src/lib.rs:4:16
-  |
-4 |     pub fn new(size: usize) -> ThreadPool {
-  |                ^^^^
-  |
-  = note: #[warn(unused_variables)] on by default
-  = note: to avoid this warning, consider using `_size` instead
-
-warning: unused variable: `f`
- --> src/lib.rs:8:30
-  |
-8 |     pub fn execute<F>(&self, f: F)
-  |                              ^
-  |
-  = note: to avoid this warning, consider using `_f` instead
+{{#include ../listings/ch20-web-server/no-listing-03-define-execute/output.txt}}
 ```
 
-We’re receiving only warnings now, which means it compiles! But note that if
-you try `cargo run` and make a request in the browser, you’ll see the errors in
-the browser that we saw at the beginning of the chapter. Our library isn’t
-actually calling the closure passed to `execute` yet!
+It compiles! But note that if you try `cargo run` and make a request in the
+browser, you’ll see the errors in the browser that we saw at the beginning of
+the chapter. Our library isn’t actually calling the closure passed to `execute`
+yet!
 
 > Note: A saying you might hear about languages with strict compilers, such as
 > Haskell and Rust, is “if the code compiles, it works.” But this saying is not
@@ -326,15 +276,14 @@ actually calling the closure passed to `execute` yet!
 
 #### Validating the Number of Threads in `new`
 
-We’ll continue to get warnings because we aren’t doing anything with the
-parameters to `new` and `execute`. Let’s implement the bodies of these
-functions with the behavior we want. To start, let’s think about `new`. Earlier
-we chose an unsigned type for the `size` parameter, because a pool with a
-negative number of threads makes no sense. However, a pool with zero threads
-also makes no sense, yet zero is a perfectly valid `usize`. We’ll add code to
-check that `size` is greater than zero before we return a `ThreadPool` instance
-and have the program panic if it receives a zero by using the `assert!` macro,
-as shown in Listing 20-13.
+We aren’t doing anything with the parameters to `new` and `execute`. Let’s
+implement the bodies of these functions with the behavior we want. To start,
+let’s think about `new`. Earlier we chose an unsigned type for the `size`
+parameter, because a pool with a negative number of threads makes no sense.
+However, a pool with zero threads also makes no sense, yet zero is a perfectly
+valid `usize`. We’ll add code to check that `size` is greater than zero before
+we return a `ThreadPool` instance and have the program panic if it receives a
+zero by using the `assert!` macro, as shown in Listing 20-13.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -540,17 +489,7 @@ the channel into `Worker::new`, and then we use it inside the closure.
 When we try to check this code, we get this error:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error[E0382]: use of moved value: `receiver`
-  --> src/lib.rs:27:42
-   |
-27 |             workers.push(Worker::new(id, receiver));
-   |                                          ^^^^^^^^ value moved here in
-   previous iteration of loop
-   |
-   = note: move occurs because `receiver` has type
-   `std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
+{{#include ../listings/ch20-web-server/listing-20-17/output.txt}}
 ```
 
 The code is trying to pass `receiver` to multiple `Worker` instances. This
@@ -647,6 +586,13 @@ wait until a job becomes available. The `Mutex<T>` ensures that only one
 Our thread pool is now in a working state! Give it a `cargo run` and make some
 requests:
 
+<!-- manual-regeneration
+cd listings/ch20-web-server/listing-20-20
+cargo run
+make some requests to 127.0.0.1:7878
+Can't automate because the output depends on making requests
+-->
+
 ```text
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
@@ -674,7 +620,7 @@ warning: field is never used: `thread`
    |
    = note: #[warn(dead_code)] on by default
 
-    Finished dev [unoptimized + debuginfo] target(s) in 0.99 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.99s
      Running `target/debug/hello`
 Worker 0 got a job; executing.
 Worker 2 got a job; executing.

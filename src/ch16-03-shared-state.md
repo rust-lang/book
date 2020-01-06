@@ -121,17 +121,7 @@ program.
 We hinted that this example wouldn’t compile. Now let’s find out why!
 
 ```text
-error[E0382]: use of moved value: `counter`
-  --> src/main.rs:9:36
-   |
-9  |         let handle = thread::spawn(move || {
-   |                                    ^^^^^^^ value moved into closure here,
-in previous iteration of loop
-10 |             let mut num = counter.lock().unwrap();
-   |                           ------- use occurs due to use in closure
-   |
-   = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-which does not implement the `Copy` trait
+{{#include ../listings/ch16-fearless-concurrency/listing-16-13/output.txt}}
 ```
 
 The error message states that the `counter` value was moved in the previous
@@ -161,19 +151,7 @@ Once again, we compile and get... different errors! The compiler is teaching us
 a lot.
 
 ```text
-error[E0277]: `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
-  --> src/main.rs:11:22
-   |
-11 |         let handle = thread::spawn(move || {
-   |                      ^^^^^^^^^^^^^ `std::rc::Rc<std::sync::Mutex<i32>>`
-cannot be sent between threads safely
-   |
-   = help: within `[closure@src/main.rs:11:36: 14:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send`
-is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
-   = note: required because it appears within the type
-`[closure@src/main.rs:11:36: 14:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
-   = note: required by `std::thread::spawn`
+{{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
 ```
 
 Wow, that error message is very wordy! Here’s the important part to focus
@@ -223,6 +201,10 @@ our program by changing the `use` line, the call to `new`, and the call to
 to be able to share ownership across multiple threads</span>
 
 This code will print the following:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Result: 10

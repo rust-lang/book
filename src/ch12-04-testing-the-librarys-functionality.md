@@ -86,15 +86,7 @@ If we forget the lifetime annotations and try to compile this function, we’ll
 get this error:
 
 ```text
-error[E0106]: missing lifetime specifier
- --> src/lib.rs:5:51
-  |
-5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
-  |                                                   ^ expected lifetime
-parameter
-  |
-  = help: this function's return type contains a borrowed value, but the
-  signature does not say whether it is borrowed from `query` or `contents`
+{{#include ../listings/ch12-an-io-project/output-only-01-missing-lifetimes/output.txt}}
 ```
 
 Rust can’t possibly know which of the two arguments we need, so we need to tell
@@ -111,31 +103,7 @@ References with Lifetimes”][validating-references-with-lifetimes]<!-- ignore
 Now let’s run the test:
 
 ```text
-$ cargo test
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
---warnings--
-    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running target/debug/deps/minigrep-abcabcabc
-
-running 1 test
-test tests::one_result ... FAILED
-
-failures:
-
----- tests::one_result stdout ----
-        thread 'tests::one_result' panicked at 'assertion failed: `(left ==
-right)`
-left: `["safe, fast, productive."]`,
-right: `[]`)', src/lib.rs:48:8
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-
-failures:
-    tests::one_result
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
-
-error: test failed, to rerun pass '--lib'
+{{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
 Great, the test fails, exactly as we expected. Let’s get the test to pass!
@@ -209,12 +177,7 @@ Now the `search` function should return only the lines that contain `query`,
 and our test should pass. Let’s run the test:
 
 ```text
-$ cargo test
---snip--
-running 1 test
-test tests::one_result ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
 Our test passed, so we know it works!
@@ -245,31 +208,20 @@ Now the entire program should work! Let’s try it out, first with a word that
 should return exactly one line from the Emily Dickinson poem, “frog”:
 
 ```text
-$ cargo run frog poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/minigrep frog poem.txt`
-How public, like a frog
+{{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
 Cool! Now let’s try a word that will match multiple lines, like “body”:
 
 ```text
-$ cargo run body poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep body poem.txt`
-I’m nobody! Who are you?
-Are you nobody, too?
-How dreary to be somebody!
+{{#include ../listings/ch12-an-io-project/output-only-02-multiple-matches/output.txt}}
 ```
 
 And finally, let’s make sure that we don’t get any lines when we search for a
 word that isn’t anywhere in the poem, such as “monomorphization”:
 
 ```text
-$ cargo run monomorphization poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep monomorphization poem.txt`
+{{#include ../listings/ch12-an-io-project/output-only-03-no-matches/output.txt}}
 ```
 
 Excellent! We’ve built our own mini version of a classic tool and learned a lot

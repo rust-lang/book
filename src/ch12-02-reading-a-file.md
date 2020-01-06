@@ -45,22 +45,7 @@ we haven’t implemented the searching part yet) and the *poem.txt* file as the
 second argument:
 
 ```text
-$ cargo run the poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep the poem.txt`
-Searching for the
-In file poem.txt
-With text:
-I'm nobody! Who are you?
-Are you nobody, too?
-Then there's a pair of us — don't tell!
-They'd banish us, you know.
-
-How dreary to be somebody!
-How public, like a frog
-To tell your name the livelong day
-To an admiring bog!
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 
 Great! The code read and then printed the contents of the file. But the code

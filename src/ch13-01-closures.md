@@ -271,15 +271,7 @@ are inferred with two different types</span>
 The compiler gives us this error:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs
-  |
-  | let n = example_closure(5);
-  |                         ^ expected struct `std::string::String`, found
-  integer
-  |
-  = note: expected type `std::string::String`
-             found type `{integer}`
+{{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
 The first time we call `example_closure` with the `String` value, the compiler
@@ -432,9 +424,7 @@ Run this test with the `Cacher` implementation in Listing 13-9 and Listing
 13-10, and the test will fail on the `assert_eq!` with this message:
 
 ```text
-thread 'call_with_different_values' panicked at 'assertion failed: `(left == right)`
-  left: `1`,
- right: `2`', src/main.rs
+{{#include ../listings/ch13-functional-features/no-listing-01-failing-cacher-test/output.txt}}
 ```
 
 The problem is that the first time we called `c.value` with 1, the `Cacher`
@@ -490,12 +480,7 @@ code won’t compile:
 We get an error:
 
 ```text
-error[E0434]: can't capture dynamic environment in a fn item; use the || { ...
-} closure form instead
- --> src/main.rs
-  |
-4 |     fn equal_to_x(z: i32) -> bool { z == x }
-  |                                          ^
+{{#include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/output.txt}}
 ```
 
 The compiler even reminds us that this only works with closures!
@@ -548,17 +533,7 @@ yet compile.
 We receive the following error:
 
 ```text
-error[E0382]: use of moved value: `x`
- --> src/main.rs:6:40
-  |
-4 |     let equal_to_x = move |z| z == x;
-  |                      -------- value moved (into closure) here
-5 |
-6 |     println!("can't use x here: {:?}", x);
-  |                                        ^ value used here after move
-  |
-  = note: move occurs because `x` has type `std::vec::Vec<i32>`, which does not
-  implement the `Copy` trait
+{{#include ../listings/ch13-functional-features/no-listing-03-move-closures/output.txt}}
 ```
 
 The `x` value is moved into the closure when the closure is defined, because we

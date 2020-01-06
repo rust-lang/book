@@ -173,11 +173,7 @@ We must call the `dangerous` function within a separate `unsafe` block. If we
 try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
 ```text
-error[E0133]: call to unsafe function requires unsafe function or block
- -->
-  |
-4 |     dangerous();
-  |     ^^^^^^^^^^^ call to unsafe function
+{{#include ../listings/ch19-advanced-features/output-only-00-missing-unsafe/output.txt}}
 ```
 
 By inserting the `unsafe` block around our call to `dangerous`, we’re asserting
@@ -231,15 +227,7 @@ slice.
 When we try to compile the code in Listing 19-5, we’ll get an error.
 
 ```text
-error[E0499]: cannot borrow `*slice` as mutable more than once at a time
- -->
-  |
-6 |     (&mut slice[..mid],
-  |           ----- first mutable borrow occurs here
-7 |      &mut slice[mid..])
-  |           ^^^^^ second mutable borrow occurs here
-8 | }
-  | - first borrow ends here
+{{#include ../listings/ch19-advanced-features/listing-19-05/output.txt}}
 ```
 
 Rust’s borrow checker can’t understand that we’re borrowing different parts of

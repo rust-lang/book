@@ -138,16 +138,7 @@ If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:
 
 ```text
-error[E0072]: recursive type `List` has infinite size
- --> src/main.rs:1:1
-  |
-1 | enum List {
-  | ^^^^^^^^^ recursive type has infinite size
-2 |     Cons(i32, List),
-  |               ----- recursive without indirection
-  |
-  = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
-  make `List` representable
+{{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
 ```
 
 <span class="caption">Listing 15-4: The error we get when attempting to define
@@ -196,9 +187,12 @@ Rust can’t figure out how much space to allocate for recursively defined types
 so the compiler gives the error in Listing 15-4. But the error does include
 this helpful suggestion:
 
+<!-- manual-regeneration
+after doing automatic regeneration, look at listings/ch15-smart-pointers/listing-15-03/output.txt and copy the relevant line
+-->
+
 ```text
-  = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
-  make `List` representable
+  = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to make `List` representable
 ```
 
 In this suggestion, “indirection” means that instead of storing a value

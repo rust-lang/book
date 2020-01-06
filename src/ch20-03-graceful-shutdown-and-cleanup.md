@@ -40,11 +40,7 @@ into an ungraceful shutdown.
 Here is the error we get when we compile this code:
 
 ```text
-error[E0507]: cannot move out of borrowed content
-  --> src/lib.rs:65:13
-   |
-65 |             worker.thread.join().unwrap();
-   |             ^^^^^^ cannot move out of borrowed content
+{{#include ../listings/ch20-web-server/listing-20-22/output.txt}}
 ```
 
 The error tells us we can’t call `join` because we only have a mutable borrow
@@ -70,25 +66,7 @@ Now let’s lean on the compiler to find the other places that need to change.
 Checking this code, we get two errors:
 
 ```text
-error[E0599]: no method named `join` found for type
-`std::option::Option<std::thread::JoinHandle<()>>` in the current scope
-  --> src/lib.rs:65:27
-   |
-65 |             worker.thread.join().unwrap();
-   |                           ^^^^
-
-error[E0308]: mismatched types
-  --> src/lib.rs:89:13
-   |
-89 |             thread,
-   |             ^^^^^^
-   |             |
-   |             expected enum `std::option::Option`, found struct
-   `std::thread::JoinHandle`
-   |             help: try using a variant of the expected type: `Some(thread)`
-   |
-   = note: expected type `std::option::Option<std::thread::JoinHandle<()>>`
-              found type `std::thread::JoinHandle<_>`
+{{#include ../listings/ch20-web-server/no-listing-04-update-worker-definition/output.txt}}
 ```
 
 Let’s address the second error, which points to the code at the end of
@@ -221,11 +199,19 @@ end of `main`, and the `drop` implementation will run.
 Start the server with `cargo run`, and make three requests. The third request
 should error, and in your terminal you should see output similar to this:
 
+<!-- manual-regeneration
+cd listings/ch20-web-server/listing-20-25
+cargo run
+make 2 requests to 127.0.0.1:7878
+third request will error because server will have shut down
+Can't automate because the output depends on making requests
+-->
+
 ```text
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
-     Running `target/debug/hello`
+    Finished dev [unoptimized + debuginfo] target(s) in 1.0s
+     Running `target/debug/main`
 Worker 0 got a job; executing.
 Worker 3 got a job; executing.
 Shutting down.

@@ -61,13 +61,7 @@ When we run this code, keeping the last `println!` commented out for the
 moment, we’ll get this output:
 
 ```text
-a initial rc count = 1
-a next item = Some(RefCell { value: Nil })
-a rc count after b creation = 2
-b initial rc count = 1
-b next item = Some(RefCell { value: Cons(5, RefCell { value: Nil }) })
-b rc count after changing a = 2
-a rc count after changing a = 2
+{{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 
 The reference count of the `Rc<List>` instances in both `a` and `b` are 2

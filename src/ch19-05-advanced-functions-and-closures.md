@@ -98,17 +98,7 @@ The following code tries to return a closure directly, but it won’t compile:
 The compiler error is as follows:
 
 ```text
-error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
-std::marker::Sized` is not satisfied
- -->
-  |
-1 | fn returns_closure() -> Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^ `std::ops::Fn(i32) -> i32 + 'static`
-  does not have a constant size known at compile-time
-  |
-  = help: the trait `std::marker::Sized` is not implemented for
-  `std::ops::Fn(i32) -> i32 + 'static`
-  = note: the return type of a function must have a statically known size
+{{#include ../listings/ch19-advanced-features/no-listing-18-returns-closure/output.txt}}
 ```
 
 The error references the `Sized` trait again! Rust doesn’t know how much space

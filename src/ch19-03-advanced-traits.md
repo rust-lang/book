@@ -230,9 +230,7 @@ disambiguate.
 Running this code prints the following:
 
 ```text
-This is your captain speaking.
-Up!
-*waving arms furiously*
+{{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
 ```
 
 Because the `fly` method takes a `self` parameter, if we had two *types* that
@@ -267,7 +265,7 @@ In `main`, we call the `Dog::baby_name` function, which calls the associated
 function defined on `Dog` directly. This code prints the following:
 
 ```text
-A baby dog is called a Spot
+{{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
 ```
 
 This output isn’t what we wanted. We want to call the `baby_name` function that
@@ -291,13 +289,7 @@ thus doesn’t have a `self` parameter, Rust can’t figure out which
 implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```text
-error[E0283]: type annotations required: cannot resolve `_: Animal`
-  --> src/main.rs:20:43
-   |
-20 |     println!("A baby dog is called a {}", Animal::baby_name());
-   |                                           ^^^^^^^^^^^^^^^^^
-   |
-   = note: required by `Animal::baby_name`
+{{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
 To disambiguate and tell Rust that we want to use the implementation of
@@ -320,7 +312,7 @@ implemented on `Dog` by saying that we want to treat the `Dog` type as an
 `Animal` for this function call. This code will now print what we want:
 
 ```text
-A baby dog is called a puppy
+{{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
 ```
 
 In general, fully qualified syntax is defined as follows:
@@ -392,14 +384,7 @@ doesn’t implement `Display`, such as the `Point` struct:
 We get an error saying that `Display` is required but not implemented:
 
 ```text
-error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
-  --> src/main.rs:20:6
-   |
-20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
-try using `:?` instead if you are using a format string
-   |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
+{{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
 To fix this, we implement `Display` on `Point` and satisfy the constraint that

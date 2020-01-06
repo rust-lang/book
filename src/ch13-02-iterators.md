@@ -151,14 +151,7 @@ create a new iterator</span>
 The warning we get is this:
 
 ```text
-warning: unused `std::iter::Map` which must be used: iterator adaptors are lazy
-and do nothing unless consumed
- --> src/main.rs:4:5
-  |
-4 |     v1.iter().map(|x| x + 1);
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
-  |
-  = note: #[warn(unused_must_use)] on by default
+{{#include ../listings/ch13-functional-features/listing-13-17/output.txt}}
 ```
 
 The code in Listing 13-17 doesn’t do anything; the closure we’ve specified

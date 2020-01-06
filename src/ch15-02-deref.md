@@ -46,14 +46,7 @@ If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
 error:
 
 ```text
-error[E0277]: can't compare `{integer}` with `&{integer}`
- --> src/main.rs:6:5
-  |
-6 |     assert_eq!(5, y);
-  |     ^^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
-  |
-  = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
-  `{integer}`
+{{#include ../listings/ch15-smart-pointers/output-only-00-comparing-to-reference/output.txt}}
 ```
 
 Comparing a number and a reference to a number isn’t allowed because they’re
@@ -122,11 +115,7 @@ way we used references and `Box<T>`</span>
 Here’s the resulting compilation error:
 
 ```text
-error[E0614]: type `MyBox<{integer}>` cannot be dereferenced
-  --> src/main.rs:14:19
-   |
-14 |     assert_eq!(5, *y);
-   |                   ^^
+{{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
 ```
 
 Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented that

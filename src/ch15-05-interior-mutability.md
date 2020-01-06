@@ -82,13 +82,7 @@ you can’t borrow it mutably. For example, this code won’t compile:
 If you tried to compile this code, you’d get the following error:
 
 ```text
-error[E0596]: cannot borrow immutable local variable `x` as mutable
- --> src/main.rs:3:18
-  |
-2 |     let x = 5;
-  |         - consider changing this to `mut x`
-3 |     let y = &mut x;
-  |                  ^ cannot borrow mutably
+{{#include ../listings/ch15-smart-pointers/no-listing-01-cant-borrow-immutable-as-mutable/output.txt}}
 ```
 
 However, there are situations in which it would be useful for a value to mutate
@@ -185,13 +179,7 @@ of should now have one message in it.
 However, there’s one problem with this test, as shown here:
 
 ```text
-error[E0596]: cannot borrow immutable field `self.sent_messages` as mutable
-  --> src/lib.rs:52:13
-   |
-51 |         fn send(&self, message: &str) {
-   |                 ----- use `&mut self` here to make mutable
-52 |             self.sent_messages.push(String::from(message));
-   |             ^^^^^^^^^^^^^^^^^^ cannot mutably borrow immutable field
+{{#include ../listings/ch15-smart-pointers/listing-15-21/output.txt}}
 ```
 
 We can’t modify the `MockMessenger` to keep track of the messages, because the
@@ -270,10 +258,7 @@ which isn’t allowed. When we run the tests for our library, the code in Listin
 15-23 will compile without any errors, but the test will fail:
 
 ```text
----- tests::it_sends_an_over_75_percent_warning_message stdout ----
-	thread 'tests::it_sends_an_over_75_percent_warning_message' panicked at
-'already borrowed: BorrowMutError', src/libcore/result.rs:906:4
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+{{#include ../listings/ch15-smart-pointers/listing-15-23/output.txt}}
 ```
 
 Notice that the code panicked with the message `already borrowed:
@@ -336,9 +321,7 @@ When we print `a`, `b`, and `c`, we can see that they all have the modified
 value of 15 rather than 5:
 
 ```text
-a after = Cons(RefCell { value: 15 }, Nil)
-b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
-c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
+{{#include ../listings/ch15-smart-pointers/listing-15-24/output.txt}}
 ```
 
 This technique is pretty neat! By using `RefCell<T>`, we have an outwardly

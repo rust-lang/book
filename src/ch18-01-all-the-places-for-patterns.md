@@ -122,9 +122,7 @@ destructure a tuple</span>
 The code in Listing 18-3 will print the following:
 
 ```text
-a is at index 0
-b is at index 1
-c is at index 2
+{{#include ../listings/ch18-patterns-and-matching/listing-18-03/output.txt}}
 ```
 
 We use the `enumerate` method to adapt an iterator to produce a value and that
@@ -189,14 +187,7 @@ variables don’t match the number of elements in the tuple</span>
 Attempting to compile this code results in this type error:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:2:9
-  |
-2 |     let (x, y) = (1, 2, 3);
-  |         ^^^^^^ expected a tuple with 3 elements, found one with 2 elements
-  |
-  = note: expected type `({integer}, {integer}, {integer})`
-             found type `(_, _)`
+{{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
 ```
 
 If we wanted to ignore one or more of the values in the tuple, we could use `_`

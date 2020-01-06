@@ -41,11 +41,7 @@ do with a `None` value. At compile time, Rust will complain that we’ve tried t
 use a refutable pattern where an irrefutable pattern is required:
 
 ```text
-error[E0005]: refutable pattern in local binding: `None` not covered
- -->
-  |
-3 | let Some(x) = some_option_value;
-  |     ^^^^^^^ pattern `None` not covered
+{{#include ../listings/ch18-patterns-and-matching/listing-18-08/output.txt}}
 ```
 
 Because we didn’t cover (and couldn’t cover!) every valid value with the
@@ -80,15 +76,7 @@ Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:
 
 ```text
-warning: irrefutable if-let pattern
- --> <anon>:2:5
-  |
-2 | /     if let x = 5 {
-3 | |     println!("{}", x);
-4 | | };
-  | |_^
-  |
-  = note: #[warn(irrefutable_let_patterns)] on by default
+{{#include ../listings/ch18-patterns-and-matching/listing-18-10/output.txt}}
 ```
 
 For this reason, match arms must use refutable patterns, except for the last

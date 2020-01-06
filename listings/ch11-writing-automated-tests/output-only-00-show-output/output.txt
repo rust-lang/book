@@ -1,0 +1,6 @@
+$ cargo test -- --show-output
+   Compiling silly-function v0.1.0 (file:///projects/silly-function)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.61s
+     Running target/debug/deps/silly_function-01fb9d1182907f15
+error: Unrecognized option: 'show-output'
+error: test failed, to rerun pass '--lib'

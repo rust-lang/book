@@ -52,9 +52,7 @@ call the `drop` method explicitly.
 When we run this program, we’ll see the following output:
 
 ```text
-CustomSmartPointers created.
-Dropping CustomSmartPointer with data `other stuff`!
-Dropping CustomSmartPointer with data `my stuff`!
+{{#include ../listings/ch15-smart-pointers/listing-15-14/output.txt}}
 ```
 
 Rust automatically called `drop` for us when our instances went out of scope,
@@ -91,11 +89,7 @@ the `Drop` trait manually to clean up early</span>
 When we try to compile this code, we’ll get this error:
 
 ```text
-error[E0040]: explicit use of destructor method
-  --> src/main.rs:14:7
-   |
-14 |     c.drop();
-   |       ^^^^ explicit destructor calls not allowed
+{{#include ../listings/ch15-smart-pointers/listing-15-15/output.txt}}
 ```
 
 This error message states that we’re not allowed to explicitly call `drop`. The
@@ -130,9 +124,7 @@ drop a value before it goes out of scope</span>
 Running this code will print the following:
 
 ```text
-CustomSmartPointer created.
-Dropping CustomSmartPointer with data `some data`!
-CustomSmartPointer dropped before the end of main.
+{{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 
 The text ```Dropping CustomSmartPointer with data `some data`!``` is printed

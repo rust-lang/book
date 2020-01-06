@@ -78,13 +78,11 @@ Finally, we print the vector using the debug formatter, `:?`. Let’s try runnin
 the code first with no arguments and then with two arguments:
 
 ```text
-$ cargo run
---snip--
-["target/debug/minigrep"]
+{{#include ../listings/ch12-an-io-project/listing-12-01/output.txt}}
+```
 
-$ cargo run needle haystack
---snip--
-["target/debug/minigrep", "needle", "haystack"]
+```text
+{{#include ../listings/ch12-an-io-project/output-only-00-with-args/output.txt}}
 ```
 
 Notice that the first value in the vector is `"target/debug/minigrep"`, which
@@ -123,12 +121,7 @@ working as we intend. Let’s run this program again with the arguments `test`
 and `sample.txt`:
 
 ```text
-$ cargo run test sample.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep test sample.txt`
-Searching for test
-In file sample.txt
+{{#include ../listings/ch12-an-io-project/listing-12-02/output.txt}}
 ```
 
 Great, the program is working! The values of the arguments we need are being

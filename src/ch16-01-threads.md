@@ -82,6 +82,10 @@ thread ends, whether or not it has finished running. The output from this
 program might be a little different every time, but it will look similar to the
 following:
 
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
 ```text
 hi number 1 from the main thread!
 hi number 1 from the spawned thread!
@@ -136,6 +140,10 @@ thread is prevented from performing work or exiting. Because we’ve put the cal
 to `join` after the main thread’s `for` loop, running Listing 16-2 should
 produce output similar to this:
 
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
 ```text
 hi number 1 from the main thread!
 hi number 2 from the main thread!
@@ -166,6 +174,10 @@ But let’s see what happens when we instead move `handle.join()` before the
 
 The main thread will wait for the spawned thread to finish and then run its
 `for` loop, so the output won’t be interleaved anymore, as shown here:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the spawned thread!
@@ -218,20 +230,7 @@ should be able to access `v` inside that new thread. But when we compile this
 example, we get the following error:
 
 ```text
-error[E0373]: closure may outlive the current function, but it borrows `v`,
-which is owned by the current function
- --> src/main.rs:6:32
-  |
-6 |     let handle = thread::spawn(|| {
-  |                                ^^ may outlive borrowed value `v`
-7 |         println!("Here's a vector: {:?}", v);
-  |                                           - `v` is borrowed here
-  |
-help: to force the closure to take ownership of `v` (and any other referenced
-variables), use the `move` keyword
-  |
-6 |     let handle = thread::spawn(move || {
-  |                                ^^^^^^^
+{{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
 Rust *infers* how to capture `v`, and because `println!` only needs a reference
@@ -261,9 +260,12 @@ is also invalid. Oh no!
 To fix the compiler error in Listing 16-3, we can use the error message’s
 advice:
 
+<!-- manual-regeneration
+after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
+-->
+
 ```text
-help: to force the closure to take ownership of `v` (and any other referenced
-variables), use the `move` keyword
+help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
   |
 6 |     let handle = thread::spawn(move || {
   |                                ^^^^^^^
@@ -291,17 +293,7 @@ would move `v` into the closure’s environment, and we could no longer call
 `drop` on it in the main thread. We would get this compiler error instead:
 
 ```text
-error[E0382]: use of moved value: `v`
-  --> src/main.rs:10:10
-   |
-6  |     let handle = thread::spawn(move || {
-   |                                ------- value moved (into closure) here
-...
-10 |     drop(v); // oh no!
-   |          ^ value used here after move
-   |
-   = note: move occurs because `v` has type `std::vec::Vec<i32>`, which does
-   not implement the `Copy` trait
+{{#include ../listings/ch16-fearless-concurrency/output-only-00-move-drop/output.txt}}
 ```
 
 Rust’s ownership rules have saved us again! We got an error from the code in

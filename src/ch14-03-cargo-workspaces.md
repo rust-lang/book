@@ -39,9 +39,16 @@ by specifying the path to our binary crate; in this case, that path is *adder*:
 Next, we’ll create the `adder` binary crate by running `cargo new` within the
 *add* directory:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/output-only-00-adder-crate/add
+rm -rf adder
+cargo new adder
+copy output below
+-->
+
 ```text
 $ cargo new adder
-     Created binary (application) `adder` project
+     Created binary (application) `adder` package
 ```
 
 At this point, we can build the workspace by running `cargo build`. The files
@@ -82,9 +89,16 @@ Change the top-level *Cargo.toml* to specify the *add-one* path in the
 
 Then generate a new library crate named `add-one`:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/output-only-01-add-one/add
+rm -rf add-one
+cargo new add-one --lib
+copy output below
+-->
+
 ```text
 $ cargo new add-one --lib
-     Created library `add-one` project
+     Created library `add-one` package
 ```
 
 Your *add* directory should now have these directories and files:
@@ -141,20 +155,32 @@ function to call the `add_one` function, as in Listing 14-7.
 Let’s build the workspace by running `cargo build` in the top-level *add*
 directory!
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-07/add
+cargo build
+copy output below, because the output updating script doesn't recurse into subdirs
+-->
+
 ```text
 $ cargo build
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.68 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.68s
 ```
 
 To run the binary crate from the *add* directory, we need to specify which
 package in the workspace we want to use by using the `-p` argument and the
 package name with `cargo run`:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-07/add
+cargo run -p adder
+copy output below, because the output updating script doesn't recurse into subdirs
+-->
+
 ```text
 $ cargo run -p adder
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/adder`
 Hello, world! 10 plus one is 11!
 ```
@@ -190,6 +216,13 @@ We can now add `use rand;` to the *add-one/src/lib.rs* file, and building the
 whole workspace by running `cargo build` in the *add* directory will bring in
 and compile the `rand` crate:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
+cargo build
+copy relevant output below, because the output updating script doesn't recurse into subdirs
+-->
+
+
 ```text
 $ cargo build
     Updating crates.io index
@@ -198,7 +231,7 @@ $ cargo build
    Compiling rand v0.5.5
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
 
 The top-level *Cargo.lock* now contains information about the dependency of
@@ -207,14 +240,20 @@ workspace, we can’t use it in other crates in the workspace unless we add
 `rand` to their *Cargo.toml* files as well. For example, if we add `use rand;`
 to the *adder/src/main.rs* file for the `adder` crate, we’ll get an error:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/output-only-02-use-rand/add
+cargo build
+copy relevant output below, because the output updating script doesn't recurse into subdirs
+-->
+
 ```text
 $ cargo build
    Compiling adder v0.1.0 (file:///projects/add/adder)
-error: use of unstable library feature 'rand': use `rand` from crates.io (see
-issue #27703)
- --> adder/src/main.rs:1:1
+error[E0432]: unresolved import `rand`
+ --> adder/src/main.rs:1:5
   |
 1 | use rand;
+  |     ^^^^ no `rand` external crate
 ```
 
 To fix this, edit the *Cargo.toml* file for the `adder` crate and indicate that
@@ -239,11 +278,17 @@ within the `add_one` crate:
 
 Now run `cargo test` in the top-level *add* directory:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
+cargo test
+copy relevant output below, because the output updating script doesn't recurse into subdirs
+-->
+
 ```text
 $ cargo test
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
      Running target/debug/deps/add_one-f0253159197f7841
 
 running 1 test
@@ -274,9 +319,15 @@ We can also run tests for one particular crate in a workspace from the
 top-level directory by using the `-p` flag and specifying the name of the crate
 we want to test:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
+cargo test -p add-one
+copy relevant output below, because the output updating script doesn't recurse into subdirs
+-->
+
 ```text
 $ cargo test -p add-one
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running target/debug/deps/add_one-b3235fea9a156f74
 
 running 1 test

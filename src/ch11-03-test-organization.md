@@ -111,28 +111,7 @@ We don’t need to annotate any code in *tests/integration_test.rs* with
 in this directory only when we run `cargo test`. Run `cargo test` now:
 
 ```text
-$ cargo test
-   Compiling adder v0.1.0 (file:///projects/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 1 test
-test tests::internal ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-     Running target/debug/deps/integration_test-ce99bcc2479f4607
-
-running 1 test
-test it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/listing-11-13/output.txt}}
 ```
 
 The three sections of output include the unit tests, the integration test, and
@@ -158,14 +137,7 @@ particular integration test file, use the `--test` argument of `cargo test`
 followed by the name of the file:
 
 ```text
-$ cargo test --test integration_test
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/integration_test-952a27e0126bb565
-
-running 1 test
-test it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/output-only-04-single-integration/output.txt}}
 ```
 
 This command runs only the tests in the *tests/integration_test.rs* file.
@@ -203,29 +175,7 @@ When we run the tests again, we’ll see a new section in the test output for th
 did we call the `setup` function from anywhere:
 
 ```text
-running 1 test
-test tests::internal ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-     Running target/debug/deps/common-b8b07b6f1be2db70
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-     Running target/debug/deps/integration_test-d993c68b431d39df
-
-running 1 test
-test it_adds_two ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/output.txt}}
 ```
 
 Having `common` appear in the test results with `running 0 tests` displayed for

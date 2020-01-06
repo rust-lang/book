@@ -444,11 +444,7 @@ way</span>
 When we compile this example, we get this error:
 
 ```text
-error: `..` can only be used once per tuple or tuple struct pattern
- --> src/main.rs:5:22
-  |
-5 |         (.., second, ..) => {
-  |                      ^^
+{{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
 ```
 
 It’s impossible for Rust to determine how many values in the tuple to ignore

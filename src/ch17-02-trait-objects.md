@@ -220,14 +220,7 @@ implement the trait object’s trait</span>
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
 ```text
-error[E0277]: the trait bound `std::string::String: gui::Draw` is not satisfied
-  --> src/main.rs:7:13
-   |
- 7 |             Box::new(String::from("Hi")),
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait gui::Draw is not
-   implemented for `std::string::String`
-   |
-   = note: required for the cast to the object type `gui::Draw`
+{{#include ../listings/ch17-oop/listing-17-10/output.txt}}
 ```
 
 This error lets us know that either we’re passing something to `Screen` we
@@ -308,14 +301,7 @@ implement the `Clone` trait instead of the `Draw` trait, like this:
 We would get this error:
 
 ```text
-error[E0038]: the trait `std::clone::Clone` cannot be made into an object
- --> src/lib.rs:2:5
-  |
-2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone`
-  cannot be made into an object
-  |
-  = note: the trait cannot require that `Self : Sized`
+{{#include ../listings/ch17-oop/no-listing-01-trait-object-of-clone/output.txt}}
 ```
 
 This error means you can’t use this trait as a trait object in this way. If

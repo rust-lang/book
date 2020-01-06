@@ -78,11 +78,7 @@ query is.
 Let’s see if this implementation passes the tests:
 
 ```text
-running 2 tests
-test tests::case_insensitive ... ok
-test tests::case_sensitive ... ok
-
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
 Great! They passed. Now, let’s call the new `search_case_insensitive` function
@@ -152,12 +148,7 @@ variable set and with the query `to`, which should match any line that contains
 the word “to” in all lowercase:
 
 ```text
-$ cargo run to poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep to poem.txt`
-Are you nobody, too?
-How dreary to be somebody!
+{{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
 Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
@@ -173,9 +164,15 @@ $ cargo run to poem.txt
 
 We should get lines that contain “to” that might have uppercase letters:
 
+<!-- manual-regeneration
+cd listings/ch12-an-io-project/listing-12-23
+CASE_INSENSITIVE=1 cargo run to poem.txt
+can't extract because of the environment variable
+-->
+
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!

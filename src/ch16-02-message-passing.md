@@ -121,6 +121,10 @@ thread is appropriate.
 When we run the code in Listing 16-8, we’ll see the value printed from the main
 thread:
 
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
 ```text
 Got: hi
 ```
@@ -154,16 +158,7 @@ unexpected results due to inconsistent or nonexistent data. However, Rust gives
 us an error if we try to compile the code in Listing 16-9:
 
 ```text
-error[E0382]: use of moved value: `val`
-  --> src/main.rs:10:31
-   |
-9  |         tx.send(val).unwrap();
-   |                 --- value moved here
-10 |         println!("val is {}", val);
-   |                               ^^^ value used here after move
-   |
-   = note: move occurs because `val` has type `std::string::String`, which does
-not implement the `Copy` trait
+{{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
 Our concurrency mistake has caused a compile time error. The `send` function
@@ -200,6 +195,10 @@ printing it. When the channel is closed, iteration will end.
 When running the code in Listing 16-10, you should see the following output
 with a 1-second pause in between each line:
 
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
 ```text
 Got: hi
 Got: from
@@ -234,6 +233,10 @@ a second spawned thread. This gives us two threads, each sending different
 messages to the receiving end of the channel.
 
 When you run the code, your output should look something like this:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Got: hi
