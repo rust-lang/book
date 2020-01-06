@@ -20,7 +20,7 @@ we suggest making a *projects* directory in your home directory and keeping all
 your projects there.
 
 Open a terminal and enter the following commands to make a *projects* directory
-and a directory for the Hello, world! project within the *projects* directory.
+and a directory for the “Hello, world!” project within the *projects* directory.
 
 For Linux, macOS, and PowerShell on Windows, enter this:
 
@@ -86,7 +86,7 @@ program. That makes you a Rust programmer—welcome!
 
 ### Anatomy of a Rust Program
 
-Let’s review in detail what just happened in your Hello, world! program.
+Let’s review in detail what just happened in your “Hello, world!” program.
 Here’s the first piece of the puzzle:
 
 ```rust
@@ -178,7 +178,7 @@ From here, you run the *main* or *main.exe* file, like this:
 $ ./main # or .\main.exe on Windows
 ```
 
-If *main.rs* was your Hello, world! program, this line would print `Hello,
+If *main.rs* was your “Hello, world!” program, this line would print `Hello,
 world!` to your terminal.
 
 If you’re more familiar with a dynamic language, such as Ruby, Python, or

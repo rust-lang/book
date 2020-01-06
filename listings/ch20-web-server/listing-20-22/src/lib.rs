@@ -8,17 +8,7 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Job>,
 }
 
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 impl ThreadPool {
     /// Create a new ThreadPool.
@@ -57,20 +47,32 @@ impl ThreadPool {
     }
 }
 
+// ANCHOR: here
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        for worker in &mut self.workers {
+            println!("Shutting down worker {}", worker.id);
+
+            worker.thread.join().unwrap();
+        }
+    }
+}
+// ANCHOR_END: here
+
 struct Worker {
     id: usize,
     thread: thread::JoinHandle<()>,
 }
-// ANCHOR: here
-// --snip--
 
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || {
-            while let Ok(job) = receiver.lock().unwrap().recv() {
+            loop {
+                let job = receiver.lock().unwrap().recv().unwrap();
+
                 println!("Worker {} got a job; executing.", id);
 
-                job.call_box();
+                job();
             }
         });
 
@@ -80,4 +82,3 @@ impl Worker {
         }
     }
 }
-// ANCHOR_END: here

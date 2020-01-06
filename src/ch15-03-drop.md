@@ -44,7 +44,7 @@ an instance of your type goes out of scope. We’re printing some text here to
 demonstrate when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` and then print
-`CustomSmartPointers created.`. At the end of `main`, our instances of
+`CustomSmartPointers created`. At the end of `main`, our instances of
 `CustomSmartPointer` will go out of scope, and Rust will call the code we put
 in the `drop` method, printing our final message. Note that we didn’t need to
 call the `drop` method explicitly.
@@ -70,7 +70,7 @@ functionality. Disabling `drop` isn’t usually necessary; the whole point of th
 `Drop` trait is that it’s taken care of automatically. Occasionally, however,
 you might want to clean up a value early. One example is when using smart
 pointers that manage locks: you might want to force the `drop` method that
-releases the lock to run so other code in the same scope can acquire the lock.
+releases the lock so that other code in the same scope can acquire the lock.
 Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead
 you have to call the `std::mem::drop` function provided by the standard library
 if you want to force a value to be dropped before the end of its scope.

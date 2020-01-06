@@ -21,7 +21,7 @@ fn main() {
                 g,
                 b
             )
-        },
+        }
         Message::ChangeColor(Color::Hsv(h, s, v)) => {
             println!(
                 "Change the color to hue {}, saturation {}, and value {}",

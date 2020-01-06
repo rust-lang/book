@@ -1,3 +1,4 @@
+// ANCHOR: here
 use std::thread;
 use std::sync::mpsc;
 use std::sync::Arc;
@@ -8,17 +9,7 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Message>,
 }
 
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
+type Job = Box<dyn FnOnce() + Send + 'static>;
 
 enum Message {
     NewJob(Job),
@@ -62,7 +53,6 @@ impl ThreadPool {
     }
 }
 
-// ANCHOR: here
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         println!("Sending terminate message to all workers.");
@@ -82,7 +72,6 @@ impl Drop for ThreadPool {
         }
     }
 }
-// ANCHOR_END: here
 
 struct Worker {
     id: usize,
@@ -101,7 +90,7 @@ impl Worker {
                     Message::NewJob(job) => {
                         println!("Worker {} got a job; executing.", id);
 
-                        job.call_box();
+                        job();
                     },
                     Message::Terminate => {
                         println!("Worker {} was told to terminate.", id);
@@ -118,3 +107,6 @@ impl Worker {
         }
     }
 }
+// ANCHOR_END: here
+
+fn main() {}

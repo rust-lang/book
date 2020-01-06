@@ -3,24 +3,27 @@ use std::sync::mpsc;
 use std::sync::Arc;
 use std::sync::Mutex;
 
+// ANCHOR: here
 pub struct ThreadPool {
     workers: Vec<Worker>,
-    sender: mpsc::Sender<Job>,
+    sender: mpsc::Sender<Message>,
 }
 
-trait FnBox {
-    fn call_box(self: Box<Self>);
+// --snip--
+
+// ANCHOR_END: here
+type Job = Box<dyn FnOnce() + Send + 'static>;
+
+enum Message {
+    NewJob(Job),
+    Terminate,
 }
 
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
-
+// ANCHOR: here
 impl ThreadPool {
+    // --snip--
+
+    // ANCHOR_END: here
     /// Create a new ThreadPool.
     ///
     /// The size is the number of threads in the pool.
@@ -47,48 +50,65 @@ impl ThreadPool {
         }
     }
 
+    // ANCHOR: here
     pub fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
         let job = Box::new(f);
 
-        self.sender.send(job).unwrap();
+        self.sender.send(Message::NewJob(job)).unwrap();
     }
 }
 
-// ANCHOR: here
+// --snip--
+
+// ANCHOR_END: here
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         for worker in &mut self.workers {
             println!("Shutting down worker {}", worker.id);
 
-            worker.thread.join().unwrap();
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap();
+            }
         }
     }
 }
-// ANCHOR_END: here
 
 struct Worker {
     id: usize,
-    thread: thread::JoinHandle<()>,
+    thread: Option<thread::JoinHandle<()>>,
 }
 
+// ANCHOR: here
 impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(move || {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
+        Worker {
+
+        let thread = thread::spawn(move ||{
             loop {
-                let job = receiver.lock().unwrap().recv().unwrap();
+                let message = receiver.lock().unwrap().recv().unwrap();
 
-                println!("Worker {} got a job; executing.", id);
+                match message {
+                    Message::NewJob(job) => {
+                        println!("Worker {} got a job; executing.", id);
 
-                job.call_box();
+                        job();
+                    },
+                    Message::Terminate => {
+                        println!("Worker {} was told to terminate.", id);
+
+                        break;
+                    },
+                }
             }
         });
 
         Worker {
             id,
-            thread,
+            thread: Some(thread),
         }
     }
 }
+// ANCHOR_END: here
