@@ -39,8 +39,10 @@ do
     # Clear the output file of everything except the command
     echo "$ ${cargo_command}" > ${full_output_path}
 
-    # Regenerate the output and append to the output file
-    RUSTFLAGS="-A unused_variables -A dead_code" $cargo_command >> ${full_output_path} 2>&1 || true
+    # Regenerate the output and append to the output file. Turn some warnings
+    # off to reduce output noise, and use one test thread to get consistent
+    # ordering of tests in the output when the command is `cargo test`.
+    RUSTFLAGS="-A unused_variables -A dead_code" RUST_TEST_THREADS=1 $cargo_command >> ${full_output_path} 2>&1 || true
 
     # Set the project file path to the projects directory plus the crate name
     sed -i '' -e "s/Compiling \([^\)]*\) v0.1.0 (.*)/Compiling \1 v0.1.0 (file:\/\/\/projects\/\1)/" ${full_output_path}
