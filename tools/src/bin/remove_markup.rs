@@ -28,15 +28,8 @@ fn remove_markup(input: String) -> String {
     let regexen = vec![filename_regex, caption_start_regex, caption_end_regex];
 
     let lines: Vec<_> = input.lines().flat_map(|line| {
-        // Remove our figure and caption markup.
-        if line == "<figure>" ||
-            line == "<figcaption>" ||
-            line == "</figcaption>" ||
-            line == "</figure>"
-        {
-            None
         // Remove our syntax highlighting and rustdoc markers.
-        } else if line.starts_with("```") {
+        if line.starts_with("```") {
             Some(String::from("```"))
         // Remove the span around filenames and captions.
         } else {
