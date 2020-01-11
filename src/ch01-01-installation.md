@@ -80,6 +80,49 @@ the Other Tools and Frameworks section.
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
+#### VS Build Tools Caveats
+
+When selecting the Build Tools only instalation, the Rust tooling will work as
+expected, but you might face a couple of issues when compiling `*-sys` 
+dependencies.
+
+`*-sys` dependencies often link to C/C++ libraries as part of their build 
+system, and for that, a set of environment variables and paths should be setup.
+
+Selecting only the Build tools instead of a complete installation of Visual Studio
+installation might not configure everything properly. Here are some indicators
+of problems on the development environment setup and some suggestion to fix them.
+
+<details>
+ <summary><code>error MSB4019: The imported project "C:\Microsoft.Cpp.Default.props" was not found. Confirm that the path in the &lt;Import&gt; declaration is correct, and that the file exists on disk.</code></summary>
+  This error indicates that the environent is not properly setup, and you have a couple of of options to try to fix it:
+
+- [Easiest] Open the `Developer Command Prompt for VS 2019` application to compile the project. This terminal will setup all the needed environment variables to let it compile.
+- Setup the environment variables (eg: `PATH`, `LIB`) as [documented on Microsoft's website](https://docs.microsoft.com/en-us/cpp/build/setting-the-path-and-environment-variables-for-command-line-builds?view=vs-2019)
+- Install the complete setup of Visual Studio 2015 or Visual Studio 2017 - not only the C++ Build tools
+
+If the errors persists, maybe the `*-sys` dependency in question requires [a similar patch](https://github.com/compass-rs/sass-rs/commit/2e8289539fcb2b11812b666b5104d94744fa93b6) to select the proper `msbuild.exe` executable from the environment.
+</details>
+
+<details>
+ <summary><code>fatal error LNK1112: module machine type 'x86' conflicts with target machine type 'x64'</code></summary>
+ This happens when the variables used setup tools for the wrong architecture, where you have a linker for x86 instead of the target x64.
+
+
+ Possible fixes:
+ - Open the `x64 Native Tools Command Prompt` instead of `Developer Command Prompt`
+ - Change the env variables to point to the correct version of the tools
+ - Use `vcvars64.bat` instead of `vcvars32.bat` to configure the environment
+</details>
+
+<details>
+ <summary><code>error MSB8036: The Windows SDK version 8.1 was not found. Install the required version of Windows SDK or change the SDK version in the project property pages or by right-clicking the solution and selecting "Retarget solution".</code></summary>
+ If you get this error while developing on Windows 8.1, please, instell the required SDK using Visual Code Installer.
+
+ If you get this error while developing on Windows 10, it means that the `*-sys` has outdated references to the SDK, and the build script is not being able to upgrade the project to a newer SDK.
+ A possible solution is to uninstall Build Tools 2017 and install the Build Tools 2019. Alternatively, install the complete Visual Studio to have `devenv.exe /upgrade` available on your environment.
+ </details>
+
 ### Updating and Uninstalling
 
 After you’ve installed Rust via `rustup`, updating to the latest version is
