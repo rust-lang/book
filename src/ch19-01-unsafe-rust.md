@@ -25,7 +25,7 @@ Rust and how to do it.
 ### Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take four actions in unsafe Rust, called
+that holds the unsafe code. You can take five actions in unsafe Rust, called
 *unsafe superpowers*, that you can’t in safe Rust. Those superpowers include
 the ability to:
 
