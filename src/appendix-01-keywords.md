@@ -15,6 +15,8 @@ The following keywords currently have the functionality described.
 
 * `as` - perform primitive casting, disambiguate the specific trait containing
   an item, or rename items in `use` and `extern crate` statements
+* `async` -  return a `Future` instead of blocking the current thread
+* `await` - suspend execution until the result of a `Future` is ready
 * `break` - exit a loop immediately
 * `const` - define constant items or constant raw pointers
 * `continue` - continue to the next loop iteration
@@ -59,8 +61,6 @@ The following keywords do not have any functionality but are reserved by Rust
 for potential future use.
 
 * `abstract`
-* `async`
-* `await`
 * `become`
 * `box`
 * `do`
