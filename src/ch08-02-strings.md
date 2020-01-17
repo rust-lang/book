@@ -1,96 +1,96 @@
-## Storing UTF-8 Encoded Text with Strings
+## 문자열에 UTF-8 텍스트를 저장하기
 
-We talked about strings in Chapter 4, but we’ll look at them in more depth now.
-New Rustaceans commonly get stuck on strings for a combination of three
-reasons: Rust’s propensity for exposing possible errors, strings being a more
-complicated data structure than many programmers give them credit for, and
-UTF-8. These factors combine in a way that can seem difficult when you’re
-coming from other programming languages.
+4장에서도 문자열을 다뤄봤지만, 이번에는 좀 더 깊이 살펴보겠습니다. 러스트
+입문자는 흔히 문자열 부분에서 막히곤 합니다. 이는 세 가지 이유가 조합된
+결과인데요. 발생할 수 있는 에러를 최대한 표시하는 러스트의 성향, 많은
+프로그래머의 예상보다 문자열이 복잡한 자료구조라는 점, UTF-8 이 그
+이유입니다. 이 때문에 다른 언어를 사용하다 오면 러스트의 문자열은 어려워
+보이죠.
 
-It’s useful to discuss strings in the context of collections because strings
-are implemented as a collection of bytes, plus some methods to provide useful
-functionality when those bytes are interpreted as text. In this section, we’ll
-talk about the operations on `String` that every collection type has, such as
-creating, updating, and reading. We’ll also discuss the ways in which `String`
-is different from the other collections, namely how indexing into a `String` is
-complicated by the differences between how people and computers interpret
-`String` data.
+문자열이 컬렉션 장에 있는 이유는 문자열이 바이트의 컬렉션 및 이 바이트들을
+텍스트로 통역할때 유용한 기능을 제공하는 몇몇 메소드로 구현되어 있기
+때문입니다.
+이번 절에서는 생성, 갱신, 값 읽기와 같은 모든 컬렉션 타입이 가지고 있는,
+`String` 에서의 연산에 대해 이야기 해보겠습니다.
+또한 `String` 을 다른 컬렉션들과 다르게 만드는 부분, 즉 사람과 컴퓨터가
+`String` 데이터를 통역하는 방식 간의 차이로 인해 생기는 `String` 인덱싱의
+복잡함을 논의해보겠습니다.
 
-### What Is a String?
+### 문자열이 뭔가요?
 
-We’ll first define what we mean by the term *string*. Rust has only one string
-type in the core language, which is the string slice `str` that is usually seen
-in its borrowed form `&str`. In Chapter 4, we talked about *string slices*,
-which are references to some UTF-8 encoded string data stored elsewhere. String
-literals, for example, are stored in the program’s binary and are therefore
-string slices.
+먼저 *문자열* 이라는 용어가 정확히 무엇을 뜻하는 것인지 정의해보겠습니다.
+러스트는 핵심 언어 기능 내에서 딱 한 가지 문자열 타입만 제공하는데, 이는
+바로 문자열 슬라이스인 `str`이고, 이것의 참조자 형태인 `&str`을 많이 봤죠.
+4장에서는 *문자열 슬라이스* 에 대해 얘기했고, 이는 다른 어딘가에 저장된
+UTF-8로 인코딩된 문자열 데이터의 참조자입니다. 예를 들어, 문자열 리터럴은
+프로그램의 바이너리 출력물 내에 저장되어 있으며, 그러므로 문자열 슬라이스입니다.
 
-The `String` type, which is provided by Rust’s standard library rather than
-coded into the core language, is a growable, mutable, owned, UTF-8 encoded
-string type. When Rustaceans refer to “strings” in Rust, they usually mean the
-`String` and the string slice `&str` types, not just one of those types.
-Although this section is largely about `String`, both types are used heavily in
-Rust’s standard library, and both `String` and string slices are UTF-8 encoded.
+`String` 타입은 핵심 언어 기능 내에 구현된 것이 아니고 러스트의 표준
+라이브러리를 통해 제공되며, 커질 수 있고, 가변적이며, 소유권을 갖고 있고,
+UTF-8로 인코딩된 문자열 타입입니다. 러스트인들이 "문자열"에 대해 이야기할
+때, 그들은 보통 `String` 과 문자열 슬라이스 `&str` 타입 둘 모두를 이야기한
+것이지, 이들 중 하나를 뜻한 것은 아닙니다. 이번 절은 대부분 `String`에 관한
+것이지만, 두 타입 모두 러스트 표준 라이브러리에서 매우 많이 사용되며 `String`과 문자열 슬라이스 모두 UTF-8로 인코딩되어 있습니다.
 
-Rust’s standard library also includes a number of other string types, such as
-`OsString`, `OsStr`, `CString`, and `CStr`. Library crates can provide even
-more options for storing string data. See how those names all end in `String`
-or `Str`? They refer to owned and borrowed variants, just like the `String` and
-`str` types you’ve seen previously. These string types can store text in
-different encodings or be represented in memory in a different way, for
-example. We won’t discuss these other string types in this chapter; see their
-API documentation for more about how to use them and when each is appropriate.
+또한 러스트 표준 라이브러리는 `OsString`, `OsStr`, `CString`, 그리고
+`CStr`과 같은 몇 가지 다른 문자열 타입도 제공합니다. 심지어 어떤 라이브러리
+크레이트들은 문자열 데이터를 저장하기 위해 더 많은 옵션을 제공할 수 있습니다.
+`String` 이나 `Str` 으로 끝나는 것을 보면 알 수 있듯, 이들은 종종 소유권이 있는 타입과
+이를 빌린 변형 타입을 제공하는데, 이는 `String`/`&str` 과 비슷합니다. 이러한
+문자열 타입들은, 예를 들면 다른 종류의 인코딩이 된 텍스트를 저장하거나 다른
+방식으로 메모리에 저장될 수 있습니다. 여기서는 이러한 다른 문자열 타입은
+다루지 않겠습니다. 이것들을 어떻게 쓰고 어떤 경우에 적합한지에 대해 알고 싶다면 각각의 API 문서를 확인하시기 바랍니다.
 
-### Creating a New String
+### 새로운 문자열 생성하기
 
-Many of the same operations available with `Vec<T>` are available with `String`
-as well, starting with the `new` function to create a string, shown in Listing
-8-11.
+`Vec`에서 쓸 수 있는 많은 연산들이 `String`에서도 마찬가지로 똑같이 쓰일
+수 있는데, `new` 함수를 이용하여 문자열을 생성하는 것으로 아래의 Listing
+8-11과 같이 시작해봅시다:
 
 ```rust
 let mut s = String::new();
 ```
 
-<span class="caption">Listing 8-11: Creating a new, empty `String`</span>
+<span class="caption">Listing 8-11: 비어있는 새로운 `String` 생성하기</span>
 
-This line creates a new empty string called `s`, which we can then load data
-into. Often, we’ll have some initial data that we want to start the string
-with. For that, we use the `to_string` method, which is available on any type
-that implements the `Display` trait, as string literals do. Listing 8-12 shows
-two examples.
+이 라인은 우리가 어떤 데이터를 담아둘 수 있는 `s` 라는 빈 문자열을 만들어
+줍니다. 종종 우리는 문자열에 담아두고 시작할 초기값을 가지고 있을 것입니다.
+그런 경우, `to_string` 메소드를 이용하는데, 이는 `Display` 트레잇이 구현된
+어떤 타입이든 사용 가능하며, 문자열 리터럴도 이 트레잇을 구현하고 있습니다.
+Listing 8-12에서 두 가지 예제를 보여주고 있습니다:
 
 ```rust
 let data = "initial contents";
 
 let s = data.to_string();
 
-// the method also works on a literal directly:
+// 문자열 리터럴에도 `to_string` 메소드를 사용할 수 있습니다:
 let s = "initial contents".to_string();
 ```
 
-<span class="caption">Listing 8-12: Using the `to_string` method to create a
-`String` from a string literal</span>
+<span class="caption">Listing 8-12: `to_string` 메소드를 사용하여 문자열
+리터럴로부터 `String` 생성하기</span>
 
-This code creates a string containing `initial contents`.
+이 코드는 `initial contents`를 담고 있는 문자열을 생성합니다.
 
-We can also use the function `String::from` to create a `String` from a string
-literal. The code in Listing 8-13 is equivalent to the code from Listing 8-12
-that uses `to_string`.
+또한 문자열 리터럴로부터 `String`을 생성하기 위해서 `String::from` 함수를
+이용할 수도 있습니다. Listing 8-13의 코드는 `to_string`을 사용하는 Listing
+8-12의 코드와 동일합니다:
 
 ```rust
 let s = String::from("initial contents");
 ```
 
-<span class="caption">Listing 8-13: Using the `String::from` function to create
-a `String` from a string literal</span>
+<span class="caption">Listing 8-13: `String::from` 함수를 사용하여 문자열
+리터럴로부터 `String` 생성하기</span>
 
-Because strings are used for so many things, we can use many different generic
-APIs for strings, providing us with a lot of options. Some of them can seem
-redundant, but they all have their place! In this case, `String::from` and
-`to_string` do the same thing, so which you choose is a matter of style.
+문자열이 너무나 많은 것들에 사용되기 때문에, 문자열을 위해 다양한 제네릭
+API들을 사용할 수 있으며, 다양한 옵션들을 제공합니다. 몇몇은 쓸모없는 것처럼
+느껴질 수도 있지만, 다 사용할 곳이 있습니다! 지금의 경우, `String::from`과
+`.to_string`은 정확히 똑같은 일을 하며, 따라서 어떤 것을 사용하는가는 여러분의 스타일에 따라 달린 문제입니다.
 
-Remember that strings are UTF-8 encoded, so we can include any properly encoded
-data in them, as shown in Listing 8-14.
+문자열이 UTF-8로 인코딩되었음을 기억하세요. 즉, 아래의 Listing 8-14에서 보는
+것처럼 우리는 인코딩된 어떤 데이터라도 포함시킬 수 있습니다:
 
 ```rust
 let hello = String::from("السلام عليكم");
@@ -106,34 +106,34 @@ let hello = String::from("Здравствуйте");
 let hello = String::from("Hola");
 ```
 
-<span class="caption">Listing 8-14: Storing greetings in different languages in
-strings</span>
+<span class="caption">Listing 8-14: 문자열에 다양한 언어로 인삿말
+저장하기</span>
 
-All of these are valid `String` values.
+위의 모두가 유효한 `String` 값입니다.
 
-### Updating a String
+### 문자열 갱신하기
 
-A `String` can grow in size and its contents can change, just like the contents
-of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
-use the `+` operator or the `format!` macro to concatenate `String` values.
+`String`은 크기가 커질 수 있으며 이것이 담고 있는 내용물은 `Vec`의 내용물과
+마찬가지로 더 많은 데이터를 집어넣음으로써 변경될 수 있습니다. 추가적으로,
+`+` 연산자나 `format!` 매크로를 사용하여 편리하게 `String` 값들을 서로 접합할 수 있습니다.
 
-#### Appending to a String with `push_str` and `push`
+#### `push_str`과 `push`를 이용하여 문자열 추가하기
 
-We can grow a `String` by using the `push_str` method to append a string slice,
-as shown in Listing 8-15.
+Listing 8-15와 같이 문자열 슬라이스를 추가하기 위해 `push_str` 메소드를
+이용하여 `String`을 키울 수 있습니다:
 
 ```rust
 let mut s = String::from("foo");
 s.push_str("bar");
 ```
 
-<span class="caption">Listing 8-15: Appending a string slice to a `String`
-using the `push_str` method</span>
+<span class="caption">Listing 8-15: `push_str` 메소드를 사용하여 `String`에
+문자열 슬라이스 추가하기</span>
 
-After these two lines, `s` will contain `foobar`. The `push_str` method takes a
-string slice because we don’t necessarily want to take ownership of the
-parameter. For example, the code in Listing 8-16 shows that it would be
-unfortunate if we weren’t able to use `s2` after appending its contents to `s1`.
+`s`는 위의 두 라인 뒤에 "foobar"를 담게 될 것입니다. `push_str` 메소드는
+문자열 슬라이스를 파라미터로 갖는데 이는 파라미터의 소유권을 가져올 필요가
+없기 때문입니다. 예를 들어, Listing 8-16의 코드는 `s1`에 `s2`의 내용물을
+추가한 뒤 `s2`를 더 이상 쓸 수 없게 되었다면 불행했을 경우를 보여주고 있습니다:
 
 ```rust
 let mut s1 = String::from("foo");
@@ -142,81 +142,81 @@ s1.push_str(s2);
 println!("s2 is {}", s2);
 ```
 
-<span class="caption">Listing 8-16: Using a string slice after appending its
-contents to a `String`</span>
+<span class="caption">Listing 8-16: 문자열 슬라이스를 `String`에 붙인 이후에
+문자열 슬라이스를 사용하기</span>
 
-If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
-its value on the last line. However, this code works as we’d expect!
+만일 `push_str` 함수가 `s2`의 소유권을 가져갔다면, 마지막 줄에서 그 값을
+출력할 수 없었을 것입니다. 하지만, 이 코드는 우리가 기대했던 대로 작동합니다!
 
-The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 shows code that adds the letter *l* to a `String` using
-the `push` method.
+`push` 메소드는 한 개의 글자를 파라미터로 받아서 `String`에 추가합니다.
+Listing 8-17은 `push` 메소드를 사용하여 `String`에 l을 추가하는 코드를
+보여주고 있습니다:
 
 ```rust
 let mut s = String::from("lo");
 s.push('l');
 ```
 
-<span class="caption">Listing 8-17: Adding one character to a `String` value
-using `push`</span>
+<span class="caption">Listing 8-17: `push`를 사용하여 `String` 값에 한 글자
+추가하기</span>
 
-As a result of this code, `s` will contain `lol`.
+위의 코드를 실행한 결과로 `s`는 `lol`을 담고 있을 것입니다.
 
-#### Concatenation with the `+` Operator or the `format!` Macro
+#### `+` 연산자나 `format!` 매크로를 이용한 접합
 
-Often, you’ll want to combine two existing strings. One way is to use the `+`
-operator, as shown in Listing 8-18.
+종종 우리는 가지고 있는 두 개의 문자열을 조합하고 싶어 합니다. 한 가지 방법은
+아래 Listing 8-18과 같이 `+` 연산자를 사용하는 것입니다:
 
 ```rust
 let s1 = String::from("Hello, ");
 let s2 = String::from("world!");
-let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
+let s3 = s1 + &s2; // s1은 여기서 이동되어 더이상 쓸 수 없음을 유의하세요
 ```
 
-<span class="caption">Listing 8-18: Using the `+` operator to combine two
-`String` values into a new `String` value</span>
+<span class="caption">Listing 8-18: `+` 연산자를 사용하여 두 `String` 값을
+하나의 새로운 `String` 값으로 조합하기</span>
 
-The string `s3` will contain `Hello, world!` as a result of this code. The
-reason `s1` is no longer valid after the addition and the reason we used a
-reference to `s2` has to do with the signature of the method that gets called
-when we use the `+` operator. The `+` operator uses the `add` method, whose
-signature looks something like this:
+위의 코드 실행 결과로서, 문자열 `s3`는 `Hello, world!`를 담게 될 것입니다.
+`s1`이 더하기 연산 이후에 더 이상 유효하지 않은 이유와 `s2`의 참조자가 사용되는
+이유는 `+` 연산자를 사용했을 때 호출되는 함수의 시그니처와 맞춰야 하기
+때문입니다 `+` 연산자는 `add` 메소드를 사용하는데, 이 메소드의 시그니처는
+아래처럼 생겼습니다:
 
 ```rust,ignore
 fn add(self, s: &str) -> String {
 ```
 
-This isn’t the exact signature that’s in the standard library: in the standard
-library, `add` is defined using generics. Here, we’re looking at the signature
-of `add` with concrete types substituted for the generic ones, which is what
-happens when we call this method with `String` values. We’ll discuss generics
-in Chapter 10. This signature gives us the clues we need to understand the
-tricky bits of the `+` operator.
+이는 표준 라이브러리에 있는 정확한 시그니처는 아닙니다. 표준 라이브러리
+내에서 `add`는 제네릭을 이용하여 정의되어 있습니다. 여기서는 제네릭에
+구체 타입(concrete type)을 대입한 `add`의 시그니처를 보는 중인데, 이는
+우리가 `String` 값으로 이 메소드를 호출했을 때 생깁니다. 제네릭에 대한
+내용은 10장에서 다룰 것입니다. 이 시그니처는 교묘한 `+` 연산자를 이해하는데
+필요한 단서를 줍니다.
 
-First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
-string to the first string because of the `s` parameter in the `add` function:
-we can only add a `&str` to a `String`; we can’t add two `String` values
-together. But wait—the type of `&s2` is `&String`, not `&str`, as specified in
-the second parameter to `add`. So why does Listing 8-18 compile?
+첫 번째로, `s2`는 `&`를 가지고 있는데, 이는 `add` 함수의 `s` 파라미터 때문에
+첫 번째 문자열에 두 번째 문자열의 *참조자*를 더하고 있음을 뜻합니다: 우리는
+`String`에 `&str`만 더할 수 있고, 두 `String`을 더하지는 못합니다. 하지만,
+잠깐만요 - `&s2`의 타입은 `&String`이지, `add`의 두 번째 파라미터에 명시한 것처럼
+`&str`은 아니죠. 왜 Listing 8-18의 예제가 컴파일될까요?
 
-The reason we’re able to use `&s2` in the call to `add` is that the compiler
-can *coerce* the `&String` argument into a `&str`. When we call the `add`
-method, Rust uses a *deref coercion*, which here turns `&s2` into `&s2[..]`.
-We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
-not take ownership of the `s` parameter, `s2` will still be a valid `String`
-after this operation.
+`&s2`를 `add` 호출에 사용할 수 있는 이유는 `&String` 인자가 `&str`로 *강제*될
+수 있기 때문입니다 -`add` 함수가 호출되면, 러스트는 *역참조 강제(deref coercion)*
+라 불리는 무언가를 사용하는데, 이는 `add` 함수 내에서 사용되는 `&s2`가 `&s2[..]`로
+바뀌는 것으로 생각할 수 있도록 해줍니다. 역참조 강제에 대한 것은 15장에서
+다룰 것입니다. `add`가 파라미터의 소유권을 가져가지는 않으므로, `s2`는 이
+연산 이후에도 여전히 유효한 `String`일 것입니다.
 
-Second, we can see in the signature that `add` takes ownership of `self`,
-because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
-moved into the `add` call and no longer be valid after that. So although `let
-s3 = s1 + &s2;` looks like it will copy both strings and create a new one, this
-statement actually takes ownership of `s1`, appends a copy of the contents of
-`s2`, and then returns ownership of the result. In other words, it looks like
-it’s making a lot of copies but isn’t; the implementation is more efficient
-than copying.
+두 번째로, 시그니처에서 `add`가 `self`의 소유권을 가져가는 것을 볼 수 있는데,
+이는 `self`가 `&`를 *안 가지고* 있기 때문입니다. 즉 Listing 8-18의 예제에서
+`s1`이 `add` 호출로 이동되어 이후에는 더 이상 유효하지 않을 것이라는 의미입니다.
+따라서 `let s3 = s1 + &s2;`가 마치 두 문자열을 복사하여 새로운 문자열을 만들
+것처럼 보일지라도, 실제로 이 구문은 `s1`의 소유권을 가져다가 `s2`의 내용물의
+복사본을 추가한 다음, 결과물의 소유권을 반환합니다. 달리 말하면, 이 구문은
+여러 복사본을 만드는 것처럼 보여도 그렇지 않습니다: 이러한 구현은 복사보다
+더 효율적입니다.
 
-If we need to concatenate multiple strings, the behavior of the `+` operator
-gets unwieldy:
+만일 여러 문자열을 접하고자 한다면, `+`의 동작은 다루기 불편해
+집니다:
 
 ```rust
 let s1 = String::from("tic");
@@ -226,9 +226,9 @@ let s3 = String::from("toe");
 let s = s1 + "-" + &s2 + "-" + &s3;
 ```
 
-At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"`
-characters, it’s difficult to see what’s going on. For more complicated string
-combining, we can use the `format!` macro:
+이 지점에서 `s`는 `tic-tac-toe`가 될 것입니다. 모든 `+`와 `"` 문자들과 함께
+보면 어떤 결과가 나올지 알기 어렵습니다. 더 복잡한 문자열 조합을 위해서는
+`format!` 매크로를 사용할 수 있습니다:
 
 ```rust
 let s1 = String::from("tic");
@@ -238,27 +238,27 @@ let s3 = String::from("toe");
 let s = format!("{}-{}-{}", s1, s2, s3);
 ```
 
-This code also sets `s` to `tic-tac-toe`. The `format!` macro works in the same
-way as `println!`, but instead of printing the output to the screen, it returns
-a `String` with the contents. The version of the code using `format!` is much
-easier to read and doesn’t take ownership of any of its parameters.
+이 코드 또한 `s`에 `tic-tac-toe`을 설정합니다. `format!` 매크로는 `println!`과
+똑같은 방식으로 작동하지만, 스크린에 결과를 출력하는 대신 결과를 담은 `String`을
+반환해줍니다. `format!`을 이용한 버전이 훨씬 읽기 쉽고, 또한 어떠한 파라미터들의
+소유권도 가져가지 않습니다.
 
-### Indexing into Strings
+### 문자열 내부의 인덱싱
 
-In many other programming languages, accessing individual characters in a
-string by referencing them by index is a valid and common operation. However,
-if you try to access parts of a `String` using indexing syntax in Rust, you’ll
-get an error. Consider the invalid code in Listing 8-19.
+다른 많은 프로그래밍 언어들에서, 인덱스를 이용한 참조를 통해 문자열 내부의
+개별 문자들에 접근하는 것은 유효하고 범용적인 연산에 속합니다. 그러나 러스트에서
+인덱싱 문법을 이용하여 `String`의 부분에 접근하고자 하면 에러를 얻게 됩니다.
+아래 Listing 8-19와 같은 코드를 생각해봅시다:
 
 ```rust,ignore,does_not_compile
 let s1 = String::from("hello");
 let h = s1[0];
 ```
 
-<span class="caption">Listing 8-19: Attempting to use indexing syntax with a
-String</span>
+<span class="caption">Listing 8-19: 문자열에 인덱싱 문법을 사용하는
+시도</span>
 
-This code will result in the following error:
+이 코드는 아래와 같은 에러를 출력합니다:
 
 ```text
 error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` is not satisfied
@@ -270,101 +270,101 @@ error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` 
   = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
 ```
 
-The error and the note tell the story: Rust strings don’t support indexing. But
-why not? To answer that question, we need to discuss how Rust stores strings in
-memory.
+에러와 노트 부분이 이야기해 줍니다: 러스트 문자열은 인덱싱을 지원하지 않는다고.
+그렇지만 왜 안 되는 걸까요? 이 질문에 답하기 위해서는 러스트가 어떻게 문자열을
+메모리에 저장하는지에 관하여 살짝 이야기해야 합니다.
 
-#### Internal Representation
+#### 내부적 표현
 
-A `String` is a wrapper over a `Vec<u8>`. Let’s look at some of our properly
-encoded UTF-8 example strings from Listing 8-14. First, this one:
+`String`은 `Vec<u8>`을 감싼 것입니다(wrapper). Listing 8-14에서 보았던 몇 가지
+적절히 인코딩된 UTF-8 예제 문자열을 살펴봅시다. 첫 번째로, 이것입니다:
 
 ```rust
 let len = String::from("Hola").len();
 ```
 
-In this case, `len` will be 4, which means the vector storing the string “Hola”
-is 4 bytes long. Each of these letters takes 1 byte when encoded in UTF-8. But
-what about the following line? (Note that this string begins with the capital
-Cyrillic letter Ze, not the Arabic number 3.)
+이 경우, `len`은 4가 되는데, 이는 문자열 "Hola"를 저장하고 있는 `Vec`이
+4바이트 길이라는 뜻입니다. UTF-8로 인코딩되면 각각의 글자들이 1바이트씩
+차지한다는 것이죠. 그런데 아래 예제는 어떨까요? (맨 앞의 문자는 아라비아
+숫자 3이 아닌, 키릴 문자 Ze 입니다)
 
 ```rust
 let len = String::from("Здравствуйте").len();
 ```
 
-Asked how long the string is, you might say 12. However, Rust’s answer is 24:
-that’s the number of bytes it takes to encode “Здравствуйте” in UTF-8, because
-each Unicode scalar value in that string takes 2 bytes of storage. Therefore,
-an index into the string’s bytes will not always correlate to a valid Unicode
-scalar value. To demonstrate, consider this invalid Rust code:
+이 문자열의 길이가 얼마인지 묻는다면, 여러분은 12라고 답할런지도 모릅니다.
+그러나 러스트의 대답은 24입니다. 이는 "Здравствуйте"를 UTF-8로 인코딩된
+바이트들의 크기인데, 각각의 유니코드 스칼라값이 저장소의 2바이트를 차지하기
+때문입니다. 따라서, 문자열의 바이트들 안의 인덱스는 유효한 유니코드 스칼라
+값과 항상 대응되지는 않을 것입니다. 이를 보여주기 위해, 다음과 같은 유효하지 않은 러스트 코드를 고려해 보세요:
 
 ```rust,ignore,does_not_compile
 let hello = "Здравствуйте";
 let answer = &hello[0];
 ```
 
-What should the value of `answer` be? Should it be `З`, the first letter? When
-encoded in UTF-8, the first byte of `З` is `208` and the second is `151`, so
-`answer` should in fact be `208`, but `208` is not a valid character on its
-own. Returning `208` is likely not what a user would want if they asked for the
-first letter of this string; however, that’s the only data that Rust has at
-byte index 0. Users generally don’t want the byte value returned, even if the
-string contains only Latin letters: if `&"hello"[0]` were valid code that
-returned the byte value, it would return `104`, not `h`. To avoid returning an
-unexpected value and causing bugs that might not be discovered immediately,
-Rust doesn’t compile this code at all and prevents misunderstandings early in
-the development process.
+`answer`의 값은 무엇이 되어야 할까요? 첫 번째 글자인 `З`이 되어야 할까요?
+UTF-8로 인코딩될 때, `З`의 첫 번째 바이트는 `208`이고, 두번째는 `151`이므로,
+`answer`는 사실 `208`이 되어야 하지만, `208`은 그 자체로는 유효한 문자가
+아닙니다. `208`을 반환하는 것은 사람들이 이 문자열의 첫 번째 글자를 요청했을
+경우 사람들이 기대하는 것이 아닙니다. 하지만 그게 러스트가 인덱스 0에 가지고
+있는 유일한 데이터죠. 바이트 값을 반환하는 것은 아마도 유저들이 원하는 것이
+아닐 것입니다. 심지어는 라틴 글자들만 있을 때도요. `&"hello"[0]`는 `h`가
+아니라 `104`를 반환합니다. 기대치 않은 값을 반환하고 즉시 발견하기 힘들지도
+모를 버그를 야기하는 것을 방지하기 위해, 러스트는 이러한 코드를 전혀
+컴파일하지 않고 이러한 오해들을 개발 과정 내에서 일찌감치
+방지합니다.
 
-#### Bytes and Scalar Values and Grapheme Clusters! Oh My!
+#### 바이트와 스칼라 값과 문자소 클러스터(Grapheme cluster)! 이런!
 
-Another point about UTF-8 is that there are actually three relevant ways to
-look at strings from Rust’s perspective: as bytes, scalar values, and grapheme
-clusters (the closest thing to what we would call *letters*).
+UTF-8에 대한 또 다른 지점은, 실제로는 러스트의 관점에서 문자열을 보는 세
+가지의 의미 있는 방식이 있다는 것입니다: 바이트, 스칼라값, 그리고 문자소
+클러스터(우리가 *글자*라고 부르는 것과 가장 근접한 것)입니다.
 
-If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
-stored as a vector of `u8` values that looks like this:
+데바가나리 글자로 쓰여진 힌디어 “नमस्ते”를 보면, 이것은 궁극적으로 아래와
+같이 `u8` 값들의 `Vec`으로서 저장됩니다:
 
 ```text
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
 224, 165, 135]
 ```
 
-That’s 18 bytes and is how computers ultimately store this data. If we look at
-them as Unicode scalar values, which are what Rust’s `char` type is, those
-bytes look like this:
+이건 18바이트이고 컴퓨터가 이 데이터를 궁극적으로 저장하는 방법입니다.
+만일 우리가 이를 유니코드 스칼라값, 즉 러스트의 `char` 타입인 형태로
+본다면, 아래와 같이 보이게 됩니다:
 
 ```text
 ['न', 'म', 'स', '्', 'त', 'े']
 ```
 
-There are six `char` values here, but the fourth and sixth are not letters:
-they’re diacritics that don’t make sense on their own. Finally, if we look at
-them as grapheme clusters, we’d get what a person would call the four letters
-that make up the Hindi word:
+여섯 개의 `char` 값이 있지만, 네번쨰와 여섯 번째는 글자가 아닙니다: 그
+자체로는 이해할 수 없는 발음 구별 부호입니다. 마지막으로, 만일 이를
+문자소 클러스로서 본다면, 사람들이 발음할 이 힌디 단어를 구성하는 네
+글자를 얻습니다:
 
 ```text
 ["न", "म", "स्", "ते"]
 ```
 
-Rust provides different ways of interpreting the raw string data that computers
-store so that each program can choose the interpretation it needs, no matter
-what human language the data is in.
+러스트는 컴퓨터가 저장하는 가공되지 않은(raw) 문자열을 번역하는 다른 방법을
+제공하여, 데이터가 담고 있는 것이 어떤 인간의 언어든 상관없이 각각의
+프로그램이 필요로 하는 통역방식을 선택할 수 있도록 합니다.
 
-A final reason Rust doesn’t allow us to index into a `String` to get a
-character is that indexing operations are expected to always take constant time
-(O(1)). But it isn’t possible to guarantee that performance with a `String`,
-because Rust would have to walk through the contents from the beginning to the
-index to determine how many valid characters there were.
+러스트가 `String`을 인덱스로 접근하여 문자를 얻지 못하도록 하는 마지막 이유는
+인덱스 연산이 언제나 상수 시간(O(1))에 실행될 것으로 기대받기 때문입니다.
+그러나 `String`을 가지고 그러한 성능을 보장하는 것은 불가능한데, 그 이유는
+러스트가 문자열 내에 얼마나 많은 유효 문자가 있는지 알아내기 위해 내용물의
+시작 지점부터 인덱스로 지정된 곳까지 훑어야 하기 때문입니다.
 
-### Slicing Strings
+### 문자열 슬라이싱하기
 
-Indexing into a string is often a bad idea because it’s not clear what the
-return type of the string-indexing operation should be: a byte value, a
-character, a grapheme cluster, or a string slice. Therefore, Rust asks you to
-be more specific if you really need to use indices to create string slices. To
-be more specific in your indexing and indicate that you want a string slice,
-rather than indexing using `[]` with a single number, you can use `[]` with a
-range to create a string slice containing particular bytes:
+문자열 인덱싱의 반환 타입이 어떤 것이 (바이트 값인지, 캐릭터인지, 문자소
+클러스터인지, 혹은 문자열 슬라이스인지) 되어야 하는지 명확하지 않기 때문에
+문자열의 인덱싱은 종종 나쁜 아이디어가 됩니다. 따라서, 여러분이 문자열
+슬라이스를 만들기 위해 정말로 인덱스를 사용하고자 한다면 러스트는 좀 더
+구체적으로 지정하도록 요청합니다. 여러분의 인덱싱을 더 구체적으로 하고
+문자열 슬라이스를 원한다는 것을 가리키기 위해서, `[]`에 숫자 하나를 사용하는
+인덱싱보다, `[]`와 범위를 사용하여 특정 바이트들이 담고 있는 문자열 슬라이스를 만들 수 있습니다:
 
 ```rust
 let hello = "Здравствуйте";
@@ -372,28 +372,28 @@ let hello = "Здравствуйте";
 let s = &hello[0..4];
 ```
 
-Here, `s` will be a `&str` that contains the first 4 bytes of the string.
-Earlier, we mentioned that each of these characters was 2 bytes, which means
-`s` will be `Зд`.
+여기서 `s`는 문자열의 첫 4바이트를 담고 있는 `&str`가 될 것입니다. 앞서 우리는
+이 글자들이 각각 2바이트를 차지한다고 언급했으므로, 이는 `s`가 “Зд”이 될 것이란
+뜻입니다.
 
-What would happen if we used `&hello[0..1]`? The answer: Rust would panic at
-runtime in the same way as if an invalid index were accessed in a vector:
+만약에 `&hello[0..1]`라고 했다면 어떻게 될까요? 답은 다음과 같습니다. 러스트는
+벡터 내에 유효하지 않은 인덱스에 접근했을 때와 동일한 방식으로 런타임에 패닉을 발생시킬 것입니다.
 
 ```text
 thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/libcore/str/mod.rs:2188:4
 ```
 
-You should use ranges to create string slices with caution, because doing so
-can crash your program.
+여러분은 문자열 슬라이스를 만들기 위하여 범위를 이용하는 방법을 조심스럽게
+사용해야 하는데, 이는 여러분의 프로그램을 죽게 만들 수도 있기 때문입니다.
 
-### Methods for Iterating Over Strings
+### 문자열을 순회할 때 쓰는 메소드, 반복자(iterator)
 
-Fortunately, you can access elements in a string in other ways.
+다행히도, 문자열의 요소에 접근하는 다른 방법이 있습니다.
 
-If you need to perform operations on individual Unicode scalar values, the best
-way to do so is to use the `chars` method. Calling `chars` on “नमस्ते” separates
-out and returns six values of type `char`, and you can iterate over the result
-to access each element:
+만일 개별적인 유니코드 스칼라값에 대한 연산을 수행하길 원한다면, 가장 좋은
+방법은 `chars` 메소드를 이용하는 것입니다. `chars`를 “नमस्ते”에 대해 호출하면
+`char`타입의 6개의 값으로 나누어 반환하며, 여러분은 각각의 요소에 접근하기
+위해 이 결과값에 대해 반복(iterate)할 수 있습니다:
 
 ```rust
 for c in "नमस्ते".chars() {
@@ -401,7 +401,7 @@ for c in "नमस्ते".chars() {
 }
 ```
 
-This code will print the following:
+이 코드는 다음을 출력할 것입니다:
 
 ```text
 न
@@ -412,8 +412,8 @@ This code will print the following:
 े
 ```
 
-The `bytes` method returns each raw byte, which might be appropriate for your
-domain:
+`bytes` 메소드는 가공되지 않은 각각의 바이트를 반환하는데, 여러분의 문제
+범위에 따라 적절할 수도 있습니다:
 
 ```rust
 for b in "नमस्ते".bytes() {
@@ -421,7 +421,7 @@ for b in "नमस्ते".bytes() {
 }
 ```
 
-This code will print the 18 bytes that make up this `String`:
+이 코드는 이 `String`을 구성하는 아래처럼 시작되는 18바이트를 출력합니다:
 
 ```text
 224
@@ -431,22 +431,22 @@ This code will print the 18 bytes that make up this `String`:
 135
 ```
 
-But be sure to remember that valid Unicode scalar values may be made up of more
-than 1 byte.
+하지만 유효한 유니코드 스칼라 값이 하나 이상의 바이트로 구성될지도 모른다는
+것을 확실히 기억해주세요.
 
-Getting grapheme clusters from strings is complex, so this functionality is not
-provided by the standard library. Crates are available on
-[crates.io](https://crates.io) if this is the functionality you need.
+문자열로부터 문자소 클러스터를 얻는 방법은 복잡해서, 이 기능은 표준
+라이브러리를 통해 제공되지 않습니다. 여러분이 원하는 기능이 이것이라면
+[crates.io](https://crates.io)에서 사용 가능한 크레이트가 있습니다.
 
-### Strings Are Not So Simple
+### 문자열은 단순하지 않습니다
 
-To summarize, strings are complicated. Different programming languages make
-different choices about how to present this complexity to the programmer. Rust
-has chosen to make the correct handling of `String` data the default behavior
-for all Rust programs, which means programmers have to put more thought into
-handling UTF-8 data upfront. This trade-off exposes more of the complexity of
-strings than is apparent in other programming languages, but it prevents you
-from having to handle errors involving non-ASCII characters later in your
-development life cycle.
+종합하면, 문자열은 복잡합니다. 다른 프로그래밍 언어들은 이러한 복잡성을
+프로그래머에게 어떻게 보여줄지에 대해 각기 다른 선택을 합니다. 러스트는
+`String` 데이터의 올바른 처리가 모든 러스트 프로그램에 대한 기본적인 동작이
+되도록 선택했는데, 이는 솔직히 프로그래머들이 UTF-8 데이터를 처리하는 데 있어
+더 많은 생각을 해야 한다는 의미입니다. 이러한 거래는 다른 프로그래밍 언어들에
+비해 더 복잡한 문자열을 노출시키지만, 한편으로는 여러분의 개발 생활 주기
+후반에 비 ASCII 캐릭터를 포함하는 에러를 처리해야 하는 것을 막아줄
+것입니다.
 
-Let’s switch to something a bit less complex: hash maps!
+이것보다 살짝 덜 복잡한 것으로 옮겨 갑시다: 해쉬맵이요!
