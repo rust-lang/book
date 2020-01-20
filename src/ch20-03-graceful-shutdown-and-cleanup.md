@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in Listing 20-21 is responding to requests asynchronously through the
+The code in Listing 20-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant <span
@@ -18,7 +18,7 @@ accept only two requests before gracefully shutting down its thread pool.
 
 Let’s start with implementing `Drop` on our thread pool. When the pool is
 dropped, our threads should all join to make sure they finish their work.
-Listing 20-23 shows a first attempt at a `Drop` implementation; this code won’t
+Listing 20-22 shows a first attempt at a `Drop` implementation; this code won’t
 quite work yet.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -35,7 +35,7 @@ impl Drop for ThreadPool {
 }
 ```
 
-<span class="caption">Listing 20-23: Joining each thread when the thread pool
+<span class="caption">Listing 20-22: Joining each thread when the thread pool
 goes out of scope</span>
 
 First, we loop through each of the thread pool `workers`. We use `&mut` for
@@ -178,7 +178,7 @@ thread should run, or it will be a `Terminate` variant that will cause the
 thread to exit its loop and stop.
 
 We need to adjust the channel to use values of type `Message` rather than type
-`Job`, as shown in Listing 20-24.
+`Job`, as shown in Listing 20-23.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -236,7 +236,7 @@ impl Worker {
 }
 ```
 
-<span class="caption">Listing 20-24: Sending and receiving `Message` values and
+<span class="caption">Listing 20-23: Sending and receiving `Message` values and
 exiting the loop if a `Worker` receives `Message::Terminate`</span>
 
 To incorporate the `Message` enum, we need to change `Job` to `Message` in two
@@ -248,9 +248,9 @@ received, and the thread will break out of the loop if the `Terminate` variant
 is received.
 
 With these changes, the code will compile and continue to function in the same
-way as it did after Listing 20-21. But we’ll get a warning because we aren’t
+way as it did after Listing 20-20. But we’ll get a warning because we aren’t
 creating any messages of the `Terminate` variety. Let’s fix this warning by
-changing our `Drop` implementation to look like Listing 20-25.
+changing our `Drop` implementation to look like Listing 20-24.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -276,7 +276,7 @@ impl Drop for ThreadPool {
 }
 ```
 
-<span class="caption">Listing 20-25: Sending `Message::Terminate` to the
+<span class="caption">Listing 20-24: Sending `Message::Terminate` to the
 workers before calling `join` on each worker thread</span>
 
 We’re now iterating over the workers twice: once to send one `Terminate`
@@ -302,7 +302,7 @@ messages as there are workers, each worker will receive a terminate message
 before `join` is called on its thread.
 
 To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 20-26.
+before gracefully shutting down the server, as shown in Listing 20-25.
 
 <span class="filename">Filename: src/bin/main.rs</span>
 
@@ -323,7 +323,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 20-26: Shut down the server after serving two
+<span class="caption">Listing 20-25: Shut down the server after serving two
 requests by exiting the loop</span>
 
 You wouldn’t want a real-world web server to shut down after serving only two
