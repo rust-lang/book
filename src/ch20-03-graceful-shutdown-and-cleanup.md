@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in Listing 20-21 is responding to requests asynchronously through the
+The code in Listing 20-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant <span
@@ -248,7 +248,7 @@ received, and the thread will break out of the loop if the `Terminate` variant
 is received.
 
 With these changes, the code will compile and continue to function in the same
-way as it did after Listing 20-21. But we’ll get a warning because we aren’t
+way as it did after Listing 20-20. But we’ll get a warning because we aren’t
 creating any messages of the `Terminate` variety. Let’s fix this warning by
 changing our `Drop` implementation to look like Listing 20-25.
 
