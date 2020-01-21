@@ -553,12 +553,12 @@ the `Display` trait that enables printing.
 ```rust
 use std::fmt::Display;
 
-struct Pair<T> {
+struct Point<T> {
     x: T,
     y: T,
 }
 
-impl<T> Pair<T> {
+impl<T> Point<T> {
     fn new(x: T, y: T) -> Self {
         Self {
             x,
@@ -567,7 +567,7 @@ impl<T> Pair<T> {
     }
 }
 
-impl<T: Display + PartialOrd> Pair<T> {
+impl<T: Display + PartialOrd> Point<T> {
     fn cmp_display(&self) {
         if self.x >= self.y {
             println!("The largest member is x = {}", self.x);
