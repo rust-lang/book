@@ -67,6 +67,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 //
 // - `target` directories
 // - `output.txt` files used to display output in the book
+// - `rustfmt-ignore` files used to signal to update-rustc.sh the listing shouldn't be formatted
 // - anchor comments or snip comments
 // - empty `main` functions in `lib.rs` files used to trick rustdoc
 fn copy_cleaned_listing_files(from: PathBuf, to: PathBuf) -> Result<(), Box<dyn Error>> {
@@ -84,8 +85,8 @@ fn copy_cleaned_listing_files(from: PathBuf, to: PathBuf) -> Result<(), Box<dyn 
                 copy_cleaned_listing_files(item_path, output_item)?;
             }
         } else {
-            // Don't copy output files
-            if item_name != "output.txt" {
+            // Don't copy output files or files that tell update-rustc.sh not to format
+            if item_name != "output.txt" && item_name != "rustfmt-ignore" {
                 let item_extension = item_path.extension();
                 if item_extension.is_some() && item_extension.unwrap() == "rs" {
                     copy_cleaned_rust_file(item_name, &item_path, &output_item)?;

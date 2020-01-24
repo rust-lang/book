@@ -68,6 +68,10 @@ listing beyond the most trivial should be extracted into a file. To do that:
   of user input or external events like making a web request), keep the output inline but make a
   comment that contains `manual-regeneration` and instructions for manually updating the inline
   output.
+- If you don't want this example to even be attempted to be formatted by `rustfmt` (for example
+  because the example doesn't parse on purpose), add a `rustfmt-ignore` file in the listing's
+  directory and the reason it's not being formatted as the contents of that file (in case it's a
+  rustfmt bug that might get fixed someday).
 
 ## See the effect of some change on the rendered book
 

@@ -6,7 +6,19 @@ set -eu
 echo 'Building book into `tmp/book-before` before updating...'
 mdbook build -d tmp/book-before
 
-# TODO: Rustfmt all listings here
+# Rustfmt all listings
+echo 'Formatting all listings...'
+find -s listings -name Cargo.toml -print0 | while IFS= read -r -d '' f; do
+    dir_to_fmt=$(dirname $f)
+
+    # There are a handful of listings we don't want to rustfmt and skipping doesn't work;
+    # those will have a file in their directory that explains why.
+    if [ ! -f "${dir_to_fmt}/rustfmt-ignore" ]; then
+        cd $dir_to_fmt
+        cargo fmt --all && true
+        cd - > /dev/null
+    fi
+done
 
 # Get listings without anchor comments in tmp by compiling a release listings artifact
 echo 'Generate listings without anchor comments...'
