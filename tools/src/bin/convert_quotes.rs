@@ -12,7 +12,6 @@ fn main() {
     }
 
     for line in buffer.lines() {
-
         if line.is_empty() {
             is_in_inline_code = false;
         }
@@ -42,29 +41,34 @@ fn main() {
                 }
 
                 // Replace with right/left apostrophe/quote.
-                let char_to_push =
-                    if possible_match == '\'' && !is_in_inline_code && !is_in_html_tag {
-                        if (previous_char != std::char::REPLACEMENT_CHARACTER &&
-                                !previous_char.is_whitespace()) ||
-                            previous_char == '‘'
-                        {
-                            '’'
-                        } else {
-                            '‘'
-                        }
-                    } else if possible_match == '"' && !is_in_inline_code && !is_in_html_tag {
-                        if (previous_char != std::char::REPLACEMENT_CHARACTER &&
-                                !previous_char.is_whitespace()) ||
-                            previous_char == '“'
-                        {
-                            '”'
-                        } else {
-                            '“'
-                        }
+                let char_to_push = if possible_match == '\''
+                    && !is_in_inline_code
+                    && !is_in_html_tag
+                {
+                    if (previous_char != std::char::REPLACEMENT_CHARACTER
+                        && !previous_char.is_whitespace())
+                        || previous_char == '‘'
+                    {
+                        '’'
                     } else {
-                        // Leave untouched.
-                        possible_match
-                    };
+                        '‘'
+                    }
+                } else if possible_match == '"'
+                    && !is_in_inline_code
+                    && !is_in_html_tag
+                {
+                    if (previous_char != std::char::REPLACEMENT_CHARACTER
+                        && !previous_char.is_whitespace())
+                        || previous_char == '“'
+                    {
+                        '”'
+                    } else {
+                        '“'
+                    }
+                } else {
+                    // Leave untouched.
+                    possible_match
+                };
                 modified_line.push(char_to_push);
                 previous_char = char_to_push;
             }

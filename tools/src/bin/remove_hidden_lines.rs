@@ -17,7 +17,6 @@ fn write_md(output: String) {
     write!(io::stdout(), "{}", output).unwrap();
 }
 
-
 fn remove_hidden_lines(input: &str) -> String {
     let mut resulting_lines = vec![];
     let mut within_codeblock = false;
@@ -80,6 +79,5 @@ you can see that...
         "#;
 
         assert_eq!(output, desired_output);
-
     }
 }

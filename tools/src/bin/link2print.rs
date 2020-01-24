@@ -1,12 +1,10 @@
 // FIXME: we have some long lines that could be refactored, but it's not a big deal.
 // ignore-tidy-linelength
 
-
-
+use regex::{Captures, Regex};
 use std::collections::HashMap;
 use std::io;
 use std::io::{Read, Write};
-use regex::{Regex, Captures};
 
 fn main() {
     write_md(parse_links(parse_references(read_md())));
@@ -27,7 +25,8 @@ fn write_md(output: String) {
 fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
     let mut ref_map = HashMap::new();
     // FIXME: currently doesn't handle "title" in following line.
-    let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###).unwrap();
+    let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###)
+        .unwrap();
     let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         let key = caps.at(1).unwrap().to_owned().to_uppercase();
         let val = caps.at(2).unwrap().to_owned();
@@ -42,7 +41,8 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
     // FIXME: check which punctuation is allowed by spec.
     let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
-    let error_code = Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
+    let error_code =
+        Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         match caps.name("pre") {
             Some(pre_section) => format!("{}", pre_section.to_owned()),
@@ -92,8 +92,12 @@ mod tests {
 
     #[test]
     fn parses_inline_link() {
-        let source = r"This is a [link](http://google.com) that should be expanded".to_string();
-        let target = r"This is a link at *http://google.com* that should be expanded".to_string();
+        let source =
+            r"This is a [link](http://google.com) that should be expanded"
+                .to_string();
+        let target =
+            r"This is a link at *http://google.com* that should be expanded"
+                .to_string();
         assert_eq!(parse(source), target);
     }
 
@@ -167,14 +171,18 @@ more text"
 
     #[test]
     fn ignores_optional_inline_title() {
-        let source = r###"This is a titled [link](http://example.com "My title")."###.to_string();
-        let target = r"This is a titled link at *http://example.com*.".to_string();
+        let source =
+            r###"This is a titled [link](http://example.com "My title")."###
+                .to_string();
+        let target =
+            r"This is a titled link at *http://example.com*.".to_string();
         assert_eq!(parse(source), target);
     }
 
     #[test]
     fn parses_title_with_puctuation() {
-        let source = r###"[link](http://example.com "It's Title")"###.to_string();
+        let source =
+            r###"[link](http://example.com "It's Title")"###.to_string();
         let target = r"link at *http://example.com*".to_string();
         assert_eq!(parse(source), target);
     }
@@ -188,10 +196,10 @@ more text"
     #[test]
     fn parses_name_with_utf8() {
         let source = r###"[user’s forum](the user’s forum)"###.to_string();
-        let target = r###"user’s forum at *the user’s forum*"###.to_string();
+        let target =
+            r###"user’s forum at *the user’s forum*"###.to_string();
         assert_eq!(parse(source), target);
     }
-
 
     #[test]
     fn parses_reference_with_punctuation() {
@@ -248,7 +256,7 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 "###
-            .to_string();
+        .to_string();
         let target = source.clone();
         assert_eq!(parse(source), target);
     }
@@ -284,7 +292,7 @@ Another [link]
 more text
 [link]: http://gohere
 "###
-            .to_string();
+        .to_string();
         let target = r###"```toml
 [package]
 name = "hello_cargo"
@@ -296,7 +304,7 @@ authors = ["Your Name <you@example.com>"]
 Another link at *http://gohere*
 more text
 "###
-            .to_string();
+        .to_string();
         assert_eq!(parse(source), target);
     }
     #[test]
