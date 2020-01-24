@@ -41,10 +41,6 @@ yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-// pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-//      vec![]
-// }
-
 #[cfg(test)]
 mod tests {
     use super::*;
