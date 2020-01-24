@@ -22,8 +22,7 @@ the `grep` tool called `ripgrep` for searching files. If we want to install
 `ripgrep`, we can run the following:
 
 <!-- manual-regeneration
-cargo install something
-use you don't have, copy relevant output below
+cargo install something you don't have, copy relevant output below
 -->
 
 ```text

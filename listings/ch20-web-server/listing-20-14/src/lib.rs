@@ -35,7 +35,6 @@ impl ThreadPool {
     where
         F: FnOnce() + Send + 'static,
     {
-
     }
     // ANCHOR: here
 }

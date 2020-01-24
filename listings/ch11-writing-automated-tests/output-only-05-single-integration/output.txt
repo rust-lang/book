@@ -1,7 +1,7 @@
 $ cargo test --test integration_test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-     Running target/debug/deps/integration_test-18ce67e0d628b336
+     Running target/debug/deps/integration_test-bab16d57839243e8
 
 running 1 test
 test it_adds_two ... ok

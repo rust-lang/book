@@ -13,7 +13,6 @@ impl ThreadPool {
     where
         F: FnOnce() + Send + 'static,
     {
-
     }
 }
 // ANCHOR_END: here

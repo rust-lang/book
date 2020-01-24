@@ -224,5 +224,5 @@ itself. We’ll discuss traits in Chapter 10.
 for the error above
 after running update-rustc.sh:
 pbcopy < listings/ch05-using-structs-to-structure-related-data/no-listing-02-reference-in-struct/output.txt
-paste below
+paste above
 add `> ` before every line -->

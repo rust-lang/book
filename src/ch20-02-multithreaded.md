@@ -602,26 +602,22 @@ warning: field is never used: `workers`
 7 |     workers: Vec<Worker>,
   |     ^^^^^^^^^^^^^^^^^^^^
   |
-  = note: #[warn(dead_code)] on by default
+  = note: `#[warn(dead_code)]` on by default
 
 warning: field is never used: `id`
-  --> src/lib.rs:61:5
+  --> src/lib.rs:48:5
    |
-61 |     id: usize,
+48 |     id: usize,
    |     ^^^^^^^^^
-   |
-   = note: #[warn(dead_code)] on by default
 
 warning: field is never used: `thread`
-  --> src/lib.rs:62:5
+  --> src/lib.rs:49:5
    |
-62 |     thread: thread::JoinHandle<()>,
+49 |     thread: thread::JoinHandle<()>,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: #[warn(dead_code)] on by default
 
-    Finished dev [unoptimized + debuginfo] target(s) in 0.99s
-     Running `target/debug/hello`
+    Finished dev [unoptimized + debuginfo] target(s) in 1.66s
+     Running `target/debug/main`
 Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 Worker 1 got a job; executing.

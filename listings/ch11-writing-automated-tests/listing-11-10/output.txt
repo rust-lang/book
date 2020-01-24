@@ -1,7 +1,7 @@
 $ cargo test
    Compiling silly-function v0.1.0 (file:///projects/silly-function)
     Finished dev [unoptimized + debuginfo] target(s) in 0.67s
-     Running target/debug/deps/silly_function-01fb9d1182907f15
+     Running target/debug/deps/silly_function-f894942035bcf1e2
 
 running 2 tests
 test tests::this_test_will_fail ... FAILED

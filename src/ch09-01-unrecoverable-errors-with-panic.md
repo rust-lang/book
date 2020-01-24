@@ -110,17 +110,18 @@ Listing 9-2 shows output similar to what you’ll see.
 <!-- manual-regeneration
 cd listings/ch09-error-handling/listing-09-01
 RUST_BACKTRACE=1 cargo run
+copy the backtrace output below
 check the backtrace number mentioned in the text below the listing
 -->
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/eae3437dfe991621e8afdc82734f4a172d7ddf9b/src/libcore/slice/mod.rs:2681:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2715:10
 stack backtrace:
    0: backtrace::backtrace::libunwind::trace
-             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.29/src/backtrace/libunwind.rs:88
+             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.34/src/backtrace/libunwind.rs:88
    1: backtrace::backtrace::trace_unsynchronized
-             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.29/src/backtrace/mod.rs:66
+             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.34/src/backtrace/mod.rs:66
    2: std::sys_common::backtrace::_print
              at src/libstd/sys_common/backtrace.rs:47
    3: std::sys_common::backtrace::print
@@ -135,26 +136,24 @@ stack backtrace:
              at src/libstd/panicking.rs:384
    8: rust_begin_unwind
              at src/libstd/panicking.rs:311
-   9: core::panicking::panic_fmt
-             at src/libcore/panicking.rs:85
-  10: core::panicking::panic_bounds_check
-             at src/libcore/panicking.rs:61
+   9: std::panicking::begin_panic
+  10: std::panicking::begin_panic
   11: <usize as core::slice::SliceIndex<[T]>>::index
-             at /rustc/eae3437dfe991621e8afdc82734f4a172d7ddf9b/src/libcore/slice/mod.rs:2681
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2715
   12: core::slice::<impl core::ops::index::Index<I> for [T]>::index
-             at /rustc/eae3437dfe991621e8afdc82734f4a172d7ddf9b/src/libcore/slice/mod.rs:2538
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2566
   13: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at /rustc/eae3437dfe991621e8afdc82734f4a172d7ddf9b/src/liballoc/vec.rs:1756
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/liballoc/vec.rs:1791
   14: panic::main
              at src/main.rs:4
   15: std::rt::lang_start::{{closure}}
-             at /rustc/eae3437dfe991621e8afdc82734f4a172d7ddf9b/src/libstd/rt.rs:64
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libstd/rt.rs:64
   16: std::rt::lang_start_internal::{{closure}}
              at src/libstd/rt.rs:49
   17: std::panicking::try::do_call
              at src/libstd/panicking.rs:296
   18: __rust_maybe_catch_panic
-             at src/libpanic_unwind/lib.rs:82
+             at src/libpanic_unwind/lib.rs:80
   19: std::panicking::try
              at src/libstd/panicking.rs:275
   20: std::panic::catch_unwind
@@ -162,7 +161,7 @@ stack backtrace:
   21: std::rt::lang_start_internal
              at src/libstd/rt.rs:48
   22: std::rt::lang_start
-             at /rustc/eae3437dfe991621e8afdc82734f4a172d7ddf9b/src/libstd/rt.rs:64
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libstd/rt.rs:64
   23: panic::main
 ```
 

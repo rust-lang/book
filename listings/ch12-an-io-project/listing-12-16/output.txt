@@ -1,7 +1,7 @@
 $ cargo test
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.43s
-     Running target/debug/deps/minigrep-2413544be48babd8
+     Running target/debug/deps/minigrep-520dd392f22dfacc
 
 running 1 test
 test tests::one_result ... FAILED

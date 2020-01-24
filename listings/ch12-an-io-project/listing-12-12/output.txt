@@ -6,7 +6,7 @@ warning: unused `std::result::Result` that must be used
 19 |     run(config);
    |     ^^^^^^^^^^^^
    |
-   = note: #[warn(unused_must_use)] on by default
+   = note: `#[warn(unused_must_use)]` on by default
    = note: this `Result` may be an `Err` variant, which should be handled
 
     Finished dev [unoptimized + debuginfo] target(s) in 0.71s

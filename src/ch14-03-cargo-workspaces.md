@@ -222,13 +222,12 @@ cargo build
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-
 ```text
 $ cargo build
     Updating crates.io index
   Downloaded rand v0.5.5
    --snip--
-   Compiling rand v0.5.5
+   Compiling rand v0.5.6
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
@@ -248,11 +247,12 @@ copy output below; the output updating script doesn't handle subdirectories in p
 
 ```text
 $ cargo build
+  --snip--
    Compiling adder v0.1.0 (file:///projects/add/adder)
 error[E0432]: unresolved import `rand`
- --> adder/src/main.rs:1:5
+ --> adder/src/main.rs:2:5
   |
-1 | use rand;
+2 | use rand;
   |     ^^^^ no `rand` external crate
 ```
 
@@ -296,7 +296,7 @@ test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-     Running target/debug/deps/adder-f88af9d2cc175a5e
+     Running target/debug/deps/adder-6b04971c46fc224f
 
 running 0 tests
 
