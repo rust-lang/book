@@ -4,8 +4,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 
     assert!(mid <= len);
 
-    (&mut slice[..mid],
-     &mut slice[mid..])
+    (&mut slice[..mid], &mut slice[mid..])
 }
 // ANCHOR_END: here
 

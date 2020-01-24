@@ -1,6 +1,6 @@
 // ANCHOR: here
-use art::PrimaryColor;
 use art::mix;
+use art::PrimaryColor;
 
 fn main() {
     // --snip--

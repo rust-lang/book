@@ -3,8 +3,8 @@ use hello::ThreadPool;
 // ANCHOR_END: here
 use std::fs;
 use std::io::prelude::*;
-use std::net::TcpStream;
 use std::net::TcpListener;
+use std::net::TcpStream;
 use std::thread;
 use std::time::Duration;
 

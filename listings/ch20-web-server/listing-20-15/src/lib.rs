@@ -25,16 +25,14 @@ impl ThreadPool {
             workers.push(Worker::new(id));
         }
 
-        ThreadPool {
-            workers
-        }
+        ThreadPool { workers }
     }
     // --snip--
     // ANCHOR_END: here
 
     pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
+    where
+        F: FnOnce() + Send + 'static,
     {
 
     }
@@ -50,10 +48,7 @@ impl Worker {
     fn new(id: usize) -> Worker {
         let thread = thread::spawn(|| {});
 
-        Worker {
-            id,
-            thread,
-        }
+        Worker { id, thread }
     }
 }
 // ANCHOR_END: here

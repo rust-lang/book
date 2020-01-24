@@ -14,7 +14,7 @@ impl<T, U> Point<T, U> {
 
 fn main() {
     let p1 = Point { x: 5, y: 10.4 };
-    let p2 = Point { x: "Hello", y: 'c'};
+    let p2 = Point { x: "Hello", y: 'c' };
 
     let p3 = p1.mixup(p2);
 

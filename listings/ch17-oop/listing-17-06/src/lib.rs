@@ -8,7 +8,9 @@ pub struct Screen<T: Draw> {
 }
 
 impl<T> Screen<T>
-    where T: Draw {
+where
+    T: Draw,
+{
     pub fn run(&self) {
         for component in self.components.iter() {
             component.draw();

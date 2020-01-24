@@ -8,5 +8,4 @@ impl<T> MyBox<T> {
 }
 // ANCHOR_END: here
 
-fn main() {
-}
+fn main() {}

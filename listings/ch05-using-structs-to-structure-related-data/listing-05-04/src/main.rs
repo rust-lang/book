@@ -17,5 +17,8 @@ fn build_user(email: String, username: String) -> User {
 // ANCHOR_END: here
 
 fn main() {
-    let user1 = build_user(String::from("someone@example.com"), String::from("someusername123"));
+    let user1 = build_user(
+        String::from("someone@example.com"),
+        String::from("someusername123"),
+    );
 }

@@ -1,9 +1,10 @@
+use rand::Rng;
 // ANCHOR: here
-use std::io;
+// --snip--
 use std::cmp::Ordering;
+use std::io;
 // --snip--
 // ANCHOR_END: here
-use rand::Rng;
 
 fn main() {
     println!("Guess the number!");
@@ -16,7 +17,8 @@ fn main() {
 
     let mut guess = String::new();
 
-    io::stdin().read_line(&mut guess)
+    io::stdin()
+        .read_line(&mut guess)
         .expect("Failed to read line");
 
     println!("You guessed: {}", guess);

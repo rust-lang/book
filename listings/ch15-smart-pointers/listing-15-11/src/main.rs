@@ -4,5 +4,4 @@ fn hello(name: &str) {
 }
 // ANCHOR_END: here
 
-fn main() {
-}
+fn main() {}

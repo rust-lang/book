@@ -69,7 +69,7 @@ allow the player to input a guess. Enter the code in Listing 2-1 into
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs}}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
 <span class="caption">Listing 2-1: Code that gets a guess from the user and
@@ -81,7 +81,7 @@ obtain user input and then print the result as output, we need to bring the
 standard library (which is known as `std`):
 
 ```rust,ignore
-use std::io;
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
 By default, Rust brings only a few types into the scope of every program in
@@ -96,7 +96,7 @@ As you saw in Chapter 1, the `main` function is the entry point into the
 program:
 
 ```rust,ignore
-fn main() {
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
 The `fn` syntax declares a new function, the parentheses, `()`, indicate there
@@ -106,9 +106,7 @@ As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
 ```rust,ignore
-println!("Guess the number!");
-
-println!("Please input your guess.");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
 This code is printing a prompt stating what the game is and requesting input
@@ -119,7 +117,7 @@ from the user.
 Next, we’ll create a place to store the user input, like this:
 
 ```rust,ignore
-let mut guess = String::new();
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
 Now the program is getting interesting! There’s a lot going on in this little
@@ -172,8 +170,7 @@ library with `use std::io;` on the first line of the program. Now we’ll call
 the `stdin` function from the `io` module:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
 If we hadn’t put the `use std::io` line at the beginning of the program, we
@@ -207,12 +204,12 @@ thoroughly.)
 
 ### Handling Potential Failure with the `Result` Type
 
-We’re not quite done with this line of code. Although what we’ve discussed so
-far is a single line of text, it’s only the first part of the single logical
-line of code. The second part is this method:
+We’re still working on this line of code. Although we’re now discussing a third
+line of text, it’s still part of a single logical line of code. The next part
+is this method:
 
 ```rust,ignore
-.expect("Failed to read line");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
 When you call a method with the `.foo()` syntax, it’s often wise to introduce a
@@ -223,8 +220,8 @@ written this code as:
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it: two
-lines for two method calls. Now let’s discuss what this line does.
+However, one long line is difficult to read, so it’s best to divide it. Now
+let’s discuss what this line does.
 
 As mentioned earlier, `read_line` puts what the user types into the string
 we’re passing it, but it also returns a value—in this case, an
@@ -276,11 +273,11 @@ because you just want to crash this program when a problem occurs, you can use
 
 ### Printing Values with `println!` Placeholders
 
-Aside from the closing curly brackets, there’s only one more line to discuss in
+Aside from the closing curly bracket, there’s only one more line to discuss in
 the code added so far, which is the following:
 
 ```rust,ignore
-println!("You guessed: {}", guess);
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
 This line prints the string we saved the user’s input in. The set of curly

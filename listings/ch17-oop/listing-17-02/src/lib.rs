@@ -16,7 +16,7 @@ impl AveragedCollection {
             Some(value) => {
                 self.update_average();
                 Some(value)
-            },
+            }
             None => None,
         }
     }

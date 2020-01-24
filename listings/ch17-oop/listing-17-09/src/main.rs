@@ -13,7 +13,7 @@ impl Draw for SelectBox {
 }
 
 // ANCHOR: here
-use gui::{Screen, Button};
+use gui::{Button, Screen};
 
 fn main() {
     let screen = Screen {
@@ -24,7 +24,7 @@ fn main() {
                 options: vec![
                     String::from("Yes"),
                     String::from("Maybe"),
-                    String::from("No")
+                    String::from("No"),
                 ],
             }),
             Box::new(Button {

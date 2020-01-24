@@ -5,7 +5,10 @@ struct Rectangle {
 }
 
 fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
 
     println!("rect1 is {:#?}", rect1);
 }

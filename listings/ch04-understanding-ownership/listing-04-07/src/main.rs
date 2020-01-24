@@ -18,5 +18,4 @@ fn first_word(s: &String) -> usize {
 }
 // ANCHOR_END: here
 
-fn main() {
-}
+fn main() {}

@@ -1,17 +1,12 @@
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: if and else have incompatible types
- --> src/main.rs:7:9
+ --> src/main.rs:4:44
   |
-4 |       let number = if condition {
-  |  __________________-
-5 | |         5
-  | |         - expected because of this
-6 | |     } else {
-7 | |         "six"
-  | |         ^^^^^ expected integer, found &str
-8 | |     };
-  | |_____- if and else have incompatible types
+4 |     let number = if condition { 5 } else { "six" };
+  |                                 -          ^^^^^ expected integer, found &str
+  |                                 |
+  |                                 expected because of this
   |
   = note: expected type `{integer}`
              found type `&str`

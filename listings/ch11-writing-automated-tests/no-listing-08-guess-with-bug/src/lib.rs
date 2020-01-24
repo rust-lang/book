@@ -6,13 +6,11 @@ pub struct Guess {
 // --snip--
 impl Guess {
     pub fn new(value: i32) -> Guess {
-        if value < 1  {
+        if value < 1 {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }
 
-        Guess {
-            value
-        }
+        Guess { value }
     }
 }
 // ANCHOR_END: here

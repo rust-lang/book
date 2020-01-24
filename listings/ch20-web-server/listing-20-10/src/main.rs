@@ -1,7 +1,7 @@
 use std::fs;
 use std::io::prelude::*;
-use std::net::TcpStream;
 use std::net::TcpListener;
+use std::net::TcpStream;
 // ANCHOR: here
 use std::thread;
 use std::time::Duration;

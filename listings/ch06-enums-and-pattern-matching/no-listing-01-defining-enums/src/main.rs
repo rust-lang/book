@@ -18,5 +18,5 @@ fn main() {
 }
 
 // ANCHOR: fn
-fn route(ip_kind: IpAddrKind) { }
+fn route(ip_kind: IpAddrKind) {}
 // ANCHOR_END: fn

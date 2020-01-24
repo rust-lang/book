@@ -1,19 +1,19 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0599]: no method named `join` found for type `std::option::Option<std::thread::JoinHandle<()>>` in the current scope
-  --> src/lib.rs:55:27
+  --> src/lib.rs:52:27
    |
-55 |             worker.thread.join().unwrap();
+52 |             worker.thread.join().unwrap();
    |                           ^^^^
 
 error[E0308]: mismatched types
-  --> src/lib.rs:79:13
+  --> src/lib.rs:72:22
    |
-79 |             thread,
-   |             ^^^^^^
-   |             |
-   |             expected enum `std::option::Option`, found struct `std::thread::JoinHandle`
-   |             help: try using a variant of the expected type: `Some(thread)`
+72 |         Worker { id, thread }
+   |                      ^^^^^^
+   |                      |
+   |                      expected enum `std::option::Option`, found struct `std::thread::JoinHandle`
+   |                      help: try using a variant of the expected type: `Some(thread)`
    |
    = note: expected type `std::option::Option<std::thread::JoinHandle<()>>`
               found type `std::thread::JoinHandle<_>`

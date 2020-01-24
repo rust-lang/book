@@ -1,5 +1,5 @@
-use std::io::Error;
 use std::fmt;
+use std::io::Error;
 
 pub trait Write {
     fn write(&mut self, buf: &[u8]) -> Result<usize, Error>;

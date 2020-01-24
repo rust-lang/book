@@ -1,5 +1,5 @@
-use std::thread;
 use std::sync::mpsc;
+use std::thread;
 
 pub struct ThreadPool {
     workers: Vec<Worker>,
@@ -31,17 +31,14 @@ impl ThreadPool {
             workers.push(Worker::new(id, receiver));
         }
 
-        ThreadPool {
-            workers,
-            sender,
-        }
+        ThreadPool { workers, sender }
     }
     // --snip--
     // ANCHOR_END: here
 
     pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
+    where
+        F: FnOnce() + Send + 'static,
     {
 
     }
@@ -64,10 +61,7 @@ impl Worker {
             receiver;
         });
 
-        Worker {
-            id,
-            thread,
-        }
+        Worker { id, thread }
     }
 }
 // ANCHOR_END: here

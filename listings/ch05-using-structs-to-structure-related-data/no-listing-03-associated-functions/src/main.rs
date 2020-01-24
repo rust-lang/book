@@ -7,7 +7,10 @@ struct Rectangle {
 // ANCHOR: here
 impl Rectangle {
     fn square(size: u32) -> Rectangle {
-        Rectangle { width: size, height: size }
+        Rectangle {
+            width: size,
+            height: size,
+        }
     }
 }
 // ANCHOR_END: here

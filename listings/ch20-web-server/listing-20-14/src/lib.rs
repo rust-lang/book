@@ -25,17 +25,15 @@ impl ThreadPool {
             // create some threads and store them in the vector
         }
 
-        ThreadPool {
-            threads
-        }
+        ThreadPool { threads }
     }
 
     // --snip--
     // ANCHOR_END: here
 
     pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
+    where
+        F: FnOnce() + Send + 'static,
     {
 
     }

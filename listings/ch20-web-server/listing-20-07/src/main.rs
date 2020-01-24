@@ -1,7 +1,7 @@
 use std::fs;
 use std::io::prelude::*;
-use std::net::TcpStream;
 use std::net::TcpListener;
+use std::net::TcpStream;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
@@ -26,9 +26,8 @@ fn handle_connection(mut stream: TcpStream) {
 
         stream.write(response.as_bytes()).unwrap();
         stream.flush().unwrap();
-        // ANCHOR: here
-        // --snip--
-
+    // ANCHOR: here
+    // --snip--
     } else {
         let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
         let contents = fs::read_to_string("404.html").unwrap();

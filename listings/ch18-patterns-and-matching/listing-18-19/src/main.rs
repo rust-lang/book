@@ -5,7 +5,7 @@ fn main() {
     match numbers {
         (first, _, third, _, fifth) => {
             println!("Some numbers: {}, {}, {}", first, third, fifth)
-        },
+        }
     }
     // ANCHOR_END: here
 }

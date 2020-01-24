@@ -7,5 +7,4 @@ struct User {
 }
 // ANCHOR_END: here
 
-fn main() {
-}
+fn main() {}

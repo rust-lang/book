@@ -4,6 +4,6 @@ fn main() {
     match numbers {
         (first, .., last) => {
             println!("Some numbers: {}, {}", first, last);
-        },
+        }
     }
 }

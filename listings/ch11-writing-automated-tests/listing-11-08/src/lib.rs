@@ -9,9 +9,7 @@ impl Guess {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }
 
-        Guess {
-            value
-        }
+        Guess { value }
     }
 }
 

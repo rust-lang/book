@@ -41,10 +41,11 @@ mod tests {
     // ANCHOR: here
     #[test]
     fn using_other_iterator_trait_methods() {
-        let sum: u32 = Counter::new().zip(Counter::new().skip(1))
-                                     .map(|(a, b)| a * b)
-                                     .filter(|x| x % 3 == 0)
-                                     .sum();
+        let sum: u32 = Counter::new()
+            .zip(Counter::new().skip(1))
+            .map(|(a, b)| a * b)
+            .filter(|x| x % 3 == 0)
+            .sum();
         assert_eq!(18, sum);
     }
     // ANCHOR_END: here

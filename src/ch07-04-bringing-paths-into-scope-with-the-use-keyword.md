@@ -215,8 +215,8 @@ Listing 2-4 bring items from `std` into scope:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-{{#include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
 
 Instead, we can use nested paths to bring the same items into scope in one
@@ -226,9 +226,8 @@ differ, as shown in Listing 7-18.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-{{#include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:1}}
-// --snip--
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 7-18: Specifying a nested path to bring multiple

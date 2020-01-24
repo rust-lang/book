@@ -10,8 +10,8 @@ impl ThreadPool {
 
     // ANCHOR: here
     pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
+    where
+        F: FnOnce() + Send + 'static,
     {
 
     }

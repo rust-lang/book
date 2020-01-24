@@ -1,7 +1,9 @@
 fn main() {
     let x = 4;
 
-    fn equal_to_x(z: i32) -> bool { z == x }
+    fn equal_to_x(z: i32) -> bool {
+        z == x
+    }
 
     let y = 4;
 

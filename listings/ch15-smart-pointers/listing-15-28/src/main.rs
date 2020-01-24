@@ -1,6 +1,6 @@
 // ANCHOR: here
-use std::rc::{Rc, Weak};
 use std::cell::RefCell;
+use std::rc::{Rc, Weak};
 
 #[derive(Debug)]
 struct Node {

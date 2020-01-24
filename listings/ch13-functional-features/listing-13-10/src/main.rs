@@ -1,5 +1,6 @@
 struct Cacher<T>
-    where T: Fn(u32) -> u32
+where
+    T: Fn(u32) -> u32,
 {
     calculation: T,
     value: Option<u32>,
@@ -7,7 +8,8 @@ struct Cacher<T>
 
 // ANCHOR: here
 impl<T> Cacher<T>
-    where T: Fn(u32) -> u32
+where
+    T: Fn(u32) -> u32,
 {
     fn new(calculation: T) -> Cacher<T> {
         Cacher {
@@ -23,7 +25,7 @@ impl<T> Cacher<T>
                 let v = (self.calculation)(arg);
                 self.value = Some(v);
                 v
-            },
+            }
         }
     }
 }

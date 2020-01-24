@@ -12,5 +12,4 @@ fn first_word(s: &String) -> &str {
 }
 // ANCHOR_END: here
 
-fn main() {
-}
+fn main() {}

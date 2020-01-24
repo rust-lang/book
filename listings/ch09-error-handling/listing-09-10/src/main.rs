@@ -1,6 +1,6 @@
-use std::io;
-use std::cmp::Ordering;
 use rand::Rng;
+use std::cmp::Ordering;
+use std::io;
 
 // ANCHOR: here
 pub struct Guess {
@@ -13,9 +13,7 @@ impl Guess {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }
 
-        Guess {
-            value
-        }
+        Guess { value }
     }
 
     pub fn value(&self) -> i32 {
@@ -34,7 +32,8 @@ fn main() {
 
         let mut guess = String::new();
 
-        io::stdin().read_line(&mut guess)
+        io::stdin()
+            .read_line(&mut guess)
             .expect("Failed to read line");
 
         let guess: i32 = match guess.trim().parse() {
