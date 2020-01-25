@@ -9,6 +9,6 @@ error[E0599]: no function or associated item named `new` found for type `hello::
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0599`.
-error: Could not compile `hello`.
+error: could not compile `hello`.
 
 To learn more, run the command again with --verbose.

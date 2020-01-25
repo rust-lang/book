@@ -9,6 +9,6 @@ error[E0433]: failed to resolve: use of undeclared type or module `ThreadPool`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0433`.
-error: Could not compile `hello`.
+error: could not compile `hello`.
 
 To learn more, run the command again with --verbose.

@@ -11,6 +11,6 @@ error[E0106]: missing lifetime specifier
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0106`.
-error: Could not compile `minigrep`.
+error: could not compile `minigrep`.
 
 To learn more, run the command again with --verbose.

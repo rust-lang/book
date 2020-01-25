@@ -1,7 +1,7 @@
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 0.62s
-     Running target/debug/deps/adder-8fc40546e8c0c425
+     Running target/debug/deps/adder-26ec23d2a5426051
 
 running 1 test
 test tests::it_adds_two ... ok

@@ -12,6 +12,6 @@ error[E0277]: the `?` operator can only be used in a function that returns `Resu
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0277`.
-error: Could not compile `error-handling`.
+error: could not compile `error-handling`.
 
 To learn more, run the command again with --verbose.

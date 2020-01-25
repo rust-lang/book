@@ -1,14 +1,14 @@
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-     Running target/debug/deps/adder-8fc40546e8c0c425
+     Running target/debug/deps/adder-26ec23d2a5426051
 
 running 1 test
 test tests::internal ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-     Running target/debug/deps/integration_test-bab16d57839243e8
+     Running target/debug/deps/integration_test-c6387e91a17a7e28
 
 running 1 test
 test it_adds_two ... ok

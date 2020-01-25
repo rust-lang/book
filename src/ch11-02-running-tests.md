@@ -90,38 +90,8 @@ When we run the tests in Listing 11-10 again with the `--show-output` flag, we
 see the following output:
 
 ```text
-running 2 tests
-test tests::this_test_will_pass ... ok
-test tests::this_test_will_fail ... FAILED
-
-successes:
-
----- tests::this_test_will_pass stdout ----
-I got the value 4
-
-
-successes:
-    tests::this_test_will_pass
-
-failures:
-
----- tests::this_test_will_fail stdout ----
-I got the value 8
-thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left == right)`
-  left: `5`,
- right: `10`', src/lib.rs:19:9
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
-
-
-failures:
-    tests::this_test_will_fail
-
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch11-writing-automated-tests/output-only-01-show-output/output.txt}}
 ```
-
-<!-- TODO: replace with:
-include ../listings/ch11-writing-automated-tests/output-only-01-show-output/output.txt
-when we're using 1.39 where the --show-output option was added -->
 
 ### Running a Subset of Tests by Name
 

@@ -1,14 +1,14 @@
 $ cargo test
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 1.77s
-     Running target/debug/deps/minigrep-520dd392f22dfacc
+     Running target/debug/deps/minigrep-d717a44405defbfd
 
 running 1 test
 test tests::one_result ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-     Running target/debug/deps/minigrep-51a9f0eece3f364c
+     Running target/debug/deps/minigrep-42e3d08a294c0b9d
 
 running 0 tests
 

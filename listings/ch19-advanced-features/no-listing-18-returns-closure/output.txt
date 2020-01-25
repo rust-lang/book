@@ -25,6 +25,6 @@ error: aborting due to 2 previous errors
 
 Some errors have detailed explanations: E0277, E0308.
 For more information about an error, try `rustc --explain E0277`.
-error: Could not compile `functions-example`.
+error: could not compile `functions-example`.
 
 To learn more, run the command again with --verbose.

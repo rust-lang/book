@@ -11,6 +11,6 @@ error[E0277]: the trait bound `std::string::String: gui::Draw` is not satisfied
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0277`.
-error: Could not compile `gui`.
+error: could not compile `gui`.
 
 To learn more, run the command again with --verbose.

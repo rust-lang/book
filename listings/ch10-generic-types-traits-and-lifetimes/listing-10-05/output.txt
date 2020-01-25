@@ -13,6 +13,6 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0369`.
-error: Could not compile `chapter10`.
+error: could not compile `chapter10`.
 
 To learn more, run the command again with --verbose.
