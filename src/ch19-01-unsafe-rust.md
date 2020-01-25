@@ -25,7 +25,7 @@ Rust and how to do it.
 ### Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take four actions in unsafe Rust, called
+that holds the unsafe code. You can take five actions in unsafe Rust, called
 *unsafe superpowers*, that you can’t in safe Rust. Those superpowers include
 the ability to:
 
@@ -38,7 +38,7 @@ the ability to:
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any other of Rust’s safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
-these four features that are then not checked by the compiler for memory
+these five features that are then not checked by the compiler for memory
 safety. You’ll still get some degree of safety inside of an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
@@ -46,7 +46,7 @@ dangerous or that it will definitely have memory safety problems: the intent is
 that as the programmer, you’ll ensure the code inside an `unsafe` block will
 access memory in a valid way.
 
-People are fallible, and mistakes will happen, but by requiring these four
+People are fallible, and mistakes will happen, but by requiring these five
 unsafe operations to be inside blocks annotated with `unsafe` you’ll know that
 any errors related to memory safety must be within an `unsafe` block. Keep
 `unsafe` blocks small; you’ll be thankful later when you investigate memory
@@ -61,7 +61,7 @@ from leaking out into all the places that you or your users might want to use
 the functionality implemented with `unsafe` code, because using a safe
 abstraction is safe.
 
-Let’s look at each of the four unsafe superpowers in turn. We’ll also look at
+Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
 some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
@@ -530,7 +530,7 @@ those checks manually and indicate as such with `unsafe`.
 
 ### When to Use Unsafe Code
 
-Using `unsafe` to take one of the four actions (superpowers) just discussed
+Using `unsafe` to take one of the five actions (superpowers) just discussed
 isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
 correct because the compiler can’t help uphold memory safety. When you have a
 reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
