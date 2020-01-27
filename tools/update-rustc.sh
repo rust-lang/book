@@ -37,7 +37,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     cd $tmp_build_directory
 
     # Save the previous compile time; we're going to keep it to minimize diff churn
-    compile_time=$(sed -ne "s/.*Finished dev \[unoptimized \+ debuginfo] target(s) in \([0-9.]*\).*/\1/p" ${full_output_path})
+    compile_time=$(sed -E -ne "s/.*Finished (dev|test) \[unoptimized \+ debuginfo] target\(s\) in ([0-9.]*).*/\2/p" ${full_output_path})
 
     # Act like this is the first time this listing has been built
     cargo clean
@@ -59,7 +59,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     # Restore the previous compile time, if there is one
     if [ -n  "${compile_time}" ]; then
-        sed -i '' -e "s/Finished dev \[unoptimized \+ debuginfo] target(s) in [0-9.]*/Finished dev [unoptimized + debuginfo] target(s) in ${compile_time}/" ${full_output_path}
+        sed -i '' -E -e "s/Finished (dev|test) \[unoptimized \+ debuginfo] target\(s\) in [0-9.]*/Finished \1 [unoptimized + debuginfo] target(s) in ${compile_time}/" ${full_output_path}
     fi
 
     cd - > /dev/null
