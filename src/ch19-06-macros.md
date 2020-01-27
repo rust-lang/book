@@ -109,7 +109,7 @@ covered in Chapter 18 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
 Listing 19-28 mean; for the full macro pattern syntax, see [the reference].
 
-[the reference]: ../reference/macros.html
+[the reference]: ../reference/macros-by-example.html
 
 First, a set of parentheses encompasses the whole pattern. A dollar sign (`$`)
 is next, followed by a set of parentheses that captures values that match the
