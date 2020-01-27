@@ -32,8 +32,9 @@ store once you insert values, so you rarely need to do this type annotation.
 It’s more common to create a `Vec<T>` that has initial values, and Rust
 provides the `vec!` macro for convenience. The macro will create a new vector
 that holds the values you give it. Listing 8-2 creates a new `Vec<i32>` that
-holds the values `1`, `2`, and `3`. `i32` is inferred because it is the default
- integer type.
+holds the values `1`, `2`, and `3`. The integer type is `i32` because that’s
+the default integer type, as we discussed in the [“Data Types”][data-types]<!--
+ignore --> section of Chapter 3.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
@@ -236,4 +237,5 @@ to review the API documentation for all the many useful methods defined on
 method removes and returns the last element. Let’s move on to the next
 collection type: `String`!
 
+[data-types]: ch03-02-data-types.html#data-types
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator
