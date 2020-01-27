@@ -1,6 +1,6 @@
 ## Advanced Functions and Closures
 
-Finally, we’ll explore some advanced features related to functions and
+Next, we’ll explore some advanced features related to functions and
 closures, which include function pointers and returning closures.
 
 ### Function Pointers
