@@ -1,0 +1,14 @@
+$ cargo build
+   Compiling no_type_annotations v0.1.0 (file:///projects/no_type_annotations)
+error[E0282]: type annotations needed
+ --> src/main.rs:2:9
+  |
+2 |     let guess = "42".parse().expect("Not a number!");
+  |         ^^^^^ consider giving `guess` a type
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0282`.
+error: could not compile `no_type_annotations`.
+
+To learn more, run the command again with --verbose.

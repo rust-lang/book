@@ -1,0 +1,15 @@
+$ cargo run
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+error: `..` can only be used once per tuple pattern
+ --> src/main.rs:5:22
+  |
+5 |         (.., second, ..) => {
+  |          --          ^^ can only be used once per tuple pattern
+  |          |
+  |          previously used here
+
+error: aborting due to previous error
+
+error: could not compile `patterns`.
+
+To learn more, run the command again with --verbose.

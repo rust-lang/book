@@ -1,0 +1,7 @@
+$ cargo run
+   Compiling drop-example v0.1.0 (file:///projects/drop-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.60s
+     Running `target/debug/drop-example`
+CustomSmartPointers created.
+Dropping CustomSmartPointer with data `other stuff`!
+Dropping CustomSmartPointer with data `my stuff`!

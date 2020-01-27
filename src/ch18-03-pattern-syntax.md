@@ -10,14 +10,7 @@ As you saw in Chapter 6, you can match patterns against literals directly. The
 following code gives some examples:
 
 ```rust
-let x = 1;
-
-match x {
-    1 => println!("one"),
-    2 => println!("two"),
-    3 => println!("three"),
-    _ => println!("anything"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-01-literals/src/main.rs:here}}
 ```
 
 This code prints `one` because the value in `x` is 1. This syntax is useful
@@ -40,18 +33,7 @@ running this code or reading further.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = Some(5);
-    let y = 10;
-
-    match x {
-        Some(50) => println!("Got 50"),
-        Some(y) => println!("Matched, y = {:?}", y),
-        _ => println!("Default case, x = {:?}", x),
-    }
-
-    println!("at the end: x = {:?}, y = {:?}", x, y);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-11: A `match` expression with an arm that
@@ -94,13 +76,7 @@ value of `x` matches either of the values in that arm, that arm’s code will
 run:
 
 ```rust
-let x = 1;
-
-match x {
-    1 | 2 => println!("one or two"),
-    3 => println!("three"),
-    _ => println!("anything"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-02-multiple-patterns/src/main.rs:here}}
 ```
 
 This code prints `one or two`.
@@ -112,12 +88,7 @@ following code, when a pattern matches any of the values within the range, that
 arm will execute:
 
 ```rust
-let x = 5;
-
-match x {
-    1..=5 => println!("one through five"),
-    _ => println!("something else"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-03-ranges/src/main.rs:here}}
 ```
 
 If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
@@ -133,13 +104,7 @@ which Rust can tell if a range is empty or not are `char` and numeric values.
 Here is an example using ranges of `char` values:
 
 ```rust
-let x = 'c';
-
-match x {
-    'a'..='j' => println!("early ASCII letter"),
-    'k'..='z' => println!("late ASCII letter"),
-    _ => println!("something else"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
 Rust can tell that `c` is within the first pattern’s range and prints `early
@@ -158,18 +123,7 @@ break apart using a pattern with a `let` statement.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-fn main() {
-    let p = Point { x: 0, y: 7 };
-
-    let Point { x: a, y: b } = p;
-    assert_eq!(0, a);
-    assert_eq!(7, b);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-12/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-12: Destructuring a struct’s fields into
@@ -192,18 +146,7 @@ in Listing 18-12, but the variables created in the `let` pattern are `x` and
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-fn main() {
-    let p = Point { x: 0, y: 7 };
-
-    let Point { x, y } = p;
-    assert_eq!(0, x);
-    assert_eq!(7, y);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-13/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-13: Destructuring struct fields using struct
@@ -225,20 +168,7 @@ three cases: points that lie directly on the `x` axis (which is true when `y =
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-fn main() {
-    let p = Point { x: 0, y: 7 };
-
-    match p {
-        Point { x, y: 0 } => println!("On the x axis at {}", x),
-        Point { x: 0, y } => println!("On the y axis at {}", y),
-        Point { x, y } => println!("On neither axis: ({}, {})", x, y),
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-14/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-14: Destructuring and matching literal values
@@ -268,38 +198,7 @@ a `match` with patterns that will destructure each inner value.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(i32, i32, i32),
-}
-
-fn main() {
-    let msg = Message::ChangeColor(0, 160, 255);
-
-    match msg {
-        Message::Quit => {
-            println!("The Quit variant has no data to destructure.")
-        }
-        Message::Move { x, y } => {
-            println!(
-                "Move in the x direction {} and in the y direction {}",
-                x,
-                y
-            );
-        }
-        Message::Write(text) => println!("Text message: {}", text),
-        Message::ChangeColor(r, g, b) => {
-            println!(
-                "Change the color to red {}, green {}, and blue {}",
-                r,
-                g,
-                b
-            )
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-15/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-15: Destructuring enum variants that hold
@@ -333,41 +232,7 @@ For example, we can refactor the code in Listing 18-15 to support RGB and HSV
 colors in the `ChangeColor` message, as shown in Listing 18-16.
 
 ```rust
-enum Color {
-   Rgb(i32, i32, i32),
-   Hsv(i32, i32, i32),
-}
-
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(Color),
-}
-
-fn main() {
-    let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
-
-    match msg {
-        Message::ChangeColor(Color::Rgb(r, g, b)) => {
-            println!(
-                "Change the color to red {}, green {}, and blue {}",
-                r,
-                g,
-                b
-            )
-        }
-        Message::ChangeColor(Color::Hsv(h, s, v)) => {
-            println!(
-                "Change the color to hue {}, saturation {}, and value {}",
-                h,
-                s,
-                v
-            )
-        }
-        _ => ()
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-16/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-16: Matching on nested enums</span>
@@ -386,12 +251,7 @@ The following example shows a complicated destructure where we nest structs and
 tuples inside a tuple and destructure all the primitive values out:
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-let ((feet, inches), Point {x, y}) = ((3, 10), Point { x: 3, y: -10 });
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-05-destructuring-structs-and-tuples/src/main.rs:here}}
 ```
 
 This code lets us break complex types into their component parts so we can use
@@ -420,13 +280,7 @@ including function parameters, as shown in Listing 18-17.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn foo(_: i32, y: i32) {
-    println!("This code only uses the y parameter: {}", y);
-}
-
-fn main() {
-    foo(3, 4);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-17/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-17: Using `_` in a function signature</span>
@@ -452,19 +306,7 @@ the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and give it a value if it is currently unset.
 
 ```rust
-let mut setting_value = Some(5);
-let new_setting_value = Some(10);
-
-match (setting_value, new_setting_value) {
-    (Some(_), Some(_)) => {
-        println!("Can't overwrite an existing customized value");
-    }
-    _ => {
-        setting_value = new_setting_value;
-    }
-}
-
-println!("setting is {:?}", setting_value);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-18: Using an underscore within patterns that
@@ -487,13 +329,7 @@ particular values. Listing 18-19 shows an example of ignoring the second and
 fourth values in a tuple of five items.
 
 ```rust
-let numbers = (2, 4, 8, 16, 32);
-
-match numbers {
-    (first, _, third, _, fifth) => {
-        println!("Some numbers: {}, {}, {}", first, third, fifth)
-    },
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-19/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-19: Ignoring multiple parts of a tuple</span>
@@ -514,10 +350,7 @@ only get a warning about one of them.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let _x = 5;
-    let y = 10;
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-20/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-20: Starting a variable name with an
@@ -532,13 +365,7 @@ variable, whereas `_` doesn’t bind at all. To show a case where this
 distinction matters, Listing 18-21 will provide us with an error.
 
 ```rust,ignore,does_not_compile
-let s = Some(String::from("Hello!"));
-
-if let Some(_s) = s {
-    println!("found a string");
-}
-
-println!("{:?}", s);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-21: An unused variable starting with an
@@ -550,13 +377,7 @@ doesn’t ever bind to the value. Listing 18-22 will compile without any errors
 because `s` doesn’t get moved into `_`.
 
 ```rust
-let s = Some(String::from("Hello!"));
-
-if let Some(_) = s {
-    println!("found a string");
-}
-
-println!("{:?}", s);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-22: Using an underscore does not bind the
@@ -575,17 +396,7 @@ explicitly matched in the rest of the pattern. In Listing 18-23, we have a
 the values in the `y` and `z` fields.
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-    z: i32,
-}
-
-let origin = Point { x: 0, y: 0, z: 0 };
-
-match origin {
-    Point { x, .. } => println!("x is {}", x),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-23/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-23: Ignoring all fields of a `Point` except
@@ -602,15 +413,7 @@ shows how to use `..` with a tuple.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let numbers = (2, 4, 8, 16, 32);
-
-    match numbers {
-        (first, .., last) => {
-            println!("Some numbers: {}, {}", first, last);
-        },
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-24/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-24: Matching only the first and last values in
@@ -627,15 +430,7 @@ compile.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let numbers = (2, 4, 8, 16, 32);
-
-    match numbers {
-        (.., second, ..) => {
-            println!("Some numbers: {}", second)
-        },
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-25/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-25: An attempt to use `..` in an ambiguous
@@ -644,11 +439,7 @@ way</span>
 When we compile this example, we get this error:
 
 ```text
-error: `..` can only be used once per tuple or tuple struct pattern
- --> src/main.rs:5:22
-  |
-5 |         (.., second, ..) => {
-  |                      ^^
+{{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
 ```
 
 It’s impossible for Rust to determine how many values in the tuple to ignore
@@ -671,13 +462,7 @@ The condition can use variables created in the pattern. Listing 18-26 shows a
 guard of `if x < 5`.
 
 ```rust
-let num = Some(4);
-
-match num {
-    Some(x) if x < 5 => println!("less than five: {}", x),
-    Some(x) => println!("{}", x),
-    None => (),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-26: Adding a match guard to a pattern</span>
@@ -705,18 +490,7 @@ problem.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = Some(5);
-    let y = 10;
-
-    match x {
-        Some(50) => println!("Got 50"),
-        Some(n) if n == y => println!("Matched, n = {}", n),
-        _ => println!("Default case, x = {:?}", x),
-    }
-
-    println!("at the end: x = {:?}, y = {}", x, y);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-27/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-27: Using a match guard to test for equality
@@ -742,13 +516,7 @@ to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to
 `6`.
 
 ```rust
-let x = 4;
-let y = false;
-
-match x {
-    4 | 5 | 6 if y => println!("yes"),
-    _ => println!("no"),
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-28/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-28: Combining multiple patterns with a match
@@ -789,23 +557,7 @@ name this variable `id`, the same as the field, but for this example we’ll use
 a different name.
 
 ```rust
-enum Message {
-    Hello { id: i32 },
-}
-
-let msg = Message::Hello { id: 5 };
-
-match msg {
-    Message::Hello { id: id_variable @ 3..=7 } => {
-        println!("Found an id in range: {}", id_variable)
-    },
-    Message::Hello { id: 10..=12 } => {
-        println!("Found an id in another range")
-    },
-    Message::Hello { id } => {
-        println!("Found some other id: {}", id)
-    },
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-29/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-29: Using `@` to bind to a value in a pattern

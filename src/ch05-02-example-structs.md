@@ -12,19 +12,7 @@ exactly that in our project’s *src/main.rs*.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let width1 = 30;
-    let height1 = 50;
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(width1, height1)
-    );
-}
-
-fn area(width: u32, height: u32) -> u32 {
-    width * height
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:all}}
 ```
 
 <span class="caption">Listing 5-8: Calculating the area of a rectangle
@@ -33,7 +21,7 @@ specified by separate width and height variables</span>
 Now, run this program using `cargo run`:
 
 ```text
-The area of the rectangle is 1500 square pixels.
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/output.txt}}
 ```
 
 Even though Listing 5-8 works and figures out the area of the rectangle by
@@ -44,7 +32,7 @@ rectangle.
 The issue with this code is evident in the signature of `area`:
 
 ```rust,ignore
-fn area(width: u32, height: u32) -> u32 {
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:here}}
 ```
 
 The `area` function is supposed to calculate the area of one rectangle, but the
@@ -61,18 +49,7 @@ Listing 5-9 shows another version of our program that uses tuples.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let rect1 = (30, 50);
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(rect1)
-    );
-}
-
-fn area(dimensions: (u32, u32)) -> u32 {
-    dimensions.0 * dimensions.1
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-09/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-9: Specifying the width and height of the
@@ -100,23 +77,7 @@ parts, as shown in Listing 5-10.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(&rect1)
-    );
-}
-
-fn area(rectangle: &Rectangle) -> u32 {
-    rectangle.width * rectangle.height
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-10/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-10: Defining a `Rectangle` struct</span>
@@ -150,16 +111,7 @@ work, however.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-
-    println!("rect1 is {}", rect1);
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-11: Attempting to print a `Rectangle`
@@ -168,7 +120,7 @@ instance</span>
 When we compile this code, we get an error with this core message:
 
 ```text
-error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:3}}
 ```
 
 The `println!` macro can do many kinds of formatting, and by default, the curly
@@ -185,8 +137,7 @@ implementation of `Display`.
 If we continue reading the errors, we’ll find this helpful note:
 
 ```text
-= help: the trait `std::fmt::Display` is not implemented for `Rectangle`
-= note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:9:10}}
 ```
 
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
@@ -198,14 +149,13 @@ see its value while we’re debugging our code.
 Compile the code with this change. Drat! We still get an error:
 
 ```text
-error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:3}}
 ```
 
 But again, the compiler gives us a helpful note:
 
 ```text
-= help: the trait `std::fmt::Debug` is not implemented for `Rectangle`
-= note: add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
 ```
 
 Rust *does* include functionality to print out debugging information, but we
@@ -216,17 +166,7 @@ definition, as shown in Listing 5-12.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-
-    println!("rect1 is {:?}", rect1);
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-12: Adding the annotation to derive the `Debug`
@@ -236,7 +176,7 @@ Now when we run the program, we won’t get any errors, and we’ll see the
 following output:
 
 ```text
-rect1 is Rectangle { width: 30, height: 50 }
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/output.txt}}
 ```
 
 Nice! It’s not the prettiest output, but it shows the values of all the fields
@@ -246,10 +186,7 @@ those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
 When we use the `{:#?}` style in the example, the output will look like this:
 
 ```text
-rect1 is Rectangle {
-    width: 30,
-    height: 50
-}
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 
 Rust has provided a number of traits for us to use with the `derive` annotation

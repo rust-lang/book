@@ -54,18 +54,7 @@ single-threaded context, as shown in Listing 16-12:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::sync::Mutex;
-
-fn main() {
-    let m = Mutex::new(5);
-
-    {
-        let mut num = m.lock().unwrap();
-        *num = 6;
-    }
-
-    println!("m = {:?}", m);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-12/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-12: Exploring the API of `Mutex<T>` in a
@@ -110,28 +99,7 @@ a compiler error, and we’ll use that error to learn more about using
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Mutex::new(0);
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-13/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-13: Ten threads each increment a counter
@@ -153,17 +121,7 @@ program.
 We hinted that this example wouldn’t compile. Now let’s find out why!
 
 ```text
-error[E0382]: use of moved value: `counter`
-  --> src/main.rs:9:36
-   |
-9  |         let handle = thread::spawn(move || {
-   |                                    ^^^^^^^ value moved into closure here,
-in previous iteration of loop
-10 |             let mut num = counter.lock().unwrap();
-   |                           ------- use occurs due to use in closure
-   |
-   = note: move occurs because `counter` has type `std::sync::Mutex<i32>`,
-which does not implement the `Copy` trait
+{{#include ../listings/ch16-fearless-concurrency/listing-16-13/output.txt}}
 ```
 
 The error message states that the `counter` value was moved in the previous
@@ -183,30 +141,7 @@ errors, we’ll also switch back to using the `for` loop, and we’ll keep the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::rc::Rc;
-use std::sync::Mutex;
-use std::thread;
-
-fn main() {
-    let counter = Rc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let counter = Rc::clone(&counter);
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-14: Attempting to use `Rc<T>` to allow
@@ -216,19 +151,7 @@ Once again, we compile and get... different errors! The compiler is teaching us
 a lot.
 
 ```text
-error[E0277]: `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
-  --> src/main.rs:11:22
-   |
-11 |         let handle = thread::spawn(move || {
-   |                      ^^^^^^^^^^^^^ `std::rc::Rc<std::sync::Mutex<i32>>`
-cannot be sent between threads safely
-   |
-   = help: within `[closure@src/main.rs:11:36: 14:10
-counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send`
-is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
-   = note: required because it appears within the type
-`[closure@src/main.rs:11:36: 14:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
-   = note: required by `std::thread::spawn`
+{{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
 ```
 
 Wow, that error message is very wordy! Here’s the important part to focus
@@ -271,35 +194,17 @@ our program by changing the `use` line, the call to `new`, and the call to
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::sync::{Mutex, Arc};
-use std::thread;
-
-fn main() {
-    let counter = Arc::new(Mutex::new(0));
-    let mut handles = vec![];
-
-    for _ in 0..10 {
-        let counter = Arc::clone(&counter);
-        let handle = thread::spawn(move || {
-            let mut num = counter.lock().unwrap();
-
-            *num += 1;
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().unwrap();
-    }
-
-    println!("Result: {}", *counter.lock().unwrap());
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-15/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-15: Using an `Arc<T>` to wrap the `Mutex<T>`
 to be able to share ownership across multiple threads</span>
 
 This code will print the following:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Result: 10

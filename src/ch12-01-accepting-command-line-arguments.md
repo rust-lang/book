@@ -41,12 +41,7 @@ command line arguments passed to it and then collect the values into a vector.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::env;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 12-1: Collecting the command line arguments into
@@ -83,13 +78,11 @@ Finally, we print the vector using the debug formatter, `:?`. Let’s try runnin
 the code first with no arguments and then with two arguments:
 
 ```text
-$ cargo run
---snip--
-["target/debug/minigrep"]
+{{#include ../listings/ch12-an-io-project/listing-12-01/output.txt}}
+```
 
-$ cargo run needle haystack
---snip--
-["target/debug/minigrep", "needle", "haystack"]
+```text
+{{#include ../listings/ch12-an-io-project/output-only-01-with-args/output.txt}}
 ```
 
 Notice that the first value in the vector is `"target/debug/minigrep"`, which
@@ -110,17 +103,7 @@ throughout the rest of the program. We do that in Listing 12-2.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-use std::env;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let query = &args[1];
-    let filename = &args[2];
-
-    println!("Searching for {}", query);
-    println!("In file {}", filename);
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 12-2: Creating variables to hold the query
@@ -138,12 +121,7 @@ working as we intend. Let’s run this program again with the arguments `test`
 and `sample.txt`:
 
 ```text
-$ cargo run test sample.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep test sample.txt`
-Searching for test
-In file sample.txt
+{{#include ../listings/ch12-an-io-project/listing-12-02/output.txt}}
 ```
 
 Great, the program is working! The values of the arguments we need are being

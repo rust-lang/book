@@ -33,19 +33,22 @@ by specifying the path to our binary crate; in this case, that path is *adder*:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[workspace]
-
-members = [
-    "adder",
-]
+{{#include ../listings/ch14-more-about-cargo/no-listing-01-workspace-with-adder-crate/add/Cargo.toml}}
 ```
 
 Next, we’ll create the `adder` binary crate by running `cargo new` within the
 *add* directory:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/output-only-01-adder-crate/add
+rm -rf adder
+cargo new adder
+copy output below
+-->
+
 ```text
 $ cargo new adder
-     Created binary (application) `adder` project
+     Created binary (application) `adder` package
 ```
 
 At this point, we can build the workspace by running `cargo build`. The files
@@ -81,19 +84,21 @@ Change the top-level *Cargo.toml* to specify the *add-one* path in the
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[workspace]
-
-members = [
-    "adder",
-    "add-one",
-]
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/Cargo.toml}}
 ```
 
 Then generate a new library crate named `add-one`:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/output-only-02-add-one/add
+rm -rf add-one
+cargo new add-one --lib
+copy output below
+-->
+
 ```text
 $ cargo new add-one --lib
-     Created library `add-one` project
+     Created library `add-one` package
 ```
 
 Your *add* directory should now have these directories and files:
@@ -117,9 +122,7 @@ In the *add-one/src/lib.rs* file, let’s add an `add_one` function:
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
 ```rust
-pub fn add_one(x: i32) -> i32 {
-    x + 1
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add-one/src/lib.rs}}
 ```
 
 Now that we have a library crate in the workspace, we can have the binary crate
@@ -129,9 +132,7 @@ dependency on `add-one` to *adder/Cargo.toml*.
 <span class="filename">Filename: adder/Cargo.toml</span>
 
 ```toml
-[dependencies]
-
-add-one = { path = "../add-one" }
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:7:9}}
 ```
 
 Cargo doesn’t assume that crates in a workspace will depend on each other, so
@@ -145,12 +146,7 @@ function to call the `add_one` function, as in Listing 14-7.
 <span class="filename">Filename: adder/src/main.rs</span>
 
 ```rust,ignore
-use add_one;
-
-fn main() {
-    let num = 10;
-    println!("Hello, world! {} plus one is {}!", num, add_one::add_one(num));
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 
 <span class="caption">Listing 14-7: Using the `add-one` library crate from the
@@ -159,20 +155,32 @@ fn main() {
 Let’s build the workspace by running `cargo build` in the top-level *add*
 directory!
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-07/add
+cargo build
+copy output below; the output updating script doesn't handle subdirectories in paths properly
+-->
+
 ```text
 $ cargo build
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.68 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.68s
 ```
 
 To run the binary crate from the *add* directory, we need to specify which
 package in the workspace we want to use by using the `-p` argument and the
 package name with `cargo run`:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-07/add
+cargo run -p adder
+copy output below; the output updating script doesn't handle subdirectories in paths properly
+-->
+
 ```text
 $ cargo run -p adder
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/adder`
 Hello, world! 10 plus one is 11!
 ```
@@ -201,23 +209,28 @@ crate:
 <span class="filename">Filename: add-one/Cargo.toml</span>
 
 ```toml
-[dependencies]
-rand = "0.5.5"
+{{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add-one/Cargo.toml:7:8}}
 ```
 
 We can now add `use rand;` to the *add-one/src/lib.rs* file, and building the
 whole workspace by running `cargo build` in the *add* directory will bring in
 and compile the `rand` crate:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
+cargo build
+copy output below; the output updating script doesn't handle subdirectories in paths properly
+-->
+
 ```text
 $ cargo build
     Updating crates.io index
   Downloaded rand v0.5.5
    --snip--
-   Compiling rand v0.5.5
+   Compiling rand v0.5.6
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
 
 The top-level *Cargo.lock* now contains information about the dependency of
@@ -226,14 +239,21 @@ workspace, we can’t use it in other crates in the workspace unless we add
 `rand` to their *Cargo.toml* files as well. For example, if we add `use rand;`
 to the *adder/src/main.rs* file for the `adder` crate, we’ll get an error:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/output-only-03-use-rand/add
+cargo build
+copy output below; the output updating script doesn't handle subdirectories in paths properly
+-->
+
 ```text
 $ cargo build
+  --snip--
    Compiling adder v0.1.0 (file:///projects/add/adder)
-error: use of unstable library feature 'rand': use `rand` from crates.io (see
-issue #27703)
- --> adder/src/main.rs:1:1
+error[E0432]: unresolved import `rand`
+ --> adder/src/main.rs:2:5
   |
-1 | use rand;
+2 | use rand;
+  |     ^^^^ no `rand` external crate
 ```
 
 To fix this, edit the *Cargo.toml* file for the `adder` crate and indicate that
@@ -253,28 +273,22 @@ within the `add_one` crate:
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
 ```rust
-pub fn add_one(x: i32) -> i32 {
-    x + 1
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        assert_eq!(3, add_one(2));
-    }
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add-one/src/lib.rs}}
 ```
 
 Now run `cargo test` in the top-level *add* directory:
+
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
+cargo test
+copy output below; the output updating script doesn't handle subdirectories in paths properly
+-->
 
 ```text
 $ cargo test
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
      Running target/debug/deps/add_one-f0253159197f7841
 
 running 1 test
@@ -282,7 +296,7 @@ test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-     Running target/debug/deps/adder-f88af9d2cc175a5e
+     Running target/debug/deps/adder-6b04971c46fc224f
 
 running 0 tests
 
@@ -305,9 +319,15 @@ We can also run tests for one particular crate in a workspace from the
 top-level directory by using the `-p` flag and specifying the name of the crate
 we want to test:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add
+cargo test -p add-one
+copy output below; the output updating script doesn't handle subdirectories in paths properly
+-->
+
 ```text
 $ cargo test -p add-one
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running target/debug/deps/add_one-b3235fea9a156f74
 
 running 1 test
