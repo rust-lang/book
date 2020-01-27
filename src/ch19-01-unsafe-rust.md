@@ -435,10 +435,13 @@ can’t verify that our type upholds the guarantees that it can be safely sent
 across threads or accessed from multiple threads; therefore, we need to do
 those checks manually and indicate as such with `unsafe`.
 
-### Accessing fields of a `union`
+### Accessing Fields of a Union
 
-`union`s are an advanced feature of Rust that allow accessing data in a
-non-type-safe way. This book doesn't describe them, but you can learn about them in [The Reference](https://doc.rust-lang.org/reference/items/unions.html)<!-- ignore -->.
+A `union` is similar to a `struct`, but only one declared field is used in a
+particular instance at one time. Unions are primarily used to interface with
+unions in C code. Accessing union fields is unsafe because Rust can't guarantee
+the type of the data currently being stored in the union instance. You can
+learn more about unions in [the reference][reference].
 
 ### When to Use Unsafe Code
 
@@ -455,3 +458,4 @@ ch03-01-variables-and-mutability.html#differences-between-variables-and-constant
 [extensible-concurrency-with-the-sync-and-send-traits]:
 ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type
+[reference]: ../reference/items/unions.html
