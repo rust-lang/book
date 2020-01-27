@@ -279,7 +279,8 @@ never coerce to mutable references. Because of the borrowing rules, if you have
 a mutable reference, that mutable reference must be the only reference to that
 data (otherwise, the program wouldn’t compile). Converting one mutable
 reference to one immutable reference will never break the borrowing rules.
-Converting an immutable reference to a mutable reference would require that
-there is only one immutable reference to that data, and the borrowing rules
-don’t guarantee that. Therefore, Rust can’t make the assumption that converting
-an immutable reference to a mutable reference is possible.
+Converting an immutable reference to a mutable reference would require that the
+initial immutable reference is the only immutable reference to that data, but
+the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
+assumption that converting an immutable reference to a mutable reference is
+possible.
