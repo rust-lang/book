@@ -249,7 +249,9 @@ The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
 the closure definition, and the fourth line removes the brackets, which are
 optional because the closure body has only one expression. These are all valid
-definitions that will produce the same behavior when they’re called.
+definitions that will produce the same behavior when they’re called. Calling
+the closures is required for `add_one_v3` and `add_one_v4` to be able to
+compile because the types will be inferred from their usage.
 
 Closure definitions will have one concrete type inferred for each of their
 parameters and for their return value. For instance, Listing 13-8 shows the
