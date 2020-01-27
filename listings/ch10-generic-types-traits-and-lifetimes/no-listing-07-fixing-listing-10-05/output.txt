@@ -13,8 +13,8 @@ error[E0508]: cannot move out of type `[T]`, a non-copy slice
 error[E0507]: cannot move out of a shared reference
  --> src/main.rs:4:18
   |
-4 |     for &item in list.iter() {
-  |         -----    ^^^^^^^^^^^
+4 |     for &item in list {
+  |         -----    ^^^^
   |         ||
   |         |data moved here
   |         |move occurs because `item` has type `T`, which does not implement the `Copy` trait
