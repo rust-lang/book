@@ -131,9 +131,9 @@ anything with the value that a `Weak<T>` is pointing to, you must make sure the
 value still exists. Do this by calling the `upgrade` method on a `Weak<T>`
 instance, which will return an `Option<Rc<T>>`. You’ll get a result of `Some`
 if the `Rc<T>` value has not been dropped yet and a result of `None` if the
-`Rc<T>` value has been dropped. Because `upgrade` returns an `Option<Rc<T>>`, Rust
-will ensure that the `Some` case and the `None` case are handled, and there
-won’t be an invalid pointer.
+`Rc<T>` value has been dropped. Because `upgrade` returns an `Option<Rc<T>>`,
+Rust will ensure that the `Some` case and the `None` case are handled, and
+there won’t be an invalid pointer.
 
 As an example, rather than using a list whose items know only about the next
 item, we’ll create a tree whose items know about their children items *and*
