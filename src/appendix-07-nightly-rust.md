@@ -142,7 +142,7 @@ global or per-project basis. By default, you’ll have stable Rust installed. To
 install nightly, for example:
 
 ```text
-$ rustup install nightly
+$ rustup toolchain install nightly
 ```
 
 You can see all of the *toolchains* (releases of Rust and associated

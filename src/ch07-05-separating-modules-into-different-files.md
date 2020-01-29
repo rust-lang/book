@@ -13,15 +13,7 @@ crates whose crate root file is *src/main.rs*.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-mod front_of_house;
-
-pub use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
@@ -32,10 +24,8 @@ And *src/front_of_house.rs* gets the definitions from the body of the
 
 <span class="filename">Filename: src/front_of_house.rs</span>
 
-```rust
-pub mod hosting {
-    pub fn add_to_waitlist() {}
-}
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
 <span class="caption">Listing 7-22: Definitions inside the `front_of_house`
@@ -50,7 +40,7 @@ declaration of the `hosting` module:
 <span class="filename">Filename: src/front_of_house.rs</span>
 
 ```
-pub mod hosting;
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
 Then we create a *src/front_of_house* directory and a file
@@ -60,7 +50,7 @@ Then we create a *src/front_of_house* directory and a file
 <span class="filename">Filename: src/front_of_house/hosting.rs</span>
 
 ```
-pub fn add_to_waitlist() {}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
 The module tree remains the same, and the function calls in `eat_at_restaurant`

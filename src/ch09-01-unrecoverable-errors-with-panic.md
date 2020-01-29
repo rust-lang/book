@@ -29,20 +29,13 @@ Let’s try calling `panic!` in a simple program:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    panic!("crash and burn");
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
 
 When you run the program, you’ll see something like this:
 
 ```text
-$ cargo run
-   Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.25s
-     Running `target/debug/panic`
-thread 'main' panicked at 'crash and burn', src/main.rs:2:5
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+{{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
 The call to `panic!` causes the error message contained in the last two lines.
@@ -69,11 +62,7 @@ element by index in a vector.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    let v = vec![1, 2, 3];
-
-    v[99];
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 9-1: Attempting to access an element beyond the
@@ -98,12 +87,7 @@ element at an index that doesn’t exist, Rust will stop execution and refuse to
 continue. Let’s try it and see:
 
 ```text
-$ cargo run
-   Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
-     Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+{{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
 This error points at a file we didn’t write, *libcore/slice/mod.rs*. That’s the
@@ -123,53 +107,62 @@ library code, or crates that you’re using. Let’s try getting a backtrace by
 setting the `RUST_BACKTRACE` environment variable to any value except 0.
 Listing 9-2 shows output similar to what you’ll see.
 
+<!-- manual-regeneration
+cd listings/ch09-error-handling/listing-09-01
+RUST_BACKTRACE=1 cargo run
+copy the backtrace output below
+check the backtrace number mentioned in the text below the listing
+-->
+
 ```text
 $ RUST_BACKTRACE=1 cargo run
-    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
-     Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2715:10
 stack backtrace:
-   0: std::sys::unix::backtrace::tracing::imp::unwind_backtrace
-             at libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
-   1: std::sys_common::backtrace::print
-             at libstd/sys_common/backtrace.rs:71
-             at libstd/sys_common/backtrace.rs:59
-   2: std::panicking::default_hook::{{closure}}
-             at libstd/panicking.rs:211
-   3: std::panicking::default_hook
-             at libstd/panicking.rs:227
-   4: <std::panicking::begin_panic::PanicPayload<A> as core::panic::BoxMeUp>::get
-             at libstd/panicking.rs:476
-   5: std::panicking::continue_panic_fmt
-             at libstd/panicking.rs:390
-   6: std::panicking::try::do_call
-             at libstd/panicking.rs:325
-   7: core::ptr::drop_in_place
-             at libcore/panicking.rs:77
-   8: core::ptr::drop_in_place
-             at libcore/panicking.rs:59
-   9: <usize as core::slice::SliceIndex<[T]>>::index
-             at libcore/slice/mod.rs:2448
-  10: core::slice::<impl core::ops::index::Index<I> for [T]>::index
-             at libcore/slice/mod.rs:2316
-  11: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at liballoc/vec.rs:1653
-  12: panic::main
+   0: backtrace::backtrace::libunwind::trace
+             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.34/src/backtrace/libunwind.rs:88
+   1: backtrace::backtrace::trace_unsynchronized
+             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.34/src/backtrace/mod.rs:66
+   2: std::sys_common::backtrace::_print
+             at src/libstd/sys_common/backtrace.rs:47
+   3: std::sys_common::backtrace::print
+             at src/libstd/sys_common/backtrace.rs:36
+   4: std::panicking::default_hook::{{closure}}
+             at src/libstd/panicking.rs:200
+   5: std::panicking::default_hook
+             at src/libstd/panicking.rs:214
+   6: std::panicking::rust_panic_with_hook
+             at src/libstd/panicking.rs:477
+   7: std::panicking::continue_panic_fmt
+             at src/libstd/panicking.rs:384
+   8: rust_begin_unwind
+             at src/libstd/panicking.rs:311
+   9: std::panicking::begin_panic
+  10: std::panicking::begin_panic
+  11: <usize as core::slice::SliceIndex<[T]>>::index
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2715
+  12: core::slice::<impl core::ops::index::Index<I> for [T]>::index
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2566
+  13: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/liballoc/vec.rs:1791
+  14: panic::main
              at src/main.rs:4
-  13: std::rt::lang_start::{{closure}}
-             at libstd/rt.rs:74
-  14: std::panicking::try::do_call
-             at libstd/rt.rs:59
-             at libstd/panicking.rs:310
-  15: macho_symbol_search
-             at libpanic_unwind/lib.rs:102
-  16: std::alloc::default_alloc_error_hook
-             at libstd/panicking.rs:289
-             at libstd/panic.rs:392
-             at libstd/rt.rs:58
-  17: std::rt::lang_start
-             at libstd/rt.rs:74
-  18: panic::main
+  15: std::rt::lang_start::{{closure}}
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libstd/rt.rs:64
+  16: std::rt::lang_start_internal::{{closure}}
+             at src/libstd/rt.rs:49
+  17: std::panicking::try::do_call
+             at src/libstd/panicking.rs:296
+  18: __rust_maybe_catch_panic
+             at src/libpanic_unwind/lib.rs:80
+  19: std::panicking::try
+             at src/libstd/panicking.rs:275
+  20: std::panic::catch_unwind
+             at src/libstd/panic.rs:394
+  21: std::rt::lang_start_internal
+             at src/libstd/rt.rs:48
+  22: std::rt::lang_start
+             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libstd/rt.rs:64
+  23: panic::main
 ```
 
 <span class="caption">Listing 9-2: The backtrace generated by a call to
@@ -181,7 +174,7 @@ information, debug symbols must be enabled. Debug symbols are enabled by
 default when using `cargo build` or `cargo run` without the `--release` flag,
 as we have here.
 
-In the output in Listing 9-2, line 12 of the backtrace points to the line in
+In the output in Listing 9-2, line 14 of the backtrace points to the line in
 our project that’s causing the problem: line 4 of *src/main.rs*. If we don’t
 want our program to panic, the location pointed to by the first line mentioning
 a file we wrote is where we should start investigating. In Listing 9-1, where

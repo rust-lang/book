@@ -1,11 +1,11 @@
 extern crate regex;
 
+use regex::{Captures, Regex};
 use std::collections::HashSet;
 use std::io;
 use std::io::{Read, Write};
-use regex::{Regex, Captures};
 
-fn main () {
+fn main() {
     let mut buffer = String::new();
     if let Err(e) = io::stdin().read_to_string(&mut buffer) {
         panic!(e);
@@ -14,10 +14,10 @@ fn main () {
     let mut refs = HashSet::new();
 
     // Capture all links and link references.
-    let regex = r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!--\signore\s-->";
+    let regex =
+        r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!--\signore\s-->";
     let link_regex = Regex::new(regex).unwrap();
     let first_pass = link_regex.replace_all(&buffer, |caps: &Captures<'_>| {
-
         // Save the link reference we want to delete.
         if let Some(reference) = caps.at(2) {
             refs.insert(reference.to_owned());

@@ -1,6 +1,6 @@
 ## Advanced Functions and Closures
 
-Finally, we’ll explore some advanced features related to functions and
+Next, we’ll explore some advanced features related to functions and
 closures, which include function pointers and returning closures.
 
 ### Function Pointers
@@ -17,19 +17,7 @@ similar to that of closures, as shown in Listing 19-27.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn add_one(x: i32) -> i32 {
-    x + 1
-}
-
-fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
-    f(arg) + f(arg)
-}
-
-fn main() {
-    let answer = do_twice(add_one, 5);
-
-    println!("The answer is: {}", answer);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-27/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-27: Using the `fn` type to accept a function
@@ -59,22 +47,14 @@ function, let’s look at a use of `map`. To use the `map` function to turn a
 vector of numbers into a vector of strings, we could use a closure, like this:
 
 ```rust
-let list_of_numbers = vec![1, 2, 3];
-let list_of_strings: Vec<String> = list_of_numbers
-    .iter()
-    .map(|i| i.to_string())
-    .collect();
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
 ```
 
 Or we could name a function as the argument to `map` instead of the closure,
 like this:
 
 ```rust
-let list_of_numbers = vec![1, 2, 3];
-let list_of_strings: Vec<String> = list_of_numbers
-    .iter()
-    .map(ToString::to_string)
-    .collect();
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-16-map-function/src/main.rs:here}}
 ```
 
 Note that we must use the fully qualified syntax that we talked about earlier
@@ -92,15 +72,7 @@ implement the closure traits, which means we can specify the initializer
 functions as arguments for methods that take closures, like so:
 
 ```rust
-enum Status {
-    Value(u32),
-    Stop,
-}
-
-let list_of_statuses: Vec<Status> =
-    (0u32..20)
-    .map(Status::Value)
-    .collect();
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-17-map-initializer/src/main.rs:here}}
 ```
 
 Here we create `Status::Value` instances using each `u32` value in the range
@@ -120,25 +92,13 @@ pointer `fn` as a return type, for example.
 The following code tries to return a closure directly, but it won’t compile:
 
 ```rust,ignore,does_not_compile
-fn returns_closure() -> Fn(i32) -> i32 {
-    |x| x + 1
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 
 The compiler error is as follows:
 
 ```text
-error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
-std::marker::Sized` is not satisfied
- -->
-  |
-1 | fn returns_closure() -> Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^ `std::ops::Fn(i32) -> i32 + 'static`
-  does not have a constant size known at compile-time
-  |
-  = help: the trait `std::marker::Sized` is not implemented for
-  `std::ops::Fn(i32) -> i32 + 'static`
-  = note: the return type of a function must have a statically known size
+{{#include ../listings/ch19-advanced-features/no-listing-18-returns-closure/output.txt}}
 ```
 
 The error references the `Sized` trait again! Rust doesn’t know how much space
@@ -146,9 +106,7 @@ it will need to store the closure. We saw a solution to this problem earlier.
 We can use a trait object:
 
 ```rust
-fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
-    Box::new(|x| x + 1)
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
 ```
 
 This code will compile just fine. For more about trait objects, refer to the

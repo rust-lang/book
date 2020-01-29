@@ -31,13 +31,7 @@ Look at the generated *Cargo.toml* file:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[package]
-name = "guessing_game"
-version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
-edition = "2018"
-
-[dependencies]
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
 If the author information that Cargo obtained from your environment is not
@@ -49,20 +43,14 @@ you. Check out the *src/main.rs* file:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    println!("Hello, world!");
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
 Now let’s compile this “Hello, world!” program and run it in the same step
 using the `cargo run` command:
 
 ```text
-$ cargo run
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
-     Running `target/debug/guessing_game`
-Hello, world!
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
 The `run` command comes in handy when you need to rapidly iterate on a project,
@@ -81,20 +69,7 @@ allow the player to input a guess. Enter the code in Listing 2-1 into
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-
-fn main() {
-    println!("Guess the number!");
-
-    println!("Please input your guess.");
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {}", guess);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
 <span class="caption">Listing 2-1: Code that gets a guess from the user and
@@ -106,7 +81,7 @@ obtain user input and then print the result as output, we need to bring the
 standard library (which is known as `std`):
 
 ```rust,ignore
-use std::io;
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
 By default, Rust brings only a few types into the scope of every program in
@@ -121,7 +96,7 @@ As you saw in Chapter 1, the `main` function is the entry point into the
 program:
 
 ```rust,ignore
-fn main() {
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
 The `fn` syntax declares a new function, the parentheses, `()`, indicate there
@@ -131,9 +106,7 @@ As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
 ```rust,ignore
-println!("Guess the number!");
-
-println!("Please input your guess.");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
 This code is printing a prompt stating what the game is and requesting input
@@ -144,7 +117,7 @@ from the user.
 Next, we’ll create a place to store the user input, like this:
 
 ```rust,ignore
-let mut guess = String::new();
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
 Now the program is getting interesting! There’s a lot going on in this little
@@ -197,8 +170,7 @@ library with `use std::io;` on the first line of the program. Now we’ll call
 the `stdin` function from the `io` module:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
 If we hadn’t put the `use std::io` line at the beginning of the program, we
@@ -232,12 +204,12 @@ thoroughly.)
 
 ### Handling Potential Failure with the `Result` Type
 
-We’re not quite done with this line of code. Although what we’ve discussed so
-far is a single line of text, it’s only the first part of the single logical
-line of code. The second part is this method:
+We’re still working on this line of code. Although we’re now discussing a third
+line of text, it’s still part of a single logical line of code. The next part
+is this method:
 
 ```rust,ignore
-.expect("Failed to read line");
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
 When you call a method with the `.foo()` syntax, it’s often wise to introduce a
@@ -248,8 +220,8 @@ written this code as:
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it: two
-lines for two method calls. Now let’s discuss what this line does.
+However, one long line is difficult to read, so it’s best to divide it. Now
+let’s discuss what this line does.
 
 As mentioned earlier, `read_line` puts what the user types into the string
 we’re passing it, but it also returns a value—in this case, an
@@ -289,15 +261,7 @@ entered into standard input.
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
 ```text
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-warning: unused `std::result::Result` which must be used
-  --> src/main.rs:10:5
-   |
-10 |     io::stdin().read_line(&mut guess);
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: #[warn(unused_must_use)] on by default
+{{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
 Rust warns that you haven’t used the `Result` value returned from `read_line`,
@@ -309,11 +273,11 @@ because you just want to crash this program when a problem occurs, you can use
 
 ### Printing Values with `println!` Placeholders
 
-Aside from the closing curly brackets, there’s only one more line to discuss in
+Aside from the closing curly bracket, there’s only one more line to discuss in
 the code added so far, which is the following:
 
 ```rust,ignore
-println!("You guessed: {}", guess);
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
 This line prints the string we saved the user’s input in. The set of curly
@@ -336,10 +300,16 @@ This code would print `x = 5 and y = 10`.
 
 Let’s test the first part of the guessing game. Run it using `cargo run`:
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-01/
+cargo clean
+cargo run
+input 6 -->
+
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 6.44s
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -382,8 +352,7 @@ you:
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[dependencies]
-rand = "0.5.5"
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
 In the *Cargo.toml* file, everything that follows a header is part of a section
@@ -401,6 +370,11 @@ version 0.5.5.”
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2.
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-02/
+cargo clean
+cargo build -->
+
 ```text
 $ cargo build
     Updating crates.io index
@@ -415,7 +389,7 @@ $ cargo build
    Compiling rand_core v0.2.2
    Compiling rand v0.5.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 s
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after
@@ -433,9 +407,9 @@ their open source Rust projects for others to use.
 
 After updating the registry, Cargo checks the `[dependencies]` section and
 downloads any crates you don’t have yet. In this case, although we only listed
-`rand` as a dependency, Cargo also grabbed `libc` and `rand_core`, because `rand`
-depends on those to work. After downloading the crates, Rust compiles them and
-then compiles the project with the dependencies available.
+`rand` as a dependency, Cargo also grabbed `libc` and `rand_core`, because
+`rand` depends on those to work. After downloading the crates, Rust compiles
+them and then compiles the project with the dependencies available.
 
 If you immediately run `cargo build` again without making any changes, you
 won’t get any output aside from the `Finished` line. Cargo knows it has already
@@ -447,10 +421,15 @@ do, it simply exits.
 If you open up the *src/main.rs* file, make a trivial change, and then save it
 and build again, you’ll only see two lines of output:
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-02/
+touch src/main.rs
+cargo build -->
+
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
 These lines show Cargo only updates the build with your tiny change to the
@@ -488,6 +467,12 @@ those versions to the *Cargo.lock* file.
 But by default, Cargo will only look for versions greater than `0.5.5` and less
 than `0.6.0`. If the `rand` crate has released two new versions, `0.5.6` and
 `0.6.0`, you would see the following if you ran `cargo update`:
+
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-02/
+cargo update
+assuming there is a new 0.5.x version of rand; otherwise use another update
+as a guide to creating the hypothetical output shown here -->
 
 ```text
 $ cargo update
@@ -527,25 +512,7 @@ Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-use rand::Rng;
-
-fn main() {
-    println!("Guess the number!");
-
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-
-    println!("The secret number is: {}", secret_number);
-
-    println!("Please input your guess.");
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    println!("You guessed: {}", guess);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
 <span class="caption">Listing 2-3: Adding code to generate a random
@@ -580,17 +547,27 @@ program prints the answer as soon as it starts!
 
 Try running the program a few times:
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-03/
+cargo run
+4
+cargo run
+5
+-->
+
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
 Please input your guess.
 4
 You guessed: 4
+
 $ cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.02s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 83
@@ -611,22 +588,7 @@ will explain.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
-fn main() {
-
-    // ---snip---
-
-    println!("You guessed: {}", guess);
-
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 2-4: Handling the possible return values of
@@ -672,19 +634,7 @@ expression ends because it has no need to look at the last arm in this scenario.
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
 ```text
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-error[E0308]: mismatched types
-  --> src/main.rs:23:21
-   |
-23 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `std::string::String`, found integer
-   |
-   = note: expected type `&std::string::String`
-   = note:    found type `&{integer}`
-
-error: aborting due to previous error
-Could not compile `guessing_game`.
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
 The core of the error states that there are *mismatched types*. Rust has a
@@ -705,24 +655,7 @@ do that by adding the following two lines to the `main` function body:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-    let mut guess = String::new();
-
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
-
-    let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
-
-    println!("You guessed: {}", guess);
-
-    match guess.cmp(&secret_number) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("You win!"),
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
 The two new lines are:
@@ -779,10 +712,16 @@ number that we want from the `Ok` value.
 
 Let’s run the program now!
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/
+cargo run
+  76
+-->
+
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -808,22 +747,7 @@ more chances at guessing the number:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-    println!("The secret number is: {}", secret_number);
-
-    loop {
-        println!("Please input your guess.");
-
-        // --snip--
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => println!("You win!"),
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-04-looping/src/main.rs:here}}
 ```
 
 As you can see, we’ve moved everything into a loop from the guess input prompt
@@ -839,10 +763,19 @@ Guess to the Secret Number”](#comparing-the-guess-to-the-secret-number)<!--
 ignore -->: if the user enters a non-number answer, the program will crash. The
 user can take advantage of that in order to quit, as shown here:
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/no-listing-04-looping/
+cargo run
+(too small guess)
+(too big guess)
+(correct guess)
+quit
+-->
+
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 1.50s
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 59
@@ -860,9 +793,8 @@ You guessed: 59
 You win!
 Please input your guess.
 quit
-thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
+thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:999:5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
 ```
 
 Typing `quit` actually quits the game, but so will any other non-number input.
@@ -876,18 +808,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-05-quitting/src/main.rs:here}}
 ```
 
 Adding the `break` line after `You win!` makes the program exit the loop when
@@ -904,19 +825,7 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-
-io::stdin().read_line(&mut guess)
-    .expect("Failed to read line");
-
-let guess: u32 = match guess.trim().parse() {
-    Ok(num) => num,
-    Err(_) => continue,
-};
-
-println!("You guessed: {}", guess);
-
-// --snip--
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
@@ -945,6 +854,15 @@ next iteration of the `loop` and ask for another guess. So, effectively, the
 program ignores all errors that `parse` might encounter!
 
 Now everything in the program should work as expected. Let’s try it:
+
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial/listing-02-05/
+cargo run
+(too small guess)
+(too big guess)
+foo
+(correct guess)
+-->
 
 ```text
 $ cargo run
@@ -976,40 +894,7 @@ secret number. Listing 2-6 shows the final code.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::io;
-use std::cmp::Ordering;
-use rand::Rng;
-
-fn main() {
-    println!("Guess the number!");
-
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-
-    loop {
-        println!("Please input your guess.");
-
-        let mut guess = String::new();
-
-        io::stdin().read_line(&mut guess)
-            .expect("Failed to read line");
-
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
-
-        println!("You guessed: {}", guess);
-
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 2-6: Complete guessing game code</span>

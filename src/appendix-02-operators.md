@@ -153,6 +153,7 @@ macros and specifying attributes on an item.
 | `$ident` | Macro substitution |
 | `$ident:kind` | Macro capture |
 | `$(…)…` | Macro repetition |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation |
 
 Table B-7 shows symbols that create comments.
 
@@ -180,7 +181,6 @@ Table B-8 shows symbols that appear in the context of using tuples.
 | `(expr, ...)` | Tuple expression |
 | `(type, ...)` | Tuple type |
 | `expr(expr, ...)` | Function call expression; also used to initialize tuple `struct`s and tuple `enum` variants |
-| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation |
 | `expr.0`, `expr.1`, etc. | Tuple indexing |
 
 Table B-9 shows the contexts in which curly braces are used.

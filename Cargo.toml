@@ -22,6 +22,14 @@ name = "link2print"
 path = "tools/src/bin/link2print.rs"
 
 [[bin]]
+name = "release_listings"
+path = "tools/src/bin/release_listings.rs"
+
+[[bin]]
+name = "remove_hidden_lines"
+path = "tools/src/bin/remove_hidden_lines.rs"
+
+[[bin]]
 name = "remove_links"
 path = "tools/src/bin/remove_links.rs"
 
@@ -35,3 +43,5 @@ docopt = "0.6.82"
 rustc-serialize = "0.3.19"
 regex = "0.1.73"
 lazy_static = "0.2.1"
+flate2 = "1.0"
+tar = "0.4.16"

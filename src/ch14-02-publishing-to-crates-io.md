@@ -29,19 +29,7 @@ for an `add_one` function in a crate named `my_crate`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-/// Adds one to the number given.
-///
-/// # Examples
-///
-/// ```
-/// let arg = 5;
-/// let answer = my_crate::add_one(arg);
-///
-/// assert_eq!(6, answer);
-/// ```
-pub fn add_one(x: i32) -> i32 {
-    x + 1
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
 ```
 
 <span class="caption">Listing 14-1: A documentation comment for a
@@ -96,6 +84,12 @@ that don’t work because the code has changed since the documentation was
 written. If we run `cargo test` with the documentation for the `add_one`
 function from Listing 14-1, we will see a section in the test results like this:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-01/
+cargo test
+copy just the doc-tests section below
+-->
+
 ```text
    Doc-tests my_crate
 
@@ -125,13 +119,7 @@ shown in Listing 14-2:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-//! # My Crate
-//!
-//! `my_crate` is a collection of utilities to make performing certain
-//! calculations more convenient.
-
-/// Adds one to the number given.
-// --snip--
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 14-2: Documentation for the `my_crate` crate as a
@@ -189,37 +177,7 @@ function named `mix`, as shown in Listing 14-3:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-//! # Art
-//!
-//! A library for modeling artistic concepts.
-
-pub mod kinds {
-    /// The primary colors according to the RYB color model.
-    pub enum PrimaryColor {
-        Red,
-        Yellow,
-        Blue,
-    }
-
-    /// The secondary colors according to the RYB color model.
-    pub enum SecondaryColor {
-        Orange,
-        Green,
-        Purple,
-    }
-}
-
-pub mod utils {
-    use crate::kinds::*;
-
-    /// Combines two primary colors in equal amounts to create
-    /// a secondary color.
-    pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
-        // --snip--
-#         SecondaryColor::Orange
-    }
-}
-# fn main() {}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 14-3: An `art` library with items organized into
@@ -245,14 +203,7 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use art::kinds::PrimaryColor;
-use art::utils::mix;
-
-fn main() {
-    let red = PrimaryColor::Red;
-    let yellow = PrimaryColor::Yellow;
-    mix(red, yellow);
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 14-4: A crate using the `art` crate’s items with
@@ -276,21 +227,7 @@ items at the top level, as shown in Listing 14-5:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-//! # Art
-//!
-//! A library for modeling artistic concepts.
-
-pub use self::kinds::PrimaryColor;
-pub use self::kinds::SecondaryColor;
-pub use self::utils::mix;
-
-pub mod kinds {
-    // --snip--
-}
-
-pub mod utils {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 14-5: Adding `pub use` statements to re-export
@@ -312,12 +249,7 @@ structure in Listing 14-5, as shown in Listing 14-6:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use art::PrimaryColor;
-use art::mix;
-
-fn main() {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 14-6: A program using the re-exported items from
@@ -380,13 +312,19 @@ name = "guessing_game"
 Even if you’ve chosen a unique name, when you run `cargo publish` to publish
 the crate at this point, you’ll get a warning and then an error:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-01/
+cargo publish
+copy just the relevant lines below
+-->
+
 ```text
 $ cargo publish
-    Updating registry `https://github.com/rust-lang/crates.io-index`
-warning: manifest has no description, license, license-file, documentation,
-homepage or repository.
+    Updating crates.io index
+warning: manifest has no description, license, license-file, documentation, homepage or repository.
+See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata for more info.
 --snip--
-error: api errors: missing or empty metadata fields: description, license.
+error: api errors (status 200 OK): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for how to upload metadata
 ```
 
 The reason is that you’re missing some crucial information: a description and
@@ -461,15 +399,21 @@ no limit to the number of crate versions you can publish.
 
 Run the `cargo publish` command again. It should succeed now:
 
+<!-- manual-regeneration
+go to some valid crate, publish a new version
+cargo publish
+copy just the relevant lines below
+-->
+
 ```text
 $ cargo publish
- Updating registry `https://github.com/rust-lang/crates.io-index`
-Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
-Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
-Compiling guessing_game v0.1.0
+    Updating crates.io index
+   Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
+   Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
+   Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
- Finished dev [unoptimized + debuginfo] target(s) in 0.19 secs
-Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.19s
+   Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
 Congratulations! You’ve now shared your code with the Rust community, and
