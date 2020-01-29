@@ -28,26 +28,26 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
     let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###)
         .unwrap();
     let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
-        let key = caps.at(1).unwrap().to_owned().to_uppercase();
-        let val = caps.at(2).unwrap().to_owned();
+        let key = caps.get(1).unwrap().as_str().to_uppercase();
+        let val = caps.get(2).unwrap().as_str().to_string();
         if ref_map.insert(key, val).is_some() {
             panic!("Did not expect markdown page to have duplicate reference");
         }
         "".to_string()
-    });
+    }).to_string();
     (output, ref_map)
 }
 
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
     // FIXME: check which punctuation is allowed by spec.
-    let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
+    let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^\[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
     let error_code =
         Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         match caps.name("pre") {
-            Some(pre_section) => format!("{}", pre_section.to_owned()),
+            Some(pre_section) => format!("{}", pre_section.as_str()),
             None => {
-                let name = caps.name("name").expect("could not get name").to_owned();
+                let name = caps.name("name").expect("could not get name").as_str();
                 // Really we should ignore text inside code blocks,
                 // this is a hack to not try to treat `#[derive()]`,
                 // `[profile]`, `[test]`, or `[E\d\d\d\d]` like a link.
@@ -55,21 +55,21 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                    name.starts_with("profile") ||
                    name.starts_with("test") ||
                    name.starts_with("no_mangle") ||
-                   error_code.is_match(&name) {
-                    return name
+                   error_code.is_match(name) {
+                    return name.to_string()
                 }
 
                 let val = match caps.name("val") {
                     // `[name](link)`
-                    Some(value) => value.to_owned(),
+                    Some(value) => value.as_str().to_string(),
                     None => {
                         match caps.name("key") {
                             Some(key) => {
-                                match key {
+                                match key.as_str() {
                                     // `[name][]`
                                     "" => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
                                     // `[name][reference]`
-                                    _ => format!("{}", ref_map.get(&key.to_uppercase()).expect(&format!("could not find url for the link text `{}`", key))),
+                                    _ => format!("{}", ref_map.get(&key.as_str().to_uppercase()).expect(&format!("could not find url for the link text `{}`", key.as_str()))),
                                 }
                             }
                             // `[name]` as reference
@@ -81,7 +81,7 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
             }
         }
     });
-    output
+    output.to_string()
 }
 
 #[cfg(test)]
