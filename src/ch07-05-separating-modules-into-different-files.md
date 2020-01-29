@@ -24,7 +24,7 @@ And *src/front_of_house.rs* gets the definitions from the body of the
 
 <span class="filename">Filename: src/front_of_house.rs</span>
 
-```rust
+```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
