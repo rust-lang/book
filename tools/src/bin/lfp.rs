@@ -1,17 +1,14 @@
 // We have some long regex literals, so:
 // ignore-tidy-linelength
 
-extern crate docopt;
-extern crate rustc_serialize;
-extern crate walkdir;
-
 use docopt::Docopt;
+use serde::Deserialize;
 use std::io::BufRead;
 use std::{fs, io, path};
 
 fn main() {
     let args: Args = Docopt::new(USAGE)
-        .and_then(|d| d.decode())
+        .and_then(|d| d.deserialize())
         .unwrap_or_else(|e| e.exit());
 
     let src_dir = &path::Path::new(&args.arg_src_dir);
@@ -69,7 +66,7 @@ Options:
   -h --help         Show this screen.
 ";
 
-#[derive(Debug, RustcDecodable)]
+#[derive(Debug, Deserialize)]
 struct Args {
     arg_src_dir: String,
 }

@@ -61,7 +61,7 @@ fn match_files(
                         regex.replace_all(source_filename, replacement);
                     let source_path = entry.path();
                     let mut target_path = PathBuf::from(&target_dir);
-                    target_path.push(target_filename);
+                    target_path.push(target_filename.to_string());
                     return Some((source_path, target_path));
                 }
             }
