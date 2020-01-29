@@ -34,7 +34,7 @@ because we haven’t implemented the `blog` crate yet.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch17-oop/listing-17-11/src/main.rs:all}}
 ```
 
