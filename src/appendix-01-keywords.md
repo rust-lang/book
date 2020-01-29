@@ -42,7 +42,7 @@ The following keywords currently have the functionality described.
 * `pub` - denote public visibility in struct fields, `impl` blocks, or modules
 * `ref` - bind by reference
 * `return` - return from function
-* `Self` - a type alias for the type implementing a trait
+* `Self` - a type alias for the type we are defining or implementing
 * `self` - method subject or current module
 * `static` - global variable or lifetime lasting the entire program execution
 * `struct` - define a structure
