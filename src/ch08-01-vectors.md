@@ -162,8 +162,8 @@ other where the vector currently is. In that case, the reference to the first
 element would be pointing to deallocated memory. The borrowing rules prevent
 programs from ending up in that situation.
 
-> Note: For more on the implementation details of the `Vec<T>` type, see “The
-> Rustonomicon” at <https://doc.rust-lang.org/stable/nomicon/vec.html>.
+> Note: For more on the implementation details of the `Vec<T>` type, see [“The
+> Rustonomicon”][nomicon].
 
 ### Iterating over the Values in a Vector
 
@@ -238,4 +238,5 @@ method removes and returns the last element. Let’s move on to the next
 collection type: `String`!
 
 [data-types]: ch03-02-data-types.html#data-types
+[nomicon]: ../nomicon/vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator

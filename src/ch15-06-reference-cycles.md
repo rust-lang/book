@@ -312,7 +312,7 @@ If this chapter has piqued your interest and you want to implement your own
 smart pointers, check out [“The Rustonomicon”][nomicon] for more useful
 information.
 
-[nomicon]: https://doc.rust-lang.org/stable/nomicon/
-
 Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
 smart pointers.
+
+[nomicon]: ../nomicon/
