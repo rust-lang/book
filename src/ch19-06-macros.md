@@ -289,13 +289,6 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
-<!--
-This usage of `extern crate` is required for the moment with 1.31.0, see:
-https://github.com/rust-lang/rust/issues/54418
-https://github.com/rust-lang/rust/pull/54658
-https://github.com/rust-lang/rust/issues/55599
--->
-
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
@@ -367,7 +360,7 @@ with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
 fields on this struct for describing all sorts of Rust code; check the [`syn`
 documentation for `DeriveInput`][syn-docs] for more information.
 
-[syn-docs]: https://docs.rs/syn/0.14.4/syn/struct.DeriveInput.html
+[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
 
 Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
 the new Rust code we want to include. But before we do, note that the output
