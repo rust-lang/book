@@ -323,10 +323,10 @@ importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
-For example, in the code in Listing 3-4, if you removed an item from the `a`
-array but forgot to update the condition to `while index < 4`, the code would
-panic. Using the `for` loop, you wouldn’t need to remember to change any other
-code if you changed the number of values in the array.
+For example, in the code in Listing 3-4, if you defined the `a` array with four
+elements but forgot to update the condition to `while index < 4`, the code
+would panic. Using the `for` loop, you wouldn’t need to remember to change any
+other code if you changed the number of values in the array.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
