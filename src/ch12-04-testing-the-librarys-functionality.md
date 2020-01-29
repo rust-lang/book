@@ -40,7 +40,7 @@ yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
