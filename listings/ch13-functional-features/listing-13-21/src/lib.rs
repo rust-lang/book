@@ -13,9 +13,8 @@ impl Iterator for Counter {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.count += 1;
-
-        if self.count < 6 {
+        if self.count < 5 {
+            self.count += 1;
             Some(self.count)
         } else {
             None

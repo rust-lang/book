@@ -15,9 +15,8 @@ impl Iterator for Counter {
     fn next(&mut self) -> Option<Self::Item> {
         // --snip--
         // ANCHOR_END: ch19
-        self.count += 1;
-
-        if self.count < 6 {
+        if self.count < 5 {
+            self.count += 1;
             Some(self.count)
         } else {
             None

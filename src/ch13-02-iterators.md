@@ -273,9 +273,10 @@ iterator will return `u32` values. Again, don’t worry about associated types
 yet, we’ll cover them in Chapter 19.
 
 We want our iterator to add 1 to the current state, so we initialized `count`
-to 0 so it would return 1 first. If the value of `count` is less than 6, `next`
-will return the current value wrapped in `Some`, but if `count` is 6 or higher,
-our iterator will return `None`.
+to 0 so it would return 1 first. If the value of `count` is less than 5, `next`
+will increment `count` and return the current value wrapped in `Some`. Once
+`count` is 5, our iterator will stop incrementing `count` and always return
+`None`.
 
 #### Using Our `Counter` Iterator’s `next` Method
 
