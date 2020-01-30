@@ -74,13 +74,13 @@ situation, Rust will panic. Using `[]` is supposed to return an element, but if
 you pass an invalid index, there’s no element that Rust could return here that
 would be correct.
 
-Other languages, like C, will attempt to give you exactly what you asked for in
-this situation, even though it isn’t what you want: you’ll get whatever is at
-the location in memory that would correspond to that element in the vector,
-even though the memory doesn’t belong to the vector. This is called a *buffer
-overread* and can lead to security vulnerabilities if an attacker is able to
-manipulate the index in such a way as to read data they shouldn’t be allowed to
-that is stored after the array.
+In C, attempting to read beyond the end of a data structure is undefined
+behavior. You might get whatever is at the location in memory that would
+correspond to that element in the data structure, even though the memory
+doesn’t belong to that structure. This is called a *buffer overread* and can
+lead to security vulnerabilities if an attacker is able to manipulate the index
+in such a way as to read data they shouldn’t be allowed to that is stored after
+the data structure.
 
 To protect your program from this sort of vulnerability, if you try to read an
 element at an index that doesn’t exist, Rust will stop execution and refuse to
