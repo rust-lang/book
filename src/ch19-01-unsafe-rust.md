@@ -310,16 +310,16 @@ mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
 and a length, and it creates a slice. We use this function to create a slice
-that starts from `ptr` and is `mid` items long. Then we call the `offset`
+that starts from `ptr` and is `mid` items long. Then we call the `add`
 method on `ptr` with `mid` as an argument to get a raw pointer that starts at
 `mid`, and we create a slice using that pointer and the remaining number of
 items after `mid` as the length.
 
 The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
-pointer and must trust that this pointer is valid. The `offset` method on raw
+pointer and must trust that this pointer is valid. The `add` method on raw
 pointers is also unsafe, because it must trust that the offset location is also
 a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
-`slice::from_raw_parts_mut` and `offset` so we could call them. By looking at
+`slice::from_raw_parts_mut` and `add` so we could call them. By looking at
 the code and by adding the assertion that `mid` must be less than or equal to
 `len`, we can tell that all the raw pointers used within the `unsafe` block
 will be valid pointers to data within the slice. This is an acceptable and
