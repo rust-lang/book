@@ -42,13 +42,16 @@ keys of type `String` and values of type `i32`. Like vectors, hash maps are
 homogeneous: all of the keys must have the same type, and all of the values
 must have the same type.
 
-Another way of constructing a hash map is by using the `collect` method on a
-vector of tuples, where each tuple consists of a key and its value. The
-`collect` method gathers data into a number of collection types, including
-`HashMap`. For example, if we had the team names and initial scores in two
-separate vectors, we could use the `zip` method to create a vector of tuples
-where “Blue” is paired with 10, and so forth. Then we could use the `collect`
-method to turn that vector of tuples into a hash map, as shown in Listing 8-21.
+Another way of constructing a hash map is by using iterators and the `collect`
+method on a vector of tuples, where each tuple consists of a key and its value.
+We'll be going into more detail about iterators and their associated methods in
+the ["Processing a Series of Items with Iterators" section of Chapter
+13][iterators]<!-- ignore -->. The `collect` method gathers data into a number
+of collection types, including `HashMap`. For example, if we had the team names
+and initial scores in two separate vectors, we could use the `zip` method to
+create a vector of tuples where “Blue” is paired with 10, and so forth. Then we
+could use the `collect` method to turn that vector of tuples into a hash map,
+as shown in Listing 8-21.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
@@ -61,7 +64,9 @@ The type annotation `HashMap<_, _>` is needed here because it’s possible to
 `collect` into many different data structures and Rust doesn’t know which you
 want unless you specify. For the parameters for the key and value types,
 however, we use underscores, and Rust can infer the types that the hash map
-contains based on the types of the data in the vectors.
+contains based on the types of the data in the vectors. In Listing 8-21, the
+key type will be `String` and the value type will be `i32`, just as the types
+were in Listing 8-20.
 
 ### Hash Maps and Ownership
 
@@ -241,5 +246,6 @@ and hash maps have that will be helpful for these exercises!
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
 
+[iterators]: ch13-02-iterators.html
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
