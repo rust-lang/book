@@ -44,8 +44,11 @@ same name.
 
 Go into the *hello_cargo* directory and list the files. You’ll see that Cargo
 has generated two files and one directory for us: a *Cargo.toml* file and a
-*src* directory with a *main.rs* file inside. It has also initialized a new Git
-repository along with a *.gitignore* file.
+*src* directory with a *main.rs* file inside.
+
+It has also initialized a new Git repository along with a *.gitignore* file.
+Git files won't be generated if you run `cargo new` within an existing Git
+repository; you can override this behavior by using `cargo new --vcs=git`.
 
 > Note: Git is a common version control system. You can change `cargo new` to
 > use a different version control system or no version control system by using

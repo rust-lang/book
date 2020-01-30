@@ -6,6 +6,7 @@ adaptor
 adaptors
 AddAssign
 Addr
+afdc
 aggregator
 AGraph
 aliasability
@@ -247,6 +248,7 @@ libpanic
 librarys
 libreoffice
 libstd
+libunwind
 lifecycle
 LimitTracker
 linter
@@ -334,6 +336,7 @@ parameterize
 ParseIntError
 PartialEq
 PartialOrd
+pbcopy
 PendingReview
 PendingReviewPost
 PlaceholderType

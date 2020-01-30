@@ -30,14 +30,14 @@ strings.
 > be described in relation to the stack and the heap later in this chapter, so
 > here is a brief explanation in preparation.
 >
-> Both the stack and the heap are parts of memory that are available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
-> This is referred to as *last in, first out*. Think of a stack of plates: when
-> you add more plates, you put them on top of the pile, and when you need a
-> plate, you take one off the top. Adding or removing plates from the middle or
-> bottom wouldn’t work as well! Adding data is called *pushing onto the stack*,
-> and removing data is called *popping off the stack*.
+> Both the stack and the heap are parts of memory that are available to your
+> code to use at runtime, but they are structured in different ways. The stack
+> stores values in the order it gets them and removes the values in the
+> opposite order. This is referred to as *last in, first out*. Think of a stack
+> of plates: when you add more plates, you put them on top of the pile, and
+> when you need a plate, you take one off the top. Adding or removing plates
+> from the middle or bottom wouldn’t work as well! Adding data is called
+> *pushing onto the stack*, and removing data is called *popping off the stack*.
 >
 > All data stored on the stack must have a known, fixed size. Data with an
 > unknown size at compile time or a size that might change must be stored on
@@ -117,11 +117,7 @@ which it’s declared until the end of the current *scope*. Listing 4-1 has
 comments annotating where the variable `s` is valid.
 
 ```rust
-{                      // s is not valid here, it’s not yet declared
-    let s = "hello";   // s is valid from this point forward
-
-    // do stuff with s
-}                      // this scope is now over, and s is no longer valid
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-1: A variable and the scope in which it is
@@ -147,7 +143,7 @@ data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
 that relate to ownership. These aspects also apply to other complex data types,
-whether they are provided by the standard library or created by you. We’ll 
+whether they are provided by the standard library or created by you. We’ll
 discuss `String` in more depth in Chapter 8.
 
 We’ve already seen string literals, where a string value is hardcoded into our
@@ -174,11 +170,7 @@ Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 This kind of string *can* be mutated:
 
 ```rust
-let mut s = String::from("hello");
-
-s.push_str(", world!"); // push_str() appends a literal to a String
-
-println!("{}", s); // This will print `hello, world!`
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
 So, what’s the difference here? Why can `String` be mutated but literals
@@ -219,12 +211,7 @@ variable that owns it goes out of scope. Here’s a version of our scope example
 from Listing 4-1 using a `String` instead of a string literal:
 
 ```rust
-{
-    let s = String::from("hello"); // s is valid from this point forward
-
-    // do stuff with s
-}                                  // this scope is now over, and s is no
-                                   // longer valid
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
 There is a natural point at which we can return the memory our `String` needs
@@ -249,8 +236,7 @@ Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.
 
 ```rust
-let x = 5;
-let y = x;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-2: Assigning the integer value of variable `x`
@@ -265,8 +251,7 @@ onto the stack.
 Now let’s look at the `String` version:
 
 ```rust
-let s1 = String::from("hello");
-let s2 = s1;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
 
 This looks very similar to the previous code, so we might assume that the way
@@ -325,27 +310,14 @@ anything when `s1` goes out of scope. Check out what happens when you try to
 use `s1` after `s2` is created; it won’t work:
 
 ```rust,ignore,does_not_compile
-let s1 = String::from("hello");
-let s2 = s1;
-
-println!("{}, world!", s1);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
 You’ll get an error like this because Rust prevents you from using the
 invalidated reference:
 
 ```text
-error[E0382]: use of moved value: `s1`
- --> src/main.rs:5:28
-  |
-3 |     let s2 = s1;
-  |         -- value moved here
-4 |
-5 |     println!("{}, world!", s1);
-  |                            ^^ value used here after move
-  |
-  = note: move occurs because `s1` has type `std::string::String`, which does
-  not implement the `Copy` trait
+{{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
 If you’ve heard the terms *shallow copy* and *deep copy* while working with
@@ -377,10 +349,7 @@ programming languages, you’ve probably seen them before.
 Here’s an example of the `clone` method in action:
 
 ```rust
-let s1 = String::from("hello");
-let s2 = s1.clone();
-
-println!("s1 = {}, s2 = {}", s1, s2);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
 This works just fine and explicitly produces the behavior shown in Figure 4-3,
@@ -396,10 +365,7 @@ There’s another wrinkle we haven’t talked about yet. This code using integer
 part of which was shown in Listing 4-2, works and is valid:
 
 ```rust
-let x = 5;
-let y = x;
-
-println!("x = {}, y = {}", x, y);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
 But this code seems to contradict what we just learned: we don’t have a call to
@@ -444,29 +410,7 @@ showing where variables go into and out of scope.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s = String::from("hello");  // s comes into scope
-
-    takes_ownership(s);             // s's value moves into the function...
-                                    // ... and so is no longer valid here
-
-    let x = 5;                      // x comes into scope
-
-    makes_copy(x);                  // x would move into the function,
-                                    // but i32 is Copy, so it’s okay to still
-                                    // use x afterward
-
-} // Here, x goes out of scope, then s. But because s's value was moved, nothing
-  // special happens.
-
-fn takes_ownership(some_string: String) { // some_string comes into scope
-    println!("{}", some_string);
-} // Here, some_string goes out of scope and `drop` is called. The backing
-  // memory is freed.
-
-fn makes_copy(some_integer: i32) { // some_integer comes into scope
-    println!("{}", some_integer);
-} // Here, some_integer goes out of scope. Nothing special happens.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-3: Functions with ownership and scope
@@ -485,35 +429,7 @@ similar annotations to those in Listing 4-3.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = gives_ownership();         // gives_ownership moves its return
-                                        // value into s1
-
-    let s2 = String::from("hello");     // s2 comes into scope
-
-    let s3 = takes_and_gives_back(s2);  // s2 is moved into
-                                        // takes_and_gives_back, which also
-                                        // moves its return value into s3
-} // Here, s3 goes out of scope and is dropped. s2 goes out of scope but was
-  // moved, so nothing happens. s1 goes out of scope and is dropped.
-
-fn gives_ownership() -> String {             // gives_ownership will move its
-                                             // return value into the function
-                                             // that calls it
-
-    let some_string = String::from("hello"); // some_string comes into scope
-
-    some_string                              // some_string is returned and
-                                             // moves out to the calling
-                                             // function
-}
-
-// takes_and_gives_back will take a String and return one
-fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
-                                                      // scope
-
-    a_string  // a_string is returned and moves out to the calling function
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-4: Transferring ownership of return
@@ -535,19 +451,7 @@ It’s possible to return multiple values using a tuple, as shown in Listing 4-5
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = String::from("hello");
-
-    let (s2, len) = calculate_length(s1);
-
-    println!("The length of '{}' is {}.", s2, len);
-}
-
-fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() returns the length of a String
-
-    (s, length)
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-5: Returning ownership of parameters</span>

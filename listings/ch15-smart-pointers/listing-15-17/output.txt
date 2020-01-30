@@ -1,0 +1,18 @@
+$ cargo run
+   Compiling cons-list v0.1.0 (file:///projects/cons-list)
+error[E0382]: use of moved value: `a`
+  --> src/main.rs:11:30
+   |
+9  |     let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
+   |         - move occurs because `a` has type `List`, which does not implement the `Copy` trait
+10 |     let b = Cons(3, Box::new(a));
+   |                              - value moved here
+11 |     let c = Cons(4, Box::new(a));
+   |                              ^ value used here after move
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `cons-list`.
+
+To learn more, run the command again with --verbose.

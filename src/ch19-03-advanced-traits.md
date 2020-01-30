@@ -28,11 +28,7 @@ Chapter 13, we mentioned that the definition of the `Iterator` trait is as
 shown in Listing 19-12.
 
 ```rust
-pub trait Iterator {
-    type Item;
-
-    fn next(&mut self) -> Option<Self::Item>;
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
 ```
 
 <span class="caption">Listing 19-12: The definition of the `Iterator` trait
@@ -54,20 +50,14 @@ Listing 13-21, we specified that the `Item` type was `u32`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Iterator for Counter {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        // --snip--
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-13-21-reproduced/src/lib.rs:ch19}}
 ```
 
 This syntax seems comparable to that of generics. So why not just define the
 `Iterator` trait with generics, as shown in Listing 19-13?
 
 ```rust
-pub trait Iterator<T> {
-    fn next(&mut self) -> Option<T>;
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
 ```
 
 <span class="caption">Listing 19-13: A hypothetical definition of the
@@ -111,29 +101,7 @@ struct:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::ops::Add;
-
-#[derive(Debug, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl Add for Point {
-    type Output = Point;
-
-    fn add(self, other: Point) -> Point {
-        Point {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-fn main() {
-    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
-               Point { x: 3, y: 3 });
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-14: Implementing the `Add` trait to overload
@@ -176,18 +144,7 @@ implementation of `Add` do the conversion correctly. We can implement `Add` for
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::ops::Add;
-
-struct Millimeters(u32);
-struct Meters(u32);
-
-impl Add<Meters> for Millimeters {
-    type Output = Millimeters;
-
-    fn add(self, other: Meters) -> Millimeters {
-        Millimeters(self.0 + (other.0 * 1000))
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-15/src/lib.rs}}
 ```
 
 <span class="caption">Listing 19-15: Implementing the `Add` trait on
@@ -229,33 +186,7 @@ on it. Each `fly` method does something different.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-trait Pilot {
-    fn fly(&self);
-}
-
-trait Wizard {
-    fn fly(&self);
-}
-
-struct Human;
-
-impl Pilot for Human {
-    fn fly(&self) {
-        println!("This is your captain speaking.");
-    }
-}
-
-impl Wizard for Human {
-    fn fly(&self) {
-        println!("Up!");
-    }
-}
-
-impl Human {
-    fn fly(&self) {
-        println!("*waving arms furiously*");
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-16/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-16: Two traits are defined to have a `fly`
@@ -268,38 +199,7 @@ the method that is directly implemented on the type, as shown in Listing 19-17.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# trait Wizard {
-#     fn fly(&self);
-# }
-#
-# struct Human;
-#
-# impl Pilot for Human {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Wizard for Human {
-#     fn fly(&self) {
-#         println!("Up!");
-#     }
-# }
-#
-# impl Human {
-#     fn fly(&self) {
-#         println!("*waving arms furiously*");
-#     }
-# }
-#
-fn main() {
-    let person = Human;
-    person.fly();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-17/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-17: Calling `fly` on an instance of
@@ -315,40 +215,7 @@ Listing 19-18 demonstrates this syntax.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# trait Wizard {
-#     fn fly(&self);
-# }
-#
-# struct Human;
-#
-# impl Pilot for Human {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Wizard for Human {
-#     fn fly(&self) {
-#         println!("Up!");
-#     }
-# }
-#
-# impl Human {
-#     fn fly(&self) {
-#         println!("*waving arms furiously*");
-#     }
-# }
-#
-fn main() {
-    let person = Human;
-    Pilot::fly(&person);
-    Wizard::fly(&person);
-    person.fly();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-18: Specifying which trait’s `fly` method we
@@ -363,9 +230,7 @@ disambiguate.
 Running this code prints the following:
 
 ```text
-This is your captain speaking.
-Up!
-*waving arms furiously*
+{{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
 ```
 
 Because the `fly` method takes a `self` parameter, if we had two *types* that
@@ -382,27 +247,7 @@ associated function `baby_name` defined on `Dog` directly.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-trait Animal {
-    fn baby_name() -> String;
-}
-
-struct Dog;
-
-impl Dog {
-    fn baby_name() -> String {
-        String::from("Spot")
-    }
-}
-
-impl Animal for Dog {
-    fn baby_name() -> String {
-        String::from("puppy")
-    }
-}
-
-fn main() {
-    println!("A baby dog is called a {}", Dog::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-19/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-19: A trait with an associated function and a
@@ -420,7 +265,7 @@ In `main`, we call the `Dog::baby_name` function, which calls the associated
 function defined on `Dog` directly. This code prints the following:
 
 ```text
-A baby dog is called a Spot
+{{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
 ```
 
 This output isn’t what we wanted. We want to call the `baby_name` function that
@@ -432,9 +277,7 @@ Listing 19-20, we’ll get a compilation error.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    println!("A baby dog is called a {}", Animal::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-20/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-20: Attempting to call the `baby_name`
@@ -446,13 +289,7 @@ thus doesn’t have a `self` parameter, Rust can’t figure out which
 implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```text
-error[E0283]: type annotations required: cannot resolve `_: Animal`
-  --> src/main.rs:20:43
-   |
-20 |     println!("A baby dog is called a {}", Animal::baby_name());
-   |                                           ^^^^^^^^^^^^^^^^^
-   |
-   = note: required by `Animal::baby_name`
+{{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
 To disambiguate and tell Rust that we want to use the implementation of
@@ -462,27 +299,7 @@ demonstrates how to use fully qualified syntax.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Animal {
-#     fn baby_name() -> String;
-# }
-#
-# struct Dog;
-#
-# impl Dog {
-#     fn baby_name() -> String {
-#         String::from("Spot")
-#     }
-# }
-#
-# impl Animal for Dog {
-#     fn baby_name() -> String {
-#         String::from("puppy")
-#     }
-# }
-#
-fn main() {
-    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-21: Using fully qualified syntax to specify
@@ -495,7 +312,7 @@ implemented on `Dog` by saying that we want to treat the `Dog` type as an
 `Animal` for this function call. This code will now print what we want:
 
 ```text
-A baby dog is called a puppy
+{{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
 ```
 
 In general, fully qualified syntax is defined as follows:
@@ -542,19 +359,7 @@ the trait. Listing 19-22 shows an implementation of the `OutlinePrint` trait.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt;
-
-trait OutlinePrint: fmt::Display {
-    fn outline_print(&self) {
-        let output = self.to_string();
-        let len = output.len();
-        println!("{}", "*".repeat(len + 4));
-        println!("*{}*", " ".repeat(len + 2));
-        println!("* {} *", output);
-        println!("*{}*", " ".repeat(len + 2));
-        println!("{}", "*".repeat(len + 4));
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-22: Implementing the `OutlinePrint` trait that
@@ -572,27 +377,14 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# trait OutlinePrint {}
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl OutlinePrint for Point {}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
 ```
 
 We get an error saying that `Display` is required but not implemented:
 
 ```text
-error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
-  --> src/main.rs:20:6
-   |
-20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
-try using `:?` instead if you are using a format string
-   |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
+{{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
 To fix this, we implement `Display` on `Point` and satisfy the constraint that
@@ -601,18 +393,7 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-use std::fmt;
-
-impl fmt::Display for Point {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
 ```
 
 Then implementing the `OutlinePrint` trait on `Point` will compile
@@ -644,20 +425,7 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt;
-
-struct Wrapper(Vec<String>);
-
-impl fmt::Display for Wrapper {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{}]", self.0.join(", "))
-    }
-}
-
-fn main() {
-    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
-    println!("w = {}", w);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-23/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-23: Creating a `Wrapper` type around

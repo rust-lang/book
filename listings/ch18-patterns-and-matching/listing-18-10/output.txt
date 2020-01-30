@@ -1,0 +1,15 @@
+$ cargo run
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+warning: irrefutable if-let pattern
+ --> src/main.rs:2:5
+  |
+2 | /     if let x = 5 {
+3 | |         println!("{}", x);
+4 | |     };
+  | |_____^
+  |
+  = note: `#[warn(irrefutable_let_patterns)]` on by default
+
+    Finished dev [unoptimized + debuginfo] target(s) in 0.39s
+     Running `target/debug/patterns`
+5

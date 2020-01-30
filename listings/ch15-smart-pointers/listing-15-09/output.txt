@@ -1,0 +1,14 @@
+$ cargo run
+   Compiling deref-example v0.1.0 (file:///projects/deref-example)
+error[E0614]: type `MyBox<{integer}>` cannot be dereferenced
+  --> src/main.rs:14:19
+   |
+14 |     assert_eq!(5, *y);
+   |                   ^^
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0614`.
+error: could not compile `deref-example`.
+
+To learn more, run the command again with --verbose.

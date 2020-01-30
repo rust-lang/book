@@ -1,0 +1,29 @@
+$ cargo run
+   Compiling threads v0.1.0 (file:///projects/threads)
+error[E0373]: closure may outlive the current function, but it borrows `v`, which is owned by the current function
+ --> src/main.rs:6:32
+  |
+6 |     let handle = thread::spawn(|| {
+  |                                ^^ may outlive borrowed value `v`
+7 |         println!("Here's a vector: {:?}", v);
+  |                                           - `v` is borrowed here
+  |
+note: function requires argument type to outlive `'static`
+ --> src/main.rs:6:18
+  |
+6 |       let handle = thread::spawn(|| {
+  |  __________________^
+7 | |         println!("Here's a vector: {:?}", v);
+8 | |     });
+  | |______^
+help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
+  |
+6 |     let handle = thread::spawn(move || {
+  |                                ^^^^^^^
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0373`.
+error: could not compile `threads`.
+
+To learn more, run the command again with --verbose.

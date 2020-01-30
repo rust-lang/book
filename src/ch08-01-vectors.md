@@ -12,7 +12,7 @@ To create a new, empty vector, we can call the `Vec::new` function, as shown in
 Listing 8-1.
 
 ```rust
-let v: Vec<i32> = Vec::new();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-1: Creating a new, empty vector to hold values
@@ -32,10 +32,12 @@ store once you insert values, so you rarely need to do this type annotation.
 It’s more common to create a `Vec<T>` that has initial values, and Rust
 provides the `vec!` macro for convenience. The macro will create a new vector
 that holds the values you give it. Listing 8-2 creates a new `Vec<i32>` that
-holds the values `1`, `2`, and `3`.
+holds the values `1`, `2`, and `3`. The integer type is `i32` because that’s
+the default integer type, as we discussed in the [“Data Types”][data-types]<!--
+ignore --> section of Chapter 3.
 
 ```rust
-let v = vec![1, 2, 3];
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-2: Creating a new vector containing
@@ -51,12 +53,7 @@ To create a vector and then add elements to it, we can use the `push` method,
 as shown in Listing 8-3.
 
 ```rust
-let mut v = Vec::new();
-
-v.push(5);
-v.push(6);
-v.push(7);
-v.push(8);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-3: Using the `push` method to add values to a
@@ -73,12 +70,7 @@ Like any other `struct`, a vector is freed when it goes out of scope, as
 annotated in Listing 8-4.
 
 ```rust
-{
-    let v = vec![1, 2, 3, 4];
-
-    // do stuff with v
-
-} // <- v goes out of scope and is freed here
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-4: Showing where the vector and its elements
@@ -100,15 +92,7 @@ Listing 8-5 shows both methods of accessing a value in a vector, either with
 indexing syntax or the `get` method.
 
 ```rust
-let v = vec![1, 2, 3, 4, 5];
-
-let third: &i32 = &v[2];
-println!("The third element is {}", third);
-
-match v.get(2) {
-    Some(third) => println!("The third element is {}", third),
-    None => println!("There is no third element."),
-}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-5: Using indexing syntax or the `get` method to
@@ -127,10 +111,7 @@ that holds five elements and then tries to access an element at index 100, as
 shown in Listing 8-6.
 
 ```rust,should_panic,panics
-let v = vec![1, 2, 3, 4, 5];
-
-let does_not_exist = &v[100];
-let does_not_exist = v.get(100);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-6: Attempting to access the element at index
@@ -160,13 +141,7 @@ the first element in a vector and try to add an element to the end, which won’
 work.
 
 ```rust,ignore,does_not_compile
-let mut v = vec![1, 2, 3, 4, 5];
-
-let first = &v[0];
-
-v.push(6);
-
-println!("The first element is: {}", first);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-7: Attempting to add an element to a vector
@@ -175,17 +150,7 @@ while holding a reference to an item</span>
 Compiling this code will result in this error:
 
 ```text
-error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:5
-  |
-4 |     let first = &v[0];
-  |                  - immutable borrow occurs here
-5 |
-6 |     v.push(6);
-  |     ^^^^^^^^^ mutable borrow occurs here
-7 |
-8 |     println!("The first element is: {}", first);
-  |                                          ----- immutable borrow later used here
+{{#include ../listings/ch08-common-collections/listing-08-07/output.txt}}
 ```
 
 The code in Listing 8-7 might look like it should work: why should a reference
@@ -197,8 +162,8 @@ other where the vector currently is. In that case, the reference to the first
 element would be pointing to deallocated memory. The borrowing rules prevent
 programs from ending up in that situation.
 
-> Note: For more on the implementation details of the `Vec<T>` type, see “The
-> Rustonomicon” at https://doc.rust-lang.org/stable/nomicon/vec.html.
+> Note: For more on the implementation details of the `Vec<T>` type, see [“The
+> Rustonomicon”][nomicon].
 
 ### Iterating over the Values in a Vector
 
@@ -208,10 +173,7 @@ all of the elements rather than use indices to access one at a time. Listing
 in a vector of `i32` values and print them.
 
 ```rust
-let v = vec![100, 32, 57];
-for i in &v {
-    println!("{}", i);
-}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-8: Printing each element in a vector by
@@ -222,10 +184,7 @@ in order to make changes to all the elements. The `for` loop in Listing 8-9
 will add `50` to each element.
 
 ```rust
-let mut v = vec![100, 32, 57];
-for i in &mut v {
-    *i += 50;
-}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-9: Iterating over mutable references to
@@ -253,17 +212,7 @@ that of the enum. Then we can create a vector that holds that enum and so,
 ultimately, holds different types. We’ve demonstrated this in Listing 8-10.
 
 ```rust
-enum SpreadsheetCell {
-    Int(i32),
-    Float(f64),
-    Text(String),
-}
-
-let row = vec![
-    SpreadsheetCell::Int(3),
-    SpreadsheetCell::Text(String::from("blue")),
-    SpreadsheetCell::Float(10.12),
-];
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-10: Defining an `enum` to store values of
@@ -288,4 +237,6 @@ to review the API documentation for all the many useful methods defined on
 method removes and returns the last element. Let’s move on to the next
 collection type: `String`!
 
+[data-types]: ch03-02-data-types.html#data-types
+[nomicon]: ../nomicon/vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator

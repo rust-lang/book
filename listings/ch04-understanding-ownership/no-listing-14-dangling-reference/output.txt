@@ -1,0 +1,16 @@
+$ cargo run
+   Compiling ownership v0.1.0 (file:///projects/ownership)
+error[E0106]: missing lifetime specifier
+ --> src/main.rs:5:16
+  |
+5 | fn dangle() -> &String {
+  |                ^ help: consider giving it a 'static lifetime: `&'static`
+  |
+  = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0106`.
+error: could not compile `ownership`.
+
+To learn more, run the command again with --verbose.

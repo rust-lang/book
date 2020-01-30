@@ -18,4 +18,6 @@ them early will give you a strong core to start from.
 > special meanings, and you’ll be using them to do various tasks in your Rust
 > programs; a few have no current functionality associated with them but have
 > been reserved for functionality that might be added to Rust in the future. You
-> can find a list of the keywords in Appendix A.
+> can find a list of the keywords in [Appendix A][appendix_a].
+
+[appendix_a]: appendix-01-keywords.md

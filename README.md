@@ -4,7 +4,7 @@
 
 This repository contains the source of "The Rust Programming Language" book.
 
-[The book is available in dead-tree form from No Starch Press][nostarch]
+[The book is available in dead-tree form from No Starch Press][nostarch].
 
 [nostarch]: https://nostarch.com/rust
 
@@ -16,6 +16,10 @@ releases are updated less frequently.
 [stable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
+
+See the [releases] to download just the code of all the code listings that appear in the book.
+
+[releases]: https://github.com/rust-lang/book/releases
 
 ## Requirements
 
@@ -78,20 +82,6 @@ before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 [mdbook support]: https://github.com/rust-lang-nursery/mdBook/issues/5
-
-## Graphviz dot
-
-We're using [Graphviz](http://graphviz.org/) for some of the diagrams in the
-book. The source for those files live in the `dot` directory. To turn a `dot`
-file, for example, `dot/trpl04-01.dot` into an `svg`, run:
-
-```bash
-$ dot dot/trpl04-01.dot -Tsvg > src/img/trpl04-01.svg
-```
-
-In the generated SVG, remove the width and the height attributes from the `svg`
-element and set the `viewBox` attribute to `0.00 0.00 1000.00 1000.00` or other
-values that don't cut off the image.
 
 ## Spellchecking
 

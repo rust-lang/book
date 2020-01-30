@@ -1,0 +1,3 @@
+$ cargo check
+    Checking hello v0.1.0 (file:///projects/hello)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.24s
