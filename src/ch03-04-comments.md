@@ -11,9 +11,9 @@ Here’s a simple comment:
 // hello, world
 ```
 
-In Rust, comments must start with two slashes and continue until the end of the
-line. For comments that extend beyond a single line, you’ll need to include
-`//` on each line, like this:
+In Rust, the idiomatic comment style starts a comment with two slashes, and the
+comment continues until the end of the line. For comments that extend beyond a
+single line, you’ll need to include `//` on each line, like this:
 
 ```rust
 // So we’re doing something complicated here, long enough that we need
