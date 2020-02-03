@@ -202,8 +202,11 @@ should error, and in your terminal you should see output similar to this:
 <!-- manual-regeneration
 cd listings/ch20-web-server/listing-20-25
 cargo run
-make 2 requests to 127.0.0.1:7878
+curl http://127.0.0.1:7878
+curl http://127.0.0.1:7878
+curl http://127.0.0.1:7878
 third request will error because server will have shut down
+copy output below
 Can't automate because the output depends on making requests
 -->
 
