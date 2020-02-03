@@ -596,7 +596,7 @@ Can't automate because the output depends on making requests
 ```text
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-warning: field is never used: `workers`
+warning: field is never read: `workers`
  --> src/lib.rs:7:5
   |
 7 |     workers: Vec<Worker>,
@@ -604,19 +604,19 @@ warning: field is never used: `workers`
   |
   = note: `#[warn(dead_code)]` on by default
 
-warning: field is never used: `id`
+warning: field is never read: `id`
   --> src/lib.rs:48:5
    |
 48 |     id: usize,
    |     ^^^^^^^^^
 
-warning: field is never used: `thread`
+warning: field is never read: `thread`
   --> src/lib.rs:49:5
    |
 49 |     thread: thread::JoinHandle<()>,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Finished dev [unoptimized + debuginfo] target(s) in 1.66s
+    Finished dev [unoptimized + debuginfo] target(s) in 1.40s
      Running `target/debug/main`
 Worker 0 got a job; executing.
 Worker 2 got a job; executing.

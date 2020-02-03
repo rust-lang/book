@@ -1,10 +1,10 @@
 $ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
 error[E0597]: `x` does not live long enough
-  --> src/main.rs:7:13
+  --> src/main.rs:7:17
    |
 7  |             r = &x;
-   |             ^^^^^^ borrowed value does not live long enough
+   |                 ^^ borrowed value does not live long enough
 8  |         }
    |         - `x` dropped here while still borrowed
 9  | 

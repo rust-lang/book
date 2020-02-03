@@ -288,7 +288,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 $ cargo test
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
+    Finished test [unoptimized + debuginfo] target(s) in 0.27s
      Running target/debug/deps/add_one-f0253159197f7841
 
 running 1 test
@@ -296,7 +296,7 @@ test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-     Running target/debug/deps/adder-6b04971c46fc224f
+     Running target/debug/deps/adder-49979ff40686fa8e
 
 running 0 tests
 
@@ -327,7 +327,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 
 ```text
 $ cargo test -p add-one
-    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
+    Finished test [unoptimized + debuginfo] target(s) in 0.00s
      Running target/debug/deps/add_one-b3235fea9a156f74
 
 running 1 test

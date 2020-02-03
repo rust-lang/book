@@ -15,8 +15,8 @@ error[E0308]: mismatched types
    |                      expected enum `std::option::Option`, found struct `std::thread::JoinHandle`
    |                      help: try using a variant of the expected enum: `Some(thread)`
    |
-   = note: expected type `std::option::Option<std::thread::JoinHandle<()>>`
-              found type `std::thread::JoinHandle<_>`
+   = note: expected enum `std::option::Option<std::thread::JoinHandle<()>>`
+            found struct `std::thread::JoinHandle<_>`
 
 error: aborting due to 2 previous errors
 

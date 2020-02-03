@@ -116,53 +116,60 @@ check the backtrace number mentioned in the text below the listing
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2715:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/libcore/slice/mod.rs:2806:10
 stack backtrace:
    0: backtrace::backtrace::libunwind::trace
-             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.34/src/backtrace/libunwind.rs:88
+             at /Users/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.40/src/backtrace/libunwind.rs:88
    1: backtrace::backtrace::trace_unsynchronized
-             at /Users/vsts/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.34/src/backtrace/mod.rs:66
-   2: std::sys_common::backtrace::_print
-             at src/libstd/sys_common/backtrace.rs:47
-   3: std::sys_common::backtrace::print
-             at src/libstd/sys_common/backtrace.rs:36
-   4: std::panicking::default_hook::{{closure}}
-             at src/libstd/panicking.rs:200
-   5: std::panicking::default_hook
-             at src/libstd/panicking.rs:214
-   6: std::panicking::rust_panic_with_hook
-             at src/libstd/panicking.rs:477
-   7: std::panicking::continue_panic_fmt
-             at src/libstd/panicking.rs:384
-   8: rust_begin_unwind
-             at src/libstd/panicking.rs:311
-   9: std::panicking::begin_panic
-  10: std::panicking::begin_panic
-  11: <usize as core::slice::SliceIndex<[T]>>::index
-             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2715
-  12: core::slice::<impl core::ops::index::Index<I> for [T]>::index
-             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libcore/slice/mod.rs:2566
-  13: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/liballoc/vec.rs:1791
-  14: panic::main
+             at /Users/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.40/src/backtrace/mod.rs:66
+   2: std::sys_common::backtrace::_print_fmt
+             at src/libstd/sys_common/backtrace.rs:84
+   3: <std::sys_common::backtrace::_print::DisplayBacktrace as core::fmt::Display>::fmt
+             at src/libstd/sys_common/backtrace.rs:61
+   4: core::fmt::ArgumentV1::show_usize
+   5: std::io::Write::write_fmt
+             at src/libstd/io/mod.rs:1426
+   6: std::sys_common::backtrace::_print
+             at src/libstd/sys_common/backtrace.rs:65
+   7: std::sys_common::backtrace::print
+             at src/libstd/sys_common/backtrace.rs:50
+   8: std::panicking::default_hook::{{closure}}
+             at src/libstd/panicking.rs:193
+   9: std::panicking::default_hook
+             at src/libstd/panicking.rs:210
+  10: std::panicking::rust_panic_with_hook
+             at src/libstd/panicking.rs:471
+  11: rust_begin_unwind
+             at src/libstd/panicking.rs:375
+  12: core::panicking::panic_fmt
+             at src/libcore/panicking.rs:84
+  13: core::panicking::panic_bounds_check
+             at src/libcore/panicking.rs:62
+  14: <usize as core::slice::SliceIndex<[T]>>::index
+             at /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/libcore/slice/mod.rs:2806
+  15: core::slice::<impl core::ops::index::Index<I> for [T]>::index
+             at /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/libcore/slice/mod.rs:2657
+  16: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
+             at /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/liballoc/vec.rs:1871
+  17: panic::main
              at src/main.rs:4
-  15: std::rt::lang_start::{{closure}}
-             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libstd/rt.rs:64
-  16: std::rt::lang_start_internal::{{closure}}
-             at src/libstd/rt.rs:49
-  17: std::panicking::try::do_call
-             at src/libstd/panicking.rs:296
-  18: __rust_maybe_catch_panic
-             at src/libpanic_unwind/lib.rs:80
-  19: std::panicking::try
-             at src/libstd/panicking.rs:275
-  20: std::panic::catch_unwind
+  18: std::rt::lang_start::{{closure}}
+             at /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/libstd/rt.rs:67
+  19: std::rt::lang_start_internal::{{closure}}
+             at src/libstd/rt.rs:52
+  20: std::panicking::try::do_call
+             at src/libstd/panicking.rs:292
+  21: __rust_maybe_catch_panic
+             at src/libpanic_unwind/lib.rs:78
+  22: std::panicking::try
+             at src/libstd/panicking.rs:270
+  23: std::panic::catch_unwind
              at src/libstd/panic.rs:394
-  21: std::rt::lang_start_internal
-             at src/libstd/rt.rs:48
-  22: std::rt::lang_start
-             at /rustc/625451e376bb2e5283fc4741caa0a3e8a2ca4d54/src/libstd/rt.rs:64
-  23: panic::main
+  24: std::rt::lang_start_internal
+             at src/libstd/rt.rs:51
+  25: std::rt::lang_start
+             at /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/libstd/rt.rs:67
+  26: panic::main
 ```
 
 <span class="caption">Listing 9-2: The backtrace generated by a call to
@@ -174,7 +181,7 @@ information, debug symbols must be enabled. Debug symbols are enabled by
 default when using `cargo build` or `cargo run` without the `--release` flag,
 as we have here.
 
-In the output in Listing 9-2, line 14 of the backtrace points to the line in
+In the output in Listing 9-2, line 17 of the backtrace points to the line in
 our project that’s causing the problem: line 4 of *src/main.rs*. If we don’t
 want our program to panic, the location pointed to by the first line mentioning
 a file we wrote is where we should start investigating. In Listing 9-1, where
