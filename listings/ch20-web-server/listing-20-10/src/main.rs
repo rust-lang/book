@@ -23,7 +23,7 @@ fn handle_connection(mut stream: TcpStream) {
     // --snip--
 
     // ANCHOR_END: here
-    let mut buffer = [0; 512];
+    let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
 
     // ANCHOR: here
