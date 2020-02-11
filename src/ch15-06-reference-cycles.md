@@ -315,4 +315,4 @@ information.
 Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
 smart pointers.
 
-[nomicon]: ../nomicon/
+[nomicon]: ../nomicon/index.html
