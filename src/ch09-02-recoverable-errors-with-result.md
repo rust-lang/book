@@ -316,16 +316,16 @@ is an `Err`, the `Err` will be returned from the whole function as if we had
 used the `return` keyword so the error value gets propagated to the calling
 code.
 
-There is a difference between what the `match` expression from Listing 9-6 and
-the `?` operator do: error values that have the `?` operator called on them go
-through the `from` function, defined in the `From` trait in the standard
-library, which is used to convert errors from one type into another. When the
-`?` operator calls the `from` function, the error type received is converted
-into the error type defined in the return type of the current function. This is
-useful when a function returns one error type to represent all the ways a
-function might fail, even if parts might fail for many different reasons. As
-long as each error type implements the `from` function to define how to convert
-itself to the returned error type, the `?` operator takes care of the
+There is a difference between what the `match` expression from Listing 9-6 does
+and what the `?` operator does: error values that have the `?` operator called
+on them go through the `from` function, defined in the `From` trait in the
+standard library, which is used to convert errors from one type into another.
+When the `?` operator calls the `from` function, the error type received is
+converted into the error type defined in the return type of the current
+function. This is useful when a function returns one error type to represent all
+the ways a function might fail, even if parts might fail for many different
+reasons. As long as each error type implements the `from` function to define how
+to convert itself to the returned error type, the `?` operator takes care of the
 conversion automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
