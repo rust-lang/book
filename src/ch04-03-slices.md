@@ -221,6 +221,15 @@ truncate the `String`, it needs to get a mutable reference. Rust disallows
 this, and compilation fails. Not only has Rust made our API easier to use, but
 it has also eliminated an entire class of errors at compile time!
 
+You might wonder how Rust knows the returned value is actually related to the
+submitted argument and not somewhere else? In Rust you cannot actually return
+a reference to anything that was not passed by reference to it in the first
+place, so that's how. But what if the function took multiple parameters?
+How would it then know which one it is returning a reference to? In this case
+Rust will require you to use lifetime annotations to communicate that
+information. These will be covered in the [“Validating References with
+Lifetimes”][lifetime-syntax]<!-- ignore --> section of Chapter 10.
+
 #### String Literals Are Slices
 
 Recall that we talked about string literals being stored inside the binary. Now
