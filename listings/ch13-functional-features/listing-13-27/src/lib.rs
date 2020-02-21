@@ -18,10 +18,7 @@ impl Config {
             None => return Err("Didn't get a query string"),
         };
 
-        let filename = match args.next() {
-            Some(arg) => arg,
-            None => return Err("Didn't get a file name"),
-        };
+        let filename = args.next().ok_or("Didn't get a file name")?;
 
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
