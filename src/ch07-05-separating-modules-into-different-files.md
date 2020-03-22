@@ -39,7 +39,7 @@ declaration of the `hosting` module:
 
 <span class="filename">Filename: src/front_of_house.rs</span>
 
-```
+```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house.rs}}
 ```
 
@@ -49,7 +49,7 @@ Then we create a *src/front_of_house* directory and a file
 
 <span class="filename">Filename: src/front_of_house/hosting.rs</span>
 
-```
+```rust
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
