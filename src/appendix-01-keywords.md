@@ -50,10 +50,13 @@ The following keywords currently have the functionality described.
 * `trait` - define a trait
 * `true` - Boolean true literal
 * `type` - define a type alias or associated type
+* `union` - define a [union] and is only a keyword when used in a union declaration
 * `unsafe` - denote unsafe code, functions, traits, or implementations
 * `use` - bring symbols into scope
 * `where` - denote clauses that constrain a type
 * `while` - loop conditionally based on the result of an expression
+
+[union]: ../reference/items/unions.html
 
 ### Keywords Reserved for Future Use
 
