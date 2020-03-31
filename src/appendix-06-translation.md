@@ -22,3 +22,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Esperanto](https://github.com/psychoslave/Rust-libro)
 - [ελληνική](https://github.com/TChatzigiannakis/rust-book-greek)
 - [Svenska](https://github.com/sebras/book)
+- [Farsi](https://github.com/pomokhtari/rust-book-fa)
