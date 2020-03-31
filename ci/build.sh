@@ -17,3 +17,9 @@ for file in src/*.md ; do
     echo Checking references in $file
     cargo run --quiet --bin link2print < $file > /dev/null
 done
+echo 'Checking for broken links...'
+rustup toolchain install nightly -c rust-docs --profile=minimal
+curl -sSLo linkcheck.sh \
+    https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
+# Cannot use --all here because of the generated redirect pages aren't available.
+sh linkcheck.sh book
