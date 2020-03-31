@@ -136,20 +136,8 @@ to another variable, as the following code tries to do; you’ll get an error:
 ```
 
 When you run this program, the error you’ll get looks like this:
-
-<!--TODO: not extracting this because the new error message is incorrect; see
-https://github.com/rust-lang/rust/issues/65254 -->
-
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-error: expected expression, found statement (`let`)
- --> src/main.rs:2:14
-  |
-2 |     let x = (let y = 6);
-  |              ^^^
-  |
-  = note: variable declaration using `let` is a statement
+{{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
 The `let y = 6` statement does not return a value, so there isn’t anything for
