@@ -13,7 +13,7 @@ irrefutable patterns, because the program cannot do anything meaningful when
 values don’t match. The `if let` and `while let` expressions accept
 refutable and irrefutable patterns, but the compiler warns against
 irrefutable patterns because by definition they’re intended to handle possible
-failure: the functionality of a conditional is in its ability to perform
+failure: the functionality of a conditional expression is in its ability to perform
 differently depending on success or failure.
 
 In general, you shouldn’t have to worry about the distinction between refutable
