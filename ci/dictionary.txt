@@ -198,6 +198,7 @@ Hoare
 Hola
 homogenous
 html
+https
 hyperoptimize
 hypotheticals
 Iceburgh
@@ -357,6 +358,7 @@ PrimaryColor
 println
 priv
 proc
+proto
 pthreads
 pushups
 QuitMessage
@@ -476,6 +478,7 @@ timestamp
 Tiếng
 timeline
 tlborm
+tlsv
 TODO
 TokenStream
 toml

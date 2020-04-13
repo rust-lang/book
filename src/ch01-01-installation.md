@@ -28,7 +28,7 @@ using these steps should work as expected with the content of this book.
 If you’re using Linux or macOS, open a terminal and enter the following command:
 
 ```text
-$ curl https://sh.rustup.rs -sSf | sh
+$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
 The command downloads a script and starts the installation of the `rustup`
