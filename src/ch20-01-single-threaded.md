@@ -325,7 +325,8 @@ familiar; we used it in Chapter 12 when we read the contents of a file for our
 I/O project in Listing 12-4.
 
 Next, we use `format!` to add the file’s contents as the body of the success
-response.
+response. To ensure a valid HTTP response, we add the `Content-Length` header
+which is set to the size of our response body, in this case the size of `hello.html`.
 
 Run this code with `cargo run` and load *127.0.0.1:7878* in your browser; you
 should see your HTML rendered!
