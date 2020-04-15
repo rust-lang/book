@@ -105,12 +105,22 @@ requires these around all function bodies. It’s good style to place the openin
 curly bracket on the same line as the function declaration, adding one space in
 between.
 
-At the time of this writing, an automatic formatter tool called `rustfmt` is
-under development. If you want to stick to a standard style across Rust
-projects, `rustfmt` will format your code in a particular style. The Rust team
-plans to eventually include this tool with the standard Rust distribution, like
-`rustc`. So depending on when you read this book, it might already be installed
-on your computer! Check the online documentation for more details.
+If you want to stick to a standard style across Rust projects,
+`rustfmt` will format your code in a particular style. It is
+included in the standard Rust distribution, like `rustc`.
+
+If we had to run `rustfmt` on our current code, we could do it as follows:
+
+```text
+$ rustfmt main.rs
+```
+
+Checkout its basic usage as follows:
+
+```text
+$ rustfmt --help
+```
+
 
 Inside the `main` function is the following code:
 
