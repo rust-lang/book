@@ -95,7 +95,7 @@ than `email: email`.
 It’s often useful to create a new instance of a struct that uses most of an old
 instance’s values but changes some. You’ll do this using *struct update syntax*.
 
-First, Listing 5-6 shows how we create a new `User` instance in `user2` without
+First, Listing 5-6 shows how we create a new `User` instance in `user2` with
 the update syntax. We set new values for `email` and `username` but otherwise
 use the same values from `user1` that we created in Listing 5-2.
 
