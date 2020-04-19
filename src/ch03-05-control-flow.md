@@ -251,7 +251,7 @@ print the value in `result`, which in this case is 20.
 #### Conditional Loops with `while`
 
 It’s often useful for a program to evaluate a condition within a loop. While
-the condition is true, the loop runs. When the condition ceases to be true, the
+the condition is true, the loop runs. When the condition ceases to be false, the
 program calls `break`, stopping the loop. This loop type could be implemented
 using a combination of `loop`, `if`, `else`, and `break`; you could try that
 now in a program, if you’d like.
