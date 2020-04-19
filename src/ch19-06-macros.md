@@ -487,7 +487,7 @@ defined only using the match-like syntax we discussed in the section
 [“Declarative Macros with `macro_rules!` for General Metaprogramming”][decl]
 earlier. Function-like macros take a `TokenStream` parameter and their
 definition manipulates that `TokenStream` using Rust code as the other two
-types of procedural macros do. An example of a function-like macro is an `sql!`
+types of procedural macros do. An example of a function-like macro is a `sql!`
 macro that might be called like so:
 
 [decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
