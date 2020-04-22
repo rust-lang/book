@@ -300,7 +300,7 @@ Rust’s ownership rules have saved us again! We got an error from the code in
 Listing 16-3 because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
 thread’s reference. By telling Rust to move ownership of `v` to the spawned
-thread, we’re guaranteeing Rust that the main thread won’t use `v` anymore. If
+thread, we’re guaranteeing to Rust that the main thread won’t use `v` anymore. If
 we change Listing 16-4 in the same way, we’re then violating the ownership
 rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
