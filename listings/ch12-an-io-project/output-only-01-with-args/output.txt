@@ -1,0 +1,5 @@
+$ cargo run needle haystack
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.57s
+     Running `target/debug/minigrep needle haystack`
+["target/debug/minigrep", "needle", "haystack"]

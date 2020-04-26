@@ -10,8 +10,9 @@ a_value` because if the value in the `a_value` variable is `None` rather than
 
 Function parameters, `let` statements, and `for` loops can only accept
 irrefutable patterns, because the program cannot do anything meaningful when
-values don’t match. The `if let` and `while let` expressions only accept
-refutable patterns, because by definition they’re intended to handle possible
+values don’t match. The `if let` and `while let` expressions accept
+refutable and irrefutable patterns, but the compiler warns against
+irrefutable patterns because by definition they’re intended to handle possible
 failure: the functionality of a conditional is in its ability to perform
 differently depending on success or failure.
 
@@ -27,7 +28,7 @@ where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
 pattern. As you might expect, this code will not compile.
 
 ```rust,ignore,does_not_compile
-let Some(x) = some_option_value;
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-8: Attempting to use a refutable pattern with
@@ -40,11 +41,7 @@ do with a `None` value. At compile time, Rust will complain that we’ve tried t
 use a refutable pattern where an irrefutable pattern is required:
 
 ```text
-error[E0005]: refutable pattern in local binding: `None` not covered
- -->
-  |
-3 | let Some(x) = some_option_value;
-  |     ^^^^^^^ pattern `None` not covered
+{{#include ../listings/ch18-patterns-and-matching/listing-18-08/output.txt}}
 ```
 
 Because we didn’t cover (and couldn’t cover!) every valid value with the
@@ -57,10 +54,7 @@ will just skip the code in the curly brackets, giving it a way to continue
 validly. Listing 18-9 shows how to fix the code in Listing 18-8.
 
 ```rust
-# let some_option_value: Option<i32> = None;
-if let Some(x) = some_option_value {
-    println!("{}", x);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-9: Using `if let` and a block with refutable
@@ -69,12 +63,10 @@ patterns instead of `let`</span>
 We’ve given the code an out! This code is perfectly valid, although it means we
 cannot use an irrefutable pattern without receiving an error. If we give `if
 let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
-it will not compile.
+the compiler will give a warning.
 
-```rust,ignore,does_not_compile
-if let x = 5 {
-    println!("{}", x);
-};
+```rust
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-10: Attempting to use an irrefutable pattern
@@ -84,11 +76,7 @@ Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:
 
 ```text
-error[E0162]: irrefutable if-let pattern
- --> <anon>:2:8
-  |
-2 | if let x = 5 {
-  |        ^ irrefutable pattern
+{{#include ../listings/ch18-patterns-and-matching/listing-18-10/output.txt}}
 ```
 
 For this reason, match arms must use refutable patterns, except for the last

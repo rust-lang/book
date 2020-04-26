@@ -25,12 +25,7 @@ Blue and Yellow. The Blue team starts with 10 points, and the Yellow team
 starts with 50.
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Yellow"), 50);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-20: Creating a new hash map and inserting some
@@ -47,21 +42,19 @@ keys of type `String` and values of type `i32`. Like vectors, hash maps are
 homogeneous: all of the keys must have the same type, and all of the values
 must have the same type.
 
-Another way of constructing a hash map is by using the `collect` method on a
-vector of tuples, where each tuple consists of a key and its value. The
-`collect` method gathers data into a number of collection types, including
-`HashMap`. For example, if we had the team names and initial scores in two
-separate vectors, we could use the `zip` method to create a vector of tuples
-where “Blue” is paired with 10, and so forth. Then we could use the `collect`
-method to turn that vector of tuples into a hash map, as shown in Listing 8-21.
+Another way of constructing a hash map is by using iterators and the `collect`
+method on a vector of tuples, where each tuple consists of a key and its value.
+We’ll be going into more detail about iterators and their associated methods in
+the [”Processing a Series of Items with Iterators” section of Chapter
+13][iterators]<!-- ignore -->. The `collect` method gathers data into a number
+of collection types, including `HashMap`. For example, if we had the team names
+and initial scores in two separate vectors, we could use the `zip` method to
+create a vector of tuples where “Blue” is paired with 10, and so forth. Then we
+could use the `collect` method to turn that vector of tuples into a hash map,
+as shown in Listing 8-21.
 
 ```rust
-use std::collections::HashMap;
-
-let teams  = vec![String::from("Blue"), String::from("Yellow")];
-let initial_scores = vec![10, 50];
-
-let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-21: Creating a hash map from a list of teams
@@ -71,7 +64,9 @@ The type annotation `HashMap<_, _>` is needed here because it’s possible to
 `collect` into many different data structures and Rust doesn’t know which you
 want unless you specify. For the parameters for the key and value types,
 however, we use underscores, and Rust can infer the types that the hash map
-contains based on the types of the data in the vectors.
+contains based on the types of the data in the vectors. In Listing 8-21, the
+key type will be `String` and the value type will be `i32`, just as the types
+were in Listing 8-20.
 
 ### Hash Maps and Ownership
 
@@ -80,15 +75,7 @@ into the hash map. For owned values like `String`, the values will be moved and
 the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
 ```rust
-use std::collections::HashMap;
-
-let field_name = String::from("Favorite color");
-let field_value = String::from("Blue");
-
-let mut map = HashMap::new();
-map.insert(field_name, field_value);
-// field_name and field_value are invalid at this point, try using them and
-// see what compiler error you get!
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-22: Showing that keys and values are owned by
@@ -100,8 +87,9 @@ they’ve been moved into the hash map with the call to `insert`.
 If we insert references to values into the hash map, the values won’t be moved
 into the hash map. The values that the references point to must be valid for at
 least as long as the hash map is valid. We’ll talk more about these issues in
-the [“Validating References with Lifetimes”]
-[validating-references-with-lifetimes]<!-- ignore --> section in Chapter 10.
+the [“Validating References with
+Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section in
+Chapter 10.
 
 ### Accessing Values in a Hash Map
 
@@ -109,15 +97,7 @@ We can get a value out of the hash map by providing its key to the `get`
 method, as shown in Listing 8-23.
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Yellow"), 50);
-
-let team_name = String::from("Blue");
-let score = scores.get(&team_name);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-23: Accessing the score for the Blue team
@@ -133,16 +113,7 @@ We can iterate over each key/value pair in a hash map in a similar manner as we
 do with vectors, using a `for` loop:
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Yellow"), 50);
-
-for (key, value) in &scores {
-    println!("{}: {}", key, value);
-}
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
 This code will print each pair in an arbitrary order:
@@ -172,14 +143,7 @@ only contain one key/value pair because we’re inserting the value for the Blue
 team’s key both times.
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Blue"), 25);
-
-println!("{:?}", scores);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-24: Replacing a value stored with a particular
@@ -200,15 +164,7 @@ and the same for the Blue team. Using the `entry` API, the code looks like
 Listing 8-25.
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-scores.insert(String::from("Blue"), 10);
-
-scores.entry(String::from("Yellow")).or_insert(50);
-scores.entry(String::from("Blue")).or_insert(50);
-
-println!("{:?}", scores);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-25: Using the `entry` method to only insert if
@@ -236,18 +192,7 @@ seen that word. If it’s the first time we’ve seen a word, we’ll first inse
 the value 0.
 
 ```rust
-use std::collections::HashMap;
-
-let text = "hello world wonderful world";
-
-let mut map = HashMap::new();
-
-for word in text.split_whitespace() {
-    let count = map.entry(word).or_insert(0);
-    *count += 1;
-}
-
-println!("{:?}", map);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-26/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-26: Counting occurrences of words using a hash
@@ -271,7 +216,7 @@ purposes, you can switch to another function by specifying a different
 *hasher*. A hasher is a type that implements the `BuildHasher` trait. We’ll
 talk about traits and how to implement them in Chapter 10. You don’t
 necessarily have to implement your own hasher from scratch;
-[crates.io](https://crates.io) has libraries shared by other Rust users that
+[crates.io](https://crates.io/) has libraries shared by other Rust users that
 provide hashers implementing many common hashing algorithms.
 
 [^siphash]: [https://www.131002.net/siphash/siphash.pdf](https://www.131002.net/siphash/siphash.pdf)
@@ -301,5 +246,6 @@ and hash maps have that will be helpful for these exercises!
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
 
+[iterators]: ch13-02-iterators.html
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes

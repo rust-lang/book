@@ -20,21 +20,7 @@ similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3.
 
 ```rust
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter,
-}
-
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => 1,
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter => 25,
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-3: An enum and a `match` expression that has
@@ -69,24 +55,7 @@ following code would print “Lucky penny!” every time the method was called w
 a `Coin::Penny` but would still return the last value of the block, `1`:
 
 ```rust
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter,
-# }
-#
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => {
-            println!("Lucky penny!");
-            1
-        },
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter => 25,
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-08-match-arm-multiple-lines/src/main.rs:here}}
 ```
 
 ### Patterns that Bind to Values
@@ -103,19 +72,7 @@ our `enum` by changing the `Quarter` variant to include a `UsState` value stored
 inside it, which we’ve done here in Listing 6-4.
 
 ```rust
-#[derive(Debug)] // so we can inspect the state in a minute
-enum UsState {
-    Alabama,
-    Alaska,
-    // --snip--
-}
-
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter(UsState),
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-4: A `Coin` enum in which the `Quarter` variant
@@ -132,30 +89,7 @@ pattern that matches values of the variant `Coin::Quarter`. When a
 quarter’s state. Then we can use `state` in the code for that arm, like so:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-#
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => 1,
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter(state) => {
-            println!("State quarter from {:?}!", state);
-            25
-        },
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-09-variable-in-pattern/src/main.rs:here}}
 ```
 
 If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
@@ -182,16 +116,7 @@ This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5.
 
 ```rust
-fn plus_one(x: Option<i32>) -> Option<i32> {
-    match x {
-        None => None,
-        Some(i) => Some(i + 1),
-    }
-}
-
-let five = Some(5);
-let six = plus_one(five);
-let none = plus_one(None);
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-5: A function that uses a `match` expression on
@@ -202,14 +127,14 @@ Let’s examine the first execution of `plus_one` in more detail. When we call
 value `Some(5)`. We then compare that against each match arm.
 
 ```rust,ignore
-None => None,
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
 The `Some(5)` value doesn’t match the pattern `None`, so we continue to the
 next arm.
 
 ```rust,ignore
-Some(i) => Some(i + 1),
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
 Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant. The
@@ -221,7 +146,7 @@ Now let’s consider the second call of `plus_one` in Listing 6-5, where `x` is
 `None`. We enter the `match` and compare to the first arm.
 
 ```rust,ignore
-None => None,
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
 It matches! There’s no value to add to, so the program stops and returns the
@@ -240,11 +165,7 @@ There’s one other aspect of `match` we need to discuss. Consider this version
 of our `plus_one` function that has a bug and won’t compile:
 
 ```rust,ignore,does_not_compile
-fn plus_one(x: Option<i32>) -> Option<i32> {
-    match x {
-        Some(i) => Some(i + 1),
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
 ```
 
 We didn’t handle the `None` case, so this code will cause a bug. Luckily, it’s
@@ -252,11 +173,7 @@ a bug Rust knows how to catch. If we try to compile this code, we’ll get this
 error:
 
 ```text
-error[E0004]: non-exhaustive patterns: `None` not covered
- -->
-  |
-6 |         match x {
-  |               ^ pattern `None` not covered
+{{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 
 Rust knows that we didn’t cover every possible case and even knows which
@@ -264,7 +181,7 @@ pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last
 possibility in order for the code to be valid. Especially in the case of
 `Option<T>`, when Rust prevents us from forgetting to explicitly handle the
 `None` case, it protects us from assuming that we have a value when we might
-have null, thus making the billion-dollar mistake discussed earlier.
+have null, thus making the billion-dollar mistake discussed earlier impossible.
 
 ### The `_` Placeholder
 
@@ -275,14 +192,7 @@ care about the values 1, 3, 5, and 7, we don’t want to have to list out 0, 2,
 special pattern `_` instead:
 
 ```rust
-let some_u8_value = 0u8;
-match some_u8_value {
-    1 => println!("one"),
-    3 => println!("three"),
-    5 => println!("five"),
-    7 => println!("seven"),
-    _ => (),
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-11-underscore-placeholder/src/main.rs:here}}
 ```
 
 The `_` pattern will match any value. By putting it after our other arms, the
@@ -293,3 +203,8 @@ list before the `_` placeholder.
 
 However, the `match` expression can be a bit wordy in a situation in which we
 care about only *one* of the cases. For this situation, Rust provides `if let`.
+
+More about patterns, and matching can be found in [chapter 18][ch18-00-patterns].
+
+[ch18-00-patterns]:
+ch18-00-patterns.html

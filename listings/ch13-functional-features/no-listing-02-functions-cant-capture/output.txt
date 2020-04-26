@@ -1,0 +1,16 @@
+$ cargo run
+   Compiling equal-to-x v0.1.0 (file:///projects/equal-to-x)
+error[E0434]: can't capture dynamic environment in a fn item
+ --> src/main.rs:5:14
+  |
+5 |         z == x
+  |              ^
+  |
+  = help: use the `|| { ... }` closure form instead
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0434`.
+error: could not compile `equal-to-x`.
+
+To learn more, run the command again with --verbose.

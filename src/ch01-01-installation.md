@@ -28,7 +28,7 @@ using these steps should work as expected with the content of this book.
 If you’re using Linux or macOS, open a terminal and enter the following command:
 
 ```text
-$ curl https://sh.rustup.rs -sSf | sh
+$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
 The command downloads a script and starts the installation of the `rustup`
@@ -71,11 +71,11 @@ On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
 the instructions for installing Rust. At some point in the installation, you’ll
 receive a message explaining that you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
-install [Build Tools for Visual Studio 2017][visualstudio]. The tools are in
+install [Build Tools for Visual Studio 2019][visualstudio]. The tools are in
 the Other Tools and Frameworks section.
 
 [install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2017
+[visualstudio]: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
 
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
@@ -115,22 +115,20 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 If you see this information, you have installed Rust successfully! If you don’t
 see this information and you’re on Windows, check that Rust is in your `%PATH%`
 system variable. If that’s all correct and Rust still isn’t working, there are
-a number of places you can get help. The easiest is [the #rust IRC channel on
-irc.mozilla.org][irc]<!-- ignore -->, which you can access through
-[Mibbit][mibbit]. At that address you can chat with other Rustaceans (a silly
-nickname we call ourselves) who can help you out. Other great resources include
-[the Users forum][users] and [Stack Overflow][stackoverflow].
+a number of places you can get help. The easiest is the #beginners channel on
+[the official Rust Discord][discord]. There, you can chat with other Rustaceans
+(a silly nickname we call ourselves) who can help you out. Other great
+resources include [the Users forum][users] and [Stack Overflow][stackoverflow].
 
-[irc]: irc://irc.mozilla.org/#rust
-[mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
+[discord]: https://discord.gg/rust-lang
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
 ### Local Documentation
 
-The installer also includes a copy of the documentation locally, so you can
-read it offline. Run `rustup doc` to open the local documentation in your
-browser.
+The installation of Rust also includes a copy of the documentation locally, so
+you can read it offline. Run `rustup doc` to open the local documentation in
+your browser.
 
 Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface

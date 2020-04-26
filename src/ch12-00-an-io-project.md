@@ -16,9 +16,9 @@ in that file that contain the string argument, and prints those lines.
 Along the way, we’ll show how to make our command line tool use features of the
 terminal that many command line tools use. We’ll read the value of an
 environment variable to allow the user to configure the behavior of our tool.
-We’ll also print to the standard error console stream (`stderr`) instead of
-standard output (`stdout`), so, for example, the user can redirect successful
-output to a file while still seeing error messages onscreen.
+We’ll also print error messages to the standard error console stream (`stderr`)
+instead of standard output (`stdout`), so, for example, the user can redirect
+successful output to a file while still seeing error messages onscreen.
 
 One Rust community member, Andrew Gallant, has already created a fully
 featured, very fast version of `grep`, called `ripgrep`. By comparison, our
@@ -28,11 +28,22 @@ the background knowledge you need to understand a real-world project such as
 
 Our `grep` project will combine a number of concepts you’ve learned so far:
 
-* Organizing code (using what you learned about modules in Chapter 7)
-* Using vectors and strings (collections, Chapter 8)
-* Handling errors (Chapter 9)
-* Using traits and lifetimes where appropriate (Chapter 10)
-* Writing tests (Chapter 11)
+* Organizing code (using what you learned about modules in [Chapter 7][ch7]<!--
+  ignore -->)
+* Using vectors and strings (collections, [Chapter 8][ch8]<!-- ignore -->)
+* Handling errors ([Chapter 9][ch9]<!-- ignore -->)
+* Using traits and lifetimes where appropriate ([Chapter 10][ch10]<!-- ignore
+  -->)
+* Writing tests ([Chapter 11][ch11]<!-- ignore -->)
 
 We’ll also briefly introduce closures, iterators, and trait objects, which
-Chapters 13 and 17 will cover in detail.
+Chapters [13][ch13]<!-- ignore --> and [17][ch17]<!-- ignore --> will cover in
+detail.
+
+[ch7]: ch07-00-managing-growing-projects-with-packages-crates-and-modules.html
+[ch8]: ch08-00-common-collections.html
+[ch9]: ch09-00-error-handling.html
+[ch10]: ch10-00-generics.html
+[ch11]: ch11-00-testing.html
+[ch13]: ch13-00-functional-features.html
+[ch17]: ch17-00-oop.html

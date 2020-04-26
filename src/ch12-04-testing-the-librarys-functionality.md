@@ -32,36 +32,16 @@ lines that match the query. We’ll add this functionality in a function called
 Because we don’t need them anymore, let’s remove the `println!` statements from
 *src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
 Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
-did in Chapter 11. The test function specifies the behavior we want the
-`search` function to have: it will take a query and the text to search for the
-query in, and it will return only the lines from the text that contain the
-query. Listing 12-15 shows this test, which won’t compile yet.
+did in [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies
+the behavior we want the `search` function to have: it will take a query and
+the text to search for the query in, and it will return only the lines from the
+text that contain the query. Listing 12-15 shows this test, which won’t compile
+yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn one_result() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
-    }
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-15: Creating a failing test for the `search`
@@ -81,9 +61,7 @@ containing the line `"safe, fast, productive."`
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    vec![]
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-16: Defining just enough of the `search`
@@ -91,10 +69,11 @@ function so our test will compile</span>
 
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Recall in
-Chapter 10 that the lifetime parameters specify which argument lifetime is
-connected to the lifetime of the return value. In this case, we indicate that
-the returned vector should contain string slices that reference slices of the
-argument `contents` (rather than the argument `query`).
+[Chapter 10][ch10-lifetimes]<!-- ignore --> that the lifetime parameters
+specify which argument lifetime is connected to the lifetime of the return
+value. In this case, we indicate that the returned vector should contain string
+slices that reference slices of the argument `contents` (rather than the
+argument `query`).
 
 In other words, we tell Rust that the data returned by the `search` function
 will live as long as the data passed into the `search` function in the
@@ -107,15 +86,7 @@ If we forget the lifetime annotations and try to compile this function, we’ll
 get this error:
 
 ```text
-error[E0106]: missing lifetime specifier
- --> src/lib.rs:5:51
-  |
-5 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
-  |                                                   ^ expected lifetime
-parameter
-  |
-  = help: this function's return type contains a borrowed value, but the
-  signature does not say whether it is borrowed from `query` or `contents`
+{{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
 Rust can’t possibly know which of the two arguments we need, so we need to tell
@@ -132,31 +103,7 @@ References with Lifetimes”][validating-references-with-lifetimes]<!-- ignore
 Now let’s run the test:
 
 ```text
-$ cargo test
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
---warnings--
-    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running target/debug/deps/minigrep-abcabcabc
-
-running 1 test
-test tests::one_result ... FAILED
-
-failures:
-
----- tests::one_result stdout ----
-        thread 'tests::one_result' panicked at 'assertion failed: `(left ==
-right)`
-left: `["safe, fast, productive."]`,
-right: `[]`)', src/lib.rs:48:8
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-
-failures:
-    tests::one_result
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
-
-error: test failed, to rerun pass '--lib'
+{{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
 Great, the test fails, exactly as we expected. Let’s get the test to pass!
@@ -183,20 +130,16 @@ won’t compile yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    for line in contents.lines() {
-        // do something with line
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-17: Iterating through each line in `contents`
 </span>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
-Chapter 13, but recall that you saw this way of using an iterator in Listing
-3-5, where we used a `for` loop with an iterator to run some code on each item
-in a collection.
+[Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way of using an
+iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a `for` loop
+with an iterator to run some code on each item in a collection.
 
 #### Searching Each Line for the Query
 
@@ -208,13 +151,7 @@ Listing 12-18. Note this still won’t compile yet.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    for line in contents.lines() {
-        if line.contains(query) {
-            // do something with line
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-18: Adding functionality to see whether the
@@ -230,17 +167,7 @@ shown in Listing 12-19.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-19: Storing the lines that match so we can
@@ -250,12 +177,7 @@ Now the `search` function should return only the lines that contain `query`,
 and our test should pass. Let’s run the test:
 
 ```text
-$ cargo test
---snip--
-running 1 test
-test tests::one_result ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+{{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
 Our test passed, so we know it works!
@@ -264,8 +186,8 @@ At this point, we could consider opportunities for refactoring the
 implementation of the search function while keeping the tests passing to
 maintain the same functionality. The code in the search function isn’t too bad,
 but it doesn’t take advantage of some useful features of iterators. We’ll
-return to this example in Chapter 13, where we’ll explore iterators in detail,
-and look at how to improve it.
+return to this example in [Chapter 13][ch13-iterators]<!-- ignore -->, where we’ll
+explore iterators in detail, and look at how to improve it.
 
 #### Using the `search` Function in the `run` Function
 
@@ -277,15 +199,7 @@ will print each line returned from `search`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    for line in search(&config.query, &contents) {
-        println!("{}", line);
-    }
-
-    Ok(())
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/src/lib.rs:here}}
 ```
 
 We’re still using a `for` loop to return each line from `search` and print it.
@@ -294,31 +208,20 @@ Now the entire program should work! Let’s try it out, first with a word that
 should return exactly one line from the Emily Dickinson poem, “frog”:
 
 ```text
-$ cargo run frog poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/minigrep frog poem.txt`
-How public, like a frog
+{{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
 Cool! Now let’s try a word that will match multiple lines, like “body”:
 
 ```text
-$ cargo run body poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep body poem.txt`
-I’m nobody! Who are you?
-Are you nobody, too?
-How dreary to be somebody!
+{{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
 And finally, let’s make sure that we don’t get any lines when we search for a
 word that isn’t anywhere in the poem, such as “monomorphization”:
 
 ```text
-$ cargo run monomorphization poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep monomorphization poem.txt`
+{{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 
 Excellent! We’ve built our own mini version of a classic tool and learned a lot
@@ -331,3 +234,7 @@ useful when you’re writing command line programs.
 
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+[ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
+[ch10-lifetimes]: ch10-03-lifetime-syntax.html
+[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
+[ch13-iterators]: ch13-02-iterators.html

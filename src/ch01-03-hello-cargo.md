@@ -6,17 +6,17 @@ such as building your code, downloading the libraries your code depends on, and
 building those libraries. (We call libraries your code needs *dependencies*.)
 
 The simplest Rust programs, like the one we’ve written so far, don’t have any
-dependencies. So if we had built the Hello, world! project with Cargo, it would
-only use the part of Cargo that handles building your code. As you write more
-complex Rust programs, you’ll add dependencies, and if you start a project
+dependencies. So if we had built the “Hello, world!” project with Cargo, it
+would only use the part of Cargo that handles building your code. As you write
+more complex Rust programs, you’ll add dependencies, and if you start a project
 using Cargo, adding dependencies will be much easier to do.
 
 Because the vast majority of Rust projects use Cargo, the rest of this book
 assumes that you’re using Cargo too. Cargo comes installed with Rust if you
-used the official installers discussed in the [“Installation”]
-[installation]<!-- ignore --> section. If you installed Rust through some other
-means, check whether Cargo is installed by entering the following into your
-terminal:
+used the official installers discussed in the
+[“Installation”][installation]<!-- ignore --> section. If you installed Rust
+through some other means, check whether Cargo is installed by entering the
+following into your terminal:
 
 ```text
 $ cargo --version
@@ -29,7 +29,7 @@ determine how to install Cargo separately.
 ### Creating a Project with Cargo
 
 Let’s create a new project using Cargo and look at how it differs from our
-original Hello, world! project. Navigate back to your *projects* directory (or
+original “Hello, world!” project. Navigate back to your *projects* directory (or
 wherever you decided to store your code). Then, on any operating system, run
 the following:
 
@@ -44,8 +44,11 @@ same name.
 
 Go into the *hello_cargo* directory and list the files. You’ll see that Cargo
 has generated two files and one directory for us: a *Cargo.toml* file and a
-*src* directory with a *main.rs* file inside. It has also initialized a new Git
-repository along with a *.gitignore* file.
+*src* directory with a *main.rs* file inside.
+
+It has also initialized a new Git repository along with a *.gitignore* file.
+Git files won’t be generated if you run `cargo new` within an existing Git
+repository; you can override this behavior by using `cargo new --vcs=git`.
 
 > Note: Git is a common version control system. You can change `cargo new` to
 > use a different version control system or no version control system by using
@@ -99,10 +102,10 @@ fn main() {
 }
 ```
 
-Cargo has generated a Hello, world! program for you, just like the one we wrote
-in Listing 1-1! So far, the differences between our previous project and the
-project Cargo generates are that Cargo placed the code in the *src* directory,
-and we have a *Cargo.toml* configuration file in the top directory.
+Cargo has generated a “Hello, world!” program for you, just like the one we
+wrote in Listing 1-1! So far, the differences between our previous project and
+the project Cargo generates are that Cargo placed the code in the *src*
+directory, and we have a *Cargo.toml* configuration file in the top directory.
 
 Cargo expects your source files to live inside the *src* directory. The
 top-level project directory is just for README files, license information,
@@ -110,14 +113,14 @@ configuration files, and anything else not related to your code. Using Cargo
 helps you organize your projects. There’s a place for everything, and
 everything is in its place.
 
-If you started a project that doesn’t use Cargo, as we did with the Hello,
-world! project, you can convert it to a project that does use Cargo. Move the
+If you started a project that doesn’t use Cargo, as we did with the “Hello,
+world!” project, you can convert it to a project that does use Cargo. Move the
 project code into the *src* directory and create an appropriate *Cargo.toml*
 file.
 
 ### Building and Running a Cargo Project
 
-Now let’s look at what’s different when we build and run the Hello, world!
+Now let’s look at what’s different when we build and run the “Hello, world!”
 program with Cargo! From your *hello_cargo* directory, build your project by
 entering the following command:
 
@@ -237,7 +240,7 @@ you’ve learned how to:
 * Install the latest stable version of Rust using `rustup`
 * Update to a newer Rust version
 * Open locally installed documentation
-* Write and run a Hello, world! program using `rustc` directly
+* Write and run a “Hello, world!” program using `rustc` directly
 * Create and run a new project using the conventions of Cargo
 
 This is a great time to build a more substantial program to get used to reading

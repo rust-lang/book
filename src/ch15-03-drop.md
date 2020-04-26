@@ -30,21 +30,7 @@ function.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct CustomSmartPointer {
-    data: String,
-}
-
-impl Drop for CustomSmartPointer {
-    fn drop(&mut self) {
-        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
-    }
-}
-
-fn main() {
-    let c = CustomSmartPointer { data: String::from("my stuff") };
-    let d = CustomSmartPointer { data: String::from("other stuff") };
-    println!("CustomSmartPointers created.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 15-14: A `CustomSmartPointer` struct that
@@ -58,7 +44,7 @@ an instance of your type goes out of scope. We’re printing some text here to
 demonstrate when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` and then print
-`CustomSmartPointers created.`. At the end of `main`, our instances of
+`CustomSmartPointers created`. At the end of `main`, our instances of
 `CustomSmartPointer` will go out of scope, and Rust will call the code we put
 in the `drop` method, printing our final message. Note that we didn’t need to
 call the `drop` method explicitly.
@@ -66,9 +52,7 @@ call the `drop` method explicitly.
 When we run this program, we’ll see the following output:
 
 ```text
-CustomSmartPointers created.
-Dropping CustomSmartPointer with data `other stuff`!
-Dropping CustomSmartPointer with data `my stuff`!
+{{#include ../listings/ch15-smart-pointers/listing-15-14/output.txt}}
 ```
 
 Rust automatically called `drop` for us when our instances went out of scope,
@@ -84,7 +68,7 @@ functionality. Disabling `drop` isn’t usually necessary; the whole point of th
 `Drop` trait is that it’s taken care of automatically. Occasionally, however,
 you might want to clean up a value early. One example is when using smart
 pointers that manage locks: you might want to force the `drop` method that
-releases the lock to run so other code in the same scope can acquire the lock.
+releases the lock so that other code in the same scope can acquire the lock.
 Rust doesn’t let you call the `Drop` trait’s `drop` method manually; instead
 you have to call the `std::mem::drop` function provided by the standard library
 if you want to force a value to be dropped before the end of its scope.
@@ -96,12 +80,7 @@ compiler error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
-    c.drop();
-    println!("CustomSmartPointer dropped before the end of main.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-15/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-15: Attempting to call the `drop` method from
@@ -110,11 +89,7 @@ the `Drop` trait manually to clean up early</span>
 When we try to compile this code, we’ll get this error:
 
 ```text
-error[E0040]: explicit use of destructor method
-  --> src/main.rs:14:7
-   |
-14 |     c.drop();
-   |       ^^^^ explicit destructor calls not allowed
+{{#include ../listings/ch15-smart-pointers/listing-15-15/output.txt}}
 ```
 
 This error message states that we’re not allowed to explicitly call `drop`. The
@@ -140,22 +115,7 @@ an argument. The function is in the prelude, so we can modify `main` in Listing
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# struct CustomSmartPointer {
-#     data: String,
-# }
-#
-# impl Drop for CustomSmartPointer {
-#     fn drop(&mut self) {
-#         println!("Dropping CustomSmartPointer!");
-#     }
-# }
-#
-fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
-    drop(c);
-    println!("CustomSmartPointer dropped before the end of main.");
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-16/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-16: Calling `std::mem::drop` to explicitly
@@ -164,9 +124,7 @@ drop a value before it goes out of scope</span>
 Running this code will print the following:
 
 ```text
-CustomSmartPointer created.
-Dropping CustomSmartPointer with data `some data`!
-CustomSmartPointer dropped before the end of main.
+{{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 
 The text ```Dropping CustomSmartPointer with data `some data`!``` is printed

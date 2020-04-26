@@ -1,13 +1,13 @@
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 
-
+use std::collections::BTreeMap;
 use std::env;
+use std::fs::{create_dir, read_dir, File};
 use std::io;
 use std::io::{Read, Write};
-use std::process::exit;
-use std::fs::{create_dir, read_dir, File};
 use std::path::{Path, PathBuf};
-use std::collections::BTreeMap;
+use std::process::exit;
 
 use regex::Regex;
 
@@ -18,7 +18,8 @@ static PATTERNS: &'static [(&'static str, &'static str)] = &[
 
 lazy_static! {
     static ref MATCHERS: Vec<(Regex, &'static str)> = {
-        PATTERNS.iter()
+        PATTERNS
+            .iter()
             .map(|&(expr, repl)| (Regex::new(expr).unwrap(), repl))
             .collect()
     };
@@ -43,19 +44,24 @@ fn main() {
     }
 }
 
-fn match_files(source_dir: &Path, target_dir: &Path) -> Vec<(PathBuf, PathBuf)> {
+fn match_files(
+    source_dir: &Path,
+    target_dir: &Path,
+) -> Vec<(PathBuf, PathBuf)> {
     read_dir(source_dir)
         .expect("Unable to read source directory")
         .filter_map(|maybe_entry| maybe_entry.ok())
         .filter_map(|entry| {
             let source_filename = entry.file_name();
-            let source_filename = &source_filename.to_string_lossy().into_owned();
+            let source_filename =
+                &source_filename.to_string_lossy().into_owned();
             for &(ref regex, replacement) in MATCHERS.iter() {
                 if regex.is_match(source_filename) {
-                    let target_filename = regex.replace_all(source_filename, replacement);
+                    let target_filename =
+                        regex.replace_all(source_filename, replacement);
                     let source_path = entry.path();
                     let mut target_path = PathBuf::from(&target_dir);
-                    target_path.push(target_filename);
+                    target_path.push(target_filename.to_string());
                     return Some((source_path, target_path));
                 }
             }
@@ -64,7 +70,9 @@ fn match_files(source_dir: &Path, target_dir: &Path) -> Vec<(PathBuf, PathBuf)> 
         .collect()
 }
 
-fn group_by_target(matched_files: Vec<(PathBuf, PathBuf)>) -> BTreeMap<PathBuf, Vec<PathBuf>> {
+fn group_by_target(
+    matched_files: Vec<(PathBuf, PathBuf)>,
+) -> BTreeMap<PathBuf, Vec<PathBuf>> {
     let mut grouped: BTreeMap<PathBuf, Vec<PathBuf>> = BTreeMap::new();
     for (source, target) in matched_files {
         if let Some(source_paths) = grouped.get_mut(&target) {
@@ -77,7 +85,10 @@ fn group_by_target(matched_files: Vec<(PathBuf, PathBuf)>) -> BTreeMap<PathBuf, 
     grouped
 }
 
-fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<()> {
+fn concat_files(
+    source_paths: Vec<PathBuf>,
+    target_path: PathBuf,
+) -> io::Result<()> {
     println!("Concatenating into {}:", target_path.to_string_lossy());
     let mut target = File::create(target_path)?;
     target.write_all(b"\n[TOC]\n")?;

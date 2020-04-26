@@ -12,15 +12,7 @@ Here’s a program that contains an example function definition:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    println!("Hello, world!");
-
-    another_function();
-}
-
-fn another_function() {
-    println!("Another function.");
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
 Function definitions in Rust start with `fn` and have a set of parentheses
@@ -39,12 +31,7 @@ further. Place the `another_function` example in *src/main.rs* and run it. You
 should see the following output:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.28 secs
-     Running `target/debug/functions`
-Hello, world!
-Another function.
+{{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
 The lines execute in the order in which they appear in the `main` function.
@@ -67,23 +54,13 @@ look like in Rust:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    another_function(5);
-}
-
-fn another_function(x: i32) {
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/src/main.rs}}
 ```
 
 Try running this program; you should get the following output:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
-     Running `target/debug/functions`
-The value of x is: 5
+{{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
 The declaration of `another_function` has one parameter named `x`. The type of
@@ -102,14 +79,7 @@ declarations with commas, like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    another_function(5, 6);
-}
-
-fn another_function(x: i32, y: i32) {
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
 This example creates a function with two parameters, both of which are `i32`
@@ -122,12 +92,7 @@ project’s *src/main.rs* file with the preceding example and run it using `carg
 run`:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/functions`
-The value of x is: 5
-The value of y is: 6
+{{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
 Because we called the function with `5` as the value for  `x` and `6` is passed
@@ -153,9 +118,7 @@ statement. In Listing 3-1, `let y = 6;` is a statement.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let y = 6;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-1: A `main` function declaration containing one statement</span>
@@ -169,23 +132,12 @@ to another variable, as the following code tries to do; you’ll get an error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = (let y = 6);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/src/main.rs}}
 ```
 
 When you run this program, the error you’ll get looks like this:
-
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-error: expected expression, found statement (`let`)
- --> src/main.rs:2:14
-  |
-2 |     let x = (let y = 6);
-  |              ^^^
-  |
-  = note: variable declaration using `let` is a statement
+{{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
 The `let y = 6` statement does not return a value, so there isn’t anything for
@@ -205,16 +157,7 @@ new scopes, `{}`, is an expression, for example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-
-    let y = {
-        let x = 3;
-        x + 1
-    };
-
-    println!("The value of y is: {}", y);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-20-blocks-are-expressions/src/main.rs}}
 ```
 
 This expression:
@@ -246,15 +189,7 @@ value:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn five() -> i32 {
-    5
-}
-
-fn main() {
-    let x = five();
-
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/src/main.rs}}
 ```
 
 There are no function calls, macros, or even `let` statements in the `five`
@@ -263,11 +198,7 @@ Rust. Note that the function’s return type is specified too, as `-> i32`. Try
 running this code; the output should look like this:
 
 ```text
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
-     Running `target/debug/functions`
-The value of x is: 5
+{{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
 The `5` in `five` is the function’s return value, which is why the return type
@@ -289,15 +220,7 @@ Let’s look at another example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = plus_one(5);
-
-    println!("The value of x is: {}", x);
-}
-
-fn plus_one(x: i32) -> i32 {
-    x + 1
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-22-function-parameter-and-return/src/main.rs}}
 ```
 
 Running this code will print `The value of x is: 6`. But if we place a
@@ -307,32 +230,13 @@ expression to a statement, we’ll get an error.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = plus_one(5);
-
-    println!("The value of x is: {}", x);
-}
-
-fn plus_one(x: i32) -> i32 {
-    x + 1;
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/src/main.rs}}
 ```
 
 Compiling this code produces an error, as follows:
 
 ```text
-error[E0308]: mismatched types
- --> src/main.rs:7:28
-  |
-7 |   fn plus_one(x: i32) -> i32 {
-  |  ____________________________^
-8 | |     x + 1;
-  | |          - help: consider removing this semicolon
-9 | | }
-  | |_^ expected i32, found ()
-  |
-  = note: expected type `i32`
-             found type `()`
+{{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 
 The main error message, “mismatched types,” reveals the core issue with this

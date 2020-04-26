@@ -1,0 +1,18 @@
+$ cargo run
+   Compiling structs v0.1.0 (file:///projects/structs)
+error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
+  --> src/main.rs:12:31
+   |
+12 |     println!("rect1 is {:?}", rect1);
+   |                               ^^^^^ `Rectangle` cannot be formatted using `{:?}`
+   |
+   = help: the trait `std::fmt::Debug` is not implemented for `Rectangle`
+   = note: add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
+   = note: required by `std::fmt::Debug::fmt`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `structs`.
+
+To learn more, run the command again with --verbose.

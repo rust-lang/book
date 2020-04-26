@@ -10,12 +10,24 @@ name = "concat_chapters"
 path = "tools/src/bin/concat_chapters.rs"
 
 [[bin]]
+name = "convert_quotes"
+path = "tools/src/bin/convert_quotes.rs"
+
+[[bin]]
 name = "lfp"
 path = "tools/src/bin/lfp.rs"
 
 [[bin]]
 name = "link2print"
 path = "tools/src/bin/link2print.rs"
+
+[[bin]]
+name = "release_listings"
+path = "tools/src/bin/release_listings.rs"
+
+[[bin]]
+name = "remove_hidden_lines"
+path = "tools/src/bin/remove_hidden_lines.rs"
 
 [[bin]]
 name = "remove_links"
@@ -25,13 +37,11 @@ path = "tools/src/bin/remove_links.rs"
 name = "remove_markup"
 path = "tools/src/bin/remove_markup.rs"
 
-[[bin]]
-name = "convert_quotes"
-path = "tools/src/bin/convert_quotes.rs"
-
 [dependencies]
-walkdir = "0.1.5"
-docopt = "0.6.82"
-rustc-serialize = "0.3.19"
-regex = "0.1.73"
-lazy_static = "0.2.1"
+walkdir = "2.3.1"
+docopt = "1.1.0"
+serde = "1.0"
+regex = "1.3.3"
+lazy_static = "1.4.0"
+flate2 = "1.0.13"
+tar = "0.4.26"

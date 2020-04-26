@@ -1,4 +1,4 @@
-# Appendix G - How Rust is Made and “Nightly Rust”
+## Appendix G - How Rust is Made and “Nightly Rust”
 
 This appendix is about how Rust is made and how that affects you as a Rust
 developer.
@@ -142,7 +142,7 @@ global or per-project basis. By default, you’ll have stable Rust installed. To
 install nightly, for example:
 
 ```text
-$ rustup install nightly
+$ rustup toolchain install nightly
 ```
 
 You can see all of the *toolchains* (releases of Rust and associated

@@ -6,6 +6,7 @@ adaptor
 adaptors
 AddAssign
 Addr
+afdc
 aggregator
 AGraph
 aliasability
@@ -18,6 +19,7 @@ APIs
 app's
 aren
 args
+ArgumentV
 associativity
 async
 atomics
@@ -97,6 +99,7 @@ deallocated
 deallocating
 deallocation
 debuginfo
+decl
 decrementing
 deduplicate
 deduplicating
@@ -125,6 +128,7 @@ doccratesio
 DOCTYPE
 doesn
 disambiguating
+DisplayBacktrace
 DivAssign
 DraftPost
 DSTs
@@ -159,7 +163,6 @@ Filesystem
 filesystem's
 filesystems
 Firefox
-FnBox
 FnMut
 FnOnce
 formatter
@@ -195,6 +198,7 @@ Hoare
 Hola
 homogenous
 html
+https
 hyperoptimize
 hypotheticals
 Iceburgh
@@ -216,6 +220,7 @@ initializers
 inline
 instantiation
 internet
+interoperate
 IntoIterator
 InvalidDigit
 invariants
@@ -234,6 +239,7 @@ JavaScript
 JoinHandle
 Kay's
 kinded
+Klabnik
 lang
 LastWriteTime
 latin
@@ -245,6 +251,7 @@ libpanic
 librarys
 libreoffice
 libstd
+libunwind
 lifecycle
 LimitTracker
 linter
@@ -332,6 +339,7 @@ parameterize
 ParseIntError
 PartialEq
 PartialOrd
+pbcopy
 PendingReview
 PendingReviewPost
 PlaceholderType
@@ -350,6 +358,7 @@ PrimaryColor
 println
 priv
 proc
+proto
 pthreads
 pushups
 QuitMessage
@@ -469,6 +478,7 @@ timestamp
 Tiếng
 timeline
 tlborm
+tlsv
 TODO
 TokenStream
 toml
@@ -516,6 +526,7 @@ variable's
 variant's
 vers
 versa
+vert
 Versioning
 visualstudio
 Vlissides
