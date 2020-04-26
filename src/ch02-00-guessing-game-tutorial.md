@@ -650,7 +650,7 @@ cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it numerically to the secret number. We can
-do that by adding the following two lines to the `main` function body:
+do that by adding another line to the `main` function body:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -658,11 +658,10 @@ do that by adding the following two lines to the `main` function body:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-03-convert-string-to-number/src/main.rs:here}}
 ```
 
-The two new lines are:
+The line is:
 
 ```rust,ignore
-let guess: u32 = guess.trim().parse()
-    .expect("Please type a number!");
+let guess: u32 = guess.trim().parse().expect("Please type a number!");
 ```
 
 We create a variable named `guess`. But wait, doesn’t the program already have
