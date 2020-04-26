@@ -24,7 +24,7 @@ overload that operator is listed.
 | `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Borrowed pointer type | |
 | `&` | `expr & expr` | Bitwise AND | `BitAnd` |
 | `&=` | `var &= expr` | Bitwise AND and assignment | `BitAndAssign` |
-| `&&` | `expr && expr` | Logical AND | |
+| `&&` | `expr && expr` | Short-circuiting logical AND | |
 | `*` | `expr * expr` | Arithmetic multiplication | `Mul` |
 | `*=` | `var *= expr` | Arithmetic multiplication and assignment | `MulAssign` |
 | `*` | `*expr` | Dereference | |
@@ -67,7 +67,7 @@ overload that operator is listed.
 | <code>&vert;</code> | <code>pat &vert; pat</code> | Pattern alternatives | |
 | <code>&vert;</code> | <code>expr &vert; expr</code> | Bitwise OR | `BitOr` |
 | <code>&vert;=</code> | <code>var &vert;= expr</code> | Bitwise OR and assignment | `BitOrAssign` |
-| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | Logical OR | |
+| <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | Short-circuiting logical OR | |
 | `?` | `expr?` | Error propagation | |
 
 ### Non-operator Symbols
