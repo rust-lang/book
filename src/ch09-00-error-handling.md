@@ -3,7 +3,7 @@
 Rust’s commitment to reliability extends to error handling. Errors are a fact
 of life in software, so Rust has a number of features for handling situations
 in which something goes wrong. In many cases, Rust requires you to acknowledge
-the possibility of an error and take some action before your code will compile.
+the possibility of an error and take some actions before your code will compile.
 This requirement makes your program more robust by ensuring that you’ll
 discover errors and handle them appropriately before you’ve deployed your code
 to production!
