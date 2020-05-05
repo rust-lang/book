@@ -109,7 +109,7 @@ the screen:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
-This code is printing a prompt stating what the game is and requesting input
+This code is printing a prompt stating what the game is about.
 from the user.
 
 ### Storing Values with Variables

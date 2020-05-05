@@ -12,14 +12,14 @@ fn main() {
 
     println!("The secret number is: {}", secret_number);
 
+    let mut guess = String::new();
+
     loop {
         println!("Please input your guess.");
 
         // --snip--
 
         // ANCHOR_END: here
-
-        let mut guess = String::new();
 
         io::stdin()
             .read_line(&mut guess)

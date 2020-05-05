@@ -13,9 +13,9 @@ fn main() {
 
     println!("The secret number is: {}", secret_number);
 
-    println!("Please input your guess.");
-
     let mut guess = String::new();
+
+    println!("Please input your guess.");
 
     io::stdin()
         .read_line(&mut guess)

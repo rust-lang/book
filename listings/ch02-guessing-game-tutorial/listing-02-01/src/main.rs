@@ -8,13 +8,13 @@ fn main() {
     // ANCHOR_END: main
     // ANCHOR: print
     println!("Guess the number!");
-
-    println!("Please input your guess.");
     // ANCHOR_END: print
 
     // ANCHOR: string
     let mut guess = String::new();
     // ANCHOR_END: string
+
+    println!("Please input your guess.");
 
     // ANCHOR: read
     io::stdin()
