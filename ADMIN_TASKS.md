@@ -5,7 +5,7 @@ occasional maintenance tasks.
 
 ## Update the `rustc` version
 
-- Change the version number in `.travis.yml`
+- Change the version number in `.github/workflows/main.yml`
 - Change the version number in `rust-toolchain`, which should change the version you're using
   locally with `rustup`
 - Change the version number in `src/title-page.md`
