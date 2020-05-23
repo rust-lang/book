@@ -39,24 +39,6 @@ for your password. If the install is successful, the following line will appear:
 Rust is installed now. Great!
 ```
 
-If you prefer, feel free to download the script and inspect it before running
-it.
-
-The installation script automatically adds Rust to your system PATH after your
-next login. If you want to start using Rust right away instead of restarting
-your terminal, run the following command in your shell to add Rust to your
-system PATH manually:
-
-```text
-$ source $HOME/.cargo/env
-```
-
-Alternatively, you can add the following line to your *~/.bash_profile*:
-
-```text
-$ export PATH="$HOME/.cargo/bin:$PATH"
-```
-
 Additionally, you’ll need a linker of some kind. It’s likely one is already
 installed, but when you try to compile a Rust program and get errors indicating
 that a linker could not execute, that means a linker isn’t installed on your
