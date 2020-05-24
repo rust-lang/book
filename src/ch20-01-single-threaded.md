@@ -289,6 +289,10 @@ output from Cargo. When you load *127.0.0.1:7878* in a web browser, you should
 get a blank page instead of an error. You’ve just hand-coded an HTTP request
 and response!
 
+> Note: Server presented in this chapter was tested with Firefox. Other 
+> browsers might not be compatibile with it. E.g. Chrome requires at least 
+> a `Content-Length` header to accept a response. 
+
 ### Returning Real HTML
 
 Let’s implement the functionality for returning more than a blank page. Create
