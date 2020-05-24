@@ -290,7 +290,7 @@ get a blank page instead of an error. You’ve just hand-coded an HTTP request
 and response!
 
 > Note: Server presented in this chapter was tested with Firefox. Other 
-> browsers might not be compatibile with it. E.g. Chrome requires at least 
+> browsers might not be compatible with it. E.g. Chrome requires at least 
 > a `Content-Length` header to accept a response. 
 
 ### Returning Real HTML
