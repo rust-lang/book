@@ -148,13 +148,14 @@ for the next time we ask for data. It therefore needs to be `mut` because its
 internal state might change; usually, we think of “reading” as not needing
 mutation, but in this case we need the `mut` keyword.
 
-Next, we need to actually read from the stream. We do this in two steps: first,
-we declare a `buffer` on the stack to hold the data that is read in. We’ve made
-the buffer 512 bytes in size, which is big enough to hold the data of a basic
-request and sufficient for our purposes in this chapter. If we wanted to handle
-requests of an arbitrary size, buffer management would need to be more
-complicated; we’ll keep it simple for now. We pass the buffer to `stream.read`,
-which will read bytes from the `TcpStream` and put them in the buffer.
+Next, we need to actually read from the stream. We do this in two steps:
+first, we declare a `buffer` on the stack to hold the data that is read in.
+We’ve made the buffer 1024 bytes in size, which is big enough to hold the
+data of a basic request and sufficient for our purposes in this chapter. If
+we wanted to handle requests of an arbitrary size, buffer management would
+need to be more complicated; we’ll keep it simple for now. We pass the buffer
+to `stream.read`, which will read bytes from the `TcpStream` and put them in
+the buffer.
 
 Second, we convert the bytes in the buffer to a string and print that string.
 The `String::from_utf8_lossy` function takes a `&[u8]` and produces a `String`

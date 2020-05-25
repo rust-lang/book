@@ -42,7 +42,7 @@ strings.
 > All data stored on the stack must have a known, fixed size. Data with an
 > unknown size at compile time or a size that might change must be stored on
 > the heap instead. The heap is less organized: when you put data on the heap,
-> you request a certain amount of space. The operating system finds an empty
+> you request a certain amount of space. The memory allocator finds an empty
 > spot in the heap that is big enough, marks it as being in use, and returns a
 > *pointer*, which is the address of that location. This process is called
 > *allocating on the heap* and is sometimes abbreviated as just *allocating*.
@@ -56,9 +56,9 @@ strings.
 > you’ve been seated to find you.
 >
 > Pushing to the stack is faster than allocating on the heap because the
-> operating system never has to search for a place to store new data; that
+> allocator never has to search for a place to store new data; that
 > location is always at the top of the stack. Comparatively, allocating space
-> on the heap requires more work, because the operating system must first find
+> on the heap requires more work, because the allocator must first find
 > a big enough space to hold the data and then perform bookkeeping to prepare
 > for the next allocation.
 >
@@ -189,8 +189,8 @@ With the `String` type, in order to support a mutable, growable piece of text,
 we need to allocate an amount of memory on the heap, unknown at compile time,
 to hold the contents. This means:
 
-* The memory must be requested from the operating system at runtime.
-* We need a way of returning this memory to the operating system when we’re
+* The memory must be requested from the memory allocator at runtime.
+* We need a way of returning this memory to the allocator when we’re
   done with our `String`.
 
 That first part is done by us: when we call `String::from`, its implementation
@@ -215,7 +215,7 @@ from Listing 4-1 using a `String` instead of a string literal:
 ```
 
 There is a natural point at which we can return the memory our `String` needs
-to the operating system: when `s` goes out of scope. When a variable goes out
+to the allocator: when `s` goes out of scope. When a variable goes out
 of scope, Rust calls a special function for us. This function is called `drop`,
 and it’s where the author of `String` can put the code to return the memory.
 Rust calls `drop` automatically at the closing curly bracket.
@@ -271,7 +271,7 @@ holding the value `"hello"` bound to `s1`</span>
 
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the
-`String` has received from the operating system. The difference between length
+`String` has received from the allocator. The difference between length
 and capacity matters, but not in this context, so for now, it’s fine to ignore
 the capacity.
 
