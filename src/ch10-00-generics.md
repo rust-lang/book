@@ -96,7 +96,7 @@ concrete slice of `i32` values that we might pass into the function. As a
 result, when we call the function, the code runs on the specific values that we
 pass in.
 
-In sum, here are the steps we took to change the code from Listing 10-2 to
+In summary, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
 1. Identify duplicate code.
