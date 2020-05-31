@@ -23,3 +23,4 @@ For resources in languages other than English. Most are still in progress; see
 - [ελληνική](https://github.com/TChatzigiannakis/rust-book-greek)
 - [Svenska](https://github.com/sebras/book)
 - [Farsi](https://github.com/pomokhtari/rust-book-fa)
+- [Deutsch](https://github.com/rust-lang-de/rustbook-de)
