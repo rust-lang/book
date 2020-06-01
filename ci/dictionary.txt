@@ -69,6 +69,7 @@ chXX
 chYY
 clippy
 clippy's
+cmdlet
 coercions
 combinator
 ConcreteType
