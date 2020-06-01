@@ -179,7 +179,7 @@ Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
 make `rand` available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the package, `rand`, and listed the items
+`use` line starting with the name of the crate, `rand`, and listed the items
 we wanted to bring into scope. Recall that in the [“Generating a Random
 Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
 into scope and called the `rand::thread_rng` function:
@@ -191,7 +191,7 @@ into scope and called the `rand::thread_rng` function:
 Members of the Rust community have made many packages available at
 [crates.io](https://crates.io/), and pulling any of them into your package
 involves these same steps: listing them in your package’s *Cargo.toml* file and
-using `use` to bring items into scope.
+using `use` to bring items from their crates into scope.
 
 Note that the standard library (`std`) is also a crate that’s external to our
 package. Because the standard library is shipped with the Rust language, we
@@ -208,7 +208,7 @@ crate.
 
 ### Using Nested Paths to Clean Up Large `use` Lists
 
-If we’re using multiple items defined in the same package or same module,
+If we’re using multiple items defined in the same crate or same module,
 listing each item on its own line can take up a lot of vertical space in our
 files. For example, these two `use` statements we had in the Guessing Game in
 Listing 2-4 bring items from `std` into scope:
@@ -233,7 +233,7 @@ differ, as shown in Listing 7-18.
 <span class="caption">Listing 7-18: Specifying a nested path to bring multiple
 items with the same prefix into scope</span>
 
-In bigger programs, bringing many items into scope from the same package or
+In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate `use` statements
 needed by a lot!
 
