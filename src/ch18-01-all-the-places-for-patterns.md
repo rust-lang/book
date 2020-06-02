@@ -121,7 +121,7 @@ destructure a tuple</span>
 
 The code in Listing 18-3 will print the following:
 
-```text
+```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-03/output.txt}}
 ```
 
@@ -186,7 +186,7 @@ variables don’t match the number of elements in the tuple</span>
 
 Attempting to compile this code results in this type error:
 
-```text
+```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
 ```
 

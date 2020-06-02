@@ -272,7 +272,7 @@ are inferred with two different types</span>
 
 The compiler gives us this error:
 
-```text
+```console
 {{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
@@ -425,7 +425,7 @@ passed into it. We call the `value` method on this `Cacher` instance with an
 Run this test with the `Cacher` implementation in Listing 13-9 and Listing
 13-10, and the test will fail on the `assert_eq!` with this message:
 
-```text
+```console
 {{#include ../listings/ch13-functional-features/no-listing-01-failing-cacher-test/output.txt}}
 ```
 
@@ -481,7 +481,7 @@ code won’t compile:
 
 We get an error:
 
-```text
+```console
 {{#include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/output.txt}}
 ```
 
@@ -534,7 +534,7 @@ yet compile.
 
 We receive the following error:
 
-```text
+```console
 {{#include ../listings/ch13-functional-features/no-listing-03-move-closures/output.txt}}
 ```
 

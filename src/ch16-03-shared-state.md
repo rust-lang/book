@@ -120,7 +120,7 @@ program.
 
 We hinted that this example wouldn’t compile. Now let’s find out why!
 
-```text
+```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-13/output.txt}}
 ```
 
@@ -150,7 +150,7 @@ multiple threads to own the `Mutex<T>`</span>
 Once again, we compile and get... different errors! The compiler is teaching us
 a lot.
 
-```text
+```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
 ```
 

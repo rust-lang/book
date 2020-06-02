@@ -53,7 +53,7 @@ isn’t of type `u32`, so let’s change the `let f` statement to this:
 
 Attempting to compile now gives us the following output:
 
-```text
+```console
 {{#include ../listings/ch09-error-handling/no-listing-02-ask-compiler-for-type/output.txt}}
 ```
 
@@ -400,7 +400,7 @@ which you’ll recall has a return type of `()`:
 
 When we compile this code, we get the following error message:
 
-```text
+```console
 {{#include ../listings/ch09-error-handling/no-listing-06-question-mark-in-main/output.txt}}
 ```
 

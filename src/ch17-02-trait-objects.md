@@ -219,7 +219,7 @@ implement the trait object’s trait</span>
 
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
-```text
+```console
 {{#include ../listings/ch17-oop/listing-17-10/output.txt}}
 ```
 
@@ -300,7 +300,7 @@ implement the `Clone` trait instead of the `Draw` trait, like this:
 
 We would get this error:
 
-```text
+```console
 {{#include ../listings/ch17-oop/no-listing-01-trait-object-of-clone/output.txt}}
 ```
 

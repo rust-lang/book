@@ -263,7 +263,7 @@ trying to add an `i8` to an `Option<i8>`:
 
 If we run this code, we get an error message like this:
 
-```text
+```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/output.txt}}
 ```
 

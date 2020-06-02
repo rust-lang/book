@@ -360,7 +360,7 @@ look like this:
 
 This time when we compile the code, we get a different set of errors:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/output.txt}}
 ```
 

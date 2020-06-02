@@ -73,7 +73,7 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 
 Here’s the error:
 
-```text
+```console
 {{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
@@ -106,7 +106,7 @@ fail:
 
 Here’s the error:
 
-```text
+```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
 
@@ -142,7 +142,7 @@ results in an error:
 
 Here’s the error:
 
-```text
+```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
 
@@ -191,7 +191,7 @@ compile-time error:
 
 Here’s the error:
 
-```text
+```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
 

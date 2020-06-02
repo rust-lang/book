@@ -40,7 +40,7 @@ only accept an irrefutable pattern because there is nothing valid the code can
 do with a `None` value. At compile time, Rust will complain that we’ve tried to
 use a refutable pattern where an irrefutable pattern is required:
 
-```text
+```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-08/output.txt}}
 ```
 
@@ -75,7 +75,7 @@ with `if let`</span>
 Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:
 
-```text
+```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-10/output.txt}}
 ```
 

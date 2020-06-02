@@ -34,7 +34,7 @@ Let’s try calling `panic!` in a simple program:
 
 When you run the program, you’ll see something like this:
 
-```text
+```console
 {{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
@@ -86,7 +86,7 @@ To protect your program from this sort of vulnerability, if you try to read an
 element at an index that doesn’t exist, Rust will stop execution and refuse to
 continue. Let’s try it and see:
 
-```text
+```console
 {{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
@@ -114,7 +114,7 @@ copy the backtrace output below
 check the backtrace number mentioned in the text below the listing
 -->
 
-```text
+```console
 $ RUST_BACKTRACE=1 cargo run
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/5e1a799842ba6ed4a57e91f7ab9435947482f7d8/src/libcore/slice/mod.rs:2806:10
 stack backtrace:

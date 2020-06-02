@@ -18,7 +18,7 @@ used the official installers discussed in the
 through some other means, check whether Cargo is installed by entering the
 following into your terminal:
 
-```text
+```console
 $ cargo --version
 ```
 
@@ -33,7 +33,7 @@ original “Hello, world!” project. Navigate back to your *projects* directory
 wherever you decided to store your code). Then, on any operating system, run
 the following:
 
-```text
+```console
 $ cargo new hello_cargo
 $ cd hello_cargo
 ```
@@ -124,7 +124,7 @@ Now let’s look at what’s different when we build and run the “Hello, world
 program with Cargo! From your *hello_cargo* directory, build your project by
 entering the following command:
 
-```text
+```console
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
@@ -134,7 +134,7 @@ This command creates an executable file in *target/debug/hello_cargo* (or
 *target\debug\hello_cargo.exe* on Windows) rather than in your current
 directory. You can run the executable with this command:
 
-```text
+```console
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
@@ -150,7 +150,7 @@ We just built a project with `cargo build` and ran it with
 `./target/debug/hello_cargo`, but we can also use `cargo run` to compile the
 code and then run the resulting executable all in one command:
 
-```text
+```console
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/hello_cargo`
@@ -162,7 +162,7 @@ Notice that this time we didn’t see output indicating that Cargo was compiling
 the binary. If you had modified your source code, Cargo would have rebuilt the
 project before running it, and you would have seen this output:
 
-```text
+```console
 $ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.33 secs
@@ -173,7 +173,7 @@ Hello, world!
 Cargo also provides a command called `cargo check`. This command quickly checks
 your code to make sure it compiles but doesn’t produce an executable:
 
-```text
+```console
 $ cargo check
    Checking hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
@@ -222,7 +222,7 @@ tooling you’ll use in the rest of your Rust career. In fact, to work on any
 existing projects, you can use the following commands to check out the code
 using Git, change to that project’s directory, and build:
 
-```text
+```console
 $ git clone someurl.com/someproject
 $ cd someproject
 $ cargo build

@@ -193,7 +193,7 @@ itself. We’ll discuss traits in Chapter 10.
 >
 > The compiler will complain that it needs lifetime specifiers:
 >
-> ```text
+> ```console
 > $ cargo run
 >    Compiling structs v0.1.0 (file:///projects/structs)
 > error[E0106]: missing lifetime specifier

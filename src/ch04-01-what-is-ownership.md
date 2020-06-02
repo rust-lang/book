@@ -316,7 +316,7 @@ use `s1` after `s2` is created; it won’t work:
 You’ll get an error like this because Rust prevents you from using the
 invalidated reference:
 
-```text
+```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 

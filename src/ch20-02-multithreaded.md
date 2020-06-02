@@ -140,7 +140,7 @@ Make the changes in Listing 20-12 to *src/main.rs*, and then let’s use the
 compiler errors from `cargo check` to drive our development. Here is the first
 error we get:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/listing-20-12/output.txt}}
 ```
 
@@ -177,7 +177,7 @@ following code to the top of *src/bin/main.rs*:
 This code still won’t work, but let’s check it again to get the next error that
 we need to address:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/output.txt}}
 ```
 
@@ -201,7 +201,7 @@ ignore --> section of Chapter 3.
 
 Let’s check the code again:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/no-listing-02-impl-threadpool-new/output.txt}}
 ```
 
@@ -258,7 +258,7 @@ have no parameters, we still need the parentheses.
 Again, this is the simplest implementation of the `execute` method: it does
 nothing, but we’re trying only to make our code compile. Let’s check it again:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/no-listing-03-define-execute/output.txt}}
 ```
 
@@ -488,7 +488,7 @@ the channel into `Worker::new`, and then we use it inside the closure.
 
 When we try to check this code, we get this error:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/listing-20-17/output.txt}}
 ```
 
@@ -593,7 +593,7 @@ make some requests to 127.0.0.1:7878
 Can't automate because the output depends on making requests
 -->
 
-```text
+```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
 warning: field is never read: `workers`

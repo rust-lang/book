@@ -97,7 +97,7 @@ The following code tries to return a closure directly, but it won’t compile:
 
 The compiler error is as follows:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/no-listing-18-returns-closure/output.txt}}
 ```
 

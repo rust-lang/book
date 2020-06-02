@@ -110,7 +110,7 @@ We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the `tests` directory specially and compiles files
 in this directory only when we run `cargo test`. Run `cargo test` now:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-13/output.txt}}
 ```
 
@@ -136,7 +136,7 @@ function’s name as an argument to `cargo test`. To run all the tests in a
 particular integration test file, use the `--test` argument of `cargo test`
 followed by the name of the file:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-05-single-integration/output.txt}}
 ```
 
@@ -174,7 +174,7 @@ When we run the tests again, we’ll see a new section in the test output for th
 *common.rs* file, even though this file doesn’t contain any test functions nor
 did we call the `setup` function from anywhere:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/output.txt}}
 ```
 

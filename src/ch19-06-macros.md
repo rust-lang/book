@@ -222,7 +222,7 @@ to write when using our procedural macro</span>
 This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
 first step is to make a new library crate, like this:
 
-```text
+```console
 $ cargo new hello_macro --lib
 ```
 
@@ -257,7 +257,7 @@ follows: for a crate named `foo`, a custom derive procedural macro crate is
 called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
 our `hello_macro` project:
 
-```text
+```console
 $ cargo new hello_macro_derive --lib
 ```
 

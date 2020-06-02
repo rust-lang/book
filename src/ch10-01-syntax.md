@@ -67,7 +67,7 @@ uses generic type parameters but doesn’t compile yet</span>
 
 If we compile this code right now, we’ll get this error:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
@@ -123,7 +123,7 @@ compiler know that the generic type `T` will be an integer for this instance of
 `Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
 same type as `x`, we’ll get a type mismatch error like this:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 

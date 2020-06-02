@@ -45,7 +45,7 @@ we have access to the integer value `y` is pointing to that we can compare with
 If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
 error:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/output-only-01-comparing-to-reference/output.txt}}
 ```
 
@@ -114,7 +114,7 @@ way we used references and `Box<T>`</span>
 
 Here’s the resulting compilation error:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
 ```
 

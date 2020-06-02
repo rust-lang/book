@@ -438,7 +438,7 @@ way</span>
 
 When we compile this example, we get this error:
 
-```text
+```console
 {{#include ../listings/ch18-patterns-and-matching/listing-18-25/output.txt}}
 ```
 

@@ -149,7 +149,7 @@ while holding a reference to an item</span>
 
 Compiling this code will result in this error:
 
-```text
+```console
 {{#include ../listings/ch08-common-collections/listing-08-07/output.txt}}
 ```
 

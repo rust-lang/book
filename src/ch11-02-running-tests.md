@@ -39,7 +39,7 @@ control over the number of threads used, you can send the `--test-threads` flag
 and the number of threads you want to use to the test binary. Take a look at
 the following example:
 
-```text
+```console
 $ cargo test -- --test-threads=1
 ```
 
@@ -70,7 +70,7 @@ parameter and returns 10, as well as a test that passes and a test that fails.
 
 When we run these tests with `cargo test`, we’ll see the following output:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-10/output.txt}}
 ```
 
@@ -82,14 +82,14 @@ of the test summary output, which also shows the cause of the test failure.
 If we want to see printed values for passing tests as well, we can tell Rust
 to also show the output of successful tests at the end with `--show-output`.
 
-```text
+```console
 $ cargo test -- --show-output
 ```
 
 When we run the tests in Listing 11-10 again with the `--show-output` flag, we
 see the following output:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-01-show-output/output.txt}}
 ```
 
@@ -115,7 +115,7 @@ names</span>
 If we run the tests without passing any arguments, as we saw earlier, all the
 tests will run in parallel:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-11/output.txt}}
 ```
 
@@ -123,7 +123,7 @@ tests will run in parallel:
 
 We can pass the name of any test function to `cargo test` to run only that test:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-02-single-test/output.txt}}
 ```
 
@@ -140,7 +140,7 @@ We can specify part of a test name, and any test whose name matches that value
 will be run. For example, because two of our tests’ names contain `add`, we can
 run those two by running `cargo test add`:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-03-multiple-tests/output.txt}}
 ```
 
@@ -166,14 +166,14 @@ here:
 After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now
 when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-11-ignore-a-test/output.txt}}
 ```
 
 The `expensive_test` function is listed as `ignored`. If we want to run only
 the ignored tests, we can use `cargo test -- --ignored`:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/output-only-04-running-ignored/output.txt}}
 ```
 

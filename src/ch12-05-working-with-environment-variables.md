@@ -77,7 +77,7 @@ query is.
 
 Let’s see if this implementation passes the tests:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
@@ -147,7 +147,7 @@ Let’s give it a try! First, we’ll run our program without the environment
 variable set and with the query `to`, which should match any line that contains
 the word “to” in all lowercase:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
@@ -157,7 +157,7 @@ set to `1` but with the same query `to`.
 If you’re using PowerShell, you will need to set the environment variable and
 run the program in two commands rather than one:
 
-```text
+```console
 $ $env:CASE_INSENSITIVE=1
 $ cargo run to poem.txt
 ```
@@ -170,7 +170,7 @@ CASE_INSENSITIVE=1 cargo run to poem.txt
 can't extract because of the environment variable
 -->
 
-```text
+```console
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep to poem.txt`

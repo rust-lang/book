@@ -150,7 +150,7 @@ create a new iterator</span>
 
 The warning we get is this:
 
-```text
+```console
 {{#include ../listings/ch13-functional-features/listing-13-17/output.txt}}
 ```
 

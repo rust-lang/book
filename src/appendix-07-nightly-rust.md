@@ -141,7 +141,7 @@ Rustup makes it easy to change between different release channels of Rust, on a
 global or per-project basis. By default, you’ll have stable Rust installed. To
 install nightly, for example:
 
-```text
+```console
 $ rustup toolchain install nightly
 ```
 
@@ -162,7 +162,7 @@ nightly on a specific project, because you care about a cutting-edge feature.
 To do so, you can use `rustup override` in that project’s directory to set the
 nightly toolchain as the one `rustup` should use when you’re in that directory:
 
-```text
+```console
 $ cd ~/projects/needs-nightly
 $ rustup override set nightly
 ```

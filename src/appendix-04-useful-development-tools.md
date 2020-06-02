@@ -12,14 +12,14 @@ style to use when writing Rust: everyone formats their code using the tool.
 
 To install `rustfmt`, enter the following:
 
-```text
+```console
 $ rustup component add rustfmt
 ```
 
 This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
 both `rustc` and `cargo`. To format any Cargo project, enter the following:
 
-```text
+```console
 $ cargo fmt
 ```
 
@@ -50,7 +50,7 @@ fn main() {
 Here, we’re calling the `do_something` function 100 times, but we never use the
 variable `i` in the body of the `for` loop. Rust warns us about that:
 
-```text
+```console
 $ cargo build
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
 warning: unused variable: `i`
@@ -69,7 +69,7 @@ indicates that we intend for this variable to be unused. We can automatically
 apply that suggestion using the `rustfix` tool by running the command `cargo
 fix`:
 
-```text
+```console
 $ cargo fix
     Checking myprogram v0.1.0 (file:///projects/myprogram)
       Fixing src/main.rs (1 fix)
@@ -103,13 +103,13 @@ common mistakes and improve your Rust code.
 
 To install Clippy, enter the following:
 
-```text
+```console
 $ rustup component add clippy
 ```
 
 To run Clippy’s lints on any Cargo project, enter the following:
 
-```text
+```console
 $ cargo clippy
 ```
 
@@ -171,7 +171,7 @@ such as [the Rust plug-in for Visual Studio Code][vscode].
 
 To install the `rls`, enter the following:
 
-```text
+```console
 $ rustup component add rls
 ```
 

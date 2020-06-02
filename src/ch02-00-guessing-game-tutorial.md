@@ -17,7 +17,7 @@ correct, the game will print a congratulatory message and exit.
 To set up a new project, go to the *projects* directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
-```text
+```console
 $ cargo new guessing_game
 $ cd guessing_game
 ```
@@ -49,7 +49,7 @@ you. Check out the *src/main.rs* file:
 Now let’s compile this “Hello, world!” program and run it in the same step
 using the `cargo run` command:
 
-```text
+```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
@@ -260,7 +260,7 @@ entered into standard input.
 
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
-```text
+```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
@@ -306,7 +306,7 @@ cargo clean
 cargo run
 input 6 -->
 
-```text
+```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 6.44s
@@ -375,7 +375,7 @@ cd listings/ch02-guessing-game-tutorial/listing-02-02/
 cargo clean
 cargo build -->
 
-```text
+```console
 $ cargo build
     Updating crates.io index
   Downloaded rand v0.5.5
@@ -426,7 +426,7 @@ cd listings/ch02-guessing-game-tutorial/listing-02-02/
 touch src/main.rs
 cargo build -->
 
-```text
+```console
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
@@ -474,7 +474,7 @@ cargo update
 assuming there is a new 0.5.x version of rand; otherwise use another update
 as a guide to creating the hypothetical output shown here -->
 
-```text
+```console
 $ cargo update
     Updating crates.io index
     Updating rand v0.5.5 -> v0.5.6
@@ -555,7 +555,7 @@ cargo run
 5
 -->
 
-```text
+```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
@@ -633,7 +633,7 @@ expression ends because it has no need to look at the last arm in this scenario.
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
-```text
+```console
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
@@ -717,7 +717,7 @@ cargo run
   76
 -->
 
-```text
+```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 0.43s
@@ -771,7 +771,7 @@ cargo run
 quit
 -->
 
-```text
+```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 1.50s
@@ -863,7 +863,7 @@ foo
 (correct guess)
 -->
 
-```text
+```console
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`

@@ -211,7 +211,7 @@ compile-time error:
 
 Here’s the compiler error:
 
-```text
+```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 

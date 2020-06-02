@@ -45,7 +45,7 @@ the inner scope ends, and we attempt to print the value in `r`. This code won’
 compile because the value `r` is referring to has gone out of scope before we
 try to use it. Here is the error message:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/output.txt}}
 ```
 
@@ -136,7 +136,7 @@ compile</span>
 
 Instead, we get the following error that talks about lifetimes:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/output.txt}}
 ```
 
@@ -282,7 +282,7 @@ has gone out of scope</span>
 
 When we try to compile this code, we’ll get this error:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/output.txt}}
 ```
 
@@ -341,7 +341,7 @@ type, this implementation will fail to compile because the return value
 lifetime is not related to the lifetime of the parameters at all. Here is the
 error message we get:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 

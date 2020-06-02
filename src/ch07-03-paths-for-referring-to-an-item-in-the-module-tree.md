@@ -67,7 +67,7 @@ likely to move code definitions and item calls independently of each other.
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
 
-```text
+```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
@@ -119,7 +119,7 @@ use it from `eat_at_restaurant`</span>
 Unfortunately, the code in Listing 7-5 still results in an error, as shown in
 Listing 7-6.
 
-```text
+```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 

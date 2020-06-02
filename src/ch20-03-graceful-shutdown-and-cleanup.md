@@ -39,7 +39,7 @@ into an ungraceful shutdown.
 
 Here is the error we get when we compile this code:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/listing-20-22/output.txt}}
 ```
 
@@ -65,7 +65,7 @@ So we know we want to update the definition of `Worker` like this:
 Now let’s lean on the compiler to find the other places that need to change.
 Checking this code, we get two errors:
 
-```text
+```console
 {{#include ../listings/ch20-web-server/no-listing-04-update-worker-definition/output.txt}}
 ```
 
@@ -210,7 +210,7 @@ copy output below
 Can't automate because the output depends on making requests
 -->
 
-```text
+```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0s
