@@ -28,7 +28,7 @@ The way to demonstrate this behavior is by running the program with `>` and the
 filename, *output.txt*, that we want to redirect the standard output stream to.
 We won’t pass any arguments, which should cause an error:
 
-```text
+```console
 $ cargo run > output.txt
 ```
 
@@ -77,7 +77,7 @@ behavior we expect of command line programs.
 Let’s run the program again with arguments that don’t cause an error but still
 redirect standard output to a file, like so:
 
-```text
+```console
 $ cargo run to poem.txt > output.txt
 ```
 

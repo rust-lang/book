@@ -85,7 +85,7 @@ incorrectly.
 If we forget the lifetime annotations and try to compile this function, we’ll
 get this error:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/output-only-02-missing-lifetimes/output.txt}}
 ```
 
@@ -102,7 +102,7 @@ References with Lifetimes”][validating-references-with-lifetimes]<!-- ignore
 
 Now let’s run the test:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-16/output.txt}}
 ```
 
@@ -176,7 +176,7 @@ return them</span>
 Now the `search` function should return only the lines that contain `query`,
 and our test should pass. Let’s run the test:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-19/output.txt}}
 ```
 
@@ -207,20 +207,20 @@ We’re still using a `for` loop to return each line from `search` and print it.
 Now the entire program should work! Let’s try it out, first with a word that
 should return exactly one line from the Emily Dickinson poem, “frog”:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/no-listing-02-using-search-in-run/output.txt}}
 ```
 
 Cool! Now let’s try a word that will match multiple lines, like “body”:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/output-only-03-multiple-matches/output.txt}}
 ```
 
 And finally, let’s make sure that we don’t get any lines when we search for a
 word that isn’t anywhere in the poem, such as “monomorphization”:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/output-only-04-no-matches/output.txt}}
 ```
 

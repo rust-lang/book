@@ -51,7 +51,7 @@ call the `drop` method explicitly.
 
 When we run this program, we’ll see the following output:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-14/output.txt}}
 ```
 
@@ -88,7 +88,7 @@ the `Drop` trait manually to clean up early</span>
 
 When we try to compile this code, we’ll get this error:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-15/output.txt}}
 ```
 
@@ -123,7 +123,7 @@ drop a value before it goes out of scope</span>
 
 Running this code will print the following:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-16/output.txt}}
 ```
 

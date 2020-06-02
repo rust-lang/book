@@ -60,7 +60,7 @@ from an `Rc<List>` that holds a `Nil` value to the `Rc<List>` in `b`.
 When we run this code, keeping the last `println!` commented out for the
 moment, we’ll get this output:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-26/output.txt}}
 ```
 

@@ -4,7 +4,7 @@ Let’s create a new project with, as always, `cargo new`. We’ll call our proj
 `minigrep` to distinguish it from the `grep` tool that you might already have
 on your system.
 
-```text
+```console
 $ cargo new minigrep
      Created binary (application) `minigrep` project
 $ cd minigrep
@@ -15,7 +15,7 @@ filename and a string to search for. That is, we want to be able to run our
 program with `cargo run`, a string to search for, and a path to a file to
 search in, like so:
 
-```text
+```console
 $ cargo run searchstring example-filename.txt
 ```
 
@@ -77,11 +77,11 @@ isn’t able to infer the kind of collection you want.
 Finally, we print the vector using the debug formatter, `:?`. Let’s try running
 the code first with no arguments and then with two arguments:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-01/output.txt}}
 ```
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/output-only-01-with-args/output.txt}}
 ```
 
@@ -120,7 +120,7 @@ We temporarily print the values of these variables to prove that the code is
 working as we intend. Let’s run this program again with the arguments `test`
 and `sample.txt`:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-02/output.txt}}
 ```
 

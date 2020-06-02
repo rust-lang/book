@@ -20,7 +20,7 @@ If we don’t add the type annotation here, Rust will display the following
 error, which means the compiler needs more information from us to know which
 type we want to use:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
 ```
 
@@ -326,7 +326,7 @@ compile but exit with an error when it runs:
 
 Running this code using `cargo run` produces the following result:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/output.txt}}
 ```
 

@@ -20,7 +20,7 @@ specified by separate width and height variables</span>
 
 Now, run this program using `cargo run`:
 
-```text
+```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/output.txt}}
 ```
 
@@ -175,7 +175,7 @@ trait and printing the `Rectangle` instance using debug formatting</span>
 Now when we run the program, we won’t get any errors, and we’ll see the
 following output:
 
-```text
+```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/output.txt}}
 ```
 
@@ -185,7 +185,7 @@ larger structs, it’s useful to have output that’s a bit easier to read; in
 those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
 When we use the `{:#?}` style in the example, the output will look like this:
 
-```text
+```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 

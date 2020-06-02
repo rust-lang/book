@@ -25,7 +25,7 @@ Our web server needs to listen to a TCP connection, so that’s the first part
 we’ll work on. The standard library offers a `std::net` module that lets us do
 this. Let’s make a new project in the usual fashion:
 
-```text
+```console
 $ cargo new hello
      Created binary (application) `hello` project
 $ cd hello
@@ -168,7 +168,7 @@ Let’s try this code! Start the program and make a request in a web browser
 again. Note that we’ll still get an error page in the browser, but our
 program’s output in the terminal will now look similar to this:
 
-```text
+```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 0.42s

@@ -24,7 +24,7 @@ and a directory for the “Hello, world!” project within the *projects* direct
 
 For Linux, macOS, and PowerShell on Windows, enter this:
 
-```text
+```console
 $ mkdir ~/projects
 $ cd ~/projects
 $ mkdir hello_world
@@ -62,7 +62,7 @@ fn main() {
 Save the file and go back to your terminal window. On Linux or macOS, enter
 the following commands to compile and run the file:
 
-```text
+```console
 $ rustc main.rs
 $ ./main
 Hello, world!
@@ -143,7 +143,7 @@ Before running a Rust program, you must compile it using the Rust compiler by
 entering the `rustc` command and passing it the name of your source file, like
 this:
 
-```text
+```console
 $ rustc main.rs
 ```
 
@@ -174,7 +174,7 @@ This shows the source code file with the *.rs* extension, the executable file
 Windows, a file containing debugging information with the *.pdb* extension.
 From here, you run the *main* or *main.exe* file, like this:
 
-```text
+```console
 $ ./main # or .\main.exe on Windows
 ```
 

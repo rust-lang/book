@@ -30,7 +30,7 @@ Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You
 should see the following output:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-16-functions/output.txt}}
 ```
 
@@ -59,7 +59,7 @@ look like in Rust:
 
 Try running this program; you should get the following output:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-17-functions-with-parameters/output.txt}}
 ```
 
@@ -91,7 +91,7 @@ Let’s try running this code. Replace the program currently in your *functions*
 project’s *src/main.rs* file with the preceding example and run it using `cargo
 run`:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
@@ -136,7 +136,8 @@ to another variable, as the following code tries to do; you’ll get an error:
 ```
 
 When you run this program, the error you’ll get looks like this:
-```text
+
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-19-statements-vs-expressions/output.txt}}
 ```
 
@@ -197,7 +198,7 @@ function—just the number `5` by itself. That’s a perfectly valid function in
 Rust. Note that the function’s return type is specified too, as `-> i32`. Try
 running this code; the output should look like this:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-21-function-return-values/output.txt}}
 ```
 
@@ -235,7 +236,7 @@ expression to a statement, we’ll get an error.
 
 Compiling this code produces an error, as follows:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-23-statements-dont-return-values/output.txt}}
 ```
 

@@ -16,7 +16,7 @@ binary).
 Let’s walk through what happens when we create a package. First, we enter the
 command `cargo new`:
 
-```text
+```console
 $ cargo new my-project
      Created binary (application) `my-project` package
 $ ls my-project

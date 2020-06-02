@@ -27,7 +27,7 @@ using these steps should work as expected with the content of this book.
 
 If you’re using Linux or macOS, open a terminal and enter the following command:
 
-```text
+```console
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
@@ -67,14 +67,14 @@ If there are specific differences, we’ll explain which to use.
 After you’ve installed Rust via `rustup`, updating to the latest version is
 easy. From your shell, run the following update script:
 
-```text
+```console
 $ rustup update
 ```
 
 To uninstall Rust and `rustup`, run the following uninstall script from your
 shell:
 
-```text
+```console
 $ rustup self uninstall
 ```
 
@@ -83,7 +83,7 @@ $ rustup self uninstall
 To check whether you have Rust installed correctly, open a shell and enter this
 line:
 
-```text
+```console
 $ rustc --version
 ```
 

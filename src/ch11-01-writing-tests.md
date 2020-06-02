@@ -35,7 +35,7 @@ behavior is correct.
 
 Let’s create a new library project called `adder`:
 
-```text
+```console
 $ cargo new adder --lib
      Created library `adder` project
 $ cd adder
@@ -67,7 +67,7 @@ it to see that this test passes.
 The `cargo test` command runs all tests in our project, as shown in Listing
 11-2.
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-01/output.txt}}
 ```
 
@@ -114,7 +114,7 @@ so:
 Then run `cargo test` again. The output now shows `exploration` instead of
 `it_works`:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
@@ -213,7 +213,7 @@ We’ve named our test `larger_can_hold_smaller`, and we’ve created the two
 passed it the result of calling `larger.can_hold(&smaller)`. This expression
 is supposed to return `true`, so our test should pass. Let’s find out!
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-06/output.txt}}
 ```
 
@@ -230,7 +230,7 @@ Because the correct result of the `can_hold` function in this case is `false`,
 we need to negate that result before we pass it to the `assert!` macro. As a
 result, our test will pass if `can_hold` returns `false`:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-02-adding-another-rectangle-test/output.txt}}
 ```
 
@@ -245,7 +245,7 @@ compares the widths:
 
 Running the tests now produces the following:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-03-introducing-a-bug/output.txt}}
 ```
 
@@ -281,7 +281,7 @@ parameter and returns the result. Then we test this function using the
 
 Let’s check that it passes!
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-07/output.txt}}
 ```
 
@@ -299,7 +299,7 @@ instead add `3`:
 
 Run the tests again:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-04-bug-in-add-two/output.txt}}
 ```
 
@@ -378,7 +378,7 @@ Let’s introduce a bug into this code by changing `greeting` to not include
 
 Running this test produces the following:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-06-greeter-with-bug/output.txt}}
 ```
 
@@ -394,7 +394,7 @@ filled in with the actual value we got from the `greeting` function:
 
 Now when we run the test, we’ll get a more informative error message:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/output.txt}}
 ```
 
@@ -431,7 +431,7 @@ We place the `#[should_panic]` attribute after the `#[test]` attribute and
 before the test function it applies to. Let’s look at the result when this test
 passes:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/listing-11-08/output.txt}}
 ```
 
@@ -444,7 +444,7 @@ that the `new` function will panic if the value is greater than 100:
 
 When we run the test in Listing 11-8, it will fail:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-08-guess-with-bug/output.txt}}
 ```
 
@@ -490,7 +490,7 @@ fails, let’s again introduce a bug into our code by swapping the bodies of the
 
 This time when we run the `should_panic` test, it will fail:
 
-```text
+```console
 {{#include ../listings/ch11-writing-automated-tests/no-listing-09-guess-with-panic-msg-bug/output.txt}}
 ```
 

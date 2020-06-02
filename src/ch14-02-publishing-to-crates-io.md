@@ -277,7 +277,7 @@ you’re logged in, visit your account settings at
 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
 API key. Then run the `cargo login` command with your API key, like this:
 
-```text
+```console
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
 ```
 
@@ -318,7 +318,7 @@ cargo publish
 copy just the relevant lines below
 -->
 
-```text
+```console
 $ cargo publish
     Updating crates.io index
 warning: manifest has no description, license, license-file, documentation, homepage or repository.
@@ -405,7 +405,7 @@ cargo publish
 copy just the relevant lines below
 -->
 
-```text
+```console
 $ cargo publish
     Updating crates.io index
    Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -445,14 +445,14 @@ not use the yanked version.
 To yank a version of a crate, run `cargo yank` and specify which version you
 want to yank:
 
-```text
+```console
 $ cargo yank --vers 1.0.1
 ```
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
 to start depending on a version again:
 
-```text
+```console
 $ cargo yank --vers 1.0.1 --undo
 ```
 

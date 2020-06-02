@@ -19,7 +19,7 @@ cargo build --release
 and ensure output below is accurate
 -->
 
-```text
+```console
 $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
 $ cargo build --release

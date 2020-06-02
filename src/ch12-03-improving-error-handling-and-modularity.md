@@ -206,7 +206,7 @@ the values in the `args` vector at index 1 or index 2 will cause the program to
 panic if the vector contains fewer than three items. Try running the program
 without any arguments; it will look like this:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
@@ -241,7 +241,7 @@ will be true, and we call the `panic!` macro to end the program immediately.
 With these extra few lines of code in `new`, let’s run the program without any
 arguments again to see what the error looks like now:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
@@ -331,7 +331,7 @@ number that was passed as the exit status code. This is similar to the
 `panic!`-based handling we used in Listing 12-8, but we no longer get all the
 extra output. Let’s try it:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
@@ -411,7 +411,7 @@ it doesn’t return a value we need.
 
 When you run this code, it will compile but will display a warning:
 
-```text
+```console
 {{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 

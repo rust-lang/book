@@ -23,7 +23,7 @@ code with the following code that won’t compile just yet:
 Save and run the program using `cargo run`. You should receive an error
 message, as shown in this output:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
@@ -65,7 +65,7 @@ For example, let’s change *src/main.rs* to the following:
 
 When we run the program now, we get this:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
@@ -147,7 +147,7 @@ repeating `let x =`, taking the original value and adding `1` so the value of
 previous value by `2` to give `x` a final value of `12`. When we run this
 program, it will output the following:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
@@ -180,7 +180,7 @@ try to use `mut` for this, as shown here, we’ll get a compile-time error:
 
 The error says we’re not allowed to mutate a variable’s type:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 

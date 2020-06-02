@@ -172,7 +172,7 @@ body:
 We must call the `dangerous` function within a separate `unsafe` block. If we
 try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
@@ -226,7 +226,7 @@ slice.
 
 When we try to compile the code in Listing 19-5, we’ll get an error.
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/listing-19-05/output.txt}}
 ```
 

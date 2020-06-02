@@ -172,7 +172,7 @@ We didn’t handle the `None` case, so this code will cause a bug. Luckily, it�
 a bug Rust knows how to catch. If we try to compile this code, we’ll get this
 error:
 
-```text
+```console
 {{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 

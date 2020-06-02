@@ -229,7 +229,7 @@ environment. Because `thread::spawn` runs this closure in a new thread, we
 should be able to access `v` inside that new thread. But when we compile this
 example, we get the following error:
 
-```text
+```console
 {{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
@@ -292,7 +292,7 @@ isn’t allowed for a different reason. If we added `move` to the closure, we
 would move `v` into the closure’s environment, and we could no longer call
 `drop` on it in the main thread. We would get this compiler error instead:
 
-```text
+```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 

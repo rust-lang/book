@@ -137,7 +137,7 @@ is one more `Cons` value that holds `3` and a `List` value, which is finally
 If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-03/output.txt}}
 ```
 

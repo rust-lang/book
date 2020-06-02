@@ -39,7 +39,7 @@ to the next bit of code.
 
 Try running this code; you should see the following output:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/output.txt}}
 ```
 
@@ -52,7 +52,7 @@ Let’s try changing the value of `number` to a value that makes the condition
 
 Run the program again, and look at the output:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
@@ -69,7 +69,7 @@ following code:
 The `if` condition evaluates to a value of `3` this time, and Rust throws an
 error:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/output.txt}}
 ```
 
@@ -102,7 +102,7 @@ expression. For example:
 This program has four possible paths it can take. After running it, you should
 see the following output:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
@@ -134,7 +134,7 @@ to a variable</span>
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-02/output.txt}}
 ```
 
@@ -156,7 +156,7 @@ When we try to compile this code, we’ll get an error. The `if` and `else` arms
 have value types that are incompatible, and Rust indicates exactly where to
 find the problem in the program:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/output.txt}}
 ```
 
@@ -203,7 +203,7 @@ cargo run
 CTRL-C
 -->
 
-```text
+```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
     Finished dev [unoptimized + debuginfo] target(s) in 0.29s

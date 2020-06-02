@@ -19,7 +19,7 @@ provide an `add_one` function, and a second library an `add_two` function.
 These three crates will be part of the same workspace. We’ll start by creating
 a new directory for the workspace:
 
-```text
+```console
 $ mkdir add
 $ cd add
 ```
@@ -46,7 +46,7 @@ cargo new adder
 copy output below
 -->
 
-```text
+```console
 $ cargo new adder
      Created binary (application) `adder` package
 ```
@@ -96,7 +96,7 @@ cargo new add-one --lib
 copy output below
 -->
 
-```text
+```console
 $ cargo new add-one --lib
      Created library `add-one` package
 ```
@@ -161,7 +161,7 @@ cargo build
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-```text
+```console
 $ cargo build
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
@@ -178,7 +178,7 @@ cargo run -p adder
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-```text
+```console
 $ cargo run -p adder
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/adder`
@@ -222,7 +222,7 @@ cargo build
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-```text
+```console
 $ cargo build
     Updating crates.io index
   Downloaded rand v0.5.5
@@ -245,7 +245,7 @@ cargo build
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-```text
+```console
 $ cargo build
   --snip--
    Compiling adder v0.1.0 (file:///projects/add/adder)
@@ -284,7 +284,7 @@ cargo test
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-```text
+```console
 $ cargo test
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
@@ -325,7 +325,7 @@ cargo test -p add-one
 copy output below; the output updating script doesn't handle subdirectories in paths properly
 -->
 
-```text
+```console
 $ cargo test -p add-one
     Finished test [unoptimized + debuginfo] target(s) in 0.00s
      Running target/debug/deps/add_one-b3235fea9a156f74

@@ -44,7 +44,7 @@ Let’s run this code with any string as the first command line argument (becaus
 we haven’t implemented the searching part yet) and the *poem.txt* file as the
 second argument:
 
-```text
+```console
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/output.txt}}
 ```
 

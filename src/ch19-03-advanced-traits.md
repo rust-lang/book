@@ -229,7 +229,7 @@ disambiguate.
 
 Running this code prints the following:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
 ```
 
@@ -264,7 +264,7 @@ is expressed in the implementation of the `Animal` trait on `Dog` in the
 In `main`, we call the `Dog::baby_name` function, which calls the associated
 function defined on `Dog` directly. This code prints the following:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
 ```
 
@@ -288,7 +288,7 @@ Because `Animal::baby_name` is an associated function rather than a method, and
 thus doesn’t have a `self` parameter, Rust can’t figure out which
 implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
@@ -311,7 +311,7 @@ indicates we want to call the `baby_name` method from the `Animal` trait as
 implemented on `Dog` by saying that we want to treat the `Dog` type as an
 `Animal` for this function call. This code will now print what we want:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
 ```
 
@@ -383,7 +383,7 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 We get an error saying that `Display` is required but not implemented:
 
-```text
+```console
 {{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
