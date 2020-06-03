@@ -154,12 +154,18 @@ the word “to” in all lowercase:
 Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
 set to `1` but with the same query `to`.
 
-If you’re using PowerShell, you will need to set the environment variable and
-run the program in two commands rather than one:
+If you're using PowerShell, you will need to set the environment
+variable and run the program as separate commands:
 
 ```console
-$ $env:CASE_INSENSITIVE=1
-$ cargo run to poem.txt
+PS> $Env:CASE_INSENSITIVE=1; cargo run to poem.txt
+```
+
+This will make `CASE_INSENSITIVE` persist for the remainder of your shell
+session. It can be unset with the `Remove-Item` cmdlet:
+
+```console
+PS> Remove-Item Env:CASE_INSENSITIVE
 ```
 
 We should get lines that contain “to” that might have uppercase letters:
