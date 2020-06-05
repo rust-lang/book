@@ -13,8 +13,8 @@ fn main() {
 
     let a = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
 
-    let b = Cons(Rc::new(RefCell::new(6)), Rc::clone(&a));
-    let c = Cons(Rc::new(RefCell::new(10)), Rc::clone(&a));
+    let b = Cons(Rc::new(RefCell::new(3)), Rc::clone(&a));
+    let c = Cons(Rc::new(RefCell::new(4)), Rc::clone(&a));
 
     *value.borrow_mut() += 10;
 
