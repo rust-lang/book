@@ -113,13 +113,10 @@ function to find the longer of two string slices</span>
 
 Note that we want the function to take string slices, which are references,
 because we don’t want the `longest` function to take ownership of its
-parameters. We want to allow the function to accept slices of a `String` (the
-type stored in the variable `string1`) as well as string literals (which is
-what variable `string2` contains).
-
-Refer to the [“String Slices as Parameters”][string-slices-as-parameters]<!--
-ignore --> section in Chapter 4 for more discussion about why the parameters we
-use in Listing 10-20 are the ones we want.
+parameters. Refer to the [“String Slices as
+Parameters”][string-slices-as-parameters]<!-- ignore --> section in Chapter 4
+for more discussion about why the parameters we use in Listing 10-20 are the
+ones we want.
 
 If we try to implement the `longest` function as shown in Listing 10-21, it
 won’t compile.
