@@ -25,7 +25,7 @@ comments for any suggestions or corrections!
 
 If you're looking for ways to help that don't involve large amounts of
 reading or writing, check out the [open issues with the E-help-wanted
-label][help-wanted]. These might be small fixes to the text Rust code,
+label][help-wanted]. These might be small fixes to the text, Rust code,
 frontend code, or shell scripts that would help us be more efficient or
 enhance the book in some way!
 
