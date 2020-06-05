@@ -520,6 +520,11 @@ environment, you can use the `move` keyword before the parameter list. This
 technique is mostly useful when passing a closure to a new thread to move the
 data so it’s owned by the new thread.
 
+> Note: `move` closures may still implement [`Fn`] or [`FnMut`], even though
+> they capture variables by move. This is because the traits implemented by a
+> closure type are determined by what the closure does with captured values,
+> not how it captures them. The `move` keyword only specifies the latter.
+
 We’ll have more examples of `move` closures in Chapter 16 when we talk about
 concurrency. For now, here’s the code from Listing 13-12 with the `move`
 keyword added to the closure definition and using vectors instead of integers,
