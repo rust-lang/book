@@ -10,7 +10,7 @@ pub struct Config {
 
 // ANCHOR: here
 impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
         // --snip--
         // ANCHOR_END: here
         if args.len() < 3 {
