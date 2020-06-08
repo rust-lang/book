@@ -150,7 +150,7 @@ scope, but external code couldn’t take advantage of this new path.
 Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
 example, in this restaurant metaphor, the people running the restaurant think
-about “front of house” and “back of house.” But customers visiting a restaurant
+about “front of house” and “back of house”. But customers visiting a restaurant
 probably won’t think about the parts of the restaurant in those terms. With
 `pub use`, we can write our code with one structure but expose a different
 structure. Doing so makes our library well organized for programmers working on

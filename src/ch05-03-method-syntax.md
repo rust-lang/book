@@ -71,7 +71,7 @@ provide.
 > automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
 > the method. In other words, the following are the same:
 >
-<!-- CAN'T EXTRACT SEE BUG TODO -->
+> <!-- CAN'T EXTRACT SEE BUG TODO -->
 > ```rust
 > # #[derive(Debug,Copy,Clone)]
 > # struct Point {
