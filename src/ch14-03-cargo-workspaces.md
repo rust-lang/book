@@ -168,8 +168,8 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.68s
 ```
 
-To run the binary crate from the *add* directory, we need to specify which
-package in the workspace we want to use by using the `-p` argument and the
+To run the binary crate from the *add* directory, we can specify which
+package in the workspace we want to run by using the `-p` argument and the
 package name with `cargo run`:
 
 <!-- manual-regeneration
