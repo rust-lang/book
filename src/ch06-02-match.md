@@ -204,7 +204,7 @@ list before the `_` placeholder.
 However, the `match` expression can be a bit wordy in a situation in which we
 care about only *one* of the cases. For this situation, Rust provides `if let`.
 
-More about patterns, and matching can be found in [chapter 18][ch18-00-patterns].
+More about patterns and matching can be found in [chapter 18][ch18-00-patterns].
 
 [ch18-00-patterns]:
 ch18-00-patterns.html
