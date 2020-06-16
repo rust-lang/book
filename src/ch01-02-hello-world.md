@@ -68,16 +68,16 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, enter the command `.\main.exe` instead of `./main`:
+On Windows, enter the command `main` instead of `./main`:
 
 ```powershell
 > rustc main.rs
-> .\main.exe
+> main
 Hello, world!
 ```
 
-Regardless of your operating system, the string `Hello, world!` should print to
-the terminal. If you don’t see this output, refer back to the
+Regardless of your operating system, the string `Hello, world!` should display
+on ("print to") the terminal. If you don’t see this output, refer back to the
 [“Troubleshooting”][troubleshooting]<!-- ignore --> part of the Installation
 section for ways to get help.
 
