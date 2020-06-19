@@ -608,10 +608,11 @@ Believe it or not, there is much more to learn on the topics we discussed in
 this chapter: Chapter 17 discusses trait objects, which are another way to use
 traits. There are also more complex scenarios involving lifetime annotations
 that you will only need in very advanced scenarios; for those, you should read
-the Reference. But next, you’ll learn how to write tests in Rust so you can make
-sure your code is working the way it should.
+the [Rust Reference][reference]. But next, you’ll learn how to write tests in
+Rust so you can make sure your code is working the way it should.
 
 [references-and-borrowing]:
 ch04-02-references-and-borrowing.html#references-and-borrowing
 [string-slices-as-parameters]:
 ch04-03-slices.html#string-slices-as-parameters
+[reference]: ../reference/?search=lifetime
