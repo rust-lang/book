@@ -17,7 +17,7 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.3.5/mdbook-v0.3.5-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.3.7/mdbook-v0.3.7-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "##[add-path]$(pwd)/bin"
     - name: Report versions
       run: |
@@ -41,7 +41,7 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.3.5/mdbook-v0.3.5-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.3.7/mdbook-v0.3.7-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "##[add-path]$(pwd)/bin"
     - name: Report versions
       run: |
@@ -51,7 +51,7 @@ jobs:
     - name: Spellcheck
       run: bash ci/spellcheck.sh list
     - name: Lint for local file paths
-      run: | 
+      run: |
         mdbook build
         cargo run --bin lfp src
     - name: Validate references
