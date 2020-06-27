@@ -119,8 +119,9 @@ Inside the `main` function is the following code:
 ```
 
 This line does all the work in this little program: it prints text to the
-screen. There are four important details to notice here. First, Rust style is
-to indent with four spaces, not a tab.
+screen. There are four important details to notice here.
+
+First, Rust style is to indent with four spaces, not a tab.
 
 Second, `println!` calls a Rust macro. If it called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
