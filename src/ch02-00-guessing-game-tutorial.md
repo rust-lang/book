@@ -520,7 +520,12 @@ number</span>
 
 First, we add a `use` line: `use rand::Rng`. The `Rng` trait defines
 methods that random number generators implement, and this trait must be in
-scope for us to use those methods. Chapter 10 will cover traits in detail.
+scope for us to use those methods. Chapter 10 will cover traits in detail. 
+
+> The underlying reason for the presence of `crate::` when calling operations from 
+> crates, such as `rand::`, is to prevent the compiler from mistaking crate-operations
+> with our defined operation, which happens to share the same name. 
+> Further information will be introduced in Chapter 5, 6 & 7.
 
 Next, we’re adding two lines in the middle. The `rand::thread_rng` function
 will give us the particular random number generator that we’re going to use:
