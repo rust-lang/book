@@ -615,8 +615,8 @@ fn main() {
 <!-- 이하의  https://doc.rust-lang.org/book/second-edition/ch12-03-improving-error-handling-and-modularity.html 
 에서 직접 옮겼습니다. -->
 
-라이브러리 크레이트를 바이너리 크레이트에 가져 오려면 `extern crate minigrep`을 
-사용합니다. 그런 다음 `minigrep::Config`줄을 추가하여 `Config`타입을 범위로 가져오고 
+라이브러리 크레이트를 바이너리 크레이트에 가져 오려면 `extern crate greprs`을 
+사용합니다. 그런 다음 `greprs::Config`줄을 추가하여 `Config`타입을 범위로 가져오고 
 `run` 함수 접두어에 크레이트 이름을 붙입니다. 이를 통해 모든 기능이 연결되어 있어야 하며 
 작동해야 합니다. `cargo run`을 실행하여 모든 것이 올바르게 연결되어 있는지 확인하십시오.
 
