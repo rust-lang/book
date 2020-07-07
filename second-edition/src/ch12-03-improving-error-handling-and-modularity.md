@@ -292,9 +292,9 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 #### `new`에서 `panic!`을 호출하는 대신 `Result`를 반환하기. 
 
 우리는 `Result`를 반환 값으로 선택하여 성공인 경우에는 `Config` 객체를 포함시키고 에러가 
-발생한 경우에는 문제가 무엇인지 설명할 수 있게 만들 수 있다. `Config::new`가 `main`과 
-상호작용할 시에, 우리는 `Result`를 사용하여 문제가 있다고 신호할 수 있다. 그리고`main`에선
-`Err`의 값을 사용자들에게 보다 실용적인 방식으로 변환하여 보여줄 수 있다. `thread 'main'`
+발생한 경우에는 문제가 무엇인지 설명할 수 있게 만들 수 있습니다. `Config::new`가 `main`과 
+상호작용할 시에, 우리는 `Result`를 사용하여 문제가 있다고 신호할 수 있습니다. 그리고`main`에선
+`Err`의 값을 사용자들에게 보다 실용적인 방식으로 변환하여 보여줄 수 있습니다. `thread 'main'`
 으로 시작하는 문자들과 `panic!`을 사용해서 보여지는 `RUST_BACKTRACE`관련 메시지 없이.
 
 항목 12-9에서 당신이 변경해야 할 `Config::new`의 반환 값과 `Result`를 반환하기 위한
