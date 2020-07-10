@@ -1,7 +1,7 @@
 ## Defining and Instantiating Structs
 
 Structs are similar to tuples, which were discussed in Chapter 3. Like tuples,
-the pieces of a struct can be different types. Unlike with tuples, you’ll name
+the pieces of a struct can be different types. Unlike tuples, you’ll name
 each piece of data so it’s clear what the values mean. As a result of these
 names, structs are more flexible than tuples: you don’t have to rely on the
 order of the data to specify or access the values of an instance.
@@ -164,7 +164,7 @@ itself. We’ll discuss traits in Chapter 10.
 > data to be valid for as long as the entire struct is valid.
 >
 > It’s possible for structs to store references to data owned by something else,
-> but to do so requires the use of *lifetimes*, a Rust feature that we’ll
+> but doing so requires the use of *lifetimes*, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
 > in a struct without specifying lifetimes, like this, which won’t work:
