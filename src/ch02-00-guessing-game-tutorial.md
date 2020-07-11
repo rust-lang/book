@@ -99,7 +99,7 @@ program:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-The `fn` syntax declares a new function, the parentheses, `()`, indicate there
+The `fn` syntax declares a new function, the parentheses, `()`, with nothing inside indicate there
 are no parameters, and the curly bracket, `{`, starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
