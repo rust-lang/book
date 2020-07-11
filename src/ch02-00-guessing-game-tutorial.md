@@ -162,7 +162,7 @@ This `new` function creates a new, empty string. You’ll find a `new` function
 on many types, because it’s a common name for a function that makes a new value
 of some kind.
 
-To summarize, the `let mut guess = String::new();` line has created a mutable
+To summarize, the `let mut guess = String::new();` line created a mutable
 variable that is currently bound to a new, empty instance of a `String`. Whew!
 
 Recall that we included the input/output functionality from the standard
