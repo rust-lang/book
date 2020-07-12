@@ -273,7 +273,7 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You would write an array’s type by using square brackets, and within the
+More generally, you would write an array’s type by using square brackets, and within the
 brackets include the type of each element, a semicolon, and then the number of
 elements in the array, like so:
 
