@@ -318,7 +318,7 @@ implemented on `Dog` by saying that we want to treat the `Dog` type as an
 In general, fully qualified syntax is defined as follows:
 
 ```rust,ignore
-<Type as Trait>::function(receiver_if_method, next_arg, ...);
+<Type as Trait>::function(receiver_of_method, next_arg, ...);
 ```
 
 For associated functions, there would not be a `receiver`: there would only be
