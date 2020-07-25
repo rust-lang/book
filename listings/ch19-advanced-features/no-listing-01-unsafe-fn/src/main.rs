@@ -2,8 +2,6 @@ fn main() {
     // ANCHOR: here
     unsafe fn dangerous() {}
 
-    unsafe {
-        dangerous();
-    }
+    dangerous();
     // ANCHOR_END: here
 }
