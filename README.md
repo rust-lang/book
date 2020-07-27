@@ -23,7 +23,7 @@ See the [releases] to download just the code of all the code listings that appea
 
 ## Requirements
 
-Building the book requires [mdBook], ideally the same 0.4.x version that
+Building the book requires [mdBook], ideally the same version that
 rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 
 [mdBook]: https://github.com/rust-lang-nursery/mdBook
