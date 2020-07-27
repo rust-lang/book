@@ -232,11 +232,12 @@ the program will get at runtime to store in a vector, the enum technique won’t
 work. Instead, you can use a trait object, which we’ll cover in Chapter 17.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
-to review the API documentation for all the many useful methods defined on
+to review [the API documentation][vec-api] for all the many useful methods defined on
 `Vec<T>` by the standard library. For example, in addition to `push`, a `pop`
 method removes and returns the last element. Let’s move on to the next
 collection type: `String`!
 
 [data-types]: ch03-02-data-types.html#data-types
 [nomicon]: ../nomicon/vec.html
+[vec-api]: ../std/vec/struct.Vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator
