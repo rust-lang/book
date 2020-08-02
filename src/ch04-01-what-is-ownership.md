@@ -388,10 +388,13 @@ we add the `Copy` annotation to that type, we’ll get a compile-time error. To
 learn about how to add the `Copy` annotation to your type, see [“Derivable
 Traits”][derivable-traits]<!-- ignore --> in Appendix C.
 
-So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a general rule, any group of simple scalar values can be
-`Copy`, and nothing that requires allocation or is some form of resource is
-`Copy`. Here are some of the types that are `Copy`:
+So what types are `Copy`able? You can check the documentation for the given type to
+be sure, but as a general rule: 
+
+1. Any group of simple scalar values can have the `Copy` trait, 
+2. Nothing that requires allocation or is some form of resource is `Copy`able. 
+
+Here are some of the types that are `Copy`able:
 
 * All the integer types, such as `u32`.
 * The Boolean type, `bool`, with values `true` and `false`.
