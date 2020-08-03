@@ -361,8 +361,8 @@ different is going on.
 
 #### Stack-Only Data: Copy
 
-There’s another wrinkle we haven’t talked about yet. This code using integers,
-part of which was shown in Listing 4-2, works and is valid:
+There’s another wrinkle we haven’t talked about yet. This code using integers – 
+part of which was shown in Listing 4-2 – works and is valid:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
