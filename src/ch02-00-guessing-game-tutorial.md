@@ -158,7 +158,7 @@ function* of the `String` type. An associated function is implemented on a type,
 in this case `String`, rather than on a particular instance of a `String`. Some
 languages call this a *static method*.
 
-This `new` function creates a new, empty string. You’ll find a `new` function
+This `new` function creates a new empty string. You’ll find a `new` function
 on many types, because it’s a common name for a function that makes a new value
 of some kind.
 
