@@ -163,7 +163,7 @@ on many types, because it’s a common name for a function that makes a new valu
 of some kind.
 
 To summarize, the `let mut guess = String::new();` line has created a mutable
-variable that is currently bound to a new, empty instance of a `String`. Whew!
+variable that is currently bound to a new empty instance of a `String`. Whew!
 
 Recall that we included the input/output functionality from the standard
 library with `use std::io;` on the first line of the program. Now we’ll call
