@@ -12,13 +12,10 @@ impl AveragedCollection {
 
     pub fn remove(&mut self) -> Option<i32> {
         let result = self.list.pop();
-        match result {
-            Some(value) => {
-                self.update_average();
-                Some(value)
-            }
-            None => None,
+        if result.is_some() {
+            self.update_average();
         }
+        result
     }
 
     pub fn average(&self) -> f64 {
