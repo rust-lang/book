@@ -62,7 +62,7 @@ parameter and returns 10, as well as a test that passes and a test that fails.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,panics
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-10/src/lib.rs}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-10/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 11-10: Tests for a function that calls
