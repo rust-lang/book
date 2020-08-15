@@ -507,7 +507,7 @@ that use `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use
 `Result<T, E>` and return an `Err` instead of panicking:
 
 ```rust
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs}}
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-10-result-in-tests/src/lib.rs:here}}
 ```
 
 The `it_works` function now has a return type, `Result<(), String>`. In the
