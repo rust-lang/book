@@ -85,10 +85,10 @@ from the vector.
 iterator</span>
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
-iterator changes internal state that the iterator uses to keep track of where
-it is in the sequence. In other words, this code *consumes*, or uses up, the
-iterator. Each call to `next` eats up an item from the iterator. We didn’t need
-to make `v1_iter` mutable when we used a `for` loop because the loop took
+iterator changes the internal state that the iterator uses to keep track of
+where it is in the sequence. In other words, this code *consumes*, or uses up,
+the iterator. Each call to `next` eats up an item from the iterator. We didn’t
+need to make `v1_iter` mutable when we used a `for` loop because the loop took
 ownership of `v1_iter` and made it mutable behind the scenes.
 
 Also note that the values we get from the calls to `next` are immutable
