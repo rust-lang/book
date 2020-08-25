@@ -24,3 +24,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Svenska](https://github.com/sebras/book)
 - [Farsi](https://github.com/pomokhtari/rust-book-fa)
 - [Deutsch](https://github.com/rust-lang-de/rustbook-de)
+- [Turkish](https://github.com/RustDili/dokuman/tree/master/ceviriler), [online](https://rustdili.github.io/)
