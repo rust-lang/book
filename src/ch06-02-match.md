@@ -34,9 +34,9 @@ here, it can be any type. The type of `coin` in this example is the `Coin` enum
 that we defined on line 1.
 
 Next are the `match` arms. An arm has two parts: a pattern and some code. The
-first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
-operator that separates the pattern and the code to run. The code in this case
-is just the value `1`. Each arm is separated from the next with a comma.
+first arm here has a pattern that is the value `Coin::Penny` and, after the
+separator `=>`, the code to run. The code in this case is just the value `1`.
+Each arm is separated from the next with a comma.
 
 When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
