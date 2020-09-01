@@ -5,7 +5,7 @@ struct MoveMessage {
     y: i32,
 }
 struct WriteMessage(String); // tuple struct
-struct ChangeColorMessage(i32, i32, i32); // tuple struct
+struct ChangeColorMessage(u8, u8, u8); // tuple struct
                                           // ANCHOR_END: here
 
 fn main() {}
