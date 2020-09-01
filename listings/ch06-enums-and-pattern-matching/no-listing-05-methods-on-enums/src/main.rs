@@ -3,7 +3,7 @@ fn main() {
         Quit,
         Move { x: i32, y: i32 },
         Write(String),
-        ChangeColor(i32, i32, i32),
+        ChangeColor(u8, u8, u8),
     }
 
     // ANCHOR: here
