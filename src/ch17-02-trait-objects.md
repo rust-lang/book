@@ -147,8 +147,8 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 17-7:
 
 The `width`, `height`, and `label` fields on `Button` will differ from the
 fields on other components, such as a `TextField` type, that might instead have
-have those fields plus a `placeholder` field. Each of the types we want to draw
-on the screen will implement the `Draw` trait but will use different code in the
+those fields plus a `placeholder` field. Each of the types we want to draw on
+the screen will implement the `Draw` trait but will use different code in the
 `draw` method to define how to draw that particular type, as `Button` has here
 (without the actual GUI code, which is beyond the scope of this chapter). The
 `Button` type, for instance, might have an additional `impl` block containing
