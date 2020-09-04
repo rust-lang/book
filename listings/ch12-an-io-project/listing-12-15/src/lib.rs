@@ -42,5 +42,3 @@ Pick three.";
     }
 }
 // ANCHOR_END: here
-
-fn main() {}
