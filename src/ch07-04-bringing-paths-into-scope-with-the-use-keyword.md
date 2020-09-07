@@ -288,4 +288,4 @@ library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
 for more information on that pattern.
 
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
-[writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
+[writing-tests]: ch11-01-writing-tests.html#how-to-write-tests---the-test-attribute
