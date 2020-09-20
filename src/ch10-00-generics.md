@@ -94,7 +94,10 @@ in two lists</span>
 The `largest` function has a parameter called `list`, which represents any
 concrete slice of `i32` values that we might pass into the function. As a
 result, when we call the function, the code runs on the specific values that we
-pass in.
+pass in. Don't worry about the syntax of the `for` loop for now. We aren't
+referencing a reference to an `i32` here, we're just pattern matching
+and telling the for loop that it should expect an `&i32`. We'll cover pattern
+matching in detail in [Chapter 18][ch18]<!-- ignore -->.
 
 In sum, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
@@ -112,3 +115,5 @@ abstract types.
 For example, say we had two functions: one that finds the largest item in a
 slice of `i32` values and one that finds the largest item in a slice of `char`
 values. How would we eliminate that duplication? Let’s find out!
+
+[ch18]: ch18-00-patterns.html
