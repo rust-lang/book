@@ -227,7 +227,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.5.5
+  Downloaded rand v0.5.6
    --snip--
    Compiling rand v0.5.6
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
