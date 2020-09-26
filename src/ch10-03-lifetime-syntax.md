@@ -521,7 +521,7 @@ that of generic type parameters shown in Listing 10-11. Where we declare and
 use the lifetime parameters depends on whether they’re related to the struct
 fields or the method parameters and return values.
 
-Lifetime names for struct fields always need to be declared after the `impl`
+Lifetime names for struct fields always need to be declared after the `struct`
 keyword and then used after the struct’s name, because those lifetimes are part
 of the struct’s type.
 
