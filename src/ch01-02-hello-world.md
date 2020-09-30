@@ -121,15 +121,15 @@ Inside the `main` function is the following code:
 This line does all the work in this little program: it prints text to the
 screen. There are four important details to notice here.
 
-Second, `println!` calls a Rust macro. If it called a function instead, it
+First, `println!` calls a Rust macro. If it called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
 more detail in Chapter 19. For now, you just need to know that using a `!`
 means that you’re calling a macro instead of a normal function.
 
-Third, you see the `"Hello, world!"` string. We pass this string as an argument
+Second, you see the `"Hello, world!"` string. We pass this string as an argument
 to `println!`, and the string is printed to the screen.
 
-Fourth, we end the line with a semicolon (`;`), which indicates that this
+Third, we end the line with a semicolon (`;`), which indicates that this
 expression is over and the next one is ready to begin. Most lines of Rust code
 end with a semicolon.
 
