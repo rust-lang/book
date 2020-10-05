@@ -389,7 +389,7 @@ The `?` operator can be used in functions that have a return type of
 `Result`, because it is defined to work in the same way as the `match`
 expression we defined in Listing 9-6. The part of the `match` that requires a
 return type of `Result` is `return Err(e)`, so the return type of the function
-can be a `Result` to be compatible with this `return`.
+has to be a `Result` to be compatible with this `return`.
 
 Let’s look at what happens if we use the `?` operator in the `main` function,
 which you’ll recall has a return type of `()`:
