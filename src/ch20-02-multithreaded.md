@@ -35,7 +35,7 @@ recognition of multiple requests in a much less verbose way!
 
 Start the server using `cargo run`. Then open two browser windows: one for
 *http://127.0.0.1:7878/* and the other for *http://127.0.0.1:7878/sleep*. If
-you enter the */* URI a few times, as before, you’ll see it respond quickly.
+you enter the */* URI a few times, as before, you’ll see it responds quickly.
 But if you enter */sleep* and then load */*, you’ll see that */* waits until
 `sleep` has slept for its full 5 seconds before loading.
 
