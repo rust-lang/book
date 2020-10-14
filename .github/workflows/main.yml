@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.3.7/mdbook-v0.3.7-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "##[add-path]$(pwd)/bin"
+        echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Report versions
       run: |
         rustup --version
@@ -42,7 +42,7 @@ jobs:
       run: |
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.3.7/mdbook-v0.3.7-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "##[add-path]$(pwd)/bin"
+        echo "$(pwd)/bin" >> ${GITHUB_PATH}
     - name: Report versions
       run: |
         rustup --version
