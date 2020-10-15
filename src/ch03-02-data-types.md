@@ -145,9 +145,8 @@ The following code shows how you’d use each one in a `let` statement:
 ```
 
 Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. Appendix B contains a
-list of all operators that Rust provides.
-
+to a single value, which is then bound to a variable. [Appendix B][appendix_b]<!-- ignore --> contains a
+list of all operators that Rust provides. 
 #### The Boolean Type
 
 As in most other programming languages, a Boolean type in Rust has two possible
@@ -348,3 +347,4 @@ ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
 [wrapping]: ../std/num/struct.Wrapping.html
+[appendix_b]: appendix-02-operators.md
