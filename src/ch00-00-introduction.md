@@ -1,19 +1,20 @@
-# Introduction
+# Introduzione
 
-> Note: This edition of the book is the same as [The Rust Programming
-> Language][nsprust] available in print and ebook format from [No Starch
-> Press][nsp].
+> Nota: Questa edizione del libro è la stessa di [The Rust Programming
+> Language][nsprust] disponibile in formato cartaceo o ebook su [No Starch
+> Press][nsp] in lingua inglese.
 
 [nsprust]: https://nostarch.com/rust
 [nsp]: https://nostarch.com/
 
-Welcome to *The Rust Programming Language*, an introductory book about Rust.
-The Rust programming language helps you write faster, more reliable software.
-High-level ergonomics and low-level control are often at odds in programming
-language design; Rust challenges that conflict. Through balancing powerful
-technical capacity and a great developer experience, Rust gives you the option
-to control low-level details (such as memory usage) without all the hassle
-traditionally associated with such control.
+Benvenuti in *Programmare in Rust*, un libro introduttivo su Rust.
+Il linguaggio di programmazione Rust ti permette di scrivere 
+codice più veloce e software più affidabile.
+La comodità dei linguaggi di alto-livello e il controllo a basso-livello sono spesso in contrasto
+nel design di linguaggi programmazione; Rust affronta questo problema. Attraverso il bilanciamento
+di potenti capacità tecniche e l'esperienza di grandi sviluppatori, Rust ti da l'opportunità
+di controllare dettagli di basso-livello (com l'uso della memoria) senza tutti i fastidi
+tradizionalmente associati a questo tpo di controllo.
 
 ## Who Rust Is For
 
