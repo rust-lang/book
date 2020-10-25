@@ -68,63 +68,63 @@ strumenti di sviluppo, e librerie. Noi saremmo felicissimi se voi decideste di c
 
 ### Persone che Desiderano Velocità e Stabilità
 
-Rust is for people who crave speed and stability in a language. By speed, we
-mean the speed of the programs that you can create with Rust and the speed at
-which Rust lets you write them. The Rust compiler’s checks ensure stability
-through feature additions and refactoring. This is in contrast to the brittle
-legacy code in languages without these checks, which developers are often
-afraid to modify. By striving for zero-cost abstractions, higher-level features
-that compile to lower-level code as fast as code written manually, Rust
-endeavors to make safe code be fast code as well.
+Rust è per coloro che bramano velocità e stabilità da un linguaggio. Per velocità,
+intendiamo la velocità dei programmi che tu puoi creare e la velocità con cui
+Rust ti permette di scriverli. I controlli del compilatore di Rust assicurano la stabilità
+attraverso l'aggiunta di features e il refactoring. Questo si oppone alla fragilità del
+codice legacy nei linguaggi senza questi controlli, e che gli sviluppatori hanno spesso 
+paura di modificare. Impegnandoci ad avere astrazioni a costo zero, funzionalità alto-livello
+che vengano compilate in codice basso-livello veloce come il codice scritto manualmente, Rust
+si sforza di creare del codice sicuro e che sia anche veloce.
 
-The Rust language hopes to support many other users as well; those mentioned
-here are merely some of the biggest stakeholders. Overall, Rust’s greatest
-ambition is to eliminate the trade-offs that programmers have accepted for
-decades by providing safety *and* productivity, speed *and* ergonomics. Give
-Rust a try and see if its choices work for you.
+Rust spera di supportare anche molti altri tipi di utenti; quelli menzionati
+sono solo una parte dei tantissimi interessati. Soprattutto, la più grande 
+ambizione di Rust è quella di eliminare tutti i compromessi che i programmatori hanno dovuto
+accettare per decenni garantendo sicurezza *e* produttività, velocità *e* comodità. Dai
+a Rust una possibilità e scopri se questa scelta è adatta a te.
 
-## Who This Book Is For
+## Per Chi è Questo Libro
 
-This book assumes that you’ve written code in another programming language but
-doesn’t make any assumptions about which one. We’ve tried to make the material
-broadly accessible to those from a wide variety of programming backgrounds. We
-don’t spend a lot of time talking about what programming *is* or how to think
-about it. If you’re entirely new to programming, you would be better served by
-reading a book that specifically provides an introduction to programming.
+Questo libro dà per scontato che tu abbia già programmato in altri linguaggi ma
+senza fare distinzione tra quale. Abbiamo provato a creare del materiale che fosse
+di facile comprensione per tutti indipendentemente dal linguaggio di progrmmazione di provenineza. 
+Non spenderemo molto tempo parlando di cosa *è* la programmazione o su come affrontarla. 
+Se sei completamente nuovo alla programmazione, faresti meglio a leggere
+un libro che ti fronisca specificamente un'introduzione alla programmazione.
 
-## How to Use This Book
+## Come Usare Questo Libro
 
-In general, this book assumes that you’re reading it in sequence from front to
-back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a topic; we typically revisit the
-topic in a later chapter.
+Principalmente, questo libro presuppone che tu lo stia leggendo in sequenza dal fronte
+al retro . I capitoli successivi si basano su concetti espressi nei capitoli precedenti,
+e questi ultimi potrebbero non scendere nei dettagli di ogni argomento; tipiacmente riaffrontiamo
+l'argomento nei capitoli successivi.
 
-You’ll find two kinds of chapters in this book: concept chapters and project
-chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
-chapters, we’ll build small programs together, applying what you’ve learned so
-far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
+Troverai due tipi di capitoli in questo libro: capitoli concettuali e
+capitoli progettuali. Nei capitoli concettuali, imparerai nozioni riguardo gli aspetti di Rust.
+Nei capitoli progettuali, creeremo piccoli progetti insieme, applicando quello che hai imparato
+fino a quel momento. I Capitoli 2,12 e 20 sono progettuali; i restanti sono concettuali.
 
-Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
-and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
-hands-on introduction to the Rust language. Here we cover concepts at a high
-level, and later chapters will provide additional detail. If you want to get
-your hands dirty right away, Chapter 2 is the place for that. At first, you
-might even want to skip Chapter 3, which covers Rust features similar to those
-of other programming languages, and head straight to Chapter 4 to learn about
-Rust’s ownership system. However, if you’re a particularly meticulous learner
-who prefers to learn every detail before moving on to the next, you might want
-to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
-you’d like to work on a project applying the details you’ve learned.
+Il Capitolo 1 spiega come installare Rust, come scrivere un programma "Hello, world!",
+e come usare Cargo, il gestore di pacchetti e strumento di compilazione di Rust. Il Capitolo 2
+è un'introduzione pratica al linguaggio Rust. Lì Parleremo di concetti ad alto-livello,
+e i capitoli successivi forniranno maggiori dettagli. Se vuoi sporcarti subito
+le mani, il Capitolo 2 è il posto adatto per te. Inizialmente, potresti
+saltare il Capitolo 3, che copre delle funzionalità di Rust simili
+a quelle di altri linguaggi di programmazine, e puntare direttamente al Capitolo 4
+per imparare il sistema di "proprietà" di Rust (ownership). Comunque, se sei uno studente
+meticoloso che preferisce imparare ogni singolo dettaglio prima di spostarsi al successivo,
+potresti voler saltare il Capitolo 2 e andare direttamente al Capitolo 3, tornadno al 2 quando
+vorrai lavorare su un progetto applicando i dettagli che hai imparato.
 
-Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
-expressions, and the `if let` control flow construct. You’ll use structs and
-enums to make custom types in Rust.
+Il Capitolo 5 discute le strutture e i metodi, e il Capitolo 6 copre le enum, le espressioni
+`match`, e il costrutto di controllo del flusso `if let`. Userai strutture e
+enum per creare tipi personalizzati in Rust.
 
-In Chapter 7, you’ll learn about Rust’s module system and about privacy rules
-for organizing your code and its public Application Programming Interface
-(API). Chapter 8 discusses some common collection data structures that the
-standard library provides, such as vectors, strings, and hash maps. Chapter 9
-explores Rust’s error-handling philosophy and techniques.
+Nel Capitolo 7, imparerai circa il sistema di moduli di Rust e le regole di privacy
+per organizzare il tuo codice e le sue Application Programming Interface
+(API) pubbliche. Il Capitolo 8 parla di alcune tra le più comuni strutture dati
+che la libreria standard fornisce, come i vettori, le stringhe, e le hash map. Il Capitolo 9
+esplora la filosofia e le tecniche della gestione degli errori in Rust.
 
 Chapter 10 digs into generics, traits, and lifetimes, which give you the power
 to define code that applies to multiple types. Chapter 11 is all about testing,
