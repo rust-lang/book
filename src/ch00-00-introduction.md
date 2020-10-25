@@ -86,7 +86,7 @@ a Rust una possibilità e scopri se questa scelta è adatta a te.
 ## Per Chi è Questo Libro
 
 Questo libro dà per scontato che tu abbia già programmato in altri linguaggi ma
-senza fare distinzione tra quale. Abbiamo provato a creare del materiale che fosse
+senza fare distinzione tra di loro. Abbiamo provato a creare del materiale che fosse
 di facile comprensione per tutti indipendentemente dal linguaggio di progrmmazione di provenineza. 
 Non spenderemo molto tempo parlando di cosa *è* la programmazione o su come affrontarla. 
 Se sei completamente nuovo alla programmazione, faresti meglio a leggere
