@@ -63,8 +63,8 @@ learning, e anche una vasta porzione del web browser Firefox.
 
 ### Sviluppatori Open Source
 
-Rust è anche per le persone che vogliono aiutarci a costruire il linguaggio di programmazione Rust, community,
-strumenti di sviluppo, e librerie. Noi saremmo felicissimi se voi decideste di contribuire.
+Rust è anche per le persone che vogliono aiutarci a costruire il linguaggio di programmazione Rust,
+community, strumenti di sviluppo, e librerie. Noi saremmo felicissimi se voi decideste di contribuire.
 
 ### Persone che Desiderano Velocità e Stabilità
 
@@ -114,7 +114,7 @@ a quelle di altri linguaggi di programmazine, e puntare direttamente al Capitolo
 per imparare il sistema di "proprietà" di Rust (ownership). Comunque, se sei uno studente
 meticoloso che preferisce imparare ogni singolo dettaglio prima di spostarsi al successivo,
 potresti voler saltare il Capitolo 2 e andare direttamente al Capitolo 3, tornadno al 2 quando
-vorrai lavorare su un progetto applicando i dettagli che hai imparato.
+vorrai lavorare su un progetto applicando i concetti che hai imparato.
 
 Il Capitolo 5 discute le strutture e i metodi, e il Capitolo 6 copre le enum, le espressioni
 `match`, e il costrutto di controllo del flusso `if let`. Userai strutture e
@@ -126,13 +126,13 @@ per organizzare il tuo codice e le sue Application Programming Interface
 che la libreria standard fornisce, come i vettori, le stringhe, e le hash map. Il Capitolo 9
 esplora la filosofia e le tecniche della gestione degli errori in Rust.
 
-Chapter 10 digs into generics, traits, and lifetimes, which give you the power
-to define code that applies to multiple types. Chapter 11 is all about testing,
-which even with Rust’s safety guarantees is necessary to ensure your program’s
-logic is correct. In Chapter 12, we’ll build our own implementation of a subset
-of functionality from the `grep` command line tool that searches for text
-within files. For this, we’ll use many of the concepts we discussed in the
-previous chapters.
+Il Capitolo 10 si fa strada attraverso: tipi generici, tratti e lifetimes, i quali rendono possibile
+creare codice che funzioni per più tipi diversi. Il Capitolo 11 è concentrato sul testing,
+che nonostante le garanzie di sicurezza di Rust è necessario per assicurasi che
+la logica del codice sia corretta. Nel Capitolo 12, creeremo una nostra implementazione di un 
+sottoinsieme di funzionalità del comando da terminale `grep` che cerca del testo
+all'interno di files. Per fare questo, useremo gran parte degli argomenti di cui avremo parlato nei
+capitoli precedenti.
 
 Chapter 13 explores closures and iterators: features of Rust that come from
 functional programming languages. In Chapter 14, we’ll examine Cargo in more
