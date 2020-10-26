@@ -134,58 +134,57 @@ sottoinsieme di funzionalità del comando da terminale `grep` che cerca del test
 all'interno di files. Per fare questo, useremo gran parte degli argomenti di cui avremo parlato nei
 capitoli precedenti.
 
-Chapter 13 explores closures and iterators: features of Rust that come from
-functional programming languages. In Chapter 14, we’ll examine Cargo in more
-depth and talk about best practices for sharing your libraries with others.
-Chapter 15 discusses smart pointers that the standard library provides and the
-traits that enable their functionality.
+Il Capitolo 13 esplora le chiusure e gli iteratori: funzionalità di Rust prese dai
+linguaggi di programmazione funzionali. Nel Capitolo 14, esamineremo Cargo più nel dettaglio
+e parleremo delle best practices per condividere le tue librerie con altri.
+Il Capitolo 15 discute dei puntatori intelligenti che la libreria standard mette a disposizine
+e i tratti che attivano la loro fiunzionalità.
 
-In Chapter 16, we’ll walk through different models of concurrent programming
-and talk about how Rust helps you to program in multiple threads fearlessly.
-Chapter 17 looks at how Rust idioms compare to object-oriented programming
-principles you might be familiar with.
+Nel Capitolo 16, analizzeremo diversi modelli di programmazione concorrente
+e parleremo di come Rust ti aiuti a programmare in multi-threading senza paura.
+Il Capitolo 17 mostra come associare gli idiomi di Rust ai principi della
+programmazione ad oggetti con la quale potresti sentirti più a tuo agio.
 
-Chapter 18 is a reference on patterns and pattern matching, which are powerful
-ways of expressing ideas throughout Rust programs. Chapter 19 contains a
-smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
-more about lifetimes, traits, types, functions, and closures.
+Il Capitolo 18 è una guida ai pattern e al pattern matching, che sono molto potenti
+per esprimere idee attraverso i programmi in Rust. Il Capitolo 19 contiene 
+un'ampia varietà di argomenti interessanti, compresi; Rust non sicuro, macro,
+ulteriori informazioni sui lifetimes, tratti, tipi, funzioni, e chiusure.
 
-In Chapter 20, we’ll complete a project in which we’ll implement a low-level
-multithreaded web server!
+Nel Capitolo 20, completeremo un prgetto in cui implementeremo un web server
+multithread a basso-livello!
 
-Finally, some appendixes contain useful information about the language in a
-more reference-like format. Appendix A covers Rust’s keywords, Appendix B
-covers Rust’s operators and symbols, Appendix C covers derivable traits
-provided by the standard library, Appendix D covers some useful development
-tools, and Appendix E explains Rust editions.
+In ultimo, alcune appendici contententi informazioni utili sul linguaggio in
+formato guida. L'Appendice A copre le keywords di Rust, la B copre gli operatori e i simboli, 
+l'Appendice C copre i tratti derivabili forniti dalla libreria standard,
+la D parla di alcuni utili strumenti di sviluppo e la E mostra le varie edizioni di Rust.
 
-There is no wrong way to read this book: if you want to skip ahead, go for it!
-You might have to jump back to earlier chapters if you experience any
-confusion. But do whatever works for you.
+Non c'è un modo sbagliato di leggere questo libro. Se vuoi saltare avanti, fallo!
+Potrai sempre tornare indietro se dovessi sentirti perso o confuso.
+Fai tutto ciò che funziona per te.
 
 <span id="ferris"></span>
 
-An important part of the process of learning Rust is learning how to read the
-error messages the compiler displays: these will guide you toward working code.
-As such, we’ll provide many examples that don’t compile along with the error
-message the compiler will show you in each situation. Know that if you enter
-and run a random example, it may not compile! Make sure you read the
-surrounding text to see whether the example you’re trying to run is meant to
-error. Ferris will also help you distinguish code that isn’t meant to work:
+Una parte importante nel processo di studio di Rust è imparare come leggere
+i messaggi di errore forniti dal compilatore: questo ti guiderà verso il codice giusto.
+Per tanto, forniremo tanti esempi che non compileranno con i relativi messaggi di errore
+che il compilatore ti motrerà in ciascuna situazione. Sappi che se prendi 
+ed esegui un esempio random, potrebbe non compilare! Assicurati di leggere
+il testo circostante per capire quale errore vuole mostrare il codice che
+stai provando a eseguire. Ferris ti aiuterà a distinguere il codice che è stato scritto per non funzionare:
 
-| Ferris                                                                 | Meaning                                          |
+| Ferris                                                                 | Significato                                      |
 |------------------------------------------------------------------------|--------------------------------------------------|
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain"/>    | This code does not compile!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain"/>              | This code panics!                                |
-| <img src="img/ferris/unsafe.svg" class="ferris-explain"/>              | This code block contains unsafe code.            |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"/>| This code does not produce the desired behavior. |
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain"/>    | Questo codice non compila!                       |
+| <img src="img/ferris/panics.svg" class="ferris-explain"/>              | Questo codice fornisce errori di runtime!        |
+| <img src="img/ferris/unsafe.svg" class="ferris-explain"/>              | Questo blocco contiene codice pericoloso.        |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"/>| Questo codice non esegue il funzionamento voluto.|
 
-In most situations, we’ll lead you to the correct version of any code that
-doesn’t compile.
+Nella maggior parte delle situazioni ti condurremo alla versione corretta di qualsiasi codice
+che non compila.
 
 ## Source Code
 
-The source files from which this book is generated can be found on
+I file sorgenti dai quali questo libro viene generato possono essere trovati su
 [GitHub][book].
 
 [book]: https://github.com/rust-lang/book/tree/master/src
