@@ -187,4 +187,4 @@ che non compila.
 I file sorgenti dai quali questo libro viene generato possono essere trovati su
 [GitHub][book].
 
-[book]: https://github.com/rust-lang/book/tree/master/src
+[book]: https://github.com/Ciro-Fusco/book_it/tree/master/src
