@@ -27,7 +27,7 @@ Rust sta dimostrando di essere un utile strumento per collaborare tra grandi tea
 di sviluppatori con diversi livelli di conoscenza di programmazione di sistemi. Il codice 
 di basso-livello è incline ad avere diversi subdoli bug, che nella maggior parte degli
 altri linguaggi possono essere trovati solo attraverso lunghi testing e attente revisioni del codice 
-da parte di sviluppatori esperti. In Rust, il compilatore svolge il ruolo di guardianoby rifiutando la
+da parte di sviluppatori esperti. In Rust, il compilatore svolge il ruolo di guardiano rifiutando la
 compilazine di codice contenente questi bug sfuggenti, inclusi i bug di concorrenza. Lavorando
 insieme al compilatore, il team può spendere il proprio tempo concentrandosi sulla logica di
 programma piuttosto che rincorrere i bugs.
