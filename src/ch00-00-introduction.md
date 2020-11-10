@@ -153,7 +153,7 @@ more about lifetimes, traits, types, functions, and closures.
 In Chapter 20, we’ll complete a project in which we’ll implement a low-level
 multithreaded web server!
 
-Finally, some appendixes contain useful information about the language in a
+Finally, some appendices contain useful information about the language in a
 more reference-like format. Appendix A covers Rust’s keywords, Appendix B
 covers Rust’s operators and symbols, Appendix C covers derivable traits
 provided by the standard library, Appendix D covers some useful development
