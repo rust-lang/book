@@ -219,7 +219,7 @@ necessarily have to implement your own hasher from scratch;
 [crates.io](https://crates.io/) has libraries shared by other Rust users that
 provide hashers implementing many common hashing algorithms.
 
-[^siphash]: [https://www.131002.net/siphash/siphash.pdf](https://www.131002.net/siphash/siphash.pdf)
+[^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
 ## Summary
 
