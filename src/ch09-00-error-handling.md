@@ -1,24 +1,24 @@
-# Error Handling
+# 에러 처리
 
-Rust’s commitment to reliability extends to error handling. Errors are a fact
-of life in software, so Rust has a number of features for handling situations
-in which something goes wrong. In many cases, Rust requires you to acknowledge
-the possibility of an error and take some action before your code will compile.
-This requirement makes your program more robust by ensuring that you’ll
-discover errors and handle them appropriately before you’ve deployed your code
-to production!
+러스트는 에러 처리에서도 신뢰성을 보장합니다.
+에러는 소프트웨어에서 피할 수 없는 현상이므로,
+러스트는 무언가 잘못되었을 경우에 대한 처리를 위한 몇 가지 기능을 갖추고 있습니다.
+많은 경우, 러스트는 여러분이 에러가 발생할 가능성을 인정하고 여러분의 코드가
+컴파일되기 전에 어떤 행동을 취하기를 요구할 것입니다.
+이러한 요구사항은 여러분의 코드를 제품으로서 배포하기 전에 에러를 발견하고
+적절히 조치할 것이라고 보장함으로써 여러분의 프로그램을 더 강건하게 해줍니다!
 
-Rust groups errors into two major categories: *recoverable* and *unrecoverable*
-errors. For a recoverable error, such as a file not found error, it’s
-reasonable to report the problem to the user and retry the operation.
-Unrecoverable errors are always symptoms of bugs, like trying to access a
-location beyond the end of an array.
+러스트는 에러를 *복구 가능한(recoverable)* 에러와
+*복구 불가능한(unrecoverable)* 에러 두 가지 범주로 묶습니다.
+복구 가능한 에러는 파일을 찾지 못하는 에러처럼 사용자에게 문제를 보고하고
+명령을 재시도할 수 있는 에러이고, 복구 불가능한 에러는 배열 끝을 넘어선 위치에
+접근하는 경우처럼 언제나 버그의 증상이 나타나는 에러입니다.
 
-Most languages don’t distinguish between these two kinds of errors and handle
-both in the same way, using mechanisms such as exceptions. Rust doesn’t have
-exceptions. Instead, it has the type `Result<T, E>` for recoverable errors and
-the `panic!` macro that stops execution when the program encounters an
-unrecoverable error. This chapter covers calling `panic!` first and then talks
-about returning `Result<T, E>` values. Additionally, we’ll explore
-considerations when deciding whether to try to recover from an error or to stop
-execution.
+대부분의 언어는 예외 처리(exception)와 같은 메카니즘을 이용하여
+이 두 종류의 에러를 구분하지 않고 같은 방식으로 처리합니다.
+러스트에는 예외 처리 기능이 없습니다.
+대신, 복구 가능한 에러를 위한 `Result<T, E>` 타입과 복구 불가능한
+에러가 발생했을 때 프로그램을 종료하는 `panic!` 매크로가 있습니다.
+이번 장에서는 `panic!`을 호출하는 것을 먼저 다룬 뒤, `Result<T, E>` 값을
+반환하는 것에 관해 이야기하겠습니다. 추가로, 에러로부터 복구를 시도할지
+아니면 실행을 멈출지를 결정할 때 고려할 것에 관해 탐구해 보겠습니다.
