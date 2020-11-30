@@ -200,13 +200,26 @@ itself. We’ll discuss traits in Chapter 10.
 >  --> src/main.rs:2:15
 >   |
 > 2 |     username: &str,
->   |               ^ expected lifetime parameter
+>   |               ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 | struct User<'lifetime> {
+> 2 |     username: &'lifetime str,
+>   |
 >
 > error[E0106]: missing lifetime specifier
 >  --> src/main.rs:3:12
 >   |
 > 3 |     email: &str,
->   |            ^ expected lifetime parameter
+>   |            ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 | struct User<'lifetime> {
+> 2 |     username: &str,
+> 3 |     email: &'lifetime str,
+>   |
 >
 > error: aborting due to 2 previous errors
 >

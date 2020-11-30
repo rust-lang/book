@@ -4,13 +4,25 @@ error[E0603]: function `add_to_waitlist` is private
  --> src/lib.rs:9:37
   |
 9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                                     ^^^^^^^^^^^^^^^
+  |                                     ^^^^^^^^^^^^^^^ this function is private
+  |
+note: the function `add_to_waitlist` is defined here
+ --> src/lib.rs:3:9
+  |
+3 |         fn add_to_waitlist() {}
+  |         ^^^^^^^^^^^^^^^^^^^^
 
 error[E0603]: function `add_to_waitlist` is private
   --> src/lib.rs:12:30
    |
 12 |     front_of_house::hosting::add_to_waitlist();
-   |                              ^^^^^^^^^^^^^^^
+   |                              ^^^^^^^^^^^^^^^ this function is private
+   |
+note: the function `add_to_waitlist` is defined here
+  --> src/lib.rs:3:9
+   |
+3  |         fn add_to_waitlist() {}
+   |         ^^^^^^^^^^^^^^^^^^^^
 
 error: aborting due to 2 previous errors
 

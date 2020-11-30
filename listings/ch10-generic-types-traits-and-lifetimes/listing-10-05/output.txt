@@ -1,14 +1,14 @@
 $ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
-error[E0369]: binary operation `>` cannot be applied to type `T`
+error[E0369]: binary operation `>` cannot be applied to type `&T`
  --> src/main.rs:5:17
   |
 5 |         if item > largest {
-  |            ---- ^ ------- T
+  |            ---- ^ ------- &T
   |            |
-  |            T
+  |            &T
   |
-  = note: `T` might need a bound for `std::cmp::PartialOrd`
+  = note: an implementation of `std::cmp::PartialOrd` might be missing for `&T`
 
 error: aborting due to previous error
 

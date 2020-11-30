@@ -11,7 +11,7 @@ failures:
 
 ---- tests::another stdout ----
 thread 'main' panicked at 'Make this test fail', src/lib.rs:10:9
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:

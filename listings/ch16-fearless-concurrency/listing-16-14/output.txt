@@ -3,8 +3,15 @@ $ cargo run
 error[E0277]: `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
    --> src/main.rs:11:22
     |
-11  |         let handle = thread::spawn(move || {
-    |                      ^^^^^^^^^^^^^ `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
+11  |           let handle = thread::spawn(move || {
+    |  ______________________^^^^^^^^^^^^^_-
+    | |                      |
+    | |                      `std::rc::Rc<std::sync::Mutex<i32>>` cannot be sent between threads safely
+12  | |             let mut num = counter.lock().unwrap();
+13  | |
+14  | |             *num += 1;
+15  | |         });
+    | |_________- within this `[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
     |
     = help: within `[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`, the trait `std::marker::Send` is not implemented for `std::rc::Rc<std::sync::Mutex<i32>>`
     = note: required because it appears within the type `[closure@src/main.rs:11:36: 15:10 counter:std::rc::Rc<std::sync::Mutex<i32>>]`
