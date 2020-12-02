@@ -9,7 +9,7 @@ test tests::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
-     Running target/debug/deps/minigrep-caf9dbee196c78b9
+     Running target/debug/deps/minigrep-4672b652f7794785
 
 running 0 tests
 
