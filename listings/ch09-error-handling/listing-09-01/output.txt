@@ -2,5 +2,5 @@ $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished dev [unoptimized + debuginfo] target(s) in 0.27s
      Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/b8cedc00407a4c56a3bda1ed605c6fc166655447/src/libcore/slice/mod.rs:2791:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', /rustc/8d69840ab92ea7f4d323420088dd8c9775f180cd/src/libcore/slice/mod.rs:2842:10
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

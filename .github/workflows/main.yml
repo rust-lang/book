@@ -12,8 +12,8 @@ jobs:
     - name: Install Rust
       run: |
         rustup set profile minimal
-        rustup toolchain install 1.42 -c rust-docs
-        rustup default 1.42
+        rustup toolchain install 1.43 -c rust-docs
+        rustup default 1.43
     - name: Install mdbook
       run: |
         mkdir bin

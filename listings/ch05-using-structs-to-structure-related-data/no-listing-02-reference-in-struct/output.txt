@@ -8,8 +8,8 @@ error[E0106]: missing lifetime specifier
   |
 help: consider introducing a named lifetime parameter
   |
-1 | struct User<'lifetime> {
-2 |     username: &'lifetime str,
+1 | struct User<'a> {
+2 |     username: &'a str,
   |
 
 error[E0106]: missing lifetime specifier
@@ -20,9 +20,9 @@ error[E0106]: missing lifetime specifier
   |
 help: consider introducing a named lifetime parameter
   |
-1 | struct User<'lifetime> {
+1 | struct User<'a> {
 2 |     username: &str,
-3 |     email: &'lifetime str,
+3 |     email: &'a str,
   |
 
 error: aborting due to 2 previous errors

@@ -7,8 +7,6 @@ error[E0369]: binary operation `>` cannot be applied to type `&T`
   |            ---- ^ ------- &T
   |            |
   |            &T
-  |
-  = note: an implementation of `std::cmp::PartialOrd` might be missing for `&T`
 
 error: aborting due to previous error
 

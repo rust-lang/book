@@ -6,7 +6,7 @@ error[E0658]: `let` expressions in this position are experimental
 2 |     let x = (let y = 6);
   |              ^^^^^^^^^
   |
-  = note: for more information, see https://github.com/rust-lang/rust/issues/53667
+  = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
 
 error: expected expression, found statement (`let`)
  --> src/main.rs:2:14
