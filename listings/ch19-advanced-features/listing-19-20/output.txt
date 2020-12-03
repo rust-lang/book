@@ -9,7 +9,7 @@ error[E0283]: type annotations needed
 20 |     println!("A baby dog is called a {}", Animal::baby_name());
    |                                           ^^^^^^^^^^^^^^^^^ cannot infer type
    |
-   = note: cannot resolve `_: Animal`
+   = note: cannot satisfy `_: Animal`
 
 error: aborting due to previous error
 

@@ -2,5 +2,5 @@ $ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
     Finished dev [unoptimized + debuginfo] target(s) in 0.43s
      Running `target/debug/collections`
-thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/libcore/str/mod.rs:2219:5
+thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', /rustc/c7087fe00d2ba919df1d813c040a5d47e43b0fe7/src/libcore/str/mod.rs:1920:47
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
