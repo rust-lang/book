@@ -10,13 +10,13 @@ error[E0072]: recursive type `List` has infinite size
   |
   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to make `List` representable
 
-error[E0391]: cycle detected when processing `List`
+error[E0391]: cycle detected when computing drop-check constraints for `List`
  --> src/main.rs:1:1
   |
 1 | enum List {
   | ^^^^^^^^^
   |
-  = note: ...which again requires processing `List`, completing the cycle
+  = note: ...which again requires computing drop-check constraints for `List`, completing the cycle
   = note: cycle used when computing dropck types for `Canonical { max_universe: U0, variables: [], value: ParamEnvAnd { param_env: ParamEnv { caller_bounds: [], reveal: UserFacing, def_id: None }, value: List } }`
 
 error: aborting due to 2 previous errors
