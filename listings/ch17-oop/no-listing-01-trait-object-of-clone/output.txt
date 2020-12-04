@@ -1,10 +1,10 @@
 $ cargo build
    Compiling gui v0.1.0 (file:///projects/gui)
 error[E0038]: the trait `std::clone::Clone` cannot be made into an object
- --> src/lib.rs:2:5
+ --> src/lib.rs:2:21
   |
 2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be made into an object
+  |                     ^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be made into an object
   |
   = note: the trait cannot be made into an object because it requires `Self: Sized`
 
