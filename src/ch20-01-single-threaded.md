@@ -58,7 +58,7 @@ will return a new `TcpListener` instance. The reason the function is called
 
 The `bind` function returns a `Result<T, E>`, which indicates that binding
 might fail. For example, connecting to port 80 requires administrator
-privileges (nonadministrators can listen only on ports higher than 1024), so if
+privileges (nonadministrators can listen only on ports higher than 1023), so if
 we tried to connect to port 80 without being an administrator, binding wouldn’t
 work. As another example, binding wouldn’t work if we ran two instances of our
 program and so had two programs listening to the same port. Because we’re
