@@ -1,4 +1,3 @@
-// ANCHOR: here
 pub struct ThreadPool;
 
 impl ThreadPool {
@@ -6,6 +5,3 @@ impl ThreadPool {
         ThreadPool
     }
 }
-// ANCHOR_END: here
-
-fn main() {}

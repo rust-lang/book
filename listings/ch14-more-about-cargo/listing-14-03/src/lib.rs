@@ -1,4 +1,3 @@
-// ANCHOR: here
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -31,6 +30,3 @@ pub mod utils {
         // ANCHOR: here
     }
 }
-// ANCHOR_END: here
-
-fn main() {}

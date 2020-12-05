@@ -46,5 +46,3 @@ Pick three.";
         assert_eq!(vec!["safe, fast, productive."], search(query, contents));
     }
 }
-
-fn main() {}

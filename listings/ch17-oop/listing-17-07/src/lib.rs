@@ -27,5 +27,3 @@ impl Draw for Button {
     }
 }
 // ANCHOR_END: here
-
-fn main() {}

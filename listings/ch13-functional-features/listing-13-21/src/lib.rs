@@ -22,5 +22,3 @@ impl Iterator for Counter {
     }
 }
 // ANCHOR_END: here
-
-fn main() {}

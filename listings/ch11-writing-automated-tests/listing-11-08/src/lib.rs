@@ -1,4 +1,3 @@
-// ANCHOR: here
 pub struct Guess {
     value: i32,
 }
@@ -23,6 +22,3 @@ mod tests {
         Guess::new(200);
     }
 }
-// ANCHOR_END: here
-
-fn main() {}

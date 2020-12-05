@@ -1,4 +1,3 @@
-// ANCHOR: here
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::sync::Mutex;
@@ -100,6 +99,3 @@ impl Worker {
         }
     }
 }
-// ANCHOR_END: here
-
-fn main() {}

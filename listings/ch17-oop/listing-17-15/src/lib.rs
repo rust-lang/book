@@ -50,5 +50,3 @@ impl State for PendingReview {
     }
 }
 // ANCHOR_END: here
-
-fn main() {}

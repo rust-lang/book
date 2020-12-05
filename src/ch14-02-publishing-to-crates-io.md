@@ -176,8 +176,8 @@ function named `mix`, as shown in Listing 14-3:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs:here}}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs}}
 ```
 
 <span class="caption">Listing 14-3: An `art` library with items organized into

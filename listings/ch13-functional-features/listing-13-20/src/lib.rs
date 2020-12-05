@@ -7,5 +7,3 @@ impl Counter {
         Counter { count: 0 }
     }
 }
-
-fn main() {}

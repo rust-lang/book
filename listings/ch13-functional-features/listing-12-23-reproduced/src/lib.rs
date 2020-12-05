@@ -104,5 +104,3 @@ Trust me.";
         );
     }
 }
-
-fn main() {}

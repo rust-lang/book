@@ -16,5 +16,3 @@ impl ThreadPool {
     }
 }
 // ANCHOR_END: here
-
-fn main() {}

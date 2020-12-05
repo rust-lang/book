@@ -25,5 +25,3 @@ mod tests {
         Guess::new(200);
     }
 }
-
-fn main() {}
