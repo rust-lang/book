@@ -616,6 +616,8 @@ warning: field is never read: `thread`
 49 |     thread: thread::JoinHandle<()>,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+warning: 3 warnings emitted
+
     Finished dev [unoptimized + debuginfo] target(s) in 1.40s
      Running `target/debug/main`
 Worker 0 got a job; executing.

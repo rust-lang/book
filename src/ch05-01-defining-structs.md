@@ -204,8 +204,8 @@ itself. We’ll discuss traits in Chapter 10.
 >   |
 > help: consider introducing a named lifetime parameter
 >   |
-> 1 | struct User<'lifetime> {
-> 2 |     username: &'lifetime str,
+> 1 | struct User<'a> {
+> 2 |     username: &'a str,
 >   |
 >
 > error[E0106]: missing lifetime specifier
@@ -216,15 +216,15 @@ itself. We’ll discuss traits in Chapter 10.
 >   |
 > help: consider introducing a named lifetime parameter
 >   |
-> 1 | struct User<'lifetime> {
+> 1 | struct User<'a> {
 > 2 |     username: &str,
-> 3 |     email: &'lifetime str,
+> 3 |     email: &'a str,
 >   |
 >
 > error: aborting due to 2 previous errors
 >
 > For more information about this error, try `rustc --explain E0106`.
-> error: could not compile `structs`.
+> error: could not compile `structs`
 >
 > To learn more, run the command again with --verbose.
 > ```
