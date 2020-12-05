@@ -9,6 +9,6 @@ error[E0282]: type annotations needed
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0282`.
-error: could not compile `no_type_annotations`.
+error: could not compile `no_type_annotations`
 
 To learn more, run the command again with --verbose.

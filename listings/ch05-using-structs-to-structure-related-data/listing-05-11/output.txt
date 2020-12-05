@@ -14,6 +14,6 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `structs`.
+error: could not compile `structs`
 
 To learn more, run the command again with --verbose.

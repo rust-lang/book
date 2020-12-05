@@ -12,6 +12,6 @@ error[E0515]: cannot return value referencing local variable `result`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0515`.
-error: could not compile `chapter10`.
+error: could not compile `chapter10`
 
 To learn more, run the command again with --verbose.

@@ -13,6 +13,6 @@ error[E0382]: use of moved value: `a`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `cons-list`.
+error: could not compile `cons-list`
 
 To learn more, run the command again with --verbose.

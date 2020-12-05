@@ -4,7 +4,7 @@ error[E0382]: borrow of moved value: `s1`
  --> src/main.rs:5:28
   |
 2 |     let s1 = String::from("hello");
-  |         -- move occurs because `s1` has type `std::string::String`, which does not implement the `Copy` trait
+  |         -- move occurs because `s1` has type `String`, which does not implement the `Copy` trait
 3 |     let s2 = s1;
   |              -- value moved here
 4 | 
@@ -14,6 +14,6 @@ error[E0382]: borrow of moved value: `s1`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `ownership`.
+error: could not compile `ownership`
 
 To learn more, run the command again with --verbose.

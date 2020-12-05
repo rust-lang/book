@@ -24,6 +24,6 @@ help: to force the closure to take ownership of `v` (and any other referenced va
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0373`.
-error: could not compile `threads`.
+error: could not compile `threads`
 
 To learn more, run the command again with --verbose.

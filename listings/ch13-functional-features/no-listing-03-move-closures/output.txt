@@ -4,7 +4,7 @@ error[E0382]: borrow of moved value: `x`
  --> src/main.rs:6:40
   |
 2 |     let x = vec![1, 2, 3];
-  |         - move occurs because `x` has type `std::vec::Vec<i32>`, which does not implement the `Copy` trait
+  |         - move occurs because `x` has type `Vec<i32>`, which does not implement the `Copy` trait
 3 | 
 4 |     let equal_to_x = move |z| z == x;
   |                      --------      - variable moved due to use in closure
@@ -17,6 +17,6 @@ error[E0382]: borrow of moved value: `x`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `equal-to-x`.
+error: could not compile `equal-to-x`
 
 To learn more, run the command again with --verbose.

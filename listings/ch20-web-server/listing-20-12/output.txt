@@ -1,14 +1,14 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
-error[E0433]: failed to resolve: use of undeclared type or module `ThreadPool`
+error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
   --> src/main.rs:10:16
    |
 10 |     let pool = ThreadPool::new(4);
-   |                ^^^^^^^^^^ use of undeclared type or module `ThreadPool`
+   |                ^^^^^^^^^^ use of undeclared type `ThreadPool`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0433`.
-error: could not compile `hello`.
+error: could not compile `hello`
 
 To learn more, run the command again with --verbose.
