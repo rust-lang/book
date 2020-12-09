@@ -145,7 +145,7 @@ let user2 = User {
 };
 ```
 
-<span class="caption">예제 5-5: `user1`을 일부 값들을 재사용하여, 구조체 `User`의 인스턴스
+<span class="caption">예제 5-5: `user1`의 일부 값들을 재사용하여, 구조체 `User`의 인스턴스
 `user2`를 새로 생성</span>
 
   구조체 갱신법(*struct update syntax*)은 예제 5-5에서 작성한 짧은 코드와 같은 효과를 낼 수
