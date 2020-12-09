@@ -1,4 +1,3 @@
-// ANCHOR: here
 #[cfg(test)]
 mod tests {
     #[test]
@@ -6,6 +5,3 @@ mod tests {
         assert_eq!(2 + 2, 4);
     }
 }
-// ANCHOR_END: here
-
-fn main() {}

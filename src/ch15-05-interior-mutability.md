@@ -195,7 +195,7 @@ shows what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
 ```
 

@@ -10,6 +10,8 @@ warning: irrefutable if-let pattern
   |
   = note: `#[warn(irrefutable_let_patterns)]` on by default
 
+warning: 1 warning emitted
+
     Finished dev [unoptimized + debuginfo] target(s) in 0.39s
      Running `target/debug/patterns`
 5

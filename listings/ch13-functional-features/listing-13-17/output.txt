@@ -1,6 +1,6 @@
 $ cargo run
    Compiling iterators v0.1.0 (file:///projects/iterators)
-warning: unused `std::iter::Map` that must be used
+warning: unused `Map` that must be used
  --> src/main.rs:4:5
   |
 4 |     v1.iter().map(|x| x + 1);
@@ -8,6 +8,8 @@ warning: unused `std::iter::Map` that must be used
   |
   = note: `#[warn(unused_must_use)]` on by default
   = note: iterators are lazy and do nothing unless consumed
+
+warning: 1 warning emitted
 
     Finished dev [unoptimized + debuginfo] target(s) in 0.47s
      Running `target/debug/iterators`

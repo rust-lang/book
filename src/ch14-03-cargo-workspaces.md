@@ -151,7 +151,7 @@ function to call the `add_one` function, as in Listing 14-7.
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 
-<span class="caption">Listing 14-7: Using the `add-one` library crate from the 
+<span class="caption">Listing 14-7: Using the `add-one` library crate from the
  `adder` crate</span>
 
 Let’s build the workspace by running `cargo build` in the top-level *add*
@@ -216,7 +216,8 @@ crate:
 
 We can now add `use rand;` to the *add-one/src/lib.rs* file, and building the
 whole workspace by running `cargo build` in the *add* directory will bring in
-and compile the `rand` crate:
+and compile the `rand` crate. We will get one warning because we aren’t
+referring to the `rand` we brought into scope:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add
@@ -231,6 +232,16 @@ $ cargo build
    --snip--
    Compiling rand v0.5.6
    Compiling add-one v0.1.0 (file:///projects/add/add-one)
+warning: unused import: `rand`
+ --> add-one/src/lib.rs:1:5
+  |
+1 | use rand;
+  |     ^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: 1 warning emitted
+
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
@@ -255,7 +266,7 @@ error[E0432]: unresolved import `rand`
  --> adder/src/main.rs:2:5
   |
 2 | use rand;
-  |     ^^^^ no `rand` external crate
+  |     ^^^^ no external crate `rand`
 ```
 
 To fix this, edit the *Cargo.toml* file for the `adder` package and indicate

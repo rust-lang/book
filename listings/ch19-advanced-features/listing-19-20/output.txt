@@ -9,11 +9,11 @@ error[E0283]: type annotations needed
 20 |     println!("A baby dog is called a {}", Animal::baby_name());
    |                                           ^^^^^^^^^^^^^^^^^ cannot infer type
    |
-   = note: cannot resolve `_: Animal`
+   = note: cannot satisfy `_: Animal`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0283`.
-error: could not compile `traits-example`.
+error: could not compile `traits-example`
 
 To learn more, run the command again with --verbose.

@@ -74,5 +74,3 @@ Trust me.";
     }
 }
 // ANCHOR_END: here
-
-fn main() {}

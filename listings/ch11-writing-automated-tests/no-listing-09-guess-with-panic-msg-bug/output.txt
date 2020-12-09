@@ -10,7 +10,7 @@ failures:
 
 ---- tests::greater_than_100 stdout ----
 thread 'main' panicked at 'Guess value must be greater than or equal to 1, got 200.', src/lib.rs:13:13
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 note: panic did not contain expected string
       panic message: `"Guess value must be greater than or equal to 1, got 200."`,
  expected substring: `"Guess value must be less than or equal to 100"`

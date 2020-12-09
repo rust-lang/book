@@ -29,8 +29,8 @@ Listing 7-1 into *src/lib.rs* to define some modules and function signatures.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs:here}}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-1: A `front_of_house` module containing other

@@ -1,14 +1,14 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
-error[E0599]: no function or associated item named `new` found for type `hello::ThreadPool` in the current scope
+error[E0599]: no function or associated item named `new` found for struct `ThreadPool` in the current scope
   --> src/bin/main.rs:11:28
    |
 11 |     let pool = ThreadPool::new(4);
-   |                            ^^^ function or associated item not found in `hello::ThreadPool`
+   |                            ^^^ function or associated item not found in `ThreadPool`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0599`.
-error: could not compile `hello`.
+error: could not compile `hello`
 
 To learn more, run the command again with --verbose.

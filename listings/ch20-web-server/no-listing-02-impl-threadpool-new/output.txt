@@ -1,14 +1,14 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
-error[E0599]: no method named `execute` found for type `hello::ThreadPool` in the current scope
+error[E0599]: no method named `execute` found for struct `ThreadPool` in the current scope
   --> src/bin/main.rs:16:14
    |
 16 |         pool.execute(|| {
-   |              ^^^^^^^ method not found in `hello::ThreadPool`
+   |              ^^^^^^^ method not found in `ThreadPool`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0599`.
-error: could not compile `hello`.
+error: could not compile `hello`
 
 To learn more, run the command again with --verbose.

@@ -99,5 +99,3 @@ Trust me.";
         );
     }
 }
-
-fn main() {}

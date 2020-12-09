@@ -74,5 +74,3 @@ impl Worker {
     }
 }
 // ANCHOR_END: here
-
-fn main() {}

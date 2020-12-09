@@ -60,8 +60,8 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs:here}}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
 ```
 
 <span class="caption">Listing 11-12: Testing a private function</span>

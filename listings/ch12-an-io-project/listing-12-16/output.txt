@@ -12,7 +12,7 @@ failures:
 thread 'main' panicked at 'assertion failed: `(left == right)`
   left: `["safe, fast, productive."]`,
  right: `[]`', src/lib.rs:44:9
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:

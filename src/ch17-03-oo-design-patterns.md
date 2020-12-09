@@ -107,7 +107,7 @@ Post` block:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-13/src/lib.rs:here}}
 ```
 
@@ -135,7 +135,7 @@ be empty. Listing 17-14 shows this placeholder implementation:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-14/src/lib.rs:here}}
 ```
 
@@ -152,7 +152,7 @@ change its state from `Draft` to `PendingReview`. Listing 17-15 shows this code:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch17-oop/listing-17-15/src/lib.rs:here}}
 ```
 

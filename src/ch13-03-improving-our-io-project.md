@@ -98,7 +98,7 @@ Listing 12-23 to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-27/src/lib.rs:here}}
 ```
 

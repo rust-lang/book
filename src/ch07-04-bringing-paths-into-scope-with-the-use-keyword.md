@@ -15,8 +15,8 @@ scope of the `eat_at_restaurant` function so we only have to specify
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs:here}}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-11: Bringing a module into scope with
@@ -34,8 +34,8 @@ Listing 7-11.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs:here}}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-12: Bringing a module into scope with `use` and
@@ -50,8 +50,8 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs:here}}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function
@@ -135,8 +135,8 @@ changed to `pub use`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs:here}}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-17: Making a name available for any code to use

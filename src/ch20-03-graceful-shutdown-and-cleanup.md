@@ -112,7 +112,7 @@ variants.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-07-define-message-enum/src/lib.rs:here}}
 ```
 
@@ -256,13 +256,13 @@ Here’s the full code for reference:
 <span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/bin/main.rs:all}}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/bin/main.rs}}
 ```
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/lib.rs:here}}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/lib.rs}}
 ```
 
 We could do more here! If you want to continue enhancing this project, here are

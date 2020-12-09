@@ -84,5 +84,3 @@ impl Worker {
         }
     }
 }
-
-fn main() {}

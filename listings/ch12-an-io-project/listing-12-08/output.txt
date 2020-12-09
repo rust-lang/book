@@ -3,4 +3,4 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep`
 thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

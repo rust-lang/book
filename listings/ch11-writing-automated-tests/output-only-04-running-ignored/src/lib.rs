@@ -10,5 +10,3 @@ fn expensive_test() {
     // code that takes an hour to run
 }
 // ANCHOR_END: here
-
-fn main() {}

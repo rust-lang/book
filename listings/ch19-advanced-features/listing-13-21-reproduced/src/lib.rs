@@ -23,5 +23,3 @@ impl Iterator for Counter {
         }
     }
 }
-
-fn main() {}

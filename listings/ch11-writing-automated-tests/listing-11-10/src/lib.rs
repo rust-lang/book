@@ -1,6 +1,3 @@
-fn main() {}
-
-// ANCHOR: here
 fn prints_and_returns_10(a: i32) -> i32 {
     println!("I got the value {}", a);
     10
@@ -22,4 +19,3 @@ mod tests {
         assert_eq!(5, value);
     }
 }
-// ANCHOR_END: here

@@ -1,16 +1,16 @@
 $ cargo build
    Compiling gui v0.1.0 (file:///projects/gui)
-error[E0038]: the trait `std::clone::Clone` cannot be made into an object
- --> src/lib.rs:2:5
+error[E0038]: the trait `Clone` cannot be made into an object
+ --> src/lib.rs:2:21
   |
 2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone` cannot be made into an object
+  |                     ^^^^^^^^^^^^^^^^^^^ the trait `Clone` cannot be made into an object
   |
-  = note: the trait cannot require that `Self : Sized`
+  = note: the trait cannot be made into an object because it requires `Self: Sized`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0038`.
-error: could not compile `gui`.
+error: could not compile `gui`
 
 To learn more, run the command again with --verbose.

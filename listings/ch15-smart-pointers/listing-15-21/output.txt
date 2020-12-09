@@ -11,6 +11,8 @@ error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a `
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0596`.
-error: could not compile `limit-tracker`.
+error: could not compile `limit-tracker`
 
 To learn more, run the command again with --verbose.
+warning: build failed, waiting for other jobs to finish...
+error: build failed

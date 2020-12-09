@@ -4,11 +4,11 @@ error[E0507]: cannot move out of `worker.thread` which is behind a mutable refer
   --> src/lib.rs:52:13
    |
 52 |             worker.thread.join().unwrap();
-   |             ^^^^^^^^^^^^^ move occurs because `worker.thread` has type `std::thread::JoinHandle<()>`, which does not implement the `Copy` trait
+   |             ^^^^^^^^^^^^^ move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0507`.
-error: could not compile `hello`.
+error: could not compile `hello`
 
 To learn more, run the command again with --verbose.

@@ -13,5 +13,3 @@ pub trait Write {
     fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<()>;
 }
 // ANCHOR_END: there
-
-fn main() {}

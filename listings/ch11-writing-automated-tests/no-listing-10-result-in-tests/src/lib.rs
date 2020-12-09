@@ -1,7 +1,3 @@
-#![allow(unused_variables)]
-fn main() {}
-
-// ANCHOR: here
 #[cfg(test)]
 mod tests {
     #[test]
@@ -13,4 +9,3 @@ mod tests {
         }
     }
 }
-// ANCHOR_END: here

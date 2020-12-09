@@ -1,16 +1,16 @@
 $ cargo run
    Compiling collections v0.1.0 (file:///projects/collections)
-error[E0277]: the type `std::string::String` cannot be indexed by `{integer}`
+error[E0277]: the type `String` cannot be indexed by `{integer}`
  --> src/main.rs:3:13
   |
 3 |     let h = s1[0];
-  |             ^^^^^ `std::string::String` cannot be indexed by `{integer}`
+  |             ^^^^^ `String` cannot be indexed by `{integer}`
   |
-  = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
+  = help: the trait `Index<{integer}>` is not implemented for `String`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `collections`.
+error: could not compile `collections`
 
 To learn more, run the command again with --verbose.

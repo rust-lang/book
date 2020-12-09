@@ -45,5 +45,3 @@ mod tests {
         assert!(!smaller.can_hold(&larger));
     }
 }
-
-fn main() {}

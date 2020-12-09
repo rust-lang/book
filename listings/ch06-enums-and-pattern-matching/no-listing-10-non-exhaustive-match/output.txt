@@ -1,16 +1,17 @@
 $ cargo run
    Compiling enums v0.1.0 (file:///projects/enums)
 error[E0004]: non-exhaustive patterns: `None` not covered
- --> src/main.rs:3:15
-  |
-3 |         match x {
-  |               ^ pattern `None` not covered
-  |
-  = help: ensure that all possible cases are being handled, possibly by adding wildcards or more match arms
+   --> src/main.rs:3:15
+    |
+3   |         match x {
+    |               ^ pattern `None` not covered
+    |
+    = help: ensure that all possible cases are being handled, possibly by adding wildcards or more match arms
+    = note: the matched value is of type `Option<i32>`
 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0004`.
-error: could not compile `enums`.
+error: could not compile `enums`
 
 To learn more, run the command again with --verbose.

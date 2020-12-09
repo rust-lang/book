@@ -9,8 +9,8 @@ test tests::it_sends_an_over_75_percent_warning_message ... FAILED
 failures:
 
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
-thread 'main' panicked at 'already borrowed: BorrowMutError', src/libcore/result.rs:1188:5
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace.
+thread 'main' panicked at 'already borrowed: BorrowMutError', src/lib.rs:60:53
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
 failures:

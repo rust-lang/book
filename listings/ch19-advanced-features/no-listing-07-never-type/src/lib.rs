@@ -6,5 +6,3 @@ fn bar() -> ! {
     // ANCHOR: here
 }
 // ANCHOR_END: here
-
-fn main() {}

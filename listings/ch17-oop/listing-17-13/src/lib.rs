@@ -26,5 +26,3 @@ trait State {}
 struct Draft {}
 
 impl State for Draft {}
-
-fn main() {}

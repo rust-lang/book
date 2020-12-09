@@ -15,6 +15,6 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0502`.
-error: could not compile `ownership`.
+error: could not compile `ownership`
 
 To learn more, run the command again with --verbose.

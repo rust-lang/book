@@ -11,6 +11,6 @@ error[E0133]: call to unsafe function is unsafe and requires unsafe function or 
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0133`.
-error: could not compile `unsafe-example`.
+error: could not compile `unsafe-example`
 
 To learn more, run the command again with --verbose.

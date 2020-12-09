@@ -10,6 +10,6 @@ error: `..` can only be used once per tuple pattern
 
 error: aborting due to previous error
 
-error: could not compile `patterns`.
+error: could not compile `patterns`
 
 To learn more, run the command again with --verbose.

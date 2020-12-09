@@ -13,6 +13,6 @@ error[E0597]: `string2` does not live long enough
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0597`.
-error: could not compile `chapter10`.
+error: could not compile `chapter10`
 
 To learn more, run the command again with --verbose.

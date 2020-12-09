@@ -3,6 +3,9 @@ $ cargo run
 error[E0277]: `Point` doesn't implement `std::fmt::Display`
   --> src/main.rs:20:6
    |
+3  | trait OutlinePrint: fmt::Display {
+   |                     ------------ required by this bound in `OutlinePrint`
+...
 20 | impl OutlinePrint for Point {}
    |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter
    |
@@ -12,6 +15,6 @@ error[E0277]: `Point` doesn't implement `std::fmt::Display`
 error: aborting due to previous error
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `traits-example`.
+error: could not compile `traits-example`
 
 To learn more, run the command again with --verbose.

@@ -1,4 +1,3 @@
-// ANCHOR: here
 mod front_of_house {
     mod hosting {
         fn add_to_waitlist() {}
@@ -14,6 +13,3 @@ mod front_of_house {
         fn take_payment() {}
     }
 }
-// ANCHOR_END: here
-
-fn main() {}

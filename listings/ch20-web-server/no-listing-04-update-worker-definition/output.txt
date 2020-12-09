@@ -1,10 +1,10 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
-error[E0599]: no method named `join` found for type `std::option::Option<std::thread::JoinHandle<()>>` in the current scope
+error[E0599]: no method named `join` found for enum `Option<JoinHandle<()>>` in the current scope
   --> src/lib.rs:52:27
    |
 52 |             worker.thread.join().unwrap();
-   |                           ^^^^ method not found in `std::option::Option<std::thread::JoinHandle<()>>`
+   |                           ^^^^ method not found in `Option<JoinHandle<()>>`
 
 error[E0308]: mismatched types
   --> src/lib.rs:72:22
@@ -12,16 +12,16 @@ error[E0308]: mismatched types
 72 |         Worker { id, thread }
    |                      ^^^^^^
    |                      |
-   |                      expected enum `std::option::Option`, found struct `std::thread::JoinHandle`
+   |                      expected enum `Option`, found struct `JoinHandle`
    |                      help: try using a variant of the expected enum: `Some(thread)`
    |
-   = note: expected enum `std::option::Option<std::thread::JoinHandle<()>>`
-            found struct `std::thread::JoinHandle<_>`
+   = note: expected enum `Option<JoinHandle<()>>`
+            found struct `JoinHandle<_>`
 
 error: aborting due to 2 previous errors
 
 Some errors have detailed explanations: E0308, E0599.
 For more information about an error, try `rustc --explain E0308`.
-error: could not compile `hello`.
+error: could not compile `hello`
 
 To learn more, run the command again with --verbose.

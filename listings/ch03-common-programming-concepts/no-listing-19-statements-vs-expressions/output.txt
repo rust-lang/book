@@ -1,9 +1,32 @@
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+error[E0658]: `let` expressions in this position are experimental
+ --> src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^^^^^^^
+  |
+  = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
+
 error: expected expression, found statement (`let`)
  --> src/main.rs:2:14
   |
 2 |     let x = (let y = 6);
-  |              ^^^
+  |              ^^^^^^^^^
   |
   = note: variable declaration using `let` is a statement
+
+warning: unnecessary parentheses around assigned value
+ --> src/main.rs:2:13
+  |
+2 |     let x = (let y = 6);
+  |             ^^^^^^^^^^^ help: remove these parentheses
+  |
+  = note: `#[warn(unused_parens)]` on by default
+
+error: aborting due to 2 previous errors; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `functions`
+
+To learn more, run the command again with --verbose.

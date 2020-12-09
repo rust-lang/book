@@ -189,8 +189,8 @@ characteristics:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-02-impl-threadpool-new/src/lib.rs:here}}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-02-impl-threadpool-new/src/lib.rs}}
 ```
 
 We chose `usize` as the type of the `size` parameter, because we know that a
@@ -246,7 +246,7 @@ the thread will take to execute. Let’s create an `execute` method on
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-03-define-execute/src/lib.rs:here}}
 ```
 
@@ -287,7 +287,7 @@ zero by using the `assert!` macro, as shown in Listing 20-13.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-13/src/lib.rs:here}}
 ```
 
@@ -404,7 +404,7 @@ Ready? Here is Listing 20-15 with one way to make the preceding modifications.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-15/src/lib.rs:here}}
 ```
 
@@ -459,7 +459,7 @@ the channel.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-16/src/lib.rs:here}}
 ```
 
@@ -511,7 +511,7 @@ receiver at a time. Listing 20-18 shows the changes we need to make.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-18/src/lib.rs:here}}
 ```
 
@@ -535,7 +535,7 @@ at Listing 20-19.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-19/src/lib.rs:here}}
 ```
 
@@ -615,6 +615,8 @@ warning: field is never read: `thread`
    |
 49 |     thread: thread::JoinHandle<()>,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: 3 warnings emitted
 
     Finished dev [unoptimized + debuginfo] target(s) in 1.40s
      Running `target/debug/main`
