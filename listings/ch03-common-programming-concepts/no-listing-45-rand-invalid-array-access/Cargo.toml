@@ -1,7 +1,7 @@
 [package]
-name = "bookdelme"
+name = "no-listing-45-rand-invalid-array-access/"
 version = "0.1.0"
-authors = ["froderick <jnikolaides@toolsonair.com>"]
+authors = ["nobody <att@att.dot>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
