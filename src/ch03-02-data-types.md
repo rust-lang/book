@@ -315,8 +315,7 @@ get the value `2` from index `[1]` in the array.
 ##### Invalid Array Element Access
 
 What happens if you try to access an element of an array that is past the end
-of the array? Say you change the example to the following code, which will
-compile but exit with an error when it runs:
+of the array? Say you change the example to the following code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -330,7 +329,26 @@ Running this code using `cargo run` produces the following result:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/output.txt}}
 ```
 
-The compilation didn’t produce any errors, but the program resulted in a
+Rust has our backs once again! The compiler realised that the only possible
+path for the program to take is to panic at runtime, and therefore forbade
+us from compiling it in the first place. That said, it's not infallible. For
+instance, suppose we were to change it to something like this, which will
+compile but exit with an error when it runs:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-45-rand-invalid-array-access/src/main.rs}}
+```
+
+Running this code using `cargo run` produces the following result:
+
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-45-rand-invalid-array-access/output.txt}}
+```
+
+This time, although the only possible value that the index could take was `15`,
+the compilation didn’t produce any errors. Still, the program resulted in a
 *runtime* error and didn’t exit successfully. When you attempt to access an
 element using indexing, Rust will check that the index you’ve specified is less
 than the array length. If the index is greater than or equal to the array
