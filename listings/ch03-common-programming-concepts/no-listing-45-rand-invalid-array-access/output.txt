@@ -1,0 +1,5 @@
+cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.02s
+     Running `target/debug/bookdelme`
+thread 'main' panicked at 'index out of bounds: the len is 5 but the index is 15', src/main.rs:7:19
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
