@@ -286,7 +286,7 @@ let s = "Hello, world!";
 fn first_word(s: &String) -> &str {
 ```
 
-더 경험이 많은 러스트인이라면 대신 아래와 같이 작성하는데, 그 이유는 `String`과 `&str` 둘 모두에
+더 경험이 많은 러스트인이라면 대신 아래와 같이 작성하는데, 그 이유는 `&String`과 `&str` 둘 모두에
 대한 같은 함수를 사용할 수 있도록 해주기 때문입니다.
 
 ```rust,ignore
