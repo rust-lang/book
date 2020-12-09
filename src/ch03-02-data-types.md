@@ -337,7 +337,7 @@ compile but exit with an error when it runs:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-45-rand-invalid-array-access/src/main.rs}}
 ```
 
