@@ -112,6 +112,9 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 > value that probably isn’t what you were expecting it to have. Relying on
 > integer overflow’s wrapping behavior is considered an error. If you want to
 > wrap explicitly, you can use the standard library type [`Wrapping`][wrapping].
+>
+> Integer overflow checking can be performed with the `checked_*` methods from
+> the standard library, for example `checked_add()`.
 
 #### Floating-Point Types
 
