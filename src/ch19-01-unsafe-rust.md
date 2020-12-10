@@ -408,7 +408,7 @@ that data accessed from different threads is done safely.
 
 ### Implementing an Unsafe Trait
 
-The final action that works only with `unsafe` is implementing an unsafe trait.
+Another use-case for `unsafe` is implementing an unsafe trait.
 A trait is unsafe when at least one of its methods has some invariant that the
 compiler can’t verify. We can declare that a trait is `unsafe` by adding the
 `unsafe` keyword before `trait` and marking the implementation of the trait as
@@ -437,8 +437,9 @@ those checks manually and indicate as such with `unsafe`.
 
 ### Accessing Fields of a Union
 
-A `union` is similar to a `struct`, but only one declared field is used in a
-particular instance at one time. Unions are primarily used to interface with
+The final action that works only with `unsafe` is accessing fields of a `union`
+which is similar to a `struct`, but with only one declared field being used
+in a particular instance at one time. Unions are primarily used to interface with
 unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
 the type of the data currently being stored in the union instance. You can
 learn more about unions in [the reference][reference].
@@ -457,5 +458,6 @@ ch04-02-references-and-borrowing.html#dangling-references
 ch03-01-variables-and-mutability.html#differences-between-variables-and-constants
 [extensible-concurrency-with-the-sync-and-send-traits]:
 ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
+
 [the-slice-type]: ch04-03-slices.html#the-slice-type
 [reference]: ../reference/items/unions.html
