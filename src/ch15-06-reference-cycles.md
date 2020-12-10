@@ -66,14 +66,13 @@ moment, we’ll get this output:
 
 The reference count of the `Rc<List>` instances in both `a` and `b` are 2
 after we change the list in `a` to point to `b`. At the end of `main`, Rust
-will try to drop `b` first, which will decrease the count of the `Rc<List>`
-instance in `b` by 1.
-
-However, because `a` is still referencing the `Rc<List>` that was in `b`, that
-`Rc<List>` has a count of 1 rather than 0, so the memory the `Rc<List>` has on
-the heap won’t be dropped. The memory will just sit there with a count of 1,
-forever. To visualize this reference cycle, we’ve created a diagram in Figure
-15-4.
+drops `b` which decreases the reference count of the `b` `Rc<List>` instance 
+by 1. However, the `b` `Rc<List>` can not be collected, because its reference
+count is 1, not 0. Then Rust drops `a` which decreases the reference count of
+the `a` `Rc<List>` instance by 1. This instance can not be collected either,
+because its count is 1, since the uncollected `b` `Rc<List>` instance still
+refers to it. The memory allocated to the list will remain uncollected forever.
+To visualize this reference cycle, we’ve created a diagram in Figure 15-4.
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
