@@ -69,7 +69,7 @@ Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits
+program is compiled on: 64 bits if you’re on a 64-bit architecture and 32 bits
 if you’re on a 32-bit architecture.
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
