@@ -110,11 +110,17 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 > of the values the type can hold. In the case of a `u8`, 256 becomes 0, 257
 > becomes 1, and so on. The program won’t panic, but the variable will have a
 > value that probably isn’t what you were expecting it to have. Relying on
-> integer overflow’s wrapping behavior is considered an error. If you want to
-> wrap explicitly, you can use the standard library type [`Wrapping`][wrapping].
+> integer overflow’s wrapping behavior is considered an error.
 >
-> Integer overflow checking can be performed with the `checked_*` methods from
-> the standard library, for example `checked_add()`.
+> To explicitly handle the possibility of overflow, you can use these families
+> of methods that the standard library provides on primitive numeric types:
+>
+> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`
+> - Return the `None` value if there is overflow with the `checked_*` methods
+> - Return the value and a boolean indicating whether there was overflow with
+>   the `overflowing_*` methods
+> - Saturate at the value's minimum or maximum values with `saturating_*`
+>   methods
 
 #### Floating-Point Types
 
