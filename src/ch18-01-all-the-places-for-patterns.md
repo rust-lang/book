@@ -126,10 +126,10 @@ The code in Listing 18-3 will print the following:
 ```
 
 We use the `enumerate` method to adapt an iterator to produce a value and that
-value’s index in the iterator, placed into a tuple. The first call to
-`next` produces the tuple `(0, 'a')`. When this value is matched to the
-pattern `(index, value)`, `index` will be `0` and `value` will be `'a'`,
-printing the first line of the output.
+value’s index in the iterator, placed into a tuple. The first value produced is
+the tuple `(0, 'a')`. When this value is matched to the pattern `(index,
+value)`, `index` will be `0` and `value` will be `'a'`, printing the first line
+of the output.
 
 ### `let` Statements
 
