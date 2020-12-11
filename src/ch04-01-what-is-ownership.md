@@ -361,7 +361,7 @@ different is going on.
 
 #### Stack-Only Data: Copy
 
-There’s another wrinkle we haven’t talked about yet. This code using integers – 
+There’s another wrinkle we haven’t talked about yet. This code using integers –
 part of which was shown in Listing 4-2 – works and is valid:
 
 ```rust
@@ -380,28 +380,27 @@ different from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
 types like integers that are stored on the stack (we’ll talk more about traits
-in Chapter 10). If a type has the `Copy` trait, an older variable is still
-usable after assignment. Rust won’t let us annotate a type with the `Copy`
-trait if the type, or any of its parts, has implemented the `Drop` trait. If
-the type needs something special to happen when the value goes out of scope and
-we add the `Copy` annotation to that type, we’ll get a compile-time error. To
-learn about how to add the `Copy` annotation to your type, see [“Derivable
-Traits”][derivable-traits]<!-- ignore --> in Appendix C.
+in Chapter 10). If a type implements the `Copy` trait, an older variable is
+still usable after assignment. Rust won’t let us annotate a type with the
+`Copy` trait if the type, or any of its parts, has implemented the `Drop`
+trait. If the type needs something special to happen when the value goes out of
+scope and we add the `Copy` annotation to that type, we’ll get a compile-time
+error. To learn about how to add the `Copy` annotation to your type to
+implement the trait, see [“Derivable Traits”][derivable-traits]<!-- ignore -->
+in Appendix C.
 
-So what types are `Copy`able? You can check the documentation for the given type to
-be sure, but as a general rule: 
-
-1. Any group of simple scalar values can have the `Copy` trait, 
-2. Nothing that requires allocation or is some form of resource is `Copy`able. 
-
-Here are some of the types that are `Copy`able:
+So what types implement the `Copy` trait? You can check the documentation for
+the given type to be sure, but as a general rule, any group of simple scalar
+values can implement `Copy`, and nothing that requires allocation or is some
+form of resource can implement `Copy`. Here are some of the types that
+implement `Copy`:
 
 * All the integer types, such as `u32`.
 * The Boolean type, `bool`, with values `true` and `false`.
 * All the floating point types, such as `f64`.
 * The character type, `char`.
-* Tuples, if they only contain types that are also `Copy`. For example,
-  `(i32, i32)` is `Copy`, but `(i32, String)` is not.
+* Tuples, if they only contain types that also implement `Copy`. For example,
+  `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
 
 ### Ownership and Functions
 
