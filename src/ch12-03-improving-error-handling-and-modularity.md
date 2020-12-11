@@ -315,7 +315,7 @@ is an `Err` value, this method calls the code in the *closure*, which is an
 anonymous function we define and pass as an argument to `unwrap_or_else`. We’ll
 cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For now,
 you just need to know that `unwrap_or_else` will pass the inner value of the
-`Err`, which in this case is the static string `not enough arguments` that we
+`Err`, which in this case is the static string `"not enough arguments"` that we
 added in Listing 12-9, to our closure in the argument `err` that appears
 between the vertical pipes. The code in the closure can then use the `err`
 value when it runs.
