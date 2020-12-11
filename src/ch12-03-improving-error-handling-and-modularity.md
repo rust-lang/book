@@ -495,7 +495,6 @@ Let’s take advantage of this newfound modularity by doing something that would
 have been difficult with the old code but is easy with the new code: we’ll
 write some tests!
 
-[the-static-lifetime]: ch10-03-lifetime-syntax.html#the-static-lifetime
 [ch13]: ch13-00-functional-features.html
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling
