@@ -34,7 +34,7 @@
 `adder`라고 하는 새로운 라이브러리 프로젝트를 만듭시다:
 
 ```text
-$ cargo new adder
+$ cargo new adder --lib
      Created library `adder` project
 $ cd adder
 ```
