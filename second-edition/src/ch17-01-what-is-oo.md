@@ -10,7 +10,7 @@
 
 ### 객체는 데이터와 동작을 담습니다
 
-흔히 The Gang of Four라고도 불리우는 Enoch Gamma, Richard Helm, Ralph Johnson,
+흔히 The Gang of Four라고도 불리우는 Erich Gamma, Richard Helm, Ralph Johnson,
 그리고 John Vlissides (Addison-Wesley Professional, 1994)의 책 *Design Patterns:
 Elements of Reusable Object-Oriented Software*은 객체 지향 디자인 패턴의 편람입니다.
 이 책에서는 OOP를 다음과 같이 정의합니다.
@@ -159,7 +159,7 @@ Listing 10-14에서 우리가 `Summary` 트레잇에 `summarize` 메소드의
 
 > ### 다형성
 >
-> 많은 사람들아 다형성을 상속과 동일시 합니다. 하지만 다형성은 다수의
+> 많은 사람들이 다형성을 상속과 동일시 합니다. 하지만 다형성은 다수의
 > 타입들의 데이터에 대해 동작 가능한 코드를 나타내는 더 범용적인 개념입니다.
 > 상속에서는 이런 타입들이 일반적으로 하위클래스에 해당합니다.
 >
