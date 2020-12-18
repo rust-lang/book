@@ -37,7 +37,7 @@ jobs:
       run: |
         rustup set profile minimal
         rustup toolchain install nightly -c rust-docs
-        rustup default nightly
+        rustup override set nightly
     - name: Install mdbook
       run: |
         mkdir bin
