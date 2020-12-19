@@ -362,8 +362,9 @@ versions of those crates you require. In this case, we’ll specify the `rand`
 crate with the semantic version specifier `0.5.5`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
 standard for writing version numbers. The number `0.5.5` is actually shorthand
-for `^0.5.5`, which means any version that is at least `0.5.5`, but below `0.6.0`.
-These versions are public API compatible with version 0.5.5.
+for `^0.5.5`, which means any version that is at least `0.5.5` but below
+`0.6.0`. Cargo considers these versions to have public APIs compatible with
+version `0.5.5`.
 
 [semver]: http://semver.org
 
