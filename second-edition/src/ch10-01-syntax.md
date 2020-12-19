@@ -180,7 +180,6 @@ fn main() {
 이용한 제네릭이고 `x`와 `y`가 이게 결국 무엇이 되든 간에 *둘 다* 동일한 타입을 가지고 있다고
 말할 수 있음을 주목하세요. 만일 Listing 10-7에서와 같이 다른 타입의 값을 갖는 `Point`의
 인스턴스를 만들고자 한다면, 컴파일이 되지 않을 것입니다:
-`
 
 <span class="filename">Filename: src/main.rs</span>
 
