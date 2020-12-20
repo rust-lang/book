@@ -1,3 +1,5 @@
+extern crate rand;
+
 // ANCHOR: all
 use std::io;
 // ANCHOR: ch07-04
