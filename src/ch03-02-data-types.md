@@ -315,8 +315,7 @@ get the value `2` from index `[1]` in the array.
 ##### Invalid Array Element Access
 
 What happens if you try to access an element of an array that is past the end
-of the array? Say you change the example to the following code, which will
-compile but exit with an error when it runs:
+of the array? If you change the example to the following code, it will not compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -324,23 +323,27 @@ compile but exit with an error when it runs:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
-Running this code using `cargo run` produces the following result:
+Building this code using `cargo build` produces the following result:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/output.txt}}
 ```
 
-The compilation didn’t produce any errors, but the program resulted in a
-*runtime* error and didn’t exit successfully. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the array
-length, Rust will panic.
+When the compiler can prove that invalid array access occurs, it will fail to compile.
+However, there are some cases where the compilation won't produce any errors, but the
+program itself will fail with a runtime error and won't exit successfully.
+
+At runtime, when you attempt to access an element using indexing, Rust will check that
+the index you’ve specified is less than the array length. If the index is greater than
+or equal to the array length, Rust will panic.
 
 This is the first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+kind of error by not allowing the program to compile, or it might panic at runtime
+if the error could not be identified at compile-time, which would immediately exit
+the program instead of allowing the invalid memory access to occur.
+Chapter 9 discusses more of Rust’s error handling.
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number

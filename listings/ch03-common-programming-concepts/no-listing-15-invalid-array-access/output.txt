@@ -1,4 +1,4 @@
-$ cargo run
+$ cargo build
    Compiling arrays v0.1.0 (file:///projects/arrays)
 error: this operation will panic at runtime
  --> src/main.rs:5:19
