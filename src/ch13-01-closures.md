@@ -278,7 +278,7 @@ The compiler gives us this error:
 
 The first time we call `example_closure` with the `String` value, the compiler
 infers the type of `x` and the return type of the closure to be `String`. Those
-types are then locked in to the closure in `example_closure`, and we get a type
+types are then locked into the closure in `example_closure`, and we get a type
 error if we try to use a different type with the same closure.
 
 ### Storing Closures Using Generic Parameters and the `Fn` Traits
@@ -430,8 +430,8 @@ Run this test with the `Cacher` implementation in Listing 13-9 and Listing
 ```
 
 The problem is that the first time we called `c.value` with 1, the `Cacher`
-instance saved `Some(1)` in `self.value`. Thereafter, no matter what we pass in
-to the `value` method, it will always return 1.
+instance saved `Some(1)` in `self.value`. Thereafter, no matter what we pass into
+the `value` method, it will always return 1.
 
 Try modifying `Cacher` to hold a hash map rather than a single value. The keys
 of the hash map will be the `arg` values that are passed in, and the values of
