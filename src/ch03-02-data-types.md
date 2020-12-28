@@ -329,7 +329,7 @@ compile but exit with an error when it runs:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,ignore
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/src/main.rs}}
 ```
 
@@ -339,8 +339,10 @@ Running this code using `cargo run` produces the following result:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access/output.txt}}
 ```
 
-The compilation didn’t produce any errors, but the program resulted in a
-*runtime* error and didn’t exit successfully. When you attempt to access an
+For this simple case, the compiler produces an error, which indicates
+the index is out of bounds. For some more complicated cases, the compiler
+might not be able to produce any errors, but the programs will still result in a
+*runtime* error and don't exit successfully. When you attempt to access an
 element using indexing, Rust will check that the index you’ve specified is less
 than the array length. If the index is greater than or equal to the array
 length, Rust will panic.
