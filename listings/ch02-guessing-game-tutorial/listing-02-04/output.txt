@@ -2,7 +2,7 @@ $ cargo build
    Compiling libc v0.2.51
    Compiling rand_core v0.4.0
    Compiling rand_core v0.3.1
-   Compiling rand v0.5.6
+   Compiling rand v0.8.0
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
   --> src/main.rs:22:21
