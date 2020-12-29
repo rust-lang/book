@@ -1,0 +1,20 @@
+$ cargo build
+   Compiling functions-example v0.1.0 (file:///projects/functions-example)
+error[E0746]: return type cannot have an unboxed trait object
+ --> src/lib.rs:1:25
+  |
+1 | fn returns_closure() -> dyn Fn(i32) -> i32 {
+  |                         ^^^^^^^^^^^^^^^^^^ doesn't have a size known at compile-time
+  |
+  = note: for information on `impl Trait`, see <https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-implement-traits>
+help: use `impl Fn(i32) -> i32` as the return type, as all return paths are of type `[closure@src/lib.rs:2:5: 2:14]`, which implements `Fn(i32) -> i32`
+  |
+1 | fn returns_closure() -> impl Fn(i32) -> i32 {
+  |                         ^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0746`.
+error: could not compile `functions-example`
+
+To learn more, run the command again with --verbose.

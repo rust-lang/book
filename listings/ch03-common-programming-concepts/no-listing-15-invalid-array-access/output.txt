@@ -1,0 +1,15 @@
+$ cargo run
+   Compiling arrays v0.1.0 (file:///projects/arrays)
+error: this operation will panic at runtime
+ --> src/main.rs:5:19
+  |
+5 |     let element = a[index];
+  |                   ^^^^^^^^ index out of bounds: the length is 5 but the index is 10
+  |
+  = note: `#[deny(unconditional_panic)]` on by default
+
+error: aborting due to previous error
+
+error: could not compile `arrays`
+
+To learn more, run the command again with --verbose.

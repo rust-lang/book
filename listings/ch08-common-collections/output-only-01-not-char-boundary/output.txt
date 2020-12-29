@@ -1,0 +1,6 @@
+$ cargo run
+   Compiling collections v0.1.0 (file:///projects/collections)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/collections`
+thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/main.rs:4:14
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

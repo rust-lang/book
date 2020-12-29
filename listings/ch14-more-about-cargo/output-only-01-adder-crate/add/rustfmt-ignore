@@ -1,0 +1,2 @@
+This listing is used for demonstrating how to set up a workspace, but the workspace isn't
+completely set up yet, so rustfmt complains the crate mentioned in Cargo.toml doesn't exist yet.

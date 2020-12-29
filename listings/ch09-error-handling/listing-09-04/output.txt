@@ -1,0 +1,6 @@
+$ cargo run
+   Compiling error-handling v0.1.0 (file:///projects/error-handling)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.73s
+     Running `target/debug/error-handling`
+thread 'main' panicked at 'Problem opening the file: Os { code: 2, kind: NotFound, message: "No such file or directory" }', src/main.rs:8:23
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
