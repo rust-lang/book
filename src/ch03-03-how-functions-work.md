@@ -22,7 +22,7 @@ function body begins and ends.
 We can call any function we’ve defined by entering its name followed by a set
 of parentheses. Because `another_function` is defined in the program, it can be
 called from inside the `main` function. Note that we defined `another_function`
-*after* the `main` function in the source code; we could have defined it before
+*after* the `main` function in the source code. we could have defined it before
 as well. Rust doesn’t care where you define your functions, only that they’re
 defined somewhere.
 
