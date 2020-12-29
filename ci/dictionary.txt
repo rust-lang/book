@@ -6,6 +6,7 @@ adaptor
 adaptors
 AddAssign
 Addr
+afdc
 aggregator
 AGraph
 aliasability
@@ -18,6 +19,7 @@ APIs
 app's
 aren
 args
+ArgumentV
 associativity
 async
 atomics
@@ -67,6 +69,7 @@ chXX
 chYY
 clippy
 clippy's
+cmdlet
 coercions
 combinator
 ConcreteType
@@ -126,6 +129,7 @@ doccratesio
 DOCTYPE
 doesn
 disambiguating
+DisplayBacktrace
 DivAssign
 DraftPost
 DSTs
@@ -160,7 +164,6 @@ Filesystem
 filesystem's
 filesystems
 Firefox
-FnBox
 FnMut
 FnOnce
 formatter
@@ -196,6 +199,7 @@ Hoare
 Hola
 homogenous
 html
+https
 hyperoptimize
 hypotheticals
 Iceburgh
@@ -248,6 +252,7 @@ libpanic
 librarys
 libreoffice
 libstd
+libunwind
 lifecycle
 LimitTracker
 linter
@@ -313,6 +318,7 @@ nonadministrators
 nondeterministic
 nonequality
 nongeneric
+noplayground
 NotFound
 nsprust
 null's
@@ -335,6 +341,7 @@ parameterize
 ParseIntError
 PartialEq
 PartialOrd
+pbcopy
 PendingReview
 PendingReviewPost
 PlaceholderType
@@ -353,6 +360,7 @@ PrimaryColor
 println
 priv
 proc
+proto
 pthreads
 pushups
 QuitMessage
@@ -463,6 +471,7 @@ supertraits
 TcpListener
 TcpStream
 templating
+test_harness
 test's
 TextField
 That'd
@@ -472,6 +481,7 @@ timestamp
 Tiếng
 timeline
 tlborm
+tlsv
 TODO
 TokenStream
 toml
@@ -519,6 +529,7 @@ variable's
 variant's
 vers
 versa
+vert
 Versioning
 visualstudio
 Vlissides
