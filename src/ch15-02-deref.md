@@ -10,7 +10,7 @@ Let’s first look at how the dereference operator works with regular references
 Then we’ll try to define a custom type that behaves like `Box<T>`, and see why
 the dereference operator doesn’t work like a reference on our newly defined
 type. We’ll explore how implementing the `Deref` trait makes it possible for
-smart pointers to work in a similar way as references. Then we’ll look at
+smart pointers to work in ways similar to references. Then we’ll look at
 Rust’s *deref coercion* feature and how it lets us work with either references
 or smart pointers.
 
@@ -29,13 +29,7 @@ reference to the data:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-    let y = &x;
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 15-6: Using the dereference operator to follow a
@@ -51,15 +45,8 @@ we have access to the integer value `y` is pointing to that we can compare with
 If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
 error:
 
-```text
-error[E0277]: can't compare `{integer}` with `&{integer}`
- --> src/main.rs:6:5
-  |
-6 |     assert_eq!(5, y);
-  |     ^^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
-  |
-  = help: the trait `std::cmp::PartialEq<&{integer}>` is not implemented for
-  `{integer}`
+```console
+{{#include ../listings/ch15-smart-pointers/output-only-01-comparing-to-reference/output.txt}}
 ```
 
 Comparing a number and a reference to a number isn’t allowed because they’re
@@ -74,20 +61,14 @@ reference; the dereference operator will work as shown in Listing 15-7:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-    let y = Box::new(x);
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
 ```
 
 <span class="caption">Listing 15-7: Using the dereference operator on a
 `Box<i32>`</span>
 
 The only difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a box pointing to the value in `x` rather than a
+`y` to be an instance of a box pointing to a copied value of `x` rather than a
 reference pointing to the value of `x`. In the last assertion, we can use the
 dereference operator to follow the box’s pointer in the same way that we did
 when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
@@ -107,13 +88,7 @@ Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct MyBox<T>(T);
-
-impl<T> MyBox<T> {
-    fn new(x: T) -> MyBox<T> {
-        MyBox(x)
-    }
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
@@ -131,13 +106,7 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 5;
-    let y = MyBox::new(x);
-
-    assert_eq!(5, x);
-    assert_eq!(5, *y);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same
@@ -145,12 +114,8 @@ way we used references and `Box<T>`</span>
 
 Here’s the resulting compilation error:
 
-```text
-error[E0614]: type `MyBox<{integer}>` cannot be dereferenced
-  --> src/main.rs:14:19
-   |
-14 |     assert_eq!(5, *y);
-   |                   ^^
+```console
+{{#include ../listings/ch15-smart-pointers/listing-15-09/output.txt}}
 ```
 
 Our `MyBox<T>` type can’t be dereferenced because we haven’t implemented that
@@ -168,16 +133,7 @@ contains an implementation of `Deref` to add to the definition of `MyBox`:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::ops::Deref;
-
-# struct MyBox<T>(T);
-impl<T> Deref for MyBox<T> {
-    type Target = T;
-
-    fn deref(&self) -> &T {
-        &self.0
-    }
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
@@ -226,13 +182,14 @@ Listing 15-9.
 ### Implicit Deref Coercions with Functions and Methods
 
 *Deref coercion* is a convenience that Rust performs on arguments to functions
-and methods. Deref coercion converts a reference to a type that implements
-`Deref` into a reference to a type that `Deref` can convert the original type
-into. Deref coercion happens automatically when we pass a reference to a
-particular type’s value as an argument to a function or method that doesn’t
-match the parameter type in the function or method definition. A sequence of
-calls to the `deref` method converts the type we provided into the type the
-parameter needs.
+and methods. Deref coercion works only on types that implement the `Deref`
+trait. Deref coercion converts such a type into a reference to another type.
+For example, deref coercion can convert `&String` to `&str` because `String`
+implements the `Deref` trait such that it returns `str`. Deref coercion happens
+automatically when we pass a reference to a particular type’s value as an
+argument to a function or method that doesn’t match the parameter type in the
+function or method definition. A sequence of calls to the `deref` method
+converts the type we provided into the type the parameter needs.
 
 Deref coercion was added to Rust so that programmers writing function and
 method calls don’t need to add as many explicit references and dereferences
@@ -247,9 +204,7 @@ parameter:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn hello(name: &str) {
-    println!("Hello, {}!", name);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-11: A `hello` function that has the parameter
@@ -262,32 +217,7 @@ with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use std::ops::Deref;
-#
-# struct MyBox<T>(T);
-#
-# impl<T> MyBox<T> {
-#     fn new(x: T) -> MyBox<T> {
-#         MyBox(x)
-#     }
-# }
-#
-# impl<T> Deref for MyBox<T> {
-#     type Target = T;
-#
-#     fn deref(&self) -> &T {
-#         &self.0
-#     }
-# }
-#
-# fn hello(name: &str) {
-#     println!("Hello, {}!", name);
-# }
-#
-fn main() {
-    let m = MyBox::new(String::from("Rust"));
-    hello(&m);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-12: Calling `hello` with a reference to a
@@ -308,32 +238,7 @@ of type `&MyBox<String>`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use std::ops::Deref;
-#
-# struct MyBox<T>(T);
-#
-# impl<T> MyBox<T> {
-#     fn new(x: T) -> MyBox<T> {
-#         MyBox(x)
-#     }
-# }
-#
-# impl<T> Deref for MyBox<T> {
-#     type Target = T;
-#
-#     fn deref(&self) -> &T {
-#         &self.0
-#     }
-# }
-#
-# fn hello(name: &str) {
-#     println!("Hello, {}!", name);
-# }
-#
-fn main() {
-    let m = MyBox::new(String::from("Rust"));
-    hello(&(*m)[..]);
-}
+{{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 15-13: The code we would have to write if Rust
@@ -375,7 +280,8 @@ never coerce to mutable references. Because of the borrowing rules, if you have
 a mutable reference, that mutable reference must be the only reference to that
 data (otherwise, the program wouldn’t compile). Converting one mutable
 reference to one immutable reference will never break the borrowing rules.
-Converting an immutable reference to a mutable reference would require that
-there is only one immutable reference to that data, and the borrowing rules
-don’t guarantee that. Therefore, Rust can’t make the assumption that converting
-an immutable reference to a mutable reference is possible.
+Converting an immutable reference to a mutable reference would require that the
+initial immutable reference is the only immutable reference to that data, but
+the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
+assumption that converting an immutable reference to a mutable reference is
+possible.

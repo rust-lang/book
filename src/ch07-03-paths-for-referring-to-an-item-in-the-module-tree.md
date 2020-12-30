@@ -1,10 +1,10 @@
 ## Paths for Referring to an Item in the Module Tree
 
-To show Rust where to find an item in a module tree, we use a *path* in the
-same way we use a path when navigating a filesystem. If we want to call a
-function, we need to know its path.
+To show Rust where to find an item in a module tree, we use a path in the same
+way we use a path when navigating a filesystem. If we want to call a function,
+we need to know its path.
 
-A *path* can take two forms:
+A path can take two forms:
 
 * An *absolute path* starts from a crate root by using a crate name or a
   literal `crate`.
@@ -19,28 +19,16 @@ Let’s return to the example in Listing 7-1. How do we call the
 `add_to_waitlist` function? In Listing 7-3, we simplified our code a bit by
 removing some of the modules and functions. We’ll show two ways to call the
 `add_to_waitlist` function from a new function `eat_at_restaurant` defined in
-the crate root. The `eat_at_restaurant` function is part of our library crate's
-public API, so we mark it with the `pub` keyword. In the ["Exposing Paths with
-the `pub` Keyword"][pub]<!-- ignore --> section, we'll go into more detail
+the crate root. The `eat_at_restaurant` function is part of our library crate’s
+public API, so we mark it with the `pub` keyword. In the [”Exposing Paths with
+the `pub` Keyword”][pub]<!-- ignore --> section, we’ll go into more detail
 about `pub`. Note that this example won’t compile just yet; we’ll explain why
 in a bit.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-mod front_of_house {
-    mod hosting {
-        fn add_to_waitlist() {}
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-3: Calling the `add_to_waitlist` function using
@@ -79,20 +67,8 @@ likely to move code definitions and item calls independently of each other.
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
 
-```text
-$ cargo build
-   Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0603]: module `hosting` is private
- --> src/lib.rs:9:28
-  |
-9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                            ^^^^^^^
-
-error[E0603]: module `hosting` is private
-  --> src/lib.rs:12:21
-   |
-12 |     front_of_house::hosting::add_to_waitlist();
-   |                     ^^^^^^^
+```console
+{{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
 <span class="caption">Listing 7-4: Compiler errors from building the code in
@@ -103,7 +79,7 @@ have the correct paths for the `hosting` module and the `add_to_waitlist`
 function, but Rust won’t let us use them because it doesn’t have access to the
 private sections.
 
-Modules aren’t only useful for organizing your code, they also define Rust’s
+Modules aren’t useful only for organizing your code. They also define Rust’s
 *privacy boundary*: the line that encapsulates the implementation details
 external code isn’t allowed to know about, call, or rely on. So, if you want to
 make an item like a function or struct private, you put it in a module.
@@ -114,15 +90,15 @@ can’t use the private items inside child modules, but items in child modules
 can use the items in their ancestor modules. The reason is that child modules
 wrap and hide their implementation details, but the child modules can see the
 context in which they’re defined. To continue with the restaurant metaphor,
-think of the privacy rules like the back office of a restaurant: what goes on
-in there is private to restaurant customers, but office managers can see and do
-everything in the restaurant in which they operate.
+think of the privacy rules as being like the back office of a restaurant: what
+goes on in there is private to restaurant customers, but office managers can
+see and do everything in the restaurant in which they operate.
 
 Rust chose to have the module system function this way so that hiding inner
 implementation details is the default. That way, you know which parts of the
 inner code you can change without breaking outer code. But you can expose inner
-parts of child modules code to outer ancestor modules by making an item public
-using the `pub` keyword.
+parts of child modules' code to outer ancestor modules by using the `pub`
+keyword to make an item public.
 
 ### Exposing Paths with the `pub` Keyword
 
@@ -134,19 +110,7 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-mod front_of_house {
-    pub mod hosting {
-        fn add_to_waitlist() {}
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-5: Declaring the `hosting` module as `pub` to
@@ -155,20 +119,8 @@ use it from `eat_at_restaurant`</span>
 Unfortunately, the code in Listing 7-5 still results in an error, as shown in
 Listing 7-6.
 
-```text
-$ cargo build
-   Compiling restaurant v0.1.0 (file:///projects/restaurant)
-error[E0603]: function `add_to_waitlist` is private
- --> src/lib.rs:9:37
-  |
-9 |     crate::front_of_house::hosting::add_to_waitlist();
-  |                                     ^^^^^^^^^^^^^^^
-
-error[E0603]: function `add_to_waitlist` is private
-  --> src/lib.rs:12:30
-   |
-12 |     front_of_house::hosting::add_to_waitlist();
-   |                              ^^^^^^^^^^^^^^^
+```console
+{{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 
 <span class="caption">Listing 7-6: Compiler errors from building the code in
@@ -189,29 +141,16 @@ keyword before its definition, as in Listing 7-7.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Absolute path
-    crate::front_of_house::hosting::add_to_waitlist();
-
-    // Relative path
-    front_of_house::hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-7: Adding the `pub` keyword to `mod hosting`
 and `fn add_to_waitlist` lets us call the function from
 `eat_at_restaurant`</span>
 
-Now the code will compile! Let’s look at the absolute and the relative path,
-and double-check why adding the `pub` keyword lets us use these paths in
+Now the code will compile! Let’s look at the absolute and the relative path and
+double-check why adding the `pub` keyword lets us use these paths in
 `add_to_waitlist` with respect to the privacy rules.
 
 In the absolute path, we start with `crate`, the root of our crate’s module
@@ -229,7 +168,7 @@ first step: rather than starting from the crate root, the path starts from
 `front_of_house`. The `front_of_house` module is defined within the same module
 as `eat_at_restaurant`, so the relative path starting from the module in which
 `eat_at_restaurant` is defined works. Then, because `hosting` and
-`add_to_waitlist` are marked with `pub`, the rest of the path works and this
+`add_to_waitlist` are marked with `pub`, the rest of the path works, and this
 function call is valid!
 
 ### Starting Relative Paths with `super`
@@ -245,18 +184,8 @@ the path to `serve_order` starting with `super`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-fn serve_order() {}
-
-mod back_of_house {
-    fn fix_incorrect_order() {
-        cook_order();
-        super::serve_order();
-    }
-
-    fn cook_order() {}
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-8: Calling a function using a relative path
@@ -287,33 +216,7 @@ or even see which fruit they’ll get.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod back_of_house {
-    pub struct Breakfast {
-        pub toast: String,
-        seasonal_fruit: String,
-    }
-
-    impl Breakfast {
-        pub fn summer(toast: &str) -> Breakfast {
-            Breakfast {
-                toast: String::from(toast),
-                seasonal_fruit: String::from("peaches"),
-            }
-        }
-    }
-}
-
-pub fn eat_at_restaurant() {
-    // Order a breakfast in the summer with Rye toast
-    let mut meal = back_of_house::Breakfast::summer("Rye");
-    // Change our mind about what bread we'd like
-    meal.toast = String::from("Wheat");
-    println!("I'd like {} toast please", meal.toast);
-
-    // The next line won't compile if we uncomment it; we're not allowed
-    // to see or modify the seasonal fruit that comes with the meal
-    // meal.seasonal_fruit = String::from("blueberries");
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-9: A struct with some public fields and some
@@ -329,7 +232,7 @@ Also, note that because `back_of_house::Breakfast` has a private field, the
 struct needs to provide a public associated function that constructs an
 instance of `Breakfast` (we’ve named it `summer` here). If `Breakfast` didn’t
 have such a function, we couldn’t create an instance of `Breakfast` in
-`eat_at_restaurant` because we can’t set the value of the private
+`eat_at_restaurant` because we couldn’t set the value of the private
 `seasonal_fruit` field in `eat_at_restaurant`.
 
 In contrast, if we make an enum public, all of its variants are then public. We
@@ -338,17 +241,7 @@ only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-mod back_of_house {
-    pub enum Appetizer {
-        Soup,
-        Salad,
-    }
-}
-
-pub fn eat_at_restaurant() {
-    let order1 = back_of_house::Appetizer::Soup;
-    let order2 = back_of_house::Appetizer::Salad;
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-10: Designating an enum as public makes all its

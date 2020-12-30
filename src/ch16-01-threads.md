@@ -71,22 +71,7 @@ thread and other text from a new thread:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-1: Creating a new thread to print one thing
@@ -96,6 +81,10 @@ Note that with this function, the new thread will be stopped when the main
 thread ends, whether or not it has finished running. The output from this
 program might be a little different every time, but it will look similar to the
 following:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the main thread!
@@ -139,24 +128,7 @@ in Listing 16-1 and call `join` to make sure the spawned thread finishes before
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
@@ -167,6 +139,10 @@ thread represented by the handle terminates. *Blocking* a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
 to `join` after the main thread’s `for` loop, running Listing 16-2 should
 produce output similar to this:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the main thread!
@@ -193,28 +169,15 @@ But let’s see what happens when we instead move `handle.join()` before the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let handle = thread::spawn(|| {
-        for i in 1..10 {
-            println!("hi number {} from the spawned thread!", i);
-            thread::sleep(Duration::from_millis(1));
-        }
-    });
-
-    handle.join().unwrap();
-
-    for i in 1..5 {
-        println!("hi number {} from the main thread!", i);
-        thread::sleep(Duration::from_millis(1));
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/no-listing-01-join-too-early/src/main.rs}}
 ```
 
 The main thread will wait for the spawned thread to finish and then run its
 `for` loop, so the output won’t be interleaved anymore, as shown here:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 hi number 1 from the spawned thread!
@@ -255,17 +218,7 @@ thread. However, this won’t yet work, as you’ll see in a moment.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(|| {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-3: Attempting to use a vector created by the
@@ -276,21 +229,8 @@ environment. Because `thread::spawn` runs this closure in a new thread, we
 should be able to access `v` inside that new thread. But when we compile this
 example, we get the following error:
 
-```text
-error[E0373]: closure may outlive the current function, but it borrows `v`,
-which is owned by the current function
- --> src/main.rs:6:32
-  |
-6 |     let handle = thread::spawn(|| {
-  |                                ^^ may outlive borrowed value `v`
-7 |         println!("Here's a vector: {:?}", v);
-  |                                           - `v` is borrowed here
-  |
-help: to force the closure to take ownership of `v` (and any other referenced
-variables), use the `move` keyword
-  |
-6 |     let handle = thread::spawn(move || {
-  |                                ^^^^^^^
+```console
+{{#include ../listings/ch16-fearless-concurrency/listing-16-03/output.txt}}
 ```
 
 Rust *infers* how to capture `v`, and because `println!` only needs a reference
@@ -304,19 +244,7 @@ that won’t be valid:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(|| {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    drop(v); // oh no!
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-4: A thread with a closure that attempts to
@@ -332,9 +260,12 @@ is also invalid. Oh no!
 To fix the compiler error in Listing 16-3, we can use the error message’s
 advice:
 
+<!-- manual-regeneration
+after automatic regeneration, look at listings/ch16-fearless-concurrency/listing-16-03/output.txt and copy the relevant part
+-->
+
 ```text
-help: to force the closure to take ownership of `v` (and any other referenced
-variables), use the `move` keyword
+help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
   |
 6 |     let handle = thread::spawn(move || {
   |                                ^^^^^^^
@@ -348,17 +279,7 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-
-fn main() {
-    let v = vec![1, 2, 3];
-
-    let handle = thread::spawn(move || {
-        println!("Here's a vector: {:?}", v);
-    });
-
-    handle.join().unwrap();
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-5: Using the `move` keyword to force a closure
@@ -371,18 +292,8 @@ isn’t allowed for a different reason. If we added `move` to the closure, we
 would move `v` into the closure’s environment, and we could no longer call
 `drop` on it in the main thread. We would get this compiler error instead:
 
-```text
-error[E0382]: use of moved value: `v`
-  --> src/main.rs:10:10
-   |
-6  |     let handle = thread::spawn(move || {
-   |                                ------- value moved (into closure) here
-...
-10 |     drop(v); // oh no!
-   |          ^ value used here after move
-   |
-   = note: move occurs because `v` has type `std::vec::Vec<i32>`, which does
-   not implement the `Copy` trait
+```console
+{{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
 Rust’s ownership rules have saved us again! We got an error from the code in

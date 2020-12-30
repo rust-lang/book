@@ -1,6 +1,6 @@
 ## Graceful Shutdown and Cleanup
 
-The code in Listing 20-21 is responding to requests asynchronously through the
+The code in Listing 20-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
 we’re not cleaning up anything. When we use the less elegant <span
@@ -18,24 +18,16 @@ accept only two requests before gracefully shutting down its thread pool.
 
 Let’s start with implementing `Drop` on our thread pool. When the pool is
 dropped, our threads should all join to make sure they finish their work.
-Listing 20-23 shows a first attempt at a `Drop` implementation; this code won’t
+Listing 20-22 shows a first attempt at a `Drop` implementation; this code won’t
 quite work yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,does_not_compile
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-        for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
-
-            worker.thread.join().unwrap();
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-22/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 20-23: Joining each thread when the thread pool
+<span class="caption">Listing 20-22: Joining each thread when the thread pool
 goes out of scope</span>
 
 First, we loop through each of the thread pool `workers`. We use `&mut` for
@@ -47,12 +39,8 @@ into an ungraceful shutdown.
 
 Here is the error we get when we compile this code:
 
-```text
-error[E0507]: cannot move out of borrowed content
-  --> src/lib.rs:65:13
-   |
-65 |             worker.thread.join().unwrap();
-   |             ^^^^^^ cannot move out of borrowed content
+```console
+{{#include ../listings/ch20-web-server/listing-20-22/output.txt}}
 ```
 
 The error tells us we can’t call `join` because we only have a mutable borrow
@@ -70,37 +58,15 @@ So we know we want to update the definition of `Worker` like this:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# use std::thread;
-struct Worker {
-    id: usize,
-    thread: Option<thread::JoinHandle<()>>,
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
 ```
 
 Now let’s lean on the compiler to find the other places that need to change.
 Checking this code, we get two errors:
 
-```text
-error[E0599]: no method named `join` found for type
-`std::option::Option<std::thread::JoinHandle<()>>` in the current scope
-  --> src/lib.rs:65:27
-   |
-65 |             worker.thread.join().unwrap();
-   |                           ^^^^
-
-error[E0308]: mismatched types
-  --> src/lib.rs:89:13
-   |
-89 |             thread,
-   |             ^^^^^^
-   |             |
-   |             expected enum `std::option::Option`, found struct
-   `std::thread::JoinHandle`
-   |             help: try using a variant of the expected type: `Some(thread)`
-   |
-   = note: expected type `std::option::Option<std::thread::JoinHandle<()>>`
-              found type `std::thread::JoinHandle<_>`
+```console
+{{#include ../listings/ch20-web-server/no-listing-04-update-worker-definition/output.txt}}
 ```
 
 Let’s address the second error, which points to the code at the end of
@@ -110,16 +76,7 @@ new `Worker`. Make the following changes to fix this error:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        // --snip--
-
-        Worker {
-            id,
-            thread: Some(thread),
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
 ```
 
 The first error is in our `Drop` implementation. We mentioned earlier that we
@@ -129,17 +86,7 @@ The following changes will do so:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-        for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
-
-            if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
 
 As discussed in Chapter 17, the `take` method on `Option` takes the `Some`
@@ -165,12 +112,8 @@ variants.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# struct Job;
-enum Message {
-    NewJob(Job),
-    Terminate,
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-define-message-enum/src/lib.rs:here}}
 ```
 
 This `Message` enum will either be a `NewJob` variant that holds the `Job` the
@@ -178,65 +121,15 @@ thread should run, or it will be a `Terminate` variant that will cause the
 thread to exit its loop and stop.
 
 We need to adjust the channel to use values of type `Message` rather than type
-`Job`, as shown in Listing 20-24.
+`Job`, as shown in Listing 20-23.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub struct ThreadPool {
-    workers: Vec<Worker>,
-    sender: mpsc::Sender<Message>,
-}
-
-// --snip--
-
-impl ThreadPool {
-    // --snip--
-
-    pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
-    {
-        let job = Box::new(f);
-
-        self.sender.send(Message::NewJob(job)).unwrap();
-    }
-}
-
-// --snip--
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
-        Worker {
-
-        let thread = thread::spawn(move ||{
-            loop {
-                let message = receiver.lock().unwrap().recv().unwrap();
-
-                match message {
-                    Message::NewJob(job) => {
-                        println!("Worker {} got a job; executing.", id);
-
-                        job.call_box();
-                    },
-                    Message::Terminate => {
-                        println!("Worker {} was told to terminate.", id);
-
-                        break;
-                    },
-                }
-            }
-        });
-
-        Worker {
-            id,
-            thread: Some(thread),
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-23/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 20-24: Sending and receiving `Message` values and
+<span class="caption">Listing 20-23: Sending and receiving `Message` values and
 exiting the loop if a `Worker` receives `Message::Terminate`</span>
 
 To incorporate the `Message` enum, we need to change `Job` to `Message` in two
@@ -248,35 +141,17 @@ received, and the thread will break out of the loop if the `Terminate` variant
 is received.
 
 With these changes, the code will compile and continue to function in the same
-way as it did after Listing 20-21. But we’ll get a warning because we aren’t
+way as it did after Listing 20-20. But we’ll get a warning because we aren’t
 creating any messages of the `Terminate` variety. Let’s fix this warning by
-changing our `Drop` implementation to look like Listing 20-25.
+changing our `Drop` implementation to look like Listing 20-24.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-        println!("Sending terminate message to all workers.");
-
-        for _ in &mut self.workers {
-            self.sender.send(Message::Terminate).unwrap();
-        }
-
-        println!("Shutting down all workers.");
-
-        for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
-
-            if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
-            }
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-24/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 20-25: Sending `Message::Terminate` to the
+<span class="caption">Listing 20-24: Sending `Message::Terminate` to the
 workers before calling `join` on each worker thread</span>
 
 We’re now iterating over the workers twice: once to send one `Terminate`
@@ -302,28 +177,15 @@ messages as there are workers, each worker will receive a terminate message
 before `join` is called on its thread.
 
 To see this code in action, let’s modify `main` to accept only two requests
-before gracefully shutting down the server, as shown in Listing 20-26.
+before gracefully shutting down the server, as shown in Listing 20-25.
 
 <span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    let pool = ThreadPool::new(4);
-
-    for stream in listener.incoming().take(2) {
-        let stream = stream.unwrap();
-
-        pool.execute(|| {
-            handle_connection(stream);
-        });
-    }
-
-    println!("Shutting down.");
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/bin/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-26: Shut down the server after serving two
+<span class="caption">Listing 20-25: Shut down the server after serving two
 requests by exiting the loop</span>
 
 You wouldn’t want a real-world web server to shut down after serving only two
@@ -337,11 +199,22 @@ end of `main`, and the `drop` implementation will run.
 Start the server with `cargo run`, and make three requests. The third request
 should error, and in your terminal you should see output similar to this:
 
-```text
+<!-- manual-regeneration
+cd listings/ch20-web-server/listing-20-25
+cargo run
+curl http://127.0.0.1:7878
+curl http://127.0.0.1:7878
+curl http://127.0.0.1:7878
+third request will error because server will have shut down
+copy output below
+Can't automate because the output depends on making requests
+-->
+
+```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
-     Running `target/debug/hello`
+    Finished dev [unoptimized + debuginfo] target(s) in 1.0s
+     Running `target/debug/main`
 Worker 0 got a job; executing.
 Worker 3 got a job; executing.
 Shutting down.
@@ -383,176 +256,13 @@ Here’s the full code for reference:
 <span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-use hello::ThreadPool;
-
-use std::io::prelude::*;
-use std::net::TcpListener;
-use std::net::TcpStream;
-use std::fs;
-use std::thread;
-use std::time::Duration;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-    let pool = ThreadPool::new(4);
-
-    for stream in listener.incoming().take(2) {
-        let stream = stream.unwrap();
-
-        pool.execute(|| {
-            handle_connection(stream);
-        });
-    }
-
-    println!("Shutting down.");
-}
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
-    stream.read(&mut buffer).unwrap();
-
-    let get = b"GET / HTTP/1.1\r\n";
-    let sleep = b"GET /sleep HTTP/1.1\r\n";
-
-    let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else if buffer.starts_with(sleep) {
-        thread::sleep(Duration::from_secs(5));
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
-    };
-
-    let contents = fs::read_to_string(filename).unwrap();
-
-    let response = format!("{}{}", status_line, contents);
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/bin/main.rs}}
 ```
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-use std::thread;
-use std::sync::mpsc;
-use std::sync::Arc;
-use std::sync::Mutex;
-
-enum Message {
-    NewJob(Job),
-    Terminate,
-}
-
-pub struct ThreadPool {
-    workers: Vec<Worker>,
-    sender: mpsc::Sender<Message>,
-}
-
-trait FnBox {
-    fn call_box(self: Box<Self>);
-}
-
-impl<F: FnOnce()> FnBox for F {
-    fn call_box(self: Box<F>) {
-        (*self)()
-    }
-}
-
-type Job = Box<dyn FnBox + Send + 'static>;
-
-impl ThreadPool {
-    /// Create a new ThreadPool.
-    ///
-    /// The size is the number of threads in the pool.
-    ///
-    /// # Panics
-    ///
-    /// The `new` function will panic if the size is zero.
-    pub fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (sender, receiver) = mpsc::channel();
-
-        let receiver = Arc::new(Mutex::new(receiver));
-
-        let mut workers = Vec::with_capacity(size);
-
-        for id in 0..size {
-            workers.push(Worker::new(id, Arc::clone(&receiver)));
-        }
-
-        ThreadPool {
-            workers,
-            sender,
-        }
-    }
-
-    pub fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
-    {
-        let job = Box::new(f);
-
-        self.sender.send(Message::NewJob(job)).unwrap();
-    }
-}
-
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-        println!("Sending terminate message to all workers.");
-
-        for _ in &mut self.workers {
-            self.sender.send(Message::Terminate).unwrap();
-        }
-
-        println!("Shutting down all workers.");
-
-        for worker in &mut self.workers {
-            println!("Shutting down worker {}", worker.id);
-
-            if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
-            }
-        }
-    }
-}
-
-struct Worker {
-    id: usize,
-    thread: Option<thread::JoinHandle<()>>,
-}
-
-impl Worker {
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
-        Worker {
-
-        let thread = thread::spawn(move ||{
-            loop {
-                let message = receiver.lock().unwrap().recv().unwrap();
-
-                match message {
-                    Message::NewJob(job) => {
-                        println!("Worker {} got a job; executing.", id);
-
-                        job.call_box();
-                    },
-                    Message::Terminate => {
-                        println!("Worker {} was told to terminate.", id);
-
-                        break;
-                    },
-                }
-            }
-        });
-
-        Worker {
-            id,
-            thread: Some(thread),
-        }
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/lib.rs}}
 ```
 
 We could do more here! If you want to continue enhancing this project, here are
@@ -562,9 +272,9 @@ some ideas:
 * Add tests of the library’s functionality.
 * Change calls to `unwrap` to more robust error handling.
 * Use `ThreadPool` to perform some task other than serving web requests.
-* Find a thread pool crate on *https://crates.io/* and implement a similar web
-  server using the crate instead. Then compare its API and robustness to the
-  thread pool we implemented.
+* Find a thread pool crate on [crates.io](https://crates.io/) and implement a
+  similar web server using the crate instead. Then compare its API and
+  robustness to the thread pool we implemented.
 
 ## Summary
 

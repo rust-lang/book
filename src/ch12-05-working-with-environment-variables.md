@@ -18,41 +18,8 @@ tests, as shown in Listing 12-20.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn case_sensitive() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Duct tape.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
-    }
-
-    #[test]
-    fn case_insensitive() {
-        let query = "rUsT";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            search_case_insensitive(query, contents)
-        );
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-20: Adding a new failing test for the
@@ -83,19 +50,8 @@ they’ll be the same case when we check whether the line contains the query.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let query = query.to_lowercase();
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-21/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-21: Defining the `search_case_insensitive`
@@ -104,7 +60,10 @@ function to lowercase the query and the line before comparing them</span>
 First, we lowercase the `query` string and store it in a shadowed variable with
 the same name. Calling `to_lowercase` on the query is necessary so no matter
 whether the user’s query is `"rust"`, `"RUST"`, `"Rust"`, or `"rUsT"`, we’ll
-treat the query as if it were `"rust"` and be insensitive to the case.
+treat the query as if it were `"rust"` and be insensitive to the case. While
+`to_lowercase` will handle basic Unicode, it won't be 100% accurate. If we were
+writing a real application, we'd want to do a bit more work here, but this section
+is about environment variables, not Unicode, so we'll leave it at that here.
 
 Note that `query` is now a `String` rather than a string slice, because calling
 `to_lowercase` creates new data rather than referencing existing data. Say the
@@ -121,12 +80,8 @@ query is.
 
 Let’s see if this implementation passes the tests:
 
-```text
-running 2 tests
-test tests::case_insensitive ... ok
-test tests::case_sensitive ... ok
-
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-21/output.txt}}
 ```
 
 Great! They passed. Now, let’s call the new `search_case_insensitive` function
@@ -137,12 +92,8 @@ this field anywhere yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-pub struct Config {
-    pub query: String,
-    pub filename: String,
-    pub case_sensitive: bool,
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:here}}
 ```
 
 Note that we added the `case_sensitive` field that holds a Boolean. Next, we
@@ -153,40 +104,8 @@ won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# use std::error::Error;
-# use std::fs::{self, File};
-# use std::io::prelude::*;
-#
-# pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-# pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-#      vec![]
-# }
-#
-# pub struct Config {
-#     query: String,
-#     filename: String,
-#     case_sensitive: bool,
-# }
-#
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    let results = if config.case_sensitive {
-        search(&config.query, &contents)
-    } else {
-        search_case_insensitive(&config.query, &contents)
-    };
-
-    for line in results {
-        println!("{}", line);
-    }
-
-    Ok(())
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-22/src/lib.rs:there}}
 ```
 
 <span class="caption">Listing 12-22: Calling either `search` or
@@ -201,30 +120,8 @@ in Listing 12-23.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-use std::env;
-# struct Config {
-#     query: String,
-#     filename: String,
-#     case_sensitive: bool,
-# }
-
-// --snip--
-
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-23/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-23: Checking for an environment variable named
@@ -253,31 +150,38 @@ Let’s give it a try! First, we’ll run our program without the environment
 variable set and with the query `to`, which should match any line that contains
 the word “to” in all lowercase:
 
-```text
-$ cargo run to poem.txt
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep to poem.txt`
-Are you nobody, too?
-How dreary to be somebody!
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-23/output.txt}}
 ```
 
 Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
 set to `1` but with the same query `to`.
 
-If you’re using PowerShell, you will need to set the environment variable and
-run the program in two commands rather than one:
+If you're using PowerShell, you will need to set the environment
+variable and run the program as separate commands:
 
-```text
-$ $env:CASE_INSENSITIVE=1
-$ cargo run to poem.txt
+```console
+PS> $Env:CASE_INSENSITIVE=1; cargo run to poem.txt
+```
+
+This will make `CASE_INSENSITIVE` persist for the remainder of your shell
+session. It can be unset with the `Remove-Item` cmdlet:
+
+```console
+PS> Remove-Item Env:CASE_INSENSITIVE
 ```
 
 We should get lines that contain “to” that might have uppercase letters:
 
-```text
+<!-- manual-regeneration
+cd listings/ch12-an-io-project/listing-12-23
+CASE_INSENSITIVE=1 cargo run to poem.txt
+can't extract because of the environment variable
+-->
+
+```console
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
      Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!

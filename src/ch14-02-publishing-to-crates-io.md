@@ -1,9 +1,9 @@
 ## Publishing a Crate to Crates.io
 
-We’ve used packages from [crates.io](https://crates.io)<!-- ignore --> as
+We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as
 dependencies of our project, but you can also share your code with other people
 by publishing your own packages. The crate registry at
-[crates.io](https://crates.io)<!-- ignore --> distributes the source code of
+[crates.io](https://crates.io/)<!-- ignore --> distributes the source code of
 your packages, so it primarily hosts code that is open source.
 
 Rust and Cargo have features that help make your published package easier for
@@ -29,19 +29,7 @@ for an `add_one` function in a crate named `my_crate`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-/// Adds one to the number given.
-///
-/// # Examples
-///
-/// ```
-/// let arg = 5;
-/// let answer = my_crate::add_one(arg);
-///
-/// assert_eq!(6, answer);
-/// ```
-pub fn add_one(x: i32) -> i32 {
-    x + 1
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
 ```
 
 <span class="caption">Listing 14-1: A documentation comment for a
@@ -96,6 +84,12 @@ that don’t work because the code has changed since the documentation was
 written. If we run `cargo test` with the documentation for the `add_one`
 function from Listing 14-1, we will see a section in the test results like this:
 
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-01/
+cargo test
+copy just the doc-tests section below
+-->
+
 ```text
    Doc-tests my_crate
 
@@ -125,13 +119,7 @@ shown in Listing 14-2:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-//! # My Crate
-//!
-//! `my_crate` is a collection of utilities to make performing certain
-//! calculations more convenient.
-
-/// Adds one to the number given.
-// --snip--
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 14-2: Documentation for the `my_crate` crate as a
@@ -188,38 +176,8 @@ function named `mix`, as shown in Listing 14-3:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-//! # Art
-//!
-//! A library for modeling artistic concepts.
-
-pub mod kinds {
-    /// The primary colors according to the RYB color model.
-    pub enum PrimaryColor {
-        Red,
-        Yellow,
-        Blue,
-    }
-
-    /// The secondary colors according to the RYB color model.
-    pub enum SecondaryColor {
-        Orange,
-        Green,
-        Purple,
-    }
-}
-
-pub mod utils {
-    use crate::kinds::*;
-
-    /// Combines two primary colors in equal amounts to create
-    /// a secondary color.
-    pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
-        // --snip--
-#         SecondaryColor::Orange
-    }
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs}}
 ```
 
 <span class="caption">Listing 14-3: An `art` library with items organized into
@@ -245,14 +203,7 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use art::kinds::PrimaryColor;
-use art::utils::mix;
-
-fn main() {
-    let red = PrimaryColor::Red;
-    let yellow = PrimaryColor::Yellow;
-    mix(red, yellow);
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 14-4: A crate using the `art` crate’s items with
@@ -276,21 +227,7 @@ items at the top level, as shown in Listing 14-5:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-//! # Art
-//!
-//! A library for modeling artistic concepts.
-
-pub use self::kinds::PrimaryColor;
-pub use self::kinds::SecondaryColor;
-pub use self::utils::mix;
-
-pub mod kinds {
-    // --snip--
-}
-
-pub mod utils {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 14-5: Adding `pub use` statements to re-export
@@ -312,12 +249,7 @@ structure in Listing 14-5, as shown in Listing 14-6:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use art::PrimaryColor;
-use art::mix;
-
-fn main() {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 14-6: A program using the re-exported items from
@@ -337,22 +269,22 @@ differs from their public API.
 ### Setting Up a Crates.io Account
 
 Before you can publish any crates, you need to create an account on
-[crates.io](https://crates.io)<!-- ignore --> and get an API token. To do so,
-visit the home page at [crates.io](https://crates.io)<!-- ignore --> and log in
+[crates.io](https://crates.io/)<!-- ignore --> and get an API token. To do so,
+visit the home page at [crates.io](https://crates.io/)<!-- ignore --> and log in
 via a GitHub account. (The GitHub account is currently a requirement, but the
 site might support other ways of creating an account in the future.) Once
 you’re logged in, visit your account settings at
 [https://crates.io/me/](https://crates.io/me/)<!-- ignore --> and retrieve your
 API key. Then run the `cargo login` command with your API key, like this:
 
-```text
+```console
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
 ```
 
 This command will inform Cargo of your API token and store it locally in
 *~/.cargo/credentials*. Note that this token is a *secret*: do not share it
 with anyone else. If you do share it with anyone for any reason, you should
-revoke it and generate a new token on [crates.io](https://crates.io)<!-- ignore
+revoke it and generate a new token on [crates.io](https://crates.io/)<!-- ignore
 -->.
 
 ### Adding Metadata to a New Crate
@@ -363,7 +295,7 @@ to the `[package]` section of the crate’s *Cargo.toml* file.
 
 Your crate will need a unique name. While you’re working on a crate locally,
 you can name a crate whatever you’d like. However, crate names on
-[crates.io](https://crates.io)<!-- ignore --> are allocated on a first-come,
+[crates.io](https://crates.io/)<!-- ignore --> are allocated on a first-come,
 first-served basis. Once a crate name is taken, no one else can publish a crate
 with that name. Before attempting to publish a crate, search for the name you
 want to use on the site. If the name has been used by another crate, you will
@@ -380,13 +312,19 @@ name = "guessing_game"
 Even if you’ve chosen a unique name, when you run `cargo publish` to publish
 the crate at this point, you’ll get a warning and then an error:
 
-```text
+<!-- manual-regeneration
+cd listings/ch14-more-about-cargo/listing-14-01/
+cargo publish
+copy just the relevant lines below
+-->
+
+```console
 $ cargo publish
-    Updating registry `https://github.com/rust-lang/crates.io-index`
-warning: manifest has no description, license, license-file, documentation,
-homepage or repository.
+    Updating crates.io index
+warning: manifest has no description, license, license-file, documentation, homepage or repository.
+See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata for more info.
 --snip--
-error: api errors: missing or empty metadata fields: description, license.
+error: api errors (status 200 OK): missing or empty metadata fields: description, license. Please see https://doc.rust-lang.org/cargo/reference/manifest.html for how to upload metadata
 ```
 
 The reason is that you’re missing some crucial information: a description and
@@ -449,27 +387,33 @@ easily.
 Now that you’ve created an account, saved your API token, chosen a name for
 your crate, and specified the required metadata, you’re ready to publish!
 Publishing a crate uploads a specific version to
-[crates.io](https://crates.io)<!-- ignore --> for others to use.
+[crates.io](https://crates.io/)<!-- ignore --> for others to use.
 
 Be careful when publishing a crate because a publish is *permanent*. The
 version can never be overwritten, and the code cannot be deleted. One major
-goal of [crates.io](https://crates.io)<!-- ignore --> is to act as a permanent
+goal of [crates.io](https://crates.io/)<!-- ignore --> is to act as a permanent
 archive of code so that builds of all projects that depend on crates from
-[crates.io](https://crates.io)<!-- ignore --> will continue to work. Allowing
+[crates.io](https://crates.io/)<!-- ignore --> will continue to work. Allowing
 version deletions would make fulfilling that goal impossible. However, there is
 no limit to the number of crate versions you can publish.
 
 Run the `cargo publish` command again. It should succeed now:
 
-```text
+<!-- manual-regeneration
+go to some valid crate, publish a new version
+cargo publish
+copy just the relevant lines below
+-->
+
+```console
 $ cargo publish
- Updating registry `https://github.com/rust-lang/crates.io-index`
-Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
-Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
-Compiling guessing_game v0.1.0
+    Updating crates.io index
+   Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
+   Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
+   Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
- Finished dev [unoptimized + debuginfo] target(s) in 0.19 secs
-Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.19s
+   Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
 Congratulations! You’ve now shared your code with the Rust community, and
@@ -501,14 +445,14 @@ not use the yanked version.
 To yank a version of a crate, run `cargo yank` and specify which version you
 want to yank:
 
-```text
+```console
 $ cargo yank --vers 1.0.1
 ```
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
 to start depending on a version again:
 
-```text
+```console
 $ cargo yank --vers 1.0.1 --undo
 ```
 

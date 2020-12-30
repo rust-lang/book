@@ -25,7 +25,7 @@ Our web server needs to listen to a TCP connection, so that’s the first part
 we’ll work on. The standard library offers a `std::net` module that lets us do
 this. Let’s make a new project in the usual fashion:
 
-```text
+```console
 $ cargo new hello
      Created binary (application) `hello` project
 $ cd hello
@@ -38,17 +38,7 @@ an incoming stream, it will print `Connection established!`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-use std::net::TcpListener;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        println!("Connection established!");
-    }
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 20-1: Listening for incoming streams and printing
@@ -68,7 +58,7 @@ will return a new `TcpListener` instance. The reason the function is called
 
 The `bind` function returns a `Result<T, E>`, which indicates that binding
 might fail. For example, connecting to port 80 requires administrator
-privileges (nonadministrators can listen only on ports higher than 1024), so if
+privileges (nonadministrators can listen only on ports higher than 1023), so if
 we tried to connect to port 80 without being an administrator, binding wouldn’t
 work. As another example, binding wouldn’t work if we ran two instances of our
 program and so had two programs listening to the same port. Because we’re
@@ -140,27 +130,7 @@ look like Listing 20-2.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
-use std::io::prelude::*;
-use std::net::TcpStream;
-use std::net::TcpListener;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        handle_connection(stream);
-    }
-}
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
-
-    stream.read(&mut buffer).unwrap();
-
-    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
-}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 20-2: Reading from the `TcpStream` and printing
@@ -178,13 +148,14 @@ for the next time we ask for data. It therefore needs to be `mut` because its
 internal state might change; usually, we think of “reading” as not needing
 mutation, but in this case we need the `mut` keyword.
 
-Next, we need to actually read from the stream. We do this in two steps: first,
-we declare a `buffer` on the stack to hold the data that is read in. We’ve made
-the buffer 512 bytes in size, which is big enough to hold the data of a basic
-request and sufficient for our purposes in this chapter. If we wanted to handle
-requests of an arbitrary size, buffer management would need to be more
-complicated; we’ll keep it simple for now. We pass the buffer to `stream.read`,
-which will read bytes from the `TcpStream` and put them in the buffer.
+Next, we need to actually read from the stream. We do this in two steps:
+first, we declare a `buffer` on the stack to hold the data that is read in.
+We’ve made the buffer 1024 bytes in size, which is big enough to hold the
+data of a basic request and sufficient for our purposes in this chapter. If
+we wanted to handle requests of an arbitrary size, buffer management would
+need to be more complicated; we’ll keep it simple for now. We pass the buffer
+to `stream.read`, which will read bytes from the `TcpStream` and put them in
+the buffer.
 
 Second, we convert the bytes in the buffer to a string and print that string.
 The `String::from_utf8_lossy` function takes a `&[u8]` and produces a `String`
@@ -197,10 +168,10 @@ Let’s try this code! Start the program and make a request in a web browser
 again. Note that we’ll still get an error page in the browser, but our
 program’s output in the terminal will now look similar to this:
 
-```text
+```console
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.42 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.42s
      Running `target/debug/hello`
 Request: GET / HTTP/1.1
 Host: 127.0.0.1:7878
@@ -295,19 +266,8 @@ Listing 20-3.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
-
-    stream.read(&mut buffer).unwrap();
-
-    let response = "HTTP/1.1 200 OK\r\n\r\n";
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-3: Writing a tiny successful HTTP response to
@@ -340,17 +300,7 @@ possibility.
 <span class="filename">Filename: hello.html</span>
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Hello!</h1>
-    <p>Hi from Rust</p>
-  </body>
-</html>
+{{#include ../listings/ch20-web-server/listing-20-04/hello.html}}
 ```
 
 <span class="caption">Listing 20-4: A sample HTML file to return in a
@@ -363,23 +313,8 @@ and send it.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-use std::fs;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
-    stream.read(&mut buffer).unwrap();
-
-    let contents = fs::read_to_string("hello.html").unwrap();
-
-    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-5: Sending the contents of *hello.html* as the
@@ -391,7 +326,8 @@ familiar; we used it in Chapter 12 when we read the contents of a file for our
 I/O project in Listing 12-4.
 
 Next, we use `format!` to add the file’s contents as the body of the success
-response.
+response. To ensure a valid HTTP response, we add the `Content-Length` header
+which is set to the size of our response body, in this case the size of `hello.html`.
 
 Run this code with `cargo run` and load *127.0.0.1:7878* in your browser; you
 should see your HTML rendered!
@@ -415,29 +351,8 @@ received against what we know a request for */* looks like and adds `if` and
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
-    stream.read(&mut buffer).unwrap();
-
-    let get = b"GET / HTTP/1.1\r\n";
-
-    if buffer.starts_with(get) {
-        let contents = fs::read_to_string("hello.html").unwrap();
-
-        let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
-
-        stream.write(response.as_bytes()).unwrap();
-        stream.flush().unwrap();
-    } else {
-        // some other request
-    }
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-6: Matching the request and handling requests
@@ -467,24 +382,8 @@ indicating the response to the end user.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs;
-# fn handle_connection(mut stream: TcpStream) {
-# if true {
-// --snip--
-
-} else {
-    let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
-    let contents = fs::read_to_string("404.html").unwrap();
-
-    let response = format!("{}{}", status_line, contents);
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
-# }
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-7: Responding with status code 404 and an
@@ -499,17 +398,7 @@ any HTML you want or use the example HTML in Listing 20-8.
 <span class="filename">Filename: 404.html</span>
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Hello!</title>
-  </head>
-  <body>
-    <h1>Oops!</h1>
-    <p>Sorry, I don't know what you're asking for.</p>
-  </body>
-</html>
+{{#include ../listings/ch20-web-server/listing-20-08/404.html}}
 ```
 
 <span class="caption">Listing 20-8: Sample content for the page to send back
@@ -532,32 +421,8 @@ the large `if` and `else` blocks.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::io::prelude::*;
-# use std::net::TcpStream;
-# use std::fs;
-// --snip--
-
-fn handle_connection(mut stream: TcpStream) {
-#     let mut buffer = [0; 512];
-#     stream.read(&mut buffer).unwrap();
-#
-#     let get = b"GET / HTTP/1.1\r\n";
-    // --snip--
-
-    let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
-    };
-
-    let contents = fs::read_to_string(filename).unwrap();
-
-    let response = format!("{}{}", status_line, contents);
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
+```rust,no_run
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-9: Refactoring the `if` and `else` blocks to

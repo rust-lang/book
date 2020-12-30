@@ -5,7 +5,6 @@ Chapter 12 by using iterators to make places in the code clearer and more
 concise. Let’s look at how iterators can improve our implementation of the
 `Config::new` function and the `search` function.
 
-
 ### Removing a `clone` Using an Iterator
 
 In Listing 12-6, we added code that took a slice of `String` values and created
@@ -17,20 +16,7 @@ Listing 12-23:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
-    }
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
 ```
 
 <span class="caption">Listing 13-24: Reproduction of the `Config::new` function
@@ -61,16 +47,7 @@ Open your I/O project’s *src/main.rs* file, which should look like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
 We’ll change the start of the `main` function that we had in Listing 12-24 to
@@ -80,14 +57,7 @@ well.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let config = Config::new(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-25/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 13-25: Passing the return value of `env::args` to
@@ -106,9 +76,7 @@ body.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        // --snip--
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-26/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 13-26: Updating the signature of `Config::new` to
@@ -121,6 +89,16 @@ signature of the `Config::new` function so the parameter `args` has the type
 `args` and we’ll be mutating `args` by iterating over it, we can add the `mut`
 keyword into the specification of the `args` parameter to make it mutable.
 
+We also needed to specify that the string slice error type can now only have
+the `'static` lifetime. Because we’re only ever returning string literals, this
+was true before. However, when we had a reference in the parameters, there was
+the possibility that the reference in the return type could have had the same
+lifetime as the reference in the parameters. The rules that we discussed in the
+[“Lifetime Elision”][lifetime-elision] section of Chapter 10 applied, and we
+weren’t required to annotate the lifetime of `&str`. With the change to `args`,
+the lifetime elision rules no longer apply, and we must specify the `'static`
+lifetime.
+
 #### Using `Iterator` Trait Methods Instead of Indexing
 
 Next, we’ll fix the body of `Config::new`. The standard library documentation
@@ -130,35 +108,8 @@ Listing 12-23 to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# fn main() {}
-# use std::env;
-#
-# struct Config {
-#     query: String,
-#     filename: String,
-#     case_sensitive: bool,
-# }
-#
-impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
-        args.next();
-
-        let query = match args.next() {
-            Some(arg) => arg,
-            None => return Err("Didn't get a query string"),
-        };
-
-        let filename = match args.next() {
-            Some(arg) => arg,
-            None => return Err("Didn't get a file name"),
-        };
-
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
-
-        Ok(Config { query, filename, case_sensitive })
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-27/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 13-27: Changing the body of `Config::new` to use
@@ -180,17 +131,7 @@ project, which is reproduced here in Listing 13-28 as it was in Listing 12-19:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = Vec::new();
-
-    for line in contents.lines() {
-        if line.contains(query) {
-            results.push(line);
-        }
-    }
-
-    results
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
 ```
 
 <span class="caption">Listing 13-28: The implementation of the `search`
@@ -206,11 +147,7 @@ concurrent access to the `results` vector. Listing 13-29 shows this change:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    contents.lines()
-        .filter(|line| line.contains(query))
-        .collect()
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-29/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 13-29: Using iterator adaptor methods in the
@@ -238,3 +175,5 @@ the iterator must pass.
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the more low-level loop will be faster. Let’s talk about
 performance.
+
+[lifetime-elision]: ch10-03-lifetime-syntax.html#lifetime-elision

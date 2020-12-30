@@ -28,8 +28,9 @@ value can never fail and thus covers every remaining case.
 A particular pattern `_` will match anything, but it never binds to a variable,
 so it’s often used in the last match arm. The `_` pattern can be useful when
 you want to ignore any value not specified, for example. We’ll cover the `_`
-pattern in more detail in the [“Ignoring Values in a Pattern”]
-[ignoring-values-in-a-pattern]<!-- ignore --> section later in this chapter.
+pattern in more detail in the [“Ignoring Values in a
+Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section later in this
+chapter.
 
 ### Conditional `if let` Expressions
 
@@ -52,25 +53,7 @@ input.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let favorite_color: Option<&str> = None;
-    let is_tuesday = false;
-    let age: Result<u8, _> = "34".parse();
-
-    if let Some(color) = favorite_color {
-        println!("Using your favorite color, {}, as the background", color);
-    } else if is_tuesday {
-        println!("Tuesday is green day!");
-    } else if let Ok(age) = age {
-        if age > 30 {
-            println!("Using purple as the background color");
-        } else {
-            println!("Using orange as the background color");
-        }
-    } else {
-        println!("Using blue as the background color");
-    }
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-1: Mixing `if let`, `else if`, `else if let`,
@@ -107,15 +90,7 @@ Listing 18-2 shows a `while let` loop that uses a vector as a stack and prints
 the values in the vector in the opposite order in which they were pushed.
 
 ```rust
-let mut stack = Vec::new();
-
-stack.push(1);
-stack.push(2);
-stack.push(3);
-
-while let Some(top) = stack.pop() {
-    println!("{}", top);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-2: Using a `while let` loop to print values
@@ -138,11 +113,7 @@ Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
 or break apart, a tuple as part of the `for` loop.
 
 ```rust
-let v = vec!['a', 'b', 'c'];
-
-for (index, value) in v.iter().enumerate() {
-    println!("{} is at index {}", value, index);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-3: Using a pattern in a `for` loop to
@@ -150,17 +121,15 @@ destructure a tuple</span>
 
 The code in Listing 18-3 will print the following:
 
-```text
-a is at index 0
-b is at index 1
-c is at index 2
+```console
+{{#include ../listings/ch18-patterns-and-matching/listing-18-03/output.txt}}
 ```
 
 We use the `enumerate` method to adapt an iterator to produce a value and that
-value’s index in the iterator, placed into a tuple. The first call to
-`enumerate` produces the tuple `(0, 'a')`. When this value is matched to the
-pattern `(index, value)`, `index` will be `0` and `value` will be `'a'`,
-printing the first line of the output.
+value’s index in the iterator, placed into a tuple. The first value produced is
+the tuple `(0, 'a')`. When this value is matched to the pattern `(index,
+value)`, `index` will be `0` and `value` will be `'a'`, printing the first line
+of the output.
 
 ### `let` Statements
 
@@ -192,7 +161,7 @@ To see the pattern matching aspect of `let` more clearly, consider Listing
 18-4, which uses a pattern with `let` to destructure a tuple.
 
 ```rust
-let (x, y, z) = (1, 2, 3);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-4: Using a pattern to destructure a tuple and
@@ -209,7 +178,7 @@ example, Listing 18-5 shows an attempt to destructure a tuple with three
 elements into two variables, which won’t work.
 
 ```rust,ignore,does_not_compile
-let (x, y) = (1, 2, 3);
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-5: Incorrectly constructing a pattern whose
@@ -217,23 +186,16 @@ variables don’t match the number of elements in the tuple</span>
 
 Attempting to compile this code results in this type error:
 
-```text
-error[E0308]: mismatched types
- --> src/main.rs:2:9
-  |
-2 |     let (x, y) = (1, 2, 3);
-  |         ^^^^^^ expected a tuple with 3 elements, found one with 2 elements
-  |
-  = note: expected type `({integer}, {integer}, {integer})`
-             found type `(_, _)`
+```console
+{{#include ../listings/ch18-patterns-and-matching/listing-18-05/output.txt}}
 ```
 
 If we wanted to ignore one or more of the values in the tuple, we could use `_`
-or `..`, as you’ll see in the [“Ignoring Values in a Pattern”]
-[ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem is that
-we have too many variables in the pattern, the solution is to make the types
-match by removing variables so the number of variables equals the number of
-elements in the tuple.
+or `..`, as you’ll see in the [“Ignoring Values in a
+Pattern”][ignoring-values-in-a-pattern]<!-- ignore --> section. If the problem
+is that we have too many variables in the pattern, the solution is to make the
+types match by removing variables so the number of variables equals the number
+of elements in the tuple.
 
 ### Function Parameters
 
@@ -242,9 +204,7 @@ declares a function named `foo` that takes one parameter named `x` of type
 `i32`, should by now look familiar.
 
 ```rust
-fn foo(x: i32) {
-    // code goes here
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 18-6: A function signature uses patterns in the
@@ -257,14 +217,7 @@ as we pass it to a function.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn print_coordinates(&(x, y): &(i32, i32)) {
-    println!("Current location: ({}, {})", x, y);
-}
-
-fn main() {
-    let point = (3, 5);
-    print_coordinates(&point);
-}
+{{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-07/src/main.rs}}
 ```
 
 <span class="caption">Listing 18-7: A function with parameters that destructure

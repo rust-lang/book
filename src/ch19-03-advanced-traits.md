@@ -1,9 +1,9 @@
 ## Advanced Traits
 
-We first covered traits in the [“Traits: Defining Shared Behavior”]
-[traits-defining-shared-behavior]<!-- ignore --> section of Chapter 10, but as
-with lifetimes, we didn’t discuss the more advanced details. Now that you know
-more about Rust, we can get into the nitty-gritty.
+We first covered traits in the [“Traits: Defining Shared
+Behavior”][traits-defining-shared-behavior]<!-- ignore --> section of Chapter
+10, but as with lifetimes, we didn’t discuss the more advanced details. Now
+that you know more about Rust, we can get into the nitty-gritty.
 
 ### Specifying Placeholder Types in Trait Definitions with Associated Types
 
@@ -22,17 +22,13 @@ the other features discussed in this chapter.
 One example of a trait with an associated type is the `Iterator` trait that the
 standard library provides. The associated type is named `Item` and stands in
 for the type of the values the type implementing the `Iterator` trait is
-iterating over. In [“The `Iterator` Trait and the `next` Method”]
-[the-iterator-trait-and-the-next-method]<!-- ignore --> section of Chapter 13,
-we mentioned that the definition of the `Iterator` trait is as shown in Listing
-19-12.
+iterating over. In [“The `Iterator` Trait and the `next`
+Method”][the-iterator-trait-and-the-next-method]<!-- ignore --> section of
+Chapter 13, we mentioned that the definition of the `Iterator` trait is as
+shown in Listing 19-12.
 
 ```rust
-pub trait Iterator {
-    type Item;
-
-    fn next(&mut self) -> Option<Self::Item>;
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
 ```
 
 <span class="caption">Listing 19-12: The definition of the `Iterator` trait
@@ -54,20 +50,14 @@ Listing 13-21, we specified that the `Item` type was `u32`:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-impl Iterator for Counter {
-    type Item = u32;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        // --snip--
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-13-21-reproduced/src/lib.rs:ch19}}
 ```
 
 This syntax seems comparable to that of generics. So why not just define the
 `Iterator` trait with generics, as shown in Listing 19-13?
 
 ```rust
-pub trait Iterator<T> {
-    fn next(&mut self) -> Option<T>;
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
 ```
 
 <span class="caption">Listing 19-13: A hypothetical definition of the
@@ -111,29 +101,7 @@ struct:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::ops::Add;
-
-#[derive(Debug, PartialEq)]
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl Add for Point {
-    type Output = Point;
-
-    fn add(self, other: Point) -> Point {
-        Point {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
-    }
-}
-
-fn main() {
-    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
-               Point { x: 3, y: 3 });
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-14: Implementing the `Add` trait to overload
@@ -148,53 +116,42 @@ The default generic type in this code is within the `Add` trait. Here is its
 definition:
 
 ```rust
-trait Add<RHS=Self> {
+trait Add<Rhs=Self> {
     type Output;
 
-    fn add(self, rhs: RHS) -> Self::Output;
+    fn add(self, rhs: Rhs) -> Self::Output;
 }
 ```
 
 This code should look generally familiar: a trait with one method and an
-associated type. The new part is `RHS=Self`: this syntax is called *default
-type parameters*. The `RHS` generic type parameter (short for “right hand
+associated type. The new part is `Rhs=Self`: this syntax is called *default
+type parameters*. The `Rhs` generic type parameter (short for “right hand
 side”) defines the type of the `rhs` parameter in the `add` method. If we don’t
-specify a concrete type for `RHS` when we implement the `Add` trait, the type
-of `RHS` will default to `Self`, which will be the type we’re implementing
+specify a concrete type for `Rhs` when we implement the `Add` trait, the type
+of `Rhs` will default to `Self`, which will be the type we’re implementing
 `Add` on.
 
-When we implemented `Add` for `Point`, we used the default for `RHS` because we
+When we implemented `Add` for `Point`, we used the default for `Rhs` because we
 wanted to add two `Point` instances. Let’s look at an example of implementing
-the `Add` trait where we want to customize the `RHS` type rather than using the
+the `Add` trait where we want to customize the `Rhs` type rather than using the
 default.
 
 We have two structs, `Millimeters` and `Meters`, holding values in different
 units. We want to add values in millimeters to values in meters and have the
 implementation of `Add` do the conversion correctly. We can implement `Add` for
-`Millimeters` with `Meters` as the `RHS`, as shown in Listing 19-15.
+`Millimeters` with `Meters` as the `Rhs`, as shown in Listing 19-15.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::ops::Add;
-
-struct Millimeters(u32);
-struct Meters(u32);
-
-impl Add<Meters> for Millimeters {
-    type Output = Millimeters;
-
-    fn add(self, other: Meters) -> Millimeters {
-        Millimeters(self.0 + (other.0 * 1000))
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-15/src/lib.rs}}
 ```
 
 <span class="caption">Listing 19-15: Implementing the `Add` trait on
 `Millimeters` to add `Millimeters` to `Meters`</span>
 
 To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
-value of the `RHS` type parameter instead of using the default of `Self`.
+value of the `Rhs` type parameter instead of using the default of `Self`.
 
 You’ll use default type parameters in two main ways:
 
@@ -229,33 +186,7 @@ on it. Each `fly` method does something different.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-trait Pilot {
-    fn fly(&self);
-}
-
-trait Wizard {
-    fn fly(&self);
-}
-
-struct Human;
-
-impl Pilot for Human {
-    fn fly(&self) {
-        println!("This is your captain speaking.");
-    }
-}
-
-impl Wizard for Human {
-    fn fly(&self) {
-        println!("Up!");
-    }
-}
-
-impl Human {
-    fn fly(&self) {
-        println!("*waving arms furiously*");
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-16/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-16: Two traits are defined to have a `fly`
@@ -268,38 +199,7 @@ the method that is directly implemented on the type, as shown in Listing 19-17.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# trait Wizard {
-#     fn fly(&self);
-# }
-#
-# struct Human;
-#
-# impl Pilot for Human {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Wizard for Human {
-#     fn fly(&self) {
-#         println!("Up!");
-#     }
-# }
-#
-# impl Human {
-#     fn fly(&self) {
-#         println!("*waving arms furiously*");
-#     }
-# }
-#
-fn main() {
-    let person = Human;
-    person.fly();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-17/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-17: Calling `fly` on an instance of
@@ -315,40 +215,7 @@ Listing 19-18 demonstrates this syntax.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# trait Wizard {
-#     fn fly(&self);
-# }
-#
-# struct Human;
-#
-# impl Pilot for Human {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Wizard for Human {
-#     fn fly(&self) {
-#         println!("Up!");
-#     }
-# }
-#
-# impl Human {
-#     fn fly(&self) {
-#         println!("*waving arms furiously*");
-#     }
-# }
-#
-fn main() {
-    let person = Human;
-    Pilot::fly(&person);
-    Wizard::fly(&person);
-    person.fly();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-18: Specifying which trait’s `fly` method we
@@ -362,10 +229,8 @@ disambiguate.
 
 Running this code prints the following:
 
-```text
-This is your captain speaking.
-Up!
-*waving arms furiously*
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-18/output.txt}}
 ```
 
 Because the `fly` method takes a `self` parameter, if we had two *types* that
@@ -382,27 +247,7 @@ associated function `baby_name` defined on `Dog` directly.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-trait Animal {
-    fn baby_name() -> String;
-}
-
-struct Dog;
-
-impl Dog {
-    fn baby_name() -> String {
-        String::from("Spot")
-    }
-}
-
-impl Animal for Dog {
-    fn baby_name() -> String {
-        String::from("puppy")
-    }
-}
-
-fn main() {
-    println!("A baby dog is called a {}", Dog::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-19/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-19: A trait with an associated function and a
@@ -419,8 +264,8 @@ is expressed in the implementation of the `Animal` trait on `Dog` in the
 In `main`, we call the `Dog::baby_name` function, which calls the associated
 function defined on `Dog` directly. This code prints the following:
 
-```text
-A baby dog is called a Spot
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-19/output.txt}}
 ```
 
 This output isn’t what we wanted. We want to call the `baby_name` function that
@@ -432,9 +277,7 @@ Listing 19-20, we’ll get a compilation error.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    println!("A baby dog is called a {}", Animal::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-20/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-20: Attempting to call the `baby_name`
@@ -445,14 +288,8 @@ Because `Animal::baby_name` is an associated function rather than a method, and
 thus doesn’t have a `self` parameter, Rust can’t figure out which
 implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
-```text
-error[E0283]: type annotations required: cannot resolve `_: Animal`
-  --> src/main.rs:20:43
-   |
-20 |     println!("A baby dog is called a {}", Animal::baby_name());
-   |                                           ^^^^^^^^^^^^^^^^^
-   |
-   = note: required by `Animal::baby_name`
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-20/output.txt}}
 ```
 
 To disambiguate and tell Rust that we want to use the implementation of
@@ -462,27 +299,7 @@ demonstrates how to use fully qualified syntax.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Animal {
-#     fn baby_name() -> String;
-# }
-#
-# struct Dog;
-#
-# impl Dog {
-#     fn baby_name() -> String {
-#         String::from("Spot")
-#     }
-# }
-#
-# impl Animal for Dog {
-#     fn baby_name() -> String {
-#         String::from("puppy")
-#     }
-# }
-#
-fn main() {
-    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-21: Using fully qualified syntax to specify
@@ -494,8 +311,8 @@ indicates we want to call the `baby_name` method from the `Animal` trait as
 implemented on `Dog` by saying that we want to treat the `Dog` type as an
 `Animal` for this function call. This code will now print what we want:
 
-```text
-A baby dog is called a puppy
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-21/output.txt}}
 ```
 
 In general, fully qualified syntax is defined as follows:
@@ -542,19 +359,7 @@ the trait. Listing 19-22 shows an implementation of the `OutlinePrint` trait.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt;
-
-trait OutlinePrint: fmt::Display {
-    fn outline_print(&self) {
-        let output = self.to_string();
-        let len = output.len();
-        println!("{}", "*".repeat(len + 4));
-        println!("*{}*", " ".repeat(len + 2));
-        println!("* {} *", output);
-        println!("*{}*", " ".repeat(len + 2));
-        println!("{}", "*".repeat(len + 4));
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-22: Implementing the `OutlinePrint` trait that
@@ -572,27 +377,14 @@ doesn’t implement `Display`, such as the `Point` struct:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# trait OutlinePrint {}
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-impl OutlinePrint for Point {}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/src/main.rs:here}}
 ```
 
 We get an error saying that `Display` is required but not implemented:
 
-```text
-error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
-  --> src/main.rs:20:6
-   |
-20 | impl OutlinePrint for Point {}
-   |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter;
-try using `:?` instead if you are using a format string
-   |
-   = help: the trait `std::fmt::Display` is not implemented for `Point`
+```console
+{{#include ../listings/ch19-advanced-features/no-listing-02-impl-outlineprint-for-point/output.txt}}
 ```
 
 To fix this, we implement `Display` on `Point` and satisfy the constraint that
@@ -601,18 +393,7 @@ To fix this, we implement `Display` on `Point` and satisfy the constraint that
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# struct Point {
-#     x: i32,
-#     y: i32,
-# }
-#
-use std::fmt;
-
-impl fmt::Display for Point {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.x, self.y)
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-03-impl-display-for-point/src/main.rs:here}}
 ```
 
 Then implementing the `OutlinePrint` trait on `Point` will compile
@@ -621,19 +402,19 @@ it within an outline of asterisks.
 
 ### Using the Newtype Pattern to Implement External Traits on External Types
 
-In Chapter 10 in the [“Implementing a Trait on a Type”]
-[implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned the
-orphan rule that states we’re allowed to implement a trait on a type as long as
-either the trait or the type are local to our crate. It’s possible to get
-around this restriction using the *newtype pattern*, which involves creating a
-new type in a tuple struct. (We covered tuple structs in the [“Using Tuple
-Structs without Named Fields to Create Different Types”][tuple-structs]<!--
-ignore --> section of Chapter 5.) The tuple struct will have one field and be a
-thin wrapper around the type we want to implement a trait for. Then the wrapper
-type is local to our crate, and we can implement the trait on the wrapper.
-*Newtype* is a term that originates from the Haskell programming language.
-There is no runtime performance penalty for using this pattern, and the wrapper
-type is elided at compile time.
+In Chapter 10 in the [“Implementing a Trait on a
+Type”][implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned
+the orphan rule that states we’re allowed to implement a trait on a type as
+long as either the trait or the type are local to our crate. It’s possible to
+get around this restriction using the *newtype pattern*, which involves
+creating a new type in a tuple struct. (We covered tuple structs in the
+[“Using Tuple Structs without Named Fields to Create Different
+Types”][tuple-structs]<!-- ignore --> section of Chapter 5.) The tuple struct
+will have one field and be a thin wrapper around the type we want to implement
+a trait for. Then the wrapper type is local to our crate, and we can implement
+the trait on the wrapper. *Newtype* is a term that originates from the Haskell
+programming language. There is no runtime performance penalty for using this
+pattern, and the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
@@ -644,20 +425,7 @@ that holds an instance of `Vec<T>`; then we can implement `Display` on
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fmt;
-
-struct Wrapper(Vec<String>);
-
-impl fmt::Display for Wrapper {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "[{}]", self.0.join(", "))
-    }
-}
-
-fn main() {
-    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
-    println!("w = {}", w);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-23/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-23: Creating a `Wrapper` type around

@@ -69,9 +69,7 @@ Listing 17-3 shows how to define a trait named `Draw` with one method named
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub trait Draw {
-    fn draw(&self);
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-03/src/lib.rs}}
 ```
 
 <span class="caption">Listing 17-3: Definition of the `Draw` trait</span>
@@ -85,13 +83,7 @@ a `Box` that implements the `Draw` trait.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Screen {
-    pub components: Vec<Box<dyn Draw>>,
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-04/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-4: Definition of the `Screen` struct with a
@@ -104,21 +96,7 @@ On the `Screen` struct, we’ll define a method named `run` that will call the
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-# pub struct Screen {
-#     pub components: Vec<Box<dyn Draw>>,
-# }
-#
-impl Screen {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-05/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-5: A `run` method on `Screen` that calls the
@@ -134,22 +112,7 @@ as in Listing 17-6:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Screen<T: Draw> {
-    pub components: Vec<T>,
-}
-
-impl<T> Screen<T>
-    where T: Draw {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-06/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-6: An alternate implementation of the `Screen`
@@ -175,22 +138,8 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 17-7:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-# pub trait Draw {
-#     fn draw(&self);
-# }
-#
-pub struct Button {
-    pub width: u32,
-    pub height: u32,
-    pub label: String,
-}
-
-impl Draw for Button {
-    fn draw(&self) {
-        // code to actually draw a button
-    }
-}
+```rust,noplayground
+{{#rustdoc_include ../listings/ch17-oop/listing-17-07/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 17-7: A `Button` struct that implements the
@@ -213,19 +162,7 @@ If someone using our library decides to implement a `SelectBox` struct that has
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use gui::Draw;
-
-struct SelectBox {
-    width: u32,
-    height: u32,
-    options: Vec<String>,
-}
-
-impl Draw for SelectBox {
-    fn draw(&self) {
-        // code to actually draw a select box
-    }
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 17-8: Another crate using `gui` and implementing
@@ -240,30 +177,7 @@ components. Listing 17-9 shows this implementation:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use gui::{Screen, Button};
-
-fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(SelectBox {
-                width: 75,
-                height: 10,
-                options: vec![
-                    String::from("Yes"),
-                    String::from("Maybe"),
-                    String::from("No")
-                ],
-            }),
-            Box::new(Button {
-                width: 50,
-                height: 10,
-                label: String::from("OK"),
-            }),
-        ],
-    };
-
-    screen.run();
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 17-9: Using trait objects to store values of
@@ -275,14 +189,15 @@ new type and draw it because `SelectBox` implements the `Draw` trait, which
 means it implements the `draw` method.
 
 This concept—of being concerned only with the messages a value responds to
-rather than the value’s concrete type—is similar to the concept *duck typing*
-in dynamically typed languages: if it walks like a duck and quacks like a duck,
-then it must be a duck! In the implementation of `run` on `Screen` in Listing
-17-5, `run` doesn’t need to know what the concrete type of each component is.
-It doesn’t check whether a component is an instance of a `Button` or a
-`SelectBox`, it just calls the `draw` method on the component. By specifying
-`Box<dyn Draw>` as the type of the values in the `components` vector, we’ve
-defined `Screen` to need values that we can call the `draw` method on.
+rather than the value’s concrete type—is similar to the concept of *duck
+typing* in dynamically typed languages: if it walks like a duck and quacks
+like a duck, then it must be a duck! In the implementation of `run` on `Screen`
+in Listing 17-5, `run` doesn’t need to know what the concrete type of each
+component is. It doesn’t check whether a component is an instance of a `Button`
+or a `SelectBox`, it just calls the `draw` method on the component. By
+specifying `Box<dyn Draw>` as the type of the values in the `components`
+vector, we’ve defined `Screen` to need values that we can call the `draw`
+method on.
 
 The advantage of using trait objects and Rust’s type system to write code
 similar to code using duck typing is that we never have to check whether a
@@ -296,17 +211,7 @@ with a `String` as a component:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use gui::Screen;
-
-fn main() {
-    let screen = Screen {
-        components: vec![
-            Box::new(String::from("Hi")),
-        ],
-    };
-
-    screen.run();
-}
+{{#rustdoc_include ../listings/ch17-oop/listing-17-10/src/main.rs}}
 ```
 
 <span class="caption">Listing 17-10: Attempting to use a type that doesn’t
@@ -314,15 +219,8 @@ implement the trait object’s trait</span>
 
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
-```text
-error[E0277]: the trait bound `std::string::String: gui::Draw` is not satisfied
-  --> src/main.rs:7:13
-   |
- 7 |             Box::new(String::from("Hi")),
-   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait gui::Draw is not
-   implemented for `std::string::String`
-   |
-   = note: required for the cast to the object type `gui::Draw`
+```console
+{{#include ../listings/ch17-oop/listing-17-10/output.txt}}
 ```
 
 This error lets us know that either we’re passing something to `Screen` we
@@ -331,17 +229,17 @@ didn’t mean to pass and we should pass a different type or we should implement
 
 ### Trait Objects Perform Dynamic Dispatch
 
-Recall in the [“Performance of Code Using Generics”]
-[performance-of-code-using-generics]<!-- ignore --> section in Chapter 10 our
-discussion on the monomorphization process performed by the compiler when we
-use trait bounds on generics: the compiler generates nongeneric implementations
-of functions and methods for each concrete type that we use in place of a
-generic type parameter. The code that results from monomorphization is doing
-*static dispatch*, which is when the compiler knows what method you’re calling
-at compile time. This is opposed to *dynamic dispatch*, which is when the
-compiler can’t tell at compile time which method you’re calling. In dynamic
-dispatch cases, the compiler emits code that at runtime will figure out which
-method to call.
+Recall in the [“Performance of Code Using
+Generics”][performance-of-code-using-generics]<!-- ignore --> section in
+Chapter 10 our discussion on the monomorphization process performed by the
+compiler when we use trait bounds on generics: the compiler generates
+nongeneric implementations of functions and methods for each concrete type
+that we use in place of a generic type parameter. The code that results from
+monomorphization is doing *static dispatch*, which is when the compiler knows
+what method you’re calling at compile time. This is opposed to *dynamic
+dispatch*, which is when the compiler can’t tell at compile time which method
+you’re calling. In dynamic dispatch cases, the compiler emits code that at
+runtime will figure out which method to call.
 
 When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
 know all the types that might be used with the code that is using trait
@@ -397,22 +295,13 @@ tried to implement the `Screen` struct in Listing 17-4 to hold types that
 implement the `Clone` trait instead of the `Draw` trait, like this:
 
 ```rust,ignore,does_not_compile
-pub struct Screen {
-    pub components: Vec<Box<dyn Clone>>,
-}
+{{#rustdoc_include ../listings/ch17-oop/no-listing-01-trait-object-of-clone/src/lib.rs}}
 ```
 
 We would get this error:
 
-```text
-error[E0038]: the trait `std::clone::Clone` cannot be made into an object
- --> src/lib.rs:2:5
-  |
-2 |     pub components: Vec<Box<dyn Clone>>,
-  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::clone::Clone`
-  cannot be made into an object
-  |
-  = note: the trait cannot require that `Self : Sized`
+```console
+{{#include ../listings/ch17-oop/no-listing-01-trait-object-of-clone/output.txt}}
 ```
 
 This error means you can’t use this trait as a trait object in this way. If

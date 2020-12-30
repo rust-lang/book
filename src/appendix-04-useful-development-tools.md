@@ -1,10 +1,10 @@
-# Appendix D - Useful Development Tools
+## Appendix D - Useful Development Tools
 
 In this appendix, we talk about some useful development tools that the Rust
 project provides. We’ll look at automatic formatting, quick ways to apply
 warning fixes, a linter, and integrating with IDEs.
 
-## Automatic Formatting with `rustfmt`
+### Automatic Formatting with `rustfmt`
 
 The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
@@ -12,14 +12,14 @@ style to use when writing Rust: everyone formats their code using the tool.
 
 To install `rustfmt`, enter the following:
 
-```text
+```console
 $ rustup component add rustfmt
 ```
 
 This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
 both `rustc` and `cargo`. To format any Cargo project, enter the following:
 
-```text
+```console
 $ cargo fmt
 ```
 
@@ -29,7 +29,7 @@ on `rustfmt`, see [its documentation][rustfmt].
 
 [rustfmt]: https://github.com/rust-lang/rustfmt
 
-## Fix Your Code with `rustfix`
+### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
 some compiler warnings. If you’ve written code in Rust, you’ve probably seen
@@ -50,7 +50,7 @@ fn main() {
 Here, we’re calling the `do_something` function 100 times, but we never use the
 variable `i` in the body of the `for` loop. Rust warns us about that:
 
-```text
+```console
 $ cargo build
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
 warning: unused variable: `i`
@@ -69,7 +69,7 @@ indicates that we intend for this variable to be unused. We can automatically
 apply that suggestion using the `rustfix` tool by running the command `cargo
 fix`:
 
-```text
+```console
 $ cargo fix
     Checking myprogram v0.1.0 (file:///projects/myprogram)
       Fixing src/main.rs (1 fix)
@@ -96,20 +96,20 @@ The `for` loop variable is now named `_i`, and the warning no longer appears.
 You can also use the `cargo fix` command to transition your code between
 different Rust editions. Editions are covered in Appendix E.
 
-## More Lints with Clippy
+### More Lints with Clippy
 
-The Clippy tool is a collection of lints to analyze your code to catch common
-mistakes and improve your Rust code.
+The Clippy tool is a collection of lints to analyze your code so you can catch
+common mistakes and improve your Rust code.
 
 To install Clippy, enter the following:
 
-```text
+```console
 $ rustup component add clippy
 ```
 
 To run Clippy’s lints on any Cargo project, enter the following:
 
-```text
+```console
 $ cargo clippy
 ```
 
@@ -139,9 +139,9 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust has this constant defined more precisely,
-and that your program would be more correct if you used the constant instead.
-You would then change your code to use the `PI` constant. The following code
+This error lets you know that Rust has this constant defined more precisely and
+that your program would be more correct if you used the constant instead. You
+would then change your code to use the `PI` constant. The following code
 doesn’t result in any errors or warnings from Clippy:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -158,7 +158,7 @@ For more information on Clippy, see [its documentation][clippy].
 
 [clippy]: https://github.com/rust-lang/rust-clippy
 
-## IDE Integration Using the Rust Language Server
+### IDE Integration Using the Rust Language Server
 
 To help IDE integration, the Rust project distributes the *Rust Language
 Server* (`rls`). This tool speaks the [Language Server
@@ -171,7 +171,7 @@ such as [the Rust plug-in for Visual Studio Code][vscode].
 
 To install the `rls`, enter the following:
 
-```text
+```console
 $ rustup component add rls
 ```
 

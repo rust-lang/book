@@ -25,7 +25,7 @@ Rust and how to do it.
 ### Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take four actions in unsafe Rust, called
+that holds the unsafe code. You can take five actions in unsafe Rust, called
 *unsafe superpowers*, that you can’t in safe Rust. Those superpowers include
 the ability to:
 
@@ -33,11 +33,12 @@ the ability to:
 * Call an unsafe function or method
 * Access or modify a mutable static variable
 * Implement an unsafe trait
+* Access fields of `union`s
 
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any other of Rust’s safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
-these four features that are then not checked by the compiler for memory
+these five features that are then not checked by the compiler for memory
 safety. You’ll still get some degree of safety inside of an unsafe block.
 
 In addition, `unsafe` does not mean the code inside the block is necessarily
@@ -45,7 +46,7 @@ dangerous or that it will definitely have memory safety problems: the intent is
 that as the programmer, you’ll ensure the code inside an `unsafe` block will
 access memory in a valid way.
 
-People are fallible, and mistakes will happen, but by requiring these four
+People are fallible, and mistakes will happen, but by requiring these five
 unsafe operations to be inside blocks annotated with `unsafe` you’ll know that
 any errors related to memory safety must be within an `unsafe` block. Keep
 `unsafe` blocks small; you’ll be thankful later when you investigate memory
@@ -60,7 +61,7 @@ from leaking out into all the places that you or your users might want to use
 the functionality implemented with `unsafe` code, because using a safe
 abstraction is safe.
 
-Let’s look at each of the four unsafe superpowers in turn. We’ll also look at
+Let’s look at each of the five unsafe superpowers in turn. We’ll also look at
 some abstractions that provide a safe interface to unsafe code.
 
 ### Dereferencing a Raw Pointer
@@ -90,10 +91,7 @@ Listing 19-1 shows how to create an immutable and a mutable raw pointer from
 references.
 
 ```rust
-let mut num = 5;
-
-let r1 = &num as *const i32;
-let r2 = &mut num as *mut i32;
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-1: Creating raw pointers from references</span>
@@ -116,8 +114,7 @@ is no memory access, or the program might error with a segmentation fault.
 Usually, there is no good reason to write code like this, but it is possible.
 
 ```rust
-let address = 0x012345usize;
-let r = address as *const i32;
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-2: Creating a raw pointer to an arbitrary
@@ -128,15 +125,7 @@ raw pointers and read the data being pointed to. In Listing 19-3, we use the
 dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
 ```rust,unsafe
-let mut num = 5;
-
-let r1 = &num as *const i32;
-let r2 = &mut num as *mut i32;
-
-unsafe {
-    println!("r1 is: {}", *r1);
-    println!("r2 is: {}", *r2);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-3: Dereferencing raw pointers within an
@@ -177,22 +166,14 @@ Here is an unsafe function named `dangerous` that doesn’t do anything in its
 body:
 
 ```rust,unsafe
-unsafe fn dangerous() {}
-
-unsafe {
-    dangerous();
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-01-unsafe-fn/src/main.rs:here}}
 ```
 
 We must call the `dangerous` function within a separate `unsafe` block. If we
 try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
-```text
-error[E0133]: call to unsafe function requires unsafe function or block
- -->
-  |
-4 |     dangerous();
-  |     ^^^^^^^^^^^ call to unsafe function
+```console
+{{#include ../listings/ch19-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
 By inserting the `unsafe` block around our call to `dangerous`, we’re asserting
@@ -215,14 +196,7 @@ slice and makes it two by splitting the slice at the index given as an
 argument. Listing 19-4 shows how to use `split_at_mut`.
 
 ```rust
-let mut v = vec![1, 2, 3, 4, 5, 6];
-
-let r = &mut v[..];
-
-let (a, b) = r.split_at_mut(3);
-
-assert_eq!(a, &mut [1, 2, 3]);
-assert_eq!(b, &mut [4, 5, 6]);
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-4: Using the safe `split_at_mut`
@@ -234,14 +208,7 @@ implement `split_at_mut` as a function rather than a method and only for slices
 of `i32` values rather than for a generic type `T`.
 
 ```rust,ignore,does_not_compile
-fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
-    let len = slice.len();
-
-    assert!(mid <= len);
-
-    (&mut slice[..mid],
-     &mut slice[mid..])
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-5: An attempted implementation of
@@ -250,7 +217,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
 This function first gets the total length of the slice. Then it asserts that
 the index given as a parameter is within the slice by checking whether it’s
 less than or equal to the length. The assertion means that if we pass an index
-that is greater than the index to split the slice at, the function will panic
+that is greater than the length to split the slice at, the function will panic
 before it attempts to use that index.
 
 Then we return two mutable slices in a tuple: one from the start of the
@@ -259,16 +226,8 @@ slice.
 
 When we try to compile the code in Listing 19-5, we’ll get an error.
 
-```text
-error[E0499]: cannot borrow `*slice` as mutable more than once at a time
- -->
-  |
-6 |     (&mut slice[..mid],
-  |           ----- first mutable borrow occurs here
-7 |      &mut slice[mid..])
-  |           ^^^^^ second mutable borrow occurs here
-8 | }
-  | - first borrow ends here
+```console
+{{#include ../listings/ch19-advanced-features/listing-19-05/output.txt}}
 ```
 
 Rust’s borrow checker can’t understand that we’re borrowing different parts of
@@ -281,19 +240,7 @@ Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work.
 
 ```rust,unsafe
-use std::slice;
-
-fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
-    let len = slice.len();
-    let ptr = slice.as_mut_ptr();
-
-    assert!(mid <= len);
-
-    unsafe {
-        (slice::from_raw_parts_mut(ptr, mid),
-         slice::from_raw_parts_mut(ptr.offset(mid as isize), len - mid))
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-6: Using unsafe code in the implementation of
@@ -309,16 +256,16 @@ mutable slice to `i32` values, `as_mut_ptr` returns a raw pointer with the type
 We keep the assertion that the `mid` index is within the slice. Then we get to
 the unsafe code: the `slice::from_raw_parts_mut` function takes a raw pointer
 and a length, and it creates a slice. We use this function to create a slice
-that starts from `ptr` and is `mid` items long. Then we call the `offset`
+that starts from `ptr` and is `mid` items long. Then we call the `add`
 method on `ptr` with `mid` as an argument to get a raw pointer that starts at
 `mid`, and we create a slice using that pointer and the remaining number of
 items after `mid` as the length.
 
 The function `slice::from_raw_parts_mut` is unsafe because it takes a raw
-pointer and must trust that this pointer is valid. The `offset` method on raw
+pointer and must trust that this pointer is valid. The `add` method on raw
 pointers is also unsafe, because it must trust that the offset location is also
 a valid pointer. Therefore, we had to put an `unsafe` block around our calls to
-`slice::from_raw_parts_mut` and `offset` so we could call them. By looking at
+`slice::from_raw_parts_mut` and `add` so we could call them. By looking at
 the code and by adding the assertion that `mid` must be less than or equal to
 `len`, we can tell that all the raw pointers used within the `unsafe` block
 will be valid pointers to data within the slice. This is an acceptable and
@@ -335,14 +282,7 @@ likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice 10,000 items long.
 
 ```rust,unsafe
-use std::slice;
-
-let address = 0x01234usize;
-let r = address as *mut i32;
-
-let slice: &[i32] = unsafe {
-    slice::from_raw_parts_mut(r, 10000)
-};
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 19-7: Creating a slice from an arbitrary memory
@@ -369,15 +309,7 @@ responsibility falls on the programmer to ensure safety.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,unsafe
-extern "C" {
-    fn abs(input: i32) -> i32;
-}
-
-fn main() {
-    unsafe {
-        println!("Absolute value of -3 according to C: {}", abs(-3));
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-08/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-8: Declaring and calling an `extern` function
@@ -427,26 +359,21 @@ value.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-static HELLO_WORLD: &str = "Hello, world!";
-
-fn main() {
-    println!("name is: {}", HELLO_WORLD);
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-09/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-9: Defining and using an immutable static
 variable</span>
 
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-
 Static variables are similar to constants, which we discussed in the
-[“Differences Between Variables and Constants”]
-[differences-between-variables-and-constants]<!-- ignore --> section in
-Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
-convention, and we *must* annotate the variable’s type, which is `&'static str`
-in this example. Static variables can only store references with the `'static`
-lifetime, which means the Rust compiler can figure out the lifetime; we don’t
-need to annotate it explicitly. Accessing an immutable static variable is safe.
+[“Differences Between Variables and
+Constants”][differences-between-variables-and-constants]<!-- ignore -->
+section in Chapter 3. The names of static variables are in
+`SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable’s
+type, which is `&'static str` in this example. Static variables can only store
+references with the `'static` lifetime, which means the Rust compiler can
+figure out the lifetime; we don’t need to annotate it explicitly. Accessing an
+immutable static variable is safe.
 
 Constants and immutable static variables might seem similar, but a subtle
 difference is that values in a static variable have a fixed address in memory.
@@ -461,21 +388,7 @@ static variable named `COUNTER`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,unsafe
-static mut COUNTER: u32 = 0;
-
-fn add_to_count(inc: u32) {
-    unsafe {
-        COUNTER += inc;
-    }
-}
-
-fn main() {
-    add_to_count(3);
-
-    unsafe {
-        println!("COUNTER: {}", COUNTER);
-    }
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-10/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-10: Reading from or writing to a mutable
@@ -495,20 +408,14 @@ that data accessed from different threads is done safely.
 
 ### Implementing an Unsafe Trait
 
-The final action that works only with `unsafe` is implementing an unsafe trait.
-A trait is unsafe when at least one of its methods has some invariant that the
-compiler can’t verify. We can declare that a trait is `unsafe` by adding the
-`unsafe` keyword before `trait` and marking the implementation of the trait as
-`unsafe` too, as shown in Listing 19-11.
+Another use case for `unsafe` is implementing an unsafe trait. A trait is
+unsafe when at least one of its methods has some invariant that the compiler
+can’t verify. We can declare that a trait is `unsafe` by adding the `unsafe`
+keyword before `trait` and marking the implementation of the trait as `unsafe`
+too, as shown in Listing 19-11.
 
 ```rust,unsafe
-unsafe trait Foo {
-    // methods go here
-}
-
-unsafe impl Foo for i32 {
-    // method implementations go here
-}
+{{#rustdoc_include ../listings/ch19-advanced-features/listing-19-11/src/main.rs}}
 ```
 
 <span class="caption">Listing 19-11: Defining and implementing an unsafe
@@ -518,23 +425,32 @@ By using `unsafe impl`, we’re promising that we’ll uphold the invariants tha
 the compiler can’t verify.
 
 As an example, recall the `Sync` and `Send` marker traits we discussed in the
-[“Extensible Concurrency with the `Sync` and `Send` Traits”]
-[extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore --> section
-in Chapter 16: the compiler implements these traits automatically if our types
-are composed entirely of `Send` and `Sync` types. If we implement a type that
-contains a type that is not `Send` or `Sync`, such as raw pointers, and we want
-to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust can’t verify
-that our type upholds the guarantees that it can be safely sent across threads
-or accessed from multiple threads; therefore, we need to do those checks
-manually and indicate as such with `unsafe`.
+[“Extensible Concurrency with the `Sync` and `Send`
+Traits”][extensible-concurrency-with-the-sync-and-send-traits]<!-- ignore -->
+section in Chapter 16: the compiler implements these traits automatically if
+our types are composed entirely of `Send` and `Sync` types. If we implement a
+type that contains a type that is not `Send` or `Sync`, such as raw pointers,
+and we want to mark that type as `Send` or `Sync`, we must use `unsafe`. Rust
+can’t verify that our type upholds the guarantees that it can be safely sent
+across threads or accessed from multiple threads; therefore, we need to do
+those checks manually and indicate as such with `unsafe`.
+
+### Accessing Fields of a Union
+
+The final action that works only with `unsafe` is accessing fields of a
+*union*. A `union` is similar to a `struct`, but only one declared field is
+used in a particular instance at one time. Unions are primarily used to
+interface with unions in C code. Accessing union fields is unsafe because Rust
+can’t guarantee the type of the data currently being stored in the union
+instance. You can learn more about unions in [the reference][reference].
 
 ### When to Use Unsafe Code
 
-Using `unsafe` to take one of the four actions (superpowers) just discussed
+Using `unsafe` to take one of the five actions (superpowers) just discussed
 isn’t wrong or even frowned upon. But it is trickier to get `unsafe` code
 correct because the compiler can’t help uphold memory safety. When you have a
 reason to use `unsafe` code, you can do so, and having the explicit `unsafe`
-annotation makes it easier to track down the source of problems if they occur.
+annotation makes it easier to track down the source of problems when they occur.
 
 [dangling-references]:
 ch04-02-references-and-borrowing.html#dangling-references
@@ -543,3 +459,4 @@ ch03-01-variables-and-mutability.html#differences-between-variables-and-constant
 [extensible-concurrency-with-the-sync-and-send-traits]:
 ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type
+[reference]: ../reference/items/unions.html

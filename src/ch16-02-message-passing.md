@@ -3,8 +3,8 @@
 One increasingly popular approach to ensuring safe concurrency is *message
 passing*, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from [the Go language
-documentation](http://golang.org/doc/effective_go.html): “Do not communicate by
-sharing memory; instead, share memory by communicating.”
+documentation](https://golang.org/doc/effective_go.html#concurrency): 
+“Do not communicate by sharing memory; instead, share memory by communicating.”
 
 One major tool Rust has for accomplishing message-sending concurrency is the
 *channel*, a programming concept that Rust’s standard library provides an
@@ -35,13 +35,8 @@ want to send over the channel.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-#     tx.send(()).unwrap();
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-6: Creating a channel and assigning the two
@@ -56,16 +51,14 @@ of the streams will end up in one river at the end. We’ll start with a single
 producer for now, but we’ll add multiple producers when we get this example
 working.
 
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-
 The `mpsc::channel` function returns a tuple, the first element of which is the
 sending end and the second element is the receiving end. The abbreviations `tx`
 and `rx` are traditionally used in many fields for *transmitter* and *receiver*
 respectively, so we name our variables as such to indicate each end. We’re
 using a `let` statement with a pattern that destructures the tuples; we’ll
-discuss the use of patterns in `let` statements and destructuring in
-Chapter 18. Using a `let` statement this way is a convenient approach to
-extract the pieces of the tuple returned by `mpsc::channel`.
+discuss the use of patterns in `let` statements and destructuring in Chapter
+18. Using a `let` statement this way is a convenient approach to extract the
+pieces of the tuple returned by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
 string so the spawned thread is communicating with the main thread, as shown in
@@ -75,17 +68,7 @@ sending a chat message from one thread to another.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-    });
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-07/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-7: Moving `tx` to a spawned thread and sending
@@ -110,20 +93,7 @@ end of the river or like getting a chat message.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-    });
-
-    let received = rx.recv().unwrap();
-    println!("Got: {}", received);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-08/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-8: Receiving the value “hi” in the main thread
@@ -151,6 +121,10 @@ thread is appropriate.
 When we run the code in Listing 16-8, we’ll see the value printed from the main
 thread:
 
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
+
 ```text
 Got: hi
 ```
@@ -170,21 +144,7 @@ this code isn’t allowed:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-use std::thread;
-use std::sync::mpsc;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let val = String::from("hi");
-        tx.send(val).unwrap();
-        println!("val is {}", val);
-    });
-
-    let received = rx.recv().unwrap();
-    println!("Got: {}", received);
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-09/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-9: Attempting to use `val` after we’ve sent it
@@ -197,17 +157,8 @@ again. Potentially, the other thread’s modifications could cause errors or
 unexpected results due to inconsistent or nonexistent data. However, Rust gives
 us an error if we try to compile the code in Listing 16-9:
 
-```text
-error[E0382]: use of moved value: `val`
-  --> src/main.rs:10:31
-   |
-9  |         tx.send(val).unwrap();
-   |                 --- value moved here
-10 |         println!("val is {}", val);
-   |                               ^^^ value used here after move
-   |
-   = note: move occurs because `val` has type `std::string::String`, which does
-not implement the `Copy` trait
+```console
+{{#include ../listings/ch16-fearless-concurrency/listing-16-09/output.txt}}
 ```
 
 Our concurrency mistake has caused a compile time error. The `send` function
@@ -226,31 +177,7 @@ pause for a second between each message.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::thread;
-use std::sync::mpsc;
-use std::time::Duration;
-
-fn main() {
-    let (tx, rx) = mpsc::channel();
-
-    thread::spawn(move || {
-        let vals = vec![
-            String::from("hi"),
-            String::from("from"),
-            String::from("the"),
-            String::from("thread"),
-        ];
-
-        for val in vals {
-            tx.send(val).unwrap();
-            thread::sleep(Duration::from_secs(1));
-        }
-    });
-
-    for received in rx {
-        println!("Got: {}", received);
-    }
-}
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-10/src/main.rs}}
 ```
 
 <span class="caption">Listing 16-10: Sending multiple messages and pausing
@@ -267,6 +194,10 @@ printing it. When the channel is closed, iteration will end.
 
 When running the code in Listing 16-10, you should see the following output
 with a 1-second pause in between each line:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Got: hi
@@ -289,50 +220,7 @@ so by cloning the transmitting half of the channel, as shown in Listing 16-11:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::sync::mpsc;
-# use std::time::Duration;
-#
-# fn main() {
-// --snip--
-
-let (tx, rx) = mpsc::channel();
-
-let tx1 = mpsc::Sender::clone(&tx);
-thread::spawn(move || {
-    let vals = vec![
-        String::from("hi"),
-        String::from("from"),
-        String::from("the"),
-        String::from("thread"),
-    ];
-
-    for val in vals {
-        tx1.send(val).unwrap();
-        thread::sleep(Duration::from_secs(1));
-    }
-});
-
-thread::spawn(move || {
-    let vals = vec![
-        String::from("more"),
-        String::from("messages"),
-        String::from("for"),
-        String::from("you"),
-    ];
-
-    for val in vals {
-        tx.send(val).unwrap();
-        thread::sleep(Duration::from_secs(1));
-    }
-});
-
-for received in rx {
-    println!("Got: {}", received);
-}
-
-// --snip--
-# }
+{{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 16-11: Sending multiple messages from multiple
@@ -345,6 +233,10 @@ a second spawned thread. This gives us two threads, each sending different
 messages to the receiving end of the channel.
 
 When you run the code, your output should look something like this:
+
+<!-- Not extracting output because changes to this output aren't significant;
+the changes are likely to be due to the threads running differently rather than
+changes in the compiler -->
 
 ```text
 Got: hi

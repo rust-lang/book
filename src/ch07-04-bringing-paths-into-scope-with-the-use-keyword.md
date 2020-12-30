@@ -15,21 +15,8 @@ scope of the `eat_at_restaurant` function so we only have to specify
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-11: Bringing a module into scope with
@@ -41,35 +28,18 @@ root, `hosting` is now a valid name in that scope, just as though the `hosting`
 module had been defined in the crate root. Paths brought into scope with `use`
 also check privacy, like any other paths.
 
-Specifying a relative path with `use` is slightly different. Instead of
-starting from a name in the current scope, we must start the path given to
-`use` with the keyword `self`. Listing 7-12 shows how to specify a relative
-path to get the same behavior as Listing 7-11.
+You can also bring an item into scope with `use` and a relative path. Listing
+7-12 shows how to specify a relative path to get the same behavior as in
+Listing 7-11.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use self::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-12: Bringing a module into scope with `use` and
-a relative path starting with `self`</span>
-
-Note that using `self` in this way might not be necessary in the future; it’s
-an inconsistency in the language that Rust developers are working to eliminate.
+a relative path</span>
 
 ### Creating Idiomatic `use` Paths
 
@@ -80,21 +50,8 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-use crate::front_of_house::hosting::add_to_waitlist;
-
-pub fn eat_at_restaurant() {
-    add_to_waitlist();
-    add_to_waitlist();
-    add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function
@@ -115,12 +72,7 @@ crate.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::collections::HashMap;
-
-fn main() {
-    let mut map = HashMap::new();
-    map.insert(1, 2);
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
 ```
 
 <span class="caption">Listing 7-14: Bringing `HashMap` into scope in an
@@ -137,18 +89,7 @@ different parent modules and how to refer to them.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::fmt;
-use std::io;
-
-fn function1() -> fmt::Result {
-    // --snip--
-#     Ok(())
-}
-
-fn function2() -> io::Result<()> {
-    // --snip--
-#     Ok(())
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-15: Bringing two types with the same name into
@@ -169,18 +110,7 @@ code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::fmt::Result;
-use std::io::Result as IoResult;
-
-fn function1() -> Result {
-    // --snip--
-#     Ok(())
-}
-
-fn function2() -> IoResult<()> {
-    // --snip--
-#     Ok(())
-}
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 7-16: Renaming a type when it’s brought into
@@ -205,21 +135,8 @@ changed to `pub use`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
-mod front_of_house {
-    pub mod hosting {
-        pub fn add_to_waitlist() {}
-    }
-}
-
-pub use crate::front_of_house::hosting;
-
-pub fn eat_at_restaurant() {
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-    hosting::add_to_waitlist();
-}
-# fn main() {}
+```rust,noplayground,test_harness
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-17: Making a name available for any code to use
@@ -227,11 +144,11 @@ from a new scope with `pub use`</span>
 
 By using `pub use`, external code can now call the `add_to_waitlist` function
 using `hosting::add_to_waitlist`. If we hadn’t specified `pub use`, the
-`eat_at_restaurant` function could call `hosting::add_to_waitlist` in its scope
-but external code couldn’t take advantage of this new path.
+`eat_at_restaurant` function could call `hosting::add_to_waitlist` in its
+scope, but external code couldn’t take advantage of this new path.
 
 Re-exporting is useful when the internal structure of your code is different
-than the way programmers calling your code would think about the domain. For
+from how programmers calling your code would think about the domain. For
 example, in this restaurant metaphor, the people running the restaurant think
 about “front of house” and “back of house.” But customers visiting a restaurant
 probably won’t think about the parts of the restaurant in those terms. With
@@ -245,34 +162,36 @@ In Chapter 2, we programmed a guessing game project that used an external
 package called `rand` to get random numbers. To use `rand` in our project, we
 added this line to *Cargo.toml*:
 
+<!-- When updating the version of `rand` used, also update the version of
+`rand` used in these files so they all match:
+* ch02-00-guessing-game-tutorial.md
+* ch14-03-cargo-workspaces.md
+-->
+
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
-[dependencies]
-rand = "0.5.5"
+{{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
-`rand` package and any dependencies from *https://crates.io* and make `rand`
-available to our project.
+`rand` package and any dependencies from [crates.io](https://crates.io/) and
+make `rand` available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the package, `rand`, and listing the items
+`use` line starting with the name of the crate, `rand`, and listed the items
 we wanted to bring into scope. Recall that in the [“Generating a Random
 Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
 into scope and called the `rand::thread_rng` function:
 
 ```rust,ignore
-use rand::Rng;
-fn main() {
-    let secret_number = rand::thread_rng().gen_range(1, 101);
-}
+{{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
 Members of the Rust community have made many packages available at
-*https://crates.io*, and pulling any of them into your package involves these
-same steps: listing them in your package’s *Cargo.toml* file and using `use` to
-bring items into scope.
+[crates.io](https://crates.io/), and pulling any of them into your package
+involves these same steps: listing them in your package’s *Cargo.toml* file and
+using `use` to bring items from their crates into scope.
 
 Note that the standard library (`std`) is also a crate that’s external to our
 package. Because the standard library is shipped with the Rust language, we
@@ -289,17 +208,15 @@ crate.
 
 ### Using Nested Paths to Clean Up Large `use` Lists
 
-If we’re using multiple items defined in the same package or same module,
+If we’re using multiple items defined in the same crate or same module,
 listing each item on its own line can take up a lot of vertical space in our
-files. For example, these two `use` statements we had in Listing 2-4 in the
-Guessing Game bring items from `std` into scope:
+files. For example, these two `use` statements we had in the Guessing Game in
+Listing 2-4 bring items from `std` into scope:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-use std::cmp::Ordering;
-use std::io;
-// ---snip---
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
 
 Instead, we can use nested paths to bring the same items into scope in one
@@ -309,15 +226,14 @@ differ, as shown in Listing 7-18.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-use std::{cmp::Ordering, io};
-// ---snip---
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 7-18: Specifying a nested path to bring multiple
 items with the same prefix into scope</span>
 
-In bigger programs, bringing many items into scope from the same package or
+In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate `use` statements
 needed by a lot!
 
@@ -329,8 +245,7 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::io;
-use std::io::Write;
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-19: Two `use` statements where one is a subpath
@@ -343,7 +258,7 @@ the nested path, as shown in Listing 7-20.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-use std::io::{self, Write};
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into

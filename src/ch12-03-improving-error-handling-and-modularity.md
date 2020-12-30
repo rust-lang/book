@@ -75,20 +75,7 @@ function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let (query, filename) = parse_config(&args);
-
-    // --snip--
-}
-
-fn parse_config(args: &[String]) -> (&str, &str) {
-    let query = &args[1];
-    let filename = &args[2];
-
-    (query, filename)
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-5: Extracting a `parse_config` function from
@@ -133,34 +120,7 @@ Listing 12-6 shows the improvements to the `parse_config` function.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-# use std::env;
-# use std::fs;
-#
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = parse_config(&args);
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
-
-    // --snip--
-}
-
-struct Config {
-    query: String,
-    filename: String,
-}
-
-fn parse_config(args: &[String]) -> Config {
-    let query = args[1].clone();
-    let filename = args[2].clone();
-
-    Config { query, filename }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-6: Refactoring `parse_config` to return an
@@ -187,14 +147,15 @@ trade-off.
 > ### The Trade-Offs of Using `clone`
 >
 > There’s a tendency among many Rustaceans to avoid using `clone` to fix
-> ownership problems because of its runtime cost. In [Chapter 13][ch13]<!--
-> ignore -->, you’ll learn how to use more efficient methods in this type of
-> situation. But for now, it’s okay to copy a few strings to continue making
-> progress because you’ll make these copies only once and your filename and
-> query string are very small. It’s better to have a working program that’s a
-> bit inefficient than to try to hyperoptimize code on your first pass. As you
-> become more experienced with Rust, it’ll be easier to start with the most
-> efficient solution, but for now, it’s perfectly acceptable to call `clone`.
+> ownership problems because of its runtime cost. In
+> [Chapter 13][ch13]<!-- ignore -->, you’ll learn how to use more efficient
+> methods in this type of situation. But for now, it’s okay to copy a few
+> strings to continue making progress because you’ll make these copies only
+> once and your filename and query string are very small. It’s better to have
+> a working program that’s a bit inefficient than to try to hyperoptimize code
+> on your first pass. As you become more experienced with Rust, it’ll be
+> easier to start with the most efficient solution, but for now, it’s
+> perfectly acceptable to call `clone`.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config`, and we updated the code that
@@ -227,31 +188,7 @@ shows the changes we need to make.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-# use std::env;
-#
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args);
-
-    // --snip--
-}
-
-# struct Config {
-#     query: String,
-#     filename: String,
-# }
-#
-// --snip--
-
-impl Config {
-    fn new(args: &[String]) -> Config {
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        Config { query, filename }
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-7: Changing `parse_config` into
@@ -269,14 +206,8 @@ the values in the `args` vector at index 1 or index 2 will cause the program to
 panic if the vector contains fewer than three items. Try running the program
 without any arguments; it will look like this:
 
-```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep`
-thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', src/main.rs:25:21
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-07/output.txt}}
 ```
 
 The line `index out of bounds: the len is 1 but the index is 1` is an error
@@ -293,12 +224,7 @@ out of bounds` message.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// --snip--
-fn new(args: &[String]) -> Config {
-    if args.len() < 3 {
-        panic!("not enough arguments");
-    }
-    // --snip--
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-8: Adding a check for the number of
@@ -315,13 +241,8 @@ will be true, and we call the `panic!` macro to end the program immediately.
 With these extra few lines of code in `new`, let’s run the program without any
 arguments again to see what the error looks like now:
 
-```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/minigrep`
-thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-08/output.txt}}
 ```
 
 This output is better: we now have a reasonable error message. However, we also
@@ -349,28 +270,14 @@ next listing.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-impl Config {
-    fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        Ok(Config { query, filename })
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-9: Returning a `Result` from
 `Config::new`</span>
 
 Our `new` function now returns a `Result` with a `Config` instance in the
-success case and a `&'static str` in the error case. Recall from [“The Static
-Lifetime”][the-static-lifetime]<!-- ignore --> section in Chapter 10 that
-`&'static str` is the type of string literals, which is our error message type
-for now.
+success case and a `&str` in the error case.
 
 We’ve made two changes in the body of the `new` function: instead of calling
 `panic!` when the user doesn’t pass enough arguments, we now return an `Err`
@@ -393,17 +300,7 @@ program that the program exited with an error state.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::process;
-
-fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    // --snip--
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-10: Exiting with an error code if creating a
@@ -418,7 +315,7 @@ is an `Err` value, this method calls the code in the *closure*, which is an
 anonymous function we define and pass as an argument to `unwrap_or_else`. We’ll
 cover closures in more detail in [Chapter 13][ch13]<!-- ignore -->. For now,
 you just need to know that `unwrap_or_else` will pass the inner value of the
-`Err`, which in this case is the static string `not enough arguments` that we
+`Err`, which in this case is the static string `"not enough arguments"` that we
 added in Listing 12-9, to our closure in the argument `err` that appears
 between the vertical pipes. The code in the closure can then use the `err`
 value when it runs.
@@ -431,12 +328,8 @@ number that was passed as the exit status code. This is similar to the
 `panic!`-based handling we used in Listing 12-8, but we no longer get all the
 extra output. Let’s try it:
 
-```text
-$ cargo run
-   Compiling minigrep v0.1.0 (file:///projects/minigrep)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target/debug/minigrep`
-Problem parsing arguments: not enough arguments
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-10/output.txt}}
 ```
 
 Great! This output is much friendlier for our users.
@@ -458,23 +351,7 @@ defining the function in *src/main.rs*.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    // --snip--
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
-    run(config);
-}
-
-fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
-
-    println!("With text:\n{}", contents);
-}
-
-// --snip--
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-11: Extracting a `run` function containing the
@@ -497,17 +374,7 @@ signature and body of `run`.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::error::Error;
-
-// --snip--
-
-fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
-
-    println!("With text:\n{}", contents);
-
-    Ok(())
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-12/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-12: Changing the `run` function to return
@@ -541,15 +408,8 @@ it doesn’t return a value we need.
 
 When you run this code, it will compile but will display a warning:
 
-```text
-warning: unused `std::result::Result` that must be used
-  --> src/main.rs:17:5
-   |
-17 |     run(config);
-   |     ^^^^^^^^^^^^
-   |
-   = note: #[warn(unused_must_use)] on by default
-   = note: this `Result` may be an `Err` variant, which should be handled
+```console
+{{#include ../listings/ch12-an-io-project/listing-12-12/output.txt}}
 ```
 
 Rust tells us that our code ignored the `Result` value and the `Result` value
@@ -565,18 +425,7 @@ with `Config::new` in Listing 12-10, but with a slight difference:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    // --snip--
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
-    if let Err(e) = run(config) {
-        println!("Application error: {}", e);
-
-        process::exit(1);
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/no-listing-01-handling-errors-in-main/src/main.rs:here}}
 ```
 
 We use `if let` rather than `unwrap_or_else` to check whether `run` returns an
@@ -610,23 +459,7 @@ compile until we modify *src/main.rs* in Listing 12-14.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-use std::error::Error;
-use std::fs;
-
-pub struct Config {
-    pub query: String,
-    pub filename: String,
-}
-
-impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        // --snip--
-    }
-}
-
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 12-13: Moving `Config` and `run` into
@@ -642,17 +475,7 @@ binary crate in *src/main.rs*, as shown in Listing 12-14.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-use std::env;
-use std::process;
-
-use minigrep::Config;
-
-fn main() {
-    // --snip--
-    if let Err(e) = minigrep::run(config) {
-        // --snip--
-    }
-}
+{{#rustdoc_include ../listings/ch12-an-io-project/listing-12-14/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 12-14: Using the `minigrep` library crate in
@@ -672,7 +495,6 @@ Let’s take advantage of this newfound modularity by doing something that would
 have been difficult with the old code but is easy with the new code: we’ll
 write some tests!
 
-[the-static-lifetime]: ch10-03-lifetime-syntax.html#the-static-lifetime
 [ch13]: ch13-00-functional-features.html
 [ch9-custom-types]: ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation
 [ch9-error-guidelines]: ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling

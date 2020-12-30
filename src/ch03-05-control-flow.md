@@ -18,15 +18,7 @@ the `if` expression. In the *src/main.rs* file, input the following:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number = 3;
-
-    if number < 5 {
-        println!("condition was true");
-    } else {
-        println!("condition was false");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/src/main.rs}}
 ```
 
 All `if` expressions start with the keyword `if`, which is followed by a
@@ -35,8 +27,9 @@ condition. In this case, the condition checks whether or not the variable
 condition is true is placed immediately after the condition inside curly
 brackets. Blocks of code associated with the conditions in `if` expressions are
 sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the [“Comparing the Guess to the Secret Number”]
-[comparing-the-guess-to-the-secret-number]<!-- ignore --> section of Chapter 2.
+discussed in the [“Comparing the Guess to the Secret
+Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section of
+Chapter 2.
 
 Optionally, we can also include an `else` expression, which we chose
 to do here, to give the program an alternative block of code to execute should
@@ -46,29 +39,21 @@ to the next bit of code.
 
 Try running this code; you should see the following output:
 
-```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/branches`
-condition was true
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-26-if-true/output.txt}}
 ```
 
 Let’s try changing the value of `number` to a value that makes the condition
 `false` to see what happens:
 
 ```rust,ignore
-let number = 7;
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/src/main.rs:here}}
 ```
 
 Run the program again, and look at the output:
 
-```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/branches`
-condition was false
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-27-if-false/output.txt}}
 ```
 
 It’s also worth noting that the condition in this code *must* be a `bool`. If
@@ -78,27 +63,14 @@ following code:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let number = 3;
-
-    if number {
-        println!("number was three");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/src/main.rs}}
 ```
 
 The `if` condition evaluates to a value of `3` this time, and Rust throws an
 error:
 
-```text
-error[E0308]: mismatched types
- --> src/main.rs:4:8
-  |
-4 |     if number {
-  |        ^^^^^^ expected bool, found integral variable
-  |
-  = note: expected type `bool`
-             found type `{integer}`
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-28-if-condition-must-be-bool/output.txt}}
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Unlike
@@ -111,13 +83,7 @@ expression to the following:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number = 3;
-
-    if number != 0 {
-        println!("number was something other than zero");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-29-if-not-equal-0/src/main.rs}}
 ```
 
 Running this code will print `number was something other than zero`.
@@ -130,30 +96,14 @@ expression. For example:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let number = 6;
-
-    if number % 4 == 0 {
-        println!("number is divisible by 4");
-    } else if number % 3 == 0 {
-        println!("number is divisible by 3");
-    } else if number % 2 == 0 {
-        println!("number is divisible by 2");
-    } else {
-        println!("number is not divisible by 4, 3, or 2");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/src/main.rs}}
 ```
 
 This program has four possible paths it can take. After running it, you should
 see the following output:
 
-```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/branches`
-number is divisible by 3
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-30-else-if/output.txt}}
 ```
 
 When this program executes, it checks each `if` expression in turn and executes
@@ -175,16 +125,7 @@ statement, as in Listing 3-2.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let condition = true;
-    let number = if condition {
-        5
-    } else {
-        6
-    };
-
-    println!("The value of number is: {}", number);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-2: Assigning the result of an `if` expression
@@ -193,12 +134,8 @@ to a variable</span>
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
 
-```text
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
-     Running `target/debug/branches`
-The value of number is: 5
+```console
+{{#include ../listings/ch03-common-programming-concepts/listing-03-02/output.txt}}
 ```
 
 Remember that blocks of code evaluate to the last expression in them, and
@@ -212,37 +149,15 @@ example, we’ll get an error:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let condition = true;
-
-    let number = if condition {
-        5
-    } else {
-        "six"
-    };
-
-    println!("The value of number is: {}", number);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/src/main.rs}}
 ```
 
 When we try to compile this code, we’ll get an error. The `if` and `else` arms
 have value types that are incompatible, and Rust indicates exactly where to
 find the problem in the program:
 
-```text
-error[E0308]: if and else have incompatible types
- --> src/main.rs:4:18
-  |
-4 |       let number = if condition {
-  |  __________________^
-5 | |         5
-6 | |     } else {
-7 | |         "six"
-8 | |     };
-  | |_____^ expected integral variable, found &str
-  |
-  = note: expected type `{integer}`
-             found type `&str`
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-31-arms-must-return-same-type/output.txt}}
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
@@ -274,11 +189,7 @@ like this:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    loop {
-        println!("again!");
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-loop/src/main.rs}}
 ```
 
 When we run this program, we’ll see `again!` printed over and over continuously
@@ -286,10 +197,16 @@ until we stop the program manually. Most terminals support a keyboard shortcut,
 <span class="keystroke">ctrl-c</span>, to interrupt a program that is stuck in
 a continual loop. Give it a try:
 
-```text
+<!-- manual-regeneration
+cd listings/ch03-common-programming-concepts/no-listing-32-loop
+cargo run
+CTRL-C
+-->
+
+```console
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.29 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29s
      Running `target/debug/loops`
 again!
 again!
@@ -320,19 +237,7 @@ the loop; that value will be returned out of the loop so you can use it, as
 shown here:
 
 ```rust
-fn main() {
-    let mut counter = 0;
-
-    let result = loop {
-        counter += 1;
-
-        if counter == 10 {
-            break counter * 2;
-        }
-    };
-
-    println!("The result is {}", result);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-33-return-value-from-loop/src/main.rs}}
 ```
 
 Before the loop, we declare a variable named `counter` and initialize it to
@@ -359,17 +264,7 @@ another message and exits.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut number = 3;
-
-    while number != 0 {
-        println!("{}!", number);
-
-        number -= 1;
-    }
-
-    println!("LIFTOFF!!!");
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-3: Using a `while` loop to run code while a
@@ -387,16 +282,7 @@ such as an array. For example, let’s look at Listing 3-4.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [10, 20, 30, 40, 50];
-    let mut index = 0;
-
-    while index < 5 {
-        println!("the value is: {}", a[index]);
-
-        index += 1;
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-4: Looping through each element of a collection
@@ -408,15 +294,7 @@ when `index < 5` is no longer true). Running this code will print every element
 in the array:
 
 ```text
-$ cargo run
-   Compiling loops v0.1.0 (file:///projects/loops)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
-     Running `target/debug/loops`
-the value is: 10
-the value is: 20
-the value is: 30
-the value is: 40
-the value is: 50
+{{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 
 All five array values appear in the terminal, as expected. Even though `index`
@@ -434,13 +312,7 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let a = [10, 20, 30, 40, 50];
-
-    for element in a.iter() {
-        println!("the value is: {}", element);
-    }
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 3-5: Looping through each element of a collection
@@ -451,10 +323,11 @@ importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
-For example, in the code in Listing 3-4, if you removed an item from the `a`
-array but forgot to update the condition to `while index < 4`, the code would
-panic. Using the `for` loop, you wouldn’t need to remember to change any other
-code if you changed the number of values in the array.
+For example, in the code in Listing 3-4, if you changed the definition of the
+`a` array to have four elements but forgot to update the condition to `while
+index < 4`, the code would panic. Using the `for` loop, you wouldn’t need to
+remember to change any other code if you changed the number of values in the
+array.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
@@ -470,12 +343,7 @@ we’ve not yet talked about, `rev`, to reverse the range:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    for number in (1..4).rev() {
-        println!("{}!", number);
-    }
-    println!("LIFTOFF!!!");
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-34-for-range/src/main.rs}}
 ```
 
 This code is a bit nicer, isn’t it?
