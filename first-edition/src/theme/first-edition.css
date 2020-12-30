@@ -1,0 +1,56 @@
+.warning {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(242, 222, 222);
+    border-bottom-color: rgb(238, 211, 215);
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-style: solid;
+    border-bottom-width: 0.666667px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color: rgb(238, 211, 215);
+    border-left-style: solid;
+    border-left-width: 0.666667px;
+    border-right-color: rgb(238, 211, 215);
+    border-right-style: solid;
+    border-right-width: 0.666667px;
+    border-top-color: rgb(238, 211, 215);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-top-style: solid;
+    border-top-width: 0.666667px;
+    color: rgb(185, 74, 72);
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 30px;
+    padding-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 35px;
+    padding-right: 14px;
+    padding-top: 8px;
+}
+.warning strong {
+    color: rgb(185, 74, 72)
+}
+.warning a {
+    color: rgb(0, 136, 204)
+}
+.warning .message {
+    margin-right: 14px;
+}
+.warning .message:last-child {
+    margin-right: 21px;
+}
+.warning .button {
+    border: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 14px;
+}
