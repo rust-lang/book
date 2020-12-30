@@ -25,12 +25,7 @@
 것입니다:
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Yellow"), 50);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-20: 새로운 해쉬맵을 생성하여 몇 개의 키와 값을
@@ -47,31 +42,31 @@ scores.insert(String::from("Yellow"), 50);
 동질적입니다: 모든 키는 같은 타입이어야 하고, 모든 값도 같은 타입이여야
 합니다.
 
-해쉬맵을 생성하는 또 다른 방법은 튜플의 벡터에 대해 `collect` 메소드를
-사용하는 것인데, 이 벡터의 각 튜플은 키와 키에 대한 값으로 구성되어 있습니다.
-`collect` 메소드는 데이터를 모아서 `HashMap`을 포함한 여러 컬렉션 타입으로
-만들어줍니다. 예를 들면, 만약 두 개의 분리된 벡터에 각각 팀 이름과 초기 점수를
-갖고 있다면, 우리는 `zip` 메소드를 이용하여 "Blue"와 10이 한 쌍이 되는 식으로
-튜플의 벡터를 생성할 수 있습니다. 그 다음 Listing 8-21과 같이 `collect`
-메소드를 사용하여 튜플의 벡터를 `HashMap`으로 바꿀 수 있습니다:
+해쉬맵을 생성하는 또 다른 방법은 튜플의 벡터에 대해 반복자 (iterator) 와
+`collect` 메소드를 사용하는 것인데, 이 벡터의 각 튜플은 키와 키에 대한 값으로 구성되어 있습니다.
+반복자 및 이와 관련된 메소드에 대한 더 자세한 내용은 13장의
+[”반복자를 통하여 일련의 아이템 처리하기”][iterators]<!-- ignore -->
+에서 다룰 예정입니다. `collect` 메소드는 데이터를 모아서 `HashMap`을 포함한
+여러 컬렉션 타입으로 만들어줍니다. 예를 들면, 만약 두 개의 분리된 벡터에 각각
+팀 이름과 초기 점수를 갖고 있다면, 우리는 `zip` 메소드를 이용하여 "Blue"와
+10이 한 쌍이 되는 식으로 튜플의 벡터를 생성할 수 있습니다.
+그 다음 Listing 8-21과 같이 `collect` 메소드를 사용하여
+튜플의 벡터를 `HashMap`으로 바꿀 수 있습니다:
 
 ```rust
-use std::collections::HashMap;
-
-let teams  = vec![String::from("Blue"), String::from("Yellow")];
-let initial_scores = vec![10, 50];
-
-let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-21: 팀의 리스트와 점수의 리스트로부터 해쉬맵
 생성하기</span>
 
-타입 명시 `HashMap<_, _>`이 필요한데 이는 `collect`가 다른 많은 데이터 구조로
-바뀔 수 있고, 러스트는 여러분이 특정하지 않으면 어떤 것을 원하는지 모르기
-때문입니다. 그러나 키와 값의 타입에 대한 타입 파라미터에 대해서는 밑줄을 쓸 수
-있으며 러스트는 벡터에 담긴 데이터의 타입에 기초하여 해쉬에 담길 타입을 추론할
-수 있습니다.
+타입 명시 `HashMap<_, _>`이 필요한데 이는 `collect`가 다른 많은 데이터
+구조로 바뀔 수 있고, 러스트는 여러분이 특정하지 않으면 어떤 것을 원하는지
+모르기 때문입니다. 그러나 키와 값의 타입에 대한 타입 파라미터에 대해서는
+밑줄을 쓸 수 있으며 러스트는 벡터에 담긴 데이터의 타입에 기초하여 해쉬에
+담길 타입을 추론할 수 있습니다. Listing 8-21에서는 Listing 8-20에서와
+마찬가지로 키의 타입은 `String`이, 값의 타입은 `i32`가
+될 것입니다.
 
 ### 해쉬맵과 소유권
 
@@ -80,15 +75,7 @@ let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
 값들이 이동되어 해쉬맵이 그 값들에 대한 소유자가 될 것입니다:
 
 ```rust
-use std::collections::HashMap;
-
-let field_name = String::from("Favorite color");
-let field_value = String::from("Blue");
-
-let mut map = HashMap::new();
-map.insert(field_name, field_value);
-// field_name과 field_value은 이 지점부터 유효하지 않습니다.
-// 이들을 이용하는 시도를 해보고 어떤 컴파일러 에러가 나오는지 보세요!
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-22: 키와 값이 삽입되는 순간 이들이 해쉬맵의
@@ -99,10 +86,10 @@ map.insert(field_name, field_value);
 
 만일 우리가 해쉬맵에 값들의 참조자들을 삽입한다면, 이 값들은 해쉬맵으로
 이동되지 않을 것입니다. 하지만 참조자가 가리키고 있는 값은 해쉬맵이 유효할
-때까지 계속 유효해야 합니다. 이것과 관련하여 10장의
+때까지 계속 유효해야 합니다.
+이것과 관련하여 10장의
 ["라이프타임을 이용한 참조자 유효화"][validating-references-with-lifetimes]<!-- ignore -->
-절에서 더 자세히 이야기할
-것입니다.
+절에서 더 자세히 이야기할 것입니다.
 
 ### 해쉬맵 내의 값 접근하기
 
@@ -110,15 +97,7 @@ Listing 8-23과 같이 해쉬맵의 `get` 메소드에 키를 제공하여 해�
 값을 얻어올 수 있습니다:
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Yellow"), 50);
-
-let team_name = String::from("Blue");
-let score = scores.get(&team_name);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-23: 해쉬맵 내에 저장된 블루 팀의 점수
@@ -134,16 +113,7 @@ let score = scores.get(&team_name);
 각각의 키/값 쌍에 대한 반복작업을 할 수 있습니다:
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Yellow"), 50);
-
-for (key, value) in &scores {
-    println!("{}: {}", key, value);
-}
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
 ```
 
 이 코드는 각각의 쌍을 임의의 순서로 출력할 것입니다:
@@ -173,14 +143,7 @@ Blue: 10
 때문입니다:
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-
-scores.insert(String::from("Blue"), 10);
-scores.insert(String::from("Blue"), 25);
-
-println!("{:?}", scores);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-24: 특정한 키로 저장된 값을
@@ -201,15 +164,7 @@ println!("{:?}", scores);
 같습니다:
 
 ```rust
-use std::collections::HashMap;
-
-let mut scores = HashMap::new();
-scores.insert(String::from("Blue"), 10);
-
-scores.entry(String::from("Yellow")).or_insert(50);
-scores.entry(String::from("Blue")).or_insert(50);
-
-println!("{:?}", scores);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-25: `entry` 메소드를 이용하여 어떤 키가 값을
@@ -237,18 +192,7 @@ Listing 8-25의 코드를 실행하면 `{"Yellow": 50, "Blue": 10}`를 출력할
 것입니다.
 
 ```rust
-use std::collections::HashMap;
-
-let text = "hello world wonderful world";
-
-let mut map = HashMap::new();
-
-for word in text.split_whitespace() {
-    let count = map.entry(word).or_insert(0);
-    *count += 1;
-}
-
-println!("{:?}", map);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-26/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-26: 단어와 횟수를 저장하는 해쉬맵을 사용하여
@@ -272,10 +216,10 @@ println!("{:?}", map);
 다른 *해쉬어(hasher)* 를 특정하여 다른 함수로 바꿀 수 있습니다. 해쉬어는
 `BuildHasher` 트레잇을 구현한 타입을 말합니다. 트레잇과 이를 어떻게
 구현하는지에 대해서는 10장에서 다룰 것입니다. 여러분의 해쉬어를 바닥부터
-새로 구현해야 할 필요는 없습니다; [crates.io](https://crates.io)에서는
+새로 구현해야 할 필요는 없습니다; [crates.io](https://crates.io/)에서는
 많은 수의 범용적인 해쉬 알고리즘을 구현한 해쉬어를 제공하는 공유 라이브러리를 제공합니다.
 
-[^siphash]: [https://www.131002.net/siphash/siphash.pdf](https://www.131002.net/siphash/siphash.pdf)
+[^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
 ## 정리
 
@@ -302,5 +246,6 @@ println!("{:?}", map);
 우리는 연산이 실패할 수 있는 더 복잡한 프로그램으로 진입하고 있는 상황입니다;
 따라서, 다음은 에러 처리에 대해 다룰 완벽한 시간이란 뜻이죠!
 
+[iterators]: ch13-02-iterators.html
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes

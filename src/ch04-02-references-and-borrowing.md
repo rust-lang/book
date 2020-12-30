@@ -12,17 +12,7 @@
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = String::from("hello");
-
-    let len = calculate_length(&s1);
-
-    println!("The length of '{}' is {}.", s1, len);
-}
-
-fn calculate_length(s: &String) -> usize {
-    s.len()
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:all}}
 ```
 
 먼저, 변수 선언부와 함수 반환 값에 위치하던
@@ -46,12 +36,7 @@ fn calculate_length(s: &String) -> usize {
 함수 호출부를 좀 더 자세히 살펴봅시다:
 
 ```rust
-# fn calculate_length(s: &String) -> usize {
-#     s.len()
-# }
-let s1 = String::from("hello");
-
-let len = calculate_length(&s1);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
 ```
 
 `s1` 에 `&` 를 붙인 `&s1` 구문은 `s1` 값을 참조하나,
@@ -62,10 +47,7 @@ let len = calculate_length(&s1);
 주석으로 보여드리겠습니다.
 
 ```rust
-fn calculate_length(s: &String) -> usize { // s 는 String 참조자입니다.
-    s.len()
-} // 이 지점에서 s 는 스코프를 벗어나지만,
-  // 참조자 s 는 소유권을 갖고 있지 않기 때문에 아무 일도 일어나지 않습니다.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
 ```
 
 변수 `s` 가 유효한 스코프는
@@ -84,29 +66,15 @@ Listing 4-9 코드를 실행해보면 알 수 있으나, 미리 말씀드리자�
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let s = String::from("hello");
-
-    change(&s);
-}
-
-fn change(some_string: &String) {
-    some_string.push_str(", world");
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-6: borrow 한 값을 수정해보는 코드</span>
 
 나타나는 오류는 다음과 같습니다:
 
-```text
-error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
- --> error.rs:8:5
-  |
-7 | fn change(some_string: &String) {
-  |                        ------- use `&mut String` here to make mutable
-8 |     some_string.push_str(", world");
-  |     ^^^^^^^^^^^ cannot borrow as mutable
+```console
+{{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
 변수가 기본적으로 불변성을 지니듯,
@@ -119,15 +87,7 @@ Listing 4-6 을 살짝 수정하여 오류를 없애보죠:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut s = String::from("hello");
-
-    change(&mut s);
-}
-
-fn change(some_string: &mut String) {
-    some_string.push_str(", world");
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-09-fixes-listing-04-06/src/main.rs}}
 ```
 
 `s` 를 `mut` 로 변경하고,
@@ -141,27 +101,13 @@ fn change(some_string: &mut String) {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-let mut s = String::from("hello");
-
-let r1 = &mut s;
-let r2 = &mut s;
-
-println!("{}, {}", r1, r2);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/src/main.rs:here}}
 ```
 
 나타나는 오류는 다음과 같습니다:
 
-```text
-error[E0499]: cannot borrow `s` as mutable more than once at a time
- --> src/main.rs:5:14
-  |
-4 |     let r1 = &mut s;
-  |              ------ first mutable borrow occurs here
-5 |     let r2 = &mut s;
-  |              ^^^^^^ second mutable borrow occurs here
-6 |
-7 |     println!("{}, {}", r1, r2);
-  |                        -- first borrow later used here
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
 ```
 
 이 제약으로 인해 가변 참조자는 남용이 불가능합니다.
@@ -172,9 +118,9 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 데이터 레이스란 다음 세 가지 상황이 겹칠 때 일어나는
 특정한 레이스 조건(race condition)입니다:
 
-1. 둘 이상의 포인터가 동시에 같은 데이터에 접근
-2. 포인터 중 하나 이상이 데이터에 쓰기 작업을 시행
-3. 데이터 접근 동기화 매커니즘이 존재하지 않음
+* 둘 이상의 포인터가 동시에 같은 데이터에 접근
+* 포인터 중 하나 이상이 데이터에 쓰기 작업을 시행
+* 데이터 접근 동기화 매커니즘이 존재하지 않음
 
 데이터 레이스는 정의되지 않은 동작을 일으키며,
 런타임에 추적하려고 할 때 문제 진단 및 수정이 어렵습니다.
@@ -184,43 +130,20 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 중괄호로 새로운 스코프를 만들어, 가변 참조자가 동시에 여러개가 존재하는 상황을 회피하는 방법이 있습니다:
 
 ```rust
-let mut s = String::from("hello");
-
-{
-    let r1 = &mut s;
-
-} // r1 은 여기서 스코프를 벗어나니, 문제없이 새 참조자를 만들 수 있습니다.
-
-let r2 = &mut s;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
 ```
 
 가변 참조자와 불변 참조자를 혼용할 때도 유사한 제약이 적용되는데,
 다음 코드는 컴파일 오류가 발생합니다:
 
 ```rust,ignore,does_not_compile
-let mut s = String::from("hello");
-
-let r1 = &s; // 문제 없음
-let r2 = &s; // 문제 없음
-let r3 = &mut s; // 이 부분이 문제가 됩니다
-
-println!("{}, {}, and {}", r1, r2, r3);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
 ```
 
 나타나는 오류는 다음과 같습니다:
 
-```text
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:14
-  |
-4 |     let r1 = &s; // 문제 없음
-  |              -- immutable borrow occurs here
-5 |     let r2 = &s; // 문제 없음
-6 |     let r3 = &mut s; // 이 부분이 문제가 됩니다
-  |              ^^^^^^ mutable borrow occurs here
-7 |
-8 |     println!("{}, {}, and {}", r1, r2, r3);
-  |                                -- immutable borrow later used here
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
 ```
 
 안타깝게도, 가변 참조자는 불변 참조자가 존재하는 동안에도 생성할 수 없습니다.
@@ -234,20 +157,8 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 즉, 다음 코드는 가변 참조자 정의가 불변 참조자의 마지막 사용 이후에 있으므로
 컴파일 오류가 발생하지 않습니다.
 
-<!-- This example is being ignored because there's a bug in rustdoc making the
-edition2018 not work. The bug is currently fixed in nightly, so when we update
-the book to >= 1.35, `ignore` can be removed from this example. -->
-
-```rust,edition2018,ignore
-let mut s = String::from("hello");
-
-let r1 = &s; // 문제 없음
-let r2 = &s; // 문제 없음
-println!("{} and {}", r1, r2);
-// 이 지점 이후로 r1, r2 는 사용되지 않음
-
-let r3 = &mut s; // 문제 없음
-println!("{}", r3);
+```rust,edition2018
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
 불변 참조자 `rl`, `r2` 의 스코프는 자신들이 마지막으로 사용된 `println!` 이후로 종료되고,
@@ -275,29 +186,13 @@ println!("{}", r3);
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let reference_to_nothing = dangle();
-}
-
-fn dangle() -> &String {
-    let s = String::from("hello");
-
-    &s
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
 ```
 
 나타나는 오류는 다음과 같습니다:
 
-```text
-error[E0106]: missing lifetime specifier
- --> main.rs:5:16
-  |
-5 | fn dangle() -> &String {
-  |                ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but there is
-  no value for it to be borrowed from
-  = help: consider giving it a 'static lifetime
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
 ```
 
 아직 다루지 않은 라이프타임이라는 내용이 에러 메시지에 등장하는데,
@@ -315,13 +210,7 @@ this function's return type contains a borrowed value, but there is no value for
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn dangle() -> &String { // dangle 함수는 String 참조자를 반환합니다
-
-    let s = String::from("hello"); // s 는 새로운 String 입니다
-
-    &s // String 참조자 s 를 반환합니다.
-} // 하지만 s 는 스코프를 벗어났고, drop 되었습니다. 메모리도 사라졌죠.
-  // 문제가 생겼네요.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
 ```
 
 `s` 는 `dangle` 함수 내에서 생성됐기 때문에,
@@ -332,11 +221,7 @@ fn dangle() -> &String { // dangle 함수는 String 참조자를 반환합니다
 따라서, 이런 경우엔 `String` 을 직접 반환해야 합니다:
 
 ```rust
-fn no_dangle() -> String {
-    let s = String::from("hello");
-
-    s
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
 ```
 
 이 코드는 정상적으로 작동합니다.

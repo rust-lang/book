@@ -12,7 +12,7 @@
 호출해 줍니다:
 
 ```rust
-let v: Vec<i32> = Vec::new();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-1: `i32` 타입의 값을 가질 수 있는 비어있는 새 벡터
@@ -32,10 +32,12 @@ let v: Vec<i32> = Vec::new();
 없습니다. 초기값들을 갖고 있는 `Vec<T>`을 생성하는 것이 더 일반적이며, 러스트는
 편의를 위해 `vec!` 매크로를 제공합니다. 이 매크로는 우리가 준 값들을 저장하고
 있는 새로운 `Vec`을 생성합니다. Listing 8-2는 `1`, `2`, `3`을 저장하고 있는
-새로운 `Vec<i32>`을 생성할 것입니다:
+새로운 `Vec<i32>`을 생성할 것입니다. 3장의 [“데이터 타입들”][data-types]<!--
+ignore --> 절에서 본 것처럼, 기본 정수형이 `i32`기 때문에 여기서도 타입은
+`i32` 입니다.
 
 ```rust
-let v = vec![1, 2, 3];
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-2: 값을 저장하고 있는 새로운 벡터
@@ -51,12 +53,7 @@ let v = vec![1, 2, 3];
 `push` 메소드를 사용할 수 있습니다:
 
 ```rust
-let mut v = Vec::new();
-
-v.push(5);
-v.push(6);
-v.push(7);
-v.push(8);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-3: `push` 메소드를 사용하여 벡터에 값을
@@ -73,12 +70,7 @@ Listing 8-4에 주석으로 표시된 것처럼, 벡터는 스코프를 벗어�
 `struct` 와 마찬가지죠.
 
 ```rust
-{
-    let v = vec![1, 2, 3, 4];
-
-    // v 를 사용하는 코드
-
-} // 이 지점에서 v 는 스코프를 벗어나고 해제됩니다.
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-4: 벡터와 요소들이 drop되는 위치를
@@ -100,15 +92,7 @@ Listing 8-5는 인덱스 문법이나 `get` 메소드를 가지고 벡터의 값
 방법 모두를 보여주고 있습니다:
 
 ```rust
-let v = vec![1, 2, 3, 4, 5];
-
-let third: &i32 = &v[2];
-println!("The third element is {}", third);
-
-match v.get(2) {
-    Some(third) => println!("The third element is {}", third),
-    None => println!("There is no third element."),
-}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-5: 인덱스 문법 혹은 `get` 메소드를 사용하여
@@ -127,10 +111,7 @@ match v.get(2) {
 접근하려고 시도한 경우 프로그램은 어떻게 동작해야 할까요:
 
 ```rust,should_panic,panics
-let v = vec![1, 2, 3, 4, 5];
-
-let does_not_exist = &v[100];
-let does_not_exist = v.get(100);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-6: 5개의 요소를 가진 벡터에 100 인덱스에 있는
@@ -157,16 +138,10 @@ let does_not_exist = v.get(100);
 내에서 가변 참조자와 불변 참조자를 가질 수 없다는 규칙을 상기하세요.
 이 규칙은 아래 예제에서도 적용되는데, Listing 8-7에서는 벡터의 첫 번째
 요소에 대한 불변 참조자를 얻은 뒤 벡터의 끝에 요소를 추가하고자
-했습니다:
+했는데, 함수 끝에서 해당 요소에 참조 시도까지 한다면 동작하지 않을 것입니다:
 
 ```rust,ignore,does_not_compile
-let mut v = vec![1, 2, 3, 4, 5];
-
-let first = &v[0];
-
-v.push(6);
-
-println!("The first element is: {}", first);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-7: 벡터 요소의 참조자를 가지고 있는 상태에서,
@@ -174,18 +149,8 @@ println!("The first element is: {}", first);
 
 이 예제를 컴파일하면 아래와 같은 에러가 발생합니다:
 
-```text
-error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immutable
- --> src/main.rs:6:5
-  |
-4 |     let first = &v[0];
-  |                  - immutable borrow occurs here
-5 |
-6 |     v.push(6);
-  |     ^^^^^^^^^ mutable borrow occurs here
-7 |
-8 |     println!("The first element is: {}", first);
-  |                                          ----- immutable borrow later used here
+```console
+{{#include ../listings/ch08-common-collections/listing-08-07/output.txt}}
 ```
 
 첫 번째 요소의 참조자가 벡터 끝부분의 변경이랑 무슨 상관일까요?
@@ -198,7 +163,7 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
 막아둔 것이죠.
 
 > Note: `Vec<T>` 타입의 구현 세부사항에 대한 그밖의 것에 대해서는
-> https://doc.rust-lang.org/stable/nomicon/vec.html 에 있는 노미콘(The Nomicon)을 보세요:
+> [“러스토노미콘 (The Rustonomicon)”][nomicon]을 보세요:
 
 ### 벡터 내의 값들에 대한 반복처리
 
@@ -208,10 +173,7 @@ Listing 8-8은 `for` 루프를 사용하여 `i32`의 벡터 내에 있는 각 �
 불변 참조자를 얻어서 이를 출력하는 방법을 보여줍니다:
 
 ```rust
-let v = vec![100, 32, 57];
-for i in &v {
-    println!("{}", i);
-}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-8: `for` 루프를 이용한 요소들에 대한
@@ -222,10 +184,7 @@ for i in &v {
 `50`을 더할 것입니다:
 
 ```rust
-let mut v = vec![100, 32, 57];
-for i in &mut v {
-    *i += 50;
-}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-9: 벡터 내의 요소에 대한 가변 참조자로
@@ -253,17 +212,7 @@ for i in &mut v {
 수 있습니다. Listing 8-10에서 이를 보여주고 있습니다:
 
 ```rust
-enum SpreadsheetCell {
-    Int(i32),
-    Float(f64),
-    Text(String),
-}
-
-let row = vec![
-    SpreadsheetCell::Int(3),
-    SpreadsheetCell::Text(String::from("blue")),
-    SpreadsheetCell::Float(10.12),
-];
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-10: 열거형을 정의하여 벡터 내에 다른
@@ -284,8 +233,11 @@ let row = vec![
 다루게 될 것입니다.
 
 지금까지 벡터를 이용하는 가장 일반적인 방식 중 몇 가지에 대해 논의했는데, 표준
-라이브러리의 `Vec`에 정의된 수많은 유용한 메소드들이 있으니 API 문서를 꼭
-살펴봐 주시기 바랍니다. 예를 들면, `push`에 더해서, `pop` 메소드는 제일 마지막
+라이브러리의 `Vec`에 정의된 수많은 유용한 메소드들이 있으니 [API 문서][vec-api]를
+꼭 살펴봐 주시기 바랍니다. 예를 들면, `push`에 더해서, `pop` 메소드는 제일 마지막
 요소를 반환하고 지워줍니다. 다음 컬렉션 타입인 `String`으로 넘어갑시다!
 
+[data-types]: ch03-02-data-types.html#data-types
+[nomicon]: ../nomicon/vec.html
+[vec-api]: ../std/vec/struct.Vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator

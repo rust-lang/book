@@ -48,7 +48,7 @@ UTF-8로 인코딩된 문자열 타입입니다. 러스트인들이 "문자열"�
 8-11과 같이 시작해봅시다:
 
 ```rust
-let mut s = String::new();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-11: 비어있는 새로운 `String` 생성하기</span>
@@ -60,12 +60,7 @@ let mut s = String::new();
 Listing 8-12에서 두 가지 예제를 보여주고 있습니다:
 
 ```rust
-let data = "initial contents";
-
-let s = data.to_string();
-
-// 문자열 리터럴에도 `to_string` 메소드를 사용할 수 있습니다:
-let s = "initial contents".to_string();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-12/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-12: `to_string` 메소드를 사용하여 문자열
@@ -78,7 +73,7 @@ let s = "initial contents".to_string();
 8-12의 코드와 동일합니다:
 
 ```rust
-let s = String::from("initial contents");
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-13/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-13: `String::from` 함수를 사용하여 문자열
@@ -93,17 +88,7 @@ API들을 사용할 수 있으며, 다양한 옵션들을 제공합니다. 몇�
 것처럼 우리는 인코딩된 어떤 데이터라도 포함시킬 수 있습니다:
 
 ```rust
-let hello = String::from("السلام عليكم");
-let hello = String::from("Dobrý den");
-let hello = String::from("Hello");
-let hello = String::from("שָׁלוֹם");
-let hello = String::from("नमस्ते");
-let hello = String::from("こんにちは");
-let hello = String::from("안녕하세요");
-let hello = String::from("你好");
-let hello = String::from("Olá");
-let hello = String::from("Здравствуйте");
-let hello = String::from("Hola");
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-14: 문자열에 다양한 언어로 인삿말
@@ -123,8 +108,7 @@ Listing 8-15와 같이 문자열 슬라이스를 추가하기 위해 `push_str` 
 이용하여 `String`을 키울 수 있습니다:
 
 ```rust
-let mut s = String::from("foo");
-s.push_str("bar");
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-15/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-15: `push_str` 메소드를 사용하여 `String`에
@@ -136,10 +120,7 @@ s.push_str("bar");
 추가한 뒤 `s2`를 더 이상 쓸 수 없게 되었다면 불행했을 경우를 보여주고 있습니다:
 
 ```rust
-let mut s1 = String::from("foo");
-let s2 = "bar";
-s1.push_str(s2);
-println!("s2 is {}", s2);
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-16/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-16: 문자열 슬라이스를 `String`에 붙인 이후에
@@ -149,12 +130,11 @@ println!("s2 is {}", s2);
 출력할 수 없었을 것입니다. 하지만, 이 코드는 우리가 기대했던 대로 작동합니다!
 
 `push` 메소드는 한 개의 글자를 파라미터로 받아서 `String`에 추가합니다.
-Listing 8-17은 `push` 메소드를 사용하여 `String`에 l을 추가하는 코드를
+Listing 8-17은 `push` 메소드를 사용하여 `String`에 "l"을 추가하는 코드를
 보여주고 있습니다:
 
 ```rust
-let mut s = String::from("lo");
-s.push('l');
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-17/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-17: `push`를 사용하여 `String` 값에 한 글자
@@ -168,9 +148,7 @@ s.push('l');
 아래 Listing 8-18과 같이 `+` 연산자를 사용하는 것입니다:
 
 ```rust
-let s1 = String::from("Hello, ");
-let s2 = String::from("world!");
-let s3 = s1 + &s2; // s1은 여기서 이동되어 더이상 쓸 수 없음을 유의하세요
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-18: `+` 연산자를 사용하여 두 `String` 값을
@@ -219,11 +197,7 @@ fn add(self, s: &str) -> String {
 집니다:
 
 ```rust
-let s1 = String::from("tic");
-let s2 = String::from("tac");
-let s3 = String::from("toe");
-
-let s = s1 + "-" + &s2 + "-" + &s3;
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-01-concat-multiple-strings/src/main.rs:here}}
 ```
 
 이 지점에서 `s`는 `tic-tac-toe`가 될 것입니다. 모든 `+`와 `"` 문자들과 함께
@@ -231,11 +205,7 @@ let s = s1 + "-" + &s2 + "-" + &s3;
 `format!` 매크로를 사용할 수 있습니다:
 
 ```rust
-let s1 = String::from("tic");
-let s2 = String::from("tac");
-let s3 = String::from("toe");
-
-let s = format!("{}-{}-{}", s1, s2, s3);
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-02-format/src/main.rs:here}}
 ```
 
 이 코드 또한 `s`에 `tic-tac-toe`을 설정합니다. `format!` 매크로는 `println!`과
@@ -251,8 +221,7 @@ let s = format!("{}-{}-{}", s1, s2, s3);
 아래 Listing 8-19와 같은 코드를 생각해봅시다:
 
 ```rust,ignore,does_not_compile
-let s1 = String::from("hello");
-let h = s1[0];
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-19/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 8-19: 문자열에 인덱싱 문법을 사용하는
@@ -260,14 +229,8 @@ let h = s1[0];
 
 이 코드는 아래와 같은 에러를 출력합니다:
 
-```text
-error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` is not satisfied
- -->
-  |
-3 |     let h = s1[0];
-  |             ^^^^^ the type `std::string::String` cannot be indexed by `{integer}`
-  |
-  = help: the trait `std::ops::Index<{integer}>` is not implemented for `std::string::String`
+```console
+{{#include ../listings/ch08-common-collections/listing-08-19/output.txt}}
 ```
 
 에러와 노트 부분이 이야기해 줍니다: 러스트 문자열은 인덱싱을 지원하지 않는다고.
@@ -280,7 +243,7 @@ error[E0277]: the trait bound `std::string::String: std::ops::Index<{integer}>` 
 적절히 인코딩된 UTF-8 예제 문자열을 살펴봅시다. 첫 번째로, 이것입니다:
 
 ```rust
-let len = String::from("Hola").len();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:spanish}}
 ```
 
 이 경우, `len`은 4가 되는데, 이는 문자열 "Hola"를 저장하고 있는 `Vec`이
@@ -289,7 +252,7 @@ let len = String::from("Hola").len();
 숫자 3이 아닌, 키릴 문자 Ze 입니다)
 
 ```rust
-let len = String::from("Здравствуйте").len();
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-14/src/main.rs:russian}}
 ```
 
 이 문자열의 길이가 얼마인지 묻는다면, 여러분은 12라고 답할런지도 모릅니다.
@@ -379,8 +342,8 @@ let s = &hello[0..4];
 만약에 `&hello[0..1]`라고 했다면 어떻게 될까요? 답은 다음과 같습니다. 러스트는
 벡터 내에 유효하지 않은 인덱스에 접근했을 때와 동일한 방식으로 런타임에 패닉을 발생시킬 것입니다.
 
-```text
-thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/libcore/str/mod.rs:2188:4
+```console
+{{#include ../listings/ch08-common-collections/output-only-01-not-char-boundary/output.txt}}
 ```
 
 여러분은 문자열 슬라이스를 만들기 위하여 범위를 이용하는 방법을 조심스럽게
@@ -436,7 +399,7 @@ for b in "नमस्ते".bytes() {
 
 문자열로부터 문자소 클러스터를 얻는 방법은 복잡해서, 이 기능은 표준
 라이브러리를 통해 제공되지 않습니다. 여러분이 원하는 기능이 이것이라면
-[crates.io](https://crates.io)에서 사용 가능한 크레이트가 있습니다.
+[crates.io](https://crates.io/)에서 사용 가능한 크레이트가 있습니다.
 
 ### 문자열은 단순하지 않습니다
 

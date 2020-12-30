@@ -4,8 +4,8 @@ IP 주소를 다루는 프로그램을 만들어 보면서,
 어떤 상황에서 열거형이 구조체보다 유용하고 적절한지 알아보겠습니다.
 현재 사용되는 IP 주소 표준은 IPv4, IPv6 두 종류입니다(앞으로 v4, v6 로 표기하겠습니다).
 즉, 우리가 만들 프로그램에서 다룰 IP 종류 역시 v4, v6 가 전부입니다.
-이번엔 단 두 가지뿐이긴 하지만, 이처럼 가능한 모든 경우를 죽 늘어놓는 것을
-'열거'라고 표현합니다.
+이번엔 단 두 가지뿐이긴 하지만, 이처럼 가능한 모든 variant들을 죽 늘어놓는
+것을 '열거'라고 표현합니다.
 
 IP 주소는 반드시 v4나 v6 중 하나만 될 수 있는데,
 이러한 특성은 열거형 자료 구조에 적합합니다.
@@ -16,13 +16,10 @@ v4, v6 는 근본적으로 IP 주소이기 때문에, 이 둘은 코드에서
 
 `IpAddrKind` 이라는 열거형을 정의하면서 포함할 수 있는 IP 주소인 `V4` 과 `V6` 를
 나열함으로써 이 개념을 코드에 표현할 수 있습니다.
-이것들은 열거형의 *variant* 라고 합니다:
+이것들을 열거형의 *variant* 라고 합니다:
 
 ```rust
-enum IpAddrKind {
-    V4,
-    V6,
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:def}}
 ```
 
 이제 `IpAddrKind` 은 우리의 코드 어디에서나 쓸 수 있는 데이터 타입이 되었습니다.
@@ -32,13 +29,7 @@ enum IpAddrKind {
 아래처럼 `IpAddrKind` 의 두 개의 variant 에 대한 인스턴스를 만들 수 있습니다:
 
 ```rust
-# enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-let four = IpAddrKind::V4;
-let six = IpAddrKind::V6;
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:instance}}
 ```
 
 열거형을 정의할 때의 식별자로 네임스페이스가 만들어져서,
@@ -48,26 +39,13 @@ let six = IpAddrKind::V6;
 정의해봅시다:
 
 ```rust
-# enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-fn route(ip_kind: IpAddrKind) { }
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:fn}}
 ```
 
 그리고, variant 중 하나를 사용해서 함수를 호출할 수 있습니다:
 
 ```rust
-# enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-# fn route(ip_type: IpAddrKind) { }
-#
-route(IpAddrKind::V4);
-route(IpAddrKind::V6);
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-01-defining-enums/src/main.rs:fn_call}}
 ```
 
 열거형을 사용하면 이점이 더 있습니다. IP 주소 타입에 대해 더 생각해 볼 때,
@@ -76,25 +54,7 @@ route(IpAddrKind::V6);
 Listing 6-1에서 보이는 것처럼 풀려고 할 것입니다:
 
 ```rust
-enum IpAddrKind {
-    V4,
-    V6,
-}
-
-struct IpAddr {
-    kind: IpAddrKind,
-    address: String,
-}
-
-let home = IpAddr {
-    kind: IpAddrKind::V4,
-    address: String::from("127.0.0.1"),
-};
-
-let loopback = IpAddr {
-    kind: IpAddrKind::V6,
-    address: String::from("::1"),
-};
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-1: `struct` 를 사용해서 IP 주소의 데이터와
@@ -115,14 +75,7 @@ let loopback = IpAddr {
 `String` 타입의 값을 갖게 됩니다:
 
 ```rust
-enum IpAddr {
-    V4(String),
-    V6(String),
-}
-
-let home = IpAddr::V4(String::from("127.0.0.1"));
-
-let loopback = IpAddr::V6(String::from("::1"));
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-02-enum-with-data/src/main.rs:here}}
 ```
 
 열거형의 각 variant 에 직접 데이터를 붙임으로써,
@@ -136,14 +89,7 @@ v4 타입의 IP 주소는 항상 0 ~ 255 사이의 숫자 4개로 된 구성요�
 열거형은 이런 경우를 쉽게 처리합니다:
 
 ```rust
-enum IpAddr {
-    V4(u8, u8, u8, u8),
-    V6(String),
-}
-
-let home = IpAddr::V4(127, 0, 0, 1);
-
-let loopback = IpAddr::V6(String::from("::1"));
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-03-variants-with-different-data/src/main.rs:here}}
 ```
 
 두 가지 다른 종류의 IP 주소를 저장하기 위해
@@ -186,12 +132,7 @@ Listing 6-2 에 있는 열거형의 다른 예제를 살펴봅시다. 이 예제
 에 다양한 유형의 타입들이 포함되어 있습니다:
 
 ```rust
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(i32, i32, i32),
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-2: `Message` 열거형은 각 variant 가 다른 타입과
@@ -211,13 +152,7 @@ Listing 6-2 에서 처럼 variant 로 열거형을 정의하는 것은 다른 �
 있습니다:
 
 ```rust
-struct QuitMessage; // 유닛 구조체
-struct MoveMessage {
-    x: i32,
-    y: i32,
-}
-struct WriteMessage(String); // 튜플 구조체
-struct ChangeColorMessage(i32, i32, i32); // 튜플 구조체
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-04-structs-similar-to-message-enum/src/main.rs:here}}
 ```
 
 각기 다른 타입을 갖는 여러 개의 구조체를 사용한다면, 이 메시지 중 어떤 한 가지를
@@ -229,21 +164,7 @@ struct ChangeColorMessage(i32, i32, i32); // 튜플 구조체
 에 정의한 `call` 이라는 메소드가 있습니다:
 
 ```rust
-# enum Message {
-#     Quit,
-#     Move { x: i32, y: i32 },
-#     Write(String),
-#     ChangeColor(i32, i32, i32),
-# }
-#
-impl Message {
-    fn call(&self) {
-        // 메소드 본문은 여기에 정의합니다.
-    }
-}
-
-let m = Message::Write(String::from("hello"));
-m.call();
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-05-methods-on-enums/src/main.rs:here}}
 ```
 
 열거형의 값을 가져오기 위해 메소드 안에서 `self` 를 사용할 것입니다.
@@ -319,10 +240,7 @@ enum Option<T> {
 예들이 있습니다:
 
 ```rust
-let some_number = Some(5);
-let some_string = Some("a string");
-
-let absent_number: Option<i32> = None;
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
 ```
 
 `Some` 이 아닌 `None` 을 사용한다면, `Option<T>` 이 어떤 타입을 가질지
@@ -340,22 +258,13 @@ let absent_number: Option<i32> = None;
 컴파일되지 않습니다:
 
 ```rust,ignore,does_not_compile
-let x: i8 = 5;
-let y: Option<i8> = Some(5);
-
-let sum = x + y;
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/src/main.rs:here}}
 ```
 
 이 코드를 실행하면, 아래와 같은 에러 메시지가 출력됩니다:
 
-```text
-error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is
-not satisfied
- -->
-  |
-5 |     let sum = x + y;
-  |                 ^ no implementation for `i8 + std::option::Option<i8>`
-  |
+```console
+{{#include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/output.txt}}
 ```
 
 주목하세요! 실제로, 이 에러 메시지는 러스트가 `Option<i8>` 와 `i8` 를 어떻게

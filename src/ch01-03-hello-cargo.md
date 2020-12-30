@@ -6,7 +6,7 @@ Cargo 는 러스트 사용자라면 대부분 사용하는 러스트 빌드 시�
 (앞으로 외부 라이브러리는 *의존성(dependencies)* 이라고 지칭하겠습니다.)
 
 여태 우리가 작성해온 간단한 러스트 프로그램에선 의존성을 추가하지 않았습니다.
-Hello, world! 프로젝트를 만들면서도 Cargo 기능 중 코드를 생성하는 기능만 사용했었죠.
+“Hello, world!” 프로젝트를 만들면서도 Cargo 기능 중 코드를 생성하는 기능만 사용했었죠.
 하지만 훗날 복잡한 프로그램을 작성하게 되면 이야기가 다를 겁니다.
 그렇더라도, 프로젝트를 생성할 때부터 Cargo 를 이용하면
 의존성을 추가할 일이 생겨도 간단히 해결할 수 있을 겁니다.
@@ -18,7 +18,7 @@ Hello, world! 프로젝트를 만들면서도 Cargo 기능 중 코드를 생성�
 다른 방법을 이용하신 경우엔 다음 명령어로
 Cargo 가 설치돼있는지 확인하시기 바랍니다:
 
-```text
+```console
 $ cargo --version
 ```
 
@@ -29,11 +29,11 @@ $ cargo --version
 ### Cargo 로 프로젝트 생성하기
 
 Cargo 로 프로젝트를 생성해보고
-우리가 앞서 만들었던 Hello, world! 프로젝트와 비교해봅시다.
+우리가 앞서 만들었던 “Hello, world!” 프로젝트와 비교해봅시다.
 *projects* 디렉토리로 (다른 곳에 코드를 만드신 분은 해당 위치로)
 돌아가 다음 명령어를 실행해보세요.
 
-```text
+```console
 $ cargo new hello_cargo
 $ cd hello_cargo
 ```
@@ -43,9 +43,12 @@ $ cd hello_cargo
 해당 디렉토리 내에 프로젝트명과 동일한 이름의 파일을 생성합니다.
 
 *hello_cargo* 디렉토리로 이동해 파일을 살펴보면
-*Cargo.toml* 파일과 *src* 디렉토리를 확인할 수 있습니다.
-그 외에도 *.gitignore* 파일과 초기화된 새 Git 저장소를 확인할 수 있으며,
+*Cargo.toml* 파일과 *src* 디렉토리를 확인할 수 있으며,
 *src* 디렉토리 내에는 *main.rs* 파일이 있는 것도 볼 수 있습니다.
+
+그 외에도 *.gitignore* 파일과 함께 새 Git 저장소가 초기화됩니다. 여러분이
+이미 Git 저장소가 있는 디렉토리에서 `cargo new`를 실행시킨다면 Git 파일들은
+생성되지 않을 것입니다. 이 동작은 `cargo new --vcs=git` 명령을 통해 덮어쓸수 있습니다.
 
 > Note: Git 은 일반적으로 사용하는 버전 관리 시스템입니다. 따라서 기본 설정되어 있으며,
 > 이 설정은 `cargo new` 명령어의 `--vcs` 플래그로 변경 가능합니다.
@@ -69,10 +72,8 @@ edition = "2018"
 <span class="caption">Listing 1-2: `cargo new` 로 생성한
 *Cargo.toml* 파일의 내용</span>
 
-이 포맷은 [*TOML*][toml]<!-- ignore --> (*Tom’s Obvious, Minimal Language*) 포맷으로,
-Cargo 설정에서 사용하는 포맷입니다.
-
-[toml]: https://github.com/toml-lang/toml/blob/master/versions/ko/toml-v0.5.0.md
+이 포맷은 [*TOML*](https://toml.io)<!-- ignore --> (*Tom’s Obvious, Minimal
+Language*) 포맷으로, Cargo 설정에서 사용하는 포맷입니다.
 
 `[package]` 라 적힌 첫 줄은 부문 제목으로,
 뒤에 패키지 설정 구문들이 따라오는 걸 보실 수 있습니다.
@@ -99,7 +100,7 @@ fn main() {
 }
 ```
 
-Cargo 가 Hello, world! 프로그램을 만들어 놨네요.
+Cargo 가 “Hello, world!” 프로그램을 만들어 놨네요.
 Listing 1-1 에서 만든 프로젝트와 다른 점은
 이번엔 코드 위치가 *src* 디렉토리라는 점과
 최상위 디렉토리에 *Cargo.toml* 설정 파일이 존재한다는 점입니다.
@@ -117,11 +118,11 @@ Cargo 는 최상위 프로젝트 디렉토리를 README, 라이센스, 설정 �
 
 ### Cargo 로 프로젝트를 생성하고 실행하기
 
-Cargo 로 생성한 Hello, world! 프로그램은
+Cargo 로 생성한 “Hello, world!” 프로그램은
 실행했을 때 어떤 점이 다른지 확인해봅시다!
 *hello_cargo* 디렉토리에서 다음 명령어를 이용해 프로젝트를 빌드해주세요:
 
-```text
+```console
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
@@ -131,7 +132,7 @@ $ cargo build
 (Windows 에선 *target\debug\hello_cargo.exe*) 에 실행 파일을 생성합니다.
 실행 파일은 다음 명령어로 실행할 수 있습니다:
 
-```text
+```console
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
@@ -147,7 +148,7 @@ Hello, world!
 `./target/debug/hello_cargo` 명령어로 실행했지만,
 컴파일과 실행을 한 번에 진행하는 `cargo run` 명령어도 있습니다:
 
-```text
+```console
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/hello_cargo`
@@ -159,7 +160,7 @@ Hello, world!
 소스 코드를 수정한 뒤 명령어를 다시 실행해보면 다음과 같이
 프로젝트를 다시 빌드한 후에 바이너리를 실행함을 알 수 있습니다.
 
-```text
+```console
 $ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.33 secs
@@ -170,7 +171,7 @@ Hello, world!
 `cargo check` 라는 명령어도 존재하는데, 이 명령어는 실행 파일은 생성하지 않은 채,
 작성한 소스가 문제없이 컴파일되는지만 빠르게 확인하는 명령어입니다.
 
-```text
+```console
 $ cargo check
    Checking hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
@@ -185,47 +186,48 @@ $ cargo check
 
 이제, 여태 배운 내용을 복습해봅시다:
 
-* 프로젝트 빌드 관련 명령어는 `cargo build` 와 `cargo check` 가 존재합니다.
+* `cargo build` 명령으로 프로젝트를 빌드할 수 있습니다.
 * `cargo run` 명령어는 한번에 프로젝트를 빌드하고 실행할 수 있습니다.
+* `cargo check` 명령으로 바이너리를 생성하지 않고 프로젝트의 에러를 체크할 수 있습니다.
 * 빌드로 만들어진 파일은 우리가 작성한 소스 코드와 뒤섞이지 않도록
   *target/debug* 디렉토리에 저장됩니다.
 
-운영체제에 상관 없이 같은 명령어를 사용한다는 것도 Cargo 사용으로 얻는 장점입니다.
-
-같은 이유로, 앞으로는 운영체제 별로 명령어를 따로 알려드리지 않습니다.
+운영체제에 상관 없이 같은 명령어를 사용한다는 것도
+Cargo 사용으로 얻는 장점입니다.
+따라서 이 시점부터는 운영체제 별로 명령어를 따로 알려드리지 않겠습니다.
 
 ### 릴리즈 빌드 생성
 
-프로젝트를 완성해서 배포(릴리즈)할 준비가 끝났다면, `cargo build --release` 명령어를 사용해 릴리즈 빌드를 생성할 수 있습니다.
-일반 빌드와 차이점은 *target/debug* 가 아닌 *target/release* 에 실행 파일이 생성된다는 점과
+프로젝트를 완성해서 배포(릴리즈)할 준비가 끝났다면, `cargo build --release`
+명령어를 사용해 릴리즈 빌드를 생성할 수 있습니다. 일반 빌드와 차이점은
+*target/debug* 가 아닌 *target/release* 에 실행 파일이 생성된다는 점과
 컴파일 시 최적화를 진행해, 컴파일이 오래 걸리는 대신 러스트 코드가 더 빠르게 작동하는 점입니다.
-
 릴리즈 빌드가 더 빠르게 작동한다면, 왜 일반 빌드시에는 최적화를 진행하지 않을까요?
-이에 대한 해답은 빌드가 두 종류로 나뉘게 된 이유이기도 한데, 개발 중에는 빌드가 잦으며 작업의 흐름을 끊지 않기 위해 빌드 속도 또한 빠를수록 좋은 반면,
-배포용 프로그램은 잦은 빌드가 필요 없으며 빌드 속도보단 프로그램의 작동 속도가 더 중요하기 때문입니다.
-
-이와 같은 이유로, 작성한 코드 작동 속도를 벤치마킹할 시에는 릴리즈 빌드를
-기준으로 해야 한다는 것도 알아두시기 바랍니다.
+이에 대한 해답은 빌드가 두 종류로 나뉘게 된 이유이기도 한데, 개발 중에는 빌드가
+잦으며 작업의 흐름을 끊지 않기 위해 빌드 속도 또한 빠를수록 좋은 반면, 배포용
+프로그램은 잦은 빌드가 필요 없으며 빌드 속도보단 프로그램의 작동 속도가 더 중요하기
+때문입니다. 이와 같은 이유로, 작성한 코드 작동 속도를 벤치마킹할 시에는
+릴리즈 빌드를 기준으로 해야 한다는 것도 알아두시기 바랍니다.
 
 ### Cargo 사용법
 
-`hello_cargo` 프로젝트는 단순하지만, 이미 여러분은 앞으로 러스트를 사용하며 쓸 Cargo 명령어 중 대부분을 써본 것과 다름없습니다.
+Cargo는 단순한 프로젝트에서는 그냥 `rustc`만 사용할 때와 비교하여
+큰 값어치를 못하지만, 여러분의 프로그램이 더 뒤얽히게 되면 그 가치를 증명할
+것입니다. 여러 개의 크레이트로 구성된 복잡한 프로젝트에서는 Cargo가 빌드를
+조정하게 하는 것이 훨씬 쉽습니다.
 
-예시로, 기존에 있던 러스트 프로젝트에서 작업하는 데 필요한 준비 과정은 다음과 같습니다.
+`hello_cargo` 프로젝트는 단순하지만, 이미 여러분은 앞으로 러스트를 사용하며
+쓰게될 Cargo 명령어 중 대부분을 써본 것과 다름없습니다. 실제로 기존에 있던
+러스트 프로젝트를 Git으로 가져와서, 해당 디렉토리로 이동하고, 빌드하는 과정은
+다음과 같은 명령을 이용하면 됩니다.
 
-```text
+```console
 $ git clone someurl.com/someproject
 $ cd someproject
 $ cargo build
 ```
 
-각각 차례대로 Git 으로 코드를 가져오고, 프로젝트 디렉토리로 이동하고, 빌드하는 명령어입니다. 앞서 여러분이 해본 것과 비슷하지 않나요?
-
-Cargo 와 `rustc` 에서 큰 차이를 느끼지 못한 분도 있을 겁니다.
-하지만 Cargo 를 사용함으로써 얻는 장점은 단순한 프로젝트가 아닌,
-프로젝트에 여러 크레이트가 추가되고 코드가 복잡해질수록, 즉 복잡한 프로젝트일수록 극대화됩니다.
-
-더 자세한 내용은 [The Cargo Book (영문)] 에서 읽어보세요!
+더 자세한 내용은 [The Cargo Book (영문)] 에서 읽어보세요.
 
 [its documentation]: https://doc.rust-lang.org/cargo/
 
@@ -237,7 +239,7 @@ Cargo 와 `rustc` 에서 큰 차이를 느끼지 못한 분도 있을 겁니다.
 * `rustup` 으로 최신 stable 버전 러스트를 설치하는 방법
 * 러스트를 새 버전으로 업데이트하는 방법
 * 로컬 설치된 문서 열어보기
-* 직접 `rustc` 를 사용해 `Hello, world!` 프로그램을 작성하고 실행해보기
+* 직접 `rustc` 를 사용해 “Hello, world!” 프로그램을 작성하고 실행해보기
 * Cargo 로 프로젝트를 생성하고 실행하는 방법
 
 코드를 읽고 쓰는데 익숙해질 수 있도록 프로그램을 몇 번 더 생성해보셔도 좋습니다.

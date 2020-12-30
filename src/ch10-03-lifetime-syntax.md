@@ -7,8 +7,9 @@
 하지만 여러 타입이 될 수 있을 상황에는 타입을 명시해주어야 하듯,
 참조자의 수명이 여러 방식으로 서로 연관될 수 있는 경우에는
 라이프타임을 명시해주어야 합니다.
-러스트에서 런타임에 사용되는 실제 참조자가 반드시 유효할 것임을 보장하려면
-제네릭 라이프타임 매개변수로 이 관계를 명시해야합니다.
+러스트에서 런타임에 사용되는 실제 참조자가
+반드시 유효할 것임을 보장하려면 제네릭 라이프타임 매개변수로
+이 관계를 명시해야합니다.
 
 라이프타임은 다른 프로그래밍 언어에서는 찾아보기 어려운 개념이며,
 러스트의 가장 독특한 기능입니다.
@@ -24,16 +25,7 @@
 Listing 10-17처럼 내부 스코프와 외부 스코프를 갖는 프로그램을 생각해봅시다:
 
 ```rust,ignore,does_not_compile
-{
-    let r;
-
-    {
-        let x = 5;
-        r = &x;
-    }
-
-    println!("r: {}", r);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-17: 스코프 밖으로 벗어난 값을
@@ -53,17 +45,8 @@ Listing 10-17처럼 내부 스코프와 외부 스코프를 갖는 프로그램�
 `r` 이 참조하는 값은 우리가 사용하는 시점에 이미 자신의 스코프를 벗어났기 때문입니다.
 에러 메세지는 다음과 같습니다:
 
-```text
-error[E0597]: `x` does not live long enough
-  --> src/main.rs:7:5
-   |
-6  |         r = &x;
-   |              - borrow occurs here
-7  |     }
-   |     ^ `x` dropped here while still borrowed
-...
-10 | }
-   | - borrowed value needs to live until here
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/output.txt}}
 ```
 
 변수 `x`가 "충분히 오래 살지 못했습니다(does not live long enough)".
@@ -81,16 +64,7 @@ borrow의 유효성을 판단합니다. Listing 10-18은 Listing 10-17 코드의
 변수 라이프타임을 주석으로 표시한 모습입니다:
 
 ```rust,ignore,does_not_compile
-{
-    let r;                // ---------+-- 'a
-                          //          |
-    {                     //          |
-        let x = 5;        // -+-- 'b  |
-        r = &x;           //  |       |
-    }                     // -+       |
-                          //          |
-    println!("r: {}", r); //          |
-}                         // ---------+
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-18: `r`, `x` 의 라이프타임을 각각
@@ -107,14 +81,7 @@ Listing 10-19는 댕글링 참조자를 만들지 않고
 정상적으로 컴파일되도록 수정한 코드입니다.
 
 ```rust
-{
-    let x = 5;            // ----------+-- 'b
-                          //           |
-    let r = &x;           // --+-- 'a  |
-                          //   |       |
-    println!("r: {}", r); //   |       |
-                          // --+       |
-}                         // ----------+
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-19: 데이터의 라이프타임이
@@ -138,13 +105,7 @@ Listing 10-19는 댕글링 참조자를 만들지 않고
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-fn main() {
-    let string1 = String::from("abcd");
-    let string2 = "xyz";
-
-    let result = longest(string1.as_str(), string2);
-    println!("The longest string is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-20: 두 문자열 슬라이스 중 긴 쪽을 찾기 위해
@@ -152,12 +113,9 @@ fn main() {
 
 `longest` 함수가 매개변수의 소유권을 얻지 않도록,
 참조자인 문자열 슬라이스를 전달한다는 점을 주목하세요.
-우린 함수가 `string1` 변수의 타입인 `String` 의 문자열 슬라이스와,
-`string2` 변수의 타입인 문자열 리터럴
-모두 전달받을 수 있길 원합니다.
-
-어째서 Listing 10-20처럼 문자열을 매개변수로 전달하는지는
-4장의 ["문자열 슬라이스를 매개변수로 사용하기"][string-slices-as-parameters]<!-- ignore -->
+어째서 Listing 10-20처럼 문자열을
+매개변수로 전달하는지는 4장의
+["문자열 슬라이스를 매개변수로 사용하기"][string-slices-as-parameters]<!-- ignore -->
 절을 참고해주세요.
 
 Listing 10-21처럼 `longest` 함수를 구현할 경우,
@@ -166,13 +124,7 @@ Listing 10-21처럼 `longest` 함수를 구현할 경우,
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn longest(x: &str, y: &str) -> &str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-21: 두 문자열 슬라이스 중
@@ -181,15 +133,8 @@ fn longest(x: &str, y: &str) -> &str {
 
 나타나는 에러는 라이프타임과 관련되어있습니다:
 
-```text
-error[E0106]: missing lifetime specifier
- --> src/main.rs:1:33
-  |
-1 | fn longest(x: &str, y: &str) -> &str {
-  |                                 ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but the
-signature does not say whether it is borrowed from `x` or `y`
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/output.txt}}
 ```
 
 이 도움말은 반환 타입에 제네릭 라이프타임 매개변수가 필요하다는 내용입니다.
@@ -256,13 +201,7 @@ Listing 10-22처럼 `'a` 라이프타임을 각각의 참조자에
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-22: 시그니처 내 모든 참조자가
@@ -309,23 +248,7 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-#     if x.len() > y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
-fn main() {
-    let string1 = String::from("long string is long");
-
-    {
-        let string2 = String::from("xyz");
-        let result = longest(string1.as_str(), string2.as_str());
-        println!("The longest string is {}", result);
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-23: 서로 다른 구체적인 라이프타임을 가진
@@ -348,15 +271,7 @@ fn main() {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let string1 = String::from("long string is long");
-    let result;
-    {
-        let string2 = String::from("xyz");
-        result = longest(string1.as_str(), string2.as_str());
-    }
-    println!("The longest string is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-24: `string2`가 스코프 밖으로 벗어나고 나서
@@ -364,17 +279,8 @@ fn main() {
 
 컴파일하면 다음과 같은 에러가 발생합니다:
 
-```text
-error[E0597]: `string2` does not live long enough
-  --> src/main.rs:15:5
-   |
-14 |         result = longest(string1.as_str(), string2.as_str());
-   |                                            ------- borrow occurs here
-15 |     }
-   |     ^ `string2` dropped here while still borrowed
-16 |     println!("The longest string is {}", result);
-17 | }
-   | - borrowed value needs to live until here
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/output.txt}}
 ```
 
 이 에러는 `println!` 구문에서 `result` 가 유효하려면 `string2` 가
@@ -407,9 +313,7 @@ borrow 검사기는 Listing 10-23 코드가 잠재적으로 유효하지 않은 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn longest<'a>(x: &'a str, y: &str) -> &'a str {
-    x
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-08-only-one-reference-with-lifetime/src/main.rs:here}}
 ```
 
 이 예제는 매개변수 `x`와 반환 타입에만 라이프타임 매개변수 `'a` 가 지정되어있습니다.
@@ -426,10 +330,7 @@ fn longest<'a>(x: &'a str, y: &str) -> &'a str {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn longest<'a>(x: &str, y: &str) -> &'a str {
-    let result = String::from("really long string");
-    result.as_str()
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/src/main.rs:here}}
 ```
 
 반환 타입에 `'a` 를 지정했지만,
@@ -437,24 +338,8 @@ fn longest<'a>(x: &str, y: &str) -> &'a str {
 관련 없으므로 컴파일할 수 없습니다.
 나타나는 에러 메세지는 다음과 같습니다:
 
-```text
-error[E0597]: `result` does not live long enough
- --> src/main.rs:3:5
-  |
-3 |     result.as_str()
-  |     ^^^^^^ does not live long enough
-4 | }
-  | - borrowed value only lives until here
-  |
-note: borrowed value must be valid for the lifetime 'a as defined on the
-function body at 1:1...
- --> src/main.rs:1:1
-  |
-1 | / fn longest<'a>(x: &str, y: &str) -> &'a str {
-2 | |     let result = String::from("really long string");
-3 | |     result.as_str()
-4 | | }
-  | |_^
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-09-unrelated-lifetime/output.txt}}
 ```
 
 `result` 는 `longest` 함수가 끝나면서 스코프를 벗어나 정리되는데,
@@ -480,17 +365,7 @@ Listing 10-25는 문자열 슬라이스를 보유하는 `ImportantExcerpt` 구�
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct ImportantExcerpt<'a> {
-    part: &'a str,
-}
-
-fn main() {
-    let novel = String::from("Call me Ishmael. Some years ago...");
-    let first_sentence = novel.split('.')
-        .next()
-        .expect("Could not find a '.'");
-    let i = ImportantExcerpt { part: first_sentence };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-25: 참조자를 보유하여
@@ -520,17 +395,7 @@ Listing 10-25의 라이프타임 명시는 '`ImportantExcerpt` 인스턴스는
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-fn first_word(s: &str) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
-        }
-    }
-
-    &s[..]
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-26/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-26: 4장에서 정의했던,
@@ -670,15 +535,7 @@ Listing 10-25의 `ImportantExcerpt` 구조체로 예시를 들어보겠습니다
 이 메소드의 매개변수는 `self` 참조자 하나뿐이며, 반환 값은 참조자가 아닌 그냥 `i32` 값입니다.
 
 ```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn level(&self) -> i32 {
-        3
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:1st}}
 ```
 
 `impl` 뒤에서 라이프타임 매개변수를 선언하고
@@ -688,16 +545,7 @@ impl<'a> ImportantExcerpt<'a> {
 다음은 세 번째 라이프타임 생략 규칙이 적용되는 예시입니다:
 
 ```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn announce_and_return_part(&self, announcement: &str) -> &str {
-        println!("Attention please: {}", announcement);
-        self.part
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-10-lifetimes-on-methods/src/main.rs:3rd}}
 ```
 
 두 개의 입력 라이프타임이 있으니, 러스트는 첫 번째 라이프타임 생략 규칙대로
@@ -733,18 +581,7 @@ let s: &'static str = "I have a static lifetime.";
 전부 들어간 모습을 살펴봅시다!
 
 ```rust
-use std::fmt::Display;
-
-fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
-    where T: Display
-{
-    println!("Announcement! {}", ann);
-    if x.len() > y.len() {
-        x
-    } else {
-        y
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
 Listing 10-22에서 본 두 개의 문자열 슬라이스 중 긴 쪽을 반환하는
@@ -769,7 +606,8 @@ Listing 10-22에서 본 두 개의 문자열 슬라이스 중 긴 쪽을 반환�
 
 이번 장에서 다룬 주제들에서 더 배울 내용이 남았다고 하면 믿어지시나요?
 17장에선 트레잇을 사용하는 또 다른 방법인 트레잇 객체(trait object)를 다룰 예정입니다.
-19장에선 고급 타입 시스템 특성, 라이프타임 명시에 관련된 더 복잡한 시나리오를 다룰 예정입니다.
+매우 고급 시나리오 상에서만 필요하게 될 라이프타임 명시에 관한 더 복잡한 시나리오도
+있습니다. 이와 관련해서는 [러스트 레퍼런스 문서][reference]를 읽으셔야 합니다.
 하지만 일단 다음 장에서는 러스트에서 여러분의 코드가 원하던대로
 작동함을 확신할 수 있는 코드 테스트 작성방법을 배워보도록 하죠.
 
@@ -777,3 +615,4 @@ Listing 10-22에서 본 두 개의 문자열 슬라이스 중 긴 쪽을 반환�
 ch04-02-references-and-borrowing.html#%EC%B0%B8%EC%A1%B0%EC%9E%90%EC%99%80-borrow
 [string-slices-as-parameters]:
 ch04-03-slices.html#%EB%AC%B8%EC%9E%90%EC%97%B4-%EC%8A%AC%EB%9D%BC%EC%9D%B4%EC%8A%A4%EB%A5%BC-%EB%A7%A4%EA%B0%9C%EB%B3%80%EC%88%98%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+[reference]: ../reference/index.html

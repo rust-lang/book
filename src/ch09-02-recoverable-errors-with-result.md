@@ -34,11 +34,7 @@ Listing 9-3는 파일을 열어보는 코드입니다.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-use std::fs::File;
-
-fn main() {
-    let f = File::open("hello.txt");
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 9-3: 파일 열기</span>
@@ -51,22 +47,14 @@ fn main() {
 아니라는 것을 알고 있으니, `let f` 구문을 이렇게
 바꿔봅시다:
 
-```rust,ignore
-let f: u32 = File::open("hello.txt");
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-02-ask-compiler-for-type/src/main.rs:here}}
 ```
 
 이제 컴파일을 시도하면 다음 메세지가 나타납니다:
 
-```text
-error[E0308]: mismatched types
- --> src/main.rs:4:18
-  |
-4 |     let f: u32 = File::open("hello.txt");
-  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum
-`std::result::Result`
-  |
-  = note: expected type `u32`
-             found type `std::result::Result<std::fs::File, std::io::Error>`
+```console
+{{#include ../listings/ch09-error-handling/no-listing-02-ask-compiler-for-type/output.txt}}
 ```
 
 이 메세지는 `File::open` 함수의 반환 타입이 `Result<T, E>`라는 것을 알려줍니다.
@@ -95,18 +83,7 @@ Listing 9-4은 6장에서 다뤘던 `match` 표현식을 이용하여
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-use std::fs::File;
-
-fn main() {
-    let f = File::open("hello.txt");
-
-    let f = match f {
-        Ok(file) => file,
-        Err(error) => {
-            panic!("There was a problem opening the file: {:?}", error)
-        },
-    };
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 9-4: 반환될 수 있는 `Result` variant들을 `match`
@@ -127,8 +104,7 @@ fn main() {
 `panic!` 매크로로부터 다음과 같은 출력을 보게 될 것입니다:
 
 ```text
-thread 'main' panicked at 'There was a problem opening the file: Error { repr:
-Os { code: 2, message: "No such file or directory" } }', src/main.rs:9:12
+{{#include ../listings/ch09-error-handling/listing-09-04/output.txt}}
 ```
 
 여태 그래왔듯, 이 출력은 어떤 것이 잘못되었는지 정확하게 알려줍니다.
@@ -149,23 +125,7 @@ Listing 9-4처럼 `panic!`을 일으키도록 말이죠.
 tests to fail lol -->
 
 ```rust,ignore
-use std::fs::File;
-use std::io::ErrorKind;
-
-fn main() {
-    let f = File::open("hello.txt");
-
-    let f = match f {
-        Ok(file) => file,
-        Err(error) => match error.kind() {
-            ErrorKind::NotFound => match File::create("hello.txt") {
-                Ok(fc) => fc,
-                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
-            },
-            other_error => panic!("There was a problem opening the file: {:?}", other_error),
-        },
-    };
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 9-5: 다른 종류의 에러를
@@ -195,20 +155,7 @@ fn main() {
 러스트를 오래 사용한 사람들은 Listing 9-5 대신 다음과 같이 코드를 작성할 겁니다:
 
 ```rust,ignore
-use std::fs::File;
-use std::io::ErrorKind;
-
-fn main() {
-    let f = File::open("hello.txt").unwrap_or_else(|error| {
-        if error.kind() == ErrorKind::NotFound {
-            File::create("hello.txt").unwrap_or_else(|error| {
-                panic!("Tried to create file but there was a problem: {:?}", error);
-            })
-        } else {
-            panic!("There was a problem opening the file: {:?}", error);
-        }
-    });
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-03-closures/src/main.rs}}
 ```
 
 이 코드는 Listing 9-5와 완벽히 동일하게 작동하지만,
@@ -230,11 +177,7 @@ fn main() {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-use std::fs::File;
-
-fn main() {
-    let f = File::open("hello.txt").unwrap();
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-04-unwrap/src/main.rs}}
 ```
 
 *hello.txt* 파일이 없는 상태에서 이 코드를 실행시키면, `unwrap` 메소드에 의한 `panic!`
@@ -254,11 +197,7 @@ src/libcore/result.rs:906:4
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
-use std::fs::File;
-
-fn main() {
-    let f = File::open("hello.txt").expect("Failed to open hello.txt");
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-05-expect/src/main.rs}}
 ```
 
 `unwrap`과 똑같이 파일 핸들을 반환하거나 `panic!` 매크로를 호출하도록 하는 데에
@@ -292,26 +231,12 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 
 <span class="filename">Filename: src/main.rs</span>
 
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
+
 ```rust
-use std::io;
-use std::io::Read;
-use std::fs::File;
-
-fn read_username_from_file() -> Result<String, io::Error> {
-    let f = File::open("hello.txt");
-
-    let mut f = match f {
-        Ok(file) => file,
-        Err(e) => return Err(e),
-    };
-
-    let mut s = String::new();
-
-    match f.read_to_string(&mut s) {
-        Ok(_) => Ok(s),
-        Err(e) => Err(e),
-    }
-}
+{{#include ../listings/ch09-error-handling/listing-09-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-6: `match`를 이용하여 호출 코드 쪽으로
@@ -372,17 +297,12 @@ Listing 9-7은 Listing 9-6과 같은 기능을 가진
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-use std::io;
-use std::io::Read;
-use std::fs::File;
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
 
-fn read_username_from_file() -> Result<String, io::Error> {
-    let mut f = File::open("hello.txt")?;
-    let mut s = String::new();
-    f.read_to_string(&mut s)?;
-    Ok(s)
-}
+```rust
+{{#include ../listings/ch09-error-handling/listing-09-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-7: `?` 연산자를 이용하여 에러를 호출 코드쪽으로
@@ -420,18 +340,12 @@ Listing 9-7의 내용에서, `File::open` 호출 부분의 끝에 있는 `?`는
 
 <span class="filename">Filename: src/main.rs</span>
 
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
+
 ```rust
-use std::io;
-use std::io::Read;
-use std::fs::File;
-
-fn read_username_from_file() -> Result<String, io::Error> {
-    let mut s = String::new();
-
-    File::open("hello.txt")?.read_to_string(&mut s)?;
-
-    Ok(s)
-}
+{{#include ../listings/ch09-error-handling/listing-09-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-8: `?` 연산자 뒤에 메소드 호출을
@@ -451,13 +365,12 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-use std::io;
-use std::fs;
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file panics. We do want to include it for reader experimentation purposes, but
+don't want to include it for rustdoc testing purposes. -->
 
-fn read_username_from_file() -> Result<String, io::Error> {
-    fs::read_to_string("hello.txt")
-}
+```rust
+{{#include ../listings/ch09-error-handling/listing-09-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-9: 파일을 열고, 읽는 대신 `fs::read_to_string`를
@@ -470,9 +383,9 @@ fn read_username_from_file() -> Result<String, io::Error> {
 다만 `fs::read_to_string`를 사용해버리면 여러분에게 에러를 다루는 법을
 자세히 설명할 수 없으니 긴 코드로 먼저 설명했습니다.
 
-### `?`는 `Result`를 반환하는 함수에서만 사용될 수 있습니다
+### `?`는 `Result`를 반환하는 함수에서 사용될 수 있습니다
 
-`?`는 `Result` 타입을 반환하는 함수에서만 사용할 수 있는데, 이것이 Listing 9-6에
+`?`는 `Result` 타입을 반환하는 함수에서 사용할 수 있는데, 이것이 Listing 9-6에
 정의된 `match` 표현식과 동일한 방식으로 동작하도록 정의되어 있기 때문입니다.
 `Result` 반환 타입을 요구하는 `match` 부분은 `return Err(e)`이며,
 따라서 함수의 반환 타입은 반드시 이 `return`과 호환 가능한
@@ -481,36 +394,24 @@ fn read_username_from_file() -> Result<String, io::Error> {
 `main`의 반환 타입이 `()`라는 것을 상기하면서, 만약 `main` 함수 내에서 `?`를
 사용하면 어떤 일이 생길지 살펴봅시다:
 
-```rust,ignore
-use std::fs::File;
-
-fn main() {
-    let f = File::open("hello.txt")?;
-}
+```rust,ignore,does_not_compile
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-06-question-mark-in-main/src/main.rs}}
 ```
 
 이걸 컴파일하면, 아래와 같은 에러 메세지가 뜹니다:
 
-```text
-error[E0277]: the `?` operator can only be used in a function that returns
-`Result` or `Option` (or another type that implements `std::ops::Try`)
- --> src/main.rs:4:13
-  |
-4 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^ cannot use the `?` operator in a
-  function that returns `()`
-  |
-  = help: the trait `std::ops::Try` is not implemented for `()`
-  = note: required by `std::ops::Try::from_error`
+```console
+{{#include ../listings/ch09-error-handling/no-listing-06-question-mark-in-main/output.txt}}
 ```
 
-이 에러는 오직 `Result<T, E>`를 반환하는 함수 내에서만
-`?` 연산자를 사용할 수 있음을 지적합니다.
-`Result<T, E>`를 반환하지 않는 함수 내에서,
+이 에러는 `Result`나 `Option`, 혹은 `std::ops::Try`를 구현한
+그 밖의 타입을 반환하는 함수 내에서 `?` 연산자를 사용할 수 있음을
+지적합니다. 위의 타입 중 하나를 반환하지 않는 함수 내에서,
 `Result<T, E>`를 반환하는 함수를 호출할 때 `?`를
 사용하고 싶다면 두 가지 방법이 있습니다.
-하나는 함수의 반환형을 변경해도 별문제가 없다면 `Result<T, E>`로 변경하는 방법입니다.
-또 하나는 `match`나 `Result<T, E>` 메소드 중 하나를 이용해 `Result<T, E>`를
+하나는 함수의 반환형을 변경해도 별문제가 없다면
+`Result<T, E>`로 변경하는 방법입니다. 또 하나는 `match`나
+`Result<T, E>` 메소드 중 하나를 이용해 `Result<T, E>`를
 적절한 방식으로 처리하는 방법입니다.
 
 `main` 함수는 특수하므로 함수의 반환형에 제약이 있고,
@@ -518,17 +419,10 @@ error[E0277]: the `?` operator can only be used in a function that returns
 `Result<T, E>`도 허용된 반환형입니다. 다음에서 볼 수 있습니다.
 
 ```rust,ignore
-use std::error::Error;
-use std::fs::File;
-
-fn main() -> Result<(), Box<dyn Error>> {
-    let f = File::open("hello.txt")?;
-
-    Ok(())
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-07-main-returning-result/src/main.rs}}
 ```
 
-`Box<dyn Error>` 타입은 *트레잇 객체* 라고 합니다.
+`Box<dyn Error>` 타입은 트레잇 객체 라고 합니다.
 이는 17장의 ["트레잇 객체를 사용하여 다른 타입 간의 값 허용하기"][trait-objects]<!-- ignore -->
 절에서 다룰 예정입니다.
 현재로서는 "어떤 종류의 에러"라는 뜻으로 받아들이시면 됩니다.

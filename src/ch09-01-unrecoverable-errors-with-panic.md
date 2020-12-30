@@ -29,20 +29,13 @@
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    panic!("crash and burn");
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-01-panic/src/main.rs}}
 ```
 
 프로그램을 실행하면, 다음과 같은 내용이 나타납니다:
 
-```text
-$ cargo run
-   Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.25s
-     Running `target/debug/panic`
-thread 'main' panicked at 'crash and burn', src/main.rs:2:5
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch09-error-handling/no-listing-01-panic/output.txt}}
 ```
 
 `panic!`의 호출이 마지막 두 줄의 에러 메세지를 일으킵니다.
@@ -69,11 +62,7 @@ Listing 9-1은 벡터 내의 요소를 인덱스로
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic,panics
-fn main() {
-    let v = vec![1, 2, 3];
-
-    v[99];
-}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-01/src/main.rs}}
 ```
 
 <span class="caption">Listing 9-1: `panic!`을 일으키는 벡터의 끝을 넘어선
@@ -85,25 +74,20 @@ fn main() {
 유효하지 않은 인덱스를 넘기게 되면 러스트가 반환할 올바른 요소는
 없습니다.
 
-이러한 상황에서 C와 같은 다른 언어들은 여러분이 원하는 것이 아닐지라도,
-여러분이 요청한 것을 정확히 주려고 시도할 것입니다. 여러분은 벡터 내에
-해당 요소와 상응하는 위치의 메모리에 들어 있는 무언가를 얻을 것입니다.
-설령 그 메모리 영역이 벡터 소유가 아닐지라도 말이죠. 이러한 것을
-*버퍼 오버리드(buffer overread)* 라 하며, 만일 어떤 공격자가 읽도록
-허용되어선 안 되지만 배열 뒤에 저장된 데이터를 읽어낼 방법으로서
-인덱스를 다룰 수 있게 된다면, 이는 보안 취약점을 발생시킬 수 있습니다.
+C에서 구조체의 끝을 넘어서 읽는 시도는 정의되지 않은 동작입니다.
+여러분은 그 구조체의 해당 요소와 상응하는 위치의 메모리에 들어 있는
+어떤 값을 얻을 것입니다. 설령 그 메모리 영역이 해당 구조체의 소유가
+아닐지라도 말이죠. 이러한 것을 *버퍼 오버리드(buffer overread)* 라 하며,
+접근이 허용되서는 안되는 데이터를 읽기 위해 어떤 공격자가 배열 뒤에 저장된
+데이터를 읽어낼 요량으로 인덱스를 다루게 된다면,
+이는 보안 취약점을 발생시킬 수 있습니다.
 
 여러분의 프로그램을 이러한 취약점으로부터 보호하기 위해서, 존재하지 않는
 인덱스 상의 요소를 읽으려 시도한다면, 러스트는 실행을 멈추고 계속하기를
 거부할 것입니다. 한번 시도해 봅시다:
 
-```text
-$ cargo run
-   Compiling panic v0.1.0 (file:///projects/panic)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
-     Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```console
+{{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
 위 에러는 우리가 작성하지 않은 파일인 *libcore/slice/mod.rs* 를 가리키고 있습니다.
@@ -123,53 +107,34 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 설정하여 백트레이스를 얻어봅시다. Listing 9-2는 여러분이 보게 될 것과
 유사한 출력을 나타냅니다.
 
-```text
+<!-- manual-regeneration
+cd listings/ch09-error-handling/listing-09-01
+RUST_BACKTRACE=1 cargo run
+copy the backtrace output below
+check the backtrace number mentioned in the text below the listing
+-->
+
+```console
 $ RUST_BACKTRACE=1 cargo run
-    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
-     Running `target/debug/panic`
-thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', libcore/slice/mod.rs:2448:10
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', src/main.rs:4:5
 stack backtrace:
-   0: std::sys::unix::backtrace::tracing::imp::unwind_backtrace
-             at libstd/sys/unix/backtrace/tracing/gcc_s.rs:49
-   1: std::sys_common::backtrace::print
-             at libstd/sys_common/backtrace.rs:71
-             at libstd/sys_common/backtrace.rs:59
-   2: std::panicking::default_hook::{{closure}}
-             at libstd/panicking.rs:211
-   3: std::panicking::default_hook
-             at libstd/panicking.rs:227
-   4: <std::panicking::begin_panic::PanicPayload<A> as core::panic::BoxMeUp>::get
-             at libstd/panicking.rs:476
-   5: std::panicking::continue_panic_fmt
-             at libstd/panicking.rs:390
-   6: std::panicking::try::do_call
-             at libstd/panicking.rs:325
-   7: core::ptr::drop_in_place
-             at libcore/panicking.rs:77
-   8: core::ptr::drop_in_place
-             at libcore/panicking.rs:59
-   9: <usize as core::slice::SliceIndex<[T]>>::index
-             at libcore/slice/mod.rs:2448
-  10: core::slice::<impl core::ops::index::Index<I> for [T]>::index
-             at libcore/slice/mod.rs:2316
-  11: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at liballoc/vec.rs:1653
-  12: panic::main
-             at src/main.rs:4
-  13: std::rt::lang_start::{{closure}}
-             at libstd/rt.rs:74
-  14: std::panicking::try::do_call
-             at libstd/rt.rs:59
-             at libstd/panicking.rs:310
-  15: macho_symbol_search
-             at libpanic_unwind/lib.rs:102
-  16: std::alloc::default_alloc_error_hook
-             at libstd/panicking.rs:289
-             at libstd/panic.rs:392
-             at libstd/rt.rs:58
-  17: std::rt::lang_start
-             at libstd/rt.rs:74
-  18: panic::main
+   0: rust_begin_unwind
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/std/src/panicking.rs:483
+   1: core::panicking::panic_fmt
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:85
+   2: core::panicking::panic_bounds_check
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:62
+   3: <usize as core::slice::index::SliceIndex<[T]>>::index
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:255
+   4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:15
+   5: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/alloc/src/vec.rs:1982
+   6: panic::main
+             at ./src/main.rs:4
+   7: core::ops::function::FnOnce::call_once
+             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/ops/function.rs:227
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
 <span class="caption">Listing 9-2: 환경 변수 `RUST_BACKTRACE`가 설정되었을 때 `panic!`의
@@ -181,7 +146,7 @@ stack backtrace:
 여러분이 `cargo build`나 `cargo run`을 `--release` 플래그 없이 실행했을 때
 기본적으로 활성화됩니다.
 
-Listing 9-2 출력 내용은, 백트레이스의 12번 줄이 문제를 일으킨
+Listing 9-2 출력 내용은, 백트레이스의 6번 줄이 문제를 일으킨
 우리 프로젝트의 *src/main.rs*, 4번 줄을 가리키고 있습니다.
 만일 프로그램이 패닉에 빠지지 않도록 하고 싶다면, 우리가 작성한 파일이
 언급된 첫 줄부터 조사해봅시다.

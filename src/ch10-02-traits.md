@@ -30,9 +30,7 @@ Listing 10-12는 이 동작을 `Summary` 트레잇 정의로 표현합니다.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub trait Summary {
-    fn summarize(&self) -> String;
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-12/src/lib.rs}}
 ```
 
 <span class="caption">Listing 10-12: `summarize` 메소드가 제공하는
@@ -65,35 +63,7 @@ Listing 10-13은 헤드라인, 저자, 지역 정보를 사용하여 `summarize`
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub trait Summary {
-#     fn summarize(&self) -> String;
-# }
-#
-pub struct NewsArticle {
-    pub headline: String,
-    pub location: String,
-    pub author: String,
-    pub content: String,
-}
-
-impl Summary for NewsArticle {
-    fn summarize(&self) -> String {
-        format!("{}, by {} ({})", self.headline, self.author, self.location)
-    }
-}
-
-pub struct Tweet {
-    pub username: String,
-    pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
-}
-
-impl Summary for Tweet {
-    fn summarize(&self) -> String {
-        format!("{}: {}", self.username, self.content)
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-13/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 10-13: `NewsArticle`과 `Tweet` 타입에
@@ -112,14 +82,7 @@ impl Summary for Tweet {
 동일한 방식으로 `NewsArticle`과 `Tweet` 인스턴스에서 메소드를 호출할 수 있습니다:
 
 ```rust,ignore
-let tweet = Tweet {
-    username: String::from("horse_ebooks"),
-    content: String::from("of course, as you probably already know, people"),
-    reply: false,
-    retweet: false,
-};
-
-println!("1 new tweet: {}", tweet.summarize());
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs:here}}
 ```
 
 이 코드는
@@ -168,11 +131,7 @@ Listing 10-14는 Listing 10-12에서 `Summary` 트레잇에
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub trait Summary {
-    fn summarize(&self) -> String {
-        String::from("(Read more...)")
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-14/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 10-14: `summarize` 메소드의 기본 구현을
@@ -188,15 +147,7 @@ pub trait Summary {
 `Summary` 트레잇은 `summarize` 메소드의 기본 구현을 제공하기 때문입니다:
 
 ```rust,ignore
-let article = NewsArticle {
-    headline: String::from("Penguins win the Stanley Cup Championship!"),
-    location: String::from("Pittsburgh, PA, USA"),
-    author: String::from("Iceburgh"),
-    content: String::from("The Pittsburgh Penguins once again are the best
-    hockey team in the NHL."),
-};
-
-println!("New article available! {}", article.summarize());
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-02-calling-default-impl/src/main.rs:here}}
 ```
 
 이 코드는 `New article available! (Read more...)`를 출력합니다.
@@ -216,24 +167,14 @@ Listing 10-13 코드의 `Tweet` 의 `Summary` 구현을 변경할 필요는 없�
 만들어보았습니다:
 
 ```rust
-pub trait Summary {
-    fn summarize_author(&self) -> String;
-
-    fn summarize(&self) -> String {
-        format!("(Read more from {}...)", self.summarize_author())
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:here}}
 ```
 
 이 `Summary`를 어떤 타입에 구현할 때는 `summarize_author` 만
 정의하면 됩니다:
 
 ```rust,ignore
-impl Summary for Tweet {
-    fn summarize_author(&self) -> String {
-        format!("@{}", self.username)
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/lib.rs:impl}}
 ```
 
 `summarize_author` 를 정의하고 나면 `Tweet` 인스턴스에서 `summarize` 를 호출할 수 있습니다.
@@ -243,14 +184,7 @@ impl Summary for Tweet {
 알 수 있습니다.
 
 ```rust,ignore
-let tweet = Tweet {
-    username: String::from("horse_ebooks"),
-    content: String::from("of course, as you probably already know, people"),
-    reply: false,
-    retweet: false,
-};
-
-println!("1 new tweet: {}", tweet.summarize());
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-03-default-impl-calls-other-methods/src/main.rs:here}}
 ```
 
 이 코드는 `1 new tweet: (Read more from @horse_ebooks...)` 를 출력합니다.
@@ -270,9 +204,7 @@ Listing 10-13에서 `Summary` 트레잇을
 이럴 때는 `impl Trait` 문법을 사용합니다:
 
 ```rust,ignore
-pub fn notify(item: impl Summary) {
-    println!("Breaking news! {}", item.summarize());
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
 `item` 매개변수의 구체적 타입을 명시하는 대신 `impl` 키워드와 트레잇 이름을 명시했습니다.
@@ -290,7 +222,7 @@ pub fn notify(item: impl Summary) {
 트레잇 바운드는 다음과 같이 생겼습니다:
 
 ```rust,ignore
-pub fn notify<T: Summary>(item: T) {
+pub fn notify<T: Summary>(item: &T) {
     println!("Breaking news! {}", item.summarize());
 }
 ```
@@ -305,7 +237,7 @@ pub fn notify<T: Summary>(item: T) {
 `impl Trait` 문법으로 표현하면 다음과 같습니다:
 
 ```rust,ignore
-pub fn notify(item1: impl Summary, item2: impl Summary) {
+pub fn notify(item1: &impl Summary, item2: &impl Summary) {
 ```
 
 `item1` 과 `item2` 가 (둘 다 `Summary`를 구현하는 타입이되)
@@ -314,7 +246,7 @@ pub fn notify(item1: impl Summary, item2: impl Summary) {
 이는 트레잇 바운드 문법으로만 표현 가능합니다:
 
 ```rust,ignore
-pub fn notify<T: Summary>(item1: T, item2: T) {
+pub fn notify<T: Summary>(item1: &T, item2: &T) {
 ```
 
 `item1` 및 `item2` 매개 변수의 타입으로 지정된 제네릭 타입 `T`는
@@ -329,13 +261,13 @@ pub fn notify<T: Summary>(item1: T, item2: T) {
 `+` 구문을 사용하면 트레잇을 여러 개 지정할 수 있습니다:
 
 ```rust,ignore
-pub fn notify(item: impl Summary + Display) {
+pub fn notify(item: &(impl Summary + Display)) {
 ```
 
 `+` 구문은 제네릭 타입의 트레잇 바운드에도 사용할 수 있습니다:
 
 ```rust,ignore
-pub fn notify<T: Summary + Display>(item: T) {
+pub fn notify<T: Summary + Display>(item: &T) {
 ```
 
 두 트레잇 바운드가 지정됐으니, `notify` 본문에서는 `item` 의 `summarize` 메소드를
@@ -351,13 +283,13 @@ pub fn notify<T: Summary + Display>(item: T) {
 즉, 다음과 같이 작성하는 대신:
 
 ```rust,ignore
-fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 ```
 
 다음과 같이 `where` 조항을 사용할 수 있습니다:
 
 ```rust,ignore
-fn some_function<T, U>(t: T, u: U) -> i32
+fn some_function<T, U>(t: &T, u: &U) -> i32
     where T: Display + Clone,
           U: Clone + Debug
 {
@@ -373,14 +305,7 @@ fn some_function<T, U>(t: T, u: U) -> i32
 사용할 수도 있습니다:
 
 ```rust,ignore
-fn returns_summarizable() -> impl Summary {
-    Tweet {
-        username: String::from("horse_ebooks"),
-        content: String::from("of course, as you probably already know, people"),
-        reply: false,
-        retweet: false,
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 
 반환 타입에 구체적인 타입명이 아닌 `impl Summary` 를 작성하여
@@ -400,24 +325,7 @@ fn returns_summarizable() -> impl Summary {
 이 코드는 컴파일할 수 없습니다:
 
 ```rust,ignore,does_not_compile
-fn returns_summarizable(switch: bool) -> impl Summary {
-    if switch {
-        NewsArticle {
-            headline: String::from("Penguins win the Stanley Cup Championship!"),
-            location: String::from("Pittsburgh, PA, USA"),
-            author: String::from("Iceburgh"),
-            content: String::from("The Pittsburgh Penguins once again are the best
-            hockey team in the NHL."),
-        }
-    } else {
-        Tweet {
-            username: String::from("horse_ebooks"),
-            content: String::from("of course, as you probably already know, people"),
-            reply: false,
-            retweet: false,
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 
 `NewsArticle`, `Tweet` 중 하나를 반환하는 행위는 컴파일러 내에서
@@ -435,13 +343,7 @@ Listing 10-5의 `largest` 함수 정의를 제네릭 타입 매개변수를 사�
 다음과 같습니다:
 
 ```text
-error[E0369]: binary operation `>` cannot be applied to type `T`
- --> src/main.rs:5:12
-  |
-5 |         if item > largest {
-  |            ^^^^^^^^^^^^^^
-  |
-  = note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
 `largest` 본문에서 `T` 타입 값 두 개를 큰 부등호(`>`) 연산자로 비교할 수 있길 원했습니다.
@@ -453,35 +355,20 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 `largest` 함수의 시그니처를 다음과 같이 바꿔봅시다:
 
 ```rust,ignore
-fn largest<T: PartialOrd>(list: &[T]) -> T {
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/src/main.rs:here}}
 ```
 
 하지만 이 코드를 컴파일하면 또 다른 에러가 나타납니다:
 
-```text
-error[E0508]: cannot move out of type `[T]`, a non-copy slice
- --> src/main.rs:2:23
-  |
-2 |     let mut largest = list[0];
-  |                       ^^^^^^^
-  |                       |
-  |                       cannot move out of here
-  |                       help: consider using a reference instead: `&list[0]`
-
-error[E0507]: cannot move out of borrowed content
- --> src/main.rs:4:9
-  |
-4 |     for &item in list.iter() {
-  |         ^----
-  |         ||
-  |         |hint: to prevent move, use `ref item` or `ref mut item`
-  |         cannot move out of borrowed content
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/output.txt}}
 ```
 
 에러의 핵심은 `cannot move out of type [T], a non-copy slice` 입니다.
 우리가 제네릭을 사용하지 않고 만든 `largest` 함수는 `i32`, `char` 타입만 다루었습니다.
-4장의 ["스택에만 저장된 데이터: 복사(copy)"][stack-only-data-copy]<!-- ignore --> 절에서 다루었듯
-`i32`, `char` 타입은 고정된 크기를 갖고 스택에 저장되는 타입이며 `Copy` 트레잇을 구현합니다.
+4장의 ["스택에만 저장된 데이터: 복사(copy)"][stack-only-data-copy]<!-- ignore -->
+절에서 다루었듯 `i32`, `char` 타입은 고정된 크기를 갖고 스택에 저장되는
+타입이며 `Copy` 트레잇을 구현합니다.
 하지만 제네릭으로 만든 `largest` 함수는
 `list` 매개변수로 `Copy` 트레잇을
 구현하지 않는 타입이 전달될 수도 있습니다.
@@ -497,29 +384,7 @@ Listing 10-15는 `i32`, `char` 타입처럼 `PartialOrd`, `Copy` 트레잇을
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest(&char_list);
-    println!("The largest char is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-15: `PartialOrd`, `Copy` 트레잇을
@@ -549,32 +414,10 @@ fn main() {
 출력을 가능하게 만드는 `Display` 트레잇을 모두 구현하는 타입이라면,
 그런 경우에만 `cmp_display` 메소드를 구현합니다.
 
+<span class="filename">Filename: src/lib.rs</span>
+
 ```rust
-use std::fmt::Display;
-
-struct Pair<T> {
-    x: T,
-    y: T,
-}
-
-impl<T> Pair<T> {
-    fn new(x: T, y: T) -> Self {
-        Self {
-            x,
-            y,
-        }
-    }
-}
-
-impl<T: Display + PartialOrd> Pair<T> {
-    fn cmp_display(&self) {
-        if self.x >= self.y {
-            println!("The largest member is x = {}", self.x);
-        } else {
-            println!("The largest member is y = {}", self.y);
-        }
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/lib.rs}}
 ```
 
 <span class="caption">Listing 10-16: 트레잇 바운드를 이용해 제네릭 타입에
@@ -610,7 +453,7 @@ let s = 3.to_string();
 이 필요하다는 걸 컴파일러에게 전달할 수 있습니다.
 컴파일러는 트레잇 바운드를 이용하여 우리가 코드에서
 사용한 구체적인 타입들이 알맞은 동작을 제공하는지 검사합니다.
-동적 타입 언어에선 해당 타입이 구현하지 않는 메소드를 호출하면
+동적 타입 언어에선 해당 타입이 정의하지 않은 메소드를 호출하면
 런타임에 에러가 발생합니다. 하지만 러스트는 컴파일타임에 에러를
 제공하여 코드를 실행하기도 전에 문제를 해결하도록 강제합니다.
 따라서 우린 런타임에 해당 동작을 구현하는지를 검사하는 코드를

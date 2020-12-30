@@ -13,12 +13,7 @@
 다음 Listing 5-1은 사용자 계정 정보를 저장하는 구조체입니다.
 
 ```rust
-struct User {
-    username: String,
-    email: String,
-    sign_in_count: u64,
-    active: bool,
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-1: 사용자 계정 정보를 저장하는 `User` 구조체 정의</span>
@@ -34,19 +29,7 @@ struct User {
 사용자를 선언해보겠습니다.
 
 ```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-let user1 = User {
-    email: String::from("someone@example.com"),
-    username: String::from("someusername123"),
-    active: true,
-    sign_in_count: 1,
-};
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-2: `User` 구조체의
@@ -59,21 +42,7 @@ let user1 = User {
 `email` 필드 값을 변경하는 예시입니다.
 
 ```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-let mut user1 = User {
-    email: String::from("someone@example.com"),
-    username: String::from("someusername123"),
-    active: true,
-    sign_in_count: 1,
-};
-
-user1.email = String::from("anotheremail@example.com");
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-3: `User` 인스턴스의
@@ -89,21 +58,7 @@ Listing 5-4 에선 `build_user` 함수가 사용자 이메일과 이름을 전�
 `User` 인스턴스를 반환하는 모습을 보여줍니다.
 
 ```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-fn build_user(email: String, username: String) -> User {
-    User {
-        email: email,
-        username: username,
-        active: true,
-        sign_in_count: 1,
-    }
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-4: 사용자의 이메일과 이름을 전달 받고
@@ -122,21 +77,7 @@ Listing 5-4 처럼 변수명과 구조체 필드명이 같을 땐,
 반복 작성하는 대신 필드 초기화 축약법을 사용한 예제입니다.
 
 ```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-fn build_user(email: String, username: String) -> User {
-    User {
-        email,
-        username,
-        active: true,
-        sign_in_count: 1,
-    }
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-5: 변수명과 필드명이 같던
@@ -159,26 +100,7 @@ Listing 5-6 은 Listing 5-2 에서 만든 `user1` 을 구조체 갱신법 없이
 `email` 과 `username` 만 새로운 값으로 변경해 `user2` 를 생성하는 코드입니다.
 
 ```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-# let user1 = User {
-#     email: String::from("someone@example.com"),
-#     username: String::from("someusername123"),
-#     active: true,
-#     sign_in_count: 1,
-# };
-#
-let user2 = User {
-    email: String::from("another@example.com"),
-    username: String::from("anotherusername567"),
-    active: user1.active,
-    sign_in_count: user1.sign_in_count,
-};
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-6: `user1` 의 일부 값을 이용해
@@ -189,25 +111,7 @@ let user2 = User {
 `..` 은 따로 명시된 필드를 제외한 나머지 필드를, 주어진 인스턴스의 필드 값으로 설정하는 구문입니다.
 
 ```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-# let user1 = User {
-#     email: String::from("someone@example.com"),
-#     username: String::from("someusername123"),
-#     active: true,
-#     sign_in_count: 1,
-# };
-#
-let user2 = User {
-    email: String::from("another@example.com"),
-    username: String::from("anotherusername567"),
-    ..user1
-};
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-7: 새로운 `email`, `username` 값으로
@@ -232,11 +136,7 @@ Listing 5-7 은 `user2` 인스턴스를 생성할때
 다음은 각각 `Color`, `Point` 라는 두 개의 튜플 구조체 정의 및 사용 예시입니다.
 
 ```rust
-struct Color(i32, i32, i32);
-struct Point(i32, i32, i32);
-
-let black = Color(0, 0, 0);
-let origin = Point(0, 0, 0);
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs:here}}
 ```
 
 `black`, `origin` 이 서로 다른 튜플 구조체의 인스턴스이므로,
@@ -271,6 +171,8 @@ let origin = Point(0, 0, 0);
 >
 > <span class="filename">Filename: src/main.rs</span>
 >
+> <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
+> 
 > ```rust,ignore,does_not_compile
 > struct User {
 >     username: &str,
@@ -291,20 +193,49 @@ let origin = Point(0, 0, 0);
 >
 > 라이프타임이 명시돼야 한다며 컴파일러가 에러를 일으킬 겁니다.
 >
-> ```text
+> ```console
+> $ cargo run
+>    Compiling structs v0.1.0 (file:///projects/structs)
 > error[E0106]: missing lifetime specifier
->  -->
+>  --> src/main.rs:2:15
 >   |
 > 2 |     username: &str,
->   |               ^ expected lifetime parameter
+>   |               ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 | struct User<'a> {
+> 2 |     username: &'a str,
+>   |
 >
 > error[E0106]: missing lifetime specifier
->  -->
+>  --> src/main.rs:3:12
 >   |
 > 3 |     email: &str,
->   |            ^ expected lifetime parameter
+>   |            ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 | struct User<'a> {
+> 2 |     username: &str,
+> 3 |     email: &'a str,
+>   |
+>
+> error: aborting due to 2 previous errors
+>
+> For more information about this error, try `rustc --explain E0106`.
+> error: could not compile `structs`
+>
+> To learn more, run the command again with --verbose.
 > ```
 >
 > 위 에러를 해결하여 구조체에 참조자를 저장하는 방법은 10장에서 알아볼 겁니다.
 > 지금 당장은 `&str` 대신 `String` 을 사용함으로써
 > 넘어가도록 하죠.
+
+<!-- manual-regeneration
+for the error above
+after running update-rustc.sh:
+pbcopy < listings/ch05-using-structs-to-structure-related-data/no-listing-02-reference-in-struct/output.txt
+paste above
+add `> ` before every line -->

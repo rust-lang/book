@@ -27,8 +27,8 @@
 
 Linux 나 macOS 사용자는 터미널을 열고 다음 명령어를 입력해주세요:
 
-```text
-$ curl https://sh.rustup.rs -sSf | sh
+```console
+$ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
 최신 stable 버전 러스트를 설치하는 데 사용할 `rustup` 툴을 설치하는
@@ -37,24 +37,6 @@ $ curl https://sh.rustup.rs -sSf | sh
 
 ```text
 Rust is installed now. Great!
-```
-
-원하시는 분들은 다운받은 스크립트를
-자유롭게 살펴보셔도 좋습니다.
-
-설치 스크립트는 다음 로그인부터
-자동으로 러스트를 환경변수에 추가합니다.
-로그아웃 없이 바로 진행하실 분들은 다음 명령어를 입력해
-직접 환경변수에 추가하셔도 됩니다:
-
-```text
-$ source $HOME/.cargo/env
-```
-
-*~/.bash_profile* 에 다음 줄을 추가하는 방법도 있습니다:
-
-```text
-$ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
 링커는 기본으로 설치되나, 러스트 컴파일 시에 링커를
@@ -69,13 +51,13 @@ $ export PATH="$HOME/.cargo/bin:$PATH"
 
 윈도우 사용자는 [https://www.rust-lang.org/tools/install][install] 에서
 안내를 따라주시기 바랍니다. 설치시 C++ 빌드 툴이 필요하다는 메시지가
-나타날 텐데, Visual studio 2013 이상 버전에 포함된 빌드 툴이 알맞으며
-가장 쉬운 방법은 [Visual Studio 2019 다운로드 페이지][visualstudio] 에
-들어가셔서 'Tools for Visual Studio 2019' 의
-'Visual Studio 2019 용 Build Tools' 를 설치하시는 겁니다.
+나타날 텐데, Visual studio 2013 이상 버전에 포함된 빌드 툴이 알맞습니다.
+가장 쉬운 방법은 [Microsoft C++ 빌드 도구][visualstudio] 를 설치하시는 겁니다.
+설치시 워크로드에서 "C++ 빌드 도구"가 선택되어 있는지, 그리고 개별 컴포넌트 중
+Windows 10 SDK가, 언어 팩 중에서 영어 언어 팩이 포함되어 있는지 확인하세요.
 
 [install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://www.visualstudio.com/downloads/#build-tools-for-visual-studio-2019
+[visualstudio]: https://visualstudio.microsoft.com/visual-cpp-build-tools/
 
 이 뒷내용부턴 *cmd.exe* 와 PowerShell 에서 혼용되는 명령어만
 사용할 예정이며, 서로 다른 부분이 있을 경우엔 따로 명시하겠습니다.
@@ -85,14 +67,14 @@ $ export PATH="$HOME/.cargo/bin:$PATH"
 `rustup` 으로 러스트를 설치했다면 최신 버전 업데이트도 간편합니다.
 셸에 다음 명령어를 입력해주세요:
 
-```text
+```console
 $ rustup update
 ```
 
 `rustup` 과 러스트를 삭제하는 방법은 다음과 같습니다
 (지금 입력하진 마세요!):
 
-```text
+```console
 $ rustup self uninstall
 ```
 
@@ -101,7 +83,7 @@ $ rustup self uninstall
 러스트가 제대로 설치되었는지
 확인하는 방법은 다음과 같습니다:
 
-```text
+```console
 $ rustc --version
 ```
 
@@ -123,7 +105,7 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 [korean_discord]: https://discord.gg/uqXGjEz
 [official_discord]: https://discord.gg/rust-lang
 [users]: https://users.rust-lang.org/
-[stackoverflow]: http://stackoverflow.com/questions/tagged/rust
+[stackoverflow]: https://stackoverflow.com/questions/tagged/rust
 
 ### 로컬 문서
 

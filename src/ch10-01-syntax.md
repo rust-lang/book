@@ -18,43 +18,7 @@
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn largest_i32(list: &[i32]) -> i32 {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn largest_char(list: &[char]) -> char {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest_i32(&number_list);
-    println!("The largest number is {}", result);
-#    assert_eq!(result, 100);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest_char(&char_list);
-    println!("The largest char is {}", result);
-#    assert_eq!(result, 'y');
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-4: 이름과 타입 시그니처만 다른
@@ -80,12 +44,13 @@ fn main() {
 다음과 같습니다:
 
 ```rust,ignore
-fn largest<T>(list: &[T]) -> T {
+fn largest<T>(list: &[T]) -> &T {
 ```
 
-이는 "`largest` 함수는 어떤 타입 `T` 에 대한 제네릭 함수" 라고 읽습니다.
-이 함수는 `T` 타입 값들의 슬라이스인 `list` 매개변수를 가지며,
-동일한 `T` 타입의 값을 반환합니다.
+이는 "`largest` 함수는 어떤 타입 `T` 에 대한 제네릭 함수" 라고
+읽습니다. 이 함수는 `T` 타입 값들의 슬라이스인 `list` 매개변수를
+가지며, 동일한 `T` 타입의 값에 대한 참조자를
+반환합니다.
 
 Listing 10-5는 제네릭 데이터 타입을 사용해 하나로 통합한 `largest` 함수 정의를 나타냅니다.
 코드에서 볼 수 있듯, 우린 이 함수를 `i32` 값들의 슬라이스로 호출할 수도 있고
@@ -95,29 +60,7 @@ Listing 10-5는 제네릭 데이터 타입을 사용해 하나로 통합한 `lar
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn largest<T>(list: &[T]) -> T {
-    let mut largest = list[0];
-
-    for &item in list.iter() {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest(&char_list);
-    println!("The largest char is {}", result);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-5: 제네릭 타입 매개변수를 이용한 `largest` 함수
@@ -125,14 +68,8 @@ fn main() {
 
 이 코드를 지금 바로 컴파일해 보면 다음과 같은 에러가 나타납니다:
 
-```text
-error[E0369]: binary operation `>` cannot be applied to type `T`
- --> src/main.rs:5:12
-  |
-5 |         if item > largest {
-  |            ^^^^^^^^^^^^^^
-  |
-  = note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
 `std::cmp::PartialOrd` 가 언급되는데, 이는 *트레잇(trait)* 입니다.
@@ -155,15 +92,7 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-fn main() {
-    let integer = Point { x: 5, y: 10 };
-    let float = Point { x: 1.0, y: 4.0 };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-6: `T` 타입의 값 `x`, `y`를 갖는
@@ -184,14 +113,7 @@ fn main() {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-fn main() {
-    let wont_work = Point { x: 5, y: 4.0 };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-7: `x`와 `y` 필드는 둘 다 동일한
@@ -202,16 +124,8 @@ fn main() {
 우린 그다음 `y` 에 4.0을 지정했는데, `y` 는 `x` 와 동일한 타입을 갖도록
 정의되었으므로 컴파일러는 타입 불일치 에러를 발생시킵니다:
 
-```text
-error[E0308]: mismatched types
- --> src/main.rs:7:38
-  |
-7 |     let wont_work = Point { x: 5, y: 4.0 };
-  |                                      ^^^ expected integral variable, found
-floating-point variable
-  |
-  = note: expected type `{integer}`
-             found type `{float}`
+```console
+{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/output.txt}}
 ```
 
 제네릭 `Point` 구조체의 `x`, `y`가 서로 다른 타입일 수 있도록
@@ -222,16 +136,7 @@ Listing 10-8에서는 `x`는 `T` 타입으로, `y`는 `U` 타입으로 정의한
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T, U> {
-    x: T,
-    y: U,
-}
-
-fn main() {
-    let both_integer = Point { x: 5, y: 10 };
-    let both_float = Point { x: 1.0, y: 4.0 };
-    let integer_and_float = Point { x: 5, y: 4.0 };
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-8: 두 타입의 제네릭을 사용하여,
@@ -294,22 +199,7 @@ Listing 10-6에서 정의했던 `Point<T>` 구조체에 `x` 메소드를 구현�
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-impl<T> Point<T> {
-    fn x(&self) -> &T {
-        &self.x
-    }
-}
-
-fn main() {
-    let p = Point { x: 5, y: 10 };
-
-    println!("p.x = {}", p.x());
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-9: `T` 타입의 `x` 필드에 대한
@@ -328,17 +218,10 @@ fn main() {
 메소드를 정의할 수도 있습니다. Listing 10-10은 `impl` 뒤에 타입을 선언하지 않고
 구체적인 타입인 `f32` 를 사용한 모습입니다.
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
-# struct Point<T> {
-#     x: T,
-#     y: T,
-# }
-#
-impl Point<f32> {
-    fn distance_from_origin(&self) -> f32 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
-    }
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 10-10: 구조체의 제네릭 타입 매개변수 `T`가
@@ -361,28 +244,7 @@ Listing 10-11은 Listing 10-8 코드의 `Point<T, U>` 구조체에 `mixup` 이�
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Point<T, U> {
-    x: T,
-    y: U,
-}
-
-impl<T, U> Point<T, U> {
-    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
-        Point {
-            x: self.x,
-            y: other.y,
-        }
-    }
-}
-
-fn main() {
-    let p1 = Point { x: 5, y: 10.4 };
-    let p2 = Point { x: "Hello", y: 'c'};
-
-    let p3 = p1.mixup(p2);
-
-    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
-}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-11: 구조체 정의와 다른 제네릭 타입을

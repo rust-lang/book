@@ -48,9 +48,7 @@
 여기 예제가 있습니다:
 
 ```rust
-use std::net::IpAddr;
-
-let home: IpAddr = "127.0.0.1".parse().unwrap();
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-08-unwrap-that-cant-fail/src/main.rs:here}}
 ```
 
 여기서는 하드코딩된 스트링을 파싱하여 `IpAddr` 인스턴스를 만드는 중입니다.
@@ -133,22 +131,7 @@ let home: IpAddr = "127.0.0.1".parse().unwrap();
 있는지에 대한 검사를 추가하는 것입니다:
 
 ```rust,ignore
-loop {
-    // --snip--
-
-    let guess: i32 = match guess.trim().parse() {
-        Ok(num) => num,
-        Err(_) => continue,
-    };
-
-    if guess < 1 || guess > 100 {
-        println!("The secret number will be between 1 and 100.");
-        continue;
-    }
-
-    match guess.cmp(&secret_number) {
-    // --snip--
-}
+{{#rustdoc_include ../listings/ch09-error-handling/no-listing-09-guess-out-of-range/src/main.rs:here}}
 ```
 
 `if` 표현식은 우리의 값이 범위 밖에 있는지 혹은 그렇지 않은지 검사하고,
@@ -169,26 +152,13 @@ loop {
 값을 받았을 때만 인스턴스를 생성하는 `Guess` 타입을 정의하는 한 가지 방법을
 보여줍니다:
 
+<!-- Deliberately not using rustdoc_include here; the `main` function in the
+file requires the `rand` crate. We do want to include it for reader
+experimentation purposes, but don't want to include it for rustdoc testing
+purposes. -->
+
 ```rust
-pub struct Guess {
-    value: i32,
-}
-
-impl Guess {
-    pub fn new(value: i32) -> Guess {
-        if value < 1 || value > 100 {
-            panic!("Guess value must be between 1 and 100, got {}.", value);
-        }
-
-        Guess {
-            value
-        }
-    }
-
-    pub fn value(&self) -> i32 {
-        self.value
-    }
-}
+{{#include ../listings/ch09-error-handling/listing-09-10/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-10: 1과 100 사이의 값일 때만 계속되는

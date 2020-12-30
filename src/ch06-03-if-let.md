@@ -6,11 +6,7 @@
 프로그램을 고려해 보세요:
 
 ```rust
-let some_u8_value = Some(0u8);
-match some_u8_value {
-    Some(3) => println!("three"),
-    _ => (),
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-06/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-6: 어떤 값이 `Some(3)` 일 때에만 코드를 실행하도록
@@ -25,10 +21,7 @@ match some_u8_value {
 Listing 6-6에서의 `match`와 동일하게 동작합니다:
 
 ```rust
-# let some_u8_value = Some(0u8);
-if let Some(3) = some_u8_value {
-    println!("three");
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-12-if-let/src/main.rs:here}}
 ```
 
 `if let`은 `=`로 구분된 패턴과 표현식을 입력받습니다. 이는 `match`와 동일한
@@ -53,48 +46,13 @@ if let Some(3) = some_u8_value {
 겁니다:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-# let coin = Coin::Penny;
-let mut count = 0;
-match coin {
-    Coin::Quarter(state) => println!("State quarter from {:?}!", state),
-    _ => count += 1,
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-13-count-and-announce-match/src/main.rs:here}}
 ```
 
 혹은 아래와 같이 `if let`과 `else` 표현식을 이용할 수도 있겠지요:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-# let coin = Coin::Penny;
-let mut count = 0;
-if let Coin::Quarter(state) = coin {
-    println!("State quarter from {:?}!", state);
-} else {
-    count += 1;
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-14-count-and-announce-if-let-else/src/main.rs:here}}
 ```
 
 만일 여러분의 프로그램이 `match`로 표현하기에는 너무 수다스러운 로직을 가지고 있는 경우에 놓여 있다면,

@@ -20,21 +20,7 @@ Listing 6-3에서 보는 바와 같이, 우리는 익명의 미국 동전을 입
 센트로 해당 값을 반환하는 함수를 작성할 수 있습니다.
 
 ```rust
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter,
-}
-
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => 1,
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter => 25,
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-03/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-3: 열거형과 열거형의 variant를 패턴으로서 사용하는
@@ -47,8 +33,7 @@ fn value_in_cents(coin: Coin) -> u8 {
 여기서는 어떤 타입이든 가능합니다. 위 예제에서 `coin`의 타입은
 Listing 6-3에서 정의했던 `Coin` 열거형입니다.
 
-다음은 `match` 갈래(arm)들입니다.
-하나의 갈래는 패턴과 코드 두 부분으로 이루어져 있습니다.
+다음은 `match` 갈래(arm)들입니다. 하나의 갈래는 패턴과 코드 두 부분으로 이루어져 있습니다.
 여기서의 첫 번째 갈래는 값 `Coin::Penny`로 되어있는 패턴을 가지고 있고
 그 후에 패턴과 실행되는 코드를 구분해주는 `=>` 연산자가 있습니다.
 위의 경우에서 코드는 그냥 값 `1`입니다. 각 갈래는 그다음 갈래와 쉼표로 구분됩니다.
@@ -70,24 +55,7 @@ Listing 6-3에서 정의했던 `Coin` 열거형입니다.
 출력하지만 여전히 해당 블록의 마지막 값인 `1`을 반환할 것입니다:
 
 ```rust
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter,
-# }
-#
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => {
-            println!("Lucky penny!");
-            1
-        },
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter => 25,
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-08-match-arm-multiple-lines/src/main.rs:here}}
 ```
 
 ### 값들을 바인딩하는 패턴들
@@ -104,19 +72,7 @@ fn value_in_cents(coin: Coin) -> u8 {
 이는 Listing 6-4에서 한 바와 같습니다:
 
 ```rust
-#[derive(Debug)] // 귀찮은 작업 없이 `println!` 에서 빠르게 확인하기 위해 추가했습니다
-enum UsState {
-    Alabama,
-    Alaska,
-    // --생략--
-}
-
-enum Coin {
-    Penny,
-    Nickel,
-    Dime,
-    Quarter(UsState),
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-4: `Quarter` variant가 `UsSate` 값 또한 들고
@@ -133,30 +89,7 @@ enum Coin {
 있습니다:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-#
-fn value_in_cents(coin: Coin) -> u8 {
-    match coin {
-        Coin::Penny => 1,
-        Coin::Nickel => 5,
-        Coin::Dime => 10,
-        Coin::Quarter(state) => {
-            println!("State quarter from {:?}!", state);
-            25
-        },
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-09-variable-in-pattern/src/main.rs:here}}
 ```
 
 만일 우리가 `value_in_cents(Coin::Quarter(UsState::Alaska))`를 호출했다면, `coin`은
@@ -183,16 +116,7 @@ fn value_in_cents(coin: Coin) -> u8 {
 Listing 6-5와 같이 보일 것입니다:
 
 ```rust
-fn plus_one(x: Option<i32>) -> Option<i32> {
-    match x {
-        None => None,
-        Some(i) => Some(i + 1),
-    }
-}
-
-let five = Some(5);
-let six = plus_one(five);
-let none = plus_one(None);
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 6-5: `Option<i32>` 상에서 `match`를 이용하는
@@ -203,14 +127,14 @@ let none = plus_one(None);
 매치 갈래에 대하여 이 값을 비교합니다.
 
 ```rust,ignore
-None => None,
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
 `Some(5)` 값은 패턴 `None`과 매칭되지 않으므로,
 다음 갈래로 계속 갑니다.
 
 ```rust,ignore
-Some(i) => Some(i + 1),
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
 `Some(5)`가 `Some(i)`랑 매칭되나요? 예, 바로 그렇습니다! 동일한 variant를 갖고 있습니다.
@@ -222,7 +146,7 @@ Some(i) => Some(i + 1),
 `match` 안으로 들어와서 첫 번째 갈래와 비교합니다.
 
 ```rust,ignore
-None => None,
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:first_arm}}
 ```
 
 매칭되었군요! 더할 값은 없으므로, 프로그램은 멈추고 `=>`의
@@ -241,23 +165,15 @@ None => None,
 보세요:
 
 ```rust,ignore,does_not_compile
-fn plus_one(x: Option<i32>) -> Option<i32> {
-    match x {
-        Some(i) => Some(i + 1),
-    }
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
 ```
 
 여기서는 `None` 케이스를 다루지 않았고, 따라서 이 코드는 버그를 일으킬 것입니다. 다행히도,
 이는 러스트가 어떻게 잡는지 알고 있는 버그입니다. 이 코드를 컴파일하고자 시도하면, 아래와 같은
 에러를 얻게 됩니다:
 
-```text
-error[E0004]: non-exhaustive patterns: `None` not covered
- -->
-  |
-6 |         match x {
-  |               ^ pattern `None` not covered
+```console
+{{#include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/output.txt}}
 ```
 
 러스트의 매치는 *철저합니다(exhaustive)*. 발생할 수 있는 경우 중 우리가 놓친 게
@@ -265,7 +181,7 @@ error[E0004]: non-exhaustive patterns: `None` not covered
 만들려면 모든 가능성을 샅샅이 다루어야 합니다. 이로써 발생하는 장점은 `Option<T>` 에서도
 드러납니다. `None` 케이스를 다루는 것을 깜박하더라도 러스트가 알아채고 알려주기 때문에,
 앞서 말했던 Null 일지도 모를 값을 가지고 있어서 발생할 수 있는 수십억 달러짜리 실수를
-걱정할 필요가 전혀 없죠.
+불가능하게 만듭니다.
 
 ### `_` Placeholder
 
@@ -276,14 +192,7 @@ error[E0004]: non-exhaustive patterns: `None` not covered
 싶진 않을 겁니다. 다행히도, 이럴 땐 `_` 라는 특별한 패턴을 사용하면 됩니다:
 
 ```rust
-let some_u8_value = 0u8;
-match some_u8_value {
-    1 => println!("one"),
-    3 => println!("three"),
-    5 => println!("five"),
-    7 => println!("seven"),
-    _ => (),
-}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-11-underscore-placeholder/src/main.rs:here}}
 ```
 
 `_` 패턴은 어떠한 값과도 매칭될 것입니다. 우리의 다른 갈래 뒤에 이를 집어넣음으로써, `_`는
@@ -292,5 +201,10 @@ match some_u8_value {
 결과적으로, 우리가 `_` placeholder 이전에 나열하지 않은 모든 가능한 값들에 대해서는
 아무것도 하고 싶지 않다는 것을 말해줄 수 있습니다.
 
-하지만 `match` 표현식은 우리가 단 *한 가지* 경우에 대해 고려하는 상황에서는 다소 장황할 수 있습니다.
-이러한 상황을 위하여, 러스트는 `if let`을 제공합니다.
+하지만 `match` 표현식은 우리가 단 *한 가지* 경우에 대해 고려하는 상황에서는
+다소 장황할 수 있습니다. 이러한 상황을 위하여, 러스트는 `if let`을 제공합니다.
+
+패턴과 매칭에 대한 더 많은 내용은 [18장][ch18-00-patterns] 에서 확인할 수 있습니다.
+
+[ch18-00-patterns]:
+ch18-00-patterns.html

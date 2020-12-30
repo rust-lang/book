@@ -17,26 +17,14 @@
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
 저장하고 `cargo run`으로 프로그램을 실행해보세요. 다음의 출력처럼
 에러 메시지를 받을 것입니다:
 
-```text
-에러[E0384]: 불변 변수 `x`에 두 번 값을 할당할 수 없습니다
- --> src/main.rs:4:5
-  |
-2 |     let x = 5;
-  |         - `x`에 대한 첫 번째 할당
-3 |     println!("x의 값은: {}", x);
-4 |     x = 6;
-  |     ^^^^^ 불변 변수에 두 번 할당할 수 없습니다
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
 ```
 
 이 예시는 컴파일러가 프로그램의 에러 찾기를 어떻게 도와주는지 보여줍니다.
@@ -72,23 +60,13 @@ fn main() {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut x = 5;
-    println!("The value of x is: {}", x);
-    x = 6;
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/src/main.rs}}
 ```
 
 지금 이 프로그램을 실행하면, 다음의 출력을 얻습니다.
 
-```text
-$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
-     Running `target/debug/variables`
-The value of x is: 5
-The value of x is: 6
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
 우리는 `mut`를 사용해 `x`의 값을 `5`에서 `6`으로 바꿀 수
@@ -160,15 +138,7 @@ ignore --> 섹션에서 보았듯이, 새 변수를 이전 변
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let x = 5;
-
-    let x = x + 1;
-
-    let x = x * 2;
-
-    println!("The value of x is: {}", x);
-}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/src/main.rs}}
 ```
 
 이 프로그램은 1차로 `x`에 `5`를 바인드(대입)합니다. 그리고 `let x = `을 반복해 `x`의 값을 가려
@@ -177,12 +147,8 @@ fn main() {
 이전 값에 `2`를 곱해 `x`에 할당해서 `x`의 최종값은 `12`가 됩니다. 우리가 이 프로그램을 실행하면
 다음과 같이 출력될 것입니다.
 
-```text
-$ cargo run
-   Compiling variables v0.1.0 (file:///projects/variables)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
-     Running `target/debug/variables`
-The value of x is: 12
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
 덮어쓰기는 변수를 `mut`로 표시하는 것과는 다릅니다.
@@ -198,8 +164,7 @@ The value of x is: 12
 우리는 이 값을 숫자로써 보관하고 싶습니다.
 
 ```rust
-let spaces = "   ";
-let spaces = spaces.len();
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
 이 구조는 숫자 타입인 두 번째 `spaces` 변수가 문자열 타입인
@@ -210,21 +175,13 @@ let spaces = spaces.len();
 하지만, 여기에 `mut`을 사용하려 한다면, 보시다시피 컴파일-타임 에러가 발생합니다.
 
 ```rust,ignore,does_not_compile
-let mut spaces = "   ";
-spaces = spaces.len();
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 
 에러는 변수의 타입을 바꿀 수 없다고 알려줍니다.
 
-```text
-에러[E0308]: 타입 불일치
- --> src/main.rs:3:14
-  |
-3 |     spaces = spaces.len();
-  |              ^^^^^^^^^^^^ 스트링 슬라이스(&str)를 예상했지만, usize를 찾음
-  |
-  = 노트: `&str` 타입을 예상함
-          `usize` 타입을 찾음
+```console
+{{#include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/output.txt}}
 ```
 
 변수가 어떻게 작동하는지 알아보았으니, 변수가 가질 수 있는 더 많은

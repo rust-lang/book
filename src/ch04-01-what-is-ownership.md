@@ -40,10 +40,10 @@
 > 반대로 스택에서 데이터를 제거하는 행위는 *팝(pop)* 이라 합니다.
 >
 > 스택에 저장되는 데이터는 모두 명확하고 크기가 정해져 있어야 합니다.
-> 컴파일 타임에 크기를 알 수 없거나, 크기가 변경될 수 있는 데이터는 스택 대신 힙에 저장됩니다.
->
-> 힙은 스택보다 복잡합니다. 데이터를 힙에 넣을때 먼저 저장할 공간이 있는지 운영체제한테 물어봅니다.
-> 그럼 운영체제는 커다란 힙 영역 안에서 어떤 빈 지점을 찾고,
+> 컴파일 타임에 크기를 알 수 없거나, 크기가 변경될 수 있는 데이터는
+> 스택 대신 힙에 저장됩니다. 힙은 스택보다 복잡합니다.
+> 데이터를 힙에 넣을때 먼저 저장할 공간이 있는지 운영체제한테 물어봅니다.
+> 그럼 메모리 할당자는 커다란 힙 영역 안에서 어떤 빈 지점을 찾고,
 > 이 지점은 사용 중이라고 표시한 뒤 해당 지점을 가리키는 *포인터(pointer)* 를 우리한테 반환합니다.
 > 이 과정을 *힙 공간 할당(allocating on the heap)*, 줄여서 *할당(allocationg)* 이라 합니다
 > (스택에 값을 푸시하는 것은 할당이라 부르지 않습니다). 포인터는 크기가 정해져 있어
@@ -56,11 +56,11 @@
 > 이후에 온 일행이 우리 테이블을 찾을 땐 직원에게 물어 안내받을 겁니다.
 >
 > 스택 영역은 데이터에 접근하는 방식상 힙 영역보다 속도가 빠릅니다.
-> 스택에서는 항상 스택의 가장 위에 데이터를 저장하니
-> 새로운 데이터를 저장할 공간을 탐색할 필요가 없기 때문이죠.
-> 스택에 담긴 모든 데이터는 크기가 정해져 있다는 점 또한
-> 속도를 빠르게 만들어주는데
-> 한몫합니다.
+> 메모리 할당자가 새로운 데이터를 저장할 공간을 찾을 필요가 없이
+> 항상 스택의 가장 위에 데이터를 저장하면 되기 때문이죠.
+> 반면에 힙에 공간을 할당하는 작업은 좀 더 많은 작업을 요구하는데,
+> 메모리 할당자가 데이터를 저장하기에 충분한 공간을 먼저 찾고
+> 다음 할당을 위한 준비를 위해 예약을 수행해야 하기 때문입니다.
 >
 > 힙 영역은 포인터가 가리키는 곳을 찾아가는 과정으로 인해 느려집니다.
 > 현대 프로세서는 메모리 내부를 이리저리 왔다 갔다 하는 작업이 적을수록 속도가 빨라지는데,
@@ -117,11 +117,7 @@ let s = "hello";
 Listing 4-1에 변수 `s`가 유효한 지점을 주석으로 표시했습니다:
 
 ```rust
-{                      // s를 아직 선언하지 않았으므로, 유효하지 않습니다
-    let s = "hello";   // 이 시점 이후로 s는 유효합니다.
-
-    // 변수 s 를 사용하는 코드
-}                      // 스코프가 닫혔으므로, s 는 더 이상 유효하지 않습니다.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-1: 변수와,
@@ -174,11 +170,7 @@ let s = String::from("hello");
 이 `String` 문자열은 변경 가능합니다:
 
 ```rust
-let mut s = String::from("hello");
-
-s.push_str(", world!"); // push_str()은 문자열 리터럴을 String 에 덧붙이는 함수입니다.
-
-println!("{}", s); // 이 부분에서 `hello, world!` 를 출력합니다.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-01-can-mutate-string/src/main.rs:here}}
 ```
 
 하지만, 문자열 리터럴과 `String` 에 무슨 차이가 있길래 어떤 것은 변경할 수 있고
@@ -197,8 +189,8 @@ println!("{}", s); // 이 부분에서 `hello, world!` 를 출력합니다.
 텍스트 내용 및 크기를 변경할 수 있습니다.
 하지만 이는 다음을 의미하기도 합니다:
 
-1. 런타임 중 운영체제에 메모리를 요청해야 합니다.
-2. `String` 사용을 마쳤을 때 메모리를 해제할(운영체제에게 메모리를 반납할)
+* 실행 중 메모리 할당자로부터 메모리를 요청해야 합니다.
+* `String` 사용을 마쳤을 때 메모리를 해제할 (할당자에게 메모리를 반납할)
   방법이 필요합니다.
 
 이 중 첫 번째는 이미 우리 손으로 해결했습니다.
@@ -206,7 +198,7 @@ println!("{}", s); // 이 부분에서 `hello, world!` 를 출력합니다.
 프로그래밍 언어 사이에서 일반적으로 사용하는 방식이죠.
 
 하지만 두 번째는 다릅니다.
-*가비지 콜렉터(GC)* 를 갖는 언어에선 GC가
+*가비지 콜렉터 (garbage collector, GC)* 를 갖는 언어에선 GC가
 사용하지 않는 메모리를 찾아 없애주므로 프로그래머가 신경 쓸 필요 없으나,
 GC가 없는 언어에선 할당받은 메모리가 필요 없어지는 지점을
 프로그래머가 직접 찾아 메모리 해제 코드를 작성해야 합니다.
@@ -219,12 +211,7 @@ GC가 없는 언어에선 할당받은 메모리가 필요 없어지는 지점�
 Listing 4-1 에서 문자열 리터럴을 `String` 으로 바꿔보았습니다:
 
 ```rust
-{
-    let s = String::from("hello"); // 이 시점 이후로 s는 유효합니다.
-
-    // 변수 s 를 사용하는 코드
-}                                  // 스코프가 닫혔으므로,
-                                   // s 는 더 이상 유효하지 않습니다.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
 ```
 
 보시면 `String` 에서 사용한 메모리를 자연스럽게 해제하는 지점이 있습니다.
@@ -249,8 +236,7 @@ Listing 4-1 에서 문자열 리터럴을 `String` 으로 바꿔보았습니다:
 정수형을 이용한 예제로 살펴보겠습니다.
 
 ```rust
-let x = 5;
-let y = x;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-2: 변수 `x`의 정숫값을
@@ -265,8 +251,7 @@ let y = x;
 이번엔 앞선 예제를 `String` 으로 바꿔보았습니다:
 
 ```rust
-let s1 = String::from("hello");
-let s2 = s1;
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-03-string-move/src/main.rs:here}}
 ```
 
 이전 코드와 매우 비슷하니, 동작 방식도 같을 거라고 생각하실 수도 있습니다.
@@ -286,7 +271,7 @@ Figure 4-1 를 참고해주세요. `String` 은 그림 좌측에서 나타나듯
 
 문자열 길이와 메모리 용량이 무슨 차이인가 궁금하실 분들을 위해 간단히 설명해드리자면,
 문자열 길이는 `String` 의 내용이 현재 사용하고 있는 메모리를 바이트 단위로 나타낸 것이고,
-메모리 용량은 운영체제가 `String` 에 할당한 메모리의 양을 뜻합니다.
+메모리 용량은 메모리 할당자가 `String` 에 할당한 메모리의 양을 뜻합니다.
 이번 내용에서는 길이, 용량 사이의 차이는 중요한 내용이 아니니,
 이해가 잘 안 되면 용량 값은 무시하셔도 좋습니다.
 
@@ -321,30 +306,18 @@ Figure 4-1 를 참고해주세요. `String` 은 그림 좌측에서 나타나듯
 따라서, 러스트에는 여러 포인터가 한 곳을 가리킬 경우를 대비한 규칙이 존재합니다.
 `s1` 에 할당한 메모리를 새로 복사하는 대신, 기존의 `s1` 을 무효화하는 것이죠.
 이로써 러스트는 `s1` 이 스코프를 벗어나더라도 아무것도 해제할 필요가 없어집니다.
-그럼 `s2` 가 만들어진 이후에 `s1` 을 사용하면 어떻게 될까요? 결론부터 말씀드리면, 사용할 수 없습니다:
+그럼 `s2` 가 만들어진 이후에 `s1` 을 사용하면 어떻게 될까요? 결론부터 말씀드리면,
+사용할 수 없습니다:
 
 ```rust,ignore,does_not_compile
-let s1 = String::from("hello");
-let s2 = s1;
-
-println!("{}, world!", s1);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
 ```
 
 보시는 것과 같이 유효하지 않은 참조자의 사용을 감지했다는 에러가
 발생하네요:
 
-```text
-error[E0382]: use of moved value: `s1`
- --> src/main.rs:5:28
-  |
-3 |     let s2 = s1;
-  |         -- value moved here
-4 |
-5 |     println!("{}, world!", s1);
-  |                            ^^ value used here after move
-  |
-  = note: move occurs because `s1` has type `std::string::String`, which does
-  not implement the `Copy` trait
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/output.txt}}
 ```
 
 여러분이 다른 프로그래밍 언어에서 “얕은 복사(shallow copy)”,
@@ -370,17 +343,13 @@ error[E0382]: use of moved value: `s1`
 
 `String` 의 힙 데이터까지 깊이 복사하고 싶을 땐
 `clone` 이라는 공용 메소드를 사용할 수 있습니다.
-메소드 문법은 5장에서 다룰 예정이지만,
-메소드라는 개념은 대부분의 프로그래밍 언어가 갖는 특성이기 때문에
-여러분은 이미 다뤄보셨을 겁니다.
+메소드 문법은 5장에서 다룰 예정이지만, 메소드라는 개념은
+대부분의 프로그래밍 언어가 갖는 특성이기 때문에 여러분은 이미 다뤄보셨을 겁니다.
 
 다음은 `clone` 메소드의 사용 예제입니다:
 
 ```rust
-let s1 = String::from("hello");
-let s2 = s1.clone();
-
-println!("s1 = {}, s2 = {}", s1, s2);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
 ```
 
 이 코드의 실행 결과는 힙 데이터까지 복사됐을 때의 메모리 구조를 나타낸
@@ -397,10 +366,7 @@ Figure 4-3 과 정확히 일치합니다.
 (정상적으로 작동합니다):
 
 ```rust
-let x = 5;
-let y = x;
-
-println!("x = {}, y = {}", x, y);
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
 ```
 
 하지만 이 코드는 방금 우리가 배운 내용과 맞지 않는 것처럼 보이네요.
@@ -413,9 +379,10 @@ println!("x = {}, y = {}", x, y);
 여기선 `clone` 을 호출해도 얕은 복사와 차이가 없으니 생략해도 상관없죠.
 
 러스트에는 정수형 등 스택에 저장되는 타입에
-달아 놓을 수 있는 `Copy` 트레잇이 있습니다(트레잇은 10장에서 자세히 다룹니다).
-만약 어떤 타입에 이 `Copy` 트레잇이 구현되어 있다면, 대입 연산 후에도 기존 변수를 사용할 수 있죠.
-하지만 구현하려는 타입이나, 구현하려는 타입 중 일부분에 `Drop` 트레잇이 구현된 경우엔
+달아 놓을 수 있는 `Copy` 트레잇이 있습니다 (트레잇은 10장에서 자세히 다룹니다).
+만약 어떤 타입에 이 `Copy` 트레잇이 구현되어 있다면,
+대입 연산 후에도 기존 변수를 사용할 수 있죠. 하지만 구현하려는 타입이나,
+구현하려는 타입 중 일부분에 `Drop` 트레잇이 구현된 경우엔
 `Copy` 트레잇을 어노테이션(annotation) 할 수 없습니다.
 즉, 스코프 밖으로 벗어났을 때 특정 동작이 요구되는 타입에
 `Copy` 어노테이션을 추가하면 컴파일 오류가 발생합니다.
@@ -423,8 +390,9 @@ println!("x = {}, y = {}", x, y);
 부록 C의 [“Derivable Traits”][derivable-traits]<!-- ignore --> 을 참고 바랍니다.
 
 그래서, `Copy` 가능한 타입은 뭘까요?
-타입마다 문서를 뒤져 정보를 찾아보고 확신을 얻을 수도 있겠지만, 일반적으로
-단순한 스칼라 값의 묶음은 `Copy` 가능하고, 할당이 필요하거나 리소스의 일종인 경우엔 불가능합니다.
+타입마다 문서를 뒤져 정보를 찾아보고 확신을 얻을 수도 있겠지만,
+일반적으로 단순한 스칼라 값의 묶음은 `Copy` 가능하고,
+할당이 필요하거나 리소스의 일종인 경우엔 불가능합니다.
 `Copy` 가능한 타입 목록 중 일부를 보여드리겠습니다.
 
 * 모든 정수형 타입 (예: `u32`)
@@ -444,29 +412,7 @@ Listing 4-3 에 변수가 스코프를 벗어나는 부분을
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s = String::from("hello");  // s 가 스코프 내에 들어옵니다.
-
-    takes_ownership(s);             // s 의 값이 함수로 이동
-                                    // 따라서 s 는 더 이상 유효하지 않습니다.
-
-    let x = 5;                      // x 가 스코프 내에 들어옵니다.
-
-    makes_copy(x);                  // x 는 함수 안으로 이동하지만,
-                                    // i32는 Copy 가능한 타입이므로,
-                                    // 이후에도 x 를 사용할 수 있습니다.
-
-} // 이 지점에서 x 와 s 는 스코프를 벗어납니다.
-  // 하지만 s 의 값은 이미 이동되었으므로, 별다른 일이 발생하지 않습니다.
-
-fn takes_ownership(some_string: String) { // some_string 이 스코프 내에 들어옵니다.
-    println!("{}", some_string);
-} // 이 지점에서 some_string 은 스코프를 벗어나고 `drop` 이 호출됩니다.
-  // 이로써 사용하던 메모리는 해제되었습니다.
-
-fn makes_copy(some_integer: i32) { // some_integer 가 스코프 내에 들어옵니다.
-    println!("{}", some_integer);
-} // 이 지점에서 some_integer 가 스코프를 벗어나고 별다른 일은 발생하지 않습니다.
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-3: 소유권, 스코프가 주석으로
@@ -485,35 +431,7 @@ fn makes_copy(some_integer: i32) { // some_integer 가 스코프 내에 들어�
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = gives_ownership();         // gives_ownership 은 반환 값을
-                                        // s1 으로 이동시킵니다.
-
-    let s2 = String::from("hello");     // s2 가 스코프 내에 들어옵니다.
-
-    let s3 = takes_and_gives_back(s2);  // s2 가 takes_and_gives_back 로 이동하고,
-                                        // takes_and_gives_back 은 반환 값을
-                                        // s3 으로 이동시킵니다.
-} // 이 지점에서 s3 는 스코프를 벗어나고 drop 됩니다.
-  // 반면 s2 는 이동되며, s1 는 별다른 일 없이 스코프를 벗어납니다.
-
-fn gives_ownership() -> String {             // gives_ownership 함수는
-                                             // 자신을 호출한 함수(이 경우 main)로
-                                             // 반환 값을 이동시킵니다.
-
-    let some_string = String::from("hello"); // some_string 이 스코프 내에 들어옵니다.
-
-    some_string                              // some_string 이 반환되고,
-                                             // gives_ownership 을 호출한 함수로
-                                             // 이동합니다.
-}
-
-// takes_and_gives_back 함수는 String 을 전달받고, String 을 반환합니다.
-fn takes_and_gives_back(a_string: String) -> String { // a_string 이
-                                                      // 스코프 내에 들어옵니다.
-
-    a_string  // some_string 이 반환되고, takes_and_gives_back 함수를 호출한 함수로 이동합니다.
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-4: 반환 값으로 일어나는
@@ -535,19 +453,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string 이
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let s1 = String::from("hello");
-
-    let (s2, len) = calculate_length(s1);
-
-    println!("The length of '{}' is {}.", s2, len);
-}
-
-fn calculate_length(s: String) -> (String, usize) {
-    let length = s.len(); // len() 은 String 의 길이를 반환하는 함수입니다.
-
-    (s, length)
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
 ```
 
 <span class="caption">Listing 4-5: 매개변수의 소유권을 되돌려주는 방법</span>

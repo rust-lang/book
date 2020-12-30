@@ -23,17 +23,7 @@ fn first_word(s: &String) -> ?
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn first_word(s: &String) -> usize {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return i;
-        }
-    }
-
-    s.len()
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-7: `String` 매개변수의 바이트 인덱스 값을 반환하는
@@ -44,13 +34,13 @@ fn first_word(s: &String) -> usize {
 `as_bytes` 메소드를 이용해 바이트 배열로 변환하였습니다:
 
 ```rust,ignore
-let bytes = s.as_bytes();
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
 ```
 
 그 다음, 바이트 배열에 사용할 반복자(iterator)를 `iter` 메소드로 생성했습니다:
 
 ```rust,ignore
-for (i, &item) in bytes.iter().enumerate() {
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
 반복자(iterator)는 13장에서 자세히 알아볼 예정이니
@@ -71,12 +61,7 @@ for (i, &item) in bytes.iter().enumerate() {
 찾지 못했을 땐 `s.len()` 으로 문자열의 길이를 반환합니다:
 
 ```rust,ignore
-    if item == b' ' {
-        return i;
-    }
-}
-
-s.len()
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
 ```
 
 문자열 첫 단어의 끝부분을 찾아 해당 인덱스를 반환하는 함수를 완성했습니다.
@@ -89,28 +74,7 @@ s.len()
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# fn first_word(s: &String) -> usize {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &item) in bytes.iter().enumerate() {
-#         if item == b' ' {
-#             return i;
-#         }
-#     }
-#
-#     s.len()
-# }
-#
-fn main() {
-    let mut s = String::from("hello world");
-
-    let word = first_word(&s); // word 는 5 가 되겠죠.
-
-    s.clear(); // String 을 비워, 내용을 "" 로 만드는 코드입니다.
-
-    // word 에는 아직 5 가 들어 있지만, 해당 값을 의미 있게 사용할 수 있는 String 은 이제 없습니다.
-    // word 는 쓸모없어졌네요.
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-8: `first_word` 함수의 결과를 저장했으나,
@@ -142,10 +106,7 @@ fn second_word(s: &String) -> (usize, usize) {
 문자열 슬라이스(String Slice)는 `String` 의 일부를 가리키는 참조자를 말합니다:
 
 ```rust
-let s = String::from("hello world");
-
-let hello = &s[0..5];
-let world = &s[6..11];
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
 만드는 방식은 `String` 참조자와 유사하지만, `[0..5]` 가 추가로 붙어 있네요.
@@ -157,7 +118,7 @@ let world = &s[6..11];
 슬라이스는 내부적으로 시작 위치, 길이를 데이터 구조에 저장하며,
 길이 값은 `ending_index` 값에서 `starting_index` 값을 빼서 계산합니다.
 따라서 `let world = &[6..11];` 의 `world` 는
-시작 위치로 `s` 의 7번째 바이트를 가리키는 포인터와,
+시작 위치로 `s` 의 (1부터 시작하여) 7번째 바이트를 가리키는 포인터와,
 길이 값 5를 갖는 슬라이스가 되겠죠.
 
 Figure 4-6 을 참고하겠습니다:
@@ -214,17 +175,7 @@ let slice = &s[..];
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn first_word(s: &String) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
-        }
-    }
-
-    &s[..]
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
 ```
 
 Listing 4-7 과 같은 방법으로
@@ -233,53 +184,35 @@ Listing 4-7 과 같은 방법으로
 문자열 맨 앞부터 알아낸 위치까지 문자열 슬라이스를 생성하여 반환합니다.
 
 이제 `first_word` 가 반환하는 값은 원래 데이터와 분리된 값이 아닙니다.
-원래 데이터에서 슬라이스 시작 위치를 가리키는 참조자와, 슬라이스 요소 개수로 구성된 값이죠.
+원래 데이터에서 슬라이스 시작 위치를 가리키는 참조자와,
+슬라이스 요소 개수로 구성된 값이죠.
+
 `second_word` 함수도 슬라이스를 반환하도록 바꿔보겠습니다:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-사용법이 훨씬 직관적이지 않나요?
-또한 Listing 4-8 에서 말한 첫 단어의 끝부분 인덱스를 찾은 이후
-문자열이 비워지면 찾아낸 인덱스가 쓸모없어지는 문제도 해결했습니다.
-이제는 컴파일러가 `String` 을 가리키는 참조자의 유효함을 보증하니까요.
-
+사용법이 훨씬 직관적이지 않나요? 또한 Listing 4-8 에서 말한
+첫 단어의 끝부분 인덱스를 찾은 이후 문자열이 비워지면 찾아낸
+인덱스가 쓸모없어지는 문제도 해결했습니다. 이제는 컴파일러가
+`String` 을 가리키는 참조자의 유효함을 보증하니까요.
 기존 코드는 논리적으로 맞지 않음에도 불구하고 오류가 나타나지 않았습니다.
 비어 있는 문자열에서 첫 번째 단어의 인덱스를 이용할 때가 되어서야 오류가 나타났죠.
 하지만 슬라이스를 사용하면 이런 버그를 미연에 방지하고,
-발생할지도 모를 문제마저 사전에 알 수 있습니다.
-이제 슬라이스로 만든 `first_word` 를 잘못된 방법으로 사용했을 때
-컴파일 에러가 제대로 나타나는지 확인해보죠:
+발생할지도 모를 문제마저 사전에 알 수 있습니다. 이제 슬라이스로 만든
+`first_word` 를 잘못된 방법으로 사용했을 때 컴파일 에러가 제대로 나타나는지 확인해보죠:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-fn main() {
-    let mut s = String::from("hello world");
-
-    let word = first_word(&s);
-
-    s.clear(); // error!
-
-    println!("the first word is: {}", word);
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
 ```
 
 나타나는 오류는 다음과 같습니다:
 
-```text
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
-  --> src/main.rs:18:5
-   |
-16 |     let word = first_word(&s);
-   |                           -- immutable borrow occurs here
-17 |
-18 |     s.clear(); // error!
-   |     ^^^^^^^^^ mutable borrow occurs here
-19 |
-20 |     println!("the first word is: {}", word);
-   |                                       ---- immutable borrow later used here
+```console
+{{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
 이전 절에서 배운 borrow 규칙 중, 특정 대상의 불변 참조자가 이미 존재할 경우에는
@@ -315,7 +248,7 @@ fn first_word(s: &String) -> &str {
 모두 사용 가능한 함수를 작성하는 방법도 알죠.
 
 ```rust,ignore
-fn first_word(s: &str) -> &str {
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 4-9: `first_word` 함수 개선
@@ -329,32 +262,7 @@ API 를 제공하는 관점에선 간단하고 손해 없는 방법으로 더 �
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# fn first_word(s: &str) -> &str {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &item) in bytes.iter().enumerate() {
-#         if item == b' ' {
-#             return &s[0..i];
-#         }
-#     }
-#
-#     &s[..]
-# }
-fn main() {
-    let my_string = String::from("hello world");
-
-    // 이때는 `String` 의 슬라이스를 받아 작동합니다.
-    let word = first_word(&my_string[..]);
-
-    let my_string_literal = "hello world";
-
-    // 이때는 문자열 리터럴의 슬라이스를 받아 작동합니다.
-    let word = first_word(&my_string_literal[..]);
-
-    // 다만, 앞서 말했듯 문자열 리터럴은 그 자체로 슬라이스이므로
-    // 슬라이스 구문을 붙이지 않아도 작동합니다.
-    let word = first_word(my_string_literal);
-}
+{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:usage}}
 ```
 
 ### 그 외 슬라이스

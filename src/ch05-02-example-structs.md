@@ -12,19 +12,7 @@ Listing 5-8 은 *src/main.rs* 에 이 기능을 간단하게 구현한
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let width1 = 30;
-    let height1 = 50;
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(width1, height1)
-    );
-}
-
-fn area(width: u32, height: u32) -> u32 {
-    width * height
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:all}}
 ```
 
 <span class="caption">Listing 5-8: 각 변수에 지정된 너비와 높이로
@@ -32,8 +20,8 @@ fn area(width: u32, height: u32) -> u32 {
 
 `cargo run` 으로 실행해보죠:
 
-```text
-The area of the rectangle is 1500 square pixels.
+```console
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/output.txt}}
 ```
 
 Listing 5-8 는 `area` 함수에
@@ -44,7 +32,7 @@ Listing 5-8 는 `area` 함수에
 `area` 함수의 시그니처를 보면 개선해야 할 점이 여실히 드러납니다:
 
 ```rust,ignore
-fn area(width: u32, height: u32) -> u32 {
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:here}}
 ```
 
 너비와 높이 값은 둘이 합쳐져서 하나의 사각형을 묘사합니다.
@@ -61,18 +49,7 @@ fn area(width: u32, height: u32) -> u32 {
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let rect1 = (30, 50);
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(rect1)
-    );
-}
-
-fn area(dimensions: (u32, u32)) -> u32 {
-    dimensions.0 * dimensions.1
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-09/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-9: 사각형의 너비와 높이를
@@ -100,23 +77,7 @@ Listing 5-10 처럼, 기존에 사용하던 튜플을 구조체로 바꿔
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(&rect1)
-    );
-}
-
-fn area(rectangle: &Rectangle) -> u32 {
-    rectangle.width * rectangle.height
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-10/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-10: `Rectangle` 구조체 정의</span>
@@ -150,16 +111,7 @@ Listing 5-11 는 앞서 다뤄본 `println!` 매크로를 사용해본 예시이
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-
-    println!("rect1 is {}", rect1);
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-11: `Rectangle` 인스턴스
@@ -168,7 +120,7 @@ fn main() {
 이 코드를 컴파일하면 다음과 같은 메시지가 나타납니다:
 
 ```text
-error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:3}}
 ```
 
 `println!` 매크로에는 여러 출력 형식을 사용할 수 있습니다.
@@ -185,8 +137,7 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 에러를 더 읽다 보면 다음과 같은 도움말을 찾을 수 있습니다:
 
 ```text
-= help: the trait `std::fmt::Display` is not implemented for `Rectangle`
-= note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/output.txt:9:10}}
 ```
 
 `{}` 대신 `{:?}` 를 사용해보라네요. 한번 해보죠.
@@ -198,14 +149,13 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 변경하고 나서 다시 컴파일해 보면, 어째서인지 여전히 에러가 발생하네요:
 
 ```text
-error[E0277]: `Rectangle` doesn't implement `std::fmt::Debug`
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:3}}
 ```
 
 그런데 컴파일러가 또 무언가를 알려주네요:
 
 ```text
-= help: the trait `std::fmt::Debug` is not implemented for `Rectangle`
-= note: add `#[derive(Debug)]` or manually implement `std::fmt::Debug`
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-01-debug/output.txt:9:10}}
 ```
 
 러스트는 디버깅 정보를 출력하는 기능을 *자체적으로 가지고 있습니다*.
@@ -216,17 +166,7 @@ Listing 5-12 처럼 구조체 정의 바로 이전에 `#[derive(Debug)]`
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let rect1 = Rectangle { width: 30, height: 50 };
-
-    println!("rect1 is {:?}", rect1);
-}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/src/main.rs}}
 ```
 
 <span class="caption">Listing 5-12: `Rectangle` 인스턴스를 디버그 출력 형식으로
@@ -235,8 +175,8 @@ fn main() {
 이제 프로그램을 실행해 보면 더 이상 에러가 나타나지 않고,
 다음과 같은 출력이 나타날 겁니다:
 
-```text
-rect1 is Rectangle { width: 30, height: 50 }
+```console
+{{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/output.txt}}
 ```
 
 가장 예쁜 출력 형태라 할 수는 없지만,
@@ -245,11 +185,8 @@ rect1 is Rectangle { width: 30, height: 50 }
 그럴 땐 `println!` 문자열 내에 `{:?}` 대신 `{:#?}` 를 사용하면 됩니다.
 `{:#?}` 를 사용했을 때의 출력 예시는 다음과 같습니다.
 
-```text
-rect1 is Rectangle {
-    width: 30,
-    height: 50
-}
+```console
+{{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 
 러스트에선 이처럼 `derive` 어노테이션으로 우리가 만든 타입에
