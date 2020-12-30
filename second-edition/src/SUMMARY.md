@@ -130,4 +130,4 @@
     - [E - 본 책의 번역본 목록](appendix-05-translation.md)
     - [F - 새로운 기능](appendix-06-newest-features.md)
     - [G - 러스트가 만들어지는 과정과 “Nightly Rust”](appendix-07-nightly-rust.md)
-    - [F - 번역 용어 정리](appendix-08-glossary.md)
+    - [H - 번역 용어 정리](appendix-08-glossary.md)
