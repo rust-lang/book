@@ -157,6 +157,9 @@ pipes (`|`), inside which we specify the parameters to the closure; this syntax
 was chosen because of its similarity to closure definitions in Smalltalk and
 Ruby. This closure has one parameter named `num`: if we had more than one
 parameter, we would separate them with commas, like `|param1, param2|`.
+Some other languages define functions and closures the same way. Rust
+makes a difference for performance and type inference reasons explained
+below.
 
 After the parameters, we place curly brackets that hold the body of the
 closure—these are optional if the closure body is a single expression. The end
@@ -452,7 +455,8 @@ parameters to increase the flexibility of the `Cacher` functionality.
 In the workout generator example, we only used closures as inline anonymous
 functions. However, closures have an additional capability that functions don’t
 have: they can capture their environment and access variables from the scope in
-which they’re defined.
+which they’re defined. The capability to "close" some of their variables thanks
+to their environment is what gives closures their name.
 
 Listing 13-12 has an example of a closure stored in the `equal_to_x` variable
 that uses the `x` variable from the closure’s surrounding environment.
