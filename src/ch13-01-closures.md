@@ -131,8 +131,9 @@ twice. Unfortunately, we’re now calling this function and waiting for the
 result in all cases, which includes the inner `if` block that doesn’t use the
 result value at all.
 
-We want to define code in one place in our program, but only *execute* that
-code where we actually need the result. This is a use case for closures!
+We want to refer to `simulated_expensive_calculation` only once in
+`generate_workout`, but defer the expensive calculation to only where
+we actually need the result. This is a use case for closures!
 
 #### Refactoring with Closures to Store Code
 
@@ -186,8 +187,8 @@ want to use, as shown in Listing 13-6.
 <span class="caption">Listing 13-6: Calling the `expensive_closure` we’ve
 defined</span>
 
-Now the expensive calculation is called in only one place, and we’re only
-executing that code where we need the results.
+Now how to perform the expensive calculation is defined in only one
+place, and we’re only executing that code where we need the results.
 
 However, we’ve reintroduced one of the problems from Listing 13-3: we’re still
 calling the closure twice in the first `if` block, which will call the
