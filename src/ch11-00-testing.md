@@ -1,34 +1,34 @@
-# Writing Automated Tests
+# 자동화 테스트 작성하기
 
-In his 1972 essay “The Humble Programmer,” Edsger W. Dijkstra said that
-“Program testing can be a very effective way to show the presence of bugs, but
-it is hopelessly inadequate for showing their absence.” That doesn’t mean we
-shouldn’t try to test as much as we can!
+에츠허르 다익스트라(Edsger W. Dijkstra)는 1972년 자신의 에세이 '겸손한 프로그래머' (*The Humble Programmer*)에서
+"프로그램 테스트는 버그의 존재를 보여주는 데에는 매우 효율적인 방법일 수 있지만, 버그의 부재를 보여주기에는 절망적으로 부적절하다."
+(*Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence.*)
+라고 말했습니다. 하지만 이 말은 우리가 테스트를 할 필요가 없다는 뜻이 아닙니다!
 
-Correctness in our programs is the extent to which our code does what we intend
-it to do. Rust is designed with a high degree of concern about the correctness
-of programs, but correctness is complex and not easy to prove. Rust’s type
-system shoulders a huge part of this burden, but the type system cannot catch
-every kind of incorrectness. As such, Rust includes support for writing
-automated software tests within the language.
+프로그램의 정확성은 곧 '프로그램이 얼마나 우리가 의도한 대로 작동하는가'와 같습니다.
+러스트는 프로그램의 정확성에 굉장히 신경을 써서 설계된 언어지만,
+정확성을 증명하기란 어렵고 복잡합니다.
+러스트 타입 시스템이 이 역할의 큰 부담을 해소해주고 있으나
+타입 시스템만으로 모든 문제를 해결할 수는 없습니다.
+따라서 러스트는 언어 자체적으로 자동화 소프트웨어 테스트 작성을 지원합니다.
 
-As an example, say we write a function called `add_two` that adds 2 to whatever
-number is passed to it. This function’s signature accepts an integer as a
-parameter and returns an integer as a result. When we implement and compile
-that function, Rust does all the type checking and borrow checking that you’ve
-learned so far to ensure that, for instance, we aren’t passing a `String` value
-or an invalid reference to this function. But Rust *can’t* check that this
-function will do precisely what we intend, which is return the parameter plus 2
-rather than, say, the parameter plus 10 or the parameter minus 50! That’s where
-tests come in.
+전달받은 숫자에 2를 더하는 `add_two` 함수를 작성한다고 칩시다.
+함수 시그니처는 매개변수로 정수를 전달받고, 결과로 정수를 반환합니다.
+우리가 이 함수를 구현하고 컴파일할 때 러스트는
+우리가 앞서 배운 타입 검사 및 borrow 검사를 수행합니다.
+함수에 `String` 값이나 유효하지 않은 참조자가 전달될 일이 없도록 보장해주죠.
+하지만 러스트는 함수가 우리 의도대로 작동하는지는 검사할 수 *없습니다.*
+함수가 매개변수에 2를 더하지 않고,
+10을 더하거나 50을 빼서 반환해도 모를 일입니다.
+이런 경우에 테스트를 도입합니다.
 
-We can write tests that assert, for example, that when we pass `3` to the
-`add_two` function, the returned value is `5`. We can run these tests whenever
-we make changes to our code to make sure any existing correct behavior has not
-changed.
+`add_two` 함수에 `3` 을 전달하면 `5` 가 반환될 것임을 단언(assert)하는 테스트를 작성하고
+코드를 수정할 때마다 테스트를 실행하면, 제대로 작동하던 기존 코드에
+문제가 생기지 않았을지 걱정할 필요가
+사라집니다.
 
-Testing is a complex skill: although we can’t cover every detail about how to
-write good tests in one chapter, we’ll discuss the mechanics of Rust’s testing
-facilities. We’ll talk about the annotations and macros available to you when
-writing your tests, the default behavior and options provided for running your
-tests, and how to organize tests into unit tests and integration tests.
+테스트는 복잡한 기술입니다. 좋은 테스트를 작성하는 방법을 이번 장 내에서
+하나부터 열까지 전부 다룰 수는 없습니다. 이번 장은 러스트의 테스트 메커니즘을 설명합니다.
+테스트 작성 시 사용하는 어노테이션, 매크로를 배우고,
+테스트 실행 시의 기본 동작과 실행 옵션, 유닛 테스트와
+통합 테스트를 조직화하는 방법을 배워보도록 하죠.
