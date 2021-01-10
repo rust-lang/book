@@ -46,7 +46,7 @@ Here is the error we get when we compile this code:
 The error tells us we can’t call `join` because we only have a mutable borrow
 of each `worker` and `join` takes ownership of its argument. To solve this
 issue, we need to move the thread out of the `Worker` instance that owns
-`thread` so `join` can consume the thread. We did this in Listing 17-15: if
+`thread` so `join` can consume the thread. We did this in Listing 20-15: if
 `Worker` holds an `Option<thread::JoinHandle<()>>` instead, we can call the
 `take` method on the `Option` to move the value out of the `Some` variant and
 leave a `None` variant in its place. In other words, a `Worker` that is running
