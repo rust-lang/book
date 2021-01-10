@@ -341,7 +341,7 @@ Cargo’s use of external crates is where it really shines. Before we can write
 code that uses `rand`, we need to modify the *Cargo.toml* file to include the
 `rand` crate as a dependency. Open that file now and add the following line to
 the bottom beneath the `[dependencies]` section header that Cargo created for
-you:
+you (be sure to use version `0.8.1` or the code examples in this tutorial may not work!):
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
