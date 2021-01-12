@@ -123,7 +123,7 @@ these three behaviors occur:
 * There’s no mechanism being used to synchronize access to the data.
 
 Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem
+when you’re trying to track them down at runtime. Rust prevents this problem
 from happening because it won’t even compile code with data races!
 
 As always, we can use curly brackets to create a new scope, allowing for
