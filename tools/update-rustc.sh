@@ -11,8 +11,8 @@ echo 'Formatting all listings...'
 find -s listings -name Cargo.toml -print0 | while IFS= read -r -d '' f; do
     dir_to_fmt=$(dirname $f)
 
-    # There are a handful of listings we don't want to rustfmt and skipping doesn't work;
-    # those will have a file in their directory that explains why.
+    # There are a handful of listings we don't want to rustfmt and skipping
+    # doesn't work; those will have a file in their directory that explains why.
     if [ ! -f "${dir_to_fmt}/rustfmt-ignore" ]; then
         cd $dir_to_fmt
         cargo fmt --all && true
@@ -20,7 +20,8 @@ find -s listings -name Cargo.toml -print0 | while IFS= read -r -d '' f; do
     fi
 done
 
-# Get listings without anchor comments in tmp by compiling a release listings artifact
+# Get listings without anchor comments in tmp by compiling a release listings
+# artifact
 echo 'Generate listings without anchor comments...'
 cargo run --bin release_listings
 
@@ -36,10 +37,12 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     cd $tmp_build_directory
 
-    # Save the previous compile time; we're going to keep it to minimize diff churn
+    # Save the previous compile time; we're going to keep it to minimize diff
+    # churn
     compile_time=$(sed -E -ne 's/.*Finished (dev|test) \[unoptimized \+ debuginfo] target\(s\) in ([0-9.]*).*/\2/p' ${full_output_path})
 
-    # Save the hash from the first test binary; we're going to keep it to minimize diff churn
+    # Save the hash from the first test binary; we're going to keep it to
+    # minimize diff churn
     test_binary_hash=$(sed -E -ne 's@.*Running target/debug/deps/[^-]*-([^\s]*)@\1@p' ${full_output_path} | head -n 1)
 
     # Act like this is the first time this listing has been built
@@ -56,8 +59,8 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
     # ordering of tests in the output when the command is `cargo test`.
     RUSTFLAGS="-A unused_variables -A dead_code" RUST_TEST_THREADS=1 $cargo_command >> ${full_output_path} 2>&1 || true
 
-    # Set the project file path to the projects directory plus the crate name instead of a path
-    # to the computer of whoever is running this
+    # Set the project file path to the projects directory plus the crate name
+    # instead of a path to the computer of whoever is running this
     sed -i '' -E -e 's@(Compiling|Checking) ([^\)]*) v0.1.0 (.*)@\1 \2 v0.1.0 (file:///projects/\2)@' ${full_output_path}
 
     # Restore the previous compile time, if there is one
