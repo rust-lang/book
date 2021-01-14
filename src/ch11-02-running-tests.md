@@ -105,7 +105,7 @@ To demonstrate how to run a subset of tests, we’ll create three tests for our
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-11/src/lib.rs}}
 ```
 

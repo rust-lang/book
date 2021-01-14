@@ -27,7 +27,7 @@ Method”][the-iterator-trait-and-the-next-method]<!-- ignore --> section of
 Chapter 13, we mentioned that the definition of the `Iterator` trait is as
 shown in Listing 19-12.
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
 ```
 
@@ -56,7 +56,7 @@ Listing 13-21, we specified that the `Item` type was `u32`:
 This syntax seems comparable to that of generics. So why not just define the
 `Iterator` trait with generics, as shown in Listing 19-13?
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-13/src/lib.rs}}
 ```
 
@@ -143,7 +143,7 @@ implementation of `Add` do the conversion correctly. We can implement `Add` for
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-15/src/lib.rs}}
 ```
 
