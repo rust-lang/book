@@ -122,7 +122,7 @@ In the *add-one/src/lib.rs* file, let’s add an `add_one` function:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/add-one/src/lib.rs}}
 ```
 
@@ -285,7 +285,7 @@ within the `add_one` crate:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests/add/add-one/src/lib.rs}}
 ```
 
