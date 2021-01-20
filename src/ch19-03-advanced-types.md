@@ -291,4 +291,4 @@ ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
 ch06-02-match.html#the-match-control-flow-operator
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
-[using-the-newtype-pattern]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
+[using-the-newtype-pattern]: ch19-02-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types

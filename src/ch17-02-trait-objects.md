@@ -311,4 +311,4 @@ you’re interested in more details on object safety, see [Rust RFC 255].
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics
-[dynamically-sized]: ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+[dynamically-sized]: ch19-03-advanced-types.html#dynamically-sized-types-and-the-sized-trait
