@@ -359,12 +359,12 @@ In the *Cargo.toml* file, everything that follows a header is part of a section
 that continues until another section starts. The `[dependencies]` section is
 where you tell Cargo which external crates your project depends on and which
 versions of those crates you require. In this case, we’ll specify the `rand`
-crate with the semantic version specifier `0.5.5`. Cargo understands [Semantic
+crate with the semantic version specifier `0.8.2`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
-standard for writing version numbers. The number `0.5.5` is actually shorthand
-for `^0.5.5`, which means any version that is at least `0.5.5` but below
-`0.6.0`. Cargo considers these versions to have public APIs compatible with
-version `0.5.5`.
+standard for writing version numbers. The number `0.8.2` is actually shorthand
+for `^0.8.2`, which means any version that is at least `0.8.2` but below
+`0.9.0`. Cargo considers these versions to have public APIs compatible with
+version `0.8.2`.
 
 [semver]: http://semver.org
 
@@ -378,19 +378,15 @@ cargo build -->
 
 ```console
 $ cargo build
-    Updating crates.io index
-  Downloaded rand v0.5.5
-  Downloaded libc v0.2.62
-  Downloaded rand_core v0.2.2
-  Downloaded rand_core v0.3.1
-  Downloaded rand_core v0.4.2
-   Compiling rand_core v0.4.2
-   Compiling libc v0.2.62
-   Compiling rand_core v0.3.1
-   Compiling rand_core v0.2.2
-   Compiling rand v0.5.5
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
+    Compiling libc v0.2.82
+    Compiling getrandom v0.2.2
+    Compiling cfg-if v1.0.0
+    Compiling ppv-lite86 v0.2.10
+    Compiling rand_core v0.6.1
+    Compiling rand_chacha v0.3.0
+    Compiling rand v0.8.2
+    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+      Finished dev [unoptimized + debuginfo] target(s) in 4.75s
 ```
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after
@@ -455,7 +451,7 @@ the *Cargo.lock* file. When you build your project in the future, Cargo will
 see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at `0.5.5` until you explicitly upgrade, thanks to the *Cargo.lock*
+remain at `0.8.2` until you explicitly upgrade, thanks to the *Cargo.lock*
 file.
 
 #### Updating a Crate to Get a New Version
@@ -465,31 +461,31 @@ which will ignore the *Cargo.lock* file and figure out all the latest versions
 that fit your specifications in *Cargo.toml*. If that works, Cargo will write
 those versions to the *Cargo.lock* file.
 
-But by default, Cargo will only look for versions greater than `0.5.5` and less
-than `0.6.0`. If the `rand` crate has released two new versions, `0.5.6` and
-`0.6.0`, you would see the following if you ran `cargo update`:
+But by default, Cargo will only look for versions greater than `0.8.2` and less
+than `0.9.0`. If the `rand` crate has released two new versions, `0.8.3` and
+`0.9.0`, you would see the following if you ran `cargo update`:
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
 cargo update
-assuming there is a new 0.5.x version of rand; otherwise use another update
+assuming there is a new 0.8.x version of rand; otherwise use another update
 as a guide to creating the hypothetical output shown here -->
 
 ```console
 $ cargo update
     Updating crates.io index
-    Updating rand v0.5.5 -> v0.5.6
+    Updating rand v0.8.2 -> v0.8.3
 ```
 
 At this point, you would also notice a change in your *Cargo.lock* file noting
-that the version of the `rand` crate you are now using is `0.5.6`.
+that the version of the `rand` crate you are now using is `0.8.3`.
 
-If you wanted to use `rand` version `0.6.0` or any version in the `0.6.x`
+If you wanted to use `rand` version `0.9.0` or any version in the `0.9.x`
 series, you’d have to update the *Cargo.toml* file to look like this instead:
 
 ```toml
 [dependencies]
-rand = "0.6.0"
+rand = "0.9.0"
 ```
 
 The next time you run `cargo build`, Cargo will update the registry of crates
