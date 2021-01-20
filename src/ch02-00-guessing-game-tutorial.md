@@ -439,7 +439,7 @@ your part of the code.
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
-happens if next week version 0.5.6 of the `rand` crate comes out and
+happens if next week version 0.8.3 of the `rand` crate comes out and
 contains an important bug fix but also contains a regression that will break
 your code?
 
