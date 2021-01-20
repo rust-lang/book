@@ -21,6 +21,16 @@ single line, you’ll need to include `//` on each line, like this:
 // explain what’s going on.
 ```
 
+Rust also supports the block-style comments that comment out a block of text delimited by `/* */`.
+For this, you'll need to add `/*` before and `*/` after the text you want to comment out. 
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-35-block-comments/src/main.rs}}
+```
+
+
 Comments can also be placed at the end of lines containing code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -35,8 +45,11 @@ separate line above the code it’s annotating:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
+{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
 Rust also has another kind of comment, documentation comments, which we’ll
 discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
+
+All comments in Rust are listed in [Table B-7](./appendix-02-operators.md) 
+in the "Operators and Symbols" section of Chapter 21.
