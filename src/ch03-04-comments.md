@@ -27,7 +27,7 @@ For this, you'll need to add `/*` before and `*/` after the text you want to com
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-35-block-comments/src/main.rs}}
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-35-block-comments/src/main.rs}}
 ```
 
 
