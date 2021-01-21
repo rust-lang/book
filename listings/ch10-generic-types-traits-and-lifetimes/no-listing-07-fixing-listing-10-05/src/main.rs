@@ -1,9 +1,9 @@
 // ANCHOR: here
-fn largest<T: PartialOrd>(list: &[T]) -> T {
+fn largest<T: PartialOrd>(list: &[T]) -> &T {
     // ANCHOR_END: here
-    let mut largest = list[0];
+    let mut largest = &list[0];
 
-    for &item in list {
+    for item in list {
         if item > largest {
             largest = item;
         }
