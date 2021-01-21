@@ -105,7 +105,7 @@ the `Write` trait:
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-05-write-trait/src/lib.rs}}
 ```
 
-The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type of
+The `Result<..., Error>` is repeated a lot. As such, `std::io` has this type
 alias declaration:
 
 ```rust,noplayground
