@@ -52,18 +52,38 @@ let user1 = User {
 <span class="caption">Listing 5-2: 구조체 `User`의 인스턴스 생성하기</span>
 
 구조체에서 특정한 값을 읽어오려면, 점(.) 표기법을 사용하시면 됩니다. 사용자의 이메일 값을 얻고자 하면,
-`user1.email` 과 같은 방식으로 접근하실 수 있습니다. 변경이 가능한 구조체에 들어있는 값을 바꾸고자
-할 때는, 아래와 같이 점(.) 표기법을 사용하여 새 값을 할당할 수 있습니다.
-`user1.email = String::from("someone-else@example.com");`
+`user1.email` 과 같은 방식으로 접근하실 수 있습니다. 변경이 가능한 구조체 인스턴스에 들어있는 값을 바꾸고자
+할 때는, 점(.) 표기법을 사용하여 특정 필드에 새 값을 할당할 수 있습니다.
+
+```rust
+# struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+#
+
+ let mut user1 = User {
+    email: String::from("someone@example.com"),
+    username: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
+};
+
+user1.email = String::from("anotheremail@example.com");
+```
+<span class="caption">Listing 5-3: `User` 인스턴스의 `email`필드 변경하기</span>
 
 
-### 변수명이 필드명과 같을 때 간단하게 필드 초기화하기
+인스턴스는 반드시 `변경 가능(mutable)`해야합니다.
+Rust에서는 특정 필드만 변경할 수 있도록 허용하지 않습니다.
+다른 표현식과 마찬가지로, 함수 본문의 마지막에 새 인스턴스 구조체를
+표현식(expressions)으로 생성하여 새 인스턴스를 바로 반환 할 수 있습니다.
 
-변수명과 구조체의 필드명이 같다면, 필드 초기화 축약법(*field init shorthand*) 을 이용할 수 있습니다. 
-이를 활용하면 구조체를 생성하는 함수를 더 간단히 작성할 수 있게 됩니다.
-아래 예제 5-3의 `build_user` 함수에는 `email`과 `username` 라는 매개변수가
-있습니다. 함수는 `User`구조체가 구현된 인스턴스를 반환합니다.
-
+Listing 5-4에서는 주어진 `email`과 `user_name`으로 `User` 인스턴스를 반환하는
+`build_user` 함수를 보여줍니다. 활성 필드는 `true` 값을 가져오고
+`sign_in_count`는 `1` 값을 가져옵니다.
 
 ```rust
 # struct User {
@@ -82,15 +102,26 @@ fn build_user(email: String, username: String) -> User {
     }
 }
 ```
-
-<span class="caption">예제 5-3: 사용자의 이메일과 이름을 받아 `User`구조체의 인스턴스를
+<span class="caption">예제 5-4: 사용자의 이메일과 이름을 받아 `User`구조체의 인스턴스를
 반환하는 `build_user` 함수</span>
 
+구조체 필드와 동일한 이름으로 함수 매개 변수의 이름을 지정하는 것이 합리적이긴 하지만,
+`email` 및 `username` 필드 이름과 변수를 반복해야하는 것은 비효율적입니다.
+구조체에 더 많은 필드가 많다면, 더욱 성가실 것입니다.
+다행히도 편리한 방법이 있습니다!
+
+
+### 변수명이 필드명과 같을 때 간단하게 필드 초기화하기
+
+변수명과 구조체의 필드명이 같다면, 필드 초기화 축약법(*field init shorthand*) 을 이용할 수 있습니다. 
+이를 활용하면 구조체를 생성하는 함수를 더 간단히 작성할 수 있게 됩니다.
+아래 예제 5-5의 `build_user` 함수에는 `email`과 `username` 라는 매개변수가
+있습니다. 함수는 `User`구조체가 구현된 인스턴스를 반환합니다.
 
 매개변수인 `email`과 `username`이 `User`구조체의 필드명과 같기 떄문에, 함수 `build_user`
 에서 `email`과 `username`를 명시하는 부분을 예제 5-4와 같이 다시 작성할 필요가 없습니다.
 
-예제 5-4의 `build_user` 함수는 예제 5-3과 같은 방식으로 동작합니다. 필드 초기화를 이러한 방식으로
+예제 5-5의 `build_user` 함수는 예제 5-4와 같은 방식으로 동작합니다. 필드 초기화를 이러한 방식으로
 수행하는 문법은 간결한 코드를 작성하는데 도움이 되고, 많은 필드의 값이 정의되어야할 때 특히 유용합니다.
 
 ```rust
@@ -111,13 +142,16 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-<span class="caption">예제 5-4: 매개변수 `email`과 `username`가 구조체의 필드와 이름이
+<span class="caption">예제 5-5: 매개변수 `email`과 `username`가 구조체의 필드와 이름이
 같아, 함수 내에서 특별히 명시하지 않고 초기화한 예인 `build_user` 함수</span>
+
+
+`email` 필드와 `email` 매개 변수의 이름이 같기 때문에 `email:email` 대신 `email` 만 작성하면됩니다!
 
 ### 구조체 갱신법을 이용하여 기존 구조체 인스턴스로 새 구조체 인스턴스 생성하기
 
 존재하는 인스턴스에서 기존 값의 대부분은 재사용하고, 몇몇 값만 바꿔 새로운 인스턴스를 정의하는 방법은
-유용합니다. 예제 5-5는 변수 `user2`에 `email`과 `username`은 새로 할당하고, 나머지
+유용합니다. 예제 5-6는 변수 `user2`에 `email`과 `username`은 새로 할당하고, 나머지
 필드들은 예제 5-2에서 정의한 `user1`의 값들을 그대로 사용하는 방식으로 `User` 인스턴스를
 생성하는 것을 보여줍니다.
 
@@ -145,12 +179,12 @@ let user2 = User {
 };
 ```
 
-<span class="caption">예제 5-5: `user1`의 일부 값들을 재사용하여, 구조체 `User`의 인스턴스
+<span class="caption">예제 5-6: `user1`의 일부 값들을 재사용하여, 구조체 `User`의 인스턴스
 `user2`를 새로 생성</span>
 
-  구조체 갱신법(*struct update syntax*)은 예제 5-5에서 작성한 짧은 코드와 같은 효과를 낼 수
+  구조체 갱신법(*struct update syntax*)은 예제 5-6에서 작성한 짧은 코드와 같은 효과를 낼 수
 있습니다. 구조체 갱신법은, 입력으로 주어진 인스턴스와 변화하지 않는 필드들을 명시적으로 할당하지
-않기 위해 `..` 구문을 사용합니다. 예제 5-6의 코드는 `user1` 인스턴스와 `active`,
+않기 위해 `..` 구문을 사용합니다. 예제 5-7의 코드는 `user1` 인스턴스와 `active`,
 `sign_in_count` 필드의 값은 같고, `email`과 `username` 필드들은 값은 다른 `user2`
 인스턴스를 생성할 때 구조체 갱신법을 사용하는 것을 보여줍니다.
 
@@ -176,7 +210,7 @@ let user2 = User {
 };
 ```
 
-<span class="caption">예제 5-6: 인스턴스 갱신 문법의 사용 예시 - 새 `User` 구조체 생성 시
+<span class="caption">예제 5-7: 인스턴스 갱신 문법의 사용 예시 - 새 `User` 구조체 생성 시
 `email`과 `username` 필드에는 새 값을 할당하고, 나머지 필드는 `user1`에서 재사용</span>
 
 ### 이름이 없고 필드마다 타입은 다르게 정의 가능한 튜플 구조체
