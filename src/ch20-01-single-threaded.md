@@ -390,10 +390,10 @@ indicating the response to the end user.
 error page if anything other than */* was requested</span>
 
 Here, our response has a status line with status code 404 and the reason
-phrase `NOT FOUND`. We’re still not returning headers, and the body of the
-response will be the HTML in the file *404.html*. You’ll need to create a
-*404.html* file next to *hello.html* for the error page; again feel free to use
-any HTML you want or use the example HTML in Listing 20-8.
+phrase `NOT FOUND`. The body of the response will be the HTML in the file
+*404.html*. You’ll need to create a *404.html* file next to *hello.html* for
+the error page; again feel free to use any HTML you want or use the example
+HTML in Listing 20-8.
 
 <span class="filename">Filename: 404.html</span>
 
