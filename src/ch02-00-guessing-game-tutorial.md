@@ -14,7 +14,7 @@ correct, the game will print a congratulatory message and exit.
 
 ## Setting Up a New Project
 
-To set up a new project, go to the *projects* directory that you created in
+To set up a new project, go to the _projects_ directory that you created in
 Chapter 1 and make a new project using Cargo, like so:
 
 ```console
@@ -26,7 +26,7 @@ The first command, `cargo new`, takes the name of the project (`guessing_game`)
 as the first argument. The second command changes to the new project’s
 directory.
 
-Look at the generated *Cargo.toml* file:
+Look at the generated _Cargo.toml_ file:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -38,7 +38,7 @@ If the author information that Cargo obtained from your environment is not
 correct, fix that in the file and save it again.
 
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the *src/main.rs* file:
+you. Check out the _src/main.rs_ file:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -57,14 +57,14 @@ The `run` command comes in handy when you need to rapidly iterate on a project,
 as we’ll do in this game, quickly testing each iteration before moving on to
 the next one.
 
-Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
+Reopen the _src/main.rs_ file. You’ll be writing all the code in this file.
 
 ## Processing a Guess
 
 The first part of the guessing game program will ask for user input, process
 that input, and check that the input is in the expected form. To start, we’ll
 allow the player to input a guess. Enter the code in Listing 2-1 into
-*src/main.rs*.
+_src/main.rs_.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -85,7 +85,7 @@ standard library (which is known as `std`):
 ```
 
 By default, Rust brings only a few types into the scope of every program in
-[the *prelude*][prelude]<!-- ignore -->. If a type you want to use isn’t in the
+[the _prelude_][prelude]<!-- ignore -->. If a type you want to use isn’t in the
 prelude, you have to bring that type into scope explicitly with a `use`
 statement. Using the `std::io` library provides you with a number of useful
 features, including the ability to accept user input.
@@ -122,7 +122,7 @@ Next, we’ll create a place to store the user input, like this:
 
 Now the program is getting interesting! There’s a lot going on in this little
 line. Notice that this is a `let` statement, which is used to create a
-*variable*. Here’s another example:
+_variable_. Here’s another example:
 
 ```rust,ignore
 let foo = bar;
@@ -153,10 +153,10 @@ library that is a growable, UTF-8 encoded bit of text.
 
 [string]: ../std/string/struct.String.html
 
-The `::` syntax in the `::new` line indicates that `new` is an *associated
-function* of the `String` type. An associated function is implemented on a type,
+The `::` syntax in the `::new` line indicates that `new` is an _associated
+function_ of the `String` type. An associated function is implemented on a type,
 in this case `String`, rather than on a particular instance of a `String`. Some
-languages call this a *static method*.
+languages call this a _static method_.
 
 This `new` function creates a new, empty string. You’ll find a `new` function
 on many types, because it’s a common name for a function that makes a new value
@@ -182,8 +182,7 @@ type that represents a handle to the standard input for your terminal.
 
 The next part of the code, `.read_line(&mut guess)`, calls the
 [`read_line`][read_line]<!-- ignore --> method on the standard input handle to
-get input from the user. We’re also passing one argument to `read_line`: `&mut
-guess`.
+get input from the user. We’re also passing one argument to `read_line`: `&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 
@@ -192,7 +191,7 @@ and place that into a string, so it takes that string as an argument. The
 string argument needs to be mutable so the method can change the string’s
 content by adding the user input.
 
-The `&` indicates that this argument is a *reference*, which gives you a way to
+The `&` indicates that this argument is a _reference_, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
 copy that data into memory multiple times. References are a complex feature,
 and one of Rust’s major advantages is how safe and easy it is to use
@@ -232,9 +231,9 @@ as well as specific versions for submodules, such as `io::Result`.
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-The `Result` types are [*enumerations*][enums]<!-- ignore -->, often referred
-to as *enums*. An enumeration is a type that can have a fixed set of values,
-and those values are called the enum’s *variants*. Chapter 6 will cover enums
+The `Result` types are [_enumerations_][enums]<!-- ignore -->, often referred
+to as _enums_. An enumeration is a type that can have a fixed set of values,
+and those values are called the enum’s _variants_. Chapter 6 will cover enums
 in more detail.
 
 [enums]: ch06-00-enums.html
@@ -333,15 +332,15 @@ library. However, the Rust team does provide a [`rand` crate][randcrate].
 ### Using a Crate to Get More Functionality
 
 Remember that a crate is a collection of Rust source code files.
-The project we’ve been building is a *binary crate*, which is an executable.
-The `rand` crate is a *library crate*, which contains code intended to be
+The project we’ve been building is a _binary crate_, which is an executable.
+The `rand` crate is a _library crate_, which contains code intended to be
 used in other programs.
 
 Cargo’s use of external crates is where it really shines. Before we can write
-code that uses `rand`, we need to modify the *Cargo.toml* file to include the
+code that uses `rand`, we need to modify the _Cargo.toml_ file to include the
 `rand` crate as a dependency. Open that file now and add the following line to
 the bottom beneath the `[dependencies]` section header that Cargo created for
-you (be sure to use version `0.8.1` or the code examples in this tutorial may not work!):
+you (be sure to use version `0.8.3` or the code examples in this tutorial may not work!):
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -355,16 +354,16 @@ you (be sure to use version `0.8.1` or the code examples in this tutorial may no
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
-In the *Cargo.toml* file, everything that follows a header is part of a section
+In the _Cargo.toml_ file, everything that follows a header is part of a section
 that continues until another section starts. The `[dependencies]` section is
 where you tell Cargo which external crates your project depends on and which
 versions of those crates you require. In this case, we’ll specify the `rand`
-crate with the semantic version specifier `0.8.1`. Cargo understands [Semantic
-Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
-standard for writing version numbers. The number `0.8.1` is actually shorthand
-for `^0.8.1`, which means any version that is at least `0.8.1` but below
+crate with the semantic version specifier `0.8.3`. Cargo understands [Semantic
+Versioning][semver]<!-- ignore --> (sometimes called _SemVer_), which is a
+standard for writing version numbers. The number `0.8.3` is actually shorthand
+for `^0.8.3`, which means any version that is at least `0.8.3` but below
 `0.9.0`. Cargo considers these versions to have public APIs compatible with
-version `0.8.1`.
+version `0.8.3`.
 
 [semver]: http://semver.org
 
@@ -379,7 +378,7 @@ cargo build -->
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.1
+  Downloaded rand v0.8.3
   Downloaded libc v0.2.62
   Downloaded rand_core v0.2.2
   Downloaded rand_core v0.3.1
@@ -388,7 +387,7 @@ $ cargo build
    Compiling libc v0.2.62
    Compiling rand_core v0.3.1
    Compiling rand_core v0.2.2
-   Compiling rand v0.8.1
+   Compiling rand v0.8.3
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
@@ -400,7 +399,7 @@ You may see different version numbers (but they will all be compatible with
 the code, thanks to SemVer!), different lines (depending on the operating system), and the lines may be in a different order.
 
 Now that we have an external dependency, Cargo fetches the latest versions of
-everything from the *registry*, which is a copy of data from
+everything from the _registry_, which is a copy of data from
 [Crates.io][cratesio]. Crates.io is where people in the Rust ecosystem post
 their open source Rust projects for others to use.
 
@@ -415,11 +414,11 @@ them and then compiles the project with the dependencies available.
 If you immediately run `cargo build` again without making any changes, you
 won’t get any output aside from the `Finished` line. Cargo knows it has already
 downloaded and compiled the dependencies, and you haven’t changed anything
-about them in your *Cargo.toml* file. Cargo also knows that you haven’t changed
+about them in your _Cargo.toml_ file. Cargo also knows that you haven’t changed
 anything about your code, so it doesn’t recompile that either. With nothing to
 do, it simply exits.
 
-If you open up the *src/main.rs* file, make a trivial change, and then save it
+If you open up the _src/main.rs_ file, make a trivial change, and then save it
 and build again, you’ll only see two lines of output:
 
 <!-- manual-regeneration
@@ -434,39 +433,39 @@ $ cargo build
 ```
 
 These lines show Cargo only updates the build with your tiny change to the
-*src/main.rs* file. Your dependencies haven’t changed, so Cargo knows it can
+_src/main.rs_ file. Your dependencies haven’t changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.
 
-#### Ensuring Reproducible Builds with the *Cargo.lock* File
+#### Ensuring Reproducible Builds with the _Cargo.lock_ File
 
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
-happens if next week version 0.8.1 of the `rand` crate comes out and
+happens if next week version 0.8.4 of the `rand` crate comes out and
 contains an important bug fix but also contains a regression that will break
 your code?
 
-The answer to this problem is the *Cargo.lock* file, which was created the
-first time you ran `cargo build` and is now in your *guessing_game* directory.
+The answer to this problem is the _Cargo.lock_ file, which was created the
+first time you ran `cargo build` and is now in your _guessing_game_ directory.
 When you build a project for the first time, Cargo figures out all the
 versions of the dependencies that fit the criteria and then writes them to
-the *Cargo.lock* file. When you build your project in the future, Cargo will
-see that the *Cargo.lock* file exists and use the versions specified there
+the _Cargo.lock_ file. When you build your project in the future, Cargo will
+see that the _Cargo.lock_ file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at `0.8.1` until you explicitly upgrade, thanks to the *Cargo.lock*
+remain at `0.8.3` until you explicitly upgrade, thanks to the _Cargo.lock_
 file.
 
 #### Updating a Crate to Get a New Version
 
-When you *do* want to update a crate, Cargo provides another command, `update`,
-which will ignore the *Cargo.lock* file and figure out all the latest versions
-that fit your specifications in *Cargo.toml*. If that works, Cargo will write
-those versions to the *Cargo.lock* file.
+When you _do_ want to update a crate, Cargo provides another command, `update`,
+which will ignore the _Cargo.lock_ file and figure out all the latest versions
+that fit your specifications in _Cargo.toml_. If that works, Cargo will write
+those versions to the _Cargo.lock_ file.
 
-But by default, Cargo will only look for versions greater than `0.8.1` and less
-than `0.9.0`. If the `rand` crate has released two new versions, `0.8.2` and
+But by default, Cargo will only look for versions greater than `0.8.3` and less
+than `0.9.0`. If the `rand` crate has released two new versions, `0.8.4` and
 `0.9.0`, you would see the following if you ran `cargo update`:
 
 <!-- manual-regeneration
@@ -478,14 +477,14 @@ as a guide to creating the hypothetical output shown here -->
 ```console
 $ cargo update
     Updating crates.io index
-    Updating rand v0.8.1 -> v0.8.2
+    Updating rand v0.8.3 -> v0.8.4
 ```
 
-At this point, you would also notice a change in your *Cargo.lock* file noting
-that the version of the `rand` crate you are now using is `0.8.2`.
+At this point, you would also notice a change in your _Cargo.lock_ file noting
+that the version of the `rand` crate you are now using is `0.8.4`.
 
 If you wanted to use `rand` version `0.9.0` or any version in the `0.9.x`
-series, you’d have to update the *Cargo.toml* file to look like this instead:
+series, you’d have to update the _Cargo.toml_ file to look like this instead:
 
 ```toml
 [dependencies]
@@ -507,8 +506,8 @@ from a number of packages.
 
 ### Generating a Random Number
 
-Now that you’ve added the `rand` crate to *Cargo.toml*, let’s start using
-`rand`. The next step is to update *src/main.rs*, as shown in Listing 2-3.
+Now that you’ve added the `rand` crate to _Cargo.toml_, let’s start using
+`rand`. The next step is to update _src/main.rs_, as shown in Listing 2-3.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -530,15 +529,14 @@ operating system. Then we call the `gen_range` method on the random number
 generator. This method is defined by the `Rng` trait that we brought into
 scope with the `use rand::Rng` statement. The `gen_range` method takes a
 range expression as an argument and generates a random number in the range.
-A range expression takes the form start`..`end.  It’s inclusive on the lower
+A range expression takes the form start`..`end. It’s inclusive on the lower
 bound but exclusive on the upper bound, so we need to specify `1..101` to
 request a number between 1 and 100. Alternatively, we could pass the range
 `1..=100`, which is equivalent.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate. Instructions for using a crate are in each crate’s
-> documentation. Another neat feature of Cargo is that you can run the `cargo
-> doc --open` command, which will build documentation provided by all of your
+> documentation. Another neat feature of Cargo is that you can run the `cargo doc --open` command, which will build documentation provided by all of your
 > dependencies locally and open it in your browser. If you’re interested in
 > other functionality in the `rand` crate, for example, run `cargo doc --open`
 > and click `rand` in the sidebar on the left.
@@ -614,7 +612,7 @@ in `guess` and `secret_number`.
 
 [match]: ch06-02-match.html
 
-A `match` expression is made up of *arms*. An arm consists of a *pattern* and
+A `match` expression is made up of _arms_. An arm consists of a _pattern_ and
 the code that should be run if the value given to the beginning of the `match`
 expression fits that arm’s pattern. Rust takes the value given to `match` and
 looks through each arm’s pattern in turn. The `match` construct and patterns
@@ -630,7 +628,7 @@ expression gets the `Ordering::Greater` value and starts checking each arm’s
 pattern. It looks at the first arm’s pattern, `Ordering::Less`, and sees that
 the value `Ordering::Greater` does not match `Ordering::Less`, so it ignores
 the code in that arm and moves to the next arm. The next arm’s pattern,
-`Ordering::Greater`, *does* match `Ordering::Greater`! The associated code in
+`Ordering::Greater`, _does_ match `Ordering::Greater`! The associated code in
 that arm will execute and print `Too big!` to the screen. The `match`
 expression ends because it has no need to look at the last arm in this scenario.
 
@@ -640,7 +638,7 @@ However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
 ```
 
-The core of the error states that there are *mismatched types*. Rust has a
+The core of the error states that there are _mismatched types_. Rust has a
 strong, static type system. However, it also has type inference. When we wrote
 `let mut guess = String::new()`, Rust was able to infer that `guess` should be
 a `String` and didn’t make us write the type. The `secret_number`, on the other
@@ -668,7 +666,7 @@ let guess: u32 = guess.trim().parse().expect("Please type a number!");
 ```
 
 We create a variable named `guess`. But wait, doesn’t the program already have
-a variable named `guess`? It does, but Rust allows us to *shadow* the previous
+a variable named `guess`? It does, but Rust allows us to _shadow_ the previous
 value of `guess` with a new one. This feature is often used in situations in
 which you want to convert a value from one type to another type. Shadowing lets
 us reuse the `guess` variable name rather than forcing us to create two unique
@@ -845,7 +843,7 @@ match the first arm’s pattern, and the `match` expression will just return the
 `num` value that `parse` produced and put inside the `Ok` value. That number
 will end up right where we want it in the new `guess` variable we’re creating.
 
-If `parse` is *not* able to turn the string into a number, it will return an
+If `parse` is _not_ able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
 match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
@@ -915,5 +913,4 @@ Chapter 4 explores ownership, a feature that makes Rust different from other
 languages. Chapter 5 discusses structs and method syntax, and Chapter 6
 explains how enums work.
 
-[variables-and-mutability]:
-ch03-01-variables-and-mutability.html#variables-and-mutability
+[variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
