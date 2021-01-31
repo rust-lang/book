@@ -68,9 +68,9 @@ Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 -128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
 so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits
-if you’re on a 32-bit architecture.
+Additionally, the `isize` and `usize` types depend on the computer architecture
+your program was compiled for. Default is your host's architecture. 
+Configuration options can be found in the [Cargo Book](https://doc.rust-lang.org/cargo/commands/cargo-build.html).
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that all number literals except the byte literal allow a type suffix, such as
