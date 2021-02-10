@@ -350,13 +350,13 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
 The program resulted in a *runtime* error at the point of using an invalid
-value in the indexing operation. The program exited at that point with an error
-message and didn't execute the final `println!`. When you attempt to access an
+value in the indexing operation. The program exited with an error message and
+didn't execute the final `println!` statement. When you attempt to access an
 element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than or equal to the array
-length, Rust will panic. This check has to happen at runtime, especially in
-this case, because the compiler can't possibly know what the value a user
-running the code will later enter.
+than the array length. If the index is greater than or equal to the length,
+Rust will panic. This check has to happen at runtime, especially in this case,
+because the compiler can't possibly know what value a user will enter when they
+run the code later.
 
 This is the first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
