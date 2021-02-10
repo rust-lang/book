@@ -397,7 +397,8 @@ $ cargo build
 adding the rand crate as a dependency</span>
 
 You may see different version numbers (but they will all be compatible with
-the code, thanks to SemVer!), different lines (depending on the operating system), and the lines may be in a different order.
+the code, thanks to SemVer!), different lines (depending on the operating
+system), and the lines may be in a different order.
 
 Now that we have an external dependency, Cargo fetches the latest versions of
 everything from the *registry*, which is a copy of data from
