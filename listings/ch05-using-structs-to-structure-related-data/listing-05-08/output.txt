@@ -1,5 +1,5 @@
 $ cargo run
-   Compiling structs v0.1.0 (file:///projects/structs)
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
     Finished dev [unoptimized + debuginfo] target(s) in 0.42s
-     Running `target/debug/structs`
+     Running `target/debug/rectangles`
 The area of the rectangle is 1500 square pixels.
