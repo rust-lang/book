@@ -14,6 +14,6 @@ note: test did not panic as expected
 failures:
     tests::greater_than_100
 
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 error: test failed, to rerun pass '--lib'

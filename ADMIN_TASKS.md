@@ -5,6 +5,7 @@ remember how to do occasional maintenance tasks.
 
 ## Update the `rustc` version
 
+- Delete your `target` directory, you're about to recompile everything anyway
 - Change the version number in `.github/workflows/main.yml`
 - Change the version number in `rust-toolchain`, which should change the
   version you're using locally with `rustup`

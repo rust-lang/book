@@ -7,5 +7,5 @@ running 2 tests
 test tests::add_three_and_two ... ok
 test tests::add_two_and_two ... ok
 
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
 
