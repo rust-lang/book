@@ -55,6 +55,7 @@ instance of a type in one `impl` block rather than making future users of our
 code search for capabilities of `Rectangle` in various places in the library we
 provide.
 
+<!-- CAN'T EXTRACT BELOW CODE LISTING SEE BUG TODO -->
 > ### Where’s the `->` Operator?
 >
 > In C and C++, two different operators are used for calling methods: you use
@@ -71,7 +72,6 @@ provide.
 > automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
 > the method. In other words, the following are the same:
 >
-<!-- CAN'T EXTRACT SEE BUG TODO -->
 > ```rust
 > # #[derive(Debug,Copy,Clone)]
 > # struct Point {
