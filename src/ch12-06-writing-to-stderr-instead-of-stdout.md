@@ -66,7 +66,7 @@ instead of standard output using `eprintln!`</span>
 After changing `println!` to `eprintln!`, let’s run the program again in the
 same way, without any arguments and redirecting standard output with `>`:
 
-```text
+```console
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
