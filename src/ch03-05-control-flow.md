@@ -140,7 +140,7 @@ expression. Run this code to see what happens:
 
 Remember that blocks of code evaluate to the last expression in them, and
 numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
+whole `if` expression depends on which block of code it executes. This means the
 values that have the potential to be results from each arm of the `if` must be
 the same type; in Listing 3-2, the results of both the `if` arm and the `else`
 arm were `i32` integers. If the types are mismatched, as in the following
