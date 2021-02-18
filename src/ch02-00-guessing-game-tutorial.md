@@ -380,14 +380,18 @@ cargo build -->
 $ cargo build
     Updating crates.io index
   Downloaded rand v0.8.3
-  Downloaded libc v0.2.62
-  Downloaded rand_core v0.2.2
-  Downloaded rand_core v0.3.1
-  Downloaded rand_core v0.4.2
-   Compiling rand_core v0.4.2
-   Compiling libc v0.2.62
-   Compiling rand_core v0.3.1
-   Compiling rand_core v0.2.2
+  Downloaded libc v0.2.86
+  Downloaded getrandom v0.2.2
+  Downloaded cfg-if v1.0.0
+  Downloaded ppv-lite86 v0.2.10
+  Downloaded rand_chacha v0.3.0
+  Downloaded rand_core v0.6.2
+   Compiling rand_core v0.6.2
+   Compiling libc v0.2.86
+   Compiling getrandom v0.2.2
+   Compiling cfg-if v1.0.0
+   Compiling ppv-lite86 v0.2.10
+   Compiling rand_chacha v0.3.0
    Compiling rand v0.8.3
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
