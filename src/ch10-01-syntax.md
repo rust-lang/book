@@ -44,12 +44,12 @@ to declare the type parameter name before we use it. To define the generic
 between the name of the function and the parameter list, like this:
 
 ```rust,ignore
-fn largest<T>(list: &[T]) -> &T {
+fn largest<T>(list: &[T]) -> T {
 ```
 
 We read this definition as: the function `largest` is generic over some type
 `T`. This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a reference to a value of the
+of type `T`. The `largest` function will return a value of the
 same type `T`.
 
 Listing 10-5 shows the combined `largest` function definition using the generic
