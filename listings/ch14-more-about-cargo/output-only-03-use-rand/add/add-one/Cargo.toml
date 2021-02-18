@@ -5,4 +5,4 @@ authors = ["Your Name <you@example.com>"]
 edition = "2018"
 
 [dependencies]
-rand = "0.5.5"
+rand = "0.8.3"

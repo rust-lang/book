@@ -94,7 +94,7 @@ enum definition are considered less than the variants listed later.
 
 The `PartialOrd` trait is required, for example, for the `gen_range` method
 from the `rand` crate that generates a random value in the range specified by a
-low value and a high value.
+range expression.
 
 The `Ord` trait allows you to know that for any two values of the annotated
 type, a valid ordering will exist. The `Ord` trait implements the `cmp` method,
