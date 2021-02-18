@@ -341,7 +341,8 @@ Cargo’s use of external crates is where it really shines. Before we can write
 code that uses `rand`, we need to modify the *Cargo.toml* file to include the
 `rand` crate as a dependency. Open that file now and add the following line to
 the bottom beneath the `[dependencies]` section header that Cargo created for
-you (be sure to use version `0.8.3` or the code examples in this tutorial may not work!):
+you. Be sure to specify `rand` exactly as we have here, or the code examples in
+this tutorial may not work.
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -364,7 +365,10 @@ Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
 standard for writing version numbers. The number `0.8.3` is actually shorthand
 for `^0.8.3`, which means any version that is at least `0.8.3` but below
 `0.9.0`. Cargo considers these versions to have public APIs compatible with
-version `0.8.3`.
+version `0.8.3`, and this specification ensures you'll get the latest patch
+release that will still compile with the code in this chapter. Any version
+`0.9.0` or greater is not guaranteed to have the same API as what the following
+examples use.
 
 [semver]: http://semver.org
 
@@ -413,9 +417,9 @@ their open source Rust projects for others to use.
 
 After updating the registry, Cargo checks the `[dependencies]` section and
 downloads any crates you don’t have yet. In this case, although we only listed
-`rand` as a dependency, Cargo also grabbed `libc` and `rand_core`, because
-`rand` depends on those to work. After downloading the crates, Rust compiles
-them and then compiles the project with the dependencies available.
+`rand` as a dependency, Cargo also grabbed other crates that `rand` depends on
+to work. After downloading the crates, Rust compiles them and then compiles the
+project with the dependencies available.
 
 If you immediately run `cargo build` again without making any changes, you
 won’t get any output aside from the `Finished` line. Cargo knows it has already
@@ -532,13 +536,13 @@ Next, we’re adding two lines in the middle. The `rand::thread_rng` function
 will give us the particular random number generator that we’re going to use:
 one that is local to the current thread of execution and seeded by the
 operating system. Then we call the `gen_range` method on the random number
-generator. This method is defined by the `Rng` trait that we brought into
-scope with the `use rand::Rng` statement. The `gen_range` method takes a
-range expression as an argument and generates a random number in the range.
-A range expression takes the form start`..`end.  It’s inclusive on the lower
-bound but exclusive on the upper bound, so we need to specify `1..101` to
-request a number between 1 and 100. Alternatively, we could pass the range
-`1..=100`, which is equivalent.
+generator. This method is defined by the `Rng` trait that we brought into scope
+with the `use rand::Rng` statement. The `gen_range` method takes a range
+expression as an argument and generates a random number in the range. The kind
+of range expression we’re using here takes the form `start..end`. It’s
+inclusive on the lower bound but exclusive on the upper bound, so we need to
+specify `1..101` to request a number between 1 and 100. Alternatively, we could
+pass the range `1..=100`, which is equivalent.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate. Instructions for using a crate are in each crate’s
