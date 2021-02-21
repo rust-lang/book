@@ -191,8 +191,9 @@ When we use the `{:#?}` style in the example, the output will look like this:
 
 Rust has provided a number of traits for us to use with the `derive` annotation
 that can add useful behavior to our custom types. Those traits and their
-behaviors are listed in [Appendix C](./appendix-03-derivable-traits.md). We’ll cover how to implement these traits
-with custom behavior as well as how to create your own traits in Chapter 10.
+behaviors are listed in [Appendix C][app-c]<!-- ignore -->. We’ll cover how to
+implement these traits with custom behavior as well as how to create your own
+traits in Chapter 10.
 
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle`
@@ -201,3 +202,4 @@ continue to refactor this code by turning the `area` function into an `area`
 *method* defined on our `Rectangle` type.
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
+[app-c]: appendix-03-derivable-traits.md
