@@ -155,7 +155,7 @@ entering the `ls` command in your shell. On Linux and macOS, you’ll see two
 files. With PowerShell on Windows, you’ll see the same three files that you
 would see using CMD.
 
-```text
+```console
 $ ls
 main  main.rs
 ```
