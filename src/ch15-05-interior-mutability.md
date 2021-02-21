@@ -189,7 +189,7 @@ signature of `send` wouldn’t match the signature in the `Messenger` trait
 definition (feel free to try and see what error message you get).
 
 This is a situation in which interior mutability can help! We’ll store the
-`sent_messages` within a `RefCell<T>`, and then the `send` message will be
+`sent_messages` within a `RefCell<T>`, and then the `send` method will be
 able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
 shows what that looks like:
 
