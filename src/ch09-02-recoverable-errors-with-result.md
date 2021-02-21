@@ -103,7 +103,7 @@ The other arm of the `match` handles the case where we get an `Err` value from
 there’s no file named *hello.txt* in our current directory and we run this
 code, we’ll see the following output from the `panic!` macro:
 
-```text
+```console
 {{#include ../listings/ch09-error-handling/listing-09-04/output.txt}}
 ```
 

@@ -178,7 +178,7 @@ of should now have one message in it.
 
 However, there’s one problem with this test, as shown here:
 
-```text
+```console
 {{#include ../listings/ch15-smart-pointers/listing-15-21/output.txt}}
 ```
 

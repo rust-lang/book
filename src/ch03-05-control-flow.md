@@ -293,7 +293,7 @@ Here, the code counts up through the elements in the array. It starts at index
 when `index < 5` is no longer true). Running this code will print every element
 in the array:
 
-```text
+```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
 ```
 

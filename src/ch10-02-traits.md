@@ -342,7 +342,7 @@ type parameter’s bounds, let’s return to Listing 10-5 to fix the definition 
 the `largest` function that uses a generic type parameter! Last time we tried
 to run that code, we received this error:
 
-```text
+```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
