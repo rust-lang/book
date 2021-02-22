@@ -262,7 +262,7 @@ iterator is used, as shown in Listing 13-21:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch13-functional-features/listing-13-21/src/lib.rs}}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-21/src/lib.rs:here}}
 ```
 
 <span class="caption">Listing 13-21: Implementing the `Iterator` trait on our
