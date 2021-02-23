@@ -8,11 +8,12 @@ and works just like regular Rust, but gives us extra superpowers.
 Unsafe Rust exists because, by nature, static analysis is conservative. When
 the compiler tries to determine whether or not code upholds the guarantees,
 it’s better for it to reject some valid programs rather than accept some
-invalid programs. Although the code might be okay, as far as Rust is able to
-tell, it’s not! In these cases, you can use unsafe code to tell the compiler,
-“Trust me, I know what I’m doing.” The downside is that you use it at your own
-risk: if you use unsafe code incorrectly, problems due to memory unsafety, such
-as null pointer dereferencing, can occur.
+invalid programs. Although the code *might* be okay, if the Rust compiler
+doesn’t have enough information to be confident, it will reject the code. In
+these cases, you can use unsafe code to tell the compiler, “Trust me, I know
+what I’m doing.” The downside is that you use it at your own risk: if you use
+unsafe code incorrectly, problems due to memory unsafety, such as null pointer
+dereferencing, can occur.
 
 Another reason Rust has an unsafe alter ego is that the underlying computer
 hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
