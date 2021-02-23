@@ -203,11 +203,11 @@ instances. It will return only shoes that are the specified size.
 <span class="caption">Listing 13-19: Using the `filter` method with a closure
 that captures `shoe_size`</span>
 
-The `shoes_in_my_size` function takes ownership of a vector of shoes and a shoe
+The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
 size.
 
-In the body of `shoes_in_my_size`, we call `into_iter` to create an iterator
+In the body of `shoes_in_size`, we call `into_iter` to create an iterator
 that takes ownership of the vector. Then we call `filter` to adapt that
 iterator into a new iterator that only contains elements for which the closure
 returns `true`.
@@ -217,7 +217,7 @@ compares the value with each shoe’s size, keeping only shoes of the size
 specified. Finally, calling `collect` gathers the values returned by the
 adapted iterator into a vector that’s returned by the function.
 
-The test shows that when we call `shoes_in_my_size`, we get back only shoes
+The test shows that when we call `shoes_in_size`, we get back only shoes
 that have the same size as the value we specified.
 
 ### Creating Our Own Iterators with the `Iterator` Trait
