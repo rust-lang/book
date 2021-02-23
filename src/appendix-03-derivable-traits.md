@@ -134,10 +134,10 @@ overloading those methods and violating the assumption that no arbitrary code
 is being run. That way, all programmers can assume that copying a value will be
 very fast.
 
-You can derive `Copy` on any type whose parts all implement `Copy`. You can
-only apply the `Copy` trait to types that also implement `Clone`, because a
-type that implements `Copy` has a trivial implementation of `Clone` that
-performs the same task as `Copy`.
+You can derive `Copy` on any type whose parts all implement `Copy`. A type that
+implements `Copy` must also implement `Clone`, because a type that implements
+`Copy` has a trivial implementation of `Clone` that performs the same task as
+`Copy`.
 
 The `Copy` trait is rarely required; types that implement `Copy` have
 optimizations available, meaning you don’t have to call `clone`, which makes
