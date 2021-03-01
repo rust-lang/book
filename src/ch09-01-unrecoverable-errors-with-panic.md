@@ -90,22 +90,18 @@ continue. Let’s try it and see:
 {{#include ../listings/ch09-error-handling/listing-09-01/output.txt}}
 ```
 
-This error points at a file we didn’t write, *libcore/slice/mod.rs*. That’s the
-implementation of `slice` in the Rust source code. The code that gets run when
-we use `[]` on our vector `v` is in *libcore/slice/mod.rs*, and that is where
-the `panic!` is actually happening.
-
-The next note line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. A
-*backtrace* is a list of all the functions that have been called to get to this
-point. Backtraces in Rust work as they do in other languages: the key to
-reading the backtrace is to start from the top and read until you see files you
-wrote. That’s the spot where the problem originated. The lines above the lines
-mentioning your files are code that your code called; the lines below are code
-that called your code. These lines might include core Rust code, standard
-library code, or crates that you’re using. Let’s try getting a backtrace by
-setting the `RUST_BACKTRACE` environment variable to any value except 0.
-Listing 9-2 shows output similar to what you’ll see.
+This error points at line 4 of our `main.rs` where we attempt to access index
+99. The next note line tells us that we can set the `RUST_BACKTRACE`
+environment variable to get a backtrace of exactly what happened to cause the
+error. A *backtrace* is a list of all the functions that have been called to
+get to this point. Backtraces in Rust work as they do in other languages: the
+key to reading the backtrace is to start from the top and read until you see
+files you wrote. That’s the spot where the problem originated. The lines above
+the lines mentioning your files are code that your code called; the lines below
+are code that called your code. These lines might include core Rust code,
+standard library code, or crates that you’re using. Let’s try getting a
+backtrace by setting the `RUST_BACKTRACE` environment variable to any value
+except 0. Listing 9-2 shows output similar to what you’ll see.
 
 <!-- manual-regeneration
 cd listings/ch09-error-handling/listing-09-01
