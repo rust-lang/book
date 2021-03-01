@@ -119,7 +119,7 @@ Listing 12-6 shows the improvements to the `parse_config` function.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,should_panic
+```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-06/src/main.rs:here}}
 ```
 
@@ -187,7 +187,7 @@ shows the changes we need to make.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,should_panic
+```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-07/src/main.rs:here}}
 ```
 

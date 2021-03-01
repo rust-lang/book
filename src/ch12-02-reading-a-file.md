@@ -22,7 +22,7 @@ shown in Listing 12-4.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,should_panic
+```rust,noplayground
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
