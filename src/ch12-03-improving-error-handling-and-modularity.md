@@ -306,7 +306,7 @@ program that the program exited with an error state.
 <span class="caption">Listing 12-10: Exiting with an error code if creating a
 new `Config` fails</span>
 
-In this listing, we’ve used a method we haven’t covered before:
+In this listing, we’ve used a method we haven’t covered in detail yet:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
 Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
 handling. If the `Result` is an `Ok` value, this method’s behavior is similar
