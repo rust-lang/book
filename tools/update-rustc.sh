@@ -70,7 +70,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     # Restore the previous test binary hash, if there is one
     if [ -n "${test_binary_hash}" ]; then
-        replacement='s@Running target/debug/deps/([^-]*)-([^\s]*)$@Running target/debug/deps/\1-'
+        replacement='s@Running target/debug/deps/([^-]*)-([^\s]*)@Running target/debug/deps/\1-'
         replacement+="${test_binary_hash}"
         replacement+='@g'
         sed -i '' -E -e "${replacement}" ${full_output_path}
