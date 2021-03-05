@@ -129,7 +129,7 @@ hardcoded value needed to be updated in the future.
 As you saw in the guessing game tutorial in the [“Comparing the Guess to the
 Secret Number”][comparing-the-guess-to-the-secret-number]<!-- ignore -->
 section in Chapter 2, you can declare a new variable with the same name as a
-previous variable, and the new variable shadows the previous variable.
+previous variable.
 Rustaceans say that the first variable is *shadowed* by the second, which means
 that the second variable’s value is what appears when the variable is used. We
 can shadow a variable by using the same variable’s name and repeating the use
