@@ -314,7 +314,7 @@ match `Some` variants when we don’t need to use the value inside the
 `Some`</span>
 
 This code will print `Can't overwrite an existing customized value` and then
-`setting is Some(5)`. In the first match arm, we don’t need to match on or use
+`setting_value` is `Some(5)`. In the first match arm, we don’t need to match on or use
 the values inside either `Some` variant, but we do need to test for the case
 when `setting_value` and `new_setting_value` are the `Some` variant. In that
 case, we print why we’re not changing `setting_value`, and it doesn’t get
