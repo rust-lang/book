@@ -296,7 +296,7 @@ will hold the closure and the resulting value of calling the closure. The
 struct will execute the closure only if we need the resulting value, and it
 will cache the resulting value so the rest of our code doesn’t have to be
 responsible for saving and reusing the result. You may know this pattern as
-*memoization* or *lazy evaluation*.
+*memorization* or *lazy evaluation*.
 
 To make a struct that holds a closure, we need to specify the type of the
 closure, because a struct definition needs to know the types of each of its
