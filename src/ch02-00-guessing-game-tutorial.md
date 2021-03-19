@@ -694,7 +694,9 @@ newline character is added to the string. For example, if the user types <span
 class="keystroke">5</span> and presses <span class="keystroke">enter</span>,
 `guess` looks like this: `5\n`. The `\n` represents “newline,” the result of
 pressing <span class="keystroke">enter</span>. The `trim` method eliminates
-`\n`, resulting in just `5`.
+`\n`, resulting in just `5`. (Unlike on Linux, pressing
+<span class="keystroke">enter</span> on Microsoft Windows produces `\r\n`, 
+both of which characters are removed with `trim`.)
 
 The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
