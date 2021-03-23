@@ -13,7 +13,7 @@ value. Shared memory concurrency is like multiple ownership: multiple threads
 can access the same memory location at the same time. As you saw in Chapter 15,
 where smart pointers made multiple ownership possible, multiple ownership can
 add complexity because these different owners need managing. Rust’s type system
-and ownership rules greatly assist in getting this management correct. For an
+and ownership rules greatly assist in getting this management correct. For
 example, let’s look at mutexes, one of the more common concurrency primitives
 for shared memory.
 

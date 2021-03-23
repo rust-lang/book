@@ -85,7 +85,7 @@ introduce references to the elements of the vector. Let’s tackle that next!
 
 Now that you know how to create, update, and destroy vectors, knowing how to
 read their contents is a good next step. There are two ways to reference a
-value stored in a vector. In the examples, we’ve annotated the types of the
+value stored in a vector. In the examples, we’ve annotated the types of
 values that are returned from these functions for extra clarity.
 
 Listing 8-5 shows both methods of accessing a value in a vector, either with

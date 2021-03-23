@@ -195,7 +195,7 @@ calling the closure twice in the first `if` block, which will call the
 expensive code twice and make the user wait twice as long as they need to. We
 could fix this problem by creating a variable local to that `if` block to hold
 the result of calling the closure, but closures provide us with another
-solution. We’ll talk about that solution in a bit. But first let’s talk about
+solution. We’ll talk about that solution in a bit. But first, let’s talk about
 why there aren’t type annotations in the closure definition and the traits
 involved with closures.
 
