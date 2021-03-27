@@ -1,31 +1,31 @@
-## Defining Modules to Control Scope and Privacy
+## 모듈을 정의하여 스코프 및 공개 여부 제어하기
 
-In this section, we’ll talk about modules and other parts of the module system,
-namely *paths* that allow you to name items; the `use` keyword that brings a
-path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator. For now, let’s
-focus on modules!
+이번에는 모듈, 항목의 이름을 지정하는 *경로(path)*,
+스코프에 경로를 가져오는 `use` 키워드,
+항목을 공개하는 데 사용하는 `pub` 키워드를 알아보겠습니다.
+`as` 키워드, 외부 패키지, 글롭 연산자 등도 다룰 예정이지만,
+일단은 모듈에 집중하죠!
 
-*Modules* let us organize code within a crate into groups for readability and
-easy reuse. Modules also control the *privacy* of items, which is whether an
-item can be used by outside code (*public*) or is an internal implementation
-detail and not available for outside use (*private*).
+*모듈(module)* 은 가독성과 재사용성을 위해서 크레이트 내 코드를 그룹화하는 데 사용됩니다.
+항목을 외부에 *공개(public)* 할지,
+내부의 세부 구현이니 외부에서 사용할 수 없도록
+*비공개(private)* 할지 제어하는 역할도 있습니다.
 
-As an example, let’s write a library crate that provides the functionality of a
-restaurant. We’ll define the signatures of functions but leave their bodies
-empty to concentrate on the organization of the code, rather than actually
-implement a restaurant in code.
+예시로, 레스토랑 기능을 제공하는
+라이브러리 크레이트를 작성한다고 가정해보죠.
+코드 구조에 집중할 수 있도록 레스토랑을 실제 코드로 구현하지는 않고,
+본문은 비워둔 함수 시그니처만 정의하겠습니다.
 
-In the restaurant industry, some parts of a restaurant are referred to as
-*front of house* and others as *back of house*. Front of house is where
-customers are; this is where hosts seat customers, servers take orders and
-payment, and bartenders make drinks. Back of house is where the chefs and cooks
-work in the kitchen, dishwashers clean up, and managers do administrative work.
+레스토랑 업계에서는 레스토랑을 크게
+*접객 부서(front of house)* 와 *지원 부서(back of house)* 로 나눕니다.
+접객 부서는 호스트가 고객을 안내하고, 웨이터가 주문 접수 및 결제를 담당하고,
+바텐더가 음료를 만들어 주는 곳입니다.
+지원 부서는 셰프, 요리사, 주방보조가 일하는 주방과 매니저가 행정 업무를 하는 곳입니다.
 
-To structure our crate in the same way that a real restaurant works, we can
-organize the functions into nested modules. Create a new library named
-`restaurant` by running `cargo new --lib restaurant`; then put the code in
-Listing 7-1 into *src/lib.rs* to define some modules and function signatures.
+함수를 중첩 모듈로 구성하면 크레이트 구조를 실제 레스토랑이 일하는 방식과 동일하게 구성할 수 있습니다.
+`cargo new --lib restaurant` 명령어를 실행하여 `restaurant` 라는 새 라이브러리를 생성하고,
+Listing 7-1 코드를 *src/lib.rs* 에 작성하여 모듈, 함수 시그니처를 정의합시다.
+
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -33,29 +33,29 @@ Listing 7-1 into *src/lib.rs* to define some modules and function signatures.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-1: A `front_of_house` module containing other
-modules that then contain functions</span>
+<span class="caption">Listing 7-1: 함수를 포함하는 별도의 모듈을 포함한
+`front_of_house` 모듈</span>
 
-We define a module by starting with the `mod` keyword and then specify the
-name of the module (in this case, `front_of_house`) and place curly brackets
-around the body of the module. Inside modules, we can have other modules, as in
-this case with the modules `hosting` and `serving`. Modules can also hold
-definitions for other items, such as structs, enums, constants, traits, or—as
-in Listing 7-1—functions.
+`mod` 키워드와 모듈 이름(이 경우 `front_of_house`)을 명시하고,
+본문을 중괄호로 감싸 모듈을 정의하였습니다.
+`hosting`, `serving` 모듈처럼,
+모듈 내에는 다른 모듈을 넣을 수 있습니다.
+모듈은 구조체, 열거형, 상수, 트레잇, 함수(Listing 7-1처럼) 등의
+항목 정의를 지닐 수 있습니다.
 
-By using modules, we can group related definitions together and name why
-they’re related. Programmers using this code would have an easier time finding
-the definitions they wanted to use because they could navigate the code based
-on the groups rather than having to read through all the definitions.
-Programmers adding new functionality to this code would know where to place the
-code to keep the program organized.
+모듈은 관련된 정의들을 하나로 묶고,
+어떤 연관성이 있는지 이름을 지어줄 수 있습니다.
+모듈화된 코드를 사용하는 프로그래머가 자신에게 필요한 어떠한 정의를 찾을 때,
+모든 정의를 읽어 내릴 필요 없이 그룹 기반으로 탐색할 수 있으므로 훨씬 쉽게 찾아낼 수 있죠.
+코드에 새로운 기능을 추가하려는 프로그래머도 자신이 어디에 코드를 작성해야
+프로그램 구조를 망치지 않을지 파악할 수 있습니다.
 
-Earlier, we mentioned that *src/main.rs* and *src/lib.rs* are called crate
-roots. The reason for their name is that the contents of either of these two
-files form a module named `crate` at the root of the crate’s module structure,
-known as the *module tree*.
+앞서 *src/main.rs*, *src/lib.rs* 는
+크레이트 루트 파일이라 했던 걸 기억하시나요?
+이 두 파일이 그런 이름을 갖게 된 이유는 크레이트 모듈 구조의 최상위(root)에 위치한
+`crate` 라는 이름을 갖는 일종의 모듈을 형성하기 때문입니다.
 
-Listing 7-2 shows the module tree for the structure in Listing 7-1.
+Listing 7-2는 Listing 7-1의 구조를 모듈 트리로 나타낸 모습입니다.
 
 ```text
 crate
@@ -69,19 +69,19 @@ crate
          └── take_payment
 ```
 
-<span class="caption">Listing 7-2: The module tree for the code in Listing
-7-1</span>
+<span class="caption">Listing 7-2: Listing 7-1 코드를 모듈 트리로
+나타낸 모습</span>
 
-This tree shows how some of the modules nest inside one another (for example,
-`hosting` nests inside `front_of_house`). The tree also shows that some modules
-are *siblings* to each other, meaning they’re defined in the same module
-(`hosting` and `serving` are defined within `front_of_house`). To continue the
-family metaphor, if module A is contained inside module B, we say that module A
-is the *child* of module B and that module B is the *parent* of module A.
-Notice that the entire module tree is rooted under the implicit module named
-`crate`.
+트리는 모듈이 서로 어떻게 중첩되어 있는지 보여줍니다
+(예시: `hosting` 모듈은 `front_of_house` 내에 위치함).
+`hosting`, `serving` 모듈이 둘 다 동일하게 `front_of_house` 모듈 내에 위치한 것처럼,
+어떤 모듈이 *형제* 관계에 있는지 나타내기도 합니다.
+가족 관계로 계속 비유하면, 모듈 A가 모듈 B 내에 있을 경우,
+모듈 A는 모듈 B의 *자식* 이며, 모듈 B는 모듈 A의 *부모* 라고 표현할 수 있습니다.
+전체 모듈 트리 최상위에 `crate` 라는 모듈이 암묵적으로 위치한다는 점을
+기억해두세요.
 
-The module tree might remind you of the filesystem’s directory tree on your
-computer; this is a very apt comparison! Just like directories in a filesystem,
-you use modules to organize your code. And just like files in a directory, we
-need a way to find our modules.
+모듈 트리에서 컴퓨터 파일 시스템의 디렉토리 트리를 연상하셨다면, 적절한 비유입니다!
+파일 시스템의 디렉토리처럼, 여러분은 모듈로 코드를 조직화합니다.
+또한 디렉토리에서 파일을 찾는 것처럼,
+우리는 모듈을 찾아낼 방법이 필요하죠.

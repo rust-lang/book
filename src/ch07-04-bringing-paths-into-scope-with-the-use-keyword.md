@@ -1,17 +1,17 @@
-## Bringing Paths into Scope with the `use` Keyword
+## `use` 키워드로 경로를 스코프 내로 가져오기
 
-It might seem like the paths we’ve written to call functions so far are
-inconveniently long and repetitive. For example, in Listing 7-7, whether we
-chose the absolute or relative path to the `add_to_waitlist` function, every
-time we wanted to call `add_to_waitlist` we had to specify `front_of_house` and
-`hosting` too. Fortunately, there’s a way to simplify this process. We can
-bring a path into a scope once and then call the items in that path as if
-they’re local items with the `use` keyword.
+앞서 작성한 함수 호출 경로는
+너무 길고 반복적으로 느껴지기도 합니다.
+예를 들어, Listing 7-7에서는 절대 경로를 사용하건 상대 경로를 사용하건,
+`add_to_waitlist` 호출할 때마다 `front_of_house`,
+`hosting` 모듈을 매번 명시해 주어야 하죠.
+`use` 키워드를 사용해 경로를 스코프 내로 가져오면
+이 과정을 단축하여 마치 로컬 항목처럼 호출할 수 있습니다.
 
-In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
-scope of the `eat_at_restaurant` function so we only have to specify
-`hosting::add_to_waitlist` to call the `add_to_waitlist` function in
-`eat_at_restaurant`.
+Listing 7-11은 `crate::front_of_house::hosting` 모듈을
+`eat_at_restaurant` 함수가 존재하는 스코프로 가져와,
+`eat_at_restaurant` 함수 내에서 `add_to_waitlist` 함수를
+`hosting::add_to_waitlist` 경로만으로 호출하는 예제입니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -19,18 +19,18 @@ scope of the `eat_at_restaurant` function so we only have to specify
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-11/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-11: Bringing a module into scope with
-`use`</span>
+<span class="caption">Listing 7-11: `use` 키워드로 모듈을 스코프 내로
+가져오기</span>
 
-Adding `use` and a path in a scope is similar to creating a symbolic link in
-the filesystem. By adding `use crate::front_of_house::hosting` in the crate
-root, `hosting` is now a valid name in that scope, just as though the `hosting`
-module had been defined in the crate root. Paths brought into scope with `use`
-also check privacy, like any other paths.
+스코프에 `use` 키워드와 경로를 작성하는 건
+파일 시스템에서 심볼릭 링크를 생성하는 것과 유사합니다.
+크레이트 루트에 `use crate::front_of_house::hosting`를 작성하면
+해당 스코프에서 `hosting` 모듈을 크레이트 루트에 정의한 것처럼 사용할 수 있습니다.
+`use` 키워드로 가져온 경우 또한 다른 경로와 마찬가지로 비공개 규칙이 적용됩니다.
 
-You can also bring an item into scope with `use` and a relative path. Listing
-7-12 shows how to specify a relative path to get the same behavior as in
-Listing 7-11.
+`use` 키워드에 상대 경로를 사용할 수도 있습니다.
+Listing 7-12는 Listing 7-11 코드를
+상대 경로로 변경한 예제입니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -38,15 +38,15 @@ Listing 7-11.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-12: Bringing a module into scope with `use` and
-a relative path</span>
+<span class="caption">Listing 7-12: `use` 키워드와 상대 경로를 작성하여
+모듈을 스코프에 가져오기</span>
 
-### Creating Idiomatic `use` Paths
+### 보편적인 `use` 경로 작성법
 
-In Listing 7-11, you might have wondered why we specified `use
-crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant` rather than specifying the `use` path all the way out to
-the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
+Listing 7-11에서 `add_to_waitlist` 함수까지 경로를 전부 작성하지 않고,
+`use crate::front_of_house::hosting` 까지만 작성한 뒤
+`hosting::add_to_waitlist` 코드로 함수를 호출하는 점이 의아하실 수도 있습니다.
+Listing 7-13 처럼 작성하면 안 되는 걸까요?
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -54,20 +54,20 @@ the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-13/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-13: Bringing the `add_to_waitlist` function
-into scope with `use`, which is unidiomatic</span>
+<span class="caption">Listing 7-13: `use` 키워드로 `add_to_waitlist` 함수를 직접 가져오기
+(보편적이지 않은 작성 방식)</span>
 
-Although both Listing 7-11 and 7-13 accomplish the same task, Listing 7-11 is
-the idiomatic way to bring a function into scope with `use`. Bringing the
-function’s parent module into scope with `use` so we have to specify the parent
-module when calling the function makes it clear that the function isn’t locally
-defined while still minimizing repetition of the full path. The code in Listing
-7-13 is unclear as to where `add_to_waitlist` is defined.
+Listing 7-11과 7-13의 동작은 동일하지만, Listing 7-11 코드가
+`use` 키워드로 스코프에 함수를 가져올 때의 관용적인 코드입니다.
+함수의 부모 모듈을 `use` 키워드로 가져올 경우, 전체 경로 대신 축약 경로만 작성하면서도,
+해당 함수가 현재 위치에 정의된 함수가 아님이 명확해지기 때문입니다.
+반면, Listing 7-13은 `add_to_waitlist` 함수가 어디에 정의되어 있는지
+알기 어렵습니다.
 
-On the other hand, when bringing in structs, enums, and other items with `use`,
-it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way
-to bring the standard library’s `HashMap` struct into the scope of a binary
-crate.
+한편, `use` 키워드로 구조체나 열거형 등의 타 항목을
+가져올 시에는 전체 경로를 작성하는 것이 보편적입니다.
+Listing 7-14는 `HashMap` 표준 라이브러리 구조체를
+바이너리 크레이트의 스코프로 가져오는 관용적인 코드 예시입니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -75,16 +75,16 @@ crate.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-14/src/main.rs}}
 ```
 
-<span class="caption">Listing 7-14: Bringing `HashMap` into scope in an
-idiomatic way</span>
+<span class="caption">Listing 7-14: 보편적인 방식으로 `HashMap`을
+스코프로 가져오기</span>
 
-There’s no strong reason behind this idiom: it’s just the convention that has
-emerged, and folks have gotten used to reading and writing Rust code this way.
+이러한 관용이 탄생하게 된 명확한 이유는 없습니다.
+어쩌다 보니 관습이 생겼고, 사람들이 이 방식대로 러스트 코드를 읽고 쓰는 데에 익숙해졌을 뿐입니다.
 
-The exception to this idiom is if we’re bringing two items with the same name
-into scope with `use` statements, because Rust doesn’t allow that. Listing 7-15
-shows how to bring two `Result` types into scope that have the same name but
-different parent modules and how to refer to them.
+하지만, 동일한 이름의 항목을 여럿 가져오는 경우는 이 방식을 사용하지 않습니다.
+러스트가 허용하기 않기 때문이죠.
+Listing 7-15는 각각 다른 모듈 내에 위치하지만 이름이 같은 두 개의
+`Result` 타입을 스코프로 가져와 사용하는 예시입니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -92,20 +92,20 @@ different parent modules and how to refer to them.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 7-15: Bringing two types with the same name into
-the same scope requires using their parent modules.</span>
+<span class="caption">Listing 7-15: 이름이 같은 두 개의 타입을 동일한 스코프에 가져오려면
+부모 모듈을 반드시 명시해야 합니다.</span>
 
-As you can see, using the parent modules distinguishes the two `Result` types.
-If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
-have two `Result` types in the same scope and Rust wouldn’t know which one we
-meant when we used `Result`.
+보시다시피 부모 모듈을 명시하여 두 개의 `Result` 타입을 구별하고 있습니다.
+만약 `use std::fmt::Result`, `use std::io::Result` 로 작성한다면,
+동일한 스코프 내에 두 개의 `Result` 타입이 존재하므로
+러스트는 우리가 어떤 `Result` 타입을 사용했는지 알 수 없습니다.
 
-### Providing New Names with the `as` Keyword
+### `as` 키워드로 새로운 이름 제공하기
 
-There’s another solution to the problem of bringing two types of the same name
-into the same scope with `use`: after the path, we can specify `as` and a new
-local name, or alias, for the type. Listing 7-16 shows another way to write the
-code in Listing 7-15 by renaming one of the two `Result` types using `as`.
+`use` 키워드로 동일한 이름의 타입을 스코프로 여러 개 가져올 경우의 또 다른 해결 방법이 있습니다.
+경로 뒤에 `as` 키워드를 작성하고, 새로운 이름이나 타입 별칭을 작성을 작성하면 됩니다.
+Listing 7-16은 `as` 키워드를 이용해 Listing 7-15 코드 내
+`Result` 타입 중 하나의 이름을 변경한 예제입니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -113,25 +113,25 @@ code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 7-16: Renaming a type when it’s brought into
-scope with the `as` keyword</span>
+<span class="caption">Listing 7-16: 스코프 내로 가져온 타입의 이름을
+`as` 키워드로 변경하기</span>
 
-In the second `use` statement, we chose the new name `IoResult` for the
-`std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
-that we’ve also brought into scope. Listing 7-15 and Listing 7-16 are
-considered idiomatic, so the choice is up to you!
+두 번째 `use` 구문에서는, 앞서 스코프 내로 가져온
+`std::fmt` 의 `Result` 와 충돌을 방지하기 위해
+`std::io::Result` 타입의 이름을 `IoResult` 로 새롭게 지정합니다.
+Listing 7-15, Listing 7-16은 둘 다 관용적인 방식이므로, 원하는 방식을 선택하시면 됩니다!
 
-### Re-exporting Names with `pub use`
+### `pub use` 로 다시 내보내기
 
-When we bring a name into scope with the `use` keyword, the name available in
-the new scope is private. To enable the code that calls our code to refer to
-that name as if it had been defined in that code’s scope, we can combine `pub`
-and `use`. This technique is called *re-exporting* because we’re bringing
-an item into scope but also making that item available for others to bring into
-their scope.
+`use` 키워드로 이름을 가져올 경우,
+해당 이름은 새 위치의 스코프에서 비공개가 됩니다.
+`pub` 와 `use` 를 결합하면 우리 코드를 호출하는 코드가,
+해당 스코프에 정의된 것처럼 해당 이름을 참조할 수 있습니다.
+이 기법은 항목을 스코프로 가져오는 동시에 다른 곳에서 항목을 가져갈 수 있도록 만들기 때문에,
+*다시 내보내기(Re-exporting)* 라고 합니다.
 
-Listing 7-17 shows the code in Listing 7-11 with `use` in the root module
-changed to `pub use`.
+Listing 7-17은 Listing 7-11 코드의 `use` 를 `pub use` 로
+변경한 예제입니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -139,28 +139,28 @@ changed to `pub use`.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-17/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-17: Making a name available for any code to use
-from a new scope with `pub use`</span>
+<span class="caption">Listing 7-17: 다른 스코프의 코드에서 사용할 수 있도록
+`pub use` 사용</span>
 
-By using `pub use`, external code can now call the `add_to_waitlist` function
-using `hosting::add_to_waitlist`. If we hadn’t specified `pub use`, the
-`eat_at_restaurant` function could call `hosting::add_to_waitlist` in its
-scope, but external code couldn’t take advantage of this new path.
+`pub use`를 사용하면 외부 코드에서 `add_to_waitlist` 함수를
+`hosting::add_to_waitlist` 코드로 호출할 수 있습니다.
+`pub use` 로 지정하지 않을 경우, `eat_at_restaurant` 함수에서는
+여전히 `hosting::add_to_waitlist` 로 호출할 수 있지만, 외부 코드에서는 불가능합니다.
 
-Re-exporting is useful when the internal structure of your code is different
-from how programmers calling your code would think about the domain. For
-example, in this restaurant metaphor, the people running the restaurant think
-about “front of house” and “back of house.” But customers visiting a restaurant
-probably won’t think about the parts of the restaurant in those terms. With
-`pub use`, we can write our code with one structure but expose a different
-structure. Doing so makes our library well organized for programmers working on
-the library and programmers calling the library.
+다시 내보내기 기법은 여러분이 작성한 코드의 구조 내부와,
+여러분의 코드를 사용할 프로그래머들이 예상할법한 해당 분야의 구조가 서로 다를 때 유용합니다.
+레스토랑 비유 예제를 예로 들어보죠. 레스토랑을 운영하는
+직원들의 머릿속에서는 '접객 부서'와 '지원 부서'가 나뉘어있습니다.
+하지만 레스토랑을 방문하는 고객들은 레스토랑의 부서를 그런 용어로 나누어 생각하지 않겠죠.
+`pub use` 를 사용하면 코드를 작성할 때의 구조와, 노출할 때의 구조를 다르게 만들 수 있습니다.
+라이브러리를 제작하는 프로그래머와, 라이브러리를 사용하는 프로그래머
+모두를 위한 라이브러리를 구성하는데 큰 도움이 되죠.
 
-### Using External Packages
+### 외부 패키지 사용하기
 
-In Chapter 2, we programmed a guessing game project that used an external
-package called `rand` to get random numbers. To use `rand` in our project, we
-added this line to *Cargo.toml*:
+우린 2장에서 `rand` 라는 외부 패키지를 사용해
+추리 게임의 랜덤 숫자 생성을 구현했었습니다.
+`rand` 패키지를 우리 프로젝트에서 사용하기 위해, *Cargo.toml* 에 다음 줄을 추가했었죠.
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -174,44 +174,44 @@ added this line to *Cargo.toml*:
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
-Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
-`rand` package and any dependencies from [crates.io](https://crates.io/) and
-make `rand` available to our project.
+*Cargo.toml* 에 `rand` 를 의존성으로 추가하면 Cargo가
+`rand` 패키지를 비롯한 모든 의존성을 [crates.io](https://crates.io/)에서 다운로드하므로
+프로젝트 내에서 `rand` 패키지를 사용할 수 있게 됩니다.
 
-Then, to bring `rand` definitions into the scope of our package, we added a
-`use` line starting with the name of the crate, `rand`, and listed the items
-we wanted to bring into scope. Recall that in the [“Generating a Random
-Number”][rand]<!-- ignore --> section in Chapter 2, we brought the `Rng` trait
-into scope and called the `rand::thread_rng` function:
+그 후, `use` 키워드와 크레이트 이름인
+`rand`를 작성하고, 가져올 항목을 나열하여,
+`rand` 정의를 우리가 만든 패키지의 스코프로 가져왔습니다.
+2장 ["임의의 숫자를 생성하기"][rand]<!-- ignore --> 절을 다시 떠올려보죠.
+`Rng` 트레잇을 스코프로 가져오고 `rand::thread_rng` 함수를 호출했었습니다.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:ch07-04}}
 ```
 
-Members of the Rust community have made many packages available at
-[crates.io](https://crates.io/), and pulling any of them into your package
-involves these same steps: listing them in your package’s *Cargo.toml* file and
-using `use` to bring items from their crates into scope.
+러스트 커뮤니티 구성원들은 [crates.io](https://crates.io/)에서 이용 가능한
+다양한 패키지를 만들어두었으니, 같은 방식으로 가져와서 여러분의 패키지를 발전시켜보세요.
+여러분이 만든 패키지의 *Cargo.toml* 파일에 추가하고,
+`use` 키워드를 사용해 스코프로 가져오면 됩니다.
 
-Note that the standard library (`std`) is also a crate that’s external to our
-package. Because the standard library is shipped with the Rust language, we
-don’t need to change *Cargo.toml* to include `std`. But we do need to refer to
-it with `use` to bring items from there into our package’s scope. For example,
-with `HashMap` we would use this line:
+알아 두어야 할 것은,
+표준 라이브러리 `std`도 마찬가지로 외부 크레이트라는 겁니다.
+러스트 언어에 포함되어 있기 때문에 *Cargo.toml* 에 추가할 필요는 없지만,
+표준 라이브러리에서 우리가 만든 패키지의 스코프로 가져오려면 `use` 문을 작성해야 합니다.
+예를 들어, `HashMap`을 가져오는 코드는 다음과 같습니다.
 
 ```rust
 use std::collections::HashMap;
 ```
 
-This is an absolute path starting with `std`, the name of the standard library
-crate.
+표준 라이브러리 크레이트의 이름인 `std` 로 시작하는
+절대 경로입니다.
 
-### Using Nested Paths to Clean Up Large `use` Lists
+### 대량의 `use` 구문을 중첩 경로로 정리하기
 
-If we’re using multiple items defined in the same crate or same module,
-listing each item on its own line can take up a lot of vertical space in our
-files. For example, these two `use` statements we had in the Guessing Game in
-Listing 2-4 bring items from `std` into scope:
+동일한 크레이트나, 동일한 모듈 내에 정의된 항목을 여럿 사용할 경우,
+각 항목당 한 줄씩 코드를 나열하면 수직 방향으로 너무 많은 영역을 차지합니다.
+예시로 살펴봅시다. 추리 게임 Listing 2-4에서 작성했던
+다음 두 `use` 문은 `std` 내 항목을 스코프로 가져옵니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -219,10 +219,10 @@ Listing 2-4 bring items from `std` into scope:
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-01-use-std-unnested/src/main.rs:here}}
 ```
 
-Instead, we can use nested paths to bring the same items into scope in one
-line. We do this by specifying the common part of the path, followed by two
-colons, and then curly brackets around a list of the parts of the paths that
-differ, as shown in Listing 7-18.
+중첩 경로를 사용하면 한 줄로 작성할 수 있습니다.
+경로의 공통된 부분을 작성하고, `::` 와 중괄호 내에
+경로가 각각 다른 부분을 나열합니다.
+예시는 Listing 7-18와 같습니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -230,17 +230,17 @@ differ, as shown in Listing 7-18.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 7-18: Specifying a nested path to bring multiple
-items with the same prefix into scope</span>
+<span class="caption">Listing 7-18: 중첩 경로를 사용해, 경로의 앞부분이 같은
+여러 항목을 스코프로 가져오기</span>
 
-In bigger programs, bringing many items into scope from the same crate or
-module using nested paths can reduce the number of separate `use` statements
-needed by a lot!
+규모가 큰 프로그램이라면, 동일한 크레이트나 모듈에서 여러 항목을 가져오는 데에
+중첩 경로를 사용함으로써 많은 `use` 구문을
+줄일 수 있습니다!
 
-We can use a nested path at any level in a path, which is useful when combining
-two `use` statements that share a subpath. For example, Listing 7-19 shows two
-`use` statements: one that brings `std::io` into scope and one that brings
-`std::io::Write` into scope.
+중첩 경로는 경로의 모든 부위에서 사용할 수 있으며,
+하위 경로가 동일한 `use` 구문이 많을 때 특히 빛을 발합니다.
+다음 Listing 7-19는 두 `use` 구문의 예시입니다. 하나는 `std::io` 를 스코프로 가져오고,
+다른 하나는 `std::io::Write` 를 스코프로 가져옵니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -248,12 +248,12 @@ two `use` statements that share a subpath. For example, Listing 7-19 shows two
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-19/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-19: Two `use` statements where one is a subpath
-of the other</span>
+<span class="caption">Listing 7-19: 하위 경로가 같은
+두 `use` 구문</span>
 
-The common part of these two paths is `std::io`, and that’s the complete first
-path. To merge these two paths into one `use` statement, we can use `self` in
-the nested path, as shown in Listing 7-20.
+두 경로에서 중복되는 부분은 `std::io` 입니다.
+또한 `std::io` 는 첫 번째 경로 그 자체이기도 합니다.
+중첩 경로에 `self`를 작성하면 두 경로를 하나의 `use` 구문으로 합칠 수 있습니다.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -261,31 +261,31 @@ the nested path, as shown in Listing 7-20.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-20/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-20: Combining the paths in Listing 7-19 into
-one `use` statement</span>
+<span class="caption">Listing 7-20: Listing 7-19의 두 경로를
+`use` 구문 하나로 합치기</span>
 
-This line brings `std::io` and `std::io::Write` into scope.
+한 줄로 `std::io`, `std::io::Write` 둘 다 스코프로 가져올 수 있습니다.
 
-### The Glob Operator
+### 글롭 연산자
 
-If we want to bring *all* public items defined in a path into scope, we can
-specify that path followed by `*`, the glob operator:
+경로에 글롭 연산자 `*`를 붙이면 경로 내 정의된
+*모든* 공개 항목을 가져올 수 있습니다.
 
 ```rust
 use std::collections::*;
 ```
 
-This `use` statement brings all public items defined in `std::collections` into
-the current scope. Be careful when using the glob operator! Glob can make it
-harder to tell what names are in scope and where a name used in your program
-was defined.
+이 `use` 구문은 `std::collections` 내에 정의된
+모든 공개 항목을 현재 스코프로 가져옵니다.
+하지만 글롭 연산자는 코드에서 사용된 어떤 이름이 어느 곳에 정의되어 있는지
+파악하기 어렵게 만들 수 있으므로, 사용에 주의해야 합니다.
 
-The glob operator is often used when testing to bring everything under test
-into the `tests` module; we’ll talk about that in the [“How to Write
-Tests”][writing-tests]<!-- ignore --> section in Chapter 11. The glob operator
-is also sometimes used as part of the prelude pattern: see [the standard
-library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
-for more information on that pattern.
+글롭 연산자는 테스트할 모든 항목을 `tests` 모듈로
+가져오는 용도로 자주 사용됩니다.
+(11장 ["테스트 작성 방법"][writing-tests]<!-- ignore --> 에서 다룰 예정입니다.)
+또한 프렐루드 패턴의 일부로 사용되기도 하며, 자세한 내용은
+[표준 라이브러리 문서]([../std/prelude/index.html#other-preludes](https://doc.rust-lang.org/std/prelude/index.html#other-preludes))<!-- ignore --> 를
+참고 바랍니다.
 
-[rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
-[writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
+[rand]: ch02-00-guessing-game-tutorial.html#임의의-숫자를-생성하기
+[writing-tests]: ch11-01-writing-tests.html#테스트-작성-방법

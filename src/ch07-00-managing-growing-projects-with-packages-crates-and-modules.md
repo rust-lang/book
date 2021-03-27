@@ -1,49 +1,49 @@
-# Managing Growing Projects with Packages, Crates, and Modules
+# 커져가는 프로젝트를 패키지, 크레이트, 모듈로 관리하기
 
-As you write large programs, organizing your code will be important because
-keeping track of your entire program in your head will become impossible. By
-grouping related functionality and separating code with distinct features,
-you’ll clarify where to find code that implements a particular feature and
-where to go to change how a feature works.
+거대한 프로그램을 작성할 때에는 코드 관리가 무척 중요합니다.
+어느 시점부터는 머릿속에서 생각하는 것만으로는
+전체 프로그램의 변화를 쫓아갈 수 없기 때문입니다.
+코드에서 연관된 기능은 묶고 서로 다른 기능은 분리해두어야,
+이후 특정 기능을 구현하는 코드를 찾거나 변경할 때 헤맬 필요 없습니다.
 
-The programs we’ve written so far have been in one module in one file. As a
-project grows, you can organize code by splitting it into multiple modules and
-then multiple files. A package can contain multiple binary crates and
-optionally one library crate. As a package grows, you can extract parts into
-separate crates that become external dependencies. This chapter covers all
-these techniques. For very large projects of a set of interrelated packages
-that evolve together, Cargo provides workspaces, which we’ll cover in the
-[“Cargo Workspaces”][workspaces]<!-- ignore --> section in Chapter 14.
+앞서 작성한 프로그램들은 하나의 모듈, 하나의 파일로 이루어져 있었지만,
+프로젝트 규모가 커지면 코드를 여러 모듈, 여러 파일로 나누어 관리할 필요가 있습니다.
+한 패키지 내에는 여러 바이너리 크레이트와 (원할 경우) 라이브러리 크레이트를 포함시킬 수 있으므로,
+커진 프로젝트의 각 부분을 크레이트로 나눠서 외부 라이브러리처럼 쓸 수 있습니다.
+이번 장에서 배워 볼 것은 이러한 기술들입니다.
+상호연관된 패키지들로 이루어진 대규모 프로젝트의 경우,
+14장 [“Cargo Workspaces”][workspaces]<!-- ignore --> 절에서 다룰 예정인,
+Cargo에서 제공하는 Workspace 기능을 이용합니다.
 
-In addition to grouping functionality, encapsulating implementation details
-lets you reuse code at a higher level: once you’ve implemented an operation,
-other code can call that code via the code’s public interface without knowing
-how the implementation works. The way you write code defines which parts are
-public for other code to use and which parts are private implementation details
-that you reserve the right to change. This is another way to limit the amount
-of detail you have to keep in your head.
+그룹화 외에도, 세부 구현을 캡슐화하면 더 고수준으로 코드를 재사용할 수 있습니다.
+어떤 작업을 구현해두고 다른 코드에서 해당 코드의 공개 인터페이스를 통해 호출하면,
+세부적인 작동은 알 필요 없죠.
+여러분은 어떤 부분을 다른 코드에서 사용할 수 있도록 공개하고,
+어떤 부분을 비공개된 세부 구현으로 만들어 자유롭게 수정할 수 있도록
+할지를 정의하는 방식으로 코드를 작성합니다.
+머릿속에 담아두어야 하는 정보의 양을 줄이는 또 다른 방법이기도 합니다.
 
-A related concept is scope: the nested context in which code is written has a
-set of names that are defined as “in scope.” When reading, writing, and
-compiling code, programmers and compilers need to know whether a particular
-name at a particular spot refers to a variable, function, struct, enum, module,
-constant, or other item and what that item means. You can create scopes and
-change which names are in or out of scope. You can’t have two items with the
-same name in the same scope; tools are available to resolve name conflicts.
+스코프 개념도 관련되어있습니다. 중첩된 컨텍스트에 작성한 코드는 "스코프 내" 정의된 다양한 이름들이 사용됩니다.
+프로그래머나 컴파일러가 코드를 읽고, 쓰고, 컴파일할 때는 어떤 위치의 어떤 이름이 무엇을 의미하는지 알아야 합니다.
+해당 이름이 변수인지, 함수인지, 열거형인지, 모듈인지, 상수인지, 그 외 요소인지 말이죠.
+동일한 스코프 내에는 같은 이름을 가진 요소가 둘 이상 존재할 수 없기 때문에,
+스코프를 의도적으로 생성해 어떤 이름은 스코프 내에 위치하고
+어떤 이름은 스코프 밖에 위치하도록 조정하기도 합니다.
+(이름 충돌을 해결하는 도구도 존재합니다)
 
-Rust has a number of features that allow you to manage your code’s
-organization, including which details are exposed, which details are private,
-and what names are in each scope in your programs. These features, sometimes
-collectively referred to as the *module system*, include:
+러스트에는 코드 조직화에 필요한 기능이 여럿 있습니다.
+어떤 세부 정보를 외부에 노출할지, 비공개로 둘지,
+프로그램의 스코프 내 항목 이름 등 다양합니다.
+이를 통틀어 *모듈 시스템* 이라 하며, 다음 기능들이 포함됩니다.
 
-* **Packages:** A Cargo feature that lets you build, test, and share crates
-* **Crates:** A tree of modules that produces a library or executable
-* **Modules** and **use:** Let you control the organization, scope, and
-  privacy of paths
-* **Paths:** A way of naming an item, such as a struct, function, or module
+* **패키지** 크레이트를 빌드하고, 테스트하고, 공유하는데 사용하는 Cargo 기능입니다.
+* **크레이트** 라이브러리나 실행 가능한 모듈로 구성된 트리 구조입니다.
+* **모듈**, **use:** 구조, 스코프를 제어하고,
+  조직세부 경로를 감추는 데 사용합니다.
+* **경로** 구조체, 함수, 모듈 등의 이름을 지정합니다.
 
-In this chapter, we’ll cover all these features, discuss how they interact, and
-explain how to use them to manage scope. By the end, you should have a solid
-understanding of the module system and be able to work with scopes like a pro!
+이번 장에서는 이 기능들을 모두 다뤄보면서 어떻게 작동하고,
+어떻게 사용해서 스코프를 관리하는지 등을 배워보겠습니다.
+이번 장을 마치고 나면, 모듈 시스템을 확실히 이해하고 스코프를 자유자재로 다룰 수 있을 거랍니다!
 
 [workspaces]: ch14-03-cargo-workspaces.html
