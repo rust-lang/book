@@ -36,14 +36,20 @@ organization, including which details are exposed, which details are private,
 and what names are in each scope in your programs. These features, sometimes
 collectively referred to as the *module system*, include:
 
-* **Packages:** A Cargo feature that lets you build, test, and share crates
-* **Crates:** A tree of modules that produces a library or executable
-* **Modules** and **use:** Let you control the organization, scope, and
-  privacy of paths
-* **Paths:** A way of naming an item, such as a struct, function, or module
+* Packages and crates, features provided by Cargo that organize the Rust
+  ecosystem into buildable, testable, and sharable units:
+  * **Package:** A collection of functionally related crates
+  * **Crate:** A tree of source files that comprises a single source library or
+  a single executable
+* Modules that are a part of the Rust language used to organize code and
+  encapsulate implementation detail:
+  * **Module**: A unit of related code with a specific scope path (a way of
+    naming an item, such as a struct, function, or module), internal privacy,
+    and external permission
 
 In this chapter, we’ll cover all these features, discuss how they interact, and
 explain how to use them to manage scope. By the end, you should have a solid
 understanding of the module system and be able to work with scopes like a pro!
 
 [workspaces]: ch14-03-cargo-workspaces.html
+
