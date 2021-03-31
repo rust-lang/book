@@ -1,6 +1,30 @@
 # 러스트 프로그래밍 언어
 
-### [빌드된 문서 바로가기: https://rinthel.github.io/rust-lang-book-ko](https://rinthel.github.io/rust-lang-book-ko)
+### 빌드된 문서 바로가기
+
+- [2nd edition: 완역](https://rinthel.github.io/rust-lang-book-ko)
+- [2018 edition: 번역중](https://rust-kr.github.io/doc.rust-kr.org)
+
+### 번역 상황 안내
+
+##### 2018 edition 번역
+
+2021년 3월까지 이 저장소에서 진행한 번역작업은 이제
+[https://github.com/rust-kr/doc.rust-kr.org](https://github.com/rust-kr/doc.rust-kr.org)으로
+fork 되어 여기서 진행하는 것으로 결정되었습니다.
+
+따라서 2018 edition의 번역 작업과 관련된 issue, pull request는 모두
+위의 저장소에서 진행할 예정이니 참고 바라겠습니다~
+
+##### 2nd edition 번역
+
+현재 2판 번역은 완료된 상태이며,
+[https://rinthel.github.io/rust-lang-book-ko](https://rinthel.github.io/rust-lang-book-ko)에서
+빌드된 문서를 확인할 수 있습니다.
+
+이 저장소는 2018 edition 번역이 완료될때까지 계속 유지될 것이며
+그동안의 2판 관련 오타 수정 등의 issue 및 pull-request는 여기서
+처리될 예정입니다.
 
 ### 환영합니다!
 
