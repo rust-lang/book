@@ -73,11 +73,14 @@ Packages contain:
 * A primary binary crate if they have a main.rs *crate root* file in the
 <package name>/src/ folder that will compile into an executable with the same
 name as the package
+ 
 * A library crate if they have a lib.rs *crate root* file
 in the <package name>/src/ folder with the same name as the package.
+ 
 * Additional binary crates if there are one or more .rs source files in the
 <package name>/bin/ folder, each compiled into an executable with the same
 name as the source.
+ 
 * Additional binary crates if there are one or more folders in the <package
 name>/bin/ folders with *crate root* main.rs files, each compiled into an
 executable with the same name as the folder.
