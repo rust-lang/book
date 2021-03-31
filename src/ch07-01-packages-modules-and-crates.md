@@ -3,7 +3,7 @@ have an understanding of how each fits in to the overall Rust ecosystem:
 
 ## Modules
 
-*Modules* are source-code based organizational units recognized by the Rust
+*Modules* are source based logical organizational units recognized by the Rust
 compiler that organize code into semi-autonomous sections with controllable
 internal privacy, controllable external visibility, and independent scope.
 
@@ -21,12 +21,13 @@ Privacy”][modules] section).
 
 ## Crates
 
-A *crate* is is file based organizational unit provided by Cargo that
+A *crate* is is file based organizational unit understood by Cargo that
 organizes source files into a specific directory structure. A crate can either
 be a library crate (distributed as source code) that can be used by external
-code, or a binary crate that compiles to an executable.
+code, or a "binary" crate (also distributed as source code) that compiles to an
+executable.
 
-A *crate root* is the crate source file that Rust compiles first and which
+A *crate root* is the source file in a crate that Rust compiles first and which
 contains the *root module* of a crate.  
 
 ## Packages
