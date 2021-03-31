@@ -41,11 +41,11 @@ collectively referred to as the *module system*, include:
   * **Package:** A collection of functionally related crates
   * **Crate:** A tree of source files that comprises a single source library or
   a single executable
-* Modules that are a part of the Rust language used to organize code and
+* Modules, part of the Rust language used to logically organize code and
   encapsulate implementation detail:
   * **Module**: A unit of related code with a specific scope path (a way of
     naming an item, such as a struct, function, or module), internal privacy,
-    and external permission
+    and external permissions
 
 In this chapter, we’ll cover all these features, discuss how they interact, and
 explain how to use them to manage scope. By the end, you should have a solid
