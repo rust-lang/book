@@ -65,7 +65,7 @@ directory structure:
  ├── 📁 examples
  │    └── ...                    (example code for the library crate goes here)
  └── 📁 tests
-      └── ...                              (unit and integration tests go here)
+      └── ...                                       (integration tests go here)
 ```
 
 Packages contain:
