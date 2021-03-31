@@ -32,7 +32,7 @@ contains the *root module* of a crate.
 
 ## Packages
 
-A package is a file based organizational unit provided by Cargo that contain
+A *package* is a file based organizational unit provided by Cargo that contain
 one or more Crates. Packages may contain zero or more binary crates (that
 build to executables) in addition to zero or one library crate (distributed as
 source code that other projects can use). Cargo packages have a pre-determined
