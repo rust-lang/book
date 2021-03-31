@@ -52,4 +52,3 @@ explain how to use them to manage scope. By the end, you should have a solid
 understanding of the module system and be able to work with scopes like a pro!
 
 [workspaces]: ch14-03-cargo-workspaces.html
-
