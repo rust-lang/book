@@ -27,9 +27,9 @@ The `#[cfg(test)]` annotation on the tests module tells Rust to compile and run
 the test code only when you run `cargo test`, not when you run `cargo build`.
 This saves compile time when you only want to build the library and saves space
 in the resulting compiled artifact because the tests are not included. Because
-integration tests go in a different directory that is only used when testing,
-they don’t need the `#[cfg(test)]` annotation. Unit tests, on the other hand,
-go in the same files as the code, so you’ll see `#[cfg(test)]` used there to
+integration tests go in separate files that reside in a special directory, they
+don’t need the `#[cfg(test)]` annotation. Unit tests, on the other hand, go in
+the same files as the main code and are annotated with `#[cfg(test)]` to
 specify that they shouldn’t be included in the compiled result.
 
 Recall that when we generated the new `adder` project in the first section of
