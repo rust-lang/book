@@ -29,7 +29,7 @@ message, as shown in this output:
 
 This example shows how the compiler helps you find errors in your programs.
 Even though compiler errors can be frustrating, they only mean your program
-isn’t safely doing what you want it to do yet; they do *not* mean that you’re
+isn’t safely doing what you want it to do; yet they do *not* mean that you’re
 not a good programmer! Experienced Rustaceans still get compiler errors.
 
 The error message indicates that the cause of the error is that you `cannot
