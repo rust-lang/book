@@ -77,8 +77,8 @@ Here’s the error:
 {{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+Just as variables are immutable by default, so are references. We are not 
+allowed to change what we have borrowed.
 
 ### Mutable References
 
