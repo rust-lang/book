@@ -270,7 +270,8 @@ you want to ensure you always have a fixed number of elements. An array isn’t
 as flexible as the vector type, though. A vector is a similar collection type
 provided by the standard library that *is* allowed to grow or shrink in size.
 If you’re unsure whether to use an array or a vector, you should probably use a
-vector. Chapter 8 discusses vectors in more detail.
+vector. The vector is more like what you see as an array in most other languages.
+Chapter 8 discusses vectors in more detail.
 
 An example of when you might want to use an array rather than a vector is in a
 program that needs to know the names of the months of the year. It’s very
