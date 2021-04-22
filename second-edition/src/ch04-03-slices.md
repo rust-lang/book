@@ -144,7 +144,7 @@ let world = &s[6..11];
 우리는 대괄호 내에 `[starting_index..ending_index]`를 특정한 범위를 이용하여 슬라이스를 만들
 수 있는데, 여기서 `starting_index`는 슬라이스에 포함되는 첫번째 위치이고 `ending_index`는
 슬라이스에 포함될 마지막 위치보다 1을 더한 값입니다. 내부적으로 슬라이스 데이터 구조는 시작 위치와
-슬라이스의 길이를 저장하는데, 이 길이 갚은 `ending_index`에서 `starting_index`를 뺀 값입니다.
+슬라이스의 길이를 저장하는데, 이 길이 값은 `ending_index`에서 `starting_index`를 뺀 값입니다.
 따라서 `let world = &[6..11];`의 경우, `world`는 `s`의 6번째 바이트를 가리키고 있는 포인터와
 길이값 5를 갖고 있는 슬라이스가 될 것입니다.
 
