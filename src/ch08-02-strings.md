@@ -37,9 +37,9 @@ Rust’s standard library also includes a number of other string types, such as
 more options for storing string data. See how those names all end in `String`
 or `Str`? They refer to owned and borrowed variants, just like the `String` and
 `str` types you’ve seen previously. These string types can store text in
-different encodings or be represented in memory in a different way, for
-example. We won’t discuss these other string types in this chapter; see their
-API documentation for more about how to use them and when each is appropriate.
+different encodings or be represented in memory in a different way. We won’t
+discuss these other string types in this chapter; see their API documentation
+for more about how to use them and when each is appropriate.
 
 ### Creating a New String
 
