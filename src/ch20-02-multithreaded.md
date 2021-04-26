@@ -226,8 +226,9 @@ shows us the following:
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
     where
-        F: FnOnce() -> T + Send + 'static,
-        T: Send + 'static
+        F: FnOnce() -> T,
+        F: Send + 'static,
+        T: Send + 'static,
 ```
 
 The `F` type parameter is the one we’re concerned with here; the `T` type
