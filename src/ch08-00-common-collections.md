@@ -17,7 +17,7 @@ collections that are used very often in Rust programs:
   particular implementation of the more general data structure called a *map*.
 
 To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+see [the std::collections documentation][collections].
 
 [collections]: ../std/collections/index.html
 
