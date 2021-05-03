@@ -42,7 +42,7 @@ overload that operator is listed.
 | `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | |
 | `..` | `..expr` | Struct literal update syntax | |
 | `..` | `variant(x, ..)`, `struct_type { x, .. }` | “And the rest” pattern binding | |
-| `...` | `expr...expr` | In a pattern: inclusive range pattern | |
+| `...` | `expr...expr` | In a pattern: inclusive range pattern (now replaced with `..=`) | |
 | `/` | `expr / expr` | Arithmetic division | `Div` |
 | `/=` | `var /= expr` | Arithmetic division and assignment | `DivAssign` |
 | `:` | `pat: type`, `ident: type` | Constraints | |
