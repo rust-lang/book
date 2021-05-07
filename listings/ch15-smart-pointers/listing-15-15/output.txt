@@ -4,10 +4,10 @@ error[E0040]: explicit use of destructor method
   --> src/main.rs:16:7
    |
 16 |     c.drop();
-   |       ^^^^
-   |       |
-   |       explicit destructor calls not allowed
-   |       help: consider using `drop` function: `drop(c)`
+   |     --^^^^--
+   |     | |
+   |     | explicit destructor calls not allowed
+   |     help: consider using `drop` function: `drop(c)`
 
 error: aborting due to previous error
 
