@@ -1,7 +1,7 @@
 $ cargo test one_hundred
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.69s
-     Running target/debug/deps/adder-92948b65e88960b4
+     Running unittests (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
 test tests::one_hundred ... ok
