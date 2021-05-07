@@ -1,7 +1,7 @@
 $ cargo test
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished test [unoptimized + debuginfo] target(s) in 0.66s
-     Running target/debug/deps/guessing_game-57d70c3acb738f4d
+     Running unittests (target/debug/deps/guessing_game-57d70c3acb738f4d)
 
 running 1 test
 test tests::greater_than_100 ... FAILED

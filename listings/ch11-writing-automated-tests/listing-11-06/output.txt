@@ -1,7 +1,7 @@
 $ cargo test
    Compiling rectangle v0.1.0 (file:///projects/rectangle)
     Finished test [unoptimized + debuginfo] target(s) in 0.66s
-     Running target/debug/deps/rectangle-6584c4561e48942e
+     Running unittests (target/debug/deps/rectangle-6584c4561e48942e)
 
 running 1 test
 test tests::larger_can_hold_smaller ... ok

@@ -43,7 +43,7 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     # Save the hash from the first test binary; we're going to keep it to
     # minimize diff churn
-    test_binary_hash=$(sed -E -ne 's@.*Running target/debug/deps/[^-]*-([^\s]*)@\1@p' ${full_output_path} | head -n 1)
+    test_binary_hash=$(sed -E -ne 's@.*Running [^[:space:]]+ \(target/debug/deps/[^-]*-([^\s]*)\)@\1@p' ${full_output_path} | head -n 1)
 
     # Act like this is the first time this listing has been built
     cargo clean
@@ -70,9 +70,9 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
 
     # Restore the previous test binary hash, if there is one
     if [ -n "${test_binary_hash}" ]; then
-        replacement='s@Running target/debug/deps/([^-]*)-([^\s]*)@Running target/debug/deps/\1-'
+        replacement='s@Running ([^[:space:]]+) \(target/debug/deps/([^-]*)-([^\s]*)\)@Running \1 (target/debug/deps/\2-'
         replacement+="${test_binary_hash}"
-        replacement+='@g'
+        replacement+=')@g'
         sed -i '' -E -e "${replacement}" ${full_output_path}
     fi
 

@@ -1,7 +1,7 @@
 $ cargo test -- --show-output
    Compiling silly-function v0.1.0 (file:///projects/silly-function)
     Finished test [unoptimized + debuginfo] target(s) in 0.60s
-     Running target/debug/deps/silly_function-160869f38cff9166
+     Running unittests (target/debug/deps/silly_function-160869f38cff9166)
 
 running 2 tests
 test tests::this_test_will_fail ... FAILED
