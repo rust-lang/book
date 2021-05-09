@@ -1,0 +1,16 @@
+   Compiling playground v0.0.1 (/playground)
+error[E0308]: mismatched types
+  --> src/main.rs:50:19
+   |
+50 |     foo::<3,true>(x);
+   |                   ^ expected `3_usize`, found `2_usize`
+   |
+   = note: expected struct `ArrayPair<_, 3_usize, 3_usize>`
+              found struct `ArrayPair<_, 2_usize, 2_usize>`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `playground`
+
+To learn more, run the command again with --verbose.

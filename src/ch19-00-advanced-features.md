@@ -10,13 +10,11 @@ make sure you have a grasp of all the features Rust has to offer.
 
 In this chapter, we’ll cover:
 
-* Unsafe Rust: how to opt out of some of Rust’s guarantees and take
-  responsibility for manually upholding those guarantees
-* Advanced traits: associated types, default type parameters, fully qualified
-  syntax, supertraits, and the newtype pattern in relation to traits
-* Advanced types: more about the newtype pattern, type aliases, the never type,
-  and dynamically sized types
+* Unsafe Rust: how to opt out of some of Rust’s guarantees and take responsibility for manually upholding those guarantees
+* Advanced traits: associated types, default type parameters, fully qualified syntax, supertraits, and the newtype pattern in relation to traits
+* Advanced types: more about the newtype pattern, type aliases, the never type, and dynamically sized types
 * Advanced functions and closures: function pointers and returning closures
 * Macros: ways to define code that defines more code at compile time
+* Const Generics: generics using data values instead of data types
 
 It’s a panoply of Rust features with something for everyone! Let’s dive in!

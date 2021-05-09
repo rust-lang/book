@@ -1,0 +1,16 @@
+   Compiling playground v0.0.1 (/playground)
+error[E0308]: mismatched types
+  --> src/main.rs:41:15
+   |
+41 |     let z = x+y;
+   |               ^ expected struct `CPUId`, found struct `GPUId`
+   |
+   = note: expected struct `NumberWrapper<CPUId<0_u32>>`
+              found struct `NumberWrapper<GPUId<0_u32>>`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `playground`
+
+To learn more, run the command again with --verbose.

@@ -27,6 +27,7 @@ contains a number of changes to reflect those improvements:
   enables code written in the 2015 Edition and the 2018 Edition to interoperate.
 - Appendix D is now titled “Useful Development Tools” and covers recently
   released tools that help you write Rust code.
+- Added a section to Chapter 19 covering the new stable feature Const Generics.
 - We fixed a number of small errors and imprecise wording throughout the book.
   Thank you to the readers who reported them!
 
