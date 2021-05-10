@@ -153,7 +153,7 @@ programmers will *use* macros more than *write* macros, we won’t discuss
 the online documentation or other resources, such as [“The Little Book of Rust
 Macros”][tlborm].
 
-[tlborm]: https://danielkeep.github.io/tlborm/book/index.html
+[tlborm]: https://veykril.github.io/tlborm/
 
 ### Procedural Macros for Generating Code from Attributes
 
