@@ -82,12 +82,13 @@ compile to the same code, so use whichever style is clearer to you.
 
 ### Returning Closures
 
-Closures are represented by traits, which means you can’t return closures
-directly. In most cases where you might want to return a trait, you can instead
-use the concrete type that implements the trait as the return value of the
-function. But you can’t do that with closures because they don’t have a
-concrete type that is returnable; you’re not allowed to use the function
-pointer `fn` as a return type, for example.
+There are two ways to return a closure from a function.
+
+1. Use `impl Trait` syntax.
+
+`impl Trait` allows us to specify unnamed but concrete types that implement a specific trait. We can use that for Closures in Rust, as they have a unique, un-writable type.
+
+This method is available from [Rust 1.26](https://doc.rust-lang.org/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html#impl-trait-for-returning-complex-types-with-ease).  
 
 The following code tries to return a closure directly, but it won’t compile:
 
@@ -102,17 +103,30 @@ The compiler error is as follows:
 ```
 
 The error references the `Sized` trait again! Rust doesn’t know how much space
-it will need to store the closure. We saw a solution to this problem earlier.
-We can use a trait object:
+it will need to store the closure. To solve this issue, we can follow the compiler's suggestion and use `impl Trait`:
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure-trait-object/src/lib.rs}}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure/impl-trait/src/lib.rs}}
 ```
 
-This code will compile just fine. For more about trait objects, refer to the
+This code will compile just fine. For more about `impl Trait`, refer to the
+section [“impl Trait and closures”](https://doc.rust-lang.org/edition-guide/rust-2018/trait-system/impl-trait-for-returning-complex-types-with-ease.html#impl-trait-and-closures) from The Edition Guide.
+
+2. Use indirection via Trait objects.
+
+That option was the one available before Rust 1.26 to return a closure from a function. Although, even after that Rust's version, you still need to use Trait objects, if your function can return more than one closure. Note that no two closures, even if identical, have the same type.  
+
+To fix aforementioned example, so it compiles, we can use a trait object:
+
+```rust,noplayground
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-19-returns-closure/trait-object/src/lib.rs}}
+```
+
+This code will also compile just fine. For more about trait objects, refer to the
 section [“Using Trait Objects That Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> in Chapter 17.
+
 
 Next, let’s look at macros!
 
