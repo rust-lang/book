@@ -18,7 +18,7 @@ tests, as shown in Listing 12-20.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,noplayground
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-20/src/lib.rs:here}}
 ```
 
