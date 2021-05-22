@@ -15,5 +15,6 @@ fn main() {
     // ANCHOR: spanish
     let hello = String::from("Hola");
     // ANCHOR_END: spanish
+    let hello = String::from("Buongiorno");
     // ANCHOR_END: here
 }
