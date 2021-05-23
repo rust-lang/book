@@ -416,7 +416,8 @@ will have one field and be a thin wrapper around the type we want to implement
 a trait for. Then the wrapper type is local to our crate, and we can implement
 the trait on the wrapper. *Newtype* is a term that originates from the Haskell
 programming language. There is no runtime performance penalty for using this
-pattern, and the wrapper type is elided at compile time.
+pattern, and the wrapper type is elided at compile time. (Although Haskell
+*does* have dedicated syntax for creating a newtype, Rust does not.)
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
