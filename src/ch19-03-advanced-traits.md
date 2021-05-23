@@ -137,8 +137,10 @@ the `Add` trait where we want to customize the `Rhs` type rather than using the
 default.
 
 We have two structs, `Millimeters` and `Meters`, holding values in different
-units. We want to add values in millimeters to values in meters and have the
-implementation of `Add` do the conversion correctly. We can implement `Add` for
+units. (This thin wrapping of an existing type in another struct is known as
+the *newtype pattern*, which we describe in more detail later.) We want
+to add values in millimeters to values in meters and have the implementation
+of `Add` do the conversion correctly. We can implement `Add` for
 `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 19-15.
 
 <span class="filename">Filename: src/lib.rs</span>
