@@ -6,11 +6,11 @@ examine why newtypes are useful as types. Then we’ll move on to type aliases, 
 feature similar to newtypes but with slightly different semantics. We’ll also
 discuss the `!` type and dynamically sized types.
 
-> Note: The next section assumes you’ve read the earlier section [“Using the
+### Using the Newtype Pattern for Type Safety and Abstraction
+
+> Note: This section assumes you’ve read the earlier section [“Using the
 > Newtype Pattern to Implement External Traits on External
 > Types.”][using-the-newtype-pattern]<!-- ignore -->
-
-### Using the Newtype Pattern for Type Safety and Abstraction
 
 The newtype pattern is useful for tasks beyond those we’ve discussed so far,
 including statically enforcing that values are never confused and indicating
