@@ -39,6 +39,12 @@ strings.
 > from the middle or bottom wouldn’t work as well! Adding data is called
 > *pushing onto the stack*, and removing data is called *popping off the stack*.
 >
+> (The stack of plates analogy isn’t quite accurate: during a function call,
+> the function can quickly access any variables in a region of the stack known
+> as its *stack frame* without having to pop anything off the stack. In modern
+> compiled languages, usually an entire stack frame is pushed during a function
+> call and popped when the function returns.)
+>
 > All data stored on the stack must have a known, fixed size. Data with an
 > unknown size at compile time or a size that might change must be stored on
 > the heap instead. The heap is less organized: when you put data on the heap,
@@ -76,7 +82,9 @@ strings.
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
 > local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
+> values get popped off the stack, invalidating all of them. This is why we
+> can’t let references to local variables live for longer than the function
+> call.
 >
 > Keeping track of what parts of code are using what data on the heap,
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
