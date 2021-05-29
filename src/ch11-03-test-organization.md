@@ -68,9 +68,9 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, you can
-bring `internal_adder` into a test’s scope and call it. If you don’t think
-private functions should be tested, there’s nothing in Rust that will compel
-you to do so.
+use private items from its ancestor modules, for example bring `internal_adder` into
+a test’s scope and call it. If you don’t think private functions should be tested,
+there’s nothing in Rust that will compel you to do so.
 
 ### Integration Tests
 
