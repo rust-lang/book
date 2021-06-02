@@ -1,10 +1,12 @@
 // ANCHOR: here
 use std::fs::File;
+use std::fs;
 use std::io;
 use std::io::Read;
 
 fn read_username_from_file() -> Result<String, io::Error> {
-    let f = File::open("hello.txt");
+    let filename = "hello.txt";
+    let f = File::open(filename);
 
     let mut f = match f {
         Ok(file) => file,
@@ -13,7 +15,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
     let mut s = String::new();
 
-    match f.read_to_string(&mut s) {
+    match fs::read_to_string(filename) {
         Ok(_) => Ok(s),
         Err(e) => Err(e),
     }
