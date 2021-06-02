@@ -335,8 +335,10 @@ value to the calling code. The same thing applies to the `?` at the end of the
 `read_to_string` call.
 
 The `?` operator eliminates a lot of boilerplate and makes this function’s
-implementation simpler. We could even shorten this code further by chaining
-method calls immediately after the `?`, as shown in Listing 9-8.
+implementation simpler.
+
+Speaking of different ways to write this function, Listing 9-8 shows that
+there’s a way to make this even shorter.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -348,32 +350,7 @@ don't want to include it for rustdoc testing purposes. -->
 {{#include ../listings/ch09-error-handling/listing-09-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-8: Chaining method calls after the `?`
-operator</span>
-
-We’ve moved the creation of the new `String` in `s` to the beginning of the
-function; that part hasn’t changed. Instead of creating a variable `f`, we’ve
-chained the call to `read_to_string` directly onto the result of
-`File::open("hello.txt")?`. We still have a `?` at the end of the
-`read_to_string` call, and we still return an `Ok` value containing the
-username in `s` when both `File::open` and `read_to_string` succeed rather than
-returning errors. The functionality is again the same as in Listing 9-6 and
-Listing 9-7; this is just a different, more ergonomic way to write it.
-
-Speaking of different ways to write this function, Listing 9-9 shows that
-there’s a way to make this even shorter.
-
-<span class="filename">Filename: src/main.rs</span>
-
-<!-- Deliberately not using rustdoc_include here; the `main` function in the
-file panics. We do want to include it for reader experimentation purposes, but
-don't want to include it for rustdoc testing purposes. -->
-
-```rust
-{{#include ../listings/ch09-error-handling/listing-09-09/src/main.rs:here}}
-```
-
-<span class="caption">Listing 9-9: Using `fs::read_to_string` instead of
+<span class="caption">Listing 9-8: Using `fs::read_to_string` instead of
 opening and then reading the file</span>
 
 Reading a file into a string is a fairly common operation, so Rust provides the
