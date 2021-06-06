@@ -24,7 +24,7 @@ starting with the definition of the `List` enum and a `tail` method in Listing
 <span class="caption">Listing 15-25: A cons list definition that holds a
 `RefCell<T>` so we can modify what a `Cons` variant is referring to</span>
 
-We’re using another variation of the `List` definition from Listing 15-5. The
+We’re using another variation of the `List` definition from Listing 15-25. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
 instead of having the ability to modify the `i32` value as we did in Listing
 15-24, we want to modify which `List` value a `Cons` variant is pointing to.
