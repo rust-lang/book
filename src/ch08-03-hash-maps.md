@@ -122,6 +122,7 @@ This code will print each pair in an arbitrary order:
 Yellow: 50
 Blue: 10
 ```
+This arbitary printing order may cause output in this book to vary from what your output looks like, so be sure to remember this.
 
 ### Updating a Hash Map
 
@@ -176,7 +177,7 @@ inserts the parameter as the new value for this key and returns a mutable
 reference to the new value. This technique is much cleaner than writing the
 logic ourselves and, in addition, plays more nicely with the borrow checker.
 
-Running the code in Listing 8-25 will print `{"Yellow": 50, "Blue": 10}` or `{"Blue": 10, "Yellow": 50}`. The
+Running the code in Listing 8-25 will print `{"Yellow": 50, "Blue": 10}`. The
 first call to `entry` will insert the key for the Yellow team with the value
 50 because the Yellow team doesn’t have a value already. The second call to
 `entry` will not change the hash map because the Blue team already has the
