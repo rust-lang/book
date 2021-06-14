@@ -37,7 +37,7 @@ because Rust knows the type of `self` is `Rectangle` due to this method’s bein
 inside the `impl Rectangle` context. Note that we still need to use the `&`
 before `self`, just as we did in `&Rectangle`. Methods can take ownership of
 `self`, borrow `self` immutably as we’ve done here, or borrow `self` mutably,
-just as they can any other parameter.
+just as they can with any other parameter.
 
 We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
 function version: we don’t want to take ownership, and we just want to read the
