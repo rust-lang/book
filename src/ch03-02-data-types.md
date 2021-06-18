@@ -115,7 +115,7 @@ which you’d use `isize` or `usize` is when indexing some sort of collection.
 > To explicitly handle the possibility of overflow, you can use these families
 > of methods that the standard library provides on primitive numeric types:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`
+> - Wrap in all modes with the `wrapping_*` methods, such as [`wrapping_add`](https://doc.rust-lang.org/std/intrinsics/fn.wrapping_add.html)
 > - Return the `None` value if there is overflow with the `checked_*` methods
 > - Return the value and a boolean indicating whether there was overflow with
 >   the `overflowing_*` methods
