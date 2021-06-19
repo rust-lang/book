@@ -13,6 +13,7 @@ fn main() {
         }
     }
 
+    // recall that the Write variant of Message requires a String
     let m = Message::Write(String::from("hello"));
     m.call();
     // ANCHOR_END: here
