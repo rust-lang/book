@@ -7,9 +7,10 @@ fn main() {
 
     thread::spawn(move || {
         let vals = vec![
-            String::from("hi"),
+            String::from("hello"),
             String::from("from"),
             String::from("the"),
+            String::from("other"),
             String::from("thread"),
         ];
 

@@ -200,9 +200,10 @@ the changes are likely to be due to the threads running differently rather than
 changes in the compiler -->
 
 ```text
-Got: hi
+Got: hello
 Got: from
 Got: the
+Got: other
 Got: thread
 ```
 
