@@ -87,9 +87,14 @@ that all number literals except the byte literal allow a type suffix, such as
 | Byte (`u8` only) | `b'A'`        |
 
 So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good choices, and integer types default to `i32`: this
-type is generally the fastest, even on 64-bit systems. The primary situation in
-which you’d use `isize` or `usize` is when indexing some sort of collection.
+defaults are reasonable trade-offs between efficiency and space, and so integer
+types default to `i32`. You will find the other types useful when you need to have
+larger numeric values or can get away with smaller ones, thus trading efficiency
+for space or vice versa. For example, you can fit eight `u8` integers in a single
+`u64` to conserve space, but at the cost of their numerical limit and how quickly
+a computer may be able to process them. Typically the most efficient to process
+is `isize` or `usize` which for 32-bit and 64-bit processors equate to their
+"word" size, the natural unit of data the processor can read at any one time.
 
 > ##### Integer Overflow
 >
