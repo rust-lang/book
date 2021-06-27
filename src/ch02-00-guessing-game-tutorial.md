@@ -217,7 +217,7 @@ newline and other whitespace to help break up long lines. We could have
 written this code as:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess).expect("Failed to read line");
+(io::stdin()).read_line(&mut guess).expect("Failed to read line");
 ```
 
 However, one long line is difficult to read, so it’s best to divide it. Now
