@@ -255,8 +255,10 @@ and `&str` values.
 a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a `String` makes our API more general and useful
+can pass a slice of the entire `String`. We can also pass the reference of
+`String`, thanks to [Deref Coercions][deref-coercions]<!--ignore-->, a feature
+we will cover later in Chapter 15. Defining a function to take a string slice
+instead of a reference to a `String` makes our API more general and useful
 without losing any functionality:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -303,3 +305,4 @@ these concepts further throughout the rest of the book. Let’s move on to
 Chapter 5 and look at grouping pieces of data together in a `struct`.
 
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[deref-coercions]: ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods
