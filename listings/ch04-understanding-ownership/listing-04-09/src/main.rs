@@ -18,6 +18,10 @@ fn main() {
 
     // first_word works on slices of `String`s
     let word = first_word(&my_string[..]);
+    
+    // first_word works on `String` reference too
+    // this is called *Deref coercion*, which will be covered in Chapter 15
+    let word = first_word(&my_string);
 
     let my_string_literal = "hello world";
 
