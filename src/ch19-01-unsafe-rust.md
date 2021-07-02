@@ -372,9 +372,8 @@ Constants”][differences-between-variables-and-constants]<!-- ignore -->
 section in Chapter 3. The names of static variables are in
 `SCREAMING_SNAKE_CASE` by convention. Static variables can only store
 references with the `'static` lifetime, which means the Rust compiler can
-figure out the lifetime; we don’t need to annotate it explicitly, although
-that used to be required, so you may see that in older code. Accessing an
-immutable static variable is safe.
+figure out the lifetime and we aren’t required to annotate it explicitly.
+Accessing an immutable static variable is safe.
 
 Constants and immutable static variables might seem similar, but a subtle
 difference is that values in a static variable have a fixed address in memory.
