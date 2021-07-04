@@ -151,7 +151,7 @@ effectively deprecated. With this in mind, as well as the fact that most Rust
 programmers will *use* macros more than *write* macros, we won’t discuss
 `macro_rules!` any further. To learn more about how to write macros, consult
 the online documentation or other resources, such as [“The Little Book of Rust
-Macros”][tlborm].
+Macros”][tlborm] started by Daniel Keep and continued by Lukas Wirth.
 
 [tlborm]: https://veykril.github.io/tlborm/
 
