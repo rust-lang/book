@@ -185,7 +185,7 @@ Listing 15-9.
 and methods. Deref coercion works only on types that implement the `Deref`
 trait. Deref coercion converts such a type into a reference to another type.
 For example, deref coercion can convert `&String` to `&str` because `String`
-implements the `Deref` trait such that it returns `str`. Deref coercion happens
+implements the `Deref` trait such that it returns `&str`. Deref coercion happens
 automatically when we pass a reference to a particular type’s value as an
 argument to a function or method that doesn’t match the parameter type in the
 function or method definition. A sequence of calls to the `deref` method
