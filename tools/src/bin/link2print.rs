@@ -27,14 +27,18 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
     // FIXME: currently doesn't handle "title" in following line.
     let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###)
         .unwrap();
-    let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
-        let key = caps.get(1).unwrap().as_str().to_uppercase();
-        let val = caps.get(2).unwrap().as_str().to_string();
-        if ref_map.insert(key, val).is_some() {
-            panic!("Did not expect markdown page to have duplicate reference");
-        }
-        "".to_string()
-    }).to_string();
+    let output = re
+        .replace_all(&buffer, |caps: &Captures<'_>| {
+            let key = caps.get(1).unwrap().as_str().to_uppercase();
+            let val = caps.get(2).unwrap().as_str().to_string();
+            if ref_map.insert(key, val).is_some() {
+                panic!(
+                    "Did not expect markdown page to have duplicate reference"
+                );
+            }
+            "".to_string()
+        })
+        .to_string();
     (output, ref_map)
 }
 
@@ -196,8 +200,7 @@ more text"
     #[test]
     fn parses_name_with_utf8() {
         let source = r###"[user’s forum](the user’s forum)"###.to_string();
-        let target =
-            r###"user’s forum at *the user’s forum*"###.to_string();
+        let target = r###"user’s forum at *the user’s forum*"###.to_string();
         assert_eq!(parse(source), target);
     }
 
