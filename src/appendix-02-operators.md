@@ -38,8 +38,8 @@ overload that operator is listed.
 | `-=` | `var -= expr` | Arithmetic subtraction and assignment | `SubAssign` |
 | `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type | |
 | `.` | `expr.ident` | Member access | |
-| `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | |
-| `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | |
+| `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | `PartialOrd` |
+| `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | `PartialOrd` |
 | `..` | `..expr` | Struct literal update syntax | |
 | `..` | `variant(x, ..)`, `struct_type { x, .. }` | “And the rest” pattern binding | |
 | `...` | `expr...expr` | (Deprecated, use `..=` instead) In a pattern: inclusive range pattern | |
