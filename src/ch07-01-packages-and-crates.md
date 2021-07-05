@@ -8,8 +8,8 @@ Privacy”][modules]<!-- ignore --> section). A *package* is one or more crates
 that provide a set of functionality. A package contains a *Cargo.toml* file
 that describes how to build those crates.
 
-Several rules determine what a package can contain. A package *must* contain
-zero or one library crates, and no more. It can contain as many binary crates
+Several rules determine what a package can contain. A package can contain
+at most one library crate. It can contain as many binary crates
 as you’d like, but it must contain at least one crate (either library or
 binary).
 
