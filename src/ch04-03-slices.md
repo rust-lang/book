@@ -256,11 +256,12 @@ and `&str` values.
 a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. We can also pass the reference of
-`String`, thanks to [Deref Coercions][deref-coercions]<!--ignore-->, a feature
-we will cover later in Chapter 15. Defining a function to take a string slice
-instead of a reference to a `String` makes our API more general and useful
-without losing any functionality:
+can pass a slice of the `String` or a reference to the `String`. This
+flexibility takes advantage of *deref coercions*, a feature we will cover in
+the [“Implicit Deref Coercions with Functions and
+Methods”][deref-coercions]<!--ignore--> section of Chapter 15. Defining a
+function to take a string slice instead of a reference to a `String` makes our
+API more general and useful without losing any functionality:
 
 <span class="filename">Filename: src/main.rs</span>
 
