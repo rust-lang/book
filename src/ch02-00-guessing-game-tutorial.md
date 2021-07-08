@@ -34,9 +34,6 @@ Look at the generated *Cargo.toml* file:
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
-If the author information that Cargo obtained from your environment is not
-correct, fix that in the file and save it again.
-
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
 you. Check out the *src/main.rs* file:
 
