@@ -79,8 +79,8 @@ following statements are configuring a package. As we add more information to
 this file, we’ll add other sections.
 
 The next three lines set the configuration information Cargo needs to compile
-your program: the name, the version, and the edition of Rust to
-use. We’ll talk about the `edition` key in Appendix E.
+your program: the name, the version, and the edition of Rust to use. We’ll talk
+about the `edition` key in Appendix E.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
 of your project’s dependencies. In Rust, packages of code are referred to as
