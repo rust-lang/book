@@ -254,10 +254,18 @@ to consider.
 
 ### Object Safety Is Required for Trait Objects
 
-You can only make *object-safe* traits into trait objects. Some complex rules
-govern all the properties that make a trait object safe, but in practice, only
-two rules are relevant. A trait is object safe if all the methods defined in
-the trait have the following properties:
+You can only make *object-safe* traits into trait objects. Object safety has
+requirements for the trait and for all the methods on the trait. A simplified
+practical summary of object safety is as follows.
+
+The trait must satisfy these conditions to be object safe:
+* It is not `Sized`.
+* All its supertraits are object safe. That is to say, `trait T: Clone {}`
+  would not be object safe because `Clone: Sized` and is thus not object safe.
+* It has no associated constants.
+
+All methods that don't have an explicit `where Self: Sized` bound or take
+`self` by value must satisfy these conditions for the trait to be object safe:
 
 * The return type isn’t `Self`.
 * There are no generic type parameters.
@@ -278,7 +286,7 @@ library’s `Clone` trait. The signature for the `clone` method in the `Clone`
 trait looks like this:
 
 ```rust
-pub trait Clone {
+pub trait Clone: Sized {
     fn clone(&self) -> Self;
 }
 ```
