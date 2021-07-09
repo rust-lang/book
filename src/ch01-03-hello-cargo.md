@@ -80,7 +80,7 @@ this file, we’ll add other sections.
 
 The next three lines set the configuration information Cargo needs to compile
 your program: the name, the version, and the edition of Rust to use. We’ll talk
-about the `edition` key in Appendix E.
+about the `edition` key in [Appendix E][appendix-e]<!-- ignore -->.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
 of your project’s dependencies. In Rust, packages of code are referred to as
@@ -246,3 +246,4 @@ If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
 
 [installation]: ch01-01-installation.html#installation
+[appendix-e]: appendix-05-editions.html
