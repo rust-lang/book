@@ -8,7 +8,7 @@ use std::io::{Read, Write};
 fn main() {
     let mut buffer = String::new();
     if let Err(e) = io::stdin().read_to_string(&mut buffer) {
-        panic!(e);
+        panic!("{}", e);
     }
 
     let mut refs = HashSet::new();

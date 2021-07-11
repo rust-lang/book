@@ -59,10 +59,11 @@ into scope with `use`, which is unidiomatic</span>
 
 Although both Listing 7-11 and 7-13 accomplish the same task, Listing 7-11 is
 the idiomatic way to bring a function into scope with `use`. Bringing the
-function’s parent module into scope with `use` so we have to specify the parent
-module when calling the function makes it clear that the function isn’t locally
-defined while still minimizing repetition of the full path. The code in Listing
-7-13 is unclear as to where `add_to_waitlist` is defined.
+function’s parent module into scope with `use` means we have to specify the
+parent module when calling the function. Specifying the parent module when
+calling the function makes it clear that the function isn’t locally defined
+while still minimizing repetition of the full path. The code in Listing 7-13 is
+unclear as to where `add_to_waitlist` is defined.
 
 On the other hand, when bringing in structs, enums, and other items with `use`,
 it’s idiomatic to specify the full path. Listing 7-14 shows the idiomatic way

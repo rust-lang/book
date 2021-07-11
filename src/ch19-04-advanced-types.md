@@ -6,11 +6,11 @@ examine why newtypes are useful as types. Then we’ll move on to type aliases, 
 feature similar to newtypes but with slightly different semantics. We’ll also
 discuss the `!` type and dynamically sized types.
 
-> Note: The next section assumes you’ve read the earlier section [“Using the
+### Using the Newtype Pattern for Type Safety and Abstraction
+
+> Note: This section assumes you’ve read the earlier section [“Using the
 > Newtype Pattern to Implement External Traits on External
 > Types.”][using-the-newtype-pattern]<!-- ignore -->
-
-### Using the Newtype Pattern for Type Safety and Abstraction
 
 The newtype pattern is useful for tasks beyond those we’ve discussed so far,
 including statically enforcing that values are never confused and indicating
@@ -274,8 +274,9 @@ restriction:
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-14-generic-maybe-sized/src/lib.rs}}
 ```
 
-A trait bound on `?Sized` is the opposite of a trait bound on `Sized`: we would
-read this as “`T` may or may not be `Sized`.” This syntax is only available for
+A trait bound on `?Sized` means “`T` may or may not be `Sized`” and this
+notation overrides the default that generic types must have a known size at
+compile time. The `?Trait` syntax with this meaning is only available for
 `Sized`, not any other traits.
 
 Also note that we switched the type of the `t` parameter from `T` to `&T`.

@@ -1,6 +1,6 @@
 $ cargo run
    Compiling patterns v0.1.0 (file:///projects/patterns)
-warning: irrefutable if-let pattern
+warning: irrefutable `if let` pattern
  --> src/main.rs:2:5
   |
 2 | /     if let x = 5 {
@@ -9,6 +9,8 @@ warning: irrefutable if-let pattern
   | |_____^
   |
   = note: `#[warn(irrefutable_let_patterns)]` on by default
+  = note: this pattern will always match, so the `if let` is useless
+  = help: consider replacing the `if let` with a `let`
 
 warning: 1 warning emitted
 

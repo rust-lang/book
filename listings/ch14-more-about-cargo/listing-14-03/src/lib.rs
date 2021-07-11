@@ -1,3 +1,4 @@
+// ANCHOR: here
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -26,7 +27,8 @@ pub mod utils {
     pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
         // --snip--
         // ANCHOR_END: here
-        SecondaryColor::Orange
+        unimplemented!();
         // ANCHOR: here
     }
 }
+// ANCHOR_END: here

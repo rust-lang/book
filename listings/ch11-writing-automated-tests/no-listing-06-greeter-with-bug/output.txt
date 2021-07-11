@@ -1,7 +1,7 @@
 $ cargo test
    Compiling greeter v0.1.0 (file:///projects/greeter)
     Finished test [unoptimized + debuginfo] target(s) in 0.91s
-     Running target/debug/deps/greeter-170b942eb5bf5e3a
+     Running unittests (target/debug/deps/greeter-170b942eb5bf5e3a)
 
 running 1 test
 test tests::greeting_contains_name ... FAILED

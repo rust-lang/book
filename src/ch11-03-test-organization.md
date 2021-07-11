@@ -66,9 +66,12 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 
 <span class="caption">Listing 11-12: Testing a private function</span>
 
-Note that the `internal_adder` function is not marked as `pub`, but because
-tests are just Rust code and the `tests` module is just another module, you can
-bring `internal_adder` into a test’s scope and call it. If you don’t think
+Note that the `internal_adder` function is not marked as `pub`. Tests are just
+Rust code, and the `tests` module is just another module. As we discussed in
+the [“Paths for Referring to an Item in the Module Tree”][paths]<!-- ignore -->
+section, items in child modules can use the items in their ancestor modules. In
+this test, we bring all of the `test` module’s parent’s items into scope with
+`use super::*`, and then the test can call `internal_adder`. If you don’t think
 private functions should be tested, there’s nothing in Rust that will compel
 you to do so.
 
@@ -235,5 +238,6 @@ reduce logic bugs having to do with how your code is expected to behave.
 Let’s combine the knowledge you learned in this chapter and in previous
 chapters to work on a project!
 
+[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html

@@ -305,10 +305,12 @@ We would get this error:
 ```
 
 This error means you can’t use this trait as a trait object in this way. If
-you’re interested in more details on object safety, see [Rust RFC 255].
+you’re interested in more details on object safety, see [Rust RFC 255] or check the
+object safety section in the [Rust Reference][object-safety-reference].
 
 [Rust RFC 255]: https://github.com/rust-lang/rfcs/blob/master/text/0255-object-safety.md
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics
 [dynamically-sized]: ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait
+[object-safety-reference]: ../reference/items/traits.html#object-safety

@@ -137,9 +137,12 @@ the `Add` trait where we want to customize the `Rhs` type rather than using the
 default.
 
 We have two structs, `Millimeters` and `Meters`, holding values in different
-units. We want to add values in millimeters to values in meters and have the
-implementation of `Add` do the conversion correctly. We can implement `Add` for
-`Millimeters` with `Meters` as the `Rhs`, as shown in Listing 19-15.
+units. This thin wrapping of an existing type in another struct is known as the
+*newtype pattern*, which we describe in more detail in the [“Using the Newtype
+Pattern to Implement External Traits on External Types”][newtype]<!-- ignore
+--> section. We want to add values in millimeters to values in meters and have
+the implementation of `Add` do the conversion correctly. We can implement `Add`
+for `Millimeters` with `Meters` as the `Rhs`, as shown in Listing 19-15.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -451,6 +454,7 @@ Now you know how the newtype pattern is used in relation to traits; it’s also 
 useful pattern even when traits are not involved. Let’s switch focus and look
 at some advanced ways to interact with Rust’s type system.
 
+[newtype]: ch19-04-advanced-types.html#using-the-newtype-pattern-for-type-safety-and-abstraction
 [implementing-a-trait-on-a-type]:
 ch10-02-traits.html#implementing-a-trait-on-a-type
 [the-iterator-trait-and-the-next-method]:

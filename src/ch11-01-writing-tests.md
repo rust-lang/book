@@ -264,7 +264,7 @@ more conveniently. These macros compare two arguments for equality or
 inequality, respectively. They’ll also print the two values if the assertion
 fails, which makes it easier to see *why* the test failed; conversely, the
 `assert!` macro only indicates that it got a `false` value for the `==`
-expression, not the values that lead to the `false` value.
+expression, not the values that led to the `false` value.
 
 In Listing 11-7, we write a function named `add_two` that adds `2` to its
 parameter and returns the result. Then we test this function using the

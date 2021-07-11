@@ -173,12 +173,11 @@ and run a random example, it may not compile! Make sure you read the
 surrounding text to see whether the example you’re trying to run is meant to
 error. Ferris will also help you distinguish code that isn’t meant to work:
 
-| Ferris                                                                 | Meaning                                          |
-|------------------------------------------------------------------------|--------------------------------------------------|
-| <img src="img/ferris/does_not_compile.svg" class="ferris-explain"/>    | This code does not compile!                      |
-| <img src="img/ferris/panics.svg" class="ferris-explain"/>              | This code panics!                                |
-| <img src="img/ferris/unsafe.svg" class="ferris-explain"/>              | This code block contains unsafe code.            |
-| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain"/>| This code does not produce the desired behavior. |
+| Ferris                                                                                                           | Meaning                                          |
+|------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| <img src="img/ferris/does_not_compile.svg" class="ferris-explain" alt="Ferris with a question mark"/>            | This code does not compile!                      |
+| <img src="img/ferris/panics.svg" class="ferris-explain" alt="Ferris throwing up their hands"/>                   | This code panics!                                |
+| <img src="img/ferris/not_desired_behavior.svg" class="ferris-explain" alt="Ferris with one claw up, shrugging"/> | This code does not produce the desired behavior. |
 
 In most situations, we’ll lead you to the correct version of any code that
 doesn’t compile.

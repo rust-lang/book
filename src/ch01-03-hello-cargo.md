@@ -63,7 +63,6 @@ code in Listing 1-2.
 [package]
 name = "hello_cargo"
 version = "0.1.0"
-authors = ["Your Name <you@example.com>"]
 edition = "2018"
 
 [dependencies]
@@ -79,11 +78,9 @@ The first line, `[package]`, is a section heading that indicates that the
 following statements are configuring a package. As we add more information to
 this file, we’ll add other sections.
 
-The next four lines set the configuration information Cargo needs to compile
-your program: the name, the version, who wrote it, and the edition of Rust to
-use. Cargo gets your name and email information from your environment, so if
-that information is not correct, fix the information now and then save the
-file. We’ll talk about the `edition` key in Appendix E.
+The next three lines set the configuration information Cargo needs to compile
+your program: the name, the version, and the edition of Rust to use. We’ll talk
+about the `edition` key in [Appendix E][appendix-e]<!-- ignore -->.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
 of your project’s dependencies. In Rust, packages of code are referred to as
@@ -249,3 +246,4 @@ If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
 
 [installation]: ch01-01-installation.html#installation
+[appendix-e]: appendix-05-editions.html

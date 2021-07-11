@@ -8,6 +8,7 @@ For resources in languages other than English. Most are still in progress; see
 - [Português](https://github.com/rust-br/rust-book-pt-br) (BR)
 - [Português](https://github.com/nunojesus/rust-book-pt-pt) (PT)
 - [简体中文](https://github.com/KaiserY/trpl-zh-cn)
+- [正體中文](https://github.com/rust-tw/book-tw)
 - [Українська](https://github.com/pavloslav/rust-book-uk-ua)
 - [Español](https://github.com/thecodix/book), [alternate](https://github.com/ManRR/rust-book-es)
 - [Italiano](https://github.com/AgeOfWar/rust-book-it)
@@ -25,3 +26,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Farsi](https://github.com/pomokhtari/rust-book-fa)
 - [Deutsch](https://github.com/rust-lang-de/rustbook-de)
 - [Turkish](https://github.com/RustDili/dokuman/tree/master/ceviriler), [online](https://rustdili.github.io/)
+- [हिंदी](https://github.com/venkatarun95/rust-book-hindi)

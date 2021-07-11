@@ -119,17 +119,18 @@ in the slice and `ending_index` is one more than the last position in the
 slice. Internally, the slice data structure stores the starting position and
 the length of the slice, which corresponds to `ending_index` minus
 `starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the 7th byte (counting from 1) of `s` with a length value of 5.
+a slice that contains a pointer to the byte at index 6 of `s` with a length
+value of 5.
 
 Figure 4-6 shows this in a diagram.
 
-<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 4-6: String slice referring to part of a
 `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at the first index (zero),
-you can drop the value before the two periods. In other words, these are equal:
+With Rust’s `..` range syntax, if you want to start at index zero, you can drop
+the value before the two periods. In other words, these are equal:
 
 ```rust
 let s = String::from("hello");
@@ -255,9 +256,12 @@ and `&str` values.
 a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a `String` makes our API more general and useful
-without losing any functionality:
+can pass a slice of the `String` or a reference to the `String`. This
+flexibility takes advantage of *deref coercions*, a feature we will cover in
+the [“Implicit Deref Coercions with Functions and
+Methods”][deref-coercions]<!--ignore--> section of Chapter 15. Defining a
+function to take a string slice instead of a reference to a `String` makes our
+API more general and useful without losing any functionality:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -303,3 +307,4 @@ these concepts further throughout the rest of the book. Let’s move on to
 Chapter 5 and look at grouping pieces of data together in a `struct`.
 
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[deref-coercions]: ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods

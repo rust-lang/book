@@ -125,7 +125,7 @@ Recall that we can create raw pointers in safe code, but we can’t *dereference
 raw pointers and read the data being pointed to. In Listing 19-3, we use the
 dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-03/src/main.rs:here}}
 ```
 
@@ -166,7 +166,7 @@ responsibility for upholding the function’s contracts.
 Here is an unsafe function named `dangerous` that doesn’t do anything in its
 body:
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-01-unsafe-fn/src/main.rs:here}}
 ```
 
@@ -240,7 +240,7 @@ know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
 Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work.
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-06/src/main.rs:here}}
 ```
 
@@ -282,7 +282,7 @@ In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice 10,000 items long.
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-07/src/main.rs:here}}
 ```
 
@@ -309,7 +309,7 @@ responsibility falls on the programmer to ensure safety.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-08/src/main.rs}}
 ```
 
@@ -370,11 +370,10 @@ Static variables are similar to constants, which we discussed in the
 [“Differences Between Variables and
 Constants”][differences-between-variables-and-constants]<!-- ignore -->
 section in Chapter 3. The names of static variables are in
-`SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable’s
-type, which is `&'static str` in this example. Static variables can only store
+`SCREAMING_SNAKE_CASE` by convention. Static variables can only store
 references with the `'static` lifetime, which means the Rust compiler can
-figure out the lifetime; we don’t need to annotate it explicitly. Accessing an
-immutable static variable is safe.
+figure out the lifetime and we aren’t required to annotate it explicitly.
+Accessing an immutable static variable is safe.
 
 Constants and immutable static variables might seem similar, but a subtle
 difference is that values in a static variable have a fixed address in memory.
@@ -388,7 +387,7 @@ static variable named `COUNTER`.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-10/src/main.rs}}
 ```
 
@@ -415,7 +414,7 @@ can’t verify. We can declare that a trait is `unsafe` by adding the `unsafe`
 keyword before `trait` and marking the implementation of the trait as `unsafe`
 too, as shown in Listing 19-11.
 
-```rust,unsafe
+```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-11/src/main.rs}}
 ```
 
