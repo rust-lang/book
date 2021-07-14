@@ -222,8 +222,8 @@ as follows:
 
 ```rust
 enum Option<T> {
-    Some(T),
     None,
+    Some(T),
 }
 ```
 
