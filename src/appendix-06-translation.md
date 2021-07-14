@@ -27,3 +27,4 @@ For resources in languages other than English. Most are still in progress; see
 - [Deutsch](https://github.com/rust-lang-de/rustbook-de)
 - [Turkish](https://github.com/RustDili/dokuman/tree/master/ceviriler), [online](https://rustdili.github.io/)
 - [हिंदी](https://github.com/venkatarun95/rust-book-hindi)
+- [ไทย](https://github.com/rust-lang-th/book-th)
