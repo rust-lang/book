@@ -49,9 +49,9 @@ the [”Processing a Series of Items with Iterators” section of Chapter
 13][iterators]<!-- ignore -->. The `collect` method gathers data into a number
 of collection types, including `HashMap`. For example, if we had the team names
 and initial scores in two separate vectors, we could use the `zip` method to
-create a vector of tuples where “Blue” is paired with 10, and so forth. Then we
-could use the `collect` method to turn that vector of tuples into a hash map,
-as shown in Listing 8-21.
+create an iterator of tuples where “Blue” is paired with 10, and so forth. Then
+we could use the `collect` method to turn that iterator of tuples into a hash
+map, as shown in Listing 8-21.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
@@ -207,7 +207,7 @@ loop, so all of these changes are safe and allowed by the borrowing rules.
 
 ### Hashing Functions
 
-By default, `HashMap` uses a hashing function called SipHash that can provide 
+By default, `HashMap` uses a hashing function called SipHash that can provide
 resistance to Denial of Service (DoS) attacks involving hash tables[^siphash]. This
 is not the fastest hashing algorithm available, but the trade-off for better
 security that comes with the drop in performance is worth it. If you profile
