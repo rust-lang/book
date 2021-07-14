@@ -141,7 +141,7 @@ different amounts and types of values</span>
 This enum has four variants with different types:
 
 * `Quit` has no data associated with it at all.
-* `Move` includes an anonymous struct inside it.
+* `Move` has named fields like a struct does.
 * `Write` includes a single `String`.
 * `ChangeColor` includes three `i32` values.
 
