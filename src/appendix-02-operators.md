@@ -27,7 +27,7 @@ overload that operator is listed.
 | `&&` | `expr && expr` | Short-circuiting logical AND | |
 | `*` | `expr * expr` | Arithmetic multiplication | `Mul` |
 | `*=` | `var *= expr` | Arithmetic multiplication and assignment | `MulAssign` |
-| `*` | `*expr` | Dereference | |
+| `*` | `*expr` | Dereference | `Deref` |
 | `*` | `*const type`, `*mut type` | Raw pointer | |
 | `+` | `trait + trait`, `'a + trait` | Compound type constraint | |
 | `+` | `expr + expr` | Arithmetic addition | `Add` |
