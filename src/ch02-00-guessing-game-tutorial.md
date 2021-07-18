@@ -327,17 +327,17 @@ library. However, the Rust team does provide a [`rand` crate][randcrate].
 
 ### Using a Crate to Get More Functionality
 
-Remember that a crate is a collection of Rust source code files.
-The project we’ve been building is a *binary crate*, which is an executable.
-The `rand` crate is a *library crate*, which contains code intended to be
-used in other programs.
+Remember that a crate is a collection of Rust source code files. The project
+we’ve been building is a *binary crate*, which is an executable. The `rand`
+crate is a *library crate*, which contains code intended to be used in other
+programs.
 
-Cargo’s use of external crates is where it really shines. Before we can write
-code that uses `rand`, we need to modify the *Cargo.toml* file to include the
-`rand` crate as a dependency. Open that file now and add the following line to
-the bottom beneath the `[dependencies]` section header that Cargo created for
-you. Be sure to specify `rand` exactly as we have here, or the code examples in
-this tutorial may not work.
+Cargo’s coordination of external crates is where Cargo really shines. Before we
+can write code that uses `rand`, we need to modify the *Cargo.toml* file to
+include the `rand` crate as a dependency. Open that file now and add the
+following line to the bottom beneath the `[dependencies]` section header that
+Cargo created for you. Be sure to specify `rand` exactly as we have here, or
+the code examples in this tutorial may not work.
 
 <!-- When updating the version of `rand` used, also update the version of
 `rand` used in these files so they all match:
@@ -447,9 +447,9 @@ your part of the code.
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
-happens if next week version 0.8.4 of the `rand` crate comes out and
-contains an important bug fix but also contains a regression that will break
-your code?
+happens if next week version 0.8.4 of the `rand` crate comes out, and that
+version contains an important bug fix, but it also contains a regression that
+will break your code?
 
 The answer to this problem is the *Cargo.lock* file, which was created the
 first time you ran `cargo build` and is now in your *guessing_game* directory.
@@ -838,11 +838,11 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 <span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
 another guess instead of crashing the program</span>
 
-Switching from an `expect` call to a `match` expression is how you generally
-move from crashing on an error to handling the error. Remember that `parse`
-returns a `Result` type and `Result` is an enum that has the variants `Ok` or
-`Err`. We’re using a `match` expression here, as we did with the `Ordering`
-result of the `cmp` method.
+Switching from an `expect` call to a `match` expression is one way of moving
+from crashing on an error to handling the error. Remember that `parse` returns
+a `Result` type and `Result` is an enum that has the variants `Ok` or `Err`.
+We’re using a `match` expression here, as we did with the `Ordering` result of
+the `cmp` method.
 
 If `parse` is able to successfully turn the string into a number, it will
 return an `Ok` value that contains the resulting number. That `Ok` value will
