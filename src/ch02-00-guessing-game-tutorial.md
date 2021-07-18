@@ -122,19 +122,18 @@ line. Notice that this is a `let` statement, which is used to create a
 *variable*. Here’s another example:
 
 ```rust,ignore
-let foo = bar;
+let apples = 5;
 ```
 
-This line creates a new variable named `foo` and binds it to the value of the
-`bar` variable. In Rust, variables are immutable by default. We’ll be
-discussing this concept in detail in the [“Variables and
-Mutability”][variables-and-mutability]<!-- ignore --> section in Chapter 3.
-The following example shows how to use `mut` before the variable name to make
-a variable mutable:
+This line creates a new variable named `apples` and binds it to the value 5. In
+Rust, variables are immutable by default. We’ll be discussing this concept in
+detail in the [“Variables and Mutability”][variables-and-mutability]<!-- ignore
+--> section in Chapter 3. The following example shows how to use `mut` before
+the variable name to make a variable mutable:
 
 ```rust,ignore
-let foo = 5; // immutable
-let mut bar = 5; // mutable
+let apples = 5; // immutable
+let mut bananas = 5; // mutable
 ```
 
 > Note: The `//` syntax starts a comment that continues until the end of the
@@ -209,9 +208,9 @@ is this method:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-When you call a method with the `.foo()` syntax, it’s often wise to introduce a
-newline and other whitespace to help break up long lines. We could have
-written this code as:
+When you call a method with the `.method_name()` syntax, it’s often wise to
+introduce a newline and other whitespace to help break up long lines. We could
+have written this code as:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("Failed to read line");
