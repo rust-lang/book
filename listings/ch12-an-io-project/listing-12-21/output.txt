@@ -1,7 +1,7 @@
 $ cargo test
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished test [unoptimized + debuginfo] target(s) in 1.33s
-     Running target/debug/deps/minigrep-4672b652f7794785
+     Running unittests (target/debug/deps/minigrep-9cd200e5fac0fc94)
 
 running 2 tests
 test tests::case_insensitive ... ok
@@ -9,7 +9,7 @@ test tests::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running target/debug/deps/minigrep-4672b652f7794785
+     Running unittests (target/debug/deps/minigrep-9cd200e5fac0fc94)
 
 running 0 tests
 

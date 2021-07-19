@@ -1,7 +1,7 @@
 $ cargo test
    Compiling cacher v0.1.0 (file:///projects/cacher)
     Finished test [unoptimized + debuginfo] target(s) in 0.72s
-     Running target/debug/deps/cacher-4116485fb32b3fff
+     Running unittests (target/debug/deps/cacher-074d7c200c000afa)
 
 running 1 test
 test tests::call_with_different_values ... FAILED

@@ -1,7 +1,7 @@
 $ cargo test
    Compiling limit-tracker v0.1.0 (file:///projects/limit-tracker)
     Finished test [unoptimized + debuginfo] target(s) in 0.91s
-     Running target/debug/deps/limit_tracker-d1b2637139dca6ca
+     Running unittests (target/debug/deps/limit_tracker-e599811fa246dbde)
 
 running 1 test
 test tests::it_sends_an_over_75_percent_warning_message ... FAILED
