@@ -142,9 +142,10 @@ and repeating the use of the `let` keyword as follows:
 
 This program first binds `x` to a value of `5`. Then it shadows `x` by
 repeating `let x =`, taking the original value and adding `1` so the value of
-`x` is then `6`. The third `let` statement also shadows `x`, multiplying the
-previous value by `2` to give `x` a final value of `12`. When we run this
-program, it will output the following:
+`x` is then `6`. Then, within an inner scope, the third `let` statement also
+shadows `x`, multiplying the previous value by `2` to give `x` a value of `12`.
+When that scope is over, the inner shadowing ends and `x` returns to being `6`.
+When we run this program, it will output the following:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
