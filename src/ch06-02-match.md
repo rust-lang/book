@@ -197,14 +197,15 @@ special pattern `_` instead:
 
 The `_` pattern will match any value. By putting it after our other arms, the
 `_` will match all the possible cases that aren’t specified before it. The `()`
-is just the unit value, so nothing will happen in the `_` case. As a result, we
-can say that we want to do nothing for all the possible values that we don’t
-list before the `_` placeholder.
+is just the unit value (the empty tuple type we mentioned in [“The Tuple
+Type”][tuples]<!-- ignore --> section), so nothing will happen in the `_` case.
+As a result, we can say that we want to do nothing for all the possible values
+that we don’t list before the `_` placeholder.
 
 However, the `match` expression can be a bit wordy in a situation in which we
 care about only *one* of the cases. For this situation, Rust provides `if let`.
 
 More about patterns and matching can be found in [chapter 18][ch18-00-patterns].
 
-[ch18-00-patterns]:
-ch18-00-patterns.html
+[tuples]: ch03-02-data-types.html#the-tuple-type
+[ch18-00-patterns]: ch18-00-patterns.html
