@@ -220,12 +220,35 @@ The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
 depending on where the code was in the loop when it received the interrupt
 signal.
 
-Fortunately, Rust provides another, more reliable way to break out of a loop.
-You can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game in the
+Fortunately, Rust provides a way to break out of a loop from code. You can
+place the `break` keyword within the loop to tell the program when to stop
+executing the loop. Recall that we did this in the guessing game in the
 [“Quitting After a Correct Guess”][quitting-after-a-correct-guess]<!-- ignore
 --> section of Chapter 2 to exit the program when the user won the game by
 guessing the correct number.
+
+We also used `continue` in the guessing game. The `continue` keyword within a
+loop tells the program to skip over any remaining code in this iteration of the
+loop and go to the next iteration.
+
+If you have loops within loops, `break` and `continue` apply to the innermost
+loop at that point. You can optionally specify a *loop label* on a loop and
+then use the label with `break` or `continue` to have those keywords applied to
+the labeled loop instead of the innermost loop. Here's an example with two
+nested loops:
+
+```rust
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
+```
+
+The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
+The inner loop without a label counts down from 10 to 9. The first `break` that
+doesn't specify a label will exit the inner loop only. The `break
+'counting_up;` statement will exit the outer loop. This code prints:
+
+```console
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
+```
 
 #### Returning Values from Loops
 
