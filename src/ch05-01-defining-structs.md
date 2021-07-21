@@ -1,10 +1,11 @@
 ## Defining and Instantiating Structs
 
-Structs are similar to tuples, which were discussed in Chapter 3. Like tuples,
-the pieces of a struct can be different types. Unlike with tuples, you’ll name
-each piece of data so it’s clear what the values mean. As a result of these
-names, structs are more flexible than tuples: you don’t have to rely on the
-order of the data to specify or access the values of an instance.
+Structs are similar to tuples, which were discussed in [“The Tuple
+Type”][tuples]<!-- ignore --> section. Like tuples, the pieces of a struct can
+be different types. Unlike with tuples, you’ll name each piece of data so it’s
+clear what the values mean. As a result of these names, structs are more
+flexible than tuples: you don’t have to rely on the order of the data to
+specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
@@ -151,10 +152,11 @@ individual value, and so on.
 ### Unit-Like Structs Without Any Fields
 
 You can also define structs that don’t have any fields! These are called
-*unit-like structs* because they behave similarly to `()`, the unit type.
-Unit-like structs can be useful in situations in which you need to implement a
-trait on some type but don’t have any data that you want to store in the type
-itself. We’ll discuss traits in Chapter 10.
+*unit-like structs* because they behave similarly to `()`, the unit type that
+we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
+structs can be useful in situations in which you need to implement a trait on
+some type but don’t have any data that you want to store in the type itself.
+We’ll discuss traits in Chapter 10.
 
 > ### Ownership of Struct Data
 >
@@ -239,3 +241,5 @@ after running update-rustc.sh:
 pbcopy < listings/ch05-using-structs-to-structure-related-data/no-listing-02-reference-in-struct/output.txt
 paste above
 add `> ` before every line -->
+
+[tuples]: ch03-02-data-types.html#the-tuple-type

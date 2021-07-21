@@ -250,6 +250,11 @@ This program creates a tuple, `x`, and then makes new variables for each
 element by using their respective indices. As with most programming languages,
 the first index in a tuple is 0.
 
+The tuple without any values, `()`, is a special type that has only one value,
+also written `()`. The type is called the *unit type* and the value is called
+the *unit value*. Expressions implicitly return the unit value if they don't
+return any other value.
+
 #### The Array Type
 
 Another way to have a collection of multiple values is with an *array*. Unlike
