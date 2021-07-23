@@ -234,7 +234,7 @@ loop and go to the next iteration.
 If you have loops within loops, `break` and `continue` apply to the innermost
 loop at that point. You can optionally specify a *loop label* on a loop and
 then use the label with `break` or `continue` to have those keywords applied to
-the labeled loop instead of the innermost loop. Here's an example with two
+the labeled loop instead of the innermost loop. Here’s an example with two
 nested loops:
 
 ```rust
@@ -243,7 +243,7 @@ nested loops:
 
 The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
 The inner loop without a label counts down from 10 to 9. The first `break` that
-doesn't specify a label will exit the inner loop only. The `break
+doesn’t specify a label will exit the inner loop only. The `break
 'counting_up;` statement will exit the outer loop. This code prints:
 
 ```console
@@ -325,9 +325,9 @@ will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
 But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds runtime
-code to perform the conditional check on every element on every iteration
-through the loop.
+index value or test condition are incorrect. It’s also slow, because the
+compiler adds runtime code to perform the conditional check of whether the
+index is within the bounds of the array on every iteration through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like the code in Listing 3-5.

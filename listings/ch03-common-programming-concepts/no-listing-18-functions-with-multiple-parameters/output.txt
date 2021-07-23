@@ -2,5 +2,4 @@ $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
      Running `target/debug/functions`
-The value of x is: 5
-The value of y is: 6
+The measurement is: 5h

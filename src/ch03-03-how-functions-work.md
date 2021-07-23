@@ -71,7 +71,7 @@ string.
 In function signatures, you *must* declare the type of each parameter. This is
 a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what you mean.
+the code to figure out what type you mean.
 
 When you want a function to have multiple parameters, separate the parameter
 declarations with commas, like this:
@@ -82,10 +82,10 @@ declarations with commas, like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/src/main.rs}}
 ```
 
-This example creates a function with two parameters, both of which are `i32`
-types. The function then prints the values in both of its parameters. Note that
-function parameters don’t all need to be the same type, they just happen to be
-in this example.
+This example creates a function named `print_labeled_measurement` with two
+parameters. The first parameter is named `value` and is an `i32`. The second is
+named `unit_label` and is type `char`. The function then prints text containing
+both the `value` and the `unit_label`.
 
 Let’s try running this code. Replace the program currently in your *functions*
 project’s *src/main.rs* file with the preceding example and run it using `cargo
@@ -95,8 +95,8 @@ run`:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-18-functions-with-multiple-parameters/output.txt}}
 ```
 
-Because we called the function with `5` as the value for  `x` and `6` is passed
-as the value for `y`, the two strings are printed with these values.
+Because we called the function with `5` as the value for `value` and `'h'` as
+the value for `unit_label`, the program output contains those values.
 
 ### Function Bodies Contain Statements and Expressions
 
@@ -147,9 +147,9 @@ C and Ruby, where the assignment returns the value of the assignment. In those
 languages, you can write `x = y = 6` and have both `x` and `y` have the value
 `6`; that is not the case in Rust.
 
-Expressions evaluate to something and make up most of the rest of the code that
-you’ll write in Rust. Consider a simple math operation, such as `5 + 6`, which
-is an expression that evaluates to the value `11`. Expressions can be part of
+Expressions evaluate to a value and make up most of the rest of the code that
+you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
+expression that evaluates to the value `11`. Expressions can be part of
 statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
 expression that evaluates to the value `6`. Calling a function is an
 expression. Calling a macro is an expression. The block that we use to create
@@ -243,7 +243,7 @@ Compiling this code produces an error, as follows:
 The main error message, “mismatched types,” reveals the core issue with this
 code. The definition of the function `plus_one` says that it will return an
 `i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-an empty tuple. Therefore, nothing is returned, which contradicts the function
+the unit type. Therefore, nothing is returned, which contradicts the function
 definition and results in an error. In this output, Rust provides a message to
 possibly help rectify this issue: it suggests removing the semicolon, which
 would fix the error.
