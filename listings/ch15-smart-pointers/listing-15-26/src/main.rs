@@ -39,6 +39,6 @@ fn main() {
 
     // Uncomment the next line to see that we have a cycle;
     // it will overflow the stack
-    // println!("a next item = {:?}", a.tail());
+    // println!("a = {:?}", a);
 }
 // ANCHOR_END: here
