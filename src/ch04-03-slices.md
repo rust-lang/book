@@ -218,9 +218,12 @@ Here’s the compiler error:
 
 Recall from the borrowing rules that if we have an immutable reference to
 something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. Rust disallows
-this, and compilation fails. Not only has Rust made our API easier to use, but
-it has also eliminated an entire class of errors at compile time!
+truncate the `String`, it needs to get a mutable reference. The `println!`
+after the call to `clear` uses the reference in `word`, so the immutable
+reference must still be active at that point. Rust disallows the mutable
+reference in `clear` and the immutable reference in `word` from existing at the
+same time, and compilation fails. Not only has Rust made our API easier to use,
+but it has also eliminated an entire class of errors at compile time!
 
 #### String Literals Are Slices
 
