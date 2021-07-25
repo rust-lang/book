@@ -304,10 +304,10 @@ safety bugs we mentioned previously. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.
 
 To ensure memory safety, there’s one more detail to what happens in this
-situation in Rust. Instead of trying to copy the allocated memory, Rust
-considers `s1` to no longer be valid and, therefore, Rust doesn’t need to free
-anything when `s1` goes out of scope. Check out what happens when you try to
-use `s1` after `s2` is created; it won’t work:
+situation in Rust. After `let s2 = s1`, Rust considers `s1` to no longer be
+valid. Therefore, Rust doesn’t need to free anything when `s1` goes out of
+scope. Check out what happens when you try to use `s1` after `s2` is created;
+it won’t work:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-04-cant-use-after-move/src/main.rs:here}}
