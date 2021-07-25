@@ -136,10 +136,12 @@ understanding by introducing the `String` type.
 
 To illustrate the rules of ownership, we need a data type that is more complex
 than the ones we covered in the [“Data Types”][data-types]<!-- ignore -->
-section of Chapter 3. The types covered previously are all stored on the stack
-and popped off the stack when their scope is over, but we want to look at data
-that is stored on the heap and explore how Rust knows when to clean up that
-data.
+section of Chapter 3. The types covered previously are all a known size, can be
+stored on the stack and popped off the stack when their scope is over, and can
+be quickly and trivially copied to make a new, independent instance if another
+part of code needs to use the same value in a different scope. But we want to
+look at data that is stored on the heap and explore how Rust knows when to
+clean up that data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
 that relate to ownership. These aspects also apply to other complex data types,
@@ -151,10 +153,10 @@ program. String literals are convenient, but they aren’t suitable for every
 situation in which we may want to use text. One reason is that they’re
 immutable. Another is that not every string value can be known when we write
 our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type is
-allocated on the heap and as such is able to store an amount of text that is
-unknown to us at compile time. You can create a `String` from a string literal
-using the `from` function, like so:
+these situations, Rust has a second string type, `String`. This type manages
+data allocated on the heap and as such is able to store an amount of text that
+is unknown to us at compile time. You can create a `String` from a string
+literal using the `from` function, like so:
 
 ```rust
 let s = String::from("hello");
