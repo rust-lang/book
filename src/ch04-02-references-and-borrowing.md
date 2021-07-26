@@ -56,9 +56,9 @@ stops being used because we don’t have ownership. When functions have
 references as parameters instead of the actual values, we won’t need to return
 the values in order to give back ownership, because we never had ownership.
 
-We call having references as function parameters *borrowing*. As in real life,
-if a person owns something, you can borrow it from them. When you’re done, you
-have to give it back.
+We call the action of creating a reference *borrowing*. As in real life, if a
+person owns something, you can borrow it from them. When you’re done, you have
+to give it back.
 
 So what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!
@@ -82,7 +82,7 @@ allowed to modify something we have a reference to.
 
 ### Mutable References
 
-We can fix the error in the code from Listing 4-6 with just a small tweak:
+We can fix the error in the code from Listing 4-6 with just a few small tweaks:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -91,8 +91,10 @@ We can fix the error in the code from Listing 4-6 with just a small tweak:
 ```
 
 First, we had to change `s` to be `mut`. Then we had to create a mutable
-reference with `&mut s` and accept a mutable reference with `some_string: &mut
-String`.
+reference with `&mut s` where we call the `change` function, and update the
+function signature to accept a mutable reference with `some_string: &mut
+String`. This makes it very clear that the `change` function will mutate the
+value it borrows.
 
 But mutable references have one big restriction: you can have only one mutable
 reference to a particular piece of data at a time. This code will fail:
@@ -111,7 +113,7 @@ Here’s the error:
 
 This error says that this code is invalid because we cannot borrow `s` as
 mutable more than once at a time. The first mutable borrow is in `r1` and must
-last until it's used in the `println!`, but between the creation of that
+last until it’s used in the `println!`, but between the creation of that
 mutable reference and its usage, we tried to create another mutable reference
 in `r2` that borrows the same data as `r1`.
 
@@ -160,8 +162,8 @@ the data.
 
 Note that a reference’s scope starts from where it is introduced and continues
 through the last time that reference is used. For instance, this code will
-compile because the last usage of the immutable references occurs before the
-mutable reference is introduced:
+compile because the last usage of the immutable references, the `println!`,
+occurs before the mutable reference is introduced:
 
 ```rust,edition2018
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}

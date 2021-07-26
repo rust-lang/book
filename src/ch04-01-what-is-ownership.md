@@ -218,9 +218,10 @@ from Listing 4-1 using a `String` instead of a string literal:
 
 There is a natural point at which we can return the memory our `String` needs
 to the allocator: when `s` goes out of scope. When a variable goes out of
-scope, Rust calls a special function for us. This function is called [`drop`],
-and it’s where the author of `String` can put the code to return the memory.
-Rust calls `drop` automatically at the closing curly bracket.
+scope, Rust calls a special function for us. This function is called
+[`drop`][drop]<!-- ignore -->, and it’s where the author of `String` can put
+the code to return the memory. Rust calls `drop` automatically at the closing
+curly bracket.
 
 > Note: In C++, this pattern of deallocating resources at the end of an item’s
 > lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
@@ -468,4 +469,4 @@ common. Luckily for us, Rust has a feature for this concept, called
 [derivable-traits]: appendix-03-derivable-traits.html
 [method-syntax]: ch05-03-method-syntax.html#method-syntax
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
-[`drop`]: ../std/ops/trait.Drop.html#tymethod.drop
+[drop]: ../std/ops/trait.Drop.html#tymethod.drop

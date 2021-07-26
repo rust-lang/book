@@ -51,10 +51,10 @@ second element is a reference to the element. This is a bit more convenient
 than calculating the index ourselves.
 
 Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple, just like everywhere else in Rust. So in the `for`
-loop, we specify a pattern that has `i` for the index in the tuple and `&item`
-for the single byte in the tuple. Because we get a reference to the element
-from `.iter().enumerate()`, we use `&` in the pattern.
+destructure that tuple. We'll be discussing patterns more in Chapter 6. So in
+the `for` loop, we specify a pattern that has `i` for the index in the tuple
+and `&item` for the single byte in the tuple. Because we get a reference to the
+element from `.iter().enumerate()`, we use `&` in the pattern.
 
 Inside the `for` loop, we search for the byte that represents the space by
 using the byte literal syntax. If we find a space, we return the position.
