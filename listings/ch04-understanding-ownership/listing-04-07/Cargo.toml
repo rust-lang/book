@@ -1,7 +1,6 @@
 [package]
 name = "ownership"
 version = "0.1.0"
-authors = ["Carol (Nichols || Goulding) <carol.nichols@gmail.com>"]
 edition = "2018"
 
 [dependencies]
