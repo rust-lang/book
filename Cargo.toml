@@ -1,7 +1,6 @@
 [package]
 name = "rust-book"
 version = "0.0.1"
-authors = ["Steve Klabnik <steve@steveklabnik.com>"]
 description = "The Rust Book"
 edition = "2018"
 
