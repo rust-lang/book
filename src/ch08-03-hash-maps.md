@@ -119,8 +119,8 @@ do with vectors, using a `for` loop:
 This code will print each pair in an arbitrary order:
 
 ```text
-Yellow: 50
 Blue: 10
+Yellow: 50
 ```
 
 ### Updating a Hash Map
