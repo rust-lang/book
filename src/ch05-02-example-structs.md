@@ -105,8 +105,8 @@ and `1`. This is a win for clarity.
 
 It’d be nice to be able to print an instance of `Rectangle` while we’re
 debugging our program and see the values for all its fields. Listing 5-11 tries
-using the `println!` macro as we have used in previous chapters. This won’t
-work, however.
+using the [`println!` macro][println]<!-- ignore --> as we have used in
+previous chapters. This won’t work, however.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -189,11 +189,45 @@ When we use the `{:#?}` style in the example, the output will look like this:
 {{#include ../listings/ch05-using-structs-to-structure-related-data/output-only-02-pretty-debug/output.txt}}
 ```
 
-Rust has provided a number of traits for us to use with the `derive` annotation
-that can add useful behavior to our custom types. Those traits and their
-behaviors are listed in [Appendix C][app-c]<!-- ignore -->. We’ll cover how to
-implement these traits with custom behavior as well as how to create your own
-traits in Chapter 10.
+Another way to print out a value using the `Debug` format is by using the
+[`dbg!` macro][dbg] <!-- ignore -->. The `dbg!` macro takes ownership of an
+expression, prints the file and line number of where that `dbg!` macro call
+occurs in your code along with the resulting value of that expression, and
+returns ownership of the value. Calling the `dbg!` macro prints to the standard
+error console stream (`stderr`), as opposed to `println!` which prints to the
+standard output console stream (`stdout`). We’ll talk more about `stderr` and
+`stdout` in the [”Writing Error Messages to Standard Error Instead of Standard
+Output” section in Chapter 12][err]<!-- ignore -->. Here’s an example where
+we’re interested in the value that gets assigned to the `width` field, as well
+as the value of the whole struct in `rect1`:
+
+```rust
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/src/main.rs}}
+```
+
+We can put `dbg!` around the expression `30 * scale` and, because `dbg!`
+returns ownership of the expression’s value, the `width` field will get the
+same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` to
+take ownership of `rect1`, so we use a reference to `dbg!` in the next call.
+Here’s what the output of this example looks like:
+
+```console
+{{#include ../listings/ch05-using-structs-to-structure-related-data/no-listing-05-dbg-macro/output.txt}}
+```
+
+We can see the first bit of output came from *src/main.rs* line 10, where we’re
+debugging the expression `30 * scale`, and its resulting value is 60 (the
+`Debug` formatting implemented for integers is to print only their value). The
+`dbg!` call on line 14 of *src/main.rs* outputs the value of `&rect1`, which is
+the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
+`Rectangle` type. The `dbg!` macro can be really helpful when you’re trying to
+figure out what your code is doing!
+
+In addition to the `Debug` trait, Rust has provided a number of traits for us
+to use with the `derive` annotation that can add useful behavior to our custom
+types. Those traits and their behaviors are listed in [Appendix C][app-c]<!--
+ignore -->. We’ll cover how to implement these traits with custom behavior as
+well as how to create your own traits in Chapter 10.
 
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle`
@@ -203,3 +237,6 @@ continue to refactor this code by turning the `area` function into an `area`
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
 [app-c]: appendix-03-derivable-traits.md
+[println]: ../std/macro.println.html
+[dbg]: ../std/macro.dbg.html
+[err]: ch12-06-writing-to-stderr-instead-of-stdout.html
