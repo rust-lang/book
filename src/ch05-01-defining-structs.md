@@ -156,7 +156,22 @@ You can also define structs that don’t have any fields! These are called
 we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
 structs can be useful in situations in which you need to implement a trait on
 some type but don’t have any data that you want to store in the type itself.
-We’ll discuss traits in Chapter 10.
+We’ll discuss traits in Chapter 10. Here’s an example of declaring and
+instantiating a unit struct named `AlwaysEqual`:
+
+```rust
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs:here}}
+```
+
+To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
+semicolon. No need for curly brackets or parentheses! Then we can get an
+instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
+name we defined, without any curly brackets or parentheses. Imagine we’ll be
+implementing behavior for this type that every instance is always equal to
+every instance of every other type, perhaps to have a known result for testing
+purposes. We wouldn’t need any data to implement that behavior! You’ll see in
+Chapter 10 how to define traits and implement them on any type, including
+unit-like structs.
 
 > ### Ownership of Struct Data
 >
