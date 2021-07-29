@@ -196,7 +196,7 @@ occurs in your code along with the resulting value of that expression, and
 returns ownership of the value. Calling the `dbg!` macro prints to the standard
 error console stream (`stderr`), as opposed to `println!` which prints to the
 standard output console stream (`stdout`). We’ll talk more about `stderr` and
-`stdout` in the [”Writing Error Messages to Standard Error Instead of Standard
+`stdout` in the [“Writing Error Messages to Standard Error Instead of Standard
 Output” section in Chapter 12][err]<!-- ignore -->. Here’s an example where
 we’re interested in the value that gets assigned to the `width` field, as well
 as the value of the whole struct in `rect1`:
