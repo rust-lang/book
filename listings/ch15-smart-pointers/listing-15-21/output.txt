@@ -3,8 +3,9 @@ $ cargo test
 error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a `&` reference
   --> src/lib.rs:58:13
    |
-57 |         fn send(&self, message: &str) {
-   |                 ----- help: consider changing this to be a mutable reference: `&mut self`
+2  |     fn send(&self, msg: &str);
+   |             ----- help: consider changing that to be a mutable reference: `&mut self`
+...
 58 |             self.sent_messages.push(String::from(message));
    |             ^^^^^^^^^^^^^^^^^^ `self` is a `&` reference, so the data it refers to cannot be borrowed as mutable
 
