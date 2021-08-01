@@ -24,13 +24,14 @@ in Listing 5-13.
 `Rectangle` struct</span>
 
 To define the function within the context of `Rectangle`, we start an `impl`
-(implementation) block. Then we move the `area` function within the `impl`
-curly brackets and change the first (and in this case, only) parameter to be
-`self` in the signature and everywhere within the body. In `main`, where we
-called the `area` function and passed `rect1` as an argument, we can instead
-use *method syntax* to call the `area` method on our `Rectangle` instance.
-The method syntax goes after an instance: we add a dot followed by the method
-name, parentheses, and any arguments.
+(implementation) block for `Rectangle`. Everything within this `impl` block
+will be associated with the `Rectangle` type. Then we move the `area` function
+within the `impl` curly brackets and change the first (and in this case, only)
+parameter to be `self` in the signature and everywhere within the body. In
+`main`, where we called the `area` function and passed `rect1` as an argument,
+we can instead use *method syntax* to call the `area` method on our `Rectangle`
+instance. The method syntax goes after an instance: we add a dot followed by
+the method name, parentheses, and any arguments.
 
 In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`.
 The `&self` is actually short for `self: &Self`. Within an `impl` block, the
@@ -160,18 +161,18 @@ parameters in functions.
 
 ### Associated Functions
 
-Another useful feature of `impl` blocks is that we’re allowed to define
-functions within `impl` blocks that *don’t* take `self` as a parameter. These
-are called *associated functions* because they’re associated with the struct.
-They’re still functions, not methods, because they don’t have an instance of
-the struct to work with. You’ve already used the `String::from` associated
-function.
+All functions defined within an `impl` block are called *associated functions*
+because they’re associated with the type named after the `impl`. We can define
+associated functions that don’t have `self` as their first parameter (and thus
+are not methods) because they don’t need an instance of the type to work with.
+We’ve already used one function like this, the `String::from` function, that’s
+defined on the `String` type.
 
-Associated functions are often used for constructors that will return a new
-instance of the struct. For example, we could provide an associated function
-that would have one dimension parameter and use that as both width and height,
-thus making it easier to create a square `Rectangle` rather than having to
-specify the same value twice:
+Associated functions that aren’t methods are often used for constructors that
+will return a new instance of the struct. For example, we could provide an
+associated function that would have one dimension parameter and use that as
+both width and height, thus making it easier to create a square `Rectangle`
+rather than having to specify the same value twice:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -205,10 +206,10 @@ useful in Chapter 10, where we discuss generic types and traits.
 
 Structs let you create custom types that are meaningful for your domain. By
 using structs, you can keep associated pieces of data connected to each other
-and name each piece to make your code clear. Methods let you specify the
-behavior that instances of your structs have, and associated functions let you
-namespace functionality that is particular to your struct without having an
-instance available.
+and name each piece to make your code clear. In `impl` blocks, you can define
+functions that are associated with your type, and methods are a kind of
+associated function that let you specify the behavior that instances of your
+structs have.
 
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
