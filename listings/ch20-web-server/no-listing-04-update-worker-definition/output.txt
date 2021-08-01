@@ -1,6 +1,6 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
-error[E0599]: no method named `join` found for enum `Option<JoinHandle<()>>` in the current scope
+error[E0599]: no method named `join` found for enum `Option` in the current scope
   --> src/lib.rs:52:27
    |
 52 |             worker.thread.join().unwrap();

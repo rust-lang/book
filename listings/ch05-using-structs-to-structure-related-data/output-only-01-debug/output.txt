@@ -9,7 +9,7 @@ error[E0277]: `Rectangle` doesn't implement `Debug`
    = help: the trait `Debug` is not implemented for `Rectangle`
    = note: add `#[derive(Debug)]` or manually implement `Debug`
    = note: required by `std::fmt::Debug::fmt`
-   = note: this error originates in a macro (in Nightly builds, run with -Z macro-backtrace for more info)
+   = note: this error originates in the macro `$crate::format_args_nl` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 error: aborting due to previous error
 
