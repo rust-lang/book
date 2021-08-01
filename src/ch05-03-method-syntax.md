@@ -32,12 +32,15 @@ use *method syntax* to call the `area` method on our `Rectangle` instance.
 The method syntax goes after an instance: we add a dot followed by the method
 name, parentheses, and any arguments.
 
-In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`
-because Rust knows the type of `self` is `Rectangle` due to this method’s being
-inside the `impl Rectangle` context. Note that we still need to use the `&`
-before `self`, just as we did in `&Rectangle`. Methods can take ownership of
-`self`, borrow `self` immutably as we’ve done here, or borrow `self` mutably,
-just as they can any other parameter.
+In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`.
+The `&self` is actually short for `self: &Self`. Within an `impl` block, the
+type `Self` is an alias for the type that the `impl` block is for. Methods must
+have a parameter named `self` of type `Self` for their first parameter, so Rust
+lets you abbreviate this with only the name `self` in the first parameter spot.
+Note that we still need to use the `&` in front of the `self` shorthand to
+indicate this method borrows the `Self` instance, just as we did in `rectangle:
+&Rectangle`. Methods can take ownership of `self`, borrow `self` immutably as
+we’ve done here, or borrow `self` mutably, just as they can any other parameter.
 
 We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
 function version: we don’t want to take ownership, and we just want to read the
