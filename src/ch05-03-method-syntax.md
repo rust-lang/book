@@ -59,6 +59,31 @@ instance of a type in one `impl` block rather than making future users of our
 code search for capabilities of `Rectangle` in various places in the library we
 provide.
 
+Note that we can choose to give a method the same name as one of the struct’s
+fields. For example, we can define a method on `Rectangle` also named `width`:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-06-method-field-interaction/src/main.rs:here}}
+```
+
+Here, we’re choosing to make the behavior of the `width` method be that it
+returns `true` if the value in the instance’s `width` field is greater than 0,
+and `false` if the value is 0: we can use a field within a method of the same
+name for any purpose. In `main`, when we follow `rect1.width` with parentheses,
+Rust knows we mean the method `width`. When we don’t use parentheses, Rust
+knows we mean the field `width`.
+
+Often, but not always, methods with the same name as a field will be defined to
+only return the value in the field and do nothing else. Methods like this are
+called *getters*, and Rust does not implement them automatically for struct
+fields as some other languages do. Getters are useful because you can make the
+field private but the method public and thus enable read-only access to that
+field as part of the type’s public API. We will be discussing what public and
+private are and how to designate a field or method as public or private in
+Chapter 7.
+
 > ### Where’s the `->` Operator?
 >
 > In C and C++, two different operators are used for calling methods: you use
