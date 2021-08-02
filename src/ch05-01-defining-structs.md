@@ -121,7 +121,11 @@ values from the fields of the instance in the `user1` variable</span>
 
 The code in Listing 5-7 also creates an instance in `user2` that has a
 different value for `email` and `username` but has the same values for the
-`active` and `sign_in_count` fields from `user1`.
+`active` and `sign_in_count` fields from `user1`. The `..user1` must come last
+to specify that any remaining fields should get their values from the
+corresponding fields in `user1`, but we can choose to specify values for as
+many fields as we want in any order, regardless of the order of the fields in
+the struct’s definition.
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
