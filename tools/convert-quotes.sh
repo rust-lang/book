@@ -2,12 +2,11 @@
 
 set -eu
 
-dir=$1
+mkdir -p tmp
+rm -rf tmp/*.md
 
-mkdir -p "tmp/$dir"
-
-for f in $dir/*.md
+for f in src/${1:-""}*.md
 do
-    cat "$f" | cargo run --bin convert_quotes > "tmp/$f"
+    cargo run --bin convert_quotes < "$f" > "tmp/$f"
     mv "tmp/$f" "$f"
 done
