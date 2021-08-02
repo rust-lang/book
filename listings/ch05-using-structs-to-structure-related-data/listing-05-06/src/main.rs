@@ -16,7 +16,7 @@ fn main() {
     // ANCHOR: here
     let user2 = User {
         active: user1.active,
-        username: String::from("anotherusername567"),
+        username: user1.username,
         email: String::from("another@example.com"),
         sign_in_count: user1.sign_in_count,
     };

@@ -15,7 +15,6 @@ fn main() {
 
     // ANCHOR: here
     let user2 = User {
-        username: String::from("anotherusername567"),
         email: String::from("another@example.com"),
         ..user1
     };
