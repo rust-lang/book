@@ -1,8 +1,8 @@
 struct User {
+    active: bool,
     username: &str,
     email: &str,
     sign_in_count: u64,
-    active: bool,
 }
 
 fn main() {

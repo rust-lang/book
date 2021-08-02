@@ -160,8 +160,8 @@ But again, the compiler gives us a helpful note:
 
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt in to make that functionality available for our struct.
-To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-12.
+To do that, we add the outer attribute `#[derive(Debug)]` just before the
+struct definition, as shown in Listing 5-12.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -169,7 +169,7 @@ definition, as shown in Listing 5-12.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-12: Adding the annotation to derive the `Debug`
+<span class="caption">Listing 5-12: Adding the attribute to derive the `Debug`
 trait and printing the `Rectangle` instance using debug formatting</span>
 
 Now when we run the program, we won’t get any errors, and we’ll see the
@@ -224,10 +224,12 @@ the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
 figure out what your code is doing!
 
 In addition to the `Debug` trait, Rust has provided a number of traits for us
-to use with the `derive` annotation that can add useful behavior to our custom
+to use with the `derive` attribute that can add useful behavior to our custom
 types. Those traits and their behaviors are listed in [Appendix C][app-c]<!--
 ignore -->. We’ll cover how to implement these traits with custom behavior as
-well as how to create your own traits in Chapter 10.
+well as how to create your own traits in Chapter 10. There are also many
+attributes other than `derive`; for more information, see [the “Attributes”
+section of the Rust Reference][attributes].
 
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle`
@@ -240,3 +242,4 @@ continue to refactor this code by turning the `area` function into an `area`
 [println]: ../std/macro.println.html
 [dbg]: ../std/macro.dbg.html
 [err]: ch12-06-writing-to-stderr-instead-of-stdout.html
+[attributes]: ../reference/attributes.html
