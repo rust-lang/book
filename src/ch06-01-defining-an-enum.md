@@ -79,7 +79,12 @@ variants will have associated `String` values:
 ```
 
 We attach data to each variant of the enum directly, so there is no need for an
-extra struct.
+extra struct. Here it’s also easier to see another detail of how enums work:
+the name of each enum variant that we define also becomes a function that
+constructs an instance of the enum. That is, `IpAddr::V4()` is a function call
+that takes a `String` argument and returns an instance of the `IpAddr` type. We
+automatically get this constructor function defined as a result of defining the
+enum.
 
 There’s another advantage to using an enum rather than a struct: each variant
 can have different types and amounts of associated data. Version four type IP
