@@ -1,30 +1,31 @@
-# The Rust Programming Language
+# El lenguaje de programación Rust
 
-![Build Status](https://github.com/rust-lang/book/workflows/CI/badge.svg)
+![Status de compilación](https://github.com/rust-lang/book/workflows/CI/badge.svg)
 
-This repository contains the source of "The Rust Programming Language" book.
+Este repositorio contiene el código fuente del libro "The Rust Programming Language".
 
-[The book is available in dead-tree form from No Starch Press][nostarch].
+[El libro está disponible en formato de archivo fijo en No Starch Press.][nostarch].
 
 [nostarch]: https://nostarch.com/rust
 
-You can also read the book for free online. Please see the book as shipped with
-the latest [stable], [beta], or [nightly] Rust releases. Be aware that issues
-in those versions may have been fixed in this repository already, as those
-releases are updated less frequently.
+También puede leer el libro gratuitamente en línea. Por favor, vea el libro tal y como se envía con
+las últimas versiones [estable], [beta], o [nightly] Ten en cuenta que los problemas 
+ de esas versiones pueden haber sido ya corregidos en este repositorio, ya que esas 
+ versiones se actualizan con menos frecuencia.
 
-[stable]: https://doc.rust-lang.org/stable/book/
+[estable]: https://doc.rust-lang.org/stable/book/
 [beta]: https://doc.rust-lang.org/beta/book/
 [nightly]: https://doc.rust-lang.org/nightly/book/
 
-See the [releases] to download just the code of all the code listings that appear in the book.
+Vea las [versiones] para descargar sólo el código de todos los listados de código que aparecen en el libro.
 
-[releases]: https://github.com/rust-lang/book/releases
+[versiones]: https://github.com/rust-lang/book/releases
 
-## Requirements
+## Requisitos
 
-Building the book requires [mdBook], ideally the same version that
-rust-lang/rust uses in [this file][rust-mdbook]. To get it:
+La construcción del libro requiere  [mdBook], preferiblemente la misma versión que 
+utiliza rust-lang/rust en [este archivo][rust-mdbook]. Para conseguirlo: 
+
 
 [mdBook]: https://github.com/rust-lang-nursery/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
@@ -33,16 +34,16 @@ rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 $ cargo install mdbook --vers [version-num]
 ```
 
-## Building
+## crear
 
-To build the book, type:
+Para crear el libro, escriba:
 
 ```bash
 $ mdbook build
 ```
 
-The output will be in the `book` subdirectory. To check it out, open it in
-your web browser.
+El resultado estará en el subdirectorio del `book`. Para comprobarlo, ábralo en 
+su navegador web.
 
 _Firefox:_
 ```bash
@@ -60,34 +61,35 @@ $ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
 $ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
-To run the tests:
-
+Para ejecutar las pruebas: 
 ```bash
 $ mdbook test
 ```
 
-## Contributing
+## Forma de colaborar
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+Nos encantaría que nos ayudaras.[CONTRIBUTING.md][contrib] ara conocer el tipo de 
+contribuciones que buscamos.
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
-### Translations
+### Traducciones
 
-We'd love help translating the book! See the [Translations] label to join in
-efforts that are currently in progress. Open a new issue to start working on
-a new language! We're waiting on [mdbook support] for multiple languages
-before we merge any in, but feel free to start!
+Nos encantaría que nos ayudaras a traducir el libro. Consulte la etiqueta [Traducciones] 
+para unirse a los esfuerzos que se están llevando a cabo actualmente. Abra una nueva edición
+para empezar a trabajar en un nuevo idioma. Estamos esperando a que el [mdbook] sea 
+compatible con varios idiomas antes de fusionar alguno, pero ¡no dudes en empezar!
+Revisión ortográfica
 
-[Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang-nursery/mdBook/issues/5
+[Traducciones]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
+[mdbook]: https://github.com/rust-lang-nursery/mdBook/issues/5
 
-## Spellchecking
+## Revisión ortográfica
 
-To scan source files for spelling errors, you can use the `spellcheck.sh`
-script available in the `ci` directory. It needs a dictionary of valid words,
-which is provided in `ci/dictionary.txt`. If the script produces a false
-positive (say, you used word `BTreeMap` which the script considers invalid),
-you need to add this word to `ci/dictionary.txt` (keep the sorted order for
-consistency).
+Para analizar los archivos fuente en busca de errores ortográficos, 
+puede utilizar el script `spellcheck.sh` disponible en el directorio `ci`.
+Necesita un diccionario de palabras válidas, que se proporciona en `ci/dictionary.txt.` 
+Si el script produce un falso positivo (por ejemplo, usted utilizó la palabra `
+BTreeMap`, que el script considera inválida), debe añadiresta 
+palabra a `ci/dictionary.txt`(mantenga el orden ordenado para mantener la coherencia).
+
