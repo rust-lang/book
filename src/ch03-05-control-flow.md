@@ -352,9 +352,9 @@ index < 4`, the code would panic. Using the `for` loop, you wouldn’t need to
 remember to change any other code if you changed the number of values in the
 array.
 
-The safety and conciseness of `for` loops make them the most commonly used loop
-construct in Rust. Even in situations in which you want to run some code a
-certain number of times, as in the countdown example that used a `while` loop
+The safety and conciseness of `for` loops makes them the most commonly used
+loop construct in Rust. Even in situations in which you want to run some code
+a certain number of times, as in the countdown example that used a `while` loop
 in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
 would be to use a `Range`, which is a type provided by the standard library
 that generates all numbers in sequence starting from one number and ending
