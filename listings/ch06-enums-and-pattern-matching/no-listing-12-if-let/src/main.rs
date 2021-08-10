@@ -1,8 +1,8 @@
 fn main() {
     // ANCHOR: here
-    let some_u8_value = Some(0u8);
-    if let Some(3) = some_u8_value {
-        println!("three");
+    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {}", max);
     }
     // ANCHOR_END: here
 }
