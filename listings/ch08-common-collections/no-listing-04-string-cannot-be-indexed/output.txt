@@ -1,0 +1,19 @@
+$ cargo run
+   Compiling collections v0.1.0 (file:///projects/collections)
+error[E0277]: the type `str` cannot be indexed by `{integer}`
+ --> src/main.rs:4:19
+  |
+4 |     let answer = &hello[0];
+  |                   ^^^^^^^^ string indices are ranges of `usize`
+  |
+  = help: the trait `SliceIndex<str>` is not implemented for `{integer}`
+  = note: you can use `.chars().nth()` or `.bytes().nth()`
+          for more information, see chapter 8 in The Book: <https://doc.rust-lang.org/book/ch08-02-strings.html#indexing-into-strings>
+  = note: required because of the requirements on the impl of `Index<{integer}>` for `str`
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0277`.
+error: could not compile `collections`
+
+To learn more, run the command again with --verbose.
