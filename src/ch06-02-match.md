@@ -183,29 +183,67 @@ possibility in order for the code to be valid. Especially in the case of
 `None` case, it protects us from assuming that we have a value when we might
 have null, thus making the billion-dollar mistake discussed earlier impossible.
 
-### The `_` Placeholder
+### Catch-all Patterns and the `_` Placeholder
 
-Rust also has a pattern we can use when we don’t want to list all possible
-values. For example, a `u8` can have valid values of 0 through 255. If we only
-care about the values 1, 3, 5, and 7, we don’t want to have to list out 0, 2,
-4, 6, 8, 9 all the way up to 255. Fortunately, we don’t have to: we can use the
-special pattern `_` instead:
+Let’s look at an example where we want to take special actions for a few
+particular values, but for all other values take one default action. Imagine
+we’re implementing a game where if you get a value of 3 on a dice roll, your
+player doesn’t move, but instead gets a new fancy hat. If you roll a 7, your
+player loses a fancy hat. For all other values, your player moves that number
+of spaces on the game board. Here’s a `match` that implements that logic, with
+the result of the dice roll hardcoded rather than a random value, and all other
+logic represented by functions without bodies because actually implementing
+them is out of scope for this example:
 
 ```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-11-underscore-placeholder/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-15-binding-catchall/src/main.rs:here}}
 ```
 
-The `_` pattern will match any value. By putting it after our other arms, the
-`_` will match all the possible cases that aren’t specified before it. The `()`
-is just the unit value (the empty tuple type we mentioned in [“The Tuple
-Type”][tuples]<!-- ignore --> section), so nothing will happen in the `_` case.
-As a result, we can say that we want to do nothing for all the possible values
-that we don’t list before the `_` placeholder.
+For the first two arms, the patterns are the literal values 3 and 7. For the
+last arm that covers every other possible value, the pattern is the variable
+we’ve chosen to name `other`. The code that runs for the `other` arm uses the
+variable by passing it to the `move_player` function.
 
-However, the `match` expression can be a bit wordy in a situation in which we
-care about only *one* of the cases. For this situation, Rust provides `if let`.
+This code compiles, even though we haven’t listed all the possible values a
+`u8` can have, because the last pattern will match all values not specifically
+listed. This catch-all pattern meets the requirement that `match` must be
+exhaustive. Note that we have to put the catch-all arm last because the
+patterns are evaluated in order. Rust will warn us if we add arms after a
+catch-all because those later arms would never match!
 
-More about patterns and matching can be found in [chapter 18][ch18-00-patterns].
+Rust also has a pattern we can use when we don’t want to use the value in the
+catch-all pattern: `_`, which is a special pattern that matches any value and
+does not bind to that value. This tells Rust we aren’t going to use the value,
+so Rust won’t warn us about an unused variable.
+
+Let’s change the rules of the game to be that if you roll anything other than
+a 3 or a 7, you must roll again. We don’t need to use the value in that case,
+so we can change our code to use `_` instead of the variable named `other`:
+
+```rust
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-16-underscore-catchall/src/main.rs:here}}
+```
+
+This example also meets the exhaustiveness requirement because we’re explicitly
+ignoring all other values in the last arm; we haven’t forgotten anything.
+
+If we change the rules of the game one more time, so that nothing else happens
+on your turn if you roll anything other than a 3 or a 7, we can express that
+by using the unit value (the empty tuple type we mentioned in [“The Tuple
+Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
+
+```rust
+{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-17-underscore-unit/src/main.rs:here}}
+```
+
+Here, we’re telling Rust explicitly that we aren’t going to use any other value
+that doesn’t match a pattern in an earlier arm, and we don’t want to run any
+code in this case.
+
+There’s more about patterns and matching that we’ll cover in [Chapter
+18][ch18-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
+`if let` syntax, which can be useful in situations where the `match` expression
+is a bit wordy.
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
 [ch18-00-patterns]: ch18-00-patterns.html
