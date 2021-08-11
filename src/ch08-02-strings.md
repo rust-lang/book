@@ -263,8 +263,7 @@ an index into the string’s bytes will not always correlate to a valid Unicode
 scalar value. To demonstrate, consider this invalid Rust code:
 
 ```rust,ignore,does_not_compile
-let hello = "Здравствуйте";
-let answer = &hello[0];
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-04-string-cannot-be-indexed/src/main.rs:here}}
 ```
 
 What should the value of `answer` be? Should it be `З`, the first letter? When
