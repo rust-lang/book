@@ -19,13 +19,24 @@ body.ayu .not_desired_behavior {
   background: #501f21;
 }
 
-.ferris {
+.ferris-container {
   position: absolute;
   z-index: 99;
   right: 5px;
   top: 30px;
-	width: 10%;
-	height: auto;
+}
+
+.ferris {
+  vertical-align: top;
+  margin-left: 0.5em;
+}
+
+.ferris-large {
+  width: 4.5em;
+}
+
+.ferris-small {
+  width: 3em;
 }
 
 .ferris-explain {

@@ -19,19 +19,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-function attachFerrises (type) {
+function attachFerrises(type) {
   var elements = document.getElementsByClassName(type.attr)
 
   for (var codeBlock of elements) {
-    var lines = codeBlock.textContent.split(/\r|\r\n|\n/).length - 1;
-
-    if (lines >= 4) {
-      attachFerris(codeBlock, type)
+    var lines = codeBlock.innerText.replace(/\n$/, '').split(/\n/).length
+    var size = 'large'
+    if (lines < 4) {
+      size = 'small'
     }
+
+    var container = prepareFerrisContainer(codeBlock, size == 'small')
+    container.appendChild(createFerris(type, size))
   }
 }
 
-function attachFerris (element, type) {
+function prepareFerrisContainer(element, useButtons) {
+  var foundButtons = element.parentElement.querySelector('.buttons')
+  if (useButtons && foundButtons) {
+    return foundButtons
+  }
+
+  var div = document.createElement('div')
+  div.classList.add('ferris-container')
+
+  element.parentElement.insertBefore(div, element)
+
+  return div
+}
+
+function createFerris(type, size) {
   var a = document.createElement('a')
   a.setAttribute('href', 'ch00-00-introduction.html#ferris')
   a.setAttribute('target', '_blank')
@@ -39,9 +56,10 @@ function attachFerris (element, type) {
   var img = document.createElement('img')
   img.setAttribute('src', 'img/ferris/' + type.attr + '.svg')
   img.setAttribute('title', type.title)
-  img.className = 'ferris'
+  img.classList.add('ferris')
+  img.classList.add('ferris-' + size)
 
   a.appendChild(img)
 
-  element.parentElement.insertBefore(a, element)
+  return a
 }
