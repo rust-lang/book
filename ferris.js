@@ -23,15 +23,23 @@ function attachFerrises (type) {
   var elements = document.getElementsByClassName(type.attr)
 
   for (var codeBlock of elements) {
-    var lines = codeBlock.textContent.split(/\r|\r\n|\n/).length - 1;
+    var lines = 0;
+    for (var child of codeBlock.childNodes) {
+      if(child.nodeType ===  Node.ELEMENT_NODE && child.classList.contains('boring')) {
+        continue;
+      }
 
-    if (lines >= 4) {
-      attachFerris(codeBlock, type)
+      var text = child.textContent;
+      if(/\r|\r\n|\n/.exec(text)) {
+        lines += text.split(/\r|\r\n|\n/).length -1;
+      }
     }
+
+    attachFerris(codeBlock, type, lines)
   }
 }
 
-function attachFerris (element, type) {
+function attachFerris (element, type, lines) {
   var a = document.createElement('a')
   a.setAttribute('href', 'ch00-00-introduction.html#ferris')
   a.setAttribute('target', '_blank')
@@ -40,6 +48,11 @@ function attachFerris (element, type) {
   img.setAttribute('src', 'img/ferris/' + type.attr + '.svg')
   img.setAttribute('title', type.title)
   img.className = 'ferris'
+
+  if(lines < 4) {
+    img.style.width = "30px"
+    img.style.height = "30px"
+  }
 
   a.appendChild(img)
 

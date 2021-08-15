@@ -22,8 +22,8 @@ body.ayu .not_desired_behavior {
 .ferris {
   position: absolute;
   z-index: 99;
-  right: 5px;
-  top: 30px;
+  right: 60px;
+  top: 5px;
 	width: 10%;
 	height: auto;
 }
