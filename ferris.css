@@ -29,6 +29,7 @@ body.ayu .not_desired_behavior {
 .ferris {
   vertical-align: top;
   margin-left: 0.5em;
+  height: auto;
 }
 
 .ferris-large {
