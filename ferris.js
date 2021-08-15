@@ -23,11 +23,7 @@ function attachFerrises (type) {
   var elements = document.getElementsByClassName(type.attr)
 
   for (var codeBlock of elements) {
-    var lines = codeBlock.textContent.split(/\r|\r\n|\n/).length - 1;
-
-    if (lines >= 4) {
-      attachFerris(codeBlock, type)
-    }
+    attachFerris(codeBlock, type)
   }
 }
 
