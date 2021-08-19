@@ -83,10 +83,12 @@ body.
 expect an iterator</span>
 
 The standard library documentation for the `env::args` function shows that the
-type of the iterator it returns is `std::env::Args`. We’ve updated the
-signature of the `Config::new` function so the parameter `args` has the type
-`std::env::Args` instead of `&[String]`. Because we’re taking ownership of
-`args` and we’ll be mutating `args` by iterating over it, we can add the `mut`
+type of the iterator it returns is `std::env::Args`. You can also use
+`impl Iterator<Item=String>` instead. Then you can pass `Args` normally and it's
+easy to mock `std::env::Args` arguments to test(pass a `vec::IntoIter<String>`).
+We’ve updated the signature of the `Config::new` function so the parameter `args`
+has the type `std::env::Args` instead of `&[String]`. Because we’re taking ownership
+of `args` and we’ll be mutating `args` by iterating over it, we can add the `mut`
 keyword into the specification of the `args` parameter to make it mutable.
 
 We also needed to specify that the string slice error type can now only have
