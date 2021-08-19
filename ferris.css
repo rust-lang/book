@@ -28,7 +28,7 @@ body.ayu .not_desired_behavior {
 
 .ferris {
   vertical-align: top;
-  margin-left: 0.5em;
+  margin-left: 0.2em;
   height: auto;
 }
 
@@ -37,7 +37,7 @@ body.ayu .not_desired_behavior {
 }
 
 .ferris-small {
-  width: 3em;
+  width: 2.3em;
 }
 
 .ferris-explain {
