@@ -8,6 +8,6 @@ fn main() {
     scores.entry(String::from("Yellow")).or_insert(50);
     scores.entry(String::from("Blue")).or_insert(50);
 
-    println!("{:?}", scores);
+    dbg!(scores);
     // ANCHOR_END: here
 }

@@ -11,6 +11,6 @@ fn main() {
         *count += 1;
     }
 
-    println!("{:?}", map);
+    dbg!(map);
     // ANCHOR_END: here
 }
