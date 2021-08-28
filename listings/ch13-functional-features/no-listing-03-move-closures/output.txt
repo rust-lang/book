@@ -5,14 +5,14 @@ error[E0382]: borrow of moved value: `x`
   |
 2 |     let x = vec![1, 2, 3];
   |         - move occurs because `x` has type `Vec<i32>`, which does not implement the `Copy` trait
-3 | 
+3 |
 4 |     let equal_to_x = move |z| z == x;
   |                      --------      - variable moved due to use in closure
   |                      |
   |                      value moved into closure here
-5 | 
-6 |     println!("can't use x here: {:?}", x);
-  |                                        ^ value borrowed here after move
+...
+7 |     dbg!(x);
+|            ^ value used here after move
 
 error: aborting due to previous error
 
