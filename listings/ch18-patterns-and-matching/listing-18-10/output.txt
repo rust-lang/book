@@ -4,7 +4,7 @@ warning: irrefutable `if let` pattern
  --> src/main.rs:2:5
   |
 2 | /     if let x = 5 {
-3 | |         println!("{}", x);
+3 | |         dbg!(x);
 4 | |     };
   | |_____^
   |

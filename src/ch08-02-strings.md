@@ -361,7 +361,7 @@ to access each element:
 
 ```rust
 for c in "नमस्ते".chars() {
-    println!("{}", c);
+    dbg!(c);
 }
 ```
 
@@ -381,7 +381,7 @@ domain:
 
 ```rust
 for b in "नमस्ते".bytes() {
-    println!("{}", b);
+    dbg!(b);
 }
 ```
 
