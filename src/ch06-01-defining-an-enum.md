@@ -217,6 +217,14 @@ property is pervasive, it’s extremely easy to make this kind of error.
 However, the concept that null is trying to express is still a useful one: a
 null is a value that is currently invalid or absent for some reason.
 
+> ### Examples for absent values
+> It is not simple to grasp the concept of an absent value but a good
+> example of that will be the one for environment variables.  Let's say
+> you want to get the environment variable called ENV_VAR, this environment
+> variable can be either present or it can be undefined as the variable was
+> not set.  This is an example for a value that a function could return
+> or that it can be absent and in this case return `None`.
+
 The problem isn’t really with the concept but with the particular
 implementation. As such, Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
