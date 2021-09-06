@@ -650,7 +650,7 @@ impl PendingReviewPost {
 질질 끌지 않게될 겁니다. `PendingReviewPost` 구조체는 `content`
 메소드의 정의를 갖지 않기 때문에, 그의 내용물을 읽으려는 시도는 `DraftPost`와
 마찬가지로 컴파일 에러를 발생시킵니다. `content` 메소드를 정의하고 있는 게시된
-`Post` 인스턴스를 얻을 수 있는 유일한 방법은 `PendingReiewPost`의
+`Post` 인스턴스를 얻을 수 있는 유일한 방법은 `PendingReviewPost`의
 `approve` 메소드를 호출하는 것이고, `PendingReviewPost`를 얻을 수
 있는 유일한 방법은 `DraftPost`의 `request_review`를 호출하는 것이기에,
 우리는 이제 블로그 게시물의 작업 흐름을 타입 시스템으로 인코딩했습니다.
