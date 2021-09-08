@@ -376,7 +376,11 @@ fn handle_connection(mut stream: TcpStream) {
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
-    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+    let response = format!(
+        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
+        contents.len(),
+        contents
+    );
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
@@ -391,8 +395,9 @@ body에 넣고 전송하기</span>
 12장 (예제 12-4)의 I/O 프로젝트에서
 파일 내용을 읽을때 작성해봤으니 익숙하실 겁니다.
 
-다음으로, 우린 `format!` 을 이용해 응답 데이터의 body부분에
-파일의 내용을 추가했습니다.
+다음으로, 우린 `format!` 을 이용해 응답 데이터의 body부분에 파일의 내용을 추가했습니다.
+HTTP 응답이 유효함을 확실히 하기 위해 우리는 응답 body의 크기로 설정된 `Content-Length` 헤더를 추가했는데,
+이 경우에는 `hello.html`의 크기입니다.
 
 이 코드를 `cargo run` 을 이용해 실행하고 브라우저로 `127.0.0.1:7878` 로 접속해보세요,
 여러분이 작성한 HTML이 화면에 나타날 것입니다!
@@ -434,7 +439,11 @@ fn handle_connection(mut stream: TcpStream) {
         let mut contents = String::new();
         file.read_to_string(&mut contents).unwrap();
 
-        let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+        let response = format!(
+            "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
+            contents.len(),
+            contents
+        );
 
         stream.write(response.as_bytes()).unwrap();
         stream.flush().unwrap();
@@ -480,13 +489,18 @@ fn handle_connection(mut stream: TcpStream) {
 // --생략--
 
 } else {
-    let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+    let status_line = "HTTP/1.1 404 NOT FOUND";
     let mut file = File::open("404.html").unwrap();
     let mut contents = String::new();
 
     file.read_to_string(&mut contents).unwrap();
 
-    let response = format!("{}{}", status_line, contents);
+    let response = format!(
+        "{}\r\nContent-Length: {}\r\n\r\n{}",
+        status_line,
+        contents.len(),
+        contents
+    );
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
@@ -553,9 +567,9 @@ fn handle_connection(mut stream: TcpStream) {
     // --생략--
 
     let (status_line, filename) = if buffer.starts_with(get) {
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+        ("HTTP/1.1 200 OK", "hello.html")
     } else {
-        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
+        ("HTTP/1.1 404 NOT FOUND", "404.html")
     };
 
     let mut file = File::open(filename).unwrap();
@@ -563,7 +577,12 @@ fn handle_connection(mut stream: TcpStream) {
 
     file.read_to_string(&mut contents).unwrap();
 
-    let response = format!("{}{}", status_line, contents);
+    let response = format!(
+        "{}\r\nContent-Length: {}\r\n\r\n{}",
+        status_line,
+        contents.len(),
+        contents
+    );
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
