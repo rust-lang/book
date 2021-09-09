@@ -48,9 +48,9 @@ yet.
 function we wish we had</span>
 
 This test searches for the string `"duct"`. The text we’re searching is three
-lines, only one of which contains `"duct"` (Note that the backslash after the
+lines, only one of which contains `"duct"`. (Note that the backslash after the
 opening double quote tells Rust not to put a newline character at the beginning
-of the contents of this string literal). We assert that the value returned from
+of the contents of this string literal.) We assert that the value returned from
 the `search` function contains only the line we expect.
 
 We aren’t able to run this test and watch it fail because the test doesn’t even
