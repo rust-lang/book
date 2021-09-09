@@ -136,7 +136,7 @@ parameters with trait bounds.
 |--------|-------------|
 | `T: U` | Generic parameter `T` constrained to types that implement `U` |
 | `T: 'a` | Generic type `T` must outlive lifetime `'a` (meaning the type cannot transitively contain any references with lifetimes shorter than `'a`) |
-| `T : 'static` | Generic type `T` contains no borrowed references other than `'static` ones |
+| `T: 'static` | Generic type `T` contains no borrowed references other than `'static` ones |
 | `'b: 'a` | Generic lifetime `'b` must outlive lifetime `'a` |
 | `T: ?Sized` | Allow generic type parameter to be a dynamically sized type |
 | `'a + trait`, `trait + trait` | Compound type constraint |
