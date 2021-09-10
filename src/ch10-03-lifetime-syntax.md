@@ -193,10 +193,10 @@ lifetime.
 Now let’s examine lifetime annotations in the context of the `longest`
 function. As with generic type parameters, we need to declare generic lifetime
 parameters inside angle brackets between the function name and the parameter
-list. The constraint we want to express in this signature is that all the
-references in the parameters and the return value must have the same lifetime.
-We’ll name the lifetime `'a` and then add it to each reference, as shown in
-Listing 10-22.
+list. The constraint we want to express in this signature is that the two
+parameters passed to this function need to live at least as long as lifetime
+`'a` and so will the return value! We’ll name the lifetime `'a` and then 
+add it to each reference, as shown in Listing 10-22.
 
 <span class="filename">Filename: src/main.rs</span>
 
