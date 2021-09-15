@@ -100,7 +100,7 @@ another crate to implement it, which it is because we put the `pub` keyword
 before `trait` in Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
-trait on a type only if either the trait or the type is local to our crate.
+trait on a type only if the trait or the type is local to our crate.
 For example, we can implement standard library traits like `Display` on a
 custom type like `Tweet` as part of our `aggregator` crate functionality,
 because the type `Tweet` is local to our `aggregator` crate. We can also
