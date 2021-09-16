@@ -12,8 +12,7 @@ warning: irrefutable `if let` pattern
   = note: this pattern will always match, so the `if let` is useless
   = help: consider replacing the `if let` with a `let`
 
-warning: 1 warning emitted
-
+warning: `patterns` (bin "patterns") generated 1 warning
     Finished dev [unoptimized + debuginfo] target(s) in 0.39s
      Running `target/debug/patterns`
 5

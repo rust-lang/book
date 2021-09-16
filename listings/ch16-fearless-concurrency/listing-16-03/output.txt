@@ -21,9 +21,5 @@ help: to force the closure to take ownership of `v` (and any other referenced va
 6 |     let handle = thread::spawn(move || {
   |                                ^^^^^^^
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0373`.
-error: could not compile `threads`
-
-To learn more, run the command again with --verbose.
+error: could not compile `threads` due to previous error

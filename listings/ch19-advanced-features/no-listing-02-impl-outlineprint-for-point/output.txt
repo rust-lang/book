@@ -12,9 +12,5 @@ error[E0277]: `Point` doesn't implement `std::fmt::Display`
    = help: the trait `std::fmt::Display` is not implemented for `Point`
    = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `traits-example`
-
-To learn more, run the command again with --verbose.
+error: could not compile `traits-example` due to previous error

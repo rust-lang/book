@@ -6,9 +6,5 @@ error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
 10 |     let pool = ThreadPool::new(4);
    |                ^^^^^^^^^^ use of undeclared type `ThreadPool`
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0433`.
-error: could not compile `hello`
-
-To learn more, run the command again with --verbose.
+error: could not compile `hello` due to previous error

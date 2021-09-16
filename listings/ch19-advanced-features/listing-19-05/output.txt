@@ -13,9 +13,5 @@ error[E0499]: cannot borrow `*slice` as mutable more than once at a time
   |     |     first mutable borrow occurs here
   |     returning this value requires that `*slice` is borrowed for `'1`
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0499`.
-error: could not compile `unsafe-example`
-
-To learn more, run the command again with --verbose.
+error: could not compile `unsafe-example` due to previous error

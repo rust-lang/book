@@ -16,9 +16,5 @@ error[E0308]: mismatched types
    = note: expected reference `&String`
               found reference `&{integer}`
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0308`.
-error: could not compile `guessing_game`
-
-To learn more, run the command again with --verbose.
+error: could not compile `guessing_game` due to previous error

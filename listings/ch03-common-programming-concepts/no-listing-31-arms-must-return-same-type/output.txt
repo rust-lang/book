@@ -8,9 +8,5 @@ error[E0308]: `if` and `else` have incompatible types
   |                                 |
   |                                 expected because of this
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0308`.
-error: could not compile `branches`
-
-To learn more, run the command again with --verbose.
+error: could not compile `branches` due to previous error

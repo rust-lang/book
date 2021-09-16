@@ -8,9 +8,5 @@ error[E0434]: can't capture dynamic environment in a fn item
   |
   = help: use the `|| { ... }` closure form instead
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0434`.
-error: could not compile `equal-to-x`
-
-To learn more, run the command again with --verbose.
+error: could not compile `equal-to-x` due to previous error

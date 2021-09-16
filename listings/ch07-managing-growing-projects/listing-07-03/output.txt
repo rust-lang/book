@@ -24,9 +24,5 @@ note: the module `hosting` is defined here
 2  |     mod hosting {
    |     ^^^^^^^^^^^
 
-error: aborting due to 2 previous errors
-
 For more information about this error, try `rustc --explain E0603`.
-error: could not compile `restaurant`
-
-To learn more, run the command again with --verbose.
+error: could not compile `restaurant` due to 2 previous errors

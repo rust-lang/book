@@ -13,9 +13,5 @@ help: consider restricting type parameter `T`
 1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> T {
   |             ^^^^^^^^^^^^^^^^^^^^^^
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0369`.
-error: could not compile `chapter10`
-
-To learn more, run the command again with --verbose.
+error: could not compile `chapter10` due to previous error
