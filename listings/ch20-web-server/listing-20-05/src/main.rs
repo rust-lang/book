@@ -22,10 +22,12 @@ fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 1024];
     stream.read(&mut buffer).unwrap();
 
+    let status_line = "HTTP/1.1 200 OK";
     let contents = fs::read_to_string("hello.html").unwrap();
 
     let response = format!(
-        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\n\r\n{}",
+        "{}\r\nContent-Length: {}\r\n\r\n{}",
+        status_line,
         contents.len(),
         contents
     );
