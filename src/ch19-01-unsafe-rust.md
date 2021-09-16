@@ -125,6 +125,9 @@ Recall that we can create raw pointers in safe code, but we can’t *dereference
 raw pointers and read the data being pointed to. In Listing 19-3, we use the
 dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
+The convention for `unsafe` is to describe why the unsafe block is safe for
+reviewers in a comment prefixed with `safety:`.
+
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-03/src/main.rs:here}}
 ```
@@ -162,6 +165,11 @@ need to uphold when we call this function, because Rust can’t guarantee we’v
 met these requirements. By calling an unsafe function within an `unsafe` block,
 we’re saying that we’ve read this function’s documentation and take
 responsibility for upholding the function’s contracts.
+
+The convention for `unsafe fn` is to describe the necessary invariants for the
+safety of the function in a comment prefixed with `assume:`. Correspondingly
+usage in unsafe blocks is annotated with `safety:` followed by a reasoning for
+reviewers.
 
 Here is an unsafe function named `dangerous` that doesn’t do anything in its
 body:

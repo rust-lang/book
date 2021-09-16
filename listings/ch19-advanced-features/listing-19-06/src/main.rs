@@ -5,8 +5,10 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
     let len = slice.len();
     let ptr = slice.as_mut_ptr();
 
-    assert!(mid <= len);
+    assert!(mid < len);
 
+    // safety: 0 <= mid < len and slice is continous memory
+    // => pointer access valid and 2 distinct slices are created
     unsafe {
         (
             slice::from_raw_parts_mut(ptr, mid),

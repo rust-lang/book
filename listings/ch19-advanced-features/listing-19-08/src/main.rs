@@ -3,6 +3,7 @@ extern "C" {
 }
 
 fn main() {
+    // safety: function abs is defined for all inputs
     unsafe {
         println!("Absolute value of -3 according to C: {}", abs(-3));
     }
