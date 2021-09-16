@@ -76,6 +76,9 @@ find -s listings -name output.txt -print0 | while IFS= read -r -d '' f; do
         sed -i '' -E -e "${replacement}" ${full_output_path}
     fi
 
+    # Clean again
+    cargo clean
+
     cd - > /dev/null
 done
 
