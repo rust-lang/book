@@ -14,9 +14,5 @@ error[E0382]: borrow of moved value: `x`
 6 |     println!("can't use x here: {:?}", x);
   |                                        ^ value borrowed here after move
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `equal-to-x`
-
-To learn more, run the command again with --verbose.
+error: could not compile `equal-to-x` due to previous error

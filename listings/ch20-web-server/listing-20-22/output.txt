@@ -6,9 +6,5 @@ error[E0507]: cannot move out of `worker.thread` which is behind a mutable refer
 52 |             worker.thread.join().unwrap();
    |             ^^^^^^^^^^^^^ move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0507`.
-error: could not compile `hello`
-
-To learn more, run the command again with --verbose.
+error: could not compile `hello` due to previous error

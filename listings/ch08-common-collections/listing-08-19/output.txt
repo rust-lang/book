@@ -8,9 +8,5 @@ error[E0277]: the type `String` cannot be indexed by `{integer}`
   |
   = help: the trait `Index<{integer}>` is not implemented for `String`
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `collections`
-
-To learn more, run the command again with --verbose.
+error: could not compile `collections` due to previous error

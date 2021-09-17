@@ -11,9 +11,5 @@ error[E0382]: borrow of moved value: `s1`
 5 |     println!("{}, world!", s1);
   |                            ^^ value borrowed here after move
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `ownership`
-
-To learn more, run the command again with --verbose.
+error: could not compile `ownership` due to previous error

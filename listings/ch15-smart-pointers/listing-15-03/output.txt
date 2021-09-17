@@ -22,10 +22,6 @@ error[E0391]: cycle detected when computing drop-check constraints for `List`
   = note: ...which again requires computing drop-check constraints for `List`, completing the cycle
   = note: cycle used when computing dropck types for `Canonical { max_universe: U0, variables: [], value: ParamEnvAnd { param_env: ParamEnv { caller_bounds: [], reveal: UserFacing }, value: List } }`
 
-error: aborting due to 2 previous errors
-
 Some errors have detailed explanations: E0072, E0391.
 For more information about an error, try `rustc --explain E0072`.
-error: could not compile `cons-list`
-
-To learn more, run the command again with --verbose.
+error: could not compile `cons-list` due to 2 previous errors

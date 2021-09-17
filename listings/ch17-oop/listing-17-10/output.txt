@@ -8,9 +8,5 @@ error[E0277]: the trait bound `String: Draw` is not satisfied
   |
   = note: required for the cast to the object type `dyn Draw`
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `gui`
-
-To learn more, run the command again with --verbose.
+error: could not compile `gui` due to previous error

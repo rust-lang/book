@@ -12,9 +12,5 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
 8 |     println!("The first element is: {}", first);
   |                                          ----- immutable borrow later used here
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0502`.
-error: could not compile `collections`
-
-To learn more, run the command again with --verbose.
+error: could not compile `collections` due to previous error

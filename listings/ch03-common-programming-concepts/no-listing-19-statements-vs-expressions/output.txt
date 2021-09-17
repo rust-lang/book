@@ -25,9 +25,6 @@ warning: unnecessary parentheses around assigned value
   |
   = note: `#[warn(unused_parens)]` on by default
 
-error: aborting due to 2 previous errors; 1 warning emitted
-
 For more information about this error, try `rustc --explain E0658`.
-error: could not compile `functions`
-
-To learn more, run the command again with --verbose.
+warning: `functions` (bin "functions") generated 1 warning
+error: could not compile `functions` due to 2 previous errors; 1 warning emitted
