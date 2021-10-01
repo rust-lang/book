@@ -280,7 +280,7 @@ in a moment, so we need to add them as dependencies. Add the following to the
 <span class="filename">Filename: hello_macro_derive/Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/Cargo.toml:7:12}}
+{{#include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/Cargo.toml:6:12}}
 ```
 
 To start defining the procedural macro, place the code in Listing 19-31 into
