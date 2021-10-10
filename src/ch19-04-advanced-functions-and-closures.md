@@ -117,6 +117,6 @@ ignore --> in Chapter 17.
 Next, let’s look at macros!
 
 [advanced-traits]:
-ch19-03-advanced-traits.html#advanced-traits
+ch19-02-advanced-traits.html#advanced-traits
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
