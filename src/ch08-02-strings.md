@@ -400,7 +400,8 @@ than 1 byte.
 
 Getting grapheme clusters from strings is complex, so this functionality is not
 provided by the standard library. Crates are available on
-[crates.io](https://crates.io/) if this is the functionality you need.
+[crates.io](https://crates.io/)<!-- ignore --> if this is the functionality you
+need.
 
 ### Strings Are Not So Simple
 
