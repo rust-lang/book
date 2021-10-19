@@ -105,7 +105,6 @@ error[E0596]: cannot borrow immutable local variable `x` as mutable
 불변 값을 변경하기 위해 `RefCell<T>`를 이용할 수 있는 실질적인 예제를
 살펴보고 이것이 왜 유용한지를 알아봅시다.
 
-#### A Use Case for Interior Mutability: Mock Objects
 #### 내부 가변성에 대한 용례: 목(mock) 객체
 
 *테스트 더블 (test double)* 은 테스트하는 동안 또다른 타입을 대신하여
@@ -310,7 +309,7 @@ mod tests {
 <span class="caption">Listing 15-22: `RefCell<T>`를 사용하여 바깥쪽에서는
 불변으로 간주되는 동안 내부의 값을 변경하기</span>
 
-`sent_message` 필드는 이제 `Vec<String>` 대신 `RefCell<Vec<String>>`
+`sent_messages` 필드는 이제 `Vec<String>` 대신 `RefCell<Vec<String>>`
 타입입니다. `new` 함수 내에서, 우리는 빈 벡터를 감싼 새로운 `RefCell<Vec<String>>`
 인스턴스를 생성합니다.
 
