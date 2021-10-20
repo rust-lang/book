@@ -134,7 +134,7 @@ library. First, we’ll need to add a path dependency on `add-one` to
 <span class="filename">Filename: adder/Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:7:9}}
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:8}}
 ```
 
 Cargo doesn’t assume that crates in a workspace will depend on each other, so
