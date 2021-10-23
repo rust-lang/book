@@ -322,11 +322,11 @@ on them go through the `from` function, defined in the `From` trait in the
 standard library, which is used to convert errors from one type into another.
 When the `?` operator calls the `from` function, the error type received is
 converted into the error type defined in the return type of the current
-function. This is useful when a function returns one error type to represent all
-the ways a function might fail, even if parts might fail for many different
-reasons. As long as each error type implements the `from` function to define how
-to convert itself to the returned error type, the `?` operator takes care of the
-conversion automatically.
+function. This is useful when a function returns one error type to represent
+all the ways a function might fail, even if parts might fail for many different
+reasons. As long as there’s an `impl From<OtherError> for ReturnedError` to
+define the conversion in the trait’s `from` function, the `?` operator takes
+care of calling the `from` function automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the variable `f`. If an error occurs, the

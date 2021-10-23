@@ -74,7 +74,7 @@ code—plus one or more of the following:
   format.
 * Your code after this point needs to rely on not being in this bad state,
   rather than checking for the problem at every step.
-* There’s not a good way to encode this information in the types you use. We'll
+* There’s not a good way to encode this information in the types you use. We’ll
   work through an example of what we mean in the [“Encoding States and Behavior
   as Types”][encoding]<!-- ignore --> section of Chapter 17.
 
