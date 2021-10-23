@@ -69,9 +69,14 @@ assumption, guarantee, contract, or invariant has been broken, such as when
 invalid values, contradictory values, or missing values are passed to your
 code—plus one or more of the following:
 
-* The bad state is not something that’s *expected* to happen occasionally.
-* Your code after this point needs to rely on not being in this bad state.
-* There’s not a good way to encode this information in the types you use.
+* The bad state is something that is unexpected, as opposed to something that
+  will likely happen occasionally, like a user entering data in the wrong
+  format.
+* Your code after this point needs to rely on not being in this bad state,
+  rather than checking for the problem at every step.
+* There’s not a good way to encode this information in the types you use. We'll
+  work through an example of what we mean in the [“Encoding States and Behavior
+  as Types”][encoding]<!-- ignore --> section of Chapter 17.
 
 If someone calls your code and passes in values that don’t make sense, the best
 choice might be to call `panic!` and alert the person using your library to the
@@ -209,3 +214,5 @@ situations will make your code more reliable in the face of inevitable problems.
 Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code.
+
+[encoding]: ch17-03-oo-design-patterns.html#encoding-states-and-behavior-as-types
