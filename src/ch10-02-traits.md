@@ -406,7 +406,7 @@ reference, we wouldn’t need the `Clone` or `Copy` trait bounds and we could
 avoid heap allocations. Try implementing these alternate solutions on your own!
 If you get stuck with errors having to do with lifetimes, keep reading: the
 “Validating References with Lifetimes” section coming up will explain, but
-lifetimes aren't required to solve these challenges.
+lifetimes aren’t required to solve these challenges.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 

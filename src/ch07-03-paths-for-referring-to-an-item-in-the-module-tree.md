@@ -97,7 +97,7 @@ see and do everything in the restaurant in which they operate.
 Rust chose to have the module system function this way so that hiding inner
 implementation details is the default. That way, you know which parts of the
 inner code you can change without breaking outer code. But you can expose inner
-parts of child modules' code to outer ancestor modules by using the `pub`
+parts of child modules’ code to outer ancestor modules by using the `pub`
 keyword to make an item public.
 
 ### Exposing Paths with the `pub` Keyword

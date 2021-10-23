@@ -54,7 +54,7 @@ $ xcode-select --install
 ```
 
 Linux users should generally install GCC or Clang, according to their
-distribution's documentation. For example, if you use Ubuntu, you can install
+distribution’s documentation. For example, if you use Ubuntu, you can install
 the `build-essential` package.
 
 ### Installing `rustup` on Windows
@@ -64,7 +64,7 @@ the instructions for installing Rust. At some point in the installation, you’l
 receive a message explaining that you’ll also need the C++ build tools for
 Visual Studio 2013 or later. The easiest way to acquire the build tools is to
 install [Build Tools for Visual Studio 2019][visualstudio]. When asked which
-workloads to install make sure "C++ build tools" is selected and that the
+workloads to install make sure “C++ build tools” is selected and that the
 Windows 10 SDK and the English language pack components are included.
 
 [install]: https://www.rust-lang.org/tools/install
