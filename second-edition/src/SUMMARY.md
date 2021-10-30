@@ -1,6 +1,6 @@
 # 러스트 프로그래밍 언어
 
-[들어가기 앞서](foreword.md)
+[들어가기에 앞서](foreword.md)
 [소개](ch00-00-introduction.md)
 
 ## 시작하기
