@@ -273,14 +273,15 @@ possible for programmers to use `hello_macro` even if they don’t want the
 `derive` functionality.
 
 We need to declare the `hello_macro_derive` crate as a procedural macro crate.
-We’ll also need functionality from the `syn` and `quote` crates, as you’ll see
-in a moment, so we need to add them as dependencies. Add the following to the
-*Cargo.toml* file for `hello_macro_derive`:
+For this you will need to add `proc-macro = true` in the lib section of the crate's
+*Cargo.toml* file. We’ll also need functionality from the `syn` and `quote` crates, 
+as you’ll see in a moment, so we need to add them as dependencies. Add the following
+to the *Cargo.toml* file for `hello_macro_derive`:
 
 <span class="filename">Filename: hello_macro_derive/Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/Cargo.toml:7:12}}
+{{#include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/Cargo.toml:6:12}}
 ```
 
 To start defining the procedural macro, place the code in Listing 19-31 into
