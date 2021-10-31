@@ -2,7 +2,7 @@
 
 set -eu
 
-mkdir -p tmp
+mkdir -p tmp/src
 rm -rf tmp/*.md
 
 for f in src/${1:-""}*.md
