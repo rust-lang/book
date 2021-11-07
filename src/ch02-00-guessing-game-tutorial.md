@@ -84,11 +84,12 @@ standard library, known as `std`:
 
 By default, Rust has a few items defined in the standard library that it brings
 into the scope of every program. This set is called the *prelude*, and you can
-see everything in it [in the standard library documentation][prelude]. If a
-type you want to use isn’t in the prelude, you have to bring that type into
-scope explicitly with a `use` statement. Using the `std::io` library provides
-you with a number of useful features, including the ability to accept user
-input.
+see everything in it [in the standard library documentation][prelude].
+
+If a type you want to use isn’t in the prelude, you have to bring that type
+into scope explicitly with a `use` statement. Using the `std::io` library
+provides you with a number of useful features, including the ability to accept
+user input.
 
 As you saw in Chapter 1, the `main` function is the entry point into the
 program:
@@ -223,13 +224,14 @@ types are [*enumerations*][enums]<!-- ignore -->, often referred to as *enums*,
 which can have a fixed set of possibilites known as *variants*. Enums are often
 used with `match`, a conditional that makes it convenient to execute different
 code based on which variant an enum value is when the conditional is evaluated.
-Chapter 6 will cover enums in more detail.
 
-The purpose of these `Result` types is to encode error-handling information.
-For `Result`, the variants are `Ok` or `Err`. The `Ok` variant indicates the
-operation was successful, and inside `Ok` is the successfully generated value.
-The `Err` variant means the operation failed, and `Err` contains information
-about how or why the operation failed.
+Chapter 6 will cover enums in more detail. The purpose of these `Result` types
+is to encode error-handling information.
+
+`Result`’s variants are `Ok` or `Err`. The `Ok` variant indicates the operation
+was successful, and inside `Ok` is the successfully generated value. The `Err`
+variant means the operation failed, and `Err` contains information about how or
+why the operation failed.
 
 Values of the `Result` type, like values of any type, have methods defined on
 them. An instance of `io::Result` has an [`expect` method][expect]<!-- ignore
@@ -239,8 +241,7 @@ passed as an argument to `expect`. If the `read_line` method returns an `Err`,
 it would likely be the result of an error coming from the underlying operating
 system. If this instance of `io::Result` is an `Ok` value, `expect` will take
 the return value that `Ok` is holding and return just that value to you so you
-can use it. In this case, that value is the number of bytes in what the user
-this case, that value is the number of bytes in the user’s input.
+can use it. In this case, that value is the number of bytes in the user’s input.
 
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
@@ -259,7 +260,7 @@ use `expect`. You’ll learn about recovering from errors in [Chapter
 ### Printing Values with `println!` Placeholders
 
 Aside from the closing curly bracket, there’s only one more line to discuss in
-the code added so far:
+the code so far:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
@@ -339,6 +340,7 @@ this version number, or the code examples in this tutorial may not work.
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
+
 In the *Cargo.toml* file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
 tell Cargo which external crates your project depends on and which versions of
@@ -348,7 +350,7 @@ Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
 standard for writing version numbers. The number `0.8.3` is actually shorthand
 for `^0.8.3`, which means any version that is at least `0.8.3` but below
 `0.9.0`. Cargo considers these versions to have public APIs compatible with
-version `0.8.3`, and this specification ensures you'll get the latest patch
+version `0.8.3`, and this specification ensures you’ll get the latest patch
 release that will still compile with the code in this chapter. Any version
 `0.9.0` or greater is not guaranteed to have the same API as what the following
 examples use.
@@ -385,9 +387,9 @@ $ cargo build
 <span class="caption">Listing 2-2: The output from running `cargo build` after
 adding the rand crate as a dependency</span>
 
-You may see different version numbers (but they will all be compatible with
-the code, thanks to SemVer!), different lines (depending on the operating
-system), and the lines may be in a different order.
+You may see different version numbers (but they will all be compatible with the
+code, thanks to SemVer!), different lines (depending on the operating system),
+and the lines may be in a different order.
 
 When we include an external dependency, Cargo fetches the latest versions of
 everything that dependency needs from the *registry*, which is a copy of data
