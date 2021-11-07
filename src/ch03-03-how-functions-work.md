@@ -6,7 +6,7 @@ point of many programs. You’ve also seen the `fn` keyword, which allows you to
 declare new functions.
 
 Rust code uses *snake case* as the conventional style for function and variable
-names. In snake case, all letters are lowercase and underscores separate words.
+names, in which all letters are lowercase and underscores separate words.
 Here’s a program that contains an example function definition:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -15,9 +15,9 @@ Here’s a program that contains an example function definition:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-16-functions/src/main.rs}}
 ```
 
-Function definitions in Rust start with `fn` and have a set of parentheses
-after the function name. The curly brackets tell the compiler where the
-function body begins and ends.
+We define a function in Rust by entering `fn` followed by a function name and a
+set of parentheses. The curly brackets tell the compiler where the function
+body begins and ends.
 
 We can call any function we’ve defined by entering its name followed by a set
 of parentheses. Because `another_function` is defined in the program, it can be
@@ -38,18 +38,17 @@ The lines execute in the order in which they appear in the `main` function.
 First, the “Hello, world!” message prints, and then `another_function` is
 called and its message is printed.
 
-### Function Parameters
+### Parameters
 
-Functions can also be defined to have *parameters*, which are special variables
-that are part of a function’s signature. When a function has parameters, you
-can provide it with concrete values for those parameters. Technically, the
-concrete values are called *arguments*, but in casual conversation, people tend
-to use the words *parameter* and *argument* interchangeably for either the
-variables in a function’s definition or the concrete values passed in when you
-call a function.
+We can define functions to have *parameters*, which are special variables that
+are part of a function’s signature. When a function has parameters, you can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called *arguments*, but in casual conversation, people tend to use
+the words *parameter* and *argument* interchangeably for either the variables
+in a function’s definition or the concrete values passed in when you call a
+function.
 
-The following rewritten version of `another_function` shows what parameters
-look like in Rust:
+In this version of `another_function` we add a parameter:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -64,7 +63,7 @@ Try running this program; you should get the following output:
 ```
 
 The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When `5` is passed to `another_function`, the
+`x` is specified as `i32`. When we pass `5` in to `another_function`, the
 `println!` macro puts `5` where the pair of curly brackets were in the format
 string.
 
@@ -73,8 +72,8 @@ a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code to figure out what type you mean.
 
-When you want a function to have multiple parameters, separate the parameter
-declarations with commas, like this:
+When defining multiple parameters, separate the parameter declarations with
+commas, like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -98,22 +97,22 @@ run`:
 Because we called the function with `5` as the value for `value` and `'h'` as
 the value for `unit_label`, the program output contains those values.
 
-### Function Bodies Contain Statements and Expressions
+### Statements and Expressions
 
 Function bodies are made up of a series of statements optionally ending in an
-expression. So far, we’ve only covered functions without an ending expression,
-but you have seen an expression as part of a statement. Because Rust is an
-expression-based language, this is an important distinction to understand.
-Other languages don’t have the same distinctions, so let’s look at what
-statements and expressions are and how their differences affect the bodies of
-functions.
+expression. So far, the functions we've covered haven't included an ending
+expression, but you have seen an expression as part of a statement. Because
+Rust is an expression-based language, this is an important distinction to
+understand. Other languages don’t have the same distinctions, so let’s look at
+what statements and expressions are and how their differences affect the bodies
+of functions.
 
-We’ve actually already used statements and expressions. *Statements* are
-instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let’s look at some examples.
+*Statements* are instructions that perform some action and do not return a
+value. *Expressions* evaluate to a resulting value. Let’s look at some examples.
 
-Creating a variable and assigning a value to it with the `let` keyword is a
-statement. In Listing 3-1, `let y = 6;` is a statement.
+We’ve actually already used statements and expressions. Creating a variable and
+assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
+`let y = 6;` is a statement.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -152,8 +151,8 @@ you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
 expression that evaluates to the value `11`. Expressions can be part of
 statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
 expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. The block that we use to create
-new scopes, `{}`, is an expression, for example:
+expression. Calling a macro is an expression. A new scope block created with
+curly brackets is an expression, for example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -171,10 +170,10 @@ This expression:
 ```
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note the `x + 1` line without a semicolon at
-the end, which is unlike most of the lines you’ve seen so far. Expressions do
-not include ending semicolons. If you add a semicolon to the end of an
-expression, you turn it into a statement, which will then not return a value.
+as part of the `let` statement. Note that the `x + 1` line doesn't have a
+semicolon at the end, unlike most of the lines you’ve seen so far. Expressions
+do not include ending semicolons. If you add a semicolon to the end of an
+expression, you turn it into a statement, and it will then not return a value.
 Keep this in mind as you explore function return values and expressions next.
 
 ### Functions with Return Values

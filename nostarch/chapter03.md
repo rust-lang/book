@@ -37,7 +37,8 @@ that value. To illustrate this, let’s generate a new project called *variables
 in your *projects* directory by using `cargo new variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
-code with the following code; this code won’t compile just yet, we'll first examine the immutability error:
+code with the following code. This code won’t compile just yet, we'll first
+examine the immutability error.
 
 Filename: src/main.rs
 
@@ -79,20 +80,21 @@ assign twice to immutable variable `x` ``, because you tried to assign a second
 value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
-value that's designated as immutable because this very situation
-can lead to bugs. If one part of our code operates on the assumption that a
-value will never change and another part of our code changes that value, it’s
-possible that the first part of the code won’t do what it was designed to do.
-The cause of this kind of bug can be difficult to track down after the fact,
-especially when the second piece of code changes the value only *sometimes*. The Rust compiler guarantees that when you state that a value won’t change,
-it really won’t change, soc you don’t have to keep track of it yourself. Your code
-is thus easier to reason through.
+value that’s designated as immutable because this very situation can lead to
+bugs. If one part of our code operates on the assumption that a value will
+never change and another part of our code changes that value, it’s possible
+that the first part of the code won’t do what it was designed to do. The cause
+of this kind of bug can be difficult to track down after the fact, especially
+when the second piece of code changes the value only *sometimes*. The Rust
+compiler guarantees that when you state a value won’t change, it really won’t
+change, so you don’t have to keep track of it yourself. Your code is thus
+easier to reason through.
 
-But mutability can be very useful, and can make code more convenient to write. Variables are immutable only by default; as
-you did in Chapter 2, you can make them mutable by adding `mut` in front of the
-variable name. Adding `mut` also conveys
-intent to future readers of the code by indicating that other parts of the code
-will be changing this variable’s value.
+But mutability can be very useful, and can make code more convenient to write.
+Variables are immutable only by default; as you did in Chapter 2, you can make
+them mutable by adding `mut` in front of the variable name. Adding `mut` also
+conveys intent to future readers of the code by indicating that other parts of
+the code will be changing this variable’s value.
 
 For example, let’s change *src/main.rs* to the following:
 
@@ -119,25 +121,26 @@ The value of x is: 6
 ```
 
 We’re allowed to change the value that `x` binds to from `5` to `6` when `mut`
-is used. There are multiple trade-offs to consider in addition to the prevention of
-bugs. For example, in cases where you’re using large data structures, mutating
-an instance in place may be faster than copying and returning newly allocated
-instances. With smaller data structures, creating new instances and writing in
-a more functional programming style may be easier to think through, so lower
-performance might be a worthwhile penalty for gaining that clarity.
+is used. There are multiple trade-offs to consider in addition to the
+prevention of bugs. For example, in cases where you’re using large data
+structures, mutating an instance in place may be faster than copying and
+returning newly allocated instances. With smaller data structures, creating new
+instances and writing in a more functional programming style may be easier to
+think through, so lower performance might be a worthwhile penalty for gaining
+that clarity.
 
 ### Constants
 
-Like
-immutable variables, *constants* are values that are bound to a name and are not
-allowed to change, but there are a few differences between constants and
-variables.
+Like immutable variables, *constants* are values that are bound to a name and
+are not allowed to change, but there are a few differences between constants
+and variables.
 
 First, you aren’t allowed to use `mut` with constants. Constants aren’t just
-immutable by default—they’re always immutable. You declare constants using the `const` keyword instead of the `let` keyword,
-and the type of the value *must* be annotated. We’re about to cover types and
-type annotations in the next section, “Data Types,” so don’t worry about the
-details right now. Just know that you must always annotate the type.
+immutable by default—they’re always immutable. You declare constants using the
+`const` keyword instead of the `let` keyword, and the type of the value *must*
+be annotated. We’re about to cover types and type annotations in the next
+section, “Data Types,” so don’t worry about the details right now. Just know
+that you must always annotate the type.
 
 Constants can be declared in any scope, including the global scope, which makes
 them useful for values that many parts of code need to know about.
@@ -151,14 +154,14 @@ Here’s an example of a constant declaration:
 const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ```
 
-The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the result of multiplying 60
-(the number of seconds in a minute) by 60 (the number of minutes in an hour) by
-3 (the number of hours we want to count in this program). 
-Rust’s naming convention for constants is to use all uppercase with underscores
-between words. The compiler is able to evaluate a limited set of operations at
-compile time, which lets us choose to write out this value in a way that’s
-easier to understand and verify, rather than setting this constant to the value
-10,800. See the Rust Reference’s section on constant evaluation at
+The constant’s name is `THREE_HOURS_IN_SECONDS` and its value is set to the
+result of multiplying 60 (the number of seconds in a minute) by 60 (the number
+of minutes in an hour) by 3 (the number of hours we want to count in this
+program). Rust’s naming convention for constants is to use all uppercase with
+underscores between words. The compiler is able to evaluate a limited set of
+operations at compile time, which lets us choose to write out this value in a
+way that’s easier to understand and verify, rather than setting this constant
+to the value 10,800. See the Rust Reference’s section on constant evaluation at
 *https://doc.rust-lang.org/reference/const_eval.html* for more information on
 what operations can be used when declaring constants.
 
@@ -175,11 +178,12 @@ hardcoded value needed to be updated in the future.
 
 ### Shadowing
 
-As you saw in the guessing game tutorial in Chapter 2, you can declare a new variable with the
-same name as a previous variable. Rustaceans say that the first variable is
-*shadowed* by the second, which means that the second variable’s value is what
-the program sees when the variable is used. We can shadow a variable by using
-the same variable’s name and repeating the use of the `let` keyword as follows:
+As you saw in the guessing game tutorial in Chapter 2, you can declare a new
+variable with the same name as a previous variable. Rustaceans say that the
+first variable is *shadowed* by the second, which means that the second
+variable’s value is what the program sees when the variable is used. We can
+shadow a variable by using the same variable’s name and repeating the use of
+the `let` keyword as follows:
 
 Filename: src/main.rs
 
@@ -220,7 +224,14 @@ using the `let` keyword. By using `let`, we can perform a few transformations
 on a value but have the variable be immutable after those transformations have
 been completed.
 
-<!--- so, to be clear, we're not overwriting the variable, so when the shadowing variable goes out of scope the earlier variables become visible to the compiler? --->
+<!--- so, to be clear, we're not overwriting the variable, so when the
+shadowing variable goes out of scope the earlier variables become visible to
+the compiler? --->
+<!-- Well, we *are* overwriting it *in the inner scope* -- there's no way to
+access the original value from the outer scope within the inner scope after
+the shadowing. But yes, shadowing only applies to the scope it happens in,
+which is what this example illustrates. Is there something that could be
+made clearer? /Carol -->
 
 The other difference between `mut` and shadowing is that because we’re
 effectively creating a new variable when we use the `let` keyword again, we can
@@ -233,11 +244,11 @@ inputting space characters, and then we want to store that input as a number:
     let spaces = spaces.len();
 ```
 
-The first `spaces` variable is a string type
-and the second `spaces` variable is a number type. Shadowing thus spares us
-from having to come up with different names, such as `spaces_str` and
-`spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
-try to use `mut` for this, as shown here, we’ll get a compile-time error:
+The first `spaces` variable is a string type and the second `spaces` variable
+is a number type. Shadowing thus spares us from having to come up with
+different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
+the simpler `spaces` name. However, if we try to use `mut` for this, as shown
+here, we’ll get a compile-time error:
 
 ```
     let mut spaces = "   ";
@@ -304,8 +315,8 @@ An *integer* is a number without a fractional component. We used one integer
 type in Chapter 2, the `u32` type. This type declaration indicates that the
 value it’s associated with should be an unsigned integer (signed integer types
 start with `i`, instead of `u`) that takes up 32 bits of space. Table 3-1 shows
-the built-in integer types in Rust. We can use any of these variants to declare the type of an integer
-value.
+the built-in integer types in Rust. We can use any of these variants to declare
+the type of an integer value.
 
 Table 3-1: Integer Types in Rust
 
@@ -333,11 +344,14 @@ Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 -128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
 so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits
-if you’re on a 32-bit architecture.
+Additionally, the `isize` and `usize` types depend on the architecture of the
+computer your program is running on, which is denoted in the table as "arch":
+64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
+architecture.
 
 <!--- what does arch refer to? /LC --->
+<!-- architecture-dependent, I've tried to specifically make that connection,
+is this better? /Carol -->
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that number literals that can be multiple numeric types allow a type suffix,
@@ -362,15 +376,14 @@ some sort of collection.
 
 > ##### Integer Overflow
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and 255.
-> If you try to change the variable to a value outside of that range, such
-> as 256, *integer overflow* will occur, which can result in one of two behaviors. 
-> When you’re compiling in debug mode, Rust includes
-> checks for integer overflow that cause your program to *panic* at runtime if
-> this behavior occurs. Rust uses the term panicking when a program exits with
-> an error; we’ll discuss panics in more depth in the “Unrecoverable Errors
-> with `panic!`” section in
-> Chapter 9.
+> Let’s say you have a variable of type `u8` that can hold values between 0 and
+> 255. If you try to change the variable to a value outside of that range, such
+> as 256, *integer overflow* will occur, which can result in one of two
+> behaviors. When you’re compiling in debug mode, Rust includes checks for
+> integer overflow that cause your program to *panic* at runtime if this
+> behavior occurs. Rust uses the term panicking when a program exits with an
+> error; we’ll discuss panics in more depth in the “Unrecoverable Errors with
+> `panic!`” section in Chapter 9.
 >
 > When you’re compiling in release mode with the `--release` flag, Rust does
 > *not* include checks for integer overflow that cause panics. Instead, if
@@ -397,9 +410,11 @@ Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`
 because on modern CPUs it’s roughly the same speed as `f32` but is capable of
-more precision.
+more precision. All floating-point types are signed.
 
 <!--- and these don't need to be designate as signed or unsigned? /LC --->
+<!-- Yes, it's a long story why, I've added a quick statement as such at the
+end of the previous paragraph, does that work? /Carol-->
 
 Here’s an example that shows floating-point numbers in action:
 
@@ -471,8 +486,8 @@ Flow” section.
 
 #### The Character Type
 
-Rust’s
-`char` type is the language’s most primitive alphabetic type. Here's one way to use it.
+Rust’s `char` type is the language’s most primitive alphabetic type. Here's
+some examples of declaring `char` values:
 
 Filename: src/main.rs
 
@@ -484,15 +499,16 @@ fn main() {
 }
 ```
 
-Note that we specify `char` literals with
-single quotes, as opposed to string literals, which use double quotes. Rust’s `char` type is four bytes in size and represents a Unicode Scalar Value,
-which means it can represent a lot more than just ASCII. Accented letters;
-Chinese, Japanese, and Korean characters; emoji; and zero-width spaces are all
-valid `char` values in Rust. Unicode Scalar Values range from `U+0000` to
-`U+D7FF` and `U+E000` to `U+10FFFF` inclusive. However, a “character” isn’t
-really a concept in Unicode, so your human intuition for what a “character” is
-may not match up with what a `char` is in Rust. We’ll discuss this topic in
-detail in “Storing UTF-8 Encoded Text with Strings” in Chapter 8.
+Note that we specify `char` literals with single quotes, as opposed to string
+literals, which use double quotes. Rust’s `char` type is four bytes in size and
+represents a Unicode Scalar Value, which means it can represent a lot more than
+just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
+and zero-width spaces are all valid `char` values in Rust. Unicode Scalar
+Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
+However, a “character” isn’t really a concept in Unicode, so your human
+intuition for what a “character” is may not match up with what a `char` is in
+Rust. We’ll discuss this topic in detail in “Storing UTF-8 Encoded Text with
+Strings” in Chapter 8.
 
 ### Compound Types
 
@@ -540,9 +556,8 @@ variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts. Finally, the program prints the value of
 `y`, which is `6.4`.
 
-We can access a tuple
-element directly by using a period (`.`) followed by the index of the value we
-want to access. For example:
+We can also access a tuple element directly by using a period (`.`) followed by
+the index of the value we want to access. For example:
 
 Filename: src/main.rs
 
@@ -570,11 +585,11 @@ return any other value.
 #### The Array Type
 
 Another way to have a collection of multiple values is with an *array*. Unlike
-a tuple, every element of an array must have the same type. Unlike arrays in some other languages, arrays in Rust have a
-fixed length.
+a tuple, every element of an array must have the same type. Unlike arrays in
+some other languages, arrays in Rust have a fixed length.
 
-We write the values in an array as a comma-separated list
-inside square brackets:
+We write the values in an array as a comma-separated list inside square
+brackets:
 
 Filename: src/main.rs
 
@@ -585,24 +600,34 @@ fn main() {
 ```
 
 Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in Chapter 4) or when
-you want to ensure you always have a fixed number of elements. An array isn’t
-as flexible as the vector type, though. A vector is a similar collection type
+the heap (we will discuss the stack and the heap more in Chapter 4) or when you
+want to ensure you always have a fixed number of elements. An array isn’t as
+flexible as the vector type, though. A vector is a similar collection type
 provided by the standard library that *is* allowed to grow or shrink in size.
-If you’re unsure whether to use an array or a vector, chances are you should use a
-vector. Chapter 8 discusses vectors in more detail.
+If you’re unsure whether to use an array or a vector, chances are you should
+use a vector. Chapter 8 discusses vectors in more detail.
 
-However, arrays are more useful when you know the values will not need to change.
-For example, if you were coding the names of the month into a strucuter, you would use an array rather than a vector because you know it will always contain 12 elements:
+However, arrays are more useful when you know the number of elements will not
+need to change. For example, if you were using the names of the month in a
+program, you would probably use an array rather than a vector because you know
+it will always contain 12 elements:
 
 ```
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
-<!--- and is the benefit here that using the array prevents other coders making the mistake of somehow changing the values, while with a vector they could? /LC --->
 
-You write an array’s type using square brackets with the type of each element, a semicolon, and then the number of
-elements in the array, like so:
+<!--- and is the benefit here that using the array prevents other coders making
+the mistake of somehow changing the values, while with a vector they could?
+/LC --->
+<!-- No, the benefit is that you know there will always be 12 elements in the
+array. Arrays can be mutable in that other parts of the code could change
+"January" to "Jan", but they couldn't add or remove a month. Does that make
+sense? I've changed the paragraph before the code to say "number of elements"
+instead of "values", does that clear it up? /Carol -->
+
+You write an array’s type using square brackets with the type of each element,
+a semicolon, and then the number of elements in the array, like so:
 
 ```
 let a: [i32; 5] = [1, 2, 3, 4, 5];
@@ -611,9 +636,9 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 Here, `i32` is the type of each element. After the semicolon, the number `5`
 indicates the array contains five elements.
 
-You can aslo initialize an array to contain the same
-value for each element by specifying the initial value, followed by a
-semicolon, and then the length of the array in square brackets, as shown here:
+You can also initialize an array to contain the same value for each element by
+specifying the initial value, followed by a semicolon, and then the length of
+the array in square brackets, as shown here:
 
 ```
 let a = [3; 5];
@@ -646,9 +671,9 @@ get the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
-Let's see what happens if you try to access an element of an array that is past the end
-of the array. Say you run this code,
-similar to the guessing game in Chapter 2, to get an array index from the user:
+Let's see what happens if you try to access an element of an array that is past
+the end of the array. Say you run this code, similar to the guessing game in
+Chapter 2, to get an array index from the user:
 
 Filename: src/main.rs
 
@@ -730,9 +755,9 @@ fn another_function() {
 }
 ```
 
-We define a function in Rust by entering `fn` followed by a function name ans a set of parentheses.
-The curly brackets tell the compiler where the
-function body begins and ends.
+We define a function in Rust by entering `fn` followed by a function name and a
+set of parentheses. The curly brackets tell the compiler where the function
+body begins and ends.
 
 We can call any function we’ve defined by entering its name followed by a set
 of parentheses. Because `another_function` is defined in the program, it can be
@@ -760,13 +785,13 @@ called and its message is printed.
 
 ### Parameters
 
-We can define functions to have *parameters*, which are special variables
-that are part of a function’s signature. When a function has parameters, you
-can provide it with concrete values for those parameters. Technically, the
-concrete values are called *arguments*, but in casual conversation, people tend
-to use the words *parameter* and *argument* interchangeably for either the
-variables in a function’s definition or the concrete values passed in when you
-call a function.
+We can define functions to have *parameters*, which are special variables that
+are part of a function’s signature. When a function has parameters, you can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called *arguments*, but in casual conversation, people tend to use
+the words *parameter* and *argument* interchangeably for either the variables
+in a function’s definition or the concrete values passed in when you call a
+function.
 
 In this version of `another_function` we add a parameter:
 
@@ -802,8 +827,8 @@ a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code to figure out what type you mean.
 
-When defining multiple parameters, separate the parameter
-declarations with commas, like this:
+When defining multiple parameters, separate the parameter declarations with
+commas, like this:
 
 Filename: src/main.rs
 
@@ -840,20 +865,19 @@ the value for `unit_label`, the program output contains those values.
 ### Statements and Expressions
 
 Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we've covered haven't included an ending expression,
-but you have seen an expression as part of a statement. Because Rust is an
-expression-based language, this is an important distinction to understand.
-Other languages don’t have the same distinctions, so let’s look at what
-statements and expressions are and how their differences affect the bodies of
-functions.
+expression. So far, the functions we've covered haven't included an ending
+expression, but you have seen an expression as part of a statement. Because
+Rust is an expression-based language, this is an important distinction to
+understand. Other languages don’t have the same distinctions, so let’s look at
+what statements and expressions are and how their differences affect the bodies
+of functions.
 
-*Statements* are
-instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let’s look at some examples.
+*Statements* are instructions that perform some action and do not return a
+value. *Expressions* evaluate to a resulting value. Let’s look at some examples.
 
-We’ve actually already used statements and expressions. 
-Creating a variable and assigning a value to it with the `let` keyword is a
-statement. In Listing 3-1, `let y = 6;` is a statement.
+We’ve actually already used statements and expressions. Creating a variable and
+assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
+`let y = 6;` is a statement.
 
 Filename: src/main.rs
 
@@ -921,8 +945,8 @@ you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
 expression that evaluates to the value `11`. Expressions can be part of
 statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
 expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. The block that we use to create
-new scopes with `{}` is an expression, for example:
+expression. Calling a macro is an expression. A new scope block created with
+curly brackets is an expression, for example:
 
 Filename: src/main.rs
 
@@ -949,9 +973,9 @@ This expression:
 ```
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note that the `x + 1` line doesn't have a semicolon at
-the end, unlike most of the lines you’ve seen so far. Expressions do
-not include ending semicolons. If you add a semicolon to the end of an
+as part of the `let` statement. Note that the `x + 1` line doesn't have a
+semicolon at the end, unlike most of the lines you’ve seen so far. Expressions
+do not include ending semicolons. If you add a semicolon to the end of an
 expression, you turn it into a statement, and it will then not return a value.
 Keep this in mind as you explore function return values and expressions next.
 
@@ -1067,9 +1091,9 @@ would fix the error.
 ## Comments
 
 All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, programmers leave 
-*comments* in their source code that the compiler will ignore but people
-reading the source code may find useful.
+extra explanation is warranted. In these cases, programmers leave *comments* in
+their source code that the compiler will ignore but people reading the source
+code may find useful.
 
 Here’s a simple comment:
 
@@ -1114,11 +1138,10 @@ discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
 
 ## Control Flow
 
-The ability to run some code depending on if a condition is true
-and or run some code repeatedly while a condition is true are basic
-building blocks in most programming languages. The most common constructs that
-let you control the flow of execution of Rust code are `if` expressions and
-loops.
+The ability to run some code depending on if a condition is true, or run some
+code repeatedly while a condition is true, are basic building blocks in most
+programming languages. The most common constructs that let you control the flow
+of execution of Rust code are `if` expressions and loops.
 
 ### `if` Expressions
 
@@ -1143,14 +1166,13 @@ fn main() {
 }
 ```
 
-All `if` expressions start with the keyword `if`, followed by a
-condition. In this case, the condition checks whether or not the variable
-`number` has a value less than 5. We place block of code to execute if the
-condition is true immediately after the condition inside curly
-brackets. Blocks of code associated with the conditions in `if` expressions are
-sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the “Comparing the Guess to the Secret Number” section of Chapter
-2.
+All `if` expressions start with the keyword `if`, followed by a condition. In
+this case, the condition checks whether or not the variable `number` has a
+value less than 5. We place block of code to execute if the condition is true
+immediately after the condition inside curly brackets. Blocks of code
+associated with the conditions in `if` expressions are sometimes called *arms*,
+just like the arms in `match` expressions that we discussed in the “Comparing
+the Guess to the Secret Number” section of Chapter 2.
 
 Optionally, we can also include an `else` expression, which we chose
 to do here, to give the program an alternative block of code to execute should
@@ -1237,7 +1259,7 @@ Running this code will print `number was something other than zero`.
 
 #### Handling Multiple Conditions with `else if`
 
-You can set multiple conditions by combining `if` and `else` in an `else if`
+You can use multiple conditions by combining `if` and `else` in an `else if`
 expression. For example:
 
 Filename: src/main.rs
@@ -1348,12 +1370,12 @@ error[E0308]: `if` and `else` have incompatible types
 
 The expression in the `if` block evaluates to an integer, and the expression in
 the `else` block evaluates to a string. This won’t work because variables must
-have a single type, and Rust needs to know at compile time what type the `number`
-variable is, definitively, so it can verify at compile time that its type is
-valid everywhere we use `number`. Rust wouldn’t be able to do that if the type
-of `number` was only determined at runtime; the compiler would be more complex
-and would make fewer guarantees about the code if it had to keep track of
-multiple hypothetical types for any variable.
+have a single type, and Rust needs to know at compile time what type the
+`number` variable is, definitively. Knowing the type of `number` lets the
+compiler verify the type is valid everywhere we use `number`. Rust wouldn’t be
+able to do that if the type of `number` was only determined at runtime; the
+compiler would be more complex and would make fewer guarantees about the code
+if it had to keep track of multiple hypothetical types for any variable.
 
 ### Repetition with Loops
 
@@ -1410,13 +1432,13 @@ executing the loop. Recall that we did this in the guessing game in the
 “Quitting After a Correct Guess” section of Chapter 2 to exit the program when
 the user won the game by guessing the correct number.
 
-We also used `continue` in the guessing game, which in a
-loop tells the program to skip over any remaining code in this iteration of the
-loop and go to the next iteration.
+We also used `continue` in the guessing game, which in a loop tells the program
+to skip over any remaining code in this iteration of the loop and go to the
+next iteration.
 
 If you have loops within loops, `break` and `continue` apply to the innermost
-loop at that point. You can optionally specify a *loop label* on a loop that we can
-then use with `break` or `continue` to specify that  those keywords apply to
+loop at that point. You can optionally specify a *loop label* on a loop that we
+can then use with `break` or `continue` to specify that those keywords apply to
 the labeled loop instead of the innermost loop. Here’s an example with two
 nested loops:
 
@@ -1467,11 +1489,11 @@ End count = 2
 #### Returning Values from Loops
 
 One of the uses of a `loop` is to retry an operation you know might fail, such
-as checking whether a thread has completed its job. You might also need to
-pass the result of that operation out of the loop to the rest of your code. To do this, you can
-add the value you want returned after the `break` expression you use to stop
-the loop; that value will be returned out of the loop so you can use it, as
-shown here:
+as checking whether a thread has completed its job. You might also need to pass
+the result of that operation out of the loop to the rest of your code. To do
+this, you can add the value you want returned after the `break` expression you
+use to stop the loop; that value will be returned out of the loop so you can
+use it, as shown here:
 
 ```
 fn main() {
@@ -1499,14 +1521,14 @@ print the value in `result`, which in this case is 20.
 
 #### Conditional Loops with `while`
 
-A program will often need to evaluate a condition within a loop. While
-the condition is true, the loop runs. When the condition ceases to be true, the
-program calls `break`, stopping the loop. It's possible t implemen
-a structure like this using a combination of `loop`, `if`, `else`, and `break`; you could try that
-now in a program, if you’d like. However, this pattern is so common that Rust has a built-in language construct
-for it, called a `while` loop. In Listing 3-3 we use `while` to loop the program
-three times, counting down each time, and then, after the loop, print
-a message and exit.
+A program will often need to evaluate a condition within a loop. While the
+condition is true, the loop runs. When the condition ceases to be true, the
+program calls `break`, stopping the loop. It's possible to implement behavior
+like this using a combination of `loop`, `if`, `else`, and `break`; you could
+try that now in a program, if you’d like. However, this pattern is so common
+that Rust has a built-in language construct for it, called a `while` loop. In
+Listing 3-3, we use `while` to loop the program three times, counting down each
+time, and then, after the loop, print a message and exit.
 
 Filename: src/main.rs
 
@@ -1532,8 +1554,9 @@ true, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
-In theory, you can use the `while` construct to loop over the elements of a collection,
-such as an array. For example, the loop in Listing 3-4 counts up to 50 in tens.
+You can choose to use the `while` construct to loop over the elements of a
+collection, such as an array. For example, the loop in Listing 3-4 prints each
+element in the array `a`.
 
 Filename: src/main.rs
 
@@ -1573,11 +1596,11 @@ All five array values appear in the terminal, as expected. Even though `index`
 will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
-However, this approach is error prone; we could cause the program to panic if the
-index value or test condition are incorrect. For example, if you changed the definition of the
-`a` array to have four elements but forgot to update the condition to `while
-index < 4`, the code would panic. It’s also slow, because the
-compiler adds runtime code to perform the conditional check of whether the
+However, this approach is error prone; we could cause the program to panic if
+the index value or test condition are incorrect. For example, if you changed
+the definition of the `a` array to have four elements but forgot to update the
+condition to `while index < 4`, the code would panic. It’s also slow, because
+the compiler adds runtime code to perform the conditional check of whether the
 index is within the bounds of the array on every iteration through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
@@ -1602,17 +1625,17 @@ importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
-Using the `for` loop, you wouldn’t need to
-remember to change any other code if you changed the number of values in the
-array, as you would with the method used in Listing 3-4.
+Using the `for` loop, you wouldn’t need to remember to change any other code if
+you changed the number of values in the array, as you would with the method
+used in Listing 3-4.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
 certain number of times, as in the countdown example that used a `while` loop
 in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
-would be to use a `Range`, provided by the standard library, which
-generates all numbers in sequence starting from one number and ending
-before another number.
+would be to use a `Range`, provided by the standard library, which generates
+all numbers in sequence starting from one number and ending before another
+number.
 
 Here’s what the countdown would look like using a `for` loop and another method
 we’ve not yet talked about, `rev`, to reverse the range:

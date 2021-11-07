@@ -38,9 +38,8 @@ An *integer* is a number without a fractional component. We used one integer
 type in Chapter 2, the `u32` type. This type declaration indicates that the
 value it’s associated with should be an unsigned integer (signed integer types
 start with `i`, instead of `u`) that takes up 32 bits of space. Table 3-1 shows
-the built-in integer types in Rust. Each variant in the Signed and Unsigned
-columns (for example, `i16`) can be used to declare the type of an integer
-value.
+the built-in integer types in Rust. We can use any of these variants to declare
+the type of an integer value.
 
 <span class="caption">Table 3-1: Integer Types in Rust</span>
 
@@ -70,9 +69,10 @@ Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 -128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
 so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64 bits if you’re on a 64-bit architecture and 32 bits
-if you’re on a 32-bit architecture.
+Additionally, the `isize` and `usize` types depend on the architecture of the
+computer your program is running on, which is denoted in the table as "arch":
+64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
+architecture.
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that number literals that can be multiple numeric types allow a type suffix,
@@ -97,15 +97,15 @@ some sort of collection.
 
 > ##### Integer Overflow
 >
-> Let’s say you have a variable of type `u8` that can hold values between 0 and 255.
-> If you try to change the variable to a value outside of that range, such
-> as 256, *integer overflow* will occur. Rust has some interesting rules
-> involving this behavior. When you’re compiling in debug mode, Rust includes
-> checks for integer overflow that cause your program to *panic* at runtime if
-> this behavior occurs. Rust uses the term panicking when a program exits with
-> an error; we’ll discuss panics in more depth in the [“Unrecoverable Errors
-> with `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in
-> Chapter 9.
+> Let’s say you have a variable of type `u8` that can hold values between 0 and
+> 255. If you try to change the variable to a value outside of that range, such
+> as 256, *integer overflow* will occur, which can result in one of two
+> behaviors. When you’re compiling in debug mode, Rust includes checks for
+> integer overflow that cause your program to *panic* at runtime if this
+> behavior occurs. Rust uses the term panicking when a program exits with an
+> error; we’ll discuss panics in more depth in the [“Unrecoverable Errors with
+> `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
+> 9.
 >
 > When you’re compiling in release mode with the `--release` flag, Rust does
 > *not* include checks for integer overflow that cause panics. Instead, if
@@ -117,7 +117,7 @@ some sort of collection.
 > have. Relying on integer overflow’s wrapping behavior is considered an error.
 >
 > To explicitly handle the possibility of overflow, you can use these families
-> of methods that the standard library provides on primitive numeric types:
+> of methods provided by the standard library for primitive numeric types:
 >
 > - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`
 > - Return the `None` value if there is overflow with the `checked_*` methods
@@ -132,7 +132,7 @@ Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`
 because on modern CPUs it’s roughly the same speed as `f32` but is capable of
-more precision.
+more precision. All floating-point types are signed.
 
 Here’s an example that shows floating-point numbers in action:
 
@@ -180,10 +180,8 @@ Flow”][control-flow]<!-- ignore --> section.
 
 #### The Character Type
 
-So far we’ve worked only with numbers, but Rust supports letters too. Rust’s
-`char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it. (Note that `char` literals are specified with
-single quotes, as opposed to string literals, which use double quotes.)
+Rust’s `char` type is the language’s most primitive alphabetic type. Here's
+some examples of declaring `char` values:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -191,15 +189,16 @@ single quotes, as opposed to string literals, which use double quotes.)
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-09-char/src/main.rs}}
 ```
 
-Rust’s `char` type is four bytes in size and represents a Unicode Scalar Value,
-which means it can represent a lot more than just ASCII. Accented letters;
-Chinese, Japanese, and Korean characters; emoji; and zero-width spaces are all
-valid `char` values in Rust. Unicode Scalar Values range from `U+0000` to
-`U+D7FF` and `U+E000` to `U+10FFFF` inclusive. However, a “character” isn’t
-really a concept in Unicode, so your human intuition for what a “character” is
-may not match up with what a `char` is in Rust. We’ll discuss this topic in
-detail in [“Storing UTF-8 Encoded Text with Strings”][strings]<!-- ignore -->
-in Chapter 8.
+Note that we specify `char` literals with single quotes, as opposed to string
+literals, which use double quotes. Rust’s `char` type is four bytes in size and
+represents a Unicode Scalar Value, which means it can represent a lot more than
+just ASCII. Accented letters; Chinese, Japanese, and Korean characters; emoji;
+and zero-width spaces are all valid `char` values in Rust. Unicode Scalar
+Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF` inclusive.
+However, a “character” isn’t really a concept in Unicode, so your human
+intuition for what a “character” is may not match up with what a `char` is in
+Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with
+Strings”][strings]<!-- ignore --> in Chapter 8.
 
 ### Compound Types
 
@@ -239,9 +238,8 @@ variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts. Finally, the program prints the value of
 `y`, which is `6.4`.
 
-In addition to destructuring through pattern matching, we can access a tuple
-element directly by using a period (`.`) followed by the index of the value we
-want to access. For example:
+We can also access a tuple element directly by using a period (`.`) followed by
+the index of the value we want to access. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -249,7 +247,7 @@ want to access. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-This program creates a tuple, `x`, and then makes new variables for each
+This program creates the tuple `x` and then makes new variables for each
 element by using their respective indices. As with most programming languages,
 the first index in a tuple is 0.
 
@@ -261,12 +259,11 @@ return any other value.
 #### The Array Type
 
 Another way to have a collection of multiple values is with an *array*. Unlike
-a tuple, every element of an array must have the same type. Arrays in Rust are
-different from arrays in some other languages because arrays in Rust have a
-fixed length, like tuples.
+a tuple, every element of an array must have the same type. Unlike arrays in
+some other languages, arrays in Rust have a fixed length.
 
-In Rust, the values going into an array are written as a comma-separated list
-inside square brackets:
+We write the values in an array as a comma-separated list inside square
+brackets:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -275,26 +272,26 @@ inside square brackets:
 ```
 
 Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in Chapter 4) or when
-you want to ensure you always have a fixed number of elements. An array isn’t
-as flexible as the vector type, though. A vector is a similar collection type
-provided by the standard library that *is* allowed to grow or shrink in size.
-If you’re unsure whether to use an array or a vector, you should probably use a
-vector. Chapter 8 discusses vectors in more detail.
+the heap (we will discuss the stack and the heap more in [Chapter
+4][stack-and-heap]<!-- ignore -->) or when you want to ensure you always have a
+fixed number of elements. An array isn’t as flexible as the vector type,
+though. A vector is a similar collection type provided by the standard library
+that *is* allowed to grow or shrink in size. If you’re unsure whether to use an
+array or a vector, chances are you should use a vector. [Chapter
+8][vectors]<!-- ignore --> discusses vectors in more detail.
 
-An example of when you might want to use an array rather than a vector is in a
-program that needs to know the names of the months of the year. It’s very
-unlikely that such a program will need to add or remove months, so you can use
-an array because you know it will always contain 12 elements:
+However, arrays are more useful when you know the number of elements will not
+need to change. For example, if you were using the names of the month in a
+program, you would probably use an array rather than a vector because you know
+it will always contain 12 elements:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
 
-You would write an array’s type by using square brackets, and within the
-brackets include the type of each element, a semicolon, and then the number of
-elements in the array, like so:
+You write an array’s type using square brackets with the type of each element,
+a semicolon, and then the number of elements in the array, like so:
 
 ```rust
 let a: [i32; 5] = [1, 2, 3, 4, 5];
@@ -303,10 +300,9 @@ let a: [i32; 5] = [1, 2, 3, 4, 5];
 Here, `i32` is the type of each element. After the semicolon, the number `5`
 indicates the array contains five elements.
 
-Writing an array’s type this way looks similar to an alternative syntax for
-initializing an array: if you want to create an array that contains the same
-value for each element, you can specify the initial value, followed by a
-semicolon, and then the length of the array in square brackets, as shown here:
+You can also initialize an array to contain the same value for each element by
+specifying the initial value, followed by a semicolon, and then the length of
+the array in square brackets, as shown here:
 
 ```rust
 let a = [3; 5];
@@ -334,9 +330,9 @@ get the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
-What happens if you try to access an element of an array that is past the end
-of the array? Say you change the example to the following, which uses code
-similar to the guessing game in Chapter 2 to get an array index from the user:
+Let's see what happens if you try to access an element of an array that is past
+the end of the array. Say you run this code, similar to the guessing game in
+Chapter 2, to get an array index from the user:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -379,6 +375,8 @@ continuing. Chapter 9 discusses more of Rust’s error handling.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [control-flow]: ch03-05-control-flow.html#control-flow
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
+[stack-and-heap]: ch04-01-what-is-ownership.html#the-stack-and-the-heap
+[vectors]: ch08-01-vectors.html
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
 [wrapping]: ../std/num/struct.Wrapping.html
 [appendix_b]: appendix-02-operators.md
