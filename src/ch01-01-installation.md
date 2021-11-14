@@ -5,9 +5,9 @@ command line tool for managing Rust versions and associated tools. You’ll need
 an internet connection for the download.
 
 > Note: If you prefer not to use `rustup` for some reason, please see the
-> [Other Rust Installation Methods page][install] for more options.
+> [Other Rust Installation Methods page][otherinstall] for more options.
 
-[install]: https://forge.rust-lang.org/infra/other-installation-methods.html
+[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
 
 The following steps install the latest stable version of the Rust compiler.
 Rust’s stability guarantees ensure that all the examples in the book that
