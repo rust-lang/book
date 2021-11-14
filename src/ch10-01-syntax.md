@@ -241,11 +241,11 @@ point is from the point at coordinates (0.0, 0.0) and uses mathematical
 operations that are available only for floating point types.
 
 Generic type parameters in a struct definition aren’t always the same as those
-you use in that struct’s method signatures. 
-Listing 10-11 uses the generic types `X1` `Y1` for the `Point` struct and 
-`X2` `Y2` for the `mixup` method signature to make the example clearer. 
-The method creates a new `Point` instance with the `x` value from the `self` 
-`Point` (of type `X1`) and the `y` value from the passed-in `Point` (of type `Y2`).
+you use in that struct’s method signatures. Listing 10-11 uses the generic
+types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
+signature to make the example clearer. The method creates a new `Point`
+instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
+value from the passed-in `Point` (of type `Y2`).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -266,9 +266,10 @@ call will print `p3.x = 5, p3.y = c`.
 
 The purpose of this example is to demonstrate a situation in which some generic
 parameters are declared with `impl` and some are declared with the method
-definition. Here, the generic parameters `X1` and `Y1` are declared after `impl`,
-because they go with the struct definition. The generic parameters `X2` and `Y2`
-are declared after `fn mixup`, because they’re only relevant to the method.
+definition. Here, the generic parameters `X1` and `Y1` are declared after
+`impl` because they go with the struct definition. The generic parameters `X2`
+and `Y2` are declared after `fn mixup`, because they’re only relevant to the
+method.
 
 ### Performance of Code Using Generics
 
