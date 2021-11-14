@@ -91,7 +91,7 @@ $ rustup self uninstall
 
 ### Troubleshooting
 
-To check whether you have Rust installed correctly, open a shell and enter this
+To check whether you have Rust installed correctly, open a new shell that is not the one you ran the installer in and enter this
 line:
 
 ```console
@@ -105,10 +105,11 @@ stable version that has been released in the following format:
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information and you’re on Windows, check that Rust is in your `%PATH%`
-system variable. If that’s all correct and Rust still isn’t working, there are
-a number of places you can get help. The easiest is the #beginners channel on
+If you see this information, you have installed Rust successfully! If you don't
+see this information, make sure you opened a new shell before running the command.
+If it's still not working and you’re on Windows, check that Rust is in your
+`%PATH%` system variable. If that’s all correct and Rust still isn’t working, there
+are a number of places you can get help. The easiest is the #beginners channel on
 [the official Rust Discord][discord]. There, you can chat with other Rustaceans
 (a silly nickname we call ourselves) who can help you out. Other great
 resources include [the Users forum][users] and [Stack Overflow][stackoverflow].
