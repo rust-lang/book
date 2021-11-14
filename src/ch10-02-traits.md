@@ -101,12 +101,12 @@ another crate to implement it, which it is because we put the `pub` keyword
 before `trait` in Listing 10-12.
 
 One restriction to note with trait implementations is that we can implement a
-trait on a type only if either the trait or the type is local to our crate.
-For example, we can implement standard library traits like `Display` on a
-custom type like `Tweet` as part of our `aggregator` crate functionality,
+trait on a type only if at least one of the trait or the type is local to our
+crate. For example, we can implement standard library traits like `Display` on
+a custom type like `Tweet` as part of our `aggregator` crate functionality,
 because the type `Tweet` is local to our `aggregator` crate. We can also
-implement `Summary` on `Vec<T>` in our `aggregator` crate, because the
-trait `Summary` is local to our `aggregator` crate.
+implement `Summary` on `Vec<T>` in our `aggregator` crate, because the trait
+`Summary` is local to our `aggregator` crate.
 
 But we can’t implement external traits on external types. For example, we can’t
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
