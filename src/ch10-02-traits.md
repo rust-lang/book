@@ -79,7 +79,8 @@ the specific behavior that we want the methods of the trait to have for the
 particular type.
 
 After implementing the trait, we can call the methods on instances of
-`NewsArticle` and `Tweet` in the same way we call regular methods, like this:
+`NewsArticle` and `Tweet` in the same way we call regular methods. Here's an
+example of how a binary crate could use our library crate:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs:here}}
