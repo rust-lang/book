@@ -21,11 +21,11 @@ particular location and a `Tweet` that can have at most 280 characters along
 with metadata that indicates whether it was a new tweet, a retweet, or a reply
 to another tweet.
 
-We want to make a media aggregator library that can display summaries of data
-that might be stored in a `NewsArticle` or `Tweet` instance. To do this, we
-need a summary from each type, and we need to request that summary by calling a
-`summarize` method on an instance. Listing 10-12 shows the definition of a
-`Summary` trait that expresses this behavior.
+We want to make a media aggregator library crate named `aggregator` that can
+display summaries of data that might be stored in a `NewsArticle` or `Tweet`
+instance. To do this, we need a summary from each type, and we'll request
+that summary by calling a `summarize` method on an instance. Listing 10-12
+shows the definition of a public `Summary` trait that expresses this behavior.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -37,9 +37,11 @@ need a summary from each type, and we need to request that summary by calling a
 behavior provided by a `summarize` method</span>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. Inside the curly brackets, we declare the
-method signatures that describe the behaviors of the types that implement this
-trait, which in this case is `fn summarize(&self) -> String`.
+which is `Summary` in this case. We've also declared the trait as `pub` so that
+crates depending on this crate can make use of this trait too, as we'll see in
+a few examples. Inside the curly brackets, we declare the method signatures
+that describe the behaviors of the types that implement this trait, which in
+this case is `fn summarize(&self) -> String`.
 
 After the method signature, instead of providing an implementation within curly
 brackets, we use a semicolon. Each type implementing this trait must provide
@@ -78,35 +80,29 @@ after each signature, we use curly brackets and fill in the method body with
 the specific behavior that we want the methods of the trait to have for the
 particular type.
 
-After implementing the trait, we can call the methods on instances of
-`NewsArticle` and `Tweet` in the same way we call regular methods. Here's an
-example of how a binary crate could use our library crate:
+Now that the library has implemented the `Summary` trait on `NewsArticle` and
+`Tweet`, users of the crate can call the trait methods on instances of
+`NewsArticle` and `Tweet` in the same way we call regular methods. The only
+difference is that the trait has to be brought into scope as well as the types
+to get the additional trait methods. Here's an example of how a binary crate
+could use our `aggregator` library crate:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
 This code prints `1 new tweet: horse_ebooks: of course, as you probably already
 know, people`.
 
-Note that because we defined the `Summary` trait and the `NewsArticle` and
-`Tweet` types in the same *lib.rs* in Listing 10-13, they’re all in the same
-scope. Let’s say this *lib.rs* is for a crate we’ve called `aggregator` and
-someone else wants to use our crate’s functionality to implement the `Summary`
-trait on a struct defined within their library’s scope. They would need to
-bring the trait into their scope first. They would do so by specifying `use
-aggregator::Summary;`, which then would enable them to implement `Summary` for
-their type. The `Summary` trait would also need to be a public trait for
-another crate to implement it, which it is because we put the `pub` keyword
-before `trait` in Listing 10-12.
-
-One restriction to note with trait implementations is that we can implement a
-trait on a type only if at least one of the trait or the type is local to our
-crate. For example, we can implement standard library traits like `Display` on
-a custom type like `Tweet` as part of our `aggregator` crate functionality,
-because the type `Tweet` is local to our `aggregator` crate. We can also
-implement `Summary` on `Vec<T>` in our `aggregator` crate, because the trait
-`Summary` is local to our `aggregator` crate.
+Other crates that depend on the `aggregator` crate can also bring the `Summary`
+trait into scope to implement the trait on their own types. One restriction to
+note with trait implementations is that we can implement a trait on a type only
+if at least one of the trait or the type is local to our crate. For example, we
+can implement standard library traits like `Display` on a custom type like
+`Tweet` as part of our `aggregator` crate functionality, because the type
+`Tweet` is local to our `aggregator` crate. We can also implement `Summary` on
+`Vec<T>` in our `aggregator` crate, because the trait `Summary` is local to our
+`aggregator` crate.
 
 But we can’t implement external traits on external types. For example, we can’t
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
