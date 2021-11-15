@@ -229,12 +229,15 @@ know exactly how long `x` and `y` will live, only that some scope can be
 substituted for `'a` that will satisfy this signature.
 
 When annotating lifetimes in functions, the annotations go in the function
-signature, not in the function body. Rust can analyze the code within the
-function without any help. However, when a function has references to or from
-code outside that function, it becomes almost impossible for Rust to figure out
-the lifetimes of the parameters or return values on its own. The lifetimes
-might be different each time the function is called. This is why we need to
-annotate the lifetimes manually.
+signature, not in the function body. The lifetime annotations become part of
+the contract of the function, much like the types in the signature are. Having
+function signatures contain the lifetime contract means the analysis the Rust
+compiler does can be simpler. If there's a problem with the way a function is
+annotated or the way it is called, the compiler errors can point to the part of
+our code and the constraints more precisely. If, instead, the Rust compiler
+made more inferences about what we intended the relationships of the lifetimes
+to be, the compiler might only be able to point to a use of our code many steps
+away from the cause of the problem.
 
 When we pass concrete references to `longest`, the concrete lifetime that is
 substituted for `'a` is the part of the scope of `x` that overlaps with the
