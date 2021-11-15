@@ -410,7 +410,10 @@ lifetimes aren’t required to solve these challenges.
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
 traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
-`new` function. But `Pair<T>` only implements the `cmp_display` method if its
+`new` function to return a new instance of `Pair<T>` (recall from the
+["Defining Methods"][methods] section of Chapter 5 that `Self` is a type alias
+for the type of the `impl` block, which in this case is `Pair<T>`). But in the
+next `impl` block, `Pair<T>` only implements the `cmp_display` method if its
 inner type `T` implements the `PartialOrd` trait that enables comparison *and*
 the `Display` trait that enables printing.
 
@@ -469,3 +472,4 @@ lifetimes do that.
 ch04-01-what-is-ownership.html#stack-only-data-copy
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[methods]: ch05-03-method-syntax.html#defining-methods
