@@ -11,11 +11,10 @@ ways. Rust requires us to annotate the relationships using generic lifetime
 parameters to ensure the actual references used at runtime will definitely be
 valid.
 
-The concept of lifetimes is somewhat different from tools in other programming
-languages, arguably making lifetimes Rust’s most distinctive feature. Although
-we won’t cover lifetimes in their entirety in this chapter, we’ll discuss
-common ways you might encounter lifetime syntax so you can become familiar with
-the concepts.
+Annotating lifetimes is not even a concept most other programming languages
+have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
+their entirety in this chapter, we’ll discuss common ways you might encounter
+lifetime syntax so you can get introduced to the concept.
 
 ### Preventing Dangling References with Lifetimes
 
