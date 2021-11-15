@@ -13,7 +13,7 @@ that value. To illustrate this, let’s generate a new project called *variables
 in your *projects* directory by using `cargo new variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
-code with the following code. This code won’t compile just yet, we'll first
+code with the following code. This code won’t compile just yet, we’ll first
 examine the immutability error.
 
 <span class="filename">Filename: src/main.rs</span>

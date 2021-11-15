@@ -231,7 +231,7 @@ When annotating lifetimes in functions, the annotations go in the function
 signature, not in the function body. The lifetime annotations become part of
 the contract of the function, much like the types in the signature are. Having
 function signatures contain the lifetime contract means the analysis the Rust
-compiler does can be simpler. If there's a problem with the way a function is
+compiler does can be simpler. If there’s a problem with the way a function is
 annotated or the way it is called, the compiler errors can point to the part of
 our code and the constraints more precisely. If, instead, the Rust compiler
 made more inferences about what we intended the relationships of the lifetimes

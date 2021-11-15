@@ -23,7 +23,7 @@ to another tweet.
 
 We want to make a media aggregator library crate named `aggregator` that can
 display summaries of data that might be stored in a `NewsArticle` or `Tweet`
-instance. To do this, we need a summary from each type, and we'll request
+instance. To do this, we need a summary from each type, and we’ll request
 that summary by calling a `summarize` method on an instance. Listing 10-12
 shows the definition of a public `Summary` trait that expresses this behavior.
 
@@ -37,8 +37,8 @@ shows the definition of a public `Summary` trait that expresses this behavior.
 behavior provided by a `summarize` method</span>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We've also declared the trait as `pub` so that
-crates depending on this crate can make use of this trait too, as we'll see in
+which is `Summary` in this case. We’ve also declared the trait as `pub` so that
+crates depending on this crate can make use of this trait too, as we’ll see in
 a few examples. Inside the curly brackets, we declare the method signatures
 that describe the behaviors of the types that implement this trait, which in
 this case is `fn summarize(&self) -> String`.
@@ -54,7 +54,7 @@ one per line and each line ends in a semicolon.
 
 ### Implementing a Trait on a Type
 
-Now that we’ve defined the desired signatures of the `Summary` trait's methods,
+Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
 we can implement it on the types in our media aggregator. Listing 10-13 shows
 an implementation of the `Summary` trait on the `NewsArticle` struct that uses
 the headline, the author, and the location to create the return value of
@@ -84,7 +84,7 @@ Now that the library has implemented the `Summary` trait on `NewsArticle` and
 `Tweet`, users of the crate can call the trait methods on instances of
 `NewsArticle` and `Tweet` in the same way we call regular methods. The only
 difference is that the trait has to be brought into scope as well as the types
-to get the additional trait methods. Here's an example of how a binary crate
+to get the additional trait methods. Here’s an example of how a binary crate
 could use our `aggregator` library crate:
 
 ```rust,ignore
@@ -411,7 +411,7 @@ By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
 traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
 `new` function to return a new instance of `Pair<T>` (recall from the
-["Defining Methods"][methods] section of Chapter 5 that `Self` is a type alias
+[”Defining Methods”][methods] section of Chapter 5 that `Self` is a type alias
 for the type of the `impl` block, which in this case is `Pair<T>`). But in the
 next `impl` block, `Pair<T>` only implements the `cmp_display` method if its
 inner type `T` implements the `PartialOrd` trait that enables comparison *and*

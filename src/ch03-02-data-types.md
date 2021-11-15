@@ -70,7 +70,7 @@ Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on, which is denoted in the table as "arch":
+computer your program is running on, which is denoted in the table as “arch”:
 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
 architecture.
 
@@ -180,7 +180,7 @@ Flow”][control-flow]<!-- ignore --> section.
 
 #### The Character Type
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here's
+Rust’s `char` type is the language’s most primitive alphabetic type. Here’s
 some examples of declaring `char` values:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -330,7 +330,7 @@ get the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
-Let's see what happens if you try to access an element of an array that is past
+Let’s see what happens if you try to access an element of an array that is past
 the end of the array. Say you run this code, similar to the guessing game in
 Chapter 2, to get an array index from the user:
 

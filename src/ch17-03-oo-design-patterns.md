@@ -435,7 +435,7 @@ But we also have to make some small changes to `main`. The `request_review` and
 `approve` methods return new instances rather than modifying the struct they’re
 called on, so we need to add more `let post =` shadowing assignments to save
 the returned instances. We also can’t have the assertions about the draft and
-pending review posts' contents be empty strings, nor do we need them: we can’t
+pending review posts’ contents be empty strings, nor do we need them: we can’t
 compile code that tries to use the content of posts in those states any longer.
 The updated code in `main` is shown in Listing 17-21:
 

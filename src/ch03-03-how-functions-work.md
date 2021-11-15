@@ -100,7 +100,7 @@ the value for `unit_label`, the program output contains those values.
 ### Statements and Expressions
 
 Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we've covered haven't included an ending
+expression. So far, the functions we’ve covered haven’t included an ending
 expression, but you have seen an expression as part of a statement. Because
 Rust is an expression-based language, this is an important distinction to
 understand. Other languages don’t have the same distinctions, so let’s look at
@@ -170,7 +170,7 @@ This expression:
 ```
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note that the `x + 1` line doesn't have a
+as part of the `let` statement. Note that the `x + 1` line doesn’t have a
 semicolon at the end, unlike most of the lines you’ve seen so far. Expressions
 do not include ending semicolons. If you add a semicolon to the end of an
 expression, you turn it into a statement, and it will then not return a value.
