@@ -187,4 +187,4 @@ doesn’t compile.
 The source files from which this book is generated can be found on
 [GitHub][book].
 
-[book]: https://github.com/rust-lang/book/tree/master/src
+[book]: https://github.com/rust-lang/book/tree/main/src
