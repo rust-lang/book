@@ -3,29 +3,29 @@
 
 # Understanding Ownership
 
-Ownership is Rust’s most unique feature, and has deep implications for the rest
+Ownership is Rust’s most unique feature and has deep implications for the rest
 of the language. It enables Rust to make memory safety guarantees without
 needing a garbage collector, so it’s important to understand how ownership
-works in Rust. In this chapter, we’ll talk about ownership as well as several
-related features: borrowing, slices, and how Rust lays data out in memory.
+works. In this chapter, we’ll talk about ownership as well as several related
+features: borrowing, slices, and how Rust lays data out in memory.
 
 ## What Is Ownership?
 
-
-Ownership in Rust is a set of rules that governs how a program manages memory.
+*Ownership* is a set of rules that governs how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
 Some languages have garbage collection that constantly looks for no-longer used
 memory as the program runs; in other languages, the programmer must explicitly
 allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks at
-compile time. If any of the rules are violated, the program XXX
+through a system of ownership with a set of rules that the compiler checks. If
+any of the rules are violated, the program won’t compile.
 <!--- What happens if an ownership rule is violated, the program won't run? /LC -->
+<!-- It won't even *compile*, let alone run. I've updated /Carol -->
 None of the features of ownership will slow down your program while it’s
 running.
 
 Because ownership is a new concept for many programmers, it does take some time
 to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the easier you'll find it to naturally
+and the rules of the ownership system, the easier you’ll find it to naturally
 develop code that is safe and efficient. Keep at it!
 
 When you understand ownership, you’ll have a solid foundation for understanding
@@ -35,44 +35,44 @@ strings.
 
 > ### The Stack and the Heap
 >
-> Most programming languages don't requrie you to think about the stack and
-> the heap very often. But in a systems programming language like Rust, whether
-> a value is on the stack or the heap effects how the language
-> behaves and why you have to make certain decisions. Parts of ownership will
-> be described in relation to the stack and the heap later in this chapter, so
-> here is a brief explanation in preparation.
+> Many programming languages don’t require you to think about the stack and the
+> heap very often. But in a systems programming language like Rust, whether a
+> value is on the stack or the heap affects how the language behaves and why
+> you have to make certain decisions. Parts of ownership will be described in
+> relation to the stack and the heap later in this chapter, so here is a brief
+> explanation in preparation.
 >
-> Both the stack and the heap are parts of memory available to your
-> code to use at runtime, but they are structured in different ways. The stack
-> stores values in the order it gets them and removes the values in the
-> opposite order. This is referred to as *last in, first out*. Think of a stack
-> of plates: when you add more plates, you put them on top of the pile, and
-> when you need a plate, you take one off the top. Adding or removing plates
-> from the middle or bottom wouldn’t work as well! Adding data is called
-> *pushing onto the stack*, and removing data is called *popping off the stack*.
-> All data stored on the stack must have a known, fixed size. Data with an
-> unknown size at compile time or a size that might change must be stored on
-> the heap instead.
+> Both the stack and the heap are parts of memory available to your code to use
+> at runtime, but they are structured in different ways. The stack stores
+> values in the order it gets them and removes the values in the opposite
+> order. This is referred to as *last in, first out*. Think of a stack of
+> plates: when you add more plates, you put them on top of the pile, and when
+> you need a plate, you take one off the top. Adding or removing plates from
+> the middle or bottom wouldn’t work as well! Adding data is called *pushing
+> onto the stack*, and removing data is called *popping off the stack*. All
+> data stored on the stack must have a known, fixed size. Data with an unknown
+> size at compile time or a size that might change must be stored on the heap
+> instead.
 >
-> The heap is less organized: when you put data on the heap,
-> you request a certain amount of space. The memory allocator finds an empty
-> spot in the heap that is big enough, marks it as being in use, and returns a
-> *pointer*, which is the address of that location. This process is called
-> *allocating on the heap* and is sometimes abbreviated as just *allocating*.
-> Pushing values onto the stack is not considered allocating. Because the
-> pointer to the heap is a known, fixed size, you can store the pointer on the stack, but
-> when you want the actual data, you must follow the pointer. Think of being
-> seated at a restaurant. When you enter, you state the number of
-> people in your group, and the staff finds an empty table that fits everyone
-> and leads you there. If someone in your group comes late, they can ask where
-> you’ve been seated to find you.
+> The heap is less organized: when you put data on the heap, you request a
+> certain amount of space. The memory allocator finds an empty spot in the heap
+> that is big enough, marks it as being in use, and returns a *pointer*, which
+> is the address of that location. This process is called *allocating on the
+> heap* and is sometimes abbreviated as just *allocating*. Pushing values onto
+> the stack is not considered allocating. Because the pointer to the heap is a
+> known, fixed size, you can store the pointer on the stack, but when you want
+> the actual data, you must follow the pointer. Think of being seated at a
+> restaurant. When you enter, you state the number of people in your group, and
+> the staff finds an empty table that fits everyone and leads you there. If
+> someone in your group comes late, they can ask where you’ve been seated to
+> find you.
 >
 > Pushing to the stack is faster than allocating on the heap because the
-> allocator never has to search for a place to store new data; that
-> location is always at the top of the stack. Comparatively, allocating space
-> on the heap requires more work, because the allocator must first find
-> a big enough space to hold the data and then perform bookkeeping to prepare
-> for the next allocation.
+> allocator never has to search for a place to store new data; that location is
+> always at the top of the stack. Comparatively, allocating space on the heap
+> requires more work, because the allocator must first find a big enough space
+> to hold the data and then perform bookkeeping to prepare for the next
+> allocation.
 >
 > Accessing data in the heap is slower than accessing data on the stack because
 > you have to follow a pointer to get there. Contemporary processors are faster
@@ -94,8 +94,8 @@ strings.
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
 > data on the heap so you don’t run out of space are all problems that ownership
 > addresses. Once you understand ownership, you won’t need to think about the
-> stack and the heap very often, but knowing that the main purpose of ownership is to
->  manage heap data can help explain why it works the way it does.
+> stack and the heap very often, but knowing that the main purpose of ownership
+> is to manage heap data can help explain why it works the way it does.
 
 ### Ownership Rules
 
@@ -108,15 +108,15 @@ work through the examples that illustrate them:
 
 ### Variable Scope
 
-Now that we’re past basic Rust syntax, we won’t include all the `fn main() {` code in
-examples, so if you’re following along, make sure to put the following
+Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
+code in examples, so if you’re following along, make sure to put the following
 examples inside a `main` function manually. As a result, our examples will be a
 bit more concise, letting us focus on the actual details rather than
 boilerplate code.
 
 As a first example of ownership, we’ll look at the *scope* of some variables. A
-scope is the range within a program for which an item is valid. Take the following
-variable:
+scope is the range within a program for which an item is valid. Take the
+following variable:
 
 ```
 let s = "hello";
@@ -124,15 +124,15 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 shows a pseudoprogram
-with comments annotating where the variable `s` would be valid.
+which it’s declared until the end of the current *scope*. Listing 4-1 shows a
+program with comments annotating where the variable `s` would be valid.
 
 ```
-    {                      // s is not valid here, it’s not yet declared
-        let s = "hello";   // s is valid from this point forward
+{                      // s is not valid here, it’s not yet declared
+    let s = "hello";   // s is valid from this point forward.
 
-        // do stuff with s
-    }                      // this scope is now over, and s is no longer valid
+    // do stuff with s
+}                      // this scope is now over, and s is no longer valid
 ```
 
 Listing 4-1: A variable and the scope in which it is valid
@@ -154,12 +154,13 @@ covered previously are all a known size, can be stored on the stack and popped
 off the stack when their scope is over, and can be quickly and trivially copied
 to make a new, independent instance if another part of code needs to use the
 same value in a different scope. But we want to look at data that is stored on
-the heap and explore how Rust knows when to clean up that data.
+the heap and explore how Rust knows when to clean up that data, and the
+`String` type is a great example.
 
-We’ll concentrate on the parts of `String`
-that relate to ownership. These aspects also apply to other complex data types,
-whether they are provided by the standard library or created by you. We’ll
-discuss `String` in more depth in Chapter 8.
+We’ll concentrate on the parts of `String` that relate to ownership. These
+aspects also apply to other complex data types, whether they are provided by
+the standard library or created by you. We’ll discuss `String` in more depth in
+Chapter 8.
 
 We’ve already seen string literals, where a string value is hardcoded into our
 program. String literals are convenient, but they aren’t suitable for every
@@ -175,20 +176,20 @@ literal using the `from` function, like so:
 let s = String::from("hello");
 ```
 
-The double colon `::` operator allows us to namespace this
-particular `from` function under the `String` type rather than using some sort
-of name like `string_from`. We’ll discuss this syntax more in the “Method
-Syntax” section of Chapter 5 and when we talk about namespacing with modules in
-“Paths for Referring to an Item in the Module Tree” in Chapter 7.
+The double colon `::` operator allows us to namespace this particular `from`
+function under the `String` type rather than using some sort of name like
+`string_from`. We’ll discuss this syntax more in the “Method Syntax” section of
+Chapter 5 and when we talk about namespacing with modules in “Paths for
+Referring to an Item in the Module Tree” in Chapter 7.
 
 This kind of string *can* be mutated:
 
 ```
-    let mut s = String::from("hello");
+let mut s = String::from("hello");
 
-    s.push_str(", world!"); // push_str() appends a literal to a String
+s.push_str(", world!"); // push_str() appends a literal to a String
 
-    println!("{}", s); // This will print `hello, world!`
+println!("{}", s); // This will print `hello, world!`
 ```
 
 So, what’s the difference here? Why can `String` be mutated but literals
@@ -216,25 +217,26 @@ requests the memory it needs. This is pretty much universal in programming
 languages.
 
 However, the second part is different. In languages with a *garbage collector
-(GC)*, the GC keeps track of and cleans up memory that isn’t being used anymore,
-and we don’t need to think about it. In most languages without a GC, it’s our responsibility to
-identify when memory is no longer being used and call code to explicitly return
-it, just as we did to request it. Doing this correctly has historically been a
-difficult programming problem. If we forget, we’ll waste memory. If we do it
-too early, we’ll have an invalid variable. If we do it twice, that’s a bug too.
-We need to pair exactly one `allocate` with exactly one `free`.
+(GC)*, the GC keeps track of and cleans up memory that isn’t being used
+anymore, and we don’t need to think about it. In most languages without a GC,
+it’s our responsibility to identify when memory is no longer being used and
+call code to explicitly return it, just as we did to request it. Doing this
+correctly has historically been a difficult programming problem. If we forget,
+we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
+we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
+exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
 from Listing 4-1 using a `String` instead of a string literal:
 
 ```
-    {
-        let s = String::from("hello"); // s is valid from this point forward
+{
+    let s = String::from("hello"); // s is valid from this point forward
 
-        // do stuff with s
-    }                                  // this scope is now over, and s is no
-                                       // longer valid
+    // do stuff with s
+}                                  // this scope is now over, and s is no
+                                   // longer valid
 ```
 
 There is a natural point at which we can return the memory our `String` needs
@@ -278,9 +280,9 @@ Now let’s look at the `String` version:
     let s2 = s1;
 ```
 
-This looks very similar, so we might assume that the way
-it works would be the same: that is, the second line would make a copy of the
-value in `s1` and bind it to `s2`. But this isn’t quite what happens.
+This looks very similar, so we might assume that the way it works would be the
+same: that is, the second line would make a copy of the value in `s1` and bind
+it to `s2`. But this isn’t quite what happens.
 
 Take a look at Figure 4-1 to see what is happening to `String` under the
 covers. A `String` is made up of three parts, shown on the left: a pointer to
@@ -290,7 +292,8 @@ heap that holds the contents.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-Figure 4-1: Representation in memory of a `String` holding the value `"hello"` bound to `s1`
+Figure 4-1: Representation in memory of a `String` holding the value `"hello"`
+bound to `s1`
 
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the
@@ -305,7 +308,8 @@ representation in memory looks like Figure 4-2.
 
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-Figure 4-2: Representation in memory of the variable `s2` that has a copy of the pointer, length, and capacity of `s1`
+Figure 4-2: Representation in memory of the variable `s2` that has a copy of
+the pointer, length, and capacity of `s1`
 
 The representation does *not* look like Figure 4-3, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
@@ -314,7 +318,8 @@ the data on the heap were large.
 
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-Figure 4-3: Another possibility for what `s2 = s1` might do if Rust copied the heap data as well
+Figure 4-3: Another possibility for what `s2 = s1` might do if Rust copied the
+heap data as well
 
 Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the `drop` function and cleans up the heap memory for that variable. But
@@ -324,24 +329,22 @@ same memory. This is known as a *double free* error and is one of the memory
 safety bugs we mentioned previously. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.
 
-To ensure memory safety, after the line `let s2 = s1`, Rust considers `s1` as no longer
-valid. Therefore, Rust doesn’t need to free anything when `s1` goes out of
-scope. Check out what happens when you try to use `s1` after `s2` is created;
-it won’t work:
+To ensure memory safety, after the line `let s2 = s1`, Rust considers `s1` as
+no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
+out of scope. Check out what happens when you try to use `s1` after `s2` is
+created; it won’t work:
 
 ```
-    let s1 = String::from("hello");
-    let s2 = s1;
+let s1 = String::from("hello");
+let s2 = s1;
 
-    println!("{}, world!", s1);
+println!("{}, world!", s1);
 ```
 
 You’ll get an error like this because Rust prevents you from using the
 invalidated reference:
 
 ```
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0382]: borrow of moved value: `s1`
  --> src/main.rs:5:28
   |
@@ -357,7 +360,7 @@ error[E0382]: borrow of moved value: `s1`
 If you’ve heard the terms *shallow copy* and *deep copy* while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like making a shallow copy. But
-because Rust also invalidates the first variable, instead ofcalling it a
+because Rust also invalidates the first variable, instead of calling it a
 shallow copy, it’s known as a *move*. In this example, we would say that
 `s1` was *moved* into `s2`. So what actually happens is shown in Figure 4-4.
 
@@ -382,10 +385,10 @@ programming languages, you’ve probably seen them before.
 Here’s an example of the `clone` method in action:
 
 ```
-    let s1 = String::from("hello");
-    let s2 = s1.clone();
+let s1 = String::from("hello");
+let s2 = s1.clone();
 
-    println!("s1 = {}, s2 = {}", s1, s2);
+println!("s1 = {}, s2 = {}", s1, s2);
 ```
 
 This works just fine and explicitly produces the behavior shown in Figure 4-3,
@@ -401,10 +404,10 @@ There’s another wrinkle we haven’t talked about yet. This code using integer
 part of which was shown in Listing 4-2 – works and is valid:
 
 ```
-    let x = 5;
-    let y = x;
+let x = 5;
+let y = x;
 
-    println!("x = {}, y = {}", x, y);
+println!("x = {}, y = {}", x, y);
 ```
 
 But this code seems to contradict what we just learned: we don’t have a call to
@@ -418,16 +421,20 @@ between deep and shallow copying here, so calling `clone` wouldn’t do anything
 different from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
-types that are stored on the stack, like integers (we’ll talk more about traits
-in Chapter 10). If a type implements the `Copy` trait, an older variable is
-still usable after assignment.
+types that are stored on the stack like integers are (we’ll talk more about
+traits in Chapter 10). If a type implements the `Copy` trait, a variable is
+still valid after assignment to another variable.
 <!--- an older variable that uses that type, we mean? /LC --->
-Rust won’t let us annotate a type with
-`Copy` if the type, or any of its parts, has implemented the `Drop`
-trait. If the type needs something special to happen when the value goes out of
-scope and we add the `Copy` annotation to that type, we’ll get a compile-time
-error. To learn about how to add the `Copy` annotation to your type to
-implement the trait, see “Derivable Traits” in Appendix C.
+<!-- I removed "older" here, I don't think that was quite right-- this sentence
+is trying to describe the line `let y = x` where the variable `x` is assigned
+to `y`. The variables must be the same type because they're getting the same
+value, so "that uses that type" isn't relevant. Let me know if there's any
+aspects that are still confusing here. /Carol -->
+Rust won’t let us annotate a type with `Copy` if the type, or any of its parts,
+has implemented the `Drop` trait. If the type needs something special to happen
+when the value goes out of scope and we add the `Copy` annotation to that type,
+we’ll get a compile-time error. To learn about how to add the `Copy` annotation
+to your type to implement the trait, see “Derivable Traits” in Appendix C.
 
 So what types implement the `Copy` trait? You can check the documentation for
 the given type to be sure, but as a general rule, any group of simple scalar
@@ -486,8 +493,9 @@ the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
 
-Returning values can also transfer ownership. In Listing 4-4 we give an example
-with of a function that returns some value, with similar annotations to those in Listing 4-3.
+Returning values can also transfer ownership. Listing 4-4 shows an example
+of a function that returns some value, with similar annotations as those in
+Listing 4-3.
 
 Filename: src/main.rs
 
@@ -527,16 +535,16 @@ Listing 4-4: Transferring ownership of return values
 
 The ownership of a variable follows the same pattern every time: assigning a
 value to another variable moves it. When a variable that includes data on the
-heap goes out of scope, the value will be cleaned up by `drop` unless the data
-has been moved in such a way that it is then owned by another variable.
+heap goes out of scope, the value will be cleaned up by `drop` unless ownership
+of the data has been moved to another variable.
 
-While this works, taking ownership and then returning ownership with every function is a bit
-tedious. What if we want to let a function use a value but not take ownership?
-It’s quite annoying that anything we pass in also needs to be passed back if we
-want to use it again, in addition to any data resulting from the body of the
-function that we might want to return as well.
+While this works, taking ownership and then returning ownership with every
+function is a bit tedious. What if we want to let a function use a value but
+not take ownership? It’s quite annoying that anything we pass in also needs to
+be passed back if we want to use it again, in addition to any data resulting
+from the body of the function that we might want to return as well.
 
-Rust does allow us to return multiple values using a tuple, as shown in Listing 4-5.
+Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 
 Filename: src/main.rs
 
@@ -559,19 +567,24 @@ fn calculate_length(s: String) -> (String, usize) {
 Listing 4-5: Returning ownership of parameters
 
 But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for using a value without transferring ownership, called
-*references*.
+common. Luckily for us, Rust has a feature for using a value without
+transferring ownership, called *references*.
 
 ## References and Borrowing
 
 The issue with the tuple code in Listing 4-5 is that we have to return the
 `String` to the calling function so we can still use the `String` after the
 call to `calculate_length`, because the `String` was moved into
-`calculate_length`. Instead, we can provide a reference to XXX, meaning XXX
-<!--- Could you add a direct definition of a reference? We mentioned them in Ch 2 but didn't give a full definition, I think that would be useful. /LC --->
+`calculate_length`. Instead, we can provide a reference to the `String` value.
+A *reference* is like a pointer in that it’s an address we can follow to access
+data stored at that address that is owned by some other variable. Unlike a
+pointer, a reference is guaranteed to point to a valid value of a particular
+type.
+<!-- Could you add a direct definition of a reference? We mentioned them in Ch
+2 but didn't give a full definition, I think that would be useful. /LC -->
+<!-- Good call -- done! /Carol -->
 Here is how you would define and use a `calculate_length` function that has a
-reference to an object as a parameter instead of taking ownership of the
-value:
+reference to an object as a parameter instead of taking ownership of the value:
 
 Filename: src/main.rs
 
@@ -592,8 +605,8 @@ fn calculate_length(s: &String) -> usize {
 First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass `&s1` into
 `calculate_length` and, in its definition, we take `&String` rather than
-`String`. These ampersands represent *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-5 depicts this concept.
+`String`. These ampersands represent *references*, and they allow you to refer
+to some value without taking ownership of it. Figure 4-5 depicts this concept.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
@@ -607,9 +620,9 @@ Figure 4-5: A diagram of `&String s` pointing at `String s1`
 Let’s take a closer look at the function call here:
 
 ```
-    let s1 = String::from("hello");
+let s1 = String::from("hello");
 
-    let len = calculate_length(&s1);
+let len = calculate_length(&s1);
 ```
 
 The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
@@ -627,14 +640,15 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 ```
 
 The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but the value pointed to by the reference is not dropped when `s`
-stops being used because we don’t have ownership. When functions have
-references as parameters instead of the actual values, we won’t need to return
-the values in order to give back ownership, because we never had ownership.
+parameter’s scope, but the value pointed to by the reference is not dropped
+when `s` stops being used because `s` doesn’t have ownership. When functions
+have references as parameters instead of the actual values, we won’t need to
+return the values in order to give back ownership, because we never had
+ownership.
 
 We call the action of creating a reference *borrowing*. As in real life, if a
 person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don't own it.
+to give it back. You don’t own it.
 
 So what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!
@@ -658,8 +672,6 @@ Listing 4-6: Attempting to modify a borrowed value
 Here’s the error:
 
 ```
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0596]: cannot borrow `*some_string` as mutable, as it is behind a `&` reference
  --> src/main.rs:8:5
   |
@@ -675,7 +687,7 @@ allowed to modify something we have a reference to.
 ### Mutable References
 
 We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that implement, instead, a *mutable reference*:
+with just a few small tweaks that use, instead, a *mutable reference*:
 
 Filename: src/main.rs
 
@@ -691,15 +703,14 @@ fn change(some_string: &mut String) {
 }
 ```
 
-First, we change `s` to be `mut`. Then we create a mutable
-reference with `&mut s` where we call the `change` function, and update the
-function signature to accept a mutable reference with `some_string: &mut
-String`. This makes it very clear that the `change` function will mutate the
-value it borrows.
+First, we change `s` to be `mut`. Then we create a mutable reference with `&mut
+s` where we call the `change` function, and update the function signature to
+accept a mutable reference with `some_string: &mut String`. This makes it very
+clear that the `change` function will mutate the value it borrows.
 
 Mutable references have one big restriction: you can have only one mutable
-reference to a particular piece of data at a time. This code that attempts to create
-two mutable references to `s` will fail:
+reference to a particular piece of data at a time. This code that attempts to
+create two mutable references to `s` will fail:
 
 Filename: src/main.rs
 
@@ -715,8 +726,6 @@ Filename: src/main.rs
 Here’s the error:
 
 ```
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0499]: cannot borrow `s` as mutable more than once at a time
  --> src/main.rs:5:14
   |
@@ -738,9 +747,9 @@ in `r2` that borrows the same data as `r1`.
 The restriction preventing multiple mutable references to the same data at the
 same time allows for mutation but in a very controlled fashion. It’s something
 that new Rustaceans struggle with, because most languages let you mutate
-whenever you’d like. The benefit of having this restriction is that Rust can prevent data races at
-compile time. A *data race* is similar to a race condition and happens when
-these three behaviors occur:
+whenever you’d like. The benefit of having this restriction is that Rust can
+prevent data races at compile time. A *data race* is similar to a race
+condition and happens when these three behaviors occur:
 
 * Two or more pointers access the same data at the same time.
 * At least one of the pointers is being used to write to the data.
@@ -754,33 +763,31 @@ As always, we can use curly brackets to create a new scope, allowing for
 multiple mutable references, just not *simultaneous* ones:
 
 ```
-    let mut s = String::from("hello");
+let mut s = String::from("hello");
 
-    {
-        let r1 = &mut s;
-    } // r1 goes out of scope here, so we can make a new reference with no problems.
+{
+    let r1 = &mut s;
+} // r1 goes out of scope here, so we can make a new reference with no problems.
 
-    let r2 = &mut s;
+let r2 = &mut s;
 ```
 
-Rust enforces a similar rule for combining mutable and immutable references. This code
-results in an error:
+Rust enforces a similar rule for combining mutable and immutable references.
+This code results in an error:
 
 ```
-    let mut s = String::from("hello");
+let mut s = String::from("hello");
 
-    let r1 = &s; // no problem
-    let r2 = &s; // no problem
-    let r3 = &mut s; // BIG PROBLEM
+let r1 = &s; // no problem
+let r2 = &s; // no problem
+let r3 = &mut s; // BIG PROBLEM
 
-    println!("{}, {}, and {}", r1, r2, r3);
+println!("{}, {}, and {}", r1, r2, r3);
 ```
 
 Here’s the error:
 
 ```
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
  --> src/main.rs:6:14
   |
@@ -794,12 +801,15 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   |                                -- immutable borrow later used here
 ```
 
-Whew! We *also* cannot have a mutable reference while we have an immutable one.
-<!--- while we have an immutable one to the same value, or simply within the same script? /LC --->
-Users of an immutable reference don’t expect the values to suddenly change out
-from under them! However, multiple immutable references are allowed because no one
-who is just reading the data has the ability to affect anyone else’s reading of
-the data.
+Whew! We *also* cannot have a mutable reference while we have an immutable one
+to the same value.
+<!-- while we have an immutable one to the same value, or simply within the
+same script? /LC -->
+<!-- The former, I've updated /Carol -->
+Users of an immutable reference don’t expect the value to suddenly change out
+from under them! However, multiple immutable references are allowed because no
+one who is just reading the data has the ability to affect anyone else’s
+reading of the data.
 
 Note that a reference’s scope starts from where it is introduced and continues
 through the last time that reference is used. For instance, this code will
@@ -807,15 +817,15 @@ compile because the last usage of the immutable references, the `println!`,
 occurs before the mutable reference is introduced:
 
 ```
-    let mut s = String::from("hello");
+let mut s = String::from("hello");
 
-    let r1 = &s; // no problem
-    let r2 = &s; // no problem
-    println!("{} and {}", r1, r2);
-    // variables r1 and r2 will not be used after this point
+let r1 = &s; // no problem
+let r2 = &s; // no problem
+println!("{} and {}", r1, r2);
+// variables r1 and r2 will not be used after this point
 
-    let r3 = &mut s; // no problem
-    println!("{}", r3);
+let r3 = &mut s; // no problem
+println!("{}", r3);
 ```
 
 The scopes of the immutable references `r1` and `r2` end after the `println!`
@@ -841,7 +851,7 @@ never be dangling references: if you have a reference to some data, the
 compiler will ensure that the data will not go out of scope before the
 reference to the data does.
 
-Let’s try to create a dangling reference, and see how Rust prevents them with a
+Let’s try to create a dangling reference to see how Rust prevents them with a
 compile-time error:
 
 Filename: src/main.rs
@@ -861,8 +871,6 @@ fn dangle() -> &String {
 Here’s the error:
 
 ```
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
 error[E0106]: missing lifetime specifier
  --> src/main.rs:5:16
   |
@@ -882,7 +890,7 @@ about lifetimes, the message does contain the key to why this code is a problem:
 
 ```
 this function's return type contains a borrowed value, but there is no value
-for it to be borrowed from.
+for it to be borrowed from
 ```
 
 Let’s take a closer look at exactly what’s happening at each stage of our
@@ -930,16 +938,17 @@ Next, we’ll look at a different kind of reference: slices.
 
 ## The Slice Type
 
-*Slices* let you
-reference a contiguous sequence of elements in a collection rather than the
-whole collection. Since it's a reference, a slice does not have ownership.
+*Slices* let you reference a contiguous sequence of elements in a collection
+rather than the whole collection. A slice is a kind of reference, so it does
+not have ownership.
 
 Here’s a small programming problem: write a function that takes a string and
 returns the first word it finds in that string. If the function doesn’t find a
 space in the string, the whole string must be one word, so the entire string
 should be returned.
 
-Let’s work through how we'd build the signature of this function without using slices, to set up the problem that slices will solve:
+Let’s work through how we’d write the signature of this function without using
+slices, to understand the problem that slices will solve:
 
 ```
 fn first_word(s: &String) -> ?
@@ -972,7 +981,12 @@ Listing 4-7: The `first_word` function that returns a byte index value into the
 Because we need to go through the `String` element by element and check whether
 a value is a space, we’ll convert our `String` to an array of bytes using the
 `as_bytes` method [1].
-<!--- I've suggested going back to using the wingdings, so that the explanation is all together and we avoid that repetition. However, if you're preference is to use the repetition instead, let me know -- it's not our usual house style, but I think it could work /LC --->
+<!--- I've suggested going back to using the wingdings, so that the explanation
+is all together and we avoid that repetition. However, if you're preference is
+to use the repetition instead, let me know -- it's not our usual house style,
+but I think it could work /LC --->
+<!-- Oh yes, I still want to use the wingdings in print-- I just generated
+these files from the online version that doesn't use wingdings. /Carol -->
 Next, we create an iterator over the array of bytes using the `iter` method [3].
 We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
 is a method that returns each element in a collection and that `enumerate`
@@ -982,9 +996,9 @@ second element is a reference to the element. This is a bit more convenient
 than calculating the index ourselves.
 
 Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We'll be discussing patterns more in Chapter 6. In
-the `for` loop, we specify a pattern that has `i` for the index in the tuple
-and `&item` for the single byte in the tuple [2]. Because we get a reference to the
+destructure that tuple. We’ll be discussing patterns more in Chapter 6. In the
+`for` loop, we specify a pattern that has `i` for the index in the tuple and
+`&item` for the single byte in the tuple [2]. Because we get a reference to the
 element from `.iter().enumerate()`, we use `&` in the pattern.
 
 Inside the `for` loop, we search for the byte that represents the space by
@@ -1048,16 +1062,15 @@ A *string slice* is a reference to part of a `String`, and it looks like this:
     let world = &s[6..11];
 ```
 
-Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`, specified in the extra
-`[0..5]` bit. We create slices using a range within brackets by specifying
-`[starting_index..ending_index]`, where `starting_index` is the first position
-in the slice and `ending_index` is one more than the last position in the
-slice. Internally, the slice data structure stores the starting position and
-the length of the slice, which corresponds to `ending_index` minus
-`starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the byte at index 6 of `s` with a length
-value of 5.
+Rather than a reference to the entire `String`, `hello` is a reference to a
+portion of the `String`, specified in the extra `[0..5]` bit. We create slices
+using a range within brackets by specifying `[starting_index..ending_index]`,
+where `starting_index` is the first position in the slice and `ending_index` is
+one more than the last position in the slice. Internally, the slice data
+structure stores the starting position and the length of the slice, which
+corresponds to `ending_index` minus `starting_index`. So in the case of `let
+world = &s[6..11];`, `world` would be a slice that contains a pointer to the
+byte at index 6 of `s` with a length value of 5.
 
 Figure 4-6 shows this in a diagram.
 
@@ -1167,9 +1180,8 @@ fn main() {
 Here’s the compiler error:
 
 ```
-$ cargo run
-   Compiling ownership v0.1.0 (file:///projects/ownership)
-error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
+immutable
   --> src/main.rs:18:5
    |
 16 |     let word = first_word(&s);
