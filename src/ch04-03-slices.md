@@ -1,24 +1,25 @@
 ## The Slice Type
 
-Another data type that does not have ownership is the *slice*. Slices let you
-reference a contiguous sequence of elements in a collection rather than the
-whole collection.
+*Slices* let you reference a contiguous sequence of elements in a collection
+rather than the whole collection. A slice is a kind of reference, so it does
+not have ownership.
 
 Here’s a small programming problem: write a function that takes a string and
 returns the first word it finds in that string. If the function doesn’t find a
 space in the string, the whole string must be one word, so the entire string
 should be returned.
 
-Let’s think about the signature of this function:
+Let’s work through how we’d write the signature of this function without using
+slices, to understand the problem that slices will solve:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-This function, `first_word`, has a `&String` as a parameter. We don’t want
+The `first_word` function has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that, as shown in Listing 4-7.
+end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -43,18 +44,19 @@ Next, we create an iterator over the array of bytes using the `iter` method:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
-is a method that returns each element in a collection and that `enumerate`
-wraps the result of `iter` and returns each element as part of a tuple instead.
-The first element of the tuple returned from `enumerate` is the index, and the
-second element is a reference to the element. This is a bit more convenient
-than calculating the index ourselves.
+We’ll discuss iterators in more detail in [Chapter 13][ch13]<!-- ignore -->.
+For now, know that `iter` is a method that returns each element in a collection
+and that `enumerate` wraps the result of `iter` and returns each element as
+part of a tuple instead. The first element of the tuple returned from
+`enumerate` is the index, and the second element is a reference to the element.
+This is a bit more convenient than calculating the index ourselves.
 
 Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple. We’ll be discussing patterns more in Chapter 6. So in
-the `for` loop, we specify a pattern that has `i` for the index in the tuple
-and `&item` for the single byte in the tuple. Because we get a reference to the
-element from `.iter().enumerate()`, we use `&` in the pattern.
+destructure that tuple. We’ll be discussing patterns more in [Chapter
+6][ch6]<!-- ignore -->. In the `for` loop, we specify a pattern that has `i`
+for the index in the tuple and `&item` for the single byte in the tuple.
+Because we get a reference to the element from `.iter().enumerate()`, we use
+`&` in the pattern.
 
 Inside the `for` loop, we search for the byte that represents the space by
 using the byte literal syntax. If we find a space, we return the position.
@@ -96,7 +98,7 @@ fn second_word(s: &String) -> (usize, usize) {
 
 Now we’re tracking a starting *and* an ending index, and we have even more
 values that were calculated from data in a particular state but aren’t tied to
-that state at all. We now have three unrelated variables floating around that
+that state at all. We have three unrelated variables floating around that
 need to be kept in sync.
 
 Luckily, Rust has a solution to this problem: string slices.
@@ -109,18 +111,15 @@ A *string slice* is a reference to part of a `String`, and it looks like this:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-This is similar to taking a reference to the whole `String` but with the extra
-`[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`.
-
-We can create slices using a range within brackets by specifying
-`[starting_index..ending_index]`, where `starting_index` is the first position
-in the slice and `ending_index` is one more than the last position in the
-slice. Internally, the slice data structure stores the starting position and
-the length of the slice, which corresponds to `ending_index` minus
-`starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the byte at index 6 of `s` with a length
-value of 5.
+Rather than a reference to the entire `String`, `hello` is a reference to a
+portion of the `String`, specified in the extra `[0..5]` bit. We create slices
+using a range within brackets by specifying `[starting_index..ending_index]`,
+where `starting_index` is the first position in the slice and `ending_index` is
+one more than the last position in the slice. Internally, the slice data
+structure stores the starting position and the length of the slice, which
+corresponds to `ending_index` minus `starting_index`. So in the case of `let
+world = &s[6..11];`, `world` would be a slice that contains a pointer to the
+byte at index 6 of `s` with a length value of 5.
 
 Figure 4-6 shows this in a diagram.
 
@@ -309,5 +308,7 @@ Ownership affects how lots of other parts of Rust work, so we’ll talk about
 these concepts further throughout the rest of the book. Let’s move on to
 Chapter 5 and look at grouping pieces of data together in a `struct`.
 
+[ch13]: ch13-02-iterators.html
+[ch6]: ch06-02-match.html#patterns-that-bind-to-values
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
 [deref-coercions]: ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods
