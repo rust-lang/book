@@ -93,7 +93,7 @@ fn match(needle: &str, haystack: &str) -> bool {
 }
 ```
 
-you’ll get this error:
+obtendrá este error:
 
 ```text
 error: expected identifier, found keyword `match`
@@ -103,9 +103,9 @@ error: expected identifier, found keyword `match`
   |    ^^^^^ expected identifier, found keyword
 ```
 
-The error shows that you can’t use the keyword `match` as the function
-identifier. To use `match` as a function name, you need to use the raw
-identifier syntax, like this:
+El error muestra que no se puede utilizar la palabra clave `match` como identificador de la función
+como identificador de la función. Para utilizar `match` como nombre de función, es necesario utilizar la sintaxis de identificador
+sintaxis del identificador, así:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -128,7 +128,7 @@ utilizar bibliotecas escritas en una edición de Rust diferente a la que utiliza
 Por ejemplo, " try " no es una palabra clave en la edición de 2015 pero sí en la de 2018
 2018. Si depende de una biblioteca escrita con la edición de 2015 y
 tiene una función `try`, tendrá que utilizar la sintaxis del identificador bruto, `r#try` en
-en este caso, para llamar a esa función desde tu código de la edición 2018. Véase[Appendix
-E][appendix-e]<!-- ignore ecma--> for more information on editions.
+en este caso, para llamar a esa función desde tu código de la edición 2018. Véase en [Appendix
+E][appendix-e]<!-- ignore ecma--> para más información sobre las ediciones.
 
 [appendix-e]: appendix-05-editions.html
