@@ -499,16 +499,18 @@ directly map to the three ways a function can take a parameter: taking
 ownership, borrowing mutably, and borrowing immutably. These are encoded in the
 three `Fn` traits as follows:
 
-* `FnOnce` consumes the variables it captures from its enclosing scope, known
-  as the closure’s *environment*. To consume the captured variables, the
-  closure must take ownership of these variables and move them into the closure
-  when it is defined. The `Once` part of the name represents the fact that the
-  closure can’t take ownership of the same variables more than once, so it can
-  be called only once.
+* `FnOnce` describes a closure that can be called at least once. A closure that
+  is not eligible for `Fn` or `FnMut` but _is_ eligible for `FnOnce` consumes
+  the variables it captures from its enclosing scope, known as the closure’s
+  *environment*. To consume the captured variables, the closure must take
+  ownership of these variables and move them into the closure when it is
+  defined. The `Once` part of the name represents the fact that the closure
+  can’t take ownership of the same variables more than once, so this trait
+  guarantees only the ability to be called once.
 * `FnMut` can change the environment because it mutably borrows values.
 * `Fn` borrows values from the environment immutably.
 
-When you create a closure, Rust infers which trait to use based on how the
+When you create a closure, Rust infers which traits to use based on how the
 closure uses the values from the environment. All closures implement `FnOnce`
 because they can all be called at least once. Closures that don’t move the
 captured variables also implement `FnMut`, and closures that don’t need mutable
