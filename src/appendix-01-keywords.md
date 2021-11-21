@@ -1,4 +1,4 @@
-## Appendix A: Keywords
+## Anexo A: Palabras clave
 
 The following list contains keywords that are reserved for current or future
 use by the Rust language. As such, they cannot be used as identifiers (except
@@ -9,59 +9,59 @@ macros, static values, attributes, types, traits, or lifetimes.
 
 [raw-identifiers]: #raw-identifiers
 
-### Keywords Currently in Use
+### Palabras clave actualmente en uso
 
-The following keywords currently have the functionality described.
+Las siguientes palabras clave tienen actualmente la funcionalidad descrita.
 
-* `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` and `extern crate` statements
-* `async` -  return a `Future` instead of blocking the current thread
-* `await` - suspend execution until the result of a `Future` is ready
-* `break` - exit a loop immediately
-* `const` - define constant items or constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - link an external crate or a macro variable representing the crate in
-  which the macro is defined
-* `dyn` - dynamic dispatch to a trait object
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - define an enumeration
-* `extern` - link an external crate, function, or variable
+* `as` - realizar un casting primitivo, desambiguar el rasgo específico que contiene
+  un elemento, o cambiar el nombre de los elementos en las declaraciones `use` y `extern crate`.
+* `async` -  retornar un `Future` en lugar de bloquear el hilo actual
+* `await` - suspender la ejecución hasta que el resultado de un `Future` esté listo
+* `break` - salir inmediatamente de un bucle
+* `const` - definir elementos constantes o punteros crudos constantes
+* `continue` - continuar con la siguiente iteración del bucle
+* `crate` - vincular un crate externo o una variable de macro que represente el crate en
+  en el que está definida la macro
+* `dyn` - envío dinámico a un objeto trait
+* `else` - la respuesta a las construcciones de flujo de control "if" y "if let".
+* `enum` - definir una enumeración
+* `extern` - vincular una caja, función o variable externa
 * `false` - Boolean false literal
-* `fn` - define a function or the function pointer type
-* `for` - loop over items from an iterator, implement a trait, or specify a
-  higher-ranked lifetime
-* `if` - branch based on the result of a conditional expression
-* `impl` - implement inherent or trait functionality
-* `in` - part of `for` loop syntax
-* `let` - bind a variable
-* `loop` - loop unconditionally
-* `match` - match a value to patterns
-* `mod` - define a module
-* `move` - make a closure take ownership of all its captures
-* `mut` - denote mutability in references, raw pointers, or pattern bindings
-* `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-* `ref` - bind by reference
-* `return` - return from function
-* `Self` - a type alias for the type we are defining or implementing
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - define a structure
-* `super` - parent module of the current module
-* `trait` - define a trait
-* `true` - Boolean true literal
-* `type` - define a type alias or associated type
-* `union` - define a [union] and is only a keyword when used in a union declaration
-* `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - bring symbols into scope
-* `where` - denote clauses that constrain a type
-* `while` - loop conditionally based on the result of an expression
+* `fn` - definir una función o el tipo de puntero de función
+* `for` - bucle sobre los elementos de un iterador, implementar un rasgo, o especificar un
+  tiempo de duración mayor
+* `if` - rama basada en el resultado de una expresión condicional
+* `impl` - implementar la funcionalidad inherente o de rasgo
+* `in` - parte de la sintaxis del bucle `for`.
+* `let` - enlazar una variable
+* `loop` - bucle de forma incondicional
+* `match` - hacer coincidir un valor con los patrones
+* `mod` - definir un módulo
+* `move` - hacer que las capturas de un cierre sean de su propiedad
+* `mut` - denotan la mutabilidad en las referencias, los punteros en bruto o los enlaces de patrones
+* `pub` - denotan la visibilidad pública en campos struct, bloques `impl` o módulos
+* `ref` - enlazar por referencia
+* `return` - retorno de la función
+* `Self` - un nombre de tipo para el tipo que estamos definiendo o implementando
+* `self` - método tema o módulo actual
+* `static` - variable global o el tiempo de vida que dura toda la ejecución del programa
+* `struct` - definir una estructura
+* `super` - módulo padre del módulo actual
+* `trait` - definir una trait
+* `true` - Booleano verdadero
+* `type` - definir un nombre de tipo o un tipo asociado
+* `union` - definen una [union] y sólo es una palabra clave cuando se utiliza en una declaración de unión
+* `unsafe` - denotan código, funciones, rasgos o implementaciones no seguras
+* `use` - introducir los símbolos en el ámbito de aplicación
+* `where` - denotan declaraciones que restringen un tipo
+* `while` - bucle condicional basado en el resultado de una expresión
 
 [union]: ../reference/items/unions.html
 
-### Keywords Reserved for Future Use
+### Palabras clave reservadas para uso futuro
 
-The following keywords do not have any functionality but are reserved by Rust
-for potential future use.
+Las siguientes palabras clave no tienen ninguna funcionalidad pero están reservadas por Rust
+para un posible uso futuro.
 
 * `abstract`
 * `become`
@@ -77,13 +77,13 @@ for potential future use.
 * `virtual`
 * `yield`
 
-### Raw Identifiers
+### Identificadores en bruto
 
-*Raw identifiers* are the syntax that lets you use keywords where they wouldn’t
-normally be allowed. You use a raw identifier by prefixing a keyword with `r#`.
+*Los identificadores brutos* son la sintaxis que permite utilizar palabras clave donde normalmente no se
+normalmente se permiten. Para utilizar un identificador sin procesar, hay que anteponer a la palabra clave `r#`
 
-For example, `match` is a keyword. If you try to compile the following function
-that uses `match` as its name:
+Por ejemplo, `match` es una palabra clave. Si intenta compilar la siguiente función
+que utiliza `match` como nombre:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -119,16 +119,16 @@ fn main() {
 }
 ```
 
-This code will compile without any errors. Note the `r#` prefix on the function
-name in its definition as well as where the function is called in `main`.
+Este código se compilará sin ningún error. Observe el prefijo `r#` en el nombre de la función
+en su definición, así como el lugar donde se llama a la función en `main`.
 
-Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. In addition, raw identifiers allow
-you to use libraries written in a different Rust edition than your crate uses.
-For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
-edition. If you depend on a library that’s written using the 2015 edition and
-has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
-this case, to call that function from your 2018 edition code. See [Appendix
-E][appendix-e]<!-- ignore --> for more information on editions.
+Los identificadores en bruto le permiten utilizar cualquier palabra que elija como identificador, incluso si esa palabra sea 
+una palabra clave reservada. Además, los identificadores sin procesar le permiten
+utilizar bibliotecas escritas en una edición de Rust diferente a la que utiliza tu crate.
+Por ejemplo, " try " no es una palabra clave en la edición de 2015 pero sí en la de 2018
+2018. Si depende de una biblioteca escrita con la edición de 2015 y
+tiene una función `try`, tendrá que utilizar la sintaxis del identificador bruto, `r#try` en
+en este caso, para llamar a esa función desde tu código de la edición 2018. Véase[Appendix
+E][appendix-e]<!-- ignore ecma--> for more information on editions.
 
 [appendix-e]: appendix-05-editions.html
