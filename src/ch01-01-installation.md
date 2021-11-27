@@ -91,15 +91,13 @@ $ rustup self uninstall
 
 ### Troubleshooting
 
-To check whether you have Rust installed correctly, open a new shell that is not the one you ran the installer in and enter this
-line:
+To check whether you have Rust installed correctly, open a new shell that is not the one you ran the installer in and enter thisline:
 
 ```console
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date for the latest
-stable version that has been released in the following format:
+You should see the version number, commit hash, and commit date for the lateststable version that has been released in the following format:
 
 ```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
