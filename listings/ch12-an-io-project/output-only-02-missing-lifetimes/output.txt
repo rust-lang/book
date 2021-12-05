@@ -10,7 +10,7 @@ error[E0106]: missing lifetime specifier
 help: consider introducing a named lifetime parameter
    |
 28 | pub fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
-   |              ^^^^        ^^^^^^^            ^^^^^^^         ^^^
+   |              ++++         ++                 ++              ++
 
 For more information about this error, try `rustc --explain E0106`.
 error: could not compile `minigrep` due to previous error

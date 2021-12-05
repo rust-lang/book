@@ -1,7 +1,7 @@
 # Administrative Tasks
 
-This documentation is for Carol and Steve and anyone else managing the repo to
-remember how to do occasional maintenance tasks.
+This documentation is for anyone managing the repo to remember how to do
+occasional maintenance tasks.
 
 ## Update the `rustc` version
 

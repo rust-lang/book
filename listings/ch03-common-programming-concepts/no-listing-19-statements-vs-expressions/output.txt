@@ -1,5 +1,13 @@
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+error: expected expression, found statement (`let`)
+ --> src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^^^^^^^
+  |
+  = note: variable declaration using `let` is a statement
+
 error[E0658]: `let` expressions in this position are experimental
  --> src/main.rs:2:14
   |
@@ -8,14 +16,6 @@ error[E0658]: `let` expressions in this position are experimental
   |
   = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
   = help: you can write `matches!(<expr>, <pattern>)` instead of `let <pattern> = <expr>`
-
-error: expected expression, found statement (`let`)
- --> src/main.rs:2:14
-  |
-2 |     let x = (let y = 6);
-  |              ^^^^^^^^^
-  |
-  = note: variable declaration using `let` is a statement
 
 warning: unnecessary parentheses around assigned value
  --> src/main.rs:2:13

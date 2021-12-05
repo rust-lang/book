@@ -19,7 +19,7 @@ note: function requires argument type to outlive `'static`
 help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
   |
 6 |     let handle = thread::spawn(move || {
-  |                                ^^^^^^^
+  |                                ++++
 
 For more information about this error, try `rustc --explain E0373`.
 error: could not compile `threads` due to previous error

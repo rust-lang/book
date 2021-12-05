@@ -10,7 +10,7 @@ error[E0106]: missing lifetime specifier
 help: consider introducing a named lifetime parameter
   |
 9 | fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-  |           ^^^^    ^^^^^^^     ^^^^^^^     ^^^
+  |           ++++     ++          ++          ++
 
 For more information about this error, try `rustc --explain E0106`.
 error: could not compile `chapter10` due to previous error

@@ -1,12 +1,10 @@
 $ cargo run
    Compiling patterns v0.1.0 (file:///projects/patterns)
 warning: irrefutable `if let` pattern
- --> src/main.rs:2:5
+ --> src/main.rs:2:8
   |
-2 | /     if let x = 5 {
-3 | |         println!("{}", x);
-4 | |     };
-  | |_____^
+2 |     if let x = 5 {
+  |        ^^^^^^^^^
   |
   = note: `#[warn(irrefutable_let_patterns)]` on by default
   = note: this pattern will always match, so the `if let` is useless
