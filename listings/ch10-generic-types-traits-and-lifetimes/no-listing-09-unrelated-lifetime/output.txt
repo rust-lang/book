@@ -1,13 +1,10 @@
 $ cargo run
    Compiling chapter10 v0.1.0 (file:///projects/chapter10)
-error[E0515]: cannot return value referencing local variable `result`
+error[E0515]: cannot return reference to local variable `result`
   --> src/main.rs:11:5
    |
 11 |     result.as_str()
-   |     ------^^^^^^^^^
-   |     |
-   |     returns a value referencing data owned by the current function
-   |     `result` is borrowed here
+   |     ^^^^^^^^^^^^^^^ returns a reference to data owned by the current function
 
 For more information about this error, try `rustc --explain E0515`.
 error: could not compile `chapter10` due to previous error
