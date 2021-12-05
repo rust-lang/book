@@ -520,8 +520,9 @@ mark operator in the body of tests, which can be a convenient way to write
 tests that should fail if any operation within them returns an `Err` variant.
 
 You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
-E>`. Instead, you should return an `Err` value directly when the test should
-fail.
+E>`. To assert that an operation returns an `Err` variant, *don’t* use the
+question mark operator on the `Result<T, E>` value. Instead, use
+`assert!(value.is_err())`.
 
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
