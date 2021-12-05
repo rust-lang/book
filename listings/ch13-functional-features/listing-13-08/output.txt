@@ -4,10 +4,9 @@ error[E0308]: mismatched types
  --> src/main.rs:5:29
   |
 5 |     let n = example_closure(5);
-  |                             ^
+  |                             ^- help: try using a conversion method: `.to_string()`
   |                             |
   |                             expected struct `String`, found integer
-  |                             help: try using a conversion method: `5.to_string()`
 
 For more information about this error, try `rustc --explain E0308`.
 error: could not compile `closure-example` due to previous error

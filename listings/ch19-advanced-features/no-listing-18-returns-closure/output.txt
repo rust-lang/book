@@ -10,7 +10,7 @@ error[E0746]: return type cannot have an unboxed trait object
 help: use `impl Fn(i32) -> i32` as the return type, as all return paths are of type `[closure@src/lib.rs:2:5: 2:14]`, which implements `Fn(i32) -> i32`
   |
 1 | fn returns_closure() -> impl Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^^^^^^
+  |                         ~~~~~~~~~~~~~~~~~~~
 
 For more information about this error, try `rustc --explain E0746`.
 error: could not compile `functions-example` due to previous error
