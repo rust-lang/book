@@ -37,7 +37,7 @@ or binary.
 
 Here, we have a package that only contains *src/main.rs*, meaning it only
 contains a binary crate named `my-project`. If a package contains *src/main.rs*
-and *src/lib.rs*, it has two crates: a library and a binary, both with the same
+and *src/lib.rs*, it has two crates: a binary and a library, both with the same
 name as the package. A package can have multiple binary crates by placing files
 in the *src/bin* directory: each file will be a separate binary crate.
 
