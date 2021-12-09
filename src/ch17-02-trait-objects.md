@@ -210,7 +210,7 @@ with a `String` as a component:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-oop/listing-17-10/src/main.rs}}
 ```
 
@@ -294,7 +294,7 @@ rules of object safety in regard to trait objects. For example, let’s say we
 tried to implement the `Screen` struct in Listing 17-4 to hold types that
 implement the `Clone` trait instead of the `Draw` trait, like this:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch17-oop/no-listing-01-trait-object-of-clone/src/lib.rs}}
 ```
 

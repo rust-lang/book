@@ -321,7 +321,7 @@ However, you can only use `impl Trait` if you’re returning a single type. For
 example, this code that returns either a `NewsArticle` or a `Tweet` with the
 return type specified as `impl Summary` wouldn’t work:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-06-impl-trait-returns-one-type/src/lib.rs:here}}
 ```
 

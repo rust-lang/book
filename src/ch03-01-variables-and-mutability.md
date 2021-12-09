@@ -18,7 +18,7 @@ examine the immutability error.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
@@ -174,7 +174,7 @@ different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
 the simpler `spaces` name. However, if we try to use `mut` for this, as shown
 here, we’ll get a compile-time error:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-05-mut-cant-change-types/src/main.rs:here}}
 ```
 

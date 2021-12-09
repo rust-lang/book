@@ -206,7 +206,7 @@ unit-like structs.
 >
 > <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
 >
-> ```rust,ignore,does_not_compile
+> ```rust,compile_fail
 > struct User {
 >     username: &str,
 >     email: &str,

@@ -27,7 +27,7 @@ where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-08/src/main.rs:here}}
 ```
 

@@ -364,7 +364,7 @@ that starts with an underscore. The syntax `_x` still binds the value to the
 variable, whereas `_` doesn’t bind at all. To show a case where this
 distinction matters, Listing 18-21 will provide us with an error.
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-21/src/main.rs:here}}
 ```
 
@@ -429,7 +429,7 @@ compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-25/src/main.rs}}
 ```
 

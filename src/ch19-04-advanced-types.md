@@ -156,7 +156,7 @@ At the time, we skipped over some details in this code. In Chapter 6 in [“The
 --> section, we discussed that `match` arms must all return the same type. So,
 for example, the following code doesn’t work:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-08-match-arms-different-types/src/main.rs:here}}
 ```
 
@@ -214,7 +214,7 @@ its own, is a DST. We can’t know how long the string is until runtime, meaning
 we can’t create a variable of type `str`, nor can we take an argument of type
 `str`. Consider the following code, which does not work:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-11-cant-create-str/src/main.rs:here}}
 ```
 

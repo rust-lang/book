@@ -177,7 +177,7 @@ in the tuple, the overall type won’t match and we’ll get a compiler error. F
 example, Listing 18-5 shows an attempt to destructure a tuple with three
 elements into two variables, which won’t work.
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-05/src/main.rs:here}}
 ```
 

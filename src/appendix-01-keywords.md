@@ -87,7 +87,7 @@ that uses `match` as its name:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 fn match(needle: &str, haystack: &str) -> bool {
     haystack.contains(needle)
 }

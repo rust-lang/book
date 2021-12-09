@@ -27,7 +27,7 @@ in a bit.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
@@ -109,7 +109,7 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
 ```
 

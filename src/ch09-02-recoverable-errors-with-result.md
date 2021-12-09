@@ -47,7 +47,7 @@ us that the types don’t match. The error message will then tell us what the
 type of `f` *is*. Let’s try it! We know that the return type of `File::open`
 isn’t of type `u32`, so let’s change the `let f` statement to this:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch09-error-handling/no-listing-02-ask-compiler-for-type/src/main.rs:here}}
 ```
 
@@ -398,7 +398,7 @@ compatible with this `return`.
 In Listing 9-10, let’s look at the error we’ll get if we use the `?` operator
 in a `main` function with a return type of `()`:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
 ```
 
