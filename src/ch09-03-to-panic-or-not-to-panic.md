@@ -157,13 +157,8 @@ confidently use the values they receive. Listing 9-13 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100.
 
-<!-- Deliberately not using rustdoc_include here; the `main` function in the
-file requires the `rand` crate. We do want to include it for reader
-experimentation purposes, but don't want to include it for rustdoc testing
-purposes. -->
-
-```rust
-{{#include ../listings/ch09-error-handling/listing-09-13/src/main.rs:here}}
+```rust,ignore
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-13/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 9-13: A `Guess` type that will only continue with

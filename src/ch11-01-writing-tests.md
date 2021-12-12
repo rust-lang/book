@@ -388,7 +388,7 @@ value we got from the `greeting` function. Let’s change the test function,
 giving it a custom failure message made from a format string with a placeholder
 filled in with the actual value we got from the `greeting` function:
 
-```rust,ignore
+```rust,should_panic,ignore
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-07-custom-failure-message/src/lib.rs:here}}
 ```
 

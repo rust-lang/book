@@ -192,7 +192,7 @@ returning a value from `unwrap`, so this code is valid.
 
 One final expression that has the type `!` is a `loop`:
 
-```rust,ignore
+```rust,no_run
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-10-loop-returns-never/src/main.rs:here}}
 ```
 

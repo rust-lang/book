@@ -85,7 +85,7 @@ The following changes will do so:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
 

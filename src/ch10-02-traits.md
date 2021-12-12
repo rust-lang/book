@@ -200,7 +200,7 @@ the `summarize` method on its `item` parameter, which is of some type that
 implements the `Summary` trait. To do this, we can use the `impl Trait`
 syntax, like this:
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-04-traits-as-parameters/src/lib.rs:here}}
 ```
 
@@ -301,7 +301,7 @@ bounds.
 We can also use the `impl Trait` syntax in the return position to return a
 value of some type that implements a trait, as shown here:
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-05-returning-impl-trait/src/lib.rs:here}}
 ```
 

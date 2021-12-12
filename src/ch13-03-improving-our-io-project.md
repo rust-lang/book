@@ -56,7 +56,7 @@ well.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,compile_fail,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-25/src/main.rs:here}}
 ```
 
@@ -75,7 +75,7 @@ body.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-26/src/lib.rs:here}}
 ```
 
@@ -146,7 +146,7 @@ concurrent access to the `results` vector. Listing 13-29 shows this change:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-29/src/lib.rs:here}}
 ```
 
