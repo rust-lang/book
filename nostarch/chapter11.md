@@ -1174,6 +1174,8 @@ will be fast. When you’re at a point where it makes sense to check the results
 of the `ignored` tests and you have time to wait for the results, you can run
 `cargo test -- --ignored` instead.
 
+If you want to run all test, not just the `ignored` tests, you can run `cargo test -- --include-ignored`.
+
 ## Test Organization
 
 As mentioned at the start of the chapter, testing is a complex discipline, and
