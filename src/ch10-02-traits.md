@@ -21,11 +21,11 @@ particular location and a `Tweet` that can have at most 280 characters along
 with metadata that indicates whether it was a new tweet, a retweet, or a reply
 to another tweet.
 
-We want to make a media aggregator library that can display summaries of data
-that might be stored in a `NewsArticle` or `Tweet` instance. To do this, we
-need a summary from each type, and we need to request that summary by calling a
-`summarize` method on an instance. Listing 10-12 shows the definition of a
-`Summary` trait that expresses this behavior.
+We want to make a media aggregator library crate named `aggregator` that can
+display summaries of data that might be stored in a `NewsArticle` or `Tweet`
+instance. To do this, we need a summary from each type, and we’ll request
+that summary by calling a `summarize` method on an instance. Listing 10-12
+shows the definition of a public `Summary` trait that expresses this behavior.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -37,9 +37,11 @@ need a summary from each type, and we need to request that summary by calling a
 behavior provided by a `summarize` method</span>
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. Inside the curly brackets, we declare the
-method signatures that describe the behaviors of the types that implement this
-trait, which in this case is `fn summarize(&self) -> String`.
+which is `Summary` in this case. We’ve also declared the trait as `pub` so that
+crates depending on this crate can make use of this trait too, as we’ll see in
+a few examples. Inside the curly brackets, we declare the method signatures
+that describe the behaviors of the types that implement this trait, which in
+this case is `fn summarize(&self) -> String`.
 
 After the method signature, instead of providing an implementation within curly
 brackets, we use a semicolon. Each type implementing this trait must provide
@@ -52,10 +54,10 @@ one per line and each line ends in a semicolon.
 
 ### Implementing a Trait on a Type
 
-Now that we’ve defined the desired behavior using the `Summary` trait, we can
-implement it on the types in our media aggregator. Listing 10-13 shows an
-implementation of the `Summary` trait on the `NewsArticle` struct that uses the
-headline, the author, and the location to create the return value of
+Now that we’ve defined the desired signatures of the `Summary` trait’s methods,
+we can implement it on the types in our media aggregator. Listing 10-13 shows
+an implementation of the `Summary` trait on the `NewsArticle` struct that uses
+the headline, the author, and the location to create the return value of
 `summarize`. For the `Tweet` struct, we define `summarize` as the username
 followed by the entire text of the tweet, assuming that tweet content is
 already limited to 280 characters.
@@ -78,34 +80,29 @@ after each signature, we use curly brackets and fill in the method body with
 the specific behavior that we want the methods of the trait to have for the
 particular type.
 
-After implementing the trait, we can call the methods on instances of
-`NewsArticle` and `Tweet` in the same way we call regular methods, like this:
+Now that the library has implemented the `Summary` trait on `NewsArticle` and
+`Tweet`, users of the crate can call the trait methods on instances of
+`NewsArticle` and `Tweet` in the same way we call regular methods. The only
+difference is that the trait has to be brought into scope as well as the types
+to get the additional trait methods. Here’s an example of how a binary crate
+could use our `aggregator` library crate:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-01-calling-trait-method/src/main.rs}}
 ```
 
 This code prints `1 new tweet: horse_ebooks: of course, as you probably already
 know, people`.
 
-Note that because we defined the `Summary` trait and the `NewsArticle` and
-`Tweet` types in the same *lib.rs* in Listing 10-13, they’re all in the same
-scope. Let’s say this *lib.rs* is for a crate we’ve called `aggregator` and
-someone else wants to use our crate’s functionality to implement the `Summary`
-trait on a struct defined within their library’s scope. They would need to
-bring the trait into their scope first. They would do so by specifying `use
-aggregator::Summary;`, which then would enable them to implement `Summary` for
-their type. The `Summary` trait would also need to be a public trait for
-another crate to implement it, which it is because we put the `pub` keyword
-before `trait` in Listing 10-12.
-
-One restriction to note with trait implementations is that we can implement a
-trait on a type only if either the trait or the type is local to our crate.
-For example, we can implement standard library traits like `Display` on a
-custom type like `Tweet` as part of our `aggregator` crate functionality,
-because the type `Tweet` is local to our `aggregator` crate. We can also
-implement `Summary` on `Vec<T>` in our `aggregator` crate, because the
-trait `Summary` is local to our `aggregator` crate.
+Other crates that depend on the `aggregator` crate can also bring the `Summary`
+trait into scope to implement the trait on their own types. One restriction to
+note with trait implementations is that we can implement a trait on a type only
+if at least one of the trait or the type is local to our crate. For example, we
+can implement standard library traits like `Display` on a custom type like
+`Tweet` as part of our `aggregator` crate functionality, because the type
+`Tweet` is local to our `aggregator` crate. We can also implement `Summary` on
+`Vec<T>` in our `aggregator` crate, because the trait `Summary` is local to our
+`aggregator` crate.
 
 But we can’t implement external traits on external types. For example, we can’t
 implement the `Display` trait on `Vec<T>` within our `aggregator` crate,
@@ -406,16 +403,19 @@ reference, we wouldn’t need the `Clone` or `Copy` trait bounds and we could
 avoid heap allocations. Try implementing these alternate solutions on your own!
 If you get stuck with errors having to do with lifetimes, keep reading: the
 “Validating References with Lifetimes” section coming up will explain, but
-lifetimes aren't required to solve these challenges.
+lifetimes aren’t required to solve these challenges.
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
 traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
-`new` function. But `Pair<T>` only implements the `cmp_display` method if its
-inner type `T` implements the `PartialOrd` trait that enables comparison *and*
-the `Display` trait that enables printing.
+`new` function to return a new instance of `Pair<T>` (recall from the
+[”Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
+is a type alias for the type of the `impl` block, which in this case is
+`Pair<T>`). But in the next `impl` block, `Pair<T>` only implements the
+`cmp_display` method if its inner type `T` implements the `PartialOrd` trait
+that enables comparison *and* the `Display` trait that enables printing.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -472,3 +472,4 @@ lifetimes do that.
 ch04-01-what-is-ownership.html#stack-only-data-copy
 [using-trait-objects-that-allow-for-values-of-different-types]:
 ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[methods]: ch05-03-method-syntax.html#defining-methods

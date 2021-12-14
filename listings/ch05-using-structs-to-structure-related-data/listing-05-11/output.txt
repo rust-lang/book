@@ -8,12 +8,7 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
    |
    = help: the trait `std::fmt::Display` is not implemented for `Rectangle`
    = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
-   = note: required by `std::fmt::Display::fmt`
    = note: this error originates in the macro `$crate::format_args_nl` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `rectangles`
-
-To learn more, run the command again with --verbose.
+error: could not compile `rectangles` due to previous error

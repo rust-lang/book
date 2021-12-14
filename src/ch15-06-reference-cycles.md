@@ -70,7 +70,7 @@ variable `b`, which decreases the reference count of the `Rc<List>` instance
 from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
 this point, because its reference count is 1, not 0. Then Rust drops `a`, which
 decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
-well. This instance's memory can’t be dropped either, because the other
+well. This instance’s memory can’t be dropped either, because the other
 `Rc<List>` instance still refers to it. The memory allocated to the list will
 remain uncollected forever. To visualize this reference cycle, we’ve created a
 diagram in Figure 15-4.

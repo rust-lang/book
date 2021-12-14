@@ -6,9 +6,5 @@ error[E0599]: no function or associated item named `new` found for struct `Threa
 11 |     let pool = ThreadPool::new(4);
    |                            ^^^ function or associated item not found in `ThreadPool`
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0599`.
-error: could not compile `hello`
-
-To learn more, run the command again with --verbose.
+error: could not compile `hello` due to previous error

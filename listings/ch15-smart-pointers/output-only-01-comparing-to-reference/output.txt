@@ -4,14 +4,10 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
  --> src/main.rs:6:5
   |
 6 |     assert_eq!(5, y);
-  |     ^^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
+  |     ^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
   |
   = help: the trait `PartialEq<&{integer}>` is not implemented for `{integer}`
   = note: this error originates in the macro `assert_eq` (in Nightly builds, run with -Z macro-backtrace for more info)
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `deref-example`
-
-To learn more, run the command again with --verbose.
+error: could not compile `deref-example` due to previous error

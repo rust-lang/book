@@ -9,6 +9,5 @@ warning: unused `Result` that must be used
    = note: `#[warn(unused_must_use)]` on by default
    = note: this `Result` may be an `Err` variant, which should be handled
 
-warning: 1 warning emitted
-
+warning: `guessing_game` (bin "guessing_game") generated 1 warning
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s

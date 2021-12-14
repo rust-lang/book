@@ -71,7 +71,7 @@ $ mdbook test
 We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
 kinds of contributions we're looking for.
 
-[contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
+[contrib]: https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md
 
 Because the book is [printed](https://nostarch.com/rust), and because we want
 to keep the online version of the book close to the print version when

@@ -260,22 +260,24 @@ body that might fail: the `File::open` function and the `read_to_string`
 method.
 
 The body of the function starts by calling the `File::open` function. Then we
-handle the `Result` value returned with a `match` similar to the `match` in
-Listing 9-4, only instead of calling `panic!` in the `Err` case, we return
-early from this function and pass the error value from `File::open` back to the
-calling code as this function’s error value. If `File::open` succeeds, we store
-the file handle in the variable `f` and continue.
+handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
+If `File::open` succeeds, the file handle in the pattern variable `file`
+becomes the value in the mutable variable `f` and the function continues. In
+the `Err` case, instead of calling `panic!`, we use the `return` keyword to
+return early out of the function entirely and pass the error value from
+`File::open`, now in the pattern variable `e`, back to the calling code as this
+function’s error value.
 
-Then we create a new `String` in variable `s` and call the `read_to_string`
-method on the file handle in `f` to read the contents of the file into `s`. The
-`read_to_string` method also returns a `Result` because it might fail, even
-though `File::open` succeeded. So we need another `match` to handle that
-`Result`: if `read_to_string` succeeds, then our function has succeeded, and we
-return the username from the file that’s now in `s` wrapped in an `Ok`. If
-`read_to_string` fails, we return the error value in the same way that we
-returned the error value in the `match` that handled the return value of
-`File::open`. However, we don’t need to explicitly say `return`, because this
-is the last expression in the function.
+So if we have a file handle in `f`, the function then creates a new `String` in
+variable `s` and calls the `read_to_string` method on the file handle in `f` to
+read the contents of the file into `s`. The `read_to_string` method also
+returns a `Result` because it might fail, even though `File::open` succeeded.
+So we need another `match` to handle that `Result`: if `read_to_string`
+succeeds, then our function has succeeded, and we return the username from the
+file that’s now in `s` wrapped in an `Ok`. If `read_to_string` fails, we return
+the error value in the same way that we returned the error value in the `match`
+that handled the return value of `File::open`. However, we don’t need to
+explicitly say `return`, because this is the last expression in the function.
 
 The code that calls this code will then handle getting either an `Ok` value
 that contains a username or an `Err` value that contains an `io::Error`. We
@@ -322,11 +324,11 @@ on them go through the `from` function, defined in the `From` trait in the
 standard library, which is used to convert errors from one type into another.
 When the `?` operator calls the `from` function, the error type received is
 converted into the error type defined in the return type of the current
-function. This is useful when a function returns one error type to represent all
-the ways a function might fail, even if parts might fail for many different
-reasons. As long as each error type implements the `from` function to define how
-to convert itself to the returned error type, the `?` operator takes care of the
-conversion automatically.
+function. This is useful when a function returns one error type to represent
+all the ways a function might fail, even if parts might fail for many different
+reasons. As long as there’s an `impl From<OtherError> for ReturnedError` to
+define the conversion in the trait’s `from` function, the `?` operator takes
+care of calling the `from` function automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the variable `f`. If an error occurs, the
@@ -383,53 +385,130 @@ and returns it. Of course, using `fs::read_to_string` doesn’t give us the
 opportunity to explain all the error handling, so we did it the longer way
 first.
 
-#### The `?` Operator Can Be Used in Functions That Return `Result`
+#### Where The `?` Operator Can Be Used
 
-The `?` operator can be used in functions that have a return type of
-`Result`, because it is defined to work in the same way as the `match`
-expression we defined in Listing 9-6. The part of the `match` that requires a
-return type of `Result` is `return Err(e)`, so the return type of the function
-has to be a `Result` to be compatible with this `return`.
+The `?` operator can only be used in functions that have a return type
+compatible with the value the `?` is used on. This is because the `?` operator
+is defined to perform an early return of a value out of the function, in the
+same manner as the `match` expression we defined in Listing 9-6 did. In Listing
+9-6, the `match` was using a `Result` value, and the early return arm returned
+an `Err(e)` value. The return type of the function has to be a `Result` to be
+compatible with this `return`.
 
-Let’s look at what happens if we use the `?` operator in the `main` function,
-which you’ll recall has a return type of `()`:
+In Listing 9-10, let’s look at the error we’ll get if we use the `?` operator
+in a `main` function with a return type of `()`:
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch09-error-handling/no-listing-06-question-mark-in-main/src/main.rs}}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
 ```
 
-When we compile this code, we get the following error message:
+<span class="caption">Listing 9-10: Attempting to use the `?` in the `main`
+function that returns `()` won’t compile</span>
+
+This code opens a file, which might fail. The `?` operator follows the `Result`
+value returned by `File::open`, but this `main` function has the return type of
+`()`, not `Result`. When we compile this code, we get the following error
+message:
 
 ```console
-{{#include ../listings/ch09-error-handling/no-listing-06-question-mark-in-main/output.txt}}
+{{#include ../listings/ch09-error-handling/listing-09-10/output.txt}}
 ```
 
 This error points out that we’re only allowed to use the `?` operator in a
-function that returns `Result` or `Option` or another type that implements
-`std::ops::Try`. When you’re writing code in a function
-that doesn’t return one of these types, and you want to use `?` when you call other
-functions that return `Result<T, E>`, you have two choices to fix this problem.
-One technique is to change the return type of your function to be `Result<T,
-E>` if you have no restrictions preventing that. The other technique is to use
-a `match` or one of the `Result<T, E>` methods to handle the `Result<T, E>` in
-whatever way is appropriate.
+function that returns `Result`, `Option`, or another type that implements
+`FromResidual`. To fix this error, you have two choices. One technique is to
+change the return type of your function to be `Result<T, E>` if you have no
+restrictions preventing that. The other technique is to use a `match` or one of
+the `Result<T, E>` methods to handle the `Result<T, E>` in whatever way is
+appropriate.
 
-The `main` function is special, and there are restrictions on what its return
-type must be. One valid return type for main is `()`, and conveniently, another
-valid return type is `Result<T, E>`, as shown here:
+The error message also mentioned that `?` can be used with `Option<T>` values
+as well. As with using `?` on `Result`, you can only use `?` on `Option` in a
+function that returns an `Option`. The behavior of the `?` operator when called
+on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`:
+if the value is `None`, the `None` will be returned early from the function at
+that point. If the value is `Some`, the value inside the `Some` is the
+resulting value of the expression and the function continues. Listing 9-11 has
+an example of a function that finds the last character of the first line in the
+given text:
+
+```rust
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
+```
+
+<span class="caption">Listing 9-11: Using the `?` operator on an `Option<T>`
+value</span>
+
+This function returns `Option<char>` because it might find a character at this
+position, or there might be no character there. This code takes the `text`
+string slice argument and calls the `lines` method on it, which returns an
+iterator over the lines in the string. Because this function wants to examine
+the first line, it calls `next` on the iterator to get the first value from the
+iterator. If `text` is the empty string, this call to `next` will return
+`None`, and here we can use `?` to stop and return `None` from
+`last_char_of_first_line` if that is the case. If `text` is not the empty
+string, `next` will return a `Some` value containing a string slice of the
+first line in `text`.
+
+The `?` extracts the string slice, and we can call `chars` on that string slice
+to get an iterator of the characters in this string slice. We’re interested in
+the last character in this first line, so we call `last` to return the last
+item in the iterator over the characters. This is an `Option` because the first
+line might be the empty string, if `text` starts with a blank line but has
+characters on other lines, as in `"\nhi"`. However, if there is a last
+character on the first line, it will be returned in the `Some` variant. The `?`
+operator in the middle gives us a concise way to express this logic, and this
+function can be implemented in one line. If we couldn’t use the `?` operator on
+`Option`, we’d have to implement this logic using more method calls or a
+`match` expression.
+
+Note that you can use the `?` operator on a `Result` in a function that returns
+`Result`, and you can use the `?` operator on an `Option` in a function that
+returns `Option`, but you can’t mix and match. The `?` operator won’t
+automatically convert a `Result` to an `Option` or vice versa; in those cases,
+there are methods like the `ok` method on `Result` or the `ok_or` method on
+`Option` that will do the conversion explicitly.
+
+So far, all the `main` functions we’ve used return `()`. The `main` function is
+special because it’s the entry and exit point of executable programs, and there
+are restrictions on what its return type can be for the programs to behave as
+expected. Executables written in C return integers when they exit, and Rust
+executables follow this convention as well: programs that exit successfully
+return the integer `0`, and programs that error return some integer other than
+`0`. When `main` returns `()`, Rust executables will return `0` if `main`
+returns and a nonzero value if the program panics before reaching the end of
+`main`.
+
+Another return type `main` can have is `Result<(), E>`. Listing 9-12 has the
+code from Listing 9-10 but we’ve changed the return type of `main` to be
+`Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
+code will now compile:
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch09-error-handling/no-listing-07-main-returning-result/src/main.rs}}
+{{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
 ```
+
+<span class="caption">Listing 9-12: Changing `main` to return `Result<(), E>`
+allows the use of the `?` operator on `Result` values</span>
 
 The `Box<dyn Error>` type is called a trait object, which we’ll talk about in
 the [“Using Trait Objects that Allow for Values of Different
 Types”][trait-objects]<!-- ignore --> section in Chapter 17. For now, you can
-read `Box<dyn Error>` to mean “any kind of error.” Using `?` in a `main`
-function with this return type is allowed.
+read `Box<dyn Error>` to mean “any kind of error.” Using `?` on a `Result`
+value in a `main` function with this return type is allowed, because now an
+`Err` value can be returned early. When a `main` function returns a `Result<(),
+E>`, the executable will exit with a value of `0` if `main` returns `Ok(())`
+and will exit with a nonzero value if `main` returns an `Err` value.
+
+The types that `main` may return are those that implement [the
+`std::process::Termination` trait][termination]<!-- ignore -->. As of this
+writing, the `Termination` trait is an unstable feature only available in
+Nightly Rust, so you can’t yet implement it for your own types in Stable Rust,
+but you might be able to someday!
 
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
 
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
+[termination]: ../std/process/trait.Termination.html

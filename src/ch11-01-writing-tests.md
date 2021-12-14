@@ -406,7 +406,7 @@ debug what happened instead of what we were expecting to happen.
 In addition to checking that our code returns the correct values we expect,
 it’s also important to check that our code handles error conditions as we
 expect. For example, consider the `Guess` type that we created in Chapter 9,
-Listing 9-10. Other code that uses `Guess` depends on the guarantee that `Guess`
+Listing 9-13. Other code that uses `Guess` depends on the guarantee that `Guess`
 instances will contain only values between 1 and 100. We can write a test that
 ensures that attempting to create a `Guess` instance with a value outside that
 range panics.
@@ -520,8 +520,9 @@ mark operator in the body of tests, which can be a convenient way to write
 tests that should fail if any operation within them returns an `Err` variant.
 
 You can’t use the `#[should_panic]` annotation on tests that use `Result<T,
-E>`. Instead, you should return an `Err` value directly when the test should
-fail.
+E>`. To assert that an operation returns an `Err` variant, *don’t* use the
+question mark operator on the `Result<T, E>` value. Instead, use
+`assert!(value.is_err())`.
 
 Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo

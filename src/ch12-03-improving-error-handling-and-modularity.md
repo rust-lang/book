@@ -247,7 +247,7 @@ arguments again to see what the error looks like now:
 
 This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
-the technique we used in Listing 9-10 isn’t the best to use here: a call to
+the technique we used in Listing 9-13 isn’t the best to use here: a call to
 `panic!` is more appropriate for a programming problem than a usage problem,
 [as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead, we
 can use the other technique you learned about in Chapter 9—[returning a

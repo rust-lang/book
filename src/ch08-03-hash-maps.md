@@ -199,25 +199,28 @@ the value 0.
 map that stores words and counts</span>
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. The
-`or_insert` method actually returns a mutable reference (`&mut V`) to the value
-for this key. Here we store that mutable reference in the `count` variable, so
-in order to assign to that value, we must first dereference `count` using the
-asterisk (`*`). The mutable reference goes out of scope at the end of the `for`
-loop, so all of these changes are safe and allowed by the borrowing rules.
+`split_whitespace` method iterates over sub-slices, separated by whitespace, of
+the value in `text`. The `or_insert` method returns a mutable reference (`&mut
+V`) to the value for the specified key. Here we store that mutable reference in
+the `count` variable, so in order to assign to that value, we must first
+dereference `count` using the asterisk (`*`). The mutable reference goes out of
+scope at the end of the `for` loop, so all of these changes are safe and
+allowed by the borrowing rules.
 
 ### Hashing Functions
 
 By default, `HashMap` uses a hashing function called SipHash that can provide
-resistance to Denial of Service (DoS) attacks involving hash tables[^siphash]. This
-is not the fastest hashing algorithm available, but the trade-off for better
-security that comes with the drop in performance is worth it. If you profile
-your code and find that the default hash function is too slow for your
-purposes, you can switch to another function by specifying a different
-*hasher*. A hasher is a type that implements the `BuildHasher` trait. We’ll
-talk about traits and how to implement them in Chapter 10. You don’t
-necessarily have to implement your own hasher from scratch;
-[crates.io](https://crates.io/) has libraries shared by other Rust users that
-provide hashers implementing many common hashing algorithms.
+resistance to Denial of Service (DoS) attacks involving hash
+tables[^siphash]<!-- ignore -->. This is not the fastest hashing algorithm
+available, but the trade-off for better security that comes with the drop in
+performance is worth it. If you profile your code and find that the default
+hash function is too slow for your purposes, you can switch to another function
+by specifying a different *hasher*. A hasher is a type that implements the
+`BuildHasher` trait. We’ll talk about traits and how to implement them in
+Chapter 10. You don’t necessarily have to implement your own hasher from
+scratch; [crates.io](https://crates.io/)<!-- ignore --> has libraries shared by
+other Rust users that provide hashers implementing many common hashing
+algorithms.
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
@@ -227,9 +230,9 @@ Vectors, strings, and hash maps will provide a large amount of functionality
 necessary in programs when you need to store, access, and modify data. Here are
 some exercises you should now be equipped to solve:
 
-* Given a list of integers, use a vector and return the mean (the average
-  value), median (when sorted, the value in the middle position), and mode (the
-  value that occurs most often; a hash map will be helpful here) of the list.
+* Given a list of integers, use a vector and return the median (when sorted,
+  the value in the middle position) and mode (the value that occurs most often;
+  a hash map will be helpful here) of the list.
 * Convert strings to pig latin. The first consonant of each word is moved to
   the end of the word and “ay” is added, so “first” becomes “irst-fay.” Words
   that start with a vowel have “hay” added to the end instead (“apple” becomes

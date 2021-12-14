@@ -6,9 +6,5 @@ error[E0308]: mismatched types
 7 |     let wont_work = Point { x: 5, y: 4.0 };
   |                                      ^^^ expected integer, found floating-point number
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0308`.
-error: could not compile `chapter10`
-
-To learn more, run the command again with --verbose.
+error: could not compile `chapter10` due to previous error

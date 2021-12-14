@@ -48,7 +48,7 @@ Using `TcpListener`, we can listen for TCP connections at the address
 `127.0.0.1:7878`. In the address, the section before the colon is an IP address
 representing your computer (this is the same on every computer and doesn’t
 represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn't normally accepted on this port, and
+chosen this port for two reasons: HTTP isn’t normally accepted on this port, and
 7878 is *rust* typed on a telephone.
 
 The `bind` function in this scenario works like the `new` function in that it

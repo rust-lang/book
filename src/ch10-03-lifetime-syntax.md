@@ -11,11 +11,10 @@ ways. Rust requires us to annotate the relationships using generic lifetime
 parameters to ensure the actual references used at runtime will definitely be
 valid.
 
-The concept of lifetimes is somewhat different from tools in other programming
-languages, arguably making lifetimes Rust’s most distinctive feature. Although
-we won’t cover lifetimes in their entirety in this chapter, we’ll discuss
-common ways you might encounter lifetime syntax so you can become familiar with
-the concepts.
+Annotating lifetimes is not even a concept most other programming languages
+have, so this is going to feel unfamiliar. Although we won’t cover lifetimes in
+their entirety in this chapter, we’ll discuss common ways you might encounter
+lifetime syntax so you can get introduced to the concept.
 
 ### Preventing Dangling References with Lifetimes
 
@@ -193,10 +192,11 @@ lifetime.
 Now let’s examine lifetime annotations in the context of the `longest`
 function. As with generic type parameters, we need to declare generic lifetime
 parameters inside angle brackets between the function name and the parameter
-list. The constraint we want to express in this signature is that all the
-references in the parameters and the return value must have the same lifetime.
-We’ll name the lifetime `'a` and then add it to each reference, as shown in
-Listing 10-22.
+list. The constraint we want to express in this signature is that the lifetimes
+of both of the parameters and the lifetime of the returned reference are
+related such that the returned reference will be valid as long as both the
+parameters are. We’ll name the lifetime `'a` and then add it to each reference,
+as shown in Listing 10-22.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -217,7 +217,9 @@ long as lifetime `'a`. The function signature also tells Rust that the string
 slice returned from the function will live at least as long as lifetime `'a`.
 In practice, it means that the lifetime of the reference returned by the
 `longest` function is the same as the smaller of the lifetimes of the
-references passed in. These constraints are what we want Rust to enforce.
+references passed in. These relationships are what we want Rust to use when
+analyzing this code.
+
 Remember, when we specify the lifetime parameters in this function signature,
 we’re not changing the lifetimes of any values passed in or returned. Rather,
 we’re specifying that the borrow checker should reject any values that don’t
@@ -226,12 +228,15 @@ know exactly how long `x` and `y` will live, only that some scope can be
 substituted for `'a` that will satisfy this signature.
 
 When annotating lifetimes in functions, the annotations go in the function
-signature, not in the function body. Rust can analyze the code within the
-function without any help. However, when a function has references to or from
-code outside that function, it becomes almost impossible for Rust to figure out
-the lifetimes of the parameters or return values on its own. The lifetimes
-might be different each time the function is called. This is why we need to
-annotate the lifetimes manually.
+signature, not in the function body. The lifetime annotations become part of
+the contract of the function, much like the types in the signature are. Having
+function signatures contain the lifetime contract means the analysis the Rust
+compiler does can be simpler. If there’s a problem with the way a function is
+annotated or the way it is called, the compiler errors can point to the part of
+our code and the constraints more precisely. If, instead, the Rust compiler
+made more inferences about what we intended the relationships of the lifetimes
+to be, the compiler might only be able to point to a use of our code many steps
+away from the cause of the problem.
 
 When we pass concrete references to `longest`, the concrete lifetime that is
 substituted for `'a` is the part of the scope of `x` that overlaps with the
@@ -588,10 +593,10 @@ This is the `longest` function from Listing 10-22 that returns the longer of
 two string slices. But now it has an extra parameter named `ann` of the generic
 type `T`, which can be filled in by any type that implements the `Display`
 trait as specified by the `where` clause. This extra parameter will be printed
-before the function compares the lengths of the string slices, which is why the
-`Display` trait bound is necessary. Because lifetimes are a type of generic,
-the declarations of the lifetime parameter `'a` and the generic type parameter
-`T` go in the same list inside the angle brackets after the function name.
+using `{}`, which is why the `Display` trait bound is necessary. Because
+lifetimes are a type of generic, the declarations of the lifetime parameter
+`'a` and the generic type parameter `T` go in the same list inside the angle
+brackets after the function name.
 
 ## Summary
 

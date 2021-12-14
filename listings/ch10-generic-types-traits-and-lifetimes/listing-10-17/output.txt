@@ -11,9 +11,5 @@ error[E0597]: `x` does not live long enough
 10 |         println!("r: {}", r);
    |                           - borrow later used here
 
-error: aborting due to previous error
-
 For more information about this error, try `rustc --explain E0597`.
-error: could not compile `chapter10`
-
-To learn more, run the command again with --verbose.
+error: could not compile `chapter10` due to previous error

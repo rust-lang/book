@@ -455,7 +455,7 @@ annotation makes it easier to track down the source of problems when they occur.
 [dangling-references]:
 ch04-02-references-and-borrowing.html#dangling-references
 [differences-between-variables-and-constants]:
-ch03-01-variables-and-mutability.html#differences-between-variables-and-constants
+ch03-01-variables-and-mutability.html#constants
 [extensible-concurrency-with-the-sync-and-send-traits]:
 ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits
 [the-slice-type]: ch04-03-slices.html#the-slice-type

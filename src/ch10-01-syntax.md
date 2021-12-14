@@ -210,13 +210,20 @@ Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
 to the data in the field `x`.
 
 Note that we have to declare `T` just after `impl` so we can use it to specify
-that we’re implementing methods on the type `Point<T>`.  By declaring `T` as a
+that we’re implementing methods on the type `Point<T>`. By declaring `T` as a
 generic type after `impl`, Rust can identify that the type in the angle
-brackets in `Point` is a generic type rather than a concrete type.
+brackets in `Point` is a generic type rather than a concrete type. Because this
+is declaring the generic again, we could have chosen a different name for the
+generic parameter than the generic parameter declared in the struct definition,
+but using the same name is conventional. Methods written within an `impl` that
+declares the generic type will be defined on any instance of the type, no
+matter what concrete type ends up substituting for the generic type.
 
-We could, for example, implement methods only on `Point<f32>` instances rather
-than on `Point<T>` instances with any generic type. In Listing 10-10 we use the
-concrete type `f32`, meaning we don’t declare any types after `impl`.
+The other option we have is defining methods on the type with some constraint
+on the generic type. We could, for example, implement methods only on
+`Point<f32>` instances rather than on `Point<T>` instances with any generic
+type. In Listing 10-10 we use the concrete type `f32`, meaning we don’t declare
+any types after `impl`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -234,12 +241,11 @@ point is from the point at coordinates (0.0, 0.0) and uses mathematical
 operations that are available only for floating point types.
 
 Generic type parameters in a struct definition aren’t always the same as those
-you use in that struct’s method signatures. For example, Listing 10-11 defines
-the method `mixup` on the `Point<T, U>` struct from Listing 10-8. The method
-takes another `Point` as a parameter, which might have different types from the
-`self` `Point` we’re calling `mixup` on. The method creates a new `Point`
-instance with the `x` value from the `self` `Point` (of type `T`) and the `y`
-value from the passed-in `Point` (of type `W`).
+you use in that struct’s method signatures. Listing 10-11 uses the generic
+types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
+signature to make the example clearer. The method creates a new `Point`
+instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
+value from the passed-in `Point` (of type `Y2`).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -260,9 +266,10 @@ call will print `p3.x = 5, p3.y = c`.
 
 The purpose of this example is to demonstrate a situation in which some generic
 parameters are declared with `impl` and some are declared with the method
-definition. Here, the generic parameters `T` and `U` are declared after `impl`,
-because they go with the struct definition. The generic parameters `V` and `W`
-are declared after `fn mixup`, because they’re only relevant to the method.
+definition. Here, the generic parameters `X1` and `Y1` are declared after
+`impl` because they go with the struct definition. The generic parameters `X2`
+and `Y2` are declared after `fn mixup`, because they’re only relevant to the
+method.
 
 ### Performance of Code Using Generics
 
