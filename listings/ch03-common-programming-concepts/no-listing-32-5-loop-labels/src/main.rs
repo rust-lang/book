@@ -10,7 +10,7 @@ fn main() {
                 break;
             }
             if count == 2 {
-                break 'counting_up;
+                break 'counting_up';
             }
             remaining -= 1;
         }
