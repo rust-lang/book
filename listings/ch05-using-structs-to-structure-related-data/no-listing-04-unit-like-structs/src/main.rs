@@ -1,7 +1,5 @@
-fn main() {
-    // ANCHOR: here
-    struct AlwaysEqual;
+struct AlwaysEqual;
 
+fn main() {
     let subject = AlwaysEqual;
-    // ANCHOR_END: here
 }

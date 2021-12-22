@@ -1,12 +1,12 @@
 ## Method Syntax
 
-*Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can have parameters and a return value, and they contain some
-code that is run when they’re called from somewhere else. However, methods are
-different from functions in that they’re defined within the context of a struct
-(or an enum or a trait object, which we cover in Chapters 6 and 17,
-respectively), and their first parameter is always `self`, which represents the
-instance of the struct the method is being called on.
+*Methods* are similar to functions: we declare them with the `fn` keyword and a
+name, they can have parameters and a return value, and they contain some code
+that’s run when the method is called from somewhere else. Unlike functions,
+methods are defined within the context of a struct (or an enum or a trait
+object, which we cover in Chapters 6 and 17, respectively), and their first
+parameter is always `self`, which represents the instance of the struct the
+method is being called on.
 
 ### Defining Methods
 
@@ -52,7 +52,7 @@ instance by using just `self` as the first parameter is rare; this technique is
 usually used when the method transforms `self` into something else and you want
 to prevent the caller from using the original instance after the transformation.
 
-The main benefit of using methods instead of functions, in addition to using
+The main reason for using methods instead of functions, in addition to providing
 method syntax and not having to repeat the type of `self` in every method’s
 signature, is for organization. We’ve put all the things we can do with an
 instance of a type in one `impl` block rather than making future users of our
@@ -68,21 +68,20 @@ fields. For example, we can define a method on `Rectangle` also named `width`:
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-06-method-field-interaction/src/main.rs:here}}
 ```
 
-Here, we’re choosing to make the behavior of the `width` method be that it
-returns `true` if the value in the instance’s `width` field is greater than 0,
-and `false` if the value is 0: we can use a field within a method of the same
-name for any purpose. In `main`, when we follow `rect1.width` with parentheses,
-Rust knows we mean the method `width`. When we don’t use parentheses, Rust
-knows we mean the field `width`.
+Here, we’re choosing to make the `width` method return `true` if the value in
+the instance’s `width` field is greater than 0, and `false` if the value is 0:
+we can use a field within a method of the same name for any purpose. In `main`,
+when we follow `rect1.width` with parentheses, Rust knows we mean the method
+`width`. When we don’t use parentheses, Rust knows we mean the field `width`.
 
-Often, but not always, methods with the same name as a field will be defined to
-only return the value in the field and do nothing else. Methods like this are
-called *getters*, and Rust does not implement them automatically for struct
-fields as some other languages do. Getters are useful because you can make the
-field private but the method public and thus enable read-only access to that
-field as part of the type’s public API. We will be discussing what public and
-private are and how to designate a field or method as public or private in
-Chapter 7.
+Often, but not always, when we give methods with the same name as a field we
+want it to only return the value in the field and do nothing else. Methods like
+this are called *getters*, and Rust does not implement them automatically for
+struct fields as some other languages do. Getters are useful because you can
+make the field private but the method public and thus enable read-only access
+to that field as part of the type’s public API. We will be discussing what
+public and private are and how to designate a field or method as public or
+private in Chapter 7.
 
 > ### Where’s the `->` Operator?
 >
@@ -134,9 +133,9 @@ Chapter 7.
 Let’s practice using methods by implementing a second method on the `Rectangle`
 struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self`; otherwise it should return `false`. That is, we want to be able
-to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
-method.
+within `self` (the first `Rectangle`); otherwise it should return `false`. That
+is, once we’ve defined the `can_hold` method, we want to be able to write the
+program shown in Listing 5-14.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -190,7 +189,7 @@ All functions defined within an `impl` block are called *associated functions*
 because they’re associated with the type named after the `impl`. We can define
 associated functions that don’t have `self` as their first parameter (and thus
 are not methods) because they don’t need an instance of the type to work with.
-We’ve already used one function like this, the `String::from` function, that’s
+We’ve already used one function like this: the `String::from` function that’s
 defined on the `String` type.
 
 Associated functions that aren’t methods are often used for constructors that
