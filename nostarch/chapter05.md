@@ -55,12 +55,14 @@ in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.
 
 ```
-let user1 = User {
-    email: String::from("someone@example.com"),
-    username: String::from("someusername123"),
-    active: true,
-    sign_in_count: 1,
-};
+fn main() {
+    let user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };
+}
 ```
 
 Listing 5-2: Creating an instance of the `User` struct
@@ -72,14 +74,16 @@ the dot notation and assigning into a particular field. Listing 5-3 shows how
 to change the value in the `email` field of a mutable `User` instance.
 
 ```
-let mut user1 = User {
-    email: String::from("someone@example.com"),
-    username: String::from("someusername123"),
-    active: true,
-    sign_in_count: 1,
-};
+fn main() {
+    let mut user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };
 
-user1.email = String::from("anotheremail@example.com");
+    user1.email = String::from("anotheremail@example.com");
+}
 ```
 
 Listing 5-3: Changing the value in the `email` field of a `User` instance
@@ -150,12 +154,16 @@ regularly, without the update syntax. We set a new value for `email` but
 otherwise use the same values from `user1` that we created in Listing 5-2.
 
 ```
-let user2 = User {
-    active: user1.active,
-    username: user1.username,
-    email: String::from("another@example.com"),
-    sign_in_count: user1.sign_in_count,
-};
+fn main() {
+    // --snip--
+
+    let user2 = User {
+        active: user1.active,
+        username: user1.username,
+        email: String::from("another@example.com"),
+        sign_in_count: user1.sign_in_count,
+    };
+}
 ```
 
 Listing 5-6: Creating a new `User` instance using one of the values from `user1`
@@ -165,10 +173,14 @@ shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
 
 ```
-let user2 = User {
-    email: String::from("another@example.com"),
-    ..user1
-};
+fn main() {
+    // --snip--
+
+    let user2 = User {
+        email: String::from("another@example.com"),
+        ..user1
+    };
+}
 ```
 
 Listing 5-7: Using struct update syntax to set a new `email` value for a `User`
@@ -210,8 +222,10 @@ two tuple structs named `Color` and `Point`:
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
-let black = Color(0, 0, 0);
-let origin = Point(0, 0, 0);
+fn main() {
+    let black = Color(0, 0, 0);
+    let origin = Point(0, 0, 0);
+}
 ```
 
 Note that the `black` and `origin` values are different types, because they’re
@@ -235,7 +249,9 @@ example of declaring and instantiating a unit struct named `AlwaysEqual`:
 ```
 struct AlwaysEqual;
 
-let subject = AlwaysEqual;
+fn main() {
+    let subject = AlwaysEqual;
+}
 ```
 
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
