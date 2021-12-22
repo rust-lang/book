@@ -3,25 +3,29 @@
 
 # Using Structs to Structure Related Data
 
-A *struct*, or *structure*, is a custom data type that lets you name and
-package together multiple related values that make up a meaningful group. If
+A *struct*, or *structure*, is a custom data type that lets you package
+together and name multiple related values that make up a meaningful group. If
 you’re familiar with an object-oriented language, a *struct* is like an
 object’s data attributes. In this chapter, we’ll compare and contrast tuples
-with structs. We’ll demonstrate how to define and instantiate structs. We’ll
-discuss how to define associated functions, especially the kind of associated
-functions called *methods*, to specify behavior associated with a struct type.
-Structs and enums (discussed in Chapter 6) are the building blocks for creating
-new types in your program’s domain to take full advantage of Rust’s compile
-time type checking.
+with structs to build on what you already know and demonstrate when structs are
+a better way to group data.
+<!--- quickly say why we do this comparison -- to show when to use structs and
+when to use tuples? Because they serve similar functions? /LC --->
+<!-- done! /Carol -->
+We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
+define associated functions, especially the kind of associated functions called
+*methods*, to specify behavior associated with a struct type. Structs and enums
+(discussed in Chapter 6) are the building blocks for creating new types in your
+program’s domain to take full advantage of Rust’s compile time type checking.
 
 ## Defining and Instantiating Structs
 
-Structs are similar to tuples, which were discussed in “The Tuple Type”
-section. Like tuples, the pieces of a struct can be different types. Unlike
-with tuples, you’ll name each piece of data so it’s clear what the values mean.
-As a result of these names, structs are more flexible than tuples: you don’t
-have to rely on the order of the data to specify or access the values of an
-instance.
+Structs are similar to tuples, discussed in “The Tuple Type” section, in that
+both hold multiple related values. Like tuples, the pieces of a struct can be
+different types. Unlike with tuples, in a struct you’ll name each piece of data
+so it’s clear what the values mean. Adding these names means that structs are
+more flexible than tuples: you don’t have to rely on the order of the data to
+specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
@@ -61,7 +65,7 @@ let user1 = User {
 
 Listing 5-2: Creating an instance of the `User` struct
 
-To get a specific value from a struct, we can use dot notation. If we wanted
+To get a specific value from a struct, we use dot notation. If we wanted
 just this user’s email address, we could use `user1.email` wherever we wanted
 to use this value. If the instance is mutable, we can change a value by using
 the dot notation and assigning into a particular field. Listing 5-3 shows how
@@ -108,7 +112,7 @@ fields, but having to repeat the `email` and `username` field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
 would get even more annoying. Luckily, there’s a convenient shorthand!
 
-### Using the Field Init Shorthand when Variables and Fields Have the Same Name
+### Using the Field Init Shorthand
 
 Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the *field init shorthand* syntax to rewrite
@@ -137,13 +141,13 @@ than `email: email`.
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 
-It’s often useful to create a new instance of a struct that uses most of an old
-instance’s values but changes some. You can do this using *struct update
-syntax*.
+It’s often useful to create a new instance of a struct that includes most of
+the values from another instance, but changes some. You can do this using
+*struct update syntax*.
 
-First, Listing 5-6 shows how we create a new `User` instance in `user2` without
-the update syntax. We set a new value for `email` but otherwise use the same
-values from `user1` that we created in Listing 5-2.
+First, in Listing 5-6 we show how to create a new `User` instance in `user2`
+regularly, without the update syntax. We set a new value for `email` but
+otherwise use the same values from `user1` that we created in Listing 5-2.
 
 ```
 let user2 = User {
@@ -178,28 +182,29 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax is like assignment with `=` because it moves
-the data, just as we saw in the “Ways Variables and Data Interact: Move”
-section. In this example, we can no longer use `user1` after creating `user2`
-because the `String` in the `username` field of `user1` was moved into `user2`.
-If we had given `user2` new `String` values for both `email` and `username`,
-and thus only used the `active` and `sign_in_count` values from `user1`, then
-`user1` would still be valid after creating `user2`. The types of `active` and
-`sign_in_count` are types that implement the `Copy` trait, so the behavior we
-discussed in the “Stack-Only Data: Copy” section would apply.
+Note that the struct update syntax uses `=` like an assignement; this is
+because it moves the data, just as we saw in the “Ways Variables and Data
+Interact: Move” section. In this example, we can no longer use `user1` after
+creating `user2` because the `String` in the `username` field of `user1` was
+moved into `user2`. If we had given `user2` new `String` values for both
+`email` and `username`, and thus only used the `active` and `sign_in_count`
+values from `user1`, then `user1` would still be valid after creating `user2`.
+The types of `active` and `sign_in_count` are types that implement the `Copy`
+trait, so the behavior we discussed in the “Stack-Only Data: Copy” section
+would apply.
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
-You can also define structs that look similar to tuples, called *tuple
+Rust also supports structs that look similar to tuples, called *tuple
 structs*. Tuple structs have the added meaning the struct name provides but
 don’t have names associated with their fields; rather, they just have the types
 of the fields. Tuple structs are useful when you want to give the whole tuple a
-name and make the tuple be a different type from other tuples, and naming each
+name and make the tuple a different type from other tuples, and when naming each
 field as in a regular struct would be verbose or redundant.
 
 To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here are definitions and
-usages of two tuple structs named `Color` and `Point`:
+followed by the types in the tuple. For example, here we define and use
+two tuple structs named `Color` and `Point`:
 
 ```
 struct Color(i32, i32, i32);
@@ -222,11 +227,10 @@ individual value, and so on.
 
 You can also define structs that don’t have any fields! These are called
 *unit-like structs* because they behave similarly to `()`, the unit type that
-we mentioned in “The Tuple Type” section. Unit-like structs can be useful in
-situations in which you need to implement a trait on some type but don’t have
-any data that you want to store in the type itself. We’ll discuss traits in
-Chapter 10. Here’s an example of declaring and instantiating a unit struct
-named `AlwaysEqual`:
+we mentioned in “The Tuple Type” section. Unit-like structs can be useful when
+you need to implement a trait on some type but don’t have any data that you
+want to store in the type itself. We’ll discuss traits in Chapter 10. Here’s an
+example of declaring and instantiating a unit struct named `AlwaysEqual`:
 
 ```
 struct AlwaysEqual;
@@ -237,12 +241,12 @@ let subject = AlwaysEqual;
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
 semicolon. No need for curly brackets or parentheses! Then we can get an
 instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
-name we defined, without any curly brackets or parentheses. Imagine we’ll be
-implementing behavior for this type that every instance is always equal to
-every instance of every other type, perhaps to have a known result for testing
-purposes. We wouldn’t need any data to implement that behavior! You’ll see in
-Chapter 10 how to define traits and implement them on any type, including
-unit-like structs.
+name we defined, without any curly brackets or parentheses. Imagine that later
+we’ll implement behavior for this type such that every instance of
+`AlwaysEqual` is always equal to every instance of any other type, perhaps to
+have a known result for testing purposes. We wouldn’t need any data to
+implement that behavior! You’ll see in Chapter 10 how to define traits and
+implement them on any type, including unit-like structs.
 
 > ### Ownership of Struct Data
 >
@@ -251,11 +255,11 @@ unit-like structs.
 > because we want instances of this struct to own all of its data and for that
 > data to be valid for as long as the entire struct is valid.
 >
-> It’s possible for structs to store references to data owned by something else,
-> but to do so requires the use of *lifetimes*, a Rust feature that we’ll
+> It’s also possible for structs to store references to data owned by something
+> else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like this, which won’t work:
+> in a struct without specifying lifetimes, like the following; this won’t work:
 >
 > Filename: src/main.rs
 >
@@ -315,8 +319,8 @@ unit-like structs.
 ## An Example Program Using Structs
 
 To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start with single variables, and then
-refactor the program until we’re using structs instead.
+calculates the area of a rectangle. We’ll start by using single variables, and
+then refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the width and height of a rectangle specified in pixels and calculate the area
@@ -354,10 +358,12 @@ $ cargo run
 The area of the rectangle is 1500 square pixels.
 ```
 
-Even though Listing 5-8 works and figures out the area of the rectangle by
-calling the `area` function with each dimension, we can do better. The width
-and the height are related to each other because together they describe one
-rectangle.
+This code succeeds in figuring out the area of the rectangle by calling the
+`area` function with each dimension, but we can do more to make this code clear
+and readable.
+<!--- I wanted to clarify what more needed to be done up front, is this right,
+it's just better practice to relate the two parameters? /LC --->
+<!-- Yup, you've got it! /Carol -->
 
 The issue with this code is evident in the signature of `area`:
 
@@ -366,8 +372,8 @@ fn area(width: u32, height: u32) -> u32 {
 ```
 
 The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters. The parameters are related, but that’s
-not expressed anywhere in our program. It would be more readable and more
+function we wrote has two parameters, and it's not clear anywhere in our
+program that the parameters are related. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
 we might do that in “The Tuple Type” section of Chapter 3: by using tuples.
 
@@ -396,21 +402,20 @@ Listing 5-9: Specifying the width and height of the rectangle with a tuple
 
 In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way, this version is less
-clear: tuples don’t name their elements, so our calculation has become more
-confusing because we have to index into the parts of the tuple.
+clear: tuples don’t name their elements, so we have to index into the parts of
+the tuple, making our calculation less obvious.
 
-It doesn’t matter if we mix up width and height for the area calculation, but
-if we want to draw the rectangle on the screen, it would matter! We would have
-to keep in mind that `width` is the tuple index `0` and `height` is the tuple
-index `1`. If someone else worked on this code, they would have to figure this
-out and keep it in mind as well. It would be easy to forget or mix up these
-values and cause errors, because we haven’t conveyed the meaning of our data in
-our code.
+Mixing up the width and height wouldn’t matter for the area calculation, but if
+we want to draw the rectangle on the screen, it would matter! We would have to
+keep in mind that `width` is the tuple index `0` and `height` is the tuple
+index `1`. This would be even harder for someone else to figure out and keep in
+mind if they were to use our code. Because we haven’t conveyed the meaning of
+our data in our code, it’s now easier to introduce errors.
 
 ### Refactoring with Structs: Adding More Meaning
 
 We use structs to add meaning by labeling the data. We can transform the tuple
-we’re using into a data type with a name for the whole as well as names for the
+we’re using into a struct with a name for the whole as well as names for the
 parts, as shown in Listing 5-10.
 
 Filename: src/main.rs
@@ -461,7 +466,7 @@ and `1`. This is a win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
-It’d be nice to be able to print an instance of `Rectangle` while we’re
+It’d be useful to be able to print an instance of `Rectangle` while we’re
 debugging our program and see the values for all its fields. Listing 5-11 tries
 using the `println!` macro as we have used in previous chapters. This won’t
 work, however.
@@ -501,7 +506,7 @@ a `1` or any other primitive type to a user. But with structs, the way
 display possibilities: Do you want commas or not? Do you want to print the
 curly brackets? Should all the fields be shown? Due to this ambiguity, Rust
 doesn’t try to guess what we want, and structs don’t have a provided
-implementation of `Display`.
+implementation of `Display` to use with `println!` and the `{}` placeholder.
 
 If we continue reading the errors, we’ll find this helpful note:
 
@@ -571,7 +576,7 @@ Nice! It’s not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging. When we have
 larger structs, it’s useful to have output that’s a bit easier to read; in
 those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
-When we use the `{:#?}` style in the example, the output will look like this:
+In this example, using the `{:#?}` style will output:
 
 ```
 $ cargo run
@@ -584,17 +589,23 @@ rect1 is Rectangle {
 }
 ```
 
-Another way to print out a value using the `Debug` format is by using the
-`dbg!` macro. The `dbg!` macro takes ownership of an expression, prints the
-file and line number of where that `dbg!` macro call occurs in your code along
-with the resulting value of that expression, and returns ownership of the
-value. Calling the `dbg!` macro prints to the standard error console stream
-(`stderr`), as opposed to `println!` which prints to the standard output
-console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-“Writing Error Messages to Standard Error Instead of Standard Output” section
-in Chapter 12. Here’s an example where we’re interested in the value that gets
-assigned to the `width` field, as well as the value of the whole struct in
-`rect1`:
+Another way to print out a value using the `Debug` format is to use the `dbg!`
+macro, which takes ownership of an expression, prints the file and line number
+of where that `dbg!` macro call occurs in your code along with the resulting
+value of that expression, and returns ownership of the value.
+
+<!--- I've forgotten how to format a note in markdown... I suggest making this
+a note since we don't explote what it means for our program here /LC --->
+<!-- No problem -- we've been abusing blockquotes in markdown for notes. I've
+fixed! Good call! /Carol -->
+> Note: Calling the `dbg!` macro prints to the standard error console stream
+> (`stderr`), as opposed to `println!` which prints to the standard output
+> console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
+> “Writing Error Messages to Standard Error Instead of Standard Output” section
+> in Chapter 12.
+
+Here’s an example where we’re interested in the value that gets assigned to the
+`width` field, as well as the value of the whole struct in `rect1`:
 
 ```
 #[derive(Debug)]
@@ -656,13 +667,13 @@ continue to refactor this code by turning the `area` function into an `area`
 
 ## Method Syntax
 
-*Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can have parameters and a return value, and they contain some
-code that is run when they’re called from somewhere else. However, methods are
-different from functions in that they’re defined within the context of a struct
-(or an enum or a trait object, which we cover in Chapters 6 and 17,
-respectively), and their first parameter is always `self`, which represents the
-instance of the struct the method is being called on.
+*Methods* are similar to functions: we declare them with the `fn` keyword and a
+name, they can have parameters and a return value, and they contain some code
+that’s run when the method is called from somewhere else. Unlike functions,
+methods are defined within the context of a struct (or an enum or a trait
+object, which we cover in Chapters 6 and 17, respectively), and their first
+parameter is always `self`, which represents the instance of the struct the
+method is being called on.
 
 ### Defining Methods
 
@@ -729,7 +740,7 @@ instance by using just `self` as the first parameter is rare; this technique is
 usually used when the method transforms `self` into something else and you want
 to prevent the caller from using the original instance after the transformation.
 
-The main benefit of using methods instead of functions, in addition to using
+The main reason for using methods instead of functions, in addition to providing
 method syntax and not having to repeat the type of `self` in every method’s
 signature, is for organization. We’ve put all the things we can do with an
 instance of a type in one `impl` block rather than making future users of our
@@ -760,21 +771,20 @@ fn main() {
 }
 ```
 
-Here, we’re choosing to make the behavior of the `width` method be that it
-returns `true` if the value in the instance’s `width` field is greater than 0,
-and `false` if the value is 0: we can use a field within a method of the same
-name for any purpose. In `main`, when we follow `rect1.width` with parentheses,
-Rust knows we mean the method `width`. When we don’t use parentheses, Rust
-knows we mean the field `width`.
+Here, we’re choosing to make the `width` method return `true` if the value in
+the instance’s `width` field is greater than 0, and `false` if the value is 0:
+we can use a field within a method of the same name for any purpose. In `main`,
+when we follow `rect1.width` with parentheses, Rust knows we mean the method
+`width`. When we don’t use parentheses, Rust knows we mean the field `width`.
 
-Often, but not always, methods with the same name as a field will be defined to
-only return the value in the field and do nothing else. Methods like this are
-called *getters*, and Rust does not implement them automatically for struct
-fields as some other languages do. Getters are useful because you can make the
-field private but the method public and thus enable read-only access to that
-field as part of the type’s public API. We will be discussing what public and
-private are and how to designate a field or method as public or private in
-Chapter 7.
+Often, but not always, when we give methods with the same name as a field we
+want it to only return the value in the field and do nothing else. Methods like
+this are called *getters*, and Rust does not implement them automatically for
+struct fields as some other languages do. Getters are useful because you can
+make the field private but the method public and thus enable read-only access
+to that field as part of the type’s public API. We will be discussing what
+public and private are and how to designate a field or method as public or
+private in Chapter 7.
 
 > ### Where’s the `->` Operator?
 >
@@ -810,9 +820,11 @@ Chapter 7.
 Let’s practice using methods by implementing a second method on the `Rectangle`
 struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self`; otherwise it should return `false`. That is, we want to be able
-to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
-method.
+within `self` (the first `Rectangle`);
+<!--- self being the first instance? /LC --->
+<!-- Yup! /Carol -->
+otherwise it should return `false`. That is, once we’ve defined the `can_hold`
+method, we want to be able to write the program shown in Listing 5-14.
 
 Filename: src/main.rs
 
@@ -889,7 +901,7 @@ All functions defined within an `impl` block are called *associated functions*
 because they’re associated with the type named after the `impl`. We can define
 associated functions that don’t have `self` as their first parameter (and thus
 are not methods) because they don’t need an instance of the type to work with.
-We’ve already used one function like this, the `String::from` function, that’s
+We’ve already used one function like this: the `String::from` function that’s
 defined on the `String` type.
 
 Associated functions that aren’t methods are often used for constructors that
