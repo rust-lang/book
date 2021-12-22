@@ -302,29 +302,31 @@ implement them on any type, including unit-like structs.
 > ```
 > $ cargo run
 >    Compiling structs v0.1.0 (file:///projects/structs)
-> errorE0106: missing lifetime specifier
->  --> src/main.rs:2:15
+> error[E0106]: missing lifetime specifier
+>  --> src/main.rs:3:15
 >   |
-> 2 |     username: &str,
+> 3 |     username: &str,
 >   |               ^ expected named lifetime parameter
 >   |
 > help: consider introducing a named lifetime parameter
 >   |
-> 1 | struct User<'a> {
-> 2 |     username: &'a str,
+> 1 ~ struct User<'a> {
+> 2 |     active: bool,
+> 3 ~     username: &'a str,
 >   |
 >
-> errorE0106: missing lifetime specifier
->  --> src/main.rs:3:12
+> error[E0106]: missing lifetime specifier
+>  --> src/main.rs:4:12
 >   |
-> 3 |     email: &str,
+> 4 |     email: &str,
 >   |            ^ expected named lifetime parameter
 >   |
 > help: consider introducing a named lifetime parameter
 >   |
-> 1 | struct User<'a> {
-> 2 |     username: &str,
-> 3 |     email: &'a str,
+> 1 ~ struct User<'a> {
+> 2 |     active: bool,
+> 3 |     username: &str,
+> 4 ~     email: &'a str,
 >   |
 > ```
 >

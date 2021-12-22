@@ -1,11 +1,11 @@
 ## Defining and Instantiating Structs
 
-Structs are similar to tuples, which were discussed in [“The Tuple
-Type”][tuples]<!-- ignore --> section. Like tuples, the pieces of a struct can
-be different types. Unlike with tuples, you’ll name each piece of data so it’s
-clear what the values mean. As a result of these names, structs are more
-flexible than tuples: you don’t have to rely on the order of the data to
-specify or access the values of an instance.
+Structs are similar to tuples, discussed in [“The Tuple Type”][tuples]<!--
+ignore --> section, in that both hold multiple related values. Like tuples, the
+pieces of a struct can be different types. Unlike with tuples, in a struct
+you’ll name each piece of data so it’s clear what the values mean. Adding these
+names means that structs are more flexible than tuples: you don’t have to rely
+on the order of the data to specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
@@ -36,7 +36,7 @@ example, we can declare a particular user as shown in Listing 5-2.
 <span class="caption">Listing 5-2: Creating an instance of the `User`
 struct</span>
 
-To get a specific value from a struct, we can use dot notation. If we wanted
+To get a specific value from a struct, we use dot notation. If we wanted
 just this user’s email address, we could use `user1.email` wherever we wanted
 to use this value. If the instance is mutable, we can change a value by using
 the dot notation and assigning into a particular field. Listing 5-3 shows how
@@ -70,7 +70,8 @@ fields, but having to repeat the `email` and `username` field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
 would get even more annoying. Luckily, there’s a convenient shorthand!
 
-### Using the Field Init Shorthand when Variables and Fields Have the Same Name
+<a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
+### Using the Field Init Shorthand
 
 Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the *field init shorthand* syntax to rewrite
@@ -93,13 +94,13 @@ than `email: email`.
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 
-It’s often useful to create a new instance of a struct that uses most of an old
-instance’s values but changes some. You can do this using *struct update
-syntax*.
+It’s often useful to create a new instance of a struct that includes most of
+the values from another instance, but changes some. You can do this using
+*struct update syntax*.
 
-First, Listing 5-6 shows how we create a new `User` instance in `user2` without
-the update syntax. We set a new value for `email` but otherwise use the same
-values from `user1` that we created in Listing 5-2.
+First, in Listing 5-6 we show how to create a new `User` instance in `user2`
+regularly, without the update syntax. We set a new value for `email` but
+otherwise use the same values from `user1` that we created in Listing 5-2.
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
@@ -128,32 +129,32 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax is like assignment with `=` because it moves
-the data, just as we saw in the [“Ways Variables and Data Interact: Move”
-section][move]<!-- ignore -->. In this example, we can no longer use `user1`
-after creating `user2` because the `String` in the `username` field of `user1`
-was moved into `user2`. If we had given `user2` new `String` values for both
-`email` and `username`, and thus only used the `active` and `sign_in_count`
-values from `user1`, then `user1` would still be valid after creating `user2`.
-The types of `active` and `sign_in_count` are types that implement the `Copy`
-trait, so the behavior we discussed in the [“Stack-Only Data: Copy”
-section][copy]<!-- ignore --> would apply.
+Note that the struct update syntax uses `=` like an assignement; this is
+because it moves the data, just as we saw in the [“Ways Variables and Data
+Interact: Move”][move]<!-- ignore --> section. In this example, we can no
+longer use `user1` after creating `user2` because the `String` in the
+`username` field of `user1` was moved into `user2`. If we had given `user2` new
+`String` values for both `email` and `username`, and thus only used the
+`active` and `sign_in_count` values from `user1`, then `user1` would still be
+valid after creating `user2`. The types of `active` and `sign_in_count` are
+types that implement the `Copy` trait, so the behavior we discussed in the
+[“Stack-Only Data: Copy”][copy]<!-- ignore --> section would apply.
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
-You can also define structs that look similar to tuples, called *tuple
+Rust also supports structs that look similar to tuples, called *tuple
 structs*. Tuple structs have the added meaning the struct name provides but
 don’t have names associated with their fields; rather, they just have the types
 of the fields. Tuple structs are useful when you want to give the whole tuple a
-name and make the tuple be a different type from other tuples, and naming each
+name and make the tuple a different type from other tuples, and when naming each
 field as in a regular struct would be verbose or redundant.
 
 To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here are definitions and
-usages of two tuple structs named `Color` and `Point`:
+followed by the types in the tuple. For example, here we define and use
+two tuple structs named `Color` and `Point`:
 
 ```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs}}
 ```
 
 Note that the `black` and `origin` values are different types, because they’re
@@ -170,37 +171,37 @@ individual value, and so on.
 You can also define structs that don’t have any fields! These are called
 *unit-like structs* because they behave similarly to `()`, the unit type that
 we mentioned in [“The Tuple Type”][tuples]<!-- ignore --> section. Unit-like
-structs can be useful in situations in which you need to implement a trait on
-some type but don’t have any data that you want to store in the type itself.
-We’ll discuss traits in Chapter 10. Here’s an example of declaring and
-instantiating a unit struct named `AlwaysEqual`:
+structs can be useful when you need to implement a trait on some type but don’t
+have any data that you want to store in the type itself. We’ll discuss traits
+in Chapter 10. Here’s an example of declaring and instantiating a unit struct
+named `AlwaysEqual`:
 
 ```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs}}
 ```
 
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
 semicolon. No need for curly brackets or parentheses! Then we can get an
 instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
-name we defined, without any curly brackets or parentheses. Imagine we’ll be
-implementing behavior for this type that every instance is always equal to
-every instance of every other type, perhaps to have a known result for testing
-purposes. We wouldn’t need any data to implement that behavior! You’ll see in
-Chapter 10 how to define traits and implement them on any type, including
-unit-like structs.
+name we defined, without any curly brackets or parentheses. Imagine that later
+we’ll implement behavior for this type such that every instance of
+`AlwaysEqual` is always equal to every instance of any other type, perhaps to
+have a known result for testing purposes. We wouldn’t need any data to
+implement that behavior! You’ll see in Chapter 10 how to define traits and
+implement them on any type, including unit-like structs.
 
 > ### Ownership of Struct Data
 >
 > In the `User` struct definition in Listing 5-1, we used the owned `String`
 > type rather than the `&str` string slice type. This is a deliberate choice
-> because we want instances of this struct to own all of its data and for that
-> data to be valid for as long as the entire struct is valid.
+> because we want each instance of this struct to own all of its data and for
+> that data to be valid for as long as the entire struct is valid.
 >
-> It’s possible for structs to store references to data owned by something else,
-> but to do so requires the use of *lifetimes*, a Rust feature that we’ll
+> It’s also possible for structs to store references to data owned by something
+> else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
 > discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
 > is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like this, which won’t work:
+> in a struct without specifying lifetimes, like the following; this won’t work:
 >
 > <span class="filename">Filename: src/main.rs</span>
 >
@@ -208,10 +209,10 @@ unit-like structs.
 >
 > ```rust,ignore,does_not_compile
 > struct User {
+>     active: bool,
 >     username: &str,
 >     email: &str,
 >     sign_in_count: u64,
->     active: bool,
 > }
 >
 > fn main() {
@@ -230,36 +231,34 @@ unit-like structs.
 > $ cargo run
 >    Compiling structs v0.1.0 (file:///projects/structs)
 > error[E0106]: missing lifetime specifier
->  --> src/main.rs:2:15
+>  --> src/main.rs:3:15
 >   |
-> 2 |     username: &str,
+> 3 |     username: &str,
 >   |               ^ expected named lifetime parameter
 >   |
 > help: consider introducing a named lifetime parameter
 >   |
-> 1 | struct User<'a> {
-> 2 |     username: &'a str,
+> 1 ~ struct User<'a> {
+> 2 |     active: bool,
+> 3 ~     username: &'a str,
 >   |
 >
 > error[E0106]: missing lifetime specifier
->  --> src/main.rs:3:12
+>  --> src/main.rs:4:12
 >   |
-> 3 |     email: &str,
+> 4 |     email: &str,
 >   |            ^ expected named lifetime parameter
 >   |
 > help: consider introducing a named lifetime parameter
 >   |
-> 1 | struct User<'a> {
-> 2 |     username: &str,
-> 3 |     email: &'a str,
+> 1 ~ struct User<'a> {
+> 2 |     active: bool,
+> 3 |     username: &str,
+> 4 ~     email: &'a str,
 >   |
 >
-> error: aborting due to 2 previous errors
->
 > For more information about this error, try `rustc --explain E0106`.
-> error: could not compile `structs`
->
-> To learn more, run the command again with --verbose.
+> error: could not compile `structs` due to 2 previous errors
 > ```
 >
 > In Chapter 10, we’ll discuss how to fix these errors so you can store
