@@ -268,8 +268,8 @@ implement them on any type, including unit-like structs.
 >
 > In the `User` struct definition in Listing 5-1, we used the owned `String`
 > type rather than the `&str` string slice type. This is a deliberate choice
-> because we want instances of this struct to own all of its data and for that
-> data to be valid for as long as the entire struct is valid.
+> because we want each instance of this struct to own all of its data and for
+> that data to be valid for as long as the entire struct is valid.
 >
 > It’s also possible for structs to store references to data owned by something
 > else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
