@@ -4,8 +4,7 @@ Now that we’ve extracted the logic into *src/lib.rs* and left the argument
 collecting and error handling in *src/main.rs*, it’s much easier to write tests
 for the core functionality of our code. We can call functions directly with
 various arguments and check return values without having to call our binary
-from the command line. Feel free to write some tests for the functionality in
-the `Config::new` and `run` functions on your own.
+from the command line.
 
 In this section, we’ll add the searching logic to the `minigrep` program by
 using the Test-driven development (TDD) process. This software development
