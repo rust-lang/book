@@ -112,9 +112,6 @@ struct fields a meaningful name. Doing so will make it easier for future
 maintainers of this code to understand how the different values relate to each
 other and what their purpose is.
 
-> Note: Using primitive values when a complex type would be more appropriate is
-> an anti-pattern known as *primitive obsession*.
-
 Listing 12-6 shows the improvements to the `parse_config` function.
 
 <span class="filename">Filename: src/main.rs</span>
