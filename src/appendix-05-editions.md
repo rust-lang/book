@@ -24,8 +24,8 @@ Editions serve different purposes for different people:
 * For those developing Rust, a new edition provides a rallying point for the
   project as a whole.
 
-At the time of this writing, two Rust editions are available: Rust 2015 and
-Rust 2018. This book is written using Rust 2018 edition idioms.
+At the time of this writing, three Rust editions are available: Rust 2015, Rust
+2018, and Rust 2021. This book is written using Rust 2021 edition idioms.
 
 The `edition` key in *Cargo.toml* indicates which edition the compiler should
 use for your code. If the key doesn’t exist, Rust uses `2015` as the edition

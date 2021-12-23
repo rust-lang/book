@@ -369,7 +369,7 @@ With a unique name, the version, your description, and a license added, the
 [package]
 name = "guessing_game"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 description = "A fun game where you guess what number the computer has chosen."
 license = "MIT OR Apache-2.0"
 
