@@ -165,7 +165,7 @@ through the last time that reference is used. For instance, this code will
 compile because the last usage of the immutable references, the `println!`,
 occurs before the mutable reference is introduced:
 
-```rust,edition2018
+```rust,edition2021
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
 ```
 
