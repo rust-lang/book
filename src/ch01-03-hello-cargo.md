@@ -39,7 +39,7 @@ $ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
-The first command creates a new directory called *hello_cargo*. We’ve named
+The first command created a new directory called *hello_cargo*. We’ve named
 our project *hello_cargo*, and Cargo creates its files in a directory of the
 same name.
 
