@@ -274,7 +274,8 @@ next listing.
 `Config::new`</span>
 
 Our `new` function now returns a `Result` with a `Config` instance in the
-success case and a `&str` in the error case.
+success case and a `&'static str` in the error case. Our error values will
+always be string literals that have the `'static` lifetime.
 
 We’ve made two changes in the body of the `new` function: instead of calling
 `panic!` when the user doesn’t pass enough arguments, we now return an `Err`

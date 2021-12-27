@@ -37,7 +37,7 @@ struct Config {
 }
 
 impl Config {
-    fn new(args: &[String]) -> Result<Config, &str> {
+    fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
