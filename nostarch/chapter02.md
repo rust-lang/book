@@ -278,7 +278,7 @@ on which variant an enum value is when the conditional is evaluated.
 Chapter 6 will cover enums in more detail. The purpose of these `Result` types
 is to encode error-handling information.
 
-`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates that the
+`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the
 operation was successful, and it contains the successfully generated value.
 The `Err` variant means the operation failed, and it contains information
 about how or why the operation failed.
