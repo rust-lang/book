@@ -150,7 +150,7 @@ understanding by introducing the `String` type.
 
 To illustrate the rules of ownership, we need a data type that is more complex
 than those we covered in the “Data Types” section of Chapter 3. The types
-covered previously are all of a known size, can be stored on the stack and popped
+covered previously are all a known size, can be stored on the stack and popped
 off the stack when their scope is over, and can be quickly and trivially copied
 to make a new, independent instance if another part of code needs to use the
 same value in a different scope. But we want to look at data that is stored on
