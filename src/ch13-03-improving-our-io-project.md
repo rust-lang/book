@@ -56,7 +56,7 @@ well.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-25/src/main.rs:here}}
 ```
 
@@ -75,7 +75,7 @@ body.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-26/src/lib.rs:here}}
 ```
 
