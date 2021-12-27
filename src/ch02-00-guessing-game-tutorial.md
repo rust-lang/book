@@ -180,7 +180,7 @@ ignore --> method on the standard input handle to get input from the user.
 We’re also passing `&mut guess` as the argument to `read_line` to tell it what
 string to store the user input in. The full job of `read_line` is to take
 whatever the user types into standard input and append that into a string
-(without overwriting its contents), so we therefore pass that string as an
+(without overwriting its content), so we therefore pass that string as an
 argument. The string argument needs to be mutable so the method can change the
 string’s content.
 
