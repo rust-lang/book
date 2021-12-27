@@ -95,7 +95,7 @@ strings.
 > data on the heap so you don’t run out of space are all problems that ownership
 > addresses. Once you understand ownership, you won’t need to think about the
 > stack and the heap very often, but knowing that the main purpose of ownership
-> is to manage heap data and can help explain why it works the way it does.
+> is to manage heap data can help explain why it works the way it does.
 
 ### Ownership Rules
 
