@@ -76,7 +76,7 @@ isn’t safely doing what you want it to do yet; they do *not* mean that you’r
 not a good programmer! Experienced Rustaceans still get compiler errors.
 
 The error message indicates that the cause of the error is that you `` cannot
-assign twice to immutable variable ``, because you tried to assign a second
+assign twice to immutable variable `x` ``, because you tried to assign a second
 value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
