@@ -269,7 +269,7 @@ next listing.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 

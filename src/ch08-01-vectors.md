@@ -140,7 +140,7 @@ scope. That rule applies in Listing 8-7, where we hold an immutable reference to
 the first element in a vector and try to add an element to the end, which won’t
 work if we also try to refer to that element later in the function:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
 ```
 

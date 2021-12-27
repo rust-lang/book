@@ -23,7 +23,7 @@ quite work yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-22/src/lib.rs:here}}
 ```
 
@@ -58,7 +58,7 @@ So we know we want to update the definition of `Worker` like this:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
 ```
 
@@ -85,7 +85,7 @@ The following changes will do so:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
 

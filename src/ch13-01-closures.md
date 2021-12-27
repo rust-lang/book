@@ -264,7 +264,7 @@ first time and a `u32` the second time, we’ll get an error.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs:here}}
 ```
 
@@ -414,7 +414,7 @@ The first problem is that a `Cacher` instance assumes it will always get the
 same value for the parameter `arg` to the `value` method. That is, this test of
 `Cacher` will fail:
 
-```rust,ignore,panics
+```rust,should_panic,ignore
 {{#rustdoc_include ../listings/ch13-functional-features/no-listing-01-failing-cacher-test/src/lib.rs:here}}
 ```
 
@@ -476,7 +476,7 @@ code won’t compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch13-functional-features/no-listing-02-functions-cant-capture/src/main.rs}}
 ```
 
@@ -534,7 +534,7 @@ yet compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch13-functional-features/no-listing-03-move-closures/src/main.rs}}
 ```
 

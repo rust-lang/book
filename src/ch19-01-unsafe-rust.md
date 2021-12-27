@@ -208,7 +208,7 @@ something like Listing 19-5, which won’t compile. For simplicity, we’ll
 implement `split_at_mut` as a function rather than a method and only for slices
 of `i32` values rather than for a generic type `T`.
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-05/src/main.rs:here}}
 ```
 

@@ -1,10 +1,10 @@
 var ferrisTypes = [
   {
-    attr: 'does_not_compile',
+    attr: 'compile_fail',
     title: 'This code does not compile!'
   },
   {
-    attr: 'panics',
+    attr: 'should_panic',
     title: 'This code panics!'
   },
   {

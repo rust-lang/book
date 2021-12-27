@@ -91,7 +91,7 @@ pointer `fn` as a return type, for example.
 
 The following code tries to return a closure directly, but it won’t compile:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-18-returns-closure/src/lib.rs}}
 ```
 

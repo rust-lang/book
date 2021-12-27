@@ -212,7 +212,7 @@ programmer to write code like Listing 19-30 using our crate.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-30/src/main.rs}}
 ```
 
@@ -289,7 +289,7 @@ won’t compile until we add a definition for the `impl_hello_macro` function.
 
 <span class="filename">Filename: hello_macro_derive/src/lib.rs</span>
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-31/hello_macro/hello_macro_derive/src/lib.rs}}
 ```
 

@@ -268,7 +268,7 @@ types, the compiler won’t let us use an `Option<T>` value as if it were
 definitely a valid value. For example, this code won’t compile because it’s
 trying to add an `i8` to an `Option<i8>`:
 
-```rust,ignore,does_not_compile
+```rust,compile_fail
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-07-cant-use-option-directly/src/main.rs:here}}
 ```
 
