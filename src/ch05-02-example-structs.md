@@ -35,7 +35,7 @@ The issue with this code is evident in the signature of `area`:
 ```
 
 The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters, and it's not clear anywhere in our
+function we wrote has two parameters, and it’s not clear anywhere in our
 program that the parameters are related. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
 we might do that in [“The Tuple Type”][the-tuple-type]<!-- ignore --> section
