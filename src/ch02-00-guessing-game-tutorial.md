@@ -221,9 +221,10 @@ we pass to it, but it also returns a value—in this case, an
 `Result` in its standard library: a generic [`Result`][result]<!-- ignore -->
 as well as specific versions for submodules, such as `io::Result`. The `Result`
 types are [*enumerations*][enums]<!-- ignore -->, often referred to as *enums*,
-which can have a fixed set of possibilites known as *variants*. Enums are often
-used with `match`, a conditional that makes it convenient to execute different
-code based on which variant an enum value is when the conditional is evaluated.
+which can have a fixed set of possibilities known as *variants*. Enums are
+often used with `match`, a conditional that makes it convenient to execute
+different code based on which variant an enum value is when the conditional is
+evaluated.
 
 Chapter 6 will cover enums in more detail. The purpose of these `Result` types
 is to encode error-handling information.
@@ -469,7 +470,7 @@ $ cargo update
     Updating rand v0.8.3 -> v0.8.4
 ```
 
-Cargo ignores the `0.9.0` releaese. At this point, you would also notice a
+Cargo ignores the `0.9.0` release. At this point, you would also notice a
 change in your *Cargo.lock* file noting that the version of the `rand` crate
 you are now using is `0.8.4`. To use `rand` version `0.9.0` or any version in
 the `0.9.x` series, you’d have to update the *Cargo.toml* file to look like
@@ -628,7 +629,7 @@ strong, static type system. However, it also has type inference. When we wrote
 a `String` and didn’t make us write the type. The `secret_number`, on the other
 hand, is a number type. A few of Rust’s number types can have a value between 1
 and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
-64-bit number; as well as others. Unless otherwise speceified, Rust defaults to
+64-bit number; as well as others. Unless otherwise specified, Rust defaults to
 an `i32`, which is the type of `secret_number` unless you add type information
 elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
