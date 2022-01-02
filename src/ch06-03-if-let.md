@@ -12,11 +12,11 @@ variable but only wants to execute code if the value is the `Some` variant.
 <span class="caption">Listing 6-6: A `match` that only cares about executing
 code when the value is `Some`</span>
 
-If the value is `Some`, we want to print out the value in the `Some` variant,
-which we do by binding the value to the variable `max` in the pattern.
-We don’t want to do anything with the `None` value. To satisfy the `match`
-expression, we have to add `_ => ()` after processing just one variant, which
-is annoying boilerplate code to add.
+If the value is `Some`, we print out the value in the `Some` variant by binding
+the value to the variable `max` in the pattern. We don’t want to do anything
+with the `None` value. To satisfy the `match` expression, we have to add `_ =>
+()` after processing just one variant, which is annoying boilerplate code to
+add.
 
 Instead, we could write this in a shorter way using `if let`. The following
 code behaves the same as the `match` in Listing 6-6:
