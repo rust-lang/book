@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 aspell --version
 
 # Checks project Markdown files for spelling mistakes.
