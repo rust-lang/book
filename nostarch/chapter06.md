@@ -265,10 +265,16 @@ useful: `Option`.
 
 This section explores a case study of `Option`, which is another enum defined
 by the standard library. The `Option` type encodes the very common scenario in
-which a value could be something or it could be nothing. Expressing this
-concept in terms of the type system means the compiler can check whether you’ve
-handled all the cases you should be handling; this functionality can prevent
-bugs that are extremely common in other programming languages.
+which a value could be something or it could be nothing.
+<!-- Liz: I just got an issue from a reader requesting a concrete example
+of this scenario, so I've added two sentences here. Please check to see if they
+make sense! /Carol-->
+For example, if you request the first of a list containing items, you would get
+a value. If you request the first item of an empty list, you would get nothing.
+Expressing this concept in terms of the type system means the compiler can
+check whether you’ve handled all the cases you should be handling; this
+functionality can prevent bugs that are extremely common in other programming
+languages.
 
 Programming language design is often thought of in terms of which features you
 include, but the features you exclude are important too. Rust doesn’t have the
