@@ -1,6 +1,7 @@
-## The `match` Control Flow Operator
+<a id="the-match-control-flow-operator"></a>
+## The `match` Control Flow Construct
 
-Rust has an extremely powerful control flow operator called `match` that allows
+Rust has an extremely powerful control flow construct called `match` that allows
 you to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
 names, wildcards, and many other things; Chapter 18 covers all the different
