@@ -406,9 +406,9 @@ just this when used with enums: it will run different code depending on which
 variant of the enum it has, and that code can use the data inside the matching
 value.
 
-## The `match` Control Flow Operator
+## The `match` Control Flow Construct
 
-Rust has an extremely powerful control flow operator called `match` that allows
+Rust has an extremely powerful control flow construct called `match` that allows
 you to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
 names, wildcards, and many other things; Chapter 18 covers all the different
