@@ -377,6 +377,14 @@ If `self.value` is `None`, the code calls the closure stored in
 `self.calculation`, saves the result in `self.value` for future use, and
 returns the value as well.
 
+> You may have noticed that in Listing 13-10 we invoked the closure stored in
+> `self.calculation` as `(self.calculation)(arg)`. The parentheses around
+> `self.calculation` are needed to tell rust that we are calling the closure
+> contained within the *field* named `calculation` with the arguments given. 
+> Without the parentheses rust would instead interpret `self.calculation(arg)`
+> as trying to call a *method* named `calculation` on `Cacher`, which does not
+> exist in this case.
+
 Listing 13-11 shows how we can use this `Cacher` struct in the function
 `generate_workout` from Listing 13-6.
 
