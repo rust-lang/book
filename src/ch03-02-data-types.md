@@ -55,7 +55,7 @@ the type of an integer value.
 Each variant can be either signed or unsigned and has an explicit size.
 *Signed* and *unsigned* refer to whether it’s possible for the number to be
 negative—in other words, whether the number needs to have a sign with it
-(signed) or whether it will only ever be positive and can therefore be
+(signed) or whether it will only ever be non-negative and can therefore be
 represented without a sign (unsigned). It’s like writing numbers on paper: when
 the sign matters, a number is shown with a plus sign or a minus sign; however,
 when it’s safe to assume the number is positive, it’s shown with no sign.
