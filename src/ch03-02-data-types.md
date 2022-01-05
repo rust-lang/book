@@ -72,7 +72,7 @@ so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 Additionally, the `isize` and `usize` types depend on the architecture of the
 computer your program is running on, which is denoted in the table as “arch”:
 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
-architecture.
+architecture (assuming program is compiled in accord with architecture).
 
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that number literals that can be multiple numeric types allow a type suffix,
