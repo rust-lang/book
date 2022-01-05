@@ -12,7 +12,7 @@ rm -rf tmp/markdown
 MDBOOK_OUTPUT__MARKDOWN=1 mdbook build -d tmp
 
 # Get all the Markdown files
-ls tmp/markdown/${1:-""}*.md | \
+find tmp/markdown -name "${1:-\"\"}*.md" -print0 | \
 # Extract just the filename so we can reuse it easily.
 xargs -n 1 basename | \
 # Remove all links followed by `<!-- ignore -->``, then

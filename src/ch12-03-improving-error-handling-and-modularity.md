@@ -112,9 +112,6 @@ struct fields a meaningful name. Doing so will make it easier for future
 maintainers of this code to understand how the different values relate to each
 other and what their purpose is.
 
-> Note: Using primitive values when a complex type would be more appropriate is
-> an anti-pattern known as *primitive obsession*.
-
 Listing 12-6 shows the improvements to the `parse_config` function.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -269,7 +266,7 @@ next listing.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-09/src/main.rs:here}}
 ```
 
@@ -277,7 +274,8 @@ next listing.
 `Config::new`</span>
 
 Our `new` function now returns a `Result` with a `Config` instance in the
-success case and a `&str` in the error case.
+success case and a `&'static str` in the error case. Our error values will
+always be string literals that have the `'static` lifetime.
 
 We’ve made two changes in the body of the `new` function: instead of calling
 `panic!` when the user doesn’t pass enough arguments, we now return an `Err`
@@ -458,7 +456,7 @@ compile until we modify *src/main.rs* in Listing 12-14.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-13/src/lib.rs:here}}
 ```
 

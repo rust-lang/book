@@ -56,7 +56,7 @@ well.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-25/src/main.rs:here}}
 ```
 
@@ -75,7 +75,7 @@ body.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-26/src/lib.rs:here}}
 ```
 
@@ -88,16 +88,6 @@ signature of the `Config::new` function so the parameter `args` has the type
 `std::env::Args` instead of `&[String]`. Because we’re taking ownership of
 `args` and we’ll be mutating `args` by iterating over it, we can add the `mut`
 keyword into the specification of the `args` parameter to make it mutable.
-
-We also needed to specify that the string slice error type can now only have
-the `'static` lifetime. Because we’re only ever returning string literals, this
-was true before. However, when we had a reference in the parameters, there was
-the possibility that the reference in the return type could have had the same
-lifetime as the reference in the parameters. The rules that we discussed in the
-[“Lifetime Elision”][lifetime-elision] section of Chapter 10 applied, and we
-weren’t required to annotate the lifetime of `&str`. With the change to `args`,
-the lifetime elision rules no longer apply, and we must specify the `'static`
-lifetime.
 
 #### Using `Iterator` Trait Methods Instead of Indexing
 
@@ -175,5 +165,3 @@ the iterator must pass.
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the more low-level loop will be faster. Let’s talk about
 performance.
-
-[lifetime-elision]: ch10-03-lifetime-syntax.html#lifetime-elision

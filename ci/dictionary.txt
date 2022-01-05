@@ -6,6 +6,7 @@ adaptor
 adaptors
 AddAssign
 Addr
+adfb
 afdc
 aggregator
 AGraph
@@ -13,6 +14,7 @@ aliasability
 alignof
 alloc
 allocator
+AlwaysEqual
 Amir
 anotherusername
 APIs
@@ -49,6 +51,7 @@ BitXorAssign
 Bjarne
 Boehm
 bool
+boolean
 Boolean
 Booleans
 Bors
@@ -61,6 +64,8 @@ Cagain
 callsite
 CamelCase
 cargodoc
+centric
+chacha
 ChangeColor
 ChangeColorMessage
 charset
@@ -148,6 +153,7 @@ Enums
 eprintln
 Erlang
 ErrorKind
+eval
 executables
 expr
 extern
@@ -170,8 +176,11 @@ formatter
 formatters
 FrenchToast
 FromIterator
+FromResidual
 frontend
+getrandom
 getter
+getters
 GGraph
 GitHub
 gitignore
@@ -264,6 +273,7 @@ login
 lookup
 loopback
 lossy
+Lukas
 lval
 macOS
 Matsakis
@@ -332,6 +342,8 @@ OptionalNumber
 OsStr
 OsString
 other's
+otherinstall
+OtherError
 OutlinePrint
 overloadable
 overread
@@ -392,6 +404,7 @@ representable
 request's
 resizes
 resizing
+ReturnedError
 retweet
 rewordings
 rint
@@ -421,6 +434,7 @@ ShrAssign
 shouldn
 Simula
 siphash
+SipHash
 situps
 sizeof
 SliceIndex
@@ -471,7 +485,6 @@ supertraits
 TcpListener
 TcpStream
 templating
-test_harness
 test's
 TextField
 That'd
@@ -543,6 +556,7 @@ WebSocket
 whitespace
 wildcard
 wildcards
+Wirth
 workflow
 workspace
 workspaces
@@ -550,6 +564,7 @@ Workspaces
 wouldn
 writeln
 WriteMessage
+xcode
 xpression
 yyyy
 ZipImpl
