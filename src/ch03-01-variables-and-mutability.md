@@ -168,8 +168,8 @@ inputting space characters, and then we want to store that input as a number:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-04-shadowing-can-change-types/src/main.rs:here}}
 ```
 
-The first `spaces` variable is a string type and the second `spaces` variable
-is a number type. Shadowing thus spares us from having to come up with
+The first `spaces` variable is of string type and the second `spaces` variable
+is of number type. Shadowing thus spares us from having to come up with
 different names, such as `spaces_str` and `spaces_num`; instead, we can reuse
 the simpler `spaces` name. However, if we try to use `mut` for this, as shown
 here, we’ll get a compile-time error:
