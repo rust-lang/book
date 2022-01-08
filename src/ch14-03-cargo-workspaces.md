@@ -134,7 +134,7 @@ library. First, we’ll need to add a path dependency on `add_one` to
 <span class="filename">Filename: adder/Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:8}}
+{{#include ../listings/ch14-more-about-cargo/no-listing-02-workspace-with-two-crates/add/adder/Cargo.toml:6:7}}
 ```
 
 Cargo doesn’t assume that crates in a workspace will depend on each other, so
@@ -211,7 +211,7 @@ crate:
 <span class="filename">Filename: add_one/Cargo.toml</span>
 
 ```toml
-{{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:7:8}}
+{{#include ../listings/ch14-more-about-cargo/no-listing-03-workspace-with-external-dependency/add/add_one/Cargo.toml:6:7}}
 ```
 
 We can now add `use rand;` to the *add_one/src/lib.rs* file, and building the
