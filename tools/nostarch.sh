@@ -14,7 +14,7 @@ MDBOOK_OUTPUT__MARKDOWN=1 mdbook build -d tmp
 # Get all the Markdown files
 find tmp/markdown -name "${1:-\"\"}*.md" -print0 | \
 # Extract just the filename so we can reuse it easily.
-xargs -n 1 basename | \
+xargs -0 basename | \
 # Remove all links followed by `<!-- ignore -->``, then
 # Change all remaining links from Markdown to italicized inline text.
 while IFS= read -r filename; do
