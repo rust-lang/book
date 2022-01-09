@@ -364,7 +364,7 @@ publish` command does not have an `--all` flag or a `-p` flag, so you must
 change to each crate’s directory and run `cargo publish` on each crate in the
 workspace to publish the crates.
 
-For additional practice, add an `add-two` crate to this workspace in a similar
+For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
 
 As your project grows, consider using a workspace: it’s easier to understand
