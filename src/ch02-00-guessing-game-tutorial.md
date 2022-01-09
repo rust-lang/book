@@ -229,7 +229,7 @@ evaluated.
 Chapter 6 will cover enums in more detail. The purpose of these `Result` types
 is to encode error-handling information.
 
-`Result`’s variants are `Ok` or `Err`. The `Ok` variant indicates the operation
+`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the operation
 was successful, and inside `Ok` is the successfully generated value. The `Err`
 variant means the operation failed, and `Err` contains information about how or
 why the operation failed.
@@ -817,7 +817,7 @@ another guess instead of crashing the program</span>
 
 We switch from an `expect` call to a `match` expression to move from crashing
 on an error to handling the error. Remember that `parse` returns a `Result`
-type and `Result` is an enum that has the variants `Ok` or `Err`. We’re using a
+type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using a
 `match` expression here, as we did with the `Ordering` result of the `cmp`
 method.
 
