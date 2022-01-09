@@ -5,7 +5,7 @@ set -eu
 # Get all the docx files in the tmp dir.
 find tmp -name '*.docx' -print0 | \
 # Extract just the filename so we can reuse it easily.
-xargs -n 1 basename -s .docx | \
+xargs -0 basename -s .docx | \
 while IFS= read -r filename; do
     # Make a directory to put the XML in.
     mkdir -p "tmp/$filename"
