@@ -183,7 +183,7 @@ Listing 15-9.
 
 *Deref coercion* is a convenience that Rust performs on arguments to functions
 and methods. Deref coercion works only on types that implement the `Deref`
-trait. Deref coercion converts such a type into a reference to another type.
+trait. Deref coercion converts reference to such a type into a reference to another type.
 For example, deref coercion can convert `&String` to `&str` because `String`
 implements the `Deref` trait such that it returns `&str`. Deref coercion happens
 automatically when we pass a reference to a particular type’s value as an
