@@ -124,7 +124,8 @@ implement the `Deref` trait.
 
 ### Treating a Type Like a Reference by Implementing the `Deref` Trait
 
-As discussed in Chapter 10, to implement a trait, we need to provide
+As discussed in the [“Implementing a Trait on a Type”][impl-trait]<!-- ignore
+--> section of Chapter 10, to implement a trait, we need to provide
 implementations for the trait’s required methods. The `Deref` trait, provided
 by the standard library, requires us to implement one method named `deref` that
 borrows `self` and returns a reference to the inner data. Listing 15-10
@@ -285,3 +286,5 @@ initial immutable reference is the only immutable reference to that data, but
 the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
 assumption that converting an immutable reference to a mutable reference is
 possible.
+
+[impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
