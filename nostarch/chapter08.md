@@ -764,7 +764,7 @@ Let’s switch to something a bit less complex: hash maps!
 ## Storing Keys with Associated Values in Hash Maps
 
 The last of our common collections is the *hash map*. The type `HashMap<K, V>`
-stores a mapping of keys of type `K` to values of type `V`. It does this via a
+stores a mapping of keys of type `K` to values of type `V` using a
 *hashing function*, which determines how it places these keys and values into
 memory. Many programming languages support this kind of data structure, but
 they often use a different name, such as hash, map, object, hash table,
@@ -1031,13 +1031,13 @@ allowed by the borrowing rules.
 
 ### Hashing Functions
 
-By default, `HashMap` uses a hashing function called SipHash that can provide
+By default, `HashMap` uses a hashing function called *SipHash* that can provide
 resistance to Denial of Service (DoS) attacks involving hash tables. This is
 not the fastest hashing algorithm available, but the trade-off for better
 security that comes with the drop in performance is worth it. If you profile
 your code and find that the default hash function is too slow for your
 purposes, you can switch to another function by specifying a different
-*hasher*. A hasher is a type that implements the `BuildHasher` trait. We’ll
+hasher. A *hasher* is a type that implements the `BuildHasher` trait. We’ll
 talk about traits and how to implement them in Chapter 10. You don’t
 necessarily have to implement your own hasher from scratch; crates.io has
 libraries shared by other Rust users that provide hashers implementing many
