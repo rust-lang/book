@@ -145,9 +145,11 @@ parameter, but you don’t need to worry about them for now; we’ll cover them 
 more detail in Chapter 19.
 
 We fill in the body of the `deref` method with `&self.0` so `deref` returns a
-reference to the value we want to access with the `*` operator. The `main`
-function in Listing 15-9 that calls `*` on the `MyBox<T>` value now compiles,
-and the assertions pass!
+reference to the value we want to access with the `*` operator. Recall from the
+[“Using Tuple Structs without Named Fields to Create Different
+Types”][tuple-structs]<!-- ignore --> section of Chapter 5 that `.0` accesses
+the first value in a tuple struct. The `main` function in Listing 15-9 that
+calls `*` on the `MyBox<T>` value now compiles, and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
 The `deref` method gives the compiler the ability to take a value of any type
@@ -288,3 +290,4 @@ assumption that converting an immutable reference to a mutable reference is
 possible.
 
 [impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
+[tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
