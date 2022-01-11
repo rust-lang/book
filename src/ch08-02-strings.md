@@ -132,7 +132,7 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter "l" to a `String` using the `push`
+`String`. Listing 8-17 adds the letter “l” to a `String` using the `push`
 method.
 
 ```rust
@@ -166,7 +166,7 @@ this:
 fn add(self, s: &str) -> String {
 ```
 
-In the standard library, you'll see `add` defined using generics. Here, we’ve
+In the standard library, you’ll see `add` defined using generics. Here, we’ve
 substituted in concrete types for the generic ones, which is what happens when
 we call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need to understand the tricky bits of the
@@ -342,7 +342,7 @@ Here, `s` will be a `&str` that contains the first 4 bytes of the string.
 Earlier, we mentioned that each of these characters was 2 bytes, which means
 `s` will be `Зд`.
 
-If we were to try to slice only part of a character's bytes with something like
+If we were to try to slice only part of a character’s bytes with something like
 `&hello[0..1]`, Rust would panic at runtime in the same way as if an invalid
 index were accessed in a vector:
 

@@ -27,7 +27,7 @@ When we create a vector to hold a specific type, we can specify the type within
 angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
 hold elements of the `i32` type.
 
-More often, you'll create a `Vec<T>` with initial values and Rust will infer
+More often, you’ll create a `Vec<T>` with initial values and Rust will infer
 the type of value you want to store, so you rarely need to do this type
 annotation. Rust conveniently provides the `vec!` macro, which will create a
 new vector that holds the values you give it. Listing 8-2 creates a new
