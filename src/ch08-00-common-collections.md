@@ -19,7 +19,7 @@ collections that are used very often in Rust programs:
 To learn about the other kinds of collections provided by the standard library,
 see [the documentation][collections].
 
-[collections]: ../std/collections/index.html
-
 We’ll discuss how to create and update vectors, strings, and hash maps, as well
 as what makes each special.
+
+[collections]: ../std/collections/index.html
