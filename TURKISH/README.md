@@ -15,12 +15,12 @@ Katkıda bulunmak istiyorsanız [`/TURKISH/CONTRIBUTING.md`][] bölümünü okuy
 <!-- LINKS : -->
 
 [`/TURKISH/src/`]:
-<!-- https://github.com/RustDili/rust-book-tr/tree/french-release/FRENCH/src/ -->
+https://github.com/RustDili/rust-book-tr/tree/main/TURKISH/src
 
 [`/TURKISH/listings/`]:
-<!-- https://github.com/Jimskapt/rust-book-fr/tree/french-release/FRENCH/listings/ -->
+https://github.com/RustDili/rust-book-tr/tree/main/TURKISH/listings
 
 [`/TURKISH/CONTRIBUTING.md`]:
-<!-- https://github.com/Jimskapt/rust-book-fr/tree/french-release/FRENCH/CONTRIBUTING.md -->
+https://github.com/RustDili/rust-book-tr/blob/main/TURKISH/CONTRIBUTING.md
 
 ## [Çevrim-içi Takip Et](https://rustdili.github.io/)
