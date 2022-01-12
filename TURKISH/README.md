@@ -6,15 +6,11 @@ Rust Programlama Dili kitabının Türkçe çevirisi [The Rust Programming Langu
 
 Türkçe bölümü asıl kitabın `/` çevrilmiş bir kopyası olup kök dizin olduğu gibi kalacak, ana bölümde güncelleme oldukça bu güncellemeler Türkçe bölümüne çevirilerek yansıtılacaktır.
 
-The translated pages are inThe translated pages are in [`/TURKISH/src/`][] folder.
+Çevirisi tamamlanan sayfalar [`/TURKISH/src/`][] dizininde,
 
-And translated code in [`/TURKISH/listings/`][] folder.
+Türkçe düzenlenmiş kodlar ise [`/TURKISH/listings/`][] dizininde yer almaktadır.
 
-Please read [`/TURKISH/CONTRIBUTING.md`][]. [`/TURKISH/src/`][] folder.
-
-And translated code in [`/TURKISH/listings/`][] folder.
-
-Please read [`/TURKISH/CONTRIBUTING.md`][].
+Katkıda bulunmak istiyorsanız [`/TURKISH/CONTRIBUTING.md`][] bölümünü okuyarak başlamalısınız.
 
 <!-- LINKS : -->
 
