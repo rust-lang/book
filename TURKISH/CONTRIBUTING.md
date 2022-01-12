@@ -1,4 +1,4 @@
-# Contributing to translate
+<!-- # Contributing to translate
 
 ## Guidelines
 
@@ -144,3 +144,4 @@ You need to have the `dot` installed, for instance after typing
       that don't cut off the image.
     - Replace every instance of `font-family="Times,serif"` with
       `font-family="Times,Liberation Serif,serif"`.
+-->
