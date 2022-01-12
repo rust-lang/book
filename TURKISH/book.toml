@@ -1,0 +1,9 @@
+[book]
+title = "Rust Programlama Dili"
+author = "Steve Klabnik, Carol Nichols ve Rust Topluluğunun katkılarıyla"
+language = "tr"
+
+[output.html]
+additional-css = ["../ferris.css", "../theme/2018-edition.css"]
+additional-js = ["../ferris.js"]
+git-repository-url = "https://github.com/RustDili/rust-book-tr"
