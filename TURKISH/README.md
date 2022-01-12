@@ -19,10 +19,10 @@ Please read [`/TURKISH/CONTRIBUTING.md`][].
 <!-- LINKS : -->
 
 [`/TURKISH/src/`]:
-https://github.com/RustDili/rust-book-tr/tree/french-release/FRENCH/src/
+<!-- https://github.com/RustDili/rust-book-tr/tree/french-release/FRENCH/src/ -->
 
 [`/TURKISH/listings/`]:
-https://github.com/Jimskapt/rust-book-fr/tree/french-release/FRENCH/listings/
+<!-- https://github.com/Jimskapt/rust-book-fr/tree/french-release/FRENCH/listings/ -->
 
 [`/TURKISH/CONTRIBUTING.md`]:
-https://github.com/Jimskapt/rust-book-fr/tree/french-release/FRENCH/CONTRIBUTING.md
+<!-- https://github.com/Jimskapt/rust-book-fr/tree/french-release/FRENCH/CONTRIBUTING.md -->
