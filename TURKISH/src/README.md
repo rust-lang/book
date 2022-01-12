@@ -1,5 +1,5 @@
 # Çevirisi devam eden bölümler
-* [Rust Programlama Dili](SUMMARY.md)
+* [Tamamlanmamış Bölümleriyle Rust Programlama Dili](SUMMARY.md)
 
 # Çevirisi tamamlanan bölümler
 
