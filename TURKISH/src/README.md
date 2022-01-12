@@ -1,9 +1,12 @@
+# Çevirisi devam eden bölümler
+* [Rust Programlama Dili](SUMMARY.md)
+
 # Çevirisi tamamlanan bölümler
 
 * [Rust Programlama Dili](title-page.md)
 * [Önsöz](foreword.md)
 * [Giriş](ch00-00-introduction.md)
-
+<!--
 # Başlarken
 * [Başlarken](ch01-00-getting-started.md)
     * [Kurulum](ch01-01-installation.md)
@@ -45,3 +48,4 @@
 # İleri Seviye Konular  
 * [Ekler](appendix-00.md)
   * [A - Anahtar Kelimeler](appendix-01-keywords.md)
+-->
