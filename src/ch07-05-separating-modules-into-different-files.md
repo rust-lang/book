@@ -6,8 +6,17 @@ file to make the code easier to navigate.
 
 For example, let’s start from the code in Listing 7-17 and move the
 `front_of_house` module to its own file *src/front_of_house.rs*. Once moved
-we can remove the redundant outer `mod front_of_house` scope. Now change the
-crate root file *src/lib.rs* so it contains the code shown in Listing 7-21.
+we can remove the outer `mod front_of_house` since our file 
+*src/front_of_house.rs* becomes that module. Then we get the definitions from 
+the body of the `front_of_house` module, as shown in Listing 7-22.
+
+<span class="filename">Filename: src/front_of_house.rs</span>
+
+```rust,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
+```
+
+Now change the crate root file *src/lib.rs* so it contains the code shown in Listing 7-21.
 This procedure also works with binary crates whose crate root file is 
 src/main.rs.
 
@@ -20,14 +29,7 @@ src/main.rs.
 <span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
 body will be in *src/front_of_house.rs*</span>
 
-And *src/front_of_house.rs* gets the definitions from the body of the
-`front_of_house` module, as shown in Listing 7-22.
 
-<span class="filename">Filename: src/front_of_house.rs</span>
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
-```
 
 <span class="caption">Listing 7-22: Definitions inside the `front_of_house`
 module in *src/front_of_house.rs*</span>
