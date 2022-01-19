@@ -15,6 +15,7 @@ the body of the `front_of_house` module file, as shown in Listing 7-22.
 ```rust,ignore
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
+
 <span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
 body will be in *src/front_of_house.rs*</span>
 
