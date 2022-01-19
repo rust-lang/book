@@ -6,7 +6,8 @@ file to make the code easier to navigate.
 
 For example, let’s start from the code in Listing 7-17 and move the
 `front_of_house` module to its own file *src/front_of_house.rs* by changing the
-crate root file so it contains the code shown in Listing 7-21. In this case,
+crate root file so it contains the code shown in Listing 7-21. Now that the files *is* 
+the module we can remove the outer front_of_house module. In this case,
 the crate root file is *src/lib.rs*, but this procedure also works with binary
 crates whose crate root file is *src/main.rs*.
 
