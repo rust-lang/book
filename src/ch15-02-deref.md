@@ -67,7 +67,7 @@ reference; the dereference operator will work as shown in Listing 15-7:
 <span class="caption">Listing 15-7: Using the dereference operator on a
 `Box<i32>`</span>
 
-The only difference between Listing 15-7 and Listing 15-6 is that here we set
+The main difference between Listing 15-7 and Listing 15-6 is that here we set
 `y` to be an instance of a box pointing to a copied value of `x` rather than a
 reference pointing to the value of `x`. In the last assertion, we can use the
 dereference operator to follow the box’s pointer in the same way that we did
