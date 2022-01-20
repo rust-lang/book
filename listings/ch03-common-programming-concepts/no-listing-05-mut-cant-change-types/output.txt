@@ -3,6 +3,8 @@ $ cargo run
 error[E0308]: mismatched types
  --> src/main.rs:3:14
   |
+2 |     let mut spaces = "   ";
+  |                      ----- expected due to this value
 3 |     spaces = spaces.len();
   |              ^^^^^^^^^^^^ expected `&str`, found `usize`
 

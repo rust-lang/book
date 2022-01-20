@@ -7,11 +7,6 @@ error[E0283]: type annotations needed
    |                                           ^^^^^^^^^^^^^^^^^ cannot infer type
    |
    = note: cannot satisfy `_: Animal`
-note: required by `Animal::baby_name`
-  --> src/main.rs:2:5
-   |
-2  |     fn baby_name() -> String;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For more information about this error, try `rustc --explain E0283`.
 error: could not compile `traits-example` due to previous error
