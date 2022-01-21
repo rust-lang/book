@@ -1,4 +1,4 @@
-# Appendix
+# Anexo
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+Las siguientes secciones contienen material de referencia que puede resultar útil en su
+en su viaje por el óxido.
