@@ -14,7 +14,9 @@ impl AveragedCollection {
         let result = self.list.pop();
         match result {
             Some(value) => {
-                self.update_average();
+                if self.list.len() > 0 {
+                    self.update_average();
+                }
                 Some(value)
             }
             None => None,
@@ -22,7 +24,12 @@ impl AveragedCollection {
     }
 
     pub fn average(&self) -> f64 {
-        self.average
+        if self.list.len() > 0 {
+            self.average
+        }
+        else {
+            panic!("Collection is empty, no average available !");
+        }
     }
 
     fn update_average(&mut self) {
