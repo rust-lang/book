@@ -1,43 +1,43 @@
-## Appendix B: Operators and Symbols
+## Apéndice B: Operadores y símbolos
 
-This appendix contains a glossary of Rust’s syntax, including operators and
-other symbols that appear by themselves or in the context of paths, generics,
-trait bounds, macros, attributes, comments, tuples, and brackets.
+Este apéndice contiene un glosario de la sintaxis de Rust, incluyendo operadores y
+otros símbolos que aparecen por sí mismos o en el contexto de rutas, genéricos
+límites de rasgos, macros, atributos, comentarios, tuplas y paréntesis.
 
-### Operators
+### Operadores
 
-Table B-1 contains the operators in Rust, an example of how the operator would
-appear in context, a short explanation, and whether that operator is
-overloadable. If an operator is overloadable, the relevant trait to use to
-overload that operator is listed.
+La Tabla B-1 contiene los operadores en Rust, un ejemplo de cómo el operador aparecería en el contexto, una breve explicación y si el operador
+en contexto, una breve explicación y si el operador es sobrecargable.
+sobrecargable. Si un operador es sobrecargable, el rasgo relevante a utilizar para
+para sobrecargar ese operador.
 
-<span class="caption">Table B-1: Operators</span>
+<span class="caption">Tabla B-1: Operadores</span>
 
-| Operator | Example | Explanation | Overloadable? |
+| Operador | Ejemplo | Explicación | ¿Sobrecargable? |
 |----------|---------|-------------|---------------|
-| `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro expansion | |
-| `!` | `!expr` | Bitwise or logical complement | `Not` |
-| `!=` | `var != expr` | Nonequality comparison | `PartialEq` |
-| `%` | `expr % expr` | Arithmetic remainder | `Rem` |
-| `%=` | `var %= expr` | Arithmetic remainder and assignment | `RemAssign` |
+| `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Expansión de macros | |
+| `!` | `!expr` | Complemento lógico o de bit a bit | `Not` |
+| `!=` | `var != expr` | Comparación sin calidad | `PartialEq` |
+| `%` | `expr % expr` | Residuo aritmético | `Rem` |
+| `%=` | `var %= expr` | Residuo aritmético y asignación | `RemAssign` |
 | `&` | `&expr`, `&mut expr` | Borrow | |
 | `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Borrowed pointer type | |
-| `&` | `expr & expr` | Bitwise AND | `BitAnd` |
-| `&=` | `var &= expr` | Bitwise AND and assignment | `BitAndAssign` |
+| `&` | `expr & expr` | AND a nivel de bits | `BitAnd` |
+| `&=` | `var &= expr` | Asignación y AND a nivel de bit | `BitAndAssign` |
 | `&&` | `expr && expr` | Short-circuiting logical AND | |
-| `*` | `expr * expr` | Arithmetic multiplication | `Mul` |
-| `*=` | `var *= expr` | Arithmetic multiplication and assignment | `MulAssign` |
-| `*` | `*expr` | Dereference | |
-| `*` | `*const type`, `*mut type` | Raw pointer | |
-| `+` | `trait + trait`, `'a + trait` | Compound type constraint | |
-| `+` | `expr + expr` | Arithmetic addition | `Add` |
-| `+=` | `var += expr` | Arithmetic addition and assignment | `AddAssign` |
-| `,` | `expr, expr` | Argument and element separator | |
-| `-` | `- expr` | Arithmetic negation | `Neg` |
-| `-` | `expr - expr` | Arithmetic subtraction | `Sub` |
-| `-=` | `var -= expr` | Arithmetic subtraction and assignment | `SubAssign` |
-| `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Function and closure return type | |
-| `.` | `expr.ident` | Member access | |
+| `*` | `expr * expr` | Multiplicación aritmética | `Mul` |
+| `*=` | `var *= expr` | Multiplicación aritmética y asignación | `MulAssign` |
+| `*` | `*expr` | Dereferir | |
+| `*` | `*const type`, `*mut type` | Puntero crudo | |
+| `+` | `trait + trait`, `'a + trait` | Condición de tipo combinado | |
+| `+` | `expr + expr` | Adición aritmética | `Add` |
+| `+=` | `var += expr` | Adición y asignación aritmética | `AddAssign` |
+| `,` | `expr, expr` | Separador de argumentos y elementos | |
+| `-` | `- expr` | Negativo aritmético | `Neg` |
+| `-` | `expr - expr` | Resta aritmética | `Sub` |
+| `-=` | `var -= expr` | Resta y asignación aritmética | `SubAssign` |
+| `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Tipo de retorno de funciones y cierres | |
+| `.` | `expr.ident` | Acceso a miembros | |
 | `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | |
 | `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | |
 | `..` | `..expr` | Struct literal update syntax | |
@@ -70,13 +70,13 @@ overload that operator is listed.
 | <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | Short-circuiting logical OR | |
 | `?` | `expr?` | Error propagation | |
 
-### Non-operator Symbols
+### Símbolos no operativos
 
-The following list contains all non-letters that don’t function as operators;
-that is, they don’t behave like a function or method call.
+La siguiente lista contiene todas las letras que no funcionan como operadores;
+es decir, no se comportan como una llamada a una función o método.
 
-Table B-2 shows symbols that appear on their own and are valid in a variety of
-locations.
+La Tabla B-2 muestra los símbolos que aparecen solos y que son válidos en una variedad de
+lugares.
 
 <span class="caption">Table B-2: Stand-Alone Syntax</span>
 
