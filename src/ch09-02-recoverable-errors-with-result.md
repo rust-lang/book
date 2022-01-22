@@ -10,8 +10,6 @@ Recall from [“Handling Potential Failure with the `Result`
 Type”][handle_failure]<!-- ignore --> in Chapter 2 that the `Result` enum is
 defined as having two variants, `Ok` and `Err`, as follows:
 
-[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
-
 ```rust
 enum Result<T, E> {
     Ok(T),
@@ -510,5 +508,6 @@ Now that we’ve discussed the details of calling `panic!` or returning `Result`
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
 
+[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [termination]: ../std/process/trait.Termination.html
