@@ -155,8 +155,23 @@ the missing file error.
 > For example, here’s another way to write the same logic as shown in Listing
 > 9-5 but using closures and the `unwrap_or_else` method:
 >
+> <!-- CAN'T EXTRACT SEE https://github.com/rust-lang/mdBook/issues/1127 -->
+>
 > ```rust,ignore
-> {{#rustdoc_include ../listings/ch09-error-handling/no-listing-03-closures/src/main.rs}}
+> use std::fs::File;
+> use std::io::ErrorKind;
+>
+> fn main() {
+>     let f = File::open("hello.txt").unwrap_or_else(|error| {
+>         if error.kind() == ErrorKind::NotFound {
+>             File::create("hello.txt").unwrap_or_else(|error| {
+>                 panic!("Problem creating the file: {:?}", error);
+>             })
+>         } else {
+>             panic!("Problem opening the file: {:?}", error);
+>         }
+>     });
+> }
 > ```
 >
 > Although this code has the same behavior as Listing 9-5, it doesn’t contain
