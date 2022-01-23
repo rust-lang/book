@@ -11,9 +11,12 @@ The HTML format is available online at
 and offline with installations of Rust made with `rustup`; run `rustup docs
 --book` to open.
 
+Several other [translations] are also available.
+
 This text is available in [paperback and ebook format from No Starch
 Press][nsprust].
 
 [install]: ch01-01-installation.html
 [editions]: appendix-05-editions.html
 [nsprust]: https://nostarch.com/rust
+[translations]: appendix-06-translation.html
