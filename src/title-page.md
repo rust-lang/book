@@ -1,16 +1,16 @@
-# The Rust Programming Language
+# Lenguaje de programación Rust
 
-*by Steve Klabnik and Carol Nichols, with contributions from the Rust Community*
+*por Steve Klabnik y Carol Nichols, con contribuciones de la comunidad de la roya*
 
-This version of the text assumes you’re using Rust 1.50 or later with
-`edition="2018"` in *Cargo.toml* of all projects to use Rust 2018 Edition
-idioms. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
-to install or update Rust, and see the new [Appendix E][editions]<!-- ignore
---> for information on editions.
+Esta versión del texto asume que estás usando Rust 1.50 o posterior con
+`edición="2018"` en *Cargo.toml* de todos los proyectos para usar Rust 2018 Edition
+de Rust. Ver la sección ["Instalación" del capítulo 1][install]<!-- ignore -->
+para instalar o actualizar Rust, y ver el nuevo [Apéndice E][editions]<!-- ignore
+--> para obtener información sobre las ediciones.
 
-The 2018 Edition of the Rust language includes a number of improvements that
-make Rust more ergonomic and easier to learn. This iteration of the book
-contains a number of changes to reflect those improvements:
+La edición 2018 del lenguaje Rust incluye una serie de mejoras que
+hacen que Rust sea más ergonómico y fácil de aprender. Esta iteración del libro
+contiene una serie de cambios para reflejar esas mejoras:
 
 - Chapter 7, “Managing Growing Projects with Packages, Crates, and Modules,”
   has been mostly rewritten. The module system and the way paths work in the
