@@ -585,8 +585,8 @@ The call to `recv` blocks, so if there is no job yet, the current thread will
 wait until a job becomes available. The `Mutex<T>` ensures that only one
 `Worker` thread at a time is trying to request a job.
 
-With the implementation of this trick, our thread pool is in a working state!
-Give it a `cargo run` and make some requests:
+Our thread pool is now in a working state! Give it a `cargo run` and make some
+requests:
 
 <!-- manual-regeneration
 cd listings/ch20-web-server/listing-20-20
