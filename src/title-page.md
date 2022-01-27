@@ -11,7 +11,7 @@ The HTML format is available online at
 and offline with installations of Rust made with `rustup`; run `rustup docs
 --book` to open.
 
-Several other [translations] are also available.
+Several community [translations] are also available.
 
 This text is available in [paperback and ebook format from No Starch
 Press][nsprust].
