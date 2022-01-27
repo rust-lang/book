@@ -267,7 +267,7 @@ after automatic regeneration, look at listings/ch16-fearless-concurrency/listing
 help: to force the closure to take ownership of `v` (and any other referenced variables), use the `move` keyword
   |
 6 |     let handle = thread::spawn(move || {
-  |                                ^^^^^^^
+  |                                ++++
 ```
 
 By adding the `move` keyword before the closure, we force the closure to take
