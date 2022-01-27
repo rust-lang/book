@@ -200,13 +200,12 @@ threads run at the same time.
 
 ### Using `move` Closures with Threads
 
-The `move` closure is often used alongside `thread::spawn` because it allows
-you to use data from one thread in another thread.
-
-In Chapter 13, we mentioned we can use the `move` keyword before the parameter
-list of a closure to force the closure to take ownership of the values it uses
-in the environment. This technique is especially useful when creating new
-threads in order to transfer ownership of values from one thread to another.
+The `move` keyword is often used with closures passed to `thread::spawn`
+because the closure will then take ownership of the values it uses from the
+environment, thus transferring ownership of those values from one thread to
+another. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
+--> section of Chapter 13, we discussed `move` in the context of closures. Now,
+we’ll concentrate more on the interaction between `move` and `thread::spawn`
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
@@ -308,3 +307,5 @@ ownership rules.
 
 With a basic understanding of threads and the thread API, let’s look at what we
 can *do* with threads.
+
+[capture]: ch13-01-closures.html#capturing-the-environment-with-closures
