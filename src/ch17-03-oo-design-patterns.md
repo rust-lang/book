@@ -219,16 +219,18 @@ state is approved, as shown in Listing 17-16:
 We add the `approve` method to the `State` trait and add a new struct that
 implements `State`, the `Published` state.
 
-Similar to `request_review`, if we call the `approve` method on a `Draft`, it
-will have no effect because it will return `self`. When we call `approve` on
-`PendingReview`, it returns a new, boxed instance of the `Published` struct.
-The `Published` struct implements the `State` trait, and for both the
-`request_review` method and the `approve` method, it returns itself, because
-the post should stay in the `Published` state in those cases.
+Similar to the way `request_review` on `PendingReview` works, if we call the
+`approve` method on a `Draft`, it will have no effect because `approve` will
+return `self`. When we call `approve` on `PendingReview`, it returns a new,
+boxed instance of the `Published` struct. The `Published` struct implements the
+`State` trait, and for both the `request_review` method and the `approve`
+method, it returns itself, because the post should stay in the `Published`
+state in those cases.
 
-Now we need to update the `content` method on `Post`: if the state is
-`Published`, we want to return the value in the post’s `content` field;
-otherwise, we want to return an empty string slice, as shown in Listing 17-17:
+Now we need to update the `content` method on `Post`. We want the value
+returned from `content` to depend on the current state of the `Post`, so we're
+going to have the `Post` delegate to a `content` method defined on its `state`,
+as shown in Listing 17-17:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -246,9 +248,9 @@ returned from using the `content` method on the `state` value.
 
 We call the `as_ref` method on the `Option` because we want a reference to the
 value inside the `Option` rather than ownership of the value. Because `state`
-is an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn State>>` is
-returned. If we didn’t call `as_ref`, we would get an error because we can’t
-move `state` out of the borrowed `&self` of the function parameter.
+is an `Option<Box<dyn State>>`, when we call `as_ref`, an `Option<&Box<dyn
+State>>` is returned. If we didn’t call `as_ref`, we would get an error because
+we can’t move `state` out of the borrowed `&self` of the function parameter.
 
 We then call the `unwrap` method, which we know will never panic, because we
 know the methods on `Post` ensure that `state` will always contain a `Some`
