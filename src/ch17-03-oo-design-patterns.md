@@ -41,13 +41,13 @@ because we haven’t implemented the `blog` crate yet.
 <span class="caption">Listing 17-11: Code that demonstrates the desired
 behavior we want our `blog` crate to have</span>
 
-We want to allow the user to create a new draft blog post with `Post::new`.
-Then we want to allow text to be added to the blog post while it’s in the draft
-state. If we try to get the post’s content immediately, before approval,
-nothing should happen because the post is still a draft. We’ve added
-`assert_eq!` in the code for demonstration purposes. An excellent unit test for
-this would be to assert that a draft blog post returns an empty string from the
-`content` method, but we’re not going to write tests for this example.
+We want to allow the user to create a new draft blog post with `Post::new`. We
+want to allow text to be added to the blog post. If we try to get the post’s
+content immediately, before approval, we shouldn't get any text because the
+post is still a draft. We’ve added `assert_eq!` in the code for demonstration
+purposes. An excellent unit test for this would be to assert that a draft blog
+post returns an empty string from the `content` method, but we’re not going to
+write tests for this example.
 
 Next, we want to enable a request for a review of the post, and we want
 `content` to return an empty string while waiting for the review. When the post
