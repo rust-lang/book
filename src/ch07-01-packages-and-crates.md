@@ -22,6 +22,7 @@ $ cargo new my-project
 $ ls my-project
 Cargo.toml
 src
+.gitignore
 $ ls my-project/src
 main.rs
 ```
