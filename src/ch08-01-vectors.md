@@ -108,12 +108,6 @@ range of existing elements. As an example, let’s see what happens when we have
 a vector of five elements and then we try to access an element at index 100
 with each technique, as shown in Listing 8-6.
 
-Rust has two ways to reference an element so you can choose how the program
-behaves when you try to use an index value that the vector doesn’t have an
-element for. As an example, let’s see what a program will do if it has a vector
-that holds five elements and then tries to access an element at index 100, as
-shown in Listing 8-6.
-
 ```rust,should_panic,panics
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
