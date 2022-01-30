@@ -720,7 +720,7 @@ strong, static type system. However, it also has type inference. When we wrote
 a `String` and didn’t make us write the type. The `secret_number`, on the other
 hand, is a number type. A few of Rust’s number types can have a value between 1
 and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
-64-bit number; as well as others. Unless otherwise speceified, Rust defaults to
+64-bit number; as well as others. Unless otherwise specified, Rust defaults to
 an `i32`, which is the type of `secret_number` unless you add type information
 elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
