@@ -1,6 +1,6 @@
 ## Customizing Builds with Release Profiles
 
-In Rust, *release profiles* are predefined and customizable profiles with
+In Rust, *release profiles* are predefined and customizable. Profiles with
 different configurations that allow a programmer to have more control over
 various options for compiling code. Each profile is configured independently of
 the others.
