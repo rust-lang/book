@@ -157,7 +157,7 @@ The `cfg_panic` feature makes it possible to exercise different lines of code de
 The possible value is either `unwind` or `abort`.
 The following is a playful example on choosing the right beverage. 
 
-```rust
+```toml
 #![feature(cfg_panic)]
 
 #[cfg(panic = "unwind")]
@@ -178,7 +178,7 @@ fn main(){
 ```
 
 Here is the same example rewritten.
-```rust
+```toml
 #![feature(cfg_panic)]
 
 fn drink(beverage: &str) {
