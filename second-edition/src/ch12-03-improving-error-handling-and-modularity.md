@@ -439,7 +439,7 @@ use std::error::Error;
 
 // ...snip...
 
-fn run(config: Config) -> Result<(), Box<Error>> {
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
@@ -454,14 +454,14 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 <span class="caption">항목 12-12: `run` 함수가 `Result`를 반환하게 바꾸기 </span>
 
 우리는 여기서 세 가지 큰 변화를 만들었습니다. 먼저, `run` 함수의 리턴 타입을 `Result 
-<(), Box <Error >>`로 바꿨습니다. 이 함수는 이전에 유닛 타입 `()`을 반환했으며, 
+<(), Box <dyn Error >>`로 바꿨습니다. 이 함수는 이전에 유닛 타입 `()`을 반환했으며, 
 우리는 `Ok`의 경우 반환할 값으로 이 타입을 유지합니다.
 
 우리의 에러 타입으로, *특성 오브젝트* Box <Error>를 사용합니다 (그리고 상단에 `use`문으로 
 `std::error::Error`를 범위 내로 임포트 해왔습니다). 우리는 특성 오브젝트들을 17장에서 
-다룰 것입니다. 지금 당장은, `Box<Error>`는 함수가 `Error` 특성을 구현하는 타입을 
+다룰 것입니다. 지금 당장은, `Box<dyn Error>`는 함수가 `Error` 특성을 구현하는 타입을 
 반환한다는 것만 알면 되고, 특별히 어떤 타입이 반환될지에 대해서는 알 필요 없습니다. 이런 방식은 
-다양한 에러 상황에 다른 타입의 오류 값을 반환 할 수 있는 유연성을 확보할 수 있습니다. 
+다양한 에러 상황에 다른 타입의 오류 값을 반환 할 수 있는 유연성을 확보할 수 있습니다. `dyn`은 "dynamic"의 약자입니다.
 
 
 우리가 만든 두 번째 변화는 우리가 9 장에서 이야기했듯이, `?`에 대한 `expect`에 대한 호출을 제거한 것입니다. 에러 시에 `panic!`을 호출하는 것보다 현재 함수에서 에러 값을 반환하며 호출자가 처리 할 수 ​​있도록 하였습니다.
@@ -558,7 +558,7 @@ impl Config {
     }
 }
 
-pub fn run(config: Config) -> Result<(), Box<Error>>{
+pub fn run(config: Config) -> Result<(), Box<dyn Error>>{
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
