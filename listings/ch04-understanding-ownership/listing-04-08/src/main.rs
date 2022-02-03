@@ -12,7 +12,7 @@ fn first_word(s: &String) -> usize {
 
 // ANCHOR: here
 fn main() {
-    let mut s = String::from("hello world");
+    let s = String::from("hello world");
 
     let word = first_word(&s); // word will get the value 5
 
