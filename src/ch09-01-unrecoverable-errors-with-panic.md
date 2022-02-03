@@ -152,6 +152,51 @@ request an element beyond the range of the vector indexes. When your code
 panics in the future, you’ll need to figure out what action the code is taking
 with what values to cause the panic and what the code should do instead.
 
+### Different panic strategies
+The `cfg_panic` feature makes it possible to exercise different lines of code depending on the panic strategy. 
+The possible value is either `unwind` or `abort`.
+The following is a playful example on choosing the right beverage. 
+
+```rust
+#![feature(cfg_panic)]
+
+#[cfg(panic = "unwind")]
+fn ah(){ println!("Spit it out!!!!");}
+
+#[cfg(not(panic="unwind"))]
+fn ah(){ println!("This is not your party. Run!!!!");}
+
+fn drink(beverage: &str){
+   if beverage == "lemonade"{ ah();}
+   else{println!("Some refreshing {} is all I need.", beverage);}
+}
+
+fn main(){
+   drink("water");
+   drink("lemonade");
+}
+```
+
+Here is the same example rewritten.
+```rust
+#![feature(cfg_panic)]
+
+fn drink(beverage: &str) {
+   // You shouldn't drink too much sugary beverages.
+   if beverage == "lemonade" {
+     if cfg!(panic="abort"){ println!("This is not your party. Run!!!!");}
+     else{ println!("Spit it out!!!!");}
+   }
+   else{ println!("Some refreshing {} is all I need.", beverage); }
+}
+
+fn main() {
+    drink("water");
+    drink("lemonade");
+}
+```
+
+### Summary 
 We’ll come back to `panic!` and when we should and should not use `panic!` to
 handle error conditions in the [“To `panic!` or Not to
 `panic!`”][to-panic-or-not-to-panic]<!-- ignore --> section later in this
