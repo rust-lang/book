@@ -99,7 +99,7 @@ fn main() {
 ```
 
 Cargo has generated a “Hello, world!” program for you, just like the one we
-wrote in Listing 1-1! So far, the differences between our previous project and
+wrote in Listing 1-2! So far, the differences between our previous project and
 the project Cargo generated are that Cargo placed the code in the *src*
 directory, and we have a *Cargo.toml* configuration file in the top directory.
 
