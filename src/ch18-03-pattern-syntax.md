@@ -459,7 +459,7 @@ than a pattern alone allows.
 
 The condition can use variables created in the pattern. Listing 18-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x < 5`.
+guard of `if x % 2 == 0` (which will be true if the number is even).
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-26/src/main.rs:here}}
@@ -467,18 +467,18 @@ guard of `if x < 5`.
 
 <span class="caption">Listing 18-26: Adding a match guard to a pattern</span>
 
-This example will print `less than five: 4`. When `num` is compared to the
+This example will print `The number 4 is even`. When `num` is compared to the
 pattern in the first arm, it matches, because `Some(4)` matches `Some(x)`. Then
-the match guard checks whether the value in `x` is less than `5`, and because
-it is, the first arm is selected.
+the match guard checks whether the remainder of dividing `x` by 2 is equal to
+0, and because it is, the first arm is selected.
 
-If `num` had been `Some(10)` instead, the match guard in the first arm would
-have been false because 10 is not less than 5. Rust would then go to the second
-arm, which would match because the second arm doesn’t have a match guard and
-therefore matches any `Some` variant.
+If `num` had been `Some(5)` instead, the match guard in the first arm would
+have been false because the remainder of 5 divided by 2 is 1, which is not
+equal to 0. Rust would then go to the second arm, which would match because the
+second arm doesn’t have a match guard and therefore matches any `Some` variant.
 
-There is no way to express the `if x < 5` condition within a pattern, so the
-match guard gives us the ability to express this logic.
+There is no way to express the `if x % 2 == 0` condition within a pattern, so
+the match guard gives us the ability to express this logic.
 
 In Listing 18-11, we mentioned that we could use match guards to solve our
 pattern-shadowing problem. Recall that a new variable was created inside the
