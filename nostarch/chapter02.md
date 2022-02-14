@@ -515,7 +515,7 @@ $ cargo update
     Updating rand v0.8.3 -> v0.8.4
 ```
 
-Cargo ignores the `0.9.0` releaese. At this point, you would also notice a
+Cargo ignores the `0.9.0` release. At this point, you would also notice a
 change in your *Cargo.lock* file noting that the version of the `rand` crate
 you are now using is `0.8.4`. To use `rand` version `0.9.0` or any version in
 the `0.9.x` series, you’d have to update the *Cargo.toml* file to look like
