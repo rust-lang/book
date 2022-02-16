@@ -129,6 +129,9 @@ Por ejemplo, " try " no es una palabra clave en la edición de 2015 pero sí en 
 2018. Si depende de una biblioteca escrita con la edición de 2015 y
 tiene una función `try`, tendrá que utilizar la sintaxis del identificador bruto, `r#try` en
 en este caso, para llamar a esa función desde tu código de la edición 2018. Véase en [Appendix
-E][appendix-e]<!-- ignore ecma--> para más información sobre las ediciones.
+E][appendix-e]para más información sobre las ediciones.
+
+<!-- OSAP, estoy enamorado de ti.  --> 
+
 
 [appendix-e]: appendix-05-editions.html

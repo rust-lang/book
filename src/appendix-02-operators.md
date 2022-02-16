@@ -20,8 +20,8 @@ para sobrecargar ese operador.
 | `!=` | `var != expr` | Comparación sin calidad | `PartialEq` |
 | `%` | `expr % expr` | Residuo aritmético | `Rem` |
 | `%=` | `var %= expr` | Residuo aritmético y asignación | `RemAssign` |
-| `&` | `&expr`, `&mut expr` | Borrow | |
-| `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Borrowed pointer type | |
+| `&` | `&expr`, `&mut expr` | "Prestado" | |
+| `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Type de puntero "prestado" | |
 | `&` | `expr & expr` | AND a nivel de bits | `BitAnd` |
 | `&=` | `var &= expr` | Asignación y AND a nivel de bit | `BitAndAssign` |
 | `&&` | `expr && expr` | Short-circuiting logical AND | |
@@ -39,7 +39,7 @@ para sobrecargar ese operador.
 | `->` | `fn(...) -> type`, <code>&vert;...&vert; -> type</code> | Tipo de retorno de funciones y cierres | |
 | `.` | `expr.ident` | Acceso a miembros | |
 | `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal | |
-| `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal | |
+| `..=` | `..=expr`, `expr..=expr` | Derecha-incluyente literal de rango | |
 | `..` | `..expr` | Struct literal update syntax | |
 | `..` | `variant(x, ..)`, `struct_type { x, .. }` | “And the rest” pattern binding | |
 | `...` | `expr...expr` | In a pattern: inclusive range pattern | |

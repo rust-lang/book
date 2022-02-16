@@ -1,7 +1,7 @@
-## Appendix F: Translations of the Book
+## Apéndice F: Traducciones del Libro
 
-For resources in languages other than English. Most are still in progress; see
-[the Translations label][label] to help or let us know about a new translation!
+Para recursos en idiomas distintos del inglés. La mayoría están todavía en proceso; vea
+[la etiqueta Traducciones][label] para ayudar o avisarnos de una nueva traducción.
 
 [label]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
 
