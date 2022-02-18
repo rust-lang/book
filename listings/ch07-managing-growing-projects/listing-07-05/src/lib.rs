@@ -1,5 +1,5 @@
-mod front_of_house {
-    pub mod hosting {
+pub mod front_of_house {
+    mod hosting {
         fn add_to_waitlist() {}
     }
 }
