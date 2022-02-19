@@ -67,14 +67,14 @@ whether all borrows are valid. Listing 10-18 shows the same code as Listing
 ```
 
 <span class="caption">Listing 10-18: Annotations of the lifetimes of `r` and
-`x`, named `'a` and `'b`, respectively</span>
+`x`, named `'outer_scope` and `'inner_scope`, respectively</span>
 
-Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
-with `'b`. As you can see, the inner `'b` block is much smaller than the outer
-`'a` lifetime block. At compile time, Rust compares the size of the two
-lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
-with a lifetime of `'b`. The program is rejected because `'b` is shorter than
-`'a`: the subject of the reference doesn’t live as long as the reference.
+Here, we’ve annotated the lifetime of `r` with `'outer_scope` and the lifetime of `x`
+with `'inner_scope`. As you can see, the `'inner_scope` block is much smaller than the
+`'outer_scope` lifetime block. At compile time, Rust compares the size of the two
+lifetimes and sees that `r` has a lifetime of `'outer_scope` but that it refers to memory
+with a lifetime of `'inner_scope`. The program is rejected because `'inner_scope` is shorter than
+`'outer_scope`: the subject of the reference doesn’t live as long as the reference.
 
 Listing 10-19 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
@@ -86,7 +86,7 @@ compiles without any errors.
 <span class="caption">Listing 10-19: A valid reference because the data has a
 longer lifetime than the reference</span>
 
-Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
+Here, `x` has the lifetime `'full_scope`, which in this case is larger than `'partial_scope`. This
 means `r` can reference `x` because Rust knows that the reference in `r` will
 always be valid while `x` is valid.
 
