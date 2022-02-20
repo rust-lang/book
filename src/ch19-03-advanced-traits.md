@@ -241,11 +241,11 @@ both implement one *trait*, Rust could figure out which implementation of a
 trait to use based on the type of `self`.
 
 However, associated functions that are part of traits don’t have a `self`
-parameter. When two types in the same scope implement that trait, Rust can’t
-figure out which type you mean unless you use *fully qualified syntax*. For
-example, the `Animal` trait in Listing 19-19 has the associated function
-`baby_name`, the implementation of `Animal` for the struct `Dog`, and the
-associated function `baby_name` defined on `Dog` directly.
+parameter. When a type implements two associated functions with the same name,
+Rust can’t figure out which function to call unless you use *fully qualified
+syntax*. For example, the `Animal` trait in Listing 19-19 has the associated
+function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
+the associated function `baby_name` defined on `Dog` directly.
 
 <span class="filename">Filename: src/main.rs</span>
 
