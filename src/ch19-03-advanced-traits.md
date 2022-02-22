@@ -240,7 +240,7 @@ Because the `fly` method takes a `self` parameter, if we had two *types* that
 both implement one *trait*, Rust could figure out which implementation of a
 trait to use based on the type of `self`.
 
-However, associated functions that are part of traits don’t have a `self`
+However, associated functions that are not methods don’t have a `self`
 parameter. When two types in the same scope implement that trait, Rust can’t
 figure out which type you mean unless you use *fully qualified syntax*. For
 example, the `Animal` trait in Listing 19-19 has the associated function
@@ -324,13 +324,13 @@ In general, fully qualified syntax is defined as follows:
 <Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
-For associated functions, there would not be a `receiver`: there would only be
-the list of other arguments. You could use fully qualified syntax everywhere
-that you call functions or methods. However, you’re allowed to omit any part of
-this syntax that Rust can figure out from other information in the program. You
-only need to use this more verbose syntax in cases where there are multiple
-implementations that use the same name and Rust needs help to identify which
-implementation you want to call.
+For associated functions that aren’t methods, there would not be a `receiver`:
+there would only be the list of other arguments. You could use fully qualified
+syntax everywhere that you call functions or methods. However, you’re allowed
+to omit any part of this syntax that Rust can figure out from other information
+in the program. You only need to use this more verbose syntax in cases where
+there are multiple implementations that use the same name and Rust needs help
+to identify which implementation you want to call.
 
 ### Using Supertraits to Require One Trait’s Functionality Within Another Trait
 
