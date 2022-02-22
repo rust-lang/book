@@ -291,7 +291,7 @@ location</span>
 
 We don’t own the memory at this arbitrary location, and there is no guarantee
 that the slice this code creates contains valid `i32` values. Attempting to use
-`slice` as though it’s a valid slice results in undefined behavior.
+`values` as though it’s a valid slice results in undefined behavior.
 
 #### Using `extern` Functions to Call External Code
 
