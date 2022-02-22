@@ -454,7 +454,7 @@ Now you know how the newtype pattern is used in relation to traits; it’s also 
 useful pattern even when traits are not involved. Let’s switch focus and look
 at some advanced ways to interact with Rust’s type system.
 
-[newtype]: ch19-04-advanced-types.html#using-the-newtype-pattern-for-type-safety-and-abstraction
+[newtype]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
 [implementing-a-trait-on-a-type]:
 ch10-02-traits.html#implementing-a-trait-on-a-type
 [the-iterator-trait-and-the-next-method]:
