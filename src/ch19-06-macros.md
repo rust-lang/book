@@ -168,9 +168,9 @@ function-like) all work in a similar fashion.
 
 When creating procedural macros, the definitions must reside in their own crate
 with a special crate type. This is for complex technical reasons that we hope
-to eliminate in the future. Using procedural macros looks like the code in
+to eliminate in the future. Defining procedural macros looks like the code in
 Listing 19-29, where `some_attribute` is a placeholder for using a specific
-macro.
+macro variety.
 
 <span class="filename">Filename: src/lib.rs</span>
 

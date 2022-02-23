@@ -46,6 +46,16 @@ Listing 11-1.
 
 <span class="filename">Filename: src/lib.rs</span>
 
+<!-- manual-regeneration
+cd listings/ch11-writing-automated-tests
+rm -rf listing-11-01
+cargo new --lib listing-11-01 --name adder
+cd listing-11-01
+cargo test
+git co output.txt
+cd ../../..
+-->
+
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-01/src/lib.rs}}
 ```

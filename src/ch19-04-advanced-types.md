@@ -22,8 +22,7 @@ that function with a value of type `Meters` or a plain `u32`.
 
 Another use of the newtype pattern is in abstracting away some implementation
 details of a type: the new type can expose a public API that is different from
-the API of the private inner type if we used the new type directly to restrict
-the available functionality, for example.
+the API of the private inner type.
 
 Newtypes can also hide internal implementation. For example, we could provide a
 `People` type to wrap a `HashMap<i32, String>` that stores a person’s ID
