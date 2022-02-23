@@ -184,6 +184,7 @@ build` when they’re ready to use the executable.
 
 Let’s recap what we’ve learned so far about Cargo:
 
+* We can create a project using `cargo new`.
 * We can build a project using `cargo build`.
 * We can build and run a project in one step using `cargo run`.
 * We can build a project without producing a binary to check for errors using
