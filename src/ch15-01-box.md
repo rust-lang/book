@@ -56,7 +56,7 @@ Putting a single value on the heap isn’t very useful, so you won’t use boxes
 themselves in this way very often. Having values like a single `i32` on the
 stack, where they’re stored by default, is more appropriate in the majority of
 situations. Let’s look at a case where boxes allow us to define types that
-wouldn’t be allowed to if we didn’t have boxes.
+wouldn’t be allowed if we didn’t have boxes.
 
 ### Enabling Recursive Types with Boxes
 
