@@ -18,8 +18,9 @@ useful.
 <span class="caption">Listing 13-13: Creating an iterator</span>
 
 Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-5 in Chapter 3, we used iterators with `for` loops to execute some code on
-each item, although we glossed over what the call to `iter` did until now.
+3-5 in Chapter 3, we iterated over an array using a `for` loop to execute some
+code on each of its items. Under the hood this implicitly created and then
+consumed an iterator, but we glossed over how exactly that works until now.
 
 The example in Listing 13-14 separates the creation of the iterator from the
 use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
