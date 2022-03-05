@@ -241,11 +241,12 @@ both implement one *trait*, Rust could figure out which implementation of a
 trait to use based on the type of `self`.
 
 However, associated functions that are not methods don’t have a `self`
-parameter. When two types in the same scope implement that trait, Rust can’t
-figure out which type you mean unless you use *fully qualified syntax*. For
-example, the `Animal` trait in Listing 19-19 has the associated function
-`baby_name`, the implementation of `Animal` for the struct `Dog`, and the
-associated function `baby_name` defined on `Dog` directly.
+parameter. When there are multiple types or traits that define non-method
+functions with the same function name, Rust doesn't always know which type you
+mean unless you use *fully qualified syntax*. For example, the `Animal` trait
+in Listing 19-19 has the associated non-method function `baby_name`, and the
+`Animal` trait is implemented for the struct `Dog`. There’s also an associated
+non-method function `baby_name` defined on `Dog` directly.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -287,8 +288,8 @@ Listing 19-20, we’ll get a compilation error.
 function from the `Animal` trait, but Rust doesn’t know which implementation to
 use</span>
 
-Because `Animal::baby_name` is an associated function rather than a method, and
-thus doesn’t have a `self` parameter, Rust can’t figure out which
+Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be
+other types that implement the `Animal` trait, Rust can’t figure out which
 implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```console
@@ -296,8 +297,9 @@ implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 ```
 
 To disambiguate and tell Rust that we want to use the implementation of
-`Animal` for `Dog`, we need to use fully qualified syntax. Listing 19-21
-demonstrates how to use fully qualified syntax.
+`Animal` for `Dog` as opposed to the implementation of `Animal` for some other
+type, we need to use fully qualified syntax. Listing 19-21 demonstrates how to
+use fully qualified syntax.
 
 <span class="filename">Filename: src/main.rs</span>
 
