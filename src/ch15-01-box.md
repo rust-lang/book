@@ -67,11 +67,11 @@ of values could theoretically continue infinitely, Rust doesn’t know how much
 space a value of a recursive type needs. However, boxes have a known size, so
 by inserting a box in a recursive type definition, you can have recursive types.
 
-Let’s explore the *cons list*, which is a data type common in functional
-programming languages, as an example of a recursive type. The cons list type
-we’ll define is straightforward except for the recursion; therefore, the
-concepts in the example we’ll work with will be useful any time you get into
-more complex situations involving recursive types.
+As an example of a recursive type, let’s explore the *cons list*. This is a data
+commonly found in functional programming languages. The cons list type we’ll
+define is straightforward except for the recursion; therefore, the concepts in
+the example we’ll work with will be useful any time you get into more complex
+situations involving recursive types.
 
 #### More Information About the Cons List
 
