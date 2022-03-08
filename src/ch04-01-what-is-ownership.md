@@ -45,7 +45,7 @@ strings.
 > that is big enough, marks it as being in use, and returns a *pointer*, which
 > is the address of that location. This process is called *allocating on the
 > heap* and is sometimes abbreviated as just *allocating*. Pushing values onto
-> the stack is not considered allocating. Because the pointer to the heap is a
+> the stack is not considered allocating. Because the pointer to the stack is a
 > known, fixed size, you can store the pointer on the stack, but when you want
 > the actual data, you must follow the pointer. Think of being seated at a
 > restaurant. When you enter, you state the number of people in your group, and
