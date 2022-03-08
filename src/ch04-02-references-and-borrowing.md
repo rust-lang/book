@@ -57,6 +57,9 @@ have references as parameters instead of the actual values, we won’t need to
 return the values in order to give back ownership, because we never had
 ownership.
 
+Also note that we didn't end up writing `*s`, this is because the method 
+`len` will dereference as needed.
+
 We call the action of creating a reference *borrowing*. As in real life, if a
 person owns something, you can borrow it from them. When you’re done, you have
 to give it back. You don’t own it.
