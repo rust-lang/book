@@ -9,7 +9,7 @@ struct Point {
 impl Add for Point {
     type Output = Point;
 
-    fn add(self, other: Point) -> Output {
+    fn add(self, other: Point) -> Self::Output {
         Point {
             x: self.x + other.x,
             y: self.y + other.y,
