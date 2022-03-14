@@ -220,12 +220,7 @@ Here’s the compiler error:
 
 Recall from the borrowing rules that if we have an immutable reference to
 something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get let s = String::from("hello");
-
-let len = s.len();
-
-let slice = &s[0..len];
-let slice = &s[..];a mutable reference. The `println!`
+truncate the `String`, it needs to get a mutable reference. The `println!`
 after the call to `clear` uses the reference in `word`, so the immutable
 reference must still be active at that point. Rust disallows the mutable
 reference in `clear` and the immutable reference in `word` from existing at the
