@@ -134,8 +134,9 @@ the value before the two periods. In other words, these are equal:
 ```rust
 let s = String::from("hello");
 
-let slice = &s[0..2];
-let slice = &s[..2];
+let slice1 = &s[0..2];
+let slice2 = &s[..2];
+assert_eq!(slice1, slice2);
 ```
 
 By the same token, if your slice includes the last byte of the `String`, you
@@ -146,8 +147,9 @@ let s = String::from("hello");
 
 let len = s.len();
 
-let slice = &s[3..len];
-let slice = &s[3..];
+let slice1 = &s[3..len];
+let slice2 = &s[3..];
+assert_eq!(slice1, slice2);
 ```
 
 You can also drop both values to take a slice of the entire string. So these
@@ -158,8 +160,9 @@ let s = String::from("hello");
 
 let len = s.len();
 
-let slice = &s[0..len];
-let slice = &s[..];
+let slice1 = &s[0..len];
+let slice2 = &s[..];
+assert_eq!(slice1, slice2);
 ```
 
 > Note: String slice range indices must occur at valid UTF-8 character
@@ -217,7 +220,12 @@ Here’s the compiler error:
 
 Recall from the borrowing rules that if we have an immutable reference to
 something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it needs to get a mutable reference. The `println!`
+truncate the `String`, it needs to get let s = String::from("hello");
+
+let len = s.len();
+
+let slice = &s[0..len];
+let slice = &s[..];a mutable reference. The `println!`
 after the call to `clear` uses the reference in `word`, so the immutable
 reference must still be active at that point. Rust disallows the mutable
 reference in `clear` and the immutable reference in `word` from existing at the
