@@ -9,6 +9,9 @@ fn main() {
     let hello = String::from("안녕하세요");
     let hello = String::from("你好");
     let hello = String::from("Olá");
+    // ANCHOR: bengali
+    let hello = String::from("নমস্কার");
+    // ANCHOR_END: bengali
     // ANCHOR: russian
     let hello = String::from("Здравствуйте");
     // ANCHOR_END: russian
