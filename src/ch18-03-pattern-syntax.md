@@ -107,7 +107,7 @@ Here is an example using ranges of `char` values:
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/no-listing-04-ranges-of-char/src/main.rs:here}}
 ```
 
-Rust can tell that `c` is within the first pattern’s range and prints `early
+Rust can tell that `'c'` is within the first pattern’s range and prints `early
 ASCII letter`.
 
 ### Destructuring to Break Apart Values
