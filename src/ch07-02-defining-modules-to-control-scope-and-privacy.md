@@ -3,8 +3,94 @@
 In this section, we’ll talk about modules and other parts of the module system,
 namely *paths* that allow you to name items; the `use` keyword that brings a
 path into scope; and the `pub` keyword to make items public. We’ll also discuss
-the `as` keyword, external packages, and the glob operator. For now, let’s
-focus on modules!
+the `as` keyword, external packages, and the glob operator.
+
+First, we’re going to start with a list of rules for easy reference when you’re
+organizing your code in the future. Then we’ll explain each of the rules in
+detail.
+
+### Modules Quick Reference
+
+Here's how modules, paths, the `use` keyword, and the `pub` keyword work in the
+compiler, and how most developers organize their code. We'll be going through
+examples of each of these rules, but this is a great place to look in the
+future as a reminder of how modules work.
+
+- **Start from the crate root**: When compiling a crate, the compiler first
+  looks in the crate root file (usually *src/lib.rs* for a library crate or
+  *src/main.rs* for a binary crate).
+- **Declaring modules**: In the crate root file, you can declare a new module
+  named, say, "garden", with `mod garden;`. The compiler will look for the code
+  inside the module in these places:
+  - Inline, directly following `mod garden`, within curly brackets instead of
+    the semicolon
+  - In the file *src/garden.rs*
+  - In the file *src/garden/mod.rs*
+- **Declaring submodules**: In any file other than the crate root that's being
+  compiled as part of the crate (for example, *src/garden.rs*), you can declare
+  submodules (for example, `mod vegetables;`). The compiler will look for the
+  code inside submodules in these places within a directory named for the
+  parent module:
+  - Inline, directly following `mod vegetables`, within curly brackets instead
+    of the semicolon
+  - In the file *src/garden/vegetables.rs*
+  - In the file *src/garden/vegetables/mod.rs*
+- **Paths to code in modules**: Once a module is being compiled as part of your
+  crate, you can refer to code in that module (for example, an `Asparagus` type
+  in the garden vegetables module) from anywhere else in this crate by using
+  the path `crate::garden::vegetables::Asparagus` as long as the privacy rules
+  allow.
+- **Private vs public**: Code within a module is private from its parent
+  modules by default. To make a module public, declare it with `pub mod`
+  instead of `mod`. To make items within a public module public as well, use
+  `pub` before their declarations.
+- **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
+  items to reduce repetition of long paths. In any scope that can refer to
+  `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
+  crate::garden::vegetables::Asparagus;` and then only need to write `Asparagus`
+  to make use of that type in the scope.
+
+Here's a binary crate named `backyard` that illustrates these rules. The
+crate's directory, also named `backyard`, contains these files and directories:
+
+```text
+backyard
+├── Cargo.lock
+├── Cargo.toml
+└── src
+    ├── garden
+    │   └── vegetables.rs
+    ├── garden.rs
+    └── main.rs
+```
+
+The crate root file, in this case *src/main.rs*, contains:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,noplayground,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/main.rs}}
+```
+
+The `pub mod garden;` means the compiler includes the code it finds in
+*src/garden.rs*, which is:
+
+<span class="filename">Filename: src/garden.rs</span>
+
+```rust,noplayground,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden.rs}}
+```
+
+And `pub mod vegetables;` means the code in *src/garden/vegetables.rs* is
+included too:
+
+```rust,noplayground,ignore
+{{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
+```
+
+Now let's get into the details of these rules and demonstrate them in action!
+
+### Grouping Related Code in Modules
 
 *Modules* let us organize code within a crate into groups for readability and
 easy reuse. Modules also control the *privacy* of items, which is whether an
