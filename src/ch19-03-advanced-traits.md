@@ -65,7 +65,7 @@ This syntax seems comparable to that of generics. So why not just define the
 
 The difference is that when using generics, as in Listing 19-13, we must
 annotate the types in each implementation; because we can also implement
-`Iterator<String> for Counter` or any other type, we could have multiple
+`impl Iterator<String> for Counter` or any other type, we could have multiple
 implementations of `Iterator` for `Counter`. In other words, when a trait has a
 generic parameter, it can be implemented for a type multiple times, changing
 the concrete types of the generic type parameters each time. When we use the
