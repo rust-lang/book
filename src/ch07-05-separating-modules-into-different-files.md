@@ -65,6 +65,31 @@ a child of the `front_of_house` module. The rules the compiler follows to know
 what files to look in for modules' code means the directories and files more
 closely match the module tree.
 
+> ### Alternate File Paths
+>
+> This section covered the most idiomatic file paths the Rust compiler uses;
+> but an older file path is also still supported.
+>
+> For a module named `front_of_house` declared in the crate root, the compiler
+> will look for the module's code in:
+>
+> * *src/front_of_house.rs* (what we covered)
+> * *src/front_of_house/mod.rs* (older, still supported path)
+>
+> For a module named `hosting` that is a submodule of `front_of_house`, the
+> compiler will look for the module's code in:
+>
+> * *src/front_of_house/hosting.rs* (what we covered)
+> * *src/front_of_house/hosting/mod.rs* (older, still supported path)
+>
+> If you use both for the same module, you'll get a compiler error. Using
+> different styles for different modules in the same project is allowed, but
+> might be confusing for people navigating your project.
+>
+> The main downside to the style that uses files named *mod.rs* is that your
+> project can end up with many files named *mod.rs*, which can get confusing
+> when you have them open in your editor at the same time.
+
 Moving each module's code to a separate file is now complete, and the module
 tree remains the same. The function calls in `eat_at_restaurant` will work
 without any modification, even though the definitions live in different files.
