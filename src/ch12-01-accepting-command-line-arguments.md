@@ -89,7 +89,7 @@ Notice that the first value in the vector is `"target/debug/minigrep"`, which
 is the name of our binary. This matches the behavior of the arguments list in
 C, letting programs use the name by which they were invoked in their execution.
 It’s often convenient to have access to the program name in case you want to
-print it in messages or change behavior of the program based on what command
+print it in messages or change the behavior of the program based on what command
 line alias was used to invoke the program. But for the purposes of this
 chapter, we’ll ignore it and save only the two arguments we need.
 
