@@ -33,7 +33,14 @@ module in *src/front_of_house.rs*</span>
 
 Using a semicolon after `mod front_of_house` rather than using a block tells
 Rust to load the contents of the module from another file with the same name as
-the module.
+the module. Note that you only need to load the contents of a file using a
+`mod` declaration once somewhere in your module tree. Once the compiler knows
+the file is part of the project (and knows where in the module tree the code
+resides because of where you've put the `mod` statement), other files in your
+project should refer to the code in that file using a path to where it was
+declared as covered in the [“Paths for Referring to an Item in the Module
+Tree”][paths]<!-- ignore --> section. In other words, `mod` is *not* an
+"include" operation that other programming languages have.
 
 Next, we'll extract the `hosting` module to its own file as well. The process
 is a bit different because `hosting` is a child module of `front_of_house`, not
@@ -112,3 +119,5 @@ definitions public by adding the `pub` keyword.
 
 In the next chapter, we’ll look at some collection data structures in the
 standard library that you can use in your neatly organized code.
+
+[paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
