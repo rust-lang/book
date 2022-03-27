@@ -162,7 +162,7 @@ let s = String::from("hello");
 The double colon `::` operator allows us to namespace this particular `from`
 function under the `String` type rather than using some sort of name like
 `string_from`. We’ll discuss this syntax more in the [“Method
-Syntax”][method-syntax]<!-- ignore --> section of Chapter 5 and when we talk
+Syntax”][method-syntax]<!-- ignore --> section of Chapter 5 and when we’ll talk
 about namespacing with modules in [“Paths for Referring to an Item in the
 Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
