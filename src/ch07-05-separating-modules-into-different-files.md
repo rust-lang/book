@@ -33,8 +33,14 @@ module in *src/front_of_house.rs*</span>
 
 Using a semicolon after `mod front_of_house` rather than using a block tells
 Rust to load the contents of the module from another file with the same name as
-the module. To continue with our example and extract the `hosting` module to
-its own file as well, we change *src/front_of_house.rs* to contain only the
+the module.
+
+Next, we'll extract the `hosting` module to its own file as well. The process
+is a bit different because `hosting` is a child module of `front_of_house`, not
+of the root module. The file for `hosting` will be in a directory named for its
+place in the module tree.
+
+To start moving `hosting`, we change *src/front_of_house.rs* to contain only the
 declaration of the `hosting` module:
 
 <span class="filename">Filename: src/front_of_house.rs</span>
@@ -53,10 +59,16 @@ Then we create a *src/front_of_house* directory and a file
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/no-listing-02-extracting-hosting/src/front_of_house/hosting.rs}}
 ```
 
-The module tree remains the same, and the function calls in `eat_at_restaurant`
-will work without any modification, even though the definitions live in
-different files. This technique lets you move modules to new files as they grow
-in size.
+If we instead put *hosting.rs* in the *src* directory, the compiler would
+expect that code to be in a `hosting` module declared in the crate root, not as
+a child of the `front_of_house` module. The rules the compiler follows to know
+what files to look in for modules' code means the directories and files more
+closely match the module tree.
+
+Moving each module's code to a separate file is now complete, and the module
+tree remains the same. The function calls in `eat_at_restaurant` will work
+without any modification, even though the definitions live in different files.
+This technique lets you move modules to new files as they grow in size.
 
 Note that the `pub use crate::front_of_house::hosting` statement in
 *src/lib.rs* also hasn’t changed, nor does `use` have any impact on what files
