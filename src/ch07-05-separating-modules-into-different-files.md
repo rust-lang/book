@@ -4,23 +4,30 @@ So far, all the examples in this chapter defined multiple modules in one file.
 When modules get large, you might want to move their definitions to a separate
 file to make the code easier to navigate.
 
-For example, let’s start from the code in Listing 7-17 and move the
-`front_of_house` module to its own file *src/front_of_house.rs* by changing the
-crate root file so it contains the code shown in Listing 7-21. In this case,
-the crate root file is *src/lib.rs*, but this procedure also works with binary
-crates whose crate root file is *src/main.rs*.
+For example, let’s start from the code in Listing 7-17 and extract modules into
+files instead of having all the modules defined in the crate root file. In this
+case, the crate root file is *src/lib.rs*, but this procedure also works with
+binary crates whose crate root file is *src/main.rs*.
+
+First, we'll extract the `front_of_house` module to its own file. Remove the
+code inside the curly brackets for the `front_of_house` module, leaving only
+the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
+shown in Listing 7-21. Note that this won't compile until we create the
+*src/front_of_house.rs* file in Listing 7-22.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
 <span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
 body will be in *src/front_of_house.rs*</span>
 
-And *src/front_of_house.rs* gets the definitions from the body of the
-`front_of_house` module, as shown in Listing 7-22.
+Next, place the code that was in the curly brackets into a new file named
+*src/front_of_house.rs*, as shown in Listing 7-22. The compiler knows to look
+in this file because of the module declaration it found in the crate root with
+the name `front_of_house`.
 
 <span class="filename">Filename: src/front_of_house.rs</span>
 
@@ -31,11 +38,9 @@ And *src/front_of_house.rs* gets the definitions from the body of the
 <span class="caption">Listing 7-22: Definitions inside the `front_of_house`
 module in *src/front_of_house.rs*</span>
 
-Using a semicolon after `mod front_of_house` rather than using a block tells
-Rust to load the contents of the module from another file with the same name as
-the module. Note that you only need to load the contents of a file using a
-`mod` declaration once somewhere in your module tree. Once the compiler knows
-the file is part of the project (and knows where in the module tree the code
+Note that you only need to load the contents of a file using a `mod`
+declaration once somewhere in your module tree. Once the compiler knows the
+file is part of the project (and knows where in the module tree the code
 resides because of where you've put the `mod` statement), other files in your
 project should refer to the code in that file using a path to where it was
 declared as covered in the [“Paths for Referring to an Item in the Module
