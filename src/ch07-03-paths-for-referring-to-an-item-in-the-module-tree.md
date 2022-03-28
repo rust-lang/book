@@ -6,8 +6,9 @@ we need to know its path.
 
 A path can take two forms:
 
-* An *absolute path* starts from a crate root by using a crate name or a
-  literal `crate`.
+* An *absolute path* starts from a crate root by using a crate name (for code
+  from an external crate) or a literal `crate` (for code from the current
+  crate).
 * A *relative path* starts from the current module and uses `self`, `super`, or
   an identifier in the current module.
 
@@ -20,7 +21,7 @@ Let’s return to the example in Listing 7-1. How do we call the
 removing some of the modules and functions. We’ll show two ways to call the
 `add_to_waitlist` function from a new function `eat_at_restaurant` defined in
 the crate root. The `eat_at_restaurant` function is part of our library crate’s
-public API, so we mark it with the `pub` keyword. In the [”Exposing Paths with
+public API, so we mark it with the `pub` keyword. In the [“Exposing Paths with
 the `pub` Keyword”][pub]<!-- ignore --> section, we’ll go into more detail
 about `pub`. Note that this example won’t compile just yet; we’ll explain why
 in a bit.
