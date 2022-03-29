@@ -156,10 +156,11 @@ changed to `pub use`.
 <span class="caption">Listing 7-17: Making a name available for any code to use
 from a new scope with `pub use`</span>
 
-By using `pub use`, external code can now call the `add_to_waitlist` function
-using `hosting::add_to_waitlist`. If we hadn’t specified `pub use`, the
-`eat_at_restaurant` function could call `hosting::add_to_waitlist` in its
-scope, but external code couldn’t take advantage of this new path.
+Before this change, external code would have to call the `add_to_waitlist`
+function by using the path
+`restaurant::front_of_house::hosting::add_to_waitlist()`. Now that this `pub
+use` has re-exported the `hosting` module from the root module, external code
+can now use the path `restaurant::hosting::add_to_waitlist()` instead.
 
 Re-exporting is useful when the internal structure of your code is different
 from how programmers calling your code would think about the domain. For
