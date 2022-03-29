@@ -169,7 +169,10 @@ about “front of house” and “back of house.” But customers visiting a res
 probably won’t think about the parts of the restaurant in those terms. With
 `pub use`, we can write our code with one structure but expose a different
 structure. Doing so makes our library well organized for programmers working on
-the library and programmers calling the library.
+the library and programmers calling the library. We’ll look at another example
+of `pub use` and how it affects your crate’s documentation in the [“Exporting a
+Convenient Public API with `pub use`”][ch14-pub-use]<!-- ignore --> section of
+Chapter 14.
 
 ### Using External Packages
 
@@ -302,5 +305,6 @@ is also sometimes used as part of the prelude pattern: see [the standard
 library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
 for more information on that pattern.
 
+[ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
 [writing-tests]: ch11-01-writing-tests.html#how-to-write-tests
