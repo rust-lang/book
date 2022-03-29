@@ -172,6 +172,34 @@ as `eat_at_restaurant`, so the relative path starting from the module in which
 `add_to_waitlist` are marked with `pub`, the rest of the path works, and this
 function call is valid!
 
+If you plan on sharing your library crate so other projects can use your code,
+your public API is your contract with users of your crate about how they
+interact with your code. There are many considerations around managing changes
+to your public API to make it easier for people to depend on your crate. These
+considerations are out of the scope of this book; if you're interested in this
+topic, see [The Rust API Guidelines][api-guidelines].
+
+> #### Best Practices for Packages with a Binary and a Library
+>
+> We mentioned a package can contain both a *src/main.rs* binary crate root as
+> well as a *src/lib.rs* library crate root, and both crates will have the
+> package name by default. Typically, packages with this pattern will have just
+> enough code in the binary crate to start an executable that calls code with
+> the library crate. This lets other projects benefit from the most
+> functionality that the package provides, because the library crate's code can
+> be shared.
+>
+> The module tree should be defined in *src/lib.rs*. Then, any public items can
+> be used in the binary crate by starting paths with the name of the package.
+> The binary crate becomes a user of the library crate just like a completely
+> external crate would use the library crate: it can only use the public API.
+> This helps you design a good API; not only are you the author, you're also a
+> client!
+>
+> In [Chapter 12][ch12]<!-- ignore -->, we'll demonstrate this organizational
+> practice with a command-line program that will contain both a binary crate
+> and a library crate.
+
 ### Starting Relative Paths with `super`
 
 We can also construct relative paths that begin in the parent module by using
@@ -261,3 +289,5 @@ our last module system feature: the `use` keyword. We’ll cover `use` by itself
 first, and then we’ll show how to combine `pub` and `use`.
 
 [pub]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
+[api-guidelines]: https://rust-lang.github.io/api-guidelines/
+[ch12]: ch12-00-an-io-project.html

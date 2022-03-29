@@ -21,10 +21,9 @@ up the root module of your crate (we’ll explain modules in depth in the
 [“Defining Modules to Control Scope and Privacy”][modules]<!-- ignore -->
 section).
 
-Several rules determine what a package can contain. A package can contain
-at most one library crate. It can contain as many binary crates
-as you’d like, but it must contain at least one crate (either library or
-binary).
+Several rules determine what a package can contain. A package can contain at
+most one library crate. It can contain as many binary crates as you’d like, but
+it must contain at least one crate (either library or binary).
 
 Let’s walk through what happens when we create a package. First, we enter the
 command `cargo new`:
