@@ -63,7 +63,8 @@ would still be valid. However, if we moved the `eat_at_restaurant` function
 separately into a module named `dining`, the absolute path to the
 `add_to_waitlist` call would stay the same, but the relative path would need to
 be updated. Our preference is to specify absolute paths because it’s more
-likely to move code definitions and item calls independently of each other.
+likely we'll want to move code definitions and item calls independently of each
+other.
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
