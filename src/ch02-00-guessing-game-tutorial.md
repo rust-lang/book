@@ -29,6 +29,14 @@ directory.
 
 Look at the generated *Cargo.toml* file:
 
+<!-- manual-regeneration
+cd listings/ch02-guessing-game-tutorial
+rm -rf no-listing-01-cargo-new
+cargo new --name guessing_game no-listing-01-cargo-new
+cd no-listing-01-cargo-new
+cargo run
+-->
+
 <span class="filename">Filename: Cargo.toml</span>
 
 ```toml
@@ -82,7 +90,7 @@ standard library, known as `std`:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-By default, Rust has a few items defined in the standard library that it brings
+By default, Rust has a set of items defined in the standard library that it brings
 into the scope of every program. This set is called the *prelude*, and you can
 see everything in it [in the standard library documentation][prelude].
 
@@ -127,9 +135,10 @@ let apples = 5;
 ```
 
 This line creates a new variable named `apples` and binds it to the value 5. In
-Rust, variables are immutable by default. We’ll be discussing this concept in
-detail in the [“Variables and Mutability”][variables-and-mutability]<!-- ignore
---> section in Chapter 3. To make a variable mutable, we add `mut` before the
+Rust, variables are immutable by default, meaning once we give the variable a
+value, the value won't change. We’ll be discussing this concept in detail in
+the [“Variables and Mutability”][variables-and-mutability]<!-- ignore -->
+section in Chapter 3. To make a variable mutable, we add `mut` before the
 variable name:
 
 ```rust,ignore
@@ -196,9 +205,9 @@ thoroughly.)
 
 ### Handling Potential Failure with the `Result` Type
 
-We’re still working on this line of code. Although we’re now discussing a third
-line of text, it’s still part of a single logical line of code. The next part
-is this method:
+We’re still working on this line of code. We’re now discussing a third line of
+text, but note that it’s still part of a single logical line of code. The next
+part is this method:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
@@ -216,33 +225,28 @@ lines when you call a method with the `.method_name()` syntax. Now let’s
 discuss what this line does.
 
 As mentioned earlier, `read_line` puts whatever the user enters into the string
-we pass to it, but it also returns a value—in this case, an
-[`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
-`Result` in its standard library: a generic [`Result`][result]<!-- ignore -->
-as well as specific versions for submodules, such as `io::Result`. The `Result`
-types are [*enumerations*][enums]<!-- ignore -->, often referred to as *enums*,
-which can have a fixed set of possibilities known as *variants*. Enums are
-often used with `match`, a conditional that makes it convenient to execute
-different code based on which variant an enum value is when the conditional is
-evaluated.
+we pass to it, but it also returns a `Result` value. [`Result`][result]<!--
+ignore --> is an [*enumeration*][enums]<!-- ignore -->, often called an *enum*,
+which is a type that can be in one of multiple possible states. We call each
+possible state a *variant*.
 
 Chapter 6 will cover enums in more detail. The purpose of these `Result` types
 is to encode error-handling information.
 
-`Result`’s variants are `Ok` and `Err`. The `Ok` variant indicates the operation
-was successful, and inside `Ok` is the successfully generated value. The `Err`
-variant means the operation failed, and `Err` contains information about how or
-why the operation failed.
+`Result`'s variants are `Ok` and `Err`. The `Ok` variant indicates the
+operation was successful, and inside `Ok` is the successfully generated value.
+The `Err` variant means the operation failed, and `Err` contains information
+about how or why the operation failed.
 
 Values of the `Result` type, like values of any type, have methods defined on
-them. An instance of `io::Result` has an [`expect` method][expect]<!-- ignore
---> that you can call. If this instance of `io::Result` is an `Err` value,
-`expect` will cause the program to crash and display the message that you
-passed as an argument to `expect`. If the `read_line` method returns an `Err`,
-it would likely be the result of an error coming from the underlying operating
-system. If this instance of `io::Result` is an `Ok` value, `expect` will take
-the return value that `Ok` is holding and return just that value to you so you
-can use it. In this case, that value is the number of bytes in the user’s input.
+them. An instance of `Result` has an [`expect` method][expect]<!-- ignore -->
+that you can call. If this instance of `Result` is an `Err` value, `expect`
+will cause the program to crash and display the message that you passed as an
+argument to `expect`. If the `read_line` method returns an `Err`, it would
+likely be the result of an error coming from the underlying operating system.
+If this instance of `Result` is an `Ok` value, `expect` will take the return
+value that `Ok` is holding and return just that value to you so you can use it.
+In this case, that value is the number of bytes in the user’s input.
 
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
@@ -321,7 +325,7 @@ said functionality.
 Remember that a crate is a collection of Rust source code files. The project
 we’ve been building is a *binary crate*, which is an executable. The `rand`
 crate is a *library crate*, which contains code intended to be used in other
-programs, and can’t be executed on its own.
+programs and can't be executed on its own.
 
 Cargo’s coordination of external crates is where Cargo really shines. Before we
 can write code that uses `rand`, we need to modify the *Cargo.toml* file to
@@ -350,11 +354,13 @@ semantic version specifier `0.8.3`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
 standard for writing version numbers. The number `0.8.3` is actually shorthand
 for `^0.8.3`, which means any version that is at least `0.8.3` but below
-`0.9.0`. Cargo considers these versions to have public APIs compatible with
-version `0.8.3`, and this specification ensures you’ll get the latest patch
-release that will still compile with the code in this chapter. Any version
-`0.9.0` or greater is not guaranteed to have the same API as what the following
-examples use.
+`0.9.0`.
+
+Cargo considers these versions to have public APIs compatible with version
+`0.8.3`, and this specification ensures you’ll get the latest patch release
+that will still compile with the code in this chapter. Any version `0.9.0` or
+greater is not guaranteed to have the same API as what the following examples
+use.
 
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2.
@@ -446,7 +452,8 @@ see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
 remain at `0.8.3` until you explicitly upgrade, thanks to the *Cargo.lock*
-file.
+file. Because the *Cargo.lock* file is important for reproducible builds, it's
+often checked into source control with the rest of the code in your project.
 
 #### Updating a Crate to Get a New Version
 
@@ -517,9 +524,8 @@ method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng` statement. The
 `gen_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
-the form `start..end` and is inclusive on the lower bound but exclusive on the
-upper bound, so we need to specify `1..101` to request a number between 1 and
-100. Alternatively, we could pass the range `1..=100`, which is equivalent.
+the form `start..=end` and is inclusive on the lower and upper bounds, so we
+need to specify `1..=100` to request a number between 1 and 100.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
@@ -615,7 +621,8 @@ at the first arm’s pattern, `Ordering::Less`, and sees that the value
 that arm and moves to the next arm. The next arm’s pattern is
 `Ordering::Greater`, which *does* match `Ordering::Greater`! The associated
 code in that arm will execute and print `Too big!` to the screen. The `match`
-expression ends because it has no need to look at the last arm in this scenario.
+expression ends after the first successful match, so it won’t look at the last
+arm in this scenario.
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
@@ -671,16 +678,16 @@ represents “newline”. (On Windows, pressing <span
 class="keystroke">enter</span> results in a carriage return and a newline,
 `\r\n`). The `trim` method eliminates `\n` or `\r\n`, resulting in just `5`.
 
-The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
-kind of number. Because this method can parse a variety of number types, we
-need to tell Rust the exact number type we want by using `let guess: u32`. The
-colon (`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust
-has a few built-in number types; the `u32` seen here is an unsigned, 32-bit
-integer. It’s a good default choice for a small positive number. You’ll learn
-about other number types in Chapter 3. Additionally, the `u32` annotation in
-this example program and the comparison with `secret_number` means that Rust
-will infer that `secret_number` should be a `u32` as well. So now the
-comparison will be between two values of the same type!
+The [`parse` method on strings][parse]<!-- ignore --> converts a string to
+another type. Here, we use it to convert from a string to a number. We need to
+tell Rust the exact number type we want by using `let guess: u32`. The colon
+(`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust has a
+few built-in number types; the `u32` seen here is an unsigned, 32-bit integer.
+It’s a good default choice for a small positive number. You’ll learn about
+other number types in Chapter 3. Additionally, the `u32` annotation in this
+example program and the comparison with `secret_number` means that Rust will
+infer that `secret_number` should be a `u32` as well. So now the comparison
+will be between two values of the same type!
 
 The `parse` method will only work on characters that can logically be converted
 into numbers and so can easily cause errors. If, for example, the string
@@ -817,8 +824,8 @@ another guess instead of crashing the program</span>
 
 We switch from an `expect` call to a `match` expression to move from crashing
 on an error to handling the error. Remember that `parse` returns a `Result`
-type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using a
-`match` expression here, as we did with the `Ordering` result of the `cmp`
+type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using
+a `match` expression here, as we did with the `Ordering` result of the `cmp`
 method.
 
 If `parse` is able to successfully turn the string into a number, it will
@@ -902,7 +909,6 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [string]: ../std/string/struct.String.html
 [iostdin]: ../std/io/struct.Stdin.html
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
-[ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 [enums]: ch06-00-enums.html
 [expect]: ../std/result/enum.Result.html#method.expect
