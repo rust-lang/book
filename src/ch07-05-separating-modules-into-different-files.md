@@ -9,10 +9,10 @@ files instead of having all the modules defined in the crate root file. In this
 case, the crate root file is *src/lib.rs*, but this procedure also works with
 binary crates whose crate root file is *src/main.rs*.
 
-First, we'll extract the `front_of_house` module to its own file. Remove the
+First, we’ll extract the `front_of_house` module to its own file. Remove the
 code inside the curly brackets for the `front_of_house` module, leaving only
 the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
-shown in Listing 7-21. Note that this won't compile until we create the
+shown in Listing 7-21. Note that this won’t compile until we create the
 *src/front_of_house.rs* file in Listing 7-22.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -41,13 +41,13 @@ module in *src/front_of_house.rs*</span>
 Note that you only need to load the contents of a file using a `mod`
 declaration once somewhere in your module tree. Once the compiler knows the
 file is part of the project (and knows where in the module tree the code
-resides because of where you've put the `mod` statement), other files in your
+resides because of where you’ve put the `mod` statement), other files in your
 project should refer to the code in that file using a path to where it was
 declared as covered in the [“Paths for Referring to an Item in the Module
 Tree”][paths]<!-- ignore --> section. In other words, `mod` is *not* an
-"include" operation that other programming languages have.
+“include” operation that other programming languages have.
 
-Next, we'll extract the `hosting` module to its own file as well. The process
+Next, we’ll extract the `hosting` module to its own file as well. The process
 is a bit different because `hosting` is a child module of `front_of_house`, not
 of the root module. The file for `hosting` will be in a directory named for its
 place in the module tree.
@@ -74,7 +74,7 @@ Then we create a *src/front_of_house* directory and a file
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect that code to be in a `hosting` module declared in the crate root, not as
 a child of the `front_of_house` module. The rules the compiler follows to know
-what files to look in for modules' code means the directories and files more
+what files to look in for modules’ code means the directories and files more
 closely match the module tree.
 
 > ### Alternate File Paths
@@ -83,18 +83,18 @@ closely match the module tree.
 > but an older file path is also still supported.
 >
 > For a module named `front_of_house` declared in the crate root, the compiler
-> will look for the module's code in:
+> will look for the module’s code in:
 >
 > * *src/front_of_house.rs* (what we covered)
 > * *src/front_of_house/mod.rs* (older, still supported path)
 >
 > For a module named `hosting` that is a submodule of `front_of_house`, the
-> compiler will look for the module's code in:
+> compiler will look for the module’s code in:
 >
 > * *src/front_of_house/hosting.rs* (what we covered)
 > * *src/front_of_house/hosting/mod.rs* (older, still supported path)
 >
-> If you use both for the same module, you'll get a compiler error. Using
+> If you use both for the same module, you’ll get a compiler error. Using
 > different styles for different modules in the same project is allowed, but
 > might be confusing for people navigating your project.
 >
@@ -102,7 +102,7 @@ closely match the module tree.
 > project can end up with many files named *mod.rs*, which can get confusing
 > when you have them open in your editor at the same time.
 
-Moving each module's code to a separate file is now complete, and the module
+Moving each module’s code to a separate file is now complete, and the module
 tree remains the same. The function calls in `eat_at_restaurant` will work
 without any modification, even though the definitions live in different files.
 This technique lets you move modules to new files as they grow in size.

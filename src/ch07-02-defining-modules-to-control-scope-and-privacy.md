@@ -11,8 +11,8 @@ detail.
 
 ### Modules Quick Reference
 
-Here's how modules, paths, the `use` keyword, and the `pub` keyword work in the
-compiler, and how most developers organize their code. We'll be going through
+Here’s how modules, paths, the `use` keyword, and the `pub` keyword work in the
+compiler, and how most developers organize their code. We’ll be going through
 examples of each of these rules, but this is a great place to look in the
 future as a reminder of how modules work.
 
@@ -20,13 +20,13 @@ future as a reminder of how modules work.
   looks in the crate root file (usually *src/lib.rs* for a library crate or
   *src/main.rs* for a binary crate).
 - **Declaring modules**: In the crate root file, you can declare a new module
-  named, say, "garden", with `mod garden;`. The compiler will look for the code
+  named, say, “garden”, with `mod garden;`. The compiler will look for the code
   inside the module in these places:
   - Inline, directly following `mod garden`, within curly brackets instead of
     the semicolon
   - In the file *src/garden.rs*
   - In the file *src/garden/mod.rs*
-- **Declaring submodules**: In any file other than the crate root that's being
+- **Declaring submodules**: In any file other than the crate root that’s being
   compiled as part of the crate (for example, *src/garden.rs*), you can declare
   submodules (for example, `mod vegetables;`). The compiler will look for the
   code inside submodules in these places within a directory named for the
@@ -50,8 +50,8 @@ future as a reminder of how modules work.
   crate::garden::vegetables::Asparagus;` and then only need to write `Asparagus`
   to make use of that type in the scope.
 
-Here's a binary crate named `backyard` that illustrates these rules. The
-crate's directory, also named `backyard`, contains these files and directories:
+Here’s a binary crate named `backyard` that illustrates these rules. The
+crate’s directory, also named `backyard`, contains these files and directories:
 
 ```text
 backyard
@@ -88,7 +88,7 @@ included too:
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/quick-reference-example/src/garden/vegetables.rs}}
 ```
 
-Now let's get into the details of these rules and demonstrate them in action!
+Now let’s get into the details of these rules and demonstrate them in action!
 
 ### Grouping Related Code in Modules
 

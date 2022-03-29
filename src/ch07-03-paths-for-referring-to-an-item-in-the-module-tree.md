@@ -63,7 +63,7 @@ would still be valid. However, if we moved the `eat_at_restaurant` function
 separately into a module named `dining`, the absolute path to the
 `add_to_waitlist` call would stay the same, but the relative path would need to
 be updated. Our preference is to specify absolute paths because it’s more
-likely we'll want to move code definitions and item calls independently of each
+likely we’ll want to move code definitions and item calls independently of each
 other.
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
@@ -177,7 +177,7 @@ If you plan on sharing your library crate so other projects can use your code,
 your public API is your contract with users of your crate about how they
 interact with your code. There are many considerations around managing changes
 to your public API to make it easier for people to depend on your crate. These
-considerations are out of the scope of this book; if you're interested in this
+considerations are out of the scope of this book; if you’re interested in this
 topic, see [The Rust API Guidelines][api-guidelines].
 
 > #### Best Practices for Packages with a Binary and a Library
@@ -187,17 +187,17 @@ topic, see [The Rust API Guidelines][api-guidelines].
 > package name by default. Typically, packages with this pattern will have just
 > enough code in the binary crate to start an executable that calls code with
 > the library crate. This lets other projects benefit from the most
-> functionality that the package provides, because the library crate's code can
+> functionality that the package provides, because the library crate’s code can
 > be shared.
 >
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
 > be used in the binary crate by starting paths with the name of the package.
 > The binary crate becomes a user of the library crate just like a completely
 > external crate would use the library crate: it can only use the public API.
-> This helps you design a good API; not only are you the author, you're also a
+> This helps you design a good API; not only are you the author, you’re also a
 > client!
 >
-> In [Chapter 12][ch12]<!-- ignore -->, we'll demonstrate this organizational
+> In [Chapter 12][ch12]<!-- ignore -->, we’ll demonstrate this organizational
 > practice with a command-line program that will contain both a binary crate
 > and a library crate.
 

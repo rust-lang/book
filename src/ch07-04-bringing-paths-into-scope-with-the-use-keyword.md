@@ -31,7 +31,7 @@ also check privacy, like any other paths.
 Note that `use` only creates the shortcut for the particular scope in which the
 `use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
 child module named `customer`, which is then a different scope than the `use`
-statement and the function body won't compile:
+statement and the function body won’t compile:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -40,7 +40,7 @@ statement and the function body won't compile:
 ```
 
 <span class="caption">Listing 7-12: A `use` statement only applies in the scope
-it's in</span>
+it’s in</span>
 
 The compiler error shows that the shortcut no longer applies within the
 `customer` module:
@@ -49,7 +49,7 @@ The compiler error shows that the shortcut no longer applies within the
 {{#include ../listings/ch07-managing-growing-projects/listing-07-12/output.txt}}
 ```
 
-Notice there's also a warning that the `use` is no longer used in its scope! To
+Notice there’s also a warning that the `use` is no longer used in its scope! To
 fix this problem, move the `use` within the `customer` module too, or reference
 the shortcut in the parent module with `super::hosting` within the child
 `customer` module.
