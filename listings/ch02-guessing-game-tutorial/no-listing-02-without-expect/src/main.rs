@@ -9,5 +9,5 @@ fn main() {
 
     io::stdin().read_line(&mut guess);
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 }

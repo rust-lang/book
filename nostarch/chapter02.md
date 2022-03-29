@@ -43,11 +43,15 @@ Filename: Cargo.toml
 [package]
 name = "guessing_game"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 ```
+
+<!--- We should move to the 2021 edition. /JT --->
+<!-- Totally right, done! /Carol -->
 
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
 you. Check out the *src/main.rs* file:
@@ -100,9 +104,16 @@ fn main() {
         .read_line(&mut guess)
         .expect("Failed to read line");
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 }
 ```
+
+<!--- Style question, should we switch to the more recent style of:
+```
+    println!("You guessed: {guess}");
+```
+/JT --->
+<!-- Good call, I'll switch these throughout as I edit after TR. /Carol -->
 
 Listing 2-1: Code that gets a guess from the user and prints it
 
@@ -115,14 +126,9 @@ standard library, known as `std`:
 use std::io;
 ```
 
-By default, Rust has a few items defined in the standard library that it brings
+By default, Rust has a set of items defined in the standard library that it brings
 into the scope of every program. This set is called the *prelude*, and you can
 see everything in it at *https://doc.rust-lang.org/std/prelude/index.html*.
-
-<!-- I think it'd be worth giving a really quick direct definition of the
-prelude here, since it's the first time it's mentioned in the book (unless this
-time around you want to mention it earlier?)-- /LC-->
-<!-- Done! /Carol -->
 
 If a type you want to use isn’t in the prelude, you have to bring that type
 into scope explicitly with a `use` statement. Using the `std::io` library
@@ -141,6 +147,11 @@ are no parameters, and the curly bracket, `{`, starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
+
+<!--- Not sure if we want to go into it just yet, but `println!` formats a string
+and then prints the resulting string to stdout (which is often, but not always
+the screen). /JT --->
+<!-- Yeah, I want to gloss over that for now. Leaving this as-is. /Carol -->
 
 ```
     println!("Guess the number!");
@@ -167,9 +178,16 @@ let apples = 5;
 ```
 
 This line creates a new variable named `apples` and binds it to the value 5. In
-Rust, variables are immutable by default. We’ll be discussing this concept in
-detail in the “Variables and Mutability” section in Chapter 3. To make a
-variable mutable, we add `mut` before the variable name:
+Rust, variables are immutable by default, meaning once we give the variable a
+value, the value won't change. We’ll be discussing this concept in detail in
+the “Variables and Mutability” section in Chapter 3. To make a variable
+mutable, we add `mut` before the variable name:
+
+<!--- Do we want to give a quick word about what "mutable" means? Folks who grab
+this book but aren't familiar with some of the technical programming language terms
+might need something like "variable are immutable by default, meaning once we give
+the variable its value, it won't change". /JT --->
+<!-- Sounds good, made that change /Carol -->
 
 ```
 let apples = 5; // immutable
@@ -193,6 +211,12 @@ function of the `String` type. An *associated function* is a function that’s
 implemented on a type, in this case `String`. This `new` function creates a
 new, empty string. You’ll find a `new` function on many types, because it’s a
 common name for a function that makes a new value of some kind.
+
+<!--- For some readers, we might want to say "If you've used languages with
+static methods, associated function work very similarly" or something along
+those lines. /JT --->
+<!-- I don't think that's helpful enough for all readers to include here, given
+that we're trying to make the book mostly background-agnostic. /Carol -->
 
 In full, the `let mut guess = String::new();` line has created a mutable
 variable that is currently bound to a new, empty instance of a `String`. Whew!
@@ -219,15 +243,9 @@ Next, the line `.read_line(&mut guess)` calls the `read_line` method on the
 standard input handle to get input from the user. We’re also passing `&mut
 guess` as the argument to `read_line` to tell it what string to store the user
 input in. The full job of `read_line` is to take whatever the user types into
-standard input
-
-<!--- can you check my edits here? I wanted to make the purpose of passing the
-variable we made earlier in clearer /:C -->
-<!-- Yup, looks good! /Carol -->
-
-and append that into a string (without overwriting its contents), so we
-therefore pass that string as an argument. The string argument needs to be
-mutable so the method can change the string’s content.
+standard input and append that into a string (without overwriting its
+contents), so we therefore pass that string as an argument. The string argument
+needs to be mutable so the method can change the string’s content.
 
 The `&` indicates that this argument is a *reference*, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
@@ -241,16 +259,17 @@ thoroughly.)
 
 ### Handling Potential Failure with the `Result` Type
 
-We’re still working on this line of code. Although we’re now discussing a third
+We’re still working on this line of code. We’re now discussing a third line of
+text, but note that it’s still part of a single logical line of code. The next
+part is this method:
+
 <!--- in the program this is the second line of code -- do you mean the third
 section of this line? -->
 <!-- This is still discussing the code in Listing 2-1, and is going to talk
 about the third line, if you're counting the lines of the page, of this logical
 line of code, where logical lines of code are ended with semicolons. Do you
 have suggestions on how to make that clearer? /Carol -->
-
-line of text, it’s still part of a single logical line of code. The next part
-is this method:
+<!--- Ashley, does this all track now? /LC --->
 
 ```
         .expect("Failed to read line");
@@ -268,35 +287,34 @@ lines when you call a method with the `.method_name()` syntax. Now let’s
 discuss what this line does.
 
 As mentioned earlier, `read_line` puts whatever the user enters into the string
-we pass to it, but it also returns a value—in this case, an `io::Result`. Rust
-has a number of types named `Result` in its standard library: a generic
-`Result` as well as specific versions for submodules, such as `io::Result`. The
-`Result` types are *enumerations*, often referred to as *enums*, which can have
-a fixed set of possibilites known as *variants*. Enums are often used with
-`match`, a conditional that makes it convenient to execute different code based
-on which variant an enum value is when the conditional is evaluated.
+we pass to it, but it also returns a `Result` value. `Result` is an
+*enumeration*, often called an *enum*, which is a type that can be in one of
+multiple possible states. We call each possible state a *variant*.
 
-<!--- I wanted to give an indication of the purpose of variants, is my addition
-(the last sentence) fair to say? /LC -->
-<!-- Not quite, I edited a bit-- did I make it better or worse? :) /Carol -->
+<!--- Typo above: possibilities /JT --->
+<!--- Personally, I think the above paragraph might be introducing a little too
+much all at once. You might be able to shorten it to: "`Result` is an *enumeration*,
+often called an *enum*, which is a type that can be in one of multiple possible
+states. We call each possible state a *variant*. /JT --->
+<!-- I like it, made that change /Carol -->
 
 Chapter 6 will cover enums in more detail. The purpose of these `Result` types
 is to encode error-handling information.
 
-`Result`’s variants are `Ok` or `Err`. The `Ok` variant indicates the
+`Result`'s variants are `Ok` and `Err`. The `Ok` variant indicates the
 operation was successful, and inside `Ok` is the successfully generated value.
 The `Err` variant means the operation failed, and `Err` contains information
 about how or why the operation failed.
 
 Values of the `Result` type, like values of any type, have methods defined on
-them. An instance of `io::Result` has an `expect` method that you can call. If
-this instance of `io::Result` is an `Err` value, `expect` will cause the
-program to crash and display the message that you passed as an argument to
-`expect`. If the `read_line` method returns an `Err`, it would likely be the
-result of an error coming from the underlying operating system. If this
-instance of `io::Result` is an `Ok` value, `expect` will take the return value
-that `Ok` is holding and return just that value to you so you can use it. In
-this case, that value is the number of bytes in the user’s input.
+them. An instance of `Result` has an `expect` method that you can call. If this
+instance of `Result` is an `Err` value, `expect` will cause the program to
+crash and display the message that you passed as an argument to `expect`. If
+the `read_line` method returns an `Err`, it would likely be the result of an
+error coming from the underlying operating system. If this instance of `Result`
+is an `Ok` value, `expect` will take the return value that `Ok` is holding and
+return just that value to you so you can use it. In this case, that value is
+the number of bytes in the user’s input.
 
 If you don’t call `expect`, the program will compile, but you’ll get a warning:
 
@@ -316,8 +334,6 @@ warning: `guessing_game` (bin "guessing_game") generated 1 warning
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
-<!-- TODO: Update warning output -->
-
 Rust warns that you haven’t used the `Result` value returned from `read_line`,
 indicating that the program hasn’t handled a possible error.
 
@@ -331,8 +347,10 @@ Aside from the closing curly bracket, there’s only one more line to discuss in
 the code so far:
 
 ```
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 ```
+
+<!--- Ditto with using the `{guess}` style in this line. /JT --->
 
 This line prints the string that now contains the user’s input. The `{}` set of
 curly brackets is a placeholder: think of `{}` as little crab pincers that hold
@@ -345,8 +363,10 @@ values in one call to `println!` would look like this:
 let x = 5;
 let y = 10;
 
-println!("x = {} and y = {}", x, y);
+println!("x = {x} and y = {y}");
 ```
+<!--- And `println!("x = {x} and y = {y}");` in this example. /JT --->
+<!-- Done! /Carol -->
 
 This code would print `x = 5 and y = 10`.
 
@@ -382,7 +402,10 @@ library. However, the Rust team does provide a `rand` crate at
 Remember that a crate is a collection of Rust source code files. The project
 we’ve been building is a *binary crate*, which is an executable. The `rand`
 crate is a *library crate*, which contains code intended to be used in other
-programs, and can’t be executed on its own.
+programs and can't be executed on its own.
+
+<!--- Nit: ", and" followed by incomplete sentence. /JT --->
+<!-- Fixed /Carol -->
 
 Cargo’s coordination of external crates is where Cargo really shines. Before we
 can write code that uses `rand`, we need to modify the *Cargo.toml* file to
@@ -396,6 +419,10 @@ Filename: Cargo.toml
 ```
 rand = "0.8.3"
 ```
+<!--- 0.8.5 is the current latest. /JT --->
+<!-- I will update this version to whatever is latest once we're in Word; there
+could be another version between now and then. If it's another 0.8.x version,
+it doesn't really matter in any case. /Carol -->
 
 In the *Cargo.toml* file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
@@ -405,11 +432,6 @@ semantic version specifier `0.8.3`. Cargo understands Semantic Versioning
 (sometimes called *SemVer*), which is a standard for writing version numbers.
 The number `0.8.3` is actually shorthand for `^0.8.3`, which means any version
 that is at least `0.8.3` but below `0.9.0`.
-
-<!-- As in, it knows not to go outside the 0.8.x range? How does it know to
-stop at 0.9.0? -->
-<!-- That's specified in the Semantic Versioning spec and programmed into
-Cargo. /Carol -->
 
 Cargo considers these versions to have public APIs compatible with version
 `0.8.3`, and this specification ensures you’ll get the latest patch release
@@ -440,6 +462,20 @@ $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
+<!--- If we feel like refreshing this, here's what I saw today:
+
+   Compiling cfg-if v1.0.0
+   Compiling ppv-lite86 v0.2.16
+   Compiling libc v0.2.120
+   Compiling getrandom v0.2.5
+   Compiling rand_core v0.6.3
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
+   Compiling guessing_game v0.1.0 (/Users/jt/Source/book/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.50s
+
+/JT --->
+<!-- I will refresh this when we're in Word /Carol -->
 
 Listing 2-2: The output from running `cargo build` after adding the rand crate
 as a dependency
@@ -490,6 +526,9 @@ break your code. To handle this, Rust creates the *Cargo.lock* file the first
 time you run `cargo build`, so we now have this in the *guessing_game*
 directory.
 
+<!--- If we bump version numbers, we should bump above and below also. /JT --->
+<!-- Yup, will do in Word! /Carol -->
+
 When you build a project for the first time, Cargo figures out all the
 versions of the dependencies that fit the criteria and then writes them to
 the *Cargo.lock* file. When you build your project in the future, Cargo will
@@ -497,7 +536,17 @@ see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
 remain at `0.8.3` until you explicitly upgrade, thanks to the *Cargo.lock*
-file.
+file. Because the *Cargo.lock* file is important for reproducible builds, it's
+often checked into source control with the rest of the code in your project.
+
+<!--- We could mention that because Cargo.lock is important for reproducible
+builds, they're often checked into source control alongside the Cargo.toml and
+the rest of the code of your project. /JT --->
+<!-- Liz, is this sentence ok even though we don't really talk about source
+control or what it is anywhere else in the book? I don't really want to get
+into it, but at this point I think it's a fair assumption that developers know
+what "source control" is. If you disagree, this sentence can come back out.
+/Carol -->
 
 #### Updating a Crate to Get a New Version
 
@@ -515,11 +564,14 @@ $ cargo update
     Updating rand v0.8.3 -> v0.8.4
 ```
 
-Cargo ignores the `0.9.0` releaese. At this point, you would also notice a
+Cargo ignores the `0.9.0` release. At this point, you would also notice a
 change in your *Cargo.lock* file noting that the version of the `rand` crate
 you are now using is `0.8.4`. To use `rand` version `0.9.0` or any version in
 the `0.9.x` series, you’d have to update the *Cargo.toml* file to look like
 this instead:
+
+<!--- Typo first line: release. /JT --->
+<!-- Fixed /Carol -->
 
 ```
 [dependencies]
@@ -540,12 +592,6 @@ assembled from a number of packages.
 Let’s start using `rand` to generate a number to guess. The next step is to
 update *src/main.rs*, as shown in Listing 2-3.
 
-<!--- It looks like in the last editing we're using the graying out method to
-highlight the new code here, I'm leaving this note to remind us to implement it
-when we convert to Word /LC --->
-<!-- Oh yes, I totally forgot that the print has the graying out, I definitely
-want to keep that the way it was in the last print version. /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -555,9 +601,9 @@ use std::io;
 fn main() {
     println!("Guess the number!");
 
-  [2] let secret_number = rand::thread_rng().gen_range(1..101);
+  [2] let secret_number = rand::thread_rng().gen_range(1..=100);
 
-  [3] println!("The secret number is: {}", secret_number);
+  [3] println!("The secret number is: {secret_number}");
 
     println!("Please input your guess.");
 
@@ -567,9 +613,16 @@ fn main() {
         .read_line(&mut guess)
         .expect("Failed to read line");
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 }
 ```
+
+<!--- Same style suggestion re: `{secret_number}`. /JT --->
+<!--- Thought: for first-time readability, we could use `1..=100` in the above
+and let people know later this is equivalent to `1..101` later. We say a number
+between 1 and 100, so we could show the syntax equivalent of that description.
+/JT --->
+<!-- I'm into both these suggestions! /Carol -->
 
 Listing 2-3: Adding code to generate a random number
 
@@ -581,10 +634,9 @@ code listings that are the same as the last printing version, I'd definitely
 like to keep the wingdings the way they were. Using the brackets with numbers
 as you have here works fine! /Carol -->
 
-First, we add the line `use rand::Rng` [1]. The `Rng` <!-- TODO: remove range
---> trait defines methods that random number generators implement, and this
-trait must be in scope for us to use those methods. Chapter 10 will cover
-traits in detail.
+First, we add the line `use rand::Rng` [1]. The `Rng` trait defines methods
+that random number generators implement, and this trait must be in scope for us
+to use those methods. Chapter 10 will cover traits in detail.
 
 Next, we’re adding two lines in the middle. In the first line [2], we call the
 `rand::thread_rng` function that gives us the particular random number
@@ -594,9 +646,8 @@ method on the random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng` statement. The
 `gen_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
-the form `start..end` and is inclusive on the lower bound but exclusive on the
-upper bound, so we need to specify `1..101` to request a number between 1 and
-100. Alternatively, we could pass the range `1..=100`, which is equivalent.
+the form `start..=end` and is inclusive on the lower and upper bounds, so we
+need to specify `1..=100` to request a number between 1 and 100.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
@@ -653,7 +704,7 @@ use std::io;
 fn main() {
     // --snip--
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 
     match[2] guess.cmp(&secret_number)[3] {
         Ordering::Less => println!("Too small!"),
@@ -697,7 +748,13 @@ at the first arm’s pattern, `Ordering::Less`, and sees that the value
 that arm and moves to the next arm. The next arm’s pattern is
 `Ordering::Greater`, which *does* match `Ordering::Greater`! The associated
 code in that arm will execute and print `Too big!` to the screen. The `match`
-expression ends because it has no need to look at the last arm in this scenario.
+expression ends after the first successful match, so it won’t look at the last
+arm in this scenario.
+
+<!--- Since `match` always ends after the first successful match, we might want
+to just say that directly: "The `match` expression ends after the first successful
+match, so it won't look at the last arm in this scenario". /JT --->
+<!-- Sounds good, done! /Carol -->
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
@@ -720,10 +777,13 @@ strong, static type system. However, it also has type inference. When we wrote
 a `String` and didn’t make us write the type. The `secret_number`, on the other
 hand, is a number type. A few of Rust’s number types can have a value between 1
 and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
-64-bit number; as well as others. Unless otherwise speceified, Rust defaults to
+64-bit number; as well as others. Unless otherwise specified, Rust defaults to
 an `i32`, which is the type of `secret_number` unless you add type information
 elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
+
+<!--- Typo: Unless otherwise specified. /JT --->
+<!-- Fixed /Carol -->
 
 Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it numerically to the secret number. We do so
@@ -742,7 +802,7 @@ Filename: src/main.rs
 
     let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
-    println!("You guessed: {}", guess);
+    println!("You guessed: {guess}");
 
     match guess.cmp(&secret_number) {
         Ordering::Less => println!("Too small!"),
@@ -763,28 +823,30 @@ We bind this new variable to the expression `guess.trim().parse()`. The `guess`
 in the expression refers to the original `guess` variable that contained the
 input as a string. The `trim` method on a `String` instance will eliminate any
 whitespace at the beginning and end, which we must do to be able to compare the
-string to the `u32`, which can only contain numerical data. <!--- do we
-eliminate the whitespace to allows us to compare it to the number accurately?
-I've assumed so, but please check my wording here /LC -->
-<!-- Yep, the wording here seems fine! /Carol -->
-The user must press <span class="keystroke">enter</span> to satisfy `read_line`
-and input their guess, which adds a newline character to the string. For
-example, if the user types <span class="keystroke">5</span> and presses <span
+string to the `u32`, which can only contain numerical data. The user must press
+<span class="keystroke">enter</span> to satisfy `read_line` and input their
+guess, which adds a newline character to the string. For example, if the user
+types <span class="keystroke">5</span> and presses <span
 class="keystroke">enter</span>, `guess` looks like this: `5\n`. The `\n`
 represents “newline”. (On Windows, pressing <span
 class="keystroke">enter</span> results in a carriage return and a newline,
 `\r\n`). The `trim` method eliminates `\n` or `\r\n`, resulting in just `5`.
 
-The `parse` method on strings parses a string into some kind of number. Because
-this method can parse a variety of number types, we need to tell Rust the exact
-number type we want by using `let guess: u32`. The colon (`:`) after `guess`
-tells Rust we’ll annotate the variable’s type. Rust has a few built-in number
-types; the `u32` seen here is an unsigned, 32-bit integer. It’s a good default
-choice for a small positive number. You’ll learn about other number types in
-Chapter 3. Additionally, the `u32` annotation in this example program and the
+The `parse` method on strings converts a string to another type. Here, we use
+it to convert from a string to a number. We need to tell Rust the exact number
+type we want by using `let guess: u32`. The colon (`:`) after `guess` tells
+Rust we’ll annotate the variable’s type. Rust has a few built-in number types;
+the `u32` seen here is an unsigned, 32-bit integer. It’s a good default choice
+for a small positive number. You’ll learn about other number types in Chapter
+3. Additionally, the `u32` annotation in this example program and the
 comparison with `secret_number` means that Rust will infer that `secret_number`
 should be a `u32` as well. So now the comparison will be between two values of
 the same type!
+
+<!--- More correct to say "The `parse` method converts a string to another type.
+Here, we use it to convert from a string to a number." You can use `parse` to
+convert to non-numeric types also. /JT --->
+<!-- Great catch, fixed! /Carol -->
 
 The `parse` method will only work on characters that can logically be converted
 into numbers and so can easily cause errors. If, for example, the string
@@ -831,7 +893,7 @@ Filename: src/main.rs
 ```
     // --snip--
 
-    println!("The secret number is: {}", secret_number);
+    println!("The secret number is: {secret_number}");
 
     loop {
         println!("Please input your guess.");
@@ -934,7 +996,7 @@ Filename: src/main.rs
             Err(_) => continue,
         };
 
-        println!("You guessed: {}", guess);
+        println!("You guessed: {guess}");
 
         // --snip--
 ```
@@ -944,8 +1006,8 @@ of crashing the program
 
 We switch from an `expect` call to a `match` expression to move from crashing
 on an error to handling the error. Remember that `parse` returns a `Result`
-type and `Result` is an enum that has the variants `Ok` or `Err`. We’re using a
-`match` expression here, as we did with the `Ordering` result of the `cmp`
+type and `Result` is an enum that has the variants `Ok` and `Err`. We’re using
+a `match` expression here, as we did with the `Ordering` result of the `cmp`
 method.
 
 If `parse` is able to successfully turn the string into a number, it will
@@ -1004,7 +1066,7 @@ use std::io;
 fn main() {
     println!("Guess the number!");
 
-    let secret_number = rand::thread_rng().gen_range(1..101);
+    let secret_number = rand::thread_rng().gen_range(1..=100);
 
     loop {
         println!("Please input your guess.");
@@ -1020,7 +1082,7 @@ fn main() {
             Err(_) => continue,
         };
 
-        println!("You guessed: {}", guess);
+        println!("You guessed: {guess}");
 
         match guess.cmp(&secret_number) {
             Ordering::Less => println!("Too small!"),

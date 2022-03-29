@@ -19,7 +19,7 @@ error[E0308]: mismatched types
 error[E0283]: type annotations needed for `{integer}`
    --> src/main.rs:8:44
     |
-8   |     let secret_number = rand::thread_rng().gen_range(1..101);
+8   |     let secret_number = rand::thread_rng().gen_range(1..=100);
     |         -------------                      ^^^^^^^^^ cannot infer type for type `{integer}`
     |         |
     |         consider giving `secret_number` a type
@@ -37,7 +37,7 @@ note: required by a bound in `gen_range`
     |            ^^^^^^^^^^^^^ required by this bound in `gen_range`
 help: consider specifying the type arguments in the function call
     |
-8   |     let secret_number = rand::thread_rng().gen_range::<T, R>(1..101);
+8   |     let secret_number = rand::thread_rng().gen_range::<T, R>(1..=100);
     |                                                     ++++++++
 
 Some errors have detailed explanations: E0283, E0308.
