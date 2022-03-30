@@ -10,6 +10,8 @@ error[E0382]: borrow of moved value: `s1`
 4 | 
 5 |     println!("{}, world!", s1);
   |                            ^^ value borrowed here after move
+  |
+  = note: this error originates in the macro `$crate::format_args_nl` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 For more information about this error, try `rustc --explain E0382`.
 error: could not compile `ownership` due to previous error

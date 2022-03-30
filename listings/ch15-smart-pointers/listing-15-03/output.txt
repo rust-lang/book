@@ -20,7 +20,7 @@ error[E0391]: cycle detected when computing drop-check constraints for `List`
   | ^^^^^^^^^
   |
   = note: ...which immediately requires computing drop-check constraints for `List` again
-  = note: cycle used when computing dropck types for `Canonical { max_universe: U0, variables: [], value: ParamEnvAnd { param_env: ParamEnv { caller_bounds: [], reveal: UserFacing }, value: List } }`
+  = note: cycle used when computing dropck types for `Canonical { max_universe: U0, variables: [], value: ParamEnvAnd { param_env: ParamEnv { caller_bounds: [], reveal: UserFacing, constness: NotConst }, value: List } }`
 
 Some errors have detailed explanations: E0072, E0391.
 For more information about an error, try `rustc --explain E0072`.
