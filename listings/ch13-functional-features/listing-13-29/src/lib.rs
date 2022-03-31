@@ -9,7 +9,9 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(
+        mut args: impl Iterator<Item = String>,
+    ) -> Result<Config, &'static str> {
         args.next();
 
         let query = match args.next() {

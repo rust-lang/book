@@ -83,18 +83,25 @@ body.
 expect an iterator</span>
 
 The standard library documentation for the `env::args` function shows that the
-type of the iterator it returns is `std::env::Args`. We’ve updated the
-signature of the `Config::new` function so the parameter `args` has the type
-`std::env::Args` instead of `&[String]`. Because we’re taking ownership of
-`args` and we’ll be mutating `args` by iterating over it, we can add the `mut`
-keyword into the specification of the `args` parameter to make it mutable.
+type of the iterator it returns is `std::env::Args`, and that type implements
+the `Iterator` trait and returns `String` values.
+
+We’ve updated the signature of the `Config::new` function so the parameter
+`args` has a generic type with the trait bounds `impl Iterator<Item = String>`
+instead of `&[String]`. This usage of the `impl Trait` syntax we discussed in
+the [“Traits as Parameters”][impl-trait]<!-- ignore --> section of Chapter 10
+means that `args` can be any type that implements the `Iterator` type and
+returns `String` items.
+
+Because we’re taking ownership of `args` and we’ll be mutating `args` by
+iterating over it, we can add the `mut` keyword into the specification of the
+`args` parameter to make it mutable.
 
 #### Using `Iterator` Trait Methods Instead of Indexing
 
-Next, we’ll fix the body of `Config::new`. The standard library documentation
-also mentions that `std::env::Args` implements the `Iterator` trait, so we know
-we can call the `next` method on it! Listing 13-27 updates the code from
-Listing 12-23 to use the `next` method:
+Next, we’ll fix the body of `Config::new`. Because `args` implements the
+`Iterator` trait, we know we can call the `next` method on it! Listing 13-27
+updates the code from Listing 12-23 to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -165,3 +172,5 @@ the iterator must pass.
 But are the two implementations truly equivalent? The intuitive assumption
 might be that the more low-level loop will be faster. Let’s talk about
 performance.
+
+[impl-trait]: ch10-02-traits.html#traits-as-parameters
