@@ -201,22 +201,19 @@ involved with closures.
 
 ### Closure Type Inference and Annotation
 
-Closures don’t require you to annotate the types of the parameters or the
-return value like `fn` functions do. Type annotations are required on functions
-because they’re part of an explicit interface exposed to your users. Defining
-this interface rigidly is important for ensuring that everyone agrees on what
-types of values a function uses and returns. But closures aren’t used in an
-exposed interface like this: they’re stored in variables and used without
+Closures don’t usually require you to annotate the types of the parameters or
+the return value like `fn` functions do. Type annotations are required on
+functions because they’re part of an explicit interface exposed to your users.
+Defining this interface rigidly is important for ensuring that everyone agrees
+on what types of values a function uses and returns. But closures aren’t used
+in an exposed interface like this: they’re stored in variables and used without
 naming them and exposing them to users of our library.
 
-Closures are usually short and relevant only within a narrow context rather
-than in any arbitrary scenario. Within these limited contexts, the compiler is
-reliably able to infer the types of the parameters and the return type, similar
-to how it’s able to infer the types of most variables.
-
-Making programmers annotate the types in these small, anonymous functions would
-be annoying and largely redundant with the information the compiler already has
-available.
+Closures are typically short and relevant only within a narrow context rather
+than in any arbitrary scenario. Within these limited contexts, the compiler can
+infer the types of the parameters and the return type, similar to how it’s able
+to infer the types of most variables (there are rare cases where the compiler
+needs closure type annotations too).
 
 As with variables, we can add type annotations if we want to increase
 explicitness and clarity at the cost of being more verbose than is strictly
