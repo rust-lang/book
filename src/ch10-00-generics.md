@@ -105,7 +105,7 @@ destructuring each `&i32` that the `for` loop gets so that `item` will be an
 `i32` inside the loop body. We’ll cover pattern matching in detail in [Chapter
 18][ch18]<!-- ignore -->.
 
-In sum, here are the steps we took to change the code from Listing 10-2 to
+In summary, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
 1. Identify duplicate code.
