@@ -21,9 +21,10 @@ value.
 
 Named variables are irrefutable patterns that match any value, and we’ve used
 them many times in the book. However, there is a complication when you use
-named variables in `match` expressions. Because `match` starts a new scope,
-variables declared as part of a pattern inside the `match` expression will
-shadow those with the same name outside the `match` construct, as is the case
+named variables in conditional expressions like `match`, `if let` or `while let`.
+All of them start a new scope, hence
+variables declared as part of a pattern inside the conditional will
+shadow those with the same name outside, as is the case
 with all variables. In Listing 18-11, we declare a variable named `x` with the
 value `Some(5)` and a variable `y` with the value `10`. We then create a
 `match` expression on the value `x`. Look at the patterns in the match arms and
@@ -66,10 +67,11 @@ To create a `match` expression that compares the values of the outer `x` and
 guard conditional instead. We’ll talk about match guards later in the [“Extra
 Conditionals with Match Guards”](#extra-conditionals-with-match-guards)<!--
 ignore --> section.
+There is no such mechanism for either `if let` or `while let`.
 
 ### Multiple Patterns
 
-In `match` expressions, you can match multiple patterns using the `|` syntax,
+You can match multiple patterns using the `|` syntax,
 which means *or*. For example, the following code matches the value of `x`
 against the match arms, the first of which has an *or* option, meaning if the
 value of `x` matches either of the values in that arm, that arm’s code will
