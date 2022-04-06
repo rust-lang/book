@@ -429,6 +429,7 @@ SelectBox
 semver
 SemVer
 serde
+ShirtColor
 ShlAssign
 ShrAssign
 shouldn
