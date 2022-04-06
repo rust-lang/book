@@ -56,7 +56,7 @@ $ cargo build
 warning: unused variable: `i`
  --> src/main.rs:4:9
   |
-4 |     for i in 1..100 {
+4 |     for i in 0..100 {
   |         ^ help: consider using `_i` instead
   |
   = note: #[warn(unused_variables)] on by default
