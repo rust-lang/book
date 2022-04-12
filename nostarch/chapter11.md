@@ -91,7 +91,8 @@ Filename: src/lib.rs
 mod tests {
 [1] #[test]
     fn it_works() {
-    [2] assert_eq!(2 + 2, 4);
+        let result = 2 + 2;
+    [2] assert_eq!(result, 4);
     }
 }
 ```
@@ -106,9 +107,10 @@ non-test functions in the `tests` module to help set up common scenarios or
 perform common operations, so we always need to indicate which functions are
 tests.
 
-The example function body uses the `assert_eq!` macro [2] to assert that 2 + 2
-equals 4. This assertion serves as an example of the format for a typical test.
-Let’s run it to see that this test passes.
+The example function body uses the `assert_eq!` macro [2] to assert that
+`result`, which contains the result of adding 2 and 2, equals 4. This assertion
+serves as an example of the format for a typical test. Let’s run it to see that
+this test passes.
 
 The `cargo test` command runs all tests in our project, as shown in Listing
 11-2.
