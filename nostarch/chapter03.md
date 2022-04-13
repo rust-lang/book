@@ -134,6 +134,13 @@ instances and writing in a more functional programming style may be easier to
 think through, so lower performance might be a worthwhile penalty for gaining
 that clarity.
 
+<!--- Just to voice some thoughts here: there's a kind of bad pattern I see sometimes
+with the Rust dev mindset around performance. In my experience it happens maybe less
+often than you'd think that cloning shows up in the profile as a performance hit. I
+wonder if we should maybe tone down or remove the discussion of performance above
+because it's far stronger for the developer to pick a clear representation for their
+program and then improve performance after they've found that model. /JT --->
+
 ### Constants
 
 Like immutable variables, *constants* are values that are bound to a name and
@@ -190,6 +197,19 @@ variable’s value is what the program sees when the variable is used. We can
 shadow a variable by using the same variable’s name and repeating the use of
 the `let` keyword as follows:
 
+<!--- A potential reword of the above for clarity:
+
+As you saw in the guessing game tutorial in Chapter 2, you can declare a new
+variable with the same name as a previous variable. Rustaceans say that the
+first variable is *shadowed* by the second, which means that the second
+variable is what the compiler will see when you use the name of the variable.
+In effect, the second variable overshadows the first, taking any uses of the
+variable name to itself until either it itself is shadowed or the scope ends.
+We can shadow a variable by using the same variable’s name and repeating the
+use of the `let` keyword as follows:
+
+/JT --->
+
 Filename: src/main.rs
 
 ```
@@ -206,6 +226,10 @@ fn main() {
     println!("The value of x is: {}", x);
 }
 ```
+<!--- We haven't really introduced block scoping yet. I know we're starting 
+with variables, but I wonder if we should introduce scopes before shadowing,
+or explain that each block has its own set of variables.
+/JT --->
 
 This program first binds `x` to a value of `5`. Then it shadows `x` by
 repeating `let x =`, taking the original value and adding `1` so the value of
@@ -213,6 +237,9 @@ repeating `let x =`, taking the original value and adding `1` so the value of
 shadows `x`, multiplying the previous value by `2` to give `x` a value of `12`.
 When that scope is over, the inner shadowing ends and `x` returns to being `6`.
 When we run this program, it will output the following:
+
+<!--- I lean towards reiterating that each `let x` is creating a new variable.
+/JT -->
 
 ```
 $ cargo run
@@ -237,12 +264,25 @@ access the original value from the outer scope within the inner scope after
 the shadowing. But yes, shadowing only applies to the scope it happens in,
 which is what this example illustrates. Is there something that could be
 made clearer? /Carol -->
+<!-- JT, what do you think, is this clear enough as is or is there some way to clarify in the text? /LC -->
+<!--- I made a couple notes above trying to see if we could tease out a good
+explanation. Shadowing is effectively creating new variables and then these
+variables get a kind of "higher priority" when you look up the same variable
+name. Shadowing priority is kind of a "most recent wins", and it stays until
+that variable is shadowed by a following one or that variable goes out of scope.
+/JT -->
 
 The other difference between `mut` and shadowing is that because we’re
 effectively creating a new variable when we use the `let` keyword again, we can
 change the type of the value but reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
 inputting space characters, and then we want to store that input as a number:
+
+<!--- Question: the further I read, the more I wonder if we should put the shadowing
+stuff later. Is it valuable here as a kind of "building the right mental model" or
+are we using up too much of our complexity budget for building that mental model
+relatively early in the journey? Once we're introducing shadowing into new types
+we're getting relatively deep into Rust-specific coding patterns  /JT -->
 
 ```
     let spaces = "   ";
@@ -295,6 +335,9 @@ let guess: u32 = "42".parse().expect("Not a number!");
 If we don’t add the type annotation here, Rust will display the following
 error, which means the compiler needs more information from us to know which
 type we want to use:
+
+<!--- To help visual parsing, you might want to say "If we don't add the `: u32` type
+annotation above... /JT --->
 
 ```
 $ cargo build
@@ -354,10 +397,6 @@ computer your program is running on, which is denoted in the table as "arch":
 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
 architecture.
 
-<!--- what does arch refer to? /LC --->
-<!-- architecture-dependent, I've tried to specifically make that connection,
-is this better? /Carol -->
-
 You can write integer literals in any of the forms shown in Table 3-2. Note
 that number literals that can be multiple numeric types allow a type suffix,
 such as `57u8`, to designate the type. Number literals can also use `_` as a
@@ -416,10 +455,6 @@ numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`
 because on modern CPUs it’s roughly the same speed as `f32` but is capable of
 more precision. All floating-point types are signed.
-
-<!--- and these don't need to be designate as signed or unsigned? /LC --->
-<!-- Yes, it's a long story why, I've added a quick statement as such at the
-end of the previous paragraph, does that work? /Carol-->
 
 Here’s an example that shows floating-point numbers in action:
 
@@ -582,10 +617,20 @@ This program creates the tuple `x` and then makes new variables for each
 element by using their respective indices. As with most programming languages,
 the first index in a tuple is 0.
 
+<!--- Indexing into a tuple using a constant, just like accessing a field of a struct,
+I think is maybe a more natural way to think of this than thinking of `x.0`, `x.1`, etc
+as separate variables. In the struct case, we don't think of each field as a separate
+variable, but instead that there's a path to get to the contained values that can be 
+used and checked at compile time. /JT --->
+
 The tuple without any values, `()`, is a special type that has only one value,
 also written `()`. The type is called the *unit type* and the value is called
 the *unit value*. Expressions implicitly return the unit value if they don’t
 return any other value.
+
+<!--- It's trick to see the difference between `()` and `()`. Maybe we can say: "The 
+tuple without any values has a special name, *unit*. This value, and its corresponding
+type -- also written `()` -- represent an empty value or an empty return type." /JT --->
 
 #### The Array Type
 
@@ -621,15 +666,6 @@ it will always contain 12 elements:
 let months = ["January", "February", "March", "April", "May", "June", "July",
               "August", "September", "October", "November", "December"];
 ```
-
-<!--- and is the benefit here that using the array prevents other coders making
-the mistake of somehow changing the values, while with a vector they could?
-/LC --->
-<!-- No, the benefit is that you know there will always be 12 elements in the
-array. Arrays can be mutable in that other parts of the code could change
-"January" to "Jan", but they couldn't add or remove a month. Does that make
-sense? I've changed the paragraph before the code to say "number of elements"
-instead of "values", does that clear it up? /Carol -->
 
 You write an array’s type using square brackets with the type of each element,
 a semicolon, and then the number of elements in the array, like so:
@@ -735,6 +771,12 @@ incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
 continuing. Chapter 9 discusses more of Rust’s error handling.
 
+<!--- I get the idea, though I'm feeling a little uneasy with leaving the reader
+thinking "panic > invalid access" as the end of the story. Maybe we can tag something
+on to the end: "Chapter 9 discusses more of Rust's error handling, and how you can 
+write readable, safe code that doesn't panic and doesn't allow invalid memory access. 
+/JT --->
+
 ## Functions
 
 Functions are prevalent in Rust code. You’ve already seen one of the most
@@ -770,6 +812,13 @@ called from inside the `main` function. Note that we defined `another_function`
 *after* the `main` function in the source code; we could have defined it before
 as well. Rust doesn’t care where you define your functions, only that they’re
 defined somewhere.
+
+<!--- nit: Rust does want the functions in a place the caller can see. If they're
+not in scope, Rust won't let the program build. Maybe we can say:
+"only that they're defined somewhere the caller can see them". 
+or alt: "only that they're defined somewhere in a scope that can be seen by the
+caller" 
+/JT --->
 
 Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You
@@ -812,6 +861,8 @@ fn another_function(x: i32) {
 }
 ```
 
+<!--- nit: might want to use `{x}` /JT --->
+
 Try running this program; you should get the following output:
 
 ```
@@ -831,6 +882,8 @@ In function signatures, you *must* declare the type of each parameter. This is
 a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code to figure out what type you mean.
+
+<!--- Also helps give much better error messages /JT --->
 
 When defining multiple parameters, separate the parameter declarations with
 commas, like this:
@@ -883,6 +936,11 @@ value. *Expressions* evaluate to a resulting value. Let’s look at some example
 We’ve actually already used statements and expressions. Creating a variable and
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 `let y = 6;` is a statement.
+
+<!--- To help clarify how they're related, we could say that "`let y = 6;`" is a 
+statement, and the `6` being assigned to `y` is an expression. edit: I see we
+say this later, just thought it might be a little nicer to give an examples of 
+each just following their definition. /JT --->
 
 Filename: src/main.rs
 
@@ -938,6 +996,9 @@ warning: unnecessary parentheses around assigned value
   |
   = note: `#[warn(unused_parens)]` on by default
 ```
+
+<!--- The errors in more recent Rust look slightly different here, if we want
+to update before publication. /JT --->
 
 The `let y = 6` statement does not return a value, so there isn’t anything for
 `x` to bind to. This is different from what happens in other languages, such as
@@ -1034,6 +1095,9 @@ let x = 5;
 Second, the `five` function has no parameters and defines the type of the
 return value, but the body of the function is a lonely `5` with no semicolon
 because it’s an expression whose value we want to return.
+
+<!--- If you want, you could point out that the `println!` line that main ends
+on is a statement, hence why main doesn't have a return value. /JT --->
 
 Let’s look at another example:
 
@@ -1323,8 +1387,13 @@ fn main() {
 }
 ```
 
+<!--- Style nit: `{number}`. /JT --->
+
 Listing 3-2: Assigning the result of an `if` expression
 to a variable
+
+<!--- I was wondering when listings got numbered and when they didn't. Many of
+the above don't get a number a title, though maybe it'd help readability? /JT --->
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -1436,6 +1505,9 @@ place the `break` keyword within the loop to tell the program when to stop
 executing the loop. Recall that we did this in the guessing game in the
 “Quitting After a Correct Guess” section of Chapter 2 to exit the program when
 the user won the game by guessing the correct number.
+
+<!--- Before you show loop labels below, you might want to give a code example
+of using `break` to break a loop. /JT --->
 
 We also used `continue` in the guessing game, which in a loop tells the program
 to skip over any remaining code in this iteration of the loop and go to the
