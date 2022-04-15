@@ -120,9 +120,6 @@ Listing 10-7, our code won’t compile.
 <span class="caption">Listing 10-7: The fields `x` and `y` must be the same
 type because both have the same generic data type `T`.</span>
 
-Listing 10-7: The fields `x` and `y` must be the same type because both have
-the same generic data type `T`.
-
 In this example, when we assign the integer value 5 to `x`, we let the compiler
 know that the generic type `T` will be an integer for this instance of
 `Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
