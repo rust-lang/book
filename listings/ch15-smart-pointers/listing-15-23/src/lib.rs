@@ -12,7 +12,7 @@ impl<'a, T> LimitTracker<'a, T>
 where
     T: Messenger,
 {
-    pub fn new(messenger: &T, max: usize) -> LimitTracker<T> {
+    pub fn new(messenger: &'a T, max: usize) -> LimitTracker<'a, T> {
         LimitTracker {
             messenger,
             value: 0,
