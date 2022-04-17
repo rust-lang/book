@@ -24,5 +24,5 @@ fn main() {
     println!("You guessed: {guess}");
     // ANCHOR: ch07-04
 }
-// ANCHOR_END: ch07-04
 // ANCHOR_END: all
+// ANCHOR_END: ch07-04
