@@ -1,7 +1,7 @@
-// ANCHOR: all
-use std::io;
 // ANCHOR: ch07-04
 use rand::Rng;
+// ANCHOR: all
+use std::io;
 
 fn main() {
     // ANCHOR_END: ch07-04
