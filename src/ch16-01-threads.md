@@ -174,7 +174,7 @@ because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
 another. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
 --> section of Chapter 13, we discussed `move` in the context of closures. Now,
-we’ll concentrate more on the interaction between `move` and `thread::spawn`
+we’ll concentrate more on the interaction between `move` and `thread::spawn`.
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
