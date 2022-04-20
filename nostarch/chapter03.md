@@ -42,7 +42,7 @@ that value. To illustrate this, let’s generate a new project called *variables
 in your *projects* directory by using `cargo new variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
-code with the following code. This code won’t compile just yet, we'll first
+code with the following code. This code won’t compile just yet, we’ll first
 examine the immutability error.
 
 Filename: src/main.rs
@@ -50,9 +50,9 @@ Filename: src/main.rs
 ```
 fn main() {
     let x = 5;
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
     x = 6;
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 ```
 
@@ -70,7 +70,7 @@ error[E0384]: cannot assign twice to immutable variable `x`
   |         |
   |         first assignment to `x`
   |         help: consider making this binding mutable: `mut x`
-3 |     println!("The value of x is: {}", x);
+3 |     println!("The value of x is: {x}");
 4 |     x = 6;
   |     ^^^^^ cannot assign twice to immutable variable
 ```
@@ -108,9 +108,9 @@ Filename: src/main.rs
 ```
 fn main() {
     let mut x = 5;
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
     x = 6;
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 ```
 
@@ -125,14 +125,9 @@ The value of x is: 5
 The value of x is: 6
 ```
 
-We’re allowed to change the value that `x` binds to from `5` to `6` when `mut`
-is used. There are multiple trade-offs to consider in addition to the
-prevention of bugs. For example, in cases where you’re using large data
-structures, mutating an instance in place may be faster than copying and
-returning newly allocated instances. With smaller data structures, creating new
-instances and writing in a more functional programming style may be easier to
-think through, so lower performance might be a worthwhile penalty for gaining
-that clarity.
+We’re allowed to change the value bound to `x` from `5` to `6` when `mut`
+is used. Ultimately, deciding whether to use mutability or not is up to you and
+depends on what you think is clearest in that particular situation.
 
 <!--- Just to voice some thoughts here: there's a kind of bad pattern I see sometimes
 with the Rust dev mindset around performance. In my experience it happens maybe less
@@ -140,6 +135,7 @@ often than you'd think that cloning shows up in the profile as a performance hit
 wonder if we should maybe tone down or remove the discussion of performance above
 because it's far stronger for the developer to pick a clear representation for their
 program and then improve performance after they've found that model. /JT --->
+<!-- Ok, I've removed the discussion of performance here. Good call. /Carol -->
 
 ### Constants
 
@@ -193,9 +189,11 @@ hardcoded value needed to be updated in the future.
 As you saw in the guessing game tutorial in Chapter 2, you can declare a new
 variable with the same name as a previous variable. Rustaceans say that the
 first variable is *shadowed* by the second, which means that the second
-variable’s value is what the program sees when the variable is used. We can
-shadow a variable by using the same variable’s name and repeating the use of
-the `let` keyword as follows:
+variable is what the compiler will see when you use the name of the variable.
+In effect, the second variable overshadows the first, taking any uses of the
+variable name to itself until either it itself is shadowed or the scope ends.
+We can shadow a variable by using the same variable’s name and repeating the
+use of the `let` keyword as follows:
 
 <!--- A potential reword of the above for clarity:
 
@@ -209,6 +207,8 @@ We can shadow a variable by using the same variable’s name and repeating the
 use of the `let` keyword as follows:
 
 /JT --->
+<!-- Sounds good to me, I've made the change to JT's version. What do you
+think, Liz? /Carol -->
 
 Filename: src/main.rs
 
@@ -220,26 +220,35 @@ fn main() {
 
     {
         let x = x * 2;
-        println!("The value of x in the inner scope is: {}", x);
+        println!("The value of x in the inner scope is: {x}");
     }
 
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 ```
-<!--- We haven't really introduced block scoping yet. I know we're starting 
+<!--- We haven't really introduced block scoping yet. I know we're starting
 with variables, but I wonder if we should introduce scopes before shadowing,
 or explain that each block has its own set of variables.
 /JT --->
+<!-- Chapter 4 goes into scopes in more detail. I feel like block scoping is a
+pretty common programming concept, and the behavior of scopes in Rust that
+we're demonstrating here is the same behavior as scopes have in most other
+common programming languages. I don't recall getting comments from readers
+being confused about scopes at this point. I added a small phrase in the next
+paragraph that the curly brackets are creating a new scope... do you think
+that's enough, Liz? /Carol -->
 
-This program first binds `x` to a value of `5`. Then it shadows `x` by
-repeating `let x =`, taking the original value and adding `1` so the value of
-`x` is then `6`. Then, within an inner scope, the third `let` statement also
-shadows `x`, multiplying the previous value by `2` to give `x` a value of `12`.
+This program first binds `x` to a value of `5`. Then it creates a new variable
+`x` by repeating `let x =`, taking the original value and adding `1` so the
+value of `x` is then `6`. Then, within an inner scope created with the curly
+brackets, the third `let` statement also shadows `x` and creates a new
+variable, multiplying the previous value by `2` to give `x` a value of `12`.
 When that scope is over, the inner shadowing ends and `x` returns to being `6`.
 When we run this program, it will output the following:
 
 <!--- I lean towards reiterating that each `let x` is creating a new variable.
 /JT -->
+<!-- I've added a few mentions to that effect in the previous paragraph, what do you think, Liz? /Carol -->
 
 ```
 $ cargo run
@@ -283,6 +292,9 @@ stuff later. Is it valuable here as a kind of "building the right mental model" 
 are we using up too much of our complexity budget for building that mental model
 relatively early in the journey? Once we're introducing shadowing into new types
 we're getting relatively deep into Rust-specific coding patterns  /JT -->
+<!-- I think it's important to address this here because shadowing is extremely
+common in idiomatic Rust code, but can be unfamiliar. I'm not sure where it
+would be appropriate to address if not here. /Carol -->
 
 ```
     let spaces = "   ";
@@ -308,6 +320,8 @@ $ cargo run
 error[E0308]: mismatched types
  --> src/main.rs:3:14
   |
+2 |     let mut spaces = "   ";
+  |                      ----- expected due to this value
 3 |     spaces = spaces.len();
   |              ^^^^^^^^^^^^ expected `&str`, found `usize`
 ```
@@ -332,12 +346,13 @@ Chapter 2, we must add a type annotation, like this:
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-type we want to use:
+If we don’t add the `: u32` type annotation above, Rust will display the
+following error, which means the compiler needs more information from us to
+know which type we want to use:
 
 <!--- To help visual parsing, you might want to say "If we don't add the `: u32` type
 annotation above... /JT --->
+<!-- Done /Carol -->
 
 ```
 $ cargo build
@@ -393,7 +408,7 @@ Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the architecture of the
-computer your program is running on, which is denoted in the table as "arch":
+computer your program is running on, which is denoted in the table as “arch”:
 64 bits if you’re on a 64-bit architecture and 32 bits if you’re on a 32-bit
 architecture.
 
@@ -526,7 +541,7 @@ Flow” section.
 
 #### The Character Type
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here's
+Rust’s `char` type is the language’s most primitive alphabetic type. Here’s
 some examples of declaring `char` values:
 
 Filename: src/main.rs
@@ -534,7 +549,7 @@ Filename: src/main.rs
 ```
 fn main() {
     let c = 'z';
-    let z = 'ℤ';
+    let z: char = 'ℤ'; // with explicit type annotation
     let heart_eyed_cat = '😻';
 }
 ```
@@ -586,7 +601,7 @@ fn main() {
 
     let (x, y, z) = tup;
 
-    println!("The value of y is: {}", y);
+    println!("The value of y is: {y}");
 }
 ```
 
@@ -613,24 +628,31 @@ fn main() {
 }
 ```
 
-This program creates the tuple `x` and then makes new variables for each
-element by using their respective indices. As with most programming languages,
-the first index in a tuple is 0.
+This program creates the tuple `x` and then accesses each element of the tuple
+using their respective indices. As with most programming languages, the first
+index in a tuple is 0.
 
 <!--- Indexing into a tuple using a constant, just like accessing a field of a struct,
 I think is maybe a more natural way to think of this than thinking of `x.0`, `x.1`, etc
 as separate variables. In the struct case, we don't think of each field as a separate
-variable, but instead that there's a path to get to the contained values that can be 
+variable, but instead that there's a path to get to the contained values that can be
 used and checked at compile time. /JT --->
+<!-- I think JT was actually confused with what this paragraph was trying to
+say, it was explaining that this particular example created new variables and
+bound them to the values of the tuple elements, not that the tuple elements
+*were* separate variables, so I've reworded this paragraph. Please check that
+this makes sense, Liz! /Carol -->
 
-The tuple without any values, `()`, is a special type that has only one value,
-also written `()`. The type is called the *unit type* and the value is called
-the *unit value*. Expressions implicitly return the unit value if they don’t
+The tuple without any values has a special name, *unit*. This value and its
+corresponding type are both written `()` and represent an empty value or an
+empty return type. Expressions implicitly return the unit value if they don’t
 return any other value.
 
-<!--- It's trick to see the difference between `()` and `()`. Maybe we can say: "The 
+<!--- It's trick to see the difference between `()` and `()`. Maybe we can say: "The
 tuple without any values has a special name, *unit*. This value, and its corresponding
 type -- also written `()` -- represent an empty value or an empty return type." /JT --->
+<!-- I've tried to clear this up, but didn't take JT's suggestion exactly,
+there were too many subphrases in my opinion /Carol -->
 
 #### The Array Type
 
@@ -712,7 +734,7 @@ get the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
-Let's see what happens if you try to access an element of an array that is past
+Let’s see what happens if you try to access an element of an array that is past
 the end of the array. Say you run this code, similar to the guessing game in
 Chapter 2, to get an array index from the user:
 
@@ -740,8 +762,7 @@ fn main() {
     let element = a[index];
 
     println!(
-        "The value of the element at index {} is: {}",
-        index, element
+        "The value of the element at index {index} is: {element}"
     );
 }
 ```
@@ -769,13 +790,15 @@ This is an example of Rust’s memory safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+continuing. Chapter 9 discusses more of Rust’s error handling and how you can
+write readable, safe code that neither panics nor allows invalid memory access.
 
 <!--- I get the idea, though I'm feeling a little uneasy with leaving the reader
 thinking "panic > invalid access" as the end of the story. Maybe we can tag something
-on to the end: "Chapter 9 discusses more of Rust's error handling, and how you can 
-write readable, safe code that doesn't panic and doesn't allow invalid memory access. 
+on to the end: "Chapter 9 discusses more of Rust's error handling, and how you can
+write readable, safe code that doesn't panic and doesn't allow invalid memory access.
 /JT --->
+<!-- I've incorporated JT's suggestion with a bit of rewording above /Carol -->
 
 ## Functions
 
@@ -811,14 +834,15 @@ of parentheses. Because `another_function` is defined in the program, it can be
 called from inside the `main` function. Note that we defined `another_function`
 *after* the `main` function in the source code; we could have defined it before
 as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere.
+defined somewhere in a scope that can be seen by the caller.
 
 <!--- nit: Rust does want the functions in a place the caller can see. If they're
 not in scope, Rust won't let the program build. Maybe we can say:
-"only that they're defined somewhere the caller can see them". 
+"only that they're defined somewhere the caller can see them".
 or alt: "only that they're defined somewhere in a scope that can be seen by the
-caller" 
+caller"
 /JT --->
+<!-- Done! /Carol -->
 
 Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You
@@ -857,11 +881,12 @@ fn main() {
 }
 
 fn another_function(x: i32) {
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 ```
 
 <!--- nit: might want to use `{x}` /JT --->
+<!-- Done! /Carol -->
 
 Try running this program; you should get the following output:
 
@@ -875,15 +900,17 @@ The value of x is: 5
 
 The declaration of `another_function` has one parameter named `x`. The type of
 `x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets were in the format
-string.
+`println!` macro puts `5` where the pair of curly brackets containing `x` was
+in the format string.
 
 In function signatures, you *must* declare the type of each parameter. This is
 a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what type you mean.
+the code to figure out what type you mean. The compiler is also able to give
+more helpful error messages if it knows what types the function expects.
 
 <!--- Also helps give much better error messages /JT --->
+<!-- Added a note! /Carol -->
 
 When defining multiple parameters, separate the parameter declarations with
 commas, like this:
@@ -896,7 +923,7 @@ fn main() {
 }
 
 fn print_labeled_measurement(value: i32, unit_label: char) {
-    println!("The measurement is: {}{}", value, unit_label);
+    println!("The measurement is: {value}{unit_label}");
 }
 ```
 
@@ -923,7 +950,7 @@ the value for `unit_label`, the program output contains those values.
 ### Statements and Expressions
 
 Function bodies are made up of a series of statements optionally ending in an
-expression. So far, the functions we've covered haven't included an ending
+expression. So far, the functions we’ve covered haven’t included an ending
 expression, but you have seen an expression as part of a statement. Because
 Rust is an expression-based language, this is an important distinction to
 understand. Other languages don’t have the same distinctions, so let’s look at
@@ -937,10 +964,11 @@ We’ve actually already used statements and expressions. Creating a variable an
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 `let y = 6;` is a statement.
 
-<!--- To help clarify how they're related, we could say that "`let y = 6;`" is a 
+<!--- To help clarify how they're related, we could say that "`let y = 6;`" is a
 statement, and the `6` being assigned to `y` is an expression. edit: I see we
-say this later, just thought it might be a little nicer to give an examples of 
+say this later, just thought it might be a little nicer to give an examples of
 each just following their definition. /JT --->
+<!-- I think I'm going to leave this as-is /Carol -->
 
 Filename: src/main.rs
 
@@ -971,6 +999,14 @@ When you run this program, the error you’ll get looks like this:
 ```
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+error: expected expression, found statement (`let`)
+ --> src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^^^^^^^
+  |
+  = note: variable declaration using `let` is a statement
+
 error[E0658]: `let` expressions in this position are experimental
  --> src/main.rs:2:14
   |
@@ -980,25 +1016,23 @@ error[E0658]: `let` expressions in this position are experimental
   = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
   = help: you can write `matches!(<expr>, <pattern>)` instead of `let <pattern> = <expr>`
 
-error: expected expression, found statement (`let`)
- --> src/main.rs:2:14
-  |
-2 |     let x = (let y = 6);
-  |              ^^^^^^^^^
-  |
-  = note: variable declaration using `let` is a statement
-
 warning: unnecessary parentheses around assigned value
  --> src/main.rs:2:13
   |
 2 |     let x = (let y = 6);
-  |             ^^^^^^^^^^^ help: remove these parentheses
+  |             ^         ^
   |
   = note: `#[warn(unused_parens)]` on by default
+help: remove these parentheses
+  |
+2 -     let x = (let y = 6);
+2 +     let x = let y = 6;
+  |
 ```
 
 <!--- The errors in more recent Rust look slightly different here, if we want
 to update before publication. /JT --->
+<!-- Updated here and I will also check when we're in Word /Carol -->
 
 The `let y = 6` statement does not return a value, so there isn’t anything for
 `x` to bind to. This is different from what happens in other languages, such as
@@ -1018,14 +1052,12 @@ Filename: src/main.rs
 
 ```
 fn main() {
-    let x = 5;
-
     let y = {
         let x = 3;
         x + 1
     };
 
-    println!("The value of y is: {}", y);
+    println!("The value of y is: {y}");
 }
 ```
 
@@ -1039,7 +1071,7 @@ This expression:
 ```
 
 is a block that, in this case, evaluates to `4`. That value gets bound to `y`
-as part of the `let` statement. Note that the `x + 1` line doesn't have a
+as part of the `let` statement. Note that the `x + 1` line doesn’t have a
 semicolon at the end, unlike most of the lines you’ve seen so far. Expressions
 do not include ending semicolons. If you add a semicolon to the end of an
 expression, you turn it into a statement, and it will then not return a value.
@@ -1048,12 +1080,12 @@ Keep this in mind as you explore function return values and expressions next.
 ### Functions with Return Values
 
 Functions can return values to the code that calls them. We don’t name return
-values, but we do declare their type after an arrow (`->`). In Rust, the return
-value of the function is synonymous with the value of the final expression in
-the block of the body of a function. You can return early from a function by
-using the `return` keyword and specifying a value, but most functions return
-the last expression implicitly. Here’s an example of a function that returns a
-value:
+values, but we must declare their type after an arrow (`->`). In Rust, the
+return value of the function is synonymous with the value of the final
+expression in the block of the body of a function. You can return early from a
+function by using the `return` keyword and specifying a value, but most
+functions return the last expression implicitly. Here’s an example of a
+function that returns a value:
 
 Filename: src/main.rs
 
@@ -1065,7 +1097,7 @@ fn five() -> i32 {
 fn main() {
     let x = five();
 
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 ```
 
@@ -1098,6 +1130,7 @@ because it’s an expression whose value we want to return.
 
 <!--- If you want, you could point out that the `println!` line that main ends
 on is a statement, hence why main doesn't have a return value. /JT --->
+<!-- I don't think I want to :) /Carol -->
 
 Let’s look at another example:
 
@@ -1107,7 +1140,7 @@ Filename: src/main.rs
 fn main() {
     let x = plus_one(5);
 
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 
 fn plus_one(x: i32) -> i32 {
@@ -1125,7 +1158,7 @@ Filename: src/main.rs
 fn main() {
     let x = plus_one(5);
 
-    println!("The value of x is: {}", x);
+    println!("The value of x is: {x}");
 }
 
 fn plus_one(x: i32) -> i32 {
@@ -1237,7 +1270,7 @@ fn main() {
 
 All `if` expressions start with the keyword `if`, followed by a condition. In
 this case, the condition checks whether or not the variable `number` has a
-value less than 5. We place block of code to execute if the condition is true
+value less than 5. We place the block of code to execute if the condition is true
 immediately after the condition inside curly brackets. Blocks of code
 associated with the conditions in `if` expressions are sometimes called *arms*,
 just like the arms in `match` expressions that we discussed in the “Comparing
@@ -1383,17 +1416,22 @@ fn main() {
     let condition = true;
     let number = if condition { 5 } else { 6 };
 
-    println!("The value of number is: {}", number);
+    println!("The value of number is: {number}");
 }
 ```
 
 <!--- Style nit: `{number}`. /JT --->
+<!-- Fixed! /Carol -->
 
-Listing 3-2: Assigning the result of an `if` expression
-to a variable
+Listing 3-2: Assigning the result of an `if` expression to a variable
 
 <!--- I was wondering when listings got numbered and when they didn't. Many of
 the above don't get a number a title, though maybe it'd help readability? /JT --->
+<!-- Liz: Chapter 3 doesn't have many listing numbers because on the first
+round of printing, we hadn't really figured out what we were doing with listing
+numbers yet. I'm happy to add more listing numbers in Chapter 3, but it'll take
+me some time to go through and add appropriate captions, check cross
+references, etc. Let me know if you'd like me to spend that time. /Carol -->
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -1422,7 +1460,7 @@ fn main() {
 
     let number = if condition { 5 } else { "six" };
 
-    println!("The value of number is: {}", number);
+    println!("The value of number is: {number}");
 }
 ```
 
@@ -1500,34 +1538,72 @@ The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
 depending on where the code was in the loop when it received the interrupt
 signal.
 
-Fortunately, Rust also provides a way to break out of a loop using code. You can
-place the `break` keyword within the loop to tell the program when to stop
+Fortunately, Rust also provides a way to break out of a loop using code. You
+can place the `break` keyword within the loop to tell the program when to stop
 executing the loop. Recall that we did this in the guessing game in the
 “Quitting After a Correct Guess” section of Chapter 2 to exit the program when
 the user won the game by guessing the correct number.
-
-<!--- Before you show loop labels below, you might want to give a code example
-of using `break` to break a loop. /JT --->
 
 We also used `continue` in the guessing game, which in a loop tells the program
 to skip over any remaining code in this iteration of the loop and go to the
 next iteration.
 
+<!--- Before you show loop labels below, you might want to give a code example
+of using `break` to break a loop. /JT --->
+<!-- I've rearranged the sections to take this suggestion here /Carol -->
+
+#### Returning Values from Loops
+
+One of the uses of a `loop` is to retry an operation you know might fail, such
+as checking whether a thread has completed its job. You might also need to pass
+the result of that operation out of the loop to the rest of your code. To do
+this, you can add the value you want returned after the `break` expression you
+use to stop the loop; that value will be returned out of the loop so you can
+use it, as shown here:
+
+```
+fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    println!("The result is {result}");
+}
+```
+
+Before the loop, we declare a variable named `counter` and initialize it to
+`0`. Then we declare a variable named `result` to hold the value returned from
+the loop. On every iteration of the loop, we add `1` to the `counter` variable,
+and then check whether the counter is equal to `10`. When it is, we use the
+`break` keyword with the value `counter * 2`. After the loop, we use a
+semicolon to end the statement that assigns the value to `result`. Finally, we
+print the value in `result`, which in this case is 20.
+
+#### Loop Labels to Disambiguate Between Multiple Loops
+
+<!-- Liz: New heading for this section, what do you think? /Carol -->
+
 If you have loops within loops, `break` and `continue` apply to the innermost
 loop at that point. You can optionally specify a *loop label* on a loop that we
 can then use with `break` or `continue` to specify that those keywords apply to
-the labeled loop instead of the innermost loop. Here’s an example with two
-nested loops:
+the labeled loop instead of the innermost loop. Loop labels must begin with a
+single quote. Here’s an example with two nested loops:
 
 ```
 fn main() {
     let mut count = 0;
     'counting_up: loop {
-        println!("count = {}", count);
+        println!("count = {count}");
         let mut remaining = 10;
 
         loop {
-            println!("remaining = {}", remaining);
+            println!("remaining = {remaining}");
             if remaining == 9 {
                 break;
             }
@@ -1539,7 +1615,7 @@ fn main() {
 
         count += 1;
     }
-    println!("End count = {}", count);
+    println!("End count = {count}");
 }
 ```
 
@@ -1563,44 +1639,11 @@ remaining = 10
 End count = 2
 ```
 
-#### Returning Values from Loops
-
-One of the uses of a `loop` is to retry an operation you know might fail, such
-as checking whether a thread has completed its job. You might also need to pass
-the result of that operation out of the loop to the rest of your code. To do
-this, you can add the value you want returned after the `break` expression you
-use to stop the loop; that value will be returned out of the loop so you can
-use it, as shown here:
-
-```
-fn main() {
-    let mut counter = 0;
-
-    let result = loop {
-        counter += 1;
-
-        if counter == 10 {
-            break counter * 2;
-        }
-    };
-
-    println!("The result is {}", result);
-}
-```
-
-Before the loop, we declare a variable named `counter` and initialize it to
-`0`. Then we declare a variable named `result` to hold the value returned from
-the loop. On every iteration of the loop, we add `1` to the `counter` variable,
-and then check whether the counter is equal to `10`. When it is, we use the
-`break` keyword with the value `counter * 2`. After the loop, we use a
-semicolon to end the statement that assigns the value to `result`. Finally, we
-print the value in `result`, which in this case is 20.
-
 #### Conditional Loops with `while`
 
 A program will often need to evaluate a condition within a loop. While the
 condition is true, the loop runs. When the condition ceases to be true, the
-program calls `break`, stopping the loop. It's possible to implement behavior
+program calls `break`, stopping the loop. It’s possible to implement behavior
 like this using a combination of `loop`, `if`, `else`, and `break`; you could
 try that now in a program, if you’d like. However, this pattern is so common
 that Rust has a built-in language construct for it, called a `while` loop. In
@@ -1614,7 +1657,7 @@ fn main() {
     let mut number = 3;
 
     while number != 0 {
-        println!("{}!", number);
+        println!("{number}!");
 
         number -= 1;
     }
@@ -1690,7 +1733,7 @@ fn main() {
     let a = [10, 20, 30, 40, 50];
 
     for element in a {
-        println!("the value is: {}", element);
+        println!("the value is: {element}");
     }
 }
 ```
@@ -1722,7 +1765,7 @@ Filename: src/main.rs
 ```
 fn main() {
     for number in (1..4).rev() {
-        println!("{}!", number);
+        println!("{number}!");
     }
     println!("LIFTOFF!!!");
 }
