@@ -229,25 +229,6 @@ We also used `continue` in the guessing game, which in a loop tells the program
 to skip over any remaining code in this iteration of the loop and go to the
 next iteration.
 
-If you have loops within loops, `break` and `continue` apply to the innermost
-loop at that point. You can optionally specify a *loop label* on a loop that we
-can then use with `break` or `continue` to specify that those keywords apply to
-the labeled loop instead of the innermost loop. Loop labels must begin with a
-single quote. Here’s an example with two nested loops:
-
-```rust
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
-```
-
-The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
-The inner loop without a label counts down from 10 to 9. The first `break` that
-doesn’t specify a label will exit the inner loop only. The `break
-'counting_up;` statement will exit the outer loop. This code prints:
-
-```console
-{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
-```
-
 #### Returning Values from Loops
 
 One of the uses of a `loop` is to retry an operation you know might fail, such
@@ -268,6 +249,27 @@ and then check whether the counter is equal to `10`. When it is, we use the
 `break` keyword with the value `counter * 2`. After the loop, we use a
 semicolon to end the statement that assigns the value to `result`. Finally, we
 print the value in `result`, which in this case is 20.
+
+#### Loop Labels to Disambiguate Between Multiple Loops
+
+If you have loops within loops, `break` and `continue` apply to the innermost
+loop at that point. You can optionally specify a *loop label* on a loop that we
+can then use with `break` or `continue` to specify that those keywords apply to
+the labeled loop instead of the innermost loop. Loop labels must begin with a
+single quote. Here’s an example with two nested loops:
+
+```rust
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
+```
+
+The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
+The inner loop without a label counts down from 10 to 9. The first `break` that
+doesn’t specify a label will exit the inner loop only. The `break
+'counting_up;` statement will exit the outer loop. This code prints:
+
+```console
+{{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/output.txt}}
+```
 
 #### Conditional Loops with `while`
 
