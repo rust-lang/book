@@ -24,7 +24,7 @@ of parentheses. Because `another_function` is defined in the program, it can be
 called from inside the `main` function. Note that we defined `another_function`
 *after* the `main` function in the source code; we could have defined it before
 as well. Rust doesn’t care where you define your functions, only that they’re
-defined somewhere.
+defined somewhere in a scope that can be seen by the caller.
 
 Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You
