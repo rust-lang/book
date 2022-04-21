@@ -16,9 +16,9 @@ Chapter 2, we must add a type annotation, like this:
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-type we want to use:
+If we don’t add the `: u32` type annotation above, Rust will display the
+following error, which means the compiler needs more information from us to
+know which type we want to use:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
@@ -247,13 +247,13 @@ the index of the value we want to access. For example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-12-tuple-indexing/src/main.rs}}
 ```
 
-This program creates the tuple `x` and then makes new variables for each
-element by using their respective indices. As with most programming languages,
-the first index in a tuple is 0.
+This program creates the tuple `x` and then accesses each element of the tuple
+using their respective indices. As with most programming languages, the first
+index in a tuple is 0.
 
-The tuple without any values, `()`, is a special type that has only one value,
-also written `()`. The type is called the *unit type* and the value is called
-the *unit value*. Expressions implicitly return the unit value if they don’t
+The tuple without any values has a special name, *unit*. This value and its
+corresponding type are both written `()` and represent an empty value or an
+empty return type. Expressions implicitly return the unit value if they don’t
 return any other value.
 
 #### The Array Type
@@ -369,7 +369,8 @@ This is an example of Rust’s memory safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+continuing. Chapter 9 discusses more of Rust’s error handling and how you can
+write readable, safe code that neither panics nor allows invalid memory access.
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number

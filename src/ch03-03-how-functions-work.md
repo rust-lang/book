@@ -64,13 +64,14 @@ Try running this program; you should get the following output:
 
 The declaration of `another_function` has one parameter named `x`. The type of
 `x` is specified as `i32`. When we pass `5` in to `another_function`, the
-`println!` macro puts `5` where the pair of curly brackets were in the format
-string.
+`println!` macro puts `5` where the pair of curly brackets containing `x` was
+in the format string.
 
 In function signatures, you *must* declare the type of each parameter. This is
 a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
-the code to figure out what type you mean.
+the code to figure out what type you mean. The compiler is also able to give
+more helpful error messages if it knows what types the function expects.
 
 When defining multiple parameters, separate the parameter declarations with
 commas, like this:
