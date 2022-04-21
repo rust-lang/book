@@ -232,8 +232,8 @@ next iteration.
 If you have loops within loops, `break` and `continue` apply to the innermost
 loop at that point. You can optionally specify a *loop label* on a loop that we
 can then use with `break` or `continue` to specify that those keywords apply to
-the labeled loop instead of the innermost loop. Here’s an example with two
-nested loops:
+the labeled loop instead of the innermost loop. Loop labels must begin with a
+single quote. Here’s an example with two nested loops:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
