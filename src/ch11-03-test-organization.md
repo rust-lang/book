@@ -162,7 +162,7 @@ we want to call from multiple test functions in multiple test files:
 
 <span class="filename">Filename: tests/common.rs</span>
 
-```rust
+```rust,noplayground
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/no-listing-12-shared-test-code-problem/tests/common.rs}}
 ```
 
