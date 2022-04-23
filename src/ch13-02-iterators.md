@@ -181,3 +181,42 @@ Because `map` takes a closure, we can specify any operation we want to perform
 on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the `Iterator` trait
 provides.
+
+### Using Closures that Capture Their Environment
+
+Now that we’ve introduced iterators, we can demonstrate a common use of
+closures that capture their environment by using the `filter` iterator adaptor.
+The `filter` method on an iterator takes a closure that takes each item from
+the iterator and returns a Boolean. If the closure returns `true`, the value
+will be included in the iterator produced by `filter`. If the closure returns
+`false`, the value won’t be included in the resulting iterator.
+
+In Listing 13-19, we use `filter` with a closure that captures the `shoe_size`
+variable from its environment to iterate over a collection of `Shoe` struct
+instances. It will return only shoes that are the specified size.
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust,noplayground
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs}}
+```
+
+<span class="caption">Listing 13-19: Using the `filter` method with a closure
+that captures `shoe_size`</span>
+
+The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
+size as parameters. It returns a vector containing only shoes of the specified
+size.
+
+In the body of `shoes_in_size`, we call `into_iter` to create an iterator
+that takes ownership of the vector. Then we call `filter` to adapt that
+iterator into a new iterator that only contains elements for which the closure
+returns `true`.
+
+The closure captures the `shoe_size` parameter from the environment and
+compares the value with each shoe’s size, keeping only shoes of the size
+specified. Finally, calling `collect` gathers the values returned by the
+adapted iterator into a vector that’s returned by the function.
+
+The test shows that when we call `shoes_in_size`, we get back only shoes
+that have the same size as the value we specified.
