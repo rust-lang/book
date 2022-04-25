@@ -269,8 +269,10 @@ traits, in an additive fashion:
 
 > Note: Functions can implement all three of the `Fn` traits too. If what we
 > want to do doesn’t require capturing a value from the environment, we can use
-> a function rather than a closure where we need something that implements one
-> of the `Fn` traits.
+> the name of a function rather than a closure where we need something that
+> implements one of the `Fn` traits. For example, on an `Option<Vec<T>>` value,
+> we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
+> value is `None`.
 
 Let's look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-x:
