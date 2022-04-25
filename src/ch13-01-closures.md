@@ -14,18 +14,18 @@ customization.
 
 ### Capturing the Environment with Closures
 
-The first aspect of closures we're going to examine is that closures can
-capture values from the environment they're defined in for later use. Here's
+The first aspect of closures we’re going to examine is that closures can
+capture values from the environment they’re defined in for later use. Here’s
 the scenario: A t-shirt company gives away a free shirt to someone on their
 mailing list every so often. People on the mailing list can optionally add
 their favorite color to their profile. If the person chosen to get the free
 shirt has their favorite color in their profile, they get that color shirt. If
-the person hasn't specified a favorite color, they get the color that the
+the person hasn’t specified a favorite color, they get the color that the
 company currently has the most of.
 
-There are many ways to implement this. For this example, we're going to use an
+There are many ways to implement this. For this example, we’re going to use an
 enum called `ShirtColor` that has the variants `Red` and `Blue`. The
-company's inventory is represented by an `Inventory` struct that has a field
+company’s inventory is represented by an `Inventory` struct that has a field
 named `shirts` that contains a `Vec<ShirtColor>` representing the shirts
 currently in stock. The method `shirt_giveaway` defined on `Inventory` gets the
 optional shirt color preference of the person getting the free shirt, and
@@ -50,7 +50,7 @@ shirt and a user without any preference. Running this code prints:
 ```
 
 Again, this code could be implemented in many ways, but this way uses concepts
-you've already learned, except for the body of the `giveaway` method that uses
+you’ve already learned, except for the body of the `giveaway` method that uses
 a closure. The `giveaway` method takes the user preference `Option<ShirtColor>`
 and calls `unwrap_or_else` on it. The [`unwrap_or_else` method on
 `Option<T>`][unwrap-or-else]<!-- ignore --> is defined by the standard library.
@@ -61,9 +61,9 @@ returns the value from within the `Some`. If the `Option<T>` is the `None`
 variant, `unwrap_or_else` calls the closure and returns the value returned by
 the closure.
 
-This is interesting because we've passed a closure that calls
+This is interesting because we’ve passed a closure that calls
 `self.most_stocked()` on the current `Inventory` instance. The standard library
-didn't need to know anything about the `Inventory` or `ShirtColor` types we
+didn’t need to know anything about the `Inventory` or `ShirtColor` types we
 defined, or the logic we want to use in this scenario. The closure captured an
 immutable reference to the `self` `Inventory` instance and passed it with the
 code we specified to the `unwrap_or_else` method. Functions are not able to
@@ -221,16 +221,16 @@ Before defining closure: [1, 2, 3]
 After calling closure: [1, 2, 3, 7]
 ```
 
-Note that there's no longer a `println!` between the definition and the call of
+Note that there’s no longer a `println!` between the definition and the call of
 the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a
-mutable reference to `list`. After the closure is called, because we don't use
+mutable reference to `list`. After the closure is called, because we don’t use
 the closure again after that point, the mutable borrow ends. Between the
-closure definition and the closure call, an immutable borrow to print isn't
-allowed because no other borrows are allowed when there's a mutable borrow. Try
+closure definition and the closure call, an immutable borrow to print isn’t
+allowed because no other borrows are allowed when there’s a mutable borrow. Try
 adding a `println!` there to see what error message you get!
 
 If you want to force the closure to take ownership of the values it uses in the
-environment even though the body of the closure doesn't strictly need
+environment even though the body of the closure doesn’t strictly need
 ownership, you can use the `move` keyword before the parameter list. This
 technique is mostly useful when passing a closure to a new thread to move the
 data so it’s owned by the new thread. We’ll have more examples of `move`
@@ -258,16 +258,16 @@ traits, in an additive fashion:
    implement this trait, because all closures can be called. If a closure moves
    captured values out of its body, then that closure only implements `FnOnce`
    and not any of the other `Fn` traits, because it can only be called once.
-2. `FnMut` applies to closures that don't move captured values out of their
+2. `FnMut` applies to closures that don’t move captured values out of their
    body, but that might mutate the captured values. These closures can be
    called more than once.
-3. `Fn` applies to closures that don't move captured values out of their body
-   and that don't mutate captured values. These closures can be called more
+3. `Fn` applies to closures that don’t move captured values out of their body
+   and that don’t mutate captured values. These closures can be called more
    than once without mutating their environment, which is important in cases
-   such as calling a closure multiple times concurrently. Closures that don't
+   such as calling a closure multiple times concurrently. Closures that don’t
    capture anything from their environment implement `Fn`.
 
-Let's look at the definition of the `unwrap_or_else` method on `Option<T>` that
+Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-x:
 
 ```rust,ignore
@@ -297,7 +297,7 @@ The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
 means `F` must be able to be called at least once, take no arguments, and
 return a `T`. Using `FnOnce` in the trait bound expresses the constraint that
 `unwrap_or_else` is only going to call `f` at most one time. In the body of
-`unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won't be
+`unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
 closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds
 of closures and is as flexible as it can be.
@@ -309,7 +309,7 @@ of closures and is as flexible as it can be.
 > we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
 > value is `None`.
 
-Now let's look at the standard library method `sort_by_key` defined on slices,
+Now let’s look at the standard library method `sort_by_key` defined on slices,
 to see how that differs. It takes a closure that implements `FnMut`. The
 closure gets one argument, a reference to the current item in the slice being
 considered, and returns a value of type `K` that can be ordered. This function
@@ -357,11 +357,11 @@ This code prints:
 
 The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
 the closure multiple times: once for each item in the slice. The closure `|r|
-r.width` doesn't capture, mutate, or move out anything from its environment, so
+r.width` doesn’t capture, mutate, or move out anything from its environment, so
 it meets the trait bound requirements.
 
-In contrast, here's an example of a closure that only implements `FnOnce`
-because it moves a value out of the environment. The compiler won't let us use
+In contrast, here’s an example of a closure that only implements `FnOnce`
+because it moves a value out of the environment. The compiler won’t let us use
 this closure with `sort_by_key`:
 
 ```rust,ignore,does_not_compile
@@ -389,16 +389,16 @@ fn main() {
 }
 ```
 
-This is a contrived, convoluted way (that doesn't work) to try and count the
+This is a contrived, convoluted way (that doesn’t work) to try and count the
 number of times `sort_by_key` gets called when sorting `list`. This code
-attempts to do this counting by pushing `value`, a `String` from the closure's
+attempts to do this counting by pushing `value`, a `String` from the closure’s
 environment, into the `sort_operations` vector. The closure captures `value`
 then moves `value` out of the closure by transferring ownership of `value` to
 the `sort_operations` vector. This closure can be called once; trying to call
-it a second time wouldn't work because `value` would no longer be in the
+it a second time wouldn’t work because `value` would no longer be in the
 environment to be pushed into `sort_operations` again! Therefore, this closure
 only implements `FnOnce`. When we try to compile this code, we get this error
-that `value` can't be moved out of the closure because the closure must
+that `value` can’t be moved out of the closure because the closure must
 implement `FnMut`:
 
 ```console
@@ -418,8 +418,8 @@ error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` clos
 ```
 
 The error points to the line in the closure body that moves `value` out of the
-environment. To fix this, we need to change the closure body so that it doesn't
-move values out of the environment. If we're interested in the number of times
+environment. To fix this, we need to change the closure body so that it doesn’t
+move values out of the environment. If we’re interested in the number of times
 `sort_by_key` is called, keeping a counter in the environment and incrementing
 its value in the closure body is a more straightforward way to calculate that.
 This closure works with `sort_by_key` because it is only capturing a mutable
