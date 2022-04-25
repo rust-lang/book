@@ -1279,9 +1279,9 @@ and have all their searches be case insensitive in that terminal session.
 ### Writing a Failing Test for the Case-Insensitive `search` Function
 
 We first add a new `search_case_insensitive` function that will be called when
-the environment variable is on. We’ll continue to follow the TDD process, so
-the first step is again to write a failing test. We’ll add a new test for the
-new `search_case_insensitive` function and rename our old test from
+the environment variable has a value. We’ll continue to follow the TDD process,
+so the first step is again to write a failing test. We’ll add a new test for
+the new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
 tests, as shown in Listing 12-20.
 
@@ -1407,18 +1407,24 @@ from the `run` function. First, we’ll add a configuration option to the
 Adding this field will cause compiler errors because we aren’t initializing
 this field anywhere yet:
 
+<!-- JT: I decided to change the field name and the environment variable to be
+called `ignore_case` to avoid some double-negative confusion detailed in this
+issue: https://github.com/rust-lang/book/issues/1898 I'd love your thoughts
+especially on the names and logic throughout this section! Thank you!!
+/Carol -->
+
 Filename: src/lib.rs
 
 ```
 pub struct Config {
     pub query: String,
     pub filename: String,
-    pub case_sensitive: bool,
+    pub ignore_case: bool,
 }
 ```
 
-We added the `case_sensitive` field that holds a Boolean. Next, we need the
-`run` function to check the `case_sensitive` field’s value and use that to
+We added the `ignore_case` field that holds a Boolean. Next, we need the
+`run` function to check the `ignore_case` field’s value and use that to
 decide whether to call the `search` function or the `search_case_insensitive`
 function, as shown in Listing 12-22. This still won’t compile yet.
 
@@ -1428,10 +1434,10 @@ Filename: src/lib.rs
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
 
-    let results = if config.case_sensitive {
-        search(&config.query, &contents)
-    } else {
+    let results = if config.ignore_case {
         search_case_insensitive(&config.query, &contents)
+    } else {
+        search(&config.query, &contents)
     };
 
     for line in results {
@@ -1443,13 +1449,14 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 ```
 
 Listing 12-22: Calling either `search` or `search_case_insensitive` based on
-the value in `config.case_sensitive`
+the value in `config.ignore_case`
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
 library, so we bring that module into scope at the top of *src/lib.rs*. Then
-we’ll use the `var` function from the `env` module to check for an environment
-variable named `CASE_INSENSITIVE`, as shown in Listing 12-23.
+we’ll use the `var` function from the `env` module to check to see if any value
+has been set for an environment variable named `IGNORE_CASE`, as shown in
+Listing 12-23.
 
 Filename: src/lib.rs
 
@@ -1466,37 +1473,38 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
 
         Ok(Config {
             query,
             filename,
-            case_sensitive,
+            ignore_case,
         })
     }
 }
 ```
 
-Listing 12-23: Checking for an environment variable named `CASE_INSENSITIVE`
+Listing 12-23: Checking for any value in an environment variable named
+`IGNORE_CASE`
 
-Here, we create a new variable `case_sensitive`. To set its value, we call the
-`env::var` function and pass it the name of the `CASE_INSENSITIVE` environment
+Here, we create a new variable `ignore_case`. To set its value, we call the
+`env::var` function and pass it the name of the `IGNORE_CASE` environment
 variable. The `env::var` function returns a `Result` that will be the
 successful `Ok` variant that contains the value of the environment variable if
-the environment variable is set. It will return the `Err` variant if the
-environment variable is not set.
+the environment variable is set to any value. It will return the `Err` variant
+if the environment variable is not set.
 
-We’re using the `is_err` method on the `Result` to check whether it’s an error
-and therefore unset, which means it *should* do a case-sensitive search. If the
-`CASE_INSENSITIVE` environment variable is set to anything, `is_err` will
-return false and the program will perform a case-insensitive search. We don’t
+We’re using the `is_ok` method on the `Result` to check whether the environment
+variable is set, which means the program should do a case-insensitive search.
+If the `IGNORE_CASE` environment variable isn’t set to anything, `is_ok` will
+return false and the program will perform a case-sensitive search. We don’t
 care about the *value* of the environment variable, just whether it’s set or
-unset, so we’re checking `is_err` rather than using `unwrap`, `expect`, or any
+unset, so we’re checking `is_ok` rather than using `unwrap`, `expect`, or any
 of the other methods we’ve seen on `Result`.
 
-We pass the value in the `case_sensitive` variable to the `Config` instance so
-the `run` function can read that value and decide whether to call `search` or
-`search_case_insensitive`, as we implemented in Listing 12-22.
+We pass the value in the `ignore_case` variable to the `Config` instance so the
+`run` function can read that value and decide whether to call
+`search_case_insensitive` or `search`, as we implemented in Listing 12-22.
 
 Let’s give it a try! First, we’ll run our program without the environment
 variable set and with the query `to`, which should match any line that contains
@@ -1511,11 +1519,11 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
+Looks like that still works! Now, let’s run the program with `IGNORE_CASE`
 set to `1` but with the same query `to`.
 
 ```
-$ CASE_INSENSITIVE=1 cargo run to poem.txt
+$ IGNORE_CASE=1 cargo run to poem.txt
 ```
 
 If you’re using PowerShell, you will need to set the environment variable and
@@ -1527,14 +1535,14 @@ how that's confusing. I've moved the command to run above the PowerShell
 instructions. /Carol -->
 
 ```
-PS> $Env:CASE_INSENSITIVE=1; cargo run to poem.txt
+PS> $Env:IGNORE_CASE=1; cargo run to poem.txt
 ```
 
-This will make `CASE_INSENSITIVE` persist for the remainder of your shell
+This will make `IGNORE_CASE` persist for the remainder of your shell
 session. It can be unset with the `Remove-Item` cmdlet:
 
 ```
-PS> Remove-Item Env:CASE_INSENSITIVE
+PS> Remove-Item Env:IGNORE_CASE
 ```
 
 We should get lines that contain “to” that might have uppercase letters:
@@ -1553,11 +1561,11 @@ variables.
 
 Some programs allow arguments *and* environment variables for the same
 configuration. In those cases, the programs decide that one or the other takes
-precedence. For another exercise on your own, try controlling case
-insensitivity through either a command line argument or an environment
-variable. Decide whether the command line argument or the environment variable
-should take precedence if the program is run with one set to case sensitive and
-one set to case insensitive.
+precedence. For another exercise on your own, try controlling case sensitivity
+through either a command line argument or an environment variable. Decide
+whether the command line argument or the environment variable should take
+precedence if the program is run with one set to case sensitive and one set to
+ignore case.
 
 The `std::env` module contains many more useful features for dealing with
 environment variables: check out its documentation to see what is available.
