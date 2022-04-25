@@ -309,14 +309,13 @@ of closures and is as flexible as it can be.
 > we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
 > value is `None`.
 
-Now let's look at the standard library method, `sort_by_key` defined on slices,
-that takes a closure that implements `FnMut` to see how that differs. The
-`sort_by_key` method takes a closure that gets one argument, a reference to the
-current item in the slice being considered, and returns a value of type `K`
-that can be ordered. This function is useful when you want to sort a slice by a
-particular attribute of each item. In Listing 13-x, we have a list of
-`Rectangle` instances and we use `sort_by_key` to order them by their `width`
-attribute from low to high:
+Now let's look at the standard library method `sort_by_key` defined on slices,
+to see how that differs. It takes a closure that implements `FnMut`. The
+closure gets one argument, a reference to the current item in the slice being
+considered, and returns a value of type `K` that can be ordered. This function
+is useful when you want to sort a slice by a particular attribute of each item.
+In Listing 13-x, we have a list of `Rectangle` instances and we use
+`sort_by_key` to order them by their `width` attribute from low to high:
 
 ```rust
 #[derive(Debug)]
