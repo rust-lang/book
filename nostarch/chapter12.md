@@ -15,14 +15,15 @@ the Rust concepts you now have under your belt.
 
 Rust’s speed, safety, single binary output, and cross-platform support make it
 an ideal language for creating command line tools, so for our project, we’ll
-make our own version of the classic command line tool `grep` (**g**lobally
-search a **r**egular **e**xpression and **p**rint). In the simplest use case,
-`grep` searches a specified file for a specified string. To do so, `grep` takes
-as its arguments a filename and a string. Then it reads the file, finds lines
-in that file that contain the string argument, and prints those lines.
+make our own version of the classic command line search tool `grep`
+(**g**lobally search a **r**egular **e**xpression and **p**rint). In the
+simplest use case, `grep` searches a specified file for a specified string. To
+do so, `grep` takes as its arguments a filename and a string. Then it reads the
+file, finds lines in that file that contain the string argument, and prints
+those lines.
 
-Along the way, we’ll show how to make our command line tool use features of the
-terminal that many command line tools use. We’ll read the value of an
+Along the way, we’ll show how to make our command line tool use the terminal
+features that many other command line tools use. We’ll read the value of an
 environment variable to allow the user to configure the behavior of our tool.
 We’ll also print error messages to the standard error console stream (`stderr`)
 instead of standard output (`stdout`), so, for example, the user can redirect
@@ -30,8 +31,8 @@ successful output to a file while still seeing error messages onscreen.
 
 One Rust community member, Andrew Gallant, has already created a fully
 featured, very fast version of `grep`, called `ripgrep`. By comparison, our
-version of `grep` will be fairly simple, but this chapter will give you some of
-the background knowledge you need to understand a real-world project such as
+version will be fairly simple, but this chapter will give you some of the
+background knowledge you need to understand a real-world project such as
 `ripgrep`.
 
 Our `grep` project will combine a number of concepts you’ve learned so far:
@@ -74,16 +75,16 @@ this concept, let’s implement this capability ourselves.
 ### Reading the Argument Values
 
 To enable `minigrep` to read the values of command line arguments we pass to
-it, we’ll need a function provided in Rust’s standard library, which is
-`std::env::args`. This function returns an iterator of the command line
-arguments that were given to `minigrep`. We’ll cover iterators fully in Chapter
-13. For now, you only need to know two details about iterators: iterators
-produce a series of values, and we can call the `collect` method on an iterator
-to turn it into a collection, such as a vector, containing all the elements the
-iterator produces.
+it, we’ll need the `std::env::args` function provided in Rust’s standard
+library. This function returns an iterator of the command line arguments passed
+to `minigrep`. We’ll cover iterators fully in Chapter 13. For now, you only
+need to know two details about iterators: iterators produce a series of values,
+and we can call the `collect` method on an iterator to turn it into a
+collection, such as a vector, that contains all the elements the iterator
+produces.
 
-Use the code in Listing 12-1 to allow your `minigrep` program to read any
-command line arguments passed to it and then collect the values into a vector.
+The code in Listing 12-1 allows your `minigrep` program to read any command
+line arguments passed to it and then collect the values into a vector.
 
 Filename: src/main.rs
 
@@ -151,10 +152,10 @@ chapter, we’ll ignore it and save only the two arguments we need.
 
 ### Saving the Argument Values in Variables
 
-Printing the value of the vector of arguments illustrated that the program is
-able to access the values specified as command line arguments. Now we need to
-save the values of the two arguments in variables so we can use the values
-throughout the rest of the program. We do that in Listing 12-2.
+The program is currently able to access the values specified as command line
+arguments. Now we need to save the values of the two arguments in variables so
+we can use the values throughout the rest of the program. We do that in Listing
+12-2.
 
 Filename: src/main.rs
 
@@ -176,8 +177,8 @@ Listing 12-2: Creating variables to hold the query argument and filename
 argument
 
 As we saw when we printed the vector, the program’s name takes up the first
-value in the vector at `args[0]`, so we’re starting at index `1`. The first
-argument `minigrep` takes is the string we’re searching for, so we put a
+value in the vector at `args[0]`, so we’re starting arguments at index `1`. The
+first argument `minigrep` takes is the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.
@@ -203,9 +204,8 @@ capabilities instead.
 
 ## Reading a File
 
-Now we’ll add functionality to read the file that is specified in the
-`filename` command line argument. First, we need a sample file to test it with:
-the best kind of file to use to make sure `minigrep` is working is one with a
+Now we’ll add functionality to read the file specified in the `filename`
+argument. First, we need a sample file to test it with: we’ll use a file with a
 small amount of text over multiple lines with some repeated words. Listing 12-3
 has an Emily Dickinson poem that will work well! Create a file called
 *poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
@@ -249,16 +249,15 @@ fn main() {
 
 Listing 12-4: Reading the contents of the file specified by the second argument
 
-First, we add another `use` statement to bring in a relevant part of the
-standard library: we need `std::fs` to handle files [1].
+First, we bring in a relevant part of the standard library with a `use`
+statement: we need `std::fs` to handle files [1].
 
-In `main`, we’ve added a new statement: `fs::read_to_string` takes the
-`filename`, opens that file, and returns a `Result<String>` of the file’s
-contents [2].
+In `main`, the new statement `fs::read_to_string` takes the `filename`, opens
+that file, and returns a `Result<String>` of the file’s contents [2].
 
-After that statement, we’ve again added a temporary `println!` statement that
-prints the value of `contents` after the file is read, so we can check that the
-program is working so far [3].
+After that, we again add a temporary `println!` statement that prints the value
+of `contents` after the file is read, so we can check that the program is
+working so far [3].
 
 Let’s run this code with any string as the first command line argument (because
 we haven’t implemented the searching part yet) and the *poem.txt* file as the
@@ -284,26 +283,25 @@ To an admiring bog!
 ```
 
 Great! The code read and then printed the contents of the file. But the code
-has a few flaws. The `main` function has multiple responsibilities: generally,
-functions are clearer and easier to maintain if each function is responsible
-for only one idea. The other problem is that we’re not handling errors as well
-as we could. The program is still small, so these flaws aren’t a big problem,
-but as the program grows, it will be harder to fix them cleanly. It’s good
-practice to begin refactoring early on when developing a program, because it’s
-much easier to refactor smaller amounts of code. We’ll do that next.
+has a few flaws. At the moment, the `main` function has multiple
+responsibilities: generally, functions are clearer and easier to maintain if
+each function is responsible for only one idea. The other problem is that we’re
+not handling errors as well as we could. The program is still small, so these
+flaws aren’t a big problem, but as the program grows, it will be harder to fix
+them cleanly. It’s good practice to begin refactoring early on when developing
+a program, because it’s much easier to refactor smaller amounts of code. We’ll
+do that next.
 
 ## Refactoring to Improve Modularity and Error Handling
 
 To improve our program, we’ll fix four problems that have to do with the
-program’s structure and how it’s handling potential errors.
-
-First, our `main` function now performs two tasks: it parses arguments and
-reads files. For such a small function, this isn’t a major problem. However, if
-we continue to grow our program inside `main`, the number of separate tasks the
-`main` function handles will increase. As a function gains responsibilities, it
-becomes more difficult to reason about, harder to test, and harder to change
-without breaking one of its parts. It’s best to separate functionality so each
-function is responsible for one task.
+program’s structure and how it’s handling potential errors. First, our `main`
+function now performs two tasks: it parses arguments and reads files. As our
+program grows, the number of separate tasks the `main` function handles will
+increase. As a function gains responsibilities, it becomes more difficult to
+reason about, harder to test, and harder to change without breaking one of its
+parts. It’s best to separate functionality so each function is responsible for
+one task.
 
 This issue also ties into the second problem: although `query` and `filename`
 are configuration variables to our program, variables like `contents` are used
@@ -316,14 +314,14 @@ The third problem is that we’ve used `expect` to print an error message when
 reading the file fails, but the error message just prints `Something went wrong
 reading the file`. Reading a file can fail in a number of ways: for example,
 the file could be missing, or we might not have permission to open it. Right
-now, regardless of the situation, we’d print the `Something went wrong reading
-the file` error message, which wouldn’t give the user any information!
+now, regardless of the situation, we’d print the same error message for
+everything, which wouldn’t give the user any information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
 runs our program without specifying enough arguments, they’ll get an `index out
 of bounds` error from Rust that doesn’t clearly explain the problem. It would
 be best if all the error-handling code were in one place so future maintainers
-had only one place to consult in the code if the error-handling logic needed to
+had only one place to consult the code if the error-handling logic needed to
 change. Having all the error-handling code in one place will also ensure that
 we’re printing messages that will be meaningful to our end users.
 
@@ -333,9 +331,9 @@ Let’s address these four problems by refactoring our project.
 
 The organizational problem of allocating responsibility for multiple tasks to
 the `main` function is common to many binary projects. As a result, the Rust
-community has developed a process to use as a guideline for splitting the
-separate concerns of a binary program when `main` starts getting large. The
-process has the following steps:
+community has developed guidelines for splitting the separate concerns of a
+binary program when `main` starts getting large. This process has the following
+steps:
 
 * Split your program into a *main.rs* and a *lib.rs* and move your program’s
   logic to *lib.rs*.
@@ -355,9 +353,9 @@ should be limited to the following:
 This pattern is about separating concerns: *main.rs* handles running the
 program, and *lib.rs* handles all the logic of the task at hand. Because you
 can’t test the `main` function directly, this structure lets you test all of
-your program’s logic by moving it into functions in *lib.rs*. The only code
-that remains in *main.rs* will be small enough to verify its correctness by
-reading it. Let’s rework our program by following this process.
+your program’s logic by moving it into functions in *lib.rs*. The code that
+remains in *main.rs* will be small enough to verify its correctness by reading
+it. Let’s rework our program by following this process.
 
 #### Extracting the Argument Parser
 
@@ -413,7 +411,7 @@ Another indicator that shows there’s room for improvement is the `config` part
 of `parse_config`, which implies that the two values we return are related and
 are both part of one configuration value. We’re not currently conveying this
 meaning in the structure of the data other than by grouping the two values into
-a tuple; we could put the two values into one struct and give each of the
+a tuple; we’ll instead put the two values into one struct and give each of the
 struct fields a meaningful name. Doing so will make it easier for future
 maintainers of this code to understand how the different values relate to each
 other and what their purpose is.
@@ -462,14 +460,14 @@ the argument values and is only letting the `parse_config` function borrow
 them, which means we’d violate Rust’s borrowing rules if `Config` tried to take
 ownership of the values in `args`.
 
-We could manage the `String` data in a number of different ways, but the
-easiest, though somewhat inefficient, route is to call the `clone` method on
-the values [7][8]. This will make a full copy of the data for the `Config`
-instance to own, which takes more time and memory than storing a reference to
-the string data. However, cloning the data also makes our code very
-straightforward because we don’t have to manage the lifetimes of the
-references; in this circumstance, giving up a little performance to gain
-simplicity is a worthwhile trade-off.
+There are a number of ways we could manage the `String` data; the easiest,
+though somewhat inefficient, route is to call the `clone` method on the values
+[7][8]. This will make a full copy of the data for the `Config` instance to
+own, which takes more time and memory than storing a reference to the string
+data. However, cloning the data also makes our code very straightforward
+because we don’t have to manage the lifetimes of the references; in this
+circumstance, giving up a little performance to gain simplicity is a worthwhile
+trade-off.
 
 > ### The Trade-Offs of Using `clone`
 >
@@ -560,14 +558,13 @@ note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 The line `index out of bounds: the len is 1 but the index is 1` is an error
 message intended for programmers. It won’t help our end users understand what
-happened and what they should do instead. Let’s fix that now.
+they should do instead. Let’s fix that now.
 
 #### Improving the Error Message
 
 In Listing 12-8, we add a check in the `new` function that will verify that the
 slice is long enough before accessing index 1 and 2. If the slice isn’t long
-enough, the program panics and displays a better error message than the `index
-out of bounds` message.
+enough, the program panics and displays a better error message.
 
 Filename: src/main.rs
 
@@ -582,7 +579,7 @@ fn new(args: &[String]) -> Config {
 
 Listing 12-8: Adding a check for the number of arguments
 
-This code is similar to the `Guess::new` function we wrote in Listing 9-10,
+This code is similar to the `Guess::new` function we wrote in Listing 9-13,
 where we called `panic!` when the `value` argument was out of the range of
 valid values. Instead of checking for a range of values here, we’re checking
 that the length of `args` is at least 3 and the rest of the function can
@@ -606,7 +603,7 @@ This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
 the technique we used in Listing 9-13 isn’t the best to use here: a call to
 `panic!` is more appropriate for a programming problem than a usage problem, as
-discussed in Chapter 9. Instead, we can use the other technique you learned
+discussed in Chapter 9. Instead, we’ll use the other technique you learned
 about in Chapter 9—returning a `Result` that indicates either success or an
 error.
 
@@ -661,9 +658,9 @@ more cleanly in the error case.
 To handle the error case and print a user-friendly message, we need to update
 `main` to handle the `Result` being returned by `Config::new`, as shown in
 Listing 12-10. We’ll also take the responsibility of exiting the command line
-tool with a nonzero error code from `panic!` and implement it by hand. A
-nonzero exit status is a convention to signal to the process that called our
-program that the program exited with an error state.
+tool with a nonzero error code away from `panic!` and instead implement it by
+hand. A nonzero exit status is a convention to signal to the process that
+called our program that the program exited with an error state.
 
 Filename: src/main.rs
 
@@ -764,7 +761,7 @@ With the remaining program logic separated into the `run` function, we can
 improve the error handling, as we did with `Config::new` in Listing 12-9.
 Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
-us further consolidate into `main` the logic around handling errors in a
+us further consolidate the logic around handling errors into `main` in a
 user-friendly way. Listing 12-12 shows the changes we need to make to the
 signature and body of `run`.
 
@@ -855,7 +852,7 @@ We use `if let` rather than `unwrap_or_else` to check whether `run` returns an
 return a value that we want to `unwrap` in the same way that `Config::new`
 returns the `Config` instance. Because `run` returns `()` in the success case,
 we only care about detecting an error, so we don’t need `unwrap_or_else` to
-return the unwrapped value because it would only be `()`.
+return the unwrapped value, which would only be `()`.
 
 The bodies of the `if let` and the `unwrap_or_else` functions are the same in
 both cases: we print the error and exit.
@@ -863,8 +860,8 @@ both cases: we print the error and exit.
 ### Splitting Code into a Library Crate
 
 Our `minigrep` project is looking good so far! Now we’ll split the
-*src/main.rs* file and put some code into the *src/lib.rs* file so we can test
-it and have a *src/main.rs* file with fewer responsibilities.
+*src/main.rs* file and put some code into the *src/lib.rs* file. That way we
+can test the code and have a *src/main.rs* file with fewer responsibilities.
 
 Let’s move all the code that isn’t the `main` function from *src/main.rs* to
 *src/lib.rs*:
@@ -904,7 +901,7 @@ Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
 `new` method, and on the `run` function. We now have a library crate that has a
-public API that we can test!
+public API we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
 binary crate in *src/main.rs*, as shown in Listing 12-14.
@@ -949,9 +946,8 @@ for the core functionality of our code. We can call functions directly with
 various arguments and check return values without having to call our binary
 from the command line.
 
-In this section, we’ll add the searching logic to the `minigrep` program by
-using the Test-driven development (TDD) process. This software development
-technique follows these steps:
+In this section, we’ll add the searching logic to the `minigrep` program
+using the test-driven development (TDD) process with the following steps:
 
 1. Write a test that fails and run it to make sure it fails for the reason you
    expect.
@@ -960,9 +956,9 @@ technique follows these steps:
    continue to pass.
 4. Repeat from step 1!
 
-This process is just one of many ways to write software, but TDD can help drive
-code design as well. Writing the test before you write the code that makes the
-test pass helps to maintain high test coverage throughout the process.
+Though it’s just one of many ways to write software, TDD can help drive code
+design. Writing the test before you write the code that makes the test pass
+helps to maintain high test coverage throughout the process.
 
 We’ll test drive the implementation of the functionality that will actually do
 the searching for the query string in the file contents and produce a list of
@@ -973,11 +969,11 @@ lines that match the query. We’ll add this functionality in a function called
 
 Because we don’t need them anymore, let’s remove the `println!` statements from
 *src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
-Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
-did in Chapter 11. The test function specifies the behavior we want the
-`search` function to have: it will take a query and the text to search for the
-query in, and it will return only the lines from the text that contain the
-query. Listing 12-15 shows this test, which won’t compile yet.
+Then, in *src/lib.rs*, add a `tests` module with a test function, as we did in
+Chapter 11. The test function specifies the behavior we want the `search`
+function to have: it will take a query and the text to search, and it will
+return only the lines from the text that contain the query. Listing 12-15 shows
+this test, which won’t compile yet.
 
 Filename: src/lib.rs
 
@@ -1007,12 +1003,13 @@ opening double quote tells Rust not to put a newline character at the beginning
 of the contents of this string literal). We assert that the value returned from
 the `search` function contains only the line we expect.
 
-We aren’t able to run this test and watch it fail because the test doesn’t even
-compile: the `search` function doesn’t exist yet! So now we’ll add just enough
-code to get the test to compile and run by adding a definition of the `search`
-function that always returns an empty vector, as shown in Listing 12-16. Then
-the test should compile and fail because an empty vector doesn’t match a vector
-containing the line `"safe, fast, productive."`
+We aren’t yet able to run this test and watch it fail because the test doesn’t
+even compile: the `search` function doesn’t exist yet! In accordance with TDD
+principles, we’ll add just enough code to get the test to compile and run by
+adding a definition of the `search` function that always returns an empty
+vector, as shown in Listing 12-16. Then the test should compile and fail
+because an empty vector doesn’t match a vector containing the line `"safe,
+fast, productive."`
 
 Filename: src/lib.rs
 
@@ -1025,12 +1022,12 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 Listing 12-16: Defining just enough of the `search` function so our test will
 compile
 
-Notice that we need an explicit lifetime `'a` defined in the signature of
-`search` and used with the `contents` argument and the return value. Recall in
-Chapter 10 that the lifetime parameters specify which argument lifetime is
-connected to the lifetime of the return value. In this case, we indicate that
-the returned vector should contain string slices that reference slices of the
-argument `contents` (rather than the argument `query`).
+Notice that we need to define an explicit lifetime `'a` in the signature of
+`search` and use that lifetime with the `contents` argument and the return
+value. Recall in Chapter 10 that the lifetime parameters specify which argument
+lifetime is connected to the lifetime of the return value. In this case, we
+indicate that the returned vector should contain string slices that reference
+slices of the argument `contents` (rather than the argument `query`).
 
 In other words, we tell Rust that the data returned by the `search` function
 will live as long as the data passed into the `search` function in the
@@ -1057,14 +1054,15 @@ help: consider introducing a named lifetime parameter
 ```
 
 Rust can’t possibly know which of the two arguments we need, so we need to tell
-it. Because `contents` is the argument that contains all of our text and we
-want to return the parts of that text that match, we know `contents` is the
-argument that should be connected to the return value using the lifetime syntax.
+it explicitly. Because `contents` is the argument that contains all of our text
+and we want to return the parts of that text that match, we know `contents` is
+the argument that should be connected to the return value using the lifetime
+syntax.
 
 Other programming languages don’t require you to connect arguments to return
-values in the signature. Although this might seem strange, it will get easier
-over time. You might want to compare this example with the “Validating
-References with Lifetimes” section in Chapter 10.
+values in the signature, but this practice will get easier over time. You might
+want to compare this example with the “Validating References with Lifetimes”
+section in Chapter 10.
 
 Now let’s run the test:
 
@@ -1154,12 +1152,19 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 Listing 12-18: Adding functionality to see whether the line contains the string
 in `query`
 
+At the moment, we’re building up functionality. To get it to compile, we need
+to return a value from the body as we indicated we would in the function
+signature.
+
+<!-- can you quickly say why it hasn't compiled so far? /LC-->
+<!-- Done! /Carol -->
+
 #### Storing Matching Lines
 
-We also need a way to store the lines that contain our query string. For that,
-we can make a mutable vector before the `for` loop and call the `push` method
-to store a `line` in the vector. After the `for` loop, we return the vector, as
-shown in Listing 12-19.
+To finish this function, we need a way to store the matching lines that we want
+to return. For that, we can make a mutable vector before the `for` loop and
+call the `push` method to store a `line` in the vector. After the `for` loop,
+we return the vector, as shown in Listing 12-19.
 
 Filename: src/lib.rs
 
@@ -1267,13 +1272,13 @@ useful when you’re writing command line programs.
 We’ll improve `minigrep` by adding an extra feature: an option for
 case-insensitive searching that the user can turn on via an environment
 variable. We could make this feature a command line option and require that
-users enter it each time they want it to apply, but instead we’ll use an
-environment variable. Doing so allows our users to set the environment variable
-once and have all their searches be case insensitive in that terminal session.
+users enter it each time they want it to apply, but by instead making it an
+environment variable, we allow our users to set the environment variable once
+and have all their searches be case insensitive in that terminal session.
 
 ### Writing a Failing Test for the Case-Insensitive `search` Function
 
-We want to add a new `search_case_insensitive` function that we’ll call when
+We first add a new `search_case_insensitive` function that will be called when
 the environment variable is on. We’ll continue to follow the TDD process, so
 the first step is again to write a failing test. We’ll add a new test for the
 new `search_case_insensitive` function and rename our old test from
@@ -1382,10 +1387,9 @@ query is `"rUsT"`, as an example: that string slice doesn’t contain a lowercas
 need to add an ampersand [3] because the signature of `contains` is defined to
 take a string slice.
 
-Next, we add a call to `to_lowercase` on each `line` before we check whether it
-contains `query` to lowercase all characters [2]. Now that we’ve converted
-`line` and `query` to lowercase, we’ll find matches no matter what the case of
-the query is.
+Next, we add a call to `to_lowercase` on each `line` to lowercase all
+characters [2]. Now that we’ve converted `line` and `query` to lowercase, we’ll
+find matches no matter what the case of the query is.
 
 Let’s see if this implementation passes the tests:
 
@@ -1413,11 +1417,10 @@ pub struct Config {
 }
 ```
 
-Note that we added the `case_sensitive` field that holds a Boolean. Next, we
-need the `run` function to check the `case_sensitive` field’s value and use
-that to decide whether to call the `search` function or the
-`search_case_insensitive` function, as shown in Listing 12-22. Note this still
-won’t compile yet.
+We added the `case_sensitive` field that holds a Boolean. Next, we need the
+`run` function to check the `case_sensitive` field’s value and use that to
+decide whether to call the `search` function or the `search_case_insensitive`
+function, as shown in Listing 12-22. This still won’t compile yet.
 
 Filename: src/lib.rs
 
@@ -1444,10 +1447,9 @@ the value in `config.case_sensitive`
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
-library, so we want to bring that module into scope with a `use std::env;` line
-at the top of *src/lib.rs*. Then we’ll use the `var` function from the `env`
-module to check for an environment variable named `CASE_INSENSITIVE`, as shown
-in Listing 12-23.
+library, so we bring that module into scope at the top of *src/lib.rs*. Then
+we’ll use the `var` function from the `env` module to check for an environment
+variable named `CASE_INSENSITIVE`, as shown in Listing 12-23.
 
 Filename: src/lib.rs
 
@@ -1512,8 +1514,17 @@ How dreary to be somebody!
 Looks like that still works! Now, let’s run the program with `CASE_INSENSITIVE`
 set to `1` but with the same query `to`.
 
+```
+$ CASE_INSENSITIVE=1 cargo run to poem.txt
+```
+
 If you’re using PowerShell, you will need to set the environment variable and
 run the program as separate commands:
+
+<!-- what about other platforms? something similar? /LC -->
+<!-- The instructions for other platforms were below with the output, but I see
+how that's confusing. I've moved the command to run above the PowerShell
+instructions. /Carol -->
 
 ```
 PS> $Env:CASE_INSENSITIVE=1; cargo run to poem.txt
@@ -1529,9 +1540,6 @@ PS> Remove-Item Env:CASE_INSENSITIVE
 We should get lines that contain “to” that might have uppercase letters:
 
 ```
-$ CASE_INSENSITIVE=1 cargo run to poem.txt
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
@@ -1571,18 +1579,18 @@ have to use something else to print to standard error.
 First, let’s observe how the content printed by `minigrep` is currently being
 written to standard output, including any error messages we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
-to a file while also intentionally causing an error. We won’t redirect the
-standard error stream, so any content sent to standard error will continue to
-display on the screen.
+to a file while intentionally causing an error. We won’t redirect the standard
+error stream, so any content sent to standard error will continue to display on
+the screen.
 
 Command line programs are expected to send error messages to the standard error
 stream so we can still see error messages on the screen even if we redirect the
 standard output stream to a file. Our program is not currently well-behaved:
 we’re about to see that it saves the error message output to a file instead!
 
-The way to demonstrate this behavior is by running the program with `>` and the
-filename, *output.txt*, that we want to redirect the standard output stream to.
-We won’t pass any arguments, which should cause an error:
+To demonstrate this behavior, we’ll run the program with `>` and the filename,
+*output.txt*, that we want to redirect the standard output stream to. We won’t
+pass any arguments, which should cause an error:
 
 ```
 $ cargo run > output.txt
@@ -1632,8 +1640,8 @@ fn main() {
 Listing 12-24: Writing error messages to standard error instead of standard
 output using `eprintln!`
 
-After changing `println!` to `eprintln!`, let’s run the program again in the
-same way, without any arguments and redirecting standard output with `>`:
+Let’s now run the program again in the same way, without any arguments and
+redirecting standard output with `>`:
 
 ```
 $ cargo run > output.txt
@@ -1668,8 +1676,8 @@ and standard error for error output as appropriate.
 This chapter recapped some of the major concepts you’ve learned so far and
 covered how to perform common I/O operations in Rust. By using command line
 arguments, files, environment variables, and the `eprintln!` macro for printing
-errors, you’re now prepared to write command line applications. By using the
-concepts in previous chapters, your code will be well organized, store data
+errors, you’re now prepared to write command line applications. Combined with
+the concepts in previous chapters, your code will be well organized, store data
 effectively in the appropriate data structures, handle errors nicely, and be
 well tested.
 
