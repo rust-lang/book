@@ -267,13 +267,6 @@ traits, in an additive fashion:
    such as calling a closure multiple times concurrently. Closures that don't
    capture anything from their environment implement `Fn`.
 
-> Note: Functions can implement all three of the `Fn` traits too. If what we
-> want to do doesn’t require capturing a value from the environment, we can use
-> the name of a function rather than a closure where we need something that
-> implements one of the `Fn` traits. For example, on an `Option<Vec<T>>` value,
-> we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
-> value is `None`.
-
 Let's look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-x:
 
@@ -308,6 +301,13 @@ return a `T`. Using `FnOnce` in the trait bound expresses the constraint that
 called. If the `Option` is `None`, `f` will be called once. Because all
 closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds
 of closures and is as flexible as it can be.
+
+> Note: Functions can implement all three of the `Fn` traits too. If what we
+> want to do doesn’t require capturing a value from the environment, we can use
+> the name of a function rather than a closure where we need something that
+> implements one of the `Fn` traits. For example, on an `Option<Vec<T>>` value,
+> we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
+> value is `None`.
 
 Now let's look at the standard library method, `sort_by_key` defined on slices,
 that takes a closure that implements `FnMut` to see how that differs. The
