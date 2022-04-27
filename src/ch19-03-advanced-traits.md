@@ -22,10 +22,8 @@ the other features discussed in this chapter.
 One example of a trait with an associated type is the `Iterator` trait that the
 standard library provides. The associated type is named `Item` and stands in
 for the type of the values the type implementing the `Iterator` trait is
-iterating over. In [“The `Iterator` Trait and the `next`
-Method”][the-iterator-trait-and-the-next-method]<!-- ignore --> section of
-Chapter 13, we mentioned that the definition of the `Iterator` trait is as
-shown in Listing 19-12.
+iterating over. The definition of the `Iterator` trait is as shown in Listing
+19-12.
 
 ```rust,noplayground
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-12/src/lib.rs}}
@@ -43,14 +41,14 @@ Associated types might seem like a similar concept to generics, in that the
 latter allow us to define a function without specifying what types it can
 handle. So why use associated types?
 
-Let’s examine the difference between the two concepts with an example from
-Chapter 13 that implements the `Iterator` trait on the `Counter` struct. In
-Listing 13-21, we specified that the `Item` type was `u32`:
+Let’s examine the difference between the two concepts with an example that
+implements the `Iterator` trait on a `Counter` struct. This implementation
+specifies the `Item` type is `u32`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch19-advanced-features/listing-13-21-reproduced/src/lib.rs:ch19}}
+{{#rustdoc_include ../listings/ch19-advanced-features/no-listing-22-iterator-on-counter/src/lib.rs:ch19}}
 ```
 
 This syntax seems comparable to that of generics. So why not just define the
@@ -459,8 +457,6 @@ at some advanced ways to interact with Rust’s type system.
 [newtype]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
 [implementing-a-trait-on-a-type]:
 ch10-02-traits.html#implementing-a-trait-on-a-type
-[the-iterator-trait-and-the-next-method]:
-ch13-02-iterators.html#the-iterator-trait-and-the-next-method
 [traits-defining-shared-behavior]:
 ch10-02-traits.html#traits-defining-shared-behavior
 [smart-pointer-deref]: ch15-02-deref.html#treating-smart-pointers-like-regular-references-with-the-deref-trait

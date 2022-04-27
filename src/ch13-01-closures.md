@@ -29,8 +29,7 @@ company’s inventory is represented by an `Inventory` struct that has a field
 named `shirts` that contains a `Vec<ShirtColor>` representing the shirts
 currently in stock. The method `shirt_giveaway` defined on `Inventory` gets the
 optional shirt color preference of the person getting the free shirt, and
-returns the shirt color the person will get. This setup is shown in Listing
-13-x:
+returns the shirt color the person will get. This is shown in Listing 13-1:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,8 +37,7 @@ returns the shirt color the person will get. This setup is shown in Listing
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-x: Framework of the shirt company giveaway
-situation</span>
+<span class="caption">Listing 13-1: Shirt company giveaway</span>
 
 The `store` defined in `main` has two blue shirts and one red shirt in stock.
 Then it calls the `giveaway` method for a user with a preference for a red
@@ -89,15 +87,15 @@ needs closure type annotations too).
 As with variables, we can add type annotations if we want to increase
 explicitness and clarity at the cost of being more verbose than is strictly
 necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-x.
+shown in Listing 13-2.
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-x: Adding optional type annotations of the
+<span class="caption">Listing 13-2: Adding optional type annotations of the
 parameter and return value types in the closure</span>
 
 With type annotations added, the syntax of closures looks more similar to the
@@ -123,7 +121,7 @@ the closures is required for `add_one_v3` and `add_one_v4` to be able to
 compile because the types will be inferred from their usage.
 
 Closure definitions will have one concrete type inferred for each of their
-parameters and for their return value. For instance, Listing 13-x shows the
+parameters and for their return value. For instance, Listing 13-3 shows the
 definition of a short closure that just returns the value it receives as a
 parameter. This closure isn’t very useful except for the purposes of this
 example. Note that we haven’t added any type annotations to the definition: if
@@ -133,16 +131,16 @@ first time and a `u32` the second time, we’ll get an error.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-x: Attempting to call a closure whose types
+<span class="caption">Listing 13-3: Attempting to call a closure whose types
 are inferred with two different types</span>
 
 The compiler gives us this error:
 
 ```console
-{{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
+{{#include ../listings/ch13-functional-features/listing-13-03/output.txt}}
 ```
 
 The first time we call `example_closure` with the `String` value, the compiler
@@ -158,7 +156,7 @@ immutably, borrowing mutably, and taking ownership. The closure will decide
 which of these to use based on what the body of the function does with the
 captured values.
 
-Listing 13-x defines a closure that captures an immutable borrow to the vector
+Listing 13-4 defines a closure that captures an immutable borrow to the vector
 named `list` because it only needs an immutable borrow to print the value. This
 example also illustrates that a variable can bind to a closure definition, and
 the closure can later be called by using the variable name and parentheses as
@@ -167,19 +165,10 @@ if the variable name were a function name:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let list = vec![1, 2, 3];
-    println!("Before defining closure: {:?}", list);
-
-    let only_borrows = || println!("From closure: {:?}", list);
-
-    println!("Before calling closure: {:?}", list);
-    only_borrows();
-    println!("After calling closure: {:?}", list);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-x: Defining and calling a closure that
+<span class="caption">Listing 13-4: Defining and calling a closure that
 captures an immutable borrow</span>
 
 The `list` is still accessible by the code before the closure definition, after
@@ -188,37 +177,25 @@ is called because we can have multiple immutable borrows of `list` at the same
 time. This code compiles, runs, and prints:
 
 ```console
-Before defining closure: [1, 2, 3]
-Before calling closure: [1, 2, 3]
-From closure: [1, 2, 3]
-After calling closure: [1, 2, 3]
+{{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, Listing 13-x changes the closure definition to need a mutable borrow
+Next, Listing 13-5 changes the closure definition to need a mutable borrow
 because the closure body adds an element to the `list` vector:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn main() {
-    let mut list = vec![1, 2, 3];
-    println!("Before defining closure: {:?}", list);
-
-    let mut borrows_mutably = || list.push(7);
-
-    borrows_mutably();
-    println!("After calling closure: {:?}", list);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-x: Defining and calling a closure that
+<span class="caption">Listing 13-5: Defining and calling a closure that
 captures a mutable borrow</span>
 
 This code compiles, runs, and prints:
 
 ```console
-Before defining closure: [1, 2, 3]
-After calling closure: [1, 2, 3, 7]
+{{#include ../listings/ch13-functional-features/listing-13-05/output.txt}}
 ```
 
 Note that there’s no longer a `println!` between the definition and the call of
@@ -268,7 +245,7 @@ traits, in an additive fashion:
    capture anything from their environment implement `Fn`.
 
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-x:
+we used in Listing 13-6:
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -314,45 +291,22 @@ to see how that differs. It takes a closure that implements `FnMut`. The
 closure gets one argument, a reference to the current item in the slice being
 considered, and returns a value of type `K` that can be ordered. This function
 is useful when you want to sort a slice by a particular attribute of each item.
-In Listing 13-x, we have a list of `Rectangle` instances and we use
+In Listing 13-7, we have a list of `Rectangle` instances and we use
 `sort_by_key` to order them by their `width` attribute from low to high:
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let mut list = [
-        Rectangle { width: 10, height: 1 },
-        Rectangle { width: 3, height: 5 },
-        Rectangle { width: 7, height: 12 },
-    ];
-
-    list.sort_by_key(|r| r.width);
-    println!("{:#?}", list);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
 ```
+
+<span class="caption">Listing 13-7: Using `sort_by_key` and a closure to sort a
+list of `Rectangle` instances by their `width` value</span>
 
 This code prints:
 
 ```console
-[
-    Rectangle {
-        width: 3,
-        height: 5,
-    },
-    Rectangle {
-        width: 7,
-        height: 12,
-    },
-    Rectangle {
-        width: 10,
-        height: 1,
-    },
-]
+{{#include ../listings/ch13-functional-features/listing-13-07/output.txt}}
 ```
 
 The reason `sort_by_key` is defined to take an `FnMut` closure is that it calls
@@ -360,34 +314,18 @@ the closure multiple times: once for each item in the slice. The closure `|r|
 r.width` doesn’t capture, mutate, or move out anything from its environment, so
 it meets the trait bound requirements.
 
-In contrast, here’s an example of a closure that only implements `FnOnce`
-because it moves a value out of the environment. The compiler won’t let us use
-this closure with `sort_by_key`:
+In contrast, Listing 13-8 shows an example of a closure that only implements
+`FnOnce` because it moves a value out of the environment. The compiler won’t
+let us use this closure with `sort_by_key`:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore,does_not_compile
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let mut list = [
-        Rectangle { width: 10, height: 1 },
-        Rectangle { width: 3, height: 5 },
-        Rectangle { width: 7, height: 12 },
-    ];
-
-    let mut sort_operations = vec![];
-    let value = String::from("by key called");
-
-    list.sort_by_key(|r| {
-        sort_operations.push(value);
-        r.width
-    });
-    println!("{:#?}", list);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
 ```
+
+<span class="caption">Listing 13-8: Attempting to use an `FnOnce` closure with
+`sort_by_key`</span>
 
 This is a contrived, convoluted way (that doesn’t work) to try and count the
 number of times `sort_by_key` gets called when sorting `list`. This code
@@ -402,19 +340,7 @@ that `value` can’t be moved out of the closure because the closure must
 implement `FnMut`:
 
 ```console
-error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` closure
-  --> src/main.rs:18:30
-   |
-15 |       let value = String::from("by key called");
-   |           ----- captured outer variable
-16 |
-17 |       list.sort_by_key(|r| {
-   |  ______________________-
-18 | |         sort_operations.push(value);
-   | |                              ^^^^^ move occurs because `value` has type `String`, which does not implement the `Copy` trait
-19 | |         r.width
-20 | |     });
-   | |_____- captured by this `FnMut` closure
+{{#include ../listings/ch13-functional-features/listing-13-08/output.txt}}
 ```
 
 The error points to the line in the closure body that moves `value` out of the
@@ -422,32 +348,18 @@ environment. To fix this, we need to change the closure body so that it doesn’
 move values out of the environment. If we’re interested in the number of times
 `sort_by_key` is called, keeping a counter in the environment and incrementing
 its value in the closure body is a more straightforward way to calculate that.
-This closure works with `sort_by_key` because it is only capturing a mutable
-reference to the `num_sort_operations` counter and can therefore be called more
-than once:
+The closure in Listing 13-9 works with `sort_by_key` because it is only
+capturing a mutable reference to the `num_sort_operations` counter and can
+therefore be called more than once:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-fn main() {
-    let mut list = [
-        Rectangle { width: 10, height: 1 },
-        Rectangle { width: 3, height: 5 },
-        Rectangle { width: 7, height: 12 },
-    ];
-
-    let mut num_sort_operations = 0;
-    list.sort_by_key(|r| {
-        num_sort_operations += 1;
-        r.width
-    });
-    println!("{:#?}, sorted in {num_sort_operations} operations", list);
-}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
 ```
+
+<span class="caption">Listing 13-9: Using an `FnMut` closure with `sort_by_key`
+is allowed</span>
 
 The `Fn` traits are important when defining or using functions or types that
 make use of closures. The next section discusses iterators, and many iterator
