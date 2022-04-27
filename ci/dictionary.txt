@@ -60,6 +60,7 @@ BoxMeUp
 BTreeSet
 BuildHasher
 Cacher
+cacher
 Cagain
 callsite
 CamelCase
@@ -429,6 +430,7 @@ SelectBox
 semver
 SemVer
 serde
+ShirtColor
 ShlAssign
 ShrAssign
 shouldn

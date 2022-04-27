@@ -1,0 +1,8 @@
+$ cargo run
+   Compiling closure-example v0.1.0 (file:///projects/closure-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43s
+     Running `target/debug/closure-example`
+Before defining closure: [1, 2, 3]
+Before calling closure: [1, 2, 3]
+From closure: [1, 2, 3]
+After calling closure: [1, 2, 3]

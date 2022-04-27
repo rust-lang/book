@@ -1,12 +1,18 @@
 $ cargo run
-   Compiling closure-example v0.1.0 (file:///projects/closure-example)
-error[E0308]: mismatched types
- --> src/main.rs:5:29
-  |
-5 |     let n = example_closure(5);
-  |                             ^- help: try using a conversion method: `.to_string()`
-  |                             |
-  |                             expected struct `String`, found integer
+   Compiling rectangles v0.1.0 (file:///projects/rectangles)
+error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` closure
+  --> src/main.rs:27:30
+   |
+24 |       let value = String::from("by key called");
+   |           ----- captured outer variable
+25 | 
+26 |       list.sort_by_key(|r| {
+   |  ______________________-
+27 | |         sort_operations.push(value);
+   | |                              ^^^^^ move occurs because `value` has type `String`, which does not implement the `Copy` trait
+28 | |         r.width
+29 | |     });
+   | |_____- captured by this `FnMut` closure
 
-For more information about this error, try `rustc --explain E0308`.
-error: could not compile `closure-example` due to previous error
+For more information about this error, try `rustc --explain E0507`.
+error: could not compile `rectangles` due to previous error

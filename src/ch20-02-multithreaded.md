@@ -214,14 +214,13 @@ so it takes the closure it’s given and gives it to an idle thread in the pool
 to run.
 
 We’ll define the `execute` method on `ThreadPool` to take a closure as a
-parameter. Recall from the [“Storing Closures Using Generic Parameters and the
-`Fn` Traits”][storing-closures-using-generic-parameters-and-the-fn-traits]<!--
-ignore --> section in Chapter 13 that we can take closures as parameters with
-three different traits: `Fn`, `FnMut`, and `FnOnce`. We need to decide which
-kind of closure to use here. We know we’ll end up doing something similar to
-the standard library `thread::spawn` implementation, so we can look at what
-bounds the signature of `thread::spawn` has on its parameter. The documentation
-shows us the following:
+parameter. Recall from the [“Moving Captured Values Out of the Closure and the
+`Fn` Traits”][fn-traits]<!-- ignore --> section in Chapter 13 that we can take
+closures as parameters with three different traits: `Fn`, `FnMut`, and
+`FnOnce`. We need to decide which kind of closure to use here. We know we’ll
+end up doing something similar to the standard library `thread::spawn`
+implementation, so we can look at what bounds the signature of `thread::spawn`
+has on its parameter. The documentation shows us the following:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -679,5 +678,5 @@ of the call to `job()`, meaning other workers cannot receive jobs.
 [creating-type-synonyms-with-type-aliases]:
 ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
 [integer-types]: ch03-02-data-types.html#integer-types
-[storing-closures-using-generic-parameters-and-the-fn-traits]:
-ch13-01-closures.html#storing-closures-using-generic-parameters-and-the-fn-traits
+[fn-traits]:
+ch13-01-closures.html#moving-captured-values-out-of-the-closure-and-the-fn-traits
