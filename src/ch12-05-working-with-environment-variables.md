@@ -3,16 +3,16 @@
 We’ll improve `minigrep` by adding an extra feature: an option for
 case-insensitive searching that the user can turn on via an environment
 variable. We could make this feature a command line option and require that
-users enter it each time they want it to apply, but instead we’ll use an
-environment variable. Doing so allows our users to set the environment variable
-once and have all their searches be case insensitive in that terminal session.
+users enter it each time they want it to apply, but by instead making it an
+environment variable, we allow our users to set the environment variable once
+and have all their searches be case insensitive in that terminal session.
 
 ### Writing a Failing Test for the Case-Insensitive `search` Function
 
-We want to add a new `search_case_insensitive` function that we’ll call when
-the environment variable is on. We’ll continue to follow the TDD process, so
-the first step is again to write a failing test. We’ll add a new test for the
-new `search_case_insensitive` function and rename our old test from
+We first add a new `search_case_insensitive` function that will be called when
+the environment variable has a value. We’ll continue to follow the TDD process,
+so the first step is again to write a failing test. We’ll add a new test for
+the new `search_case_insensitive` function and rename our old test from
 `one_result` to `case_sensitive` to clarify the differences between the two
 tests, as shown in Listing 12-20.
 
@@ -58,12 +58,13 @@ they’ll be the same case when we check whether the line contains the query.
 function to lowercase the query and the line before comparing them</span>
 
 First, we lowercase the `query` string and store it in a shadowed variable with
-the same name. Calling `to_lowercase` on the query is necessary so no matter
-whether the user’s query is `"rust"`, `"RUST"`, `"Rust"`, or `"rUsT"`, we’ll
-treat the query as if it were `"rust"` and be insensitive to the case. While
-`to_lowercase` will handle basic Unicode, it won’t be 100% accurate. If we were
-writing a real application, we’d want to do a bit more work here, but this section
-is about environment variables, not Unicode, so we’ll leave it at that here.
+the same name. Calling `to_lowercase` on the query is necessary so no
+matter whether the user’s query is `"rust"`, `"RUST"`, `"Rust"`, or `"rUsT"`,
+we’ll treat the query as if it were `"rust"` and be insensitive to the case.
+While `to_lowercase` will handle basic Unicode, it won’t be 100% accurate. If
+we were writing a real application, we’d want to do a bit more work here, but
+this section is about environment variables, not Unicode, so we’ll leave it at
+that here.
 
 Note that `query` is now a `String` rather than a string slice, because calling
 `to_lowercase` creates new data rather than referencing existing data. Say the
@@ -73,10 +74,9 @@ query is `"rUsT"`, as an example: that string slice doesn’t contain a lowercas
 need to add an ampersand because the signature of `contains` is defined to take
 a string slice.
 
-Next, we add a call to `to_lowercase` on each `line` before we check whether it
-contains `query` to lowercase all characters. Now that we’ve converted `line`
-and `query` to lowercase, we’ll find matches no matter what the case of the
-query is.
+Next, we add a call to `to_lowercase` on each `line` to lowercase all
+characters. Now that we’ve converted `line` and `query` to lowercase, we’ll
+find matches no matter what the case of the query is.
 
 Let’s see if this implementation passes the tests:
 

@@ -27,16 +27,16 @@ just learning this concept, let’s implement this capability ourselves.
 ### Reading the Argument Values
 
 To enable `minigrep` to read the values of command line arguments we pass to
-it, we’ll need a function provided in Rust’s standard library, which is
-`std::env::args`. This function returns an iterator of the command line
-arguments that were given to `minigrep`. We’ll cover iterators fully in
-[Chapter 13][ch13]<!-- ignore -->. For now, you only need to know two details
-about iterators: iterators produce a series of values, and we can call the
-`collect` method on an iterator to turn it into a collection, such as a vector,
-containing all the elements the iterator produces.
+it, we’ll need the `std::env::args` function provided in Rust’s standard
+library. This function returns an iterator of the command line arguments passed
+to `minigrep`. We’ll cover iterators fully in [Chapter 13][ch13]<!-- ignore
+-->. For now, you only need to know two details about iterators: iterators
+produce a series of values, and we can call the `collect` method on an iterator
+to turn it into a collection, such as a vector, that contains all the elements
+the iterator produces.
 
-Use the code in Listing 12-1 to allow your `minigrep` program to read any
-command line arguments passed to it and then collect the values into a vector.
+The code in Listing 12-1 allows your `minigrep` program to read any command
+line arguments passed to it and then collect the values into a vector.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -95,10 +95,10 @@ chapter, we’ll ignore it and save only the two arguments we need.
 
 ### Saving the Argument Values in Variables
 
-Printing the value of the vector of arguments illustrated that the program is
-able to access the values specified as command line arguments. Now we need to
-save the values of the two arguments in variables so we can use the values
-throughout the rest of the program. We do that in Listing 12-2.
+The program is currently able to access the values specified as command line
+arguments. Now we need to save the values of the two arguments in variables so
+we can use the values throughout the rest of the program. We do that in Listing
+12-2.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -110,8 +110,8 @@ throughout the rest of the program. We do that in Listing 12-2.
 argument and filename argument</span>
 
 As we saw when we printed the vector, the program’s name takes up the first
-value in the vector at `args[0]`, so we’re starting at index `1`. The first
-argument `minigrep` takes is the string we’re searching for, so we put a
+value in the vector at `args[0]`, so we’re starting arguments at index `1`. The
+first argument `minigrep` takes is the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.

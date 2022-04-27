@@ -1,15 +1,13 @@
 ## Refactoring to Improve Modularity and Error Handling
 
 To improve our program, we’ll fix four problems that have to do with the
-program’s structure and how it’s handling potential errors.
-
-First, our `main` function now performs two tasks: it parses arguments and
-reads files. For such a small function, this isn’t a major problem. However, if
-we continue to grow our program inside `main`, the number of separate tasks the
-`main` function handles will increase. As a function gains responsibilities, it
-becomes more difficult to reason about, harder to test, and harder to change
-without breaking one of its parts. It’s best to separate functionality so each
-function is responsible for one task.
+program’s structure and how it’s handling potential errors. First, our `main`
+function now performs two tasks: it parses arguments and reads files. As our
+program grows, the number of separate tasks the `main` function handles will
+increase. As a function gains responsibilities, it becomes more difficult to
+reason about, harder to test, and harder to change without breaking one of its
+parts. It’s best to separate functionality so each function is responsible for
+one task.
 
 This issue also ties into the second problem: although `query` and `filename`
 are configuration variables to our program, variables like `contents` are used
@@ -22,14 +20,14 @@ The third problem is that we’ve used `expect` to print an error message when
 reading the file fails, but the error message just prints `Something went wrong
 reading the file`. Reading a file can fail in a number of ways: for example,
 the file could be missing, or we might not have permission to open it. Right
-now, regardless of the situation, we’d print the `Something went wrong reading
-the file` error message, which wouldn’t give the user any information!
+now, regardless of the situation, we’d print the same error message for
+everything, which wouldn’t give the user any information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
 runs our program without specifying enough arguments, they’ll get an `index out
 of bounds` error from Rust that doesn’t clearly explain the problem. It would
 be best if all the error-handling code were in one place so future maintainers
-had only one place to consult in the code if the error-handling logic needed to
+had only one place to consult the code if the error-handling logic needed to
 change. Having all the error-handling code in one place will also ensure that
 we’re printing messages that will be meaningful to our end users.
 
@@ -39,9 +37,9 @@ Let’s address these four problems by refactoring our project.
 
 The organizational problem of allocating responsibility for multiple tasks to
 the `main` function is common to many binary projects. As a result, the Rust
-community has developed a process to use as a guideline for splitting the
-separate concerns of a binary program when `main` starts getting large. The
-process has the following steps:
+community has developed guidelines for splitting the separate concerns of a
+binary program when `main` starts getting large. This process has the following
+steps:
 
 * Split your program into a *main.rs* and a *lib.rs* and move your program’s
   logic to *lib.rs*.
@@ -61,9 +59,9 @@ should be limited to the following:
 This pattern is about separating concerns: *main.rs* handles running the
 program, and *lib.rs* handles all the logic of the task at hand. Because you
 can’t test the `main` function directly, this structure lets you test all of
-your program’s logic by moving it into functions in *lib.rs*. The only code
-that remains in *main.rs* will be small enough to verify its correctness by
-reading it. Let’s rework our program by following this process.
+your program’s logic by moving it into functions in *lib.rs*. The code that
+remains in *main.rs* will be small enough to verify its correctness by reading
+it. Let’s rework our program by following this process.
 
 #### Extracting the Argument Parser
 
@@ -107,7 +105,7 @@ Another indicator that shows there’s room for improvement is the `config` part
 of `parse_config`, which implies that the two values we return are related and
 are both part of one configuration value. We’re not currently conveying this
 meaning in the structure of the data other than by grouping the two values into
-a tuple; we could put the two values into one struct and give each of the
+a tuple; we’ll instead put the two values into one struct and give each of the
 struct fields a meaningful name. Doing so will make it easier for future
 maintainers of this code to understand how the different values relate to each
 other and what their purpose is.
@@ -125,21 +123,20 @@ instance of a `Config` struct</span>
 
 We’ve added a struct named `Config` defined to have fields named `query` and
 `filename`. The signature of `parse_config` now indicates that it returns a
-`Config` value. In the body of `parse_config`, where we used to return string
-slices that reference `String` values in `args`, we now define `Config` to
-contain owned `String` values. The `args` variable in `main` is the owner of
+`Config` value. In the body of `parse_config`, where we used to return
+string slices that reference `String` values in `args`, we now define `Config`
+to contain owned `String` values. The `args` variable in `main` is the owner of
 the argument values and is only letting the `parse_config` function borrow
 them, which means we’d violate Rust’s borrowing rules if `Config` tried to take
 ownership of the values in `args`.
 
-We could manage the `String` data in a number of different ways, but the
-easiest, though somewhat inefficient, route is to call the `clone` method on
-the values. This will make a full copy of the data for the `Config` instance to
-own, which takes more time and memory than storing a reference to the string
-data. However, cloning the data also makes our code very straightforward
-because we don’t have to manage the lifetimes of the references; in this
-circumstance, giving up a little performance to gain simplicity is a worthwhile
-trade-off.
+There are a number of ways we could manage the `String` data; the easiest,
+though somewhat inefficient, route is to call the `clone` method on the values.
+This will make a full copy of the data for the `Config` instance to own, which
+takes more time and memory than storing a reference to the string data.
+However, cloning the data also makes our code very straightforward because we
+don’t have to manage the lifetimes of the references; in this circumstance,
+giving up a little performance to gain simplicity is a worthwhile trade-off.
 
 > ### The Trade-Offs of Using `clone`
 >
@@ -209,14 +206,13 @@ without any arguments; it will look like this:
 
 The line `index out of bounds: the len is 1 but the index is 1` is an error
 message intended for programmers. It won’t help our end users understand what
-happened and what they should do instead. Let’s fix that now.
+they should do instead. Let’s fix that now.
 
 #### Improving the Error Message
 
 In Listing 12-8, we add a check in the `new` function that will verify that the
 slice is long enough before accessing index 1 and 2. If the slice isn’t long
-enough, the program panics and displays a better error message than the `index
-out of bounds` message.
+enough, the program panics and displays a better error message.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -246,8 +242,8 @@ This output is better: we now have a reasonable error message. However, we also
 have extraneous information we don’t want to give to our users. Perhaps using
 the technique we used in Listing 9-13 isn’t the best to use here: a call to
 `panic!` is more appropriate for a programming problem than a usage problem,
-[as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead, we
-can use the other technique you learned about in Chapter 9—[returning a
+[as discussed in Chapter 9][ch9-error-guidelines]<!-- ignore -->. Instead,
+we’ll use the other technique you learned about in Chapter 9—[returning a
 `Result`][ch9-result]<!-- ignore --> that indicates either success or an error.
 
 #### Returning a `Result` from `new` Instead of Calling `panic!`
@@ -291,9 +287,9 @@ more cleanly in the error case.
 To handle the error case and print a user-friendly message, we need to update
 `main` to handle the `Result` being returned by `Config::new`, as shown in
 Listing 12-10. We’ll also take the responsibility of exiting the command line
-tool with a nonzero error code from `panic!` and implement it by hand. A
-nonzero exit status is a convention to signal to the process that called our
-program that the program exited with an error state.
+tool with a nonzero error code away from `panic!` and instead implement it by
+hand. A nonzero exit status is a convention to signal to the process that
+called our program that the program exited with an error state.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -365,7 +361,7 @@ With the remaining program logic separated into the `run` function, we can
 improve the error handling, as we did with `Config::new` in Listing 12-9.
 Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
-us further consolidate into `main` the logic around handling errors in a
+us further consolidate the logic around handling errors into `main` in a
 user-friendly way. Listing 12-12 shows the changes we need to make to the
 signature and body of `run`.
 
@@ -397,12 +393,12 @@ talked about in [Chapter 9][ch9-question-mark]<!-- ignore -->. Rather than
 `panic!` on an error, `?` will return the error value from the current function
 for the caller to handle.
 
-Third, the `run` function now returns an `Ok` value in the success case. We’ve
-declared the `run` function’s success type as `()` in the signature, which
-means we need to wrap the unit type value in the `Ok` value. This `Ok(())`
-syntax might look a bit strange at first, but using `()` like this is the
-idiomatic way to indicate that we’re calling `run` for its side effects only;
-it doesn’t return a value we need.
+Third, the `run` function now returns an `Ok` value in the success case.
+We’ve declared the `run` function’s success type as `()` in the signature,
+which means we need to wrap the unit type value in the `Ok` value. This
+`Ok(())` syntax might look a bit strange at first, but using `()` like this is
+the idiomatic way to indicate that we’re calling `run` for its side effects
+only; it doesn’t return a value we need.
 
 When you run this code, it will compile but will display a warning:
 
@@ -431,7 +427,7 @@ We use `if let` rather than `unwrap_or_else` to check whether `run` returns an
 return a value that we want to `unwrap` in the same way that `Config::new`
 returns the `Config` instance. Because `run` returns `()` in the success case,
 we only care about detecting an error, so we don’t need `unwrap_or_else` to
-return the unwrapped value because it would only be `()`.
+return the unwrapped value, which would only be `()`.
 
 The bodies of the `if let` and the `unwrap_or_else` functions are the same in
 both cases: we print the error and exit.
@@ -439,8 +435,8 @@ both cases: we print the error and exit.
 ### Splitting Code into a Library Crate
 
 Our `minigrep` project is looking good so far! Now we’ll split the
-*src/main.rs* file and put some code into the *src/lib.rs* file so we can test
-it and have a *src/main.rs* file with fewer responsibilities.
+*src/main.rs* file and put some code into the *src/lib.rs* file. That way we
+can test the code and have a *src/main.rs* file with fewer responsibilities.
 
 Let’s move all the code that isn’t the `main` function from *src/main.rs* to
 *src/lib.rs*:
@@ -465,7 +461,7 @@ compile until we modify *src/main.rs* in Listing 12-14.
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
 `new` method, and on the `run` function. We now have a library crate that has a
-public API that we can test!
+public API we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
 binary crate in *src/main.rs*, as shown in Listing 12-14.
