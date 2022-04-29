@@ -10,6 +10,6 @@ other, more advanced features to show you how to do the following:
 * Install binaries from [crates.io](https://crates.io/)<!-- ignore -->
 * Extend Cargo using custom commands
 
-Cargo can do even more than what we cover in this chapter, so for a full
-explanation of all its features, see [its
+Cargo can do even more than the functionality we cover in this chapter, so for
+a full explanation of all its features, see [its
 documentation](https://doc.rust-lang.org/cargo/).

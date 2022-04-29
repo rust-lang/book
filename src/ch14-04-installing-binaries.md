@@ -1,4 +1,7 @@
-## Installing Binaries from Crates.io with `cargo install`
+<!-- Old link, do not remove -->
+<a id="installing-binaries-from-cratesio-with-cargo-install"></a>
+
+## Installing Binaries with `cargo install`
 
 The `cargo install` command allows you to install and use binary crates
 locally. This isn’t intended to replace system packages; it’s meant to be a
@@ -18,8 +21,8 @@ directory is in your `$PATH` to be able to run programs you’ve installed with
 `cargo install`.
 
 For example, in Chapter 12 we mentioned that there’s a Rust implementation of
-the `grep` tool called `ripgrep` for searching files. If we want to install
-`ripgrep`, we can run the following:
+the `grep` tool called `ripgrep` for searching files. To install `ripgrep`, we
+can run the following:
 
 <!-- manual-regeneration
 cargo install something you don't have, copy relevant output below
