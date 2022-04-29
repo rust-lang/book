@@ -364,8 +364,8 @@ test`, we can publish a particular crate in our workspace by using the `-p` flag
 and specifying the name of the crate we want to publish:
 
 <!-- manual-regeneration
-go to some valid crate, publish a new version
-cargo publish
+cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests
+cargo publish -p add_one
 copy just the relevant lines below
 -->
 
