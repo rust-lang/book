@@ -361,24 +361,7 @@ didn’t run the `adder` crate tests.
 If you publish the crates in the workspace to [crates.io](https://crates.io/),
 each crate in the workspace will need to be published separately. Like `cargo
 test`, we can publish a particular crate in our workspace by using the `-p` flag
-and specifying the name of the crate we want to publish:
-
-<!-- manual-regeneration
-cd listings/ch14-more-about-cargo/no-listing-04-workspace-with-tests
-cargo publish -p add_one
-copy just the relevant lines below
--->
-
-```console
-$ cargo publish -p add_one
-    Updating crates.io index
-   Packaging add_one v0.1.0 (file:///projects/add/add_one)
-   Verifying add_one v0.1.0 (file:///projects/add/add_one)
-   Compiling add_one v0.1.0
-(file:///projects/add/target/package/add_one-0.1.0)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.41s
-   Uploading add_one v0.1.0 (file:///projects/add/add_one)
-```
+and specifying the name of the crate we want to publish.
 
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
