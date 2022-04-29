@@ -89,7 +89,7 @@ Cargo will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as in a release build.
 
 For the full list of configuration options and defaults for each profile, see
-Cargo’s documentation at *https://doc.rust-lang.org/cargo/*.
+Cargo’s documentation at *https://doc.rust-lang.org/cargo/reference/profiles.html*.
 
 ## Publishing a Crate to Crates.io
 
@@ -929,10 +929,9 @@ This output shows `cargo test` only ran the tests for the `add_one` crate and
 didn’t run the `adder` crate tests.
 
 If you publish the crates in the workspace to *https://crates.io/*, each crate
-in the workspace will need to be published separately. The `cargo publish`
-command does not have an `--all` flag or a `-p` flag, so you must change to
-each crate’s directory and run `cargo publish` on each crate in the workspace
-to publish the crates.
+in the workspace will need to be published separately. Like `cargo test`, we
+can publish a particular crate in our workspace by using the `-p` flag and
+specifying the name of the crate we want to publish.
 
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
