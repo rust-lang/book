@@ -2,12 +2,12 @@
 
 The second trait important to the smart pointer pattern is `Drop`, which lets
 you customize what happens when a value is about to go out of scope. You can
-provide an implementation for the `Drop` trait on any type, and the code you
-specify can be used to release resources like files or network connections.
-We’re introducing `Drop` in the context of smart pointers because the
-functionality of the `Drop` trait is almost always used when implementing a
-smart pointer. For example, when a `Box<T>` is dropped it will deallocate the
-space on the heap that the box points to.
+provide an implementation for the `Drop` trait on any type, and that code can
+be used to release resources like files or network connections. We’re
+introducing `Drop` in the context of smart pointers because the functionality
+of the `Drop` trait is almost always used when implementing a smart pointer.
+For example, when a `Box<T>` is dropped it will deallocate the space on the
+heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
 or resources every time they finish using an instance those types. Examples
@@ -18,15 +18,14 @@ this code automatically. As a result, you don’t need to be careful about
 placing cleanup code everywhere in a program that an instance of a particular
 type is finished with—you still won’t leak resources!
 
-Specify the code to run when a value goes out of scope by implementing the
+You specify the code to run when a value goes out of scope by implementing the
 `Drop` trait. The `Drop` trait requires you to implement one method named
 `drop` that takes a mutable reference to `self`. To see when Rust calls `drop`,
 let’s implement `drop` with `println!` statements for now.
 
 Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
-instance goes out of scope. This example demonstrates when Rust runs the `drop`
-function.
+instance goes out of scope, to show when Rust runs the `drop` function.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -42,7 +41,7 @@ scope. We implement the `Drop` trait on `CustomSmartPointer` and provide an
 implementation for the `drop` method that calls `println!`. The body of the
 `drop` function is where you would place any logic that you wanted to run when
 an instance of your type goes out of scope. We’re printing some text here to
-demonstrate when Rust will call `drop`.
+demonstrate visually when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` and then print
 `CustomSmartPointers created`. At the end of `main`, our instances of
@@ -58,9 +57,10 @@ When we run this program, we’ll see the following output:
 
 Rust automatically called `drop` for us when our instances went out of scope,
 calling the code we specified. Variables are dropped in the reverse order of
-their creation, so `d` was dropped before `c`. This example gives you a visual
-guide to how the `drop` method works; usually you would specify the cleanup
-code that your type needs to run rather than a print message.
+their creation, so `d` was dropped before `c`. This example's purpose is to
+give you a visual guide to how the `drop` method works; usually you would
+specify the cleanup code that your type needs to run rather than a print
+message.
 
 ### Dropping a Value Early with `std::mem::drop`
 
@@ -100,18 +100,18 @@ for a function that cleans up an instance. A *destructor* is analogous to a
 particular destructor.
 
 Rust doesn’t let us call `drop` explicitly because Rust would still
-automatically call `drop` on the value at the end of `main`. This would be a
+automatically call `drop` on the value at the end of `main`. This would cause a
 *double free* error because Rust would be trying to clean up the same value
 twice.
 
 We can’t disable the automatic insertion of `drop` when a value goes out of
 scope, and we can’t call the `drop` method explicitly. So, if we need to force
-a value to be cleaned up early, we can use the `std::mem::drop` function.
+a value to be cleaned up early, we use the `std::mem::drop` function.
 
 The `std::mem::drop` function is different from the `drop` method in the `Drop`
-trait. We call it by passing the value we want to force to be dropped early as
-an argument. The function is in the prelude, so we can modify `main` in Listing
-15-15 to call the `drop` function, as shown in Listing 15-16:
+trait. We call it by passing as an argument the value we want to force drop.
+The function is in the prelude, so we can modify `main` in Listing 15-15 to
+call the `drop` function, as shown in Listing 15-16:
 
 <span class="filename">Filename: src/main.rs</span>
 

@@ -1,7 +1,7 @@
 ## Treating Smart Pointers Like Regular References with the `Deref` Trait
 
 Implementing the `Deref` trait allows you to customize the behavior of the
-*dereference operator*, `*` (as opposed to the multiplication or glob
+*dereference operator* `*` (not to be confused with the multiplication or glob
 operator). By implementing `Deref` in such a way that a smart pointer can be
 treated like a regular reference, you can write code that operates on
 references and use that code with smart pointers too.
@@ -19,12 +19,15 @@ or smart pointers.
 > We are focusing this example on `Deref`, so where the data is actually stored
 > is less important than the pointer-like behavior.
 
-### Following the Pointer to the Value with the Dereference Operator
+<!-- Old link, do not remove -->
+<a id="following-the-pointer-to-the-value-with-the-dereference-operator"></a>
+
+### Following the Pointer to the Value
 
 A regular reference is a type of pointer, and one way to think of a pointer is
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an `i32` value and then use the dereference operator to follow the
-reference to the data:
+reference to the value:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -35,12 +38,12 @@ reference to the data:
 <span class="caption">Listing 15-6: Using the dereference operator to follow a
 reference to an `i32` value</span>
 
-The variable `x` holds an `i32` value, `5`. We set `y` equal to a reference to
+The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to
 `x`. We can assert that `x` is equal to `5`. However, if we want to make an
 assertion about the value in `y`, we have to use `*y` to follow the reference
-to the value it’s pointing to (hence *dereference*). Once we dereference `y`,
-we have access to the integer value `y` is pointing to that we can compare with
-`5`.
+to the value it’s pointing to (hence *dereference*) so the compiler can compare
+the actual value. Once we dereference `y`, we have access to the integer value
+`y` is pointing to that we can compare with `5`.
 
 If we tried to write `assert_eq!(5, y);` instead, we would get this compilation
 error:
@@ -56,7 +59,9 @@ to the value it’s pointing to.
 ### Using `Box<T>` Like a Reference
 
 We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
-reference; the dereference operator will work as shown in Listing 15-7:
+reference; the dereference operator used on the `Box<T>` in Listing 15-7
+functions in the same way as the dereference operator used on the reference in
+Listing 15-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -139,13 +144,13 @@ contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 <span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
 
-The `type Target = T;` syntax defines an associated type for the `Deref` trait
-to use. Associated types are a slightly different way of declaring a generic
-parameter, but you don’t need to worry about them for now; we’ll cover them in
-more detail in Chapter 19.
+The `type Target = T;` syntax defines an associated type for the `Deref`
+trait to use. Associated types are a slightly different way of declaring a
+generic parameter, but you don’t need to worry about them for now; we’ll cover
+them in more detail in Chapter 19.
 
 We fill in the body of the `deref` method with `&self.0` so `deref` returns a
-reference to the value we want to access with the `*` operator. Recall from the
+reference to the value we want to access with the `*` operator; recall from the
 [“Using Tuple Structs without Named Fields to Create Different
 Types”][tuple-structs]<!-- ignore --> section of Chapter 5 that `.0` accesses
 the first value in a tuple struct. The `main` function in Listing 15-9 that
@@ -169,12 +174,12 @@ call the `deref` method. This Rust feature lets us write code that functions
 identically whether we have a regular reference or a type that implements
 `Deref`.
 
-The reason the `deref` method returns a reference to a value, and that the plain
-dereference outside the parentheses in `*(y.deref())` is still necessary, is the
-ownership system. If the `deref` method returned the value directly instead of
-a reference to the value, the value would be moved out of `self`. We don’t want
-to take ownership of the inner value inside `MyBox<T>` in this case or in most
-cases where we use the dereference operator.
+The reason the `deref` method returns a reference to a value, and that the
+plain dereference outside the parentheses in `*(y.deref())` is still necessary,
+is to do with the ownership system. If the `deref` method returned the value
+directly instead of a reference to the value, the value would be moved out of
+`self`. We don’t want to take ownership of the inner value inside `MyBox<T>` in
+this case or in most cases where we use the dereference operator.
 
 Note that the `*` operator is replaced with a call to the `deref` method and
 then a call to the `*` operator just once, each time we use a `*` in our code.
@@ -184,15 +189,15 @@ Listing 15-9.
 
 ### Implicit Deref Coercions with Functions and Methods
 
-*Deref coercion* is a convenience that Rust performs on arguments to functions
-and methods. Deref coercion works only on types that implement the `Deref`
-trait. Deref coercion converts a reference to such a type into a reference to
-another type. For example, deref coercion can convert `&String` to `&str`
-because `String` implements the `Deref` trait such that it returns `&str`.
-Deref coercion happens automatically when we pass a reference to a particular
-type’s value as an argument to a function or method that doesn’t match the
-parameter type in the function or method definition. A sequence of calls to the
-`deref` method converts the type we provided into the type the parameter needs.
+*Deref coercion* converts a reference to a type that implements the `Deref`
+trait into a reference to another type. For example, deref coercion can convert
+`&String` to `&str` because `String` implements the `Deref` trait such that it
+returns `&str`. Deref conversion is a convenience Rust performs on arguments to
+functions and methods, and works only on types that implement the `Deref`
+trait. It happens automatically when we pass a reference to a particular type’s
+value as an argument to a function or method that doesn’t match the parameter
+type in the function or method definition. A sequence of calls to the `deref`
+method converts the type we provided into the type the parameter needs.
 
 Deref coercion was added to Rust so that programmers writing function and
 method calls don’t need to add as many explicit references and dereferences
@@ -249,7 +254,7 @@ didn’t have deref coercion</span>
 
 The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and
 `[..]` take a string slice of the `String` that is equal to the whole string to
-match the signature of `hello`. The code without deref coercions is harder to
+match the signature of `hello`. This code without deref coercions is harder to
 read, write, and understand with all of these symbols involved. Deref coercion
 allows Rust to handle these conversions for us automatically.
 
@@ -272,10 +277,10 @@ cases:
 * From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
 * From `&mut T` to `&U` when `T: Deref<Target=U>`
 
-The first two cases are the same except for mutability. The first case states
-that if you have a `&T`, and `T` implements `Deref` to some type `U`, you can
-get a `&U` transparently. The second case states that the same deref coercion
-happens for mutable references.
+The first two cases are the same as each other except that the second
+implements mutability. The first case states that if you have a `&T`, and `T`
+implements `Deref` to some type `U`, you can get a `&U` transparently. The
+second case states that the same deref coercion happens for mutable references.
 
 The third case is trickier: Rust will also coerce a mutable reference to an
 immutable one. But the reverse is *not* possible: immutable references will

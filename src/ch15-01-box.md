@@ -30,8 +30,8 @@ Chapter 17!
 
 ### Using a `Box<T>` to Store Data on the Heap
 
-Before we discuss this use case for `Box<T>`, we’ll cover the syntax and how to
-interact with values stored within a `Box<T>`.
+Before we discuss the heap storage use case for `Box<T>`, we’ll cover the
+syntax and how to interact with values stored within a `Box<T>`.
 
 Listing 15-1 shows how to use a box to store an `i32` value on the heap:
 
@@ -49,8 +49,8 @@ value `5`, which is allocated on the heap. This program will print `b = 5`; in
 this case, we can access the data in the box similar to how we would if this
 data were on the stack. Just like any owned value, when a box goes out of
 scope, as `b` does at the end of `main`, it will be deallocated. The
-deallocation happens for the box (stored on the stack) and the data it points
-to (stored on the heap).
+deallocation happens both for the box (stored on the stack) and the data it
+points to (stored on the heap).
 
 Putting a single value on the heap isn’t very useful, so you won’t use boxes by
 themselves in this way very often. Having values like a single `i32` on the
@@ -60,12 +60,12 @@ wouldn’t be allowed to if we didn’t have boxes.
 
 ### Enabling Recursive Types with Boxes
 
-At compile time, Rust needs to know how much space a type takes up. One type
-whose size can’t be known at compile time is a *recursive type*, where a value
-can have as part of itself another value of the same type. Because this nesting
-of values could theoretically continue infinitely, Rust doesn’t know how much
-space a value of a recursive type needs. However, boxes have a known size, so
-by inserting a box in a recursive type definition, you can have recursive types.
+A value of *recursive type* can have another value of the same type as part of
+itself. Recursive types pose an issue because at compile time Rust needs to
+know how much space a type takes up. However, the nesting of values of
+recursive types could theoretically continue infinitely, so Rust can’t know how
+much space the value needs. Because boxes have a known size, we can enable
+recursive types by inserting a box in the recursive type definition.
 
 As an example of a recursive type, let’s explore the *cons list*. This is a data
 type commonly found in functional programming languages. The cons list type
@@ -76,14 +76,17 @@ more complex situations involving recursive types.
 #### More Information About the Cons List
 
 A *cons list* is a data structure that comes from the Lisp programming language
-and its dialects. In Lisp, the `cons` function (short for “construct function”)
-constructs a new pair from its two arguments, which usually are a single value
-and another pair. These pairs containing pairs form a list.
+and its dialects and is made up of nested pairs. Its name comes from the `cons`
+function (short for “construct function”) in Lisp that constructs a new pair
+from its two arguments. By calling `cons` on a pair consisting of a value and
+another pair, we can construct cons lists made up of recursive pairs.
 
-The cons function concept has made its way into more general functional
-programming jargon: “to cons *x* onto *y*” informally means to construct a new
-container instance by putting the element *x* at the start of this new
-container, followed by the container *y*.
+For example, here's a pseudocode representation of a cons list containing the
+list 1, 2, 3 with each pair in parentheses:
+
+```text
+(1, (2, (3, Nil)))
+```
 
 Each item in a cons list contains two elements: the value of the current item
 and the next item. The last item in the list contains only a value called `Nil`
@@ -92,12 +95,11 @@ function. The canonical name to denote the base case of the recursion is `Nil`.
 Note that this is not the same as the “null” or “nil” concept in Chapter 6,
 which is an invalid or absent value.
 
-Although functional programming languages use cons lists frequently, the cons
-list isn’t a commonly used data structure in Rust. Most of the time when you
-have a list of items in Rust, `Vec<T>` is a better choice to use. Other, more
-complex recursive data types *are* useful in various situations, but by
-starting with the cons list, we can explore how boxes let us define a recursive
-data type without much distraction.
+The cons list isn’t a commonly used data structure in Rust. Most of the time
+when you have a list of items in Rust, `Vec<T>` is a better choice to use.
+Other, more complex recursive data types *are* useful in various situations,
+but by starting with the cons list in this chapter, we can explore how boxes
+let us define a recursive data type without much distraction.
 
 Listing 15-2 contains an enum definition for a cons list. Note that this code
 won’t compile yet because the `List` type doesn’t have a known size, which
@@ -147,9 +149,8 @@ a recursive enum</span>
 The error shows this type “has infinite size.” The reason is that we’ve defined
 `List` with a variant that is recursive: it holds another value of itself
 directly. As a result, Rust can’t figure out how much space it needs to store a
-`List` value. Let’s break down why we get this error a bit. First, let’s look
-at how Rust decides how much space it needs to store a value of a non-recursive
-type.
+`List` value. Let’s break down why we get this error. First, we'll look at how
+Rust decides how much space it needs to store a value of a non-recursive type.
 
 #### Computing the Size of a Non-Recursive Type
 
@@ -183,9 +184,8 @@ variant. The `Cons` variant holds a value of type `i32` and a value of type
 
 #### Using `Box<T>` to Get a Recursive Type with a Known Size
 
-Rust can’t figure out how much space to allocate for recursively defined types,
-so the compiler gives the error in Listing 15-4. But the error does include
-this helpful suggestion:
+Because Rust can’t figure out how much space to allocate for recursively
+defined types, the compiler gives an error with this helpful suggestion:
 
 <!-- manual-regeneration
 after doing automatic regeneration, look at listings/ch15-smart-pointers/listing-15-03/output.txt and copy the relevant line
@@ -199,7 +199,7 @@ help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` repre
 ```
 
 In this suggestion, “indirection” means that instead of storing a value
-directly, we’ll change the data structure to store the value indirectly by
+directly, we should change the data structure to store the value indirectly by
 storing a pointer to the value instead.
 
 Because a `Box<T>` is a pointer, Rust always knows how much space a `Box<T>`
@@ -207,8 +207,8 @@ needs: a pointer’s size doesn’t change based on the amount of data it’s
 pointing to. This means we can put a `Box<T>` inside the `Cons` variant instead
 of another `List` value directly. The `Box<T>` will point to the next `List`
 value that will be on the heap rather than inside the `Cons` variant.
-Conceptually, we still have a list, created with lists “holding” other lists,
-but this implementation is now more like placing the items next to one another
+Conceptually, we still have a list, created with lists holding other lists, but
+this implementation is now more like placing the items next to one another
 rather than inside one another.
 
 We can change the definition of the `List` enum in Listing 15-2 and the usage
@@ -223,7 +223,7 @@ of the `List` in Listing 15-3 to the code in Listing 15-5, which will compile:
 <span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
 order to have a known size</span>
 
-The `Cons` variant will need the size of an `i32` plus the space to store the
+The `Cons` variant needs the size of an `i32` plus the space to store the
 box’s pointer data. The `Nil` variant stores no values, so it needs less space
 than the `Cons` variant. We now know that any `List` value will take up the
 size of an `i32` plus the size of a box’s pointer data. By using a box, we’ve
@@ -238,7 +238,7 @@ because `Cons` holds a `Box`</span>
 
 Boxes provide only the indirection and heap allocation; they don’t have any
 other special capabilities, like those we’ll see with the other smart pointer
-types. They also don’t have any performance overhead that these special
+types. They also don’t have the performance overhead that these special
 capabilities incur, so they can be useful in cases like the cons list where the
 indirection is the only feature we need. We’ll look at more use cases for boxes
 in Chapter 17, too.
@@ -246,9 +246,9 @@ in Chapter 17, too.
 The `Box<T>` type is a smart pointer because it implements the `Deref` trait,
 which allows `Box<T>` values to be treated like references. When a `Box<T>`
 value goes out of scope, the heap data that the box is pointing to is cleaned
-up as well because of the `Drop` trait implementation. Let’s explore these two
-traits in more detail. These two traits will be even more important to the
-functionality provided by the other smart pointer types we’ll discuss in the
-rest of this chapter.
+up as well because of the `Drop` trait implementation. These two traits will be
+even more important to the functionality provided by the other smart pointer
+types we’ll discuss in the rest of this chapter. Let’s explore these two traits
+in more detail.
 
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

@@ -47,15 +47,15 @@ reference counts are at various points in this process.
 values pointing to each other</span>
 
 We create an `Rc<List>` instance holding a `List` value in the variable `a`
-with an initial list of `5, Nil`. We then create an `Rc<List>` instance
-holding another `List` value in the variable `b` that contains the value 10 and
-points to the list in `a`.
+with an initial list of `5, Nil`. We then create an `Rc<List>` instance holding
+another `List` value in the variable `b` that contains the value 10 and points
+to the list in `a`.
 
-We modify `a` so it points to `b` instead of `Nil`, creating a cycle. We
-do that by using the `tail` method to get a reference to the
-`RefCell<Rc<List>>` in `a`, which we put in the variable `link`. Then we use
-the `borrow_mut` method on the `RefCell<Rc<List>>` to change the value inside
-from an `Rc<List>` that holds a `Nil` value to the `Rc<List>` in `b`.
+We modify `a` so it points to `b` instead of `Nil`, creating a cycle. We do
+that by using the `tail` method to get a reference to the `RefCell<Rc<List>>`
+in `a`, which we put in the variable `link`. Then we use the `borrow_mut`
+method on the `RefCell<Rc<List>>` to change the value inside from an `Rc<List>`
+that holds a `Nil` value to the `Rc<List>` in `b`.
 
 When we run this code, keeping the last `println!` commented out for the
 moment, we’ll get this output:
@@ -84,11 +84,12 @@ If you uncomment the last `println!` and run the program, Rust will try to
 print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
 overflows the stack.
 
-In this case, right after we create the reference cycle, the program ends. The
-consequences of this cycle aren’t very dire. However, if a more complex program
-allocated lots of memory in a cycle and held onto it for a long time, the
-program would use more memory than it needed and might overwhelm the system,
-causing it to run out of available memory.
+Compared to a real-world program, the consequences creating a reference cycle
+in this example aren’t very dire: right after we create the reference cycle,
+the program ends. However, if a more complex program allocated lots of memory
+in a cycle and held onto it for a long time, the program would use more memory
+than it needed and might overwhelm the system, causing it to run out of
+available memory.
 
 Creating reference cycles is not easily done, but it’s not impossible either.
 If you have `RefCell<T>` values that contain `Rc<T>` values or similar nested
@@ -114,17 +115,18 @@ So far, we’ve demonstrated that calling `Rc::clone` increases the
 `strong_count` of an `Rc<T>` instance, and an `Rc<T>` instance is only cleaned
 up if its `strong_count` is 0. You can also create a *weak reference* to the
 value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
-reference to the `Rc<T>`. When you call `Rc::downgrade`, you get a smart
-pointer of type `Weak<T>`. Instead of increasing the `strong_count` in the
-`Rc<T>` instance by 1, calling `Rc::downgrade` increases the `weak_count` by 1.
-The `Rc<T>` type uses `weak_count` to keep track of how many `Weak<T>`
-references exist, similar to `strong_count`. The difference is the `weak_count`
-doesn’t need to be 0 for the `Rc<T>` instance to be cleaned up.
+reference to the `Rc<T>`. Strong references are how you can share ownership of
+an `Rc<T>` instance. Weak references don’t express an ownership relationship,
+and their count doesn't affect when an `Rc<T>` instance is cleaned up. They
+won’t cause a reference cycle because any cycle involving some weak references
+will be broken once the strong reference count of values involved is 0.
 
-Strong references are how you can share ownership of an `Rc<T>` instance. Weak
-references don’t express an ownership relationship. They won’t cause a
-reference cycle because any cycle involving some weak references will be broken
-once the strong reference count of values involved is 0.
+When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
+Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
+`Rc::downgrade` increases the `weak_count` by 1. The `Rc<T>` type uses
+`weak_count` to keep track of how many `Weak<T>` references exist, similar to
+`strong_count`. The difference is the `weak_count` doesn’t need to be 0 for the
+`Rc<T>` instance to be cleaned up.
 
 Because the value that `Weak<T>` references might have been dropped, to do
 anything with the value that a `Weak<T>` is pointing to, you must make sure the
@@ -214,9 +216,9 @@ node will have a way to refer to its parent, `branch`:
 <span class="caption">Listing 15-28: A `leaf` node with a weak reference to its
 parent node `branch`</span>
 
-Creating the `leaf` node looks similar to how creating the `leaf` node looked
-in Listing 15-27 with the exception of the `parent` field: `leaf` starts out
-without a parent, so we create a new, empty `Weak<Node>` reference instance.
+Creating the `leaf` node looks similar to Listing 15-27 with the exception of
+the `parent` field: `leaf` starts out without a parent, so we create a new,
+empty `Weak<Node>` reference instance.
 
 At this point, when we try to get a reference to the parent of `leaf` by using
 the `upgrade` method, we get a `None` value. We see this in the output from the

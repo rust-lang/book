@@ -4,11 +4,13 @@
 data even when there are immutable references to that data; normally, this
 action is disallowed by the borrowing rules. To mutate data, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. We haven’t yet covered unsafe code; we will in Chapter
-19. We can use types that use the interior mutability pattern when we can
-ensure that the borrowing rules will be followed at runtime, even though the
-compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
-safe API, and the outer type is still immutable.
+mutation and borrowing. We haven’t yet covered unsafe code that indicates we're
+checking the rules manually instead of the compiler checking them for us; we
+will discuss unsafe code more in Chapter 19. We can use types that use the
+interior mutability pattern only when we can ensure that the borrowing rules
+will be followed at runtime, even though the compiler can’t guarantee that. The
+`unsafe` code involved is then wrapped in a safe API, and the outer type is
+still immutable.
 
 Let’s explore this concept by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
@@ -19,8 +21,8 @@ Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
 it holds. So, what makes `RefCell<T>` different from a type like `Box<T>`?
 Recall the borrowing rules you learned in Chapter 4:
 
-* At any given time, you can have *either* (but not both of) one mutable
-  reference or any number of immutable references.
+* At any given time, you can have *either* (but not both) one mutable reference
+  or any number of immutable references.
 * References must always be valid.
 
 With references and `Box<T>`, the borrowing rules’ invariants are enforced at
@@ -35,11 +37,11 @@ reasons, checking the borrowing rules at compile time is the best choice in the
 majority of cases, which is why this is Rust’s default.
 
 The advantage of checking the borrowing rules at runtime instead is that
-certain memory-safe scenarios are then allowed, whereas they are disallowed by
-the compile-time checks. Static analysis, like the Rust compiler, is inherently
-conservative. Some properties of code are impossible to detect by analyzing the
-code: the most famous example is the Halting Problem, which is beyond the scope
-of this book but is an interesting topic to research.
+certain memory-safe scenarios are then allowed, where they would’ve been
+disallowed by the compile-time checks. Static analysis, like the Rust compiler,
+is inherently conservative. Some properties of code are impossible to detect by
+analyzing the code: the most famous example is the Halting Problem, which is
+beyond the scope of this book but is an interesting topic to research.
 
 Because some analysis is impossible, if the Rust compiler can’t be sure the
 code complies with the ownership rules, it might reject a correct program; in
@@ -88,7 +90,7 @@ If you tried to compile this code, you’d get the following error:
 However, there are situations in which it would be useful for a value to mutate
 itself in its methods but appear immutable to other code. Code outside the
 value’s methods would not be able to mutate the value. Using `RefCell<T>` is
-one way to get the ability to have interior mutability. But `RefCell<T>`
+one way to get the ability to have interior mutability, but `RefCell<T>`
 doesn’t get around the borrowing rules completely: the borrow checker in the
 compiler allows this interior mutability, and the borrowing rules are checked
 at runtime instead. If you violate the rules, you’ll get a `panic!` instead of
@@ -99,8 +101,12 @@ an immutable value and see why that is useful.
 
 #### A Use Case for Interior Mutability: Mock Objects
 
-A *test double* is the general programming concept for a type used in place of
-another type during testing. *Mock objects* are specific types of test doubles
+Sometimes during testing a programmer will use a type in place of another type,
+in order to observe particular behavior and assert it's implemented correctly.
+This placeholder type is called a *test double*. Think of it in the sense of a
+"stunt double" in filmmaking, where a person steps in and substitutes for an
+actor to do a particular tricky scene. Test doubles stand in for other types
+when we're running tests. *Mock objects* are specific types of test doubles
 that record what happens during a test so you can assert that the correct
 actions took place.
 
@@ -209,9 +215,9 @@ instance around the empty vector.
 For the implementation of the `send` method, the first parameter is still an
 immutable borrow of `self`, which matches the trait definition. We call
 `borrow_mut` on the `RefCell<Vec<String>>` in `self.sent_messages` to get a
-mutable reference to the value inside the `RefCell<Vec<String>>`, which is
-the vector. Then we can call `push` on the mutable reference to the vector to
-keep track of the messages sent during the test.
+mutable reference to the value inside the `RefCell<Vec<String>>`, which is the
+vector. Then we can call `push` on the mutable reference to the vector to keep
+track of the messages sent during the test.
 
 The last change we have to make is in the assertion: to see how many items are
 in the inner vector, we call `borrow` on the `RefCell<Vec<String>>` to get an
@@ -265,15 +271,16 @@ Notice that the code panicked with the message `already borrowed:
 BorrowMutError`. This is how `RefCell<T>` handles violations of the borrowing
 rules at runtime.
 
-Catching borrowing errors at runtime rather than compile time means that you
-would find a mistake in your code later in the development process and possibly
-not until your code was deployed to production. Also, your code would incur a
-small runtime performance penalty as a result of keeping track of the borrows
-at runtime rather than compile time. However, using `RefCell<T>` makes it
-possible to write a mock object that can modify itself to keep track of the
-messages it has seen while you’re using it in a context where only immutable
-values are allowed. You can use `RefCell<T>` despite its trade-offs to get more
-functionality than regular references provide.
+Choosing to catch borrowing errors at runtime rather than compile time, as
+we've done here, means you'd potentially be finding mistakes in your code later
+in the development process: possibly not until your code was deployed to
+production. Also, your code would incur a small runtime performance penalty as
+a result of keeping track of the borrows at runtime rather than compile time.
+However, using `RefCell<T>` makes it possible to write a mock object that can
+modify itself to keep track of the messages it has seen while you’re using it
+in a context where only immutable values are allowed. You can use `RefCell<T>`
+despite its trade-offs to get more functionality than regular references
+provide.
 
 ### Having Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
 
@@ -309,8 +316,8 @@ than transferring ownership from `value` to `a` or having `a` borrow from
 We wrap the list `a` in an `Rc<T>` so when we create lists `b` and `c`, they
 can both refer to `a`, which is what we did in Listing 15-18.
 
-After we’ve created the lists in `a`, `b`, and `c`, we add 10 to the value in
-`value`. We do this by calling `borrow_mut` on `value`, which uses the
+After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
+value in `value`. We do this by calling `borrow_mut` on `value`, which uses the
 automatic dereferencing feature we discussed in Chapter 5 (see the section
 [“Where’s the `->` Operator?”][wheres-the---operator]<!-- ignore -->) to
 dereference the `Rc<T>` to the inner `RefCell<T>` value. The `borrow_mut`
