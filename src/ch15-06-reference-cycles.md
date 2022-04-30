@@ -27,7 +27,7 @@ starting with the definition of the `List` enum and a `tail` method in Listing
 We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>`, meaning that
 instead of having the ability to modify the `i32` value as we did in Listing
-15-24, we want to modify which `List` value a `Cons` variant is pointing to.
+15-24, we want to modify the `List` value a `Cons` variant is pointing to.
 We’re also adding a `tail` method to make it convenient for us to access the
 second item if we have a `Cons` variant.
 
