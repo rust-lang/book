@@ -1,11 +1,12 @@
 ## Shared-State Concurrency
 
 Message passing is a fine way of handling concurrency, but it’s not the only
-one. Consider this part of the slogan from the Go language documentation again:
-“do not communicate by sharing memory.”
+one. Another method would be for multiple threads to access the same shared
+data. Consider this part of the slogan from the Go language documentation
+again: “do not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
-message-passing enthusiasts not use it and do the opposite instead?
+message-passing enthusiasts caution not to use memory sharing?
 
 In a way, channels in any programming language are similar to single ownership,
 because once you transfer a value down a channel, you should no longer use that
@@ -81,10 +82,10 @@ to `lock` *returns* a smart pointer called `MutexGuard`, wrapped in a
 `LockResult` that we handled with the call to `unwrap`. The `MutexGuard` smart
 pointer implements `Deref` to point at our inner data; the smart pointer also
 has a `Drop` implementation that releases the lock automatically when a
-`MutexGuard` goes out of scope, which happens at the end of the inner scope in
-Listing 16-12. As a result, we don’t risk forgetting to release the lock and
-blocking the mutex from being used by other threads because the lock release
-happens automatically.
+`MutexGuard` goes out of scope, which happens at the end of the inner scope. As
+a result, we don’t risk forgetting to release the lock and blocking the mutex
+from being used by other threads, because the lock release happens
+automatically.
 
 After dropping the lock, we can print the mutex value and see that we were able
 to change the inner `i32` to 6.
@@ -106,11 +107,11 @@ a compiler error, and we’ll use that error to learn more about using
 <span class="caption">Listing 16-13: Ten threads each increment a counter
 guarded by a `Mutex<T>`</span>
 
-We create a `counter` variable to hold an `i32` inside a `Mutex<T>`, as we
-did in Listing 16-12. Next, we create 10 threads by iterating over a range
-of numbers. We use `thread::spawn` and give all the threads the same closure,
-one that moves the counter into the thread, acquires a lock on the `Mutex<T>`
-by calling the `lock` method, and then adds 1 to the value in the mutex. When a
+We create a `counter` variable to hold an `i32` inside a `Mutex<T>`, as we did
+in Listing 16-12. Next, we create 10 threads by iterating over a range of
+numbers. We use `thread::spawn` and give all the threads the same closure: one
+that moves the counter into the thread, acquires a lock on the `Mutex<T>` by
+calling the `lock` method, and then adds 1 to the value in the mutex. When a
 thread finishes running its closure, `num` will go out of scope and release the
 lock so another thread can acquire it.
 
@@ -126,7 +127,7 @@ We hinted that this example wouldn’t compile. Now let’s find out why!
 ```
 
 The error message states that the `counter` value was moved in the previous
-iteration of the loop. So Rust is telling us that we can’t move the ownership
+iteration of the loop. Rust is telling us that we can’t move the ownership
 of lock `counter` into multiple threads. Let’s fix the compiler error with a
 multiple-ownership method we discussed in Chapter 15.
 
@@ -153,9 +154,9 @@ a lot.
 {{#include ../listings/ch16-fearless-concurrency/listing-16-14/output.txt}}
 ```
 
-Wow, that error message is very wordy! Here’s the important part to focus
-on: `` `Rc<Mutex<i32>>` cannot be sent between threads safely ``. The compiler
-is also telling us the reason why: ``the trait `Send` is not implemented for
+Wow, that error message is very wordy! Here’s the important part to focus on:
+`` `Rc<Mutex<i32>>` cannot be sent between threads safely ``. The compiler is
+also telling us the reason why: ``the trait `Send` is not implemented for
 `Rc<Mutex<i32>>` ``. We’ll talk about `Send` in the next section: it’s one of
 the traits that ensures the types we use with threads are meant for use in
 concurrent situations.

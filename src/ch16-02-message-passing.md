@@ -6,28 +6,28 @@ containing data. Here’s the idea in a slogan from [the Go language
 documentation](https://golang.org/doc/effective_go.html#concurrency):
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
-One major tool Rust has for accomplishing message-sending concurrency is the
-*channel*, a programming concept that Rust’s standard library provides an
-implementation of. You can imagine a channel in programming as being like a
-channel of water, such as a stream or a river. If you put something like a
-rubber duck or boat into a stream, it will travel downstream to the end of the
-waterway.
+To accomplish message-sending concurrency, Rust's standard library provides an
+implementation of *channels*. A channel is a general programming concept by
+which data is sent from one thread to another.
 
-A channel in programming has two halves: a transmitter and a receiver. The
-transmitter half is the upstream location where you put rubber ducks into the
-river, and the receiver half is where the rubber duck ends up downstream. One
-part of your code calls methods on the transmitter with the data you want to
-send, and another part checks the receiving end for arriving messages. A
-channel is said to be *closed* if either the transmitter or receiver half is
-dropped.
+You can imagine a channel in programming as being like a directional channel of
+water, such as a stream or a river. If you put something like a rubber duck
+into a river, it will travel downstream to the end of the waterway.
+
+A channel has two halves: a transmitter and a receiver. The transmitter half is
+the upstream location where you put rubber ducks into the river, and the
+receiver half is where the rubber duck ends up downstream. One part of your
+code calls methods on the transmitter with the data you want to send, and
+another part checks the receiving end for arriving messages. A channel is said
+to be *closed* if either the transmitter or receiver half is dropped.
 
 Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
 print them out. We’ll be sending simple values between threads using a channel
 to illustrate the feature. Once you’re familiar with the technique, you could
-use channels to implement a chat system or a system where many threads perform
-parts of a calculation and send the parts to one thread that aggregates the
-results.
+use channels for any threads that needs to communicate between each other, such
+as a chat system or a system where many threads perform parts of a calculation
+and send the parts to one thread that aggregates the results.
 
 First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
@@ -52,13 +52,14 @@ producer for now, but we’ll add multiple producers when we get this example
 working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end and the second element is the receiving end. The abbreviations `tx`
-and `rx` are traditionally used in many fields for *transmitter* and *receiver*
-respectively, so we name our variables as such to indicate each end. We’re
-using a `let` statement with a pattern that destructures the tuples; we’ll
-discuss the use of patterns in `let` statements and destructuring in Chapter
-18. Using a `let` statement this way is a convenient approach to extract the
-pieces of the tuple returned by `mpsc::channel`.
+sending end--the transmitter--and the second element is the receiving end--the
+receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
+for *transmitter* and *receiver* respectively, so we name our variables as such
+to indicate each end. We’re using a `let` statement with a pattern that
+destructures the tuples; we’ll discuss the use of patterns in `let` statements
+and destructuring in Chapter 18. For now, know that using a `let` statement
+this way is a convenient approach to extract the pieces of the tuple returned
+by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
 string so the spawned thread is communicating with the main thread, as shown in
@@ -76,19 +77,17 @@ sending a chat message from one thread to another.
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
-thread needs to own the transmitting end of the channel to be able to send
-messages through the channel.
-
-The transmitting end has a `send` method that takes the value we want to send.
-The `send` method returns a `Result<T, E>` type, so if the receiving end has
+thread needs to own the transmitter to be able to send messages through the
+channel. The transmitter has a `send` method that takes the value we want to
+send. The `send` method returns a `Result<T, E>` type, so if the receiver has
 already been dropped and there’s nowhere to send a value, the send operation
 will return an error. In this example, we’re calling `unwrap` to panic in case
 of an error. But in a real application, we would handle it properly: return to
 Chapter 9 to review strategies for proper error handling.
 
-In Listing 16-8, we’ll get the value from the receiving end of the channel in
-the main thread. This is like retrieving the rubber duck from the water at the
-end of the river or like getting a chat message.
+In Listing 16-8, we’ll get the value from the receiver in the main thread. This
+is like retrieving the rubber duck from the water at the end of the river or
+receiving a chat message.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -99,12 +98,11 @@ end of the river or like getting a chat message.
 <span class="caption">Listing 16-8: Receiving the value “hi” in the main thread
 and printing it</span>
 
-The receiving end of a channel has two useful methods: `recv` and `try_recv`.
-We’re using `recv`, short for *receive*, which will block the main thread’s
-execution and wait until a value is sent down the channel. Once a value is
-sent, `recv` will return it in a `Result<T, E>`. When the sending end of the
-channel closes, `recv` will return an error to signal that no more values will
-be coming.
+The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
+short for *receive*, which will block the main thread’s execution and wait
+until a value is sent down the channel. Once a value is sent, `recv` will
+return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
+an error to signal that no more values will be coming.
 
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available and an `Err`
@@ -215,7 +213,7 @@ the spawned thread.
 Earlier we mentioned that `mpsc` was an acronym for *multiple producer,
 single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitting half of the channel, as shown in Listing 16-11:
+so by cloning the transmitter, as shown in Listing 16-11:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,10 +225,9 @@ so by cloning the transmitting half of the channel, as shown in Listing 16-11:
 producers</span>
 
 This time, before we create the first spawned thread, we call `clone` on the
-sending end of the channel. This will give us a new sending handle we can pass
-to the first spawned thread. We pass the original sending end of the channel to
-a second spawned thread. This gives us two threads, each sending different
-messages to the receiving end of the channel.
+transmitter. This will give us a new transmitter we can pass to the first
+spawned thread. We pass the original transmitter to a second spawned thread.
+This gives us two threads, each sending different messages to the one receiver.
 
 When you run the code, your output should look something like this:
 
@@ -249,7 +246,7 @@ Got: thread
 Got: you
 ```
 
-You might see the values in another order; it depends on your system. This is
+You might see the values in another order, depending on your system. This is
 what makes concurrency interesting as well as difficult. If you experiment with
 `thread::sleep`, giving it various values in the different threads, each run
 will be more nondeterministic and create different output each time.

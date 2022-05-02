@@ -1,20 +1,22 @@
 ## Using Threads to Run Code Simultaneously
 
 In most current operating systems, an executed program’s code is run in a
-*process*, and the operating system manages multiple processes at once. Within
-your program, you can also have independent parts that run simultaneously. The
-features that run these independent parts are called *threads*.
+*process*, and the operating system will manage multiple processes at once.
+Within a program, you can also have independent parts that run simultaneously.
+The features that run these independent parts are called *threads*. For
+example, a web server could have multiple threads so that it could respond to
+more than one request at the same time.
 
-Splitting the computation in your program into multiple threads can improve
-performance because the program does multiple tasks at the same time, but it
-also adds complexity. Because threads can run simultaneously, there’s no
-inherent guarantee about the order in which parts of your code on different
-threads will run. This can lead to problems, such as:
+Splitting the computation in your program into multiple threads to run multiple
+tasks at the same time can improve performance, but it also adds complexity.
+Because threads can run simultaneously, there’s no inherent guarantee about the
+order in which parts of your code on different threads will run. This can lead
+to problems, such as:
 
 * Race conditions, where threads are accessing data or resources in an
   inconsistent order
-* Deadlocks, where two threads are waiting for each other to finish using a
-  resource the other thread has, preventing both threads from continuing
+* Deadlocks, where two threads are waiting for each other, preventing both
+  threads from continuing
 * Bugs that happen only in certain situations and are hard to reproduce and fix
   reliably
 
@@ -23,12 +25,12 @@ programming in a multithreaded context still takes careful thought and requires
 a code structure that is different from that in programs running in a single
 thread.
 
-Programming languages implement threads in a few different ways. Many operating
-systems provide an API for creating new threads. This model where a language
-calls the operating system APIs to create threads is sometimes called *1:1*,
-meaning one operating system thread per one language thread. The Rust standard
-library only provides an implementation of 1:1 threading; there are crates that
-implement other models of threading that make different tradeoffs.
+Programming languages implement threads in a few different ways, and many
+operating systems provide an API the language can call for creating new
+threads. The Rust standard library uses a *1:1* model of thread implementation,
+whereby a program uses one operating system thread per one language thread.
+There are crates that implement other models of threading that make different
+tradeoffs to the 1:1 model.
 
 ### Creating a New Thread with `spawn`
 
@@ -46,8 +48,8 @@ thread and other text from a new thread:
 <span class="caption">Listing 16-1: Creating a new thread to print one thing
 while the main thread prints something else</span>
 
-Note that with this function, the new thread will be stopped when the main
-thread ends, whether or not it has finished running. The output from this
+Note that when the main thread of a Rust program completes, all spawned threads
+are shut down, whether or not they have finished running. The output from this
 program might be a little different every time, but it will look similar to the
 following:
 
@@ -82,17 +84,16 @@ for the operating system to switch between the threads.
 ### Waiting for All Threads to Finish Using `join` Handles
 
 The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but also can’t guarantee that the
-spawned thread will get to run at all. The reason is that there is no guarantee
-on the order in which threads run!
+the time due to the main thread ending, but because there is no guarantee on
+the order in which threads run, we also can’t guarantee that the spawned thread
+will get to run at all!
 
-We can fix the problem of the spawned thread not getting to run, or not getting
-to run completely, by saving the return value of `thread::spawn` in a variable.
-The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
-value that, when we call the `join` method on it, will wait for its thread to
-finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
-in Listing 16-1 and call `join` to make sure the spawned thread finishes before
-`main` exits:
+We can fix the problem of the spawned thread not running or ending prematurely
+by saving the return value of `thread::spawn` in a variable. The return type of
+`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
+call the `join` method on it, will wait for its thread to finish. Listing 16-2
+shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
+call `join` to make sure the spawned thread finishes before `main` exits:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -169,7 +170,7 @@ threads run at the same time.
 
 ### Using `move` Closures with Threads
 
-The `move` keyword is often used with closures passed to `thread::spawn`
+We'll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
 another. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
@@ -218,7 +219,7 @@ that won’t be valid:
 <span class="caption">Listing 16-4: A thread with a closure that attempts to
 capture a reference to `v` from a main thread that drops `v`</span>
 
-If we were allowed to run this code, there’s a possibility the spawned thread
+If Rust allowed us to run this code, there’s a possibility the spawned thread
 would be immediately put in the background without running at all. The spawned
 thread has a reference to `v` inside, but the main thread immediately drops
 `v`, using the `drop` function we discussed in Chapter 15. Then, when the
@@ -253,12 +254,12 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 <span class="caption">Listing 16-5: Using the `move` keyword to force a closure
 to take ownership of the values it uses</span>
 
-What would happen to the code in Listing 16-4 where the main thread called
-`drop` if we use a `move` closure? Would `move` fix that case? Unfortunately,
-no; we would get a different error because what Listing 16-4 is trying to do
-isn’t allowed for a different reason. If we added `move` to the closure, we
-would move `v` into the closure’s environment, and we could no longer call
-`drop` on it in the main thread. We would get this compiler error instead:
+We might be tempted to try the same thing to fix the code in Listing 16-4 where
+the main thread called `drop` by using a `move` closure. However, this fix will
+not work because what Listing 16-4 is trying to do is disallowed for a
+different reason. If we added `move` to the closure, we would move `v` into the
+closure’s environment, and we could no longer call `drop` on it in the main
+thread. We would get this compiler error instead:
 
 ```console
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
