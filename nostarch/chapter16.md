@@ -282,7 +282,7 @@ because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
 another. In the “Capturing the Environment with Closures” section of Chapter
 13, we discussed `move` in the context of closures. Now, we’ll concentrate more
-on the interaction between `move` and `thread::spawn`
+on the interaction between `move` and `thread::spawn`.
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
@@ -909,10 +909,11 @@ that case, no one would ever be able to get the lock, so we’ve chosen to
 `unwrap` and have this thread panic if we’re in that situation.
 
 After we’ve acquired the lock, we can treat the return value, named `num` in
-this case, as a mutable reference to the data inside [3]. The type system
-ensures that we acquire a lock before using the value in `m`: `Mutex<i32>` is
-not an `i32`, so we *must* acquire the lock to be able to use the `i32` value.
-We can’t forget; the type system won’t let us access the inner `i32` otherwise.
+this case, as a mutable reference to the data inside. The type system ensures
+that we acquire a lock before using the value in `m`. The type of `m` is
+`Mutex<i32>`, not `i32`, so we *must* call `lock` to be able to use the `i32`
+value. We can’t forget; the type system won’t let us access the inner `i32`
+otherwise.
 
 As you might suspect, `Mutex<T>` is a smart pointer. More accurately, the call
 to `lock` *returns* a smart pointer called `MutexGuard`, wrapped in a
