@@ -6,7 +6,7 @@ fn main() {
     println!("The third element is {}", third);
 
     match v.get(2) {
-        Some(third) => println!("The third element is {}", third),
+        Some(third: &i32) => println!("The third element is {}", third),
         None => println!("There is no third element."),
     }
     // ANCHOR_END: here
