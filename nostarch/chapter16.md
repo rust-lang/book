@@ -59,25 +59,27 @@ Here are the topics we’ll cover in this chapter:
 ## Using Threads to Run Code Simultaneously
 
 In most current operating systems, an executed program’s code is run in a
-*process*, and the operating system will manage multiple processes at once. Within
-a program, you can also have independent parts that run simultaneously. The
-features that run these independent parts are called *threads*.
+*process*, and the operating system will manage multiple processes at once.
+Within a program, you can also have independent parts that run simultaneously.
+The features that run these independent parts are called *threads*. For
+example, a web server could have multiple threads so that it could respond to
+more than one request at the same time.
 
-<!-- perhaps give an example of two threads that might run similtaneously, to help
-the reader envision this. Would this be like serving a server at the same time as 
-taking user input? /LC -->
+<!-- perhaps give an example of two threads that might run similtaneously, to
+help the reader envision this. Would this be like serving a server at the same
+time as taking user input? /LC -->
+<!-- Done! /Carol -->
 
-Splitting the computation in your program into multiple threads to run multiple tasks
-at the same time can improve
-performance, but it
-also adds complexity. Because threads can run simultaneously, there’s no
-inherent guarantee about the order in which parts of your code on different
-threads will run. This can lead to problems, such as:
+Splitting the computation in your program into multiple threads to run multiple
+tasks at the same time can improve performance, but it also adds complexity.
+Because threads can run simultaneously, there’s no inherent guarantee about the
+order in which parts of your code on different threads will run. This can lead
+to problems, such as:
 
 * Race conditions, where threads are accessing data or resources in an
   inconsistent order
-* Deadlocks, where two threads are waiting for each other to finish using a
-  resource, preventing both threads from continuing
+* Deadlocks, where two threads are waiting for each other, preventing both
+  threads from continuing
 * Bugs that happen only in certain situations and are hard to reproduce and fix
   reliably
 
@@ -86,12 +88,12 @@ programming in a multithreaded context still takes careful thought and requires
 a code structure that is different from that in programs running in a single
 thread.
 
-Programming languages implement threads in a few different ways, and many operating
-systems provide an API the language can call for creating new threads. 
-The Rust standard library uses a
-*1:1* model of thread implementation, whereby a program uses one operating system thread per one language thread. 
-There are crates that
-implement other models of threading that make different tradeoffs to the 1:1 model.
+Programming languages implement threads in a few different ways, and many
+operating systems provide an API the language can call for creating new
+threads. The Rust standard library uses a *1:1* model of thread implementation,
+whereby a program uses one operating system thread per one language thread.
+There are crates that implement other models of threading that make different
+tradeoffs to the 1:1 model.
 
 ### Creating a New Thread with `spawn`
 
@@ -123,10 +125,16 @@ fn main() {
 
 Listing 16-1: Creating a new thread to print one thing while the main thread
 prints something else
-<!-- maybe quickly say why the new thread is stopped -- it shares the lifetime of the 
-main thread? /LC -->
-Note that with this function, the new thread will be stopped when the main
-thread ends, whether or not it has finished running. The output from this
+
+<!-- maybe quickly say why the new thread is stopped -- it shares the lifetime
+of the main thread? /LC -->
+<!-- In a sense yes, but because "lifetime" has a specific, different meaning
+in Rust, I don't want to use that word here. This is the way the `main`
+function/thread works in Rust programs, is it clearer with the edits I've made
+here? /Carol -->
+
+Note that when the main thread of a Rust program completes, all spawned threads
+are shut down, whether or not they have finished running. The output from this
 program might be a little different every time, but it will look similar to the
 following:
 
@@ -157,17 +165,16 @@ for the operating system to switch between the threads.
 ### Waiting for All Threads to Finish Using `join` Handles
 
 The code in Listing 16-1 not only stops the spawned thread prematurely most of
-the time due to the main thread ending, but because there is no guarantee
-on the order in which threads run, we also can’t guarantee that the
-spawned thread will get to run at all! 
+the time due to the main thread ending, but because there is no guarantee on
+the order in which threads run, we also can’t guarantee that the spawned thread
+will get to run at all!
 
-We can fix the problem of the spawned thread not running or 
-ending prematurely by saving the return value of `thread::spawn` in a variable.
-The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
-value that, when we call the `join` method on it, will wait for its thread to
-finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
-in Listing 16-1 and call `join` to make sure the spawned thread finishes before
-`main` exits:
+We can fix the problem of the spawned thread not running or ending prematurely
+by saving the return value of `thread::spawn` in a variable. The return type of
+`thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
+call the `join` method on it, will wait for its thread to finish. Listing 16-2
+shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
+call `join` to make sure the spawned thread finishes before `main` exits:
 
 Filename: src/main.rs
 
@@ -273,8 +280,9 @@ threads run at the same time.
 We'll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
-another. In the “Capturing the Environment with Closures” section of Chapter 13, we discussed `move` in the context of closures. Now,
-we’ll concentrate more on the interaction between `move` and `thread::spawn`
+another. In the “Capturing the Environment with Closures” section of Chapter
+13, we discussed `move` in the context of closures. Now, we’ll concentrate more
+on the interaction between `move` and `thread::spawn`
 
 Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
@@ -400,13 +408,12 @@ fn main() {
 Listing 16-5: Using the `move` keyword to force a closure to take ownership of
 the values it uses
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 
-where the main thread called
-`drop` by using a `move` closure. However, 
-thisfix  will not work because what Listing 16-4 is trying to do
-is disallowed for a different reason. If we added `move` to the closure, we
-would move `v` into the closure’s environment, and we could no longer call
-`drop` on it in the main thread. We would get this compiler error instead:
+We might be tempted to try the same thing to fix the code in Listing 16-4 where
+the main thread called `drop` by using a `move` closure. However, this fix will
+not work because what Listing 16-4 is trying to do is disallowed for a
+different reason. If we added `move` to the closure, we would move `v` into the
+closure’s environment, and we could no longer call `drop` on it in the main
+thread. We would get this compiler error instead:
 
 ```
 error[E0382]: use of moved value: `v`
@@ -444,38 +451,50 @@ passing*, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from the Go language
 documentation at *https://golang.org/doc/effective_go.html#concurrency*:
 “Do not communicate by sharing memory; instead, share memory by communicating.”
-<!-- are they communicating to decide which thread should be running, or by 
+
+<!-- are they communicating to decide which thread should be running, or by
 "communicate" do we just mean sharing data? /LC -->
+<!-- Just sharing data. Is there something that should be clarified here? I'm
+not sure what to do because this paragraph doesn't mention deciding which
+thread should be running, it only mentions sharing data, so I'm not sure where
+the possible confusion is coming from. /Carol -->
 
 To accomplish message-sending concurrency, Rust's standard library provides an
-implementation of *channels*. A channel is a general programming concept by which
-XXX
-<!-- can you provide a more direct definition of a channel? The analogy is helpful
-but having that technical definition wold solidify that analogy. Is is just 
-a data stream? /LC -->
-You can imagine a channel in programming as being like a
-directional channel of water, such as a stream or a river. If you put something like a
-rubber duck into a river, it will travel downstream to the end of the
-waterway.
+implementation of *channels*. A channel is a general programming concept by
+which data is sent from one thread to another.
 
-A channel has two halves: a transmitter and a receiver. The
-transmitter half is the upstream location where you put rubber ducks into the
-river, and the receiver half is where the rubber duck ends up downstream. One
-part of your code calls methods on the transmitter with the data you want to
-send, and another part checks the receiving end for arriving messages. A
-channel is said to be *closed* if either the transmitter or receiver half is
-dropped.
+<!-- can you provide a more direct definition of a channel? The analogy is
+helpful but having that technical definition wold solidify that analogy. Is is
+just a data stream? /LC -->
+<!-- A channel is a really general concept that can be implemented in many
+different ways, and saying the word "stream" in a technical definition might
+cause the reader to infer one particular implementation so I don't want to give
+that impression. Is what I put here ok? /Carol -->
+
+You can imagine a channel in programming as being like a directional channel of
+water, such as a stream or a river. If you put something like a rubber duck
+into a river, it will travel downstream to the end of the waterway.
+
+A channel has two halves: a transmitter and a receiver. The transmitter half is
+the upstream location where you put rubber ducks into the river, and the
+receiver half is where the rubber duck ends up downstream. One part of your
+code calls methods on the transmitter with the data you want to send, and
+another part checks the receiving end for arriving messages. A channel is said
+to be *closed* if either the transmitter or receiver half is dropped.
 
 Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
 print them out. We’ll be sending simple values between threads using a channel
 to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any code that needs to communicate with itself, such as 
-<!-- is this right -- the code is communicating with itself via channels? Rather 
+use channels for any threads that needs to communicate between each other, such
+as a chat system or a system where many threads perform parts of a calculation
+and send the parts to one thread that aggregates the results.
+
+<!-- is this right -- the code is communicating with itself via channels? Rather
 than with other programs? /LC -->
-a chat system or a system where many threads perform
-parts of a calculation and send the parts to one thread that aggregates the
-results.
+<!-- I think saying threads are communicating between each other is more
+accurate. It really depends on where you draw the line between one "program"
+and another, which would be distracting to get into here /Carol -->
 
 First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
@@ -503,13 +522,14 @@ producer for now, but we’ll add multiple producers when we get this example
 working.
 
 The `mpsc::channel` function returns a tuple, the first element of which is the
-sending end--the transmitter--and the second element is the receiving end--the receiver. The abbreviations `tx`
-and `rx` are traditionally used in many fields for *transmitter* and *receiver*
-respectively, so we name our variables as such to indicate each end. We’re
-using a `let` statement with a pattern that destructures the tuples; we’ll
-discuss the use of patterns in `let` statements and destructuring in Chapter
-18. For now know that using a `let` statement this way is a convenient approach to extract the
-pieces of the tuple returned by `mpsc::channel`.
+sending end--the transmitter--and the second element is the receiving end--the
+receiver. The abbreviations `tx` and `rx` are traditionally used in many fields
+for *transmitter* and *receiver* respectively, so we name our variables as such
+to indicate each end. We’re using a `let` statement with a pattern that
+destructures the tuples; we’ll discuss the use of patterns in `let` statements
+and destructuring in Chapter 18. For now, know that using a `let` statement
+this way is a convenient approach to extract the pieces of the tuple returned
+by `mpsc::channel`.
 
 Let’s move the transmitting end into a spawned thread and have it send one
 string so the spawned thread is communicating with the main thread, as shown in
@@ -536,22 +556,22 @@ Listing 16-7: Moving `tx` to a spawned thread and sending “hi”
 
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
-thread needs to own the transmitting end of the channel to be able to send
-messages through the channel.
-<!-- since we have already introduced the terms "transmitter" and "reciever", I feel
-we should use them in this explanation, unless that's not accurate for some reason 
-and "transmitting end" etc is more accurate? /LC -->
-
-The transmitting end has a `send` method that takes the value we want to send.
-The `send` method returns a `Result<T, E>` type, so if the receiving end has
+thread needs to own the transmitter to be able to send messages through the
+channel.
+<!-- since we have already introduced the terms "transmitter" and "reciever", I
+feel we should use them in this explanation, unless that's not accurate for
+some reason and "transmitting end" etc is more accurate? /LC -->
+<!-- "Transmitter" and "receiver" are fine, I've made that change /Carol -->
+The transmitter has a `send` method that takes the value we want to send.
+The `send` method returns a `Result<T, E>` type, so if the receiver has
 already been dropped and there’s nowhere to send a value, the send operation
 will return an error. In this example, we’re calling `unwrap` to panic in case
 of an error. But in a real application, we would handle it properly: return to
 Chapter 9 to review strategies for proper error handling.
 
-In Listing 16-8, we’ll get the value from the receiving end of the channel in
-the main thread. This is like retrieving the rubber duck from the water at the
-end of the river or receiving a chat message.
+In Listing 16-8, we’ll get the value from the receiver in the main thread. This
+is like retrieving the rubber duck from the water at the end of the river or
+receiving a chat message.
 
 Filename: src/main.rs
 
@@ -574,12 +594,11 @@ fn main() {
 
 Listing 16-8: Receiving the value “hi” in the main thread and printing it
 
-The receiving end of a channel has two useful methods: `recv` and `try_recv`.
-We’re using `recv`, short for *receive*, which will block the main thread’s
-execution and wait until a value is sent down the channel. Once a value is
-sent, `recv` will return it in a `Result<T, E>`. When the sending end of the
-channel closes, `recv` will return an error to signal that no more values will
-be coming.
+The receiver has two useful methods: `recv` and `try_recv`. We’re using `recv`,
+short for *receive*, which will block the main thread’s execution and wait
+until a value is sent down the channel. Once a value is sent, `recv` will
+return it in a `Result<T, E>`. When the transmitter closes, `recv` will return
+an error to signal that no more values will be coming.
 
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available and an `Err`
@@ -726,7 +745,7 @@ the spawned thread.
 Earlier we mentioned that `mpsc` was an acronym for *multiple producer,
 single consumer*. Let’s put `mpsc` to use and expand the code in Listing 16-10
 to create multiple threads that all send values to the same receiver. We can do
-so by cloning the transmitting half of the channel, as shown in Listing 16-11:
+so by cloning the transmitter, as shown in Listing 16-11:
 
 Filename: src/main.rs
 
@@ -774,10 +793,9 @@ Filename: src/main.rs
 Listing 16-11: Sending multiple messages from multiple producers
 
 This time, before we create the first spawned thread, we call `clone` on the
-sending end of the channel. This will give us a new sending handle we can pass
-to the first spawned thread. We pass the original sending end of the channel to
-a second spawned thread. This gives us two threads, each sending different
-messages to the receiving end of the channel.
+transmitter. This will give us a new transmitter we can pass to the first
+spawned thread. We pass the original transmitter to a second spawned thread.
+This gives us two threads, each sending different messages to the one receiver.
 
 When you run the code, your output should look something like this:
 
@@ -803,15 +821,19 @@ concurrency.
 ## Shared-State Concurrency
 
 Message passing is a fine way of handling concurrency, but it’s not the only
-one. Another method would be to XXXX
-<!-- can you specify up front what this other method we're looking at is? Sharing
-memory? /LC -->
+one. Another method would be for multiple threads to access the same shared
+data.
+<!-- can you specify up front what this other method we're looking at is?
+Sharing memory? /LC -->
+<!-- Yep, done! /Carol -->
 Consider this part of the slogan from the Go language documentation again:
 “do not communicate by sharing memory.”
 
 What would communicating by sharing memory look like? In addition, why would
-message-passing enthusiasts not use it and do the opposite instead?
-<!-- not use what -- memory sharing? I wasn't sure what we were saying here /LC -->
+message-passing enthusiasts caution not to use memory sharing?
+<!-- not use what -- memory sharing? I wasn't sure what we were saying here /LC
+-->
+<!-- Yes, memory sharing, I've tried to clarify /Carol -->
 
 In a way, channels in any programming language are similar to single ownership,
 because once you transfer a value down a channel, you should no longer use that
@@ -1153,13 +1175,14 @@ However, two concurrency concepts are embedded in the language: the
 
 ### Allowing Transference of Ownership Between Threads with `Send`
 
-The `Send` marker trait indicates that ownership of values of the type implementing
-`Send` can be transferred between threads. Almost every Rust type is `Send`,
-but there are some exceptions, including `Rc<T>`: this cannot be `Send` because
-if you cloned an `Rc<T>` value and tried to transfer ownership of the clone to
-another thread, both threads might update the reference count at the same time.
-For this reason, `Rc<T>` is implemented for use in single-threaded situations
-where you don’t want to pay the thread-safe performance penalty.
+The `Send` marker trait indicates that ownership of values of the type
+implementing `Send` can be transferred between threads. Almost every Rust type
+is `Send`, but there are some exceptions, including `Rc<T>`: this cannot be
+`Send` because if you cloned an `Rc<T>` value and tried to transfer ownership
+of the clone to another thread, both threads might update the reference count
+at the same time. For this reason, `Rc<T>` is implemented for use in
+single-threaded situations where you don’t want to pay the thread-safe
+performance penalty.
 
 Therefore, Rust’s type system and trait bounds ensure that you can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
@@ -1198,8 +1221,8 @@ Manually implementing these traits involves implementing unsafe Rust code.
 We’ll talk about using unsafe Rust code in Chapter 19; for now, the important
 information is that building new concurrent types not made up of `Send` and
 `Sync` parts requires careful thought to uphold the safety guarantees. “The
-Rustonomicon” at *../nomicon/index.html* has more information about these guarantees and how to
-uphold them.
+Rustonomicon” at *https://doc.rust-lang.org/stable/nomicon/* has more
+information about these guarantees and how to uphold them.
 
 ## Summary
 
