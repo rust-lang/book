@@ -2,7 +2,7 @@
 
 *Ownership* is a set of rules that governs how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that constantly looks for no-longer used
+Some languages have garbage collection that regularly looks for no-longer used
 memory as the program runs; in other languages, the programmer must explicitly
 allocate and free the memory. Rust uses a third approach: memory is managed
 through a system of ownership with a set of rules that the compiler checks. If
@@ -69,7 +69,7 @@ strings.
 > then one from B again would be a much slower process. By the same token, a
 > processor can do its job better if it works on data that’s close to other
 > data (as it is on the stack) rather than farther away (as it can be on the
-> heap). Allocating a large amount of space on the heap can also take time.
+> heap).
 >
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
@@ -88,7 +88,7 @@ strings.
 First, let’s take a look at the ownership rules. Keep these rules in mind as we
 work through the examples that illustrate them:
 
-* Each value in Rust has a variable that’s called its *owner*.
+* Each value in Rust has an *owner*.
 * There can only be one owner at a time.
 * When the owner goes out of scope, the value will be dropped.
 
@@ -200,7 +200,7 @@ However, the second part is different. In languages with a *garbage collector
 (GC)*, the GC keeps track of and cleans up memory that isn’t being used
 anymore, and we don’t need to think about it. In most languages without a GC,
 it’s our responsibility to identify when memory is no longer being used and
-call code to explicitly return it, just as we did to request it. Doing this
+call code to explicitly free it, just as we did to request it. Doing this
 correctly has historically been a difficult programming problem. If we forget,
 we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
 we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
@@ -379,15 +379,17 @@ between deep and shallow copying here, so calling `clone` wouldn’t do anything
 different from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
-types that are stored on the stack like integers are (we’ll talk more about
-traits in Chapter 10). If a type implements the `Copy` trait, a variable is
-still valid after assignment to another variable. Rust won’t let us annotate a
-type with `Copy` if the type, or any of its parts, has implemented the `Drop`
-trait. If the type needs something special to happen when the value goes out of
-scope and we add the `Copy` annotation to that type, we’ll get a compile-time
-error. To learn about how to add the `Copy` annotation to your type to
-implement the trait, see [“Derivable Traits”][derivable-traits]<!-- ignore -->
-in Appendix C.
+types that are stored on the stack, as integers are (we’ll talk more about
+traits in [Chapter 10][traits]<!-- ignore -->). If a type implements the `Copy`
+trait, variables that use it do not move, but rather are trivially copied,
+making them still valid after assignment to another variable.
+
+Rust won’t let us annotate a type with `Copy` if the type, or any of its parts,
+has implemented the `Drop` trait. If the type needs something special to happen
+when the value goes out of scope and we add the `Copy` annotation to that type,
+we’ll get a compile-time error. To learn about how to add the `Copy` annotation
+to your type to implement the trait, see [“Derivable
+Traits”][derivable-traits]<!-- ignore --> in Appendix C.
 
 So what types implement the `Copy` trait? You can check the documentation for
 the given type to be sure, but as a general rule, any group of simple scalar
@@ -465,6 +467,7 @@ transferring ownership, called *references*.
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html
+[traits]: ch10-02-traits.html
 [derivable-traits]: appendix-03-derivable-traits.html
 [method-syntax]: ch05-03-method-syntax.html#method-syntax
 [paths-module-tree]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html

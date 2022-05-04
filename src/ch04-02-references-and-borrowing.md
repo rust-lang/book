@@ -5,9 +5,11 @@ The issue with the tuple code in Listing 4-5 is that we have to return the
 call to `calculate_length`, because the `String` was moved into
 `calculate_length`. Instead, we can provide a reference to the `String` value.
 A *reference* is like a pointer in that it’s an address we can follow to access
-data stored at that address that is owned by some other variable. Unlike a
-pointer, a reference is guaranteed to point to a valid value of a particular
-type. Here is how you would define and use a `calculate_length` function that
+the data stored at that address; that data is owned by some other variable.
+Unlike a pointer, a reference is guaranteed to point to a valid value of a
+particular type for the life of that reference.
+
+Here is how you would define and use a `calculate_length` function that
 has a reference to an object as a parameter instead of taking ownership of the
 value:
 
@@ -97,9 +99,9 @@ s` where we call the `change` function, and update the function signature to
 accept a mutable reference with `some_string: &mut String`. This makes it very
 clear that the `change` function will mutate the value it borrows.
 
-Mutable references have one big restriction: you can have only one mutable
-reference to a particular piece of data at a time. This code that attempts to
-create two mutable references to `s` will fail:
+Mutable references have one big restriction: if you have a mutable reference to
+a value, you can have no other references to that value. This code that
+attempts to create two mutable references to `s` will fail:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -155,10 +157,12 @@ Here’s the error:
 ```
 
 Whew! We *also* cannot have a mutable reference while we have an immutable one
-to the same value. Users of an immutable reference don’t expect the value to
-suddenly change out from under them! However, multiple immutable references are
-allowed because no one who is just reading the data has the ability to affect
-anyone else’s reading of the data.
+to the same value.
+
+Users of an immutable reference don’t expect the value to suddenly change out
+from under them! However, multiple immutable references are allowed because no
+one who is just reading the data has the ability to affect anyone else’s
+reading of the data.
 
 Note that a reference’s scope starts from where it is introduced and continues
 through the last time that reference is used. For instance, this code will
