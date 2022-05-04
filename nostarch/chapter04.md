@@ -66,8 +66,8 @@ strings.
 > certain amount of space. The memory allocator finds an empty spot in the heap
 > that is big enough, marks it as being in use, and returns a *pointer*, which
 > is the address of that location. This process is called *allocating on the
-> heap* and is sometimes abbreviated as just *allocating*. Pushing values onto
-> the stack is not considered allocating. Because the pointer to the heap is a
+> heap* and is sometimes abbreviated as just *allocating* (pushing values onto
+> the stack is not considered allocating). Because the pointer to the heap is a
 > known, fixed size, you can store the pointer on the stack, but when you want
 > the actual data, you must follow the pointer. Think of being seated at a
 > restaurant. When you enter, you state the number of people in your group, and
@@ -714,7 +714,7 @@ the parameter `s` is a reference. Let’s add some explanatory annotations:
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
     s.len()
 } // Here, s goes out of scope. But because it does not have ownership of what
-  // it refers to, nothing happens.
+  // it refers to, it is not dropped.
 ```
 
 The scope in which the variable `s` is valid is the same as any function
@@ -756,7 +756,7 @@ error[E0596]: cannot borrow `*some_string` as mutable, as it is behind a `&` ref
 7 | fn change(some_string: &String) {
   |                        ------- help: consider changing this to be a mutable reference: `&mut String`
 8 |     some_string.push_str(", world");
-  |     ^^^^^^^^^^^ `some_string` is a `&` reference, so the data it refers to cannot be borrowed as mutable
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `some_string` is a `&` reference, so the data it refers to cannot be borrowed as mutable
 ```
 
 Just as variables are immutable by default, so are references. We’re not
@@ -964,7 +964,7 @@ error[E0106]: missing lifetime specifier
 help: consider using the `'static` lifetime
   |
 5 | fn dangle() -> &'static String {
-  |                ^^^^^^^^
+  |                ~~~~~~~~
 ```
 
 This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
