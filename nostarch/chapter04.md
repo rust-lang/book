@@ -18,15 +18,18 @@ features: borrowing, slices, and how Rust lays data out in memory.
 
 *Ownership* is a set of rules that governs how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that constantly looks for no-longer used
+Some languages have garbage collection that regularly looks for no-longer used
 memory as the program runs; in other languages, the programmer must explicitly
 allocate and free the memory. Rust uses a third approach: memory is managed
 through a system of ownership with a set of rules that the compiler checks. If
-any of the rules are violated, the program won’t compile.
-<!--- What happens if an ownership rule is violated, the program won't run? /LC -->
-<!-- It won't even *compile*, let alone run. I've updated /Carol -->
-None of the features of ownership will slow down your program while it’s
-running.
+any of the rules are violated, the program won’t compile. None of the features
+of ownership will slow down your program while it’s running.
+
+<!--- Minor nit: garbage collection isn't constant, it happens at times specified
+by the collection algorithm. Maybe "Some languages have garbage collection that
+regularly looks for no-longer used memory as the program runs."
+/JT --->
+<!-- Took this suggestion! /Carol -->
 
 Because ownership is a new concept for many programmers, it does take some time
 to get used to. The good news is that the more experienced you become with Rust
@@ -78,7 +81,14 @@ strings.
 > requires more work, because the allocator must first find a big enough space
 > to hold the data and then perform bookkeeping to prepare for the next
 > allocation.
->
+
+<!--- Minor nit: not sure if worth clarifying but thought I'd mention - performance
+for heap allocation I think isn't as much the time spent in the allocator but that
+you have to spend time asking the system for memory. Custom allocators still have to
+do the allocation step but try to avoid the system step where possible.
+/JT --->
+<!-- I think this is a bit in the weeds, not making any change here /Carol -->
+
 > Accessing data in the heap is slower than accessing data on the stack because
 > you have to follow a pointer to get there. Contemporary processors are faster
 > if they jump around less in memory. Continuing the analogy, consider a server
@@ -88,12 +98,31 @@ strings.
 > then one from B again would be a much slower process. By the same token, a
 > processor can do its job better if it works on data that’s close to other
 > data (as it is on the stack) rather than farther away (as it can be on the
-> heap). Allocating a large amount of space on the heap can also take time.
+> heap).
+
+<!--- I don't quite understand the last sentence. If you allocate enough to create
+virtual memory, sure. But modern systems you're probably safe for most things? Also,
+if we're contrasting against something like the heap, just having the ability to allocate
+large space is probably a big benefit of the heap rather than a drawback. IMHO I'd probably
+just drop the last sentence.
+/JT --->
+<!-- Done! /Carol -->
+
 >
 > When your code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
 > local variables get pushed onto the stack. When the function is over, those
 > values get popped off the stack.
+
+<!--- Some calling conventions don't always use the stack for parameters.
+For example, Windows x64 calling convention puts the first 4 arguments into
+registers, and only puts args 5 and later on the stack. Ditto for the return
+value. If it can fit in a register, x64 will use that instead of the stack:
+
+https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170#parameter-passing
+/JT --->
+<!-- I think this is a bit in the weeds, not making any change here /Carol -->
+
 >
 > Keeping track of what parts of code are using what data on the heap,
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
@@ -107,9 +136,17 @@ strings.
 First, let’s take a look at the ownership rules. Keep these rules in mind as we
 work through the examples that illustrate them:
 
-* Each value in Rust has a variable that’s called its *owner*.
+* Each value in Rust has an *owner*.
 * There can only be one owner at a time.
 * When the owner goes out of scope, the value will be dropped.
+
+<!--- Maybe splitting hairs, but for the first bullet I'd say:
+"Each value in Rust has an *owner*".
+
+If we say variables here, and then find out later that, for example, structs can
+also be owners, this gets a bit mirky.
+/JT --->
+<!-- Took this suggestion! /Carol -->
 
 ### Variable Scope
 
@@ -225,11 +262,17 @@ However, the second part is different. In languages with a *garbage collector
 (GC)*, the GC keeps track of and cleans up memory that isn’t being used
 anymore, and we don’t need to think about it. In most languages without a GC,
 it’s our responsibility to identify when memory is no longer being used and
-call code to explicitly return it, just as we did to request it. Doing this
+call code to explicitly free it, just as we did to request it. Doing this
 correctly has historically been a difficult programming problem. If we forget,
 we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
 we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
 exactly one `free`.
+
+<!--- The phrase "explicitly return it" gives a connotation in programming of
+returning a value to a caller rather than the more casual returning it to the OS.
+Maybe we can say "explicitly delete it" or "explicitly free it".
+/JT --->
+<!-- Changed "return" to "free" /Carol -->
 
 Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
@@ -296,6 +339,20 @@ This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+
+<!--- This might be me being a bit nitpicky - when you show what the string looks like
+in memory, we're showing indices for data pointed to by ptr. I have a bit of a knee-jerk
+reaction here since we don't think of strings has having indices in Rust (because of UTF-8)
+Not sure if it's well enough alone, or if it might be better for the ptr to point at
+at cells of memory without giving them indices.
+
+Something like:
+
+[ptr      | --] -> [h][e][l][l][o]
+[len      | 5]
+[capacity | 5]
+/JT --->
+<!-- I think this is a bit in the weeds, not making any change here /Carol -->
 
 Figure 4-1: Representation in memory of a `String` holding the value `"hello"`
 bound to `s1`
@@ -426,15 +483,27 @@ between deep and shallow copying here, so calling `clone` wouldn’t do anything
 different from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
-types that are stored on the stack like integers are (we’ll talk more about
-traits in Chapter 10). If a type implements the `Copy` trait, a variable is
-still valid after assignment to another variable.
+types that are stored on the stack, as integers are (we’ll talk more about
+traits in Chapter 10). If a type implements the `Copy` trait, variables that
+use it do not move, but rather are trivially copied, making them still valid
+after assignment to another variable.
+
 <!--- an older variable that uses that type, we mean? /LC --->
 <!-- I removed "older" here, I don't think that was quite right-- this sentence
 is trying to describe the line `let y = x` where the variable `x` is assigned
 to `y`. The variables must be the same type because they're getting the same
 value, so "that uses that type" isn't relevant. Let me know if there's any
 aspects that are still confusing here. /Carol -->
+<!-- JT, is this all clear in the text? /LC -->
+<!--- I think this is fine. When I teach it, I tend to stress *move* and *copy*
+so that they can build up that framework. So my slight tweak to the above might
+be:
+
+"If a type implements the `Copy` trait, variables that use it do not move but rather are
+trivially copied, making them still valid after assignment to another variable."
+/JT --->
+<!-- Took this suggestion! /Carol -->
+
 Rust won’t let us annotate a type with `Copy` if the type, or any of its parts,
 has implemented the `Drop` trait. If the type needs something special to happen
 when the value goes out of scope and we add the `Copy` annotation to that type,
@@ -582,12 +651,16 @@ The issue with the tuple code in Listing 4-5 is that we have to return the
 call to `calculate_length`, because the `String` was moved into
 `calculate_length`. Instead, we can provide a reference to the `String` value.
 A *reference* is like a pointer in that it’s an address we can follow to access
-data stored at that address that is owned by some other variable. Unlike a
-pointer, a reference is guaranteed to point to a valid value of a particular
-type.
-<!-- Could you add a direct definition of a reference? We mentioned them in Ch
-2 but didn't give a full definition, I think that would be useful. /LC -->
-<!-- Good call -- done! /Carol -->
+the data stored at that address; that data is owned by some other variable.
+Unlike a pointer, a reference is guaranteed to point to a valid value of a
+particular type for the life of that reference.
+
+<!--- Possible wording tweak: "a reference is guaranteed to point to a valid value of a
+particular type for the life of that reference" or "a reference is always guaranteed
+to point to a valid value of a particular type"
+/JT --->
+<!-- Took this suggestion! /Carol -->
+
 Here is how you would define and use a `calculate_length` function that has a
 reference to an object as a parameter instead of taking ownership of the value:
 
@@ -713,9 +786,16 @@ s` where we call the `change` function, and update the function signature to
 accept a mutable reference with `some_string: &mut String`. This makes it very
 clear that the `change` function will mutate the value it borrows.
 
-Mutable references have one big restriction: you can have only one mutable
-reference to a particular piece of data at a time. This code that attempts to
-create two mutable references to `s` will fail:
+Mutable references have one big restriction: if you have a mutable reference to
+a value, you can have no other references to that value. This code that
+attempts to create two mutable references to `s` will fail:
+
+<!--- Clarification: "Mutable references have one big restriction: if you have a
+mutable reference to a value, you can have no other references to that value."
+This covers both not having two mutable references and having a mutable references
+and an immutable reference to the same value.
+/JT --->
+<!-- Took this suggestion! /Carol -->
 
 Filename: src/main.rs
 
@@ -808,9 +888,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 
 Whew! We *also* cannot have a mutable reference while we have an immutable one
 to the same value.
-<!-- while we have an immutable one to the same value, or simply within the
-same script? /LC -->
-<!-- The former, I've updated /Carol -->
+
 Users of an immutable reference don’t expect the value to suddenly change out
 from under them! However, multiple immutable references are allowed because no
 one who is just reading the data has the ability to affect anyone else’s
@@ -947,10 +1025,16 @@ Next, we’ll look at a different kind of reference: slices.
 rather than the whole collection. A slice is a kind of reference, so it does
 not have ownership.
 
-Here’s a small programming problem: write a function that takes a string and
-returns the first word it finds in that string. If the function doesn’t find a
-space in the string, the whole string must be one word, so the entire string
-should be returned.
+Here’s a small programming problem: write a function that takes a string of
+words separated by spaces and returns the first word it finds in that string.
+If the function doesn’t find a space in the string, the whole string must be
+one word, so the entire string should be returned.
+
+<!--- Do we want to clarify this is for words separated by spaces?
+Not all languages use spaces to separate words:
+https://www.w3.org/International/articles/typography/linebreak.en#whatisword
+/JT --->
+<!-- Took this suggestion! /Carol -->
 
 Let’s work through how we’d write the signature of this function without using
 slices, to understand the problem that slices will solve:
@@ -986,12 +1070,7 @@ Listing 4-7: The `first_word` function that returns a byte index value into the
 Because we need to go through the `String` element by element and check whether
 a value is a space, we’ll convert our `String` to an array of bytes using the
 `as_bytes` method [1].
-<!--- I've suggested going back to using the wingdings, so that the explanation
-is all together and we avoid that repetition. However, if you're preference is
-to use the repetition instead, let me know -- it's not our usual house style,
-but I think it could work /LC --->
-<!-- Oh yes, I still want to use the wingdings in print-- I just generated
-these files from the online version that doesn't use wingdings. /Carol -->
+
 Next, we create an iterator over the array of bytes using the `iter` method [3].
 We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
 is a method that returns each element in a collection and that `enumerate`
