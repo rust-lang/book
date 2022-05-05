@@ -114,9 +114,9 @@ connections by retrying, because the problem might be temporary. The important
 factor is that we’ve successfully gotten a handle to a TCP connection!
 
 Remember to stop the program by pressing <span class="keystroke">ctrl-c</span>
-when you’re done running a particular version of the code. Then restart `cargo
-run` after you’ve made each set of code changes to make sure you’re running the
-newest code.
+when you’re done running a particular version of the code. Then restart the
+program by invoking the `cargo run` command after you’ve made each set of code
+changes to make sure you’re running the newest code.
 
 ### Reading the Request
 
