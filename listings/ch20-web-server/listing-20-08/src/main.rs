@@ -28,7 +28,7 @@ fn handle_connection(mut stream: TcpStream) {
             contents
         );
 
-        stream.write(response.as_bytes()).unwrap();
+        stream.write_all(response.as_bytes()).unwrap();
         stream.flush().unwrap();
     } else {
         let status_line = "HTTP/1.1 404 NOT FOUND";
@@ -41,7 +41,7 @@ fn handle_connection(mut stream: TcpStream) {
             contents
         );
 
-        stream.write(response.as_bytes()).unwrap();
+        stream.write_all(response.as_bytes()).unwrap();
         stream.flush().unwrap();
     }
 }

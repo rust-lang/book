@@ -275,13 +275,13 @@ the stream</span>
 
 The first new line defines the `response` variable that holds the success
 message’s data. Then we call `as_bytes` on our `response` to convert the string
-data to bytes. The `write` method on `stream` takes a `&[u8]` and sends those
-bytes directly down the connection.
+data to bytes. The `write_all` method on `stream` takes a `&[u8]` and sends
+those bytes directly down the connection.
 
-Because the `write` operation could fail, we use `unwrap` on any error result
-as before. Again, in a real application you would add error handling here.
-Finally, `flush` will wait and prevent the program from continuing until all
-the bytes are written to the connection; `TcpStream` contains an internal
+Because the `write_all` operation could fail, we use `unwrap` on any error
+result as before. Again, in a real application you would add error handling
+here. Finally, `flush` will wait and prevent the program from continuing until
+all the bytes are written to the connection; `TcpStream` contains an internal
 buffer to minimize calls to the underlying operating system.
 
 With these changes, let’s run our code and make a request. We’re no longer

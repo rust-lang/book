@@ -30,7 +30,7 @@ fn handle_connection(mut stream: TcpStream) {
             contents
         );
 
-        stream.write(response.as_bytes()).unwrap();
+        stream.write_all(response.as_bytes()).unwrap();
         stream.flush().unwrap();
     // ANCHOR: here
     // --snip--
@@ -45,7 +45,7 @@ fn handle_connection(mut stream: TcpStream) {
             contents
         );
 
-        stream.write(response.as_bytes()).unwrap();
+        stream.write_all(response.as_bytes()).unwrap();
         stream.flush().unwrap();
     }
     // ANCHOR_END: here
