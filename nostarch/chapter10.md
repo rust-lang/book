@@ -1868,7 +1868,7 @@ which it can’t figure out lifetimes, the compiler will stop with an error.
 These rules apply to `fn` definitions as well as `impl` blocks.
 
 The first rule is that the compiler assigns a lifetime parameter to each
-paramter that’s a reference. In other words, a function with one parameter gets
+parameter that’s a reference. In other words, a function with one parameter gets
 one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
 parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
 y: &'b i32)`; and so on.

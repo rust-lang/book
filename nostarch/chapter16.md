@@ -65,7 +65,7 @@ The features that run these independent parts are called *threads*. For
 example, a web server could have multiple threads so that it could respond to
 more than one request at the same time.
 
-<!-- perhaps give an example of two threads that might run similtaneously, to
+<!-- perhaps give an example of two threads that might run simultaneously, to
 help the reader envision this. Would this be like serving a server at the same
 time as taking user input? /LC -->
 <!-- Done! /Carol -->
@@ -558,7 +558,7 @@ Again, we’re using `thread::spawn` to create a new thread and then using `move
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
 channel.
-<!-- since we have already introduced the terms "transmitter" and "reciever", I
+<!-- since we have already introduced the terms "transmitter" and "receiver", I
 feel we should use them in this explanation, unless that's not accurate for
 some reason and "transmitting end" etc is more accurate? /LC -->
 <!-- "Transmitter" and "receiver" are fine, I've made that change /Carol -->
