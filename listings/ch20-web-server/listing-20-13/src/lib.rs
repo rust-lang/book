@@ -17,7 +17,6 @@ impl ThreadPool {
 
     // --snip--
     // ANCHOR_END: here
-
     pub fn execute<F>(&self, f: F)
     where
         F: FnOnce() + Send + 'static,
