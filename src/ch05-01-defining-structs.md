@@ -161,7 +161,7 @@ Note that the `black` and `origin` values are different types, because they’re
 instances of different tuple structs. Each struct you define is its own type,
 even though the fields within the struct have the same types. For example, a
 function that takes a parameter of type `Color` cannot take a `Point` as an
-argument, even though both types are made up of three `i32` values. Otherwise,
+argument, even though both types are made up of three `u8` values. Otherwise,
 tuple struct instances behave like tuples: you can destructure them into their
 individual pieces, you can use a `.` followed by the index to access an
 individual value, and so on.
