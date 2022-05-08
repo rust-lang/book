@@ -38,7 +38,7 @@ fail. In Listing 9-3 we try to open a file.
 <span class="caption">Listing 9-3: Opening a file</span>
 
 How do we know `File::open` returns a `Result`? We could look at the [standard
-library API documentation](../std/index.html)<!-- ignore -->, or we could ask
+library API documentation](../std/fs/struct.File.html#method.open)<!-- ignore -->, or we could ask
 the compiler! If we give `f` a type annotation that we know is *not* the return
 type of the function and then try to compile the code, the compiler will tell
 us that the types don’t match. The error message will then tell us what the
