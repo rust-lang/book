@@ -118,7 +118,7 @@ using the `push_str` method</span>
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
-parameter. For example, in the code in Listing 8-16, we want to able to use
+parameter. For example, in the code in Listing 8-16, we want to be able to use
 `s2` after appending its contents to `s1`.
 
 ```rust
