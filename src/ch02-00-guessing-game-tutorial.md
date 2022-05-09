@@ -834,6 +834,11 @@ match the first arm’s pattern, and the `match` expression will just return the
 `num` value that `parse` produced and put inside the `Ok` value. That number
 will end up right where we want it in the new `guess` variable we’re creating.
 
+> Note: In the above code snippet, `num` is a variable that we chose to represent
+> the value that `Ok` is bound with, which is returned by the `parse()` method.
+> On this example we named it `num` but we could had named it `val` as well, or
+> anything else we want.
+
 If `parse` is *not* able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
