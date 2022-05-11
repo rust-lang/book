@@ -621,7 +621,7 @@ care of calling the `from` function automatically.
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the variable `f`. If an error occurs, the
-`?` operator will return early out of the whole function and give any `Err`
+`?` operator will return early out of the whole function and give an `Err`
 value to the calling code. The same thing applies to the `?` at the end of the
 `read_to_string` call.
 
