@@ -108,7 +108,7 @@ for the first thread to finish.
 To fix this problem, we’ll need a change in the the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
 
-First, we'll change the `Threadpool` `drop` implementation to explicitly drop
+First, we’ll change the `Threadpool` `drop` implementation to explicitly drop
 the `sender` before waiting for the threads to finish. Listing 20-23 shows the
 changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
 and `take` technique as we did with the thread to be able to move `sender` out

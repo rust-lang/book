@@ -154,15 +154,15 @@ lines in a vector by adding the `Vec<_>` type annotation.
 method. The `lines` method returns an iterator of `Result<String,
 std::io::Error>` by splitting the stream of data whenever it sees a newline
 byte. To get each `String`, we map and `unwrap` each `Result`. The `Result`
-might be an error if the data isn't valid UTF-8 or if there was a problem
+might be an error if the data isn’t valid UTF-8 or if there was a problem
 reading from the stream. Again, a production program should handle these errors
-more gracefully, but we're choosing to stop the program in the error case for
+more gracefully, but we’re choosing to stop the program in the error case for
 simplicity.
 
 The browser signals the end of an HTTP request by sending two newline
 characters in a row, so to get one request from the stream, we take lines while
-they're not the empty string. Once we've collected the lines into the vector,
-we're printing them out using pretty debug formatting so we can take a look at
+they’re not the empty string. Once we’ve collected the lines into the vector,
+we’re printing them out using pretty debug formatting so we can take a look at
 the instructions the web browser is sending to our server.
 
 Let’s try this code! Start the program and make a request in a web browser
@@ -363,8 +363,8 @@ received against what we know a request for */* looks like and adds `if` and
 <span class="caption">Listing 20-6: Looking at the request line and handling
 requests to */* differently from other requests</span>
 
-First, we're only going to be looking at the first line of the HTTP request, so
-rather than reading the entire request into a vector, we're calling `next` to
+First, we’re only going to be looking at the first line of the HTTP request, so
+rather than reading the entire request into a vector, we’re calling `next` to
 get the first item from the iterator. The first `unwrap` takes care of the
 `Option` and stops the program if the iterator has no items. The second
 `unwrap` handles the `Result` and has the same effect as the `unwrap` that was

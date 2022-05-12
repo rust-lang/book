@@ -26,7 +26,7 @@ for 5 seconds before responding.
 
 We switched from `if` to `match` now that we have three cases. We need to
 explicitly match on a slice of `request_line` to pattern match against the
-string literal values; `match` doesn't do automatic referencing and
+string literal values; `match` doesn’t do automatic referencing and
 dereferencing like the equality method does.
 
 The first arm is the same as the `if` block from Listing 20-9. The second arm
@@ -493,7 +493,7 @@ When we try to check this code, we get this error:
 The code is trying to pass `receiver` to multiple `Worker` instances. This
 won’t work, as you’ll recall from Chapter 16: the channel implementation that
 Rust provides is multiple *producer*, single *consumer*. This means we can’t
-just clone the consuming end of the channel to fix this code. We also don't
+just clone the consuming end of the channel to fix this code. We also don’t
 want to send a message multiple times to multiple consumers; we want one list
 of messages with multiple workers such that each message gets processed once.
 
