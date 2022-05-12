@@ -493,9 +493,9 @@ When we try to check this code, we get this error:
 The code is trying to pass `receiver` to multiple `Worker` instances. This
 won’t work, as you’ll recall from Chapter 16: the channel implementation that
 Rust provides is multiple *producer*, single *consumer*. This means we can’t
-just clone the consuming end of the channel to fix this code. Even if we could,
-that is not the technique we would want to use; instead, we want to distribute
-the jobs across threads by sharing the single `receiver` among all the workers.
+just clone the consuming end of the channel to fix this code. We also don't
+want to send a message multiple times to multiple consumers; we want one list
+of messages with multiple workers such that each message gets processed once.
 
 Additionally, taking a job off the channel queue involves mutating the
 `receiver`, so the threads need a safe way to share and modify `receiver`;
