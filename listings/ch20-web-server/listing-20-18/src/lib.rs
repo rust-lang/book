@@ -1,8 +1,8 @@
-use std::sync::mpsc;
-use std::thread;
 // ANCHOR: here
-use std::sync::Arc;
-use std::sync::Mutex;
+use std::{
+    sync::{mpsc, Arc, Mutex},
+    thread,
+};
 // --snip--
 
 // ANCHOR_END: here

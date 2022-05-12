@@ -27,7 +27,6 @@ impl ThreadPool {
 
         ThreadPool { threads }
     }
-
     // --snip--
     // ANCHOR_END: here
 

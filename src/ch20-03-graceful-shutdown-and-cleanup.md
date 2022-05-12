@@ -75,7 +75,7 @@ new `Worker`. Make the following changes to fix this error:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
 ```
 
@@ -85,7 +85,7 @@ The following changes will do so:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
 
@@ -105,84 +105,46 @@ the moment, we call `join`, but that won’t shut down the threads because they
 current implementation of `drop`, the main thread will block forever waiting
 for the first thread to finish.
 
-To fix this problem, we’ll modify the threads so they listen for either a `Job`
-to run or a signal that they should stop listening and exit the infinite loop.
-Instead of `Job` instances, our channel will send one of these two enum
-variants.
+To fix this problem, we’ll need a change in the the `ThreadPool` `drop`
+implementation and then a change in the `Worker` loop.
+
+First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
+the `sender` before waiting for the threads to finish. Listing 20-23 shows the
+changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
+and `take` technique as we did with the thread to be able to move `sender` out
+of `ThreadPool`:
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust,noplayground,not_desired_behavior
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-23/src/lib.rs:here}}
+```
+
+<span class="caption">Listing 20-23: Explicitly drop `sender` before joining
+the worker threads</span>
+
+Dropping `sender` closes the channel, which indicates no more messages will be
+sent. When that happens, all the calls to `recv` that the workers do in the
+infinite loop will return an error. In Listing 20-24, we change the `Worker`
+loop to gracefully exit the loop in that case, which means the threads will
+finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-define-message-enum/src/lib.rs:here}}
-```
-
-This `Message` enum will either be a `NewJob` variant that holds the `Job` the
-thread should run, or it will be a `Terminate` variant that will cause the
-thread to exit its loop and stop.
-
-We need to adjust the channel to use values of type `Message` rather than type
-`Job`, as shown in Listing 20-23.
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-23/src/lib.rs:here}}
-```
-
-<span class="caption">Listing 20-23: Sending and receiving `Message` values and
-exiting the loop if a `Worker` receives `Message::Terminate`</span>
-
-To incorporate the `Message` enum, we need to change `Job` to `Message` in two
-places: the definition of `ThreadPool` and the signature of `Worker::new`. The
-`execute` method of `ThreadPool` needs to send jobs wrapped in the
-`Message::NewJob` variant. Then, in `Worker::new` where a `Message` is received
-from the channel, the job will be processed if the `NewJob` variant is
-received, and the thread will break out of the loop if the `Terminate` variant
-is received.
-
-With these changes, the code will compile and continue to function in the same
-way as it did after Listing 20-20. But we’ll get a warning because we aren’t
-creating any messages of the `Terminate` variety. Let’s fix this warning by
-changing our `Drop` implementation to look like Listing 20-24.
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-24/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 20-24: Sending `Message::Terminate` to the
-workers before calling `join` on each worker thread</span>
-
-We’re now iterating over the workers twice: once to send one `Terminate`
-message for each worker and once to call `join` on each worker’s thread. If we
-tried to send a message and `join` immediately in the same loop, we couldn’t
-guarantee that the worker in the current iteration would be the one to get the
-message from the channel.
-
-To better understand why we need two separate loops, imagine a scenario with
-two workers. If we used a single loop to iterate through each worker, on the
-first iteration a terminate message would be sent down the channel and `join`
-called on the first worker’s thread. If that first worker was busy processing a
-request at that moment, the second worker would pick up the terminate message
-from the channel and shut down. We would be left waiting on the first worker to
-shut down, but it never would because the second thread picked up the terminate
-message. Deadlock!
-
-To prevent this scenario, we first put all of our `Terminate` messages on the
-channel in one loop; then we join on all the threads in another loop. Each
-worker will stop receiving requests on the channel once it gets a terminate
-message. So, we can be sure that if we send the same number of terminate
-messages as there are workers, each worker will receive a terminate message
-before `join` is called on its thread.
+<span class="caption">Listing 20-24: Explicitly break out of the loop when
+`recv` returns an error</span>
 
 To see this code in action, let’s modify `main` to accept only two requests
 before gracefully shutting down the server, as shown in Listing 20-25.
 
-<span class="filename">Filename: src/bin/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/bin/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-web-server/listing-20-25/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 20-25: Shut down the server after serving two
@@ -214,17 +176,15 @@ Can't automate because the output depends on making requests
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0s
-     Running `target/debug/main`
+     Running `target/debug/hello`
 Worker 0 got a job; executing.
-Worker 3 got a job; executing.
 Shutting down.
-Sending terminate message to all workers.
-Shutting down all workers.
 Shutting down worker 0
-Worker 1 was told to terminate.
-Worker 2 was told to terminate.
-Worker 0 was told to terminate.
-Worker 3 was told to terminate.
+Worker 3 got a job; executing.
+Worker 1 disconnected; shutting down.
+Worker 2 disconnected; shutting down.
+Worker 3 disconnected; shutting down.
+Worker 0 disconnected; shutting down.
 Shutting down worker 1
 Shutting down worker 2
 Shutting down worker 3
@@ -232,20 +192,19 @@ Shutting down worker 3
 
 You might see a different ordering of workers and messages printed. We can see
 how this code works from the messages: workers 0 and 3 got the first two
-requests, and then on the third request, the server stopped accepting
-connections. When the `ThreadPool` goes out of scope at the end of `main`, its
-`Drop` implementation kicks in, and the pool tells all workers to terminate.
-The workers each print a message when they see the terminate message, and then
-the thread pool calls `join` to shut down each worker thread.
+requests. The server stopped accepting connections after the second connection,
+and the `Drop` implementation on `ThreadPool` starts executing before worker 3
+even starts its job. Dropping the `sender` disconnects all the workers and
+tells them to shut down. The workers each print a message when they disconnect,
+and then the thread pool calls `join` to wait for each worker thread to finish.
 
 Notice one interesting aspect of this particular execution: the `ThreadPool`
-sent the terminate messages down the channel, and before any worker received
-the messages, we tried to join worker 0. Worker 0 had not yet received the
-terminate message, so the main thread blocked waiting for worker 0 to finish.
-In the meantime, each of the workers received the termination messages. When
-worker 0 finished, the main thread waited for the rest of the workers to
-finish. At that point, they had all received the termination message and were
-able to shut down.
+dropped the `sender`, and before any worker received an error, we tried to join
+worker 0. Worker 0 had not yet gotten an error from `recv`, so the main thread
+blocked waiting for worker 0 to finish. In the meantime, worker 3 received a
+job and then all threads received an error. When worker 0 finished, the main
+thread waited for the rest of the workers to finish. At that point, they had
+all exited their loops and stopped.
 
 Congrats! We’ve now completed our project; we have a basic web server that uses
 a thread pool to respond asynchronously. We’re able to perform a graceful
@@ -253,16 +212,16 @@ shutdown of the server, which cleans up all the threads in the pool.
 
 Here’s the full code for reference:
 
-<span class="filename">Filename: src/bin/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/bin/main.rs}}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-final-code/src/main.rs}}
 ```
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-08-final-code/src/lib.rs}}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-07-final-code/src/lib.rs}}
 ```
 
 We could do more here! If you want to continue enhancing this project, here are

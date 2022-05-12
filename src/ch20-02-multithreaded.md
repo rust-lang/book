@@ -24,11 +24,15 @@ for 5 seconds before responding.
 <span class="caption">Listing 20-10: Simulating a slow request by recognizing
 */sleep* and sleeping for 5 seconds</span>
 
-This code is a bit messy, but it’s good enough for simulation purposes. We
-created a second request `sleep`, whose data our server recognizes. We added an
-`else if` after the `if` block to check for the request to */sleep*. When that
-request is received, the server will sleep for 5 seconds before rendering the
-successful HTML page.
+We switched from `if` to `match` now that we have three cases. We need to
+explicitly match on a slice of `request_line` to pattern match against the
+string literal values; `match` doesn’t do automatic referencing and
+dereferencing like the equality method does.
+
+The first arm is the same as the `if` block from Listing 20-9. The second arm
+matches a request to */sleep*. When that request is received, the server will
+sleep for 5 seconds before rendering the successful HTML page. The third arm is
+the same as the `else` block from Listing 20-9.
 
 You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
@@ -73,8 +77,8 @@ handle before reaching that point.
 This technique is just one of many ways to improve the throughput of a web
 server. Other options you might explore are the fork/join model and the
 single-threaded async I/O model. If you’re interested in this topic, you can
-read more about other solutions and try to implement them in Rust; with a
-low-level language like Rust, all of these options are possible.
+read more about other solutions and try to implement them; with a low-level
+language like Rust, all of these options are possible.
 
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
@@ -161,17 +165,13 @@ definition of a `ThreadPool` struct that we can have for now:
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/lib.rs}}
 ```
 
-Then create a new directory, *src/bin*, and move the binary crate rooted in
-*src/main.rs* into *src/bin/main.rs*. Doing so will make the library crate the
-primary crate in the *hello* directory; we can still run the binary in
-*src/bin/main.rs* using `cargo run`. After moving the *main.rs* file, edit it
-to bring the library crate in and bring `ThreadPool` into scope by adding the
-following code to the top of *src/bin/main.rs*:
+Then edit *main.rs* file to bring `ThreadPool` into scope from the library
+crate by adding the following code to the top of *src/main.rs*:
 
-<span class="filename">Filename: src/bin/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/bin/main.rs:here}}
+{{#rustdoc_include ../listings/ch20-web-server/no-listing-01-define-threadpool-struct/src/main.rs:here}}
 ```
 
 This code still won’t work, but let’s check it again to get the next error that
@@ -294,11 +294,11 @@ zero by using the `assert!` macro, as shown in Listing 20-13.
 <span class="caption">Listing 20-13: Implementing `ThreadPool::new` to panic if
 `size` is zero</span>
 
-We’ve added some documentation for our `ThreadPool` with doc comments. Note
-that we followed good documentation practices by adding a section that calls
-out the situations in which our function can panic, as discussed in Chapter 14.
-Try running `cargo doc --open` and clicking the `ThreadPool` struct to see what
-the generated docs for `new` look like!
+We’ve also added some documentation for our `ThreadPool` with doc comments.
+Note that we followed good documentation practices by adding a section that
+calls out the situations in which our function can panic, as discussed in
+Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
+to see what the generated docs for `new` look like!
 
 Instead of adding the `assert!` macro as we’ve done here, we could make `new`
 return a `Result` like we did with `Config::new` in the I/O project in Listing
@@ -358,8 +358,7 @@ store `size` elements in the vector, doing this allocation up front is slightly
 more efficient than using `Vec::new`, which resizes itself as elements are
 inserted.
 
-When you run `cargo check` again, you’ll get a few more warnings, but it should
-succeed.
+When you run `cargo check` again, it should succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
@@ -417,7 +416,7 @@ because it’s now holding `Worker` instances instead of `JoinHandle<()>`
 instances. We use the counter in the `for` loop as an argument to
 `Worker::new`, and we store each new `Worker` in the vector named `workers`.
 
-External code (like our server in *src/bin/main.rs*) doesn’t need to know the
+External code (like our server in *src/main.rs*) doesn’t need to know the
 implementation details regarding using a `Worker` struct within `ThreadPool`,
 so we make the `Worker` struct and its `new` function private. The
 `Worker::new` function uses the `id` we give it and stores a `JoinHandle<()>`
@@ -443,18 +442,17 @@ function as the queue of jobs, and `execute` will send a job from the
 `ThreadPool` to the `Worker` instances, which will send the job to its thread.
 Here is the plan:
 
-1. The `ThreadPool` will create a channel and hold on to the sending side of
-   the channel.
-2. Each `Worker` will hold on to the receiving side of the channel.
+1. The `ThreadPool` will create a channel and hold on to the sender.
+2. Each `Worker` will hold on to the receiver.
 3. We’ll create a new `Job` struct that will hold the closures we want to send
    down the channel.
-4. The `execute` method will send the job it wants to execute down the sending
-   side of the channel.
-5. In its thread, the `Worker` will loop over its receiving side of the channel
-   and execute the closures of any jobs it receives.
+4. The `execute` method will send the job it wants to execute through the
+   sender.
+5. In its thread, the `Worker` will loop over its receiver and execute the
+   closures of any jobs it receives.
 
-Let’s start by creating a channel in `ThreadPool::new` and holding the sending
-side in the `ThreadPool` instance, as shown in Listing 20-16. The `Job` struct
+Let’s start by creating a channel in `ThreadPool::new` and holding the sender
+in the `ThreadPool` instance, as shown in Listing 20-16. The `Job` struct
 doesn’t hold anything for now but will be the type of item we’re sending down
 the channel.
 
@@ -465,15 +463,15 @@ the channel.
 ```
 
 <span class="caption">Listing 20-16: Modifying `ThreadPool` to store the
-sending end of a channel that sends `Job` instances</span>
+sender of a channel that transmits `Job` instances</span>
 
 In `ThreadPool::new`, we create our new channel and have the pool hold the
-sending end. This will successfully compile, still with warnings.
+sender. This will successfully compile.
 
-Let’s try passing a receiving end of the channel into each worker as the thread
-pool creates the channel. We know we want to use the receiving end in the
-thread that the workers spawn, so we’ll reference the `receiver` parameter in
-the closure. The code in Listing 20-17 won’t quite compile yet.
+Let’s try passing a receiver of the channel into each worker as the thread pool
+creates the channel. We know we want to use the receiver in the thread that the
+workers spawn, so we’ll reference the `receiver` parameter in the closure. The
+code in Listing 20-17 won’t quite compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -481,11 +479,10 @@ the closure. The code in Listing 20-17 won’t quite compile yet.
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-17/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 20-17: Passing the receiving end of the channel
-to the workers</span>
+<span class="caption">Listing 20-17: Passing the receiver to the workers</span>
 
-We’ve made some small and straightforward changes: we pass the receiving end of
-the channel into `Worker::new`, and then we use it inside the closure.
+We’ve made some small and straightforward changes: we pass the receiver into
+`Worker::new`, and then we use it inside the closure.
 
 When we try to check this code, we get this error:
 
@@ -496,9 +493,9 @@ When we try to check this code, we get this error:
 The code is trying to pass `receiver` to multiple `Worker` instances. This
 won’t work, as you’ll recall from Chapter 16: the channel implementation that
 Rust provides is multiple *producer*, single *consumer*. This means we can’t
-just clone the consuming end of the channel to fix this code. Even if we could,
-that is not the technique we would want to use; instead, we want to distribute
-the jobs across threads by sharing the single `receiver` among all the workers.
+just clone the consuming end of the channel to fix this code. We also don’t
+want to send a message multiple times to multiple consumers; we want one list
+of messages with multiple workers such that each message gets processed once.
 
 Additionally, taking a job off the channel queue involves mutating the
 `receiver`, so the threads need a safe way to share and modify `receiver`;
@@ -516,12 +513,12 @@ receiver at a time. Listing 20-18 shows the changes we need to make.
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-18/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 20-18: Sharing the receiving end of the channel
-among the workers using `Arc` and `Mutex`</span>
+<span class="caption">Listing 20-18: Sharing the receiver among the workers
+using `Arc` and `Mutex`</span>
 
-In `ThreadPool::new`, we put the receiving end of the channel in an `Arc` and a
-`Mutex`. For each new worker, we clone the `Arc` to bump the reference count so
-the workers can share ownership of the receiving end.
+In `ThreadPool::new`, we put the receiver in an `Arc` and a `Mutex`. For each
+new worker, we clone the `Arc` to bump the reference count so the workers can
+share ownership of the receiver.
 
 With these changes, the code compiles! We’re getting there!
 
@@ -577,8 +574,8 @@ you.
 
 If we get the lock on the mutex, we call `recv` to receive a `Job` from the
 channel. A final `unwrap` moves past any errors here as well, which might occur
-if the thread holding the sending side of the channel has shut down, similar to
-how the `send` method returns `Err` if the receiving side shuts down.
+if the thread holding the sender has shut down, similar to how the `send`
+method returns `Err` if the receiver shuts down.
 
 The call to `recv` blocks, so if there is no job yet, the current thread will
 wait until a job becomes available. The `Mutex<T>` ensures that only one
@@ -617,10 +614,9 @@ warning: field is never read: `thread`
 49 |     thread: thread::JoinHandle<()>,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-warning: 3 warnings emitted
-
+warning: `hello` (lib) generated 3 warnings
     Finished dev [unoptimized + debuginfo] target(s) in 1.40s
-     Running `target/debug/main`
+     Running `target/debug/hello`
 Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 Worker 1 got a job; executing.

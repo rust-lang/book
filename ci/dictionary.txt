@@ -58,6 +58,8 @@ Bors
 BorrowMutError
 BoxMeUp
 BTreeSet
+BufRead
+BufReader
 BuildHasher
 Cacher
 cacher
@@ -120,6 +122,7 @@ dereferences
 dereferencing
 DerefMut
 DeriveInput
+Dest
 destructor
 destructure
 destructured
@@ -210,6 +213,7 @@ Hoare
 Hola
 homogenous
 html
+http
 https
 hyperoptimize
 hypotheticals
