@@ -108,7 +108,7 @@ for the first thread to finish.
 To fix this problem, we’ll need a change in the the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
 
-First, we’ll change the `Threadpool` `drop` implementation to explicitly drop
+First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
 the `sender` before waiting for the threads to finish. Listing 20-23 shows the
 changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
 and `take` technique as we did with the thread to be able to move `sender` out
@@ -199,12 +199,12 @@ tells them to shut down. The workers each print a message when they disconnect,
 and then the thread pool calls `join` to wait for each worker thread to finish.
 
 Notice one interesting aspect of this particular execution: the `ThreadPool`
-droppend the `sender`, and before any worker received an error, we tried to
-join worker 0. Worker 0 had not yet gotten an error from `recv`, so the main
-thread blocked waiting for worker 0 to finish. In the meantime, worker 3
-received a job and then all threads received an error. When worker 0 finished,
-the main thread waited for the rest of the workers to finish. At that point,
-they had all exited their loops and stopped.
+dropped the `sender`, and before any worker received an error, we tried to join
+worker 0. Worker 0 had not yet gotten an error from `recv`, so the main thread
+blocked waiting for worker 0 to finish. In the meantime, worker 3 received a
+job and then all threads received an error. When worker 0 finished, the main
+thread waited for the rest of the workers to finish. At that point, they had
+all exited their loops and stopped.
 
 Congrats! We’ve now completed our project; we have a basic web server that uses
 a thread pool to respond asynchronously. We’re able to perform a graceful
