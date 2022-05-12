@@ -363,12 +363,12 @@ received against what we know a request for */* looks like and adds `if` and
 <span class="caption">Listing 20-6: Looking at the request line and handling
 requests to */* differently from other requests</span>
 
-First, we’re only going to be looking at the first line of the HTTP request, so
-rather than reading the entire request into a vector, we’re calling `next` to
-get the first item from the iterator. The first `unwrap` takes care of the
-`Option` and stops the program if the iterator has no items. The second
-`unwrap` handles the `Result` and has the same effect as the `unwrap` that was
-in the `map` added in Listing 20-2.
+We’re only going to be looking at the first line of the HTTP request, so rather
+than reading the entire request into a vector, we’re calling `next` to get the
+first item from the iterator. The first `unwrap` takes care of the `Option` and
+stops the program if the iterator has no items. The second `unwrap` handles the
+`Result` and has the same effect as the `unwrap` that was in the `map` added in
+Listing 20-2.
 
 Next, we check the `request_line` to see if it equals the request line of a GET
 request to the */* path. If it does, the `if` block returns the contents of our

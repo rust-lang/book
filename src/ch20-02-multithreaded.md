@@ -31,7 +31,8 @@ dereferencing like the equality method does.
 
 The first arm is the same as the `if` block from Listing 20-9. The second arm
 matches a request to */sleep*. When that request is received, the server will
-sleep for 5 seconds before rendering the successful HTML page.
+sleep for 5 seconds before rendering the successful HTML page. The third arm is
+the same as the `else` block from Listing 20-9.
 
 You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
@@ -357,8 +358,7 @@ store `size` elements in the vector, doing this allocation up front is slightly
 more efficient than using `Vec::new`, which resizes itself as elements are
 inserted.
 
-When you run `cargo check` again, you’ll get a few more warnings, but it should
-succeed.
+When you run `cargo check` again, it should succeed.
 
 #### A `Worker` Struct Responsible for Sending Code from the `ThreadPool` to a Thread
 
@@ -416,7 +416,7 @@ because it’s now holding `Worker` instances instead of `JoinHandle<()>`
 instances. We use the counter in the `for` loop as an argument to
 `Worker::new`, and we store each new `Worker` in the vector named `workers`.
 
-External code (like our server in *src/bin/main.rs*) doesn’t need to know the
+External code (like our server in *src/main.rs*) doesn’t need to know the
 implementation details regarding using a `Worker` struct within `ThreadPool`,
 so we make the `Worker` struct and its `new` function private. The
 `Worker::new` function uses the `id` we give it and stores a `JoinHandle<()>`
@@ -466,7 +466,7 @@ the channel.
 sender of a channel that transmits `Job` instances</span>
 
 In `ThreadPool::new`, we create our new channel and have the pool hold the
-sender. This will successfully compile, still with warnings.
+sender. This will successfully compile.
 
 Let’s try passing a receiver of the channel into each worker as the thread pool
 creates the channel. We know we want to use the receiver in the thread that the
