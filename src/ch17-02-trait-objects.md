@@ -41,18 +41,18 @@ allow users to extend it with new types.
 To implement the behavior we want `gui` to have, we’ll define a trait named
 `Draw` that will have one method named `draw`. Then we can define a vector that
 takes a *trait object*. A trait object points to both an instance of a type
-implementing our specified trait as well as a table used to look up trait
-methods on that type at runtime. We create a trait object by specifying some
-sort of pointer, such as a `&` reference or a `Box<T>` smart pointer, then the
-`dyn` keyword, and then specifying the relevant trait. (We’ll talk about the
-reason trait objects must use a pointer in Chapter 19 in the section
-[“Dynamically Sized Types and the `Sized` Trait.”][dynamically-sized]<!--
-ignore -->) We can use trait objects in place of a generic or concrete type.
-Wherever we use a trait object, Rust’s type system will ensure at compile time
-that any value used in that context will implement the trait object’s trait.
-Consequently, we don’t need to know all the possible types at compile time.
+implementing our specified trait and a table used to look up trait methods on
+that type at runtime. We create a trait object by specifying some sort of
+pointer, such as a `&` reference or a `Box<T>` smart pointer, then the `dyn`
+keyword, and then specifying the relevant trait. (We’ll talk about the reason
+trait objects must use a pointer in Chapter 19 in the section [“Dynamically
+Sized Types and the `Sized` Trait.”][dynamically-sized]<!-- ignore -->) We can
+use trait objects in place of a generic or concrete type. Wherever we use a
+trait object, Rust’s type system will ensure at compile time that any value
+used in that context will implement the trait object’s trait. Consequently, we
+don’t need to know all the possible types at compile time.
 
-We’ve mentioned that in Rust, we refrain from calling structs and enums
+We’ve mentioned that, in Rust, we refrain from calling structs and enums
 “objects” to distinguish them from other languages’ objects. In a struct or
 enum, the data in the struct fields and the behavior in `impl` blocks are
 separated, whereas in other languages, the data and behavior combined into one
@@ -146,14 +146,14 @@ might have fields for `width`, `height`, and `label`, as shown in Listing 17-7:
 `Draw` trait</span>
 
 The `width`, `height`, and `label` fields on `Button` will differ from the
-fields on other components, such as a `TextField` type, that might have those
-fields plus a `placeholder` field instead. Each of the types we want to draw on
+fields on other components; for example, a `TextField` type might have those
+same fields plus a `placeholder` field. Each of the types we want to draw on
 the screen will implement the `Draw` trait but will use different code in the
 `draw` method to define how to draw that particular type, as `Button` has here
-(without the actual GUI code, which is beyond the scope of this chapter). The
-`Button` type, for instance, might have an additional `impl` block containing
-methods related to what happens when a user clicks the button. These kinds of
-methods won’t apply to types like `TextField`.
+(without the actual GUI code, as mentioned). The `Button` type, for instance,
+might have an additional `impl` block containing methods related to what
+happens when a user clicks the button. These kinds of methods won’t apply to
+types like `TextField`.
 
 If someone using our library decides to implement a `SelectBox` struct that has
 `width`, `height`, and `options` fields, they implement the `Draw` trait on the
@@ -224,7 +224,7 @@ We’ll get this error because `String` doesn’t implement the `Draw` trait:
 ```
 
 This error lets us know that either we’re passing something to `Screen` we
-didn’t mean to pass and we should pass a different type or we should implement
+didn’t mean to pass and so should pass a different type or we should implement
 `Draw` on `String` so that `Screen` is able to call `draw` on it.
 
 ### Trait Objects Perform Dynamic Dispatch
@@ -233,8 +233,8 @@ Recall in the [“Performance of Code Using
 Generics”][performance-of-code-using-generics]<!-- ignore --> section in
 Chapter 10 our discussion on the monomorphization process performed by the
 compiler when we use trait bounds on generics: the compiler generates
-nongeneric implementations of functions and methods for each concrete type
-that we use in place of a generic type parameter. The code that results from
+nongeneric implementations of functions and methods for each concrete type that
+we use in place of a generic type parameter. The code that results from
 monomorphization is doing *static dispatch*, which is when the compiler knows
 what method you’re calling at compile time. This is opposed to *dynamic
 dispatch*, which is when the compiler can’t tell at compile time which method
@@ -242,15 +242,14 @@ you’re calling. In dynamic dispatch cases, the compiler emits code that at
 runtime will figure out which method to call.
 
 When we use trait objects, Rust must use dynamic dispatch. The compiler doesn’t
-know all the types that might be used with the code that is using trait
-objects, so it doesn’t know which method implemented on which type to call.
-Instead, at runtime, Rust uses the pointers inside the trait object to know
-which method to call. There is a runtime cost when this lookup happens that
-doesn’t occur with static dispatch. Dynamic dispatch also prevents the compiler
-from choosing to inline a method’s code, which in turn prevents some
-optimizations. However, we did get extra flexibility in the code that we wrote
-in Listing 17-5 and were able to support in Listing 17-9, so it’s a trade-off
-to consider.
+know all the types that might be used with the code that’s using trait objects,
+so it doesn’t know which method implemented on which type to call. Instead, at
+runtime, Rust uses the pointers inside the trait object to know which method to
+call. This lookup incurs a runtime cost that doesn’t occur with static
+dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
+method’s code, which in turn prevents some optimizations. However, we did get
+extra flexibility in the code that we wrote in Listing 17-5 and were able to
+support in Listing 17-9, so it’s a trade-off to consider.
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics

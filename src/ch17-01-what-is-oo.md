@@ -76,10 +76,10 @@ implementations of each call the private `update_average` method that handles
 updating the `average` field as well.
 
 We leave the `list` and `average` fields private so there is no way for
-external code to add or remove items to the `list` field directly; otherwise,
-the `average` field might become out of sync when the `list` changes. The
-`average` method returns the value in the `average` field, allowing external
-code to read the `average` but not modify it.
+external code to add or remove items to or from the `list` field directly;
+otherwise, the `average` field might become out of sync when the `list`
+changes. The `average` method returns the value in the `average` field,
+allowing external code to read the `average` but not modify it.
 
 Because we’ve encapsulated the implementation details of the struct
 `AveragedCollection`, we can easily change aspects, such as the data structure,
@@ -97,9 +97,9 @@ different parts of code enables encapsulation of implementation details.
 
 ### Inheritance as a Type System and as Code Sharing
 
-*Inheritance* is a mechanism whereby an object can inherit from another
-object’s definition, thus gaining the parent object’s data and behavior without
-you having to define them again.
+*Inheritance* is a mechanism whereby an object can inherit elements from
+another object’s definition, thus gaining the parent object’s data and behavior
+without you having to define them again.
 
 If a language must have inheritance to be an object-oriented language, then
 Rust is not one. There is no way to define a struct that inherits the parent
@@ -107,11 +107,11 @@ struct’s fields and method implementations. However, if you’re used to havin
 inheritance in your programming toolbox, you can use other solutions in Rust,
 depending on your reason for reaching for inheritance in the first place.
 
-You choose inheritance for two main reasons. One is for reuse of code: you can
-implement particular behavior for one type, and inheritance enables you to
-reuse that implementation for a different type. You can share Rust code using
-default trait method implementations instead, which you saw in Listing 10-14
-when we added a default implementation of the `summarize` method on the
+You would choose inheritance for two main reasons. One is for reuse of code:
+you can implement particular behavior for one type, and inheritance enables you
+to reuse that implementation for a different type. You can share Rust code
+using default trait method implementations instead, which you saw in Listing
+10-14 when we added a default implementation of the `summarize` method on the
 `Summary` trait. Any type implementing the `Summary` trait would have the
 `summarize` method available on it without any further code. This is similar to
 a parent class having an implementation of a method and an inheriting child
@@ -145,5 +145,6 @@ apply to the subclass. In addition, some languages will only allow a subclass
 to inherit from one class, further restricting the flexibility of a program’s
 design.
 
-For these reasons, Rust takes a different approach, using trait objects instead
-of inheritance. Let’s look at how trait objects enable polymorphism in Rust.
+For these reasons, Rust takes the different approach of using trait objects
+instead of inheritance. Let’s look at how trait objects enable polymorphism in
+Rust.
