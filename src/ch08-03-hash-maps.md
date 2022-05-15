@@ -199,7 +199,7 @@ the value 0.
 map that stores words and counts</span>
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. The
-`split_whitespace` method iterates over sub-slices, separated by whitespace, of
+`split_whitespace` returns iterator to be consumed by `for` loop, which iterates over sub-slices separated by whitespace, of
 the value in `text`. The `or_insert` method returns a mutable reference (`&mut
 V`) to the value for the specified key. Here we store that mutable reference in
 the `count` variable, so in order to assign to that value, we must first
