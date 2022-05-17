@@ -61,14 +61,14 @@ the `build-essential` package.
 
 On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
 the instructions for installing Rust. At some point in the installation, you’ll
-receive a message explaining that you’ll also need the C++ build tools for
-Visual Studio 2013 or later. The easiest way to acquire the build tools is to
-install [Build Tools for Visual Studio 2019][visualstudio]. When asked which
-workloads to install make sure “C++ build tools” is selected and that the
-Windows 10 SDK and the English language pack components are included.
+receive a message explaining that you’ll also need the MSVC build tools for
+Visual Studio 2013 or later. To acquire the build tools you'll need to
+install [Visual Studio 2022][visualstudio]. When asked which workloads to
+install make sure “Desktop Development with C++” is selected and that the
+Windows 10 or 11 SDK and the English language pack components are included.
 
 [install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+[visualstudio]: https://visualstudio.microsoft.com/downloads/
 
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
