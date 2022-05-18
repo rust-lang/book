@@ -92,7 +92,7 @@ $ rustup self uninstall
 ### Troubleshooting
 
 To check whether you have Rust installed correctly, open a shell and enter this
-line:
+line (you might need to reboot the shell):
 
 ```console
 $ rustc --version
