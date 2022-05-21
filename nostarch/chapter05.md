@@ -14,9 +14,7 @@ you’re familiar with an object-oriented language, a *struct* is like an
 object’s data attributes. In this chapter, we’ll compare and contrast tuples
 with structs to build on what you already know and demonstrate when structs are
 a better way to group data.
-<!--- quickly say why we do this comparison -- to show when to use structs and
-when to use tuples? Because they serve similar functions? /LC --->
-<!-- done! /Carol -->
+
 We’ll demonstrate how to define and instantiate structs. We’ll discuss how to
 define associated functions, especially the kind of associated functions called
 *methods*, to specify behavior associated with a struct type. Structs and enums
@@ -77,6 +75,11 @@ just this user’s email address, we could use `user1.email` wherever we wanted
 to use this value. If the instance is mutable, we can change a value by using
 the dot notation and assigning into a particular field. Listing 5-3 shows how
 to change the value in the `email` field of a mutable `User` instance.
+
+<!--- Do we want to mention that `user1.email` will move the field? We can't
+just use `user1.email` multiple times re: "wherever we wanted
+to use this value"
+/JT --->
 
 ```
 fn main() {
@@ -199,7 +202,7 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax uses `=` like an assignment; this is
+Note that the struct update syntax uses `=` like an assignement; this is
 because it moves the data, just as we saw in the “Ways Variables and Data
 Interact: Move” section. In this example, we can no longer use `user1` after
 creating `user2` because the `String` in the `username` field of `user1` was
@@ -209,6 +212,9 @@ values from `user1`, then `user1` would still be valid after creating `user2`.
 The types of `active` and `sign_in_count` are types that implement the `Copy`
 trait, so the behavior we discussed in the “Stack-Only Data: Copy” section
 would apply.
+
+<!--- Misspelled "assignment" above.
+/JT --->
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
@@ -241,6 +247,21 @@ argument, even though both types are made up of three `i32` values. Otherwise,
 tuple struct instances behave like tuples: you can destructure them into their
 individual pieces, you can use a `.` followed by the index to access an
 individual value, and so on.
+
+<!--- The last line above feels a bit misleading. There are related restrictions on
+tuple structs that don't apply to tuples.
+
+One example is you can't create a tuple struct with a tuple. 
+```
+struct Color(i32, i32, i32);
+
+fn main() {
+    let x: Color = (1, 2, 3);
+}
+```
+
+You can't pass a tuple struct to something that expects a tuple, either.
+/JT --->
 
 ### Unit-Like Structs Without Any Fields
 
@@ -384,9 +405,6 @@ The area of the rectangle is 1500 square pixels.
 This code succeeds in figuring out the area of the rectangle by calling the
 `area` function with each dimension, but we can do more to make this code clear
 and readable.
-<!--- I wanted to clarify what more needed to be done up front, is this right,
-it's just better practice to relate the two parameters? /LC --->
-<!-- Yup, you've got it! /Carol -->
 
 The issue with this code is evident in the signature of `area`:
 
@@ -486,6 +504,11 @@ calculate the area of `Rectangle`, using its `width` and `height` fields. This
 conveys that the width and height are related to each other, and it gives
 descriptive names to the values rather than using the tuple index values of `0`
 and `1`. This is a win for clarity.
+
+<!--- Tying to my comment above about `user1.email` moving that field: we should
+take a minute here and explain that accessing fields on a borrowed struct does
+not move them, and why you often see borrows of structs.
+/JT --->
 
 ### Adding Useful Functionality with Derived Traits
 
@@ -654,6 +677,10 @@ same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` 
 take ownership of `rect1`, so we use a reference to `dbg!` in the next call.
 Here’s what the output of this example looks like:
 
+<!--- is it worth calling out that println! doesn't have the dbg! shortcoming
+of taking ownership?
+/JT --->
+
 ```
 $ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
@@ -697,6 +724,12 @@ methods are defined within the context of a struct (or an enum or a trait
 object, which we cover in Chapters 6 and 17, respectively), and their first
 parameter is always `self`, which represents the instance of the struct the
 method is being called on.
+
+<!--- minor nit: some folks call the non-self functions in an `impl` 
+"static methods" as a nod to OO languages that do the same. For folks
+from that background, we may want to call out that instance methods always
+have `self` and methods on the type do not.
+/JT --->
 
 ### Defining Methods
 
@@ -951,6 +984,10 @@ To call this associated function, we use the `::` syntax with the struct name;
 the struct: the `::` syntax is used for both associated functions and
 namespaces created by modules. We’ll discuss modules in Chapter 7.
 
+<!--- Should we mention the most common associated function is `new`? And that 
+new isn't built into the language.
+/JT --->
+
 ### Multiple `impl` Blocks
 
 Each struct is allowed to have multiple `impl` blocks. For example, Listing
@@ -988,3 +1025,25 @@ structs have.
 
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
+
+<!--- We don't mention that you can only use `impl` in the same crate as the
+type it's created in, otherwise you could use `impl` and add methods on types
+that come from other people (which you can't do, unless you make a trait to
+attach them to)
+
+Another thing we may want to mention is that `Self` inside of an `impl` refers
+to the type being impl'd. So you might write the above:
+
+```
+impl Rectangle {
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
+    }
+}
+```
+which is often a bit more ergonomic.
+
+/JT --->
