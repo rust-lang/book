@@ -481,6 +481,7 @@ subdirectory
 submodule
 submodules
 Submodules
+submodule’s
 suboptimal
 subpath
 substring
