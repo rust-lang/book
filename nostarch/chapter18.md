@@ -8,7 +8,7 @@ directory, so all fixes need to be made in `/src/`.
 
 # Patterns and Matching
 
-Patterns are a special syntax in Rust for matching against the structure of
+*Patterns* are a special syntax in Rust for matching against the structure of
 types, both complex and simple. Using patterns in conjunction with `match`
 expressions and other constructs gives you more control over a program’s
 control flow. A pattern consists of some combination of the following:
@@ -22,6 +22,10 @@ control flow. A pattern consists of some combination of the following:
 These components describe the shape of the data we’re working with, which we
 then match against values to determine whether our program has the correct data
 to continue running a particular piece of code.
+<!-- is there some generic pattern we can show as an example, early on, or
+is it too dependent on where the pattern is used? /LC -->
+<!-- Yeah, if a pattern is out of context, it doesn't look special. Like `3`
+can be a pattern. /Carol -->
 
 To use a pattern, we compare it to some value. If the pattern matches the
 value, we use the value parts in our code. Recall the `match` expressions in
@@ -56,17 +60,32 @@ match VALUE {
 }
 ```
 
+For example, here's the `match` expression from Listing 6-5 that matches on an
+`Option<i32>` value in the variable `x`:
+
+```
+match x {
+    None => None,
+    Some(i) => Some(i + 1),
+}
+```
+
+The patterns in this `match` expression are the `None` and `Some(i)` on the
+left of each arrow.
+<!-- and maybe a quick example of an actual match block here would be useful,
+so we can see what counts as a pattern /LC -->
+<!-- Done! /Carol -->
 One requirement for `match` expressions is that they need to be *exhaustive* in
 the sense that all possibilities for the value in the `match` expression must
 be accounted for. One way to ensure you’ve covered every possibility is to have
 a catchall pattern for the last arm: for example, a variable name matching any
 value can never fail and thus covers every remaining case.
 
-A particular pattern `_` will match anything, but it never binds to a variable,
-so it’s often used in the last match arm. The `_` pattern can be useful when
-you want to ignore any value not specified, for example. We’ll cover the `_`
-pattern in more detail in the “Ignoring Values in a Pattern” section later in
-this chapter.
+The particular pattern `_` will match anything, but it never binds to a
+variable, so it’s often used in the last match arm. The `_` pattern can be
+useful when you want to ignore any value not specified, for example. We’ll
+cover the `_` pattern in more detail in the “Ignoring Values in a Pattern”
+section later in this chapter.
 
 ### Conditional `if let` Expressions
 
@@ -78,11 +97,11 @@ the pattern in the `if let` doesn’t match.
 Listing 18-1 shows that it’s also possible to mix and match `if let`, `else
 if`, and `else if let` expressions. Doing so gives us more flexibility than a
 `match` expression in which we can express only one value to compare with the
-patterns. Also, the conditions in a series of `if let`, `else if`, `else if
-let` arms aren’t required to relate to each other.
+patterns. Also, Rust doesn't require that the conditions in a series of `if
+let`, `else if`, `else if let` arms relate to each other.
 
-The code in Listing 18-1 shows a series of checks for several conditions that
-decide what the background color should be. For this example, we’ve created
+The code in Listing 18-1 determines what color to make your background based on
+a series of checks for several conditions. For this example, we’ve created
 variables with hardcoded values that a real program might receive from user
 input.
 
@@ -112,11 +131,12 @@ fn main() {
 
 Listing 18-1: Mixing `if let`, `else if`, `else if let`, and `else`
 
-If the user specifies a favorite color [1], that color is the background color
-[2]. If today is Tuesday [3], the background color is green [4]. If the user
-specifies their age as a string and we can parse it as a number successfully
-[5], the color is either purple [7] or orange [8] depending on the value of the
-number [6]. If none of these conditions apply [9], the background color is blue.
+If the user specifies a favorite color [1], that color is used as the
+background [2]. If no favorite color is specified and today is Tuesday [3], the
+background color is green [4]. Otherwise, if the user specifies their age as a
+string and we can parse it as a number successfully [5], the color is either
+purple [7] or orange [8] depending on the value of the number [6]. If none of
+these conditions apply [9], the background color is blue.
 
 This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the
@@ -131,27 +151,27 @@ shadowed `age` we want to compare to 30 isn’t valid until the new scope starts
 with the curly bracket.
 
 The downside of using `if let` expressions is that the compiler doesn’t check
-exhaustiveness, whereas with `match` expressions it does. If we omitted the
+for exhaustiveness, whereas with `match` expressions it does. If we omitted the
 last `else` block [9] and therefore missed handling some cases, the compiler
 would not alert us to the possible logic bug.
 
 ### `while let` Conditional Loops
 
 Similar in construction to `if let`, the `while let` conditional loop allows a
-`while` loop to run for as long as a pattern continues to match. The example in
-Listing 18-2 shows a `while let` loop that uses a vector as a stack and prints
-the values in the vector in the opposite order in which they were pushed.
+`while` loop to run for as long as a pattern continues to match. In Listing
+18-2 we code a `while let` loop that uses a vector as a stack and prints the
+values in the vector in the opposite order in which they were pushed.
 
 ```
-  let mut stack = Vec::new();
+let mut stack = Vec::new();
 
-  stack.push(1);
-  stack.push(2);
-  stack.push(3);
+stack.push(1);
+stack.push(2);
+stack.push(3);
 
-  while let Some(top) = stack.pop() {
-      println!("{}", top);
-  }
+while let Some(top) = stack.pop() {
+    println!("{}", top);
+}
 ```
 
 Listing 18-2: Using a `while let` loop to print values for as long as
@@ -165,13 +185,10 @@ use `while let` to pop every element off our stack.
 
 ### `for` Loops
 
-In Chapter 3, we mentioned that the `for` loop is the most common loop
-construction in Rust code, but we haven’t yet discussed the pattern that `for`
-takes. In a `for` loop, the pattern is the value that directly follows the
-keyword `for`, so in `for x in y` the `x` is the pattern.
-
-Listing 18-3 demonstrates how to use a pattern in a `for` loop to destructure,
-or break apart, a tuple as part of the `for` loop.
+In a `for` loop, the value that directly follows the keyword `for` is a
+pattern. For example, in `for x in y` the `x` is the pattern. Listing 18-3
+demonstrates how to use a pattern in a `for` loop to destructure, or break
+apart, a tuple as part of the `for` loop.
 
 ```
 let v = vec!['a', 'b', 'c'];
@@ -191,11 +208,11 @@ b is at index 1
 c is at index 2
 ```
 
-We use the `enumerate` method to adapt an iterator to produce a value and that
-value’s index in the iterator, placed into a tuple. The first value produced is
-the tuple `(0, 'a')`. When this value is matched to the pattern `(index,
-value)`, `index` will be `0` and `value` will be `'a'`, printing the first line
-of the output.
+We adapt an iterator using the `enumerate` method so it produces a value and
+the index for that value, placed into a tuple. The first value produced is the
+tuple `(0, 'a')`. When this value is matched to the pattern `(index, value)`,
+`index` will be `0` and `value` will be `'a'`, printing the first line of the
+output.
 
 ### `let` Statements
 
@@ -208,9 +225,9 @@ variable assignment with `let`:
 let x = 5;
 ```
 
-Throughout this book, we’ve used `let` like this hundreds of times, and
-although you might not have realized it, you were using patterns! More
-formally, a `let` statement looks like this:
+Every time you've used a `let` statement like this you've been using patterns,
+although you might not have realized it! More formally, a `let` statement looks
+like this:
 
 ```
 let PATTERN = EXPRESSION;
@@ -235,6 +252,9 @@ at once
 
 Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
 to the pattern `(x, y, z)` and sees that the value matches the pattern, so Rust
+<!-- when you say "the value matches the pattern", do you mean it sees that
+the number of elements in both the value and pattern are the same? /LC -->
+<!-- Yes, and that the pattern is a tuple and the value is a tuple /Carol -->
 binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
 pattern as nesting three individual variable patterns inside it.
 
@@ -247,8 +267,8 @@ elements into two variables, which won’t work.
 let (x, y) = (1, 2, 3);
 ```
 
-Listing 18-5: Incorrectly constructing a pattern whose
-variables don’t match the number of elements in the tuple
+Listing 18-5: Incorrectly constructing a pattern whose variables don’t match
+the number of elements in the tuple
 
 Attempting to compile this code results in this type error:
 
@@ -265,10 +285,10 @@ error[E0308]: mismatched types
              found tuple `(_, _)`
 ```
 
-If we wanted to ignore one or more of the values in the tuple, we could use `_`
-or `..`, as you’ll see in the “Ignoring Values in a Pattern” section. If the
-problem is that we have too many variables in the pattern, the solution is to
-make the types match by removing variables so the number of variables equals
+To fix the error, we could ignore one or more of the values in the tuple using
+`_` or `..`, as you’ll see in the “Ignoring Values in a Pattern” section. If
+the problem is that we have too many variables in the pattern, the solution is
+to make the types match by removing variables so the number of variables equals
 the number of elements in the tuple.
 
 ### Function Parameters
@@ -376,11 +396,11 @@ help: you might want to use `if let` to ignore the variant that isn't matched
 Because we didn’t cover (and couldn’t cover!) every valid value with the
 pattern `Some(x)`, Rust rightfully produces a compiler error.
 
-To fix the problem where we have a refutable pattern where an irrefutable
-pattern is needed, we can change the code that uses the pattern: instead of
-using `let`, we can use `if let`. Then if the pattern doesn’t match, the code
-will just skip the code in the curly brackets, giving it a way to continue
-validly. Listing 18-9 shows how to fix the code in Listing 18-8.
+If we have a refutable pattern where an irrefutable pattern is needed, we can
+fix it by changing the code that uses the pattern: instead of using `let`, we
+can use `if let`. Then if the pattern doesn’t match, the code will just skip
+the code in the curly brackets, giving it a way to continue validly. Listing
+18-9 shows how to fix the code in Listing 18-8.
 
 ```
 if let Some(x) = some_option_value {
@@ -431,9 +451,8 @@ patterns.
 
 ## Pattern Syntax
 
-Throughout the book, you’ve seen examples of many kinds of patterns. In this
-section, we gather all the syntax valid in patterns and discuss why you might
-want to use each one.
+In this section, we gather all the syntax valid in patterns and discuss why and
+when you might want to use each one.
 
 ### Matching Literals
 
@@ -519,10 +538,10 @@ Conditionals with Match Guards” section.
 ### Multiple Patterns
 
 In `match` expressions, you can match multiple patterns using the `|` syntax,
-which means *or*. For example, the following code matches the value of `x`
-against the match arms, the first of which has an *or* option, meaning if the
-value of `x` matches either of the values in that arm, that arm’s code will
-run:
+which is the pattern *or* operator. For example, in the following code we match
+the value of `x` against the match arms, the first of which has an *or* option,
+meaning if the value of `x` matches either of the values in that arm, that
+arm’s code will run:
 
 ```
 let x = 1;
@@ -539,8 +558,8 @@ This code prints `one or two`.
 ### Matching Ranges of Values with `..=`
 
 The `..=` syntax allows us to match to an inclusive range of values. In the
-following code, when a pattern matches any of the values within the range, that
-arm will execute:
+following code, when a pattern matches any of the values within the given
+range, that arm will execute:
 
 ```
 let x = 5;
@@ -552,14 +571,14 @@ match x {
 ```
 
 If `x` is 1, 2, 3, 4, or 5, the first arm will match. This syntax is more
-convenient than using the `|` operator to express the same idea; instead of
-`1..=5`, we would have to specify `1 | 2 | 3 | 4 | 5` if we used `|`.
+convenient for multiple match values than using the `|` operator to express the
+same idea; if we were to use `|` we would have to specify `1 | 2 | 3 | 4 | 5`.
 Specifying a range is much shorter, especially if we want to match, say, any
 number between 1 and 1,000!
 
-Ranges are only allowed with numeric values or `char` values, because the
-compiler checks that the range isn’t empty at compile time. The only types for
-which Rust can tell if a range is empty or not are `char` and numeric values.
+The compiler checks that the range isn’t empty at compile time, and because the
+only types for which Rust can tell if a range is empty or not are `char` and
+numeric values, ranges are only allowed with numeric or `char` values.
 
 Here is an example using ranges of `char` values:
 
@@ -573,7 +592,7 @@ match x {
 }
 ```
 
-Rust can tell that `c` is within the first pattern’s range and prints `early
+Rust can tell that `'c'` is within the first pattern’s range and prints `early
 ASCII letter`.
 
 ### Destructuring to Break Apart Values
@@ -607,17 +626,15 @@ Listing 18-12: Destructuring a struct’s fields into separate variables
 
 This code creates the variables `a` and `b` that match the values of the `x`
 and `y` fields of the `p` struct. This example shows that the names of the
-variables in the pattern don’t have to match the field names of the struct. But
-it’s common to want the variable names to match the field names to make it
-easier to remember which variables came from which fields.
-
-Because having variable names match the fields is common and because writing
-`let Point { x: x, y: y } = p;` contains a lot of duplication, there is a
-shorthand for patterns that match struct fields: you only need to list the name
-of the struct field, and the variables created from the pattern will have the
-same names. Listing 18-13 shows code that behaves in the same way as the code
-in Listing 18-12, but the variables created in the `let` pattern are `x` and
-`y` instead of `a` and `b`.
+variables in the pattern don’t have to match the field names of the struct.
+However, it’s common to match the variable names to the field names to make it
+easier to remember which variables came from which fields. Because of this
+common usage, and because writing `let Point { x: x, y: y } = p;` contains a
+lot of duplication, Rust has a shorthand for patterns that match struct fields:
+you only need to list the name of the struct field, and the variables created
+from the pattern will have the same names. Listing 18-13 behaves in the same
+way as the code in Listing 18-12, but the variables created in the `let`
+pattern are `x` and `y` instead of `a` and `b`.
 
 Filename: src/main.rs
 
@@ -647,9 +664,9 @@ rather than creating variables for all the fields. Doing so allows us to test
 some of the fields for particular values while creating variables to
 destructure the other fields.
 
-Listing 18-14 shows a `match` expression that separates `Point` values into
-three cases: points that lie directly on the `x` axis (which is true when `y =
-0`), on the `y` axis (`x = 0`), or neither.
+In Listing 18-14, we have a `match` expression that separates `Point` values
+into three cases: points that lie directly on the `x` axis (which is true when
+`y = 0`), on the `y` axis (`x = 0`), or neither.
 
 Filename: src/main.rs
 
@@ -681,10 +698,9 @@ containing a 0, so this code will print `On the y axis at 7`.
 
 #### Destructuring Enums
 
-We’ve destructured enums earlier in this book, for example, when we
-destructured `Option<i32>` in Listing 6-5 in Chapter 6. One detail we haven’t
-mentioned explicitly is that the pattern to destructure an enum should
-correspond to the way the data stored within the enum is defined. As an
+We've destructured enums in this book (for example, Listing 6-5 in Chapter 6),
+but haven’t yet explicitly discussed that the pattern to destructure an enum
+corresponds to the way the data stored within the enum is defined. As an
 example, in Listing 18-15 we use the `Message` enum from Listing 6-2 and write
 a `match` with patterns that will destructure each inner value.
 
@@ -743,11 +759,10 @@ variant we’re matching.
 
 #### Destructuring Nested Structs and Enums
 
-Until now, all our examples have been matching structs or enums that were one
-level deep. Matching can work on nested items too!
-
-For example, we can refactor the code in Listing 18-15 to support RGB and HSV
-colors in the `ChangeColor` message, as shown in Listing 18-16.
+So far, our examples have all been matching structs or enums one level deep,
+but matching can work on nested items too! For example, we can refactor the
+code in Listing 18-15 to support RGB and HSV colors in the `ChangeColor`
+message, as shown in Listing 18-16.
 
 ```
 enum Color {
@@ -785,8 +800,8 @@ The pattern of the first arm in the `match` expression matches a
 `Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
 the pattern binds to the three inner `i32` values. The pattern of the second
 arm also matches a `Message::ChangeColor` enum variant, but the inner enum
-matches the `Color::Hsv` variant instead. We can specify these complex
-conditions in one `match` expression, even though two enums are involved.
+matches `Color::Hsv` instead. We can specify these complex conditions in one
+`match` expression, even though two enums are involved.
 
 #### Destructuring Structs and Tuples
 
@@ -816,10 +831,10 @@ parts of a value. Let’s explore how and why to use each of these patterns.
 
 #### Ignoring an Entire Value with `_`
 
-We’ve used the underscore (`_`) as a wildcard pattern that will match any value
-but not bind to the value. Although the underscore `_` pattern is especially
-useful as the last arm in a `match` expression, we can use it in any pattern,
-including function parameters, as shown in Listing 18-17.
+We’ve used the underscore as a wildcard pattern that will match any value but
+not bind to the value. This is especially useful as the last arm in a `match`
+expression, but we can also use it in any pattern, including function
+parameters, as shown in Listing 18-17.
 
 Filename: src/main.rs
 
@@ -835,16 +850,16 @@ fn main() {
 
 Listing 18-17: Using `_` in a function signature
 
-This code will completely ignore the value passed as the first argument, `3`,
+This code will completely ignore the value `3` passed as the first argument,
 and will print `This code only uses the y parameter: 4`.
 
 In most cases when you no longer need a particular function parameter, you
 would change the signature so it doesn’t include the unused parameter. Ignoring
-a function parameter can be especially useful in some cases, for example, when
-implementing a trait when you need a certain type signature but the function
-body in your implementation doesn’t need one of the parameters. The compiler
-will then not warn about unused function parameters, as it would if you used a
-name instead.
+a function parameter can be especially useful in cases when, for example,
+you're implementing a trait when you need a certain type signature but the
+function body in your implementation doesn’t need one of the parameters. You
+then avoid getting a compiler warning about unused function parameters, as you
+would if you used a name instead.
 
 #### Ignoring Parts of a Value with a Nested `_`
 
@@ -878,7 +893,7 @@ This code will print `Can't overwrite an existing customized value` and then
 `setting is Some(5)`. In the first match arm, we don’t need to match on or use
 the values inside either `Some` variant, but we do need to test for the case
 when `setting_value` and `new_setting_value` are the `Some` variant. In that
-case, we print why we’re not changing `setting_value`, and it doesn’t get
+case, we print the reason for not changing `setting_value`, and it doesn’t get
 changed.
 
 In all other cases (if either `setting_value` or `new_setting_value` are
@@ -907,12 +922,12 @@ ignored.
 #### Ignoring an Unused Variable by Starting Its Name with `_`
 
 If you create a variable but don’t use it anywhere, Rust will usually issue a
-warning because that could be a bug. But sometimes it’s useful to create a
-variable you won’t use yet, such as when you’re prototyping or just starting a
-project. In this situation, you can tell Rust not to warn you about the unused
-variable by starting the name of the variable with an underscore. In Listing
-18-20, we create two unused variables, but when we compile this code, we should
-only get a warning about one of them.
+warning because an unused variable could be a bug. However, sometimes it’s
+useful to be able to create a variable you won’t use yet, such as when you’re
+prototyping or just starting a project. In this situation, you can tell Rust
+not to warn you about the unused variable by starting the name of the variable
+with an underscore. In Listing 18-20, we create two unused variables, but when
+we compile this code, we should only get a warning about one of them.
 
 Filename: src/main.rs
 
@@ -927,7 +942,7 @@ Listing 18-20: Starting a variable name with an
 underscore to avoid getting unused variable warnings
 
 Here we get a warning about not using the variable `y`, but we don’t get a
-warning about not using the variable preceded by the underscore.
+warning about not using `_x`.
 
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore. The syntax `_x` still binds the value to the
@@ -968,7 +983,7 @@ This code works just fine because we never bind `s` to anything; it isn’t move
 
 #### Ignoring Remaining Parts of a Value with `..`
 
-With values that have many parts, we can use the `..` syntax to use only a few
+With values that have many parts, we can use the `..` syntax to use specific
 parts and ignore the rest, avoiding the need to list underscores for each
 ignored value. The `..` pattern ignores any parts of a value that we haven’t
 explicitly matched in the rest of the pattern. In Listing 18-23, we have a
@@ -1063,10 +1078,9 @@ compiler error because using `..` in two places like this is ambiguous.
 
 ### Extra Conditionals with Match Guards
 
-A *match guard* is an additional `if` condition specified after the pattern in
-a `match` arm that must also match, along with the pattern matching, for that
-arm to be chosen. Match guards are useful for expressing more complex ideas
-than a pattern alone allows.
+A *match guard* is an additional `if` condition, specified after the pattern in
+a `match` arm, that must also match for that arm to be chosen. Match guards are
+useful for expressing more complex ideas than a pattern alone allows.
 
 The condition can use variables created in the pattern. Listing 18-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
@@ -1100,7 +1114,7 @@ this additional expressiveness is that the compiler doesn't try to check for
 exhaustiveness when match guard expressions are involved.
 
 In Listing 18-11, we mentioned that we could use match guards to solve our
-pattern-shadowing problem. Recall that a new variable was created inside the
+pattern-shadowing problem. Recall that we created a new variable inside the
 pattern in the `match` expression instead of using the variable outside the
 `match`. That new variable meant we couldn’t test against the value of the
 outer variable. Listing 18-27 shows how we can use a match guard to fix this
@@ -1139,10 +1153,10 @@ we can look for a value that has the same value as the outer `y` by comparing
 
 You can also use the *or* operator `|` in a match guard to specify multiple
 patterns; the match guard condition will apply to all the patterns. Listing
-18-28 shows the precedence of combining a match guard with a pattern that uses
-`|`. The important part of this example is that the `if y` match guard applies
-to `4`, `5`, *and* `6`, even though it might look like `if y` only applies to
-`6`.
+18-28 shows the precedence when combining a pattern that uses `|` with a match
+guard. The important part of this example is that the `if y` match guard
+applies to `4`, `5`, *and* `6`, even though it might look like `if y` only
+applies to `6`.
 
 ```
 let x = 4;
@@ -1182,13 +1196,12 @@ were applied only to the final value in the list of values specified using the
 
 ### `@` Bindings
 
-The *at* operator (`@`) lets us create a variable that holds a value at the
-same time we’re testing that value to see whether it matches a pattern. Listing
-18-29 shows an example where we want to test that a `Message::Hello` `id` field
-is within the range `3..=7`. But we also want to bind the value to the variable
-`id_variable` so we can use it in the code associated with the arm. We could
-name this variable `id`, the same as the field, but for this example we’ll use
-a different name.
+The *at* operator `@` lets us create a variable that holds a value at the same
+time as we’re testing that value for a pattern match. In Listing 18-29, we want
+to test that a `Message::Hello` `id` field is within the range `3..=7`. We also
+want to bind the value to the variable `id_variable` so we can use it in the
+code associated with the arm. We could name this variable `id`, the same as the
+field, but for this example we’ll use a different name.
 
 ```
 enum Message {
@@ -1231,11 +1244,11 @@ Using `@` lets us test a value and save it in a variable within one pattern.
 
 ## Summary
 
-Rust’s patterns are very useful in that they help distinguish between different
-kinds of data. When used in `match` expressions, Rust ensures your patterns
-cover every possible value, or your program won’t compile. Patterns in `let`
-statements and function parameters make those constructs more useful, enabling
-the destructuring of values into smaller parts at the same time as assigning to
+Rust’s patterns are very useful in distinguishing between different kinds of
+data. When used in `match` expressions, Rust ensures your patterns cover every
+possible value, or your program won’t compile. Patterns in `let` statements and
+function parameters make those constructs more useful, enabling the
+destructuring of values into smaller parts at the same time as assigning to
 variables. We can create simple or complex patterns to suit our needs.
 
 Next, for the penultimate chapter of the book, we’ll look at some advanced
