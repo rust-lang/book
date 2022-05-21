@@ -93,11 +93,13 @@ using `rect1`, which is the reason we use the `&` in the function signature and
 where we call the function.
 
 The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance. Our function signature for `area` now says exactly what we mean:
-calculate the area of `Rectangle`, using its `width` and `height` fields. This
-conveys that the width and height are related to each other, and it gives
-descriptive names to the values rather than using the tuple index values of `0`
-and `1`. This is a win for clarity.
+instance (note that accessing fields of a borrowed struct instance does not
+move the field values, which is why you often see borrows of structs). Our
+function signature for `area` now says exactly what we mean: calculate the area
+of `Rectangle`, using its `width` and `height` fields. This conveys that the
+width and height are related to each other, and it gives descriptive names to
+the values rather than using the tuple index values of `0` and `1`. This is a
+win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
@@ -188,9 +190,10 @@ In this example, using the `{:#?}` style will output:
 ```
 
 Another way to print out a value using the `Debug` format is to use the [`dbg!`
-macro][dbg]<!-- ignore -->, which takes ownership of an expression, prints the
-file and line number of where that `dbg!` macro call occurs in your code along
-with the resulting value of that expression, and returns ownership of the value.
+macro][dbg]<!-- ignore -->, which takes ownership of an expression (as opposed
+to `println!` that takes a reference), prints the file and line number of where
+that `dbg!` macro call occurs in your code along with the resulting value of
+that expression, and returns ownership of the value.
 
 > Note: Calling the `dbg!` macro prints to the standard error console stream
 > (`stderr`), as opposed to `println!` which prints to the standard output

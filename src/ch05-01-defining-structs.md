@@ -36,11 +36,11 @@ example, we can declare a particular user as shown in Listing 5-2.
 <span class="caption">Listing 5-2: Creating an instance of the `User`
 struct</span>
 
-To get a specific value from a struct, we use dot notation. If we wanted
-just this user’s email address, we could use `user1.email` wherever we wanted
-to use this value. If the instance is mutable, we can change a value by using
-the dot notation and assigning into a particular field. Listing 5-3 shows how
-to change the value in the `email` field of a mutable `User` instance.
+To get a specific value from a struct, we use dot notation. For example, to
+access this user’s email address, we use `user1.email`. If the instance is
+mutable, we can change a value by using the dot notation and assigning into a
+particular field. Listing 5-3 shows how to change the value in the `email`
+field of a mutable `User` instance.
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
@@ -159,12 +159,12 @@ two tuple structs named `Color` and `Point`:
 
 Note that the `black` and `origin` values are different types, because they’re
 instances of different tuple structs. Each struct you define is its own type,
-even though the fields within the struct have the same types. For example, a
-function that takes a parameter of type `Color` cannot take a `Point` as an
-argument, even though both types are made up of three `i32` values. Otherwise,
-tuple struct instances behave like tuples: you can destructure them into their
-individual pieces, you can use a `.` followed by the index to access an
-individual value, and so on.
+even though the fields within the struct might have the same types. For
+example, a function that takes a parameter of type `Color` cannot take a
+`Point` as an argument, even though both types are made up of three `i32`
+values. Otherwise, tuple struct instances are similar to tuples in that you can
+destructure them into their individual pieces, and you can use a `.` followed
+by the index to access an individual value.
 
 ### Unit-Like Structs Without Any Fields
 

@@ -193,16 +193,22 @@ We’ve already used one function like this: the `String::from` function that’
 defined on the `String` type.
 
 Associated functions that aren’t methods are often used for constructors that
-will return a new instance of the struct. For example, we could provide an
-associated function that would have one dimension parameter and use that as
-both width and height, thus making it easier to create a square `Rectangle`
-rather than having to specify the same value twice:
+will return a new instance of the struct. These are often called `new`, but
+`new` isn’t a special name and isn’t built into the language. For example, we
+could choose to provide an associated function named `square` that would have
+one dimension parameter and use that as both width and height, thus making it
+easier to create a square `Rectangle` rather than having to specify the same
+value twice:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-03-associated-functions/src/main.rs:here}}
 ```
+
+The `Self` keywords in the return type and in the body of the function are
+aliases for the type that appears after the `impl` keyword, which in this case
+is `Rectangle`.
 
 To call this associated function, we use the `::` syntax with the struct name;
 `let sq = Rectangle::square(3);` is an example. This function is namespaced by
