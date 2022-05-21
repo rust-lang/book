@@ -70,16 +70,18 @@ fn main() {
 
 Listing 5-2: Creating an instance of the `User` struct
 
-To get a specific value from a struct, we use dot notation. If we wanted
-just this user’s email address, we could use `user1.email` wherever we wanted
-to use this value. If the instance is mutable, we can change a value by using
-the dot notation and assigning into a particular field. Listing 5-3 shows how
-to change the value in the `email` field of a mutable `User` instance.
+To get a specific value from a struct, we use dot notation. For example, to
+access this user’s email address, we use `user1.email`. If the instance is
+mutable, we can change a value by using the dot notation and assigning into a
+particular field. Listing 5-3 shows how to change the value in the `email`
+field of a mutable `User` instance.
 
 <!--- Do we want to mention that `user1.email` will move the field? We can't
 just use `user1.email` multiple times re: "wherever we wanted
 to use this value"
 /JT --->
+<!-- I don't really want to mention that, but I did reword to avoid the
+implication that we can use the value wherever we wanted to. /Carol -->
 
 ```
 fn main() {
@@ -202,7 +204,7 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax uses `=` like an assignement; this is
+Note that the struct update syntax uses `=` like an assignment; this is
 because it moves the data, just as we saw in the “Ways Variables and Data
 Interact: Move” section. In this example, we can no longer use `user1` after
 creating `user2` because the `String` in the `username` field of `user1` was
@@ -215,6 +217,7 @@ would apply.
 
 <!--- Misspelled "assignment" above.
 /JT --->
+<!-- Fixed! /Carol -->
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
@@ -241,17 +244,17 @@ fn main() {
 
 Note that the `black` and `origin` values are different types, because they’re
 instances of different tuple structs. Each struct you define is its own type,
-even though the fields within the struct have the same types. For example, a
-function that takes a parameter of type `Color` cannot take a `Point` as an
-argument, even though both types are made up of three `i32` values. Otherwise,
-tuple struct instances behave like tuples: you can destructure them into their
-individual pieces, you can use a `.` followed by the index to access an
-individual value, and so on.
+even though the fields within the struct might have the same types. For
+example, a function that takes a parameter of type `Color` cannot take a
+`Point` as an argument, even though both types are made up of three `i32`
+values. Otherwise, tuple struct instances are similar to tuples in that you can
+destructure them into their individual pieces, and you can use a `.` followed
+by the index to access an individual value.
 
-<!--- The last line above feels a bit misleading. There are related restrictions on
-tuple structs that don't apply to tuples.
+<!--- The last line above feels a bit misleading. There are related
+restrictions on tuple structs that don't apply to tuples.
 
-One example is you can't create a tuple struct with a tuple. 
+One example is you can't create a tuple struct with a tuple.
 ```
 struct Color(i32, i32, i32);
 
@@ -262,6 +265,7 @@ fn main() {
 
 You can't pass a tuple struct to something that expects a tuple, either.
 /JT --->
+<!-- I've reworded to avoid that implication /Carol -->
 
 ### Unit-Like Structs Without Any Fields
 
@@ -499,16 +503,21 @@ using `rect1`, which is the reason we use the `&` in the function signature and
 where we call the function.
 
 The `area` function accesses the `width` and `height` fields of the `Rectangle`
-instance. Our function signature for `area` now says exactly what we mean:
-calculate the area of `Rectangle`, using its `width` and `height` fields. This
-conveys that the width and height are related to each other, and it gives
-descriptive names to the values rather than using the tuple index values of `0`
-and `1`. This is a win for clarity.
+instance (note that accessing fields of a borrowed struct instance does not
+move the field values, which is why you often see borrows of structs). Our
+function signature for `area` now says exactly what we mean: calculate the area
+of `Rectangle`, using its `width` and `height` fields. This conveys that the
+width and height are related to each other, and it gives descriptive names to
+the values rather than using the tuple index values of `0` and `1`. This is a
+win for clarity.
 
 <!--- Tying to my comment above about `user1.email` moving that field: we should
 take a minute here and explain that accessing fields on a borrowed struct does
 not move them, and why you often see borrows of structs.
 /JT --->
+<!-- I've added a note in the paragraph above; I haven't really seen people
+struggle with that concept though so I don't want to spend too much time on it
+/Carol -->
 
 ### Adding Useful Functionality with Derived Traits
 
@@ -636,14 +645,11 @@ rect1 is Rectangle {
 ```
 
 Another way to print out a value using the `Debug` format is to use the `dbg!`
-macro, which takes ownership of an expression, prints the file and line number
-of where that `dbg!` macro call occurs in your code along with the resulting
-value of that expression, and returns ownership of the value.
+macro, which takes ownership of an expression (as opposed to `println!` that
+takes a reference), prints the file and line number of where that `dbg!` macro
+call occurs in your code along with the resulting value of that expression, and
+returns ownership of the value.
 
-<!--- I've forgotten how to format a note in markdown... I suggest making this
-a note since we don't explote what it means for our program here /LC --->
-<!-- No problem -- we've been abusing blockquotes in markdown for notes. I've
-fixed! Good call! /Carol -->
 > Note: Calling the `dbg!` macro prints to the standard error console stream
 > (`stderr`), as opposed to `println!` which prints to the standard output
 > console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
@@ -674,12 +680,14 @@ fn main() {
 We can put `dbg!` around the expression `30 * scale` and, because `dbg!`
 returns ownership of the expression’s value, the `width` field will get the
 same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` to
-take ownership of `rect1`, so we use a reference to `dbg!` in the next call.
+take ownership of `rect1`, so we use a reference to `rect1` in the next call.
 Here’s what the output of this example looks like:
 
 <!--- is it worth calling out that println! doesn't have the dbg! shortcoming
 of taking ownership?
 /JT --->
+<!-- I added a note in the paragraph above that starts with "Another way to
+print out a value" /Carol -->
 
 ```
 $ cargo run
@@ -725,11 +733,14 @@ object, which we cover in Chapters 6 and 17, respectively), and their first
 parameter is always `self`, which represents the instance of the struct the
 method is being called on.
 
-<!--- minor nit: some folks call the non-self functions in an `impl` 
+<!--- minor nit: some folks call the non-self functions in an `impl`
 "static methods" as a nod to OO languages that do the same. For folks
 from that background, we may want to call out that instance methods always
 have `self` and methods on the type do not.
 /JT --->
+<!-- This paragraph already says "their first parameter is always `self`", and
+we get into associated functions in just a bit. I don't want to distract with
+that info here; not changing anything at this spot. /Carol -->
 
 ### Defining Methods
 
@@ -876,11 +887,9 @@ private in Chapter 7.
 Let’s practice using methods by implementing a second method on the `Rectangle`
 struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self` (the first `Rectangle`);
-<!--- self being the first instance? /LC --->
-<!-- Yup! /Carol -->
-otherwise it should return `false`. That is, once we’ve defined the `can_hold`
-method, we want to be able to write the program shown in Listing 5-14.
+within `self` (the first `Rectangle`); otherwise it should return `false`. That
+is, once we’ve defined the `can_hold` method, we want to be able to write the
+program shown in Listing 5-14.
 
 Filename: src/main.rs
 
@@ -961,17 +970,19 @@ We’ve already used one function like this: the `String::from` function that’
 defined on the `String` type.
 
 Associated functions that aren’t methods are often used for constructors that
-will return a new instance of the struct. For example, we could provide an
-associated function that would have one dimension parameter and use that as
-both width and height, thus making it easier to create a square `Rectangle`
-rather than having to specify the same value twice:
+will return a new instance of the struct. These are often called `new`, but
+`new` isn’t a special name and isn’t built into the language. For example, we
+could choose to provide an associated function named `square` that would have
+one dimension parameter and use that as both width and height, thus making it
+easier to create a square `Rectangle` rather than having to specify the same
+value twice:
 
 Filename: src/main.rs
 
 ```
 impl Rectangle {
-    fn square(size: u32) -> Rectangle {
-        Rectangle {
+    fn square(size: u32) -> Self [1] {
+        Self [2] {
             width: size,
             height: size,
         }
@@ -979,14 +990,20 @@ impl Rectangle {
 }
 ```
 
+The `Self` keywords in the return type [1] and in the body of the function [2]
+are aliases for the type that appears after the `impl` keyword, which in this
+case is `Rectangle`.
+
 To call this associated function, we use the `::` syntax with the struct name;
 `let sq = Rectangle::square(3);` is an example. This function is namespaced by
 the struct: the `::` syntax is used for both associated functions and
 namespaces created by modules. We’ll discuss modules in Chapter 7.
 
-<!--- Should we mention the most common associated function is `new`? And that 
+<!--- Should we mention the most common associated function is `new`? And that
 new isn't built into the language.
 /JT --->
+<!-- I've added a note as such above to the paragraph that starts with
+"Associated functions that aren’t methods" /Carol -->
 
 ### Multiple `impl` Blocks
 
@@ -1047,3 +1064,10 @@ impl Rectangle {
 which is often a bit more ergonomic.
 
 /JT --->
+<!-- I've changed the `square` example to use `Self` and added some wingdings
+and notes explaining that. I don't really want to get into the restrictions on
+`impl` on types defined in another crate, because we haven't covered traits
+yet. Traits let you do `impl Trait for OtherCrateType` in some circumstances,
+so I don't want to say "you can't use an `impl` block on types from other
+crates" because I'd have to allude to traits or potentially give the reader the
+wrong impression. We get into these restrictions in chapter 10. -->
