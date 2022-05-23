@@ -7,13 +7,13 @@ and works just like regular Rust, but gives us extra superpowers.
 
 Unsafe Rust exists because, by nature, static analysis is conservative. When
 the compiler tries to determine whether or not code upholds the guarantees,
-it’s better for it to reject some valid programs rather than accept some
-invalid programs. Although the code *might* be okay, if the Rust compiler
-doesn’t have enough information to be confident, it will reject the code. In
-these cases, you can use unsafe code to tell the compiler, “Trust me, I know
-what I’m doing.” The downside is that you use it at your own risk: if you use
-unsafe code incorrectly, problems due to memory unsafety, such as null pointer
-dereferencing, can occur.
+it’s better for it to reject some valid programs than to accept some invalid
+programs. Although the code *might* be okay, if the Rust compiler doesn’t have
+enough information to be confident, it will reject the code. In these cases,
+you can use unsafe code to tell the compiler, “Trust me, I know what I’m
+doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
+use unsafe code incorrectly, problems can occur due to memory unsafety, such as
+null pointer dereferencing.
 
 Another reason Rust has an unsafe alter ego is that the underlying computer
 hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
@@ -26,9 +26,9 @@ Rust and how to do it.
 ### Unsafe Superpowers
 
 To switch to unsafe Rust, use the `unsafe` keyword and then start a new block
-that holds the unsafe code. You can take five actions in unsafe Rust, called
-*unsafe superpowers*, that you can’t in safe Rust. Those superpowers include
-the ability to:
+that holds the unsafe code. You can take five actions in unsafe Rust that you
+can’t in safe Rust, which we call *unsafe superpowers*. Those superpowers
+include the ability to:
 
 * Dereference a raw pointer
 * Call an unsafe function or method
@@ -107,12 +107,13 @@ directly from references guaranteed to be valid, we know these particular raw
 pointers are valid, but we can’t make that assumption about just any raw
 pointer.
 
-Next, we’ll create a raw pointer whose validity we can’t be so certain of.
-Listing 19-2 shows how to create a raw pointer to an arbitrary location in
-memory. Trying to use arbitrary memory is undefined: there might be data at
-that address or there might not, the compiler might optimize the code so there
-is no memory access, or the program might error with a segmentation fault.
-Usually, there is no good reason to write code like this, but it is possible.
+To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
+so certain of. Listing 19-2 shows how to create a raw pointer to an arbitrary
+location in memory. Trying to use arbitrary memory is undefined: there might be
+data at that address or there might not, the compiler might optimize the code
+so there is no memory access, or the program might error with a segmentation
+fault. Usually, there is no good reason to write code like this, but it is
+possible.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-02/src/main.rs:here}}
@@ -154,14 +155,14 @@ abstraction that uses unsafe code.
 
 ### Calling an Unsafe Function or Method
 
-The second type of operation that requires an unsafe block is calls to unsafe
-functions. Unsafe functions and methods look exactly like regular functions and
-methods, but they have an extra `unsafe` before the rest of the definition. The
-`unsafe` keyword in this context indicates the function has requirements we
-need to uphold when we call this function, because Rust can’t guarantee we’ve
-met these requirements. By calling an unsafe function within an `unsafe` block,
-we’re saying that we’ve read this function’s documentation and take
-responsibility for upholding the function’s contracts.
+The second type of operation you can perform in an unsafe block is calling
+unsafe functions. Unsafe functions and methods look exactly like regular
+functions and methods, but they have an extra `unsafe` before the rest of the
+definition. The `unsafe` keyword in this context indicates the function has
+requirements we need to uphold when we call this function, because Rust can’t
+guarantee we’ve met these requirements. By calling an unsafe function within an
+`unsafe` block, we’re saying that we’ve read this function’s documentation and
+take responsibility for upholding the function’s contracts.
 
 Here is an unsafe function named `dangerous` that doesn’t do anything in its
 body:
@@ -177,10 +178,9 @@ try to call `dangerous` without the `unsafe` block, we’ll get an error:
 {{#include ../listings/ch19-advanced-features/output-only-01-missing-unsafe/output.txt}}
 ```
 
-By inserting the `unsafe` block around our call to `dangerous`, we’re asserting
-to Rust that we’ve read the function’s documentation, we understand how to use
-it properly, and we’ve verified that we’re fulfilling the contract of the
-function.
+With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s
+documentation, we understand how to use it properly, and we’ve verified that
+we’re fulfilling the contract of the function.
 
 Bodies of unsafe functions are effectively `unsafe` blocks, so to perform other
 unsafe operations within an unsafe function, we don’t need to add another
@@ -190,10 +190,10 @@ unsafe operations within an unsafe function, we don’t need to add another
 
 Just because a function contains unsafe code doesn’t mean we need to mark the
 entire function as unsafe. In fact, wrapping unsafe code in a safe function is
-a common abstraction. As an example, let’s study a function from the standard
-library, `split_at_mut`, that requires some unsafe code and explore how we
-might implement it. This safe method is defined on mutable slices: it takes one
-slice and makes it two by splitting the slice at the index given as an
+a common abstraction. As an example, let’s study the `split_at_mut` function
+from the standard library, which requires some unsafe code. We’ll explore how
+we might implement it. This safe method is defined on mutable slices: it takes
+one slice and makes it two by splitting the slice at the index given as an
 argument. Listing 19-4 shows how to use `split_at_mut`.
 
 ```rust
@@ -296,7 +296,7 @@ that the slice this code creates contains valid `i32` values. Attempting to use
 #### Using `extern` Functions to Call External Code
 
 Sometimes, your Rust code might need to interact with code written in another
-language. For this, Rust has a keyword, `extern`, that facilitates the creation
+language. For this, Rust has the keyword `extern` that facilitates the creation
 and use of a *Foreign Function Interface (FFI)*. An FFI is a way for a
 programming language to define functions and enable a different (foreign)
 programming language to call those functions.
@@ -325,15 +325,15 @@ most common and follows the C programming language’s ABI.
 > #### Calling Rust Functions from Other Languages
 >
 > We can also use `extern` to create an interface that allows other languages
-> to call Rust functions. Instead of an `extern` block, we add the `extern`
-> keyword and specify the ABI to use just before the `fn` keyword. We also need
-> to add a `#[no_mangle]` annotation to tell the Rust compiler not to mangle
-> the name of this function. *Mangling* is when a compiler changes the name
-> we’ve given a function to a different name that contains more information for
-> other parts of the compilation process to consume but is less human readable.
-> Every programming language compiler mangles names slightly differently, so
-> for a Rust function to be nameable by other languages, we must disable the
-> Rust compiler’s name mangling.
+> to call Rust functions. Instead of an creating a whole `extern` block, we add
+> the `extern` keyword and specify the ABI to use just before the `fn` keyword
+> for the relevant function. We also need to add a `#[no_mangle]` annotation to
+> tell the Rust compiler not to mangle the name of this function. *Mangling* is
+> when a compiler changes the name we’ve given a function to a different name
+> that contains more information for other parts of the compilation process to
+> consume but is less human readable. Every programming language compiler
+> mangles names slightly differently, so for a Rust function to be nameable by
+> other languages, we must disable the Rust compiler’s name mangling.
 >
 > In the following example, we make the `call_from_c` function accessible from
 > C code, after it’s compiled to a shared library and linked from C:
@@ -349,8 +349,8 @@ most common and follows the C programming language’s ABI.
 
 ### Accessing or Modifying a Mutable Static Variable
 
-Until now, we’ve not talked about *global variables*, which Rust does support
-but can be problematic with Rust’s ownership rules. If two threads are
+In this book, we’ve not yet talked about *global variables*, which Rust does
+support but can be problematic with Rust’s ownership rules. If two threads are
 accessing the same mutable global variable, it can cause a data race.
 
 In Rust, global variables are called *static* variables. Listing 19-9 shows an
@@ -368,19 +368,17 @@ variable</span>
 
 Static variables are similar to constants, which we discussed in the
 [“Differences Between Variables and
-Constants”][differences-between-variables-and-constants]<!-- ignore -->
-section in Chapter 3. The names of static variables are in
-`SCREAMING_SNAKE_CASE` by convention. Static variables can only store
-references with the `'static` lifetime, which means the Rust compiler can
-figure out the lifetime and we aren’t required to annotate it explicitly.
-Accessing an immutable static variable is safe.
+Constants”][differences-between-variables-and-constants]<!-- ignore --> section
+in Chapter 3. The names of static variables are in `SCREAMING_SNAKE_CASE` by
+convention. Static variables can only store references with the `'static`
+lifetime, which means the Rust compiler can figure out the lifetime and we
+aren’t required to annotate it explicitly. Accessing an immutable static
+variable is safe.
 
-Constants and immutable static variables might seem similar, but a subtle
-difference is that values in a static variable have a fixed address in memory.
-Using the value will always access the same data. Constants, on the other hand,
-are allowed to duplicate their data whenever they’re used.
-
-Another difference between constants and static variables is that static
+A subtle difference between constants and immutable static variables is that
+values in a static variable have a fixed address in memory. Using the value
+will always access the same data. Constants, on the other hand, are allowed to
+duplicate their data whenever they’re used. Another difference is that static
 variables can be mutable. Accessing and modifying mutable static variables is
 *unsafe*. Listing 19-10 shows how to declare, access, and modify a mutable
 static variable named `COUNTER`.
@@ -408,11 +406,11 @@ that data accessed from different threads is done safely.
 
 ### Implementing an Unsafe Trait
 
-Another use case for `unsafe` is implementing an unsafe trait. A trait is
-unsafe when at least one of its methods has some invariant that the compiler
-can’t verify. We can declare that a trait is `unsafe` by adding the `unsafe`
-keyword before `trait` and marking the implementation of the trait as `unsafe`
-too, as shown in Listing 19-11.
+We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
+least one of its methods has some invariant that the compiler can’t verify. We
+declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
+and marking the implementation of the trait as `unsafe` too, as shown in
+Listing 19-11.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-11/src/main.rs}}

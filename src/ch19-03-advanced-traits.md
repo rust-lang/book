@@ -9,10 +9,10 @@ about Rust, we can get into the nitty-gritty.
 
 *Associated types* connect a type placeholder with a trait such that the trait
 method definitions can use these placeholder types in their signatures. The
-implementor of a trait will specify the concrete type to be used in this type’s
-place for the particular implementation. That way, we can define a trait that
-uses some types without needing to know exactly what those types are until the
-trait is implemented.
+implementor of a trait will specify the concrete type to be used instead of the
+placeholder type for the particular implementation. That way, we can define a
+trait that uses some types without needing to know exactly what those types are
+until the trait is implemented.
 
 We’ve described most of the advanced features in this chapter as being rarely
 needed. Associated types are somewhere in the middle: they’re used more rarely
@@ -32,18 +32,16 @@ iterating over. The definition of the `Iterator` trait is as shown in Listing
 <span class="caption">Listing 19-12: The definition of the `Iterator` trait
 that has an associated type `Item`</span>
 
-The type `Item` is a placeholder type, and the `next` method’s definition shows
-that it will return values of type `Option<Self::Item>`. Implementors of the
+The type `Item` is a placeholder, and the `next` method’s definition shows that
+it will return values of type `Option<Self::Item>`. Implementors of the
 `Iterator` trait will specify the concrete type for `Item`, and the `next`
 method will return an `Option` containing a value of that concrete type.
 
 Associated types might seem like a similar concept to generics, in that the
 latter allow us to define a function without specifying what types it can
-handle. So why use associated types?
-
-Let’s examine the difference between the two concepts with an example that
-implements the `Iterator` trait on a `Counter` struct. This implementation
-specifies the `Item` type is `u32`:
+handle. To examine the difference between the two concepts, we’ll look at an
+implementation of the `Iterator` trait on a type named `Counter` that specifies
+the `Item` type is `u32`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -81,13 +79,12 @@ that we call `next` on `Counter`.
 
 When we use generic type parameters, we can specify a default concrete type for
 the generic type. This eliminates the need for implementors of the trait to
-specify a concrete type if the default type works. The syntax for specifying a
-default type for a generic type is `<PlaceholderType=ConcreteType>` when
-declaring the generic type.
+specify a concrete type if the default type works. You specify a default type
+when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
 
-A great example of a situation where this technique is useful is with operator
-overloading. *Operator overloading* is customizing the behavior of an operator
-(such as `+`) in particular situations.
+A great example of a situation where this technique is useful is with *operator
+overloading*, in which you customize the behavior of an operator (such as `+`)
+in particular situations.
 
 Rust doesn’t allow you to create your own operators or overload arbitrary
 operators. But you can overload the operations and corresponding traits listed
@@ -241,10 +238,11 @@ trait to use based on the type of `self`.
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn't always know which type you
-mean unless you use *fully qualified syntax*. For example, the `Animal` trait
-in Listing 19-19 has the associated non-method function `baby_name`, and the
-`Animal` trait is implemented for the struct `Dog`. There’s also an associated
-non-method function `baby_name` defined on `Dog` directly.
+mean unless you use *fully qualified syntax*. For example, in Listing 19-19 we
+create a trait for an animal shelter that wants to name all baby dogs *Spot*.
+We make an `Animal` trait with an associated non-method function `baby_name`.
+The `Animal` trait is implemented for the struct `Dog`, on which we also
+provide an associated non-method function `baby_name` directly.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -256,12 +254,11 @@ non-method function `baby_name` defined on `Dog` directly.
 type with an associated function of the same name that also implements the
 trait</span>
 
-This code is for an animal shelter that wants to name all puppies Spot, which
-is implemented in the `baby_name` associated function that is defined on `Dog`.
-The `Dog` type also implements the trait `Animal`, which describes
-characteristics that all animals have. Baby dogs are called puppies, and that
-is expressed in the implementation of the `Animal` trait on `Dog` in the
-`baby_name` function associated with the `Animal` trait.
+We implement the code for naming all puppies Spot in the `baby_name` associated
+function that is defined on `Dog`. The `Dog` type also implements the trait
+`Animal`, which describes characteristics that all animals have. Baby dogs are
+called puppies, and that is expressed in the implementation of the `Animal`
+trait on `Dog` in the `baby_name` function associated with the `Animal` trait.
 
 In `main`, we call the `Dog::baby_name` function, which calls the associated
 function defined on `Dog` directly. This code prints the following:
@@ -334,15 +331,17 @@ to identify which implementation you want to call.
 
 ### Using Supertraits to Require One Trait’s Functionality Within Another Trait
 
-Sometimes, you might need one trait to use another trait’s functionality. In
-this case, you need to rely on the dependent trait also being implemented.
-The trait you rely on is a *supertrait* of the trait you’re implementing.
+Sometimes, you might write a trait definition that depends on another trait:
+for a type to implement the first trait, you want to require that type to also
+implement the second trait. You would do this so that your trait definition can
+make use of the associated items of the second trait. The trait your trait
+definition is relying on is called a *supertrait* of your trait.
 
 For example, let’s say we want to make an `OutlinePrint` trait with an
-`outline_print` method that will print a value framed in asterisks. That is,
-given a `Point` struct that implements `Display` to result in `(x, y)`, when we
-call `outline_print` on a `Point` instance that has `1` for `x` and `3` for
-`y`, it should print the following:
+`outline_print` method that will print a given value formatted so that it's
+framed in asterisks. That is, given a `Point` struct that implements `Display`
+to result in `(x, y)`, when we call `outline_print` on a `Point` instance that
+has `1` for `x` and `3` for `y`, it should print the following:
 
 ```text
 **********
@@ -352,12 +351,13 @@ call `outline_print` on a `Point` instance that has `1` for `x` and `3` for
 **********
 ```
 
-In the implementation of `outline_print`, we want to use the `Display` trait’s
-functionality. Therefore, we need to specify that the `OutlinePrint` trait will
-work only for types that also implement `Display` and provide the functionality
-that `OutlinePrint` needs. We can do that in the trait definition by specifying
-`OutlinePrint: Display`. This technique is similar to adding a trait bound to
-the trait. Listing 19-22 shows an implementation of the `OutlinePrint` trait.
+In the implementation of the `outline_print` method, we want to use the
+`Display` trait’s functionality. Therefore, we need to specify that the
+`OutlinePrint` trait will work only for types that also implement `Display` and
+provide the functionality that `OutlinePrint` needs. We can do that in the
+trait definition by specifying `OutlinePrint: Display`. This technique is
+similar to adding a trait bound to the trait. Listing 19-22 shows an
+implementation of the `OutlinePrint` trait.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -406,18 +406,18 @@ it within an outline of asterisks.
 ### Using the Newtype Pattern to Implement External Traits on External Types
 
 In Chapter 10 in the [“Implementing a Trait on a
-Type”][implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned
-the orphan rule that states we’re allowed to implement a trait on a type as
-long as either the trait or the type are local to our crate. It’s possible to
-get around this restriction using the *newtype pattern*, which involves
-creating a new type in a tuple struct. (We covered tuple structs in the
-[“Using Tuple Structs without Named Fields to Create Different
-Types”][tuple-structs]<!-- ignore --> section of Chapter 5.) The tuple struct
-will have one field and be a thin wrapper around the type we want to implement
-a trait for. Then the wrapper type is local to our crate, and we can implement
-the trait on the wrapper. *Newtype* is a term that originates from the Haskell
-programming language. There is no runtime performance penalty for using this
-pattern, and the wrapper type is elided at compile time.
+Type”][implementing-a-trait-on-a-type]<!-- ignore --> section, we mentioned the
+orphan rule that states we’re only allowed to implement a trait on a type if
+either the trait or the type are local to our crate. It’s possible to get
+around this restriction using the *newtype pattern*, which involves creating a
+new type in a tuple struct. (We covered tuple structs in the [“Using Tuple
+Structs without Named Fields to Create Different Types”][tuple-structs]<!--
+ignore --> section of Chapter 5.) The tuple struct will have one field and be a
+thin wrapper around the type we want to implement a trait for. Then the wrapper
+type is local to our crate, and we can implement the trait on the wrapper.
+*Newtype* is a term that originates from the Haskell programming language.
+There is no runtime performance penalty for using this pattern, and the wrapper
+type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
@@ -450,9 +450,8 @@ the inner type would be a solution. If we don’t want the `Wrapper` type to hav
 all the methods of the inner type—for example, to restrict the `Wrapper` type’s
 behavior—we would have to implement just the methods we do want manually.
 
-Now you know how the newtype pattern is used in relation to traits; it’s also a
-useful pattern even when traits are not involved. Let’s switch focus and look
-at some advanced ways to interact with Rust’s type system.
+This newtype pattern is also useful even when traits are not involved. Let’s
+switch focus and look at some advanced ways to interact with Rust’s type system.
 
 [newtype]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
 [implementing-a-trait-on-a-type]:

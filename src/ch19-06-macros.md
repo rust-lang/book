@@ -46,9 +46,9 @@ opposed to functions you can define anywhere and call anywhere.
 
 ### Declarative Macros with `macro_rules!` for General Metaprogramming
 
-The most widely used form of macros in Rust is *declarative macros*. These are
-also sometimes referred to as “macros by example,” “`macro_rules!` macros,” or
-just plain “macros.” At their core, declarative macros allow you to write
+The most widely used form of macros in Rust is the *declarative macro*. These
+are also sometimes referred to as “macros by example,” “`macro_rules!` macros,”
+or just plain “macros.” At their core, declarative macros allow you to write
 something similar to a Rust `match` expression. As discussed in Chapter 6,
 `match` expressions are control structures that take an expression, compare the
 resulting value of the expression to patterns, and then run the code associated
@@ -107,15 +107,18 @@ one arm.
 Valid pattern syntax in macro definitions is different than the pattern syntax
 covered in Chapter 18 because macro patterns are matched against Rust code
 structure rather than values. Let’s walk through what the pattern pieces in
-Listing 19-28 mean; for the full macro pattern syntax, see [the reference].
+Listing 19-28 mean; for the full macro pattern syntax, see the [Rust
+Reference][ref].
 
-[the reference]: ../reference/macros-by-example.html
+[ref]: ../reference/macros-by-example.html
 
-First, a set of parentheses encompasses the whole pattern. A dollar sign (`$`)
-is next, followed by a set of parentheses that captures values that match the
-pattern within the parentheses for use in the replacement code. Within `$()` is
-`$x:expr`, which matches any Rust expression and gives the expression the name
-`$x`.
+First, we use a set of parentheses to encompass the whole pattern. We use a
+dollar sign (`$`) to declare a variable in the macro system that will contain
+the Rust code matching the pattern. The dollar sign makes it clear this is a
+macro variable as opposed to a regular Rust variable. Next comes a set of
+parentheses that captures values that match the pattern within the parentheses
+for use in the replacement code. Within `$()` is `$x:expr`, which matches any
+Rust expression and gives the expression the name `$x`.
 
 The comma following `$()` indicates that a literal comma separator character
 could optionally appear after the code that matches the code in `$()`. The `*`
@@ -157,19 +160,17 @@ Macros”][tlborm] started by Daniel Keep and continued by Lukas Wirth.
 
 ### Procedural Macros for Generating Code from Attributes
 
-The second form of macros is *procedural macros*, which act more like functions
-(and are a type of procedure). Procedural macros accept some code as an input,
-operate on that code, and produce some code as an output rather than matching
-against patterns and replacing the code with other code as declarative macros
-do.
-
-The three kinds of procedural macros (custom derive, attribute-like, and
-function-like) all work in a similar fashion.
+The second form of macros is the *procedural macro*, which acts more like a
+function (and is a type of procedure). Procedural macros accept some code as an
+input, operate on that code, and produce some code as an output rather than
+matching against patterns and replacing the code with other code as declarative
+macros do. The three kinds of procedural macros are custom derive,
+attribute-like, and function-like, and all work in a similar fashion.
 
 When creating procedural macros, the definitions must reside in their own crate
 with a special crate type. This is for complex technical reasons that we hope
-to eliminate in the future. Defining procedural macros looks like the code in
-Listing 19-29, where `some_attribute` is a placeholder for using a specific
+to eliminate in the future. In Listing 19-29, we show how to define a
+procedural macro, where `some_attribute` is a placeholder for using a specific
 macro variety.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -202,8 +203,8 @@ other forms different.
 
 Let’s create a crate named `hello_macro` that defines a trait named
 `HelloMacro` with one associated function named `hello_macro`. Rather than
-making our crate users implement the `HelloMacro` trait for each of their
-types, we’ll provide a procedural macro so users can annotate their type with
+making our users implement the `HelloMacro` trait for each of their types,
+we’ll provide a procedural macro so users can annotate their type with
 `#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
 function. The default implementation will print `Hello, Macro! My name is
 TypeName!` where `TypeName` is the name of the type on which this trait has
@@ -322,7 +323,7 @@ task.
 The `hello_macro_derive` function will be called when a user of our library
 specifies `#[derive(HelloMacro)]` on a type. This is possible because we’ve
 annotated the `hello_macro_derive` function here with `proc_macro_derive` and
-specified the name, `HelloMacro`, which matches our trait name; this is the
+specified the name `HelloMacro`, which matches our trait name; this is the
 convention most procedural macros follow.
 
 The `hello_macro_derive` function first converts the `input` from a
@@ -413,7 +414,7 @@ Check out [the `quote` crate’s docs][quote-docs] for a thorough introduction.
 
 We want our procedural macro to generate an implementation of our `HelloMacro`
 trait for the type the user annotated, which we can get by using `#name`. The
-trait implementation has one function, `hello_macro`, whose body contains the
+trait implementation has the one function `hello_macro`, whose body contains the
 functionality we want to provide: printing `Hello, Macro! My name is` and then
 the name of the annotated type.
 
@@ -511,12 +512,12 @@ generate.
 
 ## Summary
 
-Whew! Now you have some Rust features in your toolbox that you won’t use often,
-but you’ll know they’re available in very particular circumstances. We’ve
-introduced several complex topics so that when you encounter them in error
-message suggestions or in other peoples’ code, you’ll be able to recognize
-these concepts and syntax. Use this chapter as a reference to guide you to
-solutions.
+Whew! Now you have some Rust features in your toolbox that you likely won’t use
+often, but you’ll know they’re available in very particular circumstances.
+We’ve introduced several complex topics so that when you encounter them in
+error message suggestions or in other peoples’ code, you’ll be able to
+recognize these concepts and syntax. Use this chapter as a reference to guide
+you to solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
