@@ -137,7 +137,7 @@ next arm.
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-05/src/main.rs:second_arm}}
 ```
 
-Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant. The
+Does `Some(5)` match `Some(i)`? Yes, it does! We have the same variant. The
 `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
 code in the match arm is then executed, so we add 1 to the value of `i` and
 create a new `Some` value with our total `6` inside.
