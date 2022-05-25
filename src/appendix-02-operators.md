@@ -86,7 +86,7 @@ locations.
 | `...u8`, `...i32`, `...f64`, `...usize`, etc. | Numeric literal of specific type |
 | `"..."` | String literal |
 | `r"..."`, `r#"..."#`, `r##"..."##`, etc. | Raw string literal, escape characters not processed |
-| `b"..."` | Byte string literal; constructs a `[u8]` instead of a string |
+| `b"..."` | Byte string literal; constructs an array of bytes instead of a string |
 | `br"..."`, `br#"..."#`, `br##"..."##`, etc. | Raw byte string literal, combination of raw and byte string literal |
 | `'...'` | Character literal |
 | `b'...'` | ASCII byte literal |
