@@ -365,9 +365,9 @@ would create dangling pointers or otherwise violate memory safety.
 
 ### Lifetime Annotations in Struct Definitions
 
-So far, the structs we've define all hold owned types. We can define structs to
-hold references, but in that case we would need to add a lifetime annotation on
-every reference in the struct’s definition. Listing 10-25 has a struct named
+So far, the structs we've defined all hold owned types. We can define structs
+to hold references, but in that case we would need to add a lifetime annotation
+on every reference in the struct’s definition. Listing 10-25 has a struct named
 `ImportantExcerpt` that holds a string slice.
 
 <span class="filename">Filename: src/main.rs</span>
