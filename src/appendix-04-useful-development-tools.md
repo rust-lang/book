@@ -161,22 +161,18 @@ For more information on Clippy, see [its documentation][clippy].
 ### IDE Integration Using `rust-analyzer`
 
 To help IDE integration, the Rust community recommends using
-[`rust-analyzer`][rust-analyzer]. This tool is a set of compiler-centric
-utilities that speaks the [Language Server Protocol][lsp], which is a
-specification for IDEs and programming languages to communicate with each
-other. Different clients can use `rust-analyzer`, such as [the Rust analyzer
-plug-in for Visual Studio Code][vscode].
+[`rust-analyzer`][rust-analyzer]<!-- ignore -->. This tool is a set of
+compiler-centric utilities that speaks the [Language Server Protocol][lsp]<!--
+ignore -->, which is a specification for IDEs and programming languages to
+communicate with each other. Different clients can use `rust-analyzer`, such as
+[the Rust analyzer plug-in for Visual Studio Code][vscode].
 
 [lsp]: http://langserver.org/
-[vscode]: https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer
+[vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
 Visit the `rust-analyzer` project’s [home page][rust-analyzer] for installation
 instructions, then install the language server support in your particular IDE.
 Your IDE will gain abilities such as autocompletion, jump to definition, and
 inline errors.
 
-For more information on `rust-analyzer`, see [its
-documentation][rust-analyzer-manual].
-
 [rust-analyzer]: https://rust-analyzer.github.io
-[rust-analyzer-manual]: https://rust-analyzer.github.io/manual.html
