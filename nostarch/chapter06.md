@@ -22,6 +22,10 @@ Enums are a feature in many languages, but their capabilities differ in each
 language. Rust’s enums are most similar to *algebraic data types* in functional
 languages, such as F#, OCaml, and Haskell.
 
+<!--- The above about algebraic data types feels pretty niche. Should it get the 
+"expert aside" treatment that some of the early texts gets?
+/JT --->
+
 ## Defining an Enum
 <!--- I added this first line, it seems like this is what we're saying? Maybe
 summarize what enums are better suited for: when you know all possible outcomes
@@ -33,7 +37,20 @@ think "enums are an alternative to structs" was quite right, because that
 sounded like in any situation, you could choose either enum or struct according
 to your preferences, but what I'd like the reader to come away with is that
 some situations are better expressed with enums; others with structs. /Carol -->
-Enums are a way of defining custom data types in a different way than you do
+<!-- I think this makes sense! I wonder if there's more we could add to give an idea of 
+why we're contrasting them with structs, to give the reader a point of reference. 
+What do you think JT? Would more explanation here be redundant? /LC -->
+<!--- Here's my try for a framing, using our earlier Rectangle example:
+
+Where structs give you a way of grouping together related fields and data, like a
+`Rectangle` with its `width` and `height`, we don't yet have a way of saying a values
+is one of a possible set of values. For example, we may want to say that Rectangle 
+is one of a set of possible shapes. To do this, Rust allows us to encode these 
+possibilities as an enum. Let's look at...
+
+/JT --->
+
+Enums are a way of defining custom data types differently to how you would
 with structs. Let’s look at a situation we might want to express in code and
 see why enums are useful and more appropriate than structs in this case. Say we
 need to work with IP addresses. Currently, two major standards are used for IP
@@ -243,6 +260,10 @@ But if we used the different structs, which each have their own type, we
 couldn’t as easily define a function to take any of these kinds of messages as
 we could with the `Message` enum defined in Listing 6-2, which is a single type.
 
+<!--- We're also hinting at pattern matching complexity if we use the struct method.
+Should we call it out and mention the pattern matching chapter?
+/JT --->
+
 There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
 enums. Here’s a method named `call` that we could define on our `Message` enum:
@@ -274,6 +295,7 @@ which a value could be something or it could be nothing.
 <!-- Liz: I just got an issue from a reader requesting a concrete example
 of this scenario, so I've added two sentences here. Please check to see if they
 make sense! /Carol-->
+<!-- I like this clarification! Good call, reader /LC -->
 For example, if you request the first of a list containing items, you would get
 a value. If you request the first item of an empty list, you would get nothing.
 Expressing this concept in terms of the type system means the compiler can
@@ -339,6 +361,23 @@ let some_string = Some("a string");
 
 let absent_number: Option<i32> = None;
 ```
+
+<!--- I would maybe do the above more explicitly as:
+
+"
+```
+let some_number = Some(5);
+
+let some_number2: Option<i32> = Some(5);
+```
+The types of `some_number` and `some_number2` in the above are identical.
+"
+
+Using `Some("a string")` we're going to open the door to references in
+generic positions (which we still need to build up to). We talk a little about Option<&str> 
+below, but I don't think it helps explain the enum concept.
+
+/JT --->
 
 The type of `some_number` is `Option<i32>`. The type of `some_string` is
 `Option<&str>`, which is a different type. Rust can infer these types because
@@ -472,6 +511,11 @@ Next are the `match` arms. An arm has two parts: a pattern and some code. The
 first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
 operator that separates the pattern and the code to run. The code in this case
 is just the value `1`. Each arm is separated from the next with a comma.
+
+<!--- Tiny nit, though not sure how to phrase it. Arms are separated by commas
+in this example, though if you use blocks instead of simple values you won't use
+commas. We see this happen in the next example.
+/JT --->
 
 When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
@@ -635,8 +679,7 @@ once you get used to it, you’ll wish you had it in all languages. It’s
 consistently a user favorite.
 
 ### Matches Are Exhaustive
-<!--- Can you just summarize what the aspect is up front, here? --->
-<!-- Done! /Carol -->
+
 There’s one other aspect of `match` we need to discuss: the arms’ patterns must
 cover all possibilities. Consider this version of our `plus_one` function,
 which has a bug and won’t compile:
@@ -857,3 +900,10 @@ function expects.
 In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
+
+<!--- I'm of two minds whether `?` should squeeze in here? We talk about `if let`
+but then switch topics next chapter and talk about modules. In the wild, I'd bet
+`?` would be as common, perhaps more common, than `if let`.
+
+But I'll defer to your pedagogy plan. Just wanted to share the thought.
+/JT --->
