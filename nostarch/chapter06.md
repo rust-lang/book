@@ -18,15 +18,12 @@ code for different values of an enum. Finally, we’ll cover how the `if let`
 construct is another convenient and concise idiom available to handle enums in
 your code.
 
-Enums are a feature in many languages, but their capabilities differ in each
-language. Rust’s enums are most similar to *algebraic data types* in functional
-languages, such as F#, OCaml, and Haskell.
-
-<!--- The above about algebraic data types feels pretty niche. Should it get the 
-"expert aside" treatment that some of the early texts gets?
-/JT --->
+<!--- The above about algebraic data types feels pretty niche. Should it get
+the "expert aside" treatment that some of the early texts gets? /JT --->
+<!-- I decided to just remove the paragraph this comment was about. /Carol -->
 
 ## Defining an Enum
+
 <!--- I added this first line, it seems like this is what we're saying? Maybe
 summarize what enums are better suited for: when you know all possible outcomes
 and that the outcomes must be distinct from each other? I was hoping to
@@ -37,26 +34,33 @@ think "enums are an alternative to structs" was quite right, because that
 sounded like in any situation, you could choose either enum or struct according
 to your preferences, but what I'd like the reader to come away with is that
 some situations are better expressed with enums; others with structs. /Carol -->
-<!-- I think this makes sense! I wonder if there's more we could add to give an idea of 
-why we're contrasting them with structs, to give the reader a point of reference. 
-What do you think JT? Would more explanation here be redundant? /LC -->
+<!-- I think this makes sense! I wonder if there's more we could add to give an
+idea of why we're contrasting them with structs, to give the reader a point of
+reference. What do you think JT? Would more explanation here be redundant? /LC
+-->
 <!--- Here's my try for a framing, using our earlier Rectangle example:
-
-Where structs give you a way of grouping together related fields and data, like a
-`Rectangle` with its `width` and `height`, we don't yet have a way of saying a values
-is one of a possible set of values. For example, we may want to say that Rectangle 
-is one of a set of possible shapes. To do this, Rust allows us to encode these 
-possibilities as an enum. Let's look at...
-
+Where structs give you a way of grouping together related fields and data, like
+a `Rectangle` with its `width` and `height`, we don't yet have a way of saying
+a values is one of a possible set of values. For example, we may want to say
+that Rectangle is one of a set of possible shapes. To do this, Rust allows us
+to encode these possibilities as an enum. Let's look at...
 /JT --->
+<!-- I've generally taken JT's suggestion with a few edits. I'm a little
+concerned that we won't ever actually make a `Shape` enum with variants
+`Rectangle`, `Circle`, and `Triangle`? Is that a problem, Liz? /Carol -->
 
-Enums are a way of defining custom data types differently to how you would
-with structs. Let’s look at a situation we might want to express in code and
-see why enums are useful and more appropriate than structs in this case. Say we
-need to work with IP addresses. Currently, two major standards are used for IP
-addresses: version four and version six. Because these are the only
-possibilities for an IP address that our program will come across, we can
-*enumerate* all possible variants, which is where enumeration gets its name.
+Where structs give you a way of grouping together related fields and data, like
+a `Rectangle` with its `width` and `height`, enums give you a way of saying a
+value is one of a possible set of values. For example, we may want to say that
+`Rectangle` is one of a set of possible shapes that also includes `Circle` and
+`Triangle`. To do this, Rust allows us to encode these possibilities as an enum.
+
+Let’s look at a situation we might want to express in code and see why enums
+are useful and more appropriate than structs in this case. Say we need to work
+with IP addresses. Currently, two major standards are used for IP addresses:
+version four and version six. Because these are the only possibilities for an
+IP address that our program will come across, we can *enumerate* all possible
+variants, which is where enumeration gets its name.
 
 Any IP address can be either a version four or a version six address, but not
 both at the same time. That property of IP addresses makes the enum data
@@ -260,9 +264,11 @@ But if we used the different structs, which each have their own type, we
 couldn’t as easily define a function to take any of these kinds of messages as
 we could with the `Message` enum defined in Listing 6-2, which is a single type.
 
-<!--- We're also hinting at pattern matching complexity if we use the struct method.
-Should we call it out and mention the pattern matching chapter?
+<!--- We're also hinting at pattern matching complexity if we use the struct
+method. Should we call it out and mention the pattern matching chapter?
 /JT --->
+<!-- If readers don't have experience with pattern matching, I don't think this
+will resonate with them, so I'm not going to mention it here. /Carol -->
 
 There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
@@ -292,10 +298,7 @@ useful: `Option`.
 This section explores a case study of `Option`, which is another enum defined
 by the standard library. The `Option` type encodes the very common scenario in
 which a value could be something or it could be nothing.
-<!-- Liz: I just got an issue from a reader requesting a concrete example
-of this scenario, so I've added two sentences here. Please check to see if they
-make sense! /Carol-->
-<!-- I like this clarification! Good call, reader /LC -->
+
 For example, if you request the first of a list containing items, you would get
 a value. If you request the first item of an empty list, you would get nothing.
 Expressing this concept in terms of the type system means the compiler can
@@ -357,7 +360,7 @@ types and string types:
 
 ```
 let some_number = Some(5);
-let some_string = Some("a string");
+let some_char = Some('e');
 
 let absent_number: Option<i32> = None;
 ```
@@ -374,13 +377,16 @@ The types of `some_number` and `some_number2` in the above are identical.
 "
 
 Using `Some("a string")` we're going to open the door to references in
-generic positions (which we still need to build up to). We talk a little about Option<&str> 
-below, but I don't think it helps explain the enum concept.
+generic positions (which we still need to build up to). We talk a little about
+Option<&str> below, but I don't think it helps explain the enum concept.
 
 /JT --->
+<!-- I changed the above to use `char` rather than string slice, but we're
+trying to show that options holding different types are themselves different
+types below, so I didn't want to make them both `i32`. /Carol -->
 
-The type of `some_number` is `Option<i32>`. The type of `some_string` is
-`Option<&str>`, which is a different type. Rust can infer these types because
+The type of `some_number` is `Option<i32>`. The type of `some_char` is
+`Option<char>`, which is a different type. Rust can infer these types because
 we’ve specified a value inside the `Some` variant. For `absent_number`, Rust
 requires us to annotate the overall `Option` type: the compiler can’t infer the
 type that the corresponding `Some` variant will hold by looking only at a
@@ -472,12 +478,10 @@ the first hole it encounters that it fits into. In the same way, values go
 through each pattern in a `match`, and at the first pattern the value “fits,”
 the value falls into the associated code block to be used during execution.
 
-<!--- love this simile /LC --->
-
-Speaking of coins, let’s use them as an example using `match`! We
-can write a function that takes an unknown United States coin and, in a
-similar way as the counting machine, determines which coin it is and return its
-value in cents, as shown here in Listing 6-3.
+Speaking of coins, let’s use them as an example using `match`! We can write a
+function that takes an unknown United States coin and, in a similar way as the
+counting machine, determines which coin it is and return its value in cents, as
+shown here in Listing 6-3.
 
 ```
 [1]enum Coin {
@@ -516,6 +520,8 @@ is just the value `1`. Each arm is separated from the next with a comma.
 in this example, though if you use blocks instead of simple values you won't use
 commas. We see this happen in the next example.
 /JT --->
+<!-- I clarified in the paragraph before the next example. You *can* use commas
+even if there's curly brackets, but people don't usually. /Carol -->
 
 When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
@@ -529,9 +535,10 @@ entire `match` expression.
 
 We don't typically use curly brackets if the match arm code is short, as it is
 in Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you must use curly brackets. For example, the
-following code prints “Lucky penny!” every time the method is called with a
-`Coin::Penny`, but still returns the last value of the block, `1`:
+lines of code in a match arm, you must use curly brackets, and the comma
+following the arm is then optional. For example, the following code prints
+“Lucky penny!” every time the method is called with a `Coin::Penny`, but still
+returns the last value of the block, `1`:
 
 ```
 fn value_in_cents(coin: Coin) -> u8 {
@@ -778,7 +785,7 @@ fn reroll() {}
 This example also meets the exhaustiveness requirement because we’re explicitly
 ignoring all other values in the last arm; we haven’t forgotten anything.
 
-Finally, we'll change the rules of the game one more time, so that nothing else
+Finally, we’ll change the rules of the game one more time, so that nothing else
 happens on your turn if you roll anything other than a 3 or a 7. We can express
 that by using the unit value (the empty tuple type we mentioned in “The Tuple
 Type” section) as the code that goes with the `_` arm:
@@ -901,9 +908,12 @@ In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
 
-<!--- I'm of two minds whether `?` should squeeze in here? We talk about `if let`
-but then switch topics next chapter and talk about modules. In the wild, I'd bet
-`?` would be as common, perhaps more common, than `if let`.
+<!--- I'm of two minds whether `?` should squeeze in here? We talk about `if
+let` but then switch topics next chapter and talk about modules. In the wild,
+I'd bet `?` would be as common, perhaps more common, than `if let`.
 
 But I'll defer to your pedagogy plan. Just wanted to share the thought.
 /JT --->
+<!-- Yeah introducing `?` here would be a big change; I don't want to talk
+about that until we've talked about `Result` even though you can use `?` on
+`Option` now, because `?` is still way more common with `Result`. /Carol -->
