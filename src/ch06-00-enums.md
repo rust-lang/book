@@ -9,7 +9,3 @@ how pattern matching in the `match` expression makes it easy to run different
 code for different values of an enum. Finally, we’ll cover how the `if let`
 construct is another convenient and concise idiom available to handle enums in
 your code.
-
-Enums are a feature in many languages, but their capabilities differ in each
-language. Rust’s enums are most similar to *algebraic data types* in functional
-languages, such as F#, OCaml, and Haskell.

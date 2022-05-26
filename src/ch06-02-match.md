@@ -14,6 +14,7 @@ down a track with variously sized holes along it, and each coin falls through
 the first hole it encounters that it fits into. In the same way, values go
 through each pattern in a `match`, and at the first pattern the value “fits,”
 the value falls into the associated code block to be used during execution.
+
 Speaking of coins, let’s use them as an example using `match`! We can write a
 function that takes an unknown United States coin and, in a similar way as the
 counting machine, determines which coin it is and return its value in cents, as
@@ -50,9 +51,10 @@ entire `match` expression.
 
 We don’t typically use curly brackets if the match arm code is short, as it is
 in Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you must use curly brackets. For example, the
-following code prints “Lucky penny!” every time the method is called with a
-`Coin::Penny`, but still returns the last value of the block, `1`:
+lines of code in a match arm, you must use curly brackets, and the comma
+following the arm is then optional. For example, the following code prints
+“Lucky penny!” every time the method is called with a `Coin::Penny`, but still
+returns the last value of the block, `1`:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-08-match-arm-multiple-lines/src/main.rs:here}}
@@ -161,8 +163,9 @@ consistently a user favorite.
 
 ### Matches Are Exhaustive
 
-There’s one other aspect of `match` we need to discuss. Consider this version
-of our `plus_one` function that has a bug and won’t compile:
+There’s one other aspect of `match` we need to discuss: the arms’ patterns must
+cover all possibilities. Consider this version of our `plus_one` function,
+which has a bug and won’t compile:
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-10-non-exhaustive-match/src/main.rs:here}}
@@ -208,17 +211,17 @@ This code compiles, even though we haven’t listed all the possible values a
 `u8` can have, because the last pattern will match all values not specifically
 listed. This catch-all pattern meets the requirement that `match` must be
 exhaustive. Note that we have to put the catch-all arm last because the
-patterns are evaluated in order. Rust will warn us if we add arms after a
-catch-all because those later arms would never match!
+patterns are evaluated in order. If we put the catch-all arm earlier, the other
+arms would never run, so Rust will warn us if we add arms after a catch-all!
 
-Rust also has a pattern we can use when we don’t want to use the value in the
-catch-all pattern: `_`, which is a special pattern that matches any value and
-does not bind to that value. This tells Rust we aren’t going to use the value,
-so Rust won’t warn us about an unused variable.
+Rust also has a pattern we can use when we want a catch-all but don’t want to
+*use* the value in the catch-all pattern: `_` is a special pattern that matches
+any value and does not bind to that value. This tells Rust we aren’t going to
+use the value, so Rust won’t warn us about an unused variable.
 
-Let’s change the rules of the game to be that if you roll anything other than
-a 3 or a 7, you must roll again. We don’t need to use the value in that case,
-so we can change our code to use `_` instead of the variable named `other`:
+Let’s change the rules of the game: now, if you roll anything other than a 3 or
+a 7, you must roll again. We no longer need to use the catch-all value, so we
+can change our code to use `_` instead of the variable named `other`:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-16-underscore-catchall/src/main.rs:here}}
@@ -227,9 +230,9 @@ so we can change our code to use `_` instead of the variable named `other`:
 This example also meets the exhaustiveness requirement because we’re explicitly
 ignoring all other values in the last arm; we haven’t forgotten anything.
 
-If we change the rules of the game one more time, so that nothing else happens
-on your turn if you roll anything other than a 3 or a 7, we can express that
-by using the unit value (the empty tuple type we mentioned in [“The Tuple
+Finally, we’ll change the rules of the game one more time, so that nothing else
+happens on your turn if you roll anything other than a 3 or a 7. We can express
+that by using the unit value (the empty tuple type we mentioned in [“The Tuple
 Type”][tuples]<!-- ignore --> section) as the code that goes with the `_` arm:
 
 ```rust

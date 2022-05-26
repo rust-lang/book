@@ -1,12 +1,17 @@
 ## Defining an Enum
 
-Enums are a way of defining custom data types in a different way than you do
-with structs. Let’s look at a situation we might want to express in code and
-see why enums are useful and more appropriate than structs in this case. Say we
-need to work with IP addresses. Currently, two major standards are used for IP
-addresses: version four and version six. Because these are the only
-possibilities for an IP address that our program will come across, we can
-*enumerate* all possible variants, which is where enumeration gets its name.
+Where structs give you a way of grouping together related fields and data, like
+a `Rectangle` with its `width` and `height`, enums give you a way of saying a
+value is one of a possible set of values. For example, we may want to say that
+`Rectangle` is one of a set of possible shapes that also includes `Circle` and
+`Triangle`. To do this, Rust allows us to encode these possibilities as an enum.
+
+Let’s look at a situation we might want to express in code and see why enums
+are useful and more appropriate than structs in this case. Say we need to work
+with IP addresses. Currently, two major standards are used for IP addresses:
+version four and version six. Because these are the only possibilities for an
+IP address that our program will come across, we can *enumerate* all possible
+variants, which is where enumeration gets its name.
 
 Any IP address can be either a version four or a version six address, but not
 both at the same time. That property of IP addresses makes the enum data
@@ -183,12 +188,14 @@ useful: `Option`.
 
 This section explores a case study of `Option`, which is another enum defined
 by the standard library. The `Option` type encodes the very common scenario in
-which a value could be something or it could be nothing. For example, if you
-request the first of a list containing items, you would get a value. If you
-request the first item of an empty list, you would get nothing. Expressing this
-concept in terms of the type system means the compiler can check whether you’ve
-handled all the cases you should be handling; this functionality can prevent
-bugs that are extremely common in other programming languages.
+which a value could be something or it could be nothing.
+
+For example, if you request the first of a list containing items, you would get
+a value. If you request the first item of an empty list, you would get nothing.
+Expressing this concept in terms of the type system means the compiler can
+check whether you’ve handled all the cases you should be handling; this
+functionality can prevent bugs that are extremely common in other programming
+languages.
 
 Programming language design is often thought of in terms of which features you
 include, but the features you exclude are important too. Rust doesn’t have the
@@ -246,8 +253,8 @@ types and string types:
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
 ```
 
-The type of `some_number` is `Option<i32>`. The type of `some_string` is
-`Option<&str>`, which is a different type. Rust can infer these types because
+The type of `some_number` is `Option<i32>`. The type of `some_char` is
+`Option<char>`, which is a different type. Rust can infer these types because
 we’ve specified a value inside the `Some` variant. For `absent_number`, Rust
 requires us to annotate the overall `Option` type: the compiler can’t infer the
 type that the corresponding `Some` variant will hold by looking only at a
