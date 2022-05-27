@@ -190,7 +190,7 @@ This section explores a case study of `Option`, which is another enum defined
 by the standard library. The `Option` type encodes the very common scenario in
 which a value could be something or it could be nothing.
 
-For example, if you request the first of a list containing items, you would get
+For example, if you request the first item of a list containing items, you would get
 a value. If you request the first item of an empty list, you would get nothing.
 Expressing this concept in terms of the type system means the compiler can
 check whether you’ve handled all the cases you should be handling; this
