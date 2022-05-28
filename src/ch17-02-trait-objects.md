@@ -1,7 +1,7 @@
 ## Using Trait Objects That Allow for Values of Different Types
 
 In Chapter 8, we mentioned that one limitation of vectors is that they can
-store elements of only one type. We created a workaround in Listing 8-10 where
+store elements of only one type. We created a workaround in Listing 8-9 where
 we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
 and text. This meant we could store different types of data in each cell and
 still have a vector that represented a row of cells. This is a perfectly good
