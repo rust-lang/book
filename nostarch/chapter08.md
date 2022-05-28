@@ -97,6 +97,19 @@ make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
 we place inside are all of type `i32`, and Rust infers this from the data, so
 we don’t need the `Vec<i32>` annotation.
 
+<!--- 
+
+I think people from other languages may get stuck a bit here because this is
+the first time (I think?) that we're showing a hindley-milner style type inference
+in action (rather than using the initializer to infer the type).
+
+Should we show the definition for `push`? That'd let us tie together the
+method call, mutable reference to self drawing on the `impl` we saw in earlier chapters
+and help to explain a little why the above works without having to annotate the
+type of the Vec.
+
+/JT --->
+
 ### Dropping a Vector Drops Its Elements
 
 Like any other `struct`, a vector is freed when it goes out of scope, as
@@ -116,6 +129,17 @@ When the vector gets dropped, all of its contents are also dropped, meaning
 those integers it holds will be cleaned up. This may seem like a
 straightforward point but it can get complicated when you start to introduce
 references to the elements of the vector. Let’s tackle that next!
+
+<!--- 
+
+nit: I think "meaning the integers it holds will be cleaned up" reads a little
+better
+
+nit #2: imho dropping isn't as imports when you start using vectors as reading elements
+from the vector. Is it better for training to mention it here, or would it be possible to move it
+later?
+
+/JT --->
 
 ### Reading Elements of Vectors
 
@@ -146,6 +170,12 @@ element because vectors are indexed by number, starting at zero. Second, we get
 the third element by either using `&` and `[]`, which gives us a reference, or
 using the `get` method with the index passed as an argument, which gives us an
 `Option<&T>`.
+
+<!--- 
+
+I think it should be "Second, we get the third element by using both `&` and `[]`"
+
+/JT --->
 
 The reason Rust provides these two ways to reference an element is so you can
 choose how the program behaves when you try to use an index value outside the
@@ -265,6 +295,26 @@ To change the value that the mutable reference refers to, we have to use the
 “Following the Pointer to the Value with the Dereference Operator”
 section of Chapter 15.
 
+<!--- 
+Maybe worth a mention: the above use of the mutable reference while you iterate
+is perfectly safe because there's no changing that's happening to the vector that
+would invalidate the iterator. But, if you wanted to iterate the vector while also
+trying to remove or insert elements, you'd get an error. For example:
+
+```
+let mut v = vec![100, 32, 57];
+for i in &mut v {
+    *i += 50;
+    if *i > 100 {
+      v.push(10); // <-- a second mutable reference is needed and will fail to compile
+    }
+}
+```
+
+Things like this help Rust prevent some classic C++ issues where people didn't think
+about the implications of growing/shrinking a container while iterating over it.
+/JT --->
+
 ### Using an Enum to Store Multiple Types
 
 Vectors can only store values that are the same type. This can be inconvenient;
@@ -347,10 +397,6 @@ coded into the core language, is a growable, mutable, owned, UTF-8 encoded
 string type. When Rustaceans refer to “strings” in Rust, they might be
 referring to either the `String` or the string slice `&str` types, not just one
 of those types.
-<!-- as in, they use the term interchangeably, or they're referring to the pair of 'String' and '$str' as a srting? /LC -->
-<!-- Interchangeably, sort of. It's more like you might say "string" out loud but
-the actual thing you're talking about might be a `String` or a `&str`, because most
-of the time it doesn't particularly matter. I've tried to clarify /Carol -->
 Although this section is largely about `String`, both types are used heavily in
 Rust’s standard library, and both `String` and string slices are UTF-8 encoded.
 
@@ -362,6 +408,18 @@ or `Str`? They refer to owned and borrowed variants, just like the `String` and
 different encodings or be represented in memory in a different way, for
 example. We won’t discuss these other string types in this chapter; see their
 API documentation for more about how to use them and when each is appropriate.
+
+<!--- 
+
+I'm wondering if listing the above makes it a bit more cumbersome. In effect, out of 
+gate we're saying there are a lot of different string types.
+
+But perhaps we could focus on String and &str here and let them learn about CString/CStr
+when doing FFI and OsString/OsStr when they work on paths? Basically, I'm wondering if
+we should cut down on the concept count and let them come across those alternate strings
+more naturally.
+
+/JT --->
 
 ### Creating a New String
 
@@ -453,7 +511,7 @@ Listing 8-15: Appending a string slice to a `String` using the `push_str` method
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
-parameter. For example, in the code in Listing 8-16, we want to be able to use
+parameter. For example, in the code in Listing 8-16, we want to able to use
 `s2` after appending its contents to `s1`.
 
 ```
@@ -516,6 +574,29 @@ string to the first string. This is because of the `s` parameter in the `add`
 function: we can only add a `&str` to a `String`; we can’t add two `String`
 values together. But wait—the type of `&s2` is `&String`, not `&str`, as
 specified in the second parameter to `add`. So why does Listing 8-18 compile?
+
+<!--- 
+
+The above isn't quite right - the trait for ops::Add uses an Rhs associated type
+instead of using T for both lhs and rhs. 
+
+```
+pub trait Add<Rhs = Self> {
+    type Output;
+    fn add(self, rhs: Rhs) -> Self::Output;
+}
+```
+
+The implementation of Add for String fills in Rhs with the slice:
+
+```
+impl<'_> Add<&'_ str> for String
+```
+
+Not sure if it's better to fix the description and not have deref coercion
+discussion following, or fix the example so you can have the coercion discussion.
+
+/JT --->
 
 The reason we’re able to use `&s2` in the call to `add` is that the compiler
 can *coerce* the `&String` argument into a `&str`. When we call the `add`
@@ -718,6 +799,18 @@ can crash your program.
 Do you have suggestions on making this clearer? I've tried to add a bit at the beginning of this section /Carol
 -->
 
+<!-- JT, what do you think -- is this ordering clear to you? /LC -->
+<!--- 
+I'm okay with the current order - I think showing why it's bad, what's close to what you try first, and then
+finally the idiomatic Rust solution reads okay.
+
+One tiny nit, for flow, would be to use the Cyrillic example first here to show how `.chars()` works well for it
+and then mention that for more complex scripts, like Hindi, you'll need to use the more full-featured
+string handling you find on crates.io.
+
+/JT --->
+
+
 The best way to operate on pieces of strings is to be explicit about whether
 you want characters or bytes. For individual Unicode scalar values, use the
 `chars` method. Calling `chars` on “नमस्ते” separates out and returns six values
@@ -767,6 +860,18 @@ provided by the standard library. Crates are available on *https://crates.io/*
 if this is the functionality you need.
 
 ### Strings Are Not So Simple
+
+<!--- 
+
+Because Strings are quite complicated, and have complications that are all their own
+and unlike any other containers, I wonder if maybe this chapter should be two different
+chapters with one specifically being about strings, string slices, chars, and related?
+
+/JT --->
+
+<!--- 
+We don't talk about searching in a string. Feels like it could use an example or two?
+/JT --->
 
 To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust
@@ -824,13 +929,8 @@ standard library; there’s no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
+homogeneous: all of the keys must have the same type as each other, and all of the values
 must have the same type.
-
-<!--- but the keys can be of a different type to the values? /LC --->
-<!-- Yes, which is illustrated in the sentence before that describes Listing
-8-20, I didn't think that needed to be stated explicitly because it's
-demonstrated, do you disagree? /Carol -->
 
 Another way of constructing a hash map is by using iterators and the `collect`
 method on a vector of tuples, where each tuple consists of a key and its value.
@@ -854,6 +954,14 @@ let mut scores: HashMap<_, _> =
 ```
 
 Listing 8-21: Creating a hash map from a list of teams and a list of scores
+
+<!--- 
+
+I'm not sure I've seen this in the wild? I'm tempted to say to skip the zip
+example for flow and go from creating the hash map to working with its
+contents.
+
+/JT --->
 
 The type annotation `HashMap<_, _>` is needed here because it’s possible to
 `collect` into many different data structures and Rust doesn’t know which you
@@ -894,6 +1002,13 @@ the “Validating References with Lifetimes” section in Chapter 10.
 
 ### Accessing Values in a Hash Map
 
+<!--- 
+
+For flow, would it make sense for this section to follow creating the hash map?
+That way we introduce a useful concept and also continue the teams example.
+
+/JT --->
+
 We can get a value out of the hash map by providing its key to the `get`
 method, as shown in Listing 8-23.
 
@@ -916,6 +1031,13 @@ result will be `Some(&10)`. The result is wrapped in `Some` because `get`
 returns an `Option<&V>`; if there’s no value for that key in the hash map,
 `get` will return `None`. The program will need to handle the `Option` in one
 of the ways that we covered in Chapter 6.
+
+<!--- 
+
+Should there be a quick example here to show handling Some/None again before
+we move on to iteration?
+
+/JT --->
 
 We can iterate over each key/value pair in a hash map in a similar manner as we
 do with vectors, using a `for` loop:
@@ -950,6 +1072,17 @@ example. Stating this here feels a bit off topic for updating the value of an
 existing key, though, I'm not sure how to work it in. Do you think that's
 important enough to state here? If so, do you have suggestions on how to do it
 without distracting from the main point of this section? /Carol -->
+<!-- It may not be important enough, what do you think JT? /LC -->
+
+<!--- 
+
+I think it's maybe worth calling out. Something you could use to drive
+this home is the `.entry()` call. This makes it clear that for any key there's
+one cell (or entry) that you're updating in the hash map. I see we use it
+later, though worth a thought if bringing it earlier helps?
+
+/JT --->
+
 When you want to change the data in a hash map, you have to decide how to
 handle the case when a key already has a value assigned. You could replace the
 old value with the new value, completely disregarding the old value. You could
@@ -995,6 +1128,20 @@ don't think it matters, but I am interested to know if there's something I'm
 missing that you're trying to get at). Can you elaborate on what was confusing
 and perhaps propose wording that would have cleared this up for you, and I can
 fix if needed? /Carol-->
+<!-- I suppose what I'm asking is whether a value is inserted from the started as a default
+value and then updated, meaning the key never has no value, or whether we're only
+allowing insertion of a value if there isn't already a value. I think it's the latter
+and maybe that's clear enough as is! JT, what do you think? /LC -->
+<!--- 
+I think the idea is generally right, we're going to insert the value if the
+key is not already in the hash map. Maybe the title could be:
+
+"Adding a key and value only if a key isn't present"
+
+Worth a note: I think "default" values are a bit of a loaded term in Rust. If we use it, we may
+confuse people later if we they come across `Default`, which is the default value of a
+type (like 0 is for i64, via `i64::default()`)
+/JT --->
 
 It’s common to check whether a particular key has a value and, if it doesn’t,
 insert a value for it. Hash maps have a special API for this called `entry`
@@ -1068,6 +1215,12 @@ dereference `count` using the asterisk (`*`). The mutable reference goes out of
 scope at the end of the `for` loop, so all of these changes are safe and
 allowed by the borrowing rules.
 
+<!--- 
+Running the above gave me `{"world": 2, "wonderful": 1, "hello": 1}` so the key
+order may not be deterministic or may change based on changes to the hashing
+function in the std lib.
+/JT --->
+
 ### Hashing Functions
 
 By default, `HashMap` uses a hashing function called *SipHash* that can provide
@@ -1106,3 +1259,4 @@ and hash maps have that will be helpful for these exercises!
 
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
+
