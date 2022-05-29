@@ -33,20 +33,13 @@ of those types. Although this section is largely about `String`, both types are
 used heavily in Rust’s standard library, and both `String` and string slices
 are UTF-8 encoded.
 
-Rust’s standard library also includes a number of other string types, such as
-`OsString`, `OsStr`, `CString`, and `CStr`. Library crates can provide even
-more options for storing string data. See how those names all end in `String`
-or `Str`? They refer to owned and borrowed variants, just like the `String` and
-`str` types you’ve seen previously. These string types can store text in
-different encodings or be represented in memory in a different way, for
-example. We won’t discuss these other string types in this chapter; see their
-API documentation for more about how to use them and when each is appropriate.
-
 ### Creating a New String
 
 Many of the same operations available with `Vec<T>` are available with `String`
-as well, starting with the `new` function to create a string, shown in Listing
-8-11.
+as well, because `String` is actually implemented as a wrapper around a vector
+of bytes with some extra guarantees, restrictions, and capabilities. An example
+of a function that works the same way with `Vec<T>` and `String` is the `new`
+function to create an instance, shown in Listing 8-11.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-11/src/main.rs:here}}
@@ -166,9 +159,9 @@ this:
 fn add(self, s: &str) -> String {
 ```
 
-In the standard library, you’ll see `add` defined using generics. Here, we’ve
-substituted in concrete types for the generic ones, which is what happens when
-we call this method with `String` values. We’ll discuss generics in Chapter 10.
+In the standard library, you'll see `add` defined using generics and associated
+types. Here, we’ve substituted in concrete types, which is what happens when we
+call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need to understand the tricky bits of the
 `+` operator.
 
@@ -382,7 +375,7 @@ for b in "Зд".bytes() {
 }
 ```
 
-This code will print the four bytes that make up this `String`:
+This code will print the four bytes that make up this string:
 
 ```text
 208
@@ -409,5 +402,11 @@ handling UTF-8 data upfront. This trade-off exposes more of the complexity of
 strings than is apparent in other programming languages, but it prevents you
 from having to handle errors involving non-ASCII characters later in your
 development life cycle.
+
+The good news is that the standard library offers a lot of functionality built
+off the `String` and `&str` types to help handle these complex situations
+correctly. Be sure to check out the documentation for useful methods like
+`contains` for searching in a string and `replace` for substituting parts of a
+string with another string.
 
 Let’s switch to something a bit less complex: hash maps!

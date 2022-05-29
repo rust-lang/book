@@ -39,34 +39,40 @@ standard library; there’s no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
-must have the same type.
+homogeneous: all of the keys must have the same type as each other, and all of
+the values must have the same type.
 
-Another way of constructing a hash map is by using iterators and the `collect`
-method on a vector of tuples, where each tuple consists of a key and its value.
-We’ll be going into more detail about iterators and their associated methods in
-the [”Processing a Series of Items with Iterators” section of Chapter
-13][iterators]<!-- ignore -->. The `collect` method gathers data into a number
-of collection types, including `HashMap`. For example, if we had the team names
-and initial scores in two separate vectors, we could use the `zip` method to
-create an iterator of tuples where “Blue” is paired with 10, and so forth. Then
-we could use the `collect` method to turn that iterator of tuples into a hash
-map, as shown in Listing 8-21.
+### Accessing Values in a Hash Map
+
+We can get a value out of the hash map by providing its key to the `get`
+method, as shown in Listing 8-21.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-21: Creating a hash map from a list of teams
-and a list of scores</span>
+<span class="caption">Listing 8-21: Accessing the score for the Blue team
+stored in the hash map</span>
 
-The type annotation `HashMap<_, _>` is needed here because it’s possible to
-`collect` into many different data structures and Rust doesn’t know which you
-want unless you specify. For the parameters for the key and value types,
-however, we use underscores, and Rust can infer the types that the hash map
-contains based on the types of the data in the vectors. In Listing 8-21, the
-key type will be `String` and the value type will be `i32`, just as in Listing
-8-20.
+Here, `score` will have the value that’s associated with the Blue team, and the
+result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
+value for that key in the hash map, `get` will return `None`. This program
+handles the `Option` by calling `unwrap_or` to set `score` to zero if `scores`
+doesn't have an entry for the key.
+
+We can iterate over each key/value pair in a hash map in a similar manner as we
+do with vectors, using a `for` loop:
+
+```rust
+{{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
+```
+
+This code will print each pair in an arbitrary order:
+
+```text
+Yellow: 50
+Blue: 10
+```
 
 ### Hash Maps and Ownership
 
@@ -91,83 +97,60 @@ the [“Validating References with
 Lifetimes”][validating-references-with-lifetimes]<!-- ignore --> section in
 Chapter 10.
 
-### Accessing Values in a Hash Map
-
-We can get a value out of the hash map by providing its key to the `get`
-method, as shown in Listing 8-23.
-
-```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
-```
-
-<span class="caption">Listing 8-23: Accessing the score for the Blue team
-stored in the hash map</span>
-
-Here, `score` will have the value that’s associated with the Blue team, and the
-result will be `Some(&10)`. The result is wrapped in `Some` because `get`
-returns an `Option<&V>`; if there’s no value for that key in the hash map,
-`get` will return `None`. The program will need to handle the `Option` in one
-of the ways that we covered in Chapter 6.
-
-We can iterate over each key/value pair in a hash map in a similar manner as we
-do with vectors, using a `for` loop:
-
-```rust
-{{#rustdoc_include ../listings/ch08-common-collections/no-listing-03-iterate-over-hashmap/src/main.rs:here}}
-```
-
-This code will print each pair in an arbitrary order:
-
-```text
-Yellow: 50
-Blue: 10
-```
-
 ### Updating a Hash Map
 
-Although the number of key and value pairs is growable, each key can only have
-one value associated with it at a time. When you want to change the data in a
-hash map, you have to decide how to handle the case when a key already has a
-value assigned. You could replace the old value with the new value, completely
-disregarding the old value. You could keep the old value and ignore the new
-value, only adding the new value if the key *doesn’t* already have a value. Or
-you could combine the old value and the new value. Let’s look at how to do each
-of these!
+Although the number of key and value pairs is growable, each unique key can
+only have one value associated with it at a time (but not vice versa: for
+example, both the Blue team and the Yellow team could have value 10 stored in
+the `scores` hash map).
+
+When you want to change the data in a hash map, you have to decide how to
+handle the case when a key already has a value assigned. You could replace the
+old value with the new value, completely disregarding the old value. You could
+keep the old value and ignore the new value, only adding the new value if the
+key *doesn’t* already have a value. Or you could combine the old value and the
+new value. Let’s look at how to do each of these!
 
 #### Overwriting a Value
 
 If we insert a key and a value into a hash map and then insert that same key
 with a different value, the value associated with that key will be replaced.
-Even though the code in Listing 8-24 calls `insert` twice, the hash map will
+Even though the code in Listing 8-23 calls `insert` twice, the hash map will
 only contain one key/value pair because we’re inserting the value for the Blue
 team’s key both times.
 
 ```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-24: Replacing a value stored with a particular
+<span class="caption">Listing 8-23: Replacing a value stored with a particular
 key</span>
 
 This code will print `{"Blue": 25}`. The original value of `10` has been
 overwritten.
 
-#### Only Inserting a Value If the Key Has No Value
+<!-- Old headings. Do not remove or links may break. -->
+<a id="only-inserting-a-value-if-the-key-has-no-value"></a>
 
-It’s common to check whether a particular key has a value and, if it doesn’t,
-insert a value for it. Hash maps have a special API for this called `entry`
-that takes the key you want to check as a parameter. The return value of the
-`entry` method is an enum called `Entry` that represents a value that might or
-might not exist. Let’s say we want to check whether the key for the Yellow team
-has a value associated with it. If it doesn’t, we want to insert the value 50,
-and the same for the Blue team. Using the `entry` API, the code looks like
-Listing 8-25.
+#### Adding a Key and Value Only If a Key Isn’t Present
+
+It’s common to check whether a particular key already exists in the hash map
+with a value then take the following actions: if the key does exist in the hash
+map, the existing value should remain the way it is. If the key doesn’t exist,
+insert it and a value for it.
+
+Hash maps have a special API for this called `entry` that takes the key you
+want to check as a parameter. The return value of the `entry` method is an enum
+called `Entry` that represents a value that might or might not exist. Let’s say
+we want to check whether the key for the Yellow team has a value associated
+with it. If it doesn’t, we want to insert the value 50, and the same for the
+Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
 ```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-25: Using the `entry` method to only insert if
+<span class="caption">Listing 8-24: Using the `entry` method to only insert if
 the key does not already have a value</span>
 
 The `or_insert` method on `Entry` is defined to return a mutable reference to
@@ -176,7 +159,7 @@ inserts the parameter as the new value for this key and returns a mutable
 reference to the new value. This technique is much cleaner than writing the
 logic ourselves and, in addition, plays more nicely with the borrow checker.
 
-Running the code in Listing 8-25 will print `{"Yellow": 50, "Blue": 10}`. The
+Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
 first call to `entry` will insert the key for the Yellow team with the value
 50 because the Yellow team doesn’t have a value already. The second call to
 `entry` will not change the hash map because the Blue team already has the
@@ -185,18 +168,23 @@ value 10.
 #### Updating a Value Based on the Old Value
 
 Another common use case for hash maps is to look up a key’s value and then
-update it based on the old value. For instance, Listing 8-26 shows code that
+update it based on the old value. For instance, Listing 8-25 shows code that
 counts how many times each word appears in some text. We use a hash map with
 the words as keys and increment the value to keep track of how many times we’ve
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
 the value 0.
 
 ```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-26/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-26: Counting occurrences of words using a hash
+<span class="caption">Listing 8-25: Counting occurrences of words using a hash
 map that stores words and counts</span>
+
+This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
+the same key/value pairs printed in a different order: recall from the
+[“Accessing Values in a Hash Map”][access]<!-- ignore --> section that
+iterating over a hash map happens in an arbitrary order.
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. The
 `split_whitespace` method returns an iterator over sub-slices, separated by
@@ -249,6 +237,6 @@ and hash maps have that will be helpful for these exercises!
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
 
-[iterators]: ch13-02-iterators.html
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
+[access]: #accessing-values-in-a-hash-map
