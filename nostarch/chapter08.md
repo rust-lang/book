@@ -1227,7 +1227,7 @@ the same key/value pairs printed in a different order: recall from the
 “Accessing Values in a Hash Map” section that iterating over a hash map happens
 in an arbitrary order.
 
-The `split_whitespace` method iterates over sub-slices, separated by
+The `split_whitespace` method returns an iterator over sub-slices, separated by
 whitespace, of the value in `text`. The `or_insert` method returns a mutable
 reference (`&mut V`) to the value for the specified key. Here we store that
 mutable reference in the `count` variable, so in order to assign to that value,
