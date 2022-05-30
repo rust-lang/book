@@ -21,10 +21,6 @@ likely just want to report the problem to the user and retry the operation.
 Unrecoverable errors are always symptoms of bugs, like trying to access a
 location beyond the end of an array, and so we want to immediately stop the
 program.
-<!-- so what do we want to do with unrecoverable ones, panic (or maybe just
-"exit the program")? /LC -->
-<!-- Yes, we want to stop the program, which is what panic does. I've opted for
-"stop" here since we haven't really defined "panic" yet. /Carol -->
 
 Most languages don’t distinguish between these two kinds of errors and handle
 both in the same way, using mechanisms such as exceptions. Rust doesn’t have
@@ -50,6 +46,15 @@ written and the data the program gets at runtime. It *might* involve us
 literally typing `panic!` into our code, or it might be part of Rust that we're
 using that calls `panic!` for us because of something else we've done. Does
 that make sense? I've tried to clarify the last sentence a bit here /Carol -->
+<!--- 
+One way we could explain it is to say there are two ways to cause a panic in
+practice: by doing an action that causes our code to panic, like accessing an
+array past the end or dividing by zero, or by explicitly calling the `panic!`
+macro. In both cases, we cause a panic in our application. By default, these
+panics will unwind and clean up the stack. Via an environment setting, you can
+also have Rust display the call stack when a panic occurs to make it easier to
+track down the source of the panic.
+/JT --->
 
 > ### Unwinding the Stack or Aborting in Response to a Panic
 >
@@ -256,6 +261,14 @@ error message will then tell us what the type of `f` *is*. Let’s try it! We
 know that the return type of `File::open` isn’t of type `u32`, so let’s change
 the `let f` statement to this:
 
+<!--- 
+This brings up an interesting point - should we teach them to install
+rust-analyzer in the setup instructions? If so, then we can tell them to mouse
+over the name of what they want the typename of. The "assign something to i32 to
+have rustc tell you what it is" feels a bit like old style Rust.
+/JT --->
+
+
 ```
     let f: u32 = File::open("hello.txt");
 ```
@@ -397,14 +410,9 @@ the missing file error.
 > much a primitive. In Chapter 13, you’ll learn about closures, which are used
 > with many of the methods defined on `Result<T, E>`. These methods can be more
 > concise than using `match` when handling `Result<T, E>` values in your code.
->
-> <!-- I've tried to clarify the connection of closures to match here, can you check it's fair to say? /LC -->
-> <!-- I've made some edits, please check to see if it's clear! /Carol -->
->
-> <!-- to clarify, is this next example using closures, or just a more concise way to do the same thing using some other technique? /LC -->
-> <!-- This next example uses closures and is a more concise way to do the same thing; I've tried to clarify /Carol -->
+
 > For example, here’s another way to write the same logic as shown in Listing
-> 9-5 but using closures and the `unwrap_or_else` method:
+> 9-5, this time using closures and the `unwrap_or_else` method:
 >
 > ```
 > use std::fs::File;
@@ -458,6 +466,15 @@ repr: Os { code: 2, message: "No such file or directory" } }',
 src/libcore/result.rs:906:4
 ```
 
+<!--- 
+More recent rustc versions give a bit better error here (specifically the location):
+
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: 
+Os { code: 2, kind: NotFound, message: "No such file or directory" }', src/main.rs:4:37
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+/JT --->
+
+
 Similarly, the `expect` method lets us also choose the `panic!` error message.
 Using `expect` instead of `unwrap` and providing good error messages can convey
 your intent and make tracking down the source of a panic easier. The syntax of
@@ -483,11 +500,24 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 2, message: "No such file or directory" } }', src/libcore/result.rs:906:4
 ```
 
+<!--- 
+Ditto with the above:
+
+thread 'main' panicked at 'Failed to open hello.txt: Os { code: 2, kind: NotFound,
+message: "No such file or directory" }', src/main.rs:4:37
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+/JT --->
+
 Because this error message starts with the text we specified, `Failed to open
 hello.txt`, it will be easier to find where in the code this error message is
 coming from. If we use `unwrap` in multiple places, it can take more time to
 figure out exactly which `unwrap` is causing the panic because all `unwrap`
 calls that panic print the same message.
+
+<!--- 
+Now that `unwrap` and `expect` give an improved file location, we may not
+need the paragraph above.
+/JT --->
 
 ### Propagating Errors
 
@@ -563,6 +593,16 @@ the error value in the same way that we returned the error value in the `match`
 that handled the return value of `File::open`. However, we don’t need to
 explicitly say `return`, because this is the last expression in the function.
 
+<!--- 
+Style nit: I'm finding the above two paragraphs a bit difficult to read comfortably.
+I think one issue is that we're using a handful of single letter variable names while
+also trying to walk someone through an explanation of multiple concepts.
+
+Maybe just me? But feels like the above example might be explained a bit better
+if we used more complete variable names so the explanation could have a better flow
+(without trying to remember what each of the single-letter variables meant)
+/JT --->
+
 The code that calls this code will then handle getting either an `Ok` value
 that contains a username or an `Err` value that contains an `io::Error`. It’s
 up to the calling code to decide what to do with those values. If the calling
@@ -618,6 +658,11 @@ all the ways a function might fail, even if parts might fail for many different
 reasons. As long as there’s an `impl From<OtherError> for ReturnedError` to
 define the conversion in the trait’s `from` function, the `?` operator takes
 care of calling the `from` function automatically.
+
+<!--- 
+It's a bit fuzzy what `impl From<OtherError> for ReturnedError` means. We may
+want to use a more concrete example, like: `impl From<OurError> for io::Error`.
+/JT --->
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the variable `f`. If an error occurs, the
@@ -727,6 +772,11 @@ function that returns `Result`, `Option`, or another type that implements
 <!--- are we saying it is always the case that the return type must be Result etc, or in this specific case? I think the former, but wanted to check. /LC --->
 <!-- Yes, it is always the case that the return type of a function that uses `?` in its body must return  `Result`, `Option`, or another type that implements
 `FromResidual`. This has changed over Rust's history, and might change in the future... but this is what it is in the current state of Rust. /Carol -->
+<!-- JT, is this clear as it is? /LC -->
+<!--- 
+Seems okay to me.
+/JT --->
+
 To fix the error, you have two choices. One choice is to change the return type
 of your function to be compatible with the value you’re using the `?` operator
 on as long as you have no restrictions preventing that. The other technique is
@@ -800,6 +850,16 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
+<!--- 
+The move to `Box<dyn Error>` isn't unexpected for an experienced Rust
+developer, but I wonder if we should keep `std::io::Error` here to keep with
+the flow of the previous examples?
+
+I think my instinct was to mention this since we don't use the flexibility
+the trait object gives us. Instead, we switch to explaining how exit codes
+work with Result values.
+/JT --->
+
 Listing 9-12: Changing `main` to return `Result<(), E>` allows the use of the
 `?` operator on `Result` values
 
@@ -816,9 +876,6 @@ nonzero value if `main` returns an `Err` value. Executables written in C return
 integers when they exit: programs that exit successfully return the integer
 `0`, and programs that error return some integer other than `0`. Rust also
 returns integers from executables to be compatible with this convention.
-
-<!-- oh, this is why you mention the C and Rust return values. Perhaps move that discussion here and keep it brief? /LC -->
-<!-- I've tried moving and clarifying! /Carol -->
 
 The `main` function may return any types that implement the
 `std::process::Termination` trait. As of this writing, the `Termination` trait
@@ -877,6 +934,14 @@ situation. If you can ensure by manually inspecting the code that you’ll never
 have an `Err` variant, it’s perfectly acceptable to call `unwrap`. Here’s an
 example:
 
+<!--- 
+Some Rust devs may have a nuanced take on the above, myself included. I'd say you'd
+be safer to use `.expect(...)` and put as the argument the reason why it should
+never fail. If, in the future it ever *does* fail for some reason (probably as a 
+result of many code fixes over time), then you've got a message to start with
+telling you what the original expectation was.
+/JT --->
+
 ```
 use std::net::IpAddr;
 
@@ -916,6 +981,21 @@ bug in their code so they can fix it during development. Similarly, `panic!` is
 often appropriate if you’re calling external code that is out of your control
 and it returns an invalid state that you have no way of fixing.
 
+<!---
+Disagree a bit with the above. I don't think libraries should ever panic. They should always
+be written defensively so they can be used in a broader range of applications, which
+include applications where crashing could result in data loss.
+
+Rather than crashing, libraries can encode the reasons they failed based on the
+user's input into an error that can be returned to the user.
+
+In practice, the only time the application should absolutely crash is if
+continuing could bring harm to the user's machine, their data, filesystem, and so on.
+Otherwise, the user should just be given a warning that the operation couldn't be completed
+successfully, so they can take their next action. If we crash, unfortunately the user
+never gets that choice.
+/JT --->
+
 However, when failure is expected, it’s more appropriate to return a `Result`
 than to make a `panic!` call. Examples include a parser being given malformed
 data or an HTTP request returning a status that indicates you have hit a rate
@@ -936,6 +1016,13 @@ handle. In fact, there’s no reasonable way for calling code to recover; the
 calling *programmers* need to fix the code. Contracts for a function,
 especially when a violation will cause a panic, should be explained in the API
 documentation for the function.
+
+<!---
+The wording of the first sentence in the above paragraph reads like we should
+panic on invalid data, but in the previous paragraph we say malformed data should
+be a `Result`. The rest makes sense, where the spirit of when the stdlib panics
+is less about invalid data and more about when the user will be put at risk.
+/JT --->
 
 However, having lots of error checks in all of your functions would be verbose
 and annoying. Fortunately, you can use Rust’s type system (and thus the type
@@ -1024,6 +1111,17 @@ impl Guess {
 }
 ```
 
+<!---
+The above example feels a bit off to me. We talk earlier about user input being a prime
+candidate for recoverable errors, and then we talk about encoding only proper states
+in the type system. But this examples seems to work with user input and panic if it's
+not correct, rather than using recoverable errors or encoding the state into the type.
+
+Maybe you could have them guess rock/paper/scissors and encode the rock/paper/scissor
+as three enum values, and if they type something outside of that, we don't allow it. Otherwise
+we create an enum of that value.
+/JT --->
+
 Listing 9-13: A `Guess` type that will only continue with values between 1 and
 100
 
@@ -1072,3 +1170,14 @@ situations will make your code more reliable in the face of inevitable problems.
 Now that you’ve seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, we’ll talk about how generics work and how you
 can use them in your code.
+
+<!---
+A meta comment: the coverage of `panic!` here feels helpful in terms of giving
+a more complete understanding of Rust, but in practice (and this may depend
+on domain), using `panic!` should be a fairly limited thing.
+
+Something I noticed we don't touch on but may want to is panic hooks, as 
+unrecoverable errors isn't exactly true. You can recover from an unwinding panic
+if you need to code defensively against, say, a dependency panicking and you don't
+want your app to go down as a result.
+/JT --->
