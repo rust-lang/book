@@ -875,10 +875,9 @@ integers when they exit: programs that exit successfully return the integer
 returns integers from executables to be compatible with this convention.
 
 The `main` function may return any types that implement the
-`std::process::Termination` trait. As of this writing, the `Termination` trait
-is an unstable feature only available in Nightly Rust, so you can’t yet
-implement it for your own types in Stable Rust, but you might be able to
-someday!
+`std::process::Termination` trait, which contains a function `report` that
+returns an `ExitCode` Consult the standard library documentation for more
+information on implementing the `Termination` trait for your own types.
 
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
