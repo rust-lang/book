@@ -172,11 +172,17 @@ the `it_works` function to a different name, such as `exploration`, like so:
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn exploration() {
-        let result = 2 + 2;
+        let result = add(2, 2);
         assert_eq!(result, 4);
     }
 }
@@ -203,11 +209,18 @@ is to call the `panic!` macro. Enter the new test as a function named
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn exploration() {
-        assert_eq!(2 + 2, 4);
+        let result = add(2, 2);
+        assert_eq!(result, 4);
     }
 
     #[test]
@@ -231,7 +244,7 @@ test tests::exploration ... ok
 2 failures:
 
 ---- tests::another stdout ----
-thread 'main' panicked at 'Make this test fail', src/lib.rs:10:9
+thread 'main' panicked at 'Make this test fail', src/lib.rs:17:9
 note: run with `RUST_BACKTRACE=1` environment variable to display
 a backtrace
 
@@ -867,11 +880,17 @@ E>` and return an `Err` instead of panicking:
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn it_works() -> Result<(), String> {
-        if 2 + 2 == 4 {
+        if add(2, 2) == 4 {
             Ok(())
         } else {
             Err(String::from("two plus two does not equal four"))
@@ -1265,11 +1284,17 @@ this chapter, Cargo generated this code for us:
 Filename: src/lib.rs
 
 ```
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn it_works() {
-        let result = 2 + 2;
+        let result = add(2, 2);
         assert_eq!(result, 4);
     }
 }
