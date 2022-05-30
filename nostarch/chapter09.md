@@ -34,11 +34,13 @@ execution.
 ## Unrecoverable Errors with `panic!`
 
 Sometimes, bad things happen in your code, and there’s nothing you can do about
-it. In these cases, Rust has the `panic!` macro. When the `panic!` macro
-executes, your program will print a failure message, unwind and clean up the
-stack, and then quit. We’ll commonly invoke a panic when a bug of some kind has
-been detected and it’s not clear how to handle the problem at the time we’re
-writing our program.
+it. In these cases, Rust has the `panic!` macro. There are two ways to cause a
+panic in practice: by taking an action that causes our code to panic (such as
+accessing an array past the end) or by explicitly calling the `panic!` macro.
+In both cases, we cause a panic in our program. By default, these panics will
+print a failure message, unwind, clean up the stack, and quit. Via an
+environment variable, you can also have Rust display the call stack when a
+panic occurs to make it easier to track down the source of the panic.
 
 <!-- does Rust invoke the panic, or do we? Or sometimes it can be either? /LC --->
 <!-- We will have done *something* through a combination of the code we've
@@ -46,7 +48,7 @@ written and the data the program gets at runtime. It *might* involve us
 literally typing `panic!` into our code, or it might be part of Rust that we're
 using that calls `panic!` for us because of something else we've done. Does
 that make sense? I've tried to clarify the last sentence a bit here /Carol -->
-<!--- 
+<!---
 One way we could explain it is to say there are two ways to cause a panic in
 practice: by doing an action that causes our code to panic, like accessing an
 array past the end or dividing by zero, or by explicitly calling the `panic!`
@@ -55,16 +57,16 @@ panics will unwind and clean up the stack. Via an environment setting, you can
 also have Rust display the call stack when a panic occurs to make it easier to
 track down the source of the panic.
 /JT --->
-
+<!-- I've taken JT's suggestion with some edits in the paragraph above /Carol
+-->
 > ### Unwinding the Stack or Aborting in Response to a Panic
 >
 > By default, when a panic occurs, the program starts *unwinding*, which
 > means Rust walks back up the stack and cleans up the data from each function
-> it encounters. However, this walking back and cleanup is a lot of work. Rust, therefore,
-> allows you to choose the alternative of immediately *aborting*, which ends the program without
-> cleaning up.
-> <!-- here it was unclear whether you're saying a Rust panic unwinds or whether it just immediately aborts; I've tried to clarify, can you check that it's accurate? /LC -->
-> <!-- A Rust panic unwinds by default; you can change the configuration setting if you want panic to immediately abort. What you put here is correct. /Carol -->
+> it encounters. However, this walking back and cleanup is a lot of work. Rust,
+> therefore, allows you to choose the alternative of immediately *aborting*,
+> which ends the program without cleaning up.
+>
 > Memory that the program was using will then need to be cleaned
 > up by the operating system. If in your project you need to make the resulting
 > binary as small as possible, you can switch from unwinding to aborting upon a
@@ -247,64 +249,40 @@ Filename: src/main.rs
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt");
+    let greeting_file_result = File::open("hello.txt");
 }
 ```
 
 Listing 9-3: Opening a file
 
-How do we know `File::open` returns a `Result`? We could look at the standard
-library API documentation, or we could ask the compiler! If we give `f` a type
-annotation that we know is *not* the return type of the function and then try
-to compile the code, the compiler will tell us that the types don’t match. The
-error message will then tell us what the type of `f` *is*. Let’s try it! We
-know that the return type of `File::open` isn’t of type `u32`, so let’s change
-the `let f` statement to this:
-
-<!--- 
+<!---
 This brings up an interesting point - should we teach them to install
 rust-analyzer in the setup instructions? If so, then we can tell them to mouse
 over the name of what they want the typename of. The "assign something to i32 to
 have rustc tell you what it is" feels a bit like old style Rust.
 /JT --->
+<!-- I somewhat disagree here; not everyone uses IDE plugins. I'll see what JT
+says about mentioning rust-analyzer in chapter 1 rather than in the appendix...
+I am in favor of making the book shorter, though, so I've removed the parts
+about asking the compiler what the type of something is by deliberately
+annotating with the wrong type. /Carol -->
 
+The return type of `File::open` is a `Result<T, E>`. The generic parameter `T`
+has been filled in by the implementation of `File::open` with the type of the
+success value, `std::fs::File`, which is a file handle. The type of `E` used in
+the error value is `std::io::Error`. This return type means the call to
+`File::open` might succeed and return a file handle that we can read from or
+write to. The function call also might fail: for example, the file might not
+exist, or we might not have permission to access the file. The `File::open`
+function needs to have a way to tell us whether it succeeded or failed and at
+the same time give us either the file handle or error information. This
+information is exactly what the `Result` enum conveys.
 
-```
-    let f: u32 = File::open("hello.txt");
-```
-
-Attempting to compile now gives us the following output:
-
-```
-error[E0308]: mismatched types
- --> src/main.rs:4:18
-  |
-4 |     let f: u32 = File::open("hello.txt");
-  |            ---   ^^^^^^^^^^^^^^^^^^^^^^^ expected `u32`, found enum `Result`
-  |            |
-  |            expected due to this
-  |
-  = note: expected type `u32`
-             found enum `Result<File, std::io::Error>`
-```
-
-This tells us the return type of the `File::open` function is a `Result<T, E>`.
-The generic parameter `T` has been filled in here with the type of the success
-value, `std::fs::File`, which is a file handle. The type of `E` used in the
-error value is `std::io::Error`.
-
-This return type means the call to `File::open` might succeed and return a file
-handle that we can read from or write to. The function call also might fail:
-for example, the file might not exist, or we might not have permission to
-access the file. The `File::open` function needs to have a way to tell us
-whether it succeeded or failed and at the same time give us either the file
-handle or error information. This information is exactly what the `Result` enum
-conveys.
-
-In the case where `File::open` succeeds, the value in the variable `f` will be
-an instance of `Ok` that contains a file handle. In the case where it fails,
-the value in `f` will be an instance of `Err` that contains more information
-about the kind of error that happened.
+In the case where `File::open` succeeds, the value in the variable
+`greeting_file_result` will be an instance of `Ok` that contains a file handle.
+In the case where it fails, the value in `greeting_file_result` will be an
+instance of `Err` that contains more information about the kind of error that
+happened.
 
 We need to add to the code in Listing 9-3 to take different actions depending
 on the value `File::open` returns. Listing 9-4 shows one way to handle the
@@ -317,9 +295,9 @@ Filename: src/main.rs
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt");
+    let greeting_file_result = File::open("hello.txt");
 
-    let f = match f {
+    let greeting_file = match greeting_file_result {
         Ok(file) => file,
         Err(error) => panic!("Problem opening the file: {:?}", error),
     };
@@ -335,7 +313,8 @@ before the `Ok` and `Err` variants in the `match` arms.
 
 When the result is `Ok`, this code will return the inner `file` value out of
 the `Ok` variant, and we then assign that file handle value to the variable
-`f`. After the `match`, we can use the file handle for reading or writing.
+`greeting_file`. After the `match`, we can use the file handle for reading or
+writing.
 
 The other arm of the `match` handles the case where we get an `Err` value from
 `File::open`. In this example, we’ve chosen to call the `panic!` macro. If
@@ -356,7 +335,7 @@ However, we want to take different actions for different failure reasons: if
 and return the handle to the new file. If `File::open` failed for any other
 reason—for example, because we didn’t have permission to open the file—we still
 want the code to `panic!` in the same way as it did in Listing 9-4. For this we
-add an inner `match` expression, shown in Listing 8-5.
+add an inner `match` expression, shown in Listing 9-5.
 
 Filename: src/main.rs
 
@@ -365,19 +344,19 @@ use std::fs::File;
 use std::io::ErrorKind;
 
 fn main() {
-    let f = File::open("hello.txt");
+    let greeting_file_result = File::open("hello.txt");
 
-    let f = match f {
+    let greeting_file = match greeting_file_result {
         Ok(file) => file,
         Err(error) => match error.kind() {
             ErrorKind::NotFound => match File::create("hello.txt") {
                 Ok(fc) => fc,
                 Err(e) => panic!("Problem creating the file: {:?}", e),
-            },
-            other_error => {
-                panic!("Problem opening the file: {:?}", other_error)
             }
-        },
+            other_error => {
+                panic!("Problem opening the file: {:?}", other_error);
+            }
+        }
     };
 }
 ```
@@ -390,8 +369,8 @@ has a method `kind` that we can call to get an `io::ErrorKind` value. The enum
 `io::ErrorKind` is provided by the standard library and has variants
 representing the different kinds of errors that might result from an `io`
 operation. The variant we want to use is `ErrorKind::NotFound`, which indicates
-the file we’re trying to open doesn’t exist yet. So we match on `f`, but we
-also have an inner match on `error.kind()`.
+the file we’re trying to open doesn’t exist yet. So we match on
+`greeting_file_result`, but we also have an inner match on `error.kind()`.
 
 The condition we want to check in the inner match is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
@@ -400,9 +379,6 @@ could also fail, we need a second arm in the inner `match` expression. When the
 file can’t be created, a different error message is printed. The second arm of
 the outer `match` stays the same, so the program panics on any error besides
 the missing file error.
-
-<!-- I'd suggest making this a box, as it's a bit of an aside. Feel free to re-title! /LC -->
-<!-- Sounds good! I've changed it to the blockquote markdown syntax to be consistent with how I've written other boxes in markdown. /Carol -->
 
 > ### Alternatives to Using `match` with `Result<T, E>`
 >
@@ -419,7 +395,7 @@ the missing file error.
 > use std::io::ErrorKind;
 >
 > fn main() {
->     let f = File::open("hello.txt").unwrap_or_else(|error| {
+>     let greeting_file = File::open("hello.txt").unwrap_or_else(|error| {
 >         if error.kind() == ErrorKind::NotFound {
 >             File::create("hello.txt").unwrap_or_else(|error| {
 >                 panic!("Problem creating the file: {:?}", error);
@@ -453,7 +429,7 @@ Filename: src/main.rs
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt").unwrap();
+    let greeting_file = File::open("hello.txt").unwrap();
 }
 ```
 
@@ -466,14 +442,14 @@ repr: Os { code: 2, message: "No such file or directory" } }',
 src/libcore/result.rs:906:4
 ```
 
-<!--- 
+<!---
 More recent rustc versions give a bit better error here (specifically the location):
 
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: 
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value:
 Os { code: 2, kind: NotFound, message: "No such file or directory" }', src/main.rs:4:37
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 /JT --->
-
+<!-- I'll update the error output when we're in Word /Carol -->
 
 Similarly, the `expect` method lets us also choose the `panic!` error message.
 Using `expect` instead of `unwrap` and providing good error messages can convey
@@ -486,7 +462,8 @@ Filename: src/main.rs
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt").expect("Failed to open hello.txt");
+    let greeting_file = File::open("hello.txt")
+        .expect("hello.txt should be included in this project");
 }
 ```
 
@@ -496,28 +473,31 @@ will be the parameter that we pass to `expect`, rather than the default
 `panic!` message that `unwrap` uses. Here’s what it looks like:
 
 ```
-thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
+thread 'main' panicked at 'hello.txt should be included in this project: Error { repr: Os { code:
 2, message: "No such file or directory" } }', src/libcore/result.rs:906:4
 ```
 
-<!--- 
+<!---
 Ditto with the above:
 
 thread 'main' panicked at 'Failed to open hello.txt: Os { code: 2, kind: NotFound,
 message: "No such file or directory" }', src/main.rs:4:37
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 /JT --->
+<!-- I'll update the error output when we're in Word /Carol -->
 
-Because this error message starts with the text we specified, `Failed to open
-hello.txt`, it will be easier to find where in the code this error message is
-coming from. If we use `unwrap` in multiple places, it can take more time to
-figure out exactly which `unwrap` is causing the panic because all `unwrap`
-calls that panic print the same message.
+In production-quality code, most Rustaceans choose `expect` rather than
+`unwrap` and give more context about why the operation is expected to always
+succeed. That way, if your assumptions are ever proven wrong, you have more
+information to use in debugging.
 
-<!--- 
+<!---
 Now that `unwrap` and `expect` give an improved file location, we may not
 need the paragraph above.
 /JT --->
+<!-- I've changed the paragraph above, as well as the text in the examaple
+usage of `expect`, to better reflect current best practices and the reasons for
+them. /Carol -->
 
 ### Propagating Errors
 
@@ -538,19 +518,19 @@ Filename: src/main.rs
 use std::fs::File;
 use std::io::{self, Read};
 
-fn read_username_from_file() -> Result<String, io::Error> {
-    let f = File::open("hello.txt");
+fn read_username_from_file() -> Result<String, io::Error> [1] {
+    let username_file_result = File::open("hello.txt"); [2]
 
-    let mut f = match f {
-        Ok(file) => file,
-        Err(e) => return Err(e),
+    let mut username_file [3] = match username_file_result {
+        Ok(file) => file, [4]
+        Err(e) => return Err(e), [5]
     };
 
-    let mut s = String::new();
+    let mut username = String::new(); [6]
 
-    match f.read_to_string(&mut s) {
-        Ok(_) => Ok(s),
-        Err(e) => Err(e),
+    match username_file.read_to_string(&mut username) [7] {
+        Ok(_) => Ok(username), [8]
+        Err(e) => Err(e), [9]
     }
 }
 ```
@@ -560,48 +540,55 @@ Listing 9-6: A function that returns errors to the calling code using `match`
 This function can be written in a much shorter way, but we’re going to start by
 doing a lot of it manually in order to explore error handling; at the end,
 we’ll show the shorter way. Let’s look at the return type of the function
-first: `Result<String, io::Error>`. This means the function is returning a
+first: `Result<String, io::Error>` [1]. This means the function is returning a
 value of the type `Result<T, E>` where the generic parameter `T` has been
 filled in with the concrete type `String`, and the generic type `E` has been
-filled in with the concrete type `io::Error`. If this function succeeds without
-any problems, the code that calls this function will receive an `Ok` value that
-holds a `String`—the username that this function read from the file. If this
-function encounters any problems, the calling code will receive an `Err` value
-that holds an instance of `io::Error` that contains more information about what
-the problems were. We chose `io::Error` as the return type of this function
-because that happens to be the type of the error value returned from both of
-the operations we’re calling in this function’s body that might fail: the
-`File::open` function and the `read_to_string` method.
+filled in with the concrete type `io::Error`.
 
-The body of the function starts by calling the `File::open` function. Then we
-handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
-If `File::open` succeeds, the file handle in the pattern variable `file`
-becomes the value in the mutable variable `f` and the function continues. In
-the `Err` case, instead of calling `panic!`, we use the `return` keyword to
-return early out of the function entirely and pass the error value from
-`File::open`, now in the pattern variable `e`, back to the calling code as this
-function’s error value.
+If this function succeeds without any problems, the code that calls this
+function will receive an `Ok` value that holds a `String`—the username that
+this function read from the file [8]. If this function encounters any problems,
+the calling code will receive an `Err` value that holds an instance of
+`io::Error` that contains more information about what the problems were. We
+chose `io::Error` as the return type of this function because that happens to
+be the type of the error value returned from both of the operations we’re
+calling in this function’s body that might fail: the `File::open` function [2]
+and the `read_to_string` method [7].
 
-So if we have a file handle in `f`, the function then creates a new `String` in
-variable `s` and calls the `read_to_string` method on the file handle in `f` to
-read the contents of the file into `s`. The `read_to_string` method also
-returns a `Result` because it might fail, even though `File::open` succeeded.
-So we need another `match` to handle that `Result`: if `read_to_string`
-succeeds, then our function has succeeded, and we return the username from the
-file that’s now in `s` wrapped in an `Ok`. If `read_to_string` fails, we return
-the error value in the same way that we returned the error value in the `match`
-that handled the return value of `File::open`. However, we don’t need to
-explicitly say `return`, because this is the last expression in the function.
+The body of the function starts by calling the `File::open` function [2]. Then
+we handle the `Result` value with a `match` similar to the `match` in Listing
+9-4. If `File::open` succeeds, the file handle in the pattern variable `file`
+[4] becomes the value in the mutable variable `username_file` [3] and the
+function continues. In the `Err` case, instead of calling `panic!`, we use the
+`return` keyword to return early out of the function entirely and pass the
+error value from `File::open`, now in the pattern variable `e`, back to the
+calling code as this function’s error value [5].
 
-<!--- 
-Style nit: I'm finding the above two paragraphs a bit difficult to read comfortably.
-I think one issue is that we're using a handful of single letter variable names while
-also trying to walk someone through an explanation of multiple concepts.
+So if we have a file handle in `username_file`, the function then creates a new
+`String` in variable `username` [6] and calls the `read_to_string` method on
+the file handle in `username_file` to read the contents of the file into
+`username` [7]. The `read_to_string` method also returns a `Result` because it
+might fail, even though `File::open` succeeded. So we need another `match` to
+handle that `Result`: if `read_to_string` succeeds, then our function has
+succeeded, and we return the username from the file that’s now in `username`
+wrapped in an `Ok`. If `read_to_string` fails, we return the error value in the
+same way that we returned the error value in the `match` that handled the
+return value of `File::open`. However, we don’t need to explicitly say
+`return`, because this is the last expression in the function [9].
+
+<!---
+Style nit: I'm finding the above two paragraphs a bit difficult to read
+comfortably. I think one issue is that we're using a handful of single letter
+variable names while also trying to walk someone through an explanation of
+multiple concepts.
 
 Maybe just me? But feels like the above example might be explained a bit better
-if we used more complete variable names so the explanation could have a better flow
-(without trying to remember what each of the single-letter variables meant)
+if we used more complete variable names so the explanation could have a better
+flow (without trying to remember what each of the single-letter variables meant)
 /JT --->
+<!-- Totally valid! I've changed the variable names in this, previous, and
+following examples, broke up these paragraphs a bit, and added wingdings.
+/Carol -->
 
 The code that calls this code will then handle getting either an `Ok` value
 that contains a username or an `Err` value that contains an `io::Error`. It’s
@@ -629,10 +616,10 @@ use std::io;
 use std::io::Read;
 
 fn read_username_from_file() -> Result<String, io::Error> {
-    let mut f = File::open("hello.txt")?;
-    let mut s = String::new();
-    f.read_to_string(&mut s)?;
-    Ok(s)
+    let mut username_file = File::open("hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&mut username)?;
+    Ok(username)
 }
 ```
 
@@ -650,25 +637,32 @@ code.
 There is a difference between what the `match` expression from Listing 9-6 does
 and what the `?` operator does: error values that have the `?` operator called
 on them go through the `from` function, defined in the `From` trait in the
-standard library, which is used to convert errors from one type into another.
+standard library, which is used to convert values from one type into another.
 When the `?` operator calls the `from` function, the error type received is
 converted into the error type defined in the return type of the current
 function. This is useful when a function returns one error type to represent
 all the ways a function might fail, even if parts might fail for many different
-reasons. As long as there’s an `impl From<OtherError> for ReturnedError` to
-define the conversion in the trait’s `from` function, the `?` operator takes
-care of calling the `from` function automatically.
+reasons.
 
-<!--- 
+For example, we could change the `read_username_from_file` function in Listing
+9-7 to return a custom error type named `OurError` that we define. If we also
+define `impl From<io::Error> for OurError` to construct an instance of
+`OurError` from an `io::Error`, then the `?` operator calls in the body of
+`read_username_from_file` will call `from` and convert the error types without
+needing to add any more code to the function.
+
+<!---
 It's a bit fuzzy what `impl From<OtherError> for ReturnedError` means. We may
 want to use a more concrete example, like: `impl From<OurError> for io::Error`.
 /JT --->
+<!-- I've added a more concrete example here, but converting the other way,
+which I think is more likely in production code /Carol -->
 
 In the context of Listing 9-7, the `?` at the end of the `File::open` call will
-return the value inside an `Ok` to the variable `f`. If an error occurs, the
-`?` operator will return early out of the whole function and give any `Err`
-value to the calling code. The same thing applies to the `?` at the end of the
-`read_to_string` call.
+return the value inside an `Ok` to the variable `username_file`. If an error
+occurs, the `?` operator will return early out of the whole function and give
+any `Err` value to the calling code. The same thing applies to the `?` at the
+end of the `read_to_string` call.
 
 The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
@@ -682,24 +676,24 @@ use std::io;
 use std::io::Read;
 
 fn read_username_from_file() -> Result<String, io::Error> {
-    let mut s = String::new();
+    let mut username = String::new();
 
-    File::open("hello.txt")?.read_to_string(&mut s)?;
+    File::open("hello.txt")?.read_to_string(&mut username)?;
 
-    Ok(s)
+    Ok(username)
 }
 ```
 
 Listing 9-8: Chaining method calls after the `?` operator
 
-We’ve moved the creation of the new `String` in `s` to the beginning of the
-function; that part hasn’t changed. Instead of creating a variable `f`, we’ve
-chained the call to `read_to_string` directly onto the result of
-`File::open("hello.txt")?`. We still have a `?` at the end of the
-`read_to_string` call, and we still return an `Ok` value containing the
-username in `s` when both `File::open` and `read_to_string` succeed rather than
-returning errors. The functionality is again the same as in Listing 9-6 and
-Listing 9-7; this is just a different, more ergonomic way to write it.
+We’ve moved the creation of the new `String` in `username` to the beginning of
+the function; that part hasn’t changed. Instead of creating a variable
+`username_file`, we’ve chained the call to `read_to_string` directly onto the
+result of `File::open("hello.txt")?`. We still have a `?` at the end of the
+`read_to_string` call, and we still return an `Ok` value containing `username`
+when both `File::open` and `read_to_string` succeed rather than returning
+errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
+this is just a different, more ergonomic way to write it.
 
 Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
 
@@ -738,11 +732,13 @@ In Listing 9-10, let’s look at the error we’ll get if we use the `?` operato
 in a `main` function with a return type incompatible with the type of the value
 we use `?` on:
 
+Filename: src/main.rs
+
 ```
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt")?;
+    let greeting_file = File::open("hello.txt")?;
 }
 ```
 
@@ -769,13 +765,6 @@ error[E0277]: the `?` operator can only be used in a function that returns `Resu
 This error points out that we’re only allowed to use the `?` operator in a
 function that returns `Result`, `Option`, or another type that implements
 `FromResidual`.
-<!--- are we saying it is always the case that the return type must be Result etc, or in this specific case? I think the former, but wanted to check. /LC --->
-<!-- Yes, it is always the case that the return type of a function that uses `?` in its body must return  `Result`, `Option`, or another type that implements
-`FromResidual`. This has changed over Rust's history, and might change in the future... but this is what it is in the current state of Rust. /Carol -->
-<!-- JT, is this clear as it is? /LC -->
-<!--- 
-Seems okay to me.
-/JT --->
 
 To fix the error, you have two choices. One choice is to change the return type
 of your function to be compatible with the value you’re using the `?` operator
@@ -844,13 +833,13 @@ use std::error::Error;
 use std::fs::File;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let f = File::open("hello.txt")?;
+    let greeting_file = File::open("hello.txt")?;
 
     Ok(())
 }
 ```
 
-<!--- 
+<!---
 The move to `Box<dyn Error>` isn't unexpected for an experienced Rust
 developer, but I wonder if we should keep `std::io::Error` here to keep with
 the flow of the previous examples?
@@ -859,6 +848,11 @@ I think my instinct was to mention this since we don't use the flexibility
 the trait object gives us. Instead, we switch to explaining how exit codes
 work with Result values.
 /JT --->
+<!-- The idea here was to give the reader code that will work in the future no
+matter what errors they're trying to return from main. If we put in
+std::io::Error, it'll work for this example, but probably not in the reader's
+own projects. I've added a sentence to the end of the paragraph after Listing
+9-12's caption to explain this thinking. /Carol -->
 
 Listing 9-12: Changing `main` to return `Result<(), E>` allows the use of the
 `?` operator on `Result` values
@@ -866,9 +860,12 @@ Listing 9-12: Changing `main` to return `Result<(), E>` allows the use of the
 The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the
 “Using Trait Objects that Allow for Values of Different Types” section in
 Chapter 17. For now, you can read `Box<dyn Error>` to mean “any kind of error.”
-Using `?` on a `Result` value in a `main` function with the error type
-`Box<dyn Error>` is allowed, because it allows any `Err` value to be returned
-early.
+Using `?` on a `Result` value in a `main` function with the error type `Box<dyn
+Error>` is allowed, because it allows any `Err` value to be returned early.
+Even though the body of this `main` function will only ever return errors of
+type `std::io::Error`, by specifying `Box<dyn Error>`, this signature will
+continue to be correct even if more code that returns other errors is added to
+the body of `main`.
 
 When a `main` function returns a `Result<(), E>`, the executable will
 exit with a value of `0` if `main` returns `Ok(())` and will exit with a
@@ -925,31 +922,37 @@ happen.
 
 ### Cases in Which You Have More Information Than the Compiler
 
-It would also be appropriate to call `unwrap` when you have some other logic
-that ensures the `Result` will have an `Ok` value, but the logic isn’t
-something the compiler understands. You’ll still have a `Result` value that you
-need to handle: whatever operation you’re calling still has the possibility of
-failing in general, even though it’s logically impossible in your particular
-situation. If you can ensure by manually inspecting the code that you’ll never
-have an `Err` variant, it’s perfectly acceptable to call `unwrap`. Here’s an
-example:
+It would also be appropriate to call `unwrap` or `expect` when you have some
+other logic that ensures the `Result` will have an `Ok` value, but the logic
+isn’t something the compiler understands. You’ll still have a `Result` value
+that you need to handle: whatever operation you’re calling still has the
+possibility of failing in general, even though it’s logically impossible in
+your particular situation. If you can ensure by manually inspecting the code
+that you’ll never have an `Err` variant, it’s perfectly acceptable to call
+`unwrap`, and even better to document the reason you think you’ll never have an
+`Err` variant in the `expect` text. Here’s an example:
 
-<!--- 
-Some Rust devs may have a nuanced take on the above, myself included. I'd say you'd
-be safer to use `.expect(...)` and put as the argument the reason why it should
-never fail. If, in the future it ever *does* fail for some reason (probably as a 
-result of many code fixes over time), then you've got a message to start with
-telling you what the original expectation was.
+<!---
+Some Rust devs may have a nuanced take on the above, myself included. I'd say
+you'd be safer to use `.expect(...)` and put as the argument the reason why it
+should never fail. If, in the future it ever *does* fail for some reason
+(probably as a result of many code fixes over time), then you've got a message
+to start with telling you what the original expectation was.
 /JT --->
+<!-- I agree with this and reinforcing this best practice; I've changed the
+`unwrap` to `expect` and demonstrated a good message. I still don't want to
+shame people too much for using `unwrap`, though. /Carol -->
 
 ```
 use std::net::IpAddr;
 
-let home: IpAddr = "127.0.0.1".parse().unwrap();
+let home: IpAddr = "127.0.0.1"
+    .parse()
+    .expect("Hardcoded IP address should be valid");
 ```
 
 We’re creating an `IpAddr` instance by parsing a hardcoded string. We can see
-that `127.0.0.1` is a valid IP address, so it’s acceptable to use `unwrap`
+that `127.0.0.1` is a valid IP address, so it’s acceptable to use `expect`
 here. However, having a hardcoded, valid string doesn’t change the return type
 of the `parse` method: we still get a `Result` value, and the compiler will
 still make us handle the `Result` as if the `Err` variant is a possibility
@@ -957,6 +960,9 @@ because the compiler isn’t smart enough to see that this string is always a
 valid IP address. If the IP address string came from a user rather than being
 hardcoded into the program and therefore *did* have a possibility of failure,
 we’d definitely want to handle the `Result` in a more robust way instead.
+Mentioning the assumption that this IP address is hardcoded will prompt us to
+change `expect` to better error handling code if in the future, we need to get
+the IP address from some other source instead.
 
 ### Guidelines for Error Handling
 
@@ -975,26 +981,32 @@ code—plus one or more of the following:
   work through an example of what we mean in the “Encoding States and Behavior
   as Types” section of Chapter 17.
 
-If someone calls your code and passes in values that don’t make sense, the best
-choice might be to call `panic!` and alert the person using your library to the
-bug in their code so they can fix it during development. Similarly, `panic!` is
-often appropriate if you’re calling external code that is out of your control
-and it returns an invalid state that you have no way of fixing.
+If someone calls your code and passes in values that don’t make sense, it’s
+best to return an error if you can so the user of the library can decide what
+they want to do in that case. However, in cases where continuing could be
+insecure or harmful, the best choice might be to call `panic!` and alert the
+person using your library to the bug in their code so they can fix it during
+development. Similarly, `panic!` is often appropriate if you’re calling
+external code that is out of your control and it returns an invalid state that
+you have no way of fixing.
 
 <!---
-Disagree a bit with the above. I don't think libraries should ever panic. They should always
-be written defensively so they can be used in a broader range of applications, which
-include applications where crashing could result in data loss.
+Disagree a bit with the above. I don't think libraries should ever panic. They
+should always be written defensively so they can be used in a broader range of
+applications, which include applications where crashing could result in data
+loss.
 
 Rather than crashing, libraries can encode the reasons they failed based on the
 user's input into an error that can be returned to the user.
 
 In practice, the only time the application should absolutely crash is if
-continuing could bring harm to the user's machine, their data, filesystem, and so on.
-Otherwise, the user should just be given a warning that the operation couldn't be completed
-successfully, so they can take their next action. If we crash, unfortunately the user
-never gets that choice.
+continuing could bring harm to the user's machine, their data, filesystem, and
+so on. Otherwise, the user should just be given a warning that the operation
+couldn't be completed successfully, so they can take their next action. If we
+crash, unfortunately the user never gets that choice.
 /JT --->
+<!-- I think we actually agree here but the original text wasn't clear enough;
+I've edited. /Carol -->
 
 However, when failure is expected, it’s more appropriate to return a `Result`
 than to make a `panic!` call. Examples include a parser being given malformed
@@ -1002,27 +1014,33 @@ data or an HTTP request returning a status that indicates you have hit a rate
 limit. In these cases, returning a `Result` indicates that failure is an
 expected possibility that the calling code must decide how to handle.
 
-When your code performs operations on values, your code should verify the
-values are valid first and panic if the values aren’t valid. This is mostly for
-safety reasons: attempting to operate on invalid data can expose your code to
-vulnerabilities. This is the main reason the standard library will call
-`panic!` if you attempt an out-of-bounds memory access: trying to access memory
-that doesn’t belong to the current data structure is a common security problem.
-Functions often have *contracts*: their behavior is only guaranteed if the
-inputs meet particular requirements. Panicking when the contract is violated
-makes sense because a contract violation always indicates a caller-side bug and
-it’s not a kind of error you want the calling code to have to explicitly
-handle. In fact, there’s no reasonable way for calling code to recover; the
-calling *programmers* need to fix the code. Contracts for a function,
-especially when a violation will cause a panic, should be explained in the API
-documentation for the function.
+When your code performs an operation that could put a user at risk if it’s
+called using invalid values, your code should verify the values are valid first
+and panic if the values aren’t valid. This is mostly for safety reasons:
+attempting to operate on invalid data can expose your code to vulnerabilities.
+This is the main reason the standard library will call `panic!` if you attempt
+an out-of-bounds memory access: trying to access memory that doesn’t belong to
+the current data structure is a common security problem. Functions often have
+*contracts*: their behavior is only guaranteed if the inputs meet particular
+requirements. Panicking when the contract is violated makes sense because a
+contract violation always indicates a caller-side bug and it’s not a kind of
+error you want the calling code to have to explicitly handle. In fact, there’s
+no reasonable way for calling code to recover; the calling *programmers* need
+to fix the code. Contracts for a function, especially when a violation will
+cause a panic, should be explained in the API documentation for the function.
 
 <!---
 The wording of the first sentence in the above paragraph reads like we should
-panic on invalid data, but in the previous paragraph we say malformed data should
-be a `Result`. The rest makes sense, where the spirit of when the stdlib panics
-is less about invalid data and more about when the user will be put at risk.
+panic on invalid data, but in the previous paragraph we say malformed data
+should be a `Result`. The rest makes sense, where the spirit of when the stdlib
+panics is less about invalid data and more about when the user will be put at
+risk.
 /JT --->
+<!-- I think we were trying to draw a distinction between "malformed" and
+"invalid" values that perhaps wasn't very clear. I've tried to clarify by
+adding "could put a user at risk", but I don't really want to get into the
+specifics of this because only a subset of readers will be writing code like
+this... /Carol -->
 
 However, having lots of error checks in all of your functions would be verbose
 and annoying. Fortunately, you can use Rust’s type system (and thus the type
@@ -1112,15 +1130,20 @@ impl Guess {
 ```
 
 <!---
-The above example feels a bit off to me. We talk earlier about user input being a prime
-candidate for recoverable errors, and then we talk about encoding only proper states
-in the type system. But this examples seems to work with user input and panic if it's
-not correct, rather than using recoverable errors or encoding the state into the type.
+The above example feels a bit off to me. We talk earlier about user input being
+a prime candidate for recoverable errors, and then we talk about encoding only
+proper states in the type system. But this examples seems to work with user
+input and panic if it's not correct, rather than using recoverable errors or
+encoding the state into the type.
 
-Maybe you could have them guess rock/paper/scissors and encode the rock/paper/scissor
-as three enum values, and if they type something outside of that, we don't allow it. Otherwise
-we create an enum of that value.
+Maybe you could have them guess rock/paper/scissors and encode the
+rock/paper/scissor as three enum values, and if they type something outside of
+that, we don't allow it. Otherwise we create an enum of that value.
 /JT --->
+<!-- The point about this listing panicking is valid, but I disagree a little.
+I think this is encoding only valid states into the type system. Also, Chapter
+11 builds on this example to show how to use `should_panic`, so I'm going to
+leave this the way it is. /Carol -->
 
 Listing 9-13: A `Guess` type that will only continue with values between 1 and
 100
@@ -1176,8 +1199,12 @@ A meta comment: the coverage of `panic!` here feels helpful in terms of giving
 a more complete understanding of Rust, but in practice (and this may depend
 on domain), using `panic!` should be a fairly limited thing.
 
-Something I noticed we don't touch on but may want to is panic hooks, as 
-unrecoverable errors isn't exactly true. You can recover from an unwinding panic
-if you need to code defensively against, say, a dependency panicking and you don't
-want your app to go down as a result.
+Something I noticed we don't touch on but may want to is panic hooks, as
+unrecoverable errors isn't exactly true. You can recover from an unwinding
+panic if you need to code defensively against, say, a dependency panicking and
+you don't want your app to go down as a result.
 /JT --->
+<!-- Yeahhh I don't want to mention panic hooks, one because I don't think most
+people will need to think about them or implement one, and two because a subset
+of people will look at that and think "oh look, exception handling!" which...
+is not what it's for. /Carol -->
