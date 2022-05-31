@@ -159,6 +159,7 @@ Erlang
 ErrorKind
 eval
 executables
+ExitCode
 expr
 extern
 favicon
@@ -350,6 +351,7 @@ OsString
 other's
 otherinstall
 OtherError
+OurError
 OutlinePrint
 overloadable
 overread
