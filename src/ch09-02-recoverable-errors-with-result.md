@@ -209,16 +209,22 @@ the `panic!` macro. The error message used by `expect` in its call to `panic!`
 will be the parameter that we pass to `expect`, rather than the default
 `panic!` message that `unwrap` uses. Here’s what it looks like:
 
+<!-- manual-regeneration
+cd listings/ch09-error-handling/no-listing-05-expect
+cargo run
+copy and paste relevant text
+-->
+
 ```text
-thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
-2, message: "No such file or directory" } }', src/libcore/result.rs:906:4
+thread 'main' panicked at 'hello.txt should be included in this project: Error
+{ repr: Os { code: 2, message: "No such file or directory" } }',
+src/libcore/result.rs:906:4
 ```
 
-Because this error message starts with the text we specified, `Failed to open
-hello.txt`, it will be easier to find where in the code this error message is
-coming from. If we use `unwrap` in multiple places, it can take more time to
-figure out exactly which `unwrap` is causing the panic because all `unwrap`
-calls that panic print the same message.
+In production-quality code, most Rustaceans choose `expect` rather than
+`unwrap` and give more context about why the operation is expected to always
+succeed. That way, if your assumptions are ever proven wrong, you have more
+information to use in debugging.
 
 ### Propagating Errors
 
