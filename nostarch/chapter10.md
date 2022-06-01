@@ -40,11 +40,6 @@ help.
 
 Generics allow us to replace specific types with a placeholder that represents
 multiple types to remove code duplication.
-<!-- I wanted to open the section with the connection to generics as
-explanation as to why we're discussing this first, can you fill in the gaps? I
-assume we're generalizing the process to show how generics work? /LC -->
-<!-- Done, I tried to make the connection a bit clearer in the rest of this
-paragraph as well. What do you think? /Carol -->
 Before diving into generics syntax, then, let’s first look at how to remove
 duplication in a way that doesn’t involve generic types by extracting a
 function that replaces specific values with a placeholder that represents
@@ -134,12 +129,6 @@ function named `largest`. Then we call the function to find the largest number
 in the two lists from Listing 10-2. We could also use the function on any other
 list of `i32` values we might have in the future.
 
-<!-- just two, or any number of lists? Can it also handle just one list, or is
-this specific to two lists? /LC -->
-<!-- In this code, we are only demonstrating the function with the two lists,
-but it can be used on any list of integers. I've tried to clarify in the
-previous paragraph /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -181,6 +170,10 @@ destructuring each `&i32` that the `for` loop gets so that `item` will be an
 
 In sum, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
+
+<!---
+"In summary"?
+/JT --->
 
 1. Identify duplicate code.
 2. Extract the duplicate code into the body of the function and specify the
@@ -348,10 +341,21 @@ particular trait in the “Traits as Parameters” section. Before we fix this c
 (in the section “Fixing the `largest` Function with Trait Bounds”), let’s first
 explore other ways of using generic type parameters.
 
-<!-- can you identify the specific section in which we fix the code? This
-overarching section finished without having done so, which took me by surprise!
-/LC -->
-<!-- Done /Carol -->
+<!---
+
+The wording at the end of the above paragraph feels a little odd. For the
+"You’ll learn how to specify that a generic type has a
+particular trait in the “Traits as Parameters” section." -- the error message
+above tells you how to maybe fix it.
+
+Well, it *could* fix it but the way the example is written adds multiple constraints.
+
+Do we want to leave this example unfinished and move onto other topics for a bit or
+revise the example so it's more self-contained, allowing the compiler to help us 
+and later revisit after we've learned more?
+
+/JT --->
+
 
 ### In Struct Definitions
 
@@ -406,6 +410,31 @@ In this example, when we assign the integer value 5 to `x`, we let the compiler
 know that the generic type `T` will be an integer for this instance of
 `Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
 same type as `x`, we’ll get a type mismatch error like this:
+
+<!---
+
+Not sure how or where we might want to call this out, but this is also how
+type inference in Rust works. If we don't know the type, we look for how it's
+used. That fresh type becomes a concrete type, and any use after that which
+is different than we expect becomes an error.
+
+fn main() {
+    let mut x;
+    
+    x = 5;
+    x = 4.0;
+}
+
+Also gives:
+  |
+2 |     let mut x;
+  |         ----- expected due to the type of this binding
+...
+5 |     x = 4.0;
+  |         ^^^ expected integer, found floating-point number
+
+/JT --->
+
 
 ```
 error[E0308]: mismatched types
@@ -513,6 +542,13 @@ fn main() {
     println!("p.x = {}", p.x());
 }
 ```
+
+<!---
+
+The above code gives a warning for the unused `y`. Maybe we can print both
+`x` and `y`?
+
+/JT --->
 
 Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
 will return a reference to the `x` field of type `T`
@@ -634,6 +670,13 @@ instances and identifies two kinds of `Option<T>`: one is `i32` and the other
 is `f64`. As such, it expands the generic definition of `Option<T>` into
 `Option_i32` and `Option_f64`, thereby replacing the generic definition with
 the specific ones.
+
+<!---
+
+We may want to be clear in the above it doesn't actually do this, as you
+wouldn't be able to write `enum Option_i32` in your code as it would clash.
+
+/JT --->
 
 The monomorphized version of the code looks like the following:
 
@@ -1305,6 +1348,22 @@ generics.
 
 ## Validating References with Lifetimes
 
+<!---
+
+meta comment: this chapter is already pretty hefty. We just went through both
+generics and a whirlwind tour of traits. Lifetimes, while related to generics, feel
+like you might want to give a five minute break between them, let those sink in, and
+then pick up this topic.
+
+I noticed a couple topics we may want to touch on above for a bit of completeness:
+
+* A closer look at how From/Into work and how they relate to each other.
+* Using traits to specialize what you do when returning values.
+  i.e., Why does `let four: u32 = "4".parse().unwrap();` work?
+* Turbofish
+
+/JT --->
+
 Lifetimes are another kind of generic that we’ve already been using. Rather
 than ensuring that a type has the behavior we want, lifetimes ensure that
 references are valid as long as we need them to be.
@@ -1547,6 +1606,12 @@ an `i32` that also has the lifetime `'a`. The lifetime annotations indicate
 that the references `first` and `second` must both live as long as that generic
 lifetime.
 
+<!---
+
+The above description is a little hard to follow with a code example.
+
+/JT --->
+
 ### Lifetime Annotations in Function Signatures
 
 Now let’s examine lifetime annotations in the context of the `longest`
@@ -1767,6 +1832,12 @@ So far, the structs we've define all hold owned types. We can define structs to
 hold references, but in that case we would need to add a lifetime annotation on
 every reference in the struct’s definition. Listing 10-25 has a struct named
 `ImportantExcerpt` that holds a string slice.
+
+<!---
+
+nit: "So far, the structs we've *defined* all hold owned types"
+
+/JT --->
 
 Filename: src/main.rs
 
