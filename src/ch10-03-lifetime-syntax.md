@@ -216,8 +216,8 @@ long as lifetime `'a`. The function signature also tells Rust that the string
 slice returned from the function will live at least as long as lifetime `'a`.
 In practice, it means that the lifetime of the reference returned by the
 `longest` function is the same as the smaller of the lifetimes of the values
-to which the references are passed in as function arguments. These relationships
-are what we want Rust to use when analyzing this code.
+referred to by the function arguments. These relationships are what we want
+Rust to use when analyzing this code.
 
 Remember, when we specify the lifetime parameters in this function signature,
 we’re not changing the lifetimes of any values passed in or returned. Rather,
