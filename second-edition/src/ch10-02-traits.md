@@ -52,9 +52,9 @@ pub trait Summarizable {
 
 ### 특정 타입에 대한 트레잇 구현하기
 
-`Summariable` 트레잇을 정의하였으니, 이제 우리의 미디어 종합기 내에서 이 동작을 갖길 원했던 타입들
+`Summarizable` 트레잇을 정의하였으니, 이제 우리의 미디어 종합기 내에서 이 동작을 갖길 원했던 타입들
 상에 이 트레잇을 구현할 수 있습니다. Listing 10-12는 `summary`의 반환 값을 만들기 위해 헤드라인,
-저자, 위치를 사용하는 `NewsArticle` 구조체 상의 `Summariable` 트레잇 구현을 보여줍니다.
+저자, 위치를 사용하는 `NewsArticle` 구조체 상의 `Summarizable` 트레잇 구현을 보여줍니다.
 `Tweet` 구조체에 대해서는, 트윗 내용이 이미 140자로 제한되어 있음을 가정하고, `summary`를 정의하는
 데 있어 사용자 이름과 해당 트윗의 전체 텍스트를 가지고 오는 선택을 했습니다.
 
@@ -151,7 +151,7 @@ impl Summarizable for WeatherForecast {
 <span class="caption">Listing 10-13: 우리의 `aggregator` 크레이트로부터
 다른 크레이트 내의 스코프로 `Summarizable` 트레잇을 가져오기</span>
 
-이 코드는 또한 `Summariable`이 공개 트레잇임을 가정하는데, 이는 Listing 10-11에서 `trait`
+이 코드는 또한 `Summarizable`이 공개 트레잇임을 가정하는데, 이는 Listing 10-11에서 `trait`
 전에 `pub` 키워드를 집어넣었기 때문입니다.
 
 트레잇 구현과 함께 기억할 한 가지 제한사항이 있습니다: 트레잇 혹은 타입이 우리의 크레이트 내의 것일
@@ -199,7 +199,7 @@ impl Summarizable for NewsArticle {}
 ```
 
 비록 `NewsArticle`에 대한 `summary` 메소드를 직접 정의하는 선택을 더 이상 하지 않았더라도,
-`summary` 메소드가 기본 구현을 갖고 있고 `NewsArticle`이 `Summariable` 트레잇을 구현하도록
+`summary` 메소드가 기본 구현을 갖고 있고 `NewsArticle`이 `Summarizable` 트레잇을 구현하도록
 명시했기 때문에, 우리는 여전히 `newsArticle`의 인스턴스 상에서 `summary` 메소드를 호출할 수
 있습니다:
 
@@ -291,13 +291,13 @@ pub fn notify<T: Summarizable>(item: T) {
 트레잇 바운드이므로, 우리는 `notify`를 호출하여 `NewsArticle`이나 `Tweet`의 어떠한 인스턴스라도
 넘길 수 있습니다. 우리의 `aggregator` 크레이트를 사용하는 Listing 10-13의 외부 코드도 우리의
 `notify` 함수를 호출하여 `WeatherForecast`의 인스턴스를 넘길 수 있는데, 이는
-`WeatherForecast` 또한 `Summariable`을 구현하였기 때문입니다. `String`이나 `i32` 같은
+`WeatherForecast` 또한 `Summarizable`을 구현하였기 때문입니다. `String`이나 `i32` 같은
 어떠한 다른 타입을 가지고 `notify`를 호출하는 코드는 컴파일되지 않을 것인데, 그 이유는 그러한
 타입들이 `Summarizable`을 구현하지 않았기 때문입니다.
 
 `+`를 이용하면 하나의 제네릭 타입에 대해 여러 개의 트레잇 바운드를 특정할 수 있습니다. 만일 함수
 내에서 타입 `T`에 대해 `summary` 메소드 뿐만 아니라 형식화된 출력을 사용하길 원한다면,
-트레잇 바운드 `T: Summarizable + Display`를 이용할 수 있습니다. 이는 `T`가 `Summariable`과
+트레잇 바운드 `T: Summarizable + Display`를 이용할 수 있습니다. 이는 `T`가 `Summarizable`과
 `Display` 둘다 구현한 어떤 타입이어야 함을 의미합니다.
 
 여러 개의 제네릭 타입 파라미터를 가진 함수들에 대하여, 각 제네릭은 고유의 트레잇 바운드를 가집니다.
