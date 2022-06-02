@@ -56,9 +56,9 @@ Filename: src/main.rs
 fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
-    let mut largest = number_list[0];
+    let mut largest = &number_list[0];
 
-    for number in number_list {
+    for number in &number_list {
         if number > largest {
             largest = number;
         }
@@ -70,14 +70,14 @@ fn main() {
 
 Listing 10-1: Finding the largest number in a list of numbers
 
-We store a list of integers in the variable `number_list` and place the first
-number in the list in a variable named `largest`. We then iterate through all
-the numbers in the list, and if the current number is greater than the number
-stored in `largest`, replace the number in that variable. However, if the
-current number is less than or equal to the largest number seen so far, the
-variable doesn’t change, and the code moves on to the next number in the list.
-After considering all the numbers in the list, `largest` should hold the
-largest number, which in this case is 100.
+We store a list of integers in the variable `number_list` and place a reference
+to the first number in the list in a variable named `largest`. We then iterate
+through all the numbers in the list, and if the current number is greater than
+the number stored in `largest`, replace the reference in that variable.
+However, if the current number is less than or equal to the largest number seen
+so far, the variable doesn’t change, and the code moves on to the next number
+in the list. After considering all the numbers in the list, `largest` should
+refer to the largest number, which in this case is 100.
 
 We've now been tasked with finding the largest number in two different lists of
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
@@ -89,9 +89,9 @@ Filename: src/main.rs
 fn main() {
     let number_list = vec![34, 50, 25, 100, 65];
 
-    let mut largest = number_list[0];
+    let mut largest = &number_list[0];
 
-    for number in number_list {
+    for number in &number_list {
         if number > largest {
             largest = number;
         }
@@ -101,9 +101,9 @@ fn main() {
 
     let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 
-    let mut largest = number_list[0];
+    let mut largest = &number_list[0];
 
-    for number in number_list {
+    for number in &number_list {
         if number > largest {
             largest = number;
         }
@@ -132,10 +132,10 @@ list of `i32` values we might have in the future.
 Filename: src/main.rs
 
 ```
-fn largest(list: &[i32]) -> i32 {
-    let mut largest = list[0];
+fn largest(list: &[i32]) -> &i32 {
+    let mut largest = &list[0];
 
-    for &item in list {
+    for item in list {
         if item > largest {
             largest = item;
         }
@@ -162,18 +162,16 @@ Listing 10-3: Abstracted code to find the largest number in two lists
 The `largest` function has a parameter called `list`, which represents any
 concrete slice of `i32` values we might pass into the function. As a result,
 when we call the function, the code runs on the specific values that we pass
-in. Don’t worry about the syntax of the `for` loop for now. We aren’t
-referencing a reference to an `i32` here; we’re pattern matching and
-destructuring each `&i32` that the `for` loop gets so that `item` will be an
-`i32` inside the loop body. We’ll cover pattern matching in detail in Chapter
-18.
+in.
 
-In sum, here are the steps we took to change the code from Listing 10-2 to
+In summary, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
 <!---
 "In summary"?
 /JT --->
+<!-- I believe "In sum" to be fine, but other people have been confused by it
+as well, so I'm ok changing it. /Carol -->
 
 1. Identify duplicate code.
 2. Extract the duplicate code into the body of the function and specify the
@@ -209,10 +207,10 @@ function that uses generics.
 Filename: src/main.rs
 
 ```
-fn largest_i32(list: &[i32]) -> i32 {
-    let mut largest = list[0];
+fn largest_i32(list: &[i32]) -> &i32 {
+    let mut largest = &list[0];
 
-    for &item in list {
+    for item in list {
         if item > largest {
             largest = item;
         }
@@ -221,10 +219,10 @@ fn largest_i32(list: &[i32]) -> i32 {
     largest
 }
 
-fn largest_char(list: &[char]) -> char {
-    let mut largest = list[0];
+fn largest_char(list: &[char]) -> &char {
+    let mut largest = &list[0];
 
-    for &item in list {
+    for item in list {
         if item > largest {
             largest = item;
         }
@@ -269,12 +267,12 @@ to declare the type parameter name before we use it. To define the generic
 between the name of the function and the parameter list, like this:
 
 ```
-fn largest<T>(list: &[T]) -> T {
+fn largest<T>(list: &[T]) -> &T {
 ```
 
 We read this definition as: the function `largest` is generic over some type
 `T`. This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a value of the
+of type `T`. The `largest` function will return a reference to a value of the
 same type `T`.
 
 Listing 10-5 shows the combined `largest` function definition using the generic
@@ -285,10 +283,10 @@ compile yet, but we’ll fix it later in this chapter.
 Filename: src/main.rs
 
 ```
-fn largest<T>(list: &[T]) -> T {
-    let mut largest = list[0];
+fn largest<T>(list: &[T]) -> &T {
+    let mut largest = &list[0];
 
-    for &item in list {
+    for item in list {
         if item > largest {
             largest = item;
         }
@@ -330,32 +328,36 @@ help: consider restricting type parameter `T`
   |             ^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-The note mentions `std::cmp::PartialOrd`, which is a *trait*. We’ll talk about
-traits in the next section. For now, know that this error states that the body
-of `largest` won’t work for all possible types that `T` could be. Because we
-want to compare values of type `T` in the body, we can only use types whose
-values can be ordered. To enable comparisons, the standard library has the
-`std::cmp::PartialOrd` trait that you can implement on types (see Appendix C
-for more on this trait). You’ll learn how to specify that a generic type has a
-particular trait in the “Traits as Parameters” section. Before we fix this code
-(in the section “Fixing the `largest` Function with Trait Bounds”), let’s first
-explore other ways of using generic type parameters.
+The help text mentions `std::cmp::PartialOrd`, which is a *trait*, and we’re
+going to talk about traits in the next section. For now, know that this error
+states that the body of `largest` won’t work for all possible types that `T`
+could be. Because we want to compare values of type `T` in the body, we can
+only use types whose values can be ordered. To enable comparisons, the standard
+library has the `std::cmp::PartialOrd` trait that you can implement on types
+(see Appendix C for more on this trait). By following the help text's
+suggestion, we restrict the types valid for `T` to only those that implement
+`PartialOrd` and this example will compile, because the standard library
+implements `PartialOrd` on both `i32` and `char`.
 
 <!---
-
 The wording at the end of the above paragraph feels a little odd. For the
-"You’ll learn how to specify that a generic type has a
-particular trait in the “Traits as Parameters” section." -- the error message
-above tells you how to maybe fix it.
+"You’ll learn how to specify that a generic type has a particular trait in the
+“Traits as Parameters” section." -- the error message above tells you how to
+maybe fix it.
 
-Well, it *could* fix it but the way the example is written adds multiple constraints.
+Well, it *could* fix it but the way the example is written adds multiple
+constraints.
 
-Do we want to leave this example unfinished and move onto other topics for a bit or
-revise the example so it's more self-contained, allowing the compiler to help us 
-and later revisit after we've learned more?
-
+Do we want to leave this example unfinished and move onto other topics for a
+bit or revise the example so it's more self-contained, allowing the compiler to
+help us and later revisit after we've learned more?
 /JT --->
-
+<!-- I've modified the example and explanation just slightly so that only
+adding the `PartialOrd` trait as suggested here will fix it completely, perhaps
+leaving the reader hanging a little bit less. It's really hard to teach
+generics and trait bounds, though, because you can't do much with generics
+unless you have trait bounds too (and can't learn why you'd want trait bounds
+without knowing about generics). /Carol -->
 
 ### In Struct Definitions
 
@@ -412,7 +414,6 @@ know that the generic type `T` will be an integer for this instance of
 same type as `x`, we’ll get a type mismatch error like this:
 
 <!---
-
 Not sure how or where we might want to call this out, but this is also how
 type inference in Rust works. If we don't know the type, we look for how it's
 used. That fresh type becomes a concrete type, and any use after that which
@@ -420,7 +421,7 @@ is different than we expect becomes an error.
 
 fn main() {
     let mut x;
-    
+
     x = 5;
     x = 4.0;
 }
@@ -434,7 +435,8 @@ Also gives:
   |         ^^^ expected integer, found floating-point number
 
 /JT --->
-
+<!-- Yeah, it's kind of neat trivia, but doesn't really fit here I don't think.
+/Carol -->
 
 ```
 error[E0308]: mismatched types
@@ -549,6 +551,9 @@ The above code gives a warning for the unused `y`. Maybe we can print both
 `x` and `y`?
 
 /JT --->
+<!-- In general, I'm not worried about unused code warnings, there's a lot of
+examples that have unused code because they're small examples. I don't think
+there's much value in adding a method and printing `y` as well. /Carol -->
 
 Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
 will return a reference to the `x` field of type `T`
@@ -667,9 +672,9 @@ let float = Some(5.0);
 When Rust compiles this code, it performs monomorphization. During that
 process, the compiler reads the values that have been used in `Option<T>`
 instances and identifies two kinds of `Option<T>`: one is `i32` and the other
-is `f64`. As such, it expands the generic definition of `Option<T>` into
-`Option_i32` and `Option_f64`, thereby replacing the generic definition with
-the specific ones.
+is `f64`. As such, it expands the generic definition of `Option<T>` into two
+definitions specialized to `i32` and `f64`, thereby replacing the generic
+definition with the specific ones.
 
 <!---
 
@@ -677,8 +682,11 @@ We may want to be clear in the above it doesn't actually do this, as you
 wouldn't be able to write `enum Option_i32` in your code as it would clash.
 
 /JT --->
+<!-- I've reworded the last sentence in the above paragraph and the next
+sentence to hopefully sidestep the issue JT pointed out. /Carol -->
 
-The monomorphized version of the code looks like the following:
+The monomorphized version of the code looks similar to the following (the
+compiler uses different names than what we’re using here for illustration):
 
 Filename: src/main.rs
 
@@ -1008,11 +1016,8 @@ parameter after a colon and inside angle brackets.
 
 The `impl Trait` syntax is convenient and makes for more concise code in simple
 cases, while the fuller trait bound syntax can express more complexity in other
-cases.
-<!-- small edit here; is this what we mean? /LC -->
-<!-- Yup! /Carol -->
-For example, we can have two parameters that implement `Summary`. Doing so with
-the `impl Trait` syntax looks like this:
+cases. For example, we can have two parameters that implement `Summary`. Doing
+so with the `impl Trait` syntax looks like this:
 
 ```
 pub fn notify(item1: &impl Summary, item2: &impl Summary) {
@@ -1141,137 +1146,19 @@ fn returns_summarizable(switch: bool) -> impl Summary {
 Returning either a `NewsArticle` or a `Tweet` isn’t allowed due to restrictions
 around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
 how to write a function with this behavior in the “Using Trait Objects That
-Allow for Values of Different
-Types” section of Chapter 17.
+Allow for Values of Different Types” section of Chapter 17.
 
-### Fixing the `largest` Function with Trait Bounds
-
-Now that you know how to specify the behavior you want using the generic type
-parameter’s bounds, let’s return to Listing 10-5 to fix the definition of the
-`largest` function that uses a generic type parameter! Last time we tried to
-run that code, we received this error:
-
-```
-error[E0369]: binary operation `>` cannot be applied to type `T`
- --> src/main.rs:5:17
-  |
-5 |         if item > largest {
-  |            ---- ^ ------- T
-  |            |
-  |            T
-  |
-help: consider restricting type parameter `T`
-  |
-1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> T {
-  |             ^^^^^^^^^^^^^^^^^^^^^^
-```
-
-In the body of `largest` we wanted to compare two values of type `T` using the
-greater than (`>`) operator. Because that operator is defined as a default
-method on the standard library trait `std::cmp::PartialOrd`, we need to specify
-`PartialOrd` in the trait bounds for `T` so the `largest` function can work on
-slices of any type that we can compare. We don’t need to bring `PartialOrd`
-into scope because it’s in the prelude. Change the signature of `largest` to
-look like this:
-
-```
-fn largest<T: PartialOrd>(list: &[T]) -> T {
-```
-
-This time when we compile the code, we get a different set of errors:
-
-```
-error[E0508]: cannot move out of type `[T]`, a non-copy slice
- --> src/main.rs:2:23
-  |
-2 |     let mut largest = list[0];
-  |                       ^^^^^^^
-  |                       |
-  |                       cannot move out of here
-  |                       move occurs because `list[_]` has type `T`, which does not implement the `Copy` trait
-  |                       help: consider borrowing here: `&list[0]`
-
-error[E0507]: cannot move out of a shared reference
- --> src/main.rs:4:18
-  |
-4 |     for &item in list {
-  |         -----    ^^^^
-  |         ||
-  |         |data moved here
-  |         |move occurs because `item` has type `T`, which does not implement the `Copy` trait
-  |         help: consider removing the `&`: `item`
-```
-
-The key line in this error is `cannot move out of type [T], a non-copy slice`.
-With our non-generic versions of the `largest` function, we were only trying to
-find the largest `i32` or `char`. As discussed in the “Stack-Only Data: Copy”
-section in Chapter 4, types like `i32` and `char` that have a known size can be
-stored on the stack, so they implement the `Copy` trait. But when we made the
-`largest` function generic, it became possible for the `list` parameter to have
-types in it that don’t implement the `Copy` trait. Consequently, we wouldn’t be
-able to move the value out of `list[0]` and into the `largest` variable,
-resulting in this error.
-
-To call this code with only those types that implement the `Copy` trait, we can
-add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
-a generic `largest` function that will compile as long as the types of the
-values in the slice that we pass into the function implement the `PartialOrd`
-*and* `Copy` traits, like `i32` and `char` do.
-
-Filename: src/main.rs
-
-```
-fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
-    let mut largest = list[0];
-
-    for &item in list {
-        if item > largest {
-            largest = item;
-        }
-    }
-
-    largest
-}
-
-fn main() {
-    let number_list = vec![34, 50, 25, 100, 65];
-
-    let result = largest(&number_list);
-    println!("The largest number is {}", result);
-
-    let char_list = vec!['y', 'm', 'a', 'q'];
-
-    let result = largest(&char_list);
-    println!("The largest char is {}", result);
-}
-```
-
-Listing 10-15: A working definition of the `largest` function that works on any
-generic type that implements the `PartialOrd` and `Copy` traits
-
-If we don’t want to restrict the `largest` function to the types that implement
-the `Copy` trait, we could specify that `T` has the trait bound `Clone` instead
-of `Copy`. Then we could clone each value in the slice when we want the
-`largest` function to have ownership. Using the `clone` function means we’re
-potentially making more heap allocations in the case of types that own heap
-data like `String`, and heap allocations can be slow if we’re working with
-large amounts of data.
-
-We could also implement `largest` by having the function return a reference to
-a `T` value in the slice. If we change the return type to `&T` instead of `T`,
-thereby changing the body of the function to return a reference, we wouldn’t
-need the `Clone` or `Copy` trait bounds and we could avoid heap allocations.
-Try implementing these alternate solutions on your own! If you get stuck with
-errors having to do with lifetimes, keep reading: the “Validating References
-with Lifetimes” section coming up will explain, but lifetimes aren’t required
-to solve these challenges.
+<!-- I've removed the whole "Fixing the `largest` Function with Trait Bounds"
+section now that the example is slightly different and adding the one trait
+bound as the compiler suggests fixed Listing 10-5 earlier. I've also renumbered
+the following listings. /Carol-->
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
-`new` function to return a new instance of `Pair<T>` (recall from the ”Defining
+traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
+`new` function to return a new instance of `Pair<T>` (recall from the “Defining
 Methods” section of Chapter 5 that `Self` is a type alias for the type of the
 `impl` block, which in this case is `Pair<T>`). But in the next `impl` block,
 `Pair<T>` only implements the `cmp_display` method if its inner type `T`
@@ -1305,7 +1192,7 @@ impl<T: Display + PartialOrd> Pair<T> {
 }
 ```
 
-Listing 10-16: Conditionally implementing methods on a generic type depending
+Listing 10-15: Conditionally implementing methods on a generic type depending
 on trait bounds
 
 We can also conditionally implement a trait for any type that implements
@@ -1345,17 +1232,17 @@ checks for behavior at runtime because we’ve already checked at compile time.
 Doing so improves performance without having to give up the flexibility of
 generics.
 
-
 ## Validating References with Lifetimes
 
 <!---
 
 meta comment: this chapter is already pretty hefty. We just went through both
-generics and a whirlwind tour of traits. Lifetimes, while related to generics, feel
-like you might want to give a five minute break between them, let those sink in, and
-then pick up this topic.
+generics and a whirlwind tour of traits. Lifetimes, while related to generics,
+feel like you might want to give a five minute break between them, let those
+sink in, and then pick up this topic.
 
-I noticed a couple topics we may want to touch on above for a bit of completeness:
+I noticed a couple topics we may want to touch on above for a bit of
+completeness:
 
 * A closer look at how From/Into work and how they relate to each other.
 * Using traits to specialize what you do when returning values.
@@ -1363,6 +1250,9 @@ I noticed a couple topics we may want to touch on above for a bit of completenes
 * Turbofish
 
 /JT --->
+<!-- These comments are totally valid, but seeing as this revision is already
+dragging on later than we were hoping, I don't really want to do large scale
+reorganization at this point. /Carol -->
 
 Lifetimes are another kind of generic that we’ve already been using. Rather
 than ensuring that a type has the behavior we want, lifetimes ensure that
@@ -1387,7 +1277,7 @@ lifetime syntax so you can get comfortable with the concept.
 
 The main aim of lifetimes is to prevent *dangling references*, which cause a
 program to reference data other than the data it’s intended to reference.
-Consider the program in Listing 10-17, which has an outer scope and an inner
+Consider the program in Listing 10-16, which has an outer scope and an inner
 scope.
 
 ```
@@ -1403,9 +1293,9 @@ scope.
 }
 ```
 
-Listing 10-17: An attempt to use a reference whose value has gone out of scope
+Listing 10-16: An attempt to use a reference whose value has gone out of scope
 
-> Note: The examples in Listings 10-17, 10-18, and 10-24 declare variables
+> Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
 > without giving them an initial value, so the variable name exists in the
 > outer scope. At first glance, this might appear to be in conflict with Rust’s
 > having no null values. However, if we try to use a variable before giving it
@@ -1443,8 +1333,8 @@ It uses a borrow checker.
 ### The Borrow Checker
 
 The Rust compiler has a *borrow checker* that compares scopes to determine
-whether all borrows are valid. Listing 10-18 shows the same code as Listing
-10-17 but with annotations showing the lifetimes of the variables.
+whether all borrows are valid. Listing 10-17 shows the same code as Listing
+10-16 but with annotations showing the lifetimes of the variables.
 
 ```
 {
@@ -1459,7 +1349,7 @@ whether all borrows are valid. Listing 10-18 shows the same code as Listing
 }                         // ---------+
 ```
 
-Listing 10-18: Annotations of the lifetimes of `r` and `x`, named `'a` and
+Listing 10-17: Annotations of the lifetimes of `r` and `x`, named `'a` and
 `'b`, respectively
 
 Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
@@ -1469,7 +1359,7 @@ lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
 with a lifetime of `'b`. The program is rejected because `'b` is shorter than
 `'a`: the subject of the reference doesn’t live as long as the reference.
 
-Listing 10-19 fixes the code so it doesn’t have a dangling reference and
+Listing 10-18 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
 ```
@@ -1483,7 +1373,7 @@ compiles without any errors.
 }                         // ----------+
 ```
 
-Listing 10-19: A valid reference because the data has a longer lifetime than
+Listing 10-18: A valid reference because the data has a longer lifetime than
 the reference
 
 Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
@@ -1498,7 +1388,7 @@ lifetimes of parameters and return values in the context of functions.
 
 We’ll write a function that returns the longer of two string slices. This
 function will take two string slices and return a single string slice. After
-we’ve implemented the `longest` function, the code in Listing 10-20 should
+we’ve implemented the `longest` function, the code in Listing 10-19 should
 print `The longest string is abcd`.
 
 Filename: src/main.rs
@@ -1513,16 +1403,16 @@ fn main() {
 }
 ```
 
-Listing 10-20: A `main` function that calls the `longest` function to find the
+Listing 10-19: A `main` function that calls the `longest` function to find the
 longer of two string slices
 
 Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the `longest` function to take
 ownership of its parameters. Refer to the “String Slices as Parameters” section
 in Chapter 4 for more discussion about why the parameters we use in Listing
-10-20 are the ones we want.
+10-19 are the ones we want.
 
-If we try to implement the `longest` function as shown in Listing 10-21, it
+If we try to implement the `longest` function as shown in Listing 10-20, it
 won’t compile.
 
 Filename: src/main.rs
@@ -1537,7 +1427,7 @@ fn longest(x: &str, y: &str) -> &str {
 }
 ```
 
-Listing 10-21: An implementation of the `longest` function that returns the
+Listing 10-20: An implementation of the `longest` function that returns the
 longer of two string slices but does not yet compile
 
 Instead, we get the following error that talks about lifetimes:
@@ -1566,7 +1456,7 @@ When we’re defining this function, we don’t know the concrete values that wi
 be passed into this function, so we don’t know whether the `if` case or the
 `else` case will execute. We also don’t know the concrete lifetimes of the
 references that will be passed in, so we can’t look at the scopes as we did in
-Listings 10-18 and 10-19 to determine whether the reference we return will
+Listings 10-17 and 10-18 to determine whether the reference we return will
 always be valid. The borrow checker can’t determine this either, because it
 doesn’t know how the lifetimes of `x` and `y` relate to the lifetime of the
 return value. To fix this error, we’ll add generic lifetime parameters that
@@ -1599,29 +1489,29 @@ reference to an `i32` that also has the lifetime `'a`.
 
 One lifetime annotation by itself doesn’t have much meaning, because the
 annotations are meant to tell Rust how generic lifetime parameters of multiple
-references relate to each other. For example, let’s say we have a function with
-the parameter `first` that is a reference to an `i32` with lifetime `'a`. The
-function also has another parameter named `second` that is another reference to
-an `i32` that also has the lifetime `'a`. The lifetime annotations indicate
-that the references `first` and `second` must both live as long as that generic
-lifetime.
+references relate to each other. Let’s examine how the lifetime annotations
+relate to each other in the context of the `longest` function.
 
 <!---
 
 The above description is a little hard to follow with a code example.
 
 /JT --->
+<!-- Rather than fleshing out the code that goes with this description, I've
+moved some of the description to the next section to go with the code example
+there. /Carol -->
 
 ### Lifetime Annotations in Function Signatures
 
-Now let’s examine lifetime annotations in the context of the `longest`
-function. As with generic type parameters, we need to declare generic lifetime
-parameters inside angle brackets between the function name and the parameter
-list. We want the signature to express the following constraint: the returned
+To use lifetime annotations in function signatures, we need to declare the
+generic *lifetime* parameters inside angle brackets between the function name
+and the parameter list, just as we did with generic *type* parameters
+
+We want the signature to express the following constraint: the returned
 reference will be valid as long as both the parameters are valid. This is the
 relationship between lifetimes of the parameters and the return value. We’ll
 name the lifetime `'a` and then add it to each reference, as shown in Listing
-10-22.
+10-21.
 
 Filename: src/main.rs
 
@@ -1635,11 +1525,11 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 ```
 
-Listing 10-22: The `longest` function definition specifying that all the
+Listing 10-21: The `longest` function definition specifying that all the
 references in the signature must have the same lifetime `'a`
 
 This code should compile and produce the result we want when we use it with the
-`main` function in Listing 10-20.
+`main` function in Listing 10-19.
 
 The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
@@ -1677,7 +1567,7 @@ the returned reference will also be valid for the length of the smaller of the
 lifetimes of `x` and `y`.
 
 Let’s look at how the lifetime annotations restrict the `longest` function by
-passing in references that have different concrete lifetimes. Listing 10-23 is
+passing in references that have different concrete lifetimes. Listing 10-22 is
 a straightforward example.
 
 Filename: src/main.rs
@@ -1694,7 +1584,7 @@ fn main() {
 }
 ```
 
-Listing 10-23: Using the `longest` function with references to `String` values
+Listing 10-22: Using the `longest` function with references to `String` values
 that have different concrete lifetimes
 
 In this example, `string1` is valid until the end of the outer scope, `string2`
@@ -1708,7 +1598,7 @@ Next, let’s try an example that shows that the lifetime of the reference in
 declaration of the `result` variable outside the inner scope but leave the
 assignment of the value to the `result` variable inside the scope with
 `string2`. Then we’ll move the `println!` that uses `result` to outside the
-inner scope, after the inner scope has ended. The code in Listing 10-24 will
+inner scope, after the inner scope has ended. The code in Listing 10-23 will
 not compile.
 
 Filename: src/main.rs
@@ -1725,7 +1615,7 @@ fn main() {
 }
 ```
 
-Listing 10-24: Attempting to use `result` after `string2` has gone out of scope
+Listing 10-23: Attempting to use `result` after `string2` has gone out of scope
 
 When we try to compile this code, we get this error:
 
@@ -1753,7 +1643,7 @@ still be valid for the `println!` statement. However, the compiler can’t see
 that the reference is valid in this case. We’ve told Rust that the lifetime of
 the reference returned by the `longest` function is the same as the smaller of
 the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-24 as possibly having an invalid reference.
+disallows the code in Listing 10-23 as possibly having an invalid reference.
 
 Try designing more experiments that vary the values and lifetimes of the
 references passed in to the `longest` function and how the returned reference
@@ -1828,9 +1718,9 @@ would create dangling pointers or otherwise violate memory safety.
 
 ### Lifetime Annotations in Struct Definitions
 
-So far, the structs we've define all hold owned types. We can define structs to
+So far, the structs we’ve defined all hold owned types. We can define structs to
 hold references, but in that case we would need to add a lifetime annotation on
-every reference in the struct’s definition. Listing 10-25 has a struct named
+every reference in the struct’s definition. Listing 10-24 has a struct named
 `ImportantExcerpt` that holds a string slice.
 
 <!---
@@ -1838,6 +1728,7 @@ every reference in the struct’s definition. Listing 10-25 has a struct named
 nit: "So far, the structs we've *defined* all hold owned types"
 
 /JT --->
+<!-- Fixed! /Carol -->
 
 Filename: src/main.rs
 
@@ -1855,7 +1746,7 @@ fn main() {
 }
 ```
 
-Listing 10-25: A struct that holds a reference, requiring a lifetime annotation
+Listing 10-24: A struct that holds a reference, requiring a lifetime annotation
 
 This struct has the single field `part` that holds a string slice, which is a
 reference. As with generic data types, we declare the name of the generic
@@ -1875,7 +1766,7 @@ the `ImportantExcerpt` goes out of scope, so the reference in the
 
 You’ve learned that every reference has a lifetime and that you need to specify
 lifetime parameters for functions or structs that use references. However, in
-Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-26, that
+Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-25, that
 compiled without lifetime annotations.
 
 Filename: src/lib.rs
@@ -1894,7 +1785,7 @@ fn first_word(s: &str) -> &str {
 }
 ```
 
-Listing 10-26: A function we defined in Listing 4-9 that compiled without
+Listing 10-25: A function we defined in Listing 4-9 that compiled without
 lifetime annotations, even though the parameter and return type are references
 
 The reason this function compiles without lifetime annotations is historical:
@@ -1939,7 +1830,7 @@ which it can’t figure out lifetimes, the compiler will stop with an error.
 These rules apply to `fn` definitions as well as `impl` blocks.
 
 The first rule is that the compiler assigns a lifetime parameter to each
-paramter that’s a reference. In other words, a function with one parameter gets
+parameter that’s a reference. In other words, a function with one parameter gets
 one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
 parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
 y: &'b i32)`; and so on.
@@ -1955,7 +1846,7 @@ methods much nicer to read and write because fewer symbols are necessary.
 
 Let’s pretend we’re the compiler. We’ll apply these rules to figure out the
 lifetimes of the references in the signature of the `first_word` function in
-Listing 10-26. The signature starts without any lifetimes associated with the
+Listing 10-25. The signature starts without any lifetimes associated with the
 references:
 
 ```
@@ -1983,7 +1874,7 @@ compiler can continue its analysis without needing the programmer to annotate
 the lifetimes in this function signature.
 
 Let’s look at another example, this time using the `longest` function that had
-no lifetime parameters when we started working with it in Listing 10-21:
+no lifetime parameters when we started working with it in Listing 10-20:
 
 ```
 fn longest(x: &str, y: &str) -> &str {
@@ -2001,7 +1892,7 @@ input lifetime. The third rule doesn’t apply either, because `longest` is a
 function rather than a method, so none of the parameters are `self`. After
 working through all three rules, we still haven’t figured out what the return
 type’s lifetime is. This is why we got an error trying to compile the code in
-Listing 10-21: the compiler worked through the lifetime elision rules but still
+Listing 10-20: the compiler worked through the lifetime elision rules but still
 couldn’t figure out all the lifetimes of the references in the signature.
 
 Because the third rule really only applies in method signatures, we’ll look at
@@ -2023,7 +1914,7 @@ In method signatures inside the `impl` block, references might be tied to the
 lifetime of references in the struct’s fields, or they might be independent. In
 addition, the lifetime elision rules often make it so that lifetime annotations
 aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in Listing 10-25.
+struct named `ImportantExcerpt` that we defined in Listing 10-24.
 
 First, we’ll use a method named `level` whose only parameter is a reference to
 `self` and whose return value is an `i32`, which is not a reference to anything:
@@ -2074,13 +1965,9 @@ You might see suggestions to use the `'static` lifetime in error messages. But
 before specifying `'static` as the lifetime for a reference, think about
 whether the reference you have actually lives the entire lifetime of your
 program or not, and whether you want it to. Most of the time, an error message
-suggesting the `'static` lifetime results from attempting to create a
-<!-- I'm not sure what problem you refer to here? You mean the question of
-whether to use static? Or the problem of misusing lifetimes? /LC -->
-<!-- The problem that caused the compiler error that the error message is
-suggesting the static lifetime for, I've tried to clarify /Carol -->
-dangling reference or a mismatch of the available lifetimes. In such cases, the
-solution is fixing those problems, not specifying the `'static` lifetime.
+suggesting the `'static` lifetime results from attempting to create a dangling
+reference or a mismatch of the available lifetimes. In such cases, the solution
+is fixing those problems, not specifying the `'static` lifetime.
 
 ## Generic Type Parameters, Trait Bounds, and Lifetimes Together
 
@@ -2107,7 +1994,7 @@ where
 }
 ```
 
-This is the `longest` function from Listing 10-22 that returns the longer of
+This is the `longest` function from Listing 10-21 that returns the longer of
 two string slices. But now it has an extra parameter named `ann` of the generic
 type `T`, which can be filled in by any type that implements the `Display`
 trait as specified by the `where` clause. This extra parameter will be printed
