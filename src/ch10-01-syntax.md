@@ -45,12 +45,12 @@ to declare the type parameter name before we use it. To define the generic
 between the name of the function and the parameter list, like this:
 
 ```rust,ignore
-fn largest<T>(list: &[T]) -> T {
+fn largest<T>(list: &[T]) -> &T {
 ```
 
 We read this definition as: the function `largest` is generic over some type
 `T`. This function has one parameter named `list`, which is a slice of values
-of type `T`. The `largest` function will return a value of the
+of type `T`. The `largest` function will return a reference to a value of the
 same type `T`.
 
 Listing 10-5 shows the combined `largest` function definition using the generic
@@ -73,17 +73,16 @@ If we compile this code right now, we’ll get this error:
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The note mentions `std::cmp::PartialOrd`, which is a *trait*. We’ll talk about
-traits in the next section. For now, know that this error states that the body
-of `largest` won’t work for all possible types that `T` could be. Because we
-want to compare values of type `T` in the body, we can only use types whose
-values can be ordered. To enable comparisons, the standard library has the
-`std::cmp::PartialOrd` trait that you can implement on types (see Appendix C
-for more on this trait). You’ll learn how to specify that a generic type has a
-particular trait in the [“Traits as Parameters”][traits-as-parameters]<!--
-ignore --> section. Before we fix this code (in the section [“Fixing the
-`largest` Function with Trait Bounds”][fixing]<!-- ignore -->), let’s first
-explore other ways of using generic type parameters.
+The help text mentions `std::cmp::PartialOrd`, which is a *trait*, and we’re
+going to talk about traits in the next section. For now, know that this error
+states that the body of `largest` won’t work for all possible types that `T`
+could be. Because we want to compare values of type `T` in the body, we can
+only use types whose values can be ordered. To enable comparisons, the standard
+library has the `std::cmp::PartialOrd` trait that you can implement on types
+(see Appendix C for more on this trait). By following the help text's
+suggestion, we restrict the types valid for `T` to only those that implement
+`PartialOrd` and this example will compile, because the standard library
+implements `PartialOrd` on both `i32` and `char`.
 
 ### In Struct Definitions
 
@@ -297,11 +296,12 @@ let float = Some(5.0);
 When Rust compiles this code, it performs monomorphization. During that
 process, the compiler reads the values that have been used in `Option<T>`
 instances and identifies two kinds of `Option<T>`: one is `i32` and the other
-is `f64`. As such, it expands the generic definition of `Option<T>` into
-`Option_i32` and `Option_f64`, thereby replacing the generic definition with
-the specific ones.
+is `f64`. As such, it expands the generic definition of `Option<T>` into two
+definitions specialized to `i32` and `f64`, thereby replacing the generic
+definition with the specific ones.
 
-The monomorphized version of the code looks like the following:
+The monomorphized version of the code looks similar to the following (the
+compiler uses different names than what we’re using here for illustration):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -328,6 +328,3 @@ type in each instance, we pay no runtime cost for using generics. When the code
 runs, it performs just as it would if we had duplicated each definition by
 hand. The process of monomorphization makes Rust’s generics extremely efficient
 at runtime.
-
-[traits-as-parameters]: ch10-02-traits.html#traits-as-parameters
-[fixing]: ch10-02-traits.html#fixing-the-largest-function-with-trait-bounds

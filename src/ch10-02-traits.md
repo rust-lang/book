@@ -207,6 +207,9 @@ and pass in any instance of `NewsArticle` or `Tweet`. Code that calls the
 function with any other type, such as a `String` or an `i32`, won’t compile
 because those types don’t implement `Summary`.
 
+<!-- Old headings. Do not remove or links may break. -->
+<a id="fixing-the-largest-function-with-trait-bounds"></a>
+
 #### Trait Bound Syntax
 
 The `impl Trait` syntax works for straightforward cases but is actually syntax
@@ -326,83 +329,11 @@ Allow for Values of Different
 Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> section of Chapter 17.
 
-### Fixing the `largest` Function with Trait Bounds
-
-Now that you know how to specify the behavior you want using the generic type
-parameter’s bounds, let’s return to Listing 10-5 to fix the definition of the
-`largest` function that uses a generic type parameter! Last time we tried to
-run that code, we received this error:
-
-```console
-{{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
-```
-
-In the body of `largest` we wanted to compare two values of type `T` using the
-greater than (`>`) operator. Because that operator is defined as a default
-method on the standard library trait `std::cmp::PartialOrd`, we need to specify
-`PartialOrd` in the trait bounds for `T` so the `largest` function can work on
-slices of any type that we can compare. We don’t need to bring `PartialOrd`
-into scope because it’s in the prelude. Change the signature of `largest` to
-look like this:
-
-```rust,ignore
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/src/main.rs:here}}
-```
-
-This time when we compile the code, we get a different set of errors:
-
-```console
-{{#include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-07-fixing-listing-10-05/output.txt}}
-```
-
-The key line in this error is `cannot move out of type [T], a non-copy slice`.
-With our non-generic versions of the `largest` function, we were only trying to
-find the largest `i32` or `char`. As discussed in the [“Stack-Only Data:
-Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4, types like
-`i32` and `char` that have a known size can be stored on the stack, so they
-implement the `Copy` trait. But when we made the `largest` function generic, it
-became possible for the `list` parameter to have types in it that don’t
-implement the `Copy` trait. Consequently, we wouldn’t be able to move the value
-out of `list[0]` and into the `largest` variable, resulting in this error.
-
-To call this code with only those types that implement the `Copy` trait, we can
-add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
-a generic `largest` function that will compile as long as the types of the
-values in the slice that we pass into the function implement the `PartialOrd`
-*and* `Copy` traits, like `i32` and `char` do.
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/main.rs}}
-```
-
-<span class="caption">Listing 10-15: A working definition of the `largest`
-function that works on any generic type that implements the `PartialOrd` and
-`Copy` traits</span>
-
-If we don’t want to restrict the `largest` function to the types that implement
-the `Copy` trait, we could specify that `T` has the trait bound `Clone` instead
-of `Copy`. Then we could clone each value in the slice when we want the
-`largest` function to have ownership. Using the `clone` function means we’re
-potentially making more heap allocations in the case of types that own heap
-data like `String`, and heap allocations can be slow if we’re working with
-large amounts of data.
-
-We could also implement `largest` by having the function return a reference to
-a `T` value in the slice. If we change the return type to `&T` instead of `T`,
-thereby changing the body of the function to return a reference, we wouldn’t
-need the `Clone` or `Copy` trait bounds and we could avoid heap allocations.
-Try implementing these alternate solutions on your own! If you get stuck with
-errors having to do with lifetimes, keep reading: the “Validating References
-with Lifetimes” section coming up will explain, but lifetimes aren’t required
-to solve these challenges.
-
 ### Using Trait Bounds to Conditionally Implement Methods
 
 By using a trait bound with an `impl` block that uses generic type parameters,
 we can implement methods conditionally for types that implement the specified
-traits. For example, the type `Pair<T>` in Listing 10-16 always implements the
+traits. For example, the type `Pair<T>` in Listing 10-15 always implements the
 `new` function to return a new instance of `Pair<T>` (recall from the
 [“Defining Methods”][methods]<!-- ignore --> section of Chapter 5 that `Self`
 is a type alias for the type of the `impl` block, which in this case is
@@ -413,10 +344,10 @@ that enables comparison *and* the `Display` trait that enables printing.
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,noplayground
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/lib.rs}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-15/src/lib.rs}}
 ```
 
-<span class="caption">Listing 10-16: Conditionally implement methods on a
+<span class="caption">Listing 10-15: Conditionally implementing methods on a
 generic type depending on trait bounds</span>
 
 We can also conditionally implement a trait for any type that implements
@@ -456,6 +387,5 @@ checks for behavior at runtime because we’ve already checked at compile time.
 Doing so improves performance without having to give up the flexibility of
 generics.
 
-[stack-only-data-copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
 [using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods

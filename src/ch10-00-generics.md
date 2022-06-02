@@ -51,14 +51,14 @@ in a list.
 <span class="caption">Listing 10-1: Finding the largest number in a list of
 numbers</span>
 
-We store a list of integers in the variable `number_list` and place the first
-number in the list in a variable named `largest`. We then iterate through all
-the numbers in the list, and if the current number is greater than the number
-stored in `largest`, replace the number in that variable. However, if the
-current number is less than or equal to the largest number seen so far, the
-variable doesn’t change, and the code moves on to the next number in the list.
-After considering all the numbers in the list, `largest` should hold the
-largest number, which in this case is 100.
+We store a list of integers in the variable `number_list` and place a reference
+to the first number in the list in a variable named `largest`. We then iterate
+through all the numbers in the list, and if the current number is greater than
+the number stored in `largest`, replace the reference in that variable.
+However, if the current number is less than or equal to the largest number seen
+so far, the variable doesn’t change, and the code moves on to the next number
+in the list. After considering all the numbers in the list, `largest` should
+refer to the largest number, which in this case is 100.
 
 We've now been tasked with finding the largest number in two different lists of
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
@@ -99,13 +99,9 @@ in two lists</span>
 The `largest` function has a parameter called `list`, which represents any
 concrete slice of `i32` values we might pass into the function. As a result,
 when we call the function, the code runs on the specific values that we pass
-in. Don’t worry about the syntax of the `for` loop for now. We aren’t
-referencing a reference to an `i32` here; we’re pattern matching and
-destructuring each `&i32` that the `for` loop gets so that `item` will be an
-`i32` inside the loop body. We’ll cover pattern matching in detail in [Chapter
-18][ch18]<!-- ignore -->.
+in.
 
-In sum, here are the steps we took to change the code from Listing 10-2 to
+In summary, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
 1. Identify duplicate code.
@@ -120,5 +116,3 @@ of specific values, generics allow code to operate on abstract types.
 For example, say we had two functions: one that finds the largest item in a
 slice of `i32` values and one that finds the largest item in a slice of `char`
 values. How would we eliminate that duplication? Let’s find out!
-
-[ch18]: ch18-00-patterns.html
