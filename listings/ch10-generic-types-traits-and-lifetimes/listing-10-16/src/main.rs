@@ -1,14 +1,10 @@
 fn main() {
-    // ANCHOR: here
+    let r;
+
     {
-        let r;
-
-        {
-            let x = 5;
-            r = &x;
-        }
-
-        println!("r: {}", r);
+        let x = 5;
+        r = &x;
     }
-    // ANCHOR_END: here
+
+    println!("r: {}", r);
 }

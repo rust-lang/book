@@ -27,7 +27,7 @@ Consider the program in Listing 10-16, which has an outer scope and an inner
 scope.
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-16: An attempt to use a reference whose value
@@ -52,7 +52,7 @@ try to use it. Here is the error message:
 ```
 
 The variable `x` doesn’t “live long enough.” The reason is that `x` will be out
-of scope when the inner scope ends on line 8. But `r` is still valid for the
+of scope when the inner scope ends on line 7. But `r` is still valid for the
 outer scope; because its scope is larger, we say that it “lives longer.” If
 Rust allowed this code to work, `r` would be referencing memory that was
 deallocated when `x` went out of scope, and anything we tried to do with `r`
@@ -66,7 +66,7 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-17: Annotations of the lifetimes of `r` and
@@ -83,7 +83,7 @@ Listing 10-18 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
 ```rust
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
 ```
 
 <span class="caption">Listing 10-18: A valid reference because the data has a
