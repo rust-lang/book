@@ -142,16 +142,14 @@ the result of running that test is `ok` [2]. The overall summary `test result:
 ok.` [3] means that all the tests passed, and the portion that reads `1 passed;
 0 failed` totals the number of tests that passed or failed.
 
-<!-- could you quickly say what it means to be filtered? I've taken a stab at ignored /LC -->
-<!-- Done! /Carol -->
 
 It's possible to mark a test as ignored so it doesn't run in a particular
 instance; we'll cover that in the “Ignoring Some Tests Unless Specifically
 Requested” section later in this chapter. Because we haven't done that here,
 the summary shows `0 ignored`. We can also pass an argument to the `cargo test`
-command to run only tests whose name matches a string; this is called filtering
-and we'll cover that in the “Running a Subset of Tests by Name” section. We
-also haven’t filtered the tests being run, so the end of the summary shows `0
+command to run only tests whose name matches a string; this is called *filtering*
+and we'll cover that in the “Running a Subset of Tests by Name” section.
+Here we haven’t filtered the tests being run, so the end of the summary shows `0
 filtered out`.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
@@ -786,6 +784,15 @@ expect, which in this case would be `Guess value must be less than or equal to
 message is unique or dynamic and how precise you want your test to be. In this
 case, a substring of the panic message is enough to ensure that the code in the
 test function executes the `else if value > 100` case.
+
+<!---
+We may want to make extra clear above that `expected` here means substring. I
+think many people would assume equality rather than substring like the
+expected/actual of unit tests.
+
+(let alone how .expect(..) works. It seems we use the word expect in different
+ways around the language/library )
+/JT --->
 
 To see what happens when a `should_panic` test with an `expected` message
 fails, let’s again introduce a bug into our code by swapping the bodies of the
@@ -1494,3 +1501,8 @@ reduce logic bugs having to do with how your code is expected to behave.
 
 Let’s combine the knowledge you learned in this chapter and in previous
 chapters to work on a project!
+
+<!---
+We hint at doc tests but don't cover them. Should we have a section in this
+chapter about that? They're pretty handy.
+/JT --->
