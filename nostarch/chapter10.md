@@ -1281,7 +1281,7 @@ Consider the program in Listing 10-16, which has an outer scope and an inner
 scope.
 
 ```
-{
+fn main() {
     let r;
 
     {
@@ -1311,15 +1311,15 @@ try to use it. Here is the error message:
 
 ```
 error[E0597]: `x` does not live long enough
-  --> src/main.rs:7:17
-   |
-7  |             r = &x;
-   |                 ^^ borrowed value does not live long enough
-8  |         }
-   |         - `x` dropped here while still borrowed
-9  |
-10 |         println!("r: {}", r);
-   |                           - borrow later used here
+ --> src/main.rs:6:13
+  |
+6 |         r = &x;
+  |             ^^ borrowed value does not live long enough
+7 |     }
+  |     - `x` dropped here while still borrowed
+8 |
+9 |     println!("r: {}", r);
+  |                       - borrow later used here
 ```
 
 The variable `x` doesn’t “live long enough.” The reason is that `x` will be out
@@ -1337,7 +1337,7 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.
 
 ```
-{
+fn main() {
     let r;                // ---------+-- 'a
                           //          |
     {                     //          |
@@ -1363,7 +1363,7 @@ Listing 10-18 fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
 ```
-{
+fn main() {
     let x = 5;            // ----------+-- 'b
                           //           |
     let r = &x;           // --+-- 'a  |
@@ -1536,9 +1536,9 @@ takes two parameters, both of which are string slices that live at least as
 long as lifetime `'a`. The function signature also tells Rust that the string
 slice returned from the function will live at least as long as lifetime `'a`.
 In practice, it means that the lifetime of the reference returned by the
-`longest` function is the same as the smaller of the lifetimes of the
-references passed in. These relationships are what we want Rust to use when
-analyzing this code.
+`longest` function is the same as the smaller of the lifetimes of the values
+referred to by the function arguments. These relationships are what we want
+Rust to use when analyzing this code.
 
 Remember, when we specify the lifetime parameters in this function signature,
 we’re not changing the lifetimes of any values passed in or returned. Rather,
