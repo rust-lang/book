@@ -10,7 +10,7 @@ pub struct Config {
 
 // ANCHOR: here
 impl Config {
-    pub fn new(
+    pub fn build(
         mut args: impl Iterator<Item = String>,
     ) -> Result<Config, &'static str> {
         args.next();

@@ -157,14 +157,14 @@ Looks like that still works! Now, let’s run the program with `IGNORE_CASE`
 set to `1` but with the same query `to`.
 
 ```console
-$ IGNORE_CASE=1 cargo run to poem.txt
+$ IGNORE_CASE=1 cargo run -- to poem.txt
 ```
 
 If you’re using PowerShell, you will need to set the environment variable and
 run the program as separate commands:
 
 ```console
-PS> $Env:IGNORE_CASE=1; cargo run to poem.txt
+PS> $Env:IGNORE_CASE=1; cargo run -- to poem.txt
 ```
 
 This will make `IGNORE_CASE` persist for the remainder of your shell
@@ -178,7 +178,7 @@ We should get lines that contain “to” that might have uppercase letters:
 
 <!-- manual-regeneration
 cd listings/ch12-an-io-project/listing-12-23
-IGNORE_CASE=1 cargo run to poem.txt
+IGNORE_CASE=1 cargo run -- to poem.txt
 can't extract because of the environment variable
 -->
 

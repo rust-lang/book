@@ -246,19 +246,24 @@ the technique we used in Listing 9-13 isn’t the best to use here: a call to
 we’ll use the other technique you learned about in Chapter 9—[returning a
 `Result`][ch9-result]<!-- ignore --> that indicates either success or an error.
 
-#### Returning a `Result` from `new` Instead of Calling `panic!`
+<!-- Old headings. Do not remove or links may break. -->
+<a id="returning-a-result-from-new-instead-of-calling-panic"></a>
+
+#### Returning a `Result` Instead of Calling `panic!`
 
 We can instead return a `Result` value that will contain a `Config` instance in
-the successful case and will describe the problem in the error case. When
-`Config::new` is communicating to `main`, we can use the `Result` type to
-signal there was a problem. Then we can change `main` to convert an `Err`
-variant into a more practical error for our users without the surrounding text
-about `thread 'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
+the successful case and will describe the problem in the error case. We’re also
+going to change the function name from `new` to `build` because many
+programmers expect `new` functions to never fail. When `Config::build` is
+communicating to `main`, we can use the `Result` type to signal there was a
+problem. Then we can change `main` to convert an `Err` variant into a more
+practical error for our users without the surrounding text about `thread
+'main'` and `RUST_BACKTRACE` that a call to `panic!` causes.
 
-Listing 12-9 shows the changes we need to make to the return value of
-`Config::new` and the body of the function needed to return a `Result`. Note
-that this won’t compile until we update `main` as well, which we’ll do in the
-next listing.
+Listing 12-9 shows the changes we need to make to the return value of the
+function we’re now calling `Config::build` and the body of the function needed
+to return a `Result`. Note that this won’t compile until we update `main` as
+well, which we’ll do in the next listing.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -267,25 +272,28 @@ next listing.
 ```
 
 <span class="caption">Listing 12-9: Returning a `Result` from
-`Config::new`</span>
+`Config::build`</span>
 
-Our `new` function now returns a `Result` with a `Config` instance in the
+Our `build` function now returns a `Result` with a `Config` instance in the
 success case and a `&'static str` in the error case. Our error values will
 always be string literals that have the `'static` lifetime.
 
-We’ve made two changes in the body of the `new` function: instead of calling
-`panic!` when the user doesn’t pass enough arguments, we now return an `Err`
-value, and we’ve wrapped the `Config` return value in an `Ok`. These changes
-make the function conform to its new type signature.
+We’ve made two changes in the body of the function: instead of calling `panic!`
+when the user doesn’t pass enough arguments, we now return an `Err` value, and
+we’ve wrapped the `Config` return value in an `Ok`. These changes make the
+function conform to its new type signature.
 
-Returning an `Err` value from `Config::new` allows the `main` function to
-handle the `Result` value returned from the `new` function and exit the process
-more cleanly in the error case.
+Returning an `Err` value from `Config::build` allows the `main` function to
+handle the `Result` value returned from the `build` function and exit the
+process more cleanly in the error case.
 
-#### Calling `Config::new` and Handling Errors
+<!-- Old headings. Do not remove or links may break. -->
+<a id="calling-confignew-and-handling-errors"></a>
+
+#### Calling `Config::build` and Handling Errors
 
 To handle the error case and print a user-friendly message, we need to update
-`main` to handle the `Result` being returned by `Config::new`, as shown in
+`main` to handle the `Result` being returned by `Config::build`, as shown in
 Listing 12-10. We’ll also take the responsibility of exiting the command line
 tool with a nonzero error code away from `panic!` and instead implement it by
 hand. A nonzero exit status is a convention to signal to the process that
@@ -297,8 +305,8 @@ called our program that the program exited with an error state.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-10: Exiting with an error code if creating a
-new `Config` fails</span>
+<span class="caption">Listing 12-10: Exiting with an error code if building a
+`Config` fails</span>
 
 In this listing, we’ve used a method we haven’t covered in detail yet:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
@@ -358,7 +366,7 @@ argument.
 #### Returning Errors from the `run` Function
 
 With the remaining program logic separated into the `run` function, we can
-improve the error handling, as we did with `Config::new` in Listing 12-9.
+improve the error handling, as we did with `Config::build` in Listing 12-9.
 Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
 us further consolidate the logic around handling errors into `main` in a
@@ -414,7 +422,7 @@ have some error-handling code here! Let’s rectify that problem now.
 #### Handling Errors Returned from `run` in `main`
 
 We’ll check for errors and handle them using a technique similar to one we used
-with `Config::new` in Listing 12-10, but with a slight difference:
+with `Config::build` in Listing 12-10, but with a slight difference:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -424,7 +432,7 @@ with `Config::new` in Listing 12-10, but with a slight difference:
 
 We use `if let` rather than `unwrap_or_else` to check whether `run` returns an
 `Err` value and call `process::exit(1)` if it does. The `run` function doesn’t
-return a value that we want to `unwrap` in the same way that `Config::new`
+return a value that we want to `unwrap` in the same way that `Config::build`
 returns the `Config` instance. Because `run` returns `()` in the success case,
 we only care about detecting an error, so we don’t need `unwrap_or_else` to
 return the unwrapped value, which would only be `()`.
@@ -444,7 +452,7 @@ Let’s move all the code that isn’t the `main` function from *src/main.rs* to
 * The `run` function definition
 * The relevant `use` statements
 * The definition of `Config`
-* The `Config::new` function definition
+* The `Config::build` function definition
 
 The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
 (we’ve omitted the bodies of the functions for brevity). Note that this won’t

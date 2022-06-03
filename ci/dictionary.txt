@@ -83,6 +83,7 @@ combinator
 ConcreteType
 config
 Config
+confignew
 const
 consts
 constant's

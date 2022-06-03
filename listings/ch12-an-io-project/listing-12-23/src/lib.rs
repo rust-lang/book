@@ -14,7 +14,7 @@ pub struct Config {
 
 // ANCHOR: here
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
+    pub fn build(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
