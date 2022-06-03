@@ -89,14 +89,14 @@ the result of running that test is `ok`. The overall summary `test result: ok.`
 means that all the tests passed, and the portion that reads `1 passed; 0
 failed` totals the number of tests that passed or failed.
 
-It's possible to mark a test as ignored so it doesn't run in a particular
-instance; we'll cover that in the [“Ignoring Some Tests Unless Specifically
+It’s possible to mark a test as ignored so it doesn’t run in a particular
+instance; we’ll cover that in the [“Ignoring Some Tests Unless Specifically
 Requested”][ignoring]<!-- ignore --> section later in this chapter. Because we
-haven't done that here, the summary shows `0 ignored`. We can also pass an
+haven’t done that here, the summary shows `0 ignored`. We can also pass an
 argument to the `cargo test` command to run only tests whose name matches a
-string; this is called filtering and we'll cover that in the [“Running a Subset
-of Tests by Name”][subset]<!-- ignore --> section. We also haven’t filtered the
-tests being run, so the end of the summary shows `0 filtered out`.
+string; this is called *filtering* and we’ll cover that in the [“Running a
+Subset of Tests by Name”][subset]<!-- ignore --> section. We also haven’t
+filtered the tests being run, so the end of the summary shows `0 filtered out`.
 
 The `0 measured` statistic is for benchmark tests that measure performance.
 Benchmark tests are, as of this writing, only available in nightly Rust. See
@@ -126,7 +126,7 @@ Then run `cargo test` again. The output now shows `exploration` instead of
 {{#include ../listings/ch11-writing-automated-tests/no-listing-01-changing-test-name/output.txt}}
 ```
 
-Now we'll add another test, but this time we’ll make a test that fails! Tests
+Now we’ll add another test, but this time we’ll make a test that fails! Tests
 fail when something in the test function panics. Each test is run in a new
 thread, and when the main thread sees that a test thread has died, the test is
 marked as failed. In Chapter 9, we talked about how the simplest way to panic
@@ -470,8 +470,8 @@ too large.
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-09/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 11-9: Testing for a `panic!` with a particular
-panic message</span>
+<span class="caption">Listing 11-9: Testing for a `panic!` with a panic message
+containing a specified substring</span>
 
 This test will pass because the value we put in the `should_panic` attribute’s
 `expected` parameter is a substring of the message that the `Guess::new`
