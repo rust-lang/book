@@ -11,7 +11,7 @@ $ cd minigrep
 ```
 
 The first task is to make `minigrep` accept its two command line arguments: the
-filename and a string to search for. That is, we want to be able to run our
+file path and a string to search for. That is, we want to be able to run our
 program with `cargo run`, two hyphens to indicate the following arguments are
 for our program rather than for `cargo`, a string to search for, and a path to
 a file to search in, like so:
@@ -75,8 +75,8 @@ want a vector of strings. Although we very rarely need to annotate types in
 Rust, `collect` is one function you do often need to annotate because Rust
 isn’t able to infer the kind of collection you want.
 
-Finally, we print the vector using the debug formatter, `:?`. Let’s try running
-the code first with no arguments and then with two arguments:
+Finally, we print the vector using the debug macro. Let’s try running the code
+first with no arguments and then with two arguments:
 
 ```console
 {{#include ../listings/ch12-an-io-project/listing-12-01/output.txt}}
@@ -108,14 +108,14 @@ we can use the values throughout the rest of the program. We do that in Listing
 ```
 
 <span class="caption">Listing 12-2: Creating variables to hold the query
-argument and filename argument</span>
+argument and file path argument</span>
 
 As we saw when we printed the vector, the program’s name takes up the first
 value in the vector at `args[0]`, so we’re starting arguments at index `1`. The
 first argument `minigrep` takes is the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
-will be the filename, so we put a reference to the second argument in the
-variable `filename`.
+will be the file path, so we put a reference to the second argument in the
+variable `file_path`.
 
 We temporarily print the values of these variables to prove that the code is
 working as we intend. Let’s run this program again with the arguments `test`

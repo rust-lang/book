@@ -18,8 +18,8 @@ an ideal language for creating command line tools, so for our project, we’ll
 make our own version of the classic command line search tool `grep`
 (**g**lobally search a **r**egular **e**xpression and **p**rint). In the
 simplest use case, `grep` searches a specified file for a specified string. To
-do so, `grep` takes as its arguments a filename and a string. Then it reads the
-file, finds lines in that file that contain the string argument, and prints
+do so, `grep` takes as its arguments a file path and a string. Then it reads
+the file, finds lines in that file that contain the string argument, and prints
 those lines.
 
 Along the way, we’ll show how to make our command line tool use the terminal
@@ -59,7 +59,7 @@ $ cd minigrep
 ```
 
 The first task is to make `minigrep` accept its two command line arguments: the
-filename and a string to search for. That is, we want to be able to run our
+file path and a string to search for. That is, we want to be able to run our
 program with `cargo run`, two hyphens to indicate the following arguments are
 for our program rather than for `cargo`, a string to search for, and a path to
 a file to search in, like so:
@@ -115,7 +115,7 @@ use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
+    dbg!(args);
 }
 ```
 
@@ -164,8 +164,8 @@ want a vector of strings. Although we very rarely need to annotate types in
 Rust, `collect` is one function you do often need to annotate because Rust
 isn’t able to infer the kind of collection you want.
 
-Finally, we print the vector using the debug formatter, `:?`. Let’s try running
-the code first with no arguments and then with two arguments:
+Finally, we print the vector using the debug macro. Let’s try running the code
+first with no arguments and then with two arguments:
 
 ```
 $ cargo run
@@ -203,22 +203,22 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let query = &args[1];
-    let filename = &args[2];
+    let file_path = &args[2];
 
     println!("Searching for {}", query);
-    println!("In file {}", filename);
+    println!("In file {}", file_path);
 }
 ```
 
-Listing 12-2: Creating variables to hold the query argument and filename
+Listing 12-2: Creating variables to hold the query argument and file path
 argument
 
 As we saw when we printed the vector, the program’s name takes up the first
 value in the vector at `args[0]`, so we’re starting arguments at index `1`. The
 first argument `minigrep` takes is the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
-will be the filename, so we put a reference to the second argument in the
-variable `filename`.
+will be the file path, so we put a reference to the second argument in the
+variable `file_path`.
 
 We temporarily print the values of these variables to prove that the code is
 working as we intend. Let’s run this program again with the arguments `test`
@@ -241,7 +241,7 @@ capabilities instead.
 
 ## Reading a File
 
-Now we’ll add functionality to read the file specified in the `filename`
+Now we’ll add functionality to read the file specified in the `file_path`
 argument. First, we need a sample file to test it with: we’ll use a file with a
 small amount of text over multiple lines with some repeated words. Listing 12-3
 has an Emily Dickinson poem that will work well! Create a file called
@@ -275,12 +275,12 @@ use std::env;
 
 fn main() {
     // --snip--
-    println!("In file {}", filename);
+    println!("In file {}", file_path);
 
-    [2] let contents = fs::read_to_string(filename)
-        .expect("Something went wrong reading the file");
+    [2] let contents = fs::read_to_string(file_path)
+        .expect("Should have been able to read the file");
 
-    [3] println!("With text:\n{}", contents);
+    [3] println!("With text:\n{contents}");
 }
 ```
 
@@ -289,7 +289,7 @@ Listing 12-4: Reading the contents of the file specified by the second argument
 First, we bring in a relevant part of the standard library with a `use`
 statement: we need `std::fs` to handle files [1].
 
-In `main`, the new statement `fs::read_to_string` takes the `filename`, opens
+In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
 that file, and returns a `std::io::Result<String>` of the file’s contents [2].
 
 <!---
@@ -348,7 +348,7 @@ reason about, harder to test, and harder to change without breaking one of its
 parts. It’s best to separate functionality so each function is responsible for
 one task.
 
-This issue also ties into the second problem: although `query` and `filename`
+This issue also ties into the second problem: although `query` and `file_path`
 are configuration variables to our program, variables like `contents` are used
 to perform the program’s logic. The longer `main` becomes, the more variables
 we’ll need to bring into scope; the more variables we have in scope, the harder
@@ -356,10 +356,10 @@ it will be to keep track of the purpose of each. It’s best to group the
 configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
-reading the file fails, but the error message just prints `Something went wrong
-reading the file`. Reading a file can fail in a number of ways: for example,
-the file could be missing, or we might not have permission to open it. Right
-now, regardless of the situation, we’d print the same error message for
+reading the file fails, but the error message just prints `Should have been
+able to read the file`. Reading a file can fail in a number of ways: for
+example, the file could be missing, or we might not have permission to open it.
+Right now, regardless of the situation, we’d print the same error message for
 everything, which wouldn’t give the user any information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
@@ -415,16 +415,16 @@ Filename: src/main.rs
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let (query, filename) = parse_config(&args);
+    let (query, file_path) = parse_config(&args);
 
     // --snip--
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
     let query = &args[1];
-    let filename = &args[2];
+    let file_path = &args[2];
 
-    (query, filename)
+    (query, file_path)
 }
 ```
 
@@ -432,11 +432,11 @@ Listing 12-5: Extracting a `parse_config` function from `main`
 
 We’re still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
-argument value at index 2 to the variable `filename` within the `main`
+argument value at index 2 to the variable `file_path` within the `main`
 function, we pass the whole vector to the `parse_config` function. The
 `parse_config` function then holds the logic that determines which argument
 goes in which variable and passes the values back to `main`. We still create
-the `query` and `filename` variables in `main`, but `main` no longer has the
+the `query` and `file_path` variables in `main`, but `main` no longer has the
 responsibility of determining how the command line arguments and variables
 correspond.
 
@@ -472,24 +472,24 @@ fn main() {
     [1] let config = parse_config(&args);
 
     println!("Searching for {}", config.query[2]);
-    println!("In file {}", config.filename[3]);
+    println!("In file {}", config.file_path[3]);
 
-    let contents = fs::read_to_string(config.filename[4])
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.file_path[4])
+        .expect("Should have been able to read the file");
 
     // --snip--
 }
 
 [5] struct Config {
     query: String,
-    filename: String,
+    file_path: String,
 }
 
 [6] fn parse_config(args: &[String]) -> Config {
     [7] let query = args[1].clone();
-    [8] let filename = args[2].clone();
+    [8] let file_path = args[2].clone();
 
-    Config { query, filename }
+    Config { query, file_path }
 }
 ```
 
@@ -497,7 +497,7 @@ Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
 struct
 
 We’ve added a struct named `Config` defined to have fields named `query` and
-`filename` [5]. The signature of `parse_config` now indicates that it returns a
+`file_path` [5]. The signature of `parse_config` now indicates that it returns a
 `Config` value [6]. In the body of `parse_config`, where we used to return
 string slices that reference `String` values in `args`, we now define `Config`
 to contain owned `String` values. The `args` variable in `main` is the owner of
@@ -521,7 +521,7 @@ trade-off.
 > Chapter 13, you’ll learn how to use more efficient
 > methods in this type of situation. But for now, it’s okay to copy a few
 > strings to continue making progress because you’ll make these copies only
-> once and your filename and query string are very small. It’s better to have
+> once and your file path and query string are very small. It’s better to have
 > a working program that’s a bit inefficient than to try to hyperoptimize code
 > on your first pass. As you become more experienced with Rust, it’ll be
 > easier to start with the most efficient solution, but for now, it’s
@@ -529,10 +529,10 @@ trade-off.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config` [1], and we updated the code that
-previously used the separate `query` and `filename` variables so it now uses
+previously used the separate `query` and `file_path` variables so it now uses
 the fields on the `Config` struct instead [2][3][4].
 
-Now our code more clearly conveys that `query` and `filename` are related and
+Now our code more clearly conveys that `query` and `file_path` are related and
 that their purpose is to configure how the program will work. Any code that
 uses these values knows to find them in the `config` instance in the fields
 named for their purpose.
@@ -541,9 +541,9 @@ named for their purpose.
 
 So far, we’ve extracted the logic responsible for parsing the command line
 arguments from `main` and placed it in the `parse_config` function. Doing so
-helped us to see that the `query` and `filename` values were related and that
+helped us to see that the `query` and `file_path` values were related and that
 relationship should be conveyed in our code. We then added a `Config` struct to
-name the related purpose of `query` and `filename` and to be able to return the
+name the related purpose of `query` and `file_path` and to be able to return the
 values’ names as struct field names from the `parse_config` function.
 
 So now that the purpose of the `parse_config` function is to create a `Config`
@@ -571,9 +571,9 @@ fn main() {
 [2] impl Config {
     [3] fn new(args: &[String]) -> Config {
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let file_path = args[2].clone();
 
-        Config { query, filename }
+        Config { query, file_path }
     }
 }
 ```
@@ -693,9 +693,9 @@ impl Config {
         }
 
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let file_path = args[2].clone();
 
-        Ok(Config { query, filename })
+        Ok(Config { query, file_path })
     }
 }
 ```
@@ -746,7 +746,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     [2] let config = Config::build(&args).unwrap_or_else([3]|err[4]| {
-        [5] println!("Problem parsing arguments: {}", err);
+        [5] println!("Problem parsing arguments: {err}");
         [6] process::exit(1);
     });
 
@@ -808,16 +808,16 @@ fn main() {
     // --snip--
 
     println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
+    println!("In file {}", config.file_path);
 
     run(config);
 }
 
 fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
 
-    println!("With text:\n{}", contents);
+    println!("With text:\n{contents}");
 }
 
 // --snip--
@@ -848,9 +848,9 @@ Filename: src/main.rs
 // --snip--
 
 [2] fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?[3];
+    let contents = fs::read_to_string(config.file_path)?[3];
 
-    println!("With text:\n{}", contents);
+    println!("With text:\n{contents}");
 
     [4] Ok(())
 }
@@ -912,10 +912,10 @@ fn main() {
     // --snip--
 
     println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
+    println!("In file {}", config.file_path);
 
     if let Err(e) = run(config) {
-        println!("Application error: {}", e);
+        println!("Application error: {e}");
 
         process::exit(1);
     }
@@ -958,7 +958,7 @@ use std::fs;
 
 pub struct Config {
     pub query: String,
-    pub filename: String,
+    pub file_path: String,
 }
 
 impl Config {
@@ -1288,10 +1288,10 @@ Filename: src/lib.rs
 
 ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
+    let contents = fs::read_to_string(config.file_path)?;
 
     for line in search(&config.query, &contents) {
-        println!("{}", line);
+        println!("{line}");
     }
 
     Ok(())
@@ -1512,7 +1512,7 @@ Filename: src/lib.rs
 ```
 pub struct Config {
     pub query: String,
-    pub filename: String,
+    pub file_path: String,
     pub ignore_case: bool,
 }
 ```
@@ -1526,7 +1526,7 @@ Filename: src/lib.rs
 
 ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
+    let contents = fs::read_to_string(config.file_path)?;
 
     let results = if config.ignore_case {
         search_case_insensitive(&config.query, &contents)
@@ -1535,7 +1535,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     };
 
     for line in results {
-        println!("{}", line);
+        println!("{line}");
     }
 
     Ok(())
@@ -1565,13 +1565,13 @@ impl Config {
         }
 
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let file_path = args[2].clone();
 
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 
         Ok(Config {
             query,
-            filename,
+            file_path,
             ignore_case,
         })
     }
@@ -1699,7 +1699,7 @@ stream so we can still see error messages on the screen even if we redirect the
 standard output stream to a file. Our program is not currently well-behaved:
 we’re about to see that it saves the error message output to a file instead!
 
-To demonstrate this behavior, we’ll run the program with `>` and the filename,
+To demonstrate this behavior, we’ll run the program with `>` and the file_path,
 *output.txt*, that we want to redirect the standard output stream to. We won’t
 pass any arguments, which should cause an error:
 
@@ -1736,12 +1736,12 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::build(&args).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
+        eprintln!("Problem parsing arguments: {err}");
         process::exit(1);
     });
 
     if let Err(e) = minigrep::run(config) {
-        eprintln!("Application error: {}", e);
+        eprintln!("Application error: {e}");
 
         process::exit(1);
     }

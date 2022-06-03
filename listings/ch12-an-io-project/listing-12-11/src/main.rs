@@ -10,22 +10,22 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        println!("Problem parsing arguments: {err}");
         process::exit(1);
     });
 
     // ANCHOR: here
     println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
+    println!("In file {}", config.file_path);
 
     run(config);
 }
 
 fn run(config: Config) {
-    let contents = fs::read_to_string(config.filename)
-        .expect("Something went wrong reading the file");
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file");
 
-    println!("With text:\n{}", contents);
+    println!("With text:\n{contents}");
 }
 
 // --snip--
@@ -33,7 +33,7 @@ fn run(config: Config) {
 
 struct Config {
     query: String,
-    filename: String,
+    file_path: String,
 }
 
 impl Config {
@@ -43,8 +43,8 @@ impl Config {
         }
 
         let query = args[1].clone();
-        let filename = args[2].clone();
+        let file_path = args[2].clone();
 
-        Ok(Config { query, filename })
+        Ok(Config { query, file_path })
     }
 }

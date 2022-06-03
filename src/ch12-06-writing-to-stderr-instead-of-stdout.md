@@ -24,7 +24,7 @@ stream so we can still see error messages on the screen even if we redirect the
 standard output stream to a file. Our program is not currently well-behaved:
 we’re about to see that it saves the error message output to a file instead!
 
-To demonstrate this behavior, we’ll run the program with `>` and the filename,
+To demonstrate this behavior, we’ll run the program with `>` and the file path,
 *output.txt*, that we want to redirect the standard output stream to. We won’t
 pass any arguments, which should cause an error:
 

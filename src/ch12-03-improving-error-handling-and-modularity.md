@@ -9,7 +9,7 @@ reason about, harder to test, and harder to change without breaking one of its
 parts. It’s best to separate functionality so each function is responsible for
 one task.
 
-This issue also ties into the second problem: although `query` and `filename`
+This issue also ties into the second problem: although `query` and `file_path`
 are configuration variables to our program, variables like `contents` are used
 to perform the program’s logic. The longer `main` becomes, the more variables
 we’ll need to bring into scope; the more variables we have in scope, the harder
@@ -17,10 +17,10 @@ it will be to keep track of the purpose of each. It’s best to group the
 configuration variables into one structure to make their purpose clear.
 
 The third problem is that we’ve used `expect` to print an error message when
-reading the file fails, but the error message just prints `Something went wrong
-reading the file`. Reading a file can fail in a number of ways: for example,
-the file could be missing, or we might not have permission to open it. Right
-now, regardless of the situation, we’d print the same error message for
+reading the file fails, but the error message just prints `Should have been
+able to read the file`. Reading a file can fail in a number of ways: for
+example, the file could be missing, or we might not have permission to open it.
+Right now, regardless of the situation, we’d print the same error message for
 everything, which wouldn’t give the user any information!
 
 Fourth, we use `expect` repeatedly to handle different errors, and if the user
@@ -81,11 +81,11 @@ function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 
 We’re still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
-argument value at index 2 to the variable `filename` within the `main`
+argument value at index 2 to the variable `file_path` within the `main`
 function, we pass the whole vector to the `parse_config` function. The
 `parse_config` function then holds the logic that determines which argument
 goes in which variable and passes the values back to `main`. We still create
-the `query` and `filename` variables in `main`, but `main` no longer has the
+the `query` and `file_path` variables in `main`, but `main` no longer has the
 responsibility of determining how the command line arguments and variables
 correspond.
 
@@ -122,7 +122,7 @@ Listing 12-6 shows the improvements to the `parse_config` function.
 instance of a `Config` struct</span>
 
 We’ve added a struct named `Config` defined to have fields named `query` and
-`filename`. The signature of `parse_config` now indicates that it returns a
+`file_path`. The signature of `parse_config` now indicates that it returns a
 `Config` value. In the body of `parse_config`, where we used to return
 string slices that reference `String` values in `args`, we now define `Config`
 to contain owned `String` values. The `args` variable in `main` is the owner of
@@ -145,7 +145,7 @@ giving up a little performance to gain simplicity is a worthwhile trade-off.
 > [Chapter 13][ch13]<!-- ignore -->, you’ll learn how to use more efficient
 > methods in this type of situation. But for now, it’s okay to copy a few
 > strings to continue making progress because you’ll make these copies only
-> once and your filename and query string are very small. It’s better to have
+> once and your file path and query string are very small. It’s better to have
 > a working program that’s a bit inefficient than to try to hyperoptimize code
 > on your first pass. As you become more experienced with Rust, it’ll be
 > easier to start with the most efficient solution, but for now, it’s
@@ -153,10 +153,10 @@ giving up a little performance to gain simplicity is a worthwhile trade-off.
 
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config`, and we updated the code that
-previously used the separate `query` and `filename` variables so it now uses
+previously used the separate `query` and `file_path` variables so it now uses
 the fields on the `Config` struct instead.
 
-Now our code more clearly conveys that `query` and `filename` are related and
+Now our code more clearly conveys that `query` and `file_path` are related and
 that their purpose is to configure how the program will work. Any code that
 uses these values knows to find them in the `config` instance in the fields
 named for their purpose.
@@ -165,9 +165,9 @@ named for their purpose.
 
 So far, we’ve extracted the logic responsible for parsing the command line
 arguments from `main` and placed it in the `parse_config` function. Doing so
-helped us to see that the `query` and `filename` values were related and that
+helped us to see that the `query` and `file_path` values were related and that
 relationship should be conveyed in our code. We then added a `Config` struct to
-name the related purpose of `query` and `filename` and to be able to return the
+name the related purpose of `query` and `file_path` and to be able to return the
 values’ names as struct field names from the `parse_config` function.
 
 So now that the purpose of the `parse_config` function is to create a `Config`
