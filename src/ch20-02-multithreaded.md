@@ -301,9 +301,9 @@ Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
 to see what the generated docs for `new` look like!
 
 Instead of adding the `assert!` macro as we’ve done here, we could make `new`
-return a `Result` like we did with `Config::new` in the I/O project in Listing
-12-9. But we’ve decided in this case that trying to create a thread pool
-without any threads should be an unrecoverable error. If you’re feeling
+return a `Result` like we did with `Config::build` in the I/O project in
+Listing 12-9. But we’ve decided in this case that trying to create a thread
+pool without any threads should be an unrecoverable error. If you’re feeling
 ambitious, try to write a version of `new` with the following signature to
 compare both versions:
 
