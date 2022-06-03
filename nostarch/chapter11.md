@@ -142,13 +142,12 @@ the result of running that test is `ok` [2]. The overall summary `test result:
 ok.` [3] means that all the tests passed, and the portion that reads `1 passed;
 0 failed` totals the number of tests that passed or failed.
 
-
-It's possible to mark a test as ignored so it doesn't run in a particular
-instance; we'll cover that in the “Ignoring Some Tests Unless Specifically
-Requested” section later in this chapter. Because we haven't done that here,
+It’s possible to mark a test as ignored so it doesn’t run in a particular
+instance; we’ll cover that in the “Ignoring Some Tests Unless Specifically
+Requested” section later in this chapter. Because we haven’t done that here,
 the summary shows `0 ignored`. We can also pass an argument to the `cargo test`
 command to run only tests whose name matches a string; this is called *filtering*
-and we'll cover that in the “Running a Subset of Tests by Name” section.
+and we’ll cover that in the “Running a Subset of Tests by Name” section.
 Here we haven’t filtered the tests being run, so the end of the summary shows `0
 filtered out`.
 
@@ -190,7 +189,7 @@ test tests::exploration ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
 ```
 
-Now we'll add another test, but this time we’ll make a test that fails! Tests
+Now we’ll add another test, but this time we’ll make a test that fails! Tests
 fail when something in the test function panics. Each test is run in a new
 thread, and when the main thread sees that a test thread has died, the test is
 marked as failed. In Chapter 9, we talked about how the simplest way to panic
@@ -253,9 +252,6 @@ the “Controlling How Tests Are Run” section.
 
 The summary line displays at the end [4]: overall, our test result is `FAILED`.
 We had one test pass and one test fail.
-
-<!-- so to pass overall every test must pass? /LC -->
-<!-- Yes /Carol -->
 
 Now that you’ve seen what the test results look like in different scenarios,
 let’s look at some macros other than `panic!` that are useful in tests.
@@ -767,14 +763,15 @@ mod tests {
     use super::*;
 
     #[test]
-    #[should_panic(expected = "Guess value must be less than or equal to 100")]
+    #[should_panic(expected = "less than or equal to 100")]
     fn greater_than_100() {
         Guess::new(200);
     }
 }
 ```
 
-Listing 11-9: Testing for a `panic!` with a particular panic message
+Listing 11-9: Testing for a `panic!` with a panic message containing a
+specified substring
 
 This test will pass because the value we put in the `should_panic` attribute’s
 `expected` parameter is a substring of the message that the `Guess::new`
@@ -793,6 +790,8 @@ expected/actual of unit tests.
 (let alone how .expect(..) works. It seems we use the word expect in different
 ways around the language/library )
 /JT --->
+<!-- I've changed the example to be more clearly a substring specified, and
+changed the caption as well. Hope that makes it extra clear! /Carol -->
 
 To see what happens when a `should_panic` test with an `expected` message
 fails, let’s again introduce a bug into our code by swapping the bodies of the
@@ -819,7 +818,7 @@ thread 'main' panicked at 'Guess value must be greater than or equal to 1, got 2
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 note: panic did not contain expected string
       panic message: `"Guess value must be greater than or equal to 1, got 200."`,
- expected substring: `"Guess value must be less than or equal to 100"`
+ expected substring: `"less than or equal to 100"`
 
 failures:
     tests::greater_than_100
@@ -1095,7 +1094,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; fini
 ```
 
 Only the test with the name `one_hundred` ran; the other two tests didn’t match
-that name. The test output lets us know we had more tests that didn't run by
+that name. The test output lets us know we had more tests that didn’t run by
 displaying `2 filtered out` at the end.
 
 We can’t specify the names of multiple tests in this way; only the first value
@@ -1506,3 +1505,7 @@ chapters to work on a project!
 We hint at doc tests but don't cover them. Should we have a section in this
 chapter about that? They're pretty handy.
 /JT --->
+<!-- We cover that in chapter 14, and there's a forward reference to that in
+"The Anatomy of a Test Function" section. I don't actually think most Rust
+developers will write doc tests; they're the most useful when writing open
+source libraries, which I think only a minority of developers do. /Carol -->
