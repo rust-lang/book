@@ -24,11 +24,10 @@ $ cd add
 ```
 
 Next, in the *add* directory, we create the *Cargo.toml* file that will
-configure the entire workspace. This file won’t have a `[package]` section or
-the metadata we’ve seen in other *Cargo.toml* files. Instead, it will start
-with a `[workspace]` section that will allow us to add members to the workspace
-by specifying the path to the package with our binary crate; in this case,
-that path is *adder*:
+configure the entire workspace. This file won’t have a `[package]` section.
+Instead, it will start with a `[workspace]` section that will allow us to add
+members to the workspace by specifying the path to the package with our binary
+crate; in this case, that path is *adder*:
 
 <span class="filename">Filename: Cargo.toml</span>
 

@@ -542,6 +542,7 @@ UnsafeCell
 unsafety
 unsized
 unsynchronized
+Unyank
 URIs
 UsefulType
 username
