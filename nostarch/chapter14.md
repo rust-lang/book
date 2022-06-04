@@ -125,18 +125,22 @@ Filename: src/lib.rs
 ///
 /// # Examples
 ///
-/// ```
+///
 /// let arg = 5;
 /// let answer = my_crate::add_one(arg);
 ///
 /// assert_eq!(6, answer);
-/// ```
+///
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
 ```
 
 Listing 14-1: A documentation comment for a function
+
+<!-- I removed two sets of ``` here because it was inverting the text and code
+formatting, but you may want to check that I have't changed meaning in the
+code! /LC -->
 
 Here, we give a description of what the `add_one` function does, start a
 section with the heading `Examples`, and then provide code that demonstrates
@@ -376,6 +380,13 @@ pub mod utils {
 }
 ```
 
+<!-- The example feels a tiny bit awkward. If you're
+going to use `pub use`, in my experience it's probably going
+to happen when you're pulling in definitions from sub-crates.
+In this one, we create modules that we export and also
+re-export symbols from those same modules. In practice,
+you'd probably use sub-crates or move the definitions around. /JT -->
+
 Listing 14-5: Adding `pub use` statements to re-export items
 
 The API documentation that `cargo doc` generates for this crate will now list
@@ -583,6 +594,16 @@ this go in a file that's part of the new crate version? /LC -->
 <!-- No, this is a command to run in the directory of a crate that has already
 been published to crates.io. Do you have suggestions on how to make this
 clearer? I've tried a bit above /Carol -->
+<!-- Ah, I see! I think this is clear. JT, does this read okay to you? /LC -->
+<!-- I think this makes sense. Maybe you could make it clear in the example
+that you're in the project directory?
+
+```
+my_project> cargo yank --vers 1.0.1
+```
+and then show the message that cargo returns when the version is yanked to
+help key them in.
+/JT -->
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
 to start depending on a version again:
@@ -625,6 +646,13 @@ the metadata we’ve seen in other *Cargo.toml* files. Instead, it will start
 with a `[workspace]` section that will allow us to add members to the workspace
 by specifying the path to the package with our binary crate; in this case,
 that path is *adder*:
+
+<!-- You can have metadata in the top-level Cargo.toml along with the
+`[workspace]` section. We use this in Nushell, for example:
+
+https://github.com/nushell/nushell/blob/main/Cargo.toml
+
+ /JT -->
 
 Filename: Cargo.toml
 
