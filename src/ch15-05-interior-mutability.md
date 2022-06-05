@@ -4,13 +4,14 @@
 data even when there are immutable references to that data; normally, this
 action is disallowed by the borrowing rules. To mutate data, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. We haven’t yet covered unsafe code that indicates we're
-checking the rules manually instead of the compiler checking them for us; we
-will discuss unsafe code more in Chapter 19. We can use types that use the
-interior mutability pattern only when we can ensure that the borrowing rules
-will be followed at runtime, even though the compiler can’t guarantee that. The
-`unsafe` code involved is then wrapped in a safe API, and the outer type is
-still immutable.
+mutation and borrowing. mutation and borrowing. Unsafe code indicates to the
+compiler that we’re checking the rules manually instead of relying on the
+compiler to check them for us; we will discuss unsafe code more in Chapter 19.
+
+We can use types that use the interior mutability pattern only when we can
+ensure that the borrowing rules will be followed at runtime, even though the
+compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
+safe API, and the outer type is still immutable.
 
 Let’s explore this concept by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
@@ -336,13 +337,8 @@ immutable `List` value. But we can use the methods on `RefCell<T>` that provide
 access to its interior mutability so we can modify our data when we need to.
 The runtime checks of the borrowing rules protect us from data races, and it’s
 sometimes worth trading a bit of speed for this flexibility in our data
-structures.
-
-The standard library has other types that provide interior mutability, such as
-`Cell<T>`, which is similar except that instead of giving references to the
-inner value, the value is copied in and out of the `Cell<T>`. There’s also
-`Mutex<T>`, which offers interior mutability that’s safe to use across threads;
-we’ll discuss its use in Chapter 16. Check out the standard library docs for
-more details on the differences between these types.
+structures. Note that `RefCell<T>` does not work for multithreaded code!
+`Mutex<T>` is the thread-safe version of `RefCell<T>` and we’ll discuss
+`Mutex<T>` in Chapter 16.
 
 [wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator

@@ -192,7 +192,7 @@ Listing 15-9.
 *Deref coercion* converts a reference to a type that implements the `Deref`
 trait into a reference to another type. For example, deref coercion can convert
 `&String` to `&str` because `String` implements the `Deref` trait such that it
-returns `&str`. Deref conversion is a convenience Rust performs on arguments to
+returns `&str`. Deref coercion is a convenience Rust performs on arguments to
 functions and methods, and works only on types that implement the `Deref`
 trait. It happens automatically when we pass a reference to a particular type’s
 value as an argument to a function or method that doesn’t match the parameter

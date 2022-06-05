@@ -1580,7 +1580,7 @@ access to its interior mutability so we can modify our data when we need to.
 The runtime checks of the borrowing rules protect us from data races, and it’s
 sometimes worth trading a bit of speed for this flexibility in our data
 structures. Note that `RefCell<T>` does not work for multithreaded code!
-`Mutex<T>` is the threadsafe version of `RefCell<T>` and we’ll discuss
+`Mutex<T>` is the thread-safe version of `RefCell<T>` and we’ll discuss
 `Mutex<T>` in Chapter 16.
 
 <!-- While we mention threading a little bit, I think we should take a little
