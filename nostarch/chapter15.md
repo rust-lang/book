@@ -606,7 +606,7 @@ Filename: src/main.rs
 
 ```
 fn hello(name: &str) {
-    println!("Hello, {}!", name);
+    println!("Hello, {name}!");
 }
 ```
 
