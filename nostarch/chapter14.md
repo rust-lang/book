@@ -120,7 +120,7 @@ for an `add_one` function in a crate named `my_crate`.
 
 Filename: src/lib.rs
 
-```
+````
 /// Adds one to the number given.
 ///
 /// # Examples
@@ -134,9 +134,16 @@ Filename: src/lib.rs
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
-```
+````
 
 Listing 14-1: A documentation comment for a function
+
+<!-- I removed two sets of ``` here because it was inverting the text and code
+formatting, but you may want to check that I have't changed meaning in the
+code! /LC -->
+<!-- Yeah, those need to be in there. It's definitely weird that it's a code
+block inside of a code block-- I think I've fixed it by adding more ` around
+the outer block, but I'll check it again when we're in Word. /Carol -->
 
 Here, we give a description of what the `add_one` function does, start a
 section with the heading `Examples`, and then provide code that demonstrates
@@ -376,6 +383,15 @@ pub mod utils {
 }
 ```
 
+<!-- The example feels a tiny bit awkward. If you're
+going to use `pub use`, in my experience it's probably going
+to happen when you're pulling in definitions from sub-crates.
+In this one, we create modules that we export and also
+re-export symbols from those same modules. In practice,
+you'd probably use sub-crates or move the definitions around. /JT -->
+<!-- I don't want to get into sub-crates here, but I've added a sentence about
+this common usage in the second-to-last paragraph of this section. /Carol -->
+
 Listing 14-5: Adding `pub use` statements to re-export items
 
 The API documentation that `cargo doc` generates for this crate will now list
@@ -406,7 +422,9 @@ Listing 14-6: A program using the re-exported items from the `art` crate
 
 In cases where there are many nested modules, re-exporting the types at the top
 level with `pub use` can make a significant difference in the experience of
-people who use the crate.
+people who use the crate. Another common use of `pub use` is to re-export
+definitions of a dependency in the current crate to make that crate's
+definitions part of your crate’s public API.
 
 Creating a useful public API structure is more of an art than a science, and
 you can iterate to find the API that works best for your users. Choosing `pub
@@ -572,10 +590,14 @@ yank means that all projects with a *Cargo.lock* will not break, and any future
 
 To yank a version of a crate, in the directory of the crate that you’ve
 previously published, run `cargo yank` and specify which version you want to
-yank:
+yank. For example, if we've published a crate named `guessing_game` version
+1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd
+run:
 
 ```
 $ cargo yank --vers 1.0.1
+    Updating crates.io index
+        Yank guessing_game:1.0.1
 ```
 
 <!-- so we run this on a crate, then load that crate onto crates.io? Or does
@@ -583,12 +605,28 @@ this go in a file that's part of the new crate version? /LC -->
 <!-- No, this is a command to run in the directory of a crate that has already
 been published to crates.io. Do you have suggestions on how to make this
 clearer? I've tried a bit above /Carol -->
+<!-- Ah, I see! I think this is clear. JT, does this read okay to you? /LC -->
+<!-- I think this makes sense. Maybe you could make it clear in the example
+that you're in the project directory?
+
+```
+my_project> cargo yank --vers 1.0.1
+```
+and then show the message that cargo returns when the version is yanked to
+help key them in.
+/JT -->
+<!-- We haven't used that notation anywhere else in the book, of showing the
+current directory in the prompt. I think showing the output is a good idea
+though, so I've added that above and made the introduction to the scenario more
+concrete. /Carol-->
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
 to start depending on a version again:
 
 ```
 $ cargo yank --vers 1.0.1 --undo
+    Updating crates.io index
+      Unyank guessing_game_:1.0.1
 ```
 
 A yank *does not* delete any code. It cannot, for example, delete accidentally
@@ -620,11 +658,18 @@ $ cd add
 ```
 
 Next, in the *add* directory, we create the *Cargo.toml* file that will
-configure the entire workspace. This file won’t have a `[package]` section or
-the metadata we’ve seen in other *Cargo.toml* files. Instead, it will start
-with a `[workspace]` section that will allow us to add members to the workspace
-by specifying the path to the package with our binary crate; in this case,
-that path is *adder*:
+configure the entire workspace. This file won’t have a `[package]` section.
+Instead, it will start with a `[workspace]` section that will allow us to add
+members to the workspace by specifying the path to the package with our binary
+crate; in this case, that path is *adder*:
+
+<!-- You can have metadata in the top-level Cargo.toml along with the
+`[workspace]` section. We use this in Nushell, for example:
+
+https://github.com/nushell/nushell/blob/main/Cargo.toml
+
+ /JT -->
+<!-- Fixed! /Carol -->
 
 Filename: Cargo.toml
 
@@ -745,8 +790,7 @@ use add_one;
 fn main() {
     let num = 10;
     println!(
-        "Hello, world! {} plus one is {}!",
-        num,
+        "Hello, world! {num} plus one is {}!",
         add_one::add_one(num)
     );
 }

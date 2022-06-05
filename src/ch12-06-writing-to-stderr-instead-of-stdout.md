@@ -24,7 +24,7 @@ stream so we can still see error messages on the screen even if we redirect the
 standard output stream to a file. Our program is not currently well-behaved:
 we’re about to see that it saves the error message output to a file instead!
 
-To demonstrate this behavior, we’ll run the program with `>` and the filename,
+To demonstrate this behavior, we’ll run the program with `>` and the file path,
 *output.txt*, that we want to redirect the standard output stream to. We won’t
 pass any arguments, which should cause an error:
 
@@ -78,7 +78,7 @@ Let’s run the program again with arguments that don’t cause an error but sti
 redirect standard output to a file, like so:
 
 ```console
-$ cargo run to poem.txt > output.txt
+$ cargo run -- to poem.txt > output.txt
 ```
 
 We won’t see any output to the terminal, and *output.txt* will contain our

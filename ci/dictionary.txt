@@ -83,6 +83,7 @@ combinator
 ConcreteType
 config
 Config
+confignew
 const
 consts
 constant's
@@ -541,6 +542,7 @@ UnsafeCell
 unsafety
 unsized
 unsynchronized
+Unyank
 URIs
 UsefulType
 username

@@ -138,10 +138,11 @@ more complex situations involving recursive types.
 #### More Information About the Cons List
 
 A *cons list* is a data structure that comes from the Lisp programming language
-and its dialects and is made up of nested pairs. Its name comes from the `cons`
-function (short for “construct function”) in Lisp that constructs a new pair
-from its two arguments. By calling `cons` on a pair consisting of a value and
-another pair, we can construct cons lists made up of recursive pairs.
+and its dialects and is made up of nested pairs, and is the Lisp version of a
+linked list. Its name comes from the `cons` function (short for “construct
+function”) in Lisp that constructs a new pair from its two arguments. By
+calling `cons` on a pair consisting of a value and another pair, we can
+construct cons lists made up of recursive pairs.
 
 <!-- can you add a direct definition of the cons list -- we
 have a definition for the cons function, but not a direct one for the list. I
@@ -149,6 +150,14 @@ assume the list is the result of the function, so is a recursive list of nested
 pairs? /LC -->
 <!-- There was a definition here, "These pairs containing pairs form a list",
 but I guess it wasn't clear enough. Is this better? /Carol -->
+<!-- JT, what do you think? I suppose what I wanted was to open with an idea of
+what the cons list is and what it's for -- is it right that it's a recursive
+list of nested pairs? /LC -->
+<!-- I think having the example pretty early on would help readers, though a
+cons list is a bit of a niche idea for developers. It's basically the lisp
+version of a linked list - maybe we use a linked list as the example? /JT -->
+<!-- I added the note about it being the Lisp version of a linked list above, I
+like that /Carol -->
 
 For example, here's a pseudocode representation of a cons list containing the
 list 1, 2, 3 with each pair in parentheses:
@@ -156,10 +165,6 @@ list 1, 2, 3 with each pair in parentheses:
 ```
 (1, (2, (3, Nil)))
 ```
-
-<!-- maybe here also show us a cons list -- not necessarily how to make one,
-but the actual list that's the result /LC -->
-<!-- Done! /Carol -->
 
 Each item in a cons list contains two elements: the value of the current item
 and the next item. The last item in the list contains only a value called `Nil`
@@ -214,8 +219,6 @@ The first `Cons` value holds `1` and another `List` value. This `List` value is
 another `Cons` value that holds `2` and another `List` value. This `List` value
 is one more `Cons` value that holds `3` and a `List` value, which is finally
 `Nil`, the non-recursive variant that signals the end of the list.
-
-<!-- I really like the use of the cons list as the example here /LC -->
 
 If we try to compile the code in Listing 15-3, we get the error shown in
 Listing 15-4:
@@ -371,11 +374,6 @@ A regular reference is a type of pointer, and one way to think of a pointer is
 as an arrow to a value stored somewhere else. In Listing 15-6, we create a
 reference to an `i32` value and then use the dereference operator to follow the
 reference to the value:
-<!-- is the data different to the value? I wasn't sure if the two things above
-were supposed to be doing different things? /LC -->
-<!-- I'm not sure what you mean by "two things above", but generally "value"
-and "data" are interchangeable. I switched "data" to "value" in this paragraph,
-does that fix the issue? /Carol -->
 
 Filename: src/main.rs
 
@@ -444,14 +442,6 @@ use the dereference operator to follow the box’s pointer in the same way that
 we did when `y` was a reference. Next, we’ll explore what is special about
 `Box<T>` that enables us to use the dereference operator by defining our own
 box type.
-<!-- is there a benefit to using this method -- a box rather than a reference
--- or is this just pure example? they seemed to be doing pretty much the same
-thing, I wasn't clear why you'd choose one over the other /LC -->
-<!-- This example is illustrating that the box and the reference behave the
-same in regards to the dereference operator. Differences and why to use `Box`
-are discussed before and after this section. I tried to clarify the purpose of
-this listing a bit in the paragraph just before the listing, does that help?
-/Carol -->
 
 ### Defining Our Own Smart Pointer
 
@@ -591,12 +581,16 @@ Listing 15-9.
 *Deref coercion* converts a reference to a type that implements the `Deref`
 trait into a reference to another type. For example, deref coercion can convert
 `&String` to `&str` because `String` implements the `Deref` trait such that it
-returns `&str`. Deref conversion is a convenience Rust performs on arguments to
+returns `&str`. Deref coercion is a convenience Rust performs on arguments to
 functions and methods, and works only on types that implement the `Deref`
 trait. It happens automatically when we pass a reference to a particular type’s
 value as an argument to a function or method that doesn’t match the parameter
 type in the function or method definition. A sequence of calls to the `deref`
 method converts the type we provided into the type the parameter needs.
+
+<!-- We use both "deref coercion" and "deref conversion" in the above. Might
+want to stick with just the first term as that's the more common one. /JT -->
+<!-- WHOOPS great catch! Fixed! /Carol -->
 
 Deref coercion was added to Rust so that programmers writing function and
 method calls don’t need to add as many explicit references and dereferences
@@ -612,7 +606,7 @@ Filename: src/main.rs
 
 ```
 fn hello(name: &str) {
-    println!("Hello, {}!", name);
+    println!("Hello, {name}!");
 }
 ```
 
@@ -688,10 +682,6 @@ implements mutability. The first case states that if you have a `&T`, and `T`
 implements `Deref` to some type `U`, you can get a `&U` transparently. The
 second case states that the same deref coercion happens for mutable references.
 
-<!-- the first two cases are the same as what? each other? I think so,
-so have edited as much, but wasn't sure /LC -->
-<!-- Yep! /Carol -->
-
 The third case is trickier: Rust will also coerce a mutable reference to an
 immutable one. But the reverse is *not* possible: immutable references will
 never coerce to mutable references. Because of the borrowing rules, if you have
@@ -710,9 +700,7 @@ The second trait important to the smart pointer pattern is `Drop`, which lets
 you customize what happens when a value is about to go out of scope. You can
 provide an implementation for the `Drop` trait on any type, and that code
 can be used to release resources like files or network connections.
-<!-- so we're saying Drop can be used in other contexts, this is just a
-convenient place to introduce it? /LC -->
-<!-- Yep! /Carol -->
+
 We’re introducing `Drop` in the context of smart pointers because the
 functionality of the `Drop` trait is almost always used when implementing a
 smart pointer. For example, when a `Box<T>` is dropped it will deallocate the
@@ -1111,12 +1099,10 @@ immutability restriction.
 data even when there are immutable references to that data; normally, this
 action is disallowed by the borrowing rules. To mutate data, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. We haven’t yet covered unsafe code that indicates we're
-checking the rules manually instead of the compiler checking them for us; we
-will discuss unsafe code more in Chapter 19.
-<!-- maybe quickly give a quick idea of what unsafe code means, at a really
-high level, to let them know how it helps in this situation /LC -->
-<!-- Done! /Carol -->
+mutation and borrowing. Unsafe code indicates to the compiler that we’re
+checking the rules manually instead of relying on the compiler to check them
+for us; we will discuss unsafe code more in Chapter 19.
+
 We can use types that use the interior mutability pattern only when we can
 ensure that the borrowing rules will be followed at runtime, even though the
 compiler can’t guarantee that. The `unsafe` code involved is then wrapped in a
@@ -1222,12 +1208,6 @@ an immutable value and see why that is useful.
 
 Sometimes during testing a programmer will use a type in place of another type,
 in order to observe particular behavior and assert it's implemented correctly.
-<!-- why do we use other types -- to test different types with the code? Or you
-mean they might use special types that offer particular functionality, like
-mock objects do? /LC -->
-<!-- I'm not sure I understand your question completely, but I've tried to
-clarify by completing the sentence you left and adding a bit after this spot--
-is it clearer now? /Carol -->
 This placeholder type is called a *test double*. Think of it in the sense of a
 "stunt double" in filmmaking, where a person steps in and substitutes for an
 actor to do a particular tricky scene. Test doubles stand in for other types
@@ -1599,14 +1579,22 @@ immutable `List` value. But we can use the methods on `RefCell<T>` that provide
 access to its interior mutability so we can modify our data when we need to.
 The runtime checks of the borrowing rules protect us from data races, and it’s
 sometimes worth trading a bit of speed for this flexibility in our data
-structures.
+structures. Note that `RefCell<T>` does not work for multithreaded code!
+`Mutex<T>` is the thread-safe version of `RefCell<T>` and we’ll discuss
+`Mutex<T>` in Chapter 16.
 
-The standard library has other types that provide interior mutability, such as
-`Cell<T>`, which is similar except that instead of giving references to the
-inner value, the value is copied in and out of the `Cell<T>`. There’s also
-`Mutex<T>`, which offers interior mutability that’s safe to use across threads;
-we’ll discuss its use in Chapter 16. Check out the standard library docs for
-more details on the differences between these types.
+<!-- While we mention threading a little bit, I think we should take a little
+time here to really underscore that this method does not work for multithread
+code. We could show an example of trying to share between threads and that
+it errors at compile time as a result. /JT -->
+<!-- I decided to make a stronger statement here about `RefCell<T>` not working
+in multithreaded code, and I moved up the mention of `Mutex<T>` from the
+paragraph that used to end this section. Then I removed the mention of
+`Cell<T>`, which is pretty rarely used. I don't really want to add an example
+here of trying to use `RefCell<T>` across threads because there'll be too much
+new code to explain that is going to be explained in the next chapter anyway,
+and the fix for the code will be switch to `Mutex<T>`, which is discussed in
+the next chapter. /Carol -->
 
 ## Reference Cycles Can Leak Memory
 
@@ -1738,9 +1726,6 @@ If you uncomment the last `println!` and run the program, Rust will try to
 print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
 overflows the stack.
 
-<!-- "in this case" meaning with the last print statement commented out? /LC -->
-<!-- Technically with both the println commented out and not. I've tried to
-clarify the purpose of this paragraph earlier /Carol -->
 Compared to a real-world program, the consequences creating a reference cycle
 in this example aren’t very dire: right after we create the reference cycle,
 the program ends. However, if a more complex program allocated lots of memory
@@ -1783,6 +1768,18 @@ paragraph I wasn't entirely sure. It would be good to have a high level
 succinct definition /LC -->
 <!-- I've moved the explanation that was in the next paragraph to this spot and
 modified it a bit, does this work? /Carol -->
+<!-- JT, is this defined clearly enough? /LC -->
+<!-- This is probably a topic that if you're familiar as a reader, you'll nod
+along and if you're not, you'll have to spend some time with the ideas in
+some sample programs for them to click.
+
+I was wondering - something we could try to help this is to take our cycle
+picture above and do another version, this time with a weak reference in it,
+showing that the count gained by the weak reference doesn't increment what it's
+pointing to. /JT -->
+<!-- Liz, what do you think about a diagram? I'm concerned about making it
+accurate enough but also clear and useful enough that readers familiar with
+this topic and new to this topic will get value from it. /Carol -->
 
 When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
 Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
