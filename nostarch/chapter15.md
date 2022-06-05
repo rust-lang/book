@@ -138,10 +138,11 @@ more complex situations involving recursive types.
 #### More Information About the Cons List
 
 A *cons list* is a data structure that comes from the Lisp programming language
-and its dialects and is made up of nested pairs. Its name comes from the `cons`
-function (short for “construct function”) in Lisp that constructs a new pair
-from its two arguments. By calling `cons` on a pair consisting of a value and
-another pair, we can construct cons lists made up of recursive pairs.
+and its dialects and is made up of nested pairs, and is the Lisp version of a
+linked list. Its name comes from the `cons` function (short for “construct
+function”) in Lisp that constructs a new pair from its two arguments. By
+calling `cons` on a pair consisting of a value and another pair, we can
+construct cons lists made up of recursive pairs.
 
 <!-- can you add a direct definition of the cons list -- we
 have a definition for the cons function, but not a direct one for the list. I
@@ -580,7 +581,7 @@ Listing 15-9.
 *Deref coercion* converts a reference to a type that implements the `Deref`
 trait into a reference to another type. For example, deref coercion can convert
 `&String` to `&str` because `String` implements the `Deref` trait such that it
-returns `&str`. Deref conversion is a convenience Rust performs on arguments to
+returns `&str`. Deref coercion is a convenience Rust performs on arguments to
 functions and methods, and works only on types that implement the `Deref`
 trait. It happens automatically when we pass a reference to a particular type’s
 value as an argument to a function or method that doesn’t match the parameter
@@ -703,7 +704,7 @@ can be used to release resources like files or network connections.
 We’re introducing `Drop` in the context of smart pointers because the
 functionality of the `Drop` trait is almost always used when implementing a
 smart pointer. For example, when a `Box<T>` is dropped it will deallocate the
-space on the heap that the box points to. `Drop` can of course also be used in other contexts.
+space on the heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
 or resources every time they finish using an instance those types. Examples
@@ -1098,9 +1099,9 @@ immutability restriction.
 data even when there are immutable references to that data; normally, this
 action is disallowed by the borrowing rules. To mutate data, the pattern uses
 `unsafe` code inside a data structure to bend Rust’s usual rules that govern
-mutation and borrowing. Unsafe code indicates to the compiler that we're
-checking the rules manually instead of relying on the compiler to check them for us; we
-will discuss unsafe code more in Chapter 19.
+mutation and borrowing. Unsafe code indicates to the compiler that we’re
+checking the rules manually instead of relying on the compiler to check them
+for us; we will discuss unsafe code more in Chapter 19.
 
 We can use types that use the interior mutability pattern only when we can
 ensure that the borrowing rules will be followed at runtime, even though the
@@ -1274,7 +1275,7 @@ where
     }
 }
 ```
-'
+
 Listing 15-20: A library to keep track of how close a value is to a maximum
 value and warn when the value is at certain levels
 
@@ -1578,19 +1579,22 @@ immutable `List` value. But we can use the methods on `RefCell<T>` that provide
 access to its interior mutability so we can modify our data when we need to.
 The runtime checks of the borrowing rules protect us from data races, and it’s
 sometimes worth trading a bit of speed for this flexibility in our data
-structures.
+structures. Note that `RefCell<T>` does not work for multithreaded code!
+`Mutex<T>` is the threadsafe version of `RefCell<T>` and we’ll discuss
+`Mutex<T>` in Chapter 16.
 
 <!-- While we mention threading a little bit, I think we should take a little
 time here to really underscore that this method does not work for multithread
 code. We could show an example of trying to share between threads and that
 it errors at compile time as a result. /JT -->
-
-The standard library has other types that provide interior mutability, such as
-`Cell<T>`, which is similar except that instead of giving references to the
-inner value, the value is copied in and out of the `Cell<T>`. There’s also
-`Mutex<T>`, which offers interior mutability that’s safe to use across threads;
-we’ll discuss its use in Chapter 16. Check out the standard library docs for
-more details on the differences between these types.
+<!-- I decided to make a stronger statement here about `RefCell<T>` not working
+in multithreaded code, and I moved up the mention of `Mutex<T>` from the
+paragraph that used to end this section. Then I removed the mention of
+`Cell<T>`, which is pretty rarely used. I don't really want to add an example
+here of trying to use `RefCell<T>` across threads because there'll be too much
+new code to explain that is going to be explained in the next chapter anyway,
+and the fix for the code will be switch to `Mutex<T>`, which is discussed in
+the next chapter. /Carol -->
 
 ## Reference Cycles Can Leak Memory
 
@@ -1773,6 +1777,9 @@ I was wondering - something we could try to help this is to take our cycle
 picture above and do another version, this time with a weak reference in it,
 showing that the count gained by the weak reference doesn't increment what it's
 pointing to. /JT -->
+<!-- Liz, what do you think about a diagram? I'm concerned about making it
+accurate enough but also clear and useful enough that readers familiar with
+this topic and new to this topic will get value from it. /Carol -->
 
 When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
 Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
