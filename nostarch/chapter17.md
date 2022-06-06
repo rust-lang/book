@@ -20,6 +20,10 @@ translate to idiomatic Rust. We’ll then show you how to implement an
 object-oriented design pattern in Rust and discuss the trade-offs of doing so
 versus implementing a solution using some of Rust’s strengths instead.
 
+<!-- Nit: we should probably use "object-oriented" throughout, rather using both
+"object-oriented" and "object oriented"
+/JT -->
+
 ## Characteristics of Object-Oriented Languages
 
 There is no consensus in the programming community about what features a
@@ -115,6 +119,11 @@ impl AveragedCollection {
 }
 ```
 
+<!-- The above example will crash with a division by zero if you call it at
+any time when it's empty. Not sure if we want to fix, but thought I'd point
+it out.
+/JT -->
+
 Listing 17-2: Implementations of the public methods `add`, `remove`, and
 `average` on `AveragedCollection`
 
@@ -169,6 +178,21 @@ default implementation of the `summarize` method when we implement the
 `Summary` trait, which is similar to a child class overriding the
 implementation of a method inherited from a parent class.
 
+<!-- I'm a bit uncomfortable with the above. I think it's more honest to say
+that Rust doesn't support inheritance unless you use a macro. Saying to use
+the trait system to an OO programmer is going to leave them pretty confused, as
+traits lack of the basics of inheritance: you can't use and modify state, you
+have to use a surrogate type to hold the trait implementation, you can't
+instantiate, and so on.
+
+The example that came to mind: trying to teach OO programmers who want to
+build a UI library with traditional OO techniques using the trait system.
+It's unfortunately not going to work very well, if at all.
+
+A trait's main focus is polymorphism and not inheritance. It's probably
+better for folks coming from OO backgrounds if we just come out and say it, tbh.
+/JT -->
+
 The other reason to use inheritance relates to the type system: to enable a
 child type to be used in the same places as the parent type. This is also
 called *polymorphism*, which means that you can substitute multiple objects for
@@ -193,6 +217,12 @@ subclasses that don’t make sense or that cause errors because the methods don�
 apply to the subclass. In addition, some languages will only allow a subclass
 to inherit from one class, further restricting the flexibility of a program’s
 design.
+
+<!-- Nit - "inherit from one class" and "single-inheritance" read a bit
+differently to me. Saying you inherit from only one class almost makes it sound
+like that the class you inherit from can't have a parent. Probably minor, just
+made me read that sentence a couple times.
+/JT -->
 
 For these reasons, Rust takes the different approach of using trait objects
 instead of inheritance. Let’s look at how trait objects enable polymorphism in
@@ -446,6 +476,11 @@ fn main() {
 }
 ```
 
+<!-- I'd forgotten the UI components were in this chapter. To close on the
+thought from earlier: we don't use any inheritance in our example, only
+polymorphism. This probably is a vote for my earlier suggestion.
+/JT -->
+
 Listing 17-9: Using trait objects to store values of different types that
 implement the same trait
 
@@ -544,6 +579,12 @@ saying "we define a set of states a value can have as state objects...."? /LC
 <!-- What do you think about this, hinting at the coming example quickly? It
 felt weird to introduce something different only to switch gears in a few
 paragraphs, so is moving the example's introduction here ok? /Carol -->
+<!-- JT, what do you think? /LC -->
+<!-- Seems okay. My one thought coming to the end of the paragraph was "is
+this better than using an enum?" Not sure if we want to sidebar a bit on
+why we chose traits over enums, but some readers might be curious.
+/JT -->
+
 The state objects share functionality: in Rust, of course, we use
 structs and traits rather than objects and inheritance. Each state object is
 responsible for its own behavior and for governing when it should change into
@@ -618,17 +659,25 @@ but they don’t have to manage the state changes directly. Also, users can’t
 make a mistake with the states, like publishing a post before it’s reviewed.
 
 ### Defining `Post` and Creating a New Instance in the Draft State
-<!-- is one of these new definitions the "state object"? I wasn't sure where
-the state object fitted in /LC -->
-<!-- I've tried to clarify in this paragraph /Carol -->
+
 Let’s get started on the implementation of the library! We know we need a
 public `Post` struct that holds some content, so we’ll start with the
 definition of the struct and an associated public `new` function to create an
 instance of `Post`, as shown in Listing 17-12. We’ll also make a private
 `State` trait that will define the behavior that all state objects for a `Post`
 must have.
-<!-- what till the state trait do, allow access to one of the three states? /LC -->
-<!-- How's this? /Carol -->
+<!-- JT, I had a few questions here about what the state objects and state traits are doing.
+I'd appreciate your view on whether this all reads well with nothing missing! /LC -->
+<!-- Seems okay. If you're going to try to use a traditional OO approach in
+Rust, it'll have a bit of this style. I'm glad we include something that's a
+bit more Rust-y at the end of the chapter.
+
+What I might suggest is that we give the reader a bit of a roadmap here to say
+that we're going to explore two solutions to this problem. The first, a more
+traditional approach encoded into Rust, and the second, an approach that's more
+natural to Rust.
+/JT -->
+
 Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
 in a private field named `state` to hold the state object. You’ll see why the
 `Option<T>` is necessary in a bit.
@@ -1198,8 +1247,6 @@ Try the tasks suggested at the start of this section on the `blog` crate as it
 is after Listing 17-21 to see what you think about the design of this version
 of the code. Note that some of the tasks might be completed already in this
 design.
-<!-- above: should this be 17-21? /LC -->
-<!-- Yes, great catch! /Carol -->
 
 We’ve seen that even though Rust is capable of implementing object-oriented
 design patterns, other patterns, such as encoding state into the type system,
