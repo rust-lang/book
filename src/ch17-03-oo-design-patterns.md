@@ -309,7 +309,7 @@ rules lives in the state objects rather than being scattered throughout `Post`.
 >
 > You may have been wondering why we didn’t use an `enum` with the different
 > possible post states as variants. That’s certainly a possible solution, try
-> it and compare the end results to see which you prefer! One disadvantange of
+> it and compare the end results to see which you prefer! One disadvantage of
 > using an enum is every place that checks the value of the enum will need a
 > `match` expression or similar to handle every possible variant. This could
 > get more repetitive than this trait object solution.
