@@ -37,8 +37,28 @@ fn main() {
     println!("b rc count after changing a = {}", Rc::strong_count(&b));
     println!("a rc count after changing a = {}", Rc::strong_count(&a));
 
+    // Since this list is now circular,
+    // we'll see the same value if we call `.tail()` 2 times
+    println!(
+        "a next next item's value = {:?} should equal {}",
+        match **a.tail().unwrap().borrow().tail().unwrap().borrow() {
+            Cons(i, _) => i,
+            Nil => {
+                panic!()
+            }
+        },
+        match *a {
+            Cons(i, _) => i,
+            Nil => {
+                panic!()
+            }
+        }
+    );
+
     // Uncomment the next line to see that we have a cycle;
-    // it will overflow the stack
+    // it will overflow the stack while formatting the string
+    // because the node will recursively have next items
+    // RefCell { value: Cons(5, RefCell { value: Cons(10, ... ) }) }
     // println!("a next item = {:?}", a.tail());
 }
 // ANCHOR_END: here
