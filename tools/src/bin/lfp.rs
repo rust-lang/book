@@ -57,7 +57,7 @@ fn main() {
     }
 }
 
-const USAGE: &'static str = "
+const USAGE: &str = "
 counter
 Usage:
   lfp <src-dir>
