@@ -21,8 +21,8 @@ for 5 seconds before responding.
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-10: Simulating a slow request by recognizing
-*/sleep* and sleeping for 5 seconds</span>
+<span class="caption">Listing 20-10: Simulating a slow request by sleeping for
+5 seconds</span>
 
 We switched from `if` to `match` now that we have three cases. We need to
 explicitly match on a slice of `request_line` to pattern match against the
@@ -43,9 +43,8 @@ you enter the */* URI a few times, as before, you’ll see it respond quickly.
 But if you enter */sleep* and then load */*, you’ll see that */* waits until
 `sleep` has slept for its full 5 seconds before loading.
 
-There are multiple ways we could change how our web server works to avoid
-having more requests back up behind a slow request; the one we’ll implement is
-a thread pool.
+There are multiple techniques we could use to avoid requests backing up behind
+a slow request; the one we’ll implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool
 
@@ -64,19 +63,19 @@ for each request as it came in, someone making 10 million requests to our
 server could create havoc by using up all our server’s resources and grinding
 the processing of requests to a halt.
 
-Rather than spawning unlimited threads, we’ll have a fixed number of threads
-waiting in the pool. As requests come in, they’ll be sent to the pool for
+Rather than spawning unlimited threads, then, we’ll have a fixed number of
+threads waiting in the pool. Requests that come in are sent to the pool for
 processing. The pool will maintain a queue of incoming requests. Each of the
 threads in the pool will pop off a request from this queue, handle the request,
-and then ask the queue for another request. With this design, we can process
-`N` requests concurrently, where `N` is the number of threads. If each thread
-is responding to a long-running request, subsequent requests can still back up
-in the queue, but we’ve increased the number of long-running requests we can
-handle before reaching that point.
+and then ask the queue for another request. With this design, we can process up
+to `N` requests concurrently, where `N` is the number of threads. If each
+thread is responding to a long-running request, subsequent requests can still
+back up in the queue, but we’ve increased the number of long-running requests
+we can handle before reaching that point.
 
 This technique is just one of many ways to improve the throughput of a web
-server. Other options you might explore are the fork/join model and the
-single-threaded async I/O model. If you’re interested in this topic, you can
+server. Other options you might explore are the *fork/join model* and the
+*single-threaded async I/O model*. If you’re interested in this topic, you can
 read more about other solutions and try to implement them; with a low-level
 language like Rust, all of these options are possible.
 
@@ -90,15 +89,21 @@ designing the public API.
 Similar to how we used test-driven development in the project in Chapter 12,
 we’ll use compiler-driven development here. We’ll write the code that calls the
 functions we want, and then we’ll look at errors from the compiler to determine
-what we should change next to get the code to work.
+what we should change next to get the code to work. Before we do that, however,
+we’ll explore the technique we’re not going to use as a starting point.
 
-#### Code Structure If We Could Spawn a Thread for Each Request
+<!-- Old headings. Do not remove or links may break. -->
+<a id="code-structure-if-we-could-spawn-a-thread-for-each-request"></a>
+
+#### Spawning a Thread for Each Request
 
 First, let’s explore how our code might look if it did create a new thread for
 every connection. As mentioned earlier, this isn’t our final plan due to the
 problems with potentially spawning an unlimited number of threads, but it is a
-starting point. Listing 20-11 shows the changes to make to `main` to spawn a
-new thread to handle each stream within the `for` loop.
+starting point to get a working multithreaded server first. Then we’ll add the
+thread pool as an improvement, and contrasting the two solutions will be
+easier. Listing 20-11 shows the changes to make to `main` to spawn a new thread
+to handle each stream within the `for` loop.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -112,11 +117,14 @@ stream</span>
 As you learned in Chapter 16, `thread::spawn` will create a new thread and then
 run the code in the closure in the new thread. If you run this code and load
 */sleep* in your browser, then */* in two more browser tabs, you’ll indeed see
-that the requests to */* don’t have to wait for */sleep* to finish. But as we
-mentioned, this will eventually overwhelm the system because you’d be making
+that the requests to */* don’t have to wait for */sleep* to finish. However, as
+we mentioned, this will eventually overwhelm the system because you’d be making
 new threads without any limit.
 
-#### Creating a Similar Interface for a Finite Number of Threads
+<!-- Old headings. Do not remove or links may break. -->
+<a id="creating-a-similar-interface-for-a-finite-number-of-threads"></a>
+
+#### Creating a Finite Number of Threads
 
 We want our thread pool to work in a similar, familiar way so switching from
 threads to a thread pool doesn’t require large changes to the code that uses
@@ -138,7 +146,10 @@ run for each stream. We need to implement `pool.execute` so it takes the
 closure and gives it to a thread in the pool to run. This code won’t yet
 compile, but we’ll try so the compiler can guide us in how to fix it.
 
-#### Building the `ThreadPool` Struct Using Compiler Driven Development
+<!-- Old headings. Do not remove or links may break. -->
+<a id="building-the-threadpool-struct-using-compiler-driven-development"></a>
+
+#### Building `ThreadPool` Using Compiler Driven Development
 
 Make the changes in Listing 20-12 to *src/main.rs*, and then let’s use the
 compiler errors from `cargo check` to drive our development. Here is the first
@@ -206,12 +217,11 @@ Let’s check the code again:
 ```
 
 Now the error occurs because we don’t have an `execute` method on `ThreadPool`.
-Recall from the [“Creating a Similar Interface for a Finite Number of
-Threads”](#creating-a-similar-interface-for-a-finite-number-of-threads)<!--
-ignore --> section that we decided our thread pool should have an interface
-similar to `thread::spawn`. In addition, we’ll implement the `execute` function
-so it takes the closure it’s given and gives it to an idle thread in the pool
-to run.
+Recall from the [“Creating a Finite Number of
+Threads”](#creating-a-finite-number-of-threads)<!-- ignore --> section that we
+decided our thread pool should have an interface similar to `thread::spawn`. In
+addition, we’ll implement the `execute` function so it takes the closure it’s
+given and gives it to an idle thread in the pool to run.
 
 We’ll define the `execute` method on `ThreadPool` to take a closure as a
 parameter. Recall from the [“Moving Captured Values Out of the Closure and the
@@ -315,8 +325,8 @@ pub fn new(size: usize) -> Result<ThreadPool, PoolCreationError> {
 
 Now that we have a way to know we have a valid number of threads to store in
 the pool, we can create those threads and store them in the `ThreadPool` struct
-before returning it. But how do we “store” a thread? Let’s take another look at
-the `thread::spawn` signature:
+before returning the struct. But how do we “store” a thread? Let’s take another
+look at the `thread::spawn` signature:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -351,12 +361,11 @@ using `thread::JoinHandle` as the type of the items in the vector in
 `ThreadPool`.
 
 Once a valid size is received, our `ThreadPool` creates a new vector that can
-hold `size` items. We haven’t used the `with_capacity` function in this book
-yet, which performs the same task as `Vec::new` but with an important
-difference: it preallocates space in the vector. Because we know we need to
-store `size` elements in the vector, doing this allocation up front is slightly
-more efficient than using `Vec::new`, which resizes itself as elements are
-inserted.
+hold `size` items. The `with_capacity` function performs the same task as
+`Vec::new` but with an important difference: it preallocates space in the
+vector. Because we know we need to store `size` elements in the vector, doing
+this allocation up front is slightly more efficient than using `Vec::new`,
+which resizes itself as elements are inserted.
 
 When you run `cargo check` again, it should succeed.
 
@@ -373,10 +382,11 @@ implement it manually.
 
 We’ll implement this behavior by introducing a new data structure between the
 `ThreadPool` and the threads that will manage this new behavior. We’ll call
-this data structure `Worker`, which is a common term in pooling
-implementations. Think of people working in the kitchen at a restaurant: the
-workers wait until orders come in from customers, and then they’re responsible
-for taking those orders and filling them.
+this data structure *Worker*, which is a common term in pooling
+implementations. The Worker picks up code that needs to be run and runs the
+code in the Worker’s thread. Think of people working in the kitchen at a
+restaurant: the workers wait until orders come in from customers, and then
+they’re responsible for taking those orders and filling them.
 
 Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
 we’ll store instances of the `Worker` struct. Each `Worker` will store a single
@@ -385,9 +395,9 @@ take a closure of code to run and send it to the already running thread for
 execution. We’ll also give each worker an `id` so we can distinguish between
 the different workers in the pool when logging or debugging.
 
-Let’s make the following changes to what happens when we create a `ThreadPool`.
-We’ll implement the code that sends the closure to the thread after we have
-`Worker` set up in this way:
+Here is the new process that will happen when we create a `ThreadPool`. We’ll
+implement the code that sends the closure to the thread after we have `Worker`
+set up in this way:
 
 1. Define a `Worker` struct that holds an `id` and a `JoinHandle<()>`.
 2. Change `ThreadPool` to hold a vector of `Worker` instances.
@@ -428,19 +438,18 @@ the closure that we get in `execute`. Let’s look at how to do that next.
 
 #### Sending Requests to Threads via Channels
 
-Now we’ll tackle the problem that the closures given to `thread::spawn` do
+The next problem we’ll tackle is that the closures given to `thread::spawn` do
 absolutely nothing. Currently, we get the closure we want to execute in the
 `execute` method. But we need to give `thread::spawn` a closure to run when we
 create each `Worker` during the creation of the `ThreadPool`.
 
-We want the `Worker` structs that we just created to fetch code to run from a
-queue held in the `ThreadPool` and send that code to its thread to run.
+We want the `Worker` structs that we just created to fetch the code to run from
+a queue held in the `ThreadPool` and send that code to its thread to run.
 
-In Chapter 16, you learned about *channels*—a simple way to communicate between
-two threads—that would be perfect for this use case. We’ll use a channel to
-function as the queue of jobs, and `execute` will send a job from the
-`ThreadPool` to the `Worker` instances, which will send the job to its thread.
-Here is the plan:
+The channels we learned about in Chapter 16—a simple way to communicate between
+two threads—would be perfect for this use case. We’ll use a channel to function
+as the queue of jobs, and `execute` will send a job from the `ThreadPool` to
+the `Worker` instances, which will send the job to its thread. Here is the plan:
 
 1. The `ThreadPool` will create a channel and hold on to the sender.
 2. Each `Worker` will hold on to the receiver.
@@ -528,8 +537,8 @@ Let’s finally implement the `execute` method on `ThreadPool`. We’ll also cha
 `Job` from a struct to a type alias for a trait object that holds the type of
 closure that `execute` receives. As discussed in the [“Creating Type Synonyms
 with Type Aliases”][creating-type-synonyms-with-type-aliases]<!-- ignore -->
-section of Chapter 19, type aliases allow us to make long types shorter. Look
-at Listing 20-19.
+section of Chapter 19, type aliases allow us to make long types shorter for
+ease of use. Look at Listing 20-19.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -659,8 +668,8 @@ processed. The reason is somewhat subtle: the `Mutex` struct has no public
 the `MutexGuard<T>` within the `LockResult<MutexGuard<T>>` that the `lock`
 method returns. At compile time, the borrow checker can then enforce the rule
 that a resource guarded by a `Mutex` cannot be accessed unless we hold the
-lock. But this implementation can also result in the lock being held longer
-than intended if we don’t think carefully about the lifetime of the
+lock. However, this implementation can also result in the lock being held
+longer than intended if we aren’t mindful of the lifetime of the
 `MutexGuard<T>`.
 
 The code in Listing 20-20 that uses `let job =
