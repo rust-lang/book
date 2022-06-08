@@ -6,7 +6,7 @@ warning fixes, a linter, and integrating with IDEs.
 
 ### Automatic Formatting with `rustfmt`
 
-The `rustfmt` tool reformats your code according to the community code style.
+The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
 style to use when writing Rust: everyone formats their code using the tool.
 
@@ -32,8 +32,9 @@ on `rustfmt`, see [its documentation][rustfmt].
 ### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
-some compiler warnings. If you’ve written code in Rust, you’ve probably seen
-compiler warnings. For example, consider this code:
+compiler warnings that have one way to correct the problem that’s likely what
+you want. It’s likely you’ve seen compiler warnings before. For example,
+consider this code:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -139,10 +140,10 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust has this constant defined more precisely and
-that your program would be more correct if you used the constant instead. You
-would then change your code to use the `PI` constant. The following code
-doesn’t result in any errors or warnings from Clippy:
+This error lets you know that Rust already has a more precise `PI` constant
+defined, and that your program would be more correct if you used the constant
+instead. You would then change your code to use the `PI` constant. The
+following code doesn’t result in any errors or warnings from Clippy:
 
 <span class="filename">Filename: src/main.rs</span>
 

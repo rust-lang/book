@@ -72,8 +72,8 @@ overload that operator is listed.
 
 ### Non-operator Symbols
 
-The following list contains all non-letters that don’t function as operators;
-that is, they don’t behave like a function or method call.
+The following list contains all symbols that don’t function as operators; that
+is, they don’t behave like a function or method call.
 
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.

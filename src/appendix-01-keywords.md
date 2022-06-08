@@ -3,15 +3,16 @@
 The following list contains keywords that are reserved for current or future
 use by the Rust language. As such, they cannot be used as identifiers (except
 as raw identifiers as we’ll discuss in the “[Raw
-Identifiers][raw-identifiers]<!-- ignore -->” section), including names of
-functions, variables, parameters, struct fields, modules, crates, constants,
+Identifiers][raw-identifiers]<!-- ignore -->” section). Identifiers are names
+of functions, variables, parameters, struct fields, modules, crates, constants,
 macros, static values, attributes, types, traits, or lifetimes.
 
 [raw-identifiers]: #raw-identifiers
 
 ### Keywords Currently in Use
 
-The following keywords currently have the functionality described.
+The following is a list of keywords currently in use, with their functionality
+described.
 
 * `as` - perform primitive casting, disambiguate the specific trait containing
   an item, or rename items in `use` and `extern crate` statements
@@ -60,8 +61,8 @@ The following keywords currently have the functionality described.
 
 ### Keywords Reserved for Future Use
 
-The following keywords do not have any functionality but are reserved by Rust
-for potential future use.
+The following keywords do not yet have any functionality but are reserved by
+Rust for potential future use.
 
 * `abstract`
 * `become`
