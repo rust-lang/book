@@ -3,7 +3,7 @@ extern crate regex;
 use regex::{Captures, Regex};
 use std::collections::HashSet;
 use std::io;
-use std::io::{Read, Write};
+use std::io::Read;
 
 fn main() {
     let mut buffer = String::new();
@@ -41,5 +41,5 @@ fn main() {
         caps.get(0).unwrap().as_str().to_string()
     });
 
-    write!(io::stdout(), "{}", out).unwrap();
+    print!("{}", out);
 }

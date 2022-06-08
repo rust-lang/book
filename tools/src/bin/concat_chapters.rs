@@ -11,7 +11,7 @@ use std::process::exit;
 
 use regex::Regex;
 
-static PATTERNS: &'static [(&'static str, &'static str)] = &[
+static PATTERNS: &[(&str, &str)] = &[
     (r"ch(\d\d)-\d\d-.*\.md", "chapter$1.md"),
     (r"appendix-(\d\d).*\.md", "appendix.md"),
 ];
@@ -123,5 +123,5 @@ fn ensure_dir_exists(dir_string: &str) -> io::Result<&Path> {
     if !path.exists() {
         create_dir(path)?;
     }
-    Ok(&path)
+    Ok(path)
 }

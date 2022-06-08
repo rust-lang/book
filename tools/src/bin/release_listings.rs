@@ -146,10 +146,10 @@ fn copy_cleaned_rust_file(
 
     for line in from_buf.lines() {
         let line = line?;
-        if !ANCHOR_OR_SNIP_COMMENTS.is_match(&line) {
-            if item_name != "lib.rs" || !EMPTY_MAIN.is_match(&line) {
-                writeln!(&mut to_buf, "{}", line)?;
-            }
+        if !ANCHOR_OR_SNIP_COMMENTS.is_match(&line)
+            && (item_name != "lib.rs" || !EMPTY_MAIN.is_match(&line))
+        {
+            writeln!(&mut to_buf, "{}", line)?;
         }
     }
 

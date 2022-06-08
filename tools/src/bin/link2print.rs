@@ -4,7 +4,7 @@
 use regex::{Captures, Regex};
 use std::collections::HashMap;
 use std::io;
-use std::io::{Read, Write};
+use std::io::Read;
 
 fn main() {
     write_md(parse_links(parse_references(read_md())));
@@ -19,7 +19,7 @@ fn read_md() -> String {
 }
 
 fn write_md(output: String) {
-    write!(io::stdout(), "{}", output).unwrap();
+    print!("{}", output);
 }
 
 fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
@@ -49,7 +49,7 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
         Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures<'_>| {
         match caps.name("pre") {
-            Some(pre_section) => format!("{}", pre_section.as_str()),
+            Some(pre_section) => pre_section.as_str().to_string(),
             None => {
                 let name = caps.name("name").expect("could not get name").as_str();
                 // Really we should ignore text inside code blocks,
@@ -71,13 +71,13 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                             Some(key) => {
                                 match key.as_str() {
                                     // `[name][]`
-                                    "" => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
+                                    "" => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", name)).to_string(),
                                     // `[name][reference]`
-                                    _ => format!("{}", ref_map.get(&key.as_str().to_uppercase()).expect(&format!("could not find url for the link text `{}`", key.as_str()))),
+                                    _ => ref_map.get(&key.as_str().to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", key.as_str())).to_string(),
                                 }
                             }
                             // `[name]` as reference
-                            None => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
+                            None => ref_map.get(&name.to_uppercase()).unwrap_or_else(|| panic!("could not find url for the link text `{}`", name)).to_string(),
                         }
                     }
                 };
