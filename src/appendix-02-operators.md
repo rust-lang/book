@@ -17,7 +17,7 @@ overload that operator is listed.
 |----------|---------|-------------|---------------|
 | `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro expansion | |
 | `!` | `!expr` | Bitwise or logical complement | `Not` |
-| `!=` | `var != expr` | Nonequality comparison | `PartialEq` |
+| `!=` | `expr != expr` | Nonequality comparison | `PartialEq` |
 | `%` | `expr % expr` | Arithmetic remainder | `Rem` |
 | `%=` | `var %= expr` | Arithmetic remainder and assignment | `RemAssign` |
 | `&` | `&expr`, `&mut expr` | Borrow | |
