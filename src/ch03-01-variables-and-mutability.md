@@ -185,6 +185,8 @@ The error says we’re not allowed to mutate a variable’s type:
 Now that we’ve explored how variables work, let’s look at more data types they
 can have.
 
+{{#quiz ../quizzes/ch03-01-variables-and-mutability.toml}}
+
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types
