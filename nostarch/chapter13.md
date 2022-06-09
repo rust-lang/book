@@ -22,42 +22,44 @@ More specifically, we’ll cover:
 
 * *Closures*, a function-like construct you can store in a variable
 * *Iterators*, a way of processing a series of elements
-* How to use these two features to improve the I/O project in Chapter 12
-* The performance of these two features (Spoiler alert: they’re faster than you
-  might think!)
+* How to use closures and iterators to improve the I/O project in Chapter 12
+* The performance of these closures and iterators (Spoiler alert: they’re
+  faster than you might think!)
 
-Other Rust features, such as pattern matching and enums, which we’ve covered in
-other chapters, are influenced by the functional style as well. Mastering
-closures and iterators is an important part of writing idiomatic, fast Rust
-code, so we’ll devote this entire chapter to them.
+We've already covered some other Rust features, such as pattern matching and
+enums, that are also influenced by the functional style as well, but since
+mastering closures and iterators is an important part of writing idiomatic,
+fast Rust code, we’ll devote this entire chapter to them.
 
-## Closures: Anonymous Functions that Can Capture Their Environment
+## Closures: Anonymous Functions that Capture Their Environment
 
 Rust’s closures are anonymous functions you can save in a variable or pass as
 arguments to other functions. You can create the closure in one place and then
-call the closure to evaluate it in a different context. Unlike functions,
-closures can capture values from the scope in which they’re defined. We’ll
-demonstrate how these closure features allow for code reuse and behavior
+call the closure elsewhere to evaluate it in a different context. Unlike
+functions, closures can capture values from the scope in which they’re defined.
+We’ll demonstrate how these closure features allow for code reuse and behavior
 customization.
 
 ### Capturing the Environment with Closures
 
-The first aspect of closures we’re going to examine is that closures can
-capture values from the environment they’re defined in for later use. Here’s
-the scenario: A t-shirt company gives away a free shirt to someone on their
-mailing list every so often. People on the mailing list can optionally add
-their favorite color to their profile. If the person chosen to get the free
-shirt has their favorite color in their profile, they get that color shirt. If
-the person hasn’t specified a favorite color, they get the color that the
-company currently has the most of.
+We'll first examine how we can use closures to capture values from the
+environment they’re defined in for later use. Here’s the scenario: Every so
+often, our t-shirt company gives away a free shirt to someone on our mailing
+list. People on the mailing list can optionally add their favorite color to
+their profile. If the person chosen for a free shirt has their favorite color
+set, they get that color shirt. If the person hasn’t specified a favorite
+color, they get whatever color the company currently has the most of.
 
 There are many ways to implement this. For this example, we’re going to use an
-enum called `ShirtColor` that has the variants `Red` and `Blue`. The
-company’s inventory is represented by an `Inventory` struct that has a field
-named `shirts` that contains a `Vec<ShirtColor>` representing the shirts
-currently in stock. The method `shirt_giveaway` defined on `Inventory` gets the
-optional shirt color preference of the person getting the free shirt, and
-returns the shirt color the person will get. This is shown in Listing 13-1:
+enum called `ShirtColor` that has the variants `Red` and `Blue`.
+<!-- are we saying the company only offers shirts in red or blue, or are we just
+starting with these two colors? Likely not important for the code, but good to
+clarify for the narrative! /LC -->
+We represent the company’s inventory with an `Inventory` struct that has a
+field named `shirts` that contains a `Vec<ShirtColor>` representing the shirt
+colors currently in stock. The method `shirt_giveaway` defined on `Inventory`
+gets the optional shirt color preference of the free shirt winner, and returns
+the shirt color the person will get. This setup is shown in Listing 13-1:
 
 Filename: src/main.rs
 
@@ -116,11 +118,15 @@ fn main() {
 }
 ```
 
-Listing 13-1: Shirt company giveaway
+Listing 13-1: Framework of the shirt company giveaway situation
 
 The `store` defined in `main` has two blue shirts and one red shirt in stock.
-Then it calls the `giveaway` method for a user with a preference for a red
+We then call the `giveaway` method for a user with a preference for a red
 shirt and a user without any preference. Running this code prints:
+<!-- Again... I know this is just a toy example, but it seems jarring for a
+tshirt company to only have three shirts in stock. I think it's fine if we add
+a line earlier that says something like "for the sake of simplicity, we'll deal
+with just two shirt colors, and a small volume of stock" /LC -->
 
 ```
 $ cargo run
@@ -131,36 +137,46 @@ The user with preference Some(Red) gets Red
 The user with preference None gets Blue
 ```
 
-Again, this code could be implemented in many ways, but this way uses concepts
-you’ve already learned, except for the body of the `giveaway` method that uses
-a closure. The `giveaway` method takes the user preference `Option<ShirtColor>`
-and calls `unwrap_or_else` on it. The `unwrap_or_else` method on
-`Option<T>` is defined by the standard library.
-It takes one argument: a closure without any arguments that returns a value `T`
-(the same type stored in the `Some` variant of the `Option<T>`, in this case, a
-`ShirtColor`). If the `Option<T>` is the `Some` variant, `unwrap_or_else`
-returns the value from within the `Some`. If the `Option<T>` is the `None`
-variant, `unwrap_or_else` calls the closure and returns the value returned by
-the closure.
+Again, this code could be implemented in many ways, and here, to focus on
+closures, we've stuck to concepts you’ve already learned except for the body of
+the `giveaway` method that uses a closure. Let's examine that closure. The
+`giveaway` method takes the user preference `Option<ShirtColor>` and calls
+`unwrap_or_else` on it. The `unwrap_or_else` method on `Option<T>` is defined
+by the standard library. It takes one argument: a closure without any arguments
+that returns a value `T` (the same type stored in the `Some` variant of the
+`Option<T>`, in this case `ShirtColor`). If the `Option<T>` is the `Some`
+variant, `unwrap_or_else` returns the value from within the `Some`. If the
+`Option<T>` is the `None` variant, `unwrap_or_else` calls the closure and
+returns the value returned by the closure.
+<!-- can you show us the code that here counts as they closure? is it, for
+example, this whole section: (&self, user_preference: Option<ShirtColor>) ->
+ShirtColor { user_preference.unwrap_or_else(|| self.most_stocked()) ? And what
+indicates to Rust that it's a closure? Or do we not need to indicate that, Rust
+doesn't care? I'm thinking about the earlier closure definition "You can create
+the closure in one place and then call the closure elsewhere to evaluate it in
+a different context" -- are we using this aspect of the closure here? Can you
+highligt that in the text? /LC -->
 
-This is interesting because we’ve passed a closure that calls
+One interesting aspect here is that we’ve passed a closure that calls
 `self.most_stocked()` on the current `Inventory` instance. The standard library
 didn’t need to know anything about the `Inventory` or `ShirtColor` types we
-defined, or the logic we want to use in this scenario. The closure captured an
-immutable reference to the `self` `Inventory` instance and passed it with the
-code we specified to the `unwrap_or_else` method. Functions are not able to
-capture their environment in this way.
+defined, or the logic we want to use in this scenario. The closure captures an
+immutable reference to the `self` `Inventory` instance and passes it with the
+code we specify to the `unwrap_or_else` method. Functions, on the other hand,
+are not able to capture their environment in this way.
 
 ### Closure Type Inference and Annotation
 
 There are more differences between functions and closures. Closures don’t
 usually require you to annotate the types of the parameters or the return value
 like `fn` functions do. Type annotations are required on functions because
-they’re part of an explicit interface exposed to your users. Defining this
+functions are part of an explicit interface exposed to your users. Defining this
+<!-- functions are part of the explicit interface, or type annotations are? /LC -->
+
 interface rigidly is important for ensuring that everyone agrees on what types
-of values a function uses and returns. But closures aren’t used in an exposed
-interface like this: they’re stored in variables and used without naming them
-and exposing them to users of our library.
+of values a function uses and returns. Closures, on the other hand, aren’t used
+in an exposed interface like this: they’re stored in variables and used without
+naming them and exposing them to users of our library.
 
 Closures are typically short and relevant only within a narrow context rather
 than in any arbitrary scenario. Within these limited contexts, the compiler can
@@ -171,7 +187,7 @@ needs closure type annotations too).
 As with variables, we can add type annotations if we want to increase
 explicitness and clarity at the cost of being more verbose than is strictly
 necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-2.
+shown in Listing 13-x.
 
 Filename: src/main.rs
 
@@ -183,15 +199,19 @@ let expensive_closure = |num: u32| -> u32 {
 };
 ```
 
-Listing 13-2: Adding optional type annotations of the parameter and return
+Listing 13-x: Adding optional type annotations of the parameter and return
 value types in the closure
+<!-- Interestng, so is this another way to define a closure: with the let
+keywork like a variable? Earlier we defined in (I think!) in the function
+definition: fn giveaway(&self,... Is it worth pointing out different ways they
+can be defined, or should that be obvious to the reader? /LC -->
 
 With type annotations added, the syntax of closures looks more similar to the
-syntax of functions. The following is a vertical comparison of the syntax for
-the definition of a function that adds 1 to its parameter and a closure that
-has the same behavior. We’ve added some spaces to line up the relevant parts.
-This illustrates how closure syntax is similar to function syntax except for
-the use of pipes and the amount of syntax that is optional:
+syntax of functions. Here we define a function that adds 1 to its parameter and
+a closure that has the same behavior, for comparison. We’ve added some spaces
+to line up the relevant parts. This illustrates how closure syntax is similar
+to function syntax except for the use of pipes and the amount of syntax that is
+optional:
 
 ```
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
@@ -201,18 +221,21 @@ let add_one_v4 = |x|               x + 1  ;
 ```
 
 The first line shows a function definition, and the second line shows a fully
-annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the brackets, which are
-optional because the closure body has only one expression. These are all valid
-definitions that will produce the same behavior when they’re called. Calling
-the closures is required for `add_one_v3` and `add_one_v4` to be able to
-compile because the types will be inferred from their usage.
+annotated closure definition. In the third line we remove the type annotations
+from the closure definition, and in the fourth line we remove the brackets,
+which are optional because the closure body has only one expression. These are
+all valid definitions that will produce the same behavior when they’re called.
+Calling the closures is required for `add_one_v3` and `add_one_v4` to be able
+to compile because the types will be inferred from their usage.
+<!-- I wasn't clear what was meant by "Calling the closures is required for
+`add_one_v3` and `add_one_v4`..." -- I thought these were closures? /LC -->
 
-Closure definitions will have one concrete type inferred for each of their
-parameters and for their return value. For instance, Listing 13-3 shows the
-definition of a short closure that just returns the value it receives as a
+For closure definitions, the compiler will infer one concrete type for each of
+their parameters and for their return value. For instance, Listing 13-x shows
+the definition of a short closure that just returns the value it receives as a
 parameter. This closure isn’t very useful except for the purposes of this
 example. Note that we haven’t added any type annotations to the definition: if
+<!-- if we did add type annotations, you mean? Or because we haven't? /LC -->
 we then try to call the closure twice, using a `String` as an argument the
 first time and a `u32` the second time, we’ll get an error.
 
@@ -225,7 +248,7 @@ let s = example_closure(String::from("hello"));
 let n = example_closure(5);
 ```
 
-Listing 13-3: Attempting to call a closure whose types are inferred with two
+Listing 13-x: Attempting to call a closure whose types are inferred with two
 different types
 
 The compiler gives us this error:
@@ -243,7 +266,7 @@ error[E0308]: mismatched types
 The first time we call `example_closure` with the `String` value, the compiler
 infers the type of `x` and the return type of the closure to be `String`. Those
 types are then locked into the closure in `example_closure`, and we get a type
-error if we try to use a different type with the same closure.
+error when we next try to use a different type with the same closure.
 
 ### Capturing References or Moving Ownership
 
@@ -253,11 +276,15 @@ immutably, borrowing mutably, and taking ownership. The closure will decide
 which of these to use based on what the body of the function does with the
 captured values.
 
-Listing 13-4 defines a closure that captures an immutable borrow to the vector
-named `list` because it only needs an immutable borrow to print the value. This
-example also illustrates that a variable can bind to a closure definition, and
-the closure can later be called by using the variable name and parentheses as
-if the variable name were a function name:
+In Listing 13-x we define a closure that captures an immutable borrow to the
+vector named `list` because it only needs an immutable borrow to print the
+value. This example also illustrates that a variable can bind to a closure
+definition, and we can later call the closure by using the variable name and
+parentheses as if the variable name were a function name:
+<!-- That's cool. I'm changing to the active voice here, but I wanted to make
+sure I'm not changing meaning: it is us calling the closure later
+intentionally, right? It's not happening automatically behind the scenes? /LC
+-->
 
 Filename: src/main.rs
 
@@ -274,12 +301,12 @@ fn main() {
 }
 ```
 
-Listing 13-4: Defining and calling a closure that captures an immutable borrow
+Listing 13-x: Defining and calling a closure that captures an immutable borrow
 
-The `list` is still accessible by the code before the closure definition, after
+Because we can have multiple immutable borrows of `list` at the same time,
+`list` is still accessible from the code before the closure definition, after
 the closure definition but before the closure is called, and after the closure
-is called because we can have multiple immutable borrows of `list` at the same
-time. This code compiles, runs, and prints:
+is called. This code compiles, runs, and prints:
 
 ```
 Before defining closure: [1, 2, 3]
@@ -288,8 +315,9 @@ From closure: [1, 2, 3]
 After calling closure: [1, 2, 3]
 ```
 
-Next, Listing 13-5 changes the closure definition to need a mutable borrow
-because the closure body adds an element to the `list` vector:
+Next, in Listing 13-x we change the closure body so that it adds an element to
+the `list` vector, which means we also need to change the closure definition to
+need a mutable borrow:
 
 Filename: src/main.rs
 
@@ -305,7 +333,7 @@ fn main() {
 }
 ```
 
-Listing 13-5: Defining and calling a closure that captures a mutable borrow
+Listing 13-x: Defining and calling a closure that captures a mutable borrow
 
 This code compiles, runs, and prints:
 
@@ -316,37 +344,49 @@ After calling closure: [1, 2, 3, 7]
 
 Note that there’s no longer a `println!` between the definition and the call of
 the `borrows_mutably` closure: when `borrows_mutably` is defined, it captures a
-mutable reference to `list`. After the closure is called, because we don’t use
-the closure again after that point, the mutable borrow ends. Between the
-closure definition and the closure call, an immutable borrow to print isn’t
-allowed because no other borrows are allowed when there’s a mutable borrow. Try
-adding a `println!` there to see what error message you get!
+mutable reference to `list`. We don't use the closure again after the closure
+is called, so the mutable borrow ends. Between the closure definition and the
+closure call, an immutable borrow to print isn’t allowed because no other
+borrows are allowed when there’s a mutable borrow. Try adding a `println!`
+there to see what error message you get!
 
 If you want to force the closure to take ownership of the values it uses in the
 environment even though the body of the closure doesn’t strictly need
 ownership, you can use the `move` keyword before the parameter list. This
 technique is mostly useful when passing a closure to a new thread to move the
-data so it’s owned by the new thread. We’ll have more examples of `move`
+data so that it’s owned by the new thread. We’ll have more examples of `move`
 closures in Chapter 16 when we talk about concurrency.
 
-### Moving Captured Values Out of the Closure and the `Fn` Traits
+### Moving Captured Values Out of Closures and the `Fn` Traits
 
-Once a closure has captured a reference or moved a value into the closure, the
-code in the body of the function also affects what happens to the references or
-values as a result of calling the function. A closure body can move a captured
-value out of the closure, can mutate the captured value, can neither move nor
-mutate the captured value, or can capture nothing from the environment. The way
-a closure captures and handles values from the environment affects which traits
-the closure implements. The traits are how functions and structs can specify
-what kinds of closures they can use.
+Once a closure has captured a reference or we've moved a value into the
+closure, the code in the body of the function affects what happens to the
+references or
+<!-- which function does this refer to -- is a closure always tied to a
+function? I'm thinking of the let closure created earlier. Is "function" here
+just a way to refer to the functionality of the closure? I'm wary of mixing the
+two terms /LC -->
+values as a result of calling the function.
+<!-- do we mean "the references and values that are a result of calling the
+function"? This line confused me a little. Surely it's self-evident that the
+code in the function body affects the value or reference it's called on; I
+think I'm missing something! /LC -->
+A closure body can do any of the following: move a captured value out of the
+closure, mutate the captured value, neither move nor mutate the value, or
+capture nothing from the environment to begin with.
 
-Closures will automatically implement one, two, or all three of these `Fn`
-traits, in an additive fashion:
+The way a closure captures and handles values from the environment affects
+which traits
+<!-- so the closure will automatically implement the traits depending on how we
+set it to handle the values? /LC -->
+the closure implements, and traits are how functions and structs can specify
+what kinds of closures they can use. Closures will automatically implement one,
+two, or all three of these `Fn` traits, in an additive fashion:
 
 1. `FnOnce` applies to closures that can be called at least once. All closures
-   implement this trait, because all closures can be called. If a closure moves
-   captured values out of its body, then that closure only implements `FnOnce`
-   and not any of the other `Fn` traits, because it can only be called once.
+   implement at least this trait, because all closures can be called. A closure
+   that moves captured values out of its body will only implement `FnOnce`
+   and none of the other `Fn` traits, because it can only be called once.
 2. `FnMut` applies to closures that don’t move captured values out of their
    body, but that might mutate the captured values. These closures can be
    called more than once.
@@ -356,8 +396,11 @@ traits, in an additive fashion:
    such as calling a closure multiple times concurrently. Closures that don’t
    capture anything from their environment implement `Fn`.
 
+   <!-- so there isn't a trait for the first action listed above: moving a
+   capture value out of the closure? /LC -->
+
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-6:
+we used in Listing 13-x:
 
 ```
 impl<T> Option<T> {
@@ -378,8 +421,8 @@ Recall that `T` is the generic type representing the type of the value in the
 `unwrap_or_else` function: code that calls `unwrap_or_else` on an
 `Option<String>`, for example, will get a `String`.
 
-Next, notice that the `unwrap_or_else` function has an additional generic type
-parameter, `F`. The `F` type is the type of the parameter named `f`, which is
+Next, notice that the `unwrap_or_else` function has the additional generic type
+parameter `F`. The `F` type is the type of the parameter named `f`, which is
 the closure we provide when calling `unwrap_or_else`.
 
 The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
@@ -399,14 +442,15 @@ of closures and is as flexible as it can be.
 > value is `None`.
 
 Now let’s look at the standard library method `sort_by_key` defined on slices,
-to see how that differs. It takes a closure that implements `FnMut`. The
+to see how that differs.
+<!-- can you tell us what about this method makes it a good comparison: what's
+the difference we're focusing on? /LC -->
+It takes a closure that implements `FnMut`. The
 closure gets one argument, a reference to the current item in the slice being
 considered, and returns a value of type `K` that can be ordered. This function
 is useful when you want to sort a slice by a particular attribute of each item.
-In Listing 13-7, we have a list of `Rectangle` instances and we use
+In Listing 13-x, we have a list of `Rectangle` instances and we use
 `sort_by_key` to order them by their `width` attribute from low to high:
-
-Filename: src/main.rs
 
 ```
 #[derive(Debug)]
@@ -417,27 +461,16 @@ struct Rectangle {
 
 fn main() {
     let mut list = [
-        Rectangle {
-            width: 10,
-            height: 1,
-        },
-        Rectangle {
-            width: 3,
-            height: 5,
-        },
-        Rectangle {
-            width: 7,
-            height: 12,
-        },
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
     ];
 
     list.sort_by_key(|r| r.width);
     println!("{:#?}", list);
 }
 ```
-
-Listing 13-7: Using `sort_by_key` and a closure to sort a list of `Rectangle`
-instances by their `width` value
+Listing 13-x: Using `sort_by_key` to order rectangles by width
 
 This code prints:
 
@@ -463,11 +496,9 @@ the closure multiple times: once for each item in the slice. The closure `|r|
 r.width` doesn’t capture, mutate, or move out anything from its environment, so
 it meets the trait bound requirements.
 
-In contrast, Listing 13-8 shows an example of a closure that only implements
-`FnOnce` because it moves a value out of the environment. The compiler won’t
-let us use this closure with `sort_by_key`:
-
-Filename: src/main.rs
+In contrast, here’s an example of a closure that implements just the `FnOnce`
+trait, because it moves a value out of the environment. The compiler won’t let
+us use this closure with `sort_by_key`:
 
 ```
 #[derive(Debug)]
@@ -478,18 +509,9 @@ struct Rectangle {
 
 fn main() {
     let mut list = [
-        Rectangle {
-            width: 10,
-            height: 1,
-        },
-        Rectangle {
-            width: 3,
-            height: 5,
-        },
-        Rectangle {
-            width: 7,
-            height: 12,
-        },
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
     ];
 
     let mut sort_operations = vec![];
@@ -503,12 +525,10 @@ fn main() {
 }
 ```
 
-Listing 13-8: Attempting to use an `FnOnce` closure with `sort_by_key`
-
 This is a contrived, convoluted way (that doesn’t work) to try and count the
 number of times `sort_by_key` gets called when sorting `list`. This code
-attempts to do this counting by pushing `value`, a `String` from the closure’s
-environment, into the `sort_operations` vector. The closure captures `value`
+attempts to do this counting by pushing `value`--a `String` from the closure’s
+environment--into the `sort_operations` vector. The closure captures `value`
 then moves `value` out of the closure by transferring ownership of `value` to
 the `sort_operations` vector. This closure can be called once; trying to call
 it a second time wouldn’t work because `value` would no longer be in the
@@ -519,17 +539,17 @@ implement `FnMut`:
 
 ```
 error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` closure
-  --> src/main.rs:27:30
+  --> src/main.rs:18:30
    |
-24 |       let value = String::from("by key called");
+15 |       let value = String::from("by key called");
    |           ----- captured outer variable
-25 |
-26 |       list.sort_by_key(|r| {
+16 |
+17 |       list.sort_by_key(|r| {
    |  ______________________-
-27 | |         sort_operations.push(value);
+18 | |         sort_operations.push(value);
    | |                              ^^^^^ move occurs because `value` has type `String`, which does not implement the `Copy` trait
-28 | |         r.width
-29 | |     });
+19 | |         r.width
+20 | |     });
    | |_____- captured by this `FnMut` closure
 ```
 
@@ -538,11 +558,11 @@ environment. To fix this, we need to change the closure body so that it doesn’
 move values out of the environment. If we’re interested in the number of times
 `sort_by_key` is called, keeping a counter in the environment and incrementing
 its value in the closure body is a more straightforward way to calculate that.
-The closure in Listing 13-9 works with `sort_by_key` because it is only
-capturing a mutable reference to the `num_sort_operations` counter and can
-therefore be called more than once:
-
-Filename: src/main.rs
+<!-- are we interested in this? Are we saying this is basically what we're
+doing, but we're going about it in a roundabout way? /LC -->
+This closure works with `sort_by_key` because it is only capturing a mutable
+reference to the `num_sort_operations` counter and can therefore be called more
+than once:
 
 ```
 #[derive(Debug)]
@@ -553,18 +573,9 @@ struct Rectangle {
 
 fn main() {
     let mut list = [
-        Rectangle {
-            width: 10,
-            height: 1,
-        },
-        Rectangle {
-            width: 3,
-            height: 5,
-        },
-        Rectangle {
-            width: 7,
-            height: 12,
-        },
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
     ];
 
     let mut num_sort_operations = 0;
@@ -576,12 +587,10 @@ fn main() {
 }
 ```
 
-Listing 13-9: Using an `FnMut` closure with `sort_by_key` is allowed
-
 The `Fn` traits are important when defining or using functions or types that
-make use of closures. The next section discusses iterators, and many iterator
-methods take closure arguments. Keep these details of closures in mind as we
-explore iterators!
+make use of closures. In the next section we'll discuss iterators. Many iterator
+methods take closure arguments, so keep these closure details in mind as we
+continue!
 
 ## Processing a Series of Items with Iterators
 
@@ -592,7 +601,7 @@ have to reimplement that logic yourself.
 
 In Rust, iterators are *lazy*, meaning they have no effect until you call
 methods that consume the iterator to use it up. For example, the code in
-Listing 13-10 creates an iterator over the items in the vector `v1` by calling
+Listing 13-13 creates an iterator over the items in the vector `v1` by calling
 the `iter` method defined on `Vec<T>`. This code by itself doesn’t do anything
 useful.
 
@@ -602,18 +611,18 @@ let v1 = vec![1, 2, 3];
 let v1_iter = v1.iter();
 ```
 
-Listing 13-10: Creating an iterator
+Listing 13-13: Creating an iterator
 
-Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-5 in Chapter 3, we iterated over an array using a `for` loop to execute some
-code on each of its items. Under the hood this implicitly created and then
-consumed an iterator, but we glossed over how exactly that works until now.
+The iterator is stored in the `v1_iter` variable. Once we’ve created an
+iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we
+iterated over an array using a `for` loop to execute some code on each of its
+items. Under the hood this implicitly created and then consumed an iterator,
+but we glossed over how exactly that works until now.
 
-The example in Listing 13-11 separates the creation of the iterator from the
-use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
-variable, and no iteration takes place at that time. When the `for` loop is
-called using the iterator in `v1_iter`, each element in the iterator is used in
-one iteration of the loop, which prints out each value.
+In the example in Listing 13-14 we separate the creation of the iterator from
+the use of the iterator in the `for` loop. When the `for` loop is called using
+the iterator in `v1_iter`, each element in the iterator is used in one
+iteration of the loop, which prints out each value.
 
 ```
 let v1 = vec![1, 2, 3];
@@ -625,7 +634,7 @@ for val in v1_iter {
 }
 ```
 
-Listing 13-11: Using an iterator in a `for` loop
+Listing 13-14: Using an iterator in a `for` loop
 
 In languages that don’t have iterators provided by their standard libraries,
 you would likely write this same functionality by starting a variable at index
@@ -665,7 +674,7 @@ The `Iterator` trait only requires implementors to define one method: the
 `next` method, which returns one item of the iterator at a time wrapped in
 `Some` and, when iteration is over, returns `None`.
 
-We can call the `next` method on iterators directly; Listing 13-12 demonstrates
+We can call the `next` method on iterators directly; Listing 13-15 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
 from the vector.
 
@@ -685,7 +694,7 @@ fn iterator_demonstration() {
 }
 ```
 
-Listing 13-12: Calling the `next` method on an iterator
+Listing 13-15: Calling the `next` method on an iterator
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
 iterator changes internal state that the iterator uses to keep track of where
@@ -714,7 +723,7 @@ Methods that call `next` are called *consuming adaptors*, because calling them
 uses up the iterator. One example is the `sum` method, which takes ownership of
 the iterator and iterates through the items by repeatedly calling `next`, thus
 consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-13 has a
+total and returns the total when iteration is complete. Listing 13-16 has a
 test illustrating a use of the `sum` method:
 
 Filename: src/lib.rs
@@ -732,7 +741,7 @@ fn iterator_sum() {
 }
 ```
 
-Listing 13-13: Calling the `sum` method to get the total of all items in the
+Listing 13-16: Calling the `sum` method to get the total of all items in the
 iterator
 
 We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
@@ -741,12 +750,17 @@ ownership of the iterator we call it on.
 ### Methods that Produce Other Iterators
 
 Other methods defined on the `Iterator` trait, known as *iterator adaptors*,
-allow you to change iterators into different kinds of iterators. You can chain
-multiple calls to iterator adaptors to perform complex actions in a readable
-way. But because all iterators are lazy, you have to call one of the consuming
-adaptor methods to get results from calls to iterator adaptors.
+<!-- are all methods defined on Iterator know as iterator adaptors? If so,
+should that term be introduced in the previous section? /LC -->
+allow you to change iterators into different kinds of iterators.
+<!-- is there a quick example of a different kind of iterator you could give? I
+wasn't aware there were different kinds, unless you just mean change them into
+iterators that act on something else? /LC -->
+You can chain multiple calls to iterator adaptors to perform complex actions in
+a readable way. But because all iterators are lazy, you have to call one of the
+consuming adaptor methods to get results from calls to iterator adaptors.
 
-Listing 13-14 shows an example of calling the iterator adaptor method `map`,
+Listing 13-17 shows an example of calling the iterator adaptor method `map`,
 which takes a closure to call on each item to produce a new iterator. The
 closure here creates a new iterator in which each item from the vector has been
 incremented by 1. However, this code produces a warning:
@@ -759,7 +773,8 @@ let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-Listing 13-14: Calling the iterator adaptor `map` to create a new iterator
+Listing 13-17: Calling the iterator adaptor `map` to
+create a new iterator
 
 The warning we get is this:
 
@@ -774,7 +789,7 @@ warning: unused `Map` that must be used
   = note: iterators are lazy and do nothing unless consumed
 ```
 
-The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
+The code in Listing 13-17 doesn’t do anything; the closure we’ve specified
 never gets called. The warning reminds us why: iterator adaptors are lazy, and
 we need to consume the iterator here.
 
@@ -782,7 +797,7 @@ To fix this and consume the iterator, we’ll use the `collect` method, which we
 used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the
 iterator and collects the resulting values into a collection data type.
 
-In Listing 13-15, we collect the results of iterating over the iterator that’s
+In Listing 13-18, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
 containing each item from the original vector incremented by 1.
 
@@ -796,7 +811,7 @@ let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
-Listing 13-15: Calling the `map` method to create a new iterator and then
+Listing 13-18: Calling the `map` method to create a new iterator and then
 calling the `collect` method to consume the new iterator and create a vector
 
 Because `map` takes a closure, we can specify any operation we want to perform
@@ -807,13 +822,17 @@ provides.
 ### Using Closures that Capture Their Environment
 
 Now that we’ve introduced iterators, we can demonstrate a common use of
-closures that capture their environment by using the `filter` iterator adaptor.
+closures that capture their environment
+<!-- are we saying we use filter to demonstrate some common use, or that using
+filter is the common use? If the former, can you specify what the common usage
+is? /LC -->
+by using the `filter` iterator adaptor.
 The `filter` method on an iterator takes a closure that takes each item from
 the iterator and returns a Boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
 `false`, the value won’t be included in the resulting iterator.
 
-In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
+In Listing 13-19, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
 instances. It will return only shoes that are the specified size.
 
@@ -870,7 +889,7 @@ mod tests {
 }
 ```
 
-Listing 13-16: Using the `filter` method with a closure that captures
+Listing 13-19: Using the `filter` method with a closure that captures
 `shoe_size`
 
 The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
@@ -901,7 +920,7 @@ concise. Let’s look at how iterators can improve our implementation of the
 
 In Listing 12-6, we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
-values, allowing the `Config` struct to own those values. In Listing 13-17,
+values, allowing the `Config` struct to own those values. In Listing 13-24,
 we’ve reproduced the implementation of the `Config::new` function as it was in
 Listing 12-23:
 
@@ -928,7 +947,7 @@ impl Config {
 }
 ```
 
-Listing 13-17: Reproduction of the `Config::new` function from Listing 12-23
+Listing 13-24: Reproduction of the `Config::new` function from Listing 12-23
 
 At the time, we said not to worry about the inefficient `clone` calls because
 we would remove them in the future. Well, that time is now!
@@ -967,9 +986,9 @@ fn main() {
 }
 ```
 
-We’ll change the start of the `main` function that we had in Listing 12-24 to
-the code in Listing 13-18. This won’t compile until we update `Config::new` as
-well.
+We’ll first change the start of the `main` function that we had in Listing
+12-24 to the code in Listing 13-25, which this time uses an iterator. This
+won’t compile until we update `Config::new` as well.
 
 Filename: src/main.rs
 
@@ -984,7 +1003,7 @@ fn main() {
 }
 ```
 
-Listing 13-18: Passing the return value of `env::args` to `Config::new`
+Listing 13-25: Passing the return value of `env::args` to `Config::new`
 
 The `env::args` function returns an iterator! Rather than collecting the
 iterator values into a vector and then passing a slice to `Config::new`, now
@@ -993,7 +1012,7 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::new`. In your I/O project’s
 *src/lib.rs* file, let’s change the signature of `Config::new` to look like
-Listing 13-19. This still won’t compile because we need to update the function
+Listing 13-26. This still won’t compile because we need to update the function
 body.
 
 Filename: src/lib.rs
@@ -1006,7 +1025,7 @@ impl Config {
         // --snip--
 ```
 
-Listing 13-19: Updating the signature of `Config::new` to expect an iterator
+Listing 13-26: Updating the signature of `Config::new` to expect an iterator
 
 The standard library documentation for the `env::args` function shows that the
 type of the iterator it returns is `std::env::Args`, and that type implements
@@ -1015,9 +1034,8 @@ the `Iterator` trait and returns `String` values.
 We’ve updated the signature of the `Config::new` function so the parameter
 `args` has a generic type with the trait bounds `impl Iterator<Item = String>`
 instead of `&[String]`. This usage of the `impl Trait` syntax we discussed in
-the “Traits as Parameters” section of Chapter 10
-means that `args` can be any type that implements the `Iterator` type and
-returns `String` items.
+the “Traits as Parameters” section of Chapter 10 means that `args` can be any
+type that implements the `Iterator` type and returns `String` items.
 
 Because we’re taking ownership of `args` and we’ll be mutating `args` by
 iterating over it, we can add the `mut` keyword into the specification of the
@@ -1026,7 +1044,7 @@ iterating over it, we can add the `mut` keyword into the specification of the
 #### Using `Iterator` Trait Methods Instead of Indexing
 
 Next, we’ll fix the body of `Config::new`. Because `args` implements the
-`Iterator` trait, we know we can call the `next` method on it! Listing 13-20
+`Iterator` trait, we know we can call the `next` method on it! Listing 13-27
 updates the code from Listing 12-23 to use the `next` method:
 
 Filename: src/lib.rs
@@ -1059,7 +1077,7 @@ impl Config {
 }
 ```
 
-Listing 13-20: Changing the body of `Config::new` to use iterator methods
+Listing 13-27: Changing the body of `Config::new` to use iterator methods
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
@@ -1072,7 +1090,7 @@ the same thing for the `filename` value.
 ### Making Code Clearer with Iterator Adaptors
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
+project, which is reproduced here in Listing 13-28 as it was in Listing 12-19:
 
 Filename: src/lib.rs
 
@@ -1090,14 +1108,14 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 13-21: The implementation of the `search` function from Listing 12-19
+Listing 13-28: The implementation of the `search` function from Listing 12-19
 
 We can write this code in a more concise way using iterator adaptor methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
 to make searching happen in parallel, because we wouldn’t have to manage
-concurrent access to the `results` vector. Listing 13-22 shows this change:
+concurrent access to the `results` vector. Listing 13-29 shows this change:
 
 Filename: src/lib.rs
 
@@ -1110,20 +1128,22 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 13-22: Using iterator adaptor methods in the implementation of the
+Listing 13-29: Using iterator adaptor methods in the implementation of the
 `search` function
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
-13-16, this code uses the `filter` adaptor to keep only the lines that
+13-19, this code uses the `filter` adaptor to keep only the lines that
 `line.contains(query)` returns `true` for. We then collect the matching lines
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
 well.
 
+### What to Use When
+
 The next logical question is which style you should choose in your own code and
-why: the original implementation in Listing 13-21 or the version using
-iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
+why: the original implementation in Listing 13-28 or the version using
+iterators in Listing 13-29. Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
 for the various iterator adaptors and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
