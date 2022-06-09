@@ -3,8 +3,8 @@ title = "The Rust Programming Language"
 authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
 
 [output.html]
-additional-css = ["ferris.css", "situ-quiz.css", "theme/2018-edition.css"]
-additional-js = ["ferris.js", "situ-quiz.js"]
+additional-css = ["ferris.css", "mdbook-quiz.css", "theme/2018-edition.css"]
+additional-js = ["ferris.js", "mdbook-quiz.js"]
 git-repository-url = "https://github.com/rust-lang/book"
 
-[preprocessor.situ]
+[preprocessor.quiz]
