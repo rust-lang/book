@@ -15,11 +15,9 @@
 
 [[questions]]
 type = "Tracing"
-program = """
-fn main() {
+program = """fn main() {
   let x = 1;
   println!("{x}");
   x += 1;
   println!("{x}");
-}
-"""
+}"""
