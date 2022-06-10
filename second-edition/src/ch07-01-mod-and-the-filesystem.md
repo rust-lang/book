@@ -401,7 +401,7 @@ communicator
 ```
 
 그러니까 우리가 `network::server` 모듈을 추출하고자 할 때, 왜 `network::server` 모듈을
-*src/server.rs*로 추출하는 대신, *src/network.rs* 파일에 *src/network/mod.rs*로 옮기고
+*src/server.rs*로 추출하는 대신, *src/network.rs* 파일을 *src/network/mod.rs*로 바꾸고
 `network::server` 코드를 *network* 디렉토리 안에 있는 *src/network/server.rs*에 넣었을까요?
 그 이유는 *src* 디렉토리 안에 *server.rs* 파일이 있으면, 러스트는 `server`가 `network`의
 서브모듈이라고 인식할 수 없기 때문입니다. 러스트가 동작하는 방식을 명확하게 알기 위해서, 아래와 같은 모듈
