@@ -8,4 +8,4 @@ additional-js = ["ferris.js", "mdbook-quiz.js", "consent.js"]
 git-repository-url = "https://github.com/rust-lang/book"
 
 [preprocessor.quiz]
-log-endpoint = "http://mindover.computer:8080/quiz"
+log-endpoint = "https://mindover.computer/quiz"
