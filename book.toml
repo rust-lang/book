@@ -3,8 +3,9 @@ title = "The Rust Programming Language"
 authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
 
 [output.html]
-additional-css = ["ferris.css", "mdbook-quiz.css", "theme/2018-edition.css"]
-additional-js = ["ferris.js", "mdbook-quiz.js"]
+additional-css = ["ferris.css", "mdbook-quiz.css", "consent.css", "theme/2018-edition.css"]
+additional-js = ["ferris.js", "mdbook-quiz.js", "consent.js"]
 git-repository-url = "https://github.com/rust-lang/book"
 
 [preprocessor.quiz]
+log-endpoint = "http://mindover.computer:8080/quiz"
