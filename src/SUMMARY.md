@@ -75,7 +75,7 @@
 ## Thinking in Rust
 
 - [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)
-    - [Closures: Anonymous Functions that Can Capture Their Environment](ch13-01-closures.md)
+    - [Closures: Anonymous Functions that Capture Their Environment](ch13-01-closures.md)
     - [Processing a Series of Items with Iterators](ch13-02-iterators.md)
     - [Improving Our I/O Project](ch13-03-improving-our-io-project.md)
     - [Comparing Performance: Loops vs. Iterators](ch13-04-performance.md)
