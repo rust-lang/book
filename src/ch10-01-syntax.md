@@ -274,8 +274,8 @@ method.
 ### Performance of Code Using Generics
 
 You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won't make your run any
-slower than it would with concrete types.
+parameters. The good news is that using generic types won't make your program run 
+any slower than it would with concrete types.
 
 Rust accomplishes this by performing monomorphization of the code using
 generics at compile time. *Monomorphization* is the process of turning generic
