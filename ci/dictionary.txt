@@ -132,6 +132,7 @@ destructuring
 Destructuring
 deterministically
 DevOps
+devtools
 didn
 Dobrý
 doccargo

@@ -43,9 +43,9 @@ For Windows CMD, enter this:
 ### Writing and Running a Rust Program
 
 Next, make a new source file and call it *main.rs*. Rust files always end with
-the *.rs* extension. If you’re using more than one word in your filename, use
-an underscore to separate them. For example, use *hello_world.rs* rather than
-*helloworld.rs*.
+the *.rs* extension. If you’re using more than one word in your filename, the
+convention is to use an underscore to separate them. For example, use
+*hello_world.rs* rather than *helloworld.rs*.
 
 Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
@@ -59,8 +59,9 @@ fn main() {
 
 <span class="caption">Listing 1-1: A program that prints `Hello, world!`</span>
 
-Save the file and go back to your terminal window. On Linux or macOS, enter
-the following commands to compile and run the file:
+Save the file and go back to your terminal window in the
+*~/projects/hello_world* directory. On Linux or macOS, enter the following
+commands to compile and run the file:
 
 ```console
 $ rustc main.rs
@@ -86,8 +87,8 @@ program. That makes you a Rust programmer—welcome!
 
 ### Anatomy of a Rust Program
 
-Let’s review in detail what just happened in your “Hello, world!” program.
-Here’s the first piece of the puzzle:
+Let’s review this “Hello, world!” program in detail. Here’s the first piece of
+the puzzle:
 
 ```rust
 fn main() {
@@ -95,23 +96,23 @@ fn main() {
 }
 ```
 
-These lines define a function in Rust. The `main` function is special: it is
-always the first code that runs in every executable Rust program. The first
-line declares a function named `main` that has no parameters and returns
-nothing. If there were parameters, they would go inside the parentheses, `()`.
+These lines define a function named `main`. The `main` function is special: it
+is always the first code that runs in every executable Rust program. Here, the
+first line declares a function named `main` that has no parameters and returns
+nothing. If there were parameters, they would go inside the parentheses `()`.
 
-Also, note that the function body is wrapped in curly brackets, `{}`. Rust
-requires these around all function bodies. It’s good style to place the opening
-curly bracket on the same line as the function declaration, adding one space in
-between.
+The function body is wrapped in `{}`. Rust requires curly brackets around all
+function bodies. It’s good style to place the opening curly bracket on the same
+line as the function declaration, adding one space in between.
 
-If you want to stick to a standard style across Rust projects, you can use an
-automatic formatter tool called `rustfmt` to format your code in a particular
-style. The Rust team has included this tool with the standard Rust distribution,
-like `rustc`, so it should already be installed on your computer! Check the
-online documentation for more details.
+> Note: If you want to stick to a standard style across Rust projects, you can
+> use an automatic formatter tool called `rustfmt` to format your code in a
+> particular style (more on `rustfmt` in
+> [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool
+> with the standard Rust distribution, like `rustc`, so it should already be
+> installed on your computer!
 
-Inside the `main` function is the following code:
+The body of the the `main` function holds the following code:
 
 ```rust
     println!("Hello, world!");
@@ -122,7 +123,7 @@ screen. There are four important details to notice here.
 
 First, Rust style is to indent with four spaces, not a tab.
 
-Second, `println!` calls a Rust macro. If it called a function instead, it
+Second, `println!` calls a Rust macro. If it had called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
 more detail in Chapter 19. For now, you just need to know that using a `!`
 means that you’re calling a macro instead of a normal function, and that macros
@@ -179,7 +180,7 @@ From here, you run the *main* or *main.exe* file, like this:
 $ ./main # or .\main.exe on Windows
 ```
 
-If *main.rs* was your “Hello, world!” program, this line would print `Hello,
+If your *main.rs* is your “Hello, world!” program, this line prints `Hello,
 world!` to your terminal.
 
 If you’re more familiar with a dynamic language, such as Ruby, Python, or
@@ -197,3 +198,4 @@ code. Next, we’ll introduce you to the Cargo tool, which will help you write
 real-world Rust programs.
 
 [troubleshooting]: ch01-01-installation.html#troubleshooting
+[devtools]: appendix-04-useful-development-tools.md

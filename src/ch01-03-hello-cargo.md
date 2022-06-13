@@ -7,9 +7,9 @@ building those libraries. (We call the libraries that your code needs
 *dependencies*.)
 
 The simplest Rust programs, like the one we’ve written so far, don’t have any
-dependencies. So if we had built the “Hello, world!” project with Cargo, it
-would only use the part of Cargo that handles building your code. As you write
-more complex Rust programs, you’ll add dependencies, and if you start a project
+dependencies. If we had built the “Hello, world!” project with Cargo, it would
+only use the part of Cargo that handles building your code. As you write more
+complex Rust programs, you’ll add dependencies, and if you start a project
 using Cargo, adding dependencies will be much easier to do.
 
 Because the vast majority of Rust projects use Cargo, the rest of this book
@@ -39,9 +39,9 @@ $ cargo new hello_cargo
 $ cd hello_cargo
 ```
 
-The first command created a new directory called *hello_cargo*. We’ve named
-our project *hello_cargo*, and Cargo creates its files in a directory of the
-same name.
+The first command creates a new directory and project called *hello_cargo*.
+We’ve named our project *hello_cargo*, and Cargo creates its files in a
+directory of the same name.
 
 Go into the *hello_cargo* directory and list the files. You’ll see that Cargo
 has generated two files and one directory for us: a *Cargo.toml* file and a
@@ -99,9 +99,9 @@ fn main() {
 ```
 
 Cargo has generated a “Hello, world!” program for you, just like the one we
-wrote in Listing 1-1! So far, the differences between our previous project and
-the project Cargo generated are that Cargo placed the code in the *src*
-directory, and we have a *Cargo.toml* configuration file in the top directory.
+wrote in Listing 1-1! So far, the differences between our project and the
+project Cargo generated are that Cargo placed the code in the *src* directory,
+and we have a *Cargo.toml* configuration file in the top directory.
 
 Cargo expects your source files to live inside the *src* directory. The
 top-level project directory is just for README files, license information,
@@ -153,10 +153,15 @@ $ cargo run
 Hello, world!
 ```
 
+Using `cargo run` is more convenient than having to remember to run `cargo
+build` and then use the whole path to the binary, so most developers use `cargo
+run`.
+
 Notice that this time we didn’t see output indicating that Cargo was compiling
-`hello_cargo`. Cargo figured out that the files hadn’t changed, so it just ran
-the binary. If you had modified your source code, Cargo would have rebuilt the
-project before running it, and you would have seen this output:
+`hello_cargo`. Cargo figured out that the files hadn’t changed, so it didn’t
+rebuild but just ran the binary. If you had modified your source code, Cargo
+would have rebuilt the project before running it, and you would have seen this
+output:
 
 ```console
 $ cargo run
@@ -178,9 +183,10 @@ $ cargo check
 Why would you not want an executable? Often, `cargo check` is much faster than
 `cargo build`, because it skips the step of producing an executable. If you’re
 continually checking your work while writing the code, using `cargo check` will
-speed up the process! As such, many Rustaceans run `cargo check` periodically
-as they write their program to make sure it compiles. Then they run `cargo
-build` when they’re ready to use the executable.
+speed up the process of letting you know if your project is still compiling! As
+such, many Rustaceans run `cargo check` periodically as they write their
+program to make sure it compiles. Then they run `cargo build` when they’re
+ready to use the executable.
 
 Let’s recap what we’ve learned so far about Cargo:
 
