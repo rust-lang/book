@@ -188,9 +188,9 @@ copy and paste relevant text
 -->
 
 ```text
-thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
-repr: Os { code: 2, message: "No such file or directory" } }',
-src/libcore/result.rs:906:4
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os {
+code: 2, kind: NotFound, message: "No such file or directory" }',
+src/main.rs:4:49
 ```
 
 Similarly, the `expect` method lets us also choose the `panic!` error message.
@@ -216,9 +216,9 @@ copy and paste relevant text
 -->
 
 ```text
-thread 'main' panicked at 'hello.txt should be included in this project: Error
-{ repr: Os { code: 2, message: "No such file or directory" } }',
-src/libcore/result.rs:906:4
+thread 'main' panicked at 'hello.txt should be included in this project: Os {
+code: 2, kind: NotFound, message: "No such file or directory" }',
+src/main.rs:5:10
 ```
 
 In production-quality code, most Rustaceans choose `expect` rather than
