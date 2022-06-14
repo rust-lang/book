@@ -189,7 +189,7 @@ relate to each other in the context of the `longest` function.
 
 To use lifetime annotations in function signatures, we need to declare the
 generic *lifetime* parameters inside angle brackets between the function name
-and the parameter list, just as we did with generic *type* parameters
+and the parameter list, just as we did with generic *type* parameters.
 
 We want the signature to express the following constraint: the returned
 reference will be valid as long as both the parameters are valid. This is the
