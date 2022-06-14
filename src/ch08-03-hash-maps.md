@@ -186,8 +186,7 @@ the same key/value pairs printed in a different order: recall from the
 [“Accessing Values in a Hash Map”][access]<!-- ignore --> section that
 iterating over a hash map happens in an arbitrary order.
 
-This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. The
-`split_whitespace` method returns an iterator over sub-slices, separated by
+The `split_whitespace` method returns an iterator over sub-slices, separated by
 whitespace, of the value in `text`. The `or_insert` method returns a mutable
 reference (`&mut V`) to the value for the specified key. Here we store that
 mutable reference in the `count` variable, so in order to assign to that value,
