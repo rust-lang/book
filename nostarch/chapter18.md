@@ -19,19 +19,24 @@ control flow. A pattern consists of some combination of the following:
 * Wildcards
 * Placeholders
 
-These components describe the shape of the data we’re working with, which we
-then match against values to determine whether our program has the correct data
-to continue running a particular piece of code.
+Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
+contexts in which patterns are valid, these components describe the shape of
+data. Our program then matches values against the patterns to determine whether
+it has the correct shape of data to continue running a particular piece of code.
 <!-- is there some generic pattern we can show as an example, early on, or
 is it too dependent on where the pattern is used? /LC -->
 <!-- Yeah, if a pattern is out of context, it doesn't look special. Like `3`
 can be a pattern. /Carol -->
 <!-- We could mention something like, "If you've written a little Rust, you've
 already used patterns without knowing it. For example `let x = 3`, the `x` is
-a pattern." Though looks like we use this later. 
+a pattern." Though looks like we use this later.
 
 Or, we could say, "Some example patterns include: `x`, `(a, b)`, and `Color::Red`
 /JT -->
+<!-- Ok, I've tried rewording this paragraph to include some examples, I do
+think it's important to emphasize that these are only patterns in the contexts
+patterns may exist, because without the context, there's no way to distinguish
+patterns from regular values /Carol -->
 
 To use a pattern, we compare it to some value. If the pattern matches the
 value, we use the value parts in our code. Recall the `match` expressions in
@@ -156,8 +161,14 @@ with the curly bracket.
 
 <!-- Have we given them an intuition yet for why this is? I may be forgetting
 something from the earlier chapters, but I wonder if we should reiterate that
-when a pattern matches, the variable that gets bound is only valid for the 
+when a pattern matches, the variable that gets bound is only valid for the
 expression or block that follows the match. /JT -->
+<!-- I don't really see a difference between saying "The shadowed `age` we want
+to compare to 30 isn't valid until the new scope starts with the curly bracket"
+and "when a pattern matches, the variable that gets bound is only valid for the
+expression or block that follows the match"? To me, it sounds like this would
+be saying the same thing twice, so I'm not going to change anything here.
+/Carol -->
 
 The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
@@ -260,7 +271,7 @@ Listing 18-4: Using a pattern to destructure a tuple and create three variables
 at once
 
 Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
-to the pattern `(x, y, z)` and sees that the value matches the pattern, in that 
+to the pattern `(x, y, z)` and sees that the value matches the pattern, in that
 it sees that the number of elements is the same in both, so Rust
 binds `1` to `x`, `2` to `y`, and `3` to `z`. You can think of this tuple
 pattern as nesting three individual variable patterns inside it.
@@ -703,9 +714,14 @@ matches any other `Point` and creates variables for both the `x` and `y` fields.
 In this example, the value `p` matches the second arm by virtue of `x`
 containing a 0, so this code will print `On the y axis at 7`.
 
+Remember that a `match` expression stops checking arms once it has found the
+first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
+and the `y` axis, this code would only print `On the x axis at 0`.
+
 <!-- We should remind them that we stop at the first pattern, so even though
 0,0 is on both x- and y-axis in a sense, you'll only ever see the "on x-axis
 message" /JT -->
+<!-- Done! /Carol -->
 
 #### Destructuring Enums
 
