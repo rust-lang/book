@@ -123,7 +123,7 @@ fn main() {
     let age: Result<u8, _> = "34".parse();
 
     [1] if let Some(color) = favorite_color {
-        [2] println!("Using your favorite color, {}, as the background", color);
+        [2] println!("Using your favorite color, {color}, as the background");
     [3] } else if is_tuesday {
         [4] println!("Tuesday is green day!");
     [5]} else if let Ok(age) = age {
@@ -514,11 +514,11 @@ fn main() {
 
     match x {
         [3] Some(50) => println!("Got 50"),
-        [4] Some(y) => println!("Matched, y = {:?}", y),
+        [4] Some(y) => println!("Matched, y = {y}"),
         [5] _ => println!("Default case, x = {:?}", x),
     }
 
-    [6] println!("at the end: x = {:?}, y = {:?}", x, y);
+    [6] println!("at the end: x = {:?}, y = {y}", x);
 }
 ```
 
@@ -936,7 +936,7 @@ let numbers = (2, 4, 8, 16, 32);
 
 match numbers {
     (first, _, third, _, fifth) => {
-        println!("Some numbers: {}, {}, {}", first, third, fifth)
+        println!("Some numbers: {first}, {third}, {fifth}")
     }
 }
 ```
@@ -1050,7 +1050,7 @@ fn main() {
 
     match numbers {
         (first, .., last) => {
-            println!("Some numbers: {}, {}", first, last);
+            println!("Some numbers: {first}, {last}");
         }
     }
 }
@@ -1156,11 +1156,11 @@ fn main() {
 
     match x {
         Some(50) => println!("Got 50"),
-        Some(n) if n == y => println!("Matched, n = {}", n),
+        Some(n) if n == y => println!("Matched, n = {n}"),
         _ => println!("Default case, x = {:?}", x),
     }
 
-    println!("at the end: x = {:?}, y = {}", x, y);
+    println!("at the end: x = {:?}, y = {y}", x);
 }
 ```
 
