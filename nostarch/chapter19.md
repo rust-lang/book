@@ -424,6 +424,9 @@ most common and follows the C programming language’s ABI.
 that Rust supports here? Also, do we want to mention there are helper
 crates for connecting to other languages, include C++?
 /JT -->
+<!-- I don't really want to get into the other external types or other
+languages; there are other resources that cover these topics better than I
+could here. /Carol -->
 
 > #### Calling Rust Functions from Other Languages
 >
@@ -622,15 +625,6 @@ handle. To examine the difference between the two concepts, we’ll look at an
 implementation of the `Iterator` trait on a type named `Counter` that specifies
 the `Item` type is `u32`:
 
-<!-- Liz: This example was referencing an example from Chapter 13 that I cut.
-I've changed this to just be a small standalone example, do you think it needs
-more introduction than what's here because it's no longer referencing something
-from earlier? /Carol -->
-
-<!-- JT, what do you think? /LC -->
-<!-- Reads okay to me.
-/JT -->
-
 Filename: src/lib.rs
 
 ```
@@ -668,11 +662,17 @@ definition that uses associated types, we can only choose what the type of
 We don’t have to specify that we want an iterator of `u32` values everywhere
 that we call `next` on `Counter`.
 
+Associated types also become part of the trait’s contract: implementors of the
+trait must provide a type to stand in for the associated type placeholder.
+Associated types often have a name that describes how the type will be used,
+and documenting the associated type in the API documentation is good practice.
+
 <!-- It also makes the type a part of the trait's contract. Not sure if
 too subtle of a point, but the associated type of a trait is part of the
-require things that the implementer must provide. They often also have a name
+require things that the implementor must provide. They often also have a name
 that may clue you in as to how that required type will be used.
 /JT -->
+<!-- Great points, I've added a small paragraph here! /Carol -->
 
 ### Default Generic Type Parameters and Operator Overloading
 
@@ -1263,13 +1263,18 @@ println!("x + y = {}", x + y);
 Because `Kilometers` and `i32` are the same type, we can add values of both
 types and we can pass `Kilometers` values to functions that take `i32`
 parameters. However, using this method, we don’t get the type checking benefits
-that we get from the newtype pattern discussed earlier.
+that we get from the newtype pattern discussed earlier. In other words, if we
+mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
+an error.
 
 <!-- Having a few battle wounds trying to debug using this pattern, it's
 definitely good to warn people that if they use type aliases to the same base
 type in their program (like multiple aliases to `usize`), they're asking for
 trouble as the typechecker will not help them if they mix up their types.
 /JT -->
+<!-- I'm not sure if JT was saying this paragraph was good or it could use more
+emphasis? I've added a sentence to the end of the paragraph above in case it
+was the latter /Carol -->
 
 The main use case for type synonyms is to reduce repetition. For example, we
 might have a lengthy type like this:
@@ -1867,20 +1872,18 @@ macro call will be the following:
 We’ve defined a macro that can take any number of arguments of any type and can
 generate code to create a vector containing the specified elements.
 
-There are some strange edge cases with `macro_rules!`. In the future, Rust will
-have a second kind of declarative macro that will work in a similar fashion but
-fix some of these edge cases. After that update, `macro_rules!` will be
-effectively deprecated. With this in mind, as well as the fact that most Rust
-programmers will *use* macros more than *write* macros, we won’t discuss
-`macro_rules!` any further. To learn more about how to write macros, consult
-the online documentation or other resources, such as “The Little Book of Rust
-Macros” at *https://veykril.github.io/tlborm/* started by Daniel Keep and continued by Lukas Wirth.
+To learn more about how to write macros, consult the online documentation or
+other resources, such as “The Little Book of Rust Macros” at
+*https://veykril.github.io/tlborm/* started by Daniel Keep and continued by
+Lukas Wirth.
 
 <!-- Not sure what "In the future, Rust will have a second kind of declarative
-macro" means here. I suspect we're "stuck" with the two kinds of macros we 
-already have today, at least I don't see much energy in pushing to add a third 
+macro" means here. I suspect we're "stuck" with the two kinds of macros we
+already have today, at least I don't see much energy in pushing to add a third
 just yet.
 /JT -->
+<!-- Yeah, great catch, I think that part was back when we had more dreams that
+have now been postponed/abandoned. I've removed. /Carol -->
 
 ### Procedural Macros for Generating Code from Attributes
 
@@ -2278,14 +2281,19 @@ This definition is similar to the custom derive macro’s signature: we receive
 the tokens that are inside the parentheses and return the code we wanted to
 generate.
 
-<!-- I may get a few looks for this, but I wonder if we should trim the procedural
-macros section above a bit. There's a lot of information in there, but it feels
-like something we could intro and then point people off to other materials for.
-Reason being (and I know I may be in the minority here), procedural macros are
-something we should use only rarely in our Rust projects. They are a burden on
-the compiler, have the potential to hurt readability and maintainability, and... 
-you know the saying with great power comes great responsibilty and all that.
-/JT -->
+<!-- I may get a few looks for this, but I wonder if we should trim the
+procedural macros section above a bit. There's a lot of information in there,
+but it feels like something we could intro and then point people off to other
+materials for. Reason being (and I know I may be in the minority here),
+procedural macros are something we should use only rarely in our Rust projects.
+They are a burden on the compiler, have the potential to hurt readability and
+maintainability, and... you know the saying with great power comes great
+responsibilty and all that. /JT -->
+<!-- I think we felt obligated to have this section when procedural macros were
+introduced because there wasn't any documentation for them. I feel like the
+custom derive is the most common kind people want to make... While I'd love to
+not have to maintain this section, I asked around and people seemed generally
+in favor of keeping it, so I think I will, for now. /Carol -->
 
 ## Summary
 
