@@ -110,8 +110,6 @@ structure rather than values. Let’s walk through what the pattern pieces in
 Listing 19-28 mean; for the full macro pattern syntax, see the [Rust
 Reference][ref].
 
-[ref]: ../reference/macros-by-example.html
-
 First, we use a set of parentheses to encompass the whole pattern. We use a
 dollar sign (`$`) to declare a variable in the macro system that will contain
 the Rust code matching the pattern. The dollar sign makes it clear this is a
@@ -147,16 +145,9 @@ will be the following:
 We’ve defined a macro that can take any number of arguments of any type and can
 generate code to create a vector containing the specified elements.
 
-There are some strange edge cases with `macro_rules!`. In the future, Rust will
-have a second kind of declarative macro that will work in a similar fashion but
-fix some of these edge cases. After that update, `macro_rules!` will be
-effectively deprecated. With this in mind, as well as the fact that most Rust
-programmers will *use* macros more than *write* macros, we won’t discuss
-`macro_rules!` any further. To learn more about how to write macros, consult
-the online documentation or other resources, such as [“The Little Book of Rust
-Macros”][tlborm] started by Daniel Keep and continued by Lukas Wirth.
-
-[tlborm]: https://veykril.github.io/tlborm/
+To learn more about how to write macros, consult the online documentation or
+other resources, such as [“The Little Book of Rust Macros”][tlborm] started by
+Daniel Keep and continued by Lukas Wirth.
 
 ### Procedural Macros for Generating Code from Attributes
 
@@ -311,9 +302,6 @@ We’ve introduced three new crates: `proc_macro`, [`syn`], and [`quote`]. The
 dependencies in *Cargo.toml*. The `proc_macro` crate is the compiler’s API that
 allows us to read and manipulate Rust code from our code.
 
-[`syn`]: https://crates.io/crates/syn
-[`quote`]: https://crates.io/crates/quote
-
 The `syn` crate parses Rust code from a string into a data structure that we
 can perform operations on. The `quote` crate turns `syn` data structures back
 into Rust code. These crates make it much simpler to parse any sort of Rust
@@ -361,8 +349,6 @@ with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
 fields on this struct for describing all sorts of Rust code; check the [`syn`
 documentation for `DeriveInput`][syn-docs] for more information.
 
-[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
-
 Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
 the new Rust code we want to include. But before we do, note that the output
 for our derive macro is also a `TokenStream`. The returned `TokenStream` is
@@ -409,8 +395,6 @@ The `quote!` macro also provides some very cool templating mechanics: we can
 enter `#name`, and `quote!` will replace it with the value in the variable
 `name`. You can even do some repetition similar to the way regular macros work.
 Check out [the `quote` crate’s docs][quote-docs] for a thorough introduction.
-
-[quote-docs]: https://docs.rs/quote
 
 We want our procedural macro to generate an implementation of our `HelloMacro`
 trait for the type the user annotated, which we can get by using `#name`. The
@@ -491,8 +475,6 @@ Metaprogramming”][decl]<!-- ignore --> earlier. Function-like macros take a
 using Rust code as the other two types of procedural macros do. An example of a
 function-like macro is an `sql!` macro that might be called like so:
 
-[decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
-
 ```rust,ignore
 let sql = sql!(SELECT * FROM posts WHERE id=1);
 ```
@@ -521,3 +503,11 @@ you to solutions.
 
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
+
+[ref]: ../reference/macros-by-example.html
+[tlborm]: https://veykril.github.io/tlborm/
+[`syn`]: https://crates.io/crates/syn
+[`quote`]: https://crates.io/crates/quote
+[syn-docs]: https://docs.rs/syn/1.0/syn/struct.DeriveInput.html
+[quote-docs]: https://docs.rs/quote
+[decl]: #declarative-macros-with-macro_rules-for-general-metaprogramming
