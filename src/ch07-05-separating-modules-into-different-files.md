@@ -94,7 +94,7 @@ directories and files more closely match the module tree.
 > * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
 >
 > If you use both styles for the same module, you’ll get a compiler error. Using
-> both styles for different modules in the same project is allowed, but
+> a mix of both styles for different modules in the same project is allowed, but
 > might be confusing for people navigating your project.
 >
 > The main downside to the style that uses files named *mod.rs* is that your
