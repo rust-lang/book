@@ -101,9 +101,7 @@ doesn’t represent the authors’ computer specifically), and `7878` is the por
 We’ve chosen this port for two reasons: HTTP isn’t normally accepted on this
 port so our server is unlikely to conflict with any other web server you might
 have running on your machine, and 7878 is *rust* typed on a telephone.
-<!-- why do we want a port that doesn't usually accept http? That seems
-counterintuitive to me! /LC -->
-<!-- I've clarified! /Carol -->
+
 
 The `bind` function in this scenario works like the `new` function in that it
 will return a new `TcpListener` instance. The function is called `bind`
@@ -238,12 +236,6 @@ simplicity.
 
 The browser signals the end of an HTTP request by sending two newline
 characters in a row, so to get one request from the stream, we take lines until
-<!-- by "line while they're not the empty string", do you mean we take any line
-that isn't yet an empty string? /LC -->
-<!-- Yes, sort of, the lines don't change themselves though so I wouldn't say
-"any line that isn't yet an empty string" because that sounds like one line
-might change into an empty string. I've tried to reword, but I'm not sure
-exactly what was unclear, so I'm not sure if this is better? /Carol -->
 we get a line that is the empty string [7]. Once we’ve collected the lines into
 the vector, we’re printing them out using pretty debug formatting [8] so we can
 take a look at the instructions the web browser is sending to our server.
@@ -300,9 +292,6 @@ client is requesting. The first part of the request line indicates the *method*
 being used, such as `GET` or `POST`, which describes how the client is making
 this request. Our client used a `GET` request, which means it is asking for
 information.
-<!-- quick idea of what it means to make a get request? Is that a request
-for data/information, for eg? /LC -->
-<!-- Done! /Carol -->
 
 The next part of the request line is */*, which indicates the *Uniform Resource
 Identifier* *(URI)* the client is requesting: a URI is almost, but not quite,
@@ -744,6 +733,9 @@ server. Other options you might explore are the *fork/join model* and the
 read more about other solutions and try to implement them; with a low-level
 language like Rust, all of these options are possible.
 
+<!-- A more modern approach would probably use tokio, which could be a 
+multi-threaded async I/O model. /JT -->
+
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
 interface first can help guide your design. Write the API of the code so it’s
@@ -765,9 +757,7 @@ problems with potentially spawning an unlimited number of threads, but it is a
 starting point to get a working multithreaded server first. Then we’ll add the
 thread pool as an improvement, and contrasting the two solutions will be
 easier.
-<!-- Can you say why we start here -- is this just easier to do? Why is this our
-starting point? -->
-<!-- Done! /Carol -->
+
 Listing 20-11 shows the changes to make to `main` to spawn a new thread to
 handle each stream within the `for` loop.
 
@@ -1045,6 +1035,10 @@ compare both versions:
 ```
 pub fn new(size: usize) -> Result<ThreadPool, PoolCreationError> {
 ```
+<!-- Similar nit here to a comment I made a few chapters ago: fallible constructors
+are awkward to use. We may want to discourage their use. A modern approach
+might use a builder pattern to set the number of threads, and use a default
+number of threads that's non-zero. /JT -->
 
 #### Creating Space to Store the Threads
 
@@ -1129,8 +1123,7 @@ We’ll implement this behavior by introducing a new data structure between the
 this data structure *Worker*, which is a common term in pooling
 implementations. The Worker picks up code that needs to be run and runs the
 code in the Worker’s thread.
-<!-- can you say generally what the worker does in this context too? /LC -->
-<!-- Done! /Carol -->
+
 Think of people working in the kitchen at a restaurant: the
 workers wait until orders come in from customers, and then they’re responsible
 for taking those orders and filling them.
@@ -1197,6 +1190,13 @@ impl Worker {
     }
 }
 ```
+
+<!-- Spawning a thread in the constructor isn't safe to do as the spawn
+of the thread may fail. You can use 
+https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn 
+to be better protected against running out of resources. This should
+probably not live in the constructor, but instead in some helper function
+that can return a Result. /JT -->
 
 Listing 20-15: Modifying `ThreadPool` to hold `Worker` instances instead of
 holding threads directly
