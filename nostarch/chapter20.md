@@ -102,7 +102,6 @@ We’ve chosen this port for two reasons: HTTP isn’t normally accepted on this
 port so our server is unlikely to conflict with any other web server you might
 have running on your machine, and 7878 is *rust* typed on a telephone.
 
-
 The `bind` function in this scenario works like the `new` function in that it
 will return a new `TcpListener` instance. The function is called `bind`
 because, in networking, connecting to a port to listen to is known as “binding
@@ -728,13 +727,16 @@ back up in the queue, but we’ve increased the number of long-running requests
 we can handle before reaching that point.
 
 This technique is just one of many ways to improve the throughput of a web
-server. Other options you might explore are the *fork/join model* and the
-*single-threaded async I/O model*. If you’re interested in this topic, you can
-read more about other solutions and try to implement them; with a low-level
-language like Rust, all of these options are possible.
+server. Other options you might explore are the *fork/join model*, the
+*single-threaded async I/O model*, or the *multi-threaded async I/O model*. If
+you’re interested in this topic, you can read more about other solutions and
+try to implement them; with a low-level language like Rust, all of these
+options are possible.
 
-<!-- A more modern approach would probably use tokio, which could be a 
+<!-- A more modern approach would probably use tokio, which could be a
 multi-threaded async I/O model. /JT -->
+<!-- I've added "multi-theraded async I/O model", I don't want to get into
+particular async crates though /Carol -->
 
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
@@ -1025,20 +1027,22 @@ calls out the situations in which our function can panic [1], as discussed in
 Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
 to see what the generated docs for `new` look like!
 
-Instead of adding the `assert!` macro as we’ve done here [2], we could make
-`new` return a `Result` like we did with `Config::build` in the I/O project in
-Listing 12-9. But we’ve decided in this case that trying to create a thread
-pool without any threads should be an unrecoverable error. If you’re feeling
-ambitious, try to write a version of `new` with the following signature to
-compare both versions:
+Instead of adding the `assert!` macro as we’ve done here [2], we could change
+`new` into `build` and return a `Result` like we did with `Config::build` in
+the I/O project in Listing 12-9. But we’ve decided in this case that trying to
+create a thread pool without any threads should be an unrecoverable error. If
+you’re feeling ambitious, try to write a function named `build` with the
+following signature to compare with the `new` function:
 
 ```
-pub fn new(size: usize) -> Result<ThreadPool, PoolCreationError> {
+pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
 ```
-<!-- Similar nit here to a comment I made a few chapters ago: fallible constructors
-are awkward to use. We may want to discourage their use. A modern approach
-might use a builder pattern to set the number of threads, and use a default
-number of threads that's non-zero. /JT -->
+<!-- Similar nit here to a comment I made a few chapters ago: fallible
+constructors are awkward to use. We may want to discourage their use. A modern
+approach might use a builder pattern to set the number of threads, and use a
+default number of threads that's non-zero. /JT -->
+<!-- I've changed the function name to be `build` which nicely matches the
+changes JT suggested for chapter 12. /Carol -->
 
 #### Creating Space to Store the Threads
 
@@ -1192,11 +1196,14 @@ impl Worker {
 ```
 
 <!-- Spawning a thread in the constructor isn't safe to do as the spawn
-of the thread may fail. You can use 
-https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn 
+of the thread may fail. You can use
+https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn
 to be better protected against running out of resources. This should
 probably not live in the constructor, but instead in some helper function
 that can return a Result. /JT -->
+<!-- I've added a note in a few paragraphs. I think this behavior is perfectly
+fine for this example so I'm not going to change the code, but it is something
+readers should know. /Carol -->
 
 Listing 20-15: Modifying `ThreadPool` to hold `Worker` instances instead of
 holding threads directly
@@ -1212,6 +1219,13 @@ so we make the `Worker` struct [4] and its `new` function [5] private. The
 `Worker::new` function uses the `id` we give it [7] and stores a
 `JoinHandle<()>` instance [8] that is created by spawning a new thread using an
 empty closure [6].
+
+> Note: If the operating system can’t create a thread because there aren’t
+> enough system resources, `thread::spawn` will panic. That will cause our
+> whole server to panic, even though the creation of some threads might
+> succeed. For simplicity’s sake, this behavior is fine, but in a production
+> thread pool implementation, you’d likely want to use `std::thread::Builder`
+> and its `spawn` method that returns `Result` instead.
 
 This code will compile and will store the number of `Worker` instances we
 specified as an argument to `ThreadPool::new`. But we’re *still* not processing
