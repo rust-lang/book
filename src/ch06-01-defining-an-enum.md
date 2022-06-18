@@ -164,9 +164,9 @@ variants hold:
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-04-structs-similar-to-message-enum/src/main.rs:here}}
 ```
 
-But if we used the different structs, which each have their own type, we
-couldn’t as easily define a function to take any of these kinds of messages as
-we could with the `Message` enum defined in Listing 6-2, which is a single type.
+But if we use the different structs, which each has its own type, we couldn’t as
+easily define a function to take any of these kinds of messages as we could with
+the `Message` enum defined in Listing 6-2, which is a single type.
 
 There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
