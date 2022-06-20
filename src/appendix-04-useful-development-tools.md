@@ -32,8 +32,8 @@ on `rustfmt`, see [its documentation][rustfmt].
 ### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
-compiler warnings that have one way to correct the problem that’s likely what
-you want. It’s likely you’ve seen compiler warnings before. For example,
+compiler warnings that have a clear way to correct the problem that’s likely
+what you want. It’s likely you’ve seen compiler warnings before. For example,
 consider this code:
 
 <span class="filename">Filename: src/main.rs</span>
