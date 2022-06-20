@@ -21,18 +21,30 @@ The following is a list of keywords currently in use, with their functionality
 described.
 
 * `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` and `extern crate` statements
+  an item, or rename items in `use` statements
+
+<!-- `extern crate` is a bit old. Not sure if it needs a mention
+/JT -->
+<!-- good call, took it out /Carol -->
+
 * `async` -  return a `Future` instead of blocking the current thread
 * `await` - suspend execution until the result of a `Future` is ready
 * `break` - exit a loop immediately
 * `const` - define constant items or constant raw pointers
 * `continue` - continue to the next loop iteration
-* `crate` - link an external crate or a macro variable representing the crate in
-  which the macro is defined
+* `crate` - in a module path, refers to the crate root
+<!-- these days `crate` is mostly just used as part of the module path
+/JT -->
+<!-- fixed! /Carol -->
+
 * `dyn` - dynamic dispatch to a trait object
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - define an enumeration
-* `extern` - link an external crate, function, or variable
+* `extern` - link an external function or variable
+<!-- `extern crate` is a bit out of date
+/JT -->
+<!-- fixed! /Carol -->
+
 * `false` - Boolean false literal
 * `fn` - define a function or the function pointer type
 * `for` - loop over items from an iterator, implement a trait, or specify a
@@ -57,12 +69,11 @@ described.
 * `trait` - define a trait
 * `true` - Boolean true literal
 * `type` - define a type alias or associated type
-* `union` - define a union at *../reference/items/unions.html* and is only a keyword when used in a union declaration
+* `union` - define a union; is only a keyword when used in a union declaration
 * `unsafe` - denote unsafe code, functions, traits, or implementations
 * `use` - bring symbols into scope
 * `where` - denote clauses that constrain a type
 * `while` - loop conditionally based on the result of an expression
-
 
 ### Keywords Reserved for Future Use
 
@@ -129,18 +140,15 @@ This code will compile without any errors. Note the `r#` prefix on the function
 name in its definition as well as where the function is called in `main`.
 
 Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword.
-<!-- is there a particular situation in which you'd want to use a reserved
-keyword, or is it basically just for freedom of naming? /LC -->
-<!-- Freedom of naming, integration with programs written in a language where
-these words aren't keywords /Carol -->
-In addition, raw identifiers allow
-you to use libraries written in a different Rust edition than your crate uses.
-For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
+that word happens to be a reserved keyword. This gives us more freedom to
+choose identifier names, as well as lets us integrate with programs written in
+a language where these words aren’t keywords. In addition, raw identifiers
+allow you to use libraries written in a different Rust edition than your crate
+uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
 edition. If you depend on a library that’s written using the 2015 edition and
 has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
-this case, to call that function from your 2018 edition code. See Appendix
-E for more information on editions.
+this case, to call that function from your 2018 edition code. See Appendix E
+for more information on editions.
 
 ## Appendix B: Operators and Symbols
 
@@ -218,10 +226,6 @@ Table B-1: Operators
 
 The following list contains all symbols that don’t function as operators;
 that is, they don’t behave like a function or method call.
-<!-- I wasn't sure what we meant here -- that this is just misc syntax? What do
-you mean by "non-letters"? /LC -->
-<!-- Hm yeah, some of them are letters... I've changed to symbols to match the
-section heading /Carol -->
 
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
@@ -374,9 +378,6 @@ manually implement them.
 
 These traits listed here are the only ones defined by the standard library that
 can be implemented on your types using `derive`.
-<!-- "the rest of the traits" as in, any stabdard library traits not mentioned
-here? /LC -->
-<!-- Yep, I've reworded, is this better? /Carol -->
 Other traits defined in the standard library don’t have sensible default
 behavior, so it’s up to you to implement them in the way that makes sense for
 what you’re trying to accomplish.
@@ -565,12 +566,9 @@ on `rustfmt`, see its documentation at *https://github.com/rust-lang/rustfmt*.
 ### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
-compiler warnings that have one way to correct the problem that’s likely what
-you want.
-<!-- is there a general type of warning it does/does not handle? /LC -->
-<!-- Clarified! /Carol -->
-It’s likely you’ve seen
-compiler warnings before. For example, consider this code:
+compiler warnings that have a clear way to correct the problem that’s likely
+what you want. It’s likely you’ve seen compiler warnings before. For example,
+consider this code:
 
 Filename: src/main.rs
 
@@ -679,9 +677,7 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
 This error lets you know that Rust already has a more precise `PI` constant
 defined, and that your program would be more correct if you used the constant
 instead. You would then change your code to use the `PI` constant.
-<!-- so, to be clear, this tool doesn't fix the issue itself, but lets you know
-you should fix it? /LC -->
-<!-- Correct! /Carol -->
+
 The following code doesn’t result in any errors or warnings from Clippy:
 
 Filename: src/main.rs
@@ -695,7 +691,6 @@ fn main() {
 ```
 
 For more information on Clippy, see its documentation at *https://github.com/rust-lang/rust-clippy*.
-
 
 ### IDE Integration Using `rust-analyzer`
 
@@ -757,8 +752,6 @@ code. Therefore, if you’re using Rust 2015 and one of your dependencies uses
 Rust 2018, your project will compile and be able to use that dependency. The
 opposite situation, where your project uses Rust 2018 and a dependency uses
 Rust 2015, works as well.
-<!-- the rust compiler never ceases to amaze me /LC -->
-<!-- Hah me too! /Carol -->
 
 To be clear: most features will be available on all editions. Developers using
 any Rust edition will continue to see improvements as new stable releases are
