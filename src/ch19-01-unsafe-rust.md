@@ -325,7 +325,7 @@ most common and follows the C programming language’s ABI.
 > #### Calling Rust Functions from Other Languages
 >
 > We can also use `extern` to create an interface that allows other languages
-> to call Rust functions. Instead of an creating a whole `extern` block, we add
+> to call Rust functions. Instead of creating a whole `extern` block, we add
 > the `extern` keyword and specify the ABI to use just before the `fn` keyword
 > for the relevant function. We also need to add a `#[no_mangle]` annotation to
 > tell the Rust compiler not to mangle the name of this function. *Mangling* is
