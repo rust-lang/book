@@ -16,6 +16,30 @@ computers take advantage of their multiple processors. Historically,
 programming in these contexts has been difficult and error prone: Rust hopes to
 change that.
 
+<!-- Concurrent programming isn't necessarily helped by having multiple
+processors. How I've been teaching it is to distinguish the two by their
+workload: concurrent programming serves the needs of I/O-bound workloads and
+parallel programming serves the needs of CPU-bound workloads. If you give
+CPU bound workloads more CPUs, you have the opportunity to possibly go faster
+(assuming sufficient parallelism in the code). For I/O-bound workloads,
+rather than the need to have multiple processors, you need to be able to
+get as many I/O requests in flight and being processed as you can. This
+allows more I/O requests, and as a result better throughput/response time
+on those I/O requests.
+
+We could introduce these concepts and then simplify like we do in a bit to
+say that the design considerations of Rust allow both concurrency and
+parallelism to be done safely (...and for the remainder of the chapter talk
+about those design considerations rather than the specifics for either
+concurrency or parallelism) /JT -->
+<!-- I really don't want to get in the weeds on this because there are many
+other books and resources about concurrency and parallelism because these
+concepts aren't Rust specific. I want this to feel accessible to programmers
+who have never even considered whether their programs are I/O or CPU bound,
+because those are the types of programmers we want to empower (and make them
+feel empowered to create concurrent and/or parallel code) through Rust. So I'm
+deliberately choosing not to change anything here. /Carol -->
+
 Initially, the Rust team thought that ensuring memory safety and preventing
 concurrency problems were two separate challenges to be solved with different
 methods. Over time, the team discovered that the ownership and type systems are
@@ -64,11 +88,6 @@ Within a program, you can also have independent parts that run simultaneously.
 The features that run these independent parts are called *threads*. For
 example, a web server could have multiple threads so that it could respond to
 more than one request at the same time.
-
-<!-- perhaps give an example of two threads that might run similtaneously, to
-help the reader envision this. Would this be like serving a server at the same
-time as taking user input? /LC -->
-<!-- Done! /Carol -->
 
 Splitting the computation in your program into multiple threads to run multiple
 tasks at the same time can improve performance, but it also adds complexity.
@@ -125,13 +144,6 @@ fn main() {
 
 Listing 16-1: Creating a new thread to print one thing while the main thread
 prints something else
-
-<!-- maybe quickly say why the new thread is stopped -- it shares the lifetime
-of the main thread? /LC -->
-<!-- In a sense yes, but because "lifetime" has a specific, different meaning
-in Rust, I don't want to use that word here. This is the way the `main`
-function/thread works in Rust programs, is it clearer with the edits I've made
-here? /Carol -->
 
 Note that when the main thread of a Rust program completes, all spawned threads
 are shut down, whether or not they have finished running. The output from this
@@ -458,18 +470,23 @@ documentation at *https://golang.org/doc/effective_go.html#concurrency*:
 not sure what to do because this paragraph doesn't mention deciding which
 thread should be running, it only mentions sharing data, so I'm not sure where
 the possible confusion is coming from. /Carol -->
+<!-- JT, if this will be already obvious to a reader, no changes needed. I just
+wanted to ensure there was no potential confusion around what is being
+communicated /LC -->
+<!-- I like that we want to give a shout-out to Go's thinking process when
+we align, though I made a bit of a face reading the quote. "Share memory" is a
+such a loaded concept that I think people might stumble a bit over the play on
+the technical words.
+
+Funnily the next line following that quote in the Go book is:
+
+"This approach can be taken too far." :D
+/JT -->
+<!-- I think this means JT is fine leaving this the way it is! /Carol -->
 
 To accomplish message-sending concurrency, Rust's standard library provides an
 implementation of *channels*. A channel is a general programming concept by
 which data is sent from one thread to another.
-
-<!-- can you provide a more direct definition of a channel? The analogy is
-helpful but having that technical definition wold solidify that analogy. Is is
-just a data stream? /LC -->
-<!-- A channel is a really general concept that can be implemented in many
-different ways, and saying the word "stream" in a technical definition might
-cause the reader to infer one particular implementation so I don't want to give
-that impression. Is what I put here ok? /Carol -->
 
 You can imagine a channel in programming as being like a directional channel of
 water, such as a stream or a river. If you put something like a rubber duck
@@ -489,12 +506,6 @@ to illustrate the feature. Once you’re familiar with the technique, you could
 use channels for any threads that needs to communicate between each other, such
 as a chat system or a system where many threads perform parts of a calculation
 and send the parts to one thread that aggregates the results.
-
-<!-- is this right -- the code is communicating with itself via channels? Rather
-than with other programs? /LC -->
-<!-- I think saying threads are communicating between each other is more
-accurate. It really depends on where you draw the line between one "program"
-and another, which would be distracting to get into here /Carol -->
 
 First, in Listing 16-6, we’ll create a channel but not do anything with it.
 Note that this won’t compile yet because Rust can’t tell what type of values we
@@ -558,10 +569,7 @@ Again, we’re using `thread::spawn` to create a new thread and then using `move
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
 channel.
-<!-- since we have already introduced the terms "transmitter" and "reciever", I
-feel we should use them in this explanation, unless that's not accurate for
-some reason and "transmitting end" etc is more accurate? /LC -->
-<!-- "Transmitter" and "receiver" are fine, I've made that change /Carol -->
+
 The transmitter has a `send` method that takes the value we want to send.
 The `send` method returns a `Result<T, E>` type, so if the receiver has
 already been dropped and there’s nowhere to send a value, the send operation
@@ -822,18 +830,16 @@ concurrency.
 
 Message passing is a fine way of handling concurrency, but it’s not the only
 one. Another method would be for multiple threads to access the same shared
-data.
-<!-- can you specify up front what this other method we're looking at is?
-Sharing memory? /LC -->
-<!-- Yep, done! /Carol -->
-Consider this part of the slogan from the Go language documentation again:
-“do not communicate by sharing memory.”
+data. Consider this part of the slogan from the Go language documentation
+again: “do not communicate by sharing memory.”
+
+<!-- NB: if we decide to do anything with the Go quote above, we also
+reference it here.
+/JT -->
+<!-- Also not changing anything here. /Carol -->
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts caution not to use memory sharing?
-<!-- not use what -- memory sharing? I wasn't sure what we were saying here /LC
--->
-<!-- Yes, memory sharing, I've tried to clarify /Carol -->
 
 In a way, channels in any programming language are similar to single ownership,
 because once you transfer a value down a channel, you should no longer use that
@@ -1139,6 +1145,17 @@ program’s structure to do more complicated operations than just incrementing a
 counter. Using this strategy, you can divide a calculation into independent
 parts, split those parts across threads, and then use a `Mutex<T>` to have each
 thread update the final result with its part.
+
+Note that if you are doing simple numerical operations, there are types simpler
+than `Mutex<T>` types provided by the `std::sync::atomic` module of the
+standard library. These types provide safe, concurrent, atomic access to
+primitive types. We chose to use `Mutex<T>` with a primitive type for this
+example so we could concentrate on how `Mutex<T>` works.
+
+<!-- Do we want to mention that for simple counters we have simpler types in
+the standard library? (eg, AtomicI64 for the above)
+/JT -->
+<!-- Done! /Carol-->
 
 ### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 

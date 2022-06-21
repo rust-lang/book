@@ -132,6 +132,7 @@ destructuring
 Destructuring
 deterministically
 DevOps
+devtools
 didn
 Dobrý
 doccargo
@@ -502,6 +503,7 @@ TextField
 That'd
 there'd
 ThreadPool
+threadpool
 timestamp
 Tiếng
 timeline

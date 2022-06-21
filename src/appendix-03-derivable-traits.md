@@ -18,10 +18,10 @@ If you want different behavior from that provided by the `derive` attribute,
 consult the [standard library documentation](../std/index.html)<!-- ignore -->
 for each trait for details of how to manually implement them.
 
-The rest of the traits defined in the standard library can’t be implemented on
-your types using `derive`. These traits don’t have sensible default behavior,
-so it’s up to you to implement them in the way that makes sense for what you’re
-trying to accomplish.
+These traits listed here are the only ones defined by the standard library that
+can be implemented on your types using `derive`. Other traits defined in the
+standard library don’t have sensible default behavior, so it’s up to you to
+implement them in the way that makes sense for what you’re trying to accomplish.
 
 An example of a trait that can’t be derived is `Display`, which handles
 formatting for end users. You should always consider the appropriate way to

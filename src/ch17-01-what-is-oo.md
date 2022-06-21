@@ -1,7 +1,7 @@
 ## Characteristics of Object-Oriented Languages
 
 There is no consensus in the programming community about what features a
-language must have to be considered object oriented. Rust is influenced by many
+language must have to be considered object-oriented. Rust is influenced by many
 programming paradigms, including OOP; for example, we explored the features
 that came from functional programming in Chapter 13. Arguably, OOP languages
 share certain common characteristics, namely objects, encapsulation, and
@@ -19,7 +19,7 @@ catalog of object-oriented design patterns. It defines OOP this way:
 > data and the procedures that operate on that data. The procedures are
 > typically called *methods* or *operations*.
 
-Using this definition, Rust is object oriented: structs and enums have data,
+Using this definition, Rust is object-oriented: structs and enums have data,
 and `impl` blocks provide methods on structs and enums. Even though structs and
 enums with methods aren’t *called* objects, they provide the same
 functionality, according to the Gang of Four’s definition of objects.
@@ -91,9 +91,9 @@ this wouldn’t necessarily be the case: `HashSet<i32>` and `Vec<i32>` have
 different methods for adding and removing items, so the external code would
 likely have to change if it were modifying `list` directly.
 
-If encapsulation is a required aspect for a language to be considered object
-oriented, then Rust meets that requirement. The option to use `pub` or not for
-different parts of code enables encapsulation of implementation details.
+If encapsulation is a required aspect for a language to be considered
+object-oriented, then Rust meets that requirement. The option to use `pub` or
+not for different parts of code enables encapsulation of implementation details.
 
 ### Inheritance as a Type System and as Code Sharing
 
@@ -103,21 +103,23 @@ without you having to define them again.
 
 If a language must have inheritance to be an object-oriented language, then
 Rust is not one. There is no way to define a struct that inherits the parent
-struct’s fields and method implementations. However, if you’re used to having
-inheritance in your programming toolbox, you can use other solutions in Rust,
-depending on your reason for reaching for inheritance in the first place.
+struct’s fields and method implementations without using a macro.
+
+However, if you’re used to having inheritance in your programming toolbox, you
+can use other solutions in Rust, depending on your reason for reaching for
+inheritance in the first place.
 
 You would choose inheritance for two main reasons. One is for reuse of code:
 you can implement particular behavior for one type, and inheritance enables you
-to reuse that implementation for a different type. You can share Rust code
-using default trait method implementations instead, which you saw in Listing
-10-14 when we added a default implementation of the `summarize` method on the
-`Summary` trait. Any type implementing the `Summary` trait would have the
-`summarize` method available on it without any further code. This is similar to
-a parent class having an implementation of a method and an inheriting child
-class also having the implementation of the method. We can also override the
-default implementation of the `summarize` method when we implement the
-`Summary` trait, which is similar to a child class overriding the
+to reuse that implementation for a different type. You can do this in a limited
+way in Rust code using default trait method implementations, which you saw in
+Listing 10-14 when we added a default implementation of the `summarize` method
+on the `Summary` trait. Any type implementing the `Summary` trait would have
+the `summarize` method available on it without any further code. This is
+similar to a parent class having an implementation of a method and an
+inheriting child class also having the implementation of the method. We can
+also override the default implementation of the `summarize` method when we
+implement the `Summary` trait, which is similar to a child class overriding the
 implementation of a method inherited from a parent class.
 
 The other reason to use inheritance relates to the type system: to enable a
@@ -141,9 +143,9 @@ than necessary. Subclasses shouldn’t always share all characteristics of their
 parent class but will do so with inheritance. This can make a program’s design
 less flexible. It also introduces the possibility of calling methods on
 subclasses that don’t make sense or that cause errors because the methods don’t
-apply to the subclass. In addition, some languages will only allow a subclass
-to inherit from one class, further restricting the flexibility of a program’s
-design.
+apply to the subclass. In addition, some languages will only allow single
+inheritance (meaning a subclass can only inherit from one class), further
+restricting the flexibility of a program’s design.
 
 For these reasons, Rust takes the different approach of using trait objects
 instead of inheritance. Let’s look at how trait objects enable polymorphism in

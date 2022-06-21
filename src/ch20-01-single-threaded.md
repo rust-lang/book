@@ -5,12 +5,11 @@ let’s look at a quick overview of the protocols involved in building web
 servers. The details of these protocols are beyond the scope of this book, but
 a brief overview will give you the information you need.
 
-The two main protocols involved in web servers are the *Hypertext Transfer
-Protocol* *(HTTP)* and the *Transmission Control Protocol* *(TCP)*. Both
-protocols are *request-response* protocols, meaning a *client* initiates
-requests and a *server* listens to the requests and provides a response to the
-client. The contents of those requests and responses are defined by the
-protocols.
+The two main protocols involved in web servers are *Hypertext Transfer
+Protocol* *(HTTP)* and *Transmission Control Protocol* *(TCP)*. Both protocols
+are *request-response* protocols, meaning a *client* initiates requests and a
+*server* listens to the requests and provides a response to the client. The
+contents of those requests and responses are defined by the protocols.
 
 TCP is the lower-level protocol that describes the details of how information
 gets from one server to another but doesn’t specify what that information is.
@@ -32,8 +31,8 @@ $ cd hello
 ```
 
 Now enter the code in Listing 20-1 in *src/main.rs* to start. This code will
-listen at the address `127.0.0.1:7878` for incoming TCP streams. When it gets
-an incoming stream, it will print `Connection established!`.
+listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
+gets an incoming stream, it will print `Connection established!`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -48,23 +47,24 @@ Using `TcpListener`, we can listen for TCP connections at the address
 `127.0.0.1:7878`. In the address, the section before the colon is an IP address
 representing your computer (this is the same on every computer and doesn’t
 represent the authors’ computer specifically), and `7878` is the port. We’ve
-chosen this port for two reasons: HTTP isn’t normally accepted on this port, and
-7878 is *rust* typed on a telephone.
+chosen this port for two reasons: HTTP isn’t normally accepted on this port so
+our server is unlikely to conflict with any other web server you might have
+running on your machine, and 7878 is *rust* typed on a telephone.
 
 The `bind` function in this scenario works like the `new` function in that it
-will return a new `TcpListener` instance. The reason the function is called
-`bind` is that in networking, connecting to a port to listen to is known as
-“binding to a port.”
+will return a new `TcpListener` instance. The function is called `bind`
+because, in networking, connecting to a port to listen to is known as “binding
+to a port.”
 
-The `bind` function returns a `Result<T, E>`, which indicates that binding
-might fail. For example, connecting to port 80 requires administrator
-privileges (nonadministrators can listen only on ports higher than 1023), so if
-we tried to connect to port 80 without being an administrator, binding wouldn’t
-work. As another example, binding wouldn’t work if we ran two instances of our
-program and so had two programs listening to the same port. Because we’re
-writing a basic server just for learning purposes, we won’t worry about
-handling these kinds of errors; instead, we use `unwrap` to stop the program if
-errors happen.
+The `bind` function returns a `Result<T, E>`, which indicates that it’s
+possible for binding to fail. For example, connecting to port 80 requires
+administrator privileges (nonadministrators can listen only on ports higher
+than 1023), so if we tried to connect to port 80 without being an
+administrator, binding wouldn’t work. Binding also wouldn’t work, for example,
+if we ran two instances of our program and so had two programs listening to the
+same port. Because we’re writing a basic server just for learning purposes, we
+won’t worry about handling these kinds of errors; instead, we use `unwrap` to
+stop the program if errors happen.
 
 The `incoming` method on `TcpListener` returns an iterator that gives us a
 sequence of streams (more specifically, streams of type `TcpStream`). A single
@@ -160,10 +160,10 @@ more gracefully, but we’re choosing to stop the program in the error case for
 simplicity.
 
 The browser signals the end of an HTTP request by sending two newline
-characters in a row, so to get one request from the stream, we take lines while
-they’re not the empty string. Once we’ve collected the lines into the vector,
-we’re printing them out using pretty debug formatting so we can take a look at
-the instructions the web browser is sending to our server.
+characters in a row, so to get one request from the stream, we take lines until
+we get a line that is the empty string. Once we’ve collected the lines into the
+vector, we’re printing them out using pretty debug formatting so we can take a
+look at the instructions the web browser is sending to our server.
 
 Let’s try this code! Start the program and make a request in a web browser
 again. Note that we’ll still get an error page in the browser, but our
@@ -215,7 +215,8 @@ message-body
 The first line is the *request line* that holds information about what the
 client is requesting. The first part of the request line indicates the *method*
 being used, such as `GET` or `POST`, which describes how the client is making
-this request. Our client used a `GET` request.
+this request. Our client used a `GET` request, which means it is asking for
+information.
 
 The next part of the request line is */*, which indicates the *Uniform Resource
 Identifier* *(URI)* the client is requesting: a URI is almost, but not quite,
@@ -297,7 +298,7 @@ request and sending a response!
 ### Returning Real HTML
 
 Let’s implement the functionality for returning more than a blank page. Create
-a new file, *hello.html*, in the root of your project directory, not in the
+the new file *hello.html* in the root of your project directory, not in the
 *src* directory. You can input any HTML you want; Listing 20-4 shows one
 possibility.
 
@@ -340,9 +341,10 @@ should see your HTML rendered!
 Currently, we’re ignoring the request data in `http_request` and just sending
 back the contents of the HTML file unconditionally. That means if you try
 requesting *127.0.0.1:7878/something-else* in your browser, you’ll still get
-back this same HTML response. Our server is very limited and is not what most
-web servers do. We want to customize our responses depending on the request and
-only send back the HTML file for a well-formed request to */*.
+back this same HTML response. At the moment, our server is very limited and
+does not do what most web servers do. We want to customize our responses
+depending on the request and only send back the HTML file for a well-formed
+request to */*.
 
 ### Validating the Request and Selectively Responding
 
@@ -360,8 +362,8 @@ received against what we know a request for */* looks like and adds `if` and
 {{#rustdoc_include ../listings/ch20-web-server/listing-20-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 20-6: Looking at the request line and handling
-requests to */* differently from other requests</span>
+<span class="caption">Listing 20-6: Handling requests to */* differently from
+other requests</span>
 
 We’re only going to be looking at the first line of the HTTP request, so rather
 than reading the entire request into a vector, we’re calling `next` to get the

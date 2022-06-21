@@ -6,38 +6,45 @@ directory, so all fixes need to be made in `/src/`.
 
 [TOC]
 
-# Appendix
-
-The following sections contain reference material you may find useful in your
-Rust journey.
-
 ## Appendix A: Keywords
 
 The following list contains keywords that are reserved for current or future
 use by the Rust language. As such, they cannot be used as identifiers (except
-as raw identifiers as we’ll discuss in the “Raw
-Identifiers” section), including names of
-functions, variables, parameters, struct fields, modules, crates, constants,
-macros, static values, attributes, types, traits, or lifetimes.
-
+as raw identifiers as we’ll discuss in the “Raw Identifiers” section).
+Identifiers are names of functions, variables, parameters, struct fields,
+modules, crates, constants, macros, static values, attributes, types, traits,
+or lifetimes.
 
 ### Keywords Currently in Use
 
-The following keywords currently have the functionality described.
+The following is a list of keywords currently in use, with their functionality
+described.
 
 * `as` - perform primitive casting, disambiguate the specific trait containing
-  an item, or rename items in `use` and `extern crate` statements
+  an item, or rename items in `use` statements
+
+<!-- `extern crate` is a bit old. Not sure if it needs a mention
+/JT -->
+<!-- good call, took it out /Carol -->
+
 * `async` -  return a `Future` instead of blocking the current thread
 * `await` - suspend execution until the result of a `Future` is ready
 * `break` - exit a loop immediately
 * `const` - define constant items or constant raw pointers
 * `continue` - continue to the next loop iteration
-* `crate` - link an external crate or a macro variable representing the crate in
-  which the macro is defined
+* `crate` - in a module path, refers to the crate root
+<!-- these days `crate` is mostly just used as part of the module path
+/JT -->
+<!-- fixed! /Carol -->
+
 * `dyn` - dynamic dispatch to a trait object
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - define an enumeration
-* `extern` - link an external crate, function, or variable
+* `extern` - link an external function or variable
+<!-- `extern crate` is a bit out of date
+/JT -->
+<!-- fixed! /Carol -->
+
 * `false` - Boolean false literal
 * `fn` - define a function or the function pointer type
 * `for` - loop over items from an iterator, implement a trait, or specify a
@@ -62,17 +69,16 @@ The following keywords currently have the functionality described.
 * `trait` - define a trait
 * `true` - Boolean true literal
 * `type` - define a type alias or associated type
-* `union` - define a union at *../reference/items/unions.html* and is only a keyword when used in a union declaration
+* `union` - define a union; is only a keyword when used in a union declaration
 * `unsafe` - denote unsafe code, functions, traits, or implementations
 * `use` - bring symbols into scope
 * `where` - denote clauses that constrain a type
 * `while` - loop conditionally based on the result of an expression
 
-
 ### Keywords Reserved for Future Use
 
-The following keywords do not have any functionality but are reserved by Rust
-for potential future use.
+The following keywords do not yet have any functionality but are reserved by
+Rust for potential future use.
 
 * `abstract`
 * `become`
@@ -134,13 +140,15 @@ This code will compile without any errors. Note the `r#` prefix on the function
 name in its definition as well as where the function is called in `main`.
 
 Raw identifiers allow you to use any word you choose as an identifier, even if
-that word happens to be a reserved keyword. In addition, raw identifiers allow
-you to use libraries written in a different Rust edition than your crate uses.
-For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
+that word happens to be a reserved keyword. This gives us more freedom to
+choose identifier names, as well as lets us integrate with programs written in
+a language where these words aren’t keywords. In addition, raw identifiers
+allow you to use libraries written in a different Rust edition than your crate
+uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
 edition. If you depend on a library that’s written using the 2015 edition and
 has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
-this case, to call that function from your 2018 edition code. See Appendix
-E for more information on editions.
+this case, to call that function from your 2018 edition code. See Appendix E
+for more information on editions.
 
 ## Appendix B: Operators and Symbols
 
@@ -161,7 +169,7 @@ Table B-1: Operators
 |----------|---------|-------------|---------------|
 | `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro expansion | |
 | `!` | `!expr` | Bitwise or logical complement | `Not` |
-| `!=` | `var != expr` | Nonequality comparison | `PartialEq` |
+| `!=` | `expr != expr` | Nonequality comparison | `PartialEq` |
 | `%` | `expr % expr` | Arithmetic remainder | `Rem` |
 | `%=` | `var %= expr` | Arithmetic remainder and assignment | `RemAssign` |
 | `&` | `&expr`, `&mut expr` | Borrow | |
@@ -216,7 +224,7 @@ Table B-1: Operators
 
 ### Non-operator Symbols
 
-The following list contains all non-letters that don’t function as operators;
+The following list contains all symbols that don’t function as operators;
 that is, they don’t behave like a function or method call.
 
 Table B-2 shows symbols that appear on their own and are valid in a variety of
@@ -365,13 +373,14 @@ library that you can use with `derive`. Each section covers:
 * Examples of operations that require the trait
 
 If you want different behavior from that provided by the `derive` attribute,
-consult the standard library documentation
-for each trait for details of how to manually implement them.
+consult the standard library documentation for each trait for details of how to
+manually implement them.
 
-The rest of the traits defined in the standard library can’t be implemented on
-your types using `derive`. These traits don’t have sensible default behavior,
-so it’s up to you to implement them in the way that makes sense for what you’re
-trying to accomplish.
+These traits listed here are the only ones defined by the standard library that
+can be implemented on your types using `derive`.
+Other traits defined in the standard library don’t have sensible default
+behavior, so it’s up to you to implement them in the way that makes sense for
+what you’re trying to accomplish.
 
 An example of a trait that can’t be derived is `Display`, which handles
 formatting for end users. You should always consider the appropriate way to
@@ -461,9 +470,8 @@ a data structure that stores data based on the sort order of the values.
 
 The `Clone` trait allows you to explicitly create a deep copy of a value, and
 the duplication process might involve running arbitrary code and copying heap
-data. See the “Ways Variables and Data Interact:
-Clone” section in
-Chapter 4 for more information on `Clone`.
+data. See the “Ways Variables and Data Interact: Clone” section in Chapter 4
+for more information on `Clone`.
 
 Deriving `Clone` implements the `clone` method, which when implemented for the
 whole type, calls `clone` on each of the parts of the type. This means all the
@@ -475,9 +483,8 @@ returned from `to_vec` will need to own its instances, so `to_vec` calls
 `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
 
 The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See the “Stack-Only Data:
-Copy” section in Chapter 4 for more
-information on `Copy`.
+the stack; no arbitrary code is necessary. See the “Stack-Only Data: Copy”
+section in Chapter 4 for more information on `Copy`.
 
 The `Copy` trait doesn’t define any methods to prevent programmers from
 overloading those methods and violating the assumption that no arbitrary code
@@ -517,10 +524,8 @@ derive `Default`.
 
 The `Default::default` function is commonly used in combination with the struct
 update syntax discussed in the “Creating Instances From Other Instances With
-Struct Update
-Syntax”
-section in Chapter 5. You can customize a few fields of a struct and then
-set and use a default value for the rest of the fields by using
+Struct Update Syntax” section in Chapter 5. You can customize a few fields of a
+struct and then set and use a default value for the rest of the fields by using
 `..Default::default()`.
 
 The `Default` trait is required when you use the method `unwrap_or_default` on
@@ -536,7 +541,7 @@ warning fixes, a linter, and integrating with IDEs.
 
 ### Automatic Formatting with `rustfmt`
 
-The `rustfmt` tool reformats your code according to the community code style.
+The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
 style to use when writing Rust: everyone formats their code using the tool.
 
@@ -561,8 +566,9 @@ on `rustfmt`, see its documentation at *https://github.com/rust-lang/rustfmt*.
 ### Fix Your Code with `rustfix`
 
 The rustfix tool is included with Rust installations and can automatically fix
-some compiler warnings. If you’ve written code in Rust, you’ve probably seen
-compiler warnings. For example, consider this code:
+compiler warnings that have a clear way to correct the problem that’s likely
+what you want. It’s likely you’ve seen compiler warnings before. For example,
+consider this code:
 
 Filename: src/main.rs
 
@@ -668,10 +674,11 @@ error: approximate value of `f{32, 64}::consts::PI` found. Consider using it dir
   = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
-This error lets you know that Rust has this constant defined more precisely and
-that your program would be more correct if you used the constant instead. You
-would then change your code to use the `PI` constant. The following code
-doesn’t result in any errors or warnings from Clippy:
+This error lets you know that Rust already has a more precise `PI` constant
+defined, and that your program would be more correct if you used the constant
+instead. You would then change your code to use the `PI` constant.
+
+The following code doesn’t result in any errors or warnings from Clippy:
 
 Filename: src/main.rs
 
@@ -684,7 +691,6 @@ fn main() {
 ```
 
 For more information on Clippy, see its documentation at *https://github.com/rust-lang/rust-clippy*.
-
 
 ### IDE Integration Using `rust-analyzer`
 

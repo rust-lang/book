@@ -58,7 +58,9 @@ values of type `i32`:
 Because `Kilometers` and `i32` are the same type, we can add values of both
 types and we can pass `Kilometers` values to functions that take `i32`
 parameters. However, using this method, we don’t get the type checking benefits
-that we get from the newtype pattern discussed earlier.
+that we get from the newtype pattern discussed earlier. In other words, if we
+mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
+an error.
 
 The main use case for type synonyms is to reduce repetition. For example, we
 might have a lengthy type like this:

@@ -50,9 +50,9 @@ Open your I/O project’s *src/main.rs* file, which should look like this:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
-We’ll change the start of the `main` function that we had in Listing 12-24 to
-the code in Listing 13-18. This won’t compile until we update `Config::build` as
-well.
+We’ll first change the start of the `main` function that we had in Listing
+12-24 to the code in Listing 13-18, which this time uses an iterator. This
+won’t compile until we update `Config::build` as well.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -157,6 +157,8 @@ Recall that the purpose of the `search` function is to return all lines in
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
 well.
+
+### Choosing Between Loops or Iterators
 
 The next logical question is which style you should choose in your own code and
 why: the original implementation in Listing 13-21 or the version using

@@ -183,6 +183,10 @@ matches any other `Point` and creates variables for both the `x` and `y` fields.
 In this example, the value `p` matches the second arm by virtue of `x`
 containing a 0, so this code will print `On the y axis at 7`.
 
+Remember that a `match` expression stops checking arms once it has found the
+first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
+and the `y` axis, this code would only print `On the x axis at 0`.
+
 #### Destructuring Enums
 
 We've destructured enums in this book (for example, Listing 6-5 in Chapter 6),

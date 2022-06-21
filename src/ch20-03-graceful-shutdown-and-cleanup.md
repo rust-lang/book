@@ -8,11 +8,12 @@ class="keystroke">ctrl-c</span> method to halt the main thread, all other
 threads are stopped immediately as well, even if they’re in the middle of
 serving a request.
 
-Now we’ll implement the `Drop` trait to call `join` on each of the threads in
-the pool so they can finish the requests they’re working on before closing.
-Then we’ll implement a way to tell the threads they should stop accepting new
-requests and shut down. To see this code in action, we’ll modify our server to
-accept only two requests before gracefully shutting down its thread pool.
+Next, then, we’ll implement the `Drop` trait to call `join` on each of the
+threads in the pool so they can finish the requests they’re working on before
+closing. Then we’ll implement a way to tell the threads they should stop
+accepting new requests and shut down. To see this code in action, we’ll modify
+our server to accept only two requests before gracefully shutting down its
+thread pool.
 
 ### Implementing the `Drop` Trait on `ThreadPool`
 
@@ -97,13 +98,13 @@ cleaned up, so nothing happens in that case.
 
 ### Signaling to the Threads to Stop Listening for Jobs
 
-With all the changes we’ve made, our code compiles without any warnings. But
-the bad news is this code doesn’t function the way we want it to yet. The key
-is the logic in the closures run by the threads of the `Worker` instances: at
-the moment, we call `join`, but that won’t shut down the threads because they
-`loop` forever looking for jobs. If we try to drop our `ThreadPool` with our
-current implementation of `drop`, the main thread will block forever waiting
-for the first thread to finish.
+With all the changes we’ve made, our code compiles without any warnings.
+However, the bad news is this code doesn’t function the way we want it to yet.
+The key is the logic in the closures run by the threads of the `Worker`
+instances: at the moment, we call `join`, but that won’t shut down the threads
+because they `loop` forever looking for jobs. If we try to drop our
+`ThreadPool` with our current implementation of `drop`, the main thread will
+block forever waiting for the first thread to finish.
 
 To fix this problem, we’ll need a change in the the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.

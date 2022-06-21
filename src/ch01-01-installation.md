@@ -7,8 +7,6 @@ an internet connection for the download.
 > Note: If you prefer not to use `rustup` for some reason, please see the
 > [Other Rust Installation Methods page][otherinstall] for more options.
 
-[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
-
 The following steps install the latest stable version of the Rust compiler.
 Rust’s stability guarantees ensure that all the examples in the book that
 compile will continue to compile with newer Rust versions. The output might
@@ -20,10 +18,10 @@ using these steps should work as expected with the content of this book.
 >
 > In this chapter and throughout the book, we’ll show some commands used in the
 > terminal. Lines that you should enter in a terminal all start with `$`. You
-> don’t need to type in the `$` character; it indicates the start of each
-> command. Lines that don’t start with `$` typically show the output of the
-> previous command. Additionally, PowerShell-specific examples will use `>`
-> rather than `$`.
+> don’t need to type in the `$` character; it’s the command line prompt shown
+> to indicate the start of each command. Lines that don’t start with `$`
+> typically show the output of the previous command. Additionally,
+> PowerShell-specific examples will use `>` rather than `$`.
 
 ### Installing `rustup` on Linux or macOS
 
@@ -41,7 +39,7 @@ for your password. If the install is successful, the following line will appear:
 Rust is installed now. Great!
 ```
 
-You will also need a linker, which is a program that Rust uses to join its
+You will also need a *linker*, which is a program that Rust uses to join its
 compiled outputs into one file. It is likely you already have one. If you get
 linker errors, you should install a C compiler, which will typically include a
 linker. A C compiler is also useful because some common Rust packages depend on
@@ -61,33 +59,18 @@ the `build-essential` package.
 
 On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
 the instructions for installing Rust. At some point in the installation, you’ll
-receive a message explaining that you’ll also need the C++ build tools for
-Visual Studio 2013 or later. The easiest way to acquire the build tools is to
-install [Build Tools for Visual Studio 2019][visualstudio]. When asked which
-workloads to install make sure “C++ build tools” is selected and that the
-Windows 10 SDK and the English language pack components are included.
+receive a message explaining that you’ll also need the MSVC build tools for
+Visual Studio 2013 or later. To acquire the build tools, you’ll need to install
+[Visual Studio 2022][visualstudio]. When asked which workloads to install,
+include:
 
-[install]: https://www.rust-lang.org/tools/install
-[visualstudio]: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+- “Desktop Development with C++”
+- The Windows 10 or 11 SDK
+- The English language pack component, along with any other language pack of
+  your choosing
 
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
-
-### Updating and Uninstalling
-
-After you’ve installed Rust via `rustup`, updating to the latest version is
-easy. From your shell, run the following update script:
-
-```console
-$ rustup update
-```
-
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
-
-```console
-$ rustup self uninstall
-```
 
 ### Troubleshooting
 
@@ -113,16 +96,36 @@ a number of places you can get help. The easiest is the #beginners channel on
 (a silly nickname we call ourselves) who can help you out. Other great
 resources include [the Users forum][users] and [Stack Overflow][stackoverflow].
 
-[discord]: https://discord.gg/rust-lang
-[users]: https://users.rust-lang.org/
-[stackoverflow]: https://stackoverflow.com/questions/tagged/rust
+### Updating and Uninstalling
+
+Once Rust is installed via `rustup`, when a new version of Rust is released,
+updating to the latest version is easy. From your shell, run the following
+update script:
+
+```console
+$ rustup update
+```
+
+To uninstall Rust and `rustup`, run the following uninstall script from your
+shell:
+
+```console
+$ rustup self uninstall
+```
 
 ### Local Documentation
 
-The installation of Rust also includes a copy of the documentation locally, so
+The installation of Rust also includes a local copy of the documentation, so
 you can read it offline. Run `rustup doc` to open the local documentation in
 your browser.
 
 Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
 (API) documentation to find out!
+
+[otherinstall]: https://forge.rust-lang.org/infra/other-installation-methods.html
+[install]: https://www.rust-lang.org/tools/install
+[visualstudio]: https://visualstudio.microsoft.com/downloads/
+[discord]: https://discord.gg/rust-lang
+[users]: https://users.rust-lang.org/
+[stackoverflow]: https://stackoverflow.com/questions/tagged/rust

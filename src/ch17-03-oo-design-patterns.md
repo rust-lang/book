@@ -17,8 +17,12 @@ The advantage of using the state pattern is that, when the business
 requirements of the program change, we won’t need to change the code of the
 value holding the state or the code that uses the value. We’ll only need to
 update the code inside one of the state objects to change its rules or perhaps
-add more state objects. Let’s dig in to incrementally implementing a blog post
-workflow using the state pattern.
+add more state objects.
+
+First, we’re going to implement the state pattern in a more traditional
+object-oriented way, then we’ll use an approach that’s a bit more natural in
+Rust. Let’s dig in to incrementally implementing a blog post workflow using the
+state pattern.
 
 The final functionality will look like this:
 
@@ -47,7 +51,7 @@ behavior we want our `blog` crate to have</span>
 
 We want to allow the user to create a new draft blog post with `Post::new`. We
 want to allow text to be added to the blog post. If we try to get the post’s
-content immediately, before approval, we shouldn't get any text because the
+content immediately, before approval, we shouldn’t get any text because the
 post is still a draft. We’ve added `assert_eq!` in the code for demonstration
 purposes. An excellent unit test for this would be to assert that a draft blog
 post returns an empty string from the `content` method, but we’re not going to
@@ -239,7 +243,7 @@ method, it returns itself, because the post should stay in the `Published`
 state in those cases.
 
 Now we need to update the `content` method on `Post`. We want the value
-returned from `content` to depend on the current state of the `Post`, so we're
+returned from `content` to depend on the current state of the `Post`, so we’re
 going to have the `Post` delegate to a `content` method defined on its `state`,
 as shown in Listing 17-17:
 
@@ -300,6 +304,15 @@ related to the lifetime of the `post` argument.
 And we’re done—all of Listing 17-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic related to the
 rules lives in the state objects rather than being scattered throughout `Post`.
+
+> #### Why Not An Enum?
+>
+> You may have been wondering why we didn’t use an `enum` with the different
+> possible post states as variants. That’s certainly a possible solution, try
+> it and compare the end results to see which you prefer! One disadvantage of
+> using an enum is every place that checks the value of the enum will need a
+> `match` expression or similar to handle every possible variant. This could
+> get more repetitive than this trait object solution.
 
 ### Trade-offs of the State Pattern
 

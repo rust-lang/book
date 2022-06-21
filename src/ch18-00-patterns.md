@@ -11,9 +11,10 @@ control flow. A pattern consists of some combination of the following:
 * Wildcards
 * Placeholders
 
-These components describe the shape of the data we’re working with, which we
-then match against values to determine whether our program has the correct data
-to continue running a particular piece of code.
+Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
+contexts in which patterns are valid, these components describe the shape of
+data. Our program then matches values against the patterns to determine whether
+it has the correct shape of data to continue running a particular piece of code.
 
 To use a pattern, we compare it to some value. If the pattern matches the
 value, we use the value parts in our code. Recall the `match` expressions in
