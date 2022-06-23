@@ -1,0 +1,23 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = "What is the keyword used after `let` to indicate that a variable can be mutated?"
+answer.answer = "mut"
+context = """
+For example, you can make a mutable variable `x` by writing: `let mut x = 1`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let x = 1;
+  println!("{x}");
+  x += 1;
+  println!("{x}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 4
+context = """
+This is a compiler error because line 4 tries to mutate `x` when `x` is not marked as `mut`.
+"""
