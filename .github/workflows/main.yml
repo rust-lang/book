@@ -28,7 +28,7 @@ jobs:
           npm install -g pnpm
           pnpm install
           pnpm build
-          cp dist/* ../../
+          cp -r dist ../../mdbook-quiz
       - run: mdbook build
       - uses: peaceiris/actions-gh-pages@v3
         with:
