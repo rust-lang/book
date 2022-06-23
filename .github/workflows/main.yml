@@ -21,7 +21,7 @@ jobs:
           echo "$(pwd)/bin" >> ${GITHUB_PATH}
       - name: Install mdbook-quiz
         run: |
-          cd /tmp
+          cd ..
           git clone https://github.com/willcrichton/mdbook-quiz
           cd mdbook-quiz
           cargo install --path . --debug
@@ -29,7 +29,7 @@ jobs:
           npm install -g pnpm
           pnpm install
           pnpm build
-          cp -r dist ../../mdbook-quiz
+          cp -r dist ../../rust-book/mdbook-quiz
       - run: mdbook build
       - uses: peaceiris/actions-gh-pages@v3
         with:
