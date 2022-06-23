@@ -21,9 +21,10 @@ jobs:
           echo "$(pwd)/bin" >> ${GITHUB_PATH}
       - name: Install mdbook-quiz
         run: |
+          cd /tmp
           git clone https://github.com/willcrichton/mdbook-quiz
           cd mdbook-quiz
-          cargo install --path .
+          cargo install --path . --debug
           cd js
           npm install -g pnpm
           pnpm install
