@@ -1,4 +1,18 @@
 [[questions]]
+type = "MultipleChoice"
+prompt.prompt = "What does it mean if a variable `x` is immutable?"
+prompt.choices = [
+  "`x` is stored in the immutable region of memory.",
+  "After being defined, `x` can be changed at most once.",
+  "`x` cannot be changed after being assigned to a value.",
+  "You cannot create a reference to `x`."
+]
+answer.answer = 2
+context = """
+Immutable means "not mutable", or not changeable.
+"""
+
+[[questions]]
 type = "ShortAnswer"
 prompt.prompt = "What is the keyword used after `let` to indicate that a variable can be mutated?"
 answer.answer = "mut"

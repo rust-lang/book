@@ -73,7 +73,7 @@ We’re allowed to change the value bound to `x` from `5` to `6` when `mut`
 is used. Ultimately, deciding whether to use mutability or not is up to you and
 depends on what you think is clearest in that particular situation.
 
-{{#quiz ../quizzes/ch03-01-variables-and-mutability-section1.toml}}
+{{#quiz ../quizzes/ch03-01-variables-and-mutability-sec1-variables.toml}}
 
 ### Constants
 
@@ -121,6 +121,8 @@ Naming hardcoded values used throughout your program as constants is useful in
 conveying the meaning of that value to future maintainers of the code. It also
 helps to have only one place in your code you would need to change if the
 hardcoded value needed to be updated in the future.
+
+{{#quiz ../quizzes/ch03-01-variables-and-mutability-sec2-constants.toml}}
 
 ### Shadowing
 
@@ -186,6 +188,8 @@ The error says we’re not allowed to mutate a variable’s type:
 
 Now that we’ve explored how variables work, let’s look at more data types they
 can have.
+
+{{#quiz ../quizzes/ch03-01-variables-and-mutability-sec3-shadowing.toml}}
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number

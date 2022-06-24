@@ -1,0 +1,31 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Which statement is NOT true about the difference between shadowing and mutating a variable after it is defined?"
+prompt.choices = [
+  "Shadowing can give a new type to an existing variable name, while mutation cannot",
+  "Shadowing only changes variable within a syntactic scope, while mutation can change an outer variable in a nested scope",
+  "Shadowing requires you to use the `let` keyword, while a mutation does not",
+  "Shadowing can change the type of a runtime value, while mutation cannot",
+]
+answer.answer = 3
+context = """
+Shadowing can change the type of a variable by assigning it a new value, but it cannot change the type of a runtime value itself. That would be very dangerous!
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut x: u32 = 1;
+  {
+    let mut x = x;
+    x += 2;
+  }
+  println!("{x}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "3"
+context = """
+The statement `x += 2` only affects the shadowed `x` inside the inner curly braces, not the outer `x` on line 2.
+"""
