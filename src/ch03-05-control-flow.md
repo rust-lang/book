@@ -167,6 +167,8 @@ able to do that if the type of `number` was only determined at runtime; the
 compiler would be more complex and would make fewer guarantees about the code
 if it had to keep track of multiple hypothetical types for any variable.
 
+{{#quiz ../quizzes/ch03-05-control-flow-sec1-if.toml}}
+
 ### Repetition with Loops
 
 It’s often useful to execute a block of code more than once. For this task,
@@ -369,6 +371,8 @@ we’ve not yet talked about, `rev`, to reverse the range:
 ```
 
 This code is a bit nicer, isn’t it?
+
+{{#quiz ../quizzes/ch03-05-control-flow-sec2-loops.toml}}
 
 ## Summary
 

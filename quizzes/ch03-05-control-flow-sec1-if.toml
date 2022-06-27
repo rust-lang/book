@@ -1,0 +1,43 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+True/false: these two pieces of code have the same effect on `x`.
+
+Snippet 1:
+```
+let x = if cond { 1 } else { 2 };
+```
+
+Snippet 2:
+```
+let mut x;
+if cond {
+  x = 1;
+} else {
+  x = 2;
+}
+```
+"""
+prompt.choices = [
+  "True",
+  "False"
+]
+answer.answer = 0
+context = """
+The first if-expression is a more concise way of representing the behavior of the second if-statement.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let x = true;
+  let y = if x {};
+  println!("{y:?}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "()"
+context = """
+An if-expression without an else-branch always returns the unit type, therefore `y` has the type and value of unit (or `()`).
+"""

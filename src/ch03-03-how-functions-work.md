@@ -98,6 +98,8 @@ run`:
 Because we called the function with `5` as the value for `value` and `'h'` as
 the value for `unit_label`, the program output contains those values.
 
+{{#quiz ../quizzes/ch03-03-functions-sec1-parameters.toml}}
+
 ### Statements and Expressions
 
 Function bodies are made up of a series of statements optionally ending in an
@@ -247,3 +249,5 @@ the unit type. Therefore, nothing is returned, which contradicts the function
 definition and results in an error. In this output, Rust provides a message to
 possibly help rectify this issue: it suggests removing the semicolon, which
 would fix the error.
+
+{{#quiz ../quizzes/ch03-03-functions-sec2-expressions.toml}}

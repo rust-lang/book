@@ -1,0 +1,48 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+True/false: this code will terminate and not loop or crash.
+
+```
+fn main() {
+  let mut x = 0;
+  'a: loop {
+    x += 1;
+    'b: loop {
+      if x > 10 {
+        continue 'a;
+      } else {
+        break 'b;
+      }      
+    }
+    break;       
+  }
+}
+```
+"""
+prompt.choices = [
+  "True",
+  "False"
+]
+answer.answer = 0
+context = """
+It will in fact terminate after the first iteration of the loop.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let a = [5; 10];
+  let mut sum = 0;
+  for x in a {
+    sum += x;
+  }
+  println!("{sum}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "50"
+context = """
+The array `a` has the element `5` repeated 10 times, therefore its sum is `50`.
+"""

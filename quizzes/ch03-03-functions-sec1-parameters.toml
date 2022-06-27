@@ -1,0 +1,21 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = "The keyword for declaring a new function in Rust is:"
+answer.answer = "fn"
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn f(x) { 
+  println!("{x}");
+}
+
+fn main() {
+  f(0);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 1
+context = """
+A function must declare the types of its parameters.
+"""

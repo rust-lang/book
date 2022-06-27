@@ -200,6 +200,8 @@ intuition for what a “character” is may not match up with what a `char` is i
 Rust. We’ll discuss this topic in detail in [“Storing UTF-8 Encoded Text with
 Strings”][strings]<!-- ignore --> in Chapter 8.
 
+{{#quiz ../quizzes/ch03-02-data-types-sec1-scalar.toml}}
+
 ### Compound Types
 
 *Compound types* can group multiple values into one type. Rust has two
@@ -371,6 +373,8 @@ incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
 continuing. Chapter 9 discusses more of Rust’s error handling and how you can
 write readable, safe code that neither panics nor allows invalid memory access.
+
+{{#quiz ../quizzes/ch03-02-data-types-sec2-compound.toml}}
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number

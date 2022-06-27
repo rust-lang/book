@@ -1,0 +1,30 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let message = "The temperature today is:";
+  let x = [message, 100];
+  println!("{} {}", x[0], x[1]);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 2
+context = """
+An array can only contain elements of a single type.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let t = ([1; 2], [3; 4]);
+  let (a, _) = t;
+  println!("{}", a[0] + t.1[0]); 
+}
+"""
+answer.doesCompile = true
+answer.stdout = "4"
+context = """
+The syntax `[x; y]` declares an array with `y` copies of the value `x`. The syntax `(a, _)` destructures `t` and binds `a` to `[1; 2]`. 
+The syntax `t.1` refers to the 1-th element of `t`, which is `[3; 4]`.
+"""
