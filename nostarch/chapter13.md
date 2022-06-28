@@ -54,14 +54,6 @@ currently has the most of.
 There are many ways to implement this. For this example, we’re going to use an
 enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
 number of colors available for simplicity).
-<!-- are we saying the company only offers shirts in red or blue, or are we just
-starting with these two colors? Likely not important for the code, but good to
-clarify for the narrative! /LC -->
-<!-- Only red and blue, I've clarified here that it's for the purposes of
-making this example simpler. In the previous paragraph, I specified that these
-t-shirts are exclusive, limited-edition promotional items, perhaps that'll make
-the details of this toy make enough sense that the readers aren't distracted
-from the closures! /Carol -->
 We represent the company’s inventory with an `Inventory` struct that has a
 field named `shirts` that contains a `Vec<ShirtColor>` representing the shirt
 colors currently in stock. The method `shirt_giveaway` defined on `Inventory`
@@ -131,12 +123,6 @@ The `store` defined in `main` has two blue shirts and one red shirt remaining
 to distribute for this limited-edition promotion [2]. We call the `giveaway`
 method for a user with a preference for a red shirt [3] and a user without any
 preference [4].
-<!-- Again... I know this is just a toy example, but it seems jarring for a
-tshirt company to only have three shirts in stock. I think it's fine if we add
-a line earlier that says something like "for the sake of simplicity, we'll deal
-with just two shirt colors, and a small volume of stock" /LC -->
-<!-- I've repeated the detail here that this is a limited-edition promotion,
-hope that helps remove the jarringness! /Carol -->
 
 Again, this code could be implemented in many ways, and here, to focus on
 closures, we’ve stuck to concepts you’ve already learned except for the body of
@@ -156,17 +142,6 @@ closure had parameters, they would appear between the two vertical bars). The
 body of the closure calls `self.most_stocked()`. We’re defining the closure
 here, and the implementation of `unwrap_or_else` will evaluate the closure
 later if the result is needed.
-
-<!-- can you show us the code that here counts as they closure? is it, for
-example, this whole section: (&self, user_preference: Option<ShirtColor>) ->
-ShirtColor { user_preference.unwrap_or_else(|| self.most_stocked()) ? And what
-indicates to Rust that it's a closure? Or do we not need to indicate that, Rust
-doesn't care? I'm thinking about the earlier closure definition "You can create
-the closure in one place and then call the closure elsewhere to evaluate it in
-a different context" -- are we using this aspect of the closure here? Can you
-highligt that in the text? /LC -->
-<!-- I've tried to clarify, and moved the clarification before showing the
-result of running the code. Is this better? /Carol -->
 
 Running this code prints:
 
@@ -193,8 +168,6 @@ There are more differences between functions and closures. Closures don’t
 usually require you to annotate the types of the parameters or the return value
 like `fn` functions do. Type annotations are required on functions because
 the types are part of an explicit interface exposed to your users. Defining this
-<!-- functions are part of the explicit interface, or type annotations are? /LC -->
-<!-- I've clarified! /Carol -->
 interface rigidly is important for ensuring that everyone agrees on what types
 of values a function uses and returns. Closures, on the other hand, aren’t used
 in an exposed interface like this: they’re stored in variables and used without
@@ -225,15 +198,6 @@ let expensive_closure = |num: u32| -> u32 {
 
 Listing 13-x: Adding optional type annotations of the parameter and return
 value types in the closure
-<!-- Interestng, so is this another way to define a closure: with the let
-keywork like a variable? Earlier we defined in (I think!) in the function
-definition: fn giveaway(&self,... Is it worth pointing out different ways they
-can be defined, or should that be obvious to the reader? /LC -->
-<!-- I've tried to clarify the paragraph before the listing, does this clear it
-up? This code is storing the closure in a variable rather than as an argument.
-Closure definitions are expressions and are always defined the same way, it's
-just that they can be used in different contexts like any other expression can.
-I think the reader will understand that? /Carol -->
 
 With type annotations added, the syntax of closures looks more similar to the
 syntax of functions. Here we define a function that adds 1 to its parameter and
@@ -254,15 +218,10 @@ annotated closure definition. In the third line, we remove the type annotations
 from the closure definition. In the fourth line, we remove the brackets, which
 are optional because the closure body has only one expression. These are all
 valid definitions that will produce the same behavior when they’re called.
-Evaluating the closures is required for `add_one_v3` and `add_one_v4` to be
+The `add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
 able to compile because the types will be inferred from their usage. This is
 similar to `let v = Vec::new();` needing either type annotations or values of
 some type to be inserted into the `Vec` for Rust to be able to infer the type.
-<!-- I wasn't clear what was meant by "Calling the closures is required for
-`add_one_v3` and `add_one_v4`..." -- I thought these were closures? /LC -->
-<!-- I've changed "Calling" to "Evaluating", does that clear it up? I've also
-added a sentence to have the reader recall how `Vec` works with type
-annotations; it's similar here /Carol -->
 
 For closure definitions, the compiler will infer one concrete type for each of
 their parameters and for their return value. For instance, Listing 13-x shows
@@ -272,8 +231,6 @@ example. Note that we haven’t added any type annotations to the definition.
 Because there are no type annotations, we can call the closure with any type,
 which we’ve done here with `String` the first time. If we then try to call
 `example_closure` with an integer, we’ll get an error.
-<!-- if we did add type annotations, you mean? Or because we haven't? /LC -->
-<!-- Because we haven't. I've tried to clarify? /Carol -->
 
 Filename: src/main.rs
 
@@ -316,6 +273,8 @@ In Listing 13-x, we define a closure that captures an immutable reference to the
 vector named `list` because it only needs an immutable reference to print the
 value:
 
+<!-- Guessing "13-x" needs to be changed to a real listing number? /JT -->
+
 Filename: src/main.rs
 
 ```
@@ -337,12 +296,6 @@ reference
 This example also illustrates that a variable can bind to a closure definition
 [1], and we can later call the closure by using the variable name and
 parentheses as if the variable name were a function name [2].
-<!-- That's cool. I'm changing to the active voice here, but I wanted to make
-sure I'm not changing meaning: it is us calling the closure later
-intentionally, right? It's not happening automatically behind the scenes? /LC
--->
-<!-- Yes, beacuse we've typed `only_borrows()`. I've moved this text after the
-listing and added some wingdings to hopefully be clearer /Carol -->
 
 Because we can have multiple immutable references to `list` at the same time,
 `list` is still accessible from the code before the closure definition, after
@@ -403,12 +356,7 @@ Once a closure has captured a reference or captured ownership of a value where
 the closure is defined (thus affecting what, if anything, is moved *into* the
 closure), the code in the body of the closure defines what happens to the
 references or
-<!-- which function does this refer to -- is a closure always tied to a
-function? I'm thinking of the let closure created earlier. Is "function" here
-just a way to refer to the functionality of the closure? I'm wary of mixing the
-two terms /LC -->
-<!-- This was my mistake, this should say "closure" throughout! Great catch!
-/Carol -->
+
 values when the closure is evaluated later (thus affecting what, if anything,
 is moved *out of* the closure).
 <!-- do we mean "the references and values that are a result of calling the
@@ -420,18 +368,56 @@ clear up with this revision. Closure definitions can move references or values
 *in*, then the closure body can move references or values *out*, and we can
 vary these two aspects independently. I'm not sure the edit I've made here
 makes it better or worse? -->
+<!-- JT, what do you think? /LC -->
+
+<!-- At least for me, I think the main theme is how values are captured by the closure.
+
+The online docs say this: "Note that Fn takes &self, FnMut takes &mut self and FnOnce takes self. These correspond to the three kinds of methods that can be invoked on an instance: call-by-reference, call-by-mutable-reference, and call-by-value."
+
+I think this gives a better mental model than relating to what may get returned from
+the closure. Like in this example:
+
+```rust
+fn foo() -> Box<dyn FnOnce(usize) -> usize> {
+    let v = [1, 2, 3];
+    
+    let f = move |x: usize| x + v.len();
+    
+    Box::new(f)
+}
+
+fn main() {
+    let result = foo();
+    println!("{}", result(10))
+}
+```
+
+Only usize is returned from the closure, yet we're required to use `move`
+in front of the closure to take ownership of the captured `v` in order to
+return the closure from the function.
+
+Re-reading this bit after reading some paragraphs below, are we trying to
+say "moving values out of the environment" rather than "moving values out
+of the closure"? If so, I think that'd be a clearer rewording, since closure
+is the function itself and environment is where the variables-to-be-captured
+would live initially.
+
+/JT -->
+
 A closure body can do any of the following: move a captured value out of the
 closure, mutate the captured value, neither move nor mutate the value, or
 capture nothing from the environment to begin with.
 
 The way a closure captures and handles values from the environment affects
 which traits
-<!-- so the closure will automatically implement the traits depending on how we
-set it to handle the values? /LC -->
-<!-- Yup! /Carol-->
 the closure implements, and traits are how functions and structs can specify
 what kinds of closures they can use. Closures will automatically implement one,
-two, or all three of these `Fn` traits, in an additive fashion:
+two, or all three of these `Fn` traits, in an additive fashion, depending on how we 
+tell them to handle the values:
+
+<!-- For `FnOnce` below, I think we should start by saying this function can
+be called only once. Just in case people scan down the column to see what each
+does and misread it as "at least once" /JT -->
 
 1. `FnOnce` applies to closures that can be called at least once. All closures
    implement at least this trait, because all closures can be called. A closure
@@ -445,14 +431,6 @@ two, or all three of these `Fn` traits, in an additive fashion:
    nothing from their environment. These closures can be called more than once
    without mutating their environment, which is important in cases such as
    calling a closure multiple times concurrently.
-
-<!-- so there isn't a trait for the first action listed above: moving a
-capture value out of the closure? /LC -->
-<!-- There is-- it's `FnOnce`, as stated there: "A closure that moves captured
-values out of its body will only implement `FnOnce`". I think the confusion is
-that the 3rd trait here, `Fn`, applies to the last *two* actions listed above,
-which I tried to express but perhaps wasn't clear enough. I rearranged the text
-in #3 to maybe make it clearer? /Carol -->
 
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-x:
@@ -480,6 +458,22 @@ Next, notice that the `unwrap_or_else` function has the additional generic type
 parameter `F`. The `F` type is the type of the parameter named `f`, which is
 the closure we provide when calling `unwrap_or_else`.
 
+
+<!-- For `FnOnce` below, we're being a little loose with the "once" aspect.
+
+From the docs reference:
+
+"if the only thing known about a type is that it implements FnOnce, it can only
+be called once."
+
+If the function implements more than `FnOnce` (eg implementing `Fn` or `FnMut`,
+which inherit from `FnOnce`), then yes, it can be called more than once. But
+if all we know is the one `FnOnce` implementation, it can only be called once.
+
+Below, if our bound says `FnOnce() -> T` then the constraint only knows that
+it implements `FnOnce`.
+ /JT -->
+
 The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
 means `F` must be able to be called at least once, take no arguments, and
 return a `T`. Using `FnOnce` in the trait bound expresses the constraint that
@@ -499,10 +493,7 @@ of closures and is as flexible as it can be.
 Now let’s look at the standard library method `sort_by_key` defined on slices,
 to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
 `FnMut` instead of `FnOnce` for the trait bound.
-<!-- can you tell us what about this method makes it a good comparison: what's
-the difference we're focusing on? /LC -->
-<!-- Done! /Carol -->
-The closure gets one argument, a reference to the current item in the slice
+The closure gets one argument in the form of a reference to the current item in the slice
 being considered, and returns a value of type `K` that can be ordered. This
 function is useful when you want to sort a slice by a particular attribute of
 each item. In Listing 13-x, we have a list of `Rectangle` instances and we use
@@ -620,10 +611,6 @@ environment. To fix this, we need to change the closure body so that it doesn’
 move values out of the environment. To count the number of times `sort_by_key`
 is called, keeping a counter in the environment and incrementing its value in
 the closure body is a more straightforward way to calculate that.
-<!-- are we interested in this? Are we saying this is basically what we're
-doing, but we're going about it in a roundabout way? /LC -->
-<!-- I'm trying to point out how to fix the example if you wanted this
-behavior, I guess the hypothetical isn't necessary /Carol -->
 The closure in Listing 13-x works with `sort_by_key` because it is only
 capturing a mutable reference to the `num_sort_operations` counter and can
 therefore be called more than once:
@@ -821,19 +808,6 @@ ownership of the iterator we call it on.
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.
 
-<!-- are all methods defined on Iterator know as iterator adaptors? If so,
-should that term be introduced in the previous section? /LC -->
-<!-- No, only methods on iterator that produce other iterators are adaptors.
-I've tried to make that distinction clearer? /Carol -->
-<!-- is there a quick example of a different kind of iterator you could give? I
-wasn't aware there were different kinds, unless you just mean change them into
-iterators that act on something else? /LC -->
-<!-- Adaptors typically do change an iterator into an iterator with a different
-type, but usually that doesn't matter because the important part is that the
-new type also implents the `Iterator` trait. The iterator typically acts on the
-same items but changes them in different ways. I've tried to rearrange this so
-that the example comes sooner, does this help? /Carol -->
-
 Listing 13-17 shows an example of calling the iterator adaptor method `map`,
 which takes a closure to call on each item as the items are iterated through.
 The `map` method returns a new iterator that produces the modified items. The
@@ -903,15 +877,13 @@ consuming adaptor methods to get results from calls to iterator adaptors.
 Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture
 their environment.
-<!-- are we saying we use filter to demonstrate some common use, or that using
-filter is the common use? If the former, can you specify what the common usage
-is? /LC -->
-<!-- Iterator adapters commonly use closures that capture their environment,
-I've tried to reword to avoid the ambiguity? /Carol -->
+
 For this example, we’ll use the `filter` method that takes a closure. The
 closure gets an item from the iterator and returns a Boolean. If the closure
 returns `true`, the value will be included in the iteration produced by
 `filter`. If the closure returns `false`, the value won’t be included.
+
+<!-- Boolean should maybe be `bool` to match the type? /JT -->
 
 In Listing 13-19, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
