@@ -8,9 +8,9 @@ the text `Hello, world!` to the screen, so we’ll do the same here!
 > no specific demands about your editing or tooling or where your code lives, so
 > if you prefer to use an integrated development environment (IDE) instead of
 > the command line, feel free to use your favorite IDE. Many IDEs now have some
-> degree of Rust support; check the IDE’s documentation for details. Recently,
-> the Rust team has been focusing on enabling great IDE support, and progress
-> has been made rapidly on that front!
+> degree of Rust support; check the IDE’s documentation for details. The Rust
+> team has been focusing on enabling great IDE support via `rust-analyzer`. See
+> [Appendix D][devtools]<!-- ignore --> for more details!
 
 ### Creating a Project Directory
 
