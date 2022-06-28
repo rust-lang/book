@@ -112,7 +112,7 @@ line as the function declaration, adding one space in between.
 > with the standard Rust distribution, like `rustc`, so it should already be
 > installed on your computer!
 
-The body of the the `main` function holds the following code:
+The body of the `main` function holds the following code:
 
 ```rust
     println!("Hello, world!");
