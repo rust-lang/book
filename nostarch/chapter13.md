@@ -53,12 +53,12 @@ currently has the most of.
 
 There are many ways to implement this. For this example, we’re going to use an
 enum called `ShirtColor` that has the variants `Red` and `Blue` (limiting the
-number of colors available for simplicity).
-We represent the company’s inventory with an `Inventory` struct that has a
-field named `shirts` that contains a `Vec<ShirtColor>` representing the shirt
-colors currently in stock. The method `shirt_giveaway` defined on `Inventory`
-gets the optional shirt color preference of the free shirt winner, and returns
-the shirt color the person will get. This setup is shown in Listing 13-1:
+number of colors available for simplicity). We represent the company’s
+inventory with an `Inventory` struct that has a field named `shirts` that
+contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
+The method `shirt_giveaway` defined on `Inventory` gets the optional shirt
+color preference of the free shirt winner, and returns the shirt color the
+person will get. This setup is shown in Listing 13-1:
 
 Filename: src/main.rs
 
@@ -166,8 +166,8 @@ are not able to capture their environment in this way.
 
 There are more differences between functions and closures. Closures don’t
 usually require you to annotate the types of the parameters or the return value
-like `fn` functions do. Type annotations are required on functions because
-the types are part of an explicit interface exposed to your users. Defining this
+like `fn` functions do. Type annotations are required on functions because the
+types are part of an explicit interface exposed to your users. Defining this
 interface rigidly is important for ensuring that everyone agrees on what types
 of values a function uses and returns. Closures, on the other hand, aren’t used
 in an exposed interface like this: they’re stored in variables and used without
@@ -217,8 +217,8 @@ The first line shows a function definition, and the second line shows a fully
 annotated closure definition. In the third line, we remove the type annotations
 from the closure definition. In the fourth line, we remove the brackets, which
 are optional because the closure body has only one expression. These are all
-valid definitions that will produce the same behavior when they’re called.
-The `add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
+valid definitions that will produce the same behavior when they’re called. The
+`add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
 able to compile because the types will be inferred from their usage. This is
 similar to `let v = Vec::new();` needing either type annotations or values of
 some type to be inserted into the `Vec` for Rust to be able to infer the type.
@@ -274,6 +274,7 @@ vector named `list` because it only needs an immutable reference to print the
 value:
 
 <!-- Guessing "13-x" needs to be changed to a real listing number? /JT -->
+<!-- Yep, doing this in Word /Carol -->
 
 Filename: src/main.rs
 
@@ -345,20 +346,57 @@ there to see what error message you get!
 
 If you want to force the closure to take ownership of the values it uses in the
 environment even though the body of the closure doesn’t strictly need
-ownership, you can use the `move` keyword before the parameter list. This
-technique is mostly useful when passing a closure to a new thread to move the
-data so that it’s owned by the new thread. We’ll have more examples of `move`
-closures in Chapter 16 when we talk about concurrency.
+ownership, you can use the `move` keyword before the parameter list.
+
+This technique is mostly useful when passing a closure to a new thread to move
+the data so that it’s owned by the new thread. We’ll discuss threads and why
+you would want to use them in detail in Chapter 16 when we talk about
+concurrency, but for now, let’s briefly explore spawning a new thread using a
+closure that needs the `move` keyword. Listing 13-y shows Listing 13-x modified
+to print the vector in a new thread rather than in the main thread:
+
+<!-- The Listing 13-x I'm referencing here is the one at the beginning of the
+"Capturing References or Moving Ownership" section, will fix all the listing
+numbers in Word /Carol -->
+
+Filename: src/main.rs
+
+```
+use std::thread;
+
+fn main() {
+    let list = vec![1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    [1] thread::spawn(move || {
+        [2] println!("From thread: {:?}", list)
+    }).join().unwrap();
+}
+```
+
+We spawn a new thread, giving the thread a closure to run as an argument. The
+closure body prints out the list. In Listing 13-x, the closure only captured
+`list` using an immutable reference because that's the least amount of access
+to `list` needed to print it. In this example, even though the closure body
+still only needs an immutable reference, we need to specify that `list` should
+be moved into the closure by putting the `move` keyword at the beginning of the
+closure definition. The new thread might finish before the rest of the main
+thread finishes, or the main thread might finish first. If the main thread
+maintained ownership of `list` but ended before the new thread did and dropped
+`list`, the immutable reference in the thread would be invalid. Therefore, the
+compiler requires that `list` be moved into the closure given to the new thread
+so the reference will be valid. Try removing the `move` keyword or using `list`
+in the main thread after the closure is defined to see what compiler errors you
+get!
 
 ### Moving Captured Values Out of Closures and the `Fn` Traits
 
-Once a closure has captured a reference or captured ownership of a value where
-the closure is defined (thus affecting what, if anything, is moved *into* the
-closure), the code in the body of the closure defines what happens to the
-references or
+Once a closure has captured a reference or captured ownership of a value from
+the environment where the closure is defined (thus affecting what, if anything,
+is moved *into* the closure), the code in the body of the closure defines what
+happens to the references or values when the closure is evaluated later (thus
+affecting what, if anything, is moved *out of* the closure).
 
-values when the closure is evaluated later (thus affecting what, if anything,
-is moved *out of* the closure).
 <!-- do we mean "the references and values that are a result of calling the
 function"? This line confused me a little. Surely it's self-evident that the
 code in the function body affects the value or reference it's called on; I
@@ -370,19 +408,23 @@ vary these two aspects independently. I'm not sure the edit I've made here
 makes it better or worse? -->
 <!-- JT, what do you think? /LC -->
 
-<!-- At least for me, I think the main theme is how values are captured by the closure.
+<!-- At least for me, I think the main theme is how values are captured by the
+closure.
 
-The online docs say this: "Note that Fn takes &self, FnMut takes &mut self and FnOnce takes self. These correspond to the three kinds of methods that can be invoked on an instance: call-by-reference, call-by-mutable-reference, and call-by-value."
+The online docs say this: "Note that Fn takes &self, FnMut takes &mut self and
+FnOnce takes self. These correspond to the three kinds of methods that can be
+invoked on an instance: call-by-reference, call-by-mutable-reference, and
+call-by-value."
 
-I think this gives a better mental model than relating to what may get returned from
-the closure. Like in this example:
+I think this gives a better mental model than relating to what may get returned
+from the closure. Like in this example:
 
 ```rust
 fn foo() -> Box<dyn FnOnce(usize) -> usize> {
     let v = [1, 2, 3];
-    
+
     let f = move |x: usize| x + v.len();
-    
+
     Box::new(f)
 }
 
@@ -403,26 +445,44 @@ is the function itself and environment is where the variables-to-be-captured
 would live initially.
 
 /JT -->
+<!-- Liz: This was the spot I followed up on with JT, I was confused by the
+comments here because they didn't really apply to the point of the section, and
+it turns out that JT expected there to be an example about `move` at this
+point, then got confused that the topic shifted to the `Fn` traits instead. To
+address these comments, I've added an example using `move` to the previous
+"Capturing References or Moving Ownership" section. The example does use
+threads, which are covered in Chapter 16, but they're the simplest use case for
+`move` closures, so I hope it's ok to briefly demonstrate spawning a new thread
+for the sake of explaining `move`, but defer all other thread details to
+Chapter 16.
+
+JT agreed that this section was fine as-is once a `move` example preceeds it.
+/Carol -->
 
 A closure body can do any of the following: move a captured value out of the
 closure, mutate the captured value, neither move nor mutate the value, or
 capture nothing from the environment to begin with.
 
 The way a closure captures and handles values from the environment affects
-which traits
-the closure implements, and traits are how functions and structs can specify
-what kinds of closures they can use. Closures will automatically implement one,
-two, or all three of these `Fn` traits, in an additive fashion, depending on how we 
-tell them to handle the values:
+which traits the closure implements, and traits are how functions and structs
+can specify what kinds of closures they can use. Closures will automatically
+implement one, two, or all three of these `Fn` traits, in an additive fashion,
+depending on how the closure’s body handles the values:
 
 <!-- For `FnOnce` below, I think we should start by saying this function can
 be called only once. Just in case people scan down the column to see what each
 does and misread it as "at least once" /JT -->
+<!-- I've changed this to say "can be called once". I don't want to say "only
+once", because closures can implement *both* `FnOnce` *and* `FnMut` (or all
+three), and then they can be called more than once, so it's NOT the case that
+"all closures that implement `FnOnce` can be called *only once*". It *is* the
+case that "closures that *only* implement `FnOnce` can be called only once".
+This is confusing!! /Carol -->
 
-1. `FnOnce` applies to closures that can be called at least once. All closures
-   implement at least this trait, because all closures can be called. A closure
-   that moves captured values out of its body will only implement `FnOnce`
-   and none of the other `Fn` traits, because it can only be called once.
+1. `FnOnce` applies to closures that can be called once. All closures implement
+   at least this trait, because all closures can be called. A closure that
+   moves captured values out of its body will only implement `FnOnce` and none
+   of the other `Fn` traits, because it can only be called once.
 2. `FnMut` applies to closures that don’t move captured values out of their
    body, but that might mutate the captured values. These closures can be
    called more than once.
@@ -458,7 +518,6 @@ Next, notice that the `unwrap_or_else` function has the additional generic type
 parameter `F`. The `F` type is the type of the parameter named `f`, which is
 the closure we provide when calling `unwrap_or_else`.
 
-
 <!-- For `FnOnce` below, we're being a little loose with the "once" aspect.
 
 From the docs reference:
@@ -473,10 +532,12 @@ if all we know is the one `FnOnce` implementation, it can only be called once.
 Below, if our bound says `FnOnce() -> T` then the constraint only knows that
 it implements `FnOnce`.
  /JT -->
+<!-- I've removed the "at least" from the first sentence, which I think
+addresses JT's concern here /Carol -->
 
 The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
-means `F` must be able to be called at least once, take no arguments, and
-return a `T`. Using `FnOnce` in the trait bound expresses the constraint that
+means `F` must be able to be called once, take no arguments, and return a `T`.
+Using `FnOnce` in the trait bound expresses the constraint that
 `unwrap_or_else` is only going to call `f` at most one time. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
@@ -492,12 +553,12 @@ of closures and is as flexible as it can be.
 
 Now let’s look at the standard library method `sort_by_key` defined on slices,
 to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
-`FnMut` instead of `FnOnce` for the trait bound.
-The closure gets one argument in the form of a reference to the current item in the slice
-being considered, and returns a value of type `K` that can be ordered. This
-function is useful when you want to sort a slice by a particular attribute of
-each item. In Listing 13-x, we have a list of `Rectangle` instances and we use
-`sort_by_key` to order them by their `width` attribute from low to high:
+`FnMut` instead of `FnOnce` for the trait bound. The closure gets one argument
+in the form of a reference to the current item in the slice being considered,
+and returns a value of type `K` that can be ordered. This function is useful
+when you want to sort a slice by a particular attribute of each item. In
+Listing 13-x, we have a list of `Rectangle` instances and we use `sort_by_key`
+to order them by their `width` attribute from low to high:
 
 Filename: src/main.rs
 
@@ -610,10 +671,10 @@ The error points to the line in the closure body that moves `value` out of the
 environment. To fix this, we need to change the closure body so that it doesn’t
 move values out of the environment. To count the number of times `sort_by_key`
 is called, keeping a counter in the environment and incrementing its value in
-the closure body is a more straightforward way to calculate that.
-The closure in Listing 13-x works with `sort_by_key` because it is only
-capturing a mutable reference to the `num_sort_operations` counter and can
-therefore be called more than once:
+the closure body is a more straightforward way to calculate that. The closure
+in Listing 13-x works with `sort_by_key` because it is only capturing a mutable
+reference to the `num_sort_operations` counter and can therefore be called more
+than once:
 
 Filename: src/main.rs
 
@@ -879,11 +940,12 @@ we’ll specify as arguments to iterator adapters will be closures that capture
 their environment.
 
 For this example, we’ll use the `filter` method that takes a closure. The
-closure gets an item from the iterator and returns a Boolean. If the closure
+closure gets an item from the iterator and returns `bool`. If the closure
 returns `true`, the value will be included in the iteration produced by
 `filter`. If the closure returns `false`, the value won’t be included.
 
 <!-- Boolean should maybe be `bool` to match the type? /JT -->
+<!-- Done /Carol -->
 
 In Listing 13-19, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct
