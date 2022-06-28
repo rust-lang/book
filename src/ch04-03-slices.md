@@ -296,6 +296,8 @@ storing a reference to the first element and a length. You’ll use this kind of
 slice for all sorts of other collections. We’ll discuss these collections in
 detail when we talk about vectors in Chapter 8.
 
+{{#quiz ../quizzes/ch04-03-slices.toml}}
+
 ## Summary
 
 The concepts of ownership, borrowing, and slices ensure memory safety in Rust

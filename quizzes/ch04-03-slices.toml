@@ -1,0 +1,42 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the variables `s2` and `s3` in the following program. Compared to `s2`, the size of `s3` has:
+
+```
+fn main() {
+  let s = String::from("hello");
+  let s2: &String = &s;
+  let s3: &str = &s;
+}
+```
+"""
+prompt.choices = [
+  "More bytes",
+  "The same number of bytes",
+  "Fewer bytes"
+]
+answer.answer = 0
+context = """
+The type `&String` is a normal reference consisting of a single pointer. The type `&str` is a special slice reference which consists of a pointer and a length, 
+so it uses more memory.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut s = String::from("hello");
+  for &item in s.as_bytes().iter() {
+    if item == b'l' {
+      s.push_str(" world");
+    }
+  }
+  println!("{s}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 5
+context = """
+Because `s.as_bytes()` produces an immutable reference to `s`, it is illegal to mutate `s` (via `push_str`) inside the for-loop.
+"""

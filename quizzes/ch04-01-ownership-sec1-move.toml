@@ -1,0 +1,75 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+At the end of this function, Rust will call `drop` on which variables:
+```
+fn main() {
+  let s1 = String::from("a");
+  let s2 = String::from("b");
+  let s3 = s2;
+}
+```
+"""
+prompt.choices = [
+  "`s1`, `s2`, and `s3`",
+  "`s2` and `s3`",
+  "`s1` and `s3`",
+  "`s3`"
+]
+answer.answer = 2
+context = """
+`s2` is not dropped because it is moved into `s3`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let x = String::from("hello");
+  let mut y = x;
+  y.push_str(" world");
+  println!("{x}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 5
+context = """
+It is illegal to use `x` after moving it into `y`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let a = {
+    let b = String::from("hello");
+    b.push_str(" world");
+    b
+  };
+  println!("{a}")
+}
+"""
+answer.doesCompile = true
+answer.stdout = "hello world"
+context = """
+It is legal to move a value from a nested scope to an outer scope.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let s = String::from("hello");
+  let s2;
+  let b = false;
+  if b {
+    s2 = s;
+  }
+  println!("{s}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 7
+context = """
+Because `s` could be moved inside of the if-statement, it is illegal to use it on line 7.
+"""

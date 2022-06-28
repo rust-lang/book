@@ -83,6 +83,8 @@ Here’s the error:
 Just as variables are immutable by default, so are references. We’re not
 allowed to modify something we have a reference to.
 
+{{#quiz ../quizzes/ch04-02-references-sec1-immut.toml}}
+
 ### Mutable References
 
 We can fix the code from Listing 4-6 to allow us to modify a borrowed value
@@ -184,6 +186,8 @@ Even though borrowing errors may be frustrating at times, remember that it’s
 the Rust compiler pointing out a potential bug early (at compile time rather
 than at runtime) and showing you exactly where the problem is. Then you don’t
 have to track down why your data isn’t what you thought it was.
+
+{{#quiz ../quizzes/ch04-02-references-sec2-mut.toml}}
 
 ### Dangling References
 

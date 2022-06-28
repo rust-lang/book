@@ -1,0 +1,41 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn add_suffix(mut s: String) {
+  s.push_str(" world");
+}
+
+fn main() {
+  let s = String::from("hello");
+  add_suffix(s);
+  println!("{s}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 8
+context = """
+The string `s` is moved into `add_suffix` after calling it, so it cannot be used on line 8.
+"""
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+How many times does a heap allocation occur in the following program? (Write your answer using digits, like `1` or `2` etc.)
+
+```
+fn print(s: String) {
+  println!("{s}");
+}
+
+fn main() {
+  let s = String::from("Hello");
+  print(s.clone());
+  print(s);
+}
+```
+"""
+answer.answer = "2"
+context = """
+First, the call to `String::from` causes an initial heap allocation. Then the call `s.clone()` does a deep copy that involves a second heap allocation. 
+Moving (or shallow-copying) a `String` does not cause a heap allocation.
+"""

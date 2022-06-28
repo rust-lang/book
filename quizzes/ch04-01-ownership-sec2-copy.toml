@@ -1,0 +1,29 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Why does the type `String` not implement the `Copy` trait?"
+prompt.choices = [
+  "Because a `String` points to data on the heap",
+  "Because a `String` cannot be shallow-copied",
+  "Because the `char` type does not implement `Copy`",
+  "Because `Copy` is only implemented for primitive types"
+]
+answer.answer = 0
+context = """
+Because a `String` points to data on the heap, a shallow-copy would cause multiple strings to point to the same heap data.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let x = String::from("hello");
+  let mut y = x.clone();
+  y.push_str(" world");
+  println!("{x}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "hello"
+context = """
+Because `y` is a deep copy of `x`, the mutation to `y` does not affect `x`.
+"""

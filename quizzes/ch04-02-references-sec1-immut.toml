@@ -1,0 +1,34 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn print(s: &String) {
+  println!("{s}");
+}
+
+fn main() {
+  let mut s = String::from("hello");
+  print(&s);
+  s.push_str(" world");
+  print(&s);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "hello\nhello world"
+context = """
+The references to `s` do not last longer than the call to `print`, so it is valid to mutate `s` between them.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider a move of a value of type `&String` versus a value of type `String`. The move of `&String` will copy:
+"""
+prompt.choices = [
+  "More bytes",
+  "The same number of bytes",
+  "Fewer bytes"
+]
+answer.answer = 2
+context = """
+The `String` structure contains a pointer, length and capacity. The `&String` type is just a pointer, so a shallow-copy of it will copy fewer bytes.
+"""

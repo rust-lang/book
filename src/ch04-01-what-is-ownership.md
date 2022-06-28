@@ -339,6 +339,8 @@ In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
+{{#quiz ../quizzes/ch04-01-ownership-sec1-move.toml}}
+
 #### Ways Variables and Data Interact: Clone
 
 If we *do* want to deeply copy the heap data of the `String`, not just the
@@ -404,6 +406,8 @@ implement `Copy`:
 * Tuples, if they only contain types that also implement `Copy`. For example,
   `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
 
+{{#quiz ../quizzes/ch04-01-ownership-sec2-copy.toml}}
+
 ### Ownership and Functions
 
 The mechanics of passing a value to a function are similar to those when
@@ -464,6 +468,8 @@ Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
 transferring ownership, called *references*.
+
+{{#quiz ../quizzes/ch04-01-ownership-sec3-functions.toml}}
 
 [data-types]: ch03-02-data-types.html#data-types
 [ch8]: ch08-02-strings.html
