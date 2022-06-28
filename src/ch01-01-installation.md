@@ -89,12 +89,32 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
 If you see this information, you have installed Rust successfully! If you don’t
-see this information and you’re on Windows, check that Rust is in your `%PATH%`
-system variable. If that’s all correct and Rust still isn’t working, there are
-a number of places you can get help. The easiest is the #beginners channel on
-[the official Rust Discord][discord]. There, you can chat with other Rustaceans
-(a silly nickname we call ourselves) who can help you out. Other great
-resources include [the Users forum][users] and [Stack Overflow][stackoverflow].
+see this information, check that Rust is in your `%PATH%`
+system variable as follows.
+
+In Windows CMD, use:
+
+```console
+> echo %PATH%
+```
+
+In PowerShell, use:
+
+```console
+> echo $env:Path
+```
+
+In Linux and macOS, use:
+
+```console
+echo $PATH
+```
+
+If that’s all correct and Rust still isn’t working, there are a number of
+places you can get help. The easiest is the #beginners channel on [the official
+Rust Discord][discord]. There, you can chat with other Rustaceans (a silly
+nickname we call ourselves) who can help you out. Other great resources include
+[the Users forum][users] and [Stack Overflow][stackoverflow].
 
 ### Updating and Uninstalling
 
