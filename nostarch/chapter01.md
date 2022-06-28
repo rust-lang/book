@@ -80,12 +80,9 @@ On Windows, go to *https://www.rust-lang.org/tools/install* and follow the
 instructions for installing Rust. At some point in the installation, you’ll
 receive a message explaining that you’ll also need the MSVC build tools for
 Visual Studio 2013 or later.
-<!-- is this still true: you need 2013 or later? /LC -->
-<!-- Yup, I have verified /Carol -->
+
 To acquire the build tools, you’ll need to
 install Visual Studio 2022
-<!-- and is VS 2019 still the right/best version? /LC -->
-<!-- Just checked, there's now VS 2022! /Carol -->
 from *https://visualstudio.microsoft.com/downloads/*. When asked which
 workloads to install, include:
 
@@ -128,13 +125,12 @@ you out. Other great resources include the Users forum at
 *https://users.rust-lang.org/* and Stack Overflow at
 *https://stackoverflow.com/questions/tagged/rust*.
 
+<!-- `echo %PATH%` will work for cmd. PowerShell would use `echo $env:Path`.
+Bash would use `echo $PATH` /JT -->
+
 ### Updating and Uninstalling
 
 Once Rust is installed via `rustup`, when a new version of Rust is released, updating to the latest version is
-<!-- do you mean that the reader should immediately update to the latest
-version, or just that when, at some point, they want to update, it's easy to
-do? /LC -->
-<!-- The latter; I've clarified /Carol -->
 easy. From your shell, run the following update script:
 
 ```
@@ -222,10 +218,6 @@ Listing 1-1: A program that prints `Hello, world!`
 Save the file and go back to your terminal window in the
 *~/projects/hello_world* directory. On Linux or macOS, enter the following
 commands to compile and run the file:
-<!-- just to be clear, are we in the projects folder at this point? or a subfolder? /LC -->
-<!-- In the hello_world subfolder, as that's where we left the terminal in the
-"Creating a project directory" section. I've added the path here for clarity
-/Carol -->
 
 ```
 $ rustc main.rs
@@ -495,6 +487,12 @@ path. Most people use `cargo run` instead, which is what we show in a few
 paragraphs. We talk about building for release mode in the next section; do you
 think it needs to be mentioned here too? I think it would be somewhat
 distracting and repetitive to get into that right here... /Carol -->
+<!-- JT, what do you think? I don't want to get into the weeds... but will the reader
+be wondering? /LC -->
+<!-- I think we could quickly mention that because the default build is a debug
+build, cargo will put the binary in the debug directory. If we created a release
+build, it would put it in the release directory. Looks like we do mention this later
+/JT -->
 directory. You can run the executable with this command:
 
 ```
@@ -528,6 +526,7 @@ laboriousness. The idea was to show `cargo build`, talk about where the result
 of that ends up, then show that `cargo run` does those two steps in one command.
 Do you think that works or does this section need to be reordered somehow?
 /Carol -->
+<!-- I think that looks good! /LC -->
 
 Notice that this time we didn’t see output indicating that Cargo was compiling
 `hello_cargo`. Cargo figured out that the files hadn’t changed, so it didn’t
@@ -594,6 +593,9 @@ With simple projects, Cargo doesn’t provide a lot of value over just using
 With complex projects composed of multiple crates, it’s much easier to let
 Cargo coordinate the build.
 
+<!-- I think once you go add a second file or add a single dependency, you 
+already want to move to cargo imho. /JT -->
+
 Even though the `hello_cargo` project is simple, it now uses much of the real
 tooling you’ll use in the rest of your Rust career. In fact, to work on any
 existing projects, you can use the following commands to check out the code
@@ -622,3 +624,6 @@ This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
 If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
+
+<!-- Question for Carol: Do we want to mention IDE support? Rust Analyzer is
+pretty good these days. /JT -->
