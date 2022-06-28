@@ -25,7 +25,7 @@ the most important groups.
 
 Rust is proving to be a productive tool for collaborating among large teams of
 developers with varying levels of systems programming knowledge. Low-level code
-is prone to a variety of subtle bugs, which in most other languages can be
+is prone to various subtle bugs, which in most other languages can be
 caught only through extensive testing and careful code review by experienced
 developers. In Rust, the compiler plays a gatekeeper role by refusing to
 compile code with these elusive bugs, including concurrency bugs. By working
@@ -37,7 +37,7 @@ Rust also brings contemporary developer tools to the systems programming world:
 * Cargo, the included dependency manager and build tool, makes adding,
   compiling, and managing dependencies painless and consistent across the Rust
   ecosystem.
-* Rustfmt ensures a consistent coding style across developers.
+* The Rustfmt formatting tool ensures a consistent coding style across developers.
 * The Rust Language Server powers Integrated Development Environment (IDE)
   integration for code completion and inline error messages.
 
@@ -56,10 +56,12 @@ programming.
 ### Companies
 
 Hundreds of companies, large and small, use Rust in production for a variety of
-tasks. Those tasks include command line tools, web services, DevOps tooling,
+tasks, including command line tools, web services, DevOps tooling,
 embedded devices, audio and video analysis and transcoding, cryptocurrencies,
 bioinformatics, search engines, Internet of Things applications, machine
 learning, and even major parts of the Firefox web browser.
+<!-- with Rust adopted in a lot of really recognizable names, is it worth namedropping
+some companies that use Rust significantly? /LC -->
 
 ### Open Source Developers
 
@@ -70,8 +72,8 @@ language.
 ### People Who Value Speed and Stability
 
 Rust is for people who crave speed and stability in a language. By speed, we
-mean the speed of the programs that you can create with Rust and the speed at
-which Rust lets you write them. The Rust compiler’s checks ensure stability
+mean both how quickly Rust code can run and the speed at
+which Rust lets you write programs. The Rust compiler’s checks ensure stability
 through feature additions and refactoring. This is in contrast to the brittle
 legacy code in languages without these checks, which developers are often
 afraid to modify. By striving for zero-cost abstractions, higher-level features
@@ -97,7 +99,7 @@ reading a book that specifically provides an introduction to programming.
 
 In general, this book assumes that you’re reading it in sequence from front to
 back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a topic; we typically revisit the
+chapters might not delve into details on a particular topic but will revisit the
 topic in a later chapter.
 
 You’ll find two kinds of chapters in this book: concept chapters and project
@@ -107,12 +109,13 @@ far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
 
 Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
 and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
-hands-on introduction to the Rust language. Here we cover concepts at a high
+hands-on introduction to writing a program in Rust, having you build up
+a number guessing game. Here we cover concepts at a high
 level, and later chapters will provide additional detail. If you want to get
-your hands dirty right away, Chapter 2 is the place for that. At first, you
-might even want to skip Chapter 3, which covers Rust features similar to those
-of other programming languages, and head straight to Chapter 4 to learn about
-Rust’s ownership system. However, if you’re a particularly meticulous learner
+your hands dirty right away, Chapter 2 is the place for that. Chapter 3 
+covers Rust features that are similar to those
+of other programming languages, and in Chapter 4 you'll learn about
+Rust’s ownership system. If you’re a particularly meticulous learner
 who prefers to learn every detail before moving on to the next, you might want
 to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
 you’d like to work on a project applying the details you’ve learned.
@@ -158,7 +161,7 @@ Finally, some appendices contain useful information about the language in a
 more reference-like format. Appendix A covers Rust’s keywords, Appendix B
 covers Rust’s operators and symbols, Appendix C covers derivable traits
 provided by the standard library, Appendix D covers some useful development
-tools, and Appendix E explains Rust editions.
+tools, and Appendix E explains Rust editions.s
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any
