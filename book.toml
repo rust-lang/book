@@ -8,7 +8,7 @@ additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/rust-lang/book"
 
 [preprocessor.quiz]
-log-endpoint = "https://mindover.computer/quiz"
+log-endpoint = "https://mindover.computer"
 fullscreen = true
 consent = true
 validate = true
