@@ -46,55 +46,13 @@ Here is the error we get when we compile this code:
 
 The error tells us we can’t call `join` because we only have a mutable borrow
 of each `worker` and `join` takes ownership of its argument. To solve this
-issue, we need to move the thread out of the `Worker` instance that owns
-`thread` so `join` can consume the thread. We did this in Listing 17-15: if
-`Worker` holds an `Option<thread::JoinHandle<()>>` instead, we can call the
-`take` method on the `Option` to move the value out of the `Some` variant and
-leave a `None` variant in its place. In other words, a `Worker` that is running
-will have a `Some` variant in `thread`, and when we want to clean up a
-`Worker`, we’ll replace `Some` with `None` so the `Worker` doesn’t have a
-thread to run.
-
-So we know we want to update the definition of `Worker` like this:
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-04-update-worker-definition/src/lib.rs:here}}
-```
-
-Now let’s lean on the compiler to find the other places that need to change.
-Checking this code, we get two errors:
-
-```console
-{{#include ../listings/ch20-web-server/no-listing-04-update-worker-definition/output.txt}}
-```
-
-Let’s address the second error, which points to the code at the end of
-`Worker::new`; we need to wrap the `thread` value in `Some` when we create a
-new `Worker`. Make the following changes to fix this error:
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch20-web-server/no-listing-05-fix-worker-new/src/lib.rs:here}}
-```
-
-The first error is in our `Drop` implementation. We mentioned earlier that we
-intended to call `take` on the `Option` value to move `thread` out of `worker`.
-The following changes will do so:
+issue, we need to move the thread out of the vector. `drain` method does it.
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore,not_desired_behavior
 {{#rustdoc_include ../listings/ch20-web-server/no-listing-06-fix-threadpool-drop/src/lib.rs:here}}
 ```
-
-As discussed in Chapter 17, the `take` method on `Option` takes the `Some`
-variant out and leaves `None` in its place. We’re using `if let` to destructure
-the `Some` and get the thread; then we call `join` on the thread. If a worker’s
-thread is already `None`, we know that worker has already had its thread
-cleaned up, so nothing happens in that case.
 
 ### Signaling to the Threads to Stop Listening for Jobs
 
@@ -114,6 +72,17 @@ the `sender` before waiting for the threads to finish. Listing 20-23 shows the
 changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
 and `take` technique as we did with the thread to be able to move `sender` out
 of `ThreadPool`:
+
+To solve the
+issue, we need to move the `sender` out of the `ThreadPool` instance that owns
+`sender` so `drop` can consume the object. We did this in Listing 17-15: if
+`ThreadPool` holds an `Option<mpsc::Sender<Job>>` instead, we can call the
+`take` method on the `Option` to move the value out of the `Some` variant and
+leave a `None` variant in its place. In other words, a `ThreadPool` that is running
+will have a `Some` variant in `sender`, and when we want to clean up a
+`ThreadPool`, we’ll replace `Some` with `None` so the `ThreadPool` doesn’t have a
+sender to run.
+
 
 <span class="filename">Filename: src/lib.rs</span>
 
