@@ -25,7 +25,7 @@ fn main() {
 }
 """
 answer.doesCompile = true
-answer.stdout = "3"
+answer.stdout = "1"
 context = """
 The statement `x += 2` only affects the shadowed `x` inside the inner curly braces, not the outer `x` on line 2.
 """

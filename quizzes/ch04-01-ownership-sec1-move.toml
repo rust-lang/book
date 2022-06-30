@@ -42,7 +42,7 @@ type = "Tracing"
 prompt.program = """
 fn main() {
   let a = {
-    let b = String::from("hello");
+    let mut b = String::from("hello");
     b.push_str(" world");
     b
   };

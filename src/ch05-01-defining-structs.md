@@ -265,6 +265,8 @@ implement them on any type, including unit-like structs.
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
 
+{{#quiz ../quizzes/ch05-01-structs.toml}}
+
 <!-- manual-regeneration
 for the error above
 after running update-rustc.sh:

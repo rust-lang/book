@@ -12,3 +12,4 @@ log-endpoint = "https://mindover.computer"
 fullscreen = true
 consent = true
 validate = true
+cache-answers = true
