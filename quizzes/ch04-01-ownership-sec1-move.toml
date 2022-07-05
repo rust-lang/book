@@ -69,7 +69,7 @@ fn main() {
 }
 """
 answer.doesCompile = false
-answer.lineNumber = 7
+answer.lineNumber = 8
 context = """
-Because `s` could be moved inside of the if-statement, it is illegal to use it on line 7.
+Because `s` could be moved inside of the if-statement, it is illegal to use it on line 8.
 """

@@ -8,7 +8,7 @@ fn main() {
 }
 """
 answer.doesCompile = false
-answer.lineNumber = 2
+answer.lineNumber = 3
 context = """
 An array can only contain elements of a single type.
 """
