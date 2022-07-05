@@ -284,8 +284,9 @@ we can use a `where` clause, like this:
 
 ```rust,ignore
 fn some_function<T, U>(t: &T, u: &U) -> i32
-    where T: Display + Clone,
-          U: Clone + Debug
+where
+    T: Display + Clone,
+    U: Clone + Debug,
 {
 ```
 
