@@ -1,0 +1,82 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "What is the keyword for constructors in Rust?"
+prompt.choices = [
+  "`constructor`",
+  "`new`",
+  "The name of the type being constructed",
+  "None of the above"
+]
+answer.answer = 3
+context = """
+Rust does not have a keyword for constructors. The idiomatic way to define a constructor is to make an associated function called `new`,
+but that is not enforced by the language.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+struct Point(i32, i32);
+fn main() {
+  let p = Point(1, 2);
+
+  impl p {
+    fn x(&self) -> i32 { self.0 }
+  }
+  
+  println!("{}", p.x());
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 5
+context = """ 
+Methods can only be implemented for types (e.g. `impl Point`), not variables (like `p`).
+"""
+
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider these two methods that increment a field of a struct. Which style would be more idiomatic for Rust?
+
+```
+struct Point(i32, i32);
+impl Point {
+  fn incr_v1(mut self)  { self.0 += 1; }
+  fn incr_v2(&mut self) { self.0 += 1; }
+}
+```
+"""
+prompt.choices = [
+  "`incr_v1`",
+  "`incr_v2`",
+  "Both are idiomatic",
+  "Neither are idiomatic"
+]
+answer.answer = 1
+context = """
+The `incr_v1` method is not idiomatic, because it consumes ownership of the `Point`. This means after calling `p.incr_v1()`, `p` 
+would be unusable, which is probably not intended for this method.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+struct Point(i32, i32);
+impl Point {
+  fn incr_x(&mut self) {
+    self.0 += 1;
+  }
+}
+
+fn main() {
+  let mut p = Point(0, 0);
+  p.incr_x();
+  println!("{}", p.0);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "1"
+context = """ 
+Remember that `.0` is valid for tuple structs like `Point`.
+"""

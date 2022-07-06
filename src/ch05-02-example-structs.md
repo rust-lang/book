@@ -240,6 +240,8 @@ struct, because it won’t work with any other type. Let’s look at how we can
 continue to refactor this code by turning the `area` function into an `area`
 *method* defined on our `Rectangle` type.
 
+{{#quiz ../quizzes/ch05-02-example-structs.toml}}
+
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
 [app-c]: appendix-03-derivable-traits.md
 [println]: ../std/macro.println.html

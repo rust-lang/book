@@ -1,47 +1,39 @@
 [[questions]]
 type = "Tracing"
 prompt.program = """
-struct Point {
-  x: i32,
-  y: i32
+#[derive(Debug)]
+struct Rectangle {
+  width: u32,
+  height: u32,
 }
 
 fn main() {
-  let mut a = Point { x: 1, y: 2 };
-  a.x += 1;
-  let b = Point { y: 1, ..a };
-  a.x += 1;
-  println!("{}", b.x);
-}
-"""
-answer.doesCompile = true
-answer.stdout = "2"
-context = """ 
-The `..p` syntax is a shallow copy of each field, so the second `p.x += 1` has no effect on `p2`.
-"""
+  let rect1 = Rectangle {
+    width: 30,
+    height: 50,
+  };
 
-[[questions]]
-type = "Tracing"
-prompt.program = """
-struct Point {
-  x: i32,
-  y: i32
+  let a = area(rect1);
+  println!("{:?} {}", rect1, a);
 }
 
-fn get_x(p: &mut Point) -> &mut i32 {
-  &mut p.x
-}
-
-fn main() {
-  let mut p = Point { x: 1, y: 2 };
-  let x = get_x(&mut p);
-  *x += 1;
-  println!("{} {}", *x, p.y);
+fn area(rectangle: Rectangle) -> u32 {
+  rectangle.width * rectangle.height
 }
 """
 answer.doesCompile = false
 answer.lineNumber = 14
 context = """ 
-Because `get_x` mutably borrows `p`, a program cannot use `p` in any way until `x` is no longer used. 
-Therefore reading `x` and `p.y` in the same line is an ownership error.
+`rect1` is moved by calling `area`, so it cannot be used on the next line.
 """
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "What is the difference between the `Display` and `Debug` traits?"
+prompt.choices = [
+  "`Display` is for cases where a value has a unique string representation, while `Debug` does not assume that",
+  "`Display` is for printing values to the console, while `Debug` is for viewing values in a debugger",
+  "`Display` cannot be implemented for structs, while `Debug` can be implemented for structs",
+  "There is no difference, `Display` and `Debug` are aliases for the same trait."
+]
+answer.answer = 0

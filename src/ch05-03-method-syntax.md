@@ -243,3 +243,5 @@ structs have.
 
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
+
+{{#quiz ../quizzes/ch05-03-method-syntax.toml}}
