@@ -100,6 +100,8 @@ of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
 that point, the binding for `state` will be the value `UsState::Alaska`. We can
 then use that binding in the `println!` expression, thus getting the inner
 state value out of the `Coin` enum variant for `Quarter`.
+ 
+{{#quiz ../quizzes/ch06-02-match-sec1.toml}}
 
 ### Matching with `Option<T>`
 
@@ -247,6 +249,8 @@ There’s more about patterns and matching that we’ll cover in [Chapter
 18][ch18-00-patterns]<!-- ignore -->. For now, we’re going to move on to the
 `if let` syntax, which can be useful in situations where the `match` expression
 is a bit wordy.
+
+{{#quiz ../quizzes/ch06-02-match-sec2.toml}}
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
 [ch18-00-patterns]: ch18-00-patterns.html

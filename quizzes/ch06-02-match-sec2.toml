@@ -1,0 +1,56 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+enum Location {
+  Point(i32),
+  Range(i32, i32)
+}
+
+fn main() {
+  let l: Location = Location::Range(0, 5);
+  let n = match l {
+    Location::Point(_) => -1,
+    Location::Range(_, n) => n,
+    Location::Range(0, _) => 0,
+    _ => -2
+  };
+  println!("{n}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "5"
+context = """ 
+Each match is tried from top to bottom. Both the second and third pattern are applicable, so the second one is used.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this method implemented for the `Option` type:
+
+```
+impl<T> Option<T> {
+  fn unwrap_or(self, other: T) -> T {
+    match self {
+      Some(t) => t,
+      None => other
+    }
+  }
+}
+```
+
+Which sentence best describes the behavior of this function?
+"""
+prompt.choices = [
+  "Returns a new option containing the object inside `self` if it exists, and `other` otherwise",
+  "Inserts `other` into `self` if `self` does not already contain a value",
+  "Returns a reference to the object inside `self` if it exists, and `other` otherwise",
+  "Returns the object inside `self` if it exists, and `other` otherwise"
+]
+answer.answer = 3
+context = """
+This function "unwraps" the option by consuming ownership of it and retrieving the value inside, but if no value exists then it falls back by returning `other`.
+This is a real function in the standard library!
+"""
+
+

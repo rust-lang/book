@@ -10,7 +10,7 @@ Let’s look at a situation we might want to express in code and see why enums
 are useful and more appropriate than structs in this case. Say we need to work
 with IP addresses. Currently, two major standards are used for IP addresses:
 version four and version six. Because these are the only possibilities for an
-IP address that our program will come across, we can *enumerate* all possible
+IP address that our program will come across, we can _enumerate_ all possible
 variants, which is where enumeration gets its name.
 
 Any IP address can be either a version four or a version six address, but not
@@ -54,8 +54,8 @@ And we can call this function with either variant:
 ```
 
 Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address *data*; we
-only know what *kind* it is. Given that you just learned about structs in
+at the moment we don’t have a way to store the actual IP address _data_; we
+only know what _kind_ it is. Given that you just learned about structs in
 Chapter 5, you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.
 
@@ -106,7 +106,7 @@ a struct. Enums handle this case with ease:
 We’ve shown several different ways to define data structures to store version
 four and version six IP addresses. However, as it turns out, wanting to store
 IP addresses and encode which kind they are is so common that [the standard
-library has a definition we can use!][IpAddr]<!-- ignore --> Let’s look at how
+library has a definition we can use!][ipaddr]<!-- ignore --> Let’s look at how
 the standard library defines `IpAddr`: it has the exact enum and variants that
 we’ve defined and used, but it embeds the address data inside the variants in
 the form of two different structs, which are defined differently for each
@@ -149,10 +149,10 @@ different amounts and types of values</span>
 
 This enum has four variants with different types:
 
-* `Quit` has no data associated with it at all.
-* `Move` has named fields like a struct does.
-* `Write` includes a single `String`.
-* `ChangeColor` includes three `i32` values.
+- `Quit` has no data associated with it at all.
+- `Move` has named fields like a struct does.
+- `Write` includes a single `String`.
+- `ChangeColor` includes three `i32` values.
 
 Defining an enum with variants such as the ones in Listing 6-2 is similar to
 defining different kinds of struct definitions, except the enum doesn’t use the
@@ -199,7 +199,7 @@ languages.
 
 Programming language design is often thought of in terms of which features you
 include, but the features you exclude are important too. Rust doesn’t have the
-null feature that many other languages have. *Null* is a value that means there
+null feature that many other languages have. _Null_ is a value that means there
 is no value there. In languages with null, variables can always be in one of
 two states: null or not-null.
 
@@ -300,7 +300,7 @@ more confident in your code. In order to have a value that can possibly be
 null, you must explicitly opt in by making the type of that value `Option<T>`.
 Then, when you use that value, you are required to explicitly handle the case
 when the value is null. Everywhere that a value has a type that isn’t an
-`Option<T>`, you *can* safely assume that the value isn’t null. This was a
+`Option<T>`, you _can_ safely assume that the value isn’t null. This was a
 deliberate design decision for Rust to limit null’s pervasiveness and increase
 the safety of Rust code.
 
@@ -319,6 +319,8 @@ just this when used with enums: it will run different code depending on which
 variant of the enum it has, and that code can use the data inside the matching
 value.
 
-[IpAddr]: ../std/net/enum.IpAddr.html
+{{#quiz ../quizzes/ch06-01-defining-an-enum.toml}}
+
+[ipaddr]: ../std/net/enum.IpAddr.html
 [option]: ../std/option/enum.Option.html
 [docs]: ../std/option/enum.Option.html

@@ -1,0 +1,50 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn foo(x: &i32) { 
+  println!("{x}");
+}
+
+fn main() {
+  let x = null;
+  foo(x);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """ 
+Rust does not have null pointers, so the `null` keyword does not exist. An Option type should be used to represent the possibility of an object being null.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider these two representations of a `Result` type that contains a value `T` if a computation succeeds, or an error `E` if it fails.
+
+```
+struct Result1<T, E> {
+  ok: Option<T>,
+  err: Option<E>,
+}
+
+enum Result2<T, E> {
+  Ok(T),
+  Err(E)
+}
+```
+
+The enum `Result2` is considered more idiomatic than the struct `Result1` in Rust. Which is NOT a valid reason why?
+"""
+prompt.choices = [
+  "The struct uses more space in memory at runtime than the enum",
+  "The struct contains `Option` types, which are only intended to wrap structs",
+  "The struct could have `ok` and `err` both be `None`, while the enum must have at least one them",
+  "The struct is more syntactically verbose to construct than the enum",
+]
+answer.answer = 1
+context = """
+It's perfectly fine to have structs contain `Option` types as fields. But if your data structure has invariants like "exactly one of two optional fields should be `Some`",
+then that invariant is better ensured by use of an enum.
+"""
+
+
