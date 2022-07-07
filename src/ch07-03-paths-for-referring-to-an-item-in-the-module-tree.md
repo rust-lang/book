@@ -199,6 +199,8 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 > practice with a command-line program that will contain both a binary crate
 > and a library crate.
 
+{{#quiz ../quizzes/ch07-03-paths-sec1.toml}}
+
 ### Starting Relative Paths with `super`
 
 We can construct relative paths that begin in the parent module, rather than
@@ -292,6 +294,8 @@ being private by default unless annotated with `pub`.
 There’s one more situation involving `pub` that we haven’t covered, and that is
 our last module system feature: the `use` keyword. We’ll cover `use` by itself
 first, and then we’ll show how to combine `pub` and `use`.
+
+{{#quiz ../quizzes/ch07-03-paths-sec2.toml}}
 
 [pub]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
 [api-guidelines]: https://rust-lang.github.io/api-guidelines/

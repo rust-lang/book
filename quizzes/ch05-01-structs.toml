@@ -28,20 +28,18 @@ struct Point {
   y: i32
 }
 
-fn get_x(p: &mut Point) -> &mut i32 {
-  &mut p.x
-}
-
 fn main() {
   let mut p = Point { x: 1, y: 2 };
-  let x = get_x(&mut p);
+  let x = &mut p.x;
+  let y = &mut p.y;
   *x += 1;
-  println!("{} {}", *x, p.y);
+  *y += 1;
+  println!("{} {}", p.x, p.y);
 }
 """
-answer.doesCompile = false
-answer.lineNumber = 14
+answer.doesCompile = true
+answer.stdout = "2 3"
 context = """ 
-Because `get_x` mutably borrows `p`, a program cannot use `p` in any way until `x` is no longer used. 
-Therefore reading `x` and `p.y` in the same line is an ownership error.
+Rust understands that `.x` refers to a different object than `.y`, so it is valid to take simultaneous mutable references
+to both fields.
 """

@@ -1,0 +1,42 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Which of the following statements best describes the function of the `use` keyword?"
+prompt.choices = [
+  "`use` copies the contents of an item from one module to another",
+  "`use` reduces the verbosity of referring to items in the used path",
+  "`use` allows access to items that circumvents normal privacy rules",
+  "`use` indicates to the compiler that an item will be used and should be optimized"
+]
+answer.answer = 1
+context = """
+`use` allows references to items in the used path that are shorter than without the `use`, reducing the verbosity of reference.
+"""
+
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+Consider this module and `use` statement:
+
+```
+pub mod parent {
+  pub fn a() {}
+  fn b() {}
+  pub mod child {
+    pub fn c() {}
+  }
+}
+
+fn main() {
+  use parent::{*, child as alias};
+  // ...
+}
+```
+
+Inside `main`, how many paths to `a`, `b`, and `c` are created by the `use` statement? Write your answer as a digit such as 0 or 1.
+"""
+answer.answer = "3"
+context = """
+The `*` imports `a` and `child` (but not the private `b`). The `as` also renames `child` to `alias`. Therefore the `use` creates three possible paths:
+`a`, `child::c`, and `alias::c`.
+"""

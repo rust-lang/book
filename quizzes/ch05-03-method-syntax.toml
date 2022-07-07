@@ -80,3 +80,31 @@ answer.stdout = "1"
 context = """ 
 Remember that `.0` is valid for tuple structs like `Point`.
 """
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+struct Point {
+  x: i32,
+  y: i32
+}
+
+impl Point {
+  fn get_x(&mut self) -> &mut i32 {
+    &mut self.x
+  }
+}
+
+fn main() {
+  let mut p = Point { x: 1, y: 2 };
+  let x = p.get_x();
+  *x += 1;
+  println!("{} {}", *x, p.y);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 16
+context = """ 
+Because `get_x` mutably borrows all of `p`, a program cannot use `p` in any way until `x` is no longer used. 
+Therefore reading `x` and `p.y` in the same line is an ownership error.
+"""

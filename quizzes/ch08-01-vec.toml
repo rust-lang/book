@@ -1,0 +1,84 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Which call to this `find_until` function will cause a runtime panic?
+
+```
+fn find_until(v: &Vec<i32>, n: i32, til: usize) -> Option<usize> {
+  for i in 0 .. til {
+    if v[i] == n {
+      return Some(i);
+    }
+  }
+  return None;
+}
+```
+"""
+prompt.choices = [
+    "`find_until(&vec![1, 2, 3], 0, 0)`",
+    "`find_until(&vec![1, 2, 3], 3, 3)`",
+    "`find_until(&vec![1, 2, 3], 0, 4)`",
+    "`find_until(&vec![1, 2, 3], 4, 4)`",
+]
+answer.answer = 3
+context = """
+If `til = 4`, then for a vector of length 3, the for-loop will attempt to index the vector with `i = 3`, which is out of bounds.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut v = vec![1, 2, 3];
+  for i in &mut v {
+    v.push(*i);
+  }
+  println!("{} {} {}", v[3], v[4], v[5]);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 4
+context = """
+Even though `v` is mutably borrowed, that only allows `i` to be mutated inside the for-loop, not `v`. Therefore calling `v.push` is an ownership error.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut v = Vec::new();
+  let s = String::from("Hello ");
+  v.push(s);
+  v[0].push_str("world");
+  println!("original: {}", s)
+  println!("new: {}", v[0]);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """
+`Vec::push` moves its argument, so `s` is not usable after calling `v.push(s)`. Therefore calling `println("original: {}", s)` is not ownership-safe.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut v = vec![1, 2, 3];
+  let mut v2 = Vec::new();
+  for i in &mut v {
+    v2.push(i);
+  }
+  *v2[0] = 5;
+
+  let a = *v2[0];
+  let b = v[0];
+  println!("{a} {b}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "5 5"
+context = """
+`i` has type `&mut i32`, meaning it is a pointer to a number within `v`. So if we push `i` into `v2`, then `v2` contains pointers to `v`. Therefore
+mutating `v2[0]` actually mutates `v[0]`.
+"""

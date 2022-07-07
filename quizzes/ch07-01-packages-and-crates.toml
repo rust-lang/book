@@ -1,0 +1,39 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Which is the correct order, where "A > B" means "A contains B"?
+"""
+prompt.choices = [
+  "module > crate > package",
+  "crate > package > module",
+  "package > crate > module"
+]
+answer.answer = 2
+context = """
+A package is the top-level organizational unit, containing crates. A crate contains modules.
+"""
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+Imagine you see a Rust package `foobar` with the following files:
+
+```text
+foobar
+├── Cargo.toml
+├── build.rs
+└── src/
+    ├── main.rs
+    ├── util.rs
+    ├── lib.rs
+    └── bin/
+        └── alt.rs
+```
+
+How many crates does this package contain?
+"""
+answer.answer = "3"
+context = """ 
+`main.rs` produces a binary crate, `lib.rs` produces a library crate, and `bin/alt.rs` produces a binary crate. The `util.rs` would presumably be used as a module within
+one of these crates. `build.rs` is a build script.
+"""

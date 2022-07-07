@@ -304,6 +304,8 @@ is also sometimes used as part of the prelude pattern: see [the standard
 library documentation](../std/prelude/index.html#other-preludes)<!-- ignore -->
 for more information on that pattern.
 
+{{#quiz ../quizzes/ch07-04-use.toml}}
+
 [ch14-pub-use]: ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number
 [writing-tests]: ch11-01-writing-tests.html#how-to-write-tests

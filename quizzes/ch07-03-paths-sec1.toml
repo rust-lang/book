@@ -1,0 +1,47 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = "What is the keyword you use at the start of an absolute path?"
+answer.answer = "crate"
+context = """
+For example, an absolute path to item `b` in module `a` would be `crate::a::b`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+pub mod foo {
+  fn a() { println!("a"); }
+  mod bar {
+    pub fn b() { println!("b"); }
+  }
+}
+
+fn main() {
+  foo::bar::b();
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 9
+context = """
+`b` is not accessible to `main` because the module `bar` is not marked as `pub`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+pub mod foo {
+  pub mod bar {
+    pub fn b() { println!("b");  }
+  }
+  pub fn a() { bar::b(); }
+}
+
+fn main() {
+  foo::a();
+}
+"""
+answer.doesCompile = true
+answer.stdout = "b"
+context = """
+It is valid within `foo` to use a relative path to refer to items within `bar`.
+"""

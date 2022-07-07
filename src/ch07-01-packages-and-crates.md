@@ -68,5 +68,7 @@ and *src/lib.rs*, it has two crates: a binary and a library, both with the same
 name as the package. A package can have multiple binary crates by placing files
 in the *src/bin* directory: each file will be a separate binary crate.
 
+{{#quiz ../quizzes/ch07-01-packages-and-crates.toml}}
+
 [modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html
 [rand]: ch02-00-guessing-game-tutorial.html#generating-a-random-number

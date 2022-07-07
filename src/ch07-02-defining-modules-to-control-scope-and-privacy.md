@@ -172,3 +172,5 @@ The module tree might remind you of the filesystem’s directory tree on your
 computer; this is a very apt comparison! Just like directories in a filesystem,
 you use modules to organize your code. And just like files in a directory, we
 need a way to find our modules.
+
+{{#quiz ../quizzes/ch07-02-modules.toml}}

@@ -112,6 +112,8 @@ are compiled as part of the crate. The `mod` keyword declares modules, and Rust
 looks in a file with the same name as the module for the code that goes into
 that module.
 
+{{#quiz ../quizzes/ch07-05-files.toml}}
+
 ## Summary
 
 Rust lets you split a package into multiple crates and a crate into modules

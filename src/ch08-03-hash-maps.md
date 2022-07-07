@@ -211,6 +211,8 @@ algorithms.
 
 [^siphash]: [https://en.wikipedia.org/wiki/SipHash](https://en.wikipedia.org/wiki/SipHash)
 
+{{#quiz ../quizzes/ch08-03-hashmap.toml}}
+
 ## Summary
 
 Vectors, strings, and hash maps will provide a large amount of functionality
@@ -235,6 +237,7 @@ and hash maps have that will be helpful for these exercises!
 
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
+
 
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes

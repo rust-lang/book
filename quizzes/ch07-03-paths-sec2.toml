@@ -1,0 +1,55 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+pub mod a {
+  pub mod b {
+    pub fn f() { println!("b1"); }
+    pub mod c {
+      pub fn f() { println!("c1"); }
+    }
+  }
+  pub fn entry() { super::b::c::f(); }
+}
+
+pub mod b {
+  pub fn f() { println!("b2"); }
+  pub mod c {
+    pub fn f() { println!("c2"); }
+  }
+}
+
+fn main() {
+  crate::a::entry();
+}
+"""
+answer.doesCompile = true
+answer.stdout = "c2"
+context = """
+`entry` uses the path `super::b::c::f`. `entry` is within the module `a`, so `super` refers to the parent module of `a`, which is the root crate. 
+Then the child `b` of the root is the outermost module `b`, whose child `c` contains a function `f` that prints `"c2"`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+pub mod point {
+  #[derive(Debug)]
+  pub struct Point(i32, i32);
+
+  impl Point {
+    pub fn origin() -> Self { Point(0, 0) }
+  }
+}
+
+fn main() {
+  let mut p = point::Point::origin();
+  p.0 += 1;
+  println!("{p:?}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 12
+context = """
+While the `Point` structure and the `origin` static method are both public, the field `i32` is not marked as pub. Therefore directly accessing `p.0` outside of
+the `point` module is not allowed. This program would compile if line 3 were changed to `pub struct Point(pub i32, pub i32)`.
+"""
