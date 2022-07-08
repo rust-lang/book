@@ -161,5 +161,7 @@ handle error conditions in the [“To `panic!` or Not to
 `panic!`”][to-panic-or-not-to-panic]<!-- ignore --> section later in this
 chapter. Next, we’ll look at how to recover from an error using `Result`.
 
+{{#quiz ../quizzes/ch09-01-panic.toml}}
+
 [to-panic-or-not-to-panic]:
 ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic

@@ -328,3 +328,5 @@ type in each instance, we pay no runtime cost for using generics. When the code
 runs, it performs just as it would if we had duplicated each definition by
 hand. The process of monomorphization makes Rust’s generics extremely efficient
 at runtime.
+
+{{#quiz ../quizzes/ch10-01-generics.toml}}

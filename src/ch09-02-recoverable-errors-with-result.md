@@ -162,6 +162,8 @@ the missing file error.
 > standard library documentation. Many more of these methods can clean up huge
 > nested `match` expressions when you’re dealing with errors.
 
+{{#quiz ../quizzes/ch09-02-recoverable-errors-sec1.toml}}
+
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 
 Using `match` works well enough, but it can be a bit verbose and doesn’t always
@@ -531,6 +533,8 @@ your own types.
 Now that we’ve discussed the details of calling `panic!` or returning `Result`,
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
+
+{{#quiz ../quizzes/ch09-02-recoverable-errors-sec2.toml}}
 
 [handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

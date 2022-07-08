@@ -1,0 +1,39 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn clonable<T: Clone>(t: T) -> impl Clone { t }
+
+fn main() {
+  let s = String::from("hello");
+  let s2 = clonable(s);
+  println!("{}", s2.clone());
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """
+Because `clonable` returns `impl Clone`, then we only know that `s2` is *some* type that implements `Clone`, 
+not that it is a `String` (or any type that implements `Display`). Therefore we cannot print `s2`.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+What is the smallest set of trait bounds on `T` needed to make this function type-check?
+```
+fn f<T: /* ??? */>(t: &T) {
+  let t2 = t.clone();
+  println!("{t2}");
+}
+```
+"""
+prompt.choices = [
+  "(no bounds)",
+  "`Clone`",
+  "`Clone + Display`",
+  "`Clone + Display + Debug`"
+]
+answer.answer = 2
+context = """
+Because `clone` is called and the `{}` display brackets are used in a formatter, then `T` must be `Clone` and `Display`.
+"""

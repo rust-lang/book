@@ -1,0 +1,63 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+Imagine using a third-party function whose implementation you don't know, but whose type signature is this:
+
+```
+fn mystery<T>(x: T) -> T {
+  // ????
+}
+```
+
+If you call `mystery(3)`, then the return value must be:
+"""
+answer.answer = "3"
+context = """
+The only possible function (without unsafe code) that has the signature `T -> T` is the identity function. The function could of course panic or print, 
+but the return value can only be the input because there is no other way for `mystery` to generate or mutate a value of `T`. 
+See [Theorems for free!](https://dl.acm.org/doi/pdf/10.1145/99370.99404) for more examples of this idea.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn print_slice<T>(v: &[T]) {
+  for x in v {
+    println!("{x}");
+  }
+}
+
+fn main() {
+  print_slice(&[1, 2, 3]);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 3
+context = """
+If a type is generic (like `T`), we cannot assume anything about it, including the ability to turn it into a string. Therefore `println!("{x}")` is invalid
+because `x: &T`.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+struct Point<T> { x: T, y: T }
+
+impl Point<i32> {
+  fn f(&self) -> &i32 { &self.y }
+}
+
+impl<T> Point<T> {
+  fn f(&self) -> &T { &self.x }
+}
+
+fn main() {
+  let p: Point<i32> = Point { x: 1, y: 1 };
+  println!("{}", p.f());
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 8
+context = """
+These definitions of `f` conflict, and there is no way for Rust to determine which `f` should be used when `p.f()` is called. Therefore this is a compiler error.
+"""

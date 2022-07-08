@@ -186,6 +186,8 @@ This code prints `1 new tweet: (Read more from @horse_ebooks...)`.
 Note that it isn’t possible to call the default implementation from an
 overriding implementation of that same method.
 
+{{#quiz ../quizzes/ch10-02-traits-sec1.toml}}
+
 ### Traits as Parameters
 
 Now that you know how to define and implement traits, we can explore how to use
@@ -386,6 +388,8 @@ our code is even able to run. Additionally, we don’t have to write code that
 checks for behavior at runtime because we’ve already checked at compile time.
 Doing so improves performance without having to give up the flexibility of
 generics.
+
+{{#quiz ../quizzes/ch10-02-traits-sec2.toml}}
 
 [using-trait-objects-that-allow-for-values-of-different-types]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [methods]: ch05-03-method-syntax.html#defining-methods

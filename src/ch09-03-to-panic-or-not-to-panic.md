@@ -205,6 +205,8 @@ A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than an
 `i32` and wouldn’t need to do any additional checks in its body.
 
+{{#quiz ../quizzes/ch09-03-panic-or-not.toml}}
+
 ## Summary
 
 Rust’s error handling features are designed to help you write more robust code.

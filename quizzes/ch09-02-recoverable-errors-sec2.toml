@@ -1,0 +1,60 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Given an arbitrary expression `e` of type `Result<T, E>`, which code snippet represents how `e?` is desugared?"
+prompt.choices = [
+  """
+```
+match e {
+  Ok(x) => x,
+  Err(err) => { return Err(err); }
+}
+```
+  """,
+  """
+```
+if let Err(err) = e {
+  return Err(err);
+}
+```
+  """,
+  """
+```
+e.unwrap()
+```
+  """,
+  """
+```
+match e {
+  Ok(x) => x,
+  Err(err) => panic!("{err}")
+}
+```
+  """,
+]
+answer.answer = 0
+context = """
+If `e` is a `Result`, then `e?` extracts the value inside the `Ok` if possible, otherwise returning the `Err` out of the current function.
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+// assume hello.txt has the contents "will"
+
+fn read_username_from_file() -> Option<String> {
+  let mut username_file = File::open("hello.txt")?;
+  let mut username = String::new();
+  username_file.read_to_string(&mut username)?;
+  Some(username)
+}
+
+fn main() {
+  println!("{}", read_username_from_file().unwrap()); 
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 4
+context = """
+`File::open` returns a `Result`, but the return type of `read_username_from_file` expects an `Option`. Therefore it is invalid to use the `?`
+operator until the `Result` has been converted to an `Option` (e.g. with the `Result::ok` method).
+"""

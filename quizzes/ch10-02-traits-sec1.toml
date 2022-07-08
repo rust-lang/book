@@ -1,0 +1,49 @@
+[[questions]]
+type = "Tracing"
+prompt.program = """
+trait MakeNoise {
+  fn make_noise(&self) {
+    println!("(silence)");
+  }
+}
+
+struct Dog;
+struct Cat;
+
+impl MakeNoise for Dog {
+  fn make_noise(&self) {
+    println!("bark");
+  }
+}
+
+impl MakeNoise for Cat {}
+
+fn main() {
+  Dog.make_noise();
+  Cat.make_noise();
+}
+"""
+answer.doesCompile = true
+answer.stdout = """
+bark
+(silence)
+"""
+context = """
+The implementation of `MakeNoise` provides a specific implementation for `Dog` and uses the default implementation for `Cat`.
+Therefore calling `make_noise` on each prints `bark` and `(silence)`, respectively. 
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Which of the following statements is NOT true about when Rust allows you to implement a trait?"
+prompt.choices = [
+  "You can implement an external trait for a local type",
+  "You can implement a local trait for an external type",
+  "You can implement a local trait for a local type",
+  "You can implement an external trait for an external type"
+]
+answer.answer = 3
+context = """
+The "orphan rule" requires that you cannot implement an external trait for an external type, 
+to ensure code doesn't break if two crates provide conflicting implementations.
+"""
