@@ -10,7 +10,7 @@ For example, when a `Box<T>` is dropped it will deallocate the space on the
 heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
-or resources every time they finish using an instance those types. Examples
+or resources every time they finish using an instance of those types. Examples
 include file handles, sockets, or locks. If they forget, the system might
 become overloaded and crash. In Rust, you can specify that a particular bit of
 code be run whenever a value goes out of scope, and the compiler will insert
