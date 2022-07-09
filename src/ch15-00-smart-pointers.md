@@ -21,7 +21,7 @@ Rust, with its concept of ownership and borrowing, has an additional difference
 between references and smart pointers: while references only borrow data, in
 many cases, smart pointers *own* the data they point to.
 
-Though we didn't call them as much at the time, we’ve already encountered a few
+Though we didn't call them as such at the time, we’ve already encountered a few
 smart pointers in this book, including `String` and `Vec<T>` in Chapter 8. Both
 these types count as smart pointers because they own some memory and allow you
 to manipulate it. They also have metadata and extra capabilities or guarantees.
