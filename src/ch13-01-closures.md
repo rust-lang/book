@@ -241,7 +241,7 @@ to print the vector in a new thread rather than in the main thread:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-{{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
+{{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
 ```
 
 <span class="caption">Listing 13-6: Using `move` to force the closure for the
