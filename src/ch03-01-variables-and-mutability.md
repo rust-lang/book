@@ -8,8 +8,10 @@ Rust offers. However, you still have the option to make your variables mutable.
 Let’s explore how and why Rust encourages you to favor immutability and why
 sometimes you might want to opt out.
 
-When a variable is immutable, once a value is bound to a name, you can’t change
-that value. To illustrate this, let’s generate a new project called *variables*
+When a variable is immutable, once a value is bound to a name, you can’t assign
+a new value to that name. You also can't create a *mutable reference* to the
+variable; something you'll learn about in [Chapter 4][references-and-borrowing]<!-- ignore -->.
+To illustrate this, let’s generate a new project called *variables*
 in your *projects* directory by using `cargo new variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
@@ -39,13 +41,13 @@ assign twice to immutable variable `x` ``, because you tried to assign a second
 value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
-value that’s designated as immutable because this very situation can lead to
-bugs. If one part of our code operates on the assumption that a value will
-never change and another part of our code changes that value, it’s possible
+variable that’s designated as immutable because this very situation can lead to
+bugs. If one part of our code operates on the assumption that a variable will
+never change and another part of our code changes that variable, it’s possible
 that the first part of the code won’t do what it was designed to do. The cause
 of this kind of bug can be difficult to track down after the fact, especially
-when the second piece of code changes the value only *sometimes*. The Rust
-compiler guarantees that when you state a value won’t change, it really won’t
+when the second piece of code changes the variable only *sometimes*. The Rust
+compiler guarantees that when you state a variable won’t change, it really won’t
 change, so you don’t have to keep track of it yourself. Your code is thus
 easier to reason through.
 
@@ -187,6 +189,7 @@ can have.
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[references-and-borrowing]: ch04-02-references-and-borrowing.html
 [data-types]: ch03-02-data-types.html#data-types
 [storing-values-with-variables]: ch02-00-guessing-game-tutorial.html#storing-values-with-variables
 [const-eval]: ../reference/const_eval.html
