@@ -8,7 +8,7 @@ directory, so all fixes need to be made in `/src/`.
 
 # Introduction
 
-Welcome to *The Rust Programming Language*, an introductory book about Rust.
+Welcome to *The Rust Programming Language,* an introductory book about Rust.
 The Rust programming language helps you write faster, more reliable software.
 High-level ergonomics and low-level control are often at odds in programming
 language design; Rust challenges that conflict. Through balancing powerful
@@ -62,12 +62,6 @@ devices, audio and video analysis and transcoding, cryptocurrencies,
 bioinformatics, search engines, Internet of Things applications, machine
 learning, and even major parts of the Firefox web browser.
 
-<!-- with Rust adopted in a lot of really recognizable names, is it worth
-namedropping some companies that use Rust significantly? /LC -->
-<!-- No, I don't want to show favoritism, and there are lots of politics around
-the big companies using Rust that I don't want to get into. I would also worry
-about the list getting dated. /Carol -->
-
 ### Open Source Developers
 
 Rust is for people who want to build the Rust programming language, community,
@@ -119,7 +113,7 @@ number guessing game. Here we cover concepts at a high level, and later
 chapters will provide additional detail. If you want to get your hands dirty
 right away, Chapter 2 is the place for that. Chapter 3 covers Rust features
 that are similar to those of other programming languages, and in Chapter 4
-you'll learn about Rust’s ownership system. If you’re a particularly meticulous
+you’ll learn about Rust’s ownership system. If you’re a particularly meticulous
 learner who prefers to learn every detail before moving on to the next, you
 might want to skip Chapter 2 and go straight to Chapter 3, returning to Chapter
 2 when you’d like to work on a project applying the details you’ve learned.
@@ -182,10 +176,11 @@ that doesn’t compile.
 
 ## Resources and How to Contribute to This Book
 
-This book is open source. If you find an error, please don't hesitate to file
+This book is open source. If you find an error, please don’t hesitate to file
 an issue or send a pull request on GitHub at
 *https://github.com/rust-lang/book/*. Please see *CONTRIBUTING.md* at
 *https://github.com/rust-lang/book/blob/main/CONTRIBUTING.md* for more details.
 
 The source code for the examples in this book, errata, and other information
 are available at *https://www.nostarch.com/Rust2021/*.
+
