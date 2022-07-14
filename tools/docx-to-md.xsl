@@ -15,6 +15,13 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Normal']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Standard']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'AuthorQuery']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookHalfTitle']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookTitle0']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookAuthor']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Copyright']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightHead']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightLOC']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective0']" />
 
     <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
 
@@ -27,7 +34,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadA']">
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadA' or w:pPr/w:pStyle/@w:val = 'FrontmatterTitle']">
         <xsl:text>## </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
@@ -63,7 +70,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletA' or @w:val = 'BulletB' or @w:val = 'ListPlainA' or @w:val = 'ListPlainB']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletA' or @w:val = 'BulletB' or @w:val = 'ListPlainA' or @w:val = 'ListPlainB' or @w:val = 'ListBullet']]">
         <xsl:text>* </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
@@ -81,7 +88,7 @@
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
@@ -195,7 +202,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption' or @w:val = 'EmphasisRevItal']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption' or @w:val = 'EmphasisRevItal' or @w:val = 'Italic' or @w:val = 'LinkURL']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
