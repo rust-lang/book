@@ -12,8 +12,6 @@ Karen Rustad Tölva for the cover art. Thank you to our team at No Starch,
 including Bill Pollock, Liz Chadwick, and Janelle Ludowise, for improving this
 book and bringing it to print.
 
-<!--Insert Steve's acknowledgements here -->
-
 Carol is grateful for the opportunity to work on this book. She thanks her
 family for their constant love and support, especially her husband Jake
 Goulding and her daughter Vivian.
