@@ -1,0 +1,35 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Which kind of programming error is a lifetime supposed to prevent?"
+prompt.choices = [
+  "Using the result of a fallible computation before checking for the possibility of error",
+  "Indexing past the bounds of an array (buffer overflow)",
+  "Not allocating enough memory for an object",
+  "Using a reference to an object after its memory has been freed",
+]
+answer.answer = 3
+context = """
+Lifetimes help identify how long an object is "live", and whether references to that object outlive the object itself. 
+"""
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn shortest<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
+  if x.len() < y.len() {
+    x
+  } else {
+    y
+  }
+}
+
+fn main() {
+  println!("{}", shortest("hello", "rust"));
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 5
+context = """
+If the type signature says that the function must return a reference with lifetime `'a`, then it would be invalid to return
+a reference with a different lifetime '`b`, i.e. `y` here.
+"""

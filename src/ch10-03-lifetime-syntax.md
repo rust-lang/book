@@ -306,6 +306,8 @@ references passed in to the `longest` function and how the returned reference
 is used. Make hypotheses about whether or not your experiments will pass the
 borrow checker before you compile; then check to see if you’re right!
 
+{{#quiz ../quizzes/ch10-03-lifetimes-sec1.toml}}
+
 ### Thinking in Terms of Lifetimes
 
 The way in which you need to specify lifetime parameters depends on what your

@@ -15,6 +15,7 @@ jobs:
       - name: Install Rust
         run: |
           rustup set profile minimal
+          rustup toolchain install nightly
           rustup toolchain install 1.61 -c rust-docs
           rustup default 1.61
       - name: Install mdbook
@@ -25,7 +26,7 @@ jobs:
       - name: Install mdbook-quiz
         run: |
           npm install -g pnpm
-          cargo install --git https://github.com/willcrichton/mdbook-quiz --debug
+          cargo +nightly install --git https://github.com/willcrichton/mdbook-quiz --debug
       - run: mdbook build
       - uses: peaceiris/actions-gh-pages@v3
         with:
