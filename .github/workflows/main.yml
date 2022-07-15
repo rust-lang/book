@@ -15,7 +15,6 @@ jobs:
       - name: Install Rust
         run: |
           rustup set profile minimal
-          rustup toolchain install nightly
           rustup toolchain install 1.61 -c rust-docs
           rustup default 1.61
       - name: Install mdbook

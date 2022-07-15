@@ -1,0 +1,109 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+If a reference has a lifetime `'static`, then this means:
+"""
+prompt.choices = [
+  "The data under the reference cannot be mutated",
+  "The data under the reference lives in the static region of memory",
+  "The data under the reference is never deallocated",
+  "The data under the reference is not dynamic"
+]
+answer.answer = 2
+context = """
+`'static` means "live for the entire program", and so data under a static reference must never be deallocated. While in practice `'static` references are
+usually not mutable, the meaning of the `'static` lifetime has no essential relationship to mutability.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following un-annotated function signature.
+
+```
+struct Foo<'a> {
+  bar: &'a i32
+}
+
+fn baz(f: Foo) -> &i32 { /* ... */ }
+```
+
+Will Rust accept this function signature? If so, what lifetimes will it infer?
+"""
+prompt.choices = [
+  "Rust will reject this function signature",
+  """
+  ```
+  fn baz(f: Foo) -> &i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a>(f: Foo<'a>) -> &i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a>(f: Foo) -> &'a i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a>(f: Foo<'a>) -> &'a i32
+  ```
+  """
+]
+answer.answer = 4
+context = """
+The struct takes a single lifetime parameter, and the output has a single lifetime, so Rust assumes they are the same.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following un-annotated function signature.
+
+```
+struct Foo<'a> {
+  bar: &'a i32
+}
+
+// Foo changed to &Foo
+fn baz(f: &Foo) -> &i32 { /* ... */ }
+```
+
+Will Rust accept this function signature? If so, what lifetimes will it infer?
+"""
+prompt.choices = [
+  "Rust will reject this function signature",
+  """
+  ```
+  fn baz(f: &Foo) -> &i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a>(f: &Foo<'a>) -> &'a i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a>(f: &'a Foo) -> &'a i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'a i32
+  ```
+  """,
+  """
+  ```
+  fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'b i32
+  ```
+  """
+]
+answer.answer = 0
+context = """
+Rust will not compile this program, because it is ambiguous whether the lifetime of the output is tied to
+the lifetime of `&Foo` or the reference `Foo.bar`.
+"""

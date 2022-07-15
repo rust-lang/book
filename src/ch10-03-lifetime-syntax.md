@@ -599,6 +599,8 @@ lifetimes are a type of generic, the declarations of the lifetime parameter
 `'a` and the generic type parameter `T` go in the same list inside the angle
 brackets after the function name.
 
+{{#quiz ../quizzes/ch10-03-lifetimes-sec2.toml}}
+
 ## Summary
 
 We covered a lot in this chapter! Now that you know about generic type
