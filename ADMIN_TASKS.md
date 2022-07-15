@@ -113,7 +113,12 @@ To check, say, updating `mdbook` or changing the way files get included:
 
 ## Produce markdown from docx for diffing
 
-- TODO Carol to document this next time she does it
+- Save the docx file to `tmp/chapterXX.docx`.
+- In Word, go to the review tab, choose "Accept all changes and stop tracking"
+- Save the docx again and close Word
+- Run `./tools/doc-to-md.sh`
+- This should write `nostarch/chapterXX.md`. Adjust the XSL in
+  `tools/doc-to-md.xsl` and run `./tools/doc-to-md.sh` again if needed.
 
 ## Generate Graphviz dot
 
