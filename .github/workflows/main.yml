@@ -25,7 +25,7 @@ jobs:
       - name: Install mdbook-quiz
         run: |
           npm install -g pnpm
-          cargo +nightly install --git https://github.com/willcrichton/mdbook-quiz --debug
+          cargo install --git https://github.com/willcrichton/mdbook-quiz --debug
       - run: mdbook build
       - uses: peaceiris/actions-gh-pages@v3
         with:
