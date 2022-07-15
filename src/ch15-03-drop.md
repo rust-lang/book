@@ -3,11 +3,12 @@
 The second trait important to the smart pointer pattern is `Drop`, which lets
 you customize what happens when a value is about to go out of scope. You can
 provide an implementation for the `Drop` trait on any type, and that code can
-be used to release resources like files or network connections. We’re
-introducing `Drop` in the context of smart pointers because the functionality
-of the `Drop` trait is almost always used when implementing a smart pointer.
-For example, when a `Box<T>` is dropped it will deallocate the space on the
-heap that the box points to.
+be used to release resources like files or network connections.
+
+We’re introducing `Drop` in the context of smart pointers because the
+functionality of the `Drop` trait is almost always used when implementing a
+smart pointer. For example, when a `Box<T>` is dropped it will deallocate the
+space on the heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
 or resources every time they finish using an instance of those types. Examples
