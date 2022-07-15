@@ -274,9 +274,9 @@ well, which we’ll do in the next listing.
 <span class="caption">Listing 12-9: Returning a `Result` from
 `Config::build`</span>
 
-Our `build` function now returns a `Result` with a `Config` instance in the
-success case and a `&'static str` in the error case. Our error values will
-always be string literals that have the `'static` lifetime.
+Our `build` function returns a `Result` with a `Config` instance in the success
+case and a `&'static str` in the error case. Our error values will always be
+string literals that have the `'static` lifetime.
 
 We’ve made two changes in the body of the function: instead of calling `panic!`
 when the user doesn’t pass enough arguments, we now return an `Err` value, and
@@ -468,8 +468,8 @@ compile until we modify *src/main.rs* in Listing 12-14.
 *src/lib.rs*</span>
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
-`new` method, and on the `run` function. We now have a library crate that has a
-public API we can test!
+`build` method, and on the `run` function. We now have a library crate that has
+a public API we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
 binary crate in *src/main.rs*, as shown in Listing 12-14.

@@ -29,7 +29,7 @@ Rust, with its concept of ownership and borrowing, has an additional difference
 between references and smart pointers: while references only borrow data, in
 many cases, smart pointers *own* the data they point to.
 
-Though we didn't call them as much at the time, we’ve already encountered a few
+Though we didn't call them as such at the time, we’ve already encountered a few
 smart pointers in this book, including `String` and `Vec<T>` in Chapter 8. Both
 these types count as smart pointers because they own some memory and allow you
 to manipulate it. They also have metadata and extra capabilities or guarantees.
@@ -143,21 +143,6 @@ linked list. Its name comes from the `cons` function (short for “construct
 function”) in Lisp that constructs a new pair from its two arguments. By
 calling `cons` on a pair consisting of a value and another pair, we can
 construct cons lists made up of recursive pairs.
-
-<!-- can you add a direct definition of the cons list -- we
-have a definition for the cons function, but not a direct one for the list. I
-assume the list is the result of the function, so is a recursive list of nested
-pairs? /LC -->
-<!-- There was a definition here, "These pairs containing pairs form a list",
-but I guess it wasn't clear enough. Is this better? /Carol -->
-<!-- JT, what do you think? I suppose what I wanted was to open with an idea of
-what the cons list is and what it's for -- is it right that it's a recursive
-list of nested pairs? /LC -->
-<!-- I think having the example pretty early on would help readers, though a
-cons list is a bit of a niche idea for developers. It's basically the lisp
-version of a linked list - maybe we use a linked list as the example? /JT -->
-<!-- I added the note about it being the Lisp version of a linked list above, I
-like that /Carol -->
 
 For example, here's a pseudocode representation of a cons list containing the
 list 1, 2, 3 with each pair in parentheses:
@@ -284,6 +269,9 @@ defined types, the compiler gives an error with this helpful suggestion:
 
 ```
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` representable
+  |
+2 |     Cons(i32, Box<List>),
+  |               ^^^^    ^
 ```
 
 In this suggestion, “indirection” means that instead of storing a value
@@ -588,10 +576,6 @@ value as an argument to a function or method that doesn’t match the parameter
 type in the function or method definition. A sequence of calls to the `deref`
 method converts the type we provided into the type the parameter needs.
 
-<!-- We use both "deref coercion" and "deref conversion" in the above. Might
-want to stick with just the first term as that's the more common one. /JT -->
-<!-- WHOOPS great catch! Fixed! /Carol -->
-
 Deref coercion was added to Rust so that programmers writing function and
 method calls don’t need to add as many explicit references and dereferences
 with `&` and `*`. The deref coercion feature also lets us write more code that
@@ -707,7 +691,7 @@ smart pointer. For example, when a `Box<T>` is dropped it will deallocate the
 space on the heap that the box points to.
 
 In some languages, for some types, the programmer must call code to free memory
-or resources every time they finish using an instance those types. Examples
+or resources every time they finish using an instance of those types. Examples
 include file handles, sockets, or locks. If they forget, the system might
 become overloaded and crash. In Rust, you can specify that a particular bit of
 code be run whenever a value goes out of scope, and the compiler will insert
@@ -895,8 +879,6 @@ point to the same node, and that node is conceptually owned by all of the edges
 that point to it. A node shouldn’t be cleaned up unless it doesn’t have any
 edges pointing to it and so has no owners.
 
-<!-- Is this right, we always have to enable it explicitly? /LC -->
-<!-- Yep! /Carol -->
 You have to enable multiple ownership explicitly by using the Rust type
 `Rc<T>`, which is an abbreviation for *reference counting*. The `Rc<T>` type
 keeps track of the number of references to a value to determine whether or not
@@ -908,7 +890,6 @@ they turn it on. Others can come into the room and watch the TV. When the last
 person leaves the room, they turn off the TV because it’s no longer being used.
 If someone turns off the TV while others are still watching it, there would be
 uproar from the remaining TV watchers!
-<!-- ha, perfect analogy /LC -->
 
 We use the `Rc<T>` type when we want to allocate some data on the heap for
 multiple parts of our program to read and we can’t determine at compile time
@@ -1583,19 +1564,6 @@ structures. Note that `RefCell<T>` does not work for multithreaded code!
 `Mutex<T>` is the thread-safe version of `RefCell<T>` and we’ll discuss
 `Mutex<T>` in Chapter 16.
 
-<!-- While we mention threading a little bit, I think we should take a little
-time here to really underscore that this method does not work for multithread
-code. We could show an example of trying to share between threads and that
-it errors at compile time as a result. /JT -->
-<!-- I decided to make a stronger statement here about `RefCell<T>` not working
-in multithreaded code, and I moved up the mention of `Mutex<T>` from the
-paragraph that used to end this section. Then I removed the mention of
-`Cell<T>`, which is pretty rarely used. I don't really want to add an example
-here of trying to use `RefCell<T>` across threads because there'll be too much
-new code to explain that is going to be explained in the next chapter anyway,
-and the fix for the code will be switch to `Mutex<T>`, which is discussed in
-the next chapter. /Carol -->
-
 ## Reference Cycles Can Leak Memory
 
 Rust’s memory safety guarantees make it difficult, but not impossible, to
@@ -1709,7 +1677,7 @@ a rc count after changing a = 2
 
 The reference count of the `Rc<List>` instances in both `a` and `b` are 2 after
 we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
-variable `b`, which decreases the reference count of the `Rc<List>` instance
+variable `b`, which decreases the reference count of the `b` `Rc<List>` instance
 from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
 this point, because its reference count is 1, not 0. Then Rust drops `a`, which
 decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
@@ -1762,24 +1730,6 @@ an `Rc<T>` instance. Weak references don’t express an ownership relationship,
 and their count doesn't affect when an `Rc<T>` instance is cleaned up. They
 won’t cause a reference cycle because any cycle involving some weak references
 will be broken once the strong reference count of values involved is 0.
-
-<!-- can you explain what a weak reference does/is for? By the end of this
-paragraph I wasn't entirely sure. It would be good to have a high level
-succinct definition /LC -->
-<!-- I've moved the explanation that was in the next paragraph to this spot and
-modified it a bit, does this work? /Carol -->
-<!-- JT, is this defined clearly enough? /LC -->
-<!-- This is probably a topic that if you're familiar as a reader, you'll nod
-along and if you're not, you'll have to spend some time with the ideas in
-some sample programs for them to click.
-
-I was wondering - something we could try to help this is to take our cycle
-picture above and do another version, this time with a weak reference in it,
-showing that the count gained by the weak reference doesn't increment what it's
-pointing to. /JT -->
-<!-- Liz, what do you think about a diagram? I'm concerned about making it
-accurate enough but also clear and useful enough that readers familiar with
-this topic and new to this topic will get value from it. /Carol -->
 
 When you call `Rc::downgrade`, you get a smart pointer of type `Weak<T>`.
 Instead of increasing the `strong_count` in the `Rc<T>` instance by 1, calling
