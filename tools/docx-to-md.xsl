@@ -12,6 +12,7 @@
     <xsl:template match="w:p[starts-with(w:pPr/w:pStyle/@w:val, 'Contents3')]" />
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterStart']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterNumber']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Normal']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Standard']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'AuthorQuery']" />
@@ -58,7 +59,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListA' or @w:val = 'NumListB']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListA' or @w:val = 'NumListB' or @w:val = 'ListNumber']]">
         <xsl:text>1. </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
@@ -86,6 +87,12 @@
         <xsl:text>  * </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'CodeLabel']]">
+        <xsl:text>Filename: </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro']]">
@@ -120,6 +127,15 @@
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Code' or @w:val = 'CodeWide' or @w:val = 'CodeAnnotated']]">
+        <xsl:text>```&#10;</xsl:text>
+        <!-- Don't apply Emphasis/etc templates in code blocks -->
+        <xsl:for-each select="w:r">
+            <xsl:value-of select="w:t" />
+        </xsl:for-each>
+        <xsl:text>&#10;```&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSingle']">
         <xsl:text>```&#10;</xsl:text>
         <xsl:apply-templates select="*" />
@@ -131,7 +147,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1' or @w:val = 'Listing']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
@@ -141,7 +157,14 @@
         <xsl:apply-templates select="*" />
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockText']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BoxTitle']]">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:text>> ### </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockText' or @w:val = 'BoxBody']]">
         <xsl:text>&#10;</xsl:text>
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
@@ -183,7 +206,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisBold']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisBold' or @w:val = 'Bold']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
@@ -211,6 +234,25 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
                 <xsl:text>*</xsl:text>
                 <xsl:value-of select="normalize-space(w:t)" />
                 <xsl:text>*</xsl:text>
+                <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text> </xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'CodeAnnotation']]">
+        <xsl:choose>
+            <xsl:when test="normalize-space(w:t) != ''">
+                <xsl:if test="starts-with(w:t, ' ')">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <xsl:text>[</xsl:text>
+                <xsl:value-of select="normalize-space(w:t)" />
+                <xsl:text>]</xsl:text>
                 <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
                     <xsl:text> </xsl:text>
                 </xsl:if>
