@@ -72,6 +72,8 @@
     - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
     - [Writing Error Messages to Standard Error Instead of Standard Output](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
+- [End of Experiment](end-of-experiment.md)
+
 <!-- ## Thinking in Rust
 
 - [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)

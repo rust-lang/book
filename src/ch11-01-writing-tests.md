@@ -530,6 +530,8 @@ Now that you know several ways to write tests, let’s look at what is happening
 when we run our tests and explore the different options we can use with `cargo
 test`.
 
+{{#quiz ../quizzes/ch11-01-writing-tests.toml}}
+
 [concatenation-with-the--operator-or-the-format-macro]:
 ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro
 [bench]: ../unstable-book/library-features/test.html

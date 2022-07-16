@@ -1,0 +1,39 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+When running `cargo test` with no additional configuration, which of the following actions may not work correctly if done by multiple tests?
+"""
+prompt.choices = [
+  "Writing text to a single file",
+  "Logging strings to stdout",
+  "Failing via panics",
+  "Reading data from a single database"
+]
+answer.answer = 0
+context = """
+Tests are run in parallel by default, so actions which are not thread-safe (like writing to a single file) may cause a race condition.
+"""
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+Consider a program with the following unit test:
+
+```
+#[test]
+fn test_the_logger() { /* ... */ }
+
+#[test]
+fn test_the_database() { /* ... */ }
+
+#[test]
+fn test_logger_and_database() { /* ... */ }
+```
+
+What is the *shortest* string you can pass to `cargo test <the_string>` such that *only* `test_the_logger` and `test_the_database` are executed?
+"""
+answer.answer = "th"
+context = """
+The shortest substring string that is not contained in `test_logger_and_database` but is contained in `test_the_logger` and `test_the_database`
+is "th" (the prefix of "the").
+"""

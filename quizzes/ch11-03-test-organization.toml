@@ -1,0 +1,15 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following is NOT a reason to wrap unit tests in `#[cfg(test)] mod test { ... }`?
+"""
+prompt.choices = [
+  "It can reduce the size of generated compiler artifacts",
+  "It can improve compile times",  
+  "It separates test helper functions from library code",
+  "It gives your tests access to private functions"
+]
+answer.answer = 3
+context = """
+All unit tests in a given file have access to that file's private functions, regardless of being in a `mod test` or not.
+"""

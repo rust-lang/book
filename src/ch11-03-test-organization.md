@@ -263,6 +263,8 @@ reduce logic bugs having to do with how your code is expected to behave.
 Let’s combine the knowledge you learned in this chapter and in previous
 chapters to work on a project!
 
+{{#quiz ../quizzes/ch11-03-test-organization.toml}}
+
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html

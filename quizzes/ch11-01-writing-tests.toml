@@ -1,0 +1,63 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = "What is the annotation you add to a function to indicate that it's a unit test?"
+answer.answer = "#[test]"
+context = """
+This informs the cargo testing harness to treat the function as a test and not library code.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Let's say you have a function with the type signature:
+
+```
+fn f(x: usize) -> Result<usize, String>;
+```
+
+And you want to test that `f(0)` should return `Err(_)`. 
+Which of the following is NOT a valid way to test that?
+"""
+prompt.choices = [
+  """
+```
+#[test]
+fn test() {
+  assert!(f(0).is_err());
+}
+```
+  """,
+  """
+```
+#[test]
+#[should_panic]
+fn test() { 
+  f(0).unwrap();
+}
+```
+  """,
+  """
+```
+#[test]
+#[should_err]
+fn test() -> Result<usize, String> {
+  f(0)
+}
+```
+  """,
+  """
+```
+#[test]
+fn test() {
+  assert!(match f(0) {
+    Ok(_) => false,
+    Err(_) => true
+  });  
+}
+```
+  """
+]
+answer.answer = 2
+context = """
+`should_err` does not exist in Rust --= any test that returns a `Result` must return `Ok` to pass.
+"""

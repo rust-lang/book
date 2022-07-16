@@ -33,24 +33,24 @@ Will Rust accept this function signature? If so, what lifetimes will it infer?
 prompt.choices = [
   "Rust will reject this function signature",
   """
-  ```
-  fn baz(f: Foo) -> &i32
-  ```
+```
+fn baz(f: Foo) -> &i32
+```
   """,
   """
-  ```
-  fn baz<'a>(f: Foo<'a>) -> &i32
-  ```
+```
+fn baz<'a>(f: Foo<'a>) -> &i32
+```
   """,
   """
-  ```
-  fn baz<'a>(f: Foo) -> &'a i32
-  ```
+```
+fn baz<'a>(f: Foo) -> &'a i32
+```
   """,
   """
-  ```
-  fn baz<'a>(f: Foo<'a>) -> &'a i32
-  ```
+```
+fn baz<'a>(f: Foo<'a>) -> &'a i32
+```
   """
 ]
 answer.answer = 4
@@ -77,29 +77,29 @@ Will Rust accept this function signature? If so, what lifetimes will it infer?
 prompt.choices = [
   "Rust will reject this function signature",
   """
-  ```
-  fn baz(f: &Foo) -> &i32
-  ```
+```
+fn baz(f: &Foo) -> &i32
+```
   """,
   """
-  ```
-  fn baz<'a>(f: &Foo<'a>) -> &'a i32
-  ```
+```
+fn baz<'a>(f: &Foo<'a>) -> &'a i32
+```
   """,
   """
-  ```
-  fn baz<'a>(f: &'a Foo) -> &'a i32
-  ```
+```
+fn baz<'a>(f: &'a Foo) -> &'a i32
+```
   """,
   """
-  ```
-  fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'a i32
-  ```
+```
+fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'a i32
+```
   """,
   """
-  ```
-  fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'b i32
-  ```
+```
+fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'b i32
+```
   """
 ]
 answer.answer = 0
