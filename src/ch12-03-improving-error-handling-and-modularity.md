@@ -394,7 +394,7 @@ know that `Box<dyn Error>` means the function will return a type that
 implements the `Error` trait, but we don’t have to specify what particular type
 the return value will be. This gives us flexibility to return error values that
 may be of different types in different error cases. The `dyn` keyword is short
-for “dynamic.”
+for “dynamic”.
 
 Second, we’ve removed the call to `expect` in favor of the `?` operator, as we
 talked about in [Chapter 9][ch9-question-mark]<!-- ignore -->. Rather than
