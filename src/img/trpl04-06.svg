@@ -4,7 +4,7 @@ to the byte at index 0 in a table of the string data &quot;hello world&quot; on
 the heap. The third table rep-resents the stack data of the slice world, which
 has a length value of 5 and points to byte 6 of the heap data table." class="center">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 275)">
-        <title>%3</title>
+        <title>Figure 4-6</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-275 233,-275 233,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>

@@ -1,5 +1,6 @@
-<svg viewBox="0.00 0.00 1000 550" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg viewBox="0.00 0.00 1000 550" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" alt="Reference cycle of lists">
     <g id="graph0" class="graph" transform="scale(3.5 3.5) rotate(0) translate(4 148.09)">
+        <title>Figure 15-4</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-148.09 274,-148.09 274,4 -4,4" />
         <g id="node1" class="node">
             <title>l1</title>

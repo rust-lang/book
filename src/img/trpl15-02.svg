@@ -1,6 +1,6 @@
-<svg viewBox="0.00 0.00 363.00 342.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%">
+<svg viewBox="0.00 0.00 363.00 342.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%" alt="A finite Cons list">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 78)">
-        <title>%3</title>
+        <title>Figure 15-2</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-78 83,-78 83,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>

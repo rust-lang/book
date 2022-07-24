@@ -4,7 +4,7 @@ stack, consisting of its length (5), capacity (5), and a pointer to the first
 value in the second table. The second table contains the representation of the
 string data on the heap, byte by byte." class="center">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 152)">
-        <title>%3</title>
+        <title>Figure 4-1</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-152 233,-152 233,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>

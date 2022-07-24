@@ -3,7 +3,7 @@ alt="Three tables: the table for s contains only a pointer to the table
 for s1. The table for s1 contains the stack data for s1 and points to the
 string data on the heap." class="center">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 152)">
-        <title>%3</title>
+        <title>Figure 4-5</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-152 357,-152 357,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>

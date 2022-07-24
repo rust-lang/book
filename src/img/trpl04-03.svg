@@ -2,7 +2,7 @@
 alt="Four tables: two tables representing the stack data for s1 and s2,
 and each points to its own copy of string data on the heap." class="center">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 298)">
-        <title>%3</title>
+        <title>Figure 4-3</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-298 233,-298 233,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>

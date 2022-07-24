@@ -178,7 +178,6 @@ type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, and this process continues infinitely, as shown in Figure 15-1.
 
-<!-- <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" /> -->
 {{#include img/trpl15-01.svg}}
 
 <span class="caption">Figure 15-1: An infinite `List` consisting of infinite
@@ -233,7 +232,6 @@ broken the infinite, recursive chain, so the compiler can figure out the size
 it needs to store a `List` value. Figure 15-2 shows what the `Cons` variant
 looks like now.
 
-<!-- <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" /> -->
 {{#include img/trpl15-02.svg}}
 
 <span class="caption">Figure 15-2: A `List` that is not infinitely sized

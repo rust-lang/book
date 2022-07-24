@@ -4,7 +4,7 @@ stack, respectively, and both pointing to the same string data on the heap.
 Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
 access the heap data." class="center">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 238)">
-        <title>%3</title>
+        <title>Figure 4-4</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-238 233,-238 233,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>
