@@ -1,35 +1,35 @@
 <svg viewBox="0.00 0.00 1000.00 700.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%">
     <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 156)">
         <title>%3</title>
-        <polygon fill="var(--bg)" stroke="transparent" points="-4,4 -4,-156 174,-156 174,4 -4,4" />
+        <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-156 174,-156 174,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>
-            <polyline fill="none" stroke="var(--fg)" points="8,-128 162,-128 " />
-            <text text-anchor="start" x="70.6069" y="-133.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">Cons</text>
-            <polygon fill="none" stroke="var(--fg)" points="8,-4 8,-128 31,-128 31,-4 8,-4" />
-            <text text-anchor="start" x="10.5552" y="-61.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">i32</text>
-            <polygon fill="none" stroke="var(--fg)" points="31,-4 31,-128 162,-128 162,-4 31,-4" />
-            <polyline fill="none" stroke="var(--fg)" points="34,-105 159,-105 " />
-            <text text-anchor="start" x="82.1069" y="-110.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">Cons</text>
-            <polygon fill="none" stroke="var(--fg)" points="34,-7 34,-105 57,-105 57,-7 34,-7" />
-            <text text-anchor="start" x="36.5552" y="-51.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">i32</text>
-            <polygon fill="none" stroke="var(--fg)" points="57,-7 57,-105 159,-105 159,-7 57,-7" />
-            <polyline fill="none" stroke="var(--fg)" points="60,-82 156,-82 " />
-            <text text-anchor="start" x="93.6069" y="-87.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">Cons</text>
-            <polygon fill="none" stroke="var(--fg)" points="60,-10 60,-82 83,-82 83,-10 60,-10" />
-            <text text-anchor="start" x="62.5552" y="-41.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">i32</text>
-            <polygon fill="none" stroke="var(--fg)" points="83,-10 83,-82 156,-82 156,-10 83,-10" />
-            <polyline fill="none" stroke="var(--fg)" points="86,-59 153,-59 " />
-            <text text-anchor="start" x="105.1069" y="-64.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">Cons</text>
-            <polygon fill="none" stroke="var(--fg)" points="86,-13 86,-59 109,-59 109,-13 86,-13" />
-            <text text-anchor="start" x="88.5552" y="-31.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">i32</text>
-            <polygon fill="none" stroke="var(--fg)" points="109,-13 109,-59 153,-59 153,-13 109,-13" />
-            <polyline fill="none" stroke="var(--fg)" points="112,-36 150,-36 " />
-            <text text-anchor="start" x="116.6069" y="-41.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">Cons</text>
-            <polygon fill="none" stroke="var(--fg)" points="112,-16 112,-36 135,-36 135,-16 112,-16" />
-            <text text-anchor="start" x="114.5552" y="-21.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">i32</text>
-            <polygon fill="none" stroke="var(--fg)" points="135,-16 135,-36 150,-36 150,-16 135,-16" />
-            <text text-anchor="start" x="137.5098" y="-21.8" font-family="Times,serif" font-size="14.00" fill="var(--fg)">∞</text>
+            <polyline fill="none" stroke="var(--fg, black)" points="8,-128 162,-128 " />
+            <text text-anchor="start" x="70.6069" y="-133.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">Cons</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="8,-4 8,-128 31,-128 31,-4 8,-4" />
+            <text text-anchor="start" x="10.5552" y="-61.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">i32</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="31,-4 31,-128 162,-128 162,-4 31,-4" />
+            <polyline fill="none" stroke="var(--fg, black)" points="34,-105 159,-105 " />
+            <text text-anchor="start" x="82.1069" y="-110.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">Cons</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="34,-7 34,-105 57,-105 57,-7 34,-7" />
+            <text text-anchor="start" x="36.5552" y="-51.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">i32</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="57,-7 57,-105 159,-105 159,-7 57,-7" />
+            <polyline fill="none" stroke="var(--fg, black)" points="60,-82 156,-82 " />
+            <text text-anchor="start" x="93.6069" y="-87.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">Cons</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="60,-10 60,-82 83,-82 83,-10 60,-10" />
+            <text text-anchor="start" x="62.5552" y="-41.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">i32</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="83,-10 83,-82 156,-82 156,-10 83,-10" />
+            <polyline fill="none" stroke="var(--fg, black)" points="86,-59 153,-59 " />
+            <text text-anchor="start" x="105.1069" y="-64.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">Cons</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="86,-13 86,-59 109,-59 109,-13 86,-13" />
+            <text text-anchor="start" x="88.5552" y="-31.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">i32</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="109,-13 109,-59 153,-59 153,-13 109,-13" />
+            <polyline fill="none" stroke="var(--fg, black)" points="112,-36 150,-36 " />
+            <text text-anchor="start" x="116.6069" y="-41.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">Cons</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="112,-16 112,-36 135,-36 135,-16 112,-16" />
+            <text text-anchor="start" x="114.5552" y="-21.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">i32</text>
+            <polygon fill="none" stroke="var(--fg, black)" points="135,-16 135,-36 150,-36 150,-16 135,-16" />
+            <text text-anchor="start" x="137.5098" y="-21.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">∞</text>
         </g>
     </g>
 </svg>
