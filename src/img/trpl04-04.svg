@@ -8,23 +8,23 @@ access the heap data." class="center">
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-238 233,-238 233,4 -4,4" />
         <g id="node1" class="node">
             <title>table0</title>
-            <polyline fill="none" stroke="var(--icons)" points="8,-210 96,-210 " />
-            <text text-anchor="start" x="45.7759" y="-215.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">s1</text>
-            <polygon fill="none" stroke="var(--icons)" points="8,-190 8,-210 60,-210 60,-190 8,-190" />
-            <text text-anchor="start" x="18.8413" y="-195.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">name</text>
-            <polygon fill="none" stroke="var(--icons)" points="60,-190 60,-210 96,-210 96,-190 60,-190" />
-            <text text-anchor="start" x="62.8413" y="-195.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">value</text>
-            <polygon fill="none" stroke="var(--icons)" points="8,-170 8,-190 60,-190 60,-170 8,-170" />
-            <text text-anchor="start" x="26.2241" y="-175.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">ptr</text>
-            <polygon fill="none" stroke="var(--icons)" points="60,-170 60,-190 96,-190 96,-170 60,-170" />
-            <polygon fill="none" stroke="var(--icons)" points="8,-150 8,-170 60,-170 60,-150 8,-150" />
-            <text text-anchor="start" x="25.4482" y="-155.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">len</text>
-            <polygon fill="none" stroke="var(--icons)" points="60,-150 60,-170 96,-170 96,-150 60,-150" />
-            <text text-anchor="start" x="74.5" y="-155.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">5</text>
-            <polygon fill="none" stroke="var(--icons)" points="8,-130 8,-150 60,-150 60,-130 8,-130" />
-            <text text-anchor="start" x="10.6826" y="-135.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">capacity</text>
-            <polygon fill="none" stroke="var(--icons)" points="60,-130 60,-150 96,-150 96,-130 60,-130" />
-            <text text-anchor="start" x="74.5" y="-135.8" font-family="Times,serif" font-size="14.00" fill="var(--icons)">5</text>
+            <polyline fill="none" stroke="var(--icons, gray)" points="8,-210 96,-210 " />
+            <text text-anchor="start" x="45.7759" y="-215.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">s1</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="8,-190 8,-210 60,-210 60,-190 8,-190" />
+            <text text-anchor="start" x="18.8413" y="-195.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">name</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="60,-190 60,-210 96,-210 96,-190 60,-190" />
+            <text text-anchor="start" x="62.8413" y="-195.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">value</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="8,-170 8,-190 60,-190 60,-170 8,-170" />
+            <text text-anchor="start" x="26.2241" y="-175.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">ptr</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="60,-170 60,-190 96,-190 96,-170 60,-170" />
+            <polygon fill="none" stroke="var(--icons, gray)" points="8,-150 8,-170 60,-170 60,-150 8,-150" />
+            <text text-anchor="start" x="25.4482" y="-155.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">len</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="60,-150 60,-170 96,-170 96,-150 60,-150" />
+            <text text-anchor="start" x="74.5" y="-155.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">5</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="8,-130 8,-150 60,-150 60,-130 8,-130" />
+            <text text-anchor="start" x="10.6826" y="-135.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">capacity</text>
+            <polygon fill="none" stroke="var(--icons, gray)" points="60,-130 60,-150 96,-150 96,-130 60,-130" />
+            <text text-anchor="start" x="74.5" y="-135.8" font-family="Times,serif" font-size="14.00" fill="var(--icons, gray)">5</text>
         </g>
         <g id="node3" class="node">
             <title>table1</title>
@@ -55,8 +55,8 @@ access the heap data." class="center">
         </g>
         <g id="edge1" class="edge">
             <title>table0:c&#45;&gt;table1:pointee</title>
-            <path fill="none" stroke="var(--icons)" d="M78,-180C78,-180 101.9982,-126.912 138.4405,-118.2023" />
-            <polygon fill="var(--icons)" stroke="var(--icons)" points="138.986,-121.6621 148.5,-117 138.1553,-114.7115 138.986,-121.6621" />
+            <path fill="none" stroke="var(--icons, gray)" d="M78,-180C78,-180 101.9982,-126.912 138.4405,-118.2023" />
+            <polygon fill="var(--icons, gray)" stroke="var(--icons, gray)" points="138.986,-121.6621 148.5,-117 138.1553,-114.7115 138.986,-121.6621" />
         </g>
         <g id="node2" class="node">
             <title>table3</title>
