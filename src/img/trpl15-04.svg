@@ -17,29 +17,14 @@
         </g>
         <g id="edge5" class="edge">
             <title>l1:c&#45;&gt;l2:data</title>
-            <path fill="none" stroke="var(--fg)" d="M144.31,-70.59C151.47,-70.59 160.69,-70.59 169.83,-70.59" />
+            <path fill="none" stroke="var(--fg)" d="
+            M144.31,-70.59C151.47,-70.59 160.69,-70.59 169.83,-70.59" />
             <polygon fill="var(--fg)" stroke="var(--fg)" points="170,-74.09 180,-70.59 170,-67.09 170,-74.09" />
         </g>
-        <g id="node4" class="node">
-            <title>invisible_end</title>
-            <ellipse fill="var(--fg)" stroke="var(--fg)" cx="270" cy="-46.59" rx="0" ry="0" />
-        </g>
-        <g id="edge6" class="edge">
-            <title>l2:c&#45;&gt;invisible_end:n</title>
-            <path fill="none" stroke="var(--fg)" d="M234.38,-69.89C248.29,-68.34 270,-63.4 270,-47.59" />
-        </g>
-        <g id="node3" class="node">
-            <title>invisible_start</title>
-            <ellipse fill="var(--fg)" stroke="var(--fg)" cx="27" cy="-37.59" rx="0" ry="0" />
-        </g>
         <g id="edge3" class="edge">
-            <title>invisible_start:n&#45;&gt;l1</title>
-            <path fill="none" stroke="var(--fg)" d="M27,-38.59C27,-50.42 55.22,-59.08 79.87,-64.38" />
+            <title>l2:c&#45;&gt;l1</title>
+            <path fill="none" stroke="var(--fg)" d="M234.38,-69.89 C248.29,-68.34 270,-63.4 270,-45.59C270,8.45 27,17.45 27,-36.59C27,-50.42 55.22,-59.08 79.87,-64.38" />
             <polygon fill="var(--fg)" stroke="var(--fg)" points="79.28,-67.83 89.78,-66.38 80.67,-60.97 79.28,-67.83" />
-        </g>
-        <g id="edge4" class="edge">
-            <title>invisible_start:s&#45;&gt;invisible_end:s</title>
-            <path fill="none" stroke="var(--fg)" d="M27,-36.59C27,17.45 270,8.45 270,-45.59" />
         </g>
         <g id="node5" class="node">
             <title>a</title>
