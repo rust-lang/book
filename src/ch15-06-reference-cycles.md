@@ -75,7 +75,8 @@ well. This instance’s memory can’t be dropped either, because the other
 remain uncollected forever. To visualize this reference cycle, we’ve created a
 diagram in Figure 15-4.
 
-<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+<!-- <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" /> -->
+{{#include img/trpl15-04.svg}}
 
 <span class="caption">Figure 15-4: A reference cycle of lists `a` and `b`
 pointing to each other</span>
