@@ -47,7 +47,7 @@ mod tests {
 
     #[test]
     fn one_result() {
-        let query = "duct";
+        let query = "safe";
         let contents = "\
 Rust:
 safe, fast, productive.
