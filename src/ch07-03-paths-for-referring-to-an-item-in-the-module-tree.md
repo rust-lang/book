@@ -150,7 +150,7 @@ and `fn add_to_waitlist` lets us call the function from
 `eat_at_restaurant`</span>
 
 Now the code will compile! To see why adding the `pub` keyword lets us use
-these paths in `add_to_waitlist` with respect to the privacy rules, let’s look
+these paths in `eat_at_restaurant` with respect to the privacy rules, let’s look
 at the absolute and the relative paths.
 
 In the absolute path, we start with `crate`, the root of our crate’s module
