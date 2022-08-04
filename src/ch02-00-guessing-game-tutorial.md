@@ -271,21 +271,31 @@ the code so far:
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print_guess}}
 ```
 
-This line prints the string that now contains the user’s input. The `{}` set of
-curly brackets is a placeholder: think of `{}` as little crab pincers that hold
-a value in place. You can print more than one value using curly brackets: the
-first set of curly brackets holds the first value listed after the format
-string, the second set holds the second value, and so on. Printing multiple
-values in one call to `println!` would look like this:
+This line prints the string that now contains the user’s input. The `{guess}`
+part means the value of `guess` will be printed here: think of `{}` as little
+crab pincers that hold a value in place. You can print more than one value in
+one call to `println!`, too, and it would look like this:
 
 ```rust
 let x = 5;
 let y = 10;
 
-println!("x = {} and y = {}", x, y);
+println!("x = {x} and y = {y}");
 ```
 
 This code would print `x = 5 and y = 10`.
+
+If you want to print expressions, you need to leave the crab pincers empty and
+put the expressions afterwards:
+
+```rust
+let x = 5;
+let y = 10;
+
+println!("x = {x} and x + y = {}", x + y);
+```
+
+This code would print `x = 5 and x + y = 15`.
 
 ### Testing the First Part
 
