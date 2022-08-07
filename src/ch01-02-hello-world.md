@@ -53,7 +53,7 @@ $ cd hello_world
 
 ```rust
 fn main() {
-  println!("Hello, world!");
+    println!("Hello, world!");
 }
 ```
 
