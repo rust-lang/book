@@ -301,7 +301,7 @@ detail when we talk about vectors in Chapter 8.
 The concepts of ownership, borrowing, and slices ensure memory safety in Rust
 programs at compile time. The Rust language gives you control over your memory
 usage in the same way as other systems programming languages, but having the
-owner of data automatically clean up that data when the owner goes out of scope
+owner of data automatically cleans up that data when the owner goes out of scope
 means you don’t have to write and debug extra code to get this control.
 
 Ownership affects how lots of other parts of Rust work, so we’ll talk about
