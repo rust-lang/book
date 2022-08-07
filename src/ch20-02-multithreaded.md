@@ -694,5 +694,5 @@ ch19-04-advanced-types.html#creating-type-synonyms-with-type-aliases
 [integer-types]: ch03-02-data-types.html#integer-types
 [fn-traits]:
 ch13-01-closures.html#moving-captured-values-out-of-the-closure-and-the-fn-traits
-[builder]: ../std/thread/struct.Builder.html
-[builder-spawn]: ../std/thread/struct.Builder.html#method.spawn
+[builder]: https://doc.rust-lang.org/std/thread/struct.Builder.html
+[builder-spawn]: https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn

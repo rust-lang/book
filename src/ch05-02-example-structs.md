@@ -242,7 +242,7 @@ continue to refactor this code by turning the `area` function into an `area`
 
 [the-tuple-type]: ch03-02-data-types.html#the-tuple-type
 [app-c]: appendix-03-derivable-traits.md
-[println]: ../std/macro.println.html
-[dbg]: ../std/macro.dbg.html
+[println]: https://doc.rust-lang.org/std/macro.println.html
+[dbg]: https://doc.rust-lang.org/std/macro.dbg.html
 [err]: ch12-06-writing-to-stderr-instead-of-stdout.html
-[attributes]: ../reference/attributes.html
+[attributes]: https://doc.rust-lang.org/reference/attributes.html

@@ -619,4 +619,4 @@ Rust so you can make sure your code is working the way it should.
 ch04-02-references-and-borrowing.html#references-and-borrowing
 [string-slices-as-parameters]:
 ch04-03-slices.html#string-slices-as-parameters
-[reference]: ../reference/index.html
+[reference]: https://doc.rust-lang.org/reference/index.html

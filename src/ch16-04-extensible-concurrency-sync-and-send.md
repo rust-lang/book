@@ -87,4 +87,4 @@ relate to those you might be familiar with from object-oriented programming.
 
 [sharing-a-mutext-between-multiple-threads]:
 ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads
-[nomicon]: ../nomicon/index.html
+[nomicon]: https://doc.rust-lang.org/nomicon/index.html
