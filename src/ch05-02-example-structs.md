@@ -181,7 +181,7 @@ following output:
 
 Nice! It’s not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging. When we have
-larger structs, it’s useful to have output that’s a bit easier to read; in
+larger structs, it’s useful to have an output that’s a bit easier to read; in
 those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
 In this example, using the `{:#?}` style will output:
 
