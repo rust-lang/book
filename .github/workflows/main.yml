@@ -42,34 +42,16 @@ jobs:
         cd js-extensions
         pnpm init-repo
 
-    - name: Install aspell
-      run: sudo apt-get install aspell
-
-    - name: Install shellcheck
-      run: sudo apt-get install shellcheck
-
     - name: Run tests
       run: mdbook test
-
-    - name: Shellcheck
-      run: find . -name '*.sh' ! -path "./js-extensions/*" | xargs shellcheck
-
-    - name: Spellcheck
-      run: bash ci/spellcheck.sh list
 
     - name: Lint for local file paths
       run: |
         mdbook build
         cargo run --bin lfp src
+
     - name: Validate references
       run: bash ci/validate.sh
-
-    - name: Check for broken links
-      run: |
-        curl -sSLo linkcheck.sh \
-          https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
-        # Cannot use --all here because of the generated redirect pages aren't available.
-        sh linkcheck.sh book   
 
     - name: Build book
       run: mdbook build
