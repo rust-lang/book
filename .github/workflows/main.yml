@@ -52,7 +52,7 @@ jobs:
       run: mdbook test
 
     - name: Shellcheck
-      run: find . -name '*.sh' | xargs shellcheck
+      run: find . -name '*.sh' ! -path "./js-extensions/*" | xargs shellcheck
 
     - name: Spellcheck
       run: bash ci/spellcheck.sh list
