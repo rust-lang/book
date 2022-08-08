@@ -7,9 +7,35 @@
   box-sizing: border-box;
   background: white;
   z-index: 1000;
+  overflow-y: auto;
 
   .container {
     width: 800px;
     margin: 0 auto;
+    padding-bottom: 2em;
+
+    h2 {
+      margin: 0;
+    }
+
+    section {
+      margin-top: 2em;
+    }
+
+    .row {
+      display: flex;
+      gap: 1em;
+    }
+
+    img {
+      object-fit: contain;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 5px 8px;
+      margin-top: 1em;
+      cursor: pointer;
+    }
   }
 }
