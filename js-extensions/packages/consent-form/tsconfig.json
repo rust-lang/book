@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["index.tsx"],
+  "include": ["lib"],
   "compilerOptions": {
     "outDir": "dist"
   }
