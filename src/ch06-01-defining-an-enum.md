@@ -106,7 +106,7 @@ a struct. Enums handle this case with ease:
 We’ve shown several different ways to define data structures to store version
 four and version six IP addresses. However, as it turns out, wanting to store
 IP addresses and encode which kind they are is so common that [the standard
-library has a definition we can use!][ipaddr]<!-- ignore --> Let’s look at how
+library has a definition we can use!][IpAddr]<!-- ignore --> Let’s look at how
 the standard library defines `IpAddr`: it has the exact enum and variants that
 we’ve defined and used, but it embeds the address data inside the variants in
 the form of two different structs, which are defined differently for each
@@ -321,6 +321,6 @@ value.
 
 {{#quiz ../quizzes/ch06-01-defining-an-enum.toml}}
 
-[ipaddr]: ../std/net/enum.IpAddr.html
+[IpAddr]: ../std/net/enum.IpAddr.html
 [option]: ../std/option/enum.Option.html
 [docs]: ../std/option/enum.Option.html
