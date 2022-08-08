@@ -34,7 +34,8 @@ cd listings/ch02-guessing-game-tutorial
 rm -rf no-listing-01-cargo-new
 cargo new no-listing-01-cargo-new --name guessing_game
 cd no-listing-01-cargo-new
-cargo run
+cargo run > output.txt 2>&1
+cd ../../..
 -->
 
 <span class="filename">Filename: Cargo.toml</span>
@@ -282,7 +283,7 @@ values in one call to `println!` would look like this:
 let x = 5;
 let y = 10;
 
-println!("x = {} and y = {}", x, y);
+println!("x = {x} and y = {y}");
 ```
 
 This code would print `x = 5 and y = 10`.
@@ -350,14 +351,14 @@ In the *Cargo.toml* file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
-semantic version specifier `0.8.3`. Cargo understands [Semantic
+semantic version specifier `0.8.5`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
-standard for writing version numbers. The number `0.8.3` is actually shorthand
-for `^0.8.3`, which means any version that is at least `0.8.3` but below
+standard for writing version numbers. The number `0.8.5` is actually shorthand
+for `^0.8.5`, which means any version that is at least `0.8.5` but below
 `0.9.0`.
 
 Cargo considers these versions to have public APIs compatible with version
-`0.8.3`, and this specification ensures you’ll get the latest patch release
+`0.8.5`, and this specification ensures you’ll get the latest patch release
 that will still compile with the code in this chapter. Any version `0.9.0` or
 greater is not guaranteed to have the same API as what the following examples
 use.
@@ -367,26 +368,27 @@ Listing 2-2.
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
+rm Cargo.lock
 cargo clean
 cargo build -->
 
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.3
-  Downloaded libc v0.2.86
-  Downloaded getrandom v0.2.2
+  Downloaded rand v0.8.5
+  Downloaded libc v0.2.127
+  Downloaded getrandom v0.2.7
   Downloaded cfg-if v1.0.0
-  Downloaded ppv-lite86 v0.2.10
-  Downloaded rand_chacha v0.3.0
-  Downloaded rand_core v0.6.2
-   Compiling rand_core v0.6.2
-   Compiling libc v0.2.86
-   Compiling getrandom v0.2.2
+  Downloaded ppv-lite86 v0.2.16
+  Downloaded rand_chacha v0.3.1
+  Downloaded rand_core v0.6.3
+   Compiling libc v0.2.127
+   Compiling getrandom v0.2.7
    Compiling cfg-if v1.0.0
-   Compiling ppv-lite86 v0.2.10
-   Compiling rand_chacha v0.3.0
-   Compiling rand v0.8.3
+   Compiling ppv-lite86 v0.2.16
+   Compiling rand_core v0.6.3
+   Compiling rand_chacha v0.3.1
+   Compiling rand v0.8.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
@@ -439,7 +441,7 @@ reuse what it has already downloaded and compiled for those.
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, say that
-next week version 0.8.4 of the `rand` crate comes out, and that version
+next week version 0.8.6 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
 break your code. To handle this, Rust creates the *Cargo.lock* file the first
 time you run `cargo build`, so we now have this in the *guessing_game*
@@ -451,7 +453,7 @@ the *Cargo.lock* file. When you build your project in the future, Cargo will
 see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at `0.8.3` until you explicitly upgrade, thanks to the *Cargo.lock*
+remain at `0.8.5` until you explicitly upgrade, thanks to the *Cargo.lock*
 file. Because the *Cargo.lock* file is important for reproducible builds, it's
 often checked into source control with the rest of the code in your project.
 
@@ -461,8 +463,8 @@ When you *do* want to update a crate, Cargo provides the command `update`,
 which will ignore the *Cargo.lock* file and figure out all the latest versions
 that fit your specifications in *Cargo.toml*. Cargo will then write those
 versions to the *Cargo.lock* file. Otherwise, by default, Cargo will only look
-for versions greater than `0.8.3` and less than `0.9.0`. If the `rand` crate
-has released the two new versions `0.8.4` and `0.9.0` you would see the
+for versions greater than `0.8.5` and less than `0.9.0`. If the `rand` crate
+has released the two new versions `0.8.6` and `0.9.0` you would see the
 following if you ran `cargo update`:
 
 <!-- manual-regeneration
@@ -474,12 +476,12 @@ as a guide to creating the hypothetical output shown here -->
 ```console
 $ cargo update
     Updating crates.io index
-    Updating rand v0.8.3 -> v0.8.4
+    Updating rand v0.8.5 -> v0.8.6
 ```
 
 Cargo ignores the `0.9.0` release. At this point, you would also notice a
 change in your *Cargo.lock* file noting that the version of the `rand` crate
-you are now using is `0.8.4`. To use `rand` version `0.9.0` or any version in
+you are now using is `0.8.6`. To use `rand` version `0.9.0` or any version in
 the `0.9.x` series, you’d have to update the *Cargo.toml* file to look like
 this instead:
 
@@ -625,6 +627,11 @@ expression ends after the first successful match, so it won’t look at the last
 arm in this scenario.
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
+
+<!--
+The error numbers in this output should be that of the code **WITHOUT** the
+anchor or snip comments
+-->
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-04/output.txt}}
