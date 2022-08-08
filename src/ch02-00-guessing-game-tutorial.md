@@ -292,10 +292,10 @@ put the expressions afterwards:
 let x = 5;
 let y = 10;
 
-println!("x = {x} and x + y = {}", x + y);
+println!("x = {x}, y = {}, and x + y = {}", y, x + y);
 ```
 
-This code would print `x = 5 and x + y = 15`.
+This code would print `x = 5, y = 10, and x + y = 15`.
 
 ### Testing the First Part
 
