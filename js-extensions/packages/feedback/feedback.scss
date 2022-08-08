@@ -114,4 +114,8 @@
 
 .ReactModal__Overlay {
   z-index: 101; // must be >= #menu-bar z-index
+
+  textarea {
+    font-family: 'Open Sans', sans-serif;
+  }
 }
