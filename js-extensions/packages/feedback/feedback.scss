@@ -32,14 +32,15 @@
 .pop {
   background-color: var(--popper-bg);
   color: var(--popper-color);
-  padding: 10px;
+  padding: 5px 8px;
   display: inline-block;
-
-  // prevent tooltip dissapearing when cursor moves between
-  // highlight and tooltip
-  border-bottom: 8px solid transparent;
   border-radius: 5px;
-  background-clip: padding-box;
+
+  // // TODO: will tried removing this and it didn't seem to change any behavior?
+  // // prevent tooltip dissapearing when cursor moves between
+  // // highlight and tooltip
+  // border-bottom: 8px solid transparent;
+  // background-clip: padding-box;
 }
 
 .pop-arrow,

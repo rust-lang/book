@@ -1,5 +1,6 @@
 # The Rust Programming Language
 
+[Experiment Introduction](experiment-intro.md)
 [The Rust Programming Language](title-page.md)
 [Foreword](foreword.md)
 [Introduction](ch00-00-introduction.md)

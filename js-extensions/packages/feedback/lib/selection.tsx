@@ -74,7 +74,7 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
             onClick={() => setModalOpen(true)}
             title="Provide feedback on this content"
           >
-            &#10068;
+            ✏️
           </div>
         </FeedbackTooltip>
       );

@@ -27,7 +27,7 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-     - name: Install mdbook-quiz
+    - name: Install mdbook-quiz
       run: |
         npm install -g pnpm
         cargo install --git https://github.com/willcrichton/mdbook-quiz --debug

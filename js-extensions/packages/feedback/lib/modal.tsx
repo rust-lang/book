@@ -41,6 +41,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ range, highlighter, close
   return (
     <Modal style={modalStyles} contentLabel="Feedback Modal" onRequestClose={closeModal} isOpen>
       <textarea
+        autoFocus
         ref={feedback}
         style={{ minWidth: "250px" }}
         rows={4}

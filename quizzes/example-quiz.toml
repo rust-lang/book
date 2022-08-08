@@ -1,0 +1,13 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = "What is 1 + 1? (Try clicking the wrong answer.)"
+prompt.choices = [
+  "0",
+  "-999",
+  "11",
+  "2"
+]
+answer.answer = 3
+context = """
+See *Principia Mathematica* for an thorough explanation of this fact.
+"""
