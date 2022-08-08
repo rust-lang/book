@@ -22,14 +22,8 @@ type FeedbackModalProps = {
 };
 const FeedbackModal: React.FC<FeedbackModalProps> = ({ range, highlighter, closeModal }) => {
   const feedback = useRef<HTMLTextAreaElement>(null);
-  const [feedbackEmpty, setFeedbackEmpty] = useState(false);
 
   const handleSubmit = () => {
-    // prevent empty feedback submissions
-    if (!feedback.current!.value.trim()) {
-      return setFeedbackEmpty(true);
-    }
-
     // add feedback to serialized highlighter data (dispose hook after use)
     let dispose = highlighter.hooks.Serialize.RecordInfo.tap(() => feedback.current!.value);
     highlighter.fromRange(range);
@@ -45,10 +39,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ range, highlighter, close
         ref={feedback}
         style={{ minWidth: "250px" }}
         rows={4}
-        placeholder="Your feedback..."
+        placeholder="Your note..."
         required
       ></textarea>
-      {feedbackEmpty && <div className="modal-textarea-helper">Feedback is required</div>}
       <br />
       <button onClick={handleSubmit}>Submit</button>
     </Modal>

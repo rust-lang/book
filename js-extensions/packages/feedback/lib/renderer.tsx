@@ -50,7 +50,7 @@ const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
         onHoverChange={isHovered => setTooltipHovered(isHovered ? highlightHovered : null)}
       >
         <div className="pop-feedback-container">
-          <div className="pop-feedback-text">{feedback}</div>
+          {feedback != "" ? <div className="pop-feedback-text">{feedback}</div> : null}
           <div className="pop-button" onClick={removeFeedback} title="Delete feedback">
             &#128465;
           </div>

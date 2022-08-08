@@ -44,7 +44,7 @@ let ConsentForm = () => {
                 </li>
               </ol>
             </div>
-            <img src="/img/experiment/quiz-example2.png" width="300" />
+            <img src="/img/experiment/quiz-example.png" width="300" />
           </div>
         </section>
         <section>
