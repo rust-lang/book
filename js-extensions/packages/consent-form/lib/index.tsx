@@ -24,7 +24,7 @@ let ConsentForm = () => {
               experiment is to evaluate and improve the content of the Rust Book to help people
               learn Rust more effectively.
             </p>
-            <img src="/img/experiment/brown-logo.png" width="150" />
+            <img src="img/experiment/brown-logo.png" width="150" />
           </div>
         </section>
         <section>
@@ -44,7 +44,7 @@ let ConsentForm = () => {
                 </li>
               </ol>
             </div>
-            <img src="/img/experiment/quiz-example.png" width="300" />
+            <img src="img/experiment/quiz-example.png" width="300" />
           </div>
         </section>
         <section>
