@@ -224,9 +224,9 @@ copy output below; the output updating script doesn't handle subdirectories in p
 ```console
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.3
+  Downloaded rand v0.8.5
    --snip--
-   Compiling rand v0.8.3
+   Compiling rand v0.8.5
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
 warning: unused import: `rand`
  --> add_one/src/lib.rs:1:5
@@ -236,8 +236,7 @@ warning: unused import: `rand`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: 1 warning emitted
-
+warning: `add_one` (lib) generated 1 warning
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
