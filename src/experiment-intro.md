@@ -27,6 +27,8 @@ Another mechanic is **highlighting**: you can select any piece of text, and eith
 
 You can use highlights to save information for yourself. You can also use highlights to give us feedback &mdash; for example, if you think a section of content is confusing, you can let us know.
 
+Note: your highlights may disappear if we change the content that you've highlighted.
+
 ## 3. ...and more!
 
 The book's content may change as you go through the experiment. We will update this page as we add new features.
