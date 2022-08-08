@@ -6,6 +6,7 @@ error[E0277]: the trait bound `String: Draw` is not satisfied
 5 |         components: vec![Box::new(String::from("Hi"))],
   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is not implemented for `String`
   |
+  = help: the trait `Draw` is implemented for `Button`
   = note: required for the cast to the object type `dyn Draw`
 
 For more information about this error, try `rustc --explain E0277`.

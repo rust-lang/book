@@ -112,9 +112,9 @@ chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new --lib
-restaurant`; then enter the code in Listing 7-1 into *src/lib.rs* to define
-some modules and function signatures. Here’s the front of house section:
+modules. Create a new library named `restaurant` by running `cargo new
+restaurant --lib`; then enter the code in Listing 7-1 into *src/lib.rs* to
+define some modules and function signatures. Here’s the front of house section:
 
 <span class="filename">Filename: src/lib.rs</span>
 
