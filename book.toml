@@ -3,13 +3,12 @@ title = "The Rust Programming Language"
 authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Community"]
 
 [output.html]
-additional-css = ["ferris.css", "theme/2018-edition.css"]
-additional-js = ["ferris.js"]
+additional-css = ["ferris.css", "theme/2018-edition.css", "js-extensions/packages/consent-form/dist/index.css", "js-extensions/packages/feedback/dist/index.css"]
+additional-js = ["ferris.js", "js-extensions/packages/consent-form/dist/index.js", "js-extensions/packages/feedback/dist/index.js"]
 git-repository-url = "https://github.com/rust-lang/book"
 
 [preprocessor.quiz]
 log-endpoint = "https://mindover.computer"
 fullscreen = true
-consent = true
 validate = true
 cache-answers = true

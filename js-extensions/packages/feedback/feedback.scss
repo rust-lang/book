@@ -1,0 +1,116 @@
+/* Theme */
+.ayu {
+  --popper-bg: var(--quote-bg);
+  --popper-bg-hover: #1D1F21;
+  --popper-color: var(--fg);
+}
+
+.coal {
+  --popper-bg: var(--quote-bg);
+  --popper-bg-hover: #1D1F21;
+  --popper-color: var(--fg);
+}
+
+.light {
+  --popper-bg: #262625;
+  --popper-bg-hover: #aaaaaa;
+  --popper-color: white;
+}
+
+.navy {
+  --popper-bg: var(--quote-bg);
+  --popper-bg-hover: #1D1F21;
+  --popper-color: var(--fg);
+}
+
+.rust {
+  --popper-bg: var(--quote-bg);
+  --popper-bg-hover: #aaaaaa;
+  --popper-color: var(--fg);
+}
+
+.pop {
+  background-color: var(--popper-bg);
+  color: var(--popper-color);
+  padding: 10px;
+  display: inline-block;
+
+  // prevent tooltip dissapearing when cursor moves between
+  // highlight and tooltip
+  border-bottom: 8px solid transparent;
+  border-radius: 5px;
+  background-clip: padding-box;
+}
+
+.pop-arrow,
+.pop-arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.pop-arrow {
+  visibility: hidden;
+}
+
+.pop-arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.pop[data-popper-placement^='top'] > .pop-arrow {
+  bottom: -4px;
+}
+
+.pop[data-popper-placement^='bottom'] > .pop-arrow {
+  top: -4px;
+}
+
+.pop[data-popper-placement^='left'] > .pop-arrow {
+  right: -4px;
+}
+
+.pop[data-popper-placement^='right'] > .pop-arrow {
+  left: -4px;
+}
+
+.pop-button {
+  -moz-transition: all .1s ease-in;
+  -o-transition: all .1s ease-in;
+  -webkit-transition: all .1s ease-in;
+  transition: all .1s ease-in;
+  padding: 5px 8px;
+
+  // make emojis white
+  color: transparent;
+  text-shadow: 0 0 0 var(--popper-color);
+
+  // prevent text cursor when hovering over emoji
+  cursor: pointer;
+}
+
+.pop-button:hover {
+  background-color: var(--popper-bg-hover);
+}
+
+.pop-feedback-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  align-items: center;
+}
+
+.pop-feedback-text {
+  padding-right: 0.5rem;
+  border-right: 1px solid var(--popper-bg-hover);
+}
+
+.modal-textarea-helper {
+  font-size: 0.75em;
+  color: #ff0033;
+}
+
+.ReactModal__Overlay {
+  z-index: 101; // must be >= #menu-bar z-index
+}

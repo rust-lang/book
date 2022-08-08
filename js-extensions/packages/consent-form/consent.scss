@@ -1,0 +1,15 @@
+.consent-form {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  background: white;
+  z-index: 1000;
+
+  .container {
+    width: 800px;
+    margin: 0 auto;
+  }
+}

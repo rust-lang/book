@@ -26,6 +26,10 @@ jobs:
         run: |
           npm install -g pnpm
           cargo install --git https://github.com/willcrichton/mdbook-quiz --debug
+      - name: Install js-extensions
+        run: |
+          cd js-extensions
+          pnpm init-repo
       - run: mdbook build
       - uses: peaceiris/actions-gh-pages@v3
         with:
