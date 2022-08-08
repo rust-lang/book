@@ -50,9 +50,6 @@ edition = "2021"
 [dependencies]
 ```
 
-<!--- We should move to the 2021 edition. /JT --->
-<!-- Totally right, done! /Carol -->
-
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
 you. Check out the *src/main.rs* file:
 
@@ -108,13 +105,6 @@ fn main() {
 }
 ```
 
-<!--- Style question, should we switch to the more recent style of:
-```
-    println!("You guessed: {guess}");
-```
-/JT --->
-<!-- Good call, I'll switch these throughout as I edit after TR. /Carol -->
-
 Listing 2-1: Code that gets a guess from the user and prints it
 
 This code contains a lot of information, so let’s go over it line by line. To
@@ -148,11 +138,6 @@ are no parameters, and the curly bracket, `{`, starts the body of the function.
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
-<!--- Not sure if we want to go into it just yet, but `println!` formats a string
-and then prints the resulting string to stdout (which is often, but not always
-the screen). /JT --->
-<!-- Yeah, I want to gloss over that for now. Leaving this as-is. /Carol -->
-
 ```
     println!("Guess the number!");
 
@@ -183,12 +168,6 @@ value, the value won't change. We’ll be discussing this concept in detail in
 the “Variables and Mutability” section in Chapter 3. To make a variable
 mutable, we add `mut` before the variable name:
 
-<!--- Do we want to give a quick word about what "mutable" means? Folks who grab
-this book but aren't familiar with some of the technical programming language terms
-might need something like "variable are immutable by default, meaning once we give
-the variable its value, it won't change". /JT --->
-<!-- Sounds good, made that change /Carol -->
-
 ```
 let apples = 5; // immutable
 let mut bananas = 5; // mutable
@@ -211,12 +190,6 @@ function of the `String` type. An *associated function* is a function that’s
 implemented on a type, in this case `String`. This `new` function creates a
 new, empty string. You’ll find a `new` function on many types, because it’s a
 common name for a function that makes a new value of some kind.
-
-<!--- For some readers, we might want to say "If you've used languages with
-static methods, associated function work very similarly" or something along
-those lines. /JT --->
-<!-- I don't think that's helpful enough for all readers to include here, given
-that we're trying to make the book mostly background-agnostic. /Carol -->
 
 In full, the `let mut guess = String::new();` line has created a mutable
 variable that is currently bound to a new, empty instance of a `String`. Whew!
@@ -263,14 +236,6 @@ We’re still working on this line of code. We’re now discussing a third line 
 text, but note that it’s still part of a single logical line of code. The next
 part is this method:
 
-<!--- in the program this is the second line of code -- do you mean the third
-section of this line? -->
-<!-- This is still discussing the code in Listing 2-1, and is going to talk
-about the third line, if you're counting the lines of the page, of this logical
-line of code, where logical lines of code are ended with semicolons. Do you
-have suggestions on how to make that clearer? /Carol -->
-<!--- Ashley, does this all track now? /LC --->
-
 ```
         .expect("Failed to read line");
 ```
@@ -290,13 +255,6 @@ As mentioned earlier, `read_line` puts whatever the user enters into the string
 we pass to it, but it also returns a `Result` value. `Result` is an
 *enumeration*, often called an *enum*, which is a type that can be in one of
 multiple possible states. We call each possible state a *variant*.
-
-<!--- Typo above: possibilities /JT --->
-<!--- Personally, I think the above paragraph might be introducing a little too
-much all at once. You might be able to shorten it to: "`Result` is an *enumeration*,
-often called an *enum*, which is a type that can be in one of multiple possible
-states. We call each possible state a *variant*. /JT --->
-<!-- I like it, made that change /Carol -->
 
 Chapter 6 will cover enums in more detail. The purpose of these `Result` types
 is to encode error-handling information.
@@ -350,8 +308,6 @@ the code so far:
     println!("You guessed: {guess}");
 ```
 
-<!--- Ditto with using the `{guess}` style in this line. /JT --->
-
 This line prints the string that now contains the user’s input. The `{}` set of
 curly brackets is a placeholder: think of `{}` as little crab pincers that hold
 a value in place. You can print more than one value using curly brackets: the
@@ -365,8 +321,6 @@ let y = 10;
 
 println!("x = {x} and y = {y}");
 ```
-<!--- And `println!("x = {x} and y = {y}");` in this example. /JT --->
-<!-- Done! /Carol -->
 
 This code would print `x = 5 and y = 10`.
 
@@ -404,9 +358,6 @@ we’ve been building is a *binary crate*, which is an executable. The `rand`
 crate is a *library crate*, which contains code intended to be used in other
 programs and can't be executed on its own.
 
-<!--- Nit: ", and" followed by incomplete sentence. /JT --->
-<!-- Fixed /Carol -->
-
 Cargo’s coordination of external crates is where Cargo really shines. Before we
 can write code that uses `rand`, we need to modify the *Cargo.toml* file to
 include the `rand` crate as a dependency. Open that file now and add the
@@ -417,24 +368,20 @@ this version number, or the code examples in this tutorial may not work.
 Filename: Cargo.toml
 
 ```
-rand = "0.8.3"
+rand = "0.8.5"
 ```
-<!--- 0.8.5 is the current latest. /JT --->
-<!-- I will update this version to whatever is latest once we're in Word; there
-could be another version between now and then. If it's another 0.8.x version,
-it doesn't really matter in any case. /Carol -->
 
 In the *Cargo.toml* file, everything that follows a header is part of that
 section that continues until another section starts. In `[dependencies]` you
 tell Cargo which external crates your project depends on and which versions of
 those crates you require. In this case, we specify the `rand` crate with the
-semantic version specifier `0.8.3`. Cargo understands Semantic Versioning
+semantic version specifier `0.8.5`. Cargo understands Semantic Versioning
 (sometimes called *SemVer*), which is a standard for writing version numbers.
-The number `0.8.3` is actually shorthand for `^0.8.3`, which means any version
-that is at least `0.8.3` but below `0.9.0`.
+The number `0.8.5` is actually shorthand for `^0.8.5`, which means any version
+that is at least `0.8.5` but below `0.9.0`.
 
 Cargo considers these versions to have public APIs compatible with version
-`0.8.3`, and this specification ensures you’ll get the latest patch release
+`0.8.5`, and this specification ensures you’ll get the latest patch release
 that will still compile with the code in this chapter. Any version `0.9.0` or
 greater is not guaranteed to have the same API as what the following examples
 use.
@@ -445,37 +392,23 @@ Listing 2-2.
 ```
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.3
-  Downloaded libc v0.2.86
-  Downloaded getrandom v0.2.2
+  Downloaded rand v0.8.5
+  Downloaded libc v0.2.127
+  Downloaded getrandom v0.2.7
   Downloaded cfg-if v1.0.0
-  Downloaded ppv-lite86 v0.2.10
-  Downloaded rand_chacha v0.3.0
-  Downloaded rand_core v0.6.2
-   Compiling rand_core v0.6.2
-   Compiling libc v0.2.86
-   Compiling getrandom v0.2.2
-   Compiling cfg-if v1.0.0
-   Compiling ppv-lite86 v0.2.10
-   Compiling rand_chacha v0.3.0
-   Compiling rand v0.8.3
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
-```
-<!--- If we feel like refreshing this, here's what I saw today:
-
+  Downloaded ppv-lite86 v0.2.16
+  Downloaded rand_chacha v0.3.1
+  Downloaded rand_core v0.6.3
+   Compiling libc v0.2.127
+   Compiling getrandom v0.2.7
    Compiling cfg-if v1.0.0
    Compiling ppv-lite86 v0.2.16
-   Compiling libc v0.2.120
-   Compiling getrandom v0.2.5
    Compiling rand_core v0.6.3
    Compiling rand_chacha v0.3.1
    Compiling rand v0.8.5
-   Compiling guessing_game v0.1.0 (/Users/jt/Source/book/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 1.50s
-
-/JT --->
-<!-- I will refresh this when we're in Word /Carol -->
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
+```
 
 Listing 2-2: The output from running `cargo build` after adding the rand crate
 as a dependency
@@ -520,14 +453,11 @@ reuse what it has already downloaded and compiled for those.
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, say that
-next week version 0.8.4 of the `rand` crate comes out, and that version
+next week version 0.8.6 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
 break your code. To handle this, Rust creates the *Cargo.lock* file the first
 time you run `cargo build`, so we now have this in the *guessing_game*
 directory.
-
-<!--- If we bump version numbers, we should bump above and below also. /JT --->
-<!-- Yup, will do in Word! /Carol -->
 
 When you build a project for the first time, Cargo figures out all the
 versions of the dependencies that fit the criteria and then writes them to
@@ -535,18 +465,9 @@ the *Cargo.lock* file. When you build your project in the future, Cargo will
 see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at `0.8.3` until you explicitly upgrade, thanks to the *Cargo.lock*
+remain at `0.8.5` until you explicitly upgrade, thanks to the *Cargo.lock*
 file. Because the *Cargo.lock* file is important for reproducible builds, it's
 often checked into source control with the rest of the code in your project.
-
-<!--- We could mention that because Cargo.lock is important for reproducible
-builds, they're often checked into source control alongside the Cargo.toml and
-the rest of the code of your project. /JT --->
-<!-- Liz, is this sentence ok even though we don't really talk about source
-control or what it is anywhere else in the book? I don't really want to get
-into it, but at this point I think it's a fair assumption that developers know
-what "source control" is. If you disagree, this sentence can come back out.
-/Carol -->
 
 #### Updating a Crate to Get a New Version
 
@@ -554,24 +475,21 @@ When you *do* want to update a crate, Cargo provides the command `update`,
 which will ignore the *Cargo.lock* file and figure out all the latest versions
 that fit your specifications in *Cargo.toml*. Cargo will then write those
 versions to the *Cargo.lock* file. Otherwise, by default, Cargo will only look
-for versions greater than `0.8.3` and less than `0.9.0`. If the `rand` crate
-has released the two new versions `0.8.4` and `0.9.0` you would see the
+for versions greater than `0.8.5` and less than `0.9.0`. If the `rand` crate
+has released the two new versions `0.8.6` and `0.9.0` you would see the
 following if you ran `cargo update`:
 
 ```
 $ cargo update
     Updating crates.io index
-    Updating rand v0.8.3 -> v0.8.4
+    Updating rand v0.8.5 -> v0.8.6
 ```
 
 Cargo ignores the `0.9.0` release. At this point, you would also notice a
 change in your *Cargo.lock* file noting that the version of the `rand` crate
-you are now using is `0.8.4`. To use `rand` version `0.9.0` or any version in
+you are now using is `0.8.6`. To use `rand` version `0.9.0` or any version in
 the `0.9.x` series, you’d have to update the *Cargo.toml* file to look like
 this instead:
-
-<!--- Typo first line: release. /JT --->
-<!-- Fixed /Carol -->
 
 ```
 [dependencies]
@@ -617,22 +535,7 @@ fn main() {
 }
 ```
 
-<!--- Same style suggestion re: `{secret_number}`. /JT --->
-<!--- Thought: for first-time readability, we could use `1..=100` in the above
-and let people know later this is equivalent to `1..101` later. We say a number
-between 1 and 100, so we could show the syntax equivalent of that description.
-/JT --->
-<!-- I'm into both these suggestions! /Carol -->
-
 Listing 2-3: Adding code to generate a random number
-
-<!--- I can't remember how we handled wingdings in markdown before... I don't
-have those files on this machine. I've just used [x] for now, does that work?
-Then we'll replace them when we convert to Word /LC --->
-<!-- I don't think we added the wingdings at all until we moved to Word. For
-code listings that are the same as the last printing version, I'd definitely
-like to keep the wingdings the way they were. Using the brackets with numbers
-as you have here works fine! /Carol -->
 
 First, we add the line `use rand::Rng` [1]. The `Rng` trait defines methods
 that random number generators implement, and this trait must be in scope for us
@@ -751,20 +654,15 @@ code in that arm will execute and print `Too big!` to the screen. The `match`
 expression ends after the first successful match, so it won’t look at the last
 arm in this scenario.
 
-<!--- Since `match` always ends after the first successful match, we might want
-to just say that directly: "The `match` expression ends after the first successful
-match, so it won't look at the last arm in this scenario". /JT --->
-<!-- Sounds good, done! /Carol -->
-
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
 ```
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
-  --> src/main.rs:22:21
+  --> src/main.rs:26:21
    |
-22 |     match guess.cmp(&secret_number) {
+26 |     match guess.cmp(&secret_number) {
    |                     ^^^^^^^^^^^^^^ expected struct `String`, found integer
    |
    = note: expected reference `&String`
@@ -781,9 +679,6 @@ and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
 an `i32`, which is the type of `secret_number` unless you add type information
 elsewhere that would cause Rust to infer a different numerical type. The reason
 for the error is that Rust cannot compare a string and a number type.
-
-<!--- Typo: Unless otherwise specified. /JT --->
-<!-- Fixed /Carol -->
 
 Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it numerically to the secret number. We do so
@@ -842,11 +737,6 @@ for a small positive number. You’ll learn about other number types in Chapter
 comparison with `secret_number` means that Rust will infer that `secret_number`
 should be a `u32` as well. So now the comparison will be between two values of
 the same type!
-
-<!--- More correct to say "The `parse` method converts a string to another type.
-Here, we use it to convert from a string to a number." You can use `parse` to
-convert to non-numeric types also. /JT --->
-<!-- Great catch, fixed! /Carol -->
 
 The `parse` method will only work on characters that can logically be converted
 into numbers and so can easily cause errors. If, for example, the string
