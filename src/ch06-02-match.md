@@ -17,7 +17,7 @@ the value falls into the associated code block to be used during execution.
 
 Speaking of coins, let’s use them as an example using `match`! We can write a
 function that takes an unknown United States coin and, in a similar way as the
-counting machine, determines which coin it is and return its value in cents, as
+counting machine, determines which coin it is and returns its value in cents, as
 shown here in Listing 6-3.
 
 ```rust
