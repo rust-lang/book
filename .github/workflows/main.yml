@@ -45,14 +45,6 @@ jobs:
     - name: Run tests
       run: mdbook test
 
-    - name: Lint for local file paths
-      run: |
-        mdbook build
-        cargo run --bin lfp src
-
-    - name: Validate references
-      run: bash ci/validate.sh
-
     - name: Build book
       run: mdbook build
 
