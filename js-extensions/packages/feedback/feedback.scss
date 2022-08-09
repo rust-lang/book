@@ -107,15 +107,16 @@
   border-right: 1px solid var(--popper-bg-hover);
 }
 
-.modal-textarea-helper {
-  font-size: 0.75em;
-  color: #ff0033;
-}
-
 .ReactModal__Overlay {
   z-index: 101; // must be >= #menu-bar z-index
 
   textarea {
     font-family: 'Open Sans', sans-serif;
+    min-width: 250px;
+  }
+
+  button, textarea {
+    // safari won't zoom in on input if font-size >= 16px
+    font-size: 16px;
   }
 }

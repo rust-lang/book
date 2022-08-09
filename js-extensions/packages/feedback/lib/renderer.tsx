@@ -32,6 +32,9 @@ const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
     // cursor must be over tooltip when deleting, so use tooltip ID
     highlighter.remove(tooltipHovered!);
     setTooltipHovered(null);
+
+    // on mobile, the highlight isn't unhovered, so also reset
+    setHighlightHovered(null);
   };
 
   // If hovering over existing highlight or tooltip, render tooltip
@@ -52,7 +55,12 @@ const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
       >
         <div className="pop-feedback-container">
           {feedback != "" ? <div className="pop-feedback-text">{feedback}</div> : null}
-          <div className="pop-button" onClick={removeFeedback} title="Delete feedback">
+          <div
+            className="pop-button"
+            onClick={removeFeedback}
+            onTouchStart={removeFeedback}
+            title="Delete feedback"
+          >
             &#128465;
           </div>
         </div>
