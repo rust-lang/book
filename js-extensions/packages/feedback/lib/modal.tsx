@@ -25,7 +25,12 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ range, highlighter, close
 
   const handleSubmit = () => {
     // add feedback to serialized highlighter data (dispose hook after use)
-    let dispose = highlighter.hooks.Serialize.RecordInfo.tap(() => feedback.current!.value);
+    let dispose = highlighter.hooks.Serialize.RecordInfo.tap(() =>
+      JSON.stringify({
+        text: feedback.current!.value,
+        page: window.location.pathname,
+      })
+    );
     highlighter.fromRange(range);
     dispose();
 

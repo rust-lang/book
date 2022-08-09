@@ -38,7 +38,8 @@ const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
   let id = highlightHovered || tooltipHovered;
   if (id) {
     let el = highlighter.getDoms(id);
-    let feedback = highlighter.cache.get(id).extra as string;
+    let extra = highlighter.cache.get(id).extra as string;
+    let feedback = JSON.parse(extra || "{}").text;
 
     const reference: VirtualElement = {
       getBoundingClientRect: el[0].getBoundingClientRect.bind(el[0]),
