@@ -90,11 +90,6 @@ install, include:
 - The English language pack component, along with any other language pack of
   your choosing
 
-<!-- Liz: We do want to recommend the English language pack along with whatever
-other languages the reader speaks-- otherwise, sometimes error messages are
-printed strangely
-https://github.com/rust-lang/rust/issues/35785#issuecomment-735051657 /Carol -->
-
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
@@ -142,10 +137,6 @@ Rust Discord at *https://discord.gg/rust-lang*. There, you can chat with other
 Rustaceans (a silly nickname we call ourselves) who can help you out. Other
 great resources include the Users forum at *https://users.rust-lang.org/* and
 Stack Overflow at *https://stackoverflow.com/questions/tagged/rust*.
-
-<!-- `echo %PATH%` will work for cmd. PowerShell would use `echo $env:Path`.
-Bash would use `echo $PATH` /JT -->
-<!-- I've added these instructions above /Carol -->
 
 ### Updating and Uninstalling
 
@@ -499,21 +490,6 @@ $ cargo build
 
 This command creates an executable file in *target/debug/hello_cargo* (or
 *target\debug\hello_cargo.exe* on Windows) rather than in your current
-<!-- why does it put it in a debug folder? Interesting to know, because it seems
-laborious to have to enter the whole path to run the executable /LC -->
-<!-- Because `build` uses debug settings by default, and the compiler tries to
-make it clear that this isn't a release build by storing it in the `debug`
-path. Most people use `cargo run` instead, which is what we show in a few
-paragraphs. We talk about building for release mode in the next section; do you
-think it needs to be mentioned here too? I think it would be somewhat
-distracting and repetitive to get into that right here... /Carol -->
-<!-- JT, what do you think? I don't want to get into the weeds... but will the
-reader be wondering? /LC -->
-<!-- I think we could quickly mention that because the default build is a debug
-build, cargo will put the binary in the debug directory. If we created a release
-build, it would put it in the release directory. Looks like we do mention this
-later /JT -->
-<!-- I've added a sentence here along the lines of what JT suggested /Carol -->
 directory. Because the default build is a debug build, Cargo puts the binary in
 a directory named *debug*. You can run the executable with this command:
 
@@ -609,10 +585,6 @@ With simple projects, Cargo doesn’t provide a lot of value over just using
 Once programs grow to multiple files or need a dependency, it’s much easier to
 let Cargo coordinate the build.
 
-<!-- I think once you go add a second file or add a single dependency, you
-already want to move to cargo imho. /JT -->
-<!-- Updated above! /Carol -->
-
 Even though the `hello_cargo` project is simple, it now uses much of the real
 tooling you’ll use in the rest of your Rust career. In fact, to work on any
 existing projects, you can use the following commands to check out the code
@@ -641,9 +613,3 @@ This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
 If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
-
-<!-- Question for Carol: Do we want to mention IDE support? Rust Analyzer is
-pretty good these days. /JT -->
-<!-- I don't want to make the reader feel like they *have* to stop at this
-point and set up their IDE (or use an unfamiliar IDE); I did add a sentence to
-the note about IDEs pointing to Appendix D for more info on Rust Analyzer. -->
