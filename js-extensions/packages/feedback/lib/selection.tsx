@@ -1,12 +1,13 @@
 import { VirtualElement } from "@popperjs/core";
 import React, { useCallback, useEffect, useState } from "react";
 import Highlighter from "web-highlighter";
+import HighlightSource from "web-highlighter/dist/model/source";
 
 import FeedbackModal from "./modal";
 import FeedbackTooltip from "./tooltip";
 import { HIGHLIGHT_STORAGE_KEY } from "./utils";
 
-type SelectionRendererProps = { highlighter: Highlighter; stored?: any[] };
+type SelectionRendererProps = { highlighter: Highlighter; stored?: HighlightSource[] };
 let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored }) => {
   // current highlighted range of text
   const [currRange, setCurrRange] = useState<Range | null>(null);
