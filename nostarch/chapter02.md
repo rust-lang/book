@@ -442,10 +442,12 @@ the code so far:
 
 This line prints the string that now contains the user’s input. The `{}` set of
 curly brackets is a placeholder: think of `{}` as little crab pincers that hold
-a value in place. You can print more than one value using curly brackets: the
-first set of curly brackets holds the first value listed after the format
-string, the second set holds the second value, and so on. Printing multiple
-values in one call to `println!` would look like this:
+a value in place. When printing the value of a variable, the variable name can
+go inside the curly brackets. When printing the result of evaluating an
+expression, place empty curly brackets in the format string, then follow the
+format string with a comma-separated list of expressions to print in each empty
+curly bracket placeholder in the same order. Printing a variable and the result
+of an expression in one call to `println!` would look like this:
 
 ```
 let x = 5;
@@ -460,7 +462,7 @@ let y = 10;
 ```
 
 ```
-println!("x = {x} and y = {y}");
+println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
 
