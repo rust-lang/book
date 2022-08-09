@@ -1,3 +1,10 @@
+$mobile-cutoff: 800px;
+@mixin mobile {
+  @media (max-width: ($mobile-cutoff - 1)) {
+    @content;
+  }
+}
+
 .consent-form {
   position: fixed;
   top: 0;
@@ -14,8 +21,21 @@
     margin: 0 auto;
     padding-bottom: 2em;
 
+    @include mobile {
+      width: auto;
+      padding: 1em;
+
+      h1 {
+        margin-top: 0;
+      }
+    }    
+
     h2 {
       margin: 0;
+
+      @include mobile {
+        margin-top: 2em;
+      }
     }
 
     section {
@@ -25,6 +45,12 @@
     .row {
       display: flex;
       gap: 1em;
+
+      @include mobile {
+        flex-direction: column;
+        align-items:center;
+        gap: 0.5em;
+      }
     }
 
     img {
