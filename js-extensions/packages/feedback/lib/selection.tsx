@@ -68,8 +68,11 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
         getBoundingClientRect: currRange.getBoundingClientRect.bind(currRange),
       };
 
+      let isMobile = window.innerWidth < 800;
+      let placement: "top" | "bottom" = isMobile ? "bottom" : "top";
+
       return (
-        <FeedbackTooltip reference={reference}>
+        <FeedbackTooltip reference={reference} placement={placement}>
           <div
             className="pop-button"
             onClick={() => setModalOpen(true)}

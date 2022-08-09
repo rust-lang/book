@@ -1,20 +1,22 @@
-import { VirtualElement } from "@popperjs/core";
+import { Placement, VirtualElement } from "@popperjs/core";
 import React, { MouseEventHandler, PropsWithChildren, useEffect, useState } from "react";
 import { usePopper } from "react-popper";
 
 type FeedbackTooltipProps = PropsWithChildren<{
   reference: VirtualElement;
+  placement?: Placement;
   onHoverChange?: (isHovered: boolean) => void;
 }>;
 const FeedbackTooltip: React.FC<FeedbackTooltipProps> = ({
   reference,
+  placement,
   onHoverChange,
   children,
 }) => {
   const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
   const [arrowElement, setArrowElement] = useState<HTMLElement | null>(null);
   const { styles, attributes } = usePopper(reference, popperElement, {
-    placement: "top",
+    placement: placement || "top",
     modifiers: [{ name: "arrow", options: { element: arrowElement } }],
   });
 
