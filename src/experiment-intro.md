@@ -32,3 +32,5 @@ Note: your highlights may disappear if we change the content that you've highlig
 ## 3. ...and more!
 
 The book's content may change as you go through the experiment. We will update this page as we add new features.
+
+_Interested in participating in other experiments about making Rust easier to learn? Leave us your email here:_ <https://forms.gle/U3jEUkb2fGXykp1DA>

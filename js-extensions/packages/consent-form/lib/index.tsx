@@ -8,8 +8,8 @@ const CONSENT_KEY = "__wcrichto_consent";
 let ConsentForm = () => {
   let ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    document.documentElement.style.overflow = 'hidden';
-  })
+    document.documentElement.style.overflow = "hidden";
+  });
   return (
     <div className="consent-form" ref={ref}>
       <div className="container">
@@ -75,14 +75,18 @@ let ConsentForm = () => {
             onClick={() => {
               localStorage.setItem(CONSENT_KEY, "YES");
               ref.current!.style.display = "none";
-              document.documentElement.style.overflow = 'auto';
+              document.documentElement.style.overflow = "auto";
             }}
           >
             I understand and want to participate
           </button>
-          <button onClick={() => {
-            alert("If you do not want to particiapte, then please close this tab. (Your browser won't let us do it, sorry.)")
-          }}>
+          <button
+            onClick={() => {
+              alert(
+                "If you do not want to particiapte, then please close this tab. (Your browser won't let us do it, sorry.)"
+              );
+            }}
+          >
             I do not want to participate
           </button>
         </div>
@@ -90,7 +94,8 @@ let ConsentForm = () => {
           <i>
             Interested in participating in other experiments about making Rust easier to learn? Feel
             free to join our mailing list here:
-          </i>
+          </i>{" "}
+          <a href="https://forms.gle/U3jEUkb2fGXykp1DA">https://forms.gle/U3jEUkb2fGXykp1DA</a>
         </section>
       </div>
     </div>
