@@ -1,9 +1,8 @@
 module.exports = {
   server: {
-    command: "cd .. && mdbook serve",
-    host: process.env.CI ? "[::1]" : "localhost",
+    command: "cd .. && mdbook serve -n 0.0.0.0",
+    host: "0.0.0.0",
     port: 3000,
-    path: "/",
     launchTimeout: 20000,
   },
 };
