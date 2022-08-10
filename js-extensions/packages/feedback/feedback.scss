@@ -35,12 +35,17 @@
   padding: 5px 8px;
   display: inline-block;
   border-radius: 5px;
+  background-clip: padding-box;
+}
 
-  // // TODO: will tried removing this and it didn't seem to change any behavior?
-  // // prevent tooltip dissapearing when cursor moves between
-  // // highlight and tooltip
-  // border-bottom: 8px solid transparent;
-  // background-clip: padding-box;
+// prevent tooltip dissapearing when cursor moves between
+// highlight and tooltip by adding transparent border between
+// the two
+.pop-top {
+  border-bottom: 8px solid transparent;
+}
+.pop-bottom {
+  border-top: 8px solid transparent;
 }
 
 .pop-arrow,

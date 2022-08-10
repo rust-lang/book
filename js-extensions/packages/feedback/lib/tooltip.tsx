@@ -40,7 +40,7 @@ const FeedbackTooltip: React.FC<FeedbackTooltipProps> = ({
   return (
     <div
       ref={setPopperElement}
-      className="pop"
+      className={`pop pop-${placement}`}
       onMouseDown={handleTooltipClick}
       style={styles.popper}
       {...attributes.popper}
