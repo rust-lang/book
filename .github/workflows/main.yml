@@ -47,10 +47,7 @@ jobs:
     - name: Run mdbook tests
       run: mdbook test
 
-    - name: Build book
-      run: mdbook build
-
-    - name: Run JS tests
+    - name: Build book + Run JS tests
       run: |
         cd js-extensions
         pnpm test
