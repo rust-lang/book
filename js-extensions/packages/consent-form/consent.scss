@@ -57,6 +57,10 @@ $mobile-cutoff: 800px;
       }
     }
 
+    li {
+      margin-bottom: 1em;
+    }
+
     img {
       object-fit: contain;
     }
@@ -68,7 +72,7 @@ $mobile-cutoff: 800px;
       cursor: pointer;
       background-color: var(--searchbar-bg);
       color: var(--searchbar-fg);
-      border: 0;
+      border: 1px solid var(--searchbar-border-color);
       border-radius: 4px;
     }
   }
