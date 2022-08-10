@@ -44,11 +44,16 @@ jobs:
         cd js-extensions
         pnpm init-repo
 
-    - name: Run tests
+    - name: Run mdbook tests
       run: mdbook test
 
     - name: Build book
       run: mdbook build
+
+    - name: Run JS tests
+      run: |
+        cd js-extensions
+        pnpm test
 
     - name: Deploy to Github Pages
       uses: peaceiris/actions-gh-pages@v3
