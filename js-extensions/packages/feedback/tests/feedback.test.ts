@@ -1,7 +1,16 @@
 import "expect-puppeteer";
 import { BoundingBox } from "puppeteer";
 
-import { EXAMPLE_FEEDBACK, EXAMPLE_TEXT, TEST_SELECTORS } from "./utils";
+const EXAMPLE_TEXT = "Try highlighting this text!";
+const EXAMPLE_FEEDBACK = "my feedback...";
+
+const TEST_SELECTORS = {
+  tooltip: ".pop",
+  modal: ".ReactModal__Overlay",
+  modalTextarea: ".ReactModal__Overlay textarea",
+  modalButton: ".ReactModal__Overlay button",
+  removeButton: ".pop-button",
+};
 
 describe("feedback", () => {
   // get all web-highlighter elements
