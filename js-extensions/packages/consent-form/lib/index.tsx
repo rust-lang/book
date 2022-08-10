@@ -34,13 +34,14 @@ let ConsentForm = () => {
               <p>This website has the same structure as the Rust Book, but modified in two ways:</p>
               <ol>
                 <li>
-                  <strong>Interactive quizzes are added in each section.</strong> These quizzes help you test
-                  your understanding of Rust. The quizzes also help us determine which sections need
-                  improvement.
+                  <strong>Interactive quizzes are added in each section.</strong> These quizzes help
+                  you test your understanding of Rust. The quizzes also help us determine which
+                  sections need improvement.
                 </li>
                 <li>
-                  <strong>Some explanations will be changed.</strong> For instance, we will experiment with
-                  modifying some of the text, including replacing it with visualizations.
+                  <strong>Some explanations will be changed.</strong> For instance, we will
+                  experiment with modifying some of the text, including replacing it with
+                  visualizations.
                 </li>
               </ol>
             </div>
@@ -92,7 +93,8 @@ let ConsentForm = () => {
         </div>
         <section>
           <i>
-            Interested in participating in other experiments about making Rust easier to learn? Please sign up here:
+            Interested in participating in other experiments about making Rust easier to learn?
+            Please sign up here:
           </i>{" "}
           <a href="https://forms.gle/U3jEUkb2fGXykp1DA">https://forms.gle/U3jEUkb2fGXykp1DA</a>
         </section>
