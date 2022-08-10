@@ -43,13 +43,10 @@ jobs:
     - name: Install js-extensions
       run: |
         cd js-extensions
-        pnpm init-repo
+        pnpm commit-check
 
-    - name: Run tests
+    - name: Run mdbook tests
       run: mdbook test
-
-    - name: Build book
-      run: mdbook build
 
     - name: Deploy to Github Pages
       uses: peaceiris/actions-gh-pages@v3
