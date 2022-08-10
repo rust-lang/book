@@ -92,8 +92,7 @@ let ConsentForm = () => {
         </div>
         <section>
           <i>
-            Interested in participating in other experiments about making Rust easier to learn? Feel
-            free to join our mailing list here:
+            Interested in participating in other experiments about making Rust easier to learn? Please sign up here:
           </i>{" "}
           <a href="https://forms.gle/U3jEUkb2fGXykp1DA">https://forms.gle/U3jEUkb2fGXykp1DA</a>
         </section>

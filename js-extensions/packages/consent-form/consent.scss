@@ -12,7 +12,7 @@ $mobile-cutoff: 800px;
   width: 100vw;
   height: 100vh;
   box-sizing: border-box;
-  background: white;
+  background: var(--bg);
   z-index: 1000;
   overflow-y: auto;
 
@@ -20,6 +20,10 @@ $mobile-cutoff: 800px;
     width: 800px;
     margin: 0 auto;
     padding-bottom: 2em;
+
+    a {
+      color: var(--links);
+    }
 
     @include mobile {
       width: auto;
@@ -62,6 +66,10 @@ $mobile-cutoff: 800px;
       padding: 5px 8px;
       margin-top: 1em;
       cursor: pointer;
+      background-color: var(--searchbar-bg);
+      color: var(--searchbar-fg);
+      border: 0;
+      border-radius: 4px;
     }
   }
 }
