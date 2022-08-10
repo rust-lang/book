@@ -15,6 +15,13 @@
       // Output file options
       "outDir": "dist",
       "declaration": true,
-      "sourceMap": true
+      "sourceMap": true,
+
+      // Add puppeteer types for tests
+      "types": [
+        "puppeteer",
+        "jest-environment-puppeteer",
+        "expect-puppeteer"
+      ]
   },
 }
