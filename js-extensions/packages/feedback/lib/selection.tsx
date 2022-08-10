@@ -76,6 +76,7 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
           <div
             className="pop-button"
             onClick={() => setModalOpen(true)}
+            onTouchStart={() => setModalOpen(true)}
             title="Provide feedback on this content"
           >
             ✏️

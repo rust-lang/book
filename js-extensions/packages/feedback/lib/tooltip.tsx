@@ -22,8 +22,13 @@ const FeedbackTooltip: React.FC<FeedbackTooltipProps> = ({
 
   useEffect(() => {
     if (onHoverChange && popperElement) {
+      // mouse/laptop touchpad listeners
       popperElement.addEventListener("mouseenter", () => onHoverChange(true));
       popperElement.addEventListener("mouseleave", () => onHoverChange(false));
+
+      // mobile listeners
+      popperElement.addEventListener("touchstart", () => onHoverChange(true));
+      popperElement.addEventListener("touchend", () => onHoverChange(false));
     }
   }, [popperElement]);
 
