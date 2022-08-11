@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import Modal from "react-modal";
+import type {} from "telemetry";
 import Highlighter from "web-highlighter";
 
 Modal.setAppElement("body");
@@ -25,12 +26,13 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ range, highlighter, close
 
   const handleSubmit = () => {
     // add feedback to serialized highlighter data (dispose hook after use)
-    let dispose = highlighter.hooks.Serialize.RecordInfo.tap(() =>
-      JSON.stringify({
-        text: feedback.current!.value,
-        page: window.location.pathname,
-      })
-    );
+    let data = {
+      text: feedback.current!.value,
+      page: window.location.pathname,
+    };
+    window.telemetry.log("feedback", data);
+
+    let dispose = highlighter.hooks.Serialize.RecordInfo.tap(() => JSON.stringify(data));
     highlighter.fromRange(range);
     dispose();
 

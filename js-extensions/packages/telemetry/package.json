@@ -1,0 +1,15 @@
+{
+  "name": "telemetry",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "axios": "^0.27.2",
+    "uuid": "^8.3.2"
+  },
+  "dependencies": {
+    "@types/uuid": "^8.3.4"
+  }
+}
