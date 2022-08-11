@@ -96,8 +96,8 @@ change, so you don’t have to keep track of it yourself. Your code is thus
 easier to reason through.
 
 But mutability can be very useful, and can make code more convenient to write.
-Variables are immutable only by default; as you did in Chapter 2, you can make
-them mutable by adding `mut` in front of the variable name. Adding `mut` also
+Although variables are immutable by default, you can make them mutable by adding
+`mut` in front of the variable name as you did in Chapter 2. Adding `mut` also
 conveys intent to future readers of the code by indicating that other parts of
 the code will be changing this variable’s value.
 
@@ -128,14 +128,6 @@ The value of x is: 6
 We’re allowed to change the value bound to `x` from `5` to `6` when `mut`
 is used. Ultimately, deciding whether to use mutability or not is up to you and
 depends on what you think is clearest in that particular situation.
-
-<!--- Just to voice some thoughts here: there's a kind of bad pattern I see sometimes
-with the Rust dev mindset around performance. In my experience it happens maybe less
-often than you'd think that cloning shows up in the profile as a performance hit. I
-wonder if we should maybe tone down or remove the discussion of performance above
-because it's far stronger for the developer to pick a clear representation for their
-program and then improve performance after they've found that model. /JT --->
-<!-- Ok, I've removed the discussion of performance here. Good call. /Carol -->
 
 ### Constants
 
@@ -195,21 +187,6 @@ variable name to itself until either it itself is shadowed or the scope ends.
 We can shadow a variable by using the same variable’s name and repeating the
 use of the `let` keyword as follows:
 
-<!--- A potential reword of the above for clarity:
-
-As you saw in the guessing game tutorial in Chapter 2, you can declare a new
-variable with the same name as a previous variable. Rustaceans say that the
-first variable is *shadowed* by the second, which means that the second
-variable is what the compiler will see when you use the name of the variable.
-In effect, the second variable overshadows the first, taking any uses of the
-variable name to itself until either it itself is shadowed or the scope ends.
-We can shadow a variable by using the same variable’s name and repeating the
-use of the `let` keyword as follows:
-
-/JT --->
-<!-- Sounds good to me, I've made the change to JT's version. What do you
-think, Liz? /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -226,17 +203,6 @@ fn main() {
     println!("The value of x is: {x}");
 }
 ```
-<!--- We haven't really introduced block scoping yet. I know we're starting
-with variables, but I wonder if we should introduce scopes before shadowing,
-or explain that each block has its own set of variables.
-/JT --->
-<!-- Chapter 4 goes into scopes in more detail. I feel like block scoping is a
-pretty common programming concept, and the behavior of scopes in Rust that
-we're demonstrating here is the same behavior as scopes have in most other
-common programming languages. I don't recall getting comments from readers
-being confused about scopes at this point. I added a small phrase in the next
-paragraph that the curly brackets are creating a new scope... do you think
-that's enough, Liz? /Carol -->
 
 This program first binds `x` to a value of `5`. Then it creates a new variable
 `x` by repeating `let x =`, taking the original value and adding `1` so the
@@ -245,10 +211,6 @@ brackets, the third `let` statement also shadows `x` and creates a new
 variable, multiplying the previous value by `2` to give `x` a value of `12`.
 When that scope is over, the inner shadowing ends and `x` returns to being `6`.
 When we run this program, it will output the following:
-
-<!--- I lean towards reiterating that each `let x` is creating a new variable.
-/JT -->
-<!-- I've added a few mentions to that effect in the previous paragraph, what do you think, Liz? /Carol -->
 
 ```
 $ cargo run
@@ -265,36 +227,11 @@ using the `let` keyword. By using `let`, we can perform a few transformations
 on a value but have the variable be immutable after those transformations have
 been completed.
 
-<!--- so, to be clear, we're not overwriting the variable, so when the
-shadowing variable goes out of scope the earlier variables become visible to
-the compiler? --->
-<!-- Well, we *are* overwriting it *in the inner scope* -- there's no way to
-access the original value from the outer scope within the inner scope after
-the shadowing. But yes, shadowing only applies to the scope it happens in,
-which is what this example illustrates. Is there something that could be
-made clearer? /Carol -->
-<!-- JT, what do you think, is this clear enough as is or is there some way to clarify in the text? /LC -->
-<!--- I made a couple notes above trying to see if we could tease out a good
-explanation. Shadowing is effectively creating new variables and then these
-variables get a kind of "higher priority" when you look up the same variable
-name. Shadowing priority is kind of a "most recent wins", and it stays until
-that variable is shadowed by a following one or that variable goes out of scope.
-/JT -->
-
 The other difference between `mut` and shadowing is that because we’re
 effectively creating a new variable when we use the `let` keyword again, we can
 change the type of the value but reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
 inputting space characters, and then we want to store that input as a number:
-
-<!--- Question: the further I read, the more I wonder if we should put the shadowing
-stuff later. Is it valuable here as a kind of "building the right mental model" or
-are we using up too much of our complexity budget for building that mental model
-relatively early in the journey? Once we're introducing shadowing into new types
-we're getting relatively deep into Rust-specific coding patterns  /JT -->
-<!-- I think it's important to address this here because shadowing is extremely
-common in idiomatic Rust code, but can be unfamiliar. I'm not sure where it
-would be appropriate to address if not here. /Carol -->
 
 ```
     let spaces = "   ";
@@ -349,10 +286,6 @@ let guess: u32 = "42".parse().expect("Not a number!");
 If we don’t add the `: u32` type annotation above, Rust will display the
 following error, which means the compiler needs more information from us to
 know which type we want to use:
-
-<!--- To help visual parsing, you might want to say "If we don't add the `: u32` type
-annotation above... /JT --->
-<!-- Done /Carol -->
 
 ```
 $ cargo build
@@ -632,27 +565,10 @@ This program creates the tuple `x` and then accesses each element of the tuple
 using their respective indices. As with most programming languages, the first
 index in a tuple is 0.
 
-<!--- Indexing into a tuple using a constant, just like accessing a field of a struct,
-I think is maybe a more natural way to think of this than thinking of `x.0`, `x.1`, etc
-as separate variables. In the struct case, we don't think of each field as a separate
-variable, but instead that there's a path to get to the contained values that can be
-used and checked at compile time. /JT --->
-<!-- I think JT was actually confused with what this paragraph was trying to
-say, it was explaining that this particular example created new variables and
-bound them to the values of the tuple elements, not that the tuple elements
-*were* separate variables, so I've reworded this paragraph. Please check that
-this makes sense, Liz! /Carol -->
-
 The tuple without any values has a special name, *unit*. This value and its
 corresponding type are both written `()` and represent an empty value or an
 empty return type. Expressions implicitly return the unit value if they don’t
 return any other value.
-
-<!--- It's trick to see the difference between `()` and `()`. Maybe we can say: "The
-tuple without any values has a special name, *unit*. This value, and its corresponding
-type -- also written `()` -- represent an empty value or an empty return type." /JT --->
-<!-- I've tried to clear this up, but didn't take JT's suggestion exactly,
-there were too many subphrases in my opinion /Carol -->
 
 #### The Array Type
 
@@ -793,13 +709,6 @@ kind of error by immediately exiting instead of allowing the memory access and
 continuing. Chapter 9 discusses more of Rust’s error handling and how you can
 write readable, safe code that neither panics nor allows invalid memory access.
 
-<!--- I get the idea, though I'm feeling a little uneasy with leaving the reader
-thinking "panic > invalid access" as the end of the story. Maybe we can tag something
-on to the end: "Chapter 9 discusses more of Rust's error handling, and how you can
-write readable, safe code that doesn't panic and doesn't allow invalid memory access.
-/JT --->
-<!-- I've incorporated JT's suggestion with a bit of rewording above /Carol -->
-
 ## Functions
 
 Functions are prevalent in Rust code. You’ve already seen one of the most
@@ -835,14 +744,6 @@ called from inside the `main` function. Note that we defined `another_function`
 *after* the `main` function in the source code; we could have defined it before
 as well. Rust doesn’t care where you define your functions, only that they’re
 defined somewhere in a scope that can be seen by the caller.
-
-<!--- nit: Rust does want the functions in a place the caller can see. If they're
-not in scope, Rust won't let the program build. Maybe we can say:
-"only that they're defined somewhere the caller can see them".
-or alt: "only that they're defined somewhere in a scope that can be seen by the
-caller"
-/JT --->
-<!-- Done! /Carol -->
 
 Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You
@@ -885,9 +786,6 @@ fn another_function(x: i32) {
 }
 ```
 
-<!--- nit: might want to use `{x}` /JT --->
-<!-- Done! /Carol -->
-
 Try running this program; you should get the following output:
 
 ```
@@ -908,9 +806,6 @@ a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code to figure out what type you mean. The compiler is also able to give
 more helpful error messages if it knows what types the function expects.
-
-<!--- Also helps give much better error messages /JT --->
-<!-- Added a note! /Carol -->
 
 When defining multiple parameters, separate the parameter declarations with
 commas, like this:
@@ -964,12 +859,6 @@ We’ve actually already used statements and expressions. Creating a variable an
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 `let y = 6;` is a statement.
 
-<!--- To help clarify how they're related, we could say that "`let y = 6;`" is a
-statement, and the `6` being assigned to `y` is an expression. edit: I see we
-say this later, just thought it might be a little nicer to give an examples of
-each just following their definition. /JT --->
-<!-- I think I'm going to leave this as-is /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -1007,14 +896,13 @@ error: expected expression, found statement (`let`)
   |
   = note: variable declaration using `let` is a statement
 
-error[E0658]: `let` expressions in this position are experimental
+error[E0658]: `let` expressions in this position are unstable
  --> src/main.rs:2:14
   |
 2 |     let x = (let y = 6);
   |              ^^^^^^^^^
   |
   = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for more information
-  = help: you can write `matches!(<expr>, <pattern>)` instead of `let <pattern> = <expr>`
 
 warning: unnecessary parentheses around assigned value
  --> src/main.rs:2:13
@@ -1029,10 +917,6 @@ help: remove these parentheses
 2 +     let x = let y = 6;
   |
 ```
-
-<!--- The errors in more recent Rust look slightly different here, if we want
-to update before publication. /JT --->
-<!-- Updated here and I will also check when we're in Word /Carol -->
 
 The `let y = 6` statement does not return a value, so there isn’t anything for
 `x` to bind to. This is different from what happens in other languages, such as
@@ -1128,10 +1012,6 @@ Second, the `five` function has no parameters and defines the type of the
 return value, but the body of the function is a lonely `5` with no semicolon
 because it’s an expression whose value we want to return.
 
-<!--- If you want, you could point out that the `println!` line that main ends
-on is a statement, hence why main doesn't have a return value. /JT --->
-<!-- I don't think I want to :) /Carol -->
-
 Let’s look at another example:
 
 Filename: src/main.rs
@@ -1179,7 +1059,7 @@ error[E0308]: mismatched types
   |    |
   |    implicitly returns `()` as its body has no tail or `return` expression
 8 |     x + 1;
-  |          - help: consider removing this semicolon
+  |          - help: remove this semicolon
 ```
 
 The main error message, “mismatched types,” reveals the core issue with this
@@ -1420,18 +1300,7 @@ fn main() {
 }
 ```
 
-<!--- Style nit: `{number}`. /JT --->
-<!-- Fixed! /Carol -->
-
 Listing 3-2: Assigning the result of an `if` expression to a variable
-
-<!--- I was wondering when listings got numbered and when they didn't. Many of
-the above don't get a number a title, though maybe it'd help readability? /JT --->
-<!-- Liz: Chapter 3 doesn't have many listing numbers because on the first
-round of printing, we hadn't really figured out what we were doing with listing
-numbers yet. I'm happy to add more listing numbers in Chapter 3, but it'll take
-me some time to go through and add appropriate captions, check cross
-references, etc. Let me know if you'd like me to spend that time. /Carol -->
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -1548,10 +1417,6 @@ We also used `continue` in the guessing game, which in a loop tells the program
 to skip over any remaining code in this iteration of the loop and go to the
 next iteration.
 
-<!--- Before you show loop labels below, you might want to give a code example
-of using `break` to break a loop. /JT --->
-<!-- I've rearranged the sections to take this suggestion here /Carol -->
-
 #### Returning Values from Loops
 
 One of the uses of a `loop` is to retry an operation you know might fail, such
@@ -1586,8 +1451,6 @@ semicolon to end the statement that assigns the value to `result`. Finally, we
 print the value in `result`, which in this case is 20.
 
 #### Loop Labels to Disambiguate Between Multiple Loops
-
-<!-- Liz: New heading for this section, what do you think? /Carol -->
 
 If you have loops within loops, `break` and `continue` apply to the innermost
 loop at that point. You can optionally specify a *loop label* on a loop that we
