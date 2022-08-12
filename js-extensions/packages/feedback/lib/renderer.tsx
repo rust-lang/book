@@ -52,6 +52,7 @@ const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
       <FeedbackTooltip
         reference={reference}
         onHoverChange={isHovered => setTooltipHovered(isHovered ? highlightHovered : null)}
+        placement="top"
       >
         <div className="pop-feedback-container">
           {feedback != "" ? <div className="pop-feedback-text">{feedback}</div> : null}
