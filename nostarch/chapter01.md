@@ -80,14 +80,10 @@ On Windows, go to *https://www.rust-lang.org/tools/install* and follow the
 instructions for installing Rust. At some point in the installation, you’ll
 receive a message explaining that you’ll also need the MSVC build tools for
 Visual Studio 2013 or later.
-<!-- is this still true: you need 2013 or later? /LC -->
-<!-- Yup, I have verified /Carol -->
-To acquire the build tools, you’ll need to
-install Visual Studio 2022
-<!-- and is VS 2019 still the right/best version? /LC -->
-<!-- Just checked, there's now VS 2022! /Carol -->
-from *https://visualstudio.microsoft.com/downloads/*. When asked which
-workloads to install, include:
+
+To acquire the build tools, you’ll need to install Visual Studio 2022 from
+*https://visualstudio.microsoft.com/downloads/*. When asked which workloads to
+install, include:
 
 - “Desktop Development with C++”
 - The Windows 10 or 11 SDK
@@ -119,23 +115,43 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
 If you see this information, you have installed Rust successfully! If you don’t
-see this information and you’re on Windows, check that Rust is in your `%PATH%`
-system variable. If that’s all correct and Rust still isn’t working, there are
-a number of places you can get help. The easiest is the #beginners channel on
-the official Rust Discord at *https://discord.gg/rust-lang*. There, you can
-chat with other Rustaceans (a silly nickname we call ourselves) who can help
-you out. Other great resources include the Users forum at
-*https://users.rust-lang.org/* and Stack Overflow at
-*https://stackoverflow.com/questions/tagged/rust*.
+see this information, check that Rust is in your `%PATH%` system variable as
+follows.
+
+In Windows CMD, use:
+
+```
+> echo %PATH%
+```
+
+In PowerShell, use:
+
+```
+> echo $env:Path
+```
+
+In Linux and macOS, use:
+
+```
+echo $PATH
+```
+
+If that’s all correct and Rust still isn’t working, there are a number of
+places you can get help. The easiest is the #beginners channel on the official
+Rust Discord at *https://discord.gg/rust-lang*. There, you can chat with other
+Rustaceans (a silly nickname we call ourselves) who can help you out. Other
+great resources include the Users forum at *https://users.rust-lang.org/* and
+Stack Overflow at *https://stackoverflow.com/questions/tagged/rust*.
+
+<!-- `echo %PATH%` will work for cmd. PowerShell would use `echo $env:Path`.
+Bash would use `echo $PATH` /JT -->
+<!-- I've added these instructions above /Carol -->
 
 ### Updating and Uninstalling
 
-Once Rust is installed via `rustup`, when a new version of Rust is released, updating to the latest version is
-<!-- do you mean that the reader should immediately update to the latest
-version, or just that when, at some point, they want to update, it's easy to
-do? /LC -->
-<!-- The latter; I've clarified /Carol -->
-easy. From your shell, run the following update script:
+Once Rust is installed via `rustup`, when a new version of Rust is released,
+updating to the latest version is easy. From your shell, run the following
+update script:
 
 ```
 $ rustup update
@@ -168,9 +184,9 @@ the text `Hello, world!` to the screen, so we’ll do the same here!
 > no specific demands about your editing or tooling or where your code lives, so
 > if you prefer to use an integrated development environment (IDE) instead of
 > the command line, feel free to use your favorite IDE. Many IDEs now have some
-> degree of Rust support; check the IDE’s documentation for details. Recently,
-> the Rust team has been focusing on enabling great IDE support, and progress
-> has been made rapidly on that front!
+> degree of Rust support; check the IDE’s documentation for details. The Rust
+> team has been focusing on enabling great IDE support via `rust-analyzer`. See
+> Appendix D for more details!
 
 ### Creating a Project Directory
 
@@ -222,10 +238,6 @@ Listing 1-1: A program that prints `Hello, world!`
 Save the file and go back to your terminal window in the
 *~/projects/hello_world* directory. On Linux or macOS, enter the following
 commands to compile and run the file:
-<!-- just to be clear, are we in the projects folder at this point? or a subfolder? /LC -->
-<!-- In the hello_world subfolder, as that's where we left the terminal in the
-"Creating a project directory" section. I've added the path here for clarity
-/Carol -->
 
 ```
 $ rustc main.rs
@@ -274,7 +286,7 @@ line as the function declaration, adding one space in between.
 > included this tool with the standard Rust distribution, like `rustc`, so it
 > should already be installed on your computer!
 
-The body of the the `main` function holds the following code:
+The body of the `main` function holds the following code:
 
 ```
     println!("Hello, world!");
@@ -495,7 +507,15 @@ path. Most people use `cargo run` instead, which is what we show in a few
 paragraphs. We talk about building for release mode in the next section; do you
 think it needs to be mentioned here too? I think it would be somewhat
 distracting and repetitive to get into that right here... /Carol -->
-directory. You can run the executable with this command:
+<!-- JT, what do you think? I don't want to get into the weeds... but will the
+reader be wondering? /LC -->
+<!-- I think we could quickly mention that because the default build is a debug
+build, cargo will put the binary in the debug directory. If we created a release
+build, it would put it in the release directory. Looks like we do mention this
+later /JT -->
+<!-- I've added a sentence here along the lines of what JT suggested /Carol -->
+directory. Because the default build is a debug build, Cargo puts the binary in
+a directory named *debug*. You can run the executable with this command:
 
 ```
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
@@ -523,11 +543,6 @@ Hello, world!
 Using `cargo run` is more convenient than having to remember to run `cargo
 build` and then use the whole path to the binary, so most developers use `cargo
 run`.
-<!-- Liz: I added this note here to address the above comment about
-laboriousness. The idea was to show `cargo build`, talk about where the result
-of that ends up, then show that `cargo run` does those two steps in one command.
-Do you think that works or does this section need to be reordered somehow?
-/Carol -->
 
 Notice that this time we didn’t see output indicating that Cargo was compiling
 `hello_cargo`. Cargo figured out that the files hadn’t changed, so it didn’t
@@ -591,8 +606,12 @@ the executable in *target/release*.
 
 With simple projects, Cargo doesn’t provide a lot of value over just using
 `rustc`, but it will prove its worth as your programs become more intricate.
-With complex projects composed of multiple crates, it’s much easier to let
-Cargo coordinate the build.
+Once programs grow to multiple files or need a dependency, it’s much easier to
+let Cargo coordinate the build.
+
+<!-- I think once you go add a second file or add a single dependency, you
+already want to move to cargo imho. /JT -->
+<!-- Updated above! /Carol -->
 
 Even though the `hello_cargo` project is simple, it now uses much of the real
 tooling you’ll use in the rest of your Rust career. In fact, to work on any
@@ -622,3 +641,9 @@ This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
 If you would rather start by learning how common programming concepts work in
 Rust, see Chapter 3 and then return to Chapter 2.
+
+<!-- Question for Carol: Do we want to mention IDE support? Rust Analyzer is
+pretty good these days. /JT -->
+<!-- I don't want to make the reader feel like they *have* to stop at this
+point and set up their IDE (or use an unfamiliar IDE); I did add a sentence to
+the note about IDEs pointing to Appendix D for more info on Rust Analyzer. -->

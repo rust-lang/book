@@ -190,11 +190,12 @@ consuming adaptor methods to get results from calls to iterator adaptors.
 
 Many iterator adapters take closures as arguments, and commonly the closures
 we’ll specify as arguments to iterator adapters will be closures that capture
-their environment. For this example, we’ll use the `filter` method that takes a
-closure. The closure gets an item from the iterator and returns a Boolean. If
-the closure returns `true`, the value will be included in the iteration
-produced by `filter`. If the closure returns `false`, the value won’t be
-included.
+their environment.
+
+For this example, we’ll use the `filter` method that takes a closure. The
+closure gets an item from the iterator and returns a `bool`. If the closure
+returns `true`, the value will be included in the iteration produced by
+`filter`. If the closure returns `false`, the value won’t be included.
 
 In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct

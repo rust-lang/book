@@ -48,7 +48,7 @@ Listing 11-1.
 <!-- manual-regeneration
 cd listings/ch11-writing-automated-tests
 rm -rf listing-11-01
-cargo new --lib listing-11-01 --name adder
+cargo new listing-11-01 --lib --name adder
 cd listing-11-01
 cargo test
 git co output.txt

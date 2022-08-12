@@ -32,7 +32,7 @@ Look at the generated *Cargo.toml* file:
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial
 rm -rf no-listing-01-cargo-new
-cargo new --name guessing_game no-listing-01-cargo-new
+cargo new no-listing-01-cargo-new --name guessing_game
 cd no-listing-01-cargo-new
 cargo run
 -->

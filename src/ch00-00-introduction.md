@@ -157,7 +157,9 @@ Finally, some appendices contain useful information about the language in a
 more reference-like format. Appendix A covers Rust’s keywords, Appendix B
 covers Rust’s operators and symbols, Appendix C covers derivable traits
 provided by the standard library, Appendix D covers some useful development
-tools, and Appendix E explains Rust editions.
+tools, and Appendix E explains Rust editions. In Appendix F, you can find
+translations of the book, and in Appendix G we’ll cover how Rust is made and
+what nightly Rust is.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
 You might have to jump back to earlier chapters if you experience any
