@@ -353,7 +353,7 @@ using the `let` keyword. By using `let`, we can perform a few transformations
 on a value but have the variable be immutable after those transformations have
 been completed.
 
- The other difference between `mut` and shadowing is that because we’re
+The other difference between `mut` and shadowing is that because we’re
 effectively creating a new variable when we use the `let` keyword again, we can
 change the type of the value but reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
@@ -670,8 +670,8 @@ Floating-point numbers are represented according to the IEEE-754 standard. The
 
 Rust supports the basic mathematical operations you’d expect for all the number
 types: addition, subtraction, multiplication, division, and remainder. Integer
-division rounds down to the nearest integer. The following code shows how you’d
-use each numeric operation in a `let` statement:
+division truncates toward zero to the nearest integer. The following code shows
+how you’d use each numeric operation in a `let` statement:
 
 Filename: src/main.rs
 
@@ -724,7 +724,7 @@ fn main() {
 ```
 
 ```
-    let floored = 2 / 3; // Results in 0
+    let truncated = -5 / 3; // Results in -1
 ```
 
 ```
@@ -1152,10 +1152,7 @@ array, such as 10, you’ll see output like this:
 
 ```
 thread 'main' panicked at 'index out of bounds: the len is 5 but the index is
-```
-
-```
- 10', src/main.rs:19:19
+10', src/main.rs:19:19
 ```
 
 ```
@@ -1545,58 +1542,6 @@ error[E0658]: `let` expressions in this position are unstable
 more information
 ```
 
-```
-
-```
-
-```
-warning: unnecessary parentheses around assigned value
-```
-
-```
- --> src/main.rs:2:13
-```
-
-```
-  |
-```
-
-```
-2 |     let x = (let y = 6);
-```
-
-```
-  |             ^         ^
-```
-
-```
-  |
-```
-
-```
-  = note: `#[warn(unused_parens)]` on by default
-```
-
-```
-help: remove these parentheses
-```
-
-```
-  |
-```
-
-```
-2 -     let x = (let y = 6);
-```
-
-```
-2 +     let x = let y = 6;
-```
-
-```
-  |
-```
-
 The `let y = 6` statement does not return a value, so there isn’t anything for
 `x` to bind to. This is different from what happens in other languages, such as
 C and Ruby, where the assignment returns the value of the assignment. In those
@@ -1618,7 +1563,7 @@ fn main() {
 ```
 
 ```
-    let y = {
+  1 let y = {2
 ```
 
 ```
@@ -1626,7 +1571,7 @@ fn main() {
 ```
 
 ```
-        x + 1
+      3 x + 1
 ```
 
 ```
@@ -1645,27 +1590,15 @@ fn main() {
 }
 ```
 
-This expression:
+The expression [2] is a block that, in this case, evaluates to `4`. That value
+gets bound to `y` as part of the `let` statement [1]. Note the line without a
+semicolon at the end [3], which is unlike most of the lines you’ve seen so far.
+Expressions do not include ending semicolons. If you add a semicolon to the end
+of an expression, you turn it into a statement, and it will then not return a
+value. Keep this in mind as you explore function return values and expressions
+next.
 
-```
-{
-```
-
-```
-    let x = 3;
-```
-
-```
-    x + 1
-```
-
-```
-}
-```
-
-
-Unmatched: BodyContinued
-      ### Functions with Return Values
+### Functions with Return Values
 
 Functions can return values to the code that calls them. We don’t name return
 values, but we must declare their type after an arrow (`->`). In Rust, the
@@ -2263,11 +2196,11 @@ number is divisible by 3
 ```
 
 When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition holds true. Note that even though 6 is
-divisible by 2, we don’t see the output `number is divisible by 2`, nor do we
-see the `number is not divisible by 4, 3, or 2` text from the `else` block.
-That’s because Rust only executes the block for the first true condition, and
-once it finds one, it doesn’t even check the rest.
+the first body for which the condition evaluates to `true`. Note that even
+though 6 is divisible by 2, we don’t see the output `number is divisible by 2`,
+nor do we see the `number is not divisible by 4, 3, or 2` text from the `else`
+block. That’s because Rust only executes the block for the first true
+condition, and once it finds one, it doesn’t even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you have more
 than one, you might want to refactor your code. Chapter 6 describes a powerful
@@ -2782,11 +2715,11 @@ fn main() {
 }
 ```
 
-Using a `while` loop to run code while a condition holds true
+Using a `while` loop to run code while a condition evaluates to `true`
 
 This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
-true, the code runs; otherwise, it exits the loop.
+`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
+evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with for
 
