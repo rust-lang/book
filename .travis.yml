@@ -1,7 +1,7 @@
 language: rust
 sudo: false
-cache:
-  - cargo
+# cache:
+#   - cargo
 
 rust:
   - stable
