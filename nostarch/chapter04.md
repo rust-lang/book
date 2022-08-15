@@ -39,67 +39,72 @@ strings.
 Unmatched: BoxType
 
 > ### The Stack and the Heap
->
+
+
 > Many programming languages don’t require you to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap affects how the language behaves and why
-> you have to make certain decisions. Parts of ownership will be described in
-> relation to the stack and the heap later in this chapter, so here is a brief
-> explanation in preparation.
->
+heap very often. But in a systems programming language like Rust, whether a
+value is on the stack or the heap affects how the language behaves and why you
+have to make certain decisions. Parts of ownership will be described in
+relation to the stack and the heap later in this chapter, so here is a brief
+explanation in preparation.
+
+
 > Both the stack and the heap are parts of memory available to your code to use
-> at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite
-> order. This is referred to as *last in, first out*. Think of a stack of
-> plates: when you add more plates, you put them on top of the pile, and when
-> you need a plate, you take one off the top. Adding or removing plates from
-> the middle or bottom wouldn’t work as well! Adding data is called *pushing
-> onto the stack*, and removing data is called *popping off the stack*. All
-> data stored on the stack must have a known, fixed size. Data with an unknown
-> size at compile time or a size that might change must be stored on the heap
-> instead.
->
+at runtime, but they are structured in different ways. The stack stores values
+in the order it gets them and removes the values in the opposite order. This is
+referred to as *last in, first out*. Think of a stack of plates: when you add
+more plates, you put them on top of the pile, and when you need a plate, you
+take one off the top. Adding or removing plates from the middle or bottom
+wouldn’t work as well! Adding data is called *pushing* *onto the stack*, and
+removing data is called *popping off the stack*. All data stored on the stack
+must have a known, fixed size. Data with an unknown size at compile time or a
+size that might change must be stored on the heap instead.
+
+
 > The heap is less organized: when you put data on the heap, you request a
-> certain amount of space. The memory allocator finds an empty spot in the heap
-> that is big enough, marks it as being in use, and returns a *pointer*, which
-> is the address of that location. This process is called *allocating on the
-> heap* and is sometimes abbreviated as just *allocating* (pushing values onto
-> the stack is not considered allocating). Because the pointer to the heap is a
-> known, fixed size, you can store the pointer on the stack, but when you want
-> the actual data, you must follow the pointer. Think of being seated at a
-> restaurant. When you enter, you state the number of people in your group, and
-> the host finds an empty table that fits everyone and leads you there. If
-> someone in your group comes late, they can ask where you’ve been seated to
-> find you.
->
+certain amount of space. The memory allocator finds an empty spot in the heap
+that is big enough, marks it as being in use, and returns a *pointer*, which is
+the address of that location. This process is called *allocating on the* *heap*
+and is sometimes abbreviated as just *allocating* (pushing values onto the
+stack is not considered allocating). Because the pointer to the heap is a
+known, fixed size, you can store the pointer on the stack, but when you want
+the actual data, you must follow the pointer. Think of being seated at a
+restaurant. When you enter, you state the number of people in your group, and
+the host finds an empty table that fits everyone and leads you there. If
+someone in your group comes late, they can ask where you’ve been seated to find
+you.
+
+
 > Pushing to the stack is faster than allocating on the heap because the
-> allocator never has to search for a place to store new data; that location is
-> always at the top of the stack. Comparatively, allocating space on the heap
-> requires more work because the allocator must first find a big enough space to
-> hold the data and then perform bookkeeping to prepare for the next allocation.
->
+allocator never has to search for a place to store new data; that location is
+always at the top of the stack. Comparatively, allocating space on the heap
+requires more work because the allocator must first find a big enough space to
+hold the data and then perform bookkeeping to prepare for the next allocation.
+
+
 > Accessing data in the heap is slower than accessing data on the stack because
-> you have to follow a pointer to get there. Contemporary processors are faster
-> if they jump around less in memory. Continuing the analogy, consider a server
-> at a restaurant taking orders from many tables. It’s most efficient to get
-> all the orders at one table before moving on to the next table. Taking an
-> order from table A, then an order from table B, then one from A again, and
-> then one from B again would be a much slower process. By the same token, a
-> processor can do its job better if it works on data that’s close to other
-> data (as it is on the stack) rather than farther away (as it can be on the
-> heap).
->
+you have to follow a pointer to get there. Contemporary processors are faster
+if they jump around less in memory. Continuing the analogy, consider a server
+at a restaurant taking orders from many tables. It’s most efficient to get all
+the orders at one table before moving on to the next table. Taking an order
+from table A, then an order from table B, then one from A again, and then one
+from B again would be a much slower process. By the same token, a processor can
+do its job better if it works on data that’s close to other data (as it is on
+the stack) rather than farther away (as it can be on the heap).
+
+
 > When your code calls a function, the values passed into the function
-> (including, potentially, pointers to data on the heap) and the function’s
-> local variables get pushed onto the stack. When the function is over, those
-> values get popped off the stack.
->
+(including, potentially, pointers to data on the heap) and the function’s local
+variables get pushed onto the stack. When the function is over, those values
+get popped off the stack.
+
+
 > Keeping track of what parts of code are using what data on the heap,
-> minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so you don’t run out of space are all problems that ownership
-> addresses. Once you understand ownership, you won’t need to think about the
-> stack and the heap very often, but knowing that the main purpose of ownership
-> is to manage heap data can help explain why it works the way it does.
+minimizing the amount of duplicate data on the heap, and cleaning up unused
+data on the heap so you don’t run out of space are all problems that ownership
+addresses. Once you understand ownership, you won’t need to think about the
+stack and the heap very often, but knowing that the main purpose of ownership
+is to manage heap data can help explain why it works the way it does.
 
 ### Ownership Rules
 
@@ -109,7 +114,6 @@ work through the examples that illustrate them:
 * Each value in Rust has an *owner*.
 * There can only be one owner at a time.
 * When the owner goes out of scope, the value will be dropped.
-
 ### Variable Scope
 
 Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
@@ -157,7 +161,6 @@ In other words, there are two important points in time here:
 
 * When `s` comes *into* scope, it is valid.
 * It remains valid until it goes *out of* scope.
-
 At this point, the relationship between scopes and when variables are valid is
 similar to that in other programming languages. Now we’ll build on top of this
 understanding by introducing the `String` type.
@@ -217,7 +220,7 @@ s.push_str(", world!"); // push_str() appends a literal to a String
 ```
 
 ```
-println!("{}", s); // This will print `hello, world!`
+println!("{s}"); // This will print `hello, world!`
 ```
 
 So, what’s the difference here? Why can `String` be mutated but literals
@@ -375,10 +378,10 @@ of the memory safety bugs we mentioned previously. Freeing memory twice can
 lead to memory corruption, which can potentially lead to security
 vulnerabilities.
 
-To ensure memory safety, after the line `let s2 =` `s1`, Rust considers `s1` as
-no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
-out of scope. Check out what happens when you try to use `s1` after `s2` is
-created; it won’t work:
+To ensure memory safety, after the line `let s2 =` `s1``;`, Rust considers `s1`
+as no longer valid. Therefore, Rust doesn’t need to free anything when `s1`
+goes out of scope. Check out what happens when you try to use `s1` after `s2`
+is created; it won’t work:
 
 ```
 let s1 = String::from("hello");
@@ -393,7 +396,7 @@ let s2 = s1;
 ```
 
 ```
-println!("{}, world!", s1);
+println!("{s1}, world!");
 ```
 
 You’ll get an error like this because Rust prevents you from using the
@@ -436,11 +439,11 @@ error[E0382]: borrow of moved value: `s1`
 ```
 
 ```
-5 |     println!("{}, world!", s1);
+5 |     println!("{s1}, world!");
 ```
 
 ```
-  |                            ^^ value borrowed here after move
+  |                ^^ value borrowed here after move
 ```
 
 If you’ve heard the terms *shallow copy* and *deep copy* while working with
@@ -461,7 +464,7 @@ In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
-#### With Clone
+#### Variables and Data Interacting With Clone
 
 If we *do* want to deeply copy the heap data of the `String`, not just the
 stack data, we can use a common method called `clone`. We’ll discuss method
@@ -483,7 +486,7 @@ let s2 = s1.clone();
 ```
 
 ```
-println!("s1 = {}, s2 = {}", s1, s2);
+println!("s1 = {s1}, s2 = {s2}");
 ```
 
 This works just fine and explicitly produces the behavior shown in Figure 4-3,
@@ -511,7 +514,7 @@ let y = x;
 ```
 
 ```
-println!("x = {}, y = {}", x, y);
+println!("x = {x}, y = {y}");
 ```
 
 But this code seems to contradict what we just learned: we don’t have a call to
@@ -607,11 +610,10 @@ fn main() {
 
 ```
 } // Here, x goes out of scope, then s. However, because s's value was moved,
-nothing
 ```
 
 ```
-  // special happens
+  // nothing special happens
 ```
 
 ```
@@ -623,7 +625,7 @@ fn takes_ownership(some_string: String) { // some_string comes into scope
 ```
 
 ```
-    println!("{}", some_string);
+    println!("{some_string}");
 ```
 
 ```
@@ -643,7 +645,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope
 ```
 
 ```
-    println!("{}", some_integer);
+    println!("{some_integer}");
 ```
 
 ```
@@ -819,7 +821,7 @@ fn main() {
 ```
 
 ```
-    println!("The length of '{}' is {}.", s2, len);
+    println!("The length of '{s2}' is {len}.");
 ```
 
 ```
@@ -893,7 +895,7 @@ fn main() {
 ```
 
 ```
-    println!("The length of '{}' is {}.", s1, len);
+    println!("The length of '{s1}' is {len}.");
 ```
 
 ```
@@ -965,7 +967,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 ```
 
 ```
-  // it refers to, it is not dropped
+  // it refers to, the String is not dropped
 ```
 
 The scope in which the variable `s` is valid is the same as any function
@@ -1133,7 +1135,7 @@ Filename: src/main.rs
 ```
 
 ```
-    println!("{}, {}", r1, r2);
+    println!("{r1}, {r2}");
 ```
 
 Here’s the error:
@@ -1171,11 +1173,11 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 ```
 
 ```
-7 |     println!("{}, {}", r1, r2);
+7 |     println!("{r1}, {r2}");
 ```
 
 ```
-  |                        -- first borrow later used here
+  |                -- first borrow later used here
 ```
 
 This error says that this code is invalid because we cannot borrow `s` as
@@ -1257,7 +1259,7 @@ let r3 = &mut s; // BIG PROBLEM
 ```
 
 ```
-println!("{}, {}, and {}", r1, r2, r3);
+println!("{r1}, {r2}, and {r3}");
 ```
 
 Here’s the error:
@@ -1300,11 +1302,11 @@ immutable
 ```
 
 ```
-8 |     println!("{}, {}, and {}", r1, r2, r3);
+8 |     println!("{r1}, {r2}, and {r3}");
 ```
 
 ```
-  |                                -- immutable borrow later used here
+  |                -- immutable borrow later used here
 ```
 
 Whew! We *also* cannot have a mutable reference while we have an immutable one
@@ -1337,7 +1339,7 @@ let r2 = &s; // no problem
 ```
 
 ```
-println!("{} and {}", r1, r2);
+println!("{r1} and {r2}");
 ```
 
 ```
@@ -1353,17 +1355,14 @@ let r3 = &mut s; // no problem
 ```
 
 ```
-println!("{}", r3);
+println!("{r3}");
 ```
 
 The scopes of the immutable references `r1` and `r2` end after the `println!`
 where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed. The ability of
-the compiler to tell that a reference is no longer being used at a point before
-the end of the scope is a feature called *n**on-**l**exical* *l**ifetimes* (NLL
-for short), and you can read more about it in The Edition Guide at
-*https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-l
-exical-lifetimes.html*.
+created. These scopes don’t overlap, so this code is allowed: the compiler can
+tell that the reference is no longer being used at a point before the end of
+the scope.
 
 Even though borrowing errors may be frustrating at times, remember that it’s
 the Rust compiler pointing out a potential bug early (at compile time rather
@@ -1476,11 +1475,11 @@ discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
 about lifetimes, the message does contain the key to why this code is a problem:
 
 ```
-this function's return type contains a borrowed value, but there is no value
+this function's return type contains a borrowed value, but there
 ```
 
 ```
-for it to be borrowed from
+is no value for it to be borrowed from
 ```
 
 Let’s take a closer look at exactly what’s happening at each stage of our
@@ -1943,7 +1942,7 @@ fn main() {
 ```
 
 ```
-    println!("the first word is: {}", word);
+    println!("the first word is: {word}");
 ```
 
 ```
@@ -1993,11 +1992,11 @@ immutable
 ```
 
 ```
-20 |     println!("the first word is: {}", word);
+20 |     println!("the first word is: {word}");
 ```
 
 ```
-   |                                       ---- immutable borrow later used here
+   |                                   ---- immutable borrow later used here
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to
@@ -2065,7 +2064,11 @@ fn main() {
 ```
 
 ```
-    // `first_word` works on slices of `String`s, whether partial or whole
+    // `first_word` works on slices of `String`s, whether partial
+```
+
+```
+    // or whole
 ```
 
 ```
@@ -2077,11 +2080,11 @@ fn main() {
 ```
 
 ```
-    // `first_word` also works on references to `String`s, which are equivalent
+    // `first_word` also works on references to `String`s, which
 ```
 
 ```
-    // to whole slices of `String`s
+    // are equivalent to whole slices of `String`s
 ```
 
 ```
@@ -2101,7 +2104,11 @@ fn main() {
 ```
 
 ```
-    // `first_word` works on slices of string literals, whether partial or whole
+    // `first_word` works on slices of string literals,
+```
+
+```
+    // whether partial or whole
 ```
 
 ```
