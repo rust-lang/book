@@ -262,7 +262,7 @@ In this example, `string1` is valid until the end of the outer scope, `string2`
 is valid until the end of the inner scope, and `result` references something
 that is valid until the end of the inner scope. Run this code, and you’ll see
 that the borrow checker approves; it will compile and print `The longest string
-is long string is long`.
+is abcd`.
 
 Next, let’s try an example that shows that the lifetime of the reference in
 `result` must be the smaller lifetime of the two arguments. We’ll move the
