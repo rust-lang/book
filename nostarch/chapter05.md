@@ -19,16 +19,16 @@ We’ll demonstrate how to define and instantiate structs. We’ll discuss how t
 define associated functions, especially the kind of associated functions called
 *methods*, to specify behavior associated with a struct type. Structs and enums
 (discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile time type checking.
+program’s domain to take full advantage of Rust’s compile-time type checking.
 
 ## Defining and Instantiating Structs
 
-Structs are similar to tuples, discussed in “The Tuple Type” section, in that
-both hold multiple related values. Like tuples, the pieces of a struct can be
-different types. Unlike with tuples, in a struct you’ll name each piece of data
-so it’s clear what the values mean. Adding these names means that structs are
-more flexible than tuples: you don’t have to rely on the order of the data to
-specify or access the values of an instance.
+Structs are similar to tuples, discussed in “The Tuple Type” on page XX, in
+that both hold multiple related values. Like tuples, the pieces of a struct can
+be different types. Unlike with tuples, in a struct you’ll name each piece of
+data so it’s clear what the values mean. Adding these names means that structs
+are more flexible than tuples: you don’t have to rely on the order of the data
+to specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
@@ -38,14 +38,32 @@ struct that stores information about a user account.
 
 ```
 struct User {
+```
+
+```
     active: bool,
+```
+
+```
     username: String,
+```
+
+```
     email: String,
+```
+
+```
     sign_in_count: u64,
+```
+
+```
 }
 ```
 
-Listing 5-1: A `User` struct definition
+A `User` struct definition
+
+PROD: This should be called Listing 5-1. Please fix, and please renumber
+remaining listings consecutively (e.g., Listing 5-2, Listing 5-3, etc.).
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
@@ -59,16 +77,37 @@ example, we can declare a particular user as shown in Listing 5-2.
 
 ```
 fn main() {
+```
+
+```
     let user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
+```
+
+```
         active: true,
+```
+
+```
+        username: String::from("someusername123"),
+```
+
+```
+        email: String::from("someone@example.com"),
+```
+
+```
         sign_in_count: 1,
+```
+
+```
     };
+```
+
+```
 }
 ```
 
-Listing 5-2: Creating an instance of the `User` struct
+Creating an instance of the `User` struct
 
 To get a specific value from a struct, we use dot notation. For example, to
 access this user’s email address, we use `user1.email`. If the instance is
@@ -76,27 +115,47 @@ mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the `email`
 field of a mutable `User` instance.
 
-<!--- Do we want to mention that `user1.email` will move the field? We can't
-just use `user1.email` multiple times re: "wherever we wanted
-to use this value"
-/JT --->
-<!-- I don't really want to mention that, but I did reword to avoid the
-implication that we can use the value wherever we wanted to. /Carol -->
-
 ```
 fn main() {
-    let mut user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
-        active: true,
-        sign_in_count: 1,
-    };
+```
 
+```
+    let mut user1 = User {
+```
+
+```
+        active: true,
+```
+
+```
+        username: String::from("someusername123"),
+```
+
+```
+        email: String::from("someone@example.com"),
+```
+
+```
+        sign_in_count: 1,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
     user1.email = String::from("anotheremail@example.com");
+```
+
+```
 }
 ```
 
-Listing 5-3: Changing the value in the `email` field of a `User` instance
+Changing the value in the `email` field of a `User` instance
 
 Note that the entire instance must be mutable; Rust doesn’t allow us to mark
 only certain fields as mutable. As with any expression, we can construct a new
@@ -109,17 +168,38 @@ the `sign_in_count` gets a value of `1`.
 
 ```
 fn build_user(email: String, username: String) -> User {
+```
+
+```
     User {
-        email: email,
-        username: username,
+```
+
+```
         active: true,
+```
+
+```
+        username: username,
+```
+
+```
+        email: email,
+```
+
+```
         sign_in_count: 1,
+```
+
+```
     }
+```
+
+```
 }
 ```
 
-Listing 5-4: A `build_user` function that takes an email and username and
-returns a `User` instance
+A `build_user` function that takes an email and username and returns a `User`
+instance
 
 It makes sense to name the function parameters with the same name as the struct
 fields, but having to repeat the `email` and `username` field names and
@@ -130,22 +210,43 @@ would get even more annoying. Luckily, there’s a convenient shorthand!
 
 Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the *field init shorthand* syntax to rewrite
-`build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `email` and `username`, as shown in Listing 5-5.
+`build_user` so it behaves exactly the same but doesn’t have the repetition of
+`email` and `username`, as shown in Listing 5-5.
 
 ```
 fn build_user(email: String, username: String) -> User {
+```
+
+```
     User {
-        email,
-        username,
+```
+
+```
         active: true,
+```
+
+```
+        username,
+```
+
+```
+        email,
+```
+
+```
         sign_in_count: 1,
+```
+
+```
     }
+```
+
+```
 }
 ```
 
-Listing 5-5: A `build_user` function that uses field init shorthand because the
-`email` and `username` parameters have the same name as struct fields
+A `build_user` function that uses field init shorthand because the `email` and
+`username` parameters have the same name as struct fields
 
 Here, we’re creating a new instance of the `User` struct, which has a field
 named `email`. We want to set the `email` field’s value to the value in the
@@ -153,7 +254,7 @@ named `email`. We want to set the `email` field’s value to the value in the
 the `email` parameter have the same name, we only need to write `email` rather
 than `email: email`.
 
-### Creating Instances From Other Instances With Struct Update Syntax
+### Creating Instances from Other Instances with Struct Update Syntax
 
 It’s often useful to create a new instance of a struct that includes most of
 the values from another instance, but changes some. You can do this using
@@ -165,18 +266,45 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 
 ```
 fn main() {
-    // --snip--
+```
 
+```
+    --snip--
+```
+
+```
+
+```
+
+```
     let user2 = User {
+```
+
+```
         active: user1.active,
+```
+
+```
         username: user1.username,
+```
+
+```
         email: String::from("another@example.com"),
+```
+
+```
         sign_in_count: user1.sign_in_count,
+```
+
+```
     };
+```
+
+```
 }
 ```
 
-Listing 5-6: Creating a new `User` instance using one of the values from `user1`
+Creating a new `User` instance using one of the values from `user1`
 
 Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
@@ -184,17 +312,42 @@ explicitly set should have the same value as the fields in the given instance.
 
 ```
 fn main() {
-    // --snip--
+```
 
+```
+    --snip--
+```
+
+```
+
+```
+
+```
+
+```
+
+```
     let user2 = User {
+```
+
+```
         email: String::from("another@example.com"),
+```
+
+```
         ..user1
+```
+
+```
     };
+```
+
+```
 }
 ```
 
-Listing 5-7: Using struct update syntax to set a new `email` value for a `User`
-instance but use the rest of the values from `user1`
+Using struct update syntax to set a new `email` value for a `User` instance but
+to use the rest of the values from `user1`
 
 The code in Listing 5-7 also creates an instance in `user2` that has a
 different value for `email` but has the same values for the `username`,
@@ -204,45 +357,58 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax uses `=` like an assignment; this is
-because it moves the data, just as we saw in the “Ways Variables and Data
-Interact: Move” section. In this example, we can no longer use `user1` after
-creating `user2` because the `String` in the `username` field of `user1` was
-moved into `user2`. If we had given `user2` new `String` values for both
-`email` and `username`, and thus only used the `active` and `sign_in_count`
-values from `user1`, then `user1` would still be valid after creating `user2`.
-The types of `active` and `sign_in_count` are types that implement the `Copy`
-trait, so the behavior we discussed in the “Stack-Only Data: Copy” section
-would apply.
+Note that the struct update syntax uses `=` like an assignment; this is because
+it moves the data, just as we saw in “Ways Variables and Data Interact: Move”
+on page XX. In this example, we can no longer use `user1` after creating
+`user2` because the `String` in the `username` field of `user1` was moved into
+`user2`. If we had given `user2` new `String` values for both `email` and
+`username`, and thus only used the `active` and `sign_in_count` values from
+`user1`, then `user1` would still be valid after creating `user2`. Both
+`active` and `sign_in_count` are types that implement the `Copy` trait, so the
+behavior we discussed in “Stack-Only Data: Copy” on page XX would apply.
 
-<!--- Misspelled "assignment" above.
-/JT --->
-<!-- Fixed! /Carol -->
+### Using Tuple Structs Without Named Fields to Create Different Types
 
-### Using Tuple Structs without Named Fields to Create Different Types
-
-Rust also supports structs that look similar to tuples, called *tuple
-structs*. Tuple structs have the added meaning the struct name provides but
+Rust also supports structs that look similar to tuples, called *tuple*
+*structs*. Tuple structs have the added meaning the struct name provides but
 don’t have names associated with their fields; rather, they just have the types
 of the fields. Tuple structs are useful when you want to give the whole tuple a
-name and make the tuple a different type from other tuples, and when naming each
-field as in a regular struct would be verbose or redundant.
+name and make the tuple a different type from other tuples, and when naming
+each field as in a regular struct would be verbose or redundant.
 
 To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use
-two tuple structs named `Color` and `Point`:
+followed by the types in the tuple. For example, here we define and use two
+tuple structs named `Color` and `Point`:
 
 ```
 struct Color(i32, i32, i32);
-struct Point(i32, i32, i32);
+```
 
+```
+struct Point(i32, i32, i32);
+```
+
+```
+
+```
+
+```
 fn main() {
+```
+
+```
     let black = Color(0, 0, 0);
+```
+
+```
     let origin = Point(0, 0, 0);
+```
+
+```
 }
 ```
 
-Note that the `black` and `origin` values are different types, because they’re
+Note that the `black` and `origin` values are different types because they’re
 instances of different tuple structs. Each struct you define is its own type,
 even though the fields within the struct might have the same types. For
 example, a function that takes a parameter of type `Color` cannot take a
@@ -251,41 +417,38 @@ values. Otherwise, tuple struct instances are similar to tuples in that you can
 destructure them into their individual pieces, and you can use a `.` followed
 by the index to access an individual value.
 
-<!--- The last line above feels a bit misleading. There are related
-restrictions on tuple structs that don't apply to tuples.
-
-One example is you can't create a tuple struct with a tuple.
-```
-struct Color(i32, i32, i32);
-
-fn main() {
-    let x: Color = (1, 2, 3);
-}
-```
-
-You can't pass a tuple struct to something that expects a tuple, either.
-/JT --->
-<!-- I've reworded to avoid that implication /Carol -->
-
 ### Unit-Like Structs Without Any Fields
 
 You can also define structs that don’t have any fields! These are called
 *unit-like structs* because they behave similarly to `()`, the unit type that
-we mentioned in “The Tuple Type” section. Unit-like structs can be useful when
-you need to implement a trait on some type but don’t have any data that you
-want to store in the type itself. We’ll discuss traits in Chapter 10. Here’s an
-example of declaring and instantiating a unit struct named `AlwaysEqual`:
+we mentioned in “The Tuple Type” on page XX. Unit-like structs can be useful
+when you need to implement a trait on some type but don’t have any data that
+you want to store in the type itself. We’ll discuss traits in Chapter 10.
+Here’s an example of declaring and instantiating a unit struct named
+`AlwaysEqual`:
 
 ```
 struct AlwaysEqual;
+```
 
+```
+
+```
+
+```
 fn main() {
+```
+
+```
     let subject = AlwaysEqual;
+```
+
+```
 }
 ```
 
-To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
-semicolon. No need for curly brackets or parentheses! Then we can get an
+To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
+then a semicolon. No need for curly brackets or parentheses! Then we can get an
 instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
 name we defined, without any curly brackets or parentheses. Imagine that later
 we’ll implement behavior for this type such that every instance of
@@ -294,75 +457,118 @@ have a known result for testing purposes. We wouldn’t need any data to
 implement that behavior! You’ll see in Chapter 10 how to define traits and
 implement them on any type, including unit-like structs.
 
+
+Unmatched: BoxType
+
 > ### Ownership of Struct Data
->
+
+
 > In the `User` struct definition in Listing 5-1, we used the owned `String`
-> type rather than the `&str` string slice type. This is a deliberate choice
-> because we want each instance of this struct to own all of its data and for
-> that data to be valid for as long as the entire struct is valid.
->
+type rather than the `&str` string slice type. This is a deliberate choice
+because we want each instance of this struct to own all of its data and for
+that data to be valid for as long as the entire struct is valid.
+
+
 > It’s also possible for structs to store references to data owned by something
-> else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
-> discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct
-> is valid for as long as the struct is. Let’s say you try to store a reference
-> in a struct without specifying lifetimes, like the following; this won’t work:
->
-> Filename: src/main.rs
->
-> ```
-> struct User {
->     username: &str,
->     email: &str,
->     sign_in_count: u64,
->     active: bool,
-> }
->
-> fn main() {
->     let user1 = User {
->         email: "someone@example.com",
->         username: "someusername123",
->         active: true,
->         sign_in_count: 1,
->     };
-> }
-> ```
->
+else, but to do so requires the use of *lifetimes*, a Rust feature that we’ll
+discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct is
+valid for as long as the struct is. Let’s say you try to store a reference in a
+struct without specifying lifetimes, like the following in *src/main.rs*; this
+won’t work:
+
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
 > The compiler will complain that it needs lifetime specifiers:
->
-> ```
-> $ cargo run
->    Compiling structs v0.1.0 (file:///projects/structs)
-> error[E0106]: missing lifetime specifier
->  --> src/main.rs:3:15
->   |
-> 3 |     username: &str,
->   |               ^ expected named lifetime parameter
->   |
-> help: consider introducing a named lifetime parameter
->   |
-> 1 ~ struct User<'a> {
-> 2 |     active: bool,
-> 3 ~     username: &'a str,
->   |
->
-> error[E0106]: missing lifetime specifier
->  --> src/main.rs:4:12
->   |
-> 4 |     email: &str,
->   |            ^ expected named lifetime parameter
->   |
-> help: consider introducing a named lifetime parameter
->   |
-> 1 ~ struct User<'a> {
-> 2 |     active: bool,
-> 3 |     username: &str,
-> 4 ~     email: &'a str,
->   |
-> ```
->
+
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
 > In Chapter 10, we’ll discuss how to fix these errors so you can store
-> references in structs, but for now, we’ll fix errors like these using owned
-> types like `String` instead of references like `&str`.
+references in structs, but for now, we’ll fix errors like these using owned
+types like `String` instead of references like `&str`.
 
 ## An Example Program Using Structs
 
@@ -379,30 +585,78 @@ Filename: src/main.rs
 
 ```
 fn main() {
+```
+
+```
     let width1 = 30;
+```
+
+```
     let height1 = 50;
+```
 
+```
+
+```
+
+```
     println!(
-        "The area of the rectangle is {} square pixels.",
-        area(width1, height1)
-    );
-}
+```
 
-fn area(width: u32, height: u32) -> u32 {
-    width * height
+```
+        "The area of the rectangle is {} square pixels.",
+```
+
+```
+        area(width1, height1)
+```
+
+```
+    );
+```
+
+```
 }
 ```
 
-Listing 5-8: Calculating the area of a rectangle specified by separate width
-and height variables
+```
+
+```
+
+```
+fn area(width: u32, height: u32) -> u32 {
+```
+
+```
+    width * height
+```
+
+```
+}
+```
+
+Calculating the area of a rectangle specified by separate width and height
+variables
 
 Now, run this program using `cargo run`:
 
 ```
 $ cargo run
+```
+
+```
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
+```
+
+```
     Finished dev [unoptimized + debuginfo] target(s) in 0.42s
+```
+
+```
      Running `target/debug/rectangles`
+```
+
+```
 The area of the rectangle is 1500 square pixels.
 ```
 
@@ -417,10 +671,10 @@ fn area(width: u32, height: u32) -> u32 {
 ```
 
 The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters, and it's not clear anywhere in our
+function we wrote has two parameters, and it’s not clear anywhere in our
 program that the parameters are related. It would be more readable and more
 manageable to group width and height together. We’ve already discussed one way
-we might do that in “The Tuple Type” section of Chapter 3: by using tuples.
+we might do that in “The Tuple Type” on page XX: by using tuples.
 
 ### Refactoring with Tuples
 
@@ -430,20 +684,53 @@ Filename: src/main.rs
 
 ```
 fn main() {
+```
+
+```
     let rect1 = (30, 50);
+```
 
+```
+
+```
+
+```
     println!(
-        "The area of the rectangle is {} square pixels.",
-        area(rect1)
-    );
-}
+```
 
-fn area(dimensions: (u32, u32)) -> u32 {
-    dimensions.0 * dimensions.1
+```
+        "The area of the rectangle is {} square pixels.",
+```
+
+```
+        area(rect1)
+```
+
+```
+    );
+```
+
+```
 }
 ```
 
-Listing 5-9: Specifying the width and height of the rectangle with a tuple
+```
+
+```
+
+```
+fn area(dimensions: (u32, u32)) -> u32 {
+```
+
+```
+    dimensions.0 * dimensions.1
+```
+
+```
+}
+```
+
+Specifying the width and height of the rectangle with a tuple
 
 In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way, this version is less
@@ -467,30 +754,87 @@ Filename: src/main.rs
 
 ```
 struct Rectangle {
+```
+
+```
     width: u32,
+```
+
+```
     height: u32,
-}
+```
 
-fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        area(&rect1)
-    );
-}
-
-fn area(rectangle: &Rectangle) -> u32 {
-    rectangle.width * rectangle.height
+```
 }
 ```
 
-Listing 5-10: Defining a `Rectangle` struct
+```
 
-Here we’ve defined a struct and named it `Rectangle`. Inside the curly
+```
+
+```
+fn main() {
+```
+
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: 30,
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
+    println!(
+```
+
+```
+        "The area of the rectangle is {} square pixels.",
+```
+
+```
+        area(&rect1)
+```
+
+```
+    );
+```
+
+```
+}
+```
+
+```
+
+```
+
+```
+fn area(rectangle: &Rectangle) -> u32 {
+```
+
+```
+    rectangle.width * rectangle.height
+```
+
+```
+}
+```
+
+Defining a `Rectangle` struct
+
+Here, we’ve defined a struct and named it `Rectangle`. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
 type `u32`. Then in `main`, we created a particular instance of `Rectangle`
 that has a width of 30 and a height of 50.
@@ -511,14 +855,6 @@ width and height are related to each other, and it gives descriptive names to
 the values rather than using the tuple index values of `0` and `1`. This is a
 win for clarity.
 
-<!--- Tying to my comment above about `user1.email` moving that field: we should
-take a minute here and explain that accessing fields on a borrowed struct does
-not move them, and why you often see borrows of structs.
-/JT --->
-<!-- I've added a note in the paragraph above; I haven't really seen people
-struggle with that concept though so I don't want to spend too much time on it
-/Carol -->
-
 ### Adding Useful Functionality with Derived Traits
 
 It’d be useful to be able to print an instance of `Rectangle` while we’re
@@ -530,21 +866,57 @@ Filename: src/main.rs
 
 ```
 struct Rectangle {
+```
+
+```
     width: u32,
+```
+
+```
     height: u32,
-}
+```
 
-fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
-
-    println!("rect1 is {}", rect1);
+```
 }
 ```
 
-Listing 5-11: Attempting to print a `Rectangle` instance
+```
+
+```
+
+```
+fn main() {
+```
+
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: 30,
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
+    println!("rect1 is {}", rect1);
+```
+
+```
+}
+```
+
+Attempting to print a `Rectangle` instance
 
 When we compile this code, we get an error with this core message:
 
@@ -555,7 +927,7 @@ error[E0277]: `Rectangle` doesn't implement `std::fmt::Display`
 The `println!` macro can do many kinds of formatting, and by default, the curly
 brackets tell `println!` to use formatting known as `Display`: output intended
 for direct end user consumption. The primitive types we’ve seen so far
-implement `Display` by default, because there’s only one way you’d want to show
+implement `Display` by default because there’s only one way you’d want to show
 a `1` or any other primitive type to a user. But with structs, the way
 `println!` should format the output is less clear because there are more
 display possibilities: Do you want commas or not? Do you want to print the
@@ -567,7 +939,11 @@ If we continue reading the errors, we’ll find this helpful note:
 
 ```
 = help: the trait `std::fmt::Display` is not implemented for `Rectangle`
-= note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+```
+
+```
+= note: in format strings you may be able to use `{:?}` (or {:#?} for
+pretty-print) instead
 ```
 
 Let’s try it! The `println!` macro call will now look like `println!("rect1 is
@@ -586,6 +962,9 @@ But again, the compiler gives us a helpful note:
 
 ```
 = help: the trait `Debug` is not implemented for `Rectangle`
+```
+
+```
 = note: add `#[derive(Debug)]` or manually implement `Debug`
 ```
 
@@ -598,82 +977,196 @@ Filename: src/main.rs
 
 ```
 #[derive(Debug)]
+```
+
+```
 struct Rectangle {
+```
+
+```
     width: u32,
+```
+
+```
     height: u32,
-}
+```
 
-fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
-
-    println!("rect1 is {:?}", rect1);
+```
 }
 ```
 
-Listing 5-12: Adding the attribute to derive the `Debug` trait and printing the
-`Rectangle` instance using debug formatting
+```
+
+```
+
+```
+fn main() {
+```
+
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: 30,
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
+    println!("rect1 is {:?}", rect1);
+```
+
+```
+}
+```
+
+Adding the attribute to derive the `Debug` trait and printing the `Rectangle`
+instance using debug formatting
 
 Now when we run the program, we won’t get any errors, and we’ll see the
 following output:
 
 ```
 $ cargo run
+```
+
+```
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
+```
+
+```
     Finished dev [unoptimized + debuginfo] target(s) in 0.48s
+```
+
+```
      Running `target/debug/rectangles`
+```
+
+```
 rect1 is Rectangle { width: 30, height: 50 }
 ```
 
 Nice! It’s not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging. When we have
 larger structs, it’s useful to have output that’s a bit easier to read; in
-those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
-In this example, using the `{:#?}` style will output:
+those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string. In
+this example, using the `{:#?}` style will output the following:
 
 ```
 $ cargo run
+```
+
+```
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
+```
+
+```
     Finished dev [unoptimized + debuginfo] target(s) in 0.48s
+```
+
+```
      Running `target/debug/rectangles`
+```
+
+```
 rect1 is Rectangle {
+```
+
+```
     width: 30,
+```
+
+```
     height: 50,
+```
+
+```
 }
 ```
 
 Another way to print out a value using the `Debug` format is to use the `dbg!`
-macro, which takes ownership of an expression (as opposed to `println!` that
+macro, which takes ownership of an expression (as opposed to `println!`, which
 takes a reference), prints the file and line number of where that `dbg!` macro
-call occurs in your code along with the resulting value of that expression, and
+call occurs in your code along with the resultant value of that expression, and
 returns ownership of the value.
 
-> Note: Calling the `dbg!` macro prints to the standard error console stream
-> (`stderr`), as opposed to `println!` which prints to the standard output
-> console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-> “Writing Error Messages to Standard Error Instead of Standard Output” section
-> in Chapter 12.
+> NoteCalling the `dbg!` macro prints to the standard error console stream
+(`stderr`), as opposed to `println!` which prints to the standard output
+console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in
+“Writing Error Messages to Standard Error Instead of Standard Output” on page
+XX.
 
 Here’s an example where we’re interested in the value that gets assigned to the
 `width` field, as well as the value of the whole struct in `rect1`:
 
 ```
 #[derive(Debug)]
+```
+
+```
 struct Rectangle {
+```
+
+```
     width: u32,
+```
+
+```
     height: u32,
+```
+
+```
 }
+```
 
+```
+
+```
+
+```
 fn main() {
-    let scale = 2;
-    let rect1 = Rectangle {
-        width: dbg!(30 * scale),
-        height: 50,
-    };
+```
 
+```
+    let scale = 2;
+```
+
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: dbg!(30 * scale),
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
     dbg!(&rect1);
+```
+
+```
 }
 ```
 
@@ -683,26 +1176,44 @@ same value as if we didn’t have the `dbg!` call there. We don’t want `dbg!` 
 take ownership of `rect1`, so we use a reference to `rect1` in the next call.
 Here’s what the output of this example looks like:
 
-<!--- is it worth calling out that println! doesn't have the dbg! shortcoming
-of taking ownership?
-/JT --->
-<!-- I added a note in the paragraph above that starts with "Another way to
-print out a value" /Carol -->
-
 ```
 $ cargo run
+```
+
+```
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
+```
+
+```
     Finished dev [unoptimized + debuginfo] target(s) in 0.61s
+```
+
+```
      Running `target/debug/rectangles`
+```
+
+```
 [src/main.rs:10] 30 * scale = 60
+```
+
+```
 [src/main.rs:14] &rect1 = Rectangle {
+```
+
+```
     width: 60,
+```
+
+```
     height: 50,
+```
+
+```
 }
 ```
 
-We can see the first bit of output came from *src/main.rs* line 10, where we’re
-debugging the expression `30 * scale`, and its resulting value is 60 (the
+We can see the first bit of output came from line 10 in *src/main.rs*, where
+we’re debugging the expression `30 * scale`, and its resultant value is 60 (the
 `Debug` formatting implemented for integers is to print only their value). The
 `dbg!` call on line 14 of *src/main.rs* outputs the value of `&rect1`, which is
 the `Rectangle` struct. This output uses the pretty `Debug` formatting of the
@@ -718,10 +1229,10 @@ your own traits in Chapter 10. There are also many attributes other than
 Reference at *https://doc.rust-lang.org/reference/attributes.html*.
 
 Our `area` function is very specific: it only computes the area of rectangles.
-It would be helpful to tie this behavior more closely to our `Rectangle`
-struct, because it won’t work with any other type. Let’s look at how we can
-continue to refactor this code by turning the `area` function into an `area`
-*method* defined on our `Rectangle` type.
+It would be helpful to tie this behavior more closely to our `Rectangle` struct
+because it won’t work with any other type. Let’s look at how we can continue to
+refactor this code by turning the `area` function into an `area` *method*
+defined on our `Rectangle` type.
 
 ## Method Syntax
 
@@ -729,18 +1240,9 @@ continue to refactor this code by turning the `area` function into an `area`
 name, they can have parameters and a return value, and they contain some code
 that’s run when the method is called from somewhere else. Unlike functions,
 methods are defined within the context of a struct (or an enum or a trait
-object, which we cover in Chapters 6 and 17, respectively), and their first
-parameter is always `self`, which represents the instance of the struct the
-method is being called on.
-
-<!--- minor nit: some folks call the non-self functions in an `impl`
-"static methods" as a nod to OO languages that do the same. For folks
-from that background, we may want to call out that instance methods always
-have `self` and methods on the type do not.
-/JT --->
-<!-- This paragraph already says "their first parameter is always `self`", and
-we get into associated functions in just a bit. I don't want to distract with
-that info here; not changing anything at this spot. /Carol -->
+object, which we cover in Chapter 6 and Chapter 17, respectively), and their
+first parameter is always `self`, which represents the instance of the struct
+the method is being called on.
 
 ### Defining Methods
 
@@ -752,31 +1254,97 @@ Filename: src/main.rs
 
 ```
 #[derive(Debug)]
+```
+
+```
 struct Rectangle {
+```
+
+```
     width: u32,
+```
+
+```
     height: u32,
-}
+```
 
-impl Rectangle {
-    fn area(&self) -> u32 {
-        self.width * self.height
-    }
-}
-
-fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
-
-    println!(
-        "The area of the rectangle is {} square pixels.",
-        rect1.area()
-    );
+```
 }
 ```
 
-Listing 5-13: Defining an `area` method on the `Rectangle` struct
+```
+
+```
+
+```
+impl Rectangle {
+```
+
+```
+    fn area(&self) -> u32 {
+```
+
+```
+        self.width * self.height
+```
+
+```
+    }
+```
+
+```
+}
+```
+
+```
+
+```
+
+```
+fn main() {
+```
+
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: 30,
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
+    println!(
+```
+
+```
+        "The area of the rectangle is {} square pixels.",
+```
+
+```
+        rect1.area()
+```
+
+```
+    );
+```
+
+```
+}
+```
+
+Defining an `area` method on the `Rectangle` struct
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (implementation) block for `Rectangle`. Everything within this `impl` block
@@ -798,21 +1366,21 @@ indicate this method borrows the `Self` instance, just as we did in `rectangle:
 &Rectangle`. Methods can take ownership of `self`, borrow `self` immutably as
 we’ve done here, or borrow `self` mutably, just as they can any other parameter.
 
-We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
-function version: we don’t want to take ownership, and we just want to read the
-data in the struct, not write to it. If we wanted to change the instance that
-we’ve called the method on as part of what the method does, we’d use `&mut
-self` as the first parameter. Having a method that takes ownership of the
-instance by using just `self` as the first parameter is rare; this technique is
-usually used when the method transforms `self` into something else and you want
-to prevent the caller from using the original instance after the transformation.
+We chose `&self` here for the same reason we used `&Rectangle` in the function
+version: we don’t want to take ownership, and we just want to read the data in
+the struct, not write to it. If we wanted to change the instance that we’ve
+called the method on as part of what the method does, we’d use `&mut self` as
+the first parameter. Having a method that takes ownership of the instance by
+using just `self` as the first parameter is rare; this technique is usually
+used when the method transforms `self` into something else and you want to
+prevent the caller from using the original instance after the transformation.
 
-The main reason for using methods instead of functions, in addition to providing
-method syntax and not having to repeat the type of `self` in every method’s
-signature, is for organization. We’ve put all the things we can do with an
-instance of a type in one `impl` block rather than making future users of our
-code search for capabilities of `Rectangle` in various places in the library we
-provide.
+The main reason for using methods instead of functions, in addition to
+providing method syntax and not having to repeat the type of `self` in every
+method’s signature, is for organization. We’ve put all the things we can do
+with an instance of a type in one `impl` block rather than making future users
+of our code search for capabilities of `Rectangle` in various places in the
+library we provide.
 
 Note that we can choose to give a method the same name as one of the struct’s
 fields. For example, we can define a method on `Rectangle` also named `width`:
@@ -821,25 +1389,70 @@ Filename: src/main.rs
 
 ```
 impl Rectangle {
+```
+
+```
     fn width(&self) -> bool {
+```
+
+```
         self.width > 0
+```
+
+```
     }
+```
+
+```
 }
+```
 
+```
+
+```
+
+```
 fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
+```
 
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: 30,
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
     if rect1.width() {
+```
+
+```
         println!("The rectangle has a nonzero width; it is {}", rect1.width);
+```
+
+```
     }
+```
+
+```
 }
 ```
 
 Here, we’re choosing to make the `width` method return `true` if the value in
-the instance’s `width` field is greater than 0, and `false` if the value is 0:
+the instance’s `width` field is greater than 0 and `false` if the value is 0:
 we can use a field within a method of the same name for any purpose. In `main`,
 when we follow `rect1.width` with parentheses, Rust knows we mean the method
 `width`. When we don’t use parentheses, Rust knows we mean the field `width`.
@@ -849,43 +1462,48 @@ want it to only return the value in the field and do nothing else. Methods like
 this are called *getters*, and Rust does not implement them automatically for
 struct fields as some other languages do. Getters are useful because you can
 make the field private but the method public and thus enable read-only access
-to that field as part of the type’s public API. We will be discussing what
-public and private are and how to designate a field or method as public or
-private in Chapter 7.
+to that field as part of the type’s public API. We will discuss what public and
+private are and how to designate a field or method as public or private in
+Chapter 7.
 
-> ### Where’s the `->` Operator?
->
+
+Unmatched: BoxType
+
+> ### Where’s the -> Operator?
+
+
 > In C and C++, two different operators are used for calling methods: you use
-> `.` if you’re calling a method on the object directly and `->` if you’re
-> calling the method on a pointer to the object and need to dereference the
-> pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
->
+`.` if you’re calling a method on the object directly and `->` if you’re
+calling the method on a pointer to the object and need to dereference the
+pointer first. In other words, if `object` is a pointer, `object->something()`
+is similar to `(*object).something()`.
+
+
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
-> feature called *automatic referencing and dereferencing*. Calling methods is
-> one of the few places in Rust that has this behavior.
->
+feature called *automatic referencing and dereferencing*. Calling methods is
+one of the few places in Rust that has this behavior.
+
+
 > Here’s how it works: when you call a method with `object.something()`, Rust
-> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
-> the method. In other words, the following are the same:
->
->
-> ```
-> p1.distance(&p2);
-> (&p1).distance(&p2);
-> ```
->
+automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
+the method. In other words, the following are the same:
+
+
+Unmatched: BoxCode
+
+Unmatched: BoxCode
+
 > The first one looks much cleaner. This automatic referencing behavior works
-> because methods have a clear receiver—the type of `self`. Given the receiver
-> and name of a method, Rust can figure out definitively whether the method is
-> reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
-> that Rust makes borrowing implicit for method receivers is a big part of
-> making ownership ergonomic in practice.
+because methods have a clear receiver—the type of `self`. Given the receiver
+and name of a method, Rust can figure out definitively whether the method is
+reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact that
+Rust makes borrowing implicit for method receivers is a big part of making
+ownership ergonomic in practice.
 
 ### Methods with More Parameters
 
 Let’s practice using methods by implementing a second method on the `Rectangle`
-struct. This time, we want an instance of `Rectangle` to take another instance
+struct. This time we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self` (the first `Rectangle`); otherwise it should return `false`. That
 is, once we’ve defined the `can_hold` method, we want to be able to write the
@@ -895,32 +1513,83 @@ Filename: src/main.rs
 
 ```
 fn main() {
-    let rect1 = Rectangle {
-        width: 30,
-        height: 50,
-    };
-    let rect2 = Rectangle {
-        width: 10,
-        height: 40,
-    };
-    let rect3 = Rectangle {
-        width: 60,
-        height: 45,
-    };
+```
 
+```
+    let rect1 = Rectangle {
+```
+
+```
+        width: 30,
+```
+
+```
+        height: 50,
+```
+
+```
+    };
+```
+
+```
+    let rect2 = Rectangle {
+```
+
+```
+        width: 10,
+```
+
+```
+        height: 40,
+```
+
+```
+    };
+```
+
+```
+    let rect3 = Rectangle {
+```
+
+```
+        width: 60,
+```
+
+```
+        height: 45,
+```
+
+```
+    };
+```
+
+```
+
+```
+
+```
     println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+```
+
+```
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+```
+
+```
 }
 ```
 
-Listing 5-14: Using the as-yet-unwritten `can_hold` method
+Using the as-yet-unwritten `can_hold` method
 
-And the expected output would look like the following, because both dimensions
-of `rect2` are smaller than the dimensions of `rect1` but `rect3` is wider than
+The expected output would look like the following because both dimensions of
+`rect2` are smaller than the dimensions of `rect1` but `rect3` is wider than
 `rect1`:
 
 ```
 Can rect1 hold rect2? true
+```
+
+```
 Can rect1 hold rect3? false
 ```
 
@@ -934,7 +1603,7 @@ read `rect2` (rather than write, which would mean we’d need a mutable borrow),
 and we want `main` to retain ownership of `rect2` so we can use it again after
 calling the `can_hold` method. The return value of `can_hold` will be a
 Boolean, and the implementation will check whether the width and height of
-`self` are both greater than the width and height of the other `Rectangle`,
+`self` are greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
 Listing 5-13, shown in Listing 5-15.
 
@@ -942,18 +1611,42 @@ Filename: src/main.rs
 
 ```
 impl Rectangle {
-    fn area(&self) -> u32 {
-        self.width * self.height
-    }
+```
 
-    fn can_hold(&self, other: &Rectangle) -> bool {
-        self.width > other.width && self.height > other.height
+```
+    fn area(&self) -> u32 {
+```
+
+```
+        self.width * self.height
+```
+
+```
     }
+```
+
+```
+
+```
+
+```
+    fn can_hold(&self, other: &Rectangle) -> bool {
+```
+
+```
+        self.width > other.width && self.height > other.height
+```
+
+```
+    }
+```
+
+```
 }
 ```
 
-Listing 5-15: Implementing the `can_hold` method on `Rectangle` that takes
-another `Rectangle` instance as a parameter
+Implementing the `can_hold` method on `Rectangle` that takes another
+`Rectangle` instance as a parameter
 
 When we run this code with the `main` function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
@@ -981,12 +1674,33 @@ Filename: src/main.rs
 
 ```
 impl Rectangle {
-    fn square(size: u32) -> Self [1] {
-        Self [2] {
+```
+
+```
+    fn square(size: u32) -> 1 Self  {
+```
+
+```
+      2 Self  {
+```
+
+```
             width: size,
+```
+
+```
             height: size,
+```
+
+```
         }
+```
+
+```
     }
+```
+
+```
 }
 ```
 
@@ -999,33 +1713,57 @@ To call this associated function, we use the `::` syntax with the struct name;
 the struct: the `::` syntax is used for both associated functions and
 namespaces created by modules. We’ll discuss modules in Chapter 7.
 
-<!--- Should we mention the most common associated function is `new`? And that
-new isn't built into the language.
-/JT --->
-<!-- I've added a note as such above to the paragraph that starts with
-"Associated functions that aren’t methods" /Carol -->
-
-### Multiple `impl` Blocks
+### Multiple impl Blocks
 
 Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method
-in its own `impl` block.
+5-15 is equivalent to the code shown in Listing 5-16, which has each method in
+its own `impl` block.
 
 ```
 impl Rectangle {
+```
+
+```
     fn area(&self) -> u32 {
-        self.width * self.height
-    }
-}
+```
 
-impl Rectangle {
-    fn can_hold(&self, other: &Rectangle) -> bool {
-        self.width > other.width && self.height > other.height
+```
+        self.width * self.height
+```
+
+```
     }
+```
+
+```
 }
 ```
 
-Listing 5-16: Rewriting Listing 5-15 using multiple `impl` blocks
+```
+
+```
+
+```
+impl Rectangle {
+```
+
+```
+    fn can_hold(&self, other: &Rectangle) -> bool {
+```
+
+```
+        self.width > other.width && self.height > other.height
+```
+
+```
+    }
+```
+
+```
+}
+```
+
+Rewriting Listing 5-15 using multiple `impl` blocks
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
@@ -1043,31 +1781,3 @@ structs have.
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
 
-<!--- We don't mention that you can only use `impl` in the same crate as the
-type it's created in, otherwise you could use `impl` and add methods on types
-that come from other people (which you can't do, unless you make a trait to
-attach them to)
-
-Another thing we may want to mention is that `Self` inside of an `impl` refers
-to the type being impl'd. So you might write the above:
-
-```
-impl Rectangle {
-    fn square(size: u32) -> Self {
-        Self {
-            width: size,
-            height: size,
-        }
-    }
-}
-```
-which is often a bit more ergonomic.
-
-/JT --->
-<!-- I've changed the `square` example to use `Self` and added some wingdings
-and notes explaining that. I don't really want to get into the restrictions on
-`impl` on types defined in another crate, because we haven't covered traits
-yet. Traits let you do `impl Trait for OtherCrateType` in some circumstances,
-so I don't want to say "you can't use an `impl` block on types from other
-crates" because I'd have to allude to traits or potentially give the reader the
-wrong impression. We get into these restrictions in chapter 10. -->
