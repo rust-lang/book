@@ -57,27 +57,6 @@ understanding of the module system and be able to work with scopes like a pro!
 
 The first parts of the module system we’ll cover are packages and crates.
 
-<!-- Do you have a general definition of a crate we can add, or is it too
-dependent on whether it's a binary or library crate? /LC -->
-<!-- I've struggled to come up with something that isn't just "smaller than a
-package but bigger than a module"... "reusable" or "what you specify as a
-dependency" only applies to library crates... this definition I've added here
-gets a little bit into how the compiler sees crates, which might be too much
-detail? What do you think about this next paragraph? /Carol -->
-<!-- JT, what do you think? /LC -->
-<!-- I think this works.
-
-Carol - I'm wondering a bit if "packages" above helps the reader build the
-mental model or if it's kind of an implementation detail for cargo (we could
-say we "package crates"). You're definitely the expert here, but I wonder if we
-can simplify down to Crates/Modules/Paths and mention that we'll introduce some
-of the techniques the tooling uses to work with these later. /JT -->
-<!-- I feel like we need to explain the `[package]` section in *Cargo.toml*,
-and explain what the container is when you have a library and one or more
-binaries in one directory, and that's a package. It is a little weird because
-people hardly ever talk in terms of packages, only in terms of crates, but I
-think it's better to have the discussion of package here. /Carol -->
-
 A *crate* is the smallest amount of code that the Rust compiler considers at a
 time. Even if you run `rustc` rather than `cargo` and pass a single source code
 file (as we did all the way back in the “Writing and Running a Rust Program”
@@ -127,10 +106,6 @@ $ ls my-project/src
 main.rs
 ```
 
-<!-- I can't remember if we warned folks we were going to use unix commands. May
-want to throw in the Windows command here too, so they feel welcome. /JT -->
-<!-- I don't think JT has seen chapter 1 yet, we address that there /Carol -->
-
 After we run `cargo new`, we use `ls` to see what Cargo creates. In the project
 directory, there’s a *Cargo.toml* file, giving us a package. There’s also a
 *src* directory that contains *main.rs*. Open *Cargo.toml* in your text editor,
@@ -160,8 +135,6 @@ detail.
 
 ### Modules Cheat Sheet
 
-<!--WHEN TRANSFERRED TO WORD, DECIDE ON BOX OR NOT -->
-
 Here we provide a quick reference on how modules, paths, the `use` keyword, and
 the `pub` keyword work in the compiler, and how most developers organize their
 code. We’ll be going through examples of each of these rules throughout this
@@ -171,53 +144,11 @@ work.
 - **Start from the crate root**: When compiling a crate, the compiler first
   looks in the crate root file (usually *src/lib.rs* for a library crate or
   *src/main.rs* for a binary crate) for code to compile.
-  <!-- I may be asking a silly question here... but what is the compiler looking
-  for in the crate root file? just things to start compiling? /LC -->
-  <!-- That's exactly it-- it's the starting point of compilation, and the
-  compiler will only find files if they're connected to the crate root somehow.
-  Do you think that should be mentioned here? Is there something about this
-  explanation that would make you feel more confident about the concept? /Carol
-  -->
-  <!-- I've added "for things to compile" -- I wanted to make sure the reader
-  knew they weren't missing anything, that there wasn't a particular thing
-  being looked for that the reader wasn't aware of /LC -->
-  <!-- I changed "things" to "code" to be more precise /Carol -->
 - **Declaring modules**: In the crate root file, you can declare new modules;
 say, you declare a “garden” module with `mod garden;`. The compiler will look
 for the module’s code in these places:
-
   - Inline, within curly brackets that replace the semicolon following `mod
     garden`
-    <!-- instead of or after the semicolon? Or is all of this instead of a
-    semicolon? /LC -->
-    <!-- Curly brackets and everything within them instead of the semicolon.
-    I'm not sure a pithy way to make that distinction clearer? /Carol -->
-    <!-- JT, would "Inline, within curly brackets that replace the semicolon
-    following `mod garden` be clearer/accurate? /LC -->
-    <!-- I wonder if we should order it where this cheatsheet happens after
-    we show more examples. Most of the time, you'll use the `mod` keyword to
-    pull files in as you refactor out into separate files. Sometimes you'll use
-    it for those key cases, like grouping tests. Showing those examples and then
-    going into the resolution may be a bit easier.
-
-    To your question - I think of this as something that could be more of
-    a warning. If you want to use `mod foo`, then be sure you haven't already
-    declared a module called that in the current file. If you do, the compiler
-    will see it first before it looks for a file with that name. /JT -->
-    <!-- I feel pretty strongly that the cheat sheet needs to go first, so that
-    after a reader's first time through the book, when they go back to the
-    modules chapter to try and figure out why their modules aren't working,
-    they get this first rather than having to read through or skip through the
-    examples when they're already frustrated.
-
-    I also don't feel like the "warning" way of talking about this belongs
-    here. I almost added a section called "common mistakes" or "pitfalls" or
-    "troubleshooting", and I think talking about what you *don't* want to do
-    would belong there...
-
-    Liz, I'm fine with your suggested wording and I've made that change. /Carol
-    -->
-
   - In the file *src/garden.rs*
   - In the file *src/garden/mod.rs*
 - **Declaring submodules**: In any file other than the crate root, you can
@@ -313,9 +244,9 @@ chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new --lib
-restaurant`; then enter the code in Listing 7-1 into *src/lib.rs* to define
-some modules and function signatures. Here’s the front of house section:
+modules. Create a new library named `restaurant` by running `cargo new
+restaurant --lib`; then enter the code in Listing 7-1 into *src/lib.rs* to
+define some modules and function signatures. Here’s the front of house section:
 
 Filename: src/lib.rs
 
@@ -436,10 +367,6 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-<!-- We should probably let the reader know the above is expected to fail a
-little earlier. /JT -->
-<!-- I've rearranged a bit /Carol -->
-
 Listing 7-3: Calling the `add_to_waitlist` function using absolute and relative
 paths
 
@@ -467,10 +394,9 @@ function into a module named `customer_experience`, we’d need to update the
 absolute path to `add_to_waitlist`, but the relative path would still be valid.
 However, if we moved the `eat_at_restaurant` function separately into a module
 named `dining`, the absolute path to the `add_to_waitlist` call would stay the
-same, but the relative path would need to be updated.
-
-Our preference in general is to specify absolute paths because it’s more likely
-we’ll want to move code definitions and item calls independently of each other.
+same, but the relative path would need to be updated. Our preference in general
+is to specify absolute paths because it’s more likely we’ll want to move code
+definitions and item calls independently of each other.
 
 Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
 error we get is shown in Listing 7-4.
@@ -660,11 +586,10 @@ interested in this topic, see The Rust API Guidelines at
 > We mentioned a package can contain both a *src/main.rs* binary crate root as
 > well as a *src/lib.rs* library crate root, and both crates will have the
 > package name by default. Typically, packages with this pattern of containing
-> both a library and a binary crate will have just
-> enough code in the binary crate to start an executable that calls code with
-> the library crate. This lets other projects benefit from the most
-> functionality that the package provides, because the library crate’s code can
-> be shared.
+> both a library and a binary crate will have just enough code in the binary
+> crate to start an executable that calls code with the library crate. This
+> lets other projects benefit from the most functionality that the package
+> provides, because the library crate’s code can be shared.
 >
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
 > be used in the binary crate by starting paths with the name of the package.
@@ -1069,7 +994,7 @@ added this line to *Cargo.toml*:
 Filename: Cargo.toml
 
 ```
-rand = "0.8.3"
+rand = "0.8.5"
 ```
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
@@ -1086,7 +1011,7 @@ section in Chapter 2, we brought the `Rng` trait into scope and called the
 use rand::Rng;
 
 fn main() {
-    let secret_number = rand::thread_rng().gen_range(1..101);
+    let secret_number = rand::thread_rng().gen_range(1..=100);
 }
 ```
 
@@ -1249,11 +1174,10 @@ using a path to where it was declared, as covered in the “Paths for Referring
 to an Item in the Module Tree” section. In other words, `mod` is *not* an
 “include” operation that you may have seen in other programming languages.
 
-Next, we’ll extract the `hosting` module to its own file. The process
-is a bit different because `hosting` is a child module of `front_of_house`, not
-of the root module. We’ll place the file for `hosting` in a new directory that
-will be named for its ancestors in the module tree, in this case
-*src/front_of_house/*.
+Next, we’ll extract the `hosting` module to its own file. The process is a bit
+different because `hosting` is a child module of `front_of_house`, not of the
+root module. We’ll place the file for `hosting` in a new directory that will be
+named for its ancestors in the module tree, in this case *src/front_of_house/*.
 
 To start moving `hosting`, we change *src/front_of_house.rs* to contain only the
 declaration of the `hosting` module:
@@ -1275,10 +1199,9 @@ pub fn add_to_waitlist() {}
 
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect the *hosting.rs* code to be in a `hosting` module declared in the crate
-root, and not delcared as a child of the `front_of_house` module. The
+root, and not declared as a child of the `front_of_house` module. The
 compiler’s rules for which files to check for which modules’ code means the
 directories and files more closely match the module tree.
-
 
 > ### Alternate File Paths
 >
