@@ -18,36 +18,7 @@ code for different values of an enum. Finally, we’ll cover how the `if let`
 construct is another convenient and concise idiom available to handle enums in
 your code.
 
-<!--- The above about algebraic data types feels pretty niche. Should it get
-the "expert aside" treatment that some of the early texts gets? /JT --->
-<!-- I decided to just remove the paragraph this comment was about. /Carol -->
-
 ## Defining an Enum
-
-<!--- I added this first line, it seems like this is what we're saying? Maybe
-summarize what enums are better suited for: when you know all possible outcomes
-and that the outcomes must be distinct from each other? I was hoping to
-generalize their usage early. Edit: reading on, I can see that might be tricky,
-so ignore this if so! /LC --->
-<!-- I made a slight edit to the first line here, what do you think? I don't
-think "enums are an alternative to structs" was quite right, because that
-sounded like in any situation, you could choose either enum or struct according
-to your preferences, but what I'd like the reader to come away with is that
-some situations are better expressed with enums; others with structs. /Carol -->
-<!-- I think this makes sense! I wonder if there's more we could add to give an
-idea of why we're contrasting them with structs, to give the reader a point of
-reference. What do you think JT? Would more explanation here be redundant? /LC
--->
-<!--- Here's my try for a framing, using our earlier Rectangle example:
-Where structs give you a way of grouping together related fields and data, like
-a `Rectangle` with its `width` and `height`, we don't yet have a way of saying
-a values is one of a possible set of values. For example, we may want to say
-that Rectangle is one of a set of possible shapes. To do this, Rust allows us
-to encode these possibilities as an enum. Let's look at...
-/JT --->
-<!-- I've generally taken JT's suggestion with a few edits. I'm a little
-concerned that we won't ever actually make a `Shape` enum with variants
-`Rectangle`, `Circle`, and `Triangle`? Is that a problem, Liz? /Carol -->
 
 Where structs give you a way of grouping together related fields and data, like
 a `Rectangle` with its `width` and `height`, enums give you a way of saying a
@@ -264,12 +235,6 @@ But if we used the different structs, which each have their own type, we
 couldn’t as easily define a function to take any of these kinds of messages as
 we could with the `Message` enum defined in Listing 6-2, which is a single type.
 
-<!--- We're also hinting at pattern matching complexity if we use the struct
-method. Should we call it out and mention the pattern matching chapter?
-/JT --->
-<!-- If readers don't have experience with pattern matching, I don't think this
-will resonate with them, so I'm not going to mention it here. /Carol -->
-
 There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
 enums. Here’s a method named `call` that we could define on our `Message` enum:
@@ -364,26 +329,6 @@ let some_char = Some('e');
 
 let absent_number: Option<i32> = None;
 ```
-
-<!--- I would maybe do the above more explicitly as:
-
-"
-```
-let some_number = Some(5);
-
-let some_number2: Option<i32> = Some(5);
-```
-The types of `some_number` and `some_number2` in the above are identical.
-"
-
-Using `Some("a string")` we're going to open the door to references in
-generic positions (which we still need to build up to). We talk a little about
-Option<&str> below, but I don't think it helps explain the enum concept.
-
-/JT --->
-<!-- I changed the above to use `char` rather than string slice, but we're
-trying to show that options holding different types are themselves different
-types below, so I didn't want to make them both `i32`. /Carol -->
 
 The type of `some_number` is `Option<i32>`. The type of `some_char` is
 `Option<char>`, which is a different type. Rust can infer these types because
@@ -516,13 +461,6 @@ first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
 operator that separates the pattern and the code to run. The code in this case
 is just the value `1`. Each arm is separated from the next with a comma.
 
-<!--- Tiny nit, though not sure how to phrase it. Arms are separated by commas
-in this example, though if you use blocks instead of simple values you won't use
-commas. We see this happen in the next example.
-/JT --->
-<!-- I clarified in the paragraph before the next example. You *can* use commas
-even if there's curly brackets, but people don't usually. /Carol -->
-
 When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
 associated with that pattern is executed. If that pattern doesn’t match the
@@ -533,7 +471,7 @@ The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
-We don't typically use curly brackets if the match arm code is short, as it is
+We don’t typically use curly brackets if the match arm code is short, as it is
 in Listing 6-3 where each arm just returns a value. If you want to run multiple
 lines of code in a match arm, you must use curly brackets, and the comma
 following the arm is then optional. For example, the following code prints
@@ -712,8 +650,16 @@ error[E0004]: non-exhaustive patterns: `None` not covered
 3   |         match x {
     |               ^ pattern `None` not covered
     |
-    = help: ensure that all possible cases are being handled, possibly by adding wildcards or more match arms
+note: `Option<i32>` defined here
     = note: the matched value is of type `Option<i32>`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern or an explicit pattern as shown
+    |
+4   ~             Some(i) => Some(i + 1),
+5   ~             None => todo!(),
+    |
+
+For more information about this error, try `rustc --explain E0004`.
+error: could not compile `enums` due to previous error
 ```
 
 Rust knows that we didn’t cover every possible case and even knows which
@@ -907,13 +853,3 @@ function expects.
 In order to provide a well-organized API to your users that is straightforward
 to use and only exposes exactly what your users will need, let’s now turn to
 Rust’s modules.
-
-<!--- I'm of two minds whether `?` should squeeze in here? We talk about `if
-let` but then switch topics next chapter and talk about modules. In the wild,
-I'd bet `?` would be as common, perhaps more common, than `if let`.
-
-But I'll defer to your pedagogy plan. Just wanted to share the thought.
-/JT --->
-<!-- Yeah introducing `?` here would be a big change; I don't want to talk
-about that until we've talked about `Result` even though you can use `?` on
-`Option` now, because `?` is still way more common with `Result`. /Carol -->
