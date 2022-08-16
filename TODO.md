@@ -7,8 +7,9 @@
 - [ ] Answer all comments
 - [ ] Check indentation of --snip--
 - [ ] Check cross references
-- [ ] Gray out unchanged lines
+- [ ] Numbered lines, Gray out unchanged lines
 - [ ] Check line wrapping
+- [ ] Check for unneeded command/compiling/running output
 - [ ] Check println style and error messages
 - [ ] Add alt text to images
 - [ ] Index tags
