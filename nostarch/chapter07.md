@@ -100,12 +100,13 @@ package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
 command line tool uses.
 
-A package can contain as many binary crates as you like, but at most only one
+A crate can come in one of two forms: a binary crate or a library crate. A
+package can contain as many binary crates as you like, but at most only one
 library crate. A package must contain at least one crate, whether that’s a
 library or binary crate.
 
 Let’s walk through what happens when we create a package. First we enter the
-command `cargo new`:
+command `cargo new` `my-project`:
 
 ```
 $ cargo new my-project
@@ -135,15 +136,15 @@ $ ls my-project/src
 main.rs
 ```
 
-After we run `cargo new`, we use `ls` to see what Cargo creates. In the project
-directory, there’s a *Cargo.toml* file, giving us a package. There’s also an
-*src* directory that contains *main.rs*. Open *Cargo.toml* in your text editor,
-and note there’s no mention of *src/main.rs*. Cargo follows a convention that
-*src/main.rs* is the crate root of a binary crate with the same name as the
-package. Likewise, Cargo knows that if the package directory contains
-*src/lib.rs*, the package contains a library crate with the same name as the
-package, and *src/lib.rs* is its crate root. Cargo passes the crate root files
-to `rustc` to build the library or binary.
+After we run `cargo new` `my-project`, we use `ls` to see what Cargo creates.
+In the project directory, there’s a *Cargo.toml* file, giving us a package.
+There’s also a *src* directory that contains *main.rs*. Open *Cargo.toml* in
+your text editor, and note there’s no mention of *src/main.rs*. Cargo follows a
+convention that *src/main.rs* is the crate root of a binary crate with the same
+name as the package. Likewise, Cargo knows that if the package directory
+contains *src/lib.rs*, the package contains a library crate with the same name
+as the package, and *src/lib.rs* is its crate root. Cargo passes the crate root
+files to `rustc` to build the library or binary.
 
 Here, we have a package that only contains *src/main.rs*, meaning it only
 contains a binary crate named `my-project`. If a package contains *src/main.rs*
@@ -151,8 +152,6 @@ and *src/lib.rs*, it has two crates: a binary and a library, both with the same
 name as the package. A package can have multiple binary crates by placing files
 in the *src/bin* directory: each file will be a separate binary crate.
 
-
-Unmatched: BoxType
 
 > ### Modules Cheat Sheet
 
@@ -699,31 +698,7 @@ mod front_of_house {
 ```
 
 ```
-pub fn eat_at_restaurant() {
-```
-
-```
-    // Absolute path
-```
-
-```
-    crate::front_of_house::hosting::add_to_waitlist();
-```
-
-```
-
-```
-
-```
-    // Relative path
-```
-
-```
-    front_of_house::hosting::add_to_waitlist();
-```
-
-```
-}
+--snip--
 ```
 
 Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`
@@ -876,31 +851,7 @@ mod front_of_house {
 ```
 
 ```
-pub fn eat_at_restaurant() {
-```
-
-```
-    // Absolute path
-```
-
-```
-    crate::front_of_house::hosting::add_to_waitlist();
-```
-
-```
-
-```
-
-```
-    // Relative path
-```
-
-```
-    front_of_house::hosting::add_to_waitlist();
-```
-
-```
-}
+--snip--
 ```
 
 Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call
@@ -942,8 +893,8 @@ Unmatched: BoxType
 > ### Best Practices for Packages with a Binary and a Library
 
 
-> We mentioned that a package can contain both an *src/main.rs* binary crate
-root as well as an *src/lib.rs* library crate root, and both crates will have
+> We mentioned that a package can contain both a *src/main.rs* binary crate
+root as well as a *src/lib.rs* library crate root, and both crates will have
 the package name by default. Typically, packages with this pattern of
 containing both a library and a binary crate will have just enough code in the
 binary crate to start an executable that calls code with the library crate.
@@ -1034,7 +985,7 @@ code gets moved to a different module.
 ### Making Structs and Enums Public
 
 We can also use `pub` to designate structs and enums as public, but there are a
-few details extra to the usage of `pub` with structs and enums. If we use `pub`
+few extra details to the usage of `pub` with structs and enums. If we use `pub`
 before a struct definition, we make the struct public, but the struct’s fields
 will still be private. We can make each field public or not on a case-by-case
 basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct
@@ -1139,11 +1090,15 @@ pub fn eat_at_restaurant() {
 ```
 
 ```
-    // The next line won't compile if we uncomment it; we're not allowed
+    // The next line won't compile if we uncomment it; we're not
 ```
 
 ```
-    // to see or modify the seasonal fruit that comes with the meal
+    // allowed to see or modify the seasonal fruit that comes
+```
+
+```
+    // with the meal
 ```
 
 ```
@@ -1964,7 +1919,7 @@ Filename: src/front_of_house.rs
 pub mod hosting;
 ```
 
-Then we create an *src/front_of_house* directory and a *hosting.rs* file to
+Then we create a *src/front_of_house* directory and a *hosting.rs* file to
 contain the definitions made in the `hosting` module:
 
 Filename: src/front_of_house/hosting.rs
