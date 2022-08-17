@@ -58,8 +58,8 @@ let ConsentForm = () => {
         <section>
           <h2>Why should I participate? </h2>
           <p>
-            No, you are not at all obliged to do so! Participation is entirely optional and you may
-            stop using this version at any time you like.
+            We believe these changes will help you learn Rust better than reading the existing Rust
+            Book. Your participation may also help every future Rust learner!
           </p>
         </section>
         <section>
