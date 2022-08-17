@@ -5,8 +5,8 @@
 - [ ] Check diff
 - [ ] Check updated output
 - [ ] Answer all comments
-- [ ] Check indentation of --snip--
 - [ ] Check cross references
+- [ ] Check indentation of --snip--
 - [ ] Numbered lines, Gray out unchanged lines
 - [ ] Check line wrapping
 - [ ] Check for unneeded command/compiling/running output
