@@ -21,4 +21,6 @@ Press][nsprust].
 [nsprust]: https://nostarch.com/rust
 [translations]: appendix-06-translation.html
 
-**🚨 NEW: Want a more interactive learning experience? Try out a new version of the Rust Book, featuring: quizzes, highlighting, visualizations, and more**: <https://rust-book.cs.brown.edu>
+**🚨 Want a more interactive learning experience? Try out a different version
+of the Rust Book, featuring: quizzes, highlighting, visualizations, and more**:
+<https://rust-book.cs.brown.edu>
