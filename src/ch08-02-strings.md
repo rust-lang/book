@@ -355,7 +355,7 @@ of type `char`, and you can iterate over the result to access each element:
 
 ```rust
 for c in "Зд".chars() {
-    println!("{}", c);
+    println!("{c}");
 }
 ```
 
@@ -371,7 +371,7 @@ appropriate for your domain:
 
 ```rust
 for b in "Зд".bytes() {
-    println!("{}", b);
+    println!("{b}");
 }
 ```
 
