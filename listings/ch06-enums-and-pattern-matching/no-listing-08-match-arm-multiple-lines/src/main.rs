@@ -1,8 +1,8 @@
 enum Coin {
     Penny,
-    Nickel,
-    Dime,
     Quarter,
+    Dime,
+    Nickel,
 }
 
 // ANCHOR: here

@@ -67,17 +67,17 @@ values that match the pattern. This is how we can extract values out of enum
 variants.
 
 As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States minted quarters with different
+From 1999 through 2008, the United States minted nickels with different
 designs for each of the 50 states on one side. No other coins got state
-designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `UsState` value stored
+designs, so only nickels have this extra value. We can add this information to
+our `enum` by changing the `Nickel` variant to include a `UsState` value stored
 inside it, which we’ve done here in Listing 6-4.
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 6-4: A `Coin` enum in which the `Quarter` variant
+<span class="caption">Listing 6-4: A `Coin` enum in which the `Nickel` variant
 also holds a `UsState` value</span>
 
 Let’s imagine that a friend is trying to collect all 50 state quarters. While
@@ -86,20 +86,20 @@ state associated with each quarter so if it’s one our friend doesn’t have, t
 can add it to their collection.
 
 In the match expression for this code, we add a variable called `state` to the
-pattern that matches values of the variant `Coin::Quarter`. When a
-`Coin::Quarter` matches, the `state` variable will bind to the value of that
+pattern that matches values of the variant `Coin::Nickel`. When a
+`Coin::Nickel` matches, the `state` variable will bind to the value of that
 quarter’s state. Then we can use `state` in the code for that arm, like so:
 
 ```rust
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-09-variable-in-pattern/src/main.rs:here}}
 ```
 
-If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
-would be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
-of the match arms, none of them match until we reach `Coin::Quarter(state)`. At
+If we were to call `value_in_cents(Coin::Nickel(UsState::Alaska))`, `coin`
+would be `Coin::Nickel(UsState::Alaska)`. When we compare that value with each
+of the match arms, none of them match until we reach `Coin::Nickel(state)`. At
 that point, the binding for `state` will be the value `UsState::Alaska`. We can
 then use that binding in the `println!` expression, thus getting the inner
-state value out of the `Coin` enum variant for `Quarter`.
+state value out of the `Coin` enum variant for `Nickel`.
 
 ### Matching with `Option<T>`
 

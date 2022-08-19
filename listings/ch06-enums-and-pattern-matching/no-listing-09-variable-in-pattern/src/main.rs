@@ -7,18 +7,18 @@ enum UsState {
 
 enum Coin {
     Penny,
-    Nickel,
+    Quarter,
     Dime,
-    Quarter(UsState),
+    Nickel(UsState),
 }
 
 // ANCHOR: here
 fn value_in_cents(coin: Coin) -> u8 {
     match coin {
         Coin::Penny => 1,
-        Coin::Nickel => 5,
+        Coin::Quarter => 5,
         Coin::Dime => 10,
-        Coin::Quarter(state) => {
+        Coin::Nickel(state) => {
             println!("State quarter from {:?}!", state);
             25
         }
@@ -27,5 +27,5 @@ fn value_in_cents(coin: Coin) -> u8 {
 // ANCHOR_END: here
 
 fn main() {
-    value_in_cents(Coin::Quarter(UsState::Alaska));
+    value_in_cents(Coin::Nickel(UsState::Alaska));
 }

@@ -8,9 +8,9 @@ enum UsState {
 
 enum Coin {
     Penny,
-    Nickel,
+    Quarter,
     Dime,
-    Quarter(UsState),
+    Nickel(UsState),
 }
 // ANCHOR_END: here
 
