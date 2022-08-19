@@ -30,7 +30,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ range, highlighter, close
       text: feedback.current!.value,
       page: window.location.pathname,
     };
-    window.telemetry.log("feedback", data);
 
     let dispose = highlighter.hooks.Serialize.RecordInfo.tap(() => JSON.stringify(data));
     highlighter.fromRange(range);

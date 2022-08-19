@@ -7,3 +7,8 @@ export type HighlightExtra = {
   /** Path to page on which feedback was given */
   page: string;
 };
+
+export enum HighlightTelemetryAction {
+  create = "create",
+  remove = "remove",
+}

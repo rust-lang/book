@@ -5,7 +5,7 @@ import HighlightSource from "web-highlighter/dist/model/source";
 
 import FeedbackModal from "./modal";
 import FeedbackTooltip from "./tooltip";
-import { HIGHLIGHT_STORAGE_KEY } from "./utils";
+import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction } from "./utils";
 
 type SelectionRendererProps = { highlighter: Highlighter; stored?: HighlightSource[] };
 let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored }) => {
@@ -31,13 +31,22 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
     // load highlights from local storage
     stored?.map(s => highlighter.fromStore(s.startMeta, s.endMeta, s.text, s.id, s.extra));
 
-    // store new highlights in localStorage when created
     highlighter.on(Highlighter.event.CREATE, ({ sources }) => {
+      // store new highlights in localStorage when created
       let stored_str = localStorage.getItem(HIGHLIGHT_STORAGE_KEY);
       let stored_highlights = JSON.parse(stored_str || "[]");
       stored_highlights.push(...sources);
 
       localStorage.setItem(HIGHLIGHT_STORAGE_KEY, JSON.stringify(stored_highlights));
+
+      // log new highlights to telemetry server
+      sources.forEach(src => {
+        // `extra` contains JSON about the highlight but is stringified (need to parse)
+        let parsed_src = { ...src, extra: JSON.parse(src.extra as string) };
+        let data = { action: HighlightTelemetryAction.create, data: parsed_src };
+
+        window.telemetry.log("feedback", data);
+      });
     });
   }, []);
 
