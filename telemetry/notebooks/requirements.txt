@@ -1,0 +1,3 @@
+jupyter==1.0.0
+pandas==1.3.5
+tomlkit==0.11.4
