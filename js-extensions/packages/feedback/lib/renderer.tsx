@@ -5,7 +5,7 @@ import Highlighter from "web-highlighter";
 import HighlightSource from "web-highlighter/dist/model/source";
 
 import FeedbackTooltip from "./tooltip";
-import { HIGHLIGHT_STORAGE_KEY } from "./utils";
+import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction } from "./utils";
 
 type FeedbackRendererProps = { highlighter: Highlighter };
 const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
@@ -14,13 +14,19 @@ const FeedbackRenderer: React.FC<FeedbackRendererProps> = ({ highlighter }) => {
   const [tooltipHovered, setTooltipHovered] = useState<string | null>(null);
 
   useEffect(() => {
-    // remove highlights from local storage when deleted
     highlighter.on(Highlighter.event.REMOVE, ({ ids }) => {
+      // remove highlights from local storage when deleted
       let stored_str = localStorage.getItem(HIGHLIGHT_STORAGE_KEY);
       let stored_highlights = JSON.parse(stored_str || "[]") as HighlightSource[];
       let filtered_highlights = stored_highlights.filter(hl => !ids.includes(hl.id));
 
       localStorage.setItem(HIGHLIGHT_STORAGE_KEY, JSON.stringify(filtered_highlights));
+
+      // log removed highlights to telemetry server
+      ids.forEach(id => {
+        let data = { action: HighlightTelemetryAction.remove, data: id };
+        window.telemetry.log("feedback", data);
+      });
     });
 
     // update state on hover changes
