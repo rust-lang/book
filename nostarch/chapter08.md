@@ -138,7 +138,7 @@ let v = vec![1, 2, 3, 4, 5];
 ```
 
 ```
-println!("The third element is {}", third);
+println!("The third element is {third}");
 ```
 
 ```
@@ -154,7 +154,7 @@ match third  {
 ```
 
 ```
-    Some(third) => println!("The third element is {}", third),
+    Some(third) => println!("The third element is {third}"),
 ```
 
 ```
@@ -248,7 +248,7 @@ v.push(6);
 ```
 
 ```
-println!("The first element is: {}", first);
+println!("The first element is: {first}");
 ```
 
 Attempting to add an element to a vector while holding a reference to an item
@@ -296,15 +296,11 @@ immutable
 ```
 
 ```
-8 |     println!("The first element is: {}", first);
+8 |     println!("The first element is: {first}");
 ```
 
 ```
-  |                                          ----- immutable borrow later used
-```
-
-```
-here
+  |                                      ----- immutable borrow later used here
 ```
 
 The code in Listing 8-6 might look like it should work: why should a reference
@@ -336,7 +332,7 @@ for i in &v {
 ```
 
 ```
-    println!("{}", i);
+    println!("{i}");
 ```
 
 ```
@@ -573,8 +569,7 @@ let s = "initial contents".to_string();
 
 PROD: I couldn’t get the following listing caption to format correctly.
 
-Listing 8-12: Using the `to_string` method to create a `String` from a string
-literal
+Using the `to_string` method to create a `String` from a string literal
 
 
 Unmatched: BodyContinued
@@ -684,7 +679,7 @@ s1.push_str(s2);
 ```
 
 ```
-println!("s2 is {}", s2);
+println!("s2 is {s2}");
 ```
 
 Using a string slice after appending its contents to a `String`
@@ -743,7 +738,7 @@ call this method with `String` values. We’ll discuss generics in Chapter 10.
 This signature gives us the clues we need in order to understand the tricky
 bits of the `+` operator.
 
-First, `s2` has a `&`, meaning that we’re adding a *reference* of the second
+First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
 string to the first string. This is because of the `s` parameter in the `add`
 function: we can only add a `&str` to a `String`; we can’t add two `String`
 values together. But wait—the type of `&s2` is `&String`, not `&str`, as
@@ -757,7 +752,7 @@ not take ownership of the `s` parameter, `s2` will still be a valid `String`
 after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`
-because `self` does *not* have a `&`. This means `s1` in Listing 8-18 will be
+because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
 moved into the `add` call and will no longer be valid after that. So, although
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
 this statement actually takes ownership of `s1`, appends a copy of the contents
@@ -809,7 +804,7 @@ let s3 = String::from("toe");
 ```
 
 ```
-let s = format!("{}-{}-{}", s1, s2, s3);
+let s = format!("{s1}-{s2}-{s3}");
 ```
 
 This code also sets `s` to `tic-tac-toe`. The `format!` macro works like
@@ -862,7 +857,11 @@ error[E0277]: the type `String` cannot be indexed by `{integer}`
 ```
 
 ```
-  = help: the trait `Index<{integer}>` is not implemented for `String`
+  = help: the trait `Index<{integer}>` is not implemented for
+```
+
+```
+`String`
 ```
 
 The error and the note tell the story: Rust strings don’t support indexing. But
@@ -925,11 +924,11 @@ If we look at the Hindi word “नमस्ते” written in the Devanagari 
 stored as a vector of `u8` values that looks like this:
 
 ```
-[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
+[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224,
 ```
 
 ```
-224, 165, 135]
+164, 164, 224, 165, 135]
 ```
 
 That’s 18 bytes and is how computers ultimately store this data. If we look at
@@ -994,11 +993,7 @@ thread 'main' panicked at 'byte index 1 is not a char boundary;
 ```
 
 ```
-it is inside 'З' (bytes 0..2) of `Здравствуйте`',
-```
-
-```
-src/main.rs:4:14
+it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/main.rs:4:14
 ```
 
 You should use caution when creating string slices with ranges, because doing
@@ -1016,7 +1011,7 @@ for c in "Зд".chars() {
 ```
 
 ```
-    println!("{}", c);
+    println!("{c}");
 ```
 
 ```
@@ -1041,7 +1036,7 @@ for b in "Зд".bytes() {
 ```
 
 ```
-    println!("{}", b);
+    println!("{b}");
 ```
 
 ```
@@ -1241,7 +1236,7 @@ for (key, value) in &scores {
 ```
 
 ```
-    println!("{}: {}", key, value);
+    println!("{key}: {value}");
 ```
 
 ```
@@ -1293,11 +1288,11 @@ map.insert(field_name, field_value);
 ```
 
 ```
-// field_name and field_value are invalid at this point, try using them and
+// field_name and field_value are invalid at this point, try
 ```
 
 ```
-// see what compiler error you get!
+// using them and see what compiler error you get!
 ```
 
 Showing that keys and values are owned by the hash map once they’re inserted
