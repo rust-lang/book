@@ -39,13 +39,13 @@ help.
 ## Removing Duplication by Extracting a Function
 
 Generics allow us to replace specific types with a placeholder that represents
-multiple types to remove code duplication.
-Before diving into generics syntax, then, let’s first look at how to remove
-duplication in a way that doesn’t involve generic types by extracting a
-function that replaces specific values with a placeholder that represents
-multiple values. Then we’ll apply the same technique to extract a generic
-function! By looking at how to recognize duplicated code you can extract into a
-function, you’ll start to recognize duplicated code that can use generics.
+multiple types to remove code duplication. Before diving into generics syntax,
+then, let’s first look at how to remove duplication in a way that doesn’t
+involve generic types by extracting a function that replaces specific values
+with a placeholder that represents multiple values. Then we’ll apply the same
+technique to extract a generic function! By looking at how to recognize
+duplicated code you can extract into a function, you’ll start to recognize
+duplicated code that can use generics.
 
 We begin with the short program in Listing 10-1 that finds the largest number
 in a list.
@@ -167,12 +167,6 @@ in.
 In summary, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
-<!---
-"In summary"?
-/JT --->
-<!-- I believe "In sum" to be fine, but other people have been confused by it
-as well, so I'm ok changing it. /Carol -->
-
 1. Identify duplicate code.
 2. Extract the duplicate code into the body of the function and specify the
    inputs and return values of that code in the function signature.
@@ -255,9 +249,9 @@ the duplication by introducing a generic type parameter in a single function.
 To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
-convention, parameter names in Rust are short, often just a letter, and Rust’s
-type-naming convention is CamelCase. Short for “type,” `T` is the default
-choice of most Rust programmers.
+convention, type parameter names in Rust are short, often just a letter, and
+Rust’s type-naming convention is CamelCase. Short for “type,” `T` is the
+default choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
 parameter name in the signature so the compiler knows what that name means.
@@ -314,18 +308,18 @@ doesn’t yet compile yet
 If we compile this code right now, we’ll get this error:
 
 ```
-error[E0369]: binary operation `>` cannot be applied to type `T`
+error[E0369]: binary operation `>` cannot be applied to type `&T`
  --> src/main.rs:5:17
   |
 5 |         if item > largest {
-  |            ---- ^ ------- T
+  |            ---- ^ ------- &T
   |            |
-  |            T
+  |            &T
   |
 help: consider restricting type parameter `T`
   |
-1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> T {
-  |             ^^^^^^^^^^^^^^^^^^^^^^
+1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
+  |             ++++++++++++++++++++++
 ```
 
 The help text mentions `std::cmp::PartialOrd`, which is a *trait*, and we’re
@@ -338,26 +332,6 @@ library has the `std::cmp::PartialOrd` trait that you can implement on types
 suggestion, we restrict the types valid for `T` to only those that implement
 `PartialOrd` and this example will compile, because the standard library
 implements `PartialOrd` on both `i32` and `char`.
-
-<!---
-The wording at the end of the above paragraph feels a little odd. For the
-"You’ll learn how to specify that a generic type has a particular trait in the
-“Traits as Parameters” section." -- the error message above tells you how to
-maybe fix it.
-
-Well, it *could* fix it but the way the example is written adds multiple
-constraints.
-
-Do we want to leave this example unfinished and move onto other topics for a
-bit or revise the example so it's more self-contained, allowing the compiler to
-help us and later revisit after we've learned more?
-/JT --->
-<!-- I've modified the example and explanation just slightly so that only
-adding the `PartialOrd` trait as suggested here will fix it completely, perhaps
-leaving the reader hanging a little bit less. It's really hard to teach
-generics and trait bounds, though, because you can't do much with generics
-unless you have trait bounds too (and can't learn why you'd want trait bounds
-without knowing about generics). /Carol -->
 
 ### In Struct Definitions
 
@@ -412,31 +386,6 @@ In this example, when we assign the integer value 5 to `x`, we let the compiler
 know that the generic type `T` will be an integer for this instance of
 `Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
 same type as `x`, we’ll get a type mismatch error like this:
-
-<!---
-Not sure how or where we might want to call this out, but this is also how
-type inference in Rust works. If we don't know the type, we look for how it's
-used. That fresh type becomes a concrete type, and any use after that which
-is different than we expect becomes an error.
-
-fn main() {
-    let mut x;
-
-    x = 5;
-    x = 4.0;
-}
-
-Also gives:
-  |
-2 |     let mut x;
-  |         ----- expected due to the type of this binding
-...
-5 |     x = 4.0;
-  |         ^^^ expected integer, found floating-point number
-
-/JT --->
-<!-- Yeah, it's kind of neat trivia, but doesn't really fit here I don't think.
-/Carol -->
 
 ```
 error[E0308]: mismatched types
@@ -545,16 +494,6 @@ fn main() {
 }
 ```
 
-<!---
-
-The above code gives a warning for the unused `y`. Maybe we can print both
-`x` and `y`?
-
-/JT --->
-<!-- In general, I'm not worried about unused code warnings, there's a lot of
-examples that have unused code because they're small examples. I don't think
-there's much value in adding a method and printing `y` as well. /Carol -->
-
 Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
 will return a reference to the `x` field of type `T`
 
@@ -650,8 +589,8 @@ method.
 ### Performance of Code Using Generics
 
 You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won't make your run any
-slower than it would with concrete types.
+parameters. The good news is that using generic types won't make your program
+run any slower than it would with concrete types.
 
 Rust accomplishes this by performing monomorphization of the code using
 generics at compile time. *Monomorphization* is the process of turning generic
@@ -675,15 +614,6 @@ instances and identifies two kinds of `Option<T>`: one is `i32` and the other
 is `f64`. As such, it expands the generic definition of `Option<T>` into two
 definitions specialized to `i32` and `f64`, thereby replacing the generic
 definition with the specific ones.
-
-<!---
-
-We may want to be clear in the above it doesn't actually do this, as you
-wouldn't be able to write `enum Option_i32` in your code as it would clash.
-
-/JT --->
-<!-- I've reworded the last sentence in the above paragraph and the next
-sentence to hopefully sidestep the issue JT pointed out. /Carol -->
 
 The monomorphized version of the code looks similar to the following (the
 compiler uses different names than what we’re using here for illustration):
@@ -820,8 +750,6 @@ implement the trait for. Within the `impl` block, we put the method signatures
 that the trait definition has defined. Instead of adding a semicolon after each
 signature, we use curly brackets and fill in the method body with the specific
 behavior that we want the methods of the trait to have for the particular type.
-
-<!-- NOTE TO ADD SOME NUMBER INDICATORS HERE IN THE WORD FILES -->
 
 Now that the library has implemented the `Summary` trait on `NewsArticle` and
 `Tweet`, users of the crate can call the trait methods on instances of
@@ -1073,8 +1001,9 @@ we can use a `where` clause, like this:
 
 ```
 fn some_function<T, U>(t: &T, u: &U) -> i32
-    where T: Display + Clone,
-          U: Clone + Debug
+where
+    T: Display + Clone,
+    U: Clone + Debug,
 {
 ```
 
@@ -1147,11 +1076,6 @@ Returning either a `NewsArticle` or a `Tweet` isn’t allowed due to restriction
 around how the `impl Trait` syntax is implemented in the compiler. We’ll cover
 how to write a function with this behavior in the “Using Trait Objects That
 Allow for Values of Different Types” section of Chapter 17.
-
-<!-- I've removed the whole "Fixing the `largest` Function with Trait Bounds"
-section now that the example is slightly different and adding the one trait
-bound as the compiler suggests fixed Listing 10-5 earlier. I've also renumbered
-the following listings. /Carol-->
 
 ### Using Trait Bounds to Conditionally Implement Methods
 
@@ -1233,26 +1157,6 @@ Doing so improves performance without having to give up the flexibility of
 generics.
 
 ## Validating References with Lifetimes
-
-<!---
-
-meta comment: this chapter is already pretty hefty. We just went through both
-generics and a whirlwind tour of traits. Lifetimes, while related to generics,
-feel like you might want to give a five minute break between them, let those
-sink in, and then pick up this topic.
-
-I noticed a couple topics we may want to touch on above for a bit of
-completeness:
-
-* A closer look at how From/Into work and how they relate to each other.
-* Using traits to specialize what you do when returning values.
-  i.e., Why does `let four: u32 = "4".parse().unwrap();` work?
-* Turbofish
-
-/JT --->
-<!-- These comments are totally valid, but seeing as this revision is already
-dragging on later than we were hoping, I don't really want to do large scale
-reorganization at this point. /Carol -->
 
 Lifetimes are another kind of generic that we’ve already been using. Rather
 than ensuring that a type has the behavior we want, lifetimes ensure that
@@ -1443,7 +1347,7 @@ error[E0106]: missing lifetime specifier
 help: consider introducing a named lifetime parameter
   |
 9 | fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-  |           ^^^^    ^^^^^^^     ^^^^^^^     ^^^
+  |           ++++     ++          ++          ++
 ```
 
 The help text reveals that the return type needs a generic lifetime parameter
@@ -1492,20 +1396,11 @@ annotations are meant to tell Rust how generic lifetime parameters of multiple
 references relate to each other. Let’s examine how the lifetime annotations
 relate to each other in the context of the `longest` function.
 
-<!---
-
-The above description is a little hard to follow with a code example.
-
-/JT --->
-<!-- Rather than fleshing out the code that goes with this description, I've
-moved some of the description to the next section to go with the code example
-there. /Carol -->
-
 ### Lifetime Annotations in Function Signatures
 
 To use lifetime annotations in function signatures, we need to declare the
 generic *lifetime* parameters inside angle brackets between the function name
-and the parameter list, just as we did with generic *type* parameters
+and the parameter list, just as we did with generic *type* parameters.
 
 We want the signature to express the following constraint: the returned
 reference will be valid as long as both the parameters are valid. This is the
@@ -1624,7 +1519,7 @@ error[E0597]: `string2` does not live long enough
  --> src/main.rs:6:44
   |
 6 |         result = longest(string1.as_str(), string2.as_str());
-  |                                            ^^^^^^^ borrowed value does not live long enough
+  |                                            ^^^^^^^^^^^^^^^^ borrowed value does not live long enough
 7 |     }
   |     - `string2` dropped here while still borrowed
 8 |     println!("The longest string is {}", result);
@@ -1693,14 +1588,11 @@ lifetime is not related to the lifetime of the parameters at all. Here is the
 error message we get:
 
 ```
-error[E0515]: cannot return value referencing local variable `result`
+error[E0515]: cannot return reference to local variable `result`
   --> src/main.rs:11:5
    |
 11 |     result.as_str()
-   |     ------^^^^^^^^^
-   |     |
-   |     returns a value referencing data owned by the current function
-   |     `result` is borrowed here
+   |     ^^^^^^^^^^^^^^^ returns a reference to data owned by the current function
 ```
 
 The problem is that `result` goes out of scope and gets cleaned up at the end
@@ -1722,13 +1614,6 @@ So far, the structs we’ve defined all hold owned types. We can define structs 
 hold references, but in that case we would need to add a lifetime annotation on
 every reference in the struct’s definition. Listing 10-24 has a struct named
 `ImportantExcerpt` that holds a string slice.
-
-<!---
-
-nit: "So far, the structs we've *defined* all hold owned types"
-
-/JT --->
-<!-- Fixed! /Carol -->
 
 Filename: src/main.rs
 
