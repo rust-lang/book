@@ -1,8 +1,8 @@
 # In each chapter
 
-- [ ] Manual regeneration
-- [ ] Check for upstream changes from last snapshot
-- [ ] Propagate updated output to docx
+- [x] Manual regeneration
+- [x] Check for upstream changes from last snapshot
+- [x] Propagate updated output to docx
 - [ ] Extract docx and check diff
 - [ ] Answer all comments
 - [ ] Check cross references
