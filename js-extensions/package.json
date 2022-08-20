@@ -5,7 +5,7 @@
         "clean": "(pnpm -r --parallel exec rm -rf dist node_modules) && rm -rf node_modules",
         "build": "pnpm run -r build",
         "watch": "pnpm run --parallel --no-bail -r build -w",
-        "test": "jest",
+        "test": "jest --runInBand",
         "fmt": "prettier -w \"packages/*/lib/**/*.{ts,tsx}\"",
         "lint": "pnpm -r --parallel exec eslint --ext js,ts,tsx lib",
         "commit-check": "pnpm clean; pnpm init-repo && pnpm lint && pnpm test"
