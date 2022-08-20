@@ -2,8 +2,8 @@
 
 - [ ] Manual regeneration
 - [ ] Check for upstream changes from last snapshot
-- [ ] Check diff
-- [ ] Check updated output
+- [ ] Propagate updated output to docx
+- [ ] Extract docx and check diff
 - [ ] Answer all comments
 - [ ] Check cross references
 - [ ] Check indentation of --snip--

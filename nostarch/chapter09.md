@@ -46,19 +46,21 @@ panic occurs to make it easier to track down the source of the panic.
 Unmatched: BoxType
 
 > ### Unwinding the Stack or Aborting in Response to a Panic
->
+
+
 > By default, when a panic occurs the program starts *unwinding*, which means
-> Rust walks back up the stack and cleans up the data from each function it
-> encounters. However, walking back and cleaning up is a lot of work. Rust,
-> therefore, allows you to choose the alternative of immediately *aborting*,
-> which ends the program without cleaning up.
->
+Rust walks back up the stack and cleans up the data from each function it
+encounters. However, walking back and cleaning up is a lot of work. Rust,
+therefore, allows you to choose the alternative of immediately *aborting*,
+which ends the program without cleaning up.
+
+
 > Memory that the program was using will then need to be cleaned up by the
-> operating system. If in your project you need to make the resultant binary as
-> small as possible, you can switch from unwinding to aborting upon a panic by
-> adding `panic = 'abort'` to the appropriate `[profile]` sections in your
-> *Cargo.toml* file. For example, if you want to abort on panic in release mode,
-> add this:
+operating system. If in your project you need to make the resultant binary as
+small as possible, you can switch from unwinding to aborting upon a panic by
+adding `panic = 'abort'` to the appropriate `[profile]` sections in your
+*Cargo.toml* file. For example, if you want to abort on panic in release mode,
+add this:
 
 
 Unmatched: BoxCode
@@ -87,7 +89,11 @@ thread 'main' panicked at 'crash and burn', src/main.rs:2:5
 ```
 
 ```
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+note: run with `RUST_BACKTRACE=1` environment variable to display
+```
+
+```
+a backtrace
 ```
 
 The call to `panic!` causes the error message contained in the last two lines.
@@ -187,6 +193,10 @@ thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
 
 ```
 99', src/main.rs:4:5
+```
+
+```
+stack backtrace:
 ```
 
 ```
@@ -341,7 +351,7 @@ the type of the value that will be returned in a success case within the `Ok`
 variant, and `E` represents the type of the error that will be returned in a
 failure case within the `Err` variant. Because `Result` has these generic type
 parameters, we can use the `Result` type and the functions defined on it in
-many different situations where the successful value and error value we want to
+many different situations where the success value and error value we want to
 return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
@@ -787,7 +797,7 @@ use std::io::{self, Read};
 ```
 
 ```
-  3 let mut username_file  = match username_file_result {
+  3 let mut username_file = match username_file_result {
 ```
 
 ```
@@ -845,7 +855,7 @@ filled in with the concrete type `String`, and the generic type `E` has been
 filled in with the concrete type `io::Error`.
 
 If this function succeeds without any problems, the code that calls this
-function will receive an `Ok` value that holds a `String`—the username that
+function will receive an `Ok` value that holds a `String`—the `username` that
 this function read from the file [8]. If this function encounters any problems,
 the calling code will receive an `Err` value that holds an instance of
 `io::Error` that contains more information about what the problems were. We
@@ -900,11 +910,7 @@ use std::fs::File;
 ```
 
 ```
-use std::io;
-```
-
-```
-use std::io::Read;
+use std::io::{self, Read};
 ```
 
 ```
@@ -979,11 +985,7 @@ use std::fs::File;
 ```
 
 ```
-use std::io;
-```
-
-```
-use std::io::Read;
+use std::io::{self, Read};
 ```
 
 ```
@@ -1225,8 +1227,8 @@ you can use methods like the `ok` method on `Result` or the `ok_or` method on
 `Option` to do the conversion explicitly.
 
 So far, all the `main` functions we’ve used return `()`. The `main` function is
-special because it’s the entry and exit points of executable programs, and
-there are restrictions on what its return type can be for the programs to
+special because it’s the entry point and exit point of an executable program,
+and there are restrictions on what its return type can be for the program to
 behave as expected.
 
 Luckily, `main` can also return a `Result<(), E>`. Listing 9-12 has the code
@@ -1266,8 +1268,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Listing 9-12: Changing `main` to return `Result<(), E>` allows the use of the
-`?` operator on `Result` values.
+Changing `main` to return `Result<(), E>` allows the use of the `?` operator on
+`Result` values.
 
 The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in “Using
 Trait Objects That Allow for Values of Different Types” on page XX. For now,
@@ -1388,13 +1390,11 @@ more of the following:
 Unmatched: ListBullet0
 
 Unmatched: ListBullet0
-      There’s not a good way to encode this information in the types you use.
-We’ll work through an example of what we mean in “Encoding States and Behavior
-as Types” on page XX.
 
-If someone calls your code and passes in values that don’t make sense, it’s
-best to return an error if you can so the user of the library can decide what
-they want to do in that case. However, in cases where continuing could be
+Unmatched: ListBullet0
+      If someone calls your code and passes in values that don’t make sense,
+it’s best to return an error if you can so the user of the library can decide
+what they want to do in that case. However, in cases where continuing could be
 insecure or harmful, the best choice might be to call `panic!` and alert the
 person using your library to the bug in their code so they can fix it during
 development. Similarly, `panic!` is often appropriate if you’re calling
@@ -1457,7 +1457,7 @@ loop {
 ```
 
 ```
-     --snip--
+    --snip--
 ```
 
 ```
@@ -1509,7 +1509,7 @@ loop {
 ```
 
 ```
-         --snip--
+        --snip--
 ```
 
 ```
@@ -1535,7 +1535,7 @@ confidently use the values they receive. Listing 9-13 shows one way to define a
 receives a value between 1 and 100.
 
 ```
-pub struct Guess {
+1 pub struct Guess {
 ```
 
 ```
@@ -1555,15 +1555,27 @@ impl Guess {
 ```
 
 ```
-    pub fn new(value: i32) -> Guess {
+  2 pub fn new(value: i32) -> Guess {
 ```
 
 ```
-        if value < 1 || value > 100 {
+      3 if value < 1 || value > 100 {
 ```
 
 ```
-            panic!("Guess value must be between 1 and 100, got {}.", value);
+          4 panic!(
+```
+
+```
+                "Guess value must be between 1 and 100, got {}.",
+```
+
+```
+                value
+```
+
+```
+            );
 ```
 
 ```
@@ -1575,7 +1587,7 @@ impl Guess {
 ```
 
 ```
-        Guess { value }
+      5 Guess { value }
 ```
 
 ```
@@ -1587,7 +1599,7 @@ impl Guess {
 ```
 
 ```
-    pub fn value(&self) -> i32 {
+  6 pub fn value(&self) -> i32 {
 ```
 
 ```
@@ -1605,31 +1617,31 @@ impl Guess {
 A `Guess` type that will only continue with values between 1 and 100
 
 First we define a struct named `Guess` that has a field named `value` that
-holds an `i32`. This is where the number will be stored.
+holds an `i32` [1]. This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that creates
-instances of `Guess` values. The `new` function is defined to have one
+instances of `Guess` values [2]. The `new` function is defined to have one
 parameter named `value` of type `i32` and to return a `Guess`. The code in the
-body of the `new` function tests `value` to make sure it’s between 1 and 100.
-If `value` doesn’t pass this test, we make a `panic!` call, which will alert
-the programmer who is writing the calling code that they have a bug they need
-to fix, because creating a `Guess` with a `value` outside this range would
+body of the `new` function tests `value` to make sure it’s between 1 and 100
+[3]. If `value` doesn’t pass this test, we make a `panic!` call [4], which will
+alert the programmer who is writing the calling code that they have a bug they
+need to fix, because creating a `Guess` with a `value` outside this range would
 violate the contract that `Guess::new` is relying on. The conditions in which
 `Guess::new` might panic should be discussed in its public-facing API
 documentation; we’ll cover documentation conventions indicating the possibility
 of a `panic!` in the API documentation that you create in Chapter 14. If
 `value` does pass the test, we create a new `Guess` with its `value` field set
-to the `value` parameter and return the `Guess`.
+to the `value` parameter and return the `Guess` [5].
 
 Next, we implement a method named `value` that borrows `self`, doesn’t have any
-other parameters, and returns an `i32`. This kind of method is sometimes called
-a *getter* because its purpose is to get some data from its fields and return
-it. This public method is necessary because the `value` field of the `Guess`
-struct is private. It’s important that the `value` field be private so code
-using the `Guess` struct is not allowed to set `value` directly: code outside
-the module *must* use the `Guess::new` function to create an instance of
-`Guess`, thereby ensuring there’s no way for a `Guess` to have a `value` that
-hasn’t been checked by the conditions in the `Guess::new` function.
+other parameters, and returns an `i32` [6]. This kind of method is sometimes
+called a *getter* because its purpose is to get some data from its fields and
+return it. This public method is necessary because the `value` field of the
+`Guess` struct is private. It’s important that the `value` field be private so
+code using the `Guess` struct is not allowed to set `value` directly: code
+outside the module *must* use the `Guess::new` function to create an instance
+of `Guess`, thereby ensuring there’s no way for a `Guess` to have a `value`
+that hasn’t been checked by the conditions in the `Guess::new` function.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than an
