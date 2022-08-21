@@ -57,7 +57,7 @@ fn main() {
 ```
 
 ```
-    let number_list = vec![34, 50, 25, 100, 65];
+  1 let number_list = vec![34, 50, 25, 100, 65];
 ```
 
 ```
@@ -65,7 +65,7 @@ fn main() {
 ```
 
 ```
-    let mut largest = &number_list[0];
+  2 let mut largest = &number_list[0];
 ```
 
 ```
@@ -73,15 +73,15 @@ fn main() {
 ```
 
 ```
-    for number in &number_list {
+  3 for number in &number_list {
 ```
 
 ```
-        if number > largest {
+      4 if number > largest {
 ```
 
 ```
-            largest = number;
+          5 largest = number;
 ```
 
 ```
@@ -97,7 +97,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", largest);
+    println!("The largest number is {largest}");
 ```
 
 ```
@@ -106,14 +106,14 @@ fn main() {
 
 Finding the largest number in a list of numbers
 
-We store a list of integers in the variable `number_list` and place a reference
-to the first number in the list in a variable named `largest`. We then iterate
-through all the numbers in the list, and if the current number is greater than
-the number stored in `largest`, we replace the reference in that variable.
-However, if the current number is less than or equal to the largest number seen
-so far, the variable doesn’t change, and the code moves on to the next number
-in the list. After considering all the numbers in the list, `largest` should
-refer to the largest number, which in this case is 100.
+We store a list of integers in the variable `number_list` [1] and place a
+reference to the first number in the list in a variable named `largest` [2]. We
+then iterate through all the numbers in the list [3], and if the current number
+is greater than the number stored in `largest` [4], we replace the reference in
+that variable [5]. However, if the current number is less than or equal to the
+largest number seen so far, the variable doesn’t change, and the code moves on
+to the next number in the list. After considering all the numbers in the list,
+`largest` should refer to the largest number, which in this case is 100.
 
 We’ve now been tasked with finding the largest number in two different lists of
 numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
@@ -166,7 +166,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", largest);
+    println!("The largest number is {largest}");
 ```
 
 ```
@@ -214,7 +214,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", largest);
+    println!("The largest number is {largest}");
 ```
 
 ```
@@ -304,7 +304,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", result);
+    println!("The largest number is {result}");
 ```
 
 ```
@@ -324,7 +324,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", result);
+    println!("The largest number is {result}");
 ```
 
 ```
@@ -485,7 +485,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", result);
+    println!("The largest number is {result}");
 ```
 
 ```
@@ -505,7 +505,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest char is {}", result);
+    println!("The largest char is {result}");
 ```
 
 ```
@@ -615,7 +615,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest number is {}", result);
+    println!("The largest number is {result}");
 ```
 
 ```
@@ -635,7 +635,7 @@ fn main() {
 ```
 
 ```
-    println!("The largest char is {}", result);
+    println!("The largest char is {result}");
 ```
 
 ```
@@ -714,15 +714,15 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 Filename: src/main.rs
 
 ```
-struct Point<T> {
+1 struct Point<T> {
 ```
 
 ```
-    x: T,
+  2 x: T,
 ```
 
 ```
-    y: T,
+  3 y: T,
 ```
 
 ```
@@ -753,8 +753,9 @@ A `Point<T>` struct that holds `x` and `y` values of type `T`
 
 The syntax for using generics in struct definitions is similar to that used in
 function definitions. First we declare the name of the type parameter inside
-angle brackets just after the name of the struct. Then we use the generic type
-in the struct definition where we would otherwise specify concrete data types.
+angle brackets just after the name of the struct [1]. Then we use the generic
+type in the struct definition where we would otherwise specify concrete data
+types [23].
 
 Note that because we’ve used only one generic type to define `Point<T>`, this
 definition says that the `Point<T>` struct is generic over some type `T`, and
@@ -821,8 +822,11 @@ error[E0308]: mismatched types
 ```
 
 ```
-  |                                      ^^^ expected integer, found
-floating-point number
+  |                                      ^^^ expected integer, found floating-
+```
+
+```
+point number
 ```
 
 To define a `Point` struct where `x` and `y` are both generics but could have
@@ -1096,11 +1100,11 @@ struct Point<X1, Y1> {
 ```
 
 ```
-impl<X1, Y1> Point<X1, Y1> {
+1 impl<X1, Y1> Point<X1, Y1> {
 ```
 
 ```
-    fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
+  2 fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
 ```
 
 ```
@@ -1136,19 +1140,11 @@ fn main() {
 ```
 
 ```
-    let p1 = Point { x: 5, y: 10.4 };
+  3 let p1 = Point { x: 5, y: 10.4 };
 ```
 
 ```
-    let p2 = Point { x: "Hello", y: 'c' };
-```
-
-```
-
-```
-
-```
-    let p3 = p1.mixup(p2);
+  4 let p2 = Point { x: "Hello", y: 'c' };
 ```
 
 ```
@@ -1156,7 +1152,15 @@ fn main() {
 ```
 
 ```
-    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+  5 let p3 = p1.mixup(p2);
+```
+
+```
+
+```
+
+```
+  6 println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
 ```
 
 ```
@@ -1166,19 +1170,19 @@ fn main() {
 A method that uses generic types different from its struct’s definition
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). The `p2` variable is a `Point` struct
-that has a string slice for `x` (with value `"Hello"`) and a `char` for `y`
-(with value `c`). Calling `mixup` on `p1` with the argument `p2` gives us `p3`,
-which will have an `i32` for `x` because `x` came from `p1`. The `p3` variable
-will have a `char` for `y` because `y` came from `p2`. The `println!` macro
-call will print `p3.x = 5, p3.y = c`.
+and an `f64` for `y` (with value `10.4` [3]). The `p2` variable is a `Point`
+struct that has a string slice for `x` (with value `"Hello"`) and a `char` for
+`y` (with value `c` [4]). Calling `mixup` on `p1` with the argument `p2` gives
+us `p3` [5], which will have an `i32` for `x` because `x` came from `p1`. The
+`p3` variable will have a `char` for `y` because `y` came from `p2`. The
+`println!` macro call [6] will print `p3.x = 5, p3.y = c`.
 
 The purpose of this example is to demonstrate a situation in which some generic
 parameters are declared with `impl` and some are declared with the method
 definition. Here, the generic parameters `X1` and `Y1` are declared after
-`impl` because they go with the struct definition. The generic parameters `X2`
-and `Y2` are declared after `fn mixup` because they’re only relevant to the
-method.
+`impl` [1] because they go with the struct definition. The generic parameters
+`X2` and `Y2` are declared after `fn mixup` [2] because they’re only relevant
+to the method.
 
 ### Performance of Code Using Generics
 
@@ -1287,7 +1291,7 @@ types. We can use traits to define shared behavior in an abstract way. We can
 use *trait bounds* to specify that a generic type can be any type that has
 certain behavior.
 
-> NoteTraits are similar to a feature often called *interfaces* in other
+> NoteTraits are similar to a feature often called *interfaces*    in other
 languages, although with some differences.
 
 ### Defining a Trait
@@ -1390,7 +1394,27 @@ impl Summary for NewsArticle {
 ```
 
 ```
-        format!("{}, by {} ({})", self.headline, self.author, self.location)
+        format!(
+```
+
+```
+            "{}, by {} ({})",
+```
+
+```
+            self.headline,
+```
+
+```
+            self.author,
+```
+
+```
+            self.location
+```
+
+```
+        )
 ```
 
 ```
@@ -1598,7 +1622,15 @@ let article = NewsArticle {
 ```
 
 ```
-    headline: String::from("Penguins win the Stanley Cup Championship!"),
+    headline: String::from(
+```
+
+```
+        "Penguins win the Stanley Cup Championship!"
+```
+
+```
+    ),
 ```
 
 ```
@@ -1670,7 +1702,19 @@ pub trait Summary {
 ```
 
 ```
-        format!("(Read more from {}...)", self.summarize_author())
+        format!(
+```
+
+```
+            "(Read more from {}...)",
+```
+
+```
+            self.summarize_author()
+```
+
+```
+        )
 ```
 
 ```
@@ -1708,7 +1752,8 @@ After we define `summarize_author`, we can call `summarize` on instances of the
 `Tweet` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code.
+`summarize` method without requiring us to write any more code. Here's what
+that looks like:
 
 ```
 let tweet = Tweet {
@@ -1875,7 +1920,7 @@ where
 ```
 
 ```
-    U: Clone + Debug
+    U: Clone + Debug,
 ```
 
 ```
@@ -2164,7 +2209,7 @@ impl<T: Display> ToString for T {
 ```
 
 ```
-     --snip--
+    --snip--
 ```
 
 ```
@@ -2227,7 +2272,7 @@ fn main() {
 ```
 
 ```
-    let r;
+  1 let r;
 ```
 
 ```
@@ -2239,15 +2284,15 @@ fn main() {
 ```
 
 ```
-        let x = 5;
+      2 let x = 5;
 ```
 
 ```
-        r = &x;
+      3 r = &x;
 ```
 
 ```
-    }
+  4 }
 ```
 
 ```
@@ -2255,7 +2300,7 @@ fn main() {
 ```
 
 ```
-    println!("r: {}", r);
+  5 println!("r: {r}");
 ```
 
 ```
@@ -2271,12 +2316,12 @@ values. However, if we try to use a variable before giving it a value, we’ll
 get a compile-time error, which shows that Rust indeed does not allow null
 values.
 
-The outer scope declares a variable named `r` with no initial value, and the
-inner scope declares a variable named `x` with the initial value of `5`. Inside
-the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print the value in `r`. This code won’t
-compile because the value that `r` is referring to has gone out of scope before
-we try to use it. Here is the error message:
+The outer scope declares a variable named `r` with no initial value [1], and
+the inner scope declares a variable named `x` with the initial value of `5`
+[2]. Inside the inner scope, we attempt to set the value of `r` as a reference
+to `x` [3]. Then the inner scope ends [4], and we attempt to print the value in
+`r` [5]. This code won’t compile because the value that `r` is referring to has
+gone out of scope before we try to use it. Here is the error message:
 
 ```
 error[E0597]: `x` does not live long enough
@@ -2311,11 +2356,11 @@ error[E0597]: `x` does not live long enough
 ```
 
 ```
-9 |     println!("r: {}", r);
+9 |     println!("r: {r}");
 ```
 
 ```
-  |                       - borrow later used here
+  |                   - borrow later used here
 ```
 
 The error message says that the variable `x` doesn’t “live long enough.” The
@@ -2365,7 +2410,7 @@ fn main() {
 ```
 
 ```
-    println!("r: {}", r); //          |
+    println!("r: {r}");   //          |
 ```
 
 ```
@@ -2405,7 +2450,7 @@ fn main() {
 ```
 
 ```
-    println!("r: {}", r); //   |       |
+    println!("r: {r}");   //   |       |
 ```
 
 ```
@@ -2456,7 +2501,7 @@ fn main() {
 ```
 
 ```
-    println!("The longest string is {}", result);
+    println!("The longest string is {result}");
 ```
 
 ```
@@ -2724,7 +2769,7 @@ fn main() {
 ```
 
 ```
-        println!("The longest string is {}", result);
+        println!("The longest string is {result}");
 ```
 
 ```
@@ -2783,7 +2828,7 @@ fn main() {
 ```
 
 ```
-    println!("The longest string is {}", result);
+    println!("The longest string is {result}");
 ```
 
 ```
@@ -2827,11 +2872,11 @@ does not live long enough
 ```
 
 ```
-8 |     println!("The longest string is {}", result);
+8 |     println!("The longest string is {result}");
 ```
 
 ```
-  |                                          ------ borrow later used here
+  |                                      ------ borrow later used here
 ```
 
 The error shows that for `result` to be valid for the `println!` statement,
@@ -2957,11 +3002,11 @@ on every reference in the struct’s definition. Listing 10-24 has a struct name
 Filename: src/main.rs
 
 ```
-struct ImportantExcerpt<'a> {
+1 struct ImportantExcerpt<'a> {
 ```
 
 ```
-    part: &'a str,
+  2 part: &'a str,
 ```
 
 ```
@@ -2977,15 +3022,35 @@ fn main() {
 ```
 
 ```
-    let novel = String::from("Call me Ishmael. Some years ago...");
+  3 let novel = String::from(
 ```
 
 ```
-    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+        "Call me Ishmael. Some years ago..."
 ```
 
 ```
-    let i = ImportantExcerpt {
+    );
+```
+
+```
+  4 let first_sentence = novel
+```
+
+```
+        .split('.')
+```
+
+```
+        .next()
+```
+
+```
+        .expect("Could not find a '.'");
+```
+
+```
+  5 let i = ImportantExcerpt {
 ```
 
 ```
@@ -3003,18 +3068,18 @@ fn main() {
 A struct that holds a reference, requiring a lifetime annotation
 
 This struct has the single field `part` that holds a string slice, which is a
-reference. As with generic data types, we declare the name of the generic
+reference [2]. As with generic data types, we declare the name of the generic
 lifetime parameter inside angle brackets after the name of the struct so we can
-use the lifetime parameter in the body of the struct definition. This
+use the lifetime parameter in the body of the struct definition [1]. This
 annotation means an instance of `ImportantExcerpt` can’t outlive the reference
 it holds in its `part` field.
 
 The `main` function here creates an instance of the `ImportantExcerpt` struct
-that holds a reference to the first sentence of the `String` owned by the
-variable `novel`. The data in `novel` exists before the `ImportantExcerpt`
-instance is created. In addition, `novel` doesn’t go out of scope until after
-the `ImportantExcerpt` goes out of scope, so the reference in the
-`ImportantExcerpt` instance is valid.
+[5] that holds a reference to the first sentence of the `String` [4] owned by
+the variable `novel` [3]. The data in `novel` exists before the
+`ImportantExcerpt` instance is created. In addition, `novel` doesn’t go out of
+scope until after the `ImportantExcerpt` goes out of scope, so the reference in
+the `ImportantExcerpt` instance is valid.
 
 ### Lifetime Elision
 
@@ -3103,8 +3168,8 @@ references have, the compiler won’t guess what the lifetime of the remaining
 references should be. Instead of guessing, the compiler will give you an error
 that you can resolve by adding the lifetime annotations.
 
-Lifetimes on function or method parameters are called *input lifetimes*, and
-lifetimes on return values are called *output lifetimes*.
+Lifetimes on function or method parameters are called *input lifetimes*   , and
+lifetimes on return values are called *output lifetimes* .
 
 The compiler uses three rules to figure out the lifetimes of the references
 when there aren’t explicit annotations. The first rule applies to input
@@ -3238,7 +3303,7 @@ impl<'a> ImportantExcerpt<'a> {
 ```
 
 ```
-        println!("Attention please: {}", announcement);
+        println!("Attention please: {announcement}");
 ```
 
 ```
@@ -3325,7 +3390,7 @@ where
 ```
 
 ```
-    println!("Announcement! {}", ann);
+    println!("Announcement! {ann}");
 ```
 
 ```
