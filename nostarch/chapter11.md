@@ -101,7 +101,7 @@ mod tests {
 ```
 
 ```
-1 #[test]
+  1 #[test]
 ```
 
 ```
@@ -113,7 +113,7 @@ mod tests {
 ```
 
 ```
-    2 assert_eq!(result, 4);
+      2 assert_eq!(result, 4);
 ```
 
 ```
@@ -157,7 +157,11 @@ $ cargo test
 ```
 
 ```
-     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-
+```
+
+```
+92948b65e88960b4)
 ```
 
 ```
@@ -205,8 +209,11 @@ running 0 tests
 ```
 
 ```
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 The output from running the automatically generated test
@@ -369,7 +376,7 @@ test tests::exploration ... ok
 ```
 
 ```
-test tests::another ... FAILED 1
+1 test tests::another ... FAILED
 ```
 
 ```
@@ -377,7 +384,7 @@ test tests::another ... FAILED 1
 ```
 
 ```
-failures: 2
+2 failures:
 ```
 
 ```
@@ -405,7 +412,7 @@ a backtrace
 ```
 
 ```
-failures: 3
+3 failures:
 ```
 
 ```
@@ -417,11 +424,11 @@ failures: 3
 ```
 
 ```
-test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0
+4 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0
 ```
 
 ```
-filtered out; finished in 0.00s 4
+filtered out; finished in 0.00s
 ```
 
 ```
@@ -521,22 +528,73 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
+```
+
+```
 mod tests {
-1 use super::*;
+```
 
+```
+  1 use super::*;
+```
+
+```
+
+```
+
+```
     #[test]
-2 fn larger_can_hold_smaller() {
-    3 let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
-        let smaller = Rectangle {
-            width: 5,
-            height: 1,
-        };
+```
 
-    4 assert!(larger.can_hold(&smaller));
+```
+  2 fn larger_can_hold_smaller() {
+```
+
+```
+      3 let larger = Rectangle {
+```
+
+```
+            width: 8,
+```
+
+```
+            height: 7,
+```
+
+```
+        };
+```
+
+```
+        let smaller = Rectangle {
+```
+
+```
+            width: 5,
+```
+
+```
+            height: 1,
+```
+
+```
+        };
+```
+
+```
+
+```
+
+```
+      4 assert!(larger.can_hold(&smaller));
+```
+
+```
     }
+```
+
+```
 }
 ```
 
@@ -709,6 +767,10 @@ compares the widths:
 
 ```
 --snip--
+```
+
+```
+
 ```
 
 ```
@@ -953,11 +1015,11 @@ failures:
 ```
 
 ```
-2 left: `4`,
+2   left: `4`,
 ```
 
 ```
-3 right: `5`', src/lib.rs:11:9
+3  right: `5`', src/lib.rs:11:9
 ```
 
 ```
@@ -1048,7 +1110,7 @@ pub fn greeting(name: &str) -> String {
 ```
 
 ```
-    format!("Hello {}!", name)
+    format!("Hello {name}!")
 ```
 
 ```
@@ -1206,11 +1268,7 @@ fn greeting_contains_name() {
 ```
 
 ```
-        "Greeting did not contain name, value was `{}`",
-```
-
-```
-        result
+        "Greeting did not contain name, value was `{result}`"
 ```
 
 ```
@@ -1293,7 +1351,7 @@ impl Guess {
 ```
 
 ```
-            panic!("Guess value must be between 1 and 100, got {}.", value);
+            panic!("Guess value must be between 1 and 100, got {value}.");
 ```
 
 ```
@@ -1360,11 +1418,7 @@ mod tests {
 }
 ```
 
-```
 Testing that a condition will cause a panic!
-```
-
-Listing 11-8 xxx
 
 We place the `#[should_panic]` attribute after the `#[test]` attribute and
 before the test function it applies to. Let’s look at the result when this test
@@ -1383,8 +1437,11 @@ test tests::greater_than_100 - should panic ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 Looks good! Now let’s introduce a bug in our code by removing the condition
@@ -1392,6 +1449,10 @@ that the `new` function will panic if the value is greater than 100:
 
 ```
 --snip--
+```
+
+```
+
 ```
 
 ```
@@ -1407,7 +1468,7 @@ impl Guess {
 ```
 
 ```
-            panic!("Guess value must be between 1 and 100, got {}.", value);
+            panic!("Guess value must be between 1 and 100, got {value}.");
 ```
 
 ```
@@ -1477,8 +1538,11 @@ failures:
 ```
 
 ```
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered
-out;finished in 0.00s
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 We don’t get a very helpful message in this case, but when we look at the test
@@ -1521,11 +1585,7 @@ impl Guess {
 ```
 
 ```
-                "Guess value must be greater than or equal to 1, got {}.",
-```
-
-```
-                value
+                "Guess value must be greater than or equal to 1, got {value}."
 ```
 
 ```
@@ -1541,11 +1601,7 @@ impl Guess {
 ```
 
 ```
-                "Guess value must be less than or equal to 100, got {}.",
-```
-
-```
-                value
+                "Guess value must be less than or equal to 100, got {value}."
 ```
 
 ```
@@ -1636,7 +1692,15 @@ if value < 1 {
 ```
 
 ```
-    panic!("Guess value must be less than or equal to 100, got {}.", value);
+    panic!(
+```
+
+```
+        "Guess value must be less than or equal to 100, got {value}."
+```
+
+```
+    );
 ```
 
 ```
@@ -1644,7 +1708,15 @@ if value < 1 {
 ```
 
 ```
-    panic!("Guess value must be greater than or equal to 1, got {}.", value);
+    panic!(
+```
+
+```
+        "Guess value must be greater than or equal to 1, got {value}."
+```
+
+```
+    );
 ```
 
 ```
@@ -1678,19 +1750,15 @@ failures:
 ```
 
 ```
-thread 'main' panicked at 'Guess value must be greater than or
+thread 'main' panicked at 'Guess value must be greater than or equal to 1, got
 ```
 
 ```
-equal to 1, got 200.', src/lib.rs:13:13
+200.', src/lib.rs:13:13
 ```
 
 ```
-note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
-a backtrace
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
 ```
@@ -1698,11 +1766,11 @@ note: panic did not contain expected string
 ```
 
 ```
-      panic message: `"Guess value must be greater than or equal
+      panic message: `"Guess value must be greater than or equal to 1, got
 ```
 
 ```
-to 1, got 200."`,
+200."`,
 ```
 
 ```
@@ -1726,11 +1794,11 @@ failures:
 ```
 
 ```
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out;
 ```
 
 ```
-filtered out; finished in 0.00s
+finished in 0.00s
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
@@ -1874,7 +1942,7 @@ fn prints_and_returns_10(a: i32) -> i32 {
 ```
 
 ```
-    println!("I got the value {}", a);
+    println!("I got the value {a}");
 ```
 
 ```
@@ -2315,7 +2383,11 @@ $ cargo test one_hundred
 ```
 
 ```
-     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-
+```
+
+```
+92948b65e88960b4)
 ```
 
 ```
@@ -2368,7 +2440,11 @@ $ cargo test add
 ```
 
 ```
-     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-
+```
+
+```
+92948b65e88960b4)
 ```
 
 ```
@@ -2474,7 +2550,11 @@ $ cargo test
 ```
 
 ```
-     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-
+```
+
+```
+92948b65e88960b4)
 ```
 
 ```
@@ -2498,8 +2578,11 @@ test it_works ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 The `expensive_test` function is listed as `ignored`. If we want to run only
@@ -2514,7 +2597,11 @@ $ cargo test -- --ignored
 ```
 
 ```
-     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-
+```
+
+```
+92948b65e88960b4)
 ```
 
 ```
@@ -2542,10 +2629,10 @@ filtered out; finished in 0.00s
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results
-will be fast. When you’re at a point where it makes sense to check the results
-of the `ignored` tests and you have time to wait for the results, you can run
-`cargo test -- --ignored` instead. If you want to run all tests whether they’re
-ignored or not, you can run `cargo test -- --include-ignored`.
+will be returned quickly. When you’re at a point where it makes sense to check
+the results of the `ignored` tests and you have time to wait for the results,
+you can run `cargo test -- --ignored` instead. If you want to run all tests
+whether they’re ignored or not, you can run `cargo test -- --include-ignored`.
 
 ## Test Organization
 
@@ -2618,7 +2705,7 @@ mod tests {
 }
 ```
 
-This code is the automatically generated test module. The attribute `cfg`
+This code is the automatically generated `test``s` module. The attribute `cfg`
 stands for *configuration* and tells Rust that the following item should only
 be included given a certain configuration option. In this case, the
 configuration option is `test`, which is provided by Rust for compiling and
@@ -2795,8 +2882,8 @@ fn it_adds_two() {
 An integration test of a function in the `adder` crate
 
 Each file in the *tests* directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use adder` at the
-top of the code, which we didn’t need in the unit tests.
+library into each test crate’s scope. For that reason we add `use adder``;` at
+the top of the code, which we didn’t need in the unit tests.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
 `#[cfg(test)]`. Cargo treats the *tests* directory specially and compiles files
@@ -2815,7 +2902,11 @@ $ cargo test
 ```
 
 ```
-     Running unittests src/lib.rs (target/debug/deps/adder-1082c4b063a8fbe6)
+     Running unittests src/lib.rs (target/debug/deps/adder-
+```
+
+```
+1082c4b063a8fbe6)
 ```
 
 ```
@@ -2835,8 +2926,11 @@ test tests::internal ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 ```
@@ -2844,7 +2938,10 @@ finished in 0.00s
 ```
 
 ```
-    2 Running tests/integration_test.rs
+   2 Running tests/integration_test.rs
+```
+
+```
 (target/debug/deps/integration_test-1082c4b063a8fbe6)
 ```
 
@@ -2865,8 +2962,11 @@ running 1 test
 ```
 
 ```
-4 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+4 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 ```
@@ -2890,8 +2990,11 @@ running 0 tests
 ```
 
 ```
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 The three sections of output include the unit tests, the integration test, and
@@ -2927,6 +3030,9 @@ $ cargo test --test integration_test
 
 ```
      Running tests/integration_test.rs
+```
+
+```
 (target/debug/deps/integration_test-82e7799c1bc62298)
 ```
 
@@ -3006,8 +3112,11 @@ test tests::internal ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 ```
@@ -3015,7 +3124,11 @@ finished in 0.00s
 ```
 
 ```
-     Running tests/common.rs (target/debug/deps/common-92948b65e88960b4)
+     Running tests/common.rs (target/debug/deps/common-
+```
+
+```
+92948b65e88960b4)
 ```
 
 ```
@@ -3031,8 +3144,11 @@ running 0 tests
 ```
 
 ```
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 ```
@@ -3041,6 +3157,9 @@ finished in 0.00s
 
 ```
      Running tests/integration_test.rs
+```
+
+```
 (target/debug/deps/integration_test-92948b65e88960b4)
 ```
 
@@ -3061,8 +3180,11 @@ test it_adds_two ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 ```
@@ -3086,8 +3208,11 @@ running 0 tests
 ```
 
 ```
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 Having `common` appear in the test results with `running 0 tests` displayed for
@@ -3184,8 +3309,8 @@ we demonstrated in Listing 7-21. Then in the test function, we can call the
 
 #### Integration Tests for Binary Crates
 
-If our project is a binary crate that only contains an *src/main.rs* file and
-doesn’t have an *src/lib.rs* file, we can’t create integration tests in the
+If our project is a binary crate that only contains a *src/main.rs* file and
+doesn’t have a *src/lib.rs* file, we can’t create integration tests in the
 *tests* directory and bring functions defined in the *src/main.rs* file into
 scope with a `use` statement. Only library crates expose functions that other
 crates can use; binary crates are meant to be run on their own.
