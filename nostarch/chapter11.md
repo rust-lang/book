@@ -119,7 +119,7 @@ The `cargo test` command runs all tests in our project, as shown in Listing
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.57s
-     Running unittests (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 [1] running 1 test
 [2] test tests::it_works ... ok
@@ -186,7 +186,7 @@ Then run `cargo test` again. The output now shows `exploration` instead of
 running 1 test
 test tests::exploration ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
 Now we’ll add another test, but this time we’ll make a test that fails! Tests
@@ -782,17 +782,6 @@ message is unique or dynamic and how precise you want your test to be. In this
 case, a substring of the panic message is enough to ensure that the code in the
 test function executes the `else if value > 100` case.
 
-<!---
-We may want to make extra clear above that `expected` here means substring. I
-think many people would assume equality rather than substring like the
-expected/actual of unit tests.
-
-(let alone how .expect(..) works. It seems we use the word expect in different
-ways around the language/library )
-/JT --->
-<!-- I've changed the example to be more clearly a substring specified, and
-changed the caption as well. Hope that makes it extra clear! /Carol -->
-
 To see what happens when a `should_panic` test with an `expected` message
 fails, let’s again introduce a bug into our code by swapping the bodies of the
 `if value < 1` and the `else if value > 100` blocks:
@@ -1085,7 +1074,7 @@ We can pass the name of any test function to `cargo test` to run only that test:
 $ cargo test one_hundred
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.69s
-     Running unittests (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
 test tests::one_hundred ... ok
@@ -1110,7 +1099,7 @@ run those two by running `cargo test add`:
 $ cargo test add
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.61s
-     Running unittests (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 2 tests
 test tests::add_three_and_two ... ok
@@ -1154,7 +1143,7 @@ when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.60s
-     Running unittests (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 2 tests
 test expensive_test ... ignored
@@ -1169,7 +1158,7 @@ the ignored tests, we can use `cargo test -- --ignored`:
 ```
 $ cargo test -- --ignored
     Finished test [unoptimized + debuginfo] target(s) in 0.61s
-     Running unittests (target/debug/deps/adder-92948b65e88960b4)
+     Running unittests src/lib.rs (target/debug/deps/adder-92948b65e88960b4)
 
 running 1 test
 test expensive_test ... ok
@@ -1227,7 +1216,8 @@ Filename: src/lib.rs
 mod tests {
     #[test]
     fn it_works() {
-        assert_eq!(2 + 2, 4);
+        let result = 2 + 2;
+        assert_eq!(result, 4);
     }
 }
 ```
@@ -1339,7 +1329,7 @@ in this directory only when we run `cargo test`. Run `cargo test` now:
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished test [unoptimized + debuginfo] target(s) in 1.31s
-     Running unittests (target/debug/deps/adder-1082c4b063a8fbe6)
+     Running unittests src/lib.rs (target/debug/deps/adder-1082c4b063a8fbe6)
 
 [1] running 1 test
 test tests::internal ... ok
@@ -1530,12 +1520,3 @@ reduce logic bugs having to do with how your code is expected to behave.
 
 Let’s combine the knowledge you learned in this chapter and in previous
 chapters to work on a project!
-
-<!---
-We hint at doc tests but don't cover them. Should we have a section in this
-chapter about that? They're pretty handy.
-/JT --->
-<!-- We cover that in chapter 14, and there's a forward reference to that in
-"The Anatomy of a Test Function" section. I don't actually think most Rust
-developers will write doc tests; they're the most useful when writing open
-source libraries, which I think only a minority of developers do. /Carol -->
