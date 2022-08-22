@@ -38,7 +38,7 @@ background knowledge you need to understand a real-world project such as
 Our `grep` project will combine a number of concepts you’ve learned so far:
 
 * Organizing code (using what you learned about modules in Chapter 7)
-* Using vectors and strings (collections, Chapter 8)
+* Using vectors and strings (Chapter 8)
 * Handling errors (Chapter 9)
 * Using traits and lifetimes where appropriate (Chapter 10)
 * Writing tests (Chapter 11)
@@ -779,8 +779,8 @@ ownership of the values in `args`.
 
 There are a number of ways we could manage the `String` data; the easiest,
 though somewhat inefficient, route is to call the `clone` method on the values
-[7] and [8]. This will make a full copy of the data for the `Config` instance
-to own, which takes more time and memory than storing a reference to the string
+[7] [8]. This will make a full copy of the data for the `Config` instance to
+own, which takes more time and memory than storing a reference to the string
 data. However, cloning the data also makes our code very straightforward
 because we don’t have to manage the lifetimes of the references; in this
 circumstance, giving up a little performance to gain simplicity is a worthwhile
@@ -805,7 +805,7 @@ it’s perfectly acceptable to call `clone`.
 We’ve updated `main` so it places the instance of `Config` returned by
 `parse_config` into a variable named `config` [1], and we updated the code that
 previously used the separate `query` and `file_path` variables so it now uses
-the fields on the `Config` struct instead at [2], [3], and [4].
+the fields on the `Config` struct instead [2] [3] [4].
 
 Now our code more clearly conveys that `query` and `file_path` are related and
 that their purpose is to configure how the program will work. Any code that
@@ -1016,11 +1016,19 @@ $ cargo run
 ```
 
 ```
-thread 'main' panicked at 'not enough arguments', src/main.rs:26:13
+thread 'main' panicked at 'not enough arguments',
 ```
 
 ```
-note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+src/main.rs:26:13
+```
+
+```
+note: run with `RUST_BACKTRACE=1` environment variable to display
+```
+
+```
+a backtrace
 ```
 
 This output is better: we now have a reasonable error message. However, we also
@@ -1416,7 +1424,11 @@ warning: unused `Result` that must be used
 ```
 
 ```
-   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: this `Result` may be an `Err` variant, which should be
+```
+
+```
+handled
 ```
 
 Rust tells us that our code ignored the `Result` value and the `Result` value
@@ -1489,11 +1501,11 @@ both cases: we print the error and exit.
 
 Our `minigrep` project is looking good so far! Now we’ll split the
 *src/**main.rs* file and put some code into the *src/**lib.rs* file. That way
-we can test the code and have an *src/**main.rs* file with fewer
+we can test the code and have a *src/**main.rs* file with fewer
 responsibilities.
 
-Let’s move all the code that isn’t the `main` function from *src/**main.rs* to
-*src/**lib.rs*:
+Let’s move all the code that isn’t in the `main` function from *src/**main.rs*
+to *src/**lib.rs*:
 
 * The `run` function definition
 * The relevant `use` statements
@@ -1820,6 +1832,9 @@ error[E0106]: missing lifetime specifier
 
 ```
    |                      ----            ----         ^ expected named
+```
+
+```
 lifetime parameter
 ```
 
@@ -1863,8 +1878,8 @@ syntax.
 
 Other programming languages don’t require you to connect arguments to return
 values in the signature, but this practice will get easier over time. You might
-want to compare this example with “Validating References with Lifetimes” on
-page XX.
+want to compare this example with the examples in “Validating References with
+Lifetimes” on page XX.
 
 Now let’s run the test:
 
@@ -1950,6 +1965,9 @@ failures:
 
 ```
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out;
+```
+
+```
 finished in 0.00s
 ```
 
@@ -2132,8 +2150,11 @@ test tests::one_result ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 Our test passed, so we know it works!
@@ -2337,7 +2358,19 @@ Duct tape.";
 ```
 
 ```
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+        assert_eq!(
+```
+
+```
+            vec!["safe, fast, productive."],
+```
+
+```
+            search(query, contents)
+```
+
+```
+        );
 ```
 
 ```
@@ -2538,8 +2571,11 @@ test tests::case_sensitive ... ok
 ```
 
 ```
-test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.00s
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.00s
 ```
 
 Great! They passed. Now, let’s call the new `search_case_insensitive` function
