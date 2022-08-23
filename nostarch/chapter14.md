@@ -13,9 +13,9 @@ our code, but it can do a lot more. In this chapter, we’ll discuss some of its
 other, more advanced features to show you how to do the following:
 
 * Customize your build through release profiles
-* Publish libraries on *https://crates.io/*
+* Publish libraries on crates.io
 * Organize large projects with workspaces
-* Install binaries from *https://crates.io/*
+* Install binaries from crates.io
 * Extend Cargo using custom commands
 
 Cargo can do even more than the functionality we cover in this chapter, so for
@@ -93,10 +93,10 @@ Cargo’s documentation at *https://doc.rust-lang.org/cargo/reference/profiles.h
 
 ## Publishing a Crate to Crates.io
 
-We’ve used packages from *https://crates.io/* as dependencies of our project,
-but you can also share your code with other people by publishing your own
-packages. The crate registry at *https://crates.io* distributes the source code
-of your packages, so it primarily hosts code that is open source.
+We’ve used packages from crates.io as dependencies of our project, but you can
+also share your code with other people by publishing your own packages. The
+crate registry at crates.io distributes the source code of your packages, so it
+primarily hosts code that is open source.
 
 Rust and Cargo have features that make your published package easier for people
 to find and use. We’ll talk about some of these features next and then explain
@@ -137,13 +137,6 @@ pub fn add_one(x: i32) -> i32 {
 ````
 
 Listing 14-1: A documentation comment for a function
-
-<!-- I removed two sets of ``` here because it was inverting the text and code
-formatting, but you may want to check that I have't changed meaning in the
-code! /LC -->
-<!-- Yeah, those need to be in there. It's definitely weird that it's a code
-block inside of a code block-- I think I've fixed it by adding more ` around
-the outer block, but I'll check it again when we're in Word. /Carol -->
 
 Here, we give a description of what the `add_one` function does, start a
 section with the heading `Examples`, and then provide code that demonstrates
@@ -383,15 +376,6 @@ pub mod utils {
 }
 ```
 
-<!-- The example feels a tiny bit awkward. If you're
-going to use `pub use`, in my experience it's probably going
-to happen when you're pulling in definitions from sub-crates.
-In this one, we create modules that we export and also
-re-export symbols from those same modules. In practice,
-you'd probably use sub-crates or move the definitions around. /JT -->
-<!-- I don't want to get into sub-crates here, but I've added a sentence about
-this common usage in the second-to-last paragraph of this section. /Carol -->
-
 Listing 14-5: Adding `pub use` statements to re-export items
 
 The API documentation that `cargo doc` generates for this crate will now list
@@ -435,13 +419,12 @@ differs from their public API.
 
 ### Setting Up a Crates.io Account
 
-Before you can publish any crates, you need to create an account on
-*https://crates.io/* and get an API token. To do so, visit the home page at
-*https://crates.io/* and log in via a GitHub account. (The GitHub account is
-currently a requirement, but the site might support other ways of creating an
-account in the future.) Once you’re logged in, visit your account settings at
-*https://crates.io/me/* and retrieve your API key. Then run the `cargo login`
-command with your API key, like this:
+Before you can publish any crates, you need to create an account on crates.io
+and get an API token. To do so, visit the home page at crates.io and log in via
+a GitHub account. (The GitHub account is currently a requirement, but the site
+might support other ways of creating an account in the future.) Once you’re
+logged in, visit your account settings at https://crates.io/me/ and retrieve
+your API key. Then run the `cargo login` command with your API key, like this:
 
 ```
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
@@ -450,7 +433,7 @@ $ cargo login abcdefghijklmnopqrstuvwxyz012345
 This command will inform Cargo of your API token and store it locally in
 *~/.cargo/credentials*. Note that this token is a *secret*: do not share it
 with anyone else. If you do share it with anyone for any reason, you should
-revoke it and generate a new token on *https://crates.io/*.
+revoke it and generate a new token on crates.io.
 
 ### Adding Metadata to a New Crate
 
@@ -459,13 +442,12 @@ to add some metadata in the `[package]` section of the crate’s *Cargo.toml*
 file.
 
 Your crate will need a unique name. While you’re working on a crate locally,
-you can name a crate whatever you’d like. However, crate names on
-*https://crates.io/* are allocated on a first-come, first-served basis. Once a
-crate name is taken, no one else can publish a crate with that name. Before
-attempting to publish a crate, search for the name you want to use. If the name
-has been used, you will need to find another name and edit the `name` field in
-the *Cargo.toml* file under the `[package]` section to use the new name for
-publishing, like so:
+you can name a crate whatever you’d like. However, crate names on crates.io are
+allocated on a first-come, first-served basis. Once a crate name is taken, no
+one else can publish a crate with that name. Before attempting to publish a
+crate, search for the name you want to use. If the name has been used, you will
+need to find another name and edit the `name` field in the *Cargo.toml* file
+under the `[package]` section to use the new name for publishing, like so:
 
 Filename: Cargo.toml
 
@@ -542,15 +524,14 @@ easily.
 
 Now that you’ve created an account, saved your API token, chosen a name for
 your crate, and specified the required metadata, you’re ready to publish!
-Publishing a crate uploads a specific version to *https://crates.io/* for
-others to use.
+Publishing a crate uploads a specific version to crates.io for others to use.
 
 Be careful, because a publish is *permanent*. The version can never be
 overwritten, and the code cannot be deleted. One major goal of crates.io is to
 act as a permanent archive of code so that builds of all projects that depend
-on crates from *https://crates.io/* will continue to work. Allowing version
-deletions would make fulfilling that goal impossible. However, there is no
-limit to the number of crate versions you can publish.
+on crates from crates.io will continue to work. Allowing version deletions
+would make fulfilling that goal impossible. However, there is no limit to the
+number of crate versions you can publish.
 
 Run the `cargo publish` command again. It should succeed now:
 
@@ -600,26 +581,6 @@ $ cargo yank --vers 1.0.1
         Yank guessing_game:1.0.1
 ```
 
-<!-- so we run this on a crate, then load that crate onto crates.io? Or does
-this go in a file that's part of the new crate version? /LC -->
-<!-- No, this is a command to run in the directory of a crate that has already
-been published to crates.io. Do you have suggestions on how to make this
-clearer? I've tried a bit above /Carol -->
-<!-- Ah, I see! I think this is clear. JT, does this read okay to you? /LC -->
-<!-- I think this makes sense. Maybe you could make it clear in the example
-that you're in the project directory?
-
-```
-my_project> cargo yank --vers 1.0.1
-```
-and then show the message that cargo returns when the version is yanked to
-help key them in.
-/JT -->
-<!-- We haven't used that notation anywhere else in the book, of showing the
-current directory in the prompt. I think showing the output is a good idea
-though, so I've added that above and made the introduction to the scenario more
-concrete. /Carol-->
-
 By adding `--undo` to the command, you can also undo a yank and allow projects
 to start depending on a version again:
 
@@ -662,14 +623,6 @@ configure the entire workspace. This file won’t have a `[package]` section.
 Instead, it will start with a `[workspace]` section that will allow us to add
 members to the workspace by specifying the path to the package with our binary
 crate; in this case, that path is *adder*:
-
-<!-- You can have metadata in the top-level Cargo.toml along with the
-`[workspace]` section. We use this in Nushell, for example:
-
-https://github.com/nushell/nushell/blob/main/Cargo.toml
-
- /JT -->
-<!-- Fixed! /Carol -->
 
 Filename: Cargo.toml
 
@@ -789,10 +742,7 @@ use add_one;
 
 fn main() {
     let num = 10;
-    println!(
-        "Hello, world! {num} plus one is {}!",
-        add_one::add_one(num)
-    );
+    println!("Hello, world! {num} plus one is {}!", add_one::add_one(num));
 }
 ```
 
@@ -837,7 +787,7 @@ Filename: add_one/Cargo.toml
 
 ```
 [dependencies]
-rand = "0.8.3"
+rand = "0.8.5"
 ```
 
 We can now add `use rand;` to the *add_one/src/lib.rs* file, and building the
@@ -848,9 +798,9 @@ referring to the `rand` we brought into scope:
 ```
 $ cargo build
     Updating crates.io index
-  Downloaded rand v0.8.3
+  Downloaded rand v0.8.5
    --snip--
-   Compiling rand v0.8.3
+   Compiling rand v0.8.5
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
 warning: unused import: `rand`
  --> add_one/src/lib.rs:1:5
@@ -860,8 +810,7 @@ warning: unused import: `rand`
   |
   = note: `#[warn(unused_imports)]` on by default
 
-warning: 1 warning emitted
-
+warning: `add_one` (lib) generated 1 warning
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
@@ -923,14 +872,14 @@ $ cargo test
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
    Compiling adder v0.1.0 (file:///projects/add/adder)
     Finished test [unoptimized + debuginfo] target(s) in 0.27s
-     Running target/debug/deps/add_one-f0253159197f7841
+     Running unittests src/lib.rs (target/debug/deps/add_one-f0253159197f7841)
 
 running 1 test
 test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-     Running target/debug/deps/adder-49979ff40686fa8e
+     Running unittests src/main.rs (target/debug/deps/adder-49979ff40686fa8e)
 
 running 0 tests
 
@@ -955,7 +904,7 @@ we want to test:
 ```
 $ cargo test -p add_one
     Finished test [unoptimized + debuginfo] target(s) in 0.00s
-     Running target/debug/deps/add_one-b3235fea9a156f74
+     Running unittests src/lib.rs (target/debug/deps/add_one-b3235fea9a156f74)
 
 running 1 test
 test tests::it_works ... ok
@@ -972,10 +921,10 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 This output shows `cargo test` only ran the tests for the `add_one` crate and
 didn’t run the `adder` crate tests.
 
-If you publish the crates in the workspace to *https://crates.io/*, each crate
-in the workspace will need to be published separately. Like `cargo test`, we
-can publish a particular crate in our workspace by using the `-p` flag and
-specifying the name of the crate we want to publish.
+If you publish the crates in the workspace to crates.io at *https://crates.io/*,
+each crate in the workspace will need to be published separately. Like `cargo
+test`, we can publish a particular crate in our workspace by using the `-p`
+flag and specifying the name of the crate we want to publish.
 
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
@@ -990,9 +939,9 @@ are often changed at the same time.
 The `cargo install` command allows you to install and use binary crates
 locally. This isn’t intended to replace system packages; it’s meant to be a
 convenient way for Rust developers to install tools that others have shared on
-*https://crates.io/*. Note that you can only install packages that have binary
-targets. A *binary target* is the runnable program that is created if the crate
-has a *src/main.rs* file or another file specified as a binary, as opposed to a
+crates.io. Note that you can only install packages that have binary targets. A
+*binary target* is the runnable program that is created if the crate has a
+*src/main.rs* file or another file specified as a binary, as opposed to a
 library target that isn’t runnable on its own but is suitable for including
 within other programs. Usually, crates have information in the *README* file
 about whether a crate is a library, has a binary target, or both.
@@ -1010,14 +959,14 @@ can run the following:
 ```
 $ cargo install ripgrep
     Updating crates.io index
-  Downloaded ripgrep v11.0.2
+  Downloaded ripgrep v13.0.0
   Downloaded 1 crate (243.3 KB) in 0.88s
-  Installing ripgrep v11.0.2
+  Installing ripgrep v13.0.0
 --snip--
-   Compiling ripgrep v11.0.2
+   Compiling ripgrep v13.0.0
     Finished release [optimized + debuginfo] target(s) in 3m 10s
   Installing ~/.cargo/bin/rg
-   Installed package `ripgrep v11.0.2` (executable `rg`)
+   Installed package `ripgrep v13.0.0` (executable `rg`)
 ```
 
 The second-to-last line of the output shows the location and the name of the
@@ -1036,9 +985,8 @@ built-in Cargo tools is a super convenient benefit of Cargo’s design!
 
 ## Summary
 
-Sharing code with Cargo and *https://crates.io/* is part of what makes the Rust
-ecosystem useful for many different tasks. Rust’s standard library is small and
-stable, but crates are easy to share, use, and improve on a timeline different
-from that of the language. Don’t be shy about sharing code that’s useful to you
-on *https://crates.io/*; it’s likely that it will be useful to someone else as
-well!
+Sharing code with Cargo and crates.io is part of what makes the Rust ecosystem
+useful for many different tasks. Rust’s standard library is small and stable,
+but crates are easy to share, use, and improve on a timeline different from
+that of the language. Don’t be shy about sharing code that’s useful to you on
+crates.io; it’s likely that it will be useful to someone else as well!
