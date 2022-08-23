@@ -13,10 +13,9 @@ test our code, but it can do a lot more. In this chapter, we’ll discuss some o
 its other, more advanced features to show you how to do the following:
 
 * Customize your build through release profiles.
-Publish libraries on *https://crates.i**o**.*
-
+* Publish libraries on *https://crates.i**o*.
 * Organize large projects with workspaces.
-* Install binaries from *https://crates.io**.*
+* Install binaries from *https://crates.io*.
 * Extend Cargo using custom commands.
 Cargo can do even more than the functionality we cover in this chapter, so for
 a full explanation of all its features, see its documentation at
@@ -270,8 +269,11 @@ test src/lib.rs - add_one (line 5) ... ok
 ```
 
 ```
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-finished in 0.27s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
+```
+
+```
+filtered out; finished in 0.27s
 ```
 
 Now if we change either the function or the example so the `assert_eq!` in the
@@ -280,8 +282,8 @@ that the example and the code are out of sync with each other!
 
 #### Commenting Contained Items
 
-The style of doc comment `//!` adds documentation to the item that contains the
-comments rather than to the items following the comments. We typically use
+The doc comment `//!` adds documentation to the item that *contains* the
+comments rather than to the items *following* the comments. We typically use
 these doc comments inside the crate root file (*src/lib.rs* by convention) or
 inside a module to document the crate or the module as a whole.
 
@@ -301,11 +303,11 @@ Filename: src/lib.rs
 ```
 
 ```
-//! `my_crate` is a collection of utilities to make performing certain
+//! `my_crate` is a collection of utilities to make performing
 ```
 
 ```
-//! calculations more convenient.
+//! certain calculations more convenient.
 ```
 
 ```
@@ -317,7 +319,7 @@ Filename: src/lib.rs
 ```
 
 ```
- --snip--
+--snip--
 ```
 
 Documentation for the `my_crate` crate as a whole
@@ -472,11 +474,23 @@ pub mod utils {
 ```
 
 ```
-    pub fn mix(c1: PrimaryColor, c2: PrimaryColor) -> SecondaryColor {
+    pub fn mix(
 ```
 
 ```
-         --snip--
+        c1: PrimaryColor,
+```
+
+```
+        c2: PrimaryColor,
+```
+
+```
+    ) -> SecondaryColor {
+```
+
+```
+        --snip--
 ```
 
 ```
@@ -593,7 +607,7 @@ pub mod kinds {
 ```
 
 ```
-     --snip--
+    --snip--
 ```
 
 ```
@@ -609,7 +623,7 @@ pub mod utils {
 ```
 
 ```
-     --snip--
+    --snip--
 ```
 
 ```
@@ -649,7 +663,7 @@ fn main() {
 ```
 
 ```
-     --snip--
+    --snip--
 ```
 
 ```
@@ -727,15 +741,18 @@ $ cargo publish
 ```
 
 ```
-warning: manifest has no description, license, license-file,
+warning: manifest has no description, license, license-file, documentation,
 ```
 
 ```
-documentation, homepage or repository.
+homepage or repository.
 ```
 
 ```
 See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata
+```
+
+```
 for more info.
 ```
 
@@ -760,12 +777,11 @@ Caused by:
 ```
 
 ```
-description, license. Please see
-https://doc.rust-lang.org/cargo/reference/manifest.html
+description, license. Please see https://doc.rust-
 ```
 
 ```
-for how to upload metadata
+lang.org/cargo/reference/manifest.html for how to upload metadata
 ```
 
 This results in an error because you’re missing some crucial information: a
@@ -825,7 +841,11 @@ edition = "2021"
 ```
 
 ```
-description = "A fun game where you guess what number the computer has chosen."
+description = "A fun game where you guess what number the
+```
+
+```
+computer has chosen."
 ```
 
 ```
@@ -852,11 +872,11 @@ Publishing a crate uploads a specific version to *https://crates.io* for others
 to use.
 
 Be careful, because a publish is *permanent*. The version can never be
-overwritten, and the code cannot be deleted. One major goal of *crates.io* is
-to act as a permanent archive of code so that builds of all projects that
-depend on crates from *https://crates.io* will continue to work. Allowing
-version deletions would make fulfilling that goal impossible. However, there is
-no limit to the number of crate versions you can publish.
+overwritten, and the code cannot be deleted. One major goal of Crates.io is to
+act as a permanent archive of code so that builds of all projects that depend
+on crates from *https://crates.io* will continue to work. Allowing version
+deletions would make fulfilling that goal impossible. However, there is no
+limit to the number of crate versions you can publish.
 
 Run the `cargo publish` command again. It should succeed now:
 
@@ -930,7 +950,7 @@ $ cargo yank --vers 1.0.1
 ```
 
 ```
-        Yank guessing_game:1.0.1
+        Yank guessing_game@1.0.1
 ```
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
@@ -945,7 +965,7 @@ $ cargo yank --vers 1.0.1 --undo
 ```
 
 ```
-      Unyank guessing_game_:1.0.1
+      Unyank guessing_game@1.0.1
 ```
 
 A yank *does not* delete any code. It cannot, for example, delete accidentally
@@ -1307,7 +1327,7 @@ $ cargo build
 ```
 
 ```
-    --snip--
+   --snip--
 ```
 
 ```
@@ -1316,46 +1336,6 @@ $ cargo build
 
 ```
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
-```
-
-```
-warning: unused import: `rand`
-```
-
-```
- --> add_one/src/lib.rs:1:5
-```
-
-```
-  |
-```
-
-```
-1 | use rand;
-```
-
-```
-  |     ^^^^
-```
-
-```
-  |
-```
-
-```
-  = note: `#[warn(unused_imports)]` on by default
-```
-
-```
-
-```
-
-```
-warning: `add_one` (lib) generated 1 warning
-```
-
-```
-
 ```
 
 ```
@@ -1513,6 +1493,9 @@ test tests::it_works ... ok
 
 ```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
+```
+
+```
 finished in 0.00s
 ```
 
@@ -1538,6 +1521,9 @@ running 0 tests
 
 ```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
+```
+
+```
 finished in 0.00s
 ```
 
@@ -1563,6 +1549,9 @@ running 0 tests
 
 ```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
+```
+
+```
 finished in 0.00s
 ```
 
@@ -1650,10 +1639,10 @@ specifying the name of the crate we want to publish.
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
 
-As your project grows, consider using a workspace: it’s easier to understand
-smaller, individual components than one big blob of code. Furthermore, keeping
-the crates in a workspace can make coordination between crates easier if they
-are often changed at the same time.
+As your project grows, consider using a workspace: it provides
+easier-to-understand, smaller, individual components than one big blob of code.
+Furthermore, keeping the crates in a workspace can make coordination between
+crates easier if they are often changed at the same time.
 
 ## Installing Binaries with cargo install
 
@@ -1664,7 +1653,7 @@ convenient way for Rust developers to install tools that others have shared on
 targets. A *binary target* is the runnable program that is created if the crate
 has an *src/main.rs* file or another file specified as a binary, as opposed to
 a library target that isn’t runnable on its own but is suitable for including
-within other programs. Usually, crates have information in the README file
+within other programs. Usually, crates have information in the *README* file
 about whether a crate is a library, has a binary target, or both.
 
 All binaries installed with `cargo install` are stored in the installation
@@ -1698,7 +1687,7 @@ $ cargo install ripgrep
 ```
 
 ```
- --snip--
+   --snip--
 ```
 
 ```
@@ -1720,7 +1709,7 @@ $ cargo install ripgrep
 The second-to-last line of the output shows the location and the name of the
 installed binary, which in the case of `ripgrep` is `rg`. As long as the
 installation directory is in your `$PATH`, as mentioned previously, you can
-then run `rg --help` and start using a faster, rustier tool for searching files!
+then run `rg --help` and start using a faster, Rustier tool for searching files!
 
 ## Extending Cargo with Custom Commands
 
