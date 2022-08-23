@@ -442,10 +442,15 @@ yank. For example, if we've published a crate named `guessing_game` version
 1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd
 run:
 
+<!-- manual-regeneration:
+cargo yank carol-test --version 2.1.0
+cargo yank carol-test --version 2.1.0 --undo
+-->
+
 ```console
 $ cargo yank --vers 1.0.1
     Updating crates.io index
-        Yank guessing_game:1.0.1
+        Yank guessing_game@1.0.1
 ```
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
@@ -454,7 +459,7 @@ to start depending on a version again:
 ```console
 $ cargo yank --vers 1.0.1 --undo
     Updating crates.io index
-      Unyank guessing_game_:1.0.1
+      Unyank guessing_game@1.0.1
 ```
 
 A yank *does not* delete any code. It cannot, for example, delete accidentally
