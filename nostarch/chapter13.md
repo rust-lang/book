@@ -114,7 +114,7 @@ impl Inventory {
 ```
 
 ```
-        user_preference: Option<ShirtColor>
+        user_preference: Option<ShirtColor>,
 ```
 
 ```
@@ -226,7 +226,7 @@ fn main() {
 ```
 
 ```
-            ShirtColor::Blue
+            ShirtColor::Blue,
 ```
 
 ```
@@ -321,28 +321,12 @@ calls the closure and returns the value returned by the closure.
 
 We specify the closure expression `|| self.most_stocked()` as the argument to
 `unwrap_or_else`. This is a closure that takes no parameters itself (if the
-closure had parameters, they would appear between the two vertical bars). The
+closure had parameters, they would appear between the two vertical pipes). The
 body of the closure calls `self.most_stocked()`. We’re defining the closure
 here, and the implementation of `unwrap_or_else` will evaluate the closure
 later if the result is needed.
 
 Running this code prints the following:
-
-```
-$ cargo run
-```
-
-```
-   Compiling shirt-company v0.1.0 (file:///projects/shirt-company)
-```
-
-```
-    Finished dev [unoptimized + debuginfo] target(s) in 0.27s
-```
-
-```
-     Running `target/debug/shirt-company`
-```
 
 ```
 The user with preference Some(Red) gets Red
@@ -491,6 +475,9 @@ error[E0308]: mismatched types
 
 ```
   |                             ^- help: try using a conversion method:
+```
+
+```
 `.to_string()`
 ```
 
@@ -811,8 +798,8 @@ Using `FnOnce` in the trait bound expresses the constraint that
 `unwrap_or_else` is only going to call `f` at most one time. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
-closures implement `FnOnce`, `unwrap_or_else` accepts the most different kinds
-of closures and is as flexible as it can be.
+closures implement `FnOnce`, `unwrap_or_else` accepts the largest variety of
+closures and is as flexible as it can be.
 
 > NoteFunctions can implement all three of the `Fn` traits too. If what we want
 to do doesn’t require capturing a value from the environment, we can use the
@@ -968,23 +955,7 @@ compiler won’t let us use this closure with `sort_by_key`.
 Filename: src/main.rs
 
 ```
-#[derive(Debug)]
-```
-
-```
-struct Rectangle {
-```
-
-```
-    width: u32,
-```
-
-```
-    height: u32,
-```
-
-```
-}
+--snip--
 ```
 
 ```
@@ -1071,6 +1042,9 @@ implement `FnMut`:
 
 ```
 error[E0507]: cannot move out of `value`, a captured variable in an `FnMut`
+```
+
+```
 closure
 ```
 
@@ -1137,23 +1111,7 @@ the `num_sort_operations` counter and can therefore be called more than once.
 Filename: src/main.rs
 
 ```
-#[derive(Debug)]
-```
-
-```
-struct Rectangle {
-```
-
-```
-    width: u32,
-```
-
-```
-    height: u32,
-```
-
-```
-}
+--snip--
 ```
 
 ```
@@ -1165,23 +1123,7 @@ fn main() {
 ```
 
 ```
-    let mut list = [
-```
-
-```
-        Rectangle { width: 10, height: 1 },
-```
-
-```
-        Rectangle { width: 3, height: 5 },
-```
-
-```
-        Rectangle { width: 7, height: 12 },
-```
-
-```
-    ];
+    --snip--
 ```
 
 ```
@@ -1209,7 +1151,19 @@ fn main() {
 ```
 
 ```
-    println!("{:#?}, sorted in {num_sort_operations} operations", list);
+    println!(
+```
+
+```
+        "{:#?}, sorted in {num_sort_operations} operations",
+```
+
+```
+        list
+```
+
+```
+    );
 ```
 
 ```
@@ -1282,7 +1236,7 @@ for val in v1_iter {
 ```
 
 ```
-    println!("Got: {}", val);
+    println!("Got: {val}");
 ```
 
 ```
@@ -1422,12 +1376,12 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called *consuming adaptors* because calling them
-uses up the iterator. One example is the `sum` method, which takes ownership of
-the iterator and iterates through the items by repeatedly calling `next`, thus
-consuming the iterator. As it iterates through, it adds each item to a running
-total and returns the total when iteration is complete. Listing 13-13 has a
-test illustrating a use of the `sum` method.
+Methods that call `next` are called *consuming adapt**e**rs* because calling
+them uses up the iterator. One example is the `sum` method, which takes
+ownership of the iterator and iterates through the items by repeatedly calling
+`next`, thus consuming the iterator. As it iterates through, it adds each item
+to a running total and returns the total when iteration is complete. Listing
+13-13 has a test illustrating a use of the `sum` method.
 
 Filename: src/lib.rs
 
@@ -1478,11 +1432,11 @@ ownership of the iterator we call it on.
 
 ### Methods That Produce Other Iterators
 
-*Iterator adaptors* are methods defined on the `Iterator` trait that don’t
+*Iterator adapt**e**rs* are methods defined on the `Iterator` trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.
 
-Listing 13-14 shows an example of calling the iterator adaptor method `map`,
+Listing 13-14 shows an example of calling the iterator adapter method `map`,
 which takes a closure to call on each item as the items are iterated through.
 The `map` method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be
@@ -1502,7 +1456,7 @@ let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-Calling the iterator adaptor `map` to create a new iterator
+Calling the iterator adapter `map` to create a new iterator
 
 However, this code produces a warning:
 
@@ -1539,7 +1493,7 @@ warning: unused `Map` that must be used
 ```
 
 The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
-never gets called. The warning reminds us why: iterator adaptors are lazy, and
+never gets called. The warning reminds us why: iterator adapters are lazy, and
 we need to consume the iterator here.
 
 To fix this warning and consume the iterator, we’ll use the `collect` method,
@@ -1580,9 +1534,9 @@ on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the `Iterator` trait
 provides.
 
-You can chain multiple calls to iterator adaptors to perform complex actions in
+You can chain multiple calls to iterator adapters to perform complex actions in
 a readable way. But because all iterators are lazy, you have to call one of the
-consuming adaptor methods to get results from calls to iterator adaptors.
+consuming adapter methods to get results from calls to iterator adapters.
 
 ### Using Closures That Capture Their Environment
 
@@ -1834,7 +1788,15 @@ impl Config {
 ```
 
 ```
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
+    pub fn build(
+```
+
+```
+        args: &[String]
+```
+
+```
+    ) -> Result<Config, &'static str> {
 ```
 
 ```
@@ -1978,19 +1940,23 @@ fn main() {
 ```
 
 ```
-    let config = Config::build(env::args()).unwrap_or_else(|err| {
+    let config =
 ```
 
 ```
-        eprintln!("Problem parsing arguments: {err}");
+        Config::build(env::args()).unwrap_or_else(|err| {
 ```
 
 ```
-        process::exit(1);
+            eprintln!("Problem parsing arguments: {err}");
 ```
 
 ```
-    });
+            process::exit(1);
+```
+
+```
+        });
 ```
 
 ```
@@ -2173,7 +2139,7 @@ value we want to put in the `query` field of `Config`. If `next` returns
 not enough arguments were given and we return early with an `Err` value. We do
 the same thing for the `filename` value.
 
-### Making Code Clearer with Iterator Adaptors
+### Making Code Clearer with Iterator Adapters
 
 We can also take advantage of iterators in the `search` function in our I/O
 project, which is reproduced here in Listing 13-21 as it was in Listing 12-19.
@@ -2226,7 +2192,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 The implementation of the `search` function from Listing 12-19
 
-We can write this code in a more concise way using iterator adaptor methods.
+We can write this code in a more concise way using iterator adapter methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
@@ -2259,11 +2225,11 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Using iterator adaptor methods in the implementation of the `search` function
+Using iterator adapter methods in the implementation of the `search` function
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
-13-16, this code uses the `filter` adaptor to keep only the lines for which
+13-16, this code uses the `filter` adapter to keep only the lines for which
 `line.contains(query)` returns `true`. We then collect the matching lines into
 another vector with `collect`. Much simpler! Feel free to make the same change
 to use iterator methods in the `search_case_insensitive` function as well.
@@ -2274,7 +2240,7 @@ The next logical question is which style you should choose in your own code and
 why: the original implementation in Listing 13-21 or the version using
 iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
-for the various iterator adaptors and what they do, iterators can be easier to
+for the various iterator adapters and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
 new vectors, the code focuses on the high-level objective of the loop. This
 abstracts away some of the commonplace code so it’s easier to see the concepts
@@ -2385,7 +2351,7 @@ multiplies the values together, sums all the results, and shifts the bits in
 the sum `qlp_shift` bits to the right.
 
 Calculations in applications like audio decoders often prioritize performance
-most highly. Here, we’re creating an iterator, using two adaptors, and then
+most highly. Here, we’re creating an iterator, using two adapters, and then
 consuming the value. What assembly code would this Rust code compile to? Well,
 as of this writing, it compiles down to the same assembly you’d write by hand.
 There’s no loop at all corresponding to the iteration over the values in
