@@ -12,7 +12,7 @@ possible cases are handled.
 Think of a `match` expression as being like a coin-sorting machine: coins slide
 down a track with variously sized holes along it, and each coin falls through
 the first hole it encounters that it fits into. In the same way, values go
-through each pattern in a `match`, and at the first pattern the value “fits,”
+through each pattern in a `match`, and at the first pattern the value “fits”,
 the value falls into the associated code block to be used during execution.
 
 Speaking of coins, let’s use them as an example using `match`! We can write a
