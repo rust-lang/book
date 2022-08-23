@@ -1,6 +1,6 @@
 # In each chapter
 
-- [x] Manual regeneration
+- [ ] Manual regeneration
 - [ ] Check for upstream changes from last snapshot
 - [ ] Propagate updated output to docx
 - [ ] Extract docx and check diff
