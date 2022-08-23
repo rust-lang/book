@@ -46,7 +46,7 @@ Here is the error we get when we compile this code:
 
 The error tells us we can’t call `join` because we only have a mutable borrow
 of each `worker` and `join` takes ownership of its argument. To solve this
-issue, we need to move the thread out of the `Worker` instance that owns
+issue, we need to move the thread out of the `Worker` instance that owns the
 `thread` so `join` can consume the thread. We did this in Listing 17-15: if
 `Worker` holds an `Option<thread::JoinHandle<()>>` instead, we can call the
 `take` method on the `Option` to move the value out of the `Some` variant and
@@ -81,7 +81,7 @@ new `Worker`. Make the following changes to fix this error:
 ```
 
 The first error is in our `Drop` implementation. We mentioned earlier that we
-intended to call `take` on the `Option` value to move `thread` out of `worker`.
+intended to call `take` on the `Option` value to move `thread` out of the `worker`.
 The following changes will do so:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -111,7 +111,7 @@ implementation and then a change in the `Worker` loop.
 
 First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop
 the `sender` before waiting for the threads to finish. Listing 20-23 shows the
-changes to `ThreadPool` to explicitly drop `sender`. We use the same `Option`
+changes to `ThreadPool` to explicitly drop the `sender`. We use the same `Option`
 and `take` technique as we did with the thread to be able to move `sender` out
 of `ThreadPool`:
 
@@ -231,7 +231,7 @@ some ideas:
 * Add more documentation to `ThreadPool` and its public methods.
 * Add tests of the library’s functionality.
 * Change calls to `unwrap` to more robust error handling.
-* Use `ThreadPool` to perform some task other than serving web requests.
+* Use `ThreadPool` to perform some tasks other than serving web requests.
 * Find a thread pool crate on [crates.io](https://crates.io/) and implement a
   similar web server using the crate instead. Then compare its API and
   robustness to the thread pool we implemented.
