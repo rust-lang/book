@@ -37,7 +37,7 @@ background knowledge you need to understand a real-world project such as
 
 Our `grep` project will combine a number of concepts you’ve learned so far:
 
-* Organizing code (using what you learned about modules in Chapter 7)
+* Organizing code (Chapter 7)
 * Using vectors and strings (Chapter 8)
 * Handling errors (Chapter 9)
 * Using traits and lifetimes where appropriate (Chapter 10)
@@ -90,7 +90,7 @@ collection, such as a vector, that contains all the elements the iterator
 produces.
 
 The code in Listing 12-1 allows your `minigrep` program to read any command
-line arguments passed to it and then collect the values into a vector.
+line arguments passed to it, and then collect the values into a vector.
 
 Filename: src/main.rs
 
@@ -269,7 +269,7 @@ fn main() {
 Creating variables to hold the query argument and file path argument
 
 As we saw when we printed the vector, the program’s name takes up the first
-value in the vector at `args[0]`, so we’re starting arguments at index `1`. The
+value in the vector at `args[0]`, so we’re starting arguments at index 1. The
 first argument `minigrep` takes is the string we’re searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the file path, so we put a reference to the second argument in the
@@ -993,7 +993,7 @@ where we called `panic!` when the `value` argument was out of the range of
 valid values. Instead of checking for a range of values here, we’re checking
 that the length of `args` is at least `3` and the rest of the function can
 operate under the assumption that this condition has been met. If `args` has
-fewer than three items, this condition will be true, and we call the `panic!`
+fewer than three items, this condition will be `true`, and we call the `panic!`
 macro to end the program immediately.
 
 With these extra few lines of code in `new`, let’s run the program without any
@@ -1108,7 +1108,7 @@ impl Config {
 Returning a `Result` from `Config::build`
 
 Our `build` function returns a `Result` with a `Config` instance in the success
-case and a `&'static str` in the error case. Our error values will always be
+case and an `&'static str` in the error case. Our error values will always be
 string literals that have the `'static` lifetime.
 
 We’ve made two changes in the body of the function: instead of calling `panic!`
@@ -1500,7 +1500,7 @@ both cases: we print the error and exit.
 ### Splitting Code into a Library Crate
 
 Our `minigrep` project is looking good so far! Now we’ll split the
-*src/**main.rs* file and put some code into the *src/**lib.rs* file. That way
+*src/**main.rs* file and put some code into the *src/**lib.rs* file. That way,
 we can test the code and have a *src/**main.rs* file with fewer
 responsibilities.
 
@@ -1554,7 +1554,15 @@ impl Config {
 ```
 
 ```
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
+    pub fn build(
+```
+
+```
+        args: &[String],
+```
+
+```
+    ) -> Result<Config, &'static str> {
 ```
 
 ```
@@ -1784,7 +1792,19 @@ fast, productive."`.
 Filename: src/lib.rs
 
 ```
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(
+```
+
+```
+    query: &str,
+```
+
+```
+    contents: &'a str,
+```
+
+```
+) -> Vec<&'a str> {
 ```
 
 ```
@@ -1819,7 +1839,7 @@ error[E0106]: missing lifetime specifier
 ```
 
 ```
-  --> src/lib.rs:28:51
+  --> src/lib.rs:31:10
 ```
 
 ```
@@ -1827,15 +1847,27 @@ error[E0106]: missing lifetime specifier
 ```
 
 ```
-28 | pub fn search(query: &str, contents: &str) -> Vec<&str> {
+29 |     query: &str,
 ```
 
 ```
-   |                      ----            ----         ^ expected named
+   |            ----
 ```
 
 ```
-lifetime parameter
+30 |     contents: &str,
+```
+
+```
+   |               ----
+```
+
+```
+31 | ) -> Vec<&str> {
+```
+
+```
+   |          ^ expected named lifetime parameter
 ```
 
 ```
@@ -1843,15 +1875,11 @@ lifetime parameter
 ```
 
 ```
-   = help: this function's return type contains a borrowed value,
+   = help: this function's return type contains a borrowed value, but the
 ```
 
 ```
-but the signature does not say whether it is borrowed from `query` or
-```
-
-```
-`contents`
+signature does not say whether it is borrowed from `query` or `contents`
 ```
 
 ```
@@ -1863,11 +1891,23 @@ help: consider introducing a named lifetime parameter
 ```
 
 ```
-28 | pub fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
+28 ~ pub fn search<'a>(
 ```
 
 ```
-   |              ++++         ++                 ++              ++
+29 ~     query: &'a str,
+```
+
+```
+30 ~     contents: &'a str,
+```
+
+```
+31 ~ ) -> Vec<&'a str> {
+```
+
+```
+   |
 ```
 
 Rust can’t possibly know which of the two arguments we need, so we need to tell
@@ -1928,7 +1968,7 @@ failures:
 ```
 
 ```
-thread 'main' panicked at 'assertion failed: `(left == right)`
+thread 'tests::one_result' panicked at 'assertion failed: `(left == right)`
 ```
 
 ```
@@ -1936,7 +1976,7 @@ thread 'main' panicked at 'assertion failed: `(left == right)`
 ```
 
 ```
- right: `[]`', src/lib.rs:44:9
+ right: `[]`', src/lib.rs:47:9
 ```
 
 ```
@@ -1991,9 +2031,9 @@ that and implement `search`, our program needs to follow these steps:
 1. If it does, add it to the list of values we’re returning.
 1. If it doesn’t, do nothing.
 1. Return the list of results that match.
-Let’s work through each step, starting with iterating through lines.
 
-#### Iterating Through Lines with the lines Method
+Unmatched: BodyContinued
+      #### Iterating Through Lines with the lines Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17. Note that
@@ -2002,7 +2042,19 @@ this won’t compile yet.
 Filename: src/lib.rs
 
 ```
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(
+```
+
+```
+    query: &str,
+```
+
+```
+    contents: &'a str,
+```
+
+```
+) -> Vec<&'a str> {
 ```
 
 ```
@@ -2038,7 +2090,19 @@ Listing 12-18. Note that this still won’t compile yet.
 Filename: src/lib.rs
 
 ```
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(
+```
+
+```
+    query: &str,
+```
+
+```
+    contents: &'a str,
+```
+
+```
+) -> Vec<&'a str> {
 ```
 
 ```
@@ -2081,7 +2145,19 @@ we return the vector, as shown in Listing 12-19.
 Filename: src/lib.rs
 
 ```
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(
+```
+
+```
+    query: &str,
+```
+
+```
+    contents: &'a str,
+```
+
+```
+) -> Vec<&'a str> {
 ```
 
 ```
@@ -2702,7 +2778,15 @@ impl Config {
 ```
 
 ```
-    pub fn build(args: &[String]) -> Result<Config, &'static str> {
+    pub fn build(
+```
+
+```
+        args: &[String]
+```
+
+```
+    ) -> Result<Config, &'static str> {
 ```
 
 ```
@@ -2887,7 +2971,7 @@ to use something else to print to standard error.
 
 ### Checking Where Errors Are Written
 
-First, let’s observe how the content printed by `minigrep` is currently being
+First let’s observe how the content printed by `minigrep` is currently being
 written to standard output, including any error messages we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
 to a file while intentionally causing an error. We won’t redirect the standard

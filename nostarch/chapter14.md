@@ -29,7 +29,7 @@ various options for compiling code. Each profile is configured independently of
 the others.
 
 Cargo has two main profiles: the `dev` profile Cargo uses when you run `cargo
-build` and the `release` profile Cargo uses when you run `cargo build
+build`, and the `release` profile Cargo uses when you run `cargo build
 --release`. The `dev` profile is defined with good defaults for development,
 and the `release` profile has good defaults for release builds.
 
@@ -276,7 +276,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
 filtered out; finished in 0.27s
 ```
 
-Now if we change either the function or the example so the `assert_eq!` in the
+Now, if we change either the function or the example so the `assert_eq!` in the
 example panics and run `cargo test` again, we’ll see that the doc tests catch
 that the example and the code are out of sync with each other!
 
@@ -350,19 +350,19 @@ are and might have difficulty finding the pieces they want to use if your crate
 has a large module hierarchy.
 
 In Chapter 7, we covered how to make items public using the `pub` keyword, and
-bring items into a scope with the `use` keyword. However, the structure that
-makes sense to you while you’re developing a crate might not be very convenient
-for your users. You might want to organize your structs in a hierarchy
-containing multiple levels, but then people who want to use a type you’ve
-defined deep in the hierarchy might have trouble finding out that type exists.
-They might also be annoyed at having to enter `use`
-`my_crate::some_module::another_module::UsefulType;` rather than `use`
-`my_crate::UsefulType;`.
+how to bring items into a scope with the `use` keyword. However, the structure
+that makes sense to you while you’re developing a crate might not be very
+convenient for your users. You might want to organize your structs in a
+hierarchy containing multiple levels, but then people who want to use a type
+you’ve defined deep in the hierarchy might have trouble finding out that type
+exists. They might also be annoyed at having to enter `use`
+`my_crate``::`some_module`::`another_module`::`UsefulType`;` rather than `use`
+`my_crate``::`UsefulType`;`.
 
 The good news is that if the structure *isn’t* convenient for others to use
 from another library, you don’t have to rearrange your internal organization:
 instead, you can re-export items to make a public structure that’s different
-from your private structure by using `pub use`. Re-exporting takes a public
+from your private structure by using `pub use`. *Re-exporting* takes a public
 item in one location and makes it public in another location, as if it were
 defined in the other location instead.
 
@@ -920,17 +920,17 @@ anyone can easily add your crate as a dependency of their project.
 When you’ve made changes to your crate and are ready to release a new version,
 you change the `version` value specified in your *Cargo.toml* file and
 republish. Use the Semantic Versioning rules at *http://semver.org* to decide
-what an appropriate next version number is based on the kinds of changes you’ve
-made. Then run `cargo publish` to upload the new version.
+what an appropriate next version number is, based on the kinds of changes
+you’ve made. Then run `cargo publish` to upload the new version.
 
 ### Deprecating Versions from Crates.io with cargo yank
 
 Although you can’t remove previous versions of a crate, you can prevent any
 future projects from adding them as a new dependency. This is useful when a
 crate version is broken for one reason or another. In such situations, Cargo
-supports *yanking* a crate version.
+supports yanking a crate version.
 
-Yanking a version prevents new projects from depending on that version while
+*Yanking* a version prevents new projects from depending on that version while
 allowing all existing projects that depend on it to continue. Essentially, a
 yank means that all projects with a *Cargo.lock* will not break, and any future
 *Cargo.lock* files generated will not use the yanked version.
@@ -1651,8 +1651,8 @@ locally. This isn’t intended to replace system packages; it’s meant to be a
 convenient way for Rust developers to install tools that others have shared on
 *https://crates.io*. Note that you can only install packages that have binary
 targets. A *binary target* is the runnable program that is created if the crate
-has an *src/main.rs* file or another file specified as a binary, as opposed to
-a library target that isn’t runnable on its own but is suitable for including
+has a *src/main.rs* file or another file specified as a binary, as opposed to a
+library target that isn’t runnable on its own but is suitable for including
 within other programs. Usually, crates have information in the *README* file
 about whether a crate is a library, has a binary target, or both.
 

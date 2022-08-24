@@ -34,7 +34,7 @@ can find a list of the keywords in Appendix A.
 
 ## Variables and Mutability
 
-As mentioned in “Storing Values with Variables” on page XX, by default
+As mentioned in “Storing Values with Variables” on page XX, by default,
 variables are immutable. This is one of many nudges Rust gives you to write
 your code in a way that takes advantage of the safety and easy concurrency that
 Rust offers. However, you still have the option to make your variables mutable.
@@ -244,15 +244,15 @@ program). Rust’s naming convention for constants is to use all uppercase with
 underscores between words. The compiler is able to evaluate a limited set of
 operations at compile time, which lets us choose to write out this value in a
 way that’s easier to understand and verify, rather than setting this constant
-to the value 10,800. See the Rust Reference’s section on constant evaluation at
-*https://doc.rust-lang.org/reference/const_eval.html* for more information on
-what operations can be used when declaring constants.
+to the value `10,800`. See the Rust Reference’s section on constant evaluation
+at *https://doc.rust-lang.org/reference/const_eval.html* for more information
+on what operations can be used when declaring constants.
 
 Constants are valid for the entire time a program runs, within the scope in
 which they were declared. This property makes constants useful for values in
 your application domain that multiple parts of the program might need to know
 about, such as the maximum number of points any player of a game is allowed to
-earn or the speed of light.
+earn, or the speed of light.
 
 Naming hardcoded values used throughout your program as constants is useful in
 conveying the meaning of that value to future maintainers of the code. It also
@@ -641,7 +641,7 @@ Unmatched: BoxListBullet
 Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs it’s roughly the same speed as `f32` but is capable of
+because on modern CPUs, it’s roughly the same speed as `f32` but is capable of
 more precision. All floating-point types are signed.
 
 Here’s an example that shows floating-point numbers in action:
@@ -1151,9 +1151,9 @@ fn main() {
 ```
 
 This code compiles successfully. If you run this code using `cargo run` and
-enter 0, 1, 2, 3, or 4, the program will print out the corresponding value at
-that index in the array. If you instead enter a number past the end of the
-array, such as 10, you’ll see output like this:
+enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
+value at that index in the array. If you instead enter a number past the end of
+the array, such as `10`, you’ll see output like this:
 
 ```
 thread 'main' panicked at 'index out of bounds: the len is 5 but the index is
@@ -1269,8 +1269,8 @@ Another function.
 ```
 
 The lines execute in the order in which they appear in the `main` function.
-First, the “Hello, world!” message prints, and then `another_function` is
-called and its message is printed.
+First the “Hello, world!” message prints, and then `another_function` is called
+and its message is printed.
 
 ### Parameters
 
@@ -1897,10 +1897,10 @@ discuss in “Publishing a Crate to Crates.io” on page XX.
 
 ## Control Flow
 
-The ability to run some code depending on whether a condition is true and to
-run some code repeatedly while a condition is true are basic building blocks in
-most programming languages. The most common constructs that let you control the
-flow of execution of Rust code are `if` expressions and loops.
+The ability to run some code depending on whether a condition is `true` and to
+run some code repeatedly while a condition is `true` are basic building blocks
+in most programming languages. The most common constructs that let you control
+the flow of execution of Rust code are `if` expressions and loops.
 
 ### if Expressions
 
@@ -1952,7 +1952,7 @@ fn main() {
 All `if` expressions start with the keyword `if`, followed by a condition. In
 this case, the condition checks whether or not the variable `number` has a
 value less than 5. We place the block of code to execute if the condition is
-true immediately after the condition inside curly brackets. Blocks of code
+`true` immediately after the condition inside curly brackets. Blocks of code
 associated with the conditions in `if` expressions are sometimes called *arms*,
 just like the arms in `match` expressions that we discussed in “Comparing the
 Guess to the Secret Number” on page XX.
@@ -2204,7 +2204,7 @@ When this program executes, it checks each `if` expression in turn and executes
 the first body for which the condition evaluates to `true`. Note that even
 though 6 is divisible by 2, we don’t see the output `number is divisible by 2`,
 nor do we see the `number is not divisible by 4, 3, or 2` text from the `else`
-block. That’s because Rust only executes the block for the first true
+block. That’s because Rust only executes the block for the first `true`
 condition, and once it finds one, it doesn’t even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you have more
@@ -2396,7 +2396,7 @@ fn main() {
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support the keyboard
-shortcut ctrl-c to interrupt a program that is stuck in a continual loop. Give
+shortcut ctrl-C to interrupt a program that is stuck in a continual loop. Give
 it a try:
 
 ```
@@ -2435,7 +2435,7 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed ctrl-c. You may or may not see the
+The symbol `^C` represents where you pressed ctrl-C. You may or may not see the
 word `again!` printed after the `^C`, depending on where the code was in the
 loop when it received the interrupt signal.
 
@@ -2516,7 +2516,7 @@ the loop. On every iteration of the loop, we add `1` to the `counter` variable,
 and then check whether the `counter` is equal to `10`. When it is, we use the
 `break` keyword with the value `counter * 2`. After the loop, we use a
 semicolon to end the statement that assigns the value to `result`. Finally, we
-print the value in `result`, which in this case is 20.
+print the value in `result`, which in this case is `20`.
 
 #### Loop Labels to Disambiguate Between Multiple Loops
 
@@ -2666,7 +2666,7 @@ End count = 2
 #### Conditional Loops with while
 
 A program will often need to evaluate a condition within a loop. While the
-condition is true, the loop runs. When the condition ceases to be true, the
+condition is `true`, the loop runs. When the condition ceases to be `true`, the
 program calls `break`, stopping the loop. It’s possible to implement behavior
 like this using a combination of `loop`, `if`, `else`, and `break`; you could
 try that now in a program, if you’d like. However, this pattern is so common
@@ -2778,8 +2778,8 @@ Looping through each element of a collection using a `while` loop
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer true). Running this code will print every element
-in the array:
+when `index < 5` is no longer `true`). Running this code will print every
+element in the array:
 
 ```
 $ cargo run

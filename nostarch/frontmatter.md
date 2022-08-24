@@ -184,10 +184,10 @@ Goulding, and her daughter, Vivian.
 ## Preface
 
 This version of the text assumes you’re using Rust 1.62.0 (released 2022-06-30)
-or later with `edition="2021"` in *Cargo.toml* of all projects to configure
-them to use Rust 2021 edition idioms. See “Installation” on page XX for
-instructions on installing or updating Rust, and see Appendix E for information
-on editions.
+or later with `edition="2021"` in the *Cargo.toml* file of all projects to
+configure them to use Rust 2021 edition idioms. See “Installation” on page XX
+for instructions on installing or updating Rust, and see Appendix E for
+information on editions.
 
 The 2021 edition of the Rust language includes a number of improvements that
 make Rust more ergonomic and that correct some inconsistencies. On top of a
@@ -221,7 +221,7 @@ backward-compatibility guarantees at work!
 
 ## Introduction
 
-Welcome to *The Rust Programming Language,* an introductory book about Rust.
+Welcome to *The Rust Programming Language*, an introductory book about Rust.
 The Rust programming language helps you write faster, more reliable software.
 High-level ergonomics and low-level control are often at odds in programming
 language design; Rust challenges that conflict. Through balancing powerful

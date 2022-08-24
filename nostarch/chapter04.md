@@ -16,7 +16,7 @@ features: borrowing, slices, and how Rust lays data out in memory.
 
 ## What Is Ownership?
 
-*Ownership* is a set of rules that governs how a Rust program manages memory.
+*Ownership* is a set of rules that govern how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
 Some languages have garbage collection that regularly looks for no-longer-used
 memory as the program runs; in other languages, the programmer must explicitly
@@ -197,9 +197,9 @@ let s = String::from("hello");
 
 The double colon `::` operator allows us to namespace this particular `from`
 function under the `String` type rather than using some sort of name like
-`string_from`. We’ll discuss this syntax more in “Method Syntax” on page XX and
-when we talk about namespacing with modules in “Paths for Referring to an Item
-in the Module Tree” on page XX.
+`string_from`. We’ll discuss this syntax more in “Method Syntax” on page XX,
+and when we talk about namespacing with modules in “Paths for Referring to an
+Item in the Module Tree” on page XX.
 
 This kind of string *can* be mutated:
 
@@ -378,7 +378,7 @@ of the memory safety bugs we mentioned previously. Freeing memory twice can
 lead to memory corruption, which can potentially lead to security
 vulnerabilities.
 
-To ensure memory safety, after the line `let s2 =` `s1``;`, Rust considers `s1`
+To ensure memory safety, after the line `let s2 = s1``;`, Rust considers `s1`
 as no longer valid. Therefore, Rust doesn’t need to free anything when `s1`
 goes out of scope. Check out what happens when you try to use `s1` after `s2`
 is created; it won’t work:
@@ -423,7 +423,7 @@ error[E0382]: borrow of moved value: `s1`
 ```
 
 ```
-does not implement the `Copy` trait
+ does not implement the `Copy` trait
 ```
 
 ```
@@ -464,7 +464,7 @@ In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
-#### Variables and Data Interacting With Clone
+#### Variables and Data Interacting with Clone
 
 If we *do* want to deeply copy the heap data of the `String`, not just the
 stack data, we can use a common method called `clone`. We’ll discuss method
@@ -558,7 +558,9 @@ assigning a value to a variable. Passing a variable to a function will move or
 copy, just as assignment does. Listing 4-3 has an example with some annotations
 showing where variables go into and out of scope.
 
-Filename: src/main.rs
+```
+// src/main.rs
+```
 
 ```
 fn main() {
@@ -665,7 +667,9 @@ Returning values can also transfer ownership. Listing 4-4 shows an example of a
 function that returns some value, with similar annotations as those in Listing
 4-3.
 
-Filename: src/main.rs
+```
+// src/main.rs
+```
 
 ```
 fn main() {
@@ -1045,6 +1049,9 @@ reference
 
 ```
   |                        ------- help: consider changing this to be a mutable
+```
+
+```
 reference: `&mut String`
 ```
 
@@ -1054,6 +1061,9 @@ reference: `&mut String`
 
 ```
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `some_string` is a `&` reference, so
+```
+
+```
 the data it refers to cannot be borrowed as mutable
 ```
 
@@ -1485,7 +1495,9 @@ is no value for it to be borrowed from
 Let’s take a closer look at exactly what’s happening at each stage of our
 `dangle` code:
 
-Filename: src/main.rs
+```
+// src/main.rs
+```
 
 ```
 fn dangle() -> &String { // dangle returns a reference to a String
@@ -1655,7 +1667,9 @@ because it’s a separate value from the `String`, there’s no guarantee that i
 will still be valid in the future. Consider the program in Listing 4-8 that
 uses the `first_word` function from Listing 4-7.
 
-Filename: src/main.rs
+```
+// src/main.rs
+```
 
 ```
 fn main() {
@@ -1749,7 +1763,7 @@ one more than the last position in the slice. Internally, the slice data
 structure stores the starting position and the length of the slice, which
 corresponds to `ending_index` minus `starting_index`. So, in the case of `let
 world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of 5.
+byte at index 6 of `s` with a length value of `5`.
 
 Figure 4-6 shows this in a diagram.
 
@@ -1757,8 +1771,8 @@ Figure 4-6 shows this in a diagram.
 Unmatched: GraphicSlug
 
 Unmatched: CaptionLine
-      With Rust’s `..` range syntax, if you want to start at index zero, you
-can drop the value before the two periods. In other words, these are equal:
+      With Rust’s `..` range syntax, if you want to start at index 0, you can
+drop the value before the two periods. In other words, these are equal:
 
 ```
 let s = String::from("hello");
