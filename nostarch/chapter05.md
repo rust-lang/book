@@ -829,8 +829,8 @@ Defining a `Rectangle` struct
 
 Here, we’ve defined a struct and named it `Rectangle` [1]. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
-type `u32` [2]. Then in `main`, we created a particular instance of `Rectangle`
-that has a width of 30 and a height of 50 [3].
+type `u32` [2]. Then, in `main`, we created a particular instance of
+`Rectangle` that has a width of `30` and a height of `50` [3].
 
 Our `area` function is now defined with one parameter, which we’ve named
 `rectangle`, whose type is an immutable borrow of a struct `Rectangle` instance
@@ -1063,7 +1063,7 @@ call occurs in your code along with the resultant value of that expression, and
 returns ownership of the value.
 
 > NoteCalling the `dbg!` macro prints to the standard error console stream
-(`stderr`), as opposed to `println!` which prints to the standard output
+(`stderr`), as opposed to `println!`, which prints to the standard output
 console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in
 “Writing Error Messages to Standard Error Instead of Standard Output” on page
 XX.
@@ -1160,11 +1160,12 @@ take ownership of `rect1`, so we use a reference to `rect1` in the next call
 ```
 
 We can see the first bit of output came from [1] where we’re debugging the
-expression `30 * scale`, and its resultant value is 60 (the `Debug` formatting
-implemented for integers is to print only their value). The `dbg!` call at [2]
-outputs the value of `&rect1`, which is the `Rectangle` struct. This output
-uses the pretty `Debug` formatting of the `Rectangle` type. The `dbg!` macro
-can be really helpful when you’re trying to figure out what your code is doing!
+expression `30 * scale`, and its resultant value is `60` (the `Debug`
+formatting implemented for integers is to print only their value). The `dbg!`
+call at [2] outputs the value of `&rect1`, which is the `Rectangle` struct.
+This output uses the pretty `Debug` formatting of the `Rectangle` type. The
+`dbg!` macro can be really helpful when you’re trying to figure out what your
+code is doing!
 
 In addition to the `Debug` trait, Rust has provided a number of traits for us
 to use with the `derive` attribute that can add useful behavior to our custom
@@ -1308,9 +1309,10 @@ type `Self` is an alias for the type that the `impl` block is for. Methods must
 have a parameter named `self` of type `Self` for their first parameter, so Rust
 lets you abbreviate this with only the name `self` in the first parameter spot.
 Note that we still need to use the `&` in front of the `self` shorthand to
-indicate this method borrows the `Self` instance, just as we did in `rectangle:
-&Rectangle`. Methods can take ownership of `self`, borrow `self` immutably as
-we’ve done here, or borrow `self` mutably, just as they can any other parameter.
+indicate that this method borrows the `Self` instance, just as we did in
+`rectangle: &Rectangle`. Methods can take ownership of `self`, borrow `self`
+immutably, as we’ve done here, or borrow `self` mutably, just as they can any
+other parameter.
 
 We chose `&self` here for the same reason we used `&Rectangle` in the function
 version: we don’t want to take ownership, and we just want to read the data in
@@ -1329,7 +1331,8 @@ of our code search for capabilities of `Rectangle` in various places in the
 library we provide.
 
 Note that we can choose to give a method the same name as one of the struct’s
-fields. For example, we can define a method on `Rectangle` also named `width`:
+fields. For example, we can define a method on `Rectangle` that is also named
+`width`:
 
 Filename: src/main.rs
 
@@ -1410,16 +1413,17 @@ fn main() {
 ```
 
 Here, we’re choosing to make the `width` method return `true` if the value in
-the instance’s `width` field is greater than 0 and `false` if the value is 0:
-we can use a field within a method of the same name for any purpose. In `main`,
-when we follow `rect1.width` with parentheses, Rust knows we mean the method
-`width`. When we don’t use parentheses, Rust knows we mean the field `width`.
+the instance’s `width` field is greater than `0` and `false` if the value is
+`0`: we can use a field within a method of the same name for any purpose. In
+`main`, when we follow `rect1.width` with parentheses, Rust knows we mean the
+method `width`. When we don’t use parentheses, Rust knows we mean the field
+`width`.
 
 Often, but not always, when we give methods with the same name as a field we
 want it to only return the value in the field and do nothing else. Methods like
 this are called *getters*, and Rust does not implement them automatically for
 struct fields as some other languages do. Getters are useful because you can
-make the field private but the method public and thus enable read-only access
+make the field private but the method public, and thus enable read-only access
 to that field as part of the type’s public API. We will discuss what public and
 private are and how to designate a field or method as public or private in
 Chapter 7.
@@ -1433,8 +1437,8 @@ Unmatched: BoxType
 > In C and C++, two different operators are used for calling methods: you use
 `.` if you’re calling a method on the object directly and `->` if you’re
 calling the method on a pointer to the object and need to dereference the
-pointer first. In other words, if `object` is a pointer, `object->something()`
-is similar to `(*object).something()`.
+pointer first. In other words, if `object` is a pointer,
+`object->`something`()` is similar to `(*object).`something`()`.
 
 
 > Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
@@ -1442,7 +1446,7 @@ feature called *automatic referencing and dereferencing*. Calling methods is
 one of the few places in Rust that has this behavior.
 
 
-> Here’s how it works: when you call a method with `object.something()`, Rust
+> Here’s how it works: when you call a method with `object.`something`()`, Rust
 automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
 the method. In other words, the following are the same:
 
@@ -1463,9 +1467,9 @@ ownership ergonomic in practice.
 Let’s practice using methods by implementing a second method on the `Rectangle`
 struct. This time we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self` (the first `Rectangle`); otherwise it should return `false`. That
-is, once we’ve defined the `can_hold` method, we want to be able to write the
-program shown in Listing 5-14.
+within `self` (the first `Rectangle`); otherwise, it should return `false`.
+That is, once we’ve defined the `can_hold` method, we want to be able to write
+the program shown in Listing 5-14.
 
 Filename: src/main.rs
 
@@ -1540,7 +1544,7 @@ fn main() {
 Using the as-yet-unwritten `can_hold` method
 
 The expected output would look like the following because both dimensions of
-`rect2` are smaller than the dimensions of `rect1` but `rect3` is wider than
+`rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
 `rect1`:
 
 ```

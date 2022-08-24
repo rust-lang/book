@@ -258,7 +258,7 @@ Unmatched: BoxCode
 ## Defining Modules to Control Scope and Privacy
 
 In this section, we’ll talk about modules and other parts of the module system,
-namely *paths* that allow you to name items; the `use` keyword that brings a
+namely *paths*, which allow you to name items; the `use` keyword that brings a
 path into scope; and the `pub` keyword to make items public. We’ll also discuss
 the `as` keyword, external packages, and the glob operator.
 
@@ -526,9 +526,9 @@ filesystem equivalent would be using the path
 that the path is relative.
 
 Choosing whether to use a relative or absolute path is a decision you’ll make
-based on your project, and depends on whether you’re more likely to move item
-definition code separately from or together with the code that uses the item.
-For example, if we moved the `front_of_house` module and the
+based on your project, and it depends on whether you’re more likely to move
+item definition code separately from or together with the code that uses the
+item. For example, if we moved the `front_of_house` module and the
 `eat_at_restaurant` function into a module named `customer_experience`, we’d
 need to update the absolute path to `add_to_waitlist`, but the relative path
 would still be valid. However, if we moved the `eat_at_restaurant` function
@@ -927,7 +927,7 @@ Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
 function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
-`deliver_order` starting with `super`.
+`deliver_order`, starting with `super`.
 
 Filename: src/lib.rs
 
@@ -1381,7 +1381,7 @@ the shortcut in the parent module with `super::hosting` within the child
 
 In Listing 7-11, you might have wondered why we specified `use
 crate::front_of_house::hosting` and then called `hosting::add_to_waitlist` in
-`eat_at_restaurant` rather than specifying the `use` path all the way out to
+`eat_at_restaurant`, rather than specifying the `use` path all the way out to
 the `add_to_waitlist` function to achieve the same result, as in Listing 7-13.
 
 Filename: src/lib.rs
@@ -1529,7 +1529,7 @@ parent modules.
 
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
-have two `Result` types in the same scope and Rust wouldn’t know which one we
+have two `Result` types in the same scope, and Rust wouldn’t know which one we
 meant when we used `Result`.
 
 ### Providing New Names with the as Keyword
@@ -1678,7 +1678,7 @@ rand = "0.8.5"
 ```
 
 Adding `rand` as a dependency in *Cargo.toml* tells Cargo to download the
-`rand` package and any dependencies from *https://crates.io* and make `rand`
+`rand` package and any dependencies from *https://crates.io*, and make `rand`
 available to our project.
 
 Then, to bring `rand` definitions into the scope of our package, we added a
@@ -1931,7 +1931,7 @@ pub fn add_to_waitlist() {}
 If we instead put *hosting.rs* in the *src* directory, the compiler would
 expect the *hosting.rs* code to be in a `hosting` module declared in the crate
 root, and not declared as a child of the `front_of_house` module. The
-compiler’s rules for which files to check for which modules’ code means the
+compiler’s rules for which files to check for which modules’ code mean the
 directories and files more closely match the module tree.
 
 

@@ -931,10 +931,10 @@ state value out of the `Coin` enum variant for `Quarter`.
 ### Matching with Option<T>
 
 In the previous section, we wanted to get the inner `T` value out of the `Some`
-case when using `Option<T>`; we can also handle `Option<T>` using `match` as we
-did with the `Coin` enum! Instead of comparing coins, we’ll compare the
-variants of `Option<T>`, but the way that the `match` expression works remains
-the same.
+case when using `Option<T>`; we can also handle `Option<T>` using `match`, as
+we did with the `Coin` enum! Instead of comparing coins, we’ll compare the
+variants of `Option<T>`, but the way the `match` expression works remains the
+same.
 
 Let’s say we want to write a function that takes an `Option<i32>` and, if
 there’s a value inside, adds 1 to that value. If there isn’t a value inside,
@@ -1109,7 +1109,7 @@ shown
     |
 ```
 
-Rust knows that we didn’t cover every possible case and even knows which
+Rust knows that we didn’t cover every possible case, and even knows which
 pattern we forgot! Matches in Rust are *exhaustive*: we must exhaust every last
 possibility in order for the code to be valid. Especially in the case of
 `Option<T>`, when Rust prevents us from forgetting to explicitly handle the
@@ -1340,7 +1340,7 @@ The syntax `if let` takes a pattern and an expression separated by an equal
 sign. It works the same way as a `match`, where the expression is given to the
 `match` and the pattern is its first arm. In this case, the pattern is
 `Some(max)`, and the `max` binds to the value inside the `Some`. We can then
-use `max` in the body of the `if let` block in the same way as we used `max` in
+use `max` in the body of the `if let` block in the same way we used `max` in
 the corresponding `match` arm. The code in the `if let` block isn’t run if the
 value doesn’t match the pattern.
 

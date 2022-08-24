@@ -724,14 +724,14 @@ can specify what kinds of closures they can use. Closures will automatically
 implement one, two, or all three of these `Fn` traits, in an additive fashion,
 depending on how the closure’s body handles the values:
 
-1. `FnOnce` applies to closures that can be called once. All closures implement
+* `FnOnce` applies to closures that can be called once. All closures implement
 at least this trait because all closures can be called. A closure that moves
 captured values out of its body will only implement `FnOnce` and none of the
 other `Fn` traits because it can only be called once.
-1. `FnMut` applies to closures that don’t move captured values out of their
+* `FnMut` applies to closures that don’t move captured values out of their
 body, but that might mutate the captured values. These closures can be called
 more than once.
-1. `Fn` applies to closures that don’t move captured values out of their body
+* `Fn` applies to closures that don’t move captured values out of their body
 and that don’t mutate captured values, as well as closures that capture nothing
 from their environment. These closures can be called more than once without
 mutating their environment, which is important in cases such as calling a
@@ -795,7 +795,7 @@ the closure we provide when calling `unwrap_or_else`.
 The trait bound specified on the generic type `F` is `FnOnce() -> T`, which
 means `F` must be able to be called once, take no arguments, and return a `T`.
 Using `FnOnce` in the trait bound expresses the constraint that
-`unwrap_or_else` is only going to call `f` at most one time. In the body of
+`unwrap_or_else` is only going to call `f` one time, at most. In the body of
 `unwrap_or_else`, we can see that if the `Option` is `Some`, `f` won’t be
 called. If the `Option` is `None`, `f` will be called once. Because all
 closures implement `FnOnce`, `unwrap_or_else` accepts the largest variety of
@@ -1298,8 +1298,8 @@ method. In other words, the `Item` type will be the type returned from the
 iterator.
 
 The `Iterator` trait only requires implementors to define one method: the
-`next` method, which returns one item of the iterator at a time wrapped in
-`Some` and, when iteration is over, returns `None`.
+`next` method, which returns one item of the iterator at a time, wrapped in
+`Some`, and, when iteration is over, returns `None`.
 
 We can call the `next` method on iterators directly; Listing 13-12 demonstrates
 what values are returned from repeated calls to `next` on the iterator created
@@ -2147,7 +2147,19 @@ project, which is reproduced here in Listing 13-21 as it was in Listing 12-19.
 Filename: src/lib.rs
 
 ```
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(
+```
+
+```
+    query: &str,
+```
+
+```
+    contents: &'a str,
+```
+
+```
+) -> Vec<&'a str> {
 ```
 
 ```
@@ -2202,7 +2214,19 @@ concurrent access to the `results` vector. Listing 13-22 shows this change.
 Filename: src/lib.rs
 
 ```
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(
+```
+
+```
+    query: &str,
+```
+
+```
+    contents: &'a str,
+```
+
+```
+) -> Vec<&'a str> {
 ```
 
 ```

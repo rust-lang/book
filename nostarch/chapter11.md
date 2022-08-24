@@ -1320,7 +1320,9 @@ inside the function doesn’t panic.
 Listing 11-8 shows a test that checks that the error conditions of `Guess::new`
 happen when we expect them to.
 
-Filename: src/lib.rs
+```
+// src/lib.rs
+```
 
 ```
 pub struct Guess {
@@ -1351,7 +1353,19 @@ impl Guess {
 ```
 
 ```
-            panic!("Guess value must be between 1 and 100, got {value}.");
+            panic!(
+```
+
+```
+                "Guess value must be between 1 and 100, got {}.",
+```
+
+```
+                value
+```
+
+```
+            );
 ```
 
 ```
@@ -1448,6 +1462,10 @@ Looks good! Now let’s introduce a bug in our code by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
 ```
+// src/lib.rs
+```
+
+```
 --snip--
 ```
 
@@ -1468,7 +1486,19 @@ impl Guess {
 ```
 
 ```
-            panic!("Guess value must be between 1 and 100, got {value}.");
+            panic!(
+```
+
+```
+                "Guess value must be between 1 and 100, got {}.",
+```
+
+```
+                value
+```
+
+```
+            );
 ```
 
 ```
@@ -1558,7 +1588,9 @@ consider the modified code for `Guess` in Listing 11-9 where the `new` function
 panics with different messages depending on whether the value is too small or
 too large.
 
-Filename: src/lib.rs
+```
+// src/lib.rs
+```
 
 ```
 --snip--
@@ -1585,7 +1617,11 @@ impl Guess {
 ```
 
 ```
-                "Guess value must be greater than or equal to 1, got {value}."
+                "Guess value must be greater than or equal to 1, got {}.",
+```
+
+```
+                value
 ```
 
 ```
@@ -1601,7 +1637,11 @@ impl Guess {
 ```
 
 ```
-                "Guess value must be less than or equal to 100, got {value}."
+                "Guess value must be less than or equal to 100, got {}.",
+```
+
+```
+                value
 ```
 
 ```
@@ -1688,6 +1728,14 @@ fails, let’s again introduce a bug into our code by swapping the bodies of the
 `if value < 1` and the `else if value > 100` blocks:
 
 ```
+// src/lib.rs
+```
+
+```
+--snip--
+```
+
+```
 if value < 1 {
 ```
 
@@ -1696,7 +1744,11 @@ if value < 1 {
 ```
 
 ```
-        "Guess value must be less than or equal to 100, got {value}."
+        "Guess value must be less than or equal to 100, got {}.",
+```
+
+```
+        value
 ```
 
 ```
@@ -1712,7 +1764,11 @@ if value < 1 {
 ```
 
 ```
-        "Guess value must be greater than or equal to 1, got {value}."
+        "Guess value must be greater than or equal to 1, got {}.",
+```
+
+```
+        value
 ```
 
 ```
@@ -1721,6 +1777,10 @@ if value < 1 {
 
 ```
 }
+```
+
+```
+--snip--
 ```
 
 This time when we run the `should_panic` test, it will fail:
@@ -1812,6 +1872,8 @@ figuring out where our bug is!
 Our tests so far all panic when they fail. We can also write tests that use
 `Result<T, E>`! Here’s the test from Listing 11-1, rewritten to use `Result<T,
 E>` and return an `Err` instead of panicking:
+
+Filename: src/lib.rs
 
 ```
 #[cfg(test)]
@@ -2534,8 +2596,8 @@ fn expensive_test() {
 }
 ```
 
-After `#[test]` we add the `#[ignore]` line to the test we want to exclude. Now
-when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
+After `#[test]`, we add the `#[ignore]` line to the test we want to exclude.
+Now when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
 ```
 $ cargo test
@@ -3060,9 +3122,9 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
 filtered out; finished in 0.00s
 ```
 
-This command runs only the tests in the *tests/integration_test.rs* file.
 
-#### Submodules in Integration Tests
+Unmatched: BodyContinued
+      #### Submodules in Integration Tests
 
 As you add more integration tests, you might want to make more files in the
 *tests* directory to help organize them; for example, you can group the test
@@ -3304,7 +3366,7 @@ fn it_adds_two() {
 ```
 
 Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in Listing 7-21. Then in the test function, we can call the
+we demonstrated in Listing 7-21. Then, in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates

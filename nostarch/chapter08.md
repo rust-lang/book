@@ -118,7 +118,7 @@ we don’t need the `Vec<i32>` annotation.
 
 ### Reading Elements of Vectors
 
-There are two ways to reference a value stored in a vector: via indexing or
+There are two ways to reference a value stored in a vector: via indexing or by
 using the `get` method. In the following examples, we’ve annotated the types of
 the values that are returned from these functions for extra clarity.
 
@@ -450,7 +450,7 @@ store in a vector, the enum technique won’t work. Instead, you can use a trait
 object, which we’ll cover in Chapter 17.
 
 Now that we’ve discussed some of the most common ways to use vectors, be sure
-to review the API documentation for all the many useful methods defined on
+to review the API documentation for all of the many useful methods defined on
 `Vec<T>` by the standard library. For example, in addition to `push`, a `pop`
 method removes and returns the last element.
 
@@ -566,8 +566,6 @@ let s = data.to_string();
 ```
 let s = "initial contents".to_string();
 ```
-
-PROD: I couldn’t get the following listing caption to format correctly.
 
 Using the `to_string` method to create a `String` from a string literal
 
@@ -688,7 +686,7 @@ If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
-`String`. Listing 8-17 adds the letter “l” to a `String` using the `push`
+`String`. Listing 8-17 adds the letter *l* to a `String` using the `push`
 method.
 
 ```
@@ -740,7 +738,7 @@ bits of the `+` operator.
 
 First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
 string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&str` to a `String`; we can’t add two `String`
+function: we can only add a `&``str` to a `String`; we can’t add two `String`
 values together. But wait—the type of `&s2` is `&String`, not `&str`, as
 specified in the second parameter to `add`. So why does Listing 8-18 compile?
 
@@ -784,8 +782,8 @@ let s = s1 + "-" + &s2 + "-" + &s3;
 ```
 
 At this point, `s` will be `tic-tac-toe`. With all of the `+` and `"`
-characters, it’s difficult to see what’s going on. For more complicated string
-combining, we can instead use the `format!` macro:
+characters, it’s difficult to see what’s going on. For combining strings in
+more complicated ways, we can instead use the `format!` macro:
 
 ```
 let s1 = String::from("tic");
@@ -828,7 +826,7 @@ let s1 = String::from("hello");
 let h = s1[0];
 ```
 
-Attempting to use indexing syntax with a String
+Attempting to use indexing syntax with a `String`
 
 
 Unmatched: BodyContinued
@@ -877,10 +875,10 @@ encoded UTF-8 example strings from Listing 8-14. First, this one:
 let hello = String::from("Hola");
 ```
 
-In this case, `len` will be 4, which means the vector storing the string
+In this case, `len` will be `4`, which means the vector storing the string
 `"``Hola``"` is 4 bytes long. Each of these letters takes one byte when encoded
 in UTF-8. The following line, however, may surprise you (note that this string
-begins with the capital Cyrillic letter Ze, not the Arabic number 3):
+begins with the capital Cyrillic letter *Ze*, not the Arabic number 3):
 
 ```
 let hello = String::from("Здравствуйте");
@@ -1064,7 +1062,7 @@ Unmatched: BodyContinued
 But be sure to remember that valid Unicode scalar values may be made up of more
 than one byte.
 
-Getting grapheme clusters from strings as with the Devanagari script is
+Getting grapheme clusters from strings, as with the Devanagari script, is
 complex, so this functionality is not provided by the standard library. Crates
 are available at *https://crates.io* if this is the functionality you need.
 
@@ -1093,8 +1091,8 @@ The last of our common collections is the *hash map*. The type `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V` using a *hashing
 function*, which determines how it places these keys and values into memory.
 Many programming languages support this kind of data structure, but they often
-use a different name, such as hash, map, object, hash table, dictionary, or
-associative array, just to name a few.
+use a different name, such as *hash*, *map*, *object*, *hash table*,
+*dictionary*, or *associative array*, just to name a few.
 
 Hash maps are useful when you want to look up data not by using an index, as
 you can with vectors, but by using a key that can be of any type. For example,
@@ -1309,8 +1307,8 @@ least as long as the hash map is valid. We’ll talk more about these issues in
 
 Although the number of key and value pairs is growable, each unique key can
 only have one value associated with it at a time (but not vice versa: for
-example, both the Blue team and the Yellow team could have value 10 stored in
-the `scores` hash map).
+example, both the Blue team and the Yellow team could have the value `10`
+stored in the `scores` hash map).
 
 When you want to change the data in a hash map, you have to decide how to
 handle the case when a key already has a value assigned. You could replace the
@@ -1374,7 +1372,7 @@ Hash maps have a special API for this called `entry` that takes the key you
 want to check as a parameter. The return value of the `entry` method is an enum
 called `Entry` that represents a value that might or might not exist. Let’s say
 we want to check whether the key for the Yellow team has a value associated
-with it. If it doesn’t, we want to insert the value 50, and the same for the
+with it. If it doesn’t, we want to insert the value `50`, and the same for the
 Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
 ```
@@ -1523,9 +1521,9 @@ some exercises you should now be equipped to solve:
 the value in the middle position) and mode (the value that occurs most often; a
 hash map will be helpful here) of the list.
 1. Convert strings to pig latin. The first consonant of each word is moved to
-the end of the word and “ay” is added, so “first” becomes “irst-fay.” Words
-that start with a vowel have “hay” added to the end instead (“apple” becomes
-“apple-hay”). Keep in mind the details about UTF-8 encoding!
+the end of the word and *ay* is added, so *first* becomes *irst-fay*. Words
+that start with a vowel have *hay* added to the end instead (*apple* becomes
+*apple-hay*). Keep in mind the details about UTF-8 encoding!
 1. Using a hash map and vectors, create a text interface to allow a user to add
 employee names to a department in a company; for example, “Add Sally to
 Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all

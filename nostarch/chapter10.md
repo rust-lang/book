@@ -17,8 +17,8 @@ when compiling and running the code.
 Functions can take parameters of some generic type, instead of a concrete type
 like `i32` or `String`, in the same way they take parameters with unknown
 values to run the same code on multiple concrete values. In fact, we’ve already
-used generics in Chapter 6 with `Option<T>`, Chapter 8 with `Vec<T>` and
-`HashMap<K, V>`, and Chapter 9 with `Result<T, E>`. In this chapter, you’ll
+used generics in Chapter 6 with `Option<T>`, in Chapter 8 with `Vec<T>` and
+`HashMap<K, V>`, and in Chapter 9 with `Result<T, E>`. In this chapter, you’ll
 explore how to define your own types, functions, and methods with generics!
 
 First we’ll review how to extract a function to reduce code duplication. We’ll
@@ -341,7 +341,7 @@ In summary, here are the steps we took to change the code from Listing 10-2 to
 Listing 10-3:
 
 1. Identify duplicate code.
-1. Extract the duplicate code into the body of the function and specify the
+1. Extract the duplicate code into the body of the function, and specify the
 inputs and return values of that code in the function signature.
 1. Update the two instances of duplicated code to call the function instead.
 Next, we’ll use these same steps with generics to reduce code duplication. In
@@ -524,7 +524,7 @@ To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
 convention, type parameter names in Rust are short, often just one letter, and
-Rust’s type-naming convention is CamelCase. Short for “type,” `T` is the
+Rust’s type-naming convention is CamelCase. Short for *type*, `T` is the
 default choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
@@ -800,9 +800,9 @@ fn main() {
 The fields `x` and `y` must be the same type because both have the same generic
 data type `T`.
 
-In this example, when we assign the integer value 5 to `x`, we let the compiler
-know that the generic type `T` will be an integer for this instance of
-`Point<T>`. Then when we specify 4.0 for `y`, which we’ve defined to have the
+In this example, when we assign the integer value `5` to `x`, we let the
+compiler know that the generic type `T` will be an integer for this instance of
+`Point<T>`. Then when we specify `4.0` for `y`, which we’ve defined to have the
 same type as `x`, we’ll get a type mismatch error like this:
 
 ```
@@ -1286,9 +1286,9 @@ at runtime.
 
 ## Traits: Defining Shared Behavior
 
-A *trait* defines functionality a particular type has and can share with other
-types. We can use traits to define shared behavior in an abstract way. We can
-use *trait bounds* to specify that a generic type can be any type that has
+A *trait* defines the functionality a particular type has and can share with
+other types. We can use traits to define shared behavior in an abstract way. We
+can use *trait bounds* to specify that a generic type can be any type that has
 certain behavior.
 
 > NoteTraits are similar to a feature often called *interfaces*    in other
@@ -1303,7 +1303,7 @@ define a set of behaviors necessary to accomplish some purpose.
 
 For example, let’s say we have multiple structs that hold various kinds and
 amounts of text: a `NewsArticle` struct that holds a news story filed in a
-particular location and a `Tweet` that can have at most 280 characters along
+particular location and a `Tweet` that can have, at most, 280 characters along
 with metadata that indicates whether it was a new tweet, a retweet, or a reply
 to another tweet.
 
@@ -1330,11 +1330,11 @@ pub trait Summary {
 A `Summary` trait that consists of the behavior provided by a `summarize` method
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
-which is `Summary` in this case. We’ve also declared the trait as `pub` so that
+which is `Summary` in this case. We also declare the trait as `pub` so that
 crates depending on this crate can make use of this trait too, as we’ll see in
 a few examples. Inside the curly brackets, we declare the method signatures
 that describe the behaviors of the types that implement this trait, which in
-this case is `fn summarize(&self) -> String`.
+this case is `fn` `summarize(&self) -> String`.
 
 After the method signature, instead of providing an implementation within curly
 brackets, we use a semicolon. Each type implementing this trait must provide
@@ -1343,7 +1343,7 @@ that any type that has the `Summary` trait will have the method `summarize`
 defined with this signature exactly.
 
 A trait can have multiple methods in its body: the method signatures are listed
-one per line and each line ends in a semicolon.
+one per line, and each line ends in a semicolon.
 
 ### Implementing a Trait on a Type
 
@@ -1752,7 +1752,7 @@ After we define `summarize_author`, we can call `summarize` on instances of the
 `Tweet` struct, and the default implementation of `summarize` will call the
 definition of `summarize_author` that we’ve provided. Because we’ve implemented
 `summarize_author`, the `Summary` trait has given us the behavior of the
-`summarize` method without requiring us to write any more code. Here's what
+`summarize` method without requiring us to write any more code. Here’s what
 that looks like:
 
 ```
@@ -2249,7 +2249,7 @@ references are valid as long as we need them to be.
 One detail we didn’t discuss in “References and Borrowing” on page XX is that
 every reference in Rust has a *lifetime*, which is the scope for which that
 reference is valid. Most of the time, lifetimes are implicit and inferred, just
-like most of the time, types are inferred. We only must annotate types when
+like most of the time, types are inferred. We must annotate types only when
 multiple types are possible. In a similar way, we must annotate lifetimes when
 the lifetimes of references could be related in a few different ways. Rust
 requires us to annotate the relationships using generic lifetime parameters to
@@ -2363,7 +2363,7 @@ error[E0597]: `x` does not live long enough
   |                   - borrow later used here
 ```
 
-The error message says that the variable `x` doesn’t “live long enough.” The
+The error message says that the variable `x` “does not live long enough.” The
 reason is that `x` will be out of scope when the inner scope ends on line 7.
 But `r` is still valid for the outer scope; because its scope is larger, we say
 that it “lives longer.” If Rust allowed this code to work, `r` would be
@@ -2426,7 +2426,7 @@ lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
 with a lifetime of `'b`. The program is rejected because `'b` is shorter than
 `'a`: the subject of the reference doesn’t live as long as the reference.
 
-Listing 10-18 fixes the code so it doesn’t have a dangling reference and
+Listing 10-18 fixes the code so it doesn’t have a dangling reference and it
 compiles without any errors.
 
 ```
@@ -2885,13 +2885,13 @@ this because we annotated the lifetimes of the function parameters and return
 values using the same lifetime parameter `'a`.
 
 As humans, we can look at this code and see that `string1` is longer than
-`string2` and therefore `result` will contain a reference to `string1`. Because
-`string1` has not gone out of scope yet, a reference to `string1` will still be
-valid for the `println!` statement. However, the compiler can’t see that the
-reference is valid in this case. We’ve told Rust that the lifetime of the
-reference returned by the `longest` function is the same as the smaller of the
-lifetimes of the references passed in. Therefore, the borrow checker disallows
-the code in Listing 10-23 as possibly having an invalid reference.
+`string2`, and therefore, `result` will contain a reference to `string1`.
+Because `string1` has not gone out of scope yet, a reference to `string1` will
+still be valid for the `println!` statement. However, the compiler can’t see
+that the reference is valid in this case. We’ve told Rust that the lifetime of
+the reference returned by the `longest` function is the same as the smaller of
+the lifetimes of the references passed in. Therefore, the borrow checker
+disallows the code in Listing 10-23 as possibly having an invalid reference.
 
 Try designing more experiments that vary the values and lifetimes of the
 references passed in to the `longest` function and how the returned reference
