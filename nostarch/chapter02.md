@@ -6,8 +6,8 @@
 Let’s jump into Rust by working through a hands-on project together! This
 chapter introduces you to a few common Rust concepts by showing you how to use
 them in a real program. You’ll learn about `let`, `match`, methods, associated
-functions, using external crates, and more! In the following chapters, we’ll
-explore these ideas in more detail. In this chapter, you’ll just practice the
+functions, external crates, and more! In the following chapters, we’ll explore
+these ideas in more detail. In this chapter, you’ll just practice the
 fundamentals.
 
 We’ll implement a classic beginner programming problem: a guessing game. Here’s
@@ -216,14 +216,14 @@ program:
 fn main() {
 ```
 
-The `fn` syntax declares a new function, the parentheses, `()`, indicate there
-are no parameters, and the curly bracket, `{`, starts the body of the function.
+The `fn` syntax declares a new function; the parentheses, `()`, indicate there
+are no parameters; and the curly bracket, `{`, starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
 ```
-    println!("Guess the number!");
+println!("Guess the number!");
 ```
 
 ```
@@ -231,7 +231,7 @@ the screen:
 ```
 
 ```
-    println!("Please input your guess.");
+println!("Please input your guess.");
 ```
 
 This code is printing a prompt stating what the game is and requesting input
@@ -242,7 +242,7 @@ from the user.
 Next, we’ll create a *variable* to store the user input, like this:
 
 ```
-    let mut guess = String::new();
+let mut guess = String::new();
 ```
 
 Now the program is getting interesting! There’s a lot going on in this little
@@ -295,14 +295,14 @@ the `stdin` function from the `io` module, which will allow us to handle user
 input:
 
 ```
-    io::stdin()
+io::stdin()
 ```
 
 ```
-        .read_line(&mut guess)
+    .read_line(&mut guess)
 ```
 
-If we hadn’t imported the `io` library with `use std::``io``;` at the beginning
+If we hadn’t imported the `io` library with `use std::io``;` at the beginning
 of the program, we could still use the function by writing this function call
 as `std::io::stdin`. The `stdin` function returns an instance of
 `std::io::Stdin`, which is a type that represents a handle to the standard
@@ -323,7 +323,7 @@ and one of Rust’s major advantages is how safe and easy it is to use
 references. You don’t need to know a lot of those details to finish this
 program. For now, all you need to know is that, like variables, references are
 immutable by default. Hence, you need to write `&mut guess` rather than
-`&guess` to make it mutable.  (Chapter 4 will explain references more
+`&guess` to make it mutable. (Chapter 4 will explain references more
 thoroughly.)
 
 ### Handling Potential Failure with Result
@@ -333,7 +333,7 @@ text, but note that it’s still part of a single logical line of code. The next
 part is this method:
 
 ```
-        .expect("Failed to read line");
+.expect("Failed to read line");
 ```
 
 We could have written this code as:
@@ -429,7 +429,7 @@ indicating that the program hasn’t handled a possible error.
 
 The right way to suppress the warning is to actually write error-handling code,
 but in our case we just want to crash this program when a problem occurs, so we
-can use `expect`.  You’ll learn about recovering from errors in Chapter 9.
+can use `expect`. You’ll learn about recovering from errors in Chapter 9.
 
 ### Printing Values with println! Placeholders
 
@@ -437,7 +437,7 @@ Aside from the closing curly bracket, there’s only one more line to discuss in
 the code so far:
 
 ```
-    println!("You guessed: {guess}");
+println!("You guessed: {guess}");
 ```
 
 This line prints the string that now contains the user’s input. The `{}` set of
@@ -628,12 +628,12 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-The output from running `cargo build` after adding the rand crate as a
+The output from running `cargo build` after adding the `rand` crate as a
 dependency
 
 You may see different version numbers (but they will all be compatible with the
-code, thanks to SemVer!) , different lines (depending on the operating system),
-and the lines may be in a different order.
+code, thanks to SemVer!) and different lines (depending on the operating
+system), and the lines may be in a different order.
 
 When we include an external dependency, Cargo fetches the latest versions of
 everything that dependency needs from the *registry*, which is a copy of data
@@ -717,7 +717,7 @@ $ cargo update
 
 Cargo ignores the 0.9.0 release. At this point, you would also notice a change
 in your *Cargo.lock* file noting that the version of the `rand` crate you are
-now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9.x
+now using is 0.8.6. To use `rand` version 0.9.0 or any version in the 0.9.*x*
 series, you’d have to update the *Cargo.toml* file to look like this instead:
 
 ```
@@ -732,7 +732,7 @@ The next time you run `cargo build`, Cargo will update the registry of crates
 available and reevaluate your `rand` requirements according to the new version
 you have specified.
 
-There’s a lot more to say about Cargo and its ecosystem which we’ll discuss in
+There’s a lot more to say about Cargo and its ecosystem, which we’ll discuss in
 Chapter 14, but for now, that’s all you need to know. Cargo makes it very easy
 to reuse libraries, so Rustaceans are able to write smaller projects that are
 assembled from a number of packages.
@@ -826,7 +826,7 @@ fn main() {
 
 Adding code to generate a random number
 
-First we add the line `use rand::``Rng``;` [1]. The `Rng` trait defines methods
+First we add the line `use rand::Rng``;` [1]. The `Rng` trait defines methods
 that random number generators implement, and this trait must be in scope for us
 to use those methods. Chapter 10 will cover traits in detail.
 
@@ -835,7 +835,7 @@ Next, we’re adding two lines in the middle. In the first line [2], we call the
 generator we’re going to use: one that is local to the current thread of
 execution and is seeded by the operating system. Then we call the `gen_range`
 method on the random number generator. This method is defined by the `Rng`
-trait that we brought into scope with the `use rand::``Rng``;` statement. The
+trait that we brought into scope with the `use rand::Rng``;` statement. The
 `gen_range` method takes a range expression as an argument and generates a
 random number in the range. The kind of range expression we’re using here takes
 the form `start..=end` and is inclusive on the lower and upper bounds, so we
@@ -1088,8 +1088,8 @@ hand, is a number type. A few of Rust’s number types can have a value between 
 and 100: `i32`, a 32-bit number; `u32`, an unsigned 32-bit number; `i64`, a
 64-bit number; as well as others. Unless otherwise specified, Rust defaults to
 an `i32`, which is the type of `secret_number` unless you add type information
-elsewhere that would cause Rust to infer a different numerical type.  The
-reason for the error is that Rust cannot compare a string and a number type.
+elsewhere that would cause Rust to infer a different numerical type. The reason
+for the error is that Rust cannot compare a string and a number type.
 
 Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it numerically to the secret number. We do
@@ -1098,7 +1098,7 @@ so by adding this line to the `main` function body:
 Filename: src/main.rs
 
 ```
-    --snip--
+--snip--
 ```
 
 ```
@@ -1106,7 +1106,7 @@ Filename: src/main.rs
 ```
 
 ```
-    let mut guess = String::new();
+let mut guess = String::new();
 ```
 
 ```
@@ -1114,35 +1114,15 @@ Filename: src/main.rs
 ```
 
 ```
-    io::stdin()
+io::stdin()
 ```
 
 ```
-        .read_line(&mut guess)
+    .read_line(&mut guess)
 ```
 
 ```
-        .expect("Failed to read line");
-```
-
-```
-
-```
-
-```
-    let guess: u32 = guess
-```
-
-```
-        .trim()
-```
-
-```
-        .parse()
-```
-
-```
-        .expect("Please type a number!");
+    .expect("Failed to read line");
 ```
 
 ```
@@ -1150,7 +1130,19 @@ Filename: src/main.rs
 ```
 
 ```
-    println!("You guessed: {guess}");
+let guess: u32 = guess
+```
+
+```
+    .trim()
+```
+
+```
+    .parse()
+```
+
+```
+    .expect("Please type a number!");
 ```
 
 ```
@@ -1158,31 +1150,39 @@ Filename: src/main.rs
 ```
 
 ```
-    match guess.cmp(&secret_number) {
+println!("You guessed: {guess}");
 ```
 
 ```
-        Ordering::Less => println!("Too small!"),
+
 ```
 
 ```
-        Ordering::Greater => println!("Too big!"),
+match guess.cmp(&secret_number) {
 ```
 
 ```
-        Ordering::Equal => println!("You win!"),
+    Ordering::Less => println!("Too small!"),
 ```
 
 ```
-    }
+    Ordering::Greater => println!("Too big!"),
+```
+
+```
+    Ordering::Equal => println!("You win!"),
+```
+
+```
+}
 ```
 
 We create a variable named `guess`. But wait, doesn’t the program already have
-a variable named `guess`? It does, but helpfully Rust allows us to *shadow* the
-previous value of `guess` with a new one. Shadowing lets us reuse the `guess`
+a variable named `guess`? It does, but helpfully Rust allows us to shadow the
+previous value of `guess` with a new one. *Shadowing* lets us reuse the `guess`
 variable name rather than forcing us to create two unique variables, such as
 `guess_str` and `guess`, for example. We’ll cover this in more detail in
-Chapter 3, but for now know that this feature is often used when you want to
+Chapter 3, but for now, know that this feature is often used when you want to
 convert a value from one type to another type.
 
 We bind this new variable to the expression `guess.trim().parse()`. The `guess`
@@ -1191,7 +1191,7 @@ input as a string. The `trim` method on a `String` instance will eliminate any
 whitespace at the beginning and end, which we must do to be able to compare the
 string to the `u32`, which can only contain numerical data. The user must press
 enter to satisfy `read_line` and input their guess, which adds a newline
-character to the string. For example, if the user types 5 and presses enter,
+character to the string. For example, if the user types `5` and presses enter,
 `guess` looks like this: `5\n`. The `\n` represents “newline.” (On Windows,
 pressing enter results in a carriage return and a newline, `\r\n`.) The `trim`
 method eliminates `\n` or `\r\n`, resulting in just `5`.
@@ -1199,7 +1199,7 @@ method eliminates `\n` or `\r\n`, resulting in just `5`.
 The `parse` method on strings converts a string to another type. Here, we use
 it to convert from a string to a number. We need to tell Rust the exact number
 type we want by using `let guess: u32`. The colon (`:`) after `guess` tells
-Rust we’ll annotate the variable’s type.  Rust has a few built-in number types;
+Rust we’ll annotate the variable’s type. Rust has a few built-in number types;
 the `u32` seen here is an unsigned, 32-bit integer. It’s a good default choice
 for a small positive number. You’ll learn about other number types in Chapter 3.
 
@@ -1280,6 +1280,34 @@ more chances at guessing the number:
 Filename: src/main.rs
 
 ```
+--snip--
+```
+
+```
+
+```
+
+```
+println!("The secret number is: {secret_number}");
+```
+
+```
+
+```
+
+```
+loop {
+```
+
+```
+    println!("Please input your guess.");
+```
+
+```
+
+```
+
+```
     --snip--
 ```
 
@@ -1288,51 +1316,19 @@ Filename: src/main.rs
 ```
 
 ```
-    println!("The secret number is: {secret_number}");
+    match guess.cmp(&secret_number) {
 ```
 
 ```
-
+        Ordering::Less => println!("Too small!"),
 ```
 
 ```
-    loop {
+        Ordering::Greater => println!("Too big!"),
 ```
 
 ```
-        println!("Please input your guess.");
-```
-
-```
-
-```
-
-```
-        --snip--
-```
-
-```
-
-```
-
-```
-        match guess.cmp(&secret_number) {
-```
-
-```
-            Ordering::Less => println!("Too small!"),
-```
-
-```
-            Ordering::Greater => println!("Too big!"),
-```
-
-```
-            Ordering::Equal => println!("You win!"),
-```
-
-```
-        }
+        Ordering::Equal => println!("You win!"),
 ```
 
 ```
@@ -1349,7 +1345,7 @@ and run the program again. The program will now ask for another guess forever,
 which actually introduces a new problem. It doesn’t seem like the user can quit!
 
 The user could always interrupt the program by using the keyboard shortcut
-ctrl-c. But there’s another way to escape this insatiable monster, as mentioned
+ctrl-C. But there’s another way to escape this insatiable monster, as mentioned
 in the `parse` discussion in “Comparing the Guess to the Secret Number” on page
 XX: if the user enters a non-number answer, the program will crash. We can take
 advantage of that to allow the user to quit, as shown here:
@@ -1446,7 +1442,7 @@ thread 'main' panicked at 'Please type a number!: ParseIntError
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
-Typing `quit` will quit the game, but as you’ll notice so will entering any
+Typing `quit` will quit the game, but as you’ll notice, so will entering any
 other non-number input. This is suboptimal, to say the least; we want the game
 to also stop when the correct number is guessed.
 
@@ -1457,7 +1453,7 @@ Let’s program the game to quit when the user wins by adding a `break` statemen
 Filename: src/main.rs
 
 ```
-        --snip--
+--snip--
 ```
 
 ```
@@ -1465,35 +1461,27 @@ Filename: src/main.rs
 ```
 
 ```
-        match guess.cmp(&secret_number) {
+match guess.cmp(&secret_number) {
 ```
 
 ```
-            Ordering::Less => println!("Too small!"),
+    Ordering::Less => println!("Too small!"),
 ```
 
 ```
-            Ordering::Greater => println!("Too big!"),
+    Ordering::Greater => println!("Too big!"),
 ```
 
 ```
-            Ordering::Equal => {
+    Ordering::Equal => {
 ```
 
 ```
-                println!("You win!");
+        println!("You win!");
 ```
 
 ```
-                break;
-```
-
-```
-            }
-```
-
-```
-        }
+        break;
 ```
 
 ```
@@ -1518,7 +1506,7 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 Filename: src/main.rs
 
 ```
-        --snip--
+--snip--
 ```
 
 ```
@@ -1526,35 +1514,15 @@ Filename: src/main.rs
 ```
 
 ```
-        io::stdin()
+io::stdin()
 ```
 
 ```
-            .read_line(&mut guess)
+    .read_line(&mut guess)
 ```
 
 ```
-            .expect("Failed to read line");
-```
-
-```
-
-```
-
-```
-        let guess: u32 = match guess.trim().parse() {
-```
-
-```
-            Ok(num) => num,
-```
-
-```
-            Err(_) => continue,
-```
-
-```
-        };
+    .expect("Failed to read line");
 ```
 
 ```
@@ -1562,7 +1530,19 @@ Filename: src/main.rs
 ```
 
 ```
-        println!("You guessed: {guess}");
+let guess: u32 = match guess.trim().parse() {
+```
+
+```
+    Ok(num) => num,
+```
+
+```
+    Err(_) => continue,
+```
+
+```
+};
 ```
 
 ```
@@ -1570,7 +1550,15 @@ Filename: src/main.rs
 ```
 
 ```
-        --snip--
+println!("You guessed: {guess}");
+```
+
+```
+
+```
+
+```
+--snip--
 ```
 
 Ignoring a non-number guess and asking for another guess instead of crashing
@@ -1829,9 +1817,9 @@ fn main() {
 
 Complete guessing game code
 
-## Summary
-
 At this point, you’ve successfully built the guessing game. Congratulations!
+
+## Summary
 
 This project was a hands-on way to introduce you to many new Rust concepts:
 `let`, `match`, functions, the use of external crates, and more. In the next
