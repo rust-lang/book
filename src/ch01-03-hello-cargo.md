@@ -238,6 +238,9 @@ For more information about Cargo, check out [its documentation].
 
 [its documentation]: https://doc.rust-lang.org/cargo/
 
+{{#quiz ../quizzes/ch01-03-hello-cargo.toml}}
+
+
 ## Summary
 
 You’re already off to a great start on your Rust journey! In this chapter,

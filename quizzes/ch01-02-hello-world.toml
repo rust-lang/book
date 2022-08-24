@@ -1,0 +1,37 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = "Every executable Rust program must contain a function with the name:"
+answer.answer = "main"
+context = """
+In your program, you add a main function like this:
+
+```
+fn main() {
+  // your code here
+}
+```
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Let's say you have the following program in a file `hello.rs`:
+
+```
+fn main() {
+  println!("Hello world!");
+}
+```
+
+Say you then run the command `rustc hello.rs` from the command-line. Which statement best describes what happens next?
+"""
+prompt.choices = [
+  "`rustc` will print an error because this is an invalid program"  ,
+  "`rustc` generates a binary executable named `hello`",
+  "`rustc` executes the program and prints out `Hello world!`",
+  "`rustc` reformats `hello.rs` according to the Rust style guide"
+]
+answer.answer = 1
+context = """
+Running `rustc` checks and compiles your program, but does not execute it.
+"""

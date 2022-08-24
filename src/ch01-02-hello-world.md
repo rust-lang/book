@@ -197,5 +197,8 @@ grows, you’ll want to manage all the options and make it easy to share your
 code. Next, we’ll introduce you to the Cargo tool, which will help you write
 real-world Rust programs.
 
+{{#quiz ../quizzes/ch01-02-hello-world.toml}}
+
+
 [troubleshooting]: ch01-01-installation.html#troubleshooting
 [devtools]: appendix-04-useful-development-tools.md

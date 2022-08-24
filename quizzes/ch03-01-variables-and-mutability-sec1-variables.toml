@@ -1,6 +1,6 @@
 [[questions]]
 type = "MultipleChoice"
-prompt.prompt = "What does it mean if a variable `x` is immutable?"
+prompt.prompt = "Which statement best describes what it means if a variable `x` is immutable?"
 prompt.choices = [
   "`x` is stored in the immutable region of memory.",
   "After being defined, `x` can be changed at most once.",

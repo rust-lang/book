@@ -15,7 +15,7 @@ Every quiz looks like the one below. Try it out by clicking "Start".
 
 {{#quiz ../quizzes/example-quiz.toml}}
 
-If you get a question incorrect, you can choose to either retry the quiz, or see the correct answers. We encourage you to retry the quiz until you get 100% &mdash; feel free to review the content before retrying the quiz.
+If you get a question incorrect, you can choose to either retry the quiz, or see the correct answers. We encourage you to retry the quiz until you get 100% &mdash; feel free to review the content before retrying the quiz. Note that once you see the correct answers, you cannot retry the quiz.
 
 If you spot an issue in a question, you can submit a bug report by clicking the 🐞 icon.
 
@@ -27,7 +27,7 @@ Another mechanic is **highlighting**: you can select any piece of text, and eith
 
 You can use highlights to save information for yourself. You can also use highlights to give us feedback &mdash; for example, if you think a section of content is confusing, you can let us know.
 
-Note: your highlights may disappear if we change the content that you've highlighted.
+> **Note:** your highlights will disappear if we change the content that you've highlighted. Also, your highlights are stored as a cookie. If you block cookies or change browsers, then you won't see your previous highlights.
 
 ## 3. ...and more!
 

@@ -13,6 +13,8 @@ will then prompt the player to enter a guess. After a guess is entered, the
 program will indicate whether the guess is too low or too high. If the guess is
 correct, the game will print a congratulatory message and exit.
 
+> **Note:** there are no quizzes in this chapter, since it is just supposed to give you a feel for the language.
+
 ## Setting Up a New Project
 
 To set up a new project, go to the *projects* directory that you created in

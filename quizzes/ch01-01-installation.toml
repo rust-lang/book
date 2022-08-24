@@ -1,0 +1,7 @@
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = "What is the name of the command-line tool for managing the version of Rust on your machine?"
+answer.answer = "rustup"
+context = """
+For example, you can write `rustup update` to get the latest version of Rust.
+"""
