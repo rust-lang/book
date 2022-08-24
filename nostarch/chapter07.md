@@ -64,6 +64,19 @@ package but bigger than a module"... "reusable" or "what you specify as a
 dependency" only applies to library crates... this definition I've added here
 gets a little bit into how the compiler sees crates, which might be too much
 detail? What do you think about this next paragraph? /Carol -->
+<!-- JT, what do you think? /LC -->
+<!-- I think this works.
+
+Carol - I'm wondering a bit if "packages" above helps the reader build the
+mental model or if it's kind of an implementation detail for cargo (we could
+say we "package crates"). You're definitely the expert here, but I wonder if we
+can simplify down to Crates/Modules/Paths and mention that we'll introduce some
+of the techniques the tooling uses to work with these later. /JT -->
+<!-- I feel like we need to explain the `[package]` section in *Cargo.toml*,
+and explain what the container is when you have a library and one or more
+binaries in one directory, and that's a package. It is a little weird because
+people hardly ever talk in terms of packages, only in terms of crates, but I
+think it's better to have the discussion of package here. /Carol -->
 
 A *crate* is the smallest amount of code that the Rust compiler considers at a
 time. Even if you run `rustc` rather than `cargo` and pass a single source code
@@ -97,9 +110,6 @@ package also contains a library crate that the binary crate depends on. Other
 projects can depend on the Cargo library crate to use the same logic the Cargo
 command-line tool uses.
 
-<!-- can you give an example of a package like you did for the crates? /LC -->
-<!-- Done! /Carol -->
-
 A package can contain as many binary crates as you like, but at most only one
 library crate. A package must contain at least one crate, whether that’s a
 library or binary crate.
@@ -116,6 +126,10 @@ src
 $ ls my-project/src
 main.rs
 ```
+
+<!-- I can't remember if we warned folks we were going to use unix commands. May
+want to throw in the Windows command here too, so they feel welcome. /JT -->
+<!-- I don't think JT has seen chapter 1 yet, we address that there /Carol -->
 
 After we run `cargo new`, we use `ls` to see what Cargo creates. In the project
 directory, there’s a *Cargo.toml* file, giving us a package. There’s also a
@@ -146,22 +160,7 @@ detail.
 
 ### Modules Cheat Sheet
 
-<!-- Liz: Should this be a box or just a section? Is this header good? "Cheat
-sheet" is another way I've been thinking of this.
-
-The problem I'm trying to solve with this new section is that people often run
-into problems with modules and they're looking for a short explanation of what
-the compiler's rules are, and we didn't have that before. So I want to put the
-sort of content those folks are looking for front and center. /Carol -->
-
-<!--- Hmm, I like the idea of making this a cheat sheet. I'm torn on the box;
-on the one hand I think it's great core content and usually we'd just make that
-regular section; on the other, if we name it cheat sheet, it would be good to
-make that content stand out in a way that groups it together, so a box would be
-good. I think for now let's leave ourselves a note to address this when we lay
-it out in the Word files, and I'll ask our production editor what they think...
-/LC -->
-<!-- Sounds good! /Carol -->
+<!--WHEN TRANSFERRED TO WORD, DECIDE ON BOX OR NOT -->
 
 Here we provide a quick reference on how modules, paths, the `use` keyword, and
 the `pub` keyword work in the compiler, and how most developers organize their
@@ -171,7 +170,7 @@ work.
 
 - **Start from the crate root**: When compiling a crate, the compiler first
   looks in the crate root file (usually *src/lib.rs* for a library crate or
-  *src/main.rs* for a binary crate).
+  *src/main.rs* for a binary crate) for code to compile.
   <!-- I may be asking a silly question here... but what is the compiler looking
   for in the crate root file? just things to start compiling? /LC -->
   <!-- That's exactly it-- it's the starting point of compilation, and the
@@ -179,20 +178,46 @@ work.
   Do you think that should be mentioned here? Is there something about this
   explanation that would make you feel more confident about the concept? /Carol
   -->
+  <!-- I've added "for things to compile" -- I wanted to make sure the reader
+  knew they weren't missing anything, that there wasn't a particular thing
+  being looked for that the reader wasn't aware of /LC -->
+  <!-- I changed "things" to "code" to be more precise /Carol -->
 - **Declaring modules**: In the crate root file, you can declare new modules;
 say, you declare a “garden” module with `mod garden;`. The compiler will look
 for the module’s code in these places:
-<!-- as in, the compiler will look for the module code in these places? I wasn't
-sure what you meant by "will look for the code inside the module" /LC -->
-<!-- Yes, the code definitions that go in the module. Is "the module's code"
-clearer? /Carol -->
 
-  - Inline, directly following `mod garden`, within curly brackets instead of
-    the semicolon
-    <!-- instead of after the semicolon? Or is all of this instead of a
+  - Inline, within curly brackets that replace the semicolon following `mod
+    garden`
+    <!-- instead of or after the semicolon? Or is all of this instead of a
     semicolon? /LC -->
     <!-- Curly brackets and everything within them instead of the semicolon.
     I'm not sure a pithy way to make that distinction clearer? /Carol -->
+    <!-- JT, would "Inline, within curly brackets that replace the semicolon
+    following `mod garden` be clearer/accurate? /LC -->
+    <!-- I wonder if we should order it where this cheatsheet happens after
+    we show more examples. Most of the time, you'll use the `mod` keyword to
+    pull files in as you refactor out into separate files. Sometimes you'll use
+    it for those key cases, like grouping tests. Showing those examples and then
+    going into the resolution may be a bit easier.
+
+    To your question - I think of this as something that could be more of
+    a warning. If you want to use `mod foo`, then be sure you haven't already
+    declared a module called that in the current file. If you do, the compiler
+    will see it first before it looks for a file with that name. /JT -->
+    <!-- I feel pretty strongly that the cheat sheet needs to go first, so that
+    after a reader's first time through the book, when they go back to the
+    modules chapter to try and figure out why their modules aren't working,
+    they get this first rather than having to read through or skip through the
+    examples when they're already frustrated.
+
+    I also don't feel like the "warning" way of talking about this belongs
+    here. I almost added a section called "common mistakes" or "pitfalls" or
+    "troubleshooting", and I think talking about what you *don't* want to do
+    would belong there...
+
+    Liz, I'm fine with your suggested wording and I've made that change. /Carol
+    -->
+
   - In the file *src/garden.rs*
   - In the file *src/garden/mod.rs*
 - **Declaring submodules**: In any file other than the crate root, you can
@@ -274,11 +299,6 @@ module is private by default. Private items are internal implementation details
 not available for outside use. We can choose to make modules and the items
 within them public, which exposes them to allow external code to use and depend
 on them.
-<!-- are we saying we apply the public or private designation to an entire
-module at a time? /LC -->
-<!-- Not really, specific types and fields can be public or private. I think I
-was trying to get at modules being private by default here; I've reworded to
-hopefully clarify? /Carol -->
 
 As an example, let’s write a library crate that provides the functionality of a
 restaurant. We’ll define the signatures of functions but leave their bodies
@@ -387,12 +407,16 @@ separated by double colons (`::`).
 Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
 This is the same as asking: what’s the path of the `add_to_waitlist` function?
 Listing 7-3 contains Listing 7-1 with some of the modules and functions
-removed. We’ll show two ways to call the `add_to_waitlist` function from a new
-function `eat_at_restaurant` defined in the crate root. The `eat_at_restaurant`
-function is part of our library crate’s public API, so we mark it with the
-`pub` keyword. In the “Exposing Paths with the `pub` Keyword” section, we’ll go
-into more detail about `pub`. Note that this example won’t compile just yet;
-we’ll explain why in a bit.
+removed.
+
+We’ll show two ways to call the `add_to_waitlist` function from a new function
+`eat_at_restaurant` defined in the crate root. These paths are correct, but
+there’s another problem remaining that will prevent this example from compiling
+as-is. We’ll explain why in a bit.
+
+The `eat_at_restaurant` function is part of our library crate’s public API, so
+we mark it with the `pub` keyword. In the “Exposing Paths with the `pub`
+Keyword” section, we’ll go into more detail about `pub`.
 
 Filename: src/lib.rs
 
@@ -411,6 +435,10 @@ pub fn eat_at_restaurant() {
     front_of_house::hosting::add_to_waitlist();
 }
 ```
+
+<!-- We should probably let the reader know the above is expected to fail a
+little earlier. /JT -->
+<!-- I've rearranged a bit /Carol -->
 
 Listing 7-3: Calling the `add_to_waitlist` function using absolute and relative
 paths
@@ -440,8 +468,7 @@ absolute path to `add_to_waitlist`, but the relative path would still be valid.
 However, if we moved the `eat_at_restaurant` function separately into a module
 named `dining`, the absolute path to the `add_to_waitlist` call would stay the
 same, but the relative path would need to be updated.
-<!-- below: your preference in general, or for this example? /LC -->
-<!-- in general, I've added /Carol -->
+
 Our preference in general is to specify absolute paths because it’s more likely
 we’ll want to move code definitions and item calls independently of each other.
 
@@ -568,8 +595,6 @@ only lets code in its ancestor modules refer to it, not access its inner code.
 Because modules are containers, there’s not much we can do by only making the
 module public; we need to go further and choose to make one or more of the
 items within the module public as well.
-<!-- so what can the ancestor do with hosting, at this point? /LC -->
-<!-- Not much; I've added a sentence above to clarify that, hopefully? /Carol -->
 
 The errors in Listing 7-6 say that the `add_to_waitlist` function is private.
 The privacy rules apply to structs, enums, functions, and methods as well as
@@ -629,9 +654,6 @@ crate. These considerations are out of the scope of this book; if you’re
 interested in this topic, see The Rust API Guidelines at
 *https://rust-lang.github.io/api-guidelines/*.
 
-<!-- Liz: This new box is a situation many readers have had problems with that
-I wanted to add a bit of a call-out for. /Carol -->
-<!-- Great idea /LC -->
 
 > #### Best Practices for Packages with a Binary and a Library
 >
@@ -639,10 +661,6 @@ I wanted to add a bit of a call-out for. /Carol -->
 > well as a *src/lib.rs* library crate root, and both crates will have the
 > package name by default. Typically, packages with this pattern of containing
 > both a library and a binary crate will have just
-<!-- is "this pattern" having both these crates as package root? /LC -->
-<!-- No... there's one package that contains two crates, and each crate has its
-own root (there isn't a concept of "package root"). I've changed "this pattern"
-to hopefully disambiguate a bit? /Carol -->
 > enough code in the binary crate to start an executable that calls code with
 > the library crate. This lets other projects benefit from the most
 > functionality that the package provides, because the library crate’s code can
@@ -663,15 +681,11 @@ to hopefully disambiguate a bit? /Carol -->
 
 We can construct relative paths that begin in the parent module, rather than
 the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax. This allows
-us to reference an item that we know is in the parent module, which can make
-rearranging the module tree easier when the module is closely related to the
-parent, but the parent might be moved elsewhere in the module tree someday.
-
-<!-- can you lay out the problem it's solving explicitly, up front? That will
-make it easier to follow the example. Are we defining relationships between
-functions using super? /LC -->
-<!-- Done /Carol -->
+path. This is like starting a filesystem path with the `..` syntax. Using
+`super` allows us to reference an item that we know is in the parent module,
+which can make rearranging the module tree easier when the module is closely
+related to the parent, but the parent might be moved elsewhere in the module
+tree someday.
 
 Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
@@ -1184,19 +1198,11 @@ So far, all the examples in this chapter defined multiple modules in one file.
 When modules get large, you might want to move their definitions to a separate
 file to make the code easier to navigate.
 
-<!-- Liz: I tweaked the explanation of how and where to move the code around in
-this section a bit; some readers ended up with code that didn't compile because
-the last explanation wasn't as clear as it could have been. Please do try
-following these instructions! /Carol -->
-
 For example, let’s start from the code in Listing 7-17 that had multiple
-restaurant modules. We’ll
-<!-- can you remind us of the state of 7-17, since we've seen a couple of other
-listings since then? /LC -->
-<!-- Done! /Carol -->
-extract modules into files instead of having all the modules defined in the
-crate root file. In this case, the crate root file is *src/lib.rs*, but this
-procedure also works with binary crates whose crate root file is *src/main.rs*.
+restaurant modules. We’ll extract modules into files instead of having all the
+modules defined in the crate root file. In this case, the crate root file is
+*src/lib.rs*, but this procedure also works with binary crates whose crate root
+file is *src/main.rs*.
 
 First, we’ll extract the `front_of_house` module to its own file. Remove the
 code inside the curly brackets for the `front_of_house` module, leaving only
@@ -1248,11 +1254,6 @@ is a bit different because `hosting` is a child module of `front_of_house`, not
 of the root module. We’ll place the file for `hosting` in a new directory that
 will be named for its ancestors in the module tree, in this case
 *src/front_of_house/*.
-<!-- as in, we're going to create a new directory here? In what way is it
-named for its place in the module tree? Aren't they all? /LC -->
-<!-- The distinction I'm trying to emphasize here is that the first level of
-submodules go in *src*, but the next level (and further levels) of modules need
-to go in subdirectories. I've tried to reword a bit, is this better? /Carol -->
 
 To start moving `hosting`, we change *src/front_of_house.rs* to contain only the
 declaration of the `hosting` module:
@@ -1278,17 +1279,11 @@ root, and not delcared as a child of the `front_of_house` module. The
 compiler’s rules for which files to check for which modules’ code means the
 directories and files more closely match the module tree.
 
-<!-- Liz: This new box is a topic some readers were surprised wasn't covered at
-all, so I wanted to put in a quick mention because some people prefer this
-structure even though it's not what most projects do. /Carol -->
 
 > ### Alternate File Paths
 >
 > So far we’ve covered the most idiomatic file paths the Rust compiler uses,
 > but Rust also supports an older style of file path. For a module named
-<!-- do you mean an older style of file path? or older as in where the file
-used to be? /LC -->
-<!-- Ah yes, this is an older *style*. I've clarified /Carol -->
 > `front_of_house` declared in the crate root, the compiler will look for the
 > module’s code in:
 >
@@ -1302,9 +1297,7 @@ used to be? /LC -->
 > * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
 >
 > If you use both styles for the same module, you’ll get a compiler error. Using
-<!-- use both paths? or use a mix of styles for the same module, you mean? /LC -->
-<!-- A mix of styles, I've added that word in /Carol -->
-> both styles for different modules in the same project is allowed, but
+> a mix of both styles for different modules in the same project is allowed, but
 > might be confusing for people navigating your project.
 >
 > The main downside to the style that uses files named *mod.rs* is that your

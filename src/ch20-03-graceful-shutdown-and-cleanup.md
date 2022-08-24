@@ -106,7 +106,7 @@ because they `loop` forever looking for jobs. If we try to drop our
 `ThreadPool` with our current implementation of `drop`, the main thread will
 block forever waiting for the first thread to finish.
 
-To fix this problem, we’ll need a change in the the `ThreadPool` `drop`
+To fix this problem, we’ll need a change in the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
 
 First, we’ll change the `ThreadPool` `drop` implementation to explicitly drop

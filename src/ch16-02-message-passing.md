@@ -25,7 +25,7 @@ Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
 print them out. We’ll be sending simple values between threads using a channel
 to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that needs to communicate between each other, such
+use channels for any threads that need to communicate between each other, such
 as a chat system or a system where many threads perform parts of a calculation
 and send the parts to one thread that aggregates the results.
 

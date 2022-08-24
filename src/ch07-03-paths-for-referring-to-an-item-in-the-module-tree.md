@@ -18,12 +18,16 @@ separated by double colons (`::`).
 Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
 This is the same as asking: what’s the path of the `add_to_waitlist` function?
 Listing 7-3 contains Listing 7-1 with some of the modules and functions
-removed. We’ll show two ways to call the `add_to_waitlist` function from a new
-function `eat_at_restaurant` defined in the crate root. The `eat_at_restaurant`
-function is part of our library crate’s public API, so we mark it with the
-`pub` keyword. In the [“Exposing Paths with the `pub` Keyword”][pub]<!-- ignore
---> section, we’ll go into more detail about `pub`. Note that this example
-won’t compile just yet; we’ll explain why in a bit.
+removed.
+
+We’ll show two ways to call the `add_to_waitlist` function from a new function
+`eat_at_restaurant` defined in the crate root. These paths are correct, but
+there’s another problem remaining that will prevent this example from compiling
+as-is. We’ll explain why in a bit.
+
+The `eat_at_restaurant` function is part of our library crate’s public API, so
+we mark it with the `pub` keyword. In the [“Exposing Paths with the `pub`
+Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -199,10 +203,11 @@ interested in this topic, see [The Rust API Guidelines][api-guidelines].
 
 We can construct relative paths that begin in the parent module, rather than
 the current module or the crate root, by using `super` at the start of the
-path. This is like starting a filesystem path with the `..` syntax. This allows
-us to reference an item that we know is in the parent module, which can make
-rearranging the module tree easier when the module is closely related to the
-parent, but the parent might be moved elsewhere in the module tree someday.
+path. This is like starting a filesystem path with the `..` syntax. Using
+`super` allows us to reference an item that we know is in the parent module,
+which can make rearranging the module tree easier when the module is closely
+related to the parent, but the parent might be moved elsewhere in the module
+tree someday.
 
 Consider the code in Listing 7-8 that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The

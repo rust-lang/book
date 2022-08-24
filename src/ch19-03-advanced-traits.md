@@ -75,6 +75,11 @@ definition that uses associated types, we can only choose what the type of
 We don’t have to specify that we want an iterator of `u32` values everywhere
 that we call `next` on `Counter`.
 
+Associated types also become part of the trait’s contract: implementors of the
+trait must provide a type to stand in for the associated type placeholder.
+Associated types often have a name that describes how the type will be used,
+and documenting the associated type in the API documentation is good practice.
+
 ### Default Generic Type Parameters and Operator Overloading
 
 When we use generic type parameters, we can specify a default concrete type for
@@ -339,9 +344,10 @@ definition is relying on is called a *supertrait* of your trait.
 
 For example, let’s say we want to make an `OutlinePrint` trait with an
 `outline_print` method that will print a given value formatted so that it's
-framed in asterisks. That is, given a `Point` struct that implements `Display`
-to result in `(x, y)`, when we call `outline_print` on a `Point` instance that
-has `1` for `x` and `3` for `y`, it should print the following:
+framed in asterisks. That is, given a `Point` struct that implements the
+standard library trait `Display` to result in `(x, y)`, when we call
+`outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
+should print the following:
 
 ```text
 **********

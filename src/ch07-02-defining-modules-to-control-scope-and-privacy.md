@@ -19,12 +19,12 @@ work.
 
 - **Start from the crate root**: When compiling a crate, the compiler first
   looks in the crate root file (usually *src/lib.rs* for a library crate or
-  *src/main.rs* for a binary crate).
+  *src/main.rs* for a binary crate) for code to compile.
 - **Declaring modules**: In the crate root file, you can declare new modules;
 say, you declare a “garden” module with `mod garden;`. The compiler will look
 for the module’s code in these places:
-  - Inline, directly following `mod garden`, within curly brackets instead of
-    the semicolon
+  - Inline, within curly brackets that replace the semicolon following `mod
+    garden`
   - In the file *src/garden.rs*
   - In the file *src/garden/mod.rs*
 - **Declaring submodules**: In any file other than the crate root, you can
@@ -112,9 +112,9 @@ chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
-modules. Create a new library named `restaurant` by running `cargo new --lib
-restaurant`; then enter the code in Listing 7-1 into *src/lib.rs* to define
-some modules and function signatures. Here’s the front of house section:
+modules. Create a new library named `restaurant` by running `cargo new
+restaurant --lib`; then enter the code in Listing 7-1 into *src/lib.rs* to
+define some modules and function signatures. Here’s the front of house section:
 
 <span class="filename">Filename: src/lib.rs</span>
 
