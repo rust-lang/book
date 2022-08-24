@@ -23,7 +23,7 @@ export class Telemetry {
   }
 
   log<T>(endpoint: string, payload: T) {
-    let host = window.location.host;
+    let host = window.location.hostname;
     if (host == "localhost" && !this.url.includes("localhost")) {
       return;
     }
