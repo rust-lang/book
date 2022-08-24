@@ -83,9 +83,7 @@ let ConsentForm = () => {
           </button>
           <button
             onClick={() => {
-              alert(
-                "If you do not want to particiapte, then please close this tab. (Your browser won't let us do it, sorry.)"
-              );
+              window.location.href = "https://doc.rust-lang.org/book/";
             }}
           >
             I do not want to participate

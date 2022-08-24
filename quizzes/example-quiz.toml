@@ -9,5 +9,5 @@ prompt.choices = [
 ]
 answer.answer = 3
 context = """
-See *Principia Mathematica* for an thorough explanation of this fact.
+See *Principia Mathematica* for an explanation of this fact.
 """
