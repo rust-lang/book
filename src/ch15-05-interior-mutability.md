@@ -103,11 +103,11 @@ an immutable value and see why that is useful.
 #### A Use Case for Interior Mutability: Mock Objects
 
 Sometimes during testing a programmer will use a type in place of another type,
-in order to observe particular behavior and assert it's implemented correctly.
+in order to observe particular behavior and assert it’s implemented correctly.
 This placeholder type is called a *test double*. Think of it in the sense of a
-"stunt double" in filmmaking, where a person steps in and substitutes for an
+“stunt double” in filmmaking, where a person steps in and substitutes for an
 actor to do a particular tricky scene. Test doubles stand in for other types
-when we're running tests. *Mock objects* are specific types of test doubles
+when we’re running tests. *Mock objects* are specific types of test doubles
 that record what happens during a test so you can assert that the correct
 actions took place.
 
@@ -273,7 +273,7 @@ BorrowMutError`. This is how `RefCell<T>` handles violations of the borrowing
 rules at runtime.
 
 Choosing to catch borrowing errors at runtime rather than compile time, as
-we've done here, means you'd potentially be finding mistakes in your code later
+we’ve done here, means you’d potentially be finding mistakes in your code later
 in the development process: possibly not until your code was deployed to
 production. Also, your code would incur a small runtime performance penalty as
 a result of keeping track of the borrows at runtime rather than compile time.
