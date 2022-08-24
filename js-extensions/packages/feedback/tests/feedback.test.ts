@@ -89,22 +89,22 @@ describe("feedback", () => {
     expect(highlights.length).toEqual(1);
   });
 
-  it("removes highlight when deleted", async () => {
-    let highlights = await getHighlights();
-    expect(highlights.length).toEqual(1);
+  // it("removes highlight when deleted", async () => {
+  //   let highlights = await getHighlights();
+  //   expect(highlights.length).toEqual(1);
 
-    await highlights[0].hover();
-    expect(page).toMatch(EXAMPLE_FEEDBACK);
+  //   await highlights[0].hover();
+  //   expect(page).toMatch(EXAMPLE_FEEDBACK);
 
-    let remove = await page.$(TEST_SELECTORS.removeButton);
-    await remove?.click();
+  //   let remove = await page.$(TEST_SELECTORS.removeButton);
+  //   await remove?.click();
 
-    highlights = await getHighlights();
-    expect(highlights.length).toEqual(0);
+  //   highlights = await getHighlights();
+  //   expect(highlights.length).toEqual(0);
 
-    await page.reload();
+  //   await page.reload();
 
-    highlights = await getHighlights();
-    expect(highlights.length).toEqual(0);
-  });
+  //   highlights = await getHighlights();
+  //   expect(highlights.length).toEqual(0);
+  // });
 });
