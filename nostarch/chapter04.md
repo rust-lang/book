@@ -306,11 +306,11 @@ Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.
 
 ```
-    let x = 5;
+let x = 5;
 ```
 
 ```
-    let y = x;
+let y = x;
 ```
 
 Assigning the integer value of variable `x` to `y`
@@ -324,11 +324,11 @@ onto the stack.
 Now let’s look at the `String` version:
 
 ```
-    let s1 = String::from("hello");
+let s1 = String::from("hello");
 ```
 
 ```
-    let s2 = s1;
+let s2 = s1;
 ```
 
 This looks very similar, so we might assume that the way it works would be the
@@ -423,7 +423,7 @@ error[E0382]: borrow of moved value: `s1`
 ```
 
 ```
- does not implement the `Copy` trait
+does not implement the `Copy` trait
 ```
 
 ```
@@ -1115,7 +1115,7 @@ attempts to create two mutable references to `s` will fail:
 Filename: src/main.rs
 
 ```
-    let mut s = String::from("hello");
+let mut s = String::from("hello");
 ```
 
 ```
@@ -1123,11 +1123,11 @@ Filename: src/main.rs
 ```
 
 ```
-    let r1 = &mut s;
+let r1 = &mut s;
 ```
 
 ```
-    let r2 = &mut s;
+let r2 = &mut s;
 ```
 
 ```
@@ -1135,7 +1135,7 @@ Filename: src/main.rs
 ```
 
 ```
-    println!("{r1}, {r2}");
+println!("{r1}, {r2}");
 ```
 
 Here’s the error:
@@ -1726,7 +1726,7 @@ Luckily, Rust has a solution to this problem: string slices.
 A *string slice* is a reference to part of a `String`, and it looks like this:
 
 ```
-    let s = String::from("hello world");
+let s = String::from("hello world");
 ```
 
 ```
@@ -1734,11 +1734,11 @@ A *string slice* is a reference to part of a `String`, and it looks like this:
 ```
 
 ```
-    let hello = &s[0..5];
+let hello = &s[0..5];
 ```
 
 ```
-    let world = &s[6..11];
+let world = &s[6..11];
 ```
 
 Rather than a reference to the entire `String`, `hello` is a reference to a
