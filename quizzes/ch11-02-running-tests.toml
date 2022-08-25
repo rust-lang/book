@@ -32,8 +32,8 @@ fn test_logger_and_database() { /* ... */ }
 
 What is the *shortest* string you can pass to `cargo test <the_string>` such that *only* `test_the_logger` and `test_the_database` are executed?
 """
-answer.answer = "th"
+answer.answer = "h"
 context = """
 The shortest substring string that is not contained in `test_logger_and_database` but is contained in `test_the_logger` and `test_the_database`
-is "th" (the prefix of "the").
+is "h" (the middle character of "the").
 """

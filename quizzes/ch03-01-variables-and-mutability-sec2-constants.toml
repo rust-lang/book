@@ -1,6 +1,6 @@
 [[questions]]
 type = "MultipleChoice"
-prompt.prompt = "What is the difference between using `let` and `const` to declare a variable?"
+prompt.prompt = "Which of the following statements is correct about the difference between using `let` and `const` to declare a variable?"
 prompt.choices = [
   "They are just different syntaxes for declaring variables with the same semantics",
   "`const` can be used in the global scope, and `let` can only be used in a function",
