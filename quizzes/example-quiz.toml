@@ -1,6 +1,6 @@
 [[questions]]
 type = "MultipleChoice"
-prompt.prompt = "What is 1 + 1? (Try clicking the wrong answer.)"
+prompt.prompt = "What is 1 + 1? (Try clicking a wrong answer.)"
 prompt.choices = [
   "0",
   "-999",
