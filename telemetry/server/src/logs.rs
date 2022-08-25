@@ -25,6 +25,7 @@ impl LogFiles {
     let mut f = OpenOptions::new().create(true).append(true).open(path)?;
     f.write_all(contents.as_bytes())?;
     f.write_all(b"\n")?;
+    f.sync_all()?;
     Ok(())
   }
 }

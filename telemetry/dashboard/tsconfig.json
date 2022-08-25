@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+      // Type-checker options
+      "strict": true,
+      "skipLibCheck": true,
+
+      // Codegen options
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "jsx": "react",
+      "lib": ["es2018", "dom"],
+
+      // Output file options
+      "outDir": "dist",
+      "declaration": true,
+
+      "experimentalDecorators": true
+  }
+}
