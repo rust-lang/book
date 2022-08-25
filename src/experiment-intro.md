@@ -4,7 +4,7 @@ Welcome to the Rust Book experiment, and thank you for your participation! First
 
 ## 1. Quizzes
 
-The main mechanic is **quizzes**: each page has a few quizzes about the page's content We have two rules about quizzes for this experiment:
+The main mechanic is **quizzes**: each page has a few quizzes about the page's content. We have two rules about quizzes for this experiment:
 
 1. **Take a quiz as soon as you get to it.**
 2. **Do not skip a quiz.**
