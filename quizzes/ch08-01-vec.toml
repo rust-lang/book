@@ -17,7 +17,7 @@ fn find_until(v: &Vec<i32>, n: i32, til: usize) -> Option<usize> {
 prompt.choices = [
     "`find_until(&vec![1, 2, 3], 0, 0)`",
     "`find_until(&vec![1, 2, 3], 3, 3)`",
-    "`find_until(&vec![1, 2, 3], 0, 4)`",
+    "`find_until(&vec![1, 2, 3], 1, 4)`",
     "`find_until(&vec![1, 2, 3], 4, 4)`",
 ]
 answer.answer = 3
