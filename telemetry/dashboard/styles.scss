@@ -1,5 +1,7 @@
 @import "normalize.css/normalize.css";
 @import "rc-slider/assets/index.css";
+@import "@wcrichto/mdbook-quiz/dist/embed.css";
+@import "highlight.js/styles/default.css";
 
 body {
   font-family: "Helvetica Neue", sans-serif;
@@ -54,4 +56,39 @@ body {
 .rc-slider-mark {
   top: 0;
   font-size: 10px;
+}
+
+.qa-wrapper {
+  display: flex;
+  gap: 1rem;
+
+  > div {
+    flex: 1;
+  }
+}
+
+.mdbook-quiz {
+  border: 0;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+
+  .prompt {
+    padding: 0;
+  } 
+  
+  .answer .answer-row > div {
+    padding: 0;
+
+    .correct:before {
+      content: "";
+      margin: 0;
+    }
+  }
+}
+
+.wrong-answer {
+  border: 1px solid #ccc;
+  margin-bottom: 0.5em;
+  padding: 0 1rem;
 }

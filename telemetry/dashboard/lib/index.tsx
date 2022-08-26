@@ -8,16 +8,22 @@ import DataGrid, {
 import { Range, createSliderWithTooltip } from "rc-slider";
 import { action } from "mobx";
 import { observer, useLocalObservable } from "mobx-react";
+import { AnswerView, getQuestionMethods } from "@wcrichto/mdbook-quiz";
+import hljs from "highlight.js";
+import _ from "lodash";
+import objectHash from "object-hash";
 
 import "../styles.scss";
 import "../index.html";
-import _, { create } from "lodash";
 
 declare global {
   var QUESTION_SUMMARY: string;
   var QUIZ_SUMMARY: string;
   var QUIZ_SCHEMAS: string;
+  var hljs: any;
 }
+
+window.hljs = hljs;
 
 let questionSummary = JSON.parse(QUESTION_SUMMARY);
 let quizSummary = JSON.parse(QUIZ_SUMMARY);
@@ -209,18 +215,56 @@ let QuestionInspector: React.FC<{ state: any }> = observer(({ state }) => {
   let schemas = quizSchemas[r.quizName];
   let hash = Object.keys(schemas).find((k) => schemas[k].version == r.version)!;
   let schema = schemas[hash].schema;
+  let question = schema.questions[r.question];
+
+  let answers: { [hash: string]: { count: number; answer: any } } = {};
+  for (let answer of r.answer) {
+    let hash = objectHash(answer);
+    if (!(hash in answers)) {
+      answers[hash] = { count: 0, answer };
+    }
+    answers[hash].count += 1;
+  }
+
+  let answersSorted = _.chain(answers)
+    .values()
+    .sortBy((t) => -t.count)
+    .value();
+
+  let methods = getQuestionMethods(question.type);
+
   return (
     <div>
       <h2>
         Quiz {r.quizName} / Question {r.question + 1}
       </h2>
-      <div>
-        <h3>Question</h3>
-        <pre>{JSON.stringify(schema.questions[r.question], null, 2)}</pre>
-      </div>
-      <div>
-        <h3>Answers</h3>
-        (todo)
+      <div className="qa-wrapper">
+        <div>
+          <h3>Question</h3>
+          <div className="mdbook-quiz">
+            <AnswerView
+              index={r.question + 1}
+              quizName={r.quizName}
+              question={question}
+              correct={true}
+              userAnswer={question.answer}
+              showCorrect={false}
+            />
+          </div>
+        </div>
+        <div>
+          <h3>Answers</h3>
+          {answersSorted.map((answer, i) => (
+            <div className="wrong-answer" key={i}>
+              <p>N = {answer.count}</p>
+              <methods.AnswerView
+                answer={answer.answer}
+                baseline={question.answer}
+                prompt={question.prompt}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

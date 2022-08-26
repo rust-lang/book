@@ -3,14 +3,17 @@ lockfileVersion: 5.4
 specifiers:
   '@nota-lang/esbuild-utils': ^0.4.12
   '@types/lodash': ^4.14.184
+  '@types/object-hash': ^2.2.1
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   esbuild: ^0.15.5
   esbuild-sass-plugin: ^2.3.2
+  highlight.js: ^11.6.0
   lodash: ^4.17.21
   mobx: ^6.6.1
   mobx-react: ^7.5.2
   normalize.css: ^8.0.1
+  object-hash: ^3.0.0
   rc-slider: ^9.7.5
   react: ^18.2.0
   react-data-grid: 7.0.0-beta.16
@@ -23,13 +26,16 @@ dependencies:
 devDependencies:
   '@nota-lang/esbuild-utils': 0.4.12_esbuild@0.15.5
   '@types/lodash': 4.14.184
+  '@types/object-hash': 2.2.1
   '@types/react': 18.0.17
   '@types/react-dom': 18.0.6
   esbuild: 0.15.5
+  highlight.js: 11.6.0
   lodash: 4.17.21
   mobx: 6.6.1
   mobx-react: 7.5.2_m26jawr67gnusmh4egzqtnhxru
   normalize.css: 8.0.1
+  object-hash: 3.0.0
   rc-slider: 9.7.5_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-data-grid: 7.0.0-beta.16_biqbaboplfbrettd7655fr4n2y
@@ -141,6 +147,10 @@ packages:
 
   /@types/node/18.7.13:
     resolution: {integrity: sha512-46yIhxSe5xEaJZXWdIBP7GU4HDTG8/eo0qd9atdiL+lFpA03y8KS+lkTN834TWJj5767GbWv4n/P6efyTFt1Dw==}
+    dev: true
+
+  /@types/object-hash/2.2.1:
+    resolution: {integrity: sha512-i/rtaJFCsPljrZvP/akBqEwUP2y5cZLOmvO+JaYnz01aPknrQ+hB5MRcO7iqCUsFaYfTG8kGfKUyboA07xeDHQ==}
     dev: true
 
   /@types/prop-types/15.7.5:
@@ -919,6 +929,11 @@ packages:
       function-bind: 1.1.1
     dev: false
 
+  /highlight.js/11.6.0:
+    resolution: {integrity: sha512-ig1eqDzJaB0pqEvlPVIpSSyMaO92bH1N2rJpLMN/nX396wTpDA4Eq0uK+7I/2XG17pFaaKE0kjV/XPeGt7Evjw==}
+    engines: {node: '>=12.0.0'}
+    dev: true
+
   /https-proxy-agent/5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
     engines: {node: '>= 6'}
@@ -1139,6 +1154,11 @@ packages:
 
   /normalize.css/8.0.1:
     resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
+    dev: true
+
+  /object-hash/3.0.0:
+    resolution: {integrity: sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==}
+    engines: {node: '>= 6'}
     dev: true
 
   /once/1.4.0:

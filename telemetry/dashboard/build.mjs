@@ -1,4 +1,4 @@
-import { cli, copyPlugin } from "@nota-lang/esbuild-utils";
+import { cli, copyPlugin, peerfixPlugin } from "@nota-lang/esbuild-utils";
 import { sassPlugin } from "esbuild-sass-plugin";
 import fs from "fs";
 
@@ -14,5 +14,12 @@ build({
     QUIZ_SUMMARY: JSON.stringify(quizSummary),
     QUIZ_SCHEMAS: JSON.stringify(quizSchemas),
   },
-  plugins: [copyPlugin({ extensions: [".html"] }), sassPlugin()],
+  plugins: [
+    copyPlugin({ extensions: [".html"] }),
+    sassPlugin(),
+    peerfixPlugin({
+      modules: ["react", "react-dom", "mobx", "mobx-react"],
+      meta: import.meta,
+    }),
+  ],
 });
