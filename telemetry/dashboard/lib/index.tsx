@@ -5,16 +5,23 @@ import DataGrid, {
   SortColumn,
   headerRenderer as HeaderRenderer,
 } from "react-data-grid";
-import Slider from "rc-slider";
+import { Range, createSliderWithTooltip } from "rc-slider";
+import { action } from "mobx";
+import { observer, useLocalObservable } from "mobx-react";
 
 import "../styles.scss";
 import "../index.html";
-import _ from "lodash";
+import _, { create } from "lodash";
 
 declare global {
-  var QUESTION_SUMMARY: any;
-  var QUIZ_SUMMARY: any;
+  var QUESTION_SUMMARY: string;
+  var QUIZ_SUMMARY: string;
+  var QUIZ_SCHEMAS: string;
 }
+
+let questionSummary = JSON.parse(QUESTION_SUMMARY);
+let quizSummary = JSON.parse(QUIZ_SUMMARY);
+let quizSchemas = JSON.parse(QUIZ_SCHEMAS);
 
 type Comparator<T> = (a: T, b: T) => number;
 
@@ -51,13 +58,13 @@ let useSortColumns = <T,>(rows: T[]) => {
 
 type FilterView<K> = React.FC<{ values: K[]; setFilter: (val: any) => void }>;
 
+let RangeTooltip = createSliderWithTooltip(Range);
 let filterViews: { [K in keyof BaseTypes]: FilterView<BaseTypes[K]> } = {
   number: ({ values, setFilter }) => {
     let min = _.min(values)!;
     let max = _.max(values)!;
     return (
-      <Slider
-        range
+      <RangeTooltip
         min={min}
         max={max}
         step={(max - min) / values.length}
@@ -67,12 +74,20 @@ let filterViews: { [K in keyof BaseTypes]: FilterView<BaseTypes[K]> } = {
             .map((n) => [n, n.toFixed(max > 1 ? 0 : 1)])
         )}
         defaultValue={[min, max]}
+        tipFormatter={(n) => n.toFixed(max > 1 ? 0 : 1)}
         onChange={setFilter}
       />
     );
   },
   string: ({ setFilter }) => {
-    return <input type="text" onChange={(e) => setFilter(e.target.value)} />;
+    return (
+      <input
+        type="text"
+        onClick={(e) => e.stopPropagation()}
+        onFocus={(e) => e.stopPropagation()}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+    );
   },
 };
 
@@ -138,11 +153,13 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
   tableName,
   metricName,
   extraColumns,
+  state,
 }: {
   rows: T[];
   tableName: string;
   metricName: string;
   extraColumns?: Column<T>[];
+  state: any;
 }) {
   let columns: Column<T>[] = [
     { key: "quizName", name: "Quiz" },
@@ -176,14 +193,43 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
           sortable: true,
         }}
         columns={columns}
+        onRowClick={action((row: any) => {
+          if ("question" in row) {
+            state.selectedQuestion = row;
+          }
+        })}
       />
     </div>
   );
 }
 
+let QuestionInspector: React.FC<{ state: any }> = observer(({ state }) => {
+  if (!state.selectedQuestion) return null;
+  let r = state.selectedQuestion;
+  let schemas = quizSchemas[r.quizName];
+  let hash = Object.keys(schemas).find((k) => schemas[k].version == r.version)!;
+  let schema = schemas[hash].schema;
+  return (
+    <div>
+      <h2>
+        Quiz {r.quizName} / Question {r.question + 1}
+      </h2>
+      <div>
+        <h3>Question</h3>
+        <pre>{JSON.stringify(schema.questions[r.question], null, 2)}</pre>
+      </div>
+      <div>
+        <h3>Answers</h3>
+        (todo)
+      </div>
+    </div>
+  );
+});
+
 let App = () => {
-  let questionSummary = JSON.parse(QUESTION_SUMMARY);
-  let quizSummary = JSON.parse(QUIZ_SUMMARY);
+  let state = useLocalObservable(() => ({
+    selectedQuestion: null,
+  }));
   return (
     <div>
       <h1>Rust Book Experiment Dashboard</h1>
@@ -192,6 +238,7 @@ let App = () => {
           tableName="Quiz Summary"
           rows={quizSummary}
           metricName="Avg quiz score"
+          state={state}
         />
         <Table
           tableName="Question Summary"
@@ -203,8 +250,10 @@ let App = () => {
               name: "Question",
             },
           ]}
+          state={state}
         />
       </div>
+      <QuestionInspector state={state} />
     </div>
   );
 };

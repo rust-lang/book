@@ -12,7 +12,7 @@
         "mobx": "^6.6.1",
         "mobx-react": "^7.5.2",
         "normalize.css": "^8.0.1",
-        "rc-slider": "^10.0.1",
+        "rc-slider": "^9.7.5",
         "react": "^18.2.0",
         "react-data-grid": "7.0.0-beta.16",
         "react-dom": "^18.2.0",
