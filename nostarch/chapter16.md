@@ -16,30 +16,6 @@ computers take advantage of their multiple processors. Historically,
 programming in these contexts has been difficult and error prone: Rust hopes to
 change that.
 
-<!-- Concurrent programming isn't necessarily helped by having multiple
-processors. How I've been teaching it is to distinguish the two by their
-workload: concurrent programming serves the needs of I/O-bound workloads and
-parallel programming serves the needs of CPU-bound workloads. If you give
-CPU bound workloads more CPUs, you have the opportunity to possibly go faster
-(assuming sufficient parallelism in the code). For I/O-bound workloads,
-rather than the need to have multiple processors, you need to be able to
-get as many I/O requests in flight and being processed as you can. This
-allows more I/O requests, and as a result better throughput/response time
-on those I/O requests.
-
-We could introduce these concepts and then simplify like we do in a bit to
-say that the design considerations of Rust allow both concurrency and
-parallelism to be done safely (...and for the remainder of the chapter talk
-about those design considerations rather than the specifics for either
-concurrency or parallelism) /JT -->
-<!-- I really don't want to get in the weeds on this because there are many
-other books and resources about concurrency and parallelism because these
-concepts aren't Rust specific. I want this to feel accessible to programmers
-who have never even considered whether their programs are I/O or CPU bound,
-because those are the types of programmers we want to empower (and make them
-feel empowered to create concurrent and/or parallel code) through Rust. So I'm
-deliberately choosing not to change anything here. /Carol -->
-
 Initially, the Rust team thought that ensuring memory safety and preventing
 concurrency problems were two separate challenges to be solved with different
 methods. Over time, the team discovered that the ownership and type systems are
@@ -464,26 +440,6 @@ containing data. Here’s the idea in a slogan from the Go language
 documentation at *https://golang.org/doc/effective_go.html#concurrency*:
 “Do not communicate by sharing memory; instead, share memory by communicating.”
 
-<!-- are they communicating to decide which thread should be running, or by
-"communicate" do we just mean sharing data? /LC -->
-<!-- Just sharing data. Is there something that should be clarified here? I'm
-not sure what to do because this paragraph doesn't mention deciding which
-thread should be running, it only mentions sharing data, so I'm not sure where
-the possible confusion is coming from. /Carol -->
-<!-- JT, if this will be already obvious to a reader, no changes needed. I just
-wanted to ensure there was no potential confusion around what is being
-communicated /LC -->
-<!-- I like that we want to give a shout-out to Go's thinking process when
-we align, though I made a bit of a face reading the quote. "Share memory" is a
-such a loaded concept that I think people might stumble a bit over the play on
-the technical words.
-
-Funnily the next line following that quote in the Go book is:
-
-"This approach can be taken too far." :D
-/JT -->
-<!-- I think this means JT is fine leaving this the way it is! /Carol -->
-
 To accomplish message-sending concurrency, Rust's standard library provides an
 implementation of *channels*. A channel is a general programming concept by
 which data is sent from one thread to another.
@@ -503,7 +459,7 @@ Here, we’ll work up to a program that has one thread to generate values and
 send them down a channel, and another thread that will receive the values and
 print them out. We’ll be sending simple values between threads using a channel
 to illustrate the feature. Once you’re familiar with the technique, you could
-use channels for any threads that needs to communicate between each other, such
+use channels for any threads that need to communicate between each other, such
 as a chat system or a system where many threads perform parts of a calculation
 and send the parts to one thread that aggregates the results.
 
@@ -568,10 +524,8 @@ Listing 16-7: Moving `tx` to a spawned thread and sending “hi”
 Again, we’re using `thread::spawn` to create a new thread and then using `move`
 to move `tx` into the closure so the spawned thread owns `tx`. The spawned
 thread needs to own the transmitter to be able to send messages through the
-channel.
-
-The transmitter has a `send` method that takes the value we want to send.
-The `send` method returns a `Result<T, E>` type, so if the receiver has
+channel. The transmitter has a `send` method that takes the value we want to
+send. The `send` method returns a `Result<T, E>` type, so if the receiver has
 already been dropped and there’s nowhere to send a value, the send operation
 will return an error. In this example, we’re calling `unwrap` to panic in case
 of an error. But in a real application, we would handle it properly: return to
@@ -832,11 +786,6 @@ Message passing is a fine way of handling concurrency, but it’s not the only
 one. Another method would be for multiple threads to access the same shared
 data. Consider this part of the slogan from the Go language documentation
 again: “do not communicate by sharing memory.”
-
-<!-- NB: if we decide to do anything with the Go quote above, we also
-reference it here.
-/JT -->
-<!-- Also not changing anything here. /Carol -->
 
 What would communicating by sharing memory look like? In addition, why would
 message-passing enthusiasts caution not to use memory sharing?
@@ -1151,11 +1100,6 @@ than `Mutex<T>` types provided by the `std::sync::atomic` module of the
 standard library. These types provide safe, concurrent, atomic access to
 primitive types. We chose to use `Mutex<T>` with a primitive type for this
 example so we could concentrate on how `Mutex<T>` works.
-
-<!-- Do we want to mention that for simple counters we have simpler types in
-the standard library? (eg, AtomicI64 for the above)
-/JT -->
-<!-- Done! /Carol-->
 
 ### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 
