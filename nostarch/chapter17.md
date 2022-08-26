@@ -20,11 +20,6 @@ translate to idiomatic Rust. We’ll then show you how to implement an
 object-oriented design pattern in Rust and discuss the trade-offs of doing so
 versus implementing a solution using some of Rust’s strengths instead.
 
-<!-- Nit: we should probably use "object-oriented" throughout, rather using both
-"object-oriented" and "object oriented"
-/JT -->
-<!-- Done! /Carol -->
-
 ## Characteristics of Object-Oriented Languages
 
 There is no consensus in the programming community about what features a
@@ -120,12 +115,6 @@ impl AveragedCollection {
 }
 ```
 
-<!-- The above example will crash with a division by zero if you call it at
-any time when it's empty. Not sure if we want to fix, but thought I'd point
-it out.
-/JT -->
-<!-- It actually won't because f64 / 0 is NaN, not a panic /Carol -->
-
 Listing 17-2: Implementations of the public methods `add`, `remove`, and
 `average` on `AveragedCollection`
 
@@ -182,22 +171,6 @@ also override the default implementation of the `summarize` method when we
 implement the `Summary` trait, which is similar to a child class overriding the
 implementation of a method inherited from a parent class.
 
-<!-- I'm a bit uncomfortable with the above. I think it's more honest to say
-that Rust doesn't support inheritance unless you use a macro. Saying to use
-the trait system to an OO programmer is going to leave them pretty confused, as
-traits lack of the basics of inheritance: you can't use and modify state, you
-have to use a surrogate type to hold the trait implementation, you can't
-instantiate, and so on.
-
-The example that came to mind: trying to teach OO programmers who want to
-build a UI library with traditional OO techniques using the trait system.
-It's unfortunately not going to work very well, if at all.
-
-A trait's main focus is polymorphism and not inheritance. It's probably
-better for folks coming from OO backgrounds if we just come out and say it, tbh.
-/JT -->
-<!-- I agree, and I've made some edits to the paragraphs above /Carol -->
-
 The other reason to use inheritance relates to the type system: to enable a
 child type to be used in the same places as the parent type. This is also
 called *polymorphism*, which means that you can substitute multiple objects for
@@ -223,15 +196,6 @@ apply to the subclass. In addition, some languages will only allow single
 inheritance (meaning a subclass can only inherit from one class), further
 restricting the flexibility of a program’s design.
 
-<!-- Nit - "inherit from one class" and "single-inheritance" read a bit
-differently to me. Saying you inherit from only one class almost makes it sound
-like that the class you inherit from can't have a parent. Probably minor, just
-made me read that sentence a couple times.
-/JT -->
-<!-- I've included the term "single inheritance" above (it appears that usually
-it's not hyphenated) but kept what was there as an explanation in case the
-reader isn't familiar. /Carol -->
-
 For these reasons, Rust takes the different approach of using trait objects
 instead of inheritance. Let’s look at how trait objects enable polymorphism in
 Rust.
@@ -239,7 +203,7 @@ Rust.
 ## Using Trait Objects That Allow for Values of Different Types
 
 In Chapter 8, we mentioned that one limitation of vectors is that they can
-store elements of only one type. We created a workaround in Listing 8-10 where
+store elements of only one type. We created a workaround in Listing 8-9 where
 we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
 and text. This meant we could store different types of data in each cell and
 still have a vector that represented a row of cells. This is a perfectly good
@@ -484,12 +448,6 @@ fn main() {
 }
 ```
 
-<!-- I'd forgotten the UI components were in this chapter. To close on the
-thought from earlier: we don't use any inheritance in our example, only
-polymorphism. This probably is a vote for my earlier suggestion.
-/JT -->
-<!-- I indeed took the earlier suggestion. /Carol -->
-
 Listing 17-9: Using trait objects to store values of different types that
 implement the same trait
 
@@ -532,8 +490,8 @@ fn main() {
 }
 ```
 
-Listing 17-10: Attempting to use a type that doesn’t
-implement the trait object’s trait
+Listing 17-10: Attempting to use a type that doesn’t implement the trait
+object’s trait
 
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
@@ -582,25 +540,12 @@ states are represented by a set of *state objects*, and the value’s behavior
 changes based on its state. We’re going to work through an example of a blog
 post struct that has a field to hold its state, which will be a state object
 from the set "draft", "review", or "published".
-<!-- can you give a quick example here, something we could visualize? are we
-saying "we define a set of states a value can have as state objects...."? /LC
--->
-<!-- What do you think about this, hinting at the coming example quickly? It
-felt weird to introduce something different only to switch gears in a few
-paragraphs, so is moving the example's introduction here ok? /Carol -->
-<!-- JT, what do you think? /LC -->
-<!-- Seems okay. My one thought coming to the end of the paragraph was "is
-this better than using an enum?" Not sure if we want to sidebar a bit on
-why we chose traits over enums, but some readers might be curious.
-/JT -->
-<!-- I've added a box later titled "Why Not An Enum?" to address this -- I
-think that makes a nice exercise for the reader :) /Carol -->
 
-The state objects share functionality: in Rust, of course, we use
-structs and traits rather than objects and inheritance. Each state object is
-responsible for its own behavior and for governing when it should change into
-another state. The value that holds a state object knows nothing about the
-different behavior of the states or when to transition between states.
+The state objects share functionality: in Rust, of course, we use structs and
+traits rather than objects and inheritance. Each state object is responsible
+for its own behavior and for governing when it should change into another
+state. The value that holds a state object knows nothing about the different
+behavior of the states or when to transition between states.
 
 The advantage of using the state pattern is that, when the business
 requirements of the program change, we won’t need to change the code of the
@@ -681,22 +626,6 @@ definition of the struct and an associated public `new` function to create an
 instance of `Post`, as shown in Listing 17-12. We’ll also make a private
 `State` trait that will define the behavior that all state objects for a `Post`
 must have.
-<!-- JT, I had a few questions here about what the state objects and state
-traits are doing. I'd appreciate your view on whether this all reads well with
-nothing missing! /LC -->
-<!-- Seems okay. If you're going to try to use a traditional OO approach in
-Rust, it'll have a bit of this style. I'm glad we include something that's a
-bit more Rust-y at the end of the chapter.
-
-What I might suggest is that we give the reader a bit of a roadmap here to say
-that we're going to explore two solutions to this problem. The first, a more
-traditional approach encoded into Rust, and the second, an approach that's more
-natural to Rust.
-/JT -->
-<!-- Great idea! I've added a bit in the introduction of this section above --
-"First, we’re going to implement the state pattern in a more traditional
-object-oriented way, then we’ll use an approach that’s a bit more natural in
-Rust." /Carol -->
 
 Then `Post` will hold a trait object of `Box<dyn State>` inside an `Option<T>`
 in a private field named `state` to hold the state object. You’ll see why the
