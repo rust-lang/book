@@ -2,4 +2,23 @@
     "scripts": {
         "build": "node build.mjs"
     },
-    "devDependencies":{"@nota-lang/esbuild-utils":"^0.4.12","@types/react":"^18.0.17","@types/react-dom":"^18.0.6","esbuild":"^0.15.5","mobx":"^6.6.1","mobx-react":"^7.5.2","react":"^18.2.0","react-dom":"^18.2.0","typescript":"^4.7.4"}}
+    "devDependencies": {
+        "@nota-lang/esbuild-utils": "^0.4.12",
+        "@types/lodash": "^4.14.184",
+        "@types/react": "^18.0.17",
+        "@types/react-dom": "^18.0.6",
+        "esbuild": "^0.15.5",
+        "lodash": "^4.17.21",
+        "mobx": "^6.6.1",
+        "mobx-react": "^7.5.2",
+        "normalize.css": "^8.0.1",
+        "rc-slider": "^10.0.1",
+        "react": "^18.2.0",
+        "react-data-grid": "7.0.0-beta.16",
+        "react-dom": "^18.2.0",
+        "typescript": "^4.7.4"
+    },
+    "dependencies": {
+        "esbuild-sass-plugin": "^2.3.2"
+    }
+}

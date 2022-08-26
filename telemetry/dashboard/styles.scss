@@ -1,0 +1,53 @@
+@import "normalize.css/normalize.css";
+@import "rc-slider/assets/index.css";
+
+body {
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 16px;
+}
+
+#root {
+  padding: 1rem;
+}
+
+.grids {
+  display: flex;
+  gap: 1rem;
+
+  > div {
+    flex: 1;
+  }
+}
+
+.filter-cell {
+  line-height: 35px;
+  padding: 0;
+  > div {
+    padding-block: 0;
+    padding-inline: 8px;
+    &:first-child {
+      border-block-end: 1px solid var(--rdg-border-color);
+    }
+
+    &:last-child {
+      text-align: center;
+    }
+  }
+
+  input[type=text] {
+    width: 100%;
+  }
+}
+
+.rc-slider {
+  display: inline-block;
+  height: 22px;
+  padding: 0;
+  vertical-align: middle;
+  width: 80%;
+}
+
+.rc-slider-mark {
+  top: 0;
+  font-size: 10px;
+}
