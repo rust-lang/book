@@ -140,7 +140,7 @@ let useFilterColumns = <T,>(
       let value = baseRow[col];
       let fn = filterFuncs[typeof value as "number" | "string"] as any;
       let keep = fn(filters[col], r[col]);
-      return keep;
+      if (!keep) return false;
     }
     return true;
   });
@@ -248,6 +248,7 @@ let App = () => {
             {
               key: "question",
               name: "Question",
+              formatter: ({ row }: { row: any }) => row.question + 1,
             },
           ]}
           state={state}
