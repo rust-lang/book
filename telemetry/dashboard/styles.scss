@@ -8,6 +8,14 @@ body {
   font-size: 16px;
 }
 
+h1 {
+  margin: 0;
+}
+
+h2 {
+  margin-bottom: 0.3em;
+}
+
 #root {
   padding: 1rem;
 }
@@ -75,8 +83,8 @@ body {
 
   .prompt {
     padding: 0;
-  } 
-  
+  }
+
   .answer .answer-row > div {
     padding: 0;
 
@@ -90,5 +98,5 @@ body {
 .wrong-answer {
   border: 1px solid #ccc;
   margin-bottom: 0.5em;
-  padding: 0 1rem;
+  padding: 1rem;
 }

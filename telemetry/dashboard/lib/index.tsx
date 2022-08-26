@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import DataGrid, {
   Column,
@@ -12,6 +12,7 @@ import { AnswerView, getQuestionMethods } from "@wcrichto/mdbook-quiz";
 import hljs from "highlight.js";
 import _ from "lodash";
 import objectHash from "object-hash";
+import axios from "axios";
 
 import "../styles.scss";
 import "../index.html";
@@ -24,10 +25,6 @@ declare global {
 }
 
 window.hljs = hljs;
-
-let questionSummary = JSON.parse(QUESTION_SUMMARY);
-let quizSummary = JSON.parse(QUIZ_SUMMARY);
-let quizSchemas = JSON.parse(QUIZ_SCHEMAS);
 
 type Comparator<T> = (a: T, b: T) => number;
 
@@ -112,7 +109,7 @@ let useFilterColumns = <T,>(
   let baseRow: any = rows[0];
 
   columns = columns.map((column) => {
-    if (column.key in baseRow) {
+    if (column.key in baseRow && column.sortable) {
       let kt = typeof baseRow[column.key];
       if (kt === "number" || kt === "string") {
         let F = filterViews[kt];
@@ -168,13 +165,14 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
   state: any;
 }) {
   let columns: Column<T>[] = [
-    { key: "quizName", name: "Quiz" },
+    { key: "quizName", name: "Quiz", sortable: true, },
     { key: "version", name: "Version" },
     ...(extraColumns || []),
     {
       key: "mean",
       name: metricName,
       formatter: ({ row: r }) => r.mean.toFixed(2),
+      sortable: true,
     },
     {
       key: "ci",
@@ -183,7 +181,7 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
       formatter: ({ row: r }) =>
         r.lower ? `[${r.lower.toFixed(2)} - ${r.upper.toFixed(2)}]` : "n/a",
     },
-    { key: "N", name: "N" },
+    { key: "N", name: "N", sortable: true },
   ];
 
   [rows, columns] = useFilterColumns(rows, columns);
@@ -195,9 +193,6 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
       <DataGrid
         {...sortProps}
         headerRowHeight={70}
-        defaultColumnOptions={{
-          sortable: true,
-        }}
         columns={columns}
         onRowClick={action((row: any) => {
           if ("question" in row) {
@@ -209,7 +204,7 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
   );
 }
 
-let QuestionInspector: React.FC<{ state: any }> = observer(({ state }) => {
+let QuestionInspector: React.FC<{ state: any, quizSchemas: any }> = observer(({ state, quizSchemas }) => {
   if (!state.selectedQuestion) return null;
   let r = state.selectedQuestion;
   let schemas = quizSchemas[r.quizName];
@@ -256,7 +251,7 @@ let QuestionInspector: React.FC<{ state: any }> = observer(({ state }) => {
           <h3>Answers</h3>
           {answersSorted.map((answer, i) => (
             <div className="wrong-answer" key={i}>
-              <p>N = {answer.count}</p>
+              <div>N = {answer.count}</div>
               <methods.AnswerView
                 answer={answer.answer}
                 baseline={question.answer}
@@ -274,19 +269,34 @@ let App = () => {
   let state = useLocalObservable(() => ({
     selectedQuestion: null,
   }));
+  let [data, setData] = useState<null | any>(() => null);
+
+  useEffect(() => {
+    (async () => {
+      let files = ['data/question-summary.json', 'data/quiz-summary.json', 'data/quiz-schemas.json'];
+      let pairs = await Promise.all(files.map(async url => {
+        let resp = await axios.get(url);
+        return [url, resp.data];
+      }));
+      setData(_.fromPairs(pairs));
+    })();
+  }, []);
+
+  if (data == null) return <div>Loading data...</div>;
+
   return (
     <div>
       <h1>Rust Book Experiment Dashboard</h1>
       <div className="grids">
         <Table
           tableName="Quiz Summary"
-          rows={quizSummary}
+          rows={data['data/quiz-summary.json']}
           metricName="Avg quiz score"
           state={state}
         />
         <Table
           tableName="Question Summary"
-          rows={questionSummary}
+          rows={data['data/question-summary.json']}
           metricName="Avg question score"
           extraColumns={[
             {
@@ -298,7 +308,7 @@ let App = () => {
           state={state}
         />
       </div>
-      <QuestionInspector state={state} />
+      <QuestionInspector state={state} quizSchemas={data['data/quiz-schemas.json']} />
     </div>
   );
 };

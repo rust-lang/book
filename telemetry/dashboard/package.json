@@ -8,6 +8,7 @@
         "@types/object-hash": "^2.2.1",
         "@types/react": "^18.0.17",
         "@types/react-dom": "^18.0.6",
+        "axios": "^0.27.2",
         "esbuild": "^0.15.5",
         "highlight.js": "^11.6.0",
         "lodash": "^4.17.21",

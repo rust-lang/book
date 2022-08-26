@@ -6,6 +6,7 @@ from datetime import datetime
 import subprocess as sp
 import bisect
 
+
 class Quizzes:
     QUIZ_DIR = Path('../../quizzes')
     quizzes = {}
@@ -38,7 +39,7 @@ class Quizzes:
 
         return versions['schemas'][content_hash]
 
-        
+
 def load_log(name):
     with open(f'../server/{name}.log', 'r') as f:
         log = f.readlines()
@@ -54,3 +55,48 @@ def load_log(name):
 
     return pd.DataFrame(entries)
 
+
+
+def load_latest_answers():
+    answers = load_log('answers')
+    quizzes = Quizzes()
+
+    # Load in all quiz data and get version metadata
+    for _, row in answers.iterrows():
+        quizzes.get(row)    
+
+    # Convert hashes to version numbers
+    answers['version'] = answers.apply(lambda row: quizzes.get(row)['version'], axis=1)
+
+    # Convert UTC timestamp to datetime
+    answers['timestamp'] = pd.to_datetime(answers['timestamp'], unit='ms')
+
+    # Only keep the first attempt
+    answers = answers[answers.attempt == 0]
+
+    # Remove example data
+    answers = answers[answers.quizName != 'example-quiz']
+
+    # Only keep the latest complete answer for a given user/quiz pair
+    get_latest = lambda group: group.iloc[group.timestamp.argmax()]
+    did_complete_quiz = lambda row: len(row.answers) == len(quizzes.get(row)['schema']['questions'])
+    groups = ['sessionId', 'quizName', 'quizHash']
+    answers = answers \
+        .loc[lambda df: df.apply(did_complete_quiz, axis=1)] \
+        .groupby(groups) \
+        .apply(get_latest) \
+        .drop(columns=groups) \
+        .reset_index()
+
+    answers['frac_correct'] = answers.answers.map(lambda a: len([o for o in a if o['correct']]) / len(a))
+
+    answers_flat = []
+    for _, response in answers.iterrows():
+        for i, ans in enumerate(response.answers):
+            row = {**response, **ans, 'question': i}
+            del row['answers']
+            answers_flat.append(row)
+
+    answers_flat = pd.DataFrame(answers_flat)
+
+    return answers, answers_flat, quizzes
