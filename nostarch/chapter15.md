@@ -104,7 +104,7 @@ fn main() {
 ```
 
 ```
-    println!("b = {}", b);
+    println!("b = {b}");
 ```
 
 ```
@@ -207,6 +207,14 @@ Listing 15-3.
 Filename: src/main.rs
 
 ```
+--snip--
+```
+
+```
+
+```
+
+```
 use crate::List::{Cons, Nil};
 ```
 
@@ -270,6 +278,9 @@ error[E0072]: recursive type `List` has infinite size
 
 ```
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List`
+```
+
+```
 representable
 ```
 
@@ -339,6 +350,8 @@ variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, and this process continues infinitely, as shown in Figure 15-1.
 
 
+Unmatched: GraphicSlug
+
 Unmatched: CaptionLine
       #### Using Box<T> to Get a Recursive Type with a Known Size
 
@@ -347,6 +360,9 @@ defined types, the compiler gives an error with this helpful suggestion:
 
 ```
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List`
+```
+
+```
 representable
 ```
 
@@ -413,7 +429,43 @@ fn main() {
 ```
 
 ```
-    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+    let list = Cons(
+```
+
+```
+        1,
+```
+
+```
+        Box::new(Cons(
+```
+
+```
+            2,
+```
+
+```
+            Box::new(Cons(
+```
+
+```
+                3,
+```
+
+```
+                Box::new(Nil)
+```
+
+```
+            ))
+```
+
+```
+        ))
+```
+
+```
+    );
 ```
 
 ```
@@ -536,7 +588,11 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
 ```
 
 ```
-  |     ^^^^^^^^^^^^^^^^ no implementation for `{integer} == &{integer}`
+  |     ^^^^^^^^^^^^^^^^ no implementation for `{integer} ==
+```
+
+```
+&{integer}`
 ```
 
 ```
@@ -544,7 +600,11 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
 ```
 
 ```
-  = help: the trait `PartialEq<&{integer}>` is not implemented for `{integer}`
+  = help: the trait `PartialEq<&{integer}>` is not implemented
+```
+
+```
+for `{integer}`
 ```
 
 Comparing a number and a reference to a number isn’t allowed because they’re
@@ -717,7 +777,7 @@ trait we need to provide implementations for the trait’s required methods. The
 `Deref` trait, provided by the standard library, requires us to implement one
 method named `deref` that borrows `self` and returns a reference to the inner
 data. Listing 15-10 contains an implementation of `Deref` to add to the
-definition of `MyBox`.
+definition of `MyBox``<T>`.
 
 Filename: src/main.rs
 
@@ -966,7 +1026,7 @@ let’s implement `drop` with `println!` statements for now.
 
 Listing 15-14 shows a `CustomSmartPointer` struct whose only custom
 functionality is that it will print `Dropping CustomSmartPointer!` when the
-instance goes out of scope, to show when Rust runs the `drop` function.
+instance goes out of scope, to show when Rust runs the `drop` method.
 
 Filename: src/main.rs
 
@@ -995,7 +1055,19 @@ struct CustomSmartPointer {
 ```
 
 ```
-      2 println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+      2 println!(
+```
+
+```
+            "Dropping CustomSmartPointer with data `{}`!",
+```
+
+```
+            self.data
+```
+
+```
+        );
 ```
 
 ```
@@ -1052,8 +1124,8 @@ put our cleanup code
 The `Drop` trait is included in the prelude, so we don’t need to bring it into
 scope. We implement the `Drop` trait on `CustomSmartPointer` [1] and provide an
 implementation for the `drop` method that calls `println!` [2]. The body of the
-`drop` function is where you would place any logic that you wanted to run when
-an instance of your type goes out of scope. We’re printing some text here to
+`drop` method is where you would place any logic that you wanted to run when an
+instance of your type goes out of scope. We’re printing some text here to
 demonstrate visually when Rust will call `drop`.
 
 In `main`, we create two instances of `CustomSmartPointer` at [3] and [4] and
@@ -1523,6 +1595,14 @@ then we can see how the reference count changes when `c` goes out of scope.
 Filename: src/main.rs
 
 ```
+--snip--
+```
+
+```
+
+```
+
+```
 fn main() {
 ```
 
@@ -1740,6 +1820,8 @@ examine how it’s possible.
 A consequence of the borrowing rules is that when you have an immutable value,
 you can’t borrow it mutably. For example, this code won’t compile:
 
+Filename: src/main.rs
+
 ```
 fn main() {
 ```
@@ -1890,7 +1972,19 @@ where
 ```
 
 ```
-    pub fn new(messenger: &'a T, max: usize) -> LimitTracker<'a, T> {
+    pub fn new(
+```
+
+```
+        messenger: &'a T,
+```
+
+```
+        max: usize
+```
+
+```
+    ) -> LimitTracker<'a, T> {
 ```
 
 ```
@@ -1934,7 +2028,11 @@ where
 ```
 
 ```
-        let percentage_of_max = self.value as f64 / self.max as f64;
+        let percentage_of_max =
+```
+
+```
+            self.value as f64 / self.max as f64;
 ```
 
 ```
@@ -1946,7 +2044,11 @@ where
 ```
 
 ```
-            self.messenger.send("Error: You are over your quota!");
+            self.messenger
+```
+
+```
+                .send("Error: You are over your quota!");
 ```
 
 ```
@@ -1958,15 +2060,7 @@ where
 ```
 
 ```
-                .send(
-```
-
-```
-                    "Urgent warning: You've used up over 90% of your quota!"
-```
-
-```
-                );
+                .send("Urgent: You're at 90% of your quota!");
 ```
 
 ```
@@ -1978,7 +2072,7 @@ where
 ```
 
 ```
-                .send("Warning: You've used up over 75% of your quota!");
+                .send("Warning: You're at 75% of your quota!");
 ```
 
 ```
@@ -2182,6 +2276,9 @@ However, there’s one problem with this test, as shown here:
 
 ```
 error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a
+```
+
+```
 `&` reference
 ```
 
@@ -2199,6 +2296,9 @@ error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a
 
 ```
    |             ----- help: consider changing that to be a mutable reference:
+```
+
+```
 `&mut self`
 ```
 
@@ -2308,7 +2408,15 @@ mod tests {
 ```
 
 ```
-          3 self.sent_messages.borrow_mut().push(String::from(message));
+            self.sent_messages
+```
+
+```
+              3 .borrow_mut()
+```
+
+```
+                .push(String::from(message));
 ```
 
 ```
@@ -2340,7 +2448,19 @@ mod tests {
 ```
 
 ```
-      4 assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
+        assert_eq!(
+```
+
+```
+          4 mock_messenger.sent_messages.borrow().len(),
+```
+
+```
+            1
+```
+
+```
+        );
 ```
 
 ```
@@ -2397,19 +2517,19 @@ at runtime.
 Filename: src/lib.rs
 
 ```
-    impl Messenger for MockMessenger {
+impl Messenger for MockMessenger {
 ```
 
 ```
-        fn send(&self, message: &str) {
+    fn send(&self, message: &str) {
 ```
 
 ```
-            let mut one_borrow = self.sent_messages.borrow_mut();
+        let mut one_borrow = self.sent_messages.borrow_mut();
 ```
 
 ```
-            let mut two_borrow = self.sent_messages.borrow_mut();
+        let mut two_borrow = self.sent_messages.borrow_mut();
 ```
 
 ```
@@ -2417,19 +2537,19 @@ Filename: src/lib.rs
 ```
 
 ```
-            one_borrow.push(String::from(message));
+        one_borrow.push(String::from(message));
 ```
 
 ```
-            two_borrow.push(String::from(message));
-```
-
-```
-        }
+        two_borrow.push(String::from(message));
 ```
 
 ```
     }
+```
+
+```
+}
 ```
 
 Creating two mutable references in the same scope to see that `RefCell<T>` will
@@ -2478,9 +2598,10 @@ get a value that can have multiple owners *and* that you can mutate!
 For example, recall the cons list example in Listing 15-18 where we used
 `Rc<T>` to allow multiple lists to share ownership of another list. Because
 `Rc<T>` holds only immutable values, we can’t change any of the values in the
-list once we’ve created them. Let’s add in `RefCell<T>` the ability to change
-the values in the lists. Listing 15-24 shows that by using a `RefCell<T>` in
-the `Cons` definition, we can modify the value stored in all the lists.
+list once we’ve created them. Let’s add in `RefCell<T>` for its ability to
+change the values in the lists. Listing 15-24 shows that by using a
+`RefCell<T>` in the `Cons` definition, we can modify the value stored in all
+the lists.
 
 Filename: src/main.rs
 
@@ -2765,7 +2886,19 @@ fn main() {
 ```
 
 ```
-    println!("a rc count after b creation = {}", Rc::strong_count(&a));
+    println!(
+```
+
+```
+        "a rc count after b creation = {}",
+```
+
+```
+        Rc::strong_count(&a)
+```
+
+```
+    );
 ```
 
 ```
@@ -2797,11 +2930,35 @@ fn main() {
 ```
 
 ```
-    println!("b rc count after changing a = {}", Rc::strong_count(&b));
+    println!(
 ```
 
 ```
-    println!("a rc count after changing a = {}", Rc::strong_count(&a));
+        "b rc count after changing a = {}",
+```
+
+```
+        Rc::strong_count(&b)
+```
+
+```
+    );
+```
+
+```
+    println!(
+```
+
+```
+        "a rc count after changing a = {}",
+```
+
+```
+        Rc::strong_count(&a)
+```
+
+```
+    );
 ```
 
 ```
@@ -3141,7 +3298,19 @@ fn main() {
 ```
 
 ```
-  2 println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+  2 println!(
+```
+
+```
+        "leaf parent = {:?}",
+```
+
+```
+        leaf.parent.borrow().upgrade()
+```
+
+```
+    );
 ```
 
 ```
@@ -3181,7 +3350,19 @@ fn main() {
 ```
 
 ```
-  5 println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+  5 println!(
+```
+
+```
+        "leaf parent = {:?}",
+```
+
+```
+        leaf.parent.borrow().upgrade()
+```
+
+```
+    );
 ```
 
 ```
@@ -3295,11 +3476,11 @@ fn main() {
 ```
 
 ```
-   {
+  2 {
 ```
 
 ```
-      2 let branch = Rc::new(Node {
+        let branch = Rc::new(Node {
 ```
 
 ```
