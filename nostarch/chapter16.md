@@ -122,7 +122,7 @@ fn main() {
 ```
 
 ```
-            println!("hi number {} from the spawned thread!", i);
+            println!("hi number {i} from the spawned thread!");
 ```
 
 ```
@@ -146,7 +146,7 @@ fn main() {
 ```
 
 ```
-        println!("hi number {} from the main thread!", i);
+        println!("hi number {i} from the main thread!");
 ```
 
 ```
@@ -226,11 +226,11 @@ will get to run at all!
 
 We can fix the problem of the spawned thread not running or of it ending
 prematurely by saving the return value of `thread::spawn` in a variable. The
-return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
-value that, when we call the `join` method on it, will wait for its thread to
-finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
-in Listing 16-1 and call `join` to make sure the spawned thread finishes before
-`main` exits.
+return type of `thread::spawn` is `JoinHandle``<T>`. A `JoinHandle``<T>` is an
+owned value that, when we call the `join` method on it, will wait for its
+thread to finish. Listing 16-2 shows how to use the `JoinHandle``<T>` of the
+thread we created in Listing 16-1 and call `join` to make sure the spawned
+thread finishes before `main` exits.
 
 Filename: src/main.rs
 
@@ -259,7 +259,7 @@ fn main() {
 ```
 
 ```
-            println!("hi number {} from the spawned thread!", i);
+            println!("hi number {i} from the spawned thread!");
 ```
 
 ```
@@ -283,7 +283,7 @@ fn main() {
 ```
 
 ```
-        println!("hi number {} from the main thread!", i);
+        println!("hi number {i} from the main thread!");
 ```
 
 ```
@@ -306,8 +306,8 @@ fn main() {
 }
 ```
 
-Saving a `JoinHandle` from `thread::spawn` to guarantee the thread is run to
-completion
+Saving a `JoinHandle``<T>` from `thread::spawn` to guarantee the thread is run
+to completion
 
 Calling `join` on the handle blocks the thread currently running until the
 thread represented by the handle terminates. *Blocking* a thread means that
@@ -400,7 +400,7 @@ fn main() {
 ```
 
 ```
-            println!("hi number {} from the spawned thread!", i);
+            println!("hi number {i} from the spawned thread!");
 ```
 
 ```
@@ -432,7 +432,7 @@ fn main() {
 ```
 
 ```
-        println!("hi number {} from the main thread!", i);
+        println!("hi number {i} from the main thread!");
 ```
 
 ```
@@ -575,11 +575,11 @@ should be able to access `v` inside that new thread. But when we compile this
 example, we get the following error:
 
 ```
-error[E0373]: closure may outlive the current function, but it
+error[E0373]: closure may outlive the current function, but it borrows `v`,
 ```
 
 ```
-borrows `v`, which is owned by the current function
+which is owned by the current function
 ```
 
 ```
@@ -643,11 +643,11 @@ note: function requires argument type to outlive `'static`
 ```
 
 ```
-help: to force the closure to take ownership of `v` (and any
+help: to force the closure to take ownership of `v` (and any other referenced
 ```
 
 ```
-other referenced variables), use the `move` keyword
+variables), use the `move` keyword
 ```
 
 ```
@@ -738,11 +738,11 @@ To fix the compiler error in Listing 16-3, we can use the error message’s
 advice:
 
 ```
-help: to force the closure to take ownership of `v` (and any
+help: to force the closure to take ownership of `v` (and any other referenced
 ```
 
 ```
-other referenced variables), use the `move` keyword
+variables), use the `move` keyword
 ```
 
 ```
@@ -860,6 +860,9 @@ implement the `Copy` trait
 
 ```
    |                                           - variable moved due to use in
+```
+
+```
 closure
 ```
 
@@ -885,8 +888,8 @@ rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
-With a basic understanding of threads and the thread API, let’s look at what we
-can *do* with threads.
+Now that we’ve covered what threads are and the methods supplied by the thread
+API, let’s look at some situations in which we can use threads.
 
 ## Using Message Passing to Transfer Data Between Threads
 
@@ -1086,7 +1089,7 @@ fn main() {
 ```
 
 ```
-    println!("Got: {}", received);
+    println!("Got: {received}");
 ```
 
 ```
@@ -1171,7 +1174,7 @@ fn main() {
 ```
 
 ```
-        println!("val is {}", val);
+        println!("val is {val}");
 ```
 
 ```
@@ -1187,7 +1190,7 @@ fn main() {
 ```
 
 ```
-    println!("Got: {}", received);
+    println!("Got: {received}");
 ```
 
 ```
@@ -1220,11 +1223,11 @@ error[E0382]: borrow of moved value: `val`
 ```
 
 ```
-   |             --- move occurs because `val` has type `String`,
+   |             --- move occurs because `val` has type `String`, which does
 ```
 
 ```
-which does not implement the `Copy` trait
+not implement the `Copy` trait
 ```
 
 ```
@@ -1236,11 +1239,11 @@ which does not implement the `Copy` trait
 ```
 
 ```
-10 |         println!("val is {}", val);
+10 |         println!("val is {val}");
 ```
 
 ```
-   |                               ^^^ value borrowed here after move
+   |                           ^^^ value borrowed here after move
 ```
 
 Our concurrency mistake has caused a compile-time error. The `send` function
@@ -1347,7 +1350,7 @@ fn main() {
 ```
 
 ```
-        println!("Got: {}", received);
+        println!("Got: {received}");
 ```
 
 ```
@@ -1402,7 +1405,7 @@ so by cloning the transmitter, as shown in Listing 16-11.
 Filename: src/main.rs
 
 ```
-    --snip--
+--snip--
 ```
 
 ```
@@ -1410,7 +1413,7 @@ Filename: src/main.rs
 ```
 
 ```
-    let (tx, rx) = mpsc::channel();
+let (tx, rx) = mpsc::channel();
 ```
 
 ```
@@ -1418,59 +1421,35 @@ Filename: src/main.rs
 ```
 
 ```
-    let tx1 = tx.clone();
+let tx1 = tx.clone();
 ```
 
 ```
-    thread::spawn(move || {
+thread::spawn(move || {
 ```
 
 ```
-        let vals = vec![
+    let vals = vec![
 ```
 
 ```
-            String::from("hi"),
+        String::from("hi"),
 ```
 
 ```
-            String::from("from"),
+        String::from("from"),
 ```
 
 ```
-            String::from("the"),
+        String::from("the"),
 ```
 
 ```
-            String::from("thread"),
+        String::from("thread"),
 ```
 
 ```
-        ];
-```
-
-```
-
-```
-
-```
-        for val in vals {
-```
-
-```
-            tx1.send(val).unwrap();
-```
-
-```
-            thread::sleep(Duration::from_secs(1));
-```
-
-```
-        }
-```
-
-```
-    });
+    ];
 ```
 
 ```
@@ -1478,67 +1457,15 @@ Filename: src/main.rs
 ```
 
 ```
-    thread::spawn(move || {
+    for val in vals {
 ```
 
 ```
-        let vals = vec![
+        tx1.send(val).unwrap();
 ```
 
 ```
-            String::from("more"),
-```
-
-```
-            String::from("messages"),
-```
-
-```
-            String::from("for"),
-```
-
-```
-            String::from("you"),
-```
-
-```
-        ];
-```
-
-```
-
-```
-
-```
-        for val in vals {
-```
-
-```
-            tx.send(val).unwrap();
-```
-
-```
-            thread::sleep(Duration::from_secs(1));
-```
-
-```
-        }
-```
-
-```
-    });
-```
-
-```
-
-```
-
-```
-    for received in rx {
-```
-
-```
-        println!("Got: {}", received);
+        thread::sleep(Duration::from_secs(1));
 ```
 
 ```
@@ -1546,11 +1473,87 @@ Filename: src/main.rs
 ```
 
 ```
+});
+```
+
+```
 
 ```
 
 ```
-    --snip--
+thread::spawn(move || {
+```
+
+```
+    let vals = vec![
+```
+
+```
+        String::from("more"),
+```
+
+```
+        String::from("messages"),
+```
+
+```
+        String::from("for"),
+```
+
+```
+        String::from("you"),
+```
+
+```
+    ];
+```
+
+```
+
+```
+
+```
+    for val in vals {
+```
+
+```
+        tx.send(val).unwrap();
+```
+
+```
+        thread::sleep(Duration::from_secs(1));
+```
+
+```
+    }
+```
+
+```
+});
+```
+
+```
+
+```
+
+```
+for received in rx {
+```
+
+```
+    println!("Got: {received}");
+```
+
+```
+}
+```
+
+```
+
+```
+
+```
+--snip--
 ```
 
 Sending multiple messages from multiple producers
@@ -1614,7 +1617,7 @@ message-passing enthusiasts caution not to use memory sharing?
 
 In a way, channels in any programming language are similar to single ownership
 because once you transfer a value down a channel, you should no longer use that
-value. Shared memory concurrency is like multiple ownership: multiple threads
+value. Shared-memory concurrency is like multiple ownership: multiple threads
 can access the same memory location at the same time. As you saw in Chapter 15,
 where smart pointers made multiple ownership possible, multiple ownership can
 add complexity because these different owners need managing. Rust’s type system
@@ -1687,7 +1690,7 @@ fn main() {
 ```
 
 ```
-     3 *num = 6;
+      3 *num = 6;
 ```
 
 ```
@@ -1902,7 +1905,7 @@ in previous iteration of loop
 
 The error message states that the `counter` value was moved in the previous
 iteration of the loop. Rust is telling us that we can’t move the ownership of
-lock `counter` into multiple threads. Let’s fix the compiler error with a
+lock `counter` into multiple threads. Let’s fix the compiler error with the
 multiple-ownership method we discussed in Chapter 15.
 
 #### Multiple Ownership with Multiple Threads
@@ -2041,6 +2044,9 @@ error[E0277]: `Rc<Mutex<i32>>` cannot be sent between threads safely 1
 
 ```
     | |                      `Rc<Mutex<i32>>` cannot be sent between threads
+```
+
+```
 safely
 ```
 
@@ -2078,6 +2084,9 @@ implemented for `Rc<Mutex<i32>>` 2
 
 ```
     = note: required because it appears within the type
+```
+
+```
 `[closure@src/main.rs:11:36: 15:10]`
 ```
 
