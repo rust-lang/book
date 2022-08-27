@@ -6,7 +6,7 @@ directory, so all fixes need to be made in `/src/`.
 
 [TOC]
 
-# Object-Oriented Programming Features of Rust
+# Object-Oriented Programming Features
 
 Object-oriented programming (OOP) is a way of modeling programs. Objects as a
 programmatic concept were introduced in the programming language Simula in the
@@ -827,11 +827,11 @@ error[E0277]: the trait bound `String: Draw` is not satisfied
 ```
 
 ```
-  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the
+  |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is
 ```
 
 ```
-trait `Draw` is not implemented for `String`
+not implemented for `String`
 ```
 
 ```
@@ -986,11 +986,11 @@ post will be returned when `content` is called [7].
 Notice that the only type we’re interacting with from the crate is the `Post`
 type. This type will use the state pattern and will hold a value that will be
 one of three state objects representing the various states a post can be
-in—draft, waiting for review, or published. Changing from one state to another
-will be managed internally within the `Post` type. The states change in
-response to the methods called by our library’s users on the `Post` instance,
-but they don’t have to manage the state changes directly. Also, users can’t
-make a mistake with the states, such as publishing a post before it’s reviewed.
+in—draft, review, or published. Changing from one state to another will be
+managed internally within the `Post` type. The states change in response to the
+methods called by our library’s users on the `Post` instance, but they don’t
+have to manage the state changes directly. Also, users can’t make a mistake
+with the states, such as publishing a post before it’s reviewed.
 
 ### Defining Post and Creating a New Instance in the Draft State
 
@@ -1188,7 +1188,7 @@ always returns an empty string slice
 With this added `content` method, everything in Listing 17-11 up to the line at
 [3] works as intended.
 
-### Requesting a Review If the Post Changes Its State
+### Requesting a Review Changes the Post’s State
 
 Next, we need to add functionality to request a review of a post, which should
 change its state from `Draft` to `PendingReview`. Listing 17-15 shows this code.
@@ -1743,10 +1743,10 @@ another design pattern.
 
 Another downside is that we’ve duplicated some logic. To eliminate some of the
 duplication, we might try to make default implementations for the
-`request_review` and `approve` methods on the `State` trait that return `self`;
-however, this would violate object safety because the trait doesn’t know what
-the concrete `self` will be exactly. We want to be able to use `State` as a
-trait object, so we need its methods to be object safe.
+`request_review` and `approve` methods on the `State` trait that return `self`.
+However, this wouldn’t work: when using `State` as a trait object, the trait
+doesn’t know what the concrete `self` will be exactly, so the return type isn’t
+known at compile time.
 
 Other duplication includes the similar implementations of the `request_review`
 and `approve` methods on `Post`. Both methods delegate to the implementation of
