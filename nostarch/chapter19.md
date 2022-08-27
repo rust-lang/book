@@ -420,18 +420,10 @@ functions from another language we want to call. The `"C"` part defines which
 defines how to call the function at the assembly level. The `"C"` ABI is the
 most common and follows the C programming language’s ABI.
 
-<!-- Totally optional - but do we want to mention the other external types
-that Rust supports here? Also, do we want to mention there are helper
-crates for connecting to other languages, include C++?
-/JT -->
-<!-- I don't really want to get into the other external types or other
-languages; there are other resources that cover these topics better than I
-could here. /Carol -->
-
 > #### Calling Rust Functions from Other Languages
 >
 > We can also use `extern` to create an interface that allows other languages
-> to call Rust functions. Instead of an creating a whole `extern` block, we add
+> to call Rust functions. Instead of creating a whole `extern` block, we add
 > the `extern` keyword and specify the ABI to use just before the `fn` keyword
 > for the relevant function. We also need to add a `#[no_mangle]` annotation to
 > tell the Rust compiler not to mangle the name of this function. *Mangling* is
@@ -666,13 +658,6 @@ Associated types also become part of the trait’s contract: implementors of the
 trait must provide a type to stand in for the associated type placeholder.
 Associated types often have a name that describes how the type will be used,
 and documenting the associated type in the API documentation is good practice.
-
-<!-- It also makes the type a part of the trait's contract. Not sure if
-too subtle of a point, but the associated type of a trait is part of the
-require things that the implementor must provide. They often also have a name
-that may clue you in as to how that required type will be used.
-/JT -->
-<!-- Great points, I've added a small paragraph here! /Carol -->
 
 ### Default Generic Type Parameters and Operator Overloading
 
@@ -1039,9 +1024,9 @@ definition is relying on is called a *supertrait* of your trait.
 For example, let’s say we want to make an `OutlinePrint` trait with an
 `outline_print` method that will print a given value formatted so that it's
 framed in asterisks. That is, given a `Point` struct that implements the
-standard library trait `Display` to result in `(x, y)`, when we
-call `outline_print` on a `Point` instance that has `1` for `x` and `3` for
-`y`, it should print the following:
+standard library trait `Display` to result in `(x, y)`, when we call
+`outline_print` on a `Point` instance that has `1` for `x` and `3` for `y`, it
+should print the following:
 
 ```
 **********
@@ -1142,8 +1127,7 @@ it within an outline of asterisks.
 
 In Chapter 10 in the “Implementing a Trait on a Type” section, we mentioned the
 orphan rule that states we’re only allowed to implement a trait on a type if
-either the trait or the type are local to our crate.
-It’s possible to get
+either the trait or the type are local to our crate. It’s possible to get
 around this restriction using the *newtype pattern*, which involves creating a
 new type in a tuple struct. (We covered tuple structs in the “Using Tuple
 Structs without Named Fields to Create Different Types” section of Chapter 5.)
@@ -1266,15 +1250,6 @@ parameters. However, using this method, we don’t get the type checking benefit
 that we get from the newtype pattern discussed earlier. In other words, if we
 mix up `Kilometers` and `i32` values somewhere, the compiler will not give us
 an error.
-
-<!-- Having a few battle wounds trying to debug using this pattern, it's
-definitely good to warn people that if they use type aliases to the same base
-type in their program (like multiple aliases to `usize`), they're asking for
-trouble as the typechecker will not help them if they mix up their types.
-/JT -->
-<!-- I'm not sure if JT was saying this paragraph was good or it could use more
-emphasis? I've added a sentence to the end of the paragraph above in case it
-was the latter /Carol -->
 
 The main use case for type synonyms is to reduce repetition. For example, we
 might have a lengthy type like this:
@@ -1619,8 +1594,8 @@ functions can accept functions as arguments, but C doesn’t have closures.
 
 As an example of where you could use either a closure defined inline or a named
 function, let’s look at a use of the `map` method provided by the `Iterator`
-trait in the standard library. To use the `map` function to turn a
-vector of numbers into a vector of strings, we could use a closure, like this:
+trait in the standard library. To use the `map` function to turn a vector of
+numbers into a vector of strings, we could use a closure, like this:
 
 ```
 let list_of_numbers = vec![1, 2, 3];
@@ -1876,14 +1851,6 @@ To learn more about how to write macros, consult the online documentation or
 other resources, such as “The Little Book of Rust Macros” at
 *https://veykril.github.io/tlborm/* started by Daniel Keep and continued by
 Lukas Wirth.
-
-<!-- Not sure what "In the future, Rust will have a second kind of declarative
-macro" means here. I suspect we're "stuck" with the two kinds of macros we
-already have today, at least I don't see much energy in pushing to add a third
-just yet.
-/JT -->
-<!-- Yeah, great catch, I think that part was back when we had more dreams that
-have now been postponed/abandoned. I've removed. /Carol -->
 
 ### Procedural Macros for Generating Code from Attributes
 
@@ -2280,20 +2247,6 @@ pub fn sql(input: TokenStream) -> TokenStream {
 This definition is similar to the custom derive macro’s signature: we receive
 the tokens that are inside the parentheses and return the code we wanted to
 generate.
-
-<!-- I may get a few looks for this, but I wonder if we should trim the
-procedural macros section above a bit. There's a lot of information in there,
-but it feels like something we could intro and then point people off to other
-materials for. Reason being (and I know I may be in the minority here),
-procedural macros are something we should use only rarely in our Rust projects.
-They are a burden on the compiler, have the potential to hurt readability and
-maintainability, and... you know the saying with great power comes great
-responsibilty and all that. /JT -->
-<!-- I think we felt obligated to have this section when procedural macros were
-introduced because there wasn't any documentation for them. I feel like the
-custom derive is the most common kind people want to make... While I'd love to
-not have to maintain this section, I asked around and people seemed generally
-in favor of keeping it, so I think I will, for now. /Carol -->
 
 ## Summary
 
