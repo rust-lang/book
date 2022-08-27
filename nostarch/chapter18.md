@@ -8,7 +8,7 @@ directory, so all fixes need to be made in `/src/`.
 
 # Patterns and Matching
 
-*Patterns* are a special syntax in Rust for matching against the structure of
+  *Patterns* are a special syntax in Rust for matching against the structure of
 types, both complex and simple. Using patterns in conjunction with `match`
 expressions and other constructs gives you more control over a program’s
 control flow. A pattern consists of some combination of the following:
@@ -147,7 +147,15 @@ fn main() {
 ```
 
 ```
-        2 println!("Using your favorite color, {color}, as the background");
+      2 println!(
+```
+
+```
+            "Using your favorite, {color}, as the background"
+```
+
+```
+        );
 ```
 
 ```
@@ -155,11 +163,11 @@ fn main() {
 ```
 
 ```
-        4 println!("Tuesday is green day!");
+      4 println!("Tuesday is green day!");
 ```
 
 ```
-  5} else if let Ok(age) = age {
+  5 } else if let Ok(age) = age {
 ```
 
 ```
@@ -175,7 +183,7 @@ fn main() {
 ```
 
 ```
-            8 println!("Using orange as the background color");
+          8 println!("Using orange as the background color");
 ```
 
 ```
@@ -187,7 +195,7 @@ fn main() {
 ```
 
 ```
-      0 println!("Using blue as the background color");
+     10 println!("Using blue as the background color");
 ```
 
 ```
@@ -205,7 +213,7 @@ background [2]. If no favorite color is specified and today is Tuesday [3], the
 background color is green [4]. Otherwise, if the user specifies their age as a
 string and we can parse it as a number successfully [5], the color is either
 purple [7] or orange [8] depending on the value of the number [6]. If none of
-these conditions apply [9], the background color is blue.
+these conditions apply [9], the background color is blue [10].
 
 This conditional structure lets us support complex requirements. With the
 hardcoded values we have here, this example will print `Using purple as the
@@ -260,7 +268,7 @@ while let Some(top) = stack.pop() {
 ```
 
 ```
-    println!("{}", top);
+    println!("{top}");
 ```
 
 ```
@@ -296,7 +304,7 @@ for (index, value) in v.iter().enumerate() {
 ```
 
 ```
-    println!("{} is at index {}", value, index);
+    println!("{value} is at index {index}");
 ```
 
 ```
@@ -344,7 +352,7 @@ like this:
 let PATTERN = EXPRESSION;
 ```
 
-In statements like `let x = 5;` with a variable name in the `PATTERN` slot, the
+In statements like `let x = 5;` with a variable name in the PATTERN slot, the
 variable name is just a particularly simple form of a pattern. Rust compares
 the expression against the pattern and assigns any names it finds. So, in the
 `let x = 5;` example, `x` is a pattern that means “bind what matches here to
@@ -398,6 +406,9 @@ error[E0308]: mismatched types
 
 ```
   |         ^^^^^^   --------- this expression has type `({integer}, {integer},
+```
+
+```
 {integer})`
 ```
 
@@ -458,7 +469,7 @@ fn print_coordinates(&(x, y): &(i32, i32)) {
 ```
 
 ```
-    println!("Current location: ({}, {})", x, y);
+    println!("Current location: ({x}, {y})");
 ```
 
 ```
@@ -614,7 +625,7 @@ if let Some(x) = some_option_value {
 ```
 
 ```
-    println!("{}", x);
+    println!("{x}");
 ```
 
 ```
@@ -633,7 +644,7 @@ if let x = 5 {
 ```
 
 ```
-    println!("{}", x);
+    println!("{x}");
 ```
 
 ```
@@ -674,7 +685,11 @@ warning: irrefutable `if let` pattern
 ```
 
 ```
-  = note: this pattern will always match, so the `if let` is useless
+  = note: this pattern will always match, so the `if let` is
+```
+
+```
+useless
 ```
 
 ```
@@ -1099,15 +1114,23 @@ fn main() {
 ```
 
 ```
-        Point { x, y: 0 } => println!("On the x axis at {}", x),
+        Point { x, y: 0 } => println!("On the x axis at {x}"),
 ```
 
 ```
-        Point { x: 0, y } => println!("On the y axis at {}", y),
+        Point { x: 0, y } => println!("On the y axis at {y}"),
 ```
 
 ```
-        Point { x, y } => println!("On neither axis: ({}, {})", x, y),
+        Point { x, y } => {
+```
+
+```
+            println!("On neither axis: ({x}, {y})");
+```
+
+```
+        }
 ```
 
 ```
@@ -1195,7 +1218,15 @@ fn main() {
 ```
 
 ```
-            println!("The Quit variant has no data to destructure.")
+            println!(
+```
+
+```
+                "The Quit variant has no data to destructure."
+```
+
+```
+            );
 ```
 
 ```
@@ -1211,11 +1242,7 @@ fn main() {
 ```
 
 ```
-                "Move in the x direction {} and in the y direction {}",
-```
-
-```
-                x, y
+                "Move in the x dir {x}, in the y dir {y}"
 ```
 
 ```
@@ -1227,7 +1254,15 @@ fn main() {
 ```
 
 ```
-      4 Message::Write(text) => println!("Text message: {}", text),
+      4 Message::Write(text) => {
+```
+
+```
+            println!("Text message: {text}");
+```
+
+```
+        }
 ```
 
 ```
@@ -1235,11 +1270,7 @@ fn main() {
 ```
 
 ```
-            "Change the color to red {}, green {}, and blue {}",
-```
-
-```
-            r, g, b
+            "Change color to red {r}, green {g}, and blue {b}"
 ```
 
 ```
@@ -1256,7 +1287,7 @@ fn main() {
 
 Destructuring enum variants that hold different kinds of values
 
-This code will print `Change the color to red 0, green 160, and blue 255`. Try
+This code will print `Change color to red 0, green 160, and blue 255`. Try
 changing the value of `msg` [1] to see the code from the other arms run.
 
 For enum variants without any data, like `Message::Quit` [2], we can’t
@@ -1351,11 +1382,7 @@ fn main() {
 ```
 
 ```
-            "Change the color to red {}, green {}, and blue {}",
-```
-
-```
-            r, g, b
+            "Change color to red {r}, green {g}, and blue {b}"
 ```
 
 ```
@@ -1367,11 +1394,7 @@ fn main() {
 ```
 
 ```
-            "Change the color to hue {}, saturation {}, and value {}",
-```
-
-```
-            h, s, v
+            "Change color to hue {h}, saturation {s}, value {v}"
 ```
 
 ```
@@ -1406,7 +1429,11 @@ The following example shows a complicated destructure where we nest structs and
 tuples inside a tuple and destructure all the primitive values out:
 
 ```
-let ((feet, inches), Point { x, y }) = ((3, 10), Point { x: 3, y: -10 });
+let ((feet, inches), Point { x, y }) =
+```
+
+```
+    ((3, 10), Point { x: 3, y: -10 });
 ```
 
 This code lets us break complex types into their component parts so we can use
@@ -1439,7 +1466,7 @@ fn foo(_: i32, y: i32) {
 ```
 
 ```
-    println!("This code only uses the y parameter: {}", y);
+    println!("This code only uses the y parameter: {y}");
 ```
 
 ```
@@ -1571,7 +1598,7 @@ match numbers {
 ```
 
 ```
-        println!("Some numbers: {first}, {third}, {fifth}")
+        println!("Some numbers: {first}, {third}, {fifth}");
 ```
 
 ```
@@ -1741,7 +1768,7 @@ match origin {
 ```
 
 ```
-    Point { x, .. } => println!("x is {}", x),
+    Point { x, .. } => println!("x is {x}"),
 ```
 
 ```
@@ -1829,7 +1856,7 @@ fn main() {
 ```
 
 ```
-            println!("Some numbers: {}", second)
+            println!("Some numbers: {second}");
 ```
 
 ```
@@ -1907,11 +1934,11 @@ match num {
 ```
 
 ```
-    Some(x) if x % 2 == 0 => println!("The number {} is even", x),
+    Some(x) if x % 2 == 0 => println!("The number {x} is even"),
 ```
 
 ```
-    Some(x) => println!("The number {} is odd", x),
+    Some(x) => println!("The number {x} is odd"),
 ```
 
 ```
@@ -2117,7 +2144,7 @@ match msg {
 ```
 
 ```
-    } => println!("Found an id in range: {}", id_variable),
+    } => println!("Found an id in range: {id_variable}"),
 ```
 
 ```
@@ -2133,7 +2160,7 @@ match msg {
 ```
 
 ```
-    Message::Hello { id } => println!("Found some other id: {}", id),
+    Message::Hello { id } => println!("Some other id: {id}"),
 ```
 
 ```
