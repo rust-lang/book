@@ -23,20 +23,6 @@ Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
 contexts in which patterns are valid, these components describe the shape of
 data. Our program then matches values against the patterns to determine whether
 it has the correct shape of data to continue running a particular piece of code.
-<!-- is there some generic pattern we can show as an example, early on, or
-is it too dependent on where the pattern is used? /LC -->
-<!-- Yeah, if a pattern is out of context, it doesn't look special. Like `3`
-can be a pattern. /Carol -->
-<!-- We could mention something like, "If you've written a little Rust, you've
-already used patterns without knowing it. For example `let x = 3`, the `x` is
-a pattern." Though looks like we use this later.
-
-Or, we could say, "Some example patterns include: `x`, `(a, b)`, and `Color::Red`
-/JT -->
-<!-- Ok, I've tried rewording this paragraph to include some examples, I do
-think it's important to emphasize that these are only patterns in the contexts
-patterns may exist, because without the context, there's no way to distinguish
-patterns from regular values /Carol -->
 
 To use a pattern, we compare it to some value. If the pattern matches the
 value, we use the value parts in our code. Recall the `match` expressions in
@@ -158,17 +144,6 @@ means we need to place the `if age > 30` condition [6] within that block: we
 can’t combine these two conditions into `if let Ok(age) = age && age > 30`. The
 shadowed `age` we want to compare to 30 isn’t valid until the new scope starts
 with the curly bracket.
-
-<!-- Have we given them an intuition yet for why this is? I may be forgetting
-something from the earlier chapters, but I wonder if we should reiterate that
-when a pattern matches, the variable that gets bound is only valid for the
-expression or block that follows the match. /JT -->
-<!-- I don't really see a difference between saying "The shadowed `age` we want
-to compare to 30 isn't valid until the new scope starts with the curly bracket"
-and "when a pattern matches, the variable that gets bound is only valid for the
-expression or block that follows the match"? To me, it sounds like this would
-be saying the same thing twice, so I'm not going to change anything here.
-/Carol -->
 
 The downside of using `if let` expressions is that the compiler doesn’t check
 for exhaustiveness, whereas with `match` expressions it does. If we omitted the
@@ -404,11 +379,12 @@ error[E0005]: refutable pattern in local binding: `None` not covered
     |
     = note: `let` bindings require an "irrefutable pattern", like a `struct` or an `enum` with only one variant
     = note: for more information, visit https://doc.rust-lang.org/book/ch18-02-refutability.html
+note: `Option<i32>` defined here
     = note: the matched value is of type `Option<i32>`
 help: you might want to use `if let` to ignore the variant that isn't matched
     |
-3   |     if let Some(x) = some_option_value { /* */ }
-    |
+3   |     let x = if let Some(x) = some_option_value { x } else { todo!() };
+    |     ++++++++++                                 ++++++++++++++++++++++
 ```
 
 Because we didn’t cover (and couldn’t cover!) every valid value with the
@@ -717,11 +693,6 @@ containing a 0, so this code will print `On the y axis at 7`.
 Remember that a `match` expression stops checking arms once it has found the
 first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
 and the `y` axis, this code would only print `On the x axis at 0`.
-
-<!-- We should remind them that we stop at the first pattern, so even though
-0,0 is on both x- and y-axis in a sense, you'll only ever see the "on x-axis
-message" /JT -->
-<!-- Done! /Carol -->
 
 #### Destructuring Enums
 
