@@ -1,0 +1,18 @@
+$ cargo add rand@0.8.3
+    Updating crates.io index
+      Adding rand v0.8.3 to dependencies.
+             Features:
+             + alloc
+             + getrandom
+             + libc
+             + rand_chacha
+             + rand_hc
+             + std
+             + std_rng
+             - log
+             - nightly
+             - packed_simd
+             - serde
+             - serde1
+             - simd_support
+             - small_rng
