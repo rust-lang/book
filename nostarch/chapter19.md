@@ -150,9 +150,9 @@ To demonstrate this, next we’ll create a raw pointer whose validity we can’t
 so certain of. Listing 19-2 shows how to create a raw pointer to an arbitrary
 location in memory. Trying to use arbitrary memory is undefined: there might be
 data at that address or there might not, the compiler might optimize the code
-so there is no memory access, or the program might error with a segmentation
-fault. Usually, there is no good reason to write code like this, but it is
-possible.
+so there is no memory access, or the program might terminate with a
+segmentation fault. Usually, there is no good reason to write code like this,
+but it is possible.
 
 ```
 let address = 0x012345usize;
@@ -219,7 +219,7 @@ same location and change data through the mutable pointer, potentially creating
 a data race. Be careful!
 
 With all of these dangers, why would you ever use raw pointers? One major use
-case is when interfacing with C code, as you’ll see in“Calling an Unsafe
+case is when interfacing with C code, as you’ll see in “Calling an Unsafe
 Function or Method” on page XX. Another case is when building up safe
 abstractions that the borrow checker doesn’t understand. We’ll introduce unsafe
 functions and then look at an example of a safe abstraction that uses unsafe
@@ -263,8 +263,11 @@ We must call the `dangerous` function within a separate `unsafe` block. If we
 try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
 ```
-error[E0133]: call to unsafe function is unsafe and requires unsafe function or
-block
+error[E0133]: call to unsafe function is unsafe and requires
+```
+
+```
+unsafe function or block
 ```
 
 ```
@@ -288,11 +291,11 @@ block
 ```
 
 ```
-  = note: consult the function's documentation for information on how to avoid
+  = note: consult the function's documentation for information on
 ```
 
 ```
-undefined behavior
+how to avoid undefined behavior
 ```
 
 With the `unsafe` block, we’re asserting to Rust that we’ve read the function’s
@@ -353,7 +356,19 @@ implement `split_at_mut` as a function rather than a method and only for slices
 of `i32` values rather than for a generic type `T`.
 
 ```
-fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+fn split_at_mut(
+```
+
+```
+    values: &mut [i32],
+```
+
+```
+    mid: usize,
+```
+
+```
+) -> (&mut [i32], &mut [i32]) {
 ```
 
 ```
@@ -399,7 +414,7 @@ error[E0499]: cannot borrow `*values` as mutable more than once at a time
 ```
 
 ```
- --> src/main.rs:6:31
+ --> src/main.rs:9:31
 ```
 
 ```
@@ -407,12 +422,11 @@ error[E0499]: cannot borrow `*values` as mutable more than once at a time
 ```
 
 ```
-1 | fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32])
-{
+2 |     values: &mut [i32],
 ```
 
 ```
-  |                         - let's call the lifetime of this reference `'1`
+  |             - let's call the lifetime of this reference `'1`
 ```
 
 ```
@@ -420,7 +434,7 @@ error[E0499]: cannot borrow `*values` as mutable more than once at a time
 ```
 
 ```
-6 |     (&mut values[..mid], &mut values[mid..])
+9 |     (&mut values[..mid], &mut values[mid..])
 ```
 
 ```
@@ -461,7 +475,19 @@ use std::slice;
 ```
 
 ```
-fn split_at_mut(values: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
+fn split_at_mut(
+```
+
+```
+    values: &mut [i32],
+```
+
+```
+    mid: usize,
+```
+
+```
+) -> (&mut [i32], &mut [i32]) {
 ```
 
 ```
@@ -570,7 +596,15 @@ let r = address as *mut i32;
 ```
 
 ```
-let values: &[i32] = unsafe { slice::from_raw_parts_mut(r, 10000) };
+let values: &[i32] = unsafe {
+```
+
+```
+    slice::from_raw_parts_mut(r, 10000)
+```
+
+```
+};
 ```
 
 Creating a slice from an arbitrary memory location
@@ -620,7 +654,19 @@ fn main() {
 ```
 
 ```
-        println!("Absolute value of -3 according to C: {}", abs(-3));
+        println!(
+```
+
+```
+            "Absolute value of -3 according to C: {}",
+```
+
+```
+            abs(-3)
+```
+
+```
+        );
 ```
 
 ```
@@ -695,7 +741,7 @@ fn main() {
 ```
 
 ```
-    println!("name is: {}", HELLO_WORLD);
+    println!("value is: {HELLO_WORLD}");
 ```
 
 ```
@@ -704,12 +750,12 @@ fn main() {
 
 Defining and using an immutable static variable
 
-Static variables are similar to constants, which we discussed in “Differences
-Between Variables and Constants” on page XX. The names of static variables are
-in `SCREAMING_SNAKE_CASE` by convention. Static variables can only store
-references with the `'static` lifetime, which means the Rust compiler can
-figure out the lifetime and we aren’t required to annotate it explicitly.
-Accessing an immutable static variable is safe.
+Static variables are similar to constants, which we discussed in “Constants” on
+page XX. The names of static variables are in `SCREAMING_SNAKE_CASE` by
+convention. Static variables can only store references with the `'static`
+lifetime, which means the Rust compiler can figure out the lifetime and we
+aren’t required to annotate it explicitly. Accessing an immutable static
+variable is safe.
 
 A subtle difference between constants and immutable static variables is that
 values in a static variable have a fixed address in memory. Using the value
@@ -770,7 +816,7 @@ fn main() {
 ```
 
 ```
-        println!("COUNTER: {}", COUNTER);
+        println!("COUNTER: {COUNTER}");
 ```
 
 ```
@@ -829,14 +875,6 @@ unsafe impl Foo for i32 {
 
 ```
 }
-```
-
-```
-
-```
-
-```
-fn main() {}
 ```
 
 Defining and implementing an unsafe trait
@@ -1233,7 +1271,7 @@ type parameter to an existing trait, you can give it a default to allow
 extension of the functionality of the trait without breaking the existing
 implementation code.
 
-### Disambiguation: Calling Methods with the Same Name
+### Disambiguating Between Methods with the Same Name
 
 Nothing in Rust prevents a trait from having a method with the same name as
 another trait’s method, nor does Rust prevent you from implementing both traits
@@ -1426,22 +1464,6 @@ disambiguate.
 Running this code prints the following:
 
 ```
-$ cargo run
-```
-
-```
-   Compiling traits-example v0.1.0 (file:///projects/traits-example)
-```
-
-```
-    Finished dev [unoptimized + debuginfo] target(s) in 0.46s
-```
-
-```
-     Running `target/debug/traits-example`
-```
-
-```
 This is your captain speaking.
 ```
 
@@ -1613,6 +1635,9 @@ error[E0283]: type annotations needed
 
 ```
    |                                           ^^^^^^^^^^^^^^^^^ cannot infer
+```
+
+```
 type
 ```
 
@@ -1636,7 +1661,19 @@ fn main() {
 ```
 
 ```
-    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+    println!(
+```
+
+```
+        "A baby dog is called a {}",
+```
+
+```
+        <Dog as Animal>::baby_name()
+```
+
+```
+    );
 ```
 
 ```
@@ -1837,6 +1874,9 @@ error[E0277]: `Point` doesn't implement `std::fmt::Display`
 
 ```
    = note: in format strings you may be able to use `{:?}` (or {:#?} for
+```
+
+```
 pretty-print) instead
 ```
 
@@ -1901,15 +1941,15 @@ it within an outline of asterisks.
 
 In “Implementing a Trait on a Type” on page XX, we mentioned the orphan rule
 that states we’re only allowed to implement a trait on a type if either the
-trait or the type is local to our crate. It’s possible to get around this
-restriction using the *newtype pattern*, which involves creating a new type in
-a tuple struct. (We covered tuple structs in “Using Tuple Structs Without Named
-Fields to Create Different Types” on page XX.) The tuple struct will have one
-field and be a thin wrapper around the type for which we want to implement a
-trait. Then the wrapper type is local to our crate, and we can implement the
-trait on the wrapper. *Newtype* is a term that originates from the Haskell
-programming language. There is no runtime performance penalty for using this
-pattern, and the wrapper type is elided at compile time.
+trait or the type, or both, are local to our crate. It’s possible to get around
+this restriction using the *newtype pattern*, which involves creating a new
+type in a tuple struct. (We covered tuple structs in “Using Tuple Structs
+Without Named Fields to Create Different Types” on page XX.) The tuple struct
+will have one field and be a thin wrapper around the type for which we want to
+implement a trait. Then the wrapper type is local to our crate, and we can
+implement the trait on the wrapper. *Newtype* is a term that originates from
+the Haskell programming language. There is no runtime performance penalty for
+using this pattern, and the wrapper type is elided at compile time.
 
 As an example, let’s say we want to implement `Display` on `Vec<T>`, which the
 orphan rule prevents us from doing directly because the `Display` trait and the
@@ -1964,11 +2004,23 @@ fn main() {
 ```
 
 ```
-    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
+    let w = Wrapper(vec![
 ```
 
 ```
-    println!("w = {}", w);
+        String::from("hello"),
+```
+
+```
+        String::from("world"),
+```
+
+```
+    ]);
+```
+
+```
+    println!("w = {w}");
 ```
 
 ```
@@ -2088,7 +2140,15 @@ over the code can be tiresome and error prone. Imagine having a project full of
 code like that in Listing 19-24.
 
 ```
-let f: Box<dyn Fn() + Send + 'static> = Box::new(|| println!("hi"));
+let f: Box<dyn Fn() + Send + 'static> = Box::new(|| {
+```
+
+```
+    println!("hi");
+```
+
+```
+});
 ```
 
 ```
@@ -2221,7 +2281,19 @@ pub trait Write {
 ```
 
 ```
-    fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<(), Error>;
+    fn write_fmt(
+```
+
+```
+        &mut self,
+```
+
+```
+        fmt: fmt::Arguments,
+```
+
+```
+    ) -> Result<(), Error>;
 ```
 
 ```
@@ -2375,7 +2447,15 @@ impl<T> Option<T> {
 ```
 
 ```
-            None => panic!("called `Option::unwrap()` on a `None` value"),
+            None => panic!(
+```
+
+```
+                "called `Option::unwrap()` on a `None` value"
+```
+
+```
+            ),
 ```
 
 ```
@@ -2602,7 +2682,7 @@ fn main() {
 ```
 
 ```
-    println!("The answer is: {}", answer);
+    println!("The answer is: {answer}");
 ```
 
 ```
@@ -2640,11 +2720,19 @@ let list_of_numbers = vec![1, 2, 3];
 ```
 
 ```
-let list_of_strings: Vec<String> =
+let list_of_strings: Vec<String> = list_of_numbers
 ```
 
 ```
-    list_of_numbers.iter().map(|i| i.to_string()).collect();
+    .iter()
+```
+
+```
+    .map(|i| i.to_string())
+```
+
+```
+    .collect();
 ```
 
 Or we could name a function as the argument to `map` instead of the closure,
@@ -2655,11 +2743,19 @@ let list_of_numbers = vec![1, 2, 3];
 ```
 
 ```
-let list_of_strings: Vec<String> =
+let list_of_strings: Vec<String> = list_of_numbers
 ```
 
 ```
-    list_of_numbers.iter().map(ToString::to_string).collect();
+    .iter()
+```
+
+```
+    .map(ToString::to_string)
+```
+
+```
+    .collect();
 ```
 
 Note that we must use the fully qualified syntax that we talked about in
@@ -2697,7 +2793,15 @@ enum Status {
 ```
 
 ```
-let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+let list_of_statuses: Vec<Status> = (0u32..20)
+```
+
+```
+    .map(Status::Value)
+```
+
+```
+    .collect();
 ```
 
 Here, we create `Status::Value` instances using each `u32` value in the range
@@ -2763,8 +2867,11 @@ compile-time
 ```
 
 ```
-<https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-impleme
-nt-traits>
+<https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-
+```
+
+```
+implement-traits>
 ```
 
 ```
@@ -3026,7 +3133,7 @@ The second form of macros is the *procedural macro*, which acts more like a
 function (and is a type of procedure). Procedural macros accept some code as an
 input, operate on that code, and produce some code as an output rather than
 matching against patterns and replacing the code with other code as declarative
-macros do. The three kinds of procedural macros are custom derive,
+macros do. The three kinds of procedural macros are custom `derive`,
 attribute-like, and function-like, and all work in a similar fashion.
 
 When creating procedural macros, the definitions must reside in their own crate
@@ -3038,7 +3145,7 @@ macro variety.
 Filename: src/lib.rs
 
 ```
-use proc_macro;
+use proc_macro::TokenStream;
 ```
 
 ```
@@ -3069,7 +3176,7 @@ that specifies which kind of procedural macro we’re creating. We can have
 multiple kinds of procedural macros in the same crate.
 
 Let’s look at the different kinds of procedural macros. We’ll start with a
-custom derive macro and then explain the small dissimilarities that make the
+custom `derive` macro and then explain the small dissimilarities that make the
 other forms different.
 
 ### How to Write a Custom derive Macro
@@ -3079,10 +3186,10 @@ Let’s create a crate named `hello_macro` that defines a trait named
 making our users implement the `HelloMacro` trait for each of their types,
 we’ll provide a procedural macro so users can annotate their type with
 `#[derive(HelloMacro)]` to get a default implementation of the `hello_macro`
-function. The default implementation will print `Hello, Macro! My name is
-TypeName!` where `TypeName` is the name of the type on which this trait has
-been defined. In other words, we’ll write a crate that enables another
-programmer to write code like Listing 19-30 using our crate.
+function. The default implementation will print `Hello, Macro! My name is`
+TypeName`!` where TypeName is the name of the type on which this trait has been
+defined. In other words, we’ll write a crate that enables another programmer to
+write code like Listing 19-30 using our crate.
 
 Filename: src/main.rs
 
@@ -3215,8 +3322,8 @@ name at runtime. We need a macro to generate code at compile time.
 The next step is to define the procedural macro. At the time of this writing,
 procedural macros need to be in their own crate. Eventually, this restriction
 might be lifted. The convention for structuring crates and macro crates is as
-follows: for a crate named `foo`, a custom derive procedural macro crate is
-called `foo_derive`. Let’s start a new crate called `hello_macro_derive` inside
+follows: for a crate named foo, a custom `derive` procedural macro crate is
+called foo`_derive`. Let’s start a new crate called `hello_macro_derive` inside
 our `hello_macro` project:
 
 ```
@@ -3440,7 +3547,7 @@ documentation for `DeriveInput` at
 
 Soon we’ll define the `impl_hello_macro` function, which is where we’ll build
 the new Rust code we want to include. But before we do, note that the output
-for our derive macro is also a `TokenStream`. The returned `TokenStream` is
+for our `derive` macro is also a `TokenStream`. The returned `TokenStream` is
 added to the code that our crate users write, so when they compile their crate,
 they’ll get the extra functionality that we provide in the modified
 `TokenStream`.
@@ -3480,7 +3587,19 @@ fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
 ```
 
 ```
-                println!("Hello, Macro! My name is {}!", stringify!(#name));
+                println!(
+```
+
+```
+                    "Hello, Macro! My name is {}!",
+```
+
+```
+                    stringify!(#name)
+```
+
+```
+                );
 ```
 
 ```
@@ -3567,11 +3686,11 @@ should print `Hello, Macro! My name is Pancakes!` The implementation of the
 trait implementation.
 
 Next, let’s explore how the other kinds of procedural macros differ from custom
-derive macros.
+`derive` macros.
 
 ### Attribute-like Macros
 
-Attribute-like macros are similar to custom derive macros, but instead of
+Attribute-like macros are similar to custom `derive` macros, but instead of
 generating code for the `derive` attribute, they allow you to create new
 attributes. They’re also more flexible: `derive` only works for structs and
 enums; attributes can be applied to other items as well, such as functions.
@@ -3594,7 +3713,19 @@ macro. The signature of the macro definition function would look like this:
 ```
 
 ```
-pub fn route(attr: TokenStream, item: TokenStream) -> TokenStream {
+pub fn route(
+```
+
+```
+    attr: TokenStream,
+```
+
+```
+    item: TokenStream
+```
+
+```
+) -> TokenStream {
 ```
 
 Here, we have two parameters of type `TokenStream`. The first is for the
@@ -3602,7 +3733,7 @@ contents of the attribute: the `GET, "/"` part. The second is the body of the
 item the attribute is attached to: in this case, `fn index() {}` and the rest
 of the function’s body.
 
-Other than that, attribute-like macros work the same way as custom derive
+Other than that, attribute-like macros work the same way as custom `derive`
 macros: you create a crate with the `proc-macro` crate type and implement a
 function that generates the code you want!
 
@@ -3634,7 +3765,7 @@ syntactically correct, which is much more complex processing than a
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 
-This definition is similar to the custom derive macro’s signature: we receive
+This definition is similar to the custom `derive` macro’s signature: we receive
 the tokens that are inside the parentheses and return the code we wanted to
 generate.
 
