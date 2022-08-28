@@ -38,5 +38,17 @@ separate line above the code it’s annotating:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-25-comments-above-line/src/main.rs}}
 ```
 
-Rust also has another kind of comment, documentation comments, which we’ll
+While line comments are the recommended comment style in Rust, there is another useful type of comment, the block comment.
+Block comments are enclosed by a starting delimiter `/*` and a closing delimiter `*/`. Everything in between those delimiters is considered a comment and is ignored by the compiler. Block comments are extremely useful for temporarily disabling chunks of code.
+
+```rust
+/* 
+This is another type of comment, a block comment. In general,
+line comments are the recommended comment style. But
+block comments are extremely useful for temporarily disabling
+chunks of code.
+*/
+```
+
+Rust has yet another kind of comment, documentation comments, which we’ll
 discuss in the “Publishing a Crate to Crates.io” section of Chapter 14.
