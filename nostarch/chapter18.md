@@ -8,7 +8,7 @@ directory, so all fixes need to be made in `/src/`.
 
 # Patterns and Matching
 
-  *Patterns* are a special syntax in Rust for matching against the structure of
+*Patterns* are a special syntax in Rust for matching against the structure of
 types, both complex and simple. Using patterns in conjunction with `match`
 expressions and other constructs gives you more control over a program’s
 control flow. A pattern consists of some combination of the following:
@@ -236,7 +236,7 @@ would not alert us to the possible logic bug.
 
 Similar in construction to `if let`, the `while let` conditional loop allows a
 `while` loop to run for as long as a pattern continues to match. In Listing
-18-2 we code a `while let` loop that uses a vector as a stack and prints the
+18-2, we code a `while let` loop that uses a vector as a stack and prints the
 values in the vector in the opposite order in which they were pushed.
 
 ```
@@ -288,7 +288,7 @@ can use `while let` to pop every element off our stack.
 
 In a `for` loop, the value that directly follows the keyword `for` is a
 pattern. For example, in `for x in y`, the `x` is the pattern. Listing 18-3
-demonstrates how to use a pattern in a `for` loop to destructure, or break
+demonstrates how to use a pattern in a `for` loop to *destructure*, or break
 apart, a tuple as part of the `for` loop.
 
 ```
@@ -588,7 +588,7 @@ an `enum` with only one variant
 ```
 
 ```
-book/ch18-02-refutability.html
+https://doc.rust-lang.org/book/ch18-02-refutability.html
 ```
 
 ```
@@ -881,9 +881,9 @@ match x {
 }
 ```
 
-This code prints `one or two`.
 
-### Matching Ranges of Values with ..=
+Unmatched: BodyContinued
+      ### Matching Ranges of Values with ..=
 
 The `..=` syntax allows us to match to an inclusive range of values. In the
 following code, when a pattern matches any of the values within the given
@@ -1153,7 +1153,7 @@ value of the `y` field. The third arm doesn’t specify any literals, so it
 matches any other `Point` and creates variables for both the `x` and `y` fields.
 
 In this example, the value `p` matches the second arm by virtue of `x`
-containing a 0, so this code will print `On the y axis at 7`.
+containing a `0`, so this code will print `On the y axis at 7`.
 
 Remember that a `match` expression stops checking arms once it has found the
 first matching pattern, so even though `Point { x: 0, y: 0}` is on the `x` axis
@@ -1919,7 +1919,7 @@ useful for expressing more complex ideas than a pattern alone allows.
 
 The condition can use variables created in the pattern. Listing 18-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
-guard of `if x % 2 == 0` (which will be true if the number is even).
+guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
 ```
 let num = Some(4);
@@ -1957,7 +1957,7 @@ the match guard checks whether the remainder of dividing `x` by 2 is equal to
 0, and because it is, the first arm is selected.
 
 If `num` had been `Some(5)` instead, the match guard in the first arm would
-have been false because the remainder of 5 divided by 2 is 1, which is not
+have been `false` because the remainder of 5 divided by 2 is 1, which is not
 equal to 0. Rust would then go to the second arm, which would match because the
 second arm doesn’t have a match guard and therefore matches any `Some` variant.
 
@@ -2077,11 +2077,11 @@ Combining multiple patterns with a match guard
 The match condition states that the arm only matches if the value of `x` is
 equal to `4`, `5`, or `6` *and* if `y` is `true`. When this code runs, the
 pattern of the first arm matches because `x` is `4`, but the match guard `if y`
-is false, so the first arm is not chosen. The code moves on to the second arm,
-which does match, and this program prints `no`. The reason is that the `if`
-condition applies to the whole pattern `4 | 5 | 6`, not just to the last value
-`6`. In other words, the precedence of a match guard in relation to a pattern
-behaves like this:
+is `false`, so the first arm is not chosen. The code moves on to the second
+arm, which does match, and this program prints `no`. The reason is that the
+`if` condition applies to the whole pattern `4 | 5 | 6`, not just to the last
+value `6`. In other words, the precedence of a match guard in relation to a
+pattern behaves like this:
 
 ```
 (4 | 5 | 6) if y => ...
