@@ -1,9 +1,9 @@
 import { VirtualElement } from "@popperjs/core";
 import React from "react";
 import { useEffect, useState } from "react";
+import type {} from "telemetry";
 import Highlighter from "web-highlighter";
 import HighlightSource from "web-highlighter/dist/model/source";
-import type {} from "telemetry";
 
 import FeedbackTooltip from "./tooltip";
 import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction } from "./utils";
