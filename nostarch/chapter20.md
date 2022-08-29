@@ -30,7 +30,7 @@ Unmatched: CaptionLine
 Before we get started, we should mention one detail: the method we’ll use won’t
 be the best way to build a web server with Rust. Community members have
 published a number of production-ready crates available at *https://crates.io*
-that provide more complete web server and thread pool implementations than
+ that provide more complete web server and thread pool implementations than
 we’ll build. However, our intention in this chapter is to help you learn, not
 to take the easy route. Because Rust is a systems programming language, we can
 choose the level of abstraction we want to work with and can go to a lower
@@ -208,7 +208,7 @@ part of the `drop` implementation. Browsers sometimes deal with closed
 connections by retrying, because the problem might be temporary. The important
 factor is that we’ve successfully gotten a handle to a TCP connection!
 
-Remember to stop the program by pressing ctrl-c when you’re done running a
+Remember to stop the program by pressing ctrl-C when you’re done running a
 particular version of the code. Then restart the program by invoking the
 `cargo` `run` command after you’ve made each set of code changes to make sure
 you’re running the newest code.
@@ -397,6 +397,9 @@ Gecko/20100101 Firefox/99.0",
 
 ```
     "Accept:
+```
+
+```
 text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*
 ```
 
@@ -480,10 +483,10 @@ being used, such as `GET` or `POST`, which describes how the client is making
 this request. Our client used a `GET` request, which means it is asking for
 information.
 
-The next part of the request line is */*, which indicates the *u**niform*
-*r**esource* *i**dentifier* *(URI)* the client is requesting: a URI is almost,
-but not quite, the same as a *u**niform* *r**esource* *l**ocator* *(URL)*. The
-difference between URIs and URLs isn’t important for our purposes in this
+The next part of the request line is */*, which indicates the *u* *niform* *r*
+*esource* *i* *dentifier* *(URI)* the client is requesting: a URI is almost,
+but not quite, the same as a *u* *niform* *r* *esource* *l* *ocator* *(URL)*.
+The difference between URIs and URLs isn’t important for our purposes in this
 chapter, but the HTTP spec uses the term *URI*, so we can just mentally
 substitute *URL* for *URI* here.
 
@@ -817,7 +820,23 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 ```
-  1 let request_line = buf_reader.lines().next().unwrap().unwrap();
+  1 let request_line = buf_reader
+```
+
+```
+.lines()
+```
+
+```
+.next()
+```
+
+```
+.unwrap()
+```
+
+```
+.unwrap();
 ```
 
 ```
@@ -849,7 +868,15 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 ```
-            "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}"
+            "{status_line}\r\n
+```
+
+```
+Content-Length: {length}\r\n\r\n
+```
+
+```
+{contents}"
 ```
 
 ```
@@ -910,39 +937,23 @@ indicating the response to the end user.
 Filename: src/main.rs
 
 ```
-    --snip--
+--snip--
 ```
 
 ```
-  } else {
+} else {
 ```
 
 ```
-      1 let status_line = "HTTP/1.1 404 NOT FOUND";
+  1 let status_line = "HTTP/1.1 404 NOT FOUND";
 ```
 
 ```
-      2 let contents = fs::read_to_string("404.html").unwrap();
+  2 let contents = fs::read_to_string("404.html").unwrap();
 ```
 
 ```
-        let length = contents.len();
-```
-
-```
-
-```
-
-```
-        let response = format!(
-```
-
-```
-            "{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}"
-```
-
-```
-        );
+    let length = contents.len();
 ```
 
 ```
@@ -950,11 +961,35 @@ Filename: src/main.rs
 ```
 
 ```
-        stream.write_all(response.as_bytes()).unwrap();
+    let response = format!(
 ```
 
 ```
-    }
+        "{status_line}\r\n
+```
+
+```
+Content-Length: {length}\r\n\r\n
+```
+
+```
+{contents}"
+```
+
+```
+    );
+```
+
+```
+
+```
+
+```
+    stream.write_all(response.as_bytes()).unwrap();
+```
+
+```
+}
 ```
 
 Responding with status code 404 and an error page if anything other than */*
@@ -1052,7 +1087,11 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 ```
-    let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
+    let (status_line, filename) =
+```
+
+```
+if request_line == "GET / HTTP/1.1" {
 ```
 
 ```
@@ -1092,7 +1131,23 @@ fn handle_connection(mut stream: TcpStream) {
 ```
 
 ```
-        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+format!(
+```
+
+```
+"{status_line}\r\n
+```
+
+```
+Content-Length: {length}\r\n\r\n
+```
+
+```
+{contents}"
+```
+
+```
+);
 ```
 
 ```
@@ -1258,10 +1313,10 @@ You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
 Start the server using `cargo` `run`. Then open two browser windows: one for
-*http://127.0.0.1:7878* and the other for *http://127.0.0.1:7878/sleep*. If you
-enter the */* URI a few times, as before, you’ll see it respond quickly. But if
-you enter */sleep* and then load */*, you’ll see that */* waits until `sleep`
-has slept for its full five seconds before loading.
+*http://127.0.0.1:7878*   and the other for *http://127.0.0.1:7878/sleep*. If
+you enter the */* URI a few times, as before, you’ll see it respond quickly.
+But if you enter */sleep* and then load */*, you’ll see that */* waits until
+`sleep` has slept for its full five seconds before loading.
 
 There are multiple techniques we could use to avoid requests backing up behind
 a slow request; the one we’ll implement is a thread pool.
@@ -1295,10 +1350,10 @@ we can handle before reaching that point.
 
 This technique is just one of many ways to improve the throughput of a web
 server. Other options you might explore are the *fork/join* *model*, the
-*single-threaded* *async* *I/O* *model*, and the *multithreaded* *async* *I/O*
-*model*. If you’re interested in this topic, you can read more about other
-solutions and try to implement them; with a low-level language like Rust, all
-of these options are possible.
+*single-**threaded* *async* *I/O* *model*, and the *multi* *threaded* *async*
+*I/O* *model*. If you’re interested in this topic, you can read more about
+other solutions and try to implement them; with a low-level language like Rust,
+all of these options are possible.
 
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
@@ -1464,7 +1519,7 @@ error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
 ```
 
 ```
-  --> src/main.rs:11:16
+  --> src/main.rs:1:16
 ```
 
 ```
@@ -1472,7 +1527,7 @@ error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
 ```
 
 ```
-11 |     let pool = ThreadPool::new(4);
+1 |     let pool = ThreadPool::new(4);
 ```
 
 ```
@@ -1525,7 +1580,7 @@ error[E0599]: no function or associated item named `new` found for struct
 ```
 
 ```
-  --> src/main.rs:12:28
+  --> src/main.rs::28
 ```
 
 ```
@@ -1533,11 +1588,14 @@ error[E0599]: no function or associated item named `new` found for struct
 ```
 
 ```
-12 |     let pool = ThreadPool::new(4);
+1 |     let pool = ThreadPool::new(4);
 ```
 
 ```
    |                            ^^^ function or associated item not found in
+```
+
+```
 `ThreadPool`
 ```
 
@@ -1594,11 +1652,14 @@ $ cargo check
 
 ```
 error[E0599]: no method named `execute` found for struct `ThreadPool` in the
+```
+
+```
 current scope
 ```
 
 ```
-  --> src/main.rs:17:14
+  --> src/main.rs:1:14
 ```
 
 ```
@@ -1606,7 +1667,7 @@ current scope
 ```
 
 ```
-17 |         pool.execute(|| {
+1 |         pool.execute(|| {
 ```
 
 ```
@@ -1820,7 +1881,15 @@ you’re feeling ambitious, try to write a function named `build` with the
 following signature to compare with the `new` function:
 
 ```
-pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
+pub fn build(
+```
+
+```
+size: usize
+```
+
+```
+) -> Result<ThreadPool, PoolCreationError> {
 ```
 
 #### Creating Space to Store the Threads
@@ -2453,7 +2522,7 @@ error[E0382]: use of moved value: `receiver`
 ```
 
 ```
-  --> src/lib.rs:26:42
+  --> src/lib.rs:2:42
 ```
 
 ```
@@ -2461,7 +2530,7 @@ error[E0382]: use of moved value: `receiver`
 ```
 
 ```
-21 |         let (sender, receiver) = mpsc::channel();
+2 |         let (sender, receiver) = mpsc::channel();
 ```
 
 ```
@@ -2477,11 +2546,15 @@ error[E0382]: use of moved value: `receiver`
 ```
 
 ```
-26 |             workers.push(Worker::new(id, receiver));
+2 |             workers.push(Worker::new(id, receiver));
 ```
 
 ```
    |                                          ^^^^^^^^ value moved here, in
+```
+
+```
+
 ```
 
 ```
@@ -2580,7 +2653,15 @@ impl ThreadPool {
 ```
 
 ```
-            workers.push(Worker::new(id, Arc::clone(& 2 receiver)));
+            workers.push(
+```
+
+```
+Worker::new(id, Arc::clone(& 2 receiver))
+```
+
+```
+);
 ```
 
 ```
@@ -2628,7 +2709,19 @@ impl Worker {
 ```
 
 ```
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(
+```
+
+```
+id: usize,
+```
+
+```
+receiver: Arc<Mutex<mpsc::Receiver<Job>>>
+```
+
+```
+) -> Worker {
 ```
 
 ```
@@ -2766,7 +2859,19 @@ impl Worker {
 ```
 
 ```
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(
+```
+
+```
+id: usize,
+```
+
+```
+receiver: Arc<Mutex<mpsc::Receiver<Job>>>
+```
+
+```
+) -> Worker {
 ```
 
 ```
@@ -2774,7 +2879,23 @@ impl Worker {
 ```
 
 ```
-          1 let job = receiver.lock().2 unwrap()3 .recv()4 .unwrap();
+           let job = receiver
+```
+
+```
+.lock()
+```
+
+```
+.unwrap()
+```
+
+```
+.recv()
+```
+
+```
+.unwrap();
 ```
 
 ```
@@ -3004,7 +3125,19 @@ impl Worker {
 ```
 
 ```
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(
+```
+
+```
+id: usize,
+```
+
+```
+receiver: Arc<Mutex<mpsc::Receiver<Job>>>
+```
+
+```
+) -> Worker {
 ```
 
 ```
@@ -3077,7 +3210,7 @@ duration of the call to `job()`, meaning other workers cannot receive jobs.
 The code in Listing 20-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us
-we’re not cleaning up anything. When we use the less elegant ctrl-c method to
+we’re not cleaning up anything. When we use the less elegant ctrl-C method to
 halt the main thread, all other threads are stopped immediately as well, even
 if they’re in the middle of serving a request.
 
@@ -3146,42 +3279,70 @@ Here is the error we get when we compile this code:
 
 ```
 error[E0507]: cannot move out of `worker.thread` which is behind a mutable
+```
+
+```
 reference
 ```
 
 ```
-    --> src/lib.rs:52:13
+
 ```
 
 ```
-     |
+
 ```
 
 ```
-52   |             worker.thread.join().unwrap();
+
 ```
 
 ```
-     |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this
-method call
+
 ```
 
 ```
-     |             |
+
 ```
 
 ```
-     |             move occurs because `worker.thread` has type
-`JoinHandle<()>`, which does not implement the `Copy` trait
+
 ```
 
 ```
-     |
+
 ```
 
 ```
-note: this function takes ownership of the receiver `self`, which moves
-`worker.thread`
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
 ```
 
 The error tells us we can’t call `join` because we only have a mutable borrow
@@ -3220,6 +3381,9 @@ Checking this code, we get two errors:
 
 ```
 error[E0599]: no method named `join` found for enum `Option` in the current
+```
+
+```
 scope
 ```
 
@@ -3236,7 +3400,11 @@ scope
 ```
 
 ```
-   |                           ^^^^ method not found in `Option<JoinHandle<()>>`
+   |                           ^^^^ method not found in
+```
+
+```
+`Option<JoinHandle<()>>`
 ```
 
 ```
@@ -3261,6 +3429,9 @@ error[E0308]: mismatched types
 
 ```
    |                      ^^^^^^ expected enum `Option`, found struct
+```
+
+```
 `JoinHandle`
 ```
 
@@ -3285,11 +3456,15 @@ help: try wrapping the expression in `Some`
 ```
 
 ```
-72 |         Worker { id, thread: Some(thread) }
+
 ```
 
 ```
-   |                      +++++++++++++      +
+
+```
+
+```
+
 ```
 
 Let’s address the second error, which points to the code at the end of
@@ -3303,7 +3478,19 @@ impl Worker {
 ```
 
 ```
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(
+```
+
+```
+id: usize,
+```
+
+```
+receiver: Arc<Mutex<mpsc::Receiver<Job>>>
+```
+
+```
+) -> Worker {
 ```
 
 ```
@@ -3500,7 +3687,23 @@ impl ThreadPool {
 ```
 
 ```
-        self.sender.as_ref().unwrap().send(job).unwrap();
+        self.sender
+```
+
+```
+.as_ref()
+```
+
+```
+.unwrap()
+```
+
+```
+.send(job)
+```
+
+```
+.unwrap();
 ```
 
 ```
@@ -3582,7 +3785,19 @@ impl Worker {
 ```
 
 ```
-    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(
+```
+
+```
+id: usize,
+```
+
+```
+receiver: Arc<Mutex<mpsc::Receiver<Job>>>
+```
+
+```
+) -> Worker {
 ```
 
 ```
@@ -3590,15 +3805,15 @@ impl Worker {
 ```
 
 ```
-            let message = receiver.lock().unwrap().recv();
-```
 
 ```
 
 ```
 
 ```
-            match message {
+
+```
+
 ```
 
 ```
@@ -3606,7 +3821,15 @@ impl Worker {
 ```
 
 ```
-                    println!("Worker {id} got a job; executing.");
+                    println!(
+```
+
+```
+"Worker {id} got a job; executing."
+```
+
+```
+);
 ```
 
 ```
@@ -3626,7 +3849,15 @@ impl Worker {
 ```
 
 ```
-                    println!("Worker {id} disconnected; shutting down.");
+                    println!(
+```
+
+```
+"Worker {id} shutting down."
+```
+
+```
+);
 ```
 
 ```
@@ -3828,7 +4059,7 @@ all exited their loops and stopped.
 Congrats! We’ve now completed our project; we have a basic web server that uses
 a thread pool to respond asynchronously. We’re able to perform a graceful
 shutdown of the server, which cleans up all the threads in the pool. See
-*https://www.nostarch.com/Rust2021* to download the full code for this chapter
+*https://www.nostarch.com/Rust2021*  to download the full code for this chapter
 for reference.
 
 We could do more here! If you want to continue enhancing this project, here are
@@ -3838,7 +4069,7 @@ some ideas:
 * Add tests of the library’s functionality.
 * Change calls to `unwrap` to more robust error handling.
 * Use `ThreadPool` to perform some task other than serving web requests.
-* Find a thread pool crate on *https://crates.io* and implement a similar web
+* Find a thread pool crate on *https://crates.io*   and implement a similar web
 server using the crate instead. Then compare its API and robustness to the
 thread pool we implemented.
 ## Summary
