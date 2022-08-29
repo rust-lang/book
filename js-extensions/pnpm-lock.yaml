@@ -78,7 +78,7 @@ importers:
       react-dom: ^18.2.0
       react-modal: ^3.15.1
       react-popper: ^2.3.0
-      telemetry: file:../telemetry
+      telemetry: workspace:*
       web-highlighter: ^0.7.4
     devDependencies:
       '@popperjs/core': 2.11.5
@@ -89,7 +89,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-modal: 3.15.1_biqbaboplfbrettd7655fr4n2y
       react-popper: 2.3.0_ili5ylfne7i3hkfpsanzgkfu6m
-      telemetry: file:packages/telemetry
+      telemetry: link:../telemetry
       web-highlighter: 0.7.4
 
   packages/telemetry:
@@ -1242,6 +1242,7 @@ packages:
 
   /@types/uuid/8.3.4:
     resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
+    dev: false
 
   /@types/yargs-parser/21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -6408,12 +6409,4 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
-    dev: true
-
-  file:packages/telemetry:
-    resolution: {directory: packages/telemetry, type: directory}
-    name: telemetry
-    version: 0.1.0
-    dependencies:
-      '@types/uuid': 8.3.4
     dev: true
