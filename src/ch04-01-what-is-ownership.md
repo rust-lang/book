@@ -342,11 +342,8 @@ copying can be assumed to be inexpensive in terms of runtime performance.
 #### Ways Variables and Data Interact: Clone
 
 If we *do* want to deeply copy the heap data of the `String`, not just the
-stack data, we can use a common method called `clone`. We’ll discuss method
-syntax in Chapter 5, but because methods are a common feature in many
-programming languages, you’ve probably seen them before.
-
-Here’s an example of the `clone` method in action:
+stack data, we can use a common method called `clone`. Here’s an example of the
+`clone` method in action:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-05-clone/src/main.rs:here}}
