@@ -733,11 +733,6 @@ you’re interested in this topic, you can read more about other solutions and
 try to implement them; with a low-level language like Rust, all of these
 options are possible.
 
-<!-- A more modern approach would probably use tokio, which could be a
-multi-threaded async I/O model. /JT -->
-<!-- I've added "multi-theraded async I/O model", I don't want to get into
-particular async crates though /Carol -->
-
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
 interface first can help guide your design. Write the API of the code so it’s
@@ -831,9 +826,9 @@ error we get:
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
-  --> src/main.rs:10:16
+  --> src/main.rs:11:16
    |
-10 |     let pool = ThreadPool::new(4);
+11 |     let pool = ThreadPool::new(4);
    |                ^^^^^^^^^^ use of undeclared type `ThreadPool`
 ```
 
@@ -870,9 +865,9 @@ we need to address:
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0599]: no function or associated item named `new` found for struct `ThreadPool` in the current scope
-  --> src/bin/main.rs:11:28
+  --> src/main.rs:12:28
    |
-11 |     let pool = ThreadPool::new(4);
+12 |     let pool = ThreadPool::new(4);
    |                            ^^^ function or associated item not found in `ThreadPool`
 ```
 
@@ -905,9 +900,9 @@ Let’s check the code again:
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0599]: no method named `execute` found for struct `ThreadPool` in the current scope
-  --> src/bin/main.rs:16:14
+  --> src/main.rs:17:14
    |
-16 |         pool.execute(|| {
+17 |         pool.execute(|| {
    |              ^^^^^^^ method not found in `ThreadPool`
 ```
 
@@ -1037,12 +1032,6 @@ following signature to compare with the `new` function:
 ```
 pub fn build(size: usize) -> Result<ThreadPool, PoolCreationError> {
 ```
-<!-- Similar nit here to a comment I made a few chapters ago: fallible
-constructors are awkward to use. We may want to discourage their use. A modern
-approach might use a builder pattern to set the number of threads, and use a
-default number of threads that's non-zero. /JT -->
-<!-- I've changed the function name to be `build` which nicely matches the
-changes JT suggested for chapter 12. /Carol -->
 
 #### Creating Space to Store the Threads
 
@@ -1195,16 +1184,6 @@ impl Worker {
 }
 ```
 
-<!-- Spawning a thread in the constructor isn't safe to do as the spawn
-of the thread may fail. You can use
-https://doc.rust-lang.org/std/thread/struct.Builder.html#method.spawn
-to be better protected against running out of resources. This should
-probably not live in the constructor, but instead in some helper function
-that can return a Result. /JT -->
-<!-- I've added a note in a few paragraphs. I think this behavior is perfectly
-fine for this example so I'm not going to change the code, but it is something
-readers should know. /Carol -->
-
 Listing 20-15: Modifying `ThreadPool` to hold `Worker` instances instead of
 holding threads directly
 
@@ -1347,12 +1326,12 @@ When we try to check this code, we get this error:
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0382]: use of moved value: `receiver`
-  --> src/lib.rs:27:42
+  --> src/lib.rs:26:42
    |
-22 |         let (sender, receiver) = mpsc::channel();
+21 |         let (sender, receiver) = mpsc::channel();
    |                      -------- move occurs because `receiver` has type `std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
 ...
-27 |             workers.push(Worker::new(id, receiver));
+26 |             workers.push(Worker::new(id, receiver));
    |                                          ^^^^^^^^ value moved here, in previous iteration of loop
 ```
 
@@ -1655,10 +1634,14 @@ Here is the error we get when we compile this code:
 
 ```
 error[E0507]: cannot move out of `worker.thread` which is behind a mutable reference
-  --> src/lib.rs:52:13
-   |
-52 |             worker.thread.join().unwrap();
-   |             ^^^^^^^^^^^^^ move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
+    --> src/lib.rs:52:13
+     |
+52   |             worker.thread.join().unwrap();
+     |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this method call
+     |             |
+     |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
+     |
+note: this function takes ownership of the receiver `self`, which moves `worker.thread`
 ```
 
 The error tells us we can’t call `join` because we only have a mutable borrow
@@ -1703,8 +1686,8 @@ error[E0308]: mismatched types
             found struct `JoinHandle<_>`
 help: try wrapping the expression in `Some`
    |
-72 |         Worker { id, Some(thread) }
-   |                      +++++      +
+72 |         Worker { id, thread: Some(thread) }
+   |                      +++++++++++++      +
 ```
 
 Let’s address the second error, which points to the code at the end of
@@ -1828,7 +1811,9 @@ Filename: src/lib.rs
 impl Worker {
     fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || loop {
-            match receiver.lock().unwrap().recv() {
+            let message = receiver.lock().unwrap().recv();
+
+            match message {
                 Ok(job) => {
                     println!("Worker {id} got a job; executing.");
 
