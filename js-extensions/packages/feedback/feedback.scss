@@ -3,30 +3,35 @@
   --popper-bg: var(--quote-bg);
   --popper-bg-hover: #1D1F21;
   --popper-color: var(--fg);
+  --highlight: #46480f;
 }
 
 .coal {
   --popper-bg: var(--quote-bg);
   --popper-bg-hover: #1D1F21;
   --popper-color: var(--fg);
+  --highlight: #46480f;
 }
 
 .light {
   --popper-bg: #262625;
   --popper-bg-hover: #aaaaaa;
   --popper-color: white;
+  --highlight: #ffffc1;
 }
 
 .navy {
   --popper-bg: var(--quote-bg);
   --popper-bg-hover: #1D1F21;
   --popper-color: var(--fg);
+  --highlight: #46480f;
 }
 
 .rust {
   --popper-bg: var(--quote-bg);
   --popper-bg-hover: #aaaaaa;
   --popper-color: var(--fg);
+  --highlight: #fdf2ca;
 }
 
 .pop {
@@ -126,16 +131,6 @@
   }
 }
 
-html.light .highlight-mengshou-wrap {
-  background: #ffffc1; 
-}
-
-html.rust .highlight-mengshou-wrap {
-  background: #fdf2ca;
-}
-
-html.coal .highlight-mengshou-wrap, 
-html.navy .highlight-mengshou-wrap, 
-html.ayu  .highlight-mengshou-wrap {
-  background: #46480f;
+.highlight-mengshou-wrap {
+  background-color: var(--highlight);
 }
