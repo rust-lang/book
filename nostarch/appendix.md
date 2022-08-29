@@ -22,29 +22,16 @@ described.
 
 * `as` - perform primitive casting, disambiguate the specific trait containing
   an item, or rename items in `use` statements
-
-<!-- `extern crate` is a bit old. Not sure if it needs a mention
-/JT -->
-<!-- good call, took it out /Carol -->
-
 * `async` -  return a `Future` instead of blocking the current thread
 * `await` - suspend execution until the result of a `Future` is ready
 * `break` - exit a loop immediately
 * `const` - define constant items or constant raw pointers
 * `continue` - continue to the next loop iteration
 * `crate` - in a module path, refers to the crate root
-<!-- these days `crate` is mostly just used as part of the module path
-/JT -->
-<!-- fixed! /Carol -->
-
 * `dyn` - dynamic dispatch to a trait object
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - define an enumeration
 * `extern` - link an external function or variable
-<!-- `extern crate` is a bit out of date
-/JT -->
-<!-- fixed! /Carol -->
-
 * `false` - Boolean false literal
 * `fn` - define a function or the function pointer type
 * `for` - loop over items from an iterator, implement a trait, or specify a

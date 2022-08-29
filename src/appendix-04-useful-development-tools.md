@@ -172,9 +172,9 @@ communicate with each other. Different clients can use `rust-analyzer`, such as
 [lsp]: http://langserver.org/
 [vscode]: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer
 
-Visit the `rust-analyzer` project’s [home page][rust-analyzer] for installation
-instructions, then install the language server support in your particular IDE.
-Your IDE will gain abilities such as autocompletion, jump to definition, and
-inline errors.
+Visit the `rust-analyzer` project’s [home page][rust-analyzer]<!-- ignore -->
+for installation instructions, then install the language server support in your
+particular IDE. Your IDE will gain abilities such as autocompletion, jump to
+definition, and inline errors.
 
 [rust-analyzer]: https://rust-analyzer.github.io
