@@ -60,11 +60,11 @@ that holds the unsafe code. You can take five actions in unsafe Rust that you
 can’t in safe Rust, which we call *unsafe superpowers*. Those superpowers
 include the ability to:
 
-* Dereference a raw pointer
-* Call an unsafe function or method
-* Access or modify a mutable static variable
-* Implement an unsafe trait
-* Access fields of `union`s
+1. Dereference a raw pointer
+1. Call an unsafe function or method
+1. Access or modify a mutable static variable
+1. Implement an unsafe trait
+1. Access fields of `union`s
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any of Rust’s other safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
@@ -617,7 +617,7 @@ that the slice this code creates contains valid `i32` values. Attempting to use
 
 Sometimes your Rust code might need to interact with code written in another
 language. For this, Rust has the keyword `extern` that facilitates the creation
-and use of a *Foreign Function Interface* *(FFI)*. An FFI is a way for a
+and use of a *Foreign Function Interface* *(FFI)*, which is a way for a
 programming language to define functions and enable a different (foreign)
 programming language to call those functions.
 
@@ -719,7 +719,7 @@ Unmatched: BoxCode
 
 ### Accessing or Modifying a Mutable Static Variable
 
-In this book, we’ve not yet talked about *global variables*, which Rust does
+In this book, we’ve not yet talked about global variables, which Rust does
 support but can be problematic with Rust’s ownership rules. If two threads are
 accessing the same mutable global variable, it can cause a data race.
 
@@ -894,12 +894,12 @@ as such with `unsafe`.
 
 ### Accessing Fields of a Union
 
-The final action that works only with `unsafe` is accessing fields of a
-*union*. A `union` is similar to a `struct`, but only one declared field is
-used in a particular instance at one time. Unions are primarily used to
-interface with unions in C code. Accessing union fields is unsafe because Rust
-can’t guarantee the type of the data currently being stored in the union
-instance. You can learn more about unions in the Rust Reference at
+The final action that works only with `unsafe` is accessing fields of a union.
+A `union` is similar to a `struct`, but only one declared field is used in a
+particular instance at one time. Unions are primarily used to interface with
+unions in C code. Accessing union fields is unsafe because Rust can’t guarantee
+the type of the data currently being stored in the union instance. You can
+learn more about unions in the Rust Reference at
 *https://doc.rust-lang.org/reference/items/unions.html**.*
 
 ### When to Use Unsafe Code
@@ -1010,7 +1010,7 @@ A hypothetical definition of the `Iterator` trait using generics
 
 The difference is that when using generics, as in Listing 19-13, we must
 annotate the types in each implementation; because we can also implement
-`Iterator<String> for Counter` or any other type, we could have multiple
+`Iterator<``String``> for Counter` or any other type, we could have multiple
 implementations of `Iterator` for `Counter`. In other words, when a trait has a
 generic parameter, it can be implemented for a type multiple times, changing
 the concrete types of the generic type parameters each time. When we use the
@@ -1034,7 +1034,8 @@ and documenting the associated type in the API documentation is a good practice.
 When we use generic type parameters, we can specify a default concrete type for
 the generic type. This eliminates the need for implementors of the trait to
 specify a concrete type if the default type works. You specify a default type
-when declaring a generic type with the `<PlaceholderType=ConcreteType>` syntax.
+when declaring a generic type with the `<``PlaceholderType=ConcreteType``>`
+syntax.
 
 A great example of a situation where this technique is useful is with *operator
 overloading*, in which you customize the behavior of an operator (such as `+`)
@@ -1482,7 +1483,7 @@ trait to use based on the type of `self`.
 However, associated functions that are not methods don’t have a `self`
 parameter. When there are multiple types or traits that define non-method
 functions with the same function name, Rust doesn’t always know which type you
-mean unless you use *fully qualified syntax*. For example, in Listing 19-19 we
+mean unless you use fully qualified syntax. For example, in Listing 19-19 we
 create a trait for an animal shelter that wants to name all baby dogs Spot. We
 make an `Animal` trait with an associated non-method function `baby_name`. The
 `Animal` trait is implemented for the struct `Dog`, on which we also provide an
@@ -2038,11 +2039,12 @@ doesn’t have the methods of the value it’s holding. We would have to impleme
 all the methods of `Vec<T>` directly on `Wrapper` such that the methods
 delegate to `self.0`, which would allow us to treat `Wrapper` exactly like a
 `Vec<T>`. If we wanted the new type to have every method the inner type has,
-implementing the `Deref` trait (discussed in “Treating Smart Pointers Like
-Regular References with Deref” on page XX) on the `Wrapper` to return the inner
-type would be a solution. If we didn’t want the `Wrapper` type to have all the
-methods of the inner type—for example, to restrict the `Wrapper` type’s
-behavior—we would have to implement just the methods we do want manually.
+implementing the `Deref` trait on the `Wrapper` to return the inner type would
+be a solution (we discussed implementing the `Deref` trait in “Treating Smart
+Pointers Like Regular References with Deref” on page XX). If we didn’t want the
+`Wrapper` type to have all the methods of the inner type—for example, to
+restrict the `Wrapper` type’s behavior—we would have to implement just the
+methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.
@@ -2065,7 +2067,7 @@ far, including statically enforcing that values are never confused and
 indicating the units of a value. You saw an example of using newtypes to
 indicate units in Listing 19-15: recall that the `Millimeters` and `Meters`
 structs wrapped `u32` values in a newtype. If we wrote a function with a
-parameter of type `Millimeters`, we couldn’t compile a program that
+parameter of type `Millimeters`, we wouldn’t be able to compile a program that
 accidentally tried to call that function with a value of type `Meters` or a
 plain `u32`.
 
@@ -3129,9 +3131,9 @@ Lukas Wirth.
 
 ### Procedural Macros for Generating Code from Attributes
 
-The second form of macros is the *procedural macro*, which acts more like a
-function (and is a type of procedure). Procedural macros accept some code as an
-input, operate on that code, and produce some code as an output rather than
+The second form of macros is the procedural macro, which acts more like a
+function (and is a type of procedure). *Procedural macros* accept some code as
+an input, operate on that code, and produce some code as an output rather than
 matching against patterns and replacing the code with other code as declarative
 macros do. The three kinds of procedural macros are custom `derive`,
 attribute-like, and function-like, and all work in a similar fashion.
@@ -3540,7 +3542,7 @@ The `DeriveInput` instance we get when parsing the code that has the macro’s
 attribute in Listing 19-30
 
 The fields of this struct show that the Rust code we’ve parsed is a unit struct
-with the `ident` (identifier, meaning the name) of `Pancakes`. There are more
+with the `ident` (*identifier*, meaning the name) of `Pancakes`. There are more
 fields on this struct for describing all sorts of Rust code; check the `syn`
 documentation for `DeriveInput` at
 *https://docs.rs/syn/1.0/syn/struct.DeriveInput.html* for more information.
@@ -3694,7 +3696,7 @@ Attribute-like macros are similar to custom `derive` macros, but instead of
 generating code for the `derive` attribute, they allow you to create new
 attributes. They’re also more flexible: `derive` only works for structs and
 enums; attributes can be applied to other items as well, such as functions.
-Here’s an example of using an attribute-like macro: say you have an attribute
+Here’s an example of using an attribute-like macro. Say you have an attribute
 named `route` that annotates functions when using a web application framework:
 
 ```
@@ -3744,7 +3746,7 @@ Function-like macros define macros that look like function calls. Similarly to
 can take an unknown number of arguments. However, `macro_rules!` macros can
 only be defined using the match-like syntax we discussed in “Declarative Macros
 with macro_rules! for General Metaprogramming” on page XX. Function-like macros
-take a `TokenStream` parameter and their definition manipulates that
+take a `TokenStream` parameter, and their definition manipulates that
 `TokenStream` using Rust code as the other two types of procedural macros do.
 An example of a function-like macro is an `sql!` macro that might be called
 like so:
