@@ -28,12 +28,25 @@
 
     <!-- Paragraph styles -->
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'AppendixNumber']" >
+        <xsl:text>&#10;[TOC]&#10;&#10;</xsl:text>
+        <xsl:text>## Appendix </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>: </xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'AppendixTitle']">
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterTitle']">
         <xsl:text>&#10;[TOC]&#10;&#10;</xsl:text>
         <xsl:text># </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
+
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadA' or w:pPr/w:pStyle/@w:val = 'FrontmatterTitle']">
         <xsl:text>## </xsl:text>
@@ -95,7 +108,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
@@ -175,6 +188,17 @@
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInHead']">
+        <xsl:text>* </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>- </xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInPara']">
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p">
