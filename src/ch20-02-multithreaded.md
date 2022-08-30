@@ -387,7 +387,7 @@ this data structure *Worker*, which is a common term in pooling
 implementations. The Worker picks up code that needs to be run and runs the
 code in the Worker’s thread. Think of people working in the kitchen at a
 restaurant: the workers wait until orders come in from customers, and then
-they’re responsible for taking those orders and filling them.
+they’re responsible for taking those orders and fulfilling them.
 
 Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
 we’ll store instances of the `Worker` struct. Each `Worker` will store a single
