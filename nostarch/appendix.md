@@ -166,13 +166,11 @@ choose identifier names, as well as lets us integrate with programs written in
 a language where these words aren’t keywords. In addition, raw identifiers
 allow you to use libraries written in a different Rust edition than your crate
 uses. For example, `try` isn’t a keyword in the 2015 edition but is in the 2018
-edition. If you depend on a library that is written using the 2015 edition and
-has a `try` function, you’ll need to use the raw identifier syntax, `r#try` in
-this case, to call that function from your 2018 edition code. See Appendix E
-for more information on editions.
+and 2021 editions. If you depend on a library that is written using the 2015
+edition and has a `try` function, you’ll need to use the raw identifier syntax,
+`r#try` in this case, to call that function from your 2021 edition code. See
+Appendix E for more information on editions.
 
-
-Unmatched: NoParagraphStyle
 
 [TOC]
 
