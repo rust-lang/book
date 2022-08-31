@@ -38,8 +38,8 @@ let comparators: { [K in keyof BaseTypes]: Comparator<BaseTypes[K]> } = {
   string: (a, b) => a.localeCompare(b),
 };
 
-let useSortColumns = <T,>(rows: T[]) => {
-  let [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+let useSortColumns = <T,>(rows: T[], def: SortColumn[] = []) => {
+  let [sortColumns, setSortColumns] = useState<readonly SortColumn[]>(def);
   rows = [...(rows as any)].sort((ra, rb) => {
     for (const sort of sortColumns) {
       let a = ra[sort.columnKey],
@@ -59,11 +59,15 @@ let useSortColumns = <T,>(rows: T[]) => {
   return { rows, sortColumns, onSortColumnsChange: setSortColumns };
 };
 
-type FilterView<K> = React.FC<{ values: K[]; setFilter: (val: any) => void }>;
+type FilterView<K> = React.FC<{
+  values: K[];
+  defaultFilter?: any;
+  setFilter: (val: any) => void;
+}>;
 
 let RangeTooltip = createSliderWithTooltip(Range);
 let filterViews: { [K in keyof BaseTypes]: FilterView<BaseTypes[K]> } = {
-  number: ({ values, setFilter }) => {
+  number: ({ values, defaultFilter, setFilter }) => {
     let min = _.min(values)!;
     let max = _.max(values)!;
     return (
@@ -76,7 +80,7 @@ let filterViews: { [K in keyof BaseTypes]: FilterView<BaseTypes[K]> } = {
             .concat([max])
             .map((n) => [n, n.toFixed(max > 1 ? 0 : 1)])
         )}
-        defaultValue={[min, max]}
+        defaultValue={defaultFilter || [min, max]}
         tipFormatter={(n) => n.toFixed(max > 1 ? 0 : 1)}
         onChange={setFilter}
       />
@@ -103,9 +107,10 @@ let filterFuncs: {
 
 let useFilterColumns = <T,>(
   rows: T[],
-  columns: Column<T>[]
+  columns: Column<T>[],
+  defaultFilter: { [k: string]: any } = {}
 ): [T[], Column<T>[]] => {
-  let [filters, setFilters] = useState<{ [k: string]: any }>({});
+  let [filters, setFilters] = useState<{ [k: string]: any }>(defaultFilter);
   let baseRow: any = rows[0];
 
   columns = columns.map((column) => {
@@ -125,6 +130,7 @@ let useFilterColumns = <T,>(
               <div>
                 <F
                   values={values}
+                  defaultFilter={filters[column.key]}
                   setFilter={(val: any) => {
                     setFilters({ ...filters, [column.key]: val });
                   }}
@@ -156,16 +162,20 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
   tableName,
   metricName,
   extraColumns,
+  defaultSort,
+  defaultFilter,
   state,
 }: {
   rows: T[];
   tableName: string;
   metricName: string;
   extraColumns?: Column<T>[];
+  defaultSort?: SortColumn[];
+  defaultFilter?: { [k: string]: any };
   state: any;
 }) {
   let columns: Column<T>[] = [
-    { key: "quizName", name: "Quiz", sortable: true, },
+    { key: "quizName", name: "Quiz", sortable: true },
     { key: "version", name: "Version" },
     ...(extraColumns || []),
     {
@@ -184,8 +194,8 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
     { key: "N", name: "N", sortable: true },
   ];
 
-  [rows, columns] = useFilterColumns(rows, columns);
-  let sortProps = useSortColumns(rows);
+  [rows, columns] = useFilterColumns(rows, columns, defaultFilter);
+  let sortProps = useSortColumns(rows, defaultSort);
 
   return (
     <div className="data-grid">
@@ -204,66 +214,70 @@ function Table<T extends { mean: number; lower: number; upper: number }>({
   );
 }
 
-let QuestionInspector: React.FC<{ state: any, quizSchemas: any }> = observer(({ state, quizSchemas }) => {
-  if (!state.selectedQuestion) return null;
-  let r = state.selectedQuestion;
-  let schemas = quizSchemas[r.quizName];
-  let hash = Object.keys(schemas).find((k) => schemas[k].version == r.version)!;
-  let schema = schemas[hash].schema;
-  let question = schema.questions[r.question];
+let QuestionInspector: React.FC<{ state: any; quizSchemas: any }> = observer(
+  ({ state, quizSchemas }) => {
+    if (!state.selectedQuestion) return null;
+    let r = state.selectedQuestion;
+    let schemas = quizSchemas[r.quizName];
+    let hash = Object.keys(schemas).find(
+      (k) => schemas[k].version == r.version
+    )!;
+    let schema = schemas[hash].schema;
+    let question = schema.questions[r.question];
 
-  let answers: { [hash: string]: { count: number; answer: any } } = {};
-  for (let answer of r.answer) {
-    let hash = objectHash(answer);
-    if (!(hash in answers)) {
-      answers[hash] = { count: 0, answer };
+    let answers: { [hash: string]: { count: number; answer: any } } = {};
+    for (let answer of r.answer) {
+      let hash = objectHash(answer);
+      if (!(hash in answers)) {
+        answers[hash] = { count: 0, answer };
+      }
+      answers[hash].count += 1;
     }
-    answers[hash].count += 1;
-  }
 
-  let answersSorted = _.chain(answers)
-    .values()
-    .sortBy((t) => -t.count)
-    .value();
+    let answersSorted = _.chain(answers)
+      .values()
+      .sortBy((t) => -t.count)
+      .value();
 
-  let methods = getQuestionMethods(question.type);
+    let methods = getQuestionMethods(question.type);
 
-  return (
-    <div key={r.quizName + '/' + r.question}>
-      <h2>
-        Quiz {r.quizName} / Question {r.question + 1}
-      </h2>
-      <div className="qa-wrapper">
-        <div>
-          <h3>Question</h3>
-          <div className="mdbook-quiz">
-            <AnswerView
-              index={r.question + 1}
-              quizName={r.quizName}
-              question={question}
-              correct={true}
-              userAnswer={question.answer}
-              showCorrect={false}
-            />
-          </div>
-        </div>
-        <div>
-          <h3>Answers</h3>
-          {answersSorted.map((answer, i) => (
-            <div className="wrong-answer" key={i}>
-              <div>N = {answer.count}</div>
-              <methods.AnswerView
-                answer={answer.answer}
-                baseline={question.answer}
-                prompt={question.prompt}
+    return (
+      <div key={r.quizName + "/" + r.question}>
+        <h2>
+          Quiz {r.quizName} / Question {r.question + 1}
+        </h2>
+        <div className="qa-wrapper">
+          <div>
+            <h3>Question</h3>
+            <div className="mdbook-quiz">
+              <AnswerView
+                index={r.question + 1}
+                quizName={r.quizName}
+                question={question}
+                correct={true}
+                userAnswer={question.answer}
+                showCorrect={false}
               />
             </div>
-          ))}
+          </div>
+          <div>
+            <h3>Answers</h3>
+            {answersSorted.map((answer, i) => (
+              <div className="wrong-answer" key={i}>
+                <div>N = {answer.count}</div>
+                <methods.AnswerView
+                  answer={answer.answer}
+                  baseline={question.answer}
+                  prompt={question.prompt}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 let App = () => {
   let state = useLocalObservable(() => ({
@@ -273,17 +287,23 @@ let App = () => {
 
   useEffect(() => {
     (async () => {
-      let files = ['data/question-summary.json', 'data/quiz-summary.json', 'data/quiz-schemas.json'];
-      let pairs = await Promise.all(files.map(async url => {
-        let resp = await axios.get(url, {
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-          }
-        });
-        return [url, resp.data];
-      }));
+      let files = [
+        "data/question-summary.json",
+        "data/quiz-summary.json",
+        "data/quiz-schemas.json",
+      ];
+      let pairs = await Promise.all(
+        files.map(async (url) => {
+          let resp = await axios.get(url, {
+            headers: {
+              "Cache-Control": "no-cache",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          });
+          return [url, resp.data];
+        })
+      );
       setData(_.fromPairs(pairs));
     })();
   }, []);
@@ -296,13 +316,13 @@ let App = () => {
       <div className="grids">
         <Table
           tableName="Quiz Summary"
-          rows={data['data/quiz-summary.json']}
+          rows={data["data/quiz-summary.json"]}
           metricName="Avg quiz score"
           state={state}
         />
         <Table
           tableName="Question Summary"
-          rows={data['data/question-summary.json']}
+          rows={data["data/question-summary.json"]}
           metricName="Avg question score"
           extraColumns={[
             {
@@ -311,10 +331,15 @@ let App = () => {
               formatter: ({ row }: { row: any }) => row.question + 1,
             },
           ]}
+          defaultSort={[{ columnKey: "mean", direction: "ASC" }]}
+          defaultFilter={{ N: [30, 10000] }}
           state={state}
         />
       </div>
-      <QuestionInspector state={state} quizSchemas={data['data/quiz-schemas.json']} />
+      <QuestionInspector
+        state={state}
+        quizSchemas={data["data/quiz-schemas.json"]}
+      />
     </div>
   );
 };
