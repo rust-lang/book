@@ -18,11 +18,15 @@ export interface Log<T> {
 
 export class Telemetry {
   private sessionId: string;
-  constructor(private url: string, private commitHash: string) {
+  constructor(private url: string, private commitHash: string, private branch: string) {
     this.sessionId = getSessionId();
   }
 
   log<T>(endpoint: string, payload: T) {
+    if (!(this.branch == "main" || this.branch == "master")) {
+      return;
+    }
+
     let host = window.location.hostname;
     if (host == "localhost" && !this.url.includes("localhost")) {
       return;
@@ -43,11 +47,12 @@ export class Telemetry {
 
 declare var COMMIT_HASH: string;
 declare var TELEMETRY_URL: string;
+declare var BRANCH: string;
 
 declare global {
   var telemetry: Telemetry;
 }
 
 if (typeof window !== "undefined") {
-  window.telemetry = new Telemetry(TELEMETRY_URL, COMMIT_HASH);
+  window.telemetry = new Telemetry(TELEMETRY_URL, COMMIT_HASH, BRANCH);
 }
