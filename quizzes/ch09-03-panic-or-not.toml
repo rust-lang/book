@@ -1,24 +1,21 @@
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
-A Rust programmer is designing a library for writing command-line interfaces. As a part of this library, they are implementing a function 
-to parse command-line flags. Which implementation would be most appropriate for this domain?
+A Rust programmer is designing a library for writing command-line interfaces. As a part of this library, they are implementing a function to parse command-line flags provided by a user. Which implementation would be most appropriate for this domain?
 
 ```
-fn parse_flag_v1(flag: &str) -> Option<String> {
-  if flag.starts_with("--") {
-    Some(flag.strip_prefix("--").unwrap())
-  } else {
-    None
+fn parse_flag_v1(flag: &str) -> Result<String, String> {
+  match flag.strip_prefix("--") {
+    Some(no_dash) => Ok(no_dash.to_string()),
+    None => Err(format!("Invalid flag {flag}"))
   }
 }
 
 fn parse_flag_v2(flag: &str) -> String {
-  if !flag.starts_with("--") {
-    panic!("Invalid flag {flag}")
+  match flag.strip_prefix("--") {
+    Some(no_dash) => no_dash.to_string(),
+    None => panic!("Invalid flag {flag}")
   }
-
-  flag.strip_prefix("--").unwrap()
 }
 ```
 """
@@ -28,7 +25,7 @@ prompt.choices = [
 ]
 answer.answer = 0
 context = """
-Here, the programmer would likely want to use a *recoverable* error (the `Option`). If a CLI user passes an incorrectly formatted flag,
+Here, the programmer would likely want to use a *recoverable* error (the `Result`). If a CLI user passes an incorrectly formatted flag,
 then the CLI library might want to provide additional help like displaying the possible set of flags. A panic would force the application
 to only show the panic message, and would probably be a worse user experience.
 """
