@@ -229,7 +229,7 @@ let QuestionInspector: React.FC<{ state: any, quizSchemas: any }> = observer(({ 
   let methods = getQuestionMethods(question.type);
 
   return (
-    <div>
+    <div key={r.quizName + '/' + r.question}>
       <h2>
         Quiz {r.quizName} / Question {r.question + 1}
       </h2>
@@ -275,7 +275,13 @@ let App = () => {
     (async () => {
       let files = ['data/question-summary.json', 'data/quiz-summary.json', 'data/quiz-schemas.json'];
       let pairs = await Promise.all(files.map(async url => {
-        let resp = await axios.get(url);
+        let resp = await axios.get(url, {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }
+        });
         return [url, resp.data];
       }));
       setData(_.fromPairs(pairs));
