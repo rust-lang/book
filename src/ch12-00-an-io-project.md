@@ -5,6 +5,8 @@ exploration of a few more standard library features. We’ll build a command lin
 tool that interacts with file and command line input/output to practice some of
 the Rust concepts you now have under your belt.
 
+> **Note:** there are no quizzes in this chapter, since it is just supposed to be a hands-on walkthrough.
+
 Rust’s speed, safety, single binary output, and cross-platform support make it
 an ideal language for creating command line tools, so for our project, we’ll
 make our own version of the classic command line search tool `grep`
