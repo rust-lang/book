@@ -187,6 +187,43 @@ the Rust compiler pointing out a potential bug early (at compile time rather
 than at runtime) and showing you exactly where the problem is. Then you don’t
 have to track down why your data isn’t what you thought it was.
 
+### Implicit Borrowing
+
+Borrows and references are used *everywhere* in Rust. So to make Rust programs less verbose, the Rust compiler has a number of strategies for implicitly creating borrows and converting references. For example, mutable references can be moved by direct assignment:
+
+```rust,ignore,does_not_compile
+fn main() {
+  let mut s = String::from("Hello world");
+  let s2 = &mut s;
+  let s3 = s2;
+  println!("{}", s2); // Not valid because s2 is moved
+}
+```
+
+But mutable references are *not* moved by function calls:
+
+```rust
+fn consume(_s: &mut String) {}
+fn main() {
+  let mut s = String::from("Hello world");
+  let s2 = &mut s;
+  consume(s2);
+  println!("{}", s2); // Valid because s2 is NOT moved
+}
+```
+
+This should seem to contradict what you learned in the last chapter! But this program works because Rust automatically *reborrows* mutable references for function calls, so Rust programmers don't have to keep creating more mutable references. The call to `consume` after desugaring looks like:
+
+```rust,ignore
+  consume(&mut *s2);
+```
+
+Therefore `s2` is not *moved* by `consume`, but rather *borrowed* by `consume`.
+
+The complete set of implicit behavior is beyond the scope of this chapter. We will introduce these rules as the book goes on, for example how Rust deals with methods ([Section 5.3][methods]) and smart pointers ([Section 15.2][smartpointers]). For now, just be aware that these rules exist. If you come across a piece of Rust code that seems wrong but actually compiles, then these rules might be the reason.
+
+Conversely, you can assume that Rust will never implicitly convert borrows in a way that would violate ownership. For instance, an immutable reference will never turn into a mutable reference (unless you use [interior mutability][interior]), and a mutable reference will never turn into an owned value (unless you use [`std::mem::take`](https://doc.rust-lang.org/std/mem/fn.take.html)).
+
 {{#quiz ../quizzes/ch04-02-references-sec2-mut.toml}}
 
 ### Dangling References
@@ -257,3 +294,6 @@ Let’s recap what we’ve discussed about references:
 Next, we’ll look at a different kind of reference: slices.
 
 [nll]: https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html
+[methods]: ch05-03-method-syntax.html
+[smartpointers]: ch15-00-smart-pointers.html
+[interior]: ch15-05-interior-mutability.html
