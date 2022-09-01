@@ -1,0 +1,9 @@
+[tasks.watch-book]
+script = "mdbook serve --open --extra-watch-dirs quizzes"
+
+[tasks.watch-js]
+script = "cd js-extensions && pnpm watch"
+
+[tasks.watch.run_task]
+name = ["watch-book", "watch-js"]
+parallel = true
