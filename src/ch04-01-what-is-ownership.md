@@ -469,6 +469,38 @@ But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
 transferring ownership, called *references*.
 
+
+### The Compiler Is Not Perfect
+
+A common issue in statically-typed languages is that the type checker can reject valid programs. For example, take this program:
+
+```rust
+fn main() {
+  let x = if true { 1 } else { "hello" };
+  assert_eq!(x + 1, 2);
+}
+```
+
+If this program were allowed to execute, there would be no issues. `x` would always be `1`, and so computing `x + 1` would always work as expected. That's because the condition is `true`. But the type checker ignores the actual value of the condition, and assumes either branch *could* be executed. Therefore this program is rejected because `x` cannot be both a number and a string.
+
+Similarly with ownership, the compiler may reject programs that seem acceptable under the rules of ownership. For example, like this program:
+
+```rust
+fn move_two(s1: String, s2: String) -> String {
+  s1
+}
+
+fn main() {
+  let (s1, s2) = (String::from("a"), String::from("b"));
+  let s3 = move_two(s1, s2);
+  println!("{} {}", s2, s3);
+}
+```
+
+Even though `s2` is never used or returned in `move_two`, the compiler still considers `s2` to be moved when calling `move_two`.
+
+So as you're learning about ownership and Rust, keep in mind that the ownership-checker is conservative just like any type system. 
+
 {{#quiz ../quizzes/ch04-01-ownership-sec3-functions.toml}}
 
 [data-types]: ch03-02-data-types.html#data-types

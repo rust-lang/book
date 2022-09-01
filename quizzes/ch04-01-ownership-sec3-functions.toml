@@ -39,3 +39,22 @@ context = """
 First, the call to `String::from` causes an initial heap allocation. Then the call `s.clone()` does a deep copy that involves a second heap allocation. 
 Moving (or shallow-copying) a `String` does not cause a heap allocation.
 """
+
+[[questions]]
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let s = String::from("hello");
+  let s2;
+  let b = false;
+  if b {
+    s2 = s;
+  }
+  println!("{s}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 8
+context = """
+Because `s` could be moved inside of the if-statement, it is illegal to use it on line 8.
+"""
