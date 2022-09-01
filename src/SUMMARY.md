@@ -75,7 +75,9 @@
 
 - [End of Experiment](end-of-experiment.md)
 
-<!-- ## Thinking in Rust
+---
+
+## Thinking in Rust
 
 - [Functional Language Features: Iterators and Closures](ch13-00-functional-features.md)
     - [Closures: Anonymous Functions that Capture Their Environment](ch13-01-closures.md)
@@ -135,4 +137,4 @@
     - [D - Useful Development Tools](appendix-04-useful-development-tools.md)
     - [E - Editions](appendix-05-editions.md)
     - [F - Translations of the Book](appendix-06-translation.md)
-    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md) -->
+    - [G - How Rust is Made and “Nightly Rust”](appendix-07-nightly-rust.md)

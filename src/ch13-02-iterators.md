@@ -1,5 +1,7 @@
 ## Processing a Series of Items with Iterators
 
+{{#include experiment-note.md}}
+
 The iterator pattern allows you to perform some task on a sequence of items in
 turn. An iterator is responsible for the logic of iterating over each item and
 determining when the sequence has finished. When you use iterators, you don’t

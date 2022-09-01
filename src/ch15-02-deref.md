@@ -1,5 +1,7 @@
 ## Treating Smart Pointers Like Regular References with the `Deref` Trait
 
+{{#include experiment-note.md}}
+
 Implementing the `Deref` trait allows you to customize the behavior of the
 *dereference operator* `*` (not to be confused with the multiplication or glob
 operator). By implementing `Deref` in such a way that a smart pointer can be

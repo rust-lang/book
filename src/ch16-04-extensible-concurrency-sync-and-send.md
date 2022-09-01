@@ -1,5 +1,7 @@
 ## Extensible Concurrency with the `Sync` and `Send` Traits
 
+{{#include experiment-note.md}}
+
 Interestingly, the Rust language has *very* few concurrency features. Almost
 every concurrency feature we’ve talked about so far in this chapter has been
 part of the standard library, not the language. Your options for handling

@@ -1,5 +1,7 @@
 ## Using Threads to Run Code Simultaneously
 
+{{#include experiment-note.md}}
+
 In most current operating systems, an executed program’s code is run in a
 *process*, and the operating system will manage multiple processes at once.
 Within a program, you can also have independent parts that run simultaneously.

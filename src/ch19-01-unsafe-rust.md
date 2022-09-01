@@ -1,5 +1,7 @@
 ## Unsafe Rust
 
+{{#include experiment-note.md}}
+
 All the code we’ve discussed so far has had Rust’s memory safety guarantees
 enforced at compile time. However, Rust has a second language hidden inside it
 that doesn’t enforce these memory safety guarantees: it’s called *unsafe Rust*

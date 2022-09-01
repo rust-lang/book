@@ -1,5 +1,7 @@
 ## Macros
 
+{{#include experiment-note.md}}
+
 We’ve used macros like `println!` throughout this book, but we haven’t fully
 explored what a macro is and how it works. The term *macro* refers to a family
 of features in Rust: *declarative* macros with `macro_rules!` and three kinds

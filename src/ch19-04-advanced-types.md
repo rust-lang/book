@@ -1,5 +1,7 @@
 ## Advanced Types
 
+{{#include experiment-note.md}}
+
 The Rust type system has some features that we’ve so far mentioned but haven’t
 yet discussed. We’ll start by discussing newtypes in general as we examine why
 newtypes are useful as types. Then we’ll move on to type aliases, a feature

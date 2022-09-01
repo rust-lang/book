@@ -1,5 +1,7 @@
 ## Advanced Functions and Closures
 
+{{#include experiment-note.md}}
+
 This section explores some advanced features related to functions and closures,
 including function pointers and returning closures.
 

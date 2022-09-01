@@ -1,5 +1,7 @@
 ## Using Message Passing to Transfer Data Between Threads
 
+{{#include experiment-note.md}}
+
 One increasingly popular approach to ensuring safe concurrency is *message
 passing*, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from [the Go language

@@ -1,5 +1,7 @@
 # Final Project: Building a Multithreaded Web Server
 
+{{#include experiment-note.md}}
+
 It’s been a long journey, but we’ve reached the end of the book. In this
 chapter, we’ll build one more project together to demonstrate some of the
 concepts we covered in the final chapters, as well as recap some earlier

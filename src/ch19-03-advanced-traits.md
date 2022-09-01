@@ -1,5 +1,7 @@
 ## Advanced Traits
 
+{{#include experiment-note.md}}
+
 We first covered traits in the [“Traits: Defining Shared
 Behavior”][traits-defining-shared-behavior]<!-- ignore --> section of Chapter
 10, but we didn’t discuss the more advanced details. Now that you know more

@@ -1,5 +1,7 @@
 ## Publishing a Crate to Crates.io
 
+{{#include experiment-note.md}}
+
 We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as
 dependencies of our project, but you can also share your code with other people
 by publishing your own packages. The crate registry at

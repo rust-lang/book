@@ -1,5 +1,7 @@
 ## Customizing Builds with Release Profiles
 
+{{#include experiment-note.md}}
+
 In Rust, *release profiles* are predefined and customizable profiles with
 different configurations that allow a programmer to have more control over
 various options for compiling code. Each profile is configured independently of
