@@ -130,14 +130,15 @@ fn main() {
 Running `cargo clippy` on this project results in this error:
 
 ```text
-error: approximate value of `f{32, 64}::consts::PI` found. Consider using it directly
+error: approximate value of `f{32, 64}::consts::PI` found
  --> src/main.rs:2:13
   |
 2 |     let x = 3.1415;
   |             ^^^^^^
   |
-  = note: #[deny(clippy::approx_constant)] on by default
-  = help: for further information visit https://rust-lang-nursery.github.io/rust-clippy/master/index.html#approx_constant
+  = note: `#[deny(clippy::approx_constant)]` on by default
+  = help: consider using the constant directly
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#approx_constant
 ```
 
 This error lets you know that Rust already has a more precise `PI` constant
