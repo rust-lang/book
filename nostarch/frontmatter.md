@@ -1,11 +1,3 @@
-
-Unmatched: BookEdition
-      ##
-
-##
-
-##
-
 ## About the Authors
 
 Carol Nichols is a member of the Rust Crates.io Team and a former member of the
@@ -25,75 +17,9 @@ in 2011, and in 2016 joined Mozilla to work on Rust full time, helping to shape
 its direction for widespread use. These days, they are a freelance Rust trainer
 and advocate for safe systems programming.
 
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
 ## Brief Contents
 
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
 ## Contents in Detail
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
 
 ## Foreword
 
@@ -135,15 +61,7 @@ friendly and approachable text intended to help you level up not just your
 knowledge of Rust, but also your reach and confidence as a programmer in
 general. So dive in, get ready to learn—and welcome to the Rust community!
 
-
-Unmatched: SourceForeword
-      ##
-
-##
-
-##
-
-##
+Nicholas Matsakis and Aaron Turon
 
 ## ACKNOWLEDGMENTS
 
@@ -162,24 +80,6 @@ improving this book and bringing it to print.
 Carol is grateful for the opportunity to work on this book. She thanks her
 family for their constant love and support, especially her husband, Jake
 Goulding, and her daughter, Vivian.
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
 
 ## Preface
 
@@ -204,20 +104,6 @@ Note that any code from earlier renditions of this book that compiled will
 continue to compile with the relevant edition in the project’s *Cargo.toml*,
 even as you update the Rust compiler version you’re using. That’s Rust’s
 backward-compatibility guarantees at work!
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
-
-##
 
 ## Introduction
 

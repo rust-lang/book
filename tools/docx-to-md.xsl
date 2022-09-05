@@ -18,6 +18,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'AuthorQuery']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookHalfTitle']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookTitle0']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookEdition']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BookAuthor']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Copyright']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightHead']" />
@@ -48,11 +49,12 @@
     </xsl:template>
 
 
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadA' or w:pPr/w:pStyle/@w:val = 'FrontmatterTitle']">
+    <xsl:template match="w:p[(w:pPr/w:pStyle/@w:val = 'HeadA' or w:pPr/w:pStyle/@w:val = 'FrontmatterTitle') and w:r/w:t]">
         <xsl:text>## </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
+    <xsl:template match="w:p[(w:pPr/w:pStyle/@w:val = 'HeadA' or w:pPr/w:pStyle/@w:val = 'FrontmatterTitle') and not(w:r/w:t)]" />
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadB']">
         <xsl:text>### </xsl:text>
@@ -108,7 +110,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara' or @w:val = 'ChapterIntro' or @w:val = 'BodyContinued' or @w:val = 'SourceForeword']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
