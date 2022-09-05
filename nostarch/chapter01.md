@@ -33,8 +33,6 @@ warnings. In other words, any newer, stable version of Rust you install using
 these steps should work as expected with the content of this book.
 
 
-Unmatched: BoxType
-
 > ### Command Line Notation
 
 

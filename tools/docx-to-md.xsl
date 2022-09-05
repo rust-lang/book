@@ -24,6 +24,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightHead']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightLOC']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective0']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BoxType']" />
 
     <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
 
