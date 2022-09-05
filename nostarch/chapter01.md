@@ -20,7 +20,7 @@ The first step is to install Rust. We’ll download Rust through `rustup`, a
 command line tool for managing Rust versions and associated tools. You’ll need
 an internet connection for the download.
 
-> NoteIf you prefer not to use `rustup` for some reason, please see the Other
+> Note: If you prefer not to use `rustup` for some reason, please see the Other
 Rust Installation Methods page at
 *https://forge.rust-lang.org/infra/other-installation-methods.html* for more
 options.
@@ -170,9 +170,9 @@ Now that you’ve installed Rust, it’s time to write your first Rust program.
 It’s traditional when learning a new language to write a little program that
 prints the text `Hello, world!` to the screen, so we’ll do the same here!
 
-> NoteThis book assumes basic familiarity with the command line. Rust makes no
-specific demands about your editing or tooling or where your code lives, so if
-you prefer to use an integrated development environment (IDE) instead of the
+> Note: This book assumes basic familiarity with the command line. Rust makes
+no specific demands about your editing or tooling or where your code lives, so
+if you prefer to use an integrated development environment (IDE) instead of the
 command line, feel free to use your favorite IDE. Many IDEs now have some
 degree of Rust support; check the IDE’s documentation for details. The Rust
 team has been focusing on enabling great IDE support via `rust-analyzer`. See
@@ -312,7 +312,7 @@ The function body is wrapped in `{}`. Rust requires curly brackets around all
 function bodies. It’s good style to place the opening curly bracket on the same
 line as the function declaration, adding one space in between.
 
-> NoteIf you want to stick to a standard style across Rust projects, you can
+> Note: If you want to stick to a standard style across Rust projects, you can
 use an automatic formatter tool called `rustfmt` to format your code in a
 particular style (more on rustfmt in Appendix D). The Rust team has included
 this tool with the standard Rust distribution, as rustc is, so it should
@@ -470,9 +470,9 @@ It has also initialized a new Git repository along with a *.gitignore* file.
 Git files won’t be generated if you run `cargo new` within an existing Git
 repository; you can override this behavior by using `cargo new --vcs=git`.
 
-> NoteGit is a common version control system. You can change `cargo new` to use
-a different version control system or no version control system by using the
-`--vcs` flag. Run `cargo new --help` to see the available options.
+> Note: Git is a common version control system. You can change `cargo new` to
+use a different version control system or no version control system by using
+the `--vcs` flag. Run `cargo new --help` to see the available options.
 
 Open *Cargo.toml* in your text editor of choice. It should look similar to the
 code in Listing 1-2.
