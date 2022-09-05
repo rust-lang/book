@@ -12,7 +12,7 @@ Let’s start your Rust journey! There’s a lot to learn, but every journey sta
 somewhere. In this chapter, we’ll discuss:
 
 * Installing Rust on Linux, macOS, and Windows
-* Writing a program that prints `Hello,` `world!`
+* Writing a program that prints `Hello, world!`
 * Using `cargo`, Rust’s package manager and build system
 ## Installation
 
@@ -157,8 +157,8 @@ $ rustup self uninstall
 ### Local Documentation
 
 The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup` `doc` to open the local
-documentation in your browser.
+that you can read it offline. Run `rustup doc` to open the local documentation
+in your browser.
 
 Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
@@ -168,7 +168,7 @@ sure what it does or how to use it, use the application programming interface
 
 Now that you’ve installed Rust, it’s time to write your first Rust program.
 It’s traditional when learning a new language to write a little program that
-prints the text `Hello,` `world!` to the screen, so we’ll do the same here!
+prints the text `Hello, world!` to the screen, so we’ll do the same here!
 
 > NoteThis book assumes basic familiarity with the command line. Rust makes no
 specific demands about your editing or tooling or where your code lives, so if
@@ -247,7 +247,7 @@ fn main() {
 }
 ```
 
-A program that prints `Hello,` `world!`
+A program that prints `Hello, world!`
 
 Save the file and go back to your terminal window in the
 *~/projects/hello_world* directory. On Linux or macOS, enter the following
@@ -279,12 +279,12 @@ On Windows, enter the command `.\main.exe` instead of `./main`:
 Hello, world!
 ```
 
-Regardless of your operating system, the string `Hello,` `world!` should print
-to the terminal. If you don’t see this output, refer back to “Troubleshooting”
-on page XX for ways to get help.
+Regardless of your operating system, the string `Hello, world!` should print to
+the terminal. If you don’t see this output, refer back to “Troubleshooting” on
+page XX for ways to get help.
 
-If `Hello,` `world!` did print, congratulations! You’ve officially written a
-Rust program. That makes you a Rust programmer—welcome!
+If `Hello, world!` did print, congratulations! You’ve officially written a Rust
+program. That makes you a Rust programmer—welcome!
 
 ### Anatomy of a Rust Program
 
@@ -314,8 +314,8 @@ line as the function declaration, adding one space in between.
 
 > NoteIf you want to stick to a standard style across Rust projects, you can
 use an automatic formatter tool called `rustfmt` to format your code in a
-particular style (more on `rustfmt` in Appendix D). The Rust team has included
-this tool with the standard Rust distribution, as `rustc` is, so it should
+particular style (more on rustfmt in Appendix D). The Rust team has included
+this tool with the standard Rust distribution, as rustc is, so it should
 already be installed on your computer!
 
 The body of the `main` function holds the following code:
@@ -335,8 +335,8 @@ more detail in Chapter 19. For now, you just need to know that using a `!`
 means that you’re calling a macro instead of a normal function and that macros
 don’t always follow the same rules as functions.
 
-Third, you see the `"Hello,` `world!"` string. We pass this string as an
-argument to `println!`, and the string is printed to the screen.
+Third, you see the `"Hello, world!"` string. We pass this string as an argument
+to `println!`, and the string is printed to the screen.
 
 Fourth, we end the line with a semicolon (`;`), which indicates that this
 expression is over and the next one is ready to begin. Most lines of Rust code
@@ -398,8 +398,8 @@ From here, you run the *main* or *main.exe* file, like this:
 $ ./main # or .\main.exe on Windows
 ```
 
-If your *main.rs* is your “Hello, world!” program, this line prints `Hello,`
-`world!` to your terminal.
+If your *main.rs* is your “Hello, world!” program, this line prints `Hello,
+world!` to your terminal.
 
 If you’re more familiar with a dynamic language, such as Ruby, Python, or
 JavaScript, you might not be used to compiling and running a program as
@@ -439,9 +439,9 @@ entering the following in your terminal:
 $ cargo --version
 ```
 
-If you see a version number, you have it! If you see an error, such as
-`command` `not` `found`, look at the documentation for your method of
-installation to determine how to install Cargo separately.
+If you see a version number, you have it! If you see an error, such as `command
+not found`, look at the documentation for your method of installation to
+determine how to install Cargo separately.
 
 ### Creating a Project with Cargo
 
@@ -467,12 +467,12 @@ has generated two files and one directory for us: a *Cargo.toml* file and a
 *src* directory with a *main.rs* file inside.
 
 It has also initialized a new Git repository along with a *.gitignore* file.
-Git files won’t be generated if you run `cargo` `new` within an existing Git
-repository; you can override this behavior by using `cargo` `new` `--vcs=git`.
+Git files won’t be generated if you run `cargo new` within an existing Git
+repository; you can override this behavior by using `cargo new --vcs=git`.
 
-> NoteGit is a common version control system. You can change `cargo` `new` to
-use a different version control system or no version control system by using
-the `--vcs` flag. Run `cargo` `new` `--help` to see the available options.
+> NoteGit is a common version control system. You can change `cargo new` to use
+a different version control system or no version control system by using the
+`--vcs` flag. Run `cargo new --help` to see the available options.
 
 Open *Cargo.toml* in your text editor of choice. It should look similar to the
 code in Listing 1-2.
@@ -503,7 +503,7 @@ edition = "2021"
 [dependencies]
 ```
 
-Contents of *Cargo.toml* generated by `cargo` `new`
+Contents of *Cargo.toml* generated by `cargo new`
 
 This file is in the *TOML* (*Tom’s* *Obvious,* *Minimal* *Language*) format,
 which is Cargo’s configuration format.
@@ -584,15 +584,15 @@ $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
 
-If all goes well, `Hello,` `world!` should print to the terminal. Running
-`cargo` `build` for the first time also causes Cargo to create a new file at
-the top level: *Cargo.lock*. This file keeps track of the exact versions of
+If all goes well, `Hello, world!` should print to the terminal. Running `cargo
+build` for the first time also causes Cargo to create a new file at the top
+level: *Cargo.lock*. This file keeps track of the exact versions of
 dependencies in your project. This project doesn’t have dependencies, so the
 file is a bit sparse. You won’t ever need to change this file manually; Cargo
 manages its contents for you.
 
-We just built a project with `cargo` `build` and ran it with
-`./target/debug/hello_cargo`, but we can also use `cargo` `run` to compile the
+We just built a project with `cargo build` and ran it with
+`./target/debug/hello_cargo`, but we can also use `cargo run` to compile the
 code and then run the resultant executable all in one command:
 
 ```
@@ -611,9 +611,9 @@ $ cargo run
 Hello, world!
 ```
 
-Using `cargo` `run` is more convenient than having to remember to run `cargo`
-`build` and then use the whole path to the binary, so most developers use
-`cargo` `run`.
+Using `cargo run` is more convenient than having to remember to run `cargo
+build` and then use the whole path to the binary, so most developers use `cargo
+run`.
 
 Notice that this time we didn’t see output indicating that Cargo was compiling
 `hello_cargo`. Cargo figured out that the files hadn’t changed, so it didn’t
@@ -641,8 +641,8 @@ $ cargo run
 Hello, world!
 ```
 
-Cargo also provides a command called `cargo` `check`. This command quickly
-checks your code to make sure it compiles but doesn’t produce an executable:
+Cargo also provides a command called `cargo check`. This command quickly checks
+your code to make sure it compiles but doesn’t produce an executable:
 
 ```
 $ cargo check
@@ -656,21 +656,21 @@ $ cargo check
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
 ```
 
-Why would you not want an executable? Often, `cargo` `check` is much faster
-than `cargo` `build` because it skips the step of producing an executable. If
-you’re continually checking your work while writing the code, using `cargo`
-`check` will speed up the process of letting you know if your project is still
-compiling! As such, many Rustaceans run `cargo` `check` periodically as they
-write their program to make sure it compiles. Then they run `cargo` `build`
-when they’re ready to use the executable.
+Why would you not want an executable? Often, `cargo check` is much faster than
+`cargo build` because it skips the step of producing an executable. If you’re
+continually checking your work while writing the code, using `cargo check` will
+speed up the process of letting you know if your project is still compiling! As
+such, many Rustaceans run `cargo check` periodically as they write their
+program to make sure it compiles. Then they run `cargo build` when they’re
+ready to use the executable.
 
 Let’s recap what we’ve learned so far about Cargo:
 
-* We can create a project using `cargo` `new`.
-* We can build a project using `cargo` `build`.
-* We can build and run a project in one step using `cargo` `run`.
+* We can create a project using `cargo new`.
+* We can build a project using `cargo build`.
+* We can build and run a project in one step using `cargo run`.
 * We can build a project without producing a binary to check for errors using
-`cargo` `check`.
+`cargo check`.
 * Instead of saving the result of the build in the same directory as our code,
 Cargo stores it in the *target/debug* directory.
 An additional advantage of using Cargo is that the commands are the same no
@@ -679,16 +679,16 @@ longer provide specific instructions for Linux and macOS versus Windows.
 
 ### Building for Release
 
-When your project is finally ready for release, you can use `cargo` `build`
-`--release` to compile it with optimizations. This command will create an
+When your project is finally ready for release, you can use `cargo build
+--release` to compile it with optimizations. This command will create an
 executable in *target/release* instead of *target/debug*. The optimizations
 make your Rust code run faster, but turning them on lengthens the time it takes
 for your program to compile. This is why there are two different profiles: one
 for development, when you want to rebuild quickly and often, and another for
 building the final program you’ll give to a user that won’t be rebuilt
 repeatedly and that will run as fast as possible. If you’re benchmarking your
-code’s running time, be sure to run `cargo` `build` `--release` and benchmark
-with the executable in *target/release*.
+code’s running time, be sure to run `cargo build --release` and benchmark with
+the executable in *target/release*.
 
 ### Cargo as Convention
 
