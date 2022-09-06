@@ -147,12 +147,20 @@
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Code' or @w:val = 'CodeWide' or @w:val = 'CodeAnnotated']]">
-        <xsl:text>```&#10;</xsl:text>
+        <xsl:if test="not(preceding-sibling::*[1][self::w:p]) or preceding-sibling::w:p[1][w:pPr[not(w:pStyle) or (w:pStyle/@w:val != 'Code' and w:pStyle/@w:val != 'CodeWide' and w:pStyle/@w:val != 'CodeAnnotated')]]">
+            <xsl:text>```&#10;</xsl:text>
+        </xsl:if>
+
         <!-- Don't apply Emphasis/etc templates in code blocks -->
         <xsl:for-each select="w:r">
             <xsl:value-of select="w:t" />
         </xsl:for-each>
-        <xsl:text>&#10;```&#10;&#10;</xsl:text>
+
+        <xsl:text>&#10;</xsl:text>
+
+        <xsl:if test="not(following-sibling::*[1][self::w:p]) or following-sibling::w:p[1][w:pPr[not(w:pStyle) or (w:pStyle/@w:val != 'Code' and w:pStyle/@w:val != 'CodeWide' and w:pStyle/@w:val != 'CodeAnnotated')]]">
+            <xsl:text>```&#10;&#10;</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSingle']">
