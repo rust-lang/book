@@ -212,7 +212,7 @@ fn main() {
 }
 ```
 
-This should seem to contradict what you learned in the last chapter! But this program works because Rust automatically *reborrows* mutable references for function calls, so Rust programmers don't have to keep creating more mutable references. The call to `consume` after desugaring looks like:
+This fact contradicts what you learned in the previous section! But this program works because Rust automatically *reborrows* mutable references when passed as input to a function call. That way, Rust programmers don't have to keep creating new mutable references on every call. Inside the compiler, the call to `consume` is transformed to look like this:
 
 ```rust,ignore
   consume(&mut *s2);
