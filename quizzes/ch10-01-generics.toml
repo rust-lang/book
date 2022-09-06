@@ -9,7 +9,13 @@ fn mystery<T>(x: T) -> T {
 }
 ```
 
-If you call `mystery(3)`, then the return value must be:
+Then you call `mystery` like this:
+
+```
+let x = mystery(3);
+```
+
+Then the value of `x` must be:
 """
 answer.answer = "3"
 context = """
@@ -52,7 +58,7 @@ impl<T> Point<T> {
 }
 
 fn main() {
-  let p: Point<i32> = Point { x: 1, y: 1 };
+  let p: Point<i32> = Point { x: 1, y: 2 };
   println!("{}", p.f());
 }
 """

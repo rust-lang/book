@@ -17,7 +17,7 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "2"
 context = """ 
-The `..p` syntax is a shallow copy of each field, so the second `p.x += 1` has no effect on `p2`.
+The `..a` syntax is a shallow copy of each field, so the second `a.x += 1` has no effect on `b`.
 """
 
 [[questions]]
