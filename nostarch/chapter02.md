@@ -191,7 +191,7 @@ is a string type provided by the standard library that is a growable, UTF-8
 encoded bit of text.
 
 The `::` syntax in the `::new` line indicates that `new` is an associated
-function of the `String` type. An *associated function   is a function that’s
+function of the `String` type. An *associated function* is a function that’s
 implemented on a type, in this case `String`. This `new` function creates a
 new, empty string. You’ll find a `new` function on many types because it’s a
 common name for a function that makes a new value of some kind.
@@ -361,7 +361,7 @@ library. However, the Rust team does provide a `rand` crate at
 ### Using a Crate to Get More Functionality
 
 Remember that a crate is a collection of Rust source code files. The project
-we’ve been building is a *binary crate  , which is an executable. The `rand`
+we’ve been building is a *binary crate*, which is an executable. The `rand`
 crate is a *library crate*, which contains code that is intended to be used in
 other programs and can’t be executed on its own.
 

@@ -269,17 +269,17 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
 
     <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption' or @w:val = 'EmphasisRevItal' or @w:val = 'Italic' or @w:val = 'LinkURL']]">
         <xsl:choose>
-            <xsl:when test="normalize-space(w:t) != ''">
+            <xsl:when test="w:t and normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL')]">
+                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL')]">
                     <xsl:text>*</xsl:text>
                 </xsl:if>
 
                 <xsl:value-of select="normalize-space(w:t)" />
 
-                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL')]">
+                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'EmphasisItalic') and not(w:rPr/w:rStyle/@w:val = 'EmphasisItalicBox') and not(w:rPr/w:rStyle/@w:val = 'EmphasisNote') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevCaption') and not(w:rPr/w:rStyle/@w:val = 'EmphasisRevItal') and not(w:rPr/w:rStyle/@w:val = 'Italic') and not(w:rPr/w:rStyle/@w:val = 'LinkURL')]">
                     <xsl:text>*</xsl:text>
                 </xsl:if>
 
@@ -287,9 +287,9 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
             </xsl:when>
-            <xsl:otherwise>
+            <xsl:when test="w:t">
                 <xsl:text> </xsl:text>
-            </xsl:otherwise>
+            </xsl:when>
         </xsl:choose>
     </xsl:template>
 
