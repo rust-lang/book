@@ -90,6 +90,7 @@ install, include:
 * The Windows 10 or 11 SDK
 * The English language pack component, along with any other language pack of
 your choosing
+
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
@@ -671,6 +672,7 @@ Let’s recap what we’ve learned so far about Cargo:
 `cargo check`.
 * Instead of saving the result of the build in the same directory as our code,
 Cargo stores it in the *target/debug* directory.
+
 An additional advantage of using Cargo is that the commands are the same no
 matter which operating system you’re working on. So, at this point, we’ll no
 longer provide specific instructions for Linux and macOS versus Windows.
@@ -725,6 +727,7 @@ you’ve learned how to:
 * Open locally installed documentation
 * Write and run a “Hello, world!” program using `rustc` directly
 * Create and run a new project using the conventions of Cargo
+
 This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
 If you would rather start by learning how common programming concepts work in
