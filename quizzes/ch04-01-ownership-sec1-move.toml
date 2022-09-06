@@ -54,22 +54,3 @@ answer.stdout = "hello world"
 context = """
 It is legal to move a value from a nested scope to an outer scope.
 """
-
-[[questions]]
-type = "Tracing"
-prompt.program = """
-fn main() {
-  let s = String::from("hello");
-  let s2;
-  let b = false;
-  if b {
-    s2 = s;
-  }
-  println!("{s}");
-}
-"""
-answer.doesCompile = false
-answer.lineNumber = 8
-context = """
-Because `s` could be moved inside of the if-statement, it is illegal to use it on line 8.
-"""
