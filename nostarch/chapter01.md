@@ -35,8 +35,7 @@ these steps should work as expected with the content of this book.
 
 
 > ### Command Line Notation
-
-
+>
 > In this chapter and throughout the book, we’ll show some commands used in the
 terminal. Lines that you should enter in a terminal all start with `$`. You
 don’t need to type the `$` character; it’s the command line prompt shown to

@@ -180,11 +180,10 @@
         <xsl:text>&#10;</xsl:text>
         <xsl:text>> ### </xsl:text>
         <xsl:apply-templates select="*" />
-        <xsl:text>&#10;&#10;</xsl:text>
+        <xsl:text>&#10;>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockText' or @w:val = 'BoxBody']]">
-        <xsl:text>&#10;</xsl:text>
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
