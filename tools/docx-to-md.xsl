@@ -97,6 +97,15 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BoxListBullet']]">
+        <xsl:text>> * </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;</xsl:text>
+        <xsl:if test="not(following-sibling::*[1][self::w:p]) or following-sibling::w:p[1][w:pPr/w:pStyle[@w:val != 'BoxListBullet']]">
+            <xsl:text>>&#10;</xsl:text>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletC' or @w:val = 'ListPlainC']]">
         <xsl:text>* </xsl:text>
         <xsl:apply-templates select="*" />
