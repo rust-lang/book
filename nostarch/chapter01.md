@@ -191,17 +191,8 @@ For Linux, macOS, and PowerShell on Windows, enter this:
 
 ```
 $ mkdir ~/projects
-```
-
-```
 $ cd ~/projects
-```
-
-```
 $ mkdir hello_world
-```
-
-```
 $ cd hello_world
 ```
 
@@ -209,17 +200,8 @@ For Windows CMD, enter this:
 
 ```
 > mkdir "%USERPROFILE%\projects"
-```
-
-```
 > cd /d "%USERPROFILE%\projects"
-```
-
-```
 > mkdir hello_world
-```
-
-```
 > cd hello_world
 ```
 
@@ -236,13 +218,7 @@ Filename: main.rs
 
 ```
 fn main() {
-```
-
-```
     println!("Hello, world!");
-```
-
-```
 }
 ```
 
@@ -254,13 +230,7 @@ commands to compile and run the file:
 
 ```
 $ rustc main.rs
-```
-
-```
 $ ./main
-```
-
-```
 Hello, world!
 ```
 
@@ -268,13 +238,7 @@ On Windows, enter the command `.\main.exe` instead of `./main`:
 
 ```
 > rustc main.rs
-```
-
-```
 > .\main.exe
-```
-
-```
 Hello, world!
 ```
 
@@ -292,13 +256,7 @@ the puzzle:
 
 ```
 fn main() {
-```
 
-```
-
-```
-
-```
 }
 ```
 
@@ -362,9 +320,6 @@ entering the `ls` command in your shell:
 
 ```
 $ ls
-```
-
-```
 main  main.rs
 ```
 
@@ -374,17 +329,8 @@ would enter the following:
 
 ```
 > dir /B %= the /B option says to only show the file names =%
-```
-
-```
 main.exe
-```
-
-```
 main.pdb
-```
-
-```
 main.rs
 ```
 
@@ -451,9 +397,6 @@ run the following:
 
 ```
 $ cargo new hello_cargo
-```
-
-```
 $ cd hello_cargo
 ```
 
@@ -480,25 +423,10 @@ Filename: Cargo.toml
 
 ```
 [package]
-```
-
-```
 name = "hello_cargo"
-```
-
-```
 version = "0.1.0"
-```
-
-```
 edition = "2021"
-```
 
-```
-
-```
-
-```
 [dependencies]
 ```
 
@@ -526,13 +454,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     println!("Hello, world!");
-```
-
-```
 }
 ```
 
@@ -560,13 +482,7 @@ entering the following command:
 
 ```
 $ cargo build
-```
-
-```
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 2.85 secs
 ```
 
@@ -577,9 +493,6 @@ a directory named *debug*. You can run the executable with this command:
 
 ```
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
-```
-
-```
 Hello, world!
 ```
 
@@ -596,17 +509,8 @@ code and then run the resultant executable all in one command:
 
 ```
 $ cargo run
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-```
-
-```
      Running `target/debug/hello_cargo`
-```
-
-```
 Hello, world!
 ```
 
@@ -622,21 +526,9 @@ output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.33 secs
-```
-
-```
      Running `target/debug/hello_cargo`
-```
-
-```
 Hello, world!
 ```
 
@@ -645,13 +537,7 @@ your code to make sure it compiles but doesn’t produce an executable:
 
 ```
 $ cargo check
-```
-
-```
    Checking hello_cargo v0.1.0 (file:///projects/hello_cargo)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
 ```
 
@@ -704,13 +590,7 @@ using Git, change to that project’s directory, and build:
 
 ```
 $ git clone example.org/someproject
-```
-
-```
 $ cd someproject
-```
-
-```
 $ cargo build
 ```
 
