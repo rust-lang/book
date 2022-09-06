@@ -231,11 +231,11 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
                 <xsl:if test="starts-with(w:t, ' ')">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][w:rPr[not(w:rStyle) or (w:rStyle/@w:val != 'Literal' and w:rStyle/@w:val != 'LiteralBold' and w:rStyle/@w:val != 'LiteralCaption' and w:rStyle/@w:val != 'LiteralBox')]]">
+                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'Literal') and not(w:rPr/w:rStyle/@w:val = 'LiteralBold') and not(w:rPr/w:rStyle/@w:val = 'LiteralCaption') and not(w:rPr/w:rStyle/@w:val = 'LiteralBox')]">
                     <xsl:text>`</xsl:text>
                 </xsl:if>
                 <xsl:value-of select="normalize-space(w:t)" />
-                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][w:rPr[not(w:rStyle) or (w:rStyle/@w:val != 'Literal' and w:rStyle/@w:val != 'LiteralBold' and w:rStyle/@w:val != 'LiteralCaption' and w:rStyle/@w:val != 'LiteralBox')]]">
+                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:rPr/w:rStyle/@w:val = 'Literal') and not(w:rPr/w:rStyle/@w:val = 'LiteralBold') and not(w:rPr/w:rStyle/@w:val = 'LiteralCaption') and not(w:rPr/w:rStyle/@w:val = 'LiteralBox')]">
                     <xsl:text>`</xsl:text>
                 </xsl:if>
                 <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
