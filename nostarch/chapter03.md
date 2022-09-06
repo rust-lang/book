@@ -19,11 +19,8 @@ and control flow. These foundations will be in every Rust program, and learning
 them early will give you a strong core to start from.
 
 
-Unmatched: BoxType
-
 > ### Keywords
-
-
+>
 > The Rust language has a set of *keywords* that are reserved for use by the
 language only, much as in other languages. Keep in mind that you cannot use
 these words as names of variables or functions. Most of the keywords have
@@ -52,25 +49,10 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 5;
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
     x = 6;
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
 ```
 
@@ -79,53 +61,17 @@ regarding an immutability error, as shown in this output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling variables v0.1.0 (file:///projects/variables)
-```
-
-```
 error[E0384]: cannot assign twice to immutable variable `x`
-```
-
-```
  --> src/main.rs:4:5
-```
-
-```
   |
-```
-
-```
 2 |     let x = 5;
-```
-
-```
   |         -
-```
-
-```
   |         |
-```
-
-```
   |         first assignment to `x`
-```
-
-```
   |         help: consider making this binding mutable: `mut x`
-```
-
-```
 3 |     println!("The value of x is: {x}");
-```
-
-```
 4 |     x = 6;
-```
-
-```
   |     ^^^^^ cannot assign twice to immutable variable
 ```
 
@@ -160,25 +106,10 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let mut x = 5;
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
     x = 6;
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
 ```
 
@@ -186,25 +117,10 @@ When we run the program now, we get this:
 
 ```
 $ cargo run
-```
-
-```
    Compiling variables v0.1.0 (file:///projects/variables)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.30s
-```
-
-```
      Running `target/debug/variables`
-```
-
-```
 The value of x is: 5
-```
-
-```
 The value of x is: 6
 ```
 
@@ -274,49 +190,16 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 5;
-```
 
-```
-
-```
-
-```
     let x = x + 1;
-```
 
-```
-
-```
-
-```
     {
-```
-
-```
         let x = x * 2;
-```
-
-```
         println!("The value of x in the inner scope is: {x}");
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
 ```
 
@@ -330,25 +213,10 @@ When we run this program, it will output the following:
 
 ```
 $ cargo run
-```
-
-```
    Compiling variables v0.1.0 (file:///projects/variables)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-```
-
-```
      Running `target/debug/variables`
-```
-
-```
 The value of x in the inner scope is: 12
-```
-
-```
 The value of x is: 6
 ```
 
@@ -366,9 +234,6 @@ inputting space characters, and then we want to store that input as a number:
 
 ```
 let spaces = "   ";
-```
-
-```
 let spaces = spaces.len();
 ```
 
@@ -380,9 +245,6 @@ here, we’ll get a compile-time error:
 
 ```
 let mut spaces = "   ";
-```
-
-```
 spaces = spaces.len();
 ```
 
@@ -390,37 +252,13 @@ The error says we’re not allowed to mutate a variable’s type:
 
 ```
 $ cargo run
-```
-
-```
    Compiling variables v0.1.0 (file:///projects/variables)
-```
-
-```
 error[E0308]: mismatched types
-```
-
-```
  --> src/main.rs:3:14
-```
-
-```
   |
-```
-
-```
 2 |     let mut spaces = "   ";
-```
-
-```
   |                      ----- expected due to this value
-```
-
-```
 3 |     spaces = spaces.len();
-```
-
-```
   |              ^^^^^^^^^^^^ expected `&str`, found `usize`
 ```
 
@@ -450,29 +288,11 @@ information from us to know which type we want to use:
 
 ```
 $ cargo build
-```
-
-```
    Compiling no_type_annotations v0.1.0 (file:///projects/no_type_annotations)
-```
-
-```
 error[E0282]: type annotations needed
-```
-
-```
  --> src/main.rs:2:9
-```
-
-```
   |
-```
-
-```
 2 |     let guess = "42".parse().expect("Not a number!");
-```
-
-```
   |         ^^^^^ consider giving `guess` a type
 ```
 
@@ -493,55 +313,18 @@ start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
 the built-in integer types in Rust. We can use any of these variants to declare
 the type of an integer value.
 
-PROD: Please number this as Table 3-1.
-
 Integer Types in Rust
 
+| Length     | Signed     | Unsigned |
+|---|---|---|
+| 8-bit | `i8` | `u8` |
+| 16-bit | `i16` | `u16` |
+| 32-bit | `i32` | `u32` |
+| 64-bit | `i64` | `u64` |
+| 128-bit | `i128` | `u128` |
+| arch | `isize` | `usize` |
 
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Each variant can be either signed or unsigned and has an explicit size.
+Each variant can be either signed or unsigned and has an explicit size.
 *Signed* and *unsigned* refer to whether it’s possible for the number to be
 negative—in other words, whether the number needs to have a sign with it
 (signed) or whether it will only ever be positive and can therefore be
@@ -567,45 +350,24 @@ such as `57u8`, to designate the type. Number literals can also use `_` as a
 visual separator to make the number easier to read, such as `1_000`, which will
 have the same value as if you had specified `1000`.
 
-Prod: The following should be numbered as Table 3-2.
-
 Integer Literals in Rust
 
+| Number literals | Example |
+|---|---|
+| Decimal | `98_222` |
+| Hex | `0xff` |
+| Octal | `0o77` |
+| Binary | `0b1111_0000` |
+| Byte (`u8` only)  | `b'A'` |
 
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      So how do you know which type of integer to use? If you’re unsure, Rust’s
+So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good places to start: integer types default to `i32`.
 The primary situation in which you’d use `isize` or `usize` is when indexing
 some sort of collection.
 
 
-Unmatched: BoxType
-
 > ### Integer Overflow
-
-
+>
 > Let’s say you have a variable of type `u8` that can hold values between 0 and
 255. If you try to change the variable to a value outside that range, such as
 256, *integer overflow* will occur, which can result in one of two behaviors.
@@ -613,7 +375,6 @@ When you’re compiling in debug mode, Rust includes checks for integer overflow
 that cause your program to *panic* at runtime if this behavior occurs. Rust
 uses the term *panicking* when a program exits with an error; we’ll discuss
 panics in more depth in “Unrecoverable Errors with panic!” on page XX.
-
 
 > When you’re compiling in release mode with the `--release` flag, Rust does
 *not* include checks for integer overflow that cause panics. Instead, if
@@ -623,7 +384,6 @@ of the values the type can hold. In the case of a `u8`, the value 256 becomes
 0, the value 257 becomes 1, and so on. The program won’t panic, but the
 variable will have a value that probably isn’t what you were expecting it to
 have. Relying on integer overflow’s wrapping behavior is considered an error.
-
 
 > To explicitly handle the possibility of overflow, you can use these families
 of methods provided by the standard library for primitive numeric types:
@@ -650,21 +410,9 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 2.0; // f64
-```
 
-```
-
-```
-
-```
     let y: f32 = 3.0; // f32
-```
-
-```
 }
 ```
 
@@ -682,69 +430,21 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     // addition
-```
-
-```
     let sum = 5 + 10;
-```
 
-```
-
-```
-
-```
     // subtraction
-```
-
-```
     let difference = 95.5 - 4.3;
-```
 
-```
-
-```
-
-```
     // multiplication
-```
-
-```
     let product = 4 * 30;
-```
 
-```
-
-```
-
-```
     // division
-```
-
-```
     let quotient = 56.7 / 32.2;
-```
-
-```
     let truncated = -5 / 3; // Results in -1
-```
 
-```
-
-```
-
-```
     // remainder
-```
-
-```
     let remainder = 43 % 5;
-```
-
-```
 }
 ```
 
@@ -762,21 +462,9 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let t = true;
-```
 
-```
-
-```
-
-```
     let f: bool = false; // with explicit type annotation
-```
-
-```
 }
 ```
 
@@ -789,27 +477,13 @@ page XX.
 Rust’s `char` type is the language’s most primitive alphabetic type. Here are
 some examples of declaring `char` values:
 
-Prod: note this listing has unusual characters
-
 Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let c = 'z';
-```
-
-```
     let z: char = 'ℤ'; // with explicit type annotation
-```
-
-```
     let heart_eyed_cat = '😻';
-```
-
-```
 }
 ```
 
@@ -844,13 +518,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let tup: (i32, f64, u8) = (500, 6.4, 1);
-```
-
-```
 }
 ```
 
@@ -862,29 +530,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let tup = (500, 6.4, 1);
-```
 
-```
-
-```
-
-```
     let (x, y, z) = tup;
-```
 
-```
-
-```
-
-```
     println!("The value of y is: {y}");
-```
-
-```
 }
 ```
 
@@ -901,37 +551,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x: (i32, f64, u8) = (500, 6.4, 1);
-```
 
-```
-
-```
-
-```
     let five_hundred = x.0;
-```
 
-```
-
-```
-
-```
     let six_point_four = x.1;
-```
 
-```
-
-```
-
-```
     let one = x.2;
-```
-
-```
 }
 ```
 
@@ -957,13 +583,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let a = [1, 2, 3, 4, 5];
-```
-
-```
 }
 ```
 
@@ -982,9 +602,6 @@ it will always contain 12 elements:
 
 ```
 let months = ["January", "February", "March", "April", "May", "June", "July",
-```
-
-```
               "August", "September", "October", "November", "December"];
 ```
 
@@ -1020,25 +637,10 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let a = [1, 2, 3, 4, 5];
-```
 
-```
-
-```
-
-```
     let first = a[0];
-```
-
-```
     let second = a[1];
-```
-
-```
 }
 ```
 
@@ -1056,97 +658,28 @@ Filename: src/main.rs
 
 ```
 use std::io;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let a = [1, 2, 3, 4, 5];
-```
 
-```
-
-```
-
-```
     println!("Please enter an array index.");
-```
 
-```
-
-```
-
-```
     let mut index = String::new();
-```
 
-```
-
-```
-
-```
     io::stdin()
-```
-
-```
         .read_line(&mut index)
-```
-
-```
         .expect("Failed to read line");
-```
 
-```
-
-```
-
-```
     let index: usize = index
-```
-
-```
         .trim()
-```
-
-```
         .parse()
-```
-
-```
         .expect("Index entered was not a number");
-```
 
-```
-
-```
-
-```
     let element = a[index];
-```
 
-```
-
-```
-
-```
     println!(
-```
-
-```
         "The value of the element at index {index} is: {element}"
-```
-
-```
     );
-```
-
-```
 }
 ```
 
@@ -1158,9 +691,6 @@ the array, such as `10`, you’ll see output like this:
 ```
 thread 'main' panicked at 'index out of bounds: the len is 5 but the index is
 10', src/main.rs:19:19
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
@@ -1195,37 +725,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     println!("Hello, world!");
-```
 
-```
-
-```
-
-```
     another_function();
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn another_function() {
-```
-
-```
     println!("Another function.");
-```
-
-```
 }
 ```
 
@@ -1246,25 +752,10 @@ should see the following output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling functions v0.1.0 (file:///projects/functions)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.28s
-```
-
-```
      Running `target/debug/functions`
-```
-
-```
 Hello, world!
-```
-
-```
 Another function.
 ```
 
@@ -1288,29 +779,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     another_function(5);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn another_function(x: i32) {
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
 ```
 
@@ -1318,21 +791,9 @@ Try running this program; you should get the following output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling functions v0.1.0 (file:///projects/functions)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 1.21s
-```
-
-```
      Running `target/debug/functions`
-```
-
-```
 The value of x is: 5
 ```
 
@@ -1354,29 +815,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     print_labeled_measurement(5, 'h');
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn print_labeled_measurement(value: i32, unit_label: char) {
-```
-
-```
     println!("The measurement is: {value}{unit_label}");
-```
-
-```
 }
 ```
 
@@ -1391,21 +834,9 @@ run`:
 
 ```
 $ cargo run
-```
-
-```
    Compiling functions v0.1.0 (file:///projects/functions)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-```
-
-```
      Running `target/debug/functions`
-```
-
-```
 The measurement is: 5h
 ```
 
@@ -1422,36 +853,22 @@ understand. Other languages don’t have the same distinctions, so let’s look 
 what statements and expressions are and how their differences affect the bodies
 of functions.
 
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-      We’ve actually already used statements and expressions. Creating a
-variable and assigning a value to it with the `let` keyword is a statement. In
-Listing 3-1, `let y = 6;` is a statement.
+* Statements - are instructions that perform some action and do not return a
+value.
+* Expressions - evaluate to a resultant value. Let’s look at some examples.
+We’ve actually already used statements and expressions. Creating a variable and
+assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
+`let y = 6;` is a statement.
 
 Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let y = 6;
-```
-
-```
 }
 ```
 
 A `main` function declaration containing one statement
-
-Prod: this should be Listing 3-1. Please fix, and renumber all remaining
-listings consecutively: e.g., Listing 3-2, Listing 3-3, etc.
 
 Function definitions are also statements; the entire preceding example is a
 statement in itself.
@@ -1463,13 +880,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = (let y = 6);
-```
-
-```
 }
 ```
 
@@ -1477,73 +888,22 @@ When you run this program, the error you’ll get looks like this:
 
 ```
 $ cargo run
-```
-
-```
    Compiling functions v0.1.0 (file:///projects/functions)
-```
-
-```
 error: expected expression, found statement (`let`)
-```
-
-```
  --> src/main.rs:2:14
-```
-
-```
   |
-```
-
-```
 2 |     let x = (let y = 6);
-```
-
-```
   |              ^^^^^^^^^
-```
-
-```
   |
-```
-
-```
   = note: variable declaration using `let` is a statement
-```
 
-```
-
-```
-
-```
 error[E0658]: `let` expressions in this position are unstable
-```
-
-```
  --> src/main.rs:2:14
-```
-
-```
   |
-```
-
-```
 2 |     let x = (let y = 6);
-```
-
-```
   |              ^^^^^^^^^
-```
-
-```
   |
-```
-
-```
   = note: see issue #53667 <https://github.com/rust-lang/rust/issues/53667> for
-```
-
-```
 more information
 ```
 
@@ -1565,33 +925,12 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
   1 let y = {2
-```
-
-```
         let x = 3;
-```
-
-```
       3 x + 1
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     println!("The value of y is: {y}");
-```
-
-```
 }
 ```
 
@@ -1617,37 +956,13 @@ Filename: src/main.rs
 
 ```
 fn five() -> i32 {
-```
-
-```
     5
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let x = five();
-```
 
-```
-
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
 ```
 
@@ -1658,21 +973,9 @@ running this code; the output should look like this:
 
 ```
 $ cargo run
-```
-
-```
    Compiling functions v0.1.0 (file:///projects/functions)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.30s
-```
-
-```
      Running `target/debug/functions`
-```
-
-```
 The value of x is: 5
 ```
 
@@ -1696,37 +999,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = plus_one(5);
-```
 
-```
-
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn plus_one(x: i32) -> i32 {
-```
-
-```
     x + 1
-```
-
-```
 }
 ```
 
@@ -1738,37 +1017,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = plus_one(5);
-```
 
-```
-
-```
-
-```
     println!("The value of x is: {x}");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn plus_one(x: i32) -> i32 {
-```
-
-```
     x + 1;
-```
-
-```
 }
 ```
 
@@ -1776,45 +1031,15 @@ Compiling this code produces an error, as follows:
 
 ```
 $ cargo run
-```
-
-```
    Compiling functions v0.1.0 (file:///projects/functions)
-```
-
-```
 error[E0308]: mismatched types
-```
-
-```
  --> src/main.rs:7:24
-```
-
-```
   |
-```
-
-```
 7 | fn plus_one(x: i32) -> i32 {
-```
-
-```
   |    --------            ^^^ expected `i32`, found `()`
-```
-
-```
   |    |
-```
-
-```
   |    implicitly returns `()` as its body has no tail or `return` expression
-```
-
-```
 8 |     x + 1;
-```
-
-```
   |          - help: remove this semicolon
 ```
 
@@ -1845,13 +1070,7 @@ single line, you’ll need to include `//` on each line, like this:
 
 ```
 // So we’re doing something complicated here, long enough that we need
-```
-
-```
 // multiple lines of comments to do it! Whew! Hopefully, this comment will
-```
-
-```
 // explain what’s going on.
 ```
 
@@ -1861,13 +1080,7 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let lucky_number = 7; // I’m feeling lucky today
-```
-
-```
 }
 ```
 
@@ -1878,17 +1091,8 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     // I’m feeling lucky today
-```
-
-```
     let lucky_number = 7;
-```
-
-```
 }
 ```
 
@@ -1915,37 +1119,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let number = 3;
-```
 
-```
-
-```
-
-```
     if number < 5 {
-```
-
-```
         println!("condition was true");
-```
-
-```
     } else {
-```
-
-```
         println!("condition was false");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1967,21 +1147,9 @@ Try running this code; you should see the following output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling branches v0.1.0 (file:///projects/branches)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-```
-
-```
      Running `target/debug/branches`
-```
-
-```
 condition was true
 ```
 
@@ -1996,21 +1164,9 @@ Run the program again, and look at the output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling branches v0.1.0 (file:///projects/branches)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-```
-
-```
      Running `target/debug/branches`
-```
-
-```
 condition was false
 ```
 
@@ -2022,29 +1178,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let number = 3;
-```
 
-```
-
-```
-
-```
     if number {
-```
-
-```
         println!("number was three");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2053,29 +1191,11 @@ error:
 
 ```
 $ cargo run
-```
-
-```
    Compiling branches v0.1.0 (file:///projects/branches)
-```
-
-```
 error[E0308]: mismatched types
-```
-
-```
  --> src/main.rs:4:8
-```
-
-```
   |
-```
-
-```
 4 |     if number {
-```
-
-```
   |        ^^^^^^ expected `bool`, found integer
 ```
 
@@ -2090,29 +1210,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let number = 3;
-```
 
-```
-
-```
-
-```
     if number != 0 {
-```
-
-```
         println!("number was something other than zero");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2127,53 +1229,17 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let number = 6;
-```
 
-```
-
-```
-
-```
     if number % 4 == 0 {
-```
-
-```
         println!("number is divisible by 4");
-```
-
-```
     } else if number % 3 == 0 {
-```
-
-```
         println!("number is divisible by 3");
-```
-
-```
     } else if number % 2 == 0 {
-```
-
-```
         println!("number is divisible by 2");
-```
-
-```
     } else {
-```
-
-```
         println!("number is not divisible by 4, 3, or 2");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2182,21 +1248,9 @@ see the following output:
 
 ```
 $ cargo run
-```
-
-```
    Compiling branches v0.1.0 (file:///projects/branches)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.31s
-```
-
-```
      Running `target/debug/branches`
-```
-
-```
 number is divisible by 3
 ```
 
@@ -2220,25 +1274,10 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let condition = true;
-```
-
-```
     let number = if condition { 5 } else { 6 };
-```
 
-```
-
-```
-
-```
     println!("The value of number is: {number}");
-```
-
-```
 }
 ```
 
@@ -2249,21 +1288,9 @@ expression. Run this code to see what happens:
 
 ```
 $ cargo run
-```
-
-```
    Compiling branches v0.1.0 (file:///projects/branches)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.30s
-```
-
-```
      Running `target/debug/branches`
-```
-
-```
 The value of number is: 5
 ```
 
@@ -2279,29 +1306,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let condition = true;
-```
 
-```
-
-```
-
-```
     let number = if condition { 5 } else { "six" };
-```
 
-```
-
-```
-
-```
     println!("The value of number is: {number}");
-```
-
-```
 }
 ```
 
@@ -2311,38 +1320,14 @@ find the problem in the program:
 
 ```
 $ cargo run
-```
-
-```
    Compiling branches v0.1.0 (file:///projects/branches)
-```
-
-```
 error[E0308]: `if` and `else` have incompatible types
-```
-
-```
  --> src/main.rs:4:44
-```
-
-```
   |
-```
-
-```
 4 |     let number = if condition { 5 } else { "six" };
-```
-
-```
   |                                 -          ^^^^^ expected integer, found
 `&str`
-```
-
-```
   |                                 |
-```
-
-```
   |                                 expected because of this
 ```
 
@@ -2376,21 +1361,9 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     loop {
-```
-
-```
         println!("again!");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2401,37 +1374,13 @@ it a try:
 
 ```
 $ cargo run
-```
-
-```
    Compiling loops v0.1.0 (file:///projects/loops)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.29s
-```
-
-```
      Running `target/debug/loops`
-```
-
-```
 again!
-```
-
-```
 again!
-```
-
-```
 again!
-```
-
-```
 again!
-```
-
-```
 ^Cagain!
 ```
 
@@ -2460,53 +1409,17 @@ use it, as shown here:
 
 ```
 fn main() {
-```
-
-```
     let mut counter = 0;
-```
 
-```
-
-```
-
-```
     let result = loop {
-```
-
-```
         counter += 1;
-```
 
-```
-
-```
-
-```
         if counter == 10 {
-```
-
-```
             break counter * 2;
-```
-
-```
         }
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     println!("The result is {result}");
-```
-
-```
 }
 ```
 
@@ -2528,85 +1441,25 @@ with a single quote. Here’s an example with two nested loops:
 
 ```
 fn main() {
-```
-
-```
     let mut count = 0;
-```
-
-```
     'counting_up: loop {
-```
-
-```
         println!("count = {count}");
-```
-
-```
         let mut remaining = 10;
-```
 
-```
-
-```
-
-```
         loop {
-```
-
-```
             println!("remaining = {remaining}");
-```
-
-```
             if remaining == 9 {
-```
-
-```
                 break;
-```
-
-```
             }
-```
-
-```
             if count == 2 {
-```
-
-```
                 break 'counting_up;
-```
-
-```
             }
-```
-
-```
             remaining -= 1;
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         count += 1;
-```
-
-```
     }
-```
-
-```
     println!("End count = {count}");
-```
-
-```
 }
 ```
 
@@ -2617,49 +1470,16 @@ doesn’t specify a label will exit the inner loop only. The `break
 
 ```
    Compiling loops v0.1.0 (file:///projects/loops)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.58s
-```
-
-```
      Running `target/debug/loops`
-```
-
-```
 count = 0
-```
-
-```
 remaining = 10
-```
-
-```
 remaining = 9
-```
-
-```
 count = 1
-```
-
-```
 remaining = 10
-```
-
-```
 remaining = 9
-```
-
-```
 count = 2
-```
-
-```
 remaining = 10
-```
-
-```
 End count = 2
 ```
 
@@ -2678,45 +1498,15 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let mut number = 3;
-```
 
-```
-
-```
-
-```
     while number != 0 {
-```
-
-```
         println!("{number}!");
-```
 
-```
-
-```
-
-```
         number -= 1;
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("LIFTOFF!!!");
-```
-
-```
 }
 ```
 
@@ -2736,41 +1526,14 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let a = [10, 20, 30, 40, 50];
-```
-
-```
     let mut index = 0;
-```
 
-```
-
-```
-
-```
     while index < 5 {
-```
-
-```
         println!("the value is: {}", a[index]);
-```
 
-```
-
-```
-
-```
         index += 1;
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2783,37 +1546,13 @@ element in the array:
 
 ```
 $ cargo run
-```
-
-```
    Compiling loops v0.1.0 (file:///projects/loops)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.32s
-```
-
-```
      Running `target/debug/loops`
-```
-
-```
 the value is: 10
-```
-
-```
 the value is: 20
-```
-
-```
 the value is: 30
-```
-
-```
 the value is: 40
-```
-
-```
 the value is: 50
 ```
 
@@ -2835,29 +1574,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let a = [10, 20, 30, 40, 50];
-```
 
-```
-
-```
-
-```
     for element in a {
-```
-
-```
         println!("the value is: {element}");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2887,25 +1608,10 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     for number in (1..4).rev() {
-```
-
-```
         println!("{number}!");
-```
-
-```
     }
-```
-
-```
     println!("LIFTOFF!!!");
-```
-
-```
 }
 ```
 
@@ -2922,6 +1628,7 @@ do the following:
 * Generate the *n*th Fibonacci number.
 * Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
 taking advantage of the repetition in the song.
+
 When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
 commonly exist in other programming languages: ownership.
 

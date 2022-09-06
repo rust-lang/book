@@ -24,6 +24,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightHead']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CopyrightLOC']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective0']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BoxType']" />
 
     <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
@@ -169,11 +170,6 @@
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']">
-        <xsl:apply-templates select="*" />
-        <xsl:text>&#10;&#10;</xsl:text>
-    </xsl:template>
-
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
@@ -213,6 +209,31 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInPara']">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:tbl">
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:tr[.//w:pStyle/@w:val = 'TableHeader']">
+        <xsl:apply-templates select="*" />
+        <xsl:text>|&#10;</xsl:text>
+        <xsl:for-each select="w:tc">
+            <xsl:text>|---</xsl:text>
+        </xsl:for-each>
+        <xsl:text>|&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:tr">
+        <xsl:apply-templates select="*" />
+        <xsl:text>|&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:tc">
+        <xsl:text>| </xsl:text>
+        <xsl:apply-templates select=".//w:r" />
+        <xsl:text> </xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p">
