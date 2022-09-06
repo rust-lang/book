@@ -333,6 +333,16 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Superscript']]">
+        <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'Superscript')]">
+            <xsl:text>&lt;sup></xsl:text>
+        </xsl:if>
+        <xsl:value-of select="w:t" />
+        <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][not(w:t) or not(w:rPr/w:rStyle/@w:val = 'Superscript')]">
+            <xsl:text>&lt;/sup></xsl:text>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="w:r">
         <xsl:value-of select="w:t" />
     </xsl:template>
