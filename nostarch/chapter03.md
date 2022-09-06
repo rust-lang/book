@@ -388,15 +388,14 @@ have. Relying on integer overflow’s wrapping behavior is considered an error.
 > To explicitly handle the possibility of overflow, you can use these families
 of methods provided by the standard library for primitive numeric types:
 
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-      #### Floating-Point Types
+> * Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
+> * Return the `None` value if there is overflow with the `checked_*` methods.
+> * Return the value and a boolean indicating whether there was overflow with
+the `overflowing_*` methods.
+> * Saturate at the value’s minimum or maximum values with the `saturating_*`
+methods.
+>
+#### Floating-Point Types
 
 Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
