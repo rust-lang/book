@@ -273,9 +273,16 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
                 <xsl:if test="starts-with(w:t, ' ')">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:text>*</xsl:text>
+                <xsl:if test="not(preceding-sibling::*[1][self::w:r]) or preceding-sibling::w:r[1][w:rPr[not(w:rStyle) or (w:rStyle/@w:val != 'EmphasisItalic' and w:rStyle/@w:val != 'EmphasisItalicBox' and w:rStyle/@w:val != 'EmphasisNote' and w:rStyle/@w:val != 'EmphasisRevCaption' and w:rStyle/@w:val != 'EmphasisRevItal' and w:rStyle/@w:val != 'Italic' and w:rStyle/@w:val != 'LinkURL')]]">
+                    <xsl:text>*</xsl:text>
+                </xsl:if>
+
                 <xsl:value-of select="normalize-space(w:t)" />
-                <xsl:text>*</xsl:text>
+
+                <xsl:if test="not(following-sibling::*[1][self::w:r]) or following-sibling::w:r[1][w:rPr[not(w:rStyle) or (w:rStyle/@w:val != 'EmphasisItalic' and w:rStyle/@w:val != 'EmphasisItalicBox' and w:rStyle/@w:val != 'EmphasisNote' and w:rStyle/@w:val != 'EmphasisRevCaption' and w:rStyle/@w:val != 'EmphasisRevItal' and w:rStyle/@w:val != 'Italic' and w:rStyle/@w:val != 'LinkURL')]]">
+                    <xsl:text>*</xsl:text>
+                </xsl:if>
+
                 <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
                     <xsl:text> </xsl:text>
                 </xsl:if>
