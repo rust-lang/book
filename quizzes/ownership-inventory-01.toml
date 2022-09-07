@@ -1,4 +1,27 @@
 [[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+*Function 1*
+
+The function below is rejected by the compiler. In 1-2 sentences, describe why.
+
+```
+// Makes a string to separate lines of text, 
+// returning a default if the provided string is blank
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default
+  } else {
+    user_str
+  }
+}
+```
+"""
+prompt.response = "long"
+answer.answer = ""
+
+[[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
 *Function 1*
@@ -29,6 +52,30 @@ context = """
 The type signature `(user_str: &str) -> &str` requires that the input reference (`user_str`) and the output reference (either `user_str` or `&default`) have the same lifetime. `user_str` of course has the same lifetime as itself. But `default` is created inside `make_separator`, and the reference `&default` does not own `default`, so the lifetime of `default` is the scope of `make_separator`. Therefore `default` does not live as long as `user_str`, and the borrow checker will raise an error.
 """
 
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+*Function 1*
+
+Assume the function below was *not* rejected by the compiler. Write a program that uses this function and would violate memory safety if executed.
+
+```
+// Makes a string to separate lines of text, 
+// returning a default if the provided string is blank
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default
+  } else {
+    user_str
+  }
+}
+```
+"""
+prompt.response = "code"
+answer.answer = ""
+
 [[questions]]
 type = "MultipleChoice"
 prompt.prompt = """
@@ -57,7 +104,7 @@ println!("{}", s2);
 ```""",
 
 """```
-let mut s = "foo";
+
 let s2 = make_separator(s);
 s = "bar";
 println!("{} {}", s, s2);
@@ -77,6 +124,30 @@ answer.answer = 0
 context = """
 When `default` goes out of scope at the end of `make_separator`, its data will be deallocated. Therefore to cause a memory safety violation, the program must (1) pass `""` as input to `make_separator` to get the default as output, and (2) read the output of `make_separator` e.g. via `println`. This causes a read of deallocated memory.
 """
+
+
+[[questions]]
+type = "ShortAnswer"
+prompt.prompt = """
+*Function 1*
+
+The function below is rejected by the compiler. Write a new version of this function that fixes the compiler error while best preserving the intention of the function.
+
+```
+// Makes a string to separate lines of text, 
+// returning a default if the provided string is blank
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default
+  } else {
+    user_str
+  }
+}
+```
+"""
+prompt.response = "code"
+answer.answer = ""
 
 [[questions]]
 type = "MultipleChoice"
