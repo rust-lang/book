@@ -222,7 +222,7 @@ Therefore `s2` is not *moved* by `consume`, but rather *borrowed* by `consume`.
 
 The complete set of implicit behavior is beyond the scope of this chapter. We will introduce these rules as the book goes on, for example how Rust deals with methods ([Section 5.3][methods]) and smart pointers ([Section 15.2][smartpointers]). For now, just be aware that these rules exist. If you come across a piece of Rust code that seems wrong but actually compiles, then these rules might be the reason.
 
-Conversely, you can assume that Rust will never implicitly convert borrows in a way that would violate ownership. For instance, an immutable reference will never turn into a mutable reference (unless you use [interior mutability][interior]), and a mutable reference will never turn into an owned value (unless you use [`std::mem::take`](https://doc.rust-lang.org/std/mem/fn.take.html)).
+Conversely, Rust will never implicitly convert borrows in a way that would violate ownership. For example, if you use an immutable reference `&x` where a mutable reference `&mut x` is expected, Rust will not automatically convert `&x` to `&mut x`. You have to write out `&mut x` yourself.
 
 {{#quiz ../quizzes/ch04-02-references-sec2-mut.toml}}
 
