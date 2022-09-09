@@ -290,11 +290,10 @@ the memory that holds the contents of the string, a length, and a capacity.
 This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
 
+ Representation in memory of a `String` holding the value `"hello"` bound to
+`s1`
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      The length is how much memory, in bytes, the contents of the `String` are
+The length is how much memory, in bytes, the contents of the `String` are
 currently using. The capacity is the total amount of memory, in bytes, that the
 `String` has received from the allocator. The difference between length and
 capacity matters, but not in this context, so for now, it’s fine to ignore the
@@ -305,27 +304,24 @@ pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-2.
 
+Representation in memory of the variable `s2` that has a copy of the pointer,
+length, and capacity of `s1`
 
-Unmatched: GraphicSlug
+The representation does *not* look like Figure 4-3, which is what memory would
+look like if Rust instead copied the heap data as well. If Rust did this, the
+operation `s2 = s1` could be very expensive in terms of runtime performance if
+the data on the heap were large.
 
-Unmatched: CaptionLine
-      The representation does *not* look like Figure 4-3, which is what memory
-would look like if Rust instead copied the heap data as well. If Rust did this,
-the operation `s2 = s1` could be very expensive in terms of runtime performance
-if the data on the heap were large.
+Another possibility for what `s2 = s1` might do if Rust copied the heap data as
+well
 
-
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      Earlier, we said that when a variable goes out of scope, Rust
-automatically calls the `drop` function and cleans up the heap memory for that
-variable. But Figure 4-2 shows both data pointers pointing to the same
-location. This is a problem: when `s2` and `s1` go out of scope, they will both
-try to free the same memory. This is known as a *double free* error and is one
-of the memory safety bugs we mentioned previously. Freeing memory twice can
-lead to memory corruption, which can potentially lead to security
-vulnerabilities.
+Earlier, we said that when a variable goes out of scope, Rust automatically
+calls the `drop` function and cleans up the heap memory for that variable. But
+Figure 4-2 shows both data pointers pointing to the same location. This is a
+problem: when `s2` and `s1` go out of scope, they will both try to free the
+same memory. This is known as a *double free* error and is one of the memory
+safety bugs we mentioned previously. Freeing memory twice can lead to memory
+corruption, which can potentially lead to security vulnerabilities.
 
 To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as
 no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
@@ -363,12 +359,10 @@ because Rust also invalidates the first variable, instead of being called a
 shallow copy, it’s known as a *move*. In this example, we would say that `s1`
 was *moved* into `s2`. So, what actually happens is shown in Figure 4-4.
 
+Representation in memory after `s1` has been invalidated
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      That solves our problem! With only `s2` valid, when it goes out of scope
-it alone will free the memory, and we’re done.
+That solves our problem! With only `s2` valid, when it goes out of scope it
+alone will free the memory, and we’re done.
 
 In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
@@ -599,14 +593,12 @@ function return value is gone. Second, note that we pass `&s1` into
 `String`. These ampersands represent *references*, and they allow you to refer
 to some value without taking ownership of it. Figure 4-5 depicts this concept.
 
+A diagram of `&String s` pointing at `String s1`
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      > Note: The opposite of referencing by using `&` is *dereferencing*,
-which is accomplished with the dereference operator, `*`. We’ll see some uses
-of the dereference operator in Chapter 8 and discuss details of dereferencing
-in Chapter 15.
+> Note: The opposite of referencing by using `&` is *dereferencing*, which is
+accomplished with the dereference operator, `*`. We’ll see some uses of the
+dereference operator in Chapter 8 and discuss details of dereferencing in
+Chapter 15.
 
 Let’s take a closer look at the function call here:
 
@@ -1059,12 +1051,10 @@ byte at index 6 of `s` with a length value of `5`.
 
 Figure 4-6 shows this in a diagram.
 
+String slice referring to part of a `String`
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      With Rust’s `..` range syntax, if you want to start at index 0, you can
-drop the value before the two periods. In other words, these are equal:
+With Rust’s `..` range syntax, if you want to start at index 0, you can drop
+the value before the two periods. In other words, these are equal:
 
 ```
 let s = String::from("hello");

@@ -26,6 +26,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective0']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'BoxType']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'GraphicSlug']" />
 
     <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
 
@@ -230,6 +231,11 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInPara']">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']">
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:tbl">
