@@ -36,35 +36,30 @@ working through some examples that focus on a very common data structure:
 strings.
 
 
-Unmatched: BoxType
-
 > ### The Stack and the Heap
-
-
+>
 > Many programming languages don’t require you to think about the stack and the
 heap very often. But in a systems programming language like Rust, whether a
 value is on the stack or the heap affects how the language behaves and why you
 have to make certain decisions. Parts of ownership will be described in
 relation to the stack and the heap later in this chapter, so here is a brief
 explanation in preparation.
-
-
+>
 > Both the stack and the heap are parts of memory available to your code to use
 at runtime, but they are structured in different ways. The stack stores values
 in the order it gets them and removes the values in the opposite order. This is
 referred to as *last in, first out*. Think of a stack of plates: when you add
 more plates, you put them on top of the pile, and when you need a plate, you
 take one off the top. Adding or removing plates from the middle or bottom
-wouldn’t work as well! Adding data is called *pushing* *onto the stack*, and
+wouldn’t work as well! Adding data is called *pushing onto the stack*, and
 removing data is called *popping off the stack*. All data stored on the stack
 must have a known, fixed size. Data with an unknown size at compile time or a
 size that might change must be stored on the heap instead.
-
-
+>
 > The heap is less organized: when you put data on the heap, you request a
 certain amount of space. The memory allocator finds an empty spot in the heap
 that is big enough, marks it as being in use, and returns a *pointer*, which is
-the address of that location. This process is called *allocating on the* *heap*
+the address of that location. This process is called *allocating on the heap*
 and is sometimes abbreviated as just *allocating* (pushing values onto the
 stack is not considered allocating). Because the pointer to the heap is a
 known, fixed size, you can store the pointer on the stack, but when you want
@@ -73,15 +68,13 @@ restaurant. When you enter, you state the number of people in your group, and
 the host finds an empty table that fits everyone and leads you there. If
 someone in your group comes late, they can ask where you’ve been seated to find
 you.
-
-
+>
 > Pushing to the stack is faster than allocating on the heap because the
 allocator never has to search for a place to store new data; that location is
 always at the top of the stack. Comparatively, allocating space on the heap
 requires more work because the allocator must first find a big enough space to
 hold the data and then perform bookkeeping to prepare for the next allocation.
-
-
+>
 > Accessing data in the heap is slower than accessing data on the stack because
 you have to follow a pointer to get there. Contemporary processors are faster
 if they jump around less in memory. Continuing the analogy, consider a server
@@ -91,14 +84,12 @@ from table A, then an order from table B, then one from A again, and then one
 from B again would be a much slower process. By the same token, a processor can
 do its job better if it works on data that’s close to other data (as it is on
 the stack) rather than farther away (as it can be on the heap).
-
-
+>
 > When your code calls a function, the values passed into the function
 (including, potentially, pointers to data on the heap) and the function’s local
 variables get pushed onto the stack. When the function is over, those values
 get popped off the stack.
-
-
+>
 > Keeping track of what parts of code are using what data on the heap,
 minimizing the amount of duplicate data on the heap, and cleaning up unused
 data on the heap so you don’t run out of space are all problems that ownership
@@ -114,6 +105,7 @@ work through the examples that illustrate them:
 * Each value in Rust has an *owner*.
 * There can only be one owner at a time.
 * When the owner goes out of scope, the value will be dropped.
+
 ### Variable Scope
 
 Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
@@ -137,21 +129,9 @@ program with comments annotating where the variable `s` would be valid.
 
 ```
 {                      // s is not valid here, since it's not yet declared
-```
-
-```
     let s = "hello";   // s is valid from this point forward
-```
 
-```
-
-```
-
-```
     // do stuff with s
-```
-
-```
 }                      // this scope is now over, and s is no longer valid
 ```
 
@@ -161,6 +141,7 @@ In other words, there are two important points in time here:
 
 * When `s` comes *into* scope, it is valid.
 * It remains valid until it goes *out of* scope.
+
 At this point, the relationship between scopes and when variables are valid is
 similar to that in other programming languages. Now we’ll build on top of this
 understanding by introducing the `String` type.
@@ -205,21 +186,9 @@ This kind of string *can* be mutated:
 
 ```
 let mut s = String::from("hello");
-```
 
-```
-
-```
-
-```
 s.push_str(", world!"); // push_str() appends a literal to a String
-```
 
-```
-
-```
-
-```
 println!("{s}"); // This will print `hello, world!`
 ```
 
@@ -242,12 +211,13 @@ to hold the contents. This means:
 * The memory must be requested from the memory allocator at runtime.
 * We need a way of returning this memory to the allocator when we’re done with
 our `String`.
+
 That first part is done by us: when we call `String::from`, its implementation
 requests the memory it needs. This is pretty much universal in programming
 languages.
 
-However, the second part is different. In languages with a *garbage collector*
-*(GC)*, the GC keeps track of and cleans up memory that isn’t being used
+However, the second part is different. In languages with a *garbage collector
+(GC)*, the GC keeps track of and cleans up memory that isn’t being used
 anymore, and we don’t need to think about it. In most languages without a GC,
 it’s our responsibility to identify when memory is no longer being used and to
 call code to explicitly free it, just as we did to request it. Doing this
@@ -262,25 +232,10 @@ from Listing 4-1 using a `String` instead of a string literal:
 
 ```
 {
-```
-
-```
     let s = String::from("hello"); // s is valid from this point forward
-```
 
-```
-
-```
-
-```
     // do stuff with s
-```
-
-```
 }                                  // this scope is now over, and s is no
-```
-
-```
                                    // longer valid
 ```
 
@@ -290,7 +245,7 @@ scope, Rust calls a special function for us. This function is called `drop`,
 and it’s where the author of `String` can put the code to return the memory.
 Rust calls `drop` automatically at the closing curly bracket.
 
-> NoteIn C++, this pattern of deallocating resources at the end of an item’s
+> Note: In C++, this pattern of deallocating resources at the end of an item’s
 lifetime is sometimes called *Resource Acquisition Is Initialization* *(RAII)*.
 The `drop` function in Rust will be familiar to you if you’ve used RAII
 patterns.
@@ -307,9 +262,6 @@ Let’s look at an example using an integer in Listing 4-2.
 
 ```
 let x = 5;
-```
-
-```
 let y = x;
 ```
 
@@ -325,9 +277,6 @@ Now let’s look at the `String` version:
 
 ```
 let s1 = String::from("hello");
-```
-
-```
 let s2 = s1;
 ```
 
@@ -378,24 +327,15 @@ of the memory safety bugs we mentioned previously. Freeing memory twice can
 lead to memory corruption, which can potentially lead to security
 vulnerabilities.
 
-To ensure memory safety, after the line `let s2 = s1``;`, Rust considers `s1`
-as no longer valid. Therefore, Rust doesn’t need to free anything when `s1`
-goes out of scope. Check out what happens when you try to use `s1` after `s2`
-is created; it won’t work:
+To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as
+no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
+out of scope. Check out what happens when you try to use `s1` after `s2` is
+created; it won’t work:
 
 ```
 let s1 = String::from("hello");
-```
-
-```
 let s2 = s1;
-```
 
-```
-
-```
-
-```
 println!("{s1}, world!");
 ```
 
@@ -404,45 +344,15 @@ invalidated reference:
 
 ```
 error[E0382]: borrow of moved value: `s1`
-```
-
-```
  --> src/main.rs:5:28
-```
-
-```
   |
-```
-
-```
 2 |     let s1 = String::from("hello");
-```
-
-```
   |         -- move occurs because `s1` has type `String`, which
-```
-
-```
  does not implement the `Copy` trait
-```
-
-```
 3 |     let s2 = s1;
-```
-
-```
   |              -- value moved here
-```
-
-```
 4 |
-```
-
-```
 5 |     println!("{s1}, world!");
-```
-
-```
   |                ^^ value borrowed here after move
 ```
 
@@ -475,17 +385,8 @@ Here’s an example of the `clone` method in action:
 
 ```
 let s1 = String::from("hello");
-```
-
-```
 let s2 = s1.clone();
-```
 
-```
-
-```
-
-```
 println!("s1 = {s1}, s2 = {s2}");
 ```
 
@@ -503,17 +404,8 @@ integers—part of which was shown in Listing 4-2—works and is valid:
 
 ```
 let x = 5;
-```
-
-```
 let y = x;
-```
 
-```
-
-```
-
-```
 println!("x = {x}, y = {y}");
 ```
 
@@ -551,6 +443,7 @@ implement `Copy`:
 * The character type, `char`.
 * Tuples, if they only contain types that also implement `Copy`. For example,
 `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
+
 ### Ownership and Functions
 
 The mechanics of passing a value to a function are similar to those when
@@ -560,97 +453,28 @@ showing where variables go into and out of scope.
 
 ```
 // src/main.rs
-```
-
-```
 fn main() {
-```
-
-```
     let s = String::from("hello");  // s comes into scope
-```
 
-```
-
-```
-
-```
     takes_ownership(s);             // s's value moves into the function...
-```
-
-```
                                     // ... and so is no longer valid here
-```
 
-```
-
-```
-
-```
     let x = 5;                      // x comes into scope
-```
 
-```
-
-```
-
-```
     makes_copy(x);                  // x would move into the function,
-```
-
-```
                                     // but i32 is Copy, so it's okay to still
-```
-
-```
                                     // use x afterward
-```
 
-```
-
-```
-
-```
 } // Here, x goes out of scope, then s. However, because s's value was moved,
-```
-
-```
   // nothing special happens
-```
 
-```
-
-```
-
-```
 fn takes_ownership(some_string: String) { // some_string comes into scope
-```
-
-```
     println!("{some_string}");
-```
-
-```
 } // Here, some_string goes out of scope and `drop` is called. The backing
-```
-
-```
   // memory is freed
-```
 
-```
-
-```
-
-```
 fn makes_copy(some_integer: i32) { // some_integer comes into scope
-```
-
-```
     println!("{some_integer}");
-```
-
-```
 } // Here, some_integer goes out of scope. Nothing special happens
 ```
 
@@ -669,121 +493,34 @@ function that returns some value, with similar annotations as those in Listing
 
 ```
 // src/main.rs
-```
-
-```
 fn main() {
-```
-
-```
     let s1 = gives_ownership();         // gives_ownership moves its return
-```
-
-```
                                         // value into s1
-```
 
-```
-
-```
-
-```
     let s2 = String::from("hello");     // s2 comes into scope
-```
 
-```
-
-```
-
-```
     let s3 = takes_and_gives_back(s2);  // s2 is moved into
-```
-
-```
                                         // takes_and_gives_back, which also
-```
-
-```
                                         // moves its return value into s3
-```
-
-```
 } // Here, s3 goes out of scope and is dropped. s2 was moved, so nothing
-```
-
-```
   // happens. s1 goes out of scope and is dropped
-```
 
-```
-
-```
-
-```
 fn gives_ownership() -> String {             // gives_ownership will move its
-```
-
-```
                                              // return value into the function
-```
-
-```
                                              // that calls it
-```
 
-```
-
-```
-
-```
     let some_string = String::from("yours"); // some_string comes into scope
-```
 
-```
-
-```
-
-```
     some_string                              // some_string is returned and
-```
-
-```
                                              // moves out to the calling
-```
-
-```
                                              // function
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 // This function takes a String and returns a String
-```
-
-```
 fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
-```
-
-```
                                                       // scope
-```
 
-```
-
-```
-
-```
     a_string  // a_string is returned and moves out to the calling function
-```
-
-```
 }
 ```
 
@@ -806,53 +543,17 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let s1 = String::from("hello");
-```
 
-```
-
-```
-
-```
     let (s2, len) = calculate_length(s1);
-```
 
-```
-
-```
-
-```
     println!("The length of '{s2}' is {len}.");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn calculate_length(s: String) -> (String, usize) {
-```
-
-```
     let length = s.len(); // len() returns the length of a String
-```
 
-```
-
-```
-
-```
     (s, length)
-```
-
-```
 }
 ```
 
@@ -880,45 +581,15 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let s1 = String::from("hello");
-```
 
-```
-
-```
-
-```
     let len = calculate_length(&s1);
-```
 
-```
-
-```
-
-```
     println!("The length of '{s1}' is {len}.");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn calculate_length(s: &String) -> usize {
-```
-
-```
     s.len()
-```
-
-```
 }
 ```
 
@@ -932,22 +603,16 @@ to some value without taking ownership of it. Figure 4-5 depicts this concept.
 Unmatched: GraphicSlug
 
 Unmatched: CaptionLine
-      > NoteThe opposite of referencing by using `&` is *dereferencing*, which
-is accomplished with the dereference operator, `*`. We’ll see some uses of the
-dereference operator in Chapter 8 and discuss details of dereferencing in
-Chapter 15.
+      > Note: The opposite of referencing by using `&` is *dereferencing*,
+which is accomplished with the dereference operator, `*`. We’ll see some uses
+of the dereference operator in Chapter 8 and discuss details of dereferencing
+in Chapter 15.
 
 Let’s take a closer look at the function call here:
 
 ```
 let s1 = String::from("hello");
-```
 
-```
-
-```
-
-```
 let len = calculate_length(&s1);
 ```
 
@@ -960,17 +625,8 @@ the parameter `s` is a reference. Let’s add some explanatory annotations:
 
 ```
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
-```
-
-```
     s.len()
-```
-
-```
 } // Here, s goes out of scope. But because it does not have ownership of what
-```
-
-```
   // it refers to, the String is not dropped
 ```
 
@@ -992,37 +648,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let s = String::from("hello");
-```
 
-```
-
-```
-
-```
     change(&s);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn change(some_string: &String) {
-```
-
-```
     some_string.push_str(", world");
-```
-
-```
 }
 ```
 
@@ -1033,37 +665,13 @@ Here’s the error:
 ```
 error[E0596]: cannot borrow `*some_string` as mutable, as it is behind a `&`
 reference
-```
-
-```
  --> src/main.rs:8:5
-```
-
-```
   |
-```
-
-```
 7 | fn change(some_string: &String) {
-```
-
-```
   |                        ------- help: consider changing this to be a mutable
-```
-
-```
 reference: `&mut String`
-```
-
-```
 8 |     some_string.push_str(", world");
-```
-
-```
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `some_string` is a `&` reference, so
-```
-
-```
 the data it refers to cannot be borrowed as mutable
 ```
 
@@ -1079,37 +687,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let mut s = String::from("hello");
-```
 
-```
-
-```
-
-```
     change(&mut s);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn change(some_string: &mut String) {
-```
-
-```
     some_string.push_str(", world");
-```
-
-```
 }
 ```
 
@@ -1126,25 +710,10 @@ Filename: src/main.rs
 
 ```
 let mut s = String::from("hello");
-```
 
-```
-
-```
-
-```
 let r1 = &mut s;
-```
-
-```
 let r2 = &mut s;
-```
 
-```
-
-```
-
-```
 println!("{r1}, {r2}");
 ```
 
@@ -1152,41 +721,14 @@ Here’s the error:
 
 ```
 error[E0499]: cannot borrow `s` as mutable more than once at a time
-```
-
-```
  --> src/main.rs:5:14
-```
-
-```
   |
-```
-
-```
 4 |     let r1 = &mut s;
-```
-
-```
   |              ------ first mutable borrow occurs here
-```
-
-```
 5 |     let r2 = &mut s;
-```
-
-```
   |              ^^^^^^ second mutable borrow occurs here
-```
-
-```
 6 |
-```
-
-```
 7 |     println!("{r1}, {r2}");
-```
-
-```
   |                -- first borrow later used here
 ```
 
@@ -1206,6 +748,7 @@ condition and happens when these three behaviors occur:
 * Two or more pointers access the same data at the same time.
 * At least one of the pointers is being used to write to the data.
 * There’s no mechanism being used to synchronize access to the data.
+
 Data races cause undefined behavior and can be difficult to diagnose and fix
 when you’re trying to track them down at runtime; Rust prevents this problem by
 refusing to compile code with data races!
@@ -1215,29 +758,11 @@ multiple mutable references, just not *simultaneous* ones:
 
 ```
 let mut s = String::from("hello");
-```
 
-```
-
-```
-
-```
 {
-```
-
-```
     let r1 = &mut s;
-```
-
-```
 } // r1 goes out of scope here, so we can make a new reference with no problems
-```
 
-```
-
-```
-
-```
 let r2 = &mut s;
 ```
 
@@ -1246,29 +771,11 @@ This code results in an error:
 
 ```
 let mut s = String::from("hello");
-```
 
-```
-
-```
-
-```
 let r1 = &s; // no problem
-```
-
-```
 let r2 = &s; // no problem
-```
-
-```
 let r3 = &mut s; // BIG PROBLEM
-```
 
-```
-
-```
-
-```
 println!("{r1}, {r2}, and {r3}");
 ```
 
@@ -1277,45 +784,15 @@ Here’s the error:
 ```
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
 immutable
-```
-
-```
  --> src/main.rs:6:14
-```
-
-```
   |
-```
-
-```
 4 |     let r1 = &s; // no problem
-```
-
-```
   |              -- immutable borrow occurs here
-```
-
-```
 5 |     let r2 = &s; // no problem
-```
-
-```
 6 |     let r3 = &mut s; // BIG PROBLEM
-```
-
-```
   |              ^^^^^^ mutable borrow occurs here
-```
-
-```
 7 |
-```
-
-```
 8 |     println!("{r1}, {r2}, and {r3}");
-```
-
-```
   |                -- immutable borrow later used here
 ```
 
@@ -1334,37 +811,13 @@ occurs before the mutable reference is introduced:
 
 ```
 let mut s = String::from("hello");
-```
 
-```
-
-```
-
-```
 let r1 = &s; // no problem
-```
-
-```
 let r2 = &s; // no problem
-```
-
-```
 println!("{r1} and {r2}");
-```
-
-```
 // variables r1 and r2 will not be used after this point
-```
 
-```
-
-```
-
-```
 let r3 = &mut s; // no problem
-```
-
-```
 println!("{r3}");
 ```
 
@@ -1381,8 +834,8 @@ have to track down why your data isn’t what you thought it was.
 
 ### Dangling References
 
-In languages with pointers, it’s easy to erroneously create a *dangling*
-*pointer*—a pointer that references a location in memory that may have been
+In languages with pointers, it’s easy to erroneously create a *dangling
+pointer*—a pointer that references a location in memory that may have been
 given to someone else—by freeing some memory while preserving a pointer to that
 memory. In Rust, by contrast, the compiler guarantees that references will
 never be dangling references: if you have a reference to some data, the
@@ -1396,37 +849,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let reference_to_nothing = dangle();
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn dangle() -> &String {
-```
-
-```
     let s = String::from("hello");
-```
 
-```
-
-```
-
-```
     &s
-```
-
-```
 }
 ```
 
@@ -1434,49 +863,16 @@ Here’s the error:
 
 ```
 error[E0106]: missing lifetime specifier
-```
-
-```
  --> src/main.rs:5:16
-```
-
-```
   |
-```
-
-```
 5 | fn dangle() -> &String {
-```
-
-```
   |                ^ expected named lifetime parameter
-```
-
-```
   |
-```
-
-```
   = help: this function's return type contains a borrowed value,
-```
-
-```
 but there is no value for it to be borrowed from
-```
-
-```
 help: consider using the `'static` lifetime
-```
-
-```
   |
-```
-
-```
 5 | fn dangle() -> &'static String {
-```
-
-```
   |                ~~~~~~~~
 ```
 
@@ -1486,9 +882,6 @@ about lifetimes, the message does contain the key to why this code is a problem:
 
 ```
 this function's return type contains a borrowed value, but there
-```
-
-```
 is no value for it to be borrowed from
 ```
 
@@ -1497,33 +890,12 @@ Let’s take a closer look at exactly what’s happening at each stage of our
 
 ```
 // src/main.rs
-```
-
-```
 fn dangle() -> &String { // dangle returns a reference to a String
-```
 
-```
-
-```
-
-```
     let s = String::from("hello"); // s is a new String
-```
 
-```
-
-```
-
-```
     &s // we return a reference to the String, s
-```
-
-```
 } // Here, s goes out of scope and is dropped, so its memory goes away
-```
-
-```
   // Danger!
 ```
 
@@ -1536,21 +908,9 @@ The solution here is to return the `String` directly:
 
 ```
 fn no_dangle() -> String {
-```
-
-```
     let s = String::from("hello");
-```
 
-```
-
-```
-
-```
     s
-```
-
-```
 }
 ```
 
@@ -1564,6 +924,7 @@ Let’s recap what we’ve discussed about references:
 * At any given time, you can have *either* one mutable reference *or* any
 number of immutable references.
 * References must always be valid.
+
 Next, we’ll look at a different kind of reference: slices.
 
 ## The Slice Type
@@ -1593,45 +954,15 @@ Filename: src/main.rs
 
 ```
 fn first_word(s: &String) -> usize {
-```
-
-```
   1 let bytes = s.as_bytes();
-```
 
-```
-
-```
-
-```
     for (2 i, &item) in 3 bytes.iter().enumerate() {
-```
-
-```
       4 if item == b' ' {
-```
-
-```
             return i;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
   5 s.len()
-```
-
-```
 }
 ```
 
@@ -1669,45 +1000,15 @@ uses the `first_word` function from Listing 4-7.
 
 ```
 // src/main.rs
-```
-
-```
 fn main() {
-```
-
-```
     let mut s = String::from("hello world");
-```
 
-```
-
-```
-
-```
     let word = first_word(&s); // word will get the value 5
-```
 
-```
-
-```
-
-```
     s.clear(); // this empties the String, making it equal to ""
-```
 
-```
-
-```
-
-```
     // word still has the value 5 here, but there's no more string that
-```
-
-```
     // we could meaningfully use the value 5 with. word is now totally invalid!
-```
-
-```
 }
 ```
 
@@ -1741,17 +1042,8 @@ A *string slice* is a reference to part of a `String`, and it looks like this:
 
 ```
 let s = String::from("hello world");
-```
 
-```
-
-```
-
-```
 let hello = &s[0..5];
-```
-
-```
 let world = &s[6..11];
 ```
 
@@ -1776,17 +1068,8 @@ drop the value before the two periods. In other words, these are equal:
 
 ```
 let s = String::from("hello");
-```
 
-```
-
-```
-
-```
 let slice = &s[0..2];
-```
-
-```
 let slice = &s[..2];
 ```
 
@@ -1795,25 +1078,10 @@ can drop the trailing number. That means these are equal:
 
 ```
 let s = String::from("hello");
-```
 
-```
-
-```
-
-```
 let len = s.len();
-```
 
-```
-
-```
-
-```
 let slice = &s[3..len];
-```
-
-```
 let slice = &s[3..];
 ```
 
@@ -1822,29 +1090,14 @@ are equal:
 
 ```
 let s = String::from("hello");
-```
 
-```
-
-```
-
-```
 let len = s.len();
-```
 
-```
-
-```
-
-```
 let slice = &s[0..len];
-```
-
-```
 let slice = &s[..];
 ```
 
-> NoteString slice range indices must occur at valid UTF-8 character
+> Note: String slice range indices must occur at valid UTF-8 character
 boundaries. If you attempt to create a string slice in the middle of a
 multibyte character, your program will exit with an error. For the purposes of
 introducing string slices, we are assuming ASCII only in this section; a more
@@ -1858,45 +1111,15 @@ Filename: src/main.rs
 
 ```
 fn first_word(s: &String) -> &str {
-```
-
-```
     let bytes = s.as_bytes();
-```
 
-```
-
-```
-
-```
     for (i, &item) in bytes.iter().enumerate() {
-```
-
-```
         if item == b' ' {
-```
-
-```
             return &s[0..i];
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     &s[..]
-```
-
-```
 }
 ```
 
@@ -1929,37 +1152,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let mut s = String::from("hello world");
-```
 
-```
-
-```
-
-```
     let word = first_word(&s);
-```
 
-```
-
-```
-
-```
     s.clear(); // error!
-```
 
-```
-
-```
-
-```
     println!("the first word is: {word}");
-```
-
-```
 }
 ```
 
@@ -1967,49 +1166,16 @@ Here’s the compiler error:
 
 ```
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
-```
-
-```
 immutable
-```
-
-```
   --> src/main.rs:18:5
-```
-
-```
    |
-```
-
-```
 16 |     let word = first_word(&s);
-```
-
-```
    |                           -- immutable borrow occurs here
-```
-
-```
 17 |
-```
-
-```
 18 |     s.clear(); // error!
-```
-
-```
    |     ^^^^^^^^^ mutable borrow occurs here
-```
-
-```
 19 |
-```
-
-```
 20 |     println!("the first word is: {word}");
-```
-
-```
    |                                   ---- immutable borrow later used here
 ```
 
@@ -2067,89 +1233,26 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let my_string = String::from("hello world");
-```
 
-```
-
-```
-
-```
     // `first_word` works on slices of `String`s, whether partial
-```
-
-```
     // or whole
-```
-
-```
     let word = first_word(&my_string[0..6]);
-```
-
-```
     let word = first_word(&my_string[..]);
-```
-
-```
     // `first_word` also works on references to `String`s, which
-```
-
-```
     // are equivalent to whole slices of `String`s
-```
-
-```
     let word = first_word(&my_string);
-```
 
-```
-
-```
-
-```
     let my_string_literal = "hello world";
-```
 
-```
-
-```
-
-```
     // `first_word` works on slices of string literals,
-```
-
-```
     // whether partial or whole
-```
-
-```
     let word = first_word(&my_string_literal[0..6]);
-```
-
-```
     let word = first_word(&my_string_literal[..]);
-```
 
-```
-
-```
-
-```
     // Because string literals *are* string slices already,
-```
-
-```
     // this works too, without the slice syntax!
-```
-
-```
     let word = first_word(my_string_literal);
-```
-
-```
 }
 ```
 
@@ -2167,21 +1270,9 @@ part of an array. We’d do so like this:
 
 ```
 let a = [1, 2, 3, 4, 5];
-```
 
-```
-
-```
-
-```
 let slice = &a[1..3];
-```
 
-```
-
-```
-
-```
 assert_eq!(slice, &[2, 3]);
 ```
 
