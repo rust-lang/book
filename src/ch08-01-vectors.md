@@ -249,7 +249,7 @@ are dropped</span>
 When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
 references to contents of a vector are only used while the vector itself is
-valid. 
+valid.
 
 Let’s move on to the next collection type: `String`!
 
