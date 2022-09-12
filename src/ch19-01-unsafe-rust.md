@@ -15,7 +15,7 @@ doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
 use unsafe code incorrectly, problems can occur due to memory unsafety, such as
 null pointer dereferencing.
 
-Because many other languages are inherently usafe, using Rust to call their
+Because many other languages are inherently unsafe, using Rust to call their
 code and functions can break the runtime safety that Rust guarantees. For
 example, if you were to use an external C library like the Windows API, you
 would need to tell Rust that all the functions from that library are unsafe.
