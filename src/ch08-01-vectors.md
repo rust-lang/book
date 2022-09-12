@@ -58,6 +58,12 @@ as shown in Listing 8-3.
 <span class="caption">Listing 8-3: Using the `push` method to add values to a
 vector</span>
 
+If you expand the `vec!` macro, you'll find that it essentially performs
+the same operations shown above. It creates a new vector using the `Vec::new`
+method and adds the listed values using the `push` method. This functionality
+is further explained in the ["Macros"][macros]<!-- ignore --> section of
+Chapter 19.
+
 As with any variable, if we want to be able to change its value, we need to
 make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
 we place inside are all of type `i32`, and Rust infers this from the data, so
@@ -243,7 +249,7 @@ are dropped</span>
 When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
 references to contents of a vector are only used while the vector itself is
-valid.
+valid. 
 
 Let’s move on to the next collection type: `String`!
 
@@ -251,3 +257,4 @@ Let’s move on to the next collection type: `String`!
 [nomicon]: ../nomicon/vec/vec.html
 [vec-api]: ../std/vec/struct.Vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator
+[macros]: ch19-06-macros.html#declarative-macros-with-macro_rules-for-general-metaprogramming

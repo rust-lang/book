@@ -15,6 +15,14 @@ doing.” Be warned, however, that you use unsafe Rust at your own risk: if you
 use unsafe code incorrectly, problems can occur due to memory unsafety, such as
 null pointer dereferencing.
 
+Because many other languages are inherently usafe, using Rust to call their
+code and functions can break the runtime safety that Rust guarantees. For
+example, if you were to use an external C library like the Windows API, you
+would need to tell Rust that all the functions from that library are unsafe.
+Because calling external code and libraries is a very common thing to do in
+systems programming, Rust allows you to step outside of its rules and do things
+that were otherwise not possible with safe code.
+
 Another reason Rust has an unsafe alter ego is that the underlying computer
 hardware is inherently unsafe. If Rust didn’t let you do unsafe operations, you
 couldn’t do certain tasks. Rust needs to allow you to do low-level systems
@@ -320,7 +328,11 @@ Within the `extern "C"` block, we list the names and signatures of external
 functions from another language we want to call. The `"C"` part defines which
 *application binary interface (ABI)* the external function uses: the ABI
 defines how to call the function at the assembly level. The `"C"` ABI is the
-most common and follows the C programming language’s ABI.
+most common and follows the C programming language’s ABI. This can allow you to
+call functions and libraries that have not yet been written in Rust. For
+example, most operating system APIs are written in C. Using the `extern "C"`
+block allows you to call the API functions and interact with your operating
+system.
 
 > #### Calling Rust Functions from Other Languages
 >
