@@ -173,7 +173,7 @@ threads run at the same time.
 We'll often use the `move` keyword with closures passed to `thread::spawn`
 because the closure will then take ownership of the values it uses from the
 environment, thus transferring ownership of those values from one thread to
-another. In the [“Capturing the Environment with Closures”][capture]<!-- ignore
+another. In the [“Capturing References or Moving Ownership”][capture]<!-- ignore
 --> section of Chapter 13, we discussed `move` in the context of closures. Now,
 we’ll concentrate more on the interaction between `move` and `thread::spawn`.
 
@@ -278,4 +278,4 @@ ownership rules.
 With a basic understanding of threads and the thread API, let’s look at what we
 can *do* with threads.
 
-[capture]: ch13-01-closures.html#capturing-the-environment-with-closures
+[capture]: ch13-01-closures.html#capturing-references-or-moving-ownership
