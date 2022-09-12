@@ -75,11 +75,11 @@ Yellow: 50
 Blue: 10
 ```
 
-In the above code, you can see that when iterating over a hashmap, the
+In the above code, you can see that when iterating over a hash map, the
 (key, value) pairs are returned as a tuple. You can then use pattern matching
 to destructure the tuple and get the individual key, value variables. Their
 types are automatically inferred by the compiler depending on the types stored
-in the hashmap.
+in the hash map.
 
 ### Hash Maps and Ownership
 
