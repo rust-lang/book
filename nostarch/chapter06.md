@@ -208,19 +208,16 @@ A `Message` enum whose variants each store different amounts and types of values
 
 This enum has four variants with different types:
 
+* `Quit` has no data associated with it at all.
+* `Move` has named fields, like a struct does.
+* `Write` includes a single `String`.
+* `ChangeColor` includes three `i32` values.
 
-Unmatched: ListPlain
-
-Unmatched: ListPlain
-
-Unmatched: ListPlain
-
-Unmatched: ListPlain
-      Defining an enum with variants such as the ones in Listing 6-2 is similar
-to defining different kinds of struct definitions, except the enum doesn’t use
-the `struct` keyword and all the variants are grouped together under the
-`Message` type. The following structs could hold the same data that the
-preceding enum variants hold:
+Defining an enum with variants such as the ones in Listing 6-2 is similar to
+defining different kinds of struct definitions, except the enum doesn’t use the
+`struct` keyword and all the variants are grouped together under the `Message`
+type. The following structs could hold the same data that the preceding enum
+variants hold:
 
 ```
 struct QuitMessage; // unit struct
