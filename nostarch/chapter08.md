@@ -8,8 +8,6 @@ directory, so all fixes need to be made in `/src/`.
 
 # Common Collections
 
-Prod: note that there are non-standard characters in this chapter
-
 Rust’s standard library includes a number of very useful data structures called
 *collections*. Most other data types represent one specific value, but
 collections can contain multiple values. Unlike the built-in array and tuple
@@ -25,6 +23,7 @@ collections that are used very often in Rust programs:
 previously, but in this chapter we’ll talk about it in depth.
 * A *hash map* allows you to associate a value with a specific key. It’s a
 particular implementation of the more general data structure called a *map*.
+
 To learn about the other kinds of collections provided by the standard library,
 see the documentation at *https://doc.rust-lang.org/std/collections/index.html*.
 
@@ -49,9 +48,6 @@ let v: Vec<i32> = Vec::new();
 ```
 
 Creating a new, empty vector to hold values of type `i32`
-
-PROD: Please rename this as Listing 8-1, and rename remaining listings
-consecutively: e.g., Listing 8-2, Listing 8-3, etc.
 
 Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
@@ -87,25 +83,10 @@ as shown in Listing 8-3.
 
 ```
 let mut v = Vec::new();
-```
 
-```
-
-```
-
-```
 v.push(5);
-```
-
-```
 v.push(6);
-```
-
-```
 v.push(7);
-```
-
-```
 v.push(8);
 ```
 
@@ -127,41 +108,14 @@ syntax and the `get` method.
 
 ```
 let v = vec![1, 2, 3, 4, 5];
-```
 
-```
-
-```
-
-```
 1 let third: &i32 = &v[2];
-```
-
-```
 println!("The third element is {third}");
-```
 
-```
-
-```
-
-```
 2 let third: Option<&i32> = v.get(2);
-```
-
-```
 match third  {
-```
-
-```
     Some(third) => println!("The third element is {third}"),
-```
-
-```
     None => println!("There is no third element."),
-```
-
-```
 }
 ```
 
@@ -181,17 +135,8 @@ technique, as shown in Listing 8-5.
 
 ```
 let v = vec![1, 2, 3, 4, 5];
-```
 
-```
-
-```
-
-```
 let does_not_exist = &v[100];
-```
-
-```
 let does_not_exist = v.get(100);
 ```
 
@@ -225,81 +170,30 @@ function.
 
 ```
 let mut v = vec![1, 2, 3, 4, 5];
-```
 
-```
-
-```
-
-```
 let first = &v[0];
-```
 
-```
-
-```
-
-```
 v.push(6);
-```
 
-```
-
-```
-
-```
 println!("The first element is: {first}");
 ```
 
 Attempting to add an element to a vector while holding a reference to an item
 
+Compiling this code will result in this error:
 
-Unmatched: BodyContinued
-      ```
+```
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as
-```
-
-```
 immutable
-```
-
-```
  --> src/main.rs:6:5
-```
-
-```
   |
-```
-
-```
 4 |     let first = &v[0];
-```
-
-```
   |                  - immutable borrow occurs here
-```
-
-```
 5 |
-```
-
-```
 6 |     v.push(6);
-```
-
-```
   |     ^^^^^^^^^ mutable borrow occurs here
-```
-
-```
 7 |
-```
-
-```
 8 |     println!("The first element is: {first}");
-```
-
-```
   |                                      ----- immutable borrow later used here
 ```
 
@@ -313,7 +207,7 @@ is currently stored. In that case, the reference to the first element would be
 pointing to deallocated memory. The borrowing rules prevent programs from
 ending up in that situation.
 
-> NoteFor more on the implementation details of the `Vec<T>` type, see “The
+> Note: For more on the implementation details of the `Vec<T>` type, see “The
 Rustonomicon” at *https://doc.rust-lang.org/nomicon/vec/vec.html*.
 
 ### Iterating Over the Values in a Vector
@@ -325,17 +219,8 @@ to use a `for` loop to get immutable references to each element in a vector of
 
 ```
 let v = vec![100, 32, 57];
-```
-
-```
 for i in &v {
-```
-
-```
     println!("{i}");
-```
-
-```
 }
 ```
 
@@ -348,17 +233,8 @@ will add `50` to each element.
 
 ```
 let mut v = vec![100, 32, 57];
-```
-
-```
 for i in &mut v {
-```
-
-```
     *i += 50;
-```
-
-```
 }
 ```
 
@@ -393,45 +269,15 @@ holds different types. We’ve demonstrated this in Listing 8-9.
 
 ```
 enum SpreadsheetCell {
-```
-
-```
     Int(i32),
-```
-
-```
     Float(f64),
-```
-
-```
     Text(String),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let row = vec![
-```
-
-```
     SpreadsheetCell::Int(3),
-```
-
-```
     SpreadsheetCell::Text(String::from("blue")),
-```
-
-```
     SpreadsheetCell::Float(10.12),
-```
-
-```
 ];
 ```
 
@@ -461,21 +307,9 @@ annotated in Listing 8-10.
 
 ```
 {
-```
-
-```
     let v = vec![1, 2, 3, 4];
-```
 
-```
-
-```
-
-```
     // do stuff with v
-```
-
-```
 } // <- v goes out of scope and is freed here
 ```
 
@@ -545,35 +379,20 @@ two examples.
 
 ```
 let data = "initial contents";
-```
 
-```
-
-```
-
-```
 let s = data.to_string();
-```
 
-```
-
-```
-
-```
 // the method also works on a literal directly:
-```
-
-```
 let s = "initial contents".to_string();
 ```
 
 Using the `to_string` method to create a `String` from a string literal
 
+This code creates a string containing `initial contents`.
 
-Unmatched: BodyContinued
-      We can also use the function `String::from` to create a `String` from a
-string literal. The code in Listing 8-13 is equivalent to the code in Listing
-8-12 that uses `to_string`.
+We can also use the function `String::from` to create a `String` from a string
+literal. The code in Listing 8-13 is equivalent to the code in Listing 8-12
+that uses `to_string`.
 
 ```
 let s = String::from("initial contents");
@@ -592,53 +411,23 @@ data in them, as shown in Listing 8-14.
 
 ```
 let hello = String::from("السلام عليكم");
-```
-
-```
 let hello = String::from("Dobrý den");
-```
-
-```
 let hello = String::from("Hello");
-```
-
-```
 let hello = String::from("שָׁלוֹם");
-```
-
-```
 let hello = String::from("नमस्ते");
-```
-
-```
 let hello = String::from("こんにちは");
-```
-
-```
 let hello = String::from("안녕하세요");
-```
-
-```
 let hello = String::from("你好");
-```
-
-```
 let hello = String::from("Olá");
-```
-
-```
 let hello = String::from("Здравствуйте");
-```
-
-```
 let hello = String::from("Hola");
 ```
 
 Storing greetings in different languages in strings
 
+All of these are valid `String` values.
 
-Unmatched: BodyContinued
-      ### Updating a String
+### Updating a String
 
 A `String` can grow in size and its contents can change, just like the contents
 of a `Vec<T>`, if you push more data into it. In addition, you can conveniently
@@ -651,9 +440,6 @@ as shown in Listing 8-15.
 
 ```
 let mut s = String::from("foo");
-```
-
-```
 s.push_str("bar");
 ```
 
@@ -666,17 +452,8 @@ parameter. For example, in the code in Listing 8-16, we want to be able to use
 
 ```
 let mut s1 = String::from("foo");
-```
-
-```
 let s2 = "bar";
-```
-
-```
 s1.push_str(s2);
-```
-
-```
 println!("s2 is {s2}");
 ```
 
@@ -691,30 +468,21 @@ method.
 
 ```
 let mut s = String::from("lo");
-```
-
-```
 s.push('l');
 ```
 
 Adding one character to a `String` value using `push`
 
+As a result, `s` will contain `lol`.
 
-Unmatched: BodyContinued
-      #### Concatenation with the + Operator or the format! Macro
+#### Concatenation with the + Operator or the format! Macro
 
 Often, you’ll want to combine two existing strings. One way to do so is to use
 the `+` operator, as shown in Listing 8-18.
 
 ```
 let s1 = String::from("Hello, ");
-```
-
-```
 let s2 = String::from("world!");
-```
-
-```
 let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
 ```
 
@@ -738,7 +506,7 @@ bits of the `+` operator.
 
 First, `s2` has an `&`, meaning that we’re adding a *reference* of the second
 string to the first string. This is because of the `s` parameter in the `add`
-function: we can only add a `&``str` to a `String`; we can’t add two `String`
+function: we can only add a `&str` to a `String`; we can’t add two `String`
 values together. But wait—the type of `&s2` is `&String`, not `&str`, as
 specified in the second parameter to `add`. So why does Listing 8-18 compile?
 
@@ -763,21 +531,9 @@ gets unwieldy:
 
 ```
 let s1 = String::from("tic");
-```
-
-```
 let s2 = String::from("tac");
-```
-
-```
 let s3 = String::from("toe");
-```
 
-```
-
-```
-
-```
 let s = s1 + "-" + &s2 + "-" + &s3;
 ```
 
@@ -787,21 +543,9 @@ more complicated ways, we can instead use the `format!` macro:
 
 ```
 let s1 = String::from("tic");
-```
-
-```
 let s2 = String::from("tac");
-```
-
-```
 let s3 = String::from("toe");
-```
 
-```
-
-```
-
-```
 let s = format!("{s1}-{s2}-{s3}");
 ```
 
@@ -820,45 +564,21 @@ get an error. Consider the invalid code in Listing 8-19.
 
 ```
 let s1 = String::from("hello");
-```
-
-```
 let h = s1[0];
 ```
 
 Attempting to use indexing syntax with a `String`
 
+This code will result in the following error:
 
-Unmatched: BodyContinued
-      ```
+```
 error[E0277]: the type `String` cannot be indexed by `{integer}`
-```
-
-```
  --> src/main.rs:3:13
-```
-
-```
   |
-```
-
-```
 3 |     let h = s1[0];
-```
-
-```
   |             ^^^^^ `String` cannot be indexed by `{integer}`
-```
-
-```
   |
-```
-
-```
   = help: the trait `Index<{integer}>` is not implemented for
-```
-
-```
 `String`
 ```
 
@@ -876,8 +596,8 @@ let hello = String::from("Hola");
 ```
 
 In this case, `len` will be `4`, which means the vector storing the string
-`"``Hola``"` is 4 bytes long. Each of these letters takes one byte when encoded
-in UTF-8. The following line, however, may surprise you (note that this string
+`"Hola"` is 4 bytes long. Each of these letters takes one byte when encoded in
+UTF-8. The following line, however, may surprise you (note that this string
 begins with the capital Cyrillic letter *Ze*, not the Arabic number 3):
 
 ```
@@ -893,9 +613,6 @@ code:
 
 ```
 let hello = "Здравствуйте";
-```
-
-```
 let answer = &hello[0];
 ```
 
@@ -923,9 +640,6 @@ stored as a vector of `u8` values that looks like this:
 
 ```
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224,
-```
-
-```
 164, 164, 224, 165, 135]
 ```
 
@@ -968,13 +682,7 @@ range to create a string slice containing particular bytes:
 
 ```
 let hello = "Здравствуйте";
-```
 
-```
-
-```
-
-```
 let s = &hello[0..4];
 ```
 
@@ -988,9 +696,6 @@ index were accessed in a vector:
 
 ```
 thread 'main' panicked at 'byte index 1 is not a char boundary;
-```
-
-```
 it is inside 'З' (bytes 0..2) of `Здравствуйте`', src/main.rs:4:14
 ```
 
@@ -1006,23 +711,14 @@ type `char`, and you can iterate over the result to access each element:
 
 ```
 for c in "Зд".chars() {
-```
-
-```
     println!("{c}");
-```
-
-```
 }
 ```
 
+This code will print the following:
 
-Unmatched: BodyContinued
-      ```
+```
 З
-```
-
-```
 д
 ```
 
@@ -1031,31 +727,16 @@ appropriate for your domain:
 
 ```
 for b in "Зд".bytes() {
-```
-
-```
     println!("{b}");
-```
-
-```
 }
 ```
 
+This code will print the four bytes that make up this string:
 
-Unmatched: BodyContinued
-      ```
+```
 208
-```
-
-```
 151
-```
-
-```
 208
-```
-
-```
 180
 ```
 
@@ -1113,25 +794,10 @@ Yellow team starts with 50.
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let mut scores = HashMap::new();
-```
 
-```
-
-```
-
-```
 scores.insert(String::from("Blue"), 10);
-```
-
-```
 scores.insert(String::from("Yellow"), 50);
 ```
 
@@ -1155,37 +821,13 @@ method, as shown in Listing 8-21.
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let mut scores = HashMap::new();
-```
 
-```
-
-```
-
-```
 scores.insert(String::from("Blue"), 10);
-```
-
-```
 scores.insert(String::from("Yellow"), 50);
-```
 
-```
-
-```
-
-```
 let team_name = String::from("Blue");
-```
-
-```
 let score = scores.get(&team_name).copied().unwrap_or(0);
 ```
 
@@ -1203,51 +845,21 @@ do with vectors, using a `for` loop:
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let mut scores = HashMap::new();
-```
 
-```
-
-```
-
-```
 scores.insert(String::from("Blue"), 10);
-```
-
-```
 scores.insert(String::from("Yellow"), 50);
-```
 
-```
-
-```
-
-```
 for (key, value) in &scores {
-```
-
-```
     println!("{key}: {value}");
-```
-
-```
 }
 ```
 
+This code will print each pair in an arbitrary order:
 
-Unmatched: BodyContinued
-      ```
+```
 Yellow: 50
-```
-
-```
 Blue: 10
 ```
 
@@ -1259,37 +871,13 @@ the hash map will be the owner of those values, as demonstrated in Listing 8-22.
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let field_name = String::from("Favorite color");
-```
-
-```
 let field_value = String::from("Blue");
-```
 
-```
-
-```
-
-```
 let mut map = HashMap::new();
-```
-
-```
 map.insert(field_name, field_value);
-```
-
-```
 // field_name and field_value are invalid at this point, try
-```
-
-```
 // using them and see what compiler error you get!
 ```
 
@@ -1327,41 +915,21 @@ team’s key both times.
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let mut scores = HashMap::new();
-```
 
-```
-
-```
-
-```
 scores.insert(String::from("Blue"), 10);
-```
-
-```
 scores.insert(String::from("Blue"), 25);
-```
 
-```
-
-```
-
-```
 println!("{:?}", scores);
 ```
 
 Replacing a value stored with a particular key
 
+This code will print `{"Blue": 25}`. The original value of `10` has been
+overwritten.
 
-Unmatched: BodyContinued
-      #### Adding a Key and Value Only If a Key Isn’t Present
+#### Adding a Key and Value Only If a Key Isn’t Present
 
 It’s common to check whether a particular key already exists in the hash map
 with a value and then to take the following actions: if the key does exist in
@@ -1377,37 +945,13 @@ Blue team. Using the `entry` API, the code looks like Listing 8-24.
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let mut scores = HashMap::new();
-```
-
-```
 scores.insert(String::from("Blue"), 10);
-```
 
-```
-
-```
-
-```
 scores.entry(String::from("Yellow")).or_insert(50);
-```
-
-```
 scores.entry(String::from("Blue")).or_insert(50);
-```
 
-```
-
-```
-
-```
 println!("{:?}", scores);
 ```
 
@@ -1436,49 +980,16 @@ the value `0`.
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 let text = "hello world wonderful world";
-```
 
-```
-
-```
-
-```
 let mut map = HashMap::new();
-```
 
-```
-
-```
-
-```
 for word in text.split_whitespace() {
-```
-
-```
     let count = map.entry(word).or_insert(0);
-```
-
-```
     *count += 1;
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 println!("{:?}", map);
 ```
 
