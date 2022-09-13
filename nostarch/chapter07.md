@@ -263,7 +263,8 @@ mod front_of_house {
 }
 ```
 
-A `front_of_house` module containing other modules that then contain functions
+Listing 7-1: A `front_of_house` module containing other modules that then
+contain functions
 
 We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
@@ -297,7 +298,7 @@ crate
          └── take_payment
 ```
 
-The module tree for the code in Listing 7-1
+Listing 7-2: The module tree for the code in Listing 7-1
 
 This tree shows how some of the modules nest inside other modules; for example,
 `hosting` nests inside `front_of_house`. The tree also shows that some modules
@@ -360,7 +361,8 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Calling the `add_to_waitlist` function using absolute and relative paths
+Listing 7-3: Calling the `add_to_waitlist` function using absolute and relative
+paths
 
 The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
 we use an absolute path. The `add_to_waitlist` function is defined in the same
@@ -422,7 +424,7 @@ note: the module `hosting` is defined here
    |     ^^^^^^^^^^^
 ```
 
-Compiler errors from building the code in Listing 7-3
+Listing 7-4: Compiler errors from building the code in Listing 7-3
 
 The error messages say that module `hosting` is private. In other words, we
 have the correct paths for the `hosting` module and the `add_to_waitlist`
@@ -464,7 +466,8 @@ mod front_of_house {
 --snip--
 ```
 
-Declaring the `hosting` module as `pub` to use it from `eat_at_restaurant`
+Listing 7-5: Declaring the `hosting` module as `pub` to use it from
+`eat_at_restaurant`
 
 Unfortunately, the code in Listing 7-5 still results in compiler errors, as
 shown in Listing 7-6.
@@ -497,7 +500,7 @@ note: the function `add_to_waitlist` is defined here
    |         ^^^^^^^^^^^^^^^^^^^^
 ```
 
-Compiler errors from building the code in Listing 7-5
+Listing 7-6: Compiler errors from building the code in Listing 7-5
 
 What happened? Adding the `pub` keyword in front of `mod hosting` makes the
 module public. With this change, if we can access `front_of_house`, we can
@@ -527,8 +530,8 @@ mod front_of_house {
 --snip--
 ```
 
-Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist` lets us call
-the function from `eat_at_restaurant`.
+Listing 7-7: Adding the `pub` keyword to `mod hosting` and `fn add_to_waitlist`
+lets us call the function from `eat_at_restaurant`.
 
 Now the code will compile! To see why adding the `pub` keyword lets us use
 these paths in `add_to_waitlist` with respect to the privacy rules, let’s look
@@ -611,7 +614,7 @@ mod back_of_house {
 }
 ```
 
-Calling a function using a relative path starting with `super`
+Listing 7-8: Calling a function using a relative path starting with `super`
 
 The `fix_incorrect_order` function is in the `back_of_house` module, so we can
 use `super` to go to the parent module of `back_of_house`, which in this case
@@ -668,7 +671,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-A struct with some public fields and some private fields
+Listing 7-9: A struct with some public fields and some private fields
 
 Because the `toast` field in the `back_of_house::Breakfast` struct is public,
 in `eat_at_restaurant` we can write and read to the `toast` field using dot
@@ -702,7 +705,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Designating an enum as public makes all its variants public.
+Listing 7-10: Designating an enum as public makes all its variants public.
 
 Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad`
 variants in `eat_at_restaurant`.
@@ -747,7 +750,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Bringing a module into scope with `use`
+Listing 7-11: Bringing a module into scope with `use`
 
 Adding `use` and a path in a scope is similar to creating a symbolic link in
 the filesystem. By adding `use crate::front_of_house::hosting` in the crate
@@ -778,7 +781,7 @@ mod customer {
 }
 ```
 
-A `use` statement only applies in the scope it’s in.
+Listing 7-12: A `use` statement only applies in the scope it’s in.
 
 The compiler error shows that the shortcut no longer applies within the
 `customer` module:
@@ -827,8 +830,8 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Bringing the `add_to_waitlist` function into scope with `use`, which is
-unidiomatic
+Listing 7-13: Bringing the `add_to_waitlist` function into scope with `use`,
+which is unidiomatic
 
 Although both Listing 7-11 and Listing 7-13 accomplish the same task, Listing
 7-11 is the idiomatic way to bring a function into scope with `use`. Bringing
@@ -854,7 +857,7 @@ fn main() {
 }
 ```
 
-Bringing `HashMap` into scope in an idiomatic way
+Listing 7-14: Bringing `HashMap` into scope in an idiomatic way
 
 There’s no strong reason behind this idiom: it’s just the convention that has
 emerged, and folks have gotten used to reading and writing Rust code this way.
@@ -879,8 +882,8 @@ fn function2() -> io::Result<()> {
 }
 ```
 
-Bringing two types with the same name into the same scope requires using their
-parent modules.
+Listing 7-15: Bringing two types with the same name into the same scope
+requires using their parent modules.
 
 As you can see, using the parent modules distinguishes the two `Result` types.
 If instead we specified `use std::fmt::Result` and `use std::io::Result`, we’d
@@ -909,7 +912,7 @@ fn function2() -> IoResult<()> {
 }
 ```
 
-Renaming a type when it’s brought into scope with the `as` keyword
+Listing 7-16: Renaming a type when it’s brought into scope with the `as` keyword
 
 In the second `use` statement, we chose the new name `IoResult` for the
 `std::io::Result` type, which won’t conflict with the `Result` from `std::fmt`
@@ -944,7 +947,8 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Making a name available for any code to use from a new scope with `pub use`
+Listing 7-17: Making a name available for any code to use from a new scope with
+`pub use`
 
 Before this change, external code would have to call the `add_to_waitlist`
 function by using the path
@@ -1040,7 +1044,8 @@ use std::{cmp::Ordering, io};
 --snip--
 ```
 
-Specifying a nested path to bring multiple items with the same prefix into scope
+Listing 7-18: Specifying a nested path to bring multiple items with the same
+prefix into scope
 
 In bigger programs, bringing many items into scope from the same crate or
 module using nested paths can reduce the number of separate `use` statements
@@ -1058,7 +1063,7 @@ use std::io;
 use std::io::Write;
 ```
 
-Two `use` statements where one is a subpath of the other
+Listing 7-19: Two `use` statements where one is a subpath of the other
 
 The common part of these two paths is `std::io`, and that’s the complete first
 path. To merge these two paths into one `use` statement, we can use `self` in
@@ -1070,7 +1075,7 @@ Filename: src/lib.rs
 use std::io::{self, Write};
 ```
 
-Combining the paths in Listing 7-19 into one `use` statement
+Listing 7-20: Combining the paths in Listing 7-19 into one `use` statement
 
 This line brings `std::io` and `std::io::Write` into scope.
 
@@ -1123,7 +1128,7 @@ pub fn eat_at_restaurant() {
 }
 ```
 
-Declaring the `front_of_house` module whose body will be in
+Listing 7-21: Declaring the `front_of_house` module whose body will be in
 *src/front_of_house.rs*
 
 Next, place the code that was in the curly brackets into a new file named
@@ -1139,7 +1144,8 @@ pub mod hosting {
 }
 ```
 
-Definitions inside the `front_of_house` module in *src/front_of_house.rs*
+Listing 7-22: Definitions inside the `front_of_house` module in
+*src/front_of_house.rs*
 
 Note that you only need to load a file using a `mod` declaration *once* in your
 module tree. Once the compiler knows the file is part of the project (and knows

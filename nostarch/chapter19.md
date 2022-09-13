@@ -26,6 +26,7 @@ syntax, supertraits, and the newtype pattern in relation to traits
 and dynamically sized types
 * Advanced functions and closures: function pointers and returning closures
 * Macros: ways to define code that defines more code at compile time
+
 It’s a panoply of Rust features with something for everyone! Let’s dive in!
 
 ## Unsafe Rust
@@ -111,6 +112,7 @@ mutable pointers or multiple mutable pointers to the same location
 * Aren’t guaranteed to point to valid memory
 * Are allowed to be null
 * Don’t implement any automatic cleanup
+
 By opting out of having Rust enforce these guarantees, you can give up
 guaranteed safety in exchange for greater performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
@@ -120,21 +122,12 @@ references.
 
 ```
 let mut num = 5;
-```
 
-```
-
-```
-
-```
 let r1 = &num as *const i32;
-```
-
-```
 let r2 = &mut num as *mut i32;
 ```
 
-Creating raw pointers from references
+Listing 19-1: Creating raw pointers from references
 
 Notice that we don’t include the `unsafe` keyword in this code. We can create
 raw pointers in safe code; we just can’t dereference raw pointers outside an
@@ -156,13 +149,10 @@ but it is possible.
 
 ```
 let address = 0x012345usize;
-```
-
-```
 let r = address as *const i32;
 ```
 
-Creating a raw pointer to an arbitrary memory address
+Listing 19-2: Creating a raw pointer to an arbitrary memory address
 
 Recall that we can create raw pointers in safe code, but we can’t *dereference*
 raw pointers and read the data being pointed to. In Listing 19-3, we use the
@@ -170,41 +160,17 @@ dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
 ```
 let mut num = 5;
-```
 
-```
-
-```
-
-```
 let r1 = &num as *const i32;
-```
-
-```
 let r2 = &mut num as *mut i32;
-```
 
-```
-
-```
-
-```
 unsafe {
-```
-
-```
     println!("r1 is: {}", *r1);
-```
-
-```
     println!("r2 is: {}", *r2);
-```
-
-```
 }
 ```
 
-Dereferencing raw pointers within an `unsafe` block
+Listing 19-3: Dereferencing raw pointers within an `unsafe` block
 
 Creating a pointer does no harm; it’s only when we try to access the value that
 it points at that we might end up dealing with an invalid value.
@@ -241,21 +207,9 @@ body:
 
 ```
 unsafe fn dangerous() {}
-```
 
-```
-
-```
-
-```
 unsafe {
-```
-
-```
     dangerous();
-```
-
-```
 }
 ```
 
@@ -264,37 +218,13 @@ try to call `dangerous` without the `unsafe` block, we’ll get an error:
 
 ```
 error[E0133]: call to unsafe function is unsafe and requires
-```
-
-```
 unsafe function or block
-```
-
-```
  --> src/main.rs:4:5
-```
-
-```
   |
-```
-
-```
 4 |     dangerous();
-```
-
-```
   |     ^^^^^^^^^^^ call to unsafe function
-```
-
-```
   |
-```
-
-```
   = note: consult the function's documentation for information on
-```
-
-```
 how to avoid undefined behavior
 ```
 
@@ -318,37 +248,16 @@ argument. Listing 19-4 shows how to use `split_at_mut`.
 
 ```
 let mut v = vec![1, 2, 3, 4, 5, 6];
-```
 
-```
-
-```
-
-```
 let r = &mut v[..];
-```
 
-```
-
-```
-
-```
 let (a, b) = r.split_at_mut(3);
-```
 
-```
-
-```
-
-```
 assert_eq!(a, &mut [1, 2, 3]);
-```
-
-```
 assert_eq!(b, &mut [4, 5, 6]);
 ```
 
-Using the safe `split_at_mut` function
+Listing 19-4: Using the safe `split_at_mut` function
 
 We can’t implement this function using only safe Rust. An attempt might look
 something like Listing 19-5, which won’t compile. For simplicity, we’ll
@@ -357,45 +266,18 @@ of `i32` values rather than for a generic type `T`.
 
 ```
 fn split_at_mut(
-```
-
-```
     values: &mut [i32],
-```
-
-```
     mid: usize,
-```
-
-```
 ) -> (&mut [i32], &mut [i32]) {
-```
-
-```
     let len = values.len();
-```
 
-```
-
-```
-
-```
     assert!(mid <= len);
-```
 
-```
-
-```
-
-```
     (&mut values[..mid], &mut values[mid..])
-```
-
-```
 }
 ```
 
-An attempted implementation of `split_at_mut` using only safe Rust
+Listing 19-5: An attempted implementation of `split_at_mut` using only safe Rust
 
 This function first gets the total length of the slice. Then it asserts that
 the index given as a parameter is within the slice by checking whether it’s
@@ -411,49 +293,16 @@ When we try to compile the code in Listing 19-5, we’ll get an error:
 
 ```
 error[E0499]: cannot borrow `*values` as mutable more than once at a time
-```
-
-```
  --> src/main.rs:9:31
-```
-
-```
   |
-```
-
-```
 2 |     values: &mut [i32],
-```
-
-```
   |             - let's call the lifetime of this reference `'1`
-```
-
-```
 ...
-```
-
-```
 9 |     (&mut values[..mid], &mut values[mid..])
-```
-
-```
   |     --------------------------^^^^^^--------
-```
-
-```
   |     |     |                   |
-```
-
-```
   |     |     |                   second mutable borrow occurs here
-```
-
-```
   |     |     first mutable borrow occurs here
-```
-
-```
   |     returning this value requires that `*values` is borrowed for `'1`
 ```
 
@@ -468,77 +317,27 @@ to unsafe functions to make the implementation of `split_at_mut` work.
 
 ```
 use std::slice;
-```
 
-```
-
-```
-
-```
 fn split_at_mut(
-```
-
-```
     values: &mut [i32],
-```
-
-```
     mid: usize,
-```
-
-```
 ) -> (&mut [i32], &mut [i32]) {
-```
-
-```
   1 let len = values.len();
-```
-
-```
   2 let ptr = values.as_mut_ptr();
-```
 
-```
-
-```
-
-```
   3 assert!(mid <= len);
-```
 
-```
-
-```
-
-```
   4 unsafe {
-```
-
-```
         (
-```
-
-```
           5 slice::from_raw_parts_mut(ptr, mid),
-```
-
-```
           6 slice::from_raw_parts_mut(ptr.add(mid), len - mid),
-```
-
-```
         )
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Using unsafe code in the implementation of the `split_at_mut` function
+Listing 19-6: Using unsafe code in the implementation of the `split_at_mut`
+function
 
 Recall from “The Slice Type” on page XX that a slice is a pointer to some data
 and the length of the slice. We use the `len` method to get the length of a
@@ -577,37 +376,16 @@ location and creates a slice 10,000 items long.
 
 ```
 use std::slice;
-```
 
-```
-
-```
-
-```
 let address = 0x01234usize;
-```
-
-```
 let r = address as *mut i32;
-```
 
-```
-
-```
-
-```
 let values: &[i32] = unsafe {
-```
-
-```
     slice::from_raw_parts_mut(r, 10000)
-```
-
-```
 };
 ```
 
-Creating a slice from an arbitrary memory location
+Listing 19-7: Creating a slice from an arbitrary memory location
 
 We don’t own the memory at this arbitrary location, and there is no guarantee
 that the slice this code creates contains valid `i32` values. Attempting to use
@@ -631,53 +409,21 @@ Filename: src/main.rs
 
 ```
 extern "C" {
-```
-
-```
     fn abs(input: i32) -> i32;
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     unsafe {
-```
-
-```
         println!(
-```
-
-```
             "Absolute value of -3 according to C: {}",
-```
-
-```
             abs(-3)
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Declaring and calling an `extern` function defined in another language
+Listing 19-8: Declaring and calling an `extern` function defined in another
+language
 
 Within the `extern "C"` block, we list the names and signatures of external
 functions from another language we want to call. The `"C"` part defines which
@@ -685,12 +431,8 @@ functions from another language we want to call. The `"C"` part defines which
 defines how to call the function at the assembly level. The `"C"` ABI is the
 most common and follows the C programming language’s ABI.
 
-
-Unmatched: BoxType
-
 > ### Calling Rust Functions from Other Languages
-
-
+>
 > We can also use `extern` to create an interface that allows other languages
 to call Rust functions. Instead of creating a whole `extern` block, we add the
 `extern` keyword and specify the ABI to use just before the `fn` keyword for
@@ -701,20 +443,17 @@ contains more information for other parts of the compilation process to consume
 but is less human readable. Every programming language compiler mangles names
 slightly differently, so for a Rust function to be nameable by other languages,
 we must disable the Rust compiler’s name mangling.
-
-
+>
 > In the following example, we make the `call_from_c` function accessible from
 C code, after it’s compiled to a shared library and linked from C:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
+>
+> ```
+> #[no_mangle]
+> pub extern "C" fn call_from_c() {
+>     println!("Just called a Rust function from C!");
+> }
+> ```
+>
 > This usage of `extern` does not require `unsafe`.
 
 ### Accessing or Modifying a Mutable Static Variable
@@ -730,25 +469,13 @@ Filename: src/main.rs
 
 ```
 static HELLO_WORLD: &str = "Hello, world!";
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     println!("value is: {HELLO_WORLD}");
-```
-
-```
 }
 ```
 
-Defining and using an immutable static variable
+Listing 19-9: Defining and using an immutable static variable
 
 Static variables are similar to constants, which we discussed in “Constants” on
 page XX. The names of static variables are in `SCREAMING_SNAKE_CASE` by
@@ -769,65 +496,23 @@ Filename: src/main.rs
 
 ```
 static mut COUNTER: u32 = 0;
-```
 
-```
-
-```
-
-```
 fn add_to_count(inc: u32) {
-```
-
-```
     unsafe {
-```
-
-```
         COUNTER += inc;
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     add_to_count(3);
-```
 
-```
-
-```
-
-```
     unsafe {
-```
-
-```
         println!("COUNTER: {COUNTER}");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Reading from or writing to a mutable static variable is unsafe.
+Listing 19-10: Reading from or writing to a mutable static variable is unsafe.
 
 As with regular variables, we specify mutability using the `mut` keyword. Any
 code that reads or writes from `COUNTER` must be within an `unsafe` block. This
@@ -851,38 +536,20 @@ Listing 19-11.
 
 ```
 unsafe trait Foo {
-```
-
-```
     // methods go here
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 unsafe impl Foo for i32 {
-```
-
-```
     // method implementations go here
-```
-
-```
 }
 ```
 
-Defining and implementing an unsafe trait
+Listing 19-11: Defining and implementing an unsafe trait
 
 By using `unsafe impl`, we’re promising that we’ll uphold the invariants that
 the compiler can’t verify.
 
-As an example, recall the `S``end` and `S``ync` marker traits we discussed in
+As an example, recall the `Send` and `Sync` marker traits we discussed in
 “Extensible Concurrency with the Send and Sync Traits” on page XX: the compiler
 implements these traits automatically if our types are composed entirely of
 `Send` and `Sync` types. If we implement a type that contains a type that is
@@ -938,25 +605,14 @@ iterating over. The definition of the `Iterator` trait is as shown in Listing
 
 ```
 pub trait Iterator {
-```
-
-```
     type Item;
-```
 
-```
-
-```
-
-```
     fn next(&mut self) -> Option<Self::Item>;
-```
-
-```
 }
 ```
 
-The definition of the `Iterator` trait that has an associated type `Item`
+Listing 19-12: The definition of the `Iterator` trait that has an associated
+type `Item`
 
 The type `Item` is a placeholder, and the `next` method’s definition shows that
 it will return values of type `Option<Self::Item>`. Implementors of the
@@ -973,21 +629,9 @@ Filename: src/lib.rs
 
 ```
 impl Iterator for Counter {
-```
-
-```
     type Item = u32;
-```
 
-```
-
-```
-
-```
     fn next(&mut self) -> Option<Self::Item> {
-```
-
-```
         --snip--
 ```
 
@@ -996,17 +640,11 @@ This syntax seems comparable to that of generics. So why not just define the
 
 ```
 pub trait Iterator<T> {
-```
-
-```
     fn next(&mut self) -> Option<T>;
-```
-
-```
 }
 ```
 
-A hypothetical definition of the `Iterator` trait using generics
+Listing 19-13: A hypothetical definition of the `Iterator` trait using generics
 
 The difference is that when using generics, as in Listing 19-13, we must
 annotate the types in each implementation; because we can also implement
@@ -1034,7 +672,7 @@ and documenting the associated type in the API documentation is a good practice.
 When we use generic type parameters, we can specify a default concrete type for
 the generic type. This eliminates the need for implementors of the trait to
 specify a concrete type if the default type works. You specify a default type
-when declaring a generic type with the `<``PlaceholderType=ConcreteType``>`
+when declaring a generic type with the `<`PlaceholderType`=`ConcreteType`>`
 syntax.
 
 A great example of a situation where this technique is useful is with *operator
@@ -1052,105 +690,34 @@ Filename: src/main.rs
 
 ```
 use std::ops::Add;
-```
 
-```
-
-```
-
-```
 #[derive(Debug, Copy, Clone, PartialEq)]
-```
-
-```
 struct Point {
-```
-
-```
     x: i32,
-```
-
-```
     y: i32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Add for Point {
-```
-
-```
     type Output = Point;
-```
 
-```
-
-```
-
-```
     fn add(self, other: Point) -> Point {
-```
-
-```
         Point {
-```
-
-```
             x: self.x + other.x,
-```
-
-```
             y: self.y + other.y,
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     assert_eq!(
-```
-
-```
         Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
-```
-
-```
         Point { x: 3, y: 3 }
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Implementing the `Add` trait to overload the `+` operator for `Point` instances
+Listing 19-14: Implementing the `Add` trait to overload the `+` operator for
+`Point` instances
 
 The `add` method adds the `x` values of two `Point` instances and the `y`
 values of two `Point` instances to create a new `Point`. The `Add` trait has an
@@ -1162,21 +729,9 @@ definition:
 
 ```
 trait Add<Rhs=Self> {
-```
-
-```
     type Output;
-```
 
-```
-
-```
-
-```
     fn add(self, rhs: Rhs) -> Self::Output;
-```
-
-```
 }
 ```
 
@@ -1205,53 +760,21 @@ Filename: src/lib.rs
 
 ```
 use std::ops::Add;
-```
 
-```
-
-```
-
-```
 struct Millimeters(u32);
-```
-
-```
 struct Meters(u32);
-```
 
-```
-
-```
-
-```
 impl Add<Meters> for Millimeters {
-```
-
-```
     type Output = Millimeters;
-```
 
-```
-
-```
-
-```
     fn add(self, other: Meters) -> Millimeters {
-```
-
-```
         Millimeters(self.0 + (other.0 * 1000))
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementing the `Add` trait on `Millimeters` to add `Millimeters` and `Meters`
+Listing 19-15: Implementing the `Add` trait on `Millimeters` to add
+`Millimeters` and `Meters`
 
 To add `Millimeters` and `Meters`, we specify `impl Add<Meters>` to set the
 value of the `Rhs` type parameter instead of using the default of `Self`.
@@ -1289,114 +812,37 @@ Filename: src/main.rs
 
 ```
 trait Pilot {
-```
-
-```
     fn fly(&self);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 trait Wizard {
-```
-
-```
     fn fly(&self);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Human;
-```
 
-```
-
-```
-
-```
 impl Pilot for Human {
-```
-
-```
     fn fly(&self) {
-```
-
-```
         println!("This is your captain speaking.");
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Wizard for Human {
-```
-
-```
     fn fly(&self) {
-```
-
-```
         println!("Up!");
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Human {
-```
-
-```
     fn fly(&self) {
-```
-
-```
         println!("*waving arms furiously*");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Two traits are defined to have a `fly` method and are implemented on the
-`Human` type, and a `fly` method is implemented on `Human` directly.
+Listing 19-16: Two traits are defined to have a `fly` method and are
+implemented on the `Human` type, and a `fly` method is implemented on `Human`
+directly.
 
 When we call `fly` on an instance of `Human`, the compiler defaults to calling
 the method that is directly implemented on the type, as shown in Listing 19-17.
@@ -1405,21 +851,12 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let person = Human;
-```
-
-```
     person.fly();
-```
-
-```
 }
 ```
 
-Calling `fly` on an instance of `Human`
+Listing 19-17: Calling `fly` on an instance of `Human`
 
 Running this code will print `*waving arms furiously*`, showing that Rust
 called the `fly` method implemented on `Human` directly.
@@ -1432,29 +869,14 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let person = Human;
-```
-
-```
     Pilot::fly(&person);
-```
-
-```
     Wizard::fly(&person);
-```
-
-```
     person.fly();
-```
-
-```
 }
 ```
 
-Specifying which trait’s `fly` method we want to call
+Listing 19-18: Specifying which trait’s `fly` method we want to call
 
 Specifying the trait name before the method name clarifies to Rust which
 implementation of `fly` we want to call. We could also write
@@ -1466,13 +888,7 @@ Running this code prints the following:
 
 ```
 This is your captain speaking.
-```
-
-```
 Up!
-```
-
-```
 *waving arms furiously*
 ```
 
@@ -1493,90 +909,30 @@ Filename: src/main.rs
 
 ```
 trait Animal {
-```
-
-```
     fn baby_name() -> String;
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Dog;
-```
 
-```
-
-```
-
-```
 impl Dog {
-```
-
-```
     fn baby_name() -> String {
-```
-
-```
         String::from("Spot")
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Animal for Dog {
-```
-
-```
     fn baby_name() -> String {
-```
-
-```
         String::from("puppy")
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     println!("A baby dog is called a {}", Dog::baby_name());
-```
-
-```
 }
 ```
 
-A trait with an associated function and a type with an associated function of
-the same name that also implements the trait
+Listing 19-19: A trait with an associated function and a type with an
+associated function of the same name that also implements the trait
 
 We implement the code for naming all puppies Spot in the `baby_name` associated
 function that is defined on `Dog`. The `Dog` type also implements the trait
@@ -1601,18 +957,12 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     println!("A baby dog is called a {}", Animal::baby_name());
-```
-
-```
 }
 ```
 
-Attempting to call the `baby_name` function from the `Animal` trait, but Rust
-doesn’t know which implementation to use
+Listing 19-20: Attempting to call the `baby_name` function from the `Animal`
+trait, but Rust doesn’t know which implementation to use
 
 Because `Animal::baby_name` doesn’t have a `self` parameter, and there could be
 other types that implement the `Animal` trait, Rust can’t figure out which
@@ -1620,33 +970,12 @@ implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```
 error[E0283]: type annotations needed
-```
-
-```
   --> src/main.rs:20:43
-```
-
-```
    |
-```
-
-```
 20 |     println!("A baby dog is called a {}", Animal::baby_name());
-```
-
-```
    |                                           ^^^^^^^^^^^^^^^^^ cannot infer
-```
-
-```
 type
-```
-
-```
    |
-```
-
-```
    = note: cannot satisfy `_: Animal`
 ```
 
@@ -1659,30 +988,15 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     println!(
-```
-
-```
         "A baby dog is called a {}",
-```
-
-```
         <Dog as Animal>::baby_name()
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Using fully qualified syntax to specify that we want to call the `baby_name`
-function from the `Animal` trait as implemented on `Dog`
+Listing 19-21: Using fully qualified syntax to specify that we want to call the
+`baby_name` function from the `Animal` trait as implemented on `Dog`
 
 We’re providing Rust with a type annotation within the angle brackets, which
 indicates we want to call the `baby_name` method from the `Animal` trait as
@@ -1724,21 +1038,9 @@ should print the following:
 
 ```
 **********
-```
-
-```
 *        *
-```
-
-```
 * (1, 3) *
-```
-
-```
 *        *
-```
-
-```
 **********
 ```
 
@@ -1754,58 +1056,22 @@ Filename: src/main.rs
 
 ```
 use std::fmt;
-```
 
-```
-
-```
-
-```
 trait OutlinePrint: fmt::Display {
-```
-
-```
     fn outline_print(&self) {
-```
-
-```
         let output = self.to_string();
-```
-
-```
         let len = output.len();
-```
-
-```
         println!("{}", "*".repeat(len + 4));
-```
-
-```
         println!("*{}*", " ".repeat(len + 2));
-```
-
-```
         println!("* {} *", output);
-```
-
-```
         println!("*{}*", " ".repeat(len + 2));
-```
-
-```
         println!("{}", "*".repeat(len + 4));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementing the `OutlinePrint` trait that requires the functionality from
-`Display`
+Listing 19-22: Implementing the `OutlinePrint` trait that requires the
+functionality from `Display`
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
 can use the `to_string` function that is automatically implemented for any type
@@ -1821,25 +1087,10 @@ Filename: src/main.rs
 
 ```
 struct Point {
-```
-
-```
     x: i32,
-```
-
-```
     y: i32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl OutlinePrint for Point {}
 ```
 
@@ -1847,57 +1098,18 @@ We get an error saying that `Display` is required but not implemented:
 
 ```
 error[E0277]: `Point` doesn't implement `std::fmt::Display`
-```
-
-```
   --> src/main.rs:20:6
-```
-
-```
    |
-```
-
-```
 20 | impl OutlinePrint for Point {}
-```
-
-```
    |      ^^^^^^^^^^^^ `Point` cannot be formatted with the default formatter
-```
-
-```
    |
-```
-
-```
    = help: the trait `std::fmt::Display` is not implemented for `Point`
-```
-
-```
    = note: in format strings you may be able to use `{:?}` (or {:#?} for
-```
-
-```
 pretty-print) instead
-```
-
-```
 note: required by a bound in `OutlinePrint`
-```
-
-```
   --> src/main.rs:3:21
-```
-
-```
    |
-```
-
-```
 3  | trait OutlinePrint: fmt::Display {
-```
-
-```
    |                     ^^^^^^^^^^^^ required by this bound in `OutlinePrint`
 ```
 
@@ -1908,29 +1120,11 @@ Filename: src/main.rs
 
 ```
 use std::fmt;
-```
 
-```
-
-```
-
-```
 impl fmt::Display for Point {
-```
-
-```
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-```
-
-```
         write!(f, "({}, {})", self.x, self.y)
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1962,73 +1156,26 @@ Filename: src/main.rs
 
 ```
 use std::fmt;
-```
 
-```
-
-```
-
-```
 struct Wrapper(Vec<String>);
-```
 
-```
-
-```
-
-```
 impl fmt::Display for Wrapper {
-```
-
-```
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-```
-
-```
         write!(f, "[{}]", self.0.join(", "))
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let w = Wrapper(vec![
-```
-
-```
         String::from("hello"),
-```
-
-```
         String::from("world"),
-```
-
-```
     ]);
-```
-
-```
     println!("w = {w}");
-```
-
-```
 }
 ```
 
-Creating a `Wrapper` type around `Vec<String>` to implement `Display`
+Listing 19-23: Creating a `Wrapper` type around `Vec<String>` to implement
+`Display`
 
 The implementation of `Display` uses `self.0` to access the inner `Vec<T>`
 because `Wrapper` is a tuple struct and `Vec<T>` is the item at index 0 in the
@@ -2059,7 +1206,7 @@ the `!` type and dynamically sized types.
 
 ### Using the Newtype Pattern for Type Safety and Abstraction
 
-> NoteThis section assumes you’ve read the earlier section “Using the Newtype
+> Note: This section assumes you’ve read the earlier section “Using the Newtype
 Pattern to Implement External Traits” on page XX.
 
 The newtype pattern is also useful for tasks beyond those we’ve discussed so
@@ -2101,25 +1248,10 @@ values of type `i32`:
 
 ```
 type Kilometers = i32;
-```
 
-```
-
-```
-
-```
 let x: i32 = 5;
-```
-
-```
 let y: Kilometers = 5;
-```
 
-```
-
-```
-
-```
 println!("x + y = {}", x + y);
 ```
 
@@ -2143,49 +1275,19 @@ code like that in Listing 19-24.
 
 ```
 let f: Box<dyn Fn() + Send + 'static> = Box::new(|| {
-```
-
-```
     println!("hi");
-```
-
-```
 });
-```
 
-```
-
-```
-
-```
 fn takes_long_type(f: Box<dyn Fn() + Send + 'static>) {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn returns_long_type() -> Box<dyn Fn() + Send + 'static> {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Using a long type in many places
+Listing 19-24: Using a long type in many places
 
 A type alias makes this code more manageable by reducing the repetition. In
 Listing 19-25, we’ve introduced an alias named `Thunk` for the verbose type and
@@ -2193,49 +1295,19 @@ can replace all uses of the type with the shorter alias `Thunk`.
 
 ```
 type Thunk = Box<dyn Fn() + Send + 'static>;
-```
 
-```
-
-```
-
-```
 let f: Thunk = Box::new(|| println!("hi"));
-```
 
-```
-
-```
-
-```
 fn takes_long_type(f: Thunk) {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn returns_long_type() -> Thunk {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Introducing a type alias `Thunk` to reduce repetition
+Listing 19-25: Introducing a type alias `Thunk` to reduce repetition
 
 This code is much easier to read and write! Choosing a meaningful name for a
 type alias can help communicate your intent as well (*thunk* is a word for code
@@ -2252,53 +1324,17 @@ the `Write` trait:
 
 ```
 use std::fmt;
-```
-
-```
 use std::io::Error;
-```
 
-```
-
-```
-
-```
 pub trait Write {
-```
-
-```
     fn write(&mut self, buf: &[u8]) -> Result<usize, Error>;
-```
-
-```
     fn flush(&mut self) -> Result<(), Error>;
-```
 
-```
-
-```
-
-```
     fn write_all(&mut self, buf: &[u8]) -> Result<(), Error>;
-```
-
-```
     fn write_fmt(
-```
-
-```
         &mut self,
-```
-
-```
         fmt: fmt::Arguments,
-```
-
-```
     ) -> Result<(), Error>;
-```
-
-```
 }
 ```
 
@@ -2316,29 +1352,11 @@ looking like this:
 
 ```
 pub trait Write {
-```
-
-```
     fn write(&mut self, buf: &[u8]) -> Result<usize>;
-```
-
-```
     fn flush(&mut self) -> Result<()>;
-```
 
-```
-
-```
-
-```
     fn write_all(&mut self, buf: &[u8]) -> Result<()>;
-```
-
-```
     fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<()>;
-```
-
-```
 }
 ```
 
@@ -2356,13 +1374,7 @@ return. Here is an example:
 
 ```
 fn bar() -> ! {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -2376,21 +1388,12 @@ here in Listing 19-26.
 
 ```
 let guess: u32 = match guess.trim().parse() {
-```
-
-```
     Ok(num) => num,
-```
-
-```
     Err(_) => continue,
-```
-
-```
 };
 ```
 
-A `match` with an arm that ends in `continue`
+Listing 19-26: A `match` with an arm that ends in `continue`
 
 At the time, we skipped over some details in this code. In “The match Control
 Flow Construct” on page XX, we discussed that `match` arms must all return the
@@ -2398,17 +1401,8 @@ same type. So, for example, the following code doesn’t work:
 
 ```
 let guess = match guess.trim().parse() {
-```
-
-```
     Ok(_) => 5,
-```
-
-```
     Err(_) => "hello",
-```
-
-```
 };
 ```
 
@@ -2434,41 +1428,14 @@ this definition:
 
 ```
 impl<T> Option<T> {
-```
-
-```
     pub fn unwrap(self) -> T {
-```
-
-```
         match self {
-```
-
-```
             Some(val) => val,
-```
-
-```
             None => panic!(
-```
-
-```
                 "called `Option::unwrap()` on a `None` value"
-```
-
-```
             ),
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2482,21 +1449,9 @@ One final expression that has the type `!` is a `loop`:
 
 ```
 print!("forever ");
-```
 
-```
-
-```
-
-```
 loop {
-```
-
-```
     print!("and ever ");
-```
-
-```
 }
 ```
 
@@ -2520,9 +1475,6 @@ we can’t create a variable of type `str`, nor can we take an argument of type
 
 ```
 let s1: str = "Hello there!";
-```
-
-```
 let s2: str = "How's it going?";
 ```
 
@@ -2562,27 +1514,15 @@ generic function definition like this:
 
 ```
 fn generic<T>(t: T) {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
+is actually treated as though we had written this:
 
-Unmatched: BodyContinued
-      ```
+```
 fn generic<T: Sized>(t: T) {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -2592,13 +1532,7 @@ restriction:
 
 ```
 fn generic<T: ?Sized>(t: &T) {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -2641,57 +1575,21 @@ Filename: src/main.rs
 
 ```
 fn add_one(x: i32) -> i32 {
-```
-
-```
     x + 1
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
-```
-
-```
     f(arg) + f(arg)
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let answer = do_twice(add_one, 5);
-```
 
-```
-
-```
-
-```
     println!("The answer is: {answer}");
-```
-
-```
 }
 ```
 
-Using the `fn` type to accept a function pointer as an argument
+Listing 19-27: Using the `fn` type to accept a function pointer as an argument
 
 This code prints `The answer is: 12`. We specify that the parameter `f` in
 `do_twice` is an `fn` that takes one parameter of type `i32` and returns an
@@ -2719,21 +1617,9 @@ numbers into a vector of strings, we could use a closure, like this:
 
 ```
 let list_of_numbers = vec![1, 2, 3];
-```
-
-```
 let list_of_strings: Vec<String> = list_of_numbers
-```
-
-```
     .iter()
-```
-
-```
     .map(|i| i.to_string())
-```
-
-```
     .collect();
 ```
 
@@ -2742,21 +1628,9 @@ like this:
 
 ```
 let list_of_numbers = vec![1, 2, 3];
-```
-
-```
 let list_of_strings: Vec<String> = list_of_numbers
-```
-
-```
     .iter()
-```
-
-```
     .map(ToString::to_string)
-```
-
-```
     .collect();
 ```
 
@@ -2776,33 +1650,12 @@ closures, like so:
 
 ```
 enum Status {
-```
-
-```
     Value(u32),
-```
-
-```
     Stop,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let list_of_statuses: Vec<Status> = (0u32..20)
-```
-
-```
     .map(Status::Value)
-```
-
-```
     .collect();
 ```
 
@@ -2824,13 +1677,7 @@ The following code tries to return a closure directly, but it won’t compile:
 
 ```
 fn returns_closure() -> dyn Fn(i32) -> i32 {
-```
-
-```
     |x| x + 1
-```
-
-```
 }
 ```
 
@@ -2838,61 +1685,19 @@ The compiler error is as follows:
 
 ```
 error[E0746]: return type cannot have an unboxed trait object
-```
-
-```
  --> src/lib.rs:1:25
-```
-
-```
   |
-```
-
-```
 1 | fn returns_closure() -> dyn Fn(i32) -> i32 {
-```
-
-```
   |                         ^^^^^^^^^^^^^^^^^^ doesn't have a size known at
-```
-
-```
 compile-time
-```
-
-```
   |
-```
-
-```
   = note: for information on `impl Trait`, see
-```
-
-```
 <https://doc.rust-lang.org/book/ch10-02-traits.html#returning-types-that-
-```
-
-```
 implement-traits>
-```
-
-```
 help: use `impl Fn(i32) -> i32` as the return type, as all return paths are of
-```
-
-```
 type `[closure@src/lib.rs:2:5: 2:14]`, which implements `Fn(i32) -> i32`
-```
-
-```
   |
-```
-
-```
 1 | fn returns_closure() -> impl Fn(i32) -> i32 {
-```
-
-```
   |                         ~~~~~~~~~~~~~~~~~~~
 ```
 
@@ -2902,13 +1707,7 @@ We can use a trait object:
 
 ```
 fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
-```
-
-```
     Box::new(|x| x + 1)
-```
-
-```
 }
 ```
 
@@ -2929,6 +1728,7 @@ used on structs and enums
 * Attribute-like macros that define custom attributes usable on any item
 * Function-like macros that look like function calls but operate on the tokens
 specified as their argument
+
 We’ll talk about each of these in turn, but first, let’s look at why we even
 need macros when we already have functions.
 
@@ -2997,55 +1797,22 @@ Filename: src/lib.rs
 
 ```
 1 #[macro_export]
-```
-
-```
 2 macro_rules! vec {
-```
-
-```
   3 ( $( $x:expr ),* ) => {
-```
-
-```
         {
-```
-
-```
             let mut temp_vec = Vec::new();
-```
-
-```
           4 $(
-```
-
-```
               5 temp_vec.push(6 $x);
-```
-
-```
             )*
-```
-
-```
           7 temp_vec
-```
-
-```
         }
-```
-
-```
     };
-```
-
-```
 }
 ```
 
-A simplified version of the `vec!` macro definition
+Listing 19-28: A simplified version of the `vec!` macro definition
 
-> NoteThe actual definition of the `vec!` macro in the standard library
+> Note: The actual definition of the `vec!` macro in the standard library
 includes code to pre-allocate the correct amount of memory up front. That code
 is an optimization that we don’t include here, to make the example simpler.
 
@@ -3087,7 +1854,7 @@ When we call this macro with `vec![1, 2, 3];`, the `$x` pattern matches three
 times with the three expressions `1`, `2`, and `3`.
 
 Now let’s look at the pattern in the body of the code associated with this arm:
-`temp_vec.push()` [5] within `$()*` at [4] and [7] is generated for each part
+`temp_vec.push()` [5] within `$()* at [4] and [7] is generated for each part
 that matches `$()` in the pattern zero or more times depending on how many
 times the pattern matches. The `$x` [6] is replaced with each expression
 matched. When we call this macro with `vec![1, 2, 3];`, the code generated that
@@ -3095,29 +1862,11 @@ replaces this macro call will be the following:
 
 ```
 {
-```
-
-```
     let mut temp_vec = Vec::new();
-```
-
-```
     temp_vec.push(1);
-```
-
-```
     temp_vec.push(2);
-```
-
-```
     temp_vec.push(3);
-```
-
-```
     temp_vec
-```
-
-```
 }
 ```
 
@@ -3148,25 +1897,13 @@ Filename: src/lib.rs
 
 ```
 use proc_macro::TokenStream;
-```
 
-```
-
-```
-
-```
 #[some_attribute]
-```
-
-```
 pub fn some_name(input: TokenStream) -> TokenStream {
-```
-
-```
 }
 ```
 
-An example of defining a procedural macro
+Listing 19-29: An example of defining a procedural macro
 
 The function that defines a procedural macro takes a `TokenStream` as an input
 and produces a `TokenStream` as an output. The `TokenStream` type is defined by
@@ -3197,42 +1934,18 @@ Filename: src/main.rs
 
 ```
 use hello_macro::HelloMacro;
-```
-
-```
 use hello_macro_derive::HelloMacro;
-```
 
-```
-
-```
-
-```
 #[derive(HelloMacro)]
-```
-
-```
 struct Pancakes;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     Pancakes::hello_macro();
-```
-
-```
 }
 ```
 
-The code a user of our crate will be able to write when using our procedural
-macro
+Listing 19-30: The code a user of our crate will be able to write when using
+our procedural macro
 
 This code will print `Hello, Macro! My name is Pancakes!` when we’re done. The
 first step is to make a new library crate, like this:
@@ -3247,13 +1960,7 @@ Filename: src/lib.rs
 
 ```
 pub trait HelloMacro {
-```
-
-```
     fn hello_macro();
-```
-
-```
 }
 ```
 
@@ -3262,53 +1969,17 @@ the trait to achieve the desired functionality, like so:
 
 ```
 use hello_macro::HelloMacro;
-```
 
-```
-
-```
-
-```
 struct Pancakes;
-```
 
-```
-
-```
-
-```
 impl HelloMacro for Pancakes {
-```
-
-```
     fn hello_macro() {
-```
-
-```
         println!("Hello, Macro! My name is Pancakes!");
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     Pancakes::hello_macro();
-```
-
-```
 }
 ```
 
@@ -3352,25 +2023,10 @@ Filename: hello_macro_derive/Cargo.toml
 
 ```
 [lib]
-```
-
-```
 proc-macro = true
-```
 
-```
-
-```
-
-```
 [dependencies]
-```
-
-```
 syn = "1.0"
-```
-
-```
 quote = "1.0"
 ```
 
@@ -3382,58 +2038,22 @@ Filename: hello_macro_derive/src/lib.rs
 
 ```
 use proc_macro::TokenStream;
-```
-
-```
 use quote::quote;
-```
-
-```
 use syn;
-```
 
-```
-
-```
-
-```
 #[proc_macro_derive(HelloMacro)]
-```
-
-```
 pub fn hello_macro_derive(input: TokenStream) -> TokenStream {
-```
-
-```
     // Construct a representation of Rust code as a syntax tree
-```
-
-```
     // that we can manipulate
-```
-
-```
     let ast = syn::parse(input).unwrap();
-```
 
-```
-
-```
-
-```
     // Build the trait implementation
-```
-
-```
     impl_hello_macro(&ast)
-```
-
-```
 }
 ```
 
-Code that most procedural macro crates will require in order to process Rust
-code
+Listing 19-31: Code that most procedural macro crates will require in order to
+process Rust code
 
 Notice that we’ve split the code into the `hello_macro_derive` function, which
 is responsible for parsing the `TokenStream`, and the `impl_hello_macro`
@@ -3472,74 +2092,26 @@ struct we get from parsing the `struct Pancakes;` string.
 
 ```
 DeriveInput {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     ident: Ident {
-```
-
-```
         ident: "Pancakes",
-```
-
-```
         span: #0 bytes(95..103)
-```
-
-```
     },
-```
-
-```
     data: Struct(
-```
-
-```
         DataStruct {
-```
-
-```
             struct_token: Struct,
-```
-
-```
             fields: Unit,
-```
-
-```
             semi_token: Some(
-```
-
-```
                 Semi
-```
-
-```
             )
-```
-
-```
         }
-```
-
-```
     )
-```
-
-```
 }
 ```
 
-The `DeriveInput` instance we get when parsing the code that has the macro’s
-attribute in Listing 19-30
+Listing 19-32: The `DeriveInput` instance we get when parsing the code that has
+the macro’s attribute in Listing 19-30
 
 The fields of this struct show that the Rust code we’ve parsed is a unit struct
 with the `ident` (*identifier*, meaning the name) of `Pancakes`. There are more
@@ -3570,61 +2142,22 @@ Filename: hello_macro_derive/src/lib.rs
 
 ```
 fn impl_hello_macro(ast: &syn::DeriveInput) -> TokenStream {
-```
-
-```
     let name = &ast.ident;
-```
-
-```
     let gen = quote! {
-```
-
-```
         impl HelloMacro for #name {
-```
-
-```
             fn hello_macro() {
-```
-
-```
                 println!(
-```
-
-```
                     "Hello, Macro! My name is {}!",
-```
-
-```
                     stringify!(#name)
-```
-
-```
                 );
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
     };
-```
-
-```
     gen.into()
-```
-
-```
 }
 ```
 
-Implementing the `HelloMacro` trait using the parsed Rust code
+Listing 19-33: Implementing the `HelloMacro` trait using the parsed Rust code
 
 We get an `Ident` struct instance containing the name (identifier) of the
 annotated type using `ast.ident`. The struct in Listing 19-32 shows that when
@@ -3671,13 +2204,7 @@ dependencies; if not, you can specify them as `path` dependencies as follows:
 
 ```
 [dependencies]
-```
-
-```
 hello_macro = { path = "../hello_macro" }
-```
-
-```
 hello_macro_derive = { path = "../hello_macro/hello_macro_derive" }
 ```
 
@@ -3701,9 +2228,6 @@ named `route` that annotates functions when using a web application framework:
 
 ```
 #[route(GET, "/")]
-```
-
-```
 fn index() {
 ```
 
@@ -3712,21 +2236,9 @@ macro. The signature of the macro definition function would look like this:
 
 ```
 #[proc_macro_attribute]
-```
-
-```
 pub fn route(
-```
-
-```
     attr: TokenStream,
-```
-
-```
     item: TokenStream
-```
-
-```
 ) -> TokenStream {
 ```
 
@@ -3761,9 +2273,6 @@ syntactically correct, which is much more complex processing than a
 
 ```
 #[proc_macro]
-```
-
-```
 pub fn sql(input: TokenStream) -> TokenStream {
 ```
 

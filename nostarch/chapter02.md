@@ -106,10 +106,7 @@ fn main() {
 }
 ```
 
-Code that gets a guess from the user and prints it
-
-Prod: Please renumber the listing captions for this chapter—Listing 2-1,
-Listing 2-2, etc.
+Listing 2-1: Code that gets a guess from the user and prints it
 
 This code contains a lot of information, so let’s go over it line by line. To
 obtain user input and then print the result as output, we need to bring the
@@ -417,8 +414,8 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-The output from running `cargo build` after adding the `rand` crate as a
-dependency
+Listing 2-2: The output from running `cargo build` after adding the `rand`
+crate as a dependency
 
 You may see different version numbers (but they will all be compatible with the
 code, thanks to SemVer!) and different lines (depending on the operating
@@ -541,7 +538,7 @@ fn main() {
 }
 ```
 
-Adding code to generate a random number
+Listing 2-3: Adding code to generate a random number
 
 First we add the line `use rand::Rng;` [1]. The `Rng` trait defines methods
 that random number generators implement, and this trait must be in scope for us
@@ -623,7 +620,7 @@ fn main() {
 }
 ```
 
-Handling the possible return values of comparing two numbers
+Listing 2-4: Handling the possible return values of comparing two numbers
 
 First we add another `use` statement [1], bringing a type called
 `std::cmp::Ordering` into scope from the standard library. The `Ordering` type
@@ -747,8 +744,6 @@ Additionally, the `u32` annotation in this example program and the comparison
 with `secret_number` means Rust will infer that `secret_number` should be a
 `u32` as well. So now the comparison will be between two values of the same
 type!
-
-Comp: Note that there is an emoji in the below paragraph
 
 The `parse` method will only work on characters that can logically be converted
 into numbers and so can easily cause errors. If, for example, the string
@@ -900,8 +895,8 @@ println!("You guessed: {guess}");
 --snip--
 ```
 
-Ignoring a non-number guess and asking for another guess instead of crashing
-the program
+Listing 2-5: Ignoring a non-number guess and asking for another guess instead
+of crashing the program
 
 We switch from an `expect` call to a `match` expression to move from crashing
 on an error to handling the error. Remember that `parse` returns a `Result`
@@ -995,7 +990,7 @@ fn main() {
 }
 ```
 
-Complete guessing game code
+Listing 2-6: Complete guessing game code
 
 At this point, you’ve successfully built the guessing game. Congratulations!
 

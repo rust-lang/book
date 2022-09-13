@@ -18,6 +18,7 @@ control flow. A pattern consists of some combination of the following:
 * Variables
 * Wildcards
 * Placeholders
+
 Some example patterns include `x`, `(a, 3)`, and `Some(Color::Red)`. In the
 contexts in which patterns are valid, these components describe the shape of
 data. Our program then matches values against the patterns to determine whether
@@ -50,21 +51,9 @@ expression to run if the value matches that arm’s pattern, like this:
 
 ```
 match VALUE {
-```
-
-```
     PATTERN => EXPRESSION,
-```
-
-```
     PATTERN => EXPRESSION,
-```
-
-```
     PATTERN => EXPRESSION,
-```
-
-```
 }
 ```
 
@@ -73,17 +62,8 @@ For example, here’s the `match` expression from Listing 6-5 that matches on an
 
 ```
 match x {
-```
-
-```
     None => None,
-```
-
-```
     Some(i) => Some(i + 1),
-```
-
-```
 }
 ```
 
@@ -124,89 +104,29 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let favorite_color: Option<&str> = None;
-```
-
-```
     let is_tuesday = false;
-```
-
-```
     let age: Result<u8, _> = "34".parse();
-```
 
-```
-
-```
-
-```
   1 if let Some(color) = favorite_color {
-```
-
-```
       2 println!(
-```
-
-```
             "Using your favorite, {color}, as the background"
-```
-
-```
         );
-```
-
-```
   3 } else if is_tuesday {
-```
-
-```
       4 println!("Tuesday is green day!");
-```
-
-```
   5 } else if let Ok(age) = age {
-```
-
-```
       6 if age > 30 {
-```
-
-```
           7 println!("Using purple as the background color");
-```
-
-```
         } else {
-```
-
-```
           8 println!("Using orange as the background color");
-```
-
-```
         }
-```
-
-```
   9 } else {
-```
-
-```
      10 println!("Using blue as the background color");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Mixing `if let`, `else if`, `else if let`, and `else`
+Listing 18-1: Mixing `if let`, `else if`, `else if let`, and `else`
 
 If the user specifies a favorite color [1], that color is used as the
 background [2]. If no favorite color is specified and today is Tuesday [3], the
@@ -239,44 +159,22 @@ Similar in construction to `if let`, the `while let` conditional loop allows a
 18-2, we code a `while let` loop that uses a vector as a stack and prints the
 values in the vector in the opposite order in which they were pushed.
 
+Filename: src/main.rs
+
 ```
 let mut stack = Vec::new();
-```
 
-```
-
-```
-
-```
 stack.push(1);
-```
-
-```
 stack.push(2);
-```
-
-```
 stack.push(3);
-```
 
-```
-
-```
-
-```
 while let Some(top) = stack.pop() {
-```
-
-```
     println!("{top}");
-```
-
-```
 }
 ```
 
-Using a `while let` loop to print values for as long as `stack.pop()` returns
-`Some`
+Listing 18-2: Using a `while let` loop to print values for as long as
+`stack.pop()` returns `Some`
 
 This example prints `3`, `2`, and then `1`. The `pop` method takes the last
 element out of the vector and returns `Some(value)`. If the vector is empty,
@@ -291,39 +189,23 @@ pattern. For example, in `for x in y`, the `x` is the pattern. Listing 18-3
 demonstrates how to use a pattern in a `for` loop to *destructure*, or break
 apart, a tuple as part of the `for` loop.
 
+Filename: src/main.rs
+
 ```
 let v = vec!['a', 'b', 'c'];
-```
 
-```
-
-```
-
-```
 for (index, value) in v.iter().enumerate() {
-```
-
-```
     println!("{value} is at index {index}");
-```
-
-```
 }
 ```
 
-Using a pattern in a `for` loop to destructure a tuple
+Listing 18-3: Using a pattern in a `for` loop to destructure a tuple
 
 The code in Listing 18-3 will print the following:
 
 ```
 a is at index 0
-```
-
-```
 b is at index 1
-```
-
-```
 c is at index 2
 ```
 
@@ -366,7 +248,8 @@ To see the pattern-matching aspect of `let` more clearly, consider Listing
 let (x, y, z) = (1, 2, 3);
 ```
 
-Using a pattern to destructure a tuple and create three variables at once
+Listing 18-4: Using a pattern to destructure a tuple and create three variables
+at once
 
 Here, we match a tuple against a pattern. Rust compares the value `(1, 2, 3)`
 to the pattern `(x, y, z)` and sees that the value matches the pattern, in that
@@ -383,52 +266,22 @@ elements into two variables, which won’t work.
 let (x, y) = (1, 2, 3);
 ```
 
-Incorrectly constructing a pattern whose variables don’t match the number of
-elements in the tuple
+Listing 18-5: Incorrectly constructing a pattern whose variables don’t match
+the number of elements in the tuple
 
 Attempting to compile this code results in this type error:
 
 ```
 error[E0308]: mismatched types
-```
-
-```
  --> src/main.rs:2:9
-```
-
-```
   |
-```
-
-```
 2 |     let (x, y) = (1, 2, 3);
-```
-
-```
   |         ^^^^^^   --------- this expression has type `({integer}, {integer},
-```
-
-```
 {integer})`
-```
-
-```
   |         |
-```
-
-```
   |         expected a tuple with 3 elements, found one with 2 elements
-```
-
-```
   |
-```
-
-```
   = note: expected tuple `({integer}, {integer}, {integer})`
-```
-
-```
              found tuple `(_, _)`
 ```
 
@@ -446,17 +299,11 @@ declares a function named `foo` that takes one parameter named `x` of type
 
 ```
 fn foo(x: i32) {
-```
-
-```
     // code goes here
-```
-
-```
 }
 ```
 
-A function signature using patterns in the parameters
+Listing 18-6: A function signature using patterns in the parameters
 
 The `x` part is a pattern! As we did with `let`, we could match a tuple in a
 function’s arguments to the pattern. Listing 18-7 splits the values in a tuple
@@ -466,37 +313,16 @@ Filename: src/main.rs
 
 ```
 fn print_coordinates(&(x, y): &(i32, i32)) {
-```
-
-```
     println!("Current location: ({x}, {y})");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let point = (3, 5);
-```
-
-```
     print_coordinates(&point);
-```
-
-```
 }
 ```
 
-A function with parameters that destructure a tuple
+Listing 18-7: A function with parameters that destructure a tuple
 
 This code prints `Current location: (3, 5)`. The values `&(3, 5)` match the
 pattern `&(x, y)`, so `x` is the value `3` and `y` is the value `5`.
@@ -543,7 +369,7 @@ pattern. As you might expect, this code will not compile.
 let Some(x) = some_option_value;
 ```
 
-Attempting to use a refutable pattern with `let`
+Listing 18-8: Attempting to use a refutable pattern with `let`
 
 If `some_option_value` were a `None` value, it would fail to match the pattern
 `Some(x)`, meaning the pattern is refutable. However, the `let` statement can
@@ -553,61 +379,19 @@ use a refutable pattern where an irrefutable pattern is required:
 
 ```
 error[E0005]: refutable pattern in local binding: `None` not covered
-```
-
-```
    --> src/main.rs:3:9
-```
-
-```
     |
-```
-
-```
 3   |     let Some(x) = some_option_value;
-```
-
-```
     |         ^^^^^^^ pattern `None` not covered
-```
-
-```
     |
-```
-
-```
     = note: `let` bindings require an "irrefutable pattern", like a `struct` or
-```
-
-```
 an `enum` with only one variant
-```
-
-```
     = note: for more information, visit
-```
-
-```
 https://doc.rust-lang.org/book/ch18-02-refutability.html
-```
-
-```
     = note: the matched value is of type `Option<i32>`
-```
-
-```
 help: you might want to use `if let` to ignore the variant that isn't matched
-```
-
-```
     |
-```
-
-```
 3   |     let x = if let Some(x) = some_option_value { x } else { todo!() };
-```
-
-```
     |     ++++++++++                                 ++++++++++++++++++++++
 ```
 
@@ -622,17 +406,12 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 
 ```
 if let Some(x) = some_option_value {
-```
-
-```
     println!("{x}");
-```
-
-```
 }
 ```
 
-Using `if let` and a block with refutable patterns instead of `let`
+Listing 18-9: Using `if let` and a block with refutable patterns instead of
+`let`
 
 We’ve given the code an out! This code is perfectly valid, although it means we
 cannot use an irrefutable pattern without receiving an error. If we give `if
@@ -641,58 +420,25 @@ the compiler will give a warning.
 
 ```
 if let x = 5 {
-```
-
-```
     println!("{x}");
-```
-
-```
 };
 ```
 
-Attempting to use an irrefutable pattern with `if let`
+Listing 18-10: Attempting to use an irrefutable pattern with `if let`
 
 Rust complains that it doesn’t make sense to use `if let` with an irrefutable
 pattern:
 
 ```
 warning: irrefutable `if let` pattern
-```
-
-```
  --> src/main.rs:2:8
-```
-
-```
   |
-```
-
-```
 2 |     if let x = 5 {
-```
-
-```
   |        ^^^^^^^^^
-```
-
-```
   |
-```
-
-```
   = note: `#[warn(irrefutable_let_patterns)]` on by default
-```
-
-```
   = note: this pattern will always match, so the `if let` is
-```
-
-```
 useless
-```
-
-```
   = help: consider replacing the `if let` with a `let`
 ```
 
@@ -716,35 +462,16 @@ why and when you might want to use each one.
 As you saw in Chapter 6, you can match patterns against literals directly. The
 following code gives some examples:
 
+Filename: src/main.rs
+
 ```
 let x = 1;
-```
 
-```
-
-```
-
-```
 match x {
-```
-
-```
     1 => println!("one"),
-```
-
-```
     2 => println!("two"),
-```
-
-```
     3 => println!("three"),
-```
-
-```
     _ => println!("anything"),
-```
-
-```
 }
 ```
 
@@ -769,53 +496,21 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
   1 let x = Some(5);
-```
-
-```
   2 let y = 10;
-```
 
-```
-
-```
-
-```
     match x {
-```
-
-```
       3 Some(50) => println!("Got 50"),
-```
-
-```
       4 Some(y) => println!("Matched, y = {y}"),
-```
-
-```
       5 _ => println!("Default case, x = {:?}", x),
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
   6 println!("at the end: x = {:?}, y = {y}", x);
-```
-
-```
 }
 ```
 
-A `match` expression with an arm that introduces a shadowed variable `y`
+Listing 18-11: A `match` expression with an arm that introduces a shadowed
+variable `y`
 
 Let’s walk through what happens when the `match` expression runs. The pattern
 in the first match arm [3] doesn’t match the defined value of `x` [1], so the
@@ -853,63 +548,34 @@ the value of `x` against the match arms, the first of which has an *or* option,
 meaning if the value of `x` matches either of the values in that arm, that
 arm’s code will run:
 
+Filename: src/main.rs
+
 ```
 let x = 1;
-```
 
-```
-
-```
-
-```
 match x {
-```
-
-```
     1 | 2 => println!("one or two"),
-```
-
-```
     3 => println!("three"),
-```
-
-```
     _ => println!("anything"),
-```
-
-```
 }
 ```
 
+This code prints `one or two`.
 
-Unmatched: BodyContinued
-      ### Matching Ranges of Values with ..=
+### Matching Ranges of Values with ..=
 
 The `..=` syntax allows us to match to an inclusive range of values. In the
 following code, when a pattern matches any of the values within the given
 range, that arm will execute:
 
+Filename: src/main.rs
+
 ```
 let x = 5;
-```
 
-```
-
-```
-
-```
 match x {
-```
-
-```
     1..=5 => println!("one through five"),
-```
-
-```
     _ => println!("something else"),
-```
-
-```
 }
 ```
 
@@ -925,31 +591,15 @@ numeric values, ranges are only allowed with numeric or `char` values.
 
 Here is an example using ranges of `char` values:
 
+Filename: src/main.rs
+
 ```
 let x = 'c';
-```
 
-```
-
-```
-
-```
 match x {
-```
-
-```
     'a'..='j' => println!("early ASCII letter"),
-```
-
-```
     'k'..='z' => println!("late ASCII letter"),
-```
-
-```
     _ => println!("something else"),
-```
-
-```
 }
 ```
 
@@ -970,53 +620,20 @@ Filename: src/main.rs
 
 ```
 struct Point {
-```
-
-```
     x: i32,
-```
-
-```
     y: i32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let p = Point { x: 0, y: 7 };
-```
 
-```
-
-```
-
-```
     let Point { x: a, y: b } = p;
-```
-
-```
     assert_eq!(0, a);
-```
-
-```
     assert_eq!(7, b);
-```
-
-```
 }
 ```
 
-Destructuring a struct’s fields into separate variables
+Listing 18-12: Destructuring a struct’s fields into separate variables
 
 This code creates the variables `a` and `b` that match the values of the `x`
 and `y` fields of the `p` struct. This example shows that the names of the
@@ -1034,53 +651,20 @@ Filename: src/main.rs
 
 ```
 struct Point {
-```
-
-```
     x: i32,
-```
-
-```
     y: i32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let p = Point { x: 0, y: 7 };
-```
 
-```
-
-```
-
-```
     let Point { x, y } = p;
-```
-
-```
     assert_eq!(0, x);
-```
-
-```
     assert_eq!(7, y);
-```
-
-```
 }
 ```
 
-Destructuring struct fields using struct field shorthand
+Listing 18-13: Destructuring struct fields using struct field shorthand
 
 This code creates the variables `x` and `y` that match the `x` and `y` fields
 of the `p` variable. The outcome is that the variables `x` and `y` contain the
@@ -1099,49 +683,19 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let p = Point { x: 0, y: 7 };
-```
 
-```
-
-```
-
-```
     match p {
-```
-
-```
         Point { x, y: 0 } => println!("On the x axis at {x}"),
-```
-
-```
         Point { x: 0, y } => println!("On the y axis at {y}"),
-```
-
-```
         Point { x, y } => {
-```
-
-```
             println!("On neither axis: ({x}, {y})");
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Destructuring and matching literal values in one pattern
+Listing 18-14: Destructuring and matching literal values in one pattern
 
 The first arm will match any point that lies on the `x` axis by specifying that
 the `y` field matches if its value matches the literal `0`. The pattern still
@@ -1171,121 +725,37 @@ Filename: src/main.rs
 
 ```
 enum Message {
-```
-
-```
     Quit,
-```
-
-```
     Move { x: i32, y: i32 },
-```
-
-```
     Write(String),
-```
-
-```
     ChangeColor(i32, i32, i32),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   1 let msg = Message::ChangeColor(0, 160, 255);
-```
 
-```
-
-```
-
-```
     match msg {
-```
-
-```
       2 Message::Quit => {
-```
-
-```
             println!(
-```
-
-```
                 "The Quit variant has no data to destructure."
-```
-
-```
             );
-```
-
-```
         }
-```
-
-```
       3 Message::Move { x, y } => {
-```
-
-```
             println!(
-```
-
-```
                 "Move in the x dir {x}, in the y dir {y}"
-```
-
-```
             );
-```
-
-```
         }
-```
-
-```
       4 Message::Write(text) => {
-```
-
-```
             println!("Text message: {text}");
-```
-
-```
         }
-```
-
-```
       5 Message::ChangeColor(r, g, b) => println!(
-```
-
-```
             "Change color to red {r}, green {g}, and blue {b}"
-```
-
-```
         ),
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Destructuring enum variants that hold different kinds of values
+Listing 18-15: Destructuring enum variants that hold different kinds of values
 
 This code will print `Change color to red 0, green 160, and blue 255`. Try
 changing the value of `msg` [1] to see the code from the other arms run.
@@ -1313,107 +783,37 @@ but matching can work on nested items too! For example, we can refactor the
 code in Listing 18-15 to support RGB and HSV colors in the `ChangeColor`
 message, as shown in Listing 18-16.
 
+Filename: src/main.rs
+
 ```
 enum Color {
-```
-
-```
     Rgb(i32, i32, i32),
-```
-
-```
     Hsv(i32, i32, i32),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 enum Message {
-```
-
-```
     Quit,
-```
-
-```
     Move { x: i32, y: i32 },
-```
-
-```
     Write(String),
-```
-
-```
     ChangeColor(Color),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let msg = Message::ChangeColor(Color::Hsv(0, 160, 255));
-```
 
-```
-
-```
-
-```
     match msg {
-```
-
-```
         Message::ChangeColor(Color::Rgb(r, g, b)) => println!(
-```
-
-```
             "Change color to red {r}, green {g}, and blue {b}"
-```
-
-```
         ),
-```
-
-```
         Message::ChangeColor(Color::Hsv(h, s, v)) => println!(
-```
-
-```
             "Change color to hue {h}, saturation {s}, value {v}"
-```
-
-```
         ),
-```
-
-```
         _ => (),
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Matching on nested enums
+Listing 18-16: Matching on nested enums
 
 The pattern of the first arm in the `match` expression matches a
 `Message::ChangeColor` enum variant that contains a `Color::Rgb` variant; then
@@ -1430,9 +830,6 @@ tuples inside a tuple and destructure all the primitive values out:
 
 ```
 let ((feet, inches), Point { x, y }) =
-```
-
-```
     ((3, 10), Point { x: 3, y: -10 });
 ```
 
@@ -1463,33 +860,15 @@ Filename: src/main.rs
 
 ```
 fn foo(_: i32, y: i32) {
-```
-
-```
     println!("This code only uses the y parameter: {y}");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     foo(3, 4);
-```
-
-```
 }
 ```
 
-Using `_` in a function signature
+Listing 18-17: Using `_` in a function signature
 
 This code will completely ignore the value `3` passed as the first argument,
 and will print `This code only uses the y parameter: 4`.
@@ -1511,60 +890,26 @@ responsible for managing a setting’s value. The business requirements are that
 the user should not be allowed to overwrite an existing customization of a
 setting but can unset the setting and give it a value if it is currently unset.
 
+Filename: src/main.rs
+
 ```
 let mut setting_value = Some(5);
-```
-
-```
 let new_setting_value = Some(10);
-```
 
-```
-
-```
-
-```
 match (setting_value, new_setting_value) {
-```
-
-```
     (Some(_), Some(_)) => {
-```
-
-```
         println!("Can't overwrite an existing customized value");
-```
-
-```
     }
-```
-
-```
     _ => {
-```
-
-```
         setting_value = new_setting_value;
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 println!("setting is {:?}", setting_value);
 ```
 
-Using an underscore within patterns that match `Some` variants when we don’t
-need to use the value inside the `Some`
+Listing 18-18: Using an underscore within patterns that match `Some` variants
+when we don’t need to use the value inside the `Some`
 
 This code will print `Can't overwrite an existing customized value` and then
 `setting is Some(5)`. In the first match arm, we don’t need to match on or use
@@ -1581,35 +926,19 @@ We can also use underscores in multiple places within one pattern to ignore
 particular values. Listing 18-19 shows an example of ignoring the second and
 fourth values in a tuple of five items.
 
+Filename: src/main.rs
+
 ```
 let numbers = (2, 4, 8, 16, 32);
-```
 
-```
-
-```
-
-```
 match numbers {
-```
-
-```
     (first, _, third, _, fifth) => {
-```
-
-```
         println!("Some numbers: {first}, {third}, {fifth}");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Ignoring multiple parts of a tuple
+Listing 18-19: Ignoring multiple parts of a tuple
 
 This code will print `Some numbers: 2, 8, 32`, and the values `4` and `16` will
 be ignored.
@@ -1628,22 +957,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let _x = 5;
-```
-
-```
     let y = 10;
-```
-
-```
 }
 ```
 
-Starting a variable name with an underscore to avoid getting unused variable
-warnings
+Listing 18-20: Starting a variable name with an underscore to avoid getting
+unused variable warnings
 
 Here, we get a warning about not using the variable `y`, but we don’t get a
 warning about not using `_x`.
@@ -1653,71 +973,39 @@ that starts with an underscore. The syntax `_x` still binds the value to the
 variable, whereas `_` doesn’t bind at all. To show a case where this
 distinction matters, Listing 18-21 will provide us with an error.
 
+Filename: src/main.rs
+
 ```
 let s = Some(String::from("Hello!"));
-```
 
-```
-
-```
-
-```
 if let Some(_s) = s {
-```
-
-```
     println!("found a string");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 println!("{:?}", s);
 ```
 
-An unused variable starting with an underscore still binds the value, which
-might take ownership of the value.
+Listing 18-21: An unused variable starting with an underscore still binds the
+value, which might take ownership of the value.
 
 We’ll receive an error because the `s` value will still be moved into `_s`,
 which prevents us from using `s` again. However, using the underscore by itself
 doesn’t ever bind to the value. Listing 18-22 will compile without any errors
 because `s` doesn’t get moved into `_`.
 
+Filename: src/main.rs
+
 ```
 let s = Some(String::from("Hello!"));
-```
 
-```
-
-```
-
-```
 if let Some(_) = s {
-```
-
-```
     println!("found a string");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 println!("{:?}", s);
 ```
 
-Using an underscore does not bind the value.
+Listing 18-22: Using an underscore does not bind the value.
 
 This code works just fine because we never bind `s` to anything; it isn’t moved.
 
@@ -1731,51 +1019,23 @@ explicitly matched in the rest of the pattern. In Listing 18-23, we have a
 `match` expression, we want to operate only on the `x` coordinate and ignore
 the values in the `y` and `z` fields.
 
+Filename: src/main.rs
+
 ```
 struct Point {
-```
-
-```
     x: i32,
-```
-
-```
     y: i32,
-```
-
-```
     z: i32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let origin = Point { x: 0, y: 0, z: 0 };
-```
 
-```
-
-```
-
-```
 match origin {
-```
-
-```
     Point { x, .. } => println!("x is {x}"),
-```
-
-```
 }
 ```
 
-Ignoring all fields of a `Point` except for `x` by using `..`
+Listing 18-23: Ignoring all fields of a `Point` except for `x` by using `..`
 
 We list the `x` value and then just include the `..` pattern. This is quicker
 than having to list `y: _` and `z: _`, particularly when we’re working with
@@ -1789,41 +1049,18 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let numbers = (2, 4, 8, 16, 32);
-```
 
-```
-
-```
-
-```
     match numbers {
-```
-
-```
         (first, .., last) => {
-```
-
-```
             println!("Some numbers: {first}, {last}");
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Matching only the first and last values in a tuple and ignoring all other values
+Listing 18-24: Matching only the first and last values in a tuple and ignoring
+all other values
 
 In this code, the first and last values are matched with `first` and `last`.
 The `..` will match and ignore everything in the middle.
@@ -1837,69 +1074,27 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let numbers = (2, 4, 8, 16, 32);
-```
 
-```
-
-```
-
-```
     match numbers {
-```
-
-```
         (.., second, ..) => {
-```
-
-```
             println!("Some numbers: {second}");
-```
-
-```
         },
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-An attempt to use `..` in an ambiguous way
+Listing 18-25: An attempt to use `..` in an ambiguous way
 
 When we compile this example, we get this error:
 
 ```
 error: `..` can only be used once per tuple pattern
-```
-
-```
  --> src/main.rs:5:22
-```
-
-```
   |
-```
-
-```
 5 |         (.., second, ..) => {
-```
-
-```
   |          --          ^^ can only be used once per tuple pattern
-```
-
-```
   |          |
-```
-
-```
   |          previously used here
 ```
 
@@ -1921,35 +1116,19 @@ The condition can use variables created in the pattern. Listing 18-26 shows a
 `match` where the first arm has the pattern `Some(x)` and also has a match
 guard of `if x % 2 == 0` (which will be `true` if the number is even).
 
+Filename: src/main.rs
+
 ```
 let num = Some(4);
-```
 
-```
-
-```
-
-```
 match num {
-```
-
-```
     Some(x) if x % 2 == 0 => println!("The number {x} is even"),
-```
-
-```
     Some(x) => println!("The number {x} is odd"),
-```
-
-```
     None => (),
-```
-
-```
 }
 ```
 
-Adding a match guard to a pattern
+Listing 18-26: Adding a match guard to a pattern
 
 This example will print `The number 4 is even`. When `num` is compared to the
 pattern in the first arm, it matches because `Some(4)` matches `Some(x)`. Then
@@ -1977,53 +1156,20 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = Some(5);
-```
-
-```
     let y = 10;
-```
 
-```
-
-```
-
-```
     match x {
-```
-
-```
         Some(50) => println!("Got 50"),
-```
-
-```
         Some(n) if n == y => println!("Matched, n = {n}"),
-```
-
-```
         _ => println!("Default case, x = {:?}", x),
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("at the end: x = {:?}, y = {y}", x);
-```
-
-```
 }
 ```
 
-Using a match guard to test for equality with an outer variable
+Listing 18-27: Using a match guard to test for equality with an outer variable
 
 This code will now print `Default case, x = Some(5)`. The pattern in the second
 match arm doesn’t introduce a new variable `y` that would shadow the outer `y`,
@@ -2044,35 +1190,19 @@ guard. The important part of this example is that the `if y` match guard
 applies to `4`, `5`, *and* `6`, even though it might look like `if y` only
 applies to `6`.
 
+Filename: src/main.rs
+
 ```
 let x = 4;
-```
-
-```
 let y = false;
-```
 
-```
-
-```
-
-```
 match x {
-```
-
-```
     4 | 5 | 6 if y => println!("yes"),
-```
-
-```
     _ => println!("no"),
-```
-
-```
 }
 ```
 
-Combining multiple patterns with a match guard
+Listing 18-28: Combining multiple patterns with a match guard
 
 The match condition states that the arm only matches if the value of `x` is
 equal to `4`, `5`, or `6` *and* if `y` is `true`. When this code runs, the
@@ -2087,9 +1217,9 @@ pattern behaves like this:
 (4 | 5 | 6) if y => ...
 ```
 
+rather than this:
 
-Unmatched: BodyContinued
-      ```
+```
 4 | 5 | (6 if y) => ...
 ```
 
@@ -2107,67 +1237,27 @@ want to bind the value to the variable `id_variable` so we can use it in the
 code associated with the arm. We could name this variable `id`, the same as the
 field, but for this example we’ll use a different name.
 
+Filename: src/main.rs
+
 ```
 enum Message {
-```
-
-```
     Hello { id: i32 },
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let msg = Message::Hello { id: 5 };
-```
 
-```
-
-```
-
-```
 match msg {
-```
-
-```
     Message::Hello {
-```
-
-```
         id: id_variable @ 3..=7,
-```
-
-```
     } => println!("Found an id in range: {id_variable}"),
-```
-
-```
     Message::Hello { id: 10..=12 } => {
-```
-
-```
         println!("Found an id in another range")
-```
-
-```
     }
-```
-
-```
     Message::Hello { id } => println!("Some other id: {id}"),
-```
-
-```
 }
 ```
 
-Using `@` to bind to a value in a pattern while also testing it
+Listing 18-29: Using `@` to bind to a value in a pattern while also testing it
 
 This example will print `Found an id in range: 5`. By specifying `id_variable
 @` before the range `3..=7`, we’re capturing whatever value matched the range

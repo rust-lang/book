@@ -68,7 +68,7 @@ fn main() {
 }
 ```
 
-Finding the largest number in a list of numbers
+Listing 10-1: Finding the largest number in a list of numbers
 
 We store a list of integers in the variable `number_list` [1] and place a
 reference to the first number in the list in a variable named `largest` [2]. We
@@ -113,7 +113,7 @@ fn main() {
 }
 ```
 
-Code to find the largest number in *two* lists of numbers
+Listing 10-2: Code to find the largest number in *two* lists of numbers
 
 Although this code works, duplicating code is tedious and error prone. We also
 have to remember to update the code in multiple places when we want to change
@@ -157,7 +157,7 @@ fn main() {
 }
 ```
 
-Abstracted code to find the largest number in two lists
+Listing 10-3: Abstracted code to find the largest number in two lists
 
 The `largest` function has a parameter called `list`, which represents any
 concrete slice of `i32` values we might pass into the function. As a result,
@@ -236,8 +236,8 @@ fn main() {
 }
 ```
 
-Two functions that differ only in their names and in the types in their
-signatures
+Listing 10-4: Two functions that differ only in their names and in the types in
+their signatures
 
 The `largest_i32` function is the one we extracted in Listing 10-3 that finds
 the largest `i32` in a slice. The `largest_char` function finds the largest
@@ -300,7 +300,8 @@ fn main() {
 }
 ```
 
-The `largest` function using generic type parameters; this doesn’t compile yet
+Listing 10-5: The `largest` function using generic type parameters; this
+doesn’t compile yet
 
 If we compile this code right now, we’ll get this error:
 
@@ -350,7 +351,7 @@ fn main() {
 }
 ```
 
-A `Point<T>` struct that holds `x` and `y` values of type `T`
+Listing 10-6: A `Point<T>` struct that holds `x` and `y` values of type `T`
 
 The syntax for using generics in struct definitions is similar to that used in
 function definitions. First we declare the name of the type parameter inside
@@ -377,8 +378,8 @@ fn main() {
 }
 ```
 
-The fields `x` and `y` must be the same type because both have the same generic
-data type `T`.
+Listing 10-7: The fields `x` and `y` must be the same type because both have
+the same generic data type `T`.
 
 In this example, when we assign the integer value `5` to `x`, we let the
 compiler know that the generic type `T` will be an integer for this instance of
@@ -414,8 +415,8 @@ fn main() {
 }
 ```
 
-A `Point<T, U>` generic over two types so that `x` and `y` can be values of
-different types
+Listing 10-8: A `Point<T, U>` generic over two types so that `x` and `y` can be
+values of different types
 
 Now all the instances of `Point` shown are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few makes
@@ -493,8 +494,8 @@ fn main() {
 }
 ```
 
-Implementing a method named `x` on the `Point<T>` struct that will return a
-reference to the `x` field of type `T`
+Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
+will return a reference to the `x` field of type `T`
 
 Here, we’ve defined a method named `x` on `Point<T>` that returns a reference
 to the data in the field `x`.
@@ -524,8 +525,8 @@ impl Point<f32> {
 }
 ```
 
-An `impl` block that only applies to a struct with a particular concrete type
-for the generic type parameter `T`
+Listing 10-10: An `impl` block that only applies to a struct with a particular
+concrete type for the generic type parameter `T`
 
 This code means the type `Point<f32>` will have a `distance_from_origin`
 method; other instances of `Point<T>` where `T` is not of type `f32` will not
@@ -570,7 +571,8 @@ fn main() {
 }
 ```
 
-A method that uses generic types different from its struct’s definition
+Listing 10-11: A method that uses generic types different from its struct’s
+definition
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4` [3]). The `p2` variable is a `Point`
@@ -682,7 +684,8 @@ pub trait Summary {
 }
 ```
 
-A `Summary` trait that consists of the behavior provided by a `summarize` method
+Listing 10-12: A `Summary` trait that consists of the behavior provided by a
+`summarize` method
 
 Here, we declare a trait using the `trait` keyword and then the trait’s name,
 which is `Summary` in this case. We also declare the trait as `pub` so that
@@ -745,7 +748,8 @@ impl Summary for Tweet {
 }
 ```
 
-Implementing the `Summary` trait on the `NewsArticle` and `Tweet` types
+Listing 10-13: Implementing the `Summary` trait on the `NewsArticle` and
+`Tweet` types
 
 Implementing a trait on a type is similar to implementing regular methods. The
 difference is that after `impl`, we put the trait name we want to implement,
@@ -823,8 +827,8 @@ pub trait Summary {
 }
 ```
 
-Defining a `Summary` trait with a default implementation of the `summarize`
-method
+Listing 10-14: Defining a `Summary` trait with a default implementation of the
+`summarize` method
 
 To use a default implementation to summarize instances of `NewsArticle`, we
 specify an empty `impl` block with `impl Summary for NewsArticle {}`.
@@ -1126,7 +1130,8 @@ impl<T: Display + PartialOrd> Pair<T> {
 }
 ```
 
-Conditionally implementing methods on a generic type depending on trait bounds
+Listing 10-15: Conditionally implementing methods on a generic type depending
+on trait bounds
 
 We can also conditionally implement a trait for any type that implements
 another trait. Implementations of a trait on any type that satisfies the trait
@@ -1205,7 +1210,7 @@ fn main() {
 }
 ```
 
-An attempt to use a reference whose value has gone out of scope
+Listing 10-16: An attempt to use a reference whose value has gone out of scope
 
 > Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
 without giving them an initial value, so the variable name exists in the outer
@@ -1261,7 +1266,8 @@ fn main() {
 }                         // ---------+
 ```
 
-Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`, respectively
+Listing 10-17: Annotations of the lifetimes of `r` and `x`, named `'a` and
+`'b`, respectively
 
 Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
 with `'b`. As you can see, the inner `'b` block is much smaller than the outer
@@ -1284,7 +1290,8 @@ fn main() {
 }                         // ----------+
 ```
 
-A valid reference because the data has a longer lifetime than the reference
+Listing 10-18: A valid reference because the data has a longer lifetime than
+the reference
 
 Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
 means `r` can reference `x` because Rust knows that the reference in `r` will
@@ -1313,8 +1320,8 @@ fn main() {
 }
 ```
 
-A `main` function that calls the `longest` function to find the longer of two
-string slices
+Listing 10-19: A `main` function that calls the `longest` function to find the
+longer of two string slices
 
 Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the `longest` function to take
@@ -1337,8 +1344,8 @@ fn longest(x: &str, y: &str) -> &str {
 }
 ```
 
-An implementation of the `longest` function that returns the longer of two
-string slices but does not yet compile
+Listing 10-20: An implementation of the `longest` function that returns the
+longer of two string slices but does not yet compile
 
 Instead, we get the following error that talks about lifetimes:
 
@@ -1427,8 +1434,8 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 ```
 
-The `longest` function definition specifying that all the references in the
-signature must have the same lifetime `'a`
+Listing 10-21: The `longest` function definition specifying that all the
+references in the signature must have the same lifetime `'a`
 
 This code should compile and produce the result we want when we use it with the
 `main` function in Listing 10-19.
@@ -1486,8 +1493,8 @@ fn main() {
 }
 ```
 
-Using the `longest` function with references to `String` values that have
-different concrete lifetimes
+Listing 10-22: Using the `longest` function with references to `String` values
+that have different concrete lifetimes
 
 In this example, `string1` is valid until the end of the outer scope, `string2`
 is valid until the end of the inner scope, and `result` references something
@@ -1517,7 +1524,7 @@ fn main() {
 }
 ```
 
-Attempting to use `result` after `string2` has gone out of scope
+Listing 10-23: Attempting to use `result` after `string2` has gone out of scope
 
 When we try to compile this code, we get this error:
 
@@ -1645,7 +1652,7 @@ fn main() {
 }
 ```
 
-A struct that holds a reference, requiring a lifetime annotation
+Listing 10-24: A struct that holds a reference, requiring a lifetime annotation
 
 This struct has the single field `part` that holds a string slice, which is a
 reference [2]. As with generic data types, we declare the name of the generic
@@ -1684,8 +1691,8 @@ fn first_word(s: &str) -> &str {
 }
 ```
 
-A function we defined in Listing 4-9 that compiled without lifetime
-annotations, even though the parameter and return type are references
+Listing 10-25: A function we defined in Listing 4-9 that compiled without
+lifetime annotations, even though the parameter and return type are references
 
 The reason this function compiles without lifetime annotations is historical:
 in early versions (pre-1.0) of Rust, this code wouldn’t have compiled because
