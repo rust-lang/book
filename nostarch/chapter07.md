@@ -122,7 +122,6 @@ and *src/lib.rs*, it has two crates: a binary and a library, both with the same
 name as the package. A package can have multiple binary crates by placing files
 in the *src/bin* directory: each file will be a separate binary crate.
 
-
 > ### Modules Cheat Sheet
 >
 > Before we get to the details of modules and paths, here we provide a quick
@@ -559,7 +558,6 @@ changes to your public API to make it easier for people to depend on your
 crate. These considerations are beyond the scope of this book; if you’re
 interested in this topic, see the Rust API Guidelines at
 *https://rust-lang.github.io/api-guidelines*.
-
 
 > ### Best Practices for Packages with a Binary and a Library
 >
@@ -1178,7 +1176,6 @@ expect the *hosting.rs* code to be in a `hosting` module declared in the crate
 root, and not declared as a child of the `front_of_house` module. The
 compiler’s rules for which files to check for which modules’ code mean the
 directories and files more closely match the module tree.
-
 
 > ### Alternate File Paths
 >
