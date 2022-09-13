@@ -47,6 +47,7 @@ collectively referred to as the *module system*, include:
 * Crates- A tree of modules that produces a library or executable
 * Modules and use- Let you control the organization, scope, and privacy of paths
 * Paths - A way of naming an item, such as a struct, function, or module
+
 In this chapter, we’ll cover all these features, discuss how they interact, and
 explain how to use them to manage scope. By the end, you should have a solid
 understanding of the module system and be able to work with scopes like a pro!

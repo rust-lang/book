@@ -256,6 +256,9 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInPara']">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
+        <xsl:if test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val != 'RunInHead']">
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']">
