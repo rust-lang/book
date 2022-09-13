@@ -892,15 +892,17 @@ guarantee, contract, or invariant has been broken, such as when invalid values,
 contradictory values, or missing values are passed to your code—plus one or
 more of the following:
 
+* The bad state is something that is unexpected, as opposed to something that
+will likely happen occasionally, like a user entering data in the wrong format.
+* Your code after this point needs to rely on not being in this bad state,
+rather than checking for the problem at every step.
+* There’s not a good way to encode this information in the types you use. We’ll
+work through an example of what we mean in “Encoding States and Behavior as
+Types” on page XX.
 
-Unmatched: ListBullet0
-
-Unmatched: ListBullet0
-
-Unmatched: ListBullet0
-      If someone calls your code and passes in values that don’t make sense,
-it’s best to return an error if you can so the user of the library can decide
-what they want to do in that case. However, in cases where continuing could be
+If someone calls your code and passes in values that don’t make sense, it’s
+best to return an error if you can so the user of the library can decide what
+they want to do in that case. However, in cases where continuing could be
 insecure or harmful, the best choice might be to call `panic!` and alert the
 person using your library to the bug in their code so they can fix it during
 development. Similarly, `panic!` is often appropriate if you’re calling
