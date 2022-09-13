@@ -42,6 +42,7 @@ Our `grep` project will combine a number of concepts you’ve learned so far:
 * Handling errors (Chapter 9)
 * Using traits and lifetimes where appropriate (Chapter 10)
 * Writing tests (Chapter 11)
+
 We’ll also briefly introduce closures, iterators, and trait objects, which
 Chapter 13 and Chapter 17 will cover in detail.
 
@@ -53,13 +54,7 @@ on your system.
 
 ```
 $ cargo new minigrep
-```
-
-```
      Created binary (application) `minigrep` project
-```
-
-```
 $ cd minigrep
 ```
 
@@ -96,32 +91,14 @@ Filename: src/main.rs
 
 ```
 use std::env;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
-
-```
     dbg!(args);
-```
-
-```
 }
 ```
 
 Collecting the command line arguments into a vector and printing them
-
-Prod: please renumber this as Listing 12-1 and then renumber the remaining
-listings consecutively; e.g., Listing 12-2, Listing 12-3, etc.
 
 First we bring the `std::env` module into scope with a `use` statement so we
 can use its `args` function. Notice that the `std::env::args` function is
@@ -133,12 +110,8 @@ adding `use std::env::args` and then calling the function with just `args`,
 because `args` might easily be mistaken for a function that’s defined in the
 current module.
 
-
-Unmatched: BoxType
-
 > ### The args Function and Invalid Unicode
-
-
+>
 > Note that `std::env::args` will panic if any argument contains invalid
 Unicode. If your program needs to accept arguments containing invalid Unicode,
 use `std::env::args_os` instead. That function returns an iterator that
@@ -159,49 +132,16 @@ first with no arguments and then with two arguments:
 
 ```
 $ cargo run
-```
-
-```
 --snip--
-```
-
-```
 [src/main.rs:5] args = [
-```
-
-```
     "target/debug/minigrep",
-```
-
-```
 ]
-```
-
-```
 $ cargo run -- needle haystack
-```
-
-```
 --snip--
-```
-
-```
 [src/main.rs:5] args = [
-```
-
-```
     "target/debug/minigrep",
-```
-
-```
     "needle",
-```
-
-```
     "haystack",
-```
-
-```
 ]
 ```
 
@@ -224,45 +164,15 @@ Filename: src/main.rs
 
 ```
 use std::env;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
     let query = &args[1];
-```
-
-```
     let file_path = &args[2];
-```
 
-```
-
-```
-
-```
     println!("Searching for {}", query);
-```
-
-```
     println!("In file {}", file_path);
-```
-
-```
 }
 ```
 
@@ -281,25 +191,10 @@ and `sample.txt`:
 
 ```
 $ cargo run -- test sample.txt
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep test sample.txt`
-```
-
-```
 Searching for test
-```
-
-```
 In file sample.txt
 ```
 
@@ -322,92 +217,35 @@ Filename: poem.txt
 
 ```
 I'm nobody! Who are you?
-```
-
-```
 Are you nobody, too?
-```
-
-```
 Then there's a pair of us - don't tell!
-```
-
-```
 They'd banish us, you know.
-```
 
-```
-
-```
-
-```
 How dreary to be somebody!
-```
-
-```
 How public, like a frog
-```
-
-```
 To tell your name the livelong day
-```
-
-```
 To an admiring bog!
 ```
 
 A poem by Emily Dickinson makes a good test case.
 
-With the text in place, edit *src/**main.rs* and add code to read the file, as
+With the text in place, edit *src/main.rs* and add code to read the file, as
 shown in Listing 12-4.
 
 Filename: src/main.rs
 
 ```
 use std::env;
-```
-
-```
 1 use std::fs;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     --snip--
-```
-
-```
     println!("In file {}", file_path);
-```
 
-```
-
-```
-
-```
   2 let contents = fs::read_to_string(file_path)
-```
-
-```
         .expect("Should have been able to read the file");
-```
 
-```
-
-```
-
-```
   3 println!("With text:\n{contents}");
-```
-
-```
 }
 ```
 
@@ -429,65 +267,20 @@ second argument:
 
 ```
 $ cargo run -- the poem.txt
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep the poem.txt`
-```
-
-```
 Searching for the
-```
-
-```
 In file poem.txt
-```
-
-```
 With text:
-```
-
-```
 I'm nobody! Who are you?
-```
-
-```
 Are you nobody, too?
-```
-
-```
 Then there's a pair of us - don't tell!
-```
-
-```
 They'd banish us, you know.
-```
 
-```
-
-```
-
-```
 How dreary to be somebody!
-```
-
-```
 How public, like a frog
-```
-
-```
 To tell your name the livelong day
-```
-
-```
 To an admiring bog!
 ```
 
@@ -550,6 +343,7 @@ program’s logic to *lib.rs*.
 *main.rs*.
 * When the command line parsing logic starts getting complicated, extract it
 from *main.rs* and move it to *lib.rs*.
+
 The responsibilities that remain in the `main` function after this process
 should be limited to the following:
 
@@ -557,6 +351,7 @@ should be limited to the following:
 * Setting up any other configuration
 * Calling a `run` function in *lib.rs*
 * Handling the error if `run` returns an error
+
 This pattern is about separating concerns: *main.rs* handles running the
 program and *lib.rs* handles all the logic of the task at hand. Because you
 can’t test the `main` function directly, this structure lets you test all of
@@ -568,64 +363,25 @@ it. Let’s rework our program by following this process.
 
 We’ll extract the functionality for parsing arguments into a function that
 `main` will call to prepare for moving the command line parsing logic to
-*src/**lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
-function `parse_config`, which we’ll define in *src/**main.rs* for the moment.
+src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
+function `parse_config`, which we’ll define in *src/main.rs* for the moment.
 
 Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
     let (query, file_path) = parse_config(&args);
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn parse_config(args: &[String]) -> (&str, &str) {
-```
-
-```
     let query = &args[1];
-```
-
-```
     let file_path = &args[2];
-```
 
-```
-
-```
-
-```
     (query, file_path)
-```
-
-```
 }
 ```
 
@@ -668,101 +424,29 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
   1 let config = parse_config(&args);
-```
 
-```
-
-```
-
-```
     println!("Searching for {}", 2 config.query);
-```
-
-```
     println!("In file {}", 3 config.file_path);
-```
 
-```
-
-```
-
-```
     let contents = fs::read_to_string(4 config.file_path)
-```
-
-```
         .expect("Should have been able to read the file");
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 5 struct Config {
-```
-
-```
     query: String,
-```
-
-```
     file_path: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 6 fn parse_config(args: &[String]) -> Config {
-```
-
-```
   7 let query = args[1].clone();
-```
-
-```
   8 let file_path = args[2].clone();
-```
 
-```
-
-```
-
-```
     Config { query, file_path }
-```
-
-```
 }
 ```
 
@@ -786,12 +470,8 @@ because we don’t have to manage the lifetimes of the references; in this
 circumstance, giving up a little performance to gain simplicity is a worthwhile
 trade-off.
 
-
-Unmatched: BoxType
-
 > ### The Trade-Offs of Using clone
-
-
+>
 > There’s a tendency among many Rustaceans to avoid using `clone` to fix
 ownership problems because of its runtime cost. In Chapter 13, you’ll learn how
 to use more efficient methods in this type of situation. But for now, it’s okay
@@ -834,73 +514,22 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
   1 let config = Config::new(&args);
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 2 impl Config {
-```
-
-```
   3 fn new(args: &[String]) -> Config {
-```
-
-```
         let query = args[1].clone();
-```
-
-```
         let file_path = args[2].clone();
-```
 
-```
-
-```
-
-```
         Config { query, file_path }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -920,33 +549,12 @@ without any arguments; it will look like this:
 
 ```
 $ cargo run
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep`
-```
-
-```
 thread 'main' panicked at 'index out of bounds: the len is 1 but
-```
-
-```
 the index is 1', src/main.rs:27:21
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
 ```
 
@@ -964,25 +572,10 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
-
-```
 fn new(args: &[String]) -> Config {
-```
-
-```
     if args.len() < 3 {
-```
-
-```
         panic!("not enough arguments");
-```
-
-```
     }
-```
-
-```
     --snip--
 ```
 
@@ -1001,33 +594,12 @@ arguments again to see what the error looks like now:
 
 ```
 $ cargo run
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep`
-```
-
-```
 thread 'main' panicked at 'not enough arguments',
-```
-
-```
 src/main.rs:26:13
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
 ```
 
@@ -1059,49 +631,16 @@ Filename: src/main.rs
 
 ```
 impl Config {
-```
-
-```
     fn build(args: &[String]) -> Result<Config, &'static str> {
-```
-
-```
         if args.len() < 3 {
-```
-
-```
             return Err("not enough arguments");
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         let query = args[1].clone();
-```
-
-```
         let file_path = args[2].clone();
-```
 
-```
-
-```
-
-```
         Ok(Config { query, file_path })
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1133,45 +672,15 @@ Filename: src/main.rs
 
 ```
 1 use std::process;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
   2 let config = Config::build(&args).3 unwrap_or_else(|4 err| {
-```
-
-```
       5 println!("Problem parsing arguments: {err}");
-```
-
-```
       6 process::exit(1);
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
     --snip--
 ```
 
@@ -1201,21 +710,9 @@ extra output. Let’s try it:
 
 ```
 $ cargo run
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.48s
-```
-
-```
      Running `target/debug/minigrep`
-```
-
-```
 Problem parsing arguments: not enough arguments
 ```
 
@@ -1233,75 +730,27 @@ other logic.
 
 Listing 12-11 shows the extracted `run` function. For now, we’re just making
 the small, incremental improvement of extracting the function. We’re still
-defining the function in *src/**main.rs*.
+defining the function in *src/main.rs*.
 
 Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     println!("Searching for {}", config.query);
-```
-
-```
     println!("In file {}", config.file_path);
-```
 
-```
-
-```
-
-```
     run(config);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn run(config: Config) {
-```
-
-```
     let contents = fs::read_to_string(config.file_path)
-```
-
-```
         .expect("Should have been able to read the file");
-```
 
-```
-
-```
-
-```
     println!("With text:\n{contents}");
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
 ```
 
@@ -1325,45 +774,15 @@ Filename: src/main.rs
 
 ```
 1 use std::error::Error;
-```
 
-```
-
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 2 fn run(config: Config) -> Result<(), Box<dyn Error>> {
-```
-
-```
     let contents = fs::read_to_string(config.file_path)3 ?;
-```
 
-```
-
-```
-
-```
     println!("With text:\n{contents}");
-```
 
-```
-
-```
-
-```
   4 Ok(())
-```
-
-```
 }
 ```
 
@@ -1397,37 +816,13 @@ When you run this code, it will compile but will display a warning:
 
 ```
 warning: unused `Result` that must be used
-```
-
-```
   --> src/main.rs:19:5
-```
-
-```
    |
-```
-
-```
 19 |     run(config);
-```
-
-```
    |     ^^^^^^^^^^^^
-```
-
-```
    |
-```
-
-```
    = note: `#[warn(unused_must_use)]` on by default
-```
-
-```
    = note: this `Result` may be an `Err` variant, which should be
-```
-
-```
 handled
 ```
 
@@ -1445,45 +840,15 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     println!("Searching for {}", config.query);
-```
-
-```
     println!("In file {}", config.file_path);
-```
 
-```
-
-```
-
-```
     if let Err(e) = run(config) {
-```
-
-```
         println!("Application error: {e}");
-```
-
-```
         process::exit(1);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1500,155 +865,71 @@ both cases: we print the error and exit.
 ### Splitting Code into a Library Crate
 
 Our `minigrep` project is looking good so far! Now we’ll split the
-*src/**main.rs* file and put some code into the *src/**lib.rs* file. That way,
-we can test the code and have a *src/**main.rs* file with fewer
-responsibilities.
+*src/main.rs* file and put some code into the *src/lib.rs* file. That way, we
+can test the code and have a *src/main.rs* file with fewer responsibilities.
 
-Let’s move all the code that isn’t in the `main` function from *src/**main.rs*
-to *src/**lib.rs*:
+Let’s move all the code that isn’t in the `main` function from *src/main.rs* to
+*src/lib.rs*:
 
 * The `run` function definition
 * The relevant `use` statements
 * The definition of `Config`
 * The `Config::build` function definition
-The contents of *src/**lib.rs* should have the signatures shown in Listing
-12-13 (we’ve omitted the bodies of the functions for brevity). Note that this
-won’t compile until we modify *src/**main.rs* in Listing 12-14.
+
+The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
+(we’ve omitted the bodies of the functions for brevity). Note that this won’t
+compile until we modify *src/main.rs* in Listing 12-14.
 
 Filename: src/lib.rs
 
 ```
 use std::error::Error;
-```
-
-```
 use std::fs;
-```
 
-```
-
-```
-
-```
 pub struct Config {
-```
-
-```
     pub query: String,
-```
-
-```
     pub file_path: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Config {
-```
-
-```
     pub fn build(
-```
-
-```
         args: &[String],
-```
-
-```
     ) -> Result<Config, &'static str> {
-```
-
-```
         --snip--
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Moving `Config` and `run` into *src**/lib.rs*
+Moving `Config` and `run` into *src/lib.rs*
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
 `build` method, and on the `run` function. We now have a library crate that has
 a public API we can test!
 
-Now we need to bring the code we moved to *src/**lib.rs* into the scope of the
-binary crate in *src/**main.rs*, as shown in Listing 12-14.
+Now we need to bring the code we moved to *src/lib.rs* into the scope of the
+binary crate in *src/main.rs*, as shown in Listing 12-14.
 
 Filename: src/main.rs
 
 ```
 use std::env;
-```
-
-```
 use std::process;
-```
 
-```
-
-```
-
-```
 use minigrep::Config;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     --snip--
-```
-
-```
     if let Err(e) = minigrep::run(config) {
-```
-
-```
         --snip--
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Using the `minigrep` library crate in *src**/main.rs*
+Using the `minigrep` library crate in *src/main.rs*
 
 We add a `use minigrep::Config` line to bring the `Config` type from the
 library crate into the binary crate’s scope, and we prefix the `run` function
@@ -1657,7 +938,7 @@ work. Run the program with `cargo run` and make sure everything works correctly.
 
 Whew! That was a lot of work, but we’ve set ourselves up for success in the
 future. Now it’s much easier to handle errors, and we’ve made the code more
-modular. Almost all of our work will be done in *src/**lib.rs* from here on out.
+modular. Almost all of our work will be done in *src/lib.rs* from here on out.
 
 Let’s take advantage of this newfound modularity by doing something that would
 have been difficult with the old code but is easy with the new code: we’ll
@@ -1665,11 +946,11 @@ write some tests!
 
 ## Developing the Library’s Functionality with Test-Driven Development
 
-Now that we’ve extracted the logic into *src/**lib.rs* and left the argument
-collecting and error handling in *src/**main.rs*, it’s much easier to write
-tests for the core functionality of our code. We can call functions directly
-with various arguments and check return values without having to call our
-binary from the command line.
+Now that we’ve extracted the logic into *src/lib.rs* and left the argument
+collecting and error handling in *src/main.rs*, it’s much easier to write tests
+for the core functionality of our code. We can call functions directly with
+various arguments and check return values without having to call our binary
+from the command line.
 
 In this section, we’ll add the searching logic to the `minigrep` program using
 the test-driven development (TDD) process with the following steps:
@@ -1692,84 +973,33 @@ lines that match the query. We’ll add this functionality in a function called
 ### Writing a Failing Test
 
 Because we don’t need them anymore, let’s remove the `println!` statements from
-*src/**lib.rs* and *src/**main.rs* that we used to check the program’s
-behavior. Then, in *src/**lib.rs*, we’ll add a `tests` module with a test
-function, as we did in Chapter 11. The test function specifies the behavior we
-want the `search` function to have: it will take a query and the text to
-search, and it will return only the lines from the text that contain the query.
-Listing 12-15 shows this test, which won’t compile yet.
+*src/lib.rs* and *src/main.rs* that we used to check the program’s behavior.
+Then, in *src/lib.rs*, we’ll add a `tests` module with a test function, as we
+did in Chapter 11. The test function specifies the behavior we want the
+`search` function to have: it will take a query and the text to search, and it
+will return only the lines from the text that contain the query. Listing 12-15
+shows this test, which won’t compile yet.
 
 Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn one_result() {
-```
-
-```
         let query = "duct";
-```
-
-```
         let contents = "\
-```
-
-```
 Rust:
-```
-
-```
 safe, fast, productive.
-```
-
-```
 Pick three.";
-```
 
-```
-
-```
-
-```
         assert_eq!(
-```
-
-```
             vec!["safe, fast, productive."],
-```
-
-```
             search(query, contents)
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1793,25 +1023,10 @@ Filename: src/lib.rs
 
 ```
 pub fn search<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
     vec![]
-```
-
-```
 }
 ```
 
@@ -1836,77 +1051,23 @@ get this error:
 
 ```
 error[E0106]: missing lifetime specifier
-```
-
-```
   --> src/lib.rs:31:10
-```
-
-```
    |
-```
-
-```
 29 |     query: &str,
-```
-
-```
    |            ----
-```
-
-```
 30 |     contents: &str,
-```
-
-```
    |               ----
-```
-
-```
 31 | ) -> Vec<&str> {
-```
-
-```
    |          ^ expected named lifetime parameter
-```
-
-```
    |
-```
-
-```
    = help: this function's return type contains a borrowed value, but the
-```
-
-```
 signature does not say whether it is borrowed from `query` or `contents`
-```
-
-```
 help: consider introducing a named lifetime parameter
-```
-
-```
    |
-```
-
-```
 28 ~ pub fn search<'a>(
-```
-
-```
 29 ~     query: &'a str,
-```
-
-```
 30 ~     contents: &'a str,
-```
-
-```
 31 ~ ) -> Vec<&'a str> {
-```
-
-```
    |
 ```
 
@@ -1925,97 +1086,28 @@ Now let’s run the test:
 
 ```
 $ cargo test
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.97s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/minigrep-9cd200e5fac0fc94)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test tests::one_result ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::one_result stdout ----
-```
-
-```
 thread 'tests::one_result' panicked at 'assertion failed: `(left == right)`
-```
-
-```
   left: `["safe, fast, productive."]`,
-```
-
-```
  right: `[]`', src/lib.rs:47:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-```
 
-```
 
-```
-
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::one_result
-```
 
-```
-
-```
-
-```
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
-```
 
-```
-
-```
-
-```
 error: test failed, to rerun pass '--lib'
 ```
 
@@ -2031,9 +1123,9 @@ that and implement `search`, our program needs to follow these steps:
 1. If it does, add it to the list of values we’re returning.
 1. If it doesn’t, do nothing.
 1. Return the list of results that match.
+Let’s work through each step, starting with iterating through lines.
 
-Unmatched: BodyContinued
-      #### Iterating Through Lines with the lines Method
+#### Iterating Through Lines with the lines Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17. Note that
@@ -2043,33 +1135,12 @@ Filename: src/lib.rs
 
 ```
 pub fn search<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
     for line in contents.lines() {
-```
-
-```
         // do something with line
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2091,41 +1162,14 @@ Filename: src/lib.rs
 
 ```
 pub fn search<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
     for line in contents.lines() {
-```
-
-```
         if line.contains(query) {
-```
-
-```
             // do something with line
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2146,57 +1190,18 @@ Filename: src/lib.rs
 
 ```
 pub fn search<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
     let mut results = Vec::new();
-```
 
-```
-
-```
-
-```
     for line in contents.lines() {
-```
-
-```
         if line.contains(query) {
-```
-
-```
             results.push(line);
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     results
-```
-
-```
 }
 ```
 
@@ -2207,29 +1212,11 @@ and our test should pass. Let’s run the test:
 
 ```
 $ cargo test
-```
-
-```
 --snip--
-```
-
-```
 running 1 test
-```
-
-```
 test tests::one_result ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2253,62 +1240,26 @@ Filename: src/lib.rs
 
 ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-```
-
-```
     let contents = fs::read_to_string(config.file_path)?;
-```
 
-```
-
-```
-
-```
     for line in search(&config.query, &contents) {
-```
-
-```
         println!("{line}");
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     Ok(())
-```
-
-```
 }
 ```
 
+We’re still using a `for` loop to return each line from `search` and print it.
 
-Unmatched: BodyContinued
-      Now the entire program should work! Let’s try it out, first with a word
-that should return exactly one line from the Emily Dickinson poem: *frog*.
+Now the entire program should work! Let’s try it out, first with a word that
+should return exactly one line from the Emily Dickinson poem: *frog*.
 
 ```
 $ cargo run -- frog poem.txt
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.38s
-```
-
-```
      Running `target/debug/minigrep frog poem.txt`
-```
-
-```
 How public, like a frog
 ```
 
@@ -2316,25 +1267,10 @@ Cool! Now let’s try a word that will match multiple lines, like *body*:
 
 ```
 $ cargo run -- body poem.txt
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep body poem.txt`
-```
-
-```
 I'm nobody! Who are you?
-```
-
-```
 Are you nobody, too?
-```
-
-```
 How dreary to be somebody!
 ```
 
@@ -2343,13 +1279,7 @@ word that isn’t anywhere in the poem, such as *monomorphization*:
 
 ```
 $ cargo run -- monomorphization poem.txt
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep monomorphization poem.txt`
 ```
 
@@ -2383,137 +1313,38 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn case_sensitive() {
-```
-
-```
         let query = "duct";
-```
-
-```
         let contents = "\
-```
-
-```
 Rust:
-```
-
-```
 safe, fast, productive.
-```
-
-```
 Pick three.
-```
-
-```
 Duct tape.";
-```
 
-```
-
-```
-
-```
         assert_eq!(
-```
-
-```
             vec!["safe, fast, productive."],
-```
-
-```
             search(query, contents)
-```
-
-```
         );
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn case_insensitive() {
-```
-
-```
         let query = "rUsT";
-```
-
-```
         let contents = "\
-```
-
-```
 Rust:
-```
-
-```
 safe, fast, productive.
-```
-
-```
 Pick three.
-```
-
-```
 Trust me.";
-```
 
-```
-
-```
-
-```
         assert_eq!(
-```
-
-```
             vec!["Rust:", "Trust me."],
-```
-
-```
             search_case_insensitive(query, contents)
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2546,61 +1377,19 @@ Filename: src/lib.rs
 
 ```
 pub fn search_case_insensitive<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
   1 let query = query.to_lowercase();
-```
-
-```
     let mut results = Vec::new();
-```
 
-```
-
-```
-
-```
     for line in contents.lines() {
-```
-
-```
         if 2 line.to_lowercase().contains(3 &query) {
-```
-
-```
             results.push(line);
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     results
-```
-
-```
 }
 ```
 
@@ -2632,25 +1421,10 @@ Let’s see if this implementation passes the tests:
 
 ```
 running 2 tests
-```
-
-```
 test tests::case_insensitive ... ok
-```
-
-```
 test tests::case_sensitive ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2664,21 +1438,9 @@ Filename: src/lib.rs
 
 ```
 pub struct Config {
-```
-
-```
     pub query: String,
-```
-
-```
     pub file_path: String,
-```
-
-```
     pub ignore_case: bool,
-```
-
-```
 }
 ```
 
@@ -2691,61 +1453,19 @@ Filename: src/lib.rs
 
 ```
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-```
-
-```
     let contents = fs::read_to_string(config.file_path)?;
-```
 
-```
-
-```
-
-```
     let results = if config.ignore_case {
-```
-
-```
         search_case_insensitive(&config.query, &contents)
-```
-
-```
     } else {
-```
-
-```
         search(&config.query, &contents)
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     for line in results {
-```
-
-```
         println!("{line}");
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     Ok(())
-```
-
-```
 }
 ```
 
@@ -2754,7 +1474,7 @@ Calling either `search` or `search_case_insensitive` based on the value in
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
-library, so we bring that module into scope at the top of *src/**lib.rs*. Then
+library, so we bring that module into scope at the top of *src/lib.rs*. Then
 we’ll use the `var` function from the `env` module to check to see if any value
 has been set for an environment variable named `IGNORE_CASE`, as shown in
 Listing 12-23.
@@ -2763,93 +1483,27 @@ Filename: src/lib.rs
 
 ```
 use std::env;
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Config {
-```
-
-```
     pub fn build(
-```
-
-```
         args: &[String]
-```
-
-```
     ) -> Result<Config, &'static str> {
-```
-
-```
         if args.len() < 3 {
-```
-
-```
             return Err("not enough arguments");
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         let query = args[1].clone();
-```
-
-```
         let file_path = args[2].clone();
-```
 
-```
-
-```
-
-```
         let ignore_case = env::var("IGNORE_CASE").is_ok();
-```
 
-```
-
-```
-
-```
         Ok(Config {
-```
-
-```
             query,
-```
-
-```
             file_path,
-```
-
-```
             ignore_case,
-```
-
-```
         })
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2880,25 +1534,10 @@ the word *to* in all lowercase:
 
 ```
 $ cargo run -- to poem.txt
-```
-
-```
    Compiling minigrep v0.1.0 (file:///projects/minigrep)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/minigrep to poem.txt`
-```
-
-```
 Are you nobody, too?
-```
-
-```
 How dreary to be somebody!
 ```
 
@@ -2927,17 +1566,8 @@ We should get lines that contain *to* that might have uppercase letters:
 
 ```
 Are you nobody, too?
-```
-
-```
 How dreary to be somebody!
-```
-
-```
 To tell your name the livelong day
-```
-
-```
 To an admiring bog!
 ```
 
@@ -2984,17 +1614,17 @@ standard output stream to a file. Our program is not currently well behaved:
 we’re about to see that it saves the error message output to a file instead!
 
 To demonstrate this behavior, we’ll run the program with `>` and the file path,
-*output**.**txt*, that we want to redirect the standard output stream to. We
-won’t pass any arguments, which should cause an error:
+*output.txt*, that we want to redirect the standard output stream to. We won’t
+pass any arguments, which should cause an error:
 
 ```
 $ cargo run > output.txt
 ```
 
 The `>` syntax tells the shell to write the contents of standard output to
-*output**.**txt* instead of the screen. We didn’t see the error message we were
+*output.txt* instead of the screen. We didn’t see the error message we were
 expecting printed to the screen, so that means it must have ended up in the
-file. This is what *output**.**txt* contains:
+file. This is what *output.txt* contains:
 
 ```
 Problem parsing arguments: not enough arguments
@@ -3017,53 +1647,17 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
     let config = Config::build(&args).unwrap_or_else(|err| {
-```
-
-```
         eprintln!("Problem parsing arguments: {err}");
-```
-
-```
         process::exit(1);
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
     if let Err(e) = minigrep::run(config) {
-```
-
-```
         eprintln!("Application error: {e}");
-```
-
-```
         process::exit(1);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -3075,14 +1669,11 @@ redirecting standard output with `>`:
 
 ```
 $ cargo run > output.txt
-```
-
-```
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see the error onscreen and *output**.**txt* contains nothing, which is
-the behavior we expect of command line programs.
+Now we see the error onscreen and *output.txt* contains nothing, which is the
+behavior we expect of command line programs.
 
 Let’s run the program again with arguments that don’t cause an error but still
 redirect standard output to a file, like so:
@@ -3091,16 +1682,13 @@ redirect standard output to a file, like so:
 $ cargo run -- to poem.txt > output.txt
 ```
 
-We won’t see any output to the terminal, and *output**.**txt* will contain our
+We won’t see any output to the terminal, and *output.txt* will contain our
 results:
 
 Filename: output.txt
 
 ```
 Are you nobody, too?
-```
-
-```
 How dreary to be somebody!
 ```
 
