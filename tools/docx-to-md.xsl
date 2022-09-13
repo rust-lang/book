@@ -282,6 +282,11 @@
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']">
+        <xsl:text>Figure </xsl:text>
+        <xsl:value-of select="$chapternumber" />
+        <xsl:text>-</xsl:text>
+        <xsl:number level="any" count="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']" />
+        <xsl:text>: </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
