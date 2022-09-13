@@ -134,7 +134,7 @@ program with comments annotating where the variable `s` would be valid.
 }                      // this scope is now over, and s is no longer valid
 ```
 
-Listing -1: A variable and the scope in which it is valid
+Listing 4-1: A variable and the scope in which it is valid
 
 In other words, there are two important points in time here:
 
@@ -264,7 +264,7 @@ let x = 5;
 let y = x;
 ```
 
-Listing -2: Assigning the integer value of variable `x` to `y`
+Listing 4-2: Assigning the integer value of variable `x` to `y`
 
 We can probably guess what this is doing: “bind the value `5` to `x`; then make
 a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
@@ -289,8 +289,8 @@ the memory that holds the contents of the string, a length, and a capacity.
 This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
 
- Representation in memory of a `String` holding the value `"hello"` bound to
-`s1`
+Figure 4-1:  Representation in memory of a `String` holding the value `"hello"`
+bound to `s1`
 
 The length is how much memory, in bytes, the contents of the `String` are
 currently using. The capacity is the total amount of memory, in bytes, that the
@@ -303,16 +303,16 @@ pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-2.
 
-Representation in memory of the variable `s2` that has a copy of the pointer,
-length, and capacity of `s1`
+Figure 4-2: Representation in memory of the variable `s2` that has a copy of
+the pointer, length, and capacity of `s1`
 
 The representation does *not* look like Figure 4-3, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could be very expensive in terms of runtime performance if
 the data on the heap were large.
 
-Another possibility for what `s2 = s1` might do if Rust copied the heap data as
-well
+Figure 4-3: Another possibility for what `s2 = s1` might do if Rust copied the
+heap data as well
 
 Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the `drop` function and cleans up the heap memory for that variable. But
@@ -358,7 +358,7 @@ because Rust also invalidates the first variable, instead of being called a
 shallow copy, it’s known as a *move*. In this example, we would say that `s1`
 was *moved* into `s2`. So, what actually happens is shown in Figure 4-4.
 
-Representation in memory after `s1` has been invalidated
+Figure 4-4: Representation in memory after `s1` has been invalidated
 
 That solves our problem! With only `s2` valid, when it goes out of scope it
 alone will free the memory, and we’re done.
@@ -471,7 +471,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope
 } // Here, some_integer goes out of scope. Nothing special happens
 ```
 
-Listing -3: Functions with ownership and scope annotated
+Listing 4-3: Functions with ownership and scope annotated
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
 compile-time error. These static checks protect us from mistakes. Try adding
@@ -517,7 +517,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
 }
 ```
 
-Listing -4: Transferring ownership of return values
+Listing 4-4: Transferring ownership of return values
 
 The ownership of a variable follows the same pattern every time: assigning a
 value to another variable moves it. When a variable that includes data on the
@@ -550,7 +550,7 @@ fn calculate_length(s: String) -> (String, usize) {
 }
 ```
 
-Listing -5: Returning ownership of parameters
+Listing 4-5: Returning ownership of parameters
 
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
@@ -592,7 +592,7 @@ function return value is gone. Second, note that we pass `&s1` into
 `String`. These ampersands represent *references*, and they allow you to refer
 to some value without taking ownership of it. Figure 4-5 depicts this concept.
 
-A diagram of `&String s` pointing at `String s1`
+Figure 4-5: A diagram of `&String s` pointing at `String s1`
 
 > Note: The opposite of referencing by using `&` is *dereferencing*, which is
 accomplished with the dereference operator, `*`. We’ll see some uses of the
@@ -649,7 +649,7 @@ fn change(some_string: &String) {
 }
 ```
 
-Listing -6: Attempting to modify a borrowed value
+Listing 4-6: Attempting to modify a borrowed value
 
 Here’s the error:
 
@@ -957,7 +957,7 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-Listing -7: The `first_word` function that returns a byte index value into the
+Listing 4-7: The `first_word` function that returns a byte index value into the
 `String` parameter
 
 Because we need to go through the `String` element by element and check whether
@@ -1003,7 +1003,7 @@ fn main() {
 }
 ```
 
-Listing -8: Storing the result from calling the `first_word` function and then
+Listing 4-8: Storing the result from calling the `first_word` function and then
 changing the `String` contents
 
 This program compiles without any errors and would also do so if we used `word`
@@ -1050,7 +1050,7 @@ byte at index 6 of `s` with a length value of `5`.
 
 Figure 4-6 shows this in a diagram.
 
-String slice referring to part of a `String`
+Figure 4-6: String slice referring to part of a `String`
 
 With Rust’s `..` range syntax, if you want to start at index 0, you can drop
 the value before the two periods. In other words, these are equal:
@@ -1207,8 +1207,8 @@ and `&str` values.
 fn first_word(s: &str) -> &str {
 ```
 
-Listing -9: Improving the `first_word` function by using a string slice for the
-type of the `s` parameter
+Listing 4-9: Improving the `first_word` function by using a string slice for
+the type of the `s` parameter
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the `String` or a reference to the `String`. This
