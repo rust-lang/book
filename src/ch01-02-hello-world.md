@@ -1,8 +1,8 @@
 ## Hello, World!
 
-Now that you’ve installed Rust, let’s write your first Rust program. It’s
-traditional when learning a new language to write a little program that prints
-the text `Hello, world!` to the screen, so we’ll do the same here!
+Now that you’ve installed Rust, it’s time to write your first Rust program.
+It’s traditional when learning a new language to write a little program that
+prints the text `Hello, world!` to the screen, so we’ll do the same here!
 
 > Note: This book assumes basic familiarity with the command line. Rust makes
 > no specific demands about your editing or tooling or where your code lives, so
@@ -10,7 +10,7 @@ the text `Hello, world!` to the screen, so we’ll do the same here!
 > the command line, feel free to use your favorite IDE. Many IDEs now have some
 > degree of Rust support; check the IDE’s documentation for details. The Rust
 > team has been focusing on enabling great IDE support via `rust-analyzer`. See
-> [Appendix D][devtools]<!-- ignore --> for more details!
+> [Appendix D][devtools]<!-- ignore --> for more details.
 
 ### Creating a Project Directory
 
@@ -109,7 +109,7 @@ line as the function declaration, adding one space in between.
 > use an automatic formatter tool called `rustfmt` to format your code in a
 > particular style (more on `rustfmt` in
 > [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool
-> with the standard Rust distribution, like `rustc`, so it should already be
+> with the standard Rust distribution, as `rustc` is, so it should already be
 > installed on your computer!
 
 The body of the `main` function holds the following code:
@@ -126,7 +126,7 @@ First, Rust style is to indent with four spaces, not a tab.
 Second, `println!` calls a Rust macro. If it had called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
 more detail in Chapter 19. For now, you just need to know that using a `!`
-means that you’re calling a macro instead of a normal function, and that macros
+means that you’re calling a macro instead of a normal function and that macros
 don’t always follow the same rules as functions.
 
 Third, you see the `"Hello, world!"` string. We pass this string as an argument
@@ -153,16 +153,16 @@ If you have a C or C++ background, you’ll notice that this is similar to `gcc`
 or `clang`. After compiling successfully, Rust outputs a binary executable.
 
 On Linux, macOS, and PowerShell on Windows, you can see the executable by
-entering the `ls` command in your shell. On Linux and macOS, you’ll see two
-files. With PowerShell on Windows, you’ll see the same three files that you
-would see using CMD.
+entering the `ls` command in your shell:
 
 ```console
 $ ls
 main  main.rs
 ```
 
-With CMD on Windows, you would enter the following:
+On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
+see the same three files that you would see using CMD. With CMD on Windows, you
+would enter the following:
 
 ```cmd
 > dir /B %= the /B option says to only show the file names =%
