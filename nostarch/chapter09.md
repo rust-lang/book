@@ -60,6 +60,8 @@ add this:
 > ```
 > [profile.release]
 > panic = 'abort'
+> ```
+
 Let’s try calling `panic!` in a simple program:
 
 Filename: src/main.rs

@@ -199,7 +199,7 @@
                 <xsl:text>&#10;> ```&#10;>&#10;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>&#10;</xsl:text>
+                <xsl:text>&#10;> ```&#10;&#10;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
