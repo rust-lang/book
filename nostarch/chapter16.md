@@ -821,11 +821,11 @@ mutex is described as *guarding* the data it holds via the locking system.
 Mutexes have a reputation for being difficult to use because you have to
 remember two rules:
 
+1. You must attempt to acquire the lock before using the data.
+1. When you’re done with the data that the mutex guards, you must unlock the
+data so other threads can acquire the lock.
 
-Unmatched: ListNumber0
-
-Unmatched: ListNumber0
-      For a real-world metaphor for a mutex, imagine a panel discussion at a
+For a real-world metaphor for a mutex, imagine a panel discussion at a
 conference with only one microphone. Before a panelist can speak, they have to
 ask or signal that they want to use the microphone. When they get the
 microphone, they can talk for as long as they want to and then hand the

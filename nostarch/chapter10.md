@@ -170,6 +170,7 @@ Listing 10-3:
 1. Extract the duplicate code into the body of the function, and specify the
 inputs and return values of that code in the function signature.
 1. Update the two instances of duplicated code to call the function instead.
+
 Next, we’ll use these same steps with generics to reduce code duplication. In
 the same way that the function body can operate on an abstract `list` instead
 of specific values, generics allow code to operate on abstract types.

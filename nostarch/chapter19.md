@@ -66,6 +66,7 @@ include the ability to:
 1. Access or modify a mutable static variable
 1. Implement an unsafe trait
 1. Access fields of `union`s
+
 It’s important to understand that `unsafe` doesn’t turn off the borrow checker
 or disable any of Rust’s other safety checks: if you use a reference in unsafe
 code, it will still be checked. The `unsafe` keyword only gives you access to
@@ -783,6 +784,7 @@ You’ll use default type parameters in two main ways:
 
 1. To extend a type without breaking existing code
 1. To allow customization in specific cases most users won’t need
+
 The standard library’s `Add` trait is an example of the second purpose:
 usually, you’ll add two like types, but the `Add` trait provides the ability to
 customize beyond that. Using a default type parameter in the `Add` trait

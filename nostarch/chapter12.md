@@ -965,6 +965,7 @@ expect.
 1. Refactor the code you just added or changed and make sure the tests continue
 to pass.
 1. Repeat from step 1!
+
 Though it’s just one of many ways to write software, TDD can help drive code
 design. Writing the test before you write the code that makes the test pass
 helps to maintain high test coverage throughout the process.
@@ -1128,6 +1129,7 @@ that and implement `search`, our program needs to follow these steps:
 1. If it does, add it to the list of values we’re returning.
 1. If it doesn’t, do nothing.
 1. Return the list of results that match.
+
 Let’s work through each step, starting with iterating through lines.
 
 #### Iterating Through Lines with the lines Method

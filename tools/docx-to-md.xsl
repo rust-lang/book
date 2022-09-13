@@ -80,10 +80,13 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListA' or @w:val = 'NumListB' or @w:val = 'ListNumber']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListA' or @w:val = 'NumListB' or @w:val = 'ListNumber' or @w:val = 'ListNumber0']]">
         <xsl:text>1. </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
+        <xsl:if test="not(following-sibling::*[1][self::w:p]) or following-sibling::w:p[1][w:pPr/w:pStyle[@w:val != 'NumListA' and @w:val != 'NumListB' and @w:val != 'ListNumber' and @w:val != 'ListNumber0']]">
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListC']]">
