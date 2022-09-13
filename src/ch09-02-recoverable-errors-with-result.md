@@ -6,9 +6,9 @@ interpret and respond to. For example, if you try to open a file and that
 operation fails because the file doesn’t exist, you might want to create the
 file instead of terminating the process.
 
-Recall from [“Handling Potential Failure with the `Result`
-Type”][handle_failure]<!-- ignore --> in Chapter 2 that the `Result` enum is
-defined as having two variants, `Ok` and `Err`, as follows:
+Recall from [“Handling Potential Failure with `Result`”][handle_failure]<!--
+ignore --> in Chapter 2 that the `Result` enum is defined as having two
+variants, `Ok` and `Err`, as follows:
 
 ```rust
 enum Result<T, E> {
@@ -532,6 +532,6 @@ Now that we’ve discussed the details of calling `panic!` or returning `Result`
 let’s return to the topic of how to decide which is appropriate to use in which
 cases.
 
-[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type
+[handle_failure]: ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-result
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types
 [termination]: ../std/process/trait.Termination.html
