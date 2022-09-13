@@ -31,6 +31,7 @@
     <xsl:template match="w:p[w:pPr[not(w:pStyle)]]" />
 
     <xsl:variable name="chapternumber" select="//w:p[w:pPr/w:pStyle/@w:val = 'ChapterNumber']/w:r/w:t" />
+    <xsl:variable name="appendixnumber" select="//w:p[w:pPr/w:pStyle/@w:val = 'AppendixNumber']/w:r/w:t" />
 
     <!-- Paragraph styles -->
 
@@ -215,6 +216,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'TableTitle']]">
         <xsl:text>Table </xsl:text>
         <xsl:value-of select="$chapternumber" />
+        <xsl:value-of select="$appendixnumber" />
         <xsl:text>-</xsl:text>
         <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'TableTitle']]" />
         <xsl:text>: </xsl:text>
@@ -225,6 +227,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]">
         <xsl:text>Listing </xsl:text>
         <xsl:value-of select="$chapternumber" />
+        <xsl:value-of select="$appendixnumber" />
         <xsl:text>-</xsl:text>
         <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]" />
         <xsl:text>: </xsl:text>
@@ -294,6 +297,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']">
         <xsl:text>Figure </xsl:text>
         <xsl:value-of select="$chapternumber" />
+        <xsl:value-of select="$appendixnumber" />
         <xsl:text>-</xsl:text>
         <xsl:number level="any" count="w:p[w:pPr/w:pStyle/@w:val = 'CaptionLine']" />
         <xsl:text>: </xsl:text>
