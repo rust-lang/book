@@ -212,11 +212,21 @@
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'TableTitle']]">
+        <xsl:text>Table </xsl:text>
+        <xsl:value-of select="$chapternumber" />
+        <xsl:text>-</xsl:text>
+        <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'TableTitle']]" />
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]">
         <xsl:text>Listing </xsl:text>
         <xsl:value-of select="$chapternumber" />
         <xsl:text>-</xsl:text>
-        <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]" />
+        <xsl:number level="any" count="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'Caption1' or @w:val = 'Listing' or @w:val = 'CodeListingCaption']]" />
         <xsl:text>: </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
