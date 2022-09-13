@@ -49,6 +49,7 @@ actions:
 * Set up any needed data or state.
 * Run the code you want to test.
 * Assert that the results are what you expect.
+
 Let’s look at the features Rust provides specifically for writing tests that
 take these actions, which include the `test` attribute, a few macros, and the
 `should_panic` attribute.
@@ -77,13 +78,7 @@ Let’s create a new library project called `adder` that will add two numbers:
 
 ```
 $ cargo new adder --lib
-```
-
-```
      Created library `adder` project
-```
-
-```
 $ cd adder
 ```
 
@@ -94,40 +89,16 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
   1 #[test]
-```
-
-```
     fn it_works() {
-```
-
-```
         let result = 2 + 2;
-```
-
-```
       2 assert_eq!(result, 4);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
 The test module and function generated automatically by `cargo new`
-
-Prod: Please rename this to Listing 11-1, and renumber all remaining listings
-consecutively—e.g., Listing 11-2, Listing 11-3, etc.
 
 For now, let’s ignore the top two lines and focus on the function. Note the
 `#[test]` annotation [1]: this attribute indicates this is a test function, so
@@ -146,73 +117,22 @@ The `cargo test` command runs all tests in our project, as shown in Listing
 
 ```
 $ cargo test
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/adder)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.57s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/adder-
-```
-
-```
 92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 1 running 1 test
-```
-
-```
 2 test tests::it_works ... ok
-```
 
-```
-
-```
-
-```
 3 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
   4 Doc-tests adder
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -252,33 +172,12 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     #[test]
-```
-
-```
     fn exploration() {
-```
-
-```
         let result = 2 + 2;
-```
-
-```
         assert_eq!(result, 4);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -287,21 +186,9 @@ Then run `cargo test` again. The output now shows `exploration` instead of
 
 ```
 running 1 test
-```
-
-```
 test tests::exploration ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -316,49 +203,16 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     #[test]
-```
-
-```
     fn exploration() {
-```
-
-```
         assert_eq!(2 + 2, 4);
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn another() {
-```
-
-```
         panic!("Make this test fail");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -369,73 +223,22 @@ Run the tests again using `cargo test`. The output should look like Listing
 
 ```
 running 2 tests
-```
-
-```
 test tests::exploration ... ok
-```
-
-```
 1 test tests::another ... FAILED
-```
 
-```
-
-```
-
-```
 2 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::another stdout ----
-```
-
-```
 thread 'main' panicked at 'Make this test fail', src/lib.rs:10:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
-```
 
-```
-
-```
-
-```
 3 failures:
-```
-
-```
     tests::another
-```
 
-```
-
-```
-
-```
 4 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
 error: test failed, to rerun pass '--lib'
 ```
 
@@ -474,45 +277,15 @@ Filename: src/lib.rs
 
 ```
 #[derive(Debug)]
-```
-
-```
 struct Rectangle {
-```
-
-```
     width: u32,
-```
-
-```
     height: u32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Rectangle {
-```
-
-```
     fn can_hold(&self, other: &Rectangle) -> bool {
-```
-
-```
         self.width > other.width && self.height > other.height
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -528,73 +301,22 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
   1 use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
   2 fn larger_can_hold_smaller() {
-```
-
-```
       3 let larger = Rectangle {
-```
-
-```
             width: 8,
-```
-
-```
             height: 7,
-```
-
-```
         };
-```
-
-```
         let smaller = Rectangle {
-```
-
-```
             width: 5,
-```
-
-```
             height: 1,
-```
-
-```
         };
-```
 
-```
-
-```
-
-```
       4 assert!(larger.can_hold(&smaller));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -617,21 +339,9 @@ out!
 
 ```
 running 1 test
-```
-
-```
 test tests::larger_can_hold_smaller ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -642,93 +352,27 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn larger_can_hold_smaller() {
-```
-
-```
         --snip--
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn smaller_cannot_hold_larger() {
-```
-
-```
         let larger = Rectangle {
-```
-
-```
             width: 8,
-```
-
-```
             height: 7,
-```
-
-```
         };
-```
-
-```
         let smaller = Rectangle {
-```
-
-```
             width: 5,
-```
-
-```
             height: 1,
-```
-
-```
         };
-```
 
-```
-
-```
-
-```
         assert!(!smaller.can_hold(&larger));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -738,25 +382,10 @@ result, our test will pass if `can_hold` returns `false`:
 
 ```
 running 2 tests
-```
-
-```
 test tests::larger_can_hold_smaller ... ok
-```
-
-```
 test tests::smaller_cannot_hold_larger ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -767,29 +396,11 @@ compares the widths:
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Rectangle {
-```
-
-```
     fn can_hold(&self, other: &Rectangle) -> bool {
-```
-
-```
         self.width < other.width && self.height > other.height
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -797,73 +408,22 @@ Running the tests now produces the following:
 
 ```
 running 2 tests
-```
-
-```
 test tests::smaller_cannot_hold_larger ... ok
-```
-
-```
 test tests::larger_can_hold_smaller ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::larger_can_hold_smaller stdout ----
-```
-
-```
 thread 'main' panicked at 'assertion failed:
-```
-
-```
 larger.can_hold(&smaller)', src/lib.rs:28:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
-```
 
-```
 
-```
-
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::larger_can_hold_smaller
-```
 
-```
-
-```
-
-```
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -891,53 +451,17 @@ Filename: src/lib.rs
 
 ```
 pub fn add_two(a: i32) -> i32 {
-```
-
-```
     a + 2
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn it_adds_two() {
-```
-
-```
         assert_eq!(4, add_two(2));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -947,21 +471,9 @@ Let’s check that it passes!
 
 ```
 running 1 test
-```
-
-```
 test tests::it_adds_two ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -974,13 +486,7 @@ fails. Change the implementation of the `add_two` function to instead add `3`:
 
 ```
 pub fn add_two(a: i32) -> i32 {
-```
-
-```
     a + 3
-```
-
-```
 }
 ```
 
@@ -988,69 +494,21 @@ Run the tests again:
 
 ```
 running 1 test
-```
-
-```
 test tests::it_adds_two ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::it_adds_two stdout ----
-```
-
-```
 1 thread 'main' panicked at 'assertion failed: `(left == right)`
-```
-
-```
 2   left: `4`,
-```
-
-```
 3  right: `5`', src/lib.rs:11:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
-```
 
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::it_adds_two
-```
 
-```
-
-```
-
-```
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -1107,57 +565,18 @@ Filename: src/lib.rs
 
 ```
 pub fn greeting(name: &str) -> String {
-```
-
-```
     format!("Hello {name}!")
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn greeting_contains_name() {
-```
-
-```
         let result = greeting("Carol");
-```
-
-```
         assert!(result.contains("Carol"));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1173,13 +592,7 @@ Now let’s introduce a bug into this code by changing `greeting` to exclude
 
 ```
 pub fn greeting(name: &str) -> String {
-```
-
-```
     String::from("Hello!")
-```
-
-```
 }
 ```
 
@@ -1187,57 +600,18 @@ Running this test produces the following:
 
 ```
 running 1 test
-```
-
-```
 test tests::greeting_contains_name ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::greeting_contains_name stdout ----
-```
-
-```
 thread 'main' panicked at 'assertion failed:
-```
-
-```
 result.contains(\"Carol\")', src/lib.rs:12:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
-```
 
-```
 
-```
-
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::greeting_contains_name
 ```
 
@@ -1249,33 +623,12 @@ string with a placeholder filled in with the actual value we got from the
 
 ```
 #[test]
-```
-
-```
 fn greeting_contains_name() {
-```
-
-```
     let result = greeting("Carol");
-```
-
-```
     assert!(
-```
-
-```
         result.contains("Carol"),
-```
-
-```
         "Greeting did not contain name, value was `{result}`"
-```
-
-```
     );
-```
-
-```
 }
 ```
 
@@ -1283,21 +636,9 @@ Now when we run the test, we’ll get a more informative error message:
 
 ```
 ---- tests::greeting_contains_name stdout ----
-```
-
-```
 thread 'main' panicked at 'Greeting did not contain name, value
-```
-
-```
 was `Hello!`', src/lib.rs:12:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
 ```
 
@@ -1322,113 +663,32 @@ happen when we expect them to.
 
 ```
 // src/lib.rs
-```
-
-```
 pub struct Guess {
-```
-
-```
     value: i32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Guess {
-```
-
-```
     pub fn new(value: i32) -> Guess {
-```
-
-```
         if value < 1 || value > 100 {
-```
-
-```
             panic!(
-```
-
-```
                 "Guess value must be between 1 and 100, got {}.",
-```
-
-```
                 value
-```
-
-```
             );
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         Guess { value }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     #[should_panic]
-```
-
-```
     fn greater_than_100() {
-```
-
-```
         Guess::new(200);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1440,21 +700,9 @@ passes:
 
 ```
 running 1 test
-```
-
-```
 test tests::greater_than_100 - should panic ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -1463,61 +711,19 @@ that the `new` function will panic if the value is greater than 100:
 
 ```
 // src/lib.rs
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Guess {
-```
-
-```
     pub fn new(value: i32) -> Guess {
-```
-
-```
         if value < 1 {
-```
-
-```
             panic!(
-```
-
-```
                 "Guess value must be between 1 and 100, got {}.",
-```
-
-```
                 value
-```
-
-```
             );
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         Guess { value }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1525,53 +731,17 @@ When we run the test in Listing 11-8, it will fail:
 
 ```
 running 1 test
-```
-
-```
 test tests::greater_than_100 - should panic ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::greater_than_100 stdout ----
-```
-
-```
 note: test did not panic as expected
-```
 
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::greater_than_100
-```
 
-```
-
-```
-
-```
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -1590,125 +760,35 @@ too large.
 
 ```
 // src/lib.rs
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Guess {
-```
-
-```
     pub fn new(value: i32) -> Guess {
-```
-
-```
         if value < 1 {
-```
-
-```
             panic!(
-```
-
-```
                 "Guess value must be greater than or equal to 1, got {}.",
-```
-
-```
                 value
-```
-
-```
             );
-```
-
-```
         } else if value > 100 {
-```
-
-```
             panic!(
-```
-
-```
                 "Guess value must be less than or equal to 100, got {}.",
-```
-
-```
                 value
-```
-
-```
             );
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         Guess { value }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     #[should_panic(expected = "less than or equal to 100")]
-```
-
-```
     fn greater_than_100() {
-```
-
-```
         Guess::new(200);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1729,57 +809,18 @@ fails, let’s again introduce a bug into our code by swapping the bodies of the
 
 ```
 // src/lib.rs
-```
-
-```
 --snip--
-```
-
-```
 if value < 1 {
-```
-
-```
     panic!(
-```
-
-```
         "Guess value must be less than or equal to 100, got {}.",
-```
-
-```
         value
-```
-
-```
     );
-```
-
-```
 } else if value > 100 {
-```
-
-```
     panic!(
-```
-
-```
         "Guess value must be greater than or equal to 1, got {}.",
-```
-
-```
         value
-```
-
-```
     );
-```
-
-```
 }
-```
-
-```
 --snip--
 ```
 
@@ -1787,77 +828,23 @@ This time when we run the `should_panic` test, it will fail:
 
 ```
 running 1 test
-```
-
-```
 test tests::greater_than_100 - should panic ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::greater_than_100 stdout ----
-```
-
-```
 thread 'main' panicked at 'Guess value must be greater than or equal to 1, got
-```
-
-```
 200.', src/lib.rs:13:13
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-```
-
-```
 note: panic did not contain expected string
-```
-
-```
       panic message: `"Guess value must be greater than or equal to 1, got
-```
-
-```
 200."`,
-```
-
-```
  expected substring: `"less than or equal to 100"`
-```
 
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::greater_than_100
-```
 
-```
-
-```
-
-```
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
 ```
 
@@ -1877,45 +864,15 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     #[test]
-```
-
-```
     fn it_works() -> Result<(), String> {
-```
-
-```
         if 2 + 2 == 4 {
-```
-
-```
             Ok(())
-```
-
-```
         } else {
-```
-
-```
             Err(String::from("two plus two does not equal four"))
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2001,85 +958,25 @@ Filename: src/lib.rs
 
 ```
 fn prints_and_returns_10(a: i32) -> i32 {
-```
-
-```
     println!("I got the value {a}");
-```
-
-```
     10
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn this_test_will_pass() {
-```
-
-```
         let value = prints_and_returns_10(4);
-```
-
-```
         assert_eq!(10, value);
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn this_test_will_fail() {
-```
-
-```
         let value = prints_and_returns_10(8);
-```
-
-```
         assert_eq!(5, value);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2089,77 +986,23 @@ When we run these tests with `cargo test`, we’ll see the following output:
 
 ```
 running 2 tests
-```
-
-```
 test tests::this_test_will_pass ... ok
-```
-
-```
 test tests::this_test_will_fail ... FAILED
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::this_test_will_fail stdout ----
-```
-
-```
 1 I got the value 8
-```
-
-```
 thread 'main' panicked at 'assertion failed: `(left == right)`
-```
-
-```
   left: `5`,
-```
-
-```
  right: `10`', src/lib.rs:19:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
-```
 
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::this_test_will_fail
-```
 
-```
-
-```
-
-```
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2181,113 +1024,32 @@ see the following output:
 
 ```
 running 2 tests
-```
-
-```
 test tests::this_test_will_pass ... ok
-```
-
-```
 test tests::this_test_will_fail ... FAILED
-```
 
-```
-
-```
-
-```
 successes:
-```
 
-```
-
-```
-
-```
 ---- tests::this_test_will_pass stdout ----
-```
-
-```
 I got the value 4
-```
 
-```
 
-```
-
-```
-
-```
-
-```
 successes:
-```
-
-```
     tests::this_test_will_pass
-```
 
-```
-
-```
-
-```
 failures:
-```
 
-```
-
-```
-
-```
 ---- tests::this_test_will_fail stdout ----
-```
-
-```
 I got the value 8
-```
-
-```
 thread 'main' panicked at 'assertion failed: `(left == right)`
-```
-
-```
   left: `5`,
-```
-
-```
  right: `10`', src/lib.rs:19:9
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display
-```
-
-```
 a backtrace
-```
 
-```
-
-```
-
-```
 failures:
-```
-
-```
     tests::this_test_will_fail
-```
 
-```
-
-```
-
-```
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2305,93 +1067,27 @@ Filename: src/lib.rs
 
 ```
 pub fn add_two(a: i32) -> i32 {
-```
-
-```
     a + 2
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn add_two_and_two() {
-```
-
-```
         assert_eq!(4, add_two(2));
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn add_three_and_two() {
-```
-
-```
         assert_eq!(5, add_two(3));
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn one_hundred() {
-```
-
-```
         assert_eq!(102, add_two(100));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2402,29 +1098,11 @@ tests will run in parallel:
 
 ```
 running 3 tests
-```
-
-```
 test tests::add_three_and_two ... ok
-```
-
-```
 test tests::add_two_and_two ... ok
-```
-
-```
 test tests::one_hundred ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2434,45 +1112,15 @@ We can pass the name of any test function to `cargo test` to run only that test:
 
 ```
 $ cargo test one_hundred
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/adder)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.69s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/adder-
-```
-
-```
 92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test tests::one_hundred ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 2
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2491,49 +1139,16 @@ run those two by running `cargo test add`:
 
 ```
 $ cargo test add
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/adder)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.61s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/adder-
-```
-
-```
 92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 running 2 tests
-```
-
-```
 test tests::add_three_and_two ... ok
-```
-
-```
 test tests::add_two_and_two ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 1
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2554,45 +1169,15 @@ Filename: src/lib.rs
 
 ```
 #[test]
-```
-
-```
 fn it_works() {
-```
-
-```
     let result = 2 + 2;
-```
-
-```
     assert_eq!(result, 4);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[test]
-```
-
-```
 #[ignore]
-```
-
-```
 fn expensive_test() {
-```
-
-```
     // code that takes an hour to run
-```
-
-```
 }
 ```
 
@@ -2601,49 +1186,16 @@ Now when we run our tests, `it_works` runs, but `expensive_test` doesn’t:
 
 ```
 $ cargo test
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/adder)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.60s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/adder-
-```
-
-```
 92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 running 2 tests
-```
-
-```
 test expensive_test ... ignored
-```
-
-```
 test it_works ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2652,41 +1204,14 @@ the ignored tests, we can use `cargo test -- --ignored`:
 
 ```
 $ cargo test -- --ignored
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.61s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/adder-
-```
-
-```
 92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test expensive_test ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -2737,37 +1262,16 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     #[test]
-```
-
-```
     fn it_works() {
-```
-
-```
         let result = 2 + 2;
-```
-
-```
         assert_eq!(result, 4);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-This code is the automatically generated `test``s` module. The attribute `cfg`
+This code is the automatically generated `tests` module. The attribute `cfg`
 stands for *configuration* and tells Rust that the following item should only
 be included given a certain configuration option. In this case, the
 configuration option is `test`, which is provided by Rust for compiling and
@@ -2788,69 +1292,21 @@ Filename: src/lib.rs
 
 ```
 pub fn add_two(a: i32) -> i32 {
-```
-
-```
     internal_adder(a, 2)
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn internal_adder(a: i32, b: i32) -> i32 {
-```
-
-```
     a + b
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn internal() {
-```
-
-```
         assert_eq!(4, internal_adder(2, 2));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2887,29 +1343,11 @@ Let’s create an integration test. With the code in Listing 11-12 still in the
 
 ```
 adder
-```
-
-```
 ├── Cargo.lock
-```
-
-```
 ├── Cargo.toml
-```
-
-```
 ├── src
-```
-
-```
 │   └── lib.rs
-```
-
-```
 └── tests
-```
-
-```
     └── integration_test.rs
 ```
 
@@ -2919,32 +1357,17 @@ Filename: tests/integration_test.rs
 
 ```
 use adder;
-```
 
-```
-
-```
-
-```
 #[test]
-```
-
-```
 fn it_adds_two() {
-```
-
-```
     assert_eq!(4, adder::add_two(2));
-```
-
-```
 }
 ```
 
 An integration test of a function in the `adder` crate
 
 Each file in the *tests* directory is a separate crate, so we need to bring our
-library into each test crate’s scope. For that reason we add `use adder``;` at
+library into each test crate’s scope. For that reason we add `use adder;` at
 the top of the code, which we didn’t need in the unit tests.
 
 We don’t need to annotate any code in *tests/integration_test.rs* with
@@ -2953,109 +1376,31 @@ in this directory only when we run `cargo test`. Run `cargo test` now:
 
 ```
 $ cargo test
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/adder)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 1.31s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/adder-
-```
-
-```
 1082c4b063a8fbe6)
-```
 
-```
-
-```
-
-```
 1 running 1 test
-```
-
-```
 test tests::internal ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
    2 Running tests/integration_test.rs
-```
-
-```
 (target/debug/deps/integration_test-1082c4b063a8fbe6)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 3 test it_adds_two ... ok
-```
 
-```
-
-```
-
-```
 4 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
    Doc-tests adder
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -3084,47 +1429,20 @@ followed by the name of the file:
 
 ```
 $ cargo test --test integration_test
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.64s
-```
-
-```
      Running tests/integration_test.rs
-```
-
-```
 (target/debug/deps/integration_test-82e7799c1bc62298)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test it_adds_two ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
+This command runs only the tests in the *tests/integration_test.rs* file.
 
-Unmatched: BodyContinued
-      #### Submodules in Integration Tests
+#### Submodules in Integration Tests
 
 As you add more integration tests, you might want to make more files in the
 *tests* directory to help organize them; for example, you can group the test
@@ -3147,13 +1465,7 @@ Filename: tests/common.rs
 
 ```
 pub fn setup() {
-```
-
-```
     // setup code specific to your library's tests would go here
-```
-
-```
 }
 ```
 
@@ -3163,117 +1475,33 @@ did we call the `setup` function from anywhere:
 
 ```
 running 1 test
-```
-
-```
 test tests::internal ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
      Running tests/common.rs (target/debug/deps/common-
-```
-
-```
 92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
      Running tests/integration_test.rs
-```
-
-```
 (target/debug/deps/integration_test-92948b65e88960b4)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test it_adds_two ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
-```
 
-```
-
-```
-
-```
    Doc-tests adder
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.00s
 ```
 
@@ -3285,33 +1513,12 @@ project directory now looks like this:
 
 ```
 ├── Cargo.lock
-```
-
-```
 ├── Cargo.toml
-```
-
-```
 ├── src
-```
-
-```
 │   └── lib.rs
-```
-
-```
 └── tests
-```
-
-```
     ├── common
-```
-
-```
     │   └── mod.rs
-```
-
-```
     └── integration_test.rs
 ```
 
@@ -3331,37 +1538,13 @@ Filename: tests/integration_test.rs
 
 ```
 use adder;
-```
 
-```
-
-```
-
-```
 mod common;
-```
 
-```
-
-```
-
-```
 #[test]
-```
-
-```
 fn it_adds_two() {
-```
-
-```
     common::setup();
-```
-
-```
     assert_eq!(4, adder::add_two(2));
-```
-
-```
 }
 ```
 
