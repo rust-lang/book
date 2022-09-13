@@ -54,53 +54,17 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
   1 let number_list = vec![34, 50, 25, 100, 65];
-```
 
-```
-
-```
-
-```
   2 let mut largest = &number_list[0];
-```
 
-```
-
-```
-
-```
   3 for number in &number_list {
-```
-
-```
       4 if number > largest {
-```
-
-```
           5 largest = number;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("The largest number is {largest}");
-```
-
-```
 }
 ```
 
@@ -123,101 +87,29 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let number_list = vec![34, 50, 25, 100, 65];
-```
 
-```
-
-```
-
-```
     let mut largest = &number_list[0];
-```
 
-```
-
-```
-
-```
     for number in &number_list {
-```
-
-```
         if number > largest {
-```
-
-```
             largest = number;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("The largest number is {largest}");
-```
 
-```
-
-```
-
-```
     let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
-```
 
-```
-
-```
-
-```
     let mut largest = &number_list[0];
-```
 
-```
-
-```
-
-```
     for number in &number_list {
-```
-
-```
         if number > largest {
-```
-
-```
             largest = number;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("The largest number is {largest}");
-```
-
-```
 }
 ```
 
@@ -241,93 +133,27 @@ Filename: src/main.rs
 
 ```
 fn largest(list: &[i32]) -> &i32 {
-```
-
-```
     let mut largest = &list[0];
-```
 
-```
-
-```
-
-```
     for item in list {
-```
-
-```
         if item > largest {
-```
-
-```
             largest = item;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     largest
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let number_list = vec![34, 50, 25, 100, 65];
-```
 
-```
-
-```
-
-```
     let result = largest(&number_list);
-```
-
-```
     println!("The largest number is {result}");
-```
 
-```
-
-```
-
-```
     let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
-```
 
-```
-
-```
-
-```
     let result = largest(&number_list);
-```
-
-```
     println!("The largest number is {result}");
-```
-
-```
 }
 ```
 
@@ -374,141 +200,39 @@ Filename: src/main.rs
 
 ```
 fn largest_i32(list: &[i32]) -> &i32 {
-```
-
-```
     let mut largest = &list[0];
-```
 
-```
-
-```
-
-```
     for item in list {
-```
-
-```
         if item > largest {
-```
-
-```
             largest = item;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     largest
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn largest_char(list: &[char]) -> &char {
-```
-
-```
     let mut largest = &list[0];
-```
 
-```
-
-```
-
-```
     for item in list {
-```
-
-```
         if item > largest {
-```
-
-```
             largest = item;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     largest
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let number_list = vec![34, 50, 25, 100, 65];
-```
 
-```
-
-```
-
-```
     let result = largest_i32(&number_list);
-```
-
-```
     println!("The largest number is {result}");
-```
 
-```
-
-```
-
-```
     let char_list = vec!['y', 'm', 'a', 'q'];
-```
 
-```
-
-```
-
-```
     let result = largest_char(&char_list);
-```
-
-```
     println!("The largest char is {result}");
-```
-
-```
 }
 ```
 
@@ -552,93 +276,27 @@ Filename: src/main.rs
 
 ```
 fn largest<T>(list: &[T]) -> &T {
-```
-
-```
     let mut largest = &list[0];
-```
 
-```
-
-```
-
-```
     for item in list {
-```
-
-```
         if item > largest {
-```
-
-```
             largest = item;
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     largest
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let number_list = vec![34, 50, 25, 100, 65];
-```
 
-```
-
-```
-
-```
     let result = largest(&number_list);
-```
-
-```
     println!("The largest number is {result}");
-```
 
-```
-
-```
-
-```
     let char_list = vec!['y', 'm', 'a', 'q'];
-```
 
-```
-
-```
-
-```
     let result = largest(&char_list);
-```
-
-```
     println!("The largest char is {result}");
-```
-
-```
 }
 ```
 
@@ -648,49 +306,16 @@ If we compile this code right now, we’ll get this error:
 
 ```
 error[E0369]: binary operation `>` cannot be applied to type `&T`
-```
-
-```
  --> src/main.rs:5:17
-```
-
-```
   |
-```
-
-```
 5 |         if item > largest {
-```
-
-```
   |            ---- ^ ------- &T
-```
-
-```
   |            |
-```
-
-```
   |            &T
-```
-
-```
   |
-```
-
-```
 help: consider restricting type parameter `T`
-```
-
-```
   |
-```
-
-```
 1 | fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
-```
-
-```
   |             ++++++++++++++++++++++
 ```
 
@@ -715,37 +340,13 @@ Filename: src/main.rs
 
 ```
 1 struct Point<T> {
-```
-
-```
   2 x: T,
-```
-
-```
   3 y: T,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let integer = Point { x: 5, y: 10 };
-```
-
-```
     let float = Point { x: 1.0, y: 4.0 };
-```
-
-```
 }
 ```
 
@@ -767,33 +368,12 @@ Filename: src/main.rs
 
 ```
 struct Point<T> {
-```
-
-```
     x: T,
-```
-
-```
     y: T,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let wont_work = Point { x: 5, y: 4.0 };
-```
-
-```
 }
 ```
 
@@ -807,25 +387,10 @@ same type as `x`, we’ll get a type mismatch error like this:
 
 ```
 error[E0308]: mismatched types
-```
-
-```
  --> src/main.rs:7:38
-```
-
-```
   |
-```
-
-```
 7 |     let wont_work = Point { x: 5, y: 4.0 };
-```
-
-```
   |                                      ^^^ expected integer, found floating-
-```
-
-```
 point number
 ```
 
@@ -838,41 +403,14 @@ Filename: src/main.rs
 
 ```
 struct Point<T, U> {
-```
-
-```
     x: T,
-```
-
-```
     y: U,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let both_integer = Point { x: 5, y: 10 };
-```
-
-```
     let both_float = Point { x: 1.0, y: 4.0 };
-```
-
-```
     let integer_and_float = Point { x: 5, y: 4.0 };
-```
-
-```
 }
 ```
 
@@ -893,17 +431,8 @@ library provides, which we used in Chapter 6:
 
 ```
 enum Option<T> {
-```
-
-```
     Some(T),
-```
-
-```
     None,
-```
-
-```
 }
 ```
 
@@ -919,17 +448,8 @@ enum that we used in Chapter 9 is one example:
 
 ```
 enum Result<T, E> {
-```
-
-```
     Ok(T),
-```
-
-```
     Err(E),
-```
-
-```
 }
 ```
 
@@ -956,65 +476,20 @@ Filename: src/main.rs
 
 ```
 struct Point<T> {
-```
-
-```
     x: T,
-```
-
-```
     y: T,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl<T> Point<T> {
-```
-
-```
     fn x(&self) -> &T {
-```
-
-```
         &self.x
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let p = Point { x: 5, y: 10 };
-```
 
-```
-
-```
-
-```
     println!("p.x = {}", p.x());
-```
-
-```
 }
 ```
 
@@ -1043,21 +518,9 @@ Filename: src/main.rs
 
 ```
 impl Point<f32> {
-```
-
-```
     fn distance_from_origin(&self) -> f32 {
-```
-
-```
         (self.x.powi(2) + self.y.powi(2)).sqrt()
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1081,89 +544,29 @@ Filename: src/main.rs
 
 ```
 struct Point<X1, Y1> {
-```
-
-```
     x: X1,
-```
-
-```
     y: Y1,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 1 impl<X1, Y1> Point<X1, Y1> {
-```
-
-```
-  2 fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
-```
-
-```
+  2 fn mixup<X2, Y2>(
+        self,
+        other: Point<X2, Y2>,
+    ) -> Point<X1, Y2> {
         Point {
-```
-
-```
             x: self.x,
-```
-
-```
             y: other.y,
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   3 let p1 = Point { x: 5, y: 10.4 };
-```
-
-```
   4 let p2 = Point { x: "Hello", y: 'c' };
-```
 
-```
-
-```
-
-```
   5 let p3 = p1.mixup(p2);
-```
 
-```
-
-```
-
-```
   6 println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
-```
-
-```
 }
 ```
 
@@ -1203,9 +606,6 @@ Let’s look at how this works by using the standard library’s generic
 
 ```
 let integer = Some(5);
-```
-
-```
 let float = Some(5.0);
 ```
 
@@ -1223,57 +623,18 @@ Filename: src/main.rs
 
 ```
 enum Option_i32 {
-```
-
-```
     Some(i32),
-```
-
-```
     None,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 enum Option_f64 {
-```
-
-```
     Some(f64),
-```
-
-```
     None,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let integer = Option_i32::Some(5);
-```
-
-```
     let float = Option_f64::Some(5.0);
-```
-
-```
 }
 ```
 
@@ -1291,7 +652,7 @@ other types. We can use traits to define shared behavior in an abstract way. We
 can use *trait bounds* to specify that a generic type can be any type that has
 certain behavior.
 
-> NoteTraits are similar to a feature often called *interfaces*    in other
+> Note: Traits are similar to a feature often called *interfaces* in other
 languages, although with some differences.
 
 ### Defining a Trait
@@ -1317,13 +678,7 @@ Filename: src/lib.rs
 
 ```
 pub trait Summary {
-```
-
-```
     fn summarize(&self) -> String;
-```
-
-```
 }
 ```
 
@@ -1334,7 +689,7 @@ which is `Summary` in this case. We also declare the trait as `pub` so that
 crates depending on this crate can make use of this trait too, as we’ll see in
 a few examples. Inside the curly brackets, we declare the method signatures
 that describe the behaviors of the types that implement this trait, which in
-this case is `fn` `summarize(&self) -> String`.
+this case is `fn summarize(&self) -> String`.
 
 After the method signature, instead of providing an implementation within curly
 brackets, we use a semicolon. Each type implementing this trait must provide
@@ -1359,121 +714,34 @@ Filename: src/lib.rs
 
 ```
 pub struct NewsArticle {
-```
-
-```
     pub headline: String,
-```
-
-```
     pub location: String,
-```
-
-```
     pub author: String,
-```
-
-```
     pub content: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Summary for NewsArticle {
-```
-
-```
     fn summarize(&self) -> String {
-```
-
-```
         format!(
-```
-
-```
             "{}, by {} ({})",
-```
-
-```
             self.headline,
-```
-
-```
             self.author,
-```
-
-```
             self.location
-```
-
-```
         )
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub struct Tweet {
-```
-
-```
     pub username: String,
-```
-
-```
     pub content: String,
-```
-
-```
     pub reply: bool,
-```
-
-```
     pub retweet: bool,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Summary for Tweet {
-```
-
-```
     fn summarize(&self) -> String {
-```
-
-```
         format!("{}: {}", self.username, self.content)
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1496,57 +764,18 @@ library crate:
 
 ```
 use aggregator::{Summary, Tweet};
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let tweet = Tweet {
-```
-
-```
         username: String::from("horse_ebooks"),
-```
-
-```
         content: String::from(
-```
-
-```
             "of course, as you probably already know, people",
-```
-
-```
         ),
-```
-
-```
         reply: false,
-```
-
-```
         retweet: false,
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     println!("1 new tweet: {}", tweet.summarize());
-```
-
-```
 }
 ```
 
@@ -1555,8 +784,8 @@ know, people`.
 
 Other crates that depend on the `aggregator` crate can also bring the `Summary`
 trait into scope to implement `Summary` on their own types. One restriction to
-note is that we can implement a trait on a type only if at least one of the
-trait or the type is local to our crate. For example, we can implement standard
+note is that we can implement a trait on a type only if either the trait or the
+type, or both, are local to our crate. For example, we can implement standard
 library traits like `Display` on a custom type like `Tweet` as part of our
 `aggregator` crate functionality because the type `Tweet` is local to our
 `aggregator` crate. We can also implement `Summary` on `Vec<T>` in our
@@ -1588,21 +817,9 @@ Filename: src/lib.rs
 
 ```
 pub trait Summary {
-```
-
-```
     fn summarize(&self) -> String {
-```
-
-```
         String::from("(Read more...)")
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1619,63 +836,26 @@ the `summarize` method on an instance of `NewsArticle`, like this:
 
 ```
 let article = NewsArticle {
-```
-
-```
     headline: String::from(
-```
-
-```
         "Penguins win the Stanley Cup Championship!"
-```
-
-```
     ),
-```
-
-```
     location: String::from("Pittsburgh, PA, USA"),
-```
-
-```
     author: String::from("Iceburgh"),
-```
-
-```
     content: String::from(
-```
-
-```
         "The Pittsburgh Penguins once again are the best \
-```
-
-```
          hockey team in the NHL.",
-```
-
-```
     ),
-```
-
-```
 };
-```
 
-```
-
-```
-
-```
 println!("New article available! {}", article.summarize());
 ```
 
+This code prints `New article available! (Read more...)`.
 
-Unmatched: BodyContinued
-      Creating a default implementation doesn’t require us to change anything
-about the implementation of `Summary` on `Tweet` in Listing 10-13. The reason
-is that the syntax for overriding a default implementation is the same as the
-syntax for implementing a trait method that doesn’t have a default
-implementation.
+Creating a default implementation doesn’t require us to change anything about
+the implementation of `Summary` on `Tweet` in Listing 10-13. The reason is that
+the syntax for overriding a default implementation is the same as the syntax
+for implementing a trait method that doesn’t have a default implementation.
 
 Default implementations can call other methods in the same trait, even if those
 other methods don’t have a default implementation. In this way, a trait can
@@ -1687,41 +867,14 @@ a small part of it. For example, we could define the `Summary` trait to have a
 
 ```
 pub trait Summary {
-```
-
-```
     fn summarize_author(&self) -> String;
-```
 
-```
-
-```
-
-```
     fn summarize(&self) -> String {
-```
-
-```
         format!(
-```
-
-```
             "(Read more from {}...)",
-```
-
-```
             self.summarize_author()
-```
-
-```
         )
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1730,21 +883,9 @@ when we implement the trait on a type:
 
 ```
 impl Summary for Tweet {
-```
-
-```
     fn summarize_author(&self) -> String {
-```
-
-```
         format!("@{}", self.username)
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1757,41 +898,14 @@ that looks like:
 
 ```
 let tweet = Tweet {
-```
-
-```
     username: String::from("horse_ebooks"),
-```
-
-```
     content: String::from(
-```
-
-```
         "of course, as you probably already know, people",
-```
-
-```
     ),
-```
-
-```
     reply: false,
-```
-
-```
     retweet: false,
-```
-
-```
 };
-```
 
-```
-
-```
-
-```
 println!("1 new tweet: {}", tweet.summarize());
 ```
 
@@ -1811,13 +925,7 @@ trait. To do this, we use the `impl Trait` syntax, like this:
 
 ```
 pub fn notify(item: &impl Summary) {
-```
-
-```
     println!("Breaking news! {}", item.summarize());
-```
-
-```
 }
 ```
 
@@ -1836,13 +944,7 @@ sugar for a longer form known as a *trait bound*; it looks like this:
 
 ```
 pub fn notify<T: Summary>(item: &T) {
-```
-
-```
     println!("Breaking news! {}", item.summarize());
-```
-
-```
 }
 ```
 
@@ -1905,25 +1007,13 @@ signature. So, instead of writing this:
 fn some_function<T: Display + Clone, U: Clone + Debug>(t: &T, u: &U) -> i32 {
 ```
 
+we can use a `where` clause, like this:
 
-Unmatched: BodyContinued
-      ```
+```
 fn some_function<T, U>(t: &T, u: &U) -> i32
-```
-
-```
 where
-```
-
-```
     T: Display + Clone,
-```
-
-```
     U: Clone + Debug,
-```
-
-```
 {
 ```
 
@@ -1938,41 +1028,14 @@ value of some type that implements a trait, as shown here:
 
 ```
 fn returns_summarizable() -> impl Summary {
-```
-
-```
     Tweet {
-```
-
-```
         username: String::from("horse_ebooks"),
-```
-
-```
         content: String::from(
-```
-
-```
             "of course, as you probably already know, people",
-```
-
-```
         ),
-```
-
-```
         reply: false,
-```
-
-```
         retweet: false,
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1994,97 +1057,28 @@ return type specified as `impl Summary` wouldn’t work:
 
 ```
 fn returns_summarizable(switch: bool) -> impl Summary {
-```
-
-```
     if switch {
-```
-
-```
         NewsArticle {
-```
-
-```
             headline: String::from(
-```
-
-```
                 "Penguins win the Stanley Cup Championship!",
-```
-
-```
             ),
-```
-
-```
             location: String::from("Pittsburgh, PA, USA"),
-```
-
-```
             author: String::from("Iceburgh"),
-```
-
-```
             content: String::from(
-```
-
-```
                 "The Pittsburgh Penguins once again are the best \
-```
-
-```
                  hockey team in the NHL.",
-```
-
-```
             ),
-```
-
-```
         }
-```
-
-```
     } else {
-```
-
-```
         Tweet {
-```
-
-```
             username: String::from("horse_ebooks"),
-```
-
-```
             content: String::from(
-```
-
-```
                 "of course, as you probably already know, people",
-```
-
-```
             ),
-```
-
-```
             reply: false,
-```
-
-```
             retweet: false,
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2109,89 +1103,26 @@ Filename: src/lib.rs
 
 ```
 use std::fmt::Display;
-```
 
-```
-
-```
-
-```
 struct Pair<T> {
-```
-
-```
     x: T,
-```
-
-```
     y: T,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl<T> Pair<T> {
-```
-
-```
     fn new(x: T, y: T) -> Self {
-```
-
-```
         Self { x, y }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl<T: Display + PartialOrd> Pair<T> {
-```
-
-```
     fn cmp_display(&self) {
-```
-
-```
         if self.x >= self.y {
-```
-
-```
             println!("The largest member is x = {}", self.x);
-```
-
-```
         } else {
-```
-
-```
             println!("The largest member is y = {}", self.y);
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2206,13 +1137,7 @@ block in the standard library looks similar to this code:
 
 ```
 impl<T: Display> ToString for T {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -2269,52 +1194,25 @@ scope.
 
 ```
 fn main() {
-```
-
-```
   1 let r;
-```
 
-```
-
-```
-
-```
     {
-```
-
-```
       2 let x = 5;
-```
-
-```
       3 r = &x;
-```
-
-```
   4 }
-```
 
-```
-
-```
-
-```
   5 println!("r: {r}");
-```
-
-```
 }
 ```
 
 An attempt to use a reference whose value has gone out of scope
 
-> NoteThe examples in Listing 10-16, 10-17, and 10-23 declare variables without
-giving them an initial value, so the variable name exists in the outer scope.
-At first glance, this might appear to be in conflict with Rust’s having no null
-values. However, if we try to use a variable before giving it a value, we’ll
-get a compile-time error, which shows that Rust indeed does not allow null
-values.
+> Note: The examples in Listing 10-16, 10-17, and 10-23 declare variables
+without giving them an initial value, so the variable name exists in the outer
+scope. At first glance, this might appear to be in conflict with Rust’s having
+no null values. However, if we try to use a variable before giving it a value,
+we’ll get a compile-time error, which shows that Rust indeed does not allow
+null values.
 
 The outer scope declares a variable named `r` with no initial value [1], and
 the inner scope declares a variable named `x` with the initial value of `5`
@@ -2325,41 +1223,14 @@ gone out of scope before we try to use it. Here is the error message:
 
 ```
 error[E0597]: `x` does not live long enough
-```
-
-```
  --> src/main.rs:6:13
-```
-
-```
   |
-```
-
-```
 6 |         r = &x;
-```
-
-```
   |             ^^ borrowed value does not live long enough
-```
-
-```
 7 |     }
-```
-
-```
   |     - `x` dropped here while still borrowed
-```
-
-```
 8 |
-```
-
-```
 9 |     println!("r: {r}");
-```
-
-```
   |                   - borrow later used here
 ```
 
@@ -2379,41 +1250,14 @@ whether all borrows are valid. Listing 10-17 shows the same code as Listing
 
 ```
 fn main() {
-```
-
-```
     let r;                // ---------+-- 'a
-```
-
-```
                           //          |
-```
-
-```
     {                     //          |
-```
-
-```
         let x = 5;        // -+-- 'b  |
-```
-
-```
         r = &x;           //  |       |
-```
-
-```
     }                     // -+       |
-```
-
-```
                           //          |
-```
-
-```
     println!("r: {r}");   //          |
-```
-
-```
 }                         // ---------+
 ```
 
@@ -2431,33 +1275,12 @@ compiles without any errors.
 
 ```
 fn main() {
-```
-
-```
     let x = 5;            // ----------+-- 'b
-```
-
-```
                           //           |
-```
-
-```
     let r = &x;           // --+-- 'a  |
-```
-
-```
                           //   |       |
-```
-
-```
     println!("r: {r}");   //   |       |
-```
-
-```
                           // --+       |
-```
-
-```
 }                         // ----------+
 ```
 
@@ -2482,29 +1305,11 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let string1 = String::from("abcd");
-```
-
-```
     let string2 = "xyz";
-```
 
-```
-
-```
-
-```
     let result = longest(string1.as_str(), string2);
-```
-
-```
     println!("The longest string is {result}");
-```
-
-```
 }
 ```
 
@@ -2524,29 +1329,11 @@ Filename: src/main.rs
 
 ```
 fn longest(x: &str, y: &str) -> &str {
-```
-
-```
     if x.len() > y.len() {
-```
-
-```
         x
-```
-
-```
     } else {
-```
-
-```
         y
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2557,49 +1344,16 @@ Instead, we get the following error that talks about lifetimes:
 
 ```
 error[E0106]: missing lifetime specifier
-```
-
-```
  --> src/main.rs:9:33
-```
-
-```
   |
-```
-
-```
 9 | fn longest(x: &str, y: &str) -> &str {
-```
-
-```
   |               ----     ----     ^ expected named lifetime parameter
-```
-
-```
   |
-```
-
-```
   = help: this function's return type contains a borrowed value,
-```
-
-```
 but the signature does not say whether it is borrowed from `x` or `y`
-```
-
-```
 help: consider introducing a named lifetime parameter
-```
-
-```
   |
-```
-
-```
 9 | fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-```
-
-```
   |           ++++     ++          ++          ++
 ```
 
@@ -2640,13 +1394,7 @@ reference to an `i32` that also has the lifetime `'a`.
 
 ```
 &i32        // a reference
-```
-
-```
 &'a i32     // a reference with an explicit lifetime
-```
-
-```
 &'a mut i32 // a mutable reference with an explicit lifetime
 ```
 
@@ -2671,29 +1419,11 @@ Filename: src/main.rs
 
 ```
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-```
-
-```
     if x.len() > y.len() {
-```
-
-```
         x
-```
-
-```
     } else {
-```
-
-```
         y
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2746,37 +1476,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let string1 = String::from("long string is long");
-```
 
-```
-
-```
-
-```
     {
-```
-
-```
         let string2 = String::from("xyz");
-```
-
-```
         let result = longest(string1.as_str(), string2.as_str());
-```
-
-```
         println!("The longest string is {result}");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2801,37 +1507,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let string1 = String::from("long string is long");
-```
-
-```
     let result;
-```
-
-```
     {
-```
-
-```
         let string2 = String::from("xyz");
-```
-
-```
         result = longest(string1.as_str(), string2.as_str());
-```
-
-```
     }
-```
-
-```
     println!("The longest string is {result}");
-```
-
-```
 }
 ```
 
@@ -2841,41 +1523,14 @@ When we try to compile this code, we get this error:
 
 ```
 error[E0597]: `string2` does not live long enough
-```
-
-```
  --> src/main.rs:6:44
-```
-
-```
   |
-```
-
-```
 6 |         result = longest(string1.as_str(), string2.as_str());
-```
-
-```
   |                                            ^^^^^^^^^^^^^^^^ borrowed value
-```
-
-```
 does not live long enough
-```
-
-```
 7 |     }
-```
-
-```
   |     - `string2` dropped here while still borrowed
-```
-
-```
 8 |     println!("The longest string is {result}");
-```
-
-```
   |                                      ------ borrow later used here
 ```
 
@@ -2910,13 +1565,7 @@ Filename: src/main.rs
 
 ```
 fn longest<'a>(x: &'a str, y: &str) -> &'a str {
-```
-
-```
     x
-```
-
-```
 }
 ```
 
@@ -2936,17 +1585,8 @@ Filename: src/main.rs
 
 ```
 fn longest<'a>(x: &str, y: &str) -> &'a str {
-```
-
-```
     let result = String::from("really long string");
-```
-
-```
     result.as_str()
-```
-
-```
 }
 ```
 
@@ -2957,25 +1597,10 @@ error message we get:
 
 ```
 error[E0515]: cannot return reference to local variable `result`
-```
-
-```
   --> src/main.rs:11:5
-```
-
-```
    |
-```
-
-```
 11 |     result.as_str()
-```
-
-```
    |     ^^^^^^^^^^^^^^^ returns a reference to data owned by the
-```
-
-```
 current function
 ```
 
@@ -3003,65 +1628,20 @@ Filename: src/main.rs
 
 ```
 1 struct ImportantExcerpt<'a> {
-```
-
-```
   2 part: &'a str,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   3 let novel = String::from(
-```
-
-```
         "Call me Ishmael. Some years ago..."
-```
-
-```
     );
-```
-
-```
   4 let first_sentence = novel
-```
-
-```
         .split('.')
-```
-
-```
         .next()
-```
-
-```
         .expect("Could not find a '.'");
-```
-
-```
   5 let i = ImportantExcerpt {
-```
-
-```
         part: first_sentence,
-```
-
-```
     };
-```
-
-```
 }
 ```
 
@@ -3092,45 +1672,15 @@ Filename: src/lib.rs
 
 ```
 fn first_word(s: &str) -> &str {
-```
-
-```
     let bytes = s.as_bytes();
-```
 
-```
-
-```
-
-```
     for (i, &item) in bytes.iter().enumerate() {
-```
-
-```
         if item == b' ' {
-```
-
-```
             return &s[0..i];
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     &s[..]
-```
-
-```
 }
 ```
 
@@ -3168,8 +1718,8 @@ references have, the compiler won’t guess what the lifetime of the remaining
 references should be. Instead of guessing, the compiler will give you an error
 that you can resolve by adding the lifetime annotations.
 
-Lifetimes on function or method parameters are called *input lifetimes*   , and
-lifetimes on return values are called *output lifetimes* .
+Lifetimes on function or method parameters are called *input lifetimes*, and
+lifetimes on return values are called *output lifetimes*.
 
 The compiler uses three rules to figure out the lifetimes of the references
 when there aren’t explicit annotations. The first rule applies to input
@@ -3270,21 +1820,9 @@ First we’ll use a method named `level` whose only parameter is a reference to
 
 ```
 impl<'a> ImportantExcerpt<'a> {
-```
-
-```
     fn level(&self) -> i32 {
-```
-
-```
         3
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -3296,25 +1834,10 @@ Here is an example where the third lifetime elision rule applies:
 
 ```
 impl<'a> ImportantExcerpt<'a> {
-```
-
-```
     fn announce_and_return_part(&self, announcement: &str) -> &str {
-```
-
-```
         println!("Attention please: {announcement}");
-```
-
-```
         self.part
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -3351,69 +1874,21 @@ bounds, and lifetimes all in one function!
 
 ```
 use std::fmt::Display;
-```
 
-```
-
-```
-
-```
 fn longest_with_an_announcement<'a, T>(
-```
-
-```
     x: &'a str,
-```
-
-```
     y: &'a str,
-```
-
-```
     ann: T,
-```
-
-```
 ) -> &'a str
-```
-
-```
 where
-```
-
-```
     T: Display,
-```
-
-```
 {
-```
-
-```
     println!("Announcement! {ann}");
-```
-
-```
     if x.len() > y.len() {
-```
-
-```
         x
-```
-
-```
     } else {
-```
-
-```
         y
-```
-
-```
     }
-```
-
-```
 }
 ```
 
