@@ -238,5 +238,3 @@ Table B-10: Square Brackets
 pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or
 `RangeFull` as the “index” |
 
-
-Unmatched:
