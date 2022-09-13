@@ -124,7 +124,7 @@ fn main() {
 }
 ```
 
-Shirt company giveaway situation
+Listing 13-1: Shirt company giveaway situation
 
 The `store` defined in `main` has two blue shirts and one red shirt remaining
 to distribute for this limited-edition promotion [2]. We call the `giveaway`
@@ -199,8 +199,8 @@ let expensive_closure = |num: u32| -> u32 {
 };
 ```
 
-Adding optional type annotations of the parameter and return value types in the
-closure
+Listing 13-2: Adding optional type annotations of the parameter and return
+value types in the closure
 
 With type annotations added, the syntax of closures looks more similar to the
 syntax of functions. Here, we define a function that adds 1 to its parameter
@@ -244,7 +244,8 @@ let s = example_closure(String::from("hello"));
 let n = example_closure(5);
 ```
 
-Attempting to call a closure whose types are inferred with two different types
+Listing 13-3: Attempting to call a closure whose types are inferred with two
+different types
 
 The compiler gives us this error:
 
@@ -291,7 +292,8 @@ fn main() {
 }
 ```
 
-Defining and calling a closure that captures an immutable reference
+Listing 13-4: Defining and calling a closure that captures an immutable
+reference
 
 This example also illustrates that a variable can bind to a closure definition
 [1], and we can later call the closure by using the variable name and
@@ -326,7 +328,7 @@ fn main() {
 }
 ```
 
-Defining and calling a closure that captures a mutable reference
+Listing 13-5: Defining and calling a closure that captures a mutable reference
 
 This code compiles, runs, and prints:
 
@@ -369,7 +371,8 @@ fn main() {
 }
 ```
 
-Using `move` to force the closure for the thread to take ownership of `list`
+Listing 13-6: Using `move` to force the closure for the thread to take
+ownership of `list`
 
 We spawn a new thread, giving the thread a closure to run as an argument. The
 closure body prints out the list. In Listing 13-4, the closure only captured
@@ -489,7 +492,7 @@ fn main() {
 }
 ```
 
-Using `sort_by_key` to order rectangles by width
+Listing 13-7: Using `sort_by_key` to order rectangles by width
 
 This code prints:
 
@@ -542,7 +545,7 @@ fn main() {
 }
 ```
 
-Attempting to use an `FnOnce` closure with `sort_by_key`
+Listing 13-8: Attempting to use an `FnOnce` closure with `sort_by_key`
 
 This is a contrived, convoluted way (that doesn’t work) to try and count the
 number of times `sort_by_key` gets called when sorting `list`. This code
@@ -602,7 +605,7 @@ fn main() {
 }
 ```
 
-Using an `FnMut` closure with `sort_by_key` is allowed.
+Listing 13-9: Using an `FnMut` closure with `sort_by_key` is allowed.
 
 The `Fn` traits are important when defining or using functions or types that
 make use of closures. In the next section, we’ll discuss iterators. Many
@@ -628,7 +631,7 @@ let v1 = vec![1, 2, 3];
 let v1_iter = v1.iter();
 ```
 
-Creating an iterator
+Listing 13-10: Creating an iterator
 
 The iterator is stored in the `v1_iter` variable. Once we’ve created an
 iterator, we can use it in a variety of ways. In Listing 3-5, we iterated over
@@ -651,7 +654,7 @@ for val in v1_iter {
 }
 ```
 
-Using an iterator in a `for` loop
+Listing 13-11: Using an iterator in a `for` loop
 
 In languages that don’t have iterators provided by their standard libraries,
 you would likely write this same functionality by starting a variable at index
@@ -711,7 +714,7 @@ fn iterator_demonstration() {
 }
 ```
 
-Calling the `next` method on an iterator
+Listing 13-12: Calling the `next` method on an iterator
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
 iterator changes internal state that the iterator uses to keep track of where
@@ -758,7 +761,8 @@ fn iterator_sum() {
 }
 ```
 
-Calling the `sum` method to get the total of all items in the iterator
+Listing 13-13: Calling the `sum` method to get the total of all items in the
+iterator
 
 We aren’t allowed to use `v1_iter` after the call to `sum` because `sum` takes
 ownership of the iterator we call it on.
@@ -783,7 +787,7 @@ let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-Calling the iterator adapter `map` to create a new iterator
+Listing 13-14: Calling the iterator adapter `map` to create a new iterator
 
 However, this code produces a warning:
 
@@ -820,8 +824,8 @@ let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
-Calling the `map` method to create a new iterator, and then calling the
-`collect` method to consume the new iterator and create a vector
+Listing 13-15: Calling the `map` method to create a new iterator, and then
+calling the `collect` method to consume the new iterator and create a vector
 
 Because `map` takes a closure, we can specify any operation we want to perform
 on each item. This is a great example of how closures let you customize some
@@ -900,7 +904,8 @@ mod tests {
 }
 ```
 
-Using the `filter` method with a closure that captures `shoe_size`
+Listing 13-16: Using the `filter` method with a closure that captures
+`shoe_size`
 
 The `shoes_in_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
@@ -959,7 +964,7 @@ impl Config {
 }
 ```
 
-Reproduction of the `Config::build` function from Listing 12-23
+Listing 13-17: Reproduction of the `Config::build` function from Listing 12-23
 
 At the time, we said not to worry about the inefficient `clone` calls because
 we would remove them in the future. Well, that time is now!
@@ -1016,7 +1021,7 @@ fn main() {
 }
 ```
 
-Passing the return value of `env::args` to `Config::build`
+Listing 13-18: Passing the return value of `env::args` to `Config::build`
 
 The `env::args` function returns an iterator! Rather than collecting the
 iterator values into a vector and then passing a slice to `Config::build`, now
@@ -1038,7 +1043,7 @@ impl Config {
         --snip--
 ```
 
-Updating the signature of `Config::build` to expect an iterator
+Listing 13-19: Updating the signature of `Config::build` to expect an iterator
 
 The standard library documentation for the `env::args` function shows that the
 type of the iterator it returns is `std::env::Args`, and that type implements
@@ -1090,7 +1095,7 @@ impl Config {
 }
 ```
 
-Changing the body of `Config::build` to use iterator methods
+Listing 13-20: Changing the body of `Config::build` to use iterator methods
 
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
@@ -1124,7 +1129,7 @@ pub fn search<'a>(
 }
 ```
 
-The implementation of the `search` function from Listing 12-19
+Listing 13-21: The implementation of the `search` function from Listing 12-19
 
 We can write this code in a more concise way using iterator adapter methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
@@ -1147,7 +1152,8 @@ pub fn search<'a>(
 }
 ```
 
-Using iterator adapter methods in the implementation of the `search` function
+Listing 13-22: Using iterator adapter methods in the implementation of the
+`search` function
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similar to the `filter` example in Listing
