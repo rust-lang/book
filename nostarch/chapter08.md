@@ -1048,6 +1048,7 @@ employee names to a department in a company; for example, “Add Sally to
 Engineering” or “Add Amir to Sales.” Then let the user retrieve a list of all
 people in a department or all people in the company by department, sorted
 alphabetically.
+
 The standard library API documentation describes methods that vectors, strings,
 and hash maps have that will be helpful for these exercises!
 

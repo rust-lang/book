@@ -566,6 +566,7 @@ The final functionality will look like this:
 1. When the post is approved, it gets published.
 1. Only published blog posts return content to print, so unapproved posts can’t
 accidentally be published.
+
 Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
 should remain an unpublished draft.

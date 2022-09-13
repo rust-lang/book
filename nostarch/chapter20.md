@@ -25,6 +25,7 @@ Here is our plan for building the web server:
 1. Parse a small number of HTTP requests.
 1. Create a proper HTTP response.
 1. Improve the throughput of our server with a thread pool.
+
 Before we get started, we should mention one detail: the method we’ll use won’t
 be the best way to build a web server with Rust. Community members have
 published a number of production-ready crates available at *https://crates.io*
@@ -1157,6 +1158,7 @@ set up in this way:
 closure.
 1. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
 a new `Worker` with that `id`, and store the `Worker` in the vector.
+
 If you’re up for a challenge, try implementing these changes on your own before
 looking at the code in Listing 20-15.
 
@@ -1250,6 +1252,7 @@ down the channel.
 sender.
 1. In its thread, the `Worker` will loop over its receiver and execute the
 closures of any jobs it receives.
+
 Let’s start by creating a channel in `ThreadPool::new` and holding the sender
 in the `ThreadPool` instance, as shown in Listing 20-16. The `Job` struct
 doesn’t hold anything for now but will be the type of item we’re sending down
