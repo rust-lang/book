@@ -25,6 +25,7 @@ More specifically, we’ll cover:
 * How to use closures and iterators to improve the I/O project in Chapter 12
 * The performance of closures and iterators (spoiler alert: they’re faster than
 you might think!)
+
 We’ve already covered some other Rust features, such as pattern matching and
 enums, that are also influenced by the functional style. Because mastering
 closures and iterators is an important part of writing idiomatic, fast Rust
@@ -63,244 +64,67 @@ Filename: src/main.rs
 
 ```
 #[derive(Debug, PartialEq, Copy, Clone)]
-```
-
-```
 enum ShirtColor {
-```
-
-```
     Red,
-```
-
-```
     Blue,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Inventory {
-```
-
-```
     shirts: Vec<ShirtColor>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Inventory {
-```
-
-```
     fn giveaway(
-```
-
-```
         &self,
-```
-
-```
         user_preference: Option<ShirtColor>,
-```
-
-```
     ) -> ShirtColor {
-```
-
-```
       1 user_preference.unwrap_or_else(|| self.most_stocked())
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     fn most_stocked(&self) -> ShirtColor {
-```
-
-```
         let mut num_red = 0;
-```
-
-```
         let mut num_blue = 0;
-```
 
-```
-
-```
-
-```
         for color in &self.shirts {
-```
-
-```
             match color {
-```
-
-```
                 ShirtColor::Red => num_red += 1,
-```
-
-```
                 ShirtColor::Blue => num_blue += 1,
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
         if num_red > num_blue {
-```
-
-```
             ShirtColor::Red
-```
-
-```
         } else {
-```
-
-```
             ShirtColor::Blue
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let store = Inventory {
-```
-
-```
       2 shirts: vec![
-```
-
-```
             ShirtColor::Blue,
-```
-
-```
             ShirtColor::Red,
-```
-
-```
             ShirtColor::Blue,
-```
-
-```
         ],
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     let user_pref1 = Some(ShirtColor::Red);
-```
-
-```
   3 let giveaway1 = store.giveaway(user_pref1);
-```
-
-```
     println!(
-```
-
-```
         "The user with preference {:?} gets {:?}",
-```
-
-```
         user_pref1, giveaway1
-```
-
-```
     );
-```
 
-```
-
-```
-
-```
     let user_pref2 = None;
-```
-
-```
   4 let giveaway2 = store.giveaway(user_pref2);
-```
-
-```
     println!(
-```
-
-```
         "The user with preference {:?} gets {:?}",
-```
-
-```
         user_pref2, giveaway2
-```
-
-```
     );
-```
-
-```
 }
 ```
 
 Shirt company giveaway situation
-
-prod: Please renumber this as Listing 13-1, and then renumber all remaining
-listings consecutively; e.g., Listing 13-2, Listing 13-3, etc.
 
 The `store` defined in `main` has two blue shirts and one red shirt remaining
 to distribute for this limited-edition promotion [2]. We call the `giveaway`
@@ -330,9 +154,6 @@ Running this code prints the following:
 
 ```
 The user with preference Some(Red) gets Red
-```
-
-```
 The user with preference None gets Blue
 ```
 
@@ -372,21 +193,9 @@ Filename: src/main.rs
 
 ```
 let expensive_closure = |num: u32| -> u32 {
-```
-
-```
     println!("calculating slowly...");
-```
-
-```
     thread::sleep(Duration::from_secs(2));
-```
-
-```
     num
-```
-
-```
 };
 ```
 
@@ -402,17 +211,8 @@ that is optional:
 
 ```
 fn  add_one_v1   (x: u32) -> u32 { x + 1 }
-```
-
-```
 let add_one_v2 = |x: u32| -> u32 { x + 1 };
-```
-
-```
 let add_one_v3 = |x|             { x + 1 };
-```
-
-```
 let add_one_v4 = |x|               x + 1  ;
 ```
 
@@ -439,17 +239,8 @@ Filename: src/main.rs
 
 ```
 let example_closure = |x| x;
-```
 
-```
-
-```
-
-```
 let s = example_closure(String::from("hello"));
-```
-
-```
 let n = example_closure(5);
 ```
 
@@ -459,33 +250,12 @@ The compiler gives us this error:
 
 ```
 error[E0308]: mismatched types
-```
-
-```
  --> src/main.rs:5:29
-```
-
-```
   |
-```
-
-```
 5 |     let n = example_closure(5);
-```
-
-```
   |                             ^- help: try using a conversion method:
-```
-
-```
 `.to_string()`
-```
-
-```
   |                             |
-```
-
-```
   |                             expected struct `String`, found integer
 ```
 
@@ -510,41 +280,14 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let list = vec![1, 2, 3];
-```
-
-```
     println!("Before defining closure: {:?}", list);
-```
 
-```
-
-```
-
-```
   1 let only_borrows = || println!("From closure: {:?}", list);
-```
 
-```
-
-```
-
-```
     println!("Before calling closure: {:?}", list);
-```
-
-```
   2 only_borrows();
-```
-
-```
     println!("After calling closure: {:?}", list);
-```
-
-```
 }
 ```
 
@@ -561,17 +304,8 @@ is called. This code compiles, runs, and prints:
 
 ```
 Before defining closure: [1, 2, 3]
-```
-
-```
 Before calling closure: [1, 2, 3]
-```
-
-```
 From closure: [1, 2, 3]
-```
-
-```
 After calling closure: [1, 2, 3]
 ```
 
@@ -582,37 +316,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let mut list = vec![1, 2, 3];
-```
-
-```
     println!("Before defining closure: {:?}", list);
-```
 
-```
-
-```
-
-```
     let mut borrows_mutably = || list.push(7);
-```
 
-```
-
-```
-
-```
     borrows_mutably();
-```
-
-```
     println!("After calling closure: {:?}", list);
-```
-
-```
 }
 ```
 
@@ -622,9 +332,6 @@ This code compiles, runs, and prints:
 
 ```
 Before defining closure: [1, 2, 3]
-```
-
-```
 After calling closure: [1, 2, 3, 7]
 ```
 
@@ -651,41 +358,14 @@ Filename: src/main.rs
 
 ```
 use std::thread;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let list = vec![1, 2, 3];
-```
-
-```
     println!("Before defining closure: {:?}", list);
-```
 
-```
-
-```
-
-```
   1 thread::spawn(move || {
-```
-
-```
       2 println!("From thread: {:?}", list)
-```
-
-```
     }).join().unwrap();
-```
-
-```
 }
 ```
 
@@ -736,50 +416,21 @@ and that don’t mutate captured values, as well as closures that capture nothin
 from their environment. These closures can be called more than once without
 mutating their environment, which is important in cases such as calling a
 closure multiple times concurrently.
+
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
 we used in Listing 13-1:
 
 ```
 impl<T> Option<T> {
-```
-
-```
     pub fn unwrap_or_else<F>(self, f: F) -> T
-```
-
-```
     where
-```
-
-```
         F: FnOnce() -> T
-```
-
-```
     {
-```
-
-```
         match self {
-```
-
-```
             Some(x) => x,
-```
-
-```
             None => f(),
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -801,9 +452,9 @@ called. If the `Option` is `None`, `f` will be called once. Because all
 closures implement `FnOnce`, `unwrap_or_else` accepts the largest variety of
 closures and is as flexible as it can be.
 
-> NoteFunctions can implement all three of the `Fn` traits too. If what we want
-to do doesn’t require capturing a value from the environment, we can use the
-name of a function rather than a closure where we need something that
+> Note: Functions can implement all three of the `Fn` traits too. If what we
+want to do doesn’t require capturing a value from the environment, we can use
+the name of a function rather than a closure where we need something that
 implements one of the `Fn` traits. For example, on an `Option<Vec<T>>` value,
 we could call `unwrap_or_else(Vec::new)` to get a new, empty vector if the
 value is `None`.
@@ -821,65 +472,20 @@ Filename: src/main.rs
 
 ```
 #[derive(Debug)]
-```
-
-```
 struct Rectangle {
-```
-
-```
     width: u32,
-```
-
-```
     height: u32,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let mut list = [
-```
-
-```
         Rectangle { width: 10, height: 1 },
-```
-
-```
         Rectangle { width: 3, height: 5 },
-```
-
-```
         Rectangle { width: 7, height: 12 },
-```
-
-```
     ];
-```
 
-```
-
-```
-
-```
     list.sort_by_key(|r| r.width);
-```
-
-```
     println!("{:#?}", list);
-```
-
-```
 }
 ```
 
@@ -889,57 +495,18 @@ This code prints:
 
 ```
 [
-```
-
-```
     Rectangle {
-```
-
-```
         width: 3,
-```
-
-```
         height: 5,
-```
-
-```
     },
-```
-
-```
     Rectangle {
-```
-
-```
         width: 7,
-```
-
-```
         height: 12,
-```
-
-```
     },
-```
-
-```
     Rectangle {
-```
-
-```
         width: 10,
-```
-
-```
         height: 1,
-```
-
-```
     },
-```
-
-```
 ]
 ```
 
@@ -956,73 +523,22 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let mut list = [
-```
-
-```
         Rectangle { width: 10, height: 1 },
-```
-
-```
         Rectangle { width: 3, height: 5 },
-```
-
-```
         Rectangle { width: 7, height: 12 },
-```
-
-```
     ];
-```
 
-```
-
-```
-
-```
     let mut sort_operations = vec![];
-```
-
-```
     let value = String::from("by key called");
-```
 
-```
-
-```
-
-```
     list.sort_by_key(|r| {
-```
-
-```
         sort_operations.push(value);
-```
-
-```
         r.width
-```
-
-```
     });
-```
-
-```
     println!("{:#?}", list);
-```
-
-```
 }
 ```
 
@@ -1042,61 +558,19 @@ implement `FnMut`:
 
 ```
 error[E0507]: cannot move out of `value`, a captured variable in an `FnMut`
-```
-
-```
 closure
-```
-
-```
   --> src/main.rs:18:30
-```
-
-```
    |
-```
-
-```
 15 |       let value = String::from("by key called");
-```
-
-```
    |           ----- captured outer variable
-```
-
-```
 16 |
-```
-
-```
 17 |       list.sort_by_key(|r| {
-```
-
-```
    |  ______________________-
-```
-
-```
 18 | |         sort_operations.push(value);
-```
-
-```
    | |                              ^^^^^ move occurs because `value` has
-```
-
-```
 type `String`, which does not implement the `Copy` trait
-```
-
-```
 19 | |         r.width
-```
-
-```
 20 | |     });
-```
-
-```
    | |_____- captured by this `FnMut` closure
 ```
 
@@ -1112,61 +586,19 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     let mut num_sort_operations = 0;
-```
-
-```
     list.sort_by_key(|r| {
-```
-
-```
         num_sort_operations += 1;
-```
-
-```
         r.width
-```
-
-```
     });
-```
-
-```
     println!(
-```
-
-```
         "{:#?}, sorted in {num_sort_operations} operations",
-```
-
-```
         list
-```
-
-```
     );
-```
-
-```
 }
 ```
 
@@ -1192,13 +624,7 @@ useful.
 
 ```
 let v1 = vec![1, 2, 3];
-```
 
-```
-
-```
-
-```
 let v1_iter = v1.iter();
 ```
 
@@ -1217,29 +643,11 @@ iteration of the loop, which prints out each value.
 
 ```
 let v1 = vec![1, 2, 3];
-```
 
-```
-
-```
-
-```
 let v1_iter = v1.iter();
-```
 
-```
-
-```
-
-```
 for val in v1_iter {
-```
-
-```
     println!("Got: {val}");
-```
-
-```
 }
 ```
 
@@ -1263,29 +671,11 @@ standard library. The definition of the trait looks like this:
 
 ```
 pub trait Iterator {
-```
-
-```
     type Item;
-```
 
-```
-
-```
-
-```
     fn next(&mut self) -> Option<Self::Item>;
-```
 
-```
-
-```
-
-```
     // methods with default implementations elided
-```
-
-```
 }
 ```
 
@@ -1309,45 +699,15 @@ Filename: src/lib.rs
 
 ```
 #[test]
-```
-
-```
 fn iterator_demonstration() {
-```
-
-```
     let v1 = vec![1, 2, 3];
-```
 
-```
-
-```
-
-```
     let mut v1_iter = v1.iter();
-```
 
-```
-
-```
-
-```
     assert_eq!(v1_iter.next(), Some(&1));
-```
-
-```
     assert_eq!(v1_iter.next(), Some(&2));
-```
-
-```
     assert_eq!(v1_iter.next(), Some(&3));
-```
-
-```
     assert_eq!(v1_iter.next(), None);
-```
-
-```
 }
 ```
 
@@ -1376,52 +736,25 @@ trait. Some of these methods call the `next` method in their definition, which
 is why you’re required to implement the `next` method when implementing the
 `Iterator` trait.
 
-Methods that call `next` are called *consuming adapt**e**rs* because calling
-them uses up the iterator. One example is the `sum` method, which takes
-ownership of the iterator and iterates through the items by repeatedly calling
-`next`, thus consuming the iterator. As it iterates through, it adds each item
-to a running total and returns the total when iteration is complete. Listing
-13-13 has a test illustrating a use of the `sum` method.
+Methods that call `next` are called *consuming adapters* because calling them
+uses up the iterator. One example is the `sum` method, which takes ownership of
+the iterator and iterates through the items by repeatedly calling `next`, thus
+consuming the iterator. As it iterates through, it adds each item to a running
+total and returns the total when iteration is complete. Listing 13-13 has a
+test illustrating a use of the `sum` method.
 
 Filename: src/lib.rs
 
 ```
 #[test]
-```
-
-```
 fn iterator_sum() {
-```
-
-```
     let v1 = vec![1, 2, 3];
-```
 
-```
-
-```
-
-```
     let v1_iter = v1.iter();
-```
 
-```
-
-```
-
-```
     let total: i32 = v1_iter.sum();
-```
 
-```
-
-```
-
-```
     assert_eq!(total, 6);
-```
-
-```
 }
 ```
 
@@ -1432,7 +765,7 @@ ownership of the iterator we call it on.
 
 ### Methods That Produce Other Iterators
 
-*Iterator adapt**e**rs* are methods defined on the `Iterator` trait that don’t
+*Iterator adapters* are methods defined on the `Iterator` trait that don’t
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.
 
@@ -1446,13 +779,7 @@ Filename: src/main.rs
 
 ```
 let v1: Vec<i32> = vec![1, 2, 3];
-```
 
-```
-
-```
-
-```
 v1.iter().map(|x| x + 1);
 ```
 
@@ -1462,33 +789,12 @@ However, this code produces a warning:
 
 ```
 warning: unused `Map` that must be used
-```
-
-```
  --> src/main.rs:4:5
-```
-
-```
   |
-```
-
-```
 4 |     v1.iter().map(|x| x + 1);
-```
-
-```
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^
-```
-
-```
   |
-```
-
-```
   = note: `#[warn(unused_must_use)]` on by default
-```
-
-```
   = note: iterators are lazy and do nothing unless consumed
 ```
 
@@ -1508,21 +814,9 @@ Filename: src/main.rs
 
 ```
 let v1: Vec<i32> = vec![1, 2, 3];
-```
 
-```
-
-```
-
-```
 let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
-```
 
-```
-
-```
-
-```
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
@@ -1557,193 +851,52 @@ Filename: src/lib.rs
 
 ```
 #[derive(PartialEq, Debug)]
-```
-
-```
 struct Shoe {
-```
-
-```
     size: u32,
-```
-
-```
     style: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn shoes_in_size(shoes: Vec<Shoe>, shoe_size: u32) -> Vec<Shoe> {
-```
-
-```
     shoes.into_iter().filter(|s| s.size == shoe_size).collect()
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn filters_by_size() {
-```
-
-```
         let shoes = vec![
-```
-
-```
             Shoe {
-```
-
-```
                 size: 10,
-```
-
-```
                 style: String::from("sneaker"),
-```
-
-```
             },
-```
-
-```
             Shoe {
-```
-
-```
                 size: 13,
-```
-
-```
                 style: String::from("sandal"),
-```
-
-```
             },
-```
-
-```
             Shoe {
-```
-
-```
                 size: 10,
-```
-
-```
                 style: String::from("boot"),
-```
-
-```
             },
-```
-
-```
         ];
-```
 
-```
-
-```
-
-```
         let in_my_size = shoes_in_size(shoes, 10);
-```
 
-```
-
-```
-
-```
         assert_eq!(
-```
-
-```
             in_my_size,
-```
-
-```
             vec![
-```
-
-```
                 Shoe {
-```
-
-```
                     size: 10,
-```
-
-```
                     style: String::from("sneaker")
-```
-
-```
                 },
-```
-
-```
                 Shoe {
-```
-
-```
                     size: 10,
-```
-
-```
                     style: String::from("boot")
-```
-
-```
                 },
-```
-
-```
             ]
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1785,81 +938,24 @@ Filename: src/lib.rs
 
 ```
 impl Config {
-```
-
-```
     pub fn build(
-```
-
-```
         args: &[String]
-```
-
-```
     ) -> Result<Config, &'static str> {
-```
-
-```
         if args.len() < 3 {
-```
-
-```
             return Err("not enough arguments");
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         let query = args[1].clone();
-```
-
-```
         let file_path = args[2].clone();
-```
 
-```
-
-```
-
-```
         let ignore_case = env::var("IGNORE_CASE").is_ok();
-```
 
-```
-
-```
-
-```
         Ok(Config {
-```
-
-```
             query,
-```
-
-```
             file_path,
-```
-
-```
             ignore_case,
-```
-
-```
         })
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1891,41 +987,14 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let args: Vec<String> = env::args().collect();
-```
 
-```
-
-```
-
-```
     let config = Config::build(&args).unwrap_or_else(|err| {
-```
-
-```
         eprintln!("Problem parsing arguments: {err}");
-```
-
-```
         process::exit(1);
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -1937,37 +1006,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let config =
-```
-
-```
         Config::build(env::args()).unwrap_or_else(|err| {
-```
-
-```
             eprintln!("Problem parsing arguments: {err}");
-```
-
-```
             process::exit(1);
-```
-
-```
         });
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -1987,21 +1032,9 @@ Filename: src/lib.rs
 
 ```
 impl Config {
-```
-
-```
     pub fn build(
-```
-
-```
         mut args: impl Iterator<Item = String>,
-```
-
-```
     ) -> Result<Config, &'static str> {
-```
-
-```
         --snip--
 ```
 
@@ -2031,101 +1064,29 @@ Filename: src/lib.rs
 
 ```
 impl Config {
-```
-
-```
     pub fn build(
-```
-
-```
         mut args: impl Iterator<Item = String>,
-```
-
-```
     ) -> Result<Config, &'static str> {
-```
-
-```
         args.next();
-```
 
-```
-
-```
-
-```
         let query = match args.next() {
-```
-
-```
             Some(arg) => arg,
-```
-
-```
             None => return Err("Didn't get a query string"),
-```
-
-```
         };
-```
 
-```
-
-```
-
-```
         let file_path = match args.next() {
-```
-
-```
             Some(arg) => arg,
-```
-
-```
             None => return Err("Didn't get a file path"),
-```
-
-```
         };
-```
 
-```
-
-```
-
-```
         let ignore_case = env::var("IGNORE_CASE").is_ok();
-```
 
-```
-
-```
-
-```
         Ok(Config {
-```
-
-```
             query,
-```
-
-```
             file_path,
-```
-
-```
             ignore_case,
-```
-
-```
         })
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -2148,57 +1109,18 @@ Filename: src/lib.rs
 
 ```
 pub fn search<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
     let mut results = Vec::new();
-```
 
-```
-
-```
-
-```
     for line in contents.lines() {
-```
-
-```
         if line.contains(query) {
-```
-
-```
             results.push(line);
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     results
-```
-
-```
 }
 ```
 
@@ -2215,37 +1137,13 @@ Filename: src/lib.rs
 
 ```
 pub fn search<'a>(
-```
-
-```
     query: &str,
-```
-
-```
     contents: &'a str,
-```
-
-```
 ) -> Vec<&'a str> {
-```
-
-```
     contents
-```
-
-```
         .lines()
-```
-
-```
         .filter(|line| line.contains(query))
-```
-
-```
         .collect()
-```
-
-```
 }
 ```
 
@@ -2287,9 +1185,6 @@ version of `search` using the `for` loop and the version using iterators:
 
 ```
 test bench_search_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
-```
-
-```
 test bench_search_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 ```
 
@@ -2308,63 +1203,30 @@ imposes no additional runtime overhead. This is analogous to how Bjarne
 Stroustrup, the original designer and implementor of C++, defines
 *zero-overhead* in “Foundations of C++” (2012):
 
-
-Unmatched: QuotePara
-      As another example, the following code is taken from an audio decoder.
-The decoding algorithm uses the linear prediction mathematical operation to
-estimate future values based on a linear function of the previous samples. This
-code uses an iterator chain to do some math on three variables in scope: a
-`buffer` slice of data, an array of 12 `coefficients`, and an amount by which
-to shift data in `qlp_shift`. We’ve declared the variables within this example
-but not given them any values; although this code doesn’t have much meaning
-outside of its context, it’s still a concise, real-world example of how Rust
-translates high-level ideas to low-level code.
+> In general, C++ implementations obey the zero-overhead principle: What you
+don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
+code any better.As another example, the following code is taken from an audio
+decoder. The decoding algorithm uses the linear prediction mathematical
+operation to estimate future values based on a linear function of the previous
+samples. This code uses an iterator chain to do some math on three variables in
+scope: a `buffer` slice of data, an array of 12 `coefficients`, and an amount
+by which to shift data in `qlp_shift`. We’ve declared the variables within this
+example but not given them any values; although this code doesn’t have much
+meaning outside of its context, it’s still a concise, real-world example of how
+Rust translates high-level ideas to low-level code.
 
 ```
 let buffer: &mut [i32];
-```
-
-```
 let coefficients: [i64; 12];
-```
-
-```
 let qlp_shift: i16;
-```
 
-```
-
-```
-
-```
 for i in 12..buffer.len() {
-```
-
-```
     let prediction = coefficients.iter()
-```
-
-```
                                  .zip(&buffer[i - 12..i])
-```
-
-```
                                  .map(|(&c, &s)| c * s as i64)
-```
-
-```
                                  .sum::<i64>() >> qlp_shift;
-```
-
-```
     let delta = buffer[i];
-```
-
-```
     buffer[i] = prediction as i32 + delta;
-```
-
-```
 }
 ```
 
