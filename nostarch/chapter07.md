@@ -43,26 +43,13 @@ organization, including which details are exposed, which details are private,
 and what names are in each scope in your programs. These features, sometimes
 collectively referred to as the *module system*, include:
 
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-      In this chapter, we’ll cover all these features, discuss how they
-interact, and explain how to use them to manage scope. By the end, you should
-have a solid understanding of the module system and be able to work with scopes
-like a pro!
+* Packages - A Cargo feature that lets you build, test, and share crates
+* Crates- A tree of modules that produces a library or executable
+* Modules and use- Let you control the organization, scope, and privacy of paths
+* Paths - A way of naming an item, such as a struct, function, or module
+In this chapter, we’ll cover all these features, discuss how they interact, and
+explain how to use them to manage scope. By the end, you should have a solid
+understanding of the module system and be able to work with scopes like a pro!
 
 ## Packages and Crates
 
@@ -106,38 +93,20 @@ library crate. A package must contain at least one crate, whether that’s a
 library or binary crate.
 
 Let’s walk through what happens when we create a package. First we enter the
-command `cargo new` `my-project`:
+command `cargo new my-project`:
 
 ```
 $ cargo new my-project
-```
-
-```
      Created binary (application) `my-project` package
-```
-
-```
 $ ls my-project
-```
-
-```
 Cargo.toml
-```
-
-```
 src
-```
-
-```
 $ ls my-project/src
-```
-
-```
 main.rs
 ```
 
-After we run `cargo new` `my-project`, we use `ls` to see what Cargo creates.
-In the project directory, there’s a *Cargo.toml* file, giving us a package.
+After we run `cargo new my-project`, we use `ls` to see what Cargo creates. In
+the project directory, there’s a *Cargo.toml* file, giving us a package.
 There’s also a *src* directory that contains *main.rs*. Open *Cargo.toml* in
 your text editor, and note there’s no mention of *src/main.rs*. Cargo follows a
 convention that *src/main.rs* is the crate root of a binary crate with the same
@@ -154,8 +123,7 @@ in the *src/bin* directory: each file will be a separate binary crate.
 
 
 > ### Modules Cheat Sheet
-
-
+>
 > Before we get to the details of modules and paths, here we provide a quick
 reference on how modules, paths, the `use` keyword, and the `pub` keyword work
 in the compiler, and how most developers organize their code. We’ll be going
@@ -170,22 +138,18 @@ Unmatched: BoxRunInPara
 Unmatched: BoxRunInHead
 
 Unmatched: BoxRunInPara
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
+      > * Inline, within curly brackets that replace the semicolon following
+`mod garden`
+> * In the file *src/garden.rs.*
+> * In the file *src/garden/mod.rs*
 
 Unmatched: BoxRunInHead
 
 Unmatched: BoxRunInPara
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
+      > * Inline, directly following `mod vegetables`, within curly brackets
+instead of the semicolon
+> * In the file *src/garden/vegetables.rs*
+> * In the file *src/garden/vegetables/mod.rs*
 
 Unmatched: BoxRunInHead
 
@@ -198,61 +162,49 @@ Unmatched: BoxRunInPara
 Unmatched: BoxRunInHead
 
 Unmatched: BoxRunInPara
-
-> Here, we create a binary crate named `backyard` that illustrates these rules.
-The crate’s directory, also named `backyard`, contains these files and
+      > Here, we create a binary crate named `backyard` that illustrates these
+rules. The crate’s directory, also named `backyard`, contains these files and
 directories:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
+>
+> ```
+> backyard
+> ├── Cargo.lock
+> ├── Cargo.toml
+> └── src
+>     ├── garden
+>     │   └── vegetables.rs
+>     ├── garden.rs
+>     └── main.rs
+> ```
+>
 > The crate root file in this case is *src/main.rs*, and it contains:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
+>
+> ```
+> use crate::garden::vegetables::Asparagus;
+>
+> pub mod garden;
+>
+> fn main() {
+>     let plant = Asparagus {};
+>     println!("I'm growing {:?}!", plant);
+> }
+> ```
+>
 > The `pub mod garden;` line tells the compiler to include the code it finds in
 *src/garden.rs*, which is:
-
-
-Unmatched: BoxCode
-
+>
+> ```
+> pub mod vegetables;
+> ```
+>
 > Here, `pub mod vegetables;` means the code in *src/garden/vegetables.rs* is
 included too. That code is:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
+>
+> ```
+> #[derive(Debug)]
+> pub struct Asparagus {}
+> ```
+>
 > Now let’s get into the details of these rules and demonstrate them in action!
 
 ## Defining Modules to Control Scope and Privacy
@@ -283,7 +235,7 @@ administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
 modules. Create a new library named `restaurant` by running `cargo new
-restaurant` `--lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
+restaurant --lib`. Then enter the code in Listing 7-1 into *src/lib.rs* to
 define some modules and function signatures; this code is the front of house
 section.
 
@@ -291,68 +243,23 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     mod hosting {
-```
-
-```
         fn add_to_waitlist() {}
-```
 
-```
-
-```
-
-```
         fn seat_at_table() {}
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     mod serving {
-```
-
-```
         fn take_order() {}
-```
 
-```
-
-```
-
-```
         fn serve_order() {}
-```
 
-```
-
-```
-
-```
         fn take_payment() {}
-```
-
-```
     }
-```
-
-```
 }
 ```
 
 A `front_of_house` module containing other modules that then contain functions
-
-PROD: Please renumber this as Listing 7-1 and renumber the remaining listings
-consecutively: e.g., Listing 7-2, Listing 7-3, etc.
 
 We define a module with the `mod` keyword followed by the name of the module
 (in this case, `front_of_house`). The body of the module then goes inside curly
@@ -376,37 +283,13 @@ Listing 7-2 shows the module tree for the structure in Listing 7-1.
 
 ```
 crate
-```
-
-```
  └── front_of_house
-```
-
-```
      ├── hosting
-```
-
-```
      │   ├── add_to_waitlist
-```
-
-```
      │   └── seat_at_table
-```
-
-```
      └── serving
-```
-
-```
          ├── take_order
-```
-
-```
          ├── serve_order
-```
-
-```
          └── take_payment
 ```
 
@@ -433,11 +316,13 @@ know its path.
 
 A path can take two forms:
 
+* An *absolute path* is the full path starting from a crate root; for code from
+an external crate, the absolute path begins with the crate name, and for code
+from the current crate, it starts with the literal `crate`.
+* A *relative path* starts from the current module and uses `self`, `super`, or
+an identifier in the current module.
 
-Unmatched: ListPlain
-
-Unmatched: ListPlain
-      Both absolute and relative paths are followed by one or more identifiers
+Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
 
 Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
@@ -457,53 +342,17 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     mod hosting {
-```
-
-```
         fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     // Absolute path
-```
-
-```
     crate::front_of_house::hosting::add_to_waitlist();
-```
 
-```
-
-```
-
-```
     // Relative path
-```
-
-```
     front_of_house::hosting::add_to_waitlist();
-```
-
-```
 }
 ```
 
@@ -543,101 +392,29 @@ errors we get are shown in Listing 7-4.
 
 ```
 $ cargo build
-```
-
-```
    Compiling restaurant v0.1.0 (file:///projects/restaurant)
-```
-
-```
 error[E0603]: module `hosting` is private
-```
-
-```
  --> src/lib.rs:9:28
-```
-
-```
   |
-```
-
-```
 9 |     crate::front_of_house::hosting::add_to_waitlist();
-```
-
-```
   |                            ^^^^^^^ private module
-```
-
-```
   |
-```
-
-```
 note: the module `hosting` is defined here
-```
-
-```
  --> src/lib.rs:2:5
-```
-
-```
   |
-```
-
-```
 2 |     mod hosting {
-```
-
-```
   |     ^^^^^^^^^^^
-```
 
-```
-
-```
-
-```
 error[E0603]: module `hosting` is private
-```
-
-```
   --> src/lib.rs:12:21
-```
-
-```
    |
-```
-
-```
 12 |     front_of_house::hosting::add_to_waitlist();
-```
-
-```
    |                     ^^^^^^^ private module
-```
-
-```
    |
-```
-
-```
 note: the module `hosting` is defined here
-```
-
-```
   --> src/lib.rs:2:5
-```
-
-```
    |
-```
-
-```
 2  |     mod hosting {
-```
-
-```
    |     ^^^^^^^^^^^
 ```
 
@@ -675,29 +452,11 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     pub mod hosting {
-```
-
-```
         fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
 ```
 
@@ -708,101 +467,29 @@ shown in Listing 7-6.
 
 ```
 $ cargo build
-```
-
-```
    Compiling restaurant v0.1.0 (file:///projects/restaurant)
-```
-
-```
 error[E0603]: function `add_to_waitlist` is private
-```
-
-```
  --> src/lib.rs:9:37
-```
-
-```
   |
-```
-
-```
 9 |     crate::front_of_house::hosting::add_to_waitlist();
-```
-
-```
   |                                     ^^^^^^^^^^^^^^^ private function
-```
-
-```
   |
-```
-
-```
 note: the function `add_to_waitlist` is defined here
-```
-
-```
  --> src/lib.rs:3:9
-```
-
-```
   |
-```
-
-```
 3 |         fn add_to_waitlist() {}
-```
-
-```
   |         ^^^^^^^^^^^^^^^^^^^^
-```
 
-```
-
-```
-
-```
 error[E0603]: function `add_to_waitlist` is private
-```
-
-```
   --> src/lib.rs:12:30
-```
-
-```
    |
-```
-
-```
 12 |     front_of_house::hosting::add_to_waitlist();
-```
-
-```
    |                              ^^^^^^^^^^^^^^^ private function
-```
-
-```
    |
-```
-
-```
 note: the function `add_to_waitlist` is defined here
-```
-
-```
   --> src/lib.rs:3:9
-```
-
-```
    |
-```
-
-```
 3  |         fn add_to_waitlist() {}
-```
-
-```
    |         ^^^^^^^^^^^^^^^^^^^^
 ```
 
@@ -828,29 +515,11 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     pub mod hosting {
-```
-
-```
         pub fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
 ```
 
@@ -888,11 +557,8 @@ interested in this topic, see the Rust API Guidelines at
 *https://rust-lang.github.io/api-guidelines*.
 
 
-Unmatched: BoxType
-
 > ### Best Practices for Packages with a Binary and a Library
-
-
+>
 > We mentioned that a package can contain both a *src/main.rs* binary crate
 root as well as a *src/lib.rs* library crate root, and both crates will have
 the package name by default. Typically, packages with this pattern of
@@ -900,16 +566,14 @@ containing both a library and a binary crate will have just enough code in the
 binary crate to start an executable that calls code with the library crate.
 This lets other projects benefit from the most functionality that the package
 provides because the library crate’s code can be shared.
-
-
+>
 > The module tree should be defined in *src/lib.rs*. Then, any public items can
 be used in the binary crate by starting paths with the name of the package. The
 binary crate becomes a user of the library crate just like a completely
 external crate would use the library crate: it can only use the public API.
 This helps you design a good API; not only are you the author, you’re also a
 client!
-
-
+>
 > In Chapter 12, we’ll demonstrate this organizational practice with a command
 line program that will contain both a binary crate and a library crate.
 
@@ -933,41 +597,14 @@ Filename: src/lib.rs
 
 ```
 fn deliver_order() {}
-```
 
-```
-
-```
-
-```
 mod back_of_house {
-```
-
-```
     fn fix_incorrect_order() {
-```
-
-```
         cook_order();
-```
-
-```
         super::deliver_order();
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     fn cook_order() {}
-```
-
-```
 }
 ```
 
@@ -999,113 +636,32 @@ Filename: src/lib.rs
 
 ```
 mod back_of_house {
-```
-
-```
     pub struct Breakfast {
-```
-
-```
         pub toast: String,
-```
-
-```
         seasonal_fruit: String,
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     impl Breakfast {
-```
-
-```
         pub fn summer(toast: &str) -> Breakfast {
-```
-
-```
             Breakfast {
-```
-
-```
                 toast: String::from(toast),
-```
-
-```
                 seasonal_fruit: String::from("peaches"),
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     // Order a breakfast in the summer with Rye toast
-```
-
-```
     let mut meal = back_of_house::Breakfast::summer("Rye");
-```
-
-```
     // Change our mind about what bread we'd like
-```
-
-```
     meal.toast = String::from("Wheat");
-```
-
-```
     println!("I'd like {} toast please", meal.toast);
-```
 
-```
-
-```
-
-```
     // The next line won't compile if we uncomment it; we're not
-```
-
-```
     // allowed to see or modify the seasonal fruit that comes
-```
-
-```
     // with the meal
-```
-
-```
     // meal.seasonal_fruit = String::from("blueberries");
-```
-
-```
 }
 ```
 
@@ -1131,45 +687,15 @@ Filename: src/lib.rs
 
 ```
 mod back_of_house {
-```
-
-```
     pub enum Appetizer {
-```
-
-```
         Soup,
-```
-
-```
         Salad,
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     let order1 = back_of_house::Appetizer::Soup;
-```
-
-```
     let order2 = back_of_house::Appetizer::Salad;
-```
-
-```
 }
 ```
 
@@ -1206,45 +732,15 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     pub mod hosting {
-```
-
-```
         pub fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::front_of_house::hosting;
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     hosting::add_to_waitlist();
-```
-
-```
 }
 ```
 
@@ -1265,53 +761,17 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     pub mod hosting {
-```
-
-```
         pub fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::front_of_house::hosting;
-```
 
-```
-
-```
-
-```
 mod customer {
-```
-
-```
     pub fn eat_at_restaurant() {
-```
-
-```
         hosting::add_to_waitlist();
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1322,53 +782,17 @@ The compiler error shows that the shortcut no longer applies within the
 
 ```
 error[E0433]: failed to resolve: use of undeclared crate or module `hosting`
-```
-
-```
   --> src/lib.rs:11:9
-```
-
-```
    |
-```
-
-```
 11 |         hosting::add_to_waitlist();
-```
-
-```
    |         ^^^^^^^ use of undeclared crate or module `hosting`
-```
 
-```
-
-```
-
-```
 warning: unused import: `crate::front_of_house::hosting`
-```
-
-```
  --> src/lib.rs:7:5
-```
-
-```
   |
-```
-
-```
 7 | use crate::front_of_house::hosting;
-```
-
-```
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-```
-
-```
   |
-```
-
-```
   = note: `#[warn(unused_imports)]` on by default
 ```
 
@@ -1388,45 +812,15 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     pub mod hosting {
-```
-
-```
         pub fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::front_of_house::hosting::add_to_waitlist;
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     add_to_waitlist();
-```
-
-```
 }
 ```
 
@@ -1450,25 +844,10 @@ Filename: src/main.rs
 
 ```
 use std::collections::HashMap;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let mut map = HashMap::new();
-```
-
-```
     map.insert(1, 2);
-```
-
-```
 }
 ```
 
@@ -1486,41 +865,14 @@ Filename: src/lib.rs
 
 ```
 use std::fmt;
-```
-
-```
 use std::io;
-```
 
-```
-
-```
-
-```
 fn function1() -> fmt::Result {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn function2() -> io::Result<()> {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -1543,41 +895,14 @@ Filename: src/lib.rs
 
 ```
 use std::fmt::Result;
-```
-
-```
 use std::io::Result as IoResult;
-```
 
-```
-
-```
-
-```
 fn function1() -> Result {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn function2() -> IoResult<()> {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
@@ -1604,45 +929,15 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house {
-```
-
-```
     pub mod hosting {
-```
-
-```
         pub fn add_to_waitlist() {}
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub use crate::front_of_house::hosting;
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     hosting::add_to_waitlist();
-```
-
-```
 }
 ```
 
@@ -1689,21 +984,9 @@ function:
 
 ```
 use rand::Rng;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let secret_number = rand::thread_rng().gen_range(1..=100);
-```
-
-```
 }
 ```
 
@@ -1736,17 +1019,8 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
-
-```
 use std::cmp::Ordering;
-```
-
-```
 use std::io;
-```
-
-```
 --snip--
 ```
 
@@ -1759,13 +1033,7 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
-
-```
 use std::{cmp::Ordering, io};
-```
-
-```
 --snip--
 ```
 
@@ -1784,9 +1052,6 @@ Filename: src/lib.rs
 
 ```
 use std::io;
-```
-
-```
 use std::io::Write;
 ```
 
@@ -1804,9 +1069,9 @@ use std::io::{self, Write};
 
 Combining the paths in Listing 7-19 into one `use` statement
 
+This line brings `std::io` and `std::io::Write` into scope.
 
-Unmatched: BodyContinued
-      ### The Glob Operator
+### The Glob Operator
 
 If we want to bring *all* public items defined in a path into scope, we can
 specify that path followed by the `*` glob operator:
@@ -1847,29 +1112,11 @@ Filename: src/lib.rs
 
 ```
 mod front_of_house;
-```
 
-```
-
-```
-
-```
 pub use crate::front_of_house::hosting;
-```
 
-```
-
-```
-
-```
 pub fn eat_at_restaurant() {
-```
-
-```
     hosting::add_to_waitlist();
-```
-
-```
 }
 ```
 
@@ -1885,13 +1132,7 @@ Filename: src/front_of_house.rs
 
 ```
 pub mod hosting {
-```
-
-```
     pub fn add_to_waitlist() {}
-```
-
-```
 }
 ```
 
@@ -1935,34 +1176,26 @@ compiler’s rules for which files to check for which modules’ code mean the
 directories and files more closely match the module tree.
 
 
-Unmatched: BoxType
-
 > ### Alternate File Paths
-
-
+>
 > So far we’ve covered the most idiomatic file paths the Rust compiler uses,
 but Rust also supports an older style of file path. For a module named
 `front_of_house` declared in the crate root, the compiler will look for the
 module’s code in:
-
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-
+>
+> * *src/front_of_house.rs* (what we covered)
+> * *src/front_of_house/mod.rs* (older style, still supported path)
+>
 > For a module named `hosting` that is a submodule of `front_of_house`, the
 compiler will look for the module’s code in:
-
-
-Unmatched: BoxListBullet
-
-Unmatched: BoxListBullet
-
+>
+> * *src/front_of_house/hosting.rs* (what we covered)
+> * *src/front_of_house/hosting/mod.rs* (older style, still supported path)
+>
 > If you use both styles for the same module, you’ll get a compiler error.
 Using a mix of both styles for different modules in the same project is
 allowed, but might be confusing for people navigating your project.
-
-
+>
 > The main downside to the style that uses files named *mod.rs* is that your
 project can end up with many files named *mod.rs*, which can get confusing when
 you have them open in your editor at the same time.
