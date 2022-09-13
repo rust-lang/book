@@ -215,7 +215,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockQuote']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockQuote' or @w:val = 'QuotePara']]">
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
     </xsl:template>
