@@ -35,7 +35,6 @@ the features that make Rust unique. In this chapter, you’ll learn ownership by
 working through some examples that focus on a very common data structure:
 strings.
 
-
 > ### The Stack and the Heap
 >
 > Many programming languages don’t require you to think about the stack and the
@@ -135,7 +134,7 @@ program with comments annotating where the variable `s` would be valid.
 }                      // this scope is now over, and s is no longer valid
 ```
 
-A variable and the scope in which it is valid
+Listing -1: A variable and the scope in which it is valid
 
 In other words, there are two important points in time here:
 
@@ -265,7 +264,7 @@ let x = 5;
 let y = x;
 ```
 
-Assigning the integer value of variable `x` to `y`
+Listing -2: Assigning the integer value of variable `x` to `y`
 
 We can probably guess what this is doing: “bind the value `5` to `x`; then make
 a copy of the value in `x` and bind it to `y`.” We now have two variables, `x`
@@ -472,7 +471,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope
 } // Here, some_integer goes out of scope. Nothing special happens
 ```
 
-Functions with ownership and scope annotated
+Listing -3: Functions with ownership and scope annotated
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
 compile-time error. These static checks protect us from mistakes. Try adding
@@ -518,7 +517,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
 }
 ```
 
-Transferring ownership of return values
+Listing -4: Transferring ownership of return values
 
 The ownership of a variable follows the same pattern every time: assigning a
 value to another variable moves it. When a variable that includes data on the
@@ -551,7 +550,7 @@ fn calculate_length(s: String) -> (String, usize) {
 }
 ```
 
-Returning ownership of parameters
+Listing -5: Returning ownership of parameters
 
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without
@@ -650,7 +649,7 @@ fn change(some_string: &String) {
 }
 ```
 
-Attempting to modify a borrowed value
+Listing -6: Attempting to modify a borrowed value
 
 Here’s the error:
 
@@ -958,8 +957,8 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-The `first_word` function that returns a byte index value into the `String`
-parameter
+Listing -7: The `first_word` function that returns a byte index value into the
+`String` parameter
 
 Because we need to go through the `String` element by element and check whether
 a value is a space, we’ll convert our `String` to an array of bytes using the
@@ -1004,8 +1003,8 @@ fn main() {
 }
 ```
 
-Storing the result from calling the `first_word` function and then changing the
-`String` contents
+Listing -8: Storing the result from calling the `first_word` function and then
+changing the `String` contents
 
 This program compiles without any errors and would also do so if we used `word`
 after calling `s.clear()`. Because `word` isn’t connected to the state of `s`
@@ -1208,8 +1207,8 @@ and `&str` values.
 fn first_word(s: &str) -> &str {
 ```
 
-Improving the `first_word` function by using a string slice for the type of the
-`s` parameter
+Listing -9: Improving the `first_word` function by using a string slice for the
+type of the `s` parameter
 
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the `String` or a reference to the `String`. This
