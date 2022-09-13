@@ -296,96 +296,59 @@ discuss in Chapter 10. Lifetimes ensure that the data referenced by a struct is
 valid for as long as the struct is. Let’s say you try to store a reference in a
 struct without specifying lifetimes, like the following in *src/main.rs*; this
 won’t work:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-      > The compiler will complain that it needs lifetime specifiers:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-      > In Chapter 10, we’ll discuss how to fix these errors so you can store
+>
+> ```
+> struct User {
+>     active: bool,
+>     username: &str,
+>     email: &str,
+>     sign_in_count: u64,
+> }
+>
+> fn main() {
+>     let user1 = User {
+>         active: true,
+>         username: "someusername123",
+>         email: "someone@example.com",
+>         sign_in_count: 1,
+>     };
+> }
+> ```
+>
+> The compiler will complain that it needs lifetime specifiers:
+>
+> ```
+> $ `cargo run`
+>    Compiling structs v0.1.0 (file:///projects/structs)
+> error[E0106]: missing lifetime specifier
+>  --> src/main.rs:3:15
+>   |
+> 3 |     username: &str,
+>   |               ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 ~ struct User<'a> {
+> 2 |     active: bool,
+> 3 ~     username: &'a str,
+>   |
+>
+> error[E0106]: missing lifetime specifier
+>  --> src/main.rs:4:12
+>   |
+> 4 |     email: &str,
+>   |            ^ expected named lifetime parameter
+>   |
+> help: consider introducing a named lifetime parameter
+>   |
+> 1 ~ struct User<'a> {
+> 2 |     active: bool,
+> 3 |     username: &str,
+> 4 ~     email: &'a str,
+>   |
+> ```
+>
+> In Chapter 10, we’ll discuss how to fix these errors so you can store
 references in structs, but for now, we’ll fix errors like these using owned
 types like `String` instead of references like `&str`.
 
@@ -864,17 +827,18 @@ one of the few places in Rust that has this behavior.
 > Here’s how it works: when you call a method with `object.`something`()`, Rust
 automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
 the method. In other words, the following are the same:
-
-
-Unmatched: BoxCode
-
-Unmatched: BoxCode
-      > The first one looks much cleaner. This automatic referencing behavior
-works because methods have a clear receiver—the type of `self`. Given the
-receiver and name of a method, Rust can figure out definitively whether the
-method is reading (`&self`), mutating (`&mut self`), or consuming (`self`). The
-fact that Rust makes borrowing implicit for method receivers is a big part of
-making ownership ergonomic in practice.
+>
+> ```
+> p1.distance(&p2);
+> (&p1).distance(&p2);
+> ```
+>
+> The first one looks much cleaner. This automatic referencing behavior works
+because methods have a clear receiver—the type of `self`. Given the receiver
+and name of a method, Rust can figure out definitively whether the method is
+reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact that
+Rust makes borrowing implicit for method receivers is a big part of making
+ownership ergonomic in practice.
 
 ### Methods with More Parameters
 
