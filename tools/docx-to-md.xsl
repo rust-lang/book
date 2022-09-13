@@ -247,9 +247,9 @@
     <xsl:template match="w:r[w:rPr/w:rStyle/@w:val = 'NoteHead']" />
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInHead']">
-        <xsl:text>* </xsl:text>
+        <xsl:text>* **</xsl:text>
         <xsl:apply-templates select="*" />
-        <xsl:text>- </xsl:text>
+        <xsl:text>**: </xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'RunInPara']">
