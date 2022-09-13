@@ -179,6 +179,31 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BoxCode']]">
+        <xsl:choose>
+            <xsl:when test="not(preceding-sibling::*[1][self::w:p]) or preceding-sibling::w:p[1][w:pPr[not(w:pStyle) or w:pStyle/@w:val != 'BoxCode']]">
+                <xsl:text>> ```&#10;> </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>> </xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+
+        <xsl:apply-templates select="*" />
+
+        <xsl:choose>
+            <xsl:when test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val = 'BoxCode']">
+                <xsl:text>&#10;</xsl:text>
+            </xsl:when>
+            <xsl:when test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val = 'BoxBody']">
+                <xsl:text>&#10;> ```&#10;>&#10;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>&#10;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSingle']">
         <xsl:text>```&#10;</xsl:text>
         <xsl:apply-templates select="*" />
@@ -206,7 +231,7 @@
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:choose>
-            <xsl:when test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val = 'BlockText' or w:pPr/w:pStyle/@w:val = 'BoxBody' or w:pPr/w:pStyle/@w:val = 'BoxListBullet']">
+            <xsl:when test="following-sibling::w:p[1][w:pPr/w:pStyle/@w:val = 'BlockText' or w:pPr/w:pStyle/@w:val = 'BoxBody' or w:pPr/w:pStyle/@w:val = 'BoxListBullet' or w:pPr/w:pStyle/@w:val = 'BoxCode']">
                 <xsl:text>&#10;>&#10;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
