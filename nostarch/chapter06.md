@@ -46,17 +46,8 @@ variants of the enum:
 
 ```
 enum IpAddrKind {
-```
-
-```
     V4,
-```
-
-```
     V6,
-```
-
-```
 }
 ```
 
@@ -68,9 +59,6 @@ We can create instances of each of the two variants of `IpAddrKind` like this:
 
 ```
 let four = IpAddrKind::V4;
-```
-
-```
 let six = IpAddrKind::V6;
 ```
 
@@ -83,13 +71,10 @@ can then, for instance, define a function that takes any `IpAddrKind`:
 fn route(ip_kind: IpAddrKind) {}
 ```
 
+And we can call this function with either variant:
 
-Unmatched: BodyContinued
-      ```
+```
 route(IpAddrKind::V4);
-```
-
-```
 route(IpAddrKind::V6);
 ```
 
@@ -101,84 +86,27 @@ Listing 6-1.
 
 ```
 1 enum IpAddrKind {
-```
-
-```
     V4,
-```
-
-```
     V6,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 2 struct IpAddr {
-```
-
-```
   3 kind: IpAddrKind,
-```
-
-```
   4 address: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 5 let home = IpAddr {
-```
-
-```
     kind: IpAddrKind::V4,
-```
-
-```
     address: String::from("127.0.0.1"),
-```
-
-```
 };
-```
 
-```
-
-```
-
-```
 6 let loopback = IpAddr {
-```
-
-```
     kind: IpAddrKind::V6,
-```
-
-```
     address: String::from("::1"),
-```
-
-```
 };
 ```
 
 Storing the data and `IpAddrKind` variant of an IP address using a `struct`
-
-PROD: Please change this to Listing 6-1 and renumber remaining listings
-consecutively: e.g., Listing 6-2, Listing 6-3, etc.
 
 Here, we’ve defined a struct `IpAddr` [2] that has two fields: a `kind` field
 [3] that is of type `IpAddrKind` (the enum we defined previously [1]) and an
@@ -196,33 +124,12 @@ variants will have associated `String` values:
 
 ```
 enum IpAddr {
-```
-
-```
     V4(String),
-```
-
-```
     V6(String),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let home = IpAddr::V4(String::from("127.0.0.1"));
-```
 
-```
-
-```
-
-```
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
@@ -243,33 +150,12 @@ a struct. Enums handle this case with ease:
 
 ```
 enum IpAddr {
-```
-
-```
     V4(u8, u8, u8, u8),
-```
-
-```
     V6(String),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let home = IpAddr::V4(127, 0, 0, 1);
-```
 
-```
-
-```
-
-```
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
@@ -283,49 +169,16 @@ different structs, which are defined differently for each variant:
 
 ```
 struct Ipv4Addr {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Ipv6Addr {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 enum IpAddr {
-```
-
-```
     V4(Ipv4Addr),
-```
-
-```
     V6(Ipv6Addr),
-```
-
-```
 }
 ```
 
@@ -344,25 +197,10 @@ variety of types embedded in its variants.
 
 ```
 enum Message {
-```
-
-```
     Quit,
-```
-
-```
     Move { x: i32, y: i32 },
-```
-
-```
     Write(String),
-```
-
-```
     ChangeColor(i32, i32, i32),
-```
-
-```
 }
 ```
 
@@ -386,29 +224,11 @@ preceding enum variants hold:
 
 ```
 struct QuitMessage; // unit struct
-```
-
-```
 struct MoveMessage {
-```
-
-```
     x: i32,
-```
-
-```
     y: i32,
-```
-
-```
 }
-```
-
-```
 struct WriteMessage(String); // tuple struct
-```
-
-```
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
@@ -422,33 +242,12 @@ enums. Here’s a method named `call` that we could define on our `Message` enum
 
 ```
 impl Message {
-```
-
-```
     fn call(&self) {
-```
-
-```
       1 // method body would be defined here
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 2 let m = Message::Write(String::from("hello"));
-```
-
-```
 m.call();
 ```
 
@@ -498,17 +297,8 @@ that can encode the concept of a value being present or absent. This enum is
 
 ```
 enum Option<T> {
-```
-
-```
     None,
-```
-
-```
     Some(T),
-```
-
-```
 }
 ```
 
@@ -528,17 +318,8 @@ number types and string types:
 
 ```
 let some_number = Some(5);
-```
-
-```
 let some_char = Some('e');
-```
 
-```
-
-```
-
-```
 let absent_number: Option<i32> = None;
 ```
 
@@ -562,17 +343,8 @@ trying to add an `i8` to an `Option<i8>`:
 
 ```
 let x: i8 = 5;
-```
-
-```
 let y: Option<i8> = Some(5);
-```
 
-```
-
-```
-
-```
 let sum = x + y;
 ```
 
@@ -580,29 +352,11 @@ If we run this code, we get an error message like this one:
 
 ```
 error[E0277]: cannot add `Option<i8>` to `i8`
-```
-
-```
  --> src/main.rs:5:17
-```
-
-```
   |
-```
-
-```
 5 |     let sum = x + y;
-```
-
-```
   |                 ^ no implementation for `i8 + Option<i8>`
-```
-
-```
   |
-```
-
-```
   = help: the trait `Add<Option<i8>>` is not implemented for `i8`
 ```
 
@@ -666,61 +420,19 @@ in Listing 6-3.
 
 ```
 1 enum Coin {
-```
-
-```
     Penny,
-```
-
-```
     Nickel,
-```
-
-```
     Dime,
-```
-
-```
     Quarter,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn value_in_cents(coin: Coin) -> u8 {
-```
-
-```
   2 match coin {
-```
-
-```
       3 Coin::Penny => 1,
-```
-
-```
         Coin::Nickel => 5,
-```
-
-```
         Coin::Dime => 10,
-```
-
-```
         Coin::Quarter => 25,
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -758,45 +470,15 @@ returns the last value of the block, `1`:
 
 ```
 fn value_in_cents(coin: Coin) -> u8 {
-```
-
-```
     match coin {
-```
-
-```
         Coin::Penny => {
-```
-
-```
             println!("Lucky penny!");
-```
-
-```
             1
-```
-
-```
         }
-```
-
-```
         Coin::Nickel => 5,
-```
-
-```
         Coin::Dime => 10,
-```
-
-```
         Coin::Quarter => 25,
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -815,53 +497,17 @@ stored inside it, which we’ve done in Listing 6-4.
 
 ```
 #[derive(Debug)] // so we can inspect the state in a minute
-```
-
-```
 enum UsState {
-```
-
-```
     Alabama,
-```
-
-```
     Alaska,
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 enum Coin {
-```
-
-```
     Penny,
-```
-
-```
     Nickel,
-```
-
-```
     Dime,
-```
-
-```
     Quarter(UsState),
-```
-
-```
 }
 ```
 
@@ -879,45 +525,15 @@ quarter’s state. Then we can use `state` in the code for that arm, like so:
 
 ```
 fn value_in_cents(coin: Coin) -> u8 {
-```
-
-```
     match coin {
-```
-
-```
         Coin::Penny => 1,
-```
-
-```
         Coin::Nickel => 5,
-```
-
-```
         Coin::Dime => 10,
-```
-
-```
         Coin::Quarter(state) => {
-```
-
-```
             println!("State quarter from {:?}!", state);
-```
-
-```
             25
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -946,41 +562,14 @@ Listing 6-5.
 
 ```
 fn plus_one(x: Option<i32>) -> Option<i32> {
-```
-
-```
     match x {
-```
-
-```
       1 None => None,
-```
-
-```
       2 Some(i) => Some(i + 1),
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 let five = Some(5);
-```
-
-```
 let six = plus_one(five); 3
-```
-
-```
 let none = plus_one(None); 4
 ```
 
@@ -1027,21 +616,9 @@ which has a bug and won’t compile:
 
 ```
 fn plus_one(x: Option<i32>) -> Option<i32> {
-```
-
-```
     match x {
-```
-
-```
         Some(i) => Some(i + 1),
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1051,61 +628,19 @@ error:
 
 ```
 error[E0004]: non-exhaustive patterns: `None` not covered
-```
-
-```
  --> src/main.rs:3:15
-```
-
-```
   |
-```
-
-```
 3 |         match x {
-```
-
-```
   |               ^ pattern `None` not covered
-```
-
-```
   |
-```
-
-```
   note: `Option<i32>` defined here
-```
-
-```
       = note: the matched value is of type `Option<i32>`
-```
-
-```
 help: ensure that all possible cases are being handled by adding
-```
-
-```
 a match arm with a wildcard pattern or an explicit pattern as
-```
-
-```
 shown
-```
-
-```
     |
-```
-
-```
 4   ~             Some(i) => Some(i + 1),
-```
-
-```
 5   ~             None => todo!(),
-```
-
-```
     |
 ```
 
@@ -1130,41 +665,14 @@ this example:
 
 ```
 let dice_roll = 9;
-```
-
-```
 match dice_roll {
-```
-
-```
     3 => add_fancy_hat(),
-```
-
-```
     7 => remove_fancy_hat(),
-```
-
-```
   1 other => move_player(other),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn add_fancy_hat() {}
-```
-
-```
 fn remove_fancy_hat() {}
-```
-
-```
 fn move_player(num_spaces: u8) {}
 ```
 
@@ -1191,41 +699,14 @@ can change our code to use `_` instead of the variable named `other`:
 
 ```
 let dice_roll = 9;
-```
-
-```
 match dice_roll {
-```
-
-```
     3 => add_fancy_hat(),
-```
-
-```
     7 => remove_fancy_hat(),
-```
-
-```
     _ => reroll(),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn add_fancy_hat() {}
-```
-
-```
 fn remove_fancy_hat() {}
-```
-
-```
 fn reroll() {}
 ```
 
@@ -1239,37 +720,13 @@ Type” on page XX) as the code that goes with the `_` arm:
 
 ```
 let dice_roll = 9;
-```
-
-```
 match dice_roll {
-```
-
-```
     3 => add_fancy_hat(),
-```
-
-```
     7 => remove_fancy_hat(),
-```
-
-```
     _ => (),
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn add_fancy_hat() {}
-```
-
-```
 fn remove_fancy_hat() {}
 ```
 
@@ -1291,21 +748,9 @@ variant.
 
 ```
 let config_max = Some(3u8);
-```
-
-```
 match config_max {
-```
-
-```
     Some(max) => println!("The maximum is configured to be {max}"),
-```
-
-```
     _ => (),
-```
-
-```
 }
 ```
 
@@ -1322,17 +767,8 @@ code behaves the same as the `match` in Listing 6-6:
 
 ```
 let config_max = Some(3u8);
-```
-
-```
 if let Some(max) = config_max {
-```
-
-```
     println!("The maximum is configured to be {max}");
-```
-
-```
 }
 ```
 
@@ -1363,21 +799,9 @@ expression, like this:
 
 ```
 let mut count = 0;
-```
-
-```
 match coin {
-```
-
-```
     Coin::Quarter(state) => println!("State quarter from {:?}!", state),
-```
-
-```
     _ => count += 1,
-```
-
-```
 }
 ```
 
@@ -1385,25 +809,10 @@ Or we could use an `if let` and `else` expression, like this:
 
 ```
 let mut count = 0;
-```
-
-```
 if let Coin::Quarter(state) = coin {
-```
-
-```
     println!("State quarter from {:?}!", state);
-```
-
-```
 } else {
-```
-
-```
     count += 1;
-```
-
-```
 }
 ```
 
