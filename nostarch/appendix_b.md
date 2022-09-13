@@ -19,7 +19,7 @@ appear in context, a short explanation, and whether that operator is
 overloadable. If an operator is overloadable, the relevant trait to use to
 overload that operator is listed.
 
-Table -1: Operators
+Table B-1: Operators
 
 | Operator | Example | Explanation | Overloadable? |
 |---|---|---|---|
@@ -92,7 +92,7 @@ is, they don’t behave like a function or method call.
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
 
-Table -2: Stand-Alone Syntax
+Table B-2: Stand-Alone Syntax
 
 | Symbol | Explanation |
 |---|---|
@@ -115,7 +115,7 @@ combination of raw and byte string literal |
 Table B-3 shows symbols that appear in the context of a path through the module
 hierarchy to an item.
 
-Table -3: Path-Related Syntax
+Table B-3: Path-Related Syntax
 
 | Symbol | Explanation |
 |---|---|
@@ -139,7 +139,7 @@ trait and type |
 Table B-4 shows symbols that appear in the context of using generic type
 parameters.
 
-Table -4: Generics
+Table B-4: Generics
 
 | Symbol | Explanation |
 |---|---|
@@ -159,7 +159,7 @@ specific assignments (for example, `Iterator<Item=T>`) |
 Table B-5 shows symbols that appear in the context of constraining generic type
 parameters with trait bounds.
 
-Table -5: Trait Bound Constraints
+Table B-5: Trait Bound Constraints
 
 | Symbol | Explanation |
 |---|---|
@@ -175,7 +175,7 @@ cannot transitively contain any references with lifetimes shorter than `'a`) |
 Table B-6 shows symbols that appear in the context of calling or defining
 macros and specifying attributes on an item.
 
-Table -6: Macros and Attributes
+Table B-6: Macros and Attributes
 
 | Symbol | Explanation |
 |---|---|
@@ -188,7 +188,7 @@ Table -6: Macros and Attributes
 
 Table B-7 shows symbols that create comments.
 
-Table -7: Comments
+Table B-7: Comments
 
 | Symbol | Explanation |
 |---|---|
@@ -201,7 +201,7 @@ Table -7: Comments
 
 Table B-8 shows symbols that appear in the context of using tuples.
 
-Table -8: Tuples
+Table B-8: Tuples
 
 | Symbol | Explanation |
 |---|---|
@@ -217,7 +217,7 @@ Table -8: Tuples
 
 Table B-9 shows the contexts in which curly brackets are used.
 
-Table -9: Curly Brackets
+Table B-9: Curly Brackets
 
 | Context | Explanation |
 |---|---|
@@ -226,7 +226,7 @@ Table -9: Curly Brackets
 
 Table B-10 shows the contexts in which square brackets are used.
 
-Table -10: Square Brackets
+Table B-10: Square Brackets
 
 | Context | Explanation |
 |---|---|
