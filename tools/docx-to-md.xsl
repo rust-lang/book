@@ -330,6 +330,8 @@
         <xsl:text> </xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[not(w:pPr)]" />
+
     <xsl:template match="w:p">
 Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
       <xsl:text>
