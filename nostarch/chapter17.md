@@ -70,22 +70,13 @@ Filename: src/lib.rs
 
 ```
 pub struct AveragedCollection {
-```
-
-```
     list: Vec<i32>,
-```
-
-```
     average: f64,
-```
-
-```
 }
 ```
 
-An `AveragedCollection` struct that maintains a list of integers and the
-average of the items in the collection
+Listing 17-1: An `AveragedCollection` struct that maintains a list of integers
+and the average of the items in the collection
 
 The struct is marked `pub` so that other code can use it, but the fields within
 the struct remain private. This is important in this case because we want to
@@ -97,110 +88,35 @@ Filename: src/lib.rs
 
 ```
 impl AveragedCollection {
-```
-
-```
     pub fn add(&mut self, value: i32) {
-```
-
-```
         self.list.push(value);
-```
-
-```
         self.update_average();
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     pub fn remove(&mut self) -> Option<i32> {
-```
-
-```
         let result = self.list.pop();
-```
-
-```
         match result {
-```
-
-```
             Some(value) => {
-```
-
-```
                 self.update_average();
-```
-
-```
                 Some(value)
-```
-
-```
             }
-```
-
-```
             None => None,
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     pub fn average(&self) -> f64 {
-```
-
-```
         self.average
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     fn update_average(&mut self) {
-```
-
-```
         let total: i32 = self.list.iter().sum();
-```
-
-```
         self.average = total as f64 / self.list.len() as f64;
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementations of the public methods `add`, `remove`, and `average` on
-`AveragedCollection`
+Listing 17-2: Implementations of the public methods `add`, `remove`, and
+`average` on `AveragedCollection`
 
 The public methods `add`, `remove`, and `average` are the only ways to access
 or modify data in an instance of `AveragedCollection`. When an item is added to
@@ -260,17 +176,12 @@ child type to be used in the same places as the parent type. This is also
 called *polymorphism*, which means that you can substitute multiple objects for
 each other at runtime if they share certain characteristics.
 
-
-Unmatched: BoxType
-
 > ### Polymorphism
-
-
+>
 > To many people, polymorphism is synonymous with inheritance. But it’s
 actually a more general concept that refers to code that can work with data of
 multiple types. For inheritance, those types are generally subclasses.
-
-
+>
 > Rust instead uses generics to abstract over different possible types and
 trait bounds to impose constraints on what those types must provide. This is
 sometimes called *bounded parametric polymorphism*.
@@ -361,17 +272,11 @@ Filename: src/lib.rs
 
 ```
 pub trait Draw {
-```
-
-```
     fn draw(&self);
-```
-
-```
 }
 ```
 
-Definition of the `Draw` trait
+Listing 17-3: Definition of the `Draw` trait
 
 This syntax should look familiar from our discussions on how to define traits
 in Chapter 10. Next comes some new syntax: Listing 17-4 defines a struct named
@@ -383,18 +288,12 @@ Filename: src/lib.rs
 
 ```
 pub struct Screen {
-```
-
-```
     pub components: Vec<Box<dyn Draw>>,
-```
-
-```
 }
 ```
 
-Definition of the `Screen` struct with a `components` field holding a vector of
-trait objects that implement the `Draw` trait
+Listing 17-4: Definition of the `Screen` struct with a `components` field
+holding a vector of trait objects that implement the `Draw` trait
 
 On the `Screen` struct, we’ll define a method named `run` that will call the
 `draw` method on each of its `components`, as shown in Listing 17-5.
@@ -403,33 +302,16 @@ Filename: src/lib.rs
 
 ```
 impl Screen {
-```
-
-```
     pub fn run(&self) {
-```
-
-```
         for component in self.components.iter() {
-```
-
-```
             component.draw();
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-A `run` method on `Screen` that calls the `draw` method on each component
+Listing 17-5: A `run` method on `Screen` that calls the `draw` method on each
+component
 
 This works differently from defining a struct that uses a generic type
 parameter with trait bounds. A generic type parameter can only be substituted
@@ -442,62 +324,23 @@ Filename: src/lib.rs
 
 ```
 pub struct Screen<T: Draw> {
-```
-
-```
     pub components: Vec<T>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl<T> Screen<T>
-```
-
-```
 where
-```
-
-```
     T: Draw,
-```
-
-```
 {
-```
-
-```
     pub fn run(&self) {
-```
-
-```
         for component in self.components.iter() {
-```
-
-```
             component.draw();
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-An alternate implementation of the `Screen` struct and its `run` method using
-generics and trait bounds
+Listing 17-6: An alternate implementation of the `Screen` struct and its `run`
+method using generics and trait bounds
 
 This restricts us to a `Screen` instance that has a list of components all of
 type `Button` or all of type `TextField`. If you’ll only ever have homogeneous
@@ -521,49 +364,19 @@ Filename: src/lib.rs
 
 ```
 pub struct Button {
-```
-
-```
     pub width: u32,
-```
-
-```
     pub height: u32,
-```
-
-```
     pub label: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Draw for Button {
-```
-
-```
     fn draw(&self) {
-```
-
-```
         // code to actually draw a button
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-A `Button` struct that implements the `Draw` trait
+Listing 17-7: A `Button` struct that implements the `Draw` trait
 
 The `width`, `height`, and `label` fields on `Button` will differ from the
 fields on other components; for example, a `TextField` type might have those
@@ -583,58 +396,22 @@ Filename: src/main.rs
 
 ```
 use gui::Draw;
-```
 
-```
-
-```
-
-```
 struct SelectBox {
-```
-
-```
     width: u32,
-```
-
-```
     height: u32,
-```
-
-```
     options: Vec<String>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Draw for SelectBox {
-```
-
-```
     fn draw(&self) {
-```
-
-```
         // code to actually draw a select box
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Another crate using `gui` and implementing the `Draw` trait on a `SelectBox`
-struct
+Listing 17-8: Another crate using `gui` and implementing the `Draw` trait on a
+`SelectBox` struct
 
 Our library’s user can now write their `main` function to create a `Screen`
 instance. To the `Screen` instance, they can add a `SelectBox` and a `Button`
@@ -646,102 +423,33 @@ Filename: src/main.rs
 
 ```
 use gui::{Button, Screen};
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let screen = Screen {
-```
-
-```
         components: vec![
-```
-
-```
             Box::new(SelectBox {
-```
-
-```
                 width: 75,
-```
-
-```
                 height: 10,
-```
-
-```
                 options: vec![
-```
-
-```
                     String::from("Yes"),
-```
-
-```
                     String::from("Maybe"),
-```
-
-```
                     String::from("No"),
-```
-
-```
                 ],
-```
-
-```
             }),
-```
-
-```
             Box::new(Button {
-```
-
-```
                 width: 50,
-```
-
-```
                 height: 10,
-```
-
-```
                 label: String::from("OK"),
-```
-
-```
             }),
-```
-
-```
         ],
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     screen.run();
-```
-
-```
 }
 ```
 
-Using trait objects to store values of different types that implement the same
-trait
+Listing 17-9: Using trait objects to store values of different types that
+implement the same trait
 
 When we wrote the library, we didn’t know that someone might add the
 `SelectBox` type, but our `Screen` implementation was able to operate on the
@@ -749,10 +457,10 @@ new type and draw it because `SelectBox` implements the `Draw` trait, which
 means it implements the `draw` method.
 
 This concept—of being concerned only with the messages a value responds to
-rather than the value’s concrete type—is similar to the concept of *duck*
-*typing* in dynamically typed languages: if it walks like a duck and quacks
-like a duck, then it must be a duck! In the implementation of `run` on `Screen`
-in Listing 17-5, `run` doesn’t need to know what the concrete type of each
+rather than the value’s concrete type—is similar to the concept of *duck
+typing* in dynamically typed languages: if it walks like a duck and quacks like
+a duck, then it must be a duck! In the implementation of `run` on `Screen` in
+Listing 17-5, `run` doesn’t need to know what the concrete type of each
 component is. It doesn’t check whether a component is an instance of a `Button`
 or a `SelectBox`, it just calls the `draw` method on the component. By
 specifying `Box<dyn Draw>` as the type of the values in the `components`
@@ -772,73 +480,29 @@ Filename: src/main.rs
 
 ```
 use gui::Screen;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let screen = Screen {
-```
-
-```
         components: vec![Box::new(String::from("Hi"))],
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     screen.run();
-```
-
-```
 }
 ```
 
-Attempting to use a type that doesn’t implement the trait object’s trait
+Listing 17-10: Attempting to use a type that doesn’t implement the trait
+object’s trait
 
 We’ll get this error because `String` doesn’t implement the `Draw` trait:
 
 ```
 error[E0277]: the trait bound `String: Draw` is not satisfied
-```
-
-```
  --> src/main.rs:5:26
-```
-
-```
   |
-```
-
-```
 5 |         components: vec![Box::new(String::from("Hi"))],
-```
-
-```
   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `Draw` is
-```
-
-```
 not implemented for `String`
-```
-
-```
   |
-```
-
-```
   = note: required for the cast to the object type `dyn Draw`
 ```
 
@@ -914,61 +578,23 @@ Filename: src/main.rs
 
 ```
 use blog::Post;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   1 let mut post = Post::new();
-```
 
-```
-
-```
-
-```
   2 post.add_text("I ate a salad for lunch today");
-```
-
-```
   3 assert_eq!("", post.content());
-```
 
-```
-
-```
-
-```
   4 post.request_review();
-```
-
-```
   5 assert_eq!("", post.content());
-```
 
-```
-
-```
-
-```
   6 post.approve();
-```
-
-```
   7 assert_eq!("I ate a salad for lunch today", post.content());
-```
-
-```
 }
 ```
 
-Code that demonstrates the desired behavior we want our `blog` crate to have
+Listing 17-11: Code that demonstrates the desired behavior we want our `blog`
+crate to have
 
 We want to allow the user to create a new draft blog post with `Post::new` [1].
 We want to allow text to be added to the blog post [2]. If we try to get the
@@ -1009,82 +635,28 @@ Filename: src/lib.rs
 
 ```
 pub struct Post {
-```
-
-```
     state: Option<Box<dyn State>>,
-```
-
-```
     content: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Post {
-```
-
-```
     pub fn new() -> Post {
-```
-
-```
         Post {
-```
-
-```
           1 state: Some(Box::new(Draft {})),
-```
-
-```
           2 content: String::new(),
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 trait State {}
-```
 
-```
-
-```
-
-```
 struct Draft {}
-```
 
-```
-
-```
-
-```
 impl State for Draft {}
 ```
 
-Definition of a `Post` struct and a `new` function that creates a new `Post`
-instance, a `State` trait, and a `Draft` struct
+Listing 17-12: Definition of a `Post` struct and a `new` function that creates
+a new `Post` instance, a `State` trait, and a `Draft` struct
 
 The `State` trait defines the behavior shared by different post states. The
 state objects are `Draft`, `PendingReview`, and `Published`, and they will all
@@ -1113,29 +685,15 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-```
-
-```
     --snip--
-```
-
-```
     pub fn add_text(&mut self, text: &str) {
-```
-
-```
         self.content.push_str(text);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementing the `add_text` method to add text to a post’s `content`
+Listing 17-13: Implementing the `add_text` method to add text to a post’s
+`content`
 
 The `add_text` method takes a mutable reference to `self` because we’re
 changing the `Post` instance that we’re calling `add_text` on. We then call
@@ -1160,30 +718,15 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-```
-
-```
     --snip--
-```
-
-```
     pub fn content(&self) -> &str {
-```
-
-```
         ""
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Adding a placeholder implementation for the `content` method on `Post` that
-always returns an empty string slice
+Listing 17-14: Adding a placeholder implementation for the `content` method on
+`Post` that always returns an empty string slice
 
 With this added `content` method, everything in Listing 17-11 up to the line at
 [3] works as intended.
@@ -1197,117 +740,37 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-```
-
-```
     --snip--
-```
-
-```
   1 pub fn request_review(&mut self) {
-```
-
-```
       2 if let Some(s) = self.state.take() {
-```
-
-```
           3 self.state = Some(s.request_review())
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 trait State {
-```
-
-```
   4 fn request_review(self: Box<Self>) -> Box<dyn State>;
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Draft {}
-```
 
-```
-
-```
-
-```
 impl State for Draft {
-```
-
-```
     fn request_review(self: Box<Self>) -> Box<dyn State> {
-```
-
-```
       5 Box::new(PendingReview {})
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct PendingReview {}
-```
 
-```
-
-```
-
-```
 impl State for PendingReview {
-```
-
-```
     fn request_review(self: Box<Self>) -> Box<dyn State> {
-```
-
-```
       6 self
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementing `request_review` methods on `Post` and the `State` trait
+Listing 17-15: Implementing `request_review` methods on `Post` and the `State`
+trait
 
 We give `Post` a public method named `request_review` that will take a mutable
 reference to `self` [1]. Then we call an internal `request_review` method on
@@ -1361,177 +824,51 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-```
-
-```
     --snip--
-```
-
-```
     pub fn approve(&mut self) {
-```
-
-```
         if let Some(s) = self.state.take() {
-```
-
-```
             self.state = Some(s.approve())
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 trait State {
-```
-
-```
     fn request_review(self: Box<Self>) -> Box<dyn State>;
-```
-
-```
     fn approve(self: Box<Self>) -> Box<dyn State>;
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Draft {}
-```
 
-```
-
-```
-
-```
 impl State for Draft {
-```
-
-```
     --snip--
-```
-
-```
     fn approve(self: Box<Self>) -> Box<dyn State> {
-```
-
-```
       1 self
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct PendingReview {}
-```
 
-```
-
-```
-
-```
 impl State for PendingReview {
-```
-
-```
     --snip--
-```
-
-```
     fn approve(self: Box<Self>) -> Box<dyn State> {
-```
-
-```
       2 Box::new(Published {})
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Published {}
-```
 
-```
-
-```
-
-```
 impl State for Published {
-```
-
-```
     fn request_review(self: Box<Self>) -> Box<dyn State> {
-```
-
-```
         self
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     fn approve(self: Box<Self>) -> Box<dyn State> {
-```
-
-```
         self
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementing the `approve` method on `Post` and the `State` trait
+Listing 17-16: Implementing the `approve` method on `Post` and the `State` trait
 
 We add the `approve` method to the `State` trait and add a new struct that
 implements `State`, the `Published` state.
@@ -1553,34 +890,16 @@ Filename: src/lib.rs
 
 ```
 impl Post {
-```
-
-```
     --snip--
-```
-
-```
     pub fn content(&self) -> &str {
-```
-
-```
         self.state.as_ref().unwrap().content(self)
-```
-
-```
     }
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Updating the `content` method on `Post` to delegate to a `content` method on
-`State`
+Listing 17-17: Updating the `content` method on `Post` to delegate to a
+`content` method on `State`
 
 Because the goal is to keep all of these rules inside the structs that
 implement `State`, we call a `content` method on the value in `state` and pass
@@ -1611,69 +930,24 @@ Filename: src/lib.rs
 
 ```
 trait State {
-```
-
-```
     --snip--
-```
-
-```
     fn content<'a>(&self, post: &'a Post) -> &'a str {
-```
-
-```
       1 ""
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
-```
-
-```
 struct Published {}
-```
 
-```
-
-```
-
-```
 impl State for Published {
-```
-
-```
     --snip--
-```
-
-```
     fn content<'a>(&self, post: &'a Post) -> &'a str {
-```
-
-```
       2 &post.content
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Adding the `content` method to the `State` trait
+Listing 17-18: Adding the `content` method to the `State` trait
 
 We add a default implementation for the `content` method that returns an empty
 string slice [1]. That means we don’t need to implement `content` on the
@@ -1689,12 +963,8 @@ And we’re done—all of Listing 17-11 now works! We’ve implemented the state
 pattern with the rules of the blog post workflow. The logic related to the
 rules lives in the state objects rather than being scattered throughout `Post`.
 
-
-Unmatched: BoxType
-
 > ### Why Not An Enum?
-
-
+>
 > You may have been wondering why we didn’t use an `enum` with the different
 possible post states as variants. That’s certainly a possible solution; try it
 and compare the end results to see which you prefer! One disadvantage of using
@@ -1727,17 +997,18 @@ The implementation using the state pattern is easy to extend to add more
 functionality. To see the simplicity of maintaining code that uses the state
 pattern, try a few of these suggestions:
 
+* Add a `reject` method that changes the post’s state from `PendingReview` back
+to `Draft`.
+* Require two calls to `approve` before the state can be changed to `Published`.
+* Allow users to add text content only when a post is in the `Draft` state.
+Hint: have the state object responsible for what might change about the content
+but not responsible for modifying the `Post`.
 
-Unmatched: ListBullet0
-
-Unmatched: ListBullet0
-
-Unmatched: ListBullet0
-      One downside of the state pattern is that, because the states implement
-the transitions between states, some of the states are coupled to each other.
-If we add another state between `PendingReview` and `Published`, such as
-`Scheduled`, we would have to change the code in `PendingReview` to transition
-to `Scheduled` instead. It would be less work if `PendingReview` didn’t need to
+One downside of the state pattern is that, because the states implement the
+transitions between states, some of the states are coupled to each other. If we
+add another state between `PendingReview` and `Published`, such as `Scheduled`,
+we would have to change the code in `PendingReview` to transition to
+`Scheduled` instead. It would be less work if `PendingReview` didn’t need to
 change with the addition of a new state, but that would mean switching to
 another design pattern.
 
@@ -1774,25 +1045,10 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let mut post = Post::new();
-```
 
-```
-
-```
-
-```
     post.add_text("I ate a salad for lunch today");
-```
-
-```
     assert_eq!("", post.content());
-```
-
-```
 }
 ```
 
@@ -1810,105 +1066,34 @@ Filename: src/lib.rs
 
 ```
 pub struct Post {
-```
-
-```
     content: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub struct DraftPost {
-```
-
-```
     content: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Post {
-```
-
-```
   1 pub fn new() -> DraftPost {
-```
-
-```
         DraftPost {
-```
-
-```
             content: String::new(),
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
   2 pub fn content(&self) -> &str {
-```
-
-```
         &self.content
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl DraftPost {
-```
-
-```
   3 pub fn add_text(&mut self, text: &str) {
-```
-
-```
         self.content.push_str(text);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-A `Post` with a `content` method and a `DraftPost` without a `content` method
+Listing 17-19: A `Post` with a `content` method and a `DraftPost` without a
+`content` method
 
 Both the `Post` and `DraftPost` structs have a private `content` field that
 stores the blog post text. The structs no longer have the `state` field because
@@ -1941,87 +1126,30 @@ Filename: src/lib.rs
 
 ```
 impl DraftPost {
-```
-
-```
     --snip--
-```
-
-```
     pub fn request_review(self) -> PendingReviewPost {
-```
-
-```
         PendingReviewPost {
-```
-
-```
             content: self.content,
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub struct PendingReviewPost {
-```
-
-```
     content: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl PendingReviewPost {
-```
-
-```
     pub fn approve(self) -> Post {
-```
-
-```
         Post {
-```
-
-```
             content: self.content,
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-A `PendingReviewPost` that gets created by calling `request_review` on
-`DraftPost` and an `approve` method that turns a `PendingReviewPost` into a
-published `Post`
+Listing 17-20: A `PendingReviewPost` that gets created by calling
+`request_review` on `DraftPost` and an `approve` method that turns a
+`PendingReviewPost` into a published `Post`
 
 The `request_review` and `approve` methods take ownership of `self`, thus
 consuming the `DraftPost` and `PendingReviewPost` instances and transforming
@@ -2047,57 +1175,22 @@ Filename: src/main.rs
 
 ```
 use blog::Post;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let mut post = Post::new();
-```
 
-```
-
-```
-
-```
     post.add_text("I ate a salad for lunch today");
-```
 
-```
-
-```
-
-```
     let post = post.request_review();
-```
 
-```
-
-```
-
-```
     let post = post.approve();
-```
 
-```
-
-```
-
-```
     assert_eq!("I ate a salad for lunch today", post.content());
-```
-
-```
 }
 ```
 
-Modifications to `main` to use the new implementation of the blog post workflow
+Listing 17-21: Modifications to `main` to use the new implementation of the
+blog post workflow
 
 The changes we needed to make to `main` to reassign `post` mean that this
 implementation doesn’t quite follow the object-oriented state pattern anymore:

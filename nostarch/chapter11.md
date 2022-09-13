@@ -98,7 +98,8 @@ mod tests {
 }
 ```
 
-The test module and function generated automatically by `cargo new`
+Listing 11-1: The test module and function generated automatically by `cargo
+new`
 
 For now, let’s ignore the top two lines and focus on the function. Note the
 `#[test]` annotation [1]: this attribute indicates this is a test function, so
@@ -136,7 +137,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0
 filtered out; finished in 0.00s
 ```
 
-The output from running the automatically generated test
+Listing 11-2: The output from running the automatically generated test
 
 Cargo compiled and ran the test. We see the line `running 1 test` [1]. The next
 line shows the name of the generated test function, called `it_works`, and that
@@ -216,7 +217,8 @@ mod tests {
 }
 ```
 
-Adding a second test that will fail because we call the `panic!` macro
+Listing 11-3: Adding a second test that will fail because we call the `panic!`
+macro
 
 Run the tests again using `cargo test`. The output should look like Listing
 11-4, which shows that our `exploration` test passed and `another` failed.
@@ -242,7 +244,7 @@ filtered out; finished in 0.00s
 error: test failed, to rerun pass '--lib'
 ```
 
-Test results when one test passes and one test fails
+Listing 11-4: Test results when one test passes and one test fails
 
 Instead of `ok`, the line `test tests::another` shows `FAILED` [1]. Two new
 sections appear between the individual results and the summary: the first [2]
@@ -289,7 +291,8 @@ impl Rectangle {
 }
 ```
 
-Using the `Rectangle` struct and its `can_hold` method from Chapter 5
+Listing 11-5: Using the `Rectangle` struct and its `can_hold` method from
+Chapter 5
 
 The `can_hold` method returns a Boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, we write a test that exercises the
@@ -320,8 +323,8 @@ mod tests {
 }
 ```
 
-A test for `can_hold` that checks whether a larger rectangle can indeed hold a
-smaller rectangle
+Listing 11-6: A test for `can_hold` that checks whether a larger rectangle can
+indeed hold a smaller rectangle
 
 Note that we’ve added a new line inside the `tests` module: `use super::*;`
 [1]. The `tests` module is a regular module that follows the usual visibility
@@ -465,7 +468,7 @@ mod tests {
 }
 ```
 
-Testing the function `add_two` using the `assert_eq!` macro
+Listing 11-7: Testing the function `add_two` using the `assert_eq!` macro
 
 Let’s check that it passes!
 
@@ -692,7 +695,7 @@ mod tests {
 }
 ```
 
-Testing that a condition will cause a panic!
+Listing 11-8: Testing that a condition will cause a panic!
 
 We place the `#[should_panic]` attribute after the `#[test]` attribute and
 before the test function it applies to. Let’s look at the result when this test
@@ -792,7 +795,8 @@ mod tests {
 }
 ```
 
-Testing for a `panic!` with a panic message containing a specified substring
+Listing 11-9: Testing for a `panic!` with a panic message containing a
+specified substring
 
 This test will pass because the value we put in the `should_panic` attribute’s
 `expected` parameter is a substring of the message that the `Guess::new`
@@ -980,7 +984,7 @@ mod tests {
 }
 ```
 
-Tests for a function that calls `println!`
+Listing 11-10: Tests for a function that calls `println!`
 
 When we run these tests with `cargo test`, we’ll see the following output:
 
@@ -1091,7 +1095,7 @@ mod tests {
 }
 ```
 
-Three tests with three different names
+Listing 11-11: Three tests with three different names
 
 If we run the tests without passing any arguments, as we saw earlier, all the
 tests will run in parallel:
@@ -1310,7 +1314,7 @@ mod tests {
 }
 ```
 
-Testing a private function
+Listing 11-12: Testing a private function
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
@@ -1364,7 +1368,7 @@ fn it_adds_two() {
 }
 ```
 
-An integration test of a function in the `adder` crate
+Listing 11-13: An integration test of a function in the `adder` crate
 
 Each file in the *tests* directory is a separate crate, so we need to bring our
 library into each test crate’s scope. For that reason we add `use adder;` at

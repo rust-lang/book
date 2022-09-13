@@ -17,6 +17,7 @@ its other, more advanced features to show you how to do the following:
 * Organize large projects with workspaces.
 * Install binaries from *https://crates.io*.
 * Extend Cargo using custom commands.
+
 Cargo can do even more than the functionality we cover in this chapter, so for
 a full explanation of all its features, see its documentation at
 *https://doc.rust-lang.org/cargo*.
@@ -37,17 +38,8 @@ These profile names might be familiar from the output of your builds:
 
 ```
 $ cargo build
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
 $ cargo build --release
-```
-
-```
     Finished release [optimized] target(s) in 0.0s
 ```
 
@@ -63,21 +55,9 @@ Filename: Cargo.toml
 
 ```
 [profile.dev]
-```
-
-```
 opt-level = 0
-```
 
-```
-
-```
-
-```
 [profile.release]
-```
-
-```
 opt-level = 3
 ```
 
@@ -100,9 +80,6 @@ Filename: Cargo.toml
 
 ```
 [profile.dev]
-```
-
-```
 opt-level = 1
 ```
 
@@ -146,57 +123,21 @@ Filename: src/lib.rs
 
 ```
 /// Adds one to the number given.
-```
-
-```
 ///
-```
-
-```
 /// # Examples
-```
-
-```
 ///
-```
-
-```
 /// ```
-```
-
-```
 /// let arg = 5;
-```
-
-```
 /// let answer = my_crate::add_one(arg);
-```
-
-```
 ///
-```
-
-```
 /// assert_eq!(6, answer);
-```
-
-```
 /// ```
-```
-
-```
 pub fn add_one(x: i32) -> i32 {
-```
-
-```
     x + 1
-```
-
-```
 }
 ```
 
-A documentation comment for a function
+Listing 14-1: A documentation comment for a function
 
 Here, we give a description of what the `add_one` function does, start a
 section with the heading `Examples`, and then provide code that demonstrates
@@ -211,30 +152,27 @@ crate’s dependencies) and open the result in a web browser. Navigate to the
 `add_one` function and you’ll see how the text in the documentation comments is
 rendered, as shown in Figure 14-1.
 
+Figure 14-1: HTML documentation for the `add_one` function
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      #### Commonly Used Sections
+#### Commonly Used Sections
 
 We used the `# Examples` Markdown heading in Listing 14-1 to create a section
 in the HTML with the title “Examples.” Here are some other sections that crate
 authors commonly use in their documentation:
 
+* **Panics**: The scenarios in which the function being documented could panic.
+Callers of the function who don’t want their programs to panic should make sure
+they don’t call the function in these situations.
+* **Errors**: If the function returns a `Result`, describing the kinds of
+errors that might occur and what conditions might cause those errors to be
+returned can be helpful to callers so they can write code to handle the
+different kinds of errors in different ways.
+* **Safety**: If the function is `unsafe` to call (we discuss unsafety in
+Chapter 19), there should be a section explaining why the function is unsafe
+and covering the invariants that the function expects callers to uphold.
 
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-
-Unmatched: RunInHead
-
-Unmatched: RunInPara
-      Most documentation comments don’t need all of these sections, but this is
-a good checklist to remind you of the aspects of your code users will be
+Most documentation comments don’t need all of these sections, but this is a
+good checklist to remind you of the aspects of your code users will be
 interested in knowing about.
 
 #### Documentation Comments as Tests
@@ -250,29 +188,11 @@ looks like this:
 
 ```
    Doc-tests my_crate
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test src/lib.rs - add_one (line 5) ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0
-```
-
-```
 filtered out; finished in 0.27s
 ```
 
@@ -296,33 +216,15 @@ Filename: src/lib.rs
 
 ```
 //! # My Crate
-```
-
-```
 //!
-```
-
-```
 //! `my_crate` is a collection of utilities to make performing
-```
-
-```
 //! certain calculations more convenient.
-```
 
-```
-
-```
-
-```
 /// Adds one to the number given.
-```
-
-```
 --snip--
 ```
 
-Documentation for the `my_crate` crate as a whole
+Listing 14-2: Documentation for the `my_crate` crate as a whole
 
 Notice there isn’t any code after the last line that begins with `//!`. Because
 we started the comments with `//!` instead of `///`, we’re documenting the item
@@ -334,11 +236,10 @@ When we run `cargo doc --open`, these comments will display on the front page
 of the documentation for `my_crate` above the list of public items in the
 crate, as shown in Figure 14-2.
 
+Figure 14-2: Rendered documentation for `my_crate`, including the comment
+describing the crate as a whole
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      Documentation comments within items are useful for describing crates and
+Documentation comments within items are useful for describing crates and
 modules especially. Use them to explain the overall purpose of the container to
 help your users understand the crate’s organization.
 
@@ -356,8 +257,8 @@ convenient for your users. You might want to organize your structs in a
 hierarchy containing multiple levels, but then people who want to use a type
 you’ve defined deep in the hierarchy might have trouble finding out that type
 exists. They might also be annoyed at having to enter `use`
-`my_crate``::`some_module`::`another_module`::`UsefulType`;` rather than `use`
-`my_crate``::`UsefulType`;`.
+`my_crate::`some_module`::`another_module`::`UsefulType`;` rather than `use`
+`my_crate::`UsefulType`;`.
 
 The good news is that if the structure *isn’t* convenient for others to use
 from another library, you don’t have to rearrange your internal organization:
@@ -375,144 +276,51 @@ Filename: src/lib.rs
 
 ```
 //! # Art
-```
-
-```
 //!
-```
-
-```
 //! A library for modeling artistic concepts.
-```
 
-```
-
-```
-
-```
 pub mod kinds {
-```
-
-```
     /// The primary colors according to the RYB color model.
-```
-
-```
     pub enum PrimaryColor {
-```
-
-```
         Red,
-```
-
-```
         Yellow,
-```
-
-```
         Blue,
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     /// The secondary colors according to the RYB color model.
-```
-
-```
     pub enum SecondaryColor {
-```
-
-```
         Orange,
-```
-
-```
         Green,
-```
-
-```
         Purple,
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub mod utils {
-```
-
-```
     use crate::kinds::*;
-```
 
-```
-
-```
-
-```
     /// Combines two primary colors in equal amounts to create
-```
-
-```
     /// a secondary color.
-```
-
-```
     pub fn mix(
-```
-
-```
         c1: PrimaryColor,
-```
-
-```
         c2: PrimaryColor,
-```
-
-```
     ) -> SecondaryColor {
-```
-
-```
         --snip--
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-An `art` library with items organized into `kinds` and `utils` modules
+Listing 14-3: An `art` library with items organized into `kinds` and `utils`
+modules
 
 Figure 14-3 shows what the front page of the documentation for this crate
 generated by `cargo doc` would look like.
 
+Figure 14-3: Front page of the documentation for `art` that lists the `kinds`
+and `utils` modules
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on
-the front page, nor is the `mix` function. We have to click `kinds` and `utils`
-to see them.
+Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the
+front page, nor is the `mix` function. We have to click `kinds` and `utils` to
+see them.
 
 Another crate that depends on this library would need `use` statements that
 bring the items from `art` into scope, specifying the module structure that’s
@@ -523,37 +331,17 @@ Filename: src/main.rs
 
 ```
 use art::kinds::PrimaryColor;
-```
-
-```
 use art::utils::mix;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let red = PrimaryColor::Red;
-```
-
-```
     let yellow = PrimaryColor::Yellow;
-```
-
-```
     mix(red, yellow);
-```
-
-```
 }
 ```
 
-A crate using the `art` crate’s items with its internal structure exported
+Listing 14-4: A crate using the `art` crate’s items with its internal structure
+exported
 
 The author of the code in Listing 14-4, which uses the `art` crate, had to
 figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the
@@ -572,105 +360,47 @@ Filename: src/lib.rs
 
 ```
 //! # Art
-```
-
-```
 //!
-```
-
-```
 //! A library for modeling artistic concepts.
-```
 
-```
-
-```
-
-```
 pub use self::kinds::PrimaryColor;
-```
-
-```
 pub use self::kinds::SecondaryColor;
-```
-
-```
 pub use self::utils::mix;
-```
 
-```
-
-```
-
-```
 pub mod kinds {
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub mod utils {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Adding `pub use` statements to re-export items
+Listing 14-5: Adding `pub use` statements to re-export items
 
 The API documentation that `cargo doc` generates for this crate will now list
 and link re-exports on the front page, as shown in Figure 14-4, making the
 `PrimaryColor` and `SecondaryColor` types and the `mix` function easier to find.
 
+Figure 14-4: The front page of the documentation for `art` that lists the
+re-exports
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      The `art` crate users can still see and use the internal structure from
-Listing 14-3 as demonstrated in Listing 14-4, or they can use the more
-convenient structure in Listing 14-5, as shown in Listing 14-6.
+The `art` crate users can still see and use the internal structure from Listing
+14-3 as demonstrated in Listing 14-4, or they can use the more convenient
+structure in Listing 14-5, as shown in Listing 14-6.
 
 Filename: src/main.rs
 
 ```
 use art::mix;
-```
-
-```
 use art::PrimaryColor;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-A program using the re-exported items from the `art` crate
+Listing 14-6: A program using the re-exported items from the `art` crate
 
 In cases where there are many nested modules, re-exporting the types at the top
 level with `pub use` can make a significant difference in the experience of
@@ -692,7 +422,7 @@ Before you can publish any crates, you need to create an account on
 *https://crates.io* and log in via a GitHub account. (The GitHub account is
 currently a requirement, but the site might support other ways of creating an
 account in the future.) Once you’re logged in, visit your account settings at
-*https://crates.io/**me* and retrieve your API key. Then run the `cargo login`
+*https://crates.io/me* and retrieve your API key. Then run the `cargo login`
 command with your API key, like this:
 
 ```
@@ -723,9 +453,6 @@ Filename: Cargo.toml
 
 ```
 [package]
-```
-
-```
 name = "guessing_game"
 ```
 
@@ -734,53 +461,17 @@ the crate at this point, you’ll get a warning and then an error:
 
 ```
 $ cargo publish
-```
-
-```
     Updating crates.io index
-```
-
-```
 warning: manifest has no description, license, license-file, documentation,
-```
-
-```
 homepage or repository.
-```
-
-```
 See https://doc.rust-lang.org/cargo/reference/manifest.html#package-metadata
-```
-
-```
 for more info.
-```
-
-```
 --snip--
-```
-
-```
 error: failed to publish to registry at https://crates.io
-```
 
-```
-
-```
-
-```
 Caused by:
-```
-
-```
   the remote server responded with an error: missing or empty metadata fields:
-```
-
-```
 description, license. Please see https://doc.rust-
-```
-
-```
 lang.org/cargo/reference/manifest.html for how to upload metadata
 ```
 
@@ -798,13 +489,7 @@ Filename: Cargo.toml
 
 ```
 [package]
-```
-
-```
 name = "guessing_game"
-```
-
-```
 license = "MIT"
 ```
 
@@ -826,37 +511,13 @@ Filename: Cargo.toml
 
 ```
 [package]
-```
-
-```
 name = "guessing_game"
-```
-
-```
 version = "0.1.0"
-```
-
-```
 edition = "2021"
-```
-
-```
 description = "A fun game where you guess what number the
-```
-
-```
 computer has chosen."
-```
-
-```
 license = "MIT OR Apache-2.0"
-```
 
-```
-
-```
-
-```
 [dependencies]
 ```
 
@@ -882,33 +543,12 @@ Run the `cargo publish` command again. It should succeed now:
 
 ```
 $ cargo publish
-```
-
-```
     Updating crates.io index
-```
-
-```
    Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
-```
-
-```
    Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
-```
-
-```
    Compiling guessing_game v0.1.0
-```
-
-```
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.19s
-```
-
-```
    Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
@@ -943,13 +583,7 @@ run:
 
 ```
 $ cargo yank --vers 1.0.1
-```
-
-```
     Updating crates.io index
-```
-
-```
         Yank guessing_game@1.0.1
 ```
 
@@ -958,13 +592,7 @@ to start depending on a version again:
 
 ```
 $ cargo yank --vers 1.0.1 --undo
-```
-
-```
     Updating crates.io index
-```
-
-```
       Unyank guessing_game@1.0.1
 ```
 
@@ -993,9 +621,6 @@ a new directory for the workspace:
 
 ```
 $ mkdir add
-```
-
-```
 $ cd add
 ```
 
@@ -1009,21 +634,9 @@ Filename: Cargo.toml
 
 ```
 [workspace]
-```
 
-```
-
-```
-
-```
 members = [
-```
-
-```
     "adder",
-```
-
-```
 ]
 ```
 
@@ -1032,9 +645,6 @@ Next, we’ll create the `adder` binary crate by running `cargo new` within the
 
 ```
 $ cargo new adder
-```
-
-```
      Created binary (application) `adder` package
 ```
 
@@ -1043,29 +653,11 @@ in your *add* directory should look like this:
 
 ```
 ├── Cargo.lock
-```
-
-```
 ├── Cargo.toml
-```
-
-```
 ├── adder
-```
-
-```
 │   ├── Cargo.toml
-```
-
-```
 │   └── src
-```
-
-```
 │       └── main.rs
-```
-
-```
 └── target
 ```
 
@@ -1090,25 +682,10 @@ Filename: Cargo.toml
 
 ```
 [workspace]
-```
 
-```
-
-```
-
-```
 members = [
-```
-
-```
     "adder",
-```
-
-```
     "add_one",
-```
-
-```
 ]
 ```
 
@@ -1116,9 +693,6 @@ Then generate a new library crate named `add_one`:
 
 ```
 $ cargo new add_one --lib
-```
-
-```
      Created library `add_one` package
 ```
 
@@ -1126,45 +700,15 @@ Your *add* directory should now have these directories and files:
 
 ```
 ├── Cargo.lock
-```
-
-```
 ├── Cargo.toml
-```
-
-```
 ├── add_one
-```
-
-```
 │   ├── Cargo.toml
-```
-
-```
 │   └── src
-```
-
-```
 │       └── lib.rs
-```
-
-```
 ├── adder
-```
-
-```
 │   ├── Cargo.toml
-```
-
-```
 │   └── src
-```
-
-```
 │       └── main.rs
-```
-
-```
 └── target
 ```
 
@@ -1174,13 +718,7 @@ Filename: add_one/src/lib.rs
 
 ```
 pub fn add_one(x: i32) -> i32 {
-```
-
-```
     x + 1
-```
-
-```
 }
 ```
 
@@ -1192,9 +730,6 @@ Filename: adder/Cargo.toml
 
 ```
 [dependencies]
-```
-
-```
 add_one = { path = "../add_one" }
 ```
 
@@ -1210,58 +745,25 @@ Filename: adder/src/main.rs
 
 ```
 use add_one;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let num = 10;
-```
-
-```
     println!(
-```
-
-```
         "Hello, world! {num} plus one is {}!",
-```
-
-```
         add_one::add_one(num)
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Using the `add_one` library crate from the `adder` crate
+Listing 14-7: Using the `add_one` library crate from the `adder` crate
 
 Let’s build the workspace by running `cargo build` in the top-level *add*
 directory!
 
 ```
 $ cargo build
-```
-
-```
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/add/adder)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.68s
 ```
 
@@ -1271,17 +773,8 @@ with `cargo run`:
 
 ```
 $ cargo run -p adder
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0s
-```
-
-```
      Running `target/debug/adder`
-```
-
-```
 Hello, world! 10 plus one is 11!
 ```
 
@@ -1303,9 +796,6 @@ Filename: add_one/Cargo.toml
 
 ```
 [dependencies]
-```
-
-```
 rand = "0.8.5"
 ```
 
@@ -1316,33 +806,12 @@ referring to the `rand` we brought into scope:
 
 ```
 $ cargo build
-```
-
-```
     Updating crates.io index
-```
-
-```
   Downloaded rand v0.8.5
-```
-
-```
    --snip--
-```
-
-```
    Compiling rand v0.8.5
-```
-
-```
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/add/adder)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 10.18s
 ```
 
@@ -1354,33 +823,12 @@ to the *adder/src/main.rs* file for the `adder` package, we’ll get an error:
 
 ```
 $ cargo build
-```
-
-```
    --snip--
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/add/adder)
-```
-
-```
 error[E0432]: unresolved import `rand`
-```
-
-```
  --> adder/src/main.rs:2:5
-```
-
-```
   |
-```
-
-```
 2 | use rand;
-```
-
-```
   |     ^^^^ no external crate `rand`
 ```
 
@@ -1401,53 +849,17 @@ Filename: add_one/src/lib.rs
 
 ```
 pub fn add_one(x: i32) -> i32 {
-```
-
-```
     x + 1
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn it_works() {
-```
-
-```
         assert_eq!(3, add_one(2));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1457,101 +869,29 @@ the workspace:
 
 ```
 $ cargo test
-```
-
-```
    Compiling add_one v0.1.0 (file:///projects/add/add_one)
-```
-
-```
    Compiling adder v0.1.0 (file:///projects/add/adder)
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.27s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/add_one-f0253159197f7841)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test tests::it_works ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
-```
 
-```
-
-```
-
-```
      Running unittests src/main.rs (target/debug/deps/adder-49979ff40686fa8e)
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
-```
 
-```
-
-```
-
-```
    Doc-tests add_one
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
 ```
 
@@ -1566,65 +906,20 @@ we want to test:
 
 ```
 $ cargo test -p add_one
-```
-
-```
     Finished test [unoptimized + debuginfo] target(s) in 0.00s
-```
-
-```
      Running unittests src/lib.rs (target/debug/deps/add_one-b3235fea9a156f74)
-```
 
-```
-
-```
-
-```
 running 1 test
-```
-
-```
 test tests::it_works ... ok
-```
 
-```
-
-```
-
-```
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
-```
 
-```
-
-```
-
-```
    Doc-tests add_one
-```
 
-```
-
-```
-
-```
 running 0 tests
-```
 
-```
-
-```
-
-```
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out;
-```
-
-```
 finished in 0.00s
 ```
 
@@ -1668,41 +963,14 @@ can run the following:
 
 ```
 $ cargo install ripgrep
-```
-
-```
     Updating crates.io index
-```
-
-```
   Downloaded ripgrep v13.0.0
-```
-
-```
   Downloaded 1 crate (243.3 KB) in 0.88s
-```
-
-```
   Installing ripgrep v13.0.0
-```
-
-```
    --snip--
-```
-
-```
    Compiling ripgrep v13.0.0
-```
-
-```
     Finished release [optimized + debuginfo] target(s) in 3m 10s
-```
-
-```
   Installing ~/.cargo/bin/rg
-```
-
-```
    Installed package `ripgrep v13.0.0` (executable `rg`)
 ```
 

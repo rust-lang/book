@@ -106,7 +106,8 @@ Listing 6-1.
 };
 ```
 
-Storing the data and `IpAddrKind` variant of an IP address using a `struct`
+Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a
+`struct`
 
 Here, we’ve defined a struct `IpAddr` [2] that has two fields: a `kind` field
 [3] that is of type `IpAddrKind` (the enum we defined previously [1]) and an
@@ -204,7 +205,8 @@ enum Message {
 }
 ```
 
-A `Message` enum whose variants each store different amounts and types of values
+Listing 6-2: A `Message` enum whose variants each store different amounts and
+types of values
 
 This enum has four variants with different types:
 
@@ -439,8 +441,8 @@ fn value_in_cents(coin: Coin) -> u8 {
 }
 ```
 
-An enum and a `match` expression that has the variants of the enum as its
-patterns
+Listing 6-3: An enum and a `match` expression that has the variants of the enum
+as its patterns
 
 Let’s break down the `match` in the `value_in_cents` function. First we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -514,7 +516,8 @@ enum Coin {
 }
 ```
 
-A `Coin` enum in which the `Quarter` variant also holds a `UsState` value
+Listing 6-4: A `Coin` enum in which the `Quarter` variant also holds a
+`UsState` value
 
 Let’s imagine that a friend is trying to collect all 50 state quarters. While
 we sort our loose change by coin type, we’ll also call out the name of the
@@ -576,7 +579,7 @@ let six = plus_one(five); 3
 let none = plus_one(None); 4
 ```
 
-A function that uses a `match` expression on an `Option<i32>`
+Listing 6-5: A function that uses a `match` expression on an `Option<i32>`
 
 Let’s examine the first execution of `plus_one` in more detail. When we call
 `plus_one(five)` [3], the variable `x` in the body of `plus_one` will have the
@@ -757,7 +760,8 @@ match config_max {
 }
 ```
 
-A `match` that only cares about executing code when the value is `Some`
+Listing 6-6: A `match` that only cares about executing code when the value is
+`Some`
 
 If the value is `Some`, we print out the value in the `Some` variant by binding
 the value to the variable `max` in the pattern. We don’t want to do anything

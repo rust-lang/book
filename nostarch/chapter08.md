@@ -47,7 +47,7 @@ Listing 8-1.
 let v: Vec<i32> = Vec::new();
 ```
 
-Creating a new, empty vector to hold values of type `i32`
+Listing 8-1: Creating a new, empty vector to hold values of type `i32`
 
 Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
@@ -70,7 +70,7 @@ page XX.
 let v = vec![1, 2, 3];
 ```
 
-Creating a new vector containing values
+Listing 8-2: Creating a new vector containing values
 
 Because we’ve given initial `i32` values, Rust can infer that the type of `v`
 is `Vec<i32>`, and the type annotation isn’t necessary. Next, we’ll look at how
@@ -90,7 +90,7 @@ v.push(7);
 v.push(8);
 ```
 
-Using the `push` method to add values to a vector
+Listing 8-3: Using the `push` method to add values to a vector
 
 As with any variable, if we want to be able to change its value, we need to
 make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
@@ -119,7 +119,8 @@ match third  {
 }
 ```
 
-Using indexing syntax and using the `get` method to access an item in a vector
+Listing 8-4: Using indexing syntax and using the `get` method to access an item
+in a vector
 
 Note a few details here. We use the index value of `2` to get the third element
 [1] because vectors are indexed by number, starting at zero. Using `&` and `[]`
@@ -140,8 +141,8 @@ let does_not_exist = &v[100];
 let does_not_exist = v.get(100);
 ```
 
-Attempting to access the element at index 100 in a vector containing five
-elements
+Listing 8-5: Attempting to access the element at index 100 in a vector
+containing five elements
 
 When we run this code, the first `[]` method will cause the program to panic
 because it references a nonexistent element. This method is best used when you
@@ -178,7 +179,8 @@ v.push(6);
 println!("The first element is: {first}");
 ```
 
-Attempting to add an element to a vector while holding a reference to an item
+Listing 8-6: Attempting to add an element to a vector while holding a reference
+to an item
 
 Compiling this code will result in this error:
 
@@ -224,8 +226,8 @@ for i in &v {
 }
 ```
 
-Printing each element in a vector by iterating over the elements using a `for`
-loop
+Listing 8-7: Printing each element in a vector by iterating over the elements
+using a `for` loop
 
 We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-8
@@ -238,7 +240,7 @@ for i in &mut v {
 }
 ```
 
-Iterating over mutable references to elements in a vector
+Listing 8-8: Iterating over mutable references to elements in a vector
 
 To change the value that the mutable reference refers to, we have to use the
 `*` dereference operator to get to the value in `i` before we can use the `+=`
@@ -281,7 +283,7 @@ let row = vec![
 ];
 ```
 
-Defining an `enum` to store values of different types in one vector
+Listing 8-9: Defining an `enum` to store values of different types in one vector
 
 Rust needs to know what types will be in the vector at compile time so it knows
 exactly how much memory on the heap will be needed to store each element. We
@@ -313,7 +315,7 @@ annotated in Listing 8-10.
 } // <- v goes out of scope and is freed here
 ```
 
-Showing where the vector and its elements are dropped
+Listing 8-10: Showing where the vector and its elements are dropped
 
 When the vector gets dropped, all of its contents are also dropped, meaning the
 integers it holds will be cleaned up. The borrow checker ensures that any
@@ -369,7 +371,7 @@ function to create an instance, shown in Listing 8-11.
 let mut s = String::new();
 ```
 
-Creating a new, empty `String`
+Listing 8-11: Creating a new, empty `String`
 
 This line creates a new, empty string called `s`, into which we can then load
 data. Often, we’ll have some initial data with which we want to start the
@@ -386,7 +388,8 @@ let s = data.to_string();
 let s = "initial contents".to_string();
 ```
 
-Using the `to_string` method to create a `String` from a string literal
+Listing 8-12: Using the `to_string` method to create a `String` from a string
+literal
 
 This code creates a string containing `initial contents`.
 
@@ -398,7 +401,8 @@ that uses `to_string`.
 let s = String::from("initial contents");
 ```
 
-Using the `String::from` function to create a `String` from a string literal
+Listing 8-13: Using the `String::from` function to create a `String` from a
+string literal
 
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
@@ -423,7 +427,7 @@ let hello = String::from("Здравствуйте");
 let hello = String::from("Hola");
 ```
 
-Storing greetings in different languages in strings
+Listing 8-14: Storing greetings in different languages in strings
 
 All of these are valid `String` values.
 
@@ -443,7 +447,7 @@ let mut s = String::from("foo");
 s.push_str("bar");
 ```
 
-Appending a string slice to a `String` using the `push_str` method
+Listing 8-15: Appending a string slice to a `String` using the `push_str` method
 
 After these two lines, `s` will contain `foobar`. The `push_str` method takes a
 string slice because we don’t necessarily want to take ownership of the
@@ -457,7 +461,7 @@ s1.push_str(s2);
 println!("s2 is {s2}");
 ```
 
-Using a string slice after appending its contents to a `String`
+Listing 8-16: Using a string slice after appending its contents to a `String`
 
 If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
 its value on the last line. However, this code works as we’d expect!
@@ -471,7 +475,7 @@ let mut s = String::from("lo");
 s.push('l');
 ```
 
-Adding one character to a `String` value using `push`
+Listing 8-17: Adding one character to a `String` value using `push`
 
 As a result, `s` will contain `lol`.
 
@@ -486,7 +490,8 @@ let s2 = String::from("world!");
 let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
 ```
 
-Using the `+` operator to combine two `String` values into a new `String` value
+Listing 8-18: Using the `+` operator to combine two `String` values into a new
+`String` value
 
 The string `s3` will contain `Hello, world!`. The reason `s1` is no longer
 valid after the addition, and the reason we used a reference to `s2`, has to do
@@ -567,7 +572,7 @@ let s1 = String::from("hello");
 let h = s1[0];
 ```
 
-Attempting to use indexing syntax with a `String`
+Listing 8-19: Attempting to use indexing syntax with a `String`
 
 This code will result in the following error:
 
@@ -801,7 +806,7 @@ scores.insert(String::from("Blue"), 10);
 scores.insert(String::from("Yellow"), 50);
 ```
 
-Creating a new hash map and inserting some keys and values
+Listing 8-20: Creating a new hash map and inserting some keys and values
 
 Note that we need to first `use` the `HashMap` from the collections portion of
 the standard library. Of our three common collections, this one is the least
@@ -831,7 +836,7 @@ let team_name = String::from("Blue");
 let score = scores.get(&team_name).copied().unwrap_or(0);
 ```
 
-Accessing the score for the Blue team stored in the hash map
+Listing 8-21: Accessing the score for the Blue team stored in the hash map
 
 Here, `score` will have the value that’s associated with the Blue team, and the
 result will be `10`. The `get` method returns an `Option<&V>`; if there’s no
@@ -881,7 +886,8 @@ map.insert(field_name, field_value);
 // using them and see what compiler error you get!
 ```
 
-Showing that keys and values are owned by the hash map once they’re inserted
+Listing 8-22: Showing that keys and values are owned by the hash map once
+they’re inserted
 
 We aren’t able to use the variables `field_name` and `field_value` after
 they’ve been moved into the hash map with the call to `insert`.
@@ -924,7 +930,7 @@ scores.insert(String::from("Blue"), 25);
 println!("{:?}", scores);
 ```
 
-Replacing a value stored with a particular key
+Listing 8-23: Replacing a value stored with a particular key
 
 This code will print `{"Blue": 25}`. The original value of `10` has been
 overwritten.
@@ -955,7 +961,8 @@ scores.entry(String::from("Blue")).or_insert(50);
 println!("{:?}", scores);
 ```
 
-Using the `entry` method to only insert if the key does not already have a value
+Listing 8-24: Using the `entry` method to only insert if the key does not
+already have a value
 
 The `or_insert` method on `Entry` is defined to return a mutable reference to
 the value for the corresponding `Entry` key if that key exists, and if not, it
@@ -993,7 +1000,8 @@ for word in text.split_whitespace() {
 println!("{:?}", map);
 ```
 
-Counting occurrences of words using a hash map that stores words and counts
+Listing 8-25: Counting occurrences of words using a hash map that stores words
+and counts
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see
 the same key–value pairs printed in a different order: recall from “Accessing

@@ -53,6 +53,7 @@ cover the most common smart pointers in the standard library:
 * `Rc<T>`, a reference counting type that enables multiple ownership
 * `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
 the borrowing rules at runtime instead of compile time
+
 In addition, we’ll cover the *interior mutability* pattern where an immutable
 type exposes an API for mutating an interior value. We’ll also discuss
 *reference cycles*: how they can leak memory and how to prevent them.
@@ -76,6 +77,7 @@ to use a value of that type in a context that requires an exact size
 ensure the data won’t be copied when you do so
 * When you want to own a value and you care only that it’s a type that
 implements a particular trait rather than being of a specific type
+
 We’ll demonstrate the first situation in “Enabling Recursive Types with Boxes”
 on page XX. In the second case, transferring ownership of a large amount of
 data can take a long time because the data is copied around on the stack. To
@@ -97,21 +99,12 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let b = Box::new(5);
-```
-
-```
     println!("b = {b}");
-```
-
-```
 }
 ```
 
-Storing an `i32` value on the heap using a box
+Listing 15-1: Storing an `i32` value on the heap using a box
 
 We define the variable `b` to have the value of a `Box` that points to the
 value `5`, which is allocated on the heap. This program will print `b = 5`; in
@@ -146,8 +139,8 @@ more complex situations involving recursive types.
 
 A *cons list* is a data structure that comes from the Lisp programming language
 and its dialects, is made up of nested pairs, and is the Lisp version of a
-linked list. Its name comes from the `cons` function (short for *construct*
-*function*) in Lisp that constructs a new pair from its two arguments. By
+linked list. Its name comes from the `cons` function (short for *construct
+function*) in Lisp that constructs a new pair from its two arguments. By
 calling `cons` on a pair consisting of a value and another pair, we can
 construct cons lists made up of recursive pairs.
 
@@ -179,24 +172,15 @@ Filename: src/main.rs
 
 ```
 enum List {
-```
-
-```
     Cons(i32, List),
-```
-
-```
     Nil,
-```
-
-```
 }
 ```
 
-The first attempt at defining an enum to represent a cons list data structure
-of `i32` values
+Listing 15-2: The first attempt at defining an enum to represent a cons list
+data structure of `i32` values
 
-> NoteWe’re implementing a cons list that holds only `i32` values for the
+> Note: We’re implementing a cons list that holds only `i32` values for the
 purposes of this example. We could have implemented it using generics, as we
 discussed in Chapter 10, to define a cons list type that could store values of
 any type.
@@ -208,33 +192,15 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 use crate::List::{Cons, Nil};
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let list = Cons(1, Cons(2, Cons(3, Nil)));
-```
-
-```
 }
 ```
 
-Using the `List` enum to store the list `1, 2, 3`
+Listing 15-3: Using the `List` enum to store the list `1, 2, 3`
 
 The first `Cons` value holds `1` and another `List` value. This `List` value is
 another `Cons` value that holds `2` and another `List` value. This `List` value
@@ -246,57 +212,21 @@ Listing 15-4.
 
 ```
 error[E0072]: recursive type `List` has infinite size
-```
-
-```
  --> src/main.rs:1:1
-```
-
-```
   |
-```
-
-```
 1 | enum List {
-```
-
-```
   | ^^^^^^^^^ recursive type has infinite size
-```
-
-```
 2 |     Cons(i32, List),
-```
-
-```
   |               ---- recursive without indirection
-```
-
-```
   |
-```
-
-```
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List`
-```
-
-```
 representable
-```
-
-```
   |
-```
-
-```
 2 |     Cons(i32, Box<List>),
-```
-
-```
   |               ++++    +
 ```
 
-The error we get when attempting to define a recursive enum
+Listing 15-4: The error we get when attempting to define a recursive enum
 
 The error shows this type “has infinite size.” The reason is that we’ve defined
 `List` with a variant that is recursive: it holds another value of itself
@@ -311,25 +241,10 @@ definitions in Chapter 6:
 
 ```
 enum Message {
-```
-
-```
     Quit,
-```
-
-```
     Move { x: i32, y: i32 },
-```
-
-```
     Write(String),
-```
-
-```
     ChangeColor(i32, i32, i32),
-```
-
-```
 }
 ```
 
@@ -349,32 +264,18 @@ type needs, the compiler looks at the variants, starting with the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, and this process continues infinitely, as shown in Figure 15-1.
 
+Figure 15-1: An infinite `List` consisting of infinite `Cons` variants
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      #### Using Box<T> to Get a Recursive Type with a Known Size
+#### Using Box<T> to Get a Recursive Type with a Known Size
 
 Because Rust can’t figure out how much space to allocate for recursively
 defined types, the compiler gives an error with this helpful suggestion:
 
 ```
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List`
-```
-
-```
 representable
-```
-
-```
   |
-```
-
-```
 2 |     Cons(i32, Box<List>),
-```
-
-```
   |               ++++    +
 ```
 
@@ -398,81 +299,28 @@ Filename: src/main.rs
 
 ```
 enum List {
-```
-
-```
     Cons(i32, Box<List>),
-```
-
-```
     Nil,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::List::{Cons, Nil};
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let list = Cons(
-```
-
-```
         1,
-```
-
-```
         Box::new(Cons(
-```
-
-```
             2,
-```
-
-```
             Box::new(Cons(
-```
-
-```
                 3,
-```
-
-```
                 Box::new(Nil)
-```
-
-```
             ))
-```
-
-```
         ))
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Definition of `List` that uses `Box<T>` in order to have a known size
+Listing 15-5: Definition of `List` that uses `Box<T>` in order to have a known
+size
 
 The `Cons` variant needs the size of an `i32` plus the space to store the box’s
 pointer data. The `Nil` variant stores no values, so it needs less space than
@@ -482,13 +330,11 @@ the infinite, recursive chain, so the compiler can figure out the size it needs
 to store a `List` value. Figure 15-2 shows what the `Cons` variant looks like
 now.
 
+Figure 15-2: A `List` that is not infinitely sized, because `Cons` holds a `Box`
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      Boxes provide only the indirection and heap allocation; they don’t have
-any other special capabilities, like those we’ll see with the other smart
-pointer types. They also don’t have the performance overhead that these special
+Boxes provide only the indirection and heap allocation; they don’t have any
+other special capabilities, like those we’ll see with the other smart pointer
+types. They also don’t have the performance overhead that these special
 capabilities incur, so they can be useful in cases like the cons list where the
 indirection is the only feature we need. We’ll look at more use cases for boxes
 in Chapter 17.
@@ -517,7 +363,7 @@ smart pointers to work in ways similar to references. Then we’ll look at Rust�
 *deref coercion* feature and how it lets us work with either references or
 smart pointers.
 
->  NoteThere’s one big difference between the `MyBox<T>` type we’re about to
+> Note: There’s one big difference between the `MyBox<T>` type we’re about to
 build and the real `Box<T>`: our version will not store its data on the heap.
 We are focusing this example on `Deref`, so where the data is actually stored
 is less important than the pointer-like behavior.
@@ -533,33 +379,16 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
   1 let x = 5;
-```
-
-```
   2 let y = &x;
-```
 
-```
-
-```
-
-```
   3 assert_eq!(5, x);
-```
-
-```
   4 assert_eq!(5, *y);
-```
-
-```
 }
 ```
 
-Using the dereference operator to follow a reference to an `i32` value
+Listing 15-6: Using the dereference operator to follow a reference to an `i32`
+value
 
 The variable `x` holds an `i32` value `5` [1]. We set `y` equal to a reference
 to `x` [2]. We can assert that `x` is equal to `5` [3]. However, if we want to
@@ -573,37 +402,13 @@ error:
 
 ```
 error[E0277]: can't compare `{integer}` with `&{integer}`
-```
-
-```
  --> src/main.rs:6:5
-```
-
-```
   |
-```
-
-```
 6 |     assert_eq!(5, y);
-```
-
-```
   |     ^^^^^^^^^^^^^^^^ no implementation for `{integer} ==
-```
-
-```
 &{integer}`
-```
-
-```
   |
-```
-
-```
   = help: the trait `PartialEq<&{integer}>` is not implemented
-```
-
-```
 for `{integer}`
 ```
 
@@ -622,33 +427,15 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 5;
-```
-
-```
   1 let y = Box::new(x);
-```
 
-```
-
-```
-
-```
     assert_eq!(5, x);
-```
-
-```
   2 assert_eq!(5, *y);
-```
-
-```
 }
 ```
 
-Using the dereference operator on a `Box<i32>`
+Listing 15-7: Using the dereference operator on a `Box<i32>`
 
 The main difference between Listing 15-7 and Listing 15-6 is that here we set
 `y` to be an instance of a box pointing to a copied value of `x` rather than a
@@ -673,33 +460,15 @@ Filename: src/main.rs
 
 ```
  1 struct MyBox<T>(T);
-```
 
-```
-
-```
-
-```
 impl<T> MyBox<T> {
-```
-
-```
   2 fn new(x: T) -> MyBox<T> {
-```
-
-```
       3 MyBox(x)
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Defining a `MyBox<T>` type
+Listing 15-8: Defining a `MyBox<T>` type
 
 We define a struct named `MyBox` and declare a generic parameter `T` [1]
 because we want our type to hold values of any type. The `MyBox` type is a
@@ -716,53 +485,24 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 5;
-```
-
-```
     let y = MyBox::new(x);
-```
 
-```
-
-```
-
-```
     assert_eq!(5, x);
-```
-
-```
     assert_eq!(5, *y);
-```
-
-```
 }
 ```
 
-Attempting to use `MyBox<T>` in the same way we used references and `Box<T>`
+Listing 15-9: Attempting to use `MyBox<T>` in the same way we used references
+and `Box<T>`
 
 Here’s the resultant compilation error:
 
 ```
 error[E0614]: type `MyBox<{integer}>` cannot be dereferenced
-```
-
-```
   --> src/main.rs:14:19
-```
-
-```
    |
-```
-
-```
 14 |     assert_eq!(5, *y);
-```
-
-```
    |                   ^^
 ```
 
@@ -783,41 +523,17 @@ Filename: src/main.rs
 
 ```
 use std::ops::Deref;
-```
 
-```
-
-```
-
-```
 impl<T> Deref for MyBox<T> {
-```
-
-```
   1 type Target = T;
-```
 
-```
-
-```
-
-```
     fn deref(&self) -> &Self::Target {
-```
-
-```
       2 &self.0
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Implementing `Deref` on `MyBox<T>`
+Listing 15-10: Implementing `Deref` on `MyBox<T>`
 
 The `type Target = T;` syntax [1] defines an associated type for the `Deref`
 trait to use. Associated types are a slightly different way of declaring a
@@ -888,17 +604,11 @@ Filename: src/main.rs
 
 ```
 fn hello(name: &str) {
-```
-
-```
     println!("Hello, {name}!");
-```
-
-```
 }
 ```
 
-A `hello` function that has the parameter `name` of type `&str`
+Listing 15-11: A `hello` function that has the parameter `name` of type `&str`
 
 We can call the `hello` function with a string slice as an argument, such as
 `hello("Rust");`, for example. Deref coercion makes it possible to call `hello`
@@ -908,22 +618,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let m = MyBox::new(String::from("Rust"));
-```
-
-```
     hello(&m);
-```
-
-```
 }
 ```
 
-Calling `hello` with a reference to a `MyBox<String>` value, which works
-because of deref coercion
+Listing 15-12: Calling `hello` with a reference to a `MyBox<String>` value,
+which works because of deref coercion
 
 Here we’re calling the `hello` function with the argument `&m`, which is a
 reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
@@ -941,21 +642,13 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let m = MyBox::new(String::from("Rust"));
-```
-
-```
     hello(&(*m)[..]);
-```
-
-```
 }
 ```
 
-The code we would have to write if Rust didn’t have deref coercion
+Listing 15-13: The code we would have to write if Rust didn’t have deref
+coercion
 
 The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and
 `[..]` take a string slice of the `String` that is equal to the whole string to
@@ -981,6 +674,7 @@ cases:
 * From `&T` to `&U` when `T: Deref<Target=U>`
 * From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
 * From `&mut T` to `&U` when `T: Deref<Target=U>`
+
 The first two cases are the same except that the second implements mutability.
 The first case states that if you have a `&T`, and `T` implements `Deref` to
 some type `U`, you can get a `&U` transparently. The second case states that
@@ -1032,94 +726,31 @@ Filename: src/main.rs
 
 ```
 struct CustomSmartPointer {
-```
-
-```
     data: String,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 1 impl Drop for CustomSmartPointer {
-```
-
-```
     fn drop(&mut self) {
-```
-
-```
       2 println!(
-```
-
-```
             "Dropping CustomSmartPointer with data `{}`!",
-```
-
-```
             self.data
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   3 let c = CustomSmartPointer {
-```
-
-```
         data: String::from("my stuff"),
-```
-
-```
     };
-```
-
-```
   4 let d = CustomSmartPointer {
-```
-
-```
         data: String::from("other stuff"),
-```
-
-```
     };
-```
-
-```
   5 println!("CustomSmartPointers created.");
-```
-
-```
 6 }
 ```
 
-A `CustomSmartPointer` struct that implements the `Drop` trait where we would
-put our cleanup code
+Listing 15-14: A `CustomSmartPointer` struct that implements the `Drop` trait
+where we would put our cleanup code
 
 The `Drop` trait is included in the prelude, so we don’t need to bring it into
 scope. We implement the `Drop` trait on `CustomSmartPointer` [1] and provide an
@@ -1138,13 +769,7 @@ When we run this program, we’ll see the following output:
 
 ```
 CustomSmartPointers created.
-```
-
-```
 Dropping CustomSmartPointer with data `other stuff`!
-```
-
-```
 Dropping CustomSmartPointer with data `my stuff`!
 ```
 
@@ -1173,78 +798,30 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let c = CustomSmartPointer {
-```
-
-```
         data: String::from("some data"),
-```
-
-```
     };
-```
-
-```
     println!("CustomSmartPointer created.");
-```
-
-```
     c.drop();
-```
-
-```
     println!(
-```
-
-```
         "CustomSmartPointer dropped before the end of main."
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Attempting to call the `drop` method from the `Drop` trait manually to clean up
-early
+Listing 15-15: Attempting to call the `drop` method from the `Drop` trait
+manually to clean up early
 
 When we try to compile this code, we’ll get this error:
 
 ```
 error[E0040]: explicit use of destructor method
-```
-
-```
   --> src/main.rs:16:7
-```
-
-```
    |
-```
-
-```
 16 |     c.drop();
-```
-
-```
    |     --^^^^--
-```
-
-```
    |     | |
-```
-
-```
    |     | explicit destructor calls not allowed
-```
-
-```
    |     help: consider using `drop` function: `drop(c)`
 ```
 
@@ -1272,57 +849,25 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let c = CustomSmartPointer {
-```
-
-```
         data: String::from("some data"),
-```
-
-```
     };
-```
-
-```
     println!("CustomSmartPointer created.");
-```
-
-```
     drop(c);
-```
-
-```
     println!(
-```
-
-```
         "CustomSmartPointer dropped before the end of main."
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Calling `std::mem::drop` to explicitly drop a value before it goes out of scope
+Listing 15-16: Calling `std::mem::drop` to explicitly drop a value before it
+goes out of scope
 
 Running this code will print the following:
 
 ```
 CustomSmartPointer created.
-```
-
-```
 Dropping CustomSmartPointer with data `some data`!
-```
-
-```
 CustomSmartPointer dropped before the end of main.
 ```
 
@@ -1382,15 +927,12 @@ Let’s return to our cons list example in Listing 15-5. Recall that we defined
 it using `Box<T>`. This time, we’ll create two lists that both share ownership
 of a third list. Conceptually, this looks similar to Figure 15-3.
 
+Figure 15-3: Two lists, `b` and `c`, sharing ownership of a third list, `a`
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      We’ll create list `a` that contains `5` and then `10`. Then we’ll make
-two more lists: `b` that starts with `3` and `c` that starts with `4`. Both `b`
-and `c` lists will then continue on to the first `a` list containing `5` and
-`10`. In other words, both lists will share the first list containing `5` and
-`10`.
+We’ll create list `a` that contains `5` and then `10`. Then we’ll make two more
+lists: `b` that starts with `3` and `c` that starts with `4`. Both `b` and `c`
+lists will then continue on to the first `a` list containing `5` and `10`. In
+other words, both lists will share the first list containing `5` and `10`.
 
 Trying to implement this scenario using our definition of `List` with `Box<T>`
 won’t work, as shown in Listing 15-17.
@@ -1399,94 +941,34 @@ Filename: src/main.rs
 
 ```
 enum List {
-```
-
-```
     Cons(i32, Box<List>),
-```
-
-```
     Nil,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::List::{Cons, Nil};
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
-```
-
-```
   1 let b = Cons(3, Box::new(a));
-```
-
-```
   2 let c = Cons(4, Box::new(a));
-```
-
-```
 }
 ```
 
-Demonstrating that we’re not allowed to have two lists using `Box<T>` that try
-to share ownership of a third list
+Listing 15-17: Demonstrating that we’re not allowed to have two lists using
+`Box<T>` that try to share ownership of a third list
 
 When we compile this code, we get this error:
 
 ```
 error[E0382]: use of moved value: `a`
-```
-
-```
   --> src/main.rs:11:30
-```
-
-```
    |
-```
-
-```
 9  |     let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
-```
-
-```
    |         - move occurs because `a` has type `List`, which
-```
-
-```
 does not implement the `Copy` trait
-```
-
-```
 10 |     let b = Cons(3, Box::new(a));
-```
-
-```
    |                              - value moved here
-```
-
-```
 11 |     let c = Cons(4, Box::new(a));
-```
-
-```
    |                              ^ value used here after move
 ```
 
@@ -1515,57 +997,21 @@ Filename: src/main.rs
 
 ```
 enum List {
-```
-
-```
     Cons(i32, Rc<List>),
-```
-
-```
     Nil,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::List::{Cons, Nil};
-```
-
-```
 1 use std::rc::Rc;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   2 let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
-```
-
-```
   3 let b = Cons(3, Rc::clone(&a));
-```
-
-```
   4 let c = Cons(4, Rc::clone(&a));
-```
-
-```
 }
 ```
 
-A definition of `List` that uses `Rc<T>`
+Listing 15-18: A definition of `List` that uses `Rc<T>`
 
 We need to add a `use` statement to bring `Rc<T>` into scope [1] because it’s
 not in the prelude. In `main`, we create the list holding `5` and `10` and
@@ -1596,105 +1042,33 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
-```
-
-```
     println!(
-```
-
-```
         "count after creating a = {}",
-```
-
-```
         Rc::strong_count(&a)
-```
-
-```
     );
-```
-
-```
     let b = Cons(3, Rc::clone(&a));
-```
-
-```
     println!(
-```
-
-```
         "count after creating b = {}",
-```
-
-```
         Rc::strong_count(&a)
-```
-
-```
     );
-```
-
-```
     {
-```
-
-```
         let c = Cons(4, Rc::clone(&a));
-```
-
-```
         println!(
-```
-
-```
             "count after creating c = {}",
-```
-
-```
             Rc::strong_count(&a)
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
     println!(
-```
-
-```
         "count after c goes out of scope = {}",
-```
-
-```
         Rc::strong_count(&a)
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Printing the reference count
+Listing 15-19: Printing the reference count
 
 At each point in the program where the reference count changes, we print the
 reference count, which we get by calling the `Rc::strong_count` function. This
@@ -1706,17 +1080,8 @@ This code prints the following:
 
 ```
 count after creating a = 1
-```
-
-```
 count after creating b = 2
-```
-
-```
 count after creating c = 3
-```
-
-```
 count after c goes out of scope = 2
 ```
 
@@ -1769,6 +1134,7 @@ Recall the borrowing rules you learned in Chapter 4:
 * At any given time, you can have *either* one mutable reference or any number
 of immutable references (but not both).
 * References must always be valid.
+
 With references and `Box<T>`, the borrowing rules’ invariants are enforced at
 compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
 With references, if you break these rules, you’ll get a compiler error. With
@@ -1811,6 +1177,7 @@ immutable or mutable borrows checked at runtime.
 * Because `RefCell<T>` allows mutable borrows checked at runtime, you can
 mutate the value inside the `RefCell<T>` even when the `RefCell<T>` is
 immutable.
+
 Mutating the value inside an immutable value is the *interior mutability*
 pattern. Let’s look at a situation in which interior mutability is useful and
 examine how it’s possible.
@@ -1824,17 +1191,8 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 5;
-```
-
-```
     let y = &mut x;
-```
-
-```
 }
 ```
 
@@ -1842,33 +1200,12 @@ If you tried to compile this code, you’d get the following error:
 
 ```
 error[E0596]: cannot borrow `x` as mutable, as it is not declared
-```
-
-```
 as mutable
-```
-
-```
  --> src/main.rs:3:13
-```
-
-```
   |
-```
-
-```
 2 |     let x = 5;
-```
-
-```
   |         - help: consider changing this to be mutable: `mut x`
-```
-
-```
 3 |     let y = &mut x;
-```
-
-```
   |             ^^^^^^ cannot borrow as mutable
 ```
 
@@ -1917,178 +1254,52 @@ Filename: src/lib.rs
 
 ```
 pub trait Messenger {
-```
-
-```
   1 fn send(&self, msg: &str);
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 pub struct LimitTracker<'a, T: Messenger> {
-```
-
-```
     messenger: &'a T,
-```
-
-```
     value: usize,
-```
-
-```
     max: usize,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl<'a, T> LimitTracker<'a, T>
-```
-
-```
 where
-```
-
-```
     T: Messenger,
-```
-
-```
 {
-```
-
-```
     pub fn new(
-```
-
-```
         messenger: &'a T,
-```
-
-```
         max: usize
-```
-
-```
     ) -> LimitTracker<'a, T> {
-```
-
-```
         LimitTracker {
-```
-
-```
             messenger,
-```
-
-```
             value: 0,
-```
-
-```
             max,
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
   2 pub fn set_value(&mut self, value: usize) {
-```
-
-```
         self.value = value;
-```
 
-```
-
-```
-
-```
         let percentage_of_max =
-```
-
-```
             self.value as f64 / self.max as f64;
-```
 
-```
-
-```
-
-```
         if percentage_of_max >= 1.0 {
-```
-
-```
             self.messenger
-```
-
-```
                 .send("Error: You are over your quota!");
-```
-
-```
         } else if percentage_of_max >= 0.9 {
-```
-
-```
             self.messenger
-```
-
-```
                 .send("Urgent: You're at 90% of your quota!");
-```
-
-```
         } else if percentage_of_max >= 0.75 {
-```
-
-```
             self.messenger
-```
-
-```
                 .send("Warning: You're at 75% of your quota!");
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-A library to keep track of how close a value is to a maximum value and warn
-when the value is at certain levels
+Listing 15-20: A library to keep track of how close a value is to a maximum
+value and warn when the value is at certain levels
 
 One important part of this code is that the `Messenger` trait has one method
 called `send` that takes an immutable reference to `self` and the text of the
@@ -2113,146 +1324,44 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
 
-```
-
-```
-
-```
   1 struct MockMessenger {
-```
-
-```
       2 sent_messages: Vec<String>,
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     impl MockMessenger {
-```
-
-```
       3 fn new() -> MockMessenger {
-```
-
-```
             MockMessenger {
-```
-
-```
                 sent_messages: vec![],
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
   4 impl Messenger for MockMessenger {
-```
-
-```
         fn send(&self, message: &str) {
-```
-
-```
           5 self.sent_messages.push(String::from(message));
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
   6 fn it_sends_an_over_75_percent_warning_message() {
-```
-
-```
         let mock_messenger = MockMessenger::new();
-```
-
-```
         let mut limit_tracker = LimitTracker::new(
-```
-
-```
             &mock_messenger,
-```
-
-```
             100
-```
-
-```
         );
-```
 
-```
-
-```
-
-```
         limit_tracker.set_value(80);
-```
 
-```
-
-```
-
-```
         assert_eq!(mock_messenger.sent_messages.len(), 1);
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-An attempt to implement a `MockMessenger` that isn’t allowed by the borrow
-checker
+Listing 15-21: An attempt to implement a `MockMessenger` that isn’t allowed by
+the borrow checker
 
 This test code defines a `MockMessenger` struct [1] that has a `sent_messages`
 field with a `Vec` of `String` values [2] to keep track of the messages it’s
@@ -2276,45 +1385,15 @@ However, there’s one problem with this test, as shown here:
 
 ```
 error[E0596]: cannot borrow `self.sent_messages` as mutable, as it is behind a
-```
-
-```
 `&` reference
-```
-
-```
   --> src/lib.rs:58:13
-```
-
-```
    |
-```
-
-```
 2  |     fn send(&self, msg: &str);
-```
-
-```
    |             ----- help: consider changing that to be a mutable reference:
-```
-
-```
 `&mut self`
-```
-
-```
 ...
-```
-
-```
 58 |             self.sent_messages.push(String::from(message));
-```
-
-```
    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `self` is a
-```
-
-```
 `&` reference, so the data it refers to cannot be borrowed as mutable
 ```
 
@@ -2333,146 +1412,44 @@ Filename: src/lib.rs
 
 ```
 #[cfg(test)]
-```
-
-```
 mod tests {
-```
-
-```
     use super::*;
-```
-
-```
     use std::cell::RefCell;
-```
 
-```
-
-```
-
-```
     struct MockMessenger {
-```
-
-```
       1 sent_messages: RefCell<Vec<String>>,
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     impl MockMessenger {
-```
-
-```
         fn new() -> MockMessenger {
-```
-
-```
             MockMessenger {
-```
-
-```
               2 sent_messages: RefCell::new(vec![]),
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     impl Messenger for MockMessenger {
-```
-
-```
         fn send(&self, message: &str) {
-```
-
-```
             self.sent_messages
-```
-
-```
               3 .borrow_mut()
-```
-
-```
                 .push(String::from(message));
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     #[test]
-```
-
-```
     fn it_sends_an_over_75_percent_warning_message() {
-```
-
-```
         --snip--
-```
 
-```
-
-```
-
-```
         assert_eq!(
-```
-
-```
           4 mock_messenger.sent_messages.borrow().len(),
-```
-
-```
             1
-```
-
-```
         );
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Using `RefCell<T>` to mutate an inner value while the outer value is considered
-immutable
+Listing 15-22: Using `RefCell<T>` to mutate an inner value while the outer
+value is considered immutable
 
 The `sent_messages` field is now of type `RefCell<Vec<String>>` [1] instead of
 `Vec<String>`. In the `new` function, we create a new `RefCell<Vec<String>>`
@@ -2518,42 +1495,18 @@ Filename: src/lib.rs
 
 ```
 impl Messenger for MockMessenger {
-```
-
-```
     fn send(&self, message: &str) {
-```
-
-```
         let mut one_borrow = self.sent_messages.borrow_mut();
-```
-
-```
         let mut two_borrow = self.sent_messages.borrow_mut();
-```
 
-```
-
-```
-
-```
         one_borrow.push(String::from(message));
-```
-
-```
         two_borrow.push(String::from(message));
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Creating two mutable references in the same scope to see that `RefCell<T>` will
-panic
+Listing 15-23: Creating two mutable references in the same scope to see that
+`RefCell<T>` will panic
 
 We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
 from `borrow_mut`. Then we create another mutable borrow in the same way in the
@@ -2563,13 +1516,7 @@ which isn’t allowed. When we run the tests for our library, the code in Listin
 
 ```
 ---- tests::it_sends_an_over_75_percent_warning_message stdout ----
-```
-
-```
 thread 'main' panicked at 'already borrowed: BorrowMutError', src/lib.rs:60:53
-```
-
-```
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 ```
 
@@ -2607,101 +1554,32 @@ Filename: src/main.rs
 
 ```
 #[derive(Debug)]
-```
-
-```
 enum List {
-```
-
-```
     Cons(Rc<RefCell<i32>>, Rc<List>),
-```
-
-```
     Nil,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 use crate::List::{Cons, Nil};
-```
-
-```
 use std::cell::RefCell;
-```
-
-```
 use std::rc::Rc;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   1 let value = Rc::new(RefCell::new(5));
-```
 
-```
-
-```
-
-```
   2 let a = Rc::new(Cons(Rc::clone(&value), Rc::new(Nil)));
-```
 
-```
-
-```
-
-```
     let b = Cons(Rc::new(RefCell::new(3)), Rc::clone(&a));
-```
-
-```
     let c = Cons(Rc::new(RefCell::new(4)), Rc::clone(&a));
-```
 
-```
-
-```
-
-```
   3 *value.borrow_mut() += 10;
-```
 
-```
-
-```
-
-```
     println!("a after = {:?}", a);
-```
-
-```
     println!("b after = {:?}", b);
-```
-
-```
     println!("c after = {:?}", c);
-```
-
-```
 }
 ```
 
-Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
+Listing 15-24: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
 
 We create a value that is an instance of `Rc<RefCell<i32>>` and store it in a
 variable named `value` [1] so we can access it directly later. Then we create a
@@ -2725,13 +1603,7 @@ value of `15` rather than `5`:
 
 ```
 a after = Cons(RefCell { value: 15 }, Nil)
-```
-
-```
 b after = Cons(RefCell { value: 3 }, Cons(RefCell { value: 15 }, Nil))
-```
-
-```
 c after = Cons(RefCell { value: 4 }, Cons(RefCell { value: 15 }, Nil))
 ```
 
@@ -2765,78 +1637,27 @@ Filename: src/main.rs
 
 ```
 use crate::List::{Cons, Nil};
-```
-
-```
 use std::cell::RefCell;
-```
-
-```
 use std::rc::Rc;
-```
 
-```
-
-```
-
-```
 #[derive(Debug)]
-```
-
-```
 enum List {
-```
-
-```
   1 Cons(i32, RefCell<Rc<List>>),
-```
-
-```
     Nil,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl List {
-```
-
-```
   2 fn tail(&self) -> Option<&RefCell<Rc<List>>> {
-```
-
-```
         match self {
-```
-
-```
             Cons(_, item) => Some(item),
-```
-
-```
             Nil => None,
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-A cons list definition that holds a `RefCell<T>` so we can modify what a `Cons`
-variant is referring to
+Listing 15-25: A cons list definition that holds a `RefCell<T>` so we can
+modify what a `Cons` variant is referring to
 
 We’re using another variation of the `List` definition from Listing 15-5. The
 second element in the `Cons` variant is now `RefCell<Rc<List>>` [1], meaning
@@ -2855,133 +1676,41 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
   1 let a = Rc::new(Cons(5, RefCell::new(Rc::new(Nil))));
-```
 
-```
-
-```
-
-```
     println!("a initial rc count = {}", Rc::strong_count(&a));
-```
-
-```
     println!("a next item = {:?}", a.tail());
-```
 
-```
-
-```
-
-```
   2 let b = Rc::new(Cons(10, RefCell::new(Rc::clone(&a))));
-```
 
-```
-
-```
-
-```
     println!(
-```
-
-```
         "a rc count after b creation = {}",
-```
-
-```
         Rc::strong_count(&a)
-```
-
-```
     );
-```
-
-```
     println!("b initial rc count = {}", Rc::strong_count(&b));
-```
-
-```
     println!("b next item = {:?}", b.tail());
-```
 
-```
-
-```
-
-```
   3 if let Some(link) = a.tail() {
-```
-
-```
       4 *link.borrow_mut() = Rc::clone(&b);
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!(
-```
-
-```
         "b rc count after changing a = {}",
-```
-
-```
         Rc::strong_count(&b)
-```
-
-```
     );
-```
-
-```
     println!(
-```
-
-```
         "a rc count after changing a = {}",
-```
-
-```
         Rc::strong_count(&a)
-```
-
-```
     );
-```
 
-```
-
-```
-
-```
     // Uncomment the next line to see that we have a cycle;
-```
-
-```
     // it will overflow the stack
-```
-
-```
     // println!("a next item = {:?}", a.tail());
-```
-
-```
 }
 ```
 
-Creating a reference cycle of two `List` values pointing to each other
+Listing 15-26: Creating a reference cycle of two `List` values pointing to each
+other
 
 We create an `Rc<List>` instance holding a `List` value in the variable `a`
 with an initial list of `5, Nil` [1]. We then create an `Rc<List>` instance
@@ -2999,29 +1728,11 @@ moment, we’ll get this output:
 
 ```
 a initial rc count = 1
-```
-
-```
 a next item = Some(RefCell { value: Nil })
-```
-
-```
 a rc count after b creation = 2
-```
-
-```
 b initial rc count = 1
-```
-
-```
 b next item = Some(RefCell { value: Cons(5, RefCell { value: Nil }) })
-```
-
-```
 b rc count after changing a = 2
-```
-
-```
 a rc count after changing a = 2
 ```
 
@@ -3036,13 +1747,11 @@ to 1 as well. This instance’s memory can’t be dropped either, because the ot
 remain uncollected forever. To visualize this reference cycle, we’ve created a
 diagram in Figure 15-4.
 
+Figure 15-4: A reference cycle of lists `a` and `b` pointing to each other
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      If you uncomment the last `println!` and run the program, Rust will try
-to print this cycle with `a` pointing to `b` pointing to `a` and so forth until
-it overflows the stack.
+If you uncomment the last `println!` and run the program, Rust will try to
+print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
+overflows the stack.
 
 Compared to a real-world program, the consequences of creating a reference
 cycle in this example aren’t very dire: right after we create the reference
@@ -3111,33 +1820,12 @@ Filename: src/main.rs
 
 ```
 use std::cell::RefCell;
-```
-
-```
 use std::rc::Rc;
-```
 
-```
-
-```
-
-```
 #[derive(Debug)]
-```
-
-```
 struct Node {
-```
-
-```
     value: i32,
-```
-
-```
     children: RefCell<Vec<Rc<Node>>>,
-```
-
-```
 }
 ```
 
@@ -3155,50 +1843,20 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let leaf = Rc::new(Node {
-```
-
-```
         value: 3,
-```
-
-```
         children: RefCell::new(vec![]),
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
     let branch = Rc::new(Node {
-```
-
-```
         value: 5,
-```
-
-```
         children: RefCell::new(vec![Rc::clone(&leaf)]),
-```
-
-```
     });
-```
-
-```
 }
 ```
 
-Creating a `leaf` node with no children and a `branch` node with `leaf` as one
-of its children
+Listing 15-27: Creating a `leaf` node with no children and a `branch` node with
+`leaf` as one of its children
 
 We clone the `Rc<Node>` in `leaf` and store that in `branch`, meaning the
 `Node` in `leaf` now has two owners: `leaf` and `branch`. We can get from
@@ -3229,37 +1887,13 @@ Filename: src/main.rs
 
 ```
 use std::cell::RefCell;
-```
-
-```
 use std::rc::{Rc, Weak};
-```
 
-```
-
-```
-
-```
 #[derive(Debug)]
-```
-
-```
 struct Node {
-```
-
-```
     value: i32,
-```
-
-```
     parent: RefCell<Weak<Node>>,
-```
-
-```
     children: RefCell<Vec<Rc<Node>>>,
-```
-
-```
 }
 ```
 
@@ -3271,105 +1905,33 @@ Filename:  src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let leaf = Rc::new(Node {
-```
-
-```
         value: 3,
-```
-
-```
       1 parent: RefCell::new(Weak::new()),
-```
-
-```
         children: RefCell::new(vec![]),
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
   2 println!(
-```
-
-```
         "leaf parent = {:?}",
-```
-
-```
         leaf.parent.borrow().upgrade()
-```
-
-```
     );
-```
 
-```
-
-```
-
-```
     let branch = Rc::new(Node {
-```
-
-```
         value: 5,
-```
-
-```
       3 parent: RefCell::new(Weak::new()),
-```
-
-```
         children: RefCell::new(vec![Rc::clone(&leaf)]),
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
   4 *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
-```
 
-```
-
-```
-
-```
   5 println!(
-```
-
-```
         "leaf parent = {:?}",
-```
-
-```
         leaf.parent.borrow().upgrade()
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-A `leaf` node with a weak reference to its parent node, `branch`
+Listing 15-28: A `leaf` node with a weak reference to its parent node, `branch`
 
 Creating the `leaf` node looks similar to Listing 15-27 with the exception of
 the `parent` field: `leaf` starts out without a parent, so we create a new,
@@ -3399,13 +1961,7 @@ we had in Listing 15-26; the `Weak<Node>` references are printed as `(Weak)`:
 
 ```
 leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
-```
-
-```
 children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
-```
-
-```
 children: RefCell { value: [] } }] } })
 ```
 
@@ -3425,186 +1981,54 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let leaf = Rc::new(Node {
-```
-
-```
         value: 3,
-```
-
-```
         parent: RefCell::new(Weak::new()),
-```
-
-```
         children: RefCell::new(vec![]),
-```
-
-```
     });
-```
 
-```
-
-```
-
-```
   1 println!(
-```
-
-```
         "leaf strong = {}, weak = {}",
-```
-
-```
         Rc::strong_count(&leaf),
-```
-
-```
         Rc::weak_count(&leaf),
-```
-
-```
     );
-```
 
-```
-
-```
-
-```
   2 {
-```
-
-```
         let branch = Rc::new(Node {
-```
-
-```
             value: 5,
-```
-
-```
             parent: RefCell::new(Weak::new()),
-```
-
-```
             children: RefCell::new(vec![Rc::clone(&leaf)]),
-```
-
-```
         });
-```
 
-```
-
-```
-
-```
         *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
-```
 
-```
-
-```
-
-```
       3 println!(
-```
-
-```
             "branch strong = {}, weak = {}",
-```
-
-```
             Rc::strong_count(&branch),
-```
-
-```
             Rc::weak_count(&branch),
-```
-
-```
         );
-```
 
-```
-
-```
-
-```
       4 println!(
-```
-
-```
             "leaf strong = {}, weak = {}",
-```
-
-```
             Rc::strong_count(&leaf),
-```
-
-```
             Rc::weak_count(&leaf),
-```
-
-```
         );
-```
-
-```
   5 }
-```
 
-```
-
-```
-
-```
   6 println!(
-```
-
-```
         "leaf parent = {:?}",
-```
-
-```
         leaf.parent.borrow().upgrade()
-```
-
-```
     );
-```
-
-```
   7 println!(
-```
-
-```
         "leaf strong = {}, weak = {}",
-```
-
-```
         Rc::strong_count(&leaf),
-```
-
-```
         Rc::weak_count(&leaf),
-```
-
-```
     );
-```
-
-```
 }
 ```
 
-Creating `branch` in an inner scope and examining strong and weak reference
-counts
+Listing 15-29: Creating `branch` in an inner scope and examining strong and
+weak reference counts
 
 After `leaf` is created, its `Rc<Node>` has a strong count of 1 and a weak
 count of 0 [1]. In the inner scope [2], we create `branch` and associate it

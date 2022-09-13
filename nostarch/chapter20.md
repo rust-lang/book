@@ -16,11 +16,9 @@ lessons.
 For our final project, we’ll make a web server that says “hello” and looks like
 Figure 20-1 in a web browser.
 
+Figure 20-1: Our final shared project
 
-Unmatched: GraphicSlug
-
-Unmatched: CaptionLine
-      Here is our plan for building the web server:
+Here is our plan for building the web server:
 
 1. Learn a bit about TCP and HTTP.
 1. Listen for TCP connections on a socket.
@@ -30,7 +28,7 @@ Unmatched: CaptionLine
 Before we get started, we should mention one detail: the method we’ll use won’t
 be the best way to build a web server with Rust. Community members have
 published a number of production-ready crates available at *https://crates.io*
- that provide more complete web server and thread pool implementations than
+that provide more complete web server and thread pool implementations than
 we’ll build. However, our intention in this chapter is to help you learn, not
 to take the easy route. Because Rust is a systems programming language, we can
 choose the level of abstraction we want to work with and can go to a lower
@@ -45,12 +43,11 @@ let’s look at a quick overview of the protocols involved in building web
 servers. The details of these protocols are beyond the scope of this book, but
 a brief overview will give you the information you need.
 
-The two main protocols involved in web servers are *Hypertext* *Transfer*
-*Protocol* *(HTTP)* and *Transmission* *Control* *Protocol* *(TCP)*. Both
-protocols are *request-response* protocols, meaning a *client* initiates
-requests and a *server* listens to the requests and provides a response to the
-client. The contents of those requests and responses are defined by the
-protocols.
+The two main protocols involved in web servers are *Hypertext Transfer
+Protocol* *(HTTP)* and *Transmission Control Protocol* *(TCP)*. Both protocols
+are *request-response* protocols, meaning a *client* initiates requests and a
+*server* listens to the requests and provides a response to the client. The
+contents of those requests and responses are defined by the protocols.
 
 TCP is the lower-level protocol that describes the details of how information
 gets from one server to another but doesn’t specify what that information is.
@@ -67,67 +64,32 @@ this. Let’s make a new project in the usual fashion:
 
 ```
 $ cargo new hello
-```
-
-```
      Created binary (application) `hello` project
-```
-
-```
 $ cd hello
 ```
 
 Now enter the code in Listing 20-1 in *src/main.rs* to start. This code will
 listen at the local address `127.0.0.1:7878` for incoming TCP streams. When it
-gets an incoming stream, it will print `Connection` `established!`.
+gets an incoming stream, it will print `Connection established!`.
 
 Filename: src/main.rs
 
 ```
 use std::net::TcpListener;
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
   1 let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-```
 
-```
-
-```
-
-```
   2 for stream in listener.incoming() {
-```
-
-```
       3 let stream = stream.unwrap();
-```
 
-```
-
-```
-
-```
       4 println!("Connection established!");
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Listening for incoming streams and printing a message when we receive a stream
+Listing 20-1: Listening for incoming streams and printing a message when we
+receive a stream
 
 Using `TcpListener`, we can listen for TCP connections at the address
 `127.0.0.1:7878` [1]. In the address, the section before the colon is an IP
@@ -142,7 +104,7 @@ will return a new `TcpListener` instance. The function is called `bind`
 because, in networking, connecting to a port to listen to is known as “binding
 to a port.”
 
-The `bind` function returns a `Result<T,` `E>`, which indicates that it’s
+The `bind` function returns a `Result<T, E>`, which indicates that it’s
 possible for binding to fail. For example, connecting to port 80 requires
 administrator privileges (non-administrators can listen only on ports higher
 than 1023), so if we tried to connect to port 80 without being an
@@ -167,14 +129,14 @@ our program if the stream has any errors [3]; if there aren’t any errors, the
 program prints a message [4]. We’ll add more functionality for the success case
 in the next listing. The reason we might receive errors from the `incoming`
 method when a client connects to the server is that we’re not actually
-iterating over connections. Instead, we’re iterating over *connection*
-*attempts*. The connection might not be successful for a number of reasons,
-many of them operating system specific. For example, many operating systems
-have a limit to the number of simultaneous open connections they can support;
-new connection attempts beyond that number will produce an error until some of
-the open connections are closed.
+iterating over connections. Instead, we’re iterating over *connection
+attempts*. The connection might not be successful for a number of reasons, many
+of them operating system specific. For example, many operating systems have a
+limit to the number of simultaneous open connections they can support; new
+connection attempts beyond that number will produce an error until some of the
+open connections are closed.
 
-Let’s try running this code! Invoke `cargo` `run` in the terminal and then load
+Let’s try running this code! Invoke `cargo run` in the terminal and then load
 *127.0.0.1:7878* in a web browser. The browser should show an error message
 like “Connection reset” because the server isn’t currently sending back any
 data. But when you look at your terminal, you should see several messages that
@@ -182,17 +144,8 @@ were printed when the browser connected to the server!
 
 ```
      Running `target/debug/hello`
-```
-
-```
 Connection established!
-```
-
-```
 Connection established!
-```
-
-```
 Connection established!
 ```
 
@@ -209,9 +162,9 @@ connections by retrying, because the problem might be temporary. The important
 factor is that we’ve successfully gotten a handle to a TCP connection!
 
 Remember to stop the program by pressing ctrl-C when you’re done running a
-particular version of the code. Then restart the program by invoking the
-`cargo` `run` command after you’ve made each set of code changes to make sure
-you’re running the newest code.
+particular version of the code. Then restart the program by invoking the `cargo
+run` command after you’ve made each set of code changes to make sure you’re
+running the newest code.
 
 ### Reading the Request
 
@@ -226,105 +179,33 @@ Filename: src/main.rs
 
 ```
 1 use std::{
-```
-
-```
     io::{prelude::*, BufReader},
-```
-
-```
     net::{TcpListener, TcpStream},
-```
-
-```
 };
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-```
 
-```
-
-```
-
-```
     for stream in listener.incoming() {
-```
-
-```
         let stream = stream.unwrap();
-```
 
-```
-
-```
-
-```
       2 handle_connection(stream);
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn handle_connection(mut stream: TcpStream) {
-```
-
-```
   3 let buf_reader = BufReader::new(&mut stream);
-```
-
-```
   4 let http_request: Vec<_> = buf_reader
-```
-
-```
       5 .lines()
-```
-
-```
       6 .map(|result| result.unwrap())
-```
-
-```
       7 .take_while(|line| !line.is_empty())
-```
-
-```
         .collect();
-```
 
-```
-
-```
-
-```
   8 println!("Request: {:#?}", http_request);
-```
-
-```
 }
 ```
 
-Reading from the `TcpStream` and printing the data
+Listing 20-2: Reading from the `TcpStream` and printing the data
 
 We bring `std::io::prelude` and `std::io::BufReader` into scope to get access
 to traits and types that let us read from and write to the stream [1]. In the
@@ -341,8 +222,8 @@ the browser sends to our server. We indicate that we want to collect these
 lines in a vector by adding the `Vec<_>` type annotation [4].
 
 `BufReader` implements the `std::io::BufRead` trait, which provides the `lines`
-method [5]. The `lines` method returns an iterator of `Result<String,`
-`std::io::Error>` by splitting the stream of data whenever it sees a newline
+method [5]. The `lines` method returns an iterator of `Result<String,
+std::io::Error>` by splitting the stream of data whenever it sees a newline
 byte. To get each `String`, we map and `unwrap` each `Result` [6]. The `Result`
 might be an error if the data isn’t valid UTF-8 or if there was a problem
 reading from the stream. Again, a production program should handle these errors
@@ -361,93 +242,27 @@ program’s output in the terminal will now look similar to this:
 
 ```
 $ cargo run
-```
-
-```
    Compiling hello v0.1.0 (file:///projects/hello)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.42s
-```
-
-```
      Running `target/debug/hello`
-```
-
-```
 Request: [
-```
-
-```
     "GET / HTTP/1.1",
-```
-
-```
     "Host: 127.0.0.1:7878",
-```
-
-```
     "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:99.0)
-```
-
-```
 Gecko/20100101 Firefox/99.0",
-```
-
-```
     "Accept:
-```
-
-```
 text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*
-```
-
-```
 ;q=0.8",
-```
-
-```
     "Accept-Language: en-US,en;q=0.5",
-```
-
-```
     "Accept-Encoding: gzip, deflate, br",
-```
-
-```
     "DNT: 1",
-```
-
-```
     "Connection: keep-alive",
-```
-
-```
     "Upgrade-Insecure-Requests: 1",
-```
-
-```
     "Sec-Fetch-Dest: document",
-```
-
-```
     "Sec-Fetch-Mode: navigate",
-```
-
-```
     "Sec-Fetch-Site: none",
-```
-
-```
     "Sec-Fetch-User: ?1",
-```
-
-```
     "Cache-Control: max-age=0",
-```
-
-```
 ]
 ```
 
@@ -467,34 +282,27 @@ HTTP is a text-based protocol, and a request takes this format:
 
 ```
 Method Request-URI HTTP-Version CRLF
-```
-
-```
 headers CRLF
-```
-
-```
 message-body
 ```
 
-The first line is the *request* *line* that holds information about what the
+The first line is the *request line* that holds information about what the
 client is requesting. The first part of the request line indicates the *method*
 being used, such as `GET` or `POST`, which describes how the client is making
 this request. Our client used a `GET` request, which means it is asking for
 information.
 
-The next part of the request line is */*, which indicates the *u* *niform* *r*
-*esource* *i* *dentifier* *(URI)* the client is requesting: a URI is almost,
-but not quite, the same as a *u* *niform* *r* *esource* *l* *ocator* *(URL)*.
-The difference between URIs and URLs isn’t important for our purposes in this
-chapter, but the HTTP spec uses the term *URI*, so we can just mentally
-substitute *URL* for *URI* here.
+The next part of the request line is */*, which indicates the *uniform resource
+identifier* *(URI)* the client is requesting: a URI is almost, but not quite,
+the same as a *uniform resource locator* *(URL)*. The difference between URIs
+and URLs isn’t important for our purposes in this chapter, but the HTTP spec
+uses the term *URI*, so we can just mentally substitute *URL* for *URI* here.
 
 The last part is the HTTP version the client uses, and then the request line
-ends in a *CRLF* *sequence*. (CRLF stands for *carriage* *return* and *line*
-*feed*, which are terms from the typewriter days!) The CRLF sequence can also
-be written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed.
-The CRLF sequence separates the request line from the rest of the request data.
+ends in a CRLF sequence. (CRLF stands for *carriage return* and *line feed*,
+which are terms from the typewriter days!) The CRLF sequence can also be
+written as `\r\n`, where `\r` is a carriage return and `\n` is a line feed. The
+*CRLF sequence* separates the request line from the rest of the request data.
 Note that when the CRLF is printed, we see a new line start rather than `\r\n`.
 
 Looking at the request line data we received from running our program so far,
@@ -516,17 +324,11 @@ Responses have the following format:
 
 ```
 HTTP-Version Status-Code Reason-Phrase CRLF
-```
-
-```
 headers CRLF
-```
-
-```
 message-body
 ```
 
-The first line is a *status* *line* that contains the HTTP version used in the
+The first line is a *status line* that contains the HTTP version used in the
 response, a numeric status code that summarizes the result of the request, and
 a reason phrase that provides a text description of the status code. After the
 CRLF sequence are any headers, another CRLF sequence, and the body of the
@@ -549,53 +351,20 @@ Filename: src/main.rs
 
 ```
 fn handle_connection(mut stream: TcpStream) {
-```
-
-```
     let buf_reader = BufReader::new(&mut stream);
-```
-
-```
     let http_request: Vec<_> = buf_reader
-```
-
-```
         .lines()
-```
-
-```
         .map(|result| result.unwrap())
-```
-
-```
         .take_while(|line| !line.is_empty())
-```
-
-```
         .collect();
-```
 
-```
-
-```
-
-```
   1 let response = "HTTP/1.1 200 OK\r\n\r\n";
-```
 
-```
-
-```
-
-```
   2 stream.write_all(response.3 as_bytes()).unwrap();
-```
-
-```
 }
 ```
 
-Writing a tiny successful HTTP response to the stream
+Listing 20-3: Writing a tiny successful HTTP response to the stream
 
 The first new line defines the `response` variable that holds the success
 message’s data [1]. Then we call `as_bytes` on our `response` to convert the
@@ -621,49 +390,19 @@ Filename: hello.html
 
 ```
 <!DOCTYPE html>
-```
-
-```
 <html lang="en">
-```
-
-```
   <head>
-```
-
-```
     <meta charset="utf-8">
-```
-
-```
     <title>Hello!</title>
-```
-
-```
   </head>
-```
-
-```
   <body>
-```
-
-```
     <h1>Hello!</h1>
-```
-
-```
     <p>Hi from Rust</p>
-```
-
-```
   </body>
-```
-
-```
 </html>
 ```
 
-A sample HTML file to return in a response
+Listing 20-4: A sample HTML file to return in a response
 
 This is a minimal HTML5 document with a heading and some text. To return this
 from the server when a request is received, we’ll modify `handle_connection` as
@@ -674,101 +413,35 @@ Filename: src/main.rs
 
 ```
 use std::{
-```
-
-```
   1 fs,
-```
-
-```
     io::{prelude::*, BufReader},
-```
-
-```
     net::{TcpListener, TcpStream},
-```
-
-```
 };
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 fn handle_connection(mut stream: TcpStream) {
-```
-
-```
     let buf_reader = BufReader::new(&mut stream);
-```
-
-```
     let http_request: Vec<_> = buf_reader
-```
-
-```
         .lines()
-```
-
-```
         .map(|result| result.unwrap())
-```
-
-```
         .take_while(|line| !line.is_empty())
-```
-
-```
         .collect();
-```
 
-```
-
-```
-
-```
     let status_line = "HTTP/1.1 200 OK";
-```
-
-```
     let contents = fs::read_to_string("hello.html").unwrap();
-```
-
-```
     let length = contents.len();
-```
 
-```
+  2 let response = format!(
+        "{status_line}\r\n\
+         Content-Length: {length}\r\n\r\n\
+         {contents}"
+    );
 
-```
-
-```
-  2 let response =
-```
-
-```
-        format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
-```
-
-```
-
-```
-
-```
     stream.write_all(response.as_bytes()).unwrap();
-```
-
-```
 }
 ```
 
-Sending the contents of *hello.html* as the body of the response
+Listing 20-5: Sending the contents of *hello.html* as the body of the response
 
 We’ve added `fs` to the `use` statement to bring the standard library’s
 filesystem module into scope [1]. The code for reading the contents of a file
@@ -780,7 +453,7 @@ response [2]. To ensure a valid HTTP response, we add the `Content-Length`
 header which is set to the size of our response body, in this case the size of
 `hello.html`.
 
-Run this code with `cargo` `run` and load *127.0.0.1:7878* in your browser; you
+Run this code with `cargo run` and load *127.0.0.1:7878* in your browser; you
 should see your HTML rendered!
 
 Currently, we’re ignoring the request data in `http_request` and just sending
@@ -805,109 +478,34 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 fn handle_connection(mut stream: TcpStream) {
-```
-
-```
     let buf_reader = BufReader::new(&mut stream);
-```
-
-```
   1 let request_line = buf_reader
-```
+        .lines()
+        .next()
+        .unwrap()
+        .unwrap();
 
-```
-.lines()
-```
-
-```
-.next()
-```
-
-```
-.unwrap()
-```
-
-```
-.unwrap();
-```
-
-```
-
-```
-
-```
   2 if request_line == "GET / HTTP/1.1" {
-```
-
-```
         let status_line = "HTTP/1.1 200 OK";
-```
-
-```
         let contents = fs::read_to_string("hello.html").unwrap();
-```
-
-```
         let length = contents.len();
-```
 
-```
-
-```
-
-```
         let response = format!(
-```
-
-```
-            "{status_line}\r\n
-```
-
-```
-Content-Length: {length}\r\n\r\n
-```
-
-```
-{contents}"
-```
-
-```
+            "{status_line}\r\n\
+             Content-Length: {length}\r\n\r\n\
+             {contents}"
         );
-```
 
-```
-
-```
-
-```
         stream.write_all(response.as_bytes()).unwrap();
-```
-
-```
   3 } else {
-```
-
-```
         // some other request
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Handling requests to */* differently from other requests
+Listing 20-6: Handling requests to */* differently from other requests
 
 We’re only going to be looking at the first line of the HTTP request, so rather
 than reading the entire request into a vector, we’re calling `next` to get the
@@ -938,65 +536,26 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
-
-```
 } else {
-```
-
-```
   1 let status_line = "HTTP/1.1 404 NOT FOUND";
-```
-
-```
   2 let contents = fs::read_to_string("404.html").unwrap();
-```
-
-```
     let length = contents.len();
-```
 
-```
-
-```
-
-```
     let response = format!(
-```
-
-```
-        "{status_line}\r\n
-```
-
-```
-Content-Length: {length}\r\n\r\n
-```
-
-```
-{contents}"
-```
-
-```
+        "{status_line}\r\n\
+         Content-Length: {length}\r\n\r\n
+         {contents}"
     );
-```
 
-```
-
-```
-
-```
     stream.write_all(response.as_bytes()).unwrap();
-```
-
-```
 }
 ```
 
-Responding with status code 404 and an error page if anything other than */*
-was requested
+Listing 20-7: Responding with status code 404 and an error page if anything
+other than */* was requested
 
 Here, our response has a status line with status code 404 and the reason phrase
-`NOT` `FOUND` [1]. The body of the response will be the HTML in the file
+`NOT FOUND` [1]. The body of the response will be the HTML in the file
 *404.html* [1]. You’ll need to create a *404.html* file next to *hello.html*
 for the error page; again feel free to use any HTML you want, or use the
 example HTML in Listing 20-8.
@@ -1005,49 +564,19 @@ Filename: 404.html
 
 ```
 <!DOCTYPE html>
-```
-
-```
 <html lang="en">
-```
-
-```
   <head>
-```
-
-```
     <meta charset="utf-8">
-```
-
-```
     <title>Hello!</title>
-```
-
-```
   </head>
-```
-
-```
   <body>
-```
-
-```
     <h1>Oops!</h1>
-```
-
-```
     <p>Sorry, I don't know what you're asking for.</p>
-```
-
-```
   </body>
-```
-
-```
 </html>
 ```
 
-Sample content for the page to send back with any 404 response
+Listing 20-8: Sample content for the page to send back with any 404 response
 
 With these changes, run your server again. Requesting *127.0.0.1:7878* should
 return the contents of *hello.html*, and any other request, like
@@ -1068,102 +597,32 @@ Filename: src/main.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 fn handle_connection(mut stream: TcpStream) {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     let (status_line, filename) =
-```
+        if request_line == "GET / HTTP/1.1" {
+            ("HTTP/1.1 200 OK", "hello.html")
+        } else {
+            ("HTTP/1.1 404 NOT FOUND", "404.html")
+        };
 
-```
-if request_line == "GET / HTTP/1.1" {
-```
-
-```
-        ("HTTP/1.1 200 OK", "hello.html")
-```
-
-```
-    } else {
-```
-
-```
-        ("HTTP/1.1 404 NOT FOUND", "404.html")
-```
-
-```
-    };
-```
-
-```
-
-```
-
-```
     let contents = fs::read_to_string(filename).unwrap();
-```
-
-```
     let length = contents.len();
-```
 
-```
+    let response = format!(
+        "{status_line}\r\n\
+         Content-Length: {length}\r\n\r\n\
+         {contents}"
+    );
 
-```
-
-```
-    let response =
-```
-
-```
-format!(
-```
-
-```
-"{status_line}\r\n
-```
-
-```
-Content-Length: {length}\r\n\r\n
-```
-
-```
-{contents}"
-```
-
-```
-);
-```
-
-```
-
-```
-
-```
     stream.write_all(response.as_bytes()).unwrap();
-```
-
-```
 }
 ```
 
-Refactoring the `if` and `else` blocks to contain only the code that differs
-between the two cases
+Listing 20-9: Refactoring the `if` and `else` blocks to contain only the code
+that differs between the two cases
 
 Now the `if` and `else` blocks only return the appropriate values for the
 status line and filename in a tuple; we then use destructuring to assign these
@@ -1207,97 +666,31 @@ Filename: src/main.rs
 
 ```
 use std::{
-```
-
-```
     fs,
-```
-
-```
     io::{prelude::*, BufReader},
-```
-
-```
     net::{TcpListener, TcpStream},
-```
-
-```
     thread,
-```
-
-```
     time::Duration,
-```
-
-```
 };
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 fn handle_connection(mut stream: TcpStream) {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     let (status_line, filename) = 1 match &request_line[..] {
-```
-
-```
       2 "GET / HTTP/1.1" => ("HTTP/1.1 200 OK", "hello.html"),
-```
-
-```
       3 "GET /sleep HTTP/1.1" => {
-```
-
-```
             thread::sleep(Duration::from_secs(5));
-```
-
-```
             ("HTTP/1.1 200 OK", "hello.html")
-```
-
-```
         }
-```
-
-```
       4 _ => ("HTTP/1.1 404 NOT FOUND", "404.html"),
-```
-
-```
     };
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Simulating a slow request by sleeping for five seconds
+Listing 20-10: Simulating a slow request by sleeping for five seconds
 
 We switched from `if` to `match` now that we have three cases [1]. We need to
 explicitly match on a slice of `request_line` to pattern-match against the
@@ -1312,18 +705,18 @@ The third arm [4] is the same as the `else` block from Listing 20-9.
 You can see how primitive our server is: real libraries would handle the
 recognition of multiple requests in a much less verbose way!
 
-Start the server using `cargo` `run`. Then open two browser windows: one for
-*http://127.0.0.1:7878*   and the other for *http://127.0.0.1:7878/sleep*. If
-you enter the */* URI a few times, as before, you’ll see it respond quickly.
-But if you enter */sleep* and then load */*, you’ll see that */* waits until
-`sleep` has slept for its full five seconds before loading.
+Start the server using `cargo run`. Then open two browser windows: one for
+*http://127.0.0.1:7878* and the other for *http://127.0.0.1:7878/sleep*. If you
+enter the */* URI a few times, as before, you’ll see it respond quickly. But if
+you enter */sleep* and then load */*, you’ll see that */* waits until `sleep`
+has slept for its full five seconds before loading.
 
 There are multiple techniques we could use to avoid requests backing up behind
 a slow request; the one we’ll implement is a thread pool.
 
 ### Improving Throughput with a Thread Pool
 
-A *thread* *pool* is a group of spawned threads that are waiting and ready to
+A *thread pool* is a group of spawned threads that are waiting and ready to
 handle a task. When the program receives a new task, it assigns one of the
 threads in the pool to the task, and that thread will process the task. The
 remaining threads in the pool are available to handle any other tasks that come
@@ -1343,17 +736,17 @@ threads waiting in the pool. Requests that come in are sent to the pool for
 processing. The pool will maintain a queue of incoming requests. Each of the
 threads in the pool will pop off a request from this queue, handle the request,
 and then ask the queue for another request. With this design, we can process up
-to `N` requests concurrently, where `N` is the number of threads. If each
-thread is responding to a long-running request, subsequent requests can still
-back up in the queue, but we’ve increased the number of long-running requests
-we can handle before reaching that point.
+to N requests concurrently, where N is the number of threads. If each thread is
+responding to a long-running request, subsequent requests can still back up in
+the queue, but we’ve increased the number of long-running requests we can
+handle before reaching that point.
 
 This technique is just one of many ways to improve the throughput of a web
-server. Other options you might explore are the *fork/join* *model*, the
-*single-**threaded* *async* *I/O* *model*, and the *multi* *threaded* *async*
-*I/O* *model*. If you’re interested in this topic, you can read more about
-other solutions and try to implement them; with a low-level language like Rust,
-all of these options are possible.
+server. Other options you might explore are the fork/join model, the
+single-threaded async I/O model, and the multithreaded async I/O model. If
+you’re interested in this topic, you can read more about other solutions and
+try to implement them; with a low-level language like Rust, all of these
+options are possible.
 
 Before we begin implementing a thread pool, let’s talk about what using the
 pool should look like. When you’re trying to design code, writing the client
@@ -1383,49 +776,19 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-```
 
-```
-
-```
-
-```
     for stream in listener.incoming() {
-```
-
-```
         let stream = stream.unwrap();
-```
 
-```
-
-```
-
-```
         thread::spawn(|| {
-```
-
-```
             handle_connection(stream);
-```
-
-```
         });
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Spawning a new thread for each stream
+Listing 20-11: Spawning a new thread for each stream
 
 As you learned in Chapter 16, `thread::spawn` will create a new thread and then
 run the code in the closure in the new thread. If you run this code and load
@@ -1445,53 +808,20 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-```
-
-```
   1 let pool = ThreadPool::new(4);
-```
 
-```
-
-```
-
-```
     for stream in listener.incoming() {
-```
-
-```
         let stream = stream.unwrap();
-```
 
-```
-
-```
-
-```
       2 pool.execute(|| {
-```
-
-```
             handle_connection(stream);
-```
-
-```
         });
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Our ideal `ThreadPool` interface
+Listing 20-12: Our ideal `ThreadPool` interface
 
 We use `ThreadPool::new` to create a new thread pool with a configurable number
 of threads, in this case four [1]. Then, in the `for` loop, `pool.execute` has
@@ -1503,34 +833,16 @@ compile, but we’ll try so that the compiler can guide us in how to fix it.
 #### Building ThreadPool Using Compiler-Driven Development
 
 Make the changes in Listing 20-12 to *src/main.rs*, and then let’s use the
-compiler errors from `cargo` `check` to drive our development. Here is the
-first error we get:
+compiler errors from `cargo check` to drive our development. Here is the first
+error we get:
 
 ```
 $ cargo check
-```
-
-```
     Checking hello v0.1.0 (file:///projects/hello)
-```
-
-```
 error[E0433]: failed to resolve: use of undeclared type `ThreadPool`
-```
-
-```
-  --> src/main.rs:1:16
-```
-
-```
+  --> src/main.rs:11:16
    |
-```
-
-```
-1 |     let pool = ThreadPool::new(4);
-```
-
-```
+11 |     let pool = ThreadPool::new(4);
    |                ^^^^^^^^^^ use of undeclared type `ThreadPool`
 ```
 
@@ -1542,7 +854,7 @@ we change to a library crate, we could also use the separate thread pool
 library for any work we want to do using a thread pool, not just for serving
 web requests.
 
-Create an *src/lib.rs* file that contains the following, which is the simplest
+Create a *src/lib.rs* file that contains the following, which is the simplest
 definition of a `ThreadPool` struct that we can have for now:
 
 Filename: src/lib.rs
@@ -1565,37 +877,13 @@ we need to address:
 
 ```
 $ cargo check
-```
-
-```
     Checking hello v0.1.0 (file:///projects/hello)
-```
-
-```
 error[E0599]: no function or associated item named `new` found for struct
-```
-
-```
 `ThreadPool` in the current scope
-```
-
-```
-  --> src/main.rs::28
-```
-
-```
+  --> src/main.rs:12:28
    |
-```
-
-```
-1 |     let pool = ThreadPool::new(4);
-```
-
-```
+12 |     let pool = ThreadPool::new(4);
    |                            ^^^ function or associated item not found in
-```
-
-```
 `ThreadPool`
 ```
 
@@ -1609,29 +897,11 @@ Filename: src/lib.rs
 
 ```
 pub struct ThreadPool;
-```
 
-```
-
-```
-
-```
 impl ThreadPool {
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         ThreadPool
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1644,33 +914,12 @@ Let’s check the code again:
 
 ```
 $ cargo check
-```
-
-```
     Checking hello v0.1.0 (file:///projects/hello)
-```
-
-```
 error[E0599]: no method named `execute` found for struct `ThreadPool` in the
-```
-
-```
 current scope
-```
-
-```
-  --> src/main.rs:1:14
-```
-
-```
+  --> src/main.rs:17:14
    |
-```
-
-```
-1 |         pool.execute(|| {
-```
-
-```
+17 |         pool.execute(|| {
    |              ^^^^^^^ method not found in `ThreadPool`
 ```
 
@@ -1690,21 +939,9 @@ use here. We know we’ll end up doing something similar to the standard library
 
 ```
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
-```
-
-```
     where
-```
-
-```
         F: FnOnce() -> T,
-```
-
-```
         F: Send + 'static,
-```
-
-```
         T: Send + 'static,
 ```
 
@@ -1726,33 +963,12 @@ Filename: src/lib.rs
 
 ```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
-
-```
     pub fn execute<F>(&self, f: F)
-```
-
-```
     where
-```
-
-```
         F: FnOnce() 1 + Send + 'static,
-```
-
-```
     {
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1766,22 +982,16 @@ nothing, but we’re only trying to make our code compile. Let’s check it agai
 
 ```
 $ cargo check
-```
-
-```
     Checking hello v0.1.0 (file:///projects/hello)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.24s
 ```
 
-It compiles! But note that if you try `cargo` `run` and make a request in the
+It compiles! But note that if you try `cargo run` and make a request in the
 browser, you’ll see the errors in the browser that we saw at the beginning of
 the chapter. Our library isn’t actually calling the closure passed to `execute`
 yet!
 
-> NoteA saying you might hear about languages with strict compilers, such as
+> Note: A saying you might hear about languages with strict compilers, such as
 Haskell and Rust, is “if the code compiles, it works.” But this saying is not
 universally true. Our project compiles, but it does absolutely nothing! If we
 were building a real, complete project, this would be a good time to start
@@ -1803,75 +1013,30 @@ Filename: src/lib.rs
 
 ```
 impl ThreadPool {
-```
-
-```
     /// Create a new ThreadPool.
-```
-
-```
     ///
-```
-
-```
     /// The size is the number of threads in the pool.
-```
-
-```
     ///
-```
-
-```
   1 /// # Panics
-```
-
-```
     ///
-```
-
-```
     /// The `new` function will panic if the size is zero.
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
       2 assert!(size > 0);
-```
 
-```
-
-```
-
-```
         ThreadPool
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Implementing `ThreadPool::new` to panic if `size` is zero
+Listing 20-13: Implementing `ThreadPool::new` to panic if `size` is zero
 
 We’ve also added some documentation for our `ThreadPool` with doc comments.
 Note that we followed good documentation practices by adding a section that
 calls out the situations in which our function can panic [1], as discussed in
-Chapter 14. Try running `cargo` `doc` `--open` and clicking the `ThreadPool`
-struct to see what the generated docs for `new` look like!
+Chapter 14. Try running `cargo doc --open` and clicking the `ThreadPool` struct
+to see what the generated docs for `new` look like!
 
 Instead of adding the `assert!` macro as we’ve done here [2], we could change
 `new` into `build` and return a `Result` like we did with `Config::build` in
@@ -1882,13 +1047,7 @@ following signature to compare with the `new` function:
 
 ```
 pub fn build(
-```
-
-```
-size: usize
-```
-
-```
+    size: usize
 ) -> Result<ThreadPool, PoolCreationError> {
 ```
 
@@ -1901,21 +1060,9 @@ look at the `thread::spawn` signature:
 
 ```
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
-```
-
-```
     where
-```
-
-```
         F: FnOnce() -> T,
-```
-
-```
         F: Send + 'static,
-```
-
-```
         T: Send + 'static,
 ```
 
@@ -1934,89 +1081,29 @@ Filename: src/lib.rs
 
 ```
 1 use std::thread;
-```
 
-```
-
-```
-
-```
 pub struct ThreadPool {
-```
-
-```
   2 threads: Vec<thread::JoinHandle<()>>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         assert!(size > 0);
-```
 
-```
-
-```
-
-```
       3 let mut threads = Vec::with_capacity(size);
-```
 
-```
-
-```
-
-```
         for _ in 0..size {
-```
-
-```
             // create some threads and store them in the vector
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         ThreadPool { threads }
-```
-
-```
     }
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Creating a vector for `ThreadPool` to hold the threads
+Listing 20-14: Creating a vector for `ThreadPool` to hold the threads
 
 We’ve brought `std::thread` into scope in the library crate [1] because we’re
 using `thread::JoinHandle` as the type of the items in the vector in
@@ -2029,7 +1116,7 @@ vector. Because we know we need to store `size` elements in the vector, doing
 this allocation up front is slightly more efficient than using `Vec::new`,
 which resizes itself as elements are inserted.
 
-When you run `cargo` `check` again, it should succeed.
+When you run `cargo check` again, it should succeed.
 
 #### Sending Code from the ThreadPool to a Thread
 
@@ -2045,8 +1132,8 @@ implement it manually.
 We’ll implement this behavior by introducing a new data structure between the
 `ThreadPool` and the threads that will manage this new behavior. We’ll call
 this data structure *Worker*, which is a common term in pooling
-implementations. The Worker picks up code that needs to be run and runs the
-code in the Worker’s thread.
+implementations. The `Worker` picks up code that needs to be run and runs the
+code in its thread.
 
 Think of people working in the kitchen at a restaurant: the workers wait until
 orders come in from customers, and then they’re responsible for taking those
@@ -2056,8 +1143,8 @@ Instead of storing a vector of `JoinHandle<()>` instances in the thread pool,
 we’ll store instances of the `Worker` struct. Each `Worker` will store a single
 `JoinHandle<()>` instance. Then we’ll implement a method on `Worker` that will
 take a closure of code to run and send it to the already running thread for
-execution. We’ll also give each worker an `id` so we can distinguish between
-the different workers in the pool when logging or debugging.
+execution. We’ll also give each `Worker` an `id` so we can distinguish between
+the different instances of `Worker` in the pool when logging or debugging.
 
 Here is the new process that will happen when we create a `ThreadPool`. We’ll
 implement the code that sends the closure to the thread after we have `Worker`
@@ -2069,7 +1156,7 @@ set up in this way:
 `Worker` instance that holds the `id` and a thread spawned with an empty
 closure.
 1. In `ThreadPool::new`, use the `for` loop counter to generate an `id`, create
-a new `Worker` with that `id`, and store the worker in the vector.
+a new `Worker` with that `id`, and store the `Worker` in the vector.
 If you’re up for a challenge, try implementing these changes on your own before
 looking at the code in Listing 20-15.
 
@@ -2079,142 +1166,43 @@ Filename: src/lib.rs
 
 ```
 use std::thread;
-```
 
-```
-
-```
-
-```
 pub struct ThreadPool {
-```
-
-```
   1 workers: Vec<Worker>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         assert!(size > 0);
-```
 
-```
-
-```
-
-```
         let mut workers = Vec::with_capacity(size);
-```
 
-```
-
-```
-
-```
       2 for id in 0..size {
-```
-
-```
           3 workers.push(Worker::new(id));
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         ThreadPool { workers }
-```
-
-```
     }
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 4 struct Worker {
-```
-
-```
     id: usize,
-```
-
-```
     thread: thread::JoinHandle<()>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Worker {
-```
-
-```
   5 fn new(id: usize) -> Worker {
-```
-
-```
       6 let thread = thread::spawn(|| {});
-```
 
-```
-
-```
-
-```
         Worker { 7 id, 8 thread }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Modifying `ThreadPool` to hold `Worker` instances instead of holding threads
-directly
+Listing 20-15: Modifying `ThreadPool` to hold `Worker` instances instead of
+holding threads directly
 
 We’ve changed the name of the field on `ThreadPool` from `threads` to `workers`
 because it’s now holding `Worker` instances instead of `JoinHandle<()>`
@@ -2228,9 +1216,9 @@ so we make the `Worker` struct [4] and its `new` function [5] private. The
 `JoinHandle<()>` instance [8] that is created by spawning a new thread using an
 empty closure [6].
 
-> NoteIf the operating system can’t create a thread because there aren’t enough
-system resources, `thread::spawn` will panic. That will cause our whole server
-to panic, even though the creation of some threads might succeed. For
+> Note: If the operating system can’t create a thread because there aren’t
+enough system resources, `thread::spawn` will panic. That will cause our whole
+server to panic, even though the creation of some threads might succeed. For
 simplicity’s sake, this behavior is fine, but in a production thread pool
 implementation, you’d likely want to use `std::thread::Builder` and its `spawn`
 method that returns `Result` instead.
@@ -2271,238 +1259,79 @@ Filename: src/lib.rs
 
 ```
 use std::{sync::mpsc, thread};
-```
 
-```
-
-```
-
-```
 pub struct ThreadPool {
-```
-
-```
     workers: Vec<Worker>,
-```
-
-```
     sender: mpsc::Sender<Job>,
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 struct Job;
-```
 
-```
-
-```
-
-```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         assert!(size > 0);
-```
 
-```
-
-```
-
-```
       1 let (sender, receiver) = mpsc::channel();
-```
 
-```
-
-```
-
-```
         let mut workers = Vec::with_capacity(size);
-```
 
-```
-
-```
-
-```
         for id in 0..size {
-```
-
-```
             workers.push(Worker::new(id));
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         ThreadPool { workers, 2 sender }
-```
-
-```
     }
-```
-
-```
     --snip--
-```
-
-```
 }
 ```
 
-Modifying `ThreadPool` to store the sender of a channel that transmits `Job`
-instances
+Listing 20-16: Modifying `ThreadPool` to store the sender of a channel that
+transmits `Job` instances
 
 In `ThreadPool::new`, we create our new channel [1] and have the pool hold the
 sender [2]. This will successfully compile.
 
-Let’s try passing a receiver of the channel into each worker as the thread pool
-creates the channel. We know we want to use the receiver in the thread that the
-workers spawn, so we’ll reference the `receiver` parameter in the closure. The
-code in Listing 20-17 won’t quite compile yet.
+Let’s try passing a receiver of the channel into each `Worker` as the thread
+pool creates the channel. We know we want to use the receiver in the thread
+that the `Worker` instances spawn, so we’ll reference the `receiver` parameter
+in the closure. The code in Listing 20-17 won’t quite compile yet.
 
 Filename: src/lib.rs
 
 ```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         assert!(size > 0);
-```
 
-```
-
-```
-
-```
         let (sender, receiver) = mpsc::channel();
-```
 
-```
-
-```
-
-```
         let mut workers = Vec::with_capacity(size);
-```
 
-```
-
-```
-
-```
         for id in 0..size {
-```
-
-```
           1 workers.push(Worker::new(id, receiver));
-```
-
-```
         }
-```
 
-```
-
-```
-
-```
         ThreadPool { workers, sender }
-```
-
-```
     }
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Worker {
-```
-
-```
     fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
-```
-
-```
         let thread = thread::spawn(|| {
-```
-
-```
           2 receiver;
-```
-
-```
         });
-```
 
-```
-
-```
-
-```
         Worker { id, thread }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Passing the receiver to the workers
+Listing 20-17: Passing the receiver to each `Worker`
 
 We’ve made some small and straightforward changes: we pass the receiver into
 `Worker::new` [1], and then we use it inside the closure [2].
@@ -2511,53 +1340,16 @@ When we try to check this code, we get this error:
 
 ```
 $ cargo check
-```
-
-```
     Checking hello v0.1.0 (file:///projects/hello)
-```
-
-```
 error[E0382]: use of moved value: `receiver`
-```
-
-```
-  --> src/lib.rs:2:42
-```
-
-```
+  --> src/lib.rs:26:42
    |
-```
-
-```
-2 |         let (sender, receiver) = mpsc::channel();
-```
-
-```
+21 |         let (sender, receiver) = mpsc::channel();
    |                      -------- move occurs because `receiver` has type
-```
-
-```
 `std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
-```
-
-```
 ...
-```
-
-```
-2 |             workers.push(Worker::new(id, receiver));
-```
-
-```
+26 |             workers.push(Worker::new(id, receiver));
    |                                          ^^^^^^^^ value moved here, in
-```
-
-```
-
-```
-
-```
 previous iteration of loop
 ```
 
@@ -2566,7 +1358,8 @@ won’t work, as you’ll recall from Chapter 16: the channel implementation tha
 Rust provides is multiple *producer*, single *consumer*. This means we can’t
 just clone the consuming end of the channel to fix this code. We also don’t
 want to send a message multiple times to multiple consumers; we want one list
-of messages with multiple workers such that each message gets processed once.
+of messages with multiple `Worker` instances such that each message gets
+processed once.
 
 Additionally, taking a job off the channel queue involves mutating the
 `receiver`, so the threads need a safe way to share and modify `receiver`;
@@ -2574,173 +1367,61 @@ otherwise, we might get race conditions (as covered in Chapter 16).
 
 Recall the thread-safe smart pointers discussed in Chapter 16: to share
 ownership across multiple threads and allow the threads to mutate the value, we
-need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple workers own the
-receiver, and `Mutex` will ensure that only one worker gets a job from the
-receiver at a time. Listing 20-18 shows the changes we need to make.
+need to use `Arc<Mutex<T>>`. The `Arc` type will let multiple `Worker`
+instances own the receiver, and `Mutex` will ensure that only one `Worker` gets
+a job from the receiver at a time. Listing 20-18 shows the changes we need to
+make.
 
 Filename: src/lib.rs
 
 ```
 use std::{
-```
-
-```
     sync::{mpsc, Arc, Mutex},
-```
-
-```
     thread,
-```
-
-```
 };
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         assert!(size > 0);
-```
 
-```
-
-```
-
-```
         let (sender, receiver) = mpsc::channel();
-```
 
-```
-
-```
-
-```
       1 let receiver = Arc::new(Mutex::new(receiver));
-```
 
-```
-
-```
-
-```
         let mut workers = Vec::with_capacity(size);
-```
 
-```
-
-```
-
-```
         for id in 0..size {
-```
-
-```
             workers.push(
-```
-
-```
-Worker::new(id, Arc::clone(& 2 receiver))
-```
-
-```
-);
-```
-
-```
+                Worker::new(id, Arc::clone(& 2 receiver))
+            );
         }
-```
 
-```
-
-```
-
-```
         ThreadPool { workers, sender }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     --snip--
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Worker {
-```
-
-```
     fn new(
-```
-
-```
-id: usize,
-```
-
-```
-receiver: Arc<Mutex<mpsc::Receiver<Job>>>
-```
-
-```
-) -> Worker {
-```
-
-```
+        id: usize,
+        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
+    ) -> Worker {
         --snip--
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Sharing the receiver among the workers using `Arc` and `Mutex`
+Listing 20-18: Sharing the receiver among the `Worker` instances using `Arc`
+and `Mutex`
 
 In `ThreadPool::new`, we put the receiver in an `Arc` and a `Mutex` [1]. For
-each new worker, we clone the `Arc` to bump the reference count so the workers
-can share ownership of the receiver [2].
+each new `Worker`, we clone the `Arc` to bump the reference count so the
+`Worker` instances can share ownership of the receiver [2].
 
 With these changes, the code compiles! We’re getting there!
 
@@ -2756,78 +1437,27 @@ Filename: src/lib.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 type Job = Box<dyn FnOnce() + Send + 'static>;
-```
 
-```
-
-```
-
-```
 impl ThreadPool {
-```
-
-```
     --snip--
-```
 
-```
-
-```
-
-```
     pub fn execute<F>(&self, f: F)
-```
-
-```
     where
-```
-
-```
         F: FnOnce() + Send + 'static,
-```
-
-```
     {
-```
-
-```
       1 let job = Box::new(f);
-```
 
-```
-
-```
-
-```
       2 self.sender.send(job).unwrap();
-```
-
-```
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 --snip--
 ```
 
-Creating a `Job` type alias for a `Box` that holds each closure and then
-sending the job down the channel
+Listing 20-19: Creating a `Job` type alias for a `Box` that holds each closure
+and then sending the job down the channel
 
 After creating a new `Job` instance using the closure we get in `execute` [1],
 we send that job down the sending end of the channel [2]. We’re calling
@@ -2838,7 +1468,7 @@ executing: our threads continue executing as long as the pool exists. The
 reason we use `unwrap` is that we know the failure case won’t happen, but the
 compiler doesn’t know that.
 
-But we’re not quite done yet! In the worker, our closure being passed to
+But we’re not quite done yet! In the `Worker`, our closure being passed to
 `thread::spawn` still only *references* the receiving end of the channel.
 Instead, we need the closure to loop forever, asking the receiving end of the
 channel for a job and running the job when it gets one. Let’s make the change
@@ -2848,93 +1478,31 @@ Filename: src/lib.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Worker {
-```
-
-```
     fn new(
-```
-
-```
-id: usize,
-```
-
-```
-receiver: Arc<Mutex<mpsc::Receiver<Job>>>
-```
-
-```
-) -> Worker {
-```
-
-```
+        id: usize,
+        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
+    ) -> Worker {
         let thread = thread::spawn(move || loop {
-```
+            let job = receiver
+              1 .lock()
+              2 .unwrap()
+              3 .recv()
+              4 .unwrap();
 
-```
-           let job = receiver
-```
-
-```
-.lock()
-```
-
-```
-.unwrap()
-```
-
-```
-.recv()
-```
-
-```
-.unwrap();
-```
-
-```
-
-```
-
-```
             println!("Worker {id} got a job; executing.");
-```
 
-```
-
-```
-
-```
             job();
-```
-
-```
         });
-```
 
-```
-
-```
-
-```
         Worker { id, thread }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Receiving and executing the jobs in the worker’s thread
+Listing 20-20: Receiving and executing the jobs in the `Worker` instance’s
+thread
 
 Here, we first call `lock` on the `receiver` to acquire the mutex [1], and then
 we call `unwrap` to panic on any errors [2]. Acquiring a lock might fail if the
@@ -2953,146 +1521,44 @@ The call to `recv` blocks, so if there is no job yet, the current thread will
 wait until a job becomes available. The `Mutex<T>` ensures that only one
 `Worker` thread at a time is trying to request a job.
 
-Our thread pool is now in a working state! Give it a `cargo` `run` and make
-some requests:
+Our thread pool is now in a working state! Give it a `cargo run` and make some
+requests:
 
 ```
 $ cargo run
-```
-
-```
    Compiling hello v0.1.0 (file:///projects/hello)
-```
-
-```
 warning: field is never read: `workers`
-```
-
-```
  --> src/lib.rs:7:5
-```
-
-```
   |
-```
-
-```
 7 |     workers: Vec<Worker>,
-```
-
-```
   |     ^^^^^^^^^^^^^^^^^^^^
-```
-
-```
   |
-```
-
-```
   = note: `#[warn(dead_code)]` on by default
-```
 
-```
-
-```
-
-```
 warning: field is never read: `id`
-```
-
-```
   --> src/lib.rs:48:5
-```
-
-```
    |
-```
-
-```
 48 |     id: usize,
-```
-
-```
    |     ^^^^^^^^^
-```
 
-```
-
-```
-
-```
 warning: field is never read: `thread`
-```
-
-```
   --> src/lib.rs:49:5
-```
-
-```
    |
-```
-
-```
 49 |     thread: thread::JoinHandle<()>,
-```
-
-```
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-```
 
-```
-
-```
-
-```
 warning: `hello` (lib) generated 3 warnings
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 1.40s
-```
-
-```
      Running `target/debug/hello`
-```
-
-```
 Worker 0 got a job; executing.
-```
-
-```
 Worker 2 got a job; executing.
-```
-
-```
 Worker 1 got a job; executing.
-```
-
-```
 Worker 3 got a job; executing.
-```
-
-```
 Worker 0 got a job; executing.
-```
-
-```
 Worker 2 got a job; executing.
-```
-
-```
 Worker 1 got a job; executing.
-```
-
-```
 Worker 3 got a job; executing.
-```
-
-```
 Worker 0 got a job; executing.
-```
-
-```
 Worker 2 got a job; executing.
 ```
 
@@ -3102,89 +1568,38 @@ overloaded if the server receives a lot of requests. If we make a request to
 */sleep*, the server will be able to serve other requests by having another
 thread run them.
 
-> NoteIf you open */sleep* in multiple browser windows simultaneously, they
+> Note: If you open */sleep* in multiple browser windows simultaneously, they
 might load one at a time in five-second intervals. Some web browsers execute
 multiple instances of the same request sequentially for caching reasons. This
 limitation is not caused by our web server.
 
-After learning about the `while` `let` loop in Chapter 18, you might be
-wondering why we didn’t write the worker thread code as shown in Listing 20-21.
+After learning about the `while let` loop in Chapter 18, you might be wondering
+why we didn’t write the `Worker` thread code as shown in Listing 20-21.
 
 Filename: src/lib.rs
 
 ```
 --snip--
-```
 
-```
-
-```
-
-```
 impl Worker {
-```
-
-```
     fn new(
-```
-
-```
-id: usize,
-```
-
-```
-receiver: Arc<Mutex<mpsc::Receiver<Job>>>
-```
-
-```
-) -> Worker {
-```
-
-```
+        id: usize,
+        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
+    ) -> Worker {
         let thread = thread::spawn(move || {
-```
-
-```
             while let Ok(job) = receiver.lock().unwrap().recv() {
-```
-
-```
                 println!("Worker {id} got a job; executing.");
-```
 
-```
-
-```
-
-```
                 job();
-```
-
-```
             }
-```
-
-```
         });
-```
 
-```
-
-```
-
-```
         Worker { id, thread }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-An alternative implementation of `Worker::new` using `while` `let`
+Listing 20-21: An alternative implementation of `Worker::new` using `while let`
 
 This code compiles and runs but doesn’t result in the desired threading
 behavior: a slow request will still cause other requests to wait to be
@@ -3197,13 +1612,13 @@ lock. However, this implementation can also result in the lock being held
 longer than intended if we aren’t mindful of the lifetime of the
 `MutexGuard<T>`.
 
-The code in Listing 20-20 that uses `let` `job` `=`
-`receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
+The code in Listing 20-20 that uses `let job =
+receiver.lock().unwrap().recv().unwrap();` works because with `let`, any
 temporary values used in the expression on the right-hand side of the equal
-sign are immediately dropped when the `let` statement ends. However, `while`
-`let` (and `if` `let` and `match`) does not drop temporary values until the end
-of the associated block. In Listing 20-21, the lock remains held for the
-duration of the call to `job()`, meaning other workers cannot receive jobs.
+sign are immediately dropped when the `let` statement ends. However, `while
+let` (and `if let` and `match`) does not drop temporary values until the end of
+the associated block. In Listing 20-21, the lock remains held for the duration
+of the call to `job()`, meaning other `Worker` instances cannot receive jobs.
 
 ## Graceful Shutdown and Cleanup
 
@@ -3232,117 +1647,41 @@ Filename: src/lib.rs
 
 ```
 impl Drop for ThreadPool {
-```
-
-```
     fn drop(&mut self) {
-```
-
-```
       1 for worker in &mut self.workers {
-```
-
-```
           2 println!("Shutting down worker {}", worker.id);
-```
 
-```
-
-```
-
-```
           3 worker.thread.join().unwrap();
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Joining each thread when the thread pool goes out of scope
+Listing 20-22: Joining each thread when the thread pool goes out of scope
 
 First we loop through each of the thread pool `workers` [1]. We use `&mut` for
 this because `self` is a mutable reference, and we also need to be able to
-mutate `worker`. For each worker, we print a message saying that this
-particular worker is shutting down [2], and then we call `join` on that
-worker’s thread [3]. If the call to `join` fails, we use `unwrap` to make Rust
-panic and go into an ungraceful shutdown.
+mutate `worker`. For each `worker`, we print a message saying that this
+particular `Worker` instance is shutting down [2], and then we call `join` on
+that `Worker` instance’s thread [3]. If the call to `join` fails, we use
+`unwrap` to make Rust panic and go into an ungraceful shutdown.
 
 Here is the error we get when we compile this code:
 
 ```
 error[E0507]: cannot move out of `worker.thread` which is behind a mutable
-```
-
-```
 reference
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
+    --> src/lib.rs:52:13
+     |
+52   |             worker.thread.join().unwrap();
+     |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this
+method call
+     |             |
+     |             move occurs because `worker.thread` has type
+`JoinHandle<()>`, which does not implement the `Copy` trait
+     |
+note: this function takes ownership of the receiver `self`, which moves
+`worker.thread`
 ```
 
 The error tells us we can’t call `join` because we only have a mutable borrow
@@ -3362,17 +1701,8 @@ Filename: src/lib.rs
 
 ```
 struct Worker {
-```
-
-```
     id: usize,
-```
-
-```
     thread: Option<thread::JoinHandle<()>>,
-```
-
-```
 }
 ```
 
@@ -3381,90 +1711,26 @@ Checking this code, we get two errors:
 
 ```
 error[E0599]: no method named `join` found for enum `Option` in the current
-```
-
-```
 scope
-```
-
-```
   --> src/lib.rs:52:27
-```
-
-```
    |
-```
-
-```
 52 |             worker.thread.join().unwrap();
-```
-
-```
    |                           ^^^^ method not found in
-```
-
-```
 `Option<JoinHandle<()>>`
-```
 
-```
-
-```
-
-```
 error[E0308]: mismatched types
-```
-
-```
   --> src/lib.rs:72:22
-```
-
-```
    |
-```
-
-```
 72 |         Worker { id, thread }
-```
-
-```
    |                      ^^^^^^ expected enum `Option`, found struct
-```
-
-```
 `JoinHandle`
-```
-
-```
    |
-```
-
-```
    = note: expected enum `Option<JoinHandle<()>>`
-```
-
-```
             found struct `JoinHandle<_>`
-```
-
-```
 help: try wrapping the expression in `Some`
-```
-
-```
    |
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
+72 |         Worker { id, thread: Some(thread) }
+   |                      +++++++++++++      +
 ```
 
 Let’s address the second error, which points to the code at the end of
@@ -3475,53 +1741,17 @@ Filename: src/lib.rs
 
 ```
 impl Worker {
-```
-
-```
     fn new(
-```
-
-```
-id: usize,
-```
-
-```
-receiver: Arc<Mutex<mpsc::Receiver<Job>>>
-```
-
-```
-) -> Worker {
-```
-
-```
+        id: usize,
+        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
+    ) -> Worker {
         --snip--
-```
 
-```
-
-```
-
-```
         Worker {
-```
-
-```
             id,
-```
-
-```
             thread: Some(thread),
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -3533,53 +1763,23 @@ Filename: src/lib.rs
 
 ```
 impl Drop for ThreadPool {
-```
-
-```
     fn drop(&mut self) {
-```
-
-```
         for worker in &mut self.workers {
-```
-
-```
             println!("Shutting down worker {}", worker.id);
-```
 
-```
-
-```
-
-```
           1 if let Some(thread) = worker.thread.take() {
-```
-
-```
               2 thread.join().unwrap();
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
 As discussed in Chapter 17, the `take` method on `Option` takes the `Some`
-variant out and leaves `None` in its place. We’re using `if` `let` to
-destructure the `Some` and get the thread [1]; then we call `join` on the
-thread [2]. If a worker’s thread is already `None`, we know that worker has
-already had its thread cleaned up, so nothing happens in that case.
+variant out and leaves `None` in its place. We’re using `if let` to destructure
+the `Some` and get the thread [1]; then we call `join` on the thread [2]. If a
+`Worker` instance’s thread is already `None`, we know that `Worker` has already
+had its thread cleaned up, so nothing happens in that case.
 
 ### Signaling to the Threads to Stop Listening for Jobs
 
@@ -3589,7 +1789,7 @@ yet. The key is the logic in the closures run by the threads of the `Worker`
 instances: at the moment, we call `join`, but that won’t shut down the threads,
 because they `loop` forever looking for jobs. If we try to drop our
 `ThreadPool` with our current implementation of `drop`, the main thread will
-block forever waiting for the first thread to finish.
+block forever, waiting for the first thread to finish.
 
 To fix this problem, we’ll need a change in the `ThreadPool` `drop`
 implementation and then a change in the `Worker` loop.
@@ -3604,307 +1804,94 @@ Filename: src/lib.rs
 
 ```
 pub struct ThreadPool {
-```
-
-```
     workers: Vec<Worker>,
-```
-
-```
     sender: Option<mpsc::Sender<Job>>,
-```
-
-```
 }
-```
-
-```
 --snip--
-```
-
-```
 impl ThreadPool {
-```
-
-```
     pub fn new(size: usize) -> ThreadPool {
-```
-
-```
         --snip--
-```
 
-```
-
-```
-
-```
         ThreadPool {
-```
-
-```
             workers,
-```
-
-```
             sender: Some(sender),
-```
-
-```
         }
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     pub fn execute<F>(&self, f: F)
-```
-
-```
     where
-```
-
-```
         F: FnOnce() + Send + 'static,
-```
-
-```
     {
-```
-
-```
         let job = Box::new(f);
-```
 
-```
-
-```
-
-```
         self.sender
-```
-
-```
-.as_ref()
-```
-
-```
-.unwrap()
-```
-
-```
-.send(job)
-```
-
-```
-.unwrap();
-```
-
-```
+            .as_ref()
+            .unwrap()
+            .send(job)
+            .unwrap();
     }
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 impl Drop for ThreadPool {
-```
-
-```
     fn drop(&mut self) {
-```
-
-```
       1 drop(self.sender.take());
-```
 
-```
-
-```
-
-```
         for worker in &mut self.workers {
-```
-
-```
             println!("Shutting down worker {}", worker.id);
-```
 
-```
-
-```
-
-```
             if let Some(thread) = worker.thread.take() {
-```
-
-```
                 thread.join().unwrap();
-```
-
-```
             }
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Explicitly dropping `sender` before joining the worker threads
+Listing 20-23: Explicitly dropping `sender` before joining the `Worker` threads
 
 Dropping `sender` [1] closes the channel, which indicates no more messages will
-be sent. When that happens, all the calls to `recv` that the workers do in the
-infinite loop will return an error. In Listing 20-24, we change the `Worker`
-loop to gracefully exit the loop in that case, which means the threads will
-finish when the `ThreadPool` `drop` implementation calls `join` on them.
+be sent. When that happens, all the calls to `recv` that the `Worker` instances
+do in the infinite loop will return an error. In Listing 20-24, we change the
+`Worker` loop to gracefully exit the loop in that case, which means the threads
+will finish when the `ThreadPool` `drop` implementation calls `join` on them.
 
 Filename: src/lib.rs
 
 ```
 impl Worker {
-```
-
-```
     fn new(
-```
-
-```
-id: usize,
-```
-
-```
-receiver: Arc<Mutex<mpsc::Receiver<Job>>>
-```
-
-```
-) -> Worker {
-```
-
-```
+        id: usize,
+        receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
+    ) -> Worker {
         let thread = thread::spawn(move || loop {
-```
+            let message = receiver.lock().unwrap().recv();
 
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
+            match message {
                 Ok(job) => {
-```
-
-```
                     println!(
-```
+                        "Worker {id} got a job; executing."
+                    );
 
-```
-"Worker {id} got a job; executing."
-```
-
-```
-);
-```
-
-```
-
-```
-
-```
                     job();
-```
-
-```
                 }
-```
-
-```
                 Err(_) => {
-```
-
-```
                     println!(
-```
-
-```
-"Worker {id} shutting down."
-```
-
-```
-);
-```
-
-```
+                        "Worker {id} shutting down."
+                    );
                     break;
-```
-
-```
                 }
-```
-
-```
             }
-```
-
-```
         });
-```
 
-```
-
-```
-
-```
         Worker {
-```
-
-```
             id,
-```
-
-```
             thread: Some(thread),
-```
-
-```
         }
-```
-
-```
     }
-```
-
-```
 }
 ```
 
-Explicitly breaking out of the loop when `recv` returns an error
+Listing 20-24: Explicitly breaking out of the loop when `recv` returns an error
 
 To see this code in action, let’s modify `main` to accept only two requests
 before gracefully shutting down the server, as shown in Listing 20-25.
@@ -3913,61 +1900,23 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let listener = TcpListener::bind("127.0.0.1:7878").unwrap();
-```
-
-```
     let pool = ThreadPool::new(4);
-```
 
-```
-
-```
-
-```
     for stream in listener.incoming().take(2) {
-```
-
-```
         let stream = stream.unwrap();
-```
 
-```
-
-```
-
-```
         pool.execute(|| {
-```
-
-```
             handle_connection(stream);
-```
-
-```
         });
-```
-
-```
     }
-```
 
-```
-
-```
-
-```
     println!("Shutting down.");
-```
-
-```
 }
 ```
 
-Shutting down the server after serving two requests by exiting the loop
+Listing 20-25: Shutting down the server after serving two requests by exiting
+the loop
 
 You wouldn’t want a real-world web server to shut down after serving only two
 requests. This code just demonstrates that the graceful shutdown and cleanup is
@@ -3977,89 +1926,48 @@ The `take` method is defined in the `Iterator` trait and limits the iteration
 to the first two items at most. The `ThreadPool` will go out of scope at the
 end of `main`, and the `drop` implementation will run.
 
-Start the server with `cargo` `run`, and make three requests. The third request
+Start the server with `cargo run`, and make three requests. The third request
 should error, and in your terminal you should see output similar to this:
 
 ```
 $ cargo run
-```
-
-```
    Compiling hello v0.1.0 (file:///projects/hello)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 1.0s
-```
-
-```
      Running `target/debug/hello`
-```
-
-```
 Worker 0 got a job; executing.
-```
-
-```
 Shutting down.
-```
-
-```
 Shutting down worker 0
-```
-
-```
 Worker 3 got a job; executing.
-```
-
-```
 Worker 1 disconnected; shutting down.
-```
-
-```
 Worker 2 disconnected; shutting down.
-```
-
-```
 Worker 3 disconnected; shutting down.
-```
-
-```
 Worker 0 disconnected; shutting down.
-```
-
-```
 Shutting down worker 1
-```
-
-```
 Shutting down worker 2
-```
-
-```
 Shutting down worker 3
 ```
 
-You might see a different ordering of workers and messages printed. We can see
-how this code works from the messages: workers 0 and 3 got the first two
-requests. The server stopped accepting connections after the second connection,
-and the `Drop` implementation on `ThreadPool` starts executing before worker 3
-even starts its job. Dropping the `sender` disconnects all the workers and
-tells them to shut down. The workers each print a message when they disconnect,
-and then the thread pool calls `join` to wait for each worker thread to finish.
+You might see a different ordering of `Worker` IDs and messages printed. We can
+see how this code works from the messages: `Worker` instances 0 and 3 got the
+first two requests. The server stopped accepting connections after the second
+connection, and the `Drop` implementation on `ThreadPool` starts executing
+before `Worker` 3 even starts its job. Dropping the `sender` disconnects all
+the `Worker` instances and tells them to shut down. The `Worker` instances each
+print a message when they disconnect, and then the thread pool calls `join` to
+wait for each `Worker` thread to finish.
 
 Notice one interesting aspect of this particular execution: the `ThreadPool`
-dropped the `sender`, and before any worker received an error, we tried to join
-worker 0. Worker 0 had not yet gotten an error from `recv`, so the main thread
-blocked waiting for worker 0 to finish. In the meantime, worker 3 received a
-job and then all threads received an error. When worker 0 finished, the main
-thread waited for the rest of the workers to finish. At that point, they had
-all exited their loops and stopped.
+dropped the `sender`, and before any `Worker` received an error, we tried to
+join `Worker` 0. `Worker` 0 had not yet gotten an error from `recv`, so the
+main thread blocked, waiting for `Worker` 0 to finish. In the meantime,
+`Worker` 3 received a job and then all threads received an error. When `Worker`
+0 finished, the main thread waited for the rest of the `Worker` instances to
+finish. At that point, they had all exited their loops and stopped.
 
 Congrats! We’ve now completed our project; we have a basic web server that uses
 a thread pool to respond asynchronously. We’re able to perform a graceful
 shutdown of the server, which cleans up all the threads in the pool. See
-*https://www.nostarch.com/Rust2021*  to download the full code for this chapter
+*https://www.nostarch.com/Rust2021* to download the full code for this chapter
 for reference.
 
 We could do more here! If you want to continue enhancing this project, here are
@@ -4069,9 +1977,10 @@ some ideas:
 * Add tests of the library’s functionality.
 * Change calls to `unwrap` to more robust error handling.
 * Use `ThreadPool` to perform some task other than serving web requests.
-* Find a thread pool crate on *https://crates.io*   and implement a similar web
+* Find a thread pool crate on *https://crates.io* and implement a similar web
 server using the crate instead. Then compare its API and robustness to the
 thread pool we implemented.
+
 ## Summary
 
 Well done! You’ve made it to the end of the book! We want to thank you for

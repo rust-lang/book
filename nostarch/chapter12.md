@@ -98,7 +98,8 @@ fn main() {
 }
 ```
 
-Collecting the command line arguments into a vector and printing them
+Listing 12-1: Collecting the command line arguments into a vector and printing
+them
 
 First we bring the `std::env` module into scope with a `use` statement so we
 can use its `args` function. Notice that the `std::env::args` function is
@@ -176,7 +177,8 @@ fn main() {
 }
 ```
 
-Creating variables to hold the query argument and file path argument
+Listing 12-2: Creating variables to hold the query argument and file path
+argument
 
 As we saw when we printed the vector, the program’s name takes up the first
 value in the vector at `args[0]`, so we’re starting arguments at index 1. The
@@ -227,7 +229,7 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-A poem by Emily Dickinson makes a good test case.
+Listing 12-3: A poem by Emily Dickinson makes a good test case.
 
 With the text in place, edit *src/main.rs* and add code to read the file, as
 shown in Listing 12-4.
@@ -249,7 +251,7 @@ fn main() {
 }
 ```
 
-Reading the contents of the file specified by the second argument
+Listing 12-4: Reading the contents of the file specified by the second argument
 
 First we bring in a relevant part of the standard library with a `use`
 statement: we need `std::fs` to handle files [1].
@@ -385,7 +387,7 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 }
 ```
 
-Extracting a `parse_config` function from `main`
+Listing 12-5: Extracting a `parse_config` function from `main`
 
 We’re still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
@@ -450,7 +452,8 @@ fn main() {
 }
 ```
 
-Refactoring `parse_config` to return an instance of a `Config` struct
+Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
+struct
 
 We’ve added a struct named `Config` defined to have fields named `query` and
 `file_path` [5]. The signature of `parse_config` now indicates that it returns
@@ -533,7 +536,7 @@ fn main() {
 }
 ```
 
-Changing `parse_config` into `Config::new`
+Listing 12-7: Changing `parse_config` into `Config::new`
 
 We’ve updated `main` where we were calling `parse_config` to instead call
 `Config::new` [1]. We’ve changed the name of `parse_config` to `new` [3] and
@@ -579,7 +582,7 @@ fn new(args: &[String]) -> Config {
     --snip--
 ```
 
-Adding a check for the number of arguments
+Listing 12-8: Adding a check for the number of arguments
 
 This code is similar to the `Guess::new` function we wrote in Listing 9-13,
 where we called `panic!` when the `value` argument was out of the range of
@@ -644,7 +647,7 @@ impl Config {
 }
 ```
 
-Returning a `Result` from `Config::build`
+Listing 12-9: Returning a `Result` from `Config::build`
 
 Our `build` function returns a `Result` with a `Config` instance in the success
 case and an `&'static str` in the error case. Our error values will always be
@@ -684,7 +687,7 @@ fn main() {
     --snip--
 ```
 
-Exiting with an error code if building a `Config` fails
+Listing 12-10: Exiting with an error code if building a `Config` fails
 
 In this listing, we’ve used a method we haven’t covered in detail yet:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library
@@ -754,7 +757,8 @@ fn run(config: Config) {
 --snip--
 ```
 
-Extracting a `run` function containing the rest of the program logic
+Listing 12-11: Extracting a `run` function containing the rest of the program
+logic
 
 The `run` function now contains all the remaining logic from `main`, starting
 from reading the file. The `run` function takes the `Config` instance as an
@@ -786,7 +790,7 @@ Filename: src/main.rs
 }
 ```
 
-Changing the `run` function to return `Result`
+Listing 12-12: Changing the `run` function to return `Result`
 
 We’ve made three significant changes here. First, we changed the return type of
 the `run` function to `Result<(), Box<dyn Error>>` [2]. This function
@@ -904,7 +908,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Moving `Config` and `run` into *src/lib.rs*
+Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
 
 We’ve made liberal use of the `pub` keyword: on `Config`, on its fields and its
 `build` method, and on the `run` function. We now have a library crate that has
@@ -929,7 +933,7 @@ fn main() {
 }
 ```
 
-Using the `minigrep` library crate in *src/main.rs*
+Listing 12-14: Using the `minigrep` library crate in *src/main.rs*
 
 We add a `use minigrep::Config` line to bring the `Config` type from the
 library crate into the binary crate’s scope, and we prefix the `run` function
@@ -1003,7 +1007,7 @@ Pick three.";
 }
 ```
 
-Creating a failing test for the `search` function we wish we had
+Listing 12-15: Creating a failing test for the `search` function we wish we had
 
 This test searches for the string `"duct"`. The text we’re searching is three
 lines, only one of which contains `"duct"` (note that the backslash after the
@@ -1030,7 +1034,8 @@ pub fn search<'a>(
 }
 ```
 
-Defining just enough of the `search` function so our test will compile
+Listing 12-16: Defining just enough of the `search` function so our test will
+compile
 
 Notice that we need to define an explicit lifetime `'a` in the signature of
 `search` and use that lifetime with the `contents` argument and the return
@@ -1144,7 +1149,7 @@ pub fn search<'a>(
 }
 ```
 
-Iterating through each line in `contents`
+Listing 12-17: Iterating through each line in `contents`
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 Chapter 13, but recall that you saw this way of using an iterator in Listing
@@ -1173,7 +1178,8 @@ pub fn search<'a>(
 }
 ```
 
-Adding functionality to see whether the line contains the string in `query`
+Listing 12-18: Adding functionality to see whether the line contains the string
+in `query`
 
 At the moment, we’re building up functionality. To get the code to compile, we
 need to return a value from the body as we indicated we would in the function
@@ -1205,7 +1211,7 @@ pub fn search<'a>(
 }
 ```
 
-Storing the lines that match so we can return them
+Listing 12-19: Storing the lines that match so we can return them
 
 Now the `search` function should return only the lines that contain `query`,
 and our test should pass. Let’s run the test:
@@ -1348,7 +1354,8 @@ Trust me.";
 }
 ```
 
-Adding a new failing test for the case-insensitive function we’re about to add
+Listing 12-20: Adding a new failing test for the case-insensitive function
+we’re about to add
 
 Note that we’ve edited the old test’s `contents` too. We’ve added a new line
 with the text `"Duct tape."` using a capital *D* that shouldn’t match the query
@@ -1393,8 +1400,8 @@ pub fn search_case_insensitive<'a>(
 }
 ```
 
-Defining the `search_case_insensitive` function to lowercase the query and the
-line before comparing them
+Listing 12-21: Defining the `search_case_insensitive` function to lowercase the
+query and the line before comparing them
 
 First we lowercase the `query` string and store it in a shadowed variable with
 the same name [1]. Calling `to_lowercase` on the query is necessary so that no
@@ -1469,8 +1476,8 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 ```
 
-Calling either `search` or `search_case_insensitive` based on the value in
-`config.ignore_case`
+Listing 12-22: Calling either `search` or `search_case_insensitive` based on
+the value in `config.ignore_case`
 
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
@@ -1507,7 +1514,8 @@ impl Config {
 }
 ```
 
-Checking for any value in an environment variable named `IGNORE_CASE`
+Listing 12-23: Checking for any value in an environment variable named
+`IGNORE_CASE`
 
 Here, we create a new variable, `ignore_case`. To set its value, we call the
 `env::var` function and pass it the name of the `IGNORE_CASE` environment
@@ -1661,8 +1669,8 @@ fn main() {
 }
 ```
 
-Writing error messages to standard error instead of standard output using
-`eprintln!`
+Listing 12-24: Writing error messages to standard error instead of standard
+output using `eprintln!`
 
 Let’s now run the program again in the same way, without any arguments and
 redirecting standard output with `>`:

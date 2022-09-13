@@ -18,7 +18,6 @@ Specifically, you’ll learn about variables, basic types, functions, comments,
 and control flow. These foundations will be in every Rust program, and learning
 them early will give you a strong core to start from.
 
-
 > ### Keywords
 >
 > The Rust language has a set of *keywords* that are reserved for use by the
@@ -313,7 +312,7 @@ start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
 the built-in integer types in Rust. We can use any of these variants to declare
 the type of an integer value.
 
-Integer Types in Rust
+Table 3-1: Integer Types in Rust
 
 | Length     | Signed     | Unsigned |
 |---|---|---|
@@ -350,7 +349,7 @@ such as `57u8`, to designate the type. Number literals can also use `_` as a
 visual separator to make the number easier to read, such as `1_000`, which will
 have the same value as if you had specified `1000`.
 
-Integer Literals in Rust
+Table 3-2: Integer Literals in Rust
 
 | Number literals | Example |
 |---|---|
@@ -364,7 +363,6 @@ So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good places to start: integer types default to `i32`.
 The primary situation in which you’d use `isize` or `usize` is when indexing
 some sort of collection.
-
 
 > ### Integer Overflow
 >
@@ -852,9 +850,10 @@ understand. Other languages don’t have the same distinctions, so let’s look 
 what statements and expressions are and how their differences affect the bodies
 of functions.
 
-* Statements - are instructions that perform some action and do not return a
-value.
-* Expressions - evaluate to a resultant value. Let’s look at some examples.
+* **Statements **: are instructions that perform some action and do not return
+a value.
+* **Expressions **: evaluate to a resultant value. Let’s look at some examples.
+
 We’ve actually already used statements and expressions. Creating a variable and
 assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 `let y = 6;` is a statement.
@@ -867,7 +866,7 @@ fn main() {
 }
 ```
 
-A `main` function declaration containing one statement
+Listing 3-1: A `main` function declaration containing one statement
 
 Function definitions are also statements; the entire preceding example is a
 statement in itself.
@@ -1280,7 +1279,7 @@ fn main() {
 }
 ```
 
-Assigning the result of an `if` expression to a variable
+Listing 3-2: Assigning the result of an `if` expression to a variable
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -1509,7 +1508,8 @@ fn main() {
 }
 ```
 
-Using a `while` loop to run code while a condition evaluates to `true`
+Listing 3-3: Using a `while` loop to run code while a condition evaluates to
+`true`
 
 This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
@@ -1536,7 +1536,7 @@ fn main() {
 }
 ```
 
-Looping through each element of a collection using a `while` loop
+Listing 3-4: Looping through each element of a collection using a `while` loop
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
@@ -1581,7 +1581,7 @@ fn main() {
 }
 ```
 
-Looping through each element of a collection using a `for` loop
+Listing 3-5: Looping through each element of a collection using a `for` loop
 
 When we run this code, we’ll see the same output as in Listing 3-4. More
 importantly, we’ve now increased the safety of the code and eliminated the

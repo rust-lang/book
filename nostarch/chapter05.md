@@ -47,7 +47,7 @@ struct User {
 }
 ```
 
-A `User` struct definition
+Listing 5-1: A `User` struct definition
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
@@ -72,7 +72,7 @@ fn main() {
 }
 ```
 
-Creating an instance of the `User` struct
+Listing 5-2: Creating an instance of the `User` struct
 
 To get a specific value from a struct, we use dot notation. For example, to
 access this user’s email address, we use `user1.email`. If the instance is
@@ -95,7 +95,7 @@ fn main() {
 }
 ```
 
-Changing the value in the `email` field of a `User` instance
+Listing 5-3: Changing the value in the `email` field of a `User` instance
 
 Note that the entire instance must be mutable; Rust doesn’t allow us to mark
 only certain fields as mutable. As with any expression, we can construct a new
@@ -117,8 +117,8 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-A `build_user` function that takes an email and username and returns a `User`
-instance
+Listing 5-4: A `build_user` function that takes an email and username and
+returns a `User` instance
 
 It makes sense to name the function parameters with the same name as the struct
 fields, but having to repeat the `email` and `username` field names and
@@ -143,8 +143,8 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-A `build_user` function that uses field init shorthand because the `username`
-and `email` parameters have the same name as struct fields
+Listing 5-5: A `build_user` function that uses field init shorthand because the
+`username` and `email` parameters have the same name as struct fields
 
 Here, we’re creating a new instance of the `User` struct, which has a field
 named `email`. We want to set the `email` field’s value to the value in the
@@ -177,7 +177,7 @@ fn main() {
 }
 ```
 
-Creating a new `User` instance using one of the values from `user1`
+Listing 5-6: Creating a new `User` instance using one of the values from `user1`
 
 Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
@@ -197,8 +197,8 @@ fn main() {
 }
 ```
 
-Using struct update syntax to set a new `email` value for a `User` instance but
-to use the rest of the values from `user1`
+Listing 5-7: Using struct update syntax to set a new `email` value for a `User`
+instance but to use the rest of the values from `user1`
 
 The code in Listing 5-7 also creates an instance in `user2` that has a
 different value for `email` but has the same values for the `username`,
@@ -281,7 +281,6 @@ we’ll implement behavior for this type such that every instance of
 have a known result for testing purposes. We wouldn’t need any data to
 implement that behavior! You’ll see in Chapter 10 how to define traits and
 implement them on any type, including unit-like structs.
-
 
 > ### Ownership of Struct Data
 >
@@ -381,8 +380,8 @@ fn area(width: u32, height: u32) -> u32 {
 }
 ```
 
-Calculating the area of a rectangle specified by separate width and height
-variables
+Listing 5-8: Calculating the area of a rectangle specified by separate width
+and height variables
 
 Now, run this program using `cargo run`:
 
@@ -427,7 +426,7 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-Specifying the width and height of the rectangle with a tuple
+Listing 5-9: Specifying the width and height of the rectangle with a tuple
 
 In one way, this program is better. Tuples let us add a bit of structure, and
 we’re now passing just one argument [1]. But in another way, this version is
@@ -472,7 +471,7 @@ fn main() {
 }
 ```
 
-Defining a `Rectangle` struct
+Listing 5-10: Defining a `Rectangle` struct
 
 Here, we’ve defined a struct and named it `Rectangle` [1]. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
@@ -520,7 +519,7 @@ fn main() {
 }
 ```
 
-Attempting to print a `Rectangle` instance
+Listing 5-11: Attempting to print a `Rectangle` instance
 
 When we compile this code, we get an error with this core message:
 
@@ -590,8 +589,8 @@ fn main() {
 }
 ```
 
-Adding the attribute to derive the `Debug` trait and printing the `Rectangle`
-instance using debug formatting
+Listing 5-12: Adding the attribute to derive the `Debug` trait and printing the
+`Rectangle` instance using debug formatting
 
 Now when we run the program, we won’t get any errors, and we’ll see the
 following output:
@@ -728,7 +727,7 @@ fn main() {
 }
 ```
 
-Defining an `area` method on the `Rectangle` struct
+Listing 5-13: Defining an `area` method on the `Rectangle` struct
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (implementation) block for `Rectangle` [1]. Everything within this `impl` block
@@ -811,7 +810,6 @@ to that field as part of the type’s public API. We will discuss what public an
 private are and how to designate a field or method as public or private in
 Chapter 7.
 
-
 > ### Where’s the -> Operator?
 >
 > In C and C++, two different operators are used for calling methods: you use
@@ -871,7 +869,7 @@ fn main() {
 }
 ```
 
-Using the as-yet-unwritten `can_hold` method
+Listing 5-14: Using the as-yet-unwritten `can_hold` method
 
 The expected output would look like the following because both dimensions of
 `rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
@@ -910,8 +908,8 @@ impl Rectangle {
 }
 ```
 
-Implementing the `can_hold` method on `Rectangle` that takes another
-`Rectangle` instance as a parameter
+Listing 5-15: Implementing the `can_hold` method on `Rectangle` that takes
+another `Rectangle` instance as a parameter
 
 When we run this code with the `main` function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
@@ -977,7 +975,7 @@ impl Rectangle {
 }
 ```
 
-Rewriting Listing 5-15 using multiple `impl` blocks
+Listing 5-16: Rewriting Listing 5-15 using multiple `impl` blocks
 
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
