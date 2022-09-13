@@ -20,47 +20,51 @@ or lifetimes.
 The following is a list of keywords currently in use, with their functionality
 described.
 
-* `as` - perform primitive casting, disambiguate the specific trait containing
-an item, or rename items in `use` statements
-* `async` - return a `Future` instead of blocking the current thread
-* `await` - suspend execution until the result of a `Future` is ready
-* `break` - exit a loop immediately
-* `const` - define constant items or constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - in a module path, refers to the crate root
-* `dyn` - dynamic dispatch to a trait object
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - define an enumeration
-* `extern` - link an external function or variable
-* `false` - Boolean false literal
-* `fn` - define a function or the function pointer type
-* `for` - loop over items from an iterator, implement a trait, or specify a
+* **`as` **: perform primitive casting, disambiguate the specific trait
+containing an item, or rename items in `use` statements
+* **`async` **: return a `Future` instead of blocking the current thread
+* **`await` **: suspend execution until the result of a `Future` is ready
+* **`break` **: exit a loop immediately
+* **`const` **: define constant items or constant raw pointers
+* **`continue` **: continue to the next loop iteration
+* **`crate` **: in a module path, refers to the crate root
+* **`dyn` **: dynamic dispatch to a trait object
+* **`else` **: fallback for `if` and `if let` control flow constructs
+* **`enum` **: define an enumeration
+* **`extern` **: link an external function or variable
+* **`false` **: Boolean false literal
+* **`fn` **: define a function or the function pointer type
+* **`for` **: loop over items from an iterator, implement a trait, or specify a
 higher-ranked lifetime
-* `if` - branch based on the result of a conditional expression
-* `impl` - implement inherent or trait functionality
-* `in` - part of `for` loop syntax
-* `let` - bind a variable
-* `loop` - loop unconditionally
-* `match` - match a value to patterns
-* `mod` - define a module
-* `move` - make a closure take ownership of all its captures
-* `mut` - denote mutability in references, raw pointers, or pattern bindings
-* `pub` - denote public visibility in struct fields, `impl` blocks, or modules
-* `ref` - bind by reference
-* `return` - return from function
-* `Self` - a type alias for the type we are defining or implementing
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - define a structure
-* `super` - parent module of the current module
-* `trait` - define a trait
-* `true` - Boolean true literal
-* `type` - define a type alias or associated type
-* `union` - define a union; is a keyword only when used in a union declaration
-* `unsafe` - denote unsafe code, functions, traits, or implementations
-* `use` - bring symbols into scope
-* `where` - denote clauses that constrain a type
-* `while` - loop conditionally based on the result of an expression
+* **`if` **: branch based on the result of a conditional expression
+* **`impl` **: implement inherent or trait functionality
+* **`in` **: part of `for` loop syntax
+* **`let` **: bind a variable
+* **`loop` **: loop unconditionally
+* **`match` **: match a value to patterns
+* **`mod` **: define a module
+* **`move` **: make a closure take ownership of all its captures
+* **`mut` **: denote mutability in references, raw pointers, or pattern bindings
+* **`pub` **: denote public visibility in struct fields, `impl` blocks, or
+modules
+* **`ref` **: bind by reference
+* **`return` **: return from function
+* **`Self` **: a type alias for the type we are defining or implementing
+* **`self` **: method subject or current module
+* **`static` **: global variable or lifetime lasting the entire program
+execution
+* **`struct` **: define a structure
+* **`super` **: parent module of the current module
+* **`trait` **: define a trait
+* **`true` **: Boolean true literal
+* **`type` **: define a type alias or associated type
+* **`union` **: define a union; is a keyword only when used in a union
+declaration
+* **`unsafe` **: denote unsafe code, functions, traits, or implementations
+* **`use` **: bring symbols into scope
+* **`where` **: denote clauses that constrain a type
+* **`while` **: loop conditionally based on the result of an expression
+
 ## Keywords Reserved for Future Use
 
 The following keywords do not yet have any functionality but are reserved by
@@ -79,6 +83,7 @@ Rust for potential future use:
 * `unsized`
 * `virtual`
 * `yield`
+
 ## Raw Identifiers
 
 *Raw identifiers* are the syntax that lets you use keywords where they wouldn’t
@@ -91,13 +96,7 @@ Filename: src/main.rs
 
 ```
 fn match(needle: &str, haystack: &str) -> bool {
-```
-
-```
     haystack.contains(needle)
-```
-
-```
 }
 ```
 
@@ -105,21 +104,9 @@ you’ll get this error:
 
 ```
 error: expected identifier, found keyword `match`
-```
-
-```
  --> src/main.rs:4:4
-```
-
-```
   |
-```
-
-```
 4 | fn match(needle: &str, haystack: &str) -> bool {
-```
-
-```
   |    ^^^^^ expected identifier, found keyword
 ```
 
@@ -131,29 +118,11 @@ Filename: src/main.rs
 
 ```
 fn r#match(needle: &str, haystack: &str) -> bool {
-```
-
-```
     haystack.contains(needle)
-```
-
-```
 }
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     assert!(r#match("foo", "foobar"));
-```
-
-```
 }
 ```
 
@@ -171,9 +140,6 @@ edition and has a `try` function, you’ll need to use the raw identifier syntax
 `r#try` in this case, to call that function from your 2021 edition code. See
 Appendix E for more information on editions.
 
-
-[TOC]
-
 ## Appendix B: Operators and Symbols
 
 This appendix contains a glossary of Rust’s syntax, including operators and
@@ -187,451 +153,72 @@ appear in context, a short explanation, and whether that operator is
 overloadable. If an operator is overloadable, the relevant trait to use to
 overload that operator is listed.
 
-Prod: The tables in this appendix should be labeled Table B-1, Table B-2, etc.
-
-Operators
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      ## Non-operator Symbols
+Table B-1: Operators
+
+| Operator | Example | Explanation | Overloadable? |
+|---|---|---|---|
+| `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro expansion |  |
+| `!` | `!expr` | Bitwise or logical complement | `Not` |
+| `!=` | `expr != expr` | Nonequality comparison | `PartialEq` |
+| `% | `expr % expr` | Arithmetic remainder | `Rem` |
+| `%=` | `var %= expr` | Arithmetic remainder and assignment | `RemAssign` |
+| `& | `&expr`, `&mut expr` | Borrow |  |
+| `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Borrowed pointer
+type |  |
+| `&` | `expr & expr` | Bitwise AND | `BitAnd` |
+| `&=` | `var &= expr` | Bitwise AND and assignment | `BitAndAssign` |
+| `&&` | `expr && expr` | Short-circuiting logical AND |  |
+| `* | `expr * expr` | Arithmetic multiplication | `Mul` |
+| `*=` | `var *= expr` | Arithmetic multiplication and assignment | `MulAssign`
+|
+| `*` | `*expr` | Dereference | `Deref` |
+| `*` | `*const type`, `*mut type | Raw pointer |  |
+| `+ | `trait + trait`, `'a + trait` | Compound type constraint |  |
+| `+ | `expr + expr` | Arithmetic addition | `Add` |
+| `+=` | `var += expr` | Arithmetic addition and assignment | `AddAssign` |
+| `,` | `expr, expr` | Argument and element separator |  |
+| `- | `- expr` | Arithmetic negation | `Neg` |
+| `- | `expr - expr` | Arithmetic subtraction | `Sub` |
+| `-=` | `var -= expr` | Arithmetic subtraction and assignment | `SubAssign` |
+| `-> | `fn(...) -> type`, `|…| -> type` | Function and closure return type |  |
+| `.  | `expr.ident` | Member access |  |
+| `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal
+| `PartialOrd` |
+| `..=` | `..=expr`, `expr..=expr` | Right-inclusive range literal |
+`PartialOrd` |
+| `..` | `..expr` | Struct literal update syntax |  |
+| `..` | `variant(x, ..)`, `struct_type { x, .. }` | “And the rest” pattern
+binding |  |
+| `...` | `expr...expr` | (Deprecated, use `..=` instead) In a pattern:
+inclusive range pattern |  |
+| `/ | `expr / expr` | Arithmetic division | `Div` |
+| `/=` | `var /= expr` | Arithmetic division and assignment | `DivAssign` |
+| `:  | `pat: type`, `ident: type` | Constraints |  |
+| `:` | `ident: expr` | Struct field initializer |  |
+| `:` | `'a: loop {...}` | Loop label |  |
+| `; | `expr;` | Statement and item terminator |  |
+| `;` | `[...; len]` | Part of fixed-size array syntax |  |
+| `<<` | `expr << expr` | Left-shift | `Shl` |
+| `<<=` | `var <<= expr` | Left-shift and assignment | `ShlAssign` |
+| `<` | `expr < expr` | Less than comparison | `PartialOrd` |
+| `<=` | `expr <= expr` | Less than or equal to comparison | `PartialOrd` |
+| `=` | `var = expr`, `ident = type` | Assignment/equivalence |  |
+| `==` | `expr == expr` | Equality comparison | `PartialEq` |
+| `=>` | `pat => expr` | Part of match arm syntax |  |
+| `>` | `expr > expr` | Greater than comparison | `PartialOrd` |
+| `>=` | `expr >= expr` | Greater than or equal to comparison | `PartialOrd` |
+| `>>` | `expr >> expr` | Right-shift | `Shr` |
+| `>>=` | `var >>= expr` | Right-shift and assignment | `ShrAssign` |
+| `@ | `ident @ pat` | Pattern binding |  |
+| `^` | `expr ^ expr` | Bitwise exclusive OR | `BitXor` |
+| `^=` | `var ^= expr` | Bitwise exclusive OR and assignment | `BitXorAssign` |
+| `| | `pat | pat` | Pattern alternatives |  |
+| `|` | `expr | expr` | Bitwise OR | `BitOr` |
+| `|=` | `var |= expr` | Bitwise OR and assignment | `BitOrAssign` |
+| `||` | `expr || expr` | Short-circuiting logical OR |  |
+| `? | `expr?` | Error propagation |  |
+
+## Non-operator Symbols
 
 The following tables contain all symbols that don’t function as operators; that
 is, they don’t behave like a function or method call.
@@ -639,328 +226,151 @@ is, they don’t behave like a function or method call.
 Table B-2 shows symbols that appear on their own and are valid in a variety of
 locations.
 
-Stand-Alone Syntax
+Table B-2: Stand-Alone Syntax
 
+| Symbol | Explanation |
+|---|---|
+| `'ident | Named lifetime or loop label |
+| `...u8`, `...i32`, `...f64`, `...usize`, and so on | Numeric literal of
+specific type |
+| `"..." | String literal |
+| `r"..."`, `r#"..."#`, `r##"..."##`, and so on | Raw string literal; escape
+characters not processed |
+| `b"..."` | Byte string literal; constructs an array of bytes instead of a
+string |
+| `br"..."`, `br#"..."#`, `br##"..."##`, and so on | Raw byte string literal;
+combination of raw and byte string literal |
+| `'...' | Character literal |
+| `b'...' | ASCII byte literal |
+| `|…| expr | Closure |
+| `! | Always-empty bottom type for diverging functions |
+| `_ | “Ignored” pattern binding; also used to make integer literals readable |
 
-Unmatched: TableHeader
+Table B-3 shows symbols that appear in the context of a path through the module
+hierarchy to an item.
 
-Unmatched: TableHeader
+Table B-3: Path-Related Syntax
 
-Unmatched: TableBody
+| Symbol | Explanation |
+|---|---|
+| `ident::ident | Namespace path |
+| `::path` | Path relative to the crate root (that is, an explicitly absolute
+path) |
+| `self::path` | Path relative to the current module (that is, an explicitly
+relative path) |
+| `super::path` | Path relative to the parent of the current module |
+| `type::ident`, `<type as trait>::ident | Associated constants, functions, and
+types |
+| `<type>::...` | Associated item for a type that cannot be directly named (for
+example, `<&T>::...`, `<[T]>::...`, and so on) |
+| `trait::method(...)` | Disambiguating a method call by naming the trait that
+defines it |
+| `type::method(...)` | Disambiguating a method call by naming the type for
+which it’s defined |
+| `<type as trait>::method(...)` | Disambiguating a method call by naming the
+trait and type |
 
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-3 shows symbols that appear in the context of a path through the
-module hierarchy to an item.
-
-Path-Related Syntax
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-4 shows symbols that appear in the context of using generic type
+Table B-4 shows symbols that appear in the context of using generic type
 parameters.
 
-Generics
+Table B-4: Generics
 
+| Symbol | Explanation |
+|---|---|
+| `path<...>` | Specifies parameters to a generic type in a type (for example,
+`Vec<u8>`) |
+| `path::<...>, method::<...>` | Specifies parameters to a generic type,
+function, or method in an expression; often referred to as turbofish (for
+example, `"42".parse::<i32>()`) |
+| `fn ident<...> ...` | Define generic function |
+| `struct ident<...> ...` | Define generic structure |
+| `enum ident<...> ...` | Define generic enumeration |
+| `impl<...> ...` | Define generic implementation |
+| `for<...> type` | Higher-ranked lifetime bounds |
+| `type<ident=type>` | A generic type where one or more associated types have
+specific assignments (for example, `Iterator<Item=T>`) |
 
-Unmatched: TableHeader
+Table B-5 shows symbols that appear in the context of constraining generic type
+parameters with trait bounds.
 
-Unmatched: TableHeader
+Table B-5: Trait Bound Constraints
 
-Unmatched: TableBody
+| Symbol | Explanation |
+|---|---|
+| T: U` | Generic parameter `T` constrained to types that implement `U` |
+| `T: 'a` | Generic type `T` must outlive lifetime `'a` (meaning the type
+cannot transitively contain any references with lifetimes shorter than `'a`) |
+| `T: 'static` | Generic type `T` contains no borrowed references other than
+`'static` ones |
+| `'b: 'a` | Generic lifetime `'b` must outlive lifetime `'a` |
+| `T: ?Sized` | Allow generic type parameter to be a dynamically sized type |
+| `'a + trait`, `trait + trait` | Compound type constraint |
 
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-5 shows symbols that appear in the context of constraining
-generic type parameters with trait bounds.
-
-Trait Bound Constraints
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-6 shows symbols that appear in the context of calling or defining
+Table B-6 shows symbols that appear in the context of calling or defining
 macros and specifying attributes on an item.
 
-Macros and Attributes
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-7 shows symbols that create comments.
-
-Comments
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-8 shows symbols that appear in the context of using tuples.
-
-Tuples
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-9 shows the contexts in which curly brackets are used.
-
-Curly Brackets
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-      Table B-10 shows the contexts in which square brackets are used.
-
-Square Brackets
-
-
-Unmatched: TableHeader
-
-Unmatched: TableHeader
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched: TableBody
-
-Unmatched:
-
-[TOC]
+Table B-6: Macros and Attributes
+
+| Symbol | Explanation |
+|---|---|
+| `#[meta]` | Outer attribute |
+| `#![meta]` | Inner attribute |
+| `$ident` | Macro substitution |
+| `$ident:kind` | Macro capture |
+| `$(…)…` | Macro repetition |
+| `ident!(...)`, `ident!{...}`, `ident![...]` | Macro invocation |
+
+Table B-7 shows symbols that create comments.
+
+Table B-7: Comments
+
+| Symbol | Explanation |
+|---|---|
+| `//` | Line comment |
+| `//!` | Inner line doc comment |
+| `///` | Outer line doc comment |
+| `/*...*/` | Block comment |
+| `/*!...*/` | Inner block doc comment |
+| `/**...*/` | Outer block doc comment |
+
+Table B-8 shows symbols that appear in the context of using tuples.
+
+Table B-8: Tuples
+
+| Symbol | Explanation |
+|---|---|
+| `() | Empty tuple (aka unit), both literal and type |
+| `(expr)` | Parenthesized expression |
+| `(expr,)` | Single-element tuple expression |
+| `(type,)` | Single-element tuple type |
+| `(expr, ...)` | Tuple expression |
+| `(type, ...)` | Tuple type |
+| `expr(expr, ...)` | Function call expression; also used to initialize tuple
+`struct`s and tuple `enum` variants |
+| `expr.0`, `expr.1`, and so on | Tuple indexing |
+
+Table B-9 shows the contexts in which curly brackets are used.
+
+Table B-9: Curly Brackets
+
+| Context | Explanation |
+|---|---|
+| `{...}` | Block expression |
+| `Type {...}` | `struct` literal |
+
+Table B-10 shows the contexts in which square brackets are used.
+
+Table B-10: Square Brackets
+
+| Context | Explanation |
+|---|---|
+| `[...]` | Array literal |
+| `[expr; len]` | Array literal containing `len` copies of `expr` |
+| `[type; len]` | Array type containing `len` instances of `type` |
+| `expr[expr]` | Collection indexing; overloadable (`Index`, `IndexMut`) |
+| `expr[..]`, `expr[a..]`, `expr[..b]`, `expr[a..b]` | Collection indexing
+pretending to be collection slicing, using `Range`, `RangeFrom`, `RangeTo`, or
+`RangeFull` as the “index” |
 
 ## Appendix C: Derivable Traits
 
@@ -977,6 +387,7 @@ library that you can use with `derive`. Each section covers:
 * What implementing the trait signifies about the type
 * The conditions in which you’re allowed or not allowed to implement the trait
 * Examples of operations that require the trait
+
 If you want different behavior from that provided by the `derive` attribute,
 consult the standard library documentation for each trait for details on how to
 manually implement them.
@@ -1074,7 +485,7 @@ a data structure that stores data based on the sort order of the values.
 
 The `Clone` trait allows you to explicitly create a deep copy of a value, and
 the duplication process might involve running arbitrary code and copying heap
-data. See “Ways Variables and Data Interact: Clone” on page XX for more
+data. See “Variables and Data Interacting with Clone” on page XX for more
 information on `Clone`.
 
 Deriving `Clone` implements the `clone` method, which when implemented for the
@@ -1137,11 +548,6 @@ The `Default` trait is required when you use the method `unwrap_or_default` on
 `unwrap_or_default` will return the result of `Default::default` for the type
 `T` stored in the `Option<T>`.
 
-
-Unmatched: NoParagraphStyle
-
-[TOC]
-
 ## Appendix D: Useful Development Tools
 
 In this appendix, we talk about some useful development tools that the Rust
@@ -1154,14 +560,11 @@ The `rustfmt` tool reformats your code according to the community code style.
 Many collaborative projects use `rustfmt` to prevent arguments about which
 style to use when writing Rust: everyone formats their code using the tool.
 
-To install `rustfmt`, enter the following:
-
-```
-$ rustup component add rustfmt
-```
-
-This command gives you `rustfmt` and `cargo-fmt`, similar to how Rust gives you
-both `rustc` and `cargo`. To format any Cargo project, enter the following:
+Rust installations include `rustfmt` by default, so you should already have the
+programs `rustfmt` and `cargo-fmt` on your system. These two commands are
+analagous to `rustc` and `cargo` in that `rustfmt` allows finer-grained control
+and `cargo-fmt` understands conventions of a project that uses Cargo. To format
+any Cargo project, enter the following:
 
 ```
 $ cargo fmt
@@ -1182,29 +585,11 @@ Filename: src/main.rs
 
 ```
 fn do_something() {}
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     for i in 0..100 {
-```
-
-```
         do_something();
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1213,45 +598,15 @@ variable `i` in the body of the `for` loop. Rust warns us about that:
 
 ```
 $ cargo build
-```
-
-```
    Compiling myprogram v0.1.0 (file:///projects/myprogram)
-```
-
-```
 warning: unused variable: `i`
-```
-
-```
  --> src/main.rs:4:9
-```
-
-```
   |
-```
-
-```
 4 |     for i in 0..100 {
-```
-
-```
   |         ^ help: consider using `_i` instead
-```
-
-```
   |
-```
-
-```
   = note: #[warn(unused_variables)] on by default
-```
 
-```
-
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.50s
 ```
 
@@ -1262,17 +617,8 @@ fix`:
 
 ```
 $ cargo fix
-```
-
-```
     Checking myprogram v0.1.0 (file:///projects/myprogram)
-```
-
-```
       Fixing src/main.rs (1 fix)
-```
-
-```
     Finished dev [unoptimized + debuginfo] target(s) in 0.59s
 ```
 
@@ -1283,29 +629,11 @@ Filename: src/main.rs
 
 ```
 fn do_something() {}
-```
 
-```
-
-```
-
-```
 fn main() {
-```
-
-```
     for _i in 0..100 {
-```
-
-```
         do_something();
-```
-
-```
     }
-```
-
-```
 }
 ```
 
@@ -1317,13 +645,8 @@ different Rust editions. Editions are covered in Appendix E.
 ## More Lints with Clippy
 
 The Clippy tool is a collection of lints to analyze your code so you can catch
-common mistakes and improve your Rust code.
-
-To install Clippy, enter the following:
-
-```
-$ rustup component add clippy
-```
+common mistakes and improve your Rust code. Clippy is included with standard
+Rust installations.
 
 To run Clippy’s lints on any Cargo project, enter the following:
 
@@ -1338,61 +661,25 @@ Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = 3.1415;
-```
-
-```
     let r = 8.0;
-```
-
-```
     println!("the area of the circle is {}", x * r * r);
-```
-
-```
 }
 ```
 
 Running `cargo clippy` on this project results in this error:
 
 ```
-error: approximate value of `f{32, 64}::consts::PI` found. Consider using it
-directly
-```
-
-```
+error: approximate value of `f{32, 64}::consts::PI` found
  --> src/main.rs:2:13
-```
-
-```
   |
-```
-
-```
 2 |     let x = 3.1415;
-```
-
-```
   |             ^^^^^^
-```
-
-```
   |
-```
-
-```
-  = note: #[deny(clippy::approx_constant)] on by default
-```
-
-```
-  = help: for further information visit https://rust-lang-
-```
-
-```
-nursery.github.io/rust-clippy/master/index.html#approx_constant
+  = note: `#[deny(clippy::approx_constant)]` on by default
+  = help: consider using the constant directly
+  = help: for further information visit https://rust-lang.github.io/rust-
+clippy/master/index.html#approx_constant
 ```
 
 This error lets you know that Rust already has a more precise `PI` constant
@@ -1401,25 +688,13 @@ instead. You would then change your code to use the `PI` constant.
 
 The following code doesn’t result in any errors or warnings from Clippy:
 
-Filename: ssrc/main.rs
+Filename: src/main.rs
 
 ```
 fn main() {
-```
-
-```
     let x = std::f64::consts::PI;
-```
-
-```
     let r = 8.0;
-```
-
-```
     println!("the area of the circle is {}", x * r * r);
-```
-
-```
 }
 ```
 
@@ -1438,12 +713,7 @@ languages to communicate with each other. Different clients can use
 Visit the `rust-analyzer` project’s home page at
 *https://rust-analyzer.github.io* for installation instructions, then install
 the language server support in your particular IDE. Your IDE will gain
-capabilities such as autocompletion, jump to definition, and inline errors.
-
-
-Unmatched: NoParagraphStyle
-
-[TOC]
+capabilities such as autocompletion, jump to definition, and inline errors
 
 ## Appendix E: Editions
 
@@ -1470,6 +740,7 @@ an easy-to-understand package.
 landed, which might make Rust worth another look.
 * For those developing Rust, a new edition provides a rallying point for the
 project as a whole.
+
 At the time of this writing, three Rust editions are available: Rust 2015, Rust
 2018, and Rust 2021. This book is written using Rust 2021 edition idioms.
 
@@ -1502,5 +773,3 @@ For more details, *The* *Edition Guide* at
 editions that enumerates the differences between editions and explains how to
 automatically upgrade your code to a new edition via `cargo fix`.
 
-
-Unmatched: NoParagraphStyle
