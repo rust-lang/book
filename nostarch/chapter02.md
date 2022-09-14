@@ -134,7 +134,7 @@ program:
 fn main() {
 ```
 
-The `fn` syntax declares a new function; the parentheses, `(), indicate there
+The `fn` syntax declares a new function; the parentheses, `()`, indicate there
 are no parameters; and the curly bracket, `{`, starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
@@ -222,7 +222,7 @@ standard input and append that into a string (without overwriting its
 contents), so we therefore pass that string as an argument. The string argument
 needs to be mutable so the method can change the string’s content.
 
-The `& indicates that this argument is a *reference*, which gives you a way to
+The `&` indicates that this argument is a *reference*, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
 copy that data into memory multiple times. References are a complex feature,
 and one of Rust’s major advantages is how safe and easy it is to use
@@ -475,11 +475,11 @@ checked into source control with the rest of the code in your project.
 
 #### Updating a Crate to Get a New Version
 
-When you *do* want to update a crate, Cargo provides the command `update, which
-will ignore the *Cargo.lock* file and figure out all the latest versions that
-fit your specifications in *Cargo.toml*. Cargo will then write those versions
-to the *Cargo.lock* file. Otherwise, by default, Cargo will only look for
-versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
+When you *do* want to update a crate, Cargo provides the command `update`,
+which will ignore the *Cargo.lock* file and figure out all the latest versions
+that fit your specifications in *Cargo.toml*. Cargo will then write those
+versions to the *Cargo.lock* file. Otherwise, by default, Cargo will only look
+for versions greater than 0.8.5 and less than 0.9.0. If the `rand` crate has
 released the two new versions 0.8.6 and 0.9.0, you would see the following if
 you ran `cargo update`:
 
@@ -865,7 +865,7 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-Adding the `break line after `You win!` makes the program exit the loop when
+Adding the `break` line after `You win!` makes the program exit the loop when
 the user guesses the secret number correctly. Exiting the loop also means
 exiting the program, because the loop is the last part of `main`.
 
@@ -913,12 +913,12 @@ will end up right where we want it in the new `guess` variable we’re creating.
 If `parse` is *not* able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first `match` arm, but it does
-match the `Err(_)` pattern in the second arm. The underscore, `_, is a catchall
-value; in this example, we’re saying we want to match all `Err` values, no
-matter what information they have inside them. So the program will execute the
-second arm’s code, `continue, which tells the program to go to the next
-iteration of the `loop` and ask for another guess. So, effectively, the program
-ignores all errors that `parse` might encounter!
+match the `Err(_)` pattern in the second arm. The underscore, `_`, is a
+catchall value; in this example, we’re saying we want to match all `Err`
+values, no matter what information they have inside them. So the program will
+execute the second arm’s code, `continue`, which tells the program to go to the
+next iteration of the `loop` and ask for another guess. So, effectively, the
+program ignores all errors that `parse` might encounter!
 
 Now everything in the program should work as expected. Let’s try it:
 

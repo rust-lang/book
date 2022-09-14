@@ -26,27 +26,28 @@ Table B-1: Operators
 | `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro expansion |  |
 | `!` | `!expr` | Bitwise or logical complement | `Not` |
 | `!=` | `expr != expr` | Nonequality comparison | `PartialEq` |
-| `% | `expr % expr` | Arithmetic remainder | `Rem` |
+| `%` | `expr % expr` | Arithmetic remainder | `Rem` |
 | `%=` | `var %= expr` | Arithmetic remainder and assignment | `RemAssign` |
-| `& | `&expr`, `&mut expr` | Borrow |  |
+| `&` | `&expr`, `&mut expr` | Borrow |  |
 | `&` | `&type`, `&mut type`, `&'a type`, `&'a mut type` | Borrowed pointer
 type |  |
 | `&` | `expr & expr` | Bitwise AND | `BitAnd` |
 | `&=` | `var &= expr` | Bitwise AND and assignment | `BitAndAssign` |
 | `&&` | `expr && expr` | Short-circuiting logical AND |  |
-| `* | `expr * expr` | Arithmetic multiplication | `Mul` |
+| `*` | `expr * expr` | Arithmetic multiplication | `Mul` |
 | `*=` | `var *= expr` | Arithmetic multiplication and assignment | `MulAssign`
 |
 | `*` | `*expr` | Dereference | `Deref` |
-| `*` | `*const type`, `*mut type | Raw pointer |  |
-| `+ | `trait + trait`, `'a + trait` | Compound type constraint |  |
-| `+ | `expr + expr` | Arithmetic addition | `Add` |
+| `*` | `*const type`, `*mut type` | Raw pointer |  |
+| `+` | `trait + trait`, `'a + trait` | Compound type constraint |  |
+| `+` | `expr + expr` | Arithmetic addition | `Add` |
 | `+=` | `var += expr` | Arithmetic addition and assignment | `AddAssign` |
 | `,` | `expr, expr` | Argument and element separator |  |
-| `- | `- expr` | Arithmetic negation | `Neg` |
-| `- | `expr - expr` | Arithmetic subtraction | `Sub` |
+| `-` | `- expr` | Arithmetic negation | `Neg` |
+| `-` | `expr - expr` | Arithmetic subtraction | `Sub` |
 | `-=` | `var -= expr` | Arithmetic subtraction and assignment | `SubAssign` |
-| `-> | `fn(...) -> type`, `|…| -> type` | Function and closure return type |  |
+| `->` | `fn(...) -> type`, `|…| -> type` | Function and closure return type |
+|
 | `.  | `expr.ident` | Member access |  |
 | `..` | `..`, `expr..`, `..expr`, `expr..expr` | Right-exclusive range literal
 | `PartialOrd` |
@@ -57,12 +58,12 @@ type |  |
 binding |  |
 | `...` | `expr...expr` | (Deprecated, use `..=` instead) In a pattern:
 inclusive range pattern |  |
-| `/ | `expr / expr` | Arithmetic division | `Div` |
+| `/` | `expr / expr` | Arithmetic division | `Div` |
 | `/=` | `var /= expr` | Arithmetic division and assignment | `DivAssign` |
 | `:  | `pat: type`, `ident: type` | Constraints |  |
 | `:` | `ident: expr` | Struct field initializer |  |
 | `:` | `'a: loop {...}` | Loop label |  |
-| `; | `expr;` | Statement and item terminator |  |
+| `;` | `expr;` | Statement and item terminator |  |
 | `;` | `[...; len]` | Part of fixed-size array syntax |  |
 | `<<` | `expr << expr` | Left-shift | `Shl` |
 | `<<=` | `var <<= expr` | Left-shift and assignment | `ShlAssign` |
@@ -75,14 +76,14 @@ inclusive range pattern |  |
 | `>=` | `expr >= expr` | Greater than or equal to comparison | `PartialOrd` |
 | `>>` | `expr >> expr` | Right-shift | `Shr` |
 | `>>=` | `var >>= expr` | Right-shift and assignment | `ShrAssign` |
-| `@ | `ident @ pat` | Pattern binding |  |
+| `@` | `ident @ pat` | Pattern binding |  |
 | `^` | `expr ^ expr` | Bitwise exclusive OR | `BitXor` |
 | `^=` | `var ^= expr` | Bitwise exclusive OR and assignment | `BitXorAssign` |
-| `| | `pat | pat` | Pattern alternatives |  |
+| `|` | `pat | pat` | Pattern alternatives |  |
 | `|` | `expr | expr` | Bitwise OR | `BitOr` |
 | `|=` | `var |= expr` | Bitwise OR and assignment | `BitOrAssign` |
 | `||` | `expr || expr` | Short-circuiting logical OR |  |
-| `? | `expr?` | Error propagation |  |
+| `?` | `expr?` | Error propagation |  |
 
 ## Non-operator Symbols
 
@@ -96,21 +97,21 @@ Table B-2: Stand-Alone Syntax
 
 | Symbol | Explanation |
 |---|---|
-| `'ident | Named lifetime or loop label |
+| `'ident` | Named lifetime or loop label |
 | `...u8`, `...i32`, `...f64`, `...usize`, and so on | Numeric literal of
 specific type |
-| `"..." | String literal |
+| `"..."` | String literal |
 | `r"..."`, `r#"..."#`, `r##"..."##`, and so on | Raw string literal; escape
 characters not processed |
 | `b"..."` | Byte string literal; constructs an array of bytes instead of a
 string |
 | `br"..."`, `br#"..."#`, `br##"..."##`, and so on | Raw byte string literal;
 combination of raw and byte string literal |
-| `'...' | Character literal |
-| `b'...' | ASCII byte literal |
-| `|…| expr | Closure |
-| `! | Always-empty bottom type for diverging functions |
-| `_ | “Ignored” pattern binding; also used to make integer literals readable |
+| `'...'` | Character literal |
+| `b'...'` | ASCII byte literal |
+| `|…| expr` | Closure |
+| `!` | Always-empty bottom type for diverging functions |
+| `_` | “Ignored” pattern binding; also used to make integer literals readable |
 
 Table B-3 shows symbols that appear in the context of a path through the module
 hierarchy to an item.
@@ -119,14 +120,14 @@ Table B-3: Path-Related Syntax
 
 | Symbol | Explanation |
 |---|---|
-| `ident::ident | Namespace path |
+| `ident::ident` | Namespace path |
 | `::path` | Path relative to the crate root (that is, an explicitly absolute
 path) |
 | `self::path` | Path relative to the current module (that is, an explicitly
 relative path) |
 | `super::path` | Path relative to the parent of the current module |
-| `type::ident`, `<type as trait>::ident | Associated constants, functions, and
-types |
+| `type::ident`, `<type as trait>::ident` | Associated constants, functions,
+and types |
 | `<type>::...` | Associated item for a type that cannot be directly named (for
 example, `<&T>::...`, `<[T]>::...`, and so on) |
 | `trait::method(...)` | Disambiguating a method call by naming the trait that
@@ -205,7 +206,7 @@ Table B-8: Tuples
 
 | Symbol | Explanation |
 |---|---|
-| `() | Empty tuple (aka unit), both literal and type |
+| `()` | Empty tuple (aka unit), both literal and type |
 | `(expr)` | Parenthesized expression |
 | `(expr,)` | Single-element tuple expression |
 | `(type,)` | Single-element tuple type |
