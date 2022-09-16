@@ -1,9 +1,9 @@
 ## Control Flow
 
-The ability to run some code depending on if a condition is true, or run some
-code repeatedly while a condition is true, are basic building blocks in most
-programming languages. The most common constructs that let you control the flow
-of execution of Rust code are `if` expressions and loops.
+The ability to run some code depending on whether a condition is `true` and to
+run some code repeatedly while a condition is `true` are basic building blocks
+in most programming languages. The most common constructs that let you control
+the flow of execution of Rust code are `if` expressions and loops.
 
 ### `if` Expressions
 
@@ -22,17 +22,17 @@ the `if` expression. In the *src/main.rs* file, input the following:
 
 All `if` expressions start with the keyword `if`, followed by a condition. In
 this case, the condition checks whether or not the variable `number` has a
-value less than 5. We place the block of code to execute if the condition is true
-immediately after the condition inside curly brackets. Blocks of code
+value less than 5. We place the block of code to execute if the condition is
+`true` immediately after the condition inside curly brackets. Blocks of code
 associated with the conditions in `if` expressions are sometimes called *arms*,
 just like the arms in `match` expressions that we discussed in the [“Comparing
 the Guess to the Secret Number”][comparing-the-guess-to-the-secret-number]<!--
 ignore --> section of Chapter 2.
 
-Optionally, we can also include an `else` expression, which we chose
-to do here, to give the program an alternative block of code to execute should
-the condition evaluate to false. If you don’t provide an `else` expression and
-the condition is false, the program will just skip the `if` block and move on
+Optionally, we can also include an `else` expression, which we chose to do
+here, to give the program an alternative block of code to execute should the
+condition evaluate to `false`. If you don’t provide an `else` expression and
+the condition is `false`, the program will just skip the `if` block and move on
 to the next bit of code.
 
 Try running this code; you should see the following output:
@@ -105,11 +105,11 @@ see the following output:
 ```
 
 When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition holds true. Note that even though 6 is
-divisible by 2, we don’t see the output `number is divisible by 2`, nor do we
-see the `number is not divisible by 4, 3, or 2` text from the `else` block.
-That’s because Rust only executes the block for the first true condition, and
-once it finds one, it doesn’t even check the rest.
+the first body for which the condition evaluates to `true`. Note that even
+though 6 is divisible by 2, we don’t see the output `number is divisible by 2`,
+nor do we see the `number is not divisible by 4, 3, or 2` text from the `else`
+block. That’s because Rust only executes the block for the first `true`
+condition, and once it finds one, it doesn’t even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you have more
 than one, you might want to refactor your code. Chapter 6 describes a powerful
@@ -171,8 +171,8 @@ if it had to keep track of multiple hypothetical types for any variable.
 
 It’s often useful to execute a block of code more than once. For this task,
 Rust provides several *loops*, which will run through the code inside the loop
-body to the end and then start immediately back at the beginning. To
-experiment with loops, let’s make a new project called *loops*.
+body to the end and then start immediately back at the beginning. To experiment
+with loops, let’s make a new project called *loops*.
 
 Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
 
@@ -191,9 +191,9 @@ like this:
 ```
 
 When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support the keyboard shortcut
-<span class="keystroke">ctrl-c</span> to interrupt a program that is stuck in
-a continual loop. Give it a try:
+until we stop the program manually. Most terminals support the keyboard
+shortcut <span class="keystroke">ctrl-c</span> to interrupt a program that is
+stuck in a continual loop. Give it a try:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-32-loop
@@ -213,10 +213,10 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span class="keystroke">ctrl-c
-</span>. You may or may not see the word `again!` printed after the `^C`,
-depending on where the code was in the loop when it received the interrupt
-signal.
+The symbol `^C` represents where you pressed <span
+class="keystroke">ctrl-c</span>. You may or may not see the word `again!`
+printed after the `^C`, depending on where the code was in the loop when it
+received the interrupt signal.
 
 Fortunately, Rust also provides a way to break out of a loop using code. You
 can place the `break` keyword within the loop to tell the program when to stop
@@ -245,18 +245,18 @@ use it, as shown here:
 Before the loop, we declare a variable named `counter` and initialize it to
 `0`. Then we declare a variable named `result` to hold the value returned from
 the loop. On every iteration of the loop, we add `1` to the `counter` variable,
-and then check whether the counter is equal to `10`. When it is, we use the
+and then check whether the `counter` is equal to `10`. When it is, we use the
 `break` keyword with the value `counter * 2`. After the loop, we use a
 semicolon to end the statement that assigns the value to `result`. Finally, we
-print the value in `result`, which in this case is 20.
+print the value in `result`, which in this case is `20`.
 
 #### Loop Labels to Disambiguate Between Multiple Loops
 
 If you have loops within loops, `break` and `continue` apply to the innermost
-loop at that point. You can optionally specify a *loop label* on a loop that we
-can then use with `break` or `continue` to specify that those keywords apply to
-the labeled loop instead of the innermost loop. Loop labels must begin with a
-single quote. Here’s an example with two nested loops:
+loop at that point. You can optionally specify a *loop label* on a loop that
+you can then use with `break` or `continue` to specify that those keywords
+apply to the labeled loop instead of the innermost loop. Loop labels must begin
+with a single quote. Here’s an example with two nested loops:
 
 ```rust
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-32-5-loop-labels/src/main.rs}}
@@ -274,7 +274,7 @@ doesn’t specify a label will exit the inner loop only. The `break
 #### Conditional Loops with `while`
 
 A program will often need to evaluate a condition within a loop. While the
-condition is true, the loop runs. When the condition ceases to be true, the
+condition is `true`, the loop runs. When the condition ceases to be `true`, the
 program calls `break`, stopping the loop. It’s possible to implement behavior
 like this using a combination of `loop`, `if`, `else`, and `break`; you could
 try that now in a program, if you’d like. However, this pattern is so common
@@ -292,8 +292,8 @@ time, and then, after the loop, print a message and exit.
 condition holds true</span>
 
 This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
-true, the code runs; otherwise, it exits the loop.
+`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
+evaluates to `true`, the code runs; otherwise, it exits the loop.
 
 #### Looping Through a Collection with `for`
 
@@ -312,8 +312,8 @@ using a `while` loop</span>
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer true). Running this code will print every element
-in the array:
+when `index < 5` is no longer `true`). Running this code will print every
+element in the array:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/listing-03-04/output.txt}}
@@ -324,8 +324,8 @@ will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
 However, this approach is error prone; we could cause the program to panic if
-the index value or test condition are incorrect. For example, if you changed
-the definition of the `a` array to have four elements but forgot to update the
+the index value or test condition is incorrect. For example, if you changed the
+definition of the `a` array to have four elements but forgot to update the
 condition to `while index < 4`, the code would panic. It’s also slow, because
 the compiler adds runtime code to perform the conditional check of whether the
 index is within the bounds of the array on every iteration through the loop.
@@ -372,13 +372,13 @@ This code is a bit nicer, isn’t it?
 
 ## Summary
 
-You made it! That was a sizable chapter: you learned about variables, scalar
-and compound data types, functions, comments, `if` expressions, and loops!
-To practice with the concepts discussed in this chapter, try building
-programs to do the following:
+You made it! This was a sizable chapter: you learned about variables, scalar
+and compound data types, functions, comments, `if` expressions, and loops! To
+practice with the concepts discussed in this chapter, try building programs to
+do the following:
 
 * Convert temperatures between Fahrenheit and Celsius.
-* Generate the nth Fibonacci number.
+* Generate the *n*th Fibonacci number.
 * Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
   taking advantage of the repetition in the song.
 
