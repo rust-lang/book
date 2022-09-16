@@ -1,7 +1,7 @@
 ## Variables and Mutability
 
 As mentioned in the [“Storing Values with
-Variables”][storing-values-with-variables]<!-- ignore --> section, by default
+Variables”][storing-values-with-variables]<!-- ignore --> section, by default,
 variables are immutable. This is one of many nudges Rust gives you to write
 your code in a way that takes advantage of the safety and easy concurrency that
 Rust offers. However, you still have the option to make your variables mutable.
@@ -9,12 +9,11 @@ Let’s explore how and why Rust encourages you to favor immutability and why
 sometimes you might want to opt out.
 
 When a variable is immutable, once a value is bound to a name, you can’t change
-that value. To illustrate this, let’s generate a new project called *variables*
-in your *projects* directory by using `cargo new variables`.
+that value. To illustrate this, generate a new project called *variables* in
+your *projects* directory by using `cargo new variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
-code with the following code. This code won’t compile just yet, we’ll first
-examine the immutability error.
+code with the following code, which won’t compile just yet:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -22,8 +21,8 @@ examine the immutability error.
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/src/main.rs}}
 ```
 
-Save and run the program using `cargo run`. You should receive an error
-message, as shown in this output:
+Save and run the program using `cargo run`. You should receive an error message
+regarding an immutability error, as shown in this output:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/no-listing-01-variables-are-immutable/output.txt}}
@@ -34,9 +33,8 @@ Compiler errors can be frustrating, but really they only mean your program
 isn’t safely doing what you want it to do yet; they do *not* mean that you’re
 not a good programmer! Experienced Rustaceans still get compiler errors.
 
-The error message indicates that the cause of the error is that you `` cannot
-assign twice to immutable variable `x` ``, because you tried to assign a second
-value to the immutable `x` variable.
+You received the error message `` cannot assign twice to immutable variable `x`
+`` because you tried to assign a second value to the immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
 value that’s designated as immutable because this very situation can lead to
@@ -45,15 +43,16 @@ never change and another part of our code changes that value, it’s possible
 that the first part of the code won’t do what it was designed to do. The cause
 of this kind of bug can be difficult to track down after the fact, especially
 when the second piece of code changes the value only *sometimes*. The Rust
-compiler guarantees that when you state a value won’t change, it really won’t
-change, so you don’t have to keep track of it yourself. Your code is thus
+compiler guarantees that when you state that a value won’t change, it really
+won’t change, so you don’t have to keep track of it yourself. Your code is thus
 easier to reason through.
 
-But mutability can be very useful, and can make code more convenient to write. 
-Although variables are immutable by default, you can make them mutable by adding 
-`mut` in front of the variable name as you did in Chapter 2. Adding `mut` also
-conveys intent to future readers of the code by indicating that other parts of
-the code will be changing this variable’s value.
+But mutability can be very useful, and can make code more convenient to write.
+Although variables are immutable by default, you can make them mutable by
+adding `mut` in front of the variable name as you did in [Chapter
+2][storing-values-with-variables]<!-- ignore -->. Adding `mut` also conveys
+intent to future readers of the code by indicating that other parts of the code
+will be changing this variable’s value.
 
 For example, let’s change *src/main.rs* to the following:
 
@@ -69,8 +68,8 @@ When we run the program now, we get this:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-02-adding-mut/output.txt}}
 ```
 
-We’re allowed to change the value bound to `x` from `5` to `6` when `mut`
-is used. Ultimately, deciding whether to use mutability or not is up to you and
+We’re allowed to change the value bound to `x` from `5` to `6` when `mut` is
+used. Ultimately, deciding whether to use mutability or not is up to you and
 depends on what you think is clearest in that particular situation.
 
 ### Constants
@@ -82,9 +81,9 @@ and variables.
 First, you aren’t allowed to use `mut` with constants. Constants aren’t just
 immutable by default—they’re always immutable. You declare constants using the
 `const` keyword instead of the `let` keyword, and the type of the value *must*
-be annotated. We’re about to cover types and type annotations in the next
-section, [“Data Types,”][data-types]<!-- ignore --> so don’t worry about the
-details right now. Just know that you must always annotate the type.
+be annotated. We’ll cover types and type annotations in the next section,
+[“Data Types,”][data-types]<!-- ignore -->, so don’t worry about the details
+right now. Just know that you must always annotate the type.
 
 Constants can be declared in any scope, including the global scope, which makes
 them useful for values that many parts of code need to know about.
@@ -109,11 +108,11 @@ to the value 10,800. See the [Rust Reference’s section on constant
 evaluation][const-eval] for more information on what operations can be used
 when declaring constants.
 
-Constants are valid for the entire time a program runs, within the scope they
-were declared in. This property makes constants useful for values in your
-application domain that multiple parts of the program might need to know about,
-such as the maximum number of points any player of a game is allowed to earn or
-the speed of light.
+Constants are valid for the entire time a program runs, within the scope in
+which they were declared. This property makes constants useful for values in
+your application domain that multiple parts of the program might need to know
+about, such as the maximum number of points any player of a game is allowed to
+earn, or the speed of light.
 
 Naming hardcoded values used throughout your program as constants is useful in
 conveying the meaning of that value to future maintainers of the code. It also
@@ -150,7 +149,7 @@ When we run this program, it will output the following:
 {{#include ../listings/ch03-common-programming-concepts/no-listing-03-shadowing/output.txt}}
 ```
 
-Shadowing is different from marking a variable as `mut`, because we’ll get a
+Shadowing is different from marking a variable as `mut` because we’ll get a
 compile-time error if we accidentally try to reassign to this variable without
 using the `let` keyword. By using `let`, we can perform a few transformations
 on a value but have the variable be immutable after those transformations have
