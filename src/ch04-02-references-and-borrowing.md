@@ -9,9 +9,8 @@ the data stored at that address; that data is owned by some other variable.
 Unlike a pointer, a reference is guaranteed to point to a valid value of a
 particular type for the life of that reference.
 
-Here is how you would define and use a `calculate_length` function that
-has a reference to an object as a parameter instead of taking ownership of the
-value:
+Here is how you would define and use a `calculate_length` function that has a
+reference to an object as a parameter instead of taking ownership of the value:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -25,7 +24,9 @@ function return value is gone. Second, note that we pass `&s1` into
 `String`. These ampersands represent *references*, and they allow you to refer
 to some value without taking ownership of it. Figure 4-5 depicts this concept.
 
-<img alt="&amp;String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+<img alt="Three tables: the table for s contains only a pointer to the table
+for s1. The table for s1 contains the stack data for s1 and points to the
+string data on the heap." src="img/trpl04-05.svg" class="center" />
 
 <span class="caption">Figure 4-5: A diagram of `&String s` pointing at `String
 s1`</span>
@@ -54,7 +55,7 @@ the parameter `s` is a reference. Let’s add some explanatory annotations:
 
 The scope in which the variable `s` is valid is the same as any function
 parameter’s scope, but the value pointed to by the reference is not dropped
-when `s` stops being used because `s` doesn’t have ownership. When functions
+when `s` stops being used, because `s` doesn’t have ownership. When functions
 have references as parameters instead of the actual values, we won’t need to
 return the values in order to give back ownership, because we never had
 ownership.
@@ -63,7 +64,7 @@ We call the action of creating a reference *borrowing*. As in real life, if a
 person owns something, you can borrow it from them. When you’re done, you have
 to give it back. You don’t own it.
 
-So what happens if we try to modify something we’re borrowing? Try the code in
+So, what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-6. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
@@ -94,7 +95,7 @@ with just a few small tweaks that use, instead, a *mutable reference*:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-09-fixes-listing-04-06/src/main.rs}}
 ```
 
-First, we change `s` to be `mut`. Then we create a mutable reference with `&mut
+First we change `s` to be `mut`. Then we create a mutable reference with `&mut
 s` where we call the `change` function, and update the function signature to
 accept a mutable reference with `some_string: &mut String`. This makes it very
 clear that the `change` function will mutate the value it borrows.
@@ -123,7 +124,7 @@ in `r2` that borrows the same data as `r1`.
 
 The restriction preventing multiple mutable references to the same data at the
 same time allows for mutation but in a very controlled fashion. It’s something
-that new Rustaceans struggle with, because most languages let you mutate
+that new Rustaceans struggle with because most languages let you mutate
 whenever you’d like. The benefit of having this restriction is that Rust can
 prevent data races at compile time. A *data race* is similar to a race
 condition and happens when these three behaviors occur:
@@ -133,8 +134,8 @@ condition and happens when these three behaviors occur:
 * There’s no mechanism being used to synchronize access to the data.
 
 Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem
-by refusing to compile code with data races!
+when you’re trying to track them down at runtime; Rust prevents this problem by
+refusing to compile code with data races!
 
 As always, we can use curly brackets to create a new scope, allowing for
 multiple mutable references, just not *simultaneous* ones:
@@ -175,10 +176,9 @@ occurs before the mutable reference is introduced:
 
 The scopes of the immutable references `r1` and `r2` end after the `println!`
 where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed. The ability of
-the compiler to tell that a reference is no longer being used at a point before
-the end of the scope is called *Non-Lexical Lifetimes* (NLL for short), and you
-can read more about it in [The Edition Guide][nll].
+created. These scopes don’t overlap, so this code is allowed: the compiler can
+tell that the reference is no longer being used at a point before the end of
+the scope.
 
 Even though borrowing errors may be frustrating at times, remember that it’s
 the Rust compiler pointing out a potential bug early (at compile time rather
@@ -188,9 +188,9 @@ have to track down why your data isn’t what you thought it was.
 ### Dangling References
 
 In languages with pointers, it’s easy to erroneously create a *dangling
-pointer*--a pointer that references a location in memory that may have been
-given to someone else--by freeing some memory while preserving a pointer to
-that memory. In Rust, by contrast, the compiler guarantees that references will
+pointer*—a pointer that references a location in memory that may have been
+given to someone else—by freeing some memory while preserving a pointer to that
+memory. In Rust, by contrast, the compiler guarantees that references will
 never be dangling references: if you have a reference to some data, the
 compiler will ensure that the data will not go out of scope before the
 reference to the data does.
@@ -251,5 +251,3 @@ Let’s recap what we’ve discussed about references:
 * References must always be valid.
 
 Next, we’ll look at a different kind of reference: slices.
-
-[nll]: https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html
