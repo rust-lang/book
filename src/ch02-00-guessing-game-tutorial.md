@@ -842,11 +842,13 @@ catchall value; in this example, we’re saying we want to match all `Err`
 values, no matter what information they have inside them. So the program will
 execute the second arm’s code, `continue`, which tells the program to go to the
 next iteration of the `loop` and ask for another guess. So, effectively, the
-program ignores all errors that `parse` might encounter! Remember, we are
-using `match` to return and assign a value to `guess`, and must still end the
-expression with a semicolon. Also notice, `match` variants are enclosed in 
-curly brackets as usual. As a result, this assignment now ends with a curly 
-bracket, followed by a semicolon (`};`).
+program ignores all errors that `parse` might encounter! 
+
+> Note: In this example `match` returns a value to the `let guess =` statement.
+> In rust, statements end with a semicolon, and `match` variants are enclosed
+> in curly brackets. As a result, the line ends with a curly bracket followed
+> by a semicolon (`};`). We’ll discuss statements in more detail in
+> [Chapter 3](ch03-03-how-functions-work.md)<!-- ignore -->.
 
 Now everything in the program should work as expected. Let’s try it:
 
