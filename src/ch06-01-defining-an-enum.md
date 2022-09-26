@@ -290,8 +290,8 @@ whatever type of value we’re working with) do we have to worry about possibly
 not having a value, and the compiler will make sure we handle that case before
 using the value.
 
-In other words, you have to convert an `Option<T>` to a `T` before you can
-perform `T` operations with it. Generally, this helps catch one of the most
+In other words, you have to convert an `Option<T>` to a `T` before you can use or
+perform operations. Generally, this helps catch one of the most
 common issues with null: assuming that something isn’t null when it actually
 is.
 
