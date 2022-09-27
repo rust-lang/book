@@ -1,7 +1,7 @@
 ## The Slice Type
 
 *Slices* are a kind of reference, which lets you access a contiguous sub-sequence
-of elements in a sequential [collection](book/src/ch08-00-common-collections.md).
+of elements in a sequential [collection](ch08-00-common-collections.md).
 Because slices are a kind of reference, they too can borrow access to memory, but
 not own it.
 
