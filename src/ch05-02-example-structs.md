@@ -198,7 +198,7 @@ that expression, and returns ownership of the value.
 > Note: Calling the `dbg!` macro prints to the standard error console stream
 > (`stderr`), as opposed to `println!` which prints to the standard output
 > console stream (`stdout`). We’ll talk more about `stderr` and `stdout` in the
-> “[“Writing Error Messages to Standard Error Instead of Standard
+> [“Writing Error Messages to Standard Error Instead of Standard
 > Output” section in Chapter 12][err]<!-- ignore -->.
 
 Here’s an example where we’re interested in the value that gets assigned to the

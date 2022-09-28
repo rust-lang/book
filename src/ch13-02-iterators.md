@@ -133,7 +133,7 @@ ownership of the iterator we call it on.
 consume the iterator. Instead, they produce different iterators by changing
 some aspect of the original iterator.
 
-Listing 13-17 shows an example of calling the iterator adaptor method `map`,
+Listing 13-14 shows an example of calling the iterator adaptor method `map`,
 which takes a closure to call on each item as the items are iterated through.
 The `map` method returns a new iterator that produces the modified items. The
 closure here creates a new iterator in which each item from the vector will be

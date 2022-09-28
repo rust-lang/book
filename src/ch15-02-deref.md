@@ -73,11 +73,12 @@ Listing 15-6:
 `Box<i32>`</span>
 
 The main difference between Listing 15-7 and Listing 15-6 is that here we set
-`y` to be an instance of a box pointing to a copied value of `x` rather than a
-reference pointing to the value of `x`. In the last assertion, we can use the
-dereference operator to follow the box’s pointer in the same way that we did
-when `y` was a reference. Next, we’ll explore what is special about `Box<T>`
-that enables us to use the dereference operator by defining our own box type.
+`y` to be an instance of a `Box<T>` pointing to a copied value of `x` rather
+than a reference pointing to the value of `x`. In the last assertion, we can
+use the dereference operator to follow the pointer of the `Box<T>` in the same
+way that we did when `y` was a reference. Next, we’ll explore what is special
+about `Box<T>` that enables us to use the dereference operator by defining our
+own type.
 
 ### Defining Our Own Smart Pointer
 
