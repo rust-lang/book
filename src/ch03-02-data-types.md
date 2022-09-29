@@ -149,7 +149,7 @@ Floating-point numbers are represented according to the IEEE-754 standard. The
 
 Rust supports the basic mathematical operations you’d expect for all of the
 number types: addition, subtraction, multiplication, division, and remainder.
-Integer division rounds down to the nearest integer. The following code shows
+Integer division rounds towards zero. The following code shows
 how you’d use each numeric operation in a `let` statement:
 
 <span class="filename">Filename: src/main.rs</span>
