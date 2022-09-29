@@ -82,9 +82,8 @@ allow the player to input a guess. Enter the code in Listing 2-1 into
 prints it</span>
 
 This code contains a lot of information, so let’s go over it line by line. To
-obtain user input and then print the result as output, we need to bring the
-`io` input/output library into scope. The `io` library comes from the
-standard library, known as `std`:
+obtain user input we need to bring the `io` input/output library into scope.
+The `io` library comes from the standard library, also known as `std`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
