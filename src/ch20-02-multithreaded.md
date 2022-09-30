@@ -206,8 +206,8 @@ characteristics:
 ```
 
 We chose `usize` as the type of the `size` parameter, because we know that a
-negative number of threads doesn’t make any sense. We also know we’ll use this
-4 as the number of elements in a collection of threads, which is what the
+negative number of threads doesn’t make any sense. We also know we’ll use `size`
+as the number of elements in a collection of threads, which is what the
 `usize` type is for, as discussed in the [“Integer Types”][integer-types]<!--
 ignore --> section of Chapter 3.
 
