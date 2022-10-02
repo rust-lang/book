@@ -24,10 +24,7 @@ fn main() {
 }
 """
 answer.doesCompile = true
-answer.stdout = """
-bark
-(silence)
-"""
+answer.stdout = "bark\n(silence)"
 context = """
 The implementation of `MakeNoise` provides a specific implementation for `Dog` and uses the default implementation for `Cat`.
 Therefore calling `make_noise` on each prints `bark` and `(silence)`, respectively. 
