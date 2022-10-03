@@ -124,8 +124,8 @@ slice. The slice doesn’t own the type instances it contains, but the vector
 returned from `to_vec` will need to own its instances, so `to_vec` calls
 `clone` on each item. Thus, the type stored in the slice must implement `Clone`.
 
-The `Copy` trait allows you to duplicate a value by only copying bits stored on
-the stack; no arbitrary code is necessary. See the [“Stack-Only Data:
+The `Copy` trait allows you to duplicate a value by only copying bits of information;
+no arbitrary code is necessary. See the [“Stack-Only Data:
 Copy”][stack-only-data-copy]<!-- ignore --> section in Chapter 4 for more
 information on `Copy`.
 
