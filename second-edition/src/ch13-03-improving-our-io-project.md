@@ -112,7 +112,7 @@ impl Config {
 
 `env::args` 함수에 대한 표준 라이브러리 문서에는 반환하는 반복자의 타입이
 `std::env::Args` 라고 명시되어 있습니다. `Config::new` 함수의 시그니처를 업데이
-트 해서 `args` 파리미터가 `&[String]` 대신 `std::env::Args` 타입을 갖도록
+트 해서 `args` 파라미터가 `&[String]` 대신 `std::env::Args` 타입을 갖도록
 했습니다. `args` 의 소유권을 갖고 그것을 순회하면서 `args` 를 변경할 것이기
 때문에, 변경 가능하도록 하기 위해 `args` 파라미터의 명세에 `mut` 키워드를 추가
 할 수 있습니다.

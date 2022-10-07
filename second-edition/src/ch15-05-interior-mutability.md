@@ -379,7 +379,7 @@ impl Messenger for MockMessenger {
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-코드가 `already borrowed: BorrowMutError`라는 메세지와 함꼐 패닉을
+코드가 `already borrowed: BorrowMutError`라는 메세지와 함께 패닉을
 일으켰음을 주목하세요. 이것이 바로 `RefCell<T>`가 런타임에 빌림 규칙의 위반을
 다루는 방법입니다.
 
