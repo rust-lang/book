@@ -41,5 +41,5 @@ fn main() {
         caps.get(0).unwrap().as_str().to_string()
     });
 
-    print!("{}", out);
+    print!("{out}");
 }

@@ -21,7 +21,7 @@ fn main() {
         if is_in_code_block {
             is_in_inline_code = false;
             is_in_html_tag = false;
-            println!("{}", line);
+            println!("{line}");
         } else {
             let modified_line = &mut String::new();
             let mut previous_char = std::char::REPLACEMENT_CHARACTER;
@@ -72,7 +72,7 @@ fn main() {
                 modified_line.push(char_to_push);
                 previous_char = char_to_push;
             }
-            println!("{}", modified_line);
+            println!("{modified_line}");
         }
     }
 }

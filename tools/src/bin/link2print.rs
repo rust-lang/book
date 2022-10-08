@@ -19,7 +19,7 @@ fn read_md() -> String {
 }
 
 fn write_md(output: String) {
-    print!("{}", output);
+    print!("{output}");
 }
 
 fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
@@ -81,7 +81,7 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                         }
                     }
                 };
-                format!("{} at *{}*", name, val)
+                format!("{name} at *{val}*")
             }
         }
     });

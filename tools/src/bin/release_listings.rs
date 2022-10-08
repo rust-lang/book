@@ -149,7 +149,7 @@ fn copy_cleaned_rust_file(
         if !ANCHOR_OR_SNIP_COMMENTS.is_match(&line)
             && (item_name != "lib.rs" || !EMPTY_MAIN.is_match(&line))
         {
-            writeln!(&mut to_buf, "{}", line)?;
+            writeln!(&mut to_buf, "{line}")?;
         }
     }
 

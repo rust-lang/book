@@ -14,7 +14,7 @@ fn read_md() -> String {
 }
 
 fn write_md(output: String) {
-    print!("{}", output);
+    print!("{output}");
 }
 
 fn remove_hidden_lines(input: &str) -> String {
