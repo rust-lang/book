@@ -82,7 +82,7 @@ library has the `std::cmp::PartialOrd` trait that you can implement on types
 (see Appendix C for more on this trait). By following the help text's
 suggestion, we restrict the types valid for `T` to only those that implement
 `PartialOrd`, this is done by changing the function signature to:
-```rust
+```rust,ignore
 fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
     // this part doesn't need to change
 }
