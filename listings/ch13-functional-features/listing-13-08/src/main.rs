@@ -18,5 +18,5 @@ fn main() {
         sort_operations.push(value);
         r.width
     });
-    println!("{:#?}", list);
+    println!("{list:#?}");
 }

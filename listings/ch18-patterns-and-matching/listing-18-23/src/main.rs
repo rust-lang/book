@@ -9,7 +9,7 @@ fn main() {
     let origin = Point { x: 0, y: 0, z: 0 };
 
     match origin {
-        Point { x, .. } => println!("x is {}", x),
+        Point { x, .. } => println!("x is {x}"),
     }
     // ANCHOR_END: here
 }

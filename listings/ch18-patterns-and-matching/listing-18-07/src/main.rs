@@ -1,5 +1,5 @@
 fn print_coordinates(&(x, y): &(i32, i32)) {
-    println!("Current location: ({}, {})", x, y);
+    println!("Current location: ({x}, {y})");
 }
 
 fn main() {
