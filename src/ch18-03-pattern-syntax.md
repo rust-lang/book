@@ -254,7 +254,8 @@ tuples inside a tuple and destructure all the primitive values out:
 ```
 
 This code lets us break complex types into their component parts so we can use
-the values we’re interested in separately.
+the values we’re interested in separately. Here we create the values `feet`,
+`inches`, `x`, and `y` and assign them to `3`, `10`, `3`, and `-10` respectively.
 
 Destructuring with patterns is a convenient way to use pieces of values, such
 as the value from each field in a struct, separately from each other.
