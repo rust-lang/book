@@ -124,7 +124,7 @@ collections, using generics and trait bounds is preferable because the
 definitions will be monomorphized at compile time to use the concrete types.
 
 On the other hand, with the method using trait objects, one `Screen` instance
-can hold a `Vec` that contains a `Box<Button>` as well as a
+can hold a `Vec<T>` that contains a `Box<Button>` as well as a
 `Box<TextField>`. Let’s look at how this works, and then we’ll talk about the
 runtime performance implications.
 
