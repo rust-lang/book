@@ -483,7 +483,7 @@ arms exhaustiveness anymore when match guard expressions are involved.
 ```rust
 match Some(100) {
     Some(_) if true => print!("Got Some"),
-    None => println!("Got None")
+    None => print!("Got None")
 }
 ```
 This `match` expression involves compilation error.
