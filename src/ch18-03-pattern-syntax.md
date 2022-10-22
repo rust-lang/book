@@ -480,7 +480,7 @@ the match guard gives us the ability to express this logic. The downside of
 this additional expressiveness is that the compiler is not smart enough about 
 arms exhaustiveness anymore when match guard expressions are involved.
 
-```rust
+```rust,ignore,does_not_compile
 match Some(100) {
     Some(_) if true => print!("Got Some"),
     None => print!("Got None")
