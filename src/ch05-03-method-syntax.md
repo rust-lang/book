@@ -78,14 +78,14 @@ the instance’s `width` field is greater than `0` and `false` if the value is
 method `width`. When we don’t use parentheses, Rust knows we mean the field
 `width`.
 
-Often, but not always, when we give methods with the same name as a field we
-want it to only return the value in the field and do nothing else. Methods like
-this are called *getters*, and Rust does not implement them automatically for
-struct fields as some other languages do. Getters are useful because you can
-make the field private but the method public, and thus enable read-only access
-to that field as part of the type’s public API. We will discuss what public and
-private are and how to designate a field or method as public or private in
-[Chapter 7][public]<!-- ignore -->.
+Often, but not always, when we give a method the same name as a field we want
+it to only return the value in the field and do nothing else. Methods like this
+are called *getters*, and Rust does not implement them automatically for struct
+fields as some other languages do. Getters are useful because you can make the
+field private but the method public, and thus enable read-only access to that
+field as part of the type’s public API. We will discuss what public and private
+are and how to designate a field or method as public or private in [Chapter
+7][public]<!-- ignore -->.
 
 > ### Where’s the `->` Operator?
 >
