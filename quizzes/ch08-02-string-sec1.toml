@@ -15,7 +15,7 @@ context = """
 [[questions]]
 type = "ShortAnswer"
 prompt.prompt = """
-What is the maximum number of times a heap allocation could occur in program? Write your answer in digits, e.g. 0 or 1.
+What is the maximum number of times a heap allocation could occur in this program? Write your answer in digits, e.g. 0 or 1.
 
 ```
 let s1 = String::from("tic");

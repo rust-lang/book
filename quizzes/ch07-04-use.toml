@@ -33,10 +33,10 @@ fn main() {
 }
 ```
 
-Inside `main`, how many paths to `a`, `b`, and `c` are created by the `use` statement? Write your answer as a digit such as 0 or 1.
+Inside `main`, what is the total number of paths to refer to `a`, `b`, or `c`? Write your answer as a digit such as 0 or 1.
 """
-answer.answer = "3"
+answer.answer = "5"
 context = """
-The `*` imports `a` and `child` (but not the private `b`). The `as` also renames `child` to `alias`. Therefore the `use` creates three possible paths:
-`a`, `child::c`, and `alias::c`.
+There are two paths to `a`: `parent::a` and `a`. There are no paths to `b`, because it is private. There are three paths to `c`:
+`parent::child::c`, `child::c`, `alias::c`.
 """

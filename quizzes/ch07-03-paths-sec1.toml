@@ -1,6 +1,6 @@
 [[questions]]
 type = "ShortAnswer"
-prompt.prompt = "What is the keyword you use at the start of an absolute path?"
+prompt.prompt = "What is the keyword you use at the start of an absolute path to an item in the current crate?"
 answer.answer = "crate"
 context = """
 For example, an absolute path to item `b` in module `a` would be `crate::a::b`.

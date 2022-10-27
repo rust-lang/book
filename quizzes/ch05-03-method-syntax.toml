@@ -1,6 +1,6 @@
 [[questions]]
 type = "MultipleChoice"
-prompt.prompt = "What is the keyword for constructors in Rust?"
+prompt.prompt = "What is the keyword for constructor functions in Rust?"
 prompt.choices = [
   "`constructor`",
   "`new`",
@@ -9,7 +9,7 @@ prompt.choices = [
 ]
 answer.answer = 3
 context = """
-Rust does not have a keyword for constructors. The idiomatic way to define a constructor is to make an associated function called `new`,
+Rust does not have a keyword for constructor functions. The idiomatic way to define a constructo function is to make an associated function called `new`, 
 but that is not enforced by the language.
 """
 
