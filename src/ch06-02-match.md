@@ -31,10 +31,10 @@ the variants of the enum as its patterns</span>
 
 Let’s break down the `match` in the `value_in_cents` function. First we list
 the `match` keyword followed by an expression, which in this case is the value
-`coin`. This seems very similar to an expression used with `if`, but there’s a
-big difference: with `if`, the expression needs to return a Boolean value, but
-here it can return any type. The type of `coin` in this example is the `Coin`
-enum that we defined on the first line.
+`coin`. This seems very similar to a conditional expression used with `if`, but
+there’s a big difference: with `if`, the condition needs to evaluate to a
+Boolean value, but here it can be any type. The type of `coin` in this example
+is the `Coin` enum that we defined on the first line.
 
 Next are the `match` arms. An arm has two parts: a pattern and some code. The
 first arm here has a pattern that is the value `Coin::Penny` and then the `=>`
