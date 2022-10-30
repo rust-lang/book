@@ -348,7 +348,7 @@ chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
 Using the `for` loop, you wouldn’t need to remember to change any other code if
-you changed the number of values in the array, as you would with the method
+you changed the number of items in the collection, as you would with the method
 used in Listing 3-4.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
