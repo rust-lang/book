@@ -27,7 +27,7 @@ help: remove these parentheses
   |
 2 -     let x = (let y = 6);
 2 +     let x = let y = 6;
-  | 
+  |
 
 For more information about this error, try `rustc --explain E0658`.
 warning: `functions` (bin "functions") generated 1 warning

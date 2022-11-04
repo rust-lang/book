@@ -1,13 +1,13 @@
 $ cargo check
     Checking hello v0.1.0 (file:///projects/hello)
 error[E0507]: cannot move out of `worker.thread` which is behind a mutable reference
-    --> src/lib.rs:52:13
-     |
-52   |             worker.thread.join().unwrap();
-     |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this method call
-     |             |
-     |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
-     |
+  --> src/lib.rs:52:13
+   |
+52 |             worker.thread.join().unwrap();
+   |             ^^^^^^^^^^^^^ ------ `worker.thread` moved due to this method call
+   |             |
+   |             move occurs because `worker.thread` has type `JoinHandle<()>`, which does not implement the `Copy` trait
+   |
 note: this function takes ownership of the receiver `self`, which moves `worker.thread`
 
 For more information about this error, try `rustc --explain E0507`.

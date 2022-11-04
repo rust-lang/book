@@ -17,9 +17,9 @@ fn main() {
         Message::ChangeColor(Color::Rgb(r, g, b)) => {
             println!("Change color to red {r}, green {g}, and blue {b}");
         }
-        Message::ChangeColor(Color::Hsv(h, s, v)) => println!(
-            "Change color to hue {h}, saturation {s}, value {v}"
-        ),
+        Message::ChangeColor(Color::Hsv(h, s, v)) => {
+            println!("Change color to hue {h}, saturation {s}, value {v}")
+        }
         _ => (),
     }
 }

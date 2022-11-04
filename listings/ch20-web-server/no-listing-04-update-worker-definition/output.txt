@@ -5,6 +5,12 @@ error[E0599]: no method named `join` found for enum `Option` in the current scop
    |
 52 |             worker.thread.join().unwrap();
    |                           ^^^^ method not found in `Option<JoinHandle<()>>`
+   |
+note: the method `join` exists on the type `JoinHandle<()>`
+help: consider using `Option::expect` to unwrap the `JoinHandle<()>` value, panicking if the value is an `Option::None`
+   |
+52 |             worker.thread.expect("REASON").join().unwrap();
+   |                          +++++++++++++++++
 
 error[E0308]: mismatched types
   --> src/lib.rs:72:22
