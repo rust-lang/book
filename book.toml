@@ -4,15 +4,15 @@ authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Commun
 
 [output.html]
 additional-css = [
-  "ferris.css", 
-  "theme/2018-edition.css", 
-  "js-extensions/packages/consent-form/dist/index.css", 
+  "ferris.css",
+  "theme/2018-edition.css",
+  "js-extensions/packages/consent-form/dist/index.css",
   "js-extensions/packages/feedback/dist/index.css"
 ]
 additional-js = [
-  "ferris.js", 
-  "js-extensions/packages/telemetry/dist/index.js", 
-  "js-extensions/packages/consent-form/dist/index.js", 
+  "ferris.js",
+  "js-extensions/packages/telemetry/dist/index.js",
+  "js-extensions/packages/consent-form/dist/index.js",
   "js-extensions/packages/feedback/dist/index.js"
 ]
 # git-repository-url = "https://github.com/rust-lang/book"
@@ -21,3 +21,6 @@ additional-js = [
 fullscreen = true
 validate = true
 cache-answers = true
+
+[build]
+extra-watch-dirs = ["quizzes"]

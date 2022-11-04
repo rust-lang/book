@@ -1,5 +1,9 @@
+[env]
+QUIZ_LIGHTWEIGHT_VALIDATE = ""
+QUIZ_DEV_MODE = ""
+
 [tasks.watch-book]
-script = "mdbook serve --open --extra-watch-dirs quizzes"
+script = "mdbook serve --open"
 
 [tasks.watch-js]
 script = "cd js-extensions && pnpm watch"
