@@ -3,27 +3,17 @@ $ cargo run
 error[E0277]: `Rc<Mutex<i32>>` cannot be sent between threads safely
   --> src/main.rs:11:22
    |
-11 |           let handle = thread::spawn(move || {
-   |  ______________________^^^^^^^^^^^^^_-
-   | |                      |
-   | |                      `Rc<Mutex<i32>>` cannot be sent between threads safely
-12 | |             let mut num = counter.lock().unwrap();
-13 | |
-14 | |             *num += 1;
-15 | |         });
-   | |_________- within this `[closure@src/main.rs:11:36: 15:10]`
+11 |         let handle = thread::spawn(move || {
+   |                      ^^^^^^^^^^^^^ ------- within this `[closure@src/main.rs:11:36: 11:43]`
+   |                      |
+   |                      `Rc<Mutex<i32>>` cannot be sent between threads safely
    |
-   = help: within `[closure@src/main.rs:11:36: 15:10]`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`
+   = help: within `[closure@src/main.rs:11:36: 11:43]`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`
 note: required because it's used within this closure
   --> src/main.rs:11:36
    |
-11 |           let handle = thread::spawn(move || {
-   |  ____________________________________^
-12 | |             let mut num = counter.lock().unwrap();
-13 | |
-14 | |             *num += 1;
-15 | |         });
-   | |_________^
+11 |         let handle = thread::spawn(move || {
+   |                                    ^^^^^^^
 note: required by a bound in `spawn`
 
 For more information about this error, try `rustc --explain E0277`.
