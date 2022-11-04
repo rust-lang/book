@@ -1,12 +1,19 @@
 $ cargo run
    Compiling shared-state v0.1.0 (file:///projects/shared-state)
 error[E0277]: `Rc<Mutex<i32>>` cannot be sent between threads safely
-  --> src/main.rs:11:22
+  --> src/main.rs:11:36
    |
-11 |         let handle = thread::spawn(move || {
-   |                      ^^^^^^^^^^^^^ ------- within this `[closure@src/main.rs:11:36: 11:43]`
-   |                      |
-   |                      `Rc<Mutex<i32>>` cannot be sent between threads safely
+11 |           let handle = thread::spawn(move || {
+   |                        ------------- ^------
+   |                        |             |
+   |  ______________________|_____________within this `[closure@src/main.rs:11:36: 11:43]`
+   | |                      |
+   | |                      required by a bound introduced by this call
+12 | |             let mut num = counter.lock().unwrap();
+13 | |
+14 | |             *num += 1;
+15 | |         });
+   | |_________^ `Rc<Mutex<i32>>` cannot be sent between threads safely
    |
    = help: within `[closure@src/main.rs:11:36: 11:43]`, the trait `Send` is not implemented for `Rc<Mutex<i32>>`
 note: required because it's used within this closure
