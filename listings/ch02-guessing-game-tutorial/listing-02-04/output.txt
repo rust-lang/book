@@ -11,10 +11,13 @@ error[E0308]: mismatched types
   --> src/main.rs:22:21
    |
 22 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `String`, found integer
+   |                 --- ^^^^^^^^^^^^^^ expected struct `String`, found integer
+   |                 |
+   |                 arguments to this function are incorrect
    |
    = note: expected reference `&String`
               found reference `&{integer}`
+note: associated function defined here
 
 For more information about this error, try `rustc --explain E0308`.
 error: could not compile `guessing_game` due to previous error

@@ -5,7 +5,7 @@ error[E0382]: use of moved value: `v`
    |
 4  |     let v = vec![1, 2, 3];
    |         - move occurs because `v` has type `Vec<i32>`, which does not implement the `Copy` trait
-5  | 
+5  |
 6  |     let handle = thread::spawn(move || {
    |                                ------- value moved into closure here
 7  |         println!("Here's a vector: {:?}", v);

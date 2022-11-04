@@ -7,7 +7,7 @@ error[E0597]: `x` does not live long enough
   |             ^^ borrowed value does not live long enough
 7 |     }
   |     - `x` dropped here while still borrowed
-8 | 
+8 |
 9 |     println!("r: {}", r);
   |                       - borrow later used here
 

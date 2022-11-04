@@ -5,10 +5,10 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
    |
 16 |     let word = first_word(&s);
    |                           -- immutable borrow occurs here
-17 | 
+17 |
 18 |     s.clear(); // error!
    |     ^^^^^^^^^ mutable borrow occurs here
-19 | 
+19 |
 20 |     println!("the first word is: {}", word);
    |                                       ---- immutable borrow later used here
 
