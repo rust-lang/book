@@ -172,8 +172,10 @@ struct definition, as shown in Listing 5-12.
 <span class="caption">Listing 5-12: Adding the attribute to derive the `Debug`
 trait and printing the `Rectangle` instance using debug formatting</span>
 
-Now when we run the program, we won’t get any errors, and we’ll see the
-following output:
+Now the program triggers a warning about dead code. In this situation, it's 
+normal, as we're only using slices of code. The error will solve after our 
+code gets completed. For now, we can ignore it. We should see this output 
+after running our program:
 
 ```console
 {{#include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/output.txt}}
