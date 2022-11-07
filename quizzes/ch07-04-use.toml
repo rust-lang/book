@@ -1,4 +1,5 @@
 [[questions]]
+id = "a162c2c8-aadf-4963-a997-02a1035f2459"
 type = "MultipleChoice"
 prompt.prompt = "Which of the following statements best describes the function of the `use` keyword?"
 prompt.choices = [
@@ -14,6 +15,7 @@ context = """
 
 
 [[questions]]
+id = "eccc2099-9880-4628-8474-f1d55e2a4a4a"
 type = "ShortAnswer"
 prompt.prompt = """
 Consider this module and `use` statement:
@@ -33,7 +35,7 @@ fn main() {
 }
 ```
 
-Inside `main`, what is the total number of paths to refer to `a`, `b`, or `c`? Write your answer as a digit such as 0 or 1.
+Inside `main`, what is the total number of paths that can refer to `a`, `b`, or `c`? Write your answer as a digit such as 0 or 1.
 """
 answer.answer = "5"
 context = """

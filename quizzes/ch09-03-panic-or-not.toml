@@ -1,4 +1,5 @@
 [[questions]]
+id = "31c55174-3fdf-4a21-959c-bb4056def264"
 type = "MultipleChoice"
 prompt.prompt = """
 A Rust programmer is designing a library for writing command-line interfaces. As a part of this library, they are implementing a function to parse command-line flags provided by a user. Which implementation would be most appropriate for this domain?

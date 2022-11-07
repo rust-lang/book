@@ -1,4 +1,5 @@
 [[questions]]
+id = "affe428d-0a8e-430b-9567-99e6b7563c0f"
 type = "MultipleChoice"
 prompt.prompt = """
 When running `cargo test` with no additional configuration, which of the following actions may not work correctly if done by multiple tests?
@@ -15,6 +16,7 @@ Tests are run in parallel by default, so actions which are not thread-safe (like
 """
 
 [[questions]]
+id = "19e292f4-4bc4-4868-a58a-edf62c3e3b2a"
 type = "ShortAnswer"
 prompt.prompt = """
 Consider a program with the following unit test:

@@ -1,4 +1,5 @@
 [[questions]]
+id = "24ae4b39-284f-47f6-9824-53f2c23f9ebe"
 type = "Tracing"
 prompt.program = """
 fn print(s: &String) {
@@ -19,6 +20,7 @@ The references to `s` do not last longer than the call to `print`, so it is vali
 """
 
 [[questions]]
+id = "add4a130-9540-4f80-879b-5a6e65011a0f"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider a move of a value of type `&String` versus a value of type `String`. The move of `&String` will copy:

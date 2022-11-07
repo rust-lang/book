@@ -1,4 +1,5 @@
 [[questions]]
+id = "c1b7cc2e-b5fb-4b67-b0bb-600d82931f08"
 type = "MultipleChoice"
 prompt.prompt = """
 Say you just downloaded a Cargo project, and then you run `cargo run` at the command-line. Which statement is NOT true about what happens next?
@@ -15,6 +16,7 @@ Cargo does not watch for changes, although there is a third-party [`cargo-watch`
 """
 
 [[questions]]
+id = "292177d1-58db-484d-992a-9f2efb49a6ef"
 type = "MultipleChoice"
 prompt.prompt = "What is the purpose of the `target` directory in a Cargo project?"
 prompt.choices = [

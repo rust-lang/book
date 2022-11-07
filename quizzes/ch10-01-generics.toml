@@ -1,4 +1,5 @@
 [[questions]]
+id = "0aad53ff-89d7-4d14-8e3d-c17809220252"
 type = "ShortAnswer"
 prompt.prompt = """
 Imagine using a third-party function whose implementation you don't know, but whose type signature is this:
@@ -25,6 +26,7 @@ See [Theorems for free!](https://dl.acm.org/doi/pdf/10.1145/99370.99404) for mor
 """
 
 [[questions]]
+id = "40ae0cfe-3567-4d05-b0d9-54d612a2d654"
 type = "Tracing"
 prompt.program = """
 fn print_slice<T>(v: &[T]) {
@@ -43,8 +45,10 @@ context = """
 If a type is generic (like `T`), we cannot assume anything about it, including the ability to turn it into a string. Therefore `println!("{x}")` is invalid
 because `x: &T`.
 """
+promptExplanation = true
 
 [[questions]]
+id = "694bb2d0-f2e6-4b0b-a3e7-2d9f9e8b3d09"
 type = "Tracing"
 prompt.program = """
 struct Point<T> { x: T, y: T }
@@ -67,3 +71,4 @@ answer.lineNumber = 8
 context = """
 These definitions of `f` conflict, and there is no way for Rust to determine which `f` should be used when `p.f()` is called. Therefore this is a compiler error.
 """
+promptExplanation = true

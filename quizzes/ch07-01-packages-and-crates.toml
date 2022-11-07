@@ -1,4 +1,5 @@
 [[questions]]
+id = "904a0808-22d1-45e5-9611-cf143babbc41"
 type = "MultipleChoice"
 prompt.prompt = """
 Which is the correct order, where "A > B" means "A contains B"?
@@ -14,6 +15,7 @@ A package is the top-level organizational unit, containing crates. A crate conta
 """
 
 [[questions]]
+id = "d45c7cbe-6089-40b9-843c-fbb9ff48ca49"
 type = "ShortAnswer"
 prompt.prompt = """
 Imagine you see a Rust package `foobar` with the following files:

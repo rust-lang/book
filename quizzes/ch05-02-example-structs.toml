@@ -1,4 +1,5 @@
 [[questions]]
+id = "f0ec64fa-262f-4819-8379-acad7aaf8be2"
 type = "Tracing"
 prompt.program = """
 #[derive(Debug)]
@@ -28,8 +29,9 @@ context = """
 """
 
 [[questions]]
+id = "9ce4156e-4112-4101-a2c7-51758ceca639"
 type = "MultipleChoice"
-prompt.prompt = "What is the difference between the `Display` and `Debug` traits?"
+prompt.prompt = "Which statement best describes a difference between the `Display` and `Debug` traits?"
 prompt.choices = [
   "`Display` is for cases where a value has a unique string representation, while `Debug` does not assume that",
   "`Display` is for printing values to the console, while `Debug` is for viewing values in a debugger",

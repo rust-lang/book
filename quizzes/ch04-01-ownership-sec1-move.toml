@@ -1,4 +1,5 @@
 [[questions]]
+id = "2c7132e1-c703-45cb-819f-9f37d3f97c20"
 type = "MultipleChoice"
 prompt.prompt = """
 At the end of this function, Rust will call `drop` on which variables:
@@ -22,6 +23,7 @@ context = """
 """
 
 [[questions]]
+id = "cff07b34-223f-4c82-a138-f9120b99dcfe"
 type = "Tracing"
 prompt.program = """
 fn main() {
@@ -38,6 +40,7 @@ It is illegal to use `x` after moving it into `y`.
 """
 
 [[questions]]
+id = "86d55560-8e6a-4b89-b979-23398c91ed55"
 type = "Tracing"
 prompt.program = """
 fn main() {

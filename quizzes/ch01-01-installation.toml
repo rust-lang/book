@@ -1,4 +1,5 @@
 [[questions]]
+id = "6286342a-84c1-47c5-bfd2-f34b51df813c"
 type = "ShortAnswer"
 prompt.prompt = "What is the name of the command-line tool for managing the version of Rust on your machine?"
 answer.answer = "rustup"

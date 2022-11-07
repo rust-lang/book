@@ -1,4 +1,5 @@
 [[questions]]
+id = "b2e05b2a-1f98-4498-9a9b-e1e358adf476"
 type = "MultipleChoice"
 prompt.prompt = """
 Which control flow construct would be most idiomatic to use in the following function?
@@ -24,6 +25,7 @@ If the function only has an effect in one condition, an `if let` is most idiomat
 """
 
 [[questions]]
+id = "fe17286b-67ed-43a7-a1df-10afee7921cc"
 type = "MultipleChoice"
 prompt.prompt = """
 Which control flow construct would be most idiomatic to use in the following function?

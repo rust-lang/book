@@ -1,4 +1,5 @@
 [[questions]]
+id = "bba8893d-f59f-492a-b639-ea04a5c8093b"
 type = "Tracing"
 prompt.program = """
 struct Point {
@@ -21,6 +22,7 @@ The `..a` syntax is a shallow copy of each field, so the second `a.x += 1` has n
 """
 
 [[questions]]
+id = "77ef68d6-ee7f-4642-8817-73b846c46b2b"
 type = "Tracing"
 prompt.program = """
 struct Point {

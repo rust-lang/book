@@ -1,4 +1,5 @@
 [[questions]]
+id = "94425a4e-043e-47f8-9fba-c5b09fb60aa3"
 type = "Tracing"
 prompt.program = """
 fn add_suffix(mut s: String) {
@@ -18,6 +19,7 @@ The string `s` is moved into `add_suffix` after calling it, so it cannot be used
 """
 
 [[questions]]
+id = "c66f045e-8e45-4c24-bc7e-58ca45d7974e"
 type = "ShortAnswer"
 prompt.prompt = """
 What is the maximum number of times a heap allocation could occur in the following program? (Write your answer using digits, like `1` or `2` etc.)
@@ -41,6 +43,7 @@ Moving (or shallow-copying) a `String` does not cause a heap allocation.
 """
 
 [[questions]]
+id = "c00e3638-861b-4f9e-a55c-bfb67af79280"
 type = "Tracing"
 prompt.program = """
 fn main() {

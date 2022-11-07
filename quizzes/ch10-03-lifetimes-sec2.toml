@@ -1,4 +1,5 @@
 [[questions]]
+id = "a91417cd-cd6d-416b-b72d-4af6b3fb2fd6"
 type = "MultipleChoice"
 prompt.prompt = """
 If a reference has a lifetime `'static`, then this means:
@@ -16,6 +17,7 @@ usually not mutable, the meaning of the `'static` lifetime has no essential rela
 """
 
 [[questions]]
+id = "e521409a-6cbd-48f5-bee0-7fa7f17cc562"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider the following un-annotated function signature.
@@ -59,6 +61,7 @@ The struct takes a single lifetime parameter, and the output has a single lifeti
 """
 
 [[questions]]
+id = "d03748df-8dcf-4ec8-bd30-341927544665"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider the following un-annotated function signature.
@@ -107,3 +110,4 @@ context = """
 Rust will not compile this program, because it is ambiguous whether the lifetime of the output is tied to
 the lifetime of `&Foo` or the reference `Foo.bar`.
 """
+promptExplanation = true

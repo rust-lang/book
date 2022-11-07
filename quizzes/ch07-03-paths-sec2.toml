@@ -1,4 +1,5 @@
 [[questions]]
+id = "8ef2f170-71d9-4f17-a688-b99d8c8072a8"
 type = "Tracing"
 prompt.program = """
 pub mod a {
@@ -30,6 +31,7 @@ Then the child `b` of the root is the outermost module `b`, whose child `c` cont
 """
 
 [[questions]]
+id = "153b12b3-4fbc-449c-99a6-7a2cd469df0f"
 type = "Tracing"
 prompt.program = """
 pub mod point {

@@ -1,4 +1,5 @@
 [[questions]]
+id = "5b6e4016-c089-4cb3-96a7-ca9f88694488"
 type = "Tracing"
 prompt.program = """
 enum Location {
@@ -24,6 +25,7 @@ Each match is tried from top to bottom. Both the second and third pattern are ap
 """
 
 [[questions]]
+id = "f7c361e0-733a-4d48-9809-736e3c1e2b67"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider this method implemented for the `Option` type:

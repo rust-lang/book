@@ -23,4 +23,4 @@ validate = true
 cache-answers = true
 
 [build]
-extra-watch-dirs = ["quizzes"]
+extra-watch-dirs = ["quizzes", "../mdbook-quiz/js/lib"]

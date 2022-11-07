@@ -1,4 +1,5 @@
 [[questions]]
+id = "770f09d3-110d-4505-b41a-2af422198d59"
 type = "Tracing"
 prompt.program = """
 fn foo(x: &i32) { 
@@ -17,6 +18,7 @@ Rust does not have null pointers, so the `null` keyword does not exist. An Optio
 """
 
 [[questions]]
+id = "6226be11-31c3-4cac-b97c-515514a70af2"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider these two representations of a `Result` type that contains a value `T` if a computation succeeds, or an error `E` if it fails.
@@ -33,7 +35,8 @@ enum Result2<T, E> {
 }
 ```
 
-The enum `Result2` is considered more idiomatic than the struct `Result1` in Rust. Which is NOT a valid reason why?
+The enum `Result2` is considered more idiomatic than the struct `Result1` in Rust. 
+Which statement below is **NOT** a valid reason why?
 """
 prompt.choices = [
   "The struct uses more space in memory at runtime than the enum",

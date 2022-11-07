@@ -1,4 +1,5 @@
 [[questions]]
+id = "8b7f93c3-efb0-44e2-a0ca-b45e35620b30"
 type = "MultipleChoice"
 prompt.prompt = "Which kind of programming error is a lifetime supposed to prevent?"
 prompt.choices = [
@@ -13,6 +14,7 @@ Lifetimes help identify how long an object is "live", and whether references to 
 """
 
 [[questions]]
+id = "77cf924a-ece1-4119-a762-f5f03536b4e1"
 type = "Tracing"
 prompt.program = """
 fn shortest<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {

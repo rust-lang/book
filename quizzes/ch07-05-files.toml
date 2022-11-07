@@ -1,4 +1,5 @@
 [[questions]]
+id = "6a94bc90-6cc5-4a47-838c-596d3747b7e4"
 type = "ShortAnswer"
 prompt.prompt = """
 Imagine a Rust package with the following directory structure:
@@ -48,3 +49,4 @@ foobar
 
 Therefore the path to `run` is `foobar::engine::run`.
 """
+promptExplanation = true

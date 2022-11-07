@@ -1,4 +1,5 @@
 [[questions]]
+id = "87c3b09e-84d3-49d7-8680-0b2d068a7fc5"
 type = "ShortAnswer"
 prompt.prompt = "Every executable Rust program must contain a function with the name:"
 answer.answer = "main"
@@ -13,6 +14,7 @@ fn main() {
 """
 
 [[questions]]
+id = "0d78d302-eb3d-4ac7-a1ac-f2d661810744"
 type = "MultipleChoice"
 prompt.prompt = """
 Let's say you have the following program in a file `hello.rs`:

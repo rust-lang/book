@@ -1,4 +1,5 @@
 [[questions]]
+id = "91fb1ec6-fb11-4b6f-88df-dbc921a4108f"
 type = "MultipleChoice"
 prompt.prompt = "Given an arbitrary expression `e` of type `Result<T, E>`, which code snippet represents how `e?` is desugared?"
 prompt.choices = [
@@ -37,6 +38,7 @@ If `e` is a `Result`, then `e?` extracts the value inside the `Ok` if possible, 
 """
 
 [[questions]]
+id = "0ea46358-f560-4d3e-85d2-a1806eb7c797"
 type = "Tracing"
 prompt.program = """
 // assume hello.txt has the contents "will"

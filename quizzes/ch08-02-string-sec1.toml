@@ -1,4 +1,5 @@
 [[questions]]
+id = "79942534-f414-41e6-944f-96d57905632c"
 type = "MultipleChoice"
 prompt.prompt = "What is the difference between using `+` and `push_str` to concatenate two strings?"
 prompt.choices = [
@@ -13,6 +14,7 @@ context = """
 """
 
 [[questions]]
+id = "f1ab2171-96f0-4380-b16d-9055a9a00415"
 type = "ShortAnswer"
 prompt.prompt = """
 What is the maximum number of times a heap allocation could occur in this program? Write your answer in digits, e.g. 0 or 1.
@@ -29,3 +31,4 @@ answer.answer = "7"
 context = """
 One allocation for each call to `String::from`, and one allocation for every time `+` is called.
 """
+promptExplanation = true

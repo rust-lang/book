@@ -1,4 +1,5 @@
 [[questions]]
+id = "5080616f-6f4c-43f7-aa3a-8b23f2798937"
 type = "Tracing"
 prompt.program = """
 fn incr(n: &mut i32) {
@@ -16,8 +17,10 @@ answer.lineNumber = 7
 context = """
 Although `n` is marked as `mut`, the reference to `n` must also be marked as `mut`. So a valid version of this program would say `incr(&mut n)`.
 """
+promptExplanation = true
 
 [[questions]]
+id = "e9846c5d-1254-4420-9986-dae4af86b9af"
 type = "Tracing"
 prompt.program = """
 fn main() {

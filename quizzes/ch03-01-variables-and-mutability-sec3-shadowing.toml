@@ -1,4 +1,5 @@
 [[questions]]
+id = "dfcd3124-9ac3-4a54-b8f7-cf96e215f0ec"
 type = "MultipleChoice"
 prompt.prompt = "Which statement is NOT true about the difference between shadowing and mutating a variable after it is defined?"
 prompt.choices = [
@@ -13,6 +14,7 @@ Shadowing can change the type of a variable by assigning it a new value, but it 
 """
 
 [[questions]]
+id = "dca33d34-6294-43f4-9267-fd62d7dce993"
 type = "Tracing"
 prompt.program = """
 fn main() {

@@ -1,4 +1,5 @@
 [[questions]]
+id = "7a7bb518-b06e-4756-9510-6a8d0d1c84fa"
 type = "ShortAnswer"
 prompt.prompt = "What is the annotation you add to a function to indicate that it's a unit test?"
 answer.answer = "#[test]"
@@ -7,6 +8,7 @@ This informs the cargo testing harness to treat the function as a test and not l
 """
 
 [[questions]]
+id = "cd77485f-723a-4978-8da6-c4ca3df44c44"
 type = "MultipleChoice"
 prompt.prompt = """
 Let's say you have a function with the type signature:

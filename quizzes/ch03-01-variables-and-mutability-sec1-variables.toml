@@ -1,4 +1,5 @@
 [[questions]]
+id = "8bd8d8bc-e61e-48c7-ba78-0c89339e5995"
 type = "MultipleChoice"
 prompt.prompt = "Which statement best describes what it means if a variable `x` is immutable?"
 prompt.choices = [
@@ -13,6 +14,7 @@ Immutable means "not mutable", or not changeable.
 """
 
 [[questions]]
+id = "dcf53c67-b3c9-4c54-8da0-90749cc669e8"
 type = "ShortAnswer"
 prompt.prompt = "What is the keyword used after `let` to indicate that a variable can be mutated?"
 answer.answer = "mut"
@@ -21,6 +23,7 @@ For example, you can make a mutable variable `x` by writing: `let mut x = 1`.
 """
 
 [[questions]]
+id = "77f9f143-45a6-4f08-bd87-72bc50c00693"
 type = "Tracing"
 prompt.program = """
 fn main() {

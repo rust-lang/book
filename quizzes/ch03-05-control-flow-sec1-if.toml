@@ -1,7 +1,8 @@
 [[questions]]
+id = "5ae11501-25d9-4b94-8e88-aa1c2122779f"
 type = "MultipleChoice"
 prompt.prompt = """
-True/false: these two pieces of code have the same effect on `x`.
+True/false: executing these two pieces of code results in the same value for `x`.
 
 Snippet 1:
 ```
@@ -10,7 +11,7 @@ let x = if cond { 1 } else { 2 };
 
 Snippet 2:
 ```
-let mut x;
+let x;
 if cond {
   x = 1;
 } else {
@@ -28,6 +29,7 @@ The first if-expression is a more concise way of representing the behavior of th
 """
 
 [[questions]]
+id = "4e07358c-b318-49cb-8210-fbed7ed50e23"
 type = "Tracing"
 prompt.program = """
 fn main() {

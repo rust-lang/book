@@ -1,4 +1,5 @@
 [[questions]]
+id = "f76aba3c-2e95-428a-9366-93b03264a8b6"
 type = "Tracing"
 prompt.program = """
 use std::collections::HashMap;
@@ -18,6 +19,7 @@ context = """
 """
 
 [[questions]]
+id = "6028c7f5-b373-475f-ba43-553773c7b3b7"
 type = "Tracing"
 prompt.program = """
 use std::collections::HashMap;
@@ -39,3 +41,4 @@ context = """
 This program stores a vector of indexes for each occurrence of a given letter into a hashmap. 
 Then it sums all the indexes for the letter 'l', which occurs at indexes 2 and 3 in the string `"hello!"`.
 """
+promptExplanation = true

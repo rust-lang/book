@@ -1,4 +1,5 @@
 [[questions]]
+id = "7fbda6e4-dca7-458e-ab52-fab03181f90b"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider the variables `s2` and `s3` in the following program. These two variables will be located in memory within the stack frame for `main`. Each variable has a size in memory on the stack, *not* including the size of pointed data. Which statement is true about the sizes of `s2` and `s3`?
@@ -32,8 +33,10 @@ fn main() {
 
 Also, note that Rust will implicitly convert string references to either `&String` or `&str` based on the context of the reference. So the expression `&s` produces two different values based on the expected type of `&s`.
 """
+promptExplanation = true
 
 [[questions]]
+id = "adcfc154-03bd-470a-bacb-b3cad97cfc7f"
 type = "Tracing"
 prompt.program = """
 fn main() {

@@ -1,4 +1,5 @@
 [[questions]]
+id = "c4adb1a8-ca6a-43c1-ae34-54302f674ece"
 type = "Tracing"
 prompt.program = """
 trait MakeNoise {
@@ -31,6 +32,7 @@ Therefore calling `make_noise` on each prints `bark` and `(silence)`, respective
 """
 
 [[questions]]
+id = "783f2485-e5b9-483b-8368-064366c77285"
 type = "MultipleChoice"
 prompt.prompt = "Which of the following statements is NOT true about when Rust allows you to implement a trait?"
 prompt.choices = [

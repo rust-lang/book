@@ -1,4 +1,5 @@
 [[questions]]
+id = "a2a1546b-27bf-47d2-a1bc-86d777573f40"
 type = "Tracing"
 prompt.program = """
 fn clonable<T: Clone>(t: T) -> impl Clone { t }
@@ -15,8 +16,10 @@ context = """
 Because `clonable` returns `impl Clone`, then we only know that `s2` is *some* type that implements `Clone`, 
 not that it is a `String` (or any type that implements `Display`). Therefore we cannot print `s2`.
 """
+promptExplanation = true
 
 [[questions]]
+id = "8b35f91c-ced2-4b8f-bf1c-90550f2b744b"
 type = "MultipleChoice"
 prompt.prompt = """
 What is the smallest set of trait bounds on `T` needed to make this function type-check?

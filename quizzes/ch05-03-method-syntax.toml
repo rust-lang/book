@@ -1,4 +1,5 @@
 [[questions]]
+id = "ae4e06f6-5fdc-43d9-929c-85eba3559a82"
 type = "MultipleChoice"
 prompt.prompt = "What is the keyword for constructor functions in Rust?"
 prompt.choices = [
@@ -14,6 +15,7 @@ but that is not enforced by the language.
 """
 
 [[questions]]
+id = "a506f97d-2b51-4517-bc4d-f69764093c71"
 type = "Tracing"
 prompt.program = """
 struct Point(i32, i32);
@@ -35,6 +37,7 @@ Methods can only be implemented for types (e.g. `impl Point`), not variables (li
 
 
 [[questions]]
+id = "35a75881-eb08-486c-92b3-413ab512138a"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider these two methods that increment a field of a struct. Which style would be more idiomatic for Rust?
@@ -60,6 +63,7 @@ would be unusable, which is probably not intended for this method.
 """
 
 [[questions]]
+id = "03a0a1ec-8ce6-40f2-b8b7-6dd5402aeb7d"
 type = "Tracing"
 prompt.program = """
 struct Point(i32, i32);
@@ -82,6 +86,7 @@ Remember that `.0` is valid for tuple structs like `Point`.
 """
 
 [[questions]]
+id = "be7be598-8a31-4c1a-9171-4ff90f512430"
 type = "Tracing"
 prompt.program = """
 struct Point {

@@ -1,4 +1,5 @@
 [[questions]]
+id = "da6daf92-5b2c-4f8d-97de-6905dbc77936"
 type = "MultipleChoice"
 prompt.prompt = "Which statement is the best explanation for why Rust does not allow string indexing?"
 prompt.choices = [
@@ -14,6 +15,7 @@ of interpreting a string, so a default indexing operation does not make sense.
 """
 
 [[questions]]
+id = "9366278e-a3f5-4759-ac72-e3c7d248da44"
 type = "MultipleChoice"
 prompt.prompt = """
 Which statement best describes the difference between the types of a string slice `&str` and a byte slice `&[u8]`?

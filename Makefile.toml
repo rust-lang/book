@@ -1,6 +1,6 @@
 [env]
-QUIZ_LIGHTWEIGHT_VALIDATE = ""
-QUIZ_DEV_MODE = ""
+QUIZ_LIGHTWEIGHT_VALIDATE = "yes"
+QUIZ_DEV_MODE = "yes"
 
 [tasks.watch-book]
 script = "mdbook serve --open"

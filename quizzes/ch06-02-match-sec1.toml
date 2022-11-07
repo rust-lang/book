@@ -1,4 +1,5 @@
 [[questions]]
+id = "6e012d34-5c59-443e-85d9-385f0d7dee13"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider these two implementations of a function to decrement an unsigned number twice.
@@ -36,6 +37,7 @@ The `match` and `if` perform the same function here. A match is like a specializ
 """
 
 [[questions]]
+id = "1e4f082c-ffa4-4d33-8726-2dbcd72e1aa2"
 type = "Tracing"
 prompt.program = """
 #[derive(Debug)]
@@ -58,3 +60,4 @@ answer.lineNumber = 13
 context = """
 A match moves its input, so `x` cannot be used in the `println`.
 """
+promptExplanation = true

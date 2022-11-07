@@ -1,4 +1,5 @@
 [[questions]]
+id = "18bf21e1-4e1a-4e98-861d-c7032710a8ad"
 type = "ShortAnswer"
 prompt.prompt = "What is the name of the environment variable you should set to `1` to see the backtrace of a panic?"
 answer.answer = "RUST_BACKTRACE"
@@ -7,6 +8,7 @@ For example, you can run from the command line: `RUST_BACKTRACE=1 cargo run`
 """
 
 [[questions]]
+id = "23cabd75-88f5-4ff8-8bf5-4bd4d1a9e64a"
 type = "MultipleChoice"
 prompt.prompt = "Which of the following is NOT a good reason to use a panic?"
 prompt.choices = [

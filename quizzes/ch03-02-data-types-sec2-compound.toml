@@ -1,4 +1,5 @@
 [[questions]]
+id = "30212501-00d5-4ef6-838f-3df5112ee7ed"
 type = "Tracing"
 prompt.program = """
 fn main() {
@@ -14,10 +15,11 @@ An array can only contain elements of a single type.
 """
 
 [[questions]]
+id = "4e632a23-24cc-4c29-8935-cf6b62c3764b"
 type = "Tracing"
 prompt.program = """
 fn main() {
-  let t = ([1, 2], [3, 4]);
+  let t = ([1; 2], [3; 4]);
   let (a, _) = t;
   println!("{}", a[0] + t.1[0]); 
 }

@@ -1,4 +1,5 @@
 [[questions]]
+id = "e816708d-b0eb-4506-8c33-6ea0df69f14f"
 type = "MultipleChoice"
 prompt.prompt = """
 In Rust, a curly-brace block (like `{ /* ... */ }`) is:
@@ -18,6 +19,7 @@ A block is an expression (#1) that is allowed to contain statements. It also def
 """
 
 [[questions]]
+id = "42671602-ada3-4943-aa73-28aebcfe5011"
 type = "Tracing"
 prompt.program = """
 fn f(x: i32) -> i32 { x + 1 }
