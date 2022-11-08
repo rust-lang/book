@@ -31,6 +31,17 @@ You can use highlights to save information for yourself. You can also use highli
 
 ## 3. ...and more!
 
-The book's content may change as you go through the experiment. We will update this page as we add new features.
+The book's content may change as you go through the experiment. We will update this page as we add new features. Here's the changelog:
+
+**Upcoming changes:**
+  * We will add questions to the remaining chapters of the book.
+  * We will add ownership-specific quizzes to test your understanding of ownership in later chapters.
+
+**Past changes:**
+* November 7, 2022
+  * Only questions with incorrect answers will be shown on a retry.
+  * Most multiple-choice questions will have their choices randomized.
+  * Some questions will now prompt for your reasoning.
+  * Many questions have been updated based on your feedback. Keep it coming!
 
 _Interested in participating in other experiments about making Rust easier to learn? Please sign up here:_ <https://forms.gle/U3jEUkb2fGXykp1DA>
