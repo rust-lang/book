@@ -160,7 +160,7 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-3: `panic!` 매크로를 호출하기 떄문에 실패하게
+<span class="caption">Listing 11-3: `panic!` 매크로를 호출하기 때문에 실패하게
 될 두번째 테스트 추가 </span>
 
 `cargo test`를 이용하여 다시 한번 테스트를 실행시키세요. 결과 출력은 Listing 11-4와

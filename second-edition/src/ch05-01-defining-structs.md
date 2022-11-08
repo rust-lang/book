@@ -118,7 +118,7 @@ fn build_user(email: String, username: String) -> User {
 아래 예제 5-5의 `build_user` 함수에는 `email`과 `username` 라는 매개변수가
 있습니다. 함수는 `User`구조체가 구현된 인스턴스를 반환합니다.
 
-매개변수인 `email`과 `username`이 `User`구조체의 필드명과 같기 떄문에, 함수 `build_user`
+매개변수인 `email`과 `username`이 `User`구조체의 필드명과 같기 때문에, 함수 `build_user`
 에서 `email`과 `username`를 명시하는 부분을 예제 5-4와 같이 다시 작성할 필요가 없습니다.
 
 예제 5-5의 `build_user` 함수는 예제 5-4와 같은 방식으로 동작합니다. 필드 초기화를 이러한 방식으로

@@ -186,7 +186,7 @@ note: borrowed value must be valid for the anonymous lifetime #1 defined on the 
 
 러스트는 우리가 함수의 끝에서 스코프 밖으로 벗어나는 값의 참조자를 반환 시도를
 하는 중이라고 생각하는데, 이는 우리가 모든 라이프타임을 동일한 라이프타임
-파라미터로 명시했기 떄문입니다. 이 어노테이션은 러스트에게 `Context`가
+파라미터로 명시했기 때문입니다. 이 어노테이션은 러스트에게 `Context`가
 가지고 있는 스트링 슬라이스의 라이프타임은 `Parser`가 들고 있는 `Context`를
 가리키는 참조자의 라이프타임의 것과 동일하다고 말하고 있습니다.
 
