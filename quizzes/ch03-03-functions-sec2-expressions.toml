@@ -7,13 +7,8 @@ In Rust, a curly-brace block (like `{ /* ... */ }`) is:
 2. A statement
 3. A syntactic scope
 """
-prompt.choices = [
-  "1 only",
-  "2 only",
-  "1 and 3",
-  "2 and 3"
-]
-answer.answer = 2
+answer.answer = "1 and 3"
+prompt.distractors = [ "1 only", "2 only", "2 and 3" ]
 context = """
 A block is an expression (#1) that is allowed to contain statements. It also defines a syntactic scope for let-bindings inside it (#3).
 """

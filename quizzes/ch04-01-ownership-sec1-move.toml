@@ -11,13 +11,9 @@ fn main() {
 }
 ```
 """
-prompt.choices = [
-  "`s1`, `s2`, and `s3`",
-  "`s2` and `s3`",
-  "`s1` and `s3`",
-  "`s3`"
-]
-answer.answer = 2
+answer.answer = "`s1` and `s3`"
+prompt.distractors = [ "`s1`, `s2`, and `s3`", "`s2` and `s3`", "`s3`" ]
+prompt.answerIndex = 2
 context = """
 `s2` is not dropped because it is moved into `s3`.
 """

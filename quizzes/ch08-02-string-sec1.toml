@@ -2,13 +2,12 @@
 id = "79942534-f414-41e6-944f-96d57905632c"
 type = "MultipleChoice"
 prompt.prompt = "What is the difference between using `+` and `push_str` to concatenate two strings?"
-prompt.choices = [
+answer.answer = "`+` consumes ownership of the left-hand-side string, while `push_str` does not"
+prompt.distractors = [
   "`push_str` is more efficient at runtime than `+`",
-  "`+` consumes ownership of the left-hand-side string, while `push_str` does not",
   "`push_str` consumes ownership of the right-hand-side string, while `+` does not",
   "There is no difference, they are aliases for the same function"
 ]
-answer.answer = 1
 context = """
 `push_str` takes `&mut self` while `+` takes `self`, so `+` consumes ownership and `push_str` does not.
 """

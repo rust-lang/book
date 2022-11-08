@@ -2,15 +2,15 @@
 id = "91fb1ec6-fb11-4b6f-88df-dbc921a4108f"
 type = "MultipleChoice"
 prompt.prompt = "Given an arbitrary expression `e` of type `Result<T, E>`, which code snippet represents how `e?` is desugared?"
-prompt.choices = [
-  """
+answer.answer = """
 ```
 match e {
   Ok(x) => x,
   Err(err) => { return Err(err); }
 }
 ```
-  """,
+  """
+prompt.distractors = [
   """
 ```
 if let Err(err) = e {
@@ -32,7 +32,6 @@ match e {
 ```
   """,
 ]
-answer.answer = 0
 context = """
 If `e` is a `Result`, then `e?` extracts the value inside the `Ok` if possible, otherwise returning the `Err` out of the current function.
 """

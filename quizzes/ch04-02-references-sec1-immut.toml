@@ -25,12 +25,8 @@ type = "MultipleChoice"
 prompt.prompt = """
 Consider a move of a value of type `&String` versus a value of type `String`. The move of `&String` will copy:
 """
-prompt.choices = [
-  "More bytes",
-  "The same number of bytes",
-  "Fewer bytes"
-]
-answer.answer = 2
+answer.answer = "Fewer bytes"
+prompt.distractors = [ "More bytes", "The same number of bytes" ]
 context = """
 The `String` structure contains a pointer, length and capacity. The `&String` type is just a pointer, so a shallow-copy of it will copy fewer bytes.
 """

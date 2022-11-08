@@ -2,13 +2,12 @@
 id = "a162c2c8-aadf-4963-a997-02a1035f2459"
 type = "MultipleChoice"
 prompt.prompt = "Which of the following statements best describes the function of the `use` keyword?"
-prompt.choices = [
+answer.answer = "`use` reduces the verbosity of referring to items in the used path"
+prompt.distractors = [
   "`use` copies the contents of an item from one module to another",
-  "`use` reduces the verbosity of referring to items in the used path",
   "`use` allows access to items that circumvents normal privacy rules",
   "`use` indicates to the compiler that an item will be used and should be optimized"
 ]
-answer.answer = 1
 context = """
 `use` allows references to items in the used path that are shorter than without the `use`, reducing the verbosity of reference.
 """

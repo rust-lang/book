@@ -4,12 +4,8 @@ type = "MultipleChoice"
 prompt.prompt = """
 Which is the correct order, where "A > B" means "A contains B"?
 """
-prompt.choices = [
-  "module > crate > package",
-  "crate > package > module",
-  "package > crate > module"
-]
-answer.answer = 2
+answer.answer = "package > crate > module"
+prompt.distractors = [ "module > crate > package", "crate > package > module" ]
 context = """
 A package is the top-level organizational unit, containing crates. A crate contains modules.
 """

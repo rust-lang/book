@@ -4,13 +4,12 @@ type = "MultipleChoice"
 prompt.prompt = """
 When running `cargo test` with no additional configuration, which of the following actions may not work correctly if done by multiple tests?
 """
-prompt.choices = [
-  "Writing text to a single file",
+answer.answer = "Writing text to a single file"
+prompt.distractors = [
   "Logging strings to stdout",
   "Failing via panics",
   "Reading data from a single database"
 ]
-answer.answer = 0
 context = """
 Tests are run in parallel by default, so actions which are not thread-safe (like writing to a single file) may cause a race condition.
 """

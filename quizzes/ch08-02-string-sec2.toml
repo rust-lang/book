@@ -2,13 +2,12 @@
 id = "da6daf92-5b2c-4f8d-97de-6905dbc77936"
 type = "MultipleChoice"
 prompt.prompt = "Which statement is the best explanation for why Rust does not allow string indexing?"
-prompt.choices = [
+answer.answer = "Indexing strings is ambiguous because strings represent several granularities of sequenced data"
+prompt.distractors = [
   "Indexing strings is unsafe because it can cause a segfault or buffer overflow",
-  "Indexing strings is ambiguous because strings represent several granularities of sequenced data",
   "Indexing strings is inefficient because string are null-terminated so their length cannot be efficiently computed",
   "Indexing strings would make Rust too easy to use, and Rust developers need job security"
 ]
-answer.answer = 1
 context = """
 A UTF-8 string can be interpreted as a sequence of bytes, characters, or grapheme clusters. None of these is necessarily the "default" way
 of interpreting a string, so a default indexing operation does not make sense.
@@ -20,13 +19,12 @@ type = "MultipleChoice"
 prompt.prompt = """
 Which statement best describes the difference between the types of a string slice `&str` and a byte slice `&[u8]`?
 """
-prompt.choices = [
-  "`&str` points to bytes that can always be interpreted as UTF-8, whereas `&[u8]` can be any byte sequence",
+answer.answer = "`&str` points to bytes that can always be interpreted as UTF-8, whereas `&[u8]` can be any byte sequence"
+prompt.distractors = [
   "`&str` always points to data stored in the program binary, whereas `&[u8]` can be stored anywhere in memory",
   "`&str` cannot be further sliced, while `&[u8]` can be sliced again",
   "`&str` can be constructed from a `String`, while `&[u8]` can only come from a `Vec`"
 ]
-answer.answer = 0
 context = """
 `&str` is a promise that the byte sequence it points to will always be valid UTF-8. Therefore a programmer who wants to e.g. print out
 an `&str` never needs to check if it is valid, or worry about accidentally interpreting an invalid string.

@@ -2,13 +2,12 @@
 id = "31b20096-6c13-4626-b253-4cf93e9f1e4a"
 type = "MultipleChoice"
 prompt.prompt = "Why does the type `String` not implement the `Copy` trait?"
-prompt.choices = [
-  "Because a `String` owns a pointer to data on the heap",
+answer.answer = "Because a `String` owns a pointer to data on the heap"
+prompt.distractors = [
   "Because a `String` cannot be shallow-copied",
   "Because the `char` type does not implement `Copy`",
   "Because `Copy` is only implemented for primitive types"
 ]
-answer.answer = 0
 context = """
 Because a `String` owns a pointer to data on the heap, 
 a shallow-copy would cause multiple strings to have ownership over the same heap data.

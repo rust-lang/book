@@ -27,13 +27,12 @@ fn main() {
 
 Say you then run the command `rustc hello.rs` from the command-line. Which statement best describes what happens next?
 """
-prompt.choices = [
-  "`rustc` will print an error because this is an invalid program"  ,
-  "`rustc` generates a binary executable named `hello`",
+answer.answer = "`rustc` generates a binary executable named `hello`"
+prompt.distractors = [
+  "`rustc` will print an error because this is an invalid program",
   "`rustc` executes the program and prints out `Hello world!`",
   "`rustc` reformats `hello.rs` according to the Rust style guide"
 ]
-answer.answer = 1
 context = """
 Running `rustc` checks and compiles your program, but does not execute it.
 """

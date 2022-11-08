@@ -20,7 +20,16 @@ fn f(x: usize) -> Result<usize, String>;
 And you want to test that `f(0)` should return `Err(_)`. 
 Which of the following is NOT a valid way to test that?
 """
-prompt.choices = [
+answer.answer = """
+```
+#[test]
+#[should_err]
+fn test() -> Result<usize, String> {
+  f(0)
+}
+```
+  """
+prompt.distractors = [
   """
 ```
 #[test]
@@ -41,15 +50,6 @@ fn test() {
   """
 ```
 #[test]
-#[should_err]
-fn test() -> Result<usize, String> {
-  f(0)
-}
-```
-  """,
-  """
-```
-#[test]
 fn test() {
   assert!(match f(0) {
     Ok(_) => false,
@@ -59,7 +59,6 @@ fn test() {
 ```
   """
 ]
-answer.answer = 2
 context = """
 `should_err` does not exist in Rust --= any test that returns a `Result` must return `Ok` to pass.
 """

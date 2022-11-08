@@ -15,13 +15,12 @@ fn find_until(v: &Vec<i32>, n: i32, til: usize) -> Option<usize> {
 }
 ```
 """
-prompt.choices = [
-    "`find_until(&vec![1, 2, 3], 0, 0)`",
-    "`find_until(&vec![1, 2, 3], 3, 3)`",
-    "`find_until(&vec![1, 2, 3], 1, 4)`",
-    "`find_until(&vec![1, 2, 3], 4, 4)`",
+answer.answer = "`find_until(&vec![1, 2, 3], 4, 4)`"
+prompt.distractors = [
+  "`find_until(&vec![1, 2, 3], 0, 0)`",
+  "`find_until(&vec![1, 2, 3], 3, 3)`",
+  "`find_until(&vec![1, 2, 3], 1, 4)`"
 ]
-answer.answer = 3
 context = """
 If `til = 4`, then for a vector of length 3, the for-loop will attempt to index the vector with `i = 3`, which is out of bounds.
 """

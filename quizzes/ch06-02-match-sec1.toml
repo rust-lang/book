@@ -26,12 +26,8 @@ fn decr_twice_v2(n: u32) -> Option<u32> {
 
 The functions have the same behavior for:
 """
-prompt.choices = [
-  "All inputs",
-  "No inputs",
-  "Some, but not all inputs"
-]
-answer.answer = 0
+answer.answer = "All inputs"
+prompt.distractors = [ "No inputs", "Some, but not all inputs" ]
 context = """
 The `match` and `if` perform the same function here. A match is like a specialized `if` that checks for equality of the matched object.
 """

@@ -30,13 +30,8 @@ fn f<T: /* ??? */>(t: &T) {
 }
 ```
 """
-prompt.choices = [
-  "(no bounds)",
-  "`Clone`",
-  "`Clone + Display`",
-  "`Clone + Display + Debug`"
-]
-answer.answer = 2
+answer.answer = "`Clone + Display`"
+prompt.distractors = [ "(no bounds)", "`Clone`", "`Clone + Display + Debug`" ]
 context = """
 Because `clone` is called and the `{}` display brackets are used in a formatter, then `T` must be `Clone` and `Display`.
 """

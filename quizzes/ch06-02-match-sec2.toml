@@ -43,13 +43,12 @@ impl<T> Option<T> {
 
 Which sentence best describes the behavior of this function?
 """
-prompt.choices = [
+answer.answer = "Returns the object inside `self` if it exists, and `other` otherwise"
+prompt.distractors = [
   "Returns a new option containing the object inside `self` if it exists, and `other` otherwise",
   "Inserts `other` into `self` if `self` does not already contain a value",
-  "Returns a reference to the object inside `self` if it exists, and `other` otherwise",
-  "Returns the object inside `self` if it exists, and `other` otherwise"
+  "Returns a reference to the object inside `self` if it exists, and `other` otherwise"
 ]
-answer.answer = 3
 context = """
 This function "unwraps" the option by consuming ownership of it and retrieving the value inside, but if no value exists then it falls back by returning `other`.
 This is a real function in the standard library!

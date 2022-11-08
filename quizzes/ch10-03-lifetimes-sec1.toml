@@ -2,13 +2,12 @@
 id = "8b7f93c3-efb0-44e2-a0ca-b45e35620b30"
 type = "MultipleChoice"
 prompt.prompt = "Which kind of programming error is a lifetime supposed to prevent?"
-prompt.choices = [
+answer.answer = "Using a reference to an object after its memory has been freed"
+prompt.distractors = [
   "Using the result of a fallible computation before checking for the possibility of error",
   "Indexing past the bounds of an array (buffer overflow)",
-  "Not allocating enough memory for an object",
-  "Using a reference to an object after its memory has been freed",
+  "Not allocating enough memory for an object"
 ]
-answer.answer = 3
 context = """
 Lifetimes help identify how long an object is "live", and whether references to that object outlive the object itself. 
 """

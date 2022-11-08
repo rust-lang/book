@@ -21,11 +21,8 @@ fn main() {
 }
 ```
 """
-prompt.choices = [
-  "True",
-  "False"
-]
-answer.answer = 0
+answer.answer = "True"
+prompt.distractors = [ "False" ]
 context = """
 It will in fact terminate after the first iteration of the loop.
 """

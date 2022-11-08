@@ -2,13 +2,12 @@
 id = "dfcd3124-9ac3-4a54-b8f7-cf96e215f0ec"
 type = "MultipleChoice"
 prompt.prompt = "Which statement is NOT true about the difference between shadowing and mutating a variable after it is defined?"
-prompt.choices = [
+answer.answer = "Shadowing can change the type of a runtime value, while mutation cannot"
+prompt.distractors = [
   "Shadowing can give a new type to an existing variable name, while mutation cannot",
   "Shadowing only changes variable within a syntactic scope, while mutation can change an outer variable in a nested scope",
-  "Shadowing requires you to use the `let` keyword, while a mutation does not",
-  "Shadowing can change the type of a runtime value, while mutation cannot",
+  "Shadowing requires you to use the `let` keyword, while a mutation does not"
 ]
-answer.answer = 3
 context = """
 Shadowing can change the type of a variable by assigning it a new value, but it cannot change the type of a runtime value itself. That would be very dangerous!
 """

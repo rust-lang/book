@@ -4,13 +4,12 @@ type = "MultipleChoice"
 prompt.prompt = """
 If a reference has a lifetime `'static`, then this means:
 """
-prompt.choices = [
+answer.answer = "The data under the reference is never deallocated"
+prompt.distractors = [
   "The data under the reference cannot be mutated",
   "The data under the reference lives in the static region of memory",
-  "The data under the reference is never deallocated",
   "The data under the reference is not dynamic"
 ]
-answer.answer = 2
 context = """
 `'static` means "live for the entire program", and so data under a static reference must never be deallocated. While in practice `'static` references are
 usually not mutable, the meaning of the `'static` lifetime has no essential relationship to mutability.
@@ -32,7 +31,12 @@ fn baz(f: Foo) -> &i32 { /* ... */ }
 
 Will Rust accept this function signature? If so, what lifetimes will it infer?
 """
-prompt.choices = [
+answer.answer = """
+```
+fn baz<'a>(f: Foo<'a>) -> &'a i32
+```
+  """
+prompt.distractors = [
   "Rust will reject this function signature",
   """
 ```
@@ -49,13 +53,9 @@ fn baz<'a>(f: Foo<'a>) -> &i32
 fn baz<'a>(f: Foo) -> &'a i32
 ```
   """,
-  """
-```
-fn baz<'a>(f: Foo<'a>) -> &'a i32
-```
-  """
+
 ]
-answer.answer = 4
+prompt.answerIndex = 4
 context = """
 The struct takes a single lifetime parameter, and the output has a single lifetime, so Rust assumes they are the same.
 """
@@ -77,8 +77,8 @@ fn baz(f: &Foo) -> &i32 { /* ... */ }
 
 Will Rust accept this function signature? If so, what lifetimes will it infer?
 """
-prompt.choices = [
-  "Rust will reject this function signature",
+answer.answer = "Rust will reject this function signature"
+prompt.distractors = [  
   """
 ```
 fn baz(f: &Foo) -> &i32
@@ -105,7 +105,7 @@ fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'b i32
 ```
   """
 ]
-answer.answer = 0
+prompt.answerIndex = 0
 context = """
 Rust will not compile this program, because it is ambiguous whether the lifetime of the output is tied to
 the lifetime of `&Foo` or the reference `Foo.bar`.

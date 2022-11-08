@@ -2,13 +2,12 @@
 id = "8bd8d8bc-e61e-48c7-ba78-0c89339e5995"
 type = "MultipleChoice"
 prompt.prompt = "Which statement best describes what it means if a variable `x` is immutable?"
-prompt.choices = [
+answer.answer = "`x` cannot be changed after being assigned to a value."
+prompt.distractors = [
   "`x` is stored in the immutable region of memory.",
   "After being defined, `x` can be changed at most once.",
-  "`x` cannot be changed after being assigned to a value.",
   "You cannot create a reference to `x`."
 ]
-answer.answer = 2
 context = """
 Immutable means "not mutable", or not changeable.
 """

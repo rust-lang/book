@@ -19,11 +19,8 @@ if cond {
 }
 ```
 """
-prompt.choices = [
-  "True",
-  "False"
-]
-answer.answer = 0
+answer.answer = "True"
+prompt.distractors = [ "False" ]
 context = """
 The first if-expression is a more concise way of representing the behavior of the second if-statement.
 """

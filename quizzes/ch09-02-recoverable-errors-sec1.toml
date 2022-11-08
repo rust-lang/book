@@ -2,13 +2,12 @@
 id = "8f9e0e79-f4a7-4056-b35e-f7ae65b78888"
 type = "MultipleChoice"
 prompt.prompt = "Which of these statements best describes why `File::open` returns a `Result` and not an `Option`?"
-prompt.choices = [
+answer.answer = "Because `Result` can represent why an operation failed, and file opening can fail for many reasons"
+prompt.distractors = [
   "Because `Result` represents the possibility of failure, while `Option` cannot represent failures",
   "Because `Result` uses fewer bytes at runtime than `Option` to represent failures",
-  "Because `Result` represents errors the same way as the underlying system calls",
-  "Because `Result` can represent why an operation failed, and file opening can fail for many reasons"
+  "Because `Result` represents errors the same way as the underlying system calls"
 ]
-answer.answer = 3
 context = """
 `Option` can just represent *that* an operation has failed, but `Result` can explain *why* the operation has failed.
 """

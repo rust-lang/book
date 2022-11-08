@@ -38,13 +38,12 @@ enum Result2<T, E> {
 The enum `Result2` is considered more idiomatic than the struct `Result1` in Rust. 
 Which statement below is **NOT** a valid reason why?
 """
-prompt.choices = [
+answer.answer = "The struct contains `Option` types, which are only intended to wrap structs"
+prompt.distractors = [
   "The struct uses more space in memory at runtime than the enum",
-  "The struct contains `Option` types, which are only intended to wrap structs",
   "The struct could have `ok` and `err` both be `None`, while the enum must have at least one them",
-  "The struct is more syntactically verbose to construct than the enum",
+  "The struct is more syntactically verbose to construct than the enum"
 ]
-answer.answer = 1
 context = """
 It's perfectly fine to have structs contain `Option` types as fields. But if your data structure has invariants like "exactly one of two optional fields should be `Some`",
 then that invariant is better ensured by use of an enum.

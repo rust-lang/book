@@ -11,13 +11,12 @@ For example, you can run from the command line: `RUST_BACKTRACE=1 cargo run`
 id = "23cabd75-88f5-4ff8-8bf5-4bd4d1a9e64a"
 type = "MultipleChoice"
 prompt.prompt = "Which of the following is NOT a good reason to use a panic?"
-prompt.choices = [
+answer.answer = "The program has reached an error state which should be communicated to a caller function"
+prompt.distractors = [
   "The program is about to perform a dangerous operation",
   "The program should stop executing as soon as possible",
-  "The program has reached an error state which should be communicated to a caller function",
   "The program has reached an unrecoverable error state"
 ]
-answer.answer = 2
 context = """
 A panic should not be used to communicate failure *within* the program. The default assumption is that caller functions
 will not try to catch panics.

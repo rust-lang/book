@@ -4,28 +4,12 @@ type = "MultipleChoice"
 prompt.prompt = """
 Say you just downloaded a Cargo project, and then you run `cargo run` at the command-line. Which statement is NOT true about what happens next?
 """
-prompt.choices = [
+answer.answer = "Cargo executes the project's binary"
+prompt.distractors = [
   "Cargo downloads and builds any dependencies of the project",
   "Cargo builds the project into a binary in the `target/debug` directory",
-  "Cargo executes the project's binary",
   "Cargo watches for file changes and re-executes the binary on a change"
 ]
-answer.answer = 3
-context = """
-Cargo does not watch for changes, although there is a third-party [`cargo-watch`](https://crates.io/crates/cargo-watch) utility for that purpose.
-"""
-
-[[questions]]
-id = "292177d1-58db-484d-992a-9f2efb49a6ef"
-type = "MultipleChoice"
-prompt.prompt = "What is the purpose of the `target` directory in a Cargo project?"
-prompt.choices = [
-  "The project author puts OS-specific Rust code in the `target` directory",  
-  "The project author puts their project's documentation in the `target` directory",
-  "Cargo puts its generated files into the `target` directory",
-  "Cargo puts a backup copy of the project's source code into the `target` directory"
-]
-answer.answer = 2
 context = """
 The `target` directory isolates generated files so it's easy to clean up later.
 """

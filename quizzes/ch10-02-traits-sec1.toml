@@ -35,13 +35,12 @@ Therefore calling `make_noise` on each prints `bark` and `(silence)`, respective
 id = "783f2485-e5b9-483b-8368-064366c77285"
 type = "MultipleChoice"
 prompt.prompt = "Which of the following statements is NOT true about when Rust allows you to implement a trait?"
-prompt.choices = [
+answer.answer = "You can implement an external trait for an external type"
+prompt.distractors = [
   "You can implement an external trait for a local type",
   "You can implement a local trait for an external type",
-  "You can implement a local trait for a local type",
-  "You can implement an external trait for an external type"
+  "You can implement a local trait for a local type"
 ]
-answer.answer = 3
 context = """
 The "orphan rule" requires that you cannot implement an external trait for an external type, 
 to ensure code doesn't break if two crates provide conflicting implementations.

@@ -2,13 +2,13 @@
 id = "e582f00a-2f28-46e4-ae1b-77fd223cca4f"
 type = "MultipleChoice"
 prompt.prompt = "The largest number representable by the type `i128` is:"
-prompt.choices = [
+answer.answer = "2<sup>127</sup> - 1"
+prompt.distractors = [
   "2<sup>128</sup>",
   "2<sup>128</sup> - 1",
   "2<sup>127</sup>",
-  "2<sup>127</sup> - 1"
 ]
-answer.answer = 3
+prompt.answerIndex = 3
 context = """
 In general, a signed number with *n* bits can represent numbers between -(2<sup>n - 1</sup>) and 2<sup>n - 1</sup> - 1.
 """
@@ -17,12 +17,11 @@ In general, a signed number with *n* bits can represent numbers between -(2<sup>
 id = "3a92246b-a43c-4658-980b-335d7632ddcb"
 type = "MultipleChoice"
 prompt.prompt = "If `x : u8 = 0`, what will happen when computing `x - 1`?"
-prompt.choices = [
+answer.answer = "It depends on the compiler mode." 
+prompt.distractors = [
   "It will always panic.",
   "It will always return 255.",
-  "It depends on the compiler mode."  
 ]
-answer.answer = 2
 context = """
 This expression will panic in debug mode and return 255 in release mode.
 """

@@ -20,11 +20,8 @@ fn parse_flag_v2(flag: &str) -> String {
 }
 ```
 """
-prompt.choices = [
-  "`parse_flag_v1`",
-  "`parse_flag_v2`"
-]
-answer.answer = 0
+answer.answer = "`parse_flag_v1`"
+prompt.distractors = [ "`parse_flag_v2`" ]
 context = """
 Here, the programmer would likely want to use a *recoverable* error (the `Result`). If a CLI user passes an incorrectly formatted flag,
 then the CLI library might want to provide additional help like displaying the possible set of flags. A panic would force the application

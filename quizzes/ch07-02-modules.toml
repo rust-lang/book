@@ -4,13 +4,12 @@ type = "MultipleChoice"
 prompt.prompt = """
 Which of the following is NOT a good reason to use a module?
 """
-prompt.choices = [
-  "Modules boost the runtime performance of interdependent code within the same module",
+answer.answer = "Modules boost the runtime performance of interdependent code within the same module"
+prompt.distractors = [
   "Modules group related code so programmers can more easily work on a large codebase",
   "Modules encapsulate implementation details that shouldn't be used by external clients",
   "Modules provide a scope to avoid naming conflicts across parts of a codebase"
 ]
-answer.answer = 0
 context = """
 Modules have no effect on runtime, they are purely for compile-time organization.
 """

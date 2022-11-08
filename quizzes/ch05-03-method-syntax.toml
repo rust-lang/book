@@ -2,13 +2,13 @@
 id = "ae4e06f6-5fdc-43d9-929c-85eba3559a82"
 type = "MultipleChoice"
 prompt.prompt = "What is the keyword for constructor functions in Rust?"
-prompt.choices = [
+answer.answer = "None of the above"
+prompt.distractors = [
   "`constructor`",
   "`new`",
   "The name of the type being constructed",
-  "None of the above"
 ]
-answer.answer = 3
+prompt.answerIndex = 3
 context = """
 Rust does not have a keyword for constructor functions. The idiomatic way to define a constructo function is to make an associated function called `new`, 
 but that is not enforced by the language.
@@ -50,13 +50,13 @@ impl Point {
 }
 ```
 """
-prompt.choices = [
+answer.answer = "`incr_v2`"
+prompt.distractors = [
   "`incr_v1`",
-  "`incr_v2`",
   "Both are idiomatic",
   "Neither are idiomatic"
 ]
-answer.answer = 1
+prompt.answerIndex = 1
 context = """
 The `incr_v1` method is not idiomatic, because it consumes ownership of the `Point`. This means after calling `p.incr_v1()`, `p` 
 would be unusable, which is probably not intended for this method.

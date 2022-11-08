@@ -15,11 +15,10 @@ fn print_range_max(loc: &Location) {
 }
 ```
 """
-prompt.choices = [
-  "`match`",
-  "`if let`",
+answer.answer = "`if let`"
+prompt.distractors = [
+  "`match`"  
 ]
-answer.answer = 1
 context = """
 If the function only has an effect in one condition, an `if let` is most idiomatic.
 """
@@ -41,11 +40,10 @@ fn get_start(loc: &Location) -> i32 {
 }
 ```
 """
-prompt.choices = [
-  "`match`",
+answer.answer = "`match`"
+prompt.distractors = [
   "`if let`",
 ]
-answer.answer = 0
 context = """ 
 If the function needs to return a value for each condition, then a `match` is most appropriate.
 """
