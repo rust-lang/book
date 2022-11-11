@@ -246,8 +246,7 @@ you’ve learned how to:
 * Install the latest stable version of Rust using `rustup`
 * Update to a newer Rust version
 * Open locally installed documentation
-* Write and run a “Hello, world!” program using `rustc` directly
-* Create and run a new project using the conventions of Cargo
+* Create, run, and check a new project using the conventions of Cargo
 
 This is a great time to build a more substantial program to get used to reading
 and writing Rust code. So, in Chapter 2, we’ll build a guessing game program.
