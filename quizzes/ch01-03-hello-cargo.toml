@@ -11,5 +11,6 @@ prompt.distractors = [
   "Cargo executes the project's binary"
 ]
 context = """
-The `target` directory isolates generated files so it's easy to clean up later.
+Cargo does not watch your files by default. But you can use plugins like [cargo-watch](https://crates.io/crates/cargo-watch) for this
+purpose.
 """
