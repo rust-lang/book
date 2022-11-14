@@ -34,7 +34,8 @@ fn main() {
 }
 ```
 
-Inside `main`, what is the total number of paths that can refer to `a`, `b`, or `c`? Write your answer as a digit such as 0 or 1.
+Inside `main`, what is the total number of paths that can refer to `a`, `b`, or `c` (not including those that use `self`, `super`, or `crate`)? 
+Write your answer as a digit such as 0 or 1.
 """
 answer.answer = "5"
 context = """

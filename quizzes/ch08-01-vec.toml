@@ -52,7 +52,7 @@ fn main() {
   let s = String::from("Hello ");
   v.push(s);
   v[0].push_str("world");
-  println!("original: {}", s)
+  println!("original: {}", s);
   println!("new: {}", v[0]);
 }
 """

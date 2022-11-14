@@ -1,7 +1,7 @@
 [[questions]]
 id = "91fb1ec6-fb11-4b6f-88df-dbc921a4108f"
 type = "MultipleChoice"
-prompt.prompt = "Given an arbitrary expression `e` of type `Result<T, E>`, which code snippet represents how `e?` is desugared?"
+prompt.prompt = "Given an arbitrary expression `e` of type `Result<T, E>`, which code snippet represents how `e?` is translated?"
 answer.answer = """
 ```
 match e {
