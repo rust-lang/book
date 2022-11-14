@@ -4,11 +4,11 @@ type = "MultipleChoice"
 prompt.prompt = """
 Say you just downloaded a Cargo project, and then you run `cargo run` at the command-line. Which statement is NOT true about what happens next?
 """
-answer.answer = "Cargo executes the project's binary"
+answer.answer = "Cargo watches for file changes and re-executes the binary on a change"
 prompt.distractors = [
   "Cargo downloads and builds any dependencies of the project",
   "Cargo builds the project into a binary in the `target/debug` directory",
-  "Cargo watches for file changes and re-executes the binary on a change"
+  "Cargo executes the project's binary"
 ]
 context = """
 The `target` directory isolates generated files so it's easy to clean up later.
