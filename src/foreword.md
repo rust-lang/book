@@ -36,6 +36,6 @@ same skills to target your Raspberry Pi.
 This book fully embraces the potential of Rust to empower its users. It’s a
 friendly and approachable text intended to help you level up not just your
 knowledge of Rust, but also your reach and confidence as a programmer in
-general. So dive in, get ready to learn—and welcome to the Rust community!
+general. So dive in, get ready to learn — and welcome to the Rust community!
 
 — Nicholas Matsakis and Aaron Turon
