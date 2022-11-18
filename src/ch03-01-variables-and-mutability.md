@@ -157,7 +157,7 @@ been completed.
 
 The other difference between `mut` and shadowing is that because we’re
 effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value but reuse the same name. For example, say our
+change the type of the value and reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
 inputting space characters, and then we want to store that input as a number:
 
