@@ -191,13 +191,15 @@ Shutting down worker 2
 Shutting down worker 3
 ```
 
-You might see a different ordering of workers and messages printed. We can see
-how this code works from the messages: workers 0 and 3 got the first two
-requests. The server stopped accepting connections after the second connection,
-and the `Drop` implementation on `ThreadPool` starts executing before worker 3
-even starts its job. Dropping the `sender` disconnects all the workers and
-tells them to shut down. The workers each print a message when they disconnect,
-and then the thread pool calls `join` to wait for each worker thread to finish.
+You might see a different ordering of workers and messages printed. While in 
+multithreaded compositions attempts to interpret output seqeunces are rather
+speculative, we can make assumptions on how this code works from the messages:
+workers 0 and 3 got the first two requests. The server stopped accepting 
+connections after the second connection, and the `Drop` implementation on
+`ThreadPool` starts executing before worker 3 even starts its job. Dropping
+the `sender` disconnects all the workers and tells them to shut down. The 
+workers each print a message when they disconnect, and then the thread pool 
+calls `join` to wait for each worker thread to finish.
 
 Notice one interesting aspect of this particular execution: the `ThreadPool`
 dropped the `sender`, and before any worker received an error, we tried to join
