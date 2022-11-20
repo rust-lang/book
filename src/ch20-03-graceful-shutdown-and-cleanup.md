@@ -192,7 +192,7 @@ Shutting down worker 3
 ```
 
 You might see a different ordering of workers and messages printed. While in 
-multithreaded compositions attempts to interpret output seqeunces are rather
+multithreaded compositions attempts to interpret output sequences are rather
 speculative, we can make assumptions on how this code works from the messages:
 workers 0 and 3 got the first two requests. The server stopped accepting 
 connections after the second connection, and the `Drop` implementation on
