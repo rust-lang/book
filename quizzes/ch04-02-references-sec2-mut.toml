@@ -35,7 +35,13 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 6
 context = """
+<<<<<<< HEAD
 It is illegal to use a mutable reference to a value (`s3`) while an immutable reference 
 is live (`s2`). The last line of the error is the `println` on line 6, because if you 
 deleted that line, then this program would compile.
+=======
+It is illegal to use a mutable reference to a value (`s3`) while an immutable reference is live (`s2`). 
+Note that the program is ok until `println!("{s2}")`, because that extends the live range of `s2` to overlap with `s3`.
+Therefore the last line involved in this error is line 6.
+>>>>>>> 86eaa7e6 (Fix some wording in a few questions)
 """
