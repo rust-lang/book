@@ -56,4 +56,3 @@ answer.lineNumber = 13
 context = """
 A match moves its input, so `x` cannot be used in the `println`.
 """
-promptExplanation = true

@@ -17,7 +17,7 @@ answer.lineNumber = 7
 context = """
 Although `n` is marked as `mut`, the reference to `n` must also be marked as `mut`. So a valid version of this program would say `incr(&mut n)`.
 """
-promptExplanation = true
+
 
 [[questions]]
 id = "e9846c5d-1254-4420-9986-dae4af86b9af"

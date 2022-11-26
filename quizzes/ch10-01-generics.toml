@@ -45,7 +45,7 @@ context = """
 If a type is generic (like `T`), we cannot assume anything about it, including the ability to turn it into a string. Therefore `println!("{x}")` is invalid
 because `x: &T`.
 """
-promptExplanation = true
+
 
 [[questions]]
 id = "694bb2d0-f2e6-4b0b-a3e7-2d9f9e8b3d09"
@@ -71,4 +71,3 @@ answer.lineNumber = 8
 context = """
 These definitions of `f` conflict, and there is no way for Rust to determine which `f` should be used when `p.f()` is called. Therefore this is a compiler error.
 """
-promptExplanation = true

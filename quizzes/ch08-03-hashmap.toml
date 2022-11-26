@@ -41,4 +41,3 @@ context = """
 This program stores a vector of indexes for each occurrence of a given letter into a hashmap. 
 Then it sums all the indexes for the letter 'l', which occurs at indexes 2 and 3 in the string `"hello!"`.
 """
-promptExplanation = true
