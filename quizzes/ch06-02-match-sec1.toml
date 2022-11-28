@@ -54,5 +54,5 @@ fn main() {
 answer.doesCompile = false
 answer.lineNumber = 13
 context = """
-A match moves its input, so `x` cannot be used in the `println`.
+The match arm `Either::Right(s)` moves the field `s`, so `x` cannot be used in the `println`.
 """

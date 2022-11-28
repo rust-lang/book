@@ -45,7 +45,7 @@ fn main() {
     b.push_str(" world");
     b
   };
-  println!("{a}")
+  println!("{a}");
 }
 """
 answer.doesCompile = true

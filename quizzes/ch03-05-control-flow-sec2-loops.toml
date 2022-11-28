@@ -2,7 +2,7 @@
 id = "c5b27431-c318-4243-9621-cadacb737f5a"
 type = "MultipleChoice"
 prompt.prompt = """
-True/false: this code will terminate and not loop or crash.
+True/false: this code will terminate and not loop forever or crash.
 
 ```
 fn main() {
