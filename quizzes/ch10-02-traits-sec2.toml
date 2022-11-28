@@ -2,20 +2,23 @@
 id = "a2a1546b-27bf-47d2-a1bc-86d777573f40"
 type = "Tracing"
 prompt.program = """
-fn clonable<T: Clone>(t: T) -> impl Clone { t }
+use std::fmt::Display;
+fn displayable<T: Display>(t: T) -> impl Display { t }
 
 fn main() {
   let s = String::from("hello");
-  let s2 = clonable(s);
-  println!("{}", s2.clone());
+  let mut s2 = displayable(s);
+  s2.push_str(" world");
+  println!("{s2}");
 }
 """
 answer.doesCompile = false
-answer.lineNumber = 6
+answer.lineNumber = 7
 context = """
-Because `clonable` returns `impl Clone`, then we only know that `s2` is *some* type that implements `Clone`, 
-not that it is a `String` (or any type that implements `Display`). Therefore we cannot print `s2`.
+Because `displayable` returns `impl Display`, then we only know that `s2` is *some* type that implements `Display`, 
+not that it is a `String` which has a `push_str` method. Therefore we cannot call `s2.push_str(..)`.
 """
+promptExplanation = true
 
 
 [[questions]]
