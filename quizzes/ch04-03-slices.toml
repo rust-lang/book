@@ -8,7 +8,7 @@ Consider the variables `s2` and `s3` in the following program. These two variabl
 fn main() {
   let s = String::from("hello");
   let s2: &String = &s;
-  let s3: &str = &s;
+  let s3: &str = &s[..];
 }
 ```
 """
