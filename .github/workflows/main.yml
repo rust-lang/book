@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    tags-ignore:
+    branches:
       - '**'
 
 # TODO: make a version that runs on pull_request
