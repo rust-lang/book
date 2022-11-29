@@ -4,6 +4,22 @@ digraph {
     dpi=300.0;
     node [shape="plaintext"];
 
+    table3[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
+        <TR><TD>name</TD><TD>value</TD></TR>
+        <TR><TD port="pointee">ptr</TD><TD PORT="pointer"></TD></TR>
+        <TR><TD>len</TD><TD>11</TD></TR>
+        <TR><TD>capacity</TD><TD>11</TD></TR>
+    </TABLE>>];
+
+    table1[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD COLSPAN="2" SIDES="B">hello</TD></TR>
+        <TR><TD>name</TD><TD>value</TD></TR>
+        <TR><TD>ptr</TD><TD PORT="pointer2"></TD></TR>
+        <TR><TD>len</TD><TD>5</TD></TR>
+    </TABLE>>];
+
+
     table0[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
         <TR><TD COLSPAN="2" SIDES="B">world</TD></TR>
         <TR><TD>name</TD><TD>value</TD></TR>
@@ -11,13 +27,7 @@ digraph {
         <TR><TD>len</TD><TD>5</TD></TR>
     </TABLE>>];
 
-    table3[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-        <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
-        <TR><TD>name</TD><TD>value</TD></TR>
-        <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
-        <TR><TD>len</TD><TD>11</TD></TR>
-        <TR><TD>capacity</TD><TD>11</TD></TR>
-    </TABLE>>];
+    
     table4[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
         <TR><TD>index</TD><TD>value</TD></TR>
         <TR><TD PORT="pointee">0</TD><TD>h</TD></TR>
@@ -33,9 +43,21 @@ digraph {
         <TR><TD>10</TD><TD>d</TD></TR>
     </TABLE>>];
 
+    table5[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD COLSPAN="2" SIDES="B">s2</TD></TR>
+        <TR><TD>name</TD><TD>value</TD></TR>
+        <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
+    </TABLE>>];
 
     edge[tailclip="false"];
-    table0:pointer2:c -> table4:pointee2;
     table3:pointer:c -> table4:pointee;
+    table0:pointer2:c -> table4:pointee2;
+    table1:pointer2:c -> table4:pointee;
+    table5:pointer:c -> table3:pointee;
+
+    {
+        rank = same;
+        table3 -> table1 -> table0 [style=invis];        
+    }
 }
 

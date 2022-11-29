@@ -73,16 +73,13 @@ If we compile this code right now, we’ll get this error:
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/output.txt}}
 ```
 
-The help text mentions `std::cmp::PartialOrd`, which is a *trait*, and we’re
-going to talk about traits in the next section. For now, know that this error
-states that the body of `largest` won’t work for all possible types that `T`
-could be. Because we want to compare values of type `T` in the body, we can
-only use types whose values can be ordered. To enable comparisons, the standard
-library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). By following the help text's
-suggestion, we restrict the types valid for `T` to only those that implement
-`PartialOrd` and this example will compile, because the standard library
-implements `PartialOrd` on both `i32` and `char`.
+<!-- BEGIN INTERVENTION: 0aad53ff-89d7-4d14-8e3d-c17809220252 -->
+The issue above is that when `largest` takes a slice `&[T]` as input, the function cannot assume *anything* about the type `T`. It could be `i32`, it could be `String`, it could be [`File`](https://doc.rust-lang.org/std/fs/struct.File.html). However, `largest` requires that `T` is something you can compare with `>` (i.e. that `T` implements `PartialOrd`, a trait which we will discuss in the next section). Some types like `i32` and `String` are comparable, but other types like `File` are not comparable.
+
+In a language like C++ with [templates](https://en.cppreference.com/w/cpp/language/templates), the compiler would not complain about the implementation of `largest`, but instead it would complain about trying to call `largest` on e.g. a file slice `&[File]`. Rust instead requires you to state the expected capabilities of generic types up front. If `T` needs to be comparable, then `largest` must say so. Therefore this compiler error says `largest` will not compile until `T` is restricted.
+
+Additionally, unlike languages like Java where all objects have a set of core methods like [`Object.toString()`](https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html#toString()), there are no core methods in Rust. Without restrictions, a generic type `T` has no capabilities: it cannot be printed, cloned, or mutated (although it can be dropped).
+<!-- END INTERVENTION -->
 
 ### In Struct Definitions
 
@@ -239,6 +236,10 @@ method; other instances of `Point<T>` where `T` is not of type `f32` will not
 have this method defined. The method measures how far our point is from the
 point at coordinates (0.0, 0.0) and uses mathematical operations that are
 available only for floating point types.
+
+<!-- BEGIN INTERVENTION: 694bb2d0-f2e6-4b0b-a3e7-2d9f9e8b3d09 -->
+You cannot simultaneously implement specific *and* generic methods of the same name this way. For example, if you implemented a general `distance_from_origin` for all types `T` and a specific `distance_from_origin` for `f32`, then the compiler will reject your program: Rust does not know which implementation to use when you call `Point<f32>::distance_from_origin`. More generally, Rust does not have inheritance-like mechanisms for specializing methods as you might find in an object-oriented language, with one exception (default trait methods) discussed in the next section.
+<!-- END INTERVENTION -->
 
 Generic type parameters in a struct definition aren’t always the same as those
 you use in that same struct’s method signatures. Listing 10-11 uses the generic

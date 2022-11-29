@@ -153,6 +153,7 @@ ending up in that situation.
 
 ### Iterating over the Values in a Vector
 
+<!-- BEGIN INTERVENTION: e8da8773-8df2-4279-8c27-b7e9eda1dddd -->
 To access each element in a vector in turn, we would iterate through all of the
 elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a `for` loop to get immutable references to each element in a vector of
@@ -162,8 +163,12 @@ to use a `for` loop to get immutable references to each element in a vector of
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-7: Printing each element in a vector by
+<span class="caption">Listing 8-7: Accessing each element in a vector by
 iterating over the elements using a `for` loop</span>
+
+To read the number that `n_ref` refers to, we have to use the `*` dereference operator to get to the value in `n_ref` before we can add 1 to it. We’ll talk more about the dereference operator in the [“Following the
+Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
+section of Chapter 15.
 
 We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-8
@@ -176,11 +181,8 @@ will add `50` to each element.
 <span class="caption">Listing 8-8: Iterating over mutable references to
 elements in a vector</span>
 
-To change the value that the mutable reference refers to, we have to use the
-`*` dereference operator to get to the value in `i` before we can use the `+=`
-operator. We’ll talk more about the dereference operator in the [“Following the
-Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
-section of Chapter 15.
+To change the value that the mutable reference refers to, we again use the `*` dereference operator to get to the value in `n_ref` before we can use the `+=` operator. 
+<!-- END INTERVENTION -->
 
 Iterating over a vector, whether immutably or mutably, is safe because of the
 borrow checker's rules. If we attempted to insert or remove items in the `for`

@@ -178,14 +178,18 @@ We’ll discuss deref coercion in more depth in Chapter 15. Because `add` does
 not take ownership of the `s` parameter, `s2` will still be a valid `String`
 after this operation.
 
+<!-- BEGIN INTERVENTION: f1ab2171-96f0-4380-b16d-9055a9a00415 -->
 Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in Listing 8-18 will be
 moved into the `add` call and will no longer be valid after that. So although
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
-this statement actually takes ownership of `s1`, appends a copy of the contents
-of `s2`, and then returns ownership of the result. In other words, it looks
-like it’s making a lot of copies but isn’t; the implementation is more
-efficient than copying.
+this statement instead does the following:
+1. `add` takes ownership of `s1`,
+2. it appends a copy of the contents of `s2` to `s1`, 
+3. and then it returns back ownership of `s1`.
+
+If `s1` has enough capacity for `s2`, then no memory allocations occur. However, if `s1` does not have enough capacity for `s2`, then `s1` will internally make a larger memory allocation to fit both strings.
+<!-- END INTERVENTION -->
 
 If we need to concatenate multiple strings, the behavior of the `+` operator
 gets unwieldy:

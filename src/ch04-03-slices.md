@@ -105,17 +105,19 @@ Luckily, Rust has a solution to this problem: string slices.
 
 ### String Slices
 
+<!-- BEGIN INTERVENTION: 7fbda6e4-dca7-458e-ab52-fab03181f90b -->
 A *string slice* is a reference to part of a `String`, and it looks like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-Rather than a reference to the entire `String`, `hello` is a reference to a
+Rather than a reference to the entire `String` (like `s2`), `hello` is a reference to a
 portion of the `String`, specified in the extra `[0..5]` bit. We create slices
 using a range within brackets by specifying `[starting_index..ending_index]`,
 where `starting_index` is the first position in the slice and `ending_index` is
-one more than the last position in the slice. Internally, the slice data
+one more than the last position in the slice.
+Internally, the slice data
 structure stores the starting position and the length of the slice, which
 corresponds to `ending_index` minus `starting_index`. So in the case of `let
 world = &s[6..11];`, `world` would be a slice that contains a pointer to the
@@ -123,10 +125,13 @@ byte at index 6 of `s` with a length value of 5.
 
 Figure 4-6 shows this in a diagram.
 
-<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 80%;" />
 
 <span class="caption">Figure 4-6: String slice referring to part of a
 `String`</span>
+
+Note that there is a difference between `s2: &String`, a reference to an owned string, and `hello: &str`, a string slice. `s2` is two pointers away from the string data, while `hello` directly points to the string data without going through `s`.
+<!-- END INTERVENTION -->
 
 With Rust’s `..` range syntax, if you want to start at index zero, you can drop
 the value before the two periods. In other words, these are equal:

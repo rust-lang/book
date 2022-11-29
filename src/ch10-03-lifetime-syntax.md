@@ -450,11 +450,12 @@ compiler gets to the end of the three rules and there are still references for
 which it can’t figure out lifetimes, the compiler will stop with an error.
 These rules apply to `fn` definitions as well as `impl` blocks.
 
-The first rule is that the compiler assigns a lifetime parameter to each
-parameter that’s a reference. In other words, a function with one parameter gets
-one lifetime parameter: `fn foo<'a>(x: &'a i32)`; a function with two
-parameters gets two separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32,
-y: &'b i32)`; and so on.
+<!-- BEGIN INTERVENTION: d03748df-8dcf-4ec8-bd30-341927544665 -->
+The first rule is that the compiler assigns a different lifetime parameter to each lifetime in each input type. References like `&'_ i32` needs a lifetime parameter, and structures like `ImportantExcerpt<'_>` need a lifetime parameter. For example:
+* The function `fn foo(x: &i32)` would get one lifetime parameter and become `fn foo<'a>(x: &'a i32)`. 
+* The function `fn foo(x: &i32, y: &i32)` would get two lifetime parameters and become `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`.
+* The function `fn foo(x: &ImportantExcerpt)` would get two lifetime parameters and become `fn foo<'a, 'b>(&'a ImportantExcerpt<'b>)`.
+<!-- END INTERVENTION -->
 
 The second rule is that, if there is exactly one input lifetime parameter, that
 lifetime is assigned to all output lifetime parameters: `fn foo<'a>(x: &'a i32)
