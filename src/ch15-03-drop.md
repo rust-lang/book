@@ -96,7 +96,7 @@ When we try to compile this code, we’ll get this error:
 
 This error message states that we’re not allowed to explicitly call `drop`. The
 error message uses the term *destructor*, which is the general programming term
-for a function that cleans up an instance. A *destructor* is analogous to a
+for a function that cleans up an instance. A *destructor* is complementary to a
 *constructor*, which creates an instance. The `drop` function in Rust is one
 particular destructor.
 
