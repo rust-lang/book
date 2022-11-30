@@ -465,15 +465,15 @@ character there, but it’s also possible that there isn’t. This code takes th
 `text` string slice argument and calls the `lines` method on it, which returns
 an iterator over the lines in the string. Because this function wants to
 examine the first line, it calls `next` on the iterator to get the first value
-from the iterator. If `text` is the empty string, this call to `next` will
+from the iterator. If `text` is an empty string, this call to `next` will
 return `None`, in which case we use `?` to stop and return `None` from
-`last_char_of_first_line`. If `text` is not the empty string, `next` will
+`last_char_of_first_line`. If `text` is not an empty string, `next` will
 return a `Some` value containing a string slice of the first line in `text`.
 
 The `?` extracts the string slice, and we can call `chars` on that string slice
 to get an iterator of its characters. We’re interested in the last character in
 this first line, so we call `last` to return the last item in the iterator.
-This is an `Option` because it’s possible that the first line is the empty
+This is an `Option` because it’s possible that the first line is an empty
 string, for example if `text` starts with a blank line but has characters on
 other lines, as in `"\nhi"`. However, if there is a last character on the first
 line, it will be returned in the `Some` variant. The `?` operator in the middle
