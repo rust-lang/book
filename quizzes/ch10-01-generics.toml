@@ -24,6 +24,7 @@ The only possible function (without unsafe code) that has the signature `T -> T`
 but the return value can only be the input because there is no other way for `mystery` to generate or mutate a value of `T`. 
 See [Theorems for free!](https://dl.acm.org/doi/pdf/10.1145/99370.99404) for more examples of this idea.
 """
+promptExplanation = true
 
 [[questions]]
 id = "40ae0cfe-3567-4d05-b0d9-54d612a2d654"
@@ -71,3 +72,4 @@ answer.lineNumber = 8
 context = """
 These definitions of `f` conflict, and there is no way for Rust to determine which `f` should be used when `p.f()` is called. Therefore this is a compiler error.
 """
+promptExplanation = true

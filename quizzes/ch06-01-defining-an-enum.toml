@@ -41,7 +41,7 @@ Which statement below is **NOT** a valid reason why?
 answer.answer = "The struct contains `Option` types, which are only intended to wrap structs"
 prompt.distractors = [
   "The struct uses more space in memory at runtime than the enum",
-  "The struct could have `ok` and `err` both be `None`, while the enum must have at least one them",
+  "The struct could have `ok` and `err` both be `None`, while the enum must have at least one of them",
   "The struct is more syntactically verbose to construct than the enum"
 ]
 context = """
