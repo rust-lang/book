@@ -28,7 +28,7 @@ we would remove them in the future. Well, that time is now!
 We needed `clone` here because we have a slice with `String` elements in the
 parameter `args`, but the `build` function doesn’t own `args`. To return
 ownership of a `Config` instance, we had to clone the values from the `query`
-and `filename` fields of `Config` so the `Config` instance can own its values.
+and `file_path` fields of `Config` so the `Config` instance can own its values.
 
 With our new knowledge about iterators, we can change the `build` function to
 take ownership of an iterator as its argument instead of borrowing a slice.
@@ -118,7 +118,7 @@ the program. We want to ignore that and get to the next value, so first we call
 value we want to put in the `query` field of `Config`. If `next` returns a
 `Some`, we use a `match` to extract the value. If it returns `None`, it means
 not enough arguments were given and we return early with an `Err` value. We do
-the same thing for the `filename` value.
+the same thing for the `file_path` value.
 
 ### Making Code Clearer with Iterator Adaptors
 
