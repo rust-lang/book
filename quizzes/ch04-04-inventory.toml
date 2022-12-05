@@ -1,0 +1,129 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```
+/// Makes a string to separate lines of text, 
+/// returning a default if the provided string is blank
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default
+  } else {
+    user_str
+  }
+}
+```
+
+If you tried to compile this function, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "cannot return reference to local variable `default`"
+prompt.distractors = [
+  "`user_str` does not live long enough",
+  "function `make_distractor` cannot return a reference `&str`",
+  "function `make_distractor` cannot return two different references"
+]
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```
+/// Makes a string to separate lines of text, 
+/// returning a default if the provided string is blank
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default
+  } else {
+    user_str
+  }
+}
+```
+
+Assume that the compiler did NOT reject this function. Which, if any, of the following snippets could 
+possibly violate memory safety or cause a data race? Check "None of the above" if none of the 
+programs could cause such a problem.
+"""
+prompt.answerIndex = 2
+answer.answer = ["""
+```
+let s = make_separator("");
+println!("{s}");
+```
+"""]
+prompt.distractors = [
+"""
+```
+make_separator("");
+```
+""",
+"""
+```
+let s = make_separator("");
+```
+""",
+"None of the above",
+]
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```
+/// Makes a string to separate lines of text, 
+/// returning a default if the provided string is blank
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default
+  } else {
+    user_str
+  }
+}
+```
+
+
+"""
+answer.answer = """
+```
+fn make_separator(user_str: &str) -> String {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    default
+  } else {
+    user_str.to_string()
+  }
+}
+```
+"""
+prompt.distractors = [
+"""
+```
+fn make_separator(user_str: &str) -> &str {
+  if user_str == "" {
+    let default = "=".repeat(10);
+    &default.clone()
+  } else {
+    user_str
+  }
+}
+```
+""",
+"""
+```
+fn make_separator(user_str: String) -> String {
+  if user_str == "" {
+    let default = "=".repeat(10).to_string();
+    default
+  } else {
+    user_str
+  }
+}
+```
+""",
+"None of the above",
+]

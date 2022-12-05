@@ -25,7 +25,7 @@
     - [What is Ownership?](ch04-01-what-is-ownership.md)
     - [References and Borrowing](ch04-02-references-and-borrowing.md)
     - [The Slice Type](ch04-03-slices.md)
-    - [Ownership Inventory #1](ownership-inventory-01.md)
+    - [Ownership Inventory #1](ch04-04-inventory.md)
 
 - [Using Structs to Structure Related Data](ch05-00-structs.md)
     - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
