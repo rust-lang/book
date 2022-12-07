@@ -101,8 +101,6 @@ that point, the binding for `state` will be the value `UsState::Alaska`. We can
 then use that binding in the `println!` expression, thus getting the inner
 state value out of the `Coin` enum variant for `Quarter`.
  
-{{#quiz ../quizzes/ch06-02-match-sec1.toml}}
-
 ### Matching with `Option<T>`
 
 In the previous section, we wanted to get the inner `T` value out of the `Some`
@@ -301,7 +299,7 @@ println!("{:?}", opt);
 Rust will “push down” the reference from the outer enum, `&Option<String>`, to the inner field, `&String`. Therefore `s` has type `&String`, and `opt` can be used after the match. To better understand this “pushing down” mechanism, see the section about [binding modes](https://doc.rust-lang.org/reference/patterns.html#binding-modes) in the Rust Reference.
 <!-- END INTERVENTION -->
 
-{{#quiz ../quizzes/ch06-02-match-sec2.toml}}
+{{#quiz ../quizzes/ch06-02-match.toml}}
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
 [ch18-00-patterns]: ch18-00-patterns.html

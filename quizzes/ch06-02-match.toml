@@ -24,6 +24,7 @@ context = """
 Each match is tried from top to bottom. Both the second and third pattern are applicable, so the second one is used.
 """
 
+
 [[questions]]
 id = "f7c361e0-733a-4d48-9809-736e3c1e2b67"
 type = "MultipleChoice"
@@ -55,3 +56,63 @@ This is a real function in the standard library!
 """
 
 
+[[questions]]
+id = "1e4f082c-ffa4-4d33-8726-2dbcd72e1aa2"
+type = "Tracing"
+prompt.program = """
+#[derive(Debug)]
+enum Either {
+  Left(usize),
+  Right(String)
+}
+
+fn main() {
+  let x = Either::Right(String::from("Hello world"));
+  let value = match x {
+    Either::Left(n) => n,
+    Either::Right(s) => s.len()
+  };
+  println!("{x:?} {value}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 13
+context = """
+The match arm `Either::Right(s)` moves the field `s`, so `x` cannot be used in the `println`.
+"""
+promptExplanation = true
+
+
+[[questions]]
+id = "6e012d34-5c59-443e-85d9-385f0d7dee13"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider these two implementations of a function to decrement an unsigned number twice.
+
+```
+fn decr_twice_v1(n: u32) -> Option<u32> {
+  match n {
+    0 => None,
+    1 => None,
+    n2 => Some(n2 - 2)
+  }
+}
+
+fn decr_twice_v2(n: u32) -> Option<u32> {
+  if n == 0 {
+    None
+  } else if n == 1 {
+    None
+  } else {
+    Some(n - 2)
+  }
+}
+```
+
+The functions have the same behavior for:
+"""
+answer.answer = "All inputs"
+prompt.distractors = [ "No inputs", "Some, but not all inputs" ]
+context = """
+The `match` and `if` perform the same function here. A match is like a specialized `if` that checks for equality of the matched object.
+"""
