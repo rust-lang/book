@@ -86,7 +86,8 @@ be annotated. We’ll cover types and type annotations in the next section,
 right now. Just know that you must always annotate the type.
 
 Constants can be declared in any scope, including the global scope, which makes
-them useful for values that many parts of code need to know about.
+them useful for values that many parts of code need to know about. `let` variables 
+on the other hand cannot be declared in the global scope.
 
 The last difference is that constants may be set only to a constant expression,
 not the result of a value that could only be computed at runtime.
