@@ -24,11 +24,11 @@ fn main() {
 }
 ```
 
-This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet. Thankfully, this program is rejected by the Rust type-checker.
+This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet. 
 
-In some interpreted programming languages such as Python or Javascript, reading `x` before it's defined would raise an exception like [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to produce efficient programs that require as few checks as possible. What would happen if Rust allowed the second program to compile with no checks?
+In some interpreted programming languages such as Python or Javascript, reading `x` before it's defined would raise an exception like [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to produce efficient programs that require as few runtime checks as possible. So what would happen if Rust allowed the second program to compile? 
 
-To answer that question, let's consider how the first program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the first program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
+Let's consider how the first program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the first program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
 
 ```x86asm
 main:
@@ -59,6 +59,16 @@ Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't 
 * The code immediately crashes due to a [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) or another kind of operating system error.
 * The code executes just fine, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
 
+To avoid these kinds of outcomes, Rust uses compile-time checks to ensure that variables are defined before they are used. If you actually try to compile the problematic program, you will get this error from the compiler:
+
+```
+error[E0425]: cannot find value `x` in this scope
+ --> src/main.rs:4:10
+  |
+4 |     read(x); // oh no! x isn't defined!
+  |          ^ not found in this scope
+```
+
 **A foundational goal of Rust is to ensure your programs never have undefined behavior.**  That is meaning of "safety." A secondary goal is to prevent undefined behavior at *compile-time* instead of *run-time*. This goal has two motivations:
 1. Catching bugs at compile-time means not dealing with those bugs in production, improving the reliability of your software.
 2. Catching bugs at compile-time means fewer checks to catch bugs at runtime, improving the performance of your software.
@@ -70,7 +80,7 @@ Rust cannot prevent all bugs. If your application exposes a public and unauthent
 
 Since safety is the absence of undefined behavior, and since ownership is about safety, then we need to understand ownership in terms of the undefined behaviors it prevents. The Rust Reference maintains a list of ["Behavior considered undefined"](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), but for now we will focus on one category of behaviors: operations on memory.
 
-Memory is the virtual space where data is stored during the execution of a program. There are many ways to think about memory:
+Memory is the space where data is stored during the execution of a program. There are many ways to think about memory:
 * If you are less familiar with systems programming, you might think of memory at a high level like "memory is the RAM in my computer" or "memory is the thing that runs out if I load too much data". 
 * If you are more familiar with systems programming, you might think of memory at a low level like "memory is an array of bytes" or "memory is the pointers I get back from `malloc`".
 
@@ -102,12 +112,12 @@ The following diagram shows the state of memory at each of the marked points in 
 
 <img src="img/experiment/ch04-01-stack1.jpg" class="center" width="600" />
 
-Variables live in *frames*. A frame is a mapping from variables to values for the initialized variables in a single function. For example:
+Variables live in *frames*. A frame is a mapping from variables to values within a single scope, such as a function. For example:
 * `n = 5` is the frame for `main` at location L1.
 * `x = 5` is the frame for `plus_one` at L2.
 * `n = 5; y = 6` is the frame for `main` at location L3.
 
-Frames are organized into a *stack* of called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, its frame is deallocated ("freed"), which is similar to popping a stack.
+Frames are organized into a *stack* of called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, its frame is deallocated (or "freed"). This sequence of frames is called a stack because the most recent frame added is always the next frame to be removed.
 
 > **Note:** remember, this memory model does not fully describe how Rust actually works. As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail that shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
 
@@ -165,8 +175,7 @@ By wrapping the array in `Box::new`, our program states now look like this:
 
 <img src="img/experiment/ch04-01-stack4.jpg" class="center" width="400" />
 
-Observe that now, there is only ever a single array. At L1, `a` contains a *pointer* (represented by dot with an arrow) to the array on the heap. When performing `let b = a`, the 
-pointer is copied into `b`, but the pointed-data is not copied. 
+Observe that now, there is only ever a single array. At L1, `a` contains a *pointer* (represented by dot with an arrow) to the array on the heap. When performing `let b = a`, the pointer is copied into `b`, but the pointed-data is not copied. You could call this operation a "shallow" copy of `a` to `b`.
 
 <!-- 
 > **Note:** `Box` is not part of the Rust language, but rather the Rust standard library. You could implement your own `Box` if you wanted to. -->
@@ -193,13 +202,13 @@ free(b1);
 let b2 = Box::new([0; 100]);
 free(b2);
 assert!(b2[0] == 0);
-// Freeing b2 before using it causes the read of b3[0] to happen on 
+// Freeing b2 before using it causes the read of b2[0] to happen on 
 // deallocated memory, which could contain any kind of garbage values.
 // This is undefined behavior!
 
 let b3 = Box::new([0; 100]);
 // Forgetting to free b3 "leaks" memory, and your program may run 
-// out of memory after running for a long period of time.
+// out of memory after executing for a long period of time.
 // This is *not* undefined behavior, but it's still not *desirable* behavior.
 # }
 ```
@@ -231,9 +240,9 @@ This program has the following states:
 
 <img src="img/experiment/ch04-01-stack5.jpg" class="center" width="600" />
 
-At L1, `b` points to `5` on the heap. `b` is the owner of that heap data. But once `make_and_drop` is finished, the frame containing `b` is deallocated. Therefore `b` deallocates its heap data, and at L2 the heap is empty.
+At L1, `b` points to `5` on the heap. Once `make_and_drop` is finished, the frame containing `b` is deallocated. Therefore `b` deallocates its heap data, and at L2 the heap is empty.
 
-Our box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we assign a box to a different variable?
+Our box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we assign a box to two variable?
 
 ```rust
 # fn main() {
@@ -255,7 +264,7 @@ In the example above, `b` is the owner of the box at L2. Therefore when the scop
 
 ### Collections Use Boxes
 
-Boxes are used by Rust data structures to hold a variable number of elements, like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html). For example, here's a program that creates, moves, and mutates a string:
+Boxes are used by Rust data structures like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to hold a variable number of elements. For example, here's a program that creates, moves, and mutates a string:
 
 ```rust
 fn main() {
@@ -321,11 +330,6 @@ This error identifies that `s1` is moved by `add_suffix`, and therefore it canno
 
 ### Summary
 
+In sum, ownership is primarily a discipline of heap management. All heap data must be owned by exactly one variable, and that variable is responsible for deallocating the heap data at the end of its scope. Ownership can be transferred by assignments and function calls. Heap data can only be accessed through its current owner, not a previous owner.
 
-
-<!-- <pre class="aquascope">
-fn main() {
-  let mut s = String::new();
-  s.push_str("WE MADE IT!");
-}
-</pre> -->
+Note that in this explanation, we have repeatedly emphasized not just *how* Rust's safeguards work, but *why* they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. Hopefully the models of memory and ownership we describe here will help you in the future with interpreting Rust's error messages and designing more Rustic APIs.

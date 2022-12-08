@@ -22,8 +22,17 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
   const handleSelection = useCallback(() => {
     // get current selection (falsy value if no selection)
     let selection = document.getSelection();
-    let range =
-      selection && !selection.isCollapsed && selection.rangeCount && selection.getRangeAt(0);
+    if (!selection) return;
+    let anchor = selection.anchorNode;
+    if (
+      !anchor ||
+      !(anchor instanceof HTMLElement) ||
+      !anchor.closest(".content") ||
+      anchor.closest(".aquascope, .mdbook-quiz")
+    )
+      return;
+
+    let range = !selection.isCollapsed && selection.rangeCount && selection.getRangeAt(0);
 
     setCurrRange(range || null);
   }, []);

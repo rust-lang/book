@@ -8,14 +8,14 @@ additional-css = [
   "theme/2018-edition.css",
   "js-extensions/packages/consent-form/dist/index.css",
   "js-extensions/packages/feedback/dist/index.css",
-  "aquascope/styles.css"
+  "aquascope/lib.css"
 ]
 additional-js = [
   "ferris.js",
   "js-extensions/packages/telemetry/dist/index.js",
   "js-extensions/packages/consent-form/dist/index.js",
   "js-extensions/packages/feedback/dist/index.js",
-  "aquascope/embed.js"
+  "aquascope/lib.js"
 ]
 
 # git-repository-url = "https://github.com/rust-lang/book"
