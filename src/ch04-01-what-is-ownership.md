@@ -419,8 +419,9 @@ implement `Copy`:
 * The Boolean type, `bool`, with values `true` and `false`.
 * All the floating-point types, such as `f64`.
 * The character type, `char`.
-* Tuples, if they only contain types that also implement `Copy`. For example,
-  `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
+* Tuples and arrays, if they only contain types that also implement `Copy`. For
+  example, `(i32, i32)` and `[i32; 5]` implements `Copy`, while `(i32, String)`
+  and `[String; 5]` do not.
 
 ### Ownership and Functions
 
