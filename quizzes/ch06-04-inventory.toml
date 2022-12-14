@@ -1,0 +1,332 @@
+# [[questions]]
+# type = "MultipleChoice"
+# prompt.prompt = """
+# **Program 1:**
+
+# ```ide
+# /// Makes a string to separate lines of text, 
+# /// returning a default if the provided string is blank
+# fn make_separator(user_str: &str) -> &str {
+#     if user_str == "" {
+#         let default = "=".repeat(10);
+#         &default
+#     } else {
+#         user_str
+#     }
+# }
+# ```
+
+# If you tried to compile this function, which of the following best describes the compiler error you would get?
+# """
+# answer.answer = "cannot return reference to local variable `default`"
+# prompt.distractors = [
+#   "`user_str` does not live long enough",
+#   "function `make_distractor` cannot return a reference `&str`",
+#   "function `make_distractor` cannot return two different references"
+# ]
+# context = """
+# Because `default` lives on the stack within `make_separator`, it will be deallocated once a call to `make_separator` ends.
+# This leaves `&default` pointing to deallocated memory. Rust therefore copmlains that you cannot return a reference to a local variable.
+# """
+
+# [[questions]]
+# type = "MultipleChoice"
+# prompt.prompt = """
+# **Program 1:**
+
+# ```ide
+# /// Makes a string to separate lines of text, 
+# /// returning a default if the provided string is blank
+# fn make_separator(user_str: &str) -> &str {
+#     if user_str == "" {
+#         let default = "=".repeat(10);
+#         &default
+#     } else {
+#         user_str
+#     }
+# }
+# ```
+
+# Normally if you try to compile this function, the compiler returns the following error:
+
+# ```text
+# error[E0515]: cannot return reference to local variable `default`
+#  --> test.rs:6:9
+#   |
+# 6 |         &default
+#   |         ^^^^^^^^ returns a reference to data owned by the current function
+# ```
+
+# Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+# possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+# programs could cause such a problem.
+# """
+# answer.answer = ["""
+# ```
+# let s = make_separator("");
+# println!("{s}");
+# ```
+# """]
+# prompt.distractors = [
+# """
+# ```
+# println!("{}", make_separator("Hello world!"));
+# ```
+# """,
+# """
+# ```
+# let s = make_separator("");
+# ```
+# """,
+# "None of these programs",
+# ]
+# context = """
+# First, the caller must pass an empty string to trigger the problematic if-condition. This returns a dangling pointer.
+# Second, the caller must use the result of `make_separator`, e.g. via `println`.
+# """
+
+# [[questions]]
+# type = "MultipleChoice"
+# prompt.prompt = """
+# **Program 1:**
+
+# ```ide
+# /// Makes a string to separate lines of text, 
+# /// returning a default if the provided string is blank
+# fn make_separator(user_str: &str) -> &str {
+#     if user_str == "" {
+#         let default = "=".repeat(10);
+#         &default
+#     } else {
+#         user_str
+#     }
+# }
+# ```
+
+# Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+# 1. The fixed function passes the Rust compiler,
+# 2. The fixed function preserves the intention of the original code, and
+# 3. The fixed function does not introduce unnecessary inefficiencies
+# """
+# answer.answer = """
+# ```ide
+# fn make_separator(user_str: &str) -> `[String]` {
+#     if user_str == "" {
+#         let default = "=".repeat(10);
+#         `[default]`
+#     } else {
+#         `[let user_string: String = user_str.to_string();]`
+#         `[user_string]`
+#     }
+# }
+# ```
+# """
+# prompt.distractors = [
+# """
+# ```ide
+# fn make_separator(user_str: &str) -> &str {
+#     if user_str == "" {
+#         let default = "=".repeat(10);
+#         &default
+#     } else {
+#         `[&user_str]`
+#     }
+# }
+# ```
+# """,
+# """
+# ```ide
+# fn make_separator(user_str: `[String]`) -> `[String]` {
+#     if user_str == "" {
+#         let default = "=".repeat(10);
+#         `[default]`
+#     } else {
+#         user_str
+#     }
+# }
+# ```
+# """,
+# ]
+# context = """
+# There is no valid way to return a pointer to a stack-allocated variable. The simple solution is therefore to change the return type to `String`
+# and copy the input `user_str` into an owned string. However, requiring `user_str` to be a `String` would reduce the flexibility of the API, e.g.
+# a caller could not call `make_separator` on a substring of a bigger string.
+
+# The most idiomatic solution to this problem uses a construct you haven't seen yet: [`Cow`](https://doc.rust-lang.org/std/borrow/enum.Cow.html).
+# The copy-on-write smart pointer would enable this function to return *either* an owned string *or* a string reference without a type error.
+# """
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Gets the string out of an option if it exists,
+/// returning a default otherwise
+fn get_or_default(arg: &Option<String>) -> String {
+    if arg.is_none() {
+        return String::new();
+    }
+    let s = arg.unwrap();
+    s.clone()
+}
+```
+
+If you tried to compile this function, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "cannot move out of `arg` in `arg.unwrap()`"
+prompt.distractors = [
+  "cannot call `arg.is_none()` without dereferencing `arg`",
+  "`arg` does not live long enough",
+  "cannot return `s.clone()` which does not live long enough"
+]
+context = """
+The function `Option::unwrap` expects `self`, meaning it expects ownership of `arg`. However `arg` is an immutable
+reference to an option, so it cannot provide ownership of the option. Therefore the compiler copmlains that we 
+cannot move out of `arg` via `unwrap`.
+"""
+
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Gets the string out of an option if it exists,
+/// returning a default otherwise
+fn get_or_default(arg: &Option<String>) -> String {
+    if arg.is_none() {
+        return String::new();
+    }
+    let s = arg.unwrap();
+    s.clone()
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0507]: cannot move out of `*arg` which is behind a shared reference
+   --> test.rs:7:13
+    |
+7   |     let s = arg.unwrap();
+    |             ^^^^--------
+    |             |   |
+    |             |   `*arg` moved due to this method call
+    |             help: consider calling `.as_ref()` or `.as_mut()` to borrow the type's contents
+    |             move occurs because `*arg` has type `Option<String>`, which does not implement the `Copy` trait
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+programs could cause such a problem.
+"""
+answer.answer = [
+"""
+```
+let opt = Some(String::from("Rust"));
+get_or_default(&opt);
+println!("{:?}", opt);
+```
+""",
+"""
+```
+let opt = Some(String::from("Rust"));
+let s = get_or_default(&opt);
+println!("{}", s);
+```
+""", 
+"""
+```
+let opt = Some(String::from("Rust"));
+get_or_default(&opt);
+```
+""", 
+]
+prompt.distractors = [
+"None of these programs",
+]
+context = """
+All of these programs violate memory safety due to a double-free. If `arg.unwrap()` were permitted, then
+ownership of the string `String::from("Rust")` would be assumed by `s`. After `get_or_default` returns,
+then the string would be freed. However, `opt` also believes it owned the string, so after each program finishes,
+the string would be freed a second time on behalf of `opt`.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Gets the string out of an option if it exists,
+/// returning a default otherwise
+fn get_or_default(arg: &Option<String>) -> String {
+    if arg.is_none() {
+        return String::new();
+    }
+    let s = arg.unwrap();
+    s.clone()
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn get_or_default(arg: &Option<String>) -> String {
+    `[match arg {]`
+        `[None => String::new(),]`
+        `[Some(s) => s.clone()]`
+    `[}]`
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn get_or_default(arg: `[&mut Option<String>]`) -> String {
+    if arg.is_none() {
+        return String::new();
+    }
+    let s = arg`[.as_mut()]`.unwrap();
+    s.clone()
+}
+```
+""",
+"""
+```ide
+fn get_or_default(arg: `[Option<String>]`) -> String {
+    if arg.is_none() {
+        return String::new();
+    }
+    let s = arg.unwrap();
+    s.clone()
+}
+```
+""",
+"""
+```ide
+fn get_or_default(arg: &Option<`[&str]`>) -> String {
+    if arg.is_none() {
+        return String::new();
+    }
+    let s = arg.unwrap();
+    `[s.to_string()]`
+}
+```
+""",
+]
+context = """
+The combination of `is_none` and `unwrap` here is a Rust anti-pattern, since a `match` combines the two functionality and
+automatically deals with pushing the reference `&Option` into the interior to produce `&String`. Therefore the `match` solution
+is the most idiomatic, and passes the compiler.
+
+The solution of changing `&Option` to `Option` is not desirable because it requires the caller to provide ownership of their option,
+which is a far more restrictive API.
+"""

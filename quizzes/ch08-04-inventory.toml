@@ -1,0 +1,343 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Removes all the zeros in-place from a vector of integers.
+fn remove_zeros(v: &mut Vec<i32>) {
+    for (i, t) in v.iter().enumerate().rev() {
+        if *t == 0 {
+            v.remove(i);
+        }
+    }
+}
+```
+
+If you tried to compile this function, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "`v.remove(i)` cannot borrow `v` as mutable"
+prompt.distractors = [
+  "`v` does not live long enough to call `v.remove(i)`",
+  "`t` cannot be dereferenced while `i` is live",
+  "`v.iter()` cannot be called on a mutable reference"
+]
+context = """
+The function `v.iter()` immutable borrows a vector `v` for the duration of the for-loop. However, `v.remove(i)` requires a mutable
+reference to `v`. Therefore `v.remove(i)` cannot borrow `v` as mutable, since that would conflict with the iterator.
+"""
+
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Removes all the zeros in-place from a vector of integers.
+fn remove_zeros(v: &mut Vec<i32>) {
+    for (i, t) in v.iter().enumerate().rev() {
+        if *t == 0 {
+            v.remove(i);
+        }
+    }
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immutable
+ --> test.rs:5:13
+  |
+3 |     for (i, t) in v.iter().enumerate().rev() {
+  |                   --------------------------
+  |                   |
+  |                   immutable borrow occurs here
+  |                   immutable borrow later used here
+4 |         if *t == 0 {
+5 |             v.remove(i);
+  |             ^^^^^^^^^^^ mutable borrow occurs here
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+programs could cause such a problem.
+"""
+answer.answer = [
+"""
+```
+let mut v = vec![0, 5, 5];
+remove_zeros(&mut v);
+println!("{v:?}");
+```
+""",
+"""
+```
+let mut v = vec![1, 2, 0, 3];
+remove_zeros(&mut v);
+```
+""", 
+]
+prompt.distractors = [
+"""
+```
+let mut v = vec![1; 100];
+remove_zeros(&mut v);
+```
+""",
+"None of these programs",
+]
+context = """
+To violate memory safety, `remove_zeros` must be called with a vector that contains a zero before the last element.
+The call to `v.remove(i)` could deallocate memory owned by the vector (due to resizing), which would invalidate the
+iterator `v.iter()` which contains a pointer to the old data. Note that reading the vector `v` after calling `remove_zeros`
+is not essential to the safety violation, since the issue is internal to `remove_zeros`.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Removes all the zeros in-place from a vector of integers.
+fn remove_zeros(v: &mut Vec<i32>) {
+    for (i, t) in v.iter().enumerate().rev() {
+        if *t == 0 {
+            v.remove(i);
+        }
+    }
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn remove_zeros(v: &mut Vec<i32>) {
+    for `[i in (0 .. v.len()).rev()]` {
+        if `[v[i]]` == 0 {
+            v.remove(i);
+        }
+    }
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn remove_zeros(v: &mut Vec<i32>) {
+    for (i, t) in v`[.clone()]`.iter().enumerate().rev() {
+        if *t == 0 {
+            v.remove(i);
+        }
+    }
+}
+```
+""",
+"""
+```ide
+fn remove_zeros(v: `[&]`Vec<i32>) `[-> Vec<i32>]` {
+    `[let mut new_vec = Vec::new();]`
+    for (i, t) in v.iter().enumerate().rev() {
+        if *t `[!=]` 0 {
+            `[new_vec.push(*t)]`
+        }
+    }
+    `[new_vec]`
+}
+```
+""",
+"""
+```ide
+fn remove_zeros(v: `[&]`Vec<i32>) {
+    for (i, t) in v.iter().enumerate().rev() {
+        if *t == 0 {
+            v.remove(i);
+        }
+    }
+}
+```
+""",
+]
+context = """
+Any strategy that requires allocating a new vector, either via `Vec::clone` or `Vec::new`, requires unnecessary additional allocation.
+Therefore the simplest strategy that works is to only iterate over the indices `0 .. v.len()` which does not borrow `v`. We do this
+in reverse order to avoid removing missing indexes.
+
+Like with Problem 1, the most idiomatic strategy is actually to use a built-in function we haven't discussed,
+[`Vec::retain`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.retain). This function keeps only elements in a vector
+that pass a predicate, but does so with more memory-efficiency.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Reverses the elements of a vector in-place
+fn reverse(v: &mut Vec<String>) {
+    let n = v.len();
+    for i in 0 .. n / 2 {
+        std::mem::swap(&mut v[i], &mut v[n - i - 1]);
+    }
+}
+```
+
+If you tried to compile this program, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "cannot borrow `v` as mutable for `v[i]` and `v[n - i - 1]` more than once at a time"
+prompt.distractors = [
+  "cannot borrow `v` as immutable for `v.len()` when `v` is a mutable borrow",
+  "cannot mutable borrow an element `v[i]` of a mutable vector"
+]
+context = """
+The compiler does not consider the specific value of the indexes used to access an array, so `&mut v[i]`
+and `&mut v[n - i - 1]` are assumed to possibly refer to the same element. Therefore we get an error
+where `v` cannot be mutable borrowed twice.
+"""
+
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Reverses the elements of a vector in-place
+fn reverse(v: &mut Vec<String>) {
+    let n = v.len();
+    for i in 0 .. n / 2 {
+        std::mem::swap(&mut v[i], &mut v[n - i - 1]);
+    }
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0499]: cannot borrow `*v` as mutable more than once at a time
+ --> test.rs:4:40
+  |
+4 |         std::mem::swap(&mut v[i], &mut v[n - i - 1]);
+  |         --------------      -          ^ second mutable borrow occurs here
+  |         |                   |
+  |         |                   first mutable borrow occurs here
+  |         first borrow later used by call
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+programs could cause such a problem.
+"""
+answer.answer = ["None of these programs"]
+prompt.distractors = [
+"""
+```
+let mut v = vec![String::from("a"), String::from("b")];
+let x = &v[0];
+reverse(&mut v);
+println!("{x}");
+```
+""",
+"""
+```
+let mut v = vec![String::from("a"), String::from("b")];
+reverse(&mut v);
+```
+""",
+"""
+```
+let mut v = vec![String::from("a"), String::from("b")];
+reverse(&mut v);
+println!("{:?}", v);
+```
+""",
+]
+context = """
+This function is cannot cause a memory safety violation because `i != n - i - 1`, so the two
+mutable references always refer to different elements.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Reverses the elements of a vector in-place
+fn reverse(v: &mut Vec<String>) {
+    let n = v.len();
+    for i in 0 .. n / 2 {
+        std::mem::swap(&mut v[i], &mut v[n - i - 1]);
+    }
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn reverse(v: &mut Vec<String>) {
+    let n = v.len();
+    for i in 0 .. n / 2 {
+        `[let p1 = &mut v[i] as *mut String;]`
+        `[let p2 = &mut v[n - i - 1] as *mut String;]`
+        `[unsafe { std::ptr::swap_nonoverlapping(p1, p2, 1); }]`
+    }
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn reverse(v: &mut Vec<String>) {
+    let n = v.len();
+    `[let mut v2 = v.clone();]`
+    for i in 0 .. n / 2 {
+        std::mem::swap(&mut v[i], &mut `[v2]`[n - i - 1]);
+    }
+}
+```
+""",
+"""
+```ide
+fn reverse(v: `[&Vec<String>]`) -> `[Vec<String>]` {
+    let n = v.len();
+    `[let mut v2 = Vec::new();]`    
+    for _ in 0 .. `[n]` {
+        `[v2.push(v.pop().unwrap());]`
+    }
+    `[v2]`
+}
+```
+""",
+"""
+```ide
+fn reverse(v: &mut Vec<String>) {
+    let n = v.len();    
+    for i in 0 .. n / 2 {
+        `[let s1 = v[i].clone();]`
+        `[let s2 = v[n - i - 1].clone();]`
+        `[v[i] = s2;]`
+        `[v[n - i - 1] = s1;]`
+    }
+}
+```
+""",
+]
+context = """
+In a situation where the borrow checker rejects an operation that is actually safe and has no workaround, then
+unsafe code is acceptable if it's critical to avoid allocations. 
+In this specific case, you should use [`Vec::swap`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap)
+(or [`Vec::reverse`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.reverse)), which is internally implemented
+with heavily-tested `unsafe` code. But if the standard library doesn't happen to support your use case, then `unsafe` is ok if used correctly.
+"""

@@ -25,7 +25,6 @@
     - [What is Ownership?](ch04-01-what-is-ownership.md)
     - [References and Borrowing](ch04-02-references-and-borrowing.md)
     - [The Slice Type](ch04-03-slices.md)
-    - [Ownership Inventory #1](ch04-04-inventory.md)
 
 - [Using Structs to Structure Related Data](ch05-00-structs.md)
     - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
@@ -36,6 +35,7 @@
     - [Defining an Enum](ch06-01-defining-an-enum.md)
     - [The `match` Control Flow Construct](ch06-02-match.md)
     - [Concise Control Flow with `if let`](ch06-03-if-let.md)
+    - [Ownership Inventory #1](ch06-04-inventory.md)
 
 ## Basic Rust Literacy
 
@@ -50,6 +50,7 @@
     - [Storing Lists of Values with Vectors](ch08-01-vectors.md)
     - [Storing UTF-8 Encoded Text with Strings](ch08-02-strings.md)
     - [Storing Keys with Associated Values in Hash Maps](ch08-03-hash-maps.md)
+    - [Ownership Inventory #1](ch08-04-inventory.md)
 
 - [Error Handling](ch09-00-error-handling.md)
     - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)

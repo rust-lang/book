@@ -15,6 +15,7 @@ additional-js = [
   "js-extensions/packages/consent-form/dist/index.js",
   "js-extensions/packages/feedback/dist/index.js"
 ]
+
 # git-repository-url = "https://github.com/rust-lang/book"
 
 [preprocessor.quiz]
@@ -23,4 +24,4 @@ validate = true
 cache-answers = true
 
 [build]
-extra-watch-dirs = ["quizzes", "../mdbook-quiz/js/lib"]
+extra-watch-dirs = ["quizzes", "../mdbook-quiz/target/debug"]

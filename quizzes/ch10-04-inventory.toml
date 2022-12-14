@@ -1,0 +1,396 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+struct TestResult {
+    /// Student's scores on a test
+    scores: Vec<usize>,
+
+    /// A possible value to curve all sores
+    curve: Option<usize>
+}
+impl TestResult {  
+    pub fn get_curve(&self) -> &Option<usize> { 
+        &self.curve 
+    }
+
+    /// If there is a curve, then increments all 
+    /// scores by the curve
+    pub fn apply_curve(&mut self) {
+        if let Some(curve) = self.get_curve() {
+            for score in self.scores.iter_mut() {
+                *score += *curve;
+            }
+        }
+    }
+}
+```
+
+If you tried to compile this program, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "in `apply_curve`, cannot borrow `self.scores` as mutable for `iter_mut`"
+prompt.distractors = [
+  "in `get_curve`, cannot return a reference to a local variable `self.curve`",
+  "in `apply_curve`, cannot borrow self as immutable for `get_curve`",
+  "in `apply_curve`, `*score` cannot be mutated"
+]
+context = """
+Due to lifetime elision, the function `get_curve` has the type signature `get_curve<'a>(&'a self) -> &'a Option<usize>`. 
+This means that a call to `self.get_curve()` extends the entire borrow on `self`, not just on `self.curve`.
+Therefore `self` is immutable borrowed inside the scope of `let Some(curve) = ...`, and `self.scores.iter_mut()`
+cannot be called.
+"""
+
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+struct TestResult {
+    /// Student's scores on a test
+    scores: Vec<usize>,
+
+    /// A possible value to curve all sores
+    curve: Option<usize>
+}
+impl TestResult {  
+    pub fn get_curve(&self) -> &Option<usize> { 
+        &self.curve 
+    }
+
+    /// If there is a curve, then increments all 
+    /// scores by the curve
+    pub fn apply_curve(&mut self) {
+        if let Some(curve) = self.get_curve() {
+            for score in self.scores.iter_mut() {
+                *score += *curve;
+            }
+        }
+    }
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0502]: cannot borrow `self.scores` as mutable because it is also borrowed as immutable
+  --> test.rs:17:26
+   |
+16 |         if let Some(curve) = self.get_curve() {
+   |                              ---------------- immutable borrow occurs here
+17 |             for score in self.scores.iter_mut() {
+   |                          ^^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+18 |                 *score += *curve;
+   |                           ------ immutable borrow later used here
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+programs could cause such a problem.
+"""
+answer.answer = ["None of these programs"]
+prompt.distractors = [
+"""
+```
+let mut result = TestResult { 
+    scores: vec![20, 50, 30], 
+    curve: Some(10) 
+};
+result.apply_curve();
+```
+""",
+"""
+```
+let mut result = TestResult { 
+    scores: vec![20, 50, 30], 
+    curve: Some(10) 
+};
+let x = &result.scores[0];
+result.apply_curve();
+println!("{}", x);
+```
+""",
+"""
+```
+let mut result = TestResult { 
+    scores: vec![20, 50, 30], 
+    curve: Some(10) 
+};
+result.apply_curve();
+println!("{:?}", result.scores);
+```
+""",
+]
+context = """
+This program is actually safe as written. It is a limitation of the borrow checker to not understand that `get_curve`
+only borrows `curve`, and doesn't affect `scores`. However, in theory if `get_curve` were changed to return a reference
+to something with `self.scores`, then a memory safety could be violated.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+struct TestResult {
+    /// Student's scores on a test
+    scores: Vec<usize>,
+
+    /// A possible value to curve all sores
+    curve: Option<usize>
+}
+impl TestResult {  
+    pub fn get_curve(&self) -> &Option<usize> { 
+        &self.curve 
+    }
+
+    /// If there is a curve, then increments all 
+    /// scores by the curve
+    pub fn apply_curve(&mut self) {
+        if let Some(curve) = self.get_curve() {
+            for score in self.scores.iter_mut() {
+                *score += *curve;
+            }
+        }
+    }
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+pub fn apply_curve(&mut self) {
+    if let Some(curve) = `[self.curve]` {
+        for score in self.scores.iter_mut() {
+            *score += *curve;
+        }
+    }
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+pub fn apply_curve(&mut self) {
+    if let Some(curve) = self.get_curve()`[.as_ref()]` {
+        for score in self.scores.iter_mut() {
+            *score += *curve;
+        }
+    }
+}
+```
+""",
+"""
+```ide
+pub fn apply_curve(&mut self) {
+    if let Some(curve) = self.get_curve() {
+        for score in self.scores`[.clone()]`.iter_mut() {
+            *score += *curve;
+        }
+    }
+}
+```
+""",
+"""
+```ide
+pub fn apply_curve(&mut self) {
+    if let Some(curve) = self.get_curve() {
+        for score in self.scores`[.iter()]` {
+            *score += *curve;
+        }
+    }
+}
+```
+""",
+]
+context = """
+By inlining the definition of `get_curve` into `apply_curve`, the borrow checker understands that `self.curve` is not `self.scores`,
+so it allows the function to compile. This is a common workaround for this type of borrow checker limitation.
+
+Another option is to leverage the fact that `self.curve` is cheap to copy and use `self.get_curve().copied()`, which would release
+the borrow on `self` as soon as `.copied()` is called.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Adds the string `s` to all elements of 
+/// the input iterator
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
+
+If you tried to compile this program, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "the returned iterator captures a lifetime that isn't in the bounds of `impl Iterator<Item = String>`"
+prompt.distractors = [
+  "`s + s2` is not valid because `s` and `s2` have different lifetimes",
+  "the closure `|s2| s2 + 2` cannot move out of a shared reference",
+  "TODO"
+]
+context = """
+TODO
+"""
+
+
+# [[questions]]
+# type = "MultipleChoice"
+# prompt.prompt = """
+# **Program 1:**
+
+# ```ide
+# /// Adds the string `s` to all elements of 
+# /// the input iterator
+# fn concat_all(
+#     iter: impl Iterator<Item = String>,
+#     s: &str
+# ) -> impl Iterator<Item = String> {
+#     iter.map(move |s2| s2 + s)
+# }
+# ```
+
+# Normally if you try to compile this function, the compiler returns the following error:
+
+# ```text
+# error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime that does not appear in bounds
+#  --> test.rs:7:5
+#   |
+# 5 |     s: &str
+#   |        ---- hidden type `Map<impl Iterator<Item = String>, [closure@test.rs:7:14: 7:23]>` captures the anonymous lifetime defined here
+# 6 | ) -> impl Iterator<Item = String> {
+# 7 |     iter.map(move |s2| s2 + s)
+# ```
+
+# Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+# possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+# programs could cause such a problem.
+# """
+# answer.answer = ["None of these programs"]
+# prompt.distractors = [
+# """
+# ```
+# let mut result = TestResult { 
+#     scores: vec![20, 50, 30], 
+#     curve: Some(10) 
+# };
+# result.apply_curve();
+# ```
+# """,
+# """
+# ```
+# let mut result = TestResult { 
+#     scores: vec![20, 50, 30], 
+#     curve: Some(10) 
+# };
+# let x = &result.scores[0];
+# result.apply_curve();
+# println!("{}", x);
+# ```
+# """,
+# """
+# ```
+# let mut result = TestResult { 
+#     scores: vec![20, 50, 30], 
+#     curve: Some(10) 
+# };
+# result.apply_curve();
+# println!("{:?}", result.scores);
+# ```
+# """,
+# ]
+# context = """
+# This program is actually safe as written. It is a limitation of the borrow checker to not understand that `get_curve`
+# only borrows `curve`, and doesn't affect `scores`. However, in theory if `get_curve` were changed to return a reference
+# to something with `self.scores`, then a memory safety could be violated.
+# """
+
+# [[questions]]
+# type = "MultipleChoice"
+# prompt.prompt = """
+# **Program 1:**
+
+# ```ide
+# /// Adds the string `s` to all elements of 
+# /// the input iterator
+# fn concat_all(
+#     iter: impl Iterator<Item = String>,
+#     s: &str
+# ) -> impl Iterator<Item = String> {
+#     iter.map(move |s2| s2 + s)
+# }
+# ```
+
+# Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+# 1. The fixed function passes the Rust compiler,
+# 2. The fixed function preserves the intention of the original code, and
+# 3. The fixed function does not introduce unnecessary inefficiencies
+# """
+# answer.answer = """
+# ```ide
+# pub fn apply_curve(&mut self) {
+#     if let Some(curve) = `[self.curve]` {
+#         for score in self.scores.iter_mut() {
+#             *score += *curve;
+#         }
+#     }
+# }
+# ```
+# """
+# prompt.distractors = [
+# """
+# ```ide
+# pub fn apply_curve(&mut self) {
+#     if let Some(curve) = self.get_curve()`[.as_ref()]` {
+#         for score in self.scores.iter_mut() {
+#             *score += *curve;
+#         }
+#     }
+# }
+# ```
+# """,
+# """
+# ```ide
+# pub fn apply_curve(&mut self) {
+#     if let Some(curve) = self.get_curve() {
+#         for score in self.scores`[.clone()]`.iter_mut() {
+#             *score += *curve;
+#         }
+#     }
+# }
+# ```
+# """,
+# """
+# ```ide
+# pub fn apply_curve(&mut self) {
+#     if let Some(curve) = self.get_curve() {
+#         for score in self.scores`[.iter()]` {
+#             *score += *curve;
+#         }
+#     }
+# }
+# ```
+# """,
+# ]
+# context = """
+# By inlining the definition of `get_curve` into `apply_curve`, the borrow checker understands that `self.curve` is not `self.scores`,
+# so it allows the function to compile. This is a common workaround for this type of borrow checker limitation.
+
+# Another option is to leverage the fact that `self.curve` is cheap to copy and use `self.get_curve().copied()`, which would release
+# the borrow on `self` as soon as `.copied()` is called.
+# """
