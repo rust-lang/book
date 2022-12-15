@@ -50,7 +50,7 @@
     - [Storing Lists of Values with Vectors](ch08-01-vectors.md)
     - [Storing UTF-8 Encoded Text with Strings](ch08-02-strings.md)
     - [Storing Keys with Associated Values in Hash Maps](ch08-03-hash-maps.md)
-    - [Ownership Inventory #1](ch08-04-inventory.md)
+    - [Ownership Inventory #2](ch08-04-inventory.md)
 
 - [Error Handling](ch09-00-error-handling.md)
     - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
@@ -61,6 +61,7 @@
     - [Generic Data Types](ch10-01-syntax.md)
     - [Traits: Defining Shared Behavior](ch10-02-traits.md)
     - [Validating References with Lifetimes](ch10-03-lifetime-syntax.md)
+    - [Ownership Inventory #3](ch10-04-inventory.md)
 
 - [Writing Automated Tests](ch11-00-testing.md)
     - [How to Write Tests](ch11-01-writing-tests.md)

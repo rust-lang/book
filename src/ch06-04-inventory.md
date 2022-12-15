@@ -4,7 +4,7 @@ The Ownership Inventory is a series of quizzes that test your understanding of o
 
 ### A new technology: the in-browser IDE
 
-These questions will involve Rust programs which use functions you haven't seen before. Therefore we will use an experimental technology that supports IDE features in the browser. You can get information about unfamiliar functions and types. Here's an example. Try doing the following actions:
+These questions will involve Rust programs which use functions you haven't seen before. Therefore we will use an experimental technology that supports IDE features in the browser. The IDE lets get information about unfamiliar functions and types. For example, try doing the following actions in the program below:
 
 * Hover your mouse over `replace` to see its type and description.
 * Hover your mouse over `s2` to see its inferred type.

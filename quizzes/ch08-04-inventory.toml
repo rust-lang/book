@@ -23,7 +23,7 @@ prompt.distractors = [
   "`v.iter()` cannot be called on a mutable reference"
 ]
 context = """
-The function `v.iter()` immutable borrows a vector `v` for the duration of the for-loop. However, `v.remove(i)` requires a mutable
+The function `v.iter()` immutably borrows a vector `v` for the duration of the for-loop. However, `v.remove(i)` requires a mutable
 reference to `v`. Therefore `v.remove(i)` cannot borrow `v` as mutable, since that would conflict with the iterator.
 """
 
@@ -154,7 +154,7 @@ fn remove_zeros(v: `[&]`Vec<i32>) `[-> Vec<i32>]` {
 """,
 """
 ```ide
-fn remove_zeros(v: `[&]`Vec<i32>) {
+fn remove_zeros(v: `[Vec<i32>]`) {
     for (i, t) in v.iter().enumerate().rev() {
         if *t == 0 {
             v.remove(i);
@@ -191,15 +191,15 @@ fn reverse(v: &mut Vec<String>) {
 
 If you tried to compile this program, which of the following best describes the compiler error you would get?
 """
-answer.answer = "cannot borrow `v` as mutable for `v[i]` and `v[n - i - 1]` more than once at a time"
+answer.answer = "cannot borrow `v` as mutable twice for `v[i]` and `v[n - i - 1]`"
 prompt.distractors = [
   "cannot borrow `v` as immutable for `v.len()` when `v` is a mutable borrow",
-  "cannot mutable borrow an element `v[i]` of a mutable vector"
+  "cannot mutably borrow an element `v[i]` of a mutable vector"
 ]
 context = """
 The compiler does not consider the specific value of the indexes used to access an array, so `&mut v[i]`
 and `&mut v[n - i - 1]` are assumed to possibly refer to the same element. Therefore we get an error
-where `v` cannot be mutable borrowed twice.
+where `v` cannot be mutably borrowed twice.
 """
 
 
@@ -222,9 +222,9 @@ Normally if you try to compile this function, the compiler returns the following
 
 ```text
 error[E0499]: cannot borrow `*v` as mutable more than once at a time
- --> test.rs:4:40
+ --> test.rs:5:40
   |
-4 |         std::mem::swap(&mut v[i], &mut v[n - i - 1]);
+5 |         std::mem::swap(&mut v[i], &mut v[n - i - 1]);
   |         --------------      -          ^ second mutable borrow occurs here
   |         |                   |
   |         |                   first mutable borrow occurs here
@@ -260,7 +260,7 @@ println!("{:?}", v);
 """,
 ]
 context = """
-This function is cannot cause a memory safety violation because `i != n - i - 1`, so the two
+This function cannot cause a memory safety violation because `i != n - i - 1` for all `i`, so the two
 mutable references always refer to different elements.
 """
 
@@ -336,8 +336,7 @@ fn reverse(v: &mut Vec<String>) {
 ]
 context = """
 In a situation where the borrow checker rejects an operation that is actually safe and has no workaround, then
-unsafe code is acceptable if it's critical to avoid allocations. 
-In this specific case, you should use [`Vec::swap`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap)
-(or [`Vec::reverse`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.reverse)), which is internally implemented
+unsafe code is sometimes acceptable if it's critical to avoid allocations. 
+In this specific case, you should actually use [`Vec::swap`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap), which is internally implemented
 with heavily-tested `unsafe` code. But if the standard library doesn't happen to support your use case, then `unsafe` is ok if used correctly.
 """

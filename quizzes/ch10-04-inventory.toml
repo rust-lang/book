@@ -33,13 +33,13 @@ If you tried to compile this program, which of the following best describes the 
 answer.answer = "in `apply_curve`, cannot borrow `self.scores` as mutable for `iter_mut`"
 prompt.distractors = [
   "in `get_curve`, cannot return a reference to a local variable `self.curve`",
-  "in `apply_curve`, cannot borrow self as immutable for `get_curve`",
+  "in `apply_curve`, cannot borrow `self` as immutable for `get_curve`",
   "in `apply_curve`, `*score` cannot be mutated"
 ]
 context = """
 Due to lifetime elision, the function `get_curve` has the type signature `get_curve<'a>(&'a self) -> &'a Option<usize>`. 
 This means that a call to `self.get_curve()` extends the entire borrow on `self`, not just on `self.curve`.
-Therefore `self` is immutable borrowed inside the scope of `let Some(curve) = ...`, and `self.scores.iter_mut()`
+Therefore `self` is immutably borrowed inside the scope of `let Some(curve) = ...`, and `self.scores.iter_mut()`
 cannot be called.
 """
 
@@ -128,7 +128,7 @@ println!("{:?}", result.scores);
 context = """
 This program is actually safe as written. It is a limitation of the borrow checker to not understand that `get_curve`
 only borrows `curve`, and doesn't affect `scores`. However, in theory if `get_curve` were changed to return a reference
-to something with `self.scores`, then a memory safety could be violated.
+to something with `self.scores`, then memory safety could potentially be violated.
 """
 
 [[questions]]
@@ -216,8 +216,8 @@ context = """
 By inlining the definition of `get_curve` into `apply_curve`, the borrow checker understands that `self.curve` is not `self.scores`,
 so it allows the function to compile. This is a common workaround for this type of borrow checker limitation.
 
-Another option is to leverage the fact that `self.curve` is cheap to copy and use `self.get_curve().copied()`, which would release
-the borrow on `self` as soon as `.copied()` is called.
+Another option is to leverage the fact that `self.curve` is cheap to copy and use [`Option::copied`](https://doc.rust-lang.org/std/option/enum.Option.html#method.copied), 
+which would release the borrow on `self` as soon as `.copied()` is called.
 """
 
 [[questions]]
@@ -242,155 +242,146 @@ answer.answer = "the returned iterator captures a lifetime that isn't in the bou
 prompt.distractors = [
   "`s + s2` is not valid because `s` and `s2` have different lifetimes",
   "the closure `|s2| s2 + 2` cannot move out of a shared reference",
-  "TODO"
+  "`iter.map(..)` does not implement the trait `Iterator<Item = String>`"
 ]
 context = """
-TODO
+The string reference `s` has an implicit lifetime `'a`. The closure passed to `iter.map(..)` captures this string reference, but the type `impl Iterator<Item = String>` does not mention `'a`. Therefore the iterator captures a lifetime not in its bounds.
 """
 
 
-# [[questions]]
-# type = "MultipleChoice"
-# prompt.prompt = """
-# **Program 1:**
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
 
-# ```ide
-# /// Adds the string `s` to all elements of 
-# /// the input iterator
-# fn concat_all(
-#     iter: impl Iterator<Item = String>,
-#     s: &str
-# ) -> impl Iterator<Item = String> {
-#     iter.map(move |s2| s2 + s)
-# }
-# ```
+```ide
+/// Adds the string `s` to all elements of 
+/// the input iterator
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
 
-# Normally if you try to compile this function, the compiler returns the following error:
+Normally if you try to compile this function, the compiler returns the following error:
 
-# ```text
-# error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime that does not appear in bounds
-#  --> test.rs:7:5
-#   |
-# 5 |     s: &str
-#   |        ---- hidden type `Map<impl Iterator<Item = String>, [closure@test.rs:7:14: 7:23]>` captures the anonymous lifetime defined here
-# 6 | ) -> impl Iterator<Item = String> {
-# 7 |     iter.map(move |s2| s2 + s)
-# ```
+```text
+error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime that does not appear in bounds
+ --> test.rs:7:5
+  |
+5 |     s: &str
+  |        ---- hidden type `Map<impl Iterator<Item = String>, [closure@test.rs:7:14: 7:23]>` captures the anonymous lifetime defined here
+6 | ) -> impl Iterator<Item = String> {
+7 |     iter.map(move |s2| s2 + s)
+```
 
-# Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-# possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-# programs could cause such a problem.
-# """
-# answer.answer = ["None of these programs"]
-# prompt.distractors = [
-# """
-# ```
-# let mut result = TestResult { 
-#     scores: vec![20, 50, 30], 
-#     curve: Some(10) 
-# };
-# result.apply_curve();
-# ```
-# """,
-# """
-# ```
-# let mut result = TestResult { 
-#     scores: vec![20, 50, 30], 
-#     curve: Some(10) 
-# };
-# let x = &result.scores[0];
-# result.apply_curve();
-# println!("{}", x);
-# ```
-# """,
-# """
-# ```
-# let mut result = TestResult { 
-#     scores: vec![20, 50, 30], 
-#     curve: Some(10) 
-# };
-# result.apply_curve();
-# println!("{:?}", result.scores);
-# ```
-# """,
-# ]
-# context = """
-# This program is actually safe as written. It is a limitation of the borrow checker to not understand that `get_curve`
-# only borrows `curve`, and doesn't affect `scores`. However, in theory if `get_curve` were changed to return a reference
-# to something with `self.scores`, then a memory safety could be violated.
-# """
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
+possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
+programs could cause such a problem.
+"""
+answer.answer = [
+"""
+```
+let v = vec![String::from("Rust")];
+let it = {
+    let s = String::from("Yes");
+    concat_all(v.into_iter(), &s)
+};
+it.collect::<Vec<_>>();
+```
+"""
+]
+prompt.distractors = [
+"""
+```
+let v = vec![String::from("Rust")];
+concat_all(v.into_iter(), "Yes")
+    .collect::<Vec<_>>();
+```
+""",
+"""
+```
+let v = vec![String::from("Rust")];
+let s = String::from("Yes");
+concat_all(v.into_iter(), &s);
+println!("{}", s);
+```
+""",
+"None of these programs"
+]
+context = """
+If the returned iterator isn't related to the lifetime of `s`, then memory safety is violated if:
+1. `s` does not live forever (i.e. it's not `&'static str` like a string literal)
+2. the return value of `concat_all` is used after `s` is dropped
 
-# [[questions]]
-# type = "MultipleChoice"
-# prompt.prompt = """
-# **Program 1:**
+Then the expression `s2 + s` would dereference `s`, a read of deallocated memory.
+"""
 
-# ```ide
-# /// Adds the string `s` to all elements of 
-# /// the input iterator
-# fn concat_all(
-#     iter: impl Iterator<Item = String>,
-#     s: &str
-# ) -> impl Iterator<Item = String> {
-#     iter.map(move |s2| s2 + s)
-# }
-# ```
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
 
-# Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-# 1. The fixed function passes the Rust compiler,
-# 2. The fixed function preserves the intention of the original code, and
-# 3. The fixed function does not introduce unnecessary inefficiencies
-# """
-# answer.answer = """
-# ```ide
-# pub fn apply_curve(&mut self) {
-#     if let Some(curve) = `[self.curve]` {
-#         for score in self.scores.iter_mut() {
-#             *score += *curve;
-#         }
-#     }
-# }
-# ```
-# """
-# prompt.distractors = [
-# """
-# ```ide
-# pub fn apply_curve(&mut self) {
-#     if let Some(curve) = self.get_curve()`[.as_ref()]` {
-#         for score in self.scores.iter_mut() {
-#             *score += *curve;
-#         }
-#     }
-# }
-# ```
-# """,
-# """
-# ```ide
-# pub fn apply_curve(&mut self) {
-#     if let Some(curve) = self.get_curve() {
-#         for score in self.scores`[.clone()]`.iter_mut() {
-#             *score += *curve;
-#         }
-#     }
-# }
-# ```
-# """,
-# """
-# ```ide
-# pub fn apply_curve(&mut self) {
-#     if let Some(curve) = self.get_curve() {
-#         for score in self.scores`[.iter()]` {
-#             *score += *curve;
-#         }
-#     }
-# }
-# ```
-# """,
-# ]
-# context = """
-# By inlining the definition of `get_curve` into `apply_curve`, the borrow checker understands that `self.curve` is not `self.scores`,
-# so it allows the function to compile. This is a common workaround for this type of borrow checker limitation.
+```ide
+/// Adds the string `s` to all elements of 
+/// the input iterator
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
 
-# Another option is to leverage the fact that `self.curve` is cheap to copy and use `self.get_curve().copied()`, which would release
-# the borrow on `self` as soon as `.copied()` is called.
-# """
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn concat_all`[<'a>]`(
+    iter: impl Iterator<Item = String> `[+ 'a]`,
+    s: &`['a]` str
+) -> impl Iterator<Item = String> `[+ 'a]` {
+    iter.map(move |s2| s2 + s)
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &`['static]` str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
+""",
+"""
+```ide
+fn concat_all`[<'a, 'b>]`(
+    iter: impl Iterator<Item = String> `[+ 'a]`,
+    s: &`['b]` str
+) -> impl Iterator<Item = String> `[+ 'a + 'b]` {
+    iter.map(move |s2| s2 + s)
+}
+```
+""",
+"""
+```ide
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: `[String]`
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + `[&s]`)
+}
+```
+""",
+]
+context = """
+To fix this issue, we need to express the relationship between the lifetimes of `iter`, `s`, and the return type. The best way to do this is a lifetime variable `<'a>` and require that `iter` and `s` both live for `'a`, and that the output type also lives for `'a`.
+"""
