@@ -62,16 +62,16 @@ error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immut
   |             ^^^^^^^^^^^ mutable borrow occurs here
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-programs could cause such a problem.
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = [
 """
 ```
 let mut v = vec![0, 5, 5];
 remove_zeros(&mut v);
-println!("{v:?}");
+println!("{:?}", v);
 ```
 """,
 """
@@ -236,9 +236,9 @@ error[E0499]: cannot borrow `*v` as mutable more than once at a time
   |         first borrow later used by call
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-programs could cause such a problem.
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = ["None of these programs"]
 prompt.distractors = [
@@ -266,7 +266,8 @@ println!("{:?}", v);
 ]
 context = """
 This function cannot cause a memory safety violation because `i != n - i - 1` for all `i`, so the two
-mutable references always refer to different elements.
+mutable references always refer to different elements. Note that the `let x = &v[0]` program would not
+compile, as Rust's borrow checker would not allow `reverse` to be called while `x` is live.
 """
 
 [[questions]]
@@ -344,5 +345,6 @@ context = """
 In a situation where the borrow checker rejects an operation that is actually safe and has no workaround, then
 unsafe code is sometimes acceptable if it's critical to avoid allocations. 
 In this specific case, you should actually use [`Vec::swap`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.swap), which is internally implemented
-with heavily-tested `unsafe` code. But if the standard library doesn't happen to support your use case, then `unsafe` is ok if used correctly.
+with heavily-tested `unsafe` code similar to the code above. 
+But in general, if the standard library doesn't happen to support your use case, then `unsafe` can be acceptable if used correctly.
 """

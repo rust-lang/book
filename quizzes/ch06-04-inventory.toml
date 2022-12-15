@@ -59,9 +59,9 @@ error[E0515]: cannot return reference to local variable `default`
   |         ^^^^^^^^ returns a reference to data owned by the current function
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-programs could cause such a problem.
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = ["""
 ```
@@ -152,7 +152,8 @@ fn make_separator(user_str: `[String]`) -> `[String]` {
 context = """
 There is no valid way to return a pointer to a stack-allocated variable. The simple solution is therefore to change the return type to `String`
 and copy the input `user_str` into an owned string. However, requiring `user_str` to be a `String` would reduce the flexibility of the API, e.g.
-a caller could not call `make_separator` on a substring of a bigger string.
+a caller could not call `make_separator` on a substring of a bigger string. It would also require callers to heap-allocate strings, e.g.
+they could not use a string literal like `make_separator("Rust")`.
 
 The most idiomatic solution to this problem uses a construct you haven't seen yet: [`Cow`](https://doc.rust-lang.org/std/borrow/enum.Cow.html).
 The copy-on-write smart pointer would enable this function to return *either* an owned string *or* a string reference without a type error.
@@ -223,9 +224,9 @@ error[E0507]: cannot move out of `*arg` which is behind a shared reference
     |             move occurs because `*arg` has type `Option<String>`, which does not implement the `Copy` trait
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-programs could cause such a problem.
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = [
 """
@@ -330,7 +331,7 @@ fn get_or_default(arg: &Option<`[&str]`>) -> String {
 context = """
 The combination of `is_none` and `unwrap` here is a Rust anti-pattern, since a `match` combines the two functionalities and
 automatically deals with pushing the reference `&Option` into the interior to produce `&String`. Therefore the `match` solution
-is the most idiomatic, and passes the compiler.
+is the most idiomatic, and passes the compiler without changing the intended type signature of the function.
 
 The solution of changing `&Option` to `Option` is not desirable because it requires the caller to provide ownership of their option,
 which is a far more restrictive API.

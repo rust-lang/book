@@ -90,9 +90,9 @@ error[E0502]: cannot borrow `self.scores` as mutable because it is also borrowed
    |                           ------ immutable borrow later used here
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-programs could cause such a problem.
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = ["None of these programs"]
 prompt.distractors = [
@@ -282,9 +282,9 @@ error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime t
 7 |     iter.map(move |s2| s2 + s)
 ```
 
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs could 
-possibly violate memory safety or cause a data race? Check "None of these programs" if none of the 
-programs could cause such a problem.
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = [
 """
