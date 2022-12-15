@@ -1,4 +1,5 @@
 [[questions]]
+id = "6e5e193e-579d-4a46-aae4-d35336b77b68"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -30,6 +31,7 @@ This leaves `&default` pointing to deallocated memory. Rust therefore copmlains 
 """
 
 [[questions]]
+id = "44a2eb01-b49a-497b-a9d2-207814d1db1e"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -86,6 +88,7 @@ Second, the caller must use the result of `make_separator`, e.g. via `println`.
 """
 
 [[questions]]
+id = "815ae4cd-0f23-4da5-9dc2-0e81c664cc28"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -156,6 +159,7 @@ The copy-on-write smart pointer would enable this function to return *either* an
 """
 
 [[questions]]
+id = "1f4e5c06-ecdf-481d-9cae-8a25dafe9cfd"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
@@ -188,6 +192,7 @@ cannot move out of `arg` via `unwrap`.
 
 
 [[questions]]
+id = "989670b2-b038-47c4-9975-a93d6ee193e5"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
@@ -255,6 +260,7 @@ the string would be freed a second time on behalf of `opt`.
 """
 
 [[questions]]
+id = "3a8d5bb8-a204-43e6-b50a-d17c803dbe37"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**

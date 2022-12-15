@@ -1,4 +1,5 @@
 [[questions]]
+id = "95979d75-5823-4059-a1cf-7e0eba69b41a"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -45,6 +46,7 @@ cannot be called.
 
 
 [[questions]]
+id = "dcb42a15-d9b7-437d-95ec-f000b64ce277"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -132,6 +134,7 @@ to something with `self.scores`, then memory safety could potentially be violate
 """
 
 [[questions]]
+id = "d070eb9e-4527-453a-8c9b-698739a3dd6a"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -221,6 +224,7 @@ which would release the borrow on `self` as soon as `.copied()` is called.
 """
 
 [[questions]]
+id = "b2dd44fc-2782-495e-bb54-65af8442c388"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
@@ -250,6 +254,7 @@ The string reference `s` has an implicit lifetime `'a`. The closure passed to `i
 
 
 [[questions]]
+id = "816e9376-7161-4f41-bc04-9dba8413d7a7"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
@@ -320,6 +325,7 @@ Then the expression `s2 + s` would dereference `s`, a read of deallocated memory
 """
 
 [[questions]]
+id = "404b2cf7-7d29-45d7-86c4-7c806a071d7b"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**

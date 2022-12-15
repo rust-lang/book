@@ -1,4 +1,5 @@
 [[questions]]
+id = "867e5d29-c1eb-44b3-99e3-bb2325b74e44"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -29,6 +30,7 @@ reference to `v`. Therefore `v.remove(i)` cannot borrow `v` as mutable, since th
 
 
 [[questions]]
+id = "dd1bd092-ef8d-4293-a4d6-6a59b5887e98"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -96,6 +98,7 @@ is not essential to the safety violation, since the issue is internal to `remove
 """
 
 [[questions]]
+id = "c7e7e1e1-2788-4dd9-9c18-436bc95b405f"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
@@ -175,6 +178,7 @@ that pass a predicate, but does so with more memory-efficiency.
 """
 
 [[questions]]
+id = "fb0e3080-7cc8-4338-948e-fae693d137c8"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
@@ -204,6 +208,7 @@ where `v` cannot be mutably borrowed twice.
 
 
 [[questions]]
+id = "4c703871-3cc3-483f-beb5-876bdbcd223b"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
@@ -265,6 +270,7 @@ mutable references always refer to different elements.
 """
 
 [[questions]]
+id = "380fc77f-190d-4386-9e0e-f9360bbbfd98"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 2:**
