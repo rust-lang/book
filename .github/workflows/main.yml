@@ -40,7 +40,9 @@ jobs:
 
     - name: Install mdbook-quiz
       run: |
-        npm install -g pnpm graco
+        npm install -g pnpm
+        git clone https://github.com/willcrichton/graco
+        cd graco && npm install && npm link && cd ..
         cargo install --git https://github.com/willcrichton/mdbook-quiz --debug --features rust-editor
 
     - name: Install js-extensions
