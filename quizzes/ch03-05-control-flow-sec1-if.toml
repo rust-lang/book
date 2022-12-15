@@ -30,13 +30,13 @@ id = "4e07358c-b318-49cb-8210-fbed7ed50e23"
 type = "Tracing"
 prompt.program = """
 fn main() {
-  let x = true;
-  let y = if x {};
-  println!("{y:?}");
+  let x = 1;
+  let y = if x { 0 } else { 1 }; 
+  println!("{y}");
 }
 """
-answer.doesCompile = true
-answer.stdout = "()"
+answer.doesCompile = false
+answer.lineNumber = 3
 context = """
-An if-expression without an else-branch always returns the unit type, therefore `y` has the type and value of unit (or `()`).
+The condition to an if-expression must be a boolean. Rust does not have a concept of "truthy" or "falsy" values.
 """

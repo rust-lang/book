@@ -2,7 +2,7 @@
 id = "dfcd3124-9ac3-4a54-b8f7-cf96e215f0ec"
 type = "MultipleChoice"
 prompt.prompt = "Which statement is NOT true about the difference between shadowing and mutating a variable after it is defined?"
-answer.answer = "Shadowing can change the type of a runtime value, while mutation cannot"
+answer.answer = "Shadowing can change the type of a value at runtime, while mutation cannot"
 prompt.distractors = [
   "Shadowing can give a new type to an existing variable name, while mutation cannot",
   "Shadowing only changes variable within a syntactic scope, while mutation can change an outer variable in a nested scope",

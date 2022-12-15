@@ -6,7 +6,7 @@ answer.answer = "`const` can be used in the global scope, and `let` can only be 
 prompt.distractors = [
   "They are just different syntaxes for declaring variables with the same semantics",
   "The compiler will error if a `const` variable's name is not using `UPPER_SNAKE_CASE`",
-  "A `const` can only be assigned to an atomic constant, not a expression involving computation"
+  "A `const` can only be assigned to an atomic constant, not an expression involving computation"
 ]
 
 [[questions]]
