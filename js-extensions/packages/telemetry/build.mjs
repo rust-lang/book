@@ -9,6 +9,6 @@ build({
   define: {
     COMMIT_HASH: JSON.stringify(commitHash),
     BRANCH: JSON.stringify(branch),
-    TELEMETRY_URL: JSON.stringify("https://mindover.computer"),
+    TELEMETRY_URL: JSON.stringify("https://rust-book.willcrichton.net/logs"),
   },
 });
