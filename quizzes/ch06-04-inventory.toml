@@ -27,7 +27,7 @@ prompt.distractors = [
 ]
 context = """
 Because `default` lives on the stack within `make_separator`, it will be deallocated once a call to `make_separator` ends.
-This leaves `&default` pointing to deallocated memory. Rust therefore copmlains that you cannot return a reference to a local variable.
+This leaves `&default` pointing to deallocated memory. Rust therefore complains that you cannot return a reference to a local variable.
 """
 
 [[questions]]

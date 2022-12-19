@@ -174,7 +174,7 @@ answer.answer = """
 pub fn apply_curve(&mut self) {
     if let Some(curve) = `[self.curve]` {
         for score in self.scores.iter_mut() {
-            *score += *curve;
+            *score += curve;
         }
     }
 }
