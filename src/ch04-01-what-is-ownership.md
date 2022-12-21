@@ -2,7 +2,7 @@
 
 ### Safety is the Absence of Undefined Behavior
 
-To understand ownership, we first need to understand what makes a Rust program *safe* or *unsafe*. For example, here is a program that safe to execute:
+To understand ownership, we first need to understand what makes a Rust program **safe** or **unsafe**. For example, here is a program that safe to execute:
 
 ```rust
 fn read(y: bool) {}
@@ -26,7 +26,7 @@ fn main() {
 
 This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet. 
 
-In some interpreted programming languages such as Python or Javascript, reading `x` before it's defined would raise an exception like [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to produce efficient programs that require as few runtime checks as possible. So what would happen if Rust allowed the second program to compile? 
+When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. So what would happen if Rust allowed the second program to compile? 
 
 Let's consider how the first program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the first program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
 
@@ -37,6 +37,9 @@ main:
     call    read
     ; ...
 ```
+
+> *Note*: if you aren't familiar with assembly code, that's ok! This is just an example to show you how Rust actually works underneath the hood. You don't generally need to know assembly to understand Rust.
+
 
 This assembly code:
 * Moves the number 1, representing `true`, into a "register" (a kind of assembly variable) called `edi`. 
@@ -54,7 +57,7 @@ main:
 
 This program is unsafe because `read` will expect `edi` to be a boolean, which is either the number `0` or `1`.  But `edi` could be anything: `2`, `100`, `0x1337BEEF`. When `read` wants to use its argument `y` for any purpose, it will immediately cause _**UNDEFINED BEHAVIOR!**_
 
-Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't `true` or `false`. *Something* will happen, but your program has left the realm of "normal Rust" for ["weird Rust"](https://en.wikipedia.org/wiki/Weird_machine). Any of these outcomes are possible:
+Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't `true` or `false`. *Something* will happen, for example:
 * The code executes just fine, and no one notices a problem.
 * The code immediately crashes due to a [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) or another kind of operating system error.
 * The code executes just fine, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
@@ -81,8 +84,8 @@ Rust cannot prevent all bugs. If your application exposes a public and unauthent
 Since safety is the absence of undefined behavior, and since ownership is about safety, then we need to understand ownership in terms of the undefined behaviors it prevents. The Rust Reference maintains a list of ["Behavior considered undefined"](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), but for now we will focus on one category of behaviors: operations on memory.
 
 Memory is the space where data is stored during the execution of a program. There are many ways to think about memory:
-* If you are less familiar with systems programming, you might think of memory at a high level like "memory is the RAM in my computer" or "memory is the thing that runs out if I load too much data". 
-* If you are more familiar with systems programming, you might think of memory at a low level like "memory is an array of bytes" or "memory is the pointers I get back from `malloc`".
+* If you are unfamiliar with systems programming, you might think of memory at a high level like "memory is the RAM in my computer" or "memory is the thing that runs out if I load too much data". 
+* If you are familiar with systems programming, you might think of memory at a low level like "memory is an array of bytes" or "memory is the pointers I get back from `malloc`".
 
 Both of these memory models are *correct*, but they are not *useful* ways to think about how Rust works. The high-level model is too abstract to explain how Rust works: you will need to understand the concept of a pointer, for instance. The low-level model is too concrete to explain how Rust works: Rust does not allow you to (safely) interpret memory as an array of bytes, for instance.
 
@@ -112,18 +115,16 @@ The following diagram shows the state of memory at each of the marked points in 
 
 <img src="img/experiment/ch04-01-stack1.jpg" class="center" width="600" />
 
-Variables live in *frames*. A frame is a mapping from variables to values within a single scope, such as a function. For example:
-* `n = 5` is the frame for `main` at location L1.
-* `x = 5` is the frame for `plus_one` at L2.
-* `n = 5; y = 6` is the frame for `main` at location L3.
+Variables live in **frames**. A frame is a mapping from variables to values within a single scope, such as a function. For example:
+* The frame for `main` at location L1 holds `n = 5`.
+* The frame for `plus_one` at L2 holds `x = 5`.
+* The frame for `main` at location L3 holds `n = 5; y = 6`.
 
-Frames are organized into a *stack* of called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, its frame is deallocated (or "freed"). This sequence of frames is called a stack because the most recent frame added is always the next frame to be removed.
+<!-- SK: "This sequence of frames is called a stack" — this is a bit annoying because it (a) leaves out the control part of the stack, and (b) might bring in some standard stack misconceptions. -->
 
-> **Note:** remember, this memory model does not fully describe how Rust actually works. As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail that shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
+Frames are organized into a **stack** of currently-called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, Rust deallocates (or "frees") its frame. This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
 
-<!-- Within the basic subset of Rust you learned in Section 3, there are two kinds of safety you've already encountered:
-* **Variable safety:** a variable must be defined before using it.
-* **Type safety:** a variable must contain a value of the right type. -->
+> **Note:** this memory model does not fully describe how Rust actually works! As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail that shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
 
 When a variable is read from a frame, its value is copied out. For example, if we run this program:
 
@@ -160,7 +161,7 @@ Then copying `a` into `b` would cause the `main` frame to contain 2 million elem
 
 <img src="img/experiment/ch04-01-stack3.jpg" class="center" width="300" />
 
-To move around data without copying it, Rust uses the *heap*. The heap is a separate region of memory where data can live indefinitely, not tied to a specific frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap.
+To transfer access to data without copying it, Rust uses the **heap**. The heap is a separate region of memory where data can live indefinitely, not tied to a specific frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap.
 
 ```rust
 # fn main() {
@@ -175,19 +176,16 @@ By wrapping the array in `Box::new`, our program states now look like this:
 
 <img src="img/experiment/ch04-01-stack4.jpg" class="center" width="400" />
 
-Observe that now, there is only ever a single array. At L1, `a` contains a *pointer* (represented by dot with an arrow) to the array on the heap. When performing `let b = a`, the pointer is copied into `b`, but the pointed-data is not copied. You could call this operation a "shallow" copy of `a` to `b`.
+Observe that now, there is only ever a single array. At L1, `a` contains a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
 
-<!-- 
-> **Note:** `Box` is not part of the Rust language, but rather the Rust standard library. You could implement your own `Box` if you wanted to. -->
-
-However, you'll also notice that `a` has been crossed out. That's because of ownership. To understand why, we first need to discuss *memory management*.
+You'll also notice that in the diagram, `a` has been crossed out. That's because of ownership. To understand why, we first need to discuss *memory management*.
 
 
 ### Rust Does Not Permit Manual Memory Management
 
-Memory management is the process of allocating and deallocating memory. Stack frames are automatically managed by the Rust runtime: when you call a function, Rust allocates you a stack frame. When your function call ends, Rust deallocates the stack frame.
+Memory management is the process of allocating and deallocating memory. Stack frames are automatically managed by Rust: when a function is called, Rust allocates a stack frame for the called-function. When the call ends, Rust deallocates the stack frame.
 
-As we saw above, heap data is allocated when you call `Box::new(..)`. But when is heap data deallocated? Imagine that Rust had a `free()` function that frees a heap allocation. This kind of "manual" memory management easily leads to bugs:
+As we saw above, heap data is allocated when calling `Box::new(..)`. But when is heap data deallocated? Imagine that Rust had a `free()` function that frees a heap allocation. This kind of "manual" memory management easily leads to bugs:
 
 ```rust,ignore,does_not_compile
 # fn main() {
@@ -207,20 +205,20 @@ assert!(b2[0] == 0);
 // This is undefined behavior!
 
 let b3 = Box::new([0; 100]);
-// Forgetting to free b3 "leaks" memory, and your program may run 
+// Forgetting to free b3 "leaks" memory, and a program may run 
 // out of memory after executing for a long period of time.
 // This is *not* undefined behavior, but it's still not *desirable* behavior.
 # }
 ```
 
-Rust does not allow its users to manually deallocate memory, so as to avoid these kinds of errors.
+Rust does not allow programs to manually deallocate memory, so as to avoid these kinds of errors.
 
 
 ### A Box's Owner Manages Deallocation
 
 Instead, Rust *automatically* frees a box's heap memory. Here is an *almost* correct description of Rust's policy for freeing boxes:
 
-> **Box deallocation principle (incorrect):** If a box is assigned to a variable, when the variable's frame is deallocated, then the box's heap memory is deallocated.
+> **Box deallocation principle (incorrect):** If a variable is bound to a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
 
 For example, let's trace through a program that allocates and frees a box:
 
@@ -240,9 +238,9 @@ This program has the following states:
 
 <img src="img/experiment/ch04-01-stack5.jpg" class="center" width="600" />
 
-At L1, `b` points to `5` on the heap. Once `make_and_drop` is finished, the frame containing `b` is deallocated. Therefore `b` deallocates its heap data, and at L2 the heap is empty.
+At L1, `b` points to `5` on the heap. Once `make_and_drop` is finished, Rust deallocates the frame containing `b`, so Rust also deallocates the heap data in `b`, and the heap is empty at L2.
 
-Our box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we assign a box to two variable?
+The box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we bind two variables to a box?
 
 ```rust
 # fn main() {
@@ -253,13 +251,15 @@ let b = a;
 # }
 ```
 
-The boxed array has now been assigned to both `a` and `b`. If both `a` and `b` owned the box, then both variables would try to free the box's heap memory &mdash; unsafe and undefined behavior!
+The boxed array has now been bound to both `a` and `b`. If both `a` and `b` owned the box, then Rust would try to free the box's heap memory on behalf of both variables &mdash; undefined behavior!
 
-To avoid this kind of situation, we finally arrive at ownership. When `Box::new([0; 1_000_000])` is assigned to `a`, we say that `a` *owns* the box. The statement `let b = a` *moves* ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
+To avoid this kind of situation, we finally arrive at ownership. When `a` is bound to `Box::new([0; 1_000_000])`, we say that `a` **owns** the box. The statement `let b = a` **moves** ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
 
-> **Box deallocation principle (correct):** If a box is owned by a variable, when the variable's frame is deallocated, then the box's heap memory is deallocated.
+> **Box deallocation principle (correct):** If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
 
-In the example above, `b` is the owner of the box at L2. Therefore when the scope ends, the box is only deallocated once on behalf of `b`, not `a`.
+<!-- SK: "In the example above, b is the owner of the box at L2." — the problem is we've just seen two examples, both with a `b`, and the `b` inside make-and-drop drops at L1, etc. Use different names. Also, explain both programs, not just the most recent one. -->
+
+In the example above, `b` owns the box at L2. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
 
 
 ### Collections Use Boxes
@@ -308,7 +308,7 @@ fn add_suffix(mut s2: String) -> String {
 }
 ```
 
-As you saw in the diagram above, `s1` points to deallocated memory after calling `add_suffix`. Reading `s1` would therefore be undefined behavior, i.e. a violation of memory safety. Therefore Rust will refuse to compile this program, giving the following error:
+As you saw in the diagram above, `s1` points to deallocated memory after calling `add_suffix`. Reading `s1` would therefore be a violation of memory safety, i.e. undefined behavior. Therefore Rust will refuse to compile this program, giving the following error:
 
 ```
 error[E0382]: borrow of moved value: `s1`
@@ -325,11 +325,15 @@ error[E0382]: borrow of moved value: `s1`
 
 This error identifies that `s1` is moved by `add_suffix`, and therefore it cannot be used afterward. More generally, the compiler will enforce this principle: 
 
-> **Moved heap data principle:** if a variable has moved ownership of its heap data to another owner, then that variable cannot be used after the move.
+> **Moved heap data principle:** if a variable `x` has ownership of its heap data moved to another variable `y`, then `x` cannot be used after the move.
 
 
 ### Summary
 
-In sum, ownership is primarily a discipline of heap management. All heap data must be owned by exactly one variable, and that variable is responsible for deallocating the heap data at the end of its scope. Ownership can be transferred by assignments and function calls. Heap data can only be accessed through its current owner, not a previous owner.
+In sum, ownership is primarily a discipline of heap management:
+* All heap data must be owned by exactly one variable.
+* Rust deallocates heap data once its owner goes out of scope. 
+* Ownership can be transferred by moves, which happen on assignments and function calls. 
+* Heap data can only be accessed through its current owner, not a previous owner.
 
-Note that in this explanation, we have repeatedly emphasized not just *how* Rust's safeguards work, but *why* they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. Hopefully the models of memory and ownership we describe here will help you in the future with interpreting Rust's error messages and designing more Rustic APIs.
+In this explanation, we have repeatedly emphasized not just *how* Rust's safeguards work, but *why* they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. Hopefully the models of memory and ownership we describe here will help you in the future with interpreting Rust's error messages and designing more Rustic APIs.

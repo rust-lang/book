@@ -1,24 +1,173 @@
 ## References and Borrowing
 
-First, a code snippet:
+Ownership, boxes, and moves provide a foundation for safely programming with heap data. However, move-only APIs can be inconvenient to use. For example, say you want to read a string to print it out:
 
 ```rust
 fn main() {
-  let mut s = String::new();
-  s.push_str("WE MADE IT!");
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");
+    greet(m1, m2);
+    // We can't use `m1` or `m2` anymore!
+}
+
+fn greet(g1: String, g2: String) {
+    println!("{} {}!", g1, g2);
 }
 ```
 
-Then, an editor:
+In this example, calling `greet` moves `m1` and `m2` into `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. 
+
+This move behavior is extremely inconvenient. Programs often need to use a string more than once. Hypothetically, an alternative `greet` can return ownership of the strings:
+
+```rust
+fn main() {
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");
+    let (m1, m2) = greet(m1, m2);
+    // We can use `m1` and `m2` here... but at what cost?
+}
+
+fn greet(g1: String, g2: String) -> (String, String) {
+    println!("{} {}!", g1, g2);
+    (g1, g2)
+}
+```
+
+However, this style of program is quite verbose. Rust provides a more concise style of reading and writing movable objects with references.
+
+### References Are Non-Owning Pointers
+
+A **reference** is a kind of pointer. Here's an example of a reference that rewrites our `greet` program in a more convenient manner:
+
+```rust
+fn main() {
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");
+    // L1
+    greet(&m1, &m2); // note the ampersands
+    // L3
+}
+
+fn greet(g1: &String, g2: &String) { // note the ampersands
+    // L2
+    println!("{} {}!", g1, g2);
+}
+```
+
+The expression `&m1` uses the ampersand operator to create a reference to `m1` on the stack. The type of `g1` is also changed to `&String`, meaning "a reference to a `String`". At runtime, the references look like this:
+
+<img src="img/experiment/ch04-02-stack1.jpg" class="center" width="350" />
+
+Observe at L2 that there are two steps from `g1` to the string "Hello". `g1` is a reference that points to `m1` on the stack, and `m1` is a box that points to "Hello" on the heap.
+
+While `m1` owns the heap data "Hello", `g1` does *not* own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our Moved Heap Data Principle: because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`. 
+
+References are **non-owning pointers**, because they do not own the data they point-to.
+
+### Dereferencing a Pointer Accesses Its Data
+
+The previous examples using boxes and strings have not shown how Rust "follows" a pointer to its data. For example, the `println!` macro has mysteriously worked for inputs that were both plain strings of type `String`, and references to strings of type `&String`. The underlying mechanism is the **dereference** operator, written with an asterisk (`*`). For example, here's a program that uses dereferences in a few different ways:
+
+```rust
+# fn main() {
+let mut x: Box<i32> = Box::new(1);
+let a: i32 = *x;
+*x += 1;
+
+let r1: &Box<i32> = &x;
+let b: i32 = **r1;
+
+let r2: &i32 = &*x;
+let c: i32 = *r2;
+// L1
+# }
+```
+
+And here is the state of memory at the end of the program:
+
+<img src="img/experiment/ch04-02-stack2.jpg" class="center" width="250" />
+
+Let's walk through each line:
+1. First, we create a box `x` with `Box::new(1)`.
+2. The expression `*x` dereferences `x`, which copies the value `1` off the heap. Then `let a = *x` puts `1` into the stack slot for `a`.
+3. By putting the dereference on the left-hand side of `*x += 1`, we are modifying the heap data in-place. The heap value for `x` now contains `2`.
+4. The statement `let r1 = &x` creates a reference to `x`, which points to `x` on the stack. `r1` has type `&Box<i32>`, a reference to a box of a 32-bit integer.
+5. The statement `let b = **r1` follows the two-step pointer: `*r` goes to `x`, and `**r1` goes to the heap value `2`, therefore `b` is bound to `2`.
+6. The statement `let r2 = &*x` dereferences `x` to its heap data, and gets a pointer to the heap. `r2` then points *directly* to the heap, bypassing `x`.
+7. The statement `let c = *r2` dereferences `r2` once, getting the value `2` from the heap.
+
+You probably won't see the dereference operator very often when you read Rust code. This is because Rust implicitly inserts both dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
+
+```rust
+# fn main()  {
+let x: Box<i32> = Box::new(-1);
+let r: &Box<i32> = &x;
+let n1: i32 = r.abs();       // implicit dereference
+let n2: i32 = i32::abs(**r); // explicit dereference
+assert_eq!(n1, n2);
+
+let s = String::from("Hello");
+let n1 = s.len();      // implicit reference
+let n2 = str::len(&s); // explicit reference
+assert_eq!(n1, n2);
+# }
+```
+
+The `i32::abs` function expects an input of type `i32`, so by providing an `&Box<i32>`, Rust will insert two dereferences. The `str::len` function expects an input of type `&str`, so by providing an owned `String`, Rust will insert a single reference.
+
+We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is to recognize that these conversions are happening, especially with method calls. We want to unravel all the "magic" of Rust so you can have a clear mental model of what happens at runtime.
+
+
+### Rust Avoids Simultaneous Aliasing and Mutation 
+
+Pointers are a powerful and dangerous feature because they enabling **aliasing**: accessing the same data through different variables. On its own, aliasing is harmless. But combined with **mutation**, we have a recipe for disaster. One variable can "pull the rug out" from another variable in many ways, for example:
+* By deallocating the aliased data, leaving the other variable to point to deallocated memory.
+* By mutating the aliased data, invalidating runtime properties expected by the other variable.
+* By *concurrently* mutating the aliased data, causing a tricky data race with nondeterministic behavior for the other variable.
+
+Therefore Rust follows a basic principle to prevent undefined behavior:
+
+> **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
+
+Data is allowed to be aliased. Data is allowed to be mutated. But data is *not* allowed to be *both* aliased *and* mutated. For example, Rust enforces this principle for boxes (owned pointers) by disallowing aliasing. Assigning a box from one variable to another will move ownership, invalidating the previous variable. Owned data can only be accessed through the owner &mdash; no aliases.
+
+However, references need different rules to enforce the Pointer Safety Principle because they are non-owning pointers. By design, references are meant to temporarily create aliases. In the remainder of this section, we will explain the basics of how Rust checks for the safety of programs with references.
+
+### References Change Permissions on Paths
+
+The core idea is that variables have three kinds of **permissions** on their data:
+* **Read** (R): data can be copied to another location.
+* **Write** (W): data can be mutated in-place.
+* **Own** (O): data can be moved or dropped.
+
+By default, a variable has read and own permissions (`RO`) on its data, as well as write (`RWO`) if annotated with `let mut`. However, a reference can temporarily change those permissions. Here is a simple example that is annotated with changes in permissions after each line in the program:
 
 <pre class="aquascope">
 fn main() {
-  let s = String::from("Hello");
-  println!("{}", s.len());
-  s.push_str(" world");
-  s.into_bytes();
-
-  let mut s2 = String::from("Hello");
-  s2.push_str(" world");
+    let mut x = 1;
+    let y = &x;
+    println!("{} = {}", x, *y);
+    x += 1;
 }
 </pre>
+
+Let's walk through each line:
+
+1. After `let mut x = 1`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions.
+2. After `let y = &x`, the variable `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
+    * The borrow removes write/own permissions from `x`: it cannot write or own its data, but it can still read its data. 
+    * The variable `y` has gained read/own permissions. `y` is not writable because it was not marked `let mut`.
+    * The **path** `*y` has gained read permissions.
+3. After `println!("{} = {}", x, *y)`, `y` is no longer in use, and `x` is no longer borrowed. Therefore:
+    * `x` regains its write/own permissions (indicated by <i class="fa fa-refresh"></i>).
+    * `y` and `*y` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
+4. After `x += 1`, `x` is no longer in use, and it loses all of its permissions.
+
+<!-- <pre class="aquascope">
+fn main() {
+    let mut x = 1;
+    let y = &x;    
+    x += 1;
+    println!("{x} = {y}");
+}
+</pre> -->
