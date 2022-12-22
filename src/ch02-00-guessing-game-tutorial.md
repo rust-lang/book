@@ -291,7 +291,7 @@ let y = 10;
 println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
-This code would print `x = 5 and y = 12`.
+This code would print `x = 5 and y + 2 = 12`.
 
 ### Testing the First Part
 
