@@ -38,7 +38,7 @@ main:
     ; ...
 ```
 
-> *Note*: if you aren't familiar with assembly code, that's ok! This is just an example to show you how Rust actually works underneath the hood. You don't generally need to know assembly to understand Rust.
+> *Note*: if you aren't familiar with assembly code, that's ok! This is just an example to show you how Rust actually works under the hood. You don't generally need to know assembly to understand Rust.
 
 
 This assembly code:
@@ -94,7 +94,7 @@ Rust has a particular way to think about memory, and ownership is a discipline f
 
 ### Variables Live in the Stack
 
-Here's a program like the you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`:
+Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`:
 
 ```rust
 fn main() {
@@ -117,16 +117,16 @@ The following diagram shows the state of memory at each of the marked points in 
 
 Variables live in **frames**. A frame is a mapping from variables to values within a single scope, such as a function. For example:
 * The frame for `main` at location L1 holds `n = 5`.
-* The frame for `plus_one` at L2 holds `x = 5`.
+* The frame for `plus_one` at L2 holds `x = 5`.5
 * The frame for `main` at location L3 holds `n = 5; y = 6`.
 
 <!-- SK: "This sequence of frames is called a stack" — this is a bit annoying because it (a) leaves out the control part of the stack, and (b) might bring in some standard stack misconceptions. -->
 
-Frames are organized into a **stack** of currently-called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, Rust deallocates (or "frees") its frame. This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
+Frames are organized into a **stack** of currently-called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, Rust deallocates (or "frees") the function's frame. This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
 
-> **Note:** this memory model does not fully describe how Rust actually works! As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail that shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
+> *Note:* this memory model does not fully describe how Rust actually works! As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail that shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
 
-When a variable is read from a frame, its value is copied out. For example, if we run this program:
+When an expression reads a variable, the variable's value is copied out of its frame. For example, if we run this program:
 
 ```rust
 # fn main() {
@@ -218,7 +218,7 @@ Rust does not allow programs to manually deallocate memory, so as to avoid these
 
 Instead, Rust *automatically* frees a box's heap memory. Here is an *almost* correct description of Rust's policy for freeing boxes:
 
-> **Box deallocation principle (incorrect):** If a variable is bound to a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+> **Box deallocation principle (almost correct):** If a variable is bound to a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
 
 For example, let's trace through a program that allocates and frees a box:
 
@@ -245,17 +245,15 @@ The box's heap memory has been successfully managed. But what if we abused this 
 ```rust
 # fn main() {
 let a = Box::new([0; 1_000_000]);
-// L1
 let b = a;
-// L2
 # }
 ```
 
-The boxed array has now been bound to both `a` and `b`. If both `a` and `b` owned the box, then Rust would try to free the box's heap memory on behalf of both variables &mdash; undefined behavior!
+The boxed array has now been bound to both `a` and `b`. By our "almost correct" principle, Rust would try to free the box's heap memory on behalf of both variables &mdash; that's undefined behavior!
 
 To avoid this kind of situation, we finally arrive at ownership. When `a` is bound to `Box::new([0; 1_000_000])`, we say that `a` **owns** the box. The statement `let b = a` **moves** ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
 
-> **Box deallocation principle (correct):** If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+> **Box deallocation principle (fully correct):** If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
 
 <!-- SK: "In the example above, b is the owner of the box at L2." — the problem is we've just seen two examples, both with a `b`, and the `b` inside make-and-drop drops at L1, etc. Use different names. Also, explain both programs, not just the most recent one. -->
 
@@ -325,12 +323,12 @@ error[E0382]: borrow of moved value: `s1`
 
 This error identifies that `s1` is moved by `add_suffix`, and therefore it cannot be used afterward. More generally, the compiler will enforce this principle: 
 
-> **Moved heap data principle:** if a variable `x` has ownership of its heap data moved to another variable `y`, then `x` cannot be used after the move.
+> **Moved heap data principle:** if a variable `x` moves ownership of heap data to another variable `y`, then `x` cannot be used after the move.
 
 
 ### Summary
 
-In sum, ownership is primarily a discipline of heap management:
+Ownership is primarily a discipline of heap management:
 * All heap data must be owned by exactly one variable.
 * Rust deallocates heap data once its owner goes out of scope. 
 * Ownership can be transferred by moves, which happen on assignments and function calls. 
