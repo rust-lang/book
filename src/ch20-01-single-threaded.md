@@ -208,7 +208,8 @@ HTTP is a text-based protocol, and a request takes this format:
 
 ```text
 Method Request-URI HTTP-Version CRLF
-headers CRLF
+*(header CRLF)
+CRLF
 message-body
 ```
 
@@ -250,15 +251,16 @@ Responses have the following format:
 
 ```text
 HTTP-Version Status-Code Reason-Phrase CRLF
-headers CRLF
+*(header CRLF)
+CRLF
 message-body
 ```
 
 The first line is a *status line* that contains the HTTP version used in the
 response, a numeric status code that summarizes the result of the request, and
 a reason phrase that provides a text description of the status code. After the
-CRLF sequence are any headers, another CRLF sequence, and the body of the
-response.
+CRLF sequence are any headers (each followed by a CRLF sequence), another CRLF
+sequence by itself, and the body of the response.
 
 Here is an example response that uses HTTP version 1.1, has a status code of
 200, an OK reason phrase, no headers, and no body:
