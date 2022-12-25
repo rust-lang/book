@@ -166,8 +166,8 @@ and make the tuple a different type from other tuples, and when naming each
 field as in a regular struct would be verbose or redundant.
 
 To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use two
-tuple structs named `Color` and `Point`:
+followed by the types in the tuple, and end with a semicolon. For example,
+here we define and use two tuple structs named `Color` and `Point`:
 
 <span class="filename">Filename: src/main.rs</span>
 
