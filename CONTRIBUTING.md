@@ -2,6 +2,29 @@
 
 We'd love your help! Thanks for caring about the book.
 
+## Where to Edit
+
+All edits should be made in the `src` directory.
+
+The `nostarch` directory contains snapshots for sending edits to the publishers
+of the print version. The snapshot files reflect what has been sent or not, so
+they only get updated when edits are sent to No Starch. **Do not submit pull
+requests changing files in the `nostarch` directory, they will be closed.**
+
+## Checking for Fixes
+
+The book rides the Rust release trains. Therefore, if you see a problem on
+https://doc.rust-lang.org/stable/book, it may already be fixed on the `main`
+branch in this repo, but the fix hasn't gone through nightly -> beta -> stable
+yet. Please check the `main` branch in this repo before reporting an issue.
+
+Looking at the history for a particular file can also give more information on
+how or whether an issue has been fixed or not if you're trying to figure that
+out.
+
+Please also search open and closed issues and open and closed PRs before
+reporting a new issue or opening a new PR.
+
 ## Licensing
 
 This repository is under the same license as Rust itself, MIT/Apache2. You

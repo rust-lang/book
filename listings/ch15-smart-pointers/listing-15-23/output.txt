@@ -1,7 +1,7 @@
 $ cargo test
    Compiling limit-tracker v0.1.0 (file:///projects/limit-tracker)
     Finished test [unoptimized + debuginfo] target(s) in 0.91s
-     Running unittests (target/debug/deps/limit_tracker-e599811fa246dbde)
+     Running unittests src/lib.rs (target/debug/deps/limit_tracker-e599811fa246dbde)
 
 running 1 test
 test tests::it_sends_an_over_75_percent_warning_message ... FAILED
@@ -18,4 +18,4 @@ failures:
 
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-error: test failed, to rerun pass '--lib'
+error: test failed, to rerun pass `--lib`

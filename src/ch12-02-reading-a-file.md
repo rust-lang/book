@@ -1,6 +1,6 @@
 ## Reading a File
 
-Now we’ll add functionality to read the file specified in the `filename`
+Now we’ll add functionality to read the file specified in the `file_path`
 argument. First, we need a sample file to test it with: we’ll use a file with a
 small amount of text over multiple lines with some repeated words. Listing 12-3
 has an Emily Dickinson poem that will work well! Create a file called
@@ -31,8 +31,8 @@ by the second argument</span>
 First, we bring in a relevant part of the standard library with a `use`
 statement: we need `std::fs` to handle files.
 
-In `main`, the new statement `fs::read_to_string` takes the `filename`, opens
-that file, and returns a `Result<String>` of the file’s contents.
+In `main`, the new statement `fs::read_to_string` takes the `file_path`, opens
+that file, and returns a `std::io::Result<String>` of the file’s contents.
 
 After that, we again add a temporary `println!` statement that prints the value
 of `contents` after the file is read, so we can check that the program is

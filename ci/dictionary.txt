@@ -58,6 +58,8 @@ Bors
 BorrowMutError
 BoxMeUp
 BTreeSet
+BufRead
+BufReader
 BuildHasher
 Cacher
 cacher
@@ -81,6 +83,7 @@ combinator
 ConcreteType
 config
 Config
+confignew
 const
 consts
 constant's
@@ -120,6 +123,7 @@ dereferences
 dereferencing
 DerefMut
 DeriveInput
+Dest
 destructor
 destructure
 destructured
@@ -128,6 +132,7 @@ destructuring
 Destructuring
 deterministically
 DevOps
+devtools
 didn
 Dobrý
 doccargo
@@ -156,6 +161,7 @@ Erlang
 ErrorKind
 eval
 executables
+ExitCode
 expr
 extern
 favicon
@@ -210,6 +216,7 @@ Hoare
 Hola
 homogenous
 html
+http
 https
 hyperoptimize
 hypotheticals
@@ -346,6 +353,7 @@ OsString
 other's
 otherinstall
 OtherError
+OurError
 OutlinePrint
 overloadable
 overread
@@ -477,6 +485,7 @@ subdirectory
 submodule
 submodules
 Submodules
+submodule’s
 suboptimal
 subpath
 substring
@@ -494,6 +503,7 @@ TextField
 That'd
 there'd
 ThreadPool
+threadpool
 timestamp
 Tiếng
 timeline
@@ -527,6 +537,7 @@ uncommenting
 unevaluated
 Uninstalling
 uninstall
+unittests
 unix
 unpopulated
 unoptimized
@@ -534,6 +545,7 @@ UnsafeCell
 unsafety
 unsized
 unsynchronized
+Unyank
 URIs
 UsefulType
 username

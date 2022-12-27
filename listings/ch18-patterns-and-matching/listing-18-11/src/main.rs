@@ -5,10 +5,10 @@ fn main() {
 
     match x {
         Some(50) => println!("Got 50"),
-        Some(y) => println!("Matched, y = {:?}", y),
+        Some(y) => println!("Matched, y = {y}"),
         _ => println!("Default case, x = {:?}", x),
     }
 
-    println!("at the end: x = {:?}, y = {:?}", x, y);
+    println!("at the end: x = {:?}, y = {y}", x);
     // ANCHOR_END: here
 }

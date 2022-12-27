@@ -1,11 +1,13 @@
 ## Unrecoverable Errors with `panic!`
 
 Sometimes, bad things happen in your code, and there’s nothing you can do about
-it. In these cases, Rust has the `panic!` macro. When the `panic!` macro
-executes, your program will print a failure message, unwind and clean up the
-stack, and then quit. We’ll commonly invoke a panic when a bug of some kind has
-been detected and it’s not clear how to handle the problem at the time we’re
-writing our program.
+it. In these cases, Rust has the `panic!` macro. There are two ways to cause a
+panic in practice: by taking an action that causes our code to panic (such as
+accessing an array past the end) or by explicitly calling the `panic!` macro.
+In both cases, we cause a panic in our program. By default, these panics will
+print a failure message, unwind, clean up the stack, and quit. Via an
+environment variable, you can also have Rust display the call stack when a
+panic occurs to make it easier to track down the source of the panic.
 
 > ### Unwinding the Stack or Aborting in Response to a Panic
 >
@@ -13,12 +15,14 @@ writing our program.
 > means Rust walks back up the stack and cleans up the data from each function
 > it encounters. However, this walking back and cleanup is a lot of work. Rust,
 > therefore, allows you to choose the alternative of immediately *aborting*,
-> which ends the program without cleaning up. Memory that the program was using
-> will then need to be cleaned up by the operating system. If in your project
-> you need to make the resulting binary as small as possible, you can switch
-> from unwinding to aborting upon a panic by adding `panic = 'abort'` to the
-> appropriate `[profile]` sections in your *Cargo.toml* file. For example, if
-> you want to abort on panic in release mode, add this:
+> which ends the program without cleaning up.
+>
+> Memory that the program was using will then need to be cleaned
+> up by the operating system. If in your project you need to make the resulting
+> binary as small as possible, you can switch from unwinding to aborting upon a
+> panic by adding `panic = 'abort'` to the appropriate `[profile]` sections in
+> your *Cargo.toml* file. For example, if you want to abort on panic in release
+> mode, add this:
 >
 > ```toml
 > [profile.release]
@@ -116,21 +120,21 @@ $ RUST_BACKTRACE=1 cargo run
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 99', src/main.rs:4:5
 stack backtrace:
    0: rust_begin_unwind
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/std/src/panicking.rs:483
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/std/src/panicking.rs:584:5
    1: core::panicking::panic_fmt
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:85
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/panicking.rs:142:14
    2: core::panicking::panic_bounds_check
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/panicking.rs:62
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/panicking.rs:84:5
    3: <usize as core::slice::index::SliceIndex<[T]>>::index
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:255
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/slice/index.rs:242:10
    4: core::slice::index::<impl core::ops::index::Index<I> for [T]>::index
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/slice/index.rs:15
-   5: <alloc::vec::Vec<T> as core::ops::index::Index<I>>::index
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/alloc/src/vec.rs:1982
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/slice/index.rs:18:9
+   5: <alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/alloc/src/vec/mod.rs:2591:9
    6: panic::main
-             at ./src/main.rs:4
+             at ./src/main.rs:4:5
    7: core::ops::function::FnOnce::call_once
-             at /rustc/7eac88abb2e57e752f3302f02be5f3ce3d7adfb4/library/core/src/ops/function.rs:227
+             at /rustc/e092d0b6b43f2de967af0887873151bb1c0b18d3/library/core/src/ops/function.rs:248:5
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 

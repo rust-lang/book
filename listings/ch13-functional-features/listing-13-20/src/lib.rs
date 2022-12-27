@@ -4,13 +4,13 @@ use std::fs;
 
 pub struct Config {
     pub query: String,
-    pub filename: String,
+    pub file_path: String,
     pub ignore_case: bool,
 }
 
 // ANCHOR: here
 impl Config {
-    pub fn new(
+    pub fn build(
         mut args: impl Iterator<Item = String>,
     ) -> Result<Config, &'static str> {
         args.next();
@@ -20,16 +20,16 @@ impl Config {
             None => return Err("Didn't get a query string"),
         };
 
-        let filename = match args.next() {
+        let file_path = match args.next() {
             Some(arg) => arg,
-            None => return Err("Didn't get a file name"),
+            None => return Err("Didn't get a file path"),
         };
 
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 
         Ok(Config {
             query,
-            filename,
+            file_path,
             ignore_case,
         })
     }
@@ -37,7 +37,7 @@ impl Config {
 // ANCHOR_END: here
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(config.filename)?;
+    let contents = fs::read_to_string(config.file_path)?;
 
     let results = if config.ignore_case {
         search_case_insensitive(&config.query, &contents)
@@ -46,7 +46,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     };
 
     for line in results {
-        println!("{}", line);
+        println!("{line}");
     }
 
     Ok(())

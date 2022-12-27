@@ -63,56 +63,39 @@ make it mutable using the `mut` keyword, as discussed in Chapter 3. The numbers
 we place inside are all of type `i32`, and Rust infers this from the data, so
 we don’t need the `Vec<i32>` annotation.
 
-### Dropping a Vector Drops Its Elements
-
-Like any other `struct`, a vector is freed when it goes out of scope, as
-annotated in Listing 8-4.
-
-```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
-```
-
-<span class="caption">Listing 8-4: Showing where the vector and its elements
-are dropped</span>
-
-When the vector gets dropped, all of its contents are also dropped, meaning
-those integers it holds will be cleaned up. This may seem like a
-straightforward point but it can get complicated when you start to introduce
-references to the elements of the vector. Let’s tackle that next!
-
 ### Reading Elements of Vectors
 
 There are two ways to reference a value stored in a vector: via indexing or
 using the `get` method. In the following examples, we’ve annotated the types of
 the values that are returned from these functions for extra clarity.
 
-Listing 8-5 shows both methods of accessing a value in a vector, with indexing
+Listing 8-4 shows both methods of accessing a value in a vector, with indexing
 syntax and the `get` method.
 
 ```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-5: Using indexing syntax or the `get` method to
+<span class="caption">Listing 8-4: Using indexing syntax or the `get` method to
 access an item in a vector</span>
 
-Note two details here. First, we use the index value of `2` to get the third
-element because vectors are indexed by number, starting at zero. Second, we get
-the third element by either using `&` and `[]`, which gives us a reference, or
-using the `get` method with the index passed as an argument, which gives us an
-`Option<&T>`.
+Note a few details here. We use the index value of `2` to get the third element
+because vectors are indexed by number, starting at zero. Using `&` and `[]`
+gives us a reference to the element at the index value. When we use the `get`
+method with the index passed as an argument, we get an `Option<&T>` that we can
+use with `match`.
 
 The reason Rust provides these two ways to reference an element is so you can
 choose how the program behaves when you try to use an index value outside the
 range of existing elements. As an example, let’s see what happens when we have
 a vector of five elements and then we try to access an element at index 100
-with each technique, as shown in Listing 8-6.
+with each technique, as shown in Listing 8-5.
 
 ```rust,should_panic,panics
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-6: Attempting to access the element at index
+<span class="caption">Listing 8-5: Attempting to access the element at index
 100 in a vector containing five elements</span>
 
 When we run this code, the first `[]` method will cause the program to panic
@@ -135,25 +118,27 @@ When the program has a valid reference, the borrow checker enforces the
 ownership and borrowing rules (covered in Chapter 4) to ensure this reference
 and any other references to the contents of the vector remain valid. Recall the
 rule that states you can’t have mutable and immutable references in the same
-scope. That rule applies in Listing 8-7, where we hold an immutable reference
+scope. That rule applies in Listing 8-6, where we hold an immutable reference
 to the first element in a vector and try to add an element to the end. This
 program won’t work if we also try to refer to that element later in the
 function:
 
+
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-7: Attempting to add an element to a vector
+<span class="caption">Listing 8-6: Attempting to add an element to a vector
 while holding a reference to an item</span>
 
 Compiling this code will result in this error:
 
+
 ```console
-{{#include ../listings/ch08-common-collections/listing-08-07/output.txt}}
+{{#include ../listings/ch08-common-collections/listing-08-06/output.txt}}
 ```
 
-The code in Listing 8-7 might look like it should work: why should a reference
+The code in Listing 8-6 might look like it should work: why should a reference
 to the first element care about changes at the end of the vector? This error is
 due to the way vectors work: because vectors put the values next to each other
 in memory, adding a new element onto the end of the vector might require
@@ -169,33 +154,40 @@ ending up in that situation.
 ### Iterating over the Values in a Vector
 
 To access each element in a vector in turn, we would iterate through all of the
-elements rather than use indices to access one at a time. Listing 8-8 shows how
+elements rather than use indices to access one at a time. Listing 8-7 shows how
 to use a `for` loop to get immutable references to each element in a vector of
 `i32` values and print them.
+
+```rust
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-07/src/main.rs:here}}
+```
+
+<span class="caption">Listing 8-7: Printing each element in a vector by
+iterating over the elements using a `for` loop</span>
+
+We can also iterate over mutable references to each element in a mutable vector
+in order to make changes to all the elements. The `for` loop in Listing 8-8
+will add `50` to each element.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-8: Printing each element in a vector by
-iterating over the elements using a `for` loop</span>
-
-We can also iterate over mutable references to each element in a mutable vector
-in order to make changes to all the elements. The `for` loop in Listing 8-9
-will add `50` to each element.
-
-```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
-```
-
-<span class="caption">Listing 8-9: Iterating over mutable references to
+<span class="caption">Listing 8-8: Iterating over mutable references to
 elements in a vector</span>
 
 To change the value that the mutable reference refers to, we have to use the
-`*` dereference operator to get to the value in `i` before we can use the
-`+=` operator. We’ll talk more about the dereference operator in the
-[“Following the Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
+`*` dereference operator to get to the value in `i` before we can use the `+=`
+operator. We’ll talk more about the dereference operator in the [“Following the
+Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
 section of Chapter 15.
+
+Iterating over a vector, whether immutably or mutably, is safe because of the
+borrow checker's rules. If we attempted to insert or remove items in the `for`
+loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error
+similar to the one we got with the code in Listing 8-6. The reference to the
+vector that the `for` loop holds prevents simultaneous modification of the
+whole vector.
 
 ### Using an Enum to Store Multiple Types
 
@@ -210,13 +202,13 @@ some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and all the enum variants will be considered the same type: that
 of the enum. Then we can create a vector to hold that enum and so, ultimately,
-holds different types. We’ve demonstrated this in Listing 8-10.
+holds different types. We’ve demonstrated this in Listing 8-9.
 
 ```rust
-{{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-10: Defining an `enum` to store values of
+<span class="caption">Listing 8-9: Defining an `enum` to store values of
 different types in one vector</span>
 
 Rust needs to know what types will be in the vector at compile time so it knows
@@ -234,8 +226,26 @@ object, which we’ll cover in Chapter 17.
 Now that we’ve discussed some of the most common ways to use vectors, be sure
 to review [the API documentation][vec-api]<!-- ignore --> for all the many
 useful methods defined on `Vec<T>` by the standard library. For example, in
-addition to `push`, a `pop` method removes and returns the last element. Let’s
-move on to the next collection type: `String`!
+addition to `push`, a `pop` method removes and returns the last element.
+
+### Dropping a Vector Drops Its Elements
+
+Like any other `struct`, a vector is freed when it goes out of scope, as
+annotated in Listing 8-10.
+
+```rust
+{{#rustdoc_include ../listings/ch08-common-collections/listing-08-10/src/main.rs:here}}
+```
+
+<span class="caption">Listing 8-10: Showing where the vector and its elements
+are dropped</span>
+
+When the vector gets dropped, all of its contents are also dropped, meaning the
+integers it holds will be cleaned up. The borrow checker ensures that any
+references to contents of a vector are only used while the vector itself is
+valid.
+
+Let’s move on to the next collection type: `String`!
 
 [data-types]: ch03-02-data-types.html#data-types
 [nomicon]: ../nomicon/vec/vec.html

@@ -3,15 +3,15 @@
 With this new knowledge about iterators, we can improve the I/O project in
 Chapter 12 by using iterators to make places in the code clearer and more
 concise. Let’s look at how iterators can improve our implementation of the
-`Config::new` function and the `search` function.
+`Config::build` function and the `search` function.
 
 ### Removing a `clone` Using an Iterator
 
 In Listing 12-6, we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
 values, allowing the `Config` struct to own those values. In Listing 13-17,
-we’ve reproduced the implementation of the `Config::new` function as it was in
-Listing 12-23:
+we’ve reproduced the implementation of the `Config::build` function as it was
+in Listing 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -19,24 +19,24 @@ Listing 12-23:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
 ```
 
-<span class="caption">Listing 13-17: Reproduction of the `Config::new` function
-from Listing 12-23</span>
+<span class="caption">Listing 13-17: Reproduction of the `Config::build`
+function from Listing 12-23</span>
 
 At the time, we said not to worry about the inefficient `clone` calls because
 we would remove them in the future. Well, that time is now!
 
 We needed `clone` here because we have a slice with `String` elements in the
-parameter `args`, but the `new` function doesn’t own `args`. To return
+parameter `args`, but the `build` function doesn’t own `args`. To return
 ownership of a `Config` instance, we had to clone the values from the `query`
 and `filename` fields of `Config` so the `Config` instance can own its values.
 
-With our new knowledge about iterators, we can change the `new` function to
+With our new knowledge about iterators, we can change the `build` function to
 take ownership of an iterator as its argument instead of borrowing a slice.
 We’ll use the iterator functionality instead of the code that checks the length
 of the slice and indexes into specific locations. This will clarify what the
-`Config::new` function is doing because the iterator will access the values.
+`Config::build` function is doing because the iterator will access the values.
 
-Once `Config::new` takes ownership of the iterator and stops using indexing
+Once `Config::build` takes ownership of the iterator and stops using indexing
 operations that borrow, we can move the `String` values from the iterator into
 `Config` rather than calling `clone` and making a new allocation.
 
@@ -50,9 +50,9 @@ Open your I/O project’s *src/main.rs* file, which should look like this:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-24-reproduced/src/main.rs:ch13}}
 ```
 
-We’ll change the start of the `main` function that we had in Listing 12-24 to
-the code in Listing 13-18. This won’t compile until we update `Config::new` as
-well.
+We’ll first change the start of the `main` function that we had in Listing
+12-24 to the code in Listing 13-18, which this time uses an iterator. This
+won’t compile until we update `Config::build` as well.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -61,17 +61,17 @@ well.
 ```
 
 <span class="caption">Listing 13-18: Passing the return value of `env::args` to
-`Config::new`</span>
+`Config::build`</span>
 
 The `env::args` function returns an iterator! Rather than collecting the
-iterator values into a vector and then passing a slice to `Config::new`, now
+iterator values into a vector and then passing a slice to `Config::build`, now
 we’re passing ownership of the iterator returned from `env::args` to
-`Config::new` directly.
+`Config::build` directly.
 
-Next, we need to update the definition of `Config::new`. In your I/O project’s
-*src/lib.rs* file, let’s change the signature of `Config::new` to look like
-Listing 13-19. This still won’t compile because we need to update the function
-body.
+Next, we need to update the definition of `Config::build`. In your I/O
+project’s *src/lib.rs* file, let’s change the signature of `Config::build` to
+look like Listing 13-19. This still won’t compile because we need to update the
+function body.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -79,14 +79,14 @@ body.
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-19: Updating the signature of `Config::new` to
-expect an iterator</span>
+<span class="caption">Listing 13-19: Updating the signature of `Config::build`
+to expect an iterator</span>
 
 The standard library documentation for the `env::args` function shows that the
 type of the iterator it returns is `std::env::Args`, and that type implements
 the `Iterator` trait and returns `String` values.
 
-We’ve updated the signature of the `Config::new` function so the parameter
+We’ve updated the signature of the `Config::build` function so the parameter
 `args` has a generic type with the trait bounds `impl Iterator<Item = String>`
 instead of `&[String]`. This usage of the `impl Trait` syntax we discussed in
 the [“Traits as Parameters”][impl-trait]<!-- ignore --> section of Chapter 10
@@ -99,7 +99,7 @@ iterating over it, we can add the `mut` keyword into the specification of the
 
 #### Using `Iterator` Trait Methods Instead of Indexing
 
-Next, we’ll fix the body of `Config::new`. Because `args` implements the
+Next, we’ll fix the body of `Config::build`. Because `args` implements the
 `Iterator` trait, we know we can call the `next` method on it! Listing 13-20
 updates the code from Listing 12-23 to use the `next` method:
 
@@ -109,7 +109,7 @@ updates the code from Listing 12-23 to use the `next` method:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-20: Changing the body of `Config::new` to use
+<span class="caption">Listing 13-20: Changing the body of `Config::build` to use
 iterator methods</span>
 
 Remember that the first value in the return value of `env::args` is the name of
@@ -157,6 +157,8 @@ Recall that the purpose of the `search` function is to return all lines in
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
 well.
+
+### Choosing Between Loops or Iterators
 
 The next logical question is which style you should choose in your own code and
 why: the original implementation in Listing 13-21 or the version using

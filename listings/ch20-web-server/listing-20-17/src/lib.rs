@@ -1,5 +1,4 @@
-use std::sync::mpsc;
-use std::thread;
+use std::{sync::mpsc, thread};
 
 pub struct ThreadPool {
     workers: Vec<Worker>,

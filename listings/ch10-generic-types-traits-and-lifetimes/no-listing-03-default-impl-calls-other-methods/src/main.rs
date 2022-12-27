@@ -1,4 +1,4 @@
-use chapter10::{self, Summary, Tweet};
+use aggregator::{self, Summary, Tweet};
 
 fn main() {
     // ANCHOR: here

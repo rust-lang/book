@@ -2,7 +2,7 @@ extern crate regex;
 
 use regex::{Captures, Regex};
 use std::io;
-use std::io::{Read, Write};
+use std::io::Read;
 
 fn main() {
     write_md(remove_markup(read_md()));
@@ -17,7 +17,7 @@ fn read_md() -> String {
 }
 
 fn write_md(output: String) {
-    write!(io::stdout(), "{}", output).unwrap();
+    print!("{}", output);
 }
 
 fn remove_markup(input: String) -> String {

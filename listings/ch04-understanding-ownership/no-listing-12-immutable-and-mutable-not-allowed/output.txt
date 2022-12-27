@@ -8,7 +8,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 5 |     let r2 = &s; // no problem
 6 |     let r3 = &mut s; // BIG PROBLEM
   |              ^^^^^^ mutable borrow occurs here
-7 | 
+7 |
 8 |     println!("{}, {}, and {}", r1, r2, r3);
   |                                -- immutable borrow later used here
 

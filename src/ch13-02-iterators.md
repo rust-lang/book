@@ -17,16 +17,16 @@ useful.
 
 <span class="caption">Listing 13-10: Creating an iterator</span>
 
-Once we’ve created an iterator, we can use it in a variety of ways. In Listing
-3-5 in Chapter 3, we iterated over an array using a `for` loop to execute some
-code on each of its items. Under the hood this implicitly created and then
-consumed an iterator, but we glossed over how exactly that works until now.
+The iterator is stored in the `v1_iter` variable. Once we’ve created an
+iterator, we can use it in a variety of ways. In Listing 3-5 in Chapter 3, we
+iterated over an array using a `for` loop to execute some code on each of its
+items. Under the hood this implicitly created and then consumed an iterator,
+but we glossed over how exactly that works until now.
 
-The example in Listing 13-11 separates the creation of the iterator from the
-use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
-variable, and no iteration takes place at that time. When the `for` loop is
-called using the iterator in `v1_iter`, each element in the iterator is used in
-one iteration of the loop, which prints out each value.
+In the example in Listing 13-11, we separate the creation of the iterator from
+the use of the iterator in the `for` loop. When the `for` loop is called using
+the iterator in `v1_iter`, each element in the iterator is used in one
+iteration of the loop, which prints out each value.
 
 ```rust
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-11/src/main.rs:here}}
@@ -129,16 +129,15 @@ ownership of the iterator we call it on.
 
 ### Methods that Produce Other Iterators
 
-Other methods defined on the `Iterator` trait, known as *iterator adaptors*,
-allow you to change iterators into different kinds of iterators. You can chain
-multiple calls to iterator adaptors to perform complex actions in a readable
-way. But because all iterators are lazy, you have to call one of the consuming
-adaptor methods to get results from calls to iterator adaptors.
+*Iterator adaptors* are methods defined on the `Iterator` trait that don’t
+consume the iterator. Instead, they produce different iterators by changing
+some aspect of the original iterator.
 
 Listing 13-14 shows an example of calling the iterator adaptor method `map`,
-which takes a closure to call on each item to produce a new iterator. The
-closure here creates a new iterator in which each item from the vector has been
-incremented by 1. However, this code produces a warning:
+which takes a closure to call on each item as the items are iterated through.
+The `map` method returns a new iterator that produces the modified items. The
+closure here creates a new iterator in which each item from the vector will be
+incremented by 1:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -149,7 +148,7 @@ incremented by 1. However, this code produces a warning:
 <span class="caption">Listing 13-14: Calling the iterator adaptor `map` to
 create a new iterator</span>
 
-The warning we get is this:
+However, this code produces a warning:
 
 ```console
 {{#include ../listings/ch13-functional-features/listing-13-14/output.txt}}
@@ -159,9 +158,10 @@ The code in Listing 13-14 doesn’t do anything; the closure we’ve specified
 never gets called. The warning reminds us why: iterator adaptors are lazy, and
 we need to consume the iterator here.
 
-To fix this and consume the iterator, we’ll use the `collect` method, which we
-used in Chapter 12 with `env::args` in Listing 12-1. This method consumes the
-iterator and collects the resulting values into a collection data type.
+To fix this warning and consume the iterator, we’ll use the `collect` method,
+which we used in Chapter 12 with `env::args` in Listing 12-1. This method
+consumes the iterator and collects the resulting values into a collection data
+type.
 
 In Listing 13-15, we collect the results of iterating over the iterator that’s
 returned from the call to `map` into a vector. This vector will end up
@@ -182,14 +182,20 @@ on each item. This is a great example of how closures let you customize some
 behavior while reusing the iteration behavior that the `Iterator` trait
 provides.
 
+You can chain multiple calls to iterator adaptors to perform complex actions in
+a readable way. But because all iterators are lazy, you have to call one of the
+consuming adaptor methods to get results from calls to iterator adaptors.
+
 ### Using Closures that Capture Their Environment
 
-Now that we’ve introduced iterators, we can demonstrate a common use of
-closures that capture their environment by using the `filter` iterator adaptor.
-The `filter` method on an iterator takes a closure that takes each item from
-the iterator and returns a Boolean. If the closure returns `true`, the value
-will be included in the iterator produced by `filter`. If the closure returns
-`false`, the value won’t be included in the resulting iterator.
+Many iterator adapters take closures as arguments, and commonly the closures
+we’ll specify as arguments to iterator adapters will be closures that capture
+their environment.
+
+For this example, we’ll use the `filter` method that takes a closure. The
+closure gets an item from the iterator and returns a `bool`. If the closure
+returns `true`, the value will be included in the iteration produced by
+`filter`. If the closure returns `false`, the value won’t be included.
 
 In Listing 13-16, we use `filter` with a closure that captures the `shoe_size`
 variable from its environment to iterate over a collection of `Shoe` struct

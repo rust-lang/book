@@ -76,12 +76,13 @@ more complex situations involving recursive types.
 #### More Information About the Cons List
 
 A *cons list* is a data structure that comes from the Lisp programming language
-and its dialects and is made up of nested pairs. Its name comes from the `cons`
-function (short for “construct function”) in Lisp that constructs a new pair
-from its two arguments. By calling `cons` on a pair consisting of a value and
-another pair, we can construct cons lists made up of recursive pairs.
+and its dialects and is made up of nested pairs, and is the Lisp version of a
+linked list. Its name comes from the `cons` function (short for “construct
+function”) in Lisp that constructs a new pair from its two arguments. By
+calling `cons` on a pair consisting of a value and another pair, we can
+construct cons lists made up of recursive pairs.
 
-For example, here's a pseudocode representation of a cons list containing the
+For example, here’s a pseudocode representation of a cons list containing the
 list 1, 2, 3 with each pair in parentheses:
 
 ```text
@@ -149,7 +150,7 @@ a recursive enum</span>
 The error shows this type “has infinite size.” The reason is that we’ve defined
 `List` with a variant that is recursive: it holds another value of itself
 directly. As a result, Rust can’t figure out how much space it needs to store a
-`List` value. Let’s break down why we get this error. First, we'll look at how
+`List` value. Let’s break down why we get this error. First, we’ll look at how
 Rust decides how much space it needs to store a value of a non-recursive type.
 
 #### Computing the Size of a Non-Recursive Type
@@ -195,7 +196,7 @@ after doing automatic regeneration, look at listings/ch15-smart-pointers/listing
 help: insert some indirection (e.g., a `Box`, `Rc`, or `&`) to make `List` representable
   |
 2 |     Cons(i32, Box<List>),
-  |               ^^^^    ^
+  |               ++++    +
 ```
 
 In this suggestion, “indirection” means that instead of storing a value

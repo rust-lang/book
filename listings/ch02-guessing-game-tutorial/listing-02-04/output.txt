@@ -5,41 +5,19 @@ $ cargo build
    Compiling ppv-lite86 v0.2.10
    Compiling rand_core v0.6.2
    Compiling rand_chacha v0.3.0
-   Compiling rand v0.8.3
+   Compiling rand v0.8.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
   --> src/main.rs:22:21
    |
 22 |     match guess.cmp(&secret_number) {
-   |                     ^^^^^^^^^^^^^^ expected struct `String`, found integer
+   |                 --- ^^^^^^^^^^^^^^ expected struct `String`, found integer
+   |                 |
+   |                 arguments to this function are incorrect
    |
    = note: expected reference `&String`
               found reference `&{integer}`
+note: associated function defined here
 
-error[E0283]: type annotations needed for `{integer}`
-   --> src/main.rs:8:44
-    |
-8   |     let secret_number = rand::thread_rng().gen_range(1..=100);
-    |         -------------                      ^^^^^^^^^ cannot infer type for type `{integer}`
-    |         |
-    |         consider giving `secret_number` a type
-    |
-    = note: multiple `impl`s satisfying `{integer}: SampleUniform` found in the `rand` crate:
-            - impl SampleUniform for i128;
-            - impl SampleUniform for i16;
-            - impl SampleUniform for i32;
-            - impl SampleUniform for i64;
-            and 8 more
-note: required by a bound in `gen_range`
-   --> /Users/carolnichols/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.8.3/src/rng.rs:129:12
-    |
-129 |         T: SampleUniform,
-    |            ^^^^^^^^^^^^^ required by this bound in `gen_range`
-help: consider specifying the type arguments in the function call
-    |
-8   |     let secret_number = rand::thread_rng().gen_range::<T, R>(1..=100);
-    |                                                     ++++++++
-
-Some errors have detailed explanations: E0283, E0308.
-For more information about an error, try `rustc --explain E0283`.
-error: could not compile `guessing_game` due to 2 previous errors
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `guessing_game` due to previous error

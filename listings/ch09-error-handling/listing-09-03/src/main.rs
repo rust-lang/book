@@ -1,5 +1,5 @@
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt");
+    let greeting_file_result = File::open("hello.txt");
 }

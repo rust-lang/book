@@ -253,7 +253,9 @@ the `art` crate</span>
 
 In cases where there are many nested modules, re-exporting the types at the top
 level with `pub use` can make a significant difference in the experience of
-people who use the crate.
+people who use the crate. Another common use of `pub use` is to re-export
+definitions of a dependency in the current crate to make that crate's
+definitions part of your crate’s public API.
 
 Creating a useful public API structure is more of an art than a science, and
 you can iterate to find the API that works best for your users. Choosing `pub
@@ -436,10 +438,19 @@ yank means that all projects with a *Cargo.lock* will not break, and any future
 
 To yank a version of a crate, in the directory of the crate that you’ve
 previously published, run `cargo yank` and specify which version you want to
-yank:
+yank. For example, if we've published a crate named `guessing_game` version
+1.0.1 and we want to yank it, in the project directory for `guessing_game` we'd
+run:
+
+<!-- manual-regeneration:
+cargo yank carol-test --version 2.1.0
+cargo yank carol-test --version 2.1.0 --undo
+-->
 
 ```console
 $ cargo yank --vers 1.0.1
+    Updating crates.io index
+        Yank guessing_game@1.0.1
 ```
 
 By adding `--undo` to the command, you can also undo a yank and allow projects
@@ -447,6 +458,8 @@ to start depending on a version again:
 
 ```console
 $ cargo yank --vers 1.0.1 --undo
+    Updating crates.io index
+      Unyank guessing_game@1.0.1
 ```
 
 A yank *does not* delete any code. It cannot, for example, delete accidentally

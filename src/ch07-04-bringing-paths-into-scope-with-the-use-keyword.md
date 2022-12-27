@@ -1,12 +1,11 @@
 ## Bringing Paths into Scope with the `use` Keyword
 
-It might seem like the paths we’ve written to call functions so far are
-inconveniently long and repetitive. For example, in Listing 7-7, whether we
-chose the absolute or relative path to the `add_to_waitlist` function, every
-time we wanted to call `add_to_waitlist` we had to specify `front_of_house` and
-`hosting` too. Fortunately, there’s a way to simplify this process. We can
-create a shortcut to a path with the `use` keyword once, and then use the
-shorter name everywhere else in the scope.
+Having to write out the paths to call functions can feel inconvenient and
+repetitive. In Listing 7-7, whether we chose the absolute or relative path to
+the `add_to_waitlist` function, every time we wanted to call `add_to_waitlist`
+we had to specify `front_of_house` and `hosting` too. Fortunately, there’s a
+way to simplify this process: we can create a shortcut to a path with the `use`
+keyword once, and then use the shorter name everywhere else in the scope.
 
 In Listing 7-11, we bring the `crate::front_of_house::hosting` module into the
 scope of the `eat_at_restaurant` function so we only have to specify
@@ -31,7 +30,7 @@ also check privacy, like any other paths.
 Note that `use` only creates the shortcut for the particular scope in which the
 `use` occurs. Listing 7-12 moves the `eat_at_restaurant` function into a new
 child module named `customer`, which is then a different scope than the `use`
-statement and the function body won’t compile:
+statement, so the function body won’t compile:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -118,8 +117,8 @@ meant when we used `Result`.
 
 There’s another solution to the problem of bringing two types of the same name
 into the same scope with `use`: after the path, we can specify `as` and a new
-local name, or alias, for the type. Listing 7-16 shows another way to write the
-code in Listing 7-15 by renaming one of the two `Result` types using `as`.
+local name, or *alias*, for the type. Listing 7-16 shows another way to write
+the code in Listing 7-15 by renaming one of the two `Result` types using `as`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -211,7 +210,7 @@ Members of the Rust community have made many packages available at
 involves these same steps: listing them in your package’s *Cargo.toml* file and
 using `use` to bring items from their crates into scope.
 
-Note that the standard library (`std`) is also a crate that’s external to our
+Note that the standard `std` library is also a crate that’s external to our
 package. Because the standard library is shipped with the Rust language, we
 don’t need to change *Cargo.toml* to include `std`. But we do need to refer to
 it with `use` to bring items from there into our package’s scope. For example,
@@ -287,7 +286,7 @@ This line brings `std::io` and `std::io::Write` into scope.
 ### The Glob Operator
 
 If we want to bring *all* public items defined in a path into scope, we can
-specify that path followed by `*`, the glob operator:
+specify that path followed by the `*` glob operator:
 
 ```rust
 use std::collections::*;

@@ -93,8 +93,20 @@ can then make as many test files as we want, and Cargo will compile each of the
 files as an individual crate.
 
 Let’s create an integration test. With the code in Listing 11-12 still in the
-*src/lib.rs* file, make a *tests* directory, create a new file named
-*tests/integration_test.rs*, and enter the code in Listing 11-13.
+*src/lib.rs* file, make a *tests* directory, and create a new file named
+*tests/integration_test.rs*. Your directory structure should look like this:
+
+```text
+adder
+├── Cargo.lock
+├── Cargo.toml
+├── src
+│   └── lib.rs
+└── tests
+    └── integration_test.rs
+```
+
+Enter the code in Listing 11-13 into the *tests/integration_test.rs* file:
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 
@@ -118,9 +130,14 @@ in this directory only when we run `cargo test`. Run `cargo test` now:
 ```
 
 The three sections of output include the unit tests, the integration test, and
-the doc tests. The first section for the unit tests is the same as we’ve been
-seeing: one line for each unit test (one named `internal` that we added in
-Listing 11-12) and then a summary line for the unit tests.
+the doc tests. Note that if any test in a section fails, the following sections
+will not be run. For example, if a unit test fails, there won’t be any output
+for integration and doc tests because those tests will only be run if all unit
+tests are passing.
+
+The first section for the unit tests is the same as we’ve been seeing: one line
+for each unit test (one named `internal` that we added in Listing 11-12) and
+then a summary line for the unit tests.
 
 The integration tests section starts with the line `Running
 tests/integration_test.rs`. Next, there is a line for each test function in
@@ -179,13 +196,28 @@ it is not what we wanted. We just wanted to share some code with the other
 integration test files.
 
 To avoid having `common` appear in the test output, instead of creating
-*tests/common.rs*, we’ll create *tests/common/mod.rs*. This is an alternate
-naming convention that Rust also understands. Naming the file this way tells
-Rust not to treat the `common` module as an integration test file. When we move
-the `setup` function code into *tests/common/mod.rs* and delete the
-*tests/common.rs* file, the section in the test output will no longer appear.
-Files in subdirectories of the *tests* directory don’t get compiled as separate
-crates or have sections in the test output.
+*tests/common.rs*, we’ll create *tests/common/mod.rs*. The project directory
+now looks like this:
+
+```text
+├── Cargo.lock
+├── Cargo.toml
+├── src
+│   └── lib.rs
+└── tests
+    ├── common
+    │   └── mod.rs
+    └── integration_test.rs
+```
+
+This is the older naming convention that Rust also understands that we
+mentioned in the [“Alternate File Paths”][alt-paths]<!-- ignore --> section of
+Chapter 7. Naming the file this way tells Rust not to treat the `common` module
+as an integration test file. When we move the `setup` function code into
+*tests/common/mod.rs* and delete the *tests/common.rs* file, the section in the
+test output will no longer appear. Files in subdirectories of the *tests*
+directory don’t get compiled as separate crates or have sections in the test
+output.
 
 After we’ve created *tests/common/mod.rs*, we can use it from any of the
 integration test files as a module. Here’s an example of calling the `setup`
@@ -234,3 +266,4 @@ chapters to work on a project!
 [paths]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html
 [separating-modules-into-files]:
 ch07-05-separating-modules-into-different-files.html
+[alt-paths]: ch07-05-separating-modules-into-different-files.html#alternate-file-paths

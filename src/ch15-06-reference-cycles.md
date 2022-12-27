@@ -66,7 +66,7 @@ moment, we’ll get this output:
 
 The reference count of the `Rc<List>` instances in both `a` and `b` are 2 after
 we change the list in `a` to point to `b`. At the end of `main`, Rust drops the
-variable `b`, which decreases the reference count of the `Rc<List>` instance
+variable `b`, which decreases the reference count of the `b` `Rc<List>` instance
 from 2 to 1. The memory that `Rc<List>` has on the heap won’t be dropped at
 this point, because its reference count is 1, not 0. Then Rust drops `a`, which
 decreases the reference count of the `a` `Rc<List>` instance from 2 to 1 as
@@ -117,7 +117,7 @@ up if its `strong_count` is 0. You can also create a *weak reference* to the
 value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
 reference to the `Rc<T>`. Strong references are how you can share ownership of
 an `Rc<T>` instance. Weak references don’t express an ownership relationship,
-and their count doesn't affect when an `Rc<T>` instance is cleaned up. They
+and their count doesn’t affect when an `Rc<T>` instance is cleaned up. They
 won’t cause a reference cycle because any cycle involving some weak references
 will be broken once the strong reference count of values involved is 0.
 

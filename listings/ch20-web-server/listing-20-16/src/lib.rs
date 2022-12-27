@@ -1,7 +1,5 @@
-use std::thread;
 // ANCHOR: here
-// --snip--
-use std::sync::mpsc;
+use std::{sync::mpsc, thread};
 
 pub struct ThreadPool {
     workers: Vec<Worker>,

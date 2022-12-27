@@ -1,18 +1,15 @@
 $ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
 error[E0507]: cannot move out of `value`, a captured variable in an `FnMut` closure
-  --> src/main.rs:27:30
+  --> src/main.rs:18:30
    |
-24 |       let value = String::from("by key called");
-   |           ----- captured outer variable
-25 | 
-26 |       list.sort_by_key(|r| {
-   |  ______________________-
-27 | |         sort_operations.push(value);
-   | |                              ^^^^^ move occurs because `value` has type `String`, which does not implement the `Copy` trait
-28 | |         r.width
-29 | |     });
-   | |_____- captured by this `FnMut` closure
+15 |     let value = String::from("by key called");
+   |         ----- captured outer variable
+16 |
+17 |     list.sort_by_key(|r| {
+   |                      --- captured by this `FnMut` closure
+18 |         sort_operations.push(value);
+   |                              ^^^^^ move occurs because `value` has type `String`, which does not implement the `Copy` trait
 
 For more information about this error, try `rustc --explain E0507`.
 error: could not compile `rectangles` due to previous error

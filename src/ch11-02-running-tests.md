@@ -79,7 +79,7 @@ output from the test that failed, `I got the value 8`, appears in the section
 of the test summary output, which also shows the cause of the test failure.
 
 If we want to see printed values for passing tests as well, we can tell Rust
-to also show the output of successful tests at the end with `--show-output`.
+to also show the output of successful tests with `--show-output`.
 
 ```console
 $ cargo test -- --show-output
@@ -127,7 +127,7 @@ We can pass the name of any test function to `cargo test` to run only that test:
 ```
 
 Only the test with the name `one_hundred` ran; the other two tests didn’t match
-that name. The test output lets us know we had more tests that didn't run by
+that name. The test output lets us know we had more tests that didn’t run by
 displaying `2 filtered out` at the end.
 
 We can’t specify the names of multiple tests in this way; only the first value

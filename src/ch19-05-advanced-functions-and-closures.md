@@ -7,12 +7,20 @@ including function pointers and returning closures.
 
 We’ve talked about how to pass closures to functions; you can also pass regular
 functions to functions! This technique is useful when you want to pass a
-function you’ve already defined rather than defining a new closure. Doing this
+function you’ve already defined rather than defining a new closure. Functions
+coerce to the type `fn` (with a lowercase f), not to be confused with the `Fn`
+closure trait. The `fn` type is called a *function pointer*. Passing functions
 with function pointers will allow you to use functions as arguments to other
-functions. Functions coerce to the type `fn` (with a lowercase f), not to be
-confused with the `Fn` closure trait. The `fn` type is called a *function
-pointer*. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-27.
+functions.
+
+The syntax for specifying that a parameter is a function pointer is similar to
+that of closures, as shown in Listing 19-27, where we’ve defined a function
+`add_one` that adds one to its parameter. The function `do_twice` takes two
+parameters: a function pointer to any function that takes an `i32` parameter
+and returns an `i32`, and one `i32 value`. The `do_twice` function calls the
+function `f` twice, passing it the `arg` value, then adds the two function call
+results together. The `main` function calls `do_twice` with the arguments
+`add_one` and `5`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -33,18 +41,19 @@ parameter type directly rather than declaring a generic type parameter with one
 of the `Fn` traits as a trait bound.
 
 Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
-`FnOnce`), so you can always pass a function pointer as an argument for a
+`FnOnce`), meaning you can always pass a function pointer as an argument for a
 function that expects a closure. It’s best to write functions using a generic
 type and one of the closure traits so your functions can accept either
 functions or closures.
 
-An example of where you would want to only accept `fn` and not closures is when
-interfacing with external code that doesn’t have closures: C functions can
-accept functions as arguments, but C doesn’t have closures.
+That said, one example of where you would want to only accept `fn` and not
+closures is when interfacing with external code that doesn’t have closures: C
+functions can accept functions as arguments, but C doesn’t have closures.
 
 As an example of where you could use either a closure defined inline or a named
-function, let’s look at a use of `map`. To use the `map` function to turn a
-vector of numbers into a vector of strings, we could use a closure, like this:
+function, let’s look at a use of the `map` method provided by the `Iterator`
+trait in the standard library. To use the `map` function to turn a vector of
+numbers into a vector of strings, we could use a closure, like this:
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/no-listing-15-map-closure/src/main.rs:here}}
@@ -83,7 +92,7 @@ compile to the same code, so use whichever style is clearer to you.
 Closures are represented by traits, which means you can’t return closures
 directly. In most cases where you might want to return a trait, you can instead
 use the concrete type that implements the trait as the return value of the
-function. But you can’t do that with closures because they don’t have a
+function. However, you can’t do that with closures because they don’t have a
 concrete type that is returnable; you’re not allowed to use the function
 pointer `fn` as a return type, for example.
 
