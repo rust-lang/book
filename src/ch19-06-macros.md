@@ -242,7 +242,7 @@ implementation that will print the name of the type the trait is implemented
 on: Rust doesn’t have reflection capabilities, so it can’t look up the type’s
 name at runtime. We need a macro to generate code at compile time.
 
-The next step is to define the procedural macro. At the time of writing this,
+The next step is to define the procedural macro. At the time of writing,
 procedural macros need to be in their own crate. Eventually, this restriction
 might be lifted. The convention for structuring crates and macro crates is as
 follows: for a crate named `foo`, a custom derive procedural macro crate is
