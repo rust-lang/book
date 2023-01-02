@@ -97,24 +97,21 @@ Rust has a particular way to think about memory, and ownership is a discipline f
 
 Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`:
 
-```rust
+```aquascope,interpreter
 fn main() {
-    let n = 5;
-    // L1
-    let y = plus_one(n);
-    // L3
+    let n = 5;`[]`
+    let y = plus_one(n);`[]`
     println!("The value of y is: {y}");
 }
 
 fn plus_one(x: i32) -> i32 {
-    // L2
-    x + 1
+    `[]`x + 1
 }
 ```
 
-The following diagram shows the state of memory at each of the marked points in the program: L1, L2, and L3.
+<!-- The following diagram shows the state of memory at each of the marked points in the program: L1, L2, and L3. -->
 
-<img src="img/experiment/ch04-01-stack1.jpg" class="center" width="600" />
+<!-- <img src="img/experiment/ch04-01-stack1.jpg" class="center" width="600" /> -->
 
 Variables live in **frames**. A frame is a mapping from variables to values within a single scope, such as a function. For example:
 
@@ -130,18 +127,16 @@ Frames are organized into a **stack** of currently-called-functions. For example
 
 When an expression reads a variable, the variable's value is copied out of its frame. For example, if we run this program:
 
-```rust
-# fn main() {
-let a = 5;
-// L1
-let b = a;
-// L2
-# }
+```aquascope,interpreter
+fn main() {
+    let a = 5;`[]`
+    let b = a;`[]`
+}
 ```
 
-Then the two frames look like this:
+<!-- Then the two frames look like this:
 
-<img src="img/experiment/ch04-01-stack2.jpg" class="center" width="500" />
+<img src="img/experiment/ch04-01-stack2.jpg" class="center" width="500" /> -->
 
 The value of `a` is copied into `b`, and `a` is left unchanged.
 
@@ -149,33 +144,29 @@ The value of `a` is copied into `b`, and `a` is left unchanged.
 
 However, copying data can take up a lot of memory. For example, here's a slightly different program using an array with 1 million elements:
 
-```rust
-# fn main() {
-let a = [0; 1_000_000];
-// L1
-let b = a;
-// L2
-# }
+```aquascope,interpreter
+fn main() {
+    let a = [0; 1_000_000];`[]`
+    let b = a;`[]`
+}
 ```
 
-Then copying `a` into `b` would cause the `main` frame to contain 2 million elements:
+<!-- Then copying `a` into `b` would cause the `main` frame to contain 2 million elements:
 
-<img src="img/experiment/ch04-01-stack3.jpg" class="center" width="300" />
+<img src="img/experiment/ch04-01-stack3.jpg" class="center" width="300" /> -->
 
 To transfer access to data without copying it, Rust uses the **heap**. The heap is a separate region of memory where data can live indefinitely, not tied to a specific frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap.
 
-```rust
-# fn main() {
-let a = Box::new([0; 1_000_000]);
-// L1
-let b = a;
-// L2
-# }
+```aquascope,interpreter
+fn main() {
+    let a = Box::new([0; 1_000_000]);`[]`
+    let b = a;`[]`
+}
 ```
 
-By wrapping the array in `Box::new`, our program states now look like this:
+<!-- By wrapping the array in `Box::new`, our program states now look like this:
 
-<img src="img/experiment/ch04-01-stack4.jpg" class="center" width="400" />
+<img src="img/experiment/ch04-01-stack4.jpg" class="center" width="400" /> -->
 
 Observe that now, there is only ever a single array. At L1, `a` contains a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
 
@@ -221,21 +212,19 @@ Instead, Rust _automatically_ frees a box's heap memory. Here is an _almost_ cor
 
 For example, let's trace through a program that allocates and frees a box:
 
-```rust
+```aquascope,interpreter
 fn main() {
-    make_and_drop();
-    // L2
+    make_and_drop();`[]`
 }
 
 fn make_and_drop() {
-    let b = Box::new(5);
-    // L1
+    let b = Box::new(5);`[]`
 }
 ```
 
-This program has the following states:
+<!-- This program has the following states:
 
-<img src="img/experiment/ch04-01-stack5.jpg" class="center" width="600" />
+<img src="img/experiment/ch04-01-stack5.jpg" class="center" width="600" /> -->
 
 At L1, `b` points to `5` on the heap. Once `make_and_drop` is finished, Rust deallocates the frame containing `b`, so Rust also deallocates the heap data in `b`, and the heap is empty at L2.
 
@@ -262,26 +251,22 @@ In the example above, `b` owns the box at L2. Therefore when the scope ends, Rus
 
 Boxes are used by Rust data structures like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to hold a variable number of elements. For example, here's a program that creates, moves, and mutates a string:
 
-```rust
+```aquascope,interpreter
 fn main() {
-    let s1 = String::from("Hello ");
-    // L1
-    let s3 = add_suffix(s1);
-    // L4
+    let s1 = String::from("Hello ");`[]`
+    let s3 = add_suffix(s1);`[]`
     println!("{s3}");
 }
 
 fn add_suffix(mut s2: String) -> String {
-    // L2
-    s2.push_str(" world");
-    // L3
-    s2
+    `[]`s2.push_str(" world");
+    `[]`s2
 }
 ```
 
-This program has the following states:
+<!-- This program has the following states:
 
-<img src="img/experiment/ch04-01-stack6.jpg" class="center" width="600" />
+<img src="img/experiment/ch04-01-stack6.jpg" class="center" width="600" /> -->
 
 This program is more involved, so make sure you follow each step:
 

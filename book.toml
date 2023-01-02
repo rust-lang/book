@@ -25,5 +25,7 @@ fullscreen = true
 validate = true
 cache-answers = true
 
+[preprocessor.aquascope]
+
 [build]
 extra-watch-dirs = ["quizzes", "aquascope", "../mdbook-quiz/target/debug"]
