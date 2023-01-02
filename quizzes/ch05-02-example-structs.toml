@@ -32,7 +32,7 @@ context = """
 id = "9ce4156e-4112-4101-a2c7-51758ceca639"
 type = "MultipleChoice"
 prompt.prompt = "Which statement best describes a difference between the `Display` and `Debug` traits?"
-answer.answer = "`Display` is for cases where a value has a unique string representation, while `Debug` does not assume that"
+answer.answer = "`Display` is for presenting values to an end-user, while `Debug` is for developers' internal use"
 prompt.distractors = [
   "`Display` is for printing values to the console, while `Debug` is for viewing values in a debugger",
   "`Display` cannot be implemented for structs, while `Debug` can be implemented for structs",

@@ -22,7 +22,8 @@ The string `s` is moved into `add_suffix` after calling it, so it cannot be used
 id = "c66f045e-8e45-4c24-bc7e-58ca45d7974e"
 type = "ShortAnswer"
 prompt.prompt = """
-What is the maximum number of times a heap allocation could occur in the following program? (Write your answer using digits, like `1` or `2` etc.)
+What is the maximum number of times a heap allocation could occur in the following program? Write your answer using digits, like `1` or `2` etc.
+(You can ignore allocations due to buffering within `println!`.)
 
 ```
 fn print(s: String) {
