@@ -219,7 +219,7 @@ the types would cause errors with the operations performed on the elements of
 the vector. Using an enum plus a `match` expression means that Rust will ensure
 at compile time that every possible case is handled, as discussed in Chapter 6.
 
-If you don’t know the exhaustive set of types a program will get at runtime to
+If you don’t know the exhaustive set of types a program will get at compile time to
 store in a vector, the enum technique won’t work. Instead, you can use a trait
 object, which we’ll cover in Chapter 17.
 
