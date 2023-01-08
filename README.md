@@ -1,40 +1,30 @@
 # 러스트 프로그래밍 언어
 
+> ### 알립니다
+>
+> 이 번역본은 2017년 7월경부터 번역된 2nd edition을 기반으로 하고 있으며,
+> 완료된 상태입니다. 문서의 최신 버전은 [https://github.com/rust-kr/doc.rust-kr.org](https://github.com/rust-kr/doc.rust-kr.org)에서
+> 진행하고 있습니다. **최신 문서에 대한 정보는 rust-kr에 있는 저장소에서 확인해주세요.**
+>
+> 이 저장소는 최신 버전의 문서 번역이 완료될때까지 계속 유지될 것이며
+> 그동안의 **2판 관련 오타 수정 등의 issue 및 pull-request만 처리**될
+> 예정입니다.
+
 ### 빌드된 문서 바로가기
 
 - [2nd edition: 완역](https://rinthel.github.io/rust-lang-book-ko)
-- [2018 edition: 번역중](https://rust-kr.github.io/doc.rust-kr.org)
-
-### 번역 상황 안내
-
-##### 2018 edition 번역
-
-2021년 3월까지 이 저장소에서 진행한 번역작업은 이제
-[https://github.com/rust-kr/doc.rust-kr.org](https://github.com/rust-kr/doc.rust-kr.org)으로
-fork 되어 여기서 진행하는 것으로 결정되었습니다.
-
-따라서 2018 edition의 번역 작업과 관련된 issue, pull request는 모두
-위의 저장소에서 진행할 예정이니 참고 바라겠습니다~
-
-##### 2nd edition 번역
-
-현재 2판 번역은 완료된 상태이며,
-[https://rinthel.github.io/rust-lang-book-ko](https://rinthel.github.io/rust-lang-book-ko)에서
-빌드된 문서를 확인할 수 있습니다.
-
-이 저장소는 2018 edition 번역이 완료될때까지 계속 유지될 것이며
-그동안의 2판 관련 오타 수정 등의 issue 및 pull-request는 여기서
-처리될 예정입니다.
+- [2021 edition: 번역중](https://rust-kr.github.io/doc.rust-kr.org)
 
 ### 환영합니다!
 
-[![빌드 상태](https://api.travis-ci.com/rinthel/rust-lang-book-ko.svg?branch=master)](https://travis-ci.org/rust-lang/book)
+[![빌드 상태](https://api.travis-ci.com/rinthel/rust-lang-book-ko.svg?branch=master)](https://app.travis-ci.com/github/rinthel/rust-lang-book-ko)
 
-안녕하세요? 한국어를 쓰시는 러스트 유저 여러분들을 환영합니다. 이 저장소는 러스트 프로그래밍 언어
-문서(소위 the book이라고 일컫는)의 2번째 판 및 2018년 판에 대한 번역 작업을 위해 만들어졌습니다.
+안녕하세요? 한국어를 쓰시는 러스트 유저 여러분들을 환영합니다.
+이 저장소는 러스트 프로그래밍 언어 문서(소위 the book이라고 일컫는)의
+2번째 판 번역을 위해 fork 되었습니다.
 2번째 판의 빌드된 문서는 상단의 링크를 통해 읽으실 수 있습니다.
 
-혹시 함께 번역에 참여하고 싶으신 분들, 환영합니다! :)
+<!--혹시 함께 번역에 참여하고 싶으신 분들, 환영합니다! :)
 저에게 메세지를 주시거나 discussions에 요청을 남겨주시면,
 collaborator로 등록해 드리겠습니다!
 
@@ -75,7 +65,7 @@ issue를 만들어 주셔도 좋습니다.
 ### 기타 사항
 
 기타 논의할 사항 혹은 건의할 내용이 있다면 discussions에 남겨서 함께
-이야기하면 좋겠습니다.
+이야기하면 좋겠습니다.-->
 
 <!-- 1번째 판에 대한 번역 작업은 [sarojaba님께서 운영하시는 penflip 페이지](
 https://www.penflip.com/sarojaba/rust-doc-korean/blob/master/About.txt)에
