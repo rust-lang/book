@@ -52,7 +52,7 @@ fn greet(g1: &String, g2: &String) { // note the ampersands
 }
 ```
 
-The expression `&m1` uses the ampersand operator to create a reference to `m1`, also called "borrowing" `m1`. The type of the `greet` parameter `g1` is changed to `&String`, meaning "a reference to a `String`". 
+The expression `&m1` uses the ampersand operator to create a reference to (or "borrow") `m1`. The type of the `greet` parameter `g1` is changed to `&String`, meaning "a reference to a `String`". 
 
 <!-- At runtime, the references look like this:
 
@@ -62,7 +62,7 @@ Observe at L2 that there are two steps from `g1` to the string "Hello". `g1` is 
 
 While `m1` owns the heap data "Hello", `g1` does _not_ own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our Moved Heap Data Principle: because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`.
 
-References are **non-owning pointers**, because they do not own the data they point-to.
+References are **non-owning pointers**, because they do not own the data they point to.
 
 ### Dereferencing a Pointer Accesses Its Data
 
@@ -72,7 +72,8 @@ The previous examples using boxes and strings have not shown how Rust "follows" 
 fn main() {
     let mut x: Box<i32> = Box::new(1);
     let a: i32 = *x;         // *x reads the heap value, so a = 1
-    *x += 1;                 // *x on the left-side modifies the heap value, x points to the value 2
+    *x += 1;                 // *x on the left-side modifies the heap value, 
+                             //   x points to the value 2
 
     let r1: &Box<i32> = &x;  // r1 points to x on the stack
     let b: i32 = **r1;       // two dereferences get us to the heap value
@@ -81,10 +82,6 @@ fn main() {
     let c: i32 = *r2;`[]`    // so only one dereference is needed to read it
 }
 ```
-
-And here is the state of memory at the end of the program:
-
-<img src="img/experiment/ch04-02-stack2.jpg" class="center" width="250" />
 
 Observe the difference between `r1` pointing to `x` on the stack, and `r2` pointing to the heap value `2`.
 
@@ -154,7 +151,10 @@ The core idea is that variables have three kinds of **permissions** on their dat
 
 These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is ever executed.
 
-By default, a variable has read/own permissions (`RO`) on its data. If a variable is annotated with `let mut`, then it also has write permissions (`W`). The key idea is that **references can temporarily remove these permissions.** Here is a simple example that is annotated with changes in permissions after each line in the program:
+By default, a variable has read/own permissions (`RO`) on its data. If a variable is annotated with `let mut`, then it also has write permissions (`W`). The key idea is 
+that **references can temporarily remove these permissions.** 
+
+To illustrate this idea, we will use a new kind of diagram. This diagram shows the changes in permissions on each line of the program. For example:
 
 <!-- TODO: can we show unchanged permissions for variables appearing in a table? -->
 <!-- horizontal line should be vertical-aligned to bottom of the row, not middle
@@ -162,21 +162,21 @@ By default, a variable has read/own permissions (`RO`) on its data. If a variabl
 
 ```aquascope,permission-diffs
 fn main() {
-    let mut x = 1;
+    let mut x = String::from("Hello");
     let y = &x;
-    println!("{} = {}", x, *y);
-    x += 1;
+    println!("{} = {}", x, y);
+    x.push_str(" world"); 
 }
 ```
 
 Let's walk through each line:
 
-1. After `let mut x = 1`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions.
-2. After `let y = &x`, the variable `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
-   - The borrow removes write/own permissions from `x`: it cannot write or own its data, but it can still read its data.
-   - The variable `y` has gained read/own permissions. `y` is not writable because it was not marked `let mut`.
-   - The **path** `*y` has gained read permissions.
-3. After `println!("{} = {}", x, *y)`, `y` is no longer in use, so `x` is no longer borrowed. Therefore:
+1. After `let mut x = (...)`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (green is for gain).
+2. After `let y = &x`, the data in `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
+   - The borrow removes write/own permissions from `x` (red is for loss): it cannot write or own its data, but it can still read its data (neutral-colored is for unchanged).
+   - The variable `y` has gained read/own permissions. `y` is not writable (the missing permission is shown as a dash `-`) because it was not marked `let mut`.
+   - The **path** `*y` has gained read permissions. Note that `y` is different from `*y`! `y` is a reference to a string, while `*y` is the string itself (accessed through a reference).
+3. After `println!(...)`, `y` is no longer in use, so `x` is no longer borrowed. Therefore:
    - `x` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
    - `y` and `*y` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
 4. After `x += 1`, `x` is no longer in use, and it loses all of its permissions.
@@ -187,7 +187,7 @@ Permissions are not just defined on variables (like `x` or `y`), but also on **p
 - Dereferences of paths, like `*a`.
 - Array accesses of paths, like `a[0]`.
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next section).
-- Any combination of the above, like `(*a)[0].1`.
+- Any combination of the above, like `*((*a)[0].1)`.
 
 For example, here's a program that shows how you can borrow one field of a tuple, and write to a different field of the same tuple:
 
@@ -195,14 +195,17 @@ For example, here's a program that shows how you can borrow one field of a tuple
 
 ```aquascope,permission-diffs
 fn main() {
-    let mut x = (1, 2);
-    let y = &x.0;    
-    x.1 += 1;
-    println!("{:?} {}", x, y);
+    let mut tup = (
+      String::from("A"), 
+      String::from("B")
+    );
+    let s = &tup.0;
+    tup.1.push_str("C");
+    println!("{} {}", s, tup.1);
 }
 ```
 
-The statement `let y = &x.0` borrows `x.0` which removes write/own permissions from `x.0` and `x`. However, `x.1` still retains write permissions, so doing `x.1 += 1` is a valid operation.
+The statement `let s = &tup.0` borrows `tup.0`. This borrow removes write/own permissions from `x.0`. It also removes write/own permissions from `x`, e.g. one could not pass `tup` to a function that takes as input a value of type `(String, String)`. However, `x.1` still retains write permissions, so doing `x.1 += 1` is a valid operation.
 
 Returning to the Pointer Safety Principle, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
@@ -214,16 +217,20 @@ Permissions are a compile-time concept, not a run-time concept. The Rust compile
 
 Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. For example, suppose we placed the `x += 1` statement in-between the definition of `y` and the use of `*y`, like this:
 
-```rust,ignore,does_not_compile
-# fn main() {
-let mut x = 1;
-let y = &x;
-x += 1;
-println!("{} = {}", x, *y);
-# }
+```aquascope,receiver-types
+fn main() {
+    let mut x = 1;
+    let y = &x;
+    x += 1;
+    println!("{} = {}", x, *y);
+}
 ```
 
-Then the Rust compiler will reject this program with the following error:
+This example shows another kind of visualization. Any time a path is *used*, Rust expects that path to have certain permissions. For example, the borrow `&x` requires that `x` is readable, therefore the permission `R` is shown. The letter is filled-in because `x` has the read permission at that line. 
+
+By contrast, the increment operation `x += 1` requires that `x` is readable and writable, so both `R` and `W` are shown. However, `x` does not have write permissions (it is borrowed by `y`), so the letter is hollow, indicating that `W` is *expected* but `x` does not have it.
+
+If you try to compile this program, then the Rust compiler will reject this program with the following error:
 
 ```text
 error[E0506]: cannot assign to `x` because it is borrowed
@@ -237,34 +244,27 @@ error[E0506]: cannot assign to `x` because it is borrowed
   |                        -- borrow later used here
 ```
 
-This error reflects the fact that `x` does not have write permissions in-between `let y = &x` and `println!(..)`.
+Now, you may think that Rust is being overzealous here &mdash; what's the harm in incrementing `x`? That won't affect the reference `y`. But here is a similar example with an actual safety issue:
 
-Now you may think that Rust is being overzealous here &mdash; what's the harm in incrementing `x`? That won't affect the reference `y`. But here is a similar example with an actual safety issue:
 
-```rust,ignore,does_not_compile
-# fn main() {
-let mut v = vec![1, 2, 3];
-let n = &v[0];
-// L1
-v.push(4);
-// L2
-println!("{:?}, {}", v, *n);
-# }
+```aquascope,receiver-types
+fn main() {
+  let mut v = vec![1, 2, 3];
+  let n = &v[1];
+  v.push(4);
+  println!("{:?}", v, n);
+}
 ```
-
-Depending on the capacity of `v`, this program could potentially have the following states at L1 and L2:
-
-<img src="img/experiment/ch04-02-stack3.jpg" class="center" width="300" />
 
 The function `v.push(4)` could resize `v`, deallocating its original contents. This operation would invalidate the reference `n`, leading it to point to deallocated memory. The subsequent read of `*n` would therefore be undefined behavior.
 
-Thankfully, Rust rejects this program. The statement `&v[0]` borrows the vector `v`, which removes write permissions from `v`, so `v.push(4)` is flagged as a permissions violation.
+Thankfully, Rust rejects this program for the same reason as before. The statement `&v[0]` borrows the vector `v`, which removes write permissions from `v`, so `v.push(4)` is flagged as a permissions violation.
 
-In sum, Rust's borrow checker prevents _all_ unsafe uses of references (like `v.push(4)`). However, it also prevents _some_ safe uses of references (like `x += 1`). That is an important point: just because Rust rejects your program does not mean your program is _definitely_ unsafe!
+In sum, Rust's borrow checker prevents _all_ unsafe uses of references (like `v.push(4)`). However, it also prevents _some_ safe uses of references (like `x += 1`). This is an important point: just because Rust rejects your program does not mean your program is _definitely_ unsafe!
 
 ### Mutable References Provide Unique and Non-Owning Access to Data
 
-The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also convenient to be able to temporarily provide mutable access to data without moving it. For example, the [`Vec::push`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push) should add an element to a vector without consuming ownership of the vector.
+The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also convenient to be able to temporarily provide mutable access to data without moving it. For example, [`Vec::push`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push) should add an element to a vector without consuming ownership of the vector.
 
 The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
 
@@ -303,7 +303,7 @@ In this program, the operation `&*y` removes the write permission from `*y` but 
 
 To borrow from a path, that path must have the appropriate permissions: `R` for an immutable reference, and `RW` for a mutable reference. A common source of borrow checker errors is trying to borrow data without enough permissions, for example:
 
-```aquascope,permission-diffs
+```aquascope,receiver-types
 fn main() {
     let mut x = 1;
     let y = &x;
@@ -313,7 +313,7 @@ fn main() {
 }
 ```
 
-If you try to compile this program, Rust will return the following error:
+Observe that `x` does not have write permissions in the expression `&mut x` because it was previously borrowed by `y`. Therefore, if you try to compile this program, Rust will return the following error:
 
 ```text
 error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immutable
@@ -327,8 +327,6 @@ error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immuta
 6 |     println!("{}", y);
   |                    - immutable borrow later used here
 ```
-
-You can see this error reflected in the permissions. The statement `let y = &x` removes write permissions from `x`. Therefore Rust finds a problem with the expression `&mut x`, because `&mut` requires write permissions.
 
 ### Permissions Are Returned At The End of a Reference's Lifetime
 

@@ -5,5 +5,5 @@ book/
 target
 tmp
 
-src/quiz
-src/aquascope
+/src/quiz
+/src/aquascope

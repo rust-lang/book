@@ -1,23 +1,21 @@
 ## The Slice Type
 
 *Slices* let you reference a contiguous sequence of elements in a collection
-rather than the whole collection. A slice is a kind of reference, so it does
-not have ownership.
+rather than the whole collection. A slice is a kind of reference, so it is a non-owning pointer.
 
-Here’s a small programming problem: write a function that takes a string of
+To motivate why slices are useful, let's work through a small programming problem: 
+write a function that takes a string of
 words separated by spaces and returns the first word it finds in that string.
 If the function doesn’t find a space in the string, the whole string must be
-one word, so the entire string should be returned.
-
-Let’s work through how we’d write the signature of this function without using
-slices, to understand the problem that slices will solve:
+one word, so the entire string should be returned. Without slices, we might
+write the signature of the function like this:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
 The `first_word` function has a `&String` as a parameter. We don’t want
-ownership, so this is fine. But what should we return? We don’t really have a
+ownership of the string, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
 end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
 
@@ -75,9 +73,27 @@ uses the `first_word` function from Listing 4-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
-```
+```aquascope,interpreter
+fn first_word(s: &String) -> usize {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return i;
+        }
+    }
+
+    s.len()
+}
+
+fn main() {
+    let mut s = String::from("hello world");
+
+    let word = first_word(&s);`[]`
+
+    s.clear();`[]`
+}
+``` 
 
 <span class="caption">Listing 4-8: Storing the result from calling the
 `first_word` function and then changing the `String` contents</span>
@@ -105,11 +121,17 @@ Luckily, Rust has a solution to this problem: string slices.
 
 ### String Slices
 
-<!-- BEGIN INTERVENTION: 7fbda6e4-dca7-458e-ab52-fab03181f90b -->
 A *string slice* is a reference to part of a `String`, and it looks like this:
 
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
+```aquascope,interpreter
+fn main() {
+    let s = String::from("hello world");
+
+    let hello: &str = &s[0..5];
+    let world: &str = &s[6..11];
+    let s2: &String = &s; // not a slice, for comparison
+    `[]`
+}
 ```
 
 Rather than a reference to the entire `String` (like `s2`), `hello` is a reference to a
@@ -117,21 +139,39 @@ portion of the `String`, specified in the extra `[0..5]` bit. We create slices
 using a range within brackets by specifying `[starting_index..ending_index]`,
 where `starting_index` is the first position in the slice and `ending_index` is
 one more than the last position in the slice.
-Internally, the slice data
-structure stores the starting position and the length of the slice, which
-corresponds to `ending_index` minus `starting_index`. So in the case of `let
-world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of 5.
 
-Figure 4-6 shows this in a diagram.
+Slices are special kinds of references because they are "fat" pointers, or pointers
+with metadata. Here, the metadata is the length of the slice. We can see this metadata
+by changing our visualization to peek into the internals of Rust's data structures:
 
-<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 80%;" />
+```aquascope,interpreter,concreteTypes=true,hideCode=true
+fn main() {
+    let s = String::from("hello world");
 
-<span class="caption">Figure 4-6: String slice referring to part of a
-`String`</span>
+    let hello: &str = &s[0..5];
+    let world: &str = &s[6..11];
+    let s2: &String = &s; // not a slice, for comparison
+    `[]`
+}
+```
 
-Note that there is a difference between `s2: &String`, a reference to an owned string, and `hello: &str`, a string slice. `s2` is two pointers away from the string data, while `hello` directly points to the string data without going through `s`.
-<!-- END INTERVENTION -->
+Observe that the variables `hello` and `world` have both a `ptr` and a `len` field, which together define the underlined regions
+of the string on the heap. You can also see here what a `String` actually looks like: a string is a vector of bytes (`Vec<u8>`),
+which contains a length `len` and a buffer `buf` that has a pointer `ptr` and a capacity `cap`.
+
+Because slices are references, they also change the permissions on referenced data. For example, observe below that when
+`hello` is created as a slice of `s`, then `s` loses write and own permissions:
+
+```aquascope,permission-diffs
+fn main() {
+    let mut s = String::from("hello");
+    let hello: &str = &s[0..5];
+    println!("{hello}");
+    s.push_str(" world");
+}
+```
+
+#### Range syntax
 
 With Rust’s `..` range syntax, if you want to start at index zero, you can drop
 the value before the two periods. In other words, these are equal:
@@ -173,6 +213,8 @@ let slice = &s[..];
 > of introducing string slices, we are assuming ASCII only in this section; a
 > more thorough discussion of UTF-8 handling is in the [“Storing UTF-8 Encoded
 > Text with Strings”][strings]<!-- ignore --> section of Chapter 8.
+
+#### Rewriting `first_word` with string slices
 
 With all this information in mind, let’s rewrite `first_word` to return a
 slice. The type that signifies “string slice” is written as `&str`:

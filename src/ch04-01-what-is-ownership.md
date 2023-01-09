@@ -38,7 +38,7 @@ main:
     ; ...
 ```
 
-> _Note_: if you aren't familiar with assembly code, that's ok! This is just an example to show you how Rust actually works under the hood. You don't generally need to know assembly to understand Rust.
+> _Note_: if you aren't familiar with assembly code, that's ok! This section contains a few examples of assembly just to show you how Rust actually works under the hood. You don't generally need to know assembly to understand Rust.
 
 This assembly code:
 
@@ -95,9 +95,9 @@ Rust has a particular way to think about memory, and ownership is a discipline f
 
 ### Variables Live in the Stack
 
-Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`:
+Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`. Beneath the program is a diagram that visualizes the state of the program at the three marked points.
 
-```aquascope,interpreter
+```aquascope,interpreter,horizontal=true
 fn main() {
     let n = 5;`[]`
     let y = plus_one(n);`[]`
@@ -109,17 +109,11 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-<!-- The following diagram shows the state of memory at each of the marked points in the program: L1, L2, and L3. -->
-
-<!-- <img src="img/experiment/ch04-01-stack1.jpg" class="center" width="600" /> -->
-
 Variables live in **frames**. A frame is a mapping from variables to values within a single scope, such as a function. For example:
 
 - The frame for `main` at location L1 holds `n = 5`.
 - The frame for `plus_one` at L2 holds `x = 5`.5
 - The frame for `main` at location L3 holds `n = 5; y = 6`.
-
-<!-- SK: "This sequence of frames is called a stack" — this is a bit annoying because it (a) leaves out the control part of the stack, and (b) might bring in some standard stack misconceptions. -->
 
 Frames are organized into a **stack** of currently-called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, Rust deallocates (or "frees") the function's frame. This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
 
@@ -127,16 +121,12 @@ Frames are organized into a **stack** of currently-called-functions. For example
 
 When an expression reads a variable, the variable's value is copied out of its frame. For example, if we run this program:
 
-```aquascope,interpreter
+```aquascope,interpreter,horizontal=true
 fn main() {
     let a = 5;`[]`
     let b = a;`[]`
 }
 ```
-
-<!-- Then the two frames look like this:
-
-<img src="img/experiment/ch04-01-stack2.jpg" class="center" width="500" /> -->
 
 The value of `a` is copied into `b`, and `a` is left unchanged.
 
@@ -151,11 +141,9 @@ fn main() {
 }
 ```
 
-<!-- Then copying `a` into `b` would cause the `main` frame to contain 2 million elements:
+Observe that copying `a` into `b` causes the `main` frame to contain 2 million elements. 
 
-<img src="img/experiment/ch04-01-stack3.jpg" class="center" width="300" /> -->
-
-To transfer access to data without copying it, Rust uses the **heap**. The heap is a separate region of memory where data can live indefinitely, not tied to a specific frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap.
+To transfer access to data without copying it, Rust uses the **heap**. The heap is a separate region of memory where data can live indefinitely, not tied to a specific frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap. For example, we can wrap the million-element array in `Box::new` like this:
 
 ```aquascope,interpreter
 fn main() {
@@ -164,13 +152,10 @@ fn main() {
 }
 ```
 
-<!-- By wrapping the array in `Box::new`, our program states now look like this:
-
-<img src="img/experiment/ch04-01-stack4.jpg" class="center" width="400" /> -->
-
 Observe that now, there is only ever a single array. At L1, `a` contains a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
 
-You'll also notice that in the diagram, `a` has been crossed out. That's because of ownership. To understand why, we first need to discuss _memory management_.
+<!-- 
+You'll also notice that in the diagram, `a` has been crossed out. That's because of ownership. To understand why, we first need to discuss _memory management_. -->
 
 ### Rust Does Not Permit Manual Memory Management
 
@@ -218,15 +203,11 @@ fn main() {
 }
 
 fn make_and_drop() {
-    let b = Box::new(5);`[]`
+    let a_box = Box::new(5);`[]`
 }
 ```
 
-<!-- This program has the following states:
-
-<img src="img/experiment/ch04-01-stack5.jpg" class="center" width="600" /> -->
-
-At L1, `b` points to `5` on the heap. Once `make_and_drop` is finished, Rust deallocates the frame containing `b`, so Rust also deallocates the heap data in `b`, and the heap is empty at L2.
+At L1, `a_box` points to `5` on the heap. Once `make_and_drop` is finished, Rust deallocates the frame containing `a_box`, so Rust also deallocates the heap data in `a_box`, and the heap is empty at L2.
 
 The box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we bind two variables to a box?
 
@@ -253,26 +234,22 @@ Boxes are used by Rust data structures like [`Vec`](https://doc.rust-lang.org/st
 
 ```aquascope,interpreter
 fn main() {
-    let s1 = String::from("Hello ");`[]`
+    let s1 = String::from("Hello");`[]`
     let s3 = add_suffix(s1);`[]`
     println!("{s3}");
 }
 
 fn add_suffix(mut s2: String) -> String {
-    `[]`s2.push_str(" world");
-    `[]`s2
+    `[]`s2.push_str(" world");`[]`
+    s2
 }
 ```
-
-<!-- This program has the following states:
-
-<img src="img/experiment/ch04-01-stack6.jpg" class="center" width="600" /> -->
 
 This program is more involved, so make sure you follow each step:
 
 1. At L1, the string "Hello" has been allocated on the heap. It is owned by `s1`.
 2. At L2, the function `add_suffix(s1)` has been called. This moves ownership of the string from `s1` to `s2`. The string data is not copied, but the pointer to the data is copied.
-3. At L3, the function `s2.push_str(" world")` resizes the string's heap allocation. This frees the original heap memory, creates a new allocation, and writes "Hello world" into the new location. `s1` now points to deallocated memory.
+3. At L3, the function `s2.push_str(" world")` resizes the string's heap allocation. This frees the original heap memory, creates a new allocation, and writes "Hello world" into the new location. `s1` now points to deallocated memory (represented as an `X`).
 4. At L4, the frame for `add_suffix` is gone. This function returned `s2`, transferring ownership of the string to `s3`.
 
 This program also illustrates a key safety principle for ownership. Imagine that `s1` were used in `main` after calling `add_suffix`, like this:
