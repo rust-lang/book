@@ -122,10 +122,10 @@ Frames are organized into a **stack** of currently-called-functions. For example
 When an expression reads a variable, the variable's value is copied out of its frame. For example, if we run this program:
 
 ```aquascope,interpreter,horizontal=true
-fn main() {
-    let a = 5;`[]`
-    let b = a;`[]`
-}
+#fn main() {
+let a = 5;`[]`
+let b = a;`[]`
+#}
 ```
 
 The value of `a` is copied into `b`, and `a` is left unchanged.
@@ -135,10 +135,10 @@ The value of `a` is copied into `b`, and `a` is left unchanged.
 However, copying data can take up a lot of memory. For example, here's a slightly different program using an array with 1 million elements:
 
 ```aquascope,interpreter
-fn main() {
-    let a = [0; 1_000_000];`[]`
-    let b = a;`[]`
-}
+#fn main() {
+let a = [0; 1_000_000];`[]`
+let b = a;`[]`
+#}
 ```
 
 Observe that copying `a` into `b` causes the `main` frame to contain 2 million elements. 
@@ -146,10 +146,10 @@ Observe that copying `a` into `b` causes the `main` frame to contain 2 million e
 To transfer access to data without copying it, Rust uses the **heap**. The heap is a separate region of memory where data can live indefinitely, not tied to a specific frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap. For example, we can wrap the million-element array in `Box::new` like this:
 
 ```aquascope,interpreter
-fn main() {
-    let a = Box::new([0; 1_000_000]);`[]`
-    let b = a;`[]`
-}
+#fn main() {
+let a = Box::new([0; 1_000_000]);`[]`
+let b = a;`[]`
+#}
 ```
 
 Observe that now, there is only ever a single array. At L1, `a` contains a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
