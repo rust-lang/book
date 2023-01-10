@@ -22,8 +22,21 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
   const handleSelection = useCallback(() => {
     // get current selection (falsy value if no selection)
     let selection = document.getSelection();
-    let range =
-      selection && !selection.isCollapsed && selection.rangeCount && selection.getRangeAt(0);
+    if (!selection) return;
+
+    let anchor = selection.anchorNode;
+    if (!anchor) return;
+
+    let parentElement = anchor;
+    while (!(parentElement instanceof Element)) {
+      if (!parentElement.parentNode) return;
+      parentElement = parentElement.parentNode;
+    }
+
+    if (!parentElement.closest(".content") || parentElement.closest(".aquascope, .mdbook-quiz"))
+      return;
+
+    let range = !selection.isCollapsed && selection.rangeCount && selection.getRangeAt(0);
 
     setCurrRange(range || null);
   }, []);
@@ -46,7 +59,7 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
         let parsed_src = { ...src, extra: JSON.parse(src.extra as string) };
         let data = { action: HighlightTelemetryAction.create, data: parsed_src };
 
-        window.telemetry.log("feedback", data);
+        window.telemetry?.log("feedback", data);
       });
     });
   }, []);
