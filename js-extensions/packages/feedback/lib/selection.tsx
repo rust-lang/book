@@ -6,7 +6,7 @@ import HighlightSource from "web-highlighter/dist/model/source";
 
 import FeedbackModal from "./modal";
 import FeedbackTooltip from "./tooltip";
-import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction } from "./utils";
+import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction, addDOMHash } from "./utils";
 
 type SelectionRendererProps = { highlighter: Highlighter; stored?: HighlightSource[] };
 let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored }) => {
@@ -46,6 +46,9 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
     stored?.map(s => highlighter.fromStore(s.startMeta, s.endMeta, s.text, s.id, s.extra));
 
     highlighter.on(Highlighter.event.CREATE, ({ sources }) => {
+      // add DOM node hash to each source's metadata
+      sources = sources.map(h => addDOMHash(highlighter, h));
+
       // store new highlights in localStorage when created
       let stored_str = localStorage.getItem(HIGHLIGHT_STORAGE_KEY);
       let stored_highlights = JSON.parse(stored_str || "[]");
