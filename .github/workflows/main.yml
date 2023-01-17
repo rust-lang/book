@@ -40,11 +40,10 @@ jobs:
 
     - name: Install mdbook-linkcheck
       run: |
-        mkdir -p mdbook-linkcheck && cd "$_" && \
+        cd bin &&
           curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && \
           unzip "$_" && \
           chmod +x mdbook-linkcheck && \
-          export PATH=$PWD:$PATH && \
           cd ..
 
     - name: Install mdbook-quiz
