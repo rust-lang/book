@@ -16,7 +16,7 @@ additional-js = [
   "js-extensions/packages/feedback/dist/index.js"
 ]
 
-# git-repository-url = "https://github.com/rust-lang/book"
+git-repository-url = "https://github.com/willcrichton/rust-book"
 
 [preprocessor.quiz]
 fullscreen = true
