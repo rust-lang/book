@@ -506,7 +506,7 @@ you to solutions.
 Next, we’ll put everything we’ve discussed throughout the book into practice
 and do one more project!
 
-[ref]: ../reference/macros-by-example.html
+[ref]: https://doc.rust-lang.org/reference/macros-by-example.html
 [tlborm]: https://veykril.github.io/tlborm/
 [`syn`]: https://crates.io/crates/syn
 [`quote`]: https://crates.io/crates/quote

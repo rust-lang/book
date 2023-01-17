@@ -905,15 +905,15 @@ types, and functions, and shows how to use them in Rust. Chapter 4 explores
 ownership, a feature that makes Rust different from other languages. Chapter 5
 discusses structs and method syntax, and Chapter 6 explains how enums work.
 
-[prelude]: ../std/prelude/index.html
+[prelude]: https://doc.rust-lang.org/std/prelude/index.html
 [variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
 [comments]: ch03-04-comments.html
-[string]: ../std/string/struct.String.html
-[iostdin]: ../std/io/struct.Stdin.html
-[read_line]: ../std/io/struct.Stdin.html#method.read_line
-[result]: ../std/result/enum.Result.html
+[string]: https://doc.rust-lang.org/std/string/struct.String.html
+[iostdin]: https://doc.rust-lang.org/std/io/struct.Stdin.html
+[read_line]: https://doc.rust-lang.org/std/io/struct.Stdin.html#method.read_line
+[result]: https://doc.rust-lang.org/std/result/enum.Result.html
 [enums]: ch06-00-enums.html
-[expect]: ../std/result/enum.Result.html#method.expect
+[expect]: https://doc.rust-lang.org/std/result/enum.Result.html#method.expect
 [recover]: ch09-02-recoverable-errors-with-result.html
 [randcrate]: https://crates.io/crates/rand
 [semver]: http://semver.org
@@ -921,4 +921,4 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
 [match]: ch06-02-match.html
-[parse]: ../std/primitive.str.html#method.parse
+[parse]: https://doc.rust-lang.org/std/primitive.str.html#method.parse

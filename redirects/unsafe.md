@@ -15,4 +15,4 @@ Here are the relevant sections in the new and old books:
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/unsafe.html
 [2]: ch19-01-unsafe-rust.html
-[3]: ../nomicon/index.html
+[3]: https://doc.rust-lang.org/nomicon/index.html

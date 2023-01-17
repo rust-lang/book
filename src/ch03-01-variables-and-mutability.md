@@ -195,4 +195,4 @@ can have.
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [data-types]: ch03-02-data-types.html#data-types
 [storing-values-with-variables]: ch02-00-guessing-game-tutorial.html#storing-values-with-variables
-[const-eval]: ../reference/const_eval.html
+[const-eval]: https://doc.rust-lang.org/reference/const_eval.html

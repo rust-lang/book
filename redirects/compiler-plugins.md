@@ -10,4 +10,4 @@ This particular chapter has moved to [the Unstable Book][2].
 
 * **[In the Unstable Rust Book: `plugin`][2]**
 
-[2]: ../unstable-book/language-features/plugin.html
+[2]: https://doc.rust-lang.org/unstable-book/language-features/plugin.html

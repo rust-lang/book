@@ -21,4 +21,4 @@ Here are the relevant sections in the new and old books:
 
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/attributes.html
-[2]: ../reference/attributes.html
+[2]: https://doc.rust-lang.org/reference/attributes.html

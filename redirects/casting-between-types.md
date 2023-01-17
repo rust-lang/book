@@ -28,5 +28,5 @@ Here are the relevant sections in the new and old books:
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/casting-between-types.html
 [2]: appendix-01-keywords.html
-[3]: ../reference/expressions/operator-expr.html#type-cast-expressions
-[4]: ../std/mem/fn.transmute.html
+[3]: https://doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions
+[4]: https://doc.rust-lang.org/std/mem/fn.transmute.html

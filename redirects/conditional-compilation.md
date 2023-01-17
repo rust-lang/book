@@ -25,4 +25,4 @@ The best place to learn about it is [the Rust Reference][3].
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/conditional-compilation.html
 [2]: index.html
-[3]: ../reference/conditional-compilation.html
+[3]: https://doc.rust-lang.org/reference/conditional-compilation.html
