@@ -38,14 +38,6 @@ jobs:
         rustc -Vv
         mdbook --version
 
-    - name: Install mdbook-linkcheck
-      run: |
-        cd bin &&
-          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip && \
-          unzip "$_" && \
-          chmod +x mdbook-linkcheck && \
-          cd ..
-
     - name: Install mdbook-quiz
       run: |
         npm install -g pnpm
