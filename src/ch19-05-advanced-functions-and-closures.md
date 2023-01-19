@@ -1,7 +1,5 @@
 ## Advanced Functions and Closures
 
-{{#include experiment-note.md}}
-
 This section explores some advanced features related to functions and closures,
 including function pointers and returning closures.
 
@@ -124,6 +122,8 @@ Types”][using-trait-objects-that-allow-for-values-of-different-types]<!--
 ignore --> in Chapter 17.
 
 Next, let’s look at macros!
+
+{{#quiz ../quizzes/ch19-05-advanced-functions-and-closures.toml}}
 
 [advanced-traits]:
 ch19-03-advanced-traits.html#advanced-traits

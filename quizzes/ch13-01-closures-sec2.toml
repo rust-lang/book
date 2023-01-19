@@ -1,0 +1,87 @@
+[[questions]]
+id = "a055fa7c-89e2-467e-8458-62cbf3ffb8bf"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let mut s = String::from("Hello");
+    let mut add_suffix = || s.push_str(" world");
+    println!("{s}");
+    add_suffix();  
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 5
+context = """
+`add_suffix` mutably borrows `s` between its definition and use, so the `println` (a read of `s`) is invalid.
+"""
+
+[[questions]]
+id = "266d3cb3-de76-4b91-bd13-c3d6cb9e7fd7"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let mut s = String::from("Hello");
+    let add_suffix = |s: &mut String| s.push_str(" world");
+    println!("{s}");
+    add_suffix(&mut s);  
+}
+"""
+answer.doesCompile = true
+answer.stdout = "Hello"
+context = """
+Because `add_suffix` does not capture `s`, it is fine to read `s` before mutating it with `add_suffix`.
+"""
+
+[[questions]]
+id = "0f298680-d870-47a1-962c-1c668f75cb68"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following API:
+
+```rust
+/// Executes a function with a mutable reference to each element of a vector
+fn for_each_mut<T, F: ___(&mut T)>(v: &mut Vec<T>, mut f: F) {
+    for x in v.iter_mut() {
+        f(x);
+    }
+}
+```
+
+Which of the following function traits is most appropriate to fill in the blank?
+"""
+answer.answer = "`FnMut`"
+prompt.distractors = ["`Fn`", "`FnOnce`"]
+context = """
+`f` is called multiple times so `FnOnce` is not appropriate. Both `Fn` and `FnMut` can work, and `FnMut` is less restrictive, so `FnMut` is most appropriate.
+"""
+
+
+[[questions]]
+id = "65f574b1-b418-4abe-852e-8b14d88368a7"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following API:
+
+```rust
+pub struct Analyzer<F> {
+    postprocess: F
+}
+
+impl<F: ___(i32) -> i32> Analyzer<F> {
+    fn process(&self, n: i32) -> i32 { /* .. */ }
+    pub fn pipeline(&self, n: i32) -> i32 {
+        let n = self.process(n);
+        (self.postprocess)(n)
+    }
+}
+```
+
+Which of the following function traits is most appropriate to fill in the blank?
+"""
+answer.answer = "`Fn`"
+prompt.distractors = ["`FnMut`", "`FnOnce`"]
+context = """
+`pipeline` could be called multiple times, so `FnOnce` is not appropriate. 
+`pipeline` takes an immutable reference to `self`, if `f` were `FnMut`, it could not be called within `pipeline`. 
+Therefore `Fn` is most appropriate here.
+"""

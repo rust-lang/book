@@ -1,7 +1,5 @@
 ## All the Places Patterns Can Be Used
 
-{{#include experiment-note.md}}
-
 Patterns pop up in a number of places in Rust, and you’ve been using them a lot
 without realizing it! This section discusses all the places where patterns are
 valid.
@@ -247,6 +245,8 @@ At this point, you’ve seen several ways of using patterns, but patterns don’
 work the same in every place we can use them. In some places, the patterns must
 be irrefutable; in other circumstances, they can be refutable. We’ll discuss
 these two concepts next.
+
+{{#quiz ../quizzes/ch18-01-all-the-places-for-patterns.toml}}
 
 [ignoring-values-in-a-pattern]:
 ch18-03-pattern-syntax.html#ignoring-values-in-a-pattern

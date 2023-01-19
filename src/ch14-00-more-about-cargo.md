@@ -1,7 +1,5 @@
 # More About Cargo and Crates.io
 
-{{#include experiment-note.md}}
-
 So far we’ve used only the most basic features of Cargo to build, run, and test
 our code, but it can do a lot more. In this chapter, we’ll discuss some of its
 other, more advanced features to show you how to do the following:

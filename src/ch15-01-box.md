@@ -1,7 +1,5 @@
 ## Using `Box<T>` to Point to Data on the Heap
 
-{{#include experiment-note.md}}
-
 The most straightforward smart pointer is a *box*, whose type is written
 `Box<T>`. Boxes allow you to store data on the heap rather than the stack. What
 remains on the stack is the pointer to the heap data. Refer to Chapter 4 to
@@ -253,5 +251,7 @@ up as well because of the `Drop` trait implementation. These two traits will be
 even more important to the functionality provided by the other smart pointer
 types we’ll discuss in the rest of this chapter. Let’s explore these two traits
 in more detail.
+
+{{#quiz ../quizzes/ch15-01-box.toml}}
 
 [trait-objects]: ch17-02-trait-objects.html#using-trait-objects-that-allow-for-values-of-different-types

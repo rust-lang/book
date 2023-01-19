@@ -1,7 +1,5 @@
 ## Publishing a Crate to Crates.io
 
-{{#include experiment-note.md}}
-
 We’ve used packages from [crates.io](https://crates.io/)<!-- ignore --> as
 dependencies of our project, but you can also share your code with other people
 by publishing your own packages. The crate registry at
@@ -144,6 +142,8 @@ including the comment describing the crate as a whole</span>
 Documentation comments within items are useful for describing crates and
 modules especially. Use them to explain the overall purpose of the container to
 help your users understand the crate’s organization.
+
+{{#quiz ../quizzes/ch14-02-publishing-to-crates-io-sec1.toml}}
 
 ### Exporting a Convenient Public API with `pub use`
 
@@ -461,6 +461,8 @@ $ cargo yank --vers 1.0.1 --undo
 
 A yank *does not* delete any code. It cannot, for example, delete accidentally
 uploaded secrets. If that happens, you must reset those secrets immediately.
+
+{{#quiz ../quizzes/ch14-02-publishing-to-crates-io-sec2.toml}}
 
 [spdx]: http://spdx.org/licenses/
 [semver]: http://semver.org/

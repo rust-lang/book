@@ -1,7 +1,5 @@
 ## Processing a Series of Items with Iterators
 
-{{#include experiment-note.md}}
-
 The iterator pattern allows you to perform some task on a sequence of items in
 turn. An iterator is responsible for the logic of iterating over each item and
 determining when the sequence has finished. When you use iterators, you don’t
@@ -228,3 +226,5 @@ adapted iterator into a vector that’s returned by the function.
 
 The test shows that when we call `shoes_in_size`, we get back only shoes
 that have the same size as the value we specified.
+
+{{#quiz ../quizzes/ch13-02-iterators.toml}}

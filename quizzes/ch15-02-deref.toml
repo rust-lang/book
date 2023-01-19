@@ -1,0 +1,59 @@
+[[questions]]
+id = "f4971d37-55d5-48c5-9966-a28b54ed3bee"
+type = "Tracing"
+prompt.program = """
+use std::ops::Deref;
+
+#[derive(Clone, Copy)]
+struct AccessLogger(i32);
+
+impl Deref for AccessLogger {
+    type Target = i32;
+    fn deref(&self) -> &Self::Target {
+        println!("deref");
+        &self.0
+    }
+}
+
+fn main() {
+  let n = AccessLogger(-1);
+  let x = *n + 1;
+  let n2 = n;
+  println!("{} {}", x, *n)
+}
+"""
+answer.doesCompile = true
+answer.stdout = """
+deref
+deref
+0 -1
+"""
+context = """
+The `AccessLogger` will print "deref" every time `n` is dereferenced, which occurs twice.
+Note that copying `n` to `n2` does not dereference `n`.
+"""
+
+[[questions]]
+id = "71f06e6c-d2cb-4ba9-bae3-7bebca4c10da"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the use of deref coercions in the expression `b.len()`:
+
+```
+let s = &mut String::new();
+let b = &Box::new(s);
+b.len()
+```
+
+Which of the following is the fully expanded expression that is passed to `str::len(..)`?
+"""
+answer.answer = "`&(*b).deref()[..]`"
+prompt.distractors = [
+    "`b.deref().as_str()`",
+    "`b.deref().deref()`",
+    "`(&*b[..]).deref()`"
+]
+context = """
+First, the outer reference is dereferenced creating `(*b)`. Then the `Box` is dereferenced creating `(*b).deref()`.
+Then the type `&mut String` is converted to `&str` by adding `&` and `[..]`, creating `&(*b).deref()[..]`.
+"""

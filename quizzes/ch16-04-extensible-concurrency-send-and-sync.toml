@@ -1,0 +1,29 @@
+[[questions]]
+id = "43081862-aac8-4e18-9c55-1107ea4c7cc1"
+type = "MultipleChoice"
+prompt.prompt = """
+Imagine you are designing an API for a database connection like this:
+
+```
+struct DbConnection { /* ... */ }
+impl DbConnection {
+    fn query(&self) -> DbResult {
+        /* ... */
+    }
+}
+```
+
+Your database does not support concurrent queries from the same connection. 
+Which of the following marker traits should `DbConnection` implement?
+"""
+answer.answer = "`Send`"
+prompt.distractors = [
+    "`Send` and `Sync`",
+    "`Sync`",
+    "Neither `Send` nor `Sync`"
+]
+context = """
+It is fine to send a `DbConnection` between threads, so `DbConnection` should implement `Send`.
+But it would not be valid e.g. for an `Arc<Database>` to be shared such that multiple threads concurrently
+called `db.query()`, so `DbConnection` should not implement `Sync`.
+"""

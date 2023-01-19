@@ -1,7 +1,5 @@
 ## Advanced Traits
 
-{{#include experiment-note.md}}
-
 We first covered traits in the [“Traits: Defining Shared
 Behavior”][traits-defining-shared-behavior]<!-- ignore --> section of Chapter
 10, but we didn’t discuss the more advanced details. Now that you know more
@@ -460,6 +458,8 @@ behavior—we would have to implement just the methods we do want manually.
 
 This newtype pattern is also useful even when traits are not involved. Let’s
 switch focus and look at some advanced ways to interact with Rust’s type system.
+
+{{#quiz ../quizzes/ch19-03-advanced-traits.toml}}
 
 [newtype]: ch19-03-advanced-traits.html#using-the-newtype-pattern-to-implement-external-traits-on-external-types
 [implementing-a-trait-on-a-type]:

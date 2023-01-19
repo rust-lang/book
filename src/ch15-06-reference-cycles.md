@@ -1,7 +1,5 @@
 ## Reference Cycles Can Leak Memory
 
-{{#include experiment-note.md}}
-
 Rust’s memory safety guarantees make it difficult, but not impossible, to
 accidentally create memory that is never cleaned up (known as a *memory leak*).
 Preventing memory leaks entirely is not one of Rust’s guarantees, meaning
@@ -318,5 +316,7 @@ information.
 
 Next, we’ll talk about concurrency in Rust. You’ll even learn about a few new
 smart pointers.
+
+{{#quiz ../quizzes/ch15-06-reference-cycles.toml}}
 
 [nomicon]: https://doc.rust-lang.org/nomicon/index.html

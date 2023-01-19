@@ -1,0 +1,52 @@
+[[questions]]
+id = "e127342d-7ad2-4730-b930-774411e1872d"
+type = "Tracing"
+prompt.program = """
+use std::rc::Rc;
+fn main() {
+    let n = Rc::new(1);
+    let mut n2 = Rc::clone(&n);
+    *n2 += 1;
+    println!("{}", n);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 5
+context = """
+Data inside an `Rc` cannot be mutated without the use of interior mutability (seen next section). `Rc` enforces this property
+by implementing the `Deref` trait, but not implementing the `DerefMut` trait.
+"""
+
+[[questions]]
+id = "3b43eb45-3400-4555-b605-9ae1cde7c80c"
+type = "Tracing"
+prompt.program = """
+use std::rc::Rc;
+struct Example;
+impl Drop for Example {
+    fn drop(&mut self) {
+        println!("drop");
+    }
+}
+fn main() {
+    let x = Rc::new(Example);    
+    let y = Rc::clone(&x);    
+    println!("A");
+    drop(x);
+    println!("B");
+    drop(y);    
+    println!("C");
+}
+"""
+answer.doesCompile = true
+answer.stdout = """
+A
+B
+drop
+C
+"""
+context = """
+The value inside a reference-counted pointer is only ever dropped once, so "drop" is only printed once.
+The initial `drop(x)` decrements the reference count, but does not drop the value because `y` is still live.
+Then dropping `y` finds that the reference count is 0, and drops `Example`.
+"""

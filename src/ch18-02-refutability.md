@@ -1,7 +1,5 @@
 ## Refutability: Whether a Pattern Might Fail to Match
 
-{{#include experiment-note.md}}
-
 Patterns come in two forms: refutable and irrefutable. Patterns that will match
 for any possible value passed are *irrefutable*. An example would be `x` in the
 statement `let x = 5;` because `x` matches anything and therefore cannot fail
@@ -90,3 +88,5 @@ this syntax isn’t particularly useful and could be replaced with a simpler
 Now that you know where to use patterns and the difference between refutable
 and irrefutable patterns, let’s cover all the syntax we can use to create
 patterns.
+
+{{#quiz ../quizzes/ch18-02-refutability.toml}}

@@ -1,0 +1,59 @@
+[[questions]]
+id = "d50dd9fb-f84c-4748-9e45-cd3dc8d5fb47"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best describes why iterators are described as "lazy"?
+"""
+answer.answer = "An iterator has no effect until you call methods that extract elements from the iterator"
+prompt.distractors = [
+    "An iterator creates a copy of each item it iterates over", 
+    "An iterator takes ownership of the sequence of items it is iterating over", 
+    "An iterator will only iterate over a given number of items"
+]
+context = """
+Lazy generally means "does not do work until asked", and iterators do not perform any computation until
+`Iterator::next` is called.
+"""
+
+[[questions]]
+id = "19eac65e-44ad-4349-9632-47bdbb519d46"
+type = "MultipleChoice"
+prompt.prompt = """
+True/false: these two code snippets are semantically equivalent.
+
+Snippet 1:
+```
+while let Some(x) = iter.next() {
+    f(x);
+}
+```
+
+Snippet 2:
+```
+for x in iter {
+    f(x);
+}
+```
+"""
+answer.answer = "True"
+prompt.distractors = ["False"]
+context = """
+The for-loop is a syntactic sugar for the `while let`, which is itself a sugar for `loop` and `break`.
+"""
+
+[[questions]]
+id = "ff652580-b487-4379-bd70-652f5803321d"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let v = vec![1, 2, 3, 4];
+    let a: Vec<_> = v.iter().filter(|x| *x % 2 == 0).map(|x| x * 2).collect();
+    let b: Vec<_> = v.iter().map(|x| x * 2).filter(|x| x % 2 == 0).collect();
+    println!("{} {}", a[0], b[0]);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "4 2"
+context = """
+The order of iterators matters --- a filter and a map is not the same as a map and a filter!
+"""

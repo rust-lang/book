@@ -1,0 +1,67 @@
+[[questions]]
+id = "8c80f9e8-2d95-43cc-9aa4-04d617dd8cb9"
+type = "Tracing"
+prompt.program = """
+macro_rules! manylet {
+    ( $( $i:ident ),* = $e:expr ) => {
+        $(
+            let mut $i = $e;
+        )*
+    }
+}
+
+fn main() {
+    let mut s = String::from("A");
+    manylet!(x, y = s);
+    x.push_str("B");
+    println!("{x}{y}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 11
+context = """
+The `manylet` macro syntactically duplicates the expression `e` as a binding to each
+variable on the left-hand side of the equals. However, because `s` is an owned string, 
+then the first binding to `x` moves `s`, and the second binding to `y` is invalid.
+"""
+
+[[questions]]
+id = "f4f664ef-4b0b-43ac-ba90-5051a4ef89fb"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following are valid reasons for implementing a macro as a
+procedural macro instead of a declarative macro?
+"""
+answer.answer = [
+    "You want to integrate with Rust's derive system",
+    "Your macro requires nontrivial analysis of the macro user's syntax",
+]
+prompt.distractors = [
+  "You want to generate variable-length sequences of code",
+  "Your macro requires an entire item as input, not just an expression"
+]
+context = """
+Procedural macros are the only way to create a custom derive. Procedural macros
+are also useful when you need code to analyze the macro user's syntax --- declarative
+macros only permit shuffling around the input, not e.g. computing its size.
+
+Declarative macros can generate variable-length sequences of code, and can wrap/produce
+items and not just expressions.
+"""
+
+[[questions]]
+id = "4c7dce03-99c6-41e3-8482-ccf4e30974ff"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best describes the input to a procedural macro? 
+"""
+answer.answer = "The input is a sequence of tokens"
+prompt.distractors = [
+  "The input is a typed control-flow graph",
+   "The input is an abstract syntax tree",
+  "The input is a byte-string"
+]
+context = """
+Procedural macros take as input (and produce as output) token streams.
+You can use crates like `syn` to convert tokens to syntax trees.
+"""

@@ -30,4 +30,3 @@ answer.answer = "7"
 context = """
 One allocation for each call to `String::from`, and one allocation for every time `+` is called.
 """
-promptExplanation = true

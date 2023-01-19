@@ -1,7 +1,5 @@
 ## Pattern Syntax
 
-{{#include experiment-note.md}}
-
 In this section, we gather all the syntax valid in patterns and discuss why and
 when you might want to use each one.
 
@@ -582,6 +580,8 @@ applied any test to the value in the `id` field in this arm, as we did with the
 first two arms: any value would match this pattern.
 
 Using `@` lets us test a value and save it in a variable within one pattern.
+
+{{#quiz ../quizzes/ch18-03-pattern-syntax.toml}}
 
 ## Summary
 

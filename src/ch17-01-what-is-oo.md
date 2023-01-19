@@ -1,7 +1,5 @@
 ## Characteristics of Object-Oriented Languages
 
-{{#include experiment-note.md}}
-
 There is no consensus in the programming community about what features a
 language must have to be considered object-oriented. Rust is influenced by many
 programming paradigms, including OOP; for example, we explored the features
@@ -152,3 +150,5 @@ restricting the flexibility of a program’s design.
 For these reasons, Rust takes the different approach of using trait objects
 instead of inheritance. Let’s look at how trait objects enable polymorphism in
 Rust.
+
+{{#quiz ../quizzes/ch17-01-what-is-oo.toml}}

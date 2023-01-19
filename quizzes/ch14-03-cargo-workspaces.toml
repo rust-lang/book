@@ -1,0 +1,71 @@
+[[questions]]
+id = "20846719-fe7b-48b8-abfd-9c5f1174472f"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider a workspace with the following structure:
+
+```
+├── Cargo.lock
+├── Cargo.toml
+└── crates
+    ├── a
+    |   ├── lib.rs
+    |   └── Cargo.toml
+    └── b
+        ├── lib.rs
+        └── Cargo.toml
+```
+
+With the following content in each file:
+
+```
+// crates/b/lib.rs
+pub fn f() {}
+```
+
+```toml
+# crates/a/Cargo.toml
+[dependencies]
+b = {path = "../b"}
+```
+
+Which of the following is the correct path to refer to `f` inside of `a/lib.rs`?
+"""
+answer.answer = "`b::f`"
+prompt.distractors = [
+    "`crates::b::f`",
+    "`workspace::b::f`",
+    "`super::b::f`",
+]
+context = """
+From the perspective of `a`, `b` is an external crate like any other, so you don't use a prefix to access its items.
+"""
+
+[[questions]]
+id = "bc8a69b2-d9a8-4438-8657-391c3fda5ed9"
+type = "ShortAnswer"
+prompt.prompt = """
+Consider a workspace with three packages `a`, `b`, and `c`. Their respective manifests are:
+
+```toml
+# a/Cargo.toml
+[dependencies]
+rand = "0.8.4"
+
+# b/Cargo.toml
+[dependencies]
+rand = "0.7.3"
+
+# c/Cargo.toml
+[dependencies]
+rand = "0.8.5"
+```
+
+How many different versions of `rand` will be used when compiling all packages in the workspace? 
+Write your answer as a digit, e.g. 0, 1, so on.
+"""
+answer.answer = "2"
+context = """
+According to the rules of semantic versioning, `a` and `b` will both share the latest patch of the minor version `0.8`.
+`c` will use the latest patch of the minor version `0.7`. So two versions in total will be used.
+"""

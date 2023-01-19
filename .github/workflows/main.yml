@@ -40,10 +40,11 @@ jobs:
 
     - name: Install mdbook-quiz
       run: |
-        npm install -g pnpm
+        npm install -g pnpm spellchecker
+        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
         git clone https://github.com/willcrichton/graco
         cd graco && npm install && npm link && cd ..
-        cargo install --git https://github.com/willcrichton/mdbook-quiz --debug --features rust-editor
+        cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
 
     - name: Install js-extensions
       run: |

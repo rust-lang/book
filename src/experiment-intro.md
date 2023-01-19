@@ -17,7 +17,7 @@ Every quiz looks like the one below. Try it out by clicking "Start".
 
 If you get a question incorrect, you can choose to either retry the quiz, or see the correct answers. We encourage you to retry the quiz until you get 100% &mdash; feel free to review the content before retrying the quiz. Note that once you see the correct answers, you cannot retry the quiz.
 
-If you spot an issue in a question, you can submit a bug report by clicking the 🐞 icon.
+If you spot an issue in a question, you can submit a bug report by clicking the 🐞 icon. If you spot any other issue in this book, you can file an issue on our Github repository: <https://github.com/cognitive-engineering-lab/rust-book>
 
 ## 2. Highlighting
 
@@ -34,10 +34,14 @@ You can use highlights to save information for yourself. You can also use highli
 The book's content may change as you go through the experiment. We will update this page as we add new features. Here's the changelog:
 
 **Upcoming changes:**
-  * We will add questions to the remaining chapters of the book.
-  * We will add ownership-specific quizzes to test your understanding of ownership in later chapters.
+  * We are designing a new ownership chapter that provides a more visual approach to explaining ownership.
 
 **Past changes:**
+* January 18, 2022
+  * Questions have been added for the remaining chapters of the book.    
+* December 15, 2022
+  * New sections called "Ownership Inventory" have been added throughout the book
+    with challenging ownership-related questions.    
 * November 7, 2022
   * Only questions with incorrect answers will be shown on a retry.
   * Most multiple-choice questions will have their choices randomized.

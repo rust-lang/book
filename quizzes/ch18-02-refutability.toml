@@ -1,0 +1,41 @@
+[[questions]]
+id = "35e59c95-3d83-4277-8d88-a1986f4086d7"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider pattern-matching on an expression of some type `T`.
+Which of these statements best describes the difference between a refutable and an irrefutable pattern?
+"""
+answer.answer = "Refutable patterns do not match some value of type `T`, while irrefutable patterns match all values of type `T`"
+prompt.distractors = [
+    "Refutable patterns match some values of a different type `S`, while irrefutable patterns only match values of type `T`",
+    "Refutable patterns do not match any values of type `T`, while irrefutable patterns match some values of type `T`",
+    "Refutable patterns are patterns where `T` is an enum, while irrefutable patterns are patterns where `T` is not an enum"
+]
+context = """
+A pattern is refutable if there exists some value of the expected type that isn't matched by the pattern.
+"""
+
+[[questions]]
+id = "3c29eb2d-cbe9-4a2c-99b8-aa5c6467c8b4"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following program:
+
+```
+let x: &[(i32, i32)] = &[(0, 1)];
+```
+
+Which of the following are **refutable** patterns for `x`?
+"""
+answer.answer = [
+    "`&[(x, y)]`",
+    "`&[(x, y), ..]`",    
+]
+prompt.distractors = [
+    "`&[..]`",
+    "`_`"
+]
+context = """ 
+A slice does not have a fixed length, so any pattern which asserts that
+`x` must have at least one element is refutable.
+"""

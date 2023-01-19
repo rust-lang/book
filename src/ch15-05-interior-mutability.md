@@ -1,7 +1,5 @@
 ## `RefCell<T>` and the Interior Mutability Pattern
 
-{{#include experiment-note.md}}
-
 *Interior mutability* is a design pattern in Rust that allows you to mutate
 data even when there are immutable references to that data; normally, this
 action is disallowed by the borrowing rules. To mutate data, the pattern uses
@@ -342,5 +340,7 @@ sometimes worth trading a bit of speed for this flexibility in our data
 structures. Note that `RefCell<T>` does not work for multithreaded code!
 `Mutex<T>` is the thread-safe version of `RefCell<T>` and we’ll discuss
 `Mutex<T>` in Chapter 16.
+
+{{#quiz ../quizzes/ch15-05-interior-mutability.toml}}
 
 [wheres-the---operator]: ch05-03-method-syntax.html#wheres-the---operator

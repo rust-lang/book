@@ -1,0 +1,67 @@
+[[questions]]
+id = "5b117680-87a5-4b18-abba-3415602477eb"
+type = "Tracing"
+prompt.program = """
+use std::{sync::mpsc, thread};
+
+enum ClientMessage { Incr, Get, Quit }
+enum ServerMessage { Get(usize) }
+
+fn main() {
+    let (server_tx, client_rx) = mpsc::channel();
+    let (client_tx, server_rx) = mpsc::channel();
+    let server = thread::spawn(move || {
+        let mut n = 0;
+        loop {
+            match server_rx.recv().unwrap() {
+                ClientMessage::Quit => break,
+                ClientMessage::Incr => n += 1,
+                ClientMessage::Get => server_tx.send(ServerMessage::Get(n)).unwrap()
+            }
+        }
+    });
+
+    for msg in [ClientMessage::Incr, ClientMessage::Get, ClientMessage::Quit] {
+        client_tx.send(msg).unwrap();
+    }
+
+    if let ServerMessage::Get(n) = client_rx.recv().unwrap() {
+        println!("{}", n)
+    }
+
+    server.join().unwrap();
+}
+
+"""
+answer.doesCompile = true
+answer.stdout = "1"
+context = """
+This is an example of how to use enums to send different kinds of messages over a channel.
+Here, the client increments a number, retrieves the number, then exits the server.
+"""
+
+[[questions]]
+id = "94934f0f-4db9-48ee-b63e-198ad1a9ffc8"
+type = "Tracing"
+prompt.program = """
+use std::{sync::mpsc, thread};
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+    thread::spawn(|| {
+        let s = String::from("Hello world");
+        tx.send(s.clone()).unwrap();
+        tx.send(s.len()).unwrap();
+    });
+    let s = rx.recv().unwrap();
+    let n = rx.recv().unwrap();
+    println!("{s} {n}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 8
+context = """
+Channels can only send values of a single type, so `tx.send(s.len())` is a type error.
+If you want to send values of multiple types, you can use either an enum or the 
+[`Any`](https://doc.rust-lang.org/std/any/trait.Any.html) trait.
+"""

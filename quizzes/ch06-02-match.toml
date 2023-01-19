@@ -80,7 +80,6 @@ answer.lineNumber = 13
 context = """
 The match arm `Either::Right(s)` moves the field `s`, so `x` cannot be used in the `println`.
 """
-promptExplanation = true
 
 
 [[questions]]

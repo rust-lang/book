@@ -1,7 +1,5 @@
 ## Comparing Performance: Loops vs. Iterators
 
-{{#include experiment-note.md}}
-
 To determine whether to use loops or iterators, you need to know which
 implementation is faster: the version of the `search` function with an explicit
 `for` loop or the version with iterators.

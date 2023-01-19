@@ -110,4 +110,3 @@ context = """
 Rust will not compile this program, because it is ambiguous whether the lifetime of the output is tied to
 the lifetime of `&Foo` or the reference `Foo.bar`.
 """
-promptExplanation = true

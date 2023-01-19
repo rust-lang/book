@@ -1,0 +1,70 @@
+[[questions]]
+id = "05a7959b-4fe7-4ee6-9c25-bfa9a4e72535"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following are "superpowers" that Rust enables inside an `unsafe` block?
+"""
+answer.answer = [
+    "Dereferencing a raw pointer",
+    "Calling a function marked as `unsafe`",
+]
+prompt.distractors = [
+    "Disabling the borrow checker",
+    "Converting a reference to a raw pointer",
+]
+context = """
+`unsafe` blocks enable you to dereference raw pointers and call `unsafe` functions. However,
+`unsafe` does not disable the borrow checker (operations on safe references are still checked).
+A reference can be converted to a raw pointer in normal safe code.
+"""
+
+
+[[questions]]
+id = "7d50567d-d73c-47d4-922f-480e8d1b7919"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let mut v = Vec::with_capacity(4);
+    for i in 0 .. 3 { 
+        v.push(i); 
+    }
+    let n = &v[0] as *const i32;
+    v.push(4);
+    println!("{}", unsafe { *n });
+}
+"""
+answer.doesCompile = true
+answer.stdout = "0"
+context = """
+This program is dangerous! It compiles correctly and executes without issue
+because `Vec` has enough capacity such that `v.push(4)` does not resize it. However,
+if the capacity were 3, then `n` would point to deallocated memory.
+"""
+
+[[questions]]
+id = "015941ed-d375-4070-a8dc-2f368584b302"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following are situations where using `unsafe` code is a reasonable 
+method for working around the borrow checker?
+"""
+answer.answer = [    
+    "Getting two mutable references to disjoint indices in an array",
+    "Allowing values to be uninitialized when they are not being read",
+    "Having a reference to one field of a struct sit in another field of the same struct"
+]
+prompt.distractors = [
+    "Returning a pointer to a stack-allocated variable out of a function",    
+]
+context = """
+Two mutable references to disjoint indices is reasonable because the borrow checker doesn't understand when indices are disjoint. See: [`slice::split_at_mut`](https://doc.rust-lang.org/stable/std/primitive.slice.html#method.split_at_mut).
+
+Allowing values to be uninitialized is reasonable because the borrow checker adopts a conservative policy that values must always initialized, but it's sometimes useful to work with uninitialized values. See [`MaybeUninit`](https://doc.rust-lang.org/stable/std/mem/union.MaybeUninit.html) and the [`take_mut`](https://docs.rs/take_mut/0.2.2/take_mut/index.html) crate.
+
+Having a struct hold a reference to itself is reasonable because the borrow checker cannot
+reason about the lifetime of self-references. See the [`std::pin`](https://doc.rust-lang.org/stable/std/pin/index.html) module.
+
+However, returning a pointer to a stack-allocated variable is *never* valid to do with unsafe
+code. The only appropriate workaround is to use garbage collection, e.g. returning an `Rc<T>`
+instead of `&T`.
+"""

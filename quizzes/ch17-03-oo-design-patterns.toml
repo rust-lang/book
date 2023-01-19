@@ -1,0 +1,65 @@
+[[questions]]
+id = "d19f9e83-d4c2-41d5-9fc7-81db5135eb1e"
+type = "MultipleChoice"
+prompt.prompt = """
+In the running example from this section, a blog post could have one of three states: `Draft`, `PendingReview`, and `Published`. In the example, each state was represented as a struct, and state transitions was represented as trait methods returning trait objects.
+
+An alternative implementation could represent the states as an enum, like this:
+
+```
+enum BlogState {
+    Draft,
+    PendingReview,
+    Published
+}
+
+impl Post {
+    fn request_review(&mut self) {
+        use BlogState::*;
+        self.state = match self.state {
+            Draft => PendingReview,
+            PendingReview => PendingReview,
+            Published => Published
+        }
+    }
+}
+```
+
+Which of the following are valid reasons to prefer the struct/trait representation over the enum representation?
+"""
+answer.answer = [
+    "An API client could add a new state to the system",
+    "Adding a new state does not require modifying methods on other states"
+]
+prompt.distractors = [
+    "The use of `match` is slower at runtime than dynamic dispatch",
+    "An API client could add a new method for all states in the system"
+]
+context = """
+The struct/trait approach is extensible in the sense that an API client could potentially
+create a new state (such as `Retracted`) without changing the core API functionality. When
+adding this state, the methods for other states do not need to be changed. Whereas with enums,
+a client cannot add a new branch to the enum. Moreover, all `match` expressions must be updated
+when a state is added.
+
+A `match` is not likely to be slower than dynamic dispatch. A match is a simple branch based on
+an enum's tag, while dynamic dispatch requires layers of indirection through a trait
+object's virtual table with non-inlined function calls.
+
+An API client cannot add a new *method* for existing states in the struct/trait approach, they 
+can only add new states. The methods are fixed by the API author's trait definition. Note that you could add a new method which only builds on existing methods via extension traits, such as:
+
+```
+trait StateExt {
+    fn request_review_twice(self: Box<Self>) -> Box<dyn State>;
+}
+
+impl<S: State> StateExt for S {
+    fn request_review_twice(self: Box<Self>) -> Box<dyn State> {
+        self.request_review().request_review()
+    }
+}
+```
+
+But these extensions cannot read the internal data of the states.
+"""

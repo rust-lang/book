@@ -1,7 +1,5 @@
 ## Cargo Workspaces
 
-{{#include experiment-note.md}}
-
 In Chapter 12, we built a package that included a binary crate and a library
 crate. As your project develops, you might find that the library crate
 continues to get bigger and you want to split your package further into
@@ -369,3 +367,5 @@ As your project grows, consider using a workspace: it’s easier to understand
 smaller, individual components than one big blob of code. Furthermore, keeping
 the crates in a workspace can make coordination between crates easier if they
 are often changed at the same time.
+
+{{#quiz ../quizzes/ch14-03-cargo-workspaces.toml}}

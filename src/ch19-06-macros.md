@@ -1,7 +1,5 @@
 ## Macros
 
-{{#include experiment-note.md}}
-
 We’ve used macros like `println!` throughout this book, but we haven’t fully
 explored what a macro is and how it works. The term *macro* refers to a family
 of features in Rust: *declarative* macros with `macro_rules!` and three kinds
@@ -493,6 +491,8 @@ pub fn sql(input: TokenStream) -> TokenStream {
 This definition is similar to the custom derive macro’s signature: we receive
 the tokens that are inside the parentheses and return the code we wanted to
 generate.
+
+{{#quiz ../quizzes/ch19-06-macros.toml}}
 
 ## Summary
 

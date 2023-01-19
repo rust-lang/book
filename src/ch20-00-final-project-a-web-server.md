@@ -1,11 +1,11 @@
 # Final Project: Building a Multithreaded Web Server
 
-{{#include experiment-note.md}}
-
 It’s been a long journey, but we’ve reached the end of the book. In this
 chapter, we’ll build one more project together to demonstrate some of the
 concepts we covered in the final chapters, as well as recap some earlier
 lessons.
+
+> **Note:** there are no quizzes in this chapter, since it is just supposed to be a hands-on walkthrough.
 
 For our final project, we’ll make a web server that says “hello” and looks like
 Figure 20-1 in a web browser.

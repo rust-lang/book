@@ -1,7 +1,5 @@
 ## Shared-State Concurrency
 
-{{#include experiment-note.md}}
-
 Message passing is a fine way of handling concurrency, but it’s not the only
 one. Another method would be for multiple threads to access the same shared
 data. Consider this part of the slogan from the Go language documentation
@@ -247,5 +245,7 @@ useful information.
 
 We’ll round out this chapter by talking about the `Send` and `Sync` traits and
 how we can use them with custom types.
+
+{{#quiz ../quizzes/ch16-03-shared-state.toml}}
 
 [atomic]: https://doc.rust-lang.org/std/sync/atomic/index.html

@@ -49,4 +49,3 @@ foobar
 
 Therefore the path to `run` is `foobar::engine::run`.
 """
-promptExplanation = true

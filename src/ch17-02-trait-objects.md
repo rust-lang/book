@@ -1,7 +1,5 @@
 ## Using Trait Objects That Allow for Values of Different Types
 
-{{#include experiment-note.md}}
-
 In Chapter 8, we mentioned that one limitation of vectors is that they can
 store elements of only one type. We created a workaround in Listing 8-9 where
 we defined a `SpreadsheetCell` enum that had variants to hold integers, floats,
@@ -252,6 +250,8 @@ dispatch. Dynamic dispatch also prevents the compiler from choosing to inline a
 method’s code, which in turn prevents some optimizations. However, we did get
 extra flexibility in the code that we wrote in Listing 17-5 and were able to
 support in Listing 17-9, so it’s a trade-off to consider.
+
+{{#quiz ../quizzes/ch17-02-trait-objects.toml}}
 
 [performance-of-code-using-generics]:
 ch10-01-syntax.html#performance-of-code-using-generics

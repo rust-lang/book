@@ -42,4 +42,3 @@ context = """
 There are two paths to `a`: `parent::a` and `a`. There are no paths to `b`, because it is private. There are three paths to `c`:
 `parent::child::c`, `child::c`, `alias::c`.
 """
-promptExplanation = true

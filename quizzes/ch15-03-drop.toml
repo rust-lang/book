@@ -1,0 +1,46 @@
+[[questions]]
+id = "8282968d-b1d3-42b4-b128-f97b951db4c6"
+type = "Tracing"
+prompt.program = """
+struct Example(i32);
+impl Drop for Example {
+    fn drop(&mut self) {
+        self.0 += 1;
+        println!("drop {}", self.0);
+    }
+}
+fn main() {
+    let e = Example(0);
+    drop(e);
+    drop(e);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 11
+context = """
+An owned value cannot be dropped twice, so it is a compiler error to call a drop the second time.
+"""
+
+[[questions]]
+id = "b9121273-1c1e-4e99-9cff-a23f845aaeeb"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this snippet that allocates a string:
+
+```rust
+fn main() {
+    let mut s = String::new();
+    ____
+}
+```
+
+Which of the following are valid operations to fill in the underscore that would cause `s` to be dropped?
+"""
+answer.answer = ["`drop(s);`", "`(|_| ())(s);`", "`s;`"]
+prompt.distractors = [
+    "`s.drop();`",    
+]
+context = """
+Any use of `s` that moves it and discards the result will cause `s` to be dropped. However, `s.drop()` cannot be
+called directly.
+"""

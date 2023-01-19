@@ -18,7 +18,6 @@ context = """
 Because `displayable` returns `impl Display`, then we only know that `s2` is *some* type that implements `Display`, 
 not that it is a `String` which has a `push_str` method. Therefore we cannot call `s2.push_str(..)`.
 """
-promptExplanation = true
 
 
 [[questions]]

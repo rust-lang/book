@@ -1,7 +1,5 @@
 ## Customizing Builds with Release Profiles
 
-{{#include experiment-note.md}}
-
 In Rust, *release profiles* are predefined and customizable profiles with
 different configurations that allow a programmer to have more control over
 various options for compiling code. Each profile is configured independently of
@@ -75,3 +73,5 @@ optimizations than the default, but not as many as in a release build.
 
 For the full list of configuration options and defaults for each profile, see
 [Cargo’s documentation](https://doc.rust-lang.org/cargo/reference/profiles.html).
+
+{{#quiz ../quizzes/ch14-01-release-profiles.toml}}

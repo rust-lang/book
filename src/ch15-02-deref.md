@@ -1,7 +1,5 @@
 ## Treating Smart Pointers Like Regular References with the `Deref` Trait
 
-{{#include experiment-note.md}}
-
 Implementing the `Deref` trait allows you to customize the behavior of the
 *dereference operator* `*` (not to be confused with the multiplication or glob
 operator). By implementing `Deref` in such a way that a smart pointer can be
@@ -295,6 +293,8 @@ initial immutable reference is the only immutable reference to that data, but
 the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
 assumption that converting an immutable reference to a mutable reference is
 possible.
+
+{{#quiz ../quizzes/ch15-02-deref.toml}}
 
 [impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
 [tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types

@@ -3,8 +3,6 @@
 
 ## Installing Binaries with `cargo install`
 
-{{#include experiment-note.md}}
-
 The `cargo install` command allows you to install and use binary crates
 locally. This isn’t intended to replace system packages; it’s meant to be a
 convenient way for Rust developers to install tools that others have shared on
