@@ -546,6 +546,7 @@ unsafety
 unsized
 unsynchronized
 Unyank
+UpperCamelCase
 URIs
 UsefulType
 username
