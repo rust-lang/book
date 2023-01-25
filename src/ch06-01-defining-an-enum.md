@@ -319,6 +319,6 @@ does just this when used with enums: it will run different code depending on
 which variant of the enum it has, and that code can use the data inside the
 matching value.
 
-[IpAddr]: ../std/net/enum.IpAddr.html
+[IpAddr]: ../std/net/type.IpAddr.html
 [option]: ../std/option/enum.Option.html
 [docs]: ../std/option/enum.Option.html
