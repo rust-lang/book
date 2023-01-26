@@ -252,7 +252,7 @@ using their respective indices. As with most programming languages, the first
 index in a tuple is 0.
 
 The tuple without any values has a special name, *unit*. This value and its
-corresponding type are both written `()` and represent an empty value or an
+corresponding type are both written as `()` and represent an empty value or an
 empty return type. Expressions implicitly return the unit value if they don’t
 return any other value.
 
