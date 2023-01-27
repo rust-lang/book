@@ -21,6 +21,15 @@ single line, you’ll need to include `//` on each line, like this:
 // explain what’s going on.
 ```
 
+We can also perform block comments by utilizing multiline commenting syntax `/**/`, as such:
+```rust
+/*
+    So we’re doing something complicated here, long enough that we need
+    multiple lines of comments to do it! Whew! Hopefully, this comment will
+    explain what’s going on.
+*/
+```
+
 Comments can also be placed at the end of lines containing code:
 
 <span class="filename">Filename: src/main.rs</span>
