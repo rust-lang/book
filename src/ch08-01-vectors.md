@@ -252,6 +252,6 @@ Let’s move on to the next collection type: `String`!
 {{#quiz ../quizzes/ch08-01-vec.toml}}
 
 [data-types]: ch03-02-data-types.html#data-types
-[nomicon]: ../nomicon/vec/vec.html
-[vec-api]: ../std/vec/struct.Vec.html
+[nomicon]: https://doc.rust-lang.org/nomicon/vec/vec.html
+[vec-api]: https://doc.rust-lang.org/std/vec/struct.Vec.html
 [deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator

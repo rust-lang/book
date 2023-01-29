@@ -11,4 +11,4 @@ You might be interested in a similar page in [the Rust Reference][3].
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/bibliography.html
 [2]: index.html
-[3]: ../reference/influences.html
+[3]: https://doc.rust-lang.org/reference/influences.html

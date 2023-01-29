@@ -22,4 +22,4 @@ The best place to learn more about this is [the Rust documentation][3].
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/borrow-and-asref.html
 [2]: index.html
-[3]: ../std/convert/trait.AsRef.html
+[3]: https://doc.rust-lang.org/std/convert/trait.AsRef.html

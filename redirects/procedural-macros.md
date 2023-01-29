@@ -17,5 +17,5 @@ You can check out other resources that describe macros.
 
 [1]: https://doc.rust-lang.org/1.30.0/book/first-edition/procedural-macros.html
 [2]: ch19-06-macros.html
-[3]: ../proc_macro/index.html
-[4]: ../reference/procedural-macros.html
+[3]: https://doc.rust-lang.org/proc_macro/index.html
+[4]: https://doc.rust-lang.org/reference/procedural-macros.html

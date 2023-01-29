@@ -383,5 +383,5 @@ ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
 [stack-and-heap]: ch04-01-what-is-ownership.html#the-stack-and-the-heap
 [vectors]: ch08-01-vectors.html
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
-[wrapping]: ../std/num/struct.Wrapping.html
+[wrapping]: https://doc.rust-lang.org/std/num/struct.Wrapping.html
 [appendix_b]: appendix-02-operators.md

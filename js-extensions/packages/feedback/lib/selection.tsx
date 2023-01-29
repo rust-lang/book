@@ -6,7 +6,7 @@ import HighlightSource from "web-highlighter/dist/model/source";
 
 import FeedbackModal from "./modal";
 import FeedbackTooltip from "./tooltip";
-import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction } from "./utils";
+import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction, addDOMHash } from "./utils";
 
 type SelectionRendererProps = { highlighter: Highlighter; stored?: HighlightSource[] };
 let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored }) => {
@@ -23,13 +23,17 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
     // get current selection (falsy value if no selection)
     let selection = document.getSelection();
     if (!selection) return;
+
     let anchor = selection.anchorNode;
-    if (
-      !anchor ||
-      !(anchor instanceof HTMLElement) ||
-      !anchor.closest(".content") ||
-      anchor.closest(".aquascope, .mdbook-quiz")
-    )
+    if (!anchor) return;
+
+    let parentElement = anchor;
+    while (!(parentElement instanceof Element)) {
+      if (!parentElement.parentNode) return;
+      parentElement = parentElement.parentNode;
+    }
+
+    if (!parentElement.closest(".content") || parentElement.closest(".aquascope, .mdbook-quiz"))
       return;
 
     let range = !selection.isCollapsed && selection.rangeCount && selection.getRangeAt(0);
@@ -42,6 +46,9 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
     stored?.map(s => highlighter.fromStore(s.startMeta, s.endMeta, s.text, s.id, s.extra));
 
     highlighter.on(Highlighter.event.CREATE, ({ sources }) => {
+      // add DOM node hash to each source's metadata
+      sources = sources.map(h => addDOMHash(highlighter, h));
+
       // store new highlights in localStorage when created
       let stored_str = localStorage.getItem(HIGHLIGHT_STORAGE_KEY);
       let stored_highlights = JSON.parse(stored_str || "[]");
@@ -55,7 +62,7 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
         let parsed_src = { ...src, extra: JSON.parse(src.extra as string) };
         let data = { action: HighlightTelemetryAction.create, data: parsed_src };
 
-        window.telemetry.log("feedback", data);
+        window.telemetry?.log("feedback", data);
       });
     });
   }, []);

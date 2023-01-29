@@ -422,4 +422,4 @@ make use of closures. In the next section, we’ll discuss iterators. Many
 iterator methods take closure arguments, so keep these closure details in mind
 as we continue!
 
-[unwrap-or-else]: ../std/option/enum.Option.html#method.unwrap_or_else
+[unwrap-or-else]: https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else

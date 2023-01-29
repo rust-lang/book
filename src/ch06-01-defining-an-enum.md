@@ -321,6 +321,6 @@ value.
 
 {{#quiz ../quizzes/ch06-01-defining-an-enum.toml}}
 
-[IpAddr]: ../std/net/enum.IpAddr.html
-[option]: ../std/option/enum.Option.html
-[docs]: ../std/option/enum.Option.html
+[IpAddr]: https://doc.rust-lang.org/std/net/enum.IpAddr.html
+[option]: https://doc.rust-lang.org/std/option/enum.Option.html
+[docs]: https://doc.rust-lang.org/std/option/enum.Option.html

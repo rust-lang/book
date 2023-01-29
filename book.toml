@@ -16,7 +16,7 @@ additional-js = [
   "js-extensions/packages/feedback/dist/index.js",
 ]
 
-# git-repository-url = "https://github.com/rust-lang/book"
+git-repository-url = "https://github.com/willcrichton/rust-book"
 
 [preprocessor.quiz]
 fullscreen = true
@@ -26,4 +26,6 @@ cache-answers = true
 [preprocessor.aquascope]
 
 [build]
-extra-watch-dirs = ["quizzes"] #, "../mdbook-quiz/target/debug"]
+extra-watch-dirs = ["quizzes", "../mdbook-quiz/target/debug", "js-extensions/packages/feedback/dist"]
+
+# [output.linkcheck]

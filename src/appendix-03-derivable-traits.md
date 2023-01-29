@@ -15,7 +15,7 @@ library that you can use with `derive`. Each section covers:
 * Examples of operations that require the trait
 
 If you want different behavior from that provided by the `derive` attribute,
-consult the [standard library documentation](../std/index.html)<!-- ignore -->
+consult the [standard library documentation](https://doc.rust-lang.org/std/index.html)<!-- ignore -->
 for each trait for details of how to manually implement them.
 
 These traits listed here are the only ones defined by the standard library that

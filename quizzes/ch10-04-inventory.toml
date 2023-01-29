@@ -9,7 +9,7 @@ struct TestResult {
     /// Student's scores on a test
     scores: Vec<usize>,
 
-    /// A possible value to curve all sores
+    /// A possible value to curve all scores
     curve: Option<usize>
 }
 impl TestResult {  
@@ -56,7 +56,7 @@ struct TestResult {
     /// Student's scores on a test
     scores: Vec<usize>,
 
-    /// A possible value to curve all sores
+    /// A possible value to curve all scores
     curve: Option<usize>
 }
 impl TestResult {  
@@ -144,7 +144,7 @@ struct TestResult {
     /// Student's scores on a test
     scores: Vec<usize>,
 
-    /// A possible value to curve all sores
+    /// A possible value to curve all scores
     curve: Option<usize>
 }
 impl TestResult {  
@@ -244,8 +244,8 @@ If you tried to compile this program, which of the following best describes the 
 """
 answer.answer = "the returned iterator captures a lifetime that isn't in the bounds of `impl Iterator<Item = String>`"
 prompt.distractors = [
-  "`s + s2` is not valid because `s` and `s2` have different lifetimes",
-  "the closure `|s2| s2 + 2` cannot move out of a shared reference",
+  "`s2 + s` is not valid because `s` and `s2` have different lifetimes",
+  "the closure `|s2| s2 + s` cannot move out of a shared reference",
   "`iter.map(..)` does not implement the trait `Iterator<Item = String>`"
 ]
 context = """

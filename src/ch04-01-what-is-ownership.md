@@ -132,7 +132,7 @@ let b = a;`[]`
 
 The value of `a` is copied into `b`, and `a` is left unchanged.
 
-### Boxes Live in the Heap
+## Boxes Live in the Heap
 
 However, copying data can take up a lot of memory. For example, here's a slightly different program using an array with 1 million elements:
 

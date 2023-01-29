@@ -13,10 +13,10 @@ fn mystery<T>(x: T) -> T {
 Then you call `mystery` like this:
 
 ```
-let n = mystery(3);
+let y = mystery(3);
 ```
 
-Then the value of `n` must be:
+Then the value of `y` must be:
 """
 answer.answer = "3"
 context = """
