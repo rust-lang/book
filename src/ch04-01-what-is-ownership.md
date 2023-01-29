@@ -1,8 +1,10 @@
 ## What Is Ownership?
 
+Ownership is a discipline for ensuring the **safety** of Rust programs. To understand ownership, we first need to understand what makes a Rust program safe.
+
 ### Safety is the Absence of Undefined Behavior
 
-To understand ownership, we first need to understand what makes a Rust program **safe** or **unsafe**. For example, here is a program that safe to execute:
+To start with an example, here is a program that safe to execute:
 
 ```rust
 fn read(y: bool) {}
@@ -59,9 +61,9 @@ This program is unsafe because `read` will expect `edi` to be a boolean, which i
 
 Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't `true` or `false`. _Something_ will happen, for example:
 
-- The code executes just fine, and no one notices a problem.
+- The code executes without crashing, and no one notices a problem.
 - The code immediately crashes due to a [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) or another kind of operating system error.
-- The code executes just fine, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
+- The code executes without crashing, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
 
 To avoid these kinds of outcomes, Rust uses compile-time checks to ensure that variables are defined before they are used. If you actually try to compile the problematic program, you will get this error from the compiler:
 
@@ -112,7 +114,7 @@ fn plus_one(x: i32) -> i32 {
 Variables live in **frames**. A frame is a mapping from variables to values within a single scope, such as a function. For example:
 
 - The frame for `main` at location L1 holds `n = 5`.
-- The frame for `plus_one` at L2 holds `x = 5`.5
+- The frame for `plus_one` at L2 holds `x = 5`.
 - The frame for `main` at location L3 holds `n = 5; y = 6`.
 
 Frames are organized into a **stack** of currently-called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, Rust deallocates (or "frees") the function's frame. This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
@@ -161,31 +163,18 @@ You'll also notice that in the diagram, `a` has been crossed out. That's because
 
 Memory management is the process of allocating and deallocating memory. Stack frames are automatically managed by Rust: when a function is called, Rust allocates a stack frame for the called-function. When the call ends, Rust deallocates the stack frame.
 
-As we saw above, heap data is allocated when calling `Box::new(..)`. But when is heap data deallocated? Imagine that Rust had a `free()` function that frees a heap allocation. This kind of "manual" memory management easily leads to bugs:
+As we saw above, heap data is allocated when calling `Box::new(..)`. But when is heap data deallocated? Imagine that Rust had a `free()` function that frees a heap allocation. This kind of "manual" memory management easily leads to bugs. For example, we could read a pointer after its data has been freed:
 
-```rust,ignore,does_not_compile
-# fn main() {
-// Hypothetical Rust with a free function:
-
-let b1 = Box::new([0; 100]);
-free(b1);
-free(b1);
-// Freeing b1 twice can break the heap memory allocator.
-// This is undefined behavior!
-
-let b2 = Box::new([0; 100]);
-free(b2);
-assert!(b2[0] == 0);
-// Freeing b2 before using it causes the read of b2[0] to happen on
-// deallocated memory, which could contain any kind of garbage values.
-// This is undefined behavior!
-
-let b3 = Box::new([0; 100]);
-// Forgetting to free b3 "leaks" memory, and a program may run
-// out of memory after executing for a long period of time.
-// This is *not* undefined behavior, but it's still not *desirable* behavior.
-# }
+```aquascope,interpreter,shouldFail
+#fn free<T>(_t: T) {}
+#fn main() {
+let b = Box::new([0; 100]);`[]`
+free(b);`[]`
+assert!(b[0] == 0);`[]`
+#}
 ```
+
+> *Note:* you may wonder how we are executing this Rust program that doesn't compile. We use special tools to simulate Rust as if the borrow checker were disabled, only for educational purposes.
 
 Rust does not allow programs to manually deallocate memory, so as to avoid these kinds of errors.
 
@@ -212,13 +201,13 @@ At L1, `a_box` points to `5` on the heap. Once `make_and_drop` is finished, Rust
 The box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we bind two variables to a box?
 
 ```rust
-# fn main() {
+#fn main() {
 let a = Box::new([0; 1_000_000]);
 let b = a;
-# }
+#}
 ```
 
-The boxed array has now been bound to both `a` and `b`. By our "almost correct" principle, Rust would try to free the box's heap memory on behalf of both variables &mdash; that's undefined behavior!
+The boxed array has now been bound to both `a` and `b`. By our "almost correct" principle, Rust would try to free the box's heap memory *twice* on behalf of both variables &mdash; that's undefined behavior!
 
 To avoid this kind of situation, we finally arrive at ownership. When `a` is bound to `Box::new([0; 1_000_000])`, we say that `a` **owns** the box. The statement `let b = a` **moves** ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
 
@@ -254,20 +243,23 @@ This program is more involved, so make sure you follow each step:
 
 This program also illustrates a key safety principle for ownership. Imagine that `s1` were used in `main` after calling `add_suffix`, like this:
 
-```rust,ignore,does_not_compile
+```aquascope,interpreter,shouldFail
 fn main() {
-    let s1 = String::from("Hello ");
+    let s1 = String::from("Hello");
     let s3 = add_suffix(s1);
-    println!("{s1} {s3}"); // s1 is now used here
+    println!("{s1} {s3}");`[]` // s1 is now used here
 }
 
 fn add_suffix(mut s2: String) -> String {
     s2.push_str(" world");
     s2
 }
+
 ```
 
-As you saw in the diagram above, `s1` points to deallocated memory after calling `add_suffix`. Reading `s1` would therefore be a violation of memory safety, i.e. undefined behavior. Therefore Rust will refuse to compile this program, giving the following error:
+`s1` points to deallocated memory after calling `add_suffix`. Reading `s1` would therefore be a violation of memory safety, i.e. undefined behavior. 
+
+Thankfully, Rust will refuse to compile this program, giving the following error:
 
 ```
 error[E0382]: borrow of moved value: `s1`

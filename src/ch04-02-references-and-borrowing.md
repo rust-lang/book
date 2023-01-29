@@ -2,16 +2,16 @@
 
 Ownership, boxes, and moves provide a foundation for safely programming with the heap. However, move-only APIs can be inconvenient to use. For example, say you want to read some strings twice:
 
-```rust,ignore,does_not_compile
+```aquascope,interpreter,shouldFail
 fn main() {
     let m1 = String::from("Hello");
     let m2 = String::from("world");
     greet(m1, m2);
-    let n = m1.len() + m2.len(); // Error: m1 and m2 are moved
+    let s = format!("{} {}", m1, m2);`[]` // Error: m1 and m2 are moved
 }
 
 fn greet(g1: String, g2: String) {
-    println!("{} {}!", g1, g2);
+    println!("{} {}!", g1, g2);`[]`
 }
 ```
 
@@ -19,12 +19,12 @@ In this example, calling `greet` moves the data from `m1` and `m2` into the para
 
 This move behavior is extremely inconvenient. Programs often need to use a string more than once. Hypothetically, an alternative `greet` can return ownership of the strings:
 
-```rust
+```aquascope,interpreter
 fn main() {
     let m1 = String::from("Hello");
     let m2 = String::from("world");
     let (m1_again, m2_again) = greet(m1, m2);
-    let n = m1_again.len() + m2_again.len();
+    let s = format!("{} {}", m1_again, m2_again);`[]`
 }
 
 fn greet(g1: String, g2: String) -> (String, String) {
@@ -44,7 +44,7 @@ fn main() {
     let m1 = String::from("Hello");
     let m2 = String::from("world");`[]`
     greet(&m1, &m2);`[]` // note the ampersands
-    let n = m1.len() + m2.len();
+    let s = format!("{} {}", m1, m2);
 }
 
 fn greet(g1: &String, g2: &String) { // note the ampersands
@@ -60,7 +60,7 @@ The expression `&m1` uses the ampersand operator to create a reference to (or "b
 
 Observe at L2 that there are two steps from `g1` to the string "Hello". `g1` is a reference that points to `m1` on the stack, and `m1` is a String containing a box that points to "Hello" on the heap.
 
-While `m1` owns the heap data "Hello", `g1` does _not_ own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our Moved Heap Data Principle: because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`.
+While `m1` owns the heap data "Hello", `g1` does _not_ own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our *Moved Heap Data Principle*: because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`.
 
 References are **non-owning pointers**, because they do not own the data they point to.
 
@@ -73,7 +73,7 @@ The previous examples using boxes and strings have not shown how Rust "follows" 
 let mut x: Box<i32> = Box::new(1);
 let a: i32 = *x;         // *x reads the heap value, so a = 1
 *x += 1;                 // *x on the left-side modifies the heap value, 
-                         //   x points to the value 2
+                         //     so x points to the value 2
 
 let r1: &Box<i32> = &x;  // r1 points to x on the stack
 let b: i32 = **r1;       // two dereferences get us to the heap value
@@ -98,7 +98,7 @@ Let's walk through each line:
 You probably won't see the dereference operator very often when you read Rust code. This is because Rust implicitly inserts both dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
 
 ```rust
-# fn main()  {
+#fn main()  {
 let x: Box<i32> = Box::new(-1);
 let x_abs1 = i32::abs(*x); // explicit dereference
 let x_abs2 = x.abs();      // implicit dereference
@@ -113,7 +113,7 @@ let s = String::from("Hello");
 let s_len1 = str::len(&s); // explicit reference
 let s_len2 = s.len();      // implicit reference
 assert_eq!(s_len1, s_len2);
-# }
+#}
 ```
 
 This example shows implicit conversions in three ways:
@@ -139,7 +139,7 @@ Therefore Rust follows a basic principle to prevent undefined behavior:
 
 Data is allowed to be aliased. Data is allowed to be mutated. But data is _not_ allowed to be _both_ aliased _and_ mutated. For example, Rust enforces this principle for boxes (owned pointers) by disallowing aliasing. Assigning a box from one variable to another will move ownership, invalidating the previous variable. Owned data can only be accessed through the owner &mdash; no aliases.
 
-However, references need different rules to enforce the Pointer Safety Principle because they are non-owning pointers. By design, references are meant to temporarily create aliases. In the remainder of this section, we will explain the basics of how Rust ensures the safety of programs with references.
+However, references need different rules to enforce the Pointer Safety Principle because they are non-owning pointers. By design, references are meant to temporarily create aliases. In the remainder of this section, we will explain the basics of how Rust ensures the safety of programs with references through the **borrow checker.**
 
 ### References Change Permissions on Paths
 
@@ -160,7 +160,7 @@ To illustrate this idea, we will use a new kind of diagram. This diagram shows t
 <!-- horizontal line should be vertical-aligned to bottom of the row, not middle
      to indicate that it describes after-permissions -->
 
-```aquascope,permission-diffs
+```aquascope,stepper
 #fn main() {
 let mut x = String::from("Hello");
 let y = &x;
@@ -175,7 +175,7 @@ Let's walk through each line:
 2. After `let y = &x`, the data in `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
    - The borrow removes write/own permissions from `x` (red is for loss): it cannot write or own its data, but it can still read its data (neutral-colored is for unchanged).
    - The variable `y` has gained read/own permissions. `y` is not writable (the missing permission is shown as a dash `-`) because it was not marked `let mut`.
-   - The **path** `*y` has gained read permissions. Note that `y` is different from `*y`! `y` is a reference to a string, while `*y` is the string itself (accessed through a reference).
+   - The **path** `*y` has gained read permissions. Note that `y` is different from `*y`! `y` is a reference to a string, while `*y` is the string itself, accessed through a reference.
 3. After `println!(...)`, `y` is no longer in use, so `x` is no longer borrowed. Therefore:
    - `x` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
    - `y` and `*y` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
@@ -189,24 +189,6 @@ Permissions are not just defined on variables (like `x` or `y`), but also on **p
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next section).
 - Any combination of the above, like `*((*a)[0].1)`.
 
-For example, here's a program that shows how you can borrow one field of a tuple, and write to a different field of the same tuple:
-
-<!-- option to always show all paths vs only show changed paths -->
-
-```aquascope,permission-diffs
-#fn main() {
-let mut tup = (
-    String::from("A"), 
-    String::from("B")
-);
-let s = &tup.0;
-tup.1.push_str("C");
-println!("{} and {}", s, tup.1);
-#}
-```
-
-The statement `let s = &tup.0` borrows `tup.0`. This borrow removes write/own permissions from `tup.0`. It also removes write/own permissions from `tup`, e.g. one could not pass `tup` to a function that takes as input a value of type `(String, String)`. However, `tup.1` still retains write permissions, so doing `tup.1.push-str(...)` is a valid operation.
-
 Returning to the Pointer Safety Principle, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
 <!-- The key thing to observe is that a variable's *type* is not the same as its *permissions*. A variable always has the same type, but its permissions will change depending on context. Specifically, a variable loses permissions when its contents are borrowed by a reference. It regains those permissions when the reference is no longer used.
@@ -217,7 +199,7 @@ Permissions are a compile-time concept, not a run-time concept. The Rust compile
 
 Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. For example, suppose we placed the `x.push_str(...)` statement in-between the definition of `y` and the use of `y`, like this:
 
-```aquascope,receiver-types
+```aquascope,boundaries,shouldFail
 #fn main() {
 let mut x = String::from("Hello");
 let y = &x;
@@ -250,11 +232,11 @@ If Rust allowed this program to compile, we would violate memory safety. The ope
 
 ### Mutable References Provide Unique and Non-Owning Access to Data
 
-The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also convenient to be able to temporarily provide mutable access to data without moving it. For example, [`Vec::push`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push) should add an element to a vector without consuming ownership of the vector.
+The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it. For example, [`Vec::push`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push) should add an element to a vector without consuming ownership of the vector.
 
 The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
 
-```aquascope,permission-diffs
+```aquascope,stepper
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
@@ -266,7 +248,7 @@ println!("{}", x);
 A mutable reference is created with the syntax `&mut x`. The type of `y` is written as `&mut String`. You can see two important differences in the transfer of permissions compared to the previous example:
 
 1. When `y` was an immutable reference, `x` still had read permissions. Now that `y` is a mutable reference, `x` has lost _all_ permissions while `y` is in use.
-2. When `y` was an immutable reference, the path `*y` only had read permissions. Now that `y` is a mutable reference, `*y` has also gained write permissions.
+2. When `y` was an immutable reference, the path `*y` only had read permissions. Now that `y` is a mutable reference, `*y` has also gained write permissions (but not own permissions).
 
 The first observation is what makes mutable references safe. Mutable references allow mutation but prevent aliasing. The borrowed path becomes temporarily unusable (i.e. effectively not an alias).
 
@@ -274,7 +256,7 @@ The second observation is what makes mutable references useful. `x` can be mutat
 
 Mutable references can also be temporarily "downgraded" to read-only references. For example:
 
-```aquascope,permission-diffs
+```aquascope,stepper
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
@@ -283,14 +265,14 @@ println!("{} {}", y, z);
 #}
 ```
 
-In this program, the operation `&*y` removes the write permission from `*y` but _not_ the read permission, so `println!(..)` can read both `*y` and `*z`.
+In this program, the borrow `&*y` removes the write permission from `*y` but _not_ the read permission, so `println!(..)` can read both `*y` and `*z`.
 
 <!-- 
 ### Data Cannot Be Mutably and Immutably Borrowed
 
 To borrow from a path, that path must have the appropriate permissions: `R` for an immutable reference, and `RW` for a mutable reference. A common source of borrow checker errors is trying to borrow data without enough permissions, for example:
 
-```aquascope,receiver-types
+```aquascope,boundaries
 #fn main() {
 let mut x = String::from("Hello");
 let y = &x;
@@ -322,36 +304,37 @@ Previously, we explained that that a reference changes permissions while the ref
 
 For example, in this program, the lifetime of `y` starts with `let y = &x`, and ends with `let z = *y`:
 
-```aquascope,permission-diffs
+```aquascope,stepper
 #fn main() {
 let mut x = 1;
-let y = &x;
-let z = *y;
+let y = &x;`(focus,paths:x)`
+let z = *y;`(focus,paths:x)`
 x += z;
 #}
 ```
+
+> *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
 
 The read permissions on `x` are returned to `x` after the lifetime of `y` has ended, like we have seen before.
 
 In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a simple function that capitalizes the first character in a vector of ASCII characters:
 
-```aquascope,permission-diffs
+```aquascope,stepper
 fn ascii_capitalize(v: &mut Vec<char>) {
-    let c = &v[0];`(focus)`
+    let c = &v[0];`(focus,paths:\*v)`
     if c.is_ascii_lowercase() {
-        let c_up = c.to_ascii_uppercase();`(focus)`
-        v[0] = c_up;
-    } else {
-        println!("Already capitalized: {:?}", v);`(focus)`
+        let up = c.to_ascii_uppercase();`(focus,paths:\*v)`
+        v[0] = up;
+    } else {`(focus,paths:\*v)`
+        println!("Already capitalized: {:?}", v);
     }
 }
 ```
 
-Note that the lifetime of the character `c` starts with `let c = &v[0]`. `c` is then used in two places: the `if` condition, and the statement `let c_up = (...)`. But `c` is not used inside the `else` block.
+The variable `c` has a different lifetime in each branch of the if-statement. In the then-block, `c` is used in the expression `c.to_ascii_uppercase()`. Therefore `*v` does not regain write permissions until after that line.
 
-Therefore `c` has a different status in each branch. Going into the `if`-block, `c` is still in-use. It would be a permissions violation to mutate `v` before `let c_up = (...)`. But going into the `else`-block, `c` is out-of-use. `v` has full permissions.
+However, in the else-block, `c` is not used. Therefore `*v` immediately regains write permissions on entry to the else-block.
 
-In general, Rust will infer the lifetimes of references at the smallest granularity possible.
 
 ### Data Must Outlives All Of Its References
 
@@ -384,120 +367,22 @@ The argument `n` only lives for the duration of `add_ref`. However, the referenc
 
 If this function were allowed, we could call `add_ref` like this:
 
-```rust,ignore
-let mut v = Vec::new();
-add_ref(&mut v, 0);
-println!("{}", v[0]);
+```aquascope,interpreter,shouldFail
+fn add_ref(v: &mut Vec<&i32>, n: i32) {
+    let r = &n;
+    v.push(r);`[]`
+    ();
+}
+fn main() {
+    let mut v = Vec::new();
+    add_ref(&mut v, 0);
+    println!("{}", v[0]);`[]`
+}
 ```
 
 Then `v` would contain a reference that points to deallocated memory, and printing `v[0]` would violate memory safety.
 
-
-### Rust's Standard Library Can Help Convince the Borrow Checker That an Operation is Actually Safe
-
-The Rust type system's guarantee is to reject *all* unsafe programs, but it may also reject *some* safe programs. For example, we can modify the code above to use integers instead of strings:
-
-```aquascope,receiver-types
-#fn main() {
-let mut x = 0;
-let y = &x;
-x += 1;
-println!("{} and {}", x, y);
-#}
-```
-
-This program is rejected by Rust for the 
-<!-- TODO -->
-
-
-Understanding the distinction between safe and unsafe uses of references will help you deal with Rust compiler errors. Safe operations can often be rewritten using data structures designed to work around Rust's limitations. For example, you could rewrite the `x += 1` program without reordering the code by using a [`Cell`](https://doc.rust-lang.org/std/cell/struct.Cell.html): 
-
-```aquascope,receiver-types
-# use std::cell::Cell;
-# fn main() {
-let x: Cell<i32> = Cell::new(1);
-let y = &x;
-x.set(x.get() + 1);
-println!("{} {}", x.get(), y.get());
-# }
-```
-
-The `Cell` structure is carefully designed such that `Cell::set` "pretends" to the borrow checker that it is only reading `x` (it expects `&Cell` and not `&mut Cell`), while in fact it actually mutates `x`. A `Cell` is purely a compiler trick: a `Cell<i32>` takes the same space as `i32`, and the operation `x += 1` generates the same code as `x.set(x.get() + 1)`.
-
-Notably, this pretension is only safe because `Cell` is also carefully designed to not be shared across threads. For example, if you needed to share references across a thread boundary:
-
-```rust,ignore,does_not_compile
-# use std::cell::Cell;
-# use std::thread;
-# fn main() {
-let x: Cell<i32> = Cell::new(1);
-let y = &x;
-thread::scope(|s| { s.spawn(|| println!("{}", y.get())); })
-x.set(x.get() + 1);
-# }
-```
-
-Then Rust will reject your program, saying "`Cell<i32>` cannot be shared between threads safely". In this case, you would need to use a data structure specifically designed for sharing across threads, such as [`AtomicI32`](https://doc.rust-lang.org/std/sync/atomic/struct.AtomicI32.html):
-
-```rust
-# use std::sync::atomic::{Ordering, AtomicI32};
-# use std::thread;
-# fn main() {
-let x: AtomicI32 = AtomicI32::new(1);
-let y = &x;
-thread::scope(|s| { s.spawn(|| println!("{}", y.load(Ordering::SeqCst))); });
-x.fetch_add(1, Ordering::SeqCst);
-# }
-```
-
-The `Atomici32` structure is similar to `Cell<i32>`, except it uses special ["atomic"](https://doc.rust-lang.org/std/sync/atomic/index.html) operations that avoid data races. Therefore an atomic structure can be shared across threads. We will cover both of these constructs in detail in later chapters. For now, the takeaway is that there are constructs specialized for safely working around limitations of the borrow checker.
-
-
-### ...But Actually Unsafe Operations Require Deeper Changes
-
-Unsafe operations cannot generally be fixed with a straightforward rewrite. For example, in the case of `v.push(4)`, if a vector owns some data, you can never hold a reference to that data while also resizing the vector. There is no space-and-time-equivalent trick like `Cell` to fix such a program.
-
-One possibility is to **shorten the lifetime of references**. For example, by moving the reference `&v[0]` after `v.push(4)`:
-
-```aquascope,permission-diffs
-# fn main() {
-let mut v = vec![1, 2, 3];
-v.push(4);
-let n = &v[0];`(focus)`
-println!("{:?}, {}", v, *n);
-# }
-```
-
-Observe that `v` loses write permissions *after* the mutation `v.push(4)` has occurred.
-
-Another possibility is to **copy data instead of pointing to it.** For numbers, this is as simple as removing the ampersand:
-
-```aquascope,permission-diffs
-# fn main() {
-let mut v = vec![1, 2, 3];
-let n = v[0];`(focus)`
-v.push(4);
-println!("{:?}, {}", v, n);
-# }
-```
-
-Observe that `n = v[0]` does not change the permissions on `v`. However, if `v` held strings, then you would have to use the "clone" method like `v[0].clone()` instead. The larger your data, the more expensive it gets to clone it.
-
-Finally, if you simply must hold a reference to an owned value while also mutating its container, **you can fall back on garbage collection**, such as with the reference-counting pointer [`Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html):
-
-```aquascope,permission-diffs
-# use std::rc::Rc;
-# fn main() {
-let mut v: Vec<Rc<i32>> = vec![Rc::new(1), Rc::new(2), Rc::new(3)];
-let n = Rc::clone(&v[0]);`(focus)`
-v.push(Rc::new(4));
-println!("{:?}, {}", v, *n);
-# }
-```
-
-Observe that `Rc::clone(&v[0])` again does not change the permissions on `v`.
-
-The right solution will naturally depend on the specific circumstances of your codebase. But at the very least, whenever you get an error from Rust's borrow checker, you should ask: is my code actually unsafe? The answer will guide how you can change your code to satisfy Rust.
+<!-- TODO! we need to talk about copying somewhere..... -->
 
 ### Summary
 

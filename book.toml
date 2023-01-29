@@ -26,4 +26,4 @@ cache-answers = true
 [preprocessor.aquascope]
 
 [build]
-extra-watch-dirs = ["quizzes", "../mdbook-quiz/target/debug"]
+extra-watch-dirs = ["quizzes"] #, "../mdbook-quiz/target/debug"]
