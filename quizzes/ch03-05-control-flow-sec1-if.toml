@@ -23,6 +23,10 @@ answer.answer = "True"
 prompt.distractors = [ "False" ]
 context = """
 The first if-expression is a more concise way of representing the behavior of the second if-statement.
+
+Note that Rust **does not** require `x` to be initially declared with `let mut` in the second snippet.
+This is because Rust can determine that `x` is only ever assigned once, since only one branch of the 
+if-statement will ever execute.
 """
 
 [[questions]]

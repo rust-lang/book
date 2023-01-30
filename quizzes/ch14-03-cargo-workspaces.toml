@@ -66,6 +66,6 @@ Write your answer as a digit, e.g. 0, 1, so on.
 """
 answer.answer = "2"
 context = """
-According to the rules of semantic versioning, `a` and `b` will both share the latest patch of the minor version `0.8`.
-`c` will use the latest patch of the minor version `0.7`. So two versions in total will be used.
+According to the rules of semantic versioning, `a` and `c` will both share the latest patch of the minor version `0.8`.
+`b` will use the latest patch of the minor version `0.7`. So two versions in total will be used.
 """

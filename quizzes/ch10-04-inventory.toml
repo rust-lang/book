@@ -84,6 +84,9 @@ context = """
 This program is technically memory-safe because `slice::sort` is only capable of moving
 elements around, not freeing them. For instance, `&v[0]` is guaranteed to point to 
 *some* number after calling `find_nth`, even if it is not the *original* number.
+
+Note that `find_nth(&v, 10)` does not cause undefined behavior because Rust performs checks
+on array accesses, so evaluating `&v[10]` will panic.
 """
 
 
