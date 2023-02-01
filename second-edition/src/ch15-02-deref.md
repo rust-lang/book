@@ -99,7 +99,7 @@ Listing 15-7와 Listing 15-6 사이의 차이점은 오직 `x`의 값을 가리�
 
 `Box<T>` 타입은 궁극적으로 하나의 요소를 가진 튜플 구조체로 정의되므로,
 Listing 15-8은 `MyBox<T>` 타입을 동일한 방식으로 정의하였습니다. 또한
-`Box<T>`에 정의되어 있는 `new` 함수에 맞추기 위해 `new` 함수도 정의겠습니다:
+`Box<T>`에 정의되어 있는 `new` 함수에 맞추기 위해 `new` 함수도 정의하겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -120,7 +120,7 @@ impl<T> MyBox<T> {
 타입은 `T` 타입의 하나의 요소를 가진 튜플 구조체입니다. `MyBox::new` 함수는
 `T` 타입인 하나의 파라미터를 받아서 그 값을 갖는 `MyBox` 인스턴스를 반환합니다.
 
-Lisint 15-7의 `main` 함수를 Listing 15-8에 추가하고 `Box<T>` 대신 우리가
+Listing 15-7의 `main` 함수를 Listing 15-8에 추가하고 `Box<T>` 대신 우리가
 정의한 `MyBox<T>`를 이용하도록 수정해봅시다. Listing 15-9는 컴파일되지
 않을 것인데 그 이유는 러스트가 `MyBox`를 어떻게 역참조 하는지 모르기
 때문입니다:
