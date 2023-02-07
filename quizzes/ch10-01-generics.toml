@@ -16,15 +16,16 @@ Then you call `mystery` like this:
 let y = mystery(3);
 ```
 
-Then the value of `y` must be:
+Assuming `mystery` uses no unsafe code, then the value of `y` must be :
 """
 answer.answer = "3"
 context = """
 The only possible function (without unsafe code) that has the signature `T -> T` is the identity function. The function could of course panic or print, 
-but the return value can only be the input because there is no other way for `mystery` to generate or mutate a value of `T`. 
+but the return value can only be the input because there is no other way for `mystery` to generate or mutate a value of `T`.
 See [Theorems for free!](https://dl.acm.org/doi/pdf/10.1145/99370.99404) for more examples of this idea.
+
+**3 really is the correct answer! Please stop submitting bug reports if you disagree with the answer!**
 """
-promptExplanation = true
 
 [[questions]]
 id = "40ae0cfe-3567-4d05-b0d9-54d612a2d654"
@@ -72,4 +73,3 @@ answer.lineNumber = 8
 context = """
 These definitions of `f` conflict, and there is no way for Rust to determine which `f` should be used when `p.f()` is called. Therefore this is a compiler error.
 """
-promptExplanation = true

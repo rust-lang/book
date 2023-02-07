@@ -1,7 +1,5 @@
 ## Graceful Shutdown and Cleanup
 
-{{#include experiment-note.md}}
-
 The code in Listing 20-20 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about the `workers`,
 `id`, and `thread` fields that we’re not using in a direct way that reminds us

@@ -1,0 +1,44 @@
+
+[[questions]]
+id = "5d60cfc4-6377-48e7-96e4-fe1de0b0904e"
+type = "Tracing"
+prompt.program = """
+use std::fmt::Debug;
+fn main() {
+    let n = 1;
+    let s = String::from("Hello");
+    let v: Vec<&dyn Debug> = vec![&n, &s];
+    let n_ref = v[0] as &i32;
+    println!("{}", n_ref + 1);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """
+Unlike some OOP languages, a trait object cannot be "downcasted" to a more concrete type
+(except in the case of the [`Any`](https://doc.rust-lang.org/std/any/index.html) trait).
+"""
+
+[[questions]]
+id = "cce62358-5291-4eb3-84d6-fbc570873ee3"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider implementing a generic function in two ways:
+
+```
+fn f_opt1<T: SomeTrait>(t: &T) { /* ... */ }
+fn f_opt2(t: &dyn SomeTrait) { /* ... */ }
+```
+
+Which of the following are valid reasons to prefer the trait object version (`f_opt2`) over the type-parametric version (`f_opt1`)? 
+Select each that applies.
+"""
+answer.answer = ["Faster compile times", "Smaller binary size"]
+prompt.distractors = [
+    "Improved runtime performance",
+    "Better developer ergonomics"
+]
+context = """
+By avoiding monomorphization, trait-object functions will be both faster to compile and produce smaller binaries. However, this usually
+comes at the cost of runtime performance. Trait objects are rarely easier for developers to work with than trait-bounded generics.
+"""

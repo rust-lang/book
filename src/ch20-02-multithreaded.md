@@ -1,7 +1,5 @@
 ## Turning Our Single-Threaded Server into a Multithreaded Server
 
-{{#include experiment-note.md}}
-
 Right now, the server will process each request in turn, meaning it won’t
 process a second connection until the first is finished processing. If the
 server received more and more requests, this serial execution would be less and

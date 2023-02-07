@@ -1,0 +1,38 @@
+[[questions]]
+id = "7e4eeb62-55c2-443b-a8cc-fba060501245"
+type = "MultipleChoice"
+prompt.prompt = """
+Say you are publishing a library `foobar v0.1.0`. After running `cargo publish`, you realize there is a bug in one
+of your functions. Which of the following best describes how to overwrite the published crate at the same `v0.1.0` version?
+"""
+answer.answer = "It is impossible to overwrite a published crate at a given version"
+prompt.distractors = [
+    "Add the flag `--overwrite-published` to the `cargo publish` command",
+    "Login to Crates.io and delete `v0.1.0` of the published crate",   
+    "Run `cargo yank` and then run `cargo publish`"
+]
+context = """
+Crates.io does not allow overwriting of published versions. The best option in these situations is to yank the buggy version
+and then publish a new version such as `v0.1.1`.
+"""
+
+[[questions]]
+id = "84ac16a8-2460-4baf-8913-06da6e3603e6"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following steps is NOT required to publish a crate to Crates.io?
+"""
+answer.answer = "Adding documentation to each public function in the crate"
+prompt.distractors = [
+    "Adding a license to the `[package]` section of `Cargo.toml`",    
+    "Registering and logging in to Crates.io",
+    "Selecting a crate name that is not registered on Crates.io"
+]
+context = """
+Adding documentation to public functions is certainly recommended, but not required by default. Note that if you
+want Rust to treat undocumented code as an error, you can add the following statement at the root of your library:
+
+```
+#![deny(rustdoc::missing_docs)]
+```
+"""

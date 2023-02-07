@@ -1,7 +1,5 @@
 # Advanced Features
 
-{{#include experiment-note.md}}
-
 By now, you’ve learned the most commonly used parts of the Rust programming
 language. Before we do one more project in Chapter 20, we’ll look at a few
 aspects of the language you might run into every once in a while, but may not

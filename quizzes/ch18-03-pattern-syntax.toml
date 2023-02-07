@@ -1,0 +1,73 @@
+[[questions]]
+id = "5dcd923f-13a4-4181-b252-4b580547249f"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let x = (0, 1);
+    match x {
+        (_, y) if y == 0 => println!("A"),
+        (0, _) => println!("B"),
+        _ => println!("C")
+    }
+}
+"""
+answer.doesCompile = true
+answer.stdout = "B"
+context = """
+The first branch matches `y = 1`, which means `y != 0`, so the pattern fails.
+The second branch requires that `x == 0`, which is true, so the pattern succeeds.
+"""
+
+[[questions]]
+id = "0b0d90c3-c81b-4b81-9e1b-f8bd58a22c6c"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let x = Some(&[0, 1]);
+    match x {
+        Some(&[.., 1, ..]) => println!("A"),
+        Some(&[0, 1]) | None => println!("B"),
+        _ => println!("C")
+    }
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 4
+context = """
+It is not valid to use `..` on both sides of a value, since it is ambiguous which
+array element is being referred to.
+"""
+
+[[questions]]
+id = "a7d38ffa-66b2-472a-90a5-b026b28ad3df"
+type = "MultipleChoice"
+prompt.prompt = """
+Say we have a `Point` type with the following definition:
+
+```
+struct Point {
+    x: i32,
+    y: i32
+}
+```
+
+Given the following pattern:
+
+```
+Point { x: x @ 0 ..= 5, y } if x + y != 0
+```
+
+Which of the following values will match this pattern?
+"""
+answer.answer = [
+    "`Point { x: 5, y: -4 }`",
+    "`Point { x: 0, y: 1 }`",
+]
+prompt.distractors = [
+    "`Point { x: -1, y: 2 }`",
+    "`Point { x: 3, y: -3 }`"
+]
+context = """
+This pattern specifies that `x` must be between 0 and 5 (inclusive), and that `x + y != 0`.
+Therefore `(5, -4)` and `(0, 1)` are valid, while `(-1, 2)` and `(3, -3)` are not.
+"""

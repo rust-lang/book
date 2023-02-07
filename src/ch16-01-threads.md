@@ -1,7 +1,5 @@
 ## Using Threads to Run Code Simultaneously
 
-{{#include experiment-note.md}}
-
 In most current operating systems, an executed program’s code is run in a
 *process*, and the operating system will manage multiple processes at once.
 Within a program, you can also have independent parts that run simultaneously.
@@ -279,5 +277,7 @@ ownership rules.
 
 With a basic understanding of threads and the thread API, let’s look at what we
 can *do* with threads.
+
+{{#quiz ../quizzes/ch16-01-threads.toml}}
 
 [capture]: ch13-01-closures.html#capturing-the-environment-with-closures

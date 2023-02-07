@@ -1,0 +1,106 @@
+[[questions]]
+id = "7859b06e-72ba-4c07-a3e2-b4f8cb7fd903"
+type = "MultipleChoice"
+prompt.prompt = """
+Recall the definition of the `Add` trait:
+
+```
+trait Add<Rhs=Self> {
+    type Output;
+    fn add(self, rhs: Rhs) -> Self::Output;
+}
+```
+
+Which of the following best describes why `Output` is an associated type, while `Rhs` is a type parameter?
+"""
+answer.answer = "A type `T` should be addable to many other types `S`, but a given `T + S` operation should always have a single output type"
+prompt.distractors = [
+    "The add operation takes `Rhs` as input and produces `Output` as output, and type parameters are used for input while associated types are used for output",
+    "A trait can only have a single associated type, so `Rhs` must be a type parameter to `Add`",
+    "An associated type cannot have a default, while a trait type parameter can have a default"
+]
+context = """
+It is true that an associated type cannot currently have a default, but that is not the main
+motivating factor for having `Rhs` be a type parameter in the `Add` trait.
+"""
+
+[[questions]]
+id = "d2c77d93-3887-40a2-b93a-501aa315d676"
+type = "MultipleChoice"
+prompt.prompt = """
+Recall the definition of the `Add` trait:
+
+```
+trait Add<Rhs=Self> {
+    type Output;
+    fn add(self, rhs: Rhs) -> Self::Output;
+}
+```
+
+Which of the following best describes why `Rhs` is a type parameter to the trait `Add` rather than the function `add`? That is, why is `Add` not designed like this:
+
+```
+trait Add {
+    type Output;
+    fn add<Rhs>(self, rhs: Rhs) -> Self::Output;
+}
+```
+"""
+answer.answer = "If `Rhs` were a function-level type parameter, then the definition of `add` could not assume any structure to `Rhs`"
+prompt.distractors = [
+    "The type-checker executes more efficiently when `Rhs` is a trait-level type parameter than a function-level type parameter",
+    "`Rhs` cannot have a default type as a function-level type parameter",
+    "Code generation for the `add` function would require additional time for monomorphization due to the function-level type parameter"
+]
+context = """
+Such a design would not make much sense because `add<Rhs>` would not have any information about
+the structure of `Rhs`, so it would be impossible to implement any sensible addition function this way.
+"""
+
+[[questions]]
+id = "79db9ca4-693f-4e62-8b8d-356b51a63006"
+type = "Tracing"
+prompt.program = """
+mod inner {
+    pub trait A {
+        fn f(&self) -> usize { 0 }
+    }
+    pub trait B {
+        fn f(&self) -> usize { 1 }
+    }
+    pub struct P;
+    impl A for P {}
+    impl B for P {}
+}
+fn main() {
+    use inner::{P, B};    
+    println!("{}", P.f());    
+}
+"""
+answer.doesCompile = true
+answer.stdout = "1"
+context = """
+When only one of two conflicting trait implementations is imported, then Rust uses the imported
+implementation. Fully-qualified syntax is not necessary here.
+"""
+
+[[questions]]
+id = "cb7e4d54-e95b-4153-99d6-e8f380e4f8b4"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider implementing a trait `Trait` for a type `T`. In which of the following situations
+do you need to wrap `T` in a newtype?
+"""
+answer.answer = [
+    "`Trait` is defined in an external crate and `T` is defined in an external crate",
+]
+prompt.distractors = [
+    "`Trait` is defined in the local crate and `T` is defined in an external crate",
+    "`Trait` is defined in an external crate and `T` is defined in the local crate",
+    "`Trait` is defined in the local crate and `T` is defined in the local crate crate",
+]
+context = """
+The orphan rule dictates that a trait cannot be implemented for a type if both are
+defined in an external crate, thus necessitating a newtype. If either the trait or the type
+are defined locally, then a newtype is unnecessary.
+"""

@@ -3,8 +3,6 @@
 
 ## Closures: Anonymous Functions that Capture Their Environment
 
-{{#include experiment-note.md}}
-
 Rust’s closures are anonymous functions you can save in a variable or pass as
 arguments to other functions. You can create the closure in one place and then
 call the closure elsewhere to evaluate it in a different context. Unlike
@@ -168,6 +166,8 @@ The first time we call `example_closure` with the `String` value, the compiler
 infers the type of `x` and the return type of the closure to be `String`. Those
 types are then locked into the closure in `example_closure`, and we get a type
 error when we next try to use a different type with the same closure.
+
+{{#quiz ../quizzes/ch13-01-closures-sec1.toml}}
 
 ### Capturing References or Moving Ownership
 
@@ -421,5 +421,7 @@ The `Fn` traits are important when defining or using functions or types that
 make use of closures. In the next section, we’ll discuss iterators. Many
 iterator methods take closure arguments, so keep these closure details in mind
 as we continue!
+
+{{#quiz ../quizzes/ch13-01-closures-sec2.toml}}
 
 [unwrap-or-else]: https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else

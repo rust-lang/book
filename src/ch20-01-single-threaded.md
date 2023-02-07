@@ -1,7 +1,5 @@
 ## Building a Single-Threaded Web Server
 
-{{#include experiment-note.md}}
-
 We’ll start by getting a single-threaded web server working. Before we begin,
 let’s look at a quick overview of the protocols involved in building web
 servers. The details of these protocols are beyond the scope of this book, but

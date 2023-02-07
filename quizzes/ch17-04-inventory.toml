@@ -1,0 +1,345 @@
+[[questions]]
+id = "b2dd44fc-2782-495e-bb54-65af8442c388"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Adds the string `s` to all elements of 
+/// the input iterator
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
+
+If you tried to compile this program, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "the returned iterator captures a lifetime that isn't in the bounds of `impl Iterator<Item = String>`"
+prompt.distractors = [
+  "`s2 + s` is not valid because `s` and `s2` have different lifetimes",
+  "the closure `|s2| s2 + s` cannot move out of a shared reference",
+  "`iter.map(..)` does not implement the trait `Iterator<Item = String>`"
+]
+context = """
+The string reference `s` has an implicit lifetime `'a`. The closure passed to `iter.map(..)` captures this string reference, but the type `impl Iterator<Item = String>` does not mention `'a`. Therefore the iterator captures a lifetime not in its bounds.
+"""
+
+
+[[questions]]
+id = "816e9376-7161-4f41-bc04-9dba8413d7a7"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Adds the string `s` to all elements of 
+/// the input iterator
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime that does not appear in bounds
+ --> test.rs:7:5
+  |
+5 |     s: &str
+  |        ---- hidden type `Map<impl Iterator<Item = String>, [closure@test.rs:7:14: 7:23]>` captures the anonymous lifetime defined here
+6 | ) -> impl Iterator<Item = String> {
+7 |     iter.map(move |s2| s2 + s)
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+"""
+answer.answer = [
+"""
+```
+let v = vec![String::from("Rust")];
+let it = {
+    let s = String::from("Yes");
+    concat_all(v.into_iter(), &s)
+};
+it.collect::<Vec<_>>();
+```
+"""
+]
+prompt.distractors = [
+"""
+```
+let v = vec![String::from("Rust")];
+concat_all(v.into_iter(), "Yes")
+    .collect::<Vec<_>>();
+```
+""",
+"""
+```
+let v = vec![String::from("Rust")];
+let s = String::from("Yes");
+concat_all(v.into_iter(), &s);
+println!("{}", s);
+```
+""",
+"None of these programs"
+]
+context = """
+If the returned iterator isn't related to the lifetime of `s`, then memory safety is violated if:
+1. `s` does not live forever (i.e. it's not `&'static str` like a string literal)
+2. the return value of `concat_all` is used after `s` is dropped
+
+Then the expression `s2 + s` would dereference `s`, a read of deallocated memory.
+"""
+
+[[questions]]
+id = "404b2cf7-7d29-45d7-86c4-7c806a071d7b"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Adds the string `s` to all elements of 
+/// the input iterator
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn concat_all`[<'a>]`(
+    iter: impl Iterator<Item = String> `[+ 'a]`,
+    s: &`['a]` str
+) -> impl Iterator<Item = String> `[+ 'a]` {
+    iter.map(move |s2| s2 + s)
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: &`['static]` str
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + s)
+}
+```
+""",
+"""
+```ide
+fn concat_all`[<'a, 'b>]`(
+    iter: impl Iterator<Item = String> `[+ 'a]`,
+    s: &`['b]` str
+) -> impl Iterator<Item = String> `[+ 'a + 'b]` {
+    iter.map(move |s2| s2 + s)
+}
+```
+""",
+"""
+```ide
+fn concat_all(
+    iter: impl Iterator<Item = String>,
+    s: `[String]`
+) -> impl Iterator<Item = String> {
+    iter.map(move |s2| s2 + `[&s]`)
+}
+```
+""",
+]
+context = """
+To fix this issue, we need to express the relationship between the lifetimes of `iter`, `s`, and the return type. The best way to do this is a lifetime variable `<'a>` and require that `iter` and `s` both live for `'a`, and that the output type also lives for `'a`.
+"""
+
+
+[[questions]]
+id = "2c6d6e2e-ad6e-4e98-bf88-8cada144ebee"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Adds a Display-able object into a vector of 
+/// Display trait objects
+use std::fmt::Display;
+fn add_displayable<T: Display>(
+    v: &mut Vec<Box<dyn Display>>, 
+    t: T
+) {
+    v.push(Box::new(t));
+}
+```
+
+If you tried to compile this program, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "the type `T` does not live long enough when cast to a trait object"
+prompt.distractors = [
+  "the type `T` may be dynamically sized and cannot be casted to a trait object",
+  "the type `T` cannot be boxed if it contains a reference",
+  "the type `T` does not outlive the lifetime of the reference `&mut Vec<..>`"
+]
+context = """
+When casting `Box<T>` to `Box<dyn Display>` (implicitly in `v.push(..)`), Rust requires that the trait object `dyn Display`
+must outlive the vector. However, the lifetime of `T` is unspecified, so `T` may not live long enough.
+"""
+
+
+[[questions]]
+id = "36da4652-baeb-47a6-9ee1-1448b02cbe8e"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Adds a Display-able object into a vector of 
+/// Display trait objects
+use std::fmt::Display;
+fn add_displayable<T: Display>(
+    v: &mut Vec<Box<dyn Display>>, 
+    t: T
+) {
+    v.push(Box::new(t));
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0310]: the parameter type `T` may not live long enough
+ --> test.rs:6:12
+  |
+6 |     v.push(Box::new(t));
+  |            ^^^^^^^^^^^
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying."""
+answer.answer = [
+"""
+```
+let mut v: Vec<Box<dyn Display>> = Vec::new();
+{
+    let n = 0;
+    add_displayable(&mut v, &n);
+}
+println!("{}", v[0]);
+```
+""",
+]
+prompt.distractors = [
+  "None of these programs",
+"""
+```
+let mut v: Vec<Box<dyn Display>> = Vec::new();
+{
+    let s = String::from("Hello world");
+    add_displayable(&mut v, s);
+}
+println!("{}", v[0]);
+```
+""",
+"""
+```
+let mut v: Vec<Box<dyn Display>> = Vec::new();
+add_displayable(&mut v, 5);
+```
+"""
+]
+context = """
+This program is memory-unsafe. To create a memory safety violation, the program must create a type `T` that contains
+references which do not outlive the vector. For example, adding `&n` where `n` goes out of scope before `v` means that
+the later use of `v[0]` is a read of deallocated memory.
+"""
+
+
+[[questions]]
+id = "404b2cf7-7d29-45d7-86c4-7c806a071d7b"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
+
+```ide
+/// Adds a Display-able object into a vector of 
+/// Display trait objects
+use std::fmt::Display;
+fn add_displayable<T: Display>(
+    v: &mut Vec<Box<dyn Display>>, 
+    t: T
+) {
+    v.push(Box::new(t));
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn add_displayable<`['a]`, T: Display `[+ 'a]`>(
+    v: &mut Vec<Box<dyn Display `[+ 'a]`>>, 
+    t: T
+) {
+    v.push(Box::new(t));
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn add_displayable<T: Display `[+ 'static]`>(
+    v: &mut Vec<Box<dyn Display>>, 
+    t: T
+) {
+    v.push(Box::new(t));
+}
+```
+""",
+"""
+```ide
+fn add_displayable<T: Display `[+ Clone]`>(
+    v: &mut Vec<Box<dyn Display>>, 
+    t: T
+) {
+    v.push(Box::new(`[t.clone()]`));
+}
+```
+""",
+"""
+```ide
+fn add_displayable<`['a]`, T: Display `[+ 'a]`>(
+    v: &`['a]` mut Vec<Box<dyn Display>>, 
+    t: T
+) {
+    v.push(Box::new(t));
+}
+```
+""",
+]
+context = """
+The most idiomatic fix is to specify how the lifetime of `T` should relate to the lifetime of the trait object `dyn Display`.
+Here, that means adding a lifetime parameter `'a`, saying that `T` outlives `'a`, and that the trait objects also live for
+at least `'a`. 
+
+Using a `'static` bound is the same thing but worse: it is simply less expressive, disallowing the vector's trait objects
+from ever holding references. Putting the lifetime `'a` on the `&'a mut Vec<..>` reference is not correct and does not
+fix the compiler error.
+"""

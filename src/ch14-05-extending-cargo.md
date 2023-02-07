@@ -1,7 +1,5 @@
 ## Extending Cargo with Custom Commands
 
-{{#include experiment-note.md}}
-
 Cargo is designed so you can extend it with new subcommands without having to
 modify Cargo. If a binary in your `$PATH` is named `cargo-something`, you can
 run it as if it was a Cargo subcommand by running `cargo something`. Custom

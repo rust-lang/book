@@ -1,8 +1,170 @@
 [[questions]]
-id = "95979d75-5823-4059-a1cf-7e0eba69b41a"
+id = "9ff33b87-38e2-471b-8ca4-9c31a6431376"
 type = "MultipleChoice"
 prompt.prompt = """
 **Program 1:**
+
+```ide
+/// Returns the n-th largest element in a slice
+fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
+    elems.sort();
+    let t = &elems[n];
+    return t.clone();
+}
+```
+
+If you tried to compile this program, which of the following best describes the compiler error you would get?
+"""
+answer.answer = "cannot borrow `elems` as mutable for `sort`"
+prompt.distractors = [
+  "cannot move out of shared reference for `clone`",
+  "cannot move out of shared reference in expression `&elems[n]`",
+  "the lifetime of `T` must outlives `&[T]`",
+]
+context = """
+The method `slice::sort` expects a mutable reference to a slice, but
+instead gets an immutable reference.
+"""
+
+
+[[questions]]
+id = "3ee8d846-d282-4de1-8e83-5ca0bc44fc13"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Returns the n-th largest element in a slice
+fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
+    elems.sort();
+    let t = &elems[n];
+    return t.clone();
+}
+```
+
+Normally if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0596]: cannot borrow `*elems` as mutable, as it is behind a `&` reference
+ --> test.rs:3:5
+  |
+3 |     elems.sort();
+  |     ^^^^^^^^^^^^ `elems` is a `&` reference, so the data it refers to cannot be borrowed as mutable
+```
+
+Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
+(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
+"""
+answer.answer = ["None of these programs"]
+prompt.distractors = [
+"""
+```
+let v = vec![5, 4, 3, 2, 1];
+find_nth(&v, 10);
+```
+""",
+"""
+```
+let v = vec![5, 4, 3, 2, 1];
+find_nth(&v, 0);
+println!("{}", v[0]);
+```
+""",
+"""
+```
+let v = vec![5, 4, 3, 2, 1];
+let n = &v[0];
+find_nth(&v, 0);
+println!("{}", n);
+```
+""",
+]
+context = """
+This program is technically memory-safe because `slice::sort` is only capable of moving
+elements around, not freeing them. For instance, `&v[0]` is guaranteed to point to 
+*some* number after calling `find_nth`, even if it is not the *original* number.
+
+Note that `find_nth(&v, 10)` does not cause undefined behavior because Rust performs checks
+on array accesses, so evaluating `&v[10]` will panic.
+"""
+
+
+[[questions]]
+id = "d070eb9e-4527-453a-8c9b-698739a3dd6a"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 1:**
+
+```ide
+/// Returns the n-th largest element in a slice
+fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
+    elems.sort();
+    let t = &elems[n];
+    return t.clone();
+}
+```
+
+Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
+1. The fixed function passes the Rust compiler,
+2. The fixed function preserves the intention of the original code, and
+3. The fixed function does not introduce unnecessary inefficiencies
+"""
+answer.answer = """
+```ide
+fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
+    `[let mut elem_refs: Vec<&T> = elems.iter().collect();]`
+    `[elem_refs.sort();]`
+    let t = `[elem_refs[n]]`;
+    return t.clone();
+}
+```
+"""
+prompt.distractors = [
+"""
+```ide
+fn find_nth<T: Ord + Clone>(`[elems: &mut [T]]`, n: usize) -> T {
+    elems.sort();
+    let t = &elems[n];
+    return t.clone();
+}
+```
+""",
+"""
+```ide
+fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
+    `[let mut elems = elems.to_vec();]`
+    elems.sort();
+    let t = &elems[n];
+    return t.clone();
+}
+```
+""",
+"""
+```ide
+fn find_nth<`[T: Ord]`>(`[mut elems: Vec<T>]`, n: usize) -> T {
+    elems.sort();
+    let t = `[elems.remove(n)]`;
+    return `[t]`;
+}
+```
+""",
+]
+context = """
+A function like `find_nth` is clearly intended to be a read-only function, i.e. to
+extract some property of the input sequence. Any solution which mutates or drops the input therefore does not preserve the original function's intention, even if
+it is more efficient than creating an auxiliary vector. 
+
+Creating a `Vec<&T>` is preferable to creating a `Vec<T>`, since if `T` is large, then
+`elems.to_vec()` could be expensive. However, if we knew that `T: Copy`, then `to_vec`
+would be preferable to reduce the number of pointer dereferences within `elems.sort()`.
+"""
+
+[[questions]]
+id = "95979d75-5823-4059-a1cf-7e0eba69b41a"
+type = "MultipleChoice"
+prompt.prompt = """
+**Program 2:**
 
 ```ide
 struct TestResult {
@@ -49,7 +211,7 @@ cannot be called.
 id = "dcb42a15-d9b7-437d-95ec-f000b64ce277"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**Program 2:**
 
 ```ide
 struct TestResult {
@@ -137,7 +299,7 @@ to something with `self.scores`, then memory safety could potentially be violate
 id = "d070eb9e-4527-453a-8c9b-698739a3dd6a"
 type = "MultipleChoice"
 prompt.prompt = """
-**Program 1:**
+**Program 2:**
 
 ```ide
 struct TestResult {
@@ -221,173 +383,4 @@ so it allows the function to compile. This is a common workaround for this type 
 
 Another option is to leverage the fact that `self.curve` is cheap to copy and use [`Option::copied`](https://doc.rust-lang.org/std/option/enum.Option.html#method.copied), 
 which would release the borrow on `self` as soon as `.copied()` is called.
-"""
-
-[[questions]]
-id = "b2dd44fc-2782-495e-bb54-65af8442c388"
-type = "MultipleChoice"
-prompt.prompt = """
-**Program 2:**
-
-```ide
-/// Adds the string `s` to all elements of 
-/// the input iterator
-fn concat_all(
-    iter: impl Iterator<Item = String>,
-    s: &str
-) -> impl Iterator<Item = String> {
-    iter.map(move |s2| s2 + s)
-}
-```
-
-If you tried to compile this program, which of the following best describes the compiler error you would get?
-"""
-answer.answer = "the returned iterator captures a lifetime that isn't in the bounds of `impl Iterator<Item = String>`"
-prompt.distractors = [
-  "`s2 + s` is not valid because `s` and `s2` have different lifetimes",
-  "the closure `|s2| s2 + s` cannot move out of a shared reference",
-  "`iter.map(..)` does not implement the trait `Iterator<Item = String>`"
-]
-context = """
-The string reference `s` has an implicit lifetime `'a`. The closure passed to `iter.map(..)` captures this string reference, but the type `impl Iterator<Item = String>` does not mention `'a`. Therefore the iterator captures a lifetime not in its bounds.
-"""
-
-
-[[questions]]
-id = "816e9376-7161-4f41-bc04-9dba8413d7a7"
-type = "MultipleChoice"
-prompt.prompt = """
-**Program 2:**
-
-```ide
-/// Adds the string `s` to all elements of 
-/// the input iterator
-fn concat_all(
-    iter: impl Iterator<Item = String>,
-    s: &str
-) -> impl Iterator<Item = String> {
-    iter.map(move |s2| s2 + s)
-}
-```
-
-Normally if you try to compile this function, the compiler returns the following error:
-
-```text
-error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime that does not appear in bounds
- --> test.rs:7:5
-  |
-5 |     s: &str
-  |        ---- hidden type `Map<impl Iterator<Item = String>, [closure@test.rs:7:14: 7:23]>` captures the anonymous lifetime defined here
-6 | ) -> impl Iterator<Item = String> {
-7 |     iter.map(move |s2| s2 + s)
-```
-
-Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
-Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
-"""
-answer.answer = [
-"""
-```
-let v = vec![String::from("Rust")];
-let it = {
-    let s = String::from("Yes");
-    concat_all(v.into_iter(), &s)
-};
-it.collect::<Vec<_>>();
-```
-"""
-]
-prompt.distractors = [
-"""
-```
-let v = vec![String::from("Rust")];
-concat_all(v.into_iter(), "Yes")
-    .collect::<Vec<_>>();
-```
-""",
-"""
-```
-let v = vec![String::from("Rust")];
-let s = String::from("Yes");
-concat_all(v.into_iter(), &s);
-println!("{}", s);
-```
-""",
-"None of these programs"
-]
-context = """
-If the returned iterator isn't related to the lifetime of `s`, then memory safety is violated if:
-1. `s` does not live forever (i.e. it's not `&'static str` like a string literal)
-2. the return value of `concat_all` is used after `s` is dropped
-
-Then the expression `s2 + s` would dereference `s`, a read of deallocated memory.
-"""
-
-[[questions]]
-id = "404b2cf7-7d29-45d7-86c4-7c806a071d7b"
-type = "MultipleChoice"
-prompt.prompt = """
-**Program 2:**
-
-```ide
-/// Adds the string `s` to all elements of 
-/// the input iterator
-fn concat_all(
-    iter: impl Iterator<Item = String>,
-    s: &str
-) -> impl Iterator<Item = String> {
-    iter.map(move |s2| s2 + s)
-}
-```
-
-Of the following fixes (highlighted in yellow), which fix best satisfies these three criteria:
-1. The fixed function passes the Rust compiler,
-2. The fixed function preserves the intention of the original code, and
-3. The fixed function does not introduce unnecessary inefficiencies
-"""
-answer.answer = """
-```ide
-fn concat_all`[<'a>]`(
-    iter: impl Iterator<Item = String> `[+ 'a]`,
-    s: &`['a]` str
-) -> impl Iterator<Item = String> `[+ 'a]` {
-    iter.map(move |s2| s2 + s)
-}
-```
-"""
-prompt.distractors = [
-"""
-```ide
-fn concat_all(
-    iter: impl Iterator<Item = String>,
-    s: &`['static]` str
-) -> impl Iterator<Item = String> {
-    iter.map(move |s2| s2 + s)
-}
-```
-""",
-"""
-```ide
-fn concat_all`[<'a, 'b>]`(
-    iter: impl Iterator<Item = String> `[+ 'a]`,
-    s: &`['b]` str
-) -> impl Iterator<Item = String> `[+ 'a + 'b]` {
-    iter.map(move |s2| s2 + s)
-}
-```
-""",
-"""
-```ide
-fn concat_all(
-    iter: impl Iterator<Item = String>,
-    s: `[String]`
-) -> impl Iterator<Item = String> {
-    iter.map(move |s2| s2 + `[&s]`)
-}
-```
-""",
-]
-context = """
-To fix this issue, we need to express the relationship between the lifetimes of `iter`, `s`, and the return type. The best way to do this is a lifetime variable `<'a>` and require that `iter` and `s` both live for `'a`, and that the output type also lives for `'a`.
 """

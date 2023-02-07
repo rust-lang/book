@@ -1,0 +1,73 @@
+[[questions]]
+id = "53cb3740-2962-4379-a25f-a65e72812a95"
+type = "Tracing"
+prompt.program = """
+use std::thread;
+fn main() {
+    let mut n = 1;
+    let t = thread::spawn(move || {
+        n = n + 1;
+        thread::spawn(move || {
+            n = n + 1;
+        })
+    });
+    n = n + 1;
+    t.join().unwrap().join().unwrap();
+    println!("{n}");
+}
+"""
+answer.doesCompile = true
+answer.stdout = "2"
+context = """
+The `move` keyword causes `n` to be copied into the closure, so the assignments
+`n = n + 1` within `thread::spawn` have no effect on the outer `n`.
+"""
+
+[[questions]]
+id = "c2a84e6d-8143-4944-bf20-b00e49144ac9"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this example from the text where a vector is improperly captured by a thread:
+
+```
+use std::thread;
+
+fn main() {
+    let v = vec![1, 2, 3];
+
+    let handle = thread::spawn(|| {
+        println!("Here's a vector: {:?}", v);
+    });
+
+    handle.join().unwrap();
+}
+```
+
+The Rust compiler includes this diagnostic:
+
+```text
+note: function requires argument type to outlive `'static`
+ --> src/main.rs:6:18
+  |
+6 |       let handle = thread::spawn(|| {
+  |  __________________^
+7 | |         println!("Here's a vector: {:?}", v);
+8 | |     });
+  | |______^
+```
+
+Recall that `'static` is the lifetime of references that are valid for the entire program's duration.
+
+Which of the following best describes the note "function requires argument type to outlive `'static`"?
+"""
+answer.answer = "Rust doesn't know how long a thread will run, so the thread's captures must live forever"
+prompt.distractors = [
+    "The closure passed to `thread::spawn` is not allowed to take any arguments",
+    "The vector `v` contains values that do not outlive `'static`",
+    "A closure may only capture string constants of type `&'static str`"
+]
+context = """
+If a closure captures a reference to a value that lived less than `'static`, it's possible that the thread would live 
+longer than the value and violate memory safety. Note that [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html) 
+can be used to allow threads to capture non-static references by statically limiting the lifetime of the thread.
+"""

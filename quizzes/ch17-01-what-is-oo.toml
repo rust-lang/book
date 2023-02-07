@@ -1,0 +1,16 @@
+[[questions]]
+id = "a4680619-9533-4cbb-a785-7b73570168af"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following aspects of object-oriented programming does Rust implement?
+"""
+answer.answer = [
+    "Objects with methods",
+    "Encapsulation of private data",
+]
+prompt.distractors = [
+    "Inheritance of superclass methods"
+]
+context = """
+Rust contains objects (i.e. structs) and encapsulation (via the `pub` keyword), but not inheritance.
+"""

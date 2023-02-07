@@ -34,12 +34,11 @@ fn main() {
 }
 ```
 
-Inside `main`, what is the total number of paths that can refer to `a`, `b`, or `c` (not including those that use `self`, `super`, or `crate`)? 
-Write your answer as a digit such as 0 or 1.
+Inside `main`, what is the total number of paths that can refer to `a`, `b`, or `c` (not including those that use `self`, `super`, or `crate`)?
+Write your answer as a digit such as 0 or 1. For example, if the only two valid paths were `a` and `parent::a`, then the answer would be 2.
 """
 answer.answer = "5"
 context = """
 There are two paths to `a`: `parent::a` and `a`. There are no paths to `b`, because it is private. There are three paths to `c`:
 `parent::child::c`, `child::c`, `alias::c`.
 """
-promptExplanation = true

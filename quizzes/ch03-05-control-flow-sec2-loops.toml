@@ -6,18 +6,18 @@ True/false: this code will terminate and not loop forever or crash.
 
 ```
 fn main() {
-  let mut x = 0;
-  'a: loop {
-    x += 1;
-    'b: loop {
-      if x > 10 {
-        continue 'a;
-      } else {
-        break 'b;
-      }      
+    let mut x = 0;
+    'a: loop {
+        x += 1;
+        'b: loop {
+            if x > 10 {
+                continue 'a;
+            } else {
+                break 'b;
+            }      
+        }
+        break;       
     }
-    break;       
-  }
 }
 ```
 """
@@ -32,12 +32,12 @@ id = "46a52842-d4eb-4dc9-8885-f31a2f2f59b4"
 type = "Tracing"
 prompt.program = """
 fn main() {
-  let a = [5; 10];
-  let mut sum = 0;
-  for x in a {
-    sum += x;
-  }
-  println!("{sum}");
+    let a = [5; 10];
+    let mut sum = 0;
+    for x in a {
+        sum += x;
+    }
+    println!("{sum}");
 }
 """
 answer.doesCompile = true

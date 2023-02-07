@@ -1,0 +1,110 @@
+[[questions]]
+id = "01904807-74c7-41ad-8d8b-cfb30e5ce10c"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best describes the concept of *interior mutability* in Rust?
+"""
+answer.answer = "Allowing data to be mutated through an immutable reference"
+prompt.distractors = [
+    "Wrapping `unsafe` code in a safe API",
+    "Allowing data on the inside of a data structure to be mutated",
+    "Using the borrow checker to enforce memory safety at runtime"
+]
+context = """
+The main idea of interior mutability is taking a value of type `&T` and being able to 
+safely mutate data within `T`.
+"""
+
+[[questions]]
+id = "380cd865-76c5-419c-8961-af4c59d2ab71"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider an API that tracks the number of calls to a particular method:
+
+```
+struct Api {
+    count: ???
+}
+
+impl Api {
+    fn some_method(&self) {
+        // increment count
+        // rest of the method...
+    }    
+}
+```
+
+Say the count is represented as a `usize`. What is the most appropriate wrapper type
+to use for this situation?
+"""
+answer.answer = "`RefCell<usize>`"
+prompt.distractors = [
+    "`Rc<usize>`",
+    "`Box<usize>`",
+    "None, `usize` is fine"
+]
+context = """
+Here a `RefCell` is useful to mutate an internal field even though `some_method` takes
+an immutable reference as input.
+"""
+
+[[questions]]
+id = "d4ae1b8e-79a7-4485-828f-fb30cdeb29d5"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following incorrect implementation of a `RefCell` that does not check
+whether the interior value is borrowed:
+
+```
+use std::cell::UnsafeCell;
+struct BadRefCell<T>(UnsafeCell<T>);
+impl<T> BadRefCell<T> {
+    pub fn borrow_mut(&self) -> &mut T {
+        unsafe { &mut *self.0.get() }
+    }
+}
+```
+
+Now say we have a `BadRefCell` like this:
+
+```
+let v = BadRefCell(UnsafeCell::new(vec![1, 2, 3]));
+```
+
+Which of the following snippets would violate memory safety using this API?
+"""
+answer.answer = """
+```
+let v1 = v.borrow_mut();
+let n = &v1[0];
+v.borrow_mut().push(0);
+println!("{n}");
+```
+"""
+prompt.distractors = [
+"""
+```
+drop(v.borrow_mut());
+drop(v.borrow_mut());
+```
+""",
+"""
+```
+let v1 = v.borrow_mut();
+let v2 = v.borrow_mut();
+v1.push(0);
+v2.push(0);
+```
+""",
+"""
+```
+v.borrow_mut().push(0);
+let n = v.borrow_mut()[0];
+println!("{n}");
+```
+"""
+]
+context = """
+The `BadRefCell` allows us to have two mutable references to the underlying data at the same time,
+which permits a memory safety violation like reallocating a vector while holding a reference to its contents.
+"""

@@ -1,7 +1,5 @@
 ## Advanced Types
 
-{{#include experiment-note.md}}
-
 The Rust type system has some features that we’ve so far mentioned but haven’t
 yet discussed. We’ll start by discussing newtypes in general as we examine why
 newtypes are useful as types. Then we’ll move on to type aliases, a feature
@@ -288,6 +286,8 @@ Because the type might not be `Sized`, we need to use it behind some kind of
 pointer. In this case, we’ve chosen a reference.
 
 Next, we’ll talk about functions and closures!
+
+{{#quiz ../quizzes/ch19-04-advanced-types.toml}}
 
 [encapsulation-that-hides-implementation-details]:
 ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details

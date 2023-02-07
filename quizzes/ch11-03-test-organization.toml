@@ -2,7 +2,7 @@
 id = "3da96b29-d975-4cd8-a8eb-b1a6bd9b5c0a"
 type = "MultipleChoice"
 prompt.prompt = """
-Which of the following is NOT a reason to wrap unit tests in `#[cfg(test)] mod test { ... }`?
+Which of the following is NOT a reason to wrap unit tests in `#[cfg(test)] mod tests { ... }`?
 """
 answer.answer = "It gives your tests access to private functions"
 prompt.distractors = [
@@ -11,5 +11,5 @@ prompt.distractors = [
   "It separates test helper functions from library code"
 ]
 context = """
-All unit tests in a given file have access to that file's private functions, regardless of being in a `mod test` or not.
+All unit tests in a given file have access to that file's private functions, regardless of being in a `mod tests` or not.
 """

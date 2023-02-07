@@ -1,7 +1,5 @@
 ## Implementing an Object-Oriented Design Pattern
 
-{{#include experiment-note.md}}
-
 The *state pattern* is an object-oriented design pattern. The crux of the
 pattern is that we define a set of states a value can have internally. The
 states are represented by a set of *state objects*, and the value’s behavior
@@ -513,6 +511,8 @@ option.
 Next, we’ll look at patterns, which are another of Rust’s features that enable
 lots of flexibility. We’ve looked at them briefly throughout the book but
 haven’t seen their full capability yet. Let’s go!
+
+{{#quiz ../quizzes/ch17-03-oo-design-patterns.toml}}
 
 [more-info-than-rustc]: ch09-03-to-panic-or-not-to-panic.html#cases-in-which-you-have-more-information-than-the-compiler
 [macros]: ch19-06-macros.html#macros

@@ -1,0 +1,41 @@
+[[questions]]
+id = "d3d9197f-8baf-4ec5-9988-282c67636d3c"
+type = "Tracing"
+prompt.program = """
+fn expect_none(x: Option<i32>) -> ! {
+    match x {
+        Some(n) => panic!("Expected none, found Some({n})"),
+        None => ()
+    }
+}
+
+fn main() {
+    println!("{:?}", expect_none(None));
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 4
+context = """
+The `!` type is not an appropriate return type for this function because it only panics
+some of the time, not all of the time.
+"""
+
+[[questions]]
+id = "5c5cb765-a561-459f-8223-9e72e824c5da"
+type = "Tracing"
+prompt.program = """
+fn is_equal<T: Eq>(t1: &T, t2: &T) -> bool {
+  t1 == t2
+}
+
+fn main() {
+  println!("{:?}", is_equal("Hello", "world"));
+}
+
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """
+Unless `T` is marked as `?Sized`, then the type `&str` cannot be passed to `is_equal` 
+as `str` is not `Sized`.
+"""

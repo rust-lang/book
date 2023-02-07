@@ -1,0 +1,34 @@
+[[questions]]
+id = "6f3c2a68-24f7-439b-9fe0-426abd27e487"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let mut n = 1;
+    let b = Box::new(&mut n);
+    **b += 1;
+    println!("{}", n);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "2"
+context = """
+A box can hold a mutable reference, so dereferencing `b` twice gets back to `n`.
+"""
+
+[[questions]]
+id = "57595a80-c79f-4aae-a1d4-cdaf212d7c21"
+type = "ShortAnswer"
+prompt.prompt = """
+Say we have a program with a variable:
+
+```
+let x: [Box<(usize, usize)>; 4] = /* ... */
+```
+
+For a compile target with a 64-bit architecture, what is the minimum possible size in memory (in bytes) of `x` on the stack? 
+Write your answer in digits, e.g. 0, 1, so on.
+"""
+answer.answer = "32"
+context = """
+A box contains a pointer, which is 8 bytes on a 64-bit architecture. An array of 4 pointers is therefore at least 4 * 8 = 32 bytes.
+"""

@@ -1,0 +1,22 @@
+[[questions]]
+id = "e3a093e2-4809-4aa1-95b4-427833d8d23d"
+type = "Tracing"
+prompt.program = """
+use std::rc::Rc;
+fn main() {
+    let r1 = Rc::new(0);
+    let r4 = {
+        let r2 = Rc::clone(&r1);
+        Rc::downgrade(&r2)
+    };
+    let r5 = Rc::clone(&r1);
+    let r6 = r4.upgrade();
+    println!("{} {}", Rc::strong_count(&r1), Rc::weak_count(&r1));
+}
+"""
+answer.doesCompile = true
+answer.stdout = "3 1"
+context = """
+The three strong refs are `r1`, `r5`, and `r6`. The one weak ref is `r4`.
+`r2` is dropped at the end of its scope.
+"""

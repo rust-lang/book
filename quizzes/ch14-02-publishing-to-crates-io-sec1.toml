@@ -1,0 +1,50 @@
+[[questions]]
+id = "e2df0a8a-7bdd-40a3-9918-e4a856978cbb"
+type = "MultipleChoice"
+prompt.prompt = """
+Say you are publishing a library, and you want to write documentation about the entire library at the top of the `lib.rs` file.
+The documentation should be prefixed with the following comment syntax:
+"""
+answer.answer = "`//!`"
+prompt.distractors = [
+    "`///`",
+    "`//`",    
+]
+context = """
+`//!` is appropriate for module-level documentation, while `///` is for documenting individual items like functions.
+"""
+
+[[questions]]
+id = "cfb65011-0578-4032-8aaa-b346b091602b"
+type = "MultipleChoice"
+prompt.prompt = """
+Say you are creating a library `worldly` with the following function `lib.rs`:
+
+    /// Adds the string "world" to `s`.
+    ///
+    /// # Example
+    /// ```
+    /// let mut s = String::new();
+    /// worldly::add_world(&mut s);
+    /// assert_eq!(s, "Hello world");
+    /// ```
+    pub fn add_world(s: &mut String) {
+        s.push_str("world");
+    }
+
+    #[test]
+    fn test_add_world() {
+        let mut s = String::new();
+        add_world(&mut s);
+        assert_eq!(s, "world");
+    }
+
+If you run `cargo test`, will any test fail?
+"""
+answer.answer = "Yes"
+prompt.distractors = [
+    "No",    
+]
+context = """
+The incorrect example will be run as a doc-test, and cause `cargo test` to fail.
+"""

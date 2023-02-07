@@ -32,7 +32,6 @@ fn main() {
 
 Also, note that Rust will implicitly convert string references to either `&String` or `&str` based on the context of the reference. So the expression `&s` produces two different values based on the expected type of `&s`.
 """
-promptExplanation = true
 
 [[questions]]
 id = "adcfc154-03bd-470a-bacb-b3cad97cfc7f"

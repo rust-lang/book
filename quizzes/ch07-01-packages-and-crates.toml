@@ -33,5 +33,5 @@ How many crates does this package contain?
 answer.answer = "3"
 context = """ 
 `main.rs` produces a binary crate, `lib.rs` produces a library crate, and `bin/alt.rs` produces a binary crate. The `util.rs` would presumably be used as a module within
-one of these crates. `build.rs` is a build script.
+one of these crates, but it is not a special filename recognized by Rust, so it would not be its own crate. `build.rs` is a build script.
 """

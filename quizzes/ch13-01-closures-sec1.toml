@@ -1,0 +1,42 @@
+[[questions]]
+id = "e6cbd582-9692-4045-a984-8770a12e1b95"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best describes the rationale for why Rust will infer the types of arguments/returns for closures, but not top-level functions?
+"""
+answer.answer = "Top-level functions can be part of a library's external interface, while closures cannot be directly exposed"
+prompt.distractors = [
+  "Due to the halting problem, it is mathematically impossible for Rust to infer the types of top-level functions",
+  "For backwards compatibility with older versions of Rust",
+  "Anything assignable to a variable can be type-inferred, and top-level functions cannot be assigned to a variable"
+]
+context = """
+Rust could, in theory, provide type inference for top-level functions. Functional languages like Haskell and OCaml have this feature.
+However, Rust designers made the conscious decision to require type annotations on top-level functions to promote clarity at the 
+interface level: a function will always have exactly the type it says it has.
+"""
+
+[[questions]]
+id = "f844d1c2-3f63-4cdb-b16e-6e818e996e0d"
+type = "MultipleChoice"
+prompt.prompt = """
+Rust permits pattern matching within closure arguments, including the use of the underscore. For example, you could write the following:
+
+```rust
+let f = |_| (); // sometimes called the "toilet closure"
+let s = String::from("Hello");
+f(s);
+```
+
+Which of the following best describes the relationship between `f` and `s` in this program?
+"""
+answer.answer = "`f` causes `s` to be immediately dropped"
+prompt.distractors = [
+  "`f` has no effect on `s`",
+  "`f` reads `s` and then throws away the result",
+  "`f` captures `s` in its environment"
+]
+context = """
+The toilet closure is similar to [`std::mem::drop`](https://doc.rust-lang.org/std/mem/fn.drop.html), i.e. a function that moves
+an argument and causes it to be dropped.
+"""

@@ -1,0 +1,21 @@
+[[questions]]
+id = "f08ab588-1dca-438e-8108-a1b2410a4343"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider implementing a `register` function that takes a callback in two ways:
+
+```
+fn register1(cb: fn(Event) -> ());
+fn register2<F>(cb: F) where F: Fn(Event) -> ();
+```
+
+Which type signature permits `register` to take the widest variety of arguments?
+"""
+answer.answer = "`register2`"
+prompt.distractors = [
+  "`register1`",
+  "They are equivalent"
+]
+context = """
+Closures can be passed to `register2`, while only top-level functions can be passed to `register1`.
+"""

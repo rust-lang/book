@@ -1,7 +1,5 @@
 ## Using Message Passing to Transfer Data Between Threads
 
-{{#include experiment-note.md}}
-
 One increasingly popular approach to ensuring safe concurrency is *message
 passing*, where threads or actors communicate by sending each other messages
 containing data. Here’s the idea in a slogan from [the Go language
@@ -255,3 +253,5 @@ will be more nondeterministic and create different output each time.
 
 Now that we’ve looked at how channels work, let’s look at a different method of
 concurrency.
+
+{{#quiz ../quizzes/ch16-02-message-passing.toml}}

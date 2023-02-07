@@ -1,7 +1,5 @@
 # Object-Oriented Programming Features of Rust
 
-{{#include experiment-note.md}}
-
 Object-oriented programming (OOP) is a way of modeling programs. Objects as a
 programmatic concept were introduced in the programming language Simula in the
 1960s. Those objects influenced Alan Kay’s programming architecture in which
