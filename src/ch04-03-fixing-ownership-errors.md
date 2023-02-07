@@ -112,19 +112,120 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 }
 ```
 
+### Fixing an Unsafe Program: Copying vs. Moving Out of a Vector
+
+A common confusion for Rust learners arises around the interaction of ownership and collections, like vectors. For example, here's a safe program that copies a number out of a vector:
+
+```aquascope,permissions,stepper,boundaries
+#fn main() {
+let v: Vec<i32> = vec![0, 1, 2];
+let n_ref: &i32 = v.get(0).unwrap();`(focus,paths:\*n_ref)`
+let n: i32 = *n_ref;
+
+// Normally you would just write:
+//   let n = v[0];
+// But we've expanded the syntactic
+// sugar for clarity.
+#}
+```
+
+But if we change the type of elements from numbers to strings, then the program becomes unsafe!
+
+```aquascope,interpreter+permissions,stepper,boundaries,shouldFail
+#fn main() {
+let v: Vec<String> = vec![String::from("Hello world")];
+let s_ref: &String = v.get(0).unwrap();`[]``(focus,paths:\*s_ref)`
+let s: String = *s_ref;
+
+// These are normally implicit,
+// but we've added them for clarity.
+drop(s);`[]`
+drop(v);`[]`
+#}
+```
+
+What happened here is *a double-free.* **Rust does not allow moves through a dereference.** So the expression `*s_ref` copies the string pointer to "Hello world", but then **both** `v` and `s` think they own "Hello world". Therefore after `s` is dropped, "Hello world" is deallocated. Then `v` is dropped, and undefined behavior happens when the string is freed a second time.
+
+Because this second program is unsafe, Rust's borrow checker will reject it with the following error:
+
+```text
+error[E0507]: cannot move out of `*s_ref` which is behind a shared reference
+ --> test.rs:4:9
+  |
+4 | let s = *s_ref;
+  |         ^^^^^^
+  |         |
+  |         move occurs because `*s_ref` has type `String`, which does not implement the `Copy` trait
+```
+
+But why did the first program, the vector of numbers, pass the compiler? The error message gives a hint: "move occurs because `*s_ref` has type `String`, *which does not implement the `Copy` trait.*"
+
+In short, **if a value does not own heap data, then it can be copied without a move.** (More formally, the type of the value implements the `Copy` trait, but we'll discuss traits in a later chapter.) For example:
+
+* An `i32` **does not** own heap data, so it **can** be copied without a move. 
+* A `String` **does** own heap data, so it **can not** be copied without a move.
+* An `&String` **does not** own heap data, so it **can** be copied without a move.
+
+In terms of permissions, the idea is that the dereference operator `*` requires own-permissions. In the example below, you can see how a dereference of an `i32` has own-permissions, while a dereference of a `String` does not:
+
+```aquascope,permissions,stepper
+#fn main() {
+let v1: Vec<i32> = vec![0];
+let n: &i32 = &v1[0];`(focus,paths:\*n)`
+
+let v2: Vec<String> = vec![String::new()];
+let s: &String = &v2[0];`(focus,paths:\*s)`
+#println!("{n} {s}");
+#}
+```
+
+But let's say we have a vector of non-`Copy` types like `String`, and we want to get access to an element of the vector. Here's a few different ways to safely do so. First, you can avoid taking ownership of the string and just use an immutable reference:
+
+```rust
+#fn main() {
+let v: Vec<String> = vec![String::from("Hello world")];
+let s_ref: &String = &v[0];
+println!("{s_ref}!");
+#}
+```
+
+Second, you can clone the data if you want to get ownership of the string while leaving the vector alone:
+
+```rust
+#fn main() {
+let v: Vec<String> = vec![String::from("Hello world")];
+let mut s: String = v[0].clone();
+s.push('!');
+println!("{s}");
+#}
+```
+
+Finally, you can use [`Vec::remove`] to move the string out of the vector:
+
+```rust
+#fn main() {
+let mut v: Vec<String> = vec![String::from("Hello world")];
+let mut s: String = v.remove(0);
+s.push('!');
+println!("{s}");
+assert!(v.len() == 0);
+#}
+```
+
+
 ### Fixing a Safe Program: Disjoint Tuple Fields
 
 The above examples are cases where a program is unsafe. However, Rust may also reject safe programs. One common reason is that Rust tracks permissions at a fine-grained level, but it may end up conflating two distinct paths as the same path. 
  
 As an example of fine-grained permission tracking, here's a program that shows how you can borrow one field of a tuple, and write to a different field of the same tuple:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 #fn main() {
 let mut name = (
     String::from("Ferris"), 
     String::from("Rustacean")
-);
-let first = &name.0;
+);`(focus,paths:name)`
+let first = &name.0;`(focus,paths:name)`
 name.1.push_str(", Esq.");
 println!("{first} {}", name.1);
 #}
@@ -134,7 +235,7 @@ The statement `let first = &name.0` borrows `name.0`. This borrow removes write/
 
 However, sometimes Rust might lose track of exactly which paths are borrowed. For example, let's say we factor out `&name.0` into a function `get_first`. Notice how `get_first(&name)` now removes permissions on `name.1`!
 
-```aquascope,stepper,shouldFail
+```aquascope,permissions,stepper,shouldFail
 fn get_first(name: &(String, String)) -> &String {
     &name.0
 }
@@ -170,7 +271,7 @@ Remember, the key idea is that **the program above is safe.** It has no undefine
 
 A similar kind of problem arises when we borrow elements of an array. For example, observe what paths are borrowed when we take a mutable reference to an array:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 #fn main() {
 let mut a = [0, 1, 2, 3];
 let x = &mut a[0];`(focus,paths:a)`
@@ -188,7 +289,7 @@ let x = &mut a[idx];
 
 As a result, a perfectly safe program that uses two disjoint indices will be rejected:
 
-```aquascope,boundaries,shouldFail
+```aquascope,permissions,boundaries,shouldFail
 #fn main() {
 let mut a = [0, 1, 2, 3];
 let x = &mut a[0];
@@ -229,3 +330,4 @@ When fixing an ownership error, you should ask yourself: is my program actually 
 [cells]: https://doc.rust-lang.org/std/cell/index.html
 [split_first_mut]: https://doc.rust-lang.org/std/primitive.slice.html#method.split_first_mut
 [unsafe]: ch19-01-unsafe-rust.html
+[`Vec::remove`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.remove

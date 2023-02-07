@@ -117,13 +117,14 @@ assert_eq!(s_len1, s_len2);
 ```
 
 This example shows implicit conversions in three ways:
-1. The `i32::abs` function expects an input of type `i32`. To call `abs` with a `Box<i32>`, you can explicitly dereference the box like `i32::abs(*x)`, or you can implicitly dereference the box usig method-call syntax like `x.abs()`. The dot syntax is syntactic sugar for the function-call syntax.
+1. The `i32::abs` function expects an input of type `i32`. To call `abs` with a `Box<i32>`, you can explicitly dereference the box like `i32::abs(*x)`, or you can implicitly dereference the box using method-call syntax like `x.abs()`. The dot syntax is syntactic sugar for the function-call syntax.
 
 2. This implicit conversion works for multiple layers of pointers. For example, calling `abs` on a reference to a box `r: &Box<i32>` will insert two dereferences. 
 
 3. This conversion also works the opposite direction: if a function like `str::len` expects a reference `&str`, then by providing an owned `String`, Rust will insert a single borrowing operator. (In fact, there is a further conversion from `String` to `str`!)
 
 We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is to recognize that these conversions are happening, especially with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
+
 
 ### Rust Avoids Simultaneous Aliasing and Mutation
 
@@ -160,7 +161,7 @@ To illustrate this idea, we will use a new kind of diagram. This diagram shows t
 <!-- horizontal line should be vertical-aligned to bottom of the row, not middle
      to indicate that it describes after-permissions -->
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 #fn main() {
 let mut x = String::from("Hello");
 let y = &x;
@@ -189,6 +190,8 @@ Permissions are not just defined on variables (like `x` or `y`), but also on **p
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next section).
 - Any combination of the above, like `*((*a)[0].1)`.
 
+Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, it's not just *what* you're data accessing, but *how* you're accessing it.
+
 Returning to the Pointer Safety Principle, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
 <!-- The key thing to observe is that a variable's *type* is not the same as its *permissions*. A variable always has the same type, but its permissions will change depending on context. Specifically, a variable loses permissions when its contents are borrowed by a reference. It regains those permissions when the reference is no longer used.
@@ -199,7 +202,7 @@ Permissions are a compile-time concept, not a run-time concept. The Rust compile
 
 Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. For example, suppose we placed the `x.push_str(...)` statement in-between the definition of `y` and the use of `y`, like this:
 
-```aquascope,boundaries,shouldFail
+```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
 let mut x = String::from("Hello");
 let y = &x;
@@ -232,11 +235,11 @@ If Rust allowed this program to compile, we would violate memory safety. The ope
 
 ### Mutable References Provide Unique and Non-Owning Access to Data
 
-The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it. For example, [`Vec::push`](https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push) should add an element to a vector without consuming ownership of the vector.
+The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it. For example, [`String::push_str`] should extend a string without consuming ownership of it.
 
 The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
@@ -256,7 +259,7 @@ The second observation is what makes mutable references useful. `x` can be mutat
 
 Mutable references can also be temporarily "downgraded" to read-only references. For example:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
@@ -272,7 +275,7 @@ In this program, the borrow `&*y` removes the write permission from `*y` but _no
 
 To borrow from a path, that path must have the appropriate permissions: `R` for an immutable reference, and `RW` for a mutable reference. A common source of borrow checker errors is trying to borrow data without enough permissions, for example:
 
-```aquascope,boundaries
+```aquascope,permissions,boundaries
 #fn main() {
 let mut x = String::from("Hello");
 let y = &x;
@@ -298,13 +301,15 @@ error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immuta
 ``` 
 -->
 
+
+
 ### Permissions Are Returned At The End of a Reference's Lifetime
 
 Previously, we explained that that a reference changes permissions while the reference is "in use". The phrase "in use" is describing a reference's **lifetime**, which is the range of code spanning from its birth (where the reference is created) to its death (the last time(s) the reference is used).
 
 For example, in this program, the lifetime of `y` starts with `let y = &x`, and ends with `let z = *y`:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 #fn main() {
 let mut x = 1;
 let y = &x;`(focus,paths:x)`
@@ -319,7 +324,7 @@ The read permissions on `x` are returned to `x` after the lifetime of `y` has en
 
 In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a simple function that capitalizes the first character in a vector of ASCII characters:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 fn ascii_capitalize(v: &mut Vec<char>) {
     let c = &v[0];`(focus,paths:\*v)`
     if c.is_ascii_lowercase() {
@@ -370,8 +375,7 @@ If this function were allowed, we could call `add_ref` like this:
 ```aquascope,interpreter,shouldFail
 fn add_ref(v: &mut Vec<&i32>, n: i32) {
     let r = &n;
-    v.push(r);`[]`
-    ();
+    v.push(r);`[]`    
 }
 fn main() {
     let mut v = Vec::new();
@@ -396,3 +400,5 @@ However, references can be easily misused, so Rust provides a system of permissi
 - Data must outlive all references that point to it.
 
 In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is enabling you to use references safely but without garbage collection. Understanding these safety rules now will help you avoid frustration with the compiler down the road.
+
+[`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str

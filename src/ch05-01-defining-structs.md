@@ -265,7 +265,59 @@ implement them on any type, including unit-like structs.
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
 
+## Borrowing Fields of a Struct
+
+Similar to our discussion in ["Fixing a Safe Program: Disjoint Tuple Fields"], Rust's borrow checker will track ownership permissions
+at the both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions:
+
+```aquascope,permissions,stepper
+#fn main() {
+struct Point { x: i32, y: i32 }
+
+let mut p = Point { x: 0, y: 0 };`(focus,paths:p)`
+let x = &mut p.x;`(focus,paths:p)`
+*x += 1;`(focus,paths:p)`
+println!("{}, {}", p.x, p.y);
+#}
+```
+
+As a result, if we try and use `p` while `p.x` is mutably borrowed like this:
+
+```aquascope,permissions,boundaries,shouldFail
+struct Point { x: i32, y: i32 }
+
+fn print_point(p: &Point) {
+    println!("{}, {}", p.x, p.y);
+}
+
+fn main() {
+    let mut p = Point { x: 0, y: 0 };`(focus,paths:p)`
+    let x = &mut p.x;`(focus,paths:p)`
+    print_point(&p);
+    *x += 1;`(focus,paths:p)`
+}
+```
+
+Then the compiler will reject our program with the following error:
+
+```text
+error[E0502]: cannot borrow `p` as immutable because it is also borrowed as mutable
+  --> test.rs:10:17
+   |
+9  |     let x = &mut p.x;
+   |             -------- mutable borrow occurs here
+10 |     print_point(&p);
+   |                 ^^ immutable borrow occurs here
+11 |     *x += 1;
+   |     ------- mutable borrow later used here
+```
+
+More generally, if you encounter an ownership error that involves a struct, you should consider which fields of your structure
+are supposed to be borrowed with which permissions. But be aware of the borrow checker's limitations, since Rust may sometimes
+assume more fields are borrowed than they actually are.
+
 {{#quiz ../quizzes/ch05-01-structs.toml}}
+
 
 <!-- manual-regeneration
 for the error above

@@ -1,6 +1,6 @@
 ## What Is Ownership?
 
-Ownership is a discipline for ensuring the **safety** of Rust programs. To understand ownership, we first need to understand what makes a Rust program safe.
+Ownership is a discipline for ensuring the **safety** of Rust programs. To understand ownership, we first need to understand what makes a Rust program safe (or unsafe).
 
 ### Safety is the Absence of Undefined Behavior
 
@@ -28,9 +28,9 @@ fn main() {
 
 This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet.
 
-When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. So what would happen if Rust allowed the second program to compile?
+When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. Therefore Rust does not check *at runtime* whether a variable is defined before it is used. 
 
-Let's consider how the first program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the first program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
+So what would happen if Rust allowed the unsafe program to compile? Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
 
 ```x86asm
 main:
@@ -42,10 +42,10 @@ main:
 
 > _Note_: if you aren't familiar with assembly code, that's ok! This section contains a few examples of assembly just to show you how Rust actually works under the hood. You don't generally need to know assembly to understand Rust.
 
-This assembly code:
+This assembly code will:
 
-- Moves the number 1, representing `true`, into a "register" (a kind of assembly variable) called `edi`.
-- Calls the `read` function, which expects its first argument `y` to be in the `edi` register.
+- Move the number 1, representing `true`, into a "register" (a kind of assembly variable) called `edi`.
+- Call the `read` function, which expects its first argument `y` to be in the `edi` register.
 
 If the second function was allowed to compile, its assembly might look like this:
 
@@ -59,13 +59,13 @@ main:
 
 This program is unsafe because `read` will expect `edi` to be a boolean, which is either the number `0` or `1`. But `edi` could be anything: `2`, `100`, `0x1337BEEF`. When `read` wants to use its argument `y` for any purpose, it will immediately cause _**UNDEFINED BEHAVIOR!**_
 
-Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't `true` or `false`. _Something_ will happen, for example:
+Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't `true` or `false`. That *behavior*, i.e. what happens after executing the instruction, is *undefined*. Something will happen, for example:
 
 - The code executes without crashing, and no one notices a problem.
 - The code immediately crashes due to a [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) or another kind of operating system error.
 - The code executes without crashing, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
 
-To avoid these kinds of outcomes, Rust uses compile-time checks to ensure that variables are defined before they are used. If you actually try to compile the problematic program, you will get this error from the compiler:
+To avoid these kinds of outcomes, Rust uses compile-time checks to ensure that variables are defined before they are used. If you actually try to compile the unsafe program, you will get this error from the compiler:
 
 ```
 error[E0425]: cannot find value `x` in this scope
@@ -80,20 +80,20 @@ error[E0425]: cannot find value `x` in this scope
 1. Catching bugs at compile-time means not dealing with those bugs in production, improving the reliability of your software.
 2. Catching bugs at compile-time means fewer checks to catch bugs at runtime, improving the performance of your software.
 
-Rust cannot prevent all bugs. If your application exposes a public and unauthenticated `/delete-production-database` endpoint, then a malicious actor doesn't need to exploit your suspicious if-statement. But Rust's protections are still likely to make your programs safer than when using an unsafe language, e.g. as found by the [Android team](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html).
+Rust cannot prevent all bugs. If your application exposes a public and unauthenticated `/delete-production-database` endpoint, then a malicious actor doesn't need to exploit your suspicious if-statement. But Rust's protections are still likely to make your programs safer versus using a language with fewer protections, e.g. as found by [Google's Android team](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html).
 
 ### Ownership as a Discipline for Memory Safety
 
-Since safety is the absence of undefined behavior, and since ownership is about safety, then we need to understand ownership in terms of the undefined behaviors it prevents. The Rust Reference maintains a list of ["Behavior considered undefined"](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), but for now we will focus on one category of behaviors: operations on memory.
+Since safety is the absence of undefined behavior, and since ownership is about safety, then we need to understand ownership in terms of the undefined behaviors it prevents. The Rust Reference maintains a large list of ["Behavior considered undefined"](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), but for now we will focus on one category: operations on memory.
 
 Memory is the space where data is stored during the execution of a program. There are many ways to think about memory:
 
 - If you are unfamiliar with systems programming, you might think of memory at a high level like "memory is the RAM in my computer" or "memory is the thing that runs out if I load too much data".
 - If you are familiar with systems programming, you might think of memory at a low level like "memory is an array of bytes" or "memory is the pointers I get back from `malloc`".
 
-Both of these memory models are _correct_, but they are not _useful_ ways to think about how Rust works. The high-level model is too abstract to explain how Rust works: you will need to understand the concept of a pointer, for instance. The low-level model is too concrete to explain how Rust works: Rust does not allow you to (safely) interpret memory as an array of bytes, for instance.
+Both of these memory models are _valid_, but they are not _useful_ ways to think about how Rust works. The high-level model is too abstract to explain how Rust works: you will need to understand the concept of a pointer, for instance. The low-level model is too concrete to explain how Rust works: Rust does not allow you to (safely) interpret memory as an array of bytes, for instance.
 
-Rust has a particular way to think about memory, and ownership is a discipline for safely using memory within that way of thinking. The remainder of this chapter will explain the Rust model of memory.
+Rust provides a particular way to think about memory, and ownership is a discipline for safely using memory within that way of thinking. The remainder of this chapter will explain the Rust model of memory.
 
 ### Variables Live in the Stack
 
@@ -126,11 +126,12 @@ When an expression reads a variable, the variable's value is copied out of its f
 ```aquascope,interpreter,horizontal=true
 #fn main() {
 let a = 5;`[]`
-let b = a;`[]`
+let mut b = a;`[]`
+b += 1;`[]`
 #}
 ```
 
-The value of `a` is copied into `b`, and `a` is left unchanged.
+The value of `a` is copied into `b`, and `a` is left unchanged, even after changing `b`.
 
 ## Boxes Live in the Heap
 

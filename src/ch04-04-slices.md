@@ -144,7 +144,7 @@ Slices are special kinds of references because they are "fat" pointers, or point
 with metadata. Here, the metadata is the length of the slice. We can see this metadata
 by changing our visualization to peek into the internals of Rust's data structures:
 
-```aquascope,interpreter,concreteTypes=true,hideCode=true
+```aquascope,interpreter,concreteTypes,hideCode
 fn main() {
     let s = String::from("hello world");
 
@@ -162,7 +162,7 @@ which contains a length `len` and a buffer `buf` that has a pointer `ptr` and a 
 Because slices are references, they also change the permissions on referenced data. For example, observe below that when
 `hello` is created as a slice of `s`, then `s` loses write and own permissions:
 
-```aquascope,stepper
+```aquascope,permissions,stepper
 fn main() {
     let mut s = String::from("hello");
     let hello: &str = &s[0..5];
