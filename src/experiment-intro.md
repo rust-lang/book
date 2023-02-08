@@ -37,7 +37,7 @@ The book's content may change as you go through the experiment. We will update t
   * We are designing a new ownership chapter that provides a more visual approach to explaining ownership.
 
 **Past changes:**
-* January 18, 2022
+* January 18, 2023
   * Questions have been added for the remaining chapters of the book.    
 * December 15, 2022
   * New sections called "Ownership Inventory" have been added throughout the book
