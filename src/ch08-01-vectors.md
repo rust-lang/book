@@ -166,9 +166,7 @@ to use a `for` loop to get immutable references to each element in a vector of
 <span class="caption">Listing 8-7: Accessing each element in a vector by
 iterating over the elements using a `for` loop</span>
 
-To read the number that `n_ref` refers to, we have to use the `*` dereference operator to get to the value in `n_ref` before we can add 1 to it. We’ll talk more about the dereference operator in the [“Following the
-Pointer to the Value with the Dereference Operator”][deref]<!-- ignore -->
-section of Chapter 15.
+To read the number that `n_ref` refers to, we have to use the `*` dereference operator to get to the value in `n_ref` before we can add 1 to it, as covered in ["Derefencing a Pointer Accesses Its Data"][deref].
 
 We can also iterate over mutable references to each element in a mutable vector
 in order to make changes to all the elements. The `for` loop in Listing 8-8
@@ -254,4 +252,4 @@ Let’s move on to the next collection type: `String`!
 [data-types]: ch03-02-data-types.html#data-types
 [nomicon]: https://doc.rust-lang.org/nomicon/vec/vec.html
 [vec-api]: https://doc.rust-lang.org/std/vec/struct.Vec.html
-[deref]: ch15-02-deref.html#following-the-pointer-to-the-value-with-the-dereference-operator
+[deref]: ch04-02-references-and-borrowing.html#dereferencing-a-pointer-accesses-its-data

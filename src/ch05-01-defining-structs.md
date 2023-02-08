@@ -130,15 +130,14 @@ many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
 Note that the struct update syntax uses `=` like an assignment; this is
-because it moves the data, just as we saw in the [“Ways Variables and Data
-Interact: Move”][move]<!-- ignore --> section. In this example, we can no
+because it moves the data, just as we saw in the ["What Is Ownership?"][move]<!-- ignore --> section. In this example, we can no
 longer use `user1` after creating `user2` because the `String` in the
 `username` field of `user1` was moved into `user2`. If we had given `user2` new
 `String` values for both `email` and `username`, and thus only used the
 `active` and `sign_in_count` values from `user1`, then `user1` would still be
 valid after creating `user2`. The types of `active` and `sign_in_count` are
 types that implement the `Copy` trait, so the behavior we discussed in the
-[“Stack-Only Data: Copy”][copy]<!-- ignore --> section would apply.
+[“Copying vs. Moving Out of a Vector”][copy]<!-- ignore --> section would apply.
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
@@ -265,9 +264,9 @@ implement them on any type, including unit-like structs.
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
 
-## Borrowing Fields of a Struct
+### Borrowing Fields of a Struct
 
-Similar to our discussion in ["Fixing a Safe Program: Disjoint Tuple Fields"], Rust's borrow checker will track ownership permissions
+Similar to our discussion in ["Disjoint Tuple Fields"][disjointfields], Rust's borrow checker will track ownership permissions
 at the both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions:
 
 ```aquascope,permissions,stepper
@@ -327,5 +326,6 @@ paste above
 add `> ` before every line -->
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[move]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move
-[copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
+[move]: ch04-01-what-is-ownership.html
+[copy]: ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-vector
+[disjointfields]: ch04-03-fixing-ownership-errors.html#fixing-a-safe-program-disjoint-tuple-fields
