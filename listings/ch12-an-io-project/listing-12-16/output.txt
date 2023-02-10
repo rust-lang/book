@@ -9,7 +9,7 @@ test tests::one_result ... FAILED
 failures:
 
 ---- tests::one_result stdout ----
-thread 'main' panicked at 'assertion failed: `(left == right)`
+thread 'tests::one_result' panicked at 'assertion failed: `(left == right)`
   left: `["safe, fast, productive."]`,
  right: `[]`', src/lib.rs:44:9
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

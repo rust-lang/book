@@ -10,7 +10,7 @@ test tests::smaller_cannot_hold_larger ... ok
 failures:
 
 ---- tests::larger_can_hold_smaller stdout ----
-thread 'main' panicked at 'assertion failed: larger.can_hold(&smaller)', src/lib.rs:28:9
+thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed: larger.can_hold(&smaller)', src/lib.rs:28:9
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
