@@ -75,10 +75,10 @@ error[E0425]: cannot find value `x` in this scope
   |          ^ not found in this scope
 ```
 
-**A foundational goal of Rust is to ensure your programs never have undefined behavior.** That is meaning of "safety." A secondary goal is to prevent undefined behavior at _compile-time_ instead of _run-time_. This goal has two motivations:
+**A foundational goal of Rust is to ensure your programs never have undefined behavior.** That is the meaning of "safety." A secondary goal is to prevent undefined behavior at _compile-time_ instead of _run-time_. This goal has two motivations:
 
-1. Catching bugs at compile-time means not dealing with those bugs in production, improving the reliability of your software.
-2. Catching bugs at compile-time means fewer checks to catch bugs at runtime, improving the performance of your software.
+1. Catching bugs at compile-time means avoiding those bugs in production, improving the reliability of your software.
+2. Catching bugs at compile-time means fewer runtime checks for those bugs, improving the performance of your software.
 
 Rust cannot prevent all bugs. If your application exposes a public and unauthenticated `/delete-production-database` endpoint, then a malicious actor doesn't need to exploit your suspicious if-statement. But Rust's protections are still likely to make your programs safer versus using a language with fewer protections, e.g. as found by [Google's Android team](https://security.googleblog.com/2022/12/memory-safe-languages-in-android-13.html).
 
@@ -99,7 +99,7 @@ Rust provides a particular way to think about memory, and ownership is a discipl
 
 Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`. Beneath the program is a diagram that visualizes the state of the program at the three marked points.
 
-```aquascope,interpreter,horizontal=true
+```aquascope,interpreter,horizontal
 fn main() {
     let n = 5;`[]`
     let y = plus_one(n);`[]`
@@ -123,7 +123,7 @@ Frames are organized into a **stack** of currently-called-functions. For example
 
 When an expression reads a variable, the variable's value is copied out of its frame. For example, if we run this program:
 
-```aquascope,interpreter,horizontal=true
+```aquascope,interpreter,horizontal
 #fn main() {
 let a = 5;`[]`
 let mut b = a;`[]`
@@ -157,8 +157,7 @@ let b = a;`[]`
 
 Observe that now, there is only ever a single array. At L1, `a` contains a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
 
-<!-- 
-You'll also notice that in the diagram, `a` has been crossed out. That's because of ownership. To understand why, we first need to discuss _memory management_. -->
+{{#quiz ../quizzes/ch04-01-ownership-sec1-stackheap.toml}}
 
 ### Rust Does Not Permit Manual Memory Management
 
@@ -255,7 +254,6 @@ fn add_suffix(mut s2: String) -> String {
     s2.push_str(" world");
     s2
 }
-
 ```
 
 `s1` points to deallocated memory after calling `add_suffix`. Reading `s1` would therefore be a violation of memory safety, i.e. undefined behavior. 
@@ -278,6 +276,8 @@ error[E0382]: borrow of moved value: `s1`
 This error identifies that `s1` is moved by `add_suffix`, and therefore it cannot be used afterward. More generally, the compiler will enforce this principle:
 
 > **Moved heap data principle:** if a variable `x` moves ownership of heap data to another variable `y`, then `x` cannot be used after the move.
+
+{{#quiz ../quizzes/ch04-01-ownership-sec2-moves.toml}}
 
 ### Summary
 

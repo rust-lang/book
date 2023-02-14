@@ -124,14 +124,13 @@ Luckily, Rust has a solution to this problem: string slices.
 A *string slice* is a reference to part of a `String`, and it looks like this:
 
 ```aquascope,interpreter
-fn main() {
-    let s = String::from("hello world");
+#fn main() {
+let s = String::from("hello world");
 
-    let hello: &str = &s[0..5];
-    let world: &str = &s[6..11];
-    let s2: &String = &s; // not a slice, for comparison
-    `[]`
-}
+let hello: &str = &s[0..5];
+let world: &str = &s[6..11];
+let s2: &String = &s; `[]`
+#}
 ```
 
 Rather than a reference to the entire `String` (like `s2`), `hello` is a reference to a
@@ -343,7 +342,7 @@ storing a reference to the first element and a length. You’ll use this kind of
 slice for all sorts of other collections. We’ll discuss these collections in
 detail when we talk about vectors in Chapter 8.
 
-{{#quiz ../quizzes/ch04-03-slices.toml}}
+{{#quiz ../quizzes/ch04-04-slices.toml}}
 
 ## Summary
 

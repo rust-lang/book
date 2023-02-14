@@ -1,0 +1,100 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the permissions in the following program:
+
+```aquascope,permissions,stepper
+#fn main() {
+let mut s = String::from("Hello");
+let t = &mut s;
+/* here */
+t.push_str(" world");
+println!("{}", s);
+#}
+```
+
+At the point marked `/* here */`, what are the permissions on the path `s`? Select each permission below, or select "no permissions" 
+if the path has no permissions.
+"""
+answer.answer = ["No permissions"]
+prompt.distractors = ["R", "W", "O"]
+prompt.answerIndex = 3
+context = """
+The mutable borrow `t = &mut s` removes all permissions on `s` while `t` is live.
+"""
+
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the permissions in the following program:
+
+```aquascope,permissions,stepper,boundaries
+fn get_first(v: &Vec<String>) -> &str {
+    &v[0]
+}
+
+fn main() {
+    let mut strs = vec![
+        String::from("A"), String::from("B")
+    ];
+    let first = get_first(&strs);
+    if first.len() > 0 {
+        strs.push(String::from("C"));
+    }
+}
+```
+
+Which of the following best explains why `strs` loses and regains write permissions?
+"""
+answer.answer = "`get_first` returns an immutable reference to data within `strs`, so `strs` is not writable while `first` is live"
+prompt.distractors = [
+  "`strs` is not writable while the immutable reference `&str` passed to `get_first` is live",
+  "`strs` does not need write permissions until the `strs.push(..)` operation, so it only regains write permissions at that statement",
+  "Because `first` refers to `strs`, then `strs` can only be mutated within a nested scope like the if-statement"
+]
+context = """
+When `get_first` is called, Rust recognizes that the returned string `first` could point to data within `strs`, so `strs` loses 
+write permissions. Once the `first` variable is no longer used (after the if-condition), then `strs` regains write permissions.
+"""
+
+[[questions]]
+id = "5080616f-6f4c-43f7-aa3a-8b23f2798937"
+type = "Tracing"
+prompt.program = """
+fn incr(n: &mut i32) {
+  *n += 1;
+}
+
+fn main() {
+  let mut n = 1;
+  incr(&n);
+  println!("{n}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 7
+context = """
+Although `n` is marked as `mut`, the reference to `n` must also be marked as `mut`. 
+So a valid version of this program would say `incr(&mut n)`.
+"""
+
+
+[[questions]]
+id = "e9846c5d-1254-4420-9986-dae4af86b9af"
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut s = String::from("hello");
+  let s2 = &s;
+  let s3 = &mut s;
+  s3.push_str(" world");
+  println!("{s2}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """
+It is illegal to use a mutable reference to a value (`s3`) while an immutable reference 
+is live (`s2`). The last line of the error is the `println` on line 6, because if you 
+deleted that line, then this program would compile.
+"""

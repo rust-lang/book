@@ -85,16 +85,6 @@ let c: i32 = *r2;`[]`    // so only one dereference is needed to read it
 
 Observe the difference between `r1` pointing to `x` on the stack, and `r2` pointing to the heap value `2`.
 
-<!--
-Let's walk through each line:
-1. First, we create a box `x` with `Box::new(1)`.
-2. The expression `*x` dereferences `x`, which copies the value `1` off the heap. Then `let a = *x` puts `1` into the stack slot for `a`.
-3. By putting the dereference on the left-hand side of `*x += 1`, we are modifying the heap data in-place. The heap value for `x` now contains `2`.
-4. The statement `let r1 = &x` creates a reference to `x`, which points to `x` on the stack. `r1` has type `&Box<i32>`, a reference to a box of a 32-bit integer.
-5. The statement `let b = **r1` follows the two-step pointer: `*r` goes to `x`, and `**r1` goes to the heap value `2`, therefore `b` is bound to `2`.
-6. The statement `let r2 = &*x` dereferences `x` to its heap data, and gets a pointer to the heap. `r2` then points *directly* to the heap, bypassing `x`.
-7. The statement `let c = *r2` dereferences `r2` once, getting the value `2` from the heap. -->
-
 You probably won't see the dereference operator very often when you read Rust code. This is because Rust implicitly inserts both dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
 
 ```rust
@@ -125,6 +115,7 @@ This example shows implicit conversions in three ways:
 
 We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is to recognize that these conversions are happening, especially with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
 
+{{#quiz ../quizzes/ch04-02-references-sec1-basics.toml}}
 
 ### Rust Avoids Simultaneous Aliasing and Mutation
 
@@ -386,7 +377,7 @@ fn main() {
 
 Then `v` would contain a reference that points to deallocated memory, and printing `v[0]` would violate memory safety.
 
-<!-- TODO! we need to talk about copying somewhere..... -->
+{{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
 
 ### Summary
 

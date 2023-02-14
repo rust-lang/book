@@ -1,0 +1,67 @@
+[[questions]]
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this unsafe program:
+```aquascope,interpreter,shouldFail
+#fn main() {
+let v1 = vec![1, 2, 3];
+let mut v2 = v1;
+v2.push(4);
+println!("{}", v1[0]);`[]`    
+#}
+```
+
+Which of the following best describes why undefined behavior occurs in this program?
+"""
+answer.answer = "`v1[0]` reads `v1`, which points to deallocated memory"
+prompt.distractors = [
+  "`v2` owns the vector data on the heap, while `v1` does not",
+  "`v1` has been moved into `v2` on line 2",
+  "`v1` has its pointer invalidated by the `push` on line 3"
+]
+context = """
+The undefined behavior arises because `v1` is read after being freed. Note that the other three options are correct statements
+about the program, but they do not explain why the undefined behavior actually occurs. For example, if the `println` were deleted,
+then the other three options are still true, but the program no longer has undefined behavior.
+"""
+
+[[questions]]
+id = "94425a4e-043e-47f8-9fba-c5b09fb60aa3"
+type = "Tracing"
+prompt.program = """
+fn add_suffix(mut s: String) -> String {
+  s.push_str(" world");
+  s
+}
+
+fn main() {
+  let s = String::from("hello");
+  let s2 = add_suffix(s);
+  println!("{}", s2);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "hello world"
+context = """
+This program is valid because `s` is not used after moving it into `add_suffix`.
+"""
+
+[[questions]]
+id = "c00e3638-861b-4f9e-a55c-bfb67af79280"
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let s = String::from("hello");
+  let s2;
+  let b = false;
+  if b {
+    s2 = s;
+  }
+  println!("{}", s);
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 8
+context = """
+Because `s` could be moved inside of the if-statement, it is illegal to use it on line 8.
+"""

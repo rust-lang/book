@@ -4,7 +4,7 @@ A core Rust skill is learning how to fix an ownership error. When the borrow che
 
 The last two sections have shown how a Rust program can be **unsafe** if it triggers undefined behavior. The ownership guarantee is that Rust will reject all unsafe programs. However, Rust will also reject *some* safe programs. Fixing an ownership error will depend on whether your program is *actually* safe or unsafe.
 
-### Fixing an Unsafe Program: Reference to the Stack
+### Fixing an Unsafe Program: Returning a Reference to the Stack
 
 For example, returning a reference to a stack-allocated variable is always unsafe, like this:
 
@@ -54,13 +54,14 @@ fn return_a_string(output: &mut String) {
 
 Which strategy is most appropriate will depend on your application. But the key idea is to recognize the root issue underlying the surface-level ownership error: how long should my string live? Who should be in charge of deallocating it? Once you have a clear answer to those questions, then it's a matter of changing your API to match.
 
-### Fixing an Unsafe Program: Mutating a Data Structure
+### Fixing an Unsafe Program: Aliasing and Mutating a Data Structure
 
 Another always-unsafe operation is holding a reference to heap data that could be deallocated by another alias. For example, here's a function that gets a reference to the largest string in a vector, and uses it while mutating the vector:
 
-```rust,ignore,does_not_compile
+```aquascope,permissions,stepper,boundaries,shouldFail
 fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
-    let largest: &String = dst.iter().max_by_key(|s| s.len()).unwrap();
+    let largest: &String = 
+      dst.iter().max_by_key(|s| s.len()).unwrap();`(focus,paths:dst)`
     for s in src {
         if s.len() > largest.len() {
             dst.push(s.clone());
@@ -69,9 +70,9 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 }
 ```
 
-Again, we ask: **why is this program unsafe?** Because `dst.push(..)` could deallocate the contents of `dst`, invalidating the reference `largest`. The core idea is that we need to shorten the lifetime of `largest` to not overlap with `dst.push(..)`.
+Again, we ask: **why is this program unsafe?** Because `dst.push(..)` could deallocate the contents of `dst`, invalidating the reference `largest`. This unsafety is reflected in the fact that `let largest = ..` removes write permissions on `dst`, so `dst` cannot be pushed.
 
-One possibility is to clone `largest`. However, this may cause a performance hit for allocating and copying the string data.
+The key insight is that we need to shorten the lifetime of `largest` to not overlap with `dst.push(..)`. One possibility is to clone `largest`:
 
 ```rust
 fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
@@ -84,9 +85,9 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 }
 ```
 
+However, this may cause a performance hit for allocating and copying the string data.
 
-Another possibility is to perform all the length comparisons first, and then mutate `dst` afterwards. 
-However, this also causes a performance hit for allocating the vector `to_add`.
+Another possibility is to perform all the length comparisons first, and then mutate `dst` afterwards:
 
 ```rust
 fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
@@ -97,6 +98,7 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 }
 ```
 
+However, this also causes a performance hit for allocating the vector `to_add`.
 
 A final possibility is to copy out the length, since we don't need the contents of `largest`, just its length. 
 This solution is arguably the most idiomatic and the most performant.
@@ -112,7 +114,9 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 }
 ```
 
-### Fixing an Unsafe Program: Copying vs. Moving Out of a Vector
+All these solutions share in common the key idea: shortening the lifetime of string borrowed from `dst` so as to not overlap with a mutation to `dst`.
+
+### Fixing an Unsafe Program: Copying vs. Moving Out of a Data Structure
 
 A common confusion for Rust learners arises around the interaction of ownership and collections, like vectors. For example, here's a safe program that copies a number out of a vector:
 
@@ -131,11 +135,11 @@ let n: i32 = *n_ref;
 
 But if we change the type of elements from numbers to strings, then the program becomes unsafe!
 
-```aquascope,interpreter+permissions,stepper,boundaries,shouldFail
+```aquascope,interpreter+permissions,stepper,boundaries,shouldFail,horizontal
 #fn main() {
 let v: Vec<String> = vec![String::from("Hello world")];
-let s_ref: &String = v.get(0).unwrap();`[]``(focus,paths:\*s_ref)`
-let s: String = *s_ref;
+let s_ref: &String = v.get(0).unwrap();`(focus,paths:\*s_ref)`
+let s: String = *s_ref;`[]`
 
 // These are normally implicit,
 // but we've added them for clarity.
@@ -213,7 +217,7 @@ assert!(v.len() == 0);
 ```
 
 
-### Fixing a Safe Program: Disjoint Tuple Fields
+### Fixing a Safe Program: Mutating Disjoint Tuple Fields
 
 The above examples are cases where a program is unsafe. However, Rust may also reject safe programs. One common reason is that Rust tracks permissions at a fine-grained level, but it may end up conflating two distinct paths as the same path. 
  
@@ -267,7 +271,7 @@ error[E0502]: cannot borrow `name.1` as mutable because it is also borrowed as i
 
 Remember, the key idea is that **the program above is safe.** It has no undefined behavior! A future version of Rust may be smart enough to let it compile, but for today, it gets rejected. To work around the borrow checker, one possibility is to inline the expression `&name.0` as with the original program. Another possibility is to defer borrow checking to runtime through the use of [cells], which we will discuss in future chapters.
 
-### Fixing a Safe Program: Disjoint Array Indices
+### Fixing a Safe Program: Mutating Disjoint Array Indices
 
 A similar kind of problem arises when we borrow elements of an array. For example, observe what paths are borrowed when we take a mutable reference to an array:
 
@@ -289,10 +293,10 @@ let x = &mut a[idx];
 
 As a result, a perfectly safe program that uses two disjoint indices will be rejected:
 
-```aquascope,permissions,boundaries,shouldFail
+```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
 let mut a = [0, 1, 2, 3];
-let x = &mut a[0];
+let x = &mut a[0];`(focus,paths:a\[\])`
 let y = &a[1];
 *x += *y;
 #}
@@ -321,6 +325,8 @@ unsafe { *x += *y; } // DO NOT DO THIS unless you know what you're doing!
 ```
 
 However, you should rarely find yourself directly invoking `unsafe`, especially in application code. More commonly, data structures are designed to carefully encapsulate unsafe code behind a safe API. We will discuss unsafe code further in [Chapter 20][unsafe]. For now, it's simply useful to be aware that unsafe code is how Rust implements certain otherwise-impossible patterns.
+
+{{#quiz ../quizzes/ch04-03-fixing-ownership-errors.toml}}
 
 ### Summary
 
