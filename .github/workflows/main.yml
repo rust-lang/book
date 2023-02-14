@@ -16,6 +16,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Install graco
+      run: |
+        npm install -g pnpm spellchecker
+        npm install -g graco
+        echo "$(npm config get prefix)/lib/node_modules/graco/node_modules"
+        ls $(npm config get prefix)/lib/node_modules/graco/node_modules/.bin
+        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
+        echo "NODE_LOG=debug" >> $GITHUB_ENV
     
     - name: Update rustup
       run: rustup self update
@@ -38,22 +51,18 @@ jobs:
         rustc -Vv
         mdbook --version
 
-    - name: Install graco
-      run: |
-        npm install -g pnpm spellchecker graco
-        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
-
     - name: Install mdbook-quiz
       run: cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
 
     - uses: davidB/rust-cargo-make@v1 
     - name: Install mdbook-aquascope
       run: |
-        git clone -b dev https://github.com/cognitive-engineering-lab/aquascope
-        cd aquascope
+        git clone -b dev https://github.com/willcrichton/aquascope
+        cd aquascope        
         cargo make init-bindings
-        cargo install --path crates/mdbook-aquascope
+        cd frontend && graco prepare
         cargo +nightly-2022-12-07 miri setup
+        cargo install --path crates/mdbook-aquascope        
 
     - name: Install js-extensions
       run: |
