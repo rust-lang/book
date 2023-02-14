@@ -1,4 +1,5 @@
 [[questions]]
+id = "2e273ac2-6f06-4c19-a831-1d44eed89323"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider the permissions in the following program:
@@ -24,6 +25,7 @@ The mutable borrow `t = &mut s` removes all permissions on `s` while `t` is live
 """
 
 [[questions]]
+id = "b431f43e-9a6f-4715-ae88-8896fca6ff3b"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider the permissions in the following program:

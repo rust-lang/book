@@ -1,4 +1,5 @@
 [[questions]]
+id = "5d774a01-8604-4386-8d81-498496ccd96c"
 type = "MultipleChoice"
 prompt.prompt = """
 Which of the following best describes the difference between the stack and the heap?
@@ -16,6 +17,7 @@ contain pointers (even to the stack, as we will see later).
 """
 
 [[questions]]
+id = "4c953b2d-65bf-4dab-bbbb-14c9b15a690e"
 type = "ShortAnswer"
 prompt.prompt = """
 Consider the execution of the following snippet, with the final state shown:
@@ -36,6 +38,7 @@ The two boxes contain the two copies of the number 15. The assignment `let b = a
 """
 
 [[questions]]
+id = "b09820e6-7938-49d5-9147-ab76987d37fd"
 type = "ShortAnswer"
 prompt.prompt = """
 Consider the execution of the following snippet, with an intermediate state shown:

@@ -1,4 +1,5 @@
 [[questions]]
+id = "0b8dbb4f-7c56-4b6e-8358-95c7b46f90c3"
 type = "ShortAnswer"
 prompt.prompt = """
 Consider the following program, showing the state of memory after the last line:
@@ -19,6 +20,7 @@ to a heap pointer. Therefore `y` must be dereferenced three times for each layer
 """
 
 [[questions]]
+id = "7cf19153-3647-4afc-953a-f9392ddb96fb"
 type = "MultipleChoice"
 prompt.prompt = """
 Consider the following program, showing the state of memory after the last line:
