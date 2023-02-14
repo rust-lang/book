@@ -447,7 +447,7 @@ you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, say that
 next week version 0.8.6 of the `rand` crate comes out, and that version
 contains an important bug fix, but it also contains a regression that will
-break your code. To handle this, Rust creates the *Cargo.lock* file the first
+break your code. To handle this, Cargo creates the *Cargo.lock* file the first
 time you run `cargo build`, so we now have this in the *guessing_game*
 directory.
 
