@@ -15,7 +15,20 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@master 
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Install graco
+      run: |
+        npm install -g pnpm spellchecker
+        npm install -g graco
+        echo "$(npm config get prefix)/lib/node_modules/graco/node_modules"
+        ls $(npm config get prefix)/lib/node_modules/graco/node_modules/.bin
+        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
+        echo "NODE_LOG=debug" >> $GITHUB_ENV
     
     - name: Update rustup
       run: rustup self update
@@ -40,10 +53,6 @@ jobs:
 
     - name: Install mdbook-quiz
       run: |
-        npm install -g pnpm spellchecker
-        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
-        git clone https://github.com/willcrichton/graco
-        cd graco && npm install && npm link && cd ..
         cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
 
     - name: Install js-extensions
