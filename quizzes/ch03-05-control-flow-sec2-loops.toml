@@ -43,5 +43,5 @@ fn main() {
 answer.doesCompile = true
 answer.stdout = "50"
 context = """
-The array `a` has the element `5` repeated 10 times, therefore its sum is `50`.
+The array `a` has the element `5` repeated 10 times, therefore its sum is `50`. The answer is not `15` --- note that the syntax `[5; 10]` is different from `[5, 10]`.
 """
