@@ -266,7 +266,7 @@ thread. We would get this compiler error instead:
 ```
 
 Rust’s ownership rules have saved us again! Earlier, we got an error from the code in
-Listing 16-5 because Rust was being conservative and only borrowing `v` for the
+Listing 16-3 because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
 thread’s reference. By telling Rust to move ownership of `v` to the spawned
 thread, we’re guaranteeing Rust that the main thread won’t use `v` anymore. If
