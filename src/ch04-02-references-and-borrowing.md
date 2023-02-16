@@ -137,13 +137,13 @@ However, references need different rules to enforce the Pointer Safety Principle
 
 The core idea is that variables have three kinds of **permissions** on their data:
 
-- **Read** (`R`): data can be copied to another location.
-- **Write** (`W`): data can be mutated in-place.
-- **Own** (`O`): data can be moved or dropped.
+- **Read** (<span class="perm read">R</span>): data can be copied to another location.
+- **Write** (<span class="perm write">W</span>): data can be mutated in-place.
+- **Own** (<span class="perm drop">O</span>): data can be moved or dropped.
 
 These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is ever executed.
 
-By default, a variable has read/own permissions (`RO`) on its data. If a variable is annotated with `let mut`, then it also has write permissions (`W`). The key idea is 
+By default, a variable has read/own permissions (<span class="perm read">R</span><span class="perm drop">O</span>) on its data. If a variable is annotated with `let mut`, then it also has write permissions (<span class="perm write">W</span>). The key idea is 
 that **references can temporarily remove these permissions.** 
 
 To illustrate this idea, we will use a new kind of diagram. This diagram shows the changes in permissions on each line of the program. For example:
@@ -157,16 +157,16 @@ To illustrate this idea, we will use a new kind of diagram. This diagram shows t
 let mut x = String::from("Hello");
 let y = &x;
 println!("{} and {}", x, y);
-x.push_str(" world"); 
+x.push_str(" world");
 #}
 ```
 
 Let's walk through each line:
 
-1. After `let mut x = (...)`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (green is for gain).
+1. After `let mut x = (...)`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (the plus sign indicates gain).
 2. After `let y = &x`, the data in `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
-   - The borrow removes write/own permissions from `x` (red is for loss): it cannot write or own its data, but it can still read its data (neutral-colored is for unchanged).
-   - The variable `y` has gained read/own permissions. `y` is not writable (the missing permission is shown as a dash `-`) because it was not marked `let mut`.
+   - The borrow removes write/own permissions from `x` (the slash indicates loss). `x` cannot be written or owned, but it can still be read.
+   - The variable `y` has gained read/own permissions. `y` is not writable (the missing write permission is shown as a dash `-`) because it was not marked `let mut`.
    - The **path** `*y` has gained read permissions. Note that `y` is different from `*y`! `y` is a reference to a string, while `*y` is the string itself, accessed through a reference.
 3. After `println!(...)`, `y` is no longer in use, so `x` is no longer borrowed. Therefore:
    - `x` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
@@ -185,9 +185,6 @@ Note that permissions are *not* defined on data. For example, in the program abo
 
 Returning to the Pointer Safety Principle, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
-<!-- The key thing to observe is that a variable's *type* is not the same as its *permissions*. A variable always has the same type, but its permissions will change depending on context. Specifically, a variable loses permissions when its contents are borrowed by a reference. It regains those permissions when the reference is no longer used.
-
-Permissions are a compile-time concept, not a run-time concept. The Rust compiler has a program analyzer called the "borrow checker" which statically checks your program for permissions violations. -->
 
 ### The Borrow Checker Finds Permission Violations
 
@@ -196,15 +193,15 @@ Rust uses these permissions in its **borrow checker**. The borrow checker determ
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
 let mut x = String::from("Hello");
-let y = &x;
-x.push_str(" world"); 
+let y = &x;`{}`
+x.push_str(" world");`{}`
 println!("{} and {}", x, y);
 #}
 ```
 
-This example shows another kind of visualization. Any time a path is *used*, Rust expects that path to have certain permissions. For example, the borrow `&x` requires that `x` is readable, therefore the permission `R` is shown. The letter is filled-in because `x` has the read permission at that line. 
+This example shows another kind of visualization. Any time a path is *used*, Rust expects that path to have certain permissions. For example, the borrow `&x` requires that `x` is readable, therefore the permission <span class="perm read">R</span> is shown. The letter is filled-in because `x` has the read permission at that line. 
 
-By contrast, the mutating operation `x.push_str(...)` requires that `x` is readable and writable, so both `R` and `W` are shown. However, `x` does not have write permissions (it is borrowed by `y`), so the letter is hollow, indicating that `W` is *expected* but `x` does not have it.
+By contrast, the mutating operation `x.push_str(...)` requires that `x` is readable and writable, so both <span class="perm read">R</span> and <span class="perm write">W</span> are shown. However, `x` does not have write permissions (it is borrowed by `y`), so the letter <span class="perm write missing">W</span> is hollow, indicating that the write permission is *expected* but `x` does not have it.
 
 If you try to compile this program, then the Rust compiler will reject this program with the following error:
 
@@ -230,7 +227,7 @@ The references we have seen so far are read-only: **immutable references** (also
 
 The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
@@ -238,6 +235,8 @@ y.push_str(" world");
 println!("{}", x);
 #}
 ```
+
+> <div style="margin-block-start: 1em; margin-block-end: 1em"><i>Note:</i> when the expected permissions are not relevant to an example, we will abbreviate them as dots like <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>. You can hover your mouse over the circles (or tap on a touchscreen) to see the corresponding permission letters.</div>
 
 A mutable reference is created with the syntax `&mut x`. The type of `y` is written as `&mut String`. You can see two important differences in the transfer of permissions compared to the previous example:
 
@@ -250,48 +249,18 @@ The second observation is what makes mutable references useful. `x` can be mutat
 
 Mutable references can also be temporarily "downgraded" to read-only references. For example:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
-let z = &*y;`(focus)`
-println!("{} {}", y, z);
+let z = &*y;`(focus,paths:\*)`
+println!("{} {}", y, z);`{}`
 #}
 ```
+
+> *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
 
 In this program, the borrow `&*y` removes the write permission from `*y` but _not_ the read permission, so `println!(..)` can read both `*y` and `*z`.
-
-<!-- 
-### Data Cannot Be Mutably and Immutably Borrowed
-
-To borrow from a path, that path must have the appropriate permissions: `R` for an immutable reference, and `RW` for a mutable reference. A common source of borrow checker errors is trying to borrow data without enough permissions, for example:
-
-```aquascope,permissions,boundaries
-#fn main() {
-let mut x = String::from("Hello");
-let y = &x;
-let z = &mut x;
-y.push_str(" world"); 
-println!("{}", y);
-#}
-```
-
-Observe that `x` does not have write permissions in the expression `&mut x` because it was previously borrowed by `y`. Therefore, if you try to compile this program, Rust will return the following error:
-
-```text
-error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immutable
- src/main.rs:4:13
-  |
-3 |     let y = &x;
-  |             -- immutable borrow occurs here
-4 |     let z = &mut x;
-  |             ^^^^^^ mutable borrow occurs here
-5 |     *z += 1;
-6 |     println!("{}", y);
-  |                    - immutable borrow later used here
-``` 
--->
-
 
 
 ### Permissions Are Returned At The End of a Reference's Lifetime
@@ -300,7 +269,7 @@ Previously, we explained that that a reference changes permissions while the ref
 
 For example, in this program, the lifetime of `y` starts with `let y = &x`, and ends with `let z = *y`:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut x = 1;
 let y = &x;`(focus,paths:x)`
@@ -309,13 +278,11 @@ x += z;
 #}
 ```
 
-> *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
-
-The read permissions on `x` are returned to `x` after the lifetime of `y` has ended, like we have seen before.
+The write permissions on `x` are returned to `x` after the lifetime of `y` has ended, like we have seen before.
 
 In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a simple function that capitalizes the first character in a vector of ASCII characters:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 fn ascii_capitalize(v: &mut Vec<char>) {
     let c = &v[0];`(focus,paths:\*v)`
     if c.is_ascii_lowercase() {

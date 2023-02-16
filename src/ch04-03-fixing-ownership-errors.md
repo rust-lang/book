@@ -61,10 +61,10 @@ Another always-unsafe operation is holding a reference to heap data that could b
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
     let largest: &String = 
-      dst.iter().max_by_key(|s| s.len()).unwrap();`(focus,paths:dst)`
+      dst.iter().max_by_key(|s| s.len()).unwrap();`(focus,paths:\*dst)`
     for s in src {
         if s.len() > largest.len() {
-            dst.push(s.clone());
+            dst.push(s.clone());`{}`
         }
     }
 }
@@ -139,7 +139,7 @@ But if we change the type of elements from numbers to strings, then the program 
 #fn main() {
 let v: Vec<String> = vec![String::from("Hello world")];
 let s_ref: &String = v.get(0).unwrap();`(focus,paths:\*s_ref)`
-let s: String = *s_ref;`[]`
+let s: String = *s_ref;`[]``{}`
 
 // These are normally implicit,
 // but we've added them for clarity.
@@ -223,14 +223,14 @@ The above examples are cases where a program is unsafe. However, Rust may also r
  
 As an example of fine-grained permission tracking, here's a program that shows how you can borrow one field of a tuple, and write to a different field of the same tuple:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut name = (
     String::from("Ferris"), 
     String::from("Rustacean")
 );`(focus,paths:name)`
 let first = &name.0;`(focus,paths:name)`
-name.1.push_str(", Esq.");
+name.1.push_str(", Esq.");`{}`
 println!("{first} {}", name.1);
 #}
 ```
@@ -239,7 +239,7 @@ The statement `let first = &name.0` borrows `name.0`. This borrow removes write/
 
 However, sometimes Rust might lose track of exactly which paths are borrowed. For example, let's say we factor out `&name.0` into a function `get_first`. Notice how `get_first(&name)` now removes permissions on `name.1`!
 
-```aquascope,permissions,stepper,shouldFail
+```aquascope,permissions,stepper,boundaries,shouldFail
 fn get_first(name: &(String, String)) -> &String {
     &name.0
 }
@@ -250,7 +250,7 @@ fn main() {
         String::from("Rustacean")
     );
     let first = get_first(&name);`(focus,paths:name)`
-    name.1.push_str(", Esq.");
+    name.1.push_str(", Esq.");`{}`
     println!("{first} {}", name.1);
 }
 ```
@@ -275,11 +275,11 @@ Remember, the key idea is that **the program above is safe.** It has no undefine
 
 A similar kind of problem arises when we borrow elements of an array. For example, observe what paths are borrowed when we take a mutable reference to an array:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut a = [0, 1, 2, 3];
-let x = &mut a[0];`(focus,paths:a)`
-*x += 1;`(focus,paths:a)`
+let x = &mut a[0];`(focus,paths:a\[\])`
+*x += 1;`(focus,paths:a\[\])`
 println!("{a:?}");
 #}
 ```
@@ -297,7 +297,7 @@ As a result, a perfectly safe program that uses two disjoint indices will be rej
 #fn main() {
 let mut a = [0, 1, 2, 3];
 let x = &mut a[0];`(focus,paths:a\[\])`
-let y = &a[1];
+let y = &a[1];`{}`
 *x += *y;
 #}
 ```

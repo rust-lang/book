@@ -161,7 +161,7 @@ which contains a length `len` and a buffer `buf` that has a pointer `ptr` and a 
 Because slices are references, they also change the permissions on referenced data. For example, observe below that when
 `hello` is created as a slice of `s`, then `s` loses write and own permissions:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 fn main() {
     let mut s = String::from("hello");
     let hello: &str = &s[0..5];

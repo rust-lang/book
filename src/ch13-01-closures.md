@@ -480,7 +480,7 @@ These changes say: `s_ref` is a string reference that lives for `'a`. Adding `+ 
 #fn main() {
 let s_own = String::from("Hello world");
 let cloner = make_a_cloner(&s_own);
-drop(s_own);
+drop(s_own);`{}`
 cloner();
 #}
 ```
