@@ -25,9 +25,7 @@ jobs:
       run: |
         npm install -g pnpm spellchecker
         npm install -g graco
-        echo "$(npm config get prefix)/lib/node_modules/graco/node_modules"
-        ls $(npm config get prefix)/lib/node_modules/graco/node_modules/.bin
-        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
+        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules:$NODE_PATH" >> $GITHUB_ENV
         echo "NODE_LOG=debug" >> $GITHUB_ENV
     
     - name: Update rustup
@@ -43,6 +41,7 @@ jobs:
       run: |
         mkdir bin
         curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.27/mdbook-v0.4.27-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/cognitive-engineering-lab/mdbook-quiz/releases/download/v0.2.13/mdbook-quiz-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
 
     - name: Report versions
@@ -50,10 +49,6 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-
-    - name: Install mdbook-quiz
-      run: |
-        cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
 
     - name: Install js-extensions
       run: |
