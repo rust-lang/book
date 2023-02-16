@@ -265,7 +265,7 @@ thread. We would get this compiler error instead:
 {{#include ../listings/ch16-fearless-concurrency/output-only-01-move-drop/output.txt}}
 ```
 
-Rust’s ownership rules have saved us again! We got an error from the code in
+Rust’s ownership rules have saved us again! Earlier, we got an error from the code in
 Listing 16-5 because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
 thread’s reference. By telling Rust to move ownership of `v` to the spawned
