@@ -48,20 +48,16 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-    
-    - name: Install mdbook-quiz
-      run: cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
 
     - uses: davidB/rust-cargo-make@v1 
     - name: Install mdbook-aquascope
       run: |
         git clone -b dev https://github.com/willcrichton/aquascope
         cd aquascope        
-        cargo make init-bindings
-        cd frontend && graco prepare && cd ..
-        cargo miri setup
-        cargo install --path crates/mdbook-aquascope        
-        cargo install --path crates/aquascope_front
+        cargo make install-mdbook
+        
+    - name: Install mdbook-quiz
+      run: cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor --features aquascope
 
     - name: Install js-extensions
       run: |
@@ -70,6 +66,9 @@ jobs:
 
     - name: Run mdbook tests
       run: mdbook test
+
+    - name: Build mdbook
+      run: mdbook build
 
     - name: Deploy to Github Pages
       if: ${{ github.ref == 'refs/heads/main' }}

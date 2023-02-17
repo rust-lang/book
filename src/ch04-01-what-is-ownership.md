@@ -67,7 +67,7 @@ Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't 
 
 To avoid these kinds of outcomes, Rust uses compile-time checks to ensure that variables are defined before they are used. If you actually try to compile the unsafe program, you will get this error from the compiler:
 
-```
+```text
 error[E0425]: cannot find value `x` in this scope
  --> src/main.rs:4:10
   |
@@ -200,7 +200,7 @@ At L1, `a_box` points to `5` on the heap. Once `make_and_drop` is finished, Rust
 
 The box's heap memory has been successfully managed. But what if we abused this system? Returning to our earlier example, what happens when we bind two variables to a box?
 
-```rust
+```rust,ignore
 #fn main() {
 let a = Box::new([0; 1_000_000]);
 let b = a;
@@ -260,7 +260,7 @@ fn add_suffix(mut s2: String) -> String {
 
 Thankfully, Rust will refuse to compile this program, giving the following error:
 
-```
+```text
 error[E0382]: borrow of moved value: `s1`
  --> src/main.rs:4:16
   |

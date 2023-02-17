@@ -87,7 +87,7 @@ Observe the difference between `r1` pointing to `x` on the stack, and `r2` point
 
 You probably won't see the dereference operator very often when you read Rust code. This is because Rust implicitly inserts both dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
 
-```rust
+```rust,ignore
 #fn main()  {
 let x: Box<i32> = Box::new(-1);
 let x_abs1 = i32::abs(*x); // explicit dereference

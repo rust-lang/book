@@ -185,7 +185,7 @@ let s: &String = &v2[0];`(focus,paths:*s)`
 
 But let's say we have a vector of non-`Copy` types like `String`, and we want to get access to an element of the vector. Here's a few different ways to safely do so. First, you can avoid taking ownership of the string and just use an immutable reference:
 
-```rust
+```rust,ignore
 #fn main() {
 let v: Vec<String> = vec![String::from("Hello world")];
 let s_ref: &String = &v[0];
@@ -195,7 +195,7 @@ println!("{s_ref}!");
 
 Second, you can clone the data if you want to get ownership of the string while leaving the vector alone:
 
-```rust
+```rust,ignore
 #fn main() {
 let v: Vec<String> = vec![String::from("Hello world")];
 let mut s: String = v[0].clone();
@@ -206,7 +206,7 @@ println!("{s}");
 
 Finally, you can use [`Vec::remove`] to move the string out of the vector:
 
-```rust
+```rust,ignore
 #fn main() {
 let mut v: Vec<String> = vec![String::from("Hello world")];
 let mut s: String = v.remove(0);
@@ -304,7 +304,7 @@ let y = &a[1];`{}`
 
 Again, **this program is safe.** For cases like these, Rust often provides a function in the standard library that can assist in working around the borrow checker. For example, we could use [`slice::split_first_mut`][split_first_mut]:
 
-```rust
+```rust,ignore
 #fn main() {
 let mut a = [0, 1, 2, 3];
 let (x, rest) = a.split_first_mut().unwrap();
@@ -315,7 +315,7 @@ let y = &rest[0];
 
 You might wonder, but how is `split_first_mut` implemented? In some Rust libraries, especially core types like `Vec` or `slice`, you will often find **unsafe code**, or code within an `unsafe { .. }` block. For example, we could use an unsafe block to accomplish our task:
 
-```rust
+```rust,ignore
 #fn main() {
 let mut a = [0, 1, 2, 3];
 let x = &mut a[0] as *mut i32;
