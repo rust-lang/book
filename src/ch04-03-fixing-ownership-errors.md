@@ -2,11 +2,11 @@
 
 A core Rust skill is learning how to fix an ownership error. When the borrow checker rejects your code, how should you respond?
 
-The last two sections have shown how a Rust program can be **unsafe** if it triggers undefined behavior. The ownership guarantee is that Rust will reject all unsafe programs. However, Rust will also reject *some* safe programs. Fixing an ownership error will depend on whether your program is *actually* safe or unsafe.
+The last two sections have shown how a Rust program can be **unsafe** if it triggers undefined behavior. The ownership guarantee is that Rust will reject all unsafe programs[^safe-subset]. However, Rust will also reject *some* safe programs. Fixing an ownership error will depend on whether your program is *actually* safe or unsafe.
 
 ### Fixing an Unsafe Program: Returning a Reference to the Stack
 
-For example, returning a reference to a stack-allocated variable is always unsafe, like this:
+Returning a reference to a stack-allocated variable is always unsafe, like this:
 
 ```rust,ignore,does_not_compile
 fn return_a_string() -> &String {
@@ -15,9 +15,9 @@ fn return_a_string() -> &String {
 }
 ```
 
-In these cases, you should ask: **why is my program unsafe?** Here, the issue is with the lifetime of the referred data. If you want to pass around a string, you have to make sure the string lives long enough. 
+In these cases, you should ask: **why is my program unsafe?** Here, the issue is with the lifetime of the referred data. If you want to pass around a string, you have to make sure the memory containing the string's data lives long enough. 
 
-Depending on your situation, here are four ways you can extend the lifetime of the string. One is to move ownership of the string out of the function:
+Depending on the situation, here are four ways you can extend the lifetime of the string. One is to move ownership of the string out of the function:
 
 ```rust
 fn return_a_string() -> String {
@@ -61,7 +61,7 @@ Another always-unsafe operation is holding a reference to heap data that could b
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
     let largest: &String = 
-      dst.iter().max_by_key(|s| s.len()).unwrap();`(focus,paths:\*dst)`
+      dst.iter().max_by_key(|s| s.len()).unwrap();`(focus,paths:*dst)`
     for s in src {
         if s.len() > largest.len() {
             dst.push(s.clone());`{}`
@@ -337,3 +337,5 @@ When fixing an ownership error, you should ask yourself: is my program actually 
 [split_first_mut]: https://doc.rust-lang.org/std/primitive.slice.html#method.split_first_mut
 [unsafe]: ch19-01-unsafe-rust.html
 [`Vec::remove`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.remove
+
+[^safe-subset]: This guarantee applies for programs written in the "safe subset" of Rust. If you use `unsafe` code or invoke unsafe components (like calling a C library), then you must take extra care to avoid undefined behavior.

@@ -52,7 +52,7 @@ jobs:
     - uses: davidB/rust-cargo-make@v1 
     - name: Install mdbook-aquascope
       run: |
-        git clone -b dev https://github.com/willcrichton/aquascope
+        git clone https://github.com/cognitive-engineering-lab/aquascope
         cd aquascope        
         cargo make install-mdbook
         

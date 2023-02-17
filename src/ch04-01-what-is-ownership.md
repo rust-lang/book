@@ -28,9 +28,21 @@ fn main() {
 
 This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet.
 
-When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. Therefore Rust does not check *at runtime* whether a variable is defined before it is used. 
+When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. 
 
-So what would happen if Rust allowed the unsafe program to compile? Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
+Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. Therefore Rust does not check *at runtime* whether a variable is defined before it is used. Instead, Rust checks at *compile-time*. If you try to compile the unsafe program, you will get this error:
+
+```text
+error[E0425]: cannot find value `x` in this scope
+ --> src/main.rs:4:10
+  |
+4 |     read(x); // oh no! x isn't defined!
+  |          ^ not found in this scope
+```
+
+You probably have the intuition that it's good for Rust to ensure variables are defined before use. But why? To justify the rule, we have to ask the question: **what would happen if Rust allowed a rejected program to compile?**
+
+Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
 
 ```x86asm
 main:
@@ -47,7 +59,7 @@ This assembly code will:
 - Move the number 1, representing `true`, into a "register" (a kind of assembly variable) called `edi`.
 - Call the `read` function, which expects its first argument `y` to be in the `edi` register.
 
-If the second function was allowed to compile, its assembly might look like this:
+If the unsafe function was allowed to compile, its assembly might look like this:
 
 ```x86asm
 main:
@@ -65,17 +77,9 @@ Rust doesn't specify what happens if you try to do `if y { .. }` when `y` isn't 
 - The code immediately crashes due to a [segmentation fault](https://en.wikipedia.org/wiki/Segmentation_fault) or another kind of operating system error.
 - The code executes without crashing, until a malicious actor creates the right input to delete your production database, overwrite your backups, and steal your lunch money.
 
-To avoid these kinds of outcomes, Rust uses compile-time checks to ensure that variables are defined before they are used. If you actually try to compile the unsafe program, you will get this error from the compiler:
+**A foundational goal of Rust is to ensure that your programs never have undefined behavior.** That is the meaning of "safety." Undefined behavior is especially dangerous for low-level programs. About [70% of reported security vulnerabilities](https://msrc.microsoft.com/blog/2019/07/a-proactive-approach-to-more-secure-code/) in low-level systems are caused by memory corruption, a form of undefined behavior.
 
-```text
-error[E0425]: cannot find value `x` in this scope
- --> src/main.rs:4:10
-  |
-4 |     read(x); // oh no! x isn't defined!
-  |          ^ not found in this scope
-```
-
-**A foundational goal of Rust is to ensure your programs never have undefined behavior.** That is the meaning of "safety." A secondary goal is to prevent undefined behavior at _compile-time_ instead of _run-time_. This goal has two motivations:
+A secondary goal of Rust is to prevent undefined behavior at _compile-time_ instead of _run-time_. This goal has two motivations:
 
 1. Catching bugs at compile-time means avoiding those bugs in production, improving the reliability of your software.
 2. Catching bugs at compile-time means fewer runtime checks for those bugs, improving the performance of your software.
@@ -117,7 +121,7 @@ Variables live in **frames**. A frame is a mapping from variables to values with
 - The frame for `plus_one` at L2 holds `x = 5`.
 - The frame for `main` at location L3 holds `n = 5; y = 6`.
 
-Frames are organized into a **stack** of currently-called-functions. For example, at L2 the top frame `main` points to the called function `plus_one`. After a function returns, Rust deallocates (or "frees") the function's frame. This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
+Frames are organized into a **stack** of currently-called-functions. For example, at L2 the frame for `main` sits above the frame for the called function `plus_one`. After a function returns, Rust deallocates the function's frame. (Deallocation is also called **freeing** or **dropping**, and we use those terms interchangeably.) This sequence of frames is called a stack because the most recent frame added is always the next frame to be freed.
 
 > _Note:_ this memory model does not fully describe how Rust actually works! As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail that shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
 
@@ -155,7 +159,7 @@ let b = a;`[]`
 #}
 ```
 
-Observe that now, there is only ever a single array. At L1, `a` contains a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
+Observe that now, there is only ever a single array at a time. At L1, `a` is a **pointer** (represented by dot with an arrow) to the array on the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
 
 {{#quiz ../quizzes/ch04-01-ownership-sec1-stackheap.toml}}
 
@@ -174,9 +178,9 @@ assert!(b[0] == 0);`[]`
 #}
 ```
 
-> *Note:* you may wonder how we are executing this Rust program that doesn't compile. We use special tools to simulate Rust as if the borrow checker were disabled, only for educational purposes.
+> *Note:* you may wonder how we are executing this Rust program that doesn't compile. We use [special tools](https://github.com/cognitive-engineering-lab/aquascope) to simulate Rust as if the borrow checker were disabled, only for educational purposes.
 
-Rust does not allow programs to manually deallocate memory, so as to avoid these kinds of errors.
+Rust does not allow programs to manually deallocate memory, so as to avoid these kinds of undefined behaviors.
 
 ### A Box's Owner Manages Deallocation
 
@@ -207,73 +211,73 @@ let b = a;
 #}
 ```
 
-The boxed array has now been bound to both `a` and `b`. By our "almost correct" principle, Rust would try to free the box's heap memory *twice* on behalf of both variables &mdash; that's undefined behavior!
+The boxed array has now been bound to both `a` and `b`. By our "almost correct" principle, Rust would try to free the box's heap memory *twice* on behalf of both variables &mdash; that's undefined behavior too!
 
-To avoid this kind of situation, we finally arrive at ownership. When `a` is bound to `Box::new([0; 1_000_000])`, we say that `a` **owns** the box. The statement `let b = a` **moves** ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
+To avoid this situation, we finally arrive at ownership. When `a` is bound to `Box::new([0; 1_000_000])`, we say that `a` **owns** the box. The statement `let b = a` **moves** ownership of the box from `a` to `b`. Given these concepts, Rust's policy for freeing boxes is more accurately described as:
 
 > **Box deallocation principle (fully correct):** If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
 
 <!-- SK: "In the example above, b is the owner of the box at L2." — the problem is we've just seen two examples, both with a `b`, and the `b` inside make-and-drop drops at L1, etc. Use different names. Also, explain both programs, not just the most recent one. -->
 
-In the example above, `b` owns the box at L2. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
+In the example above, `b` owns the boxed array. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
 
 ### Collections Use Boxes
 
-Boxes are used by Rust data structures like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to hold a variable number of elements. For example, here's a program that creates, moves, and mutates a string:
+Boxes are used by Rust data structures[^boxed-data-structures] like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to hold a variable number of elements. For example, here's a program that creates, moves, and mutates a string:
 
-```aquascope,interpreter
+```aquascope,interpreter,horizontal
 fn main() {
-    let s1 = String::from("Hello");`[]`
-    let s3 = add_suffix(s1);`[]`
-    println!("{s3}");
+    let first = String::from("Ferris");`[]`
+    let full = add_suffix(first);`[]`
+    println!("{full}");
 }
 
-fn add_suffix(mut s2: String) -> String {
-    `[]`s2.push_str(" world");`[]`
-    s2
+fn add_suffix(mut name: String) -> String {
+    `[]`name.push_str(" Jr.");`[]`
+    name
 }
 ```
+
 
 This program is more involved, so make sure you follow each step:
 
-1. At L1, the string "Hello" has been allocated on the heap. It is owned by `s1`.
-2. At L2, the function `add_suffix(s1)` has been called. This moves ownership of the string from `s1` to `s2`. The string data is not copied, but the pointer to the data is copied.
-3. At L3, the function `s2.push_str(" world")` resizes the string's heap allocation. This frees the original heap memory, creates a new allocation, and writes "Hello world" into the new location. `s1` now points to deallocated memory (represented as an `X`).
-4. At L4, the frame for `add_suffix` is gone. This function returned `s2`, transferring ownership of the string to `s3`.
+1. At L1, the string "Ferris" has been allocated on the heap. It is owned by `first`.
+2. At L2, the function `add_suffix(first)` has been called. This moves ownership of the string from `first` to `name`. The string data is not copied, but the pointer to the data is copied.
+3. At L3, the function `name.push_str(" Jr.")` resizes the string's heap allocation. This frees the original heap memory, creates a new allocation, and writes "Ferris Jr." into the new location. `first` now points to deallocated memory (represented as an `⦻`).
+4. At L4, the frame for `add_suffix` is gone. This function returned `name`, transferring ownership of the string to `full`.
 
-This program also illustrates a key safety principle for ownership. Imagine that `s1` were used in `main` after calling `add_suffix`, like this:
+This program also illustrates a key safety principle for ownership. Imagine that `first` were used in `main` after calling `add_suffix`, like this:
 
 ```aquascope,interpreter,shouldFail
 fn main() {
-    let s1 = String::from("Hello");
-    let s3 = add_suffix(s1);
-    println!("{s1} {s3}");`[]` // s1 is now used here
+    let first = String::from("Ferris");
+    let full = add_suffix(first);
+    println!("{full}, originally {first}");`[]` // first is now used here
 }
 
-fn add_suffix(mut s2: String) -> String {
-    s2.push_str(" world");
-    s2
+fn add_suffix(mut name: String) -> String {
+    name.push_str(" Jr.");
+    name
 }
 ```
 
-`s1` points to deallocated memory after calling `add_suffix`. Reading `s1` would therefore be a violation of memory safety, i.e. undefined behavior. 
+`first` points to deallocated memory after calling `add_suffix`. Reading `first` would therefore be a violation of memory safety, i.e. undefined behavior. 
 
 Thankfully, Rust will refuse to compile this program, giving the following error:
 
 ```text
-error[E0382]: borrow of moved value: `s1`
- --> src/main.rs:4:16
+error[E0382]: borrow of moved value: `first`
+ --> test.rs:4:35
   |
-2 |     let s1 = String::from("Hello ");
-  |         -- move occurs because `s1` has type `String`, which does not implement the `Copy` trait
-3 |     let s3 = add_suffix(s1);
-  |                         -- value moved here
-4 |     println!("{s1} {s3}"); // s1 is now used here
-  |                ^^ value borrowed here after move
-  |
+2 |     let first = String::from("Ferris");
+  |         ----- move occurs because `first` has type `String`, which does not implement the `Copy` trait
+3 |     let full = add_suffix(first);
+  |                           ----- value moved here
+4 |     println!("{full}, originally {first}"); // first is now used here
+  |                                   ^^^^^ value borrowed here after move
 ```
 
-This error identifies that `s1` is moved by `add_suffix`, and therefore it cannot be used afterward. More generally, the compiler will enforce this principle:
+This error identifies that `first` is moved by `add_suffix`, and therefore it cannot be used afterward. More generally, the compiler will enforce this principle:
 
 > **Moved heap data principle:** if a variable `x` moves ownership of heap data to another variable `y`, then `x` cannot be used after the move.
 
@@ -288,4 +292,6 @@ Ownership is primarily a discipline of heap management:
 - Ownership can be transferred by moves, which happen on assignments and function calls.
 - Heap data can only be accessed through its current owner, not a previous owner.
 
-In this explanation, we have repeatedly emphasized not just _how_ Rust's safeguards work, but _why_ they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. Hopefully the models of memory and ownership we describe here will help you in the future with interpreting Rust's error messages and designing more Rustic APIs.
+In this explanation, we have repeatedly emphasized not just _how_ Rust's safeguards work, but _why_ they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. Hopefully the models of memory and ownership we describe here will help you in the future with interpreting Rust's error messages and with designing more Rustic APIs.
+
+[^boxed-data-structures]: These data structures don't use the literal `Box` type. For example, `String` is implemented with `Vec`, and `Vec` is implemented with [`RawVec`](https://doc.rust-lang.org/nomicon/vec/vec-raw.html) rather than `Box`. But types like `RawVec` are still box-like: they own memory in the heap.

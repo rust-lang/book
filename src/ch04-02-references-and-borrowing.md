@@ -2,7 +2,7 @@
 
 Ownership, boxes, and moves provide a foundation for safely programming with the heap. However, move-only APIs can be inconvenient to use. For example, say you want to read some strings twice:
 
-```aquascope,interpreter,shouldFail
+```aquascope,interpreter,shouldFail,horizontal
 fn main() {
     let m1 = String::from("Hello");
     let m2 = String::from("world");
@@ -15,7 +15,7 @@ fn greet(g1: String, g2: String) {
 }
 ```
 
-In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`.
+In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. If we try to read them like in the operation `format!(..)`, then that would be undefined behavior. The Rust compiler therefore rejects this program.
 
 This move behavior is extremely inconvenient. Programs often need to use a string more than once. Hypothetically, an alternative `greet` can return ownership of the strings:
 
@@ -39,7 +39,7 @@ However, this style of program is quite verbose. Rust provides a more concise st
 
 A **reference** is a kind of pointer. Here's an example of a reference that rewrites our `greet` program in a more convenient manner:
 
-```aquascope,interpreter
+```aquascope,interpreter,horizontal
 fn main() {
     let m1 = String::from("Hello");
     let m2 = String::from("world");`[]`
@@ -131,7 +131,7 @@ Therefore Rust follows a basic principle to prevent undefined behavior:
 
 Data is allowed to be aliased. Data is allowed to be mutated. But data is _not_ allowed to be _both_ aliased _and_ mutated. For example, Rust enforces this principle for boxes (owned pointers) by disallowing aliasing. Assigning a box from one variable to another will move ownership, invalidating the previous variable. Owned data can only be accessed through the owner &mdash; no aliases.
 
-However, references need different rules to enforce the Pointer Safety Principle because they are non-owning pointers. By design, references are meant to temporarily create aliases. In the remainder of this section, we will explain the basics of how Rust ensures the safety of programs with references through the **borrow checker.**
+However, references need different rules to enforce the *Pointer Safety Principle* because references are non-owning pointers. By design, references are meant to temporarily create aliases. In the remainder of this section, we will explain the basics of how Rust ensures the safety of programs with references through the **borrow checker.**
 
 ### References Change Permissions on Paths
 
@@ -155,7 +155,7 @@ To illustrate this idea, we will use a new kind of diagram. This diagram shows t
 ```aquascope,permissions,stepper
 #fn main() {
 let mut x = String::from("Hello");
-let y = &x;
+let y: &String = &x;
 println!("{} and {}", x, y);
 x.push_str(" world");
 #}
@@ -178,12 +178,12 @@ Permissions are not just defined on variables (like `x` or `y`), but also on **p
 - Variables, like `a`.
 - Dereferences of paths, like `*a`.
 - Array accesses of paths, like `a[0]`.
-- Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next section).
+- Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
 - Any combination of the above, like `*((*a)[0].1)`.
 
-Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, it's not just *what* you're data accessing, but *how* you're accessing it.
+Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, what matters is not just *what* you're data accessing, but *how* you're accessing it.
 
-Returning to the Pointer Safety Principle, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
+Returning to the *Pointer Safety Principle*, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
 
 ### The Borrow Checker Finds Permission Violations
@@ -193,7 +193,7 @@ Rust uses these permissions in its **borrow checker**. The borrow checker determ
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
 let mut x = String::from("Hello");
-let y = &x;`{}`
+let y: &String = &x;`{}`
 x.push_str(" world");`{}`
 println!("{} and {}", x, y);
 #}
@@ -230,13 +230,13 @@ The mechanism for this is **mutable references** (also called **unique reference
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut x = String::from("Hello");
-let y = &mut x;
+let y: &mut String = &mut x;
 y.push_str(" world"); 
 println!("{}", x);
 #}
 ```
 
-> <div style="margin-block-start: 1em; margin-block-end: 1em"><i>Note:</i> when the expected permissions are not relevant to an example, we will abbreviate them as dots like <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>. You can hover your mouse over the circles (or tap on a touchscreen) to see the corresponding permission letters.</div>
+> <div style="margin-block-start: 1em; margin-block-end: 1em"><i>Note:</i> when the expected permissions are not strictly relevant to an example, we will abbreviate them as dots like <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>. You can hover your mouse over the circles (or tap on a touchscreen) to see the corresponding permission letters.</div>
 
 A mutable reference is created with the syntax `&mut x`. The type of `y` is written as `&mut String`. You can see two important differences in the transfer of permissions compared to the previous example:
 
@@ -336,27 +336,27 @@ fn add_ref(v: &mut Vec<&i32>, n: i32) {
     v.push(r);`[]`    
 }
 fn main() {
-    let mut v = Vec::new();
-    add_ref(&mut v, 0);
-    println!("{}", v[0]);`[]`
+    let mut nums = Vec::new();
+    add_ref(&mut nums, 0);
+    println!("{}", nums[0]);`[]`
 }
 ```
 
-Then `v` would contain a reference that points to deallocated memory, and printing `v[0]` would violate memory safety.
+At L1, by pushing `&n` into `v`, the vector now contains a reference to data within the frame for `add_ref`. However, when `add_ref` returns, its frame is deallocated. Therefore the reference in the vector points to deallocated memory. Using the reference by printing `v[0]` violates memory safety.
 
 {{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
 
 ### Summary
 
-References provide the ability to read and write data without consuming ownership of it. References are created with borrows (`&` and `&mut`) and used with dereferences (`*`), sometimes implicitly.
+References provide the ability to read and write data without consuming ownership of it. References are created with borrows (`&` and `&mut`) and used with dereferences (`*`), often implicitly.
 
-However, references can be easily misused, so Rust provides a system of permissions to verify that programs use references safely:
+However, references can be easily misused, so Rust's borrow checker enforces a system of permissions to ensure that references are used safely:
 
 - All variables can read, own, and (optionally) write their data.
 - Creating a reference will transfer permissions from the borrowed path to the reference.
 - Permissions are returned once the reference's lifetime has ended.
 - Data must outlive all references that point to it.
 
-In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is enabling you to use references safely but without garbage collection. Understanding these safety rules now will help you avoid frustration with the compiler down the road.
+In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is enabling without garbage collection while avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler down the road.
 
 [`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str

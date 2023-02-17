@@ -253,7 +253,8 @@ If an enum contains non-copyable data like a String, then you should be careful 
 
 ```aquascope,permissions,stepper,boundaries
 # fn main() {
-let opt: Option<String> = Some(String::from("Hello world"));
+let opt: Option<String> = 
+    Some(String::from("Hello world"));
 
 match opt {
     Some(_) => println!("Some!"),
