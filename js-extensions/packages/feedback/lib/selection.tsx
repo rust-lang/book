@@ -1,5 +1,5 @@
 import { VirtualElement } from "@popperjs/core";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import type {} from "telemetry";
 import Highlighter from "web-highlighter";
 import HighlightSource from "web-highlighter/dist/model/source";
@@ -7,6 +7,36 @@ import HighlightSource from "web-highlighter/dist/model/source";
 import FeedbackModal from "./modal";
 import FeedbackTooltip from "./tooltip";
 import { HIGHLIGHT_STORAGE_KEY, HighlightTelemetryAction, addDOMHash } from "./utils";
+
+// TODO: this is duplicated with mdbook-quiz AND aquascope-embed!
+let useCaptureMdbookShortcuts = (capture: boolean) => {
+  useLayoutEffect(() => {
+    if (capture) {
+      let captureKeyboard = (e: KeyboardEvent) => e.stopPropagation();
+
+      // This gets added specifically to document.documentElement rather than document
+      // so bubbling events will hit this listener before ones added via document.addEventListener(...).
+      // All of the problematic mdBook interactions are created that way, so we ensure that
+      // the keyboard event does not propagate to those listeners.
+      //
+      // However, some widgets like Codemirror require keydown events but on local elements.
+      // So we can't just stopPropagation in the capture phase, or those widgets will break.
+      // This is the compromise!
+      document.documentElement.addEventListener(
+        "keydown",
+        captureKeyboard,
+        false
+      );
+
+      return () =>
+        document.documentElement.removeEventListener(
+          "keydown",
+          captureKeyboard,
+          false
+        );
+    }
+  }, [capture]);
+};
 
 type SelectionRendererProps = { highlighter: Highlighter; stored?: HighlightSource[] };
 let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored }) => {
@@ -81,6 +111,8 @@ let SelectionRenderer: React.FC<SelectionRendererProps> = ({ highlighter, stored
     setModalOpen(false);
     setCurrRange(null);
   };
+
+  useCaptureMdbookShortcuts(modalOpen);
 
   if (currRange) {
     if (modalOpen) {
