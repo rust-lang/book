@@ -19,6 +19,31 @@ The second branch requires that `x == 0`, which is true, so the pattern succeeds
 """
 
 [[questions]]
+id = "ac0045c7-981a-46cb-baeb-adaa533804ad"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider the following program:
+
+```
+let a = [(0, 1)];
+let ?? = a;
+```
+
+Which of the following are valid patterns that could replace the `??` placeholder?
+"""
+answer.answer = [
+    "`_`",
+    "`[(n, ..)]`",
+    "`[..]`"
+]
+prompt.distractors = [
+    "`(_, n)`"
+]
+context = """ 
+The pattern `(_, n)` is not valid because `a` is an array of tuples, not a tuple itself.
+"""
+
+[[questions]]
 id = "0b0d90c3-c81b-4b81-9e1b-f8bd58a22c6c"
 type = "Tracing"
 prompt.program = """

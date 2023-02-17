@@ -25,9 +25,7 @@ jobs:
       run: |
         npm install -g pnpm spellchecker
         npm install -g graco
-        echo "$(npm config get prefix)/lib/node_modules/graco/node_modules"
-        ls $(npm config get prefix)/lib/node_modules/graco/node_modules/.bin
-        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules" >> $GITHUB_ENV
+        echo "NODE_PATH=$(npm config get prefix)/lib/node_modules:$NODE_PATH" >> $GITHUB_ENV
         echo "NODE_LOG=debug" >> $GITHUB_ENV
     
     - name: Update rustup
@@ -42,7 +40,7 @@ jobs:
     - name: Install mdbook
       run: |
         mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.14/mdbook-v0.4.14-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.25/mdbook-v0.4.25-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
         echo "$(pwd)/bin" >> ${GITHUB_PATH}
 
     - name: Report versions
@@ -50,7 +48,7 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-
+    
     - name: Install mdbook-quiz
       run: cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
 
@@ -68,7 +66,7 @@ jobs:
     - name: Install js-extensions
       run: |
         cd js-extensions
-        pnpm commit-check
+        pnpm init-repo
 
     - name: Run mdbook tests
       run: mdbook test

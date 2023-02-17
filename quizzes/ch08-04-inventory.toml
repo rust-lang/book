@@ -10,6 +10,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
     for (i, t) in v.iter().enumerate().rev() {
         if *t == 0 {
             v.remove(i);
+            v.shrink_to_fit();
         }
     }
 }
@@ -41,6 +42,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
     for (i, t) in v.iter().enumerate().rev() {
         if *t == 0 {
             v.remove(i);
+            v.shrink_to_fit();
         }
     }
 }
@@ -92,7 +94,7 @@ remove_zeros(&mut v);
 ]
 context = """
 To violate memory safety, `remove_zeros` must be called with a vector that contains a zero after the first element.
-The call to `v.remove(i)` could deallocate memory owned by the vector (due to resizing), which would invalidate the
+The call to `v.shrink_to_fit()` will deallocate memory owned by the vector (due to resizing), which will invalidate the
 iterator `v.iter()` which contains a pointer to the old data. Note that reading the vector `v` after calling `remove_zeros`
 is not essential to the safety violation, since the issue is internal to `remove_zeros`.
 """
@@ -109,6 +111,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
     for (i, t) in v.iter().enumerate().rev() {
         if *t == 0 {
             v.remove(i);
+            v.shrink_to_fit();
         }
     }
 }
@@ -125,6 +128,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
     for `[i in (0 .. v.len()).rev()]` {
         if `[v[i]]` == 0 {
             v.remove(i);
+            v.shrink_to_fit();
         }
     }
 }
@@ -137,6 +141,7 @@ fn remove_zeros(v: &mut Vec<i32>) {
     for (i, t) in v`[.clone()]`.iter().enumerate().rev() {
         if *t == 0 {
             v.remove(i);
+            v.shrink_to_fit();
         }
     }
 }
@@ -161,6 +166,7 @@ fn remove_zeros(v: `[Vec<i32>]`) {
     for (i, t) in v.iter().enumerate().rev() {
         if *t == 0 {
             v.remove(i);
+            v.shrink_to_fit();
         }
     }
 }

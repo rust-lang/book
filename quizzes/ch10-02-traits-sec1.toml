@@ -8,8 +8,8 @@ trait MakeNoise {
   }
 }
 
-struct Dog;
-struct Cat;
+struct Dog {}
+struct Cat {}
 
 impl MakeNoise for Dog {
   fn make_noise(&self) {
@@ -20,8 +20,10 @@ impl MakeNoise for Dog {
 impl MakeNoise for Cat {}
 
 fn main() {
-  Dog.make_noise();
-  Cat.make_noise();
+  let dog = Dog {};
+  let cat = Cat {};
+  dog.make_noise();
+  cat.make_noise();
 }
 """
 answer.doesCompile = true
@@ -34,9 +36,9 @@ Therefore calling `make_noise` on each prints `bark` and `(silence)`, respective
 [[questions]]
 id = "783f2485-e5b9-483b-8368-064366c77285"
 type = "MultipleChoice"
-prompt.prompt = "Which of the following statements is NOT true about when Rust allows you to implement a trait?"
-answer.answer = "You can implement an external trait for an external type"
-prompt.distractors = [
+prompt.prompt = "The following are statements about what kinds of trait implementations are permitted by Rust. Select each statement which is true."
+prompt.distractors = ["You can implement an external trait for an external type"]
+answer.answer = [
   "You can implement an external trait for a local type",
   "You can implement a local trait for an external type",
   "You can implement a local trait for a local type"

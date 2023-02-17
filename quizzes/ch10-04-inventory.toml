@@ -19,7 +19,7 @@ answer.answer = "cannot borrow `elems` as mutable for `sort`"
 prompt.distractors = [
   "cannot move out of shared reference for `clone`",
   "cannot move out of shared reference in expression `&elems[n]`",
-  "the lifetime of `T` must outlives `&[T]`",
+  "the lifetime of `T` must outlive `&[T]`",
 ]
 context = """
 The method `slice::sort` expects a mutable reference to a slice, but

@@ -17,5 +17,5 @@ prompt.distractors = [
   "They are equivalent"
 ]
 context = """
-Closures can be passed to `register2`, while only top-level functions can be passed to `register1`.
+Closures with environments can be passed to `register2`, while only top-level functions (or closures without environments) can be passed to `register1`.
 """
