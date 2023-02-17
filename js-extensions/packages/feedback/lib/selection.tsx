@@ -22,18 +22,9 @@ let useCaptureMdbookShortcuts = (capture: boolean) => {
       // However, some widgets like Codemirror require keydown events but on local elements.
       // So we can't just stopPropagation in the capture phase, or those widgets will break.
       // This is the compromise!
-      document.documentElement.addEventListener(
-        "keydown",
-        captureKeyboard,
-        false
-      );
+      document.documentElement.addEventListener("keydown", captureKeyboard, false);
 
-      return () =>
-        document.documentElement.removeEventListener(
-          "keydown",
-          captureKeyboard,
-          false
-        );
+      return () => document.documentElement.removeEventListener("keydown", captureKeyboard, false);
     }
   }, [capture]);
 };
