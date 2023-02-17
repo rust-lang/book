@@ -56,7 +56,7 @@ jobs:
     - name: Install js-extensions
       run: |
         cd js-extensions
-        pnpm commit-check
+        pnpm init-repo
 
     - name: Run mdbook tests
       run: mdbook test
