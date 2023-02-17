@@ -253,7 +253,7 @@ Mutable references can also be temporarily "downgraded" to read-only references.
 #fn main() {
 let mut x = String::from("Hello");
 let y = &mut x;
-let z = &*y;`(focus,paths:\*)`
+let z = &*y;`(focus,paths:*)`
 println!("{} {}", y, z);`{}`
 #}
 ```
@@ -284,11 +284,11 @@ In the previous examples, a lifetime has been a contiguous region of code. Howev
 
 ```aquascope,permissions,stepper,boundaries
 fn ascii_capitalize(v: &mut Vec<char>) {
-    let c = &v[0];`(focus,paths:\*v)`
+    let c = &v[0];`(focus,paths:*v)`
     if c.is_ascii_lowercase() {
-        let up = c.to_ascii_uppercase();`(focus,paths:\*v)`
+        let up = c.to_ascii_uppercase();`(focus,paths:*v)`
         v[0] = up;
-    } else {`(focus,paths:\*v)`
+    } else {`(focus,paths:*v)`
         println!("Already capitalized: {:?}", v);
     }
 }

@@ -269,7 +269,7 @@ implement them on any type, including unit-like structs.
 Similar to our discussion in ["Disjoint Tuple Fields"][disjointfields], Rust's borrow checker will track ownership permissions
 at the both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions:
 
-```aquascope,permissions,stepper
+```aquascope,permissions,stepper,boundaries
 #fn main() {
 struct Point { x: i32, y: i32 }
 
@@ -282,7 +282,7 @@ println!("{}, {}", p.x, p.y);
 
 As a result, if we try and use `p` while `p.x` is mutably borrowed like this:
 
-```aquascope,permissions,boundaries,shouldFail
+```aquascope,permissions,stepper,boundaries,shouldFail
 struct Point { x: i32, y: i32 }
 
 fn print_point(p: &Point) {

@@ -123,7 +123,7 @@ A common confusion for Rust learners arises around the interaction of ownership 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
 let v: Vec<i32> = vec![0, 1, 2];
-let n_ref: &i32 = v.get(0).unwrap();`(focus,paths:\*n_ref)`
+let n_ref: &i32 = v.get(0).unwrap();`(focus,paths:*n_ref)`
 let n: i32 = *n_ref;
 
 // Normally you would just write:
@@ -138,7 +138,7 @@ But if we change the type of elements from numbers to strings, then the program 
 ```aquascope,interpreter+permissions,stepper,boundaries,shouldFail,horizontal
 #fn main() {
 let v: Vec<String> = vec![String::from("Hello world")];
-let s_ref: &String = v.get(0).unwrap();`(focus,paths:\*s_ref)`
+let s_ref: &String = v.get(0).unwrap();`(focus,paths:*s_ref)`
 let s: String = *s_ref;`[]``{}`
 
 // These are normally implicit,
@@ -175,10 +175,10 @@ In terms of permissions, the idea is that the dereference operator `*` requires 
 ```aquascope,permissions,stepper
 #fn main() {
 let v1: Vec<i32> = vec![0];
-let n: &i32 = &v1[0];`(focus,paths:\*n)`
+let n: &i32 = &v1[0];`(focus,paths:*n)`
 
 let v2: Vec<String> = vec![String::new()];
-let s: &String = &v2[0];`(focus,paths:\*s)`
+let s: &String = &v2[0];`(focus,paths:*s)`
 #println!("{n} {s}");
 #}
 ```
@@ -278,13 +278,13 @@ A similar kind of problem arises when we borrow elements of an array. For exampl
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut a = [0, 1, 2, 3];
-let x = &mut a[0];`(focus,paths:a\[\])`
-*x += 1;`(focus,paths:a\[\])`
+let x = &mut a[0];`(focus,paths:a[..])`
+*x += 1;`(focus,paths:a[..])`
 println!("{a:?}");
 #}
 ```
 
-The borrow checker does not contain different paths for `a[0]`, `a[1]`, and so on. There is a single path `a[]` that represents *all* elements of `a`. Rust does this because it cannot always determine the value of an index in more complex situations like this: 
+The borrow checker does not contain different paths for `a[0]`, `a[1]`, and so on. There is a single path `a[..]` that represents *all* elements of `a`. Rust does this because it cannot always determine the value of an index in more complex situations like this: 
 
 ```rust,ignore
 let idx = a_complex_function();
@@ -296,7 +296,7 @@ As a result, a perfectly safe program that uses two disjoint indices will be rej
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
 let mut a = [0, 1, 2, 3];
-let x = &mut a[0];`(focus,paths:a\[\])`
+let x = &mut a[0];`(focus,paths:a[..])`
 let y = &a[1];`{}`
 *x += *y;
 #}
