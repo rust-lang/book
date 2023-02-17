@@ -60,6 +60,9 @@ jobs:
 
     - name: Run mdbook tests
       run: mdbook test
+    
+    - name: Build mdbook
+      run: mdbook build
 
     - name: Deploy to Github Pages
       if: ${{ github.ref == 'refs/heads/main' }}
