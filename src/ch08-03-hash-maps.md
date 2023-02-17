@@ -15,7 +15,8 @@ name, you can retrieve its score.
 
 We’ll go over the basic API of hash maps in this section, but many more goodies
 are hiding in the functions defined on `HashMap<K, V>` by the standard library.
-As always, check the standard library documentation for more information.
+As always, check the [standard library documentation](https://doc.rust-lang.org/std/collections/hash_map/struct.HashMap.html)<!-- ignore -->
+for more information.
 
 ### Creating a New Hash Map
 
