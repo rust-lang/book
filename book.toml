@@ -7,13 +7,13 @@ additional-css = [
   "ferris.css",
   "theme/2018-edition.css",
   "js-extensions/packages/consent-form/dist/index.css",
-  "js-extensions/packages/feedback/dist/index.css"
+  "js-extensions/packages/feedback/dist/index.css",  
 ]
 additional-js = [
   "ferris.js",
   "js-extensions/packages/telemetry/dist/index.js",
   "js-extensions/packages/consent-form/dist/index.js",
-  "js-extensions/packages/feedback/dist/index.js"
+  "js-extensions/packages/feedback/dist/index.js",
 ]
 
 git-repository-url = "https://github.com/cognitive-engineering-lab/rust-book"
@@ -22,6 +22,8 @@ git-repository-url = "https://github.com/cognitive-engineering-lab/rust-book"
 fullscreen = true
 validate = true
 cache-answers = true
+
+[preprocessor.aquascope]
 
 [build]
 extra-watch-dirs = ["quizzes", "../mdbook-quiz/target/debug", "js-extensions/packages/feedback/dist"]

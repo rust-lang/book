@@ -291,7 +291,7 @@ Next, we’ll talk about functions and closures!
 
 [encapsulation-that-hides-implementation-details]:
 ch17-01-what-is-oo.html#encapsulation-that-hides-implementation-details
-[string-slices]: ch04-03-slices.html#string-slices
+[string-slices]: ch04-04-slices.html#string-slices
 [the-match-control-flow-operator]:
 ch06-02-match.html#the-match-control-flow-operator
 [using-trait-objects-that-allow-for-values-of-different-types]:

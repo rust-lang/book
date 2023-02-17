@@ -1,0 +1,59 @@
+[[questions]]
+id = "5d774a01-8604-4386-8d81-498496ccd96c"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best describes the difference between the stack and the heap?
+"""
+answer.answer = "The stack holds data associated with a specific function, while the heap holds data that can outlive a function"
+prompt.distractors = [ 
+  "The stack can hold pointers to data stored on the heap, while the heap only holds data without pointers",
+  "The stack holds immutable data, while the heap holds mutable data.",
+  "The stack holds copyable data, while the heap holds uncopyable data."
+]
+context = """
+Frames in the stack are associated with a specific function, and are deallocated when the function returns.
+Data on the heap can live indefinitely. Note that both stack and heap data can be mutable and can be copyable. The heap is allowed to
+contain pointers (even to the stack, as we will see later).
+"""
+
+[[questions]]
+id = "4c953b2d-65bf-4dab-bbbb-14c9b15a690e"
+type = "ShortAnswer"
+prompt.prompt = """
+Consider the execution of the following snippet, with the final state shown:
+
+```aquascope,interpreter
+#fn main() {
+let a = Box::new(15);
+let b = a;
+let c = Box::new(15);`[]`
+#}
+```
+
+In the final state, how many copies of the number `15` live anywhere in memory? Write your answer as a digit, e.g. 0 or 1.
+"""
+answer.answer = "2"
+context = """
+The two boxes contain the two copies of the number 15. The assignment `let b = a` copies the heap pointer, but not the number on the heap.
+"""
+
+[[questions]]
+id = "b09820e6-7938-49d5-9147-ab76987d37fd"
+type = "ShortAnswer"
+prompt.prompt = """
+Consider the execution of the following snippet, with an intermediate state shown:
+
+```aquascope,interpreter
+#fn main() {
+let mut a = Box::new([0, 1, 2, 3, 4, 5]);
+let mut b = a;`[]`
+b[0] = 6;
+#}
+```
+
+In the final state of the snippet, what is the value of `a[0]`? Write your answer as a digit, e.g. 0 or 1.
+"""
+answer.answer = "6"
+context = """
+Because `b` and `a` point to the same data, a change to one will affect the other. `a[0]` has the value 6.
+"""

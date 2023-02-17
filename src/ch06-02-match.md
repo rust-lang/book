@@ -247,13 +247,14 @@ There’s more about patterns and matching that we’ll cover in [Chapter
 18][ch18-00-patterns]<!-- ignore -->.
 
 <!-- BEGIN INTERVENTION: 1e4f082c-ffa4-4d33-8726-2dbcd72e1aa2 -->
-## How Matches Interact with Ownership
+### How Matches Interact with Ownership
 
 If an enum contains non-copyable data like a String, then you should be careful with whether a match will move or borrow that data. For example, this program using an `Option<String>` will compile:
 
-```rust
+```aquascope,permissions,stepper,boundaries
 # fn main() {
-let opt: Option<String> = Some(String::from("Hello world"));
+let opt: Option<String> = 
+    Some(String::from("Hello world"));
 
 match opt {
     Some(_) => println!("Some!"),
@@ -266,9 +267,10 @@ println!("{:?}", opt);
 
 But if we replace the placeholder in `Some(_)` with a variable name, like `Some(s)`, then the program will NOT compile:
 
-```rust,ignore,does_not_compile
-# fn main() {
-let opt: Option<String> = Some(String::from("Hello world"));
+```aquascope,permissions,stepper,boundaries,shouldFail
+#fn main() {
+let opt: Option<String> = 
+    Some(String::from("Hello world"));
 
 match opt {
     // _ became s
@@ -276,16 +278,19 @@ match opt {
     None => println!("None!")
 };
 
-println!("{:?}", opt);
-# }
+println!("{:?}", opt);`{}`
+#}
 ```
 
-`opt` is a plain enum &mdash; its type is `Option<String>` and not a reference like `&Option<String>`. Therefore a match on `opt` will move non-ignored fields like `s`. After the match expression, the data within `opt` has been moved, so it is illegal to use `opt` in the `println`.
+
+`opt` is a plain enum &mdash; its type is `Option<String>` and not a reference like `&Option<String>`. Therefore a match on `opt` will move non-ignored fields like `s`. Notice how `opt` loses read and own permission sooner in the second program compared to the first. After the match expression, the data within `opt` has been moved, so it is illegal to read `opt` in the `println`.
 
 If we want to peek into `opt` without moving its contents, the idiomatic solution is to match on a reference:
 
-```rust
-let opt: Option<String> = Some(String::from("Hello world"));
+```aquascope,permissions,stepper,boundaries
+#fn main() {
+let opt: Option<String> = 
+    Some(String::from("Hello world"));
 
 // opt became &opt
 match &opt {
@@ -294,6 +299,7 @@ match &opt {
 };
 
 println!("{:?}", opt);
+#}
 ```
 
 Rust will “push down” the reference from the outer enum, `&Option<String>`, to the inner field, `&String`. Therefore `s` has type `&String`, and `opt` can be used after the match. To better understand this “pushing down” mechanism, see the section about [binding modes](https://doc.rust-lang.org/reference/patterns.html#binding-modes) in the Rust Reference.

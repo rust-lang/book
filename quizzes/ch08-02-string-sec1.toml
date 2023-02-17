@@ -1,11 +1,11 @@
 [[questions]]
 id = "79942534-f414-41e6-944f-96d57905632c"
 type = "MultipleChoice"
-prompt.prompt = "What is the difference between using `+` and `push_str` to concatenate two strings?"
-answer.answer = "`+` consumes ownership of the left-hand-side string, while `push_str` does not"
+prompt.prompt = "What is the difference between using `a + b` and `a.push_str(b)` to concatenate two strings?"
+answer.answer = "`+` consumes ownership of `a`, while `push_str` does not"
 prompt.distractors = [
   "`push_str` is more efficient at runtime than `+`",
-  "`push_str` consumes ownership of the right-hand-side string, while `+` does not",
+  "`push_str` consumes ownership of `b`, while `+` does not",
   "There is no difference, they are aliases for the same function"
 ]
 context = """

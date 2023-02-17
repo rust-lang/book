@@ -29,8 +29,21 @@ struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
+```aquascope,interpreter
+#struct User {
+#    active: bool,
+#    username: String,
+#    email: String,
+#    sign_in_count: u64,
+#}
+fn main() {
+    let user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };`[]`
+}
 ```
 
 <span class="caption">Listing 5-2: Creating an instance of the `User`
@@ -42,8 +55,23 @@ mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the `email`
 field of a mutable `User` instance.
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
+```aquascope,interpreter
+#struct User {
+#    active: bool,
+#    username: String,
+#    email: String,
+#    sign_in_count: u64,
+#}
+fn main() {
+    let mut user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };`[]`
+
+    user1.email = String::from("anotheremail@example.com");`[]`
+}
 ```
 
 <span class="caption">Listing 5-3: Changing the value in the `email` field of a
@@ -102,8 +130,29 @@ First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
 otherwise use the same values from `user1` that we created in Listing 5-2.
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
+```aquascope,interpreter
+#struct User {
+#    active: bool,
+#    username: String,
+#    email: String,
+#    sign_in_count: u64,
+#}
+fn main() {
+#   let user1 = User {
+#      email: String::from("someone@example.com"),
+#      username: String::from("someusername123"),
+#      active: true,
+#      sign_in_count: 1,
+#   };
+    // --snip--
+
+    let user2 = User {
+        active: user1.active,
+        username: user1.username,
+        email: String::from("another@example.com"),
+        sign_in_count: user1.sign_in_count,
+    };`[]`
+}
 ```
 
 <span class="caption">Listing 5-6: Creating a new `User` instance using one of
@@ -130,15 +179,14 @@ many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
 Note that the struct update syntax uses `=` like an assignment; this is
-because it moves the data, just as we saw in the [“Ways Variables and Data
-Interact: Move”][move]<!-- ignore --> section. In this example, we can no
+because it moves the data, just as we saw in the ["What Is Ownership?"][move]<!-- ignore --> section. In this example, we can no
 longer use `user1` after creating `user2` because the `String` in the
 `username` field of `user1` was moved into `user2`. If we had given `user2` new
 `String` values for both `email` and `username`, and thus only used the
 `active` and `sign_in_count` values from `user1`, then `user1` would still be
 valid after creating `user2`. The types of `active` and `sign_in_count` are
 types that implement the `Copy` trait, so the behavior we discussed in the
-[“Stack-Only Data: Copy”][copy]<!-- ignore --> section would apply.
+[“Copying vs. Moving Out of a Vector”][copy]<!-- ignore --> section would apply.
 
 ### Using Tuple Structs without Named Fields to Create Different Types
 
@@ -153,8 +201,14 @@ To define a tuple struct, start with the `struct` keyword and the struct name
 followed by the types in the tuple. For example, here we define and use
 two tuple structs named `Color` and `Point`:
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs}}
+```aquascope,interpreter
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+
+fn main() {
+    let black = Color(0, 0, 0);
+    let origin = Point(0, 0, 0);`[]`
+}
 ```
 
 Note that the `black` and `origin` values are different types, because they’re
@@ -176,8 +230,12 @@ have any data that you want to store in the type itself. We’ll discuss traits
 in Chapter 10. Here’s an example of declaring and instantiating a unit struct
 named `AlwaysEqual`:
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs}}
+```aquascope,interpreter
+struct AlwaysEqual;
+
+fn main() {
+    let subject = AlwaysEqual;`[]`
+}
 ```
 
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
@@ -265,7 +323,59 @@ implement them on any type, including unit-like structs.
 > references in structs, but for now, we’ll fix errors like these using owned
 > types like `String` instead of references like `&str`.
 
+### Borrowing Fields of a Struct
+
+Similar to our discussion in ["Disjoint Tuple Fields"][disjointfields], Rust's borrow checker will track ownership permissions
+at the both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions:
+
+```aquascope,permissions,stepper,boundaries
+#fn main() {
+struct Point { x: i32, y: i32 }
+
+let mut p = Point { x: 0, y: 0 };`(focus,paths:p)`
+let x = &mut p.x;`(focus,paths:p)`
+*x += 1;`(focus,paths:p)`
+println!("{}, {}", p.x, p.y);
+#}
+```
+
+As a result, if we try and use `p` while `p.x` is mutably borrowed like this:
+
+```aquascope,permissions,stepper,boundaries,shouldFail
+struct Point { x: i32, y: i32 }
+
+fn print_point(p: &Point) {
+    println!("{}, {}", p.x, p.y);
+}
+
+fn main() {
+    let mut p = Point { x: 0, y: 0 };`(focus,paths:p)`
+    let x = &mut p.x;`(focus,paths:p)`
+    print_point(&p);`{}`
+    *x += 1;`(focus,paths:p)`
+}
+```
+
+Then the compiler will reject our program with the following error:
+
+```text
+error[E0502]: cannot borrow `p` as immutable because it is also borrowed as mutable
+  --> test.rs:10:17
+   |
+9  |     let x = &mut p.x;
+   |             -------- mutable borrow occurs here
+10 |     print_point(&p);
+   |                 ^^ immutable borrow occurs here
+11 |     *x += 1;
+   |     ------- mutable borrow later used here
+```
+
+More generally, if you encounter an ownership error that involves a struct, you should consider which fields of your structure
+are supposed to be borrowed with which permissions. But be aware of the borrow checker's limitations, since Rust may sometimes
+assume more fields are borrowed than they actually are.
+
 {{#quiz ../quizzes/ch05-01-structs.toml}}
+
 
 <!-- manual-regeneration
 for the error above
@@ -275,5 +385,6 @@ paste above
 add `> ` before every line -->
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[move]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move
-[copy]: ch04-01-what-is-ownership.html#stack-only-data-copy
+[move]: ch04-01-what-is-ownership.html
+[copy]: ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-vector
+[disjointfields]: ch04-03-fixing-ownership-errors.html#fixing-a-safe-program-disjoint-tuple-fields

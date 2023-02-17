@@ -4,8 +4,7 @@ Lifetimes are another kind of generic that we’ve already been using. Rather
 than ensuring that a type has the behavior we want, lifetimes ensure that
 references are valid as long as we need them to be.
 
-One detail we didn’t discuss in the [“References and
-Borrowing”][references-and-borrowing]<!-- ignore --> section in Chapter 4 is
+One detail we discussed briefly in Chapter 4, ["Permissions Are Returned At The End of a Reference's Lifetime"][lifetime-permissions] is
 that every reference in Rust has a *lifetime*, which is the scope for which
 that reference is valid. Most of the time, lifetimes are implicit and inferred,
 just like most of the time, types are inferred. We only must annotate types
@@ -23,11 +22,22 @@ lifetime syntax so you can get comfortable with the concept.
 
 The main aim of lifetimes is to prevent *dangling references*, which cause a
 program to reference data other than the data it’s intended to reference.
-Consider the program in Listing 10-16, which has an outer scope and an inner
+Consider the unsafe program in Listing 10-16, which has an outer scope and an inner
 scope.
 
+<!-- TODO(aquascope): support for nested scopes -->
+
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs}}
+fn main() {
+    let r;
+
+    {
+        let x = 5;
+        r = &x;
+    }
+
+    println!("r: {}", r);
+}
 ```
 
 <span class="caption">Listing 10-16: An attempt to use a reference whose value
@@ -43,9 +53,10 @@ has gone out of scope</span>
 The outer scope declares a variable named `r` with no initial value, and the
 inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
-the inner scope ends, and we attempt to print the value in `r`. This code won’t
-compile because the value `r` is referring to has gone out of scope before we
-try to use it. Here is the error message:
+the inner scope ends, and we attempt to print the value in `r`. If this code were 
+executed, then undefined behavior would occur when `r` is read.
+
+However, this code won’t compile because the value `r` is referring to has gone out of scope before we try to use it. Here is the error message:
 
 ```console
 {{#include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/output.txt}}
@@ -56,12 +67,11 @@ of scope when the inner scope ends on line 7. But `r` is still valid for the
 outer scope; because its scope is larger, we say that it “lives longer.” If
 Rust allowed this code to work, `r` would be referencing memory that was
 deallocated when `x` went out of scope, and anything we tried to do with `r`
-wouldn’t work correctly. So how does Rust determine that this code is invalid?
-It uses a borrow checker.
+wouldn’t work correctly.
 
-### The Borrow Checker
+### The Borrow Checker Ensures Data Outlives Its References
 
-The Rust compiler has a *borrow checker* that compares scopes to determine
+The Rust compiler's borrow checker will compare scopes to determine
 whether all borrows are valid. Listing 10-17 shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.
 
@@ -582,7 +592,7 @@ suggesting the `'static` lifetime results from attempting to create a dangling
 reference or a mismatch of the available lifetimes. In such cases, the solution
 is fixing those problems, not specifying the `'static` lifetime.
 
-## Generic Type Parameters, Trait Bounds, and Lifetimes Together
+### Generic Type Parameters, Trait Bounds, and Lifetimes Together
 
 Let’s briefly look at the syntax of specifying generic type parameters, trait
 bounds, and lifetimes all in one function!
@@ -602,7 +612,7 @@ brackets after the function name.
 
 {{#quiz ../quizzes/ch10-03-lifetimes-sec2.toml}}
 
-## Summary
+### Summary
 
 We covered a lot in this chapter! Now that you know about generic type
 parameters, traits and trait bounds, and generic lifetime parameters, you’re
@@ -620,8 +630,7 @@ that you will only need in very advanced scenarios; for those, you should read
 the [Rust Reference][reference]. But next, you’ll learn how to write tests in
 Rust so you can make sure your code is working the way it should.
 
-[references-and-borrowing]:
-ch04-02-references-and-borrowing.html#references-and-borrowing
 [string-slices-as-parameters]:
-ch04-03-slices.html#string-slices-as-parameters
+ch04-04-slices.html#string-slices-as-parameters
 [reference]: https://doc.rust-lang.org/reference/index.html
+[lifetime-permissions]: ch04-02-references-and-borrowing.html#permissions-are-returned-at-the-end-of-a-references-lifetime

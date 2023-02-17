@@ -417,7 +417,101 @@ than once:
 <span class="caption">Listing 13-9: Using an `FnMut` closure with `sort_by_key`
 is allowed</span>
 
-The `Fn` traits are important when defining or using functions or types that
+### Closures Must Name Captured Lifetimes
+
+When you start designing functions that accept or return closures, you'll need to think about the lifetime of data captured by the closure. For example, here is a simple program that is supposed to return a closure that clones a string:
+
+```rust,ignore,should_fail
+fn make_a_cloner(s_ref: &str) -> impl Fn() -> String {
+    move || s_ref.to_string()
+}
+```
+
+However, this program is rejected by the compiler with the following error:
+
+```text
+error[E0700]: hidden type for `impl Fn() -> String` captures lifetime that does not appear in bounds
+ --> test.rs:2:5
+  |
+1 | fn make_a_cloner(s_ref: &str) -> impl Fn() -> String {
+  |                         ---- hidden type `[closure@test.rs:2:5: 2:12]` captures the anonymous lifetime defined here
+2 |     move || s_ref.to_string()
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+```
+
+This error might be a bit confusing. What is a hidden type? Why does it capture a lifetime? Why does that lifetime need to appear in a bound?
+
+To answer those questions, let's start by seeing what would happen if Rust allowed `make_a_cloner` to compile. Then we could write the following unsafe program:
+
+```aquascope,interpreter,shouldFail
+fn make_a_cloner(s_ref: &str) -> impl Fn() -> String {
+    move || {
+        s_ref.to_string()`[]`
+    }
+}
+
+fn main() {
+    let s_own = String::from("Hello world");
+    let cloner = make_a_cloner(&s_own);`[]`
+    drop(s_own);`[]`
+    cloner();
+}    
+```
+
+Let's follow the execution. After calling `make_a_cloner(&s_own)`, at L1 we get back a closure `cloner`. Within the closure is its environment, the reference `s_ref`. However, if we are allowed to drop `s_own` at L2, then that invalidates `cloner` because its environment contains a pointer to deallocated memory. Then invoking `cloner()` would cause a use-after-free.
+
+Returning to the original type error, the issue is that **we need to tell Rust that the closure returned from `make_a_cloner` must not live longer than `s_ref`.** We can do that explicitly using a lifetime parameter like this:
+
+```rust
+//              vvvv         vv                             vvvv                
+fn make_a_cloner<'a>(s_ref: &'a str) -> impl Fn() -> String + 'a {
+    move || s_ref.to_string()
+}
+```
+
+These changes say: `s_ref` is a string reference that lives for `'a`. Adding `+ 'a` to the return type's trait bounds indicates that the closure must live no longer than `'a`. Therefore Rust deduces this function is now safe. If we try to use it unsafely like before:
+
+```aquascope,permissions,stepper,boundaries
+#fn make_a_cloner<'a>(s_ref: &'a str) 
+#    -> impl Fn() -> String + 'a 
+#{
+#    move || s_ref.to_string()
+#}
+#fn main() {
+let s_own = String::from("Hello world");
+let cloner = make_a_cloner(&s_own);
+drop(s_own);`{}`
+cloner();
+#}
+```
+
+Then we get a new compiler error:
+
+```text
+error[E0505]: cannot move out of `s_own` because it is borrowed
+  --> test.rs:9:6
+   |
+8  | let cloner = make_a_cloner(&s_own);
+   |                            ------ borrow of `s_own` occurs here
+9  | drop(s_own);
+   |      ^^^^^ move out of `s_own` occurs here
+10 | cloner();
+   | ------ borrow later used here
+```
+
+Rust recognizes that as long as `make_a_cloner` is live, `s_own` cannot be dropped. This is reflected in the permissions: `s_own` loses ownership permissions after calling `make_a_cloner`.
+
+Returning now to the original confusing error: the "hidden type" of the closure captured `s_ref` which had a limited lifetime. The return type never mentioned this lifetime, so Rust could not deduce that `make_a_cloner` was safe. But if we explicitly say that the closure captures the lifetime of `s_ref`, then our function compiles.
+
+Note that we can use the [lifetime elision] rules to make the function type more concise. We can remove the `<'a>` generic so long as we keep an indicator that the returned closure depends on *some* lifetime, like this:
+
+```rust
+fn make_a_cloner(s_ref: &str) -> impl Fn() -> String + '_ {
+    move || s_ref.to_string()
+}
+```
+
+In sum, the `Fn` traits are important when defining or using functions or types that
 make use of closures. In the next section, we’ll discuss iterators. Many
 iterator methods take closure arguments, so keep these closure details in mind
 as we continue!
@@ -425,3 +519,4 @@ as we continue!
 {{#quiz ../quizzes/ch13-01-closures-sec2.toml}}
 
 [unwrap-or-else]: https://doc.rust-lang.org/std/option/enum.Option.html#method.unwrap_or_else
+[lifetime elision]: ch10-03-lifetime-syntax.html#lifetime-elision

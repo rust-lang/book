@@ -1,266 +1,362 @@
 ## References and Borrowing
 
-The issue with the tuple code in Listing 4-5 is that we have to return the
-`String` to the calling function so we can still use the `String` after the
-call to `calculate_length`, because the `String` was moved into
-`calculate_length`. Instead, we can provide a reference to the `String` value.
-A *reference* is like a pointer in that it’s an address we can follow to access
-the data stored at that address; that data is owned by some other variable.
-Unlike a pointer, a reference is guaranteed to point to a valid value of a
-particular type for the life of that reference.
+Ownership, boxes, and moves provide a foundation for safely programming with the heap. However, move-only APIs can be inconvenient to use. For example, say you want to read some strings twice:
 
-Here is how you would define and use a `calculate_length` function that
-has a reference to an object as a parameter instead of taking ownership of the
-value:
+```aquascope,interpreter,shouldFail,horizontal
+fn main() {
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");
+    greet(m1, m2);
+    let s = format!("{} {}", m1, m2);`[]` // Error: m1 and m2 are moved
+}
 
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:all}}
+fn greet(g1: String, g2: String) {
+    println!("{} {}!", g1, g2);`[]`
+}
 ```
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length` and, in its definition, we take `&String` rather than
-`String`. These ampersands represent *references*, and they allow you to refer
-to some value without taking ownership of it. Figure 4-5 depicts this concept.
+In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. If we try to read them like in the operation `format!(..)`, then that would be undefined behavior. The Rust compiler therefore rejects this program.
 
-<img alt="&amp;String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+This move behavior is extremely inconvenient. Programs often need to use a string more than once. Hypothetically, an alternative `greet` can return ownership of the strings:
 
-<span class="caption">Figure 4-5: A diagram of `&String s` pointing at `String
-s1`</span>
+```aquascope,interpreter
+fn main() {
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");
+    let (m1_again, m2_again) = greet(m1, m2);
+    let s = format!("{} {}", m1_again, m2_again);`[]`
+}
 
-> Note: The opposite of referencing by using `&` is *dereferencing*, which is
-> accomplished with the dereference operator, `*`. We’ll see some uses of the
-> dereference operator in Chapter 8 and discuss details of dereferencing in
-> Chapter 15.
-
-Let’s take a closer look at the function call here:
-
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-07-reference/src/main.rs:here}}
+fn greet(g1: String, g2: String) -> (String, String) {
+    println!("{} {}!", g1, g2);
+    (g1, g2)
+}
 ```
 
-The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
-but does not own it. Because it does not own it, the value it points to will
-not be dropped when the reference stops being used.
+However, this style of program is quite verbose. Rust provides a more concise style of reading and writing without moves through references.
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+### References Are Non-Owning Pointers
 
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-08-reference-with-annotations/src/main.rs:here}}
+A **reference** is a kind of pointer. Here's an example of a reference that rewrites our `greet` program in a more convenient manner:
+
+```aquascope,interpreter,horizontal
+fn main() {
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");`[]`
+    greet(&m1, &m2);`[]` // note the ampersands
+    let s = format!("{} {}", m1, m2);
+}
+
+fn greet(g1: &String, g2: &String) { // note the ampersands
+    `[]`println!("{} {}!", g1, g2);
+}
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but the value pointed to by the reference is not dropped
-when `s` stops being used because `s` doesn’t have ownership. When functions
-have references as parameters instead of the actual values, we won’t need to
-return the values in order to give back ownership, because we never had
-ownership.
+The expression `&m1` uses the ampersand operator to create a reference to (or "borrow") `m1`. The type of the `greet` parameter `g1` is changed to `&String`, meaning "a reference to a `String`". 
 
-We call the action of creating a reference *borrowing*. As in real life, if a
-person owns something, you can borrow it from them. When you’re done, you have
-to give it back. You don’t own it.
+<!-- At runtime, the references look like this:
 
-So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+<img src="img/experiment/ch04-02-stack1.jpg" class="center" width="350" /> -->
 
-<span class="filename">Filename: src/main.rs</span>
+Observe at L2 that there are two steps from `g1` to the string "Hello". `g1` is a reference that points to `m1` on the stack, and `m1` is a String containing a box that points to "Hello" on the heap.
 
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
+While `m1` owns the heap data "Hello", `g1` does _not_ own either `m1` or "Hello". Therefore after `greet` ends and the program reaches L3, no heap data has been deallocated. Only the stack frame for `greet` disappears. This fact is consistent with our *Moved Heap Data Principle*: because `g1` did not own "Hello", Rust did not deallocate "Hello" on behalf of `g1`.
+
+References are **non-owning pointers**, because they do not own the data they point to.
+
+### Dereferencing a Pointer Accesses Its Data
+
+The previous examples using boxes and strings have not shown how Rust "follows" a pointer to its data. For example, the `println!` macro has mysteriously worked for inputs that were both plain strings of type `String`, and references to strings of type `&String`. The underlying mechanism is the **dereference** operator, written with an asterisk (`*`). For example, here's a program that uses dereferences in a few different ways:
+
+```aquascope,interpreter
+#fn main() {
+let mut x: Box<i32> = Box::new(1);
+let a: i32 = *x;         // *x reads the heap value, so a = 1
+*x += 1;                 // *x on the left-side modifies the heap value, 
+                         //     so x points to the value 2
+
+let r1: &Box<i32> = &x;  // r1 points to x on the stack
+let b: i32 = **r1;       // two dereferences get us to the heap value
+
+let r2: &i32 = &*x;      // r2 points to the heap value directly
+let c: i32 = *r2;`[]`    // so only one dereference is needed to read it
+#}
 ```
 
-<span class="caption">Listing 4-6: Attempting to modify a borrowed value</span>
+Observe the difference between `r1` pointing to `x` on the stack, and `r2` pointing to the heap value `2`.
 
-Here’s the error:
+You probably won't see the dereference operator very often when you read Rust code. This is because Rust implicitly inserts both dereferences and references in certain cases, such as calling a method with the dot operator. For example, this program shows two equivalent ways of calling the [`i32::abs`](https://doc.rust-lang.org/std/primitive.i32.html#method.abs) (absolute value) and [`str::len`](https://doc.rust-lang.org/std/primitive.str.html#method.len) (string length) functions:
 
-```console
-{{#include ../listings/ch04-understanding-ownership/listing-04-06/output.txt}}
+```rust,ignore
+#fn main()  {
+let x: Box<i32> = Box::new(-1);
+let x_abs1 = i32::abs(*x); // explicit dereference
+let x_abs2 = x.abs();      // implicit dereference
+assert_eq!(x_abs1, x_abs2);
+
+let r: &Box<i32> = &x;
+let r_abs1 = i32::abs(**r); // explicit dereference (twice)
+let r_abs2 = r.abs();       // implicit dereference (twice)
+assert_eq!(r_abs1, r_abs2);
+
+let s = String::from("Hello");
+let s_len1 = str::len(&s); // explicit reference
+let s_len2 = s.len();      // implicit reference
+assert_eq!(s_len1, s_len2);
+#}
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+This example shows implicit conversions in three ways:
+1. The `i32::abs` function expects an input of type `i32`. To call `abs` with a `Box<i32>`, you can explicitly dereference the box like `i32::abs(*x)`, or you can implicitly dereference the box using method-call syntax like `x.abs()`. The dot syntax is syntactic sugar for the function-call syntax.
 
-{{#quiz ../quizzes/ch04-02-references-sec1-immut.toml}}
+2. This implicit conversion works for multiple layers of pointers. For example, calling `abs` on a reference to a box `r: &Box<i32>` will insert two dereferences. 
 
-### Mutable References
+3. This conversion also works the opposite direction: if a function like `str::len` expects a reference `&str`, then by providing an owned `String`, Rust will insert a single borrowing operator. (In fact, there is a further conversion from `String` to `str`!)
 
-We can fix the code from Listing 4-6 to allow us to modify a borrowed value
-with just a few small tweaks that use, instead, a *mutable reference*:
+We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is to recognize that these conversions are happening, especially with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
 
-<span class="filename">Filename: src/main.rs</span>
+{{#quiz ../quizzes/ch04-02-references-sec1-basics.toml}}
 
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-09-fixes-listing-04-06/src/main.rs}}
+### Rust Avoids Simultaneous Aliasing and Mutation
+
+Pointers are a powerful and dangerous feature because they enable **aliasing**: accessing the same data through different variables. On its own, aliasing is harmless. But combined with **mutation**, we have a recipe for disaster. One variable can "pull the rug out" from another variable in many ways, for example:
+
+- By deallocating the aliased data, leaving the other variable to point to deallocated memory.
+- By mutating the aliased data, invalidating runtime properties expected by the other variable.
+- By _concurrently_ mutating the aliased data, causing a data race with nondeterministic behavior for the other variable.
+
+Therefore Rust follows a basic principle to prevent undefined behavior:
+
+> **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
+
+Data is allowed to be aliased. Data is allowed to be mutated. But data is _not_ allowed to be _both_ aliased _and_ mutated. For example, Rust enforces this principle for boxes (owned pointers) by disallowing aliasing. Assigning a box from one variable to another will move ownership, invalidating the previous variable. Owned data can only be accessed through the owner &mdash; no aliases.
+
+However, references need different rules to enforce the *Pointer Safety Principle* because references are non-owning pointers. By design, references are meant to temporarily create aliases. In the remainder of this section, we will explain the basics of how Rust ensures the safety of programs with references through the **borrow checker.**
+
+### References Change Permissions on Paths
+
+The core idea is that variables have three kinds of **permissions** on their data:
+
+- **Read** (<span class="perm read">R</span>): data can be copied to another location.
+- **Write** (<span class="perm write">W</span>): data can be mutated in-place.
+- **Own** (<span class="perm drop">O</span>): data can be moved or dropped.
+
+These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is ever executed.
+
+By default, a variable has read/own permissions (<span class="perm read">R</span><span class="perm drop">O</span>) on its data. If a variable is annotated with `let mut`, then it also has write permissions (<span class="perm write">W</span>). The key idea is 
+that **references can temporarily remove these permissions.** 
+
+To illustrate this idea, we will use a new kind of diagram. This diagram shows the changes in permissions on each line of the program. For example:
+
+<!-- TODO: can we show unchanged permissions for variables appearing in a table? -->
+<!-- horizontal line should be vertical-aligned to bottom of the row, not middle
+     to indicate that it describes after-permissions -->
+
+```aquascope,permissions,stepper
+#fn main() {
+let mut x = String::from("Hello");
+let y: &String = &x;
+println!("{} and {}", x, y);
+x.push_str(" world");
+#}
 ```
 
-First, we change `s` to be `mut`. Then we create a mutable reference with `&mut
-s` where we call the `change` function, and update the function signature to
-accept a mutable reference with `some_string: &mut String`. This makes it very
-clear that the `change` function will mutate the value it borrows.
+Let's walk through each line:
 
-<!-- BEGIN INTERVENTION: 5080616f-6f4c-43f7-aa3a-8b23f2798937 -->
-Unlike languages like C and C++ with a single reference-creating syntax, the `&mut` operator is different from the `&` operator. The expression `&s` creates an *immutable* reference of type `&String`, while the expression `&mut s` creates a *mutable* reference of type `&mut String`. The `&` operator *cannot* be used to create a mutable reference.
-<!-- END INTERVENTION -->
+1. After `let mut x = (...)`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (the plus sign indicates gain).
+2. After `let y = &x`, the data in `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
+   - The borrow removes write/own permissions from `x` (the slash indicates loss). `x` cannot be written or owned, but it can still be read.
+   - The variable `y` has gained read/own permissions. `y` is not writable (the missing write permission is shown as a dash `-`) because it was not marked `let mut`.
+   - The **path** `*y` has gained read permissions. Note that `y` is different from `*y`! `y` is a reference to a string, while `*y` is the string itself, accessed through a reference.
+3. After `println!(...)`, `y` is no longer in use, so `x` is no longer borrowed. Therefore:
+   - `x` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
+   - `y` and `*y` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
+4. After `x.push_str(...)`, `x` is no longer in use, and it loses all of its permissions.
 
-Mutable references have one big restriction: if you have a mutable reference to
-a value, you can have no other references to that value. This code that
-attempts to create two mutable references to `s` will fail:
+Permissions are not just defined on variables (like `x` or `y`), but also on **paths** (like `*y`). A path is anything you can put on the left-hand side of an assignment. Paths include:
 
-<span class="filename">Filename: src/main.rs</span>
+- Variables, like `a`.
+- Dereferences of paths, like `*a`.
+- Array accesses of paths, like `a[0]`.
+- Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
+- Any combination of the above, like `*((*a)[0].1)`.
 
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/src/main.rs:here}}
+Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, what matters is not just *what* you're data accessing, but *how* you're accessing it.
+
+Returning to the *Pointer Safety Principle*, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
+
+
+### The Borrow Checker Finds Permission Violations
+
+Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. For example, suppose we placed the `x.push_str(...)` statement in-between the definition of `y` and the use of `y`, like this:
+
+```aquascope,permissions,boundaries,stepper,shouldFail
+#fn main() {
+let mut x = String::from("Hello");
+let y: &String = &x;`{}`
+x.push_str(" world");`{}`
+println!("{} and {}", x, y);
+#}
 ```
 
-Here’s the error:
+This example shows another kind of visualization. Any time a path is *used*, Rust expects that path to have certain permissions. For example, the borrow `&x` requires that `x` is readable, therefore the permission <span class="perm read">R</span> is shown. The letter is filled-in because `x` has the read permission at that line. 
 
-```console
-{{#include ../listings/ch04-understanding-ownership/no-listing-10-multiple-mut-not-allowed/output.txt}}
-```
+By contrast, the mutating operation `x.push_str(...)` requires that `x` is readable and writable, so both <span class="perm read">R</span> and <span class="perm write">W</span> are shown. However, `x` does not have write permissions (it is borrowed by `y`), so the letter <span class="perm write missing">W</span> is hollow, indicating that the write permission is *expected* but `x` does not have it.
 
-This error says that this code is invalid because we cannot borrow `s` as
-mutable more than once at a time. The first mutable borrow is in `r1` and must
-last until it’s used in the `println!`, but between the creation of that
-mutable reference and its usage, we tried to create another mutable reference
-in `r2` that borrows the same data as `r1`.
-
-The restriction preventing multiple mutable references to the same data at the
-same time allows for mutation but in a very controlled fashion. It’s something
-that new Rustaceans struggle with, because most languages let you mutate
-whenever you’d like. The benefit of having this restriction is that Rust can
-prevent data races at compile time. A *data race* is similar to a race
-condition and happens when these three behaviors occur:
-
-* Two or more pointers access the same data at the same time.
-* At least one of the pointers is being used to write to the data.
-* There’s no mechanism being used to synchronize access to the data.
-
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem
-by refusing to compile code with data races!
-
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not *simultaneous* ones:
-
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-11-muts-in-separate-scopes/src/main.rs:here}}
-```
-
-Rust enforces a similar rule for combining mutable and immutable references.
-This code results in an error:
-
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/src/main.rs:here}}
-```
-
-Here’s the error:
-
-```console
-{{#include ../listings/ch04-understanding-ownership/no-listing-12-immutable-and-mutable-not-allowed/output.txt}}
-```
-
-Whew! We *also* cannot have a mutable reference while we have an immutable one
-to the same value.
-
-Users of an immutable reference don’t expect the value to suddenly change out
-from under them! However, multiple immutable references are allowed because no
-one who is just reading the data has the ability to affect anyone else’s
-reading of the data.
-
-Note that a reference’s scope starts from where it is introduced and continues
-through the last time that reference is used. For instance, this code will
-compile because the last usage of the immutable references, the `println!`,
-occurs before the mutable reference is introduced:
-
-```rust,edition2021
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-13-reference-scope-ends/src/main.rs:here}}
-```
-
-The scopes of the immutable references `r1` and `r2` end after the `println!`
-where they are last used, which is before the mutable reference `r3` is
-created. These scopes don’t overlap, so this code is allowed. The ability of
-the compiler to tell that a reference is no longer being used at a point before
-the end of the scope is called *Non-Lexical Lifetimes* (NLL for short), and you
-can read more about it in [The Edition Guide][nll].
-
-Even though borrowing errors may be frustrating at times, remember that it’s
-the Rust compiler pointing out a potential bug early (at compile time rather
-than at runtime) and showing you exactly where the problem is. Then you don’t
-have to track down why your data isn’t what you thought it was.
-
-{{#quiz ../quizzes/ch04-02-references-sec2-mut.toml}}
-
-### Dangling References
-
-In languages with pointers, it’s easy to erroneously create a *dangling
-pointer*--a pointer that references a location in memory that may have been
-given to someone else--by freeing some memory while preserving a pointer to
-that memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if you have a reference to some data, the
-compiler will ensure that the data will not go out of scope before the
-reference to the data does.
-
-Let’s try to create a dangling reference to see how Rust prevents them with a
-compile-time error:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/src/main.rs}}
-```
-
-Here’s the error:
-
-```console
-{{#include ../listings/ch04-understanding-ownership/no-listing-14-dangling-reference/output.txt}}
-```
-
-This error message refers to a feature we haven’t covered yet: lifetimes. We’ll
-discuss lifetimes in detail in Chapter 10. But, if you disregard the parts
-about lifetimes, the message does contain the key to why this code is a problem:
+If you try to compile this program, then the Rust compiler will reject this program with the following error:
 
 ```text
-this function's return type contains a borrowed value, but there is no value
-for it to be borrowed from
+error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immutable
+ --> test.rs:4:1
+  |
+3 | let y = &x;
+  |         -- immutable borrow occurs here
+4 | x.push_str(" world");
+  | ^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+5 | println!("{} and {}", x, y);
+  |                          - immutable borrow later used here
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+If Rust allowed this program to compile, we would violate memory safety. The operation `x.push_str(...)` could internally cause `x` to resize, reallocating its memory to a different heap location. This reallocation would invalidate the reference `y`, so reading it in the `println` is undefined behavior.
 
-<span class="filename">Filename: src/main.rs</span>
+
+
+### Mutable References Provide Unique and Non-Owning Access to Data
+
+The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it. For example, [`String::push_str`] should extend a string without consuming ownership of it.
+
+The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
+
+```aquascope,permissions,stepper,boundaries
+#fn main() {
+let mut x = String::from("Hello");
+let y: &mut String = &mut x;
+y.push_str(" world"); 
+println!("{}", x);
+#}
+```
+
+> <div style="margin-block-start: 1em; margin-block-end: 1em"><i>Note:</i> when the expected permissions are not strictly relevant to an example, we will abbreviate them as dots like <div class="permission-stack stack-size-2"><div class="perm read"><div class="small">•</div><div class="big">R</div></div><div class="perm write"><div class="small">•</div><div class="big">W</div></div></div>. You can hover your mouse over the circles (or tap on a touchscreen) to see the corresponding permission letters.</div>
+
+A mutable reference is created with the syntax `&mut x`. The type of `y` is written as `&mut String`. You can see two important differences in the transfer of permissions compared to the previous example:
+
+1. When `y` was an immutable reference, `x` still had read permissions. Now that `y` is a mutable reference, `x` has lost _all_ permissions while `y` is in use.
+2. When `y` was an immutable reference, the path `*y` only had read permissions. Now that `y` is a mutable reference, `*y` has also gained write permissions (but not own permissions).
+
+The first observation is what makes mutable references safe. Mutable references allow mutation but prevent aliasing. The borrowed path becomes temporarily unusable (i.e. effectively not an alias).
+
+The second observation is what makes mutable references useful. `x` can be mutated through `*y`. For example, `y.push_str(...)` mutates `x`. Note that while `*y` has write permissions, `y` does not. This is because `y` refers to the mutable reference itself, e.g. `y` cannot be reassigned to a *different* mutable reference.
+
+Mutable references can also be temporarily "downgraded" to read-only references. For example:
+
+```aquascope,permissions,stepper,boundaries
+#fn main() {
+let mut x = String::from("Hello");
+let y = &mut x;
+let z = &*y;`(focus,paths:*)`
+println!("{} {}", y, z);`{}`
+#}
+```
+
+> *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
+
+In this program, the borrow `&*y` removes the write permission from `*y` but _not_ the read permission, so `println!(..)` can read both `*y` and `*z`.
+
+
+### Permissions Are Returned At The End of a Reference's Lifetime
+
+Previously, we explained that that a reference changes permissions while the reference is "in use". The phrase "in use" is describing a reference's **lifetime**, which is the range of code spanning from its birth (where the reference is created) to its death (the last time(s) the reference is used).
+
+For example, in this program, the lifetime of `y` starts with `let y = &x`, and ends with `let z = *y`:
+
+```aquascope,permissions,stepper,boundaries
+#fn main() {
+let mut x = 1;
+let y = &x;`(focus,paths:x)`
+let z = *y;`(focus,paths:x)`
+x += z;
+#}
+```
+
+The write permissions on `x` are returned to `x` after the lifetime of `y` has ended, like we have seen before.
+
+In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a simple function that capitalizes the first character in a vector of ASCII characters:
+
+```aquascope,permissions,stepper,boundaries
+fn ascii_capitalize(v: &mut Vec<char>) {
+    let c = &v[0];`(focus,paths:*v)`
+    if c.is_ascii_lowercase() {
+        let up = c.to_ascii_uppercase();`(focus,paths:*v)`
+        v[0] = up;
+    } else {`(focus,paths:*v)`
+        println!("Already capitalized: {:?}", v);
+    }
+}
+```
+
+The variable `c` has a different lifetime in each branch of the if-statement. In the then-block, `c` is used in the expression `c.to_ascii_uppercase()`. Therefore `*v` does not regain write permissions until after that line.
+
+However, in the else-block, `c` is not used. Therefore `*v` immediately regains write permissions on entry to the else-block.
+
+
+### Data Must Outlives All Of Its References
+
+One final safety property for references is that **data must outlives its references.** For example, consider this function that adds a reference to a vector of references:
 
 ```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-15-dangling-reference-annotated/src/main.rs:here}}
+fn add_ref(v: &mut Vec<&i32>, n: i32) {
+    let r = &n;
+    v.push(r);
+}
 ```
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`. That’s no good! Rust
-won’t let us do this.
+Rust will reject this function with the following error:
 
-The solution here is to return the `String` directly:
-
-```rust
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-16-no-dangle/src/main.rs:here}}
+```text
+error[E0597]: `n` does not live long enough
+ --> src/lib.rs:2:13
+  |
+1 | fn add_ref(v: &mut Vec<&i32>, n: i32) {
+  |                        - let's call the lifetime of this reference `'1`
+2 |     let r = &n;
+  |             ^^ borrowed value does not live long enough
+3 |     v.push(r);
+  |     --------- argument requires that `n` is borrowed for `'1`
+4 | }
+  |  - `n` dropped here while still borrowed
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+The argument `n` only lives for the duration of `add_ref`. However, the reference `r` is being pushed into `v`, and `v` lives longer than `add_ref`. Therefore Rust complains that the data (`n`) does not outlive all of its references (`r`).
 
-### The Rules of References
+If this function were allowed, we could call `add_ref` like this:
 
-Let’s recap what we’ve discussed about references:
+```aquascope,interpreter,shouldFail
+fn add_ref(v: &mut Vec<&i32>, n: i32) {
+    let r = &n;
+    v.push(r);`[]`    
+}
+fn main() {
+    let mut nums = Vec::new();
+    add_ref(&mut nums, 0);
+    println!("{}", nums[0]);`[]`
+}
+```
 
-* At any given time, you can have *either* one mutable reference *or* any
-  number of immutable references.
-* References must always be valid.
+At L1, by pushing `&n` into `v`, the vector now contains a reference to data within the frame for `add_ref`. However, when `add_ref` returns, its frame is deallocated. Therefore the reference in the vector points to deallocated memory. Using the reference by printing `v[0]` violates memory safety.
 
-Next, we’ll look at a different kind of reference: slices.
+{{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
 
-[nll]: https://doc.rust-lang.org/edition-guide/rust-2018/ownership-and-lifetimes/non-lexical-lifetimes.html
-[methods]: ch05-03-method-syntax.html
-[smartpointers]: ch15-00-smart-pointers.html
-[interior]: ch15-05-interior-mutability.html
+### Summary
+
+References provide the ability to read and write data without consuming ownership of it. References are created with borrows (`&` and `&mut`) and used with dereferences (`*`), often implicitly.
+
+However, references can be easily misused, so Rust's borrow checker enforces a system of permissions to ensure that references are used safely:
+
+- All variables can read, own, and (optionally) write their data.
+- Creating a reference will transfer permissions from the borrowed path to the reference.
+- Permissions are returned once the reference's lifetime has ended.
+- Data must outlive all references that point to it.
+
+In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is enabling without garbage collection while avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler down the road.
+
+[`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str

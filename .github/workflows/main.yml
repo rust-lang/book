@@ -15,7 +15,7 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master 
+    - uses: actions/checkout@master
 
     - uses: actions/setup-node@v3
       with:
@@ -48,10 +48,16 @@ jobs:
         rustup --version
         rustc -Vv
         mdbook --version
-    
-    - name: Install mdbook-quiz
+
+    - uses: davidB/rust-cargo-make@v1 
+    - name: Install mdbook-aquascope
       run: |
-        cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor
+        git clone https://github.com/cognitive-engineering-lab/aquascope
+        cd aquascope        
+        cargo make install-mdbook
+        
+    - name: Install mdbook-quiz
+      run: cargo install --git https://github.com/cognitive-engineering-lab/mdbook-quiz --debug --features rust-editor --features aquascope
 
     - name: Install js-extensions
       run: |
@@ -61,6 +67,9 @@ jobs:
     - name: Run mdbook tests
       run: mdbook test
     
+    - name: Build mdbook
+      run: mdbook build
+
     - name: Build mdbook
       run: mdbook build
 

@@ -1,0 +1,47 @@
+[[questions]]
+id = "8c9f9173-c5ba-4914-9cfa-e3432f8414e1"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following is NOT a valid kind of fix to the issue of returning a stack reference from a function?
+"""
+answer.answer = "Extend the lifetime of the stack frame"
+prompt.distractors = ["Use a reference-counted pointer", "Move ownership of the returned value", "Expect a mutable slot from the caller"]
+context = """
+A stack frame cannot have its lifetime extended, so that is not a valid solution.
+"""
+
+[[questions]]
+id = "cbe8ef63-4f7e-45fd-b11f-e6eba40587b0"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best explains why an `i32` can be copied without a move, but a `String` cannot?
+"""
+answer.answer = "A `String` owns data on the heap, while an `i32` does not"
+prompt.distractors = [
+    "An `i32` is smaller in memory than a `String`",
+    "An `i32` is a primitive type in Rust, while a `String` is not",
+    "A `String` can be placed on the heap, while an `i32` can only be placed on the stack"
+]
+context = """
+If a value owns data on the heap, then copying it creates an alias, and so it is moved-on-copy.
+"""
+
+[[questions]]
+id = "1f48fda5-afc6-440b-a9aa-53dc8d54efaa"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let mut point = [0, 1];
+    let mut x = point[0];
+    let y = &mut point[1];
+    x += 1;
+    *y += 1;
+    println!("{} {}", point[0], point[1]);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "0 2"
+context = """
+This program does compile, as the binding of `x` copies `point[0]`, allowing `y` to mutable borrow `point[]`.
+The mutation `x += 1` does not affect `point`, while the mutation `*y += 1` does, so the final result is `0 2`.
+"""
