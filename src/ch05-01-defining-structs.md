@@ -29,8 +29,21 @@ struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
+```aquascope,interpreter
+#struct User {
+#    active: bool,
+#    username: String,
+#    email: String,
+#    sign_in_count: u64,
+#}
+fn main() {
+    let user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };`[]`
+}
 ```
 
 <span class="caption">Listing 5-2: Creating an instance of the `User`
@@ -42,8 +55,23 @@ mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the `email`
 field of a mutable `User` instance.
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
+```aquascope,interpreter
+#struct User {
+#    active: bool,
+#    username: String,
+#    email: String,
+#    sign_in_count: u64,
+#}
+fn main() {
+    let mut user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };`[]`
+
+    user1.email = String::from("anotheremail@example.com");`[]`
+}
 ```
 
 <span class="caption">Listing 5-3: Changing the value in the `email` field of a
@@ -102,8 +130,29 @@ First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
 otherwise use the same values from `user1` that we created in Listing 5-2.
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
+```aquascope,interpreter
+#struct User {
+#    active: bool,
+#    username: String,
+#    email: String,
+#    sign_in_count: u64,
+#}
+fn main() {
+#   let user1 = User {
+#      email: String::from("someone@example.com"),
+#      username: String::from("someusername123"),
+#      active: true,
+#      sign_in_count: 1,
+#   };
+    // --snip--
+
+    let user2 = User {
+        active: user1.active,
+        username: user1.username,
+        email: String::from("another@example.com"),
+        sign_in_count: user1.sign_in_count,
+    };`[]`
+}
 ```
 
 <span class="caption">Listing 5-6: Creating a new `User` instance using one of
@@ -152,8 +201,14 @@ To define a tuple struct, start with the `struct` keyword and the struct name
 followed by the types in the tuple. For example, here we define and use
 two tuple structs named `Color` and `Point`:
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs}}
+```aquascope,interpreter
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+
+fn main() {
+    let black = Color(0, 0, 0);
+    let origin = Point(0, 0, 0);`[]`
+}
 ```
 
 Note that the `black` and `origin` values are different types, because they’re
@@ -175,8 +230,12 @@ have any data that you want to store in the type itself. We’ll discuss traits
 in Chapter 10. Here’s an example of declaring and instantiating a unit struct
 named `AlwaysEqual`:
 
-```rust
-{{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs}}
+```aquascope,interpreter
+struct AlwaysEqual;
+
+fn main() {
+    let subject = AlwaysEqual;`[]`
+}
 ```
 
 To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
@@ -292,7 +351,7 @@ fn print_point(p: &Point) {
 fn main() {
     let mut p = Point { x: 0, y: 0 };`(focus,paths:p)`
     let x = &mut p.x;`(focus,paths:p)`
-    print_point(&p);
+    print_point(&p);`{}`
     *x += 1;`(focus,paths:p)`
 }
 ```

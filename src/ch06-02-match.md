@@ -251,7 +251,7 @@ There’s more about patterns and matching that we’ll cover in [Chapter
 
 If an enum contains non-copyable data like a String, then you should be careful with whether a match will move or borrow that data. For example, this program using an `Option<String>` will compile:
 
-```rust
+```aquascope,permissions,stepper,boundaries
 # fn main() {
 let opt: Option<String> = Some(String::from("Hello world"));
 
@@ -266,7 +266,6 @@ println!("{:?}", opt);
 
 But if we replace the placeholder in `Some(_)` with a variable name, like `Some(s)`, then the program will NOT compile:
 
-<!-- TODO: FIX ALL THE ISSUES IN THIS DIAGRAM, THEN UPDATE THIS SECTION -->
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
 let opt: Option<String> = 
@@ -278,11 +277,12 @@ match opt {
     None => println!("None!")
 };
 
-println!("{:?}", opt);
+println!("{:?}", opt);`{}`
 #}
 ```
 
-`opt` is a plain enum &mdash; its type is `Option<String>` and not a reference like `&Option<String>`. Therefore a match on `opt` will move non-ignored fields like `s`. After the match expression, the data within `opt` has been moved, so it is illegal to use `opt` in the `println`.
+
+`opt` is a plain enum &mdash; its type is `Option<String>` and not a reference like `&Option<String>`. Therefore a match on `opt` will move non-ignored fields like `s`. Notice how `opt` loses read and own permission sooner in the second program compared to the first. After the match expression, the data within `opt` has been moved, so it is illegal to read `opt` in the `println`.
 
 If we want to peek into `opt` without moving its contents, the idiomatic solution is to match on a reference:
 

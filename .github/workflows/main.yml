@@ -60,9 +60,10 @@ jobs:
         git clone -b dev https://github.com/willcrichton/aquascope
         cd aquascope        
         cargo make init-bindings
-        cd frontend && graco prepare
-        cargo +nightly-2022-12-07 miri setup
+        cd frontend && graco prepare && cd ..
+        cargo miri setup
         cargo install --path crates/mdbook-aquascope        
+        cargo install --path crates/aquascope_front
 
     - name: Install js-extensions
       run: |

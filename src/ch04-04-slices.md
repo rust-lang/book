@@ -73,7 +73,7 @@ uses the `first_word` function from Listing 4-7.
 
 <span class="filename">Filename: src/main.rs</span>
 
-```aquascope,interpreter
+```aquascope,interpreter+permissions,boundaries,stepper,horizontal
 fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
@@ -87,17 +87,17 @@ fn first_word(s: &String) -> usize {
 }
 
 fn main() {
-    let mut s = String::from("hello world");
+    let mut s = String::from("hello world");`(focus)`
     let word = first_word(&s);`[]`
-    s.clear();`[]`
+    s.clear();`[]``{}`    
 }
 ``` 
 
 <span class="caption">Listing 4-8: Storing the result from calling the
 `first_word` function and then changing the `String` contents</span>
 
-This program compiles without any errors and would also do so if we used `word`
-after calling `s.clear()`. Because `word` isn’t connected to the state of `s`
+This program compiles without any errors, as `s` retains write permissions
+after calling `first_word`. Because `word` isn’t connected to the state of `s`
 at all, `word` still contains the value `5`. We could use that value `5` with
 the variable `s` to try to extract the first word out, but this would be a bug
 because the contents of `s` have changed since we saved `5` in `word`.
@@ -244,16 +244,32 @@ first word but then cleared the string so our index was invalid? That code was
 logically incorrect but didn’t show any immediate errors. The problems would
 show up later if we kept trying to use the first word index with an emptied
 string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile-time error:
+our code much sooner. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore,does_not_compile
-{{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/src/main.rs:here}}
+```aquascope,permissions,boundaries,stepper
+#fn first_word(s: &String) -> &str {
+#    let bytes = s.as_bytes();
+#
+#    for (i, &item) in bytes.iter().enumerate() {
+#        if item == b' ' {
+#            return &s[0..i];
+#        }
+#    }
+#
+#    &s[..]
+#}
+fn main() {
+    let mut s = String::from("hello world");
+    let word = first_word(&s);`(focus,paths:s)`
+    s.clear();`{}`
+    println!("the first word is: {}", word);
+}
 ```
 
-Here’s the compiler error:
+You can see that calling `first_word` now removes the write permission from `s`,
+which prevents us from calling `s.clear()`. Here’s the compiler error:
 
 ```console
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}

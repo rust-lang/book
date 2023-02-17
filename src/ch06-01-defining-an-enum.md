@@ -59,8 +59,28 @@ only know what _kind_ it is. Given that you just learned about structs in
 Chapter 5, you might be tempted to tackle this problem with structs as shown in
 Listing 6-1.
 
-```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/listing-06-01/src/main.rs:here}}
+```aquascope,interpreter
+#fn main() {
+enum IpAddrKind {
+    V4,
+    V6,
+}
+
+struct IpAddr {
+    kind: IpAddrKind,
+    address: String,
+}
+
+let home = IpAddr {
+    kind: IpAddrKind::V4,
+    address: String::from("127.0.0.1"),
+};
+
+let loopback = IpAddr {
+    kind: IpAddrKind::V6,
+    address: String::from("::1"),
+};`[]`
+#}
 ```
 
 <span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
@@ -80,8 +100,17 @@ rather than an enum inside a struct, we can put data directly into each enum
 variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
 variants will have associated `String` values:
 
-```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-02-enum-with-data/src/main.rs:here}}
+```aquascope,interpreter
+#fn main() {    
+enum IpAddr {
+    V4(String),
+    V6(String),
+}
+
+let home = IpAddr::V4(String::from("127.0.0.1"));
+
+let loopback = IpAddr::V6(String::from("::1"));`[]`
+#}
 ```
 
 We attach data to each variant of the enum directly, so there is no need for an
@@ -99,8 +128,18 @@ between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
 still express `V6` addresses as one `String` value, we wouldn’t be able to with
 a struct. Enums handle this case with ease:
 
-```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-03-variants-with-different-data/src/main.rs:here}}
+```aquascope,interpreter
+#fn main() {
+enum IpAddr {
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+
+let home = IpAddr::V4(127, 0, 0, 1);
+
+let loopback = IpAddr::V6(String::from("::1"));`[]`
+#}
+
 ```
 
 We’ve shown several different ways to define data structures to store version
@@ -249,8 +288,13 @@ type that gets used in place of `T` makes the overall `Option<T>` type a
 different type. Here are some examples of using `Option` values to hold number
 types and string types:
 
-```rust
-{{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
+```aquascope,interpreter
+#fn main() {
+let some_number = Some(5);
+let some_char = Some('e');
+
+let absent_number: Option<i32> = None;`[]`
+#}
 ```
 
 The type of `some_number` is `Option<i32>`. The type of `some_char` is
