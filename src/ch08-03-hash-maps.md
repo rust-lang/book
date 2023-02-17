@@ -15,7 +15,8 @@ name, you can retrieve its score.
 
 We’ll go over the basic API of hash maps in this section, but many more goodies
 are hiding in the functions defined on `HashMap<K, V>` by the standard library.
-As always, check the standard library documentation for more information.
+As always, check the [standard library documentation][hash-map-api]<!-- ignore -->
+for more information.
 
 ### Creating a New Hash Map
 
@@ -240,3 +241,4 @@ a perfect time to discuss error handling. We’ll do that next!
 [validating-references-with-lifetimes]:
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [access]: #accessing-values-in-a-hash-map
+[hash-map-api]: ../std/collections/hash_map/struct.HashMap.html
