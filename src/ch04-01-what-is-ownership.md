@@ -4,7 +4,7 @@ Ownership is a discipline for ensuring the **safety** of Rust programs. To under
 
 ### Safety is the Absence of Undefined Behavior
 
-To start with an example, here is a program that safe to execute:
+To start with an example, here is a program that is safe to execute:
 
 ```rust
 fn read(y: bool) {}
