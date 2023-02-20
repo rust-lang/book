@@ -221,6 +221,18 @@ To avoid this situation, we finally arrive at ownership. When `a` is bound to `B
 
 In the example above, `b` owns the boxed array. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
 
+A common misconception is that a "move" actually moves data around in memory. But that is not true! A move is "just" a copy. For example, let's look again at what happens when we move a box from `a` to `b`:
+
+```aquascope,interpreter
+#fn main() {
+let a = Box::new([0; 1_000_000]);`[]`
+let b = a;`[]`
+#}
+```
+
+The big array did not change its location in memory anywhere. `a` did not change its location in memory. The only thing that happens at runtime is the *pointer* in `a` is copied into `b`. Conceptually, what's moving is *ownership* of the boxed array, not the array itself, nor the owner of the array.
+
+
 ### Collections Use Boxes
 
 Boxes are used by Rust data structures[^boxed-data-structures] like [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html), [`String`](https://doc.rust-lang.org/std/string/struct.String.html), and [`HashMap`](https://doc.rust-lang.org/std/collections/struct.HashMap.html) to hold a variable number of elements. For example, here's a program that creates, moves, and mutates a string:
@@ -285,7 +297,7 @@ This error identifies that `first` is moved by `add_suffix`, and therefore it ca
 
 ### Summary
 
-Ownership is primarily a discipline of heap management:
+Ownership is primarily a discipline of heap management:[^pointer-management]
 
 - All heap data must be owned by exactly one variable.
 - Rust deallocates heap data once its owner goes out of scope.
@@ -295,3 +307,5 @@ Ownership is primarily a discipline of heap management:
 In this explanation, we have repeatedly emphasized not just _how_ Rust's safeguards work, but _why_ they avoid undefined behavior. When you get an error message from the Rust compiler, it's easy to get frustrated if you don't understand why Rust is complaining. Hopefully the models of memory and ownership we describe here will help you in the future with interpreting Rust's error messages and with designing more Rustic APIs.
 
 [^boxed-data-structures]: These data structures don't use the literal `Box` type. For example, `String` is implemented with `Vec`, and `Vec` is implemented with [`RawVec`](https://doc.rust-lang.org/nomicon/vec/vec-raw.html) rather than `Box`. But types like `RawVec` are still box-like: they own memory in the heap.
+
+[^pointer-management]: In another sense, ownership is a discipline of *pointer* management. But we haven't described yet about how to create pointers to anywhere other than the heap. We'll get there in the next section.
