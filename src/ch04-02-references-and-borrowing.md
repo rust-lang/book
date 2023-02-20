@@ -181,7 +181,7 @@ Permissions are not just defined on variables (like `x` or `y`), but also on **p
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
 - Any combination of the above, like `*((*a)[0].1)`.
 
-Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, what matters is not just *what* you're data accessing, but *how* you're accessing it.
+Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, what matters is not just *what* data you're accessing, but *how* you're accessing it.
 
 Returning to the *Pointer Safety Principle*, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
