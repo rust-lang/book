@@ -167,13 +167,15 @@ Let's walk through each line:
 2. After `let y = &x`, the data in `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
    - The borrow removes write/own permissions from `x` (the slash indicates loss). `x` cannot be written or owned, but it can still be read.
    - The variable `y` has gained read/own permissions. `y` is not writable (the missing write permission is shown as a dash `-`) because it was not marked `let mut`.
-   - The **path** `*y` has gained read permissions. Note that `y` is different from `*y`! `y` is a reference to a string, while `*y` is the string itself, accessed through a reference.
-3. After `println!(...)`, `y` is no longer in use, so `x` is no longer borrowed. Therefore:
+   - The **path** `*y` has gained read permissions.
+3. After `println!(...)`, then `y` is no longer in use, so `x` is no longer borrowed. Therefore:
    - `x` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
    - `y` and `*y` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
-4. After `x.push_str(...)`, `x` is no longer in use, and it loses all of its permissions.
+4. After `x.push_str(...)`, then `x` is no longer in use, and it loses all of its permissions.
 
-Permissions are not just defined on variables (like `x` or `y`), but also on **paths** (like `*y`). A path is anything you can put on the left-hand side of an assignment. Paths include:
+Next, let's explore a few nuances of the diagram. First, why do you see both `y` and `*y`? That's because it's different to access data through a reference, versus to manipulate the reference itself. For example, you could do `let z = y` (because `y` has own permissions), but you could not do `let z = *y` (because `*y` does not have own permissions).
+
+More generally, permissions are defined over **paths** and not just variables. A path is anything you can put on the left-hand side of an assignment. Paths include:
 
 - Variables, like `a`.
 - Dereferences of paths, like `*a`.
@@ -181,12 +183,26 @@ Permissions are not just defined on variables (like `x` or `y`), but also on **p
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
 - Any combination of the above, like `*((*a)[0].1)`.
 
-Note that permissions are *not* defined on data. For example, in the program above, the string "Hello" does not have permissions, but the paths to it (`x` and `*y`) do have permissions. In the discipline of ownership, what matters is not just *what* data you're accessing, but *how* you're accessing it.
+Second, why do paths lose permissions when they are unused? This is because some permissions are mutually exclusive: if `y = &x`, then `x` cannot be dropped while `y` is in use. But that doesn't mean it's invalid to use `y` for more or less time. For example, say we add another `print` to the above program:
 
-Returning to the *Pointer Safety Principle*, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
+
+```aquascope,permissions,stepper
+#fn main() {
+let mut x = String::from("Hello");
+let y: &String = &x;
+println!("{} and {}", x, y);
+// vvvv   added this line
+println!("using y again: {}", y);
+x.push_str(" world");
+#}
+```
+
+In this case, `y` simply loses permissions after the second print rather than the first. However, some changes to this program can cause serious problems.
 
 
 ### The Borrow Checker Finds Permission Violations
+
+Returning to the *Pointer Safety Principle*, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
 Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. For example, suppose we placed the `x.push_str(...)` statement in-between the definition of `y` and the use of `y`, like this:
 
