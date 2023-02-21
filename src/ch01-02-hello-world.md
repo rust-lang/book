@@ -42,10 +42,11 @@ For Windows CMD, enter this:
 
 ### Writing and Running a Rust Program
 
-Next, make a new source file and call it *main.rs*. Rust files always end with
-the *.rs* extension. If you’re using more than one word in your filename, the
-convention is to use an underscore to separate them. For example, use
-*hello_world.rs* rather than *helloworld.rs*.
+Next, assuming you had your way making new file and edit it from a terminal.
+Make a new one and call it *main.rs*. It'll be the source file of you hello
+world program. Rust files always end with the *.rs* extension. If you’re using
+more than one word in your filename, the convention is to use an underscore to
+separate them. For example, use *hello_world.rs* rather than *helloworld.rs*.
 
 Now open the *main.rs* file you just created and enter the code in Listing 1-1.
 
