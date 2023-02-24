@@ -17,7 +17,7 @@
 
 ### 환영합니다!
 
-[![빌드 상태](https://api.travis-ci.com/rinthel/rust-lang-book-ko.svg?branch=master)](https://app.travis-ci.com/github/rinthel/rust-lang-book-ko)
+[![빌드 상태](https://github.com/rinthel/rust-lang-book-ko/actions/workflows/build.yml/badge.svg)](https://github.com/rinthel/rust-lang-book-ko/actions/workflows/build.yml)
 
 안녕하세요? 한국어를 쓰시는 러스트 유저 여러분들을 환영합니다.
 이 저장소는 러스트 프로그래밍 언어 문서(소위 the book이라고 일컫는)의
