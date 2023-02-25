@@ -236,8 +236,7 @@ useful in Chapter 10, where we discuss generic types and traits.
 
 ### Methods and Ownership
 
-Just like we discussed in Chapter 4.2 ["References and Borrowing"](ch04-02-references-and-borrowing.html), methods can only be called on structs
-with that have the appropriate permissions. As a running example, we will use these three methods that take `&self`, `&mut self`, and `self`, respectively.
+Just like we discussed in Chapter 4.2 ["References and Borrowing"](ch04-02-references-and-borrowing.html), methods can only be called on structs that have the appropriate permissions. As a running example, we will use these three methods that take `&self`, `&mut self`, and `self`, respectively.
 
 ```rust,ignore
 impl Rectangle {    
@@ -260,7 +259,7 @@ impl Rectangle {
 
 #### Reads and Writes with `&self` and `&mut self`
 
-If we make an owned rectangle with `let rect = Rectangle { ... }`, then we have read and own permissions. With those permissions, it is acceptable to call `area` and `max`:
+If we make an owned rectangle with `let rect = Rectangle { ... }`, then we have read and own permissions on `rect`. With those permissions, it is acceptable to call `area` and `max`:
 
 ```aquascope,permissions,boundaries,stepper
 #struct Rectangle {
@@ -384,7 +383,7 @@ rect_ref.set_width(2);`{}` // but this is still not ok
 
 #### Moves with `self`
 
-Remember that calling a method that expects `self` will move the struct (unless it implements the `Copy` trait). For example, we cannot use a rectangle after passing it to `max`:
+Recall that calling a method that expects `self` will move the input struct (unless the struct implements the `Copy` trait). For example, we cannot use a `Rectangle` after passing it to `max`:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -438,7 +437,7 @@ error[E0382]: borrow of moved value: `rect`
    |                ^^^^^^^^^^^ value borrowed here after move
 ```
 
-A similar situation arises if we try to call `self` method on a reference. For instance, say we tried to make a `set_to_max` that assigns `self` to the output of `self.max(..)`:
+A similar situation arises if we try to call `self` method on a reference. For instance, say we tried to make a method `set_to_max` that assigns `self` to the output of `self.max(..)`:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -481,6 +480,8 @@ error[E0507]: cannot move out of `*self` which is behind a mutable reference
    |                 move occurs because `*self` has type `Rectangle`, which does not implement the `Copy` trait
    |
 ```
+
+This is the same kind of error we discussed in Chapter 4.3 ["Copying vs. Moving Out of a Data Structure"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-data-structure).
 
 #### Good Moves and Bad Moves
 
@@ -538,9 +539,9 @@ impl Rectangle {
 }
 ```
 
-Notice now that `*self` has own permissions. We are allowed to copy out of it, or call a `self` method like `max` on it.
+Notice that unlike before, `*self` now has own permissions. We are allowed to call an owned-self method like `max`.
 
-You might wonder: why doesn't Rust automatically derive `Copy` for `Rectangle`? Rust chooses not to for stability across API changes. If the author of the `Rectangle` type decided to add a `name: String` field, then all client code that relies on `Rectangle` being `Copy` would suddenly break. To avoid that issue, API authors must explicitly add `#[derive(Copy)]` to indicate that they expect their type to always be `Copy`.
+You might wonder: why doesn't Rust automatically derive `Copy` for `Rectangle`? Rust does not auto-derive `Copy` for stability across API changes. If the author of the `Rectangle` type decided to add a `name: String` field, then all client code that relies on `Rectangle` being `Copy` would suddenly get rejected by the compiler. To avoid that issue, API authors must explicitly add `#[derive(Copy)]` to indicate that they expect their type to always be `Copy`.
 
 To better understand the issue, let's run a simulation. Say we added `name: String` to `Rectangle`. What would happen if Rust allowed `set_to_max` to compile?
 
@@ -584,9 +585,9 @@ fn main() {
 }
 ```
 
-In this program, we call `set_to_max` with two rectangles `r1` and `r2`. `self` is a mutable reference to `r1` and `other` is a move of `r2`. After calling `self.max(other)`, the `max` method consumes ownership of both rectangles, and deallocates both strings "r1" and "r2" in the heap before returning. Notice the problem: at this point, `*self` is supposed to be readable and writable, but we have deallocated `(*self).name` (actually `r1.name`).
+In this program, we call `set_to_max` with two rectangles `r1` and `r2`. `self` is a mutable reference to `r1` and `other` is a move of `r2`. After calling `self.max(other)`, the `max` method consumes ownership of both rectangles, and deallocates both strings "r1" and "r2" in the heap before returning. Notice the problem: at the location L2, `*self` is supposed to be readable and writable. However, `(*self).name` (actually `r1.name`) has been deallocated.
 
-Therefore when we do `*self = max`, we encounter undefined behavior. Specifically, when we overwrite `*self`, Rust will (normally) implicitly drop the data previously in `*self`. To make that behavior explicit, we have added `drop(*self)`. After calling `drop(*self)`, Rust attempts to free `(*self).name` a second time. That action is a double-free, which is undefined behavior.
+Therefore when we do `*self = max`, we encounter undefined behavior. Specifically, when we overwrite `*self`, Rust will implicitly drop the data previously in `*self`. To make that behavior explicit, we have added `drop(*self)`. After calling `drop(*self)`, Rust attempts to free `(*self).name` a second time. That action is a double-free, which is undefined behavior.
 
 So remember: when you see an error like "cannot move out of `*self`", that's usually because you're trying to call a `self` method on a reference like `&self` or `&mut self`. Rust is protecting you from a double-free.
 
