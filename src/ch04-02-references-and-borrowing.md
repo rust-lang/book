@@ -315,9 +315,50 @@ The variable `c` has a different lifetime in each branch of the if-statement. In
 However, in the else-block, `c` is not used. Therefore `*v` immediately regains write permissions on entry to the else-block.
 
 
-### Data Must Outlives All Of Its References
+### Data Must Outlive All Of Its References
 
-One final safety property for references is that **data must outlives its references.** For example, consider this function that adds a reference to a vector of references:
+One final safety property for references is that **data must outlive any references to it.** For example, let's say we tried to return a reference to data inside a function:
+
+```rust,ignore,does_not_compile
+fn return_a_string() -> &String {
+    let s = String::from("Hello world");
+    let s_ref = &s;
+    s_ref
+}
+```
+
+Rust will refuse to compile this program. It will give you a somewhat mysterious error message:
+
+```text
+error[E0106]: missing lifetime specifier
+ --> test.rs:1:25
+  |
+1 | fn return_a_string() -> &String {
+  |                         ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
+```
+
+We will talk more about named lifetime parameters in Chapter 10.3, ["Validating References with Lifetimes"](ch10-03-lifetime-syntax.html). But the actual safety issue underlying this error can be demonstrated by simulating the program in the right conditions:
+
+```aquascope,interpreter,shouldFail,horizontal
+fn return_a_string() -> &String {
+    let s = String::from("Hello world");
+    let s_ref = &s;`[]`
+    s_ref
+}
+
+fn main() {
+  let s_main = return_a_string();`[]`
+  println!("{}", s_main);`[]`
+}
+```
+
+This program is unsafe because `s_ref` points to a variable `s` within the stack frame of `return_a_string` (at L1). When `return_a_string` ends, `s` and its heap data are deallocated. This leaves `s_ref` pointing to freed memory (at L2).  That's not a problem on its own &mdash; but then we try to *use* `s_ref` by returning it to `main`, and reading it as the variable `s_main` (at L3). That read of freed memory is undefined behavior.
+
+In sum, it's unsafe to return a reference to data on a function's stack frame, and to then use that reference. The reference cannot outlive the data.
+
+As a more interesting example, let's say we tried to add a reference to a vector of references:
 
 ```rust,ignore,does_not_compile
 fn add_ref(v: &mut Vec<&i32>, n: i32) {
@@ -326,7 +367,7 @@ fn add_ref(v: &mut Vec<&i32>, n: i32) {
 }
 ```
 
-Rust will reject this function with the following error:
+Rust will also reject this function, but with a different error:
 
 ```text
 error[E0597]: `n` does not live long enough
