@@ -128,6 +128,7 @@ private in Chapter 7.
 > that Rust makes borrowing implicit for method receivers is a big part of
 > making ownership ergonomic in practice.
 
+
 ### Methods with More Parameters
 
 Let’s practice using methods by implementing a second method on the `Rectangle`
@@ -183,6 +184,7 @@ desired output. Methods can take multiple parameters that we add to the
 signature after the `self` parameter, and those parameters work just like
 parameters in functions.
 
+
 ### Associated Functions
 
 All functions defined within an `impl` block are called *associated functions*
@@ -231,6 +233,363 @@ blocks</span>
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
 useful in Chapter 10, where we discuss generic types and traits.
+
+### Methods and Ownership
+
+Just like we discussed in Chapter 4.2 ["References and Borrowing"](ch04-02-references-and-borrowing.html), methods can only be called on structs
+with that have the appropriate permissions. As a running example, we will use these three methods that take `&self`, `&mut self`, and `self`, respectively.
+
+```rust,ignore
+impl Rectangle {    
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn set_width(&mut self, width: u32) {
+        self.width = width;
+    }
+
+    fn max(self, other: Rectangle) -> Rectangle {
+        Rectangle { 
+            width: self.width.max(other.width),
+            height: self.height.max(other.height),
+        }
+    }
+}
+```
+
+#### Reads and Writes with `&self` and `&mut self`
+
+If we make an owned rectangle with `let rect = Rectangle { ... }`, then we have read and own permissions. With those permissions, it is acceptable to call `area` and `max`:
+
+```aquascope,permissions,boundaries,stepper
+#struct Rectangle {
+#    width: u32,
+#    height: u32,
+#}
+#impl Rectangle {    
+#  fn area(&self) -> u32 {
+#    self.width * self.height
+#  }
+#
+#  fn set_width(&mut self, width: u32) {
+#    self.width = width;
+#  }
+#
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+#}
+#fn main() {
+let rect = Rectangle {
+    width: 0,
+    height: 0
+};`(focus,rxpaths:^rect$)`
+println!("{}", rect.area());`{}`
+
+let other_rect = Rectangle { width: 1, height: 1 };
+let max_rect = rect.max(other_rect);`{}`
+#}
+```
+
+However, if we try to call `set_width`, we are missing the write permission:
+
+```aquascope,permissions,boundaries,shouldFail
+#struct Rectangle {
+#    width: u32,
+#    height: u32,
+#}
+#impl Rectangle {    
+#  fn area(&self) -> u32 {
+#    self.width * self.height
+#  }
+#
+#  fn set_width(&mut self, width: u32) {
+#    self.width = width;
+#  }
+#
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+#}
+#fn main() {
+let rect = Rectangle {
+    width: 0,
+    height: 0
+};
+rect.set_width(0);`{}`
+#}
+```
+
+Rust will reject this program with the corresponding error:
+
+```text
+error[E0596]: cannot borrow `rect` as mutable, as it is not declared as mutable
+  --> test.rs:28:1
+   |
+24 | let rect = Rectangle {
+   |     ---- help: consider changing this to be mutable: `mut rect`
+...
+28 | rect.set_width(0);
+   | ^^^^^^^^^^^^^^^^^ cannot borrow as mutable
+```
+
+We will get a similar error if we try to call `set_width` on an immutable reference to a `Rectangle`, even if the underlying data is mutable:
+
+```aquascope,permissions,boundaries,stepper,shouldFail
+#struct Rectangle {
+#    width: u32,
+#    height: u32,
+#}
+#impl Rectangle {    
+#  fn area(&self) -> u32 {
+#    self.width * self.height
+#  }
+#
+#  fn set_width(&mut self, width: u32) {
+#    self.width = width;
+#  }
+#
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+#}
+#fn main() {
+// Added the mut keyword to the let-binding
+let mut rect = Rectangle {
+    width: 0,
+    height: 0
+};`(focus,rxpaths:^rect$)`
+rect.set_width(1);`{}`     // this is now ok
+
+let rect_ref = &rect;`(focus,rxpaths:^\*rect_ref$)`
+rect_ref.set_width(2);`{}` // but this is still not ok
+#}
+```
+
+#### Moves with `self`
+
+Remember that calling a method that expects `self` will move the struct (unless it implements the `Copy` trait). For example, we cannot use a rectangle after passing it to `max`:
+
+```aquascope,permissions,boundaries,stepper,shouldFail
+#struct Rectangle {
+#    width: u32,
+#    height: u32,
+#}
+#impl Rectangle {    
+#  fn area(&self) -> u32 {
+#    self.width * self.height
+#  }
+#
+#  fn set_width(&mut self, width: u32) {
+#    self.width = width;
+#  }
+#
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+#}
+#fn main() {
+let rect = Rectangle {
+    width: 0,
+    height: 0
+};`(focus,rxpaths:^rect$)`
+let other_rect = Rectangle { 
+    width: 1, 
+    height: 1 
+};
+let max_rect = rect.max(other_rect);`(focus,rxpaths:^rect$)`
+println!("{}", rect.area());`{}`
+#}
+```
+
+Once we call `rect.max(..)`, we move `rect` and so lose all permissions on it. Trying to compile this program would give us the following error:
+
+```text
+error[E0382]: borrow of moved value: `rect`
+  --> test.rs:33:16
+   |
+24 | let rect = Rectangle {
+   |     ---- move occurs because `rect` has type `Rectangle`, which does not implement the `Copy` trait
+...
+32 | let max_rect = rect.max(other_rect);
+   |                     --------------- `rect` moved due to this method call
+33 | println!("{}", rect.area());
+   |                ^^^^^^^^^^^ value borrowed here after move
+```
+
+A similar situation arises if we try to call `self` method on a reference. For instance, say we tried to make a `set_to_max` that assigns `self` to the output of `self.max(..)`:
+
+```aquascope,permissions,boundaries,stepper,shouldFail
+#struct Rectangle {
+#    width: u32,
+#    height: u32,
+#}
+impl Rectangle {    
+#  fn area(&self) -> u32 {
+#    self.width * self.height
+#  }
+#
+#  fn set_width(&mut self, width: u32) {
+#    self.width = width;
+#  }
+#
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+    fn set_to_max(&mut self, other: Rectangle) {`(focus,rxpaths:^\*self$)`
+        *self = self.max(other);`{}`
+    }
+}
+```
+
+Then we can see that `self` is missing own permissions in the operation `self.max(..)`. Rust therefore rejects this program with the following error:
+
+```text
+error[E0507]: cannot move out of `*self` which is behind a mutable reference
+  --> test.rs:23:17
+   |
+23 |         *self = self.max(other);
+   |                 ^^^^^----------
+   |                 |    |
+   |                 |    `*self` moved due to this method call
+   |                 move occurs because `*self` has type `Rectangle`, which does not implement the `Copy` trait
+   |
+```
+
+#### Good Moves and Bad Moves
+
+You might wonder: why does it matter if we move out of `self`? In fact, for the case of `Rectangle`, it actually is safe, even though Rust doesn't let you do it. For example, if we simulate a program that calls the rejected `set_to_max`, you can see how nothing unsafe occurs:
+
+```aquascope,interpreter,shouldFail,horizontal
+#struct Rectangle {
+#    width: u32,
+#    height: u32,
+#}
+impl Rectangle {    
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+    fn set_to_max(&mut self, other: Rectangle) {
+        let max = self.max(other);`[]`
+        *self = max;
+    }
+}
+
+fn main() {
+    let mut rect = Rectangle { width: 0, height: 1 };
+    let other_rect = Rectangle { width: 1, height: 0 };`[]`
+    rect.set_to_max(other_rect);`[]`
+}
+```
+
+The reason it's safe to move out of `*self` is because `Rectangle` does not own any heap data.
+In fact, we can actually get Rust to compile `set_to_max` by simply adding `#[derive(Copy)]` to the definition of `Rectangle`:
+
+```aquascope,permissions,boundaries,stepper
+\#[derive(Copy)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {    
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h
+#    }
+#  }
+    fn set_to_max(&mut self, other: Rectangle) {`(focus,rxpaths:^\*self$)`
+        *self = self.max(other);`{}`
+    }
+}
+```
+
+Notice now that `*self` has own permissions. We are allowed to copy out of it, or call a `self` method like `max` on it.
+
+You might wonder: why doesn't Rust automatically derive `Copy` for `Rectangle`? Rust chooses not to for stability across API changes. If the author of the `Rectangle` type decided to add a `name: String` field, then all client code that relies on `Rectangle` being `Copy` would suddenly break. To avoid that issue, API authors must explicitly add `#[derive(Copy)]` to indicate that they expect their type to always be `Copy`.
+
+To better understand the issue, let's run a simulation. Say we added `name: String` to `Rectangle`. What would happen if Rust allowed `set_to_max` to compile?
+
+```aquascope,interpreter,shouldFail,horizontal
+struct Rectangle {
+    width: u32,
+    height: u32,
+    name: String,
+}
+
+impl Rectangle {    
+#  fn max(self, other: Self) -> Self {
+#    let w = self.width.max(other.width);
+#    let h = self.height.max(other.height);
+#    Rectangle { 
+#      width: w,
+#      height: h,
+#      name: String::from("max")
+#    }
+#  }
+    fn set_to_max(&mut self, other: Rectangle) {
+        `[]`let max = self.max(other);`[]`
+        drop(*self);`[]` // This is usually implicit,
+                         // but added here for clarity.
+        *self = max;
+    }
+}
+
+fn main() {
+    let mut r1 = Rectangle { 
+        width: 9, 
+        height: 9, 
+        name: String::from("r1") 
+    };
+    let r2 = Rectangle {
+        width: 16,
+        height: 16,
+        name: String::from("r2")
+    }
+    r1.set_to_max(r2);
+}
+```
+
+In this program, we call `set_to_max` with two rectangles `r1` and `r2`. `self` is a mutable reference to `r1` and `other` is a move of `r2`. After calling `self.max(other)`, the `max` method consumes ownership of both rectangles, and deallocates both strings "r1" and "r2" in the heap before returning. Notice the problem: at this point, `*self` is supposed to be readable and writable, but we have deallocated `(*self).name` (actually `r1.name`).
+
+Therefore when we do `*self = max`, we encounter undefined behavior. Specifically, when we overwrite `*self`, Rust will (normally) implicitly drop the data previously in `*self`. To make that behavior explicit, we have added `drop(*self)`. After calling `drop(*self)`, Rust attempts to free `(*self).name` a second time. That action is a double-free, which is undefined behavior.
+
+So remember: when you see an error like "cannot move out of `*self`", that's usually because you're trying to call a `self` method on a reference like `&self` or `&mut self`. Rust is protecting you from a double-free.
+
 
 ## Summary
 
