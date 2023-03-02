@@ -6,7 +6,7 @@ Ownership, boxes, and moves provide a foundation for safely programming with the
 fn main() {
     let m1 = String::from("Hello");
     let m2 = String::from("world");
-    greet(m1, m2);
+    greet(m1, m2);`[]`
     let s = format!("{} {}", m1, m2);`[]` // Error: m1 and m2 are moved
 }
 
@@ -15,14 +15,20 @@ fn greet(g1: String, g2: String) {
 }
 ```
 
-In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. If we try to read them like in the operation `format!(..)`, then that would be undefined behavior. The Rust compiler therefore rejects this program.
+In this example, calling `greet` moves the data from `m1` and `m2` into the parameters of `greet`. Both strings are dropped at the end of `greet`, and therefore cannot be used within `main`. If we try to read them like in the operation `format!(..)`, then that would be undefined behavior. The Rust compiler therefore rejects this program with the same error we saw last section:
+
+```text
+error[E0382]: borrow of moved value: `m1`
+ --> test.rs:5:30
+ (...rest of the error...)
+```
 
 This move behavior is extremely inconvenient. Programs often need to use a string more than once. Hypothetically, an alternative `greet` can return ownership of the strings:
 
-```aquascope,interpreter
+```aquascope,interpreter,horizontal
 fn main() {
     let m1 = String::from("Hello");
-    let m2 = String::from("world");
+    let m2 = String::from("world");`[]`
     let (m1_again, m2_again) = greet(m1, m2);
     let s = format!("{} {}", m1_again, m2_again);`[]`
 }
@@ -125,7 +131,20 @@ Pointers are a powerful and dangerous feature because they enable **aliasing**: 
 - By mutating the aliased data, invalidating runtime properties expected by the other variable.
 - By _concurrently_ mutating the aliased data, causing a data race with nondeterministic behavior for the other variable.
 
-Therefore Rust follows a basic principle to prevent undefined behavior:
+As a concrete example, say we created a reference to a vector (a resizable array). We could invalidate that reference by resizing the vector, as simulated below:
+
+```aquascope,interpreter,shouldFail,horizontal
+#fn main() {
+let mut vec: Vec<i32> = vec![1, 2, 3];
+let num: &i32 = &vec[2];`[]`
+vec.push(4);`[]`
+println!("Third element is {}", *num);`[]`
+#}
+```
+
+Initially, `vec` points to an array with 3 elements on the heap. Then `num` is created as a reference to the third element, as seen at L1. However, the operation `v.push(4)` resizes `vec` which deallocates its previous array and allocates a new, bigger array. In the process, `num` is left pointing to invalid memory. Therefore at L3, dereferencing `*num` reads invalid memory, causing undefined behavior.
+
+In more abstract terms, the issue is that the vector `vec` is both aliased (by the reference `num`) and mutated (by the operation `vec.push(4)`). So to avoid these kinds of issues, Rust follows a basic principle:
 
 > **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
 
@@ -139,41 +158,47 @@ The core idea is that variables have three kinds of **permissions** on their dat
 
 - **Read** (<span class="perm read">R</span>): data can be copied to another location.
 - **Write** (<span class="perm write">W</span>): data can be mutated in-place.
-- **Own** (<span class="perm drop">O</span>): data can be moved or dropped.
+- **Own** (<span class="perm own">O</span>): data can be moved or dropped.
 
 These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is ever executed.
 
-By default, a variable has read/own permissions (<span class="perm read">R</span><span class="perm drop">O</span>) on its data. If a variable is annotated with `let mut`, then it also has write permissions (<span class="perm write">W</span>). The key idea is 
+By default, a variable has read/own permissions (<span class="perm read">R</span><span class="perm own">O</span>) on its data. If a variable is annotated with `let mut`, then it also has write permissions (<span class="perm write">W</span>). The key idea is 
 that **references can temporarily remove these permissions.** 
 
-To illustrate this idea, we will use a new kind of diagram. This diagram shows the changes in permissions on each line of the program. For example:
-
-<!-- TODO: can we show unchanged permissions for variables appearing in a table? -->
-<!-- horizontal line should be vertical-aligned to bottom of the row, not middle
-     to indicate that it describes after-permissions -->
+To illustrate this idea, let's look at the permissions on a variation of the program above that is actually safe, by moving the `push` after the `println!`. We will visualize the permissions with a new kind fo diagram that shows the changes in permissions on each line.
 
 ```aquascope,permissions,stepper
 #fn main() {
-let mut x = String::from("Hello");
-let y: &String = &x;
-println!("{} and {}", x, y);
-x.push_str(" world");
+let mut vec: Vec<i32> = vec![1, 2, 3];
+let num: &i32 = &vec[2];
+println!("Third element is {}", *num);
+vec.push(4);
 #}
 ```
 
 Let's walk through each line:
 
-1. After `let mut x = (...)`, the variable `x` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (the plus sign indicates gain).
-2. After `let y = &x`, the data in `x` has been **borrowed** by `y` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
-   - The borrow removes write/own permissions from `x` (the slash indicates loss). `x` cannot be written or owned, but it can still be read.
-   - The variable `y` has gained read/own permissions. `y` is not writable (the missing write permission is shown as a dash `-`) because it was not marked `let mut`.
-   - The **path** `*y` has gained read permissions.
-3. After `println!(...)`, then `y` is no longer in use, so `x` is no longer borrowed. Therefore:
-   - `x` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
-   - `y` and `*y` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
-4. After `x.push_str(...)`, then `x` is no longer in use, and it loses all of its permissions.
+1. After `let mut vec = (...)`, the variable `vec` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (the plus sign indicates gain).
+2. After `let num = &vec[2]`, the data in `vec` has been **borrowed** by `num` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
+   - The borrow removes write/own permissions from `vec` (the slash indicates loss). `vec` cannot be written or owned, but it can still be read.
+   - The variable `num` has gained read/own permissions. `num` is not writable (the missing write permission is shown as a dash `-`) because it was not marked `let mut`.
+   - The **path** `*num` has gained read/own permissions.
+3. After `println!(...)`, then `num` is no longer in use, so `vec` is no longer borrowed. Therefore:
+   - `vec` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
+   - `num` and `*num` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
+4. After `vec.push(4)`, then `vec` is no longer in use, and it loses all of its permissions.
 
-Next, let's explore a few nuances of the diagram. First, why do you see both `y` and `*y`? That's because it's different to access data through a reference, versus to manipulate the reference itself. For example, you could do `let z = y` (because `y` has own permissions), but you could not do `let z = *y` (because `*y` does not have own permissions).
+Next, let's explore a few nuances of the diagram. First, why do you see both `num` and `*num`? That's because it's different to access data through a reference, versus to manipulate the reference itself. For example, say we declared a reference to a number with `let mut`:
+
+```aquascope,permissions,stepper
+#fn main() {
+let x = 0;
+let mut x_ref = &x;
+# println!("{x_ref} {x}");
+#}
+```
+
+Notice that `x_ref` as write permission, while `*x_ref` does not. That means we would be allowed to assign `x_ref` to a different reference (e.g. `x_ref = &y`), but we would not be allowed to mutate the pointed data (e.g. `*x_ref += 1`).
 
 More generally, permissions are defined over **paths** and not just variables. A path is anything you can put on the left-hand side of an assignment. Paths include:
 
@@ -183,63 +208,57 @@ More generally, permissions are defined over **paths** and not just variables. A
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
 - Any combination of the above, like `*((*a)[0].1)`.
 
-Second, why do paths lose permissions when they are unused? This is because some permissions are mutually exclusive: if `y = &x`, then `x` cannot be dropped while `y` is in use. But that doesn't mean it's invalid to use `y` for more or less time. For example, say we add another `print` to the above program:
-
+Second, why do paths lose permissions when they are unused? This is because some permissions are mutually exclusive: if `num = &vec[2]`, then `vec` cannot be mutated or dropped while `num` is in use. But that doesn't mean it's invalid to use `num` for more time. For example, if we add another `print` to the above program, then `num` simply loses its permissions later:
 
 ```aquascope,permissions,stepper
 #fn main() {
-let mut x = String::from("Hello");
-let y: &String = &x;
-println!("{} and {}", x, y);
-// vvvv   added this line
-println!("using y again: {}", y);
-x.push_str(" world");
+let mut vec: Vec<i32> = vec![1, 2, 3];
+let num: &i32 = &vec[2];
+println!("Third element is {}", *num);
+println!("Again, the third element is {}", *num);
+vec.push(4);
 #}
 ```
-
-In this case, `y` simply loses permissions after the second print rather than the first. However, some changes to this program can cause serious problems.
-
 
 ### The Borrow Checker Finds Permission Violations
 
 Returning to the *Pointer Safety Principle*, the goal of these permissions is to ensure that data cannot be mutated if it is aliased. Creating a reference to data ("borrowing" it) causes that data to be temporarily read-only until the reference is no longer used.
 
-Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. For example, suppose we placed the `x.push_str(...)` statement in-between the definition of `y` and the use of `y`, like this:
+Rust uses these permissions in its **borrow checker**. The borrow checker determines whether a program is doing potentially unsafe operations involving references. Let's return to the unsafe program we saw earlier, where `push` invalidates a reference. This time we'll add another aspect to the permissions diagram:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #fn main() {
-let mut x = String::from("Hello");
-let y: &String = &x;`{}`
-x.push_str(" world");`{}`
-println!("{} and {}", x, y);
+let mut vec: Vec<i32> = vec![1, 2, 3];
+let num: &i32 = &vec[2];`{}`
+vec.push(4);`{}`
+println!("Third element is {}", *num);
 #}
 ```
 
-This example shows another kind of visualization. Any time a path is *used*, Rust expects that path to have certain permissions. For example, the borrow `&x` requires that `x` is readable, therefore the permission <span class="perm read">R</span> is shown. The letter is filled-in because `x` has the read permission at that line. 
+Any time a path is used, Rust expects that path to have certain permissions depending on the operation. For example, the borrow `&vec[2]` requires that `vec` is readable, therefore the permission <span class="perm read">R</span> is shown in between the operation `&` and the path `vec`. The letter is filled-in because `vec` has the read permission at that line. 
 
-By contrast, the mutating operation `x.push_str(...)` requires that `x` is readable and writable, so both <span class="perm read">R</span> and <span class="perm write">W</span> are shown. However, `x` does not have write permissions (it is borrowed by `y`), so the letter <span class="perm write missing">W</span> is hollow, indicating that the write permission is *expected* but `x` does not have it.
+By contrast, the mutating operation `vec.push(4)` requires that `vec` is readable and writable, so both <span class="perm read">R</span> and <span class="perm write">W</span> are shown. However, `vec` does not have write permissions (it is borrowed by `num`), so the letter <span class="perm write missing">W</span> is hollow, indicating that the write permission is *expected* but `vec` does not have it.
 
-If you try to compile this program, then the Rust compiler will reject this program with the following error:
+As a result, if you try to compile this program, then the Rust compiler will reject this program with the following error:
 
 ```text
-error[E0502]: cannot borrow `x` as mutable because it is also borrowed as immutable
+error[E0502]: cannot borrow `vec` as mutable because it is also borrowed as immutable
  --> test.rs:4:1
   |
-3 | let y = &x;
-  |         -- immutable borrow occurs here
-4 | x.push_str(" world");
-  | ^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
-5 | println!("{} and {}", x, y);
-  |                          - immutable borrow later used here
+3 | let num: &i32 = &vec[2];
+  |                  --- immutable borrow occurs here
+4 | vec.push(4);
+  | ^^^^^^^^^^^ mutable borrow occurs here
+5 | println!("Third element is {}", *num);
+  |                                 ---- immutable borrow later used here
 ```
 
-If Rust allowed this program to compile, we would violate memory safety. The operation `x.push_str(...)` could internally cause `x` to resize, reallocating its memory to a different heap location. This reallocation would invalidate the reference `y`, so reading it in the `println` is undefined behavior.
-
+The error message explains that `vec` cannot be mutated while the reference `num` is in use. That's the surface-level reason &mdash; the underlying issue is that `num` could be invalidated by `push`, and Rust catches that potential violation of memory safety.
 
 
 ### Mutable References Provide Unique and Non-Owning Access to Data
 
-The references we have seen so far are read-only: **immutable references** (also called **shared references**). These references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it. For example, [`String::push_str`] should extend a string without consuming ownership of it.
+The references we have seen so far are read-only: **immutable references** (also called **shared references**). Immutable references permit aliasing but disallow mutation. However, it is also useful to temporarily provide mutable access to data without moving it.
 
 The mechanism for this is **mutable references** (also called **unique references**). Here's a simple example of a mutable reference with the accompanying permissions changes:
 
@@ -268,7 +287,7 @@ Mutable references can also be temporarily "downgraded" to read-only references.
 ```aquascope,permissions,stepper,boundaries
 #fn main() {
 let mut x = String::from("Hello");
-let y = &mut x;
+let y = &mut x;`(focus,paths:*y)`
 let z = &*y;`(focus,paths:*)`
 println!("{} {}", y, z);`{}`
 #}
