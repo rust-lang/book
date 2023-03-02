@@ -373,7 +373,7 @@ fn main() {
 }
 ```
 
-This program is unsafe because `s_ref` points to a variable `s` within the stack frame of `return_a_string` (at L1). When `return_a_string` ends, `s` and its heap data are deallocated. This leaves `s_ref` pointing to freed memory (at L2).  That's not a problem on its own &mdash; but then we try to *use* `s_ref` by returning it to `main`, and reading it as the variable `s_main` (at L3). That read of freed memory is undefined behavior.
+This program is unsafe because `s_ref` points to a variable `s` within the stack frame of `return_a_string` (at L1). When `return_a_string` ends, `s` and its heap data are deallocated. This leaves `s_ref` pointing to freed memory (at L2).  So far, the program is still technically safe. But then we try to *use* `s_ref` by returning it to `main`, and reading it as the variable `s_main` (at L3). That read of freed memory is undefined behavior.
 
 In sum, it's unsafe to return a reference to data on a function's stack frame, and to then use that reference. The reference cannot outlive the data.
 
@@ -433,6 +433,6 @@ However, references can be easily misused, so Rust's borrow checker enforces a s
 - Permissions are returned once the reference's lifetime has ended.
 - Data must outlive all references that point to it.
 
-In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is enabling without garbage collection while avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler down the road.
+In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is allowing you to use pointers without garbage collection, while also avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler down the road.
 
 [`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str
