@@ -42,7 +42,7 @@ error[E0425]: cannot find value `x` in this scope
   |          ^ not found in this scope
 ```
 
-You probably have the intuition that it's good for Rust to ensure that variables are defined before they are used. But why? To justify the rule, we have to ask the question: **what would happen if Rust allowed a rejected program to compile?**
+You probably have the intuition that it's good for Rust to ensure that variables are defined before they are used. But why? To justify the rule, we have to ask: **what would happen if Rust allowed a rejected program to compile?**
 
 Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
 
@@ -127,7 +127,7 @@ Frames are organized into a **stack** of currently-called-functions. For example
 
 > _Note:_ this memory model does not fully describe how Rust actually works! As we saw earlier with the assembly code, the Rust compiler might put `n` or `x` into a register rather than a stack frame. But that distinction is an implementation detail. It shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
 
-When an expression reads a variable, the variable's value is copied out of its frame. For example, if we run this program:
+When an expression reads a variable, the variable's value is copied from its slot in the stack frame. For example, if we run this program:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -162,7 +162,6 @@ let b = a;`[]`
 ```
 
 Observe that now, there is only ever a single array at a time. At L1, the value of `a` is a pointer (represented by dot with an arrow) to the array inside the heap. The statement `let b = a` copies the pointer from `a` into `b`, but the pointed-to data is not copied.
-
 
 {{#quiz ../quizzes/ch04-01-ownership-sec1-stackheap.toml}}
 

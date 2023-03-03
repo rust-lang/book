@@ -23,7 +23,7 @@ error[E0382]: borrow of moved value: `m1`
  (...rest of the error...)
 ```
 
-This move behavior is extremely inconvenient. Programs often need to use a string more than once.An alternative `greet` could return ownership of the strings, like this:
+This move behavior is extremely inconvenient. Programs often need to use a string more than once. An alternative `greet` could return ownership of the strings, like this:
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -72,7 +72,7 @@ References are **non-owning pointers**, because they do not own the data they po
 
 ### Dereferencing a Pointer Accesses Its Data
 
-The previous examples using boxes and strings have not shown how Rust "follows" a pointer to its data. For example, the `println!` macro has mysteriously worked for both owned strings of type `String`, as well as string references of type `&String`. The underlying mechanism is the **dereference** operator, written with an asterisk (`*`). For example, here's a program that uses dereferences in a few different ways:
+The previous examples using boxes and strings have not shown how Rust "follows" a pointer to its data. For example, the `println!` macro has mysteriously worked for both owned strings of type `String`, and for string references of type `&String`. The underlying mechanism is the **dereference** operator, written with an asterisk (`*`). For example, here's a program that uses dereferences in a few different ways:
 
 ```aquascope,interpreter
 #fn main() {

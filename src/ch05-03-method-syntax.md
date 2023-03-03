@@ -580,7 +580,7 @@ fn main() {
         width: 16,
         height: 16,
         name: String::from("r2")
-    }
+    };
     r1.set_to_max(r2);
 }
 ```
