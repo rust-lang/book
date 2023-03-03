@@ -18,7 +18,7 @@ The statement `x += 2` only affects the shadowed `x` inside the inner curly brac
 """
 
 [[questions]]
-id = "dca33d34-6294-43f4-9267-fd62d7dce993"
+id = "15b9d091-3b09-49fe-a472-ba6c0f69e4e0"
 type = "Tracing"
 prompt.program = """
 fn main() {

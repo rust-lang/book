@@ -248,7 +248,7 @@ our code much sooner. For example:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```aquascope,permissions,boundaries,stepper
+```aquascope,permissions,boundaries,stepper,shouldFail
 #fn first_word(s: &String) -> &str {
 #    let bytes = s.as_bytes();
 #

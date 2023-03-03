@@ -50,7 +50,7 @@ Which of the following best explains why `strs` loses and regains write permissi
 """
 answer.answer = "`get_first` returns an immutable reference to data within `strs`, so `strs` is not writable while `first` is live"
 prompt.distractors = [
-  "`strs` is not writable while the immutable reference `&str` passed to `get_first` is live",
+  "`strs` is not writable while the immutable reference `&strs` passed to `get_first` is live",
   "`strs` does not need write permissions until the `strs.push(..)` operation, so it only regains write permissions at that statement",
   "Because `first` refers to `strs`, then `strs` can only be mutated within a nested scope like the if-statement"
 ]

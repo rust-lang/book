@@ -56,4 +56,5 @@ In the final state of the snippet, what is the value of `a[0]`? Write your answe
 answer.answer = "6"
 context = """
 Because `b` and `a` point to the same data, a change to one will affect the other. `a[0]` has the value 6.
+Note that Rust will not allow you to actually access `a[0]`, as we will discuss shortly.
 """
