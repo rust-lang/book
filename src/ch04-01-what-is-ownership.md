@@ -152,7 +152,7 @@ let b = a;`[]`
 
 Observe that copying `a` into `b` causes the `main` frame to contain 2 million elements. 
 
-To transfer access to data without copying it, Rust uses **pointers**. A pointer is a value that describes a location in memory. One common way to make a pointer is to allocate memory in the **heap**. The heap is a separate region of memory where data can live indefinitely. Heap data not tied to a specific stack frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap. For example, we can wrap the million-element array in `Box::new` like this:
+To transfer access to data without copying it, Rust uses **pointers**. A pointer is a value that describes a location in memory. One common way to make a pointer is to allocate memory in the **heap**. The heap is a separate region of memory where data can live indefinitely. Heap data is not tied to a specific stack frame. Rust provides a construct called [`Box`](https://doc.rust-lang.org/std/boxed/index.html) for putting data on the heap. For example, we can wrap the million-element array in `Box::new` like this:
 
 ```aquascope,interpreter
 #fn main() {
