@@ -231,8 +231,8 @@ some exercises you should now be equipped to solve:
   people in a department or all people in the company by department, sorted
   alphabetically.
 
-The standard library API documentation describes methods that vectors, strings,
-and hash maps have that will be helpful for these exercises!
+The standard library API documentation describes methods for vectors, strings,
+and hash maps that will help you for these exercises!
 
 We’re getting into more complex programs in which operations can fail, so, it’s
 a perfect time to discuss error handling. We’ll do that next!
