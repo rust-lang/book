@@ -124,7 +124,7 @@ By cloning `name`, we are allowed to mutate the local copy of the vector. Howeve
 
 ```rust,ignore
 fn stringify_name_with_title(name: &Vec<String>) -> String {
-    let full = name.join(" ");
+    let mut full = name.join(" ");
     full.push_str(" Esq.");
     full
 }
