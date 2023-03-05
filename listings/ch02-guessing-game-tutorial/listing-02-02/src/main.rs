@@ -9,7 +9,7 @@ fn main() {
 
     io::stdin()
         .read_line(&mut guess)
-        .expect("Failed to read line");
+        .expect("String variable `guess` should be set by `read_line`");
 
     println!("You guessed: {guess}");
 }

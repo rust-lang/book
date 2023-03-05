@@ -19,7 +19,7 @@ fn main() {
 
         io::stdin()
             .read_line(&mut guess)
-            .expect("Failed to read line");
+            .expect("String variable `guess` should be set by `read_line`");
 
         // ANCHOR: ch19
         let guess: u32 = match guess.trim().parse() {

@@ -21,7 +21,7 @@ fn main() {
         .read_line(&mut guess)
         // ANCHOR_END: read
         // ANCHOR: expect
-        .expect("Failed to read line");
+        .expect("String variable `guess` should be set by `read_line`");
     // ANCHOR_END: expect
 
     // ANCHOR: print_guess
