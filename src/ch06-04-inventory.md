@@ -1,6 +1,6 @@
 ## Ownership Inventory #1
 
-The Ownership Inventory is a series of quizzes that test your understanding of ownership in real-world scenarios. These scenarios are inspired by common StackOverflow questions about Rust.
+The Ownership Inventory is a series of quizzes that check your understanding of ownership in real-world scenarios. These scenarios are inspired by common StackOverflow questions about Rust. You can use these questions to test how well you understand ownership so far.
 
 ### A new technology: the in-browser IDE
 

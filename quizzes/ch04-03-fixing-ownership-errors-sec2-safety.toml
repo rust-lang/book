@@ -1,0 +1,104 @@
+[[questions]]
+id = "cbe8ef63-4f7e-45fd-b11f-e6eba40587b0"
+type = "MultipleChoice"
+prompt.prompt = """
+Which of the following best explains why an `i32` can be copied without a move, but a `String` cannot?
+"""
+answer.answer = "A `String` owns data on the heap, while an `i32` does not"
+prompt.distractors = [
+    "An `i32` is smaller in memory than a `String`",
+    "An `i32` is a primitive type in Rust, while a `String` is not",
+    "A `String` can be placed on the heap, while an `i32` can only be placed on the stack"
+]
+context = """
+a value owns data on the heap, then copying it creates an alias, and so it is moved-on-copy.
+"""
+
+[[questions]]
+id = "4df75888-2cd5-4259-8629-46a307429fd0"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this function that is a simplified variant of the function from the previous quiz:
+
+```
+/// Adds "Ph.D." to a person's name
+fn award_phd(name: &String) {
+    let mut name = *name;
+    name.push_str(", Ph.D.");
+}
+```
+
+The Rust compiler rejects this function with the following error:
+
+```text
+error[E0507]: cannot move out of `*name` which is behind a shared reference
+ --> test.rs:3:20
+  |
+3 |     let mut name = *name;
+  |                    ^^^^^
+  |                    |
+  |                    move occurs because `*name` has type `String`, which does not implement the `Copy` trait
+  |                    help: consider borrowing here: `&*name`
+```
+
+Assume that the compiler did NOT reject this function. Of the following programs, select each
+that could possibly cause undefined behavior if executed.
+"""
+answer.answer = [
+"""
+```
+let name = String::from("Ferris");
+award_phd(&name);
+```
+""",
+"""
+```
+let name = String::from("Ferris");
+award_phd(&name);
+println!("{}", name);
+```
+""",
+"""
+```
+let name = String::from("Ferris");
+let name_ref = &name;
+award_phd(&name);
+println!("{}", name_ref);
+```
+""",
+"""
+```
+let name = String::from("Ferris");
+award_phd(&name);
+let name_ref = &name;
+println!("{name_ref}");
+```
+""",
+]
+prompt.distractors = []
+context = """
+The statement `let mut name = *name` makes `name` take ownership the input string.
+However, the caller also still retains ownership of the string. Therefore after `award_phd`
+finishes, the string is deallocated. Therefore every program above has undefined behavior, 
+because `name` will eventually be deallocated a second time.
+"""
+
+[[questions]]
+id = "1f48fda5-afc6-440b-a9aa-53dc8d54efaa"
+type = "Tracing"
+prompt.program = """
+fn main() {
+    let mut point = [0, 1];
+    let mut x = point[0];
+    let y = &mut point[1];
+    x += 1;
+    *y += 1;
+    println!("{} {}", point[0], point[1]);
+}
+"""
+answer.doesCompile = true
+answer.stdout = "0 2"
+context = """
+This program does compile, as the binding of `x` copies `point[0]`, allowing `y` to mutably borrow `point[1]`.
+The mutation `x += 1` does not affect `point`, while the mutation `*y += 1` does, so the final result is `0 2`.
+"""

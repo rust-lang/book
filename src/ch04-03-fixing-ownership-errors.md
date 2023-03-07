@@ -1,12 +1,14 @@
 ## Fixing Ownership Errors
 
-A core Rust skill is learning how to fix an ownership error. When the borrow checker rejects your code, how should you respond?
+Learning how to fix an ownership error is a core Rust skill. When the borrow checker rejects your code, how should you respond? In this section, we will discuss several case studies of common ownership errors. Each case study will present a function rejected by the compiler. Then we will explain why Rust rejects the function, and show several ways to fix it.
 
-The last two sections have shown how a Rust program can be **unsafe** if it triggers undefined behavior. The ownership guarantee is that Rust will reject all unsafe programs[^safe-subset]. However, Rust will also reject *some* safe programs. Fixing an ownership error will depend on whether your program is *actually* safe or unsafe.
+A common theme will be understanding whether a function is *actually* safe or unsafe. Rust will always reject an unsafe program[^safe-subset]. But sometimes, Rust will also reject a safe program. These case studies will show how to respond to errors in both situations.
+
+<!-- The last two sections have shown how a Rust program can be **unsafe** if it triggers undefined behavior. The ownership guarantee is that Rust will reject all unsafe programs. However, Rust will also reject *some* safe programs. Fixing an ownership error will depend on whether your program is *actually* safe or unsafe. -->
 
 ### Fixing an Unsafe Program: Returning a Reference to the Stack
 
-Returning a reference to a stack-allocated variable is always unsafe, like this:
+Our first case study is about returning a reference to the stack, just like we discussed last section in ["Data Must Outlive All Of Its References"](ch04-02-references-and-borrowing.html#data-must-outlive-all-of-its-references). Here's the function we looked at:
 
 ```rust,ignore,does_not_compile
 fn return_a_string() -> &String {
@@ -15,9 +17,9 @@ fn return_a_string() -> &String {
 }
 ```
 
-In these cases, you should ask: **why is my program unsafe?** Here, the issue is with the lifetime of the referred data. If you want to pass around a string, you have to make sure the memory containing the string's data lives long enough. 
+When thinking about how to fix this function, we need to ask: **why is this program unsafe?** Here, the issue is with the lifetime of the referred data. If you want to pass around a reference to a string, you have to make sure that the underlying string lives long enough. 
 
-Depending on the situation, here are four ways you can extend the lifetime of the string. One is to move ownership of the string out of the function:
+Depending on the situation, here are four ways you can extend the lifetime of the string. One is to move ownership of the string out of the function, changing `&String` to `String`
 
 ```rust
 fn return_a_string() -> String {
@@ -26,7 +28,7 @@ fn return_a_string() -> String {
 }
 ```
 
-Another possibility is to return a string literal, which lives forever (indicated by `'static`). This applies if we never intend to change the string.
+Another possibility is to return a string literal, which lives forever (indicated by `'static`). This solution applies if we never intend to change the string, and the string can be written directly in the program source code:
 
 ```rust
 fn return_a_string() -> &'static str {
@@ -44,13 +46,17 @@ fn return_a_string() -> Rc<String> {
 }
 ```
 
-And another possibility is to have the caller provide a slot to put the string, using a mutable reference:
+We will discuss reference-counting more in Chapter 15.4 ["`Rc<T>`, the Reference Counted Smart Pointer"](ch15-04-rc.html). In short, `Rc::clone` only clones a pointer to `s` and not the data itself. At runtime, the `Rc` checks when the last `Rc` pointing to data has been dropped, and then deallocates the data.
+
+Yet another possibility is to have the caller provide a "slot" to put the string using a mutable reference:
 
 ```rust
 fn return_a_string(output: &mut String) {
     output.replace_range(.., "Hello world");
 }
 ```
+
+With this strategy, the caller is responsible for creating space for the string. This style can be verbose, but it can also be more memory-efficient if the caller needs to carefully control when allocations occur.
 
 Which strategy is most appropriate will depend on your application. But the key idea is to recognize the root issue underlying the surface-level ownership error. How long should my string live? Who should be in charge of deallocating it? Once you have a clear answer to those questions, then it's a matter of changing your API to match.
 
@@ -132,6 +138,7 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 
 In general, writing Rust functions is a careful balance of asking for the *right* level of permissions. For this example, it's most idiomatic to only expect read permissions
 
+{{#quiz ../quizzes/ch04-03-fixing-ownership-errors-sec1-idioms.toml}}
 
 ### Fixing an Unsafe Program: Aliasing and Mutating a Data Structure
 
@@ -426,7 +433,7 @@ unsafe { *x += *y; } // DO NOT DO THIS unless you know what you're doing!
 
 Unsafe code is sometimes necessary to work around the limitations of borrow checker. As a general strategy, let's say the borrow checker rejects a program you think is actually safe. Then you should look for standard library functions (like `split_first_mut`) that contain `unsafe` blocks which solve your problem. We will discuss unsafe code further in [Chapter 20][unsafe]. For now, just be aware that unsafe code is how Rust implements certain otherwise-impossible patterns.
 
-{{#quiz ../quizzes/ch04-03-fixing-ownership-errors.toml}}
+{{#quiz ../quizzes/ch04-03-fixing-ownership-errors-sec2-safety.toml}}
 
 ### Summary
 

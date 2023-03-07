@@ -12,7 +12,7 @@ println!("{}", v1[0]);`[]`
 #}
 ```
 
-Which of the following best describes why undefined behavior occurs in this program?
+Which of the following best describes how undefined behavior occurs in this program?
 """
 answer.answer = "`v1[0]` reads `v1`, which points to deallocated memory"
 prompt.distractors = [
@@ -65,4 +65,63 @@ answer.doesCompile = false
 answer.lineNumber = 8
 context = """
 Because `s` could be moved inside of the if-statement, it is illegal to use it on line 8.
+"""
+
+[[questions]]
+id = "f7d67c11-60bb-4d92-8cc2-8ce82cf4c974"
+type = "MultipleChoice"
+prompt.prompt = """
+Say we have a function that moves a box, like this:
+```
+fn move_a_box(b: Box<i32>) {
+  // This space intentionally left blank
+}
+```
+
+Below are four snippets which are rejected by the Rust compiler. 
+Imagine that Rust instead allowed these snippets to compile and run. 
+Select each snippet that would cause undefined behavior.
+"""
+answer.answer = [
+"""
+```
+let b = Box::new(0);
+let b2 = b;
+move_a_box(b);
+```
+""",
+"""
+```
+let b = Box::new(0);
+move_a_box(b);
+println!("{}", b);
+```
+""",
+"""
+```
+let b = Box::new(0);
+move_a_box(b);
+let b2 = b;
+```
+"""
+]
+prompt.distractors = [
+"""
+```
+let b = Box::new(0);
+let b2 = b;
+println!("{}", b);
+move_a_box(b2);
+```
+""",
+]
+context = """
+The key idea is that when a box is passed to `move_a_box`, its memory is deallocated after `move_a_box` ends.
+Therefore:
+* Reading `b` via `println` after `move_a_box` is undefined behavior, as it reads freed memory.
+* Giving `b` a second owner is undefined behavior, as it would cause Rust to free the box a second time on behalf of `b2`. It doesn't matter whether the `let b2 = b` binding happens
+  before or after `move_a_box`.
+
+However, doing `let b2 = b` and then `println` is not undefined behavior. Although `b` is moved, its data is not deallocated until `move_a_box` is called at the end. Therefore 
+this program is technically safe, although still rejected by Rust.
 """
