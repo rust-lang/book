@@ -268,6 +268,7 @@ This program is more involved, so make sure you follow each step:
 3. At L3, the function `name.push_str(" Jr.")` resizes the string's heap allocation. This does three things. First, it frees the original heap memory. Second, it creates a new larger allocation. Third, it writes "Ferris Jr." into the new allocation. `first` now points to deallocated memory.
 4. At L4, the frame for `add_suffix` is gone. This function returned `name`, transferring ownership of the string to `full`.
 
+
 ### Variables Cannot Be Used After Being Moved
 
 The string program helps illustrate a key safety principle for ownership. Imagine that `first` were used in `main` after calling `add_suffix`. We can simulate such a program and see the undefined behavior that results:
@@ -308,6 +309,26 @@ So if you move a variable, Rust will stop you from using that variable later. Mo
 > **Moved heap data principle:** if a variable `x` moves ownership of heap data to another variable `y`, then `x` cannot be used after the move.
 
 Now you should start to see the relationship between ownership, moves, and safety. Moving ownership of heap data avoids undefined behavior from reading deallocated memory.
+
+### Cloning Avoids Moves
+
+One way to avoid moving data is to *clone* it using the `.clone()` method. For example, we can fix the safety issue in the previous program with a clone:
+
+```aquascope,interpreter
+fn main() {
+    let first = String::from("Ferris");
+    let first_clone = first.clone();`[]`
+    let full = add_suffix(first_clone);`[]`
+    println!("{full}, originally {first}");
+}
+
+fn add_suffix(mut name: String) -> String {
+    name.push_str(" Jr.");
+    name
+}
+```
+
+Observe that at L1, `first_clone` did not "shallow" copy the pointer in `first`, but instead "deep" copied the string data into a new heap allocation. Therefore at L2, while `first_clone` has been moved and invalidated by `add_suffix`, the original `first` variable is unchanged. It is safe to continue using `first`.
 
 {{#quiz ../quizzes/ch04-01-ownership-sec2-moves.toml}}
 
