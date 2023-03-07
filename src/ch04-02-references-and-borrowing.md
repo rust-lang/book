@@ -334,6 +334,8 @@ The variable `c` has a different lifetime in each branch of the if-statement. In
 
 However, in the else-block, `c` is not used. `*v` immediately regains write permissions on entry to the else-block.
 
+{{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
+
 
 ### Data Must Outlive All Of Its References
 
@@ -374,9 +376,9 @@ fn main() {
 }
 ```
 
-At L1, `s_ref` points to a variable `s` within the stack frame of `return_a_string`. When `return_a_string` ends, `s` and its heap data are deallocated. So at L2, `s_ref` points to freed memory. No problems yet. But then we try to use `s_ref` by returning it to `main`, and reading it as the variable `s_main` (at L3). That read of freed memory is undefined behavior.
+At L1, `s_ref` points to a variable `s` within the stack frame of `return_a_string`. When `return_a_string` ends, `s` and its heap data are deallocated. At L2, `s_ref` has been returned and is now `s_main`, which points to freed memory. So far, the program is actually safe --- no undefined behavior has happened.
 
-In sum, it's unsafe to return a reference to data on a function's stack frame, and to then use that reference. The reference cannot outlive the data.
+However, at L3 we try to actually *use* the deallocated pointer `s_main` by reading it in the `println`. That read of freed memory is undefined behavior. In sum, it's unsafe to return a reference to data on a function's stack frame, and to then use that reference. The reference cannot outlive the data.
 
 As a more interesting example, let's say we tried to add a reference to a vector of references:
 
@@ -421,7 +423,8 @@ fn main() {
 
 At L1, by pushing `&n` into `v`, the vector now contains a reference to data within the frame for `add_ref`. However, when `add_ref` returns, its frame is deallocated. Therefore the reference in the vector points to deallocated memory. Using the reference by printing `v[0]` violates memory safety.
 
-{{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
+{{#quiz ../quizzes/ch04-02-references-sec3-safety.toml}}
+
 
 ### Summary
 

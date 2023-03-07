@@ -1,0 +1,115 @@
+[[questions]]
+id = "5080616f-6f4c-43f7-aa3a-8b23f2798937"
+type = "Tracing"
+prompt.program = """
+fn incr(n: &mut i32) {
+  *n += 1;
+}
+
+fn main() {
+  let mut n = 1;
+  incr(&n);
+  println!("{n}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 7
+context = """
+Although `n` is marked as `mut`, the reference to `n` must also be marked as `mut`. 
+So a valid version of this program would say `incr(&mut n)`.
+"""
+
+
+[[questions]]
+id = "e9846c5d-1254-4420-9986-dae4af86b9af"
+type = "Tracing"
+prompt.program = """
+fn main() {
+  let mut s = String::from("hello");
+  let s2 = &s;
+  let s3 = &mut s;
+  s3.push_str(" world");
+  println!("{s2}");
+}
+"""
+answer.doesCompile = false
+answer.lineNumber = 6
+context = """
+It is illegal to use a mutable reference to a value (`s3`) while an immutable reference 
+is live (`s2`). The last line of the error is the `println` on line 6, because if you 
+deleted that line, then this program would compile.
+"""
+
+[[questions]]
+id = "80f6bcd6-b74a-4da3-a014-d423c82ce405"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this Rust function that pushes a number onto the end of a vector, and then removes and returns the number from the front of the vector:
+
+```
+fn give_and_take(v: &Vec<i32>, n: i32) -> i32 {
+    v.push(n);
+    v.remove(0)
+}
+```
+
+Normally, if you try to compile this function, the compiler returns the following error:
+
+```text
+error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
+ --> test.rs:2:5
+  |
+1 | fn give_and_take(v: &Vec<i32>, n: i32) -> i32 {
+  |                     --------- help: consider changing this to be a mutable reference: `&mut Vec<i32>`
+2 |     v.push(n);
+  |     ^^^^^^^^^ `v` is a `&` reference, so the data it refers to cannot be borrowed as mutable
+```
+
+Assume that the compiler did NOT reject this function. Of the following programs, select each
+that could possibly cause undefined behavior if executed.
+"""
+answer.answer = [
+
+"""
+```
+let v = vec![1, 2, 3];
+let n = &v[0];
+give_and_take(&v, 4);
+println!("{}", n);
+```
+""",
+]
+prompt.distractors = [
+"""
+```
+let v = vec![1, 2, 3];
+let v2 = &v;
+give_and_take(&v, 4);
+println!("{}", v2[0]);
+```
+""",
+"""
+```
+let v = vec![1, 2, 3];
+let n = &v[0];
+let k = give_and_take(&v, 4);
+println!("{}", k);
+```
+""",
+"""
+```
+let v = vec![1, 2, 3];
+give_and_take(&v, 4);
+let n = &v[0];
+println!("{}", n);
+```
+"""
+]
+context = """
+As we saw earlier in the section, `v.push(n)` can cause `v` to reallocate its internal contents, invalidating any references to the elements of `v` on the heap.
+Therefore calling `give_and_take(&v, 4)` will cause previously-created element references to point to invalid memory. The two programs that bind `let n = &v[0]`
+before `give_and_take` are candidates for undefined behavior.
+
+The program that does `println!("{}", n)` will cause undefined behavior by reading the invalid memory. The program that does `println!("{}", k)` will not cause undefined
+behavior, because it does not use the invalidated reference.
+"""
