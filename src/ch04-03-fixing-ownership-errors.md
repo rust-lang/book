@@ -262,7 +262,7 @@ In sum, **if a value does not own heap data, then it can be copied without a mov
 * A `String` **does** own heap data, so it **can not** be copied without a move.
 * An `&String` **does not** own heap data, so it **can** be copied without a move.
 
-So if we have a vector of non-`Copy` types like `String`, and how do we safely get access to an element of the vector? Here's a few different ways to safely do so. First, you can avoid taking ownership of the string and just use an immutable reference:
+So if we have a vector of non-`Copy` types like `String`, then how do we safely get access to an element of the vector? Here's a few different ways to safely do so. First, you can avoid taking ownership of the string and just use an immutable reference:
 
 ```rust,ignore
 #fn main() {
