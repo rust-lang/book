@@ -227,9 +227,9 @@ To avoid this situation, we finally arrive at ownership. When `a` is bound to `B
 In the example above, `b` owns the boxed array. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
 
 
-### A Move is Just a Copy
+### At Runtime, A Move is Just a Copy 
 
-A common misconception is that a "move" actually moves data around in memory. But that is not true! A move is "just" a copy. For example, let's look again at what happens when we move a boxed array from `a` to `b`:
+A common misconception is that a "move" actually moves data around in memory. But that is not true! A move is just a copy. For example, let's look again at what happens when we move a boxed array from `a` to `b`:
 
 ```aquascope,interpreter,horizontal
 #fn main() {
@@ -238,9 +238,9 @@ let b = a;`[]`
 #}
 ```
 
-The big array did not change its location in memory anywhere. `a` did not change its location in memory. The only thing that happens at runtime is the *pointer* in `a` is copied into `b`. *Ownership* of the boxed array is moved, but not the array itself. And ownership doesn't actually exist at runtime. It's a concept that only exists within the compiler.
+An exceedingly common question from readers is: if `a` is moved at L2, why is it still in the diagram? Shouldn't `a` disappear, or gray out, or otherwise "move" somewhere?
 
-Another misconception is that `a` simply vanishes after being moved. That is not true either. The variable hangs around after the move. That's why we see `a` in the diagram after executing `let b = a`. However, as we will see shortly, we can easily do unsafe things if we try to use a moved variable.
+No! **At runtime, nothing happens to `a` when it is moved.** There is no "ownership bit" that gets flipped in memory. There is no "has-been-moved" flag that gets turned on. Ownership only exists at compile-time. The diagram does not show how the compiler "thinks" about the program. It shows how the program actually executes at runtime. At runtime, move is just a copy. At compile-time, a move is a transfer of ownership.
 
 
 ### Collections Use Boxes

@@ -236,7 +236,7 @@ useful in Chapter 10, where we discuss generic types and traits.
 
 ### Methods and Ownership
 
-Like we discussed in Chapter 4.2 ["References and Borrowing"](ch04-02-references-and-borrowing.html), methods must be called on structs with the right permissions. As a running example, we will use these three methods that take `&self`, `&mut self`, and `self`, respectively.
+Like we discussed in Chapter 4.2 ["References and Borrowing"](ch04-02-references-and-borrowing.html), methods must be called on structs that have the necessary permissions. As a running example, we will use these three methods that take `&self`, `&mut self`, and `self`, respectively.
 
 ```rust,ignore
 impl Rectangle {    
@@ -259,7 +259,7 @@ impl Rectangle {
 
 #### Reads and Writes with `&self` and `&mut self`
 
-If we make an owned rectangle with `let rect = Rectangle { ... }`, then we have read and own permissions on `rect`. With those permissions, it is acceptable to call `area` and `max`:
+If we make an owned rectangle with `let rect = Rectangle { ... }`, then we have @Perm{read} and @Perm{own} permissions on `rect`. With those permissions, it is acceptable to call `area` and `max`:
 
 ```aquascope,permissions,boundaries,stepper
 #struct Rectangle {
@@ -296,7 +296,7 @@ let max_rect = rect.max(other_rect);`{}`
 #}
 ```
 
-However, if we try to call `set_width`, we are missing the write permission:
+However, if we try to call `set_width`, we are missing the @Perm{write} permission:
 
 ```aquascope,permissions,boundaries,shouldFail
 #struct Rectangle {
@@ -343,7 +343,7 @@ error[E0596]: cannot borrow `rect` as mutable, as it is not declared as mutable
    | ^^^^^^^^^^^^^^^^^ cannot borrow as mutable
 ```
 
-We will get a similar error if we try to call `set_width` on an immutable reference to a `Rectangle`, even if the underlying data is mutable:
+We will get a similar error if we try to call `set_width` on an immutable reference to a `Rectangle`, even if the underlying rectangle is mutable:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -437,7 +437,7 @@ error[E0382]: borrow of moved value: `rect`
    |                ^^^^^^^^^^^ value borrowed here after move
 ```
 
-A similar situation arises if we try to call `self` method on a reference. For instance, say we tried to make a method `set_to_max` that assigns `self` to the output of `self.max(..)`:
+A similar situation arises if we try to call a `self` method on a reference. For instance, say we tried to make a method `set_to_max` that assigns `self` to the output of `self.max(..)`:
 
 ```aquascope,permissions,boundaries,stepper,shouldFail
 #struct Rectangle {
@@ -467,7 +467,7 @@ impl Rectangle {
 }
 ```
 
-Then we can see that `self` is missing own permissions in the operation `self.max(..)`. Rust therefore rejects this program with the following error:
+Then we can see that `self` is missing @Perm{own} permissions in the operation `self.max(..)`. Rust therefore rejects this program with the following error:
 
 ```text
 error[E0507]: cannot move out of `*self` which is behind a mutable reference
@@ -481,7 +481,7 @@ error[E0507]: cannot move out of `*self` which is behind a mutable reference
    |
 ```
 
-This is the same kind of error we discussed in Chapter 4.3 ["Copying vs. Moving Out of a Data Structure"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-data-structure).
+This is the same kind of error we discussed in Chapter 4.3 ["Copying vs. Moving Out of a Collection"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-collection).
 
 #### Good Moves and Bad Moves
 
@@ -515,10 +515,10 @@ fn main() {
 ```
 
 The reason it's safe to move out of `*self` is because `Rectangle` does not own any heap data.
-In fact, we can actually get Rust to compile `set_to_max` by simply adding `#[derive(Copy)]` to the definition of `Rectangle`:
+In fact, we can actually get Rust to compile `set_to_max` by simply adding `#[derive(Copy, Clone)]` to the definition of `Rectangle`:
 
 ```aquascope,permissions,boundaries,stepper
-\#[derive(Copy)]
+\#[derive(Copy, Clone)]
 struct Rectangle {
     width: u32,
     height: u32,
@@ -539,7 +539,7 @@ impl Rectangle {
 }
 ```
 
-Notice that unlike before, `*self` now has own permissions. We are allowed to call an owned-self method like `max`.
+Notice that unlike before, `*self` now has the @Perm{own} permission. We are allowed to call an owned-self method like `max`.
 
 You might wonder: why doesn't Rust automatically derive `Copy` for `Rectangle`? Rust does not auto-derive `Copy` for stability across API changes. Imagine that the author of the `Rectangle` type decided to add a `name: String` field. Then all client code that relies on `Rectangle` being `Copy` would suddenly get rejected by the compiler. To avoid that issue, API authors must explicitly add `#[derive(Copy)]` to indicate that they expect their struct to always be `Copy`.
 
