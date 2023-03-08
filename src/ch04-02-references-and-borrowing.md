@@ -140,6 +140,8 @@ vec.push(4);`[]`
 #}
 ```
 
+The macro `vec!` creates a vector with the elements between the brackets. The vector `vec` has type `Vec<i32>`. The syntax `<i32>` means the elements of the vector have type `i32`.
+
 One important implementation detail is that `vec` allocates a heap array of a certain *capacity*. We can peek into `Vec`'s internals and see this detail for ourselves:
 
 ```aquascope,interpreter,horizontal,concreteTypes
@@ -175,7 +177,7 @@ However, because references are non-owning pointers, they need different rules t
 
 ### References Change Permissions on Paths
 
-The core idea is that variables have three kinds of **permissions** on their data:
+The core idea behind the borrow checker is that variables have three kinds of **permissions** on their data:
 
 - **Read** (@Perm{read}): data can be copied to another location.
 - **Write** (@Perm{write}): data can be mutated in-place.
@@ -183,7 +185,7 @@ The core idea is that variables have three kinds of **permissions** on their dat
 
 These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is executed.
 
-By default, a variable has read/own permissions (@Perm{read}@Perm{own}) on its data. If a variable is annotated with `let mut`, then it also has write permissions (@Perm{write}). The key idea is 
+By default, a variable has read/own permissions (@Perm{read}@Perm{own}) on its data. If a variable is annotated with `let mut`, then it also has the write permission (@Perm{write}). The key idea is 
 that **references can temporarily remove these permissions.** 
 
 To illustrate this idea, let's look at the permissions on a variation of the program above that is actually safe. The `push` has been moved after the `println!`. The permissions in this program are visualized with a new kind of diagram. The diagram shows the changes in permissions on each line.

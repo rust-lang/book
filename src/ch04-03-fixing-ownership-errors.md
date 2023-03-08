@@ -369,7 +369,7 @@ The problem is that Rust doesn't look at the implementation of `get_first` when 
 
 Remember, the key idea is that **the program above is safe.** It has no undefined behavior! A future version of Rust may be smart enough to let it compile, but for today, it gets rejected. So how should we work around the borrow checker today? One possibility is to inline the expression `&name.0`, like in the original program. Another possibility is to defer borrow checking to runtime with [cells], which we will discuss in future chapters.
 
-### Fixing a Safe Program: Mutating Different Array Indices
+### Fixing a Safe Program: Mutating Different Array Elements
 
 A similar kind of problem arises when we borrow elements of an array. For example, observe what paths are borrowed when we take a mutable reference to an array:
 
