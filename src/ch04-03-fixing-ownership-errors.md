@@ -75,7 +75,7 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 // ideally: ["Ferris", "Jr."] => "Ferris Jr. Esq."
 ```
 
-This program is rejected by the borrow checker because `name` is an immutable reference, but `name.push(..)` requires write permissions. This program is unsafe because `push` could invalidate other references to `name` outside of `stringify_name_with_title`, like this:
+This program is rejected by the borrow checker because `name` is an immutable reference, but `name.push(..)` requires the @Perm{write} permission. This program is unsafe because `push` could invalidate other references to `name` outside of `stringify_name_with_title`, like this:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn stringify_name_with_title(name: &Vec<String>) -> String {
@@ -136,7 +136,7 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 }
 ```
 
-In general, writing Rust functions is a careful balance of asking for the *right* level of permissions. For this example, it's most idiomatic to only expect read permissions
+In general, writing Rust functions is a careful balance of asking for the *right* level of permissions. For this example, it's most idiomatic to only expect read permission.
 
 {{#quiz ../quizzes/ch04-03-fixing-ownership-errors-sec1-idioms.toml}}
 
@@ -158,7 +158,7 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 
 > *Note:* this example uses [iterators] and [closures] to succinctly find a reference the largest string. We will discuss those features in later chapters, and for now we will provide an intuitive sense of how the features work here.
 
-This program is rejected by the borrow checker because `let largest = ..` removes write permissions on `dst`. However, `dst.push(..)` requires write permissions. Again, we should ask: **why is this program unsafe?** Because `dst.push(..)` could deallocate the contents of `dst`, invalidating the reference `largest`.
+This program is rejected by the borrow checker because `let largest = ..` removes the @Perm{write} permissions on `dst`. However, `dst.push(..)` requires the @Perm{write} permission. Again, we should ask: **why is this program unsafe?** Because `dst.push(..)` could deallocate the contents of `dst`, invalidating the reference `largest`.
 
 To fix the program, the key insight is that we need to shorten the lifetime of `largest` to not overlap with `dst.push(..)`. One possibility is to clone `largest`:
 
@@ -216,7 +216,7 @@ let n: i32 = *n_ref;`{}`
 #}
 ```
 
-The dereference operation `*n_ref` expects own permissions, which the path `*n_ref` has. But what happens if we change the type of elements in the vector from `i32` to `String`? Then it turns out we no longer have the necessary permissions:
+The dereference operation `*n_ref` expects the @Perm{own} permission, which the path `*n_ref` has. But what happens if we change the type of elements in the vector from `i32` to `String`? Then it turns out we no longer have the necessary permissions:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 #fn main() {
@@ -268,6 +268,14 @@ In sum, **if a value does not own heap data, then it can be copied without a mov
 * An `i32` **does not** own heap data, so it **can** be copied without a move. 
 * A `String` **does** own heap data, so it **can not** be copied without a move.
 * An `&String` **does not** own heap data, so it **can** be copied without a move.
+
+> *Note:* One exception to this rule is mutable references. For example, `&mut i32` is not a copyable type. So if you do something like:
+> ```rust,ignore
+> let mut n = 0;
+> let a = &mut n;
+> let b = a;
+> ```
+> Then `a` cannot be used after being assigned to `b`. That prevents two mutable references to the same data from being used at the same time.
 
 So if we have a vector of non-`Copy` types like `String`, then how do we safely get access to an element of the vector? Here's a few different ways to safely do so. First, you can avoid taking ownership of the string and just use an immutable reference:
 
@@ -321,9 +329,9 @@ println!("{first} {}", name.1);
 #}
 ```
 
-The statement `let first = &name.0` borrows `name.0`. This borrow removes write/own permissions from `name.0`. It also removes write/own permissions from `name`. (For example, one could not pass `name` to a function that takes as input a value of type `(String, String)`.) But `name.1` still retains write permissions, so doing `name.1.push_str(...)` is a valid operation.
+The statement `let first = &name.0` borrows `name.0`. This borrow removes @Perm{write}@Perm{own} permissions from `name.0`. It also removes @Perm{write}@Perm{own} permissions from `name`. (For example, one could not pass `name` to a function that takes as input a value of type `(String, String)`.) But `name.1` still retains the @Perm{write} permission, so doing `name.1.push_str(...)` is a valid operation.
 
-However, Rust can lose track of exactly which paths are borrowed. For example, let's say we refactor the expression `&name.0` into a function `get_first`. Notice how after calling `get_first(&name)`, Rust now removes write permissions on `name.1`:
+However, Rust can lose track of exactly which paths are borrowed. For example, let's say we refactor the expression `&name.0` into a function `get_first`. Notice how after calling `get_first(&name)`, Rust now removes the @Perm{write} permission on `name.1`:
 
 ```aquascope,permissions,stepper,boundaries,shouldFail
 fn get_first(name: &(String, String)) -> &String {
@@ -361,7 +369,7 @@ The problem is that Rust doesn't look at the implementation of `get_first` when 
 
 Remember, the key idea is that **the program above is safe.** It has no undefined behavior! A future version of Rust may be smart enough to let it compile, but for today, it gets rejected. So how should we work around the borrow checker today? One possibility is to inline the expression `&name.0`, like in the original program. Another possibility is to defer borrow checking to runtime with [cells], which we will discuss in future chapters.
 
-### Fixing a Safe Program: Mutating Different Array Indices
+### Fixing a Safe Program: Mutating Different Array Elements
 
 A similar kind of problem arises when we borrow elements of an array. For example, observe what paths are borrowed when we take a mutable reference to an array:
 

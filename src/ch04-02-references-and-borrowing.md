@@ -131,7 +131,30 @@ Pointers are a powerful and dangerous feature because they enable **aliasing**. 
 - By mutating the aliased data, invalidating runtime properties expected by the other variable.
 - By _concurrently_ mutating the aliased data, causing a data race with nondeterministic behavior for the other variable.
 
-As a concrete example, say we created a reference to a vector (a resizable array). We could invalidate that reference by resizing the vector, as simulated below:
+As a running example, we are going to look at programs using the vector data structure, [`Vec`]. Unlike arrays which have a fixed length, vectors have a variable length by storing their elements in the heap. For example, [`Vec::push`] adds an element to the end of a vector, like this:
+
+```aquascope,interpreter,horizontal
+#fn main() {
+let mut vec: Vec<i32> = vec![1, 2, 3];`[]`
+vec.push(4);`[]`
+#}
+```
+
+The macro `vec!` creates a vector with the elements between the brackets. The vector `vec` has type `Vec<i32>`. The syntax `<i32>` means the elements of the vector have type `i32`.
+
+One important implementation detail is that `vec` allocates a heap array of a certain *capacity*. We can peek into `Vec`'s internals and see this detail for ourselves:
+
+```aquascope,interpreter,horizontal,concreteTypes
+#fn main() {
+let mut vec: Vec<i32> = vec![1, 2, 3];`[]`
+#}
+```
+
+> *Note:* click the binocular icon in the top right of the diagram to toggle this detailed view in any runtime diagram.
+
+Notice that the vector has a length (`len`) of 3 and a capacity (`cap`) of 3. The vector is at capacity. So when we do a `push`, the vector has to create a new allocation with larger capacity, copy all the elements over, and deallocate the original heap array. In the diagram above, the array `1 2 3 4` is in a (potentially) different memory location than the original array `1 2 3`.
+
+To tie this back to memory safety, let's bring references into the mix. Say we created a reference to a vector's heap data. Then that reference can be invalidated by a push, as simulated below:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #fn main() {
@@ -154,15 +177,15 @@ However, because references are non-owning pointers, they need different rules t
 
 ### References Change Permissions on Paths
 
-The core idea is that variables have three kinds of **permissions** on their data:
+The core idea behind the borrow checker is that variables have three kinds of **permissions** on their data:
 
-- **Read** (<span class="perm read">R</span>): data can be copied to another location.
-- **Write** (<span class="perm write">W</span>): data can be mutated in-place.
-- **Own** (<span class="perm own">O</span>): data can be moved or dropped.
+- **Read** (@Perm{read}): data can be copied to another location.
+- **Write** (@Perm{write}): data can be mutated in-place.
+- **Own** (@Perm{own}): data can be moved or dropped.
 
 These permissions don't exist at runtime, only within the compiler. They describe how the compiler "thinks" about your program before the program is executed.
 
-By default, a variable has read/own permissions (<span class="perm read">R</span><span class="perm own">O</span>) on its data. If a variable is annotated with `let mut`, then it also has write permissions (<span class="perm write">W</span>). The key idea is 
+By default, a variable has read/own permissions (@Perm{read}@Perm{own}) on its data. If a variable is annotated with `let mut`, then it also has the write permission (@Perm{write}). The key idea is 
 that **references can temporarily remove these permissions.** 
 
 To illustrate this idea, let's look at the permissions on a variation of the program above that is actually safe. The `push` has been moved after the `println!`. The permissions in this program are visualized with a new kind of diagram. The diagram shows the changes in permissions on each line.
@@ -178,13 +201,13 @@ vec.push(4);
 
 Let's walk through each line:
 
-1. After `let mut vec = (...)`, the variable `vec` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains read/write/own permissions (the plus sign indicates gain).
+1. After `let mut vec = (...)`, the variable `vec` has been initialized (indicated by <i class="fa fa-level-up"></i>). It gains @Perm[gained]{read}@Perm[gained]{write}@Perm[gained]{own} permissions (the plus sign indicates gain).
 2. After `let num = &vec[2]`, the data in `vec` has been **borrowed** by `num` (indicated by <i class="fa fa-arrow-right"></i>). Three things happen:
-   - The borrow removes write/own permissions from `vec` (the slash indicates loss). `vec` cannot be written or owned, but it can still be read.
-   - The variable `num` has gained read/own permissions. `num` is not writable (the missing write permission is shown as a dash `-`) because it was not marked `let mut`.
-   - The **path** `*num` has gained read/own permissions.
+   - The borrow removes @Perm[lost]{write}@Perm[lost]{own} permissions from `vec` (the slash indicates loss). `vec` cannot be written or owned, but it can still be read.
+   - The variable `num` has gained @Perm{read}@Perm{own} permissions. `num` is not writable (the missing @Perm{write} permission is shown as a dash <span class="perm write">‒</span>) because it was not marked `let mut`.
+   - The **path** `*num` has gained @Perm{read}@Perm{own} permissions.
 3. After `println!(...)`, then `num` is no longer in use, so `vec` is no longer borrowed. Therefore:
-   - `vec` regains its write/own permissions (indicated by <i class="fa fa-rotate-left"></i>).
+   - `vec` regains its @Perm{write}@Perm{own} permissions (indicated by <i class="fa fa-rotate-left"></i>).
    - `num` and `*num` have lost all of their permissions (indicated by <i class="fa fa-level-down"></i>).
 4. After `vec.push(4)`, then `vec` is no longer in use, and it loses all of its permissions.
 
@@ -198,7 +221,9 @@ let mut x_ref = &x;
 #}
 ```
 
-Notice that `x_ref` as write permission, while `*x_ref` does not. That means we can assign `x_ref` to a different reference (e.g. `x_ref = &y`), but we cannot mutate the pointed data (e.g. `*x_ref += 1`).
+Notice that `x_ref` has the @Perm{write} permission, while `*x_ref` does not. That means we can assign `x_ref` to a different reference (e.g. `x_ref = &y`), but we cannot mutate the pointed data (e.g. `*x_ref += 1`).
+
+> *Note:* you might wonder why `*num` and `*x_ref` have the @Perm{own} permission, since references are non-owning pointers. That's because the vector contains numbers of type `i32`, and `i32` is a *copyable* type. We will discuss this difference more next section in ["Copying vs. Moving Out of a Collection"](ch04-03-fixing-ownership-errors.html#fixing-an-unsafe-program-copying-vs-moving-out-of-a-collection).
 
 More generally, permissions are defined on **paths** and not just variables. A path is anything you can put on the left-hand side of an assignment. Paths include:
 
@@ -207,6 +232,7 @@ More generally, permissions are defined on **paths** and not just variables. A p
 - Array accesses of paths, like `a[0]`.
 - Fields of paths, like `a.0` for tuples or `a.field` for structs (discussed next chapter).
 - Any combination of the above, like `*((*a)[0].1)`.
+
 
 Second, why do paths lose permissions when they become unused? Because some permissions are mutually exclusive. If `num = &vec[2]`, then `vec` cannot be mutated or dropped while `num` is in use. But that doesn't mean it's invalid to use `num` for more time. For example, if we add another `print` to the above program, then `num` simply loses its permissions later:
 
@@ -235,9 +261,9 @@ println!("Third element is {}", *num);
 #}
 ```
 
-Any time a path is used, Rust expects that path to have certain permissions depending on the operation. For example, the borrow `&vec[2]` requires that `vec` is readable. Therefore the permission <span class="perm read">R</span> is shown between the operation `&` and the path `vec`. The letter is filled-in because `vec` has the read permission at that line. 
+Any time a path is used, Rust expects that path to have certain permissions depending on the operation. For example, the borrow `&vec[2]` requires that `vec` is readable. Therefore the @Perm{read} permission is shown between the operation `&` and the path `vec`. The letter is filled-in because `vec` has the read permission at that line. 
 
-By contrast, the mutating operation `vec.push(4)` requires that `vec` is readable and writable. Both <span class="perm read">R</span> and <span class="perm write">W</span> are shown. However, `vec` does not have write permissions (it is borrowed by `num`). So the letter <span class="perm write missing">W</span> is hollow, indicating that the write permission is *expected* but `vec` does not have it.
+By contrast, the mutating operation `vec.push(4)` requires that `vec` is readable and writable. Both @Perm{read} and @Perm{write} are shown. However, `vec` does not have write permissions (it is borrowed by `num`). So the letter @Perm[missing]{write} is hollow, indicating that the write permission is *expected* but `vec` does not have it.
 
 If you try to compile this program, then the Rust compiler will return the following error:
 
@@ -276,12 +302,12 @@ println!("Vector is now {:?}", vec);
 
 A mutable reference is created with the `&mut` operator. The type of `num` is written as `&mut i32`. Compared to immutable references, you can see two important differences in the permissions:
 
-1. When `num` was an immutable reference, `vec` still had read permissions. Now that `num` is a mutable reference, `vec` has lost _all_ permissions while `num` is in use.
-2. When `num` was an immutable reference, the path `*num` only had read/own permissions. Now that `num` is a mutable reference, `*num` has also gained write permissions.
+1. When `num` was an immutable reference, `vec` still had @Perm{read} permissions. Now that `num` is a mutable reference, `vec` has lost _all_ permissions while `num` is in use.
+2. When `num` was an immutable reference, the path `*num` only had @Perm{read}@Perm{own} permissions. Now that `num` is a mutable reference, `*num` has also gained the @Perm{write} permission.
 
 The first observation is what makes mutable references *safe*. Mutable references allow mutation but prevent aliasing. The borrowed path `vec` becomes temporarily unusable, so effectively not an alias.
 
-The second observation is what makes mutable references *useful*. `vec[2]` can be mutated through `*num`. For example, `*num += 1` mutates `vec[2]`. Note that `*num` has write permissions, but `num` does not. `num` refers to the mutable reference itself, e.g. `num` cannot be reassigned to a *different* mutable reference.
+The second observation is what makes mutable references *useful*. `vec[2]` can be mutated through `*num`. For example, `*num += 1` mutates `vec[2]`. Note that `*num` has the @Perm{write} permission, but `num` does not. `num` refers to the mutable reference itself, e.g. `num` cannot be reassigned to a *different* mutable reference.
 
 Mutable references can also be temporarily "downgraded" to read-only references. For example:
 
@@ -296,7 +322,7 @@ println!("{} {}", num, num2);
 
 > *Note:* when permission changes are not relevant to an example, we will hide them. You can view hidden steps by clicking "»", and you can view hidden permissions within a step by clicking "● ● ●".
 
-In this program, the borrow `&*num` removes the write permission from `*num` but _not_ the read permission, so `println!(..)` can read both `*num` and `*num2`.
+In this program, the borrow `&*num` removes the @Perm{write} permission from `*num` but _not_ the @Perm{read} permission, so `println!(..)` can read both `*num` and `*num2`.
 
 
 ### Permissions Are Returned At The End of a Reference's Lifetime
@@ -314,7 +340,7 @@ x += z;
 #}
 ```
 
-The write permissions on `x` are returned to `x` after the lifetime of `y` has ended, like we have seen before.
+The @Perm{write} permission on `x` is returned to `x` after the lifetime of `y` has ended, like we have seen before.
 
 In the previous examples, a lifetime has been a contiguous region of code. However, once we introduce control flow, this is not necessarily the case. For example, here is a function that capitalizes the first character in a vector of ASCII characters:
 
@@ -330,9 +356,9 @@ fn ascii_capitalize(v: &mut Vec<char>) {
 }
 ```
 
-The variable `c` has a different lifetime in each branch of the if-statement. In the then-block, `c` is used in the expression `c.to_ascii_uppercase()`. Therefore `*v` does not regain write permissions until after that line.
+The variable `c` has a different lifetime in each branch of the if-statement. In the then-block, `c` is used in the expression `c.to_ascii_uppercase()`. Therefore `*v` does not regain the @Perm{write} permission until after that line.
 
-However, in the else-block, `c` is not used. `*v` immediately regains write permissions on entry to the else-block.
+However, in the else-block, `c` is not used. `*v` immediately regains the @Perm{write} permission on entry to the else-block.
 
 {{#quiz ../quizzes/ch04-02-references-sec2-perms.toml}}
 
@@ -440,3 +466,5 @@ However, references can be easily misused. Rust's borrow checker enforces a syst
 In this section, it probably feels like we've described more of what Rust _cannot_ do than what Rust _can_ do. That is intentional! One of Rust's core features is allowing you to use pointers without garbage collection, while also avoiding undefined behavior. Understanding these safety rules now will help you avoid frustration with the compiler later.
 
 [`String::push_str`]: https://doc.rust-lang.org/std/string/struct.String.html#method.push_str
+[`Vec`]: https://doc.rust-lang.org/std/vec/struct.Vec.html
+[`Vec::push`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.push
