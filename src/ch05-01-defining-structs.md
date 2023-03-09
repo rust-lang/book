@@ -326,7 +326,7 @@ implement them on any type, including unit-like structs.
 ### Borrowing Fields of a Struct
 
 Similar to our discussion in ["Different Tuple Fields"][differentfields], Rust's borrow checker will track ownership permissions
-at the both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions (but not `p.y`!):
+at the both the struct-level and field-level. For example, if we borrow a field `x` of a `Point` structure, then both `p` and `p.x` temporarily lose their permissions (but not `p.y`):
 
 ```aquascope,permissions,stepper,boundaries
 #fn main() {

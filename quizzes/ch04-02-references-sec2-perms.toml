@@ -58,3 +58,31 @@ context = """
 When `get_first` is called, Rust recognizes that the returned string `first` could point to data within `strs`, so `strs` loses 
 write permissions. Once the `first` variable is no longer used (after the if-condition), then `strs` regains write permissions.
 """
+
+[[questions]]
+id = "652e596c-7cc9-42e6-a7f8-701879cd9a2b"
+type = "MultipleChoice"
+prompt.prompt = """
+Consider this unsafe program:
+```aquascope,interpreter,shouldFail
+#fn main() {
+let v1 = vec![1, 2, 3];
+let mut v2 = v1;
+v2.push(4);
+println!("{}", v1[0]);`[]`    
+#}
+```
+
+Which of the following best describes how undefined behavior occurs in this program?
+"""
+answer.answer = "`v1[0]` reads `v1`, which points to deallocated memory"
+prompt.distractors = [
+  "`v2` owns the vector data on the heap, while `v1` does not",
+  "`v1` has been moved into `v2` on line 2",
+  "`v1` has its pointer invalidated by the `push` on line 3"
+]
+context = """
+The undefined behavior arises because `v1` is read after being freed. Note that the other three options are correct statements
+about the program, but they do not explain why the undefined behavior actually occurs. For example, if the `println` were deleted,
+then the other three options are still true, but the program no longer has undefined behavior.
+"""

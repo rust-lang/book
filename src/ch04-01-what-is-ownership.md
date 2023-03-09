@@ -227,7 +227,7 @@ To avoid this situation, we finally arrive at ownership. When `a` is bound to `B
 In the example above, `b` owns the boxed array. Therefore when the scope ends, Rust deallocates the box only once on behalf of `b`, not `a`.
 
 
-### At Runtime, A Move is Just a Copy 
+### At Runtime, A Move is Just a Copy
 
 A common misconception is that a "move" actually moves data around in memory. But that is not true! A move is just a copy. For example, let's look again at what happens when we move a boxed array from `a` to `b`:
 

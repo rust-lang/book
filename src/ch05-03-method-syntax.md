@@ -259,7 +259,7 @@ impl Rectangle {
 
 #### Reads and Writes with `&self` and `&mut self`
 
-If we make an owned rectangle with `let rect = Rectangle { ... }`, then we have @Perm{read} and @Perm{own} permissions on `rect`. With those permissions, it is acceptable to call `area` and `max`:
+If we make an owned rectangle with `let rect = Rectangle { ... }`, then `rect` has @Perm{read} and @Perm{own} permissions. With those permissions, it is permissible to call the `area` and `max` methods:
 
 ```aquascope,permissions,boundaries,stepper
 #struct Rectangle {
@@ -485,7 +485,7 @@ This is the same kind of error we discussed in Chapter 4.3 ["Copying vs. Moving 
 
 #### Good Moves and Bad Moves
 
-You might wonder: why does it matter if we move out of `self`? In fact, for the case of `Rectangle`, it actually is safe, even though Rust doesn't let you do it. For example, if we simulate a program that calls the rejected `set_to_max`, you can see how nothing unsafe occurs:
+You might wonder: why does it matter if we move out of `*self`? In fact, for the case of `Rectangle`, it actually is safe to move out of `*self`, even though Rust doesn't let you do it. For example, if we simulate a program that calls the rejected `set_to_max`, you can see how nothing unsafe occurs:
 
 ```aquascope,interpreter,shouldFail,horizontal
 #struct Rectangle {
