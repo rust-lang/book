@@ -91,7 +91,7 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 
 If you see this information, you have installed Rust successfully! If you don’t
 see this information, check that Rust is in your `%PATH%` system variable as
-follows.
+follows. Keep in mind that you should find the `~/.cargo/bin` directory.
 
 In Windows CMD, use:
 
@@ -102,7 +102,7 @@ In Windows CMD, use:
 In PowerShell, use:
 
 ```powershell
-> echo $env:Path
+> $env:Path
 ```
 
 In Linux and macOS, use:
