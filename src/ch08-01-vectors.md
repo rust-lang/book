@@ -187,15 +187,16 @@ To change the value that the mutable reference refers to, we again use the `*` d
 
 We will discuss more about how iterators work in Chapter 13.2 ["Processing a Series of Items with Iterators"](ch13-02-iterators.html).
 For now, one important detail is that iterators contain a pointer to data within the vector. We can see how
-iterators work by desugaring a for-loop into the appropriate method calls of [`Vec::iter`] and [`Iterator::next`]:
+iterators work by desugaring a for-loop into the corresponding method calls of [`Vec::iter`] and [`Iterator::next`]:
 
-```aquascope,interpreter,shouldFail,horizontal
+```aquascope,interpreter,horizontal
 #fn main() {
-let mut v = vec![1, 2];
-let mut iter = v.iter();`[]`
-let n1 = iter.next().unwrap();`[]`
-let n2 = iter.next().unwrap();`[]`
-let end = iter.next();`[]`
+use std::slice::Iter;  
+let mut v: Vec<i32>         = vec![1, 2];
+let mut iter: Iter<'_, i32> = v.iter();`[]`
+let n1: &i32                = iter.next().unwrap();`[]`
+let n2: &i32                = iter.next().unwrap();`[]`
+let end: Option<&i32>       = iter.next();`[]`
 #}
 ```
 

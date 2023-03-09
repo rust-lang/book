@@ -240,7 +240,7 @@ let b = a;`[]`
 
 An exceedingly common question from readers is: if `a` is moved at L2, why is it still in the diagram? Shouldn't `a` disappear, or gray out, or otherwise "move" somewhere?
 
-No! **At runtime, nothing happens to `a` when it is moved.** There is no "ownership bit" that gets flipped in memory. There is no "has-been-moved" flag that gets turned on. Ownership only exists at compile-time. The diagram does not show how the compiler "thinks" about the program. It shows how the program actually executes at runtime. At runtime, move is just a copy. At compile-time, a move is a transfer of ownership.
+No! **At runtime, nothing happens to `a` when it is moved.** There is no "ownership bit" that gets flipped in memory. There is no "has-been-moved" flag that gets turned on. Ownership only exists at compile-time. The diagram does not show how the compiler "thinks" about the program. It shows how the program actually executes at runtime. At runtime, a move is just a copy. At compile-time, a move is a transfer of ownership.
 
 
 ### Collections Use Boxes
