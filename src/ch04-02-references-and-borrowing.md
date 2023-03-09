@@ -119,7 +119,7 @@ This example shows implicit conversions in three ways:
 
 3. This conversion also works the opposite direction. The function `str::len` expects a reference `&str`. If you call `len` on an owned `String`, then Rust will insert a single borrowing operator. (In fact, there is a further conversion from `String` to `str`!)
 
-We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is that these conversions with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
+We will say more about method calls and implicit conversions in later chapters. For now, the important takeaway is that these conversions are happening with method calls and some macros like `println`. We want to unravel all the "magic" of Rust so you can have a clear mental model of how Rust works.
 
 {{#quiz ../quizzes/ch04-02-references-sec1-basics.toml}}
 
@@ -316,7 +316,7 @@ Mutable references can also be temporarily "downgraded" to read-only references.
 let mut vec: Vec<i32> = vec![1, 2, 3];
 let num: &mut i32 = &mut vec[2];`(focus,paths:*num)`
 let num2: &i32 = &*num;`(focus,paths:*num)`
-println!("{} {}", num, num2);
+println!("{} {}", *num, *num2);
 #}
 ```
 

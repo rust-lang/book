@@ -485,7 +485,7 @@ cloner();
 #}
 ```
 
-Then we get a new compiler error:
+Rust recognizes that as long as `make_a_cloner` is in use, `s_own` cannot be dropped. This is reflected in the permissions: `s_own` loses the @Perm{own} permission after calling `make_a_cloner`. Consequently, Rust rejects this program with the following error:
 
 ```text
 error[E0505]: cannot move out of `s_own` because it is borrowed
@@ -498,8 +498,6 @@ error[E0505]: cannot move out of `s_own` because it is borrowed
 10 | cloner();
    | ------ borrow later used here
 ```
-
-Rust recognizes that as long as `make_a_cloner` is live, `s_own` cannot be dropped. This is reflected in the permissions: `s_own` loses ownership permissions after calling `make_a_cloner`.
 
 Returning now to the original confusing error: the "hidden type" of the closure captured `s_ref` which had a limited lifetime. The return type never mentioned this lifetime, so Rust could not deduce that `make_a_cloner` was safe. But if we explicitly say that the closure captures the lifetime of `s_ref`, then our function compiles.
 

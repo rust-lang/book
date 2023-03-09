@@ -30,7 +30,7 @@ let c = Box::new(15);`[]`
 #}
 ```
 
-In the final state, how many copies of the number `15` live anywhere in memory? Write your answer as a digit, e.g. 0 or 1.
+In the final state, how many copies of the number `15` live anywhere in memory? Write your answer as a digit, such as 0 or 1.
 """
 answer.answer = "2"
 context = """

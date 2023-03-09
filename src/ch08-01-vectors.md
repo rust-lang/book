@@ -182,12 +182,67 @@ elements in a vector</span>
 To change the value that the mutable reference refers to, we again use the `*` dereference operator to get to the value in `n_ref` before we can use the `+=` operator. 
 <!-- END INTERVENTION -->
 
-Iterating over a vector, whether immutably or mutably, is safe because of the
-borrow checker's rules. If we attempted to insert or remove items in the `for`
-loop bodies in Listing 8-7 and Listing 8-8, we would get a compiler error
-similar to the one we got with the code in Listing 8-6. The reference to the
-vector that the `for` loop holds prevents simultaneous modification of the
-whole vector.
+
+### Safely Using Iterators
+
+We will discuss more about how iterators work in Chapter 13.2 ["Processing a Series of Items with Iterators"](ch13-02-iterators.html).
+For now, one important detail is that iterators contain a pointer to data within the vector. We can see how
+iterators work by desugaring a for-loop into the corresponding method calls of [`Vec::iter`] and [`Iterator::next`]:
+
+```aquascope,interpreter,horizontal
+#fn main() {
+use std::slice::Iter;  
+let mut v: Vec<i32>         = vec![1, 2];
+let mut iter: Iter<'_, i32> = v.iter();`[]`
+let n1: &i32                = iter.next().unwrap();`[]`
+let n2: &i32                = iter.next().unwrap();`[]`
+let end: Option<&i32>       = iter.next();`[]`
+#}
+```
+
+Observe that the iterator `iter` is a pointer that moves through each element of the vector. The `next` method advances
+the iterator and returns an optional reference to the previous element, either `Some` (which we unwrap) or `None` at the end of the vector.
+
+This detail is relevant to safely using vectors. For example, say we wanted to duplicate a vector in-place, such as `[1, 2]` becoming `[1, 2, 1, 2]`.
+A naive implementation might look like this, annotated with the permissions inferred by the compiler:
+
+```aquascope,permissions,stepper,boundaries
+fn dup_in_place(v: &mut Vec<i32>) {
+    for n_ref in v.iter() {`(focus,paths:*v)`
+        v.push(*n_ref);`{}`
+    }
+}
+```
+
+Notice that `v.iter()` removes the @Perm{write} permission from `*v`. Therefore the `v.push(..)` operation is missing the expected @Perm{write} permission. The Rust compiler will reject this program with a corresponding error message:
+
+```text
+error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immutable
+ --> test.rs:3:9
+  |
+2 |     for n_ref in v.iter() {
+  |                  --------
+  |                  |
+  |                  immutable borrow occurs here
+  |                  immutable borrow later used here
+3 |         v.push(*n_ref);
+  |         ^^^^^^^^^^^^^^ mutable borrow occurs here
+```
+
+As we discussed in Chapter 4, the safety issue beneath this error is reading deallocated memory. As soon as `v.push(1)` happens, the vector will reallocate its contents and invalidate the iterator's pointer. So to use iterators safely, Rust does not allow you to add or remove elements from the vector during iteration.
+
+<!-- TODO: add loop support and make this diagram look reasonable -->
+<!-- ```aquascope,interpreter,shouldFail,horizontal
+fn dup_in_place(v: &mut Vec<i32>) {`[]`
+    for n_ref in v.iter() {
+        v.push(*n_ref);
+    }`[]`
+}
+fn main() {
+    let mut v = vec![1, 2, 3];
+    dup_in_place(&mut v);
+}
+``` -->
 
 ### Using an Enum to Store Multiple Types
 
@@ -253,3 +308,5 @@ Let’s move on to the next collection type: `String`!
 [nomicon]: https://doc.rust-lang.org/nomicon/vec/vec.html
 [vec-api]: https://doc.rust-lang.org/std/vec/struct.Vec.html
 [deref]: ch04-02-references-and-borrowing.html#dereferencing-a-pointer-accesses-its-data
+[`Vec::iter`]: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.iter
+[`Iterator::next`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html#tymethod.next

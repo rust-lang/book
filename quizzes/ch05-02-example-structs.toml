@@ -25,7 +25,8 @@ fn area(rectangle: Rectangle) -> u32 {
 answer.doesCompile = false
 answer.lineNumber = 14
 context = """ 
-`rect1` is moved by calling `area`, so it cannot be used on the next line.
+The `area` function takes ownership of its argument `rectangle`. Calling `area(rect1)` therefore
+moves `rect1`, meaning it cannot be used on the next line.
 """
 
 [[questions]]
