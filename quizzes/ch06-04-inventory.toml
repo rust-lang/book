@@ -60,7 +60,7 @@ error[E0515]: cannot return reference to local variable `default`
 ```
 
 Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
 Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = ["""
@@ -225,7 +225,7 @@ error[E0507]: cannot move out of `*arg` which is behind a shared reference
 ```
 
 Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
 Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = [

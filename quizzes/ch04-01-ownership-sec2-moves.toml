@@ -1,4 +1,18 @@
 [[questions]]
+type = "MultipleChoice"
+prompt.prompt = "Which of the following is NOT a kind of undefined behavior?"
+answer.answer = "Having a pointer to freed memory in a stack frame"
+prompt.distractors = [
+  "Using a pointer that points to freed memory",
+  "Freeing the same memory a second time",
+  "Using a non-boolean value as an `if` condition"
+]
+context = """
+It can be perfectly safe to have a pointer to freed memory in a stack frame. 
+The important thing is to not *use* that pointer again, e.g. by reading it or freeing it.
+"""
+
+[[questions]]
 id = "94425a4e-043e-47f8-9fba-c5b09fb60aa3"
 type = "Tracing"
 prompt.program = """

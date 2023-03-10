@@ -83,52 +83,6 @@ to that field as part of the type’s public API. We will be discussing what
 public and private are and how to designate a field or method as public or
 private in Chapter 7.
 
-> ### Where’s the `->` Operator?
->
-> In C and C++, two different operators are used for calling methods: you use
-> `.` if you’re calling a method on the object directly and `->` if you’re
-> calling the method on a pointer to the object and need to dereference the
-> pointer first. In other words, if `object` is a pointer,
-> `object->something()` is similar to `(*object).something()`.
->
-> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
-> feature called *automatic referencing and dereferencing*. Calling methods is
-> one of the few places in Rust that has this behavior.
->
-> Here’s how it works: when you call a method with `object.something()`, Rust
-> automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
-> the method. In other words, the following are the same:
->
-> <!-- CAN'T EXTRACT SEE BUG https://github.com/rust-lang/mdBook/issues/1127 -->
-> ```rust
-> # #[derive(Debug,Copy,Clone)]
-> # struct Point {
-> #     x: f64,
-> #     y: f64,
-> # }
-> #
-> # impl Point {
-> #    fn distance(&self, other: &Point) -> f64 {
-> #        let x_squared = f64::powi(other.x - self.x, 2);
-> #        let y_squared = f64::powi(other.y - self.y, 2);
-> #
-> #        f64::sqrt(x_squared + y_squared)
-> #    }
-> # }
-> # let p1 = Point { x: 0.0, y: 0.0 };
-> # let p2 = Point { x: 5.0, y: 6.5 };
-> p1.distance(&p2);
-> (&p1).distance(&p2);
-> ```
->
-> The first one looks much cleaner. This automatic referencing behavior works
-> because methods have a clear receiver—the type of `self`. Given the receiver
-> and name of a method, Rust can figure out definitively whether the method is
-> reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
-> that Rust makes borrowing implicit for method receivers is a big part of
-> making ownership ergonomic in practice.
-
-
 ### Methods with More Parameters
 
 Let’s practice using methods by implementing a second method on the `Rectangle`
@@ -233,6 +187,96 @@ blocks</span>
 There’s no reason to separate these methods into multiple `impl` blocks here,
 but this is valid syntax. We’ll see a case in which multiple `impl` blocks are
 useful in Chapter 10, where we discuss generic types and traits.
+
+### Method Calls are Syntactic Sugar for Function Calls
+
+Using the concepts we've discussed so far, we can now see how method calls are syntactic sugar for function calls. For example, let's say we have a rectangle struct with an `area` method and a `set_width` method:
+
+```rust,ignore
+# struct Rectangle {
+#     width: u32,
+#     height: u32,
+# }
+# 
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+
+    fn set_width(&mut self, width: u32) {
+        self.width = width;
+    }
+}
+```
+
+And let's say we have a rectangle `r`. Then the method calls `r.area()` and `r.set_width(2)` are equivalent to this:
+
+```rust
+# struct Rectangle {
+#     width: u32,
+#     height: u32,
+# }
+# 
+# impl Rectangle {
+#     fn area(&self) -> u32 {
+#        self.width * self.height
+#      }
+# 
+#     fn set_width(&mut self, width: u32) {
+#         self.width = width;
+#     }
+# }
+# 
+# fn main() {
+    let mut r = Rectangle { 
+        width: 1,
+        height: 2
+    };
+    let area1 = r.area();
+    let area2 = Rectangle::area(&r);
+    assert_eq!(area1, area2);
+
+    r.set_width(2);
+    Rectangle::set_width(&mut r, 2);
+# }
+```
+
+The method call `r.area()` becomes `Rectangle::area(&r)`. The function name is the associated function `Rectangle::area`. The function argument is the `&self` parameter. Rust automatically inserts the borrowing operator `&`.
+
+> *Note:* if you are familiar with C or C++, you are used to two different syntaxes for method calls: `r.area()` and `r->area()`. Rust does not have an equivalent to the arrow operator `->`. Rust will automatically reference and dereference the method receiver when you use the dot operator.
+
+The method call `r.set_width(2)` similarly becomes `Rectangle::set_width(&mut r, 2)`. This method expects `&mut self`, so the first argument is a mutable borrow `&mut r`. The second argument is exactly the same, the number 2.
+
+As we described in Chapter 4.3 ["Dereferencing a Pointer Accesses Its Data"](ch04-02-references-and-borrowing.html#dereferencing-a-pointer-accesses-its-data), Rust will insert as many references and dereferences as needed to make the types match up for the `self` parameter. For example, here are two equivalent calls to `area` for a mutable reference to a boxed rectangle:
+
+```rust
+# struct Rectangle {
+#     width: u32,
+#     height: u32,
+# }
+# 
+# impl Rectangle {
+#     fn area(&self) -> u32 {
+#        self.width * self.height
+#      }
+# 
+#     fn set_width(&mut self, width: u32) {
+#         self.width = width;
+#     }
+# }
+# fn main() {
+    let r = &mut Box::new(Rectangle { 
+        width: 1,
+        height: 2
+    });
+    let area1 = r.area();
+    let area2 = Rectangle::area(&**r);
+    assert_eq!(area1, area2);
+# }
+```
+
+Rust will add two dereferences (once for the mutable reference, once for the box) and then one immutable borrow because `area` expects `&Rectangle`.
+
 
 ### Methods and Ownership
 

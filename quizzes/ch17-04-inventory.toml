@@ -58,7 +58,7 @@ error[E0700]: hidden type for `impl Iterator<Item = String>` captures lifetime t
 ```
 
 Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
 Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = [
@@ -229,7 +229,7 @@ error[E0310]: the parameter type `T` may not live long enough
 ```
 
 Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
 Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying."""
 answer.answer = [
 """

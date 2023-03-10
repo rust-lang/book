@@ -65,8 +65,9 @@ error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
   |     ^^^^^^^^^ `v` is a `&` reference, so the data it refers to cannot be borrowed as mutable
 ```
 
-Assume that the compiler did NOT reject this function. Of the following programs, select each
-that could possibly cause undefined behavior if executed.
+Assume that the compiler did NOT reject this function. Select each (if any) of the following programs that could
+possibly cause undefined behavior if executed. If none of these programs could cause undefined behavior, 
+then check "None of these programs" .
 """
 answer.answer = [
 
@@ -96,14 +97,7 @@ let k = give_and_take(&v, 4);
 println!("{}", k);
 ```
 """,
-"""
-```
-let v = vec![1, 2, 3];
-give_and_take(&v, 4);
-let n = &v[0];
-println!("{}", n);
-```
-"""
+"None of these programs"
 ]
 context = """
 As we saw earlier in the section, `v.push(n)` can cause `v` to reallocate its internal contents, invalidating any references to the elements of `v` on the heap.

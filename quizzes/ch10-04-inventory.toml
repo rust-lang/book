@@ -53,7 +53,7 @@ error[E0596]: cannot borrow `*elems` as mutable, as it is behind a `&` reference
 ```
 
 Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
 Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = ["None of these programs"]
@@ -253,7 +253,7 @@ error[E0502]: cannot borrow `self.scores` as mutable because it is also borrowed
 ```
 
 Assume that the compiler did NOT reject this function. Which (if any) of the following programs would
-(1) pass the compiler, and (2) possibly violate memory safety or cause a data race if executed?
+(1) pass the compiler, and (2) possibly cause undefined behavior if executed?
 Check each program that satisfies both criteria, OR check "None of these programs" if none are satisfying.
 """
 answer.answer = ["None of these programs"]

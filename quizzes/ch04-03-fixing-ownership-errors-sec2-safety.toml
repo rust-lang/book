@@ -41,8 +41,9 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
   |                    help: consider borrowing here: `&*name`
 ```
 
-Assume that the compiler did NOT reject this function. Of the following programs, select each
-that could possibly cause undefined behavior if executed.
+Assume that the compiler did NOT reject this function. Select each (if any) of the following programs that could
+possibly cause undefined behavior if executed. If none of these programs could cause undefined behavior, 
+then check "None of these programs" .
 """
 answer.answer = [
 """
@@ -66,16 +67,11 @@ award_phd(&name);
 println!("{}", name_ref);
 ```
 """,
-"""
-```
-let name = String::from("Ferris");
-award_phd(&name);
-let name_ref = &name;
-println!("{name_ref}");
-```
-""",
+
 ]
-prompt.distractors = []
+prompt.distractors = [
+  "None of these programs"
+]
 context = """
 The statement `let mut name = *name` makes `name` take ownership the input string.
 However, the caller also still retains ownership of the string. Therefore after `award_phd`

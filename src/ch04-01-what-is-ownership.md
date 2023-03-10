@@ -7,7 +7,11 @@ Ownership is a discipline for ensuring the **safety** of Rust programs. To under
 Let's start with an example. This program is safe to execute:
 
 ```rust
-fn read(y: bool) {}
+fn read(y: bool) {
+    if y {
+        println!("y is true!");
+    }
+}
 
 fn main() {
     let x = true;
@@ -18,7 +22,11 @@ fn main() {
 We can make this program unsafe to execute by moving the call to `read` before the definition of `x`:
 
 ```rust,ignore,does_not_compile
-fn read(y: bool) {}
+fn read(y: bool) {
+    if y {
+        println!("y is true!");
+    }
+}
 
 fn main() {
     read(x); // oh no! x isn't defined!
@@ -30,21 +38,21 @@ fn main() {
 
 This second program is unsafe because `read(x)` expects `x` to have a value of type `bool`, but `x` doesn't have a value yet.
 
-When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`](https://docs.python.org/3/library/exceptions.html#NameError). But these safeguards come at a cost: each read of a variable must check whether that variable is defined. 
+When programs are executed by an interpreter, reading `x` before it's defined would usually raise an exception such as Python's [`NameError`] or Javascript's [`ReferenceError`]. But these safeguards come at a cost. Each time an interpreted program reads a variable, then the interpreter must check whether that variable is defined.
 
-Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. Therefore Rust does not check *at runtime* whether a variable is defined before it is used. Instead, Rust checks at *compile-time*. If you try to compile the unsafe program, you will get this error:
+Rust's goal is to compile programs into efficient binaries that require as few runtime checks as possible. Therefore Rust does not check at *runtime* whether a variable is defined before being used. Instead, Rust checks at *compile-time*. If you try to compile the unsafe program, you will get this error:
 
 ```text
 error[E0425]: cannot find value `x` in this scope
- --> src/main.rs:4:10
+ --> src/main.rs:8:10
   |
-4 |     read(x); // oh no! x isn't defined!
+8 |     read(x); // oh no! x isn't defined!
   |          ^ not found in this scope
 ```
 
 You probably have the intuition that it's good for Rust to ensure that variables are defined before they are used. But why? To justify the rule, we have to ask: **what would happen if Rust allowed a rejected program to compile?**
 
-Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/TbqnTaK3j)):
+Let's first consider how the safe program compiles and executes. On a computer with a processor using an [x86](https://en.wikipedia.org/wiki/X86) architecture, Rust generates the following assembly code for the `main` function in the safe program ([see the full assembly code here](https://rust.godbolt.org/z/xnT1fzsqv)):
 
 ```x86asm
 main:
@@ -103,7 +111,7 @@ Rust provides a particular way to think about memory. Ownership is a discipline 
 
 ### Variables Live in the Stack
 
-Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`. Beneath the program is a new kind of diagram. This diagram visualizes the state of the program at the three marked points.
+Here's a program like the one you saw in Section 3.3 that defines a number `n` and calls a function `plus_one` on `n`. Beneath the program is a new kind of diagram. This diagram visualizes the contents of memory during the program's execution at the three marked points.
 
 ```aquascope,interpreter,horizontal
 fn main() {
@@ -346,3 +354,6 @@ We have emphasized not just _how_ Rust's safeguards work, but _why_ they avoid u
 [^boxed-data-structures]: These data structures don't use the literal `Box` type. For example, `String` is implemented with `Vec`, and `Vec` is implemented with [`RawVec`](https://doc.rust-lang.org/nomicon/vec/vec-raw.html) rather than `Box`. But types like `RawVec` are still box-like: they own memory in the heap.
 
 [^pointer-management]: In another sense, ownership is a discipline of *pointer* management. But we haven't described yet about how to create pointers to anywhere other than the heap. We'll get there in the next section.
+
+[`NameError`]: https://docs.python.org/3/library/exceptions.html#NameError
+[`ReferenceError`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError
