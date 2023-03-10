@@ -1,42 +1,4 @@
 [[questions]]
-id = "ae4e06f6-5fdc-43d9-929c-85eba3559a82"
-type = "MultipleChoice"
-prompt.prompt = "What is the keyword for constructor functions in Rust?"
-answer.answer = "None of the above"
-prompt.distractors = [
-  "`constructor`",
-  "`new`",
-  "The name of the type being constructed",
-]
-prompt.answerIndex = 3
-context = """
-Rust does not have a keyword for constructor functions. The idiomatic way to define a constructor function is to make an associated function called `new`, 
-but that is not enforced by the language.
-"""
-
-[[questions]]
-id = "a506f97d-2b51-4517-bc4d-f69764093c71"
-type = "Tracing"
-prompt.program = """
-struct Point(i32, i32);
-fn main() {
-  let p = Point(1, 2);
-
-  impl p {
-    fn x(&self) -> i32 { self.0 }
-  }
-  
-  println!("{}", p.x());
-}
-"""
-answer.doesCompile = false
-answer.lineNumber = 5
-context = """ 
-Methods can only be implemented for types (e.g. `impl Point`), not variables (like `p`).
-"""
-
-
-[[questions]]
 id = "35a75881-eb08-486c-92b3-413ab512138a"
 type = "MultipleChoice"
 prompt.prompt = """

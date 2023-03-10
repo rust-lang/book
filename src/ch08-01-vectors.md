@@ -191,7 +191,7 @@ iterators work by desugaring a for-loop into the corresponding method calls of [
 
 ```aquascope,interpreter,horizontal
 #fn main() {
-use std::slice::Iter;  
+#use std::slice::Iter;  
 let mut v: Vec<i32>         = vec![1, 2];
 let mut iter: Iter<'_, i32> = v.iter();`[]`
 let n1: &i32                = iter.next().unwrap();`[]`
@@ -243,6 +243,18 @@ fn main() {
     dup_in_place(&mut v);
 }
 ``` -->
+
+One way to iterate over a vector without using a pointer is with a range, like we used for string slices in [Chapter 4.4](ch04-04-slices.html#range-syntax). For example, the range `0 .. v.len()` is an iterator over all indices of a vector `v`, as seen here:
+
+```aquascope,interpreter,horizontal
+#fn main() {
+#use std::ops::Range; 
+let mut v: Vec<i32>        = vec![1, 2];
+let mut iter: Range<usize> = 0 .. v.len();`[]`
+let i1: usize              = iter.next().unwrap();
+let n1: &i32               = &v[i1];`[]`
+#}
+```
 
 ### Using an Enum to Store Multiple Types
 

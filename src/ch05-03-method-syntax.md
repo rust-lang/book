@@ -275,7 +275,9 @@ As we described in Chapter 4.3 ["Dereferencing a Pointer Accesses Its Data"](ch0
 # }
 ```
 
-Rust will add two dereferences (once for the mutable reference, once for the box) and then one immutable borrow because `area` expects `&Rectangle`.
+Rust will add two dereferences (once for the mutable reference, once for the box) and then one immutable borrow because `area` expects `&Rectangle`. Note that this is also a situation where a mutable reference is "downgraded" into a shared reference, like we discussed in [Chapter 4.2](ch04-02-references-and-borrowing.html#mutable-references-provide-unique-and-non-owning-access-to-data). Conversely, you would not be allowed to call `set_width` on a value of type `&Rectangle` or `&Box<Rectangle>`.
+
+{{#quiz ../quizzes/ch05-03-method-syntax-sec1.toml}}
 
 
 ### Methods and Ownership
@@ -648,4 +650,4 @@ structs have.
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
 
-{{#quiz ../quizzes/ch05-03-method-syntax.toml}}
+{{#quiz ../quizzes/ch05-03-method-syntax-sec2.toml}}

@@ -101,7 +101,7 @@ fn stringify_name_with_title(name: &mut Vec<String>) -> String {
 }
 ```
 
-**But this is not a good solution!** A person calling `stringify_name_with_title` probably does not expect their vector to be modified by this function. It is not idiomatic for `stringify_name_with_title` to mutate its input. Another function like `add_title_to_name` would be expected to mutate a name, but not this one.
+But this is not a good solution! **Functions should not mutate their inputs if the caller would not expect it.** A person calling `stringify_name_with_title` probably does not expect their vector to be modified by this function. Another function like `add_title_to_name` might be expected to mutate a name, but not this one.
 
 Another option is to take ownership of the name, by changing `&Vec<String>` to `Vec<String>`:
 
@@ -113,7 +113,7 @@ fn stringify_name_with_title(mut name: Vec<String>) -> String {
 }
 ```
 
-**But this is also not a good solution!** It's extremely uncommon for an operation converting between two data-types to take ownership of the input. This version of `stringify_name_with_title` would make the input `name` unusable, which is very annoying to a caller as we discussed at the beginning of ["References and Borrowing"](ch04-02-references-and-borrowing.html).
+But this is also not a good solution! **It is very rare for Rust functions to take ownership of heap-owning data structures like `Vec` and `String`.**  This version of `stringify_name_with_title` would make the input `name` unusable, which is very annoying to a caller as we discussed at the beginning of ["References and Borrowing"](ch04-02-references-and-borrowing.html).
 
 So the choice of `&Vec` is actually a good one, which we do *not* want to change. Instead, we can change the body of the function. There are many possible fixes which vary in how much memory they use. One possibility is to clone the input `name`:
 
