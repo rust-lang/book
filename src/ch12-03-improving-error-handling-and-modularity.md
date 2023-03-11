@@ -226,7 +226,7 @@ arguments</span>
 This code is similar to [the `Guess::new` function we wrote in Listing
 9-13][ch9-custom-types]<!-- ignore -->, where we called `panic!` when the
 `value` argument was out of the range of valid values. Instead of checking for
-a range of values here, we’re checking that the length of `args` is at least 3
+a range of values here, we’re checking that the length of `args` is at least 2
 and the rest of the function can operate under the assumption that this
 condition has been met. If `args` has fewer than three items, this condition
 will be true, and we call the `panic!` macro to end the program immediately.
