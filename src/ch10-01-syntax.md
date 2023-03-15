@@ -79,7 +79,7 @@ states that the body of `largest` won’t work for all possible types that `T`
 could be. Because we want to compare values of type `T` in the body, we can
 only use types whose values can be ordered. To enable comparisons, the standard
 library has the `std::cmp::PartialOrd` trait that you can implement on types
-(see Appendix C for more on this trait). By following the help text's
+(see [Appendix C][derivable-traits]<!-- ignore --> for more on this trait). By following the help text's
 suggestion, we restrict the types valid for `T` to only those that implement
 `PartialOrd` and this example will compile, because the standard library
 implements `PartialOrd` on both `i32` and `char`.
@@ -328,3 +328,5 @@ type in each instance, we pay no runtime cost for using generics. When the code
 runs, it performs just as it would if we had duplicated each definition by
 hand. The process of monomorphization makes Rust’s generics extremely efficient
 at runtime.
+    
+[derivable-traits]: appendix-03-derivable-traits.html
