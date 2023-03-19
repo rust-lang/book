@@ -6,3 +6,8 @@ authors = ["Steve Klabnik", "Carol Nichols", "Contributions from the Rust Commun
 additional-css = ["ferris.css", "theme/2018-edition.css"]
 additional-js = ["ferris.js"]
 git-repository-url = "https://github.com/rust-lang/book"
+
+[output.pdf]
+additional-css = ["ferris.css", "theme/2018-edition.css"]
+additional-js = ["ferris.js"]
+git-repository-url = "https://github.com/rust-lang/book"
