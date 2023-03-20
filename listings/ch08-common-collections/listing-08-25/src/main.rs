@@ -7,8 +7,9 @@ fn main() {
     let mut map = HashMap::new();
 
     for word in text.split_whitespace() {
-        let count = map.entry(word).or_insert(0);
-        *count += 1;
+        map.entry(word)
+            .and_modify(|existing_value| *existing_value += 1)
+            .or_insert(1);
     }
 
     println!("{:?}", map);
