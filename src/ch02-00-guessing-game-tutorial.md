@@ -734,7 +734,7 @@ The secret number is: 58
 Please input your guess.
   76
 You guessed: 76
-Too big!
+You win!
 ```
 
 Nice! Even though spaces were added before the guess, the program still figured
