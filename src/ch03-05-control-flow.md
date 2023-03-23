@@ -379,7 +379,7 @@ do the following:
 
 * Convert temperatures between Fahrenheit and Celsius.
 * Generate the *n*th Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
+* Print the lyrics to the Christmas carol “The Twelve Days of Christmas”,
   taking advantage of the repetition in the song.
 
 When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
