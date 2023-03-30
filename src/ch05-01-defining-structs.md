@@ -145,7 +145,7 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax uses `=` like an assignment; this is because
+Note that the struct update syntax uses `:` like an assignment; this is because
 it moves the data, just as we saw in the [“Variables and Data Interacting with
 Move”][move]<!-- ignore --> section. In this example, we can no longer use
 `user1` as a whole after creating `user2` because the `String` in the
