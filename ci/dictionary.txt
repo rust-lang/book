@@ -573,6 +573,7 @@ WebSocket
 whitespace
 wildcard
 wildcards
+winget
 Wirth
 workflow
 workspace
