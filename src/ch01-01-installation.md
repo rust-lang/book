@@ -73,6 +73,15 @@ To acquire the build tools, you’ll need to install [Visual Studio
 The rest of this book uses commands that work in both *cmd.exe* and PowerShell.
 If there are specific differences, we’ll explain which to use.
 
+If you have Windows Package Manager (winget) you can run the following command
+in PowerShell to install `rustup`.
+
+```console
+$ winget install Rustlang.Rustup
+```
+After installing, restart the PowerShell console. Otherwise, `rustc` commands
+might now work.
+
 ### Troubleshooting
 
 To check whether you have Rust installed correctly, open a shell and enter this
