@@ -432,6 +432,7 @@ Rustonomicon
 rustfix
 rustfmt
 rustup
+Rustlang
 sampleproject
 screenshot
 searchstring
