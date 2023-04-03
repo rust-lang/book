@@ -151,6 +151,7 @@ code and then run the resultant executable all in one command:
 
 ```console
 $ cargo run
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/hello_cargo`
 Hello, world!
