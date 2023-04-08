@@ -1,18 +1,20 @@
 ## Installation
 
-The first step is to install Rust. We’ll download Rust through `rustup`, a
-command line tool for managing Rust versions and associated tools. You’ll need
-an internet connection for the download.
+The first step is to install the Rust® toolchain. We’ll download the Rust®
+toolchain through `rustup`, a command line tool for managing versions of the
+Rust® compiler and associated tools. You’ll need an internet connection for the
+download.
 
 > Note: If you prefer not to use `rustup` for some reason, please see the
-> [Other Rust Installation Methods page][otherinstall] for more options.
+> [Other Rust® Installation Methods page][otherinstall] for more options.
 
-The following steps install the latest stable version of the Rust compiler.
-Rust’s stability guarantees ensure that all the examples in the book that
-compile will continue to compile with newer Rust versions. The output might
-differ slightly between versions because Rust often improves error messages and
-warnings. In other words, any newer, stable version of Rust you install using
-these steps should work as expected with the content of this book.
+The following steps install the latest stable version of the Rust® compiler.  The
+stability guarantees of the Rust® programming language ensure that all the
+examples in the book that compile will continue to compile with newer versions
+of the Rust® language.  The output might differ slightly between versions because
+the Rust® compiler often improves error messages and warnings. In other words,
+any newer, stable version of the Rust® toolchain you install using these steps
+should work as expected with the content of this book.
 
 > ### Command Line Notation
 >
@@ -31,19 +33,20 @@ If you’re using Linux or macOS, open a terminal and enter the following comman
 $ curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
 ```
 
-The command downloads a script and starts the installation of the `rustup`
-tool, which installs the latest stable version of Rust. You might be prompted
-for your password. If the install is successful, the following line will appear:
+The command downloads a script and starts the installation of the `rustup` tool,
+which installs the latest stable version of the Rust® toolchain. You might be
+prompted for your password. If the install is successful, the following line
+will appear:
 
 ```text
-Rust is installed now. Great!
+The Rust® compiler is installed now. Great!
 ```
 
-You will also need a *linker*, which is a program that Rust uses to join its
-compiled outputs into one file. It is likely you already have one. If you get
-linker errors, you should install a C compiler, which will typically include a
-linker. A C compiler is also useful because some common Rust packages depend on
-C code and will need a C compiler.
+You will also need a *linker*, which is a program that the Rust® compiler uses to
+join its compiled outputs into one file. It is likely you already have one. If
+you get linker errors, you should install a C compiler, which will typically
+include a linker. A C compiler is also useful because some common Rust® packages
+depend on C code and will need a C compiler.
 
 On macOS, you can get a C compiler by running:
 
@@ -58,9 +61,9 @@ the `build-essential` package.
 ### Installing `rustup` on Windows
 
 On Windows, go to [https://www.rust-lang.org/tools/install][install] and follow
-the instructions for installing Rust. At some point in the installation, you’ll
-receive a message explaining that you’ll also need the MSVC build tools for
-Visual Studio 2013 or later.
+the instructions for installing the Rust® toolchain. At some point in the
+installation, you’ll receive a message explaining that you’ll also need the MSVC
+build tools for Visual Studio 2013 or later.
 
 To acquire the build tools, you’ll need to install [Visual Studio
 2022][visualstudio]. When asked which workloads to install, include:
@@ -75,8 +78,8 @@ If there are specific differences, we’ll explain which to use.
 
 ### Troubleshooting
 
-To check whether you have Rust installed correctly, open a shell and enter this
-line:
+To check whether you have the Rust® compiler installed correctly, open a shell
+and enter this line:
 
 ```console
 $ rustc --version
@@ -89,9 +92,9 @@ stable version that has been released, in the following format:
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this information, you have installed Rust successfully! If you don’t
-see this information, check that Rust is in your `%PATH%` system variable as
-follows.
+If you see this information, you have installed the Rust® compiler successfully!
+If you don’t see this information, check that the Rust® compiler is in your
+`%PATH%` system variable as follows.
 
 In Windows CMD, use:
 
@@ -111,21 +114,22 @@ In Linux and macOS, use:
 $ echo $PATH
 ```
 
-If that’s all correct and Rust still isn’t working, there are a number of
-places you can get help. Find out how to get in touch with other Rustaceans (a
-silly nickname we call ourselves) on [the community page][community].
+If that’s all correct and the Rust® compiler still isn’t working, there are a
+number of places you can get help. Find out how to get in touch with other
+Rustaceans (a silly nickname we call ourselves) on [the community
+page][community].
 
 ### Updating and Uninstalling
 
-Once Rust is installed via `rustup`, updating to a newly released version is
-easy. From your shell, run the following update script:
+Once the Rust® toolchain is installed via `rustup`, updating to a newly released
+version is easy. From your shell, run the following update script:
 
 ```console
 $ rustup update
 ```
 
-To uninstall Rust and `rustup`, run the following uninstall script from your
-shell:
+To uninstall the Rust® toolchain and `rustup`, run the following uninstall
+script from your shell:
 
 ```console
 $ rustup self uninstall
@@ -133,9 +137,9 @@ $ rustup self uninstall
 
 ### Local Documentation
 
-The installation of Rust also includes a local copy of the documentation so
-that you can read it offline. Run `rustup doc` to open the local documentation
-in your browser.
+The installation of the Rust® toolchain also includes a local copy of the
+documentation so that you can read it offline. Run `rustup doc` to open the
+local documentation in your browser.
 
 Any time a type or function is provided by the standard library and you’re not
 sure what it does or how to use it, use the application programming interface
