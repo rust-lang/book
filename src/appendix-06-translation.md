@@ -7,7 +7,7 @@ For resources in languages other than English. Most are still in progress; see
 
 - [Português](https://github.com/rust-br/rust-book-pt-br) (BR)
 - [Português](https://github.com/nunojesus/rust-book-pt-pt) (PT)
-- [简体中文](https://github.com/KaiserY/trpl-zh-cn)
+- 简体中文: [KaiserY/trpl-zh-cn](https://github.com/KaiserY/trpl-zh-cn), [gnu4cn/rust-lang-Zh_CN](https://rust-lang.xfoss.com)
 - [正體中文](https://github.com/rust-tw/book-tw)
 - [Українська](https://github.com/pavloslav/rust-book-uk-ua)
 - [Español](https://github.com/thecodix/book), [alternate](https://github.com/ManRR/rust-book-es)
