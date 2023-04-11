@@ -695,7 +695,7 @@ another type. Here, we use it to convert from a string to a number. We need to
 tell Rust the exact number type we want by using `let guess: u32`. The colon
 (`:`) after `guess` tells Rust we’ll annotate the variable’s type. Rust has a
 few built-in number types; the `u32` seen here is an unsigned, 32-bit integer.
-It’s a good default choice for a small positive number. You’ll learn about
+It’s a good default choice for a small non-negative number. You’ll learn about
 other number types in [Chapter 3][integers]<!-- ignore -->.
 
 Additionally, the `u32` annotation in this example program and the comparison
