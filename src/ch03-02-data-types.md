@@ -213,7 +213,7 @@ declared, they cannot grow or shrink in size.
 
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
+different values in the tuple may not be the same. We’ve added optional
 type annotations in this example:
 
 <span class="filename">Filename: src/main.rs</span>
