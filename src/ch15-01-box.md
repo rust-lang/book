@@ -76,7 +76,7 @@ more complex situations involving recursive types.
 #### More Information About the Cons List
 
 A *cons list* is a data structure that comes from the Lisp programming language
-and its dialects and is made up of nested pairs, and is the Lisp version of a
+and its dialects, it is made up of nested pairs, and is the Lisp version of a
 linked list. Its name comes from the `cons` function (short for “construct
 function”) in Lisp that constructs a new pair from its two arguments. By
 calling `cons` on a pair consisting of a value and another pair, we can
