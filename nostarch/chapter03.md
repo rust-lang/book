@@ -670,7 +670,7 @@ fn main() {
     let index: usize = index
         .trim()
         .parse()
-        .expect("Index entered was not a number");
+        .expect("Index entered was not a positive number");
 
     let element = a[index];
 
