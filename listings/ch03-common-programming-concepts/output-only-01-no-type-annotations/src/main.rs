@@ -1,3 +1,3 @@
 fn main() {
-    let guess = "42".parse().expect("Not a number!");
+    let guess = "42".parse().expect("Not a positive number!");
 }
