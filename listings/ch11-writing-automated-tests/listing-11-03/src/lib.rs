@@ -1,8 +1,7 @@
+// ANCHOR: here
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
-
-// ANCHOR: here
 #[cfg(test)]
 mod tests {
     use super::*;
