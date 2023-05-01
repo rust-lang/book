@@ -1,0 +1,6 @@
+{
+  "rust-analyzer.linkedProjects": [
+    "./listings/ch11-writing-automated-tests/listing-11-01/Cargo.toml",
+    "./listings/ch11-writing-automated-tests/listing-11-03/Cargo.toml"
+  ]
+}

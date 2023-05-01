@@ -1,9 +1,15 @@
+pub fn add(left: usize, right: usize) -> usize {
+    left + right
+}
+
 // ANCHOR: here
 #[cfg(test)]
 mod tests {
+    use super::*;
     #[test]
     fn exploration() {
-        assert_eq!(2 + 2, 4);
+        let result = add(2, 2);
+        assert_eq!(result, 4);
     }
 
     #[test]
