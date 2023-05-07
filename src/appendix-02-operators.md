@@ -17,6 +17,7 @@ overload that operator is listed.
 |----------|---------|-------------|---------------|
 | `!` | `ident!(...)`, `ident!{...}`, `ident![...]` | Macro expansion | |
 | `!` | `!expr` | Bitwise or logical complement | `Not` |
+| `!` | `!auto_trait` | Defines a removal trait for an auto_trait | `Not` |
 | `!=` | `expr != expr` | Nonequality comparison | `PartialEq` |
 | `%` | `expr % expr` | Arithmetic remainder | `Rem` |
 | `%=` | `var %= expr` | Arithmetic remainder and assignment | `RemAssign` |
@@ -69,6 +70,7 @@ overload that operator is listed.
 | <code>&vert;=</code> | <code>var &vert;= expr</code> | Bitwise OR and assignment | `BitOrAssign` |
 | <code>&vert;&vert;</code> | <code>expr &vert;&vert; expr</code> | Short-circuiting logical OR | |
 | `?` | `expr?` | Error propagation | |
+| `?` | `?Sized` | Marks the trait optional; such as, allow generic parameters to be unsized | |
 
 ### Non-operator Symbols
 
