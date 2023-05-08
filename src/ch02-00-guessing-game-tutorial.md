@@ -182,7 +182,7 @@ input:
 If we hadn’t imported the `io` library with `use std::io;` at the beginning of
 the program, we could still use the function by writing this function call as
 `std::io::stdin`. The `stdin` function returns an instance of
-[`std::io::Stdin`][iostdin]<!-- ignore -->, which is a type that represents a
+[`std::io::stdin`][iostdin]<!-- ignore -->, which is a type that represents a
 handle to the standard input for your terminal.
 
 Next, the line `.read_line(&mut guess)` calls the [`read_line`][read_line]<!--
