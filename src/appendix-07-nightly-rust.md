@@ -124,7 +124,7 @@ para el siguiente lanzamiento estable! Una rotura en una versión beta es
 bastante extraño, pero `rustc` sigue siendo software, y los bugs seguirán
 existiendo.
 
-### Características inestable
+### Características inestables
 
 Hay una cosa más con este tiempo de modelo de lanzamiento: características 
 inestables. Rust usa una técnica llamada "banderas de características" para
@@ -150,17 +150,17 @@ características exclusivas de las versiones nocturnas online.
 
 ### Rustup y el papel de Rust nocturno
 
-Rustup makes it easy to change between different release channels of Rust, on a
-global or per-project basis. By default, you’ll have stable Rust installed. To
-install nightly, for example:
+Rustup hace que sea sencillo cambiar entre diferentes canales de lanzamiento de,
+Rust, de manera global o por proyecto. Por defecto, tendrás Rust estable instalado.
+Para instalar nocturno, por ejemplo:
 
 ```console
 $ rustup toolchain install nightly
 ```
 
-You can see all of the *toolchains* (releases of Rust and associated
-components) you have installed with `rustup` as well. Here’s an example on one
-of your authors’ Windows computer:
+También puedes ver todas las *cadena de herramientas* (lanzamientos de Rust y 
+componenetes asociados) que tienes instaladas con `rustup`. Aquí hay un ejemplo
+en uno de los PC con Windows de uno de los autores:
 
 ```powershell
 > rustup toolchain list
@@ -169,46 +169,54 @@ beta-x86_64-pc-windows-msvc
 nightly-x86_64-pc-windows-msvc
 ```
 
-As you can see, the stable toolchain is the default. Most Rust users use stable
-most of the time. You might want to use stable most of the time, but use
-nightly on a specific project, because you care about a cutting-edge feature.
-To do so, you can use `rustup override` in that project’s directory to set the
-nightly toolchain as the one `rustup` should use when you’re in that directory:
+Cómo puedes ver, la cadena de herramientas estable es la opción por defecto. La
+mayoría de los usuarios de Rust usan la versión estable la mayoría del tiempo. 
+Puede que quieras utilizar la versión estable la mayor parte del tiempo, pero
+quieres utilizar la versión nocturna para un proyecto en específico porque 
+necesitas una de las características pioneras de dicha versión. Para ello, puedes
+usar `rustup override` en el directorio del proyecto para establecer la cadena
+de herramientas nocturna como la opción que `rustup` debe utilizar cuando estés
+en ese directorio en concreto:
 
 ```console
-$ cd ~/projects/needs-nightly
+$ cd ~/proyectos/necesita-nocturno
 $ rustup override set nightly
 ```
 
-Now, every time you call `rustc` or `cargo` inside of
-*~/projects/needs-nightly*, `rustup` will make sure that you are using nightly
-Rust, rather than your default of stable Rust. This comes in handy when you
-have a lot of Rust projects!
+Ahora, cada vez que invoques `rustc` o `cargo` dentro de *~/proyectos/necesita-nocturno*,
+`rustup` se asegurará de que estés utilizando Rust nocturno, en vez de la
+versión estable por defecto de Rust. ¡Esto es muy útil cuándo tienes muchos proyectos
+en Rust!
 
-### The RFC Process and Teams
+### El proceso RFC y equipos 
 
-So how do you learn about these new features? Rust’s development model follows
-a *Request For Comments (RFC) process*. If you’d like an improvement in Rust,
-you can write up a proposal, called an RFC.
+¿Cómo puedes aprender sobre estas nuevas características? El modelo de desarrollo
+de Rust sigue un 
+*proceso de Solicitud De Comentarios (Requesto for Comments, en ingles, RFC)*.
+Si te gustaría una mejora en Rust, puedes escribir una proposición, llamada
+RFC.
 
-Anyone can write RFCs to improve Rust, and the proposals are reviewed and
-discussed by the Rust team, which is comprised of many topic subteams. There’s
-a full list of the teams [on Rust’s
-website](https://www.rust-lang.org/governance), which includes teams for
-each area of the project: language design, compiler implementation,
-infrastructure, documentation, and more. The appropriate team reads the
-proposal and the comments, writes some comments of their own, and eventually,
-there’s consensus to accept or reject the feature.
+Cualquiera puede escribir RFCs para mejorar Rust, y estas proposiciones
+son revisadas y discutidas por el equipo de Rusts, el cuál está dividido
+por tópicos en subequipos. Hay una lista completa de los equipos
+[en la página web de Rust](https://www.rust-lang.org/es/governance),
+el cuál incluye equipos para cada área del proyecto: diseño de lenguaje,
+implementación del compilador, infraestructura, documentación y más. El
+equipo correspondiente lee la proposición y los comentarios, escribe sus
+propios comentarios, y al final, hay un consenso sobre si aceptar o rechazar
+la característica.
 
-If the feature is accepted, an issue is opened on the Rust repository, and
-someone can implement it. The person who implements it very well may not be the
-person who proposed the feature in the first place! When the implementation is
-ready, it lands on the `master` branch behind a feature gate, as we discussed
-in the [“Unstable Features”](#unstable-features)<!-- ignore --> section.
+Si la característica es aceptada, se abre un asunto en el repositorio de Rust,
+y alguien puede implementarlo. ¡La persona que mejor lo implemente, es probable que
+no sea la misma que propuso la característica en primer lugar! Cuando la 
+implementación esté lista, cae en la rama `master` detrás de una bandera de
+característica, cómo ya comentamos en la sección <!-- ignorar -->
+["Características inestables"](#características-inestables). 
 
-After some time, once Rust developers who use nightly releases have been able
-to try out the new feature, team members will discuss the feature, how it’s
-worked out on nightly, and decide if it should make it into stable Rust or not.
-If the decision is to move forward, the feature gate is removed, and the
-feature is now considered stable! It rides the trains into a new stable release
-of Rust.
+Después de algún tiempo, cuándo los desarrolladores de Rust que utilizan los 
+lanzamientos nocturnos pueden probar la nueva característica, los miembros del 
+equipo discutirán sobre la característica, y cómo ha funcionado en la versión
+nocturna, y decidir si debería pasar a Rust estable o no. Si la decisión es 
+seguir adelante, se quita la bandera de característica, ¡y la característica
+ya se considera estable! Se monta en el tren hacia un nuevo lanzamiento de 
+Rust estable.
