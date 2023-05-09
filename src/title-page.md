@@ -8,7 +8,7 @@ to install or update Rust.
 
 The HTML format is available online at
 [https://doc.rust-lang.org/stable/book/](https://doc.rust-lang.org/stable/book/)
-and offline with installations of Rust made with `rustup`; run `rustup docs
+and offline with installations of Rust made with `rustup`; run `rustup doc
 --book` to open.
 
 Several community [translations] are also available.
