@@ -1,79 +1,80 @@
-# Programming a Guessing Game
+# Programando un juego de predicciones
 
-Let’s jump into Rust by working through a hands-on project together! This
-chapter introduces you to a few common Rust concepts by showing you how to use
-them in a real program. You’ll learn about `let`, `match`, methods, associated
-functions, using external crates, and more! The following chapters will explore
-these ideas in more detail. In this chapter, you’ll practice the fundamentals.
+¡Vamos a sumergirnos en Rust trabajando en un proyecto práctico juntos! Este
+capítulo te introducirá algunos conceptos de Rust enseñándote cómo usarlos en
+un programa real. Aprenderás sobre `let`, `match`, métodos, funciones asociadas,
+utilizar cajas externas y ¡mucho más! Los siguientes capítulos explicarán estas
+ideas en más detalle. En este capítulo, practicarás las bases.
 
-We’ll implement a classic beginner programming problem: a guessing game. Here’s
-how it works: the program will generate a random integer between 1 and 100. It
-will then prompt the player to enter a guess. After a guess is entered, the
-program will indicate whether the guess is too low or too high. If the guess is
-correct, the game will print a congratulatory message and exit.
+Implementaremos un problema de programación para principiantes clásico. Funciona
+así: el programa generará un entero aleatorio entre 1 y 100. Luego preguntará al
+usuario para introducir una predicción. Tras introducirla, el programa indicará
+si la predicción fue muy alta o muy baja. Si la predicción fue correcta, el 
+juego imprimirá un mensaje de felicitación y terminará.
 
-## Setting Up a New Project
+## Configurando un nuevo proyecto
 
-To set up a new project, go to the *projects* directory that you created in
-Chapter 1 and make a new project using Cargo, like so:
+Para configurar un nuevo proyecto, ve a la carpeta de *proyectos* que creaste 
+en el capítulo 1 y haz un nuevo proyecto utilizando Cargo, por ejemplo:
 
 ```console
-$ cargo new guessing_game
-$ cd guessing_game
+$ cargo new juego_predicciones
+$ cd juego_predicciones
 ```
 
-The first command, `cargo new`, takes the name of the project (`guessing_game`)
-as the first argument. The second command changes to the new project’s
-directory.
+El primer comando, `cargo new`, utiliza el nombre del proyecto (`juego_predicciones`)
+cómo el primer argumento. El segundo comando cambia la ubicación de la 
+consola al directorio del proyecto
 
-Look at the generated *Cargo.toml* file:
+Veamos el archivo *Cargo.toml* que se ha generado:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class="filename">Nombre del archivo: Cargo.toml</span>
 
 ```toml
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/Cargo.toml}}
 ```
 
-If the author information that Cargo obtained from your environment is not
-correct, fix that in the file and save it again.
+Si la información del autor que Cargo ha obtenido de tu entorno no es 
+correcta, arréglalo en el archivo y guárdalo
 
-As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the *src/main.rs* file:
+Cómo viste en el capítulo 1, `cargo new` genera un “!Hola, mundo!” para tí.
+Comprueba el archivo *src/main.rs*:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Nombre del archivo: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/src/main.rs}}
 ```
 
-Now let’s compile this “Hello, world!” program and run it in the same step
-using the `cargo run` command:
+Ahora vamos a compilar este programa de “¡Hola, mundo!” y ejecutémoslo en el
+mismo paso utilizando `cargo run`:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-01-cargo-new/output.txt}}
 ```
 
-The `run` command comes in handy when you need to rapidly iterate on a project,
-as we’ll do in this game, quickly testing each iteration before moving on to
-the next one.
+El comando `run` es muy útil cuando necesitas iterar rápidamente en un proyecto,
+tal y cómo vamos a hacer en este juego, testeando rápidamente cada iteración
+antes de ir a la siguiente.
 
-Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
+Vuelve a abrir el archivo *src/main.rs*. Vas a escribir todo el código en este
+archivo.
 
-## Processing a Guess
+## Procesando una predicción
 
-The first part of the guessing game program will ask for user input, process
-that input, and check that the input is in the expected form. To start, we’ll
-allow the player to input a guess. Enter the code in Listing 2-1 into
-*src/main.rs*.
+La primera parte del juego de predicciones será preguntar al usuario por ella,
+procesarla y comprobar que la respuesta tiene el formato adecuado. Para empezar,
+permitiremos al jugador introducir una predicción. Escribe el código del listado
+2-1 en *src/main.rs*.
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Nombre del archivo: src/main.rs</span>
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-1: Code that gets a guess from the user and
-prints it</span>
+<span class="caption">Listado 2-1: Código que obtiene una predicción del usuario
+y la imprime</span>
 
 This code contains a lot of information, so let’s go over it line by line. To
 obtain user input and then print the result as output, we need to bring the
