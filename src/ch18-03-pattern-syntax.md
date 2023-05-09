@@ -290,7 +290,7 @@ and will print `This code only uses the y parameter: 4`.
 In most cases when you no longer need a particular function parameter, you
 would change the signature so it doesn’t include the unused parameter. Ignoring
 a function parameter can be especially useful in cases when, for example,
-you're implementing a trait when you need a certain type signature but the
+you're implementing a trait where you need a certain type signature but the
 function body in your implementation doesn’t need one of the parameters. You
 then avoid getting a compiler warning about unused function parameters, as you
 would if you used a name instead.
