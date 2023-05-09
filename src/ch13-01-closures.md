@@ -130,7 +130,7 @@ let add_one_v4 = |x|               x + 1  ;
 
 The first line shows a function definition, and the second line shows a fully
 annotated closure definition. In the third line, we remove the type annotations
-from the closure definition. In the fourth line, we remove the brackets, which
+from the closure definition. In the fourth line, we remove the braces, which
 are optional because the closure body has only one expression. These are all
 valid definitions that will produce the same behavior when they’re called. The
 `add_one_v3` and `add_one_v4` lines require the closures to be evaluated to be
