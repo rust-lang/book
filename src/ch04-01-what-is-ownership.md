@@ -92,7 +92,7 @@ work through the examples that illustrate them:
 * There can only be one owner at a time.
 * When the owner goes out of scope, the value will be dropped.
 
-### Variable Scope
+### Scope of Variables
 
 Now that we’re past basic Rust syntax, we won’t include all the `fn main() {`
 code in examples, so if you’re following along, make sure to put the following
