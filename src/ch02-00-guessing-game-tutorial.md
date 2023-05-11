@@ -76,201 +76,201 @@ permitiremos al jugador introducir una predicción. Escribe el código del lista
 <span class="caption">Listado 2-1: Código que obtiene una predicción del usuario
 y la imprime</span>
 
-This code contains a lot of information, so let’s go over it line by line. To
-obtain user input and then print the result as output, we need to bring the
-`io` (input/output) library into scope. The `io` library comes from the
-standard library (which is known as `std`):
+Este código tiene mucha información, así que vamos línea por línea. Para obtener
+la entrada del usuario y luego imprimir el resultado, necesitamos importar la
+librería `io` (input/output, en español, entrada/salida) en este ámbito. La 
+libería `io` viene de la librería estándar (que es cónocida cómo `std`):
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:io}}
 ```
 
-By default, Rust brings only a few types into the scope of every program in
-[the *prelude*][prelude]<!-- ignore -->. If a type you want to use isn’t in the
-prelude, you have to bring that type into scope explicitly with a `use`
-statement. Using the `std::io` library provides you with a number of useful
-features, including the ability to accept user input.
+Por defecto, Rust trae solo unos pocos tipos al ámbito en [el *preludio*][prelude] <!--ignore-->.
+Si un tipo que quieres no está en el preludio, tienes que traer ese tipo al
+ámbito de manera explícita con la declaración `use`. Utilizar la librería
+`std::io` te da numerosas características útiles, incluyendo la habilidad
+para aceptar entrada del usuario.
 
 [prelude]: ../std/prelude/index.html
 
-As you saw in Chapter 1, the `main` function is the entry point into the
-program:
+Cómo viste en el capítulo 1, la función `main` es el punto de entrada al
+programa:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:main}}
 ```
 
-The `fn` syntax declares a new function, the parentheses, `()`, indicate there
-are no parameters, and the curly bracket, `{`, starts the body of the function.
+La sintaxis `fn` declara una nueva función, los parentesis `()`, indican que no
+hay parámetros, y la llave `{`, inicia el cuerpo de la función.
 
-As you also learned in Chapter 1, `println!` is a macro that prints a string to
-the screen:
+Cómo también aprendiste en el capítulo 1, `println!` es una macro que imprime una
+cadena de texto en pantalla:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:print}}
 ```
 
-This code is printing a prompt stating what the game is and requesting input
-from the user.
+Este código está imprimiendo una solicitud diciendo que es el juego y solicitando
+entrada por parte del usuario.
 
-### Storing Values with Variables
+### Almacenando valores con variables
 
-Next, we’ll create a place to store the user input, like this:
+Ahora, crearemos un lugar dónde almacenar la entrada del usuario, cómo este:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:string}}
 ```
 
-Now the program is getting interesting! There’s a lot going on in this little
-line. Notice that this is a `let` statement, which is used to create a
-*variable*. Here’s another example:
+¡Ahora el programa se está poniendo interesante! Hay mucho ocurriendo en está
+pequeña línea. Nota cómo esto esto es una declaración `let`, que se utiliza para
+crear una *variable*. Aquí otro ejemplo:
 
 ```rust,ignore
 let foo = bar;
 ```
 
-This line creates a new variable named `foo` and binds it to the value of the
-`bar` variable. In Rust, variables are immutable by default. We’ll be
-discussing this concept in detail in the [“Variables and
-Mutability”][variables-and-mutability]<!-- ignore --> section in Chapter 3.
-The following example shows how to use `mut` before the variable name to make
-a variable mutable:
+Esta línea crea una nueva variable llamada `foo` y la une al valor de la variable
+`bar`. En Rust, la variables son inmutables por defecto. Trataremos esto en más
+detalle en la sección del capítulo 3 ["Variables y mutabilidad"][variables-and-mutability]
+<!--ignore-->. El siguiente ejemplo muestra cómo utilizar `mut` antes del nombre 
+de la variable para hacer una variable mutable:
 
 ```rust,ignore
-let foo = 5; // immutable
+let foo = 5; // inmutable
 let mut bar = 5; // mutable
 ```
+> Nota: La sintaxis `//` comienza un comentario hasta el final de la línea.
+> Rust ignora todo lo que haya en comentario, que se discutirán en más detalle
+> en el capítulo 3.
 
-> Note: The `//` syntax starts a comment that continues until the end of the
-> line. Rust ignores everything in comments, which are discussed in more detail
-> in Chapter 3.
-
-Let’s return to the guessing game program. You now know that `let mut guess`
-will introduce a mutable variable named `guess`. On the other side of the equal
-sign (`=`) is the value that `guess` is bound to, which is the result of
-calling `String::new`, a function that returns a new instance of a `String`.
-[`String`][string]<!-- ignore --> is a string type provided by the standard
-library that is a growable, UTF-8 encoded bit of text.
+Ahora volvamos al programa del juego de predicciones. Ahora ya sabes que
+`let mut prediccion` introducirá en el programa una variable mutable llamada
+`guess`. En el otro lado de la igualdad (`=`) está el valor al que `guess` está
+atado, que es el resultado de llamar a `String::new`, una función que devuelve
+una nueva instancia de `String` (cadena de texto, en español). [`String`][string]<!--ignore-->
+es un tipo de cadena de texto que da la librería estándar que es un trocito de
+texto expandible y codificado en UTF-8
 
 [string]: ../std/string/struct.String.html
 
-The `::` syntax in the `::new` line indicates that `new` is an *associated
-function* of the `String` type. An associated function is implemented on a type,
-in this case `String`, rather than on a particular instance of a `String`. Some
-languages call this a *static method*.
+La sintaxis `::` en `::new` indica que `new` es una *función asociada* al tipo
+`String`. Una función asociada es implementada en un tipo, en este caso `String`,
+en vez de en una instancia en particular de `String`. Algunos lenguajes llaman a
+esto un *método estático*.
 
-This `new` function creates a new, empty string. You’ll find a `new` function
-on many types, because it’s a common name for a function that makes a new value
-of some kind.
+Esta función `new` crea una cadena de texto nueva y vacía. Encontrarás una 
+función `new` en muchos tipos, porque es un nombre común para una función que
+crea un nuevo valor de algún tipo. 
 
-To summarize, the `let mut guess = String::new();` line has created a mutable
-variable that is currently bound to a new, empty instance of a `String`. Whew!
+Pra resumir, la línea `let mut guess = String::new();` a creado una variable
+mutable que está asignada a una nueva instancia vacía de `String`. ¡Guau!
 
-Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we’ll call
-the `stdin` function from the `io` module:
+Recuerda que hemos incluido la funcionalidad de la entrada/salida de la librería
+estándar con `use std::io;` en la primera línea del programa. Ahora llamaremos a
+la función `stdin` desde el módulo `io`:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:read}}
 ```
 
-If we hadn’t put the `use std::io` line at the beginning of the program, we
-could have written this function call as `std::io::stdin`. The `stdin` function
-returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a
-type that represents a handle to the standard input for your terminal.
+Si no hubieramos puesto la línea `use std::io` en el principio del programa,
+podríamos haber escrito la llamada a la función cómo `std::io::stdin`. La 
+función `stdin` devuelve una instancia de [`std::io::Stdin`][iostdin] <!--ignore-->,
+que es un tipo que representa una manilla a la entrada estándar para tu terminal.
 
 [iostdin]: ../std/io/struct.Stdin.html
 
-The next part of the code, `.read_line(&mut guess)`, calls the
-[`read_line`][read_line]<!-- ignore --> method on the standard input handle to
-get input from the user. We’re also passing one argument to `read_line`: `&mut
-guess`.
+La siguiente parte del código, `.read_line(&mut guess)`, llama
+al método ['read_line`][read_line]<!--ignore--> en la manilla de la entrada
+estándar para conseguir entrada por parte del usuario. También estamos pasando
+un argumento a `read_line`: `&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 
-The job of `read_line` is to take whatever the user types into standard input
-and append that into a string (without overwriting its contents), so it takes
-that string as an argument. The string argument needs to be mutable so the
-method can change the string’s content by adding the user input.
+El trabajo de `read_line` es capturar lo que el usuario escriba en la entrada
+estándar y añadirlo en una cadena de texto (sin sobreescribir sus contenidos),
+así que toma una cadena de texto cómo un argumento. El argumento de la cadena
+de texto necesita ser mutable para el que método pueda cambiar el contenido de
+la cadena añadiendo la entrada del usuario.
 
-The `&` indicates that this argument is a *reference*, which gives you a way to
-let multiple parts of your code access one piece of data without needing to
-copy that data into memory multiple times. References are a complex feature,
-and one of Rust’s major advantages is how safe and easy it is to use
-references. You don’t need to know a lot of those details to finish this
-program. For now, all you need to know is that like variables, references are
-immutable by default. Hence, you need to write `&mut guess` rather than
-`&guess` to make it mutable. (Chapter 4 will explain references more
-thoroughly.)
+El `&` indica que este argumento es una *referencia*, lo que permite que varias
+partes de tu código accedan a la misma información sin necesitar copiar esta 
+información en memoria múltiples veces. Las refencias son una característica
+compleja, y una de las mayores ventajas de Rust en cómo de seguro y sencillo es
+utilizar referencias. No necesitar saber muchos detalles para terminar este programa.
+Por ahora, todo lo que necesitas saber es que cómo las variables, las referencias
+son inmutables por defecto. Por lo tanto, tienes que escribir `&mut guess` en vez
+de `&guess` para hacerlo mutable. (En el capítulo 4 se explicarán las referencias
+con mayor profundidad).
 
-### Handling Potential Failure with the `Result` Type
+### Manejar posibles fallos con el tipo `Result`
 
-We’re still working on this line of code. Although we’re now discussing a third
-line of text, it’s still part of a single logical line of code. The next part
-is this method:
+Todavía estamos trabajando en la misma línea de código. Aunque estemos discutiendo
+una tercera línea de texto, todavía es parte de la misma línea lógica de código. La
+siguiente parte este mmétodo:
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:expect}}
 ```
 
-When you call a method with the `.foo()` syntax, it’s often wise to introduce a
-newline and other whitespace to help break up long lines. We could have
-written this code as:
+Cuándo llamas al método con la sinxtaxis `.foo()`, puede ser una decisión sabia
+introducir una nueva línea y un espacio en blanco para poder romper líneas largas.
+Podríamos haber escrito este código de la siguiente manera:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess).expect("Failed to read line");
+io::stdin().read_line(&mut prediccion).expect("Lectura de la línea fallida");
 ```
 
-However, one long line is difficult to read, so it’s best to divide it. Now
-let’s discuss what this line does.
+Sin embargo, una línea larga es difícil de leer, así que es mejor dividirla. Ahora,
+hablemos de lo que hace esta línea.
 
-As mentioned earlier, `read_line` puts what the user types into the string
-we’re passing it, but it also returns a value—in this case, an
-[`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
-`Result` in its standard library: a generic [`Result`][result]<!-- ignore -->
-as well as specific versions for submodules, such as `io::Result`.
+Cómo mencionamos antes, `read_line` pone lo que haya escrito el usuario en
+la cadena de texto que le hayamos pasado, pero también retorna un valor en
+este caso, un [`io::Result`][ioresult]<!--ignore-->. Rust tiene un número
+de tipos llamados `Result` en su librería estándar: un [`Result`][result]<!--ignore-->
+así cómo versiones específicas para submódulos, cómo `io::Result`.
 
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-The `Result` types are [*enumerations*][enums]<!-- ignore -->, often referred
-to as *enums*. An enumeration is a type that can have a fixed set of values,
-and those values are called the enum’s *variants*. Chapter 6 will cover enums
-in more detail.
+Los tipos `Result` son [*enumeraciones*][enums]<!--ignore-->, comúnmente llamadas
+cómo *enums*. Una enumeración es un tipo que puede tener un conjunto fijo de 
+valores, y todos esos valores se llaman las *variantes* de la enum. El capítulo 6
+cubrirá las enums en más detalle.
 
 [enums]: ch06-00-enums.html
 
-For `Result`, the variants are `Ok` or `Err`. The `Ok` variant indicates the
-operation was successful, and inside `Ok` is the successfully generated value.
-The `Err` variant means the operation failed, and `Err` contains information
-about how or why the operation failed.
+Para `Result`, las variantes son `Ok` o `Err`. La variante `Ok` indica que la
+operación fue exitosa, y dentro de `Ok` está el valor generado. La variante
+`Err` significa que la operación ha fallado, y `Err` contiene la información
+sobre cómo o por qué la operación falló.
 
-The purpose of these `Result` types is to encode error-handling information.
-Values of the `Result` type, like values of any type, have methods defined on
-them. An instance of `io::Result` has an [`expect` method][expect]<!-- ignore
---> that you can call. If this instance of `io::Result` is an `Err` value,
-`expect` will cause the program to crash and display the message that you
-passed as an argument to `expect`. If the `read_line` method returns an `Err`,
-it would likely be the result of an error coming from the underlying operating
-system. If this instance of `io::Result` is an `Ok` value, `expect` will take
-the return value that `Ok` is holding and return just that value to you so you
-can use it. In this case, that value is the number of bytes in what the user
-entered into standard input.
+El propósito de estos tipos `Result` es codificar la información para el manejo
+de los errores. Los valores del tipo `Result`, cómo los valores de cualquier tipo,
+tienen métodos definidos en ellos. Una instancia de `io::Result` tiene un 
+[método `expect`][expect]<!--ignore--> que puedes llamar. Si esta instancia de 
+`io::Result` es un valor `Err`, `expect` hará que el programa se estrelle y
+mostrará el mensaje que pasaste cómo argumento. Si el método `read_line`
+devuelve un valor `Err`, es probable que el error venga del sistema operativo
+subyacente. Si esta instancia de `io::Result` es un valor `Ok`, `expect` tomará el
+valora que `Ok` está almacenando y devolverá ese valor para que puedas utilizarlo.
+En este caso, el valor es el número de bytes que en los que el usuario introdujo en
+la entrada estándar. 
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
-If you don’t call `expect`, the program will compile, but you’ll get a warning:
+Si no llamases a `expect`, el programa compilaría, pero tendrías una advertencia:
 
 ```console
 {{#include ../listings/ch02-guessing-game-tutorial/no-listing-02-without-expect/output.txt}}
 ```
 
-Rust warns that you haven’t used the `Result` value returned from `read_line`,
-indicating that the program hasn’t handled a possible error.
+Rust advierto que no has usado el valor `Result` devuelto desde `read_line`,
+indicando que el programa no ha manejado un posible error.
 
-The right way to suppress the warning is to actually write error handling, but
-because you just want to crash this program when a problem occurs, you can use
-`expect`. You’ll learn about recovering from errors in Chapter 9.
+La manera correcta de quitar esta advertencia es manejar el error de verdad, pero
+cómo simplemente quieres que tu programa se estrelle cuando ocurra un problema, 
+puedes usar `expect`. Aprenderás sobre recuperación de errores en el capítulo 9.
 
 ### Printing Values with `println!` Placeholders
 
