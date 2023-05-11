@@ -21,11 +21,11 @@ fn main() {
         .read_line(&mut prediccion)
         // ANCHOR_END: read
         // ANCHOR: expect
-        .expect("Failed to read line");
+        .expect("Lectura de línea fallida");
     // ANCHOR_END: expect
 
     // ANCHOR: print_guess
-    println!("You guessed: {}", prediccion);
+    println!("Predijiste: {}", prediccion);
     // ANCHOR_END: print_guess
 }
 // ANCHOR: all

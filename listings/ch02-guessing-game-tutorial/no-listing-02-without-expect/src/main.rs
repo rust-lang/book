@@ -9,5 +9,5 @@ fn main() {
 
     io::stdin().read_line(&mut prediccion);
 
-    println!("You guessed: {}", prediccion);
+    println!("Predijiste: {}", prediccion);
 }
