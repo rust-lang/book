@@ -17,7 +17,7 @@ The syntax for specifying that a parameter is a function pointer is similar to
 that of closures, as shown in Listing 19-27, where we’ve defined a function
 `add_one` that adds one to its parameter. The function `do_twice` takes two
 parameters: a function pointer to any function that takes an `i32` parameter
-and returns an `i32`, and one `i32 value`. The `do_twice` function calls the
+and returns an `i32`, and one `i32` value. The `do_twice` function calls the
 function `f` twice, passing it the `arg` value, then adds the two function call
 results together. The `main` function calls `do_twice` with the arguments
 `add_one` and `5`.
