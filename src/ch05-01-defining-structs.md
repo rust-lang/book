@@ -159,8 +159,8 @@ Data: Copy”][copy]<!-- ignore --> section would apply.
 ### Using Tuple Structs Without Named Fields to Create Different Types
 
 Rust also supports structs that look similar to tuples, called *tuple structs*.
-Tuple structs have the added meaning the struct name provides but don’t have
-names associated with their fields; rather, they just have the types of the
+Tuple structs have additional meaning provided by the struct name, but don’t 
+have names associated with their fields; rather, they just have the types of the
 fields. Tuple structs are useful when you want to give the whole tuple a name
 and make the tuple a different type from other tuples, and when naming each
 field as in a regular struct would be verbose or redundant.
