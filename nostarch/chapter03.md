@@ -278,7 +278,7 @@ type using `parse` in “Comparing the Guess to the Secret Number” on page XX,
 must add a type annotation, like this:
 
 ```
-let guess: u32 = "42".parse().expect("Not a positive number!");
+let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
 If we don’t add the `: u32` type annotation shown in the preceding code, Rust
@@ -291,7 +291,7 @@ $ cargo build
 error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
-2 |     let guess = "42".parse().expect("Not a positive number!");
+2 |     let guess = "42".parse().expect("Not a number!");
   |         ^^^^^ consider giving `guess` a type
 ```
 
@@ -670,7 +670,7 @@ fn main() {
     let index: usize = index
         .trim()
         .parse()
-        .expect("Index entered was not a positive number");
+        .expect("Index entered was not a number");
 
     let element = a[index];
 
