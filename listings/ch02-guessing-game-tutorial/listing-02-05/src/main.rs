@@ -25,7 +25,7 @@ fn main() {
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
             Err(_) => {
-                println!("Invalid postive number");
+                println!("Invalid positive number");
                 continue;
             },
         };
