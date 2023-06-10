@@ -294,6 +294,15 @@ initial immutable reference is the only immutable reference to that data, but
 the borrowing rules don’t guarantee that. Therefore, Rust can’t make the
 assumption that converting an immutable reference to a mutable reference is
 possible.
+  
+### Deref Coercion and Traits
+  
+The compiler only performs deref coercion when matching traits if the trait method is
+called via the dot operator (e.g `x.into()`), and not when the method is called
+using 'fully-qualified' syntax (e.g `SomeType::from(&x)`).
+
+For more information, see the [Nomicon][nomicon-coercions].
 
 [impl-trait]: ch10-02-traits.html#implementing-a-trait-on-a-type
 [tuple-structs]: ch05-01-defining-structs.html#using-tuple-structs-without-named-fields-to-create-different-types
+[nomicon-coercions]: https://doc.rust-lang.org/nomicon/coercions.html
