@@ -7,3 +7,18 @@ span.caption code {
     font-size: 0.875em;
     font-weight: 400;
 }
+
+/* scrollbar */
+::-webkit-scrollbar {
+  background-color: #202324;
+  color: #aba499;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #181a1b;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #454a4d;
+}
+
