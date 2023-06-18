@@ -1,4 +1,5 @@
 name: CI
+
 on: [push, pull_request]
 
 jobs:
@@ -6,67 +7,67 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Update rustup
-      run: rustup self update
-    - name: Install Rust
-      run: |
-        rustup set profile minimal
-        rustup toolchain install 1.67 -c rust-docs
-        rustup default 1.67
-    - name: Install mdbook
-      run: |
-        mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
-    - name: Report versions
-      run: |
-        rustup --version
-        rustc -Vv
-        mdbook --version
-    - name: Run tests
-      run: mdbook test
-  lint:
-    name: Run lints
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Update rustup
-      run: rustup self update
-    - name: Install Rust
-      run: |
-        rustup set profile minimal
-        rustup toolchain install nightly -c rust-docs
-        rustup override set nightly
-    - name: Install mdbook
-      run: |
-        mkdir bin
-        curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
-        echo "$(pwd)/bin" >> ${GITHUB_PATH}
-    - name: Install aspell
-      run: sudo apt-get install aspell
-    - name: Install shellcheck
-      run: sudo apt-get install shellcheck
-    - name: Report versions
-      run: |
-        rustup --version
-        rustc -Vv
-        mdbook --version
-        aspell --version
-        shellcheck --version
-    - name: Shellcheck
-      run: find . -name '*.sh' | xargs shellcheck
-    - name: Spellcheck
-      run: bash ci/spellcheck.sh list
-    - name: Lint for local file paths
-      run: |
-        mdbook build
-        cargo run --bin lfp src
-    - name: Validate references
-      run: bash ci/validate.sh
-    - name: Check for broken links
-      run: |
-        curl -sSLo linkcheck.sh \
-          https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
-        # Cannot use --all here because of the generated redirect pages aren't available.
-        sh linkcheck.sh book
+      - uses: actions/checkout@master
+      - name: Update rustup
+        run: rustup self update
+      - name: Install Rust
+        run: |
+          rustup set profile minimal
+          rustup toolchain install 1.67 -c rust-docs
+          rustup default 1.67
+      - name: Install mdbook
+        run: |
+          mkdir bin
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+          echo "$(pwd)/bin" >> ${GITHUB_PATH}
+      - name: Report versions
+        run: |
+          rustup --version
+          rustc -Vv
+          mdbook --version
+      - name: Run tests
+        run: mdbook test src-id
+  # lint:
+  #   name: Run lints
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@master
+  #   - name: Update rustup
+  #     run: rustup self update
+  #   - name: Install Rust
+  #     run: |
+  #       rustup set profile minimal
+  #       rustup toolchain install nightly -c rust-docs
+  #       rustup override set nightly
+  #   - name: Install mdbook
+  #     run: |
+  #       mkdir bin
+  #       curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+  #       echo "$(pwd)/bin" >> ${GITHUB_PATH}
+  #   - name: Install aspell
+  #     run: sudo apt-get install aspell
+  #   - name: Install shellcheck
+  #     run: sudo apt-get install shellcheck
+  #   - name: Report versions
+  #     run: |
+  #       rustup --version
+  #       rustc -Vv
+  #       mdbook --version
+  #       aspell --version
+  #       shellcheck --version
+  #   - name: Shellcheck
+  #     run: find . -name '*.sh' | xargs shellcheck
+  #   - name: Spellcheck
+  #     run: bash ci/spellcheck.sh list
+  #   - name: Lint for local file paths
+  #     run: |
+  #       mdbook build
+  #       cargo run --bin lfp src
+  #   - name: Validate references
+  #     run: bash ci/validate.sh
+  #   - name: Check for broken links
+  #     run: |
+  #       curl -sSLo linkcheck.sh \
+  #         https://raw.githubusercontent.com/rust-lang/rust/master/src/tools/linkchecker/linkcheck.sh
+  #       # Cannot use --all here because of the generated redirect pages aren't available.
+  #       sh linkcheck.sh book

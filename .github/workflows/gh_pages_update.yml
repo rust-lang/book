@@ -1,0 +1,37 @@
+name: gh_pages_update
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-book:
+    name: Publish book on Github Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Update rustup
+        run: rustup self update
+      - name: Install Rust
+        run: |
+          rustup set profile minimal
+          rustup toolchain install 1.67 -c rust-docs
+          rustup default 1.67
+      - name: Install mdbook
+        run: |
+          mkdir bin
+          curl -sSL https://github.com/rust-lang/mdBook/releases/download/v0.4.14/mdbook-v0.4.14-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
+          echo "$(pwd)/bin" >> ${GITHUB_PATH}
+      - name: Report versions
+        run: |
+          rustup --version
+          rustc -Vv
+          mdbook --version
+      - name: Run build
+        run: mdbook build src-id
+      - uses: rust-lang/simpleinfra/github-actions/static-websites@master
+        with:
+          deploy_dir: src-id/book
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+        if: github.ref == 'refs/heads/main'
