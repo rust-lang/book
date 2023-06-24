@@ -8,7 +8,7 @@ mod back_of_house {
         pub fn summer(toast: &str) -> Breakfast {
             Breakfast {
                 toast: String::from(toast),
-                seasonal_fruit: String::from("peaches"),
+                seasonal_fruit: String::from("Peaches"),
             }
         }
     }
@@ -23,5 +23,5 @@ pub fn eat_at_restaurant() {
 
     // The next line won't compile if we uncomment it; we're not allowed
     // to see or modify the seasonal fruit that comes with the meal
-    // meal.seasonal_fruit = String::from("blueberries");
+    // meal.seasonal_fruit = String::from("Blueberries");
 }
