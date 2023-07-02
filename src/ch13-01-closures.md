@@ -194,7 +194,7 @@ if the variable name were a function name.
 
 Because we can have multiple immutable references to `list` at the same time,
 `list` is still accessible from the code before the closure definition, after
-the closure definition but before the closure is called, and after the closure
+the closure definition, before the closure is called, and after the closure
 is called. This code compiles, runs, and prints:
 
 ```console
