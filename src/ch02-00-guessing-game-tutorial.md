@@ -295,8 +295,7 @@ Alternative print statement can be
 
 ```rust
 //snip
-
-println!("x = {x} and y + 2 = {}", y + 2);
+println!("x = {} and y + 2 = {}", x , y + 2);
 ```
 
 This code would print `x = 5 and y + 2 = 12`.
