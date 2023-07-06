@@ -291,6 +291,14 @@ let y = 10;
 println!("x = {x} and y + 2 = {}", y + 2);
 ```
 
+Alternative print statement can be
+
+```rust
+//snip
+
+println!("x = {x} and y + 2 = {}", y + 2);
+```
+
 This code would print `x = 5 and y + 2 = 12`.
 
 ### Testing the First Part
