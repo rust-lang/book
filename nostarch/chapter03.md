@@ -1437,7 +1437,7 @@ you can then use with `break` or `continue` to specify that those keywords
 apply to the labeled loop instead of the innermost loop. Loop labels must begin
 with a single quote. Here’s an example with two nested loops:
 
-```
+```rust
 fn main() {
     let mut count = 0;
     'counting_up: loop {
@@ -1461,12 +1461,24 @@ fn main() {
 }
 ```
 
-The outer loop has the label `'counting_up`, and it will count up from 0 to 2.
-The inner loop without a label counts down from 10 to 9. The first `break` that
-doesn’t specify a label will exit the inner loop only. The `break
-'counting_up;` statement will exit the outer loop. This code prints:
+Explanation:
 
-```
+The program starts by initializing a mutable variable `count` with a value of 0.
+It enters an outer loop labeled as `'counting_up`.
+Inside the outer loop, it prints the current value of `count`.
+It initializes a mutable variable `remaining` with a value of 10.
+Enters an inner loop.
+Inside the inner loop, it prints the current value of `remaining`.
+If `remaining` is equal to 9, it breaks out of the inner loop.
+If `count` is equal to 2, it breaks out of the outer loop labeled `'counting_up`.
+Otherwise, it decrements the value of `remaining` by 1.
+After breaking out of the inner loop, it increments the value of `count` by 1.
+Once the outer loop is broken, it prints the final value of `count`.
+The program terminates.
+
+This code prints:
+
+```rust
    Compiling loops v0.1.0 (file:///projects/loops)
     Finished dev [unoptimized + debuginfo] target(s) in 0.58s
      Running `target/debug/loops`
