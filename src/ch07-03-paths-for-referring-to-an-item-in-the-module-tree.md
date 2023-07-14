@@ -83,9 +83,9 @@ private sections. In Rust, all items (functions, methods, structs, enums,
 modules, and constants) are private to parent modules by default. If you want
 to make an item like a function or struct private, you put it in a module.
 
-Items in a parent module can’t use the private items inside child modules, but
-items in child modules can use the items in their ancestor modules. This is
-because child modules wrap and hide their implementation details, but the child
+Items in a parent module can’t use the private items defined inside child modules, but
+items in child modules can use the private items defined in their ancestor modules.
+This is because child modules wrap and hide their implementation details, but the child
 modules can see the context in which they’re defined. To continue with our
 metaphor, think of the privacy rules as being like the back office of a
 restaurant: what goes on in there is private to restaurant customers, but
