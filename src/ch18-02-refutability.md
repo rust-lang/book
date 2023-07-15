@@ -61,7 +61,7 @@ the code in the curly brackets, giving it a way to continue validly. Listing
 patterns instead of `let`</span>
 
 We’ve given the code an out! This code is perfectly valid, although it means we
-cannot use an irrefutable pattern without receiving an error. If we give `if
+cannot use an irrefutable pattern without receiving a warning. If we give `if
 let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
 the compiler will give a warning.
 
