@@ -293,7 +293,7 @@ We don’t own the memory at this arbitrary location, and there is no guarantee
 that the slice this code creates contains valid `i32` values. Attempting to use
 `values` as though it’s a valid slice results in undefined behavior.
 
-#### Using `extern` Functions to Call External Code
+#### Using `extern` Blocks to Call External Code
 
 Sometimes, your Rust code might need to interact with code written in another
 language. For this, Rust has the keyword `extern` that facilitates the creation
@@ -313,7 +313,7 @@ responsibility falls on the programmer to ensure safety.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-8: Declaring and calling an `extern` function
+<span class="caption">Listing 19-8: Declaring and calling an `abs` function
 defined in another language</span>
 
 Within the `extern "C"` block, we list the names and signatures of external
