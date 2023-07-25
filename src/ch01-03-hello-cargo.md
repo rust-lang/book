@@ -158,7 +158,7 @@ Hello, world!
 
 Using `cargo run` is more convenient than having to remember to run `cargo
 build` and then use the whole path to the binary, so most developers use `cargo
-run`.
+run` instead.
 
 Notice that this time we didn’t see output indicating that Cargo was compiling
 `hello_cargo`. Cargo figured out that the files hadn’t changed, so it didn’t
