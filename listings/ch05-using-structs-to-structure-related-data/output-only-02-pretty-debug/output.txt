@@ -1,5 +1,19 @@
 $ cargo run
    Compiling rectangles v0.1.0 (file:///projects/rectangles)
+warning: fields `width` and `height` are never read
+ --> src\main.rs:3:5
+  |
+2 | struct Rectangle {
+  |        --------- fields in this struct
+3 |     width: u32,
+  |     ^^^^^
+4 |     height: u32,
+  |     ^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+  = note: `Rectangle` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: `rectangles` (bin "rectangles") generated 1 warning
     Finished dev [unoptimized + debuginfo] target(s) in 0.48s
      Running `target/debug/rectangles`
 rect1 is Rectangle {
