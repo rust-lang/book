@@ -165,7 +165,7 @@ from another library, you don’t have to rearrange your internal organization:
 instead, you can re-export items to make a public structure that’s different
 from your private structure by using `pub use`. Re-exporting takes a public
 item in one location and makes it public in another location, as if it were
-defined in the other location instead.
+defined in the other location as well.
 
 For example, say we made a library named `art` for modeling artistic concepts.
 Within this library are two modules: a `kinds` module containing two enums
