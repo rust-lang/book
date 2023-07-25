@@ -163,7 +163,7 @@ well.
 The next logical question is which style you should choose in your own code and
 why: the original implementation in Listing 13-21 or the version using
 iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
-style. It’s a bit tougher to get the hang of at first, but once you get a feel
+style. It’s a bit tougher to get the hang of it at first, but once you get a feel
 for the various iterator adaptors and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
 new vectors, the code focuses on the high-level objective of the loop. This
