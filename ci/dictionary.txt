@@ -432,6 +432,7 @@ Rustonomicon
 rustfix
 rustfmt
 rustup
+Rustlang
 sampleproject
 screenshot
 searchstring
@@ -573,6 +574,7 @@ WebSocket
 whitespace
 wildcard
 wildcards
+winget
 Wirth
 workflow
 workspace
