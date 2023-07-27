@@ -295,7 +295,7 @@ This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition
 evaluates to `true`, the code runs; otherwise, it exits the loop.
 
-#### Looping Through a Collection with `for`
+#### Looping Through a Collection with `while`
 
 You can choose to use the `while` construct to loop over the elements of a
 collection, such as an array. For example, the loop in Listing 3-4 prints each
@@ -329,6 +329,8 @@ definition of the `a` array to have four elements but forgot to update the
 condition to `while index < 4`, the code would panic. It’s also slow, because
 the compiler adds runtime code to perform the conditional check of whether the
 index is within the bounds of the array on every iteration through the loop.
+
+#### Looping Through a Collection with `for`
 
 As a more concise alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like the code in Listing 3-5.
