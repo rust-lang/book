@@ -19,7 +19,7 @@ fn first_word(s: &String) -> ?
 The `first_word` function has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
-end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7.
+end of the word, indicated by a space. Let’s try that, as shown in [Listing 4-7](#4-7).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -27,7 +27,7 @@ end of the word, indicated by a space. Let’s try that, as shown in Listing 4-7
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-7: The `first_word` function that returns a
+<span class="caption" id="4-7">Listing 4-7: The `first_word` function that returns a
 byte index value into the `String` parameter</span>
 
 Because we need to go through the `String` element by element and check whether
@@ -70,8 +70,8 @@ We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a `usize` on its own, but it’s
 only a meaningful number in the context of the `&String`. In other words,
 because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-8 that
-uses the `first_word` function from Listing 4-7.
+will still be valid in the future. Consider the program in [Listing 4-8](#4-8) that
+uses the `first_word` function from [Listing 4-7](#4-7).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -79,7 +79,7 @@ uses the `first_word` function from Listing 4-7.
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-8: Storing the result from calling the
+<span class="caption" id="4-8">Listing 4-8: Storing the result from calling the
 `first_word` function and then changing the `String` contents</span>
 
 This program compiles without any errors and would also do so if we used `word`
@@ -182,7 +182,7 @@ slice. The type that signifies “string slice” is written as `&str`:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
 ```
 
-We get the index for the end of the word the same way we did in Listing 4-7, by
+We get the index for the end of the word the same way we did in [Listing 4-7](#4-7), by
 looking for the first occurrence of a space. When we find a space, we return a
 string slice using the start of the string and the index of the space as the
 starting and ending indices.
@@ -199,7 +199,7 @@ fn second_word(s: &String) -> &str {
 
 We now have a straightforward API that’s much harder to mess up because the
 compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-8, when we got the index to the end of the
+the bug in the program in [Listing 4-8](#4-8), when we got the index to the end of the
 first word but then cleared the string so our index was invalid? That code was
 logically incorrect but didn’t show any immediate errors. The problems would
 show up later if we kept trying to use the first word index with an emptied
@@ -253,7 +253,7 @@ one more improvement on `first_word`, and that’s its signature:
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the signature shown in Listing 4-9
+A more experienced Rustacean would write the signature shown in [Listing 4-9](#4-9)
 instead because it allows us to use the same function on both `&String` values
 and `&str` values.
 
@@ -261,7 +261,7 @@ and `&str` values.
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-9: Improving the `first_word` function by using
+<span class="caption" id="4-9">Listing 4-9: Improving the `first_word` function by using
 a string slice for the type of the `s` parameter</span>
 
 If we have a string slice, we can pass that directly. If we have a `String`, we

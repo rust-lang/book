@@ -2,7 +2,7 @@
 
 Now we’ll add functionality to read the file specified in the `file_path`
 argument. First, we need a sample file to test it with: we’ll use a file with a
-small amount of text over multiple lines with some repeated words. Listing 12-3
+small amount of text over multiple lines with some repeated words. [Listing 12-3](#12-3)
 has an Emily Dickinson poem that will work well! Create a file called
 *poem.txt* at the root level of your project, and enter the poem “I’m Nobody!
 Who are you?”
@@ -13,11 +13,11 @@ Who are you?”
 {{#include ../listings/ch12-an-io-project/listing-12-03/poem.txt}}
 ```
 
-<span class="caption">Listing 12-3: A poem by Emily Dickinson makes a good test
+<span class="caption" id="12-3">Listing 12-3: A poem by Emily Dickinson makes a good test
 case</span>
 
 With the text in place, edit *src/main.rs* and add code to read the file, as
-shown in Listing 12-4.
+shown in [Listing 12-4](#12-4).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -25,7 +25,7 @@ shown in Listing 12-4.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-4: Reading the contents of the file specified
+<span class="caption" id="12-4">Listing 12-4: Reading the contents of the file specified
 by the second argument</span>
 
 First, we bring in a relevant part of the standard library with a `use`

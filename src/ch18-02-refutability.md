@@ -23,7 +23,7 @@ those cases, you’ll need to change either the pattern or the construct you’r
 using the pattern with, depending on the intended behavior of the code.
 
 Let’s look at an example of what happens when we try to use a refutable pattern
-where Rust requires an irrefutable pattern and vice versa. Listing 18-8 shows a
+where Rust requires an irrefutable pattern and vice versa. [Listing 18-8](#18-8) shows a
 `let` statement, but for the pattern we’ve specified `Some(x)`, a refutable
 pattern. As you might expect, this code will not compile.
 
@@ -31,7 +31,7 @@ pattern. As you might expect, this code will not compile.
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-8: Attempting to use a refutable pattern with
+<span class="caption" id="18-8">Listing 18-8: Attempting to use a refutable pattern with
 `let`</span>
 
 If `some_option_value` was a `None` value, it would fail to match the pattern
@@ -51,25 +51,25 @@ If we have a refutable pattern where an irrefutable pattern is needed, we can
 fix it by changing the code that uses the pattern: instead of using `let`, we
 can use `if let`. Then if the pattern doesn’t match, the code will just skip
 the code in the curly brackets, giving it a way to continue validly. Listing
-18-9 shows how to fix the code in Listing 18-8.
+18-9 shows how to fix the code in [Listing 18-8](#18-8).
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-9: Using `if let` and a block with refutable
+<span class="caption" id="18-9">Listing 18-9: Using `if let` and a block with refutable
 patterns instead of `let`</span>
 
 We’ve given the code an out! This code is perfectly valid, although it means we
 cannot use an irrefutable pattern without receiving an error. If we give `if
-let` a pattern that will always match, such as `x`, as shown in Listing 18-10,
+let` a pattern that will always match, such as `x`, as shown in [Listing 18-10](#18-10),
 the compiler will give a warning.
 
 ```rust
 {{#rustdoc_include ../listings/ch18-patterns-and-matching/listing-18-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 18-10: Attempting to use an irrefutable pattern
+<span class="caption" id="18-10">Listing 18-10: Attempting to use an irrefutable pattern
 with `if let`</span>
 
 Rust complains that it doesn’t make sense to use `if let` with an irrefutable

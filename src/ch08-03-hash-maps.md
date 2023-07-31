@@ -20,7 +20,7 @@ As always, check the standard library documentation for more information.
 ### Creating a New Hash Map
 
 One way to create an empty hash map is using `new` and adding elements with
-`insert`. In Listing 8-20, we’re keeping track of the scores of two teams whose
+`insert`. In [Listing 8-20](#8-20), we’re keeping track of the scores of two teams whose
 names are *Blue* and *Yellow*. The Blue team starts with 10 points, and the
 Yellow team starts with 50.
 
@@ -28,7 +28,7 @@ Yellow team starts with 50.
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-20/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-20: Creating a new hash map and inserting some
+<span class="caption" id="8-20">Listing 8-20: Creating a new hash map and inserting some
 keys and values</span>
 
 Note that we need to first `use` the `HashMap` from the collections portion of
@@ -45,13 +45,13 @@ the values must have the same type.
 ### Accessing Values in a Hash Map
 
 We can get a value out of the hash map by providing its key to the `get`
-method, as shown in Listing 8-21.
+method, as shown in [Listing 8-21](#8-21).
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-21/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-21: Accessing the score for the Blue team
+<span class="caption" id="8-21">Listing 8-21: Accessing the score for the Blue team
 stored in the hash map</span>
 
 Here, `score` will have the value that’s associated with the Blue team, and the
@@ -79,13 +79,13 @@ Blue: 10
 
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
-the hash map will be the owner of those values, as demonstrated in Listing 8-22.
+the hash map will be the owner of those values, as demonstrated in [Listing 8-22](#8-22).
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-22/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-22: Showing that keys and values are owned by
+<span class="caption" id="8-22">Listing 8-22: Showing that keys and values are owned by
 the hash map once they’re inserted</span>
 
 We aren’t able to use the variables `field_name` and `field_value` after
@@ -116,7 +116,7 @@ new value. Let’s look at how to do each of these!
 
 If we insert a key and a value into a hash map and then insert that same key
 with a different value, the value associated with that key will be replaced.
-Even though the code in Listing 8-23 calls `insert` twice, the hash map will
+Even though the code in [Listing 8-23](#8-23) calls `insert` twice, the hash map will
 only contain one key/value pair because we’re inserting the value for the Blue
 team’s key both times.
 
@@ -124,7 +124,7 @@ team’s key both times.
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-23/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-23: Replacing a value stored with a particular
+<span class="caption" id="8-23">Listing 8-23: Replacing a value stored with a particular
 key</span>
 
 This code will print `{"Blue": 25}`. The original value of `10` has been
@@ -145,13 +145,13 @@ want to check as a parameter. The return value of the `entry` method is an enum
 called `Entry` that represents a value that might or might not exist. Let’s say
 we want to check whether the key for the Yellow team has a value associated
 with it. If it doesn’t, we want to insert the value 50, and the same for the
-Blue team. Using the `entry` API, the code looks like Listing 8-24.
+Blue team. Using the `entry` API, the code looks like [Listing 8-24](#8-24).
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-24: Using the `entry` method to only insert if
+<span class="caption" id="8-24">Listing 8-24: Using the `entry` method to only insert if
 the key does not already have a value</span>
 
 The `or_insert` method on `Entry` is defined to return a mutable reference to
@@ -160,7 +160,7 @@ inserts the parameter as the new value for this key and returns a mutable
 reference to the new value. This technique is much cleaner than writing the
 logic ourselves and, in addition, plays more nicely with the borrow checker.
 
-Running the code in Listing 8-24 will print `{"Yellow": 50, "Blue": 10}`. The
+Running the code in [Listing 8-24](#8-24) will print `{"Yellow": 50, "Blue": 10}`. The
 first call to `entry` will insert the key for the Yellow team with the value
 50 because the Yellow team doesn’t have a value already. The second call to
 `entry` will not change the hash map because the Blue team already has the
@@ -169,7 +169,7 @@ value 10.
 #### Updating a Value Based on the Old Value
 
 Another common use case for hash maps is to look up a key’s value and then
-update it based on the old value. For instance, Listing 8-25 shows code that
+update it based on the old value. For instance, [Listing 8-25](#8-25) shows code that
 counts how many times each word appears in some text. We use a hash map with
 the words as keys and increment the value to keep track of how many times we’ve
 seen that word. If it’s the first time we’ve seen a word, we’ll first insert
@@ -179,7 +179,7 @@ the value 0.
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 8-25: Counting occurrences of words using a hash
+<span class="caption" id="8-25">Listing 8-25: Counting occurrences of words using a hash
 map that stores words and counts</span>
 
 This code will print `{"world": 2, "hello": 1, "wonderful": 1}`. You might see

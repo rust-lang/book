@@ -39,7 +39,7 @@ technique to extract a generic function! By looking at how to recognize
 duplicated code you can extract into a function, you’ll start to recognize
 duplicated code that can use generics.
 
-We begin with the short program in Listing 10-1 that finds the largest number
+We begin with the short program in [Listing 10-1](#10-1) that finds the largest number
 in a list.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -48,7 +48,7 @@ in a list.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-1: Finding the largest number in a list of
+<span class="caption" id="10-1">Listing 10-1: Finding the largest number in a list of
 numbers</span>
 
 We store a list of integers in the variable `number_list` and place a reference
@@ -61,8 +61,8 @@ in the list. After considering all the numbers in the list, `largest` should
 refer to the largest number, which in this case is 100.
 
 We've now been tasked with finding the largest number in two different lists of
-numbers. To do so, we can choose to duplicate the code in Listing 10-1 and use
-the same logic at two different places in the program, as shown in Listing 10-2.
+numbers. To do so, we can choose to duplicate the code in [Listing 10-1](#10-1) and use
+the same logic at two different places in the program, as shown in [Listing 10-2](#10-2).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -70,7 +70,7 @@ the same logic at two different places in the program, as shown in Listing 10-2.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-2: Code to find the largest number in *two*
+<span class="caption" id="10-2">Listing 10-2: Code to find the largest number in *two*
 lists of numbers</span>
 
 Although this code works, duplicating code is tedious and error prone. We also
@@ -82,9 +82,9 @@ function that operates on any list of integers passed in a parameter. This
 solution makes our code clearer and lets us express the concept of finding the
 largest number in a list abstractly.
 
-In Listing 10-3, we extract the code that finds the largest number into a
+In [Listing 10-3](#10-3), we extract the code that finds the largest number into a
 function named `largest`. Then we call the function to find the largest number
-in the two lists from Listing 10-2. We could also use the function on any other
+in the two lists from [Listing 10-2](#10-2). We could also use the function on any other
 list of `i32` values we might have in the future.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -93,7 +93,7 @@ list of `i32` values we might have in the future.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-3: Abstracted code to find the largest number
+<span class="caption" id="10-3">Listing 10-3: Abstracted code to find the largest number
 in two lists</span>
 
 The `largest` function has a parameter called `list`, which represents any
@@ -101,8 +101,8 @@ concrete slice of `i32` values we might pass into the function. As a result,
 when we call the function, the code runs on the specific values that we pass
 in.
 
-In summary, here are the steps we took to change the code from Listing 10-2 to
-Listing 10-3:
+In summary, here are the steps we took to change the code from [Listing 10-2](#10-2) to
+[Listing 10-3](#10-3):
 
 1. Identify duplicate code.
 2. Extract the duplicate code into the body of the function and specify the

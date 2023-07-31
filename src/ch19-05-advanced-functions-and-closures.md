@@ -14,7 +14,7 @@ with function pointers will allow you to use functions as arguments to other
 functions.
 
 The syntax for specifying that a parameter is a function pointer is similar to
-that of closures, as shown in Listing 19-27, where we’ve defined a function
+that of closures, as shown in [Listing 19-27](#19-27), where we’ve defined a function
 `add_one` that adds one to its parameter. The function `do_twice` takes two
 parameters: a function pointer to any function that takes an `i32` parameter
 and returns an `i32`, and one `i32` value. The `do_twice` function calls the
@@ -28,7 +28,7 @@ results together. The `main` function calls `do_twice` with the arguments
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-27/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-27: Using the `fn` type to accept a function
+<span class="caption" id="19-27">Listing 19-27: Using the `fn` type to accept a function
 pointer as an argument</span>
 
 This code prints `The answer is: 12`. We specify that the parameter `f` in

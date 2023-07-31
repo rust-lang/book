@@ -113,7 +113,7 @@ administrative work.
 
 To structure our crate in this way, we can organize its functions into nested
 modules. Create a new library named `restaurant` by running `cargo new
-restaurant --lib`; then enter the code in Listing 7-1 into *src/lib.rs* to
+restaurant --lib`; then enter the code in [Listing 7-1](#7-1) into *src/lib.rs* to
 define some modules and function signatures. Here’s the front of house section:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -122,7 +122,7 @@ define some modules and function signatures. Here’s the front of house section
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-1: A `front_of_house` module containing other
+<span class="caption" id="7-1">Listing 7-1: A `front_of_house` module containing other
 modules that then contain functions</span>
 
 We define a module with the `mod` keyword followed by the name of the module
@@ -143,7 +143,7 @@ roots. The reason for their name is that the contents of either of these two
 files form a module named `crate` at the root of the crate’s module structure,
 known as the *module tree*.
 
-Listing 7-2 shows the module tree for the structure in Listing 7-1.
+[Listing 7-2](#7-2) shows the module tree for the structure in [Listing 7-1](#7-1).
 
 ```text
 crate
@@ -157,7 +157,7 @@ crate
          └── take_payment
 ```
 
-<span class="caption">Listing 7-2: The module tree for the code in Listing
+<span class="caption" id="7-2">Listing 7-2: The module tree for the code in Listing
 7-1</span>
 
 This tree shows how some of the modules nest inside one another; for example,

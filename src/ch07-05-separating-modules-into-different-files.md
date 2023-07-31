@@ -4,7 +4,7 @@ So far, all the examples in this chapter defined multiple modules in one file.
 When modules get large, you might want to move their definitions to a separate
 file to make the code easier to navigate.
 
-For example, let’s start from the code in Listing 7-17 that had multiple
+For example, let’s start from the code in [Listing 7-17](./ch07-04-bringing-paths-into-scope-with-the-use-keyword.html#7-17) that had multiple
 restaurant modules. We’ll extract modules into files instead of having all the
 modules defined in the crate root file. In this case, the crate root file is
 *src/lib.rs*, but this procedure also works with binary crates whose crate root
@@ -13,8 +13,8 @@ file is *src/main.rs*.
 First, we’ll extract the `front_of_house` module to its own file. Remove the
 code inside the curly brackets for the `front_of_house` module, leaving only
 the `mod front_of_house;` declaration, so that *src/lib.rs* contains the code
-shown in Listing 7-21. Note that this won’t compile until we create the
-*src/front_of_house.rs* file in Listing 7-22.
+shown in [Listing 7-21](#7-21). Note that this won’t compile until we create the
+*src/front_of_house.rs* file in [Listing 7-22](#7-22).
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -22,11 +22,11 @@ shown in Listing 7-21. Note that this won’t compile until we create the
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-21: Declaring the `front_of_house` module whose
+<span class="caption" id="7-21">Listing 7-21: Declaring the `front_of_house` module whose
 body will be in *src/front_of_house.rs*</span>
 
 Next, place the code that was in the curly brackets into a new file named
-*src/front_of_house.rs*, as shown in Listing 7-22. The compiler knows to look
+*src/front_of_house.rs*, as shown in [Listing 7-22](#7-22). The compiler knows to look
 in this file because it came across the module declaration in the crate root
 with the name `front_of_house`.
 
@@ -36,7 +36,7 @@ with the name `front_of_house`.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-21-and-22/src/front_of_house.rs}}
 ```
 
-<span class="caption">Listing 7-22: Definitions inside the `front_of_house`
+<span class="caption" id="7-22">Listing 7-22: Definitions inside the `front_of_house`
 module in *src/front_of_house.rs*</span>
 
 Note that you only need to load a file using a `mod` declaration *once* in your

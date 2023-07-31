@@ -33,7 +33,7 @@ Then, in *src/lib.rs*, add a `tests` module with a test function, as we did in
 [Chapter 11][ch11-anatomy]<!-- ignore -->. The test function specifies the
 behavior we want the `search` function to have: it will take a query and the
 text to search, and it will return only the lines from the text that contain
-the query. Listing 12-15 shows this test, which won’t compile yet.
+the query. [Listing 12-15](#12-15) shows this test, which won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -41,7 +41,7 @@ the query. Listing 12-15 shows this test, which won’t compile yet.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-15/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-15: Creating a failing test for the `search`
+<span class="caption" id="12-15">Listing 12-15: Creating a failing test for the `search`
 function we wish we had</span>
 
 This test searches for the string `"duct"`. The text we’re searching is three
@@ -54,7 +54,7 @@ We aren’t yet able to run this test and watch it fail because the test doesn�
 even compile: the `search` function doesn’t exist yet! In accordance with TDD
 principles, we’ll add just enough code to get the test to compile and run by
 adding a definition of the `search` function that always returns an empty
-vector, as shown in Listing 12-16. Then the test should compile and fail
+vector, as shown in [Listing 12-16](#12-16). Then the test should compile and fail
 because an empty vector doesn’t match a vector containing the line `"safe,
 fast, productive."`
 
@@ -64,7 +64,7 @@ fast, productive."`
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-16/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-16: Defining just enough of the `search`
+<span class="caption" id="12-16">Listing 12-16: Defining just enough of the `search`
 function so our test will compile</span>
 
 Notice that we need to define an explicit lifetime `'a` in the signature of
@@ -125,7 +125,7 @@ Let’s work through each step, starting with iterating through lines.
 #### Iterating Through Lines with the `lines` Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
-conveniently named `lines`, that works as shown in Listing 12-17. Note this
+conveniently named `lines`, that works as shown in [Listing 12-17](#12-17). Note this
 won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -134,12 +134,12 @@ won’t compile yet.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-17/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-17: Iterating through each line in `contents`
+<span class="caption" id="12-17">Listing 12-17: Iterating through each line in `contents`
 </span>
 
 The `lines` method returns an iterator. We’ll talk about iterators in depth in
 [Chapter 13][ch13-iterators]<!-- ignore -->, but recall that you saw this way
-of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
+of using an iterator in [[Listing 3-5](./ch03-05-control-flow.html#3-5)][ch3-iter]<!-- ignore -->, where we used a
 `for` loop with an iterator to run some code on each item in a collection.
 
 #### Searching Each Line for the Query
@@ -147,7 +147,7 @@ of using an iterator in [Listing 3-5][ch3-iter]<!-- ignore -->, where we used a
 Next, we’ll check whether the current line contains our query string.
 Fortunately, strings have a helpful method named `contains` that does this for
 us! Add a call to the `contains` method in the `search` function, as shown in
-Listing 12-18. Note this still won’t compile yet.
+[Listing 12-18](#12-18). Note this still won’t compile yet.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -155,7 +155,7 @@ Listing 12-18. Note this still won’t compile yet.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-18/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-18: Adding functionality to see whether the
+<span class="caption" id="12-18">Listing 12-18: Adding functionality to see whether the
 line contains the string in `query`</span>
 
 At the moment, we’re building up functionality. To get it to compile, we need
@@ -167,7 +167,7 @@ signature.
 To finish this function, we need a way to store the matching lines that we want
 to return. For that, we can make a mutable vector before the `for` loop and
 call the `push` method to store a `line` in the vector. After the `for` loop,
-we return the vector, as shown in Listing 12-19.
+we return the vector, as shown in [Listing 12-19](#12-19).
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -175,7 +175,7 @@ we return the vector, as shown in Listing 12-19.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 12-19: Storing the lines that match so we can
+<span class="caption" id="12-19">Listing 12-19: Storing the lines that match so we can
 return them</span>
 
 Now the `search` function should return only the lines that contain `query`,

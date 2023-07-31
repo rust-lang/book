@@ -41,7 +41,7 @@ can define a struct `AveragedCollection` that has a field containing a vector
 of `i32` values. The struct can also have a field that contains the average of
 the values in the vector, meaning the average doesn’t have to be computed
 on demand whenever anyone needs it. In other words, `AveragedCollection` will
-cache the calculated average for us. Listing 17-1 has the definition of the
+cache the calculated average for us. [Listing 17-1](#17-1) has the definition of the
 `AveragedCollection` struct:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -50,7 +50,7 @@ cache the calculated average for us. Listing 17-1 has the definition of the
 {{#rustdoc_include ../listings/ch17-oop/listing-17-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 17-1: An `AveragedCollection` struct that
+<span class="caption" id="17-1">Listing 17-1: An `AveragedCollection` struct that
 maintains a list of integers and the average of the items in the
 collection</span>
 
@@ -58,7 +58,7 @@ The struct is marked `pub` so that other code can use it, but the fields within
 the struct remain private. This is important in this case because we want to
 ensure that whenever a value is added or removed from the list, the average is
 also updated. We do this by implementing `add`, `remove`, and `average` methods
-on the struct, as shown in Listing 17-2:
+on the struct, as shown in [Listing 17-2](#17-2):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -66,7 +66,7 @@ on the struct, as shown in Listing 17-2:
 {{#rustdoc_include ../listings/ch17-oop/listing-17-02/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 17-2: Implementations of the public methods
+<span class="caption" id="17-2">Listing 17-2: Implementations of the public methods
 `add`, `remove`, and `average` on `AveragedCollection`</span>
 
 The public methods `add`, `remove`, and `average` are the only ways to access
@@ -113,7 +113,7 @@ You would choose inheritance for two main reasons. One is for reuse of code:
 you can implement particular behavior for one type, and inheritance enables you
 to reuse that implementation for a different type. You can do this in a limited
 way in Rust code using default trait method implementations, which you saw in
-Listing 10-14 when we added a default implementation of the `summarize` method
+[Listing 10-14](./ch10-02-traits.html#10-14) when we added a default implementation of the `summarize` method
 on the `Summary` trait. Any type implementing the `Summary` trait would have
 the `summarize` method available on it without any further code. This is
 similar to a parent class having an implementation of a method and an

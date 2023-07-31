@@ -1,6 +1,6 @@
 ## References and Borrowing
 
-The issue with the tuple code in Listing 4-5 is that we have to return the
+The issue with the tuple code in [Listing 4-5](./ch04-01-what-is-ownership.html#4-5) is that we have to return the
 `String` to the calling function so we can still use the `String` after the
 call to `calculate_length`, because the `String` was moved into
 `calculate_length`. Instead, we can provide a reference to the `String` value.
@@ -65,7 +65,7 @@ person owns something, you can borrow it from them. When you’re done, you have
 to give it back. You don’t own it.
 
 So, what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-6. Spoiler alert: it doesn’t work!
+[Listing 4-6](#4-6). Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -73,7 +73,7 @@ Listing 4-6. Spoiler alert: it doesn’t work!
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-6: Attempting to modify a borrowed value</span>
+<span class="caption" id="4-6">Listing 4-6: Attempting to modify a borrowed value</span>
 
 Here’s the error:
 
@@ -86,7 +86,7 @@ allowed to modify something we have a reference to.
 
 ### Mutable References
 
-We can fix the code from Listing 4-6 to allow us to modify a borrowed value
+We can fix the code from [Listing 4-6](#4-6) to allow us to modify a borrowed value
 with just a few small tweaks that use, instead, a *mutable reference*:
 
 <span class="filename">Filename: src/main.rs</span>

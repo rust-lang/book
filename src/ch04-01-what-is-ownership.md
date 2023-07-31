@@ -110,14 +110,14 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 shows a
+which it’s declared until the end of the current *scope*. [Listing 4-1](#4-1) shows a
 program with comments annotating where the variable `s` would be valid.
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-1: A variable and the scope in which it is
+<span class="caption" id="4-1">Listing 4-1: A variable and the scope in which it is
 valid</span>
 
 In other words, there are two important points in time here:
@@ -208,7 +208,7 @@ exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+from [Listing 4-1](#4-1) using a `String` instead of a string literal:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-02-string-scope/src/main.rs:here}}
@@ -237,13 +237,13 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 #### Variables and Data Interacting with Move
 
 Multiple variables can interact with the same data in different ways in Rust.
-Let’s look at an example using an integer in Listing 4-2.
+Let’s look at an example using an integer in [Listing 4-2](#4-2).
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 4-2: Assigning the integer value of variable `x`
+<span class="caption" id="4-2">Listing 4-2: Assigning the integer value of variable `x`
 to `y`</span>
 
 We can probably guess what this is doing: “bind the value `5` to `x`; then make
@@ -380,7 +380,7 @@ different is going on.
 #### Stack-Only Data: Copy
 
 There’s another wrinkle we haven’t talked about yet. This code using
-integers—part of which was shown in Listing 4-2—works and is valid:
+integers—part of which was shown in [Listing 4-2](#4-2)—works and is valid:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
@@ -426,7 +426,7 @@ implement `Copy`:
 
 The mechanics of passing a value to a function are similar to those when
 assigning a value to a variable. Passing a variable to a function will move or
-copy, just as assignment does. Listing 4-3 has an example with some annotations
+copy, just as assignment does. [Listing 4-3](#4-3) has an example with some annotations
 showing where variables go into and out of scope.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -435,7 +435,7 @@ showing where variables go into and out of scope.
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-3: Functions with ownership and scope
+<span class="caption" id="4-3">Listing 4-3: Functions with ownership and scope
 annotated</span>
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
@@ -445,7 +445,7 @@ the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
 
-Returning values can also transfer ownership. Listing 4-4 shows an example of a
+Returning values can also transfer ownership. [Listing 4-4](#4-4) shows an example of a
 function that returns some value, with similar annotations as those in Listing
 4-3.
 
@@ -455,7 +455,7 @@ function that returns some value, with similar annotations as those in Listing
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-4: Transferring ownership of return
+<span class="caption" id="4-4">Listing 4-4: Transferring ownership of return
 values</span>
 
 The ownership of a variable follows the same pattern every time: assigning a
@@ -469,7 +469,7 @@ not take ownership? It’s quite annoying that anything we pass in also needs to
 be passed back if we want to use it again, in addition to any data resulting
 from the body of the function that we might want to return as well.
 
-Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
+Rust does let us return multiple values using a tuple, as shown in [Listing 4-5](#4-5).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -477,7 +477,7 @@ Rust does let us return multiple values using a tuple, as shown in Listing 4-5.
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 4-5: Returning ownership of parameters</span>
+<span class="caption" id="4-5">Listing 4-5: Returning ownership of parameters</span>
 
 But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for using a value without

@@ -140,7 +140,7 @@ we need to be explicit about the dependency relationships.
 Next, let’s use the `add_one` function (from the `add_one` crate) in the
 `adder` crate. Open the *adder/src/main.rs* file and add a `use` line at the
 top to bring the new `add_one` library crate into scope. Then change the `main`
-function to call the `add_one` function, as in Listing 14-7.
+function to call the `add_one` function, as in [Listing 14-7](#14-7).
 
 <span class="filename">Filename: adder/src/main.rs</span>
 
@@ -148,7 +148,7 @@ function to call the `add_one` function, as in Listing 14-7.
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-07/add/adder/src/main.rs}}
 ```
 
-<span class="caption">Listing 14-7: Using the `add_one` library crate from the
+<span class="caption" id="14-7">Listing 14-7: Using the `add_one` library crate from the
  `adder` crate</span>
 
 Let’s build the workspace by running `cargo build` in the top-level *add*

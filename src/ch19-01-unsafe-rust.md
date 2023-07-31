@@ -88,14 +88,14 @@ By opting out of having Rust enforce these guarantees, you can give up
 guaranteed safety in exchange for greater performance or the ability to
 interface with another language or hardware where Rust’s guarantees don’t apply.
 
-Listing 19-1 shows how to create an immutable and a mutable raw pointer from
+[Listing 19-1](#19-1) shows how to create an immutable and a mutable raw pointer from
 references.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-1: Creating raw pointers from references</span>
+<span class="caption" id="19-1">Listing 19-1: Creating raw pointers from references</span>
 
 Notice that we don’t include the `unsafe` keyword in this code. We can create
 raw pointers in safe code; we just can’t dereference raw pointers outside an
@@ -108,7 +108,7 @@ pointers are valid, but we can’t make that assumption about just any raw
 pointer.
 
 To demonstrate this, next we’ll create a raw pointer whose validity we can’t be
-so certain of. Listing 19-2 shows how to create a raw pointer to an arbitrary
+so certain of. [Listing 19-2](#19-2) shows how to create a raw pointer to an arbitrary
 location in memory. Trying to use arbitrary memory is undefined: there might be
 data at that address or there might not, the compiler might optimize the code
 so there is no memory access, or the program might error with a segmentation
@@ -119,24 +119,24 @@ possible.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-2: Creating a raw pointer to an arbitrary
+<span class="caption" id="19-2">Listing 19-2: Creating a raw pointer to an arbitrary
 memory address</span>
 
 Recall that we can create raw pointers in safe code, but we can’t *dereference*
-raw pointers and read the data being pointed to. In Listing 19-3, we use the
+raw pointers and read the data being pointed to. In [Listing 19-3](#19-3), we use the
 dereference operator `*` on a raw pointer that requires an `unsafe` block.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-3: Dereferencing raw pointers within an
+<span class="caption" id="19-3">Listing 19-3: Dereferencing raw pointers within an
 `unsafe` block</span>
 
 Creating a pointer does no harm; it’s only when we try to access the value that
 it points at that we might end up dealing with an invalid value.
 
-Note also that in Listing 19-1 and 19-3, we created `*const i32` and `*mut i32`
+Note also that in [Listing 19-1](#19-1) and 19-3, we created `*const i32` and `*mut i32`
 raw pointers that both pointed to the same memory location, where `num` is
 stored. If we instead tried to create an immutable and a mutable reference to
 `num`, the code would not have compiled because Rust’s ownership rules don’t
@@ -194,17 +194,17 @@ a common abstraction. As an example, let’s study the `split_at_mut` function
 from the standard library, which requires some unsafe code. We’ll explore how
 we might implement it. This safe method is defined on mutable slices: it takes
 one slice and makes it two by splitting the slice at the index given as an
-argument. Listing 19-4 shows how to use `split_at_mut`.
+argument. [Listing 19-4](#19-4) shows how to use `split_at_mut`.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-4: Using the safe `split_at_mut`
+<span class="caption" id="19-4">Listing 19-4: Using the safe `split_at_mut`
 function</span>
 
 We can’t implement this function using only safe Rust. An attempt might look
-something like Listing 19-5, which won’t compile. For simplicity, we’ll
+something like [Listing 19-5](#19-5), which won’t compile. For simplicity, we’ll
 implement `split_at_mut` as a function rather than a method and only for slices
 of `i32` values rather than for a generic type `T`.
 
@@ -212,7 +212,7 @@ of `i32` values rather than for a generic type `T`.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-5: An attempted implementation of
+<span class="caption" id="19-5">Listing 19-5: An attempted implementation of
 `split_at_mut` using only safe Rust</span>
 
 This function first gets the total length of the slice. Then it asserts that
@@ -225,7 +225,7 @@ Then we return two mutable slices in a tuple: one from the start of the
 original slice to the `mid` index and another from `mid` to the end of the
 slice.
 
-When we try to compile the code in Listing 19-5, we’ll get an error.
+When we try to compile the code in [Listing 19-5](#19-5), we’ll get an error.
 
 ```console
 {{#include ../listings/ch19-advanced-features/listing-19-05/output.txt}}
@@ -237,14 +237,14 @@ Borrowing different parts of a slice is fundamentally okay because the two
 slices aren’t overlapping, but Rust isn’t smart enough to know this. When we
 know code is okay, but Rust doesn’t, it’s time to reach for unsafe code.
 
-Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
+[Listing 19-6](#19-6) shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work.
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-6: Using unsafe code in the implementation of
+<span class="caption" id="19-6">Listing 19-6: Using unsafe code in the implementation of
 the `split_at_mut` function</span>
 
 Recall from [“The Slice Type”][the-slice-type]<!-- ignore --> section in
@@ -278,7 +278,7 @@ abstraction to the unsafe code with an implementation of the function that uses
 `unsafe` code in a safe way, because it creates only valid pointers from the
 data this function has access to.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
+In contrast, the use of `slice::from_raw_parts_mut` in [Listing 19-7](#19-7) would
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice 10,000 items long.
 
@@ -286,7 +286,7 @@ location and creates a slice 10,000 items long.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 19-7: Creating a slice from an arbitrary memory
+<span class="caption" id="19-7">Listing 19-7: Creating a slice from an arbitrary memory
 location</span>
 
 We don’t own the memory at this arbitrary location, and there is no guarantee
@@ -301,7 +301,7 @@ and use of a *Foreign Function Interface (FFI)*. An FFI is a way for a
 programming language to define functions and enable a different (foreign)
 programming language to call those functions.
 
-Listing 19-8 demonstrates how to set up an integration with the `abs` function
+[Listing 19-8](#19-8) demonstrates how to set up an integration with the `abs` function
 from the C standard library. Functions declared within `extern` blocks are
 always unsafe to call from Rust code. The reason is that other languages don’t
 enforce Rust’s rules and guarantees, and Rust can’t check them, so
@@ -313,7 +313,7 @@ responsibility falls on the programmer to ensure safety.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-8: Declaring and calling an `extern` function
+<span class="caption" id="19-8">Listing 19-8: Declaring and calling an `extern` function
 defined in another language</span>
 
 Within the `extern "C"` block, we list the names and signatures of external
@@ -353,7 +353,7 @@ In this book, we’ve not yet talked about *global variables*, which Rust does
 support but can be problematic with Rust’s ownership rules. If two threads are
 accessing the same mutable global variable, it can cause a data race.
 
-In Rust, global variables are called *static* variables. Listing 19-9 shows an
+In Rust, global variables are called *static* variables. [Listing 19-9](#19-9) shows an
 example declaration and use of a static variable with a string slice as a
 value.
 
@@ -363,7 +363,7 @@ value.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-9: Defining and using an immutable static
+<span class="caption" id="19-9">Listing 19-9: Defining and using an immutable static
 variable</span>
 
 Static variables are similar to constants, which we discussed in the
@@ -380,7 +380,7 @@ values in a static variable have a fixed address in memory. Using the value
 will always access the same data. Constants, on the other hand, are allowed to
 duplicate their data whenever they’re used. Another difference is that static
 variables can be mutable. Accessing and modifying mutable static variables is
-*unsafe*. Listing 19-10 shows how to declare, access, and modify a mutable
+*unsafe*. [Listing 19-10](#19-10) shows how to declare, access, and modify a mutable
 static variable named `COUNTER`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -389,7 +389,7 @@ static variable named `COUNTER`.
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-10: Reading from or writing to a mutable
+<span class="caption" id="19-10">Listing 19-10: Reading from or writing to a mutable
 static variable is unsafe</span>
 
 As with regular variables, we specify mutability using the `mut` keyword. Any
@@ -410,13 +410,13 @@ We can use `unsafe` to implement an unsafe trait. A trait is unsafe when at
 least one of its methods has some invariant that the compiler can’t verify. We
 declare that a trait is `unsafe` by adding the `unsafe` keyword before `trait`
 and marking the implementation of the trait as `unsafe` too, as shown in
-Listing 19-11.
+[Listing 19-11](#19-11).
 
 ```rust
 {{#rustdoc_include ../listings/ch19-advanced-features/listing-19-11/src/main.rs}}
 ```
 
-<span class="caption">Listing 19-11: Defining and implementing an unsafe
+<span class="caption" id="19-11">Listing 19-11: Defining and implementing an unsafe
 trait</span>
 
 By using `unsafe impl`, we’re promising that we’ll uphold the invariants that

@@ -6,7 +6,7 @@ then refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the width and height of a rectangle specified in pixels and calculate the area
-of the rectangle. Listing 5-8 shows a short program with one way of doing
+of the rectangle. [Listing 5-8](#5-8) shows a short program with one way of doing
 exactly that in our project’s *src/main.rs*.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -15,7 +15,7 @@ exactly that in our project’s *src/main.rs*.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-08/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 5-8: Calculating the area of a rectangle
+<span class="caption" id="5-8">Listing 5-8: Calculating the area of a rectangle
 specified by separate width and height variables</span>
 
 Now, run this program using `cargo run`:
@@ -43,7 +43,7 @@ of Chapter 3: by using tuples.
 
 ### Refactoring with Tuples
 
-Listing 5-9 shows another version of our program that uses tuples.
+[Listing 5-9](#5-9) shows another version of our program that uses tuples.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -51,7 +51,7 @@ Listing 5-9 shows another version of our program that uses tuples.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-9: Specifying the width and height of the
+<span class="caption" id="5-9">Listing 5-9: Specifying the width and height of the
 rectangle with a tuple</span>
 
 In one way, this program is better. Tuples let us add a bit of structure, and
@@ -70,7 +70,7 @@ our data in our code, it’s now easier to introduce errors.
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a struct with a name for the whole as well as names for the
-parts, as shown in Listing 5-10.
+parts, as shown in [Listing 5-10](#5-10).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -78,7 +78,7 @@ parts, as shown in Listing 5-10.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-10: Defining a `Rectangle` struct</span>
+<span class="caption" id="5-10">Listing 5-10: Defining a `Rectangle` struct</span>
 
 Here we’ve defined a struct and named it `Rectangle`. Inside the curly
 brackets, we defined the fields as `width` and `height`, both of which have
@@ -104,7 +104,7 @@ win for clarity.
 ### Adding Useful Functionality with Derived Traits
 
 It’d be useful to be able to print an instance of `Rectangle` while we’re
-debugging our program and see the values for all its fields. Listing 5-11 tries
+debugging our program and see the values for all its fields. [Listing 5-11](#5-11) tries
 using the [`println!` macro][println]<!-- ignore --> as we have used in
 previous chapters. This won’t work, however.
 
@@ -114,7 +114,7 @@ previous chapters. This won’t work, however.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-11/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-11: Attempting to print a `Rectangle`
+<span class="caption" id="5-11">Listing 5-11: Attempting to print a `Rectangle`
 instance</span>
 
 When we compile this code, we get an error with this core message:
@@ -161,7 +161,7 @@ But again, the compiler gives us a helpful note:
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt in to make that functionality available for our struct.
 To do that, we add the outer attribute `#[derive(Debug)]` just before the
-struct definition, as shown in Listing 5-12.
+struct definition, as shown in [Listing 5-12](#5-12).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -169,7 +169,7 @@ struct definition, as shown in Listing 5-12.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 5-12: Adding the attribute to derive the `Debug`
+<span class="caption" id="5-12">Listing 5-12: Adding the attribute to derive the `Debug`
 trait and printing the `Rectangle` instance using debug formatting</span>
 
 Now when we run the program, we won’t get any errors, and we’ll see the

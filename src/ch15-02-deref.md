@@ -25,7 +25,7 @@ or smart pointers.
 ### Following the Pointer to the Value
 
 A regular reference is a type of pointer, and one way to think of a pointer is
-as an arrow to a value stored somewhere else. In Listing 15-6, we create a
+as an arrow to a value stored somewhere else. In [Listing 15-6](#15-6), we create a
 reference to an `i32` value and then use the dereference operator to follow the
 reference to the value:
 
@@ -35,7 +35,7 @@ reference to the value:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-6: Using the dereference operator to follow a
+<span class="caption" id="15-6">Listing 15-6: Using the dereference operator to follow a
 reference to an `i32` value</span>
 
 The variable `x` holds an `i32` value `5`. We set `y` equal to a reference to
@@ -58,10 +58,10 @@ to the value it’s pointing to.
 
 ### Using `Box<T>` Like a Reference
 
-We can rewrite the code in Listing 15-6 to use a `Box<T>` instead of a
-reference; the dereference operator used on the `Box<T>` in Listing 15-7
+We can rewrite the code in [Listing 15-6](#15-6) to use a `Box<T>` instead of a
+reference; the dereference operator used on the `Box<T>` in [Listing 15-7](#15-7)
 functions in the same way as the dereference operator used on the reference in
-Listing 15-6:
+[Listing 15-6](#15-6):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -69,10 +69,10 @@ Listing 15-6:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-7: Using the dereference operator on a
+<span class="caption" id="15-7">Listing 15-7: Using the dereference operator on a
 `Box<i32>`</span>
 
-The main difference between Listing 15-7 and Listing 15-6 is that here we set
+The main difference between [Listing 15-7](#15-7) and [Listing 15-6](#15-6) is that here we set
 `y` to be an instance of a `Box<T>` pointing to a copied value of `x` rather
 than a reference pointing to the value of `x`. In the last assertion, we can
 use the dereference operator to follow the pointer of the `Box<T>` in the same
@@ -88,7 +88,7 @@ references by default. Then we’ll look at how to add the ability to use the
 dereference operator.
 
 The `Box<T>` type is ultimately defined as a tuple struct with one element, so
-Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
+[Listing 15-8](#15-8) defines a `MyBox<T>` type in the same way. We’ll also define a
 `new` function to match the `new` function defined on `Box<T>`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -97,16 +97,16 @@ Listing 15-8 defines a `MyBox<T>` type in the same way. We’ll also define a
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-8: Defining a `MyBox<T>` type</span>
+<span class="caption" id="15-8">Listing 15-8: Defining a `MyBox<T>` type</span>
 
 We define a struct named `MyBox` and declare a generic parameter `T`, because
 we want our type to hold values of any type. The `MyBox` type is a tuple struct
 with one element of type `T`. The `MyBox::new` function takes one parameter of
 type `T` and returns a `MyBox` instance that holds the value passed in.
 
-Let’s try adding the `main` function in Listing 15-7 to Listing 15-8 and
+Let’s try adding the `main` function in [Listing 15-7](#15-7) to [Listing 15-8](#15-8) and
 changing it to use the `MyBox<T>` type we’ve defined instead of `Box<T>`. The
-code in Listing 15-9 won’t compile because Rust doesn’t know how to dereference
+code in [Listing 15-9](#15-9) won’t compile because Rust doesn’t know how to dereference
 `MyBox`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -115,7 +115,7 @@ code in Listing 15-9 won’t compile because Rust doesn’t know how to derefere
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-9: Attempting to use `MyBox<T>` in the same
+<span class="caption" id="15-9">Listing 15-9: Attempting to use `MyBox<T>` in the same
 way we used references and `Box<T>`</span>
 
 Here’s the resulting compilation error:
@@ -134,7 +134,7 @@ As discussed in the [“Implementing a Trait on a Type”][impl-trait]<!-- ignor
 --> section of Chapter 10, to implement a trait, we need to provide
 implementations for the trait’s required methods. The `Deref` trait, provided
 by the standard library, requires us to implement one method named `deref` that
-borrows `self` and returns a reference to the inner data. Listing 15-10
+borrows `self` and returns a reference to the inner data. [Listing 15-10](#15-10)
 contains an implementation of `Deref` to add to the definition of `MyBox`:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -143,7 +143,7 @@ contains an implementation of `Deref` to add to the definition of `MyBox`:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
+<span class="caption" id="15-10">Listing 15-10: Implementing `Deref` on `MyBox<T>`</span>
 
 The `type Target = T;` syntax defines an associated type for the `Deref`
 trait to use. Associated types are a slightly different way of declaring a
@@ -154,7 +154,7 @@ We fill in the body of the `deref` method with `&self.0` so `deref` returns a
 reference to the value we want to access with the `*` operator; recall from the
 [“Using Tuple Structs without Named Fields to Create Different
 Types”][tuple-structs]<!-- ignore --> section of Chapter 5 that `.0` accesses
-the first value in a tuple struct. The `main` function in Listing 15-9 that
+the first value in a tuple struct. The `main` function in [Listing 15-9](#15-9) that
 calls `*` on the `MyBox<T>` value now compiles, and the assertions pass!
 
 Without the `Deref` trait, the compiler can only dereference `&` references.
@@ -162,7 +162,7 @@ The `deref` method gives the compiler the ability to take a value of any type
 that implements `Deref` and call the `deref` method to get a `&` reference that
 it knows how to dereference.
 
-When we entered `*y` in Listing 15-9, behind the scenes Rust actually ran this
+When we entered `*y` in [Listing 15-9](#15-9), behind the scenes Rust actually ran this
 code:
 
 ```rust,ignore
@@ -186,7 +186,7 @@ Note that the `*` operator is replaced with a call to the `deref` method and
 then a call to the `*` operator just once, each time we use a `*` in our code.
 Because the substitution of the `*` operator does not recurse infinitely, we
 end up with data of type `i32`, which matches the `5` in `assert_eq!` in
-Listing 15-9.
+[Listing 15-9](#15-9).
 
 ### Implicit Deref Coercions with Functions and Methods
 
@@ -206,8 +206,8 @@ with `&` and `*`. The deref coercion feature also lets us write more code that
 can work for either references or smart pointers.
 
 To see deref coercion in action, let’s use the `MyBox<T>` type we defined in
-Listing 15-8 as well as the implementation of `Deref` that we added in Listing
-15-10. Listing 15-11 shows the definition of a function that has a string slice
+[Listing 15-8](#15-8) as well as the implementation of `Deref` that we added in Listing
+15-10. [Listing 15-11](#15-11) shows the definition of a function that has a string slice
 parameter:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -216,12 +216,12 @@ parameter:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-11: A `hello` function that has the parameter
+<span class="caption" id="15-11">Listing 15-11: A `hello` function that has the parameter
 `name` of type `&str`</span>
 
 We can call the `hello` function with a string slice as an argument, such as
 `hello("Rust");` for example. Deref coercion makes it possible to call `hello`
-with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
+with a reference to a value of type `MyBox<String>`, as shown in [Listing 15-12](#15-12):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -229,19 +229,19 @@ with a reference to a value of type `MyBox<String>`, as shown in Listing 15-12:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-12/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-12: Calling `hello` with a reference to a
+<span class="caption" id="15-12">Listing 15-12: Calling `hello` with a reference to a
 `MyBox<String>` value, which works because of deref coercion</span>
 
 Here we’re calling the `hello` function with the argument `&m`, which is a
 reference to a `MyBox<String>` value. Because we implemented the `Deref` trait
-on `MyBox<T>` in Listing 15-10, Rust can turn `&MyBox<String>` into `&String`
+on `MyBox<T>` in [Listing 15-10](#15-10), Rust can turn `&MyBox<String>` into `&String`
 by calling `deref`. The standard library provides an implementation of `Deref`
 on `String` that returns a string slice, and this is in the API documentation
 for `Deref`. Rust calls `deref` again to turn the `&String` into `&str`, which
 matches the `hello` function’s definition.
 
 If Rust didn’t implement deref coercion, we would have to write the code in
-Listing 15-13 instead of the code in Listing 15-12 to call `hello` with a value
+[Listing 15-13](#15-13) instead of the code in [Listing 15-12](#15-12) to call `hello` with a value
 of type `&MyBox<String>`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -250,7 +250,7 @@ of type `&MyBox<String>`.
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-13/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 15-13: The code we would have to write if Rust
+<span class="caption" id="15-13">Listing 15-13: The code we would have to write if Rust
 didn’t have deref coercion</span>
 
 The `(*m)` dereferences the `MyBox<String>` into a `String`. Then the `&` and

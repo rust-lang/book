@@ -56,7 +56,7 @@ There’s debate within the testing community about whether or not private
 functions should be tested directly, and other languages make it difficult or
 impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust’s privacy rules do allow you to test private functions.
-Consider the code in Listing 11-12 with the private function `internal_adder`.
+Consider the code in [Listing 11-12](#11-12) with the private function `internal_adder`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -64,7 +64,7 @@ Consider the code in Listing 11-12 with the private function `internal_adder`.
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-12/src/lib.rs}}
 ```
 
-<span class="caption">Listing 11-12: Testing a private function</span>
+<span class="caption" id="11-12">Listing 11-12: Testing a private function</span>
 
 Note that the `internal_adder` function is not marked as `pub`. Tests are just
 Rust code, and the `tests` module is just another module. As we discussed in
@@ -92,7 +92,7 @@ to *src*. Cargo knows to look for integration test files in this directory. We
 can then make as many test files as we want, and Cargo will compile each of the
 files as an individual crate.
 
-Let’s create an integration test. With the code in Listing 11-12 still in the
+Let’s create an integration test. With the code in [Listing 11-12](#11-12) still in the
 *src/lib.rs* file, make a *tests* directory, and create a new file named
 *tests/integration_test.rs*. Your directory structure should look like this:
 
@@ -106,7 +106,7 @@ adder
     └── integration_test.rs
 ```
 
-Enter the code in Listing 11-13 into the *tests/integration_test.rs* file:
+Enter the code in [Listing 11-13](#11-13) into the *tests/integration_test.rs* file:
 
 <span class="filename">Filename: tests/integration_test.rs</span>
 
@@ -114,7 +114,7 @@ Enter the code in Listing 11-13 into the *tests/integration_test.rs* file:
 {{#rustdoc_include ../listings/ch11-writing-automated-tests/listing-11-13/tests/integration_test.rs}}
 ```
 
-<span class="caption">Listing 11-13: An integration test of a function in the
+<span class="caption" id="11-13">Listing 11-13: An integration test of a function in the
 `adder` crate</span>
 
 Each file in the `tests` directory is a separate crate, so we need to bring our
@@ -136,7 +136,7 @@ for integration and doc tests because those tests will only be run if all unit
 tests are passing.
 
 The first section for the unit tests is the same as we’ve been seeing: one line
-for each unit test (one named `internal` that we added in Listing 11-12) and
+for each unit test (one named `internal` that we added in [Listing 11-12](#11-12)) and
 then a summary line for the unit tests.
 
 The integration tests section starts with the line `Running
@@ -230,7 +230,7 @@ function from the `it_adds_two` test in *tests/integration_test.rs*:
 ```
 
 Note that the `mod common;` declaration is the same as the module declaration
-we demonstrated in Listing 7-21. Then in the test function, we can call the
+we demonstrated in [Listing 7-21](./ch07-05-separating-modules-into-different-files.html#7-21). Then in the test function, we can call the
 `common::setup()` function.
 
 #### Integration Tests for Binary Crates
