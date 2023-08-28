@@ -49,11 +49,11 @@ state.
 
 ### Showing Function Output
 
-By default, if a test fails, Rust’s test library captures anything printed to
-standard output. For example, if we call `println!` in a test and the test
-passes, we won’t see the `println!` output in the terminal; we’ll see only the
-line that indicates the test passed. If a test fails, we’ll see whatever was
-printed to standard output with the rest of the failure message.
+By default, if a test passes, Rust’s test library will not capture anything
+printed to standard output. For example, if we call `println!` in a test and
+the test passes, we won’t see the `println!` output in the terminal; we’ll see
+only the line that indicates the test passed. If a test fails, we’ll see
+whatever was printed to standard output with the rest of the failure message.
 
 As an example, Listing 11-10 has a silly function that prints the value of its
 parameter and returns 10, as well as a test that passes and a test that fails.
