@@ -49,7 +49,7 @@ state.
 
 ### Showing Function Output
 
-By default, if a test passes, Rust’s test library captures anything printed to
+By default, if a test fails, Rust’s test library captures anything printed to
 standard output. For example, if we call `println!` in a test and the test
 passes, we won’t see the `println!` output in the terminal; we’ll see only the
 line that indicates the test passed. If a test fails, we’ll see whatever was
