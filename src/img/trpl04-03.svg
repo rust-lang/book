@@ -1,10 +1,10 @@
 <svg viewBox="0.00 0.00 1000.00 1300.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%"
 alt="Four tables: two tables representing the stack data for s1 and s2,
 and each points to its own copy of string data on the heap." class="center">
-    <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 298)">
+    <g id="04-03-graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 298)">
         <title>Figure 4-3</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-298 233,-298 233,4 -4,4" />
-        <g id="node1" class="node">
+        <g id="04-03-node1" class="node">
             <title>table0</title>
             <polyline fill="none" stroke="var(--fg, black)" points="8,-124 96,-124 " />
             <text text-anchor="start" x="45.7759" y="-129.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">s2</text>
@@ -24,7 +24,7 @@ and each points to its own copy of string data on the heap." class="center">
             <polygon fill="none" stroke="var(--fg, black)" points="60,-44 60,-64 96,-64 96,-44 60,-44" />
             <text text-anchor="start" x="74.5" y="-49.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">5</text>
         </g>
-        <g id="node2" class="node">
+        <g id="04-03-node2" class="node">
             <title>table1</title>
             <polygon fill="none" stroke="var(--fg, black)" points="148.5,-104 148.5,-124 185.5,-124 185.5,-104 148.5,-104" />
             <text text-anchor="start" x="151.4482" y="-109.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">index</text>
@@ -51,12 +51,12 @@ and each points to its own copy of string data on the heap." class="center">
             <polygon fill="none" stroke="var(--fg, black)" points="185.5,-4 185.5,-24 221.5,-24 221.5,-4 185.5,-4" />
             <text text-anchor="start" x="200" y="-9.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">o</text>
         </g>
-        <g id="edge1" class="edge">
+        <g id="04-03-edge1" class="edge">
             <title>table0:c&#45;&gt;table1:pointee</title>
             <path fill="none" stroke="var(--fg, black)" d="M78,-94C78,-94 109.3406,-94 138.3797,-94" />
             <polygon fill="var(--fg, black)" stroke="var(--fg, black)" points="138.5,-97.5001 148.5,-94 138.5,-90.5001 138.5,-97.5001" />
         </g>
-        <g id="node3" class="node">
+        <g id="04-03-node3" class="node">
             <title>table3</title>
             <polyline fill="none" stroke="var(--fg, black)" points="8,-270 96,-270 " />
             <text text-anchor="start" x="45.7759" y="-275.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">s1</text>
@@ -76,7 +76,7 @@ and each points to its own copy of string data on the heap." class="center">
             <polygon fill="none" stroke="var(--fg, black)" points="60,-190 60,-210 96,-210 96,-190 60,-190" />
             <text text-anchor="start" x="74.5" y="-195.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">5</text>
         </g>
-        <g id="node4" class="node">
+        <g id="04-03-node4" class="node">
             <title>table4</title>
             <polygon fill="none" stroke="var(--fg, black)" points="148.5,-250 148.5,-270 185.5,-270 185.5,-250 148.5,-250" />
             <text text-anchor="start" x="151.4482" y="-255.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">index</text>
@@ -103,7 +103,7 @@ and each points to its own copy of string data on the heap." class="center">
             <polygon fill="none" stroke="var(--fg, black)" points="185.5,-150 185.5,-170 221.5,-170 221.5,-150 185.5,-150" />
             <text text-anchor="start" x="200" y="-155.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">o</text>
         </g>
-        <g id="edge2" class="edge">
+        <g id="04-03-edge2" class="edge">
             <title>table3:c&#45;&gt;table4:pointee</title>
             <path fill="none" stroke="var(--fg, black)" d="M78,-240C78,-240 109.3406,-240 138.3797,-240" />
             <polygon fill="var(--fg, black)" stroke="var(--fg, black)" points="138.5,-243.5001 148.5,-240 138.5,-236.5001 138.5,-243.5001" />

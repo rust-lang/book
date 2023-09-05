@@ -1,10 +1,10 @@
 <svg viewBox="0.00 0.00 1000.00 1000.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%"
 alt="Three tables: tables s1 and s2 representing those strings on the
 stack, respectively, and both pointing to the same string data on the heap." class="center">
-    <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 238)">
+    <g id="04-02-graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 238)">
         <title>Figure 4-2</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-238 233,-238 233,4 -4,4" />
-        <g id="node1" class="node">
+        <g id="04-02-node1" class="node">
             <title>table0</title>
             <polyline fill="none" stroke="var(--fg, black)" points="8,-210 96,-210 " />
             <text text-anchor="start" x="45.7759" y="-215.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">s1</text>
@@ -24,7 +24,7 @@ stack, respectively, and both pointing to the same string data on the heap." cla
             <polygon fill="none" stroke="var(--fg, black)" points="60,-130 60,-150 96,-150 96,-130 60,-130" />
             <text text-anchor="start" x="74.5" y="-135.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">5</text>
         </g>
-        <g id="node3" class="node">
+        <g id="04-02-node3" class="node">
             <title>table1</title>
             <polygon fill="none" stroke="var(--fg, black)" points="148.5,-127 148.5,-147 185.5,-147 185.5,-127 148.5,-127" />
             <text text-anchor="start" x="151.4482" y="-132.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">index</text>
@@ -51,12 +51,12 @@ stack, respectively, and both pointing to the same string data on the heap." cla
             <polygon fill="none" stroke="var(--fg, black)" points="185.5,-27 185.5,-47 221.5,-47 221.5,-27 185.5,-27" />
             <text text-anchor="start" x="200" y="-32.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">o</text>
         </g>
-        <g id="edge1" class="edge">
+        <g id="04-02-edge1" class="edge">
             <title>table0:c&#45;&gt;table1:pointee</title>
             <path fill="none" stroke="var(--fg, black)" d="M78,-180C78,-180 101.9982,-126.912 138.4405,-118.2023" />
             <polygon fill="var(--fg, black)" stroke="var(--fg, black)" points="138.986,-121.6621 148.5,-117 138.1553,-114.7115 138.986,-121.6621" />
         </g>
-        <g id="node2" class="node">
+        <g id="04-02-node2" class="node">
             <title>table3</title>
             <polyline fill="none" stroke="var(--fg, black)" points="8,-84 96,-84 " />
             <text text-anchor="start" x="45.7759" y="-89.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">s2</text>
@@ -76,7 +76,7 @@ stack, respectively, and both pointing to the same string data on the heap." cla
             <polygon fill="none" stroke="var(--fg, black)" points="60,-4 60,-24 96,-24 96,-4 60,-4" />
             <text text-anchor="start" x="74.5" y="-9.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">5</text>
         </g>
-        <g id="edge2" class="edge">
+        <g id="04-02-edge2" class="edge">
             <title>table3:c&#45;&gt;table1:pointee</title>
             <path fill="none" stroke="var(--fg, black)" d="M78,-54C78,-54 101.9982,-107.088 138.4405,-115.7977" />
             <polygon fill="var(--fg, black)" stroke="var(--fg, black)" points="138.1553,-119.2885 148.5,-117 138.986,-112.3379 138.1553,-119.2885" />

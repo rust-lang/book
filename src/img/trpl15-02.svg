@@ -1,8 +1,8 @@
 <svg viewBox="0.00 0.00 363.00 342.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50%" alt="A finite Cons list">
-    <g id="graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 78)">
+    <g id="15-02-graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 78)">
         <title>Figure 15-2</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-78 83,-78 83,4 -4,4" />
-        <g id="node1" class="node">
+        <g id="15-02-node1" class="node">
             <title>table0</title>
             <polyline fill="none" stroke="var(--fg, black)" points="8.5,-50 71.5,-50 " />
             <text text-anchor="start" x="25.6069" y="-55.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">Cons</text>
