@@ -3,10 +3,10 @@ alt="Three tables: a table representing the stack data of s, which points
 to the byte at index 0 in a table of the string data &quot;hello world&quot; on
 the heap. The third table rep-resents the stack data of the slice world, which
 has a length value of 5 and points to byte 6 of the heap data table." class="center">
-    <g id="04-05-graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 275)">
+    <g id="14-06-graph0" class="graph" transform="scale(4.1667 4.1667) rotate(0) translate(4 275)">
         <title>Figure 4-6</title>
         <polygon fill="var(--bg, white)" stroke="transparent" points="-4,4 -4,-275 233,-275 233,4 -4,4" />
-        <g id="04-05-node1" class="node">
+        <g id="14-06-node1" class="node">
             <title>table0</title>
             <polyline fill="none" stroke="var(--fg, black)" points="16,-121 88,-121 " />
             <text text-anchor="start" x="35.6689" y="-126.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">world</text>
@@ -22,7 +22,7 @@ has a length value of 5 and points to byte 6 of the heap data table." class="cen
             <polygon fill="none" stroke="var(--fg, black)" points="52,-61 52,-81 88,-81 88,-61 52,-61" />
             <text text-anchor="start" x="66.5" y="-66.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">5</text>
         </g>
-        <g id="04-05-node3" class="node">
+        <g id="14-06-node3" class="node">
             <title>table4</title>
             <polygon fill="none" stroke="var(--fg, black)" points="148.5,-224 148.5,-244 185.5,-244 185.5,-224 148.5,-224" />
             <text text-anchor="start" x="151.4482" y="-229.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">index</text>
@@ -73,12 +73,12 @@ has a length value of 5 and points to byte 6 of the heap data table." class="cen
             <polygon fill="none" stroke="var(--fg, black)" points="185.5,-4 185.5,-24 221.5,-24 221.5,-4 185.5,-4" />
             <text text-anchor="start" x="200" y="-9.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">d</text>
         </g>
-        <g id="04-05-edge1" class="edge">
+        <g id="14-06-edge1" class="edge">
             <title>table0:c&#45;&gt;table4:pointee2</title>
             <path fill="none" stroke="var(--fg, black)" d="M70,-91C70,-91 105.7964,-93.4639 138.4948,-93.9258" />
             <polygon fill="var(--fg, black)" stroke="var(--fg, black)" points="138.4743,-97.4257 148.5,-94 138.5263,-90.4259 138.4743,-97.4257" />
         </g>
-        <g id="04-05-node2" class="node">
+        <g id="14-06-node2" class="node">
             <title>table3</title>
             <polyline fill="none" stroke="var(--fg, black)" points="8,-247 96,-247 " />
             <text text-anchor="start" x="49.2759" y="-252.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">s</text>
@@ -98,7 +98,7 @@ has a length value of 5 and points to byte 6 of the heap data table." class="cen
             <polygon fill="none" stroke="var(--fg, black)" points="60,-167 60,-187 96,-187 96,-167 60,-167" />
             <text text-anchor="start" x="71.2563" y="-172.8" font-family="Times,serif" font-size="14.00" fill="var(--fg, black)">11</text>
         </g>
-        <g id="04-05-edge2" class="edge">
+        <g id="14-06-edge2" class="edge">
             <title>table3:c&#45;&gt;table4:pointee</title>
             <path fill="none" stroke="var(--fg, black)" d="M78,-217C78,-217 109.3179,-214.5994 138.3725,-214.0931" />
             <polygon fill="var(--fg, black)" stroke="var(--fg, black)" points="138.5326,-217.5918 148.5,-214 138.4682,-210.5921 138.5326,-217.5918" />
