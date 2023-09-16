@@ -4,9 +4,10 @@
 name, they can have parameters and a return value, and they contain some code
 that’s run when the method is called from somewhere else. Unlike functions,
 methods are defined within the context of a struct (or an enum or a trait
-object, which we cover in Chapters 6 and 17, respectively), and their first
-parameter is always `self`, which represents the instance of the struct the
-method is being called on.
+object, which we cover in [Chapter 6][enums]<!-- ignore --> and [Chapter
+17][trait-objects]<!-- ignore -->, respectively), and their first parameter is
+always `self`, which represents the instance of the struct the method is being
+called on.
 
 ### Defining Methods
 
@@ -39,28 +40,30 @@ type `Self` is an alias for the type that the `impl` block is for. Methods must
 have a parameter named `self` of type `Self` for their first parameter, so Rust
 lets you abbreviate this with only the name `self` in the first parameter spot.
 Note that we still need to use the `&` in front of the `self` shorthand to
-indicate this method borrows the `Self` instance, just as we did in `rectangle:
-&Rectangle`. Methods can take ownership of `self`, borrow `self` immutably as
-we’ve done here, or borrow `self` mutably, just as they can any other parameter.
+indicate that this method borrows the `Self` instance, just as we did in
+`rectangle: &Rectangle`. Methods can take ownership of `self`, borrow `self`
+immutably, as we’ve done here, or borrow `self` mutably, just as they can any
+other parameter.
 
-We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
-function version: we don’t want to take ownership, and we just want to read the
-data in the struct, not write to it. If we wanted to change the instance that
-we’ve called the method on as part of what the method does, we’d use `&mut
-self` as the first parameter. Having a method that takes ownership of the
-instance by using just `self` as the first parameter is rare; this technique is
-usually used when the method transforms `self` into something else and you want
-to prevent the caller from using the original instance after the transformation.
+We chose `&self` here for the same reason we used `&Rectangle` in the function
+version: we don’t want to take ownership, and we just want to read the data in
+the struct, not write to it. If we wanted to change the instance that we’ve
+called the method on as part of what the method does, we’d use `&mut self` as
+the first parameter. Having a method that takes ownership of the instance by
+using just `self` as the first parameter is rare; this technique is usually
+used when the method transforms `self` into something else and you want to
+prevent the caller from using the original instance after the transformation.
 
-The main reason for using methods instead of functions, in addition to providing
-method syntax and not having to repeat the type of `self` in every method’s
-signature, is for organization. We’ve put all the things we can do with an
-instance of a type in one `impl` block rather than making future users of our
-code search for capabilities of `Rectangle` in various places in the library we
-provide.
+The main reason for using methods instead of functions, in addition to
+providing method syntax and not having to repeat the type of `self` in every
+method’s signature, is for organization. We’ve put all the things we can do
+with an instance of a type in one `impl` block rather than making future users
+of our code search for capabilities of `Rectangle` in various places in the
+library we provide.
 
 Note that we can choose to give a method the same name as one of the struct’s
-fields. For example, we can define a method on `Rectangle` also named `width`:
+fields. For example, we can define a method on `Rectangle` that is also named
+`width`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -69,19 +72,20 @@ fields. For example, we can define a method on `Rectangle` also named `width`:
 ```
 
 Here, we’re choosing to make the `width` method return `true` if the value in
-the instance’s `width` field is greater than 0, and `false` if the value is 0:
-we can use a field within a method of the same name for any purpose. In `main`,
-when we follow `rect1.width` with parentheses, Rust knows we mean the method
-`width`. When we don’t use parentheses, Rust knows we mean the field `width`.
+the instance’s `width` field is greater than `0` and `false` if the value is
+`0`: we can use a field within a method of the same name for any purpose. In
+`main`, when we follow `rect1.width` with parentheses, Rust knows we mean the
+method `width`. When we don’t use parentheses, Rust knows we mean the field
+`width`.
 
-Often, but not always, when we give methods with the same name as a field we
-want it to only return the value in the field and do nothing else. Methods like
-this are called *getters*, and Rust does not implement them automatically for
-struct fields as some other languages do. Getters are useful because you can
-make the field private but the method public and thus enable read-only access
-to that field as part of the type’s public API. We will be discussing what
-public and private are and how to designate a field or method as public or
-private in Chapter 7.
+Often, but not always, when we give a method the same name as a field we want
+it to only return the value in the field and do nothing else. Methods like this
+are called *getters*, and Rust does not implement them automatically for struct
+fields as some other languages do. Getters are useful because you can make the
+field private but the method public, and thus enable read-only access to that
+field as part of the type’s public API. We will discuss what public and private
+are and how to designate a field or method as public or private in [Chapter
+7][public]<!-- ignore -->.
 
 > ### Where’s the `->` Operator?
 >
@@ -131,11 +135,11 @@ private in Chapter 7.
 ### Methods with More Parameters
 
 Let’s practice using methods by implementing a second method on the `Rectangle`
-struct. This time, we want an instance of `Rectangle` to take another instance
+struct. This time we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self` (the first `Rectangle`); otherwise it should return `false`. That
-is, once we’ve defined the `can_hold` method, we want to be able to write the
-program shown in Listing 5-14.
+within `self` (the first `Rectangle`); otherwise, it should return `false`.
+That is, once we’ve defined the `can_hold` method, we want to be able to write
+the program shown in Listing 5-14.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -146,8 +150,8 @@ program shown in Listing 5-14.
 <span class="caption">Listing 5-14: Using the as-yet-unwritten `can_hold`
 method</span>
 
-And the expected output would look like the following, because both dimensions
-of `rect2` are smaller than the dimensions of `rect1` but `rect3` is wider than
+The expected output would look like the following because both dimensions of
+`rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider than
 `rect1`:
 
 ```text
@@ -165,7 +169,7 @@ read `rect2` (rather than write, which would mean we’d need a mutable borrow),
 and we want `main` to retain ownership of `rect2` so we can use it again after
 calling the `can_hold` method. The return value of `can_hold` will be a
 Boolean, and the implementation will check whether the width and height of
-`self` are both greater than the width and height of the other `Rectangle`,
+`self` are greater than the width and height of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
 Listing 5-13, shown in Listing 5-15.
 
@@ -213,13 +217,14 @@ is `Rectangle`.
 To call this associated function, we use the `::` syntax with the struct name;
 `let sq = Rectangle::square(3);` is an example. This function is namespaced by
 the struct: the `::` syntax is used for both associated functions and
-namespaces created by modules. We’ll discuss modules in Chapter 7.
+namespaces created by modules. We’ll discuss modules in [Chapter
+7][modules]<!-- ignore -->.
 
 ### Multiple `impl` Blocks
 
 Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method
-in its own `impl` block.
+5-15 is equivalent to the code shown in Listing 5-16, which has each method in
+its own `impl` block.
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-16/src/main.rs:here}}
@@ -243,3 +248,8 @@ structs have.
 
 But structs aren’t the only way you can create custom types: let’s turn to
 Rust’s enum feature to add another tool to your toolbox.
+
+[enums]: ch06-00-enums.html
+[trait-objects]: ch17-02-trait-objects.md
+[public]: ch07-03-paths-for-referring-to-an-item-in-the-module-tree.html#exposing-paths-with-the-pub-keyword
+[modules]: ch07-02-defining-modules-to-control-scope-and-privacy.html

@@ -219,9 +219,9 @@ thread update the final result with its part.
 
 Note that if you are doing simple numerical operations, there are types simpler
 than `Mutex<T>` types provided by the [`std::sync::atomic` module of the
-standard library][atomic]. These types provide safe, concurrent, atomic access
-to primitive types. We chose to use `Mutex<T>` with a primitive type for this
-example so we could concentrate on how `Mutex<T>` works.
+standard library][atomic]<!-- ignore -->. These types provide safe, concurrent,
+atomic access to primitive types. We chose to use `Mutex<T>` with a primitive
+type for this example so we could concentrate on how `Mutex<T>` works.
 
 ### Similarities Between `RefCell<T>`/`Rc<T>` and `Mutex<T>`/`Arc<T>`
 

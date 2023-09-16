@@ -32,7 +32,7 @@ byte index value into the `String` parameter</span>
 
 Because we need to go through the `String` element by element and check whether
 a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method:
+`as_bytes` method.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:as_bytes}}
@@ -60,7 +60,7 @@ Because we get a reference to the element from `.iter().enumerate()`, we use
 
 Inside the `for` loop, we search for the byte that represents the space by
 using the byte literal syntax. If we find a space, we return the position.
-Otherwise, we return the length of the string by using `s.len()`:
+Otherwise, we return the length of the string by using `s.len()`.
 
 ```rust,ignore
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:inside_for}}
@@ -98,8 +98,8 @@ fn second_word(s: &String) -> (usize, usize) {
 
 Now we’re tracking a starting *and* an ending index, and we have even more
 values that were calculated from data in a particular state but aren’t tied to
-that state at all. We have three unrelated variables floating around that
-need to be kept in sync.
+that state at all. We have three unrelated variables floating around that need
+to be kept in sync.
 
 Luckily, Rust has a solution to this problem: string slices.
 
@@ -117,18 +117,22 @@ using a range within brackets by specifying `[starting_index..ending_index]`,
 where `starting_index` is the first position in the slice and `ending_index` is
 one more than the last position in the slice. Internally, the slice data
 structure stores the starting position and the length of the slice, which
-corresponds to `ending_index` minus `starting_index`. So in the case of `let
+corresponds to `ending_index` minus `starting_index`. So, in the case of `let
 world = &s[6..11];`, `world` would be a slice that contains a pointer to the
-byte at index 6 of `s` with a length value of 5.
+byte at index 6 of `s` with a length value of `5`.
 
 Figure 4-6 shows this in a diagram.
 
-<img alt="world containing a pointer to the byte at index 6 of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt="Three tables: a table representing the stack data of s, which points
+to the byte at index 0 in a table of the string data &quot;hello world&quot; on
+the heap. The third table rep-resents the stack data of the slice world, which
+has a length value of 5 and points to byte 6 of the heap data table."
+src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 4-6: String slice referring to part of a
 `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at index zero, you can drop
+With Rust’s `..` range syntax, if you want to start at index 0, you can drop
 the value before the two periods. In other words, these are equal:
 
 ```rust
@@ -178,10 +182,10 @@ slice. The type that signifies “string slice” is written as `&str`:
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-18-first-word-slice/src/main.rs:here}}
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-7, by looking for the first occurrence of a space. When we find a space, we
-return a string slice using the start of the string and the index of the space
-as the starting and ending indices.
+We get the index for the end of the word the same way we did in Listing 4-7, by
+looking for the first occurrence of a space. When we find a space, we return a
+string slice using the start of the string and the index of the space as the
+starting and ending indices.
 
 Now when we call `first_word`, we get back a single value that is tied to the
 underlying data. The value is made up of a reference to the starting point of
@@ -193,7 +197,7 @@ Returning a slice would also work for a `second_word` function:
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, because the
+We now have a straightforward API that’s much harder to mess up because the
 compiler will ensure the references into the `String` remain valid. Remember
 the bug in the program in Listing 4-8, when we got the index to the end of the
 first word but then cleared the string so our index was invalid? That code was
@@ -224,7 +228,10 @@ reference in `clear` and the immutable reference in `word` from existing at the
 same time, and compilation fails. Not only has Rust made our API easier to use,
 but it has also eliminated an entire class of errors at compile time!
 
-#### String Literals Are Slices
+<!-- Old heading. Do not remove or links may break. -->
+<a id="string-literals-are-slices"></a>
+
+#### String Literals as Slices
 
 Recall that we talked about string literals being stored inside the binary. Now
 that we know about slices, we can properly understand string literals:
@@ -260,10 +267,11 @@ a string slice for the type of the `s` parameter</span>
 If we have a string slice, we can pass that directly. If we have a `String`, we
 can pass a slice of the `String` or a reference to the `String`. This
 flexibility takes advantage of *deref coercions*, a feature we will cover in
-the [“Implicit Deref Coercions with Functions and
-Methods”][deref-coercions]<!--ignore--> section of Chapter 15. Defining a
-function to take a string slice instead of a reference to a `String` makes our
-API more general and useful without losing any functionality:
+[“Implicit Deref Coercions with Functions and
+Methods”][deref-coercions]<!--ignore--> section of Chapter 15.
+
+Defining a function to take a string slice instead of a reference to a `String`
+makes our API more general and useful without losing any functionality:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -274,14 +282,14 @@ API more general and useful without losing any functionality:
 ### Other Slices
 
 String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
+more general slice type too. Consider this array:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just as we might want to refer to a part of a string, we might want to refer
-to part of an array. We’d do so like this:
+Just as we might want to refer to part of a string, we might want to refer to
+part of an array. We’d do so like this:
 
 ```rust
 let a = [1, 2, 3, 4, 5];

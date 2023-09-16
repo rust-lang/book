@@ -2,7 +2,7 @@
 
 *by Steve Klabnik and Carol Nichols, with contributions from the Rust Community*
 
-This version of the text assumes you’re using Rust 1.62 (released 2022-06-30)
+This version of the text assumes you’re using Rust 1.67.1 (released 2023-02-09)
 or later. See the [“Installation” section of Chapter 1][install]<!-- ignore -->
 to install or update Rust.
 
@@ -18,7 +18,7 @@ Press][nsprust].
 
 [install]: ch01-01-installation.html
 [editions]: appendix-05-editions.html
-[nsprust]: https://nostarch.com/rust
+[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [translations]: appendix-06-translation.html
 
 > **🚨 Want a more interactive learning experience? Try out a different version

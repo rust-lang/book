@@ -6,9 +6,9 @@ warning: irrefutable `if let` pattern
 2 |     if let x = 5 {
   |        ^^^^^^^^^
   |
-  = note: `#[warn(irrefutable_let_patterns)]` on by default
   = note: this pattern will always match, so the `if let` is useless
   = help: consider replacing the `if let` with a `let`
+  = note: `#[warn(irrefutable_let_patterns)]` on by default
 
 warning: `patterns` (bin "patterns") generated 1 warning
     Finished dev [unoptimized + debuginfo] target(s) in 0.39s

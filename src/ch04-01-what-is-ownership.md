@@ -1,8 +1,8 @@
 ## What Is Ownership?
 
-*Ownership* is a set of rules that governs how a Rust program manages memory.
+*Ownership* is a set of rules that govern how a Rust program manages memory.
 All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that regularly looks for no-longer used
+Some languages have garbage collection that regularly looks for no-longer-used
 memory as the program runs; in other languages, the programmer must explicitly
 allocate and free the memory. Rust uses a third approach: memory is managed
 through a system of ownership with a set of rules that the compiler checks. If
@@ -49,14 +49,14 @@ strings.
 > known, fixed size, you can store the pointer on the stack, but when you want
 > the actual data, you must follow the pointer. Think of being seated at a
 > restaurant. When you enter, you state the number of people in your group, and
-> the staff finds an empty table that fits everyone and leads you there. If
+> the host finds an empty table that fits everyone and leads you there. If
 > someone in your group comes late, they can ask where you’ve been seated to
 > find you.
 >
 > Pushing to the stack is faster than allocating on the heap because the
 > allocator never has to search for a place to store new data; that location is
 > always at the top of the stack. Comparatively, allocating space on the heap
-> requires more work, because the allocator must first find a big enough space
+> requires more work because the allocator must first find a big enough space
 > to hold the data and then perform bookkeeping to prepare for the next
 > allocation.
 >
@@ -122,8 +122,8 @@ valid</span>
 
 In other words, there are two important points in time here:
 
-* When `s` comes *into scope*, it is valid.
-* It remains valid until it goes *out of scope*.
+* When `s` comes *into* scope, it is valid.
+* It remains valid until it goes *out of* scope.
 
 At this point, the relationship between scopes and when variables are valid is
 similar to that in other programming languages. Now we’ll build on top of this
@@ -133,7 +133,7 @@ understanding by introducing the `String` type.
 
 To illustrate the rules of ownership, we need a data type that is more complex
 than those we covered in the [“Data Types”][data-types]<!-- ignore --> section
-of Chapter 3. The types covered previously are all a known size, can be stored
+of Chapter 3. The types covered previously are of a known size, can be stored
 on the stack and popped off the stack when their scope is over, and can be
 quickly and trivially copied to make a new, independent instance if another
 part of code needs to use the same value in a different scope. But we want to
@@ -162,7 +162,7 @@ let s = String::from("hello");
 The double colon `::` operator allows us to namespace this particular `from`
 function under the `String` type rather than using some sort of name like
 `string_from`. We’ll discuss this syntax more in the [“Method
-Syntax”][method-syntax]<!-- ignore --> section of Chapter 5 and when we talk
+Syntax”][method-syntax]<!-- ignore --> section of Chapter 5, and when we talk
 about namespacing with modules in [“Paths for Referring to an Item in the
 Module Tree”][paths-module-tree]<!-- ignore --> in Chapter 7.
 
@@ -173,7 +173,7 @@ This kind of string *can* be mutated:
 ```
 
 So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is how these two types deal with memory.
+cannot? The difference is in how these two types deal with memory.
 
 ### Memory and Allocation
 
@@ -189,8 +189,8 @@ we need to allocate an amount of memory on the heap, unknown at compile time,
 to hold the contents. This means:
 
 * The memory must be requested from the memory allocator at runtime.
-* We need a way of returning this memory to the allocator when we’re
-  done with our `String`.
+* We need a way of returning this memory to the allocator when we’re done with
+  our `String`.
 
 That first part is done by us: when we call `String::from`, its implementation
 requests the memory it needs. This is pretty much universal in programming
@@ -199,7 +199,7 @@ languages.
 However, the second part is different. In languages with a *garbage collector
 (GC)*, the GC keeps track of and cleans up memory that isn’t being used
 anymore, and we don’t need to think about it. In most languages without a GC,
-it’s our responsibility to identify when memory is no longer being used and
+it’s our responsibility to identify when memory is no longer being used and to
 call code to explicitly free it, just as we did to request it. Doing this
 correctly has historically been a difficult programming problem. If we forget,
 we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
@@ -231,7 +231,10 @@ simple right now, but the behavior of code can be unexpected in more
 complicated situations when we want to have multiple variables use the data
 we’ve allocated on the heap. Let’s explore some of those situations now.
 
-#### Ways Variables and Data Interact: Move
+<!-- Old heading. Do not remove or links may break. -->
+<a id="ways-variables-and-data-interact-move"></a>
+
+#### Variables and Data Interacting with Move
 
 Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2.
@@ -265,23 +268,29 @@ the memory that holds the contents of the string, a length, and a capacity.
 This group of data is stored on the stack. On the right is the memory on the
 heap that holds the contents.
 
-<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<img alt="Two tables: the first table contains the representation of s1 on the
+stack, consisting of its length (5), capacity (5), and a pointer to the first
+value in the second table. The second table contains the representation of the
+string data on the heap, byte by byte." src="img/trpl04-01.svg" class="center"
+style="width: 50%;" />
 
 <span class="caption">Figure 4-1: Representation in memory of a `String`
 holding the value `"hello"` bound to `s1`</span>
 
-The length is how much memory, in bytes, the contents of the `String` is
+The length is how much memory, in bytes, the contents of the `String` are
 currently using. The capacity is the total amount of memory, in bytes, that the
-`String` has received from the allocator. The difference between length
-and capacity matters, but not in this context, so for now, it’s fine to ignore
-the capacity.
+`String` has received from the allocator. The difference between length and
+capacity matters, but not in this context, so for now, it’s fine to ignore the
+capacity.
 
 When we assign `s1` to `s2`, the `String` data is copied, meaning we copy the
 pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-2.
 
-<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<img alt="Three tables: tables s1 and s2 representing those strings on the
+stack, respectively, and both pointing to the same string data on the heap."
+src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 4-2: Representation in memory of the variable `s2`
 that has a copy of the pointer, length, and capacity of `s1`</span>
@@ -291,7 +300,9 @@ look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could be very expensive in terms of runtime performance if
 the data on the heap were large.
 
-<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<img alt="Four tables: two tables representing the stack data for s1 and s2,
+and each points to its own copy of string data on the heap."
+src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
 <span class="caption">Figure 4-3: Another possibility for what `s2 = s1` might
 do if Rust copied the heap data as well</span>
@@ -304,7 +315,7 @@ same memory. This is known as a *double free* error and is one of the memory
 safety bugs we mentioned previously. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.
 
-To ensure memory safety, after the line `let s2 = s1`, Rust considers `s1` as
+To ensure memory safety, after the line `let s2 = s1;`, Rust considers `s1` as
 no longer valid. Therefore, Rust doesn’t need to free anything when `s1` goes
 out of scope. Check out what happens when you try to use `s1` after `s2` is
 created; it won’t work:
@@ -323,23 +334,30 @@ invalidated reference:
 If you’ve heard the terms *shallow copy* and *deep copy* while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like making a shallow copy. But
-because Rust also invalidates the first variable, instead of calling it a
-shallow copy, it’s known as a *move*. In this example, we would say that
-`s1` was *moved* into `s2`. So what actually happens is shown in Figure 4-4.
+because Rust also invalidates the first variable, instead of being called a
+shallow copy, it’s known as a *move*. In this example, we would say that `s1`
+was *moved* into `s2`. So, what actually happens is shown in Figure 4-4.
 
-<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<img alt="Three tables: tables s1 and s2 representing those strings on the
+stack, respectively, and both pointing to the same string data on the heap.
+Table s1 is grayed out be-cause s1 is no longer valid; only s2 can be used to
+access the heap data." src="img/trpl04-04.svg" class="center" style="width:
+50%;" />
 
 <span class="caption">Figure 4-4: Representation in memory after `s1` has been
 invalidated</span>
 
-That solves our problem! With only `s2` valid, when it goes out of scope, it
+That solves our problem! With only `s2` valid, when it goes out of scope it
 alone will free the memory, and we’re done.
 
 In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive in terms of runtime performance.
 
-#### Ways Variables and Data Interact: Clone
+<!-- Old heading. Do not remove or links may break. -->
+<a id="ways-variables-and-data-interact-clone"></a>
+
+#### Variables and Data Interacting with Clone
 
 If we *do* want to deeply copy the heap data of the `String`, not just the
 stack data, we can use a common method called `clone`. We’ll discuss method
@@ -361,8 +379,8 @@ different is going on.
 
 #### Stack-Only Data: Copy
 
-There’s another wrinkle we haven’t talked about yet. This code using integers –
-part of which was shown in Listing 4-2 – works and is valid:
+There’s another wrinkle we haven’t talked about yet. This code using
+integers—part of which was shown in Listing 4-2—works and is valid:
 
 ```rust
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-06-copy/src/main.rs:here}}
@@ -376,7 +394,7 @@ time are stored entirely on the stack, so copies of the actual values are quick
 to make. That means there’s no reason we would want to prevent `x` from being
 valid after we create the variable `y`. In other words, there’s no difference
 between deep and shallow copying here, so calling `clone` wouldn’t do anything
-different from the usual shallow copying and we can leave it out.
+different from the usual shallow copying, and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
 types that are stored on the stack, as integers are (we’ll talk more about
@@ -391,7 +409,7 @@ we’ll get a compile-time error. To learn about how to add the `Copy` annotatio
 to your type to implement the trait, see [“Derivable
 Traits”][derivable-traits]<!-- ignore --> in Appendix C.
 
-So what types implement the `Copy` trait? You can check the documentation for
+So, what types implement the `Copy` trait? You can check the documentation for
 the given type to be sure, but as a general rule, any group of simple scalar
 values can implement `Copy`, and nothing that requires allocation or is some
 form of resource can implement `Copy`. Here are some of the types that
@@ -399,7 +417,7 @@ implement `Copy`:
 
 * All the integer types, such as `u32`.
 * The Boolean type, `bool`, with values `true` and `false`.
-* All the floating point types, such as `f64`.
+* All the floating-point types, such as `f64`.
 * The character type, `char`.
 * Tuples, if they only contain types that also implement `Copy`. For example,
   `(i32, i32)` implements `Copy`, but `(i32, String)` does not.
@@ -427,9 +445,9 @@ the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
 
-Returning values can also transfer ownership. Listing 4-4 shows an example
-of a function that returns some value, with similar annotations as those in
-Listing 4-3.
+Returning values can also transfer ownership. Listing 4-4 shows an example of a
+function that returns some value, with similar annotations as those in Listing
+4-3.
 
 <span class="filename">Filename: src/main.rs</span>
 

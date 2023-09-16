@@ -13,6 +13,8 @@ grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
 struct that stores information about a user account.
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
 ```
@@ -21,13 +23,15 @@ struct that stores information about a user account.
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct and then add curly brackets containing `key:
-value` pairs, where the keys are the names of the fields and the values are the
+stating the name of the struct and then add curly brackets containing *key:
+value* pairs, where the keys are the names of the fields and the values are the
 data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2.
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
@@ -41,6 +45,8 @@ access this user’s email address, we use `user1.email`. If the instance is
 mutable, we can change a value by using the dot notation and assigning into a
 particular field. Listing 5-3 shows how to change the value in the `email`
 field of a mutable `User` instance.
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
@@ -58,6 +64,8 @@ Listing 5-4 shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
 the `sign_in_count` gets a value of `1`.
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
 ```
@@ -70,20 +78,24 @@ fields, but having to repeat the `email` and `username` field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
 would get even more annoying. Luckily, there’s a convenient shorthand!
 
+<!-- Old heading. Do not remove or links may break. -->
 <a id="using-the-field-init-shorthand-when-variables-and-fields-have-the-same-name"></a>
+
 ### Using the Field Init Shorthand
 
 Because the parameter names and the struct field names are exactly the same in
 Listing 5-4, we can use the *field init shorthand* syntax to rewrite
-`build_user` so that it behaves exactly the same but doesn’t have the
-repetition of `email` and `username`, as shown in Listing 5-5.
+`build_user` so it behaves exactly the same but doesn’t have the repetition of
+`username` and `email`, as shown in Listing 5-5.
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-5: A `build_user` function that uses field init
-shorthand because the `email` and `username` parameters have the same name as
+shorthand because the `username` and `email` parameters have the same name as
 struct fields</span>
 
 Here, we’re creating a new instance of the `User` struct, which has a field
@@ -92,7 +104,7 @@ named `email`. We want to set the `email` field’s value to the value in the
 the `email` parameter have the same name, we only need to write `email` rather
 than `email: email`.
 
-### Creating Instances From Other Instances With Struct Update Syntax
+### Creating Instances from Other Instances with Struct Update Syntax
 
 It’s often useful to create a new instance of a struct that includes most of
 the values from another instance, but changes some. You can do this using
@@ -101,6 +113,8 @@ the values from another instance, but changes some. You can do this using
 First, in Listing 5-6 we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
 otherwise use the same values from `user1` that we created in Listing 5-2.
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
@@ -113,12 +127,14 @@ Using struct update syntax, we can achieve the same effect with less code, as
 shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
 ```
 
 <span class="caption">Listing 5-7: Using struct update syntax to set a new
-`email` value for a `User` instance but use the rest of the values from
+`email` value for a `User` instance but to use the rest of the values from
 `user1`</span>
 
 The code in Listing 5-7 also creates an instance in `user2` that has a
@@ -129,35 +145,37 @@ corresponding fields in `user1`, but we can choose to specify values for as
 many fields as we want in any order, regardless of the order of the fields in
 the struct’s definition.
 
-Note that the struct update syntax uses `=` like an assignment; this is
-because it moves the data, just as we saw in the [“Ways Variables and Data
-Interact: Move”][move]<!-- ignore --> section. In this example, we can no
-longer use `user1` after creating `user2` because the `String` in the
+Note that the struct update syntax uses `=` like an assignment; this is because
+it moves the data, just as we saw in the [“Variables and Data Interacting with
+Move”][move]<!-- ignore --> section. In this example, we can no longer use
+`user1` as a whole after creating `user2` because the `String` in the
 `username` field of `user1` was moved into `user2`. If we had given `user2` new
 `String` values for both `email` and `username`, and thus only used the
 `active` and `sign_in_count` values from `user1`, then `user1` would still be
-valid after creating `user2`. The types of `active` and `sign_in_count` are
-types that implement the `Copy` trait, so the behavior we discussed in the
-[“Stack-Only Data: Copy”][copy]<!-- ignore --> section would apply.
+valid after creating `user2`. Both `active` and `sign_in_count` are types that
+implement the `Copy` trait, so the behavior we discussed in the [“Stack-Only
+Data: Copy”][copy]<!-- ignore --> section would apply.
 
-### Using Tuple Structs without Named Fields to Create Different Types
+### Using Tuple Structs Without Named Fields to Create Different Types
 
-Rust also supports structs that look similar to tuples, called *tuple
-structs*. Tuple structs have the added meaning the struct name provides but
-don’t have names associated with their fields; rather, they just have the types
-of the fields. Tuple structs are useful when you want to give the whole tuple a
-name and make the tuple a different type from other tuples, and when naming each
+Rust also supports structs that look similar to tuples, called *tuple structs*.
+Tuple structs have the added meaning the struct name provides but don’t have
+names associated with their fields; rather, they just have the types of the
+fields. Tuple structs are useful when you want to give the whole tuple a name
+and make the tuple a different type from other tuples, and when naming each
 field as in a regular struct would be verbose or redundant.
 
 To define a tuple struct, start with the `struct` keyword and the struct name
-followed by the types in the tuple. For example, here we define and use
-two tuple structs named `Color` and `Point`:
+followed by the types in the tuple. For example, here we define and use two
+tuple structs named `Color` and `Point`:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-01-tuple-structs/src/main.rs}}
 ```
 
-Note that the `black` and `origin` values are different types, because they’re
+Note that the `black` and `origin` values are different types because they’re
 instances of different tuple structs. Each struct you define is its own type,
 even though the fields within the struct might have the same types. For
 example, a function that takes a parameter of type `Color` cannot take a
@@ -176,12 +194,14 @@ have any data that you want to store in the type itself. We’ll discuss traits
 in Chapter 10. Here’s an example of declaring and instantiating a unit struct
 named `AlwaysEqual`:
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/no-listing-04-unit-like-structs/src/main.rs}}
 ```
 
-To define `AlwaysEqual`, we use the `struct` keyword, the name we want, then a
-semicolon. No need for curly brackets or parentheses! Then we can get an
+To define `AlwaysEqual`, we use the `struct` keyword, the name we want, and
+then a semicolon. No need for curly brackets or parentheses! Then we can get an
 instance of `AlwaysEqual` in the `subject` variable in a similar way: using the
 name we defined, without any curly brackets or parentheses. Imagine that later
 we’ll implement behavior for this type such that every instance of
@@ -217,9 +237,9 @@ implement them on any type, including unit-like structs.
 >
 > fn main() {
 >     let user1 = User {
->         email: "someone@example.com",
->         username: "someusername123",
 >         active: true,
+>         username: "someusername123",
+>         email: "someone@example.com",
 >         sign_in_count: 1,
 >     };
 > }
@@ -273,5 +293,5 @@ paste above
 add `> ` before every line -->
 
 [tuples]: ch03-02-data-types.html#the-tuple-type
-[move]: ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move
+[move]: ch04-01-what-is-ownership.html#variables-and-data-interacting-with-move
 [copy]: ch04-01-what-is-ownership.html#stack-only-data-copy

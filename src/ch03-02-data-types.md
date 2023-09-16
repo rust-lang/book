@@ -16,9 +16,9 @@ Chapter 2, we must add a type annotation, like this:
 let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
-If we don’t add the `: u32` type annotation above, Rust will display the
-following error, which means the compiler needs more information from us to
-know which type we want to use:
+If we don’t add the `: u32` type annotation shown in the preceding code, Rust
+will display the following error, which means the compiler needs more
+information from us to know which type we want to use:
 
 ```console
 {{#include ../listings/ch03-common-programming-concepts/output-only-01-no-type-annotations/output.txt}}
@@ -37,7 +37,7 @@ these from other programming languages. Let’s jump into how they work in Rust.
 An *integer* is a number without a fractional component. We used one integer
 type in Chapter 2, the `u32` type. This type declaration indicates that the
 value it’s associated with should be an unsigned integer (signed integer types
-start with `i`, instead of `u`) that takes up 32 bits of space. Table 3-1 shows
+start with `i` instead of `u`) that takes up 32 bits of space. Table 3-1 shows
 the built-in integer types in Rust. We can use any of these variants to declare
 the type of an integer value.
 
@@ -59,9 +59,8 @@ negative—in other words, whether the number needs to have a sign with it
 represented without a sign (unsigned). It’s like writing numbers on paper: when
 the sign matters, a number is shown with a plus sign or a minus sign; however,
 when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using [two’s
-complement](https://en.wikipedia.org/wiki/Two%27s_complement)<!-- ignore -->
-representation.
+Signed numbers are stored using [two’s complement][twos-complement]<!-- ignore
+--> representation.
 
 Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 1</sup> - 1 inclusive, where *n* is the number of bits that variant uses. So an
@@ -98,12 +97,12 @@ some sort of collection.
 > ##### Integer Overflow
 >
 > Let’s say you have a variable of type `u8` that can hold values between 0 and
-> 255. If you try to change the variable to a value outside of that range, such
-> as 256, *integer overflow* will occur, which can result in one of two
-> behaviors. When you’re compiling in debug mode, Rust includes checks for
-> integer overflow that cause your program to *panic* at runtime if this
-> behavior occurs. Rust uses the term panicking when a program exits with an
-> error; we’ll discuss panics in more depth in the [“Unrecoverable Errors with
+> 255. If you try to change the variable to a value outside that range, such as
+> 256, *integer overflow* will occur, which can result in one of two behaviors.
+> When you’re compiling in debug mode, Rust includes checks for integer overflow
+> that cause your program to *panic* at runtime if this behavior occurs. Rust
+> uses the term *panicking* when a program exits with an error; we’ll discuss
+> panics in more depth in the [“Unrecoverable Errors with
 > `panic!`”][unrecoverable-errors-with-panic]<!-- ignore --> section in Chapter
 > 9.
 >
@@ -119,19 +118,19 @@ some sort of collection.
 > To explicitly handle the possibility of overflow, you can use these families
 > of methods provided by the standard library for primitive numeric types:
 >
-> - Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`
-> - Return the `None` value if there is overflow with the `checked_*` methods
-> - Return the value and a boolean indicating whether there was overflow with
->   the `overflowing_*` methods
-> - Saturate at the value’s minimum or maximum values with `saturating_*`
->   methods
+> * Wrap in all modes with the `wrapping_*` methods, such as `wrapping_add`.
+> * Return the `None` value if there is overflow with the `checked_*` methods.
+> * Return the value and a boolean indicating whether there was overflow with
+>   the `overflowing_*` methods.
+> * Saturate at the value’s minimum or maximum values with the `saturating_*`
+>   methods.
 
 #### Floating-Point Types
 
 Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because on modern CPUs it’s roughly the same speed as `f32` but is capable of
+because on modern CPUs, it’s roughly the same speed as `f32` but is capable of
 more precision. All floating-point types are signed.
 
 Here’s an example that shows floating-point numbers in action:
@@ -147,9 +146,9 @@ Floating-point numbers are represented according to the IEEE-754 standard. The
 
 #### Numeric Operations
 
-Rust supports the basic mathematical operations you’d expect for all of the
-number types: addition, subtraction, multiplication, division, and remainder.
-Integer division rounds down to the nearest integer. The following code shows
+Rust supports the basic mathematical operations you’d expect for all the number
+types: addition, subtraction, multiplication, division, and remainder. Integer
+division truncates toward zero to the nearest integer. The following code shows
 how you’d use each numeric operation in a `let` statement:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -159,8 +158,9 @@ how you’d use each numeric operation in a `let` statement:
 ```
 
 Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. [Appendix B][appendix_b]<!-- ignore --> contains a
-list of all operators that Rust provides.
+to a single value, which is then bound to a variable. [Appendix
+B][appendix_b]<!-- ignore --> contains a list of all operators that Rust
+provides.
 
 #### The Boolean Type
 
@@ -180,7 +180,7 @@ Flow”][control-flow]<!-- ignore --> section.
 
 #### The Character Type
 
-Rust’s `char` type is the language’s most primitive alphabetic type. Here’s
+Rust’s `char` type is the language’s most primitive alphabetic type. Here are
 some examples of declaring `char` values:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -207,9 +207,9 @@ primitive compound types: tuples and arrays.
 
 #### The Tuple Type
 
-A tuple is a general way of grouping together a number of values with a variety
-of types into one compound type. Tuples have a fixed length: once declared,
-they cannot grow or shrink in size.
+A *tuple* is a general way of grouping together a number of values with a
+variety of types into one compound type. Tuples have a fixed length: once
+declared, they cannot grow or shrink in size.
 
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a type, and the types of the
@@ -222,7 +222,7 @@ type annotations in this example:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-10-tuples/src/main.rs}}
 ```
 
-The variable `tup` binds to the entire tuple, because a tuple is considered a
+The variable `tup` binds to the entire tuple because a tuple is considered a
 single compound element. To get the individual values out of a tuple, we can
 use pattern matching to destructure a tuple value, like this:
 
@@ -234,7 +234,7 @@ use pattern matching to destructure a tuple value, like this:
 
 This program first creates a tuple and binds it to the variable `tup`. It then
 uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
+variables, `x`, `y`, and `z`. This is called *destructuring* because it breaks
 the single tuple into three parts. Finally, the program prints the value of
 `y`, which is `6.4`.
 
@@ -275,9 +275,9 @@ Arrays are useful when you want your data allocated on the stack rather than
 the heap (we will discuss the stack and the heap more in [Chapter
 4][stack-and-heap]<!-- ignore -->) or when you want to ensure you always have a
 fixed number of elements. An array isn’t as flexible as the vector type,
-though. A vector is a similar collection type provided by the standard library
-that *is* allowed to grow or shrink in size. If you’re unsure whether to use an
-array or a vector, chances are you should use a vector. [Chapter
+though. A *vector* is a similar collection type provided by the standard
+library that *is* allowed to grow or shrink in size. If you’re unsure whether
+to use an array or a vector, chances are you should use a vector. [Chapter
 8][vectors]<!-- ignore --> discusses vectors in more detail.
 
 However, arrays are more useful when you know the number of elements will not
@@ -324,9 +324,9 @@ like this:
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/no-listing-14-array-indexing/src/main.rs}}
 ```
 
-In this example, the variable named `first` will get the value `1`, because
-that is the value at index `[0]` in the array. The variable named `second` will
-get the value `2` from index `[1]` in the array.
+In this example, the variable named `first` will get the value `1` because that
+is the value at index `[0]` in the array. The variable named `second` will get
+the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
@@ -341,9 +341,9 @@ Chapter 2, to get an array index from the user:
 ```
 
 This code compiles successfully. If you run this code using `cargo run` and
-enter 0, 1, 2, 3, or 4, the program will print out the corresponding value at
-that index in the array. If you instead enter a number past the end of the
-array, such as 10, you’ll see output like this:
+enter `0`, `1`, `2`, `3`, or `4`, the program will print out the corresponding
+value at that index in the array. If you instead enter a number past the end of
+the array, such as `10`, you’ll see output like this:
 
 <!-- manual-regeneration
 cd listings/ch03-common-programming-concepts/no-listing-15-invalid-array-access
@@ -374,10 +374,10 @@ write readable, safe code that neither panics nor allows invalid memory access.
 
 [comparing-the-guess-to-the-secret-number]:
 ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number
+[twos-complement]: https://en.wikipedia.org/wiki/Two%27s_complement
 [control-flow]: ch03-05-control-flow.html#control-flow
 [strings]: ch08-02-strings.html#storing-utf-8-encoded-text-with-strings
 [stack-and-heap]: ch04-01-what-is-ownership.html#the-stack-and-the-heap
 [vectors]: ch08-01-vectors.html
 [unrecoverable-errors-with-panic]: ch09-01-unrecoverable-errors-with-panic.html
-[wrapping]: ../std/num/struct.Wrapping.html
 [appendix_b]: appendix-02-operators.md

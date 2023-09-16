@@ -4,7 +4,7 @@
 > Language][nsprust] available in print and ebook format from [No Starch
 > Press][nsp].
 
-[nsprust]: https://nostarch.com/rust
+[nsprust]: https://nostarch.com/rust-programming-language-2nd-edition
 [nsp]: https://nostarch.com/
 
 Welcome to *The Rust Programming Language*, an introductory book about Rust.
@@ -24,8 +24,8 @@ the most important groups.
 
 Rust is proving to be a productive tool for collaborating among large teams of
 developers with varying levels of systems programming knowledge. Low-level code
-is prone to a variety of subtle bugs, which in most other languages can be
-caught only through extensive testing and careful code review by experienced
+is prone to various subtle bugs, which in most other languages can be caught
+only through extensive testing and careful code review by experienced
 developers. In Rust, the compiler plays a gatekeeper role by refusing to
 compile code with these elusive bugs, including concurrency bugs. By working
 alongside the compiler, the team can spend their time focusing on the program’s
@@ -36,7 +36,8 @@ Rust also brings contemporary developer tools to the systems programming world:
 * Cargo, the included dependency manager and build tool, makes adding,
   compiling, and managing dependencies painless and consistent across the Rust
   ecosystem.
-* Rustfmt ensures a consistent coding style across developers.
+* The Rustfmt formatting tool ensures a consistent coding style across
+  developers.
 * The Rust Language Server powers Integrated Development Environment (IDE)
   integration for code completion and inline error messages.
 
@@ -55,8 +56,8 @@ programming.
 ### Companies
 
 Hundreds of companies, large and small, use Rust in production for a variety of
-tasks. Those tasks include command line tools, web services, DevOps tooling,
-embedded devices, audio and video analysis and transcoding, cryptocurrencies,
+tasks, including command line tools, web services, DevOps tooling, embedded
+devices, audio and video analysis and transcoding, cryptocurrencies,
 bioinformatics, search engines, Internet of Things applications, machine
 learning, and even major parts of the Firefox web browser.
 
@@ -69,13 +70,13 @@ language.
 ### People Who Value Speed and Stability
 
 Rust is for people who crave speed and stability in a language. By speed, we
-mean the speed of the programs that you can create with Rust and the speed at
-which Rust lets you write them. The Rust compiler’s checks ensure stability
-through feature additions and refactoring. This is in contrast to the brittle
-legacy code in languages without these checks, which developers are often
-afraid to modify. By striving for zero-cost abstractions, higher-level features
-that compile to lower-level code as fast as code written manually, Rust
-endeavors to make safe code be fast code as well.
+mean both how quickly Rust code can run and the speed at which Rust lets you
+write programs. The Rust compiler’s checks ensure stability through feature
+additions and refactoring. This is in contrast to the brittle legacy code in
+languages without these checks, which developers are often afraid to modify. By
+striving for zero-cost abstractions, higher-level features that compile to
+lower-level code as fast as code written manually, Rust endeavors to make safe
+code be fast code as well.
 
 The Rust language hopes to support many other users as well; those mentioned
 here are merely some of the biggest stakeholders. Overall, Rust’s greatest
@@ -96,8 +97,8 @@ reading a book that specifically provides an introduction to programming.
 
 In general, this book assumes that you’re reading it in sequence from front to
 back. Later chapters build on concepts in earlier chapters, and earlier
-chapters might not delve into details on a topic; we typically revisit the
-topic in a later chapter.
+chapters might not delve into details on a particular topic but will revisit
+the topic in a later chapter.
 
 You’ll find two kinds of chapters in this book: concept chapters and project
 chapters. In concept chapters, you’ll learn about an aspect of Rust. In project
@@ -106,15 +107,15 @@ far. Chapters 2, 12, and 20 are project chapters; the rest are concept chapters.
 
 Chapter 1 explains how to install Rust, how to write a “Hello, world!” program,
 and how to use Cargo, Rust’s package manager and build tool. Chapter 2 is a
-hands-on introduction to the Rust language. Here we cover concepts at a high
-level, and later chapters will provide additional detail. If you want to get
-your hands dirty right away, Chapter 2 is the place for that. At first, you
-might even want to skip Chapter 3, which covers Rust features similar to those
-of other programming languages, and head straight to Chapter 4 to learn about
-Rust’s ownership system. However, if you’re a particularly meticulous learner
-who prefers to learn every detail before moving on to the next, you might want
-to skip Chapter 2 and go straight to Chapter 3, returning to Chapter 2 when
-you’d like to work on a project applying the details you’ve learned.
+hands-on introduction to writing a program in Rust, having you build up a
+number guessing game. Here we cover concepts at a high level, and later
+chapters will provide additional detail. If you want to get your hands dirty
+right away, Chapter 2 is the place for that. Chapter 3 covers Rust features
+that are similar to those of other programming languages, and in Chapter 4
+you’ll learn about Rust’s ownership system. If you’re a particularly meticulous
+learner who prefers to learn every detail before moving on to the next, you
+might want to skip Chapter 2 and go straight to Chapter 3, returning to Chapter
+2 when you’d like to work on a project applying the details you’ve learned.
 
 Chapter 5 discusses structs and methods, and Chapter 6 covers enums, `match`
 expressions, and the `if let` control flow construct. You’ll use structs and

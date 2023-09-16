@@ -84,7 +84,7 @@ If you uncomment the last `println!` and run the program, Rust will try to
 print this cycle with `a` pointing to `b` pointing to `a` and so forth until it
 overflows the stack.
 
-Compared to a real-world program, the consequences creating a reference cycle
+Compared to a real-world program, the consequences of creating a reference cycle
 in this example aren’t very dire: right after we create the reference cycle,
 the program ends. However, if a more complex program allocated lots of memory
 in a cycle and held onto it for a long time, the program would use more memory
@@ -117,7 +117,7 @@ up if its `strong_count` is 0. You can also create a *weak reference* to the
 value within an `Rc<T>` instance by calling `Rc::downgrade` and passing a
 reference to the `Rc<T>`. Strong references are how you can share ownership of
 an `Rc<T>` instance. Weak references don’t express an ownership relationship,
-and their count doesn't affect when an `Rc<T>` instance is cleaned up. They
+and their count doesn’t affect when an `Rc<T>` instance is cleaned up. They
 won’t cause a reference cycle because any cycle involving some weak references
 will be broken once the strong reference count of values involved is 0.
 

@@ -11,4 +11,4 @@ We’ll demonstrate how to define and instantiate structs. We’ll discuss how t
 define associated functions, especially the kind of associated functions called
 *methods*, to specify behavior associated with a struct type. Structs and enums
 (discussed in Chapter 6) are the building blocks for creating new types in your
-program’s domain to take full advantage of Rust’s compile time type checking.
+program’s domain to take full advantage of Rust’s compile-time type checking.

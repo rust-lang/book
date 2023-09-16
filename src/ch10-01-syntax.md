@@ -33,9 +33,9 @@ the duplication by introducing a generic type parameter in a single function.
 To parameterize the types in a new single function, we need to name the type
 parameter, just as we do for the value parameters to a function. You can use
 any identifier as a type parameter name. But we’ll use `T` because, by
-convention, type parameter names in Rust are short, often just a letter, and Rust’s
-type-naming convention is CamelCase. Short for “type,” `T` is the default
-choice of most Rust programmers.
+convention, type parameter names in Rust are short, often just a letter, and
+Rust’s type-naming convention is UpperCamelCase. Short for “type,” `T` is the
+default choice of most Rust programmers.
 
 When we use a parameter in the body of the function, we have to declare the
 parameter name in the signature so the compiler knows what that name means.
@@ -274,7 +274,7 @@ method.
 ### Performance of Code Using Generics
 
 You might be wondering whether there is a runtime cost when using generic type
-parameters. The good news is that using generic types won't make your program run 
+parameters. The good news is that using generic types won't make your program run
 any slower than it would with concrete types.
 
 Rust accomplishes this by performing monomorphization of the code using

@@ -1,5 +1,11 @@
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+error: expected expression, found `let` statement
+ --> src/main.rs:2:14
+  |
+2 |     let x = (let y = 6);
+  |              ^^^
+
 error: expected expression, found statement (`let`)
  --> src/main.rs:2:14
   |
@@ -27,8 +33,8 @@ help: remove these parentheses
   |
 2 -     let x = (let y = 6);
 2 +     let x = let y = 6;
-  | 
+  |
 
 For more information about this error, try `rustc --explain E0658`.
 warning: `functions` (bin "functions") generated 1 warning
-error: could not compile `functions` due to 2 previous errors; 1 warning emitted
+error: could not compile `functions` due to 3 previous errors; 1 warning emitted
