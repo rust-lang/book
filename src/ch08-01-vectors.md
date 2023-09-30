@@ -197,13 +197,13 @@ different types. Fortunately, the variants of an enum are defined under the
 same enum type, so when we need one type to represent elements of different
 types, we can define and use an enum!
 
-In order to retrieve values from a spreadsheet row where the columns may contain integers,
-floating-point numbers, and strings, we can use an enum.
-The enum will have variants to represent the different value types,
-treating all the variants as the same type (the enum itself).
-By creating a vector to store this enum,
-we can effectively store values of different types within the same vector.
-We’ve demonstrated this in Listing 8-9.
+
+For example, say we want to get values from a row in a spreadsheet in which
+some of the columns in the row contain integers, some floating-point numbers,
+and some strings. We can define an enum whose variants will hold the different
+value types, and all the enum variants will be considered the same type: that
+of the enum. Then we can create a vector to hold that enum. So, in effect, 
+that vector will hold different types. We’ve demonstrated this in Listing 8-9.
 
 ```rust
 {{#rustdoc_include ../listings/ch08-common-collections/listing-08-09/src/main.rs:here}}
