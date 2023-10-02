@@ -197,7 +197,6 @@ different types. Fortunately, the variants of an enum are defined under the
 same enum type, so when we need one type to represent elements of different
 types, we can define and use an enum!
 
-
 For example, say we want to get values from a row in a spreadsheet in which
 some of the columns in the row contain integers, some floating-point numbers,
 and some strings. We can define an enum whose variants will hold the different
