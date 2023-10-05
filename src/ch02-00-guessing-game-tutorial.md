@@ -534,7 +534,7 @@ need to specify `1..=100` to request a number between 1 and 100.
 
 > Note: You won’t just know which traits to use and which methods and functions
 > to call from a crate, so each crate has documentation with instructions for
-> using it. Another neat feature of Cargo is that running the `cargo doc
+> using it. Another near feature of Cargo is that running the `cargo doc
 > --open` command will build documentation provided by all your dependencies
 > locally and open it in your browser. If you’re interested in other
 > functionality in the `rand` crate, for example, run `cargo doc --open` and
