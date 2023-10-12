@@ -11,7 +11,7 @@ compiled with the crate, as we’ll see in the coming sections.
 
 A crate can come in one of two forms: a binary crate or a library crate.
 *Binary crates* are programs you can compile to an executable that you can run,
-such as a command-line program or a server. Each must have a function called
+such as a command-line program or a server. It must have a function called
 `main` that defines what happens when the executable runs. All the crates we’ve
 created so far have been binary crates.
 
