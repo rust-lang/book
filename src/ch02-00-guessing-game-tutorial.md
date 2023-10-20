@@ -433,7 +433,7 @@ cargo build -->
 ```console
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
 These lines show that Cargo only updates the build with your tiny change to the

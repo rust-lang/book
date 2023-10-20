@@ -21,9 +21,9 @@ and ensure output below is accurate
 
 ```console
 $ cargo build
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
 $ cargo build --release
-    Finished release [optimized] target(s) in 0.0s
+    Finished release [optimized] target(s) in 0.00s
 ```
 
 The `dev` and `release` are these different profiles used by the compiler.

@@ -179,7 +179,7 @@ copy output below; the output updating script doesn't handle subdirectories in p
 
 ```console
 $ cargo run -p adder
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0s
+    Finished dev [unoptimized + debuginfo] target(s) in 0.00s
      Running `target/debug/adder`
 Hello, world! 10 plus one is 11!
 ```
