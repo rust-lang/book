@@ -241,5 +241,5 @@ useful when you’re writing command line programs.
 ch10-03-lifetime-syntax.html#validating-references-with-lifetimes
 [ch11-anatomy]: ch11-01-writing-tests.html#the-anatomy-of-a-test-function
 [ch10-lifetimes]: ch10-03-lifetime-syntax.html
-[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-for
+[ch3-iter]: ch03-05-control-flow.html#looping-through-a-collection-with-while
 [ch13-iterators]: ch13-02-iterators.html
