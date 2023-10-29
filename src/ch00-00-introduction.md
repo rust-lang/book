@@ -185,9 +185,9 @@ error. Ferris will also help you distinguish code that isn’t meant to work:
 In most situations, we’ll lead you to the correct version of any code that
 doesn’t compile.
 
-> Note: If Ferris gets in your way by overlaying the code, you can hover on the
-> code block to make Ferris a little transparent. On mobile devices just click
-> on the code block.
+> Note: If Ferris gets in your way by overlaying the code, you can hover your
+> mouse on the code block to make Ferris a little transparent. On touchscreen
+> devices just tap on the code block.
 
 ## Source Code
 
