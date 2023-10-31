@@ -376,7 +376,7 @@ Traits and trait bounds let us write code that uses generic type parameters to
 reduce duplication but also specify to the compiler that we want the generic
 type to have particular behavior. The compiler can then use the trait bound
 information to check that all the concrete types used with our code provide the
-correct behavior. In dynamically typed languages, we would get an error at
+correct behavior. In dynamically typed languages, we would not get an error at
 runtime if we called a method on a type which didn’t define the method. But Rust
 moves these errors to compile time so we’re forced to fix the problems before
 our code is even able to run. Additionally, we don’t have to write code that
