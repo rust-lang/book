@@ -317,10 +317,10 @@ index to determine how many valid characters there were.
 
 ### Slicing Strings
 
-Indexing into a string can be problematic because it's unclear what the return 
-type of the string-indexing operation should be: a byte value, a character, 
-a grapheme cluster, or a string slice. If you need to use indices to create 
-string slices, Rust requires you to be more specific.
+Indexing into a string is often a bad idea because it’s not clear what the
+return type of the string-indexing operation should be: a byte value, a
+character, a grapheme cluster, or a string slice. If you really need to use
+indices to create string slices, Rust asks you to be more specific.
 
 Rather than indexing using `[]` with a single number, you can use `[]` with a
 range to create a string slice containing particular bytes:
