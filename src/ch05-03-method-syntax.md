@@ -89,7 +89,7 @@ are and how to designate a field or method as public or private in [Chapter
 
 > ### Where’s the `->` Operator?
 >
-> In C and C++, two different operators are used for calling methods: you use
+> In C++, two different operators are used for calling methods: you use
 > `.` if you’re calling a method on the object directly and `->` if you’re
 > calling the method on a pointer to the object and need to dereference the
 > pointer first. In other words, if `object` is a pointer,
