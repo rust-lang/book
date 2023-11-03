@@ -290,6 +290,9 @@ This function’s signature is less cluttered: the function name, parameter list
 and return type are close together, similar to a function without lots of trait
 bounds.
 
+The functionality is the same as the example using the `impl +` syntax, but it
+is easier to read.
+
 ### Returning Types that Implement Traits
 
 We can also use the `impl Trait` syntax in the return position to return a
