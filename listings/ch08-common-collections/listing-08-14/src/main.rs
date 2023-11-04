@@ -5,6 +5,7 @@ fn main() {
     let hello = String::from("Hello");
     let hello = String::from("שָׁלוֹם");
     let hello = String::from("नमस्ते");
+    let hello = String::from("আসসালামু আলাইকুম");
     let hello = String::from("こんにちは");
     let hello = String::from("안녕하세요");
     let hello = String::from("你好");
