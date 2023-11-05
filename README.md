@@ -26,7 +26,7 @@ See the [releases] to download just the code of all the code listings that appea
 Building the book requires [mdBook], ideally the same version that
 rust-lang/rust uses in [this file][rust-mdbook]. To get it:
 
-[mdBook]: https://github.com/rust-lang-nursery/mdBook
+[mdBook]: https://github.com/rust-lang/mdBook
 [rust-mdbook]: https://github.com/rust-lang/rust/blob/master/src/tools/rustbook/Cargo.toml
 
 ```bash
@@ -93,7 +93,7 @@ a new language! We're waiting on [mdbook support] for multiple languages
 before we merge any in, but feel free to start!
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/rust-lang-nursery/mdBook/issues/5
+[mdbook support]: https://github.com/rust-lang/mdBook/issues/5
 
 ## Spellchecking
 
