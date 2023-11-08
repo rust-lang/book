@@ -102,7 +102,7 @@ first line declares a function named `main` that has no parameters and returns
 nothing. If there were parameters, they would go inside the parentheses `()`.
 
 The function body is wrapped in `{}`. Rust requires curly brackets around all
-function bodies. It’s a good style to place the opening curly bracket on the same
+function bodies. It’s good style to place the opening curly bracket on the same
 line as the function declaration, adding one space in between.
 
 > Note: If you want to stick to a standard style across Rust projects, you can
@@ -198,4 +198,4 @@ code. Next, we’ll introduce you to the Cargo tool, which will help you write
 real-world Rust programs.
 
 [troubleshooting]: ch01-01-installation.md#troubleshooting
-[devtools]: appendix-04-useful-development-tools.md
+[devtools]: appendix-04-useful-development-tools.html
