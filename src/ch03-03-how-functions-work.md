@@ -113,7 +113,7 @@ of functions.
 * **Expressions** evaluate to a resultant value. Let’s look at some examples.
 
 We’ve actually already used statements and expressions. Creating a variable and
-assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
+assigning a value to it with the `let` keyword is a statement. In [Listing 3-1](#3-1),
 `let y = 6;` is a statement.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -122,7 +122,7 @@ assigning a value to it with the `let` keyword is a statement. In Listing 3-1,
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-1: A `main` function declaration containing one statement</span>
+<span class="caption" id="3-1">Listing 3-1: A `main` function declaration containing one statement</span>
 
 Function definitions are also statements; the entire preceding example is a
 statement in itself.
@@ -151,7 +151,7 @@ languages, you can write `x = y = 6` and have both `x` and `y` have the value
 Expressions evaluate to a value and make up most of the rest of the code that
 you’ll write in Rust. Consider a math operation, such as `5 + 6`, which is an
 expression that evaluates to the value `11`. Expressions can be part of
-statements: in Listing 3-1, the `6` in the statement `let y = 6;` is an
+statements: in [Listing 3-1](#3-1), the `6` in the statement `let y = 6;` is an
 expression that evaluates to the value `6`. Calling a function is an
 expression. Calling a macro is an expression. A new scope block created with
 curly brackets is an expression, for example:

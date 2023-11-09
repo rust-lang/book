@@ -36,7 +36,7 @@ tradeoffs to the 1:1 model.
 
 To create a new thread, we call the `thread::spawn` function and pass it a
 closure (we talked about closures in Chapter 13) containing the code we want to
-run in the new thread. The example in Listing 16-1 prints some text from a main
+run in the new thread. The example in [Listing 16-1](#16-1) prints some text from a main
 thread and other text from a new thread:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -45,7 +45,7 @@ thread and other text from a new thread:
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-1: Creating a new thread to print one thing
+<span class="caption" id="16-1">Listing 16-1: Creating a new thread to print one thing
 while the main thread prints something else</span>
 
 Note that when the main thread of a Rust program completes, all spawned threads
@@ -83,7 +83,7 @@ for the operating system to switch between the threads.
 
 ### Waiting for All Threads to Finish Using `join` Handles
 
-The code in Listing 16-1 not only stops the spawned thread prematurely most of
+The code in [Listing 16-1](#16-1) not only stops the spawned thread prematurely most of
 the time due to the main thread ending, but because there is no guarantee on
 the order in which threads run, we also can’t guarantee that the spawned thread
 will get to run at all!
@@ -91,8 +91,8 @@ will get to run at all!
 We can fix the problem of the spawned thread not running or ending prematurely
 by saving the return value of `thread::spawn` in a variable. The return type of
 `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned value that, when we
-call the `join` method on it, will wait for its thread to finish. Listing 16-2
-shows how to use the `JoinHandle` of the thread we created in Listing 16-1 and
+call the `join` method on it, will wait for its thread to finish. [Listing 16-2](#16-2)
+shows how to use the `JoinHandle` of the thread we created in [Listing 16-1](#16-1) and
 call `join` to make sure the spawned thread finishes before `main` exits:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -101,13 +101,13 @@ call `join` to make sure the spawned thread finishes before `main` exits:
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
+<span class="caption" id="16-2">Listing 16-2: Saving a `JoinHandle` from `thread::spawn`
 to guarantee the thread is run to completion</span>
 
 Calling `join` on the handle blocks the thread currently running until the
 thread represented by the handle terminates. *Blocking* a thread means that
 thread is prevented from performing work or exiting. Because we’ve put the call
-to `join` after the main thread’s `for` loop, running Listing 16-2 should
+to `join` after the main thread’s `for` loop, running [Listing 16-2](#16-2) should
 produce output similar to this:
 
 <!-- Not extracting output because changes to this output aren't significant;
@@ -177,10 +177,10 @@ another. In the [“Capturing References or Moving Ownership”][capture]<!-- ig
 --> section of Chapter 13, we discussed `move` in the context of closures. Now,
 we’ll concentrate more on the interaction between `move` and `thread::spawn`.
 
-Notice in Listing 16-1 that the closure we pass to `thread::spawn` takes no
+Notice in [Listing 16-1](#16-1) that the closure we pass to `thread::spawn` takes no
 arguments: we’re not using any data from the main thread in the spawned
 thread’s code. To use data from the main thread in the spawned thread, the
-spawned thread’s closure must capture the values it needs. Listing 16-3 shows
+spawned thread’s closure must capture the values it needs. [Listing 16-3](#16-3) shows
 an attempt to create a vector in the main thread and use it in the spawned
 thread. However, this won’t yet work, as you’ll see in a moment.
 
@@ -190,7 +190,7 @@ thread. However, this won’t yet work, as you’ll see in a moment.
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-3: Attempting to use a vector created by the
+<span class="caption" id="16-3">Listing 16-3: Attempting to use a vector created by the
 main thread in another thread</span>
 
 The closure uses `v`, so it will capture `v` and make it part of the closure’s
@@ -207,7 +207,7 @@ to `v`, the closure tries to borrow `v`. However, there’s a problem: Rust can�
 tell how long the spawned thread will run, so it doesn’t know if the reference
 to `v` will always be valid.
 
-Listing 16-4 provides a scenario that’s more likely to have a reference to `v`
+[Listing 16-4](#16-4) provides a scenario that’s more likely to have a reference to `v`
 that won’t be valid:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -216,7 +216,7 @@ that won’t be valid:
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-4: A thread with a closure that attempts to
+<span class="caption" id="16-4">Listing 16-4: A thread with a closure that attempts to
 capture a reference to `v` from a main thread that drops `v`</span>
 
 If Rust allowed us to run this code, there’s a possibility the spawned thread
@@ -226,7 +226,7 @@ thread has a reference to `v` inside, but the main thread immediately drops
 spawned thread starts to execute, `v` is no longer valid, so a reference to it
 is also invalid. Oh no!
 
-To fix the compiler error in Listing 16-3, we can use the error message’s
+To fix the compiler error in [Listing 16-3](#16-3), we can use the error message’s
 advice:
 
 <!-- manual-regeneration
@@ -242,7 +242,7 @@ help: to force the closure to take ownership of `v` (and any other referenced va
 
 By adding the `move` keyword before the closure, we force the closure to take
 ownership of the values it’s using rather than allowing Rust to infer that it
-should borrow the values. The modification to Listing 16-3 shown in Listing
+should borrow the values. The modification to [Listing 16-3](#16-3) shown in Listing
 16-5 will compile and run as we intend:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -251,12 +251,12 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 16-5: Using the `move` keyword to force a closure
+<span class="caption" id="16-5">Listing 16-5: Using the `move` keyword to force a closure
 to take ownership of the values it uses</span>
 
-We might be tempted to try the same thing to fix the code in Listing 16-4 where
+We might be tempted to try the same thing to fix the code in [Listing 16-4](#16-4) where
 the main thread called `drop` by using a `move` closure. However, this fix will
-not work because what Listing 16-4 is trying to do is disallowed for a
+not work because what [Listing 16-4](#16-4) is trying to do is disallowed for a
 different reason. If we added `move` to the closure, we would move `v` into the
 closure’s environment, and we could no longer call `drop` on it in the main
 thread. We would get this compiler error instead:
@@ -266,11 +266,11 @@ thread. We would get this compiler error instead:
 ```
 
 Rust’s ownership rules have saved us again! We got an error from the code in
-Listing 16-3 because Rust was being conservative and only borrowing `v` for the
+[Listing 16-3](#16-3) because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
 thread’s reference. By telling Rust to move ownership of `v` to the spawned
 thread, we’re guaranteeing Rust that the main thread won’t use `v` anymore. If
-we change Listing 16-4 in the same way, we’re then violating the ownership
+we change [Listing 16-4](#16-4) in the same way, we’re then violating the ownership
 rules when we try to use `v` in the main thread. The `move` keyword overrides
 Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.

@@ -70,7 +70,7 @@ Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
 
 The first part of the guessing game program will ask for user input, process
 that input, and check that the input is in the expected form. To start, we’ll
-allow the player to input a guess. Enter the code in Listing 2-1 into
+allow the player to input a guess. Enter the code in [Listing 2-1](#2-1) into
 *src/main.rs*.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -79,7 +79,7 @@ allow the player to input a guess. Enter the code in Listing 2-1 into
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-01/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-1: Code that gets a guess from the user and
+<span class="caption" id="2-1">Listing 2-1: Code that gets a guess from the user and
 prints it</span>
 
 This code contains a lot of information, so let’s go over it line by line. To
@@ -368,7 +368,7 @@ will still compile with the code in this chapter. Any version 0.9.0 or greater
 is not guaranteed to have the same API as what the following examples use.
 
 Now, without changing any of the code, let’s build the project, as shown in
-Listing 2-2.
+[Listing 2-2](#2-2).
 
 <!-- manual-regeneration
 cd listings/ch02-guessing-game-tutorial/listing-02-02/
@@ -397,7 +397,7 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 2.53s
 ```
 
-<span class="caption">Listing 2-2: The output from running `cargo build` after
+<span class="caption" id="2-2">Listing 2-2: The output from running `cargo build` after
 adding the rand crate as a dependency</span>
 
 You may see different version numbers (but they will all be compatible with the
@@ -506,7 +506,7 @@ from a number of packages.
 ### Generating a Random Number
 
 Let’s start using `rand` to generate a number to guess. The next step is to
-update *src/main.rs*, as shown in Listing 2-3.
+update *src/main.rs*, as shown in [Listing 2-3](#2-3).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -514,7 +514,7 @@ update *src/main.rs*, as shown in Listing 2-3.
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-03/src/main.rs:all}}
 ```
 
-<span class="caption">Listing 2-3: Adding code to generate a random
+<span class="caption" id="2-3">Listing 2-3: Adding code to generate a random
 number</span>
 
 First we add the line `use rand::Rng;`. The `Rng` trait defines methods that
@@ -582,7 +582,7 @@ You should get different random numbers, and they should all be numbers between
 ## Comparing the Guess to the Secret Number
 
 Now that we have user input and a random number, we can compare them. That step
-is shown in Listing 2-4. Note that this code won’t compile just yet, as we will
+is shown in [Listing 2-4](#2-4). Note that this code won’t compile just yet, as we will
 explain.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -591,7 +591,7 @@ explain.
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 2-4: Handling the possible return values of
+<span class="caption" id="2-4">Listing 2-4: Handling the possible return values of
 comparing two numbers</span>
 
 First we add another `use` statement, bringing a type called
@@ -631,7 +631,7 @@ code in that arm will execute and print `Too big!` to the screen. The `match`
 expression ends after the first successful match, so it won’t look at the last
 arm in this scenario.
 
-However, the code in Listing 2-4 won’t compile yet. Let’s try it:
+However, the code in [Listing 2-4](#2-4) won’t compile yet. Let’s try it:
 
 <!--
 The error numbers in this output should be that of the code **WITHOUT** the
@@ -825,7 +825,7 @@ exiting the program, because the loop is the last part of `main`.
 To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess`
-is converted from a `String` to a `u32`, as shown in Listing 2-5.
+is converted from a `String` to a `u32`, as shown in [Listing 2-5](#2-5).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -833,7 +833,7 @@ is converted from a `String` to a `u32`, as shown in Listing 2-5.
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 2-5: Ignoring a non-number guess and asking for
+<span class="caption" id="2-5">Listing 2-5: Ignoring a non-number guess and asking for
 another guess instead of crashing the program</span>
 
 We switch from an `expect` call to a `match` expression to move from crashing
@@ -895,7 +895,7 @@ You win!
 Awesome! With one tiny final tweak, we will finish the guessing game. Recall
 that the program is still printing the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
-secret number. Listing 2-6 shows the final code.
+secret number. [Listing 2-6](#2-6) shows the final code.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -903,7 +903,7 @@ secret number. Listing 2-6 shows the final code.
 {{#rustdoc_include ../listings/ch02-guessing-game-tutorial/listing-02-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 2-6: Complete guessing game code</span>
+<span class="caption" id="2-6">Listing 2-6: Complete guessing game code</span>
 
 At this point, you’ve successfully built the guessing game. Congratulations!
 

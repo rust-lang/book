@@ -47,7 +47,7 @@ data from a successful run ends up in the file. We’ll change that.
 
 ### Printing Errors to Standard Error
 
-We’ll use the code in Listing 12-24 to change how error messages are printed.
+We’ll use the code in [Listing 12-24](#12-24) to change how error messages are printed.
 Because of the refactoring we did earlier in this chapter, all the code that
 prints error messages is in one function, `main`. The standard library provides
 the `eprintln!` macro that prints to the standard error stream, so let’s change
@@ -60,7 +60,7 @@ instead.
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-24/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 12-24: Writing error messages to standard error
+<span class="caption" id="12-24">Listing 12-24: Writing error messages to standard error
 instead of standard output using `eprintln!`</span>
 
 Let’s now run the program again in the same way, without any arguments and

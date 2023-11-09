@@ -118,7 +118,7 @@ Rust branching construct called `match` for these cases.
 #### Using `if` in a `let` Statement
 
 Because `if` is an expression, we can use it on the right side of a `let`
-statement to assign the outcome to a variable, as in Listing 3-2.
+statement to assign the outcome to a variable, as in [Listing 3-2](#3-2).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -126,7 +126,7 @@ statement to assign the outcome to a variable, as in Listing 3-2.
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-02/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-2: Assigning the result of an `if` expression
+<span class="caption" id="3-2">Listing 3-2: Assigning the result of an `if` expression
 to a variable</span>
 
 The `number` variable will be bound to a value based on the outcome of the `if`
@@ -140,7 +140,7 @@ Remember that blocks of code evaluate to the last expression in them, and
 numbers by themselves are also expressions. In this case, the value of the
 whole `if` expression depends on which block of code executes. This means the
 values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-2, the results of both the `if` arm and the `else`
+the same type; in [Listing 3-2](#3-2), the results of both the `if` arm and the `else`
 arm were `i32` integers. If the types are mismatched, as in the following
 example, we’ll get an error:
 
@@ -279,7 +279,7 @@ program calls `break`, stopping the loop. It’s possible to implement behavior
 like this using a combination of `loop`, `if`, `else`, and `break`; you could
 try that now in a program, if you’d like. However, this pattern is so common
 that Rust has a built-in language construct for it, called a `while` loop. In
-Listing 3-3, we use `while` to loop the program three times, counting down each
+[Listing 3-3](#3-3), we use `while` to loop the program three times, counting down each
 time, and then, after the loop, print a message and exit.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -288,7 +288,7 @@ time, and then, after the loop, print a message and exit.
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-3: Using a `while` loop to run code while a
+<span class="caption" id="3-3">Listing 3-3: Using a `while` loop to run code while a
 condition holds true</span>
 
 This construct eliminates a lot of nesting that would be necessary if you used
@@ -298,7 +298,7 @@ evaluates to `true`, the code runs; otherwise, it exits the loop.
 #### Looping Through a Collection with `for`
 
 You can choose to use the `while` construct to loop over the elements of a
-collection, such as an array. For example, the loop in Listing 3-4 prints each
+collection, such as an array. For example, the loop in [Listing 3-4](#3-4) prints each
 element in the array `a`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -307,7 +307,7 @@ element in the array `a`.
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-4: Looping through each element of a collection
+<span class="caption" id="3-4">Listing 3-4: Looping through each element of a collection
 using a `while` loop</span>
 
 Here, the code counts up through the elements in the array. It starts at index
@@ -331,7 +331,7 @@ the compiler adds runtime code to perform the conditional check of whether the
 index is within the bounds of the array on every iteration through the loop.
 
 As a more concise alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like the code in Listing 3-5.
+for each item in a collection. A `for` loop looks like the code in [Listing 3-5](#3-5).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -339,22 +339,22 @@ for each item in a collection. A `for` loop looks like the code in Listing 3-5.
 {{#rustdoc_include ../listings/ch03-common-programming-concepts/listing-03-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 3-5: Looping through each element of a collection
+<span class="caption" id="3-5">Listing 3-5: Looping through each element of a collection
 using a `for` loop</span>
 
-When we run this code, we’ll see the same output as in Listing 3-4. More
+When we run this code, we’ll see the same output as in [Listing 3-4](#3-4). More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
 going far enough and missing some items.
 
 Using the `for` loop, you wouldn’t need to remember to change any other code if
 you changed the number of values in the array, as you would with the method
-used in Listing 3-4.
+used in [Listing 3-4](#3-4).
 
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations in which you want to run some code a
 certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-3, most Rustaceans would use a `for` loop. The way to do that
+in [Listing 3-3](#3-3), most Rustaceans would use a `for` loop. The way to do that
 would be to use a `Range`, provided by the standard library, which generates
 all numbers in sequence starting from one number and ending before another
 number.

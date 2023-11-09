@@ -7,11 +7,11 @@ concise. Let’s look at how iterators can improve our implementation of the
 
 ### Removing a `clone` Using an Iterator
 
-In Listing 12-6, we added code that took a slice of `String` values and created
+In [Listing 12-6](./ch12-03-improving-error-handling-and-modularity.html#12-6), we added code that took a slice of `String` values and created
 an instance of the `Config` struct by indexing into the slice and cloning the
-values, allowing the `Config` struct to own those values. In Listing 13-17,
+values, allowing the `Config` struct to own those values. In [Listing 13-17](#13-17),
 we’ve reproduced the implementation of the `Config::build` function as it was
-in Listing 12-23:
+in [Listing 12-23](./ch12-05-working-with-environment-variables.html#12-23):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -19,8 +19,8 @@ in Listing 12-23:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-12-23-reproduced/src/lib.rs:ch13}}
 ```
 
-<span class="caption">Listing 13-17: Reproduction of the `Config::build`
-function from Listing 12-23</span>
+<span class="caption" id="13-17">Listing 13-17: Reproduction of the `Config::build`
+function from [Listing 12-23](./ch12-05-working-with-environment-variables.html#12-23)</span>
 
 At the time, we said not to worry about the inefficient `clone` calls because
 we would remove them in the future. Well, that time is now!
@@ -51,7 +51,7 @@ Open your I/O project’s *src/main.rs* file, which should look like this:
 ```
 
 We’ll first change the start of the `main` function that we had in Listing
-12-24 to the code in Listing 13-18, which this time uses an iterator. This
+12-24 to the code in [Listing 13-18](#13-18), which this time uses an iterator. This
 won’t compile until we update `Config::build` as well.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -60,7 +60,7 @@ won’t compile until we update `Config::build` as well.
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-18/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-18: Passing the return value of `env::args` to
+<span class="caption" id="13-18">Listing 13-18: Passing the return value of `env::args` to
 `Config::build`</span>
 
 The `env::args` function returns an iterator! Rather than collecting the
@@ -70,7 +70,7 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::build`. In your I/O
 project’s *src/lib.rs* file, let’s change the signature of `Config::build` to
-look like Listing 13-19. This still won’t compile because we need to update the
+look like [Listing 13-19](#13-19). This still won’t compile because we need to update the
 function body.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -79,7 +79,7 @@ function body.
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-19/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-19: Updating the signature of `Config::build`
+<span class="caption" id="13-19">Listing 13-19: Updating the signature of `Config::build`
 to expect an iterator</span>
 
 The standard library documentation for the `env::args` function shows that the
@@ -100,8 +100,8 @@ iterating over it, we can add the `mut` keyword into the specification of the
 #### Using `Iterator` Trait Methods Instead of Indexing
 
 Next, we’ll fix the body of `Config::build`. Because `args` implements the
-`Iterator` trait, we know we can call the `next` method on it! Listing 13-20
-updates the code from Listing 12-23 to use the `next` method:
+`Iterator` trait, we know we can call the `next` method on it! [Listing 13-20](#13-20)
+updates the code from [Listing 12-23](./ch12-05-working-with-environment-variables.html#12-23) to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -109,7 +109,7 @@ updates the code from Listing 12-23 to use the `next` method:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-20/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-20: Changing the body of `Config::build` to use
+<span class="caption" id="13-20">Listing 13-20: Changing the body of `Config::build` to use
 iterator methods</span>
 
 Remember that the first value in the return value of `env::args` is the name of
@@ -123,7 +123,7 @@ the same thing for the `file_path` value.
 ### Making Code Clearer with Iterator Adaptors
 
 We can also take advantage of iterators in the `search` function in our I/O
-project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
+project, which is reproduced here in [Listing 13-21](#13-21) as it was in [Listing 12-19](./ch12-04-testing-the-librarys-functionality.html#12-19):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -131,15 +131,15 @@ project, which is reproduced here in Listing 13-21 as it was in Listing 12-19:
 {{#rustdoc_include ../listings/ch12-an-io-project/listing-12-19/src/lib.rs:ch13}}
 ```
 
-<span class="caption">Listing 13-21: The implementation of the `search`
-function from Listing 12-19</span>
+<span class="caption" id="13-21">Listing 13-21: The implementation of the `search`
+function from [Listing 12-19](./ch12-04-testing-the-librarys-functionality.html#12-19)</span>
 
 We can write this code in a more concise way using iterator adaptor methods.
 Doing so also lets us avoid having a mutable intermediate `results` vector. The
 functional programming style prefers to minimize the amount of mutable state to
 make code clearer. Removing the mutable state might enable a future enhancement
 to make searching happen in parallel, because we wouldn’t have to manage
-concurrent access to the `results` vector. Listing 13-22 shows this change:
+concurrent access to the `results` vector. [Listing 13-22](#13-22) shows this change:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -147,7 +147,7 @@ concurrent access to the `results` vector. Listing 13-22 shows this change:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-22/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 13-22: Using iterator adaptor methods in the
+<span class="caption" id="13-22">Listing 13-22: Using iterator adaptor methods in the
 implementation of the `search` function</span>
 
 Recall that the purpose of the `search` function is to return all lines in
@@ -161,8 +161,8 @@ well.
 ### Choosing Between Loops or Iterators
 
 The next logical question is which style you should choose in your own code and
-why: the original implementation in Listing 13-21 or the version using
-iterators in Listing 13-22. Most Rust programmers prefer to use the iterator
+why: the original implementation in [Listing 13-21](#13-21) or the version using
+iterators in [Listing 13-22](#13-22). Most Rust programmers prefer to use the iterator
 style. It’s a bit tougher to get the hang of at first, but once you get a feel
 for the various iterator adaptors and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building

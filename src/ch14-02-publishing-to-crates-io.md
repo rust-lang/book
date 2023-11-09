@@ -23,7 +23,7 @@ your crate is *implemented*.
 
 Documentation comments use three slashes, `///`, instead of two and support
 Markdown notation for formatting the text. Place documentation comments just
-before the item they’re documenting. Listing 14-1 shows documentation comments
+before the item they’re documenting. [Listing 14-1](#14-1) shows documentation comments
 for an `add_one` function in a crate named `my_crate`.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -32,7 +32,7 @@ for an `add_one` function in a crate named `my_crate`.
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-01/src/lib.rs}}
 ```
 
-<span class="caption">Listing 14-1: A documentation comment for a
+<span class="caption" id="14-1">Listing 14-1: A documentation comment for a
 function</span>
 
 Here, we give a description of what the `add_one` function does, start a
@@ -55,7 +55,7 @@ function</span>
 
 #### Commonly Used Sections
 
-We used the `# Examples` Markdown heading in Listing 14-1 to create a section
+We used the `# Examples` Markdown heading in [Listing 14-1](#14-1) to create a section
 in the HTML with the title “Examples.” Here are some other sections that crate
 authors commonly use in their documentation:
 
@@ -82,7 +82,7 @@ test` will run the code examples in your documentation as tests! Nothing is
 better than documentation with examples. But nothing is worse than examples
 that don’t work because the code has changed since the documentation was
 written. If we run `cargo test` with the documentation for the `add_one`
-function from Listing 14-1, we will see a section in the test results like this:
+function from [Listing 14-1](#14-1), we will see a section in the test results like this:
 
 <!-- manual-regeneration
 cd listings/ch14-more-about-cargo/listing-14-01/
@@ -121,7 +121,7 @@ start with `//!` to the beginning of the *src/lib.rs* file, as shown in Listing
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-02/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 14-2: Documentation for the `my_crate` crate as a
+<span class="caption" id="14-2">Listing 14-2: Documentation for the `my_crate` crate as a
 whole</span>
 
 Notice there isn’t any code after the last line that begins with `//!`. Because
@@ -170,7 +170,7 @@ defined in the other location instead.
 For example, say we made a library named `art` for modeling artistic concepts.
 Within this library are two modules: a `kinds` module containing two enums
 named `PrimaryColor` and `SecondaryColor` and a `utils` module containing a
-function named `mix`, as shown in Listing 14-3:
+function named `mix`, as shown in [Listing 14-3](#14-3):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -178,7 +178,7 @@ function named `mix`, as shown in Listing 14-3:
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-03/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 14-3: An `art` library with items organized into
+<span class="caption" id="14-3">Listing 14-3: An `art` library with items organized into
 `kinds` and `utils` modules</span>
 
 Figure 14-3 shows what the front page of the documentation for this crate
@@ -195,7 +195,7 @@ see them.
 
 Another crate that depends on this library would need `use` statements that
 bring the items from `art` into scope, specifying the module structure that’s
-currently defined. Listing 14-4 shows an example of a crate that uses the
+currently defined. [Listing 14-4](#14-4) shows an example of a crate that uses the
 `PrimaryColor` and `mix` items from the `art` crate:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -204,10 +204,10 @@ currently defined. Listing 14-4 shows an example of a crate that uses the
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 14-4: A crate using the `art` crate’s items with
+<span class="caption" id="14-4">Listing 14-4: A crate using the `art` crate’s items with
 its internal structure exported</span>
 
-The author of the code in Listing 14-4, which uses the `art` crate, had to
+The author of the code in [Listing 14-4](#14-4), which uses the `art` crate, had to
 figure out that `PrimaryColor` is in the `kinds` module and `mix` is in the
 `utils` module. The module structure of the `art` crate is more relevant to
 developers working on the `art` crate than to those using it. The internal
@@ -217,8 +217,8 @@ developers who use it have to figure out where to look, and must specify the
 module names in the `use` statements.
 
 To remove the internal organization from the public API, we can modify the
-`art` crate code in Listing 14-3 to add `pub use` statements to re-export the
-items at the top level, as shown in Listing 14-5:
+`art` crate code in [Listing 14-3](#14-3) to add `pub use` statements to re-export the
+items at the top level, as shown in [Listing 14-5](#14-5):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -226,7 +226,7 @@ items at the top level, as shown in Listing 14-5:
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-05/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 14-5: Adding `pub use` statements to re-export
+<span class="caption" id="14-5">Listing 14-5: Adding `pub use` statements to re-export
 items</span>
 
 The API documentation that `cargo doc` generates for this crate will now list
@@ -239,8 +239,8 @@ and link re-exports on the front page, as shown in Figure 14-4, making the
 that lists the re-exports</span>
 
 The `art` crate users can still see and use the internal structure from Listing
-14-3 as demonstrated in Listing 14-4, or they can use the more convenient
-structure in Listing 14-5, as shown in Listing 14-6:
+14-3 as demonstrated in [Listing 14-4](#14-4), or they can use the more convenient
+structure in [Listing 14-5](#14-5), as shown in [Listing 14-6](#14-6):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -248,7 +248,7 @@ structure in Listing 14-5, as shown in Listing 14-6:
 {{#rustdoc_include ../listings/ch14-more-about-cargo/listing-14-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 14-6: A program using the re-exported items from
+<span class="caption" id="14-6">Listing 14-6: A program using the re-exported items from
 the `art` crate</span>
 
 In cases where there are many nested modules, re-exporting the types at the top

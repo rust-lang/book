@@ -22,7 +22,7 @@ performance penalty.
 
 Therefore, Rust’s type system and trait bounds ensure that you can never
 accidentally send an `Rc<T>` value across threads unsafely. When we tried to do
-this in Listing 16-14, we got the error `the trait Send is not implemented for
+this in [Listing 16-14](./ch16-03-shared-state.html#16-14), we got the error `the trait Send is not implemented for
 Rc<Mutex<i32>>`. When we switched to `Arc<T>`, which is `Send`, the code
 compiled.
 

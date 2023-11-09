@@ -12,7 +12,7 @@ signature of the function where we would usually specify the data types of the
 parameters and return value. Doing so makes our code more flexible and provides
 more functionality to callers of our function while preventing code duplication.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions that
+Continuing with our `largest` function, [Listing 10-4](#10-4) shows two functions that
 both find the largest value in a slice. We'll then combine these into a single
 function that uses generics.
 
@@ -22,10 +22,10 @@ function that uses generics.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-4: Two functions that differ only in their
+<span class="caption" id="10-4">Listing 10-4: Two functions that differ only in their
 names and the types in their signatures</span>
 
-The `largest_i32` function is the one we extracted in Listing 10-3 that finds
+The `largest_i32` function is the one we extracted in [Listing 10-3](./ch10-00-generics.html#10-3) that finds
 the largest `i32` in a slice. The `largest_char` function finds the largest
 `char` in a slice. The function bodies have the same code, so let’s eliminate
 the duplication by introducing a generic type parameter in a single function.
@@ -53,7 +53,7 @@ We read this definition as: the function `largest` is generic over some type
 of type `T`. The `largest` function will return a reference to a value of the
 same type `T`.
 
-Listing 10-5 shows the combined `largest` function definition using the generic
+[Listing 10-5](#10-5) shows the combined `largest` function definition using the generic
 data type in its signature. The listing also shows how we can call the function
 with either a slice of `i32` values or `char` values. Note that this code won’t
 compile yet, but we’ll fix it later in this chapter.
@@ -64,7 +64,7 @@ compile yet, but we’ll fix it later in this chapter.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-5: The `largest` function using generic type
+<span class="caption" id="10-5">Listing 10-5: The `largest` function using generic type
 parameters; this doesn’t yet compile</span>
 
 If we compile this code right now, we’ll get this error:
@@ -87,7 +87,7 @@ implements `PartialOrd` on both `i32` and `char`.
 ### In Struct Definitions
 
 We can also define structs to use a generic type parameter in one or more
-fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
+fields using the `<>` syntax. [Listing 10-6](#10-6) defines a `Point<T>` struct to hold
 `x` and `y` coordinate values of any type.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -96,7 +96,7 @@ fields using the `<>` syntax. Listing 10-6 defines a `Point<T>` struct to hold
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
+<span class="caption" id="10-6">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
 values of type `T`</span>
 
 The syntax for using generics in struct definitions is similar to that used in
@@ -108,7 +108,7 @@ Note that because we’ve used only one generic type to define `Point<T>`, this
 definition says that the `Point<T>` struct is generic over some type `T`, and
 the fields `x` and `y` are *both* that same type, whatever that type may be. If
 we create an instance of a `Point<T>` that has values of different types, as in
-Listing 10-7, our code won’t compile.
+[Listing 10-7](#10-7), our code won’t compile.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -116,7 +116,7 @@ Listing 10-7, our code won’t compile.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
+<span class="caption" id="10-7">Listing 10-7: The fields `x` and `y` must be the same
 type because both have the same generic data type `T`.</span>
 
 In this example, when we assign the integer value 5 to `x`, we let the compiler
@@ -130,7 +130,7 @@ same type as `x`, we’ll get a type mismatch error like this:
 
 To define a `Point` struct where `x` and `y` are both generics but could have
 different types, we can use multiple generic type parameters. For example, in
-Listing 10-8, we change the definition of `Point` to be generic over types `T`
+[Listing 10-8](#10-8), we change the definition of `Point` to be generic over types `T`
 and `U` where `x` is of type `T` and `y` is of type `U`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -139,7 +139,7 @@ and `U` where `x` is of type `T` and `y` is of type `U`.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
+<span class="caption" id="10-8">Listing 10-8: A `Point<T, U>` generic over two types so
 that `x` and `y` can be values of different types</span>
 
 Now all the instances of `Point` shown are allowed! You can use as many generic
@@ -183,7 +183,7 @@ The `Result` enum is generic over two types, `T` and `E`, and has two variants:
 `E`. This definition makes it convenient to use the `Result` enum anywhere we
 have an operation that might succeed (return a value of some type `T`) or fail
 (return an error of some type `E`). In fact, this is what we used to open a
-file in Listing 9-3, where `T` was filled in with the type `std::fs::File` when
+file in [Listing 9-3](./ch09-02-recoverable-errors-with-result.html#9-3), where `T` was filled in with the type `std::fs::File` when
 the file was opened successfully and `E` was filled in with the type
 `std::io::Error` when there were problems opening the file.
 
@@ -194,8 +194,8 @@ avoid duplication by using generic types instead.
 ### In Method Definitions
 
 We can implement methods on structs and enums (as we did in Chapter 5) and use
-generic types in their definitions, too. Listing 10-9 shows the `Point<T>`
-struct we defined in Listing 10-6 with a method named `x` implemented on it.
+generic types in their definitions, too. [Listing 10-9](#10-9) shows the `Point<T>`
+struct we defined in [Listing 10-6](#10-6) with a method named `x` implemented on it.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -203,7 +203,7 @@ struct we defined in Listing 10-6 with a method named `x` implemented on it.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-9: Implementing a method named `x` on the
+<span class="caption" id="10-9">Listing 10-9: Implementing a method named `x` on the
 `Point<T>` struct that will return a reference to the `x` field of type
 `T`</span>
 
@@ -222,7 +222,7 @@ up substituting for the generic type.
 
 We can also specify constraints on generic types when defining methods on the
 type. We could, for example, implement methods only on `Point<f32>` instances
-rather than on `Point<T>` instances with any generic type. In Listing 10-10 we
+rather than on `Point<T>` instances with any generic type. In [Listing 10-10](#10-10) we
 use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -231,7 +231,7 @@ use the concrete type `f32`, meaning we don’t declare any types after `impl`.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-10/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-10: An `impl` block that only applies to a
+<span class="caption" id="10-10">Listing 10-10: An `impl` block that only applies to a
 struct with a particular concrete type for the generic type parameter `T`</span>
 
 This code means the type `Point<f32>` will have a `distance_from_origin`
@@ -241,7 +241,7 @@ point at coordinates (0.0, 0.0) and uses mathematical operations that are
 available only for floating point types.
 
 Generic type parameters in a struct definition aren’t always the same as those
-you use in that same struct’s method signatures. Listing 10-11 uses the generic
+you use in that same struct’s method signatures. [Listing 10-11](#10-11) uses the generic
 types `X1` and `Y1` for the `Point` struct and `X2` `Y2` for the `mixup` method
 signature to make the example clearer. The method creates a new `Point`
 instance with the `x` value from the `self` `Point` (of type `X1`) and the `y`
@@ -253,7 +253,7 @@ value from the passed-in `Point` (of type `Y2`).
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-11/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-11: A method that uses generic types different
+<span class="caption" id="10-11">Listing 10-11: A method that uses generic types different
 from its struct’s definition</span>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
@@ -281,7 +281,7 @@ Rust accomplishes this by performing monomorphization of the code using
 generics at compile time. *Monomorphization* is the process of turning generic
 code into specific code by filling in the concrete types that are used when
 compiled. In this process, the compiler does the opposite of the steps we used
-to create the generic function in Listing 10-5: the compiler looks at all the
+to create the generic function in [Listing 10-5](#10-5): the compiler looks at all the
 places where generic code is called and generates code for the concrete types
 the generic code is called with.
 

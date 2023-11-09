@@ -23,14 +23,14 @@ lifetime syntax so you can get comfortable with the concept.
 
 The main aim of lifetimes is to prevent *dangling references*, which cause a
 program to reference data other than the data it’s intended to reference.
-Consider the program in Listing 10-16, which has an outer scope and an inner
+Consider the program in [Listing 10-16](#10-16), which has an outer scope and an inner
 scope.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-16/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-16: An attempt to use a reference whose value
+<span class="caption" id="10-16">Listing 10-16: An attempt to use a reference whose value
 has gone out of scope</span>
 
 > Note: The examples in Listings 10-16, 10-17, and 10-23 declare variables
@@ -62,14 +62,14 @@ It uses a borrow checker.
 ### The Borrow Checker
 
 The Rust compiler has a *borrow checker* that compares scopes to determine
-whether all borrows are valid. Listing 10-17 shows the same code as Listing
+whether all borrows are valid. [Listing 10-17](#10-17) shows the same code as Listing
 10-16 but with annotations showing the lifetimes of the variables.
 
 ```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-17/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-17: Annotations of the lifetimes of `r` and
+<span class="caption" id="10-17">Listing 10-17: Annotations of the lifetimes of `r` and
 `x`, named `'a` and `'b`, respectively</span>
 
 Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
@@ -79,14 +79,14 @@ lifetimes and sees that `r` has a lifetime of `'a` but that it refers to memory
 with a lifetime of `'b`. The program is rejected because `'b` is shorter than
 `'a`: the subject of the reference doesn’t live as long as the reference.
 
-Listing 10-18 fixes the code so it doesn’t have a dangling reference and
+[Listing 10-18](#10-18) fixes the code so it doesn’t have a dangling reference and
 compiles without any errors.
 
 ```rust
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-18/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-18: A valid reference because the data has a
+<span class="caption" id="10-18">Listing 10-18: A valid reference because the data has a
 longer lifetime than the reference</span>
 
 Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
@@ -101,7 +101,7 @@ lifetimes of parameters and return values in the context of functions.
 
 We’ll write a function that returns the longer of two string slices. This
 function will take two string slices and return a single string slice. After
-we’ve implemented the `longest` function, the code in Listing 10-19 should
+we’ve implemented the `longest` function, the code in [Listing 10-19](#10-19) should
 print `The longest string is abcd`.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -110,17 +110,17 @@ print `The longest string is abcd`.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-19/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-19: A `main` function that calls the `longest`
+<span class="caption" id="10-19">Listing 10-19: A `main` function that calls the `longest`
 function to find the longer of two string slices</span>
 
 Note that we want the function to take string slices, which are references,
 rather than strings, because we don’t want the `longest` function to take
 ownership of its parameters. Refer to the [“String Slices as
 Parameters”][string-slices-as-parameters]<!-- ignore --> section in Chapter 4
-for more discussion about why the parameters we use in Listing 10-19 are the
+for more discussion about why the parameters we use in [Listing 10-19](#10-19) are the
 ones we want.
 
-If we try to implement the `longest` function as shown in Listing 10-20, it
+If we try to implement the `longest` function as shown in [Listing 10-20](#10-20), it
 won’t compile.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -129,7 +129,7 @@ won’t compile.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-20/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-20: An implementation of the `longest`
+<span class="caption" id="10-20">Listing 10-20: An implementation of the `longest`
 function that returns the longer of two string slices but does not yet
 compile</span>
 
@@ -203,12 +203,12 @@ name the lifetime `'a` and then add it to each reference, as shown in Listing
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-21/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-21: The `longest` function definition
+<span class="caption" id="10-21">Listing 10-21: The `longest` function definition
 specifying that all the references in the signature must have the same lifetime
 `'a`</span>
 
 This code should compile and produce the result we want when we use it with the
-`main` function in Listing 10-19.
+`main` function in [Listing 10-19](#10-19).
 
 The function signature now tells Rust that for some lifetime `'a`, the function
 takes two parameters, both of which are string slices that live at least as
@@ -246,7 +246,7 @@ the returned reference will also be valid for the length of the smaller of the
 lifetimes of `x` and `y`.
 
 Let’s look at how the lifetime annotations restrict the `longest` function by
-passing in references that have different concrete lifetimes. Listing 10-22 is
+passing in references that have different concrete lifetimes. [Listing 10-22](#10-22) is
 a straightforward example.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -255,7 +255,7 @@ a straightforward example.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-22/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-22: Using the `longest` function with
+<span class="caption" id="10-22">Listing 10-22: Using the `longest` function with
 references to `String` values that have different concrete lifetimes</span>
 
 In this example, `string1` is valid until the end of the outer scope, `string2`
@@ -269,7 +269,7 @@ Next, let’s try an example that shows that the lifetime of the reference in
 declaration of the `result` variable outside the inner scope but leave the
 assignment of the value to the `result` variable inside the scope with
 `string2`. Then we’ll move the `println!` that uses `result` to outside the
-inner scope, after the inner scope has ended. The code in Listing 10-23 will
+inner scope, after the inner scope has ended. The code in [Listing 10-23](#10-23) will
 not compile.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -278,7 +278,7 @@ not compile.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-23/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-23: Attempting to use `result` after `string2`
+<span class="caption" id="10-23">Listing 10-23: Attempting to use `result` after `string2`
 has gone out of scope</span>
 
 When we try to compile this code, we get this error:
@@ -299,7 +299,7 @@ still be valid for the `println!` statement. However, the compiler can’t see
 that the reference is valid in this case. We’ve told Rust that the lifetime of
 the reference returned by the `longest` function is the same as the smaller of
 the lifetimes of the references passed in. Therefore, the borrow checker
-disallows the code in Listing 10-23 as possibly having an invalid reference.
+disallows the code in [Listing 10-23](#10-23) as possibly having an invalid reference.
 
 Try designing more experiments that vary the values and lifetimes of the
 references passed in to the `longest` function and how the returned reference
@@ -364,7 +364,7 @@ would create dangling pointers or otherwise violate memory safety.
 
 So far, the structs we’ve defined all hold owned types. We can define structs to
 hold references, but in that case we would need to add a lifetime annotation on
-every reference in the struct’s definition. Listing 10-24 has a struct named
+every reference in the struct’s definition. [Listing 10-24](#10-24) has a struct named
 `ImportantExcerpt` that holds a string slice.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -373,7 +373,7 @@ every reference in the struct’s definition. Listing 10-24 has a struct named
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-24/src/main.rs}}
 ```
 
-<span class="caption">Listing 10-24: A struct that holds a reference, requiring
+<span class="caption" id="10-24">Listing 10-24: A struct that holds a reference, requiring
 a lifetime annotation</span>
 
 This struct has the single field `part` that holds a string slice, which is a
@@ -394,7 +394,7 @@ the `ImportantExcerpt` goes out of scope, so the reference in the
 
 You’ve learned that every reference has a lifetime and that you need to specify
 lifetime parameters for functions or structs that use references. However, in
-Chapter 4 we had a function in Listing 4-9, shown again in Listing 10-25, that
+Chapter 4 we had a function in [Listing 4-9](./ch04-03-slices.html#4-9), shown again in [Listing 10-25](#10-25), that
 compiled without lifetime annotations.
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -403,7 +403,7 @@ compiled without lifetime annotations.
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/listing-10-25/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 10-25: A function we defined in Listing 4-9 that
+<span class="caption" id="10-25">Listing 10-25: A function we defined in Listing 4-9 that
 compiled without lifetime annotations, even though the parameter and return
 type are references</span>
 
@@ -465,7 +465,7 @@ methods much nicer to read and write because fewer symbols are necessary.
 
 Let’s pretend we’re the compiler. We’ll apply these rules to figure out the
 lifetimes of the references in the signature of the `first_word` function in
-Listing 10-25. The signature starts without any lifetimes associated with the
+[Listing 10-25](#10-25). The signature starts without any lifetimes associated with the
 references:
 
 ```rust,ignore
@@ -493,7 +493,7 @@ compiler can continue its analysis without needing the programmer to annotate
 the lifetimes in this function signature.
 
 Let’s look at another example, this time using the `longest` function that had
-no lifetime parameters when we started working with it in Listing 10-20:
+no lifetime parameters when we started working with it in [Listing 10-20](#10-20):
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
@@ -511,7 +511,7 @@ input lifetime. The third rule doesn’t apply either, because `longest` is a
 function rather than a method, so none of the parameters are `self`. After
 working through all three rules, we still haven’t figured out what the return
 type’s lifetime is. This is why we got an error trying to compile the code in
-Listing 10-20: the compiler worked through the lifetime elision rules but still
+[Listing 10-20](#10-20): the compiler worked through the lifetime elision rules but still
 couldn’t figure out all the lifetimes of the references in the signature.
 
 Because the third rule really only applies in method signatures, we’ll look at
@@ -521,7 +521,7 @@ annotate lifetimes in method signatures very often.
 ### Lifetime Annotations in Method Definitions
 
 When we implement methods on a struct with lifetimes, we use the same syntax as
-that of generic type parameters shown in Listing 10-11. Where we declare and
+that of generic type parameters shown in [Listing 10-11](./ch10-01-syntax.html#10-11). Where we declare and
 use the lifetime parameters depends on whether they’re related to the struct
 fields or the method parameters and return values.
 
@@ -533,7 +533,7 @@ In method signatures inside the `impl` block, references might be tied to the
 lifetime of references in the struct’s fields, or they might be independent. In
 addition, the lifetime elision rules often make it so that lifetime annotations
 aren’t necessary in method signatures. Let’s look at some examples using the
-struct named `ImportantExcerpt` that we defined in Listing 10-24.
+struct named `ImportantExcerpt` that we defined in [Listing 10-24](#10-24).
 
 First, we’ll use a method named `level` whose only parameter is a reference to
 `self` and whose return value is an `i32`, which is not a reference to anything:
@@ -588,7 +588,7 @@ bounds, and lifetimes all in one function!
 {{#rustdoc_include ../listings/ch10-generic-types-traits-and-lifetimes/no-listing-11-generics-traits-and-lifetimes/src/main.rs:here}}
 ```
 
-This is the `longest` function from Listing 10-21 that returns the longer of
+This is the `longest` function from [Listing 10-21](#10-21) that returns the longer of
 two string slices. But now it has an extra parameter named `ann` of the generic
 type `T`, which can be filled in by any type that implements the `Display`
 trait as specified by the `where` clause. This extra parameter will be printed

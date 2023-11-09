@@ -27,7 +27,7 @@ many different situations where the successful value and error value we want to
 return may differ.
 
 Let’s call a function that returns a `Result` value because the function could
-fail. In Listing 9-3 we try to open a file.
+fail. In [Listing 9-3](#9-3) we try to open a file.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -35,7 +35,7 @@ fail. In Listing 9-3 we try to open a file.
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-03/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-3: Opening a file</span>
+<span class="caption" id="9-3">Listing 9-3: Opening a file</span>
 
 The return type of `File::open` is a `Result<T, E>`. The generic parameter `T`
 has been filled in by the implementation of `File::open` with the type of the
@@ -54,8 +54,8 @@ In the case where it fails, the value in `greeting_file_result` will be an
 instance of `Err` that contains more information about the kind of error that
 happened.
 
-We need to add to the code in Listing 9-3 to take different actions depending
-on the value `File::open` returns. Listing 9-4 shows one way to handle the
+We need to add to the code in [Listing 9-3](#9-3) to take different actions depending
+on the value `File::open` returns. [Listing 9-4](#9-4) shows one way to handle the
 `Result` using a basic tool, the `match` expression that we discussed in
 Chapter 6.
 
@@ -65,7 +65,7 @@ Chapter 6.
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-4: Using a `match` expression to handle the
+<span class="caption" id="9-4">Listing 9-4: Using a `match` expression to handle the
 `Result` variants that might be returned</span>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
@@ -90,13 +90,13 @@ As usual, this output tells us exactly what has gone wrong.
 
 ### Matching on Different Errors
 
-The code in Listing 9-4 will `panic!` no matter why `File::open` failed.
+The code in [Listing 9-4](#9-4) will `panic!` no matter why `File::open` failed.
 However, we want to take different actions for different failure reasons: if
 `File::open` failed because the file doesn’t exist, we want to create the file
 and return the handle to the new file. If `File::open` failed for any other
 reason—for example, because we didn’t have permission to open the file—we still
-want the code to `panic!` in the same way as it did in Listing 9-4. For this we
-add an inner `match` expression, shown in Listing 9-5.
+want the code to `panic!` in the same way as it did in [Listing 9-4](#9-4). For this we
+add an inner `match` expression, shown in [Listing 9-5](#9-5).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -107,7 +107,7 @@ tests to fail lol -->
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-5: Handling different kinds of errors in
+<span class="caption" id="9-5">Listing 9-5: Handling different kinds of errors in
 different ways</span>
 
 The type of the value that `File::open` returns inside the `Err` variant is
@@ -156,7 +156,7 @@ the missing file error.
 > }
 > ```
 >
-> Although this code has the same behavior as Listing 9-5, it doesn’t contain
+> Although this code has the same behavior as [Listing 9-5](#9-5), it doesn’t contain
 > any `match` expressions and is cleaner to read. Come back to this example
 > after you’ve read Chapter 13, and look up the `unwrap_or_else` method in the
 > standard library documentation. Many more of these methods can clean up huge
@@ -168,7 +168,7 @@ Using `match` works well enough, but it can be a bit verbose and doesn’t alway
 communicate intent well. The `Result<T, E>` type has many helper methods
 defined on it to do various, more specific tasks. The `unwrap` method is a
 shortcut method implemented just like the `match` expression we wrote in
-Listing 9-4. If the `Result` value is the `Ok` variant, `unwrap` will return
+[Listing 9-4](#9-4). If the `Result` value is the `Ok` variant, `unwrap` will return
 the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us. Here is an example of `unwrap` in action:
 
@@ -235,7 +235,7 @@ the error and gives more control to the calling code, where there might be more
 information or logic that dictates how the error should be handled than what
 you have available in the context of your code.
 
-For example, Listing 9-6 shows a function that reads a username from a file. If
+For example, [Listing 9-6](#9-6) shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called the function.
 
@@ -249,7 +249,7 @@ don't want to include it for rustdoc testing purposes. -->
 {{#include ../listings/ch09-error-handling/listing-09-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-6: A function that returns errors to the
+<span class="caption" id="9-6">Listing 9-6: A function that returns errors to the
 calling code using `match`</span>
 
 This function can be written in a much shorter way, but we’re going to start by
@@ -271,7 +271,7 @@ this function’s body that might fail: the `File::open` function and the
 `read_to_string` method.
 
 The body of the function starts by calling the `File::open` function. Then we
-handle the `Result` value with a `match` similar to the `match` in Listing 9-4.
+handle the `Result` value with a `match` similar to the `match` in [Listing 9-4](#9-4).
 If `File::open` succeeds, the file handle in the pattern variable `file`
 becomes the value in the mutable variable `username_file` and the function
 continues. In the `Err` case, instead of calling `panic!`, we use the `return`
@@ -305,8 +305,8 @@ question mark operator `?` to make this easier.
 
 #### A Shortcut for Propagating Errors: the `?` Operator
 
-Listing 9-7 shows an implementation of `read_username_from_file` that has the
-same functionality as in Listing 9-6, but this implementation uses the
+[Listing 9-7](#9-7) shows an implementation of `read_username_from_file` that has the
+same functionality as in [Listing 9-6](#9-6), but this implementation uses the
 `?` operator.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -319,7 +319,7 @@ don't want to include it for rustdoc testing purposes. -->
 {{#include ../listings/ch09-error-handling/listing-09-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-7: A function that returns errors to the
+<span class="caption" id="9-7">Listing 9-7: A function that returns errors to the
 calling code using the `?` operator</span>
 
 The `?` placed after a `Result` value is defined to work in almost the same way
@@ -330,7 +330,7 @@ is an `Err`, the `Err` will be returned from the whole function as if we had
 used the `return` keyword so the error value gets propagated to the calling
 code.
 
-There is a difference between what the `match` expression from Listing 9-6 does
+There is a difference between what the `match` expression from [Listing 9-6](#9-6) does
 and what the `?` operator does: error values that have the `?` operator called
 on them go through the `from` function, defined in the `From` trait in the
 standard library, which is used to convert values from one type into another.
@@ -347,7 +347,7 @@ define `impl From<io::Error> for OurError` to construct an instance of
 `read_username_from_file` will call `from` and convert the error types without
 needing to add any more code to the function.
 
-In the context of Listing 9-7, the `?` at the end of the `File::open` call will
+In the context of [Listing 9-7](#9-7), the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the variable `username_file`. If an error
 occurs, the `?` operator will return early out of the whole function and give
 any `Err` value to the calling code. The same thing applies to the `?` at the
@@ -355,7 +355,7 @@ end of the `read_to_string` call.
 
 The `?` operator eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
-method calls immediately after the `?`, as shown in Listing 9-8.
+method calls immediately after the `?`, as shown in [Listing 9-8](#9-8).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -367,7 +367,7 @@ don't want to include it for rustdoc testing purposes. -->
 {{#include ../listings/ch09-error-handling/listing-09-08/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-8: Chaining method calls after the `?`
+<span class="caption" id="9-8">Listing 9-8: Chaining method calls after the `?`
 operator</span>
 
 We’ve moved the creation of the new `String` in `username` to the beginning of
@@ -376,10 +376,10 @@ the function; that part hasn’t changed. Instead of creating a variable
 result of `File::open("hello.txt")?`. We still have a `?` at the end of the
 `read_to_string` call, and we still return an `Ok` value containing `username`
 when both `File::open` and `read_to_string` succeed rather than returning
-errors. The functionality is again the same as in Listing 9-6 and Listing 9-7;
+errors. The functionality is again the same as in [Listing 9-6](#9-6) and [Listing 9-7](#9-7);
 this is just a different, more ergonomic way to write it.
 
-Listing 9-9 shows a way to make this even shorter using `fs::read_to_string`.
+[Listing 9-9](#9-9) shows a way to make this even shorter using `fs::read_to_string`.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -391,7 +391,7 @@ don't want to include it for rustdoc testing purposes. -->
 {{#include ../listings/ch09-error-handling/listing-09-09/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-9: Using `fs::read_to_string` instead of
+<span class="caption" id="9-9">Listing 9-9: Using `fs::read_to_string` instead of
 opening and then reading the file</span>
 
 Reading a file into a string is a fairly common operation, so the standard
@@ -406,12 +406,12 @@ the longer way first.
 The `?` operator can only be used in functions whose return type is compatible
 with the value the `?` is used on. This is because the `?` operator is defined
 to perform an early return of a value out of the function, in the same manner
-as the `match` expression we defined in Listing 9-6. In Listing 9-6, the
+as the `match` expression we defined in [[Listing 9-6](#9-6)](#9-6). In [[Listing 9-6](#9-6)](#9-6), the
 `match` was using a `Result` value, and the early return arm returned an
 `Err(e)` value. The return type of the function has to be a `Result` so that
 it’s compatible with this `return`.
 
-In Listing 9-10, let’s look at the error we’ll get if we use the `?` operator
+In [Listing 9-10](#9-10), let’s look at the error we’ll get if we use the `?` operator
 in a `main` function with a return type incompatible with the type of the value
 we use `?` on:
 
@@ -421,7 +421,7 @@ we use `?` on:
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-10/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-10: Attempting to use the `?` in the `main`
+<span class="caption" id="9-10">Listing 9-10: Attempting to use the `?` in the `main`
 function that returns `()` won’t compile</span>
 
 This code opens a file, which might fail. The `?` operator follows the `Result`
@@ -449,7 +449,7 @@ function that returns an `Option`. The behavior of the `?` operator when called
 on an `Option<T>` is similar to its behavior when called on a `Result<T, E>`:
 if the value is `None`, the `None` will be returned early from the function at
 that point. If the value is `Some`, the value inside the `Some` is the
-resulting value of the expression and the function continues. Listing 9-11 has
+resulting value of the expression and the function continues. [Listing 9-11](#9-11) has
 an example of a function that finds the last character of the first line in the
 given text:
 
@@ -457,7 +457,7 @@ given text:
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-11/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 9-11: Using the `?` operator on an `Option<T>`
+<span class="caption" id="9-11">Listing 9-11: Using the `?` operator on an `Option<T>`
 value</span>
 
 This function returns `Option<char>` because it’s possible that there is a
@@ -493,8 +493,8 @@ special because it’s the entry and exit point of executable programs, and ther
 are restrictions on what its return type can be for the programs to behave as
 expected.
 
-Luckily, `main` can also return a `Result<(), E>`. Listing 9-12 has the
-code from Listing 9-10 but we’ve changed the return type of `main` to be
+Luckily, `main` can also return a `Result<(), E>`. [Listing 9-12](#9-12) has the
+code from [Listing 9-10](#9-10) but we’ve changed the return type of `main` to be
 `Result<(), Box<dyn Error>>` and added a return value `Ok(())` to the end. This
 code will now compile:
 
@@ -502,7 +502,7 @@ code will now compile:
 {{#rustdoc_include ../listings/ch09-error-handling/listing-09-12/src/main.rs}}
 ```
 
-<span class="caption">Listing 9-12: Changing `main` to return `Result<(), E>`
+<span class="caption" id="9-12">Listing 9-12: Changing `main` to return `Result<(), E>`
 allows the use of the `?` operator on `Result` values</span>
 
 The `Box<dyn Error>` type is a *trait object*, which we’ll talk about in the

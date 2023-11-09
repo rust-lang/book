@@ -47,7 +47,7 @@ the *.rs* extension. If you’re using more than one word in your filename, the
 convention is to use an underscore to separate them. For example, use
 *hello_world.rs* rather than *helloworld.rs*.
 
-Now open the *main.rs* file you just created and enter the code in Listing 1-1.
+Now open the *main.rs* file you just created and enter the code in [Listing 1-1](#1-1).
 
 <span class="filename">Filename: main.rs</span>
 
@@ -57,7 +57,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 1-1: A program that prints `Hello, world!`</span>
+<span class="caption" id="1-1">Listing 1-1: A program that prints `Hello, world!`</span>
 
 Save the file and go back to your terminal window in the
 *~/projects/hello_world* directory. On Linux or macOS, enter the following

@@ -127,7 +127,7 @@ that use our library will be expected to provide the mechanism for sending the
 messages: the application could put a message in the application, send an
 email, send a text message, or something else. The library doesn’t need to know
 that detail. All it needs is something that implements a trait we’ll provide
-called `Messenger`. Listing 15-20 shows the library code:
+called `Messenger`. [Listing 15-20](#15-20) shows the library code:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -135,7 +135,7 @@ called `Messenger`. Listing 15-20 shows the library code:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-20/src/lib.rs}}
 ```
 
-<span class="caption">Listing 15-20: A library to keep track of how close a
+<span class="caption" id="15-20">Listing 15-20: A library to keep track of how close a
 value is to a maximum value and warn when the value is at certain levels</span>
 
 One important part of this code is that the `Messenger` trait has one method
@@ -153,7 +153,7 @@ We need a mock object that, instead of sending an email or text message when we
 call `send`, will only keep track of the messages it’s told to send. We can
 create a new instance of the mock object, create a `LimitTracker` that uses the
 mock object, call the `set_value` method on `LimitTracker`, and then check that
-the mock object has the messages we expect. Listing 15-21 shows an attempt to
+the mock object has the messages we expect. [Listing 15-21](#15-21) shows an attempt to
 implement a mock object to do just that, but the borrow checker won’t allow it:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -162,7 +162,7 @@ implement a mock object to do just that, but the borrow checker won’t allow it
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-21/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 15-21: An attempt to implement a `MockMessenger`
+<span class="caption" id="15-21">Listing 15-21: An attempt to implement a `MockMessenger`
 that isn’t allowed by the borrow checker</span>
 
 This test code defines a `MockMessenger` struct that has a `sent_messages`
@@ -197,7 +197,7 @@ definition (feel free to try and see what error message you get).
 
 This is a situation in which interior mutability can help! We’ll store the
 `sent_messages` within a `RefCell<T>`, and then the `send` method will be
-able to modify `sent_messages` to store the messages we’ve seen. Listing 15-22
+able to modify `sent_messages` to store the messages we’ve seen. [Listing 15-22](#15-22)
 shows what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -206,7 +206,7 @@ shows what that looks like:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-22/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 15-22: Using `RefCell<T>` to mutate an inner
+<span class="caption" id="15-22">Listing 15-22: Using `RefCell<T>` to mutate an inner
 value while the outer value is considered immutable</span>
 
 The `sent_messages` field is now of type `RefCell<Vec<String>>` instead of
@@ -244,8 +244,8 @@ borrows or one mutable borrow at any point in time.
 
 If we try to violate these rules, rather than getting a compiler error as we
 would with references, the implementation of `RefCell<T>` will panic at
-runtime. Listing 15-23 shows a modification of the implementation of `send` in
-Listing 15-22. We’re deliberately trying to create two mutable borrows active
+runtime. [Listing 15-23](#15-23) shows a modification of the implementation of `send` in
+[Listing 15-22](#15-22). We’re deliberately trying to create two mutable borrows active
 for the same scope to illustrate that `RefCell<T>` prevents us from doing this
 at runtime.
 
@@ -255,7 +255,7 @@ at runtime.
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-23/src/lib.rs:here}}
 ```
 
-<span class="caption">Listing 15-23: Creating two mutable references in the
+<span class="caption" id="15-23">Listing 15-23: Creating two mutable references in the
 same scope to see that `RefCell<T>` will panic</span>
 
 We create a variable `one_borrow` for the `RefMut<T>` smart pointer returned
@@ -290,11 +290,11 @@ A common way to use `RefCell<T>` is in combination with `Rc<T>`. Recall that
 access to that data. If you have an `Rc<T>` that holds a `RefCell<T>`, you can
 get a value that can have multiple owners *and* that you can mutate!
 
-For example, recall the cons list example in Listing 15-18 where we used
+For example, recall the cons list example in [Listing 15-18](./ch15-04-rc.html#15-18) where we used
 `Rc<T>` to allow multiple lists to share ownership of another list. Because
 `Rc<T>` holds only immutable values, we can’t change any of the values in the
 list once we’ve created them. Let’s add in `RefCell<T>` to gain the ability to
-change the values in the lists. Listing 15-24 shows that by using a
+change the values in the lists. [Listing 15-24](#15-24) shows that by using a
 `RefCell<T>` in the `Cons` definition, we can modify the value stored in all
 the lists:
 
@@ -304,7 +304,7 @@ the lists:
 {{#rustdoc_include ../listings/ch15-smart-pointers/listing-15-24/src/main.rs}}
 ```
 
-<span class="caption">Listing 15-24: Using `Rc<RefCell<i32>>` to create a
+<span class="caption" id="15-24">Listing 15-24: Using `Rc<RefCell<i32>>` to create a
 `List` that we can mutate</span>
 
 We create a value that is an instance of `Rc<RefCell<i32>>` and store it in a
@@ -315,7 +315,7 @@ than transferring ownership from `value` to `a` or having `a` borrow from
 `value`.
 
 We wrap the list `a` in an `Rc<T>` so when we create lists `b` and `c`, they
-can both refer to `a`, which is what we did in Listing 15-18.
+can both refer to `a`, which is what we did in [Listing 15-18](./ch15-04-rc.html#15-18).
 
 After we’ve created the lists in `a`, `b`, and `c`, we want to add 10 to the
 value in `value`. We do this by calling `borrow_mut` on `value`, which uses the

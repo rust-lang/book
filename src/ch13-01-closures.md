@@ -33,7 +33,7 @@ inventory with an `Inventory` struct that has a field named `shirts` that
 contains a `Vec<ShirtColor>` representing the shirt colors currently in stock.
 The method `giveaway` defined on `Inventory` gets the optional shirt
 color preference of the free shirt winner, and returns the shirt color the
-person will get. This setup is shown in Listing 13-1:
+person will get. This setup is shown in [Listing 13-1](#13-1):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -41,7 +41,7 @@ person will get. This setup is shown in Listing 13-1:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-01/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-1: Shirt company giveaway situation</span>
+<span class="caption" id="13-1">Listing 13-1: Shirt company giveaway situation</span>
 
 The `store` defined in `main` has two blue shirts and one red shirt remaining
 to distribute for this limited-edition promotion. We call the `giveaway` method
@@ -101,9 +101,9 @@ needs closure type annotations too).
 As with variables, we can add type annotations if we want to increase
 explicitness and clarity at the cost of being more verbose than is strictly
 necessary. Annotating the types for a closure would look like the definition
-shown in Listing 13-2. In this example, we’re defining a closure and storing it
+shown in [Listing 13-2](#13-2). In this example, we’re defining a closure and storing it
 in a variable rather than defining the closure in the spot we pass it as an
-argument as we did in Listing 13-1.
+argument as we did in [Listing 13-1](#13-1).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -111,7 +111,7 @@ argument as we did in Listing 13-1.
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-2: Adding optional type annotations of the
+<span class="caption" id="13-2">Listing 13-2: Adding optional type annotations of the
 parameter and return value types in the closure</span>
 
 With type annotations added, the syntax of closures looks more similar to the
@@ -139,7 +139,7 @@ similar to `let v = Vec::new();` needing either type annotations or values of
 some type to be inserted into the `Vec` for Rust to be able to infer the type.
 
 For closure definitions, the compiler will infer one concrete type for each of
-their parameters and for their return value. For instance, Listing 13-3 shows
+their parameters and for their return value. For instance, [Listing 13-3](#13-3) shows
 the definition of a short closure that just returns the value it receives as a
 parameter. This closure isn’t very useful except for the purposes of this
 example. Note that we haven’t added any type annotations to the definition.
@@ -153,7 +153,7 @@ which we’ve done here with `String` the first time. If we then try to call
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 13-3: Attempting to call a closure whose types
+<span class="caption" id="13-3">Listing 13-3: Attempting to call a closure whose types
 are inferred with two different types</span>
 
 The compiler gives us this error:
@@ -175,7 +175,7 @@ immutably, borrowing mutably, and taking ownership. The closure will decide
 which of these to use based on what the body of the function does with the
 captured values.
 
-In Listing 13-4, we define a closure that captures an immutable reference to
+In [Listing 13-4](#13-4), we define a closure that captures an immutable reference to
 the vector named `list` because it only needs an immutable reference to print
 the value:
 
@@ -185,7 +185,7 @@ the value:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-04/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-4: Defining and calling a closure that
+<span class="caption" id="13-4">Listing 13-4: Defining and calling a closure that
 captures an immutable reference</span>
 
 This example also illustrates that a variable can bind to a closure definition,
@@ -201,7 +201,7 @@ is called. This code compiles, runs, and prints:
 {{#include ../listings/ch13-functional-features/listing-13-04/output.txt}}
 ```
 
-Next, in Listing 13-5, we change the closure body so that it adds an element to
+Next, in [Listing 13-5](#13-5), we change the closure body so that it adds an element to
 the `list` vector. The closure now captures a mutable reference:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -210,7 +210,7 @@ the `list` vector. The closure now captures a mutable reference:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-05/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-5: Defining and calling a closure that
+<span class="caption" id="13-5">Listing 13-5: Defining and calling a closure that
 captures a mutable reference</span>
 
 This code compiles, runs, and prints:
@@ -235,7 +235,7 @@ This technique is mostly useful when passing a closure to a new thread to move
 the data so that it’s owned by the new thread. We’ll discuss threads and why
 you would want to use them in detail in Chapter 16 when we talk about
 concurrency, but for now, let’s briefly explore spawning a new thread using a
-closure that needs the `move` keyword. Listing 13-6 shows Listing 13-4 modified
+closure that needs the `move` keyword. [Listing 13-6](#13-6) shows [Listing 13-4](#13-4) modified
 to print the vector in a new thread rather than in the main thread:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -244,11 +244,11 @@ to print the vector in a new thread rather than in the main thread:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-06/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-6: Using `move` to force the closure for the
+<span class="caption" id="13-6">Listing 13-6: Using `move` to force the closure for the
 thread to take ownership of `list`</span>
 
 We spawn a new thread, giving the thread a closure to run as an argument. The
-closure body prints out the list. In Listing 13-4, the closure only captured
+closure body prints out the list. In [Listing 13-4](#13-4), the closure only captured
 `list` using an immutable reference because that's the least amount of access
 to `list` needed to print it. In this example, even though the closure body
 still only needs an immutable reference, we need to specify that `list` should
@@ -298,7 +298,7 @@ depending on how the closure’s body handles the values:
    calling a closure multiple times concurrently.
 
 Let’s look at the definition of the `unwrap_or_else` method on `Option<T>` that
-we used in Listing 13-1:
+we used in [Listing 13-1](#13-1):
 
 ```rust,ignore
 impl<T> Option<T> {
@@ -345,7 +345,7 @@ to see how that differs from `unwrap_or_else` and why `sort_by_key` uses
 in the form of a reference to the current item in the slice being considered,
 and returns a value of type `K` that can be ordered. This function is useful
 when you want to sort a slice by a particular attribute of each item. In
-Listing 13-7, we have a list of `Rectangle` instances and we use `sort_by_key`
+[Listing 13-7](#13-7), we have a list of `Rectangle` instances and we use `sort_by_key`
 to order them by their `width` attribute from low to high:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -354,7 +354,7 @@ to order them by their `width` attribute from low to high:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-07/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-7: Using `sort_by_key` to order rectangles by
+<span class="caption" id="13-7">Listing 13-7: Using `sort_by_key` to order rectangles by
 width</span>
 
 This code prints:
@@ -368,7 +368,7 @@ the closure multiple times: once for each item in the slice. The closure `|r|
 r.width` doesn’t capture, mutate, or move out anything from its environment, so
 it meets the trait bound requirements.
 
-In contrast, Listing 13-8 shows an example of a closure that implements just
+In contrast, [Listing 13-8](#13-8) shows an example of a closure that implements just
 the `FnOnce` trait, because it moves a value out of the environment. The
 compiler won’t let us use this closure with `sort_by_key`:
 
@@ -378,7 +378,7 @@ compiler won’t let us use this closure with `sort_by_key`:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-08/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-8: Attempting to use an `FnOnce` closure with
+<span class="caption" id="13-8">Listing 13-8: Attempting to use an `FnOnce` closure with
 `sort_by_key`</span>
 
 This is a contrived, convoluted way (that doesn’t work) to try and count the
@@ -402,7 +402,7 @@ environment. To fix this, we need to change the closure body so that it doesn’
 move values out of the environment. To count the number of times `sort_by_key`
 is called, keeping a counter in the environment and incrementing its value in
 the closure body is a more straightforward way to calculate that. The closure
-in Listing 13-9 works with `sort_by_key` because it is only capturing a mutable
+in [Listing 13-9](#13-9) works with `sort_by_key` because it is only capturing a mutable
 reference to the `num_sort_operations` counter and can therefore be called more
 than once:
 
@@ -412,7 +412,7 @@ than once:
 {{#rustdoc_include ../listings/ch13-functional-features/listing-13-09/src/main.rs}}
 ```
 
-<span class="caption">Listing 13-9: Using an `FnMut` closure with `sort_by_key`
+<span class="caption" id="13-9">Listing 13-9: Using an `FnMut` closure with `sort_by_key`
 is allowed</span>
 
 The `Fn` traits are important when defining or using functions or types that

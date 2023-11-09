@@ -15,9 +15,9 @@ A path can take two forms:
 Both absolute and relative paths are followed by one or more identifiers
 separated by double colons (`::`).
 
-Returning to Listing 7-1, say we want to call the `add_to_waitlist` function.
+Returning to [Listing 7-1](./ch07-02-defining-modules-to-control-scope-and-privacy.html#7-1), say we want to call the `add_to_waitlist` function.
 This is the same as asking: what’s the path of the `add_to_waitlist` function?
-Listing 7-3 contains Listing 7-1 with some of the modules and functions
+[Listing 7-3](#7-3) contains [Listing 7-1](./ch07-02-defining-modules-to-control-scope-and-privacy.html#7-1) with some of the modules and functions
 removed.
 
 We’ll show two ways to call the `add_to_waitlist` function from a new function
@@ -35,7 +35,7 @@ Keyword”][pub]<!-- ignore --> section, we’ll go into more detail about `pub`
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-03/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-3: Calling the `add_to_waitlist` function using
+<span class="caption" id="7-3">Listing 7-3: Calling the `add_to_waitlist` function using
 absolute and relative paths</span>
 
 The first time we call the `add_to_waitlist` function in `eat_at_restaurant`,
@@ -66,15 +66,15 @@ same, but the relative path would need to be updated. Our preference in general
 is to specify absolute paths because it’s more likely we’ll want to move code
 definitions and item calls independently of each other.
 
-Let’s try to compile Listing 7-3 and find out why it won’t compile yet! The
-error we get is shown in Listing 7-4.
+Let’s try to compile [Listing 7-3](#7-3) and find out why it won’t compile yet! The
+error we get is shown in [Listing 7-4](#7-4).
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-03/output.txt}}
 ```
 
-<span class="caption">Listing 7-4: Compiler errors from building the code in
-Listing 7-3</span>
+<span class="caption" id="7-4">Listing 7-4: Compiler errors from building the code in
+[Listing 7-3](#7-3)</span>
 
 The error messages say that module `hosting` is private. In other words, we
 have the correct paths for the `hosting` module and the `add_to_waitlist`
@@ -99,10 +99,10 @@ modules by using the `pub` keyword to make an item public.
 
 ### Exposing Paths with the `pub` Keyword
 
-Let’s return to the error in Listing 7-4 that told us the `hosting` module is
+Let’s return to the error in [Listing 7-4](#7-4) that told us the `hosting` module is
 private. We want the `eat_at_restaurant` function in the parent module to have
 access to the `add_to_waitlist` function in the child module, so we mark the
-`hosting` module with the `pub` keyword, as shown in Listing 7-5.
+`hosting` module with the `pub` keyword, as shown in [Listing 7-5](#7-5).
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -110,18 +110,18 @@ access to the `add_to_waitlist` function in the child module, so we mark the
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-05/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-5: Declaring the `hosting` module as `pub` to
+<span class="caption" id="7-5">Listing 7-5: Declaring the `hosting` module as `pub` to
 use it from `eat_at_restaurant`</span>
 
-Unfortunately, the code in Listing 7-5 still results in an error, as shown in
-Listing 7-6.
+Unfortunately, the code in [Listing 7-5](#7-5) still results in an error, as shown in
+[Listing 7-6](#7-6).
 
 ```console
 {{#include ../listings/ch07-managing-growing-projects/listing-07-05/output.txt}}
 ```
 
-<span class="caption">Listing 7-6: Compiler errors from building the code in
-Listing 7-5</span>
+<span class="caption" id="7-6">Listing 7-6: Compiler errors from building the code in
+[Listing 7-5](#7-5)</span>
 
 What happened? Adding the `pub` keyword in front of `mod hosting` makes the
 module public. With this change, if we can access `front_of_house`, we can
@@ -132,12 +132,12 @@ Because modules are containers, there’s not much we can do by only making the
 module public; we need to go further and choose to make one or more of the
 items within the module public as well.
 
-The errors in Listing 7-6 say that the `add_to_waitlist` function is private.
+The errors in [Listing 7-6](#7-6) say that the `add_to_waitlist` function is private.
 The privacy rules apply to structs, enums, functions, and methods as well as
 modules.
 
 Let’s also make the `add_to_waitlist` function public by adding the `pub`
-keyword before its definition, as in Listing 7-7.
+keyword before its definition, as in [Listing 7-7](#7-7).
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -145,7 +145,7 @@ keyword before its definition, as in Listing 7-7.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-07/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-7: Adding the `pub` keyword to `mod hosting`
+<span class="caption" id="7-7">Listing 7-7: Adding the `pub` keyword to `mod hosting`
 and `fn add_to_waitlist` lets us call the function from
 `eat_at_restaurant`</span>
 
@@ -209,7 +209,7 @@ which can make rearranging the module tree easier when the module is closely
 related to the parent, but the parent might be moved elsewhere in the module
 tree someday.
 
-Consider the code in Listing 7-8 that models the situation in which a chef
+Consider the code in [Listing 7-8](#7-8) that models the situation in which a chef
 fixes an incorrect order and personally brings it out to the customer. The
 function `fix_incorrect_order` defined in the `back_of_house` module calls the
 function `deliver_order` defined in the parent module by specifying the path to
@@ -221,7 +221,7 @@ function `deliver_order` defined in the parent module by specifying the path to
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-08/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-8: Calling a function using a relative path
+<span class="caption" id="7-8">Listing 7-8: Calling a function using a relative path
 starting with `super`</span>
 
 The `fix_incorrect_order` function is in the `back_of_house` module, so we can
@@ -239,7 +239,7 @@ We can also use `pub` to designate structs and enums as public, but there are a
 few details extra to the usage of `pub` with structs and enums. If we use `pub`
 before a struct definition, we make the struct public, but the struct’s fields
 will still be private. We can make each field public or not on a case-by-case
-basis. In Listing 7-9, we’ve defined a public `back_of_house::Breakfast` struct
+basis. In [Listing 7-9](#7-9), we’ve defined a public `back_of_house::Breakfast` struct
 with a public `toast` field but a private `seasonal_fruit` field. This models
 the case in a restaurant where the customer can pick the type of bread that
 comes with a meal, but the chef decides which fruit accompanies the meal based
@@ -252,7 +252,7 @@ customers can’t choose the fruit or even see which fruit they’ll get.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-09/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-9: A struct with some public fields and some
+<span class="caption" id="7-9">Listing 7-9: A struct with some public fields and some
 private fields</span>
 
 Because the `toast` field in the `back_of_house::Breakfast` struct is public,
@@ -269,7 +269,7 @@ have such a function, we couldn’t create an instance of `Breakfast` in
 `seasonal_fruit` field in `eat_at_restaurant`.
 
 In contrast, if we make an enum public, all of its variants are then public. We
-only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
+only need the `pub` before the `enum` keyword, as shown in [Listing 7-10](#7-10).
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -277,7 +277,7 @@ only need the `pub` before the `enum` keyword, as shown in Listing 7-10.
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-10/src/lib.rs}}
 ```
 
-<span class="caption">Listing 7-10: Designating an enum as public makes all its
+<span class="caption" id="7-10">Listing 7-10: Designating an enum as public makes all its
 variants public</span>
 
 Because we made the `Appetizer` enum public, we can use the `Soup` and `Salad`

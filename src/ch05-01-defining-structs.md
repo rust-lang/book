@@ -10,7 +10,7 @@ on the order of the data to specify or access the values of an instance.
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
 grouped together. Then, inside curly brackets, we define the names and types of
-the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
+the pieces of data, which we call *fields*. For example, [Listing 5-1](#5-1) shows a
 struct that stores information about a user account.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -19,7 +19,7 @@ struct that stores information about a user account.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-01/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-1: A `User` struct definition</span>
+<span class="caption" id="5-1">Listing 5-1: A `User` struct definition</span>
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
@@ -29,7 +29,7 @@ data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
-example, we can declare a particular user as shown in Listing 5-2.
+example, we can declare a particular user as shown in [Listing 5-2](#5-2).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -37,13 +37,13 @@ example, we can declare a particular user as shown in Listing 5-2.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-02/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-2: Creating an instance of the `User`
+<span class="caption" id="5-2">Listing 5-2: Creating an instance of the `User`
 struct</span>
 
 To get a specific value from a struct, we use dot notation. For example, to
 access this user’s email address, we use `user1.email`. If the instance is
 mutable, we can change a value by using the dot notation and assigning into a
-particular field. Listing 5-3 shows how to change the value in the `email`
+particular field. [Listing 5-3](#5-3) shows how to change the value in the `email`
 field of a mutable `User` instance.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -52,7 +52,7 @@ field of a mutable `User` instance.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-03/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-3: Changing the value in the `email` field of a
+<span class="caption" id="5-3">Listing 5-3: Changing the value in the `email` field of a
 `User` instance</span>
 
 Note that the entire instance must be mutable; Rust doesn’t allow us to mark
@@ -60,7 +60,7 @@ only certain fields as mutable. As with any expression, we can construct a new
 instance of the struct as the last expression in the function body to
 implicitly return that new instance.
 
-Listing 5-4 shows a `build_user` function that returns a `User` instance with
+[Listing 5-4](#5-4) shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
 the `sign_in_count` gets a value of `1`.
 
@@ -70,7 +70,7 @@ the `sign_in_count` gets a value of `1`.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-04/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-4: A `build_user` function that takes an email
+<span class="caption" id="5-4">Listing 5-4: A `build_user` function that takes an email
 and username and returns a `User` instance</span>
 
 It makes sense to name the function parameters with the same name as the struct
@@ -84,9 +84,9 @@ would get even more annoying. Luckily, there’s a convenient shorthand!
 ### Using the Field Init Shorthand
 
 Because the parameter names and the struct field names are exactly the same in
-Listing 5-4, we can use the *field init shorthand* syntax to rewrite
+[Listing 5-4](#5-4), we can use the *field init shorthand* syntax to rewrite
 `build_user` so it behaves exactly the same but doesn’t have the repetition of
-`username` and `email`, as shown in Listing 5-5.
+`username` and `email`, as shown in [Listing 5-5](#5-5).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -94,7 +94,7 @@ Listing 5-4, we can use the *field init shorthand* syntax to rewrite
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-05/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-5: A `build_user` function that uses field init
+<span class="caption" id="5-5">Listing 5-5: A `build_user` function that uses field init
 shorthand because the `username` and `email` parameters have the same name as
 struct fields</span>
 
@@ -110,9 +110,9 @@ It’s often useful to create a new instance of a struct that includes most of
 the values from another instance, but changes some. You can do this using
 *struct update syntax*.
 
-First, in Listing 5-6 we show how to create a new `User` instance in `user2`
+First, in [Listing 5-6](#5-6) we show how to create a new `User` instance in `user2`
 regularly, without the update syntax. We set a new value for `email` but
-otherwise use the same values from `user1` that we created in Listing 5-2.
+otherwise use the same values from `user1` that we created in [Listing 5-2](#5-2).
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -120,11 +120,11 @@ otherwise use the same values from `user1` that we created in Listing 5-2.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-06/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-6: Creating a new `User` instance using one of
+<span class="caption" id="5-6">Listing 5-6: Creating a new `User` instance using one of
 the values from `user1`</span>
 
 Using struct update syntax, we can achieve the same effect with less code, as
-shown in Listing 5-7. The syntax `..` specifies that the remaining fields not
+shown in [Listing 5-7](#5-7). The syntax `..` specifies that the remaining fields not
 explicitly set should have the same value as the fields in the given instance.
 
 <span class="filename">Filename: src/main.rs</span>
@@ -133,11 +133,11 @@ explicitly set should have the same value as the fields in the given instance.
 {{#rustdoc_include ../listings/ch05-using-structs-to-structure-related-data/listing-05-07/src/main.rs:here}}
 ```
 
-<span class="caption">Listing 5-7: Using struct update syntax to set a new
+<span class="caption" id="5-7">Listing 5-7: Using struct update syntax to set a new
 `email` value for a `User` instance but to use the rest of the values from
 `user1`</span>
 
-The code in Listing 5-7 also creates an instance in `user2` that has a
+The code in [Listing 5-7](#5-7) also creates an instance in `user2` that has a
 different value for `email` but has the same values for the `username`,
 `active`, and `sign_in_count` fields from `user1`. The `..user1` must come last
 to specify that any remaining fields should get their values from the
@@ -212,7 +212,7 @@ implement them on any type, including unit-like structs.
 
 > ### Ownership of Struct Data
 >
-> In the `User` struct definition in Listing 5-1, we used the owned `String`
+> In the `User` struct definition in [Listing 5-1](#5-1), we used the owned `String`
 > type rather than the `&str` string slice type. This is a deliberate choice
 > because we want each instance of this struct to own all of its data and for
 > that data to be valid for as long as the entire struct is valid.
