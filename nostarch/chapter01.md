@@ -236,7 +236,7 @@ Hello, world!
 On Windows, enter the command `.\main.exe` instead of `./main`:
 
 ```
-> rustc main.rs
+> rustc src/main.rs
 > .\main.exe
 Hello, world!
 ```
