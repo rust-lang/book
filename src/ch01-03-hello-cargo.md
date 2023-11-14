@@ -231,8 +231,8 @@ existing projects, you can use the following commands to check out the code
 using Git, change to that project’s directory, and build:
 
 ```console
-$ git clone example.org/someproject
-$ cd someproject
+$ git clone example.org/some_project
+$ cd some_project
 $ cargo build
 ```
 
