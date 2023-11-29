@@ -73,7 +73,7 @@ that case, no one would ever be able to get the lock, so we’ve chosen to
 After we’ve acquired the lock, we can treat the return value, named `num` in
 this case, as a mutable reference to the data inside. The type system ensures
 that we acquire a lock before using the value in `m`. The type of `m` is
-`Mutex<i32>`, not `i32`, so we *must* call `lock` to be able to use the `i32`
+`Mutex<i32>`, not `i32`, so we *must* call `unwrap` to be able to use the `i32`
 value. We can’t forget; the type system won’t let us access the inner `i32`
 otherwise.
 
