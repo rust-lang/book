@@ -46,7 +46,7 @@ productive while writing systems-level code.
 
 ### Students
 
-Rust is for students and those who are interested in learning about systems
+Rust is for students and those interested in learning about systems
 concepts. Using Rust, many people have learned about topics like operating
 systems development. The community is very welcoming and happy to answer
 student questions. Through efforts such as this book, the Rust teams want to
@@ -59,7 +59,7 @@ Hundreds of companies, large and small, use Rust in production for a variety of
 tasks, including command line tools, web services, DevOps tooling, embedded
 devices, audio and video analysis and transcoding, cryptocurrencies,
 bioinformatics, search engines, Internet of Things applications, machine
-learning, and even major parts of the Firefox web browser.
+learning, and even significant parts of the Firefox web browser.
 
 ### Open Source Developers
 
@@ -72,7 +72,7 @@ language.
 Rust is for people who crave speed and stability in a language. By speed, we
 mean both how quickly Rust code can run and the speed at which Rust lets you
 write programs. The Rust compiler’s checks ensure stability through feature
-additions and refactoring. This is in contrast to the brittle legacy code in
+additions and refactoring. This contrasts with the brittle legacy code in
 languages without these checks, which developers are often afraid to modify. By
 striving for zero-cost abstractions, higher-level features that compile to
 lower-level code as fast as code written manually, Rust endeavors to make safe
@@ -88,14 +88,14 @@ Rust a try and see if its choices work for you.
 
 This book assumes that you’ve written code in another programming language but
 doesn’t make any assumptions about which one. We’ve tried to make the material
-broadly accessible to those from a wide variety of programming backgrounds. We
-don’t spend a lot of time talking about what programming *is* or how to think
+broadly accessible to those from various programming backgrounds. We
+don’t spend much time talking about what programming *is* or how to think
 about it. If you’re entirely new to programming, you would be better served by
 reading a book that specifically provides an introduction to programming.
 
 ## How to Use This Book
 
-In general, this book assumes that you’re reading it in sequence from front to
+Generally, this book assumes that you’re reading it in sequence from front to
 back. Later chapters build on concepts in earlier chapters, and earlier
 chapters might not delve into details on a particular topic but will revisit
 the topic in a later chapter.
@@ -123,13 +123,13 @@ enums to make custom types in Rust.
 
 In Chapter 7, you’ll learn about Rust’s module system and about privacy rules
 for organizing your code and its public Application Programming Interface
-(API). Chapter 8 discusses some common collection data structures that the
+(API). Chapter 8 discusses common collection data structures the
 standard library provides, such as vectors, strings, and hash maps. Chapter 9
 explores Rust’s error-handling philosophy and techniques.
 
 Chapter 10 digs into generics, traits, and lifetimes, which give you the power
 to define code that applies to multiple types. Chapter 11 is all about testing,
-which even with Rust’s safety guarantees is necessary to ensure your program’s
+which, even with Rust’s safety guarantees, is necessary to ensure your program’s
 logic is correct. In Chapter 12, we’ll build our own implementation of a subset
 of functionality from the `grep` command line tool that searches for text
 within files. For this, we’ll use many of the concepts we discussed in the
@@ -142,11 +142,11 @@ Chapter 15 discusses smart pointers that the standard library provides and the
 traits that enable their functionality.
 
 In Chapter 16, we’ll walk through different models of concurrent programming
-and talk about how Rust helps you to program in multiple threads fearlessly.
+and talk about how Rust helps you program in multiple threads fearlessly.
 Chapter 17 looks at how Rust idioms compare to object-oriented programming
 principles you might be familiar with.
 
-Chapter 18 is a reference on patterns and pattern matching, which are powerful
+Chapter 18 references patterns and pattern matching, which are powerful
 ways of expressing ideas throughout Rust programs. Chapter 19 contains a
 smorgasbord of advanced topics of interest, including unsafe Rust, macros, and
 more about lifetimes, traits, types, functions, and closures.
@@ -159,7 +159,7 @@ more reference-like format. Appendix A covers Rust’s keywords, Appendix B
 covers Rust’s operators and symbols, Appendix C covers derivable traits
 provided by the standard library, Appendix D covers some useful development
 tools, and Appendix E explains Rust editions. In Appendix F, you can find
-translations of the book, and in Appendix G we’ll cover how Rust is made and
+translations of the book, and in Appendix G, we’ll cover how Rust is made and
 what nightly Rust is.
 
 There is no wrong way to read this book: if you want to skip ahead, go for it!
@@ -168,13 +168,13 @@ confusion. But do whatever works for you.
 
 <span id="ferris"></span>
 
-An important part of the process of learning Rust is learning how to read the
+An important part of learning Rust is learning how to read the
 error messages the compiler displays: these will guide you toward working code.
-As such, we’ll provide many examples that don’t compile along with the error
+As such, we’ll provide many examples that don’t compile, along with the error
 message the compiler will show you in each situation. Know that if you enter
 and run a random example, it may not compile! Make sure you read the
 surrounding text to see whether the example you’re trying to run is meant to
-error. Ferris will also help you distinguish code that isn’t meant to work:
+be an error. Ferris will also help you distinguish code that isn’t meant to work:
 
 | Ferris                                                                                                           | Meaning                                          |
 |------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|

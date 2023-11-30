@@ -35,8 +35,7 @@ assume that the Rust team is working on the release of Rust 1.5. That release
 happened in December of 2015, but it will provide us with realistic version
 numbers. A new feature is added to Rust: a new commit lands on the `master`
 branch. Each night, a new nightly version of Rust is produced. Every day is a
-release day, and these releases are created by our release infrastructure
-automatically. So as time passes, our releases look like this, once a night:
+release day, and these releases are created automatically by our release infrastructure. So, as time passes, our releases look like this once a night:
 
 ```text
 nightly: * - - * - - *
@@ -62,7 +61,7 @@ nightly: * - - * - - * - - * - - *
 beta:                *
 ```
 
-Let’s say a regression is found. Good thing we had some time to test the beta
+Let’s say a regression is found. It's a good thing we had some time to test the beta
 release before the regression snuck into a stable release! The fix is applied
 to `master`, so that nightly is fixed, and then the fix is backported to the
 `beta` branch, and a new release of beta is produced:
@@ -106,7 +105,7 @@ release, you can know the date of the next one: it’s six weeks later. A nice
 aspect of having releases scheduled every six weeks is that the next train is
 coming soon. If a feature happens to miss a particular release, there’s no need
 to worry: another one is happening in a short time! This helps reduce pressure
-to sneak possibly unpolished features in close to the release deadline.
+to sneak possibly unpolished features close to the release deadline.
 
 Thanks to this process, you can always check out the next build of Rust and
 verify for yourself that it’s easy to upgrade to: if a beta release doesn’t
@@ -176,7 +175,7 @@ have a lot of Rust projects!
 
 So how do you learn about these new features? Rust’s development model follows
 a *Request For Comments (RFC) process*. If you’d like an improvement in Rust,
-you can write up a proposal, called an RFC.
+you can write up a proposal called an RFC.
 
 Anyone can write RFCs to improve Rust, and the proposals are reviewed and
 discussed by the Rust team, which is comprised of many topic subteams. There’s

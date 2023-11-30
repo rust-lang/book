@@ -102,11 +102,11 @@ first line declares a function named `main` that has no parameters and returns
 nothing. If there were parameters, they would go inside the parentheses `()`.
 
 The function body is wrapped in `{}`. Rust requires curly brackets around all
-function bodies. It’s good style to place the opening curly bracket on the same
+function bodies. It’s a good style to place the opening curly bracket on the same
 line as the function declaration, adding one space in between.
 
 > Note: If you want to stick to a standard style across Rust projects, you can
-> use an automatic formatter tool called `rustfmt` to format your code in a
+> use an automatic formatting tool called `rustfmt` to format your code in a
 > particular style (more on `rustfmt` in
 > [Appendix D][devtools]<!-- ignore -->). The Rust team has included this tool
 > with the standard Rust distribution, as `rustc` is, so it should already be
@@ -121,7 +121,7 @@ The body of the `main` function holds the following code:
 This line does all the work in this little program: it prints text to the
 screen. There are four important details to notice here.
 
-First, Rust style is to indent with four spaces, not a tab.
+First, the Rust style is to indent with four spaces, not a tab.
 
 Second, `println!` calls a Rust macro. If it had called a function instead, it
 would be entered as `println` (without the `!`). We’ll discuss Rust macros in
@@ -161,7 +161,7 @@ main  main.rs
 ```
 
 On Linux and macOS, you’ll see two files. With PowerShell on Windows, you’ll
-see the same three files that you would see using CMD. With CMD on Windows, you
+see the same three files you would see using CMD. With CMD on Windows, you
 would enter the following:
 
 ```cmd
