@@ -92,8 +92,8 @@ library, known as `std`:
 ```
 
 By default, Rust has a set of items defined in the standard library that it
-brings into the scope of every program. This set is called the *prelude*, and
-you can see everything in it [in the standard library documentation][prelude].
+brings into the scope of every program. This set is called the [*prelude*](prelude), and
+you can see everything in it [in the standard library documentation][stdlib].
 
 If a type you want to use isn’t in the prelude, you have to bring that type
 into scope explicitly with a `use` statement. Using the `std::io` library
@@ -917,7 +917,8 @@ types, and functions, and shows how to use them in Rust. Chapter 4 explores
 ownership, a feature that makes Rust different from other languages. Chapter 5
 discusses structs and method syntax, and Chapter 6 explains how enums work.
 
-[prelude]: ../std/index.html
+[prelude]: ../std/prelude/index.html
+[stdlib]: ../std/index.html
 [variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
 [comments]: ch03-04-comments.html
 [string]: ../std/string/struct.String.html
