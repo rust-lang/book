@@ -247,7 +247,7 @@ should borrow the values. The modification to Listing 16-3 shown in Listing
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore,does_not_compile
 {{#rustdoc_include ../listings/ch16-fearless-concurrency/listing-16-05/src/main.rs}}
 ```
 
