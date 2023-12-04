@@ -918,7 +918,6 @@ ownership, a feature that makes Rust different from other languages. Chapter 5
 discusses structs and method syntax, and Chapter 6 explains how enums work.
 
 [prelude]: ../std/prelude/index.html
-[stdlib]: ../std/index.html
 [variables-and-mutability]: ch03-01-variables-and-mutability.html#variables-and-mutability
 [comments]: ch03-04-comments.html
 [string]: ../std/string/struct.String.html
@@ -937,3 +936,4 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [shadowing]: ch03-01-variables-and-mutability.html#shadowing
 [parse]: ../std/primitive.str.html#method.parse
 [integers]: ch03-02-data-types.html#integer-types
+[stdlib]: ../std/index.html
