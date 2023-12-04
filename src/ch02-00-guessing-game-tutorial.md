@@ -93,7 +93,8 @@ library, known as `std`:
 
 By default, Rust has a set of items defined in the standard library that it
 brings into the scope of every program. This set is called the [prelude][prelude], and
-you can see everything in it in the [standard library][standardlib] documentation .
+you can see everything in it in the [standard library]
+(../std/index.html) documentation .
 
 If a type you want to use isn’t in the prelude, you have to bring that type
 into scope explicitly with a `use` statement. Using the `std::io` library
@@ -936,4 +937,3 @@ discusses structs and method syntax, and Chapter 6 explains how enums work.
 [shadowing]: ch03-01-variables-and-mutability.html#shadowing
 [parse]: ../std/primitive.str.html#method.parse
 [integers]: ch03-02-data-types.html#integer-types
-[standardlib]: ../std/index.html
