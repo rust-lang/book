@@ -93,7 +93,7 @@ library, known as `std`:
 
 By default, Rust has a set of items defined in the standard library that it
 brings into the scope of every program. This set is called the [*prelude*](prelude), and
-you can see everything in it [in the standard library documentation][stdlib].
+you can see everything in it [in the standard library documentation](stdlib).
 
 If a type you want to use isn’t in the prelude, you have to bring that type
 into scope explicitly with a `use` statement. Using the `std::io` library
