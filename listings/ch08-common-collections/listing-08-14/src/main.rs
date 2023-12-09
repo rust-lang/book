@@ -1,5 +1,6 @@
 fn main() {
     // ANCHOR: here
+    let hello = String::from("হ্যালো");
     let hello = String::from("السلام عليكم");
     let hello = String::from("Dobrý den");
     let hello = String::from("Hello");
