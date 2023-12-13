@@ -175,7 +175,7 @@ have a lot of Rust projects!
 
 So how do you learn about these new features? Rust’s development model follows
 a *Request For Comments (RFC) process*. If you’d like an improvement in Rust,
-you can write up a proposal called an RFC.
+you can write up a proposal, called an RFC.
 
 Anyone can write RFCs to improve Rust, and the proposals are reviewed and
 discussed by the Rust team, which is comprised of many topic subteams. There’s

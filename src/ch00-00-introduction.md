@@ -168,8 +168,8 @@ confusion. But do whatever works for you.
 
 <span id="ferris"></span>
 
-An important part of learning Rust is learning how to read the
-error messages the compiler displays: these will guide you toward working code.
+An important aspect of mastering Rust involves understanding how to interpret the 
+error messages displayed by the compiler: these will guide you toward working code.
 As such, we’ll provide many examples that don’t compile, along with the error
 message the compiler will show you in each situation. Know that if you enter
 and run a random example, it may not compile! Make sure you read the

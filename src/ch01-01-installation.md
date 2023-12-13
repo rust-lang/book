@@ -90,7 +90,7 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
 If you see this information, you have installed Rust successfully! If you don’t
-see this information and check that Rust is in your `%PATH%` system variable as
+see this information, check that Rust is in your `%PATH%` system variable as
 follows.
 
 In Windows CMD, use:
