@@ -13,7 +13,7 @@ Number”][comparing-the-guess-to-the-secret-number]<!-- ignore --> section in
 Chapter 2, we must add a type annotation, like this:
 
 ```rust
-let guess: u32 = "42".parse().expect("Not a number!");
+let guess: u32 = "42".parse().expect("Not a positive number!");
 ```
 
 If we don’t add the `: u32` type annotation shown in the preceding code, Rust

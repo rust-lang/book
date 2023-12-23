@@ -3,12 +3,12 @@ $ cargo build
 error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
-2 |     let guess = "42".parse().expect("Not a number!");
+2 |     let guess = "42".parse().expect("Not a positive number!");
   |         ^^^^^
   |
 help: consider giving `guess` an explicit type
   |
-2 |     let guess: _ = "42".parse().expect("Not a number!");
+2 |     let guess: _ = "42".parse().expect("Not a positive number!");
   |              +++
 
 For more information about this error, try `rustc --explain E0282`.
