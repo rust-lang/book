@@ -96,7 +96,7 @@ The `area` function accesses the `width` and `height` fields of the `Rectangle`
 instance (note that accessing fields of a borrowed struct instance does not
 move the field values, which is why you often see borrows of structs). Our
 function signature for `area` now says exactly what we mean: calculate the area
-of `Rectangle`, using its `width` and `height` fields. This conveys that the
+of a `Rectangle`, using its `width` and `height` fields. This conveys that the
 width and height are related to each other, and it gives descriptive names to
 the values rather than using the tuple index values of `0` and `1`. This is a
 win for clarity.
