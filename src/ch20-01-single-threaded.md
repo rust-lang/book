@@ -6,10 +6,10 @@ servers. The details of these protocols are beyond the scope of this book, but
 a brief overview will give you the information you need.
 
 The two main protocols involved in web servers are *Hypertext Transfer
-Protocol* *(HTTP)* and *Transmission Control Protocol* *(TCP)*. Both protocols
-are *request-response* protocols, meaning a *client* initiates requests and a
+Protocol* *(HTTP)* and *Transmission Control Protocol* *(TCP)*. HTTP
+is a *request-response* protocol, meaning a *client* initiates requests and a
 *server* listens to the requests and provides a response to the client. The
-contents of those requests and responses are defined by the protocols.
+contents of those requests and responses are defined by the HTTP protocol.
 
 TCP is the lower-level protocol that describes the details of how information
 gets from one server to another but doesn’t specify what that information is.
