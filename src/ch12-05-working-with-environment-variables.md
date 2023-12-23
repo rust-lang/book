@@ -113,7 +113,7 @@ function, as shown in Listing 12-22. This still won’t compile yet.
 Finally, we need to check for the environment variable. The functions for
 working with environment variables are in the `env` module in the standard
 library, so we bring that module into scope at the top of *src/lib.rs*. Then
-we’ll use the `var` function from the `env` module to check to see if any value
+we’ll use the `var` function from the `env` module to check if any value
 has been set for an environment variable named `IGNORE_CASE`, as shown in
 Listing 12-23.
 
