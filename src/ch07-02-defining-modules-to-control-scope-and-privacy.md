@@ -12,7 +12,7 @@ detail.
 ### Modules Cheat Sheet
 
 Here we provide a quick reference on how modules, paths, the `use` keyword, and
-the `pub` keyword work in the compiler, and how most developers organize their
+the `pub` keyword works in the compiler, and how most developers organize their
 code. We’ll be going through examples of each of these rules throughout this
 chapter, but this is a great place to refer to as a reminder of how modules
 work.
@@ -38,14 +38,14 @@ for the module’s code in these places:
 - **Paths to code in modules**: Once a module is part of your crate, you can
   refer to code in that module from anywhere else in that same crate, as long
   as the privacy rules allow, using the path to the code. For example, an
-  `Asparagus` type in the garden vegetables module would be found at
+  `Asparagus` type in the garden vegetables module can be found at
   `crate::garden::vegetables::Asparagus`.
 - **Private vs public**: Code within a module is private from its parent
   modules by default. To make a module public, declare it with `pub mod`
   instead of `mod`. To make items within a public module public as well, use
   `pub` before their declarations.
 - **The `use` keyword**: Within a scope, the `use` keyword creates shortcuts to
-  items to reduce repetition of long paths. In any scope that can refer to
+  items to reduce the repetition of long paths. In any scope that can refer to
   `crate::garden::vegetables::Asparagus`, you can create a shortcut with `use
   crate::garden::vegetables::Asparagus;` and from then on you only need to
   write `Asparagus` to make use of that type in the scope.
@@ -64,7 +64,7 @@ backyard
     └── main.rs
 ```
 
-The crate root file in this case is *src/main.rs*, and it contains:
+The crate root file, in this case, is *src/main.rs*, and it contains:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -94,8 +94,8 @@ Now let’s get into the details of these rules and demonstrate them in action!
 
 *Modules* let us organize code within a crate for readability and easy reuse.
 Modules also allow us to control the *privacy* of items, because code within a
-module is private by default. Private items are internal implementation details
-not available for outside use. We can choose to make modules and the items
+module is private by default. Private items are internal implementation details, not available for external use. 
+We can choose to make modules and the items
 within them public, which exposes them to allow external code to use and depend
 on them.
 
@@ -107,7 +107,7 @@ implementation of a restaurant.
 In the restaurant industry, some parts of a restaurant are referred to as
 *front of house* and others as *back of house*. Front of house is where
 customers are; this encompasses where the hosts seat customers, servers take
-orders and payment, and bartenders make drinks. Back of house is where the
+orders and payment, and bartenders make drinks. Back of the house is where the
 chefs and cooks work in the kitchen, dishwashers clean up, and managers do
 administrative work.
 
@@ -132,7 +132,7 @@ modules `hosting` and `serving`. Modules can also hold definitions for other
 items, such as structs, enums, constants, traits, and—as in Listing
 7-1—functions.
 
-By using modules, we can group related definitions together and name why
+By using modules, we can group related definitions and name why
 they’re related. Programmers using this code can navigate the code based on the
 groups rather than having to read through all the definitions, making it easier
 to find the definitions relevant to them. Programmers adding new functionality
