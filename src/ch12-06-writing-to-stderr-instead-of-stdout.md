@@ -16,8 +16,8 @@ First, let’s observe how the content printed by `minigrep` is currently being
 written to standard output, including any error messages we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
 to a file while intentionally causing an error. We won’t redirect the standard
-error stream, so any content sent to standard error will continue to display on
-the screen.
+error stream, so any content sent to standard error will continue to be displayed
+on the screen.
 
 Command line programs are expected to send error messages to the standard error
 stream so we can still see error messages on the screen even if we redirect the
