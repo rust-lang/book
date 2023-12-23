@@ -324,8 +324,8 @@ crate passed. The next section shows that zero tests were found in the `adder`
 crate, and then the last section shows zero documentation tests were found in
 the `add_one` crate.
 
-We can also run tests for one particular crate in a workspace from the
-top-level directory by using the `-p` flag and specifying the name of the crate
+We can also run tests for one particular package in a workspace from the
+top-level directory by using the `-p` flag and specifying the name of the package
 we want to test:
 
 <!-- manual-regeneration
@@ -356,8 +356,8 @@ didn’t run the `adder` crate tests.
 
 If you publish the crates in the workspace to [crates.io](https://crates.io/),
 each crate in the workspace will need to be published separately. Like `cargo
-test`, we can publish a particular crate in our workspace by using the `-p`
-flag and specifying the name of the crate we want to publish.
+test`, we can publish a particular package in our workspace by using the `-p`
+flag and specifying the name of the package we want to publish.
 
 For additional practice, add an `add_two` crate to this workspace in a similar
 way as the `add_one` crate!
