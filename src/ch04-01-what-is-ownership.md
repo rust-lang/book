@@ -192,7 +192,7 @@ to hold the contents. This means:
 * We need a way of returning this memory to the allocator when we’re done with
   our `String`.
 
-That first part is done by us: when we call `String::from`, its implementation
+That first part is done by us when we call `String::from`, its implementation
 requests the memory it needs. This is pretty much universal in programming
 languages.
 
