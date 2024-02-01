@@ -253,7 +253,7 @@ number types and string types:
 {{#rustdoc_include ../listings/ch06-enums-and-pattern-matching/no-listing-06-option-examples/src/main.rs:here}}
 ```
 
-The type of `some_number` is `Option<i32>`. The type of `some_char` is
+The type of `absent_number` is `Option<i32>`. The type of `some_char` is
 `Option<char>`, which is a different type. Rust can infer these types because
 we’ve specified a value inside the `Some` variant. For `absent_number`, Rust
 requires us to annotate the overall `Option` type: the compiler can’t infer the
