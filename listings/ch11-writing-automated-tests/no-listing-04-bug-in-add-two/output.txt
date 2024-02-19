@@ -9,9 +9,10 @@ test tests::it_adds_two ... FAILED
 failures:
 
 ---- tests::it_adds_two stdout ----
-thread 'tests::it_adds_two' panicked at 'assertion failed: `(left == right)`
-  left: `4`,
- right: `5`', src/lib.rs:11:9
+thread 'tests::it_adds_two' panicked at src/lib.rs:11:9:
+assertion `left == right` failed
+  left: 4
+ right: 5
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 
 
