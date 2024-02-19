@@ -7,4 +7,4 @@ error[E0515]: cannot return reference to local variable `result`
    |     ^^^^^^^^^^^^^^^ returns a reference to data owned by the current function
 
 For more information about this error, try `rustc --explain E0515`.
-error: could not compile `chapter10` due to previous error
+error: could not compile `chapter10` (bin "chapter10") due to previous error

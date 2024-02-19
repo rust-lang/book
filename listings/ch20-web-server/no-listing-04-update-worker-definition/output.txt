@@ -7,9 +7,9 @@ error[E0599]: no method named `join` found for enum `Option` in the current scop
      |                           ^^^^ method not found in `Option<JoinHandle<()>>`
      |
 note: the method `join` exists on the type `JoinHandle<()>`
-    --> /Users/carolnichols/.rustup/toolchains/1.69-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1591:5
+    --> /Users/carolnichols/.rustup/toolchains/1.70-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1557:5
      |
-1591 |     pub fn join(self) -> Result<T> {
+1557 |     pub fn join(self) -> Result<T> {
      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 help: consider using `Option::expect` to unwrap the `JoinHandle<()>` value, panicking if the value is an `Option::None`
      |
@@ -31,4 +31,4 @@ help: try wrapping the expression in `Some`
 
 Some errors have detailed explanations: E0308, E0599.
 For more information about an error, try `rustc --explain E0308`.
-error: could not compile `hello` due to 2 previous errors
+error: could not compile `hello` (lib) due to 2 previous errors

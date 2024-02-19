@@ -10,4 +10,4 @@ error[E0382]: use of moved value: `receiver`
    |                                          ^^^^^^^^ value moved here, in previous iteration of loop
 
 For more information about this error, try `rustc --explain E0382`.
-error: could not compile `hello` due to previous error
+error: could not compile `hello` (lib) due to previous error

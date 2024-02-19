@@ -13,4 +13,4 @@ error[E0597]: `string2` does not live long enough
   |                                          ------ borrow later used here
 
 For more information about this error, try `rustc --explain E0597`.
-error: could not compile `chapter10` due to previous error
+error: could not compile `chapter10` (bin "chapter10") due to previous error

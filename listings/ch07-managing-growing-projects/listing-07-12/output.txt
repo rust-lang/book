@@ -16,4 +16,4 @@ error[E0433]: failed to resolve: use of undeclared crate or module `hosting`
 
 For more information about this error, try `rustc --explain E0433`.
 warning: `restaurant` (lib) generated 1 warning
-error: could not compile `restaurant` due to previous error; 1 warning emitted
+error: could not compile `restaurant` (lib) due to previous error; 1 warning emitted

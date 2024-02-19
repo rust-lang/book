@@ -16,4 +16,4 @@ note: closure parameter defined here
   |                            ^
 
 For more information about this error, try `rustc --explain E0308`.
-error: could not compile `closure-example` due to previous error
+error: could not compile `closure-example` (bin "closure-example") due to previous error

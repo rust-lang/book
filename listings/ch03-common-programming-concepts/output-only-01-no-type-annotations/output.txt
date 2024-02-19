@@ -12,4 +12,4 @@ help: consider giving `guess` an explicit type
   |              ++++++++++++
 
 For more information about this error, try `rustc --explain E0282`.
-error: could not compile `no_type_annotations` due to previous error
+error: could not compile `no_type_annotations` (bin "no_type_annotations") due to previous error

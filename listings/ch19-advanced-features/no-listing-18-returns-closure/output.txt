@@ -13,4 +13,4 @@ help: use `impl Fn(i32) -> i32` as the return type, as all return paths are of t
   |                         ~~~~~~~~~~~~~~~~~~~
 
 For more information about this error, try `rustc --explain E0746`.
-error: could not compile `functions-example` due to previous error
+error: could not compile `functions-example` (lib) due to previous error
