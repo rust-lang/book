@@ -8,20 +8,17 @@ $ cargo build
    Compiling rand v0.8.5
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
-   --> src/main.rs:22:21
-    |
-22  |     match guess.cmp(&secret_number) {
-    |                 --- ^^^^^^^^^^^^^^ expected `&String`, found `&{integer}`
-    |                 |
-    |                 arguments to this method are incorrect
-    |
-    = note: expected reference `&String`
-               found reference `&{integer}`
+  --> src/main.rs:22:21
+   |
+22 |     match guess.cmp(&secret_number) {
+   |                 --- ^^^^^^^^^^^^^^ expected `&String`, found `&{integer}`
+   |                 |
+   |                 arguments to this method are incorrect
+   |
+   = note: expected reference `&String`
+              found reference `&{integer}`
 note: method defined here
-   --> /Users/carolnichols/.rustup/toolchains/1.71-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/cmp.rs:775:8
-    |
-775 |     fn cmp(&self, other: &Self) -> Ordering;
-    |        ^^^
+  --> /rustc/d5c2e9c342b358556da91d61ed4133f6f50fc0c3/library/core/src/cmp.rs:775:8
 
 For more information about this error, try `rustc --explain E0308`.
 error: could not compile `guessing_game` (bin "guessing_game") due to previous error
