@@ -17,4 +17,4 @@ help: box the return type, and wrap all of the returned values in `Box::new`
   |
 
 For more information about this error, try `rustc --explain E0746`.
-error: could not compile `functions-example` (lib) due to previous error
+error: could not compile `functions-example` (lib) due to 1 previous error

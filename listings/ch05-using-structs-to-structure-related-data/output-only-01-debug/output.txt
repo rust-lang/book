@@ -16,4 +16,4 @@ help: consider annotating `Rectangle` with `#[derive(Debug)]`
    |
 
 For more information about this error, try `rustc --explain E0277`.
-error: could not compile `rectangles` (bin "rectangles") due to previous error
+error: could not compile `rectangles` (bin "rectangles") due to 1 previous error

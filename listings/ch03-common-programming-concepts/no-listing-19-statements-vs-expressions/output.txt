@@ -22,4 +22,4 @@ help: remove these parentheses
   |
 
 warning: `functions` (bin "functions") generated 1 warning
-error: could not compile `functions` (bin "functions") due to previous error; 1 warning emitted
+error: could not compile `functions` (bin "functions") due to 1 previous error; 1 warning emitted

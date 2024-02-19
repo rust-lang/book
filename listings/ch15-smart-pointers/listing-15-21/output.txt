@@ -12,4 +12,4 @@ help: consider changing this to be a mutable reference
    |             ~~~~~~~~~
 
 For more information about this error, try `rustc --explain E0596`.
-error: could not compile `limit-tracker` (lib test) due to previous error
+error: could not compile `limit-tracker` (lib test) due to 1 previous error

@@ -12,4 +12,4 @@ help: consider changing this to be mutable
   |         +++
 
 For more information about this error, try `rustc --explain E0596`.
-error: could not compile `borrowing` (bin "borrowing") due to previous error
+error: could not compile `borrowing` (bin "borrowing") due to 1 previous error

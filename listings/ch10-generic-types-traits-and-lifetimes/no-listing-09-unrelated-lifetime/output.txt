@@ -10,4 +10,4 @@ error[E0515]: cannot return value referencing local variable `result`
    |     `result` is borrowed here
 
 For more information about this error, try `rustc --explain E0515`.
-error: could not compile `chapter10` (bin "chapter10") due to previous error
+error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
