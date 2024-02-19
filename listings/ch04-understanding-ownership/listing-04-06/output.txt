@@ -9,7 +9,7 @@ error[E0596]: cannot borrow `*some_string` as mutable, as it is behind a `&` ref
 help: consider changing this to be a mutable reference
   |
 7 | fn change(some_string: &mut String) {
-  |                        ~~~~~~~~~~~
+  |                         +++
 
 For more information about this error, try `rustc --explain E0596`.
 error: could not compile `ownership` (bin "ownership") due to previous error

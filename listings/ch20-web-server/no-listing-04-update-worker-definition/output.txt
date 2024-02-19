@@ -7,9 +7,9 @@ error[E0599]: no method named `join` found for enum `Option` in the current scop
      |                           ^^^^ method not found in `Option<JoinHandle<()>>`
      |
 note: the method `join` exists on the type `JoinHandle<()>`
-    --> /Users/carolnichols/.rustup/toolchains/1.70-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1557:5
+    --> /Users/carolnichols/.rustup/toolchains/1.71-aarch64-apple-darwin/lib/rustlib/src/rust/library/std/src/thread/mod.rs:1560:5
      |
-1557 |     pub fn join(self) -> Result<T> {
+1560 |     pub fn join(self) -> Result<T> {
      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 help: consider using `Option::expect` to unwrap the `JoinHandle<()>` value, panicking if the value is an `Option::None`
      |
