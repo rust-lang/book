@@ -9,6 +9,13 @@ error[E0308]: mismatched types
   |             |               expected `String`, found integer
   |             arguments to this function are incorrect
   |
+note: expected because the closure was earlier called with an argument of type `String`
+ --> src/main.rs:4:29
+  |
+4 |     let s = example_closure(String::from("hello"));
+  |             --------------- ^^^^^^^^^^^^^^^^^^^^^ expected because this argument is of type `String`
+  |             |
+  |             in this closure call
 note: closure parameter defined here
  --> src/main.rs:2:28
   |
